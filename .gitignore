@@ -1,0 +1,13 @@
+# Test dependencies fetched by tests/setup.sh
+tests/vendor/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Files written by exported programs
+outputs/
+memory.json
+
+.DS_Store
