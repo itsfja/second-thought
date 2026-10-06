@@ -3,6 +3,7 @@
 # ---------------------------------------------------------------------------
 import asyncio
 import base64
+import contextlib
 import contextvars
 import datetime
 import json
@@ -23,7 +24,13 @@ MODELS = {
     "quick": "claude-haiku-4-5-20251001",
     "default": "claude-sonnet-5-5",
     "complex": "claude-opus-5-5",
+    # Gemini: needs  pip install google-genai  and GEMINI_API_KEY. See https://ai.google.dev/gemini-api/docs/models
+    "gemini-quick": "gemini-3.5-flash-lite",
+    "gemini-default": "gemini-3.8-flash",
+    "gemini-complex": "gemini-3.1-pro-preview",
 }
+MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
+                "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro"}
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -35,6 +42,7 @@ MEMORY_FILE = os.environ.get("RB_MEMORY_FILE") or os.path.join(os.path.dirname(o
 
 
 MESSAGE_VALUE = contextvars.ContextVar("message_value", default="")
+MODEL_OVERRIDE = contextvars.ContextVar("model_override", default=None)  # set by 'with model' blocks
 # Server-side web search for the 'search the web' block. Your API organisation must allow it.
 WEB_SEARCH_TOOL = {"type": "web_search_20250305", "name": "web_search", "max_uses": 3}
 
@@ -331,6 +339,7 @@ class Runtime:
         self.vars = {}
         self.receivers = {}
         self.client = None
+        self.gemini = None
         self._input_lock = None
         self.schedule_mode = False
         self.transient_memory = {}   # kept across runs while this program keeps running
@@ -349,8 +358,7 @@ class Runtime:
         self.last_error = ""
         self.instructions = ""
         self.chats = {}
-        self.tokens_in = 0
-        self.tokens_out = 0
+        self.usage = {}  # provider -> [tokens in, tokens out]
         self.calls = 0
         self.steps = 0
         self.depth = 0
@@ -399,31 +407,82 @@ class Runtime:
                 print("    " + line, flush=True)
 
     # ----- Claude -----
-    async def _call(self, prompt, want_json=False, picture=None, history=None, tools=None):
+    @property
+    def current_tier(self):
+        return MODEL_OVERRIDE.get() or self.tier
+
+    def _count(self, provider, tokens_in, tokens_out):
+        u = self.usage.setdefault(provider, [0, 0])
+        u[0] += tokens_in or 0
+        u[1] += tokens_out or 0
+
+    async def _call(self, prompt, want_json=False, picture=None, history=None, web=False):
         if self.ending:
             raise asyncio.CancelledError()
         self.calls += 1
         if self.calls > MAX_AI_CALLS:
-            raise RunError(f"Stopped after {MAX_AI_CALLS} Claude calls in one run, to protect your usage.")
+            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+        tier = self.current_tier
+        if tier.startswith("gemini-"):
+            text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web)
+            who = "Gemini"
+        else:
+            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
+            who = "Claude"
+        if not text:
+            raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
+        return _parse_json(text) if want_json else text
+
+    async def _call_claude(self, model, prompt, picture, history, web):
         if self.client is None:
             if not os.environ.get("ANTHROPIC_API_KEY"):
                 raise RunError("Set the ANTHROPIC_API_KEY environment variable first.")
             self.client = AsyncAnthropic()
-        args = dict(model=MODELS.get(self.tier, MODELS["default"]), max_tokens=MAX_TOKENS,
+        args = dict(model=model, max_tokens=MAX_TOKENS,
                     messages=(history or []) + [{"role": "user", "content": self._content(prompt, picture)}])
         if self.instructions:
             args["system"] = self.instructions
-        if tools:
-            args["tools"] = tools
+        if web:
+            args["tools"] = [WEB_SEARCH_TOOL]
         msg = await self.client.messages.create(**args)
         usage = getattr(msg, "usage", None)
-        if usage is not None:
-            self.tokens_in += getattr(usage, "input_tokens", 0) or 0
-            self.tokens_out += getattr(usage, "output_tokens", 0) or 0
-        text = "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
-        if not text:
-            raise Retryable("Claude returned nothing for this step. Simplify it and try again.")
-        return _parse_json(text) if want_json else text
+        self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
+        return "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
+
+    async def _call_gemini(self, model, prompt, picture, history, web):
+        try:
+            from google import genai
+            from google.genai import types
+        except ImportError:
+            raise RunError("This program uses Gemini. Install its package first:  pip install google-genai")
+        if self.gemini is None:
+            if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
+                raise RunError("Set the GEMINI_API_KEY environment variable first (get a key at https://aistudio.google.com).")
+            self.gemini = genai.Client()
+        contents = []
+        for turn in history or []:
+            maker = types.UserContent if turn["role"] == "user" else types.ModelContent
+            contents.append(maker(parts=[types.Part.from_text(text=to_str(turn["content"]))]))
+        if picture is not None and picture.svg is None:
+            parts = [types.Part.from_bytes(data=picture.data, mime_type=picture.media_type), types.Part.from_text(text=prompt)]
+        else:
+            text = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
+            parts = [types.Part.from_text(text=text)]
+        contents.append(types.UserContent(parts=parts))
+        config = types.GenerateContentConfig(
+            system_instruction=self.instructions or None,
+            max_output_tokens=MAX_TOKENS,
+            tools=[types.Tool(google_search=types.GoogleSearch())] if web else None,
+        )
+        resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
+        um = getattr(resp, "usage_metadata", None)
+        self._count("Gemini",
+                    getattr(um, "prompt_token_count", None) or getattr(um, "input_tokens", 0),
+                    getattr(um, "candidates_token_count", None) or getattr(um, "output_tokens", 0))
+        try:
+            return (resp.text or "").strip()
+        except ValueError:  # blocked or empty candidate
+            return ""
 
     @staticmethod
     def _content(prompt, picture):
@@ -530,7 +589,7 @@ class Runtime:
         if not q:
             raise RunError("The 'search the web' block is empty.")
         out = await self._call("Search the web and answer briefly, listing the sources you used as plain URLs at the end.\n\nQuery: " + q,
-                               tools=[WEB_SEARCH_TOOL])
+                               web=True)
         self.log("Web search: " + _short(q, 50), out, "done")
         return out
 
@@ -638,8 +697,9 @@ class Runtime:
 
     async def retry_or_raise(self, e, attempt, max_tries):
         self.last_error = self._describe(e)
-        transient = isinstance(e, Retryable) or (type(e).__module__.startswith("anthropic") and
-                                                 getattr(e, "status_code", 500) not in (400, 401, 403, 404))
+        status = getattr(e, "status_code", None) or getattr(e, "code", None)
+        transient = isinstance(e, Retryable) or (type(e).__module__.startswith(("anthropic", "google")) and
+                                                 not (isinstance(status, int) and status in (400, 401, 403, 404)))
         if not transient:
             raise e
         if attempt >= max_tries:
@@ -1091,7 +1151,16 @@ class Runtime:
     # ----- Model -----
     def use_model(self, tier):
         self.tier = tier
-        self.log("Model", "Using " + {"quick": "quick", "default": "balanced", "complex": "most capable"}.get(tier, tier) + " model")
+        self.log("Model", "Using " + MODEL_LABELS.get(tier, tier))
+
+    @contextlib.asynccontextmanager
+    async def using_model(self, tier):
+        token = MODEL_OVERRIDE.set(tier)
+        self.log("Model", "Using " + MODEL_LABELS.get(tier, tier) + " for the blocks inside")
+        try:
+            yield
+        finally:
+            MODEL_OVERRIDE.reset(token)
 
     # ----- Broadcasts and scripts -----
     def message_value(self):
@@ -1170,8 +1239,8 @@ class Runtime:
             print(text, flush=True)
         else:
             print("\nThe program ended without a result.", flush=True)
-        print(f"\nDone · {self.calls} Claude call{'s' if self.calls != 1 else ''} · "
-              f"{self.tokens_in:,} tokens in, {self.tokens_out:,} out", flush=True)
+        used = " · ".join(f"{who}: {u[0]:,} tokens in, {u[1]:,} out" for who, u in self.usage.items()) or "no tokens used"
+        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}", flush=True)
         return 0
 
     # ----- Schedules -----

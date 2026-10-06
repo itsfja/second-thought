@@ -160,6 +160,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
         <option value="pictures">Draw, critique, redraw (pictures)</option>
         <option value="memory">Fresh headline every run (memory)</option>
         <option value="files">Summarise a file (files, retries)</option>
+        <option value="gemini">Claude writes, Gemini reviews</option>
       </select>
     </label>
     <button id="load" type="button">Load</button>
@@ -168,9 +169,16 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <button id="mem-toggle" type="button" aria-expanded="false" aria-controls="mem">Memory</button>
     <label class="lab" for="tier">Model
       <select id="tier">
-        <option value="quick">Quick</option>
-        <option value="default" selected>Balanced</option>
-        <option value="complex">Most capable</option>
+        <optgroup label="Claude">
+          <option value="quick">Quick</option>
+          <option value="default" selected>Balanced</option>
+          <option value="complex">Most capable</option>
+        </optgroup>
+        <optgroup label="Gemini (runs in exported Python)">
+          <option value="gemini-quick">Gemini Flash-Lite</option>
+          <option value="gemini-default">Gemini Flash</option>
+          <option value="gemini-complex">Gemini Pro</option>
+        </optgroup>
       </select>
     </label>
     <button id="step-toggle" type="button" aria-pressed="false">Step: off</button>
@@ -302,6 +310,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 # ---------------------------------------------------------------------------
 import asyncio
 import base64
+import contextlib
 import contextvars
 import datetime
 import json
@@ -322,7 +331,13 @@ MODELS = {
     "quick": "claude-haiku-4-5-20251001",
     "default": "claude-sonnet-5-5",
     "complex": "claude-opus-5-5",
+    # Gemini: needs  pip install google-genai  and GEMINI_API_KEY. See https://ai.google.dev/gemini-api/docs/models
+    "gemini-quick": "gemini-3.5-flash-lite",
+    "gemini-default": "gemini-3.8-flash",
+    "gemini-complex": "gemini-3.1-pro-preview",
 }
+MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
+                "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro"}
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -334,6 +349,7 @@ MEMORY_FILE = os.environ.get("RB_MEMORY_FILE") or os.path.join(os.path.dirname(o
 
 
 MESSAGE_VALUE = contextvars.ContextVar("message_value", default="")
+MODEL_OVERRIDE = contextvars.ContextVar("model_override", default=None)  # set by 'with model' blocks
 # Server-side web search for the 'search the web' block. Your API organisation must allow it.
 WEB_SEARCH_TOOL = {"type": "web_search_20250305", "name": "web_search", "max_uses": 3}
 
@@ -630,6 +646,7 @@ class Runtime:
         self.vars = {}
         self.receivers = {}
         self.client = None
+        self.gemini = None
         self._input_lock = None
         self.schedule_mode = False
         self.transient_memory = {}   # kept across runs while this program keeps running
@@ -648,8 +665,7 @@ class Runtime:
         self.last_error = ""
         self.instructions = ""
         self.chats = {}
-        self.tokens_in = 0
-        self.tokens_out = 0
+        self.usage = {}  # provider -> [tokens in, tokens out]
         self.calls = 0
         self.steps = 0
         self.depth = 0
@@ -698,31 +714,82 @@ class Runtime:
                 print("    " + line, flush=True)
 
     # ----- Claude -----
-    async def _call(self, prompt, want_json=False, picture=None, history=None, tools=None):
+    @property
+    def current_tier(self):
+        return MODEL_OVERRIDE.get() or self.tier
+
+    def _count(self, provider, tokens_in, tokens_out):
+        u = self.usage.setdefault(provider, [0, 0])
+        u[0] += tokens_in or 0
+        u[1] += tokens_out or 0
+
+    async def _call(self, prompt, want_json=False, picture=None, history=None, web=False):
         if self.ending:
             raise asyncio.CancelledError()
         self.calls += 1
         if self.calls > MAX_AI_CALLS:
-            raise RunError(f"Stopped after {MAX_AI_CALLS} Claude calls in one run, to protect your usage.")
+            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+        tier = self.current_tier
+        if tier.startswith("gemini-"):
+            text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web)
+            who = "Gemini"
+        else:
+            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
+            who = "Claude"
+        if not text:
+            raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
+        return _parse_json(text) if want_json else text
+
+    async def _call_claude(self, model, prompt, picture, history, web):
         if self.client is None:
             if not os.environ.get("ANTHROPIC_API_KEY"):
                 raise RunError("Set the ANTHROPIC_API_KEY environment variable first.")
             self.client = AsyncAnthropic()
-        args = dict(model=MODELS.get(self.tier, MODELS["default"]), max_tokens=MAX_TOKENS,
+        args = dict(model=model, max_tokens=MAX_TOKENS,
                     messages=(history or []) + [{"role": "user", "content": self._content(prompt, picture)}])
         if self.instructions:
             args["system"] = self.instructions
-        if tools:
-            args["tools"] = tools
+        if web:
+            args["tools"] = [WEB_SEARCH_TOOL]
         msg = await self.client.messages.create(**args)
         usage = getattr(msg, "usage", None)
-        if usage is not None:
-            self.tokens_in += getattr(usage, "input_tokens", 0) or 0
-            self.tokens_out += getattr(usage, "output_tokens", 0) or 0
-        text = "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
-        if not text:
-            raise Retryable("Claude returned nothing for this step. Simplify it and try again.")
-        return _parse_json(text) if want_json else text
+        self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
+        return "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
+
+    async def _call_gemini(self, model, prompt, picture, history, web):
+        try:
+            from google import genai
+            from google.genai import types
+        except ImportError:
+            raise RunError("This program uses Gemini. Install its package first:  pip install google-genai")
+        if self.gemini is None:
+            if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
+                raise RunError("Set the GEMINI_API_KEY environment variable first (get a key at https://aistudio.google.com).")
+            self.gemini = genai.Client()
+        contents = []
+        for turn in history or []:
+            maker = types.UserContent if turn["role"] == "user" else types.ModelContent
+            contents.append(maker(parts=[types.Part.from_text(text=to_str(turn["content"]))]))
+        if picture is not None and picture.svg is None:
+            parts = [types.Part.from_bytes(data=picture.data, mime_type=picture.media_type), types.Part.from_text(text=prompt)]
+        else:
+            text = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
+            parts = [types.Part.from_text(text=text)]
+        contents.append(types.UserContent(parts=parts))
+        config = types.GenerateContentConfig(
+            system_instruction=self.instructions or None,
+            max_output_tokens=MAX_TOKENS,
+            tools=[types.Tool(google_search=types.GoogleSearch())] if web else None,
+        )
+        resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
+        um = getattr(resp, "usage_metadata", None)
+        self._count("Gemini",
+                    getattr(um, "prompt_token_count", None) or getattr(um, "input_tokens", 0),
+                    getattr(um, "candidates_token_count", None) or getattr(um, "output_tokens", 0))
+        try:
+            return (resp.text or "").strip()
+        except ValueError:  # blocked or empty candidate
+            return ""
 
     @staticmethod
     def _content(prompt, picture):
@@ -829,7 +896,7 @@ class Runtime:
         if not q:
             raise RunError("The 'search the web' block is empty.")
         out = await self._call("Search the web and answer briefly, listing the sources you used as plain URLs at the end.\n\nQuery: " + q,
-                               tools=[WEB_SEARCH_TOOL])
+                               web=True)
         self.log("Web search: " + _short(q, 50), out, "done")
         return out
 
@@ -937,8 +1004,9 @@ class Runtime:
 
     async def retry_or_raise(self, e, attempt, max_tries):
         self.last_error = self._describe(e)
-        transient = isinstance(e, Retryable) or (type(e).__module__.startswith("anthropic") and
-                                                 getattr(e, "status_code", 500) not in (400, 401, 403, 404))
+        status = getattr(e, "status_code", None) or getattr(e, "code", None)
+        transient = isinstance(e, Retryable) or (type(e).__module__.startswith(("anthropic", "google")) and
+                                                 not (isinstance(status, int) and status in (400, 401, 403, 404)))
         if not transient:
             raise e
         if attempt >= max_tries:
@@ -1390,7 +1458,16 @@ class Runtime:
     # ----- Model -----
     def use_model(self, tier):
         self.tier = tier
-        self.log("Model", "Using " + {"quick": "quick", "default": "balanced", "complex": "most capable"}.get(tier, tier) + " model")
+        self.log("Model", "Using " + MODEL_LABELS.get(tier, tier))
+
+    @contextlib.asynccontextmanager
+    async def using_model(self, tier):
+        token = MODEL_OVERRIDE.set(tier)
+        self.log("Model", "Using " + MODEL_LABELS.get(tier, tier) + " for the blocks inside")
+        try:
+            yield
+        finally:
+            MODEL_OVERRIDE.reset(token)
 
     # ----- Broadcasts and scripts -----
     def message_value(self):
@@ -1469,8 +1546,8 @@ class Runtime:
             print(text, flush=True)
         else:
             print("\nThe program ended without a result.", flush=True)
-        print(f"\nDone · {self.calls} Claude call{'s' if self.calls != 1 else ''} · "
-              f"{self.tokens_in:,} tokens in, {self.tokens_out:,} out", flush=True)
+        used = " · ".join(f"{who}: {u[0]:,} tokens in, {u[1]:,} out" for who, u in self.usage.items()) or "no tokens used"
+        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}", flush=True)
         return 0
 
     # ----- Schedules -----
@@ -1568,7 +1645,9 @@ Wait & time:
   rb_wait: inputs SECS (number), fields UNIT ("s" | "m" | "h").  rb_wait_until (COND, a boolean).
   rb_wait_time: fields HOUR, MINUTE.  rb_wait_msg: fields MSG.  rb_reset_timer.
 Control:
-  rb_use_model: fields TIER ("quick" | "default" | "complex").  rb_stop: end the run.
+  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini).  rb_stop: end the run.
+  rb_with_model: fields TIER (as above); statement input DO. Runs just the blocks inside on that model.
+  Map calls to Gemini (google-genai, google.generativeai) to rb_with_model or rb_use_model with a gemini tier: Flash-Lite = gemini-quick, Flash = gemini-default, Pro = gemini-complex.
   controls_repeat_ext: inputs TIMES, DO.
   controls_whileUntil: fields MODE ("WHILE" | "UNTIL"); inputs BOOL, DO.
   controls_if: inputs IF0, DO0, IF1, DO1, ..., ELSE; extraState {"elseIfCount": <number of extra IFs>, "hasElse": true} (omit extraState for a plain if).
@@ -1706,7 +1785,10 @@ HOW TO MAP CODE
   const S = (type, msg, args, extra) => Object.assign({ type, message0:msg, args0:args || [], previousStatement:null, nextStatement:null }, extra);
   const V = (type, msg, args, output, extra) => Object.assign({ type, message0:msg, args0:args || [], output }, extra);
   const val = name => ({ type:"input_value", name });
-  const TIERS = [["Quick","quick"],["Balanced","default"],["Most capable","complex"]];
+  const TIERS = [["Claude, quick","quick"],["Claude, balanced","default"],["Claude, most capable","complex"],
+                 ["Gemini Flash-Lite","gemini-quick"],["Gemini Flash","gemini-default"],["Gemini Pro","gemini-complex"]];
+  const isGemini = t => String(t || "").startsWith("gemini-");
+  const tierLabel = t => (TIERS.find(x => x[1] === t) || [t])[0];
   /* ---------- Long text field: wraps at 80 characters, any number of lines ---------- */
   const WRAP = 80;
   function wrapText(text, width){
@@ -1771,7 +1853,11 @@ HOW TO MAP CODE
     S("rb_wait_until", "wait until %1", [{ type:"input_value", name:"COND", check:"Boolean" }],
       { style:"control", inputsInline:true, tooltip:"Pause until the condition is true. Checked twice a second, or every 10 seconds if it asks Claude." }),
     { type:"rb_stop", message0:"stop the run", previousStatement:null, style:"control", tooltip:"End the run here. Anything already in the result is shown." },
-    S("rb_use_model", "use model %1", [{ type:"field_dropdown", name:"TIER", options:TIERS }], { style:"control", tooltip:"Switch model for the AI blocks after this one." }),
+    S("rb_use_model", "use model %1", [{ type:"field_dropdown", name:"TIER", options:TIERS }], { style:"control",
+      tooltip:"Switch model for the AI blocks after this one. Gemini runs in exported Python; in this page Claude stands in for it." }),
+    { type:"rb_with_model", message0:"with model %1", args0:[{ type:"field_dropdown", name:"TIER", options:TIERS }],
+      message1:"%1", args1:[{ type:"input_statement", name:"DO" }], previousStatement:null, nextStatement:null, style:"control",
+      tooltip:"Runs just the blocks inside on this model, then goes back to the model before. Gemini runs in exported Python; in this page Claude stands in for it." },
     /* Operators extras */
     V("rb_contains", "%1 contains %2", [val("A"), val("B")], "Boolean", { style:"operators", inputsInline:true, tooltip:"True if the first text includes the second (ignores case)." }),
     V("rb_word_count", "word count of %1", [val("TEXT")], "Number", { style:"text", inputsInline:true }),
@@ -1903,7 +1989,7 @@ HOW TO MAP CODE
       B("controls_repeat_ext", { TIMES:N(3) }), B("controls_whileUntil"), B("controls_if"),
       B("controls_if", null, { extraState:{ hasElse:true } }),
       B("controls_forEach"), B("controls_for", { FROM:N(1), TO:N(5), BY:N(1) }), B("controls_flow_statements"),
-      B("rb_wait", { SECS:N(1) }), B("rb_wait_until"), B("rb_try"), B("rb_retry", { TIMES:N(3) }), B("rb_error"), B("rb_use_model"), B("rb_stop")
+      B("rb_wait", { SECS:N(1) }), B("rb_wait_until"), B("rb_try"), B("rb_retry", { TIMES:N(3) }), B("rb_error"), B("rb_use_model"), B("rb_with_model", null, { fields:{ TIER:"gemini-default" } }), B("rb_stop")
     ]},
     { kind:"category", name:"Wait & time", categorystyle:"time", contents:[
       B("rb_wait", { SECS:N(5) }, { fields:{ UNIT:"m" } }), B("rb_wait_until"), B("rb_wait_time"), B("rb_wait_msg"),
@@ -2025,6 +2111,17 @@ HOW TO MAP CODE
           blk("rb_rework", null, { TEXT:{ block:{ type:"rb_answer" } } })
         ))
       }),
+      blk("rb_result")
+    )),
+    gemini: () => prog([], chain(
+      blk("rb_start"),
+      blk("rb_task", null, { TEXT:lt("Explain what autolyse is in sourdough baking, for a home baker's reference page.") }),
+      blk("rb_generate"),
+      blk("controls_repeat_ext", null, { TIMES:nm(3), DO:st(chain(
+        blk("rb_with_model", { TIER:"gemini-default" }, { DO:st(blk("rb_review", null, { CRITERIA:lt("accurate and specific; beginner friendly, jargon explained; under 200 words") })) }),
+        blk("controls_if", null, { IF0:{ block:{ type:"rb_passed" } }, DO0:st(blk("controls_flow_statements", { FLOW:"BREAK" })) }),
+        blk("rb_revise")
+      )) }),
       blk("rb_result")
     )),
     files: () => prog([["v_doc","document"],["v_sum","summary"]], chain(
@@ -2183,7 +2280,7 @@ HOW TO MAP CODE
     const btn = $("io-py-save"); btn.disabled = true;
     try {
       const code = toPython($("io-name").value.trim() || "my-program");
-      const zip = makeZip([{ name:pyName() + ".py", text:code }, { name:"requirements.txt", text:"anthropic\n" }]);
+      const zip = makeZip([{ name:pyName() + ".py", text:code }, { name:"requirements.txt", text:programUsesGemini() ? "anthropic\ngoogle-genai\n" : "anthropic\n" }]);
       const r = await downloads.save({ filename:pyName() + ".zip", data:zip });
       ioMsg("io-export-msg", r.status === "saved" ? "Saved " + pyName() + ".zip. Unzip it to get " + pyName() + ".py." : "File sent.", "ok");
     } catch(e) {
@@ -2312,6 +2409,10 @@ HOW TO MAP CODE
   function b64encode(str){ const bytes = new TextEncoder().encode(str); let bin = ""; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin); }
   function b64decode(b64){ const bin = atob(b64); const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
 
+  function programUsesGemini(){
+    if (isGemini($("tier").value)) return true;
+    return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isGemini(b.getFieldValue("TIER")));
+  }
   function toPython(progName){
     const used = new Set(["R","V","main","run"]);
     const ident = base => {
@@ -2459,6 +2560,13 @@ HOW TO MAP CODE
           case "rb_stop": case "rb_result": E("raise Finish()"); break;
           case "rb_finish_with": E("R.finish_with(" + I("TEXT", '""') + ")"); break;
           case "rb_use_model": E("R.use_model(" + pyStr(F("TIER")) + ")"); break;
+          case "rb_with_model": {
+            E("async with R.using_model(" + pyStr(F("TIER")) + "):");
+            const before = out.length;
+            stmts(b.getInputTargetBlock("DO"), ind + 1, ctx, out);
+            if (out.length === before) out.push(pad + "    pass");
+            break;
+          }
           case "rb_broadcast": E("R.broadcast(" + I("MSG", '""') + ")"); break;
           case "rb_broadcast_wait": E("await R.broadcast_and_wait(" + I("MSG", '""') + ")"); break;
           case "rb_task": E("R.set_task(" + I("TEXT", '""') + ")"); break;
@@ -2588,6 +2696,7 @@ HOW TO MAP CODE
 
     const fileBase = slug(progName);
     const when = new Date();
+    const usesGemini = programUsesGemini();
     const header = [
       "#!/usr/bin/env python3",
       "\"\"\"" + String(progName || "my-program").replace(/"""/g, "'''"),
@@ -2595,11 +2704,13 @@ HOW TO MAP CODE
       "Exported from Second Thought on " + when.getFullYear() + "-" + String(when.getMonth() + 1).padStart(2, "0") + "-" + String(when.getDate()).padStart(2, "0") + ".",
       "",
       "How to run:",
-      "    pip install anthropic",
+      usesGemini ? "    pip install anthropic google-genai" : "    pip install anthropic",
       "    export ANTHROPIC_API_KEY=your-key      (Windows: set ANTHROPIC_API_KEY=your-key)",
+      usesGemini ? "    export GEMINI_API_KEY=your-key         (Windows: set GEMINI_API_KEY=your-key)" : null,
       starts.length ? "    python " + fileBase + ".py                    runs the 'when Run is clicked' scripts once" : null,
       schedules.length ? "    python " + fileBase + ".py --schedule         keeps running and starts the scheduled scripts on time" : null,
       "",
+      usesGemini ? "Gemini calls go through the Gemini API and are billed to your Google account." : null,
       "Claude calls go through the Anthropic API and are billed to your API account,",
       "not your claude.ai plan. To change model, set RB_MODEL_TIER to quick, default",
       "or complex, or edit MODELS below.",
@@ -3332,7 +3443,12 @@ HOW TO MAP CODE
     setStatus("running · " + run.calls + " Claude call" + (run.calls === 1 ? "" : "s"));
     const sample = run.sample;
     const ctl = new AbortController(); run.ctls.add(ctl);
-    const opts = { signal:ctl.signal, modelTier:run.tier, cache:false };
+    const gem = isGemini(run.tier);
+    const opts = { signal:ctl.signal, modelTier:gem ? run.tier.slice(7) : run.tier, cache:false };
+    if (gem) {
+      if (step && step.el && !step.el.dataset.stand) { step.el.dataset.stand = "1"; const n = step.el.querySelector(".step-name"); if (n) n.textContent += " \u00b7 Claude standing in for " + tierLabel(run.tier); }
+      if (!run.geminiNoted) { run.geminiNoted = true; addStep("Gemini", { mono:true, text:"Gemini can't be reached from this page, so Claude answers in its place. Export to Python to use Gemini itself." }).done("note", "warn"); }
+    }
     if (images && images.length) opts.images = images;
     if (mode !== "json" && step) opts.onText = ({ text }) => step.text(text);
     try {
@@ -3890,7 +4006,15 @@ HOW TO MAP CODE
         }
         break;
       }
-      case "rb_use_model": run.tier = b.getFieldValue("TIER"); addStep("Model", { mono:true, text:"Using " + TIERS.find(t => t[1] === run.tier)[0].toLowerCase() + " model" }).done("set", "ok"); break;
+      case "rb_use_model": run.tier = b.getFieldValue("TIER"); addStep("Model", { mono:true, text:"Using " + tierLabel(run.tier) }).done("set", "ok"); break;
+      case "rb_with_model": {
+        const before = run.tier;
+        run.tier = b.getFieldValue("TIER");
+        addStep("Model", { mono:true, text:"Using " + tierLabel(run.tier) + " for the blocks inside" }).done("set", "ok");
+        try { await runChain(b.getInputTargetBlock("DO"), tc); }
+        finally { run.tier = before; }
+        break;
+      }
       case "rb_task": {
         run.task = str(await input(b, tc, "TEXT")).trim();
         if (!run.task) fail("The task is empty. Type what you want into 'set task to'.");

@@ -24,7 +24,7 @@ FIX = HERE / "fixtures"
 PAGE = (ROOT / "second-thought.html").read_text(encoding="utf-8")
 DOC = '<!doctype html><html><head><meta charset=utf8><style>[hidden]{display:none!important}</style></head><body>' + PAGE + "</body></html>"
 
-EXAMPLES = ["review", "brainstorm", "interview", "translate", "parallel", "pictures", "memory", "files"]
+EXAMPLES = ["review", "brainstorm", "interview", "translate", "parallel", "pictures", "memory", "files", "gemini"]
 PY_STDIN = {"interview": "rye bread for beginners\nn\nshorter please\ny\n", "files": f"{FIX / 'notes.txt'}\n"}
 
 # Stand-ins for the page's runtime capabilities (Claude, storage, user, downloads).
@@ -138,6 +138,9 @@ async def page_tests():
             status = await run_program(pg)
             has_result = await pg.query_selector(".result") is not None
             check(status.startswith("done") and has_result, f"{ex}: {status}")
+            if ex == "gemini":
+                labelled = await pg.eval_on_selector_all(".step-name", "e => e.filter(x => x.textContent.includes('standing in for Gemini')).length")
+                check(labelled > 0, f"page marks {labelled} step(s) as Claude standing in for Gemini")
 
         print("Block search")
         await pg.fill("#block-search", "record")
@@ -178,7 +181,7 @@ async def page_tests():
 
 def python_tests(codes):
     print("Exported Python runs")
-    env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), ANTHROPIC_API_KEY="test")
+    env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test")
     with tempfile.TemporaryDirectory() as tmp:
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
@@ -187,6 +190,10 @@ def python_tests(codes):
             r = subprocess.run([sys.executable, str(path)], input=stdin, capture_output=True, text=True, env=env, cwd=tmp, timeout=120)
             ok = r.returncode == 0 and ("RESULT" in r.stdout or "Done" in r.stdout)
             check(ok, f"{ex}.py" + ("" if ok else f" (exit {r.returncode}): {(r.stderr or r.stdout)[-300:]}"))
+            if ex == "gemini":
+                done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
+                both = bool(done) and "Gemini:" in done[-1] and "Claude:" in done[-1]
+                check(both, "gemini.py used both Claude and Gemini" + ("" if both else f": {done[-1] if done else r.stdout[-200:]}"))
 
 
 def main():

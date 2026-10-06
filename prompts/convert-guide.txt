@@ -40,7 +40,9 @@ Wait & time:
   rb_wait: inputs SECS (number), fields UNIT ("s" | "m" | "h").  rb_wait_until (COND, a boolean).
   rb_wait_time: fields HOUR, MINUTE.  rb_wait_msg: fields MSG.  rb_reset_timer.
 Control:
-  rb_use_model: fields TIER ("quick" | "default" | "complex").  rb_stop: end the run.
+  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini).  rb_stop: end the run.
+  rb_with_model: fields TIER (as above); statement input DO. Runs just the blocks inside on that model.
+  Map calls to Gemini (google-genai, google.generativeai) to rb_with_model or rb_use_model with a gemini tier: Flash-Lite = gemini-quick, Flash = gemini-default, Pro = gemini-complex.
   controls_repeat_ext: inputs TIMES, DO.
   controls_whileUntil: fields MODE ("WHILE" | "UNTIL"); inputs BOOL, DO.
   controls_if: inputs IF0, DO0, IF1, DO1, ..., ELSE; extraState {"elseIfCount": <number of extra IFs>, "hasElse": true} (omit extraState for a plain if).

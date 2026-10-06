@@ -119,6 +119,7 @@ Second Thought can do many things. Here are some of them.
 - It can do several jobs at the same time.
 - It can wait until a certain time of day, and then start a job by itself.
 - If something goes wrong, it can try again.
+- It can ask **Gemini** to help too. Gemini is another clever helper, made by a company called Google. Claude can write something, and Gemini can check it. Two helpers spot more mistakes than one.
 
 ---
 
@@ -175,6 +176,15 @@ python my-program.py
 The first line installs the part that lets Python talk to Claude. The second line gives Python the key. The third line runs the program.
 
 To keep a program running so its timed jobs start by themselves, add `--schedule` to the end of the third line.
+
+If your program uses Gemini, it needs a second key, from Google, and one more part to install:
+
+```
+pip install google-genai
+export GEMINI_API_KEY=your-gemini-key
+```
+
+Gemini only works in the Python program. On the Second Thought page, Claude does Gemini's jobs instead, and the run log says so.
 
 ---
 
