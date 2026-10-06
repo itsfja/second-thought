@@ -44,11 +44,18 @@ MODELS = {
     "xai-quick": "grok-4.3",
     "xai-default": "grok-4.3",
     "xai-complex": "grok-4.7",
+    # OpenAI: needs OPENAI_API_KEY (https://platform.openai.com). All three can look at pictures.
+    # See https://developers.openai.com/api/docs/models
+    "openai-quick": "gpt-6-luna",
+    "openai-default": "gpt-6.1-sol",
+    "openai-complex": "gpt-6-astra",
 }
 DEEPSEEK_BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
 XAI_BASE_URL = os.environ.get("XAI_BASE_URL", "https://api.x.ai/v1").rstrip("/")
 XAI_API_KEY = os.environ.get("XAI_API_KEY", "")
+OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 NO_VISION = {"deepseek-v4-pro"}  # models that can't look at photos
 LLAMA_BASE_URL = os.environ.get("LLAMA_BASE_URL", "http://localhost:11434/v1").rstrip("/")
 LLAMA_API_KEY = os.environ.get("LLAMA_API_KEY", "")
@@ -56,7 +63,8 @@ MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "comple
                 "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro",
                 "llama-quick": "Llama, small", "llama-default": "Llama, vision", "llama-complex": "Llama 4",
                 "deepseek-quick": "DeepSeek Flash", "deepseek-default": "DeepSeek Flash", "deepseek-complex": "DeepSeek V4 Pro",
-                "xai-quick": "Grok 4.3", "xai-default": "Grok 4.3", "xai-complex": "Grok 4.7"}
+                "xai-quick": "Grok 4.3", "xai-default": "Grok 4.3", "xai-complex": "Grok 4.7",
+                "openai-quick": "GPT-6 Luna", "openai-default": "GPT-6.1 Sol", "openai-complex": "GPT-6 Astra"}
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -469,6 +477,9 @@ class Runtime:
         elif tier.startswith("xai-"):
             text = await self._call_openai("xAI", MODELS.get(tier, MODELS["xai-default"]), prompt, picture, history, web)
             who = "xAI"
+        elif tier.startswith("openai-"):
+            text = await self._call_openai("OpenAI", MODELS.get(tier, MODELS["openai-default"]), prompt, picture, history, web)
+            who = "OpenAI"
         else:
             text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
             who = "Claude"
@@ -499,6 +510,10 @@ class Runtime:
             base, key = DEEPSEEK_BASE_URL, DEEPSEEK_API_KEY
             if not key:
                 raise RunError("This program uses DeepSeek. Set the DEEPSEEK_API_KEY environment variable first (https://platform.deepseek.com).")
+        elif provider == "OpenAI":
+            base, key = OPENAI_BASE_URL, OPENAI_API_KEY
+            if not key:
+                raise RunError("This program uses OpenAI. Set the OPENAI_API_KEY environment variable first (https://platform.openai.com).")
         elif provider == "xAI":
             base, key = XAI_BASE_URL, XAI_API_KEY
             if not key:
@@ -524,7 +539,7 @@ class Runtime:
                 raise RunError(f"{provider} refused the request ({e.code}): {detail}")
             raise Retryable(f"{provider} answered {e.code}: {detail}")
         except (urllib.error.URLError, TimeoutError, OSError) as e:
-            where = {"DeepSeek": DEEPSEEK_BASE_URL, "xAI": XAI_BASE_URL}.get(provider, LLAMA_BASE_URL)
+            where = {"DeepSeek": DEEPSEEK_BASE_URL, "xAI": XAI_BASE_URL, "OpenAI": OPENAI_BASE_URL}.get(provider, LLAMA_BASE_URL)
             hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
             raise Retryable(f"Couldn't reach {provider} at {where} ({getattr(e, 'reason', e)}).{hint}")
 
@@ -541,7 +556,13 @@ class Runtime:
         else:
             content = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
         messages.append({"role": "user", "content": content})
-        data = await asyncio.to_thread(self._openai_request, provider, {"model": model, "messages": messages, "max_tokens": MAX_TOKENS, "stream": False})
+        body = {"model": model, "messages": messages, "stream": False}
+        if provider == "OpenAI":
+            # OpenAI's newer models refuse max_tokens, and spend part of the budget thinking before they answer.
+            body["max_completion_tokens"] = MAX_TOKENS * 4
+        else:
+            body["max_tokens"] = MAX_TOKENS
+        data = await asyncio.to_thread(self._openai_request, provider, body)
         usage = data.get("usage") or {}
         self._count(provider, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
         try:

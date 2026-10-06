@@ -1,4 +1,4 @@
-"""A tiny stand-in for an OpenAI-compatible Llama server (like Ollama), for the tests."""
+"""A tiny stand-in for an OpenAI-compatible server (Ollama, DeepSeek, xAI, OpenAI), for the tests."""
 import asyncio
 import json
 import pathlib
@@ -23,6 +23,15 @@ def start():
             text = last if isinstance(last, str) else " ".join(p.get("text", "") for p in last if p.get("type") == "text")
             calls.append({"model": body.get("model"), "image": not isinstance(last, str),
                           "system": body["messages"][0]["role"] == "system"})
+            if str(body.get("model", "")).startswith("gpt-") and "max_tokens" in body:
+                # Like the real OpenAI API: newer GPT models only accept max_completion_tokens.
+                err = json.dumps({"error": {"message": "Unsupported parameter: 'max_tokens'. Use 'max_completion_tokens' instead."}}).encode()
+                self.send_response(400)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(err)))
+                self.end_headers()
+                self.wfile.write(err)
+                return
             msg = asyncio.run(_Messages().create(model=body.get("model"), max_tokens=0, messages=[{"role": "user", "content": text}]))
             out = json.dumps({"choices": [{"message": {"role": "assistant", "content": msg.content[0].text}}],
                               "usage": {"prompt_tokens": 12, "completion_tokens": 6}}).encode()

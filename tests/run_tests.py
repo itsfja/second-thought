@@ -245,7 +245,8 @@ def python_tests(codes):
     env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test",
                HA_URL=ha_url, HA_TOKEN=fake_ha.TOKEN, LLAMA_BASE_URL=llama_url,
                DEEPSEEK_BASE_URL=llama_url, DEEPSEEK_API_KEY="test",
-               XAI_BASE_URL=llama_url, XAI_API_KEY="test")
+               XAI_BASE_URL=llama_url, XAI_API_KEY="test",
+               OPENAI_BASE_URL=llama_url, OPENAI_API_KEY="test")
     with tempfile.TemporaryDirectory() as tmp:
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
@@ -259,7 +260,12 @@ def python_tests(codes):
                 used = bool(done) and "Llama:" in done[-1]
                 check(used, f"{ex}.py used Llama" + ("" if used else f": {done[-1] if done else r.stdout[-200:]}"))
                 if ex == "w_judges":
-                    check(used and all(w in done[-1] for w in ("Claude:", "Gemini:", "DeepSeek:", "xAI:")), "w_judges.py asked Claude, Gemini, Llama, DeepSeek and Grok")
+                    check(used and all(w in done[-1] for w in ("Claude:", "Gemini:", "DeepSeek:", "xAI:", "OpenAI:")), "w_judges.py asked Claude, Gemini, Llama, DeepSeek, Grok and OpenAI")
+            if ex == "w_gptcheck":
+                done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
+                gpt = [c for c in llama_calls if str(c["model"]).startswith("gpt-")]
+                check(bool(done) and "OpenAI:" in done[-1] and "Claude:" in done[-1] and gpt,
+                      "w_gptcheck.py asked Claude and OpenAI (and OpenAI accepted the request)" + ("" if done else f": {r.stdout[-200:]}"))
             if ex == "r_second":
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 check(bool(done) and "DeepSeek:" in done[-1] and "Claude:" in done[-1], "r_second.py asked Claude and DeepSeek")
