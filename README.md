@@ -199,7 +199,13 @@ If Llama lives on a different computer, tell the program where to find it:
 export LLAMA_BASE_URL=http://that-computer:11434/v1
 ```
 
-Gemini and Llama only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
+A fourth helper, **DeepSeek**, is very cheap to use. It lives on DeepSeek's own computers in China, so it needs its own key, and it's best kept for things that aren't private:
+
+```
+export DEEPSEEK_API_KEY=your-deepseek-key
+```
+
+Gemini, Llama and DeepSeek only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
 
 ---
 

@@ -36,12 +36,20 @@ MODELS = {
     "llama-quick": "llama3.2:3b",              # small and fast; runs on most computers
     "llama-default": "llama3.2-vision:11b",    # can look at pictures; about 8 GB of graphics memory
     "llama-complex": "llama4:16x17b",          # Llama 4 Scout; needs a lot of memory
+    # DeepSeek: needs DEEPSEEK_API_KEY (https://platform.deepseek.com). Flash can look at pictures; Pro can't.
+    "deepseek-quick": "deepseek-flash",
+    "deepseek-default": "deepseek-flash",
+    "deepseek-complex": "deepseek-v4-pro",
 }
+DEEPSEEK_BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
+NO_VISION = {"deepseek-v4-pro"}  # models that can't look at photos
 LLAMA_BASE_URL = os.environ.get("LLAMA_BASE_URL", "http://localhost:11434/v1").rstrip("/")
 LLAMA_API_KEY = os.environ.get("LLAMA_API_KEY", "")
 MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
                 "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro",
-                "llama-quick": "Llama, small", "llama-default": "Llama, vision", "llama-complex": "Llama 4"}
+                "llama-quick": "Llama, small", "llama-default": "Llama, vision", "llama-complex": "Llama 4",
+                "deepseek-quick": "DeepSeek Flash", "deepseek-default": "DeepSeek Flash", "deepseek-complex": "DeepSeek V4 Pro"}
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -446,8 +454,11 @@ class Runtime:
             text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web)
             who = "Gemini"
         elif tier.startswith("llama-"):
-            text = await self._call_llama(MODELS.get(tier, MODELS["llama-default"]), prompt, picture, history, web)
+            text = await self._call_openai("Llama", MODELS.get(tier, MODELS["llama-default"]), prompt, picture, history, web)
             who = "Llama"
+        elif tier.startswith("deepseek-"):
+            text = await self._call_openai("DeepSeek", MODELS.get(tier, MODELS["deepseek-default"]), prompt, picture, history, web)
+            who = "DeepSeek"
         else:
             text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
             who = "Claude"
@@ -471,39 +482,54 @@ class Runtime:
         self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
         return "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
 
-    def _llama_request(self, body):
+    @staticmethod
+    def _openai_request(provider, body):
+        """One chat request to an OpenAI-compatible server (Ollama, llama.cpp, LM Studio, DeepSeek, ...)."""
+        if provider == "DeepSeek":
+            base, key = DEEPSEEK_BASE_URL, DEEPSEEK_API_KEY
+            if not key:
+                raise RunError("This program uses DeepSeek. Set the DEEPSEEK_API_KEY environment variable first (https://platform.deepseek.com).")
+        else:
+            base, key = LLAMA_BASE_URL, LLAMA_API_KEY
         headers = {"Content-Type": "application/json"}
-        if LLAMA_API_KEY:
-            headers["Authorization"] = "Bearer " + LLAMA_API_KEY
-        req = urllib.request.Request(LLAMA_BASE_URL + "/chat/completions", data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
+        if key:
+            headers["Authorization"] = "Bearer " + key
+        req = urllib.request.Request(base + "/chat/completions", data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
         try:
             with urllib.request.urlopen(req, timeout=600) as r:
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
             detail = e.read().decode("utf-8", "replace")[:200]
-            if e.code == 404 and "model" in detail.lower():
+            if provider == "Llama" and e.code == 404 and "model" in detail.lower():
                 raise RunError(f"The Llama server doesn't have model {body['model']}. Run:  ollama pull {body['model']}")
-            if e.code in (400, 401, 403, 404):
-                raise RunError(f"The Llama server refused the request ({e.code}): {detail}")
-            raise Retryable(f"The Llama server answered {e.code}: {detail}")
+            if e.code == 401:
+                raise RunError(f"{provider} refused the API key (401). Check it.")
+            if e.code == 402:
+                raise RunError(f"{provider} says the account has no credit left (402).")
+            if e.code in (400, 403, 404, 422):
+                raise RunError(f"{provider} refused the request ({e.code}): {detail}")
+            raise Retryable(f"{provider} answered {e.code}: {detail}")
         except (urllib.error.URLError, TimeoutError, OSError) as e:
-            raise Retryable(f"Couldn't reach the Llama server at {LLAMA_BASE_URL} ({getattr(e, 'reason', e)}). "
-                            "Is Ollama running? Start it with:  ollama serve")
+            where = DEEPSEEK_BASE_URL if provider == "DeepSeek" else LLAMA_BASE_URL
+            hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
+            raise Retryable(f"Couldn't reach {provider} at {where} ({getattr(e, 'reason', e)}).{hint}")
 
-    async def _call_llama(self, model, prompt, picture, history, web):
+    async def _call_openai(self, provider, model, prompt, picture, history, web):
         messages = [{"role": "system", "content": self.instructions}] if self.instructions else []
         messages += [{"role": t["role"], "content": to_str(t["content"])} for t in history or []]
         if web:
             prompt = "You can't browse the web, so answer from what you know and say clearly that it may be out of date.\n\n" + prompt
         if picture is not None and picture.svg is None:
+            if model in NO_VISION:
+                raise RunError(f"{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.")
             url = "data:" + picture.media_type + ";base64," + base64.b64encode(picture.data).decode("ascii")
             content = [{"type": "text", "text": prompt}, {"type": "image_url", "image_url": {"url": url}}]
         else:
             content = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
         messages.append({"role": "user", "content": content})
-        data = await asyncio.to_thread(self._llama_request, {"model": model, "messages": messages, "max_tokens": MAX_TOKENS, "stream": False})
+        data = await asyncio.to_thread(self._openai_request, provider, {"model": model, "messages": messages, "max_tokens": MAX_TOKENS, "stream": False})
         usage = data.get("usage") or {}
-        self._count("Llama", usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
+        self._count(provider, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
         try:
             return (data["choices"][0]["message"]["content"] or "").strip()
         except (KeyError, IndexError, TypeError):
