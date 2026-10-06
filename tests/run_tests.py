@@ -30,6 +30,12 @@ FIX = HERE / "fixtures"
 PAGE = (ROOT / "second-thought.html").read_text(encoding="utf-8")
 DOC = '<!doctype html><html><head><meta charset=utf8><style>[hidden]{display:none!important}</style></head><body>' + PAGE + "</body></html>"
 
+for _stream in (sys.stdout, sys.stderr):  # Windows consoles: never crash printing a result
+    try:
+        _stream.reconfigure(errors="replace")
+    except Exception:
+        pass
+
 EXAMPLES = []  # read from the page's Example menu, so every example is always tested
 EXPORTS = {}   # example -> {file name: text} of the exported zip
 
@@ -292,7 +298,7 @@ def python_tests(codes):
     print("Exported Python runs")
     ha_url, ha_calls = fake_ha.start()
     llama_url, llama_calls = fake_llama.start()
-    env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test",
+    env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), PYTHONIOENCODING="utf-8", ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test",
                HA_URL=ha_url, HA_TOKEN=fake_ha.TOKEN, LLAMA_BASE_URL=llama_url,
                DEEPSEEK_BASE_URL=llama_url, DEEPSEEK_API_KEY="test",
                XAI_BASE_URL=llama_url, XAI_API_KEY="test",
