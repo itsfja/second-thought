@@ -6,12 +6,12 @@ class _M:
 class _Messages:
     rev = 0
     async def create(self, model, max_tokens, messages, **kw):
-        with open(os.environ.get("FAKE_LOG","/dev/null"),"a") as f: f.write("KW " + json.dumps({k: (v if k=="system" else str(v)[:60]) for k,v in kw.items()}) + " turns=" + str(len(messages)) + "\n")
+        with open(os.environ.get("FAKE_LOG", os.devnull),"a") as f: f.write("KW " + json.dumps({k: (v if k=="system" else str(v)[:60]) for k,v in kw.items()}) + " turns=" + str(len(messages)) + "\n")
         c = messages[0]["content"]
         img = isinstance(c, list)
         p = c[-1]["text"] if img else c
-        with open(os.environ.get("FAKE_LOG","/dev/null"),"a") as f: f.write(("IMG " if img else "") + ("" if not img else c[0]["source"]["media_type"]) + "\n")
-        with open(os.environ.get("FAKE_LOG","/dev/null"),"a") as f: f.write(model+" | "+p[:50].replace("\n"," ")+"\n")
+        with open(os.environ.get("FAKE_LOG", os.devnull),"a") as f: f.write(("IMG " if img else "") + ("" if not img else c[0]["source"]["media_type"]) + "\n")
+        with open(os.environ.get("FAKE_LOG", os.devnull),"a") as f: f.write(model+" | "+p[:50].replace("\n"," ")+"\n")
         await asyncio.sleep(0.2)
         if os.environ.get("FAKE_FAIL_ONCE") and not getattr(_Messages, "_failed", False):
             _Messages._failed = True
