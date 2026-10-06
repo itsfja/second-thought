@@ -49,22 +49,57 @@ MODELS = {
     "openai-quick": "gpt-6-luna",
     "openai-default": "gpt-6.1-sol",
     "openai-complex": "gpt-6-astra",
+    # Mistral (France): needs MISTRAL_API_KEY (https://console.mistral.ai). See https://docs.mistral.ai/getting-started/models
+    "mistral-quick": "mistral-small-latest",
+    "mistral-default": "mistral-medium-latest",
+    "mistral-complex": "mistral-large-latest",
+    # Qwen (Alibaba Cloud Model Studio): needs DASHSCOPE_API_KEY (https://modelstudio.console.alibabacloud.com).
+    # Pictures go to QWEN_VISION_MODEL instead. See https://www.alibabacloud.com/help/en/model-studio/models
+    "qwen-quick": "qwen3.8-flash",
+    "qwen-default": "qwen3.7-plus",
+    "qwen-complex": "qwen3.8-max",
+    # Kimi (Moonshot AI): needs MOONSHOT_API_KEY (https://platform.moonshot.ai). Both can look at pictures.
+    "kimi-quick": "kimi-k2.6",
+    "kimi-default": "kimi-k2.6",
+    "kimi-complex": "kimi-k3",
+    # Perplexity: needs PERPLEXITY_API_KEY (https://www.perplexity.ai/account/api). Always searches the web and
+    # lists its sources. These are Agent API presets, not model names. See https://docs.perplexity.ai
+    "perplexity-quick": "fast",
+    "perplexity-default": "low",
+    "perplexity-complex": "high",
 }
-DEEPSEEK_BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
-DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
-XAI_BASE_URL = os.environ.get("XAI_BASE_URL", "https://api.x.ai/v1").rstrip("/")
-XAI_API_KEY = os.environ.get("XAI_API_KEY", "")
-OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+QWEN_VISION_MODEL = os.environ.get("QWEN_VISION_MODEL", "qwen3-vl-plus")
+
+
+def _provider(name, prefix, base_env, base, key_envs, signup):
+    key = next((os.environ[k] for k in key_envs if os.environ.get(k)), "")
+    return {"name": name, "prefix": prefix, "base": os.environ.get(base_env, base).rstrip("/"), "base_env": base_env,
+            "key": key, "key_env": key_envs[0], "signup": signup}
+
+
+# Model services that speak OpenAI's chat format. Change a service's address with its *_BASE_URL variable.
+PROVIDERS = {p["name"]: p for p in [
+    _provider("Llama", "llama-", "LLAMA_BASE_URL", "http://localhost:11434/v1", ("LLAMA_API_KEY",), None),
+    _provider("DeepSeek", "deepseek-", "DEEPSEEK_BASE_URL", "https://api.deepseek.com", ("DEEPSEEK_API_KEY",), "https://platform.deepseek.com"),
+    _provider("xAI", "xai-", "XAI_BASE_URL", "https://api.x.ai/v1", ("XAI_API_KEY",), "https://console.x.ai"),
+    _provider("OpenAI", "openai-", "OPENAI_BASE_URL", "https://api.openai.com/v1", ("OPENAI_API_KEY",), "https://platform.openai.com"),
+    _provider("Mistral", "mistral-", "MISTRAL_BASE_URL", "https://api.mistral.ai/v1", ("MISTRAL_API_KEY",), "https://console.mistral.ai"),
+    _provider("Qwen", "qwen-", "QWEN_BASE_URL", "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+              ("DASHSCOPE_API_KEY", "QWEN_API_KEY"), "https://modelstudio.console.alibabacloud.com"),
+    _provider("Kimi", "kimi-", "MOONSHOT_BASE_URL", "https://api.moonshot.ai/v1", ("MOONSHOT_API_KEY", "KIMI_API_KEY"), "https://platform.moonshot.ai"),
+    _provider("Perplexity", "perplexity-", "PERPLEXITY_BASE_URL", "https://api.perplexity.ai", ("PERPLEXITY_API_KEY",), "https://www.perplexity.ai/account/api"),
+]}
 NO_VISION = {"deepseek-v4-pro"}  # models that can't look at photos
-LLAMA_BASE_URL = os.environ.get("LLAMA_BASE_URL", "http://localhost:11434/v1").rstrip("/")
-LLAMA_API_KEY = os.environ.get("LLAMA_API_KEY", "")
 MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
                 "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro",
                 "llama-quick": "Llama, small", "llama-default": "Llama, vision", "llama-complex": "Llama 4",
                 "deepseek-quick": "DeepSeek Flash", "deepseek-default": "DeepSeek Flash", "deepseek-complex": "DeepSeek V4 Pro",
                 "xai-quick": "Grok 4.3", "xai-default": "Grok 4.3", "xai-complex": "Grok 4.7",
-                "openai-quick": "GPT-6 Luna", "openai-default": "GPT-6.1 Sol", "openai-complex": "GPT-6 Astra"}
+                "openai-quick": "GPT-6 Luna", "openai-default": "GPT-6.1 Sol", "openai-complex": "GPT-6 Astra",
+                "mistral-quick": "Mistral Small", "mistral-default": "Mistral Medium", "mistral-complex": "Mistral Large",
+                "qwen-quick": "Qwen Flash", "qwen-default": "Qwen Plus", "qwen-complex": "Qwen Max",
+                "kimi-quick": "Kimi K2.6", "kimi-default": "Kimi K2.6", "kimi-complex": "Kimi K3",
+                "perplexity-quick": "Perplexity, fast", "perplexity-default": "Perplexity, research", "perplexity-complex": "Perplexity, deep research"}
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -468,18 +503,15 @@ class Runtime:
         if tier.startswith("gemini-"):
             text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web)
             who = "Gemini"
-        elif tier.startswith("llama-"):
-            text = await self._call_openai("Llama", MODELS.get(tier, MODELS["llama-default"]), prompt, picture, history, web)
-            who = "Llama"
-        elif tier.startswith("deepseek-"):
-            text = await self._call_openai("DeepSeek", MODELS.get(tier, MODELS["deepseek-default"]), prompt, picture, history, web)
-            who = "DeepSeek"
-        elif tier.startswith("xai-"):
-            text = await self._call_openai("xAI", MODELS.get(tier, MODELS["xai-default"]), prompt, picture, history, web)
-            who = "xAI"
-        elif tier.startswith("openai-"):
-            text = await self._call_openai("OpenAI", MODELS.get(tier, MODELS["openai-default"]), prompt, picture, history, web)
-            who = "OpenAI"
+        elif tier.startswith("perplexity-"):
+            text, sources = await self._call_perplexity(MODELS.get(tier, MODELS["perplexity-default"]), prompt, picture, history)
+            who = "Perplexity"
+            if text and sources and not want_json:
+                text += "\n\nSources:\n" + "\n".join(sources)
+        elif any(tier.startswith(pv["prefix"]) for pv in PROVIDERS.values()):
+            pv = next(pv for pv in PROVIDERS.values() if tier.startswith(pv["prefix"]))
+            who = pv["name"]
+            text = await self._call_openai(who, MODELS.get(tier, MODELS.get(pv["prefix"] + "default")), prompt, picture, history, web)
         else:
             text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
             who = "Claude"
@@ -504,26 +536,15 @@ class Runtime:
         return "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
 
     @staticmethod
-    def _openai_request(provider, body):
-        """One chat request to an OpenAI-compatible server (Ollama, llama.cpp, LM Studio, DeepSeek, xAI, ...)."""
-        if provider == "DeepSeek":
-            base, key = DEEPSEEK_BASE_URL, DEEPSEEK_API_KEY
-            if not key:
-                raise RunError("This program uses DeepSeek. Set the DEEPSEEK_API_KEY environment variable first (https://platform.deepseek.com).")
-        elif provider == "OpenAI":
-            base, key = OPENAI_BASE_URL, OPENAI_API_KEY
-            if not key:
-                raise RunError("This program uses OpenAI. Set the OPENAI_API_KEY environment variable first (https://platform.openai.com).")
-        elif provider == "xAI":
-            base, key = XAI_BASE_URL, XAI_API_KEY
-            if not key:
-                raise RunError("This program uses xAI (Grok). Set the XAI_API_KEY environment variable first (https://console.x.ai).")
-        else:
-            base, key = LLAMA_BASE_URL, LLAMA_API_KEY
+    def _openai_request(provider, body, path="/chat/completions"):
+        """One request to a model service that speaks OpenAI's format (Ollama, DeepSeek, xAI, OpenAI, Mistral, ...)."""
+        pv = PROVIDERS[provider]
+        if pv["signup"] and not pv["key"]:
+            raise RunError(f"This program uses {provider}. Set the {pv['key_env']} environment variable first ({pv['signup']}).")
         headers = {"Content-Type": "application/json"}
-        if key:
-            headers["Authorization"] = "Bearer " + key
-        req = urllib.request.Request(base + "/chat/completions", data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
+        if pv["key"]:
+            headers["Authorization"] = "Bearer " + pv["key"]
+        req = urllib.request.Request(pv["base"] + path, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
         try:
             with urllib.request.urlopen(req, timeout=600) as r:
                 return json.loads(r.read())
@@ -532,16 +553,15 @@ class Runtime:
             if provider == "Llama" and e.code == 404 and "model" in detail.lower():
                 raise RunError(f"The Llama server doesn't have model {body['model']}. Run:  ollama pull {body['model']}")
             if e.code == 401:
-                raise RunError(f"{provider} refused the API key (401). Check it.")
+                raise RunError(f"{provider} refused the API key (401). Check {pv['key_env']}.")
             if e.code == 402:
                 raise RunError(f"{provider} says the account has no credit left (402).")
             if e.code in (400, 403, 404, 422):
                 raise RunError(f"{provider} refused the request ({e.code}): {detail}")
             raise Retryable(f"{provider} answered {e.code}: {detail}")
         except (urllib.error.URLError, TimeoutError, OSError) as e:
-            where = {"DeepSeek": DEEPSEEK_BASE_URL, "xAI": XAI_BASE_URL, "OpenAI": OPENAI_BASE_URL}.get(provider, LLAMA_BASE_URL)
             hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
-            raise Retryable(f"Couldn't reach {provider} at {where} ({getattr(e, 'reason', e)}).{hint}")
+            raise Retryable(f"Couldn't reach {provider} at {pv['base']} ({getattr(e, 'reason', e)}).{hint}")
 
     async def _call_openai(self, provider, model, prompt, picture, history, web):
         messages = [{"role": "system", "content": self.instructions}] if self.instructions else []
@@ -551,6 +571,8 @@ class Runtime:
         if picture is not None and picture.svg is None:
             if model in NO_VISION:
                 raise RunError(f"{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.")
+            if provider == "Qwen":
+                model = QWEN_VISION_MODEL  # Qwen's text models can't see; its VL model can
             url = "data:" + picture.media_type + ";base64," + base64.b64encode(picture.data).decode("ascii")
             content = [{"type": "text", "text": prompt}, {"type": "image_url", "image_url": {"url": url}}]
         else:
@@ -562,6 +584,8 @@ class Runtime:
             body["max_completion_tokens"] = MAX_TOKENS * 4
         else:
             body["max_tokens"] = MAX_TOKENS
+        if provider == "Qwen":
+            body["enable_thinking"] = False  # Qwen only thinks out loud when streaming
         data = await asyncio.to_thread(self._openai_request, provider, body)
         usage = data.get("usage") or {}
         self._count(provider, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
@@ -569,6 +593,32 @@ class Runtime:
             return (data["choices"][0]["message"]["content"] or "").strip()
         except (KeyError, IndexError, TypeError):
             return ""
+
+    async def _call_perplexity(self, preset, prompt, picture, history):
+        """Perplexity's Agent API: searches the web, then answers with numbered sources."""
+        if picture is not None and picture.svg is None:
+            raise RunError("Perplexity can't look at photos here. Use Claude, GPT or Gemini for this step.")
+        if picture is not None:
+            prompt += "\n\nThe picture is this SVG drawing:\n" + picture.svg
+        if history:
+            past = "\n\n".join(("Me: " if t["role"] == "user" else "You: ") + to_str(t["content"]) for t in history)
+            prompt = "Our conversation so far:\n\n" + past + "\n\nNow:\n" + prompt
+        body = {"preset": preset, "input": prompt}
+        if self.instructions:
+            body["instructions"] = self.instructions
+        data = await asyncio.to_thread(self._openai_request, "Perplexity", body, "/v1/agent")
+        usage = data.get("usage") or {}
+        self._count("Perplexity", usage.get("input_tokens", 0), usage.get("output_tokens", 0))
+        text, sources, seen = data.get("output_text") or "", [], set()
+        for item in data.get("output") or []:
+            if item.get("type") == "message" and not data.get("output_text"):
+                text += "".join(c.get("text", "") for c in item.get("content") or [] if c.get("type") == "output_text")
+            if item.get("type") == "search_results":
+                for res in item.get("results") or []:
+                    if res.get("url") and res["url"] not in seen:
+                        seen.add(res["url"])
+                        sources.append(f"[{res.get('id', len(sources) + 1)}] {res.get('title') or res['url']}: {res['url']}")
+        return text.strip(), sources
 
     async def _call_gemini(self, model, prompt, picture, history, web):
         try:

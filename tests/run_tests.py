@@ -246,7 +246,10 @@ def python_tests(codes):
                HA_URL=ha_url, HA_TOKEN=fake_ha.TOKEN, LLAMA_BASE_URL=llama_url,
                DEEPSEEK_BASE_URL=llama_url, DEEPSEEK_API_KEY="test",
                XAI_BASE_URL=llama_url, XAI_API_KEY="test",
-               OPENAI_BASE_URL=llama_url, OPENAI_API_KEY="test")
+               OPENAI_BASE_URL=llama_url, OPENAI_API_KEY="test",
+               MISTRAL_BASE_URL=llama_url, MISTRAL_API_KEY="test", QWEN_BASE_URL=llama_url, DASHSCOPE_API_KEY="test",
+               MOONSHOT_BASE_URL=llama_url, MOONSHOT_API_KEY="test",
+               PERPLEXITY_BASE_URL=llama_url.rsplit("/v1", 1)[0], PERPLEXITY_API_KEY="test")
     with tempfile.TemporaryDirectory() as tmp:
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
@@ -266,6 +269,14 @@ def python_tests(codes):
                 gpt = [c for c in llama_calls if str(c["model"]).startswith("gpt-")]
                 check(bool(done) and "OpenAI:" in done[-1] and "Claude:" in done[-1] and gpt,
                       "w_gptcheck.py asked Claude and OpenAI (and OpenAI accepted the request)" + ("" if done else f": {r.stdout[-200:]}"))
+            if ex == "w_worldpanel":
+                done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
+                ok3 = bool(done) and all(w in done[-1] for w in ("Mistral:", "Qwen:", "Kimi:", "Claude:"))
+                check(ok3, "w_worldpanel.py asked Mistral, Qwen, Kimi and Claude" + ("" if ok3 else f": {done[-1] if done else r.stdout[-200:]}"))
+            if ex == "r_sourced":
+                done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
+                srcd = bool(done) and "Perplexity:" in done[-1] and "Sources:" in r.stdout and "https://example.com/test" in r.stdout
+                check(srcd, "r_sourced.py asked Perplexity and showed its sources" + ("" if srcd else f": {r.stdout[-300:]}"))
             if ex == "r_second":
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 check(bool(done) and "DeepSeek:" in done[-1] and "Claude:" in done[-1], "r_second.py asked Claude and DeepSeek")

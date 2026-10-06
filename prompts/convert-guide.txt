@@ -40,13 +40,17 @@ Wait & time:
   rb_wait: inputs SECS (number), fields UNIT ("s" | "m" | "h").  rb_wait_until (COND, a boolean).
   rb_wait_time: fields HOUR, MINUTE.  rb_wait_msg: fields MSG.  rb_reset_timer.
 Control:
-  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini; "llama-*", "deepseek-*", "xai-*" and "openai-*" as below).  rb_stop: end the run.
+  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini; "llama-*", "deepseek-*", "xai-*", "openai-*", "mistral-*", "qwen-*", "kimi-*" and "perplexity-*" as below).  rb_stop: end the run.
   rb_with_model: fields TIER (as above); statement input DO. Runs just the blocks inside on that model.
   Map calls to Gemini (google-genai, google.generativeai) to rb_with_model or rb_use_model with a gemini tier: Flash-Lite = gemini-quick, Flash = gemini-default, Pro = gemini-complex.
   Map Llama, Ollama, llama.cpp or other local/open models to tiers "llama-quick" (small), "llama-default" (vision-capable), "llama-complex" (largest).
   Map DeepSeek API calls to "deepseek-default" (deepseek-flash, deepseek-chat) or "deepseek-complex" (deepseek-v4-pro, deepseek-reasoner).
   Map xAI / Grok API calls (api.x.ai) to "xai-default" (grok-4.3, grok-4-fast and other cheaper Grok models) or "xai-complex" (grok-4.7, grok-4 and other flagship Grok models).
   Map OpenAI API calls (the openai package, chat.completions or responses, GPT models) to "openai-quick" (gpt-6-luna and other mini/nano models), "openai-default" (gpt-6.1-sol and other mid-range GPT models) or "openai-complex" (gpt-6-astra and other flagship GPT models).
+  Map Mistral API calls (api.mistral.ai, the mistralai package) to "mistral-quick" (small, ministral), "mistral-default" (medium) or "mistral-complex" (large, magistral).
+  Map Qwen / DashScope / Alibaba Model Studio calls to "qwen-quick" (flash, turbo), "qwen-default" (plus, vl) or "qwen-complex" (max).
+  Map Moonshot / Kimi API calls (api.moonshot.ai) to "kimi-default" (kimi-k2.x) or "kimi-complex" (kimi-k3).
+  Map Perplexity API calls (sonar, sonar-pro, the Agent API) to "perplexity-quick" (sonar, preset fast), "perplexity-default" (sonar-pro, preset low/medium) or "perplexity-complex" (sonar-reasoning-pro, sonar-deep-research, preset high).
   controls_repeat_ext: inputs TIMES, DO.
   controls_whileUntil: fields MODE ("WHILE" | "UNTIL"); inputs BOOL, DO.
   controls_if: inputs IF0, DO0, IF1, DO1, ..., ELSE; extraState {"elseIfCount": <number of extra IFs>, "hasElse": true} (omit extraState for a plain if).

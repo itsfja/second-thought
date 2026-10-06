@@ -1,4 +1,4 @@
-"""A tiny stand-in for an OpenAI-compatible server (Ollama, DeepSeek, xAI, OpenAI), for the tests."""
+"""A tiny stand-in for an OpenAI-compatible server (Ollama, DeepSeek, xAI, OpenAI, Mistral, Qwen, Kimi, Perplexity), for the tests."""
 import asyncio
 import json
 import pathlib
@@ -19,6 +19,21 @@ def start():
 
         def do_POST(self):
             body = json.loads(self.rfile.read(int(self.headers.get("Content-Length") or 0)) or b"{}")
+            if self.path.rstrip("/").endswith("/agent"):
+                # Perplexity's Agent API: one input string, an answer plus the web pages it found.
+                calls.append({"model": "perplexity:" + str(body.get("preset")), "image": False, "system": "instructions" in body})
+                msg = asyncio.run(_Messages().create(model="sonar", max_tokens=0, messages=[{"role": "user", "content": body.get("input", "")}]))
+                out = json.dumps({"status": "completed", "output_text": msg.content[0].text, "output": [
+                    {"type": "search_results", "queries": ["test"], "results": [
+                        {"id": 1, "title": "A test page", "url": "https://example.com/test", "snippet": "..."}]},
+                    {"type": "message", "role": "assistant", "content": [{"type": "output_text", "text": msg.content[0].text}]}],
+                    "usage": {"input_tokens": 20, "output_tokens": 9}}).encode()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(out)))
+                self.end_headers()
+                self.wfile.write(out)
+                return
             last = body["messages"][-1]["content"]
             text = last if isinstance(last, str) else " ".join(p.get("text", "") for p in last if p.get("type") == "text")
             calls.append({"model": body.get("model"), "image": not isinstance(last, str),
