@@ -237,9 +237,9 @@ async def page_tests():
                 check(zf.read("second-thought.ini").decode() == EXPORTS[ex]["second-thought.ini"], "the zip unpacks to the same files")
         names = sorted(EXPORTS["review"])
         check(names == ["requirements.txt", "review.py", "run.bat", "run.sh", "second-thought.ini"], f"the zip holds the program, its settings, run.bat and run.sh ({', '.join(names)})")
-        check(all(f in EXPORTS["ha_morning"] for f in ("run-on-schedule.bat", "run-on-schedule.sh", "install-service.sh"))
+        check(all(f in EXPORTS["ha_morning"] for f in ("run-on-schedule.bat", "run-on-schedule.sh", "install-service.sh", "install-startup.bat"))
               and "--schedule" in EXPORTS["ha_morning"]["run-on-schedule.sh"],
-              "a program with timed scripts also gets run-on-schedule.bat, run-on-schedule.sh and install-service.sh")
+              "a program with timed scripts also gets run-on-schedule and install-startup / install-service scripts")
         check(all("\r" not in t for f, t in EXPORTS["ha_morning"].items() if f.endswith(".sh")), "the .sh scripts use Linux line endings")
         check(all("\r\n" in t and "\n" not in t.replace("\r\n", "") for f, t in EXPORTS["review"].items() if f.endswith((".bat", ".ini"))),
               "run.bat and second-thought.ini use Windows line endings")
@@ -429,6 +429,36 @@ def python_tests(codes):
             ok = (r.returncode == 0 and f"WorkingDirectory={folder}" in u and f'ExecStart=/bin/sh "{folder}/run-on-schedule.sh"' in u
                   and "User=" in u and "enable --now second-thought-ha_morning" in (log.read_text() if log.exists() else ""))
             check(ok, "install-service.sh writes a systemd service for this folder and turns it on" + ("" if ok else f": {r.stdout[-200:]} {r.stderr[-200:]} {u[:300]}"))
+            # On a Mac it uses launchd instead, with no password
+            (fake / "uname").write_text("#!/bin/sh\necho Darwin\n")
+            (fake / "launchctl").write_text('#!/bin/sh\necho "$*" >> "$FAKE_LOG"\n')
+            for f in fake.iterdir():
+                f.chmod(0o755)
+            home = pathlib.Path(tmp) / "home"
+            home.mkdir()
+            log.write_text("")
+            r = subprocess.run(["sh", str(folder / "install-service.sh")], env=dict(senv, HOME=str(home)), cwd=tmp, capture_output=True, text=True, timeout=60)
+            plists = list((home / "Library" / "LaunchAgents").glob("*.plist"))
+            import plistlib
+            pl = plistlib.loads(plists[0].read_bytes()) if plists else {}
+            ok = (r.returncode == 0 and pl.get("ProgramArguments") == ["/bin/sh", f"{folder}/run-on-schedule.sh"]
+                  and pl.get("WorkingDirectory") == str(folder) and pl.get("RunAtLoad") is True
+                  and "bootstrap" in log.read_text() and "sudo" not in log.read_text())
+            check(ok, "on a Mac, install-service.sh sets up a launchd agent instead" + ("" if ok else f": {r.stdout[-200:]} {r.stderr[-200:]} {pl}"))
+    if os.name == "nt":
+        print("Windows scripts")
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = pathlib.Path(tmp) / "My Programs" / "ha morning"
+            folder.mkdir(parents=True)
+            for name, text in EXPORTS["ha_morning"].items():
+                (folder / name).write_bytes(text.encode("utf-8"))
+            appdata = pathlib.Path(tmp) / "AppData"
+            r = subprocess.run(["cmd", "/c", str(folder / "install-startup.bat")], env=dict(os.environ, APPDATA=str(appdata)),
+                               input="\n", capture_output=True, text=True, timeout=60)
+            entries = list((appdata / "Microsoft" / "Windows" / "Start Menu" / "Programs" / "Startup").glob("*.cmd"))
+            text = entries[0].read_text() if entries else ""
+            ok = r.returncode == 0 and f'""{folder}\\run-on-schedule.bat""' in text and "/min" in text
+            check(ok, "install-startup.bat adds the program to the Startup folder" + ("" if ok else f": {r.stdout[-300:]} {r.stderr[-200:]} {text}"))
 
     print("Backup models in Python")
     with tempfile.TemporaryDirectory() as tmp:

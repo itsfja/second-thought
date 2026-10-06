@@ -207,9 +207,12 @@ sh run.sh
 
 The first time, it makes a private Python folder called `.venv` next to the program and installs what it needs in there, so nothing is installed for the whole computer. (On Debian or Ubuntu, if it says it can't set up Python, run `sudo apt install python3-venv` first.)
 
-If a program has timed jobs, the zip also has `run-on-schedule.bat` and `run-on-schedule.sh`. These keep running, so the jobs start by themselves.
+If a program has timed jobs, the zip also has `run-on-schedule.bat` and `run-on-schedule.sh`. These keep running, so the jobs start by themselves. If the program stops with a problem, they start it again 30 seconds later.
 
-On a Linux computer that is always switched on, like a little server, `sh install-service.sh` goes one step further. It makes the program start by itself whenever the computer starts, and start again if it ever stops. It tells you how to watch what the program is doing, and how to turn it off.
+There are also two ways to make the program start all by itself:
+
+- **Windows:** double-click `install-startup.bat` once. From then on, the program starts in a small window each time you log in. To stop that, press Windows+R, type `shell:startup`, and delete the file called "Second Thought - my-program".
+- **Linux or a Mac:** type `sh install-service.sh` once. On Linux it starts whenever the computer starts (it asks for your password to set this up). On a Mac it starts whenever you log in. It tells you how to watch what the program is doing, and how to turn it off.
 
 Everything in `second-thought.ini` can also be set as an environment variable with the same name, if you prefer. An environment variable wins over the file.
 
