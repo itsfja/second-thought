@@ -31,6 +31,7 @@ PAGE = (ROOT / "second-thought.html").read_text(encoding="utf-8")
 DOC = '<!doctype html><html><head><meta charset=utf8><style>[hidden]{display:none!important}</style></head><body>' + PAGE + "</body></html>"
 
 EXAMPLES = []  # read from the page's Example menu, so every example is always tested
+EXPORTS = {}   # example -> {file name: text} of the exported zip
 
 # Stand-ins for the page's runtime capabilities (Claude, storage, user, downloads).
 MOCK = r"""(function(){
@@ -214,6 +215,25 @@ async def page_tests():
             await pg.click("#io-py-show")
             codes[ex] = (await pg.input_value("#io-export-text"), n)
             await pg.click("#io-py-show")
+        print("Exported zip contents")
+        for ex in ("review", "w_judges", "ha_doorbell", "ha_morning"):
+            await pg.select_option("#example", ex)
+            await pg.click("#load")
+            await pg.fill("#io-name", ex)
+            EXPORTS[ex] = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+        names = sorted(EXPORTS["review"])
+        check(names == ["requirements.txt", "review.py", "run.bat", "second-thought.ini"], f"the zip holds the program, its settings and run.bat ({', '.join(names)})")
+        check("run-on-schedule.bat" in EXPORTS["ha_morning"] and "--schedule" in EXPORTS["ha_morning"]["run-on-schedule.bat"],
+              "a program with timed scripts also gets run-on-schedule.bat")
+        check(all("\r\n" in t and "\n" not in t.replace("\r\n", "") for f, t in EXPORTS["review"].items() if f.endswith((".bat", ".ini"))),
+              "run.bat and second-thought.ini use Windows line endings")
+        judges_ini = EXPORTS["w_judges"]["second-thought.ini"]
+        check(all(k + " = " in judges_ini for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY")),
+              "the ini asks for every key the program uses")
+        check("LLAMA_BASE_URL" in judges_ini and "HA_TOKEN" not in judges_ini, "the ini only has the sections the program needs")
+        check("HA_TOKEN = " in EXPORTS["ha_doorbell"]["second-thought.ini"], "a Home Assistant program's ini asks for HA_URL and HA_TOKEN")
+        check(not any(l.strip().startswith("export ") for l in EXPORTS["w_judges"]["w_judges.py"].splitlines()[:40]),
+              "the program's instructions no longer say 'export'")
         code, n = codes["brainstorm"]
         await pg.select_option("#example", "review")
         await pg.click("#load")
@@ -331,6 +351,37 @@ def python_tests(codes):
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 both = bool(done) and "Gemini:" in done[-1] and "Claude:" in done[-1]
                 check(both, "gemini.py used both Claude and Gemini" + ("" if both else f": {done[-1] if done else r.stdout[-200:]}"))
+    print("Settings file")
+    import configparser
+    cp = configparser.ConfigParser(interpolation=None, inline_comment_prefixes=(";", "#"))
+    cp.read_string(EXPORTS["w_judges"]["second-thought.ini"])
+    check(cp.has_section("keys") and cp.has_option("keys", "OPENAI_API_KEY"), "the exported ini is a valid settings file")
+    with tempfile.TemporaryDirectory() as tmp:
+        folder = pathlib.Path(tmp) / "My Programs" / "judges"  # a folder name with a space, like Windows ones
+        folder.mkdir(parents=True)
+        for name, text in EXPORTS["w_judges"].items():
+            (folder / name).write_bytes(text.encode("utf-8"))
+        ini = folder / "second-thought.ini"
+        filled = ini.read_text(encoding="utf-8")
+        for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY"):
+            filled = filled.replace(k + " = ", k + " = test")
+        filled = filled.replace("LLAMA_BASE_URL = http://localhost:11434/v1", "LLAMA_BASE_URL = " + llama_url)
+        ini.write_bytes(("\ufeff" + filled).encode("utf-8"))  # with the marker Notepad sometimes adds
+        bare = {k: v for k, v in env.items() if not k.endswith(("_API_KEY", "_TOKEN")) and k != "LLAMA_BASE_URL"}
+        bare.update(DEEPSEEK_BASE_URL=llama_url, XAI_BASE_URL=llama_url, OPENAI_BASE_URL=llama_url, HA_TOKEN="")
+        elsewhere = pathlib.Path(tmp)  # run from another folder: the ini is found next to the program, not here
+        code_, out, err = drive([sys.executable, "-u", str(folder / "w_judges.py")], bare, elsewhere)
+        done = [l for l in out.splitlines() if l.startswith("Done")]
+        ok = code_ == 0 and bool(done) and all(w in done[-1] for w in ("Claude:", "Gemini:", "Llama:", "DeepSeek:", "xAI:", "OpenAI:"))
+        check(ok, "with the keys only in second-thought.ini, every model is reached" + ("" if ok else f": {(done[-1] if done else (err or out)[-300:])}"))
+        ini.write_text(filled.replace("OPENAI_API_KEY = test", "OPENAI_API_KEY = "), encoding="utf-8")
+        code_, out, err = drive([sys.executable, "-u", str(folder / "w_judges.py")], bare, elsewhere)
+        check(code_ != 0 and "OPENAI_API_KEY = your-key in " in (out + err) and "second-thought.ini" in (out + err),
+              "a missing key says exactly which line to fill in, and in which file")
+        ini.write_text("[keys\nbroken", encoding="utf-8")
+        code_, out, err = drive([sys.executable, "-u", str(folder / "w_judges.py")], bare, elsewhere)
+        check(code_ != 0 and "mistake in" in (out + err), "a broken ini file gets a clear message")
+
     print("Backup models in Python")
     with tempfile.TemporaryDirectory() as tmp:
         path = pathlib.Path(tmp) / "backup.py"
@@ -348,7 +399,7 @@ def python_tests(codes):
         check(code_ != 0 and "its backup failed" in (out + err), "when the backup fails too, the run stops with a clear message")
         env4 = dict(env, RB_MODEL_TIER="openai-default", OPENAI_API_KEY="", RB_BACKUPS="")
         code_, out, err = drive([sys.executable, "-u", str(path)], env4, tmp)
-        check(code_ != 0 and "Set the OPENAI_API_KEY" in (out + err) and "▸ Backup" not in out, "with no backups, the primary's own error is shown")
+        check(code_ != 0 and "OPENAI_API_KEY = your-key" in (out + err) and "▸ Backup" not in out, "with no backups, the primary's own error is shown")
     services = {c[0] for c in ha_calls}
     check({"light.turn_off", "persistent_notification.create"} <= services and "lock.lock" in services,
           f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")

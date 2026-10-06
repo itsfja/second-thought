@@ -4,8 +4,10 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-python3 -m pip install --quiet playwright pypdf
-python3 -m playwright install chromium
+PY=python3
+python -c "" 2>/dev/null && PY=python   # on Windows, python3 is often a stub
+"$PY" -m pip install --quiet playwright pypdf
+"$PY" -m playwright install chromium
 
 mkdir -p vendor
 cd vendor

@@ -24,3 +24,21 @@ jobs:
         run: |
           bash tests/setup.sh
           python tests/run_tests.py
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run tests on Windows
+        shell: bash
+        env:
+          PYTHONUTF8: "0"
+        run: |
+          bash tests/setup.sh
+          python tests/run_tests.py

@@ -5,9 +5,8 @@ tests/vendor/
 __pycache__/
 *.pyc
 .venv/
-
 # Files written by exported programs
 outputs/
 memory.json
-
 .DS_Store
+second-thought.ini

@@ -17,6 +17,47 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+# Windows consoles and redirected output can't always show every character; never crash over one.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except Exception:
+        pass
+
+# ----- Settings file -----
+# Keys and settings live in second-thought.ini, next to this program (it comes in the exported zip).
+# Python looks for it next to the program, then in the current folder, then in your home folder;
+# SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
+SETTINGS_FILE = "second-thought.ini"
+SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS"}
+
+
+def _load_settings():
+    import configparser
+    here = os.path.dirname(os.path.abspath(sys.argv[0])) if sys.argv and sys.argv[0] else os.getcwd()
+    places = [os.environ.get("SECOND_THOUGHT_INI", ""), os.path.join(here, SETTINGS_FILE),
+              os.path.join(os.getcwd(), SETTINGS_FILE), os.path.join(os.path.expanduser("~"), SETTINGS_FILE)]
+    path = next((p for p in places if p and os.path.isfile(p)), None)
+    if not path:
+        return None
+    cp = configparser.ConfigParser(interpolation=None, inline_comment_prefixes=(";", "#"))
+    cp.optionxform = str
+    try:
+        cp.read(path, encoding="utf-8-sig")  # -sig: Notepad sometimes adds a marker at the start
+    except (configparser.Error, UnicodeDecodeError) as e:
+        sys.exit(f"There's a mistake in {path}:\n{e}")
+    for section in cp.sections():
+        for name, value in cp.items(section):
+            value = value.strip().strip('"').strip("'")
+            key = SETTING_NAMES.get(name.lower(), name.upper())
+            if value and not os.environ.get(key):
+                os.environ[key] = value
+    return path
+
+
+SETTINGS_PATH = _load_settings()
+WHERE_KEYS = f"in {SETTINGS_PATH}" if SETTINGS_PATH else f"in {SETTINGS_FILE}, next to this program"
+
 try:
     from anthropic import AsyncAnthropic
 except ImportError:
@@ -493,6 +534,8 @@ class Runtime:
         self.backup_used = 0
         # Backup models, tried in order when the primary fails on a step. RB_BACKUPS="openai-default,default" overrides.
         backups = os.environ.get("RB_BACKUPS")
+        if backups is not None and backups.strip().lower() in ("none", "off", "no"):
+            backups = ""
         backups = [b.strip() for b in backups.split(",")] if backups is not None else list(globals().get("BACKUPS", []))
         self.backups = [b for i, b in enumerate(backups) if b and b != self.primary and b not in backups[:i]]
         self.tasks = set()
@@ -602,7 +645,7 @@ class Runtime:
     async def _call_claude(self, model, prompt, picture, history, web):
         if self.client is None:
             if not os.environ.get("ANTHROPIC_API_KEY"):
-                raise RunError("Set the ANTHROPIC_API_KEY environment variable first.")
+                raise RunError(f"Claude needs a key. Put ANTHROPIC_API_KEY = your-key {WHERE_KEYS} (https://console.anthropic.com).")
             self.client = AsyncAnthropic()
         args = dict(model=model, max_tokens=MAX_TOKENS,
                     messages=(history or []) + [{"role": "user", "content": self._content(prompt, picture)}])
@@ -620,7 +663,7 @@ class Runtime:
         """One request to a model service that speaks OpenAI's format (Ollama, DeepSeek, xAI, OpenAI, Mistral, ...)."""
         pv = PROVIDERS[provider]
         if pv["signup"] and not pv["key"]:
-            raise RunError(f"This program uses {provider}. Set the {pv['key_env']} environment variable first ({pv['signup']}).")
+            raise RunError(f"This program uses {provider}. Put {pv['key_env']} = your-key {WHERE_KEYS} ({pv['signup']}).")
         headers = {"Content-Type": "application/json", **pv["headers"]}
         if pv["key"]:
             headers["Authorization"] = "Bearer " + pv["key"]
@@ -709,7 +752,7 @@ class Runtime:
             raise RunError("This program uses Gemini. Install its package first:  pip install google-genai")
         if self.gemini is None:
             if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
-                raise RunError("Set the GEMINI_API_KEY environment variable first (get a key at https://aistudio.google.com).")
+                raise RunError(f"Gemini needs a key. Put GEMINI_API_KEY = your-key {WHERE_KEYS} (https://aistudio.google.com).")
             self.gemini = genai.Client()
         contents = []
         for turn in history or []:
@@ -964,8 +1007,8 @@ class Runtime:
     # ----- Home Assistant -----
     def _ha_request(self, method, path, body=None, raw=False):
         if not HA_TOKEN:
-            raise RunError("This program uses Home Assistant. Set HA_URL (for example http://homeassistant.local:8123) "
-                           "and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab).")
+            raise RunError(f"This program uses Home Assistant. Put HA_URL (for example http://homeassistant.local:8123) "
+                           f"and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab) {WHERE_KEYS}.")
         data = json.dumps(body).encode("utf-8") if body is not None else None
         req = urllib.request.Request(HA_URL + path, data=data, method=method,
                                      headers={"Authorization": "Bearer " + HA_TOKEN, "Content-Type": "application/json"})

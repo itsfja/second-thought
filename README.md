@@ -178,22 +178,38 @@ This part needs a grown-up, because the Python program needs a special key to ta
 
 **Grown-ups, here is how:**
 
+Press **Import / export**, then **Save Python (.zip)**. Unzip the file into a folder of its own. Inside you will find:
+
+| File | What it is |
+|---|---|
+| `my-program.py` | The program. |
+| `second-thought.ini` | The settings: this is where the keys go. |
+| `run.bat` | For Windows. Double-click it to run the program. |
+| `requirements.txt` | The list of parts Python needs. `run.bat` installs them for you. |
+
+Open `second-thought.ini` in Notepad (or any text editor). It lists only the keys *this* program needs. Put each key after its `=` sign, like this, then save:
+
 ```
-pip install anthropic
-export ANTHROPIC_API_KEY=your-key
+[keys]
+ANTHROPIC_API_KEY = sk-ant-your-key-here
+```
+
+Keep this file private. It holds your keys, so don't email it or put it on the internet.
+
+**On Windows:** you need Python, from python.org (tick **Add python.exe to PATH** when you install it). Then double-click `run.bat`. The first time, it installs what the program needs.
+
+**On a Mac or Linux:**
+
+```
+pip install -r requirements.txt
 python my-program.py
 ```
 
-The first line installs the part that lets Python talk to Claude. The second line gives Python the key. The third line runs the program.
+If a program has timed jobs, the zip also has `run-on-schedule.bat`. That one keeps running, so the jobs start by themselves. On a Mac or Linux, add `--schedule` to the end of the second line instead.
 
-To keep a program running so its timed jobs start by themselves, add `--schedule` to the end of the third line.
+Everything in `second-thought.ini` can also be set as an environment variable with the same name, if you prefer. An environment variable wins over the file.
 
-If your program uses Gemini, it needs a second key, from Google, and one more part to install:
-
-```
-pip install google-genai
-export GEMINI_API_KEY=your-gemini-key
-```
+If your program uses Gemini, it needs a second key, from Google. The ini file will have a line ready for it: `GEMINI_API_KEY =`.
 
 There is a third helper too, called **Llama**. Llama is special because it can live on *your own computer*, so nothing you ask it ever leaves the house. To use it, install a free program called **Ollama** and download a Llama model:
 
@@ -201,42 +217,42 @@ There is a third helper too, called **Llama**. Llama is special because it can l
 ollama pull llama3.2-vision:11b
 ```
 
-If Llama lives on a different computer, tell the program where to find it:
+If Llama lives on a different computer, change this line in the ini file to tell the program where to find it:
 
 ```
-export LLAMA_BASE_URL=http://that-computer:11434/v1
+LLAMA_BASE_URL = http://that-computer:11434/v1
 ```
 
 A fourth helper, **DeepSeek**, is very cheap to use. It lives on DeepSeek's own computers in China, so it needs its own key, and it's best kept for things that aren't private:
 
 ```
-export DEEPSEEK_API_KEY=your-deepseek-key
+DEEPSEEK_API_KEY = your-deepseek-key
 ```
 
 A fifth helper, **Grok**, is made by a company called **xAI**. It lives on xAI's own computers, and it needs its own key too:
 
 ```
-export XAI_API_KEY=your-xai-key
+XAI_API_KEY = your-xai-key
 ```
 
 A sixth helper, **GPT**, is made by **OpenAI**, the company behind ChatGPT. A ChatGPT subscription is not the same as an API key, so you need a key from OpenAI's developer site:
 
 ```
-export OPENAI_API_KEY=your-openai-key
+OPENAI_API_KEY = your-openai-key
 ```
 
 There are lots more helpers. Each one needs its own key, from its own company:
 
-| Helper | Made by | Lives in | The key line |
+| Helper | Made by | Lives in | The line in the ini file |
 |---|---|---|---|
-| **Mistral** | Mistral AI | France | `export MISTRAL_API_KEY=your-key` |
-| **Qwen** | Alibaba | Singapore, for people outside China | `export DASHSCOPE_API_KEY=your-key` |
-| **Kimi** | Moonshot AI | China | `export MOONSHOT_API_KEY=your-key` |
-| **Perplexity** | Perplexity | America | `export PERPLEXITY_API_KEY=your-key` |
-| **Hugging Face** | lots of different people | all over the world | `export HF_TOKEN=your-token` |
-| **Groq** | Groq | America | `export GROQ_API_KEY=your-key` |
-| **GLM** | Z.ai | China | `export ZAI_API_KEY=your-key` |
-| **MiniMax** | MiniMax | China | `export MINIMAX_API_KEY=your-key` |
+| **Mistral** | Mistral AI | France | `MISTRAL_API_KEY = your-key` |
+| **Qwen** | Alibaba | Singapore, for people outside China | `DASHSCOPE_API_KEY = your-key` |
+| **Kimi** | Moonshot AI | China | `MOONSHOT_API_KEY = your-key` |
+| **Perplexity** | Perplexity | America | `PERPLEXITY_API_KEY = your-key` |
+| **Hugging Face** | lots of different people | all over the world | `HF_TOKEN = your-token` |
+| **Groq** | Groq | America | `GROQ_API_KEY = your-key` |
+| **GLM** | Z.ai | China | `ZAI_API_KEY = your-key` |
+| **MiniMax** | MiniMax | China | `MINIMAX_API_KEY = your-key` |
 
 Perplexity is different from the others. It searches the internet for every question, then lists the pages it read at the end of its answer. That makes it good for things that change, like prices and opening times. It can't look at photos, though.
 
@@ -247,7 +263,7 @@ Perplexity is different from the others. It searches the internet for every ques
 **OpenRouter** is like a big switchboard. One key reaches hundreds of helpers from lots of different companies. Choose **OpenRouter, auto-pick** and it chooses a good helper for each job. Or use the block called **with OpenRouter model**, and type in the name of any helper you like from openrouter.ai/models:
 
 ```
-export OPENROUTER_API_KEY=your-openrouter-key
+OPENROUTER_API_KEY = your-openrouter-key
 ```
 
 All the helpers except Claude only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
@@ -275,13 +291,15 @@ There are more than sixty Home Assistant examples to try. You will find them in 
 
 **Grown-ups, here is how to use your real Home Assistant:**
 
-Export the program as Python and run it on a computer at home, on the same network as Home Assistant. Make a long-lived access token in Home Assistant (your profile, then the Security tab), then:
+Export the program as a zip and unzip it on a computer at home, on the same network as Home Assistant. Make a long-lived access token in Home Assistant (your profile, then the Security tab), and put it in `second-thought.ini`:
 
 ```
-export HA_URL=http://homeassistant.local:8123
-export HA_TOKEN=your-long-lived-token
-python my-program.py --schedule
+[home assistant]
+HA_URL = http://homeassistant.local:8123
+HA_TOKEN = your-long-lived-token
 ```
+
+Then double-click `run-on-schedule.bat` (Windows), or run `python my-program.py --schedule` (Mac or Linux).
 
 `--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. A small virtual machine or container that's always on is a good home for it.
 

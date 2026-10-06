@@ -422,6 +422,47 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+# Windows consoles and redirected output can't always show every character; never crash over one.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except Exception:
+        pass
+
+# ----- Settings file -----
+# Keys and settings live in second-thought.ini, next to this program (it comes in the exported zip).
+# Python looks for it next to the program, then in the current folder, then in your home folder;
+# SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
+SETTINGS_FILE = "second-thought.ini"
+SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS"}
+
+
+def _load_settings():
+    import configparser
+    here = os.path.dirname(os.path.abspath(sys.argv[0])) if sys.argv and sys.argv[0] else os.getcwd()
+    places = [os.environ.get("SECOND_THOUGHT_INI", ""), os.path.join(here, SETTINGS_FILE),
+              os.path.join(os.getcwd(), SETTINGS_FILE), os.path.join(os.path.expanduser("~"), SETTINGS_FILE)]
+    path = next((p for p in places if p and os.path.isfile(p)), None)
+    if not path:
+        return None
+    cp = configparser.ConfigParser(interpolation=None, inline_comment_prefixes=(";", "#"))
+    cp.optionxform = str
+    try:
+        cp.read(path, encoding="utf-8-sig")  # -sig: Notepad sometimes adds a marker at the start
+    except (configparser.Error, UnicodeDecodeError) as e:
+        sys.exit(f"There's a mistake in {path}:\n{e}")
+    for section in cp.sections():
+        for name, value in cp.items(section):
+            value = value.strip().strip('"').strip("'")
+            key = SETTING_NAMES.get(name.lower(), name.upper())
+            if value and not os.environ.get(key):
+                os.environ[key] = value
+    return path
+
+
+SETTINGS_PATH = _load_settings()
+WHERE_KEYS = f"in {SETTINGS_PATH}" if SETTINGS_PATH else f"in {SETTINGS_FILE}, next to this program"
+
 try:
     from anthropic import AsyncAnthropic
 except ImportError:
@@ -898,6 +939,8 @@ class Runtime:
         self.backup_used = 0
         # Backup models, tried in order when the primary fails on a step. RB_BACKUPS="openai-default,default" overrides.
         backups = os.environ.get("RB_BACKUPS")
+        if backups is not None and backups.strip().lower() in ("none", "off", "no"):
+            backups = ""
         backups = [b.strip() for b in backups.split(",")] if backups is not None else list(globals().get("BACKUPS", []))
         self.backups = [b for i, b in enumerate(backups) if b and b != self.primary and b not in backups[:i]]
         self.tasks = set()
@@ -1007,7 +1050,7 @@ class Runtime:
     async def _call_claude(self, model, prompt, picture, history, web):
         if self.client is None:
             if not os.environ.get("ANTHROPIC_API_KEY"):
-                raise RunError("Set the ANTHROPIC_API_KEY environment variable first.")
+                raise RunError(f"Claude needs a key. Put ANTHROPIC_API_KEY = your-key {WHERE_KEYS} (https://console.anthropic.com).")
             self.client = AsyncAnthropic()
         args = dict(model=model, max_tokens=MAX_TOKENS,
                     messages=(history or []) + [{"role": "user", "content": self._content(prompt, picture)}])
@@ -1025,7 +1068,7 @@ class Runtime:
         """One request to a model service that speaks OpenAI's format (Ollama, DeepSeek, xAI, OpenAI, Mistral, ...)."""
         pv = PROVIDERS[provider]
         if pv["signup"] and not pv["key"]:
-            raise RunError(f"This program uses {provider}. Set the {pv['key_env']} environment variable first ({pv['signup']}).")
+            raise RunError(f"This program uses {provider}. Put {pv['key_env']} = your-key {WHERE_KEYS} ({pv['signup']}).")
         headers = {"Content-Type": "application/json", **pv["headers"]}
         if pv["key"]:
             headers["Authorization"] = "Bearer " + pv["key"]
@@ -1114,7 +1157,7 @@ class Runtime:
             raise RunError("This program uses Gemini. Install its package first:  pip install google-genai")
         if self.gemini is None:
             if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
-                raise RunError("Set the GEMINI_API_KEY environment variable first (get a key at https://aistudio.google.com).")
+                raise RunError(f"Gemini needs a key. Put GEMINI_API_KEY = your-key {WHERE_KEYS} (https://aistudio.google.com).")
             self.gemini = genai.Client()
         contents = []
         for turn in history or []:
@@ -1369,8 +1412,8 @@ class Runtime:
     # ----- Home Assistant -----
     def _ha_request(self, method, path, body=None, raw=False):
         if not HA_TOKEN:
-            raise RunError("This program uses Home Assistant. Set HA_URL (for example http://homeassistant.local:8123) "
-                           "and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab).")
+            raise RunError(f"This program uses Home Assistant. Put HA_URL (for example http://homeassistant.local:8123) "
+                           f"and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab) {WHERE_KEYS}.")
         data = json.dumps(body).encode("utf-8") if body is not None else None
         req = urllib.request.Request(HA_URL + path, data=data, method=method,
                                      headers={"Authorization": "Bearer " + HA_TOKEN, "Content-Type": "application/json"})
@@ -3279,23 +3322,23 @@ HOW TO MAP CODE
   const isOpenAI = t => String(t || "").startsWith("openai-");
   // Further model services. Each one's Python setup line and data note go into the exported file's header.
   const MORE_PROVIDERS = [
-    { prefix:"mistral-", who:"Mistral", env:"MISTRAL_API_KEY",
+    { prefix:"mistral-", who:"Mistral", env:"MISTRAL_API_KEY", signup:"https://console.mistral.ai",
       note:"Mistral calls go to Mistral AI's servers in the EU, billed to your Mistral account (https://console.mistral.ai)." },
-    { prefix:"qwen-", who:"Qwen", env:"DASHSCOPE_API_KEY",
+    { prefix:"qwen-", who:"Qwen", env:"DASHSCOPE_API_KEY", signup:"https://modelstudio.console.alibabacloud.com",
       note:"Qwen calls go to Alibaba Cloud Model Studio (international region; set QWEN_BASE_URL for another), billed to your Alibaba Cloud account." },
-    { prefix:"kimi-", who:"Kimi", env:"MOONSHOT_API_KEY",
+    { prefix:"kimi-", who:"Kimi", env:"MOONSHOT_API_KEY", signup:"https://platform.moonshot.ai",
       note:"Kimi calls go to Moonshot AI's servers (a Chinese company), under Moonshot's terms, billed to your Moonshot account." },
-    { prefix:"perplexity-", who:"Perplexity", env:"PERPLEXITY_API_KEY",
+    { prefix:"perplexity-", who:"Perplexity", env:"PERPLEXITY_API_KEY", signup:"https://www.perplexity.ai/account/api",
       note:"Perplexity searches the web for every step it answers and lists its sources; billed to your Perplexity API account." },
-    { prefix:"hf-", who:"Hugging Face", env:"HF_TOKEN",
+    { prefix:"hf-", who:"Hugging Face", env:"HF_TOKEN", signup:"https://huggingface.co/settings/tokens",
       note:"Hugging Face passes open-model calls to one of its partner services; billed to your Hugging Face account. Any model from huggingface.co works: edit MODELS below." },
-    { prefix:"groq-", who:"Groq", env:"GROQ_API_KEY",
+    { prefix:"groq-", who:"Groq", env:"GROQ_API_KEY", signup:"https://console.groq.com",
       note:"Groq calls go to Groq's servers (US), billed to your Groq account. Groq has a free tier with rate limits." },
-    { prefix:"glm-", who:"GLM", env:"ZAI_API_KEY",
+    { prefix:"glm-", who:"GLM", env:"ZAI_API_KEY", signup:"https://z.ai/manage-apikey/apikey-list",
       note:"GLM calls go to Z.ai (formerly Zhipu AI, a Chinese company), under Z.ai's terms, billed to your Z.ai account." },
-    { prefix:"minimax-", who:"MiniMax", env:"MINIMAX_API_KEY",
+    { prefix:"minimax-", who:"MiniMax", env:"MINIMAX_API_KEY", signup:"https://platform.minimax.io",
       note:"MiniMax calls go to MiniMax's international servers (a Chinese company), under MiniMax's terms, billed to your MiniMax account." },
-    { prefix:"openrouter", who:"OpenRouter", env:"OPENROUTER_API_KEY",
+    { prefix:"openrouter", who:"OpenRouter", env:"OPENROUTER_API_KEY", signup:"https://openrouter.ai/keys",
       note:"OpenRouter passes each call to the company that makes the model you chose, under that company's terms; billed to your OpenRouter credit (https://openrouter.ai/keys)." }
   ];
   const moreProvider = t => MORE_PROVIDERS.find(m => String(t || "").startsWith(m.prefix));
@@ -5194,14 +5237,25 @@ HOW TO MAP CODE
   };
 
   const pyName = () => slug($("io-name").value);
+  // Everything in the exported zip: the program, its settings file, what to install, and Windows launchers.
+  function exportFiles(progName, code){
+    const base = pyName(), sched = ws.getTopBlocks(false).some(b => ["rb_when_time", "rb_every", "rb_ha_when"].includes(b.type));
+    const req = ["anthropic"].concat(programUsesGemini() ? ["google-genai"] : []).join("\n") + "\n";
+    const files = [{ name:base + ".py", text:code }, { name:"second-thought.ini", text:iniText(progName) },
+                   { name:"requirements.txt", text:req }, { name:"run.bat", text:runBat(base, false) }];
+    if (sched) files.push({ name:"run-on-schedule.bat", text:runBat(base, true) });
+    return files;
+  }
+  window.__exportFiles = () => exportFiles($("io-name").value.trim() || "my-program", toPython($("io-name").value.trim() || "my-program"));
   $("io-py-save").onclick = async () => {
     if (!downloads) return;
     const btn = $("io-py-save"); btn.disabled = true;
     try {
       const code = toPython($("io-name").value.trim() || "my-program");
-      const zip = makeZip([{ name:pyName() + ".py", text:code }, { name:"requirements.txt", text:programUsesGemini() ? "anthropic\ngoogle-genai\n" : "anthropic\n" }]);
+      const files = exportFiles($("io-name").value.trim() || "my-program", code);
+      const zip = makeZip(files);
       const r = await downloads.save({ filename:pyName() + ".zip", data:zip });
-      ioMsg("io-export-msg", r.status === "saved" ? "Saved " + pyName() + ".zip. Unzip it to get " + pyName() + ".py." : "File sent.", "ok");
+      ioMsg("io-export-msg", r.status === "saved" ? "Saved " + pyName() + ".zip. Unzip it, put your keys in second-thought.ini, then run " + pyName() + ".py (on Windows, double-click run.bat)." : "File sent.", "ok");
     } catch(e) {
       const code = e && e.code;
       if (code === "declined") ioMsg("io-export-msg", "Save cancelled.");
@@ -5328,6 +5382,51 @@ HOW TO MAP CODE
   function b64encode(str){ const bytes = new TextEncoder().encode(str); let bin = ""; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin); }
   function b64decode(b64){ const bin = atob(b64); const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
 
+  /* ----- second-thought.ini: the keys and settings an exported program needs ----- */
+  function settingsFor(){
+    const keys = [["Claude", "ANTHROPIC_API_KEY", "https://console.anthropic.com"]];
+    if (programUsesGemini()) keys.push(["Gemini", "GEMINI_API_KEY", "https://aistudio.google.com"]);
+    if (programUsesDeepSeek()) keys.push(["DeepSeek", "DEEPSEEK_API_KEY", "https://platform.deepseek.com"]);
+    if (programUsesXai()) keys.push(["Grok (xAI)", "XAI_API_KEY", "https://console.x.ai"]);
+    if (programUsesOpenAI()) keys.push(["OpenAI", "OPENAI_API_KEY", "https://platform.openai.com"]);
+    MORE_PROVIDERS.filter(m => programUsesPrefix(m.prefix)).forEach(m => keys.push([m.who, m.env, m.signup]));
+    return { keys, llama:programUsesLlama(), ha:ws.getAllBlocks(false).some(b => b.type.startsWith("rb_ha_")) };
+  }
+  function iniText(progName){
+    const need = settingsFor(), nl = "\r\n";
+    const out = [
+      "; Settings for " + progName + ". Fill in the keys, then save this file.",
+      "; It must stay in the same folder as the program.",
+      "; Keep it private: it holds your API keys. Don't email it or put it on GitHub.",
+      "; Lines starting with ; are notes and are ignored.",
+      "",
+      "[keys]"
+    ];
+    need.keys.forEach(([who, env, url]) => { out.push("; " + who + ": get a key at " + url); out.push(env + " = "); });
+    out.push("", "[models]",
+      "; Your primary model and backups. Leave these as notes to use what was set when you exported.",
+      "; primary = " + $("tier").value,
+      "; backups = " + (backupTiers().join(", ") || "none"));
+    if (need.ha) out.push("", "[home assistant]",
+      "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
+      "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
+    if (need.llama) out.push("", "[llama]",
+      "; Where your Llama server is. This is Ollama on this computer; change it if Llama lives elsewhere.",
+      "LLAMA_BASE_URL = http://localhost:11434/v1", "; LLAMA_API_KEY = ");
+    return out.join(nl) + nl;
+  }
+  function runBat(fileBase, schedule){
+    const nl = "\r\n";
+    return ["@echo off",
+      "rem Double-click to run " + fileBase + ". The first run installs what it needs.",
+      "cd /d \"%~dp0\"",
+      "set PY=python",
+      "where py >nul 2>nul && set PY=py",
+      "%PY% -m pip install --quiet --disable-pip-version-check -r requirements.txt",
+      "%PY% " + fileBase + ".py " + (schedule ? "--schedule " : "") + "%*",
+      "echo.",
+      "pause"].join(nl) + nl;
+  }
   function programUsesPrefix(prefix){
     const has = t => String(t || "").startsWith(prefix);
     if ([$("tier").value].concat(backupTiers()).some(t => has(t))) return true;
@@ -5664,17 +5763,18 @@ HOW TO MAP CODE
       "Exported from Second Thought on " + when.getFullYear() + "-" + String(when.getMonth() + 1).padStart(2, "0") + "-" + String(when.getDate()).padStart(2, "0") + ".",
       "",
       "How to run:",
-      usesGemini ? "    pip install anthropic google-genai" : "    pip install anthropic",
-      "    export ANTHROPIC_API_KEY=your-key      (Windows: set ANTHROPIC_API_KEY=your-key)",
-      usesGemini ? "    export GEMINI_API_KEY=your-key         (Windows: set GEMINI_API_KEY=your-key)" : null,
-      usesDeepSeek ? "    export DEEPSEEK_API_KEY=your-key       (Windows: set DEEPSEEK_API_KEY=your-key)" : null,
-      usesXai ? "    export XAI_API_KEY=your-key            (Windows: set XAI_API_KEY=your-key)" : null,
-      usesOpenAI ? "    export OPENAI_API_KEY=your-key         (Windows: set OPENAI_API_KEY=your-key)" : null,
-      ...usesMore.map(m => ("    export " + m.env + "=your-key").padEnd(43) + "(Windows: set " + m.env + "=your-key)"),
-      usesHA ? "    export HA_URL=http://homeassistant.local:8123" : null,
-      usesHA ? "    export HA_TOKEN=your-long-lived-token  (Home Assistant: your profile, Security, Long-lived access tokens)" : null,
-      starts.length ? "    python " + fileBase + ".py                    runs the 'when Run is clicked' scripts once" : null,
-      (schedules.length || watches.length) ? "    python " + fileBase + ".py --schedule         keeps running: scheduled and 'when … changes' scripts start by themselves" : null,
+      "  1. Put your keys in second-thought.ini, in the same folder as this file.",
+      "     It came in the zip. No zip? Make a text file with that name containing:",
+      "         [keys]",
+      ...settingsFor().keys.map(k => "         " + k[1] + " = your-key"),
+      usesHA ? "         HA_URL = http://homeassistant.local:8123" : null,
+      usesHA ? "         HA_TOKEN = your-long-lived-token" : null,
+      "  2. Windows: double-click run.bat" + ((schedules.length || watches.length) ? " (or run-on-schedule.bat to keep it running)." : "."),
+      "     Mac or Linux:",
+      usesGemini ? "         pip install anthropic google-genai" : "         pip install anthropic",
+      starts.length ? "         python " + fileBase + ".py              runs the 'when Run is clicked' scripts once" : null,
+      (schedules.length || watches.length) ? "         python " + fileBase + ".py --schedule   keeps running: scheduled and 'when … changes' scripts start by themselves" : null,
+      "  Environment variables with the same names still work, and win over the file.",
       "",
       usesGemini ? "Gemini calls go through the Gemini API and are billed to your Google account." : null,
       usesDeepSeek ? "DeepSeek calls go to DeepSeek's servers (in China), under DeepSeek's terms, billed to your DeepSeek account." : null,
@@ -5683,12 +5783,12 @@ HOW TO MAP CODE
       ...usesMore.map(m => m.note),
       usesLlama ? "Llama runs on any OpenAI-compatible server. By default that's Ollama on this computer:" : null,
       usesLlama ? "install it from https://ollama.com, then  ollama pull llama3.2-vision:11b  (see MODELS below)." : null,
-      usesLlama ? "Elsewhere? Set LLAMA_BASE_URL (and LLAMA_API_KEY if the server needs one)." : null,
+      usesLlama ? "Elsewhere? Change LLAMA_BASE_URL in second-thought.ini (and LLAMA_API_KEY if the server needs one)." : null,
       "Claude calls go through the Anthropic API and are billed to your API account,",
-      "not your claude.ai plan. To change model, set RB_MODEL_TIER to quick, default",
-      "or complex, or edit MODELS below.",
+      "not your claude.ai plan. To change model, set primary in second-thought.ini",
+      "(quick, default, complex, gemini-default and so on), or edit MODELS below.",
       "Backup models (tried in order if the main one fails on a step) are in BACKUPS below;",
-      "RB_BACKUPS=openai-default,default overrides them, and RB_BACKUPS= turns them off.",
+      "backups in second-thought.ini overrides them, and backups = none turns them off.",
       "\"\"\"",
       ""
     ].filter(l => l !== null).join("\n");
