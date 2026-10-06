@@ -40,16 +40,23 @@ MODELS = {
     "deepseek-quick": "deepseek-flash",
     "deepseek-default": "deepseek-flash",
     "deepseek-complex": "deepseek-v4-pro",
+    # xAI (Grok): needs XAI_API_KEY (https://console.x.ai). Both can look at pictures. See https://docs.x.ai/docs/models
+    "xai-quick": "grok-4.3",
+    "xai-default": "grok-4.3",
+    "xai-complex": "grok-4.7",
 }
 DEEPSEEK_BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
+XAI_BASE_URL = os.environ.get("XAI_BASE_URL", "https://api.x.ai/v1").rstrip("/")
+XAI_API_KEY = os.environ.get("XAI_API_KEY", "")
 NO_VISION = {"deepseek-v4-pro"}  # models that can't look at photos
 LLAMA_BASE_URL = os.environ.get("LLAMA_BASE_URL", "http://localhost:11434/v1").rstrip("/")
 LLAMA_API_KEY = os.environ.get("LLAMA_API_KEY", "")
 MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
                 "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro",
                 "llama-quick": "Llama, small", "llama-default": "Llama, vision", "llama-complex": "Llama 4",
-                "deepseek-quick": "DeepSeek Flash", "deepseek-default": "DeepSeek Flash", "deepseek-complex": "DeepSeek V4 Pro"}
+                "deepseek-quick": "DeepSeek Flash", "deepseek-default": "DeepSeek Flash", "deepseek-complex": "DeepSeek V4 Pro",
+                "xai-quick": "Grok 4.3", "xai-default": "Grok 4.3", "xai-complex": "Grok 4.7"}
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -459,6 +466,9 @@ class Runtime:
         elif tier.startswith("deepseek-"):
             text = await self._call_openai("DeepSeek", MODELS.get(tier, MODELS["deepseek-default"]), prompt, picture, history, web)
             who = "DeepSeek"
+        elif tier.startswith("xai-"):
+            text = await self._call_openai("xAI", MODELS.get(tier, MODELS["xai-default"]), prompt, picture, history, web)
+            who = "xAI"
         else:
             text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
             who = "Claude"
@@ -484,11 +494,15 @@ class Runtime:
 
     @staticmethod
     def _openai_request(provider, body):
-        """One chat request to an OpenAI-compatible server (Ollama, llama.cpp, LM Studio, DeepSeek, ...)."""
+        """One chat request to an OpenAI-compatible server (Ollama, llama.cpp, LM Studio, DeepSeek, xAI, ...)."""
         if provider == "DeepSeek":
             base, key = DEEPSEEK_BASE_URL, DEEPSEEK_API_KEY
             if not key:
                 raise RunError("This program uses DeepSeek. Set the DEEPSEEK_API_KEY environment variable first (https://platform.deepseek.com).")
+        elif provider == "xAI":
+            base, key = XAI_BASE_URL, XAI_API_KEY
+            if not key:
+                raise RunError("This program uses xAI (Grok). Set the XAI_API_KEY environment variable first (https://console.x.ai).")
         else:
             base, key = LLAMA_BASE_URL, LLAMA_API_KEY
         headers = {"Content-Type": "application/json"}
@@ -510,7 +524,7 @@ class Runtime:
                 raise RunError(f"{provider} refused the request ({e.code}): {detail}")
             raise Retryable(f"{provider} answered {e.code}: {detail}")
         except (urllib.error.URLError, TimeoutError, OSError) as e:
-            where = DEEPSEEK_BASE_URL if provider == "DeepSeek" else LLAMA_BASE_URL
+            where = {"DeepSeek": DEEPSEEK_BASE_URL, "xAI": XAI_BASE_URL}.get(provider, LLAMA_BASE_URL)
             hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
             raise Retryable(f"Couldn't reach {provider} at {where} ({getattr(e, 'reason', e)}).{hint}")
 

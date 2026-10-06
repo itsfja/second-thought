@@ -244,7 +244,8 @@ def python_tests(codes):
     llama_url, llama_calls = fake_llama.start()
     env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test",
                HA_URL=ha_url, HA_TOKEN=fake_ha.TOKEN, LLAMA_BASE_URL=llama_url,
-               DEEPSEEK_BASE_URL=llama_url, DEEPSEEK_API_KEY="test")
+               DEEPSEEK_BASE_URL=llama_url, DEEPSEEK_API_KEY="test",
+               XAI_BASE_URL=llama_url, XAI_API_KEY="test")
     with tempfile.TemporaryDirectory() as tmp:
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
@@ -258,7 +259,7 @@ def python_tests(codes):
                 used = bool(done) and "Llama:" in done[-1]
                 check(used, f"{ex}.py used Llama" + ("" if used else f": {done[-1] if done else r.stdout[-200:]}"))
                 if ex == "w_judges":
-                    check(used and all(w in done[-1] for w in ("Claude:", "Gemini:", "DeepSeek:")), "w_judges.py asked Claude, Gemini, Llama and DeepSeek")
+                    check(used and all(w in done[-1] for w in ("Claude:", "Gemini:", "DeepSeek:", "xAI:")), "w_judges.py asked Claude, Gemini, Llama, DeepSeek and Grok")
             if ex == "r_second":
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 check(bool(done) and "DeepSeek:" in done[-1] and "Claude:" in done[-1], "r_second.py asked Claude and DeepSeek")

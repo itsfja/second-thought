@@ -197,6 +197,10 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
           <option value="deepseek-default">DeepSeek Flash</option>
           <option value="deepseek-complex">DeepSeek V4 Pro</option>
         </optgroup>
+        <optgroup label="Grok, from xAI (runs in exported Python)">
+          <option value="xai-default">Grok 4.3</option>
+          <option value="xai-complex">Grok 4.7</option>
+        </optgroup>
       </select>
     </label>
     <button id="step-toggle" type="button" aria-pressed="false">Step: off</button>
@@ -383,16 +387,23 @@ MODELS = {
     "deepseek-quick": "deepseek-flash",
     "deepseek-default": "deepseek-flash",
     "deepseek-complex": "deepseek-v4-pro",
+    # xAI (Grok): needs XAI_API_KEY (https://console.x.ai). Both can look at pictures. See https://docs.x.ai/docs/models
+    "xai-quick": "grok-4.3",
+    "xai-default": "grok-4.3",
+    "xai-complex": "grok-4.7",
 }
 DEEPSEEK_BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
+XAI_BASE_URL = os.environ.get("XAI_BASE_URL", "https://api.x.ai/v1").rstrip("/")
+XAI_API_KEY = os.environ.get("XAI_API_KEY", "")
 NO_VISION = {"deepseek-v4-pro"}  # models that can't look at photos
 LLAMA_BASE_URL = os.environ.get("LLAMA_BASE_URL", "http://localhost:11434/v1").rstrip("/")
 LLAMA_API_KEY = os.environ.get("LLAMA_API_KEY", "")
 MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
                 "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro",
                 "llama-quick": "Llama, small", "llama-default": "Llama, vision", "llama-complex": "Llama 4",
-                "deepseek-quick": "DeepSeek Flash", "deepseek-default": "DeepSeek Flash", "deepseek-complex": "DeepSeek V4 Pro"}
+                "deepseek-quick": "DeepSeek Flash", "deepseek-default": "DeepSeek Flash", "deepseek-complex": "DeepSeek V4 Pro",
+                "xai-quick": "Grok 4.3", "xai-default": "Grok 4.3", "xai-complex": "Grok 4.7"}
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -802,6 +813,9 @@ class Runtime:
         elif tier.startswith("deepseek-"):
             text = await self._call_openai("DeepSeek", MODELS.get(tier, MODELS["deepseek-default"]), prompt, picture, history, web)
             who = "DeepSeek"
+        elif tier.startswith("xai-"):
+            text = await self._call_openai("xAI", MODELS.get(tier, MODELS["xai-default"]), prompt, picture, history, web)
+            who = "xAI"
         else:
             text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
             who = "Claude"
@@ -827,11 +841,15 @@ class Runtime:
 
     @staticmethod
     def _openai_request(provider, body):
-        """One chat request to an OpenAI-compatible server (Ollama, llama.cpp, LM Studio, DeepSeek, ...)."""
+        """One chat request to an OpenAI-compatible server (Ollama, llama.cpp, LM Studio, DeepSeek, xAI, ...)."""
         if provider == "DeepSeek":
             base, key = DEEPSEEK_BASE_URL, DEEPSEEK_API_KEY
             if not key:
                 raise RunError("This program uses DeepSeek. Set the DEEPSEEK_API_KEY environment variable first (https://platform.deepseek.com).")
+        elif provider == "xAI":
+            base, key = XAI_BASE_URL, XAI_API_KEY
+            if not key:
+                raise RunError("This program uses xAI (Grok). Set the XAI_API_KEY environment variable first (https://console.x.ai).")
         else:
             base, key = LLAMA_BASE_URL, LLAMA_API_KEY
         headers = {"Content-Type": "application/json"}
@@ -853,7 +871,7 @@ class Runtime:
                 raise RunError(f"{provider} refused the request ({e.code}): {detail}")
             raise Retryable(f"{provider} answered {e.code}: {detail}")
         except (urllib.error.URLError, TimeoutError, OSError) as e:
-            where = DEEPSEEK_BASE_URL if provider == "DeepSeek" else LLAMA_BASE_URL
+            where = {"DeepSeek": DEEPSEEK_BASE_URL, "xAI": XAI_BASE_URL}.get(provider, LLAMA_BASE_URL)
             hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
             raise Retryable(f"Couldn't reach {provider} at {where} ({getattr(e, 'reason', e)}).{hint}")
 
@@ -2866,11 +2884,12 @@ Wait & time:
   rb_wait: inputs SECS (number), fields UNIT ("s" | "m" | "h").  rb_wait_until (COND, a boolean).
   rb_wait_time: fields HOUR, MINUTE.  rb_wait_msg: fields MSG.  rb_reset_timer.
 Control:
-  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini).  rb_stop: end the run.
+  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini; "llama-*", "deepseek-*" and "xai-*" as below).  rb_stop: end the run.
   rb_with_model: fields TIER (as above); statement input DO. Runs just the blocks inside on that model.
   Map calls to Gemini (google-genai, google.generativeai) to rb_with_model or rb_use_model with a gemini tier: Flash-Lite = gemini-quick, Flash = gemini-default, Pro = gemini-complex.
   Map Llama, Ollama, llama.cpp or other local/open models to tiers "llama-quick" (small), "llama-default" (vision-capable), "llama-complex" (largest).
   Map DeepSeek API calls to "deepseek-default" (deepseek-flash, deepseek-chat) or "deepseek-complex" (deepseek-v4-pro, deepseek-reasoner).
+  Map xAI / Grok API calls (api.x.ai) to "xai-default" (grok-4.3, grok-4-fast and other cheaper Grok models) or "xai-complex" (grok-4.7, grok-4 and other flagship Grok models).
   controls_repeat_ext: inputs TIMES, DO.
   controls_whileUntil: fields MODE ("WHILE" | "UNTIL"); inputs BOOL, DO.
   controls_if: inputs IF0, DO0, IF1, DO1, ..., ELSE; extraState {"elseIfCount": <number of extra IFs>, "hasElse": true} (omit extraState for a plain if).
@@ -3019,11 +3038,13 @@ HOW TO MAP CODE
   const TIERS = [["Claude, quick","quick"],["Claude, balanced","default"],["Claude, most capable","complex"],
                  ["Gemini Flash-Lite","gemini-quick"],["Gemini Flash","gemini-default"],["Gemini Pro","gemini-complex"],
                  ["Llama, small","llama-quick"],["Llama, vision","llama-default"],["Llama 4","llama-complex"],
-                 ["DeepSeek Flash","deepseek-default"],["DeepSeek V4 Pro","deepseek-complex"]];
+                 ["DeepSeek Flash","deepseek-default"],["DeepSeek V4 Pro","deepseek-complex"],
+                 ["Grok 4.3","xai-default"],["Grok 4.7","xai-complex"]];
   const isGemini = t => String(t || "").startsWith("gemini-");
   const isLlama = t => String(t || "").startsWith("llama-");
   const isDeepSeek = t => String(t || "").startsWith("deepseek-");
-  const isElsewhere = t => isGemini(t) || isLlama(t) || isDeepSeek(t);
+  const isXai = t => String(t || "").startsWith("xai-");
+  const isElsewhere = t => isGemini(t) || isLlama(t) || isDeepSeek(t) || isXai(t);
   const tierLabel = t => (TIERS.find(x => x[1] === t) || [t])[0];
   /* ---------- Long text field: wraps at 80 characters, any number of lines ---------- */
   const WRAP = 80;
@@ -3090,10 +3111,10 @@ HOW TO MAP CODE
       { style:"control", inputsInline:true, tooltip:"Pause until the condition is true. Checked twice a second, or every 10 seconds if it asks Claude." }),
     { type:"rb_stop", message0:"stop the run", previousStatement:null, style:"control", tooltip:"End the run here. Anything already in the result is shown." },
     S("rb_use_model", "use model %1", [{ type:"field_dropdown", name:"TIER", options:TIERS }], { style:"control",
-      tooltip:"Switch model for the AI blocks after this one. Gemini, Llama and DeepSeek run in exported Python; in this page Claude stands in for them." }),
+      tooltip:"Switch model for the AI blocks after this one. Gemini, Llama, DeepSeek and Grok run in exported Python; in this page Claude stands in for them." }),
     { type:"rb_with_model", message0:"with model %1", args0:[{ type:"field_dropdown", name:"TIER", options:TIERS }],
       message1:"%1", args1:[{ type:"input_statement", name:"DO" }], previousStatement:null, nextStatement:null, style:"control",
-      tooltip:"Runs just the blocks inside on this model, then goes back to the model before. Gemini, Llama and DeepSeek run in exported Python; in this page Claude stands in for them." },
+      tooltip:"Runs just the blocks inside on this model, then goes back to the model before. Gemini, Llama, DeepSeek and Grok run in exported Python; in this page Claude stands in for them." },
     /* Operators extras */
     V("rb_contains", "%1 contains %2", [val("A"), val("B")], "Boolean", { style:"operators", inputsInline:true, tooltip:"True if the first text includes the second (ignores case)." }),
     V("rb_word_count", "word count of %1", [val("TEXT")], "Number", { style:"text", inputsInline:true }),
@@ -3772,18 +3793,19 @@ HOW TO MAP CODE
           sIf(xB("rb_passed"), blk("controls_flow_statements", { FLOW:"BREAK" })),
           blk("rb_with_model", { TIER:"llama-default" }, { DO:st(blk("rb_revise")) })),
         sFinish())) },
-    { key:"w_judges", cat:"Writing", title:"Four AIs judge",
-      desc:"Claude, Gemini, Llama and DeepSeek each score your text out of 10; you get all four scores and the average.",
+    { key:"w_judges", cat:"Writing", title:"Five AIs judge",
+      desc:"Claude, Gemini, Llama, DeepSeek and Grok each score your text out of 10; you get all five scores and the average.",
       tip:"Paste a headline, a product description or the opening of a story.",
-      build:() => P(["text", "a", "b", "c", "d"], chain(sStart(),
+      build:() => P(["text", "a", "b", "c", "d", "e"], chain(sStart(),
         sAskMe("Paste the text to be judged."),
         xSet("text", xAnswer()),
         blk("rb_with_model", { TIER:"default" }, { DO:st(xSet("a", xScore(xV("text"), "clear, engaging and well written"))) }),
         blk("rb_with_model", { TIER:"gemini-default" }, { DO:st(xSet("b", xScore(xV("text"), "clear, engaging and well written"))) }),
         blk("rb_with_model", { TIER:"llama-default" }, { DO:st(xSet("c", xScore(xV("text"), "clear, engaging and well written"))) }),
         blk("rb_with_model", { TIER:"deepseek-default" }, { DO:st(xSet("d", xScore(xV("text"), "clear, engaging and well written"))) }),
-        sAdd(xJ("Claude: ", xV("a"), "/10   Gemini: ", xV("b"), "/10   Llama: ", xV("c"), "/10   DeepSeek: ", xV("d"), "/10")),
-        sAdd(xJ("Average: ", xB("math_round", { NUM:xB("math_arithmetic", { A:xB("math_arithmetic", { A:xB("math_arithmetic", { A:xB("math_arithmetic", { A:xV("a"), B:xV("b") }, { OP:"ADD" }), B:xV("c") }, { OP:"ADD" }), B:xV("d") }, { OP:"ADD" }), B:nm(4) }, { OP:"DIVIDE" }) }, { OP:"ROUND" }), "/10")),
+        blk("rb_with_model", { TIER:"xai-default" }, { DO:st(xSet("e", xScore(xV("text"), "clear, engaging and well written"))) }),
+        sAdd(xJ("Claude: ", xV("a"), "/10   Gemini: ", xV("b"), "/10   Llama: ", xV("c"), "/10   DeepSeek: ", xV("d"), "/10   Grok: ", xV("e"), "/10")),
+        sAdd(xJ("Average: ", xB("math_round", { NUM:xB("math_arithmetic", { A:xB("math_arithmetic", { A:xB("math_arithmetic", { A:xB("math_arithmetic", { A:xB("math_arithmetic", { A:xV("a"), B:xV("b") }, { OP:"ADD" }), B:xV("c") }, { OP:"ADD" }), B:xV("d") }, { OP:"ADD" }), B:xV("e") }, { OP:"ADD" }), B:nm(5) }, { OP:"DIVIDE" }) }, { OP:"ROUND" }), "/10")),
         sFinish())) },
 
     /* ----- Research ----- */
@@ -4954,6 +4976,10 @@ HOW TO MAP CODE
   function b64encode(str){ const bytes = new TextEncoder().encode(str); let bin = ""; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin); }
   function b64decode(b64){ const bin = atob(b64); const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
 
+  function programUsesXai(){
+    if (isXai($("tier").value)) return true;
+    return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isXai(b.getFieldValue("TIER")));
+  }
   function programUsesDeepSeek(){
     if (isDeepSeek($("tier").value)) return true;
     return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isDeepSeek(b.getFieldValue("TIER")));
@@ -5266,7 +5292,7 @@ HOW TO MAP CODE
 
     const fileBase = slug(progName);
     const when = new Date();
-    const usesGemini = programUsesGemini(), usesLlama = programUsesLlama(), usesDeepSeek = programUsesDeepSeek();
+    const usesGemini = programUsesGemini(), usesLlama = programUsesLlama(), usesDeepSeek = programUsesDeepSeek(), usesXai = programUsesXai();
     const usesHA = ws.getAllBlocks(false).some(b => b.type.startsWith("rb_ha_"));
     const header = [
       "#!/usr/bin/env python3",
@@ -5279,6 +5305,7 @@ HOW TO MAP CODE
       "    export ANTHROPIC_API_KEY=your-key      (Windows: set ANTHROPIC_API_KEY=your-key)",
       usesGemini ? "    export GEMINI_API_KEY=your-key         (Windows: set GEMINI_API_KEY=your-key)" : null,
       usesDeepSeek ? "    export DEEPSEEK_API_KEY=your-key       (Windows: set DEEPSEEK_API_KEY=your-key)" : null,
+      usesXai ? "    export XAI_API_KEY=your-key            (Windows: set XAI_API_KEY=your-key)" : null,
       usesHA ? "    export HA_URL=http://homeassistant.local:8123" : null,
       usesHA ? "    export HA_TOKEN=your-long-lived-token  (Home Assistant: your profile, Security, Long-lived access tokens)" : null,
       starts.length ? "    python " + fileBase + ".py                    runs the 'when Run is clicked' scripts once" : null,
@@ -5286,6 +5313,7 @@ HOW TO MAP CODE
       "",
       usesGemini ? "Gemini calls go through the Gemini API and are billed to your Google account." : null,
       usesDeepSeek ? "DeepSeek calls go to DeepSeek's servers (in China), under DeepSeek's terms, billed to your DeepSeek account." : null,
+      usesXai ? "Grok calls go to xAI's servers, under xAI's terms, billed to your xAI account (https://console.x.ai)." : null,
       usesLlama ? "Llama runs on any OpenAI-compatible server. By default that's Ollama on this computer:" : null,
       usesLlama ? "install it from https://ollama.com, then  ollama pull llama3.2-vision:11b  (see MODELS below)." : null,
       usesLlama ? "Elsewhere? Set LLAMA_BASE_URL (and LLAMA_API_KEY if the server needs one)." : null,
@@ -6025,7 +6053,7 @@ HOW TO MAP CODE
     const away = isElsewhere(run.tier);
     const opts = { signal:ctl.signal, modelTier:away ? run.tier.replace(/^[a-z]+-/, "") : run.tier, cache:false };
     if (away) {
-      const who = isGemini(run.tier) ? "Gemini" : isLlama(run.tier) ? "Llama" : "DeepSeek";
+      const who = isGemini(run.tier) ? "Gemini" : isLlama(run.tier) ? "Llama" : isXai(run.tier) ? "Grok" : "DeepSeek";
       if (step && step.el && !step.el.dataset.stand) { step.el.dataset.stand = "1"; const n = step.el.querySelector(".step-name"); if (n) n.textContent += " \u00b7 Claude standing in for " + tierLabel(run.tier); }
       run.awayNoted = run.awayNoted || {};
       if (!run.awayNoted[who]) { run.awayNoted[who] = true; addStep(who, { mono:true, text:who + " can't be reached from this page, so Claude answers in its place. Export to Python to use " + who + " itself." }).done("note", "warn"); }

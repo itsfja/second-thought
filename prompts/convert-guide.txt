@@ -40,11 +40,12 @@ Wait & time:
   rb_wait: inputs SECS (number), fields UNIT ("s" | "m" | "h").  rb_wait_until (COND, a boolean).
   rb_wait_time: fields HOUR, MINUTE.  rb_wait_msg: fields MSG.  rb_reset_timer.
 Control:
-  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini).  rb_stop: end the run.
+  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini; "llama-*", "deepseek-*" and "xai-*" as below).  rb_stop: end the run.
   rb_with_model: fields TIER (as above); statement input DO. Runs just the blocks inside on that model.
   Map calls to Gemini (google-genai, google.generativeai) to rb_with_model or rb_use_model with a gemini tier: Flash-Lite = gemini-quick, Flash = gemini-default, Pro = gemini-complex.
   Map Llama, Ollama, llama.cpp or other local/open models to tiers "llama-quick" (small), "llama-default" (vision-capable), "llama-complex" (largest).
   Map DeepSeek API calls to "deepseek-default" (deepseek-flash, deepseek-chat) or "deepseek-complex" (deepseek-v4-pro, deepseek-reasoner).
+  Map xAI / Grok API calls (api.x.ai) to "xai-default" (grok-4.3, grok-4-fast and other cheaper Grok models) or "xai-complex" (grok-4.7, grok-4 and other flagship Grok models).
   controls_repeat_ext: inputs TIMES, DO.
   controls_whileUntil: fields MODE ("WHILE" | "UNTIL"); inputs BOOL, DO.
   controls_if: inputs IF0, DO0, IF1, DO1, ..., ELSE; extraState {"elseIfCount": <number of extra IFs>, "hasElse": true} (omit extraState for a plain if).

@@ -121,6 +121,7 @@ Second Thought can do many things. Here are some of them.
 - If something goes wrong, it can try again.
 - It can ask **Gemini** to help too. Gemini is another clever helper, made by a company called Google. Claude can write something, and Gemini can check it. Two helpers spot more mistakes than one.
 - It can ask **Llama**, a helper that can live on your own computer and keep everything private.
+- It can ask **DeepSeek** and **Grok** too. Grok is made by a company called xAI.
 
 ---
 
@@ -205,7 +206,13 @@ A fourth helper, **DeepSeek**, is very cheap to use. It lives on DeepSeek's own 
 export DEEPSEEK_API_KEY=your-deepseek-key
 ```
 
-Gemini, Llama and DeepSeek only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
+A fifth helper, **Grok**, is made by a company called **xAI**. It lives on xAI's own computers, and it needs its own key too:
+
+```
+export XAI_API_KEY=your-xai-key
+```
+
+Gemini, Llama, DeepSeek and Grok only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
 
 ---
 
