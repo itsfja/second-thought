@@ -40,5 +40,14 @@ jobs:
         env:
           PYTHONUTF8: "0"
         run: |
-          bash tests/setup.sh
-          python tests/run_tests.py
+          set +e
+          { bash tests/setup.sh && python tests/run_tests.py; } > test-output.txt 2>&1
+          status=$?
+          cat test-output.txt
+          if [ $status -ne 0 ]; then
+            # Show the failures on the run's summary page, not just deep in the log.
+            msg=$( (grep -E "FAIL|Error|Traceback|error:" test-output.txt | head -40; echo "-----"; tail -60 test-output.txt) | cut -c1-300)
+            msg="${msg//'%'/'%25'}"; msg="${msg//$'\r'/}"; msg="${msg//$'\n'/'%0A'}"
+            echo "::error title=Windows test failures::$msg"
+          fi
+          exit $status
