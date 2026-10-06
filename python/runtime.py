@@ -84,6 +84,12 @@ MODELS = {
     "minimax-quick": "MiniMax-M2.7-highspeed",
     "minimax-default": "MiniMax-M3",
     "minimax-complex": "MiniMax-M3",
+    # OpenRouter: one key for hundreds of models (https://openrouter.ai/keys). openrouter/auto picks a model for each
+    # step. For one particular model use the "with OpenRouter model" block, or a tier like "openrouter:mistralai/..."
+    # with any name from https://openrouter.ai/models
+    "openrouter-quick": "openrouter/auto",
+    "openrouter-default": "openrouter/auto",
+    "openrouter-complex": "openrouter/auto",
 }
 # Where a service's text models can't see, pictures go to one of its models that can.
 VISION_MODELS = {
@@ -93,10 +99,10 @@ VISION_MODELS = {
 }
 
 
-def _provider(name, prefix, base_env, base, key_envs, signup):
+def _provider(name, prefix, base_env, base, key_envs, signup, headers=None):
     key = next((os.environ[k] for k in key_envs if os.environ.get(k)), "")
     return {"name": name, "prefix": prefix, "base": os.environ.get(base_env, base).rstrip("/"), "base_env": base_env,
-            "key": key, "key_env": key_envs[0], "signup": signup}
+            "key": key, "key_env": key_envs[0], "signup": signup, "headers": headers or {}}
 
 
 # Model services that speak OpenAI's chat format. Change a service's address with its *_BASE_URL variable.
@@ -113,6 +119,8 @@ PROVIDERS = {p["name"]: p for p in [
     _provider("Groq", "groq-", "GROQ_BASE_URL", "https://api.groq.com/openai/v1", ("GROQ_API_KEY",), "https://console.groq.com"),
     _provider("GLM", "glm-", "ZAI_BASE_URL", "https://api.z.ai/api/paas/v4", ("ZAI_API_KEY", "ZHIPUAI_API_KEY"), "https://z.ai/manage-apikey/apikey-list"),
     _provider("MiniMax", "minimax-", "MINIMAX_BASE_URL", "https://api.minimax.io/v1", ("MINIMAX_API_KEY",), "https://platform.minimax.io"),
+    _provider("OpenRouter", "openrouter-", "OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1", ("OPENROUTER_API_KEY",),
+              "https://openrouter.ai/keys", {"X-OpenRouter-Title": "Second Thought"}),
     _provider("Perplexity", "perplexity-", "PERPLEXITY_BASE_URL", "https://api.perplexity.ai", ("PERPLEXITY_API_KEY",), "https://www.perplexity.ai/account/api"),
 ]}
 NO_VISION = {"deepseek-v4-pro", "MiniMax-M2.7-highspeed"}  # models that can't look at photos
@@ -129,7 +137,16 @@ MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "comple
                 "hf-quick": "Gemma 4, small", "hf-default": "Gemma 4", "hf-complex": "GPT-OSS 120B",
                 "groq-quick": "Llama 3.1 8B (Groq)", "groq-default": "Llama 3.3 70B (Groq)", "groq-complex": "GPT-OSS 120B (Groq)",
                 "glm-quick": "GLM-5.3 Flash", "glm-default": "GLM-5.3 Flash", "glm-complex": "GLM-5.3",
-                "minimax-quick": "MiniMax M2.7", "minimax-default": "MiniMax M3", "minimax-complex": "MiniMax M3"}
+                "minimax-quick": "MiniMax M2.7", "minimax-default": "MiniMax M3", "minimax-complex": "MiniMax M3",
+                "openrouter-quick": "OpenRouter, auto-pick", "openrouter-default": "OpenRouter, auto-pick", "openrouter-complex": "OpenRouter, auto-pick"}
+
+
+def model_label(tier):
+    if str(tier).startswith("openrouter:"):
+        return "OpenRouter: " + tier.split(":", 1)[1]
+    return MODEL_LABELS.get(tier, tier)
+
+
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -538,6 +555,9 @@ class Runtime:
             who = "Perplexity"
             if text and sources and not want_json:
                 text += "\n\nSources:\n" + "\n".join(sources)
+        elif tier.startswith("openrouter:"):
+            who = "OpenRouter"
+            text = await self._call_openai(who, tier.split(":", 1)[1].strip() or MODELS["openrouter-default"], prompt, picture, history, web)
         elif any(tier.startswith(pv["prefix"]) for pv in PROVIDERS.values()):
             pv = next(pv for pv in PROVIDERS.values() if tier.startswith(pv["prefix"]))
             who = pv["name"]
@@ -571,7 +591,7 @@ class Runtime:
         pv = PROVIDERS[provider]
         if pv["signup"] and not pv["key"]:
             raise RunError(f"This program uses {provider}. Set the {pv['key_env']} environment variable first ({pv['signup']}).")
-        headers = {"Content-Type": "application/json"}
+        headers = {"Content-Type": "application/json", **pv["headers"]}
         if pv["key"]:
             headers["Authorization"] = "Bearer " + pv["key"]
         req = urllib.request.Request(pv["base"] + path, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
@@ -1499,12 +1519,12 @@ class Runtime:
     # ----- Model -----
     def use_model(self, tier):
         self.tier = tier
-        self.log("Model", "Using " + MODEL_LABELS.get(tier, tier))
+        self.log("Model", "Using " + model_label(tier))
 
     @contextlib.asynccontextmanager
     async def using_model(self, tier):
         token = MODEL_OVERRIDE.set(tier)
-        self.log("Model", "Using " + MODEL_LABELS.get(tier, tier) + " for the blocks inside")
+        self.log("Model", "Using " + model_label(tier) + " for the blocks inside")
         try:
             yield
         finally:

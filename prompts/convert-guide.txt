@@ -42,6 +42,7 @@ Wait & time:
 Control:
   rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini; "llama-*", "deepseek-*", "xai-*", "openai-*", "mistral-*", "qwen-*", "kimi-*", "perplexity-*", "hf-*", "groq-*", "glm-*" and "minimax-*" as below).  rb_stop: end the run.
   rb_with_model: fields TIER (as above); statement input DO. Runs just the blocks inside on that model.
+  rb_with_any_model: fields MODEL (an OpenRouter model name such as "mistralai/mistral-small", or "openrouter/auto"); statement input DO. Runs the blocks inside on that model through OpenRouter.
   Map calls to Gemini (google-genai, google.generativeai) to rb_with_model or rb_use_model with a gemini tier: Flash-Lite = gemini-quick, Flash = gemini-default, Pro = gemini-complex.
   Map Llama, Ollama, llama.cpp or other local/open models to tiers "llama-quick" (small), "llama-default" (vision-capable), "llama-complex" (largest).
   Map DeepSeek API calls to "deepseek-default" (deepseek-flash, deepseek-chat) or "deepseek-complex" (deepseek-v4-pro, deepseek-reasoner).
@@ -55,6 +56,7 @@ Control:
   Map Groq API calls (api.groq.com) to "groq-quick" (llama-3.1-8b-instant and other small models), "groq-default" (llama-3.3-70b-versatile) or "groq-complex" (openai/gpt-oss-120b).
   Map Z.ai / Zhipu / GLM API calls to "glm-default" (glm-*-flash, glm-*-air) or "glm-complex" (the full GLM models).
   Map MiniMax API calls to "minimax-quick" (MiniMax-M2.x, highspeed) or "minimax-default" (MiniMax-M3).
+  Map OpenRouter calls (openrouter.ai/api/v1) to rb_with_any_model with MODEL set to the exact model name the code uses; "openrouter/auto" stays as it is.
   controls_repeat_ext: inputs TIMES, DO.
   controls_whileUntil: fields MODE ("WHILE" | "UNTIL"); inputs BOOL, DO.
   controls_if: inputs IF0, DO0, IF1, DO1, ..., ELSE; extraState {"elseIfCount": <number of extra IFs>, "hasElse": true} (omit extraState for a plain if).

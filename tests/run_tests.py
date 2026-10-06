@@ -251,7 +251,8 @@ def python_tests(codes):
                MOONSHOT_BASE_URL=llama_url, MOONSHOT_API_KEY="test",
                PERPLEXITY_BASE_URL=llama_url.rsplit("/v1", 1)[0], PERPLEXITY_API_KEY="test",
                HF_BASE_URL=llama_url, HF_TOKEN="test", GROQ_BASE_URL=llama_url, GROQ_API_KEY="test",
-               ZAI_BASE_URL=llama_url, ZAI_API_KEY="test", MINIMAX_BASE_URL=llama_url, MINIMAX_API_KEY="test")
+               ZAI_BASE_URL=llama_url, ZAI_API_KEY="test", MINIMAX_BASE_URL=llama_url, MINIMAX_API_KEY="test",
+               OPENROUTER_BASE_URL=llama_url, OPENROUTER_API_KEY="test")
     with tempfile.TemporaryDirectory() as tmp:
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
@@ -284,6 +285,11 @@ def python_tests(codes):
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 only = bool(done) and "Hugging Face:" in done[-1] and "Claude:" not in done[-1]
                 check(only, "c_openonly.py used only Hugging Face" + ("" if only else f": {done[-1] if done else r.stdout[-200:]}"))
+            if ex == "r_anymodel":
+                done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
+                models = {c["model"] for c in llama_calls}
+                anym = bool(done) and "OpenRouter:" in done[-1] and {"openrouter/auto", "meta-llama/llama-3.3-70b-instruct"} <= models
+                check(anym, "r_anymodel.py asked OpenRouter's auto-pick and the named model" + ("" if anym else f": {done[-1] if done else r.stdout[-200:]}"))
             if ex == "r_sourced":
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 srcd = bool(done) and "Perplexity:" in done[-1] and "Sources:" in r.stdout and "https://example.com/test" in r.stdout

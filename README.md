@@ -126,6 +126,7 @@ Second Thought can do many things. Here are some of them.
 - It can ask helpers from all round the world: **Mistral** from France, **Qwen** from Alibaba and **Kimi** from Moonshot.
 - It can ask **Perplexity**, a helper that looks things up on the internet every time, and tells you where it found them.
 - It can ask open helpers from **Hugging Face**, super-speedy ones from **Groq**, and **GLM** and **MiniMax** too.
+- With **OpenRouter**, it can ask almost *any* helper in the world, using just one key.
 
 ---
 
@@ -240,6 +241,12 @@ Perplexity is different from the others. It searches the internet for every ques
 **Hugging Face** is like a huge library of free, open helpers that anyone can share. Second Thought starts you off with Google's Gemma, but you can choose almost any helper in the library.
 
 **Groq** (spelt with a q, so it is not the same as Grok) is very, very fast. It is good for jobs with lots of little steps.
+
+**OpenRouter** is like a big switchboard. One key reaches hundreds of helpers from lots of different companies. Choose **OpenRouter, auto-pick** and it chooses a good helper for each job. Or use the block called **with OpenRouter model**, and type in the name of any helper you like from openrouter.ai/models:
+
+```
+export OPENROUTER_API_KEY=your-openrouter-key
+```
 
 All the helpers except Claude only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
 

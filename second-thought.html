@@ -243,6 +243,9 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
           <option value="minimax-quick">MiniMax M2.7</option>
           <option value="minimax-default">MiniMax M3</option>
         </optgroup>
+        <optgroup label="OpenRouter, hundreds of models (runs in exported Python)">
+          <option value="openrouter-default">OpenRouter, auto-pick</option>
+        </optgroup>
       </select>
     </label>
     <button id="step-toggle" type="button" aria-pressed="false">Step: off</button>
@@ -473,6 +476,12 @@ MODELS = {
     "minimax-quick": "MiniMax-M2.7-highspeed",
     "minimax-default": "MiniMax-M3",
     "minimax-complex": "MiniMax-M3",
+    # OpenRouter: one key for hundreds of models (https://openrouter.ai/keys). openrouter/auto picks a model for each
+    # step. For one particular model use the "with OpenRouter model" block, or a tier like "openrouter:mistralai/..."
+    # with any name from https://openrouter.ai/models
+    "openrouter-quick": "openrouter/auto",
+    "openrouter-default": "openrouter/auto",
+    "openrouter-complex": "openrouter/auto",
 }
 # Where a service's text models can't see, pictures go to one of its models that can.
 VISION_MODELS = {
@@ -482,10 +491,10 @@ VISION_MODELS = {
 }
 
 
-def _provider(name, prefix, base_env, base, key_envs, signup):
+def _provider(name, prefix, base_env, base, key_envs, signup, headers=None):
     key = next((os.environ[k] for k in key_envs if os.environ.get(k)), "")
     return {"name": name, "prefix": prefix, "base": os.environ.get(base_env, base).rstrip("/"), "base_env": base_env,
-            "key": key, "key_env": key_envs[0], "signup": signup}
+            "key": key, "key_env": key_envs[0], "signup": signup, "headers": headers or {}}
 
 
 # Model services that speak OpenAI's chat format. Change a service's address with its *_BASE_URL variable.
@@ -502,6 +511,8 @@ PROVIDERS = {p["name"]: p for p in [
     _provider("Groq", "groq-", "GROQ_BASE_URL", "https://api.groq.com/openai/v1", ("GROQ_API_KEY",), "https://console.groq.com"),
     _provider("GLM", "glm-", "ZAI_BASE_URL", "https://api.z.ai/api/paas/v4", ("ZAI_API_KEY", "ZHIPUAI_API_KEY"), "https://z.ai/manage-apikey/apikey-list"),
     _provider("MiniMax", "minimax-", "MINIMAX_BASE_URL", "https://api.minimax.io/v1", ("MINIMAX_API_KEY",), "https://platform.minimax.io"),
+    _provider("OpenRouter", "openrouter-", "OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1", ("OPENROUTER_API_KEY",),
+              "https://openrouter.ai/keys", {"X-OpenRouter-Title": "Second Thought"}),
     _provider("Perplexity", "perplexity-", "PERPLEXITY_BASE_URL", "https://api.perplexity.ai", ("PERPLEXITY_API_KEY",), "https://www.perplexity.ai/account/api"),
 ]}
 NO_VISION = {"deepseek-v4-pro", "MiniMax-M2.7-highspeed"}  # models that can't look at photos
@@ -518,7 +529,16 @@ MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "comple
                 "hf-quick": "Gemma 4, small", "hf-default": "Gemma 4", "hf-complex": "GPT-OSS 120B",
                 "groq-quick": "Llama 3.1 8B (Groq)", "groq-default": "Llama 3.3 70B (Groq)", "groq-complex": "GPT-OSS 120B (Groq)",
                 "glm-quick": "GLM-5.3 Flash", "glm-default": "GLM-5.3 Flash", "glm-complex": "GLM-5.3",
-                "minimax-quick": "MiniMax M2.7", "minimax-default": "MiniMax M3", "minimax-complex": "MiniMax M3"}
+                "minimax-quick": "MiniMax M2.7", "minimax-default": "MiniMax M3", "minimax-complex": "MiniMax M3",
+                "openrouter-quick": "OpenRouter, auto-pick", "openrouter-default": "OpenRouter, auto-pick", "openrouter-complex": "OpenRouter, auto-pick"}
+
+
+def model_label(tier):
+    if str(tier).startswith("openrouter:"):
+        return "OpenRouter: " + tier.split(":", 1)[1]
+    return MODEL_LABELS.get(tier, tier)
+
+
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -927,6 +947,9 @@ class Runtime:
             who = "Perplexity"
             if text and sources and not want_json:
                 text += "\n\nSources:\n" + "\n".join(sources)
+        elif tier.startswith("openrouter:"):
+            who = "OpenRouter"
+            text = await self._call_openai(who, tier.split(":", 1)[1].strip() or MODELS["openrouter-default"], prompt, picture, history, web)
         elif any(tier.startswith(pv["prefix"]) for pv in PROVIDERS.values()):
             pv = next(pv for pv in PROVIDERS.values() if tier.startswith(pv["prefix"]))
             who = pv["name"]
@@ -960,7 +983,7 @@ class Runtime:
         pv = PROVIDERS[provider]
         if pv["signup"] and not pv["key"]:
             raise RunError(f"This program uses {provider}. Set the {pv['key_env']} environment variable first ({pv['signup']}).")
-        headers = {"Content-Type": "application/json"}
+        headers = {"Content-Type": "application/json", **pv["headers"]}
         if pv["key"]:
             headers["Authorization"] = "Bearer " + pv["key"]
         req = urllib.request.Request(pv["base"] + path, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
@@ -1888,12 +1911,12 @@ class Runtime:
     # ----- Model -----
     def use_model(self, tier):
         self.tier = tier
-        self.log("Model", "Using " + MODEL_LABELS.get(tier, tier))
+        self.log("Model", "Using " + model_label(tier))
 
     @contextlib.asynccontextmanager
     async def using_model(self, tier):
         token = MODEL_OVERRIDE.set(tier)
-        self.log("Model", "Using " + MODEL_LABELS.get(tier, tier) + " for the blocks inside")
+        self.log("Model", "Using " + model_label(tier) + " for the blocks inside")
         try:
             yield
         finally:
@@ -3030,6 +3053,7 @@ Wait & time:
 Control:
   rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini; "llama-*", "deepseek-*", "xai-*", "openai-*", "mistral-*", "qwen-*", "kimi-*", "perplexity-*", "hf-*", "groq-*", "glm-*" and "minimax-*" as below).  rb_stop: end the run.
   rb_with_model: fields TIER (as above); statement input DO. Runs just the blocks inside on that model.
+  rb_with_any_model: fields MODEL (an OpenRouter model name such as "mistralai/mistral-small", or "openrouter/auto"); statement input DO. Runs the blocks inside on that model through OpenRouter.
   Map calls to Gemini (google-genai, google.generativeai) to rb_with_model or rb_use_model with a gemini tier: Flash-Lite = gemini-quick, Flash = gemini-default, Pro = gemini-complex.
   Map Llama, Ollama, llama.cpp or other local/open models to tiers "llama-quick" (small), "llama-default" (vision-capable), "llama-complex" (largest).
   Map DeepSeek API calls to "deepseek-default" (deepseek-flash, deepseek-chat) or "deepseek-complex" (deepseek-v4-pro, deepseek-reasoner).
@@ -3043,6 +3067,7 @@ Control:
   Map Groq API calls (api.groq.com) to "groq-quick" (llama-3.1-8b-instant and other small models), "groq-default" (llama-3.3-70b-versatile) or "groq-complex" (openai/gpt-oss-120b).
   Map Z.ai / Zhipu / GLM API calls to "glm-default" (glm-*-flash, glm-*-air) or "glm-complex" (the full GLM models).
   Map MiniMax API calls to "minimax-quick" (MiniMax-M2.x, highspeed) or "minimax-default" (MiniMax-M3).
+  Map OpenRouter calls (openrouter.ai/api/v1) to rb_with_any_model with MODEL set to the exact model name the code uses; "openrouter/auto" stays as it is.
   controls_repeat_ext: inputs TIMES, DO.
   controls_whileUntil: fields MODE ("WHILE" | "UNTIL"); inputs BOOL, DO.
   controls_if: inputs IF0, DO0, IF1, DO1, ..., ELSE; extraState {"elseIfCount": <number of extra IFs>, "hasElse": true} (omit extraState for a plain if).
@@ -3201,7 +3226,8 @@ HOW TO MAP CODE
                  ["Gemma 4, small","hf-quick"],["Gemma 4","hf-default"],["GPT-OSS 120B","hf-complex"],
                  ["Llama 3.1 8B (Groq)","groq-quick"],["Llama 3.3 70B (Groq)","groq-default"],["GPT-OSS 120B (Groq)","groq-complex"],
                  ["GLM-5.3 Flash","glm-default"],["GLM-5.3","glm-complex"],
-                 ["MiniMax M2.7","minimax-quick"],["MiniMax M3","minimax-default"]];
+                 ["MiniMax M2.7","minimax-quick"],["MiniMax M3","minimax-default"],
+                 ["OpenRouter, auto-pick","openrouter-default"]];
   const isGemini = t => String(t || "").startsWith("gemini-");
   const isLlama = t => String(t || "").startsWith("llama-");
   const isDeepSeek = t => String(t || "").startsWith("deepseek-");
@@ -3224,11 +3250,13 @@ HOW TO MAP CODE
     { prefix:"glm-", who:"GLM", env:"ZAI_API_KEY",
       note:"GLM calls go to Z.ai (formerly Zhipu AI, a Chinese company), under Z.ai's terms, billed to your Z.ai account." },
     { prefix:"minimax-", who:"MiniMax", env:"MINIMAX_API_KEY",
-      note:"MiniMax calls go to MiniMax's international servers (a Chinese company), under MiniMax's terms, billed to your MiniMax account." }
+      note:"MiniMax calls go to MiniMax's international servers (a Chinese company), under MiniMax's terms, billed to your MiniMax account." },
+    { prefix:"openrouter", who:"OpenRouter", env:"OPENROUTER_API_KEY",
+      note:"OpenRouter passes each call to the company that makes the model you chose, under that company's terms; billed to your OpenRouter credit (https://openrouter.ai/keys)." }
   ];
   const moreProvider = t => MORE_PROVIDERS.find(m => String(t || "").startsWith(m.prefix));
   const isElsewhere = t => isGemini(t) || isLlama(t) || isDeepSeek(t) || isXai(t) || isOpenAI(t) || !!moreProvider(t);
-  const tierLabel = t => (TIERS.find(x => x[1] === t) || [t])[0];
+  const tierLabel = t => String(t || "").startsWith("openrouter:") ? "OpenRouter: " + t.slice(11) : (TIERS.find(x => x[1] === t) || [t])[0];
   /* ---------- Long text field: wraps at 80 characters, any number of lines ---------- */
   const WRAP = 80;
   function wrapText(text, width){
@@ -3298,6 +3326,9 @@ HOW TO MAP CODE
     { type:"rb_with_model", message0:"with model %1", args0:[{ type:"field_dropdown", name:"TIER", options:TIERS }],
       message1:"%1", args1:[{ type:"input_statement", name:"DO" }], previousStatement:null, nextStatement:null, style:"control",
       tooltip:"Runs just the blocks inside on this model, then goes back to the model before. Models other than Claude run in exported Python; in this page Claude stands in for them." },
+    { type:"rb_with_any_model", message0:"with OpenRouter model %1", args0:[{ type:"field_input", name:"MODEL", text:"openrouter/auto" }],
+      message1:"%1", args1:[{ type:"input_statement", name:"DO" }], previousStatement:null, nextStatement:null, style:"control",
+      tooltip:"Runs just the blocks inside on any model OpenRouter offers. Type its name from openrouter.ai/models, for example mistralai/mistral-small or google/gemma-4-31b-it. openrouter/auto picks one for you. Runs in exported Python (needs OPENROUTER_API_KEY); in this page Claude stands in." },
     /* Operators extras */
     V("rb_contains", "%1 contains %2", [val("A"), val("B")], "Boolean", { style:"operators", inputsInline:true, tooltip:"True if the first text includes the second (ignores case)." }),
     V("rb_word_count", "word count of %1", [val("TEXT")], "Number", { style:"text", inputsInline:true }),
@@ -3429,7 +3460,7 @@ HOW TO MAP CODE
       B("controls_repeat_ext", { TIMES:N(3) }), B("controls_whileUntil"), B("controls_if"),
       B("controls_if", null, { extraState:{ hasElse:true } }),
       B("controls_forEach"), B("controls_for", { FROM:N(1), TO:N(5), BY:N(1) }), B("controls_flow_statements"),
-      B("rb_wait", { SECS:N(1) }), B("rb_wait_until"), B("rb_try"), B("rb_retry", { TIMES:N(3) }), B("rb_error"), B("rb_use_model"), B("rb_with_model", null, { fields:{ TIER:"gemini-default" } }), B("rb_stop")
+      B("rb_wait", { SECS:N(1) }), B("rb_wait_until"), B("rb_try"), B("rb_retry", { TIMES:N(3) }), B("rb_error"), B("rb_use_model"), B("rb_with_model", null, { fields:{ TIER:"gemini-default" } }), B("rb_with_any_model"), B("rb_stop")
     ]},
     { kind:"category", name:"Wait & time", categorystyle:"time", contents:[
       B("rb_wait", { SECS:N(5) }, { fields:{ UNIT:"m" } }), B("rb_wait_until"), B("rb_wait_time"), B("rb_wait_msg"),
@@ -4088,6 +4119,16 @@ HOW TO MAP CODE
         sAdd(xJ("Gemma 4 says:\n", xV("draft"))),
         blk("rb_use_model", { TIER:"hf-complex" }),
         sAdd(xJ("GPT-OSS checks it:\n", xAsk(xJ("Check this answer to '", xAnswer(), "'. Point out anything wrong or missing, briefly.\n\n", xV("draft"))))),
+        sFinish())) },
+    { key:"r_anymodel", cat:"Research", title:"Any model you like (OpenRouter)",
+      desc:"OpenRouter's auto-pick answers your question, then a model you name answers too, and Claude says which answer is better.",
+      tip:"Type any name from openrouter.ai/models into the second 'with OpenRouter model' block, such as mistralai/mistral-small or google/gemma-4-31b-it.",
+      build:() => P(["auto", "named"], chain(sStart(),
+        sAskMe("What question should the two models answer?"),
+        blk("rb_with_any_model", { MODEL:"openrouter/auto" }, { DO:st(xSet("auto", xAsk(xAnswer()))) }),
+        blk("rb_with_any_model", { MODEL:"meta-llama/llama-3.3-70b-instruct" }, { DO:st(xSet("named", xAsk(xAnswer()))) }),
+        sAdd(xJ("Auto-pick says:\n", xV("auto"))), sAdd(xJ("Llama 3.3 70B says:\n", xV("named"))),
+        sAdd(xJ("Claude's verdict:\n", xAsk(xJ("Two answers to '", xAnswer(), "'. Which is better, and why? Two or three sentences.\n\nA:\n", xV("auto"), "\n\nB:\n", xV("named"))))),
         sFinish())) },
     { key:"r_survey", cat:"Research", title:"Fair survey questions",
       desc:"Drafts survey questions, scores each for being neutral and clear, and rewrites the weak ones.",
@@ -5215,7 +5256,8 @@ HOW TO MAP CODE
   function programUsesPrefix(prefix){
     const has = t => String(t || "").startsWith(prefix);
     if (has($("tier").value)) return true;
-    return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && has(b.getFieldValue("TIER")));
+    return ws.getAllBlocks(false).some(b => b.type === "rb_with_any_model" ? has("openrouter:") :
+      (b.type === "rb_use_model" || b.type === "rb_with_model") && has(b.getFieldValue("TIER")));
   }
   function programUsesOpenAI(){
     if (isOpenAI($("tier").value)) return true;
@@ -5391,8 +5433,8 @@ HOW TO MAP CODE
           case "rb_stop": case "rb_result": E("raise Finish()"); break;
           case "rb_finish_with": E("R.finish_with(" + I("TEXT", '""') + ")"); break;
           case "rb_use_model": E("R.use_model(" + pyStr(F("TIER")) + ")"); break;
-          case "rb_with_model": {
-            E("async with R.using_model(" + pyStr(F("TIER")) + "):");
+          case "rb_with_model": case "rb_with_any_model": {
+            E("async with R.using_model(" + pyStr(b.type === "rb_with_any_model" ? "openrouter:" + (String(F("MODEL") || "").trim() || "openrouter/auto") : F("TIER")) + "):");
             const before = out.length;
             stmts(b.getInputTargetBlock("DO"), ind + 1, ctx, out);
             if (out.length === before) out.push(pad + "    pass");
@@ -6301,7 +6343,7 @@ HOW TO MAP CODE
     const sample = run.sample;
     const ctl = new AbortController(); run.ctls.add(ctl);
     const away = isElsewhere(run.tier);
-    const opts = { signal:ctl.signal, modelTier:away ? run.tier.replace(/^[a-z]+-/, "") : run.tier, cache:false };
+    const opts = { signal:ctl.signal, modelTier:away ? ((/-(quick|default|complex)$/.exec(run.tier) || [0, "default"])[1]) : run.tier, cache:false };
     if (away) {
       const who = isGemini(run.tier) ? "Gemini" : isLlama(run.tier) ? "Llama" : isXai(run.tier) ? "Grok" : isOpenAI(run.tier) ? "OpenAI" : moreProvider(run.tier) ? moreProvider(run.tier).who : "DeepSeek";
       if (step && step.el && !step.el.dataset.stand) { step.el.dataset.stand = "1"; const n = step.el.querySelector(".step-name"); if (n) n.textContent += " \u00b7 Claude standing in for " + tierLabel(run.tier); }
@@ -6868,9 +6910,9 @@ HOW TO MAP CODE
         break;
       }
       case "rb_use_model": run.tier = b.getFieldValue("TIER"); addStep("Model", { mono:true, text:"Using " + tierLabel(run.tier) }).done("set", "ok"); break;
-      case "rb_with_model": {
+      case "rb_with_model": case "rb_with_any_model": {
         const before = run.tier;
-        run.tier = b.getFieldValue("TIER");
+        run.tier = b.type === "rb_with_any_model" ? "openrouter:" + (String(b.getFieldValue("MODEL") || "").trim() || "openrouter/auto") : b.getFieldValue("TIER");
         addStep("Model", { mono:true, text:"Using " + tierLabel(run.tier) + " for the blocks inside" }).done("set", "ok");
         try { await runChain(b.getInputTargetBlock("DO"), tc); }
         finally { run.tier = before; }
