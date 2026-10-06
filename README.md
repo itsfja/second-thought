@@ -101,6 +101,8 @@ At the end, a green box shows the **result**. The result is what your program ma
 
 If something goes wrong, press **Stop**. Everything will stop straight away.
 
+Next to the **Model** menu is a button called **Backups**. The model you choose in the menu is your main helper. Backups are spare helpers, like substitutes in a football team. If the main helper can't come (perhaps its key is missing, or its computers are having a bad day), the first spare helper does that job instead. The run log tells you when that happens.
+
 ---
 
 ## Page 7: Things Second Thought can do

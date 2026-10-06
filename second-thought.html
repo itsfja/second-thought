@@ -73,6 +73,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .result{border:2px solid var(--ok);border-radius:10px;padding:12px;min-width:0}
 .result .step-body{max-height:none}
 .result-actions{display:flex;gap:8px;margin-top:10px}
+.bk-sel{max-width:420px}
 .io{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;margin-bottom:12px}
 .io-col{display:flex;flex-direction:column;gap:10px;min-width:0}
 .io h2{font-family:var(--font-display);font-weight:500;font-size:16px;margin:0}
@@ -248,6 +249,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
         </optgroup>
       </select>
     </label>
+    <button id="bk-toggle" type="button" aria-expanded="false" aria-controls="bk" title="Models to try if the main one fails">Backups</button>
     <button id="step-toggle" type="button" aria-pressed="false">Step: off</button>
     <button id="sched" type="button" aria-pressed="false">Schedules: off</button>
     <span id="sched-status" class="sched-status" hidden></span>
@@ -312,6 +314,17 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <button type="button" id="mem-clear-no">Keep it</button>
   </div>
   <div id="mem-list" class="mem-list"></div>
+</section>
+<section id="bk" class="io" hidden aria-label="Backup models">
+  <div class="io-col">
+    <h2>Backup models</h2>
+    <p class="hint">The <b>Model</b> menu is your primary model: it does every step. If it fails on a step (no key, out of credit, service down or unreachable), the first backup answers that step instead, then the second, then the third. The run log says each time a backup steps in.</p>
+    <p class="hint">Blocks that name their own model, such as <b>with model</b>, keep that model, so a panel of judges stays a panel of different judges.</p>
+    <label class="field" for="bk-1">First backup <select id="bk-1" class="bk-sel"></select></label>
+    <label class="field" for="bk-2">Second backup <select id="bk-2" class="bk-sel"></select></label>
+    <label class="field" for="bk-3">Third backup <select id="bk-3" class="bk-sel"></select></label>
+    <p class="msg" id="bk-msg" role="status"></p>
+  </div>
 </section>
 <section id="io" class="io" hidden aria-label="Import and export">
   <div class="io-col">
@@ -881,6 +894,12 @@ class Runtime:
         self.started = 0
         self.timer_start = time.monotonic()
         self.tier = os.environ.get("RB_MODEL_TIER", globals().get("DEFAULT_TIER", "default"))
+        self.primary = self.tier
+        self.backup_used = 0
+        # Backup models, tried in order when the primary fails on a step. RB_BACKUPS="openai-default,default" overrides.
+        backups = os.environ.get("RB_BACKUPS")
+        backups = [b.strip() for b in backups.split(",")] if backups is not None else list(globals().get("BACKUPS", []))
+        self.backups = [b for i, b in enumerate(backups) if b and b != self.primary and b not in backups[:i]]
         self.tasks = set()
         self.ending = False
         self.error = None
@@ -939,6 +958,30 @@ class Runtime:
         if self.calls > MAX_AI_CALLS:
             raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
         tier = self.current_tier
+        # Backups stand in for the primary model only. A block that names its own model keeps that model.
+        tiers = [tier] + (self.backups if tier == self.primary else [])
+        last = None
+        for n, t in enumerate(tiers):
+            if n:
+                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn")
+            try:
+                text = await self._call_tier(t, prompt, want_json, picture, history, web)
+            except (asyncio.CancelledError, Finish):
+                raise
+            except Exception as e:  # no key, out of credit, service down: try the next backup
+                last = e
+                continue
+            if n:
+                self.backup_used = self.backup_used + 1
+            return _parse_json(text) if want_json else text
+        if len(tiers) > 1:
+            both = "its backup" if len(tiers) == 2 else f"all {len(tiers) - 1} backups"
+            msg = f"The primary model and {both} failed. Last error: {last}"
+            raise (Retryable if isinstance(last, Retryable) else RunError)(msg) from last
+        raise last
+
+    async def _call_tier(self, tier, prompt, want_json, picture, history, web):
+        """One model call on one tier. Returns the reply text."""
         if tier.startswith("gemini-"):
             text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web)
             who = "Gemini"
@@ -959,7 +1002,7 @@ class Runtime:
             who = "Claude"
         if not text:
             raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
-        return _parse_json(text) if want_json else text
+        return text
 
     async def _call_claude(self, model, prompt, picture, history, web):
         if self.client is None:
@@ -2003,7 +2046,8 @@ class Runtime:
         else:
             print("\nThe program ended without a result.", flush=True)
         used = " · ".join(f"{who}: {u[0]:,} tokens in, {u[1]:,} out" for who, u in self.usage.items()) or "no tokens used"
-        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}", flush=True)
+        spare = f" · a backup answered {self.backup_used} step{'s' if self.backup_used != 1 else ''}" if self.backup_used else ""
+        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}{spare}", flush=True)
         return 0
 
     # ----- Schedules -----
@@ -5077,6 +5121,37 @@ HOW TO MAP CODE
   window.addEventListener("resize", () => Blockly.svgResize(ws));
 
   /* ---------- Import / export ---------- */
+  /* ----- Backup models: tried in order when the primary (the Model menu) fails on a step ----- */
+  const BK_LS = "second-thought-backups";
+  function backupTiers(){
+    const primary = $("tier").value, seen = new Set([primary]);
+    return ["bk-1", "bk-2", "bk-3"].map(id => $(id).value).filter(t => t && !seen.has(t) && seen.add(t));
+  }
+  function showBackups(){
+    const n = backupTiers().length;
+    $("bk-toggle").textContent = n ? "Backups (" + n + ")" : "Backups";
+    const same = ["bk-1", "bk-2", "bk-3"].some(id => $(id).value && $(id).value === $("tier").value);
+    $("bk-msg").textContent = same ? "A backup is the same as the primary model, so it is skipped." : n ? "Order: " + [$("tier").value].concat(backupTiers()).map(tierLabel).join(" \u2192 ") : "No backups: if the primary fails, the step fails.";
+  }
+  (function setupBackups(){
+    const opts = [["(none)", ""]].concat(TIERS);
+    let saved = [];
+    try { saved = JSON.parse(localStorage.getItem(BK_LS) || "[]"); } catch(e) {}
+    ["bk-1", "bk-2", "bk-3"].forEach((id, i) => {
+      const sel = $(id);
+      opts.forEach(([label, value]) => { const o = document.createElement("option"); o.value = value; o.textContent = label; sel.appendChild(o); });
+      if (saved[i] && TIERS.some(t => t[1] === saved[i])) sel.value = saved[i];
+      sel.onchange = () => { try { localStorage.setItem(BK_LS, JSON.stringify(["bk-1", "bk-2", "bk-3"].map(x => $(x).value))); } catch(e) {} showBackups(); };
+    });
+    $("tier").addEventListener("change", showBackups);
+    $("bk-toggle").onclick = () => {
+      const bk = $("bk"), open = bk.hidden;
+      bk.hidden = !open; $("bk-toggle").setAttribute("aria-expanded", String(open));
+      setTimeout(() => Blockly.svgResize(ws), 0);
+    };
+    showBackups();
+  })();
+
   const FORMAT = "reflection-blocks";
   const ioMsg = (id, text, kind) => { const m = $(id); m.textContent = text; m.className = "msg" + (kind ? " " + kind : ""); };
   $("io-toggle").onclick = () => {
@@ -5255,28 +5330,28 @@ HOW TO MAP CODE
 
   function programUsesPrefix(prefix){
     const has = t => String(t || "").startsWith(prefix);
-    if (has($("tier").value)) return true;
+    if ([$("tier").value].concat(backupTiers()).some(t => has(t))) return true;
     return ws.getAllBlocks(false).some(b => b.type === "rb_with_any_model" ? has("openrouter:") :
       (b.type === "rb_use_model" || b.type === "rb_with_model") && has(b.getFieldValue("TIER")));
   }
   function programUsesOpenAI(){
-    if (isOpenAI($("tier").value)) return true;
+    if ([$("tier").value].concat(backupTiers()).some(t => isOpenAI(t))) return true;
     return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isOpenAI(b.getFieldValue("TIER")));
   }
   function programUsesXai(){
-    if (isXai($("tier").value)) return true;
+    if ([$("tier").value].concat(backupTiers()).some(t => isXai(t))) return true;
     return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isXai(b.getFieldValue("TIER")));
   }
   function programUsesDeepSeek(){
-    if (isDeepSeek($("tier").value)) return true;
+    if ([$("tier").value].concat(backupTiers()).some(t => isDeepSeek(t))) return true;
     return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isDeepSeek(b.getFieldValue("TIER")));
   }
   function programUsesLlama(){
-    if (isLlama($("tier").value)) return true;
+    if ([$("tier").value].concat(backupTiers()).some(t => isLlama(t))) return true;
     return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isLlama(b.getFieldValue("TIER")));
   }
   function programUsesGemini(){
-    if (isGemini($("tier").value)) return true;
+    if ([$("tier").value].concat(backupTiers()).some(t => isGemini(t))) return true;
     return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isGemini(b.getFieldValue("TIER")));
   }
   function toPython(progName){
@@ -5612,6 +5687,8 @@ HOW TO MAP CODE
       "Claude calls go through the Anthropic API and are billed to your API account,",
       "not your claude.ai plan. To change model, set RB_MODEL_TIER to quick, default",
       "or complex, or edit MODELS below.",
+      "Backup models (tried in order if the main one fails on a step) are in BACKUPS below;",
+      "RB_BACKUPS=openai-default,default overrides them, and RB_BACKUPS= turns them off.",
       "\"\"\"",
       ""
     ].filter(l => l !== null).join("\n");
@@ -5621,6 +5698,7 @@ HOW TO MAP CODE
       "# Your program",
       "# ---------------------------------------------------------------------------",
       "DEFAULT_TIER = " + pyStr($("tier").value),
+      "BACKUPS = [" + backupTiers().map(pyStr).join(", ") + "]  # tried in order if DEFAULT_TIER fails on a step",
       "PROMPTS = {" + [...new Set(ws.getAllBlocks(false).filter(b => b.type === "rb_prompt").map(b => String(b.getFieldValue("NAME") || "").trim().toLowerCase()))]
         .filter(k => lib.prompt.has(k)).map(k => pyStr(k) + ": " + pyStr(lib.prompt.get(k).text)).join(", ") + "}",
       "R = Runtime()",
@@ -6341,12 +6419,27 @@ HOW TO MAP CODE
     if (++run.calls > MAX_AI_CALLS) fail("Stopped after " + MAX_AI_CALLS + " Claude calls in one run, to protect your usage. Check for loops that call Claude too often.");
     setStatus("running · " + run.calls + " Claude call" + (run.calls === 1 ? "" : "s"));
     const sample = run.sample;
+    // Backups stand in for the primary model only; a block that names its own model keeps it.
+    const tiers = [run.tier].concat(run.tier === run.primary ? run.backups : []);
+    let last = null;
+    for (let n = 0; n < tiers.length; n++) {
+      if (n) addStep("Backup", { mono:true, text:tierLabel(tiers[n - 1]) + " failed: " + String((last && last.message) || last).slice(0, 160) + "\nTrying " + tierLabel(tiers[n]) + " instead." }).done("backup", "warn");
+      try { return await askOn(tiers[n], prompt, step, mode, images, sample); }
+      catch(e) {
+        if (isControlSignal(e) || halting()) throw e;
+        last = e;
+      }
+    }
+    if (tiers.length > 1) fail("The primary model and " + (tiers.length === 2 ? "its backup" : "all " + (tiers.length - 1) + " backups") + " failed. Last error: " + ((last && last.message) || last));
+    throw last;
+  }
+  async function askOn(tier, prompt, step, mode, images, sample){
     const ctl = new AbortController(); run.ctls.add(ctl);
-    const away = isElsewhere(run.tier);
-    const opts = { signal:ctl.signal, modelTier:away ? ((/-(quick|default|complex)$/.exec(run.tier) || [0, "default"])[1]) : run.tier, cache:false };
+    const away = isElsewhere(tier);
+    const opts = { signal:ctl.signal, modelTier:away ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier, cache:false };
     if (away) {
-      const who = isGemini(run.tier) ? "Gemini" : isLlama(run.tier) ? "Llama" : isXai(run.tier) ? "Grok" : isOpenAI(run.tier) ? "OpenAI" : moreProvider(run.tier) ? moreProvider(run.tier).who : "DeepSeek";
-      if (step && step.el && !step.el.dataset.stand) { step.el.dataset.stand = "1"; const n = step.el.querySelector(".step-name"); if (n) n.textContent += " \u00b7 Claude standing in for " + tierLabel(run.tier); }
+      const who = isGemini(tier) ? "Gemini" : isLlama(tier) ? "Llama" : isXai(tier) ? "Grok" : isOpenAI(tier) ? "OpenAI" : moreProvider(tier) ? moreProvider(tier).who : "DeepSeek";
+      if (step && step.el && !step.el.dataset.stand) { step.el.dataset.stand = "1"; const n = step.el.querySelector(".step-name"); if (n) n.textContent += " \u00b7 Claude standing in for " + tierLabel(tier); }
       run.awayNoted = run.awayNoted || {};
       if (!run.awayNoted[who]) { run.awayNoted[who] = true; addStep(who, { mono:true, text:who + " can't be reached from this page, so Claude answers in its place. Export to Python to use " + who + " itself." }).done("note", "warn"); }
     }
@@ -7301,7 +7394,7 @@ HOW TO MAP CODE
       stepsEl.appendChild(div);
     }
     run = { task:"", draft:"", problems:[], approved:undefined, answer:"", result:[], vars:new Map(),
-            tier:$("tier").value, calls:0, steps:0, depth:0, stopped:false, ending:false, finished:false, error:null,
+            tier:$("tier").value, primary:$("tier").value, backups:backupTiers(), calls:0, steps:0, depth:0, stopped:false, ending:false, finished:false, error:null,
             ctls:new Set(), stoppers:new Set(), threads:new Set(), started:0, broadcasts:0, sample:null,
             active:true, ready:false, pending:hats.slice(), timerStart:Date.now(),
             msgWaiters:new Map(), msgNames:new Map(), msgWaiting:0, instructions:"", chats:new Map(), lastError:"" };

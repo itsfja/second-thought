@@ -489,6 +489,12 @@ class Runtime:
         self.started = 0
         self.timer_start = time.monotonic()
         self.tier = os.environ.get("RB_MODEL_TIER", globals().get("DEFAULT_TIER", "default"))
+        self.primary = self.tier
+        self.backup_used = 0
+        # Backup models, tried in order when the primary fails on a step. RB_BACKUPS="openai-default,default" overrides.
+        backups = os.environ.get("RB_BACKUPS")
+        backups = [b.strip() for b in backups.split(",")] if backups is not None else list(globals().get("BACKUPS", []))
+        self.backups = [b for i, b in enumerate(backups) if b and b != self.primary and b not in backups[:i]]
         self.tasks = set()
         self.ending = False
         self.error = None
@@ -547,6 +553,30 @@ class Runtime:
         if self.calls > MAX_AI_CALLS:
             raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
         tier = self.current_tier
+        # Backups stand in for the primary model only. A block that names its own model keeps that model.
+        tiers = [tier] + (self.backups if tier == self.primary else [])
+        last = None
+        for n, t in enumerate(tiers):
+            if n:
+                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn")
+            try:
+                text = await self._call_tier(t, prompt, want_json, picture, history, web)
+            except (asyncio.CancelledError, Finish):
+                raise
+            except Exception as e:  # no key, out of credit, service down: try the next backup
+                last = e
+                continue
+            if n:
+                self.backup_used = self.backup_used + 1
+            return _parse_json(text) if want_json else text
+        if len(tiers) > 1:
+            both = "its backup" if len(tiers) == 2 else f"all {len(tiers) - 1} backups"
+            msg = f"The primary model and {both} failed. Last error: {last}"
+            raise (Retryable if isinstance(last, Retryable) else RunError)(msg) from last
+        raise last
+
+    async def _call_tier(self, tier, prompt, want_json, picture, history, web):
+        """One model call on one tier. Returns the reply text."""
         if tier.startswith("gemini-"):
             text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web)
             who = "Gemini"
@@ -567,7 +597,7 @@ class Runtime:
             who = "Claude"
         if not text:
             raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
-        return _parse_json(text) if want_json else text
+        return text
 
     async def _call_claude(self, model, prompt, picture, history, web):
         if self.client is None:
@@ -1611,7 +1641,8 @@ class Runtime:
         else:
             print("\nThe program ended without a result.", flush=True)
         used = " · ".join(f"{who}: {u[0]:,} tokens in, {u[1]:,} out" for who, u in self.usage.items()) or "no tokens used"
-        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}", flush=True)
+        spare = f" · a backup answered {self.backup_used} step{'s' if self.backup_used != 1 else ''}" if self.backup_used else ""
+        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}{spare}", flush=True)
         return 0
 
     # ----- Schedules -----

@@ -49,10 +49,11 @@ window.claude = { use: async n => {
   if (n === 'downloads') return { save:async r => { window.__saved.push(r.filename); return { status:'saved' }; } };
   if (n !== 'sample') return null;
   const lastText = input => Array.isArray(input) ? input[input.length - 1].content : input;
-  const f = async (input, o = {}) => { const p = lastText(input);
+  const down = o => { if (window.__failTier && o && o.modelTier === window.__failTier) throw new Error('service unavailable (test)'); };
+  const f = async (input, o = {}) => { down(o); const p = lastText(input);
     const t = p.includes('Reply with only the SVG') ? SVG : 'ANSWER(' + p.slice(0, 24).replace(/\n/g, ' ') + ')';
     o.onText && o.onText({ text:t, delta:t }); return { text:t, truncated:false }; };
-  f.json = async input => { const p = lastText(input);
+  f.json = async (input, o = {}) => { down(o); const p = lastText(input);
     if (p.includes('"approved"')) { reviews++; return { approved:reviews % 2 === 0, problems:reviews % 2 ? ['too vague'] : [] }; }
     if (p.includes('JSON array of objects')) return [{ title:'A', score:4 }, { title:'B', score:9 }];
     if (p.includes('JSON array')) return ['idea one', 'idea two', 'idea three'];
@@ -172,6 +173,35 @@ async def page_tests():
         found = await pg.evaluate("Blockly.getMainWorkspace().getToolbox().getFlyout().getWorkspace().getTopBlocks(false).length")
         check(found >= 5, f"'record' finds {found} blocks")
         await pg.press("#block-search", "Escape")
+
+        print("Backup models")
+        await pg.click("#bk-toggle")
+        await pg.select_option("#tier", "complex")
+        await pg.select_option("#bk-1", "quick")
+        await pg.evaluate("window.__failTier = 'complex'")
+        await pg.select_option("#example", "review")
+        await pg.click("#load")
+        status = await run_program(pg)
+        names = await pg.eval_on_selector_all(".step-name", "e => e.map(x => x.textContent)")
+        check(status.startswith("done") and any(n.startswith("Backup") for n in names),
+              f"when the primary fails, the backup answers ({status})")
+        label = await pg.text_content("#bk-toggle")
+        check(label == "Backups (1)", f"the Backups button shows how many are set ({label})")
+        await pg.click("#io-toggle")
+        await pg.click("#io-py-show")
+        code = await pg.input_value("#io-export-text")
+        check('BACKUPS = ["quick"]' in code, "exported Python lists the backup")
+        await pg.click("#io-py-show")
+        await pg.click("#io-toggle")
+        await pg.select_option("#bk-1", "")
+        await pg.evaluate("window.__failTier = 'complex'")
+        await pg.select_option("#example", "review")
+        await pg.click("#load")
+        status = await run_program(pg)
+        check(not status.startswith("done"), f"with no backups, a failing primary stops the run ({status})")
+        await pg.evaluate("window.__failTier = null")
+        await pg.select_option("#tier", "default")
+        await pg.click("#bk-toggle")
 
         print("Python export and import")
         await pg.click("#io-toggle")
@@ -301,6 +331,24 @@ def python_tests(codes):
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 both = bool(done) and "Gemini:" in done[-1] and "Claude:" in done[-1]
                 check(both, "gemini.py used both Claude and Gemini" + ("" if both else f": {done[-1] if done else r.stdout[-200:]}"))
+    print("Backup models in Python")
+    with tempfile.TemporaryDirectory() as tmp:
+        path = pathlib.Path(tmp) / "backup.py"
+        path.write_text(codes["review"][0], encoding="utf-8")
+        before = len(llama_calls)
+        env2 = dict(env, RB_MODEL_TIER="openai-default", OPENAI_API_KEY="", RB_BACKUPS="mistral-default,default")
+        code_, out, err = drive([sys.executable, "-u", str(path)], env2, tmp)
+        done = [l for l in out.splitlines() if l.startswith("Done")]
+        took = bool(done) and code_ == 0 and "Mistral:" in done[-1] and "OpenAI:" not in done[-1] and "a backup answered" in done[-1]
+        check(took, "with no OpenAI key, the Mistral backup answers every step" + ("" if took else f": {(done[-1] if done else out[-300:])}"))
+        check("▸ Backup" in out and "OPENAI_API_KEY" in out, "the run log says the backup stepped in, and why")
+        check(all(c["model"] == "mistral-medium-latest" for c in llama_calls[before:]), "nothing was sent to OpenAI")
+        env3 = dict(env, RB_MODEL_TIER="openai-default", OPENAI_API_KEY="", RB_BACKUPS="xai-default", XAI_API_KEY="")
+        code_, out, err = drive([sys.executable, "-u", str(path)], env3, tmp)
+        check(code_ != 0 and "its backup failed" in (out + err), "when the backup fails too, the run stops with a clear message")
+        env4 = dict(env, RB_MODEL_TIER="openai-default", OPENAI_API_KEY="", RB_BACKUPS="")
+        code_, out, err = drive([sys.executable, "-u", str(path)], env4, tmp)
+        check(code_ != 0 and "Set the OPENAI_API_KEY" in (out + err) and "▸ Backup" not in out, "with no backups, the primary's own error is shown")
     services = {c[0] for c in ha_calls}
     check({"light.turn_off", "persistent_notification.create"} <= services and "lock.lock" in services,
           f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
