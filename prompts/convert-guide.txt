@@ -40,7 +40,7 @@ Wait & time:
   rb_wait: inputs SECS (number), fields UNIT ("s" | "m" | "h").  rb_wait_until (COND, a boolean).
   rb_wait_time: fields HOUR, MINUTE.  rb_wait_msg: fields MSG.  rb_reset_timer.
 Control:
-  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini; "llama-*", "deepseek-*", "xai-*", "openai-*", "mistral-*", "qwen-*", "kimi-*" and "perplexity-*" as below).  rb_stop: end the run.
+  rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini; "llama-*", "deepseek-*", "xai-*", "openai-*", "mistral-*", "qwen-*", "kimi-*", "perplexity-*", "hf-*", "groq-*", "glm-*" and "minimax-*" as below).  rb_stop: end the run.
   rb_with_model: fields TIER (as above); statement input DO. Runs just the blocks inside on that model.
   Map calls to Gemini (google-genai, google.generativeai) to rb_with_model or rb_use_model with a gemini tier: Flash-Lite = gemini-quick, Flash = gemini-default, Pro = gemini-complex.
   Map Llama, Ollama, llama.cpp or other local/open models to tiers "llama-quick" (small), "llama-default" (vision-capable), "llama-complex" (largest).
@@ -51,6 +51,10 @@ Control:
   Map Qwen / DashScope / Alibaba Model Studio calls to "qwen-quick" (flash, turbo), "qwen-default" (plus, vl) or "qwen-complex" (max).
   Map Moonshot / Kimi API calls (api.moonshot.ai) to "kimi-default" (kimi-k2.x) or "kimi-complex" (kimi-k3).
   Map Perplexity API calls (sonar, sonar-pro, the Agent API) to "perplexity-quick" (sonar, preset fast), "perplexity-default" (sonar-pro, preset low/medium) or "perplexity-complex" (sonar-reasoning-pro, sonar-deep-research, preset high).
+  Map Hugging Face Inference (router.huggingface.co, huggingface_hub InferenceClient) to "hf-quick" (small open models), "hf-default" (gemma and mid-size open models) or "hf-complex" (gpt-oss-120b and the largest open models).
+  Map Groq API calls (api.groq.com) to "groq-quick" (llama-3.1-8b-instant and other small models), "groq-default" (llama-3.3-70b-versatile) or "groq-complex" (openai/gpt-oss-120b).
+  Map Z.ai / Zhipu / GLM API calls to "glm-default" (glm-*-flash, glm-*-air) or "glm-complex" (the full GLM models).
+  Map MiniMax API calls to "minimax-quick" (MiniMax-M2.x, highspeed) or "minimax-default" (MiniMax-M3).
   controls_repeat_ext: inputs TIMES, DO.
   controls_whileUntil: fields MODE ("WHILE" | "UNTIL"); inputs BOOL, DO.
   controls_if: inputs IF0, DO0, IF1, DO1, ..., ELSE; extraState {"elseIfCount": <number of extra IFs>, "hasElse": true} (omit extraState for a plain if).

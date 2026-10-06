@@ -48,7 +48,10 @@ def start():
                 self.wfile.write(err)
                 return
             msg = asyncio.run(_Messages().create(model=body.get("model"), max_tokens=0, messages=[{"role": "user", "content": text}]))
-            out = json.dumps({"choices": [{"message": {"role": "assistant", "content": msg.content[0].text}}],
+            reply = msg.content[0].text
+            if str(body.get("model", "")).startswith("MiniMax"):
+                reply = "<think>Some private reasoning that must not reach the user.</think>\n" + reply  # like MiniMax M2.x
+            out = json.dumps({"choices": [{"message": {"role": "assistant", "content": reply}}],
                               "usage": {"prompt_tokens": 12, "completion_tokens": 6}}).encode()
             self.send_response(200)
             self.send_header("Content-Type", "application/json")

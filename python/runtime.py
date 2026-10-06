@@ -54,7 +54,7 @@ MODELS = {
     "mistral-default": "mistral-medium-latest",
     "mistral-complex": "mistral-large-latest",
     # Qwen (Alibaba Cloud Model Studio): needs DASHSCOPE_API_KEY (https://modelstudio.console.alibabacloud.com).
-    # Pictures go to QWEN_VISION_MODEL instead. See https://www.alibabacloud.com/help/en/model-studio/models
+    # Pictures go to VISION_MODELS["Qwen"] instead. See https://www.alibabacloud.com/help/en/model-studio/models
     "qwen-quick": "qwen3.8-flash",
     "qwen-default": "qwen3.7-plus",
     "qwen-complex": "qwen3.8-max",
@@ -67,8 +67,30 @@ MODELS = {
     "perplexity-quick": "fast",
     "perplexity-default": "low",
     "perplexity-complex": "high",
+    # Hugging Face: open models run by Hugging Face's partners. Needs HF_TOKEN (https://huggingface.co/settings/tokens).
+    # Any model name from https://huggingface.co/models?inference_provider=all works here.
+    "hf-quick": "google/gemma-4-26B-A4B-it",
+    "hf-default": "google/gemma-4-31B-it",
+    "hf-complex": "openai/gpt-oss-120b",
+    # Groq: open models, very fast. Needs GROQ_API_KEY (https://console.groq.com). See https://console.groq.com/docs/models
+    "groq-quick": "llama-3.1-8b-instant",
+    "groq-default": "llama-3.3-70b-versatile",
+    "groq-complex": "openai/gpt-oss-120b",
+    # GLM (Z.ai, formerly Zhipu): needs ZAI_API_KEY (https://z.ai/manage-apikey/apikey-list). Both can look at pictures.
+    "glm-quick": "glm-5.3-flash",
+    "glm-default": "glm-5.3-flash",
+    "glm-complex": "glm-5.3",
+    # MiniMax: needs MINIMAX_API_KEY (https://platform.minimax.io). M3 can look at pictures; M2.7 can't.
+    "minimax-quick": "MiniMax-M2.7-highspeed",
+    "minimax-default": "MiniMax-M3",
+    "minimax-complex": "MiniMax-M3",
 }
-QWEN_VISION_MODEL = os.environ.get("QWEN_VISION_MODEL", "qwen3-vl-plus")
+# Where a service's text models can't see, pictures go to one of its models that can.
+VISION_MODELS = {
+    "Qwen": os.environ.get("QWEN_VISION_MODEL", "qwen3-vl-plus"),
+    "Groq": os.environ.get("GROQ_VISION_MODEL", "qwen/qwen3.8-27b"),
+    "Hugging Face": os.environ.get("HF_VISION_MODEL", "google/gemma-4-31B-it"),
+}
 
 
 def _provider(name, prefix, base_env, base, key_envs, signup):
@@ -87,9 +109,13 @@ PROVIDERS = {p["name"]: p for p in [
     _provider("Qwen", "qwen-", "QWEN_BASE_URL", "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
               ("DASHSCOPE_API_KEY", "QWEN_API_KEY"), "https://modelstudio.console.alibabacloud.com"),
     _provider("Kimi", "kimi-", "MOONSHOT_BASE_URL", "https://api.moonshot.ai/v1", ("MOONSHOT_API_KEY", "KIMI_API_KEY"), "https://platform.moonshot.ai"),
+    _provider("Hugging Face", "hf-", "HF_BASE_URL", "https://router.huggingface.co/v1", ("HF_TOKEN", "HUGGINGFACE_API_KEY"), "https://huggingface.co/settings/tokens"),
+    _provider("Groq", "groq-", "GROQ_BASE_URL", "https://api.groq.com/openai/v1", ("GROQ_API_KEY",), "https://console.groq.com"),
+    _provider("GLM", "glm-", "ZAI_BASE_URL", "https://api.z.ai/api/paas/v4", ("ZAI_API_KEY", "ZHIPUAI_API_KEY"), "https://z.ai/manage-apikey/apikey-list"),
+    _provider("MiniMax", "minimax-", "MINIMAX_BASE_URL", "https://api.minimax.io/v1", ("MINIMAX_API_KEY",), "https://platform.minimax.io"),
     _provider("Perplexity", "perplexity-", "PERPLEXITY_BASE_URL", "https://api.perplexity.ai", ("PERPLEXITY_API_KEY",), "https://www.perplexity.ai/account/api"),
 ]}
-NO_VISION = {"deepseek-v4-pro"}  # models that can't look at photos
+NO_VISION = {"deepseek-v4-pro", "MiniMax-M2.7-highspeed"}  # models that can't look at photos
 MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
                 "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro",
                 "llama-quick": "Llama, small", "llama-default": "Llama, vision", "llama-complex": "Llama 4",
@@ -99,7 +125,11 @@ MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "comple
                 "mistral-quick": "Mistral Small", "mistral-default": "Mistral Medium", "mistral-complex": "Mistral Large",
                 "qwen-quick": "Qwen Flash", "qwen-default": "Qwen Plus", "qwen-complex": "Qwen Max",
                 "kimi-quick": "Kimi K2.6", "kimi-default": "Kimi K2.6", "kimi-complex": "Kimi K3",
-                "perplexity-quick": "Perplexity, fast", "perplexity-default": "Perplexity, research", "perplexity-complex": "Perplexity, deep research"}
+                "perplexity-quick": "Perplexity, fast", "perplexity-default": "Perplexity, research", "perplexity-complex": "Perplexity, deep research",
+                "hf-quick": "Gemma 4, small", "hf-default": "Gemma 4", "hf-complex": "GPT-OSS 120B",
+                "groq-quick": "Llama 3.1 8B (Groq)", "groq-default": "Llama 3.3 70B (Groq)", "groq-complex": "GPT-OSS 120B (Groq)",
+                "glm-quick": "GLM-5.3 Flash", "glm-default": "GLM-5.3 Flash", "glm-complex": "GLM-5.3",
+                "minimax-quick": "MiniMax M2.7", "minimax-default": "MiniMax M3", "minimax-complex": "MiniMax M3"}
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -571,8 +601,8 @@ class Runtime:
         if picture is not None and picture.svg is None:
             if model in NO_VISION:
                 raise RunError(f"{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.")
-            if provider == "Qwen":
-                model = QWEN_VISION_MODEL  # Qwen's text models can't see; its VL model can
+            if provider in VISION_MODELS and model != VISION_MODELS[provider]:
+                model = VISION_MODELS[provider]  # this service's text models can't see; this one can
             url = "data:" + picture.media_type + ";base64," + base64.b64encode(picture.data).decode("ascii")
             content = [{"type": "text", "text": prompt}, {"type": "image_url", "image_url": {"url": url}}]
         else:
@@ -590,7 +620,8 @@ class Runtime:
         usage = data.get("usage") or {}
         self._count(provider, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
         try:
-            return (data["choices"][0]["message"]["content"] or "").strip()
+            text = data["choices"][0]["message"]["content"] or ""
+            return re.sub(r"<think>.*?</think>\s*", "", text, flags=re.S).strip()  # some models think out loud first
         except (KeyError, IndexError, TypeError):
             return ""
 

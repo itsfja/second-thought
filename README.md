@@ -125,6 +125,7 @@ Second Thought can do many things. Here are some of them.
 - It can ask **GPT**, the helper made by **OpenAI**. Lots of people know it from ChatGPT.
 - It can ask helpers from all round the world: **Mistral** from France, **Qwen** from Alibaba and **Kimi** from Moonshot.
 - It can ask **Perplexity**, a helper that looks things up on the internet every time, and tells you where it found them.
+- It can ask open helpers from **Hugging Face**, super-speedy ones from **Groq**, and **GLM** and **MiniMax** too.
 
 ---
 
@@ -221,7 +222,7 @@ A sixth helper, **GPT**, is made by **OpenAI**, the company behind ChatGPT. A Ch
 export OPENAI_API_KEY=your-openai-key
 ```
 
-There are four more helpers. Each one needs its own key, from its own company:
+There are lots more helpers. Each one needs its own key, from its own company:
 
 | Helper | Made by | Lives in | The key line |
 |---|---|---|---|
@@ -229,8 +230,16 @@ There are four more helpers. Each one needs its own key, from its own company:
 | **Qwen** | Alibaba | Singapore, for people outside China | `export DASHSCOPE_API_KEY=your-key` |
 | **Kimi** | Moonshot AI | China | `export MOONSHOT_API_KEY=your-key` |
 | **Perplexity** | Perplexity | America | `export PERPLEXITY_API_KEY=your-key` |
+| **Hugging Face** | lots of different people | all over the world | `export HF_TOKEN=your-token` |
+| **Groq** | Groq | America | `export GROQ_API_KEY=your-key` |
+| **GLM** | Z.ai | China | `export ZAI_API_KEY=your-key` |
+| **MiniMax** | MiniMax | China | `export MINIMAX_API_KEY=your-key` |
 
 Perplexity is different from the others. It searches the internet for every question, then lists the pages it read at the end of its answer. That makes it good for things that change, like prices and opening times. It can't look at photos, though.
+
+**Hugging Face** is like a huge library of free, open helpers that anyone can share. Second Thought starts you off with Google's Gemma, but you can choose almost any helper in the library.
+
+**Groq** (spelt with a q, so it is not the same as Grok) is very, very fast. It is good for jobs with lots of little steps.
 
 All the helpers except Claude only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
 

@@ -249,7 +249,9 @@ def python_tests(codes):
                OPENAI_BASE_URL=llama_url, OPENAI_API_KEY="test",
                MISTRAL_BASE_URL=llama_url, MISTRAL_API_KEY="test", QWEN_BASE_URL=llama_url, DASHSCOPE_API_KEY="test",
                MOONSHOT_BASE_URL=llama_url, MOONSHOT_API_KEY="test",
-               PERPLEXITY_BASE_URL=llama_url.rsplit("/v1", 1)[0], PERPLEXITY_API_KEY="test")
+               PERPLEXITY_BASE_URL=llama_url.rsplit("/v1", 1)[0], PERPLEXITY_API_KEY="test",
+               HF_BASE_URL=llama_url, HF_TOKEN="test", GROQ_BASE_URL=llama_url, GROQ_API_KEY="test",
+               ZAI_BASE_URL=llama_url, ZAI_API_KEY="test", MINIMAX_BASE_URL=llama_url, MINIMAX_API_KEY="test")
     with tempfile.TemporaryDirectory() as tmp:
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
@@ -271,8 +273,17 @@ def python_tests(codes):
                       "w_gptcheck.py asked Claude and OpenAI (and OpenAI accepted the request)" + ("" if done else f": {r.stdout[-200:]}"))
             if ex == "w_worldpanel":
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
-                ok3 = bool(done) and all(w in done[-1] for w in ("Mistral:", "Qwen:", "Kimi:", "Claude:"))
-                check(ok3, "w_worldpanel.py asked Mistral, Qwen, Kimi and Claude" + ("" if ok3 else f": {done[-1] if done else r.stdout[-200:]}"))
+                ok3 = bool(done) and all(w in done[-1] for w in ("Mistral:", "Qwen:", "Kimi:", "GLM:", "MiniMax:", "Claude:"))
+                check(ok3, "w_worldpanel.py asked Mistral, Qwen, Kimi, GLM, MiniMax and Claude" + ("" if ok3 else f": {done[-1] if done else r.stdout[-200:]}"))
+            if ex == "w_worldpanel":
+                check("<think>" not in r.stdout and "private reasoning" not in r.stdout, "w_worldpanel.py hid MiniMax's thinking")
+            if ex == "w_groqstorm":
+                done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
+                check(bool(done) and "Groq:" in done[-1], "w_groqstorm.py asked Groq" + ("" if done else f": {r.stdout[-200:]}"))
+            if ex == "c_openonly":
+                done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
+                only = bool(done) and "Hugging Face:" in done[-1] and "Claude:" not in done[-1]
+                check(only, "c_openonly.py used only Hugging Face" + ("" if only else f": {done[-1] if done else r.stdout[-200:]}"))
             if ex == "r_sourced":
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 srcd = bool(done) and "Perplexity:" in done[-1] and "Sources:" in r.stdout and "https://example.com/test" in r.stdout
