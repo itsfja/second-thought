@@ -13,6 +13,9 @@ import random
 import re
 import sys
 import time
+import urllib.error
+import urllib.parse
+import urllib.request
 
 try:
     from anthropic import AsyncAnthropic
@@ -40,6 +43,14 @@ OUTPUT_DIR = "outputs"  # where pictures are saved
 # 'forever' and timed memories live in this file, next to the program.
 MEMORY_FILE = os.environ.get("RB_MEMORY_FILE") or os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "memory.json")
 
+
+# Home Assistant: the address of your Home Assistant and a long-lived access token
+# (your Home Assistant profile, Security tab, "Long-lived access tokens").
+HA_URL = os.environ.get("HA_URL", "http://homeassistant.local:8123").rstrip("/")
+HA_TOKEN = os.environ.get("HA_TOKEN", "")
+HA_TTS_ENTITY = os.environ.get("HA_TTS_ENTITY", "tts.home_assistant_cloud")  # used by the 'say … on' block
+HA_WATCH_SECONDS = 15  # how often 'when … changes' scripts check Home Assistant
+HA_SENSITIVE = (r"^lock\.(unlock|open)$", r"^cover\.open", r"^alarm_control_panel\.alarm_disarm$", r"^valve\.open", r"^garage_door\.open")
 
 MESSAGE_VALUE = contextvars.ContextVar("message_value", default="")
 MODEL_OVERRIDE = contextvars.ContextVar("model_override", default=None)  # set by 'with model' blocks
@@ -709,6 +720,152 @@ class Runtime:
         self.log("Retrying", f"Try {attempt} of {max_tries} failed: {self.last_error}\nTrying again in {wait}s.", f"retry {attempt + 1}")
         await asyncio.sleep(wait)
 
+    # ----- Home Assistant -----
+    def _ha_request(self, method, path, body=None, raw=False):
+        if not HA_TOKEN:
+            raise RunError("This program uses Home Assistant. Set HA_URL (for example http://homeassistant.local:8123) "
+                           "and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab).")
+        data = json.dumps(body).encode("utf-8") if body is not None else None
+        req = urllib.request.Request(HA_URL + path, data=data, method=method,
+                                     headers={"Authorization": "Bearer " + HA_TOKEN, "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                payload = r.read()
+                return (payload, r.headers.get("Content-Type", "")) if raw else (json.loads(payload or b"null"))
+        except urllib.error.HTTPError as e:
+            if e.code == 401:
+                raise RunError("Home Assistant refused the token (401). Check HA_TOKEN.")
+            if e.code == 404:
+                raise RunError(f"Home Assistant has nothing at {path} (404). Check the entity or service name.")
+            raise Retryable(f"Home Assistant answered {e.code} for {path}.")
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            raise Retryable(f"Couldn't reach Home Assistant at {HA_URL} ({getattr(e, 'reason', e)}).")
+
+    async def _ha(self, method, path, body=None, raw=False):
+        return await asyncio.to_thread(self._ha_request, method, path, body, raw)
+
+    @staticmethod
+    def _ha_val(v):
+        return num(v) if _num_like(v) else v
+
+    async def _ha_entity(self, entity):
+        entity = to_str(entity).strip()
+        if not re.match(r"^[a-z_]+\.[a-z0-9_]+$", entity):
+            raise RunError(f"“{entity}” isn't an entity id. Use something like light.kitchen.")
+        return await self._ha("GET", "/api/states/" + entity)
+
+    async def ha_state(self, entity):
+        return self._ha_val((await self._ha_entity(entity))["state"])
+
+    async def ha_attr(self, attr, entity):
+        e = await self._ha_entity(entity)
+        attr = to_str(attr).strip()
+        if attr == "state":
+            return self._ha_val(e["state"])
+        v = e.get("attributes", {}).get(attr, "")
+        return self._ha_val(v) if not isinstance(v, (list, dict)) else json.dumps(v)
+
+    async def _ha_match(self, text):
+        words = [w for w in re.split(r"[\s,]+", to_str(text).lower()) if w]
+        out = []
+        for e in await self._ha("GET", "/api/states"):
+            a = e.get("attributes", {})
+            hay = " ".join(to_str(x) for x in (e["entity_id"], a.get("friendly_name"), a.get("area"), e["state"],
+                                                a.get("device_class"), a.get("unit_of_measurement"))).lower()
+            if not words or "*" in words or all(w in hay for w in words):
+                out.append(e)
+        return out[:150]
+
+    async def ha_find(self, text):
+        return [{"entity": e["entity_id"], "name": e.get("attributes", {}).get("friendly_name", e["entity_id"]),
+                 "state": self._ha_val(e["state"]), "unit": e.get("attributes", {}).get("unit_of_measurement", ""),
+                 "area": e.get("attributes", {}).get("area", "")} for e in await self._ha_match(text)]
+
+    async def ha_summary(self, text):
+        lines = []
+        for e in await self._ha_match(text):
+            a = e.get("attributes", {})
+            extra = "".join(f"; {k.replace('_', ' ')}: {v}" for k, v in a.items()
+                            if k not in ("friendly_name", "area", "unit_of_measurement", "device_class", "icon", "entity_picture",
+                                         "supported_features", "attribution", "state_class") and not isinstance(v, (list, dict)))
+            unit = " " + a["unit_of_measurement"] if a.get("unit_of_measurement") else ""
+            area = f" [{a['area']}]" if a.get("area") else ""
+            lines.append(f"{a.get('friendly_name', e['entity_id'])} ({e['entity_id']}): {e['state']}{unit}{area}{extra}")
+        return "\n".join(lines) or "(no matching entities)"
+
+    async def ha_history(self, entity, hours):
+        entity = to_str(entity).strip()
+        hours = max(1, min(168, num(hours) or 24))
+        start = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=hours)).isoformat()
+        q = urllib.parse.urlencode({"filter_entity_id": entity, "minimal_response": "", "no_attributes": ""})
+        data = await self._ha("GET", "/api/history/period/" + urllib.parse.quote(start) + "?" + q)
+        rows = data[0] if data else []
+        if len(rows) > 48:
+            step = len(rows) / 48
+            rows = [rows[int(i * step)] for i in range(48)] + [rows[-1]]
+        out = []
+        for r in rows:
+            try:
+                t = datetime.datetime.fromisoformat(r.get("last_changed", "").replace("Z", "+00:00")).astimezone()
+                label = t.strftime("%a %H:%M")
+            except ValueError:
+                label = r.get("last_changed", "")
+            out.append({"time": label, "state": self._ha_val(r.get("state", ""))})
+        return out
+
+    async def ha_snapshot(self, camera):
+        camera = to_str(camera).strip()
+        data, ctype = await self._ha("GET", "/api/camera_proxy/" + camera, raw=True)
+        pic = Picture(data, (ctype or "image/jpeg").split(";")[0], camera.replace("camera.", "") + "-snapshot")
+        self.log("Snapshot: " + camera, "Saved to " + self._picture_path(pic), "done")
+        return pic
+
+    async def ha_call(self, service, entity, data_text=""):
+        service, entity = to_str(service).strip(), to_str(entity).strip()
+        if not re.match(r"^[a-z_]+\.[a-z0-9_]+$", service):
+            raise RunError(f"“{service}” isn't a service name. Use domain.service, for example light.turn_off.")
+        body = {}
+        if to_str(data_text).strip():
+            try:
+                body = json.loads(to_str(data_text))
+            except ValueError:
+                raise RunError(f"The data for {service} isn't valid JSON. Use something like {{\"temperature\": 20}}.")
+        if entity:
+            body["entity_id"] = entity
+        if any(re.match(p, service) for p in HA_SENSITIVE):
+            if self.schedule_mode and not sys.stdin.isatty():
+                self.log("Not done", f"{service} on {entity} needs your approval, and nobody is at the keyboard.", "refused")
+                return
+            if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
+                self.log("Not done", f"{service} on {entity} was refused, so nothing happened.", "refused")
+                return
+        domain, action = service.split(".", 1)
+        await self._ha("POST", f"/api/services/{domain}/{action}", body)
+        self.log("Home Assistant: " + service, entity + (f" with {to_str(data_text).strip()}" if to_str(data_text).strip() else ""), "done")
+
+    async def ha_notify(self, target, text):
+        target, text = to_str(target).strip() or "persistent_notification", to_str(text)
+        if not text.strip():
+            raise RunError("The 'notify' block has no message.")
+        if target in ("persistent_notification", "persistent_notification.create"):
+            await self._ha("POST", "/api/services/persistent_notification/create", {"message": text, "title": "Second Thought"})
+        else:
+            svc = target.split(".", 1)[1] if target.startswith("notify.") else target
+            await self._ha("POST", f"/api/services/notify/{svc}", {"message": text, "title": "Second Thought"})
+        self.log("Notification → " + target, text, "sent")
+
+    async def ha_speak(self, text, player):
+        text, player = to_str(text), to_str(player).strip()
+        if not text.strip():
+            raise RunError("The 'say' block has nothing to say.")
+        await self._ha("POST", "/api/services/tts/speak", {"entity_id": HA_TTS_ENTITY, "media_player_entity_id": player, "message": text})
+        self.log("Spoken on " + player, text, "sent")
+
+    @staticmethod
+    def ha_trigger():
+        v = MESSAGE_VALUE.get()
+        return v if isinstance(v, dict) else {"entity": "", "name": "", "from": "", "to": ""}
+
     # ----- Memory -----
     @staticmethod
     def _mem_key(name):
@@ -1222,7 +1379,10 @@ class Runtime:
         self.reset()
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
         for fn in scripts:
-            self.start_script(fn)
+            if isinstance(fn, tuple):
+                self.start_script(fn[0], fn[1])
+            else:
+                self.start_script(fn)
         while self.tasks:
             await asyncio.wait(set(self.tasks), timeout=0.5, return_when=asyncio.FIRST_COMPLETED)
             if not self.ending and not self.schedule_mode and self.tasks and self.msg_waiting >= len(self.tasks):
@@ -1244,11 +1404,13 @@ class Runtime:
         return 0
 
     # ----- Schedules -----
-    async def run_schedules(self, schedules):
-        if not schedules:
-            sys.exit("This program has no scheduled scripts.")
+    async def run_schedules(self, schedules, watches=()):
+        if not schedules and not watches:
+            sys.exit("This program has no scheduled or 'when … changes' scripts.")
         self.schedule_mode = True
         print("Schedules are on. Leave this running; press Ctrl+C to stop.", flush=True)
+        if watches:
+            asyncio.ensure_future(self._watch(watches))
         fired, next_every = {}, {}
         start = time.time()
         for i, s in enumerate(schedules):
@@ -1282,12 +1444,44 @@ class Runtime:
                         busy = asyncio.ensure_future(self.run([fn], s[-2] if s[0] == "every" else f"Scheduled {s[1]:02d}:{s[2]:02d}"))
             await asyncio.sleep(5)
 
-    def main(self, start_scripts, receivers, schedules):
+    async def _watch(self, watches):
+        """Polls Home Assistant and starts 'when … changes' scripts."""
+        last = {}
+        first = True
+        busy = None
+        while True:
+            try:
+                states = {e["entity_id"]: e for e in await self._ha("GET", "/api/states")}
+            except RunError as e:
+                print("  (Home Assistant check failed: " + str(e) + ")", flush=True)
+                await asyncio.sleep(HA_WATCH_SECONDS)
+                continue
+            for entity, want, fn in watches:
+                e = states.get(entity)
+                if not e:
+                    continue
+                now_state = e["state"]
+                before = last.get(entity)
+                last[entity] = now_state
+                if first or before is None or before == now_state:
+                    continue
+                if want.lower() not in ("", "anything") and want.lower() != now_state.lower():
+                    continue
+                payload = {"entity": entity, "name": e.get("attributes", {}).get("friendly_name", entity),
+                           "from": self._ha_val(before), "to": self._ha_val(now_state)}
+                if busy and not busy.done():
+                    self.start_script(fn, payload)
+                else:
+                    busy = asyncio.ensure_future(self.run([(fn, payload)], f"When {entity} changes"))
+            first = False
+            await asyncio.sleep(HA_WATCH_SECONDS)
+
+    def main(self, start_scripts, receivers, schedules, watches=()):
         self.receivers = {k.lower(): v for k, v in receivers.items()}
-        use_schedule = "--schedule" in sys.argv or (schedules and not start_scripts)
+        use_schedule = "--schedule" in sys.argv or ((schedules or watches) and not start_scripts)
         try:
             if use_schedule:
-                asyncio.run(self.run_schedules(schedules))
+                asyncio.run(self.run_schedules(schedules, watches))
             else:
                 if not start_scripts:
                     sys.exit("Nothing to run: this program has no 'when Run is clicked' script.")

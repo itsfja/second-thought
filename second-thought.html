@@ -107,6 +107,10 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 .mem-kind.permanent{background:var(--ok-bg);color:var(--ok)}
 .mem-kind.timed{background:var(--warn-bg);color:var(--warn)}
 .mem-empty{font-size:14px;color:var(--muted)}
+.ha-list{max-height:340px}
+.ha-row{display:grid;grid-template-columns:minmax(120px,1fr) minmax(0,1.6fr) 150px;gap:10px;align-items:center;border-top:1px solid var(--line);padding-top:6px}
+.ha-state{width:100%;font:inherit;font-size:13px;padding:4px 8px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+@media (max-width:640px){.ha-row{grid-template-columns:minmax(0,1fr) 120px}.ha-row .mem-val{grid-column:1 / -1}}
 .lib-row{display:grid;grid-template-columns:minmax(100px,1fr) minmax(0,1.6fr) auto auto;gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:6px}
 #lib .row input[type=text]{flex:1;min-width:0}
 #lib .msg{grid-column:1 / -1;margin:0;font-size:13px}
@@ -171,6 +175,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <button id="io-toggle" type="button" aria-expanded="false" aria-controls="io">Import / export</button>
     <button id="lib-toggle" type="button" aria-expanded="false" aria-controls="lib">Programs</button>
     <button id="mem-toggle" type="button" aria-expanded="false" aria-controls="mem">Memory</button>
+    <button id="ha-toggle" type="button" aria-expanded="false" aria-controls="ha">Home Assistant</button>
     <label class="lab" for="tier">Model
       <select id="tier">
         <optgroup label="Claude">
@@ -222,6 +227,16 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <div id="lib-prompts" class="mem-list"></div>
   </div>
   <p class="msg" id="lib-msg" role="status"></p>
+</section>
+<section id="ha" class="memp" hidden aria-label="Home Assistant">
+  <div class="mem-head">
+    <div>
+      <h2>Home Assistant</h2>
+      <p class="hint">In this page, the Home Assistant blocks use a <b>sample house</b>, so you can build and test safely. Change a state below (press Enter) to try your 'when … changes' scripts. Exported Python connects to your real Home Assistant: set HA_URL and HA_TOKEN (a long-lived access token from your Home Assistant profile, under Security).</p>
+    </div>
+    <div class="row"><label class="sr" for="ha-filter">Filter entities</label><input type="search" id="ha-filter" placeholder="Filter, e.g. light or kitchen" autocomplete="off"></div>
+  </div>
+  <div id="ha-list" class="mem-list ha-list"></div>
 </section>
 <section id="mem" class="memp" hidden aria-label="Memory">
   <div class="mem-head">
@@ -332,6 +347,9 @@ import random
 import re
 import sys
 import time
+import urllib.error
+import urllib.parse
+import urllib.request
 
 try:
     from anthropic import AsyncAnthropic
@@ -359,6 +377,14 @@ OUTPUT_DIR = "outputs"  # where pictures are saved
 # 'forever' and timed memories live in this file, next to the program.
 MEMORY_FILE = os.environ.get("RB_MEMORY_FILE") or os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "memory.json")
 
+
+# Home Assistant: the address of your Home Assistant and a long-lived access token
+# (your Home Assistant profile, Security tab, "Long-lived access tokens").
+HA_URL = os.environ.get("HA_URL", "http://homeassistant.local:8123").rstrip("/")
+HA_TOKEN = os.environ.get("HA_TOKEN", "")
+HA_TTS_ENTITY = os.environ.get("HA_TTS_ENTITY", "tts.home_assistant_cloud")  # used by the 'say … on' block
+HA_WATCH_SECONDS = 15  # how often 'when … changes' scripts check Home Assistant
+HA_SENSITIVE = (r"^lock\.(unlock|open)$", r"^cover\.open", r"^alarm_control_panel\.alarm_disarm$", r"^valve\.open", r"^garage_door\.open")
 
 MESSAGE_VALUE = contextvars.ContextVar("message_value", default="")
 MODEL_OVERRIDE = contextvars.ContextVar("model_override", default=None)  # set by 'with model' blocks
@@ -1028,6 +1054,152 @@ class Runtime:
         self.log("Retrying", f"Try {attempt} of {max_tries} failed: {self.last_error}\nTrying again in {wait}s.", f"retry {attempt + 1}")
         await asyncio.sleep(wait)
 
+    # ----- Home Assistant -----
+    def _ha_request(self, method, path, body=None, raw=False):
+        if not HA_TOKEN:
+            raise RunError("This program uses Home Assistant. Set HA_URL (for example http://homeassistant.local:8123) "
+                           "and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab).")
+        data = json.dumps(body).encode("utf-8") if body is not None else None
+        req = urllib.request.Request(HA_URL + path, data=data, method=method,
+                                     headers={"Authorization": "Bearer " + HA_TOKEN, "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                payload = r.read()
+                return (payload, r.headers.get("Content-Type", "")) if raw else (json.loads(payload or b"null"))
+        except urllib.error.HTTPError as e:
+            if e.code == 401:
+                raise RunError("Home Assistant refused the token (401). Check HA_TOKEN.")
+            if e.code == 404:
+                raise RunError(f"Home Assistant has nothing at {path} (404). Check the entity or service name.")
+            raise Retryable(f"Home Assistant answered {e.code} for {path}.")
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            raise Retryable(f"Couldn't reach Home Assistant at {HA_URL} ({getattr(e, 'reason', e)}).")
+
+    async def _ha(self, method, path, body=None, raw=False):
+        return await asyncio.to_thread(self._ha_request, method, path, body, raw)
+
+    @staticmethod
+    def _ha_val(v):
+        return num(v) if _num_like(v) else v
+
+    async def _ha_entity(self, entity):
+        entity = to_str(entity).strip()
+        if not re.match(r"^[a-z_]+\.[a-z0-9_]+$", entity):
+            raise RunError(f"“{entity}” isn't an entity id. Use something like light.kitchen.")
+        return await self._ha("GET", "/api/states/" + entity)
+
+    async def ha_state(self, entity):
+        return self._ha_val((await self._ha_entity(entity))["state"])
+
+    async def ha_attr(self, attr, entity):
+        e = await self._ha_entity(entity)
+        attr = to_str(attr).strip()
+        if attr == "state":
+            return self._ha_val(e["state"])
+        v = e.get("attributes", {}).get(attr, "")
+        return self._ha_val(v) if not isinstance(v, (list, dict)) else json.dumps(v)
+
+    async def _ha_match(self, text):
+        words = [w for w in re.split(r"[\s,]+", to_str(text).lower()) if w]
+        out = []
+        for e in await self._ha("GET", "/api/states"):
+            a = e.get("attributes", {})
+            hay = " ".join(to_str(x) for x in (e["entity_id"], a.get("friendly_name"), a.get("area"), e["state"],
+                                                a.get("device_class"), a.get("unit_of_measurement"))).lower()
+            if not words or "*" in words or all(w in hay for w in words):
+                out.append(e)
+        return out[:150]
+
+    async def ha_find(self, text):
+        return [{"entity": e["entity_id"], "name": e.get("attributes", {}).get("friendly_name", e["entity_id"]),
+                 "state": self._ha_val(e["state"]), "unit": e.get("attributes", {}).get("unit_of_measurement", ""),
+                 "area": e.get("attributes", {}).get("area", "")} for e in await self._ha_match(text)]
+
+    async def ha_summary(self, text):
+        lines = []
+        for e in await self._ha_match(text):
+            a = e.get("attributes", {})
+            extra = "".join(f"; {k.replace('_', ' ')}: {v}" for k, v in a.items()
+                            if k not in ("friendly_name", "area", "unit_of_measurement", "device_class", "icon", "entity_picture",
+                                         "supported_features", "attribution", "state_class") and not isinstance(v, (list, dict)))
+            unit = " " + a["unit_of_measurement"] if a.get("unit_of_measurement") else ""
+            area = f" [{a['area']}]" if a.get("area") else ""
+            lines.append(f"{a.get('friendly_name', e['entity_id'])} ({e['entity_id']}): {e['state']}{unit}{area}{extra}")
+        return "\n".join(lines) or "(no matching entities)"
+
+    async def ha_history(self, entity, hours):
+        entity = to_str(entity).strip()
+        hours = max(1, min(168, num(hours) or 24))
+        start = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=hours)).isoformat()
+        q = urllib.parse.urlencode({"filter_entity_id": entity, "minimal_response": "", "no_attributes": ""})
+        data = await self._ha("GET", "/api/history/period/" + urllib.parse.quote(start) + "?" + q)
+        rows = data[0] if data else []
+        if len(rows) > 48:
+            step = len(rows) / 48
+            rows = [rows[int(i * step)] for i in range(48)] + [rows[-1]]
+        out = []
+        for r in rows:
+            try:
+                t = datetime.datetime.fromisoformat(r.get("last_changed", "").replace("Z", "+00:00")).astimezone()
+                label = t.strftime("%a %H:%M")
+            except ValueError:
+                label = r.get("last_changed", "")
+            out.append({"time": label, "state": self._ha_val(r.get("state", ""))})
+        return out
+
+    async def ha_snapshot(self, camera):
+        camera = to_str(camera).strip()
+        data, ctype = await self._ha("GET", "/api/camera_proxy/" + camera, raw=True)
+        pic = Picture(data, (ctype or "image/jpeg").split(";")[0], camera.replace("camera.", "") + "-snapshot")
+        self.log("Snapshot: " + camera, "Saved to " + self._picture_path(pic), "done")
+        return pic
+
+    async def ha_call(self, service, entity, data_text=""):
+        service, entity = to_str(service).strip(), to_str(entity).strip()
+        if not re.match(r"^[a-z_]+\.[a-z0-9_]+$", service):
+            raise RunError(f"“{service}” isn't a service name. Use domain.service, for example light.turn_off.")
+        body = {}
+        if to_str(data_text).strip():
+            try:
+                body = json.loads(to_str(data_text))
+            except ValueError:
+                raise RunError(f"The data for {service} isn't valid JSON. Use something like {{\"temperature\": 20}}.")
+        if entity:
+            body["entity_id"] = entity
+        if any(re.match(p, service) for p in HA_SENSITIVE):
+            if self.schedule_mode and not sys.stdin.isatty():
+                self.log("Not done", f"{service} on {entity} needs your approval, and nobody is at the keyboard.", "refused")
+                return
+            if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
+                self.log("Not done", f"{service} on {entity} was refused, so nothing happened.", "refused")
+                return
+        domain, action = service.split(".", 1)
+        await self._ha("POST", f"/api/services/{domain}/{action}", body)
+        self.log("Home Assistant: " + service, entity + (f" with {to_str(data_text).strip()}" if to_str(data_text).strip() else ""), "done")
+
+    async def ha_notify(self, target, text):
+        target, text = to_str(target).strip() or "persistent_notification", to_str(text)
+        if not text.strip():
+            raise RunError("The 'notify' block has no message.")
+        if target in ("persistent_notification", "persistent_notification.create"):
+            await self._ha("POST", "/api/services/persistent_notification/create", {"message": text, "title": "Second Thought"})
+        else:
+            svc = target.split(".", 1)[1] if target.startswith("notify.") else target
+            await self._ha("POST", f"/api/services/notify/{svc}", {"message": text, "title": "Second Thought"})
+        self.log("Notification → " + target, text, "sent")
+
+    async def ha_speak(self, text, player):
+        text, player = to_str(text), to_str(player).strip()
+        if not text.strip():
+            raise RunError("The 'say' block has nothing to say.")
+        await self._ha("POST", "/api/services/tts/speak", {"entity_id": HA_TTS_ENTITY, "media_player_entity_id": player, "message": text})
+        self.log("Spoken on " + player, text, "sent")
+
+    @staticmethod
+    def ha_trigger():
+        v = MESSAGE_VALUE.get()
+        return v if isinstance(v, dict) else {"entity": "", "name": "", "from": "", "to": ""}
+
     # ----- Memory -----
     @staticmethod
     def _mem_key(name):
@@ -1541,7 +1713,10 @@ class Runtime:
         self.reset()
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
         for fn in scripts:
-            self.start_script(fn)
+            if isinstance(fn, tuple):
+                self.start_script(fn[0], fn[1])
+            else:
+                self.start_script(fn)
         while self.tasks:
             await asyncio.wait(set(self.tasks), timeout=0.5, return_when=asyncio.FIRST_COMPLETED)
             if not self.ending and not self.schedule_mode and self.tasks and self.msg_waiting >= len(self.tasks):
@@ -1563,11 +1738,13 @@ class Runtime:
         return 0
 
     # ----- Schedules -----
-    async def run_schedules(self, schedules):
-        if not schedules:
-            sys.exit("This program has no scheduled scripts.")
+    async def run_schedules(self, schedules, watches=()):
+        if not schedules and not watches:
+            sys.exit("This program has no scheduled or 'when … changes' scripts.")
         self.schedule_mode = True
         print("Schedules are on. Leave this running; press Ctrl+C to stop.", flush=True)
+        if watches:
+            asyncio.ensure_future(self._watch(watches))
         fired, next_every = {}, {}
         start = time.time()
         for i, s in enumerate(schedules):
@@ -1601,12 +1778,44 @@ class Runtime:
                         busy = asyncio.ensure_future(self.run([fn], s[-2] if s[0] == "every" else f"Scheduled {s[1]:02d}:{s[2]:02d}"))
             await asyncio.sleep(5)
 
-    def main(self, start_scripts, receivers, schedules):
+    async def _watch(self, watches):
+        """Polls Home Assistant and starts 'when … changes' scripts."""
+        last = {}
+        first = True
+        busy = None
+        while True:
+            try:
+                states = {e["entity_id"]: e for e in await self._ha("GET", "/api/states")}
+            except RunError as e:
+                print("  (Home Assistant check failed: " + str(e) + ")", flush=True)
+                await asyncio.sleep(HA_WATCH_SECONDS)
+                continue
+            for entity, want, fn in watches:
+                e = states.get(entity)
+                if not e:
+                    continue
+                now_state = e["state"]
+                before = last.get(entity)
+                last[entity] = now_state
+                if first or before is None or before == now_state:
+                    continue
+                if want.lower() not in ("", "anything") and want.lower() != now_state.lower():
+                    continue
+                payload = {"entity": entity, "name": e.get("attributes", {}).get("friendly_name", entity),
+                           "from": self._ha_val(before), "to": self._ha_val(now_state)}
+                if busy and not busy.done():
+                    self.start_script(fn, payload)
+                else:
+                    busy = asyncio.ensure_future(self.run([(fn, payload)], f"When {entity} changes"))
+            first = False
+            await asyncio.sleep(HA_WATCH_SECONDS)
+
+    def main(self, start_scripts, receivers, schedules, watches=()):
         self.receivers = {k.lower(): v for k, v in receivers.items()}
-        use_schedule = "--schedule" in sys.argv or (schedules and not start_scripts)
+        use_schedule = "--schedule" in sys.argv or ((schedules or watches) and not start_scripts)
         try:
             if use_schedule:
-                asyncio.run(self.run_schedules(schedules))
+                asyncio.run(self.run_schedules(schedules, watches))
             else:
                 if not start_scripts:
                     sys.exit("Nothing to run: this program has no 'when Run is clicked' script.")
@@ -1614,6 +1823,922 @@ class Runtime:
         except KeyboardInterrupt:
             print("\nStopped.")
 </script>
+<script type="application/json" id="ha-sample">
+{
+ "about": "Sample house used by the Home Assistant blocks inside the Second Thought page and by the tests. Exported Python uses your real Home Assistant instead.",
+ "entities": [
+  {
+   "entity_id": "person.alex",
+   "state": "home",
+   "attributes": {
+    "friendly_name": "Alex",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "person.sam",
+   "state": "not_home",
+   "attributes": {
+    "friendly_name": "Sam",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "device_tracker.car",
+   "state": "home",
+   "attributes": {
+    "friendly_name": "Car",
+    "area": "Driveway"
+   }
+  },
+  {
+   "entity_id": "sun.sun",
+   "state": "above_horizon",
+   "attributes": {
+    "friendly_name": "Sun",
+    "area": "Outside",
+    "next_setting": "18:42",
+    "next_rising": "07:13"
+   }
+  },
+  {
+   "entity_id": "weather.home",
+   "state": "rainy",
+   "attributes": {
+    "friendly_name": "Home weather",
+    "area": "Outside",
+    "temperature": 9,
+    "forecast_text": "Rain clearing by 14:00, high of 12°C. Tonight clear and cold, low of 1°C with a risk of frost. Tomorrow sunny, 13°C."
+   }
+  },
+  {
+   "entity_id": "sensor.bin_collection",
+   "state": "Recycling",
+   "attributes": {
+    "friendly_name": "Next bin collection",
+    "area": "Outside",
+    "next_date": "Thursday 8 October",
+    "note": "Collections move one day later in bank holiday weeks."
+   }
+  },
+  {
+   "entity_id": "calendar.family",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Family calendar",
+    "area": "Home",
+    "message": "Dentist (Sam) 15:30; Swimming 18:00"
+   }
+  },
+  {
+   "entity_id": "todo.shopping_list",
+   "state": "5",
+   "attributes": {
+    "friendly_name": "Shopping list",
+    "area": "Kitchen",
+    "items": "eggs, butter, rye flour, lemons, cheddar"
+   }
+  },
+  {
+   "entity_id": "light.kitchen",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Kitchen light",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "light.living_room",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Living room light",
+    "area": "Living room"
+   }
+  },
+  {
+   "entity_id": "light.hallway",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Hallway light",
+    "area": "Hallway"
+   }
+  },
+  {
+   "entity_id": "light.landing",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Landing light",
+    "area": "Landing"
+   }
+  },
+  {
+   "entity_id": "light.bedroom",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Bedroom light",
+    "area": "Bedroom"
+   }
+  },
+  {
+   "entity_id": "light.garden",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Garden lights",
+    "area": "Garden"
+   }
+  },
+  {
+   "entity_id": "light.porch",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Porch light",
+    "area": "Outside"
+   }
+  },
+  {
+   "entity_id": "light.study",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Study lamp",
+    "area": "Study"
+   }
+  },
+  {
+   "entity_id": "switch.oven",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Oven",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "switch.coffee_machine",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Coffee machine",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "switch.garage_heater",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Garage heater",
+    "area": "Garage"
+   }
+  },
+  {
+   "entity_id": "switch.ev_charger",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "EV charger",
+    "area": "Driveway"
+   }
+  },
+  {
+   "entity_id": "switch.garden_irrigation",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Garden irrigation",
+    "area": "Garden"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.front_door",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Front door",
+    "area": "Hallway",
+    "device_class": "door"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.back_door",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Back door",
+    "area": "Kitchen",
+    "device_class": "door"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.kitchen_window",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Kitchen window",
+    "area": "Kitchen",
+    "device_class": "window"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.bedroom_window",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Bedroom window",
+    "area": "Bedroom",
+    "device_class": "window"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.garage_door_contact",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Garage door contact",
+    "area": "Garage",
+    "device_class": "garage_door"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.doorbell",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Doorbell",
+    "area": "Hallway",
+    "device_class": "occupancy"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_hallway",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Hallway motion",
+    "area": "Hallway",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_garden",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Garden motion",
+    "area": "Garden",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_driveway",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Driveway motion",
+    "area": "Driveway",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_living_room",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Living room motion",
+    "area": "Living room",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_annex",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Annex motion (Gran)",
+    "area": "Annex",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.leak_kitchen",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Kitchen leak sensor",
+    "area": "Kitchen",
+    "device_class": "moisture"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.leak_bathroom",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Bathroom leak sensor",
+    "area": "Bathroom",
+    "device_class": "moisture"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.smoke_landing",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Landing smoke alarm",
+    "area": "Landing",
+    "device_class": "smoke"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.shed_door",
+   "state": "unavailable",
+   "attributes": {
+    "friendly_name": "Shed door",
+    "area": "Garden",
+    "device_class": "door"
+   }
+  },
+  {
+   "entity_id": "lock.front_door",
+   "state": "locked",
+   "attributes": {
+    "friendly_name": "Front door lock",
+    "area": "Hallway"
+   }
+  },
+  {
+   "entity_id": "lock.back_door",
+   "state": "unlocked",
+   "attributes": {
+    "friendly_name": "Back door lock",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "cover.garage_door",
+   "state": "closed",
+   "attributes": {
+    "friendly_name": "Garage door",
+    "area": "Garage"
+   }
+  },
+  {
+   "entity_id": "alarm_control_panel.house",
+   "state": "disarmed",
+   "attributes": {
+    "friendly_name": "House alarm",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "climate.living_room",
+   "state": "heat",
+   "attributes": {
+    "friendly_name": "Living room heating",
+    "area": "Living room",
+    "current_temperature": 19.5,
+    "temperature": 21
+   }
+  },
+  {
+   "entity_id": "climate.bedroom",
+   "state": "heat",
+   "attributes": {
+    "friendly_name": "Bedroom heating",
+    "area": "Bedroom",
+    "current_temperature": 17.8,
+    "temperature": 18
+   }
+  },
+  {
+   "entity_id": "sensor.living_room_temperature",
+   "state": "19.5",
+   "attributes": {
+    "friendly_name": "Living room temperature",
+    "area": "Living room",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.kitchen_temperature",
+   "state": "22.4",
+   "attributes": {
+    "friendly_name": "Kitchen temperature",
+    "area": "Kitchen",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.bedroom_temperature",
+   "state": "17.8",
+   "attributes": {
+    "friendly_name": "Bedroom temperature",
+    "area": "Bedroom",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.outdoor_temperature",
+   "state": "9.2",
+   "attributes": {
+    "friendly_name": "Outdoor temperature",
+    "area": "Outside",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.greenhouse_temperature",
+   "state": "27.3",
+   "attributes": {
+    "friendly_name": "Greenhouse temperature",
+    "area": "Garden",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.conservatory_temperature",
+   "state": "26.5",
+   "attributes": {
+    "friendly_name": "Conservatory temperature (dog's room)",
+    "area": "Conservatory",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.proofing_temperature",
+   "state": "25.5",
+   "attributes": {
+    "friendly_name": "Proofing box temperature",
+    "area": "Kitchen",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.fridge_temperature",
+   "state": "4.1",
+   "attributes": {
+    "friendly_name": "Fridge temperature",
+    "area": "Kitchen",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.freezer_temperature",
+   "state": "-17.5",
+   "attributes": {
+    "friendly_name": "Freezer temperature",
+    "area": "Utility",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.bathroom_humidity",
+   "state": "78",
+   "attributes": {
+    "friendly_name": "Bathroom humidity",
+    "area": "Bathroom",
+    "unit_of_measurement": "%",
+    "device_class": "humidity"
+   }
+  },
+  {
+   "entity_id": "sensor.bedroom_humidity",
+   "state": "61",
+   "attributes": {
+    "friendly_name": "Bedroom humidity",
+    "area": "Bedroom",
+    "unit_of_measurement": "%",
+    "device_class": "humidity"
+   }
+  },
+  {
+   "entity_id": "sensor.living_room_humidity",
+   "state": "55",
+   "attributes": {
+    "friendly_name": "Living room humidity",
+    "area": "Living room",
+    "unit_of_measurement": "%",
+    "device_class": "humidity"
+   }
+  },
+  {
+   "entity_id": "sensor.kitchen_humidity",
+   "state": "58",
+   "attributes": {
+    "friendly_name": "Kitchen humidity",
+    "area": "Kitchen",
+    "unit_of_measurement": "%",
+    "device_class": "humidity"
+   }
+  },
+  {
+   "entity_id": "sensor.study_co2",
+   "state": "1350",
+   "attributes": {
+    "friendly_name": "Study CO2",
+    "area": "Study",
+    "unit_of_measurement": "ppm",
+    "device_class": "carbon_dioxide"
+   }
+  },
+  {
+   "entity_id": "sensor.soil_moisture",
+   "state": "22",
+   "attributes": {
+    "friendly_name": "Vegetable bed soil moisture",
+    "area": "Garden",
+    "unit_of_measurement": "%",
+    "device_class": "moisture"
+   }
+  },
+  {
+   "entity_id": "sensor.rain_last_24h",
+   "state": "0.4",
+   "attributes": {
+    "friendly_name": "Rain in the last 24 hours",
+    "area": "Outside",
+    "unit_of_measurement": "mm",
+    "device_class": "precipitation"
+   }
+  },
+  {
+   "entity_id": "sensor.shed_temperature",
+   "state": "unavailable",
+   "attributes": {
+    "friendly_name": "Shed temperature",
+    "area": "Garden",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.house_power",
+   "state": "380",
+   "attributes": {
+    "friendly_name": "House power",
+    "area": "Utility",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.energy_today",
+   "state": "9.4",
+   "attributes": {
+    "friendly_name": "Energy used today",
+    "area": "Utility",
+    "unit_of_measurement": "kWh"
+   }
+  },
+  {
+   "entity_id": "sensor.energy_yesterday",
+   "state": "14.1",
+   "attributes": {
+    "friendly_name": "Energy used yesterday",
+    "area": "Utility",
+    "unit_of_measurement": "kWh"
+   }
+  },
+  {
+   "entity_id": "sensor.electricity_price",
+   "state": "0.24",
+   "attributes": {
+    "friendly_name": "Electricity price now",
+    "area": "Utility",
+    "unit_of_measurement": "£/kWh"
+   }
+  },
+  {
+   "entity_id": "sensor.solar_power",
+   "state": "1200",
+   "attributes": {
+    "friendly_name": "Solar power",
+    "area": "Outside",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.solar_forecast_tomorrow",
+   "state": "8.5",
+   "attributes": {
+    "friendly_name": "Solar forecast tomorrow",
+    "area": "Outside",
+    "unit_of_measurement": "kWh"
+   }
+  },
+  {
+   "entity_id": "sensor.home_battery",
+   "state": "64",
+   "attributes": {
+    "friendly_name": "Home battery",
+    "area": "Utility",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.water_flow",
+   "state": "0.3",
+   "attributes": {
+    "friendly_name": "Water flow",
+    "area": "Utility",
+    "unit_of_measurement": "L/min"
+   }
+  },
+  {
+   "entity_id": "sensor.washing_machine_power",
+   "state": "2",
+   "attributes": {
+    "friendly_name": "Washing machine power",
+    "area": "Utility",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.dishwasher_power",
+   "state": "0",
+   "attributes": {
+    "friendly_name": "Dishwasher power",
+    "area": "Kitchen",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.tv_standby_power",
+   "state": "14",
+   "attributes": {
+    "friendly_name": "TV power",
+    "area": "Living room",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.games_pc_power",
+   "state": "65",
+   "attributes": {
+    "friendly_name": "Games PC power",
+    "area": "Study",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.garage_heater_power",
+   "state": "950",
+   "attributes": {
+    "friendly_name": "Garage heater power",
+    "area": "Garage",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.ev_battery",
+   "state": "48",
+   "attributes": {
+    "friendly_name": "Car battery",
+    "area": "Driveway",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.electricity_cheapest_time",
+   "state": "02:30",
+   "attributes": {
+    "friendly_name": "Cheapest electricity tonight",
+    "area": "Utility",
+    "price_then": 0.07
+   }
+  },
+  {
+   "entity_id": "sensor.dishwasher_state",
+   "state": "clean",
+   "attributes": {
+    "friendly_name": "Dishwasher",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "sensor.hallway_motion_battery",
+   "state": "14",
+   "attributes": {
+    "friendly_name": "Hallway motion battery",
+    "area": "Hallway",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.back_door_battery",
+   "state": "18",
+   "attributes": {
+    "friendly_name": "Back door sensor battery",
+    "area": "Kitchen",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.garden_motion_battery",
+   "state": "62",
+   "attributes": {
+    "friendly_name": "Garden motion battery",
+    "area": "Garden",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.leak_kitchen_battery",
+   "state": "9",
+   "attributes": {
+    "friendly_name": "Kitchen leak sensor battery",
+    "area": "Kitchen",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.smoke_landing_battery",
+   "state": "85",
+   "attributes": {
+    "friendly_name": "Landing smoke alarm battery",
+    "area": "Landing",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.bedroom_thermostat_battery",
+   "state": "31",
+   "attributes": {
+    "friendly_name": "Bedroom thermostat battery",
+    "area": "Bedroom",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.pet_feeder_last_fed",
+   "state": "07:02",
+   "attributes": {
+    "friendly_name": "Pet feeder last dispensed",
+    "area": "Conservatory"
+   }
+  },
+  {
+   "entity_id": "sensor.pet_feeder_food_level",
+   "state": "30",
+   "attributes": {
+    "friendly_name": "Pet feeder food level",
+    "area": "Conservatory",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.pve1_cpu",
+   "state": "12",
+   "attributes": {
+    "friendly_name": "pve1 CPU",
+    "area": "Homelab",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.pve2_disk_used",
+   "state": "81",
+   "attributes": {
+    "friendly_name": "pve2 disk used",
+    "area": "Homelab",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.nightly_backup",
+   "state": "failed",
+   "attributes": {
+    "friendly_name": "Nightly backup",
+    "area": "Homelab",
+    "last_success": "2 days ago"
+   }
+  },
+  {
+   "entity_id": "sensor.pihole_ads_blocked_today",
+   "state": "4231",
+   "attributes": {
+    "friendly_name": "Pi-hole ads blocked today",
+    "area": "Homelab"
+   }
+  },
+  {
+   "entity_id": "sensor.pihole_percent_blocked",
+   "state": "23.4",
+   "attributes": {
+    "friendly_name": "Pi-hole percentage blocked",
+    "area": "Homelab",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.unifi_new_devices",
+   "state": "1",
+   "attributes": {
+    "friendly_name": "New network devices",
+    "area": "Homelab",
+    "names": "Unknown-7F3A (joined 03:12 on the IoT network)"
+   }
+  },
+  {
+   "entity_id": "sensor.plex_recently_added",
+   "state": "2",
+   "attributes": {
+    "friendly_name": "Plex recently added",
+    "area": "Homelab",
+    "titles": "The Great British Bake Off S16E5; Paddington in Peru"
+   }
+  },
+  {
+   "entity_id": "input_datetime.boiler_service_due",
+   "state": "2026-11-02",
+   "attributes": {
+    "friendly_name": "Boiler service due",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "input_datetime.smoke_alarm_test_due",
+   "state": "2026-09-01",
+   "attributes": {
+    "friendly_name": "Smoke alarm test due",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "input_datetime.cooker_hood_filter_due",
+   "state": "2026-08-15",
+   "attributes": {
+    "friendly_name": "Cooker hood filter change due",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "input_datetime.water_softener_salt_due",
+   "state": "2026-10-20",
+   "attributes": {
+    "friendly_name": "Water softener salt due",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "media_player.kitchen_speaker",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Kitchen speaker",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "media_player.kids_room",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Kids' room speaker",
+    "area": "Bedroom"
+   }
+  },
+  {
+   "entity_id": "camera.front_door",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Front door camera",
+    "area": "Hallway"
+   }
+  },
+  {
+   "entity_id": "camera.driveway",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Driveway camera",
+    "area": "Driveway"
+   }
+  },
+  {
+   "entity_id": "camera.garden",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Garden camera",
+    "area": "Garden"
+   }
+  },
+  {
+   "entity_id": "camera.garage",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Garage camera",
+    "area": "Garage"
+   }
+  },
+  {
+   "entity_id": "camera.pet",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Pet camera",
+    "area": "Conservatory"
+   }
+  }
+ ],
+ "cameras": {
+  "camera.front_door": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#9aa7b3\"/><rect x=\"110\" y=\"30\" width=\"100\" height=\"160\" fill=\"#2f4b6e\"/><circle cx=\"195\" cy=\"115\" r=\"5\" fill=\"#e4c66a\"/><rect x=\"0\" y=\"185\" width=\"320\" height=\"15\" fill=\"#6b6f73\"/><rect x=\"225\" y=\"150\" width=\"60\" height=\"38\" fill=\"#c49a62\"/><rect x=\"225\" y=\"164\" width=\"60\" height=\"5\" fill=\"#a87d47\"/><text x=\"160\" y=\"20\" font-size=\"12\" text-anchor=\"middle\" fill=\"#fff\">FRONT DOOR 15:42</text></svg>",
+  "camera.driveway": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#b8c2a8\"/><rect x=\"0\" y=\"120\" width=\"320\" height=\"80\" fill=\"#7d7d7d\"/><rect x=\"70\" y=\"95\" width=\"180\" height=\"55\" rx=\"18\" fill=\"#2e5fa8\"/><rect x=\"100\" y=\"78\" width=\"110\" height=\"30\" rx=\"10\" fill=\"#8fb3e0\"/><circle cx=\"110\" cy=\"152\" r=\"16\" fill=\"#222\"/><circle cx=\"215\" cy=\"152\" r=\"16\" fill=\"#222\"/><text x=\"160\" y=\"20\" font-size=\"12\" text-anchor=\"middle\" fill=\"#fff\">DRIVEWAY 15:40</text></svg>",
+  "camera.garden": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#8fc08a\"/><rect x=\"0\" y=\"0\" width=\"320\" height=\"70\" fill=\"#c9dbe8\"/><ellipse cx=\"200\" cy=\"150\" rx=\"28\" ry=\"16\" fill=\"#333\"/><circle cx=\"226\" cy=\"134\" r=\"11\" fill=\"#333\"/><polygon points=\"220,124 224,114 229,124\" fill=\"#333\"/><polygon points=\"228,124 233,114 236,125\" fill=\"#333\"/><path d=\"M172 150 Q150 135 160 120\" stroke=\"#333\" stroke-width=\"5\" fill=\"none\"/><text x=\"160\" y=\"20\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">GARDEN 15:41</text></svg>",
+  "camera.garage": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#a9a59c\"/><rect x=\"60\" y=\"40\" width=\"200\" height=\"150\" fill=\"#3a3a3a\"/><rect x=\"60\" y=\"40\" width=\"200\" height=\"110\" fill=\"#d8d4c8\"/><line x1=\"60\" y1=\"70\" x2=\"260\" y2=\"70\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><line x1=\"60\" y1=\"100\" x2=\"260\" y2=\"100\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><line x1=\"60\" y1=\"130\" x2=\"260\" y2=\"130\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><text x=\"160\" y=\"25\" font-size=\"12\" text-anchor=\"middle\" fill=\"#fff\">GARAGE 15:39</text></svg>",
+  "camera.pet": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#e9dcc6\"/><rect x=\"40\" y=\"100\" width=\"240\" height=\"70\" rx=\"12\" fill=\"#7a5c8f\"/><ellipse cx=\"160\" cy=\"105\" rx=\"55\" ry=\"22\" fill=\"#c8893f\"/><circle cx=\"210\" cy=\"92\" r=\"17\" fill=\"#c8893f\"/><ellipse cx=\"222\" cy=\"80\" rx=\"6\" ry=\"11\" fill=\"#9c6528\"/><circle cx=\"216\" cy=\"90\" r=\"2.5\" fill=\"#222\"/><text x=\"160\" y=\"25\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">PET CAM 15:43</text></svg>"
+ }
+}</script>
 <script type="text/plain" id="convert-guide">
 You convert program code into a block program for "Second Thought", a Scratch-style editor for AI workflows. Output the program as Blockly JSON (described below). Keep the program's logic and order. Prefer the AI blocks over generic ones whenever the code calls a language model.
 
@@ -1715,6 +2840,14 @@ Memory (survives between runs):
   rb_mem_add: inputs VALUE, NAME; fields KIND: appends to a remembered list.  rb_mem_forget (NAME).
   Values: rb_mem_get (NAME) returns the remembered value or "", rb_mem_has (NAME) boolean, rb_mem_names (list).
   Map files or databases used only to keep state between runs (json files, pickle, sqlite caches) to these blocks.
+Home Assistant (talks to the user's Home Assistant):
+  Hat: rb_ha_when: fields ENTITY (entity id), STATE (target state or "anything"). Inside it, rb_ha_trigger is a record {entity, name, from, to}.
+  Values: rb_ha_state (ENTITY), rb_ha_attr (ATTR, ENTITY), rb_ha_find (TEXT: words to match; "*" = all) -> list of records {entity, name, state, unit, area},
+    rb_ha_summary (TEXT) -> text lines of matching entities and states, rb_ha_history (ENTITY, HOURS) -> list of records {time, state},
+    rb_ha_snapshot (CAMERA) -> picture.
+  Statements: rb_ha_call (SERVICE like "light.turn_off", ENTITY, DATA as JSON text or ""), rb_ha_notify (TARGET like "notify.mobile_app_phone" or "persistent_notification", TEXT),
+    rb_ha_speak (TEXT, PLAYER media_player entity).
+  Map Home Assistant REST/WebSocket calls, hass.states.get, call_service and AppDaemon listen_state to these blocks.
 Pictures (values are pictures, not text):
   rb_img_choose: the person picks a picture file.  rb_img_draw (TEXT): Claude draws an SVG illustration of the description.
   rb_img_change (IMG, TEXT): redraws the picture with a change.  rb_img_ask (TEXT, IMG): Claude answers a question about the picture (text).
@@ -1751,7 +2884,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -1762,7 +2895,7 @@ HOW TO MAP CODE
   const style = (hex, hat) => Object.assign({ colourPrimary:hex, colourSecondary:shade(hex, .35), colourTertiary:shade(hex, -.25) }, hat ? { hat:"cap" } : {});
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
-    draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records),
+    draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -2070,6 +3203,15 @@ HOW TO MAP CODE
       B("rb_img_score", { CRITERIA:L("clear, appealing, easy to read at small size") }),
       B("rb_img_show"), B("rb_img_save")
     ]},
+    { kind:"category", name:"Home Assistant", categorystyle:"ha", contents:[
+      B("rb_ha_when"), B("rb_ha_trigger"),
+      B("rb_ha_state", { ENTITY:T("sensor.living_room_temperature") }), B("rb_ha_attr", { ATTR:T("current_temperature"), ENTITY:T("climate.living_room") }),
+      B("rb_ha_summary", { TEXT:T("temperature") }), B("rb_ha_find", { TEXT:T("light") }),
+      B("rb_ha_history", { ENTITY:T("sensor.bathroom_humidity"), HOURS:N(24) }), B("rb_ha_snapshot", { CAMERA:T("camera.front_door") }),
+      B("rb_ha_call", { SERVICE:T("light.turn_off"), ENTITY:T("light.kitchen"), DATA:T("") }),
+      B("rb_ha_notify", { TARGET:T("persistent_notification"), TEXT:L("The back door is still open.") }),
+      B("rb_ha_speak", { TEXT:L("Good morning!"), PLAYER:T("media_player.kitchen_speaker") })
+    ]},
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")
     ]}
@@ -2218,6 +3360,180 @@ HOW TO MAP CODE
       blk("rb_result")
     ))
   };
+
+
+  /* ---------- Home Assistant ---------- */
+  /* In the page these blocks talk to a built-in sample house; exported Python talks to your real Home Assistant. */
+  const HA = { sample:null, states:new Map() };
+  (function haLoad(){
+    try { HA.sample = JSON.parse(document.getElementById("ha-sample").textContent); }
+    catch(e) { HA.sample = { entities:[], cameras:{} }; }
+    HA.sample.entities.forEach(e => HA.states.set(e.entity_id, JSON.parse(JSON.stringify(e))));
+  })();
+  const HA_HUE = "#2C7FB8";
+  Blockly.defineBlocksWithJsonArray([
+    { type:"rb_ha_when", message0:"when %1 changes to %2", args0:[{ type:"field_input", name:"ENTITY", text:"binary_sensor.doorbell" }, { type:"field_input", name:"STATE", text:"on" }],
+      nextStatement:null, style:"ha_hat", tooltip:"Runs the blocks below when this entity changes. Type 'anything' to react to any change. Inside, 'what changed' says what happened." },
+    { type:"rb_ha_state", message0:"state of %1", args0:[{ type:"input_value", name:"ENTITY" }], output:null, style:"ha", inputsInline:true,
+      tooltip:"The entity's current state, for example 'on', 'locked' or 19.5." },
+    { type:"rb_ha_attr", message0:"%1 of entity %2", args0:[{ type:"input_value", name:"ATTR" }, { type:"input_value", name:"ENTITY" }], output:null, style:"ha", inputsInline:true,
+      tooltip:"One attribute of an entity, for example 'current_temperature' or 'friendly_name'." },
+    { type:"rb_ha_find", message0:"entities matching %1", args0:[{ type:"input_value", name:"TEXT" }], output:"Array", style:"ha", inputsInline:true,
+      tooltip:"A list of records (entity, name, state, unit, area) for every entity whose id, name, area or state contains all these words. '*' means everything." },
+    { type:"rb_ha_summary", message0:"readings for %1", args0:[{ type:"input_value", name:"TEXT" }], output:"String", style:"ha", inputsInline:true,
+      tooltip:"A plain-text list of matching entities and their states, ready to put into a question for Claude." },
+    { type:"rb_ha_history", message0:"history of %1 for the last %2 hours", args0:[{ type:"input_value", name:"ENTITY" }, { type:"input_value", name:"HOURS" }], output:"Array", style:"ha", inputsInline:true,
+      tooltip:"A list of records (time, state) showing how the entity changed." },
+    { type:"rb_ha_snapshot", message0:"snapshot from %1", args0:[{ type:"input_value", name:"CAMERA" }], output:"Picture", style:"ha", inputsInline:true,
+      tooltip:"A picture from a camera entity. Use it with the Pictures blocks." },
+    { type:"rb_ha_trigger", message0:"what changed", output:"Record", style:"ha", tooltip:"In a 'when … changes' script: a record with entity, name, from and to." },
+    { type:"rb_ha_call", message0:"call %1 on %2 with %3", args0:[{ type:"input_value", name:"SERVICE" }, { type:"input_value", name:"ENTITY" }, { type:"input_value", name:"DATA" }],
+      previousStatement:null, nextStatement:null, style:"ha", inputsInline:true,
+      tooltip:"Calls a service, for example light.turn_off. Optional data is JSON like {\"temperature\": 20}. Unlocking, opening and disarming always ask you first." },
+    { type:"rb_ha_notify", message0:"notify %1 : %2", args0:[{ type:"input_value", name:"TARGET" }, { type:"input_value", name:"TEXT" }],
+      previousStatement:null, nextStatement:null, style:"ha", inputsInline:true,
+      tooltip:"Sends a notification. Target is a notify service such as notify.mobile_app_my_phone, or persistent_notification for the Home Assistant sidebar." },
+    { type:"rb_ha_speak", message0:"say %1 on %2", args0:[{ type:"input_value", name:"TEXT" }, { type:"input_value", name:"PLAYER" }],
+      previousStatement:null, nextStatement:null, style:"ha", inputsInline:true, tooltip:"Speaks the text on a media player, using Home Assistant's text-to-speech." }
+  ]);
+  const HA_SENSITIVE = [/^lock\.(unlock|open)$/, /^cover\.open/, /^alarm_control_panel\.alarm_disarm$/, /^valve\.open/, /^garage_door\.open/];
+  const haIsSensitive = svc => HA_SENSITIVE.some(r => r.test(svc));
+  const haVal = v => isNumLike(v) ? num(v) : v;
+  function haEnt(id){
+    const e = HA.states.get(String(id == null ? "" : id).trim());
+    if (!e) fail("The sample house has no entity called “" + str(id).trim() + "”. Open the Home Assistant panel to see the ones it has.");
+    return e;
+  }
+  function haRecord(e){ const a = e.attributes || {}; return { entity:e.entity_id, name:a.friendly_name || e.entity_id, state:haVal(e.state), unit:a.unit_of_measurement || "", area:a.area || "" }; }
+  function haMatch(text){
+    const words = str(text).toLowerCase().split(/[\s,]+/).filter(Boolean);
+    return [...HA.states.values()].filter(e => {
+      if (!words.length || words.includes("*")) return true;
+      const a = e.attributes || {};
+      const hay = [e.entity_id, a.friendly_name, a.area, e.state, a.device_class, a.unit_of_measurement].join(" ").toLowerCase();
+      return words.every(w => hay.includes(w));
+    }).slice(0, 150);
+  }
+  function haLine(e){
+    const a = e.attributes || {};
+    const extra = Object.keys(a).filter(k => !["friendly_name", "area", "unit_of_measurement", "device_class"].includes(k)).map(k => "; " + k.replace(/_/g, " ") + ": " + a[k]).join("");
+    return (a.friendly_name || e.entity_id) + " (" + e.entity_id + "): " + e.state + (a.unit_of_measurement ? " " + a.unit_of_measurement : "") + (a.area ? " [" + a.area + "]" : "") + extra;
+  }
+  function haNote(){
+    if (run.haNoted) return; run.haNoted = true;
+    addStep("Home Assistant", { mono:true, text:"This page uses a sample house, so nothing real is read or switched. Export to Python to use your own Home Assistant." }).done("sample", "warn");
+  }
+  function haHistory(e, hours){
+    hours = Math.max(1, Math.min(168, num(hours) || 24));
+    let seed = 0; for (const ch of e.entity_id) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
+    const rnd = () => { seed = (seed * 1103515245 + 12345) >>> 0; return seed / 4294967296; };
+    const n = Math.min(24, Math.max(6, Math.round(hours))), now = Date.now(), out = [];
+    const cur = e.state, numeric = isNumLike(cur);
+    const label = t => { const d = new Date(t); return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()] + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+    const pair = { on:"off", off:"on", open:"closed", closed:"open", locked:"unlocked", unlocked:"locked", home:"not_home", not_home:"home" };
+    for (let i = n; i >= 0; i--) {
+      const t = now - i * hours * 3600000 / n;
+      let v;
+      if (numeric) { const b = num(cur), amp = Math.abs(b) * 0.08 + 0.5; v = i === 0 ? b : Math.round((b + amp * Math.sin(i * 0.7 + rnd() * 2)) * 10) / 10; }
+      else v = i === 0 || !pair[cur] ? cur : (rnd() < 0.25 ? pair[cur] : cur);
+      if (!out.length || out[out.length - 1].state !== v || numeric) out.push({ time:label(t), state:v });
+    }
+    return out;
+  }
+  function haApply(svc, e, data){
+    const [domain, action] = svc.split(".");
+    const set = v => { e.state = v; };
+    if (/^(light|switch|fan|input_boolean|media_player)$/.test(domain)) {
+      if (action === "turn_on") set("on"); else if (action === "turn_off") set("off"); else if (action === "toggle") set(e.state === "on" ? "off" : "on");
+    } else if (domain === "lock") { if (action === "lock") set("locked"); else if (action === "unlock" || action === "open") set("unlocked"); }
+    else if (domain === "cover") { if (/^open/.test(action)) set("open"); else if (/^close/.test(action)) set("closed"); }
+    else if (domain === "alarm_control_panel") { if (action === "alarm_disarm") set("disarmed"); else if (/^alarm_arm_/.test(action)) set("armed_" + action.slice(10)); }
+    else if (domain === "climate") {
+      if (action === "set_temperature" && data && data.temperature !== undefined) e.attributes.temperature = num(data.temperature);
+      if (action === "turn_off") set("off"); if (action === "turn_on") set("heat");
+      if (action === "set_hvac_mode" && data && data.hvac_mode) set(String(data.hvac_mode));
+    }
+  }
+  function haChanged(id, from, to, byPerson){
+    if (from === to) return;
+    renderHaPanel();
+    const hats = ws.getTopBlocks(false).filter(b => b.type === "rb_ha_when" && (!b.isEnabled || b.isEnabled()) && b.getNextBlock() &&
+      String(b.getFieldValue("ENTITY") || "").trim() === id &&
+      ["", "anything"].concat([String(to).toLowerCase()]).includes(String(b.getFieldValue("STATE") || "").trim().toLowerCase()));
+    if (!hats.length) return;
+    if (!byPerson && !(run && run.active)) return;
+    const e = HA.states.get(id);
+    hats.forEach(b => fire(b, { entity:id, name:(e && e.attributes.friendly_name) || id, from:haVal(from), to:haVal(to) }));
+  }
+  async function haCall(svc, id, dataText, tc){
+    svc = str(svc).trim(); id = str(id).trim();
+    if (!/^[a-z_]+\.[a-z0-9_]+$/.test(svc)) fail("“" + svc + "” isn't a service name. Use domain.service, for example light.turn_off.");
+    let data = {};
+    const dt = str(dataText).trim();
+    if (dt) { try { data = JSON.parse(dt); } catch(e) { fail("The data for " + svc + " isn't valid JSON. Use something like {\"temperature\": 20}."); } }
+    const e = id ? haEnt(id) : null;
+    if (haIsSensitive(svc)) {
+      const ok = await waitForYou("Allow this?", "The program wants to " + svc.replace(".", ": ").replace(/_/g, " ") + (id ? " on " + id : "") + ". This is a safety check: unlocking, opening and disarming always ask first.", (box, done) => {
+        const row = document.createElement("div"); row.className = "row";
+        const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = "Allow";
+        const no = document.createElement("button"); no.type = "button"; no.textContent = "Don't";
+        yes.onclick = () => done(true, "allowed"); no.onclick = () => done(false, "refused");
+        row.append(yes, no); box.appendChild(row);
+      });
+      if (!ok) { addStep("Not done", { mono:true, text:svc + (id ? " on " + id : "") + " was refused, so nothing happened." }).done("refused", "warn"); return; }
+    }
+    haNote();
+    const before = e ? e.state : null;
+    if (e) haApply(svc, e, data);
+    addStep("Home Assistant: " + svc, { mono:true, text:(id || "(no entity)") + (dt ? " with " + dt : "") + (e && e.state !== before ? "\n" + before + " → " + e.state : "") }).done("sample house", "ok");
+    if (e && e.state !== before) haChanged(id, before, e.state, false);
+  }
+  async function haValue(b, tc){
+    haNote();
+    switch (b.type) {
+      case "rb_ha_state": return haVal(haEnt(await input(b, tc, "ENTITY")).state);
+      case "rb_ha_attr": {
+        const a = str(await input(b, tc, "ATTR")).trim(), e = haEnt(await input(b, tc, "ENTITY"));
+        return a in e.attributes ? haVal(e.attributes[a]) : (a === "state" ? haVal(e.state) : "");
+      }
+      case "rb_ha_find": return haMatch(await input(b, tc, "TEXT")).map(haRecord);
+      case "rb_ha_summary": { const m = haMatch(await input(b, tc, "TEXT")); return m.length ? m.map(haLine).join("\n") : "(no matching entities)"; }
+      case "rb_ha_history": return haHistory(haEnt(await input(b, tc, "ENTITY")), await input(b, tc, "HOURS", 24));
+      case "rb_ha_snapshot": {
+        const id = str(await input(b, tc, "CAMERA")).trim();
+        const svg = HA.sample.cameras[id];
+        if (!svg) fail("The sample house has no camera called “" + id + "”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.");
+        const pic = await svgImage(cleanSvg(svg), id.replace("camera.", "") + "-snapshot");
+        const st = addStep("Snapshot: " + id, { text:"" }); showPictureIn(st, pic); st.done("sample house", "ok");
+        return pic;
+      }
+      case "rb_ha_trigger": return tc.payload && typeof tc.payload === "object" ? tc.payload : { entity:"", name:"", from:"", to:"" };
+    }
+  }
+  /* Home Assistant panel: shows the sample house and lets you change it to try 'when … changes' scripts. */
+  function renderHaPanel(){
+    const list = document.getElementById("ha-list");
+    if (!list || document.getElementById("ha").hidden) return;
+    const q = (document.getElementById("ha-filter").value || "").trim();
+    const items = haMatch(q || "*");
+    list.innerHTML = "";
+    items.forEach(e => {
+      const row = document.createElement("div"); row.className = "ha-row";
+      const n = document.createElement("div"); n.className = "mem-name"; n.textContent = e.attributes.friendly_name || e.entity_id;
+      const id = document.createElement("div"); id.className = "mem-val"; id.textContent = e.entity_id + (e.attributes.area ? " · " + e.attributes.area : "");
+      const inp = document.createElement("input"); inp.type = "text"; inp.value = e.state; inp.setAttribute("aria-label", "State of " + e.entity_id); inp.className = "ha-state";
+      const apply = () => { const before = e.state, v = inp.value.trim(); if (!v || v === before) return; e.state = v; haChanged(e.entity_id, before, v, true); };
+      inp.addEventListener("change", apply);
+      inp.addEventListener("keydown", ev => { if (ev.key === "Enter") { ev.preventDefault(); apply(); } });
+      row.append(n, id, inp); list.appendChild(row);
+    });
+  }
+  function toggleHaPanel(){
+    const el = document.getElementById("ha"), open = el.hidden;
+    el.hidden = !open; document.getElementById("ha-toggle").setAttribute("aria-expanded", String(open));
+    if (open) renderHaPanel();
+    setTimeout(() => Blockly.svgResize(ws), 0);
+  }
 
   /* ---------- Example library ---------- */
   /* Small builders so each example reads like a recipe. Variables are named, and get ids from their names. */
@@ -2728,6 +4044,530 @@ HOW TO MAP CODE
           sAdd(xJ(xMsg(), ":\n", xAsk(xJ("Write ", xMsg())))),
           sAddOne("done"))]) }
   ];
+  /* ----- Home Assistant examples ----- */
+  const xHS = e => xB("rb_ha_state", { ENTITY:tx(e) });
+  const xHAttr = (a, e) => xB("rb_ha_attr", { ATTR:tx(a), ENTITY:tx(e) });
+  const xHSum = t => xB("rb_ha_summary", { TEXT:tx(t) });
+  const xHFind = t => xB("rb_ha_find", { TEXT:tx(t) });
+  const xHHist = (e, h) => xB("rb_ha_history", { ENTITY:tx(e), HOURS:nm(h) });
+  const xHSnap = c => xB("rb_ha_snapshot", { CAMERA:tx(c) });
+  const xHTrig = () => xB("rb_ha_trigger");
+  const xYes = q => xB("rb_ask_yesno", { TEXT:xT(q) });
+  const xHas = (a, b) => xB("rb_contains", { A:a, B:xT(b) });
+  const xOver = (a, n) => xB("logic_compare", { A:a, B:nm(n) }, { OP:"GT" });
+  const xUnder = (a, n) => xB("logic_compare", { A:a, B:nm(n) }, { OP:"LT" });
+  const xNot = c => xB("logic_negate", { BOOL:c });
+  const xLower = t => xB("text_changeCase", { TEXT:t }, { CASE:"LOWERCASE" });
+  const sHCall = (svc, e, data) => blk("rb_ha_call", null, { SERVICE:tx(svc), ENTITY:typeof e === "string" ? tx(e) : e, DATA:tx(data || "") });
+  const sHNotify = x => blk("rb_ha_notify", null, { TARGET:tx("persistent_notification"), TEXT:xT(x) });
+  const sHSay = (x, p) => blk("rb_ha_speak", null, { TEXT:xT(x), PLAYER:tx(p || "media_player.kitchen_speaker") });
+  const sHWhen = (e, st) => blk("rb_ha_when", { ENTITY:e, STATE:st || "anything" });
+  /* A job that runs when you press Run and also by itself (at a time, or when something changes).
+     The work lives in one 'when I receive' script; the start blocks send it what changed. */
+  const twoWay = (msg, hats, ...body) => [
+    chain(sStart(), blk("rb_broadcast_with_wait", null, { MSG:tx(msg), VALUE:xHTrig() })),
+    ...hats.map(h => chain(h, blk("rb_broadcast_with_wait", null, { MSG:tx(msg), VALUE:xHTrig() }))),
+    chain(sReceive(msg), ...body)];
+  const notifyAndKeep = x => [sHNotify(x), sAdd(x)];
+  const HA_NOTE = " Uses the sample house in the page, your real Home Assistant in exported Python.";
+  const HC = { none:"Home Assistant: no connection needed", daily:"Home Assistant: daily life", sec:"Home Assistant: security and cameras",
+    energy:"Home Assistant: energy", comfort:"Home Assistant: comfort and garden", kitchen:"Home Assistant: kitchen and household",
+    pets:"Home Assistant: pets", health:"Home Assistant: house health", lab:"Home Assistant: homelab", voice:"Home Assistant: alerts and voice" };
+  Object.values(HC).forEach(c => EXAMPLE_CATEGORIES.push(c));
+  const HA_EXAMPLES = [
+    /* No connection needed */
+    { key:"ha_write_automation", cat:HC.none, title:"Write an automation",
+      desc:"Describe what you want in plain English; Claude writes the automation YAML, checks it against current Home Assistant syntax, and waits for your approval.",
+      tip:"Try 'turn the porch light on at sunset if anyone is home, off at 23:00'.",
+      build:() => P([], chain(sStart(),
+        sAskMe("What should the automation do? Name the devices if you know their entity ids."),
+        sTask(xJ("Write a Home Assistant automation in YAML for: ", xAnswer(), ". Use the current syntax (triggers:, conditions:, actions:). Reply with only the YAML.")),
+        sGenerate(),
+        sReflect("valid YAML; current Home Assistant syntax with triggers/conditions/actions; entity ids are the user's or clearly marked placeholders; does exactly what was asked", 3),
+        sUntil(xApprove(xDraft()), sAskMe("What should change?"), sRework(xAnswer())),
+        sSave(xDraft(), "automation", "txt"),
+        sFinish())) },
+    { key:"ha_explain_automation", cat:HC.none, title:"Explain an automation",
+      desc:"Paste automation YAML you found online; Claude explains it line by line, then says in one sentence what it does.",
+      tip:"Paste a blueprint too: it works the same way.",
+      build:() => P([], chain(sStart(),
+        sAskMe("Paste the automation YAML."),
+        sAdd(xRewrite(xAnswer(), "explain this Home Assistant automation line by line for a beginner, then say in one sentence what it does")),
+        sFinish())) },
+    { key:"ha_debug", cat:HC.none, title:"Why didn't my automation fire?",
+      desc:"Paste the automation and what happened (or its trace); Claude lists the likely reasons and fixes, most likely first.",
+      tip:"The trace is under Settings, Automations, then the three dots on your automation.",
+      build:() => P(["automation"], chain(sStart(),
+        sAskMe("Paste the automation YAML."),
+        xSet("automation", xAnswer()),
+        sAskMe("What happened instead? Paste the trace if you have it."),
+        sAdd(xAsk(xJ("This Home Assistant automation didn't behave as expected. List the most likely reasons, most likely first, each with a fix.\n\nAutomation:\n", xV("automation"), "\n\nWhat happened:\n", xAnswer()))),
+        sFinish())) },
+    { key:"ha_dashboard", cat:HC.none, title:"Design a dashboard",
+      desc:"Describe your rooms and devices; Claude designs a dashboard layout and writes the card YAML, then checks it is tidy and usable on a phone.",
+      tip:"Say who uses it: 'for the kids' or 'a wall tablet in the kitchen'.",
+      build:() => P([], chain(sStart(),
+        sAskMe("Which rooms and devices should the dashboard show, and who uses it?"),
+        sTask(xJ("Design a Home Assistant dashboard (sections view) and write its YAML for: ", xAnswer())),
+        sGenerate(),
+        sReflect("valid dashboard YAML; most-used controls first; works on a phone; no more than 6 cards per section", 2),
+        sSave(xDraft(), "dashboard", "txt"),
+        sFinish())) },
+    { key:"ha_names", cat:HC.none, title:"Tidy up entity names",
+      desc:"Paste a messy list of entity ids; get consistent new ids, friendly names and suggested areas.",
+      tip:"Copy the list from Settings, Entities.",
+      build:() => P(["names", "n"], chain(sStart(),
+        sAskMe("Paste your entity ids, one per line."),
+        xSet("names", xAskRecs("current id, new id, friendly name, area", xJ("Suggest consistent Home Assistant entity ids (domain.area_thing), friendly names and areas for:\n", xAnswer()))),
+        sForEach("n", xV("names"), sAdd(xJ(xRec("current id", xV("n")), " → ", xRec("new id", xV("n")), "  (", xRec("friendly name", xV("n")), ", ", xRec("area", xV("n")), ")"))),
+        sFinish())) },
+    { key:"ha_mesh", cat:HC.none, title:"Plan a Zigbee mesh",
+      desc:"List your Zigbee or Z-Wave devices and where they are; get advice on router placement so the mesh stays reliable.",
+      tip:"Say which devices are mains-powered: plugs and bulbs usually act as routers.",
+      build:() => P([], chain(sStart(),
+        sAskMe("List your devices, the room each is in, and whether it's battery or mains powered. Where is the coordinator?"),
+        sAdd(xAsk(xJ("Give practical advice for a reliable Zigbee/Z-Wave mesh: where routers are needed, weak spots, and what to add first.\n\n", xAnswer()))),
+        sFinish())) },
+    { key:"ha_buy", cat:HC.none, title:"Which sensor should I buy?",
+      desc:"Say what you need to sense; Claude compares suitable kinds of device and ranks them.",
+      tip:"Try 'damp in the bathroom' or 'know when the post arrives'.",
+      build:() => P(["options", "o"], chain(sStart(),
+        sAskMe("What do you want Home Assistant to notice?"),
+        xSet("options", xSort(xAskRecs("kind of device, protocol, pros, cons, score", xJ("Compare kinds of smart-home device for this need. Score each 1-10: ", xAnswer())), "score")),
+        sForEach("o", xV("options"), sAdd(xJ(xRec("kind of device", xV("o")), " (", xRec("protocol", xV("o")), ", ", xRec("score", xV("o")), "/10)\n+ ", xRec("pros", xV("o")), "\n− ", xRec("cons", xV("o"))))),
+        sFinish())) },
+
+    /* Daily life */
+    { key:"ha_morning", cat:HC.daily, title:"Morning briefing",
+      desc:"At 07:15 (or when you press Run): weather, bins, calendar, who's home and anything left on overnight, in one friendly paragraph." + HA_NOTE,
+      tip:"Change the time on the yellow block, or speak it on a speaker.",
+      build:() => P(["briefing"], twoWay("morning", [sAt(7, 15, "every")],
+        sRetry(3, xSet("briefing", xAsk(xJ("Write a short, friendly morning briefing from these readings. Mention anything left on or open.\n\n",
+          xHSum("weather"), "\n", xHSum("bin"), "\n", xHSum("calendar"), "\n", xHSum("person"), "\n", xHSum("light."), "\n", xHSum("door window"))))),
+        ...notifyAndKeep(xV("briefing")), sFinish())) },
+    { key:"ha_goodnight", cat:HC.daily, title:"Goodnight check",
+      desc:"Checks doors, windows, locks and lights, lists anything not right in plain English, then offers to lock up and turn the lights off." + HA_NOTE,
+      tip:"Run it from your phone at bedtime, or add a 22:30 schedule.",
+      build:() => P(["report", "light"], chain(sStart(),
+        xSet("report", xAsk(xJ("It's bedtime. From these readings, list in plain English anything that isn't right (open doors or windows, unlocked locks, lights on, oven on). Say 'All good' if nothing.\n\n",
+          xHSum("door window"), "\n", xHSum("lock."), "\n", xHSum("light."), "\n", xHSum("oven")))),
+        sAdd(xV("report")),
+        sIf(xApprove(xJ("Lock the back door and turn off all the lights?\n\n", xV("report"))),
+          sHCall("lock.lock", "lock.back_door"),
+          sForEach("light", xHFind("light."), sIf(xIs(xRec("state", xV("light")), "on"), sHCall("light.turn_off", xRec("entity", xV("light")))))),
+        sFinish())) },
+    { key:"ha_leaving", cat:HC.daily, title:"Leaving home",
+      desc:"When the last person leaves, turns off any lights still on and tells you what it switched off." + HA_NOTE,
+      tip:"In the Home Assistant panel, change person.alex to not_home to try it.",
+      build:() => P(["light", "switched"], twoWay("leaving", [sHWhen("person.alex", "not_home")],
+        sIf(xHas(xHSum("person"), "(person.sam): home"), sFinishWith("Someone is still home, so nothing was changed.")),
+        xSet("switched", tx("")),
+        sForEach("light", xHFind("light."), sIf(xIs(xRec("state", xV("light")), "on"),
+          sHCall("light.turn_off", xRec("entity", xV("light"))), xSet("switched", xJ(xV("switched"), xRec("name", xV("light")), ", ")))),
+        ...notifyAndKeep(xJ("Everyone's out. Turned off: ", xV("switched"), "nothing else was on.")), sFinish())) },
+    { key:"ha_welcome", cat:HC.daily, title:"Welcome home summary",
+      desc:"When you arrive home, sums up what happened while you were out: doors, motion and deliveries." + HA_NOTE,
+      tip:"Change person.alex to home in the panel to try it.",
+      build:() => P(["summary"], twoWay("welcome", [sHWhen("person.alex", "home")],
+        xSet("summary", xAsk(xJ("Welcome someone home with a 3-sentence summary of what happened while they were out:\n\nFront door: ", xHHist("binary_sensor.front_door", 6),
+          "\nHallway motion: ", xHHist("binary_sensor.motion_hallway", 6), "\nDoorbell: ", xHHist("binary_sensor.doorbell", 6)))),
+        ...notifyAndKeep(xV("summary")), sFinish())) },
+    { key:"ha_holiday", cat:HC.daily, title:"Holiday lights",
+      desc:"Each evening while you're away, Claude picks lights to switch on, based on how the house was really used last week." + HA_NOTE,
+      tip:"Only lights can be chosen: the program checks every id starts with 'light.'.",
+      build:() => P(["picks", "pick"], twoWay("holiday", [sAt(18, 30, "every")],
+        xSet("picks", xAskList(xJ("We're on holiday. Pick 2 or 3 lights to switch on tonight so the house looks lived in. Reply with entity ids only.\n\nLights:\n", xHSum("light."),
+          "\n\nLiving room light last week: ", xHHist("light.living_room", 168)))),
+        sForEach("pick", xV("picks"), sIf(xHas(xV("pick"), "light."), sHCall("light.turn_on", xV("pick")), sAdd(xJ("Switched on ", xV("pick"))))),
+        sAdd("Holiday lights set for tonight."), sFinish())) },
+    { key:"ha_weekly", cat:HC.daily, title:"Weekly house report",
+      desc:"On Sunday evening: energy, temperatures, batteries and anything unusual, as a short report saved to a file." + HA_NOTE,
+      tip:"Press Run any day to see this week's report now.",
+      build:() => P(["report"], twoWay("weekly", [sAt(18, 0, "weekends")],
+        xSet("report", xAsk(xJ("Write a short weekly house report with headings: Energy, Comfort, Needs attention.\n\n", xHSum("energy"), "\n", xHSum("temperature"),
+          "\n", xHSum("battery"), "\n", xHSum("unavailable"), "\n", xHSum("backup")))),
+        sAdd(xV("report")), sSave(xV("report"), "house-report", "md"), sFinish())) },
+    { key:"ha_ask", cat:HC.daily, title:"Ask the house",
+      desc:"Ask anything ('Is anyone home?', 'Did I leave the oven on?'). Claude answers using only your Home Assistant readings." + HA_NOTE,
+      tip:"Claude says so if the readings don't contain the answer.",
+      build:() => P([], chain(sStart(),
+        sAskMe("What do you want to ask the house?"),
+        sAdd(xAsk(xJ("Answer the question using only these Home Assistant readings. If they don't contain the answer, say so.\n\nReadings:\n", xHSum("*"), "\n\nQuestion: ", xAnswer()))),
+        sFinish())) },
+    { key:"ha_bins", cat:HC.daily, title:"Bin day reminder",
+      desc:"At 19:00, checks whether the bins go out tomorrow (allowing for bank holiday changes) and reminds you which ones." + HA_NOTE,
+      tip:"Point it at your own bin collection sensor.",
+      build:() => P(["tomorrow"], twoWay("bins", [sAt(19, 0, "every")],
+        xSet("tomorrow", xYes(xJ("Today is ", xNow("weekday"), " ", xNow("date"), ". Is this bin collection tomorrow? ", xHSum("bin")))),
+        sIf(xV("tomorrow"), ...notifyAndKeep(xJ("Bins tomorrow: ", xHS("sensor.bin_collection"), ". ", xHAttr("note", "sensor.bin_collection")))),
+        sIf(xNot(xV("tomorrow")), sAdd("No bins tomorrow.")),
+        sFinish())) },
+
+    /* Security and cameras */
+    { key:"ha_doorbell", cat:HC.sec, title:"Who's at the door?",
+      desc:"When the doorbell rings, Claude looks at the camera and tells you who or what is there, including parcels." + HA_NOTE,
+      tip:"In the panel, change binary_sensor.doorbell to on to ring it.",
+      build:() => P(["snap", "who"], twoWay("door", [sHWhen("binary_sensor.doorbell", "on")],
+        xSet("snap", xHSnap("camera.front_door")),
+        xSet("who", xImgAsk("Describe who or what is at the door in one short sentence. Mention any parcel.", xV("snap"))),
+        sHNotify(xJ("Doorbell: ", xV("who"))), sAdd(xV("snap")), sAdd(xV("who")), sFinish())) },
+    { key:"ha_parcel", cat:HC.sec, title:"Parcel left outside?",
+      desc:"At 18:00, looks at the front door camera and reminds you if a parcel is still sitting on the step." + HA_NOTE,
+      tip:"Move the time to when you usually get home.",
+      build:() => P(["snap", "seen"], twoWay("parcel", [sAt(18, 0, "every")],
+        xSet("snap", xHSnap("camera.front_door")),
+        xSet("seen", xImgAsk("Is there a parcel or package on the doorstep? Start your answer with yes or no.", xV("snap"))),
+        sIf(xHas(xLower(xV("seen")), "yes"), sHNotify(xJ("There's still a parcel outside: ", xV("seen")))),
+        sAdd(xV("seen")), sFinish())) },
+    { key:"ha_motion", cat:HC.sec, title:"Smarter motion alerts",
+      desc:"When the garden camera sees motion, Claude checks the picture and only alerts you for people or vehicles, not cats or swaying bushes." + HA_NOTE,
+      tip:"Change binary_sensor.motion_garden to off then on in the panel.",
+      build:() => P(["snap", "verdict"], twoWay("motion", [sHWhen("binary_sensor.motion_garden", "on")],
+        xSet("snap", xHSnap("camera.garden")),
+        xSet("verdict", xImgAsk("Is there a person or vehicle in this picture? Start with 'alert' if so, otherwise 'ignore', then give a short reason.", xV("snap"))),
+        sIf(xHas(xLower(xV("verdict")), "alert"), sHNotify(xJ("Garden: ", xV("verdict")))),
+        sAdd(xV("verdict")), sFinish())) },
+    { key:"ha_car", cat:HC.sec, title:"Is that our car?",
+      desc:"When something moves on the drive, Claude describes the vehicle and compares it with the one it remembers as yours." + HA_NOTE,
+      tip:"The first run remembers your car; later runs compare with it.",
+      build:() => P(["snap", "seen"], twoWay("drive", [sHWhen("binary_sensor.motion_driveway", "on")],
+        xSet("snap", xHSnap("camera.driveway")),
+        xSet("seen", xImgAsk("Describe any vehicle on the drive: colour, type, anything distinctive. Say 'no vehicle' if there isn't one.", xV("snap"))),
+        sIf(xNot(xB("rb_mem_has", { NAME:tx("our car") })), sRemember(xV("seen"), "our car"), sFinishWith(xJ("Remembered as our car: ", xV("seen")))),
+        sIf(xYes(xJ("Do these describe the same vehicle?\nA: ", xRecall("our car"), "\nB: ", xV("seen"))), sFinishWith(xJ("Our car is on the drive. ", xV("seen")))),
+        ...notifyAndKeep(xJ("A vehicle that isn't ours is on the drive: ", xV("seen"))), sFinish())) },
+    { key:"ha_garage", cat:HC.sec, title:"Is the garage really shut?",
+      desc:"At 22:00, compares the garage door sensor with what the camera shows, and warns you if they disagree." + HA_NOTE,
+      tip:"Good for doors whose sensors sometimes stick.",
+      build:() => P(["snap", "looks"], twoWay("garage", [sAt(22, 0, "every")],
+        xSet("snap", xHSnap("camera.garage")),
+        xSet("looks", xImgAsk("Does this garage door look fully shut? Start with yes or no.", xV("snap"))),
+        sAdd(xJ("Sensor says: ", xHS("cover.garage_door"), ". Camera: ", xV("looks"))),
+        sIf(xNot(xHas(xLower(xV("looks")), "yes")), sHNotify(xJ("Garage door may be open: ", xV("looks")))),
+        sFinish())) },
+    { key:"ha_overnight", cat:HC.sec, title:"Overnight digest",
+      desc:"At 07:00, one calm summary of everything the doors and motion sensors noticed overnight, instead of a pile of alerts." + HA_NOTE,
+      tip:"Add more sensors to the question.",
+      build:() => P(["digest"], twoWay("overnight", [sAt(7, 0, "every")],
+        xSet("digest", xAsk(xJ("Summarise overnight activity calmly in 3 bullet points. Flag anything worth checking.\n\nFront door: ", xHHist("binary_sensor.front_door", 9),
+          "\nBack door: ", xHHist("binary_sensor.back_door", 9), "\nHallway motion: ", xHHist("binary_sensor.motion_hallway", 9), "\nGarden motion: ", xHHist("binary_sensor.motion_garden", 9)))),
+        ...notifyAndKeep(xV("digest")), sFinish())) },
+    { key:"ha_newdevice", cat:HC.sec, title:"New device on the network",
+      desc:"When an unknown device joins the network, Claude explains what it might be and what to check." + HA_NOTE,
+      tip:"Uses the UniFi integration's new-client sensor; adapt it to yours.",
+      build:() => P([], twoWay("newdevice", [sHWhen("sensor.unifi_new_devices", "anything")],
+        sIf(xOver(xHS("sensor.unifi_new_devices"), 0),
+          ...notifyAndKeep(xAsk(xJ("A new device joined the home network. Say calmly what it might be and the first 3 things to check.\n\n", xHSum("unifi"))))),
+        sAdd("Network check done."), sFinish())) },
+
+    /* Energy */
+    { key:"ha_cheap", cat:HC.energy, title:"Run appliances when power is cheap",
+      desc:"Plans when to run the dishwasher, washing machine and car charger, from the tariff, the cheapest time and the solar forecast, with a reason for each." + HA_NOTE,
+      tip:"Add your own appliances to the question.",
+      build:() => P(["plan", "p"], chain(sStart(),
+        xSet("plan", xAskRecs("appliance, start time, reason", xJ("Plan when to run the dishwasher, washing machine and EV charger in the next 24 hours to keep costs down.\n\n",
+          xHSum("price cheapest"), "\n", xHSum("solar battery"), "\n", xHSum("car battery")))),
+        sForEach("p", xV("plan"), sAdd(xJ(xRec("appliance", xV("p")), " at ", xRec("start time", xV("p")), ": ", xRec("reason", xV("p"))))),
+        sHNotify(xJ("Appliance plan:\n", xResultText())), sFinish())) },
+    { key:"ha_bill", cat:HC.energy, title:"Why was yesterday expensive?",
+      desc:"Compares energy use with the weather and who was home, and explains in plain English why it went up or down." + HA_NOTE,
+      tip:"Ask it every morning for a week to spot patterns.",
+      build:() => P([], chain(sStart(),
+        sAdd(xAsk(xJ("Explain in 3 sentences why energy use changed, and suggest one thing to try.\n\n", xHSum("energy"), "\nOutdoor temperature over 2 days: ",
+          xHHist("sensor.outdoor_temperature", 48), "\n", xHSum("person"), "\n", xHSum("heater power")))),
+        sFinish())) },
+    { key:"ha_standby", cat:HC.energy, title:"Standby power hunt",
+      desc:"Looks at every power reading and points out devices that are probably wasting electricity on standby." + HA_NOTE,
+      tip:"Run it late at night, when everything should be off.",
+      build:() => P(["waste", "w"], chain(sStart(),
+        xSet("waste", xAskRecs("device, watts, likely cause, suggestion", xJ("Which of these look like wasted standby power? Electricity costs ", xHS("sensor.electricity_price"), " per kWh.\n\n", xHSum("power")))),
+        sForEach("w", xV("waste"), sAdd(xJ(xRec("device", xV("w")), " (", xRec("watts", xV("w")), " W): ", xRec("likely cause", xV("w")), ". ", xRec("suggestion", xV("w"))))),
+        sFinish())) },
+    { key:"ha_energy_report", cat:HC.energy, title:"Energy report with three savings",
+      desc:"A plain-English energy summary with three practical ways to save money, saved as a file." + HA_NOTE,
+      tip:"Run it at the end of each month.",
+      build:() => P(["report"], chain(sStart(),
+        xSet("report", xAsk(xJ("Write a short, plain-English home energy summary with exactly three practical ways to save money.\n\n", xHSum("energy"), "\n", xHSum("power"), "\n", xHSum("solar battery price")))),
+        sAdd(xV("report")), sSave(xV("report"), "energy-report", "md"), sFinish())) },
+    { key:"ha_solar", cat:HC.energy, title:"Charge the battery tonight?",
+      desc:"At 21:00, weighs tomorrow's solar forecast, the battery level and tonight's cheapest price, and suggests whether to charge from the grid." + HA_NOTE,
+      tip:"It only suggests; add a 'call' block if you want it to act.",
+      build:() => P(["advice"], twoWay("battery", [sAt(21, 0, "every")],
+        xSet("advice", xAsk(xJ("Should the home battery charge from the grid tonight? Answer yes or no first, then one sentence why.\n\n", xHSum("solar battery"), "\n", xHSum("price cheapest")))),
+        ...notifyAndKeep(xV("advice")), sFinish())) },
+    { key:"ha_heating_waste", cat:HC.energy, title:"Heating waste check",
+      desc:"Spots heating running with nobody home, windows open, or rooms heated far above their target." + HA_NOTE,
+      tip:"Run it every couple of hours in winter.",
+      build:() => P([], chain(sStart(),
+        sAdd(xAsk(xJ("Find any heating waste: heating on with nobody home, a window or door open in a heated room, or a heater running in an unused room. Say 'No waste found' if none.\n\n",
+          xHSum("climate"), "\n", xHSum("window door"), "\n", xHSum("person"), "\n", xHSum("heater")))),
+        sFinish())) },
+
+    /* Comfort and garden */
+    { key:"ha_damp", cat:HC.comfort, title:"Damp and mould watch",
+      desc:"Looks at two days of humidity in the bathroom and bedroom and gives advice if a room stays damp." + HA_NOTE,
+      tip:"Above 70% for long periods is when mould starts.",
+      build:() => P([], chain(sStart(),
+        sAdd(xAsk(xJ("From these humidity readings, say which rooms are at risk of damp or mould and give 3 practical steps for each.\n\nBathroom: ", xHHist("sensor.bathroom_humidity", 48),
+          "\nBedroom: ", xHHist("sensor.bedroom_humidity", 48), "\nNow: ", xHSum("humidity")))),
+        sFinish())) },
+    { key:"ha_sleep", cat:HC.comfort, title:"Better bedroom temperature",
+      desc:"Reviews three nights of bedroom temperature and humidity and suggests heating settings for better sleep." + HA_NOTE,
+      tip:"Most people sleep best at 16-19°C.",
+      build:() => P([], chain(sStart(),
+        sAdd(xAsk(xJ("Suggest bedroom heating settings for better sleep from these readings.\n\nTemperature, 3 nights: ", xHHist("sensor.bedroom_temperature", 72),
+          "\nHumidity now: ", xHS("sensor.bedroom_humidity"), "%\nThermostat: ", xHSum("climate.bedroom")))),
+        sFinish())) },
+    { key:"ha_window", cat:HC.comfort, title:"Window open, heating on",
+      desc:"When the kitchen window opens while the heating is on, suggests pausing the heating." + HA_NOTE,
+      tip:"Change binary_sensor.kitchen_window to off then on in the panel.",
+      build:() => P([], twoWay("window", [sHWhen("binary_sensor.kitchen_window", "on")],
+        sIf(xIs(xHS("climate.living_room"), "heat"),
+          ...notifyAndKeep(xAsk(xJ("Write a one-sentence friendly nudge: the kitchen window is open while the heating is on. Outdoor temperature: ", xHS("sensor.outdoor_temperature"), "°C.")))),
+        sAdd("Window check done."), sFinish())) },
+    { key:"ha_co2", cat:HC.comfort, title:"Stuffy study alert",
+      desc:"Every 30 minutes, if CO₂ in the study is over 1200 ppm, suggests opening a window." + HA_NOTE,
+      tip:"Above about 1000 ppm, concentration drops noticeably.",
+      build:() => P([], twoWay("co2", [blk("rb_every", { N:30, UNIT:"m" })],
+        sIf(xOver(xHS("sensor.study_co2"), 1200), ...notifyAndKeep(xJ("The study is stuffy (", xHS("sensor.study_co2"), " ppm CO₂). Time to open a window."))),
+        sAdd("Air checked."), sFinish())) },
+    { key:"ha_seasonal", cat:HC.comfort, title:"Tune the heating schedule",
+      desc:"Reviews a week of temperatures and suggests changes to your heating schedule for the coming month." + HA_NOTE,
+      tip:"Run it at the start of each month.",
+      build:() => P([], chain(sStart(),
+        sAdd(xAsk(xJ("Suggest heating schedule changes for next month. Be specific with times and temperatures.\n\nLiving room, 7 days: ", xHHist("sensor.living_room_temperature", 168),
+          "\nOutside, 7 days: ", xHHist("sensor.outdoor_temperature", 168), "\n", xHSum("climate")))),
+        sFinish())) },
+    { key:"ha_water", cat:HC.comfort, title:"Water the garden today?",
+      desc:"At 07:00, weighs soil moisture, recent rain and the forecast; if watering is needed it runs the irrigation and tells you why." + HA_NOTE,
+      tip:"Change the irrigation switch to your own.",
+      build:() => P([], twoWay("water", [sAt(7, 0, "every")],
+        sIf(xYes(xJ("Should the vegetable bed be watered today? ", xHSum("soil rain"), " Forecast: ", xHAttr("forecast_text", "weather.home"))),
+          sHCall("switch.turn_on", "switch.garden_irrigation"), ...notifyAndKeep("Watering the vegetable bed today: the soil is dry and little rain is due."), sFinish()),
+        sAdd("No watering needed today."), sFinish())) },
+    { key:"ha_frost", cat:HC.comfort, title:"Frost warning",
+      desc:"At 17:00, checks tonight's forecast and reminds you to cover tender plants if frost is likely." + HA_NOTE,
+      tip:"Add 'and bring the pots in' to the message.",
+      build:() => P([], twoWay("frost", [sAt(17, 0, "every")],
+        sIf(xYes(xJ("Is there a risk of frost tonight (3°C or below)? Forecast: ", xHAttr("forecast_text", "weather.home"))),
+          ...notifyAndKeep("Frost is likely tonight. Cover the tender plants and bring the pots in."), sFinish()),
+        sAdd("No frost expected tonight."), sFinish())) },
+    { key:"ha_plant", cat:HC.comfort, title:"Name that plant",
+      desc:"Pick a photo of a plant; Claude names it, gives care tips, and adds it to a remembered list of your plants.",
+      tip:"Open Memory later to see the list it has built.",
+      build:() => P(["photo", "about"], chain(sStart(),
+        xSet("photo", xChoosePic()),
+        xSet("about", xImgAsk("Name this plant as precisely as you can, then give care tips: light, water, feeding, and whether it's frost-hardy.", xV("photo"))),
+        sRememberAdd(xV("about"), "my plants"), sAdd(xV("about")), sFinish())) },
+    { key:"ha_greenhouse", cat:HC.comfort, title:"Greenhouse too hot",
+      desc:"Every 30 minutes, if the greenhouse is over 26°C, reminds you to open the vent." + HA_NOTE,
+      tip:"Lower the limit for seedlings.",
+      build:() => P([], twoWay("greenhouse", [blk("rb_every", { N:30, UNIT:"m" })],
+        sIf(xOver(xHS("sensor.greenhouse_temperature"), 26), ...notifyAndKeep(xJ("The greenhouse is ", xHS("sensor.greenhouse_temperature"), "°C. Open the vent."))),
+        sAdd("Greenhouse checked."), sFinish())) },
+
+    /* Kitchen and household */
+    { key:"ha_proofing", cat:HC.kitchen, title:"When will the dough be ready?",
+      desc:"Tell it the stage your dough is at; it reads the proofing temperature and estimates when it will be ready." + HA_NOTE,
+      tip:"Point it at whatever sensor sits next to your dough.",
+      build:() => P(["estimate"], chain(sStart(),
+        sAskMe("What stage is the dough at, and when did it start? (for example: bulk ferment, started 09:30)"),
+        xSet("estimate", xAsk(xJ("Estimate when this sourdough stage will be ready, from the temperature. Give a time and the signs to look for.\n\nStage: ", xAnswer(),
+          "\nNow: ", xNow("time"), "\nProofing temperature over 3 hours: ", xHHist("sensor.proofing_temperature", 3)))),
+        ...notifyAndKeep(xV("estimate")), sFinish())) },
+    { key:"ha_bake", cat:HC.kitchen, title:"Bake schedule for today's kitchen",
+      desc:"Works backwards from when you want bread out of the oven, adjusting every step for your kitchen's actual temperature." + HA_NOTE,
+      tip:"A warm kitchen shortens bulk ferment; it allows for that.",
+      build:() => P(["steps", "s"], chain(sStart(),
+        sAskMe("When do you want the bread out of the oven?"),
+        xSet("steps", xAskRecs("time, step, notes", xJ("Work backwards from this finish time to schedule a sourdough loaf, adjusting fermentation times for the kitchen temperature (",
+          xHS("sensor.kitchen_temperature"), "°C). Finish: ", xAnswer()))),
+        sForEach("s", xV("steps"), sAdd(xJ(xRec("time", xV("s")), "  ", xRec("step", xV("s")), "  ", xRec("notes", xV("s"))))),
+        sHNotify(xJ("Today's bake schedule:\n", xResultText())), sFinish())) },
+    { key:"ha_fridge", cat:HC.kitchen, title:"Fridge and freezer watch",
+      desc:"Every 30 minutes, warns you if the fridge rises above 5°C or the freezer above -15°C." + HA_NOTE,
+      tip:"Change a temperature in the panel to try the warning.",
+      build:() => P([], twoWay("fridge", [blk("rb_every", { N:30, UNIT:"m" })],
+        sIf(xOver(xHS("sensor.fridge_temperature"), 5), ...notifyAndKeep(xJ("The fridge is warm: ", xHS("sensor.fridge_temperature"), "°C. Is the door shut?"))),
+        sIf(xOver(xHS("sensor.freezer_temperature"), -15), ...notifyAndKeep(xJ("The freezer is warm: ", xHS("sensor.freezer_temperature"), "°C."))),
+        sAdd("Fridge and freezer checked."), sFinish())) },
+    { key:"ha_starter", cat:HC.kitchen, title:"Starter feeding reminder",
+      desc:"At 08:00, reads the kitchen temperature and suggests when to feed the starter today, and at what ratio." + HA_NOTE,
+      tip:"Say your usual ratio in the question.",
+      build:() => P(["advice"], twoWay("starter", [sAt(8, 0, "every")],
+        xSet("advice", xAsk(xJ("The kitchen is ", xHS("sensor.kitchen_temperature"), "°C. Suggest when to feed a sourdough starter today and at what ratio, so it peaks in the evening. Two sentences."))),
+        ...notifyAndKeep(xV("advice")), sFinish())) },
+    { key:"ha_oven", cat:HC.kitchen, title:"Oven left on",
+      desc:"When the last person leaves, checks the oven and sends an urgent alert if it's still on." + HA_NOTE,
+      tip:"In the panel, set switch.oven to on, then person.alex to not_home.",
+      build:() => P([], twoWay("oven", [sHWhen("person.alex", "not_home")],
+        sIf(xIs(xHS("switch.oven"), "on"), ...notifyAndKeep("Urgent: the oven is on and nobody is home."), sHSay("The oven is still on.")),
+        sAdd("Oven checked."), sFinish())) },
+    { key:"ha_dinner", cat:HC.kitchen, title:"What's for dinner?",
+      desc:"Suggests three dinners from what's on your shopping list and in the kitchen, with what you'd still need." + HA_NOTE,
+      tip:"Uses Home Assistant's shopping list.",
+      build:() => P(["ideas", "i"], chain(sStart(),
+        sAskMe("Anything already in the fridge, or anything to avoid?"),
+        xSet("ideas", xAskRecs("dinner, uses, still need", xJ("Suggest 3 simple dinners. Shopping list: ", xHAttr("items", "todo.shopping_list"), ". Also: ", xAnswer()))),
+        sForEach("i", xV("ideas"), sAdd(xJ(xRec("dinner", xV("i")), "\n  Uses: ", xRec("uses", xV("i")), "\n  Still need: ", xRec("still need", xV("i"))))),
+        sFinish())) },
+    { key:"ha_chores", cat:HC.kitchen, title:"Fair chores rota",
+      desc:"Each week, type who did what; it remembers, then writes a fair rota for next week." + HA_NOTE,
+      tip:"Run it on Sunday evening with the family.",
+      build:() => P(["rota"], chain(sStart(),
+        sAskMe("Who did which chores this week?"),
+        sRememberAdd(xJ(xNow("date"), ": ", xAnswer()), "chores done"),
+        xSet("rota", xAsk(xJ("Write a fair chores rota for next week, balancing out who did more before.\n\nHistory:\n", xRecall("chores done")))),
+        ...notifyAndKeep(xV("rota")), sFinish())) },
+    { key:"ha_laundry", cat:HC.kitchen, title:"Washing's done",
+      desc:"When the washing machine's power drops, it tells you the washing is finished." + HA_NOTE,
+      tip:"In the panel, change the washing machine power to 400 then 2.",
+      build:() => P([], twoWay("laundry", [sHWhen("sensor.washing_machine_power", "anything")],
+        sIf(xUnder(xHS("sensor.washing_machine_power"), 5), ...notifyAndKeep("The washing machine has finished. Time to hang it out.")),
+        sAdd("Washing machine checked."), sFinish())) },
+    { key:"ha_dishwasher", cat:HC.kitchen, title:"Is the dishwasher clean?",
+      desc:"Answers the eternal question from the dishwasher's state, in a friendly sentence." + HA_NOTE,
+      tip:"Add it to a dashboard button or ask it by voice.",
+      build:() => P([], chain(sStart(),
+        sAdd(xAsk(xJ("In one friendly sentence, say whether the dishwasher is clean or dirty: ", xHSum("dishwasher")))),
+        sFinish())) },
+    { key:"ha_bedtime", cat:HC.kitchen, title:"Bedtime story on the speaker",
+      desc:"At 19:30, dims the bedroom light and reads a fresh short bedtime story on the kids' room speaker." + HA_NOTE,
+      tip:"Change the child's name and interests in the story request.",
+      build:() => P(["story"], twoWay("bedtime", [sAt(19, 30, "every")],
+        sHCall("light.turn_on", "light.bedroom", "{\"brightness_pct\": 20}"),
+        xSet("story", xAsk("Write a calm, 150-word bedtime story for a 6-year-old who loves foxes. Gentle ending.")),
+        sHSay(xV("story"), "media_player.kids_room"), sAdd(xV("story")), sFinish())) },
+    { key:"ha_checkin", cat:HC.kitchen, title:"Gentle check-in on a relative",
+      desc:"At 10:00, if there's been no movement in the annex all morning, sends a gentle 'all OK?' prompt to family." + HA_NOTE,
+      tip:"Agree this with the person first; it's their privacy too.",
+      build:() => P(["moved"], twoWay("checkin", [sAt(10, 0, "every")],
+        xSet("moved", xYes(xJ("Has there been any motion ('on') in this history? ", xHHist("binary_sensor.motion_annex", 4)))),
+        sIf(xNot(xV("moved")), ...notifyAndKeep("No movement in the annex since early morning. Worth a quick call to check all is well?"), sFinish()),
+        sAdd("Movement seen this morning. All looks normal."), sFinish())) },
+
+    /* Pets */
+    { key:"ha_petcam", cat:HC.pets, title:"What's the dog doing?",
+      desc:"Takes a picture from the pet camera and tells you, in a sentence, what your pet is up to." + HA_NOTE,
+      tip:"Add 'and is it chewing anything it shouldn't?'",
+      build:() => P(["snap"], chain(sStart(),
+        xSet("snap", xHSnap("camera.pet")),
+        sAdd(xV("snap")), sAdd(xImgAsk("What is the pet doing? One cheerful sentence.", xV("snap"))), sFinish())) },
+    { key:"ha_feeder", cat:HC.pets, title:"Did the feeder work?",
+      desc:"At 09:00, checks the feeder dispensed this morning and whether the food is running low." + HA_NOTE,
+      tip:"Adjust the time to just after the feeder's schedule.",
+      build:() => P([], twoWay("feeder", [sAt(9, 0, "every")],
+        ...notifyAndKeep(xAsk(xJ("It's ", xNow("time"), ". In one or two sentences: did the pet feeder dispense this morning, and does the food need topping up?\n", xHSum("feeder")))),
+        sFinish())) },
+    { key:"ha_petheat", cat:HC.pets, title:"Pet room too warm",
+      desc:"Every 15 minutes, warns you if the room your pet is in goes over 26°C." + HA_NOTE,
+      tip:"Lower it for long-haired breeds.",
+      build:() => P([], twoWay("petheat", [blk("rb_every", { N:15, UNIT:"m" })],
+        sIf(xOver(xHS("sensor.conservatory_temperature"), 26), ...notifyAndKeep(xJ("The dog's room is ", xHS("sensor.conservatory_temperature"), "°C. Open a window or move them somewhere cooler."))),
+        sAdd("Pet room checked."), sFinish())) },
+
+    /* House health */
+    { key:"ha_batteries", cat:HC.health, title:"Batteries to replace",
+      desc:"Finds every battery below 20% and turns them into a shopping list grouped by room, with likely battery types." + HA_NOTE,
+      tip:"Run it once a month and you'll never be surprised by a dead sensor.",
+      build:() => P(["b", "low"], chain(sStart(),
+        xSet("low", tx("")),
+        sForEach("b", xHFind("battery"), sIf(xUnder(xRec("state", xV("b")), 20), xSet("low", xJ(xV("low"), xRec("name", xV("b")), ": ", xRec("state", xV("b")), "% (", xRec("area", xV("b")), ")\n")))),
+        sAdd(xJ("Low batteries:\n", xV("low"))),
+        ...notifyAndKeep(xAsk(xJ("Turn this into a short battery shopping list grouped by room, with the likely battery type for each device:\n", xV("low")))),
+        sFinish())) },
+    { key:"ha_offline", cat:HC.health, title:"What's gone offline?",
+      desc:"Lists every unavailable entity and suggests the likely cause and fix for each." + HA_NOTE,
+      tip:"Shed and garage devices often drop off when it gets cold.",
+      build:() => P([], chain(sStart(),
+        sAdd(xAsk(xJ("These Home Assistant entities are unavailable. For each, suggest the likely cause and a fix.\n\n", xHSum("unavailable")))),
+        sFinish())) },
+    { key:"ha_maintenance", cat:HC.health, title:"Maintenance due",
+      desc:"Reads your maintenance dates (boiler, smoke alarms, filters) and lists what's overdue or due soon." + HA_NOTE,
+      tip:"Make an input_datetime helper for each job in Home Assistant.",
+      build:() => P([], twoWay("maintenance", [sAt(9, 0, "weekends")],
+        ...notifyAndKeep(xAsk(xJ("Today is ", xNow("date"), ". List which of these jobs are overdue or due in the next 3 weeks, most urgent first:\n", xHSum("input_datetime")))),
+        sFinish())) },
+    { key:"ha_leak", cat:HC.health, title:"Leak!",
+      desc:"When a leak sensor gets wet, sends an urgent alert and announces the first things to do." + HA_NOTE,
+      tip:"In the panel, set binary_sensor.leak_kitchen to on.",
+      build:() => P(["steps"], twoWay("leak", [sHWhen("binary_sensor.leak_kitchen", "on")],
+        xSet("steps", xAsk("A leak sensor under the kitchen sink just detected water. Give the first 3 things to do, very briefly.")),
+        sHNotify(xJ("Leak under the kitchen sink! ", xV("steps"))), sHSay(xJ("Leak detected under the kitchen sink. ", xV("steps"))),
+        sAdd(xV("steps")), sFinish())) },
+    { key:"ha_waterflow", cat:HC.health, title:"Dripping tap or hidden leak",
+      desc:"At 04:00, when nothing should be running, checks the water meter and warns you about a constant small flow." + HA_NOTE,
+      tip:"Works with any water meter or flow sensor.",
+      build:() => P([], twoWay("waterflow", [sAt(4, 0, "every")],
+        sIf(xOver(xHS("sensor.water_flow"), 0), ...notifyAndKeep(xJ("Water is flowing at 4am (", xHS("sensor.water_flow"), " L/min). Check for a dripping tap or a leak."))),
+        sAdd("Water checked."), sFinish())) },
+
+    /* Homelab */
+    { key:"ha_servers", cat:HC.lab, title:"Server health in one line",
+      desc:"Reads your Proxmox, disk and backup sensors and gives one plain-English line on how the homelab is." + HA_NOTE,
+      tip:"Uses the Proxmox integration's sensors; adapt to yours.",
+      build:() => P([], twoWay("servers", [sAt(8, 30, "every")],
+        ...notifyAndKeep(xAsk(xJ("In one or two plain sentences, how is the homelab? Flag anything needing action.\n", xHSum("homelab")))),
+        sFinish())) },
+    { key:"ha_pihole", cat:HC.lab, title:"Pi-hole digest",
+      desc:"A short, readable digest of what Pi-hole blocked today and whether anything looks unusual." + HA_NOTE,
+      tip:"Uses the Pi-hole integration's sensors.",
+      build:() => P([], chain(sStart(),
+        sAdd(xAsk(xJ("Write a short, friendly Pi-hole digest from these readings. Say if anything looks unusual.\n", xHSum("pihole")))),
+        sFinish())) },
+    { key:"ha_plex", cat:HC.lab, title:"What's new on Plex",
+      desc:"At the weekend, a cheerful digest of what's been added to Plex, with a one-line reason to watch each." + HA_NOTE,
+      tip:"Uses the Plex integration's sensors.",
+      build:() => P([], twoWay("plex", [sAt(10, 0, "weekends")],
+        ...notifyAndKeep(xAsk(xJ("Write a cheerful weekend digest of what's new on our Plex, with one line on why each is worth watching:\n", xHSum("plex")))),
+        sFinish())) },
+    { key:"ha_backups", cat:HC.lab, title:"Did the backups run?",
+      desc:"At 08:00, checks last night's backup and sends an urgent alert if it failed." + HA_NOTE,
+      tip:"Point it at whatever sensor your backup job updates.",
+      build:() => P([], twoWay("backups", [sAt(8, 0, "every")],
+        sIf(xNot(xIs(xHS("sensor.nightly_backup"), "ok")),
+          ...notifyAndKeep(xJ("Backup problem: last night's backup is '", xHS("sensor.nightly_backup"), "'. Last success: ", xHAttr("last_success", "sensor.nightly_backup"), "."))),
+        sAdd("Backups checked."), sFinish())) },
+    { key:"ha_netdigest", cat:HC.lab, title:"Network digest",
+      desc:"A weekly look at the network: new devices, Pi-hole, and the busiest machines, with anything worth checking." + HA_NOTE,
+      tip:"Run it on Sunday morning with your coffee.",
+      build:() => P([], chain(sStart(),
+        sAdd(xAsk(xJ("Write a short weekly home network digest with anything worth checking.\n", xHSum("unifi"), "\n", xHSum("pihole"), "\n", xHSum("pc power")))),
+        sFinish())) },
+
+    /* Alerts and voice */
+    { key:"ha_rewrite_alerts", cat:HC.voice, title:"Turn raw alerts into plain English",
+      desc:"Paste a pile of raw notifications; Claude merges duplicates and rewrites them as a few clear messages.",
+      tip:"Paste a morning's worth from your phone.",
+      build:() => P(["msgs", "m"], chain(sStart(),
+        sAskMe("Paste the raw alerts, one per line."),
+        xSet("msgs", xAskRecs("message, urgency", xJ("Merge duplicates and rewrite these smart-home alerts as a few clear, friendly messages with an urgency (low, medium, high):\n", xAnswer()))),
+        sForEach("m", xV("msgs"), sAdd(xJ("[", xRec("urgency", xV("m")), "] ", xRec("message", xV("m"))))),
+        sFinish())) },
+    { key:"ha_tone", cat:HC.voice, title:"The right tone for the time of day",
+      desc:"Type a message; it's rewritten to suit the hour (gentle late at night, brisk in the morning) and sent." + HA_NOTE,
+      tip:"Try the same message at 7am and 11pm.",
+      build:() => P(["msg"], chain(sStart(),
+        sAskMe("What should the notification say?"),
+        xSet("msg", xRewrite(xAnswer(), xJ("suit the time of day (it is ", xNow("time"), "): gentle and short late at night, brisk and cheerful in the morning"))),
+        ...notifyAndKeep(xV("msg")), sFinish())) },
+    { key:"ha_spoken", cat:HC.voice, title:"Spoken morning summary",
+      desc:"At 07:30 on weekdays, speaks a 30-second summary on the kitchen speaker: weather, bins, calendar and anything left open." + HA_NOTE,
+      tip:"Set HA_TTS_ENTITY in Python to your text-to-speech service.",
+      build:() => P(["summary"], twoWay("spoken", [sAt(7, 30, "weekdays")],
+        xSet("summary", xAsk(xJ("Write a warm 30-second spoken morning summary (no lists, no symbols) from:\n", xHSum("weather"), "\n", xHSum("bin"), "\n", xHSum("calendar"), "\n", xHSum("door window")))),
+        sHSay(xV("summary")), sAdd(xV("summary")), sFinish())) },
+    { key:"ha_ignored", cat:HC.voice, title:"Firmer if ignored",
+      desc:"Sends a reminder, waits, and if the back door is still open, sends a firmer one and says it out loud." + HA_NOTE,
+      tip:"In the panel, close the back door during the wait to see it stop.",
+      build:() => P([], chain(sStart(),
+        sIf(xIs(xHS("binary_sensor.back_door"), "on"),
+          sHNotify("Gentle reminder: the back door is open."),
+          blk("rb_wait", { UNIT:"s" }, { SECS:nm(10) }),
+          sIf(xIs(xHS("binary_sensor.back_door"), "on"), sHNotify("The back door is STILL open. Please close it now."), sHSay("The back door is still open."))),
+        sAdd(xJ("Back door is now: ", xHS("binary_sensor.back_door"))), sFinish())) }
+  ];
+  HA_EXAMPLES.forEach(e => EXAMPLE_LIST.push(e));
   EXAMPLE_LIST.forEach(e => { EXAMPLES[e.key] = e.build; });
   const exampleByKey = k => EXAMPLE_LIST.find(e => e.key === k);
   /* Every example opens with a note on its first block saying what it does and what to try. */
@@ -2794,6 +4634,8 @@ HOW TO MAP CODE
     setTimeout(() => Blockly.svgResize(ws), 0);
   }
   $("ex-toggle").onclick = () => toggleGallery();
+  $("ha-toggle").onclick = () => toggleHaPanel();
+  $("ha-filter").addEventListener("input", renderHaPanel);
   $("example").addEventListener("change", e => describeExample(e.target.value));
   describeExample($("example").value);
   $("load").onclick = () => loadExample($("example").value);
@@ -3049,6 +4891,13 @@ HOW TO MAP CODE
         case "rb_now": return "R.now(" + pyStr(F("PART")) + ")";
         case "rb_img_choose": return "(await R.choose_picture())";
         case "rb_mem_get": return "R.recall(" + I("NAME", '""') + ")";
+        case "rb_ha_state": return "(await R.ha_state(" + I("ENTITY", '""') + "))";
+        case "rb_ha_attr": return "(await R.ha_attr(" + I("ATTR", '""') + ", " + I("ENTITY", '""') + "))";
+        case "rb_ha_find": return "(await R.ha_find(" + I("TEXT", '"*"') + "))";
+        case "rb_ha_summary": return "(await R.ha_summary(" + I("TEXT", '"*"') + "))";
+        case "rb_ha_history": return "(await R.ha_history(" + I("ENTITY", '""') + ", " + I("HOURS", "24") + "))";
+        case "rb_ha_snapshot": return "(await R.ha_snapshot(" + I("CAMERA", '""') + "))";
+        case "rb_ha_trigger": return "R.ha_trigger()";
         case "rb_chat": return "(await R.chat(" + I("NAME", '"chat"') + ", " + I("TEXT", '""') + "))";
         case "rb_web_search": return "(await R.web_search(" + I("TEXT", '""') + "))";
         case "rb_rec_new": return "{}";
@@ -3168,6 +5017,9 @@ HOW TO MAP CODE
           case "rb_rec_set": E("rec_set(" + I("REC", "None") + ", " + I("KEY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_broadcast_with": E("R.broadcast(" + I("MSG", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_broadcast_with_wait": E("await R.broadcast_and_wait(" + I("MSG", '""') + ", " + I("VALUE", '""') + ")"); break;
+          case "rb_ha_call": E("await R.ha_call(" + I("SERVICE", '""') + ", " + I("ENTITY", '""') + ", " + I("DATA", '""') + ")"); break;
+          case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
+          case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
           case "rb_file_save": E("R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
           case "rb_try": {
             E("try:");
@@ -3213,7 +5065,7 @@ HOW TO MAP CODE
     }
 
     const tops = ws.getTopBlocks(true).filter(enabled);
-    const sections = [], starts = [], receivers = {}, schedules = [];
+    const sections = [], starts = [], receivers = {}, schedules = [], watches = [];
     let loose = 0, nStart = 0, nSched = 0;
     // Name every My Blocks function first so calls can refer to them in any order.
     tops.filter(b => b.type === "procedures_defnoreturn" || b.type === "procedures_defreturn").forEach(b => procId(b.getFieldValue("NAME")));
@@ -3261,6 +5113,13 @@ HOW TO MAP CODE
           schedules.push("(\"time\", " + h + ", " + m + ", " + pyStr(days) + ", " + fn + ")");
         }
         if (!stmts(b.getNextBlock(), 1, {}, out)) out.push("    pass");
+      } else if (b.type === "rb_ha_when") {
+        const ent = String(b.getFieldValue("ENTITY") || "").trim(), want = String(b.getFieldValue("STATE") || "").trim();
+        const fn = ident("when_" + ent + "_changes");
+        out.push("async def " + fn + "():");
+        out.push("    \"\"\"when " + ent.replace(/"/g, "'") + " changes to " + (want || "anything").replace(/"/g, "'") + "\"\"\"");
+        if (!stmts(b.getNextBlock(), 1, {}, out)) out.push("    pass");
+        watches.push("(" + pyStr(ent) + ", " + pyStr(want) + ", " + fn + ")");
       } else { loose++; return; }
       sections.push(out.join("\n"));
     });
@@ -3268,6 +5127,7 @@ HOW TO MAP CODE
     const fileBase = slug(progName);
     const when = new Date();
     const usesGemini = programUsesGemini();
+    const usesHA = ws.getAllBlocks(false).some(b => b.type.startsWith("rb_ha_"));
     const header = [
       "#!/usr/bin/env python3",
       "\"\"\"" + String(progName || "my-program").replace(/"""/g, "'''"),
@@ -3278,8 +5138,10 @@ HOW TO MAP CODE
       usesGemini ? "    pip install anthropic google-genai" : "    pip install anthropic",
       "    export ANTHROPIC_API_KEY=your-key      (Windows: set ANTHROPIC_API_KEY=your-key)",
       usesGemini ? "    export GEMINI_API_KEY=your-key         (Windows: set GEMINI_API_KEY=your-key)" : null,
+      usesHA ? "    export HA_URL=http://homeassistant.local:8123" : null,
+      usesHA ? "    export HA_TOKEN=your-long-lived-token  (Home Assistant: your profile, Security, Long-lived access tokens)" : null,
       starts.length ? "    python " + fileBase + ".py                    runs the 'when Run is clicked' scripts once" : null,
-      schedules.length ? "    python " + fileBase + ".py --schedule         keeps running and starts the scheduled scripts on time" : null,
+      (schedules.length || watches.length) ? "    python " + fileBase + ".py --schedule         keeps running: scheduled and 'when … changes' scripts start by themselves" : null,
       "",
       usesGemini ? "Gemini calls go through the Gemini API and are billed to your Google account." : null,
       "Claude calls go through the Anthropic API and are billed to your API account,",
@@ -3306,9 +5168,10 @@ HOW TO MAP CODE
       "START_SCRIPTS = [" + starts.join(", ") + "]",
       "RECEIVERS = {" + Object.keys(receivers).map(k => pyStr(k) + ": [" + receivers[k].join(", ") + "]").join(", ") + "}",
       "SCHEDULES = [" + schedules.join(", ") + "]",
+      "HA_WATCHES = [" + watches.join(", ") + "]",
       "",
       "if __name__ == \"__main__\":",
-      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES)",
+      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES)",
       ""
     ].filter(l => l !== null).join("\n");
     const code = header + document.getElementById("py-runtime").textContent.replace(/^\n+/, "") + "\n" + program;
@@ -4206,6 +6069,8 @@ HOW TO MAP CODE
       /* You */
       case "rb_answer": return run.answer;
       case "rb_msg_value": return tc.payload;
+      case "rb_ha_state": case "rb_ha_attr": case "rb_ha_find": case "rb_ha_summary":
+      case "rb_ha_history": case "rb_ha_snapshot": case "rb_ha_trigger": return haValue(b, tc);
       case "rb_rec_new": return {};
       case "rb_rec_get": { const r = await input(b, tc, "REC"), k = str(await input(b, tc, "KEY")).trim(); if (!isRec(r)) fail("'" + k + " of' needs a record in its second slot."); return k in r ? r[k] : ""; }
       case "rb_rec_has": { const r = await input(b, tc, "REC"), k = str(await input(b, tc, "KEY")).trim(); return isRec(r) && k in r; }
@@ -4652,6 +6517,17 @@ HOW TO MAP CODE
         if (isImg(v)) showPictureIn(st, v);
         st.done("say", "ok"); break;
       }
+      case "rb_ha_call": await haCall(await input(b, tc, "SERVICE"), await input(b, tc, "ENTITY"), await input(b, tc, "DATA"), tc); break;
+      case "rb_ha_notify": {
+        const target = str(await input(b, tc, "TARGET")).trim() || "persistent_notification", text = str(await input(b, tc, "TEXT"));
+        if (!text.trim()) fail("The 'notify' block has no message.");
+        haNote(); addStep("Notification → " + target, { text }).done("sample house", "ok"); break;
+      }
+      case "rb_ha_speak": {
+        const text = str(await input(b, tc, "TEXT")), player = str(await input(b, tc, "PLAYER")).trim();
+        if (!text.trim()) fail("The 'say' block has nothing to say.");
+        haNote(); addStep("Spoken on " + (player || "a speaker"), { text }).done("sample house", "ok"); break;
+      }
       case "rb_set_instructions": {
         run.instructions = str(await input(b, tc, "TEXT")).trim();
         addStep("Instructions for Claude", { text:run.instructions || "(cleared)" }).done("set", "ok"); break;
@@ -4852,7 +6728,7 @@ HOW TO MAP CODE
   $("step-go").onclick = () => { stepper.on = false; releaseStep(true); updateStepUi(); };
 
   /* ---------- Run this script (right-click a block) ---------- */
-  const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every"]);
+  const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when"]);
   function runFromBlock(block){
     if (run && run.active) return;
     const root = block.getRootBlock();
@@ -4969,7 +6845,7 @@ HOW TO MAP CODE
       if (!run.sample) { showBanner("Running needs Claude. Open this page in claude.ai while signed in."); throw new Halt(); }
       await memInit();
       run.ready = true;
-      run.pending.forEach(h => h.evalBlock ? startScript(null, "", h.evalBlock) : startScript(h.getNextBlock()));
+      run.pending.forEach(h => h.evalBlock ? startScript(null, "", h.evalBlock) : startScript(h.getNextBlock(), h.payload));
       run.pending = [];
       while (run.threads.size) await Promise.all([...run.threads]);
       if (run.error) throw run.error;
@@ -5019,6 +6895,7 @@ HOW TO MAP CODE
   function hatTime(b){ return [Math.max(0, Math.min(23, Math.round(num(b.getFieldValue("HOUR"))))), Math.max(0, Math.min(59, Math.round(num(b.getFieldValue("MINUTE")))))]; }
   function everyMs(b){ return Math.max(60000, Math.min(86400000, num(b.getFieldValue("N")) * (b.getFieldValue("UNIT") === "h" ? 3600000 : 60000))); }
   function describeHat(b){
+    if (b.type === "rb_ha_when") return "When " + String(b.getFieldValue("ENTITY") || "").trim() + " changes";
     if (b.type === "rb_every") return "Every " + num(b.getFieldValue("N")) + (b.getFieldValue("UNIT") === "h" ? " h" : " min");
     const [h, m] = hatTime(b); return "Scheduled " + pad2(h) + ":" + pad2(m);
   }
@@ -5033,14 +6910,15 @@ HOW TO MAP CODE
     }
     return Infinity;
   }
-  function fire(b){
+  function fire(b, payload){
+    const hat = { getNextBlock:() => b.getNextBlock(), payload };
     if (run && run.active) {
-      if (!run.ready) { run.pending.push(b); return; }
-      addStep(describeHat(b), { mono:true, text:"A scheduled script started inside the current run." }).done("started", "ok");
-      startScript(b.getNextBlock());
+      if (!run.ready) { run.pending.push(hat); return; }
+      addStep(describeHat(b), { mono:true, text:(b.type === "rb_ha_when" ? "A 'when it changes' script" : "A scheduled script") + " started inside the current run." }).done("started", "ok");
+      startScript(b.getNextBlock(), payload);
       return;
     }
-    startRun([b], describeHat(b));
+    startRun([hat], describeHat(b));
   }
   function schedTick(){
     if (!sched.armed) return;

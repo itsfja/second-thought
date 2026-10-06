@@ -1,0 +1,915 @@
+{
+ "about": "Sample house used by the Home Assistant blocks inside the Second Thought page and by the tests. Exported Python uses your real Home Assistant instead.",
+ "entities": [
+  {
+   "entity_id": "person.alex",
+   "state": "home",
+   "attributes": {
+    "friendly_name": "Alex",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "person.sam",
+   "state": "not_home",
+   "attributes": {
+    "friendly_name": "Sam",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "device_tracker.car",
+   "state": "home",
+   "attributes": {
+    "friendly_name": "Car",
+    "area": "Driveway"
+   }
+  },
+  {
+   "entity_id": "sun.sun",
+   "state": "above_horizon",
+   "attributes": {
+    "friendly_name": "Sun",
+    "area": "Outside",
+    "next_setting": "18:42",
+    "next_rising": "07:13"
+   }
+  },
+  {
+   "entity_id": "weather.home",
+   "state": "rainy",
+   "attributes": {
+    "friendly_name": "Home weather",
+    "area": "Outside",
+    "temperature": 9,
+    "forecast_text": "Rain clearing by 14:00, high of 12°C. Tonight clear and cold, low of 1°C with a risk of frost. Tomorrow sunny, 13°C."
+   }
+  },
+  {
+   "entity_id": "sensor.bin_collection",
+   "state": "Recycling",
+   "attributes": {
+    "friendly_name": "Next bin collection",
+    "area": "Outside",
+    "next_date": "Thursday 8 October",
+    "note": "Collections move one day later in bank holiday weeks."
+   }
+  },
+  {
+   "entity_id": "calendar.family",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Family calendar",
+    "area": "Home",
+    "message": "Dentist (Sam) 15:30; Swimming 18:00"
+   }
+  },
+  {
+   "entity_id": "todo.shopping_list",
+   "state": "5",
+   "attributes": {
+    "friendly_name": "Shopping list",
+    "area": "Kitchen",
+    "items": "eggs, butter, rye flour, lemons, cheddar"
+   }
+  },
+  {
+   "entity_id": "light.kitchen",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Kitchen light",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "light.living_room",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Living room light",
+    "area": "Living room"
+   }
+  },
+  {
+   "entity_id": "light.hallway",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Hallway light",
+    "area": "Hallway"
+   }
+  },
+  {
+   "entity_id": "light.landing",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Landing light",
+    "area": "Landing"
+   }
+  },
+  {
+   "entity_id": "light.bedroom",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Bedroom light",
+    "area": "Bedroom"
+   }
+  },
+  {
+   "entity_id": "light.garden",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Garden lights",
+    "area": "Garden"
+   }
+  },
+  {
+   "entity_id": "light.porch",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Porch light",
+    "area": "Outside"
+   }
+  },
+  {
+   "entity_id": "light.study",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Study lamp",
+    "area": "Study"
+   }
+  },
+  {
+   "entity_id": "switch.oven",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Oven",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "switch.coffee_machine",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Coffee machine",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "switch.garage_heater",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Garage heater",
+    "area": "Garage"
+   }
+  },
+  {
+   "entity_id": "switch.ev_charger",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "EV charger",
+    "area": "Driveway"
+   }
+  },
+  {
+   "entity_id": "switch.garden_irrigation",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Garden irrigation",
+    "area": "Garden"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.front_door",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Front door",
+    "area": "Hallway",
+    "device_class": "door"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.back_door",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Back door",
+    "area": "Kitchen",
+    "device_class": "door"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.kitchen_window",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Kitchen window",
+    "area": "Kitchen",
+    "device_class": "window"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.bedroom_window",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Bedroom window",
+    "area": "Bedroom",
+    "device_class": "window"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.garage_door_contact",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Garage door contact",
+    "area": "Garage",
+    "device_class": "garage_door"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.doorbell",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Doorbell",
+    "area": "Hallway",
+    "device_class": "occupancy"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_hallway",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Hallway motion",
+    "area": "Hallway",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_garden",
+   "state": "on",
+   "attributes": {
+    "friendly_name": "Garden motion",
+    "area": "Garden",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_driveway",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Driveway motion",
+    "area": "Driveway",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_living_room",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Living room motion",
+    "area": "Living room",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.motion_annex",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Annex motion (Gran)",
+    "area": "Annex",
+    "device_class": "motion"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.leak_kitchen",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Kitchen leak sensor",
+    "area": "Kitchen",
+    "device_class": "moisture"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.leak_bathroom",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Bathroom leak sensor",
+    "area": "Bathroom",
+    "device_class": "moisture"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.smoke_landing",
+   "state": "off",
+   "attributes": {
+    "friendly_name": "Landing smoke alarm",
+    "area": "Landing",
+    "device_class": "smoke"
+   }
+  },
+  {
+   "entity_id": "binary_sensor.shed_door",
+   "state": "unavailable",
+   "attributes": {
+    "friendly_name": "Shed door",
+    "area": "Garden",
+    "device_class": "door"
+   }
+  },
+  {
+   "entity_id": "lock.front_door",
+   "state": "locked",
+   "attributes": {
+    "friendly_name": "Front door lock",
+    "area": "Hallway"
+   }
+  },
+  {
+   "entity_id": "lock.back_door",
+   "state": "unlocked",
+   "attributes": {
+    "friendly_name": "Back door lock",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "cover.garage_door",
+   "state": "closed",
+   "attributes": {
+    "friendly_name": "Garage door",
+    "area": "Garage"
+   }
+  },
+  {
+   "entity_id": "alarm_control_panel.house",
+   "state": "disarmed",
+   "attributes": {
+    "friendly_name": "House alarm",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "climate.living_room",
+   "state": "heat",
+   "attributes": {
+    "friendly_name": "Living room heating",
+    "area": "Living room",
+    "current_temperature": 19.5,
+    "temperature": 21
+   }
+  },
+  {
+   "entity_id": "climate.bedroom",
+   "state": "heat",
+   "attributes": {
+    "friendly_name": "Bedroom heating",
+    "area": "Bedroom",
+    "current_temperature": 17.8,
+    "temperature": 18
+   }
+  },
+  {
+   "entity_id": "sensor.living_room_temperature",
+   "state": "19.5",
+   "attributes": {
+    "friendly_name": "Living room temperature",
+    "area": "Living room",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.kitchen_temperature",
+   "state": "22.4",
+   "attributes": {
+    "friendly_name": "Kitchen temperature",
+    "area": "Kitchen",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.bedroom_temperature",
+   "state": "17.8",
+   "attributes": {
+    "friendly_name": "Bedroom temperature",
+    "area": "Bedroom",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.outdoor_temperature",
+   "state": "9.2",
+   "attributes": {
+    "friendly_name": "Outdoor temperature",
+    "area": "Outside",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.greenhouse_temperature",
+   "state": "27.3",
+   "attributes": {
+    "friendly_name": "Greenhouse temperature",
+    "area": "Garden",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.conservatory_temperature",
+   "state": "26.5",
+   "attributes": {
+    "friendly_name": "Conservatory temperature (dog's room)",
+    "area": "Conservatory",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.proofing_temperature",
+   "state": "25.5",
+   "attributes": {
+    "friendly_name": "Proofing box temperature",
+    "area": "Kitchen",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.fridge_temperature",
+   "state": "4.1",
+   "attributes": {
+    "friendly_name": "Fridge temperature",
+    "area": "Kitchen",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.freezer_temperature",
+   "state": "-17.5",
+   "attributes": {
+    "friendly_name": "Freezer temperature",
+    "area": "Utility",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.bathroom_humidity",
+   "state": "78",
+   "attributes": {
+    "friendly_name": "Bathroom humidity",
+    "area": "Bathroom",
+    "unit_of_measurement": "%",
+    "device_class": "humidity"
+   }
+  },
+  {
+   "entity_id": "sensor.bedroom_humidity",
+   "state": "61",
+   "attributes": {
+    "friendly_name": "Bedroom humidity",
+    "area": "Bedroom",
+    "unit_of_measurement": "%",
+    "device_class": "humidity"
+   }
+  },
+  {
+   "entity_id": "sensor.living_room_humidity",
+   "state": "55",
+   "attributes": {
+    "friendly_name": "Living room humidity",
+    "area": "Living room",
+    "unit_of_measurement": "%",
+    "device_class": "humidity"
+   }
+  },
+  {
+   "entity_id": "sensor.kitchen_humidity",
+   "state": "58",
+   "attributes": {
+    "friendly_name": "Kitchen humidity",
+    "area": "Kitchen",
+    "unit_of_measurement": "%",
+    "device_class": "humidity"
+   }
+  },
+  {
+   "entity_id": "sensor.study_co2",
+   "state": "1350",
+   "attributes": {
+    "friendly_name": "Study CO2",
+    "area": "Study",
+    "unit_of_measurement": "ppm",
+    "device_class": "carbon_dioxide"
+   }
+  },
+  {
+   "entity_id": "sensor.soil_moisture",
+   "state": "22",
+   "attributes": {
+    "friendly_name": "Vegetable bed soil moisture",
+    "area": "Garden",
+    "unit_of_measurement": "%",
+    "device_class": "moisture"
+   }
+  },
+  {
+   "entity_id": "sensor.rain_last_24h",
+   "state": "0.4",
+   "attributes": {
+    "friendly_name": "Rain in the last 24 hours",
+    "area": "Outside",
+    "unit_of_measurement": "mm",
+    "device_class": "precipitation"
+   }
+  },
+  {
+   "entity_id": "sensor.shed_temperature",
+   "state": "unavailable",
+   "attributes": {
+    "friendly_name": "Shed temperature",
+    "area": "Garden",
+    "unit_of_measurement": "°C",
+    "device_class": "temperature"
+   }
+  },
+  {
+   "entity_id": "sensor.house_power",
+   "state": "380",
+   "attributes": {
+    "friendly_name": "House power",
+    "area": "Utility",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.energy_today",
+   "state": "9.4",
+   "attributes": {
+    "friendly_name": "Energy used today",
+    "area": "Utility",
+    "unit_of_measurement": "kWh"
+   }
+  },
+  {
+   "entity_id": "sensor.energy_yesterday",
+   "state": "14.1",
+   "attributes": {
+    "friendly_name": "Energy used yesterday",
+    "area": "Utility",
+    "unit_of_measurement": "kWh"
+   }
+  },
+  {
+   "entity_id": "sensor.electricity_price",
+   "state": "0.24",
+   "attributes": {
+    "friendly_name": "Electricity price now",
+    "area": "Utility",
+    "unit_of_measurement": "£/kWh"
+   }
+  },
+  {
+   "entity_id": "sensor.solar_power",
+   "state": "1200",
+   "attributes": {
+    "friendly_name": "Solar power",
+    "area": "Outside",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.solar_forecast_tomorrow",
+   "state": "8.5",
+   "attributes": {
+    "friendly_name": "Solar forecast tomorrow",
+    "area": "Outside",
+    "unit_of_measurement": "kWh"
+   }
+  },
+  {
+   "entity_id": "sensor.home_battery",
+   "state": "64",
+   "attributes": {
+    "friendly_name": "Home battery",
+    "area": "Utility",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.water_flow",
+   "state": "0.3",
+   "attributes": {
+    "friendly_name": "Water flow",
+    "area": "Utility",
+    "unit_of_measurement": "L/min"
+   }
+  },
+  {
+   "entity_id": "sensor.washing_machine_power",
+   "state": "2",
+   "attributes": {
+    "friendly_name": "Washing machine power",
+    "area": "Utility",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.dishwasher_power",
+   "state": "0",
+   "attributes": {
+    "friendly_name": "Dishwasher power",
+    "area": "Kitchen",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.tv_standby_power",
+   "state": "14",
+   "attributes": {
+    "friendly_name": "TV power",
+    "area": "Living room",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.games_pc_power",
+   "state": "65",
+   "attributes": {
+    "friendly_name": "Games PC power",
+    "area": "Study",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.garage_heater_power",
+   "state": "950",
+   "attributes": {
+    "friendly_name": "Garage heater power",
+    "area": "Garage",
+    "unit_of_measurement": "W"
+   }
+  },
+  {
+   "entity_id": "sensor.ev_battery",
+   "state": "48",
+   "attributes": {
+    "friendly_name": "Car battery",
+    "area": "Driveway",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.electricity_cheapest_time",
+   "state": "02:30",
+   "attributes": {
+    "friendly_name": "Cheapest electricity tonight",
+    "area": "Utility",
+    "price_then": 0.07
+   }
+  },
+  {
+   "entity_id": "sensor.dishwasher_state",
+   "state": "clean",
+   "attributes": {
+    "friendly_name": "Dishwasher",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "sensor.hallway_motion_battery",
+   "state": "14",
+   "attributes": {
+    "friendly_name": "Hallway motion battery",
+    "area": "Hallway",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.back_door_battery",
+   "state": "18",
+   "attributes": {
+    "friendly_name": "Back door sensor battery",
+    "area": "Kitchen",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.garden_motion_battery",
+   "state": "62",
+   "attributes": {
+    "friendly_name": "Garden motion battery",
+    "area": "Garden",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.leak_kitchen_battery",
+   "state": "9",
+   "attributes": {
+    "friendly_name": "Kitchen leak sensor battery",
+    "area": "Kitchen",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.smoke_landing_battery",
+   "state": "85",
+   "attributes": {
+    "friendly_name": "Landing smoke alarm battery",
+    "area": "Landing",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.bedroom_thermostat_battery",
+   "state": "31",
+   "attributes": {
+    "friendly_name": "Bedroom thermostat battery",
+    "area": "Bedroom",
+    "unit_of_measurement": "%",
+    "device_class": "battery"
+   }
+  },
+  {
+   "entity_id": "sensor.pet_feeder_last_fed",
+   "state": "07:02",
+   "attributes": {
+    "friendly_name": "Pet feeder last dispensed",
+    "area": "Conservatory"
+   }
+  },
+  {
+   "entity_id": "sensor.pet_feeder_food_level",
+   "state": "30",
+   "attributes": {
+    "friendly_name": "Pet feeder food level",
+    "area": "Conservatory",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.pve1_cpu",
+   "state": "12",
+   "attributes": {
+    "friendly_name": "pve1 CPU",
+    "area": "Homelab",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.pve2_disk_used",
+   "state": "81",
+   "attributes": {
+    "friendly_name": "pve2 disk used",
+    "area": "Homelab",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.nightly_backup",
+   "state": "failed",
+   "attributes": {
+    "friendly_name": "Nightly backup",
+    "area": "Homelab",
+    "last_success": "2 days ago"
+   }
+  },
+  {
+   "entity_id": "sensor.pihole_ads_blocked_today",
+   "state": "4231",
+   "attributes": {
+    "friendly_name": "Pi-hole ads blocked today",
+    "area": "Homelab"
+   }
+  },
+  {
+   "entity_id": "sensor.pihole_percent_blocked",
+   "state": "23.4",
+   "attributes": {
+    "friendly_name": "Pi-hole percentage blocked",
+    "area": "Homelab",
+    "unit_of_measurement": "%"
+   }
+  },
+  {
+   "entity_id": "sensor.unifi_new_devices",
+   "state": "1",
+   "attributes": {
+    "friendly_name": "New network devices",
+    "area": "Homelab",
+    "names": "Unknown-7F3A (joined 03:12 on the IoT network)"
+   }
+  },
+  {
+   "entity_id": "sensor.plex_recently_added",
+   "state": "2",
+   "attributes": {
+    "friendly_name": "Plex recently added",
+    "area": "Homelab",
+    "titles": "The Great British Bake Off S16E5; Paddington in Peru"
+   }
+  },
+  {
+   "entity_id": "input_datetime.boiler_service_due",
+   "state": "2026-11-02",
+   "attributes": {
+    "friendly_name": "Boiler service due",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "input_datetime.smoke_alarm_test_due",
+   "state": "2026-09-01",
+   "attributes": {
+    "friendly_name": "Smoke alarm test due",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "input_datetime.cooker_hood_filter_due",
+   "state": "2026-08-15",
+   "attributes": {
+    "friendly_name": "Cooker hood filter change due",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "input_datetime.water_softener_salt_due",
+   "state": "2026-10-20",
+   "attributes": {
+    "friendly_name": "Water softener salt due",
+    "area": "Home"
+   }
+  },
+  {
+   "entity_id": "media_player.kitchen_speaker",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Kitchen speaker",
+    "area": "Kitchen"
+   }
+  },
+  {
+   "entity_id": "media_player.kids_room",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Kids' room speaker",
+    "area": "Bedroom"
+   }
+  },
+  {
+   "entity_id": "camera.front_door",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Front door camera",
+    "area": "Hallway"
+   }
+  },
+  {
+   "entity_id": "camera.driveway",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Driveway camera",
+    "area": "Driveway"
+   }
+  },
+  {
+   "entity_id": "camera.garden",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Garden camera",
+    "area": "Garden"
+   }
+  },
+  {
+   "entity_id": "camera.garage",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Garage camera",
+    "area": "Garage"
+   }
+  },
+  {
+   "entity_id": "camera.pet",
+   "state": "idle",
+   "attributes": {
+    "friendly_name": "Pet camera",
+    "area": "Conservatory"
+   }
+  }
+ ],
+ "cameras": {
+  "camera.front_door": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#9aa7b3\"/><rect x=\"110\" y=\"30\" width=\"100\" height=\"160\" fill=\"#2f4b6e\"/><circle cx=\"195\" cy=\"115\" r=\"5\" fill=\"#e4c66a\"/><rect x=\"0\" y=\"185\" width=\"320\" height=\"15\" fill=\"#6b6f73\"/><rect x=\"225\" y=\"150\" width=\"60\" height=\"38\" fill=\"#c49a62\"/><rect x=\"225\" y=\"164\" width=\"60\" height=\"5\" fill=\"#a87d47\"/><text x=\"160\" y=\"20\" font-size=\"12\" text-anchor=\"middle\" fill=\"#fff\">FRONT DOOR 15:42</text></svg>",
+  "camera.driveway": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#b8c2a8\"/><rect x=\"0\" y=\"120\" width=\"320\" height=\"80\" fill=\"#7d7d7d\"/><rect x=\"70\" y=\"95\" width=\"180\" height=\"55\" rx=\"18\" fill=\"#2e5fa8\"/><rect x=\"100\" y=\"78\" width=\"110\" height=\"30\" rx=\"10\" fill=\"#8fb3e0\"/><circle cx=\"110\" cy=\"152\" r=\"16\" fill=\"#222\"/><circle cx=\"215\" cy=\"152\" r=\"16\" fill=\"#222\"/><text x=\"160\" y=\"20\" font-size=\"12\" text-anchor=\"middle\" fill=\"#fff\">DRIVEWAY 15:40</text></svg>",
+  "camera.garden": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#8fc08a\"/><rect x=\"0\" y=\"0\" width=\"320\" height=\"70\" fill=\"#c9dbe8\"/><ellipse cx=\"200\" cy=\"150\" rx=\"28\" ry=\"16\" fill=\"#333\"/><circle cx=\"226\" cy=\"134\" r=\"11\" fill=\"#333\"/><polygon points=\"220,124 224,114 229,124\" fill=\"#333\"/><polygon points=\"228,124 233,114 236,125\" fill=\"#333\"/><path d=\"M172 150 Q150 135 160 120\" stroke=\"#333\" stroke-width=\"5\" fill=\"none\"/><text x=\"160\" y=\"20\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">GARDEN 15:41</text></svg>",
+  "camera.garage": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#a9a59c\"/><rect x=\"60\" y=\"40\" width=\"200\" height=\"150\" fill=\"#3a3a3a\"/><rect x=\"60\" y=\"40\" width=\"200\" height=\"110\" fill=\"#d8d4c8\"/><line x1=\"60\" y1=\"70\" x2=\"260\" y2=\"70\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><line x1=\"60\" y1=\"100\" x2=\"260\" y2=\"100\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><line x1=\"60\" y1=\"130\" x2=\"260\" y2=\"130\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><text x=\"160\" y=\"25\" font-size=\"12\" text-anchor=\"middle\" fill=\"#fff\">GARAGE 15:39</text></svg>",
+  "camera.pet": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#e9dcc6\"/><rect x=\"40\" y=\"100\" width=\"240\" height=\"70\" rx=\"12\" fill=\"#7a5c8f\"/><ellipse cx=\"160\" cy=\"105\" rx=\"55\" ry=\"22\" fill=\"#c8893f\"/><circle cx=\"210\" cy=\"92\" r=\"17\" fill=\"#c8893f\"/><ellipse cx=\"222\" cy=\"80\" rx=\"6\" ry=\"11\" fill=\"#9c6528\"/><circle cx=\"216\" cy=\"90\" r=\"2.5\" fill=\"#222\"/><text x=\"160\" y=\"25\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">PET CAM 15:43</text></svg>"
+ }
+}

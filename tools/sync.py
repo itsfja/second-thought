@@ -2,8 +2,9 @@
 """Keep second-thought.html in step with its separate source files.
 
 The page is published as one self-contained HTML file, so the Python runtime
-(python/runtime.py) and the code-conversion prompt (prompts/convert-guide.txt)
-are embedded inside it. Edit those files, then run:
+(python/runtime.py), the code-conversion prompt (prompts/convert-guide.txt) and
+the Home Assistant sample house (ha/sample-house.json) are embedded inside it.
+Edit those files, then run:
 
     python tools/sync.py           # write them into second-thought.html
     python tools/sync.py --check   # exit 1 if the page is out of date (used by the tests)
@@ -16,6 +17,7 @@ PAGE = ROOT / "second-thought.html"
 PARTS = [
     ('<script type="text/plain" id="py-runtime">\n', ROOT / "python" / "runtime.py"),
     ('<script type="text/plain" id="convert-guide">\n', ROOT / "prompts" / "convert-guide.txt"),
+    ('<script type="application/json" id="ha-sample">\n', ROOT / "ha" / "sample-house.json"),
 ]
 
 

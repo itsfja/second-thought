@@ -19,6 +19,9 @@ from types import SimpleNamespace
 
 from playwright.async_api import async_playwright
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import fake_ha  # noqa: E402
+
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
 VENDOR = HERE / "vendor"
@@ -144,6 +147,24 @@ async def page_tests():
                 labelled = await pg.eval_on_selector_all(".step-name", "e => e.filter(x => x.textContent.includes('standing in for Gemini')).length")
                 check(labelled > 0, f"page marks {labelled} step(s) as Claude standing in for Gemini")
 
+        print("Home Assistant panel")
+        await pg.select_option("#example", "ha_doorbell")
+        await pg.click("#load")
+        await pg.click("#ha-toggle")
+        await pg.fill("#ha-filter", "doorbell")
+        await pg.wait_for_timeout(200)
+        inp = await pg.query_selector(".ha-state")
+        await inp.fill("on")
+        await inp.press("Enter")
+        for _ in range(100):
+            await pg.wait_for_timeout(150)
+            if await pg.is_enabled("#run") and await pg.query_selector(".result"):
+                break
+        names = await pg.eval_on_selector_all(".step-name", "e => e.map(x => x.textContent)")
+        check(any(n.startswith("Snapshot") for n in names) and await pg.query_selector(".result") is not None,
+              "changing the doorbell in the panel runs the doorbell script")
+        await pg.click("#ha-toggle")
+
         print("Block search")
         await pg.fill("#block-search", "record")
         await pg.wait_for_timeout(300)
@@ -218,7 +239,9 @@ def drive(cmd, env, cwd, timeout=120):
 
 def python_tests(codes):
     print("Exported Python runs")
-    env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test")
+    ha_url, ha_calls = fake_ha.start()
+    env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test",
+               HA_URL=ha_url, HA_TOKEN=fake_ha.TOKEN)
     with tempfile.TemporaryDirectory() as tmp:
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
@@ -231,6 +254,9 @@ def python_tests(codes):
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 both = bool(done) and "Gemini:" in done[-1] and "Claude:" in done[-1]
                 check(both, "gemini.py used both Claude and Gemini" + ("" if both else f": {done[-1] if done else r.stdout[-200:]}"))
+    services = {c[0] for c in ha_calls}
+    check({"light.turn_off", "persistent_notification.create"} <= services and "lock.lock" in services,
+          f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
 
 
 def main():

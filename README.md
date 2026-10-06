@@ -190,6 +190,39 @@ Gemini only works in the Python program. On the Second Thought page, Claude does
 
 ---
 
+## Page 10½: A clever house
+
+*Picture: a cosy house at night. A little light glows in every window, and the ladybird waves from the doorstep.*
+
+Some homes have a helper called **Home Assistant**. It knows which lights are on, whether the doors are shut, and how warm each room is. It can switch things on and off, too.
+
+Second Thought can talk to Home Assistant. It has its own blue blocks for this.
+
+- One block asks "Is the back door open?"
+- One block takes a photo from a camera, so Claude can say who is at the door.
+- One block turns a light off, or sends a message to a phone.
+- A special yellow block starts a script by itself when something changes, like the doorbell ringing.
+
+On the Second Thought page, these blocks use a **pretend house**, so you can try everything safely. Press the **Home Assistant** button to see the pretend house. Change something, like the doorbell, and watch your program spring into action.
+
+There are more than sixty Home Assistant examples to try. You will find them in **Browse examples**.
+
+**A safety rule:** Second Thought will never unlock a door, open the garage or switch off the alarm without asking you first.
+
+**Grown-ups, here is how to use your real Home Assistant:**
+
+Export the program as Python and run it on a computer at home, on the same network as Home Assistant. Make a long-lived access token in Home Assistant (your profile, then the Security tab), then:
+
+```
+export HA_URL=http://homeassistant.local:8123
+export HA_TOKEN=your-long-lived-token
+python my-program.py --schedule
+```
+
+`--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. A small virtual machine or container that's always on is a good home for it.
+
+---
+
 ## Page 11: What is in this folder
 
 *Picture: an open toy box with labelled compartments.*
@@ -201,7 +234,8 @@ This folder is where all the parts of Second Thought are kept. Each part has its
 | `second-thought.html` | The Second Thought page itself. This is the part you see on the screen. |
 | `python/runtime.py` | The helper that comes with every Python program. It knows how to do each block's job. |
 | `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
-| `tools/sync.py` | A little tool that copies the two parts above into the page, so they always match. |
+| `ha/sample-house.json` | The pretend house that the Home Assistant blocks use on the page. |
+| `tools/sync.py` | A little tool that copies the parts above into the page, so they always match. |
 | `tests/` | Checks that make sure everything still works. |
 | `README.md` | This book! |
 
