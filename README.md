@@ -185,7 +185,8 @@ Press **Import / export**, then **Save Python (.zip)**. Unzip the file into a fo
 | `my-program.py` | The program. |
 | `second-thought.ini` | The settings: this is where the keys go. |
 | `run.bat` | For Windows. Double-click it to run the program. |
-| `requirements.txt` | The list of parts Python needs. `run.bat` installs them for you. |
+| `run.sh` | For Linux or a Mac. It does the same job as `run.bat`. |
+| `requirements.txt` | The list of parts Python needs. `run.bat` and `run.sh` install them for you. |
 
 Open `second-thought.ini` in Notepad (or any text editor). It lists only the keys *this* program needs. Put each key after its `=` sign, like this, then save:
 
@@ -198,14 +199,17 @@ Keep this file private. It holds your keys, so don't email it or put it on the i
 
 **On Windows:** you need Python, from python.org (tick **Add python.exe to PATH** when you install it). Then double-click `run.bat`. The first time, it installs what the program needs.
 
-**On a Mac or Linux:**
+**On Linux or a Mac:** open a terminal in the folder and type:
 
 ```
-pip install -r requirements.txt
-python my-program.py
+sh run.sh
 ```
 
-If a program has timed jobs, the zip also has `run-on-schedule.bat`. That one keeps running, so the jobs start by themselves. On a Mac or Linux, add `--schedule` to the end of the second line instead.
+The first time, it makes a private Python folder called `.venv` next to the program and installs what it needs in there, so nothing is installed for the whole computer. (On Debian or Ubuntu, if it says it can't set up Python, run `sudo apt install python3-venv` first.)
+
+If a program has timed jobs, the zip also has `run-on-schedule.bat` and `run-on-schedule.sh`. These keep running, so the jobs start by themselves.
+
+On a Linux computer that is always switched on, like a little server, `sh install-service.sh` goes one step further. It makes the program start by itself whenever the computer starts, and start again if it ever stops. It tells you how to watch what the program is doing, and how to turn it off.
 
 Everything in `second-thought.ini` can also be set as an environment variable with the same name, if you prefer. An environment variable wins over the file.
 
@@ -299,7 +303,7 @@ HA_URL = http://homeassistant.local:8123
 HA_TOKEN = your-long-lived-token
 ```
 
-Then double-click `run-on-schedule.bat` (Windows), or run `python my-program.py --schedule` (Mac or Linux).
+Then double-click `run-on-schedule.bat` (Windows), or type `sh run-on-schedule.sh` (Linux or Mac). On an always-on Linux computer, `sh install-service.sh` keeps it running for good.
 
 `--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. A small virtual machine or container that's always on is a good home for it.
 

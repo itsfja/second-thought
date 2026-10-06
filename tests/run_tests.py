@@ -10,6 +10,7 @@ a stand-in Anthropic SDK (tests/fakeapi). Nothing calls the real API.
 """
 import asyncio
 import os
+import shutil
 import pathlib
 import subprocess
 import sys
@@ -227,10 +228,19 @@ async def page_tests():
             await pg.click("#load")
             await pg.fill("#io-name", ex)
             EXPORTS[ex] = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+            if ex == "ha_morning":
+                import base64, io, zipfile
+                zf = zipfile.ZipFile(io.BytesIO(base64.b64decode(await pg.evaluate("window.__zipBase64()"))))
+                modes = {i.filename: (i.external_attr >> 16) & 0o777 for i in zf.infolist()}
+                check(modes.get("run.sh") == 0o755 and modes.get("install-service.sh") == 0o755 and modes.get("second-thought.ini") == 0o644,
+                      f"the zip marks the .sh scripts as runnable ({modes})")
+                check(zf.read("second-thought.ini").decode() == EXPORTS[ex]["second-thought.ini"], "the zip unpacks to the same files")
         names = sorted(EXPORTS["review"])
-        check(names == ["requirements.txt", "review.py", "run.bat", "second-thought.ini"], f"the zip holds the program, its settings and run.bat ({', '.join(names)})")
-        check("run-on-schedule.bat" in EXPORTS["ha_morning"] and "--schedule" in EXPORTS["ha_morning"]["run-on-schedule.bat"],
-              "a program with timed scripts also gets run-on-schedule.bat")
+        check(names == ["requirements.txt", "review.py", "run.bat", "run.sh", "second-thought.ini"], f"the zip holds the program, its settings, run.bat and run.sh ({', '.join(names)})")
+        check(all(f in EXPORTS["ha_morning"] for f in ("run-on-schedule.bat", "run-on-schedule.sh", "install-service.sh"))
+              and "--schedule" in EXPORTS["ha_morning"]["run-on-schedule.sh"],
+              "a program with timed scripts also gets run-on-schedule.bat, run-on-schedule.sh and install-service.sh")
+        check(all("\r" not in t for f, t in EXPORTS["ha_morning"].items() if f.endswith(".sh")), "the .sh scripts use Linux line endings")
         check(all("\r\n" in t and "\n" not in t.replace("\r\n", "") for f, t in EXPORTS["review"].items() if f.endswith((".bat", ".ini"))),
               "run.bat and second-thought.ini use Windows line endings")
         judges_ini = EXPORTS["w_judges"]["second-thought.ini"]
@@ -387,6 +397,38 @@ def python_tests(codes):
         ini.write_text("[keys\nbroken", encoding="utf-8")
         code_, out, err = drive([sys.executable, "-u", str(folder / "w_judges.py")], bare, elsewhere)
         check(code_ != 0 and "mistake in" in (out + err), "a broken ini file gets a clear message")
+
+    if os.name != "nt" and shutil.which("sh"):
+        print("Linux scripts")
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = pathlib.Path(tmp) / "My Programs" / "ha morning"
+            folder.mkdir(parents=True)
+            for name, text in EXPORTS["review"].items():
+                (folder / name).write_bytes(text.encode("utf-8"))
+            ini = folder / "second-thought.ini"
+            ini.write_text(ini.read_text().replace("ANTHROPIC_API_KEY = ", "ANTHROPIC_API_KEY = test"))
+            bare = {k: v for k, v in env.items() if not k.endswith(("_API_KEY", "_TOKEN"))}
+            code_, out, err = drive(["sh", str(folder / "run.sh")], bare, tmp, timeout=300)
+            done = [l for l in out.splitlines() if l.startswith("Done")]
+            check(code_ == 0 and bool(done) and (folder / ".venv" / "bin" / "python").exists(),
+                  "sh run.sh sets up its own Python folder, installs, and runs the program" + ("" if done else f": {(err or out)[-400:]}"))
+            code_, out, err = drive(["sh", str(folder / "run.sh")], bare, tmp, timeout=120)
+            check(code_ == 0 and "First run" not in out, "the second run skips the setup")
+            for name, text in EXPORTS["ha_morning"].items():
+                (folder / name).write_bytes(text.encode("utf-8"))
+            fake = pathlib.Path(tmp) / "fakebin"
+            fake.mkdir()
+            (fake / "sudo").write_text('#!/bin/sh\nif [ "$1" = install ]; then cp "$4" "$FAKE_UNIT"; else echo "$*" >> "$FAKE_LOG"; fi\n')
+            (fake / "systemctl").write_text("#!/bin/sh\nexit 0\n")
+            for f in fake.iterdir():
+                f.chmod(0o755)
+            unit, log = pathlib.Path(tmp) / "unit.service", pathlib.Path(tmp) / "sudo.log"
+            senv = dict(bare, PATH=str(fake) + os.pathsep + bare.get("PATH", ""), FAKE_UNIT=str(unit), FAKE_LOG=str(log))
+            r = subprocess.run(["sh", str(folder / "install-service.sh")], env=senv, cwd=tmp, capture_output=True, text=True, timeout=60)
+            u = unit.read_text() if unit.exists() else ""
+            ok = (r.returncode == 0 and f"WorkingDirectory={folder}" in u and f'ExecStart=/bin/sh "{folder}/run-on-schedule.sh"' in u
+                  and "User=" in u and "enable --now second-thought-ha_morning" in (log.read_text() if log.exists() else ""))
+            check(ok, "install-service.sh writes a systemd service for this folder and turns it on" + ("" if ok else f": {r.stdout[-200:]} {r.stderr[-200:]} {u[:300]}"))
 
     print("Backup models in Python")
     with tempfile.TemporaryDirectory() as tmp:

@@ -5242,10 +5242,13 @@ HOW TO MAP CODE
     const base = pyName(), sched = ws.getTopBlocks(false).some(b => ["rb_when_time", "rb_every", "rb_ha_when"].includes(b.type));
     const req = ["anthropic"].concat(programUsesGemini() ? ["google-genai"] : []).join("\n") + "\n";
     const files = [{ name:base + ".py", text:code }, { name:"second-thought.ini", text:iniText(progName) },
-                   { name:"requirements.txt", text:req }, { name:"run.bat", text:runBat(base, false) }];
-    if (sched) files.push({ name:"run-on-schedule.bat", text:runBat(base, true) });
+                   { name:"requirements.txt", text:req }, { name:"run.bat", text:runBat(base, false) },
+                   { name:"run.sh", text:runSh(base, false) }];
+    if (sched) files.push({ name:"run-on-schedule.bat", text:runBat(base, true) }, { name:"run-on-schedule.sh", text:runSh(base, true) },
+                          { name:"install-service.sh", text:installServiceSh(base) });
     return files;
   }
+  window.__zipBase64 = async () => { const b = new Uint8Array(await makeZip(window.__exportFiles()).arrayBuffer()); let t = ""; b.forEach(x => t += String.fromCharCode(x)); return btoa(t); };
   window.__exportFiles = () => exportFiles($("io-name").value.trim() || "my-program", toPython($("io-name").value.trim() || "my-program"));
   $("io-py-save").onclick = async () => {
     if (!downloads) return;
@@ -5426,6 +5429,66 @@ HOW TO MAP CODE
       "%PY% " + fileBase + ".py " + (schedule ? "--schedule " : "") + "%*",
       "echo.",
       "pause"].join(nl) + nl;
+  }
+  function runSh(fileBase, schedule){
+    return ["#!/bin/sh",
+      "# Run " + fileBase + " on Linux or a Mac:  sh " + (schedule ? "run-on-schedule.sh" : "run.sh"),
+      "# The first run makes a private Python folder here (.venv) and installs what the program needs,",
+      "# so nothing is installed for the whole computer.",
+      "cd \"$(dirname \"$0\")\" || exit 1",
+      "if [ ! -x .venv/bin/python ]; then",
+      "  echo \"First run: setting things up. This takes a minute.\"",
+      "  if ! python3 -m venv .venv; then",
+      "    rm -rf .venv",
+      "    echo \"Couldn't set up Python here. On Debian or Ubuntu, run:  sudo apt install python3-venv\"",
+      "    echo \"then try again. No python3 at all? Install it from your software centre first.\"",
+      "    exit 1",
+      "  fi",
+      "fi",
+      "if ! cmp -s requirements.txt .venv/installed.txt; then",
+      "  .venv/bin/python -m pip install --quiet --disable-pip-version-check -r requirements.txt || exit 1",
+      "  cp requirements.txt .venv/installed.txt",
+      "fi",
+      "exec .venv/bin/python -u " + fileBase + ".py " + (schedule ? "--schedule " : "") + "\"$@\"",
+      ""].join("\n");
+  }
+  function installServiceSh(fileBase){
+    const svc = "second-thought-" + fileBase;
+    return ["#!/bin/sh",
+      "# Keeps " + fileBase + " running all the time on this Linux computer, and starts it again after a restart.",
+      "# Run it once:  sh install-service.sh   (it asks for your password, to install the service)",
+      "# Fill in second-thought.ini first.",
+      "cd \"$(dirname \"$0\")\" || exit 1",
+      "here=$(pwd)",
+      "name=" + svc,
+      "if ! command -v systemctl >/dev/null 2>&1; then",
+      "  echo \"This computer doesn't use systemd. Start run-on-schedule.sh with your own start-up tool instead.\"",
+      "  exit 1",
+      "fi",
+      "unit=$(mktemp)",
+      "cat > \"$unit\" <<EOF",
+      "[Unit]",
+      "Description=Second Thought: " + fileBase,
+      "After=network-online.target",
+      "Wants=network-online.target",
+      "",
+      "[Service]",
+      "WorkingDirectory=$here",
+      "ExecStart=/bin/sh \"$here/run-on-schedule.sh\"",
+      "Restart=on-failure",
+      "RestartSec=30",
+      "User=$(id -un)",
+      "",
+      "[Install]",
+      "WantedBy=multi-user.target",
+      "EOF",
+      "sudo install -m 644 \"$unit\" \"/etc/systemd/system/$name.service\" || exit 1",
+      "rm -f \"$unit\"",
+      "sudo systemctl daemon-reload && sudo systemctl enable --now \"$name\" || exit 1",
+      "echo \"Done. $name is running, and starts again by itself after a restart.\"",
+      "echo \"See what it's doing:  journalctl -u $name -f\"",
+      "echo \"Stop it for good:     sudo systemctl disable --now $name\"",
+      ""].join("\n");
   }
   function programUsesPrefix(prefix){
     const has = t => String(t || "").startsWith(prefix);
@@ -5770,10 +5833,9 @@ HOW TO MAP CODE
       usesHA ? "         HA_URL = http://homeassistant.local:8123" : null,
       usesHA ? "         HA_TOKEN = your-long-lived-token" : null,
       "  2. Windows: double-click run.bat" + ((schedules.length || watches.length) ? " (or run-on-schedule.bat to keep it running)." : "."),
-      "     Mac or Linux:",
-      usesGemini ? "         pip install anthropic google-genai" : "         pip install anthropic",
-      starts.length ? "         python " + fileBase + ".py              runs the 'when Run is clicked' scripts once" : null,
-      (schedules.length || watches.length) ? "         python " + fileBase + ".py --schedule   keeps running: scheduled and 'when … changes' scripts start by themselves" : null,
+      "     Linux or Mac:  sh run.sh" + ((schedules.length || watches.length) ? "   (or sh run-on-schedule.sh to keep it running;" : ""),
+      (schedules.length || watches.length) ? "     sh install-service.sh makes it start by itself whenever the computer starts)" : null,
+      "     Or by hand:  pip install " + (usesGemini ? "anthropic google-genai" : "anthropic") + ", then  python " + fileBase + ".py" + ((schedules.length || watches.length) ? " [--schedule]" : ""),
       "  Environment variables with the same names still work, and win over the file.",
       "",
       usesGemini ? "Gemini calls go through the Gemini API and are billed to your Google account." : null,
@@ -5860,9 +5922,10 @@ HOW TO MAP CODE
       lh.setUint32(18, data.length, true); lh.setUint32(22, data.length, true); lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
       parts.push(new Uint8Array(lh.buffer), name, data);
       const ch = new DataView(new ArrayBuffer(46));
-      ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true);
+      ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 0x0314, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true);
       ch.setUint16(12, dosTime, true); ch.setUint16(14, dosDate, true); ch.setUint32(16, crc, true);
       ch.setUint32(20, data.length, true); ch.setUint32(24, data.length, true); ch.setUint16(28, name.length, true);
+      ch.setUint32(38, ((/\.sh$/.test(f.name) ? 0o100755 : 0o100644) << 16) >>> 0, true);  // Linux and Mac: scripts can run
       ch.setUint32(42, offset, true);
       central.push(new Uint8Array(ch.buffer), name);
       offset += 30 + name.length + data.length;
