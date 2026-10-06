@@ -188,6 +188,11 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
           <option value="gemini-default">Gemini Flash</option>
           <option value="gemini-complex">Gemini Pro</option>
         </optgroup>
+        <optgroup label="Llama (runs in exported Python)">
+          <option value="llama-quick">Llama, small</option>
+          <option value="llama-default">Llama, vision</option>
+          <option value="llama-complex">Llama 4</option>
+        </optgroup>
       </select>
     </label>
     <button id="step-toggle" type="button" aria-pressed="false">Step: off</button>
@@ -365,9 +370,17 @@ MODELS = {
     "gemini-quick": "gemini-3.5-flash-lite",
     "gemini-default": "gemini-3.8-flash",
     "gemini-complex": "gemini-3.1-pro-preview",
+    # Llama: any OpenAI-compatible server. Default is Ollama on this computer: install from https://ollama.com,
+    # then  ollama pull llama3.2-vision:11b  (and the others if you use them). See https://ollama.com/library
+    "llama-quick": "llama3.2:3b",              # small and fast; runs on most computers
+    "llama-default": "llama3.2-vision:11b",    # can look at pictures; about 8 GB of graphics memory
+    "llama-complex": "llama4:16x17b",          # Llama 4 Scout; needs a lot of memory
 }
+LLAMA_BASE_URL = os.environ.get("LLAMA_BASE_URL", "http://localhost:11434/v1").rstrip("/")
+LLAMA_API_KEY = os.environ.get("LLAMA_API_KEY", "")
 MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
-                "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro"}
+                "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro",
+                "llama-quick": "Llama, small", "llama-default": "Llama, vision", "llama-complex": "Llama 4"}
 MAX_TOKENS = 4096
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
@@ -771,6 +784,9 @@ class Runtime:
         if tier.startswith("gemini-"):
             text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web)
             who = "Gemini"
+        elif tier.startswith("llama-"):
+            text = await self._call_llama(MODELS.get(tier, MODELS["llama-default"]), prompt, picture, history, web)
+            who = "Llama"
         else:
             text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
             who = "Claude"
@@ -793,6 +809,44 @@ class Runtime:
         usage = getattr(msg, "usage", None)
         self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
         return "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
+
+    def _llama_request(self, body):
+        headers = {"Content-Type": "application/json"}
+        if LLAMA_API_KEY:
+            headers["Authorization"] = "Bearer " + LLAMA_API_KEY
+        req = urllib.request.Request(LLAMA_BASE_URL + "/chat/completions", data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
+        try:
+            with urllib.request.urlopen(req, timeout=600) as r:
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf-8", "replace")[:200]
+            if e.code == 404 and "model" in detail.lower():
+                raise RunError(f"The Llama server doesn't have model {body['model']}. Run:  ollama pull {body['model']}")
+            if e.code in (400, 401, 403, 404):
+                raise RunError(f"The Llama server refused the request ({e.code}): {detail}")
+            raise Retryable(f"The Llama server answered {e.code}: {detail}")
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            raise Retryable(f"Couldn't reach the Llama server at {LLAMA_BASE_URL} ({getattr(e, 'reason', e)}). "
+                            "Is Ollama running? Start it with:  ollama serve")
+
+    async def _call_llama(self, model, prompt, picture, history, web):
+        messages = [{"role": "system", "content": self.instructions}] if self.instructions else []
+        messages += [{"role": t["role"], "content": to_str(t["content"])} for t in history or []]
+        if web:
+            prompt = "You can't browse the web, so answer from what you know and say clearly that it may be out of date.\n\n" + prompt
+        if picture is not None and picture.svg is None:
+            url = "data:" + picture.media_type + ";base64," + base64.b64encode(picture.data).decode("ascii")
+            content = [{"type": "text", "text": prompt}, {"type": "image_url", "image_url": {"url": url}}]
+        else:
+            content = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
+        messages.append({"role": "user", "content": content})
+        data = await asyncio.to_thread(self._llama_request, {"model": model, "messages": messages, "max_tokens": MAX_TOKENS, "stream": False})
+        usage = data.get("usage") or {}
+        self._count("Llama", usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
+        try:
+            return (data["choices"][0]["message"]["content"] or "").strip()
+        except (KeyError, IndexError, TypeError):
+            return ""
 
     async def _call_gemini(self, model, prompt, picture, history, web):
         try:
@@ -2785,6 +2839,7 @@ Control:
   rb_use_model: fields TIER ("quick" | "default" | "complex" for Claude; "gemini-quick" | "gemini-default" | "gemini-complex" for Gemini).  rb_stop: end the run.
   rb_with_model: fields TIER (as above); statement input DO. Runs just the blocks inside on that model.
   Map calls to Gemini (google-genai, google.generativeai) to rb_with_model or rb_use_model with a gemini tier: Flash-Lite = gemini-quick, Flash = gemini-default, Pro = gemini-complex.
+  Map Llama, Ollama, llama.cpp or other local/open models to tiers "llama-quick" (small), "llama-default" (vision-capable), "llama-complex" (largest).
   controls_repeat_ext: inputs TIMES, DO.
   controls_whileUntil: fields MODE ("WHILE" | "UNTIL"); inputs BOOL, DO.
   controls_if: inputs IF0, DO0, IF1, DO1, ..., ELSE; extraState {"elseIfCount": <number of extra IFs>, "hasElse": true} (omit extraState for a plain if).
@@ -2931,8 +2986,11 @@ HOW TO MAP CODE
   const V = (type, msg, args, output, extra) => Object.assign({ type, message0:msg, args0:args || [], output }, extra);
   const val = name => ({ type:"input_value", name });
   const TIERS = [["Claude, quick","quick"],["Claude, balanced","default"],["Claude, most capable","complex"],
-                 ["Gemini Flash-Lite","gemini-quick"],["Gemini Flash","gemini-default"],["Gemini Pro","gemini-complex"]];
+                 ["Gemini Flash-Lite","gemini-quick"],["Gemini Flash","gemini-default"],["Gemini Pro","gemini-complex"],
+                 ["Llama, small","llama-quick"],["Llama, vision","llama-default"],["Llama 4","llama-complex"]];
   const isGemini = t => String(t || "").startsWith("gemini-");
+  const isLlama = t => String(t || "").startsWith("llama-");
+  const isElsewhere = t => isGemini(t) || isLlama(t);
   const tierLabel = t => (TIERS.find(x => x[1] === t) || [t])[0];
   /* ---------- Long text field: wraps at 80 characters, any number of lines ---------- */
   const WRAP = 80;
@@ -2999,10 +3057,10 @@ HOW TO MAP CODE
       { style:"control", inputsInline:true, tooltip:"Pause until the condition is true. Checked twice a second, or every 10 seconds if it asks Claude." }),
     { type:"rb_stop", message0:"stop the run", previousStatement:null, style:"control", tooltip:"End the run here. Anything already in the result is shown." },
     S("rb_use_model", "use model %1", [{ type:"field_dropdown", name:"TIER", options:TIERS }], { style:"control",
-      tooltip:"Switch model for the AI blocks after this one. Gemini runs in exported Python; in this page Claude stands in for it." }),
+      tooltip:"Switch model for the AI blocks after this one. Gemini and Llama run in exported Python; in this page Claude stands in for them." }),
     { type:"rb_with_model", message0:"with model %1", args0:[{ type:"field_dropdown", name:"TIER", options:TIERS }],
       message1:"%1", args1:[{ type:"input_statement", name:"DO" }], previousStatement:null, nextStatement:null, style:"control",
-      tooltip:"Runs just the blocks inside on this model, then goes back to the model before. Gemini runs in exported Python; in this page Claude stands in for it." },
+      tooltip:"Runs just the blocks inside on this model, then goes back to the model before. Gemini and Llama run in exported Python; in this page Claude stands in for them." },
     /* Operators extras */
     V("rb_contains", "%1 contains %2", [val("A"), val("B")], "Boolean", { style:"operators", inputsInline:true, tooltip:"True if the first text includes the second (ignores case)." }),
     V("rb_word_count", "word count of %1", [val("TEXT")], "Number", { style:"text", inputsInline:true }),
@@ -3670,6 +3728,30 @@ HOW TO MAP CODE
       desc:"Claude drafts, Gemini checks the draft, Claude revises. A second opinion from a different AI.",
       tip:"Gemini only answers in exported Python; in the page Claude stands in." },
 
+    { key:"w_llama", cat:"Writing", title:"Llama drafts, Claude reviews",
+      desc:"A Llama model on your own computer writes the draft and the revisions; Claude reviews each version against your rules.",
+      tip:"Llama only answers in exported Python (with Ollama running); in the page Claude stands in.",
+      build:() => P([], chain(sStart(),
+        sTask("Write a friendly 150-word introduction to rye bread for a home baker's website."),
+        blk("rb_with_model", { TIER:"llama-default" }, { DO:st(sGenerate()) }),
+        sRepeat(3,
+          blk("rb_review", null, { CRITERIA:lt("accurate; friendly; about 150 words; no clichés") }),
+          sIf(xB("rb_passed"), blk("controls_flow_statements", { FLOW:"BREAK" })),
+          blk("rb_with_model", { TIER:"llama-default" }, { DO:st(blk("rb_revise")) })),
+        sFinish())) },
+    { key:"w_judges", cat:"Writing", title:"Three AIs judge",
+      desc:"Claude, Gemini and Llama each score your text out of 10 and say why; you get all three opinions and the average.",
+      tip:"Paste a headline, a product description or the opening of a story.",
+      build:() => P(["text", "a", "b", "c"], chain(sStart(),
+        sAskMe("Paste the text to be judged."),
+        xSet("text", xAnswer()),
+        blk("rb_with_model", { TIER:"default" }, { DO:st(xSet("a", xScore(xV("text"), "clear, engaging and well written"))) }),
+        blk("rb_with_model", { TIER:"gemini-default" }, { DO:st(xSet("b", xScore(xV("text"), "clear, engaging and well written"))) }),
+        blk("rb_with_model", { TIER:"llama-default" }, { DO:st(xSet("c", xScore(xV("text"), "clear, engaging and well written"))) }),
+        sAdd(xJ("Claude: ", xV("a"), "/10   Gemini: ", xV("b"), "/10   Llama: ", xV("c"), "/10")),
+        sAdd(xJ("Average: ", xB("math_round", { NUM:xB("math_arithmetic", { A:xB("math_arithmetic", { A:xB("math_arithmetic", { A:xV("a"), B:xV("b") }, { OP:"ADD" }), B:xV("c") }, { OP:"ADD" }), B:nm(3) }, { OP:"DIVIDE" }) }, { OP:"ROUND" }), "/10")),
+        sFinish())) },
+
     /* ----- Research ----- */
     { key:"r_brief", cat:"Research", title:"Research brief",
       desc:"Splits your topic into 4 questions, answers each, then checks the whole brief is balanced and honest about uncertainty.",
@@ -4187,6 +4269,12 @@ HOW TO MAP CODE
         xSet("report", xAsk(xJ("Write a short weekly house report with headings: Energy, Comfort, Needs attention.\n\n", xHSum("energy"), "\n", xHSum("temperature"),
           "\n", xHSum("battery"), "\n", xHSum("unavailable"), "\n", xHSum("backup")))),
         sAdd(xV("report")), sSave(xV("report"), "house-report", "md"), sFinish())) },
+    { key:"ha_private", cat:HC.daily, title:"Private briefing, kept at home",
+      desc:"A Llama model on your own computer reads the whole house and writes the briefing, so your house data never leaves home." + HA_NOTE,
+      tip:"Run it on the same machine as Ollama, next to Home Assistant.",
+      build:() => P(["briefing"], twoWay("private", [sAt(7, 20, "every")],
+        blk("rb_with_model", { TIER:"llama-quick" }, { DO:st(xSet("briefing", xAsk(xJ("Write a short, friendly morning briefing from these home readings. Mention anything left on or open.\n\n", xHSum("*"))))) }),
+        ...notifyAndKeep(xV("briefing")), sFinish())) },
     { key:"ha_ask", cat:HC.daily, title:"Ask the house",
       desc:"Ask anything ('Is anyone home?', 'Did I leave the oven on?'). Claude answers using only your Home Assistant readings." + HA_NOTE,
       tip:"Claude says so if the readings don't contain the answer.",
@@ -4822,6 +4910,10 @@ HOW TO MAP CODE
   function b64encode(str){ const bytes = new TextEncoder().encode(str); let bin = ""; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin); }
   function b64decode(b64){ const bin = atob(b64); const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
 
+  function programUsesLlama(){
+    if (isLlama($("tier").value)) return true;
+    return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isLlama(b.getFieldValue("TIER")));
+  }
   function programUsesGemini(){
     if (isGemini($("tier").value)) return true;
     return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isGemini(b.getFieldValue("TIER")));
@@ -5126,7 +5218,7 @@ HOW TO MAP CODE
 
     const fileBase = slug(progName);
     const when = new Date();
-    const usesGemini = programUsesGemini();
+    const usesGemini = programUsesGemini(), usesLlama = programUsesLlama();
     const usesHA = ws.getAllBlocks(false).some(b => b.type.startsWith("rb_ha_"));
     const header = [
       "#!/usr/bin/env python3",
@@ -5144,6 +5236,9 @@ HOW TO MAP CODE
       (schedules.length || watches.length) ? "    python " + fileBase + ".py --schedule         keeps running: scheduled and 'when … changes' scripts start by themselves" : null,
       "",
       usesGemini ? "Gemini calls go through the Gemini API and are billed to your Google account." : null,
+      usesLlama ? "Llama runs on any OpenAI-compatible server. By default that's Ollama on this computer:" : null,
+      usesLlama ? "install it from https://ollama.com, then  ollama pull llama3.2-vision:11b  (see MODELS below)." : null,
+      usesLlama ? "Elsewhere? Set LLAMA_BASE_URL (and LLAMA_API_KEY if the server needs one)." : null,
       "Claude calls go through the Anthropic API and are billed to your API account,",
       "not your claude.ai plan. To change model, set RB_MODEL_TIER to quick, default",
       "or complex, or edit MODELS below.",
@@ -5877,11 +5972,13 @@ HOW TO MAP CODE
     setStatus("running · " + run.calls + " Claude call" + (run.calls === 1 ? "" : "s"));
     const sample = run.sample;
     const ctl = new AbortController(); run.ctls.add(ctl);
-    const gem = isGemini(run.tier);
-    const opts = { signal:ctl.signal, modelTier:gem ? run.tier.slice(7) : run.tier, cache:false };
-    if (gem) {
+    const away = isElsewhere(run.tier);
+    const opts = { signal:ctl.signal, modelTier:away ? run.tier.replace(/^[a-z]+-/, "") : run.tier, cache:false };
+    if (away) {
+      const who = isGemini(run.tier) ? "Gemini" : "Llama";
       if (step && step.el && !step.el.dataset.stand) { step.el.dataset.stand = "1"; const n = step.el.querySelector(".step-name"); if (n) n.textContent += " \u00b7 Claude standing in for " + tierLabel(run.tier); }
-      if (!run.geminiNoted) { run.geminiNoted = true; addStep("Gemini", { mono:true, text:"Gemini can't be reached from this page, so Claude answers in its place. Export to Python to use Gemini itself." }).done("note", "warn"); }
+      run.awayNoted = run.awayNoted || {};
+      if (!run.awayNoted[who]) { run.awayNoted[who] = true; addStep(who, { mono:true, text:who + " can't be reached from this page, so Claude answers in its place. Export to Python to use " + who + " itself." }).done("note", "warn"); }
     }
     if (images && images.length) opts.images = images;
     if (mode !== "json" && step) opts.onText = ({ text }) => step.text(text);

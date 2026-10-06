@@ -120,6 +120,7 @@ Second Thought can do many things. Here are some of them.
 - It can wait until a certain time of day, and then start a job by itself.
 - If something goes wrong, it can try again.
 - It can ask **Gemini** to help too. Gemini is another clever helper, made by a company called Google. Claude can write something, and Gemini can check it. Two helpers spot more mistakes than one.
+- It can ask **Llama**, a helper that can live on your own computer and keep everything private.
 
 ---
 
@@ -186,7 +187,19 @@ pip install google-genai
 export GEMINI_API_KEY=your-gemini-key
 ```
 
-Gemini only works in the Python program. On the Second Thought page, Claude does Gemini's jobs instead, and the run log says so.
+There is a third helper too, called **Llama**. Llama is special because it can live on *your own computer*, so nothing you ask it ever leaves the house. To use it, install a free program called **Ollama** and download a Llama model:
+
+```
+ollama pull llama3.2-vision:11b
+```
+
+If Llama lives on a different computer, tell the program where to find it:
+
+```
+export LLAMA_BASE_URL=http://that-computer:11434/v1
+```
+
+Gemini and Llama only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
 
 ---
 
