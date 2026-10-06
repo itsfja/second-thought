@@ -131,6 +131,8 @@ You do not have to start from nothing.
 
 At the top of the screen there is a box called **Example**. Choose an example, then press **Load**. Now press **Run** and watch what happens.
 
+There are nearly fifty examples, sorted into groups: **Writing, Research, Design, Learning, Work, Home and baking, Code and data,** and **Automation**. Press **Browse examples** to see them all, with a sentence about each one and an idea for something to change.
+
 Try the example called **Review loop** first. Claude writes about bread, checks its own work, and makes it better.
 
 Then try your own ideas. Change the words on the blocks. Add new blocks. See what happens.

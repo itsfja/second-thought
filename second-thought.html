@@ -134,6 +134,19 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   .blocklyTreeRow{padding-right:4px!important;height:24px!important;line-height:24px!important}
   .blocklyToolboxDiv{max-width:118px}
 }
+.exdesc{margin:-4px 0 10px;font-size:13px;color:var(--muted);max-width:110ch}
+.exdesc b{color:var(--ink);font-weight:700}
+.gallery{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;margin-bottom:12px;display:flex;flex-direction:column;gap:14px}
+.gallery h2{font-family:var(--font-display);font-weight:500;font-size:16px;margin:0}
+.gallery .hint{margin:4px 0 0;font-size:13px;color:var(--muted);max-width:90ch}
+.gal-cat{display:flex;flex-direction:column;gap:8px}
+.gal-cat h3{font-family:var(--font-display);font-weight:500;font-size:15px;margin:6px 0 0}
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:10px}
+.gal-card{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.gal-card h4{margin:0;font-size:14px}
+.gal-card p{margin:0;font-size:13px;line-height:1.45}
+.gal-card .tip{color:var(--muted)}
+.gal-card button{align-self:flex-start;margin-top:auto}
 .banner{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:10px}
 @media (max-width:860px){
   .main{grid-template-columns:minmax(0,1fr);height:auto}
@@ -151,19 +164,10 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   </div>
   <div class="controls">
     <label class="lab" for="example">Example
-      <select id="example">
-        <option value="review">Review loop</option>
-        <option value="brainstorm">Brainstorm and pick the best</option>
-        <option value="interview">Interview me</option>
-        <option value="translate">Translate into a set</option>
-        <option value="parallel">Two critics at once (broadcast)</option>
-        <option value="pictures">Draw, critique, redraw (pictures)</option>
-        <option value="memory">Fresh headline every run (memory)</option>
-        <option value="files">Summarise a file (files, retries)</option>
-        <option value="gemini">Claude writes, Gemini reviews</option>
-      </select>
+      <select id="example"></select>
     </label>
     <button id="load" type="button">Load</button>
+    <button id="ex-toggle" type="button" aria-expanded="false" aria-controls="gallery">Browse examples</button>
     <button id="io-toggle" type="button" aria-expanded="false" aria-controls="io">Import / export</button>
     <button id="lib-toggle" type="button" aria-expanded="false" aria-controls="lib">Programs</button>
     <button id="mem-toggle" type="button" aria-expanded="false" aria-controls="mem">Memory</button>
@@ -188,7 +192,15 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <button id="run" type="button" class="primary">Run</button>
   </div>
 </header>
+<p id="ex-desc" class="exdesc"></p>
 <div id="banner" class="banner" hidden></div>
+<section id="gallery" class="gallery" hidden aria-label="Example programs">
+  <div class="gal-head">
+    <h2>Example programs</h2>
+    <p class="hint">Each one is a complete program. Load it, press Run, then change the words on the blocks to make it yours. Your current program is replaced, so save it first in Programs if you want to keep it.</p>
+  </div>
+  <div id="gal-body"></div>
+</section>
 <section id="lib" class="io" hidden aria-label="Saved programs and prompts">
   <div class="io-col">
     <h2>My programs</h2>
@@ -2207,6 +2219,525 @@ HOW TO MAP CODE
     ))
   };
 
+  /* ---------- Example library ---------- */
+  /* Small builders so each example reads like a recipe. Variables are named, and get ids from their names. */
+  const xId = n => "x_" + String(n).replace(/[^A-Za-z0-9]+/g, "_");
+  const xV = n => getv(xId(n));
+  const xSet = (n, value) => setv(xId(n), value);
+  const xT = x => typeof x === "string" ? (x.length > 40 || x.includes("\n") ? lt(x) : tx(x)) : x;
+  const xB = (type, inputs, fields) => ({ block:blk(type, fields || null, inputs || null) });
+  const xJ = (...parts) => ({ block:{ type:"text_join", extraState:{ itemCount:parts.length },
+    inputs:Object.fromEntries(parts.map((p, i) => ["ADD" + i, xT(p)])) } });
+  const xList = (...items) => ({ block:{ type:"lists_create_with", extraState:{ itemCount:items.length },
+    inputs:Object.fromEntries(items.map((p, i) => ["ADD" + i, xT(p)])) } });
+  const xAnswer = () => xB("rb_answer");
+  const xDraft = () => xB("rb_draft");
+  const xTask = () => xB("rb_task_get");
+  const xResultText = () => xB("rb_result_text");
+  const xMsg = () => xB("rb_msg_value");
+  const xAsk = p => xB("rb_ask", { TEXT:xT(p) });
+  const xAskList = p => xB("rb_ask_list", { TEXT:xT(p) });
+  const xAskRecs = (fields, p) => xB("rb_ask_records", { FIELDS:tx(fields), TEXT:xT(p) });
+  const xRewrite = (text, how) => xB("rb_rewrite", { TEXT:xT(text), HOW:xT(how) });
+  const xExtract = (what, text) => xB("rb_extract", { WHAT:xT(what), TEXT:xT(text) });
+  const xScore = (text, criteria) => xB("rb_score", { TEXT:xT(text), CRITERIA:xT(criteria) });
+  const xRec = (key, rec) => xB("rb_rec_get", { KEY:tx(key), REC:rec });
+  const xSort = (list, key, order) => xB("rb_sort", { LIST:list, KEY:tx(key) }, { ORDER:order || "desc" });
+  const xLess = (a, n) => xB("logic_compare", { A:a, B:nm(n) }, { OP:"LT" });
+  const xMore = (a, b) => xB("logic_compare", { A:a, B:b }, { OP:"GT" });
+  const xIs = (a, text) => xB("logic_compare", { A:a, B:tx(text) }, { OP:"EQ" });
+  const xDraw = p => xB("rb_img_draw", { TEXT:xT(p) });
+  const xImgAsk = (q, pic) => xB("rb_img_ask", { TEXT:xT(q), IMG:pic });
+  const xImgScore = (pic, criteria) => xB("rb_img_score", { IMG:pic, CRITERIA:xT(criteria) });
+  const xChat = (name, msg) => xB("rb_chat", { NAME:tx(name), TEXT:xT(msg) });
+  const xRecall = name => xB("rb_mem_get", { NAME:tx(name) });
+  const xNow = part => xB("rb_now", null, { PART:part });
+  const xChooseFile = () => xB("rb_file_choose");
+  const xChoosePic = () => xB("rb_img_choose");
+  const xChoose = list => xB("rb_choose", { LIST:list });
+  const xApprove = x => xB("rb_approve", { TEXT:x });
+  const sStart = () => blk("rb_start");
+  const sReceive = msg => blk("rb_receive", { MSG:msg });
+  const sAt = (h, m, days) => blk("rb_when_time", { HOUR:h, MINUTE:m, DAYS:days || "every" });
+  const sSay = x => blk("rb_say", null, { TEXT:xT(x) });
+  const sAskMe = q => blk("rb_ask_me", null, { TEXT:lt(q) });
+  const sAdd = x => blk("rb_add_result", null, { TEXT:xT(x) });
+  const sTask = x => blk("rb_task", null, { TEXT:xT(x) });
+  const sInstr = x => blk("rb_set_instructions", null, { TEXT:xT(x) });
+  const sGenerate = () => blk("rb_generate");
+  const sRework = x => blk("rb_rework", null, { TEXT:xT(x) });
+  const sSetDraft = x => blk("rb_set_draft", null, { TEXT:xT(x) });
+  const sReflect = (criteria, rounds) => blk("rb_reflect", null, { CRITERIA:lt(criteria), ROUNDS:nm(rounds || 3), FIX:st(blk("rb_revise")) });
+  const sShowPic = pic => blk("rb_img_show", null, { IMG:pic });
+  const sSave = (x, name, ext) => blk("rb_file_save", { EXT:ext }, { VALUE:xT(x), NAME:tx(name) });
+  const sRemember = (x, name, kind) => blk("rb_mem_set", { KIND:kind || "permanent" }, { VALUE:xT(x), NAME:tx(name) });
+  const sRememberAdd = (x, name) => blk("rb_mem_add", { KIND:"permanent" }, { VALUE:xT(x), NAME:tx(name) });
+  const sForget = name => blk("rb_mem_forget", null, { NAME:tx(name) });
+  const sForEach = (n, list, ...body) => blk("controls_forEach", { VAR:{ id:xId(n) } }, { LIST:list, DO:st(chain(...body)) });
+  const sRepeat = (n, ...body) => blk("controls_repeat_ext", null, { TIMES:nm(n), DO:st(chain(...body)) });
+  const sIf = (cond, ...body) => blk("controls_if", null, { IF0:cond, DO0:st(chain(...body)) });
+  const sUntil = (cond, ...body) => blk("controls_whileUntil", { MODE:"UNTIL" }, { BOOL:cond, DO:st(chain(...body)) });
+  const sWaitUntil = cond => blk("rb_wait_until", null, { COND:cond });
+  const sRetry = (n, ...body) => blk("rb_retry", null, { TIMES:nm(n), DO:st(chain(...body)) });
+  const sBroadcastWait = msg => blk("rb_broadcast_wait", null, { MSG:tx(msg) });
+  const sBroadcastWith = (msg, value) => blk("rb_broadcast_with", null, { MSG:tx(msg), VALUE:value });
+  const sAddOne = n => blk("math_change", { VAR:{ id:xId(n) } }, { DELTA:nm(1) });
+  const sFinish = () => blk("rb_result");
+  const sFinishWith = x => blk("rb_finish_with", null, { TEXT:xT(x) });
+  /* P(["var", ...], script) or P(vars, [script, script, ...]) for several scripts side by side. */
+  const P = (vars, scripts) => {
+    const list = Array.isArray(scripts) ? scripts : [scripts];
+    return { variables:vars.map(n => ({ id:xId(n), name:n })),
+      blocks:{ languageVersion:0, blocks:list.map((s, i) => Object.assign({ x:30 + i * 620, y:30 }, s)) } };
+  };
+
+  const EXAMPLE_CATEGORIES = ["Writing", "Research", "Design", "Learning", "Work", "Home and baking", "Code and data", "Automation"];
+  const EXAMPLE_LIST = [
+    /* ----- Writing ----- */
+    { key:"review", cat:"Writing", title:"Review loop", build:EXAMPLES.review,
+      desc:"Claude writes about autolyse, checks it against your rules, and fixes whatever fails, up to 3 rounds.",
+      tip:"Change the task in the blue block and the rules in the purple one." },
+    { key:"interview", cat:"Writing", title:"Interview me, then write", build:EXAMPLES.interview,
+      desc:"Asks what to write and for whom, drafts it, then keeps reworking until you press Approve.",
+      tip:"Answer the questions in the run log; send it back a few times to steer it." },
+    { key:"w_email", cat:"Writing", title:"Polish an email",
+      desc:"Paste a rough email, say who it's for and how it should sound, and Claude reshapes it until you approve.",
+      tip:"Try a tricky one: chasing an unpaid invoice, or saying no to a favour.",
+      build:() => P([], chain(sStart(),
+        sAskMe("Paste the email you want to improve."),
+        sSetDraft(xAnswer()),
+        sAskMe("Who is it to, and how should it sound? (for example: my landlord, firm but polite)"),
+        sRework(xJ("Make it suit this reader and tone: ", xAnswer())),
+        sUntil(xApprove(xDraft()), sAskMe("What should change?"), sRework(xAnswer())),
+        sFinish())) },
+    { key:"w_story", cat:"Writing", title:"Bedtime story with a checker",
+      desc:"Writes a gentle story for a particular child, then checks it is age-appropriate, calm and not too long.",
+      tip:"Change the checking rules, for example 'includes a rhyme' or 'teaches sharing'.",
+      build:() => P([], chain(sStart(),
+        sAskMe("Who is the story for, and what do they love? (for example: Maya, 6, loves foxes)"),
+        sTask(xJ("Write a gentle bedtime story for this child: ", xAnswer(), ". About 300 words, with a calm, happy ending.")),
+        sGenerate(),
+        sReflect("suitable for the child's age; nothing scary; under 400 words; ends calmly", 2),
+        sFinish())) },
+    { key:"w_longpost", cat:"Writing", title:"Outline first, then the article",
+      desc:"Plans section headings, writes each section separately, joins them up, checks the flow and saves an .md file.",
+      tip:"Change the task to any article you'd like on your website.",
+      build:() => P(["sections", "section", "article"], chain(sStart(),
+        sTask("A beginner's guide to keeping a sourdough starter alive"),
+        xSet("sections", xAskList(xJ("List 5 section headings for this article, in order: ", xTask()))),
+        xSet("article", tx("")),
+        sForEach("section", xV("sections"),
+          xSet("article", xJ(xV("article"), "## ", xV("section"), "\n\n",
+            xAsk(xJ("Write this section of the article in about 120 words. Article: ", xTask(), ". Section: ", xV("section"))), "\n\n"))),
+        sSetDraft(xV("article")),
+        sReflect("each section follows on from the last; no repetition; friendly and practical", 2),
+        sSave(xDraft(), "article", "md"),
+        sFinish())) },
+    { key:"brainstorm", cat:"Writing", title:"Brainstorm and pick the best", build:EXAMPLES.brainstorm,
+      desc:"Claude suggests 6 headlines, scores each out of 10, and keeps the highest scorer.",
+      tip:"Swap headlines for names, slogans or titles." },
+    { key:"w_social", cat:"Writing", title:"One idea, five platforms",
+      desc:"Turns one announcement into a tweet, a LinkedIn post, an Instagram caption, an email and a text message.",
+      tip:"Edit the list of platforms to the ones you actually use.",
+      build:() => P(["platform"], chain(sStart(),
+        sAskMe("What do you want to announce?"),
+        sForEach("platform", xList("a post under 280 characters", "a LinkedIn post", "an Instagram caption with hashtags", "a short email to subscribers", "a two-sentence text message"),
+          sAdd(xJ(xV("platform"), ":\n", xRewrite(xAnswer(), xJ("turn it into ", xV("platform")))))),
+        sFinish())) },
+    { key:"translate", cat:"Writing", title:"Translate into a set", build:EXAMPLES.translate,
+      desc:"Writes a website welcome in English, then translates it into French and Spanish.",
+      tip:"Add more languages to the list block." },
+    { key:"parallel", cat:"Writing", title:"Two critics at once", build:EXAMPLES.parallel,
+      desc:"Writes a draft, then two separate scripts critique it at the same time: one for accuracy, one for beginners.",
+      tip:"Add a third 'when I receive' script with a different critic." },
+    { key:"gemini", cat:"Writing", title:"Claude writes, Gemini reviews", build:EXAMPLES.gemini,
+      desc:"Claude drafts, Gemini checks the draft, Claude revises. A second opinion from a different AI.",
+      tip:"Gemini only answers in exported Python; in the page Claude stands in." },
+
+    /* ----- Research ----- */
+    { key:"r_brief", cat:"Research", title:"Research brief",
+      desc:"Splits your topic into 4 questions, answers each, then checks the whole brief is balanced and honest about uncertainty.",
+      tip:"Try 'Is rye flour better for a starter than white flour?'",
+      build:() => P(["questions", "question"], chain(sStart(),
+        sInstr("You are a careful researcher. Say clearly when you are unsure, and never invent sources."),
+        sAskMe("What do you want to find out about?"),
+        xSet("questions", xAskList(xJ("List 4 short questions that together would answer this research topic: ", xAnswer()))),
+        sForEach("question", xV("questions"), sAdd(xJ("### ", xV("question"), "\n", xAsk(xV("question"))))),
+        sSetDraft(xResultText()),
+        sReflect("balanced; flags uncertainty; no invented facts or sources; plain English", 2),
+        sFinishWith(xDraft()))) },
+    { key:"r_compare", cat:"Research", title:"Compare options",
+      desc:"Lays out pros, cons and who each option suits, scores them, and lists the best first.",
+      tip:"Try 'three bread flours', 'two laptops' or 'holiday in Cornwall or the Lakes'.",
+      build:() => P(["options", "option"], chain(sStart(),
+        sAskMe("What are you choosing between?"),
+        xSet("options", xSort(xAskRecs("option, pros, cons, best for, score", xJ("Compare these options. Score each 1-10 for most people: ", xAnswer())), "score")),
+        sForEach("option", xV("options"),
+          sAdd(xJ(xRec("option", xV("option")), " (", xRec("score", xV("option")), "/10)\nPros: ", xRec("pros", xV("option")),
+            "\nCons: ", xRec("cons", xV("option")), "\nBest for: ", xRec("best for", xV("option"))))),
+        sFinish())) },
+    { key:"r_sides", cat:"Research", title:"Argue both sides",
+      desc:"Two scripts build the strongest case for and against at the same time, then a third step writes a fair conclusion.",
+      tip:"Use it on a decision you're stuck on.",
+      build:() => P([], [
+        chain(sStart(),
+          sAskMe("What claim or decision should be tested?"),
+          sBroadcastWait("argue"),
+          sAdd(xJ("Balanced view:\n", xAsk(xJ("Here are two arguments. Write a fair, balanced conclusion in 3 sentences.\n\n", xResultText())))),
+          sFinish()),
+        chain(sReceive("argue"),
+          sAdd(xJ("The case FOR:\n", xAsk(xJ("Make the strongest honest case FOR this, in 5 bullet points: ", xAnswer()))))),
+        chain(sReceive("argue"),
+          sAdd(xJ("The case AGAINST:\n", xAsk(xJ("Make the strongest honest case AGAINST this, in 5 bullet points: ", xAnswer())))))]) },
+    { key:"r_survey", cat:"Research", title:"Fair survey questions",
+      desc:"Drafts survey questions, scores each for being neutral and clear, and rewrites the weak ones.",
+      tip:"Lower or raise the score threshold (7) in the orange 'if' block.",
+      build:() => P(["questions", "question", "score"], chain(sStart(),
+        sAskMe("What do you want to learn from people?"),
+        xSet("questions", xAskList(xJ("Write 6 survey questions to learn this: ", xAnswer()))),
+        sForEach("question", xV("questions"),
+          xSet("score", xScore(xV("question"), "open, neutral, not leading, one idea per question")),
+          sIf(xLess(xV("score"), 7), xSet("question", xRewrite(xV("question"), "make it neutral, non-leading and about one idea only"))),
+          sAdd(xV("question"))),
+        sFinish())) },
+    { key:"files", cat:"Research", title:"Summarise a file", build:EXAMPLES.files,
+      desc:"Pick a file (PDF, Word or text); Claude summarises it with action items and saves summary.md.",
+      tip:"Try a long PDF report or minutes from a meeting." },
+    { key:"r_pdf_notes", cat:"Research", title:"Study notes from a document",
+      desc:"Pulls the key points out of a document, lists the questions it leaves open, and saves notes.md.",
+      tip:"Works well with academic papers and long articles saved as PDF.",
+      build:() => P(["document"], chain(sStart(),
+        xSet("document", xChooseFile()),
+        sAdd(xJ("Key points:\n", xExtract("the 8 most important points, as bullet points", xV("document")))),
+        sAdd(xJ("Questions it raises:\n", xAsk(xJ("List 4 good questions this document leaves open:\n\n", xV("document"))))),
+        sSave(xResultText(), "notes", "md"),
+        sFinish())) },
+    { key:"r_web", cat:"Research", title:"What's new on a topic",
+      desc:"Searches for recent news on a topic and remembers when you last checked.",
+      tip:"Live web search only works in exported Python; in the page Claude answers from what it knows.",
+      build:() => P([], chain(sStart(),
+        sIf(xB("rb_mem_has", { NAME:tx("last news check") }), sSay(xJ("Last checked: ", xRecall("last news check")))),
+        sAskMe("What topic should I check for news?"),
+        sAdd(xB("rb_web_search", { TEXT:xJ("latest news and developments about ", xAnswer()) })),
+        sRemember(xNow("datetime"), "last news check"),
+        sFinish())) },
+
+    /* ----- Design ----- */
+    { key:"pictures", cat:"Design", title:"Draw, critique, redraw", build:EXAMPLES.pictures,
+      desc:"Claude draws an illustration, critiques its own drawing, and redraws it twice with the improvements.",
+      tip:"Change what is drawn in the first pink block." },
+    { key:"d_logo", cat:"Design", title:"Logo ideas, best one kept",
+      desc:"Draws three logo ideas for your brand, scores each one, and keeps the best.",
+      tip:"Describe the feeling you want, not just the name.",
+      build:() => P(["logo", "best", "best score", "score"], chain(sStart(),
+        sAskMe("What's the name, and what feeling should the logo give? (for example: Number 38, warm and homely)"),
+        xSet("best", tx("")), xSet("best score", nm(0)),
+        sRepeat(3,
+          xSet("logo", xDraw(xJ("A simple, flat logo for this brand. Try a fresh idea: ", xAnswer()))),
+          sShowPic(xV("logo")),
+          xSet("score", xImgScore(xV("logo"), "simple, memorable, works when small, fits the brief")),
+          sIf(xMore(xV("score"), xV("best score")), xSet("best score", xV("score")), xSet("best", xV("logo")))),
+        sAdd(xV("best")),
+        sFinish())) },
+    { key:"d_critique", cat:"Design", title:"Critique my design",
+      desc:"Pick a picture of your poster, page or screen; Claude gives friendly expert feedback and the top five fixes.",
+      tip:"Take a screenshot of a web page and try it.",
+      build:() => P(["design"], chain(sStart(),
+        xSet("design", xChoosePic()),
+        sAdd(xImgAsk("Critique this design as a friendly expert: layout, hierarchy, contrast, spacing and readability.", xV("design"))),
+        sAdd(xJ("Top 5 fixes:\n", xImgAsk("List the 5 changes that would most improve this design, most important first, one line each.", xV("design")))),
+        sFinish())) },
+    { key:"d_wireframes", cat:"Design", title:"Sketch app screens",
+      desc:"Turns an app idea into its three most important screens, with a simple wireframe drawing of each.",
+      tip:"Describe your idea in one sentence, like 'an app to track my starter feeds'.",
+      build:() => P(["screens", "screen"], chain(sStart(),
+        sAskMe("Describe your app idea in a sentence."),
+        xSet("screens", xAskRecs("screen, purpose, key parts", xJ("List the 3 most important screens for this app: ", xAnswer()))),
+        sForEach("screen", xV("screens"),
+          sAdd(xJ(xRec("screen", xV("screen")), ": ", xRec("purpose", xV("screen")))),
+          sAdd(xDraw(xJ("A simple greyscale wireframe of a phone app screen called ", xRec("screen", xV("screen")),
+            ", showing: ", xRec("key parts", xV("screen")), ". Boxes and short labels only.")))),
+        sFinish())) },
+    { key:"d_palette", cat:"Design", title:"Colour palette from a mood",
+      desc:"Makes a five-colour palette with hex codes from a mood or place, then draws the swatches.",
+      tip:"Try 'a bakery at dawn' or 'a seaside café in winter'.",
+      build:() => P(["colours", "colour"], chain(sStart(),
+        sAskMe("Describe a mood or place for the colours."),
+        xSet("colours", xAskRecs("name, hex, use", xJ("Make a 5-colour palette for this mood, with hex codes and what each is for: ", xAnswer()))),
+        sForEach("colour", xV("colours"),
+          sAdd(xJ(xRec("name", xV("colour")), "  ", xRec("hex", xV("colour")), "  ", xRec("use", xV("colour"))))),
+        sAdd(xDraw(xJ("Five large colour swatches in a row, each labelled with its hex code, using exactly these colours:\n", xResultText()))),
+        sFinish())) },
+    { key:"d_icons", cat:"Design", title:"A matching icon set",
+      desc:"Standing instructions keep every drawing in one style, so five icons come out as a matching set.",
+      tip:"Change the style in the instructions block: colour, line thickness, filled or outline.",
+      build:() => P(["icons", "icon"], chain(sStart(),
+        sInstr("Every drawing is a simple line icon: square viewBox, thick rounded strokes, one colour #2F4BDB, no fill, no text."),
+        xSet("icons", xAskList("5 icons for a baking website: whisk, oven, timer and two more you choose")),
+        sForEach("icon", xV("icons"), sAdd(xDraw(xJ("An icon of ", xV("icon"))))),
+        sFinish())) },
+    { key:"d_name", cat:"Design", title:"Name, tagline and first logo",
+      desc:"Suggests five names with taglines, lets you pick one, then draws a first logo for it.",
+      tip:"Use it for a shop, a club, a product or a pet project.",
+      build:() => P(["ideas", "pick"], chain(sStart(),
+        sAskMe("What are you naming? (a shop, a product, a club…)"),
+        xSet("ideas", xAskRecs("name, tagline", xJ("Suggest 5 names, each with a short tagline, for: ", xAnswer()))),
+        xSet("pick", xChoose(xV("ideas"))),
+        sAdd(xV("pick")),
+        sAdd(xDraw(xJ("A simple flat logo showing the words '", xRec("name", xV("pick")), "', in a style that matches: ", xRec("tagline", xV("pick"))))),
+        sFinish())) },
+
+    /* ----- Learning ----- */
+    { key:"l_quiz", cat:"Learning", title:"Make a quiz",
+      desc:"Writes five multiple-choice questions on any topic, with the right answer marked, and saves quiz.md.",
+      tip:"Say who it's for: 'the Tudors, for Year 5' or 'fermentation, for adults'.",
+      build:() => P(["questions", "q"], chain(sStart(),
+        sAskMe("What should the quiz be about, and who is it for?"),
+        xSet("questions", xAskRecs("question, answer, wrong 1, wrong 2, wrong 3", xJ("Write 5 multiple-choice quiz questions about: ", xAnswer()))),
+        sForEach("q", xV("questions"),
+          sAdd(xJ("Q: ", xRec("question", xV("q")), "\n  ✓ ", xRec("answer", xV("q")), "\n  ✗ ", xRec("wrong 1", xV("q")),
+            "\n  ✗ ", xRec("wrong 2", xV("q")), "\n  ✗ ", xRec("wrong 3", xV("q"))))),
+        sSave(xResultText(), "quiz", "md"),
+        sFinish())) },
+    { key:"l_levels", cat:"Learning", title:"Explain it three ways",
+      desc:"Explains one idea for a 7-year-old, a teenager and an expert, so you can see it at every level.",
+      tip:"Try something you only half understand yourself.",
+      build:() => P(["reader"], chain(sStart(),
+        sAskMe("What should be explained?"),
+        sForEach("reader", xList("a 7-year-old", "a 15-year-old", "an expert in the field"),
+          sAdd(xJ("For ", xV("reader"), ":\n", xAsk(xJ("Explain this to ", xV("reader"), " in under 120 words: ", xAnswer()))))),
+        sFinish())) },
+    { key:"l_tutor", cat:"Learning", title:"Practise with a tutor",
+      desc:"A patient tutor asks you questions one at a time, gives hints instead of answers, and sums up at the end.",
+      tip:"Change the number of rounds in the orange 'repeat' block.",
+      build:() => P([], chain(sStart(),
+        sInstr("You are a patient tutor. Ask one question at a time, never give the full answer straight away, and give hints."),
+        sAskMe("What do you want to practise?"),
+        sSay(xChat("tutor", xJ("I want to practise: ", xAnswer(), ". Ask me my first question."))),
+        sRepeat(3, sAskMe("Your answer:"), sSay(xChat("tutor", xAnswer()))),
+        sAdd(xChat("tutor", "Summarise how I did and what I should practise next.")),
+        sFinish())) },
+    { key:"l_flashcards", cat:"Learning", title:"Flashcards from notes",
+      desc:"Pick your notes; Claude makes eight question-and-answer flashcards and saves them as a text file.",
+      tip:"Any PDF, Word file or text notes will do.",
+      build:() => P(["notes", "cards", "card"], chain(sStart(),
+        xSet("notes", xChooseFile()),
+        xSet("cards", xAskRecs("front, back", xJ("Make 8 flashcards from these notes:\n\n", xV("notes")))),
+        sForEach("card", xV("cards"), sAdd(xJ(xRec("front", xV("card")), "  |  ", xRec("back", xV("card"))))),
+        sSave(xResultText(), "flashcards", "txt"),
+        sFinish())) },
+    { key:"l_plan", cat:"Learning", title:"Week-by-week study plan",
+      desc:"Builds a weekly plan from what you're learning, how long you've got and how many hours a week.",
+      tip:"Be specific: 'Python basics, 6 weeks, 3 hours a week'.",
+      build:() => P(["weeks", "week"], chain(sStart(),
+        sAskMe("What are you learning, how many weeks have you got, and how many hours a week?"),
+        xSet("weeks", xAskRecs("week, focus, tasks", xJ("Make a week-by-week study plan for: ", xAnswer()))),
+        sForEach("week", xV("weeks"),
+          sAdd(xJ("Week ", xRec("week", xV("week")), ": ", xRec("focus", xV("week")), "\n", xRec("tasks", xV("week"))))),
+        sFinish())) },
+
+    /* ----- Work ----- */
+    { key:"k_meeting", cat:"Work", title:"Meeting notes to actions",
+      desc:"Pick the notes from a meeting; you get a short summary and a checklist of who does what by when.",
+      tip:"Rough, messy notes work fine.",
+      build:() => P(["notes", "actions", "action"], chain(sStart(),
+        xSet("notes", xChooseFile()),
+        sAdd(xJ("Summary:\n", xAsk(xJ("Summarise these meeting notes in 4 bullet points:\n\n", xV("notes"))))),
+        xSet("actions", xAskRecs("action, owner, due", xJ("List every action item in these notes. Use 'unassigned' or 'no date' when missing:\n\n", xV("notes")))),
+        sForEach("action", xV("actions"),
+          sAdd(xJ("☐ ", xRec("action", xV("action")), " (", xRec("owner", xV("action")), ", ", xRec("due", xV("action")), ")"))),
+        sSave(xResultText(), "meeting-actions", "md"),
+        sFinish())) },
+    { key:"k_cv", cat:"Work", title:"Tailor a CV to a job",
+      desc:"Pick your CV and paste the job advert; Claude rewrites the CV to fit, then checks every claim is still true.",
+      tip:"Keep the 'every claim is in the original CV' rule. It stops anything being made up.",
+      build:() => P(["cv", "advert"], chain(sStart(),
+        xSet("cv", xChooseFile()),
+        sAskMe("Paste the job advert."),
+        xSet("advert", xAnswer()),
+        sTask(xJ("Rewrite this CV so it fits the job advert, keeping every fact true.\n\nJob advert:\n", xV("advert"), "\n\nCV:\n", xV("cv"))),
+        sGenerate(),
+        sReflect("every claim is in the original CV; matches the advert's key requirements; fits one page; plain, confident tone", 2),
+        sSave(xDraft(), "cv-tailored", "md"),
+        sFinish())) },
+    { key:"k_complaint", cat:"Work", title:"Reply to a complaint",
+      desc:"Drafts a warm, honest reply to an unhappy customer, scores it for empathy, improves it, and waits for your approval.",
+      tip:"Edit the instructions block to match your own business's voice.",
+      build:() => P(["score"], chain(sStart(),
+        sInstr("You write for a small business: warm, honest, never defensive, British spelling."),
+        sAskMe("Paste the customer's message."),
+        sTask(xJ("Write a reply to this customer message:\n\n", xAnswer())),
+        sGenerate(),
+        xSet("score", xScore(xDraft(), "empathy, takes responsibility where fair, offers a clear next step")),
+        sIf(xLess(xV("score"), 8), sRework("show more empathy and give a clearer next step")),
+        sUntil(xApprove(xDraft()), sAskMe("What should change?"), sRework(xAnswer())),
+        sFinish())) },
+    { key:"k_products", cat:"Work", title:"Product descriptions in bulk",
+      desc:"Writes a shop description for each product in a list, rewrites any that score below 7, and saves them all.",
+      tip:"Replace the list with your own products.",
+      build:() => P(["products", "product", "description", "score"], chain(sStart(),
+        sInstr("Write shop descriptions: about 40 words, warm and specific, British spelling."),
+        xSet("products", xList("rye sourdough loaf", "seeded spelt loaf", "cinnamon knots", "rosemary focaccia")),
+        sForEach("product", xV("products"),
+          xSet("description", xAsk(xJ("Write a product description for: ", xV("product")))),
+          xSet("score", xScore(xV("description"), "specific, appetising, about 40 words")),
+          sIf(xLess(xV("score"), 7), xSet("description", xRewrite(xV("description"), "make it more specific and appetising, about 40 words"))),
+          sAdd(xJ(xV("product"), ":\n", xV("description")))),
+        sSave(xResultText(), "product-descriptions", "md"),
+        sFinish())) },
+    { key:"k_agenda", cat:"Work", title:"Timed meeting agenda",
+      desc:"Turns a meeting's purpose, people and length into a timed agenda with a goal for each item.",
+      tip:"Add 'with 5 minutes for questions' to see it adapt.",
+      build:() => P(["items", "item"], chain(sStart(),
+        sAskMe("What is the meeting about, who's coming, and how long is it?"),
+        xSet("items", xAskRecs("minutes, item, goal", xJ("Write a timed agenda for this meeting: ", xAnswer()))),
+        sForEach("item", xV("items"),
+          sAdd(xJ(xRec("minutes", xV("item")), " min — ", xRec("item", xV("item")), " (goal: ", xRec("goal", xV("item")), ")"))),
+        sFinish())) },
+
+    /* ----- Home and baking ----- */
+    { key:"h_bake", cat:"Home and baking", title:"Bake schedule, worked backwards",
+      desc:"Say when you want bread out of the oven and get a step-by-step schedule working back from that time.",
+      tip:"Try 'Saturday 10am', then 'Sunday lunchtime, kitchen is cold'.",
+      build:() => P(["steps", "step"], chain(sStart(),
+        sAskMe("When do you want the bread out of the oven? (for example: Saturday 10am)"),
+        xSet("steps", xAskRecs("time, step, notes", xJ("Work backwards from this finish time to make a schedule for a standard sourdough loaf: feed starter, levain, autolyse, mix, bulk ferment with folds, shape, cold retard, bake. Finish time: ", xAnswer()))),
+        sForEach("step", xV("steps"), sAdd(xJ(xRec("time", xV("step")), "  ", xRec("step", xV("step")), "  ", xRec("notes", xV("step"))))),
+        sFinish())) },
+    { key:"h_meals", cat:"Home and baking", title:"Meals from what's in the fridge",
+      desc:"Plans five simple dinners from what you already have, then writes a short shopping list for the gaps.",
+      tip:"Mention diets, dislikes, or 'nothing that takes over 30 minutes'.",
+      build:() => P(["meals", "meal"], chain(sStart(),
+        sAskMe("What's in your fridge and cupboards, and any diets to follow?"),
+        xSet("meals", xAskRecs("day, meal, uses", xJ("Plan 5 simple dinners using mostly these ingredients: ", xAnswer()))),
+        sForEach("meal", xV("meals"), sAdd(xJ(xRec("day", xV("meal")), ": ", xRec("meal", xV("meal")), " (uses ", xRec("uses", xV("meal")), ")"))),
+        sAdd(xJ("Shopping list:\n", xAsk(xJ("List only the extra ingredients these meals need, as a short shopping list:\n\n", xResultText())))),
+        sFinish())) },
+    { key:"h_recipe", cat:"Home and baking", title:"Adapt a recipe",
+      desc:"Paste a recipe and say what to change (halve it, make it vegan, swap an ingredient); Claude rewrites and double-checks it.",
+      tip:"The check makes sure quantities still add up after scaling.",
+      build:() => P([], chain(sStart(),
+        sAskMe("Paste a recipe, then say what you want changed."),
+        sTask(xJ("Rewrite this recipe as asked. Keep it practical.\n\n", xAnswer())),
+        sGenerate(),
+        sReflect("quantities are consistent after the change; every step still makes sense; nothing important left out", 2),
+        sFinish())) },
+    { key:"h_dayout", cat:"Home and baking", title:"Plan a day out",
+      desc:"Plans a relaxed day with times and places, then checks travel times are realistic and nobody is left out.",
+      tip:"Mention who's coming: 'grandparents and a toddler' changes everything.",
+      build:() => P([], chain(sStart(),
+        sAskMe("Where are you going, who's coming, and what do you enjoy?"),
+        sTask(xJ("Plan a relaxed day out with times, places and travel between them: ", xAnswer())),
+        sGenerate(),
+        sReflect("realistic travel times; breaks for food; suits everyone mentioned; not overpacked", 2),
+        sFinish())) },
+    { key:"h_gifts", cat:"Home and baking", title:"Gift ideas within a budget",
+      desc:"Suggests six gifts sorted by price, lets you choose one, then writes a gift-card message for it.",
+      tip:"Give a budget and a couple of their interests.",
+      build:() => P(["gifts", "gift"], chain(sStart(),
+        sAskMe("Who is the gift for, what do they like, and what's the budget?"),
+        xSet("gifts", xSort(xAskRecs("gift, price, why", xJ("Suggest 6 gift ideas: ", xAnswer())), "price", "asc")),
+        xSet("gift", xChoose(xV("gifts"))),
+        sAdd(xJ("You chose: ", xRec("gift", xV("gift")), "\n", xRec("why", xV("gift")))),
+        sAdd(xAsk(xJ("Write a short, warm gift-card message to go with: ", xRec("gift", xV("gift"))))),
+        sFinish())) },
+    { key:"h_photo", cat:"Home and baking", title:"What's in this photo?",
+      desc:"Pick a photo of a plant, a crumb shot, a dish or a gadget; Claude names it and gives useful tips.",
+      tip:"Try a photo of your bread's crumb and ask what it says about the fermentation.",
+      build:() => P(["photo"], chain(sStart(),
+        xSet("photo", xChoosePic()),
+        sAdd(xImgAsk("What is this? Name it as precisely as you can, then give 3 useful, practical tips about it.", xV("photo"))),
+        sFinish())) },
+
+    /* ----- Code and data ----- */
+    { key:"c_review", cat:"Code and data", title:"Review some code",
+      desc:"Pick a code file; Claude lists its bugs and risks, most serious first, then writes an improved version.",
+      tip:"Works with Python, JavaScript, shell scripts and most other languages.",
+      build:() => P(["code", "issues"], chain(sStart(),
+        xSet("code", xChooseFile()),
+        xSet("issues", xAskList(xJ("List the bugs, risks and unclear parts in this code, most serious first:\n\n", xV("code")))),
+        sAdd(xJ("Issues:\n", xV("issues"))),
+        sAdd(xJ("Improved version:\n", xRewrite(xV("code"), xJ("fix these issues and keep the same behaviour otherwise: ", xV("issues"))))),
+        sFinish())) },
+    { key:"c_explain", cat:"Code and data", title:"Explain code simply",
+      desc:"Pick a code file; Claude explains what it does, section by section, for someone who has never programmed.",
+      tip:"Handy for scripts you've copied from the internet.",
+      build:() => P(["code"], chain(sStart(),
+        xSet("code", xChooseFile()),
+        sAdd(xRewrite(xV("code"), "explain what this does, section by section, for someone who has never programmed")),
+        sFinish())) },
+    { key:"c_csv", cat:"Code and data", title:"Insights from a spreadsheet",
+      desc:"Pick a CSV file; Claude finds the five most useful insights, with the evidence and why each matters.",
+      tip:"Export any spreadsheet as CSV first (File, Save as, CSV).",
+      build:() => P(["data", "findings", "finding"], chain(sStart(),
+        xSet("data", xChooseFile()),
+        xSet("findings", xAskRecs("finding, evidence, so what", xJ("Find the 5 most useful insights in this CSV data:\n\n", xV("data")))),
+        sForEach("finding", xV("findings"),
+          sAdd(xJ("• ", xRec("finding", xV("finding")), "\n  Evidence: ", xRec("evidence", xV("finding")), "\n  Why it matters: ", xRec("so what", xV("finding"))))),
+        sSave(xResultText(), "insights", "md"),
+        sFinish())) },
+    { key:"c_tests", cat:"Code and data", title:"Think of test cases",
+      desc:"Describe a feature; Claude lists eight test cases, including the awkward edge cases people forget.",
+      tip:"Describe something real: 'a form that takes a UK postcode'.",
+      build:() => P(["cases", "case"], chain(sStart(),
+        sAskMe("Describe a feature or function to test."),
+        xSet("cases", xAskRecs("case, input, expected", xJ("List 8 test cases, including edge cases, for: ", xAnswer()))),
+        sForEach("case", xV("cases"),
+          sAdd(xJ(xRec("case", xV("case")), "\n  Input: ", xRec("input", xV("case")), "\n  Expected: ", xRec("expected", xV("case"))))),
+        sFinish())) },
+
+    /* ----- Automation ----- */
+    { key:"memory", cat:"Automation", title:"Fresh headline every run", build:EXAMPLES.memory,
+      desc:"Remembers every headline it has used, so each run (or each scheduled day) comes up with a new one.",
+      tip:"Open the Memory panel after a few runs to see what it has kept." },
+    { key:"a_weekly", cat:"Automation", title:"Friday report from daily notes",
+      desc:"Each day, run it and type what you did. At 16:30 on a Friday it turns the week's notes into a report and saves it.",
+      tip:"Turn Schedules on and leave the page open on Friday afternoon, or export to Python.",
+      build:() => P([], [
+        chain(sStart(),
+          sAskMe("What did you get done today?"),
+          sRememberAdd(xAnswer(), "this week"),
+          sFinishWith("Saved. It goes into Friday's report.")),
+        chain(sAt(16, 30, "weekdays"),
+          sIf(xIs(xNow("weekday"), "Friday"),
+            sAdd(xAsk(xJ("Write a short, upbeat weekly report from these daily notes:\n", xRecall("this week")))),
+            sSave(xResultText(), "weekly-report", "md"),
+            sForget("this week")))]) },
+    { key:"a_morning", cat:"Automation", title:"Morning briefing at 7:45",
+      desc:"On weekday mornings it writes a short briefing: a baking tip, a word of the day and something to look forward to. It retries if Claude stumbles.",
+      tip:"Press Run to try it now; turn Schedules on for the real thing.",
+      build:() => P(["briefing"], [
+        chain(sStart(), sBroadcastWait("briefing")),
+        chain(sAt(7, 45, "weekdays"), sBroadcastWait("briefing")),
+        chain(sReceive("briefing"),
+          sRetry(3, xSet("briefing", xAsk(xJ("Write a short, cheerful morning briefing for ", xNow("date"),
+            ": one baking tip, one word of the day with its meaning, and one small thing to look forward to.")))),
+          sAdd(xV("briefing")),
+          sFinish())]) },
+    { key:"a_batch", cat:"Automation", title:"Do a list of jobs at once",
+      desc:"Sends each job in a list to its own script so they all run at the same time, then waits until every one is done.",
+      tip:"Add jobs to the list; they still finish in about the time of one.",
+      build:() => P(["jobs", "job", "done"], [
+        chain(sStart(),
+          xSet("jobs", xList("a haiku about bread", "a limerick about yeast", "a two-line rhyme about crumbs", "a riddle about an oven")),
+          xSet("done", nm(0)),
+          sForEach("job", xV("jobs"), sBroadcastWith("job", xV("job"))),
+          sWaitUntil(xB("logic_compare", { A:xV("done"), B:xB("lists_length", { VALUE:xV("jobs") }) }, { OP:"EQ" })),
+          sFinish()),
+        chain(sReceive("job"),
+          sAdd(xJ(xMsg(), ":\n", xAsk(xJ("Write ", xMsg())))),
+          sAddOne("done"))]) }
+  ];
+  EXAMPLE_LIST.forEach(e => { EXAMPLES[e.key] = e.build; });
+  const exampleByKey = k => EXAMPLE_LIST.find(e => e.key === k);
+  /* Every example opens with a note on its first block saying what it does and what to try. */
+  function exampleState(key){
+    const e = exampleByKey(key), state = EXAMPLES[key]();
+    const first = state.blocks.blocks[0];
+    if (e && first && !first.icons) first.icons = { comment:{ text:e.title + "\n\n" + e.desc + "\n\nTry: " + e.tip, pinned:false, height:150, width:300 } };
+    return state;
+  }
+
   /* ---------- Workspace ---------- */
   const ws = Blockly.inject("blockly", {
     toolbox, renderer:"zelos", theme:makeTheme(isDark()),
@@ -2225,7 +2756,47 @@ HOW TO MAP CODE
   $("zin").onclick = () => ws.zoomCenter(1);
   $("zout").onclick = () => ws.zoomCenter(-1);
   $("zfit").onclick = () => ws.zoomToFit();
-  $("load").onclick = () => { load(EXAMPLES[$("example").value]()); };
+  (function fillExamples(){
+    const sel = $("example");
+    EXAMPLE_CATEGORIES.forEach(cat => {
+      const g = document.createElement("optgroup"); g.label = cat;
+      EXAMPLE_LIST.filter(e => e.cat === cat).forEach(e => { const o = document.createElement("option"); o.value = e.key; o.textContent = e.title; g.appendChild(o); });
+      sel.appendChild(g);
+    });
+    const body = $("gal-body");
+    EXAMPLE_CATEGORIES.forEach(cat => {
+      const sec = document.createElement("div"); sec.className = "gal-cat";
+      const h = document.createElement("h3"); h.textContent = cat; sec.appendChild(h);
+      const grid = document.createElement("div"); grid.className = "gal-grid";
+      EXAMPLE_LIST.filter(e => e.cat === cat).forEach(e => {
+        const card = document.createElement("div"); card.className = "gal-card";
+        const t = document.createElement("h4"); t.textContent = e.title;
+        const d = document.createElement("p"); d.textContent = e.desc;
+        const tip = document.createElement("p"); tip.className = "tip"; tip.textContent = "Try: " + e.tip;
+        const btn = document.createElement("button"); btn.type = "button"; btn.textContent = "Load this example";
+        btn.onclick = () => { sel.value = e.key; loadExample(e.key); toggleGallery(false); };
+        card.append(t, d, tip, btn); grid.appendChild(card);
+      });
+      sec.appendChild(grid); body.appendChild(sec);
+    });
+  })();
+  function describeExample(key){
+    const e = exampleByKey(key), el = $("ex-desc");
+    el.innerHTML = "";
+    if (!e) return;
+    const b = document.createElement("b"); b.textContent = e.title + ": ";
+    el.append(b, document.createTextNode(e.desc + " Try: " + e.tip));
+  }
+  function loadExample(key){ load(exampleState(key)); describeExample(key); try { ws.zoomToFit(); if (ws.getScale() > 0.9) ws.setScale(0.9); } catch(e) {} }
+  function toggleGallery(open){
+    const g = $("gallery"); if (open === undefined) open = g.hidden;
+    g.hidden = !open; $("ex-toggle").setAttribute("aria-expanded", String(open));
+    setTimeout(() => Blockly.svgResize(ws), 0);
+  }
+  $("ex-toggle").onclick = () => toggleGallery();
+  $("example").addEventListener("change", e => describeExample(e.target.value));
+  describeExample($("example").value);
+  $("load").onclick = () => loadExample($("example").value);
   const mq = window.matchMedia("(prefers-color-scheme: dark)");
   const retheme = () => ws.setTheme(makeTheme(isDark()));
   mq.addEventListener && mq.addEventListener("change", retheme);

@@ -14,6 +14,8 @@ import pathlib
 import subprocess
 import sys
 import tempfile
+import time
+from types import SimpleNamespace
 
 from playwright.async_api import async_playwright
 
@@ -24,8 +26,7 @@ FIX = HERE / "fixtures"
 PAGE = (ROOT / "second-thought.html").read_text(encoding="utf-8")
 DOC = '<!doctype html><html><head><meta charset=utf8><style>[hidden]{display:none!important}</style></head><body>' + PAGE + "</body></html>"
 
-EXAMPLES = ["review", "brainstorm", "interview", "translate", "parallel", "pictures", "memory", "files", "gemini"]
-PY_STDIN = {"interview": "rye bread for beginners\nn\nshorter please\ny\n", "files": f"{FIX / 'notes.txt'}\n"}
+EXAMPLES = []  # read from the page's Example menu, so every example is always tested
 
 # Stand-ins for the page's runtime capabilities (Claude, storage, user, downloads).
 MOCK = r"""(function(){
@@ -131,7 +132,8 @@ async def page_tests():
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
 
-        print("Examples in the page")
+        EXAMPLES.extend(await pg.eval_on_selector_all("#example option", "e => e.map(o => o.value)"))
+        print(f"Examples in the page ({len(EXAMPLES)})")
         for ex in EXAMPLES:
             await pg.select_option("#example", ex)
             await pg.click("#load")
@@ -179,6 +181,41 @@ async def page_tests():
         return codes
 
 
+PROMPTS = ("Approve? [y/n] > ", "Number > ", "Path > ", "Press Enter to continue > ", "> ")
+
+
+def drive(cmd, env, cwd, timeout=120):
+    """Run an exported program, answering whatever it asks in the terminal."""
+    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env, cwd=cwd)
+    os.set_blocking(proc.stdout.fileno(), False)
+    out, deadline, buf = [], time.time() + timeout, ""
+    while proc.poll() is None and time.time() < deadline:
+        try:
+            chunk = proc.stdout.read()
+        except BlockingIOError:
+            chunk = None
+        if chunk:
+            text = chunk.decode("utf-8", "replace")
+            out.append(text)
+            buf = (buf + text)[-2000:]
+            prompt = next((p for p in PROMPTS if buf.endswith(p)), None)
+            if prompt:
+                if prompt == "Path > ":
+                    reply = str(FIX / ("crumb.png" if buf.rfind("Choose a picture") > buf.rfind("Choose a file") else "notes.txt"))
+                else:
+                    reply = {"Approve? [y/n] > ": "y", "Number > ": "1", "Press Enter to continue > ": ""}.get(prompt, "rye bread for beginners")
+                proc.stdin.write((reply + "\n").encode())
+                proc.stdin.flush()
+                buf = ""
+        else:
+            time.sleep(0.02)
+    if proc.poll() is None:
+        proc.kill()
+    rest = proc.stdout.read() if proc.stdout else b""
+    out.append((rest or b"").decode("utf-8", "replace"))
+    return proc.wait(), "".join(out), proc.stderr.read().decode("utf-8", "replace")
+
+
 def python_tests(codes):
     print("Exported Python runs")
     env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test")
@@ -186,8 +223,8 @@ def python_tests(codes):
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
             path.write_text(code, encoding="utf-8")
-            stdin = PY_STDIN.get(ex, "")
-            r = subprocess.run([sys.executable, str(path)], input=stdin, capture_output=True, text=True, env=env, cwd=tmp, timeout=120)
+            code_, stdout, stderr = drive([sys.executable, "-u", str(path)], env, tmp)
+            r = SimpleNamespace(returncode=code_, stdout=stdout, stderr=stderr)
             ok = r.returncode == 0 and ("RESULT" in r.stdout or "Done" in r.stdout)
             check(ok, f"{ex}.py" + ("" if ok else f" (exit {r.returncode}): {(r.stderr or r.stdout)[-300:]}"))
             if ex == "gemini":
