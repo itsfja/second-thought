@@ -273,6 +273,8 @@ save_log = yes
 
 `stream` shows Claude writing as it goes, on one line that counts the letters. Normally this only happens when you run the program in a terminal yourself.
 
+`resume` is for runs that stop part-way, for example because the internet dropped out or you pressed Ctrl+C. The program keeps a note of each finished step. Next time it can pick up where it stopped: Claude's answers, your answers and the messages already sent are reused, not asked or sent again. In a terminal it asks you first. Set `resume = yes` or `resume = no` to decide for programs that run on their own. If you change the program, it starts afresh.
+
 `save_log` keeps a diary of every run in a folder called `logs`, next to the program. Each step in the diary says which helper answered, how long it took and the exact tokens, and the prompts are tucked under **Prompt sent**. This is handy for programs that run on their own while you sleep.
 
 If a program has an **ask me before** block, Python asks you in the terminal and waits for `y` or `n`. When a program runs by itself on a schedule, with nobody there to answer, it says no and carries on.
