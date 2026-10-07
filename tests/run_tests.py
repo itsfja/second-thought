@@ -1113,9 +1113,10 @@ def python_tests(codes):
         check(code_ == 0 and "RESULT\n" + "=" * 60 + "\nr1\n\ngood 1\n" in out, "t_checkpoint.py goes back to its checkpoint, twice" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         print("Cut-off replies and streaming in Python")
         (pathlib.Path(tmp) / "t_long.py").write_text(EXTRA["t_long"], encoding="utf-8")
-        long_py = lambda **e: drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_long.py")], dict(env, **e), tmp)  # noqa: E731
+        def long_py(**e):
+            c, o, er = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_long.py")], dict(env, **e), tmp)
+            return c, o.replace("\r\n", "\n"), er  # Windows prints \r\n
         code_, out, err = long_py(FAKE_TRUNCATE="1")
-        out = out.replace("\r\n", "\n")
         res = out.split("=" * 60 + "\n")[-1] if "RESULT" in out else ""
         check(code_ == 0 and "▸ Reply continued  [continued]" in out and "RESULT\n" in out and res.count("TEXT[") == 2 and "Cut short" not in out,
               "t_long.py continues a cut-off reply once and joins the parts" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
@@ -1124,7 +1125,7 @@ def python_tests(codes):
         log = pathlib.Path(tmp) / "stream.log"
         code_, out, err = long_py(RB_STREAM="yes", FAKE_LOG=str(log))
         check(code_ == 0 and log.exists() and "STREAM" in log.read_text() and "… writing: " in out and "RESULT\n" in out,
-              "stream = yes streams Claude's reply with a progress line" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+              "stream = yes streams Claude's reply with a progress line" + ("" if code_ == 0 and "RESULT\n" in out else f": {(err or out)[-300:]!r}"))
         log.unlink(missing_ok=True)
         code_, out, err = long_py(FAKE_LOG=str(log))
         check(code_ == 0 and "STREAM" not in (log.read_text() if log.exists() else "") and "writing:" not in out,
