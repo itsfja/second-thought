@@ -9,6 +9,7 @@ a stand-in Anthropic SDK (tests/fakeapi). Nothing calls the real API.
     python tests/run_tests.py    # every time
 """
 import asyncio
+import re
 import json
 import os
 import shutil
@@ -539,6 +540,51 @@ async def new_feature_page_tests(pg):
     AGENT_SCRIPTS["t_typed"] = [tcall("hydration", **{"flour grams": "lots", "water grams": 350}), tcall("hydration", **{"flour grams": "500", "water grams": 350}), fin("ok")]
     check('"inputs": "flour grams: number; water grams: number - grams of water"' in EXTRA["t_typed"], "exported Python keeps the input types")
 
+    print("Traceability")
+    await pg.select_option("#example", "review")
+    await pg.click("#load")
+    await run_program(pg)
+    rows = await pg.eval_on_selector_all(".step", """e => e.map(x => [x.querySelector('.step-name').textContent,
+        (x.querySelector(':scope > .step-meta') || {}).textContent || '', (x.querySelector(':scope > .step-prompt summary') || {}).textContent || '',
+        [...x.querySelectorAll(':scope > .step-prompt pre')].map(p => p.textContent)])""")
+    by = {r[0]: r for r in rows}
+    meta_ok = re.fullmatch(r"Claude, \w+ · \d+\.\d s · ~\d+ in, ~\d+ out", by["Review, round 1"][1] or "")
+    check(meta_ok and by["Task set"][1] == "" and by["Review, round 1"][2] == "Prompt sent" and "You are a strict reviewer" in by["Review, round 1"][3][0],
+          f"each step that calls a model shows which model, how long and the tokens, and the exact prompt sent ({by['Review, round 1'][1]})")
+    status, steps, items, prompts = await scripted(num_prog("How many grams in a cup?"), ["BAD", {"number": 7}])
+    rows = await pg.eval_on_selector_all(".step", """e => e.filter(x => x.querySelector('.step-name').textContent.startsWith('Number')).map(x =>
+        [(x.querySelector(':scope > .step-meta') || {}).textContent || '', (x.querySelector(':scope > .step-prompt summary') || {}).textContent || '',
+         [...x.querySelectorAll(':scope > .step-prompt pre')].map(p => p.textContent)])""")
+    check(rows and rows[0][0].startswith("2 calls · ") and rows[0][1] == "Prompts sent (2)" and "couldn't be used" in rows[0][2][1],
+          f"a repaired step shows both calls and both prompts ({rows[0][0] if rows else 'no step'})")
+    instr = script(blk("rb_set_instructions", inputs={"TEXT": tx("Write in British English.")}), add(val(blk("rb_ask", inputs={"TEXT": tx("Spell colour.")}))))
+    await load_state(pg, instr)
+    await run_program(pg)
+    pre = await pg.eval_on_selector_all(".step > .step-prompt pre", "e => e.map(p => p.textContent)")
+    check(pre and "Write in British English." in pre[-1] and "Spell colour." in pre[-1], "the prompt shown includes standing instructions, as the model received them")
+    await pg.click("#log-save")
+    await pg.wait_for_timeout(300)
+    saved = [n for n in await pg.evaluate("window.__saved") if "-log-" in n]
+    data = (await pg.evaluate("window.__savedData"))[saved[-1]] if saved else ""
+    check("<details><summary>Prompt sent</summary>" in data and "Write in British English." in data and re.search(r"\*Claude, \w+ · \d+\.\d s · ~\d+ in", data),
+          "the saved log has each step's model, time, tokens and prompt")
+    steps_prog = script(blk("rb_agent", inputs={"GOAL": tx("Test goal"), "STEPS": nm(6), "TOOLS": {"block": blk("rb_agent_builtin", fields={"KIND": "memory"})}}),
+                        add(val(blk("rb_agent_steps"))))
+    await load_state(pg, steps_prog)
+    replies = [tcall("remember", name="s", value="rye"), tcall("recall", name="s"), tcall("recall", name="s"), fin("Rye.")]
+    await pg.evaluate("r => { window.__agentScript = r; }", replies)
+    try:
+        status = await run_program(pg)
+    finally:
+        await pg.evaluate("window.__agentScript = null")
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    got = items[0] if items else ""
+    check(status.startswith("done") and [l.split(": ", 1)[1] for l in got.splitlines() if l.startswith("status: ")] == ["done", "done", "repeat", "answer"]
+          and "tool: recall" in got and 'input: {"name": "s"}' in got and "result: rye" in got,
+          f"'agent's steps' lists each step's tool, input, result and status ({got[:80]!r})")
+    EXTRA["t_steps"] = await export_python(pg, "t_steps")
+    AGENT_SCRIPTS["t_steps"] = replies
+
     print("Agent: every path")
     done = lambda a: {"done": True, "answer": a}  # noqa: E731
     tool = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
@@ -1053,6 +1099,14 @@ def python_tests(codes):
         check(code_ == 0 and "▸ Agent step 1/6: hydration  [bad input]" in out and "should be a number, not \"lots\"" in out
               and "▸ Agent step 2/6: hydration  [done]" in out and "    Result:\n    70\n" in out,
               "t_typed.py refuses a wrong-typed input, then runs the corrected one" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        (pathlib.Path(tmp) / "t_steps.py").write_text(EXTRA["t_steps"], encoding="utf-8")
+        code_, out, err = run_ag("t_steps")
+        out = out.replace("\r\n", "\n")
+        statuses = [l.split(": ", 1)[1] for l in out.split("RESULT")[-1].splitlines() if l.startswith("status: ")]
+        check(code_ == 0 and statuses == ["done", "done", "repeat", "answer"] and "tool: recall" in out,
+              "t_steps.py gives the agent's steps as records" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        check(re.search(r"▸ Agent step 1/6: remember  \[done\]\n(    .*\n)*    · Claude, \w+ · \d+\.\d s · \d+ in, \d+ out\n", out),
+              "Python prints each step's model, time and exact tokens")
         code_, out, err = run_ag("t_ag_bad")
         check(code_ == 0 and "▸ Agent step 1/6  [unreadable]" in out and "▸ Agent: finished in 2 steps" in out, "t_ag_bad.py survives an unreadable reply" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         code_, out, err = run_ag("t_ag_repeat")
