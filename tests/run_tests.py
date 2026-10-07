@@ -54,7 +54,7 @@ window.__saved = [];
 window.claude = { use: async n => {
   if (n === 'db') return { collection:col };
   if (n === 'user') return { id:async () => 'test-user' };
-  if (n === 'downloads') return { save:async r => { window.__saved.push(r.filename); return { status:'saved' }; } };
+  if (n === 'downloads') return { save:async r => { window.__saved.push(r.filename); (window.__savedData = window.__savedData || {})[r.filename] = r.data; return { status:'saved' }; } };
   if (n !== 'sample') return null;
   const lastText = input => Array.isArray(input) ? input[input.length - 1].content : input;
   const down = o => { if (window.__failTier && o && o.modelTier === window.__failTier) throw new Error('service unavailable (test)'); };
@@ -132,6 +132,186 @@ async def run_program(pg, timeout_s=30):
         if await pg.is_enabled("#run"):
             break
     return await pg.inner_text("#status")
+
+
+EXTRA = {}  # name -> exported Python for the new-feature programs below
+
+
+def blk(type_, fields=None, inputs=None, nxt=None):
+    b = {"type": type_}
+    if fields:
+        b["fields"] = fields
+    if inputs:
+        b["inputs"] = inputs
+    if nxt:
+        b["next"] = {"block": nxt}
+    return b
+
+
+def tx(t):
+    return {"block": {"type": "text", "fields": {"TEXT": t}}}
+
+
+def nm(n):
+    return {"block": {"type": "math_number", "fields": {"NUM": n}}}
+
+
+def val(b):
+    return {"block": b}
+
+
+def script(*steps):
+    """A 'when Run is clicked' script running the given statement blocks in order."""
+    for a, b in zip(steps, steps[1:]):
+        a["next"] = {"block": b}
+    start = {"type": "rb_start", "x": 20, "y": 20}
+    if steps:
+        start["next"] = {"block": steps[0]}
+    return {"blocks": {"languageVersion": 0, "blocks": [start]}}
+
+
+def add(value):
+    return blk("rb_add_result", inputs={"TEXT": value})
+
+
+async def load_state(pg, state):
+    await pg.evaluate("s => { const w = Blockly.getMainWorkspace(); w.clear(); Blockly.serialization.workspaces.load(s, w); }", state)
+
+
+async def run_and_answer(pg, answer_label, timeout_s=30):
+    """Click Run and press the button labelled answer_label whenever the run asks."""
+    await pg.click("#run")
+    for _ in range(int(timeout_s / 0.15)):
+        await pg.wait_for_timeout(150)
+        for b in await pg.query_selector_all(".ask button"):
+            if (await b.inner_text()) == answer_label:
+                await b.click()
+                break
+        if await pg.is_enabled("#run"):
+            break
+    return await pg.inner_text("#status")
+
+
+async def step_texts(pg):
+    return await pg.eval_on_selector_all(".step", "e => e.map(x => [x.querySelector('.step-name').textContent, x.querySelector('.pill').textContent, x.querySelector('.step-body').innerText])")
+
+
+async def save_program(pg, name, state):
+    await load_state(pg, state)
+    opened = not await pg.is_visible("#lib-name")
+    if opened:
+        await pg.click("#lib-toggle")
+    await pg.fill("#lib-name", name)
+    await pg.click("#lib-save")
+    if "Replace" in (await pg.text_content("#lib-save")):
+        await pg.click("#lib-save")
+    await pg.wait_for_timeout(150)
+    msg = await pg.text_content("#lib-msg")
+    if opened:
+        await pg.click("#lib-toggle")
+    return msg
+
+
+async def export_python(pg, name):
+    opened = not await pg.is_visible("#io-name")
+    if opened:
+        await pg.click("#io-toggle")
+    await pg.fill("#io-name", name)
+    await pg.click("#io-py-show")
+    code = await pg.input_value("#io-export-text")
+    await pg.click("#io-py-show")
+    if opened:
+        await pg.click("#io-toggle")
+    return code
+
+
+async def new_feature_page_tests(pg):
+    print("Token budget and usage")
+    await pg.select_option("#example", "review")
+    await pg.click("#load")
+    await run_program(pg)
+    usage = await pg.text_content(".result-usage") if await pg.query_selector(".result-usage") else ""
+    status = await pg.inner_text("#status")
+    check(usage.startswith("About ") and "estimated" in usage and "tokens" in status,
+          f"the result shows an estimated token count ({status} | {usage[:60]})")
+    budget = script(blk("rb_budget", inputs={"TOKENS": nm(5)}), add(val(blk("rb_ask", inputs={"TEXT": tx("first question")}))),
+                    add(val(blk("rb_ask", inputs={"TEXT": tx("second question")}))))
+    await load_state(pg, budget)
+    status = await run_program(pg)
+    steps = await step_texts(pg)
+    stopped = [t for n, p_, t in steps if n == "Run stopped"]
+    asked = sum(1 for n, *_ in steps if n.startswith("Ask Claude") or n.startswith("Claude"))
+    check(status == "error" and stopped and "budget of 5" in stopped[0],
+          f"a run over its budget stops before the next call ({status}: {stopped[0][:90] if stopped else steps[-1:]})")
+    EXTRA["t_budget"] = await export_python(pg, "t_budget")
+    budget_ok = script(blk("rb_budget", inputs={"TOKENS": nm(1000000)}), add(val(blk("rb_ask", inputs={"TEXT": tx("q")}))),
+                       add(val(blk("rb_tokens_used"))))
+    await load_state(pg, budget_ok)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    check(status.startswith("done") and len(items) == 2 and items[1].isdigit() and int(items[1]) > 0,
+          f"'tokens used so far' gives a number, and a roomy budget lets the run finish ({status}, {items[-1:]})")
+
+    print("Saving the run log")
+    await pg.click("#log-save")
+    await pg.wait_for_timeout(300)
+    saved = [n for n in await pg.evaluate("window.__saved") if "-log-" in n and n.endswith(".md")]
+    data = (await pg.evaluate("window.__savedData"))[saved[-1]] if saved else ""
+    check(bool(saved) and "## 1. Budget" in data and "took " in data and "## Result" in data and "Tokens: about" in data,
+          f"Save log downloads the steps with timings and the result ({saved[-1:] or 'nothing saved'})")
+
+    print("Ask me before")
+    ask_first = script(blk("rb_ask_first", fields={"WHAT": "messages"}),
+                       blk("rb_ha_notify", inputs={"TARGET": tx("persistent_notification"), "TEXT": tx("The door is open.")}),
+                       blk("rb_ha_call", inputs={"SERVICE": tx("light.turn_off"), "ENTITY": tx("light.kitchen"), "DATA": tx("")}),
+                       add(tx("carried on")))
+    await load_state(pg, ask_first)
+    status = await run_and_answer(pg, "Don't")
+    steps = await step_texts(pg)
+    names = [n for n, *_ in steps]
+    check(status.startswith("done") and "Not done" in names and not any(n.startswith("Notification") for n in names)
+          and "Home Assistant: light.turn_off" in names,
+          f"saying no skips the message, but actions it doesn't cover still run ({status})")
+    status = await run_and_answer(pg, "Allow")
+    names = [n for n, *_ in await step_texts(pg)]
+    check(status.startswith("done") and any(n.startswith("Notification") for n in names) and "Not done" not in names,
+          f"saying yes sends the message ({status})")
+    files_first = script(blk("rb_ask_first", fields={"WHAT": "files"}),
+                         blk("rb_file_save", fields={"EXT": "txt"}, inputs={"VALUE": tx("hello from the test"), "NAME": tx("ask first note")}),
+                         add(tx("saved it")))
+    await load_state(pg, files_first)
+    EXTRA["t_askfirst"] = await export_python(pg, "t_askfirst")
+
+    print("Programs as blocks")
+    sub = script(add(val(blk("rb_msg_value"))), add(tx("from sub")))
+    msg = await save_program(pg, "shout", sub)
+    check(msg.startswith("Saved"), f"a program can be saved to the list ({msg})")
+    main = script(add(val(blk("rb_run_program", fields={"NAME": "shout"}, inputs={"VALUE": tx("hi")}))), add(tx("main done")))
+    await load_state(pg, main)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    check(status.startswith("done") and items == ["hi\n\nfrom sub", "main done"],
+          f"'run program' gives back the program's result, and its own result stays separate ({status}, {items})")
+    EXTRA["t_program"] = await export_python(pg, "t_program")
+    check("async def program_shout" in EXTRA["t_program"] and 'R.run_program("shout", program_shout' in EXTRA["t_program"],
+          "exported Python includes a copy of the saved program")
+    loop = script(add(val(blk("rb_run_program", fields={"NAME": "loop"}, inputs={"VALUE": tx("x")}))))
+    await save_program(pg, "loop", loop)
+    await load_state(pg, loop)
+    status = await run_program(pg)
+    stopped = [t for n, p_, t in await step_texts(pg) if n == "Run stopped"]
+    check(status == "error" and stopped and "runs itself" in stopped[0], f"a program that runs itself is stopped with a clear message ({status})")
+    missing = script(add(val(blk("rb_run_program", fields={"NAME": "not saved anywhere"}, inputs={"VALUE": tx("")}))))
+    await load_state(pg, missing)
+    status = await run_program(pg)
+    stopped = [t for n, p_, t in await step_texts(pg) if n == "Run stopped"]
+    check(status == "error" and stopped and "no saved program" in stopped[0], "a missing program gets a clear message")
+    with_broadcast = script(blk("rb_broadcast", inputs={"MSG": tx("go")}))
+    await save_program(pg, "talker", with_broadcast)
+    await load_state(pg, script(add(val(blk("rb_run_program", fields={"NAME": "talker"}, inputs={"VALUE": tx("")})))))
+    status = await run_program(pg)
+    stopped = [t for n, p_, t in await step_texts(pg) if n == "Run stopped"]
+    check(status == "error" and stopped and "broadcasts" in stopped[0], "a saved program that broadcasts says why it can't run as a block")
 
 
 async def page_tests():
@@ -263,6 +443,8 @@ async def page_tests():
         await pg.wait_for_timeout(300)
         choices = await pg.eval_on_selector_all("#io-choice button", "e => e.map(x => x.textContent)")
         check(len(choices) == 2, "edited export is noticed and offers a choice")
+
+        await new_feature_page_tests(pg)
 
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()
@@ -478,6 +660,26 @@ def python_tests(codes):
         env4 = dict(env, RB_MODEL_TIER="openai-default", OPENAI_API_KEY="", RB_BACKUPS="")
         code_, out, err = drive([sys.executable, "-u", str(path)], env4, tmp)
         check(code_ != 0 and "OPENAI_API_KEY = your-key" in (out + err) and "▸ Backup" not in out, "with no backups, the primary's own error is shown")
+
+    print("New features in Python")
+    with tempfile.TemporaryDirectory() as tmp:
+        for name, code in EXTRA.items():
+            (pathlib.Path(tmp) / f"{name}.py").write_text(code, encoding="utf-8")
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_program.py")], env, tmp)
+        check(code_ == 0 and "▸ Program: shout" in out and "hi\n\nfrom sub\n\nmain done" in out,
+              "t_program.py runs the saved program inside it" + ("" if code_ == 0 else f": {(err or out)[-300:]}"))
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget.py")], env, tmp)
+        check(code_ != 0 and "reaches its budget of 5" in out, "t_budget.py stops at its budget, using the exact counts" + ("" if code_ else f": {out[-200:]}"))
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget.py")], dict(env, RB_BUDGET="7"), tmp)
+        check(code_ != 0 and "budget of 5" in out, "a budget block wins over budget in the settings")
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_askfirst.py")], dict(env, RB_SAVE_LOG="yes"), tmp)
+        saved = pathlib.Path(tmp) / "outputs" / "ask-first-note.txt"
+        check(code_ == 0 and "Allow this? save" in out and saved.exists(), "t_askfirst.py asks before saving the file, then saves it" + ("" if code_ == 0 else f": {(err or out)[-300:]}"))
+        logs = list((pathlib.Path(tmp) / "logs").glob("t_askfirst-*.md"))
+        text = logs[0].read_text(encoding="utf-8") if logs else ""
+        check("## 1. Ask first" in text and "## Result" in text and "Model calls:" in text, "save_log = yes writes the run's log to the logs folder")
+        ini = EXPORTS["review"]["second-thought.ini"]
+        check("[run]" in ini and "; budget = " in ini and "; save_log = yes" in ini, "the exported ini explains budget and save_log")
     services = {c[0] for c in ha_calls}
     check({"light.turn_off", "persistent_notification.create"} <= services and "lock.lock" in services,
           f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")

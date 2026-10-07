@@ -73,6 +73,9 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .result{border:2px solid var(--ok);border-radius:10px;padding:12px;min-width:0}
 .result .step-body{max-height:none}
 .result-actions{display:flex;gap:8px;margin-top:10px}
+.result-usage{margin-top:8px;font-size:12px;color:var(--muted)}
+.log-tools{display:flex;align-items:center;gap:8px}
+.log-tools button{padding:2px 10px;font-size:12px}
 .bk-sel{max-width:420px}
 .io{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;margin-bottom:12px}
 .io-col{display:flex;flex-direction:column;gap:10px;min-width:0}
@@ -377,7 +380,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     </div>
   </div>
   <section class="log" aria-live="polite">
-    <div class="log-head"><h2>Run log</h2><span class="status" id="status">idle</span></div>
+    <div class="log-head"><h2>Run log</h2><span class="log-tools"><button type="button" id="log-save" hidden>Save log</button><span class="status" id="status">idle</span></span></div>
     <details class="watch" id="watch">
       <summary>Watch values</summary>
       <div id="watch-body" class="watch-body"></div>
@@ -434,7 +437,8 @@ for _stream in (sys.stdout, sys.stderr):
 # Python looks for it next to the program, then in the current folder, then in your home folder;
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
-SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS"}
+SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
+                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG"}
 
 
 def _load_settings():
@@ -599,6 +603,7 @@ MAX_STEPS = 20000       # stops loops that never end
 MAX_SCRIPTS = 100       # scripts started by broadcasts in one run
 MAX_DEPTH = 60          # My Blocks calling themselves
 OUTPUT_DIR = "outputs"  # where pictures are saved
+LOG_DIR = "logs"        # where run logs go when save_log = yes in second-thought.ini
 # 'forever' and timed memories live in this file, next to the program.
 MEMORY_FILE = os.environ.get("RB_MEMORY_FILE") or os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "memory.json")
 
@@ -929,6 +934,14 @@ class Runtime:
         self.instructions = ""
         self.chats = {}
         self.usage = {}  # provider -> [tokens in, tokens out]
+        try:  # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
+            self.budget = max(0, int(float(os.environ.get("RB_BUDGET", "0") or 0)))
+        except ValueError:
+            self.budget = 0
+        self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
+        self.trace = []              # every log line, for save_log
+        self.run_started = time.time()
+        self.programs = []           # names of saved programs running inside this run, innermost last
         self.calls = 0
         self.steps = 0
         self.depth = 0
@@ -978,6 +991,7 @@ class Runtime:
 
     # ----- logging -----
     def log(self, label, text=None, status=None):
+        self.trace.append((time.time(), label, to_str(text) if text else "", status or ""))
         head = f"\n▸ {label}" + (f"  [{status}]" if status else "")
         print(head, flush=True)
         if text:
@@ -994,12 +1008,45 @@ class Runtime:
         u[0] += tokens_in or 0
         u[1] += tokens_out or 0
 
+    def tokens_used(self):
+        return sum(u[0] + u[1] for u in self.usage.values())
+
+    def set_budget(self, n):
+        n = max(0, round_js(num(n)))
+        self.budget = n
+        self.log("Budget", f"This run stops before a model call once it has used {n:,} tokens (used so far: {self.tokens_used():,})."
+                 if n else "No token budget for this run.", "set")
+
+    # ----- Asking before actions -----
+    ASK_FIRST = {"ha": "any Home Assistant action", "messages": "sending messages and announcements",
+                 "files": "saving files", "all": "all of these"}
+
+    def ask_before(self, kind):
+        kinds = {"ha", "messages", "files"} if kind == "all" else {kind}
+        self.ask_first |= kinds
+        self.log("Ask first", "From now on, the program asks you before " + self.ASK_FIRST.get(kind, kind) + ".", "set")
+
+    async def _allowed(self, kinds, what):
+        """True if the action may go ahead. Asks first when an 'ask me before' block covers it."""
+        if not (self.ask_first & set(kinds)):
+            return True
+        if self.schedule_mode and not sys.stdin.isatty():
+            self.log("Not done", what + " needs your approval, and nobody is at the keyboard.", "refused")
+            return False
+        if await self.approve("Allow this? " + what):
+            return True
+        self.log("Not done", what + " was refused, so nothing happened.", "refused")
+        return False
+
     async def _call(self, prompt, want_json=False, picture=None, history=None, web=False):
         if self.ending:
             raise asyncio.CancelledError()
         self.calls += 1
         if self.calls > MAX_AI_CALLS:
             raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+        if self.budget and self.tokens_used() >= self.budget:
+            raise RunError(f"Stopped: this run has used {self.tokens_used():,} tokens, which reaches its budget of {self.budget:,}. "
+                           "Raise the number in the 'limit this run' block (or budget in second-thought.ini).")
         tier = self.current_tier
         # Backups stand in for the primary model only. A block that names its own model keeps that model.
         tiers = [tier] + (self.backups if tier == self.primary else [])
@@ -1360,7 +1407,7 @@ class Runtime:
             self.log("Chose file", f"{path} \u00b7 {len(text):,} characters", "chosen")
             return text
 
-    def save_file(self, value, name, ext):
+    async def save_file(self, value, name, ext):
         if isinstance(value, Picture):
             raise RunError("To save a picture, use the 'save picture' block.")
         if ext == "json" and not isinstance(value, str):
@@ -1371,9 +1418,11 @@ class Runtime:
             text = to_str(value)
         if not text:
             raise RunError("There's nothing to save: the value in the 'save as file' block is empty.")
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
         base = re.sub(r"[^\w\-]+", "-", to_str(name)).strip("-") or "output"
         path = os.path.join(OUTPUT_DIR, f"{base}.{ext}")
+        if not await self._allowed(["files"], f"save {path} ({len(text):,} characters)"):
+            return
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             f.write(text)
         self.log("Save file", "Saved " + path, "saved")
@@ -1521,7 +1570,10 @@ class Runtime:
                 raise RunError(f"The data for {service} isn't valid JSON. Use something like {{\"temperature\": 20}}.")
         if entity:
             body["entity_id"] = entity
-        if any(re.match(p, service) for p in HA_SENSITIVE):
+        sensitive = any(re.match(p, service) for p in HA_SENSITIVE)
+        if not sensitive and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
+            return
+        if sensitive:
             if self.schedule_mode and not sys.stdin.isatty():
                 self.log("Not done", f"{service} on {entity} needs your approval, and nobody is at the keyboard.", "refused")
                 return
@@ -1536,6 +1588,8 @@ class Runtime:
         target, text = to_str(target).strip() or "persistent_notification", to_str(text)
         if not text.strip():
             raise RunError("The 'notify' block has no message.")
+        if not await self._allowed(["ha", "messages"], f"send a notification to {target}: {_short(text, 120)}"):
+            return
         if target in ("persistent_notification", "persistent_notification.create"):
             await self._ha("POST", "/api/services/persistent_notification/create", {"message": text, "title": "Second Thought"})
         else:
@@ -1547,6 +1601,8 @@ class Runtime:
         text, player = to_str(text), to_str(player).strip()
         if not text.strip():
             raise RunError("The 'say' block has nothing to say.")
+        if not await self._allowed(["ha", "messages"], f"say on {player or 'a speaker'}: {_short(text, 120)}"):
+            return
         await self._ha("POST", "/api/services/tts/speak", {"entity_id": HA_TTS_ENTITY, "media_player_entity_id": player, "message": text})
         self.log("Spoken on " + player, text, "sent")
 
@@ -1754,8 +1810,10 @@ class Runtime:
         pic = _need_picture(pic, "show picture")
         self.log("Picture", self._picture_path(pic), "shown")
 
-    def save_picture(self, pic, fmt):
+    async def save_picture(self, pic, fmt):
         pic = _need_picture(pic, "save picture")
+        if not await self._allowed(["files"], f"save the picture {pic.name}"):
+            return
         if fmt == "svg":
             if pic.svg is None:
                 raise RunError("Only drawn pictures can be saved as SVG. Choose PNG instead.")
@@ -2036,6 +2094,45 @@ class Runtime:
         if self.ending:
             raise asyncio.CancelledError()
 
+    # ----- Saved programs run as a block -----
+    STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error")
+
+    async def run_program(self, name, fn, value=""):
+        """Runs a saved program's 'when Run is clicked' script with its own draft, result and variables.
+        Gives back its result as text. Model calls, the budget and the step limits are shared with this run."""
+        name = to_str(name).strip()
+        if name.lower() in (p.lower() for p in self.programs):
+            raise RunError(f"The program “{name}” runs itself (" + " → ".join(self.programs + [name]) + "), which would never end.")
+        if len(self.programs) >= 10:
+            raise RunError("Programs inside programs went more than 10 deep, so the run stopped.")
+        busy = [t for t in self.tasks if not t.done() and t is not asyncio.current_task()]
+        if busy:
+            raise RunError(f"“{name}” can't run while other scripts are running at the same time. "
+                           "Run it from a script that runs on its own (not alongside a broadcast).")
+        saved = {k: getattr(self, k) for k in self.STATE}
+        saved_vars = dict(self.vars)
+        self.task, self.draft, self.problems, self.approved, self.answer = "", "", [], None, ""
+        self.result, self.out_of_rounds_hit, self.instructions, self.chats, self.last_error = [], False, "", {}, ""
+        self.vars.clear()
+        token = MESSAGE_VALUE.set(value)
+        self.programs.append(name)
+        self.log("Program: " + name, "Started" + (f" with: {_short(to_str(value), 200)}" if to_str(value).strip() else "."), "running")
+        try:
+            try:
+                await fn()
+            except Finish:
+                pass
+            out = "\n\n".join(to_str(x) for x in self.result) if self.result else self.draft
+            self.log("Program: " + name, out or "(no result)", "done")
+            return out
+        finally:
+            self.programs.pop()
+            MESSAGE_VALUE.reset(token)
+            self.vars.clear()
+            self.vars.update(saved_vars)
+            for k, v in saved.items():
+                setattr(self, k, v)
+
     def start_script(self, fn, value=""):
         task = asyncio.ensure_future(self._guard(fn, value))
         self.tasks.add(task)
@@ -2066,7 +2163,14 @@ class Runtime:
 
     async def run(self, scripts, label="Run"):
         self.reset()
+        self.run_label = label
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
+        try:
+            return await self._run(scripts)
+        finally:
+            self.save_log()
+
+    async def _run(self, scripts):
         for fn in scripts:
             if isinstance(fn, tuple):
                 self.start_script(fn[0], fn[1])
@@ -2090,8 +2194,44 @@ class Runtime:
             print("\nThe program ended without a result.", flush=True)
         used = " · ".join(f"{who}: {u[0]:,} tokens in, {u[1]:,} out" for who, u in self.usage.items()) or "no tokens used"
         spare = f" · a backup answered {self.backup_used} step{'s' if self.backup_used != 1 else ''}" if self.backup_used else ""
-        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}{spare}", flush=True)
+        budget = f" · budget {self.budget:,}" if self.budget else ""
+        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}{spare}{budget}", flush=True)
         return 0
+
+    def save_log(self):
+        """With save_log = yes in second-thought.ini, writes this run's log to logs/<program>-<date>-<time>.md."""
+        if os.environ.get("RB_SAVE_LOG", "").strip().lower() not in ("1", "yes", "true", "on"):
+            return
+        prog = os.path.splitext(os.path.basename(sys.argv[0] or "program"))[0] or "program"
+        start = datetime.datetime.fromtimestamp(self.run_started)
+        lines = [f"# {prog}: run log", "",
+                 f"- Started: {start:%Y-%m-%d %H:%M:%S} ({getattr(self, 'run_label', 'Run')})",
+                 f"- Took: {time.time() - self.run_started:.1f} s",
+                 f"- Model calls: {self.calls}"]
+        for who, u in self.usage.items():
+            lines.append(f"- {who}: {u[0]:,} tokens in, {u[1]:,} out")
+        if self.budget:
+            lines.append(f"- Budget: {self.budget:,} tokens")
+        if self.error:
+            lines.append(f"- Stopped with an error: {self._describe(self.error)}")
+        lines.append("")
+        for i, (t, label, text, status) in enumerate(self.trace, 1):
+            lines.append(f"## {i}. {label}" + (f" [{status}]" if status else "") + f"  ·  +{t - self.run_started:.1f} s")
+            if text:
+                lines += ["", "~~~~", text, "~~~~"]
+            lines.append("")
+        result = "\n\n".join(to_str(x) for x in self.result) if self.result else self.draft
+        if result:
+            lines += ["## Result", "", result, ""]
+        try:
+            folder = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), LOG_DIR)
+            os.makedirs(folder, exist_ok=True)
+            path = os.path.join(folder, f"{prog}-{start:%Y%m%d-%H%M%S}.md")
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("\n".join(lines))
+            print(f"Log saved to {path}", flush=True)
+        except OSError as e:
+            print(f"(The log couldn't be saved: {e})", flush=True)
 
     # ----- Schedules -----
     async def run_schedules(self, schedules, watches=()):
@@ -3185,6 +3325,8 @@ Ask Claude (each makes one model call):
   rb_ask (TEXT): text answer.  rb_ask_yesno (TEXT): boolean.  rb_ask_number (TEXT): number.  rb_ask_list (TEXT): list of strings.
   rb_rewrite (TEXT, HOW).  rb_extract (WHAT, TEXT).  rb_score (TEXT, CRITERIA): 1-10.  rb_better (A, B, CRITERIA): returns the better text.
 You: rb_approve (TEXT): boolean, the person approves or sends back.  rb_choose (LIST): the person picks an item.
+  rb_ask_first: fields WHAT ("ha" | "messages" | "files" | "all"): from then on, ask the person before those actions.
+  Map confirm-before-acting prompts (input('Send? y/n') before sending or saving) to rb_ask_first.
 Conversations and instructions:
   rb_set_instructions (TEXT): a system prompt / role for all later calls.  rb_clear_instructions.
   rb_chat (NAME, TEXT): value, the reply in a named multi-turn conversation.  rb_chat_reset (NAME).
@@ -3203,6 +3345,9 @@ Files and errors:
   rb_result_text: value, the result so far as text.
   rb_try: statement inputs DO and FAIL (runs FAIL if anything in DO fails).  rb_retry: inputs TIMES, statement input DO (retries temporary failures).
   rb_error: value, the most recent failure message.
+  rb_budget (TOKENS): stop the run before a model call once it has used this many tokens.  rb_tokens_used: value, tokens used so far.
+  rb_run_program: fields NAME (a saved program's name); input VALUE; value, that program's result. Inside it, rb_msg_value is VALUE.
+  Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
   Map open(...).read() on text files to rb_file_choose, writing output files to rb_file_save, try/except to rb_try, retry loops and backoff to rb_retry.
 Memory (survives between runs):
   rb_mem_set: inputs VALUE, NAME; fields KIND ("transient" = while the page/program is running, "permanent" = saved forever).
@@ -3490,7 +3635,7 @@ HOW TO MAP CODE
     /* Message payloads */
     S("rb_broadcast_with", "broadcast %1 with %2", [val("MSG"), val("VALUE")], { style:"events", inputsInline:true, tooltip:"Starts every 'when I receive' script for the message. Each one gets the value as its 'message value'." }),
     S("rb_broadcast_with_wait", "broadcast %1 with %2 and wait", [val("MSG"), val("VALUE")], { style:"events", inputsInline:true }),
-    V("rb_msg_value", "message value", [], null, { style:"events", tooltip:"The value sent with the broadcast that started this script (or woke this 'wait until I receive')." }),
+    V("rb_msg_value", "message value", [], null, { style:"events", tooltip:"The value sent with the broadcast that started this script (or woke this 'wait until I receive'). In a program run by 'run program', the value it was given." }),
     /* Prompt library */
     V("rb_prompt", "prompt %1", [{ type:"field_input", name:"NAME", text:"my prompt" }], "String", { style:"claude", tooltip:"Text from your prompt library (open Programs to add prompts)." }),
     /* Files and errors */
@@ -3505,6 +3650,16 @@ HOW TO MAP CODE
       previousStatement:null, nextStatement:null, style:"control",
       tooltip:"If something inside fails in a way a second try could fix (a dropped connection, a garbled reply), waits a little and runs it again." },
     V("rb_error", "the error", [], "String", { style:"control", tooltip:"What went wrong in the most recent failure." }),
+    /* Budget and asking first */
+    S("rb_budget", "limit this run to %1 tokens", [val("TOKENS")], { style:"control", inputsInline:true,
+      tooltip:"Before each model call, checks how many tokens this run has used. Once it reaches this number, the run stops. 0 means no limit. On this page the count is an estimate; exported Python uses the exact counts." }),
+    V("rb_tokens_used", "tokens used so far", [], "Number", { style:"control",
+      tooltip:"Tokens this run has used: sent plus received. An estimate on this page, exact in exported Python." }),
+    S("rb_ask_first", "ask me before %1", [{ type:"field_dropdown", name:"WHAT", options:[["any Home Assistant action","ha"],["sending messages and announcements","messages"],["saving files","files"],["all of these","all"]] }],
+      { style:"you", tooltip:"From here on, the program shows what it's about to do and waits for you to allow it. If you say no, it skips that step and carries on. Exported Python asks in the terminal; a scheduled run with nobody there skips it." }),
+    /* Programs */
+    V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
+      tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
     /* Memory */
     S("rb_mem_set", "remember %1 as %2 %3", [val("VALUE"), val("NAME"),
       { type:"field_dropdown", name:"KIND", options:[["while this page is open","transient"],["forever","permanent"]] }],
@@ -3547,7 +3702,7 @@ HOW TO MAP CODE
       B("controls_repeat_ext", { TIMES:N(3) }), B("controls_whileUntil"), B("controls_if"),
       B("controls_if", null, { extraState:{ hasElse:true } }),
       B("controls_forEach"), B("controls_for", { FROM:N(1), TO:N(5), BY:N(1) }), B("controls_flow_statements"),
-      B("rb_wait", { SECS:N(1) }), B("rb_wait_until"), B("rb_try"), B("rb_retry", { TIMES:N(3) }), B("rb_error"), B("rb_use_model"), B("rb_with_model", null, { fields:{ TIER:"gemini-default" } }), B("rb_with_any_model"), B("rb_stop")
+      B("rb_wait", { SECS:N(1) }), B("rb_wait_until"), B("rb_try"), B("rb_retry", { TIMES:N(3) }), B("rb_error"), B("rb_budget", { TOKENS:N(50000) }), B("rb_tokens_used"), B("rb_use_model"), B("rb_with_model", null, { fields:{ TIER:"gemini-default" } }), B("rb_with_any_model"), B("rb_stop")
     ]},
     { kind:"category", name:"Wait & time", categorystyle:"time", contents:[
       B("rb_wait", { SECS:N(5) }, { fields:{ UNIT:"m" } }), B("rb_wait_until"), B("rb_wait_time"), B("rb_wait_msg"),
@@ -3569,6 +3724,9 @@ HOW TO MAP CODE
       B("lists_getIndex"), B("lists_setIndex", null, { fields:{ MODE:"INSERT", WHERE:"LAST" } })
     ]},
     { kind:"category", name:"My Blocks", categorystyle:"procedures", custom:"PROCEDURE" },
+    { kind:"category", name:"Programs", categorystyle:"procedures", contents:[
+      B("rb_run_program", { VALUE:T("") }), B("rb_msg_value")
+    ]},
     { kind:"category", name:"Search results", categorystyle:"search", custom:"SEARCH" },
     { kind:"sep" },
     { kind:"category", name:"Draft", categorystyle:"draft", contents:[
@@ -3592,7 +3750,7 @@ HOW TO MAP CODE
       B("rb_score", { CRITERIA:T("clear and accurate") }), B("rb_better", { CRITERIA:T("clarity") })
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
-      B("rb_ask_me", { TEXT:T("What should I write about?") }), B("rb_answer"), B("rb_approve"), B("rb_choose")
+      B("rb_ask_me", { TEXT:T("What should I write about?") }), B("rb_answer"), B("rb_approve"), B("rb_choose"), B("rb_ask_first")
     ]},
     { kind:"category", name:"Records", categorystyle:"records", contents:[
       B("rb_rec_new"), B("rb_rec_set", { KEY:T("score"), VALUE:N(0) }), B("rb_rec_get", { KEY:T("score") }), B("rb_rec_has", { KEY:T("score") }), B("rb_rec_keys"),
@@ -3885,6 +4043,7 @@ HOW TO MAP CODE
     const dt = str(dataText).trim();
     if (dt) { try { data = JSON.parse(dt); } catch(e) { fail("The data for " + svc + " isn't valid JSON. Use something like {\"temperature\": 20}."); } }
     const e = id ? haEnt(id) : null;
+    if (!haIsSensitive(svc) && !(await allowed(["ha"], svc.replace(".", ": ").replace(/_/g, " ") + (id ? " on " + id : "")))) return;
     if (haIsSensitive(svc)) {
       const ok = await waitForYou("Allow this?", "The program wants to " + svc.replace(".", ": ").replace(/_/g, " ") + (id ? " on " + id : "") + ". This is a safety check: unlocking, opening and disarming always ask first.", (box, done) => {
         const row = document.createElement("div"); row.className = "row";
@@ -5205,7 +5364,7 @@ HOW TO MAP CODE
   };
   let downloads = null;
   if (window.claude && window.claude.use) {
-    window.claude.use("downloads").then(d => { downloads = d; $("io-save").hidden = !d; $("io-py-save").hidden = !d; }).catch(() => {});
+    window.claude.use("downloads").then(d => { downloads = d; $("io-save").hidden = !d; $("io-py-save").hidden = !d; $("log-save").hidden = !d; }).catch(() => {});
   }
   function slug(name){
     const s = String(name || "").trim().replace(/\.json$/i, "").replace(/[^\w\- ]+/g, "").replace(/\s+/g, "-").slice(0, 80);
@@ -5386,6 +5545,38 @@ HOW TO MAP CODE
   function b64decode(b64){ const bin = atob(b64); const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
 
   /* ----- second-thought.ini: the keys and settings an exported program needs ----- */
+  /* Saved programs used by 'run program' blocks, loaded into hidden workspaces (recursively). */
+  function savedProgramState(name){
+    const e = lib.program.get(memKey(name));
+    if (!e) return null;
+    try { return JSON.parse(e.program); } catch(err) { return null; }
+  }
+  function subProgramProblem(sub){
+    const bad = sub.getAllBlocks(false).find(b => ["rb_broadcast","rb_broadcast_wait","rb_broadcast_with","rb_broadcast_with_wait","rb_wait_msg"].includes(b.type));
+    if (bad) return "uses broadcasts, which only work in a program run on its own";
+    if (!sub.getTopBlocks(false).some(b => b.type === "rb_start")) return "has no 'when Run is clicked' script";
+    return null;
+  }
+  function withSubPrograms(fn){
+    // Calls fn(list) with every saved program the canvas runs, directly or through other programs: [{ name, key, ws, problem }].
+    const found = new Map(), made = [];
+    const visit = w => w.getAllBlocks(false).filter(b => b.type === "rb_run_program").forEach(b => {
+      const name = String(b.getFieldValue("NAME") || "").trim(), key = memKey(name);
+      if (!key || found.has(key)) return;
+      const state = savedProgramState(name);
+      if (!state) { found.set(key, { name, key, ws:null, problem:"isn't in your Programs list" }); return; }
+      const sub = new Blockly.Workspace(); made.push(sub);
+      try { Blockly.serialization.workspaces.load(state, sub); }
+      catch(err) { found.set(key, { name, key, ws:null, problem:"couldn't be opened" }); return; }
+      found.set(key, { name, key, ws:sub, problem:subProgramProblem(sub) });
+      visit(sub);
+    });
+    try { visit(ws); return fn([...found.values()]); }
+    finally { made.forEach(w => { try { w.dispose(); } catch(e) {} }); }
+  }
+  function allProgramBlocks(){
+    return withSubPrograms(subs => ws.getAllBlocks(false).concat(...subs.filter(x => x.ws).map(x => x.ws.getAllBlocks(false))));
+  }
   function settingsFor(){
     const keys = [["Claude", "ANTHROPIC_API_KEY", "https://console.anthropic.com"]];
     if (programUsesGemini()) keys.push(["Gemini", "GEMINI_API_KEY", "https://aistudio.google.com"]);
@@ -5393,7 +5584,7 @@ HOW TO MAP CODE
     if (programUsesXai()) keys.push(["Grok (xAI)", "XAI_API_KEY", "https://console.x.ai"]);
     if (programUsesOpenAI()) keys.push(["OpenAI", "OPENAI_API_KEY", "https://platform.openai.com"]);
     MORE_PROVIDERS.filter(m => programUsesPrefix(m.prefix)).forEach(m => keys.push([m.who, m.env, m.signup]));
-    return { keys, llama:programUsesLlama(), ha:ws.getAllBlocks(false).some(b => b.type.startsWith("rb_ha_")) };
+    return { keys, llama:programUsesLlama(), ha:allProgramBlocks().some(b => b.type.startsWith("rb_ha_")) };
   }
   function iniText(progName){
     const need = settingsFor(), nl = "\r\n";
@@ -5409,7 +5600,10 @@ HOW TO MAP CODE
     out.push("", "[models]",
       "; Your primary model and backups. Leave these as notes to use what was set when you exported.",
       "; primary = " + $("tier").value,
-      "; backups = " + (backupTiers().join(", ") || "none"));
+      "; backups = " + (backupTiers().join(", ") || "none"),
+      "", "[run]",
+      "; budget = 50000      stop a run before a model call once it has used this many tokens (0 = no limit)",
+      "; save_log = yes      write each run's log to the logs folder, next to the program");
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
@@ -5551,28 +5745,28 @@ HOW TO MAP CODE
   function programUsesPrefix(prefix){
     const has = t => String(t || "").startsWith(prefix);
     if ([$("tier").value].concat(backupTiers()).some(t => has(t))) return true;
-    return ws.getAllBlocks(false).some(b => b.type === "rb_with_any_model" ? has("openrouter:") :
+    return allProgramBlocks().some(b => b.type === "rb_with_any_model" ? has("openrouter:") :
       (b.type === "rb_use_model" || b.type === "rb_with_model") && has(b.getFieldValue("TIER")));
   }
   function programUsesOpenAI(){
     if ([$("tier").value].concat(backupTiers()).some(t => isOpenAI(t))) return true;
-    return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isOpenAI(b.getFieldValue("TIER")));
+    return allProgramBlocks().some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isOpenAI(b.getFieldValue("TIER")));
   }
   function programUsesXai(){
     if ([$("tier").value].concat(backupTiers()).some(t => isXai(t))) return true;
-    return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isXai(b.getFieldValue("TIER")));
+    return allProgramBlocks().some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isXai(b.getFieldValue("TIER")));
   }
   function programUsesDeepSeek(){
     if ([$("tier").value].concat(backupTiers()).some(t => isDeepSeek(t))) return true;
-    return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isDeepSeek(b.getFieldValue("TIER")));
+    return allProgramBlocks().some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isDeepSeek(b.getFieldValue("TIER")));
   }
   function programUsesLlama(){
     if ([$("tier").value].concat(backupTiers()).some(t => isLlama(t))) return true;
-    return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isLlama(b.getFieldValue("TIER")));
+    return allProgramBlocks().some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isLlama(b.getFieldValue("TIER")));
   }
   function programUsesGemini(){
     if ([$("tier").value].concat(backupTiers()).some(t => isGemini(t))) return true;
-    return ws.getAllBlocks(false).some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isGemini(b.getFieldValue("TIER")));
+    return allProgramBlocks().some(b => (b.type === "rb_use_model" || b.type === "rb_with_model") && isGemini(b.getFieldValue("TIER")));
   }
   function toPython(progName){
     const used = new Set(["R","V","main","run"]);
@@ -5584,7 +5778,9 @@ HOW TO MAP CODE
       used.add(out); return out;
     };
     const procIds = new Map();
-    const procId = n => { if (!procIds.has(n)) procIds.set(n, ident("block_" + n)); return procIds.get(n); };
+    let scope = "", scopeTag = "";   // which program's My Blocks are being named: "" for the canvas
+    const procId = n => { const k = scope + "\u0000" + n; if (!procIds.has(k)) procIds.set(k, ident("block_" + scopeTag + n)); return procIds.get(k); };
+    const programFn = new Map();     // saved program key -> its Python function name
     let tmpN = 0;
     const tmp = p => "_" + p + (++tmpN);
     const vname = b => b.getField("VAR").getText();
@@ -5634,6 +5830,11 @@ HOW TO MAP CODE
         case "rb_better": return "(await R.better(" + I("A", '""') + ", " + I("B", '""') + ", " + I("CRITERIA", '""') + "))";
         case "rb_answer": return "R.answer";
         case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + "))";
+        case "rb_tokens_used": return "R.tokens_used()";
+        case "rb_run_program": {
+          const name = String(F("NAME") || "").trim();
+          return "(await R.run_program(" + pyStr(name) + ", " + (programFn.get(memKey(name)) || "None") + ", " + I("VALUE", '""') + "))";
+        }
         case "rb_choose": return "(await R.choose(" + I("LIST", "[]") + "))";
         case "rb_timer": return "R.timer()";
         case "rb_now": return "R.now(" + pyStr(F("PART")) + ")";
@@ -5768,7 +5969,9 @@ HOW TO MAP CODE
           case "rb_ha_call": E("await R.ha_call(" + I("SERVICE", '""') + ", " + I("ENTITY", '""') + ", " + I("DATA", '""') + ")"); break;
           case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
-          case "rb_file_save": E("R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
+          case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
+          case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + ")"); break;
+          case "rb_ask_first": E("R.ask_before(" + pyStr(F("WHAT") || "all") + ")"); break;
           case "rb_try": {
             E("try:");
             const before = out.length;
@@ -5801,7 +6004,7 @@ HOW TO MAP CODE
           case "rb_mem_add": E("R.remember_add(" + I("VALUE", '""') + ", " + I("NAME", '""') + ", " + pyStr(F("KIND") || "transient") + ")"); break;
           case "rb_mem_forget": E("R.forget(" + I("NAME", '""') + ")"); break;
           case "rb_img_show": E("R.show_picture(" + I("IMG", "None") + ")"); break;
-          case "rb_img_save": E("R.save_picture(" + I("IMG", "None") + ", " + pyStr(F("FORMAT") || "png") + ")"); break;
+          case "rb_img_save": E("await R.save_picture(" + I("IMG", "None") + ", " + pyStr(F("FORMAT") || "png") + ")"); break;
           case "rb_show": E("R.show()"); break;
           case "rb_add_result": E("R.add_result(" + I("TEXT", '""') + ")"); break;
           default:
@@ -5812,8 +6015,45 @@ HOW TO MAP CODE
       return out.length - start;
     }
 
-    const tops = ws.getTopBlocks(true).filter(enabled);
     const sections = [], starts = [], receivers = {}, schedules = [], watches = [];
+    // Saved programs that 'run program' blocks use, each as one function (its 'when Run is clicked' scripts, in order).
+    withSubPrograms(subs => {
+      subs.forEach(x => programFn.set(x.key, ident("program_" + x.name)));
+      subs.forEach(x => {
+        const fn = programFn.get(x.key), out = [];
+        out.push("async def " + fn + "():");
+        out.push("    \"\"\"Saved program: " + x.name.replace(/"/g, "'") + " (a copy, as it was when this was exported)\"\"\"");
+        if (x.problem) {
+          out.push("    raise RunError(" + pyStr("The program \u201c" + x.name + "\u201d " + x.problem + ", so it can't run as a block.") + ")");
+          sections.push(out.join("\n")); return;
+        }
+        scope = x.key; scopeTag = x.name + "_";
+        const subTops = x.ws.getTopBlocks(true).filter(enabled);
+        const defs = subTops.filter(b => b.type === "procedures_defnoreturn" || b.type === "procedures_defreturn");
+        defs.forEach(b => procId(b.getFieldValue("NAME")));
+        let any = false;
+        subTops.filter(b => b.type === "rb_start").forEach(b => { if (stmts(b.getNextBlock(), 1, {}, out)) any = true; });
+        if (!any) out.push("    pass");
+        const procOut = [];
+        defs.forEach(b => {
+          const name = b.getFieldValue("NAME");
+          const params = (b.getVarModels ? b.getVarModels() : []).map(v => v.name);
+          const args = params.map(p => ident("arg_" + p));
+          procOut.push("async def " + procId(name) + "(" + args.join(", ") + "):");
+          procOut.push("    \"\"\"My Block in " + x.name.replace(/"/g, "'") + ": " + name.replace(/"{3}/g, "\x27\x27\x27") + "\"\"\"");
+          procOut.push("    _saved = R.push_args({" + params.map((p, i) => pyStr(p) + ": " + args[i]).join(", ") + "})");
+          procOut.push("    try:");
+          stmts(b.getInputTargetBlock("STACK"), 2, { proc:true }, procOut);
+          procOut.push("        return " + (b.getInput("RETURN") ? inp(b, "RETURN", "None") : "None"));
+          procOut.push("    finally:");
+          procOut.push("        R.pop_args(_saved)");
+          procOut.push("");
+        });
+        scope = ""; scopeTag = "";
+        sections.push((procOut.length ? procOut.join("\n") + "\n\n" : "") + out.join("\n"));
+      });
+    });
+    const tops = ws.getTopBlocks(true).filter(enabled);
     let loose = 0, nStart = 0, nSched = 0;
     // Name every My Blocks function first so calls can refer to them in any order.
     tops.filter(b => b.type === "procedures_defnoreturn" || b.type === "procedures_defreturn").forEach(b => procId(b.getFieldValue("NAME")));
@@ -5876,7 +6116,7 @@ HOW TO MAP CODE
     const when = new Date();
     const usesGemini = programUsesGemini(), usesLlama = programUsesLlama(), usesDeepSeek = programUsesDeepSeek(), usesXai = programUsesXai(), usesOpenAI = programUsesOpenAI();
     const usesMore = MORE_PROVIDERS.filter(m => programUsesPrefix(m.prefix));
-    const usesHA = ws.getAllBlocks(false).some(b => b.type.startsWith("rb_ha_"));
+    const usesHA = allProgramBlocks().some(b => b.type.startsWith("rb_ha_"));
     const header = [
       "#!/usr/bin/env python3",
       "\"\"\"" + String(progName || "my-program").replace(/"""/g, "'''"),
@@ -5920,7 +6160,7 @@ HOW TO MAP CODE
       "# ---------------------------------------------------------------------------",
       "DEFAULT_TIER = " + pyStr($("tier").value),
       "BACKUPS = [" + backupTiers().map(pyStr).join(", ") + "]  # tried in order if DEFAULT_TIER fails on a step",
-      "PROMPTS = {" + [...new Set(ws.getAllBlocks(false).filter(b => b.type === "rb_prompt").map(b => String(b.getFieldValue("NAME") || "").trim().toLowerCase()))]
+      "PROMPTS = {" + [...new Set(allProgramBlocks().filter(b => b.type === "rb_prompt").map(b => String(b.getFieldValue("NAME") || "").trim().toLowerCase()))]
         .filter(k => lib.prompt.has(k)).map(k => pyStr(k) + ": " + pyStr(lib.prompt.get(k).text)).join(", ") + "}",
       "R = Runtime()",
       "V = R.vars",
@@ -6147,6 +6387,7 @@ HOW TO MAP CODE
   function addStep(name, opts){
     opts = opts || {};
     const el = document.createElement("div"); el.className = "step" + (opts.human ? " human" : "");
+    el.dataset.t0 = String(Date.now());
     el.innerHTML = '<div class="step-top"><span class="step-name"></span><span class="pill">running</span></div><div class="step-body"></div>';
     el.querySelector(".step-name").textContent = name;
     const body = el.querySelector(".step-body"); if (opts.mono) body.classList.add("mono");
@@ -6157,7 +6398,7 @@ HOW TO MAP CODE
       el, body,
       text(t){ body.textContent = t; },
       list(items){ body.innerHTML = ""; const ul = document.createElement("ul"); items.forEach(i => { const li = document.createElement("li"); li.textContent = i; ul.appendChild(li); }); body.appendChild(ul); },
-      done(label, kind){ pill.textContent = label; pill.className = "pill" + (kind ? " " + kind : ""); }
+      done(label, kind){ pill.textContent = label; pill.className = "pill" + (kind ? " " + kind : ""); el.dataset.ms = String(Date.now() - Number(el.dataset.t0)); }
     };
   }
   function setStatus(t){ $("status").textContent = t; }
@@ -6639,14 +6880,16 @@ HOW TO MAP CODE
     prompt = withInstructions(prompt);
     if (halting()) throw new Halt();
     if (++run.calls > MAX_AI_CALLS) fail("Stopped after " + MAX_AI_CALLS + " Claude calls in one run, to protect your usage. Check for loops that call Claude too often.");
-    setStatus("running · " + run.calls + " Claude call" + (run.calls === 1 ? "" : "s"));
+    if (run.budget && tokensUsed() >= run.budget) fail("Stopped: this run has used about " + tokensUsed().toLocaleString() + " tokens, which reaches its budget of " + run.budget.toLocaleString() + ". Raise the number in the 'limit this run' block.");
+    run.tokIn += estTokens(prompt) + (images ? images.length * 1600 : 0);
+    setStatus("running · " + run.calls + " Claude call" + (run.calls === 1 ? "" : "s") + " · ~" + fmtTokens(tokensUsed()) + " tokens");
     const sample = run.sample;
     // Backups stand in for the primary model only; a block that names its own model keeps it.
     const tiers = [run.tier].concat(run.tier === run.primary ? run.backups : []);
     let last = null;
     for (let n = 0; n < tiers.length; n++) {
       if (n) addStep("Backup", { mono:true, text:tierLabel(tiers[n - 1]) + " failed: " + String((last && last.message) || last).slice(0, 160) + "\nTrying " + tierLabel(tiers[n]) + " instead." }).done("backup", "warn");
-      try { return await askOn(tiers[n], prompt, step, mode, images, sample); }
+      try { const out = await askOn(tiers[n], prompt, step, mode, images, sample); run.tokOut += estTokens(out); return out; }
       catch(e) {
         if (isControlSignal(e) || halting()) throw e;
         last = e;
@@ -6676,6 +6919,71 @@ HOW TO MAP CODE
       throw e;
     } finally { run.ctls.delete(ctl); }
   }
+  /* The page can't see exact token counts, so it estimates: about 4 characters per token. */
+  function estTokens(x){
+    if (x == null) return 0;
+    if (Array.isArray(x)) return x.reduce((n, t) => n + estTokens(t && typeof t === "object" && "content" in t ? t.content : t), 0);
+    const t = typeof x === "string" ? x : JSON.stringify(x);
+    return Math.ceil((t || "").length / 4);
+  }
+  const tokensUsed = () => run ? run.tokIn + run.tokOut : 0;
+  const fmtTokens = n => n >= 10000 ? Math.round(n / 1000) + "k" : n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
+  function usageLine(){
+    if (!run || !run.calls) return "";
+    return "About " + tokensUsed().toLocaleString() + " tokens (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from the length of the text. Exported Python reports exact counts." +
+      (run.budget ? " Budget: " + run.budget.toLocaleString() + "." : "");
+  }
+
+  /* 'ask me before …': returns true if the action may go ahead. */
+  async function allowed(kinds, what){
+    if (!kinds.some(k => run.askFirst.has(k))) return true;
+    const said = what + (/[.!?]$/.test(what) ? "" : ".");
+    const ok = await waitForYou("Allow this?", "The program wants to " + said, (box, done) => {
+      const row = document.createElement("div"); row.className = "row";
+      const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = "Allow";
+      const no = document.createElement("button"); no.type = "button"; no.textContent = "Don't";
+      yes.onclick = () => done(true, "allowed"); no.onclick = () => done(false, "refused");
+      row.append(yes, no); box.appendChild(row);
+    });
+    if (!ok) addStep("Not done", { mono:true, text:"You said no, so the program skipped this: " + said }).done("refused", "warn");
+    return ok;
+  }
+
+  /* 'run program': a saved program as a step, with its own draft, result and variables. */
+  const RUN_STATE = ["task", "draft", "problems", "approved", "answer", "result", "vars", "instructions", "chats", "outOfRounds", "lastError"];
+  async function runProgram(name, value, tc){
+    name = String(name || "").trim();
+    if (!name) fail("The 'run program' block needs the name of a saved program.");
+    if (run.programs.some(n => n.toLowerCase() === name.toLowerCase())) fail("The program \u201c" + name + "\u201d runs itself (" + run.programs.concat(name).join(" \u2192 ") + "), which would never end.");
+    if (run.programs.length >= 10) fail("Programs inside programs went more than 10 deep, so the run stopped.");
+    if (run.threads.size > 1) fail("\u201c" + name + "\u201d can't run while other scripts are running at the same time. Run it from a script that runs on its own (not alongside a broadcast).");
+    await memInit();
+    const state = savedProgramState(name);
+    if (!state) fail("There's no saved program called \u201c" + name + "\u201d. Save it from the Programs button first.");
+    const sub = new Blockly.Workspace();
+    try {
+      try { Blockly.serialization.workspaces.load(state, sub); } catch(e) { fail("The saved program \u201c" + name + "\u201d couldn't be opened."); }
+      const problem = subProgramProblem(sub);
+      if (problem) fail("The program \u201c" + name + "\u201d " + problem + ", so it can't run as a block.");
+      const saved = {}; RUN_STATE.forEach(k => saved[k] = run[k]);
+      Object.assign(run, { task:"", draft:"", problems:[], approved:undefined, answer:"", result:[], vars:new Map(), instructions:"", chats:new Map(), outOfRounds:false, lastError:"" });
+      run.programs.push(name);
+      const st = addStep("Program: " + name, { text:"Started" + (str(value).trim() ? " with: " + short(value, 200) : ".") });
+      st.done("running", "");
+      try {
+        for (const hat of sub.getTopBlocks(true).filter(b => b.type === "rb_start" && (!b.isEnabled || b.isEnabled()))) {
+          try { await runChain(hat.getNextBlock(), { payload:value }); }
+          catch(e) { if (e instanceof FinishSig) break; throw e; }
+        }
+        const out = finalText();
+        addStep("Program: " + name, { text:out || "(no result)" }).done("done", "ok");
+        st.done("done", "ok");
+        return out;
+      } catch(e) { if (!isControlSignal(e)) st.done("failed", "bad"); throw e; }
+      finally { run.programs.pop(); RUN_STATE.forEach(k => run[k] = saved[k]); }
+    } finally { try { sub.dispose(); } catch(e) {} }
+  }
+
   async function askStep(label, prompt){
     const s = addStep(label);
     const out = await ask(prompt, s);
@@ -6963,6 +7271,8 @@ HOW TO MAP CODE
         return { time:hhmm(d), date, datetime:date + " " + hhmm(d), hour:d.getHours(), minute:d.getMinutes(),
                  weekday:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()] }[part];
       }
+      case "rb_tokens_used": return tokensUsed();
+      case "rb_run_program": return runProgram(b.getFieldValue("NAME"), await input(b, tc, "VALUE", ""), tc);
       case "rb_approve": {
         const t = str(await input(b, tc, "TEXT"));
         return waitForYou("Do you approve this?", t, (box, done) => {
@@ -7022,7 +7332,7 @@ HOW TO MAP CODE
 
   async function callProc(b, tc){
     const name = b.getProcedureCall();
-    const def = Blockly.Procedures.getDefinition(name, ws);
+    const def = Blockly.Procedures.getDefinition(name, b.workspace || ws);
     if (!def) fail("There's no definition for the block '" + name + "'.");
     if (run.depth >= MAX_DEPTH) fail("'" + name + "' called itself too many times.");
     const params = def.getVarModels ? def.getVarModels() : [];
@@ -7184,6 +7494,18 @@ HOW TO MAP CODE
         break;
       }
       case "rb_reset_timer": run.timerStart = Date.now(); break;
+      case "rb_budget": {
+        run.budget = Math.max(0, Math.round(num(await input(b, tc, "TOKENS", 0))));
+        addStep("Budget", { mono:true, text:run.budget ? "This run stops before a Claude call once it has used about " + run.budget.toLocaleString() + " tokens (about " + tokensUsed().toLocaleString() + " so far)." : "No token budget for this run." }).done("set", "ok");
+        break;
+      }
+      case "rb_ask_first": {
+        const what = b.getFieldValue("WHAT") || "all";
+        (what === "all" ? ["ha", "messages", "files"] : [what]).forEach(k => run.askFirst.add(k));
+        addStep("Ask first", { mono:true, text:"From now on, the program asks you before " + { ha:"any Home Assistant action", messages:"sending messages and announcements", files:"saving files", all:"Home Assistant actions, messages and saving files" }[what] + "." +
+          (what === "files" || what === "all" ? "\nOn this page the browser already asks before every download." : "") }).done("set", "ok");
+        break;
+      }
       case "rb_stop": throw new FinishSig();
       case "rb_broadcast":
       case "rb_broadcast_wait":
@@ -7303,11 +7625,13 @@ HOW TO MAP CODE
       case "rb_ha_notify": {
         const target = str(await input(b, tc, "TARGET")).trim() || "persistent_notification", text = str(await input(b, tc, "TEXT"));
         if (!text.trim()) fail("The 'notify' block has no message.");
+        if (!(await allowed(["ha", "messages"], "send a notification to " + target + ": " + short(text, 120)))) break;
         haNote(); addStep("Notification → " + target, { text }).done("sample house", "ok"); break;
       }
       case "rb_ha_speak": {
         const text = str(await input(b, tc, "TEXT")), player = str(await input(b, tc, "PLAYER")).trim();
         if (!text.trim()) fail("The 'say' block has nothing to say.");
+        if (!(await allowed(["ha", "messages"], "say on " + (player || "a speaker") + ": " + short(text, 120)))) break;
         haNote(); addStep("Spoken on " + (player || "a speaker"), { text }).done("sample house", "ok"); break;
       }
       case "rb_set_instructions": {
@@ -7453,8 +7777,50 @@ HOW TO MAP CODE
       };
       actions.appendChild(sv);
     });
+    const use = usageLine();
+    if (use) { const u = document.createElement("div"); u.className = "result-usage"; u.textContent = use; el.appendChild(u); }
     stepsEl.appendChild(el); el.scrollIntoView({ block:"nearest" });
   }
+
+  /* ---------- Save the run log ---------- */
+  function logMarkdown(){
+    const name = ($("io-name").value || "").trim() || "my program";
+    const out = ["# " + name + ": run log", ""];
+    if (run) {
+      const d = new Date(run.t0);
+      out.push("- Started: " + d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + hhmm(d) + " (" + (run.reason === "manual" ? "Run clicked" : run.reason) + ")");
+      out.push("- Model: " + tierLabel(run.primary) + (run.backups.length ? " (backups: " + run.backups.map(tierLabel).join(", ") + ")" : ""));
+      out.push("- Claude calls: " + run.calls);
+      if (run.calls) out.push("- Tokens: about " + tokensUsed().toLocaleString() + " (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from text length");
+      if (run.budget) out.push("- Budget: " + run.budget.toLocaleString() + " tokens");
+    }
+    out.push("- Status: " + $("status").textContent, "");
+    let n = 0;
+    [...stepsEl.children].forEach(el => {
+      if (el.classList.contains("divider")) { out.push("---", "", "**" + el.textContent + "**", ""); return; }
+      if (!el.classList.contains("step") && !el.classList.contains("result")) return;
+      const nameEl = el.querySelector(".step-name"), pill = el.querySelector(".pill"), body = el.querySelector(".step-body");
+      const ms = Number(el.dataset.ms), at = run && el.dataset.t0 ? (Number(el.dataset.t0) - run.t0) / 1000 : null;
+      const timing = [at != null && at >= 0 ? "+" + at.toFixed(1) + " s" : "", ms >= 0 && !isNaN(ms) ? "took " + (ms / 1000).toFixed(1) + " s" : ""].filter(Boolean).join(", ");
+      out.push((el.classList.contains("result") ? "## Result" : "## " + (++n) + ". " + (nameEl ? nameEl.textContent : "Step")) +
+        (pill && pill.textContent ? " [" + pill.textContent + "]" : "") + (timing ? "  \u00b7  " + timing : ""));
+      const pics = body ? body.querySelectorAll("img").length : 0;
+      const text = body ? body.innerText.trim() : "";
+      if (text) out.push("", "~~~~", text, "~~~~");
+      if (pics) out.push("", "(" + pics + " picture" + (pics === 1 ? "" : "s") + ")");
+      out.push("");
+    });
+    return out.join("\n");
+  }
+  $("log-save").onclick = async () => {
+    const btn = $("log-save");
+    if (!downloads || !stepsEl.querySelector(".step, .result")) { btn.textContent = "Nothing to save yet"; setTimeout(() => btn.textContent = "Save log", 1600); return; }
+    const d = new Date(), stamp = d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()) + "-" + pad2(d.getHours()) + pad2(d.getMinutes());
+    btn.disabled = true;
+    try { await downloads.save({ filename:slug(($("io-name").value || "").trim() || "run") + "-log-" + stamp + ".md", data:logMarkdown() }); btn.textContent = "Saved"; }
+    catch(e) { btn.textContent = e && e.code === "declined" ? "Cancelled" : "Couldn't save"; }
+    finally { btn.disabled = false; setTimeout(() => btn.textContent = "Save log", 1600); }
+  };
 
   /* ---------- Watch panel ---------- */
   function renderWatch(){
@@ -7619,7 +7985,8 @@ HOW TO MAP CODE
             tier:$("tier").value, primary:$("tier").value, backups:backupTiers(), calls:0, steps:0, depth:0, stopped:false, ending:false, finished:false, error:null,
             ctls:new Set(), stoppers:new Set(), threads:new Set(), started:0, broadcasts:0, sample:null,
             active:true, ready:false, pending:hats.slice(), timerStart:Date.now(),
-            msgWaiters:new Map(), msgNames:new Map(), msgWaiting:0, instructions:"", chats:new Map(), lastError:"" };
+            msgWaiters:new Map(), msgNames:new Map(), msgWaiting:0, instructions:"", chats:new Map(), lastError:"",
+            budget:0, tokIn:0, tokOut:0, askFirst:new Set(), programs:[], t0:Date.now(), reason };
     $("run").disabled = true; $("stop").disabled = false; setStatus("running");
     const started = Date.now();
     try {
@@ -7634,7 +8001,7 @@ HOW TO MAP CODE
       if (run.stopped) throw new Halt();
       stepsEl.querySelectorAll(".pill").forEach(p => { if (["running","waiting","waiting for you"].includes(p.textContent)) { p.textContent = "ended"; p.className = "pill warn"; } });
       if (!(quiet && !resultItems().length)) showResult();
-      setStatus("done in " + fmtLeft(Date.now() - started) + " \u00b7 " + run.calls + " Claude call" + (run.calls === 1 ? "" : "s"));
+      setStatus("done in " + fmtLeft(Date.now() - started) + " \u00b7 " + run.calls + " Claude call" + (run.calls === 1 ? "" : "s") + (run.calls ? " \u00b7 ~" + fmtTokens(tokensUsed()) + " tokens" : ""));
     } catch(e) {
       stepsEl.querySelectorAll(".pill").forEach(p => { if (["running","waiting","waiting for you"].includes(p.textContent)) { p.textContent = "interrupted"; p.className = "pill bad"; } });
       if (e instanceof Halt) {

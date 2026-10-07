@@ -87,6 +87,8 @@ Ask Claude (each makes one model call):
   rb_ask (TEXT): text answer.  rb_ask_yesno (TEXT): boolean.  rb_ask_number (TEXT): number.  rb_ask_list (TEXT): list of strings.
   rb_rewrite (TEXT, HOW).  rb_extract (WHAT, TEXT).  rb_score (TEXT, CRITERIA): 1-10.  rb_better (A, B, CRITERIA): returns the better text.
 You: rb_approve (TEXT): boolean, the person approves or sends back.  rb_choose (LIST): the person picks an item.
+  rb_ask_first: fields WHAT ("ha" | "messages" | "files" | "all"): from then on, ask the person before those actions.
+  Map confirm-before-acting prompts (input('Send? y/n') before sending or saving) to rb_ask_first.
 Conversations and instructions:
   rb_set_instructions (TEXT): a system prompt / role for all later calls.  rb_clear_instructions.
   rb_chat (NAME, TEXT): value, the reply in a named multi-turn conversation.  rb_chat_reset (NAME).
@@ -105,6 +107,9 @@ Files and errors:
   rb_result_text: value, the result so far as text.
   rb_try: statement inputs DO and FAIL (runs FAIL if anything in DO fails).  rb_retry: inputs TIMES, statement input DO (retries temporary failures).
   rb_error: value, the most recent failure message.
+  rb_budget (TOKENS): stop the run before a model call once it has used this many tokens.  rb_tokens_used: value, tokens used so far.
+  rb_run_program: fields NAME (a saved program's name); input VALUE; value, that program's result. Inside it, rb_msg_value is VALUE.
+  Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
   Map open(...).read() on text files to rb_file_choose, writing output files to rb_file_save, try/except to rb_try, retry loops and backoff to rb_retry.
 Memory (survives between runs):
   rb_mem_set: inputs VALUE, NAME; fields KIND ("transient" = while the page/program is running, "permanent" = saved forever).

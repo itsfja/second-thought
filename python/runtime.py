@@ -29,7 +29,8 @@ for _stream in (sys.stdout, sys.stderr):
 # Python looks for it next to the program, then in the current folder, then in your home folder;
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
-SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS"}
+SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
+                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG"}
 
 
 def _load_settings():
@@ -194,6 +195,7 @@ MAX_STEPS = 20000       # stops loops that never end
 MAX_SCRIPTS = 100       # scripts started by broadcasts in one run
 MAX_DEPTH = 60          # My Blocks calling themselves
 OUTPUT_DIR = "outputs"  # where pictures are saved
+LOG_DIR = "logs"        # where run logs go when save_log = yes in second-thought.ini
 # 'forever' and timed memories live in this file, next to the program.
 MEMORY_FILE = os.environ.get("RB_MEMORY_FILE") or os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "memory.json")
 
@@ -524,6 +526,14 @@ class Runtime:
         self.instructions = ""
         self.chats = {}
         self.usage = {}  # provider -> [tokens in, tokens out]
+        try:  # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
+            self.budget = max(0, int(float(os.environ.get("RB_BUDGET", "0") or 0)))
+        except ValueError:
+            self.budget = 0
+        self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
+        self.trace = []              # every log line, for save_log
+        self.run_started = time.time()
+        self.programs = []           # names of saved programs running inside this run, innermost last
         self.calls = 0
         self.steps = 0
         self.depth = 0
@@ -573,6 +583,7 @@ class Runtime:
 
     # ----- logging -----
     def log(self, label, text=None, status=None):
+        self.trace.append((time.time(), label, to_str(text) if text else "", status or ""))
         head = f"\n▸ {label}" + (f"  [{status}]" if status else "")
         print(head, flush=True)
         if text:
@@ -589,12 +600,45 @@ class Runtime:
         u[0] += tokens_in or 0
         u[1] += tokens_out or 0
 
+    def tokens_used(self):
+        return sum(u[0] + u[1] for u in self.usage.values())
+
+    def set_budget(self, n):
+        n = max(0, round_js(num(n)))
+        self.budget = n
+        self.log("Budget", f"This run stops before a model call once it has used {n:,} tokens (used so far: {self.tokens_used():,})."
+                 if n else "No token budget for this run.", "set")
+
+    # ----- Asking before actions -----
+    ASK_FIRST = {"ha": "any Home Assistant action", "messages": "sending messages and announcements",
+                 "files": "saving files", "all": "all of these"}
+
+    def ask_before(self, kind):
+        kinds = {"ha", "messages", "files"} if kind == "all" else {kind}
+        self.ask_first |= kinds
+        self.log("Ask first", "From now on, the program asks you before " + self.ASK_FIRST.get(kind, kind) + ".", "set")
+
+    async def _allowed(self, kinds, what):
+        """True if the action may go ahead. Asks first when an 'ask me before' block covers it."""
+        if not (self.ask_first & set(kinds)):
+            return True
+        if self.schedule_mode and not sys.stdin.isatty():
+            self.log("Not done", what + " needs your approval, and nobody is at the keyboard.", "refused")
+            return False
+        if await self.approve("Allow this? " + what):
+            return True
+        self.log("Not done", what + " was refused, so nothing happened.", "refused")
+        return False
+
     async def _call(self, prompt, want_json=False, picture=None, history=None, web=False):
         if self.ending:
             raise asyncio.CancelledError()
         self.calls += 1
         if self.calls > MAX_AI_CALLS:
             raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+        if self.budget and self.tokens_used() >= self.budget:
+            raise RunError(f"Stopped: this run has used {self.tokens_used():,} tokens, which reaches its budget of {self.budget:,}. "
+                           "Raise the number in the 'limit this run' block (or budget in second-thought.ini).")
         tier = self.current_tier
         # Backups stand in for the primary model only. A block that names its own model keeps that model.
         tiers = [tier] + (self.backups if tier == self.primary else [])
@@ -955,7 +999,7 @@ class Runtime:
             self.log("Chose file", f"{path} \u00b7 {len(text):,} characters", "chosen")
             return text
 
-    def save_file(self, value, name, ext):
+    async def save_file(self, value, name, ext):
         if isinstance(value, Picture):
             raise RunError("To save a picture, use the 'save picture' block.")
         if ext == "json" and not isinstance(value, str):
@@ -966,9 +1010,11 @@ class Runtime:
             text = to_str(value)
         if not text:
             raise RunError("There's nothing to save: the value in the 'save as file' block is empty.")
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
         base = re.sub(r"[^\w\-]+", "-", to_str(name)).strip("-") or "output"
         path = os.path.join(OUTPUT_DIR, f"{base}.{ext}")
+        if not await self._allowed(["files"], f"save {path} ({len(text):,} characters)"):
+            return
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             f.write(text)
         self.log("Save file", "Saved " + path, "saved")
@@ -1116,7 +1162,10 @@ class Runtime:
                 raise RunError(f"The data for {service} isn't valid JSON. Use something like {{\"temperature\": 20}}.")
         if entity:
             body["entity_id"] = entity
-        if any(re.match(p, service) for p in HA_SENSITIVE):
+        sensitive = any(re.match(p, service) for p in HA_SENSITIVE)
+        if not sensitive and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
+            return
+        if sensitive:
             if self.schedule_mode and not sys.stdin.isatty():
                 self.log("Not done", f"{service} on {entity} needs your approval, and nobody is at the keyboard.", "refused")
                 return
@@ -1131,6 +1180,8 @@ class Runtime:
         target, text = to_str(target).strip() or "persistent_notification", to_str(text)
         if not text.strip():
             raise RunError("The 'notify' block has no message.")
+        if not await self._allowed(["ha", "messages"], f"send a notification to {target}: {_short(text, 120)}"):
+            return
         if target in ("persistent_notification", "persistent_notification.create"):
             await self._ha("POST", "/api/services/persistent_notification/create", {"message": text, "title": "Second Thought"})
         else:
@@ -1142,6 +1193,8 @@ class Runtime:
         text, player = to_str(text), to_str(player).strip()
         if not text.strip():
             raise RunError("The 'say' block has nothing to say.")
+        if not await self._allowed(["ha", "messages"], f"say on {player or 'a speaker'}: {_short(text, 120)}"):
+            return
         await self._ha("POST", "/api/services/tts/speak", {"entity_id": HA_TTS_ENTITY, "media_player_entity_id": player, "message": text})
         self.log("Spoken on " + player, text, "sent")
 
@@ -1349,8 +1402,10 @@ class Runtime:
         pic = _need_picture(pic, "show picture")
         self.log("Picture", self._picture_path(pic), "shown")
 
-    def save_picture(self, pic, fmt):
+    async def save_picture(self, pic, fmt):
         pic = _need_picture(pic, "save picture")
+        if not await self._allowed(["files"], f"save the picture {pic.name}"):
+            return
         if fmt == "svg":
             if pic.svg is None:
                 raise RunError("Only drawn pictures can be saved as SVG. Choose PNG instead.")
@@ -1631,6 +1686,45 @@ class Runtime:
         if self.ending:
             raise asyncio.CancelledError()
 
+    # ----- Saved programs run as a block -----
+    STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error")
+
+    async def run_program(self, name, fn, value=""):
+        """Runs a saved program's 'when Run is clicked' script with its own draft, result and variables.
+        Gives back its result as text. Model calls, the budget and the step limits are shared with this run."""
+        name = to_str(name).strip()
+        if name.lower() in (p.lower() for p in self.programs):
+            raise RunError(f"The program “{name}” runs itself (" + " → ".join(self.programs + [name]) + "), which would never end.")
+        if len(self.programs) >= 10:
+            raise RunError("Programs inside programs went more than 10 deep, so the run stopped.")
+        busy = [t for t in self.tasks if not t.done() and t is not asyncio.current_task()]
+        if busy:
+            raise RunError(f"“{name}” can't run while other scripts are running at the same time. "
+                           "Run it from a script that runs on its own (not alongside a broadcast).")
+        saved = {k: getattr(self, k) for k in self.STATE}
+        saved_vars = dict(self.vars)
+        self.task, self.draft, self.problems, self.approved, self.answer = "", "", [], None, ""
+        self.result, self.out_of_rounds_hit, self.instructions, self.chats, self.last_error = [], False, "", {}, ""
+        self.vars.clear()
+        token = MESSAGE_VALUE.set(value)
+        self.programs.append(name)
+        self.log("Program: " + name, "Started" + (f" with: {_short(to_str(value), 200)}" if to_str(value).strip() else "."), "running")
+        try:
+            try:
+                await fn()
+            except Finish:
+                pass
+            out = "\n\n".join(to_str(x) for x in self.result) if self.result else self.draft
+            self.log("Program: " + name, out or "(no result)", "done")
+            return out
+        finally:
+            self.programs.pop()
+            MESSAGE_VALUE.reset(token)
+            self.vars.clear()
+            self.vars.update(saved_vars)
+            for k, v in saved.items():
+                setattr(self, k, v)
+
     def start_script(self, fn, value=""):
         task = asyncio.ensure_future(self._guard(fn, value))
         self.tasks.add(task)
@@ -1661,7 +1755,14 @@ class Runtime:
 
     async def run(self, scripts, label="Run"):
         self.reset()
+        self.run_label = label
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
+        try:
+            return await self._run(scripts)
+        finally:
+            self.save_log()
+
+    async def _run(self, scripts):
         for fn in scripts:
             if isinstance(fn, tuple):
                 self.start_script(fn[0], fn[1])
@@ -1685,8 +1786,44 @@ class Runtime:
             print("\nThe program ended without a result.", flush=True)
         used = " · ".join(f"{who}: {u[0]:,} tokens in, {u[1]:,} out" for who, u in self.usage.items()) or "no tokens used"
         spare = f" · a backup answered {self.backup_used} step{'s' if self.backup_used != 1 else ''}" if self.backup_used else ""
-        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}{spare}", flush=True)
+        budget = f" · budget {self.budget:,}" if self.budget else ""
+        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}{spare}{budget}", flush=True)
         return 0
+
+    def save_log(self):
+        """With save_log = yes in second-thought.ini, writes this run's log to logs/<program>-<date>-<time>.md."""
+        if os.environ.get("RB_SAVE_LOG", "").strip().lower() not in ("1", "yes", "true", "on"):
+            return
+        prog = os.path.splitext(os.path.basename(sys.argv[0] or "program"))[0] or "program"
+        start = datetime.datetime.fromtimestamp(self.run_started)
+        lines = [f"# {prog}: run log", "",
+                 f"- Started: {start:%Y-%m-%d %H:%M:%S} ({getattr(self, 'run_label', 'Run')})",
+                 f"- Took: {time.time() - self.run_started:.1f} s",
+                 f"- Model calls: {self.calls}"]
+        for who, u in self.usage.items():
+            lines.append(f"- {who}: {u[0]:,} tokens in, {u[1]:,} out")
+        if self.budget:
+            lines.append(f"- Budget: {self.budget:,} tokens")
+        if self.error:
+            lines.append(f"- Stopped with an error: {self._describe(self.error)}")
+        lines.append("")
+        for i, (t, label, text, status) in enumerate(self.trace, 1):
+            lines.append(f"## {i}. {label}" + (f" [{status}]" if status else "") + f"  ·  +{t - self.run_started:.1f} s")
+            if text:
+                lines += ["", "~~~~", text, "~~~~"]
+            lines.append("")
+        result = "\n\n".join(to_str(x) for x in self.result) if self.result else self.draft
+        if result:
+            lines += ["## Result", "", result, ""]
+        try:
+            folder = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), LOG_DIR)
+            os.makedirs(folder, exist_ok=True)
+            path = os.path.join(folder, f"{prog}-{start:%Y%m%d-%H%M%S}.md")
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("\n".join(lines))
+            print(f"Log saved to {path}", flush=True)
+        except OSError as e:
+            print(f"(The log couldn't be saved: {e})", flush=True)
 
     # ----- Schedules -----
     async def run_schedules(self, schedules, watches=()):
