@@ -21,11 +21,18 @@ class _Messages:
         if "one step at a time, using tools" in p:
             import re
             steps = len(re.findall(r"\nStep \d+: ", p))
+            script = json.loads(os.environ.get("FAKE_AGENT_SCRIPT") or "null")
+            if script:  # a test's script: one reply per step; "BAD" is an unreadable reply
+                r = script[min(steps, len(script) - 1)]
+                return _M("this is not json at all" if r == "BAD" else json.dumps(r))
             m = re.search(r"TOOLS:\n- ([a-z0-9_]+)\(([^)]*)\)", p)
             if steps or not m or "This is your last step" in p:
                 return _M(json.dumps({"done": True, "answer": f"AGENT ANSWER after {steps} step(s)"}))
             keys = [k.strip() for k in m.group(2).split(",") if k.strip()]
-            return _M(json.dumps({"tool": m.group(1), "input": {k: str(500 + i * 350) for i, k in enumerate(keys)}, "why": "test"}))
+            r = {"tool": m.group(1), "input": {k: str(500 + i * 350) for i, k in enumerate(keys)}, "why": "test"}
+            if "Planning is on" in p:
+                r["plan"] = ["test plan step"]
+            return _M(json.dumps(r))
         if "SVG" in p and "Reply with only the SVG" in p:
             return _M('Here you go:\n<svg viewBox="0 0 100 80" onload="alert(1)"><script>alert(2)</script><rect width="100" height="80" fill="#c96"/><circle cx="50" cy="40" r="20" fill="#fff" onclick="x()"/></svg>')
         if "JSON array of objects" in p:
