@@ -1,8 +1,10 @@
 import asyncio, json, os
 class _B:
     def __init__(self, t): self.type="text"; self.text=t
+class _U:
+    def __init__(self, t): self.input_tokens=120; self.output_tokens=len(t)//4+1
 class _M:
-    def __init__(self, t): self.content=[_B(t)]
+    def __init__(self, t): self.content=[_B(t)]; self.usage=_U(t)
 class _Messages:
     rev = 0
     async def create(self, model, max_tokens, messages, **kw):

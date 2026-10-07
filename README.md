@@ -99,6 +99,10 @@ Each time a block does its job, a new line appears in the run log. You can watch
 
 At the end, a green box shows the **result**. The result is what your program made.
 
+Under the result, a small line says roughly how many **tokens** the run used. Tokens are the little pieces of words that Claude reads and writes. Every token uses a tiny bit of your Claude allowance. On the page this number is a good guess, worked out from how long the words are.
+
+Press **Save log** at the top of the run log to keep a copy of the diary. It saves every step, how long each one took, and the result, as a file you can read later.
+
 If something goes wrong, press **Stop**. Everything will stop straight away.
 
 Next to the **Model** menu is a button called **Backups**. The model you choose in the menu is your main helper. Backups are spare helpers, like substitutes in a football team. If the main helper can't come (perhaps its key is missing, or its computers are having a bad day), the first spare helper does that job instead. The run log tells you when that happens.
@@ -121,6 +125,9 @@ Second Thought can do many things. Here are some of them.
 - It can do several jobs at the same time.
 - It can wait until a certain time of day, and then start a job by itself.
 - If something goes wrong, it can try again.
+- It can stop itself before it uses too many tokens. Put the block **limit this run to … tokens** near the top.
+- It can ask you first, before it sends a message, says something out loud, saves a file or changes something at home. Use the block **ask me before …**.
+- It can use one of your saved programs as a single block inside another program. Use **run program … with …** from the **Programs** colour.
 - It can ask **Gemini** to help too. Gemini is another clever helper, made by a company called Google. Claude can write something, and Gemini can check it. Two helpers spot more mistakes than one.
 - It can ask **Llama**, a helper that can live on your own computer and keep everything private.
 - It can ask **DeepSeek** and **Grok** too. Grok is made by a company called xAI.
@@ -161,6 +168,10 @@ Press the **Programs** button at the top of the screen. Type a name for your pro
 Next time, open the same box and press **Open** to get your program back.
 
 You can also keep a copy as a file on your computer. Press **Import / export** to do that.
+
+A saved program can be a building block, too. Put **run program "my program" with …** inside another program. The saved program runs, then hands back its result. Inside it, the block **message value** holds whatever you gave it. It has its own draft and its own result, so it can't muddle up yours.
+
+There are two rules. A program can't run itself, because that would never end. And a program that uses **broadcast** blocks can't be used this way: run it on its own instead.
 
 ---
 
@@ -213,6 +224,20 @@ There are also two ways to make the program start all by itself:
 
 - **Windows:** double-click `install-startup.bat` once. From then on, the program starts in a small window each time you log in. To stop that, press Windows+R, type `shell:startup`, and delete the file called "Second Thought - my-program".
 - **Linux or a Mac:** type `sh install-service.sh` once. On Linux it starts whenever the computer starts (it asks for your password to set this up). On a Mac it starts whenever you log in. It tells you how to watch what the program is doing, and how to turn it off.
+
+The ini file has a `[run]` part, too. Take the `;` off the front of a line to switch it on:
+
+```
+[run]
+budget = 50000
+save_log = yes
+```
+
+`budget` stops each run before a model call once it has used that many tokens. In Python the count is exact, because every company says how many tokens it used. A **limit this run** block in the program wins over this line.
+
+`save_log` keeps a diary of every run in a folder called `logs`, next to the program. This is handy for programs that run on their own while you sleep.
+
+If a program has an **ask me before** block, Python asks you in the terminal and waits for `y` or `n`. When a program runs by itself on a schedule, with nobody there to answer, it says no and carries on.
 
 Everything in `second-thought.ini` can also be set as an environment variable with the same name, if you prefer. An environment variable wins over the file.
 
@@ -360,6 +385,8 @@ If you change `python/runtime.py` or `prompts/convert-guide.txt`, run `python to
 - Second Thought keeps its secrets safe. Things it remembers are only seen by you.
 - Inside the page, Claude cannot look things up on the internet. A Python program can.
 - Timed jobs on the page only work while the page is open. For jobs that run while you sleep, use Python.
+- The page can't see exactly how many tokens Claude used, so it makes a careful guess. Python knows the exact number.
+- On the page, your browser already asks before saving any file. So **ask me before saving files** only adds a question in Python.
 - Some hidden names inside the page still say `reflection-blocks`. That was Second Thought's name when it was very young. They stay the same so that old saved programs still work.
 
 ---
