@@ -5,6 +5,7 @@ import asyncio
 import base64
 import contextlib
 import contextvars
+import copy
 import datetime
 import json
 import math
@@ -605,6 +606,8 @@ class Runtime:
         self.last_error = ""
         self.instructions = ""
         self.chats = {}
+        self.reflect = None          # the review loop running now: earlier problems and its best draft so far
+        self.checkpoints = {}        # 'save checkpoint' snapshots, by name
         self.usage = {}  # provider -> [tokens in, tokens out]
         try:  # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
             self.budget = max(0, int(float(os.environ.get("RB_BUDGET", "0") or 0)))
@@ -1582,24 +1585,48 @@ class Runtime:
         if not self.problems:
             self.log("Revise", "No review problems recorded, so nothing to fix.", "skipped")
             return
+        fixed = [e for e in (self.reflect or {}).get("earlier", []) if e not in self.problems]
+        keep = ("\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + "\n".join("- " + e for e in fixed)) if fixed else ""
         self.draft = await self._call("Revise the draft so it fixes every problem listed. Change nothing else that works. "
                                       "Reply with only the improved piece.\n\nTask:\n" + (self.task or "(none given)") +
-                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + "\n\nDraft:\n" + self.draft)
+                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft)
         self.log("Revise to fix the problems", self.draft, "revised")
 
     def set_draft(self, t):
         self.draft = to_str(t)
 
-    async def review(self, criteria, label="Review"):
+    @contextlib.contextmanager
+    def reviewing(self):
+        """Around a 'review … up to N rounds' loop: remembers each round's problems and its best draft."""
+        before = self.reflect
+        self.reflect = {"earlier": [], "best": None, "round": 0}
+        try:
+            yield
+        finally:
+            self.reflect = before
+
+    async def review(self, criteria, label="Review", in_loop=False):
         self._need_draft()
+        loop = self.reflect if in_loop else None
+        earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
+                   "and list it again if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
         v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
-                             to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft +
+                             to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
                              '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
                              "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
         approved = v["approved"] is True
         problems = [to_str(p) for p in (v.get("problems") or [])]
         self.approved = approved
         self.problems = [] if approved else ([p for p in problems if p] or ["Does not yet meet the criteria."])
+        if loop is not None:
+            loop["round"] += 1
+            best = loop["best"]
+            if best is None or len(self.problems) <= best["n"]:  # a tie goes to the newer draft
+                loop["best"] = {"draft": self.draft, "problems": list(self.problems), "n": len(self.problems), "round": loop["round"]}
+            for p_ in self.problems:
+                if p_ not in loop["earlier"]:
+                    loop["earlier"].append(p_)
+            del loop["earlier"][:-12]
         if approved:
             self.log(label, "Meets every criterion.", "approved")
         else:
@@ -1611,7 +1638,45 @@ class Runtime:
 
     def out_of_rounds(self):
         self.out_of_rounds_hit = True
+        best = (self.reflect or {}).get("best")
+        if best and best["round"] != self.reflect["round"]:
+            self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
+            self.log("Kept the best draft", f"Went back to the draft from round {best['round']}: it had the fewest problems "
+                     f"({best['n']}). The rounds after it didn't improve on it.", "best draft")
         self.log("Review", "Out of rounds. Keeping the best effort.", "failed")
+
+    # ----- Checkpoints -----
+    _SNAPSHOT = ("task", "draft", "problems", "approved", "answer", "result")
+
+    def save_checkpoint(self, name):
+        name = to_str(name).strip()
+        if not name:
+            raise RunError("The 'save checkpoint' block needs a name.")
+        state = {k: getattr(self, k) for k in self._SNAPSHOT}
+        state["vars"] = dict(self.vars)
+        try:
+            state = copy.deepcopy(state)
+        except Exception:  # noqa: BLE001 - something uncopyable: keep references instead
+            state = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v) for k, v in state.items()}
+        self.checkpoints[name.lower()] = state
+        self.log("Checkpoint “" + name + "”", "Saved the task, draft, review, result and variables" +
+                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "saved")
+
+    def restore_checkpoint(self, name):
+        name = to_str(name).strip()
+        state = self.checkpoints.get(name.lower())
+        if state is None:
+            raise RunError(f"There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.")
+        try:  # a copy, so the same checkpoint can be gone back to more than once
+            state = copy.deepcopy(state)
+        except Exception:  # noqa: BLE001
+            state = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v) for k, v in state.items()}
+        for k in self._SNAPSHOT:
+            setattr(self, k, state[k])
+        self.vars.clear()
+        self.vars.update(state["vars"])
+        self.log("Back to checkpoint “" + name + "”", "Restored the task, draft, review, result and variables" +
+                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "restored")
 
     # ----- You (the person at the keyboard) -----
     async def _input(self, prompt):
@@ -2003,7 +2068,8 @@ class Runtime:
         self.set_draft(last or "The agent stopped before it had a result.")
 
     # ----- Saved programs run as a block -----
-    STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error")
+    STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error",
+             "checkpoints", "reflect")
 
     async def run_program(self, name, fn, value=""):
         """Runs a saved program's 'when Run is clicked' script with its own draft, result and variables.
@@ -2021,6 +2087,7 @@ class Runtime:
         saved_vars = dict(self.vars)
         self.task, self.draft, self.problems, self.approved, self.answer = "", "", [], None, ""
         self.result, self.out_of_rounds_hit, self.instructions, self.chats, self.last_error = [], False, "", {}, ""
+        self.checkpoints, self.reflect = {}, None
         self.vars.clear()
         token = MESSAGE_VALUE.set(value)
         self.programs.append(name)

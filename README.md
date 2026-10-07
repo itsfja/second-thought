@@ -117,6 +117,8 @@ Next to the **Model** menu is a button called **Backups**. The model you choose 
 Second Thought can do many things. Here are some of them.
 
 - It can ask Claude to write, then check, then try again until the writing is good.
+- If it runs out of tries, it keeps the best try, not just the last one. And each time it checks, it makes sure old mistakes haven't crept back in.
+- It can **save a checkpoint** when the draft is good, and **go back to the checkpoint** if later changes make it worse.
 - It can ask you questions and wait for your answer.
 - It can look at a picture you give it and tell you about it.
 - It can draw simple pictures, like a cartoon loaf of bread.
