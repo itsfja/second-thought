@@ -223,6 +223,7 @@ async def agent_run(pg, tools, replies, steps=6, answer=None, export=None, plan=
 
 
 AGENT_SCRIPTS = {}  # exported program -> the replies its stand-in Claude gives in Python
+EXAMPLE_A_TOOL = {}  # the 'Agent with your own tool' example, as the page builds it
 
 
 def var(vid, name):
@@ -486,6 +487,58 @@ async def new_feature_page_tests(pg):
     stopped = [t for n, p_, t in await step_texts(pg) if n == "Run stopped"]
     check(status == "error" and stopped and "needs a goal" in stopped[0], "an agent with no goal says so")
 
+    print("Typed tool inputs")
+    tcall = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
+    fin = lambda a: {"done": True, "answer": a}  # noqa: E731
+    hyd_types = "flour grams: number; water grams: number - grams of water"
+    def hyd_prog(types=hyd_types):
+        st = json.loads(json.dumps(EXAMPLE_A_TOOL))
+        st["blocks"]["blocks"][0]["next"]["block"]["inputs"]["TOOLS"]["block"]["fields"]["INPUTS"] = types
+        return st
+    await pg.select_option("#example", "a_tool")
+    await pg.click("#load")
+    EXAMPLE_A_TOOL.update(await pg.evaluate("Blockly.serialization.workspaces.save(Blockly.getMainWorkspace())"))
+
+    async def hyd_run(replies, types=hyd_types):
+        await load_state(pg, hyd_prog(types))
+        await pg.evaluate("r => { window.__agentScript = r; window.__agentPrompts = []; }", replies)
+        try:
+            status = await run_program(pg)
+        finally:
+            await pg.evaluate("window.__agentScript = null")
+        return status, await step_texts(pg), await pg.evaluate("window.__agentPrompts")
+
+    status, steps, prompts = await hyd_run([tcall("hydration", **{"flour grams": "500", "water grams": 350}), fin("ok")])
+    r1 = [t for n, p_, t in steps if n == "Agent step 1/6: hydration"]
+    check(status.startswith("done") and r1 and r1[0].endswith("Result:\n70") and
+          '"flour grams":{"type":"number"}' in prompts[0] and '"water grams":{"type":"number","description":"grams of water"}' in prompts[0]
+          and '"required":["flour grams","water grams"],"additionalProperties":false' in prompts[0],
+          "the agent is shown each tool's JSON Schema, and a number sent as text is converted")
+    status, steps, prompts = await hyd_run([tcall("hydration", **{"flour grams": "lots", "water grams": 350}), tcall("hydration", **{"flour grams": 500, "water grams": 350}), fin("ok")])
+    pl = {n: (p_, t) for n, p_, t in steps}
+    check(status.startswith("done") and pl.get("Agent step 1/6: hydration", ("",))[0] == "bad input" and "should be a number" in pl["Agent step 1/6: hydration"][1]
+          and pl.get("Agent step 2/6: hydration", ("",))[0] == "done" and "should be a number, not \"lots\"" in prompts[1],
+          "an input of the wrong type isn't run: the agent is told what to fix, and its next try runs")
+    status, steps, prompts = await hyd_run([tcall("hydration", **{"flour grams": 500}), fin("ok")])
+    b1 = [t for n, p_, t in steps if n == "Agent step 1/6: hydration"]
+    check(b1 and "\u201cwater grams\u201d is missing" in b1[0], "a missing input is caught before the tool runs")
+    status, steps, prompts = await hyd_run([tcall("hydration", **{"flour grams": 500, "water grams": 350, "salt": 10}), fin("ok")])
+    b1 = [t for n, p_, t in steps if n == "Agent step 1/6: hydration"]
+    check(b1 and "no input called \u201csalt\u201d" in b1[0], "an input the tool doesn't have is caught")
+    status, steps, prompts = await hyd_run([fin("ok")], types="flour: number")
+    stopped = [t for n, p_, t in steps if n == "Run stopped"]
+    check(status == "error" and stopped and "inputs are: flour grams, water grams" in stopped[0], "a type for an input the My Block doesn't have stops the run, naming the real inputs")
+    status, steps, prompts = await hyd_run([fin("ok")], types="flour grams: weight")
+    stopped = [t for n, p_, t in steps if n == "Run stopped"]
+    check(status == "error" and stopped and "isn't a type the agent knows" in stopped[0], "an unknown type is reported")
+    status, steps, items = await agent_run(pg, ["ha_read"], [tcall("device_state"), fin("ok")])
+    b1 = [t for n, p_, t in steps if n == "Agent step 1/6: device_state"]
+    check(b1 and "\u201centity\u201d is missing" in b1[0], "built-in tools have types too")
+    await load_state(pg, hyd_prog())
+    EXTRA["t_typed"] = await export_python(pg, "t_typed")
+    AGENT_SCRIPTS["t_typed"] = [tcall("hydration", **{"flour grams": "lots", "water grams": 350}), tcall("hydration", **{"flour grams": "500", "water grams": 350}), fin("ok")]
+    check('"inputs": "flour grams: number; water grams: number - grams of water"' in EXTRA["t_typed"], "exported Python keeps the input types")
+
     print("Agent: every path")
     done = lambda a: {"done": True, "answer": a}  # noqa: E731
     tool = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
@@ -504,7 +557,7 @@ async def new_feature_page_tests(pg):
     r2 = [t for n, p_, t in steps if n == "Agent step 2/6: recall"]
     check(status.startswith("done") and r2 and r2[0].endswith("Result:\nrye, fed daily") and items == ["Your starter is rye."],
           f"a multi-step chain: remember, then recall what it saved, then answer ({items})")
-    status, steps, items = await agent_run(pg, ["memory"], [tool("remember", value="no name"), done("ok")])
+    status, steps, items = await agent_run(pg, ["memory"], [tool("remember", name="", value="no name"), done("ok")])
     e1 = [(p_, t) for n, p_, t in steps if n == "Agent step 1/6: remember"]
     check(status.startswith("done") and e1 and e1[0][0] == "tool error" and "remember needs a name" in e1[0][1], "a tool's error goes back to the agent and the run carries on")
     status, steps, items = await agent_run(pg, ["memory"], [tool("recall", name="x")] * 3, export="t_ag_repeat")
@@ -994,6 +1047,12 @@ def python_tests(codes):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
         run_ag = lambda name: drive([sys.executable, "-u", str(pathlib.Path(tmp) / f"{name}.py")],  # noqa: E731
                                     dict(env, FAKE_AGENT_SCRIPT=json.dumps(AGENT_SCRIPTS[name])), tmp)
+        (pathlib.Path(tmp) / "t_typed.py").write_text(EXTRA["t_typed"], encoding="utf-8")
+        code_, out, err = run_ag("t_typed")
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and "▸ Agent step 1/6: hydration  [bad input]" in out and "should be a number, not \"lots\"" in out
+              and "▸ Agent step 2/6: hydration  [done]" in out and "    Result:\n    70\n" in out,
+              "t_typed.py refuses a wrong-typed input, then runs the corrected one" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         code_, out, err = run_ag("t_ag_bad")
         check(code_ == 0 and "▸ Agent step 1/6  [unreadable]" in out and "▸ Agent: finished in 2 steps" in out, "t_ag_bad.py survives an unreadable reply" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         code_, out, err = run_ag("t_ag_repeat")
