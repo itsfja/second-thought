@@ -62,6 +62,13 @@ window.claude = { use: async n => {
     const t = p.includes('Reply with only the SVG') ? SVG : 'ANSWER(' + p.slice(0, 24).replace(/\n/g, ' ') + ')';
     o.onText && o.onText({ text:t, delta:t }); return { text:t, truncated:false }; };
   f.json = async (input, o = {}) => { down(o); const p = lastText(input);
+    if (p.includes('one step at a time, using tools')) {
+      const steps = (p.match(/\nStep \d+: /g) || []).length;
+      const m = /TOOLS:\n- ([a-z0-9_]+)\(([^)]*)\)/.exec(p);
+      if (steps || !m || p.includes('This is your last step')) return { done:true, answer:'AGENT ANSWER after ' + steps + ' step(s)' };
+      const input = {}; m[2].split(',').map(x => x.trim()).filter(Boolean).forEach((k, i) => input[k] = String(500 + i * 350));
+      return { tool:m[1], input, why:'test' };
+    }
     if (p.includes('"approved"')) { reviews++; return { approved:reviews % 2 === 0, problems:reviews % 2 ? ['too vague'] : [] }; }
     if (p.includes('JSON array of objects')) return [{ title:'A', score:4 }, { title:'B', score:9 }];
     if (p.includes('JSON array')) return ['idea one', 'idea two', 'idea three'];
@@ -281,6 +288,52 @@ async def new_feature_page_tests(pg):
                          add(tx("saved it")))
     await load_state(pg, files_first)
     EXTRA["t_askfirst"] = await export_python(pg, "t_askfirst")
+
+    print("Agent")
+    await pg.select_option("#example", "a_bake")
+    await pg.click("#load")
+    status = await run_program(pg)
+    steps = await step_texts(pg)
+    names = [n for n, *_ in steps]
+    result = await pg.text_content(".result") if await pg.query_selector(".result") else ""
+    check(status.startswith("done") and "Agent step 1/8: ask_me" in names and "Agent: finished in 2 steps" in names and "AGENT ANSWER" in result,
+          f"the agent picks a tool, uses it, then answers into the draft ({status})")
+    asked = [t for n, p_, t in steps if n == "Question for you"]
+    check(bool(asked) and "You: rye bread" in asked[0], "the agent's ask_me tool asks you in the log and passes on your answer")
+    await pg.select_option("#example", "a_tool")
+    await pg.click("#load")
+    status = await run_program(pg)
+    tool = [t for n, p_, t in await step_texts(pg) if n == "Agent step 1/6: hydration"]
+    check(status.startswith("done") and tool and "Result:\n170" in tool[0],
+          f"a My Block works as a tool: its inputs come from the agent, its return value goes back ({status}, {tool[0][-40:] if tool else 'no tool step'})")
+    await pg.evaluate("Blockly.getMainWorkspace().getBlocksByType('rb_agent_tool')[0].setFieldValue('TRUE', 'ASK')")
+    status = await run_and_answer(pg, "Don't")
+    tool = [t for n, p_, t in await step_texts(pg) if n == "Agent step 1/6: hydration"]
+    check(status.startswith("done") and tool and "said no" in tool[0], f"'ask me before each use' lets you refuse a tool, and the agent carries on ({status})")
+    EXTRA["t_agent"] = await export_python(pg, "t_agent")
+    check('await R.agent(' in EXTRA["t_agent"] and '"fn": block_hydration' in EXTRA["t_agent"] and '"ask": True' in EXTRA["t_agent"],
+          "exported Python passes the agent its tools, including the My Block and its ask setting")
+    one = script(blk("rb_agent", inputs={"GOAL": tx("Say hello"), "STEPS": nm(1)}), blk("rb_result"))
+    await load_state(pg, one)
+    status = await run_program(pg)
+    names = [n for n, *_ in await step_texts(pg)]
+    check(status.startswith("done") and "Agent: finished in 1 step" in names, f"an agent with no tools and one step just answers ({status})")
+    await load_state(pg, script(blk("rb_agent", inputs={"GOAL": tx(""), "STEPS": nm(3)})))
+    status = await run_program(pg)
+    stopped = [t for n, p_, t in await step_texts(pg) if n == "Run stopped"]
+    check(status == "error" and stopped and "needs a goal" in stopped[0], "an agent with no goal says so")
+
+    print("My Blocks")
+    double = {"variables": [{"id": "v_x", "name": "x"}], "blocks": {"languageVersion": 0, "blocks": [
+        {"type": "rb_start", "x": 20, "y": 20, "next": {"block": add(val({"type": "procedures_callreturn", "extraState": {"name": "double", "params": ["x"]},
+                                                                           "inputs": {"ARG0": nm(21)}}))}},
+        {"type": "procedures_defreturn", "x": 20, "y": 200, "fields": {"NAME": "double"}, "extraState": {"params": [{"name": "x", "id": "v_x"}]},
+         "inputs": {"RETURN": val({"type": "math_round", "fields": {"OP": "ROUND"}, "inputs": {"NUM": val({"type": "math_arithmetic", "fields": {"OP": "MULTIPLY"},
+                    "inputs": {"A": val({"type": "variables_get", "fields": {"VAR": {"id": "v_x"}}}), "B": nm(2)}})}})}}]}}
+    await load_state(pg, double)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    check(status.startswith("done") and items == ["42"], f"a My Block's return value can use its inputs inside nested blocks ({items})")
 
     print("Programs as blocks")
     sub = script(add(val(blk("rb_msg_value"))), add(tx("from sub")))
@@ -545,6 +598,11 @@ def python_tests(codes):
             if ex == "r_second":
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 check(bool(done) and "DeepSeek:" in done[-1] and "Claude:" in done[-1], "r_second.py asked Claude and DeepSeek")
+            if ex == "a_bake":
+                check("▸ Agent step 1/8: ask_me" in r.stdout and "▸ Agent: finished in 2 steps" in r.stdout, "a_bake.py runs the agent loop")
+            if ex == "a_tool":
+                out_ = r.stdout.replace("\r\n", "\n")
+                check("▸ Agent step 1/6: hydration" in out_ and "    Result:\n    170\n" in out_, "a_tool.py calls the My Block as a tool and gets 170 back")
             if ex == "gemini":
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 both = bool(done) and "Gemini:" in done[-1] and "Claude:" in done[-1]
@@ -669,6 +727,10 @@ def python_tests(codes):
         out = out.replace("\r\n", "\n")  # Windows prints \r\n
         ok = code_ == 0 and "▸ Program: shout" in out and "hi\n\nfrom sub\n\nmain done" in out
         check(ok, "t_program.py runs the saved program inside it" + ("" if ok else f" (exit {code_}): {(err or out)[-300:]!r}"))
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_agent.py")], env, tmp)
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and "Allow this? let the agent use hydration" in out and "▸ Agent: finished in 2 steps" in out,
+              "t_agent.py asks before using the tool, then finishes" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget.py")], env, tmp)
         check(code_ != 0 and "reaches its budget of 5" in out, "t_budget.py stops at its budget, using the exact counts" + ("" if code_ else f": {out[-200:]}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget.py")], dict(env, RB_BUDGET="7"), tmp)

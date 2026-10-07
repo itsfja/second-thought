@@ -81,6 +81,7 @@ The blocks come in different colours. Blocks of the same colour do the same sort
 - **Blue blocks** ask Claude to write.
 - **Purple blocks** ask Claude to check the writing.
 - **Teal blocks** ask *you* a question and wait for your answer.
+- **Olive blocks** make an **agent**: a helper that decides its own steps.
 - **Green blocks** show the result at the end.
 
 There are more colours too. You will find them all down the left side of the screen.
@@ -136,6 +137,30 @@ Second Thought can do many things. Here are some of them.
 - It can ask **Perplexity**, a helper that looks things up on the internet every time, and tells you where it found them.
 - It can ask open helpers from **Hugging Face**, super-speedy ones from **Groq**, and **GLM** and **MiniMax** too.
 - With **OpenRouter**, it can ask almost *any* helper in the world, using just one key.
+
+---
+
+## Page 7½: The agent
+
+*Picture: the ladybird standing in front of a toolbox, choosing a spanner.*
+
+Most programs do exactly what the blocks say, in order. You decide every step.
+
+An **agent** is different. You give it a **goal** and some **tools**, and Claude decides what to do next. It picks a tool, looks at what happened, and picks again. When the goal is met, it writes its answer into the draft.
+
+The olive block **agent: work toward …** holds the tools. You can give it:
+
+- **ask me a question**, so it can ask you things only you know.
+- **remember and recall notes**, so it can keep what it learns for next time.
+- **search the web**, for things that change.
+- **Home Assistant: look at devices** and **control devices**.
+- **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. Tick **ask me before each use** if you'd like to say yes first.
+
+Each step is one call to Claude, so set how many steps it may take. If it runs out of steps, the draft holds whatever it found last.
+
+An agent only reads the words that tools send back. It never follows instructions hidden inside them. It still can't unlock a door without asking you.
+
+Try the examples **Agent: plan my bake** and **Agent with your own tool**.
 
 ---
 
