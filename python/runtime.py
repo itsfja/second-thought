@@ -500,6 +500,81 @@ def _parse_json(text):
     raise BadJSON("Claude's reply came back in an unreadable format. Run again.")
 
 
+# ----- Structured replies -----
+# Every block that wants JSON names the shape it expects. Claude is held to that shape while it writes (constrained
+# decoding). Every other model is checked after it replies, and asked once to fix a reply that doesn't fit.
+# The page keeps a copy of these shapes (SCHEMAS in second-thought.html); keep the two the same.
+_ANY = {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}]}
+
+
+def _obj(props, required=()):
+    return {"type": "object", "properties": props, "required": list(required), "additionalProperties": False}
+
+
+SCHEMAS = {
+    "yesno": _obj({"answer": {"type": "boolean"}}, ["answer"]),
+    "number": _obj({"number": {"type": "number"}}, ["number"]),
+    "list": _obj({"items": {"type": "array", "items": {"type": "string"}}}, ["items"]),
+    "score": _obj({"score": {"type": "number"}}, ["score"]),
+    "pick": _obj({"pick": {"type": "integer", "enum": [1, 2]}, "reason": {"type": "string"}}, ["pick"]),
+    "review": _obj({"approved": {"type": "boolean"}, "problems": {"type": "array", "items": {"type": "string"}}}, ["approved"]),
+    "agent": _obj({"tool": {"type": "string"}, "input": {"type": "object"}, "why": {"type": "string"},
+                   "done": {"type": "boolean"}, "answer": {"type": "string"},
+                   "plan": {"type": "array", "items": {"type": "string"}}}),
+}
+
+
+def record_schema(fields, many=False):
+    one = _obj({f: _ANY for f in fields})
+    return _obj({"items": {"type": "array", "items": one}}, ["items"]) if many else one
+
+
+def _shape_problem(v, schema, where="the reply"):
+    """What's wrong with v for this schema, in a sentence, or None. Numbers written as text count as numbers."""
+    if "anyOf" in schema:
+        return None if any(_shape_problem(v, o, where) is None for o in schema["anyOf"]) else f"{where} has the wrong kind of value"
+    t = schema.get("type")
+    if t == "object":
+        if not isinstance(v, dict):
+            return f"{where} should be a JSON object"
+        for k in schema.get("required", []):
+            if k not in v:
+                return f"{where} is missing \"{k}\""
+        for k, sub_ in schema.get("properties", {}).items():
+            if k in v:
+                bad = _shape_problem(v[k], sub_, f"\"{k}\"")
+                if bad:
+                    return bad
+        return None
+    if t == "array":
+        if not isinstance(v, list):
+            return f"{where} should be a list"
+        for i, x in enumerate(v):
+            bad = _shape_problem(x, schema.get("items", {}), f"item {i + 1} of {where}")
+            if bad:
+                return bad
+        return None
+    if t == "boolean" and not isinstance(v, bool):
+        return f"{where} should be true or false"
+    if t in ("number", "integer") and (isinstance(v, bool) or not _num_like(v)):
+        return f"{where} should be a number"
+    if t == "string" and not isinstance(v, str):
+        return f"{where} should be text"
+    if "enum" in schema and (num(v) if t in ("number", "integer") else v) not in schema["enum"]:
+        return f"{where} should be one of {', '.join(json.dumps(e) for e in schema['enum'])}"
+    return None
+
+
+def _fit(v, schema):
+    """Small, safe fixes before checking: a bare list where {"items": [...]} is wanted, one record sent as a list of one."""
+    props = schema.get("properties", {})
+    if isinstance(v, list) and list(props) == ["items"]:
+        return {"items": v}
+    if isinstance(v, list) and len(v) == 1 and isinstance(v[0], dict) and schema.get("type") == "object":
+        return v[0]
+    return v
+
+
 def _short(s, n):
     s = re.sub(r"\s+", " ", to_str(s)).strip()
     return s if len(s) <= n else s[: n - 1] + "…"
@@ -512,6 +587,7 @@ class Runtime:
         self.client = None
         self.gemini = None
         self._input_lock = None
+        self.no_schema = set()       # Claude models that refused a reply shape, so it isn't sent again
         self.schedule_mode = False
         self.transient_memory = {}   # kept across runs while this program keeps running
         self.reset()
@@ -663,12 +739,37 @@ class Runtime:
                 continue
             if n:
                 self.backup_used = self.backup_used + 1
-            return _parse_json(text) if want_json else text
+            if not want_json:
+                return text
+            schema = want_json if isinstance(want_json, dict) else None
+            try:
+                return self._read_json(text, schema)
+            except BadJSON as e:
+                # One more try on the same model, showing it what went wrong. Counts as a call like any other.
+                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair")
+                self.calls += 1
+                if self.calls > MAX_AI_CALLS:
+                    raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+                fix = await self._call_tier(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
+                                            "\nPrevious reply:\n" + _short(text, 2000) +
+                                            "\n\nReply again with only the corrected JSON.", want_json, picture, history, web)
+                return self._read_json(fix, schema)
         if len(tiers) > 1:
             both = "its backup" if len(tiers) == 2 else f"all {len(tiers) - 1} backups"
             msg = f"The primary model and {both} failed. Last error: {last}"
             raise (Retryable if isinstance(last, Retryable) else RunError)(msg) from last
         raise last
+
+    @staticmethod
+    def _read_json(text, schema):
+        """Parses a reply and checks it against the schema. Raises BadJSON with a plain reason."""
+        v = _parse_json(text)
+        if schema:
+            v = _fit(v, schema)
+            bad = _shape_problem(v, schema)
+            if bad:
+                raise BadJSON(f"The reply didn't have the expected shape: {bad}.")
+        return v
 
     async def _call_tier(self, tier, prompt, want_json, picture, history, web):
         """One model call on one tier. Returns the reply text."""
@@ -688,13 +789,14 @@ class Runtime:
             who = pv["name"]
             text = await self._call_openai(who, MODELS.get(tier, MODELS.get(pv["prefix"] + "default")), prompt, picture, history, web)
         else:
-            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
+            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web,
+                                           want_json if isinstance(want_json, dict) else None)
             who = "Claude"
         if not text:
             raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
         return text
 
-    async def _call_claude(self, model, prompt, picture, history, web):
+    async def _call_claude(self, model, prompt, picture, history, web, schema=None):
         if self.client is None:
             if not os.environ.get("ANTHROPIC_API_KEY"):
                 raise RunError(f"Claude needs a key. Put ANTHROPIC_API_KEY = your-key {WHERE_KEYS} (https://console.anthropic.com).")
@@ -705,7 +807,20 @@ class Runtime:
             args["system"] = self.instructions
         if web:
             args["tools"] = [WEB_SEARCH_TOOL]
-        msg = await self.client.messages.create(**args)
+        if schema and not web and model not in self.no_schema:
+            # Structured outputs: Claude can only write JSON of this shape. https://platform.claude.com/docs/en/build-with-claude/structured-outputs
+            args["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
+        try:
+            msg = await self.client.messages.create(**args)
+        except Exception as e:  # noqa: BLE001
+            if "output_config" not in args or getattr(e, "status_code", None) != 400:
+                raise
+            # This model or account won't take the shape: ask without it (the reply is still checked), and stop sending it.
+            self.no_schema.add(model)
+            self.log("Structured replies", f"{model} wouldn't accept a reply shape ({_short(str(e), 160)}), so its replies "
+                     "are checked after they arrive instead.", "note")
+            del args["output_config"]
+            msg = await self.client.messages.create(**args)
         usage = getattr(msg, "usage", None)
         self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
         return "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
@@ -853,8 +968,8 @@ class Runtime:
         p = to_str(p)
         if not p.strip():
             raise RunError("A yes/no block is empty.")
-        r = await self._call('Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, True)
-        yes = isinstance(r, dict) and r.get("answer") is True
+        r = await self._call('Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, SCHEMAS["yesno"])
+        yes = r["answer"] is True
         self.log("Yes or no: " + _short(p, 60), "Yes" if yes else "No", "done")
         return yes
 
@@ -862,8 +977,8 @@ class Runtime:
         p = to_str(p)
         if not p.strip():
             raise RunError("An 'ask for a number' block is empty.")
-        r = await self._call('Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, True)
-        n = num(r.get("number") if isinstance(r, dict) else 0)
+        r = await self._call('Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, SCHEMAS["number"])
+        n = num(r["number"])
         self.log("Number: " + _short(p, 60), n, "done")
         return n
 
@@ -871,9 +986,8 @@ class Runtime:
         p = to_str(p)
         if not p.strip():
             raise RunError("An 'ask for a list' block is empty.")
-        r = await self._call("Reply with only a JSON array of short strings, no other text.\n\nRequest:\n" + p, True)
-        items = r if isinstance(r, list) else (r.get("items", []) if isinstance(r, dict) else [])
-        items = [to_str(i) for i in items if to_str(i)]
+        r = await self._call('Reply with only JSON: {"items": [<short strings>]}, no other text.\n\nRequest:\n' + p, SCHEMAS["list"])
+        items = [to_str(i) for i in r["items"] if to_str(i)]
         self.log("List: " + _short(p, 60), "\n".join("- " + i for i in items) or "(empty list)", f"{len(items)} items")
         return items
 
@@ -896,18 +1010,18 @@ class Runtime:
     async def score(self, text, criteria):
         text, criteria = to_str(text), to_str(criteria)
         r = await self._call("Score the text from 1 to 10 against these criteria: " + criteria +
-                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + text, True)
-        s = max(0, min(10, num(r.get("score") if isinstance(r, dict) else 0)))
+                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + text, SCHEMAS["score"])
+        s = max(0, min(10, num(r["score"])))
         self.log("Score: " + _short(text, 50), f"{s}/10", "done")
         return s
 
     async def better(self, a, b, criteria):
         a, b, criteria = to_str(a), to_str(b), to_str(criteria)
         r = await self._call("Which text is better for: " + criteria +
-                             '?\nReply with only JSON: {"pick": 1 or 2, "reason": "<one sentence>"}.\n\nText 1:\n' + a + "\n\nText 2:\n" + b, True)
-        second = isinstance(r, dict) and r.get("pick") == 2
+                             '?\nReply with only JSON: {"pick": 1 or 2, "reason": "<one sentence>"}.\n\nText 1:\n' + a + "\n\nText 2:\n" + b, SCHEMAS["pick"])
+        second = num(r["pick"]) == 2
         self.log("Pick the better one", ("Picked the second" if second else "Picked the first") +
-                 (". " + to_str(r.get("reason")) if isinstance(r, dict) and r.get("reason") else ""), "done")
+                 (". " + to_str(r.get("reason")) if r.get("reason") else ""), "done")
         return b if second else a
 
     # ----- Conversations, instructions, web search -----
@@ -948,14 +1062,13 @@ class Runtime:
         if not prompt:
             raise RunError("The 'ask Claude for a record' block has no request.")
         shape = "{" + ", ".join(json.dumps(f) + ": ..." for f in fields) + "}"
-        r = await self._call(("Reply with only a JSON array of objects, each shaped like " if many else "Reply with only one JSON object shaped like ") +
-                             shape + ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + prompt, True)
+        r = await self._call(('Reply with only JSON: {"items": [<objects, each shaped like ' + shape + '>]}' if many else "Reply with only one JSON object shaped like " + shape) +
+                             ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + prompt, record_schema(fields, many))
         if many:
-            items = r if isinstance(r, list) else (r.get("items", []) if isinstance(r, dict) else [])
-            recs = [to_record(o, fields) for o in items]
+            recs = [to_record(o, fields) for o in r["items"]]
             self.log("Records: " + _short(prompt, 55), "\n".join(" · ".join(f"{f}: {_short(x[f], 40)}" for f in fields) for x in recs), f"{len(recs)} records")
             return recs
-        rec = to_record(r[0] if isinstance(r, list) and r else r, fields)
+        rec = to_record(r, fields)
         self.log("Record: " + _short(prompt, 55), to_str(rec), "done")
         return rec
 
@@ -1402,8 +1515,8 @@ class Runtime:
     async def score_picture(self, pic, criteria):
         pic = _need_picture(pic, "score picture")
         r = await self._call("Score the attached picture from 1 to 10 against these criteria: " + to_str(criteria) +
-                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', True, picture=pic)
-        s = max(0, min(10, num(r.get("score") if isinstance(r, dict) else 0)))
+                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', SCHEMAS["score"], picture=pic)
+        s = max(0, min(10, num(r["score"])))
         self.log("Score picture: " + _short(criteria, 55), f"{s}/10", "done")
         return s
 
@@ -1482,9 +1595,9 @@ class Runtime:
         v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
                              to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft +
                              '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
-                             "approved is true only if every criterion is met; problems is empty when approved.", True)
-        approved = isinstance(v, dict) and v.get("approved") is True
-        problems = [to_str(p) for p in (v.get("problems") or [])] if isinstance(v, dict) else []
+                             "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
+        approved = v["approved"] is True
+        problems = [to_str(p) for p in (v.get("problems") or [])]
         self.approved = approved
         self.problems = [] if approved else ([p for p in problems if p] or ["Does not yet meet the criteria."])
         if approved:
@@ -1826,7 +1939,7 @@ class Runtime:
         for i in range(1, n + 1):
             label = f"Agent step {i}/{n}"
             try:
-                r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1, plan), True)
+                r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1, plan), SCHEMAS["agent"])
             except BadJSON:
                 r = None
             if not isinstance(r, dict):

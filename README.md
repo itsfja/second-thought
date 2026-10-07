@@ -415,6 +415,7 @@ If you change `python/runtime.py` or `prompts/convert-guide.txt`, run `python to
 - Inside the page, Claude cannot look things up on the internet. A Python program can.
 - Timed jobs on the page only work while the page is open. For jobs that run while you sleep, use Python.
 - The page can't see exactly how many tokens Claude used, so it makes a careful guess. Python knows the exact number.
+- Some blocks need an answer in a particular shape, like a number or a yes or no. In Python, Claude is made to write exactly that shape. Other helpers, and Claude on the page, are checked afterwards. If an answer comes back muddled, the program sends it back once and says what was wrong. If it's still muddled, that step stops with a clear message, so put it inside **retry** if you'd like another go.
 - On the page, your browser already asks before saving any file. So **ask me before saving files** only adds a question in Python.
 - Some hidden names inside the page still say `reflection-blocks`. That was Second Thought's name when it was very young. They stay the same so that old saved programs still work.
 
