@@ -64,6 +64,7 @@ window.claude = { use: async n => {
     o.onText && o.onText({ text:t, delta:t }); return { text:t, truncated:false }; };
   f.json = async (input, o = {}) => { down(o); const p = lastText(input);
     if (p.includes('one step at a time, using tools')) {
+      (window.__agentPrompts = window.__agentPrompts || []).push(p);
       const steps = (p.match(/\nStep \d+: /g) || []).length;
       if (window.__agentScript) {  // a test's script: one reply per step; "BAD" is an unreadable reply
         const r = window.__agentScript[Math.min(steps, window.__agentScript.length - 1)];
@@ -73,7 +74,7 @@ window.claude = { use: async n => {
       const m = /TOOLS:\n- ([a-z0-9_]+)\(([^)]*)\)/.exec(p);
       if (steps || !m || p.includes('This is your last step')) return { done:true, answer:'AGENT ANSWER after ' + steps + ' step(s)' };
       const input = {}; m[2].split(',').map(x => x.trim()).filter(Boolean).forEach((k, i) => input[k] = String(500 + i * 350));
-      return { tool:m[1], input, why:'test' };
+      return Object.assign({ tool:m[1], input, why:'test' }, p.includes('Planning is on') ? { plan:['test plan step'] } : {});
     }
     if (p.includes('"approved"')) { reviews++; return { approved:reviews % 2 === 0, problems:reviews % 2 ? ['too vague'] : [] }; }
     if (p.includes('JSON array of objects')) return [{ title:'A', score:4 }, { title:'B', score:9 }];
@@ -187,7 +188,7 @@ def add(value):
     return blk("rb_add_result", inputs={"TEXT": value})
 
 
-def agent_prog(tools, steps=6, goal="Test goal"):
+def agent_prog(tools, steps=6, goal="Test goal", plan=False):
     chain = None
     for t in reversed(tools):
         b = blk("rb_agent_builtin", fields={"KIND": t}) if isinstance(t, str) else t
@@ -197,13 +198,13 @@ def agent_prog(tools, steps=6, goal="Test goal"):
     inputs = {"GOAL": tx(goal), "STEPS": nm(steps)}
     if chain:
         inputs["TOOLS"] = {"block": chain}
-    return script(blk("rb_agent", inputs=inputs), blk("rb_result"))
+    return script(blk("rb_agent", fields={"PLAN": "TRUE" if plan else "FALSE"}, inputs=inputs), blk("rb_result"))
 
 
-async def agent_run(pg, tools, replies, steps=6, answer=None, export=None):
+async def agent_run(pg, tools, replies, steps=6, answer=None, export=None, plan=False):
     """Runs an agent whose stand-in Claude gives these replies in turn. Returns (status, steps, result texts)."""
-    await load_state(pg, agent_prog(tools, steps))
-    await pg.evaluate("r => { window.__agentScript = r; }", replies)
+    await load_state(pg, agent_prog(tools, steps, plan=plan))
+    await pg.evaluate("r => { window.__agentScript = r; window.__agentPrompts = []; }", replies)
     try:
         status = await (run_and_answer(pg, answer) if answer else run_program(pg))
     finally:
@@ -406,6 +407,31 @@ async def new_feature_page_tests(pg):
     status, steps, items = await agent_run(pg, ["ha_act"], unlock, answer="Allow")
     names = [n for n, *_ in steps]
     check(status.startswith("done") and names.count("Allow this?") == 1 and "Home Assistant: lock.unlock" in names, "unlocking asks once, not twice")
+
+    print("Agent planning")
+    planned = [dict(tool("remember", name="a", value="1"), plan=["save it", "check it"]),
+               dict(tool("recall", name="a"), plan=["save it", "check it"]),
+               dict(tool("list_memory"), plan=["save it", "list everything"]),
+               done("planned and done")]
+    status, steps, items = await agent_run(pg, ["memory"], planned, plan=True, export="t_ag_plan")
+    names = [n for n, *_ in steps]
+    prompts = await pg.evaluate("window.__agentPrompts")
+    check(status.startswith("done") and names.count("Agent plan") == 1 and names.count("Agent: plan changed") == 1
+          and names.index("Agent plan") < names.index("Agent step 1/6: remember") and items == ["planned and done"],
+          f"the agent's plan is logged before its first step, and a changed plan is logged once ({status})")
+    check(len(prompts) == 4 and "Planning is on" in prompts[0] and "YOUR PLAN:\n(none yet)" in prompts[0]
+          and "YOUR PLAN:\n1. save it\n2. check it" in prompts[1] and "only when you change your plan" in prompts[1]
+          and "2. list everything" in prompts[3],
+          "each step's prompt shows the current plan, and asks for changes only when needed")
+    status, steps, items = await agent_run(pg, ["memory"], [tool("list_memory"), done("ok")], plan=True)
+    prompts = await pg.evaluate("window.__agentPrompts")
+    check(status.startswith("done") and "Agent plan" not in [n for n, *_ in steps] and len(prompts) == 2 and "Planning is on" in prompts[1],
+          "if the first reply has no plan, the tool still runs and the next prompt asks for one again")
+    status, steps, items = await agent_run(pg, ["memory"], [dict(tool("list_memory"), plan=["x"]), done("ok")])
+    prompts = await pg.evaluate("window.__agentPrompts")
+    check(status.startswith("done") and not any("YOUR PLAN" in q or "plan" in q.split("TOOLS:")[0] for q in prompts)
+          and "Agent plan" not in [n for n, *_ in steps], "with planning off, the prompt never mentions a plan and any plan sent is ignored")
+    check("plan=True" in EXTRA["t_ag_plan"], "exported Python keeps planning switched on")
 
     print("My Blocks")
     double = {"variables": [{"id": "v_x", "name": "x"}], "blocks": {"languageVersion": 0, "blocks": [
@@ -683,7 +709,8 @@ def python_tests(codes):
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 check(bool(done) and "DeepSeek:" in done[-1] and "Claude:" in done[-1], "r_second.py asked Claude and DeepSeek")
             if ex == "a_bake":
-                check("▸ Agent step 1/8: ask_me" in r.stdout and "▸ Agent: finished in 2 steps" in r.stdout, "a_bake.py runs the agent loop")
+                check("▸ Agent step 1/8: ask_me" in r.stdout and "▸ Agent: finished in 2 steps" in r.stdout and "▸ Agent plan" in r.stdout,
+                      "a_bake.py runs the agent loop, planning first")
             if ex == "a_tool":
                 out_ = r.stdout.replace("\r\n", "\n")
                 check("▸ Agent step 1/6: hydration" in out_ and "    Result:\n    170\n" in out_, "a_tool.py calls the My Block as a tool and gets 170 back")
@@ -816,7 +843,7 @@ def python_tests(codes):
         check(code_ == 0 and "Allow this? let the agent use hydration" in out and "▸ Agent: finished in 2 steps" in out,
               "t_agent.py asks before using the tool, then finishes" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         print("Agent paths in Python")
-        for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha"):
+        for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
         run_ag = lambda name: drive([sys.executable, "-u", str(pathlib.Path(tmp) / f"{name}.py")],  # noqa: E731
                                     dict(env, FAKE_AGENT_SCRIPT=json.dumps(AGENT_SCRIPTS[name])), tmp)
@@ -826,6 +853,10 @@ def python_tests(codes):
         check(code_ == 0 and "▸ Agent step 2/6: recall  [repeat]" in out and "▸ Agent: stopped, repeating itself" in out, "t_ag_repeat.py stops an agent that repeats itself")
         code_, out, err = run_ag("t_ag_out")
         check(code_ == 0 and "▸ Agent step 2/2  [not a tool]" in out and "▸ Agent: out of steps  [best effort]" in out, "t_ag_out.py runs out of steps cleanly")
+        code_, out, err = run_ag("t_ag_plan")
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and "▸ Agent plan  [planned]\n    1. save it\n    2. check it" in out and out.count("▸ Agent: plan changed") == 1
+              and "▸ Agent: finished in 4 steps" in out, "t_ag_plan.py plans, changes its plan once, then finishes" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         before = len(ha_calls)
         code_, out, err = run_ag("t_ag_ha")
         check(code_ == 0 and "Allow this? let the agent use call_service" in out and any(c[0] == "light.turn_off" and c[1].get("entity_id") == "light.kitchen" for c in ha_calls[before:]),
