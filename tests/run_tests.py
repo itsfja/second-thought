@@ -328,6 +328,8 @@ async def new_feature_page_tests(pg):
     EXTRA["t_askfirst"] = await export_python(pg, "t_askfirst")
 
     print("Agent")
+    done = lambda a: {"done": True, "answer": a}  # noqa: E731
+    tool = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
     await pg.select_option("#example", "a_bake")
     await pg.click("#load")
     status = await run_program(pg)
@@ -338,6 +340,11 @@ async def new_feature_page_tests(pg):
           f"the agent picks a tool, uses it, then answers into the draft ({status})")
     asked = [t for n, p_, t in steps if n == "Question for you"]
     check(bool(asked) and "You: rye bread" in asked[0], "the agent's ask_me tool asks you in the log and passes on your answer")
+    check(names.index("Question for you") < names.index("Agent step 1/8: ask_me"), "the log shows the question before the step that used the answer")
+    status, steps, items = await agent_run(pg, ["ha_act"], [tool("call_service", service="light.turn_off", entity="light.kitchen"), done("off")], answer="Allow")
+    names = [n for n, *_ in steps]
+    check(names.index("Allow this?") < names.index("Home Assistant: light.turn_off") < names.index("Agent step 1/6: call_service"),
+          "an approval and its action show before the agent step that caused them")
     await pg.select_option("#example", "a_tool")
     await pg.click("#load")
     status = await run_program(pg)
