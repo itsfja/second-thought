@@ -157,6 +157,7 @@ The olive block **agent: work toward …** holds the tools. You can give it:
 - **search the web**, for things that change.
 - **Home Assistant: look at devices** and **control devices**. Control devices asks you before every change, because something the agent reads could try to trick it. If you trust everything it reads, choose **control devices (no asking)**.
 - **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. Tick **ask me before each use** if you'd like to say yes first.
+  In **input types**, say what each input must be, like `flour grams: number; water grams: number`. The types are text, number, yes/no, list and any. The agent's input is checked before your block runs. If it's wrong, for example words where a number should be, the block doesn't run and the agent is told what to fix.
 
 Tick **make a plan first** and the agent writes a short plan along with its first step, then changes it if something surprises it. You can read the plan in the run log. Planning costs nothing extra, because the plan travels with the steps.
 

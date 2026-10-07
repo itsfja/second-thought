@@ -1890,6 +1890,72 @@ class Runtime:
     AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
     AGENT_ASKS = {"ha_act"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
+    # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
+    AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
+                         "recall": {"name": "text"}, "list_memory": {}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
+                         "call_service": {"service": "text", "entity": "text", "data": "any"}}
+    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}}
+    INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
+                   "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
+
+    @classmethod
+    def parse_input_types(cls, spec, params, block_name):
+        """'flour grams: number; water grams: number - grams of water' -> {param: (type, description)}. Undeclared inputs are text."""
+        out = {p_: ("text", "") for p_ in params}
+        by_lower = {p_.lower(): p_ for p_ in params}
+        for part in re.split(r"[;\n]+", to_str(spec)):
+            if not part.strip():
+                continue
+            name, _, rest = part.partition(":")
+            kind, _, desc = rest.partition(" - ")
+            name, kind = name.strip(), (kind.strip().lower() or "text")
+            kind = {"string": "text", "yes or no": "yes/no", "boolean": "yes/no", "bool": "yes/no", "integer": "number"}.get(kind, kind)
+            if name.lower() not in by_lower:
+                raise RunError(f"The tool block for “{block_name}” gives a type for “{name}”, but that My Block's inputs are: "
+                               f"{', '.join(params) or 'none'}.")
+            if kind not in cls.INPUT_TYPES:
+                raise RunError(f"“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).")
+            out[by_lower[name.lower()]] = (kind, desc.strip())
+        return out
+
+    @classmethod
+    def tool_schema(cls, types, optional=()):
+        props = {}
+        for k, (kind, desc) in types.items():
+            props[k] = dict(cls.INPUT_TYPES[kind], **({"description": desc} if desc else {}))
+        return {"type": "object", "properties": props, "required": [k for k in types if k not in optional], "additionalProperties": False}
+
+    @staticmethod
+    def check_tool_input(inp, schema):
+        """Returns (problem, input) with safe conversions: numbers written as text, 'yes'/'no', numbers given as text."""
+        props, out = schema["properties"], {}
+        for k in inp:
+            if k not in props:
+                return f"there's no input called “{k}” (its inputs are: {', '.join(props) or 'none'})", None
+        for k in schema["required"]:
+            if k not in inp or inp[k] is None:
+                return f"“{k}” is missing", None
+        for k, v in inp.items():
+            t = props[k].get("type")
+            if t == "number":
+                if isinstance(v, bool) or not _num_like(v):
+                    return f"“{k}” should be a number, not {json.dumps(v, ensure_ascii=False)[:60]}", None
+                v = num(v)
+            elif t == "boolean":
+                if isinstance(v, str) and v.strip().lower() in ("true", "yes", "false", "no"):
+                    v = v.strip().lower() in ("true", "yes")
+                if not isinstance(v, bool):
+                    return f"“{k}” should be true or false, not {json.dumps(v, ensure_ascii=False)[:60]}", None
+            elif t == "string":
+                if isinstance(v, (dict, list)):
+                    return f"“{k}” should be text, not {'a list' if isinstance(v, list) else 'an object'}", None
+                v = to_str(v)
+            elif t == "array":
+                if not isinstance(v, list):
+                    return f"“{k}” should be a list", None
+                v = [to_str(x) for x in v]
+            out[k] = v
+        return None, out
 
     @staticmethod
     def _agent_name(name, taken):
@@ -1901,18 +1967,21 @@ class Runtime:
         return out
 
     def _agent_tools(self, tools):
-        """Turns the tool blocks into {name: (description, params, run, ask_first)}."""
+        """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}."""
         out, taken = {}, set()
         for t in tools:
             if t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
-                out[name] = (desc, list(t.get("params", [])), ("block", t), bool(t.get("ask")))
+                params = list(t.get("params", []))
+                schema = self.tool_schema(self.parse_input_types(t.get("inputs", ""), params, t["name"]))
+                out[name] = (desc, params, ("block", t), bool(t.get("ask")), schema)
             else:
                 for n, desc, params in self.AGENT_BUILTINS.get(t.get("kind"), []):
                     if n not in taken:
                         taken.add(n)
-                        out[n] = (desc, params, (n, t), t.get("kind") in self.AGENT_ASKS)
+                        types = {k: (v, "") for k, v in self.AGENT_INPUT_TYPES[n].items()}
+                        out[n] = (desc, params, (n, t), t.get("kind") in self.AGENT_ASKS, self.tool_schema(types, self.AGENT_OPTIONAL.get(n, ())))
         return out
 
     PLAN_FIRST = ('Planning is on: add "plan": ["<short step>", ...] to this reply, listing the steps you intend to take '
@@ -1923,7 +1992,9 @@ class Runtime:
     @staticmethod
     def agent_prompt(goal, catalogue, history, left, plan=None):
         """plan is None when planning is off, else the current plan (an empty list until the agent makes one)."""
-        tools = "\n".join(f"- {n}({', '.join(params)}): {desc}" for n, (desc, params, *_rest) in catalogue.items())
+        # Each tool: its name, inputs and description, then the JSON Schema its input must match (the page builds the same).
+        tools = "\n".join(f"- {n}({', '.join(t[1])}): {t[0]}\n  input: {json.dumps(t[4], ensure_ascii=False, separators=(',', ':'))}"
+                          for n, t in catalogue.items())
         lines = ["You are working toward a goal, one step at a time, using tools.", "", "GOAL:", goal, "",
                  "TOOLS:", tools or "(none: answer from what you know)", ""]
         if history:
@@ -1962,7 +2033,7 @@ class Runtime:
         if kind == "block":
             if spec.get("fn") is None:
                 raise RunError(f"There's no My Block called “{spec['name']}”.")
-            return await spec["fn"](*[inp.get(p, "") for p in spec.get("params", [])])
+            return await spec["fn"](*[inp.get(p_, "") for p_ in spec.get("params", [])])
         if kind == "search_web":
             if not a("query"):
                 raise RunError("search_web needs a query.")
@@ -2032,8 +2103,17 @@ class Runtime:
                 history.append(f"Step {i}: your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.")
                 self.log(label, note, "not a tool")
                 continue
-            desc, params, (kind, spec), ask = catalogue[name]
+            desc, params, (kind, spec), ask, schema = catalogue[name]
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
+            problem, checked = self.check_tool_input(inp, schema)
+            if problem:
+                # Checked before running: a tool never gets input it can't use.
+                history.append(f"Step {i}: you asked for {name} with {shown}, but {problem}, so it didn't run. "
+                               "Give exactly the inputs its schema lists.")
+                self.log(f"{label}: {name}", f"Input: {shown}\n\nIt didn't run: {problem}.", "bad input")
+                prev, same = None, 0
+                continue
+            inp = checked
             # The same call again straight away: warn the first time, stop the third.
             sig = name + " " + shown
             same = same + 1 if sig == prev else 1

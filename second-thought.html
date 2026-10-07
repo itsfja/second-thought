@@ -2298,6 +2298,72 @@ class Runtime:
     AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
     AGENT_ASKS = {"ha_act"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
+    # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
+    AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
+                         "recall": {"name": "text"}, "list_memory": {}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
+                         "call_service": {"service": "text", "entity": "text", "data": "any"}}
+    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}}
+    INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
+                   "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
+
+    @classmethod
+    def parse_input_types(cls, spec, params, block_name):
+        """'flour grams: number; water grams: number - grams of water' -> {param: (type, description)}. Undeclared inputs are text."""
+        out = {p_: ("text", "") for p_ in params}
+        by_lower = {p_.lower(): p_ for p_ in params}
+        for part in re.split(r"[;\n]+", to_str(spec)):
+            if not part.strip():
+                continue
+            name, _, rest = part.partition(":")
+            kind, _, desc = rest.partition(" - ")
+            name, kind = name.strip(), (kind.strip().lower() or "text")
+            kind = {"string": "text", "yes or no": "yes/no", "boolean": "yes/no", "bool": "yes/no", "integer": "number"}.get(kind, kind)
+            if name.lower() not in by_lower:
+                raise RunError(f"The tool block for “{block_name}” gives a type for “{name}”, but that My Block's inputs are: "
+                               f"{', '.join(params) or 'none'}.")
+            if kind not in cls.INPUT_TYPES:
+                raise RunError(f"“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).")
+            out[by_lower[name.lower()]] = (kind, desc.strip())
+        return out
+
+    @classmethod
+    def tool_schema(cls, types, optional=()):
+        props = {}
+        for k, (kind, desc) in types.items():
+            props[k] = dict(cls.INPUT_TYPES[kind], **({"description": desc} if desc else {}))
+        return {"type": "object", "properties": props, "required": [k for k in types if k not in optional], "additionalProperties": False}
+
+    @staticmethod
+    def check_tool_input(inp, schema):
+        """Returns (problem, input) with safe conversions: numbers written as text, 'yes'/'no', numbers given as text."""
+        props, out = schema["properties"], {}
+        for k in inp:
+            if k not in props:
+                return f"there's no input called “{k}” (its inputs are: {', '.join(props) or 'none'})", None
+        for k in schema["required"]:
+            if k not in inp or inp[k] is None:
+                return f"“{k}” is missing", None
+        for k, v in inp.items():
+            t = props[k].get("type")
+            if t == "number":
+                if isinstance(v, bool) or not _num_like(v):
+                    return f"“{k}” should be a number, not {json.dumps(v, ensure_ascii=False)[:60]}", None
+                v = num(v)
+            elif t == "boolean":
+                if isinstance(v, str) and v.strip().lower() in ("true", "yes", "false", "no"):
+                    v = v.strip().lower() in ("true", "yes")
+                if not isinstance(v, bool):
+                    return f"“{k}” should be true or false, not {json.dumps(v, ensure_ascii=False)[:60]}", None
+            elif t == "string":
+                if isinstance(v, (dict, list)):
+                    return f"“{k}” should be text, not {'a list' if isinstance(v, list) else 'an object'}", None
+                v = to_str(v)
+            elif t == "array":
+                if not isinstance(v, list):
+                    return f"“{k}” should be a list", None
+                v = [to_str(x) for x in v]
+            out[k] = v
+        return None, out
 
     @staticmethod
     def _agent_name(name, taken):
@@ -2309,18 +2375,21 @@ class Runtime:
         return out
 
     def _agent_tools(self, tools):
-        """Turns the tool blocks into {name: (description, params, run, ask_first)}."""
+        """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}."""
         out, taken = {}, set()
         for t in tools:
             if t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
-                out[name] = (desc, list(t.get("params", [])), ("block", t), bool(t.get("ask")))
+                params = list(t.get("params", []))
+                schema = self.tool_schema(self.parse_input_types(t.get("inputs", ""), params, t["name"]))
+                out[name] = (desc, params, ("block", t), bool(t.get("ask")), schema)
             else:
                 for n, desc, params in self.AGENT_BUILTINS.get(t.get("kind"), []):
                     if n not in taken:
                         taken.add(n)
-                        out[n] = (desc, params, (n, t), t.get("kind") in self.AGENT_ASKS)
+                        types = {k: (v, "") for k, v in self.AGENT_INPUT_TYPES[n].items()}
+                        out[n] = (desc, params, (n, t), t.get("kind") in self.AGENT_ASKS, self.tool_schema(types, self.AGENT_OPTIONAL.get(n, ())))
         return out
 
     PLAN_FIRST = ('Planning is on: add "plan": ["<short step>", ...] to this reply, listing the steps you intend to take '
@@ -2331,7 +2400,9 @@ class Runtime:
     @staticmethod
     def agent_prompt(goal, catalogue, history, left, plan=None):
         """plan is None when planning is off, else the current plan (an empty list until the agent makes one)."""
-        tools = "\n".join(f"- {n}({', '.join(params)}): {desc}" for n, (desc, params, *_rest) in catalogue.items())
+        # Each tool: its name, inputs and description, then the JSON Schema its input must match (the page builds the same).
+        tools = "\n".join(f"- {n}({', '.join(t[1])}): {t[0]}\n  input: {json.dumps(t[4], ensure_ascii=False, separators=(',', ':'))}"
+                          for n, t in catalogue.items())
         lines = ["You are working toward a goal, one step at a time, using tools.", "", "GOAL:", goal, "",
                  "TOOLS:", tools or "(none: answer from what you know)", ""]
         if history:
@@ -2370,7 +2441,7 @@ class Runtime:
         if kind == "block":
             if spec.get("fn") is None:
                 raise RunError(f"There's no My Block called “{spec['name']}”.")
-            return await spec["fn"](*[inp.get(p, "") for p in spec.get("params", [])])
+            return await spec["fn"](*[inp.get(p_, "") for p_ in spec.get("params", [])])
         if kind == "search_web":
             if not a("query"):
                 raise RunError("search_web needs a query.")
@@ -2440,8 +2511,17 @@ class Runtime:
                 history.append(f"Step {i}: your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.")
                 self.log(label, note, "not a tool")
                 continue
-            desc, params, (kind, spec), ask = catalogue[name]
+            desc, params, (kind, spec), ask, schema = catalogue[name]
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
+            problem, checked = self.check_tool_input(inp, schema)
+            if problem:
+                # Checked before running: a tool never gets input it can't use.
+                history.append(f"Step {i}: you asked for {name} with {shown}, but {problem}, so it didn't run. "
+                               "Give exactly the inputs its schema lists.")
+                self.log(f"{label}: {name}", f"Input: {shown}\n\nIt didn't run: {problem}.", "bad input")
+                prev, same = None, 0
+                continue
+            inp = checked
             # The same call again straight away: warn the first time, stop the third.
             sig = name + " " + shown
             same = same + 1 if sig == prev else 1
@@ -3734,7 +3814,7 @@ Files and errors:
   Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
 Agent (the model chooses its own steps):
   rb_agent: inputs GOAL, STEPS; fields PLAN ("TRUE" | "FALSE": plan first, revise as it goes); statement input TOOLS holding only tool blocks. Runs a tool-using loop and puts the final answer in the draft.
-  rb_agent_builtin: fields KIND ("web" | "ask" | "memory" | "ha_read" | "ha_act"). rb_agent_tool: fields NAME (a My Blocks name), ASK ("TRUE" | "FALSE"); input DESC.
+  rb_agent_builtin: fields KIND ("web" | "ask" | "memory" | "ha_read" | "ha_act"). rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
   Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
   Map open(...).read() on text files to rb_file_choose, writing output files to rb_file_save, try/except to rb_try, retry loops and backoff to rb_retry.
 Memory (survives between runs):
@@ -4061,9 +4141,10 @@ HOW TO MAP CODE
     { type:"rb_agent_tool",
       message0:"tool: My Block %1", args0:[{ type:"field_input", name:"NAME", text:"my block" }],
       message1:"what it does %1", args1:[val("DESC")],
-      message2:"ask me before each use %1", args2:[{ type:"field_checkbox", name:"ASK", checked:false }],
+      message2:"input types %1", args2:[{ type:"field_input", name:"INPUTS", text:"" }],
+      message3:"ask me before each use %1", args3:[{ type:"field_checkbox", name:"ASK", checked:false }],
       previousStatement:"AgentTool", nextStatement:"AgentTool", style:"agent",
-      tooltip:"Lets the agent run one of your My Blocks. Its inputs become the tool's inputs, and what it returns is the result the agent sees. Describe it clearly: the description is all the agent knows about it." },
+      tooltip:"Lets the agent run one of your My Blocks. Its inputs become the tool's inputs, and what it returns is the result the agent sees. Describe it clearly: the description is all the agent knows about it. Input types, for example 'flour grams: number; water grams: number - grams of water', say what each input must be: text, number, yes/no, list or any. The agent's input is checked before the block runs." },
     { type:"rb_agent_builtin",
       message0:"tool: %1", args0:[{ type:"field_dropdown", name:"KIND", options:[["search the web","web"],["ask me a question","ask"],["remember and recall notes","memory"],["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"],["Home Assistant: control devices (no asking)","ha_act_free"]] }],
       previousStatement:"AgentTool", nextStatement:"AgentTool", style:"agent",
@@ -5053,7 +5134,7 @@ HOW TO MAP CODE
         chain(sStart(),
           blk("rb_agent", null, { GOAL:lt("Work out the hydration of my dough and tell me, in two sentences, whether it suits a beginner's sourdough loaf."), STEPS:nm(6),
             TOOLS:st(chain(
-              blk("rb_agent_tool", { NAME:"hydration", ASK:false }, { DESC:lt("Gives the hydration of a dough as a percentage, from the grams of flour and of water.") }),
+              blk("rb_agent_tool", { NAME:"hydration", ASK:false, INPUTS:"flour grams: number; water grams: number" }, { DESC:lt("Gives the hydration of a dough as a percentage, from the grams of flour and of water.") }),
               blk("rb_agent_builtin", { KIND:"ask" }))) }),
           sFinish()),
         { type:"procedures_defreturn", x:30, y:470, fields:{ NAME:"hydration" },
@@ -6427,7 +6508,7 @@ HOW TO MAP CODE
                 const name = String(t.getFieldValue("NAME") || "").trim();
                 const def = Blockly.Procedures.getDefinition(name, t.workspace || ws);
                 const params = def && def.getVarModels ? def.getVarModels().map(v => v.name) : [];
-                tools.push('{"kind": "block", "name": ' + pyStr(name) + ', "desc": ' + inp(t, "DESC", '""') + ', "params": [' + params.map(pyStr).join(", ") +
+                tools.push('{"kind": "block", "name": ' + pyStr(name) + ', "desc": ' + inp(t, "DESC", '""') + ', "inputs": ' + pyStr(t.getFieldValue("INPUTS") || "") + ', "params": [' + params.map(pyStr).join(", ") +
                   '], "fn": ' + (def ? procId(name) : "None") + ', "ask": ' + (t.getFieldValue("ASK") === "TRUE" ? "True" : "False") + "}");
               }
             }
@@ -7448,6 +7529,50 @@ HOW TO MAP CODE
   AGENT_BUILTINS.ha_act_free = AGENT_BUILTINS.ha_act;
   const AGENT_ASKS = new Set(["ha_act"]);  // built-in tools that ask before each use
   const MAX_AGENT_STEPS = 20;
+  // The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL. Matches the runtime.
+  const AGENT_INPUT_TYPES = { search_web:{ query:"text" }, ask_me:{ question:"text" }, remember:{ name:"text", value:"text" }, recall:{ name:"text" },
+    list_memory:{}, find_devices:{ search:"text" }, device_state:{ entity:"text" }, call_service:{ service:"text", entity:"text", data:"any" } };
+  const AGENT_OPTIONAL = { find_devices:["search"], call_service:["entity", "data"] };
+  const INPUT_TYPES = { text:{ type:"string" }, number:{ type:"number" }, "yes/no":{ type:"boolean" }, list:{ type:"array", items:{ type:"string" } }, any:{} };
+  const TYPE_ALIASES = { string:"text", "yes or no":"yes/no", boolean:"yes/no", bool:"yes/no", integer:"number" };
+  /* 'flour grams: number; water grams: number - grams of water' -> { param: [type, description] }. Undeclared inputs are text. */
+  function parseInputTypes(spec, params, blockName){
+    const out = {}, byLower = {};
+    params.forEach(p => { out[p] = ["text", ""]; byLower[p.toLowerCase()] = p; });
+    String(spec || "").split(/[;\n]+/).forEach(part => {
+      if (!part.trim()) return;
+      const c = part.indexOf(":"), name = (c < 0 ? part : part.slice(0, c)).trim(), rest = c < 0 ? "" : part.slice(c + 1);
+      const d = rest.indexOf(" - "), kindRaw = (d < 0 ? rest : rest.slice(0, d)).trim().toLowerCase() || "text", desc = d < 0 ? "" : rest.slice(d + 3).trim();
+      const kind = TYPE_ALIASES[kindRaw] || kindRaw;
+      if (!(name.toLowerCase() in byLower)) fail("The tool block for \u201c" + blockName + "\u201d gives a type for \u201c" + name + "\u201d, but that My Block's inputs are: " + (params.join(", ") || "none") + ".");
+      if (!(kind in INPUT_TYPES)) fail("\u201c" + kind + "\u201d isn't a type the agent knows. Use text, number, yes/no, list or any (for \u201c" + name + "\u201d).");
+      out[byLower[name.toLowerCase()]] = [kind, desc];
+    });
+    return out;
+  }
+  function toolSchema(types, optional){
+    const properties = {};
+    Object.entries(types).forEach(([k, [kind, desc]]) => { properties[k] = Object.assign({}, INPUT_TYPES[kind], desc ? { description:desc } : {}); });
+    return { type:"object", properties, required:Object.keys(types).filter(k => !(optional || []).includes(k)), additionalProperties:false };
+  }
+  /* Returns [problem, input], converting safely: numbers written as text, 'yes'/'no', numbers given where text is wanted. */
+  function checkToolInput(inp, schema){
+    const props = schema.properties, out = {}, show = v => JSON.stringify(v === undefined ? null : v).slice(0, 60);
+    for (const k of Object.keys(inp)) if (!(k in props)) return ["there's no input called \u201c" + k + "\u201d (its inputs are: " + (Object.keys(props).join(", ") || "none") + ")", null];
+    for (const k of schema.required) if (!(k in inp) || inp[k] == null) return ["\u201c" + k + "\u201d is missing", null];
+    for (let [k, v] of Object.entries(inp)) {
+      const t = props[k].type;
+      if (t === "number") { if (typeof v === "boolean" || !isNumLike(v)) return ["\u201c" + k + "\u201d should be a number, not " + show(v), null]; v = num(v); }
+      else if (t === "boolean") {
+        if (typeof v === "string" && ["true", "yes", "false", "no"].includes(v.trim().toLowerCase())) v = ["true", "yes"].includes(v.trim().toLowerCase());
+        if (typeof v !== "boolean") return ["\u201c" + k + "\u201d should be true or false, not " + show(v), null];
+      }
+      else if (t === "string") { if (v && typeof v === "object") return ["\u201c" + k + "\u201d should be text, not " + (Array.isArray(v) ? "a list" : "an object"), null]; v = str(v); }
+      else if (t === "array") { if (!Array.isArray(v)) return ["\u201c" + k + "\u201d should be a list", null]; v = v.map(str); }
+      out[k] = v;
+    }
+    return [null, out];
+  }
   function agentName(name, taken){
     const base = String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "tool";
     let out = base, i = 2;
@@ -7463,10 +7588,16 @@ HOW TO MAP CODE
         const def = Blockly.Procedures.getDefinition(blockName, t.workspace || ws);
         const params = def && def.getVarModels ? def.getVarModels().map(v => v.name) : [];
         const desc = str(await input(t, tc, "DESC", "")).trim() || "Runs the My Block \u201c" + blockName + "\u201d.";
-        out.set(agentName(blockName, taken), { desc, params, kind:"block", blockName, def, ask:t.getFieldValue("ASK") === "TRUE" });
+        const schema = toolSchema(parseInputTypes(t.getFieldValue("INPUTS"), params, blockName));
+        out.set(agentName(blockName, taken), { desc, params, kind:"block", blockName, def, ask:t.getFieldValue("ASK") === "TRUE", schema });
       } else if (t.type === "rb_agent_builtin") {
         const kind = t.getFieldValue("KIND");
-        (AGENT_BUILTINS[kind] || []).forEach(([n, desc, params]) => { if (!taken.has(n)) { taken.add(n); out.set(n, { desc, params, kind:n, ask:AGENT_ASKS.has(kind) }); } });
+        (AGENT_BUILTINS[kind] || []).forEach(([n, desc, params]) => {
+          if (taken.has(n)) return;
+          taken.add(n);
+          const types = Object.fromEntries(Object.entries(AGENT_INPUT_TYPES[n]).map(([k, v]) => [k, [v, ""]]));
+          out.set(n, { desc, params, kind:n, ask:AGENT_ASKS.has(kind), schema:toolSchema(types, AGENT_OPTIONAL[n]) });
+        });
       }
     }
     return out;
@@ -7476,7 +7607,8 @@ HOW TO MAP CODE
   const MAX_PLAN = 8;
   /* plan is null when planning is off, else the current plan (empty until the agent makes one). Matches Runtime.agent_prompt. */
   function agentPrompt(goal, catalogue, history, left, plan){
-    const tools = [...catalogue].map(([n, t]) => "- " + n + "(" + t.params.join(", ") + "): " + t.desc).join("\n");
+    // Each tool: its name, inputs and description, then the JSON Schema its input must match (the runtime builds the same).
+    const tools = [...catalogue].map(([n, t]) => "- " + n + "(" + t.params.join(", ") + "): " + t.desc + "\n  input: " + JSON.stringify(t.schema)).join("\n");
     const lines = ["You are working toward a goal, one step at a time, using tools.", "", "GOAL:", goal, "", "TOOLS:", tools || "(none: answer from what you know)", ""];
     if (history.length) {
       lines.push("WHAT HAS HAPPENED SO FAR:");
@@ -7582,7 +7714,8 @@ HOW TO MAP CODE
         s.text("It said it was done, but its answer was empty."); s.done("empty answer", "warn");
         continue;
       }
-      const name = str(r.tool).trim(), inp = r.input && typeof r.input === "object" && !Array.isArray(r.input) ? r.input : {}, why = str(r.why).trim();
+      const name = str(r.tool).trim(), why = str(r.why).trim();
+      let inp = r.input && typeof r.input === "object" && !Array.isArray(r.input) ? r.input : {};
       if (i === n || !catalogue.has(name)) {
         history.push("Step " + i + ": your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.");
         s.text(i === n ? "It replied with a tool on its last step, so it stopped there." : "It replied with “" + (name || "nothing usable") + "”, which isn't one of its tools.");
@@ -7590,6 +7723,16 @@ HOW TO MAP CODE
         continue;
       }
       const t = catalogue.get(name), shown = stableJSON(inp);
+      const [problem, checked] = checkToolInput(inp, t.schema);
+      if (problem) {
+        // Checked before running: a tool never gets input it can't use.
+        history.push("Step " + i + ": you asked for " + name + " with " + shown + ", but " + problem + ", so it didn't run. Give exactly the inputs its schema lists.");
+        title(s, label + ": " + name);
+        s.text("Input: " + shown + "\n\nIt didn't run: " + problem + "."); s.done("bad input", "warn");
+        prev = null; same = 0;
+        continue;
+      }
+      inp = checked;
       // The same call again straight away: warn the first time, stop the third.
       const sig = name + " " + shown;
       same = sig === prev ? same + 1 : 1; prev = sig;
