@@ -7424,6 +7424,8 @@ HOW TO MAP CODE
         try { result = await agentRunTool(name, t, inp, tc); }
         catch(e) { if (isControlSignal(e) || halting()) throw e; result = "Error: " + (e && e.message ? e.message : String(e)); }
       }
+      // A tool that added its own steps (a question, an approval, a search) shows them first, then this step with its result.
+      if (s.el.nextElementSibling) stepsEl.appendChild(s.el);
       const text = isImg(result) ? str(result) : (result && typeof result === "object") ? JSON.stringify(result) : str(result);
       last = text;
       history.push("Step " + i + ": you used " + name + " with " + shown + ".\nResult: " + short(text, 1500));
