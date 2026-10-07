@@ -666,8 +666,9 @@ def python_tests(codes):
         for name, code in EXTRA.items():
             (pathlib.Path(tmp) / f"{name}.py").write_text(code, encoding="utf-8")
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_program.py")], env, tmp)
-        check(code_ == 0 and "▸ Program: shout" in out and "hi\n\nfrom sub\n\nmain done" in out,
-              "t_program.py runs the saved program inside it" + ("" if code_ == 0 else f": {(err or out)[-300:]}"))
+        out = out.replace("\r\n", "\n")  # Windows prints \r\n
+        ok = code_ == 0 and "▸ Program: shout" in out and "hi\n\nfrom sub\n\nmain done" in out
+        check(ok, "t_program.py runs the saved program inside it" + ("" if ok else f" (exit {code_}): {(err or out)[-300:]!r}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget.py")], env, tmp)
         check(code_ != 0 and "reaches its budget of 5" in out, "t_budget.py stops at its budget, using the exact counts" + ("" if code_ else f": {out[-200:]}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget.py")], dict(env, RB_BUDGET="7"), tmp)
