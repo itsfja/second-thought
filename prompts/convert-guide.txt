@@ -110,6 +110,10 @@ Files and errors:
   rb_budget (TOKENS): stop the run before a model call once it has used this many tokens.  rb_tokens_used: value, tokens used so far.
   rb_run_program: fields NAME (a saved program's name); input VALUE; value, that program's result. Inside it, rb_msg_value is VALUE.
   Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
+Agent (the model chooses its own steps):
+  rb_agent: inputs GOAL, STEPS; statement input TOOLS holding only tool blocks. Runs a tool-using loop and puts the final answer in the draft.
+  rb_agent_builtin: fields KIND ("web" | "ask" | "memory" | "ha_read" | "ha_act"). rb_agent_tool: fields NAME (a My Blocks name), ASK ("TRUE" | "FALSE"); input DESC.
+  Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
   Map open(...).read() on text files to rb_file_choose, writing output files to rb_file_save, try/except to rb_try, retry loops and backoff to rb_retry.
 Memory (survives between runs):
   rb_mem_set: inputs VALUE, NAME; fields KIND ("transient" = while the page/program is running, "permanent" = saved forever).
