@@ -31,7 +31,7 @@ for _stream in (sys.stdout, sys.stderr):
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
-                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG"}
+                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM"}
 
 
 def _load_settings():
@@ -213,6 +213,17 @@ MESSAGE_VALUE = contextvars.ContextVar("message_value", default="")
 MODEL_OVERRIDE = contextvars.ContextVar("model_override", default=None)  # set by 'with model' blocks
 # Server-side web search for the 'search the web' block. Your API organisation must allow it.
 WEB_SEARCH_TOOL = {"type": "web_search_20250305", "name": "web_search", "max_uses": 3}
+
+
+class Reply(str):
+    """A model's reply text that also says whether it was cut off by the length limit."""
+    def __new__(cls, text, truncated=False):
+        r = str.__new__(cls, text)
+        r.truncated = bool(truncated)
+        return r
+
+
+CONTINUE_PROMPT = "Continue exactly where you stopped. Don't repeat anything you've already written."
 
 
 class Finish(Exception):
@@ -788,6 +799,8 @@ class Runtime:
             if n:
                 self.backup_used = self.backup_used + 1
             if not want_json:
+                if getattr(text, "truncated", False):
+                    text = await self._continue(t, prompt, text, history, web)
                 return text
             schema = want_json if isinstance(want_json, dict) else None
             try:
@@ -807,6 +820,22 @@ class Runtime:
             msg = f"The primary model and {both} failed. Last error: {last}"
             raise (Retryable if isinstance(last, Retryable) else RunError)(msg) from last
         raise last
+
+    async def _continue(self, tier, prompt, text, history, web):
+        """A reply cut off by the length limit: ask once for the rest, on the same model, and join the two parts."""
+        self.log("Reply continued", "The reply reached the length limit, so the model was asked to carry on from where it stopped.",
+                 "continued", calls=False)
+        self.calls += 1
+        if self.calls > MAX_AI_CALLS:
+            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+        turns = (history or []) + [{"role": "user", "content": to_str(prompt)}, {"role": "assistant", "content": to_str(text)}]
+        more = await self._timed_call(tier, CONTINUE_PROMPT, False, None, turns, web)
+        joined = to_str(text) + to_str(more)  # the continuation picks up exactly where the first part stopped
+        if getattr(more, "truncated", False):
+            self.out_of_rounds_hit = True
+            self.log("Cut short", "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. "
+                     "Ask for something shorter, or split the job into smaller steps.", "warn", calls=False)
+        return joined
 
     @staticmethod
     def _read_json(text, schema):
@@ -859,7 +888,7 @@ class Runtime:
             # Structured outputs: Claude can only write JSON of this shape. https://platform.claude.com/docs/en/build-with-claude/structured-outputs
             args["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
         try:
-            msg = await self.client.messages.create(**args)
+            msg = await (self._claude_stream(args) if "output_config" not in args and self._streaming() else self.client.messages.create(**args))
         except Exception as e:  # noqa: BLE001
             if "output_config" not in args or getattr(e, "status_code", None) != 400:
                 raise
@@ -871,7 +900,36 @@ class Runtime:
             msg = await self.client.messages.create(**args)
         usage = getattr(msg, "usage", None)
         self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
-        return "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
+        text = "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
+        return Reply(text, getattr(msg, "stop_reason", None) in ("max_tokens", "model_context_window_exceeded"))
+
+    @staticmethod
+    def _streaming():
+        """Stream Claude's text replies? stream = yes/no in second-thought.ini; by default only in an interactive terminal."""
+        v = os.environ.get("RB_STREAM", "").strip().lower()
+        if v in ("1", "yes", "true", "on"):
+            return True
+        if v in ("0", "no", "false", "off"):
+            return False
+        return sys.stdout.isatty()
+
+    async def _claude_stream(self, args):
+        """Streams one reply, showing a single progress line that's cleared when it's done. Returns the final message."""
+        written, shown, width = 0, 0.0, 0
+        async with self.client.messages.stream(**args) as stream:
+            async for chunk in stream.text_stream:
+                written += len(chunk)
+                if time.monotonic() - shown > 0.1:
+                    shown = time.monotonic()
+                    line = f"    … writing: {written:,} characters"
+                    width = max(width, len(line))
+                    sys.stdout.write("\r" + line)
+                    sys.stdout.flush()
+            msg = await stream.get_final_message()
+        if width:
+            sys.stdout.write("\r" + " " * width + "\r")
+            sys.stdout.flush()
+        return msg
 
     @staticmethod
     def _openai_request(provider, body, path="/chat/completions"):
@@ -929,8 +987,9 @@ class Runtime:
         self._count(provider, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
         try:
             text = data["choices"][0]["message"]["content"] or ""
-            return re.sub(r"<think>.*?</think>\s*", "", text, flags=re.S).strip()  # some models think out loud first
-        except (KeyError, IndexError, TypeError):
+            cut = data["choices"][0].get("finish_reason") == "length"
+            return Reply(re.sub(r"<think>.*?</think>\s*", "", text, flags=re.S).strip(), cut)  # some models think out loud first
+        except (KeyError, IndexError, TypeError, AttributeError):
             return ""
 
     async def _call_perplexity(self, preset, prompt, picture, history):
@@ -990,7 +1049,9 @@ class Runtime:
                     getattr(um, "prompt_token_count", None) or getattr(um, "input_tokens", 0),
                     getattr(um, "candidates_token_count", None) or getattr(um, "output_tokens", 0))
         try:
-            return (resp.text or "").strip()
+            cands = getattr(resp, "candidates", None) or []
+            cut = bool(cands) and "MAX_TOKENS" in str(getattr(cands[0], "finish_reason", ""))
+            return Reply((resp.text or "").strip(), cut)
         except ValueError:  # blocked or empty candidate
             return ""
 
