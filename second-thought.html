@@ -443,7 +443,7 @@ for _stream in (sys.stdout, sys.stderr):
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
-                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG"}
+                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM"}
 
 
 def _load_settings():
@@ -625,6 +625,17 @@ MESSAGE_VALUE = contextvars.ContextVar("message_value", default="")
 MODEL_OVERRIDE = contextvars.ContextVar("model_override", default=None)  # set by 'with model' blocks
 # Server-side web search for the 'search the web' block. Your API organisation must allow it.
 WEB_SEARCH_TOOL = {"type": "web_search_20250305", "name": "web_search", "max_uses": 3}
+
+
+class Reply(str):
+    """A model's reply text that also says whether it was cut off by the length limit."""
+    def __new__(cls, text, truncated=False):
+        r = str.__new__(cls, text)
+        r.truncated = bool(truncated)
+        return r
+
+
+CONTINUE_PROMPT = "Continue exactly where you stopped. Don't repeat anything you've already written."
 
 
 class Finish(Exception):
@@ -1200,6 +1211,8 @@ class Runtime:
             if n:
                 self.backup_used = self.backup_used + 1
             if not want_json:
+                if getattr(text, "truncated", False):
+                    text = await self._continue(t, prompt, text, history, web)
                 return text
             schema = want_json if isinstance(want_json, dict) else None
             try:
@@ -1219,6 +1232,22 @@ class Runtime:
             msg = f"The primary model and {both} failed. Last error: {last}"
             raise (Retryable if isinstance(last, Retryable) else RunError)(msg) from last
         raise last
+
+    async def _continue(self, tier, prompt, text, history, web):
+        """A reply cut off by the length limit: ask once for the rest, on the same model, and join the two parts."""
+        self.log("Reply continued", "The reply reached the length limit, so the model was asked to carry on from where it stopped.",
+                 "continued", calls=False)
+        self.calls += 1
+        if self.calls > MAX_AI_CALLS:
+            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+        turns = (history or []) + [{"role": "user", "content": to_str(prompt)}, {"role": "assistant", "content": to_str(text)}]
+        more = await self._timed_call(tier, CONTINUE_PROMPT, False, None, turns, web)
+        joined = to_str(text) + to_str(more)  # the continuation picks up exactly where the first part stopped
+        if getattr(more, "truncated", False):
+            self.out_of_rounds_hit = True
+            self.log("Cut short", "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. "
+                     "Ask for something shorter, or split the job into smaller steps.", "warn", calls=False)
+        return joined
 
     @staticmethod
     def _read_json(text, schema):
@@ -1271,7 +1300,7 @@ class Runtime:
             # Structured outputs: Claude can only write JSON of this shape. https://platform.claude.com/docs/en/build-with-claude/structured-outputs
             args["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
         try:
-            msg = await self.client.messages.create(**args)
+            msg = await (self._claude_stream(args) if "output_config" not in args and self._streaming() else self.client.messages.create(**args))
         except Exception as e:  # noqa: BLE001
             if "output_config" not in args or getattr(e, "status_code", None) != 400:
                 raise
@@ -1283,7 +1312,36 @@ class Runtime:
             msg = await self.client.messages.create(**args)
         usage = getattr(msg, "usage", None)
         self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
-        return "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
+        text = "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
+        return Reply(text, getattr(msg, "stop_reason", None) in ("max_tokens", "model_context_window_exceeded"))
+
+    @staticmethod
+    def _streaming():
+        """Stream Claude's text replies? stream = yes/no in second-thought.ini; by default only in an interactive terminal."""
+        v = os.environ.get("RB_STREAM", "").strip().lower()
+        if v in ("1", "yes", "true", "on"):
+            return True
+        if v in ("0", "no", "false", "off"):
+            return False
+        return sys.stdout.isatty()
+
+    async def _claude_stream(self, args):
+        """Streams one reply, showing a single progress line that's cleared when it's done. Returns the final message."""
+        written, shown, width = 0, 0.0, 0
+        async with self.client.messages.stream(**args) as stream:
+            async for chunk in stream.text_stream:
+                written += len(chunk)
+                if time.monotonic() - shown > 0.1:
+                    shown = time.monotonic()
+                    line = f"    … writing: {written:,} characters"
+                    width = max(width, len(line))
+                    sys.stdout.write("\r" + line)
+                    sys.stdout.flush()
+            msg = await stream.get_final_message()
+        if width:
+            sys.stdout.write("\r" + " " * width + "\r")
+            sys.stdout.flush()
+        return msg
 
     @staticmethod
     def _openai_request(provider, body, path="/chat/completions"):
@@ -1341,8 +1399,9 @@ class Runtime:
         self._count(provider, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
         try:
             text = data["choices"][0]["message"]["content"] or ""
-            return re.sub(r"<think>.*?</think>\s*", "", text, flags=re.S).strip()  # some models think out loud first
-        except (KeyError, IndexError, TypeError):
+            cut = data["choices"][0].get("finish_reason") == "length"
+            return Reply(re.sub(r"<think>.*?</think>\s*", "", text, flags=re.S).strip(), cut)  # some models think out loud first
+        except (KeyError, IndexError, TypeError, AttributeError):
             return ""
 
     async def _call_perplexity(self, preset, prompt, picture, history):
@@ -1402,7 +1461,9 @@ class Runtime:
                     getattr(um, "prompt_token_count", None) or getattr(um, "input_tokens", 0),
                     getattr(um, "candidates_token_count", None) or getattr(um, "output_tokens", 0))
         try:
-            return (resp.text or "").strip()
+            cands = getattr(resp, "candidates", None) or []
+            cut = bool(cands) and "MAX_TOKENS" in str(getattr(cands[0], "finish_reason", ""))
+            return Reply((resp.text or "").strip(), cut)
         except ValueError:  # blocked or empty candidate
             return ""
 
@@ -6201,7 +6262,8 @@ HOW TO MAP CODE
       "; backups = " + (backupTiers().join(", ") || "none"),
       "", "[run]",
       "; budget = 50000      stop a run before a model call once it has used this many tokens (0 = no limit)",
-      "; save_log = yes      write each run's log to the logs folder, next to the program");
+      "; save_log = yes      write each run's log to the logs folder, next to the program",
+      "; stream = yes        show Claude writing as it goes (yes or no; normally only when you run it in a terminal yourself)");
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
@@ -7535,7 +7597,12 @@ HOW TO MAP CODE
       if (n) addStep("Backup", { mono:true, text:tierLabel(tiers[n - 1]) + " failed: " + String((last && last.message) || last).slice(0, 160) + "\nTrying " + tierLabel(tiers[n]) + " instead." }).done("backup", "warn");
       const t0 = performance.now(), tin = estTokens(prompt) + (images ? images.length * 1600 : 0);
       const note = (ok, out) => { if (step && step.call) step.call({ who:tierLabel(tiers[n]), ms:performance.now() - t0, tin, tout:ok ? estTokens(out) : 0, ok, prompt:promptText(prompt, images) }); };
-      try { const out = await askOn(tiers[n], prompt, step, mode, images, sample); run.tokOut += estTokens(out); note(true, out); return out; }
+      try {
+        const got = await askOn(tiers[n], prompt, step, mode, images, sample);
+        const out = mode === "json" ? got : got.text;
+        run.tokOut += estTokens(out); note(true, out);
+        return mode !== "json" && got.truncated ? continueReply(tiers[n], prompt, out, step, sample) : out;
+      }
       catch(e) {
         note(false);
         if (isControlSignal(e) || halting()) throw e;
@@ -7544,6 +7611,27 @@ HOW TO MAP CODE
     }
     if (tiers.length > 1) fail("The primary model and " + (tiers.length === 2 ? "its backup" : "all " + (tiers.length - 1) + " backups") + " failed. Last error: " + ((last && last.message) || last));
     throw last;
+  }
+  /* A reply cut off by the length limit: ask once for the rest, on the same model, and join the two parts. Matches the runtime. */
+  const CONTINUE_PROMPT = "Continue exactly where you stopped. Don't repeat anything you've already written.";
+  async function continueReply(tier, prompt, text, step, sample){
+    addStep("Reply continued", { mono:true, text:"The reply reached the length limit, so the model was asked to carry on from where it stopped." }).done("continued", "warn");
+    if (++run.calls > MAX_AI_CALLS) fail("Stopped after " + MAX_AI_CALLS + " Claude calls in one run, to protect your usage. Check for loops that call Claude too often.");
+    const turns = (typeof prompt === "string" ? [{ role:"user", content:prompt }] : prompt).concat([{ role:"assistant", content:text }, { role:"user", content:CONTINUE_PROMPT }]);
+    if (step) step.prefix = text;
+    const t0 = performance.now();
+    let more;
+    try { more = await askOn(tier, turns, step, "text", null, sample); }
+    finally { if (step) step.prefix = ""; }
+    run.tokIn += estTokens(turns); run.tokOut += estTokens(more.text);
+    if (step && step.call) step.call({ who:tierLabel(tier), ms:performance.now() - t0, tin:estTokens(turns), tout:estTokens(more.text), ok:true, prompt:promptText(turns) });
+    const joined = text + more.text;  // the continuation picks up exactly where the first part stopped
+    if (step) step.text(joined);
+    if (more.truncated) {
+      run.outOfRounds = true;
+      addStep("Cut short", { text:"Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. Ask for something shorter, or split the job into smaller steps." }).done("cut short", "warn");
+    }
+    return joined;
   }
   async function askOn(tier, prompt, step, mode, images, sample){
     const ctl = new AbortController(); run.ctls.add(ctl);
@@ -7556,11 +7644,11 @@ HOW TO MAP CODE
       if (!run.awayNoted[who]) { run.awayNoted[who] = true; addStep(who, { mono:true, text:who + " can't be reached from this page, so Claude answers in its place. Export to Python to use " + who + " itself." }).done("note", "warn"); }
     }
     if (images && images.length) opts.images = images;
-    if (mode !== "json" && step) opts.onText = ({ text }) => step.text(text);
+    if (mode !== "json" && step) opts.onText = ({ text }) => step.text((step.prefix || "") + text);
     try {
       if (mode === "json") return await sample.json(prompt, opts);
       const r = await sample(prompt, opts);
-      return r.text.trim();
+      return { text:r.text.trim(), truncated:!!r.truncated };
     } catch(e) {
       if (e && e.code === "cancelled") throw new Halt();
       throw e;

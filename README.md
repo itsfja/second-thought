@@ -271,6 +271,8 @@ save_log = yes
 
 `budget` stops each run before a model call once it has used that many tokens. In Python the count is exact, because every company says how many tokens it used. A **limit this run** block in the program wins over this line.
 
+`stream` shows Claude writing as it goes, on one line that counts the letters. Normally this only happens when you run the program in a terminal yourself.
+
 `save_log` keeps a diary of every run in a folder called `logs`, next to the program. Each step in the diary says which helper answered, how long it took and the exact tokens, and the prompts are tucked under **Prompt sent**. This is handy for programs that run on their own while you sleep.
 
 If a program has an **ask me before** block, Python asks you in the terminal and waits for `y` or `n`. When a program runs by itself on a schedule, with nobody there to answer, it says no and carries on.
@@ -421,6 +423,7 @@ If you change `python/runtime.py` or `prompts/convert-guide.txt`, run `python to
 - Second Thought keeps its secrets safe. Things it remembers are only seen by you.
 - Inside the page, Claude cannot look things up on the internet. A Python program can.
 - Timed jobs on the page only work while the page is open. For jobs that run while you sleep, use Python.
+- Every answer has a length limit. If Claude runs out of room part-way, the program asks it once to carry on from where it stopped, and joins the two parts. If it's still too long, the run log says **Cut short**, and the result is marked best effort.
 - The page can't see exactly how many tokens Claude used, so it makes a careful guess. Python knows the exact number.
 - Some blocks need an answer in a particular shape, like a number or a yes or no. In Python, Claude is made to write exactly that shape. Other helpers, and Claude on the page, are checked afterwards. If an answer comes back muddled, the program sends it back once and says what was wrong. If it's still muddled, that step stops with a clear message, so put it inside **retry** if you'd like another go.
 - On the page, your browser already asks before saving any file. So **ask me before saving files** only adds a question in Python.

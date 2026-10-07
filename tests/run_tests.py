@@ -62,7 +62,8 @@ window.claude = { use: async n => {
   const down = o => { if (window.__failTier && o && o.modelTier === window.__failTier) throw new Error('service unavailable (test)'); };
   const f = async (input, o = {}) => { down(o); const p = lastText(input); (window.__textPrompts = window.__textPrompts || []).push(p);
     const t = p.includes('Reply with only the SVG') ? SVG : 'ANSWER(' + p.slice(0, 24).replace(/\n/g, ' ') + ')';
-    o.onText && o.onText({ text:t, delta:t }); return { text:t, truncated:false }; };
+    const cut = (window.__truncate || 0) > 0; if (cut) window.__truncate--;
+    o.onText && o.onText({ text:t, delta:t }); return { text:t, truncated:cut }; };
   f.json = async (input, o = {}) => { down(o); const p = lastText(input);
     (window.__jsonPrompts = window.__jsonPrompts || []).push(p);
     if (window.__jsonScript && window.__jsonScript.length) {  // a test's script of replies for JSON calls; "BAD" can't be read
@@ -585,6 +586,28 @@ async def new_feature_page_tests(pg):
     EXTRA["t_steps"] = await export_python(pg, "t_steps")
     AGENT_SCRIPTS["t_steps"] = replies
 
+    print("Cut-off replies")
+    long_prog = script(add(val(blk("rb_ask", inputs={"TEXT": tx("Write a very long essay about rye.")}))))
+    await load_state(pg, long_prog)
+    await pg.evaluate("window.__truncate = 1")
+    status = await run_program(pg)
+    rows = await pg.eval_on_selector_all(".step", """e => e.map(x => [x.querySelector('.step-name').textContent, x.querySelector('.pill').textContent,
+        (x.querySelector(':scope > .step-meta') || {}).textContent || '', [...x.querySelectorAll(':scope > .step-prompt pre')].map(p => p.textContent)])""")
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    pill = await pg.text_content(".result .pill")
+    ask_row = [r for r in rows if r[0].startswith("Ask Claude")]
+    check(status.startswith("done") and any(r[0] == "Reply continued" for r in rows) and not any(r[0] == "Cut short" for r in rows)
+          and items and items[0].count("ANSWER(") == 2 and "Continue exactly" in items[0] and pill == "finished"
+          and ask_row and ask_row[0][2].startswith("2 calls") and "[assistant]" in ask_row[0][3][1],
+          f"a cut-off reply is continued once on its own, and the two parts are joined ({items[0][:70] if items else ''!r})")
+    await pg.evaluate("window.__truncate = 2")
+    status = await run_program(pg)
+    names = [n for n, *_ in await step_texts(pg)]
+    pill = await pg.text_content(".result .pill")
+    check(status.startswith("done") and "Cut short" in names and pill == "best effort", f"a reply still cut off after continuing is flagged, and the result marked best effort ({pill})")
+    await pg.evaluate("window.__truncate = 0")
+    EXTRA["t_long"] = await export_python(pg, "t_long")
+
     print("Agent: every path")
     done = lambda a: {"done": True, "answer": a}  # noqa: E731
     tool = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
@@ -1088,6 +1111,26 @@ def python_tests(codes):
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_checkpoint.py")], env, tmp)
         out = out.replace("\r\n", "\n")
         check(code_ == 0 and "RESULT\n" + "=" * 60 + "\nr1\n\ngood 1\n" in out, "t_checkpoint.py goes back to its checkpoint, twice" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        print("Cut-off replies and streaming in Python")
+        (pathlib.Path(tmp) / "t_long.py").write_text(EXTRA["t_long"], encoding="utf-8")
+        def long_py(**e):
+            c, o, er = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_long.py")], dict(env, **e), tmp)
+            return c, o.replace("\r\n", "\n"), er  # Windows prints \r\n
+        code_, out, err = long_py(FAKE_TRUNCATE="1")
+        res = out.split("=" * 60 + "\n")[-1] if "RESULT" in out else ""
+        check(code_ == 0 and "▸ Reply continued  [continued]" in out and "RESULT\n" in out and res.count("TEXT[") == 2 and "Cut short" not in out,
+              "t_long.py continues a cut-off reply once and joins the parts" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = long_py(FAKE_TRUNCATE="2")
+        check(code_ == 0 and "▸ Cut short  [warn]" in out and "RESULT (best effort)" in out, "a reply still cut off is flagged and marked best effort")
+        log = pathlib.Path(tmp) / "stream.log"
+        code_, out, err = long_py(RB_STREAM="yes", FAKE_LOG=str(log))
+        check(code_ == 0 and log.exists() and "STREAM" in log.read_text() and "… writing: " in out and "RESULT\n" in out,
+              "stream = yes streams Claude's reply with a progress line" + ("" if code_ == 0 and "RESULT\n" in out else f": {(err or out)[-300:]!r}"))
+        log.unlink(missing_ok=True)
+        code_, out, err = long_py(FAKE_LOG=str(log))
+        check(code_ == 0 and "STREAM" not in (log.read_text() if log.exists() else "") and "writing:" not in out,
+              "when the output isn't a terminal, replies aren't streamed by default")
+        check("; stream = yes" in EXPORTS["review"]["second-thought.ini"], "the exported ini explains the stream setting")
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")

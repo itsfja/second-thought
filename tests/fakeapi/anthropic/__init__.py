@@ -4,7 +4,7 @@ class _B:
 class _U:
     def __init__(self, t): self.input_tokens=120; self.output_tokens=len(t)//4+1
 class _M:
-    def __init__(self, t): self.content=[_B(t)]; self.usage=_U(t)
+    def __init__(self, t, stop="end_turn"): self.content=[_B(t)]; self.usage=_U(t); self.stop_reason=stop
 class BadRequestError(Exception):
     status_code = 400
 def _check_schema(sc, path="schema"):
@@ -22,6 +22,8 @@ def _check_schema(sc, path="schema"):
 class _Messages:
     rev = 0
     scripted = 0
+    cut = 0
+    def stream(self, **kw): return _Stream(self.create(**kw))
     async def create(self, model, max_tokens, messages, **kw):
         oc = kw.get("output_config")
         if oc:
@@ -71,6 +73,24 @@ class _Messages:
         if '"items": [<short strings>]' in p: return _M('```json\n["idea one", "idea two", "idea three"]\n```')
         if '"score"' in p: return _M(json.dumps({"score": 3 + len(p) % 7}))
         if '"pick"' in p: return _M('{"pick": 2, "reason": "clearer"}')
+        if int(os.environ.get("FAKE_TRUNCATE") or 0) > _Messages.cut:  # the next text reply is cut off
+            _Messages.cut += 1
+            return _M("TEXT[" + p[:30].replace("\n"," ") + "]", "max_tokens")
         return _M("TEXT[" + p[:30].replace("\n"," ") + "]")
+class _Stream:
+    """Like the SDK's message stream: text_stream gives the text in pieces, then get_final_message()."""
+    def __init__(self, coro): self._coro = coro
+    async def __aenter__(self):
+        self._msg = await self._coro
+        with open(os.environ.get("FAKE_LOG", os.devnull), "a") as f: f.write("STREAM\n")
+        return self
+    async def __aexit__(self, *a): return False
+    @property
+    def text_stream(self): return self._chunks()
+    async def _chunks(self):
+        text = "".join(b.text for b in self._msg.content)
+        for i in range(0, len(text), 7):
+            yield text[i:i + 7]
+    async def get_final_message(self): return self._msg
 class AsyncAnthropic:
     def __init__(self): self.messages=_Messages()
