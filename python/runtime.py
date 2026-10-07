@@ -615,6 +615,8 @@ class Runtime:
             self.budget = 0
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
         self.trace = []              # every log line, for save_log
+        self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
+        self.agent_trace = []        # the most recent agent's steps, for the "agent's steps" block
         self.run_started = time.time()
         self.programs = []           # names of saved programs running inside this run, innermost last
         self.calls = 0
@@ -665,13 +667,56 @@ class Runtime:
             raise RunError(f"Stopped after {MAX_STEPS} steps. A loop may never end; check repeat and while blocks.")
 
     # ----- logging -----
-    def log(self, label, text=None, status=None):
-        self.trace.append((time.time(), label, to_str(text) if text else "", status or ""))
+    def log(self, label, text=None, status=None, calls=True):
+        """calls=True: attach the model calls made since the last line. calls=False: a note written between a model call
+        and its step, which leaves the calls for the step. A list: exactly these calls (the agent hands each step its own)."""
+        if isinstance(calls, list):
+            pass
+        elif calls:
+            calls, self._pending = self._pending, []
+        else:
+            calls = []
+        meta = self._calls_summary(calls)
+        self.trace.append((time.time(), label, to_str(text) if text else "", status or "", meta, [c["prompt"] for c in calls]))
         head = f"\n▸ {label}" + (f"  [{status}]" if status else "")
         print(head, flush=True)
         if text:
             for line in to_str(text).splitlines() or [""]:
                 print("    " + line, flush=True)
+        if meta:
+            print("    · " + meta, flush=True)
+
+    @staticmethod
+    def _calls_summary(calls):
+        """'Claude · 1.4 s · 812 in, 120 out' for the model calls behind one step (several for a repair or a backup)."""
+        if not calls:
+            return ""
+        who = ", ".join(dict.fromkeys(c["who"] for c in calls))
+        secs = sum(c["secs"] for c in calls)
+        tin, tout = sum(c["in"] for c in calls), sum(c["out"] for c in calls)
+        failed = sum(1 for c in calls if not c["ok"])
+        return ((f"{len(calls)} calls · " if len(calls) > 1 else "") + f"{who} · {secs:.1f} s · {tin:,} in, {tout:,} out" +
+                (f" · {failed} failed" if failed else ""))
+
+    def _prompt_text(self, prompt, history, picture):
+        """The prompt as the model received it, for the saved log."""
+        parts = [f"[instructions]\n{self.instructions}"] if self.instructions else []
+        parts += [f"[{h['role']}]\n{to_str(h['content'])}" for h in (history or [])]
+        parts.append(("[user]\n" if parts else "") + to_str(prompt) + ("\n[+ a picture]" if picture is not None else ""))
+        return "\n\n".join(parts)
+
+    async def _timed_call(self, t, prompt, want_json, picture, history, web):
+        """One call on one model, remembered (time, tokens, prompt) for the next log line."""
+        start, before = time.monotonic(), [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
+        ok = False
+        try:
+            text = await self._call_tier(t, prompt, want_json, picture, history, web)
+            ok = True
+            return text
+        finally:
+            after = [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
+            self._pending.append({"who": model_label(t), "secs": time.monotonic() - start, "in": after[0] - before[0],
+                                  "out": after[1] - before[1], "ok": ok, "prompt": self._prompt_text(prompt, history, picture)})
 
     # ----- Claude -----
     @property
@@ -732,9 +777,9 @@ class Runtime:
         last = None
         for n, t in enumerate(tiers):
             if n:
-                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn")
+                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn", calls=False)
             try:
-                text = await self._call_tier(t, prompt, want_json, picture, history, web)
+                text = await self._timed_call(t, prompt, want_json, picture, history, web)
             except (asyncio.CancelledError, Finish):
                 raise
             except Exception as e:  # no key, out of credit, service down: try the next backup
@@ -749,11 +794,11 @@ class Runtime:
                 return self._read_json(text, schema)
             except BadJSON as e:
                 # One more try on the same model, showing it what went wrong. Counts as a call like any other.
-                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair")
+                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair", calls=False)
                 self.calls += 1
                 if self.calls > MAX_AI_CALLS:
                     raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
-                fix = await self._call_tier(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
+                fix = await self._timed_call(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
                                             "\nPrevious reply:\n" + _short(text, 2000) +
                                             "\n\nReply again with only the corrected JSON.", want_json, picture, history, web)
                 return self._read_json(fix, schema)
@@ -2025,7 +2070,7 @@ class Runtime:
         new = [_short(to_str(x).strip(), 120) for x in new if to_str(x).strip()][:self.MAX_PLAN]
         if not new or new == plan:
             return plan
-        self.log("Agent plan" if not plan else "Agent: plan changed", "\n".join(f"{k}. {x}" for k, x in enumerate(new, 1)), "planned")
+        self.log("Agent plan" if not plan else "Agent: plan changed", "\n".join(f"{k}. {x}" for k, x in enumerate(new, 1)), "planned", calls=False)
         return new
 
     async def _agent_run_tool(self, kind, spec, inp):
@@ -2072,16 +2117,21 @@ class Runtime:
         self.log("Agent", f"Goal: {goal}\nTools: {', '.join(catalogue) or 'none'} · up to {n} steps" + (" · plans first" if plan else ""), "started")
         history, last, prev, same = [], "", None, 0
         plan = [] if plan else None
+        self.agent_trace = []
+        rec = lambda i_, status, tool="", shown="", result="": self.agent_trace.append(  # noqa: E731
+            {"step": i_, "tool": tool, "input": shown, "result": _short(to_str(result), 2000), "status": status})
         for i in range(1, n + 1):
             label = f"Agent step {i}/{n}"
             try:
                 r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1, plan), SCHEMAS["agent"])
             except BadJSON:
                 r = None
+            mine, self._pending = self._pending, []  # this step's model calls, kept apart from anything a tool logs
             if not isinstance(r, dict):
                 # An unreadable reply costs a step, not the run: tell the model and carry on.
                 history.append(f"Step {i}: your reply wasn't readable JSON. Reply with only one JSON object, exactly as described.")
-                self.log(label, "The reply wasn't readable JSON, so this step was wasted.", "unreadable")
+                self.log(label, "The reply wasn't readable JSON, so this step was wasted.", "unreadable", calls=mine)
+                rec(i, "unreadable")
                 continue
             if plan is not None and not r.get("done"):
                 plan = self._agent_take_plan(r, plan)
@@ -2089,10 +2139,12 @@ class Runtime:
                 answer = to_str(r.get("answer", "")).strip()
                 if answer or i == n:
                     self.set_draft(answer)
-                    self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer or "(no answer)", "done")
+                    self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer or "(no answer)", "done", calls=mine)
+                    rec(i, "answer", result=answer)
                     return
                 history.append(f"Step {i}: you said you were done but gave an empty answer. Give your complete final answer.")
-                self.log(label, "It said it was done, but its answer was empty.", "empty answer")
+                self.log(label, "It said it was done, but its answer was empty.", "empty answer", calls=mine)
+                rec(i, "empty answer")
                 continue
             name = to_str(r.get("tool", "")).strip()
             inp = r.get("input") if isinstance(r.get("input"), dict) else {}
@@ -2101,7 +2153,8 @@ class Runtime:
                 note = ("It replied with a tool on its last step, so it stopped there." if i == n else
                         f"It replied with “{name or 'nothing usable'}”, which isn't one of its tools.")
                 history.append(f"Step {i}: your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.")
-                self.log(label, note, "not a tool")
+                self.log(label, note, "not a tool", calls=mine)
+                rec(i, "not a tool", name)
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
@@ -2110,7 +2163,8 @@ class Runtime:
                 # Checked before running: a tool never gets input it can't use.
                 history.append(f"Step {i}: you asked for {name} with {shown}, but {problem}, so it didn't run. "
                                "Give exactly the inputs its schema lists.")
-                self.log(f"{label}: {name}", f"Input: {shown}\n\nIt didn't run: {problem}.", "bad input")
+                self.log(f"{label}: {name}", f"Input: {shown}\n\nIt didn't run: {problem}.", "bad input", calls=mine)
+                rec(i, "bad input", name, shown, problem)
                 prev, same = None, 0
                 continue
             inp = checked
@@ -2119,17 +2173,20 @@ class Runtime:
             same = same + 1 if sig == prev else 1
             prev = sig
             if same >= 3:
-                self.log("Agent: stopped, repeating itself", f"It asked for {name} with the same input three times in a row. The draft holds its last result.", "stopped")
+                self.log("Agent: stopped, repeating itself", f"It asked for {name} with the same input three times in a row. The draft holds its last result.", "stopped", calls=mine)
+                rec(i, "stopped", name, shown)
                 break
             if same == 2:
                 history.append(f"Step {i}: you asked for {name} with exactly the same input as the step before, so it didn't run again. "
                                "Its result is above. Do something different, or give your final answer.")
-                self.log(f"{label}: {name}", f"Input: {shown}\n\nThe same call as the step before, so it didn't run again.", "repeat")
+                self.log(f"{label}: {name}", f"Input: {shown}\n\nThe same call as the step before, so it didn't run again.", "repeat", calls=mine)
+                rec(i, "repeat", name, shown)
                 continue
             if ask and kind == "call_service" and any(re.match(p_, to_str(inp.get("service", "")).strip()) for p_ in HA_SENSITIVE):
                 ask = False  # unlocking, opening and disarming ask anyway: one question is enough
+            refused = False
             if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}"):
-                result = "The person said no, so this tool didn't run."
+                result, refused = "The person said no, so this tool didn't run.", True
             else:
                 try:
                     result = await self._agent_run_tool(kind, spec, inp)
@@ -2140,16 +2197,21 @@ class Runtime:
             text = to_str(result) if not isinstance(result, (dict, list)) else json.dumps(result, ensure_ascii=False, default=str)
             last = text
             history.append(f"Step {i}: you used {name} with {shown}.\nResult: {_short(text, 1500)}")
-            status = "tool error" if text.startswith("Error: ") else "done"
-            self.log(f"{label}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", status)
+            status = "refused" if refused else "tool error" if text.startswith("Error: ") else "done"
+            self.log(f"{label}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", status, calls=mine)
+            rec(i, status, name, shown, text)
         else:
             self.log("Agent: out of steps", f"It used all {n} steps without a final answer. The draft holds its last result.", "best effort")
         self.out_of_rounds_hit = True
         self.set_draft(last or "The agent stopped before it had a result.")
 
+    def agent_steps(self):
+        """The most recent agent's steps in this run, as records: step, tool, input, result, status."""
+        return [dict(r) for r in self.agent_trace]
+
     # ----- Saved programs run as a block -----
     STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error",
-             "checkpoints", "reflect")
+             "checkpoints", "reflect", "agent_trace")
 
     async def run_program(self, name, fn, value=""):
         """Runs a saved program's 'when Run is clicked' script with its own draft, result and variables.
@@ -2167,7 +2229,7 @@ class Runtime:
         saved_vars = dict(self.vars)
         self.task, self.draft, self.problems, self.approved, self.answer = "", "", [], None, ""
         self.result, self.out_of_rounds_hit, self.instructions, self.chats, self.last_error = [], False, "", {}, ""
-        self.checkpoints, self.reflect = {}, None
+        self.checkpoints, self.reflect, self.agent_trace = {}, None, []
         self.vars.clear()
         token = MESSAGE_VALUE.set(value)
         self.programs.append(name)
@@ -2270,10 +2332,15 @@ class Runtime:
         if self.error:
             lines.append(f"- Stopped with an error: {self._describe(self.error)}")
         lines.append("")
-        for i, (t, label, text, status) in enumerate(self.trace, 1):
+        for i, (t, label, text, status, meta, prompts) in enumerate(self.trace, 1):
             lines.append(f"## {i}. {label}" + (f" [{status}]" if status else "") + f"  ·  +{t - self.run_started:.1f} s")
             if text:
                 lines += ["", "~~~~", text, "~~~~"]
+            if meta:
+                lines += ["", f"*{meta}*"]
+            for k, pr in enumerate(prompts, 1):
+                lines += ["", f"<details><summary>Prompt sent{f' ({k} of {len(prompts)})' if len(prompts) > 1 else ''}</summary>", "",
+                          "~~~~", pr, "~~~~", "", "</details>"]
             lines.append("")
         result = "\n\n".join(to_str(x) for x in self.result) if self.result else self.draft
         if result:

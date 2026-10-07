@@ -102,6 +102,8 @@ At the end, a green box shows the **result**. The result is what your program ma
 
 Under the result, a small line says roughly how many **tokens** the run used. Tokens are the little pieces of words that Claude reads and writes. Every token uses a tiny bit of your Claude allowance. On the page this number is a good guess, worked out from how long the words are.
 
+Under each step that asks Claude something, a small grey line says which helper answered, how long it took and roughly how many tokens it used. Click **Prompt sent** to see exactly what Claude was asked.
+
 Press **Save log** at the top of the run log to keep a copy of the diary. It saves every step, how long each one took, and the result, as a file you can read later.
 
 If something goes wrong, press **Stop**. Everything will stop straight away.
@@ -166,6 +168,8 @@ Each step is one call to Claude, so set how many steps it may take. If it runs o
 If Claude's reply comes out muddled, or it asks for the same tool with the same words twice in a row, the agent tells it and tries again. That uses up a step. If it repeats itself three times, the agent stops.
 
 An agent only reads the words that tools send back. It never follows instructions hidden inside them. It still can't unlock a door without asking you.
+
+The block **agent's steps** gives you a list of everything the agent did: each step, the tool, what it sent, what came back, and how it went. Your program can check it, save it, or ask Claude to review it.
 
 Try the examples **Agent: plan my bake** and **Agent with your own tool**.
 
@@ -267,7 +271,7 @@ save_log = yes
 
 `budget` stops each run before a model call once it has used that many tokens. In Python the count is exact, because every company says how many tokens it used. A **limit this run** block in the program wins over this line.
 
-`save_log` keeps a diary of every run in a folder called `logs`, next to the program. This is handy for programs that run on their own while you sleep.
+`save_log` keeps a diary of every run in a folder called `logs`, next to the program. Each step in the diary says which helper answered, how long it took and the exact tokens, and the prompts are tucked under **Prompt sent**. This is handy for programs that run on their own while you sleep.
 
 If a program has an **ask me before** block, Python asks you in the terminal and waits for `y` or `n`. When a program runs by itself on a schedule, with nobody there to answer, it says no and carries on.
 

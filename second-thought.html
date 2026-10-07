@@ -74,6 +74,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .result .step-body{max-height:none}
 .result-actions{display:flex;gap:8px;margin-top:10px}
 .result-usage{margin-top:8px;font-size:12px;color:var(--muted)}
+.step-meta{margin-top:6px;font-size:12px;color:var(--muted)}
+.step-prompt{margin-top:4px;font-size:12px}
+.step-prompt summary{cursor:pointer;color:var(--muted)}
+.step-prompt pre{margin:6px 0 0;padding:8px;max-height:260px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:6px}
 .log-tools{display:flex;align-items:center;gap:8px}
 .log-tools button{padding:2px 10px;font-size:12px}
 .bk-sel{max-width:420px}
@@ -1023,6 +1027,8 @@ class Runtime:
             self.budget = 0
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
         self.trace = []              # every log line, for save_log
+        self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
+        self.agent_trace = []        # the most recent agent's steps, for the "agent's steps" block
         self.run_started = time.time()
         self.programs = []           # names of saved programs running inside this run, innermost last
         self.calls = 0
@@ -1073,13 +1079,56 @@ class Runtime:
             raise RunError(f"Stopped after {MAX_STEPS} steps. A loop may never end; check repeat and while blocks.")
 
     # ----- logging -----
-    def log(self, label, text=None, status=None):
-        self.trace.append((time.time(), label, to_str(text) if text else "", status or ""))
+    def log(self, label, text=None, status=None, calls=True):
+        """calls=True: attach the model calls made since the last line. calls=False: a note written between a model call
+        and its step, which leaves the calls for the step. A list: exactly these calls (the agent hands each step its own)."""
+        if isinstance(calls, list):
+            pass
+        elif calls:
+            calls, self._pending = self._pending, []
+        else:
+            calls = []
+        meta = self._calls_summary(calls)
+        self.trace.append((time.time(), label, to_str(text) if text else "", status or "", meta, [c["prompt"] for c in calls]))
         head = f"\n▸ {label}" + (f"  [{status}]" if status else "")
         print(head, flush=True)
         if text:
             for line in to_str(text).splitlines() or [""]:
                 print("    " + line, flush=True)
+        if meta:
+            print("    · " + meta, flush=True)
+
+    @staticmethod
+    def _calls_summary(calls):
+        """'Claude · 1.4 s · 812 in, 120 out' for the model calls behind one step (several for a repair or a backup)."""
+        if not calls:
+            return ""
+        who = ", ".join(dict.fromkeys(c["who"] for c in calls))
+        secs = sum(c["secs"] for c in calls)
+        tin, tout = sum(c["in"] for c in calls), sum(c["out"] for c in calls)
+        failed = sum(1 for c in calls if not c["ok"])
+        return ((f"{len(calls)} calls · " if len(calls) > 1 else "") + f"{who} · {secs:.1f} s · {tin:,} in, {tout:,} out" +
+                (f" · {failed} failed" if failed else ""))
+
+    def _prompt_text(self, prompt, history, picture):
+        """The prompt as the model received it, for the saved log."""
+        parts = [f"[instructions]\n{self.instructions}"] if self.instructions else []
+        parts += [f"[{h['role']}]\n{to_str(h['content'])}" for h in (history or [])]
+        parts.append(("[user]\n" if parts else "") + to_str(prompt) + ("\n[+ a picture]" if picture is not None else ""))
+        return "\n\n".join(parts)
+
+    async def _timed_call(self, t, prompt, want_json, picture, history, web):
+        """One call on one model, remembered (time, tokens, prompt) for the next log line."""
+        start, before = time.monotonic(), [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
+        ok = False
+        try:
+            text = await self._call_tier(t, prompt, want_json, picture, history, web)
+            ok = True
+            return text
+        finally:
+            after = [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
+            self._pending.append({"who": model_label(t), "secs": time.monotonic() - start, "in": after[0] - before[0],
+                                  "out": after[1] - before[1], "ok": ok, "prompt": self._prompt_text(prompt, history, picture)})
 
     # ----- Claude -----
     @property
@@ -1140,9 +1189,9 @@ class Runtime:
         last = None
         for n, t in enumerate(tiers):
             if n:
-                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn")
+                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn", calls=False)
             try:
-                text = await self._call_tier(t, prompt, want_json, picture, history, web)
+                text = await self._timed_call(t, prompt, want_json, picture, history, web)
             except (asyncio.CancelledError, Finish):
                 raise
             except Exception as e:  # no key, out of credit, service down: try the next backup
@@ -1157,11 +1206,11 @@ class Runtime:
                 return self._read_json(text, schema)
             except BadJSON as e:
                 # One more try on the same model, showing it what went wrong. Counts as a call like any other.
-                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair")
+                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair", calls=False)
                 self.calls += 1
                 if self.calls > MAX_AI_CALLS:
                     raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
-                fix = await self._call_tier(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
+                fix = await self._timed_call(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
                                             "\nPrevious reply:\n" + _short(text, 2000) +
                                             "\n\nReply again with only the corrected JSON.", want_json, picture, history, web)
                 return self._read_json(fix, schema)
@@ -2433,7 +2482,7 @@ class Runtime:
         new = [_short(to_str(x).strip(), 120) for x in new if to_str(x).strip()][:self.MAX_PLAN]
         if not new or new == plan:
             return plan
-        self.log("Agent plan" if not plan else "Agent: plan changed", "\n".join(f"{k}. {x}" for k, x in enumerate(new, 1)), "planned")
+        self.log("Agent plan" if not plan else "Agent: plan changed", "\n".join(f"{k}. {x}" for k, x in enumerate(new, 1)), "planned", calls=False)
         return new
 
     async def _agent_run_tool(self, kind, spec, inp):
@@ -2480,16 +2529,21 @@ class Runtime:
         self.log("Agent", f"Goal: {goal}\nTools: {', '.join(catalogue) or 'none'} · up to {n} steps" + (" · plans first" if plan else ""), "started")
         history, last, prev, same = [], "", None, 0
         plan = [] if plan else None
+        self.agent_trace = []
+        rec = lambda i_, status, tool="", shown="", result="": self.agent_trace.append(  # noqa: E731
+            {"step": i_, "tool": tool, "input": shown, "result": _short(to_str(result), 2000), "status": status})
         for i in range(1, n + 1):
             label = f"Agent step {i}/{n}"
             try:
                 r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1, plan), SCHEMAS["agent"])
             except BadJSON:
                 r = None
+            mine, self._pending = self._pending, []  # this step's model calls, kept apart from anything a tool logs
             if not isinstance(r, dict):
                 # An unreadable reply costs a step, not the run: tell the model and carry on.
                 history.append(f"Step {i}: your reply wasn't readable JSON. Reply with only one JSON object, exactly as described.")
-                self.log(label, "The reply wasn't readable JSON, so this step was wasted.", "unreadable")
+                self.log(label, "The reply wasn't readable JSON, so this step was wasted.", "unreadable", calls=mine)
+                rec(i, "unreadable")
                 continue
             if plan is not None and not r.get("done"):
                 plan = self._agent_take_plan(r, plan)
@@ -2497,10 +2551,12 @@ class Runtime:
                 answer = to_str(r.get("answer", "")).strip()
                 if answer or i == n:
                     self.set_draft(answer)
-                    self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer or "(no answer)", "done")
+                    self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer or "(no answer)", "done", calls=mine)
+                    rec(i, "answer", result=answer)
                     return
                 history.append(f"Step {i}: you said you were done but gave an empty answer. Give your complete final answer.")
-                self.log(label, "It said it was done, but its answer was empty.", "empty answer")
+                self.log(label, "It said it was done, but its answer was empty.", "empty answer", calls=mine)
+                rec(i, "empty answer")
                 continue
             name = to_str(r.get("tool", "")).strip()
             inp = r.get("input") if isinstance(r.get("input"), dict) else {}
@@ -2509,7 +2565,8 @@ class Runtime:
                 note = ("It replied with a tool on its last step, so it stopped there." if i == n else
                         f"It replied with “{name or 'nothing usable'}”, which isn't one of its tools.")
                 history.append(f"Step {i}: your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.")
-                self.log(label, note, "not a tool")
+                self.log(label, note, "not a tool", calls=mine)
+                rec(i, "not a tool", name)
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
@@ -2518,7 +2575,8 @@ class Runtime:
                 # Checked before running: a tool never gets input it can't use.
                 history.append(f"Step {i}: you asked for {name} with {shown}, but {problem}, so it didn't run. "
                                "Give exactly the inputs its schema lists.")
-                self.log(f"{label}: {name}", f"Input: {shown}\n\nIt didn't run: {problem}.", "bad input")
+                self.log(f"{label}: {name}", f"Input: {shown}\n\nIt didn't run: {problem}.", "bad input", calls=mine)
+                rec(i, "bad input", name, shown, problem)
                 prev, same = None, 0
                 continue
             inp = checked
@@ -2527,17 +2585,20 @@ class Runtime:
             same = same + 1 if sig == prev else 1
             prev = sig
             if same >= 3:
-                self.log("Agent: stopped, repeating itself", f"It asked for {name} with the same input three times in a row. The draft holds its last result.", "stopped")
+                self.log("Agent: stopped, repeating itself", f"It asked for {name} with the same input three times in a row. The draft holds its last result.", "stopped", calls=mine)
+                rec(i, "stopped", name, shown)
                 break
             if same == 2:
                 history.append(f"Step {i}: you asked for {name} with exactly the same input as the step before, so it didn't run again. "
                                "Its result is above. Do something different, or give your final answer.")
-                self.log(f"{label}: {name}", f"Input: {shown}\n\nThe same call as the step before, so it didn't run again.", "repeat")
+                self.log(f"{label}: {name}", f"Input: {shown}\n\nThe same call as the step before, so it didn't run again.", "repeat", calls=mine)
+                rec(i, "repeat", name, shown)
                 continue
             if ask and kind == "call_service" and any(re.match(p_, to_str(inp.get("service", "")).strip()) for p_ in HA_SENSITIVE):
                 ask = False  # unlocking, opening and disarming ask anyway: one question is enough
+            refused = False
             if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}"):
-                result = "The person said no, so this tool didn't run."
+                result, refused = "The person said no, so this tool didn't run.", True
             else:
                 try:
                     result = await self._agent_run_tool(kind, spec, inp)
@@ -2548,16 +2609,21 @@ class Runtime:
             text = to_str(result) if not isinstance(result, (dict, list)) else json.dumps(result, ensure_ascii=False, default=str)
             last = text
             history.append(f"Step {i}: you used {name} with {shown}.\nResult: {_short(text, 1500)}")
-            status = "tool error" if text.startswith("Error: ") else "done"
-            self.log(f"{label}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", status)
+            status = "refused" if refused else "tool error" if text.startswith("Error: ") else "done"
+            self.log(f"{label}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", status, calls=mine)
+            rec(i, status, name, shown, text)
         else:
             self.log("Agent: out of steps", f"It used all {n} steps without a final answer. The draft holds its last result.", "best effort")
         self.out_of_rounds_hit = True
         self.set_draft(last or "The agent stopped before it had a result.")
 
+    def agent_steps(self):
+        """The most recent agent's steps in this run, as records: step, tool, input, result, status."""
+        return [dict(r) for r in self.agent_trace]
+
     # ----- Saved programs run as a block -----
     STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error",
-             "checkpoints", "reflect")
+             "checkpoints", "reflect", "agent_trace")
 
     async def run_program(self, name, fn, value=""):
         """Runs a saved program's 'when Run is clicked' script with its own draft, result and variables.
@@ -2575,7 +2641,7 @@ class Runtime:
         saved_vars = dict(self.vars)
         self.task, self.draft, self.problems, self.approved, self.answer = "", "", [], None, ""
         self.result, self.out_of_rounds_hit, self.instructions, self.chats, self.last_error = [], False, "", {}, ""
-        self.checkpoints, self.reflect = {}, None
+        self.checkpoints, self.reflect, self.agent_trace = {}, None, []
         self.vars.clear()
         token = MESSAGE_VALUE.set(value)
         self.programs.append(name)
@@ -2678,10 +2744,15 @@ class Runtime:
         if self.error:
             lines.append(f"- Stopped with an error: {self._describe(self.error)}")
         lines.append("")
-        for i, (t, label, text, status) in enumerate(self.trace, 1):
+        for i, (t, label, text, status, meta, prompts) in enumerate(self.trace, 1):
             lines.append(f"## {i}. {label}" + (f" [{status}]" if status else "") + f"  ·  +{t - self.run_started:.1f} s")
             if text:
                 lines += ["", "~~~~", text, "~~~~"]
+            if meta:
+                lines += ["", f"*{meta}*"]
+            for k, pr in enumerate(prompts, 1):
+                lines += ["", f"<details><summary>Prompt sent{f' ({k} of {len(prompts)})' if len(prompts) > 1 else ''}</summary>", "",
+                          "~~~~", pr, "~~~~", "", "</details>"]
             lines.append("")
         result = "\n\n".join(to_str(x) for x in self.result) if self.result else self.draft
         if result:
@@ -3816,6 +3887,7 @@ Agent (the model chooses its own steps):
   rb_agent: inputs GOAL, STEPS; fields PLAN ("TRUE" | "FALSE": plan first, revise as it goes); statement input TOOLS holding only tool blocks. Runs a tool-using loop and puts the final answer in the draft.
   rb_agent_builtin: fields KIND ("web" | "ask" | "memory" | "ha_read" | "ha_act"). rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
   Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
+  rb_agent_steps: value, the most recent agent's steps as records (step, tool, input, result, status).
   Map open(...).read() on text files to rb_file_choose, writing output files to rb_file_save, try/except to rb_try, retry loops and backoff to rb_retry.
 Memory (survives between runs):
   rb_mem_set: inputs VALUE, NAME; fields KIND ("transient" = while the page/program is running, "permanent" = saved forever).
@@ -4138,6 +4210,8 @@ HOW TO MAP CODE
       message3:"make a plan first, and change it as it goes %1", args3:[{ type:"field_checkbox", name:"PLAN", checked:false }],
       previousStatement:null, nextStatement:null, style:"agent",
       tooltip:"Claude decides what to do next: each step it picks one of the tools inside, sees what happened, and carries on until the goal is met or the steps run out. Its final answer goes in the draft. Each step is one model call. With 'make a plan first' ticked, it writes a short plan with its first step and keeps it up to date, at no extra cost." },
+    V("rb_agent_steps", "agent's steps", [], "Array", { style:"agent",
+      tooltip:"What the most recent agent in this run did: a list of records with step, tool, input, result and status (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)." }),
     { type:"rb_agent_tool",
       message0:"tool: My Block %1", args0:[{ type:"field_input", name:"NAME", text:"my block" }],
       message1:"what it does %1", args1:[val("DESC")],
@@ -4246,7 +4320,7 @@ HOW TO MAP CODE
       B("rb_agent", { GOAL:L("Plan a bake for this weekend that suits what I have in"), STEPS:N(6),
         TOOLS:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"ask" }, next:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"memory" } } } } } }, { fields:{ PLAN:true } }),
       B("rb_agent_builtin"), B("rb_agent_builtin", null, { fields:{ KIND:"ask" } }), B("rb_agent_builtin", null, { fields:{ KIND:"memory" } }),
-      B("rb_agent_tool", { DESC:L("Gives the oven temperature in °C for a bread type.") })
+      B("rb_agent_tool", { DESC:L("Gives the oven temperature in °C for a bread type.") }), B("rb_agent_steps")
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
       B("rb_ask_me", { TEXT:T("What should I write about?") }), B("rb_answer"), B("rb_approve"), B("rb_choose"), B("rb_ask_first")
@@ -6355,6 +6429,7 @@ HOW TO MAP CODE
         case "rb_answer": return "R.answer";
         case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + "))";
         case "rb_tokens_used": return "R.tokens_used()";
+        case "rb_agent_steps": return "R.agent_steps()";
         case "rb_run_program": {
           const name = String(F("NAME") || "").trim();
           return "(await R.run_program(" + pyStr(name) + ", " + (programFn.get(memKey(name)) || "None") + ", " + I("VALUE", '""') + "))";
@@ -6942,10 +7017,35 @@ HOW TO MAP CODE
       el, body,
       text(t){ body.textContent = t; },
       list(items){ body.innerHTML = ""; const ul = document.createElement("ul"); items.forEach(i => { const li = document.createElement("li"); li.textContent = i; ul.appendChild(li); }); body.appendChild(ul); },
-      done(label, kind){ pill.textContent = label; pill.className = "pill" + (kind ? " " + kind : ""); el.dataset.ms = String(Date.now() - Number(el.dataset.t0)); }
+      done(label, kind){ pill.textContent = label; pill.className = "pill" + (kind ? " " + kind : ""); el.dataset.ms = String(Date.now() - Number(el.dataset.t0)); },
+      call(c){ (el._calls = el._calls || []).push(c); renderCalls(el); }
     };
   }
   function setStatus(t){ $("status").textContent = t; }
+  /* 'Claude · 1.4 s · ~812 in, ~120 out' for the model calls behind one step (several for a repair or a backup). Matches the runtime. */
+  function callsSummary(calls){
+    if (!calls || !calls.length) return "";
+    const who = [...new Set(calls.map(c => c.who))].join(", "), secs = calls.reduce((a, c) => a + c.ms, 0) / 1000;
+    const tin = calls.reduce((a, c) => a + c.tin, 0), tout = calls.reduce((a, c) => a + c.tout, 0), failed = calls.filter(c => !c.ok).length;
+    return (calls.length > 1 ? calls.length + " calls \u00b7 " : "") + who + " \u00b7 " + secs.toFixed(1) + " s \u00b7 ~" + tin.toLocaleString() + " in, ~" +
+      tout.toLocaleString() + " out" + (failed ? " \u00b7 " + failed + " failed" : "");
+  }
+  function renderCalls(el){
+    let meta = el.querySelector(":scope > .step-meta"), det = el.querySelector(":scope > .step-prompt");
+    if (!meta) { meta = document.createElement("div"); meta.className = "step-meta"; el.appendChild(meta); }
+    if (!det) { det = document.createElement("details"); det.className = "step-prompt"; el.appendChild(det); }
+    meta.textContent = callsSummary(el._calls);
+    const open = det.open; det.innerHTML = "";
+    const sum = document.createElement("summary"); sum.textContent = el._calls.length > 1 ? "Prompts sent (" + el._calls.length + ")" : "Prompt sent";
+    det.appendChild(sum);
+    el._calls.forEach((c, k) => { const pre = document.createElement("pre"); pre.textContent = (el._calls.length > 1 ? "\u2014 " + (k + 1) + " \u2014\n" : "") + c.prompt; det.appendChild(pre); });
+    det.open = open;
+  }
+  /* The prompt as the model received it, for 'Prompt sent' and the saved log. */
+  function promptText(prompt, images){
+    const t = typeof prompt === "string" ? prompt : prompt.map(x => "[" + x.role + "]\n" + x.content).join("\n\n");
+    return t.length > 20000 ? t.slice(0, 20000) + "\n\u2026 (" + (t.length - 20000).toLocaleString() + " more characters)" : t + (images && images.length ? "\n[+ " + images.length + " picture" + (images.length === 1 ? "" : "s") + "]" : "");
+  }
 
   /* ---------- Interpreter ---------- */
   /* ---------- Memory ---------- */
@@ -7433,8 +7533,11 @@ HOW TO MAP CODE
     let last = null;
     for (let n = 0; n < tiers.length; n++) {
       if (n) addStep("Backup", { mono:true, text:tierLabel(tiers[n - 1]) + " failed: " + String((last && last.message) || last).slice(0, 160) + "\nTrying " + tierLabel(tiers[n]) + " instead." }).done("backup", "warn");
-      try { const out = await askOn(tiers[n], prompt, step, mode, images, sample); run.tokOut += estTokens(out); return out; }
+      const t0 = performance.now(), tin = estTokens(prompt) + (images ? images.length * 1600 : 0);
+      const note = (ok, out) => { if (step && step.call) step.call({ who:tierLabel(tiers[n]), ms:performance.now() - t0, tin, tout:ok ? estTokens(out) : 0, ok, prompt:promptText(prompt, images) }); };
+      try { const out = await askOn(tiers[n], prompt, step, mode, images, sample); run.tokOut += estTokens(out); note(true, out); return out; }
       catch(e) {
+        note(false);
         if (isControlSignal(e) || halting()) throw e;
         last = e;
       }
@@ -7687,6 +7790,8 @@ HOW TO MAP CODE
     addStep("Agent", { text:"Goal: " + goal + "\nTools: " + ([...catalogue.keys()].join(", ") || "none") + " · up to " + n + " steps" + (plan ? " · plans first" : "") }).done("started", "ok");
     const history = []; let last = "", prev = null, same = 0, stopped = false;
     const title = (s, t) => { s.el.querySelector(".step-name").textContent = t; };
+    run.agentTrace = [];
+    const rec = (i, status, tool, shown, result) => run.agentTrace.push({ step:i, tool:tool || "", input:shown || "", result:short(str(result == null ? "" : result), 2000), status });
     for (let i = 1; i <= n; i++) {
       const label = "Agent step " + i + "/" + n, s = addStep(label);
       let r;
@@ -7695,7 +7800,7 @@ HOW TO MAP CODE
       if (!r || typeof r !== "object" || Array.isArray(r)) {
         // An unreadable reply costs a step, not the run: tell the model and carry on.
         history.push("Step " + i + ": your reply wasn't readable JSON. Reply with only one JSON object, exactly as described.");
-        s.text("The reply wasn't readable JSON, so this step was wasted."); s.done("unreadable", "warn");
+        s.text("The reply wasn't readable JSON, so this step was wasted."); s.done("unreadable", "warn"); rec(i, "unreadable");
         continue;
       }
       if (plan && !r.done) {
@@ -7707,11 +7812,11 @@ HOW TO MAP CODE
         if (answer || i === n) {
           run.draft = answer;
           title(s, "Agent: finished in " + i + " step" + (i === 1 ? "" : "s"));
-          s.text(answer || "(no answer)"); s.done("done", "ok");
+          s.text(answer || "(no answer)"); s.done("done", "ok"); rec(i, "answer", "", "", answer);
           return;
         }
         history.push("Step " + i + ": you said you were done but gave an empty answer. Give your complete final answer.");
-        s.text("It said it was done, but its answer was empty."); s.done("empty answer", "warn");
+        s.text("It said it was done, but its answer was empty."); s.done("empty answer", "warn"); rec(i, "empty answer");
         continue;
       }
       const name = str(r.tool).trim(), why = str(r.why).trim();
@@ -7719,7 +7824,7 @@ HOW TO MAP CODE
       if (i === n || !catalogue.has(name)) {
         history.push("Step " + i + ": your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.");
         s.text(i === n ? "It replied with a tool on its last step, so it stopped there." : "It replied with “" + (name || "nothing usable") + "”, which isn't one of its tools.");
-        s.done("not a tool", "warn");
+        s.done("not a tool", "warn"); rec(i, "not a tool", name);
         continue;
       }
       const t = catalogue.get(name), shown = stableJSON(inp);
@@ -7728,7 +7833,7 @@ HOW TO MAP CODE
         // Checked before running: a tool never gets input it can't use.
         history.push("Step " + i + ": you asked for " + name + " with " + shown + ", but " + problem + ", so it didn't run. Give exactly the inputs its schema lists.");
         title(s, label + ": " + name);
-        s.text("Input: " + shown + "\n\nIt didn't run: " + problem + "."); s.done("bad input", "warn");
+        s.text("Input: " + shown + "\n\nIt didn't run: " + problem + "."); s.done("bad input", "warn"); rec(i, "bad input", name, shown, problem);
         prev = null; same = 0;
         continue;
       }
@@ -7738,20 +7843,20 @@ HOW TO MAP CODE
       same = sig === prev ? same + 1 : 1; prev = sig;
       if (same >= 3) {
         title(s, "Agent: stopped, repeating itself");
-        s.text("It asked for " + name + " with the same input three times in a row. The draft holds its last result."); s.done("stopped", "warn");
+        s.text("It asked for " + name + " with the same input three times in a row. The draft holds its last result."); s.done("stopped", "warn"); rec(i, "stopped", name, shown);
         stopped = true; break;
       }
       title(s, label + ": " + name);
       if (same === 2) {
         history.push("Step " + i + ": you asked for " + name + " with exactly the same input as the step before, so it didn't run again. Its result is above. Do something different, or give your final answer.");
-        s.text("Input: " + shown + "\n\nThe same call as the step before, so it didn't run again."); s.done("repeat", "warn");
+        s.text("Input: " + shown + "\n\nThe same call as the step before, so it didn't run again."); s.done("repeat", "warn"); rec(i, "repeat", name, shown);
         continue;
       }
       s.text((why ? "Why: " + why + "\n" : "") + "Input: " + shown); s.done("using tool", "");
       let askFirst = t.ask;
       if (askFirst && t.kind === "call_service" && haIsSensitive(str(inp.service).trim())) askFirst = false;  // those ask anyway: one question is enough
-      let result;
-      if (askFirst && !(await confirmAction("let the agent use " + name + " with " + short(shown, 200)))) result = "The person said no, so this tool didn't run.";
+      let result, refused = false;
+      if (askFirst && !(await confirmAction("let the agent use " + name + " with " + short(shown, 200)))) { result = "The person said no, so this tool didn't run."; refused = true; }
       else {
         try { result = await agentRunTool(name, t, inp, tc); }
         catch(e) { if (isControlSignal(e) || halting()) throw e; result = "Error: " + (e && e.message ? e.message : String(e)); }
@@ -7762,7 +7867,8 @@ HOW TO MAP CODE
       last = text;
       history.push("Step " + i + ": you used " + name + " with " + shown + ".\nResult: " + short(text, 1500));
       s.text((why ? "Why: " + why + "\n" : "") + "Input: " + shown + "\n\nResult:\n" + short(text, 600));
-      s.done(/^Error: /.test(text) ? "tool error" : "done", /^Error: /.test(text) ? "warn" : "ok");
+      const status = refused ? "refused" : /^Error: /.test(text) ? "tool error" : "done";
+      s.done(status, status === "done" ? "ok" : "warn"); rec(i, status, name, shown, text);
     }
     if (!stopped) addStep("Agent: out of steps", { text:"It used all " + n + " steps without a final answer. The draft holds its last result." }).done("best effort", "warn");
     run.outOfRounds = true;
@@ -7785,7 +7891,7 @@ HOW TO MAP CODE
   }
 
   /* 'run program': a saved program as a step, with its own draft, result and variables. */
-  const RUN_STATE = ["task", "draft", "problems", "approved", "answer", "result", "vars", "instructions", "chats", "outOfRounds", "lastError", "checkpoints", "reflect"];
+  const RUN_STATE = ["task", "draft", "problems", "approved", "answer", "result", "vars", "instructions", "chats", "outOfRounds", "lastError", "checkpoints", "reflect", "agentTrace"];
   async function runProgram(name, value, tc){
     name = String(name || "").trim();
     if (!name) fail("The 'run program' block needs the name of a saved program.");
@@ -7801,7 +7907,7 @@ HOW TO MAP CODE
       const problem = subProgramProblem(sub);
       if (problem) fail("The program \u201c" + name + "\u201d " + problem + ", so it can't run as a block.");
       const saved = {}; RUN_STATE.forEach(k => saved[k] = run[k]);
-      Object.assign(run, { task:"", draft:"", problems:[], approved:undefined, answer:"", result:[], vars:new Map(), instructions:"", chats:new Map(), outOfRounds:false, lastError:"", checkpoints:new Map(), reflect:null });
+      Object.assign(run, { task:"", draft:"", problems:[], approved:undefined, answer:"", result:[], vars:new Map(), instructions:"", chats:new Map(), outOfRounds:false, lastError:"", checkpoints:new Map(), reflect:null, agentTrace:[] });
       run.programs.push(name);
       const st = addStep("Program: " + name, { text:"Started" + (str(value).trim() ? " with: " + short(value, 200) : ".") });
       st.done("running", "");
@@ -8170,6 +8276,7 @@ HOW TO MAP CODE
                  weekday:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()] }[part];
       }
       case "rb_tokens_used": return tokensUsed();
+      case "rb_agent_steps": return run.agentTrace.map(r => Object.assign({}, r));
       case "rb_run_program": return runProgram(b.getFieldValue("NAME"), await input(b, tc, "VALUE", ""), tc);
       case "rb_approve": {
         const t = str(await input(b, tc, "TEXT"));
@@ -8731,6 +8838,10 @@ HOW TO MAP CODE
       const pics = body ? body.querySelectorAll("img").length : 0;
       const text = body ? body.innerText.trim() : "";
       if (text) out.push("", "~~~~", text, "~~~~");
+      if (el._calls && el._calls.length) {
+        out.push("", "*" + callsSummary(el._calls) + "*");
+        el._calls.forEach((c, k) => out.push("", "<details><summary>Prompt sent" + (el._calls.length > 1 ? " (" + (k + 1) + " of " + el._calls.length + ")" : "") + "</summary>", "", "~~~~", c.prompt, "~~~~", "", "</details>"));
+      }
       if (pics) out.push("", "(" + pics + " picture" + (pics === 1 ? "" : "s") + ")");
       out.push("");
     });
@@ -8910,7 +9021,7 @@ HOW TO MAP CODE
             ctls:new Set(), stoppers:new Set(), threads:new Set(), started:0, broadcasts:0, sample:null,
             active:true, ready:false, pending:hats.slice(), timerStart:Date.now(),
             msgWaiters:new Map(), msgNames:new Map(), msgWaiting:0, instructions:"", chats:new Map(), lastError:"",
-            budget:0, tokIn:0, tokOut:0, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map() };
+            budget:0, tokIn:0, tokOut:0, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map(), agentTrace:[] };
     $("run").disabled = true; $("stop").disabled = false; setStatus("running");
     const started = Date.now();
     try {
