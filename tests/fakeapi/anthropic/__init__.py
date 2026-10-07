@@ -25,6 +25,10 @@ class _Messages:
     cut = 0
     def stream(self, **kw): return _Stream(self.create(**kw))
     async def create(self, model, max_tokens, messages, **kw):
+        _Messages.made = getattr(_Messages, "made", 0) + 1
+        if os.environ.get("FAKE_FAIL_AT") and _Messages.made == int(os.environ["FAKE_FAIL_AT"]):
+            raise RuntimeError("the service went away (test)")  # a crash part-way through a run
+        with open(os.environ.get("FAKE_LOG", os.devnull), "a") as f: f.write("CREATE\n")
         oc = kw.get("output_config")
         if oc:
             if os.environ.get("FAKE_REJECT_SCHEMA"):

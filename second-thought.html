@@ -419,6 +419,7 @@ import contextlib
 import contextvars
 import copy
 import datetime
+import hashlib
 import json
 import math
 import os
@@ -443,7 +444,7 @@ for _stream in (sys.stdout, sys.stderr):
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
-                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM"}
+                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME"}
 
 
 def _load_settings():
@@ -1048,6 +1049,7 @@ class Runtime:
         self.depth = 0
         self.started = 0
         self.timer_start = time.monotonic()
+        self.journal, self.replay, self.replay_pos = getattr(self, "journal", None), None, 0
         self.tier = os.environ.get("RB_MODEL_TIER", globals().get("DEFAULT_TIER", "default"))
         self.primary = self.tier
         self.backup_used = 0
@@ -1115,6 +1117,8 @@ class Runtime:
         """'Claude · 1.4 s · 812 in, 120 out' for the model calls behind one step (several for a repair or a backup)."""
         if not calls:
             return ""
+        if all(c["who"].startswith("reused") for c in calls):
+            return "reused from the run that stopped: no new call"
         who = ", ".join(dict.fromkeys(c["who"] for c in calls))
         secs = sum(c["secs"] for c in calls)
         tin, tout = sum(c["in"] for c in calls), sum(c["out"] for c in calls)
@@ -1186,7 +1190,166 @@ class Runtime:
         self.log("Not done", what + " was refused, so nothing happened.", "refused")
         return False
 
+    # ----- Resuming after a stop -----
+    # While a program runs, each finished model call, each answer you give and each message or Home Assistant action is
+    # written to a journal next to the program. A run that finishes deletes it. If a run stops part-way, the next start
+    # can replay it: the blocks run again from the top, and every step that matches the journal is reused instead of
+    # repeated (no new tokens, no asking twice, nothing sent twice). At the first step that differs, the rest runs live.
+    def _journal_path(self):
+        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
+        if not prog or not os.path.isfile(prog):
+            return None, None
+        with open(prog, "rb") as f:
+            digest = hashlib.sha256(f.read()).hexdigest()[:16]
+        base = os.path.splitext(os.path.basename(prog))[0]
+        return os.path.join(os.path.dirname(prog), f".{base}.resume.jsonl"), digest
+
+    async def _journal_start(self):
+        """At the start of a run: offer to pick up a run that stopped, then start a fresh journal."""
+        self.journal, self.replay, self.replay_pos, self._replay_noted = None, None, 0, False
+        path, digest = self._journal_path()
+        if not path:
+            return
+        old = []
+        if os.path.isfile(path):
+            try:
+                with open(path, encoding="utf-8") as f:
+                    lines = [json.loads(l) for l in f if l.strip()]
+                if lines and lines[0].get("program") == digest:
+                    old = lines[1:]
+                elif lines:
+                    print("\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)", flush=True)
+            except (OSError, ValueError):
+                old = []
+        if old:
+            choice = os.environ.get("RB_RESUME", "").strip().lower()
+            if choice in ("1", "yes", "true", "on"):
+                use = True
+            elif choice in ("0", "no", "false", "off"):
+                use = False
+            elif sys.stdin.isatty():
+                print(f"\n? The last run stopped part-way, after {len(old)} saved step{'s' if len(old) != 1 else ''}.", flush=True)
+                use = (await self._input("Pick up where it stopped, reusing those? [y/n] > ")).strip().lower() in ("y", "yes")
+            else:
+                use = False
+                print("\n(The last run stopped part-way. Set resume = yes in second-thought.ini to pick up where it stopped.)", flush=True)
+            if use:
+                self.replay = old
+                self.log("Resuming", f"Picking up the run that stopped: {len(old)} saved step{'s' if len(old) != 1 else ''} will be "
+                         "reused instead of repeated.", "resume")
+        try:
+            self.journal = open(path, "w", encoding="utf-8")
+            self.journal.write(json.dumps({"program": digest, "started": time.time()}) + "\n")
+            self.journal.flush()
+        except OSError:
+            self.journal = None
+        self._journal_file = path
+
+    def _journal_end(self, finished):
+        if self.journal:
+            self.journal.close()
+            self.journal = None
+            if finished:
+                try:
+                    os.remove(self._journal_file)
+                except OSError:
+                    pass
+            else:
+                print("Run the program again to pick up where it stopped.", flush=True)
+
+    @staticmethod
+    def _key(*parts):
+        return hashlib.sha256(json.dumps(parts, default=str, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()[:20]
+
+    def _replayed(self, kind, key):
+        """(True, value) if the next saved step is this one; otherwise (False, None), and replaying ends at the first difference."""
+        if self.replay is None:
+            return False, None
+        if self.replay_pos < len(self.replay):
+            e = self.replay[self.replay_pos]
+            if e.get("kind") == kind and e.get("key") == key:
+                self.replay_pos += 1
+                self._record(kind, key, e.get("value"))
+                if self.replay_pos == len(self.replay):
+                    self.replay = None
+                    self.log("Caught up", "That was the last saved step. From here the run carries on as usual.", "resume", calls=False)
+                return True, e.get("value")
+            self.log("Run differs here", "From this step the run isn't the same as the one that stopped, so the rest runs afresh.",
+                     "resume", calls=False)
+        self.replay = None
+        return False, None
+
+    def _record(self, kind, key, value):
+        if self.journal:
+            try:
+                line = json.dumps({"kind": kind, "key": key, "value": value}, ensure_ascii=False)
+            except (TypeError, ValueError):
+                return  # something that can't be saved (a picture): that step will simply run again
+            self.journal.write(line + "\n")
+            self.journal.flush()
+
     async def _call(self, prompt, want_json=False, picture=None, history=None, web=False):
+        key = self._key("call", self.current_tier, to_str(prompt), want_json, history, web, self.instructions,
+                        hashlib.sha256(picture.data).hexdigest() if isinstance(picture, Picture) else None)
+        hit, v = self._replayed("call", key)
+        if hit:
+            self._pending.append({"who": "reused from the run that stopped", "secs": 0.0, "in": 0, "out": 0, "ok": True, "prompt": to_str(prompt)})
+            return v
+        out = await self._call_live(prompt, want_json, picture, history, web)
+        self._record("call", key, out if want_json else to_str(out))
+        return out
+
+    async def _journaled(self, kind, key, live):
+        hit, v = self._replayed(kind, key)
+        if hit:
+            return v
+        out = await live()
+        self._record(kind, key, out)
+        return out
+
+    async def ask_me(self, q):
+        out = await self._journaled("ask_me", self._key(to_str(q)), lambda: self._ask_me_live(q))
+        self.answer = out
+        return out
+
+    async def approve(self, text):
+        return await self._journaled("approve", self._key(to_str(text)), lambda: self._approve_live(text))
+
+    async def choose(self, items):
+        return await self._journaled("choose", self._key(to_list(items)), lambda: self._choose_live(items))
+
+    async def choose_file(self):
+        return await self._journaled("choose_file", self._key("file"), self._choose_file_live)
+
+    async def ha_call(self, service, entity, data_text=""):
+        key = self._key(to_str(service), to_str(entity), to_str(data_text))
+        hit, v = self._replayed("ha_call", key)
+        if hit:
+            self.log("Home Assistant: " + to_str(service).strip(), f"{to_str(entity)}: already done before the stop, so not done again.", "reused")
+            return v
+        out = await self._ha_call_live(service, entity, data_text)
+        self._record("ha_call", key, out)
+        return out
+
+    async def ha_notify(self, target, text):
+        key = self._key(to_str(target), to_str(text))
+        hit, _ = self._replayed("ha_notify", key)
+        if hit:
+            self.log("Notification → " + (to_str(target).strip() or "persistent_notification"), "Already sent before the stop, so not sent again.", "reused")
+            return
+        await self._ha_notify_live(target, text)
+        self._record("ha_notify", key, True)
+
+    async def ha_speak(self, text, player):
+        key = self._key(to_str(text), to_str(player))
+        hit, _ = self._replayed("ha_speak", key)
+        if hit:
+            self.log("Spoken on " + (to_str(player).strip() or "a speaker"), "Already said before the stop, so not said again.", "reused")
+            return
+        await self._ha_speak_live(text, player)
+        self._record("ha_speak", key, True)
+
+    async def _call_live(self, prompt, want_json=False, picture=None, history=None, web=False):
         if self.ending:
             raise asyncio.CancelledError()
         self.calls += 1
@@ -1637,7 +1800,7 @@ class Runtime:
         return text
 
     # ----- Files -----
-    async def choose_file(self):
+    async def _choose_file_live(self):
         print("\n? Choose a file: type the path to a PDF, a .docx, or a text file (.txt, .md, .csv, .json ...).", flush=True)
         while True:
             path = (await self._input("Path > ")).strip().strip('"').strip("'")
@@ -1828,7 +1991,7 @@ class Runtime:
         self.log("Snapshot: " + camera, "Saved to " + self._picture_path(pic), "done")
         return pic
 
-    async def ha_call(self, service, entity, data_text=""):
+    async def _ha_call_live(self, service, entity, data_text=""):
         service, entity = to_str(service).strip(), to_str(entity).strip()
         if not re.match(r"^[a-z_]+\.[a-z0-9_]+$", service):
             raise RunError(f"“{service}” isn't a service name. Use domain.service, for example light.turn_off.")
@@ -1855,7 +2018,7 @@ class Runtime:
         self.log("Home Assistant: " + service, entity + (f" with {to_str(data_text).strip()}" if to_str(data_text).strip() else ""), "done")
         return True
 
-    async def ha_notify(self, target, text):
+    async def _ha_notify_live(self, target, text):
         target, text = to_str(target).strip() or "persistent_notification", to_str(text)
         if not text.strip():
             raise RunError("The 'notify' block has no message.")
@@ -1868,7 +2031,7 @@ class Runtime:
             await self._ha("POST", f"/api/services/notify/{svc}", {"message": text, "title": "Second Thought"})
         self.log("Notification → " + target, text, "sent")
 
-    async def ha_speak(self, text, player):
+    async def _ha_speak_live(self, text, player):
         text, player = to_str(text), to_str(player).strip()
         if not text.strip():
             raise RunError("The 'say' block has nothing to say.")
@@ -2242,7 +2405,7 @@ class Runtime:
             except EOFError:
                 raise RunError("This step needs an answer typed at the keyboard, but there's no one to type it.")
 
-    async def ask_me(self, q):
+    async def _ask_me_live(self, q):
         q = to_str(q)
         print("\n? " + q, flush=True)
         while True:
@@ -2252,7 +2415,7 @@ class Runtime:
                 return a
             print("  Type an answer first.")
 
-    async def approve(self, text):
+    async def _approve_live(self, text):
         print("\n? Do you approve this?\n", flush=True)
         for line in to_str(text).splitlines():
             print("    " + line)
@@ -2264,7 +2427,7 @@ class Runtime:
                 return False
             print("  Type y or n.")
 
-    async def choose(self, items):
+    async def _choose_live(self, items):
         items = to_list(items)
         if not items:
             raise RunError("'let me choose from' got an empty list.")
@@ -2791,9 +2954,15 @@ class Runtime:
         self.reset()
         self.run_label = label
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
+        finished = False
         try:
-            return await self._run(scripts)
+            if not self.schedule_mode:
+                await self._journal_start()
+            code = await self._run(scripts)
+            finished = code == 0
+            return code
         finally:
+            self._journal_end(finished)
             self.save_log()
 
     async def _run(self, scripts):
@@ -6299,7 +6468,8 @@ HOW TO MAP CODE
       "", "[run]",
       "; budget = 50000      stop a run before a model call once it has used this many tokens (0 = no limit)",
       "; save_log = yes      write each run's log to the logs folder, next to the program",
-      "; stream = yes        show Claude writing as it goes (yes or no; normally only when you run it in a terminal yourself)");
+      "; stream = yes        show Claude writing as it goes (yes or no; normally only when you run it in a terminal yourself)",
+      "; resume = yes        if a run stopped part-way, pick up where it stopped next time (yes or no; normally it asks you)");
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");

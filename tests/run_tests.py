@@ -613,6 +613,11 @@ async def new_feature_page_tests(pg):
                                     add(val(blk("rb_ask_number", inputs={"TEXT": tx("one")}))), add(val(blk("rb_ask_number", inputs={"TEXT": tx("two")})))))
         EXTRA["t_json_" + tier.split("-")[0]] = await export_python(pg, "t_json_" + tier.split("-")[0])
 
+    await load_state(pg, script(blk("rb_ask_me", inputs={"TEXT": tx("What bread?")}), add(val(blk("rb_ask", inputs={"TEXT": tx("one")}))),
+                                blk("rb_ha_notify", inputs={"TARGET": tx("persistent_notification"), "TEXT": tx("Half way there.")}),
+                                add(val(blk("rb_ask", inputs={"TEXT": tx("two")}))), add(val(blk("rb_ask", inputs={"TEXT": tx("three")})))))
+    EXTRA["t_resume"] = await export_python(pg, "t_resume")
+
     print("Agent: every path")
     done = lambda a: {"done": True, "answer": a}  # noqa: E731
     tool = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
@@ -1161,6 +1166,41 @@ def python_tests(codes):
         code_, out, err = run_json("t_json_gemini", FAKE_LOG=str(log))
         lines = [json.loads(l[7:]) for l in (log.read_text().splitlines() if log.exists() else []) if l.startswith("GEMINI ")]
         check(code_ == 0 and lines and all(l["json"] == "application/json" for l in lines), "Gemini is asked to reply in JSON")
+        print("Resuming after a stop")
+        folder = pathlib.Path(tmp) / "resume"
+        folder.mkdir()
+        prog = folder / "t_resume.py"
+        prog.write_text(EXTRA["t_resume"], encoding="utf-8")
+        journal = folder / ".t_resume.resume.jsonl"
+        def resume_run(**e):
+            log = folder / "fake.log"
+            log.unlink(missing_ok=True)
+            c, o, er = drive([sys.executable, "-u", str(prog)], dict(env, FAKE_LOG=str(log), **e), str(folder))
+            return c, o.replace("\r\n", "\n"), (log.read_text().count("CREATE") if log.exists() else 0)
+        notes = lambda: sum(1 for c in ha_calls if c[0] == "persistent_notification.create" and c[1].get("message") == "Half way there.")  # noqa: E731
+        code_, out, made = resume_run(FAKE_FAIL_AT="3")
+        check(code_ != 0 and journal.exists() and "Run the program again to pick up where it stopped." in out, "a run that stops part-way keeps a journal and says how to pick up")
+        sent = notes()
+        code_, out, made = resume_run(RB_RESUME="yes")
+        check(code_ == 0 and made == 1 and "? What bread?" not in out and notes() == sent and "▸ Resuming  [resume]" in out
+              and "Already sent before the stop" in out and "reused from the run that stopped: no new call" in out and "▸ Caught up" in out
+              and out.split("RESULT\n" + "=" * 60 + "\n")[-1].count("TEXT[") == 3 and not journal.exists(),
+              f"picking up reuses the saved answers, asks nothing twice, sends nothing twice, and makes only the missing call ({made} new call(s))")
+        resume_run(FAKE_FAIL_AT="3")
+        code_, out, made = resume_run(RB_RESUME="no")
+        check(code_ == 0 and made == 3 and "? What bread?" in out and not journal.exists(), "resume = no starts afresh")
+        resume_run(FAKE_FAIL_AT="3")
+        code_, out, made = resume_run()
+        check(code_ == 0 and made == 3 and "Set resume = yes" in out, "with nobody to ask and no setting, it starts afresh and says how to resume")
+        resume_run(FAKE_FAIL_AT="3")
+        code_, out, made = resume_run(RB_RESUME="yes", RB_MODEL_TIER="quick")
+        check(code_ == 0 and made == 3 and "? What bread?" not in out and "▸ Run differs here" in out,
+              "replay stops at the first step that differs (here, a different model), and the rest runs live")
+        resume_run(FAKE_FAIL_AT="3")
+        prog.write_text(EXTRA["t_resume"] + "\n# edited\n", encoding="utf-8")
+        code_, out, made = resume_run(RB_RESUME="yes")
+        check(code_ == 0 and made == 3 and "the program has changed since" in out, "if the program has changed, it starts afresh")
+        check("; resume = yes" in EXPORTS["review"]["second-thought.ini"], "the exported ini explains the resume setting")
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
