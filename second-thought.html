@@ -1012,6 +1012,7 @@ class Runtime:
         self.gemini = None
         self._input_lock = None
         self.no_schema = set()       # Claude models that refused a reply shape, so it isn't sent again
+        self.json_modes = {}         # (service, model) -> the JSON mode that service accepts: "schema", "object" or "none"
         self.schedule_mode = False
         self.transient_memory = {}   # kept across runs while this program keeps running
         self.reset()
@@ -1262,8 +1263,9 @@ class Runtime:
 
     async def _call_tier(self, tier, prompt, want_json, picture, history, web):
         """One model call on one tier. Returns the reply text."""
+        schema = want_json if isinstance(want_json, dict) else None
         if tier.startswith("gemini-"):
-            text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web)
+            text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web, schema)
             who = "Gemini"
         elif tier.startswith("perplexity-"):
             text, sources = await self._call_perplexity(MODELS.get(tier, MODELS["perplexity-default"]), prompt, picture, history)
@@ -1272,14 +1274,13 @@ class Runtime:
                 text += "\n\nSources:\n" + "\n".join(sources)
         elif tier.startswith("openrouter:"):
             who = "OpenRouter"
-            text = await self._call_openai(who, tier.split(":", 1)[1].strip() or MODELS["openrouter-default"], prompt, picture, history, web)
+            text = await self._call_openai(who, tier.split(":", 1)[1].strip() or MODELS["openrouter-default"], prompt, picture, history, web, schema)
         elif any(tier.startswith(pv["prefix"]) for pv in PROVIDERS.values()):
             pv = next(pv for pv in PROVIDERS.values() if tier.startswith(pv["prefix"]))
             who = pv["name"]
-            text = await self._call_openai(who, MODELS.get(tier, MODELS.get(pv["prefix"] + "default")), prompt, picture, history, web)
+            text = await self._call_openai(who, MODELS.get(tier, MODELS.get(pv["prefix"] + "default")), prompt, picture, history, web, schema)
         else:
-            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web,
-                                           want_json if isinstance(want_json, dict) else None)
+            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web, schema)
             who = "Claude"
         if not text:
             raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
@@ -1343,6 +1344,28 @@ class Runtime:
             sys.stdout.flush()
         return msg
 
+    async def _openai_json(self, provider, model, body, schema):
+        """Asks for JSON the strongest way this service accepts: the full shape (json_schema), then any JSON
+        (json_object), then plain. What works is remembered, and the reply is still checked afterwards."""
+        mode = self.json_modes.get((provider, model), "schema") if schema else "none"
+        while True:
+            if mode == "schema":
+                body["response_format"] = {"type": "json_schema", "json_schema": {"name": "reply", "schema": schema, "strict": False}}
+            elif mode == "object":
+                body["response_format"] = {"type": "json_object"}
+            else:
+                body.pop("response_format", None)
+            try:
+                return await asyncio.to_thread(self._openai_request, provider, body)
+            except RunError as e:
+                if mode == "none" or not ("(400)" in str(e) or "(422)" in str(e)):
+                    raise
+                mode = self.JSON_MODES[self.JSON_MODES.index(mode) + 1]
+                self.json_modes[(provider, model)] = mode
+                self.log("Structured replies", f"{provider} ({model}) wouldn't take that JSON mode, so it's asked "
+                         + ("for plain JSON instead." if mode == "object" else "without one, and its replies are checked after they arrive."),
+                         "note", calls=False)
+
     @staticmethod
     def _openai_request(provider, body, path="/chat/completions"):
         """One request to a model service that speaks OpenAI's format (Ollama, DeepSeek, xAI, OpenAI, Mistral, ...)."""
@@ -1371,7 +1394,9 @@ class Runtime:
             hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
             raise Retryable(f"Couldn't reach {provider} at {pv['base']} ({getattr(e, 'reason', e)}).{hint}")
 
-    async def _call_openai(self, provider, model, prompt, picture, history, web):
+    JSON_MODES = ("schema", "object", "none")
+
+    async def _call_openai(self, provider, model, prompt, picture, history, web, schema=None):
         messages = [{"role": "system", "content": self.instructions}] if self.instructions else []
         messages += [{"role": t["role"], "content": to_str(t["content"])} for t in history or []]
         if web:
@@ -1394,7 +1419,7 @@ class Runtime:
             body["max_tokens"] = MAX_TOKENS
         if provider == "Qwen":
             body["enable_thinking"] = False  # Qwen only thinks out loud when streaming
-        data = await asyncio.to_thread(self._openai_request, provider, body)
+        data = await self._openai_json(provider, model, body, schema)
         usage = data.get("usage") or {}
         self._count(provider, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
         try:
@@ -1430,7 +1455,7 @@ class Runtime:
                         sources.append(f"[{res.get('id', len(sources) + 1)}] {res.get('title') or res['url']}: {res['url']}")
         return text.strip(), sources
 
-    async def _call_gemini(self, model, prompt, picture, history, web):
+    async def _call_gemini(self, model, prompt, picture, history, web, schema=None):
         try:
             from google import genai
             from google.genai import types
@@ -1450,12 +1475,23 @@ class Runtime:
             text = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
             parts = [types.Part.from_text(text=text)]
         contents.append(types.UserContent(parts=parts))
+        json_out = bool(schema) and not web and self.json_modes.get(("Gemini", model)) != "none"
         config = types.GenerateContentConfig(
             system_instruction=self.instructions or None,
             max_output_tokens=MAX_TOKENS,
             tools=[types.Tool(google_search=types.GoogleSearch())] if web else None,
+            **({"response_mime_type": "application/json"} if json_out else {}),  # Gemini then writes only JSON
         )
-        resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
+        try:
+            resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
+        except Exception as e:  # noqa: BLE001
+            if not json_out or (getattr(e, "code", None) or getattr(e, "status_code", None)) not in (400, 422):
+                raise
+            self.json_modes[("Gemini", model)] = "none"
+            self.log("Structured replies", f"Gemini ({model}) wouldn't take JSON mode, so its replies are checked after they arrive.",
+                     "note", calls=False)
+            config.response_mime_type = None
+            resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
         um = getattr(resp, "usage_metadata", None)
         self._count("Gemini",
                     getattr(um, "prompt_token_count", None) or getattr(um, "input_tokens", 0),

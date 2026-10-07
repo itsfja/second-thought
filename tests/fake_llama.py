@@ -10,6 +10,9 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent / "fakeapi"))
 from anthropic import _Messages  # noqa: E402  (shared fake replies)
 
 
+REFUSE_JSON = set()  # JSON modes this stand-in refuses with a 400, like a service that doesn't support them ("json_schema", "json_object")
+
+
 def start():
     calls = []
 
@@ -36,8 +39,18 @@ def start():
                 return
             last = body["messages"][-1]["content"]
             text = last if isinstance(last, str) else " ".join(p.get("text", "") for p in last if p.get("type") == "text")
+            rf = (body.get("response_format") or {}).get("type")
             calls.append({"model": body.get("model"), "image": not isinstance(last, str),
-                          "system": body["messages"][0]["role"] == "system"})
+                          "system": body["messages"][0]["role"] == "system", "json": rf})
+            if rf and rf in REFUSE_JSON:
+                # Like a service that doesn't support this JSON mode.
+                err = json.dumps({"error": {"message": f"response_format type '{rf}' is not supported"}}).encode()
+                self.send_response(400)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(err)))
+                self.end_headers()
+                self.wfile.write(err)
+                return
             if str(body.get("model", "")).startswith("gpt-") and "max_tokens" in body:
                 # Like the real OpenAI API: newer GPT models only accept max_completion_tokens.
                 err = json.dumps({"error": {"message": "Unsupported parameter: 'max_tokens'. Use 'max_completion_tokens' instead."}}).encode()

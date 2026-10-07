@@ -608,6 +608,11 @@ async def new_feature_page_tests(pg):
     await pg.evaluate("window.__truncate = 0")
     EXTRA["t_long"] = await export_python(pg, "t_long")
 
+    for tier in ("mistral-default", "gemini-default"):
+        await load_state(pg, script(blk("rb_use_model", fields={"TIER": tier}),
+                                    add(val(blk("rb_ask_number", inputs={"TEXT": tx("one")}))), add(val(blk("rb_ask_number", inputs={"TEXT": tx("two")})))))
+        EXTRA["t_json_" + tier.split("-")[0]] = await export_python(pg, "t_json_" + tier.split("-")[0])
+
     print("Agent: every path")
     done = lambda a: {"done": True, "answer": a}  # noqa: E731
     tool = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
@@ -1131,6 +1136,31 @@ def python_tests(codes):
         check(code_ == 0 and "STREAM" not in (log.read_text() if log.exists() else "") and "writing:" not in out,
               "when the output isn't a terminal, replies aren't streamed by default")
         check("; stream = yes" in EXPORTS["review"]["second-thought.ini"], "the exported ini explains the stream setting")
+        print("Native JSON modes in Python")
+        for name in ("t_json_mistral", "t_json_gemini"):
+            (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
+        run_json = lambda name, **e: drive([sys.executable, "-u", str(pathlib.Path(tmp) / f"{name}.py")], dict(env, **e), tmp)  # noqa: E731
+        before = len(llama_calls)
+        code_, out, err = run_json("t_json_mistral")
+        modes = [c["json"] for c in llama_calls[before:]]
+        check(code_ == 0 and modes == ["json_schema", "json_schema"] and "RESULT" in out, f"an OpenAI-style service is asked for the reply's JSON Schema ({modes})")
+        fake_llama.REFUSE_JSON.update({"json_schema"})
+        before = len(llama_calls)
+        code_, out, err = run_json("t_json_mistral")
+        modes = [c["json"] for c in llama_calls[before:]]
+        check(code_ == 0 and modes == ["json_schema", "json_object", "json_object"] and out.count("▸ Structured replies  [note]") == 1,
+              f"a service that refuses the schema falls back to plain JSON mode, remembers it, and says so once ({modes})")
+        fake_llama.REFUSE_JSON.update({"json_object"})
+        before = len(llama_calls)
+        code_, out, err = run_json("t_json_mistral")
+        modes = [c["json"] for c in llama_calls[before:]]
+        check(code_ == 0 and modes == ["json_schema", "json_object", None, None] and "RESULT" in out,
+              f"a service with no JSON mode at all is asked without one, and still works ({modes})")
+        fake_llama.REFUSE_JSON.clear()
+        log = pathlib.Path(tmp) / "gemini.log"
+        code_, out, err = run_json("t_json_gemini", FAKE_LOG=str(log))
+        lines = [json.loads(l[7:]) for l in (log.read_text().splitlines() if log.exists() else []) if l.startswith("GEMINI ")]
+        check(code_ == 0 and lines and all(l["json"] == "application/json" for l in lines), "Gemini is asked to reply in JSON")
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
