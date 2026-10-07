@@ -413,6 +413,7 @@ import asyncio
 import base64
 import contextlib
 import contextvars
+import copy
 import datetime
 import json
 import math
@@ -1013,6 +1014,8 @@ class Runtime:
         self.last_error = ""
         self.instructions = ""
         self.chats = {}
+        self.reflect = None          # the review loop running now: earlier problems and its best draft so far
+        self.checkpoints = {}        # 'save checkpoint' snapshots, by name
         self.usage = {}  # provider -> [tokens in, tokens out]
         try:  # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
             self.budget = max(0, int(float(os.environ.get("RB_BUDGET", "0") or 0)))
@@ -1990,24 +1993,48 @@ class Runtime:
         if not self.problems:
             self.log("Revise", "No review problems recorded, so nothing to fix.", "skipped")
             return
+        fixed = [e for e in (self.reflect or {}).get("earlier", []) if e not in self.problems]
+        keep = ("\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + "\n".join("- " + e for e in fixed)) if fixed else ""
         self.draft = await self._call("Revise the draft so it fixes every problem listed. Change nothing else that works. "
                                       "Reply with only the improved piece.\n\nTask:\n" + (self.task or "(none given)") +
-                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + "\n\nDraft:\n" + self.draft)
+                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft)
         self.log("Revise to fix the problems", self.draft, "revised")
 
     def set_draft(self, t):
         self.draft = to_str(t)
 
-    async def review(self, criteria, label="Review"):
+    @contextlib.contextmanager
+    def reviewing(self):
+        """Around a 'review … up to N rounds' loop: remembers each round's problems and its best draft."""
+        before = self.reflect
+        self.reflect = {"earlier": [], "best": None, "round": 0}
+        try:
+            yield
+        finally:
+            self.reflect = before
+
+    async def review(self, criteria, label="Review", in_loop=False):
         self._need_draft()
+        loop = self.reflect if in_loop else None
+        earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
+                   "and list it again if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
         v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
-                             to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft +
+                             to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
                              '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
                              "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
         approved = v["approved"] is True
         problems = [to_str(p) for p in (v.get("problems") or [])]
         self.approved = approved
         self.problems = [] if approved else ([p for p in problems if p] or ["Does not yet meet the criteria."])
+        if loop is not None:
+            loop["round"] += 1
+            best = loop["best"]
+            if best is None or len(self.problems) <= best["n"]:  # a tie goes to the newer draft
+                loop["best"] = {"draft": self.draft, "problems": list(self.problems), "n": len(self.problems), "round": loop["round"]}
+            for p_ in self.problems:
+                if p_ not in loop["earlier"]:
+                    loop["earlier"].append(p_)
+            del loop["earlier"][:-12]
         if approved:
             self.log(label, "Meets every criterion.", "approved")
         else:
@@ -2019,7 +2046,45 @@ class Runtime:
 
     def out_of_rounds(self):
         self.out_of_rounds_hit = True
+        best = (self.reflect or {}).get("best")
+        if best and best["round"] != self.reflect["round"]:
+            self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
+            self.log("Kept the best draft", f"Went back to the draft from round {best['round']}: it had the fewest problems "
+                     f"({best['n']}). The rounds after it didn't improve on it.", "best draft")
         self.log("Review", "Out of rounds. Keeping the best effort.", "failed")
+
+    # ----- Checkpoints -----
+    _SNAPSHOT = ("task", "draft", "problems", "approved", "answer", "result")
+
+    def save_checkpoint(self, name):
+        name = to_str(name).strip()
+        if not name:
+            raise RunError("The 'save checkpoint' block needs a name.")
+        state = {k: getattr(self, k) for k in self._SNAPSHOT}
+        state["vars"] = dict(self.vars)
+        try:
+            state = copy.deepcopy(state)
+        except Exception:  # noqa: BLE001 - something uncopyable: keep references instead
+            state = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v) for k, v in state.items()}
+        self.checkpoints[name.lower()] = state
+        self.log("Checkpoint “" + name + "”", "Saved the task, draft, review, result and variables" +
+                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "saved")
+
+    def restore_checkpoint(self, name):
+        name = to_str(name).strip()
+        state = self.checkpoints.get(name.lower())
+        if state is None:
+            raise RunError(f"There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.")
+        try:  # a copy, so the same checkpoint can be gone back to more than once
+            state = copy.deepcopy(state)
+        except Exception:  # noqa: BLE001
+            state = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v) for k, v in state.items()}
+        for k in self._SNAPSHOT:
+            setattr(self, k, state[k])
+        self.vars.clear()
+        self.vars.update(state["vars"])
+        self.log("Back to checkpoint “" + name + "”", "Restored the task, draft, review, result and variables" +
+                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "restored")
 
     # ----- You (the person at the keyboard) -----
     async def _input(self, prompt):
@@ -2411,7 +2476,8 @@ class Runtime:
         self.set_draft(last or "The agent stopped before it had a result.")
 
     # ----- Saved programs run as a block -----
-    STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error")
+    STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error",
+             "checkpoints", "reflect")
 
     async def run_program(self, name, fn, value=""):
         """Runs a saved program's 'when Run is clicked' script with its own draft, result and variables.
@@ -2429,6 +2495,7 @@ class Runtime:
         saved_vars = dict(self.vars)
         self.task, self.draft, self.problems, self.approved, self.answer = "", "", [], None, ""
         self.result, self.out_of_rounds_hit, self.instructions, self.chats, self.last_error = [], False, "", {}, ""
+        self.checkpoints, self.reflect = {}, None
         self.vars.clear()
         token = MESSAGE_VALUE.set(value)
         self.programs.append(name)
@@ -3662,6 +3729,7 @@ Files and errors:
   rb_try: statement inputs DO and FAIL (runs FAIL if anything in DO fails).  rb_retry: inputs TIMES, statement input DO (retries temporary failures).
   rb_error: value, the most recent failure message.
   rb_budget (TOKENS): stop the run before a model call once it has used this many tokens.  rb_tokens_used: value, tokens used so far.
+  rb_checkpoint_save, rb_checkpoint_restore: fields NAME. Snapshot and restore the task, draft, review, result and variables (copy.deepcopy of state, then putting it back).
   rb_run_program: fields NAME (a saved program's name); input VALUE; value, that program's result. Inside it, rb_msg_value is VALUE.
   Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
 Agent (the model chooses its own steps):
@@ -3902,6 +3970,10 @@ HOW TO MAP CODE
     S("rb_revise", "revise to fix the review's problems", [], { style:"draft", tooltip:"Claude fixes the problems the last review found." }),
     S("rb_set_draft", "set draft to %1", [val("TEXT")], { style:"draft" }),
     V("rb_draft", "draft", [], "String", { style:"draft" }),
+    S("rb_checkpoint_save", "save checkpoint %1", [{ type:"field_input", name:"NAME", text:"good draft" }], { style:"draft",
+      tooltip:"Remembers the task, draft, review, result and variables as they are now, under this name, for the rest of the run." }),
+    S("rb_checkpoint_restore", "go back to checkpoint %1", [{ type:"field_input", name:"NAME", text:"good draft" }], { style:"draft",
+      tooltip:"Puts the task, draft, review, result and variables back as they were at 'save checkpoint'. Memory, files and messages already sent aren't undone." }),
     V("rb_task_get", "task", [], "String", { style:"draft" }),
     /* Ask Claude */
     V("rb_ask", "ask Claude %1", [val("TEXT")], "String", { style:"claude", inputsInline:true, tooltip:"Claude answers in text." }),
@@ -3916,7 +3988,7 @@ HOW TO MAP CODE
       message1:"up to %1 rounds; when it fails, do", args1:[val("ROUNDS")],
       message2:"%1", args2:[{ type:"input_statement", name:"FIX" }],
       previousStatement:null, nextStatement:null, style:"review",
-      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again." },
+      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft with the fewest problems is kept, not just the last one." },
     S("rb_review", "review the draft against %1", [val("CRITERIA")], { style:"review", tooltip:"One review. Use 'draft passed review' and 'review problems' afterwards." }),
     V("rb_passed", "draft passed review", [], "Boolean", { style:"review" }),
     V("rb_problems", "review problems", [], "Array", { style:"review" }),
@@ -4070,7 +4142,8 @@ HOW TO MAP CODE
     { kind:"sep" },
     { kind:"category", name:"Draft", categorystyle:"draft", contents:[
       B("rb_task", { TEXT:L("Describe the job here") }), B("rb_generate"), B("rb_rework", { TEXT:L("make it friendlier") }),
-      B("rb_revise"), B("rb_set_draft", { TEXT:T("") }), B("rb_draft"), B("rb_task_get")
+      B("rb_revise"), B("rb_set_draft", { TEXT:T("") }), B("rb_draft"), B("rb_task_get"),
+      B("rb_checkpoint_save"), B("rb_checkpoint_restore")
     ]},
     { kind:"category", name:"Ask Claude", categorystyle:"claude", contents:[
       B("rb_ask", { TEXT:L("Suggest a name for a sourdough starter") }),
@@ -6313,19 +6386,22 @@ HOW TO MAP CODE
           case "rb_rework": E("await R.rework(" + I("TEXT", '""') + ")"); break;
           case "rb_revise": E("await R.revise()"); break;
           case "rb_set_draft": E("R.set_draft(" + I("TEXT", '""') + ")"); break;
+          case "rb_checkpoint_save": E("R.save_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
+          case "rb_checkpoint_restore": E("R.restore_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
           case "rb_review": E("await R.review(" + I("CRITERIA", '""') + ")"); break;
           case "rb_reflect": {
             const crit = tmp("criteria"), max = tmp("max_rounds"), rnd = tmp("round");
             E(crit + " = " + I("CRITERIA", '""'));
             E(max + " = R.rounds(" + I("ROUNDS", "3") + ")");
-            E("for " + rnd + " in range(1, " + max + " + 2):");
-            out.push(pad + "    R.tick()");
-            out.push(pad + "    if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + ")):");
-            out.push(pad + "        break");
-            out.push(pad + "    if " + rnd + " > " + max + ":");
-            out.push(pad + "        R.out_of_rounds()");
-            out.push(pad + "        break");
-            stmts(b.getInputTargetBlock("FIX"), ind + 1, Object.assign({}, ctx, { loop:true }), out);
+            E("with R.reviewing():");
+            out.push(pad + "    for " + rnd + " in range(1, " + max + " + 2):");
+            out.push(pad + "        R.tick()");
+            out.push(pad + "        if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + "), in_loop=True):");
+            out.push(pad + "            break");
+            out.push(pad + "        if " + rnd + " > " + max + ":");
+            out.push(pad + "            R.out_of_rounds()");
+            out.push(pad + "            break");
+            stmts(b.getInputTargetBlock("FIX"), ind + 2, Object.assign({}, ctx, { loop:true }), out);
             break;
           }
           case "rb_ask_me": E("await R.ask_me(" + I("TEXT", '""') + ")"); break;
@@ -7556,8 +7632,17 @@ HOW TO MAP CODE
     return JSON.stringify(v === undefined ? null : v);
   }
 
+  /* Checkpoints: what 'save checkpoint' keeps. Lists, records and variables are copied, so later changes don't reach them. */
+  const CHECKPOINT_STATE = ["task", "draft", "problems", "approved", "answer", "result", "vars"];
+  function cloneState(v){
+    if (v instanceof Map) return new Map([...v].map(([k, x]) => [k, cloneState(x)]));
+    if (Array.isArray(v)) return v.map(cloneState);
+    if (isRec(v)) return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, cloneState(x)]));
+    return v;  // text, numbers, yes/no and pictures (which never change) are kept as they are
+  }
+
   /* 'run program': a saved program as a step, with its own draft, result and variables. */
-  const RUN_STATE = ["task", "draft", "problems", "approved", "answer", "result", "vars", "instructions", "chats", "outOfRounds", "lastError"];
+  const RUN_STATE = ["task", "draft", "problems", "approved", "answer", "result", "vars", "instructions", "chats", "outOfRounds", "lastError", "checkpoints", "reflect"];
   async function runProgram(name, value, tc){
     name = String(name || "").trim();
     if (!name) fail("The 'run program' block needs the name of a saved program.");
@@ -7573,7 +7658,7 @@ HOW TO MAP CODE
       const problem = subProgramProblem(sub);
       if (problem) fail("The program \u201c" + name + "\u201d " + problem + ", so it can't run as a block.");
       const saved = {}; RUN_STATE.forEach(k => saved[k] = run[k]);
-      Object.assign(run, { task:"", draft:"", problems:[], approved:undefined, answer:"", result:[], vars:new Map(), instructions:"", chats:new Map(), outOfRounds:false, lastError:"" });
+      Object.assign(run, { task:"", draft:"", problems:[], approved:undefined, answer:"", result:[], vars:new Map(), instructions:"", chats:new Map(), outOfRounds:false, lastError:"", checkpoints:new Map(), reflect:null });
       run.programs.push(name);
       const st = addStep("Program: " + name, { text:"Started" + (str(value).trim() ? " with: " + short(value, 200) : ".") });
       st.done("running", "");
@@ -8028,16 +8113,26 @@ HOW TO MAP CODE
   const needTask = () => { if (!run.task) fail("Add a 'set task to' block before this step."); };
   const needDraft = () => { if (!run.draft) fail("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step."); };
 
-  async function reviewOnce(criteria, label){
+  async function reviewOnce(criteria, label, inLoop){
     const s = addStep(label);
+    const loop = inLoop ? run.reflect : null;
+    const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again if it has come back:\n" +
+      loop.earlier.map(e => "- " + e).join("\n") : "";
     const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" + criteria +
-      "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft +
+      "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
       '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. ' +
       "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS.review);
     const approved = v.approved === true;
     const problems = Array.isArray(v.problems) ? v.problems.map(str).filter(Boolean) : [];
     run.approved = approved;
     run.problems = approved ? [] : (problems.length ? problems : ["Does not yet meet the criteria."]);
+    if (loop) {
+      loop.round++;
+      if (!loop.best || run.problems.length <= loop.best.n)  // a tie goes to the newer draft
+        loop.best = { draft:run.draft, problems:run.problems.slice(), n:run.problems.length, round:loop.round };
+      run.problems.forEach(p => { if (!loop.earlier.includes(p)) loop.earlier.push(p); });
+      loop.earlier = loop.earlier.slice(-12);
+    }
     if (approved) { s.text("Meets every criterion."); s.done("approved", "ok"); }
     else { s.list(run.problems); s.done("needs work", "warn"); }
     return { approved, step:s };
@@ -8249,24 +8344,53 @@ HOW TO MAP CODE
         needDraft();
         if (!run.problems.length) { addStep("Revise", { text:"No review problems recorded, so nothing to fix." }).done("skipped", "warn"); break; }
         const s = addStep("Revise to fix the problems");
+        const fixed = run.reflect ? run.reflect.earlier.filter(e => !run.problems.includes(e)) : [];
+        const keep = fixed.length ? "\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + fixed.map(e => "- " + e).join("\n") : "";
         run.draft = await ask("Revise the draft so it fixes every problem listed. Change nothing else that works. Reply with only the improved piece.\n\nTask:\n" +
-          (run.task || "(none given)") + "\n\nProblems:\n" + run.problems.map(p => "- " + p).join("\n") + "\n\nDraft:\n" + run.draft, s);
+          (run.task || "(none given)") + "\n\nProblems:\n" + run.problems.map(p => "- " + p).join("\n") + keep + "\n\nDraft:\n" + run.draft, s);
         s.done("revised", "ok");
         break;
       }
       case "rb_set_draft": run.draft = str(await input(b, tc, "TEXT")); break;
+      case "rb_checkpoint_save": {
+        const name = String(b.getFieldValue("NAME") || "").trim();
+        if (!name) fail("The 'save checkpoint' block needs a name.");
+        const snap = {}; CHECKPOINT_STATE.forEach(k => snap[k] = cloneState(run[k]));
+        run.checkpoints.set(name.toLowerCase(), snap);
+        addStep("Checkpoint \u201c" + name + "\u201d", { text:"Saved the task, draft, review, result and variables" + (run.draft ? ". Draft: " + short(run.draft, 80) : ".") }).done("saved", "ok");
+        break;
+      }
+      case "rb_checkpoint_restore": {
+        const name = String(b.getFieldValue("NAME") || "").trim(), snap = run.checkpoints.get(name.toLowerCase());
+        if (!snap) fail("There's no checkpoint called \u201c" + name + "\u201d in this run. Put a 'save checkpoint' block before this one.");
+        CHECKPOINT_STATE.forEach(k => run[k] = cloneState(snap[k]));
+        addStep("Back to checkpoint \u201c" + name + "\u201d", { text:"Restored the task, draft, review, result and variables" + (run.draft ? ". Draft: " + short(run.draft, 80) : ".") }).done("restored", "ok");
+        break;
+      }
       case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), "Review"); break; }
       case "rb_reflect": {
         needDraft();
         const criteria = str(await input(b, tc, "CRITERIA"));
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
-        for (let round = 1; round <= max + 1; round++) {
-          mark(b);
-          const { approved, step } = await reviewOnce(criteria, "Review, round " + round);
-          if (approved) break;
-          if (round > max) { step.done("failed, out of rounds", "bad"); run.outOfRounds = true; break; }
-          if ((await body(b, "FIX", tc)) === "break") break;
-        }
+        const before = run.reflect;
+        run.reflect = { earlier:[], best:null, round:0 };
+        try {
+          for (let round = 1; round <= max + 1; round++) {
+            mark(b);
+            const { approved, step } = await reviewOnce(criteria, "Review, round " + round, true);
+            if (approved) break;
+            if (round > max) {
+              step.done("failed, out of rounds", "bad"); run.outOfRounds = true;
+              const best = run.reflect.best;
+              if (best && best.round !== run.reflect.round) {
+                run.draft = best.draft; run.problems = best.problems.slice(); run.approved = false;
+                addStep("Kept the best draft", { text:"Went back to the draft from round " + best.round + ": it had the fewest problems (" + best.n + "). The rounds after it didn't improve on it." }).done("best draft", "warn");
+              }
+              break;
+            }
+            if ((await body(b, "FIX", tc)) === "break") break;
+          }
+        } finally { run.reflect = before; }
         break;
       }
       case "rb_ask_me": { run.answer = await askPerson(str(await input(b, tc, "TEXT"))); break; }
@@ -8643,7 +8767,7 @@ HOW TO MAP CODE
             ctls:new Set(), stoppers:new Set(), threads:new Set(), started:0, broadcasts:0, sample:null,
             active:true, ready:false, pending:hats.slice(), timerStart:Date.now(),
             msgWaiters:new Map(), msgNames:new Map(), msgWaiting:0, instructions:"", chats:new Map(), lastError:"",
-            budget:0, tokIn:0, tokOut:0, askFirst:new Set(), programs:[], t0:Date.now(), reason };
+            budget:0, tokIn:0, tokOut:0, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map() };
     $("run").disabled = true; $("stop").disabled = false; setStatus("running");
     const started = Date.now();
     try {

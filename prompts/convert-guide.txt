@@ -108,6 +108,7 @@ Files and errors:
   rb_try: statement inputs DO and FAIL (runs FAIL if anything in DO fails).  rb_retry: inputs TIMES, statement input DO (retries temporary failures).
   rb_error: value, the most recent failure message.
   rb_budget (TOKENS): stop the run before a model call once it has used this many tokens.  rb_tokens_used: value, tokens used so far.
+  rb_checkpoint_save, rb_checkpoint_restore: fields NAME. Snapshot and restore the task, draft, review, result and variables (copy.deepcopy of state, then putting it back).
   rb_run_program: fields NAME (a saved program's name); input VALUE; value, that program's result. Inside it, rb_msg_value is VALUE.
   Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
 Agent (the model chooses its own steps):

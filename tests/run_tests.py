@@ -59,7 +59,7 @@ window.claude = { use: async n => {
   if (n !== 'sample') return null;
   const lastText = input => Array.isArray(input) ? input[input.length - 1].content : input;
   const down = o => { if (window.__failTier && o && o.modelTier === window.__failTier) throw new Error('service unavailable (test)'); };
-  const f = async (input, o = {}) => { down(o); const p = lastText(input);
+  const f = async (input, o = {}) => { down(o); const p = lastText(input); (window.__textPrompts = window.__textPrompts || []).push(p);
     const t = p.includes('Reply with only the SVG') ? SVG : 'ANSWER(' + p.slice(0, 24).replace(/\n/g, ' ') + ')';
     o.onText && o.onText({ text:t, delta:t }); return { text:t, truncated:false }; };
   f.json = async (input, o = {}) => { down(o); const p = lastText(input);
@@ -225,6 +225,46 @@ async def agent_run(pg, tools, replies, steps=6, answer=None, export=None, plan=
 AGENT_SCRIPTS = {}  # exported program -> the replies its stand-in Claude gives in Python
 
 
+def var(vid, name):
+    return {"id": vid, "name": name}
+
+
+def setv(vid, value):
+    return blk("variables_set", fields={"VAR": {"id": vid}}, inputs={"VALUE": value})
+
+
+def getv(vid):
+    return val({"type": "variables_get", "fields": {"VAR": {"id": vid}}})
+
+
+def join(*parts):
+    return val({"type": "text_join", "extraState": {"itemCount": len(parts)}, "inputs": {f"ADD{i}": x for i, x in enumerate(parts)}})
+
+
+def with_vars(state, *vs):
+    state["variables"] = list(vs)
+    return state
+
+
+def review_loop_prog(rounds=3):
+    """The draft is "v1", "v2", ... one per round, so the test can see which one is kept."""
+    fix = blk("math_change", fields={"VAR": {"id": "v_n"}}, inputs={"DELTA": nm(1)},
+              nxt=blk("rb_set_draft", inputs={"TEXT": join(tx("v"), getv("v_n"))}))
+    return with_vars(script(setv("v_n", nm(1)), blk("rb_set_draft", inputs={"TEXT": join(tx("v"), getv("v_n"))}),
+                            blk("rb_reflect", inputs={"CRITERIA": tx("clear"), "ROUNDS": nm(rounds), "FIX": {"block": fix}}),
+                            add(val(blk("rb_draft"))), add(val(blk("rb_problems")))), var("v_n", "n"))
+
+
+def checkpoint_prog():
+    return with_vars(script(blk("rb_set_draft", inputs={"TEXT": tx("good")}), setv("v_x", nm(1)), add(tx("r1")),
+                            blk("rb_checkpoint_save", fields={"NAME": "cp"}),
+                            blk("rb_set_draft", inputs={"TEXT": tx("bad")}), setv("v_x", nm(2)), add(tx("r2")),
+                            blk("rb_checkpoint_restore", fields={"NAME": "cp"}),
+                            blk("rb_set_draft", inputs={"TEXT": tx("worse")}),
+                            blk("rb_checkpoint_restore", fields={"NAME": "CP"}),
+                            add(join(val(blk("rb_draft")), tx(" "), getv("v_x")))), var("v_x", "x"))
+
+
 async def load_state(pg, state):
     await pg.evaluate("s => { const w = Blockly.getMainWorkspace(); w.clear(); Blockly.serialization.workspaces.load(s, w); }", state)
 
@@ -369,6 +409,41 @@ async def new_feature_page_tests(pg):
     check(status.startswith("done") and items == ["true"], f"a review reply without 'approved' is fixed, and 'problems' may be left out ({items})")
     await load_state(pg, num_prog("one", "two"))
     EXTRA["t_json"] = await export_python(pg, "t_json")
+
+    print("Review loop: best draft, earlier rounds, checkpoints")
+    nope = lambda *p_: {"approved": False, "problems": list(p_)}  # noqa: E731
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a", "b"), nope("a"), nope("a", "b", "c"), nope("a", "b")])
+    kept = [t for n, p_, t in steps if n == "Kept the best draft"]
+    check(status.startswith("done") and items == ["v2", "a"] and kept and "round 2" in kept[0] and "fewest problems (1)" in kept[0],
+          f"out of rounds, the draft with the fewest problems is kept, with its own problems ({items})")
+    check("Earlier rounds" not in prompts[0] and "Earlier rounds of this review found" in prompts[1] and "- a\n- b" in prompts[1]
+          and "- a\n- b\n- c" in prompts[3], "each round, the reviewer is shown the problems earlier rounds found")
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a"), {"approved": True}])
+    check(status.startswith("done") and items[0] == "v2" and "Kept the best draft" not in [n for n, *_ in steps], "an approved draft is kept as it is")
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a", "b"), nope("a"), nope("a"), nope("a")])
+    check(status.startswith("done") and items[0] == "v4" and "Kept the best draft" not in [n for n, *_ in steps],
+          "when the last draft is as good as any, it stays (a tie goes to the newer draft)")
+    revise_loop = script(blk("rb_set_draft", inputs={"TEXT": tx("x")}),
+                         blk("rb_reflect", inputs={"CRITERIA": tx("short; titled"), "ROUNDS": nm(2), "FIX": {"block": blk("rb_revise")}}),
+                         blk("rb_review", inputs={"CRITERIA": tx("short")}))
+    await pg.evaluate("window.__textPrompts = []")
+    status, steps, items, prompts = await scripted(revise_loop, [nope("too long", "no title"), nope("no title"), nope("no title"), {"approved": True}])
+    revises = [q for q in await pg.evaluate("window.__textPrompts") if q.startswith("Revise the draft")]
+    check(status.startswith("done") and len(revises) == 2 and "Don't bring them back" not in revises[0]
+          and "Don't bring them back:\n- too long\n\nDraft:" in revises[1], "revise is told which problems earlier rounds fixed, so it doesn't bring them back")
+    check("Earlier rounds" not in prompts[-1], "a review outside the loop isn't shown the loop's earlier problems")
+    status, steps, items, prompts = await scripted(checkpoint_prog(), [])
+    check(status.startswith("done") and items == ["r1", "good 1"] and [n for n, *_ in steps].count("Back to checkpoint \u201ccp\u201d") == 1,
+          f"go back to checkpoint restores the draft, result and variables, and works more than once ({items})")
+    await load_state(pg, script(blk("rb_checkpoint_restore", fields={"NAME": "nowhere"})))
+    status = await run_program(pg)
+    stopped = [t for n, p_, t in await step_texts(pg) if n == "Run stopped"]
+    check(status == "error" and stopped and "no checkpoint called" in stopped[0], "going back to a checkpoint that wasn't saved says so")
+    await load_state(pg, review_loop_prog())
+    EXTRA["t_bestdraft"] = await export_python(pg, "t_bestdraft")
+    await load_state(pg, checkpoint_prog())
+    EXTRA["t_checkpoint"] = await export_python(pg, "t_checkpoint")
+    check("with R.reviewing():" in EXTRA["t_bestdraft"] and 'R.restore_checkpoint("cp")' in EXTRA["t_checkpoint"], "exported Python has the review loop and checkpoints")
 
     print("Agent")
     done = lambda a: {"done": True, "answer": a}  # noqa: E731
@@ -903,6 +978,17 @@ def python_tests(codes):
         check(log.exists() and log.read_text().count("SCHEMA ok") >= 2, "Claude is sent each reply's shape (and the shapes are ones the API accepts)")
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_json.py")], dict(env, FAKE_REJECT_SCHEMA="1"), tmp)
         check(code_ == 0 and out.count("▸ Structured replies  [note]") == 1, "if a model refuses reply shapes, the run carries on without them, and says so once")
+        print("Review loop and checkpoints in Python")
+        for name in ("t_bestdraft", "t_checkpoint"):
+            (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
+        reviews = [json.dumps({"approved": False, "problems": p_}) for p_ in (["a", "b"], ["a"], ["a", "b", "c"], ["a", "b"])]
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_bestdraft.py")], dict(env, FAKE_JSON_SCRIPT=json.dumps(reviews)), tmp)
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and "▸ Kept the best draft  [best draft]" in out and "RESULT (best effort)\n" + "=" * 60 + "\nv2\n\na\n" in out,
+              "t_bestdraft.py keeps round 2's draft" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_checkpoint.py")], env, tmp)
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and "RESULT\n" + "=" * 60 + "\nr1\n\ngood 1\n" in out, "t_checkpoint.py goes back to its checkpoint, twice" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
