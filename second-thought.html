@@ -908,6 +908,81 @@ def _parse_json(text):
     raise BadJSON("Claude's reply came back in an unreadable format. Run again.")
 
 
+# ----- Structured replies -----
+# Every block that wants JSON names the shape it expects. Claude is held to that shape while it writes (constrained
+# decoding). Every other model is checked after it replies, and asked once to fix a reply that doesn't fit.
+# The page keeps a copy of these shapes (SCHEMAS in second-thought.html); keep the two the same.
+_ANY = {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}]}
+
+
+def _obj(props, required=()):
+    return {"type": "object", "properties": props, "required": list(required), "additionalProperties": False}
+
+
+SCHEMAS = {
+    "yesno": _obj({"answer": {"type": "boolean"}}, ["answer"]),
+    "number": _obj({"number": {"type": "number"}}, ["number"]),
+    "list": _obj({"items": {"type": "array", "items": {"type": "string"}}}, ["items"]),
+    "score": _obj({"score": {"type": "number"}}, ["score"]),
+    "pick": _obj({"pick": {"type": "integer", "enum": [1, 2]}, "reason": {"type": "string"}}, ["pick"]),
+    "review": _obj({"approved": {"type": "boolean"}, "problems": {"type": "array", "items": {"type": "string"}}}, ["approved"]),
+    "agent": _obj({"tool": {"type": "string"}, "input": {"type": "object"}, "why": {"type": "string"},
+                   "done": {"type": "boolean"}, "answer": {"type": "string"},
+                   "plan": {"type": "array", "items": {"type": "string"}}}),
+}
+
+
+def record_schema(fields, many=False):
+    one = _obj({f: _ANY for f in fields})
+    return _obj({"items": {"type": "array", "items": one}}, ["items"]) if many else one
+
+
+def _shape_problem(v, schema, where="the reply"):
+    """What's wrong with v for this schema, in a sentence, or None. Numbers written as text count as numbers."""
+    if "anyOf" in schema:
+        return None if any(_shape_problem(v, o, where) is None for o in schema["anyOf"]) else f"{where} has the wrong kind of value"
+    t = schema.get("type")
+    if t == "object":
+        if not isinstance(v, dict):
+            return f"{where} should be a JSON object"
+        for k in schema.get("required", []):
+            if k not in v:
+                return f"{where} is missing \"{k}\""
+        for k, sub_ in schema.get("properties", {}).items():
+            if k in v:
+                bad = _shape_problem(v[k], sub_, f"\"{k}\"")
+                if bad:
+                    return bad
+        return None
+    if t == "array":
+        if not isinstance(v, list):
+            return f"{where} should be a list"
+        for i, x in enumerate(v):
+            bad = _shape_problem(x, schema.get("items", {}), f"item {i + 1} of {where}")
+            if bad:
+                return bad
+        return None
+    if t == "boolean" and not isinstance(v, bool):
+        return f"{where} should be true or false"
+    if t in ("number", "integer") and (isinstance(v, bool) or not _num_like(v)):
+        return f"{where} should be a number"
+    if t == "string" and not isinstance(v, str):
+        return f"{where} should be text"
+    if "enum" in schema and (num(v) if t in ("number", "integer") else v) not in schema["enum"]:
+        return f"{where} should be one of {', '.join(json.dumps(e) for e in schema['enum'])}"
+    return None
+
+
+def _fit(v, schema):
+    """Small, safe fixes before checking: a bare list where {"items": [...]} is wanted, one record sent as a list of one."""
+    props = schema.get("properties", {})
+    if isinstance(v, list) and list(props) == ["items"]:
+        return {"items": v}
+    if isinstance(v, list) and len(v) == 1 and isinstance(v[0], dict) and schema.get("type") == "object":
+        return v[0]
+    return v
+
+
 def _short(s, n):
     s = re.sub(r"\s+", " ", to_str(s)).strip()
     return s if len(s) <= n else s[: n - 1] + "…"
@@ -920,6 +995,7 @@ class Runtime:
         self.client = None
         self.gemini = None
         self._input_lock = None
+        self.no_schema = set()       # Claude models that refused a reply shape, so it isn't sent again
         self.schedule_mode = False
         self.transient_memory = {}   # kept across runs while this program keeps running
         self.reset()
@@ -1071,12 +1147,37 @@ class Runtime:
                 continue
             if n:
                 self.backup_used = self.backup_used + 1
-            return _parse_json(text) if want_json else text
+            if not want_json:
+                return text
+            schema = want_json if isinstance(want_json, dict) else None
+            try:
+                return self._read_json(text, schema)
+            except BadJSON as e:
+                # One more try on the same model, showing it what went wrong. Counts as a call like any other.
+                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair")
+                self.calls += 1
+                if self.calls > MAX_AI_CALLS:
+                    raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+                fix = await self._call_tier(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
+                                            "\nPrevious reply:\n" + _short(text, 2000) +
+                                            "\n\nReply again with only the corrected JSON.", want_json, picture, history, web)
+                return self._read_json(fix, schema)
         if len(tiers) > 1:
             both = "its backup" if len(tiers) == 2 else f"all {len(tiers) - 1} backups"
             msg = f"The primary model and {both} failed. Last error: {last}"
             raise (Retryable if isinstance(last, Retryable) else RunError)(msg) from last
         raise last
+
+    @staticmethod
+    def _read_json(text, schema):
+        """Parses a reply and checks it against the schema. Raises BadJSON with a plain reason."""
+        v = _parse_json(text)
+        if schema:
+            v = _fit(v, schema)
+            bad = _shape_problem(v, schema)
+            if bad:
+                raise BadJSON(f"The reply didn't have the expected shape: {bad}.")
+        return v
 
     async def _call_tier(self, tier, prompt, want_json, picture, history, web):
         """One model call on one tier. Returns the reply text."""
@@ -1096,13 +1197,14 @@ class Runtime:
             who = pv["name"]
             text = await self._call_openai(who, MODELS.get(tier, MODELS.get(pv["prefix"] + "default")), prompt, picture, history, web)
         else:
-            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web)
+            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web,
+                                           want_json if isinstance(want_json, dict) else None)
             who = "Claude"
         if not text:
             raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
         return text
 
-    async def _call_claude(self, model, prompt, picture, history, web):
+    async def _call_claude(self, model, prompt, picture, history, web, schema=None):
         if self.client is None:
             if not os.environ.get("ANTHROPIC_API_KEY"):
                 raise RunError(f"Claude needs a key. Put ANTHROPIC_API_KEY = your-key {WHERE_KEYS} (https://console.anthropic.com).")
@@ -1113,7 +1215,20 @@ class Runtime:
             args["system"] = self.instructions
         if web:
             args["tools"] = [WEB_SEARCH_TOOL]
-        msg = await self.client.messages.create(**args)
+        if schema and not web and model not in self.no_schema:
+            # Structured outputs: Claude can only write JSON of this shape. https://platform.claude.com/docs/en/build-with-claude/structured-outputs
+            args["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
+        try:
+            msg = await self.client.messages.create(**args)
+        except Exception as e:  # noqa: BLE001
+            if "output_config" not in args or getattr(e, "status_code", None) != 400:
+                raise
+            # This model or account won't take the shape: ask without it (the reply is still checked), and stop sending it.
+            self.no_schema.add(model)
+            self.log("Structured replies", f"{model} wouldn't accept a reply shape ({_short(str(e), 160)}), so its replies "
+                     "are checked after they arrive instead.", "note")
+            del args["output_config"]
+            msg = await self.client.messages.create(**args)
         usage = getattr(msg, "usage", None)
         self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
         return "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
@@ -1261,8 +1376,8 @@ class Runtime:
         p = to_str(p)
         if not p.strip():
             raise RunError("A yes/no block is empty.")
-        r = await self._call('Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, True)
-        yes = isinstance(r, dict) and r.get("answer") is True
+        r = await self._call('Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, SCHEMAS["yesno"])
+        yes = r["answer"] is True
         self.log("Yes or no: " + _short(p, 60), "Yes" if yes else "No", "done")
         return yes
 
@@ -1270,8 +1385,8 @@ class Runtime:
         p = to_str(p)
         if not p.strip():
             raise RunError("An 'ask for a number' block is empty.")
-        r = await self._call('Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, True)
-        n = num(r.get("number") if isinstance(r, dict) else 0)
+        r = await self._call('Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, SCHEMAS["number"])
+        n = num(r["number"])
         self.log("Number: " + _short(p, 60), n, "done")
         return n
 
@@ -1279,9 +1394,8 @@ class Runtime:
         p = to_str(p)
         if not p.strip():
             raise RunError("An 'ask for a list' block is empty.")
-        r = await self._call("Reply with only a JSON array of short strings, no other text.\n\nRequest:\n" + p, True)
-        items = r if isinstance(r, list) else (r.get("items", []) if isinstance(r, dict) else [])
-        items = [to_str(i) for i in items if to_str(i)]
+        r = await self._call('Reply with only JSON: {"items": [<short strings>]}, no other text.\n\nRequest:\n' + p, SCHEMAS["list"])
+        items = [to_str(i) for i in r["items"] if to_str(i)]
         self.log("List: " + _short(p, 60), "\n".join("- " + i for i in items) or "(empty list)", f"{len(items)} items")
         return items
 
@@ -1304,18 +1418,18 @@ class Runtime:
     async def score(self, text, criteria):
         text, criteria = to_str(text), to_str(criteria)
         r = await self._call("Score the text from 1 to 10 against these criteria: " + criteria +
-                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + text, True)
-        s = max(0, min(10, num(r.get("score") if isinstance(r, dict) else 0)))
+                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + text, SCHEMAS["score"])
+        s = max(0, min(10, num(r["score"])))
         self.log("Score: " + _short(text, 50), f"{s}/10", "done")
         return s
 
     async def better(self, a, b, criteria):
         a, b, criteria = to_str(a), to_str(b), to_str(criteria)
         r = await self._call("Which text is better for: " + criteria +
-                             '?\nReply with only JSON: {"pick": 1 or 2, "reason": "<one sentence>"}.\n\nText 1:\n' + a + "\n\nText 2:\n" + b, True)
-        second = isinstance(r, dict) and r.get("pick") == 2
+                             '?\nReply with only JSON: {"pick": 1 or 2, "reason": "<one sentence>"}.\n\nText 1:\n' + a + "\n\nText 2:\n" + b, SCHEMAS["pick"])
+        second = num(r["pick"]) == 2
         self.log("Pick the better one", ("Picked the second" if second else "Picked the first") +
-                 (". " + to_str(r.get("reason")) if isinstance(r, dict) and r.get("reason") else ""), "done")
+                 (". " + to_str(r.get("reason")) if r.get("reason") else ""), "done")
         return b if second else a
 
     # ----- Conversations, instructions, web search -----
@@ -1356,14 +1470,13 @@ class Runtime:
         if not prompt:
             raise RunError("The 'ask Claude for a record' block has no request.")
         shape = "{" + ", ".join(json.dumps(f) + ": ..." for f in fields) + "}"
-        r = await self._call(("Reply with only a JSON array of objects, each shaped like " if many else "Reply with only one JSON object shaped like ") +
-                             shape + ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + prompt, True)
+        r = await self._call(('Reply with only JSON: {"items": [<objects, each shaped like ' + shape + '>]}' if many else "Reply with only one JSON object shaped like " + shape) +
+                             ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + prompt, record_schema(fields, many))
         if many:
-            items = r if isinstance(r, list) else (r.get("items", []) if isinstance(r, dict) else [])
-            recs = [to_record(o, fields) for o in items]
+            recs = [to_record(o, fields) for o in r["items"]]
             self.log("Records: " + _short(prompt, 55), "\n".join(" · ".join(f"{f}: {_short(x[f], 40)}" for f in fields) for x in recs), f"{len(recs)} records")
             return recs
-        rec = to_record(r[0] if isinstance(r, list) and r else r, fields)
+        rec = to_record(r, fields)
         self.log("Record: " + _short(prompt, 55), to_str(rec), "done")
         return rec
 
@@ -1810,8 +1923,8 @@ class Runtime:
     async def score_picture(self, pic, criteria):
         pic = _need_picture(pic, "score picture")
         r = await self._call("Score the attached picture from 1 to 10 against these criteria: " + to_str(criteria) +
-                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', True, picture=pic)
-        s = max(0, min(10, num(r.get("score") if isinstance(r, dict) else 0)))
+                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', SCHEMAS["score"], picture=pic)
+        s = max(0, min(10, num(r["score"])))
         self.log("Score picture: " + _short(criteria, 55), f"{s}/10", "done")
         return s
 
@@ -1890,9 +2003,9 @@ class Runtime:
         v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
                              to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft +
                              '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
-                             "approved is true only if every criterion is met; problems is empty when approved.", True)
-        approved = isinstance(v, dict) and v.get("approved") is True
-        problems = [to_str(p) for p in (v.get("problems") or [])] if isinstance(v, dict) else []
+                             "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
+        approved = v["approved"] is True
+        problems = [to_str(p) for p in (v.get("problems") or [])]
         self.approved = approved
         self.problems = [] if approved else ([p for p in problems if p] or ["Does not yet meet the criteria."])
         if approved:
@@ -2234,7 +2347,7 @@ class Runtime:
         for i in range(1, n + 1):
             label = f"Agent step {i}/{n}"
             try:
-                r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1, plan), True)
+                r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1, plan), SCHEMAS["agent"])
             except BadJSON:
                 r = None
             if not isinstance(r, dict):
@@ -6653,7 +6766,7 @@ HOW TO MAP CODE
     prompt_too_large:"The text is too long for one step. Shorten it."
   };
   const errText = e => (e instanceof Error) ? ("The page hit an error: " + e.message)
-    : (e && (e.code === "user" || e.code === "retryable")) ? e.message
+    : (e && (e.code === "user" || e.code === "retryable" || e.shape)) ? e.message
     : ERR[e && e.code] || ("Something went wrong talking to Claude" + (e && e.code ? " (" + e.code + ")" : "") + ". Run again.");
 
   /* ---------- Run log UI ---------- */
@@ -7369,7 +7482,7 @@ HOW TO MAP CODE
     for (let i = 1; i <= n; i++) {
       const label = "Agent step " + i + "/" + n, s = addStep(label);
       let r;
-      try { r = await ask(agentPrompt(goal, catalogue, history, n - i + 1, plan), s, "json"); }
+      try { r = await askChecked(q => ask(q, s, "json"), agentPrompt(goal, catalogue, history, n - i + 1, plan), SCHEMAS.agent); }
       catch(e) { if (e && e.code === "invalid_json") r = null; else throw e; }
       if (!r || typeof r !== "object" || Array.isArray(r)) {
         // An unreadable reply costs a step, not the run: tell the model and carry on.
@@ -7484,9 +7597,72 @@ HOW TO MAP CODE
     s.done("done", "ok");
     return out;
   }
-  async function askJSON(label, prompt, show){
+  /* ---------- Structured replies ----------
+     Each block that wants JSON names the shape it expects (the same shapes as SCHEMAS in the Python runtime).
+     A reply that can't be read, or doesn't fit, is sent back once with the problem; a second miss stops the step. */
+  const ANY = { anyOf:[{ type:"string" }, { type:"number" }, { type:"boolean" }] };
+  const obj = (properties, required) => ({ type:"object", properties, required:required || [], additionalProperties:false });
+  const SCHEMAS = {
+    yesno:obj({ answer:{ type:"boolean" } }, ["answer"]),
+    number:obj({ number:{ type:"number" } }, ["number"]),
+    list:obj({ items:{ type:"array", items:{ type:"string" } } }, ["items"]),
+    score:obj({ score:{ type:"number" } }, ["score"]),
+    pick:obj({ pick:{ type:"integer", enum:[1, 2] }, reason:{ type:"string" } }, ["pick"]),
+    review:obj({ approved:{ type:"boolean" }, problems:{ type:"array", items:{ type:"string" } } }, ["approved"]),
+    agent:obj({ tool:{ type:"string" }, input:{ type:"object" }, why:{ type:"string" }, done:{ type:"boolean" }, answer:{ type:"string" },
+                plan:{ type:"array", items:{ type:"string" } } })
+  };
+  function recordSchema(fields, many){
+    const one = obj(Object.fromEntries(fields.map(f => [f, ANY])));
+    return many ? obj({ items:{ type:"array", items:one } }, ["items"]) : one;
+  }
+  function shapeProblem(v, sc, where){
+    where = where || "the reply";
+    if (sc.anyOf) return sc.anyOf.some(o => !shapeProblem(v, o, where)) ? null : where + " has the wrong kind of value";
+    const t = sc.type;
+    if (t === "object") {
+      if (!v || typeof v !== "object" || Array.isArray(v)) return where + " should be a JSON object";
+      for (const k of sc.required || []) if (!(k in v)) return where + ' is missing "' + k + '"';
+      for (const [k, sub] of Object.entries(sc.properties || {})) if (k in v) { const bad = shapeProblem(v[k], sub, '"' + k + '"'); if (bad) return bad; }
+      return null;
+    }
+    if (t === "array") {
+      if (!Array.isArray(v)) return where + " should be a list";
+      for (let i = 0; i < v.length; i++) { const bad = shapeProblem(v[i], sc.items || {}, "item " + (i + 1) + " of " + where); if (bad) return bad; }
+      return null;
+    }
+    if (t === "boolean" && typeof v !== "boolean") return where + " should be true or false";
+    if ((t === "number" || t === "integer") && (typeof v === "boolean" || !isNumLike(v))) return where + " should be a number";
+    if (t === "string" && typeof v !== "string") return where + " should be text";
+    if (sc.enum && !sc.enum.includes(t === "number" || t === "integer" ? num(v) : v)) return where + " should be one of " + sc.enum.map(e => JSON.stringify(e)).join(", ");
+    return null;
+  }
+  function fitShape(v, sc){
+    const keys = Object.keys(sc.properties || {});
+    if (Array.isArray(v) && keys.length === 1 && keys[0] === "items") return { items:v };
+    if (Array.isArray(v) && v.length === 1 && v[0] && typeof v[0] === "object" && !Array.isArray(v[0]) && sc.type === "object") return v[0];
+    return v;
+  }
+  /* send(prompt) makes the JSON call (so pictures can ride along); returns the reply, checked against the schema. */
+  async function askChecked(send, prompt, schema){
+    let v, raw = "", problem = null;
+    try { v = await send(prompt); }
+    catch(e) { if (!(e && e.code === "invalid_json")) throw e; raw = e.text || ""; problem = "it wasn't readable JSON"; }
+    if (!problem) { v = fitShape(v, schema); problem = shapeProblem(v, schema); if (problem) raw = JSON.stringify(v); }
+    if (!problem) return v;
+    addStep("Unreadable reply", { mono:true, text:"The reply didn't have the expected shape: " + problem + ".\nAsking once more for a corrected reply." }).done("repair", "warn");
+    const again = prompt + "\n\nYour previous reply couldn't be used: the reply didn't have the expected shape: " + problem + ".\nPrevious reply:\n" + short(raw, 2000) +
+      "\n\nReply again with only the corrected JSON.";
+    try { v = await send(again); }
+    catch(e) { if (e && e.code === "invalid_json") throw { code:"invalid_json", shape:true, message:"Claude's reply still couldn't be read after a second try. Run again, or put the block inside 'retry'." }; throw e; }
+    v = fitShape(v, schema);
+    const still = shapeProblem(v, schema);
+    if (still) throw { code:"invalid_json", shape:true, message:"Claude's reply still didn't have the expected shape after a second try: " + still + ". Run again, or put the block inside 'retry'." };
+    return v;
+  }
+  async function askJSON(label, prompt, show, schema){
     const s = addStep(label);
-    const out = await ask(prompt, s, "json");
+    const out = await askChecked(q => ask(q, s, "json"), prompt, schema);
     s.text(show(out)); s.done("done", "ok");
     return out;
   }
@@ -7609,19 +7785,19 @@ HOW TO MAP CODE
       }
       case "rb_ask_yesno": {
         const p = str(await input(b, tc, "TEXT")); if (!p.trim()) fail("A yes/no block is empty.");
-        const r = await askJSON("Yes or no: " + short(p, 60), 'Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, o => (o && o.answer === true) ? "Yes" : "No");
-        return !!(r && r.answer === true);
+        const r = await askJSON("Yes or no: " + short(p, 60), 'Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, o => o.answer === true ? "Yes" : "No", SCHEMAS.yesno);
+        return r.answer === true;
       }
       case "rb_ask_number": {
         const p = str(await input(b, tc, "TEXT")); if (!p.trim()) fail("An 'ask for a number' block is empty.");
-        const r = await askJSON("Number: " + short(p, 60), 'Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, o => String(o && o.number));
-        return num(r && r.number);
+        const r = await askJSON("Number: " + short(p, 60), 'Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, o => String(num(o.number)), SCHEMAS.number);
+        return num(r.number);
       }
       case "rb_ask_list": {
         const p = str(await input(b, tc, "TEXT")); if (!p.trim()) fail("An 'ask for a list' block is empty.");
         const s = addStep("List: " + short(p, 60));
-        const r = await ask('Reply with only a JSON array of short strings, no other text.\n\nRequest:\n' + p, s, "json");
-        const items = (Array.isArray(r) ? r : (r && Array.isArray(r.items) ? r.items : [])).map(str).filter(Boolean);
+        const r = await askChecked(q => ask(q, s, "json"), 'Reply with only JSON: {"items": [<short strings>]}, no other text.\n\nRequest:\n' + p, SCHEMAS.list);
+        const items = r.items.map(str).filter(Boolean);
         s.list(items.length ? items : ["(empty list)"]); s.done(items.length + " items", "ok");
         return items;
       }
@@ -7641,14 +7817,14 @@ HOW TO MAP CODE
       case "rb_score": {
         const t = str(await input(b, tc, "TEXT")), c = str(await input(b, tc, "CRITERIA"));
         const r = await askJSON("Score: " + short(t, 50), 'Score the text from 1 to 10 against these criteria: ' + c +
-          '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + t, o => (o && o.score) + "/10");
-        return Math.max(0, Math.min(10, num(r && r.score)));
+          '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + t, o => num(o.score) + "/10", SCHEMAS.score);
+        return Math.max(0, Math.min(10, num(r.score)));
       }
       case "rb_better": {
         const a = str(await input(b, tc, "A")), c = str(await input(b, tc, "B")), cr = str(await input(b, tc, "CRITERIA"));
         const r = await askJSON("Pick the better one", 'Which text is better for: ' + cr + '?\nReply with only JSON: {"pick": 1 or 2, "reason": "<one sentence>"}.\n\nText 1:\n' + a + "\n\nText 2:\n" + c,
-          o => "Picked " + (o && o.pick === 2 ? "the second" : "the first") + (o && o.reason ? ". " + o.reason : ""));
-        return (r && r.pick === 2) ? c : a;
+          o => "Picked " + (num(o.pick) === 2 ? "the second" : "the first") + (o.reason ? ". " + o.reason : ""), SCHEMAS.pick);
+        return num(r.pick) === 2 ? c : a;
       }
       /* You */
       case "rb_answer": return run.answer;
@@ -7667,14 +7843,14 @@ HOW TO MAP CODE
         const many = b.type === "rb_ask_records";
         const shape = "{" + fields.map(f => JSON.stringify(f) + ": ...").join(", ") + "}";
         const s = addStep((many ? "Records: " : "Record: ") + short(p, 55));
-        const r = await ask((many ? "Reply with only a JSON array of objects, each shaped like " : "Reply with only one JSON object shaped like ") + shape +
-          ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + p, s, "json");
+        const r = await askChecked(q => ask(q, s, "json"), (many ? 'Reply with only JSON: {"items": [<objects, each shaped like ' + shape + '>]}' : "Reply with only one JSON object shaped like " + shape) +
+          ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + p, recordSchema(fields, many));
         if (many) {
-          const arr = (Array.isArray(r) ? r : (r && Array.isArray(r.items) ? r.items : [])).map(o => toRecord(o, fields));
+          const arr = r.items.map(o => toRecord(o, fields));
           s.text(arr.map(x => fields.map(f => f + ": " + short(str(x[f]), 40)).join(" \u00b7 ")).join("\n") || "(no records)"); s.done(arr.length + " records", "ok");
           return arr;
         }
-        const rec = toRecord(Array.isArray(r) ? r[0] : r, fields);
+        const rec = toRecord(r, fields);
         s.text(str(rec)); s.done("done", "ok");
         return rec;
       }
@@ -7753,8 +7929,8 @@ HOW TO MAP CODE
         const pic = needImg(await input(b, tc, "IMG"), "score picture");
         const c = str(await input(b, tc, "CRITERIA"));
         const s = addStep("Score picture: " + short(c, 55));
-        const r = await askWithPicture("Score the attached picture from 1 to 10 against these criteria: " + c + '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', pic, s, "json");
-        const n = Math.max(0, Math.min(10, num(r && r.score)));
+        const r = await askChecked(q => askWithPicture(q, pic, s, "json"), "Score the attached picture from 1 to 10 against these criteria: " + c + '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', SCHEMAS.score);
+        const n = Math.max(0, Math.min(10, num(r.score)));
         s.text(n + "/10"); s.done("done", "ok");
         return n;
       }
@@ -7854,12 +8030,12 @@ HOW TO MAP CODE
 
   async function reviewOnce(criteria, label){
     const s = addStep(label);
-    const v = await ask("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" + criteria +
+    const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" + criteria +
       "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft +
       '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. ' +
-      "approved is true only if every criterion is met; problems is empty when approved.", s, "json");
-    const approved = !!(v && v.approved === true);
-    const problems = Array.isArray(v && v.problems) ? v.problems.map(str).filter(Boolean) : [];
+      "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS.review);
+    const approved = v.approved === true;
+    const problems = Array.isArray(v.problems) ? v.problems.map(str).filter(Boolean) : [];
     run.approved = approved;
     run.problems = approved ? [] : (problems.length ? problems : ["Does not yet meet the criteria."]);
     if (approved) { s.text("Meets every criterion."); s.done("approved", "ok"); }

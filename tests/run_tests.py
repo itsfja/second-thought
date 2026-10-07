@@ -63,6 +63,12 @@ window.claude = { use: async n => {
     const t = p.includes('Reply with only the SVG') ? SVG : 'ANSWER(' + p.slice(0, 24).replace(/\n/g, ' ') + ')';
     o.onText && o.onText({ text:t, delta:t }); return { text:t, truncated:false }; };
   f.json = async (input, o = {}) => { down(o); const p = lastText(input);
+    (window.__jsonPrompts = window.__jsonPrompts || []).push(p);
+    if (window.__jsonScript && window.__jsonScript.length) {  // a test's script of replies for JSON calls; "BAD" can't be read
+      const r = window.__jsonScript.shift();
+      if (r === 'BAD') throw { code:'invalid_json', message:'test: unreadable', text:'this is not json at all' };
+      return JSON.parse(JSON.stringify(r));
+    }
     if (p.includes('one step at a time, using tools')) {
       (window.__agentPrompts = window.__agentPrompts || []).push(p);
       const steps = (p.match(/\nStep \d+: /g) || []).length;
@@ -77,8 +83,8 @@ window.claude = { use: async n => {
       return Object.assign({ tool:m[1], input, why:'test' }, p.includes('Planning is on') ? { plan:['test plan step'] } : {});
     }
     if (p.includes('"approved"')) { reviews++; return { approved:reviews % 2 === 0, problems:reviews % 2 ? ['too vague'] : [] }; }
-    if (p.includes('JSON array of objects')) return [{ title:'A', score:4 }, { title:'B', score:9 }];
-    if (p.includes('JSON array')) return ['idea one', 'idea two', 'idea three'];
+    if (p.includes('"items": [<objects')) return [{ title:'A', score:4 }, { title:'B', score:9 }];
+    if (p.includes('"items": [<short strings>]')) return ['idea one', 'idea two', 'idea three'];
     if (p.includes('"answer"')) return { answer:true };
     if (p.includes('"number"')) return { number:7 };
     if (p.includes('"score"')) return { score:6 };
@@ -326,6 +332,43 @@ async def new_feature_page_tests(pg):
                          add(tx("saved it")))
     await load_state(pg, files_first)
     EXTRA["t_askfirst"] = await export_python(pg, "t_askfirst")
+
+    print("Structured replies")
+    num_prog = lambda *qs: script(*[add(val(blk("rb_ask_number", inputs={"TEXT": tx(q)}))) for q in qs])  # noqa: E731
+
+    async def scripted(state, replies, answer=None):
+        await load_state(pg, state)
+        await pg.evaluate("r => { window.__jsonScript = r; window.__jsonPrompts = []; }", replies)
+        try:
+            status = await (run_and_answer(pg, answer) if answer else run_program(pg))
+        finally:
+            await pg.evaluate("window.__jsonScript = null")
+        return (status, await step_texts(pg), await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)"),
+                await pg.evaluate("window.__jsonPrompts"))
+
+    status, steps, items, prompts = await scripted(num_prog("How many grams in a cup of flour?"), ["BAD", {"number": 7}])
+    rep = [t for n, p_, t in steps if n == "Unreadable reply"]
+    check(status.startswith("done") and items == ["7"] and rep and "readable JSON" in rep[0] and len(prompts) == 2 and "couldn't be used" in prompts[1],
+          f"an unreadable reply is sent back once with the problem, and the corrected one is used ({items})")
+    status, steps, items, prompts = await scripted(num_prog("q"), [{"num": 7}, {"number": "8"}])
+    rep = [t for n, p_, t in steps if n == "Unreadable reply"]
+    check(status.startswith("done") and items == ["8"] and rep and 'missing "number"' in rep[0] and '{"num":7}' in prompts[1],
+          f"a reply with the wrong shape is caught, explained and fixed, not turned into 0 ({items})")
+    status, steps, items, prompts = await scripted(num_prog("q"), [{"num": 7}, {"num": 7}])
+    stopped = [t for n, p_, t in steps if n == "Run stopped"]
+    check(status == "error" and stopped and "still didn't have the expected shape" in stopped[0] and "retry" in stopped[0],
+          "a second wrong reply stops the step with a clear message")
+    retry = script(blk("rb_retry", inputs={"TIMES": nm(2), "DO": {"block": add(val(blk("rb_ask_number", inputs={"TEXT": tx("q")})))}}))
+    status, steps, items, prompts = await scripted(retry, [{"num": 1}, {"num": 1}, {"number": 5}])
+    check(status.startswith("done") and items == ["5"], f"inside 'retry', a step that still fails is tried again ({status}, {items})")
+    yesno = script(add(val(blk("rb_ask_yesno", inputs={"TEXT": tx("Is rye a grain?")}))))
+    status, steps, items, prompts = await scripted(yesno, [{"answer": "yes"}, {"answer": True}])
+    check(status.startswith("done") and items == ["true"], f"'yes' as text isn't taken as an answer: it's sent back and fixed ({items})")
+    rev = script(blk("rb_set_draft", inputs={"TEXT": tx("A draft.")}), blk("rb_review", inputs={"CRITERIA": tx("clear")}), add(val(blk("rb_passed"))))
+    status, steps, items, prompts = await scripted(rev, [{"verdict": "fine"}, {"approved": True}])
+    check(status.startswith("done") and items == ["true"], f"a review reply without 'approved' is fixed, and 'problems' may be left out ({items})")
+    await load_state(pg, num_prog("one", "two"))
+    EXTRA["t_json"] = await export_python(pg, "t_json")
 
     print("Agent")
     done = lambda a: {"done": True, "answer": a}  # noqa: E731
@@ -849,6 +892,17 @@ def python_tests(codes):
         out = out.replace("\r\n", "\n")
         check(code_ == 0 and "Allow this? let the agent use hydration" in out and "▸ Agent: finished in 2 steps" in out,
               "t_agent.py asks before using the tool, then finishes" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        print("Structured replies in Python")
+        (pathlib.Path(tmp) / "t_json.py").write_text(EXTRA["t_json"], encoding="utf-8")
+        log = pathlib.Path(tmp) / "fake.log"
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_json.py")],
+                                dict(env, FAKE_LOG=str(log), FAKE_JSON_SCRIPT=json.dumps(["this is not json", '{"number": 7}', '{"num": 1}', '{"number": 8}'])), tmp)
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and out.count("▸ Unreadable reply  [repair]") == 2 and "RESULT\n" + "=" * 60 + "\n7\n\n8\n" in out,
+              "t_json.py repairs an unreadable reply and a wrong-shaped one" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        check(log.exists() and log.read_text().count("SCHEMA ok") >= 2, "Claude is sent each reply's shape (and the shapes are ones the API accepts)")
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_json.py")], dict(env, FAKE_REJECT_SCHEMA="1"), tmp)
+        check(code_ == 0 and out.count("▸ Structured replies  [note]") == 1, "if a model refuses reply shapes, the run carries on without them, and says so once")
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
