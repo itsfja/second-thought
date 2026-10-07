@@ -21,6 +21,10 @@ class _Messages:
         if "one step at a time, using tools" in p:
             import re
             steps = len(re.findall(r"\nStep \d+: ", p))
+            script = json.loads(os.environ.get("FAKE_AGENT_SCRIPT") or "null")
+            if script:  # a test's script: one reply per step; "BAD" is an unreadable reply
+                r = script[min(steps, len(script) - 1)]
+                return _M("this is not json at all" if r == "BAD" else json.dumps(r))
             m = re.search(r"TOOLS:\n- ([a-z0-9_]+)\(([^)]*)\)", p)
             if steps or not m or "This is your last step" in p:
                 return _M(json.dumps({"done": True, "answer": f"AGENT ANSWER after {steps} step(s)"}))

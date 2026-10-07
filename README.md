@@ -153,10 +153,12 @@ The olive block **agent: work toward …** holds the tools. You can give it:
 - **ask me a question**, so it can ask you things only you know.
 - **remember and recall notes**, so it can keep what it learns for next time.
 - **search the web**, for things that change.
-- **Home Assistant: look at devices** and **control devices**.
+- **Home Assistant: look at devices** and **control devices**. Control devices asks you before every change, because something the agent reads could try to trick it. If you trust everything it reads, choose **control devices (no asking)**.
 - **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. Tick **ask me before each use** if you'd like to say yes first.
 
 Each step is one call to Claude, so set how many steps it may take. If it runs out of steps, the draft holds whatever it found last.
+
+If Claude's reply comes out muddled, or it asks for the same tool with the same words twice in a row, the agent tells it and tries again. That uses up a step. If it repeats itself three times, the agent stops.
 
 An agent only reads the words that tools send back. It never follows instructions hidden inside them. It still can't unlock a door without asking you.
 

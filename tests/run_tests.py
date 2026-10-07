@@ -9,6 +9,7 @@ a stand-in Anthropic SDK (tests/fakeapi). Nothing calls the real API.
     python tests/run_tests.py    # every time
 """
 import asyncio
+import json
 import os
 import shutil
 import pathlib
@@ -64,6 +65,11 @@ window.claude = { use: async n => {
   f.json = async (input, o = {}) => { down(o); const p = lastText(input);
     if (p.includes('one step at a time, using tools')) {
       const steps = (p.match(/\nStep \d+: /g) || []).length;
+      if (window.__agentScript) {  // a test's script: one reply per step; "BAD" is an unreadable reply
+        const r = window.__agentScript[Math.min(steps, window.__agentScript.length - 1)];
+        if (r === 'BAD') throw { code:'invalid_json', message:'test: unreadable', text:'this is not json at all' };
+        return JSON.parse(JSON.stringify(r));
+      }
       const m = /TOOLS:\n- ([a-z0-9_]+)\(([^)]*)\)/.exec(p);
       if (steps || !m || p.includes('This is your last step')) return { done:true, answer:'AGENT ANSWER after ' + steps + ' step(s)' };
       const input = {}; m[2].split(',').map(x => x.trim()).filter(Boolean).forEach((k, i) => input[k] = String(500 + i * 350));
@@ -179,6 +185,37 @@ def script(*steps):
 
 def add(value):
     return blk("rb_add_result", inputs={"TEXT": value})
+
+
+def agent_prog(tools, steps=6, goal="Test goal"):
+    chain = None
+    for t in reversed(tools):
+        b = blk("rb_agent_builtin", fields={"KIND": t}) if isinstance(t, str) else t
+        if chain:
+            b["next"] = {"block": chain}
+        chain = b
+    inputs = {"GOAL": tx(goal), "STEPS": nm(steps)}
+    if chain:
+        inputs["TOOLS"] = {"block": chain}
+    return script(blk("rb_agent", inputs=inputs), blk("rb_result"))
+
+
+async def agent_run(pg, tools, replies, steps=6, answer=None, export=None):
+    """Runs an agent whose stand-in Claude gives these replies in turn. Returns (status, steps, result texts)."""
+    await load_state(pg, agent_prog(tools, steps))
+    await pg.evaluate("r => { window.__agentScript = r; }", replies)
+    try:
+        status = await (run_and_answer(pg, answer) if answer else run_program(pg))
+    finally:
+        await pg.evaluate("window.__agentScript = null")
+    if export:
+        EXTRA[export] = await export_python(pg, export)
+        AGENT_SCRIPTS[export] = replies
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    return status, await step_texts(pg), items
+
+
+AGENT_SCRIPTS = {}  # exported program -> the replies its stand-in Claude gives in Python
 
 
 async def load_state(pg, state):
@@ -322,6 +359,53 @@ async def new_feature_page_tests(pg):
     status = await run_program(pg)
     stopped = [t for n, p_, t in await step_texts(pg) if n == "Run stopped"]
     check(status == "error" and stopped and "needs a goal" in stopped[0], "an agent with no goal says so")
+
+    print("Agent: every path")
+    done = lambda a: {"done": True, "answer": a}  # noqa: E731
+    tool = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
+    pills = lambda steps: {n: p_ for n, p_, t in steps}  # noqa: E731
+    status, steps, items = await agent_run(pg, ["memory"], ["BAD", done("recovered")], export="t_ag_bad")
+    pl = pills(steps)
+    check(status.startswith("done") and pl.get("Agent step 1/6") == "unreadable" and "Agent: finished in 2 steps" in pl and items == ["recovered"],
+          f"an unreadable reply wastes a step instead of ending the run ({status}, {items})")
+    status, steps, items = await agent_run(pg, ["memory"], [done(""), done("second try")])
+    check(status.startswith("done") and pills(steps).get("Agent step 1/6") == "empty answer" and items == ["second try"],
+          f"an empty final answer is sent back for another go ({items})")
+    status, steps, items = await agent_run(pg, ["memory"], [tool("make_tea"), done("fine")])
+    t1 = [t for n, p_, t in steps if n == "Agent step 1/6"]
+    check(status.startswith("done") and t1 and "make_tea" in t1[0] and pills(steps)["Agent step 1/6"] == "not a tool", "an unknown tool name is reported back, not run")
+    status, steps, items = await agent_run(pg, ["memory"], [tool("remember", name="starter", value="rye, fed daily"), tool("recall", name="starter"), done("Your starter is rye.")])
+    r2 = [t for n, p_, t in steps if n == "Agent step 2/6: recall"]
+    check(status.startswith("done") and r2 and r2[0].endswith("Result:\nrye, fed daily") and items == ["Your starter is rye."],
+          f"a multi-step chain: remember, then recall what it saved, then answer ({items})")
+    status, steps, items = await agent_run(pg, ["memory"], [tool("remember", value="no name"), done("ok")])
+    e1 = [(p_, t) for n, p_, t in steps if n == "Agent step 1/6: remember"]
+    check(status.startswith("done") and e1 and e1[0][0] == "tool error" and "remember needs a name" in e1[0][1], "a tool's error goes back to the agent and the run carries on")
+    status, steps, items = await agent_run(pg, ["memory"], [tool("recall", name="x")] * 3, export="t_ag_repeat")
+    pl = pills(steps)
+    check(status.startswith("done") and pl.get("Agent step 2/6: recall") == "repeat" and "Agent: stopped, repeating itself" in pl
+          and "Agent: out of steps" not in pl and items and "Nothing is saved" in items[0],
+          f"a repeated call is skipped with a warning, and a third stops the agent ({items})")
+    status, steps, items = await agent_run(pg, ["memory"], [tool("list_memory"), tool("recall", name="a")], steps=2, export="t_ag_out")
+    pl = pills(steps)
+    check(status.startswith("done") and pl.get("Agent step 2/2") == "not a tool" and pl.get("Agent: out of steps") == "best effort",
+          "out of steps: a tool on the last step isn't run, and the draft keeps the last result")
+    off = [tool("find_devices", search="kitchen"), tool("call_service", service="light.turn_off", entity="light.kitchen"), done("Kitchen light is off.")]
+    status, steps, items = await agent_run(pg, ["ha_read", "ha_act"], off, answer="Allow", export="t_ag_ha")
+    names = [n for n, *_ in steps]
+    check(status.startswith("done") and names.count("Allow this?") == 1 and "Home Assistant: light.turn_off" in names and items == ["Kitchen light is off."],
+          f"controlling Home Assistant asks first by default ({status})")
+    status, steps, items = await agent_run(pg, ["ha_read", "ha_act"], off, answer="Don't")
+    s2 = [t for n, p_, t in steps if n == "Agent step 2/6: call_service"]
+    check(status.startswith("done") and "Home Assistant: light.turn_off" not in [n for n, *_ in steps] and s2 and "said no" in s2[0],
+          "saying no keeps the light on, and the agent is told")
+    status, steps, items = await agent_run(pg, ["ha_read", "ha_act_free"], off)
+    names = [n for n, *_ in steps]
+    check(status.startswith("done") and "Allow this?" not in names and "Home Assistant: light.turn_off" in names, "'control devices (no asking)' acts without asking")
+    unlock = [tool("call_service", service="lock.unlock", entity="lock.front_door"), done("Unlocked.")]
+    status, steps, items = await agent_run(pg, ["ha_act"], unlock, answer="Allow")
+    names = [n for n, *_ in steps]
+    check(status.startswith("done") and names.count("Allow this?") == 1 and "Home Assistant: lock.unlock" in names, "unlocking asks once, not twice")
 
     print("My Blocks")
     double = {"variables": [{"id": "v_x", "name": "x"}], "blocks": {"languageVersion": 0, "blocks": [
@@ -731,6 +815,21 @@ def python_tests(codes):
         out = out.replace("\r\n", "\n")
         check(code_ == 0 and "Allow this? let the agent use hydration" in out and "▸ Agent: finished in 2 steps" in out,
               "t_agent.py asks before using the tool, then finishes" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        print("Agent paths in Python")
+        for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha"):
+            (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
+        run_ag = lambda name: drive([sys.executable, "-u", str(pathlib.Path(tmp) / f"{name}.py")],  # noqa: E731
+                                    dict(env, FAKE_AGENT_SCRIPT=json.dumps(AGENT_SCRIPTS[name])), tmp)
+        code_, out, err = run_ag("t_ag_bad")
+        check(code_ == 0 and "▸ Agent step 1/6  [unreadable]" in out and "▸ Agent: finished in 2 steps" in out, "t_ag_bad.py survives an unreadable reply" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_ag("t_ag_repeat")
+        check(code_ == 0 and "▸ Agent step 2/6: recall  [repeat]" in out and "▸ Agent: stopped, repeating itself" in out, "t_ag_repeat.py stops an agent that repeats itself")
+        code_, out, err = run_ag("t_ag_out")
+        check(code_ == 0 and "▸ Agent step 2/2  [not a tool]" in out and "▸ Agent: out of steps  [best effort]" in out, "t_ag_out.py runs out of steps cleanly")
+        before = len(ha_calls)
+        code_, out, err = run_ag("t_ag_ha")
+        check(code_ == 0 and "Allow this? let the agent use call_service" in out and any(c[0] == "light.turn_off" and c[1].get("entity_id") == "light.kitchen" for c in ha_calls[before:]),
+              "t_ag_ha.py asks in the terminal, then turns the real (test) light off" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget.py")], env, tmp)
         check(code_ != 0 and "reaches its budget of 5" in out, "t_budget.py stops at its budget, using the exact counts" + ("" if code_ else f": {out[-200:]}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget.py")], dict(env, RB_BUDGET="7"), tmp)

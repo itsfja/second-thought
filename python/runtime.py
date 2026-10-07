@@ -228,6 +228,10 @@ class Retryable(RunError):
 
 # ----- pictures -----
 
+class BadJSON(Retryable):
+    """The model's reply wasn't readable JSON."""
+
+
 class Picture:
     """A picture: a file you chose, or an SVG illustration Claude drew."""
     _count = 0
@@ -493,7 +497,7 @@ def _parse_json(text):
             return json.loads(text[min(starts):end + 1])
         except ValueError:
             pass
-    raise Retryable("Claude's reply came back in an unreadable format. Run again.")
+    raise BadJSON("Claude's reply came back in an unreadable format. Run again.")
 
 
 def _short(s, n):
@@ -1703,8 +1707,10 @@ class Runtime:
         "ha_read": [("find_devices", "Find Home Assistant devices and sensors matching some words, with their current states.", ["search"]),
                     ("device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"])],
         "ha_act": [("call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. "
-                    "Unlocking, opening and disarming always ask the person first.", ["service", "entity", "data"])],
+                    "The person may be asked first, and may say no.", ["service", "entity", "data"])],
     }
+    AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
+    AGENT_ASKS = {"ha_act"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
 
     @staticmethod
@@ -1728,7 +1734,7 @@ class Runtime:
                 for n, desc, params in self.AGENT_BUILTINS.get(t.get("kind"), []):
                     if n not in taken:
                         taken.add(n)
-                        out[n] = (desc, params, (n, t), False)
+                        out[n] = (desc, params, (n, t), t.get("kind") in self.AGENT_ASKS)
         return out
 
     @staticmethod
@@ -1794,16 +1800,27 @@ class Runtime:
         n = max(1, min(self.MAX_AGENT_STEPS, round_js(num(steps)) or 1))
         catalogue = self._agent_tools(tools)
         self.log("Agent", f"Goal: {goal}\nTools: {', '.join(catalogue) or 'none'} · up to {n} steps", "started")
-        history, last = [], ""
+        history, last, prev, same = [], "", None, 0
         for i in range(1, n + 1):
-            r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1), True)
+            label = f"Agent step {i}/{n}"
+            try:
+                r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1), True)
+            except BadJSON:
+                r = None
             if not isinstance(r, dict):
-                r = {}
+                # An unreadable reply costs a step, not the run: tell the model and carry on.
+                history.append(f"Step {i}: your reply wasn't readable JSON. Reply with only one JSON object, exactly as described.")
+                self.log(label, "The reply wasn't readable JSON, so this step was wasted.", "unreadable")
+                continue
             if r.get("done"):
                 answer = to_str(r.get("answer", "")).strip()
-                self.set_draft(answer)
-                self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer, "done")
-                return
+                if answer or i == n:
+                    self.set_draft(answer)
+                    self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer or "(no answer)", "done")
+                    return
+                history.append(f"Step {i}: you said you were done but gave an empty answer. Give your complete final answer.")
+                self.log(label, "It said it was done, but its answer was empty.", "empty answer")
+                continue
             name = to_str(r.get("tool", "")).strip()
             inp = r.get("input") if isinstance(r.get("input"), dict) else {}
             why = to_str(r.get("why", "")).strip()
@@ -1811,12 +1828,24 @@ class Runtime:
                 note = ("It replied with a tool on its last step, so it stopped there." if i == n else
                         f"It replied with “{name or 'nothing usable'}”, which isn't one of its tools.")
                 history.append(f"Step {i}: your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.")
-                self.log(f"Agent step {i}/{n}", note, "warn")
-                if i == n:
-                    break
+                self.log(label, note, "not a tool")
                 continue
             desc, params, (kind, spec), ask = catalogue[name]
-            shown = json.dumps(inp, ensure_ascii=False, default=str)
+            shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
+            # The same call again straight away: warn the first time, stop the third.
+            sig = name + " " + shown
+            same = same + 1 if sig == prev else 1
+            prev = sig
+            if same >= 3:
+                self.log("Agent: stopped, repeating itself", f"It asked for {name} with the same input three times in a row. The draft holds its last result.", "stopped")
+                break
+            if same == 2:
+                history.append(f"Step {i}: you asked for {name} with exactly the same input as the step before, so it didn't run again. "
+                               "Its result is above. Do something different, or give your final answer.")
+                self.log(f"{label}: {name}", f"Input: {shown}\n\nThe same call as the step before, so it didn't run again.", "repeat")
+                continue
+            if ask and kind == "call_service" and any(re.match(p_, to_str(inp.get("service", "")).strip()) for p_ in HA_SENSITIVE):
+                ask = False  # unlocking, opening and disarming ask anyway: one question is enough
             if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}"):
                 result = "The person said no, so this tool didn't run."
             else:
@@ -1829,10 +1858,12 @@ class Runtime:
             text = to_str(result) if not isinstance(result, (dict, list)) else json.dumps(result, ensure_ascii=False, default=str)
             last = text
             history.append(f"Step {i}: you used {name} with {shown}.\nResult: {_short(text, 1500)}")
-            self.log(f"Agent step {i}/{n}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", "done")
+            status = "tool error" if text.startswith("Error: ") else "done"
+            self.log(f"{label}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", status)
+        else:
+            self.log("Agent: out of steps", f"It used all {n} steps without a final answer. The draft holds its last result.", "best effort")
         self.out_of_rounds_hit = True
-        self.set_draft(last or "The agent ran out of steps before it finished.")
-        self.log("Agent: out of steps", f"It used all {n} steps without a final answer. The draft holds its last result.", "best effort")
+        self.set_draft(last or "The agent stopped before it had a result.")
 
     # ----- Saved programs run as a block -----
     STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error")

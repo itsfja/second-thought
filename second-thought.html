@@ -636,6 +636,10 @@ class Retryable(RunError):
 
 # ----- pictures -----
 
+class BadJSON(Retryable):
+    """The model's reply wasn't readable JSON."""
+
+
 class Picture:
     """A picture: a file you chose, or an SVG illustration Claude drew."""
     _count = 0
@@ -901,7 +905,7 @@ def _parse_json(text):
             return json.loads(text[min(starts):end + 1])
         except ValueError:
             pass
-    raise Retryable("Claude's reply came back in an unreadable format. Run again.")
+    raise BadJSON("Claude's reply came back in an unreadable format. Run again.")
 
 
 def _short(s, n):
@@ -2111,8 +2115,10 @@ class Runtime:
         "ha_read": [("find_devices", "Find Home Assistant devices and sensors matching some words, with their current states.", ["search"]),
                     ("device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"])],
         "ha_act": [("call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. "
-                    "Unlocking, opening and disarming always ask the person first.", ["service", "entity", "data"])],
+                    "The person may be asked first, and may say no.", ["service", "entity", "data"])],
     }
+    AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
+    AGENT_ASKS = {"ha_act"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
 
     @staticmethod
@@ -2136,7 +2142,7 @@ class Runtime:
                 for n, desc, params in self.AGENT_BUILTINS.get(t.get("kind"), []):
                     if n not in taken:
                         taken.add(n)
-                        out[n] = (desc, params, (n, t), False)
+                        out[n] = (desc, params, (n, t), t.get("kind") in self.AGENT_ASKS)
         return out
 
     @staticmethod
@@ -2202,16 +2208,27 @@ class Runtime:
         n = max(1, min(self.MAX_AGENT_STEPS, round_js(num(steps)) or 1))
         catalogue = self._agent_tools(tools)
         self.log("Agent", f"Goal: {goal}\nTools: {', '.join(catalogue) or 'none'} · up to {n} steps", "started")
-        history, last = [], ""
+        history, last, prev, same = [], "", None, 0
         for i in range(1, n + 1):
-            r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1), True)
+            label = f"Agent step {i}/{n}"
+            try:
+                r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1), True)
+            except BadJSON:
+                r = None
             if not isinstance(r, dict):
-                r = {}
+                # An unreadable reply costs a step, not the run: tell the model and carry on.
+                history.append(f"Step {i}: your reply wasn't readable JSON. Reply with only one JSON object, exactly as described.")
+                self.log(label, "The reply wasn't readable JSON, so this step was wasted.", "unreadable")
+                continue
             if r.get("done"):
                 answer = to_str(r.get("answer", "")).strip()
-                self.set_draft(answer)
-                self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer, "done")
-                return
+                if answer or i == n:
+                    self.set_draft(answer)
+                    self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer or "(no answer)", "done")
+                    return
+                history.append(f"Step {i}: you said you were done but gave an empty answer. Give your complete final answer.")
+                self.log(label, "It said it was done, but its answer was empty.", "empty answer")
+                continue
             name = to_str(r.get("tool", "")).strip()
             inp = r.get("input") if isinstance(r.get("input"), dict) else {}
             why = to_str(r.get("why", "")).strip()
@@ -2219,12 +2236,24 @@ class Runtime:
                 note = ("It replied with a tool on its last step, so it stopped there." if i == n else
                         f"It replied with “{name or 'nothing usable'}”, which isn't one of its tools.")
                 history.append(f"Step {i}: your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.")
-                self.log(f"Agent step {i}/{n}", note, "warn")
-                if i == n:
-                    break
+                self.log(label, note, "not a tool")
                 continue
             desc, params, (kind, spec), ask = catalogue[name]
-            shown = json.dumps(inp, ensure_ascii=False, default=str)
+            shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
+            # The same call again straight away: warn the first time, stop the third.
+            sig = name + " " + shown
+            same = same + 1 if sig == prev else 1
+            prev = sig
+            if same >= 3:
+                self.log("Agent: stopped, repeating itself", f"It asked for {name} with the same input three times in a row. The draft holds its last result.", "stopped")
+                break
+            if same == 2:
+                history.append(f"Step {i}: you asked for {name} with exactly the same input as the step before, so it didn't run again. "
+                               "Its result is above. Do something different, or give your final answer.")
+                self.log(f"{label}: {name}", f"Input: {shown}\n\nThe same call as the step before, so it didn't run again.", "repeat")
+                continue
+            if ask and kind == "call_service" and any(re.match(p_, to_str(inp.get("service", "")).strip()) for p_ in HA_SENSITIVE):
+                ask = False  # unlocking, opening and disarming ask anyway: one question is enough
             if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}"):
                 result = "The person said no, so this tool didn't run."
             else:
@@ -2237,10 +2266,12 @@ class Runtime:
             text = to_str(result) if not isinstance(result, (dict, list)) else json.dumps(result, ensure_ascii=False, default=str)
             last = text
             history.append(f"Step {i}: you used {name} with {shown}.\nResult: {_short(text, 1500)}")
-            self.log(f"Agent step {i}/{n}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", "done")
+            status = "tool error" if text.startswith("Error: ") else "done"
+            self.log(f"{label}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", status)
+        else:
+            self.log("Agent: out of steps", f"It used all {n} steps without a final answer. The draft holds its last result.", "best effort")
         self.out_of_rounds_hit = True
-        self.set_draft(last or "The agent ran out of steps before it finished.")
-        self.log("Agent: out of steps", f"It used all {n} steps without a final answer. The draft holds its last result.", "best effort")
+        self.set_draft(last or "The agent stopped before it had a result.")
 
     # ----- Saved programs run as a block -----
     STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error")
@@ -3824,9 +3855,9 @@ HOW TO MAP CODE
       previousStatement:"AgentTool", nextStatement:"AgentTool", style:"agent",
       tooltip:"Lets the agent run one of your My Blocks. Its inputs become the tool's inputs, and what it returns is the result the agent sees. Describe it clearly: the description is all the agent knows about it." },
     { type:"rb_agent_builtin",
-      message0:"tool: %1", args0:[{ type:"field_dropdown", name:"KIND", options:[["search the web","web"],["ask me a question","ask"],["remember and recall notes","memory"],["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"]] }],
+      message0:"tool: %1", args0:[{ type:"field_dropdown", name:"KIND", options:[["search the web","web"],["ask me a question","ask"],["remember and recall notes","memory"],["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"],["Home Assistant: control devices (no asking)","ha_act_free"]] }],
       previousStatement:"AgentTool", nextStatement:"AgentTool", style:"agent",
-      tooltip:"A ready-made tool for the agent. Controlling Home Assistant still asks you before unlocking, opening or disarming anything." },
+      tooltip:"A ready-made tool for the agent. 'Control devices' asks you before every change, because what the agent reads (a web page, a note) could try to steer it. Choose 'no asking' only if you trust everything it reads. Unlocking, opening and disarming always ask." },
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
@@ -7198,8 +7229,10 @@ HOW TO MAP CODE
             ["list_memory", "List the names of every saved note.", []]],
     ha_read:[["find_devices", "Find Home Assistant devices and sensors matching some words, with their current states.", ["search"]],
              ["device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"]]],
-    ha_act:[["call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. Unlocking, opening and disarming always ask the person first.", ["service", "entity", "data"]]]
+    ha_act:[["call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. The person may be asked first, and may say no.", ["service", "entity", "data"]]]
   };
+  AGENT_BUILTINS.ha_act_free = AGENT_BUILTINS.ha_act;
+  const AGENT_ASKS = new Set(["ha_act"]);  // built-in tools that ask before each use
   const MAX_AGENT_STEPS = 20;
   function agentName(name, taken){
     const base = String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "tool";
@@ -7218,7 +7251,8 @@ HOW TO MAP CODE
         const desc = str(await input(t, tc, "DESC", "")).trim() || "Runs the My Block \u201c" + blockName + "\u201d.";
         out.set(agentName(blockName, taken), { desc, params, kind:"block", blockName, def, ask:t.getFieldValue("ASK") === "TRUE" });
       } else if (t.type === "rb_agent_builtin") {
-        (AGENT_BUILTINS[t.getFieldValue("KIND")] || []).forEach(([n, desc, params]) => { if (!taken.has(n)) { taken.add(n); out.set(n, { desc, params, kind:n, ask:false }); } });
+        const kind = t.getFieldValue("KIND");
+        (AGENT_BUILTINS[kind] || []).forEach(([n, desc, params]) => { if (!taken.has(n)) { taken.add(n); out.set(n, { desc, params, kind:n, ask:AGENT_ASKS.has(kind) }); } });
       }
     }
     return out;
@@ -7289,32 +7323,59 @@ HOW TO MAP CODE
     if (!goal) fail("The agent block needs a goal.");
     const n = Math.max(1, Math.min(MAX_AGENT_STEPS, Math.round(num(await input(b, tc, "STEPS", 6))) || 1));
     const catalogue = await agentTools(b, tc);
-    addStep("Agent", { text:"Goal: " + goal + "\nTools: " + ([...catalogue.keys()].join(", ") || "none") + " \u00b7 up to " + n + " steps" }).done("started", "ok");
-    const history = []; let last = "";
+    addStep("Agent", { text:"Goal: " + goal + "\nTools: " + ([...catalogue.keys()].join(", ") || "none") + " · up to " + n + " steps" }).done("started", "ok");
+    const history = []; let last = "", prev = null, same = 0, stopped = false;
+    const title = (s, t) => { s.el.querySelector(".step-name").textContent = t; };
     for (let i = 1; i <= n; i++) {
-      const s = addStep("Agent step " + i + "/" + n);
-      let r = await ask(agentPrompt(goal, catalogue, history, n - i + 1), s, "json");
-      if (!r || typeof r !== "object" || Array.isArray(r)) r = {};
+      const label = "Agent step " + i + "/" + n, s = addStep(label);
+      let r;
+      try { r = await ask(agentPrompt(goal, catalogue, history, n - i + 1), s, "json"); }
+      catch(e) { if (e && e.code === "invalid_json") r = null; else throw e; }
+      if (!r || typeof r !== "object" || Array.isArray(r)) {
+        // An unreadable reply costs a step, not the run: tell the model and carry on.
+        history.push("Step " + i + ": your reply wasn't readable JSON. Reply with only one JSON object, exactly as described.");
+        s.text("The reply wasn't readable JSON, so this step was wasted."); s.done("unreadable", "warn");
+        continue;
+      }
       if (r.done) {
         const answer = str(r.answer).trim();
-        run.draft = answer;
-        s.el.querySelector(".step-name").textContent = "Agent: finished in " + i + " step" + (i === 1 ? "" : "s");
-        s.text(answer || "(no answer)"); s.done("done", "ok");
-        return;
+        if (answer || i === n) {
+          run.draft = answer;
+          title(s, "Agent: finished in " + i + " step" + (i === 1 ? "" : "s"));
+          s.text(answer || "(no answer)"); s.done("done", "ok");
+          return;
+        }
+        history.push("Step " + i + ": you said you were done but gave an empty answer. Give your complete final answer.");
+        s.text("It said it was done, but its answer was empty."); s.done("empty answer", "warn");
+        continue;
       }
       const name = str(r.tool).trim(), inp = r.input && typeof r.input === "object" && !Array.isArray(r.input) ? r.input : {}, why = str(r.why).trim();
       if (i === n || !catalogue.has(name)) {
         history.push("Step " + i + ": your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.");
-        s.text(i === n ? "It replied with a tool on its last step, so it stopped there." : "It replied with \u201c" + (name || "nothing usable") + "\u201d, which isn't one of its tools.");
+        s.text(i === n ? "It replied with a tool on its last step, so it stopped there." : "It replied with “" + (name || "nothing usable") + "”, which isn't one of its tools.");
         s.done("not a tool", "warn");
-        if (i === n) break;
         continue;
       }
-      const t = catalogue.get(name), shown = JSON.stringify(inp);
-      s.el.querySelector(".step-name").textContent = "Agent step " + i + "/" + n + ": " + name;
+      const t = catalogue.get(name), shown = stableJSON(inp);
+      // The same call again straight away: warn the first time, stop the third.
+      const sig = name + " " + shown;
+      same = sig === prev ? same + 1 : 1; prev = sig;
+      if (same >= 3) {
+        title(s, "Agent: stopped, repeating itself");
+        s.text("It asked for " + name + " with the same input three times in a row. The draft holds its last result."); s.done("stopped", "warn");
+        stopped = true; break;
+      }
+      title(s, label + ": " + name);
+      if (same === 2) {
+        history.push("Step " + i + ": you asked for " + name + " with exactly the same input as the step before, so it didn't run again. Its result is above. Do something different, or give your final answer.");
+        s.text("Input: " + shown + "\n\nThe same call as the step before, so it didn't run again."); s.done("repeat", "warn");
+        continue;
+      }
       s.text((why ? "Why: " + why + "\n" : "") + "Input: " + shown); s.done("using tool", "");
+      let askFirst = t.ask;
+      if (askFirst && t.kind === "call_service" && haIsSensitive(str(inp.service).trim())) askFirst = false;  // those ask anyway: one question is enough
       let result;
-      if (t.ask && !(await confirmAction("let the agent use " + name + " with " + short(shown, 200)))) result = "The person said no, so this tool didn't run.";
+      if (askFirst && !(await confirmAction("let the agent use " + name + " with " + short(shown, 200)))) result = "The person said no, so this tool didn't run.";
       else {
         try { result = await agentRunTool(name, t, inp, tc); }
         catch(e) { if (isControlSignal(e) || halting()) throw e; result = "Error: " + (e && e.message ? e.message : String(e)); }
@@ -7322,11 +7383,18 @@ HOW TO MAP CODE
       const text = isImg(result) ? str(result) : (result && typeof result === "object") ? JSON.stringify(result) : str(result);
       last = text;
       history.push("Step " + i + ": you used " + name + " with " + shown + ".\nResult: " + short(text, 1500));
-      s.text((why ? "Why: " + why + "\n" : "") + "Input: " + shown + "\n\nResult:\n" + short(text, 600)); s.done(/^Error: /.test(text) ? "tool error" : "done", /^Error: /.test(text) ? "warn" : "ok");
+      s.text((why ? "Why: " + why + "\n" : "") + "Input: " + shown + "\n\nResult:\n" + short(text, 600));
+      s.done(/^Error: /.test(text) ? "tool error" : "done", /^Error: /.test(text) ? "warn" : "ok");
     }
+    if (!stopped) addStep("Agent: out of steps", { text:"It used all " + n + " steps without a final answer. The draft holds its last result." }).done("best effort", "warn");
     run.outOfRounds = true;
-    run.draft = last || "The agent ran out of steps before it finished.";
-    addStep("Agent: out of steps", { text:"It used all " + n + " steps without a final answer. The draft holds its last result." }).done("best effort", "warn");
+    run.draft = last || "The agent stopped before it had a result.";
+  }
+  /* JSON with sorted keys, so the same input always looks the same (matches Python's sort_keys). */
+  function stableJSON(v){
+    if (Array.isArray(v)) return "[" + v.map(stableJSON).join(", ") + "]";
+    if (v && typeof v === "object") return "{" + Object.keys(v).sort().map(k => JSON.stringify(k) + ": " + stableJSON(v[k])).join(", ") + "}";
+    return JSON.stringify(v === undefined ? null : v);
   }
 
   /* 'run program': a saved program as a step, with its own draft, result and variables. */
