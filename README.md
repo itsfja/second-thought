@@ -416,6 +416,14 @@ The second line runs the checks. At the end it says **All checks passed**, or it
 
 If you change `python/runtime.py` or `prompts/convert-guide.txt`, run `python tools/sync.py` first, so the page has your changes too.
 
+The checks use pretend helpers, so they never cost anything. To check the real helpers with your own keys, run:
+
+```
+python tools/smoke_test.py
+```
+
+It asks each helper you have a key for a few short questions and says what works. That covers Claude's tidy answers, streaming, carrying on after a long answer is cut off, and the agent using a tool, plus which kind of tidy answer every other helper understands. It costs a few pence and prints the tokens used. Add a name to check only one helper, like `python tools/smoke_test.py claude`.
+
 ---
 
 ## Page 13: A few things to know

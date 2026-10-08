@@ -73,10 +73,12 @@ class _Messages:
             _Messages.rev += 1
             return _M(json.dumps({"approved": _Messages.rev % 2 == 0, "problems": [] if _Messages.rev % 2 == 0 else ["too vague"]}))
         if '"answer"' in p: return _M('{"answer": true}')
-        if '"number"' in p: return _M('Sure: {"number": 7}')
+        if '"number"' in p: return _M('Sure: {"number": %d}' % (42 if "6 times 7" in p else 7))
         if '"items": [<short strings>]' in p: return _M('```json\n["idea one", "idea two", "idea three"]\n```')
         if '"score"' in p: return _M(json.dumps({"score": 3 + len(p) % 7}))
         if '"pick"' in p: return _M('{"pick": 2, "reason": "clearer"}')
+        if 0 < max_tokens < 100:  # a tiny limit cuts the reply off, as the real API does
+            return _M("TEXT[" + p[:max_tokens // 4] + "]", "max_tokens")
         if int(os.environ.get("FAKE_TRUNCATE") or 0) > _Messages.cut:  # the next text reply is cut off
             _Messages.cut += 1
             return _M("TEXT[" + p[:30].replace("\n"," ") + "]", "max_tokens")
