@@ -335,6 +335,8 @@ If a program has an **ask me before** block, Python asks you in the terminal and
 
 Everything in `second-thought.ini` can also be set as an environment variable with the same name, if you prefer. An environment variable wins over the file.
 
+**Every setting in one place:** `second-thought.example.ini`, next to this README, lists every setting a program understands, with a note on each. That covers the keys for every helper, models and backups, run settings, Home Assistant, Homey, MQTT, Telegram, email, calendar, GitHub, web requests and feeds. Copy it to `second-thought.ini` and fill in what you use. Put that copy in your home folder and every program you export can share it, because a program looks for `second-thought.ini` next to itself first, then in the folder you run it from, then in your home folder.
+
 If your program uses Gemini, it needs a second key, from Google. The ini file will have a line ready for it: `GEMINI_API_KEY =`.
 
 There is a third helper too, called **Llama**. Llama is special because it can live on *your own computer*, so nothing you ask it ever leaves the house. To use it, install a free program called **Ollama** and download a Llama model:
@@ -481,6 +483,7 @@ This folder is where all the parts of Second Thought are kept. Each part has its
 | `samples/connections.json` | The pretend feeds, GitHub projects, Telegram messages, emails and calendar that the page uses. |
 | `tools/sync.py` | A little tool that copies the parts above into the page, so they always match. |
 | `tests/` | Checks that make sure everything still works. |
+| `second-thought.example.ini` | Every setting a program understands, with a note on each. Copy it to `second-thought.ini` to use it. |
 | `README.md` | This book! |
 
 ---
