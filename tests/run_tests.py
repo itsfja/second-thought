@@ -18,7 +18,9 @@ import pathlib
 import subprocess
 import sys
 import tempfile
+import threading
 import time
+import urllib.error
 from types import SimpleNamespace
 
 from playwright.async_api import async_playwright
@@ -27,6 +29,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import fake_ha  # noqa: E402
 import fake_llama  # noqa: E402
 import fake_services  # noqa: E402
+import fake_mqtt  # noqa: E402
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -839,6 +842,51 @@ async def new_feature_page_tests(pg):
     files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
     check("GITHUB_TOKEN = " in files["second-thought.ini"] and "[telegram]" not in files["second-thought.ini"], "a GitHub agent's settings ask for a GitHub token only")
 
+    print("Listeners")
+    hats = [("rb_mqtt_when", {"TOPIC": "home/proofer/temperature"}, "mqtt", "27.4"), ("rb_webhook_when", {"PATH": "bake-done"}, "webhook", '"loaf": "rye"'),
+            ("rb_email_when", {"CONTAINS": "flour"}, "email", "Subject: Your flour order has shipped"), ("rb_feed_when", {"URL": ""}, "feed", "nail varnish"),
+            ("rb_folder_when", {"FOLDER": "drop"}, "folder", "Grandma's loaf"), ("rb_gh_when", {}, "github", "#41: Add rye flour curve"),
+            ("rb_cal_when", {"N": 15}, "calendar", " at "), ("rb_tg_when", {"CONTAINS": "anything"}, "telegram", "What should I bake")]
+
+    def say_what(kind):
+        return blk("rb_say", inputs={"TEXT": {"block": {"type": "text_join", "extraState": {"itemCount": 2}, "inputs": {"ADD0": tx(kind + ": "),
+                   "ADD1": {"block": {"type": "rb_event", "fields": {"KEY": "text"}}}}}}})
+    for type_, fields, kind, want in hats:
+        prog = {"blocks": {"languageVersion": 0, "blocks": [dict({"type": type_, "x": 20, "y": 20, "next": {"block": dict(say_what(kind),
+                next={"block": blk("rb_add_result", inputs={"TEXT": {"block": {"type": "rb_event", "fields": {"KEY": ""}}}})})}}, **({"fields": fields} if fields else {}))]}}
+        await load_state(pg, prog)
+        await pg.evaluate("""(() => { const hat = Blockly.getMainWorkspace().getTopBlocks(false)[0];
+            Blockly.ContextMenuRegistry.registry.getItem('rb_run_script').callback({ block:hat }); })()""")
+        for _ in range(50):
+            await pg.wait_for_timeout(100)
+            if await pg.is_enabled("#run") and await pg.query_selector(".result"):
+                break
+        said = [t for n, p_, t in await step_texts(pg) if n == "Note"]
+        whole = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+        check(said and said[0].startswith(kind + ": ") and want in said[0] and whole and "text: " in whole[0],
+              f"on the page, the {kind} listener runs with a sample of what arrives ({(said or ['nothing'])[0][:60]!r})")
+    listen_all = {"blocks": {"languageVersion": 0, "blocks": [dict({"type": t, "x": 20, "y": 20 + 120 * i, "next": {"block": say_what(k)}}, **({"fields": f} if f else {}))
+                                                              for i, (t, f, k, w) in enumerate(hats)]}}
+    listen_all["blocks"]["blocks"][0]["next"]["block"]["next"] = {"block": blk("rb_mqtt_publish", fields={"RETAIN": "FALSE"},
+        inputs={"TEXT": {"block": {"type": "text_join", "extraState": {"itemCount": 2}, "inputs": {"ADD0": tx("seen "),
+                "ADD1": {"block": {"type": "rb_event", "fields": {"KEY": "text"}}}}}}, "TOPIC": tx("home/proofer/ack")})}
+    await load_state(pg, listen_all)
+    EXTRA["t_listen"] = await export_python(pg, "t_listen")
+    check('LISTENERS = [("mqtt", "home/proofer/temperature", when_mqtt_1), ("webhook", "bake-done", when_webhook_1), ("email", "flour", when_email_1), '
+          '("feed", "", when_feed_1), ("folder", "drop", when_folder_1), ("github", "", when_github_1), ("calendar", "15", when_calendar_1)]' in EXTRA["t_listen"]
+          and "R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES, TELEGRAM_WATCHES, listeners=LISTENERS)" in EXTRA["t_listen"],
+          "exported Python lists every listener")
+    await pg.evaluate("document.getElementById('io-name').value = 't_listen'")
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    ini = files["second-thought.ini"]
+    check(all(x in ini for x in ("[mqtt]", "MQTT_HOST = ", "[web requests]", "WEBHOOK_SECRET = ", "[email]", "[github]", "[calendar]", "feeds = "))
+          and "paho-mqtt" in files["requirements.txt"] and "run-on-schedule.sh" in files, "a listening program's settings ask for each connection it listens to")
+    mq = [tcall("read_mqtt", topic="zigbee2mqtt/+"), tcall("publish_mqtt", topic="zigbee2mqtt/oven_plug/set", message="OFF"), tcall("publish_mqtt", topic="home/#", message="x")]
+    status, steps, items = await agent_run(pg, ["mqtt", "mqtt_act"], mq + [fin("ok")], answer="Allow", export="t_ls_mqtt")
+    check(status.startswith("done") and "zigbee2mqtt/leak_sensor_sink: {\"water_leak\": false" in step_of(steps, 1, 6, "read_mqtt")
+          and "MQTT \u2192 zigbee2mqtt/oven_plug/set" in [n for n, *_ in steps] and "can't publish to a topic with + or #" in step_of(steps, 3, 6, "publish_mqtt"),
+          "the MQTT tools read topics with wildcards and publish after asking (sample broker on the page)")
+
     print("My Blocks")
     double = {"variables": [{"id": "v_x", "name": "x"}], "blocks": {"languageVersion": 0, "blocks": [
         {"type": "rb_start", "x": 20, "y": 20, "next": {"block": add(val({"type": "procedures_callreturn", "extraState": {"name": "double", "params": ["x"]},
@@ -1071,6 +1119,8 @@ def python_tests(codes):
                ZAI_BASE_URL=llama_url, ZAI_API_KEY="test", MINIMAX_BASE_URL=llama_url, MINIMAX_API_KEY="test",
                OPENROUTER_BASE_URL=llama_url, OPENROUTER_API_KEY="test")
     svc_url, svc_log, tg_add, imap_port, smtp_port = fake_services.start()
+    broker, mqtt_port = fake_mqtt.start(retained={"zigbee2mqtt/leak_sensor_sink": '{"water_leak": false, "battery": 87}', "zigbee2mqtt/oven_plug": '{"state": "ON", "power": 41}'})
+    env.update(MQTT_HOST="127.0.0.1", MQTT_PORT=str(mqtt_port), MQTT_USERNAME=fake_mqtt.USER, MQTT_PASSWORD=fake_mqtt.PASSWORD)
     env.update(RB_FEEDS=f"{svc_url}/feeds/baking.rss {svc_url}/feeds/tech.atom", GITHUB_API_URL=svc_url + "/gh", GITHUB_TOKEN=fake_services.GH_TOKEN,
                TELEGRAM_API_URL=svc_url + "/tg", TELEGRAM_BOT_TOKEN=fake_services.TG_TOKEN, TELEGRAM_CHAT_ID=str(fake_services.TG_CHAT),
                EMAIL_ADDRESS=fake_services.MAIL_USER, EMAIL_PASSWORD=fake_services.MAIL_PASS, EMAIL_IMAP_HOST="127.0.0.1", EMAIL_SMTP_HOST="127.0.0.1",
@@ -1417,6 +1467,66 @@ def python_tests(codes):
         got = [m["text"] for m in svc_log["tg_sent"][before:]]
         check(got == ["Got: When should I bake the rye?"] and "Telegram message" in out,
               f"t_tg_when.py answers a new Telegram message containing 'bake', and not older ones or others ({got})")
+
+        print("Listeners in Python")
+        (pathlib.Path(tmp) / "t_ls_mqtt.py").write_text(EXTRA["t_ls_mqtt"], encoding="utf-8")
+        before = len(broker.published)
+        code_, out, err = run_cn("t_ls_mqtt")
+        check(code_ == 0 and "zigbee2mqtt/leak_sensor_sink: {\"water_leak\": false, \"battery\": 87}" in out and "zigbee2mqtt/oven_plug: {\"state\": \"ON\"" in out
+              and broker.published[before:] == [("zigbee2mqtt/oven_plug/set", "OFF", False)] and "can't publish to a topic with + or #" in out,
+              "Python's MQTT tools read kept messages with wildcards, and publish after asking" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        (pathlib.Path(tmp) / "t_listen.py").write_text(EXTRA["t_listen"], encoding="utf-8")
+        import socket
+        import urllib.request as ureq
+        with socket.socket() as so:
+            so.bind(("127.0.0.1", 0))
+            hook_port = so.getsockname()[1]
+        hook = {}
+
+        def poke():
+            """Once the program is listening, make one of each thing arrive."""
+            broker.wait_for_subscriber("home/proofer/temperature")
+            time.sleep(1.5)
+            broker.publish("home/proofer/temperature", "27.9")
+            broker.publish("home/kitchen/temperature", "19")  # a topic nobody listens to
+            for _ in range(100):
+                try:
+                    hook["refused"] = ureq.urlopen(ureq.Request(f"http://127.0.0.1:{hook_port}/bake-done", data=b"{}", method="POST"), timeout=5).status
+                except urllib.error.HTTPError as e:
+                    hook["refused"] = e.code
+                    break
+                except OSError:
+                    time.sleep(0.2)
+            req = ureq.Request(f"http://127.0.0.1:{hook_port}/bake-done?key=hook-secret", data=json.dumps({"loaf": "spelt"}).encode(), method="POST")
+            hook["ok"] = ureq.urlopen(req, timeout=5).status
+            svc_log["add_mail"]("Mill & Co <orders@example.com>", "More flour on the way", "Your rye flour arrives Tuesday.")
+            svc_log["add_mail"]("Someone <x@example.com>", "Unrelated", "Nothing about baking.")
+            svc_log["add_feed_item"]("Brand new: steam in home ovens", "https://example.com/baking/steam")
+            svc_log["add_review"]("Add a spelt recipe")
+            (pathlib.Path(tmp) / "drop").mkdir(exist_ok=True)
+            (pathlib.Path(tmp) / "drop" / "notes.txt").write_text("Spelt loaf: 500 g spelt, 350 g water.", encoding="utf-8")
+            (pathlib.Path(tmp) / "drop" / ".hidden").write_text("ignored", encoding="utf-8")
+        before = len(broker.published)
+        pk = threading.Thread(target=poke, daemon=True)
+        pk.start()
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_listen.py")],
+                                dict(env, RB_POLL_SECONDS="0.5", WEBHOOK_PORT=str(hook_port), WEBHOOK_SECRET="hook-secret", WEBHOOK_HOST="127.0.0.1",
+                                     CALENDAR_URL=svc_url + "/calendar-soon.ics"), tmp, timeout=30)
+        out = out.replace("\r\n", "\n")
+        notes = [l.strip() for l in out.split("\n") if re.match(r"\s+(mqtt|webhook|email|feed|folder|github|calendar|telegram): ", l)]
+        got = {n.split(":", 1)[0] for n in notes}
+        check(got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "calendar"},
+              f"t_listen.py: every listener started its script when something arrived ({', '.join(sorted(got)) or 'none'})" + ("" if got else f": {(err or out)[-400:]!r}"))
+        check("mqtt: 27.9" in notes and not any("19" == n.split(": ", 1)[1] for n in notes if n.startswith("mqtt")) and ("home/proofer/ack", "seen 27.9", False) in broker.published[before:],
+              "the MQTT listener reacts to its own topic only, and its script can publish a reply")
+        check(hook.get("refused") == 403 and hook.get("ok") == 200 and any(n.startswith("webhook: ") and "spelt" in n for n in notes),
+              f"a web request without the key is refused; with it, the script gets what was sent ({hook})")
+        check("Subject: More flour on the way" in out and "Subject: Unrelated" not in out and "Subject: Your flour order has shipped" not in out,
+              "the email listener only reacts to new emails that match")
+        check(any("steam in home ovens" in n for n in notes) and not any("nail varnish" in n for n in notes), "the feed listener only reacts to new items")
+        check(any(n.startswith("folder: Spelt loaf") for n in notes) and not any("ignored" in n for n in notes), "the folder listener reads new files and skips hidden ones")
+        check(any("Add a spelt recipe" in n for n in notes) and not any("#41" in n for n in notes), "the GitHub listener reacts to new review requests only")
+        check(any(n.startswith("calendar: Feed the starter at ") and "(Kitchen)" in n for n in notes), "the calendar listener gives warning before an event")
 
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):

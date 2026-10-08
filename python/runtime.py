@@ -14,6 +14,7 @@ import os
 import random
 import re
 import sys
+import threading
 import time
 import urllib.error
 import urllib.parse
@@ -221,6 +222,10 @@ TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rs
 TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
 # worked out for Gmail, iCloud, Yahoo and Fastmail; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
+# MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
+# MQTT_PASSWORD if it needs them. MQTT_TLS = yes for an encrypted connection (port 8883). Needs  pip install paho-mqtt.
+# Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
+# WEBHOOK_PORT is the port to listen on (8765 if you don't say).
 # Calendar: CALENDAR_URL is your calendar's private iCal address (Google Calendar: Settings, your calendar,
 # "Secret address in iCal format"; Outlook: Settings, Calendar, Shared calendars, Publish; iCloud: share as public).
 # Several addresses can be separated by spaces.
@@ -700,6 +705,32 @@ class _Calc:
         if name == "sqrt" and args[0] < 0:
             raise ValueError("it takes the square root of a negative number")
         return {"sqrt": math.sqrt, "abs": abs, "floor": math.floor, "ceil": math.ceil}[name](args[0])
+
+
+def read_text_file(path):
+    """The words in a PDF, a .docx or a text file."""
+    low = path.lower()
+    if low.endswith(".pdf"):
+        try:
+            from pypdf import PdfReader  # pip install pypdf
+        except ImportError:
+            raise RunError("Reading PDFs needs the pypdf package: pip install pypdf") from None
+        return "\n\n".join((p.extract_text() or "") for p in PdfReader(path).pages[:300])
+    if low.endswith(".docx"):
+        import zipfile
+        with zipfile.ZipFile(path) as z:
+            xml = z.read("word/document.xml").decode("utf-8", "replace")
+        xml = re.sub(r"<w:tab/>", "\t", xml)
+        xml = re.sub(r"</w:p>|<w:br[^>]*/>", "\n", xml)
+        text = re.sub(r"<[^>]+>", "", xml)
+        for a, b in (("&lt;", "<"), ("&gt;", ">"), ("&quot;", '"'), ("&apos;", "'"), ("&amp;", "&")):
+            text = text.replace(a, b)
+        return text
+    with open(path, "rb") as f:
+        raw = f.read(25 * 1024 * 1024)
+    if b"\x00" in raw[:4000]:
+        raise RunError("That file isn't text. Use a PDF, a .docx or a text file.")
+    return raw.decode("utf-8", "replace")
 
 
 def calc_text(expression):
@@ -1877,30 +1908,11 @@ class Runtime:
             if os.path.getsize(path) > 25 * 1024 * 1024:
                 print("  That file is over 25 MB. Choose a smaller one.")
                 continue
-            low = path.lower()
-            if low.endswith(".pdf"):
-                try:
-                    from pypdf import PdfReader  # pip install pypdf
-                except ImportError:
-                    print("  Reading PDFs needs the pypdf package: pip install pypdf")
-                    continue
-                text = "\n\n".join((p.extract_text() or "") for p in PdfReader(path).pages[:300])
-            elif low.endswith(".docx"):
-                import zipfile
-                with zipfile.ZipFile(path) as z:
-                    xml = z.read("word/document.xml").decode("utf-8", "replace")
-                xml = re.sub(r"<w:tab/>", "\t", xml)
-                xml = re.sub(r"</w:p>|<w:br[^>]*/>", "\n", xml)
-                text = re.sub(r"<[^>]+>", "", xml)
-                for a, b in (("&lt;", "<"), ("&gt;", ">"), ("&quot;", '"'), ("&apos;", "'"), ("&amp;", "&")):
-                    text = text.replace(a, b)
-            else:
-                with open(path, "rb") as f:
-                    raw = f.read()
-                if b"\x00" in raw[:4000]:
-                    print("  That file isn't text. Use a PDF, a .docx or a text file.")
-                    continue
-                text = raw.decode("utf-8", "replace")
+            try:
+                text = read_text_file(path)
+            except RunError as e:
+                print("  " + str(e))
+                continue
             if not text.strip():
                 print("  No text could be found in that file. A scanned PDF holds pictures of pages, not text.")
                 continue
@@ -2660,7 +2672,7 @@ class Runtime:
     # ----- Connections: news feeds, GitHub, Telegram, email and calendar -----
     MAX_FEED_ITEMS = 10
 
-    async def feed_items(self, url="", limit=10):
+    async def feed_items(self, url="", limit=10, trusted=False):
         """Items from one feed, or from every feed in your settings (feeds = ...) when url is empty."""
         url = to_str(url).strip()
         mine = [u for u in re.split(r"[\s,]+", os.environ.get("RB_FEEDS", "")) if u]
@@ -2670,7 +2682,7 @@ class Runtime:
         limit = max(1, min(50, round_js(num(limit)) or self.MAX_FEED_ITEMS))
         out = []
         for u in urls:
-            ctype, data = await asyncio.to_thread(get_url, u, u in mine, "read_feed", 5_000_000)
+            ctype, data = await asyncio.to_thread(get_url, u, trusted or u in mine, "read_feed", 5_000_000)
             title, items = parse_feed(data)
             for it in items[:limit]:
                 out.append(dict(it, feed=title or u))
@@ -3102,6 +3114,378 @@ class Runtime:
         return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
             else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
 
+    # MQTT
+    def _mqtt_new(self, on_message=None, topics=()):
+        """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
+        try:
+            import paho.mqtt.client as mqtt
+        except ImportError:
+            raise RunError("MQTT needs the paho-mqtt package: pip install paho-mqtt") from None
+        host = os.environ.get("MQTT_HOST", "").strip()
+        if not host:
+            raise RunError(f"MQTT needs MQTT_HOST {WHERE_KEYS}: your broker's address, like homeassistant.local.")
+        tls = os.environ.get("MQTT_TLS", "").strip().lower() in ("1", "yes", "true", "on")
+        port = int(os.environ.get("MQTT_PORT") or (8883 if tls else 1883))
+        c = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        if os.environ.get("MQTT_USERNAME"):
+            c.username_pw_set(os.environ["MQTT_USERNAME"], os.environ.get("MQTT_PASSWORD") or None)
+        if tls:
+            c.tls_set()
+        ready, result = threading.Event(), {}
+
+        def on_connect(client, userdata, flags, reason_code, properties):
+            result["rc"] = reason_code
+            if not reason_code.is_failure:
+                for t in topics:
+                    client.subscribe(t, qos=0)
+            ready.set()
+        c.on_connect = on_connect
+        if on_message:
+            c.on_message = on_message
+        try:
+            c.connect(host, port, keepalive=60)
+        except OSError as e:
+            raise RunError(f"Couldn't reach the MQTT broker at {host}:{port} ({e}).") from None
+        c.loop_start()
+        if not ready.wait(10) or result["rc"].is_failure:
+            c.loop_stop()
+            raise RunError(f"The MQTT broker at {host}:{port} " + (f"refused the connection ({result['rc']}). Check MQTT_USERNAME and MQTT_PASSWORD."
+                                                                   if "rc" in result else "didn't answer."))
+        return c
+
+    @staticmethod
+    def _mqtt_payload(topic, raw):
+        """An MQTT message as a record: its topic and text, plus the fields of a JSON message (like zigbee2mqtt's)."""
+        text = raw.decode("utf-8", "replace") if isinstance(raw, (bytes, bytearray)) else to_str(raw)
+        rec = {"topic": topic, "text": text}
+        try:
+            j = json.loads(text)
+        except ValueError:
+            j = None
+        if isinstance(j, dict):
+            for k, v in j.items():
+                rec.setdefault(str(k), json.dumps(v) if isinstance(v, (dict, list)) else v)
+        return rec
+
+    @staticmethod
+    def _mqtt_topic(topic, publishing=False):
+        topic = to_str(topic).strip()
+        if not topic:
+            raise RunError("MQTT needs a topic, like home/kitchen/temperature.")
+        if publishing and ("+" in topic or "#" in topic):
+            raise RunError("You can't publish to a topic with + or # in it: those only work for listening.")
+        return topic
+
+    async def mqtt_read(self, topic, wait=2.0):
+        """The latest messages on a topic (+ and # allowed): {topic: text}. Retained messages arrive straight away."""
+        topic, got = self._mqtt_topic(topic), {}
+
+        def on_message(client, userdata, msg):
+            if len(got) < 200:
+                got[msg.topic] = self._mqtt_payload(msg.topic, msg.payload)["text"]
+        c = await asyncio.to_thread(self._mqtt_new, on_message, [topic])
+        try:
+            await asyncio.sleep(wait)
+        finally:
+            c.loop_stop()
+            c.disconnect()
+        return got
+
+    async def mqtt_value(self, topic):
+        """For the 'latest MQTT message' block: the text, or a record of topic -> text for a topic with + or #."""
+        got = await self.mqtt_read(topic)
+        topic = to_str(topic).strip()
+        if "+" not in topic and "#" not in topic:
+            v = got.get(topic, "")
+            self.log("MQTT " + topic, v or "(no message yet: only messages the broker keeps show up straight away)", "read")
+            return v
+        self.log("MQTT " + topic, "\n".join(f"{k}: {_short(v, 80)}" for k, v in sorted(got.items())) or "(nothing)", f"{len(got)} topics")
+        return got
+
+    async def mqtt_publish(self, topic, text, retain=False, approved=False):
+        topic, text = self._mqtt_topic(topic, True), to_str(text)
+        if not approved and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
+            return False
+        c = await asyncio.to_thread(self._mqtt_new)
+        try:
+            info = c.publish(topic, text, qos=1, retain=bool(retain))
+            await asyncio.to_thread(info.wait_for_publish, 10)
+        finally:
+            c.loop_stop()
+            c.disconnect()
+        self.log(f"MQTT → {topic}", text + ("  (kept by the broker)" if retain else ""), "published")
+        return True
+
+    # ----- Listeners: scripts that start when something arrives -----
+    # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
+    # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
+    LISTEN_NAMES = {"mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
+                    "github": "GitHub", "calendar": "Calendar"}
+
+    @staticmethod
+    def event(key="text"):
+        v = MESSAGE_VALUE.get()
+        key = to_str(key).strip()
+        if not isinstance(v, dict):
+            return v if key in ("", "text", "all") else ""
+        return dict(v) if key in ("", "all") else v.get(key, "")
+
+    @staticmethod
+    def _poll(seconds):
+        """How often a listener checks. RB_POLL_SECONDS (the tests use it) makes every listener check that often."""
+        try:
+            return max(0.2, float(os.environ["RB_POLL_SECONDS"])) if os.environ.get("RB_POLL_SECONDS") else seconds
+        except ValueError:
+            return seconds
+
+    def _fire(self, fn, payload, label):
+        busy = getattr(self, "_listen_busy", None)
+        if busy and not busy.done():
+            self.start_script(fn, payload)
+        else:
+            self._listen_busy = asyncio.ensure_future(self.run([(fn, payload)], label))
+
+    async def _listen(self, listeners):
+        groups = {}
+        for kind, arg, fn in listeners:
+            groups.setdefault(kind, []).append((arg, fn))
+        for kind, items in groups.items():
+            asyncio.ensure_future(self._keep_listening(kind, items))
+
+    async def _keep_listening(self, kind, items):
+        runner = getattr(self, "_listen_" + kind)
+        while True:
+            try:
+                await runner(items)
+                return
+            except asyncio.CancelledError:
+                raise
+            except Exception as e:  # noqa: BLE001 - say what went wrong, then try again
+                print(f"  ({self.LISTEN_NAMES.get(kind, kind)}: {self._describe(e)} Trying again in a minute.)", flush=True)
+                await asyncio.sleep(self._poll(60))
+
+    async def _listen_mqtt(self, items):
+        import paho.mqtt.client as mqtt
+        loop = asyncio.get_running_loop()
+
+        def on_message(client, userdata, msg):
+            if msg.retain:
+                return  # a kept message is an old value, not something that has just arrived
+            payload = self._mqtt_payload(msg.topic, msg.payload)
+            for sub_, fn in items:
+                if mqtt.topic_matches_sub(sub_, msg.topic):
+                    loop.call_soon_threadsafe(self._fire, fn, dict(payload), "MQTT " + msg.topic)
+        await asyncio.to_thread(self._mqtt_new, on_message, sorted({self._mqtt_topic(t) for t, _ in items}))
+        print("Listening for MQTT messages on " + ", ".join(sorted({t for t, _ in items})) + ".", flush=True)
+        while True:
+            await asyncio.sleep(3600)
+
+    async def _listen_webhook(self, items):
+        import hmac
+        from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+        secret = os.environ.get("WEBHOOK_SECRET", "").strip()
+        port = int(os.environ.get("WEBHOOK_PORT") or 8765)
+        paths = {}
+        for path, fn in items:
+            paths.setdefault(to_str(path).strip().strip("/").lower(), []).append(fn)
+        loop, rt = asyncio.get_running_loop(), self
+
+        class Hook(BaseHTTPRequestHandler):
+            def log_message(self, *a):
+                pass
+
+            def _answer(self, code, text):
+                body = json.dumps({"ok": code == 200, "message": text}).encode()
+                self.send_response(code)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def do_GET(self):
+                self._handle("GET")
+
+            def do_POST(self):
+                self._handle("POST")
+
+            def _handle(self, method):
+                u = urllib.parse.urlparse(self.path)
+                q = {k: v[0] for k, v in urllib.parse.parse_qs(u.query).items()}
+                key = self.headers.get("X-Second-Thought-Key") or q.pop("key", "")
+                if not secret or not hmac.compare_digest(key.encode(), secret.encode()):
+                    return self._answer(403, "Wrong or missing key.")
+                fns = paths.get(u.path.strip("/").lower())
+                if not fns:
+                    return self._answer(404, "No script listens at this address.")
+                n = int(self.headers.get("Content-Length") or 0)
+                if n > 1_000_000:
+                    return self._answer(413, "That's too big.")
+                body = self.rfile.read(n).decode("utf-8", "replace") if n else ""
+                rec = {"path": u.path.strip("/"), "method": method, "text": body or ", ".join(f"{k}={v}" for k, v in q.items())}
+                for k, v in q.items():
+                    rec.setdefault(k, v)
+                try:
+                    j = json.loads(body) if body else None
+                except ValueError:
+                    j = None
+                if isinstance(j, dict):
+                    for k, v in j.items():
+                        rec.setdefault(str(k), json.dumps(v) if isinstance(v, (dict, list)) else v)
+                for fn in fns:
+                    loop.call_soon_threadsafe(rt._fire, fn, dict(rec), "Web request /" + rec["path"])
+                self._answer(200, "Started.")
+        srv = ThreadingHTTPServer((os.environ.get("WEBHOOK_HOST", "0.0.0.0"), port), Hook)
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        if not secret:
+            print(f"Web requests: set WEBHOOK_SECRET {WHERE_KEYS} to a long password. Until then, every request is refused.", flush=True)
+        print(f"Listening for web requests on port {port}: " + ", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths) + ".", flush=True)
+        while True:
+            await asyncio.sleep(3600)
+
+    def _mail_new(self, c, last):
+        """Emails that arrived since the last check: (newest id, [records])."""
+        import email
+        import email.policy
+        import email.utils
+        m = self._imap(c)
+        try:
+            m.select("INBOX", readonly=True)
+            if last is None:
+                typ, data = m.uid("SEARCH", "ALL")
+                uids = [int(x) for x in (data[0] or b"").split()]
+                return (max(uids) if uids else 0), []
+            typ, data = m.uid("SEARCH", "UID", f"{last + 1}:*")
+            uids = sorted(int(x) for x in (data[0] or b"").split() if int(x) > last)
+            out = []
+            for uid in uids[:20]:
+                typ, got = m.uid("FETCH", str(uid), "(BODY.PEEK[]<0.30000>)")
+                raw = next((x[1] for x in got if isinstance(x, tuple)), b"")
+                msg = email.message_from_bytes(raw, policy=email.policy.default)
+                who = email.utils.parseaddr(str(msg.get("From", "")))
+                body = self._mail_text(msg, 8000)
+                sender = f"{who[0]} <{who[1]}>" if who[0] else who[1]
+                out.append({"id": str(uid), "from": sender, "subject": str(msg.get("Subject", "")), "body": body,
+                            "text": f"From: {sender}\nSubject: {msg.get('Subject', '')}\n\n{body[:3000]}"})
+            return (max(uids) if uids else last), out
+        finally:
+            try:
+                m.logout()
+            except Exception:  # noqa: BLE001
+                pass
+
+    async def _listen_email(self, items):
+        c, last = self._mail(), None
+        print("Checking for new email.", flush=True)
+        while True:
+            try:
+                last, new = await asyncio.to_thread(self._mail_new, c, last)
+                for rec in new:
+                    hay = (rec["from"] + " " + rec["subject"] + " " + rec["body"]).lower()
+                    for contains, fn in items:
+                        want = to_str(contains).strip().lower()
+                        if want in ("", "anything") or want in hay:
+                            self._fire(fn, dict(rec), "New email: " + _short(rec["subject"], 40))
+            except RunError as e:
+                print(f"  (Email check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(120))
+
+    async def _listen_feed(self, items):
+        seen = {}
+        while True:
+            for url, fn in items:
+                try:
+                    got = await self.feed_items(url, 30, trusted=True)
+                except RunError as e:
+                    print(f"  (Feed check failed: {e})", flush=True)
+                    continue
+                keys = {i["link"] or i["title"] for i in got}
+                if url in seen:
+                    for i in reversed(got):  # oldest first
+                        if (i["link"] or i["title"]) not in seen[url]:
+                            rec = {"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
+                                   "summary": i["summary"], "text": f"{i['title']}\n{i['summary']}\n{i['link']}".strip()}
+                            self._fire(fn, rec, "New in " + _short(i["feed"], 40))
+                    seen[url] |= keys
+                else:
+                    seen[url] = keys
+            await asyncio.sleep(self._poll(900))
+
+    async def _listen_folder(self, items):
+        base = os.path.dirname(os.path.abspath(sys.argv[0]))
+        folders = []
+        for d, fn in items:
+            d = os.path.expanduser(to_str(d).strip() or "inbox")
+            d = d if os.path.isabs(d) else os.path.join(base, d)
+            os.makedirs(d, exist_ok=True)
+            folders.append((d, fn))
+        known, waiting = {d: set(os.listdir(d)) for d, _ in folders}, {}
+        print("Watching for new files in " + ", ".join(d for d, _ in folders) + ".", flush=True)
+        while True:
+            await asyncio.sleep(self._poll(5))
+            for d, fn in folders:
+                try:
+                    names = set(os.listdir(d))
+                except OSError:
+                    continue
+                for n in sorted(names - known[d]):
+                    path = os.path.join(d, n)
+                    if n.startswith((".", "~")) or n.endswith((".tmp", ".part", ".crdownload")) or not os.path.isfile(path):
+                        continue
+                    size = os.path.getsize(path)
+                    if waiting.get(path) != size:  # still being written: wait until its size stops changing
+                        waiting[path] = size
+                        continue
+                    waiting.pop(path, None)
+                    known[d].add(n)
+                    try:
+                        text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
+                    except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
+                        text = ""
+                    self._fire(fn, {"name": n, "path": path, "size": size, "text": text}, "New file: " + n)
+                known[d] &= names
+
+    async def _listen_github(self, items):
+        seen = None
+        while True:
+            try:
+                data = await self._gh("/search/issues?per_page=50&q=" + urllib.parse.quote("is:pr is:open review-requested:@me archived:false"))
+                now = {}
+                for r in data.get("items", []):
+                    repo = r.get("repository_url", "").split("/repos/", 1)[-1]
+                    now[f"{repo}#{r['number']}"] = {"repo": repo, "number": r["number"], "title": r["title"], "user": r["user"]["login"],
+                                                     "link": r.get("html_url", ""), "text": f"{repo} #{r['number']}: {r['title']} (by {r['user']['login']})"}
+                if seen is not None:
+                    for k, rec in now.items():
+                        if k not in seen:
+                            for _, fn in items:
+                                self._fire(fn, dict(rec), "Review requested: " + k)
+                seen = set(now)
+            except RunError as e:
+                print(f"  (GitHub check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(300))
+
+    async def _listen_calendar(self, items):
+        fired = set()
+        while True:
+            try:
+                now = datetime.datetime.now()
+                ahead = max(max(0, round_js(num(a))) for a, _ in items)
+                for e in await self._calendar(now, now + datetime.timedelta(minutes=ahead + 1)):
+                    mins = (e["start"] - now).total_seconds() / 60
+                    if e["all_day"] or mins < 0:
+                        continue
+                    for a, fn in items:
+                        key = (e["title"], e["start"], a)
+                        if mins <= max(0, round_js(num(a))) and key not in fired:
+                            fired.add(key)
+                            rec = {"title": e["title"], "start": f"{e['start']:%H:%M}", "end": f"{e['end']:%H:%M}", "location": e["location"],
+                                   "minutes": max(0, round_js(mins)),
+                                   "text": f"{e['title']} at {e['start']:%H:%M}" + (f" ({e['location']})" if e["location"] else "")}
+                            self._fire(fn, rec, "Coming up: " + e["title"])
+            except RunError as e:
+                print(f"  (Calendar check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(60))
+
     # ----- Agent -----
     # Each step the model replies with JSON: a tool to use, or its final answer. The same protocol runs on the
     # page, so a program behaves the same in both places, and it works with every model and backup.
@@ -3155,8 +3539,13 @@ class Runtime:
                       "(60 if you don't say).", ["day", "from", "to", "minutes"])],
     }
     AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
+    AGENT_BUILTINS["mqtt"] = [("read_mqtt", "Get the latest MQTT messages on a topic (+ and # wildcards work, like zigbee2mqtt/+). Messages the broker keeps "
+                               "show up straight away; others only if one arrives within 2 seconds.", ["topic"])]
+    AGENT_BUILTINS["mqtt_act"] = [("publish_mqtt", "Publish a message to an MQTT topic, for example to switch something. retain asks the broker to keep it. "
+                                   "The person may be asked first, and may say no.", ["topic", "message", "retain"])]
+    AGENT_BUILTINS["mqtt_act_free"] = AGENT_BUILTINS["mqtt_act"]
     AGENT_BUILTINS["telegram_send_free"] = AGENT_BUILTINS["telegram_send"]
-    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send"}  # built-in tools that ask before each use
+    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
@@ -3170,10 +3559,12 @@ class Runtime:
                          "comment_on_github": {"repo": "text", "number": "number", "text": "text"}, "search_telegram": {"text": "text"},
                          "send_telegram": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
                          "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
-                         "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"}}
+                         "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"},
+                         "read_mqtt": {"topic": "text"}, "publish_mqtt": {"topic": "text", "message": "text", "retain": "yes/no"}}
     AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
                       "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"},
-                      "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"}}
+                      "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"},
+                      "publish_mqtt": {"retain"}}
     MAX_FILE_CHARS = 30000
     INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
                    "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
@@ -3407,6 +3798,13 @@ class Runtime:
             return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
         if kind == "calendar":
             return await self.calendar_text(a("day") or "today", inp.get("days", 7))
+        if kind == "read_mqtt":
+            got = await self.mqtt_read(a("topic"))
+            return "\n".join(f"{k}: {_short(v, 400)}" for k, v in sorted(got.items())) or \
+                f"No message on {a('topic')} within 2 seconds. Only messages the broker keeps (retained) show up straight away."
+        if kind == "publish_mqtt":
+            done = await self.mqtt_publish(a("topic"), inp.get("message", ""), bool(inp.get("retain")), approved)
+            return "Published." if done else "Not published: the person said no, or nobody was there to ask."
         if kind == "free_time":
             return await self.free_time(a("day") or "today", a("from") or "09:00", a("to") or "17:30", inp.get("minutes", 60))
         raise RunError(f"Unknown tool “{kind}”.")
@@ -3683,9 +4081,9 @@ class Runtime:
             print(f"(The log couldn't be saved: {e})", flush=True)
 
     # ----- Schedules -----
-    async def run_schedules(self, schedules, watches=(), telegram=()):
-        if not schedules and not watches and not telegram:
-            sys.exit("This program has no scheduled, 'when … changes' or Telegram scripts.")
+    async def run_schedules(self, schedules, watches=(), telegram=(), listeners=()):
+        if not schedules and not watches and not telegram and not listeners:
+            sys.exit("This program has no scheduled scripts, and nothing that listens.")
         self.schedule_mode = True
         print("Schedules are on. Leave this running; press Ctrl+C to stop.", flush=True)
         if watches:
@@ -3694,6 +4092,8 @@ class Runtime:
             if not self._tg_chats():
                 print(f"Telegram: send your bot a message. Until TELEGRAM_CHAT_ID is set {WHERE_KEYS}, the program only says which chat it came from.", flush=True)
             asyncio.ensure_future(self._tg_watch(telegram))
+        if listeners:
+            await self._listen(listeners)
         fired, next_every = {}, {}
         start = time.time()
         for i, s in enumerate(schedules):
@@ -3759,12 +4159,12 @@ class Runtime:
             first = False
             await asyncio.sleep(HA_WATCH_SECONDS)
 
-    def main(self, start_scripts, receivers, schedules, watches=(), telegram=()):
+    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=()):
         self.receivers = {k.lower(): v for k, v in receivers.items()}
-        use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram) and not start_scripts)
+        use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
         try:
             if use_schedule:
-                asyncio.run(self.run_schedules(schedules, watches, telegram))
+                asyncio.run(self.run_schedules(schedules, watches, telegram, listeners))
             else:
                 if not start_scripts:
                     sys.exit("Nothing to run: this program has no 'when Run is clicked' script.")

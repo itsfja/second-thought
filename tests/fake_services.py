@@ -35,7 +35,7 @@ def _atom(feed):
     return f'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"><title>{feed["title"]}</title>{entries}</feed>'
 
 
-def _ics():
+def _ics(soon=False):
     """A calendar with the awkward cases: a weekly repeat with a skipped date, a time zone, an all-day event,
     a cancelled event and a moved occurrence."""
     now = datetime.datetime.now().replace(second=0, microsecond=0)
@@ -60,6 +60,9 @@ def _ics():
         ["UID:gone", f"DTSTART:{f(today + datetime.timedelta(hours=12))}", f"DTEND:{f(today + datetime.timedelta(hours=13))}",
          "STATUS:CANCELLED", "SUMMARY:Cancelled lunch"],
     ]
+    if soon:  # for the 'event starts soon' listener: one event, ten minutes from now
+        ev = [["UID:soon", f"DTSTART:{f(now + datetime.timedelta(minutes=10))}", f"DTEND:{f(now + datetime.timedelta(minutes=40))}",
+               "SUMMARY:Feed the starter", "LOCATION:Kitchen"]]
     lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//test//EN"]
     for e in ev:
         lines += ["BEGIN:VEVENT"] + e + ["END:VEVENT"]
@@ -120,8 +123,8 @@ def start():
                 return self._send(200, _atom(feeds[1]), "application/atom+xml")
             if path == "/feeds/page.html":
                 return self._send(200, "<html><title>Not a feed</title></html>", "text/html")
-            if path == "/calendar.ics":
-                return self._send(200, _ics(), "text/calendar; charset=utf-8")
+            if path in ("/calendar.ics", "/calendar-soon.ics"):
+                return self._send(200, _ics(soon=path == "/calendar-soon.ics"), "text/calendar; charset=utf-8")
             if path.startswith("/gh/"):
                 return self._github(method, path[3:], q)
             if path.startswith("/tg/bot"):
@@ -199,6 +202,14 @@ def start():
         tg_add(m["text"], minutes_ago=m["hours_ago"] * 60)
     tg_add("Someone else's message about starter", chat=999, minutes_ago=30)
     imap_port, smtp_port = _mail_servers(data["email"], log)
+
+    def add_feed_item(title, link):
+        feeds[0]["items"].insert(0, {"title": title, "link": link, "hours_ago": 0, "summary": "Just in."})
+
+    def add_review(title):
+        gh["pulls"].append({"repo": "sample-baker/recipes", "number": 3, "title": title, "user": "crumb-shot", "days_ago": 0, "draft": False,
+                            "review_requested": True, "body": "", "head": "x", "base": "main", "files": [], "comments": []})
+    log["add_feed_item"], log["add_review"] = add_feed_item, add_review
     return base, log, tg_add, imap_port, smtp_port
 
 
@@ -219,6 +230,14 @@ def _mail_servers(email_data, log):
         else:
             e.set_content(m["body"])
         msgs.append((int(m["id"]), m["hours_ago"], e.as_bytes()))
+
+    def add_mail(sender, subject, body):
+        e = EmailMessage()
+        e["From"], e["To"], e["Subject"] = sender, MAIL_USER, subject
+        e["Date"] = email.utils.format_datetime(datetime.datetime.now(datetime.timezone.utc))
+        e.set_content(body)
+        msgs.append((max(u for u, h, r in msgs) + 1, 0, e.as_bytes()))
+    log["add_mail"] = add_mail
 
     class Imap(socketserver.StreamRequestHandler):
         def send(self, line):
@@ -251,6 +270,10 @@ def _mail_servers(email_data, log):
                 elif cmd in ("SELECT", "EXAMINE") and authed:
                     self.send(f"* {len(msgs)} EXISTS")
                     self.send(f"{tag} OK [READ-ONLY] selected")
+                elif cmd == "UID SEARCH" and authed and (args.strip() == "ALL" or args.startswith("UID ")):
+                    low = int(args.split()[1].split(":")[0]) if args.startswith("UID ") else 0
+                    self.send("* SEARCH " + " ".join(str(u) for u, h, r in msgs if u >= low))
+                    self.send(f"{tag} OK search done")
                 elif cmd == "UID SEARCH" and authed:
                     words = args.split()
                     days = 365

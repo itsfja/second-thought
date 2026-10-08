@@ -168,6 +168,7 @@ The olive block **agent: work toward …** holds the tools. The tools have their
 - **email: search and read**, and **email: send**.
 - **GitHub: projects and pull requests**, to find pull requests waiting for your review and read what they change, and **GitHub: comment**.
 - **Telegram: search my messages** and **Telegram: send**.
+- **MQTT: read topics** and **MQTT: publish**, for sensors and switches that talk MQTT (like Zigbee2MQTT).
 - **Home Assistant: look at devices**, including how a sensor changed over the last day, and **control devices**. Control devices asks you before every change, because something the agent reads could try to trick it. If you trust everything it reads, choose **control devices (no asking)**.
 - **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. **Ask me before each use** starts ticked, so you say yes before your block runs. That matters if the block changes something, because what the agent reads could try to trick it. Untick it for blocks that only work something out, like a calculator.
   In **input types**, say what each input must be, like `flour grams: number; water grams: number`. The types are text, number, yes/no, list and any. The agent's input is checked before your block runs. If it's wrong, for example words where a number should be, the block doesn't run and the agent is told what to fix.
@@ -184,7 +185,7 @@ When the agent finishes, the run log shows an **Agent summary**: a table with on
 
 The block **agent's steps** gives you a list of everything the agent did: each step, the tool, what it sent, what came back, and how it went. Your program can check it, save it, or ask Claude to review it.
 
-Tools that send something or change something (sending an email or a Telegram message, commenting on GitHub, controlling devices) ask you before each use. That matters, because an email, a web page or a pull request can contain words written to trick the agent. Telegram has a **send (no asking)** choice for a bot that answers on its own.
+Tools that send something or change something (sending an email or a Telegram message, commenting on GitHub, publishing to MQTT, controlling devices) ask you before each use. That matters, because an email, a web page or a pull request can contain words written to trick the agent. Telegram has a **send (no asking)** choice for a bot that answers on its own.
 
 On this page, the feeds, GitHub, email, Telegram and the calendar use **sample** data, like the sample house, so you can try everything safely. Nothing real is read or sent. The exported Python program uses your real ones: see **Connections** below for what to put in second-thought.ini.
 
@@ -194,12 +195,23 @@ There are many agent examples under **Agents** in Browse examples. **Agent: plan
 
 The pink **Connections** blocks work without an agent too:
 
-- **when a Telegram message arrives** starts a script when your bot gets a message. **Telegram message** gives you its words, who sent it, or the chat. On the page, right-click the block and choose **Run this script** to try it with a sample message.
+- **Listeners** start a script when something arrives:
+  - **when a Telegram message arrives**, for messages to your bot.
+  - **when an MQTT message arrives on …**, for a sensor or switch. `+` stands for one level of the topic and `#` for everything below, like `zigbee2mqtt/#`.
+  - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused.
+  - **when an email arrives containing …**, checked every 2 minutes.
+  - **when there's something new in feed …**, checked every 15 minutes.
+  - **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files.
+  - **when a pull request asks for my review**, checked every 5 minutes.
+  - **when a calendar event starts in … minutes**, for reminders.
+
+  **what arrived** gives what started the script. Every listener gives `text`, which sums it up. Each block's tooltip lists its other fields, like `subject` for an email or `topic` for MQTT. **Telegram message** gives a Telegram message's words, sender or chat. On the page, right-click a listener and choose **Run this script** to try it with a sample of what arrives. Listeners only listen while the exported program runs on schedule.
+- **latest MQTT message on …** reads a topic, and **publish MQTT … to topic …** sends one. With **ask me before any Home Assistant action**, publishing asks you first.
 - **send Telegram message** and **send email** send something. With **ask me before sending messages and announcements**, they ask you first.
 - **news from feed** gives a list of the latest items. Leave it empty for your own feeds.
 - **calendar for the next … days** gives a list of your events.
 
-Try **Morning briefing on Telegram** and **Email me a news digest** under Automation.
+Try **Morning briefing on Telegram** and **Email me a news digest** under Automation. Also try the listeners: **Proofer too warm? (MQTT)**, **When the bread is done (web request)**, **When the flour shop emails**, **Tell me when a feed posts something useful**, **Convert recipes dropped in a folder**, **When someone asks for my review (GitHub)** and **A reminder before each event**. Press Run to try each one with something you type. Under Agents, **Agent: check the sensors (MQTT)** looks over your MQTT devices.
 
 In the exported program, second-thought.ini asks only for what your program uses:
 
@@ -208,10 +220,12 @@ In the exported program, second-thought.ini asks only for what your program uses
 - **Email:** `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo and Fastmail find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST`.
 - **Calendar:** `CALENDAR_URL`, your calendar's private iCal address. In Google Calendar it's under Settings, your calendar, **Secret address in iCal format**. It can read your calendar, but not add to it.
 - **News feeds:** `feeds = ` and the feed addresses, with spaces between them.
+- **MQTT:** `MQTT_HOST`, your broker's address (for Mosquitto in Home Assistant, that's your Home Assistant), plus `MQTT_USERNAME` and `MQTT_PASSWORD` if it needs them. `MQTT_TLS = yes` makes it encrypted. The program needs the paho-mqtt library, which run.bat and run.sh install.
+- **Web requests:** `WEBHOOK_SECRET`, a long password, and `WEBHOOK_PORT` if 8765 is taken. Call `http://<this computer>:8765/<address>?key=<your secret>`, or put the secret in an `X-Second-Thought-Key` header.
 
 The agent only reads **public** web pages and feeds, never addresses on your own network, in case something it reads tries to steer it there. Your own feeds and calendar address are fine wherever they are. If you want the agent to read pages on your own network, add `local_pages = yes`.
 
-To listen for Telegram messages all the time, run the program with **run-on-schedule** (see Page 10). Messages that arrived while it was off are kept for searching, but don't start the script.
+To keep listening all the time, run the program with **run-on-schedule** (see Page 10). Things that arrived while it was off don't start the script: Telegram messages are kept for searching, and the email, feed, GitHub and folder listeners start from what's new after the program starts.
 
 ---
 

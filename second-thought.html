@@ -432,6 +432,7 @@ import os
 import random
 import re
 import sys
+import threading
 import time
 import urllib.error
 import urllib.parse
@@ -639,6 +640,10 @@ TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rs
 TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
 # worked out for Gmail, iCloud, Yahoo and Fastmail; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
+# MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
+# MQTT_PASSWORD if it needs them. MQTT_TLS = yes for an encrypted connection (port 8883). Needs  pip install paho-mqtt.
+# Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
+# WEBHOOK_PORT is the port to listen on (8765 if you don't say).
 # Calendar: CALENDAR_URL is your calendar's private iCal address (Google Calendar: Settings, your calendar,
 # "Secret address in iCal format"; Outlook: Settings, Calendar, Shared calendars, Publish; iCloud: share as public).
 # Several addresses can be separated by spaces.
@@ -1118,6 +1123,32 @@ class _Calc:
         if name == "sqrt" and args[0] < 0:
             raise ValueError("it takes the square root of a negative number")
         return {"sqrt": math.sqrt, "abs": abs, "floor": math.floor, "ceil": math.ceil}[name](args[0])
+
+
+def read_text_file(path):
+    """The words in a PDF, a .docx or a text file."""
+    low = path.lower()
+    if low.endswith(".pdf"):
+        try:
+            from pypdf import PdfReader  # pip install pypdf
+        except ImportError:
+            raise RunError("Reading PDFs needs the pypdf package: pip install pypdf") from None
+        return "\n\n".join((p.extract_text() or "") for p in PdfReader(path).pages[:300])
+    if low.endswith(".docx"):
+        import zipfile
+        with zipfile.ZipFile(path) as z:
+            xml = z.read("word/document.xml").decode("utf-8", "replace")
+        xml = re.sub(r"<w:tab/>", "\t", xml)
+        xml = re.sub(r"</w:p>|<w:br[^>]*/>", "\n", xml)
+        text = re.sub(r"<[^>]+>", "", xml)
+        for a, b in (("&lt;", "<"), ("&gt;", ">"), ("&quot;", '"'), ("&apos;", "'"), ("&amp;", "&")):
+            text = text.replace(a, b)
+        return text
+    with open(path, "rb") as f:
+        raw = f.read(25 * 1024 * 1024)
+    if b"\x00" in raw[:4000]:
+        raise RunError("That file isn't text. Use a PDF, a .docx or a text file.")
+    return raw.decode("utf-8", "replace")
 
 
 def calc_text(expression):
@@ -2295,30 +2326,11 @@ class Runtime:
             if os.path.getsize(path) > 25 * 1024 * 1024:
                 print("  That file is over 25 MB. Choose a smaller one.")
                 continue
-            low = path.lower()
-            if low.endswith(".pdf"):
-                try:
-                    from pypdf import PdfReader  # pip install pypdf
-                except ImportError:
-                    print("  Reading PDFs needs the pypdf package: pip install pypdf")
-                    continue
-                text = "\n\n".join((p.extract_text() or "") for p in PdfReader(path).pages[:300])
-            elif low.endswith(".docx"):
-                import zipfile
-                with zipfile.ZipFile(path) as z:
-                    xml = z.read("word/document.xml").decode("utf-8", "replace")
-                xml = re.sub(r"<w:tab/>", "\t", xml)
-                xml = re.sub(r"</w:p>|<w:br[^>]*/>", "\n", xml)
-                text = re.sub(r"<[^>]+>", "", xml)
-                for a, b in (("&lt;", "<"), ("&gt;", ">"), ("&quot;", '"'), ("&apos;", "'"), ("&amp;", "&")):
-                    text = text.replace(a, b)
-            else:
-                with open(path, "rb") as f:
-                    raw = f.read()
-                if b"\x00" in raw[:4000]:
-                    print("  That file isn't text. Use a PDF, a .docx or a text file.")
-                    continue
-                text = raw.decode("utf-8", "replace")
+            try:
+                text = read_text_file(path)
+            except RunError as e:
+                print("  " + str(e))
+                continue
             if not text.strip():
                 print("  No text could be found in that file. A scanned PDF holds pictures of pages, not text.")
                 continue
@@ -3078,7 +3090,7 @@ class Runtime:
     # ----- Connections: news feeds, GitHub, Telegram, email and calendar -----
     MAX_FEED_ITEMS = 10
 
-    async def feed_items(self, url="", limit=10):
+    async def feed_items(self, url="", limit=10, trusted=False):
         """Items from one feed, or from every feed in your settings (feeds = ...) when url is empty."""
         url = to_str(url).strip()
         mine = [u for u in re.split(r"[\s,]+", os.environ.get("RB_FEEDS", "")) if u]
@@ -3088,7 +3100,7 @@ class Runtime:
         limit = max(1, min(50, round_js(num(limit)) or self.MAX_FEED_ITEMS))
         out = []
         for u in urls:
-            ctype, data = await asyncio.to_thread(get_url, u, u in mine, "read_feed", 5_000_000)
+            ctype, data = await asyncio.to_thread(get_url, u, trusted or u in mine, "read_feed", 5_000_000)
             title, items = parse_feed(data)
             for it in items[:limit]:
                 out.append(dict(it, feed=title or u))
@@ -3520,6 +3532,378 @@ class Runtime:
         return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
             else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
 
+    # MQTT
+    def _mqtt_new(self, on_message=None, topics=()):
+        """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
+        try:
+            import paho.mqtt.client as mqtt
+        except ImportError:
+            raise RunError("MQTT needs the paho-mqtt package: pip install paho-mqtt") from None
+        host = os.environ.get("MQTT_HOST", "").strip()
+        if not host:
+            raise RunError(f"MQTT needs MQTT_HOST {WHERE_KEYS}: your broker's address, like homeassistant.local.")
+        tls = os.environ.get("MQTT_TLS", "").strip().lower() in ("1", "yes", "true", "on")
+        port = int(os.environ.get("MQTT_PORT") or (8883 if tls else 1883))
+        c = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        if os.environ.get("MQTT_USERNAME"):
+            c.username_pw_set(os.environ["MQTT_USERNAME"], os.environ.get("MQTT_PASSWORD") or None)
+        if tls:
+            c.tls_set()
+        ready, result = threading.Event(), {}
+
+        def on_connect(client, userdata, flags, reason_code, properties):
+            result["rc"] = reason_code
+            if not reason_code.is_failure:
+                for t in topics:
+                    client.subscribe(t, qos=0)
+            ready.set()
+        c.on_connect = on_connect
+        if on_message:
+            c.on_message = on_message
+        try:
+            c.connect(host, port, keepalive=60)
+        except OSError as e:
+            raise RunError(f"Couldn't reach the MQTT broker at {host}:{port} ({e}).") from None
+        c.loop_start()
+        if not ready.wait(10) or result["rc"].is_failure:
+            c.loop_stop()
+            raise RunError(f"The MQTT broker at {host}:{port} " + (f"refused the connection ({result['rc']}). Check MQTT_USERNAME and MQTT_PASSWORD."
+                                                                   if "rc" in result else "didn't answer."))
+        return c
+
+    @staticmethod
+    def _mqtt_payload(topic, raw):
+        """An MQTT message as a record: its topic and text, plus the fields of a JSON message (like zigbee2mqtt's)."""
+        text = raw.decode("utf-8", "replace") if isinstance(raw, (bytes, bytearray)) else to_str(raw)
+        rec = {"topic": topic, "text": text}
+        try:
+            j = json.loads(text)
+        except ValueError:
+            j = None
+        if isinstance(j, dict):
+            for k, v in j.items():
+                rec.setdefault(str(k), json.dumps(v) if isinstance(v, (dict, list)) else v)
+        return rec
+
+    @staticmethod
+    def _mqtt_topic(topic, publishing=False):
+        topic = to_str(topic).strip()
+        if not topic:
+            raise RunError("MQTT needs a topic, like home/kitchen/temperature.")
+        if publishing and ("+" in topic or "#" in topic):
+            raise RunError("You can't publish to a topic with + or # in it: those only work for listening.")
+        return topic
+
+    async def mqtt_read(self, topic, wait=2.0):
+        """The latest messages on a topic (+ and # allowed): {topic: text}. Retained messages arrive straight away."""
+        topic, got = self._mqtt_topic(topic), {}
+
+        def on_message(client, userdata, msg):
+            if len(got) < 200:
+                got[msg.topic] = self._mqtt_payload(msg.topic, msg.payload)["text"]
+        c = await asyncio.to_thread(self._mqtt_new, on_message, [topic])
+        try:
+            await asyncio.sleep(wait)
+        finally:
+            c.loop_stop()
+            c.disconnect()
+        return got
+
+    async def mqtt_value(self, topic):
+        """For the 'latest MQTT message' block: the text, or a record of topic -> text for a topic with + or #."""
+        got = await self.mqtt_read(topic)
+        topic = to_str(topic).strip()
+        if "+" not in topic and "#" not in topic:
+            v = got.get(topic, "")
+            self.log("MQTT " + topic, v or "(no message yet: only messages the broker keeps show up straight away)", "read")
+            return v
+        self.log("MQTT " + topic, "\n".join(f"{k}: {_short(v, 80)}" for k, v in sorted(got.items())) or "(nothing)", f"{len(got)} topics")
+        return got
+
+    async def mqtt_publish(self, topic, text, retain=False, approved=False):
+        topic, text = self._mqtt_topic(topic, True), to_str(text)
+        if not approved and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
+            return False
+        c = await asyncio.to_thread(self._mqtt_new)
+        try:
+            info = c.publish(topic, text, qos=1, retain=bool(retain))
+            await asyncio.to_thread(info.wait_for_publish, 10)
+        finally:
+            c.loop_stop()
+            c.disconnect()
+        self.log(f"MQTT → {topic}", text + ("  (kept by the broker)" if retain else ""), "published")
+        return True
+
+    # ----- Listeners: scripts that start when something arrives -----
+    # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
+    # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
+    LISTEN_NAMES = {"mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
+                    "github": "GitHub", "calendar": "Calendar"}
+
+    @staticmethod
+    def event(key="text"):
+        v = MESSAGE_VALUE.get()
+        key = to_str(key).strip()
+        if not isinstance(v, dict):
+            return v if key in ("", "text", "all") else ""
+        return dict(v) if key in ("", "all") else v.get(key, "")
+
+    @staticmethod
+    def _poll(seconds):
+        """How often a listener checks. RB_POLL_SECONDS (the tests use it) makes every listener check that often."""
+        try:
+            return max(0.2, float(os.environ["RB_POLL_SECONDS"])) if os.environ.get("RB_POLL_SECONDS") else seconds
+        except ValueError:
+            return seconds
+
+    def _fire(self, fn, payload, label):
+        busy = getattr(self, "_listen_busy", None)
+        if busy and not busy.done():
+            self.start_script(fn, payload)
+        else:
+            self._listen_busy = asyncio.ensure_future(self.run([(fn, payload)], label))
+
+    async def _listen(self, listeners):
+        groups = {}
+        for kind, arg, fn in listeners:
+            groups.setdefault(kind, []).append((arg, fn))
+        for kind, items in groups.items():
+            asyncio.ensure_future(self._keep_listening(kind, items))
+
+    async def _keep_listening(self, kind, items):
+        runner = getattr(self, "_listen_" + kind)
+        while True:
+            try:
+                await runner(items)
+                return
+            except asyncio.CancelledError:
+                raise
+            except Exception as e:  # noqa: BLE001 - say what went wrong, then try again
+                print(f"  ({self.LISTEN_NAMES.get(kind, kind)}: {self._describe(e)} Trying again in a minute.)", flush=True)
+                await asyncio.sleep(self._poll(60))
+
+    async def _listen_mqtt(self, items):
+        import paho.mqtt.client as mqtt
+        loop = asyncio.get_running_loop()
+
+        def on_message(client, userdata, msg):
+            if msg.retain:
+                return  # a kept message is an old value, not something that has just arrived
+            payload = self._mqtt_payload(msg.topic, msg.payload)
+            for sub_, fn in items:
+                if mqtt.topic_matches_sub(sub_, msg.topic):
+                    loop.call_soon_threadsafe(self._fire, fn, dict(payload), "MQTT " + msg.topic)
+        await asyncio.to_thread(self._mqtt_new, on_message, sorted({self._mqtt_topic(t) for t, _ in items}))
+        print("Listening for MQTT messages on " + ", ".join(sorted({t for t, _ in items})) + ".", flush=True)
+        while True:
+            await asyncio.sleep(3600)
+
+    async def _listen_webhook(self, items):
+        import hmac
+        from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+        secret = os.environ.get("WEBHOOK_SECRET", "").strip()
+        port = int(os.environ.get("WEBHOOK_PORT") or 8765)
+        paths = {}
+        for path, fn in items:
+            paths.setdefault(to_str(path).strip().strip("/").lower(), []).append(fn)
+        loop, rt = asyncio.get_running_loop(), self
+
+        class Hook(BaseHTTPRequestHandler):
+            def log_message(self, *a):
+                pass
+
+            def _answer(self, code, text):
+                body = json.dumps({"ok": code == 200, "message": text}).encode()
+                self.send_response(code)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def do_GET(self):
+                self._handle("GET")
+
+            def do_POST(self):
+                self._handle("POST")
+
+            def _handle(self, method):
+                u = urllib.parse.urlparse(self.path)
+                q = {k: v[0] for k, v in urllib.parse.parse_qs(u.query).items()}
+                key = self.headers.get("X-Second-Thought-Key") or q.pop("key", "")
+                if not secret or not hmac.compare_digest(key.encode(), secret.encode()):
+                    return self._answer(403, "Wrong or missing key.")
+                fns = paths.get(u.path.strip("/").lower())
+                if not fns:
+                    return self._answer(404, "No script listens at this address.")
+                n = int(self.headers.get("Content-Length") or 0)
+                if n > 1_000_000:
+                    return self._answer(413, "That's too big.")
+                body = self.rfile.read(n).decode("utf-8", "replace") if n else ""
+                rec = {"path": u.path.strip("/"), "method": method, "text": body or ", ".join(f"{k}={v}" for k, v in q.items())}
+                for k, v in q.items():
+                    rec.setdefault(k, v)
+                try:
+                    j = json.loads(body) if body else None
+                except ValueError:
+                    j = None
+                if isinstance(j, dict):
+                    for k, v in j.items():
+                        rec.setdefault(str(k), json.dumps(v) if isinstance(v, (dict, list)) else v)
+                for fn in fns:
+                    loop.call_soon_threadsafe(rt._fire, fn, dict(rec), "Web request /" + rec["path"])
+                self._answer(200, "Started.")
+        srv = ThreadingHTTPServer((os.environ.get("WEBHOOK_HOST", "0.0.0.0"), port), Hook)
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        if not secret:
+            print(f"Web requests: set WEBHOOK_SECRET {WHERE_KEYS} to a long password. Until then, every request is refused.", flush=True)
+        print(f"Listening for web requests on port {port}: " + ", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths) + ".", flush=True)
+        while True:
+            await asyncio.sleep(3600)
+
+    def _mail_new(self, c, last):
+        """Emails that arrived since the last check: (newest id, [records])."""
+        import email
+        import email.policy
+        import email.utils
+        m = self._imap(c)
+        try:
+            m.select("INBOX", readonly=True)
+            if last is None:
+                typ, data = m.uid("SEARCH", "ALL")
+                uids = [int(x) for x in (data[0] or b"").split()]
+                return (max(uids) if uids else 0), []
+            typ, data = m.uid("SEARCH", "UID", f"{last + 1}:*")
+            uids = sorted(int(x) for x in (data[0] or b"").split() if int(x) > last)
+            out = []
+            for uid in uids[:20]:
+                typ, got = m.uid("FETCH", str(uid), "(BODY.PEEK[]<0.30000>)")
+                raw = next((x[1] for x in got if isinstance(x, tuple)), b"")
+                msg = email.message_from_bytes(raw, policy=email.policy.default)
+                who = email.utils.parseaddr(str(msg.get("From", "")))
+                body = self._mail_text(msg, 8000)
+                sender = f"{who[0]} <{who[1]}>" if who[0] else who[1]
+                out.append({"id": str(uid), "from": sender, "subject": str(msg.get("Subject", "")), "body": body,
+                            "text": f"From: {sender}\nSubject: {msg.get('Subject', '')}\n\n{body[:3000]}"})
+            return (max(uids) if uids else last), out
+        finally:
+            try:
+                m.logout()
+            except Exception:  # noqa: BLE001
+                pass
+
+    async def _listen_email(self, items):
+        c, last = self._mail(), None
+        print("Checking for new email.", flush=True)
+        while True:
+            try:
+                last, new = await asyncio.to_thread(self._mail_new, c, last)
+                for rec in new:
+                    hay = (rec["from"] + " " + rec["subject"] + " " + rec["body"]).lower()
+                    for contains, fn in items:
+                        want = to_str(contains).strip().lower()
+                        if want in ("", "anything") or want in hay:
+                            self._fire(fn, dict(rec), "New email: " + _short(rec["subject"], 40))
+            except RunError as e:
+                print(f"  (Email check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(120))
+
+    async def _listen_feed(self, items):
+        seen = {}
+        while True:
+            for url, fn in items:
+                try:
+                    got = await self.feed_items(url, 30, trusted=True)
+                except RunError as e:
+                    print(f"  (Feed check failed: {e})", flush=True)
+                    continue
+                keys = {i["link"] or i["title"] for i in got}
+                if url in seen:
+                    for i in reversed(got):  # oldest first
+                        if (i["link"] or i["title"]) not in seen[url]:
+                            rec = {"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
+                                   "summary": i["summary"], "text": f"{i['title']}\n{i['summary']}\n{i['link']}".strip()}
+                            self._fire(fn, rec, "New in " + _short(i["feed"], 40))
+                    seen[url] |= keys
+                else:
+                    seen[url] = keys
+            await asyncio.sleep(self._poll(900))
+
+    async def _listen_folder(self, items):
+        base = os.path.dirname(os.path.abspath(sys.argv[0]))
+        folders = []
+        for d, fn in items:
+            d = os.path.expanduser(to_str(d).strip() or "inbox")
+            d = d if os.path.isabs(d) else os.path.join(base, d)
+            os.makedirs(d, exist_ok=True)
+            folders.append((d, fn))
+        known, waiting = {d: set(os.listdir(d)) for d, _ in folders}, {}
+        print("Watching for new files in " + ", ".join(d for d, _ in folders) + ".", flush=True)
+        while True:
+            await asyncio.sleep(self._poll(5))
+            for d, fn in folders:
+                try:
+                    names = set(os.listdir(d))
+                except OSError:
+                    continue
+                for n in sorted(names - known[d]):
+                    path = os.path.join(d, n)
+                    if n.startswith((".", "~")) or n.endswith((".tmp", ".part", ".crdownload")) or not os.path.isfile(path):
+                        continue
+                    size = os.path.getsize(path)
+                    if waiting.get(path) != size:  # still being written: wait until its size stops changing
+                        waiting[path] = size
+                        continue
+                    waiting.pop(path, None)
+                    known[d].add(n)
+                    try:
+                        text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
+                    except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
+                        text = ""
+                    self._fire(fn, {"name": n, "path": path, "size": size, "text": text}, "New file: " + n)
+                known[d] &= names
+
+    async def _listen_github(self, items):
+        seen = None
+        while True:
+            try:
+                data = await self._gh("/search/issues?per_page=50&q=" + urllib.parse.quote("is:pr is:open review-requested:@me archived:false"))
+                now = {}
+                for r in data.get("items", []):
+                    repo = r.get("repository_url", "").split("/repos/", 1)[-1]
+                    now[f"{repo}#{r['number']}"] = {"repo": repo, "number": r["number"], "title": r["title"], "user": r["user"]["login"],
+                                                     "link": r.get("html_url", ""), "text": f"{repo} #{r['number']}: {r['title']} (by {r['user']['login']})"}
+                if seen is not None:
+                    for k, rec in now.items():
+                        if k not in seen:
+                            for _, fn in items:
+                                self._fire(fn, dict(rec), "Review requested: " + k)
+                seen = set(now)
+            except RunError as e:
+                print(f"  (GitHub check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(300))
+
+    async def _listen_calendar(self, items):
+        fired = set()
+        while True:
+            try:
+                now = datetime.datetime.now()
+                ahead = max(max(0, round_js(num(a))) for a, _ in items)
+                for e in await self._calendar(now, now + datetime.timedelta(minutes=ahead + 1)):
+                    mins = (e["start"] - now).total_seconds() / 60
+                    if e["all_day"] or mins < 0:
+                        continue
+                    for a, fn in items:
+                        key = (e["title"], e["start"], a)
+                        if mins <= max(0, round_js(num(a))) and key not in fired:
+                            fired.add(key)
+                            rec = {"title": e["title"], "start": f"{e['start']:%H:%M}", "end": f"{e['end']:%H:%M}", "location": e["location"],
+                                   "minutes": max(0, round_js(mins)),
+                                   "text": f"{e['title']} at {e['start']:%H:%M}" + (f" ({e['location']})" if e["location"] else "")}
+                            self._fire(fn, rec, "Coming up: " + e["title"])
+            except RunError as e:
+                print(f"  (Calendar check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(60))
+
     # ----- Agent -----
     # Each step the model replies with JSON: a tool to use, or its final answer. The same protocol runs on the
     # page, so a program behaves the same in both places, and it works with every model and backup.
@@ -3573,8 +3957,13 @@ class Runtime:
                       "(60 if you don't say).", ["day", "from", "to", "minutes"])],
     }
     AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
+    AGENT_BUILTINS["mqtt"] = [("read_mqtt", "Get the latest MQTT messages on a topic (+ and # wildcards work, like zigbee2mqtt/+). Messages the broker keeps "
+                               "show up straight away; others only if one arrives within 2 seconds.", ["topic"])]
+    AGENT_BUILTINS["mqtt_act"] = [("publish_mqtt", "Publish a message to an MQTT topic, for example to switch something. retain asks the broker to keep it. "
+                                   "The person may be asked first, and may say no.", ["topic", "message", "retain"])]
+    AGENT_BUILTINS["mqtt_act_free"] = AGENT_BUILTINS["mqtt_act"]
     AGENT_BUILTINS["telegram_send_free"] = AGENT_BUILTINS["telegram_send"]
-    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send"}  # built-in tools that ask before each use
+    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
@@ -3588,10 +3977,12 @@ class Runtime:
                          "comment_on_github": {"repo": "text", "number": "number", "text": "text"}, "search_telegram": {"text": "text"},
                          "send_telegram": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
                          "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
-                         "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"}}
+                         "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"},
+                         "read_mqtt": {"topic": "text"}, "publish_mqtt": {"topic": "text", "message": "text", "retain": "yes/no"}}
     AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
                       "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"},
-                      "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"}}
+                      "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"},
+                      "publish_mqtt": {"retain"}}
     MAX_FILE_CHARS = 30000
     INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
                    "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
@@ -3825,6 +4216,13 @@ class Runtime:
             return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
         if kind == "calendar":
             return await self.calendar_text(a("day") or "today", inp.get("days", 7))
+        if kind == "read_mqtt":
+            got = await self.mqtt_read(a("topic"))
+            return "\n".join(f"{k}: {_short(v, 400)}" for k, v in sorted(got.items())) or \
+                f"No message on {a('topic')} within 2 seconds. Only messages the broker keeps (retained) show up straight away."
+        if kind == "publish_mqtt":
+            done = await self.mqtt_publish(a("topic"), inp.get("message", ""), bool(inp.get("retain")), approved)
+            return "Published." if done else "Not published: the person said no, or nobody was there to ask."
         if kind == "free_time":
             return await self.free_time(a("day") or "today", a("from") or "09:00", a("to") or "17:30", inp.get("minutes", 60))
         raise RunError(f"Unknown tool “{kind}”.")
@@ -4101,9 +4499,9 @@ class Runtime:
             print(f"(The log couldn't be saved: {e})", flush=True)
 
     # ----- Schedules -----
-    async def run_schedules(self, schedules, watches=(), telegram=()):
-        if not schedules and not watches and not telegram:
-            sys.exit("This program has no scheduled, 'when … changes' or Telegram scripts.")
+    async def run_schedules(self, schedules, watches=(), telegram=(), listeners=()):
+        if not schedules and not watches and not telegram and not listeners:
+            sys.exit("This program has no scheduled scripts, and nothing that listens.")
         self.schedule_mode = True
         print("Schedules are on. Leave this running; press Ctrl+C to stop.", flush=True)
         if watches:
@@ -4112,6 +4510,8 @@ class Runtime:
             if not self._tg_chats():
                 print(f"Telegram: send your bot a message. Until TELEGRAM_CHAT_ID is set {WHERE_KEYS}, the program only says which chat it came from.", flush=True)
             asyncio.ensure_future(self._tg_watch(telegram))
+        if listeners:
+            await self._listen(listeners)
         fired, next_every = {}, {}
         start = time.time()
         for i, s in enumerate(schedules):
@@ -4177,12 +4577,12 @@ class Runtime:
             first = False
             await asyncio.sleep(HA_WATCH_SECONDS)
 
-    def main(self, start_scripts, receivers, schedules, watches=(), telegram=()):
+    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=()):
         self.receivers = {k.lower(): v for k, v in receivers.items()}
-        use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram) and not start_scripts)
+        use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
         try:
             if use_schedule:
-                asyncio.run(self.run_schedules(schedules, watches, telegram))
+                asyncio.run(self.run_schedules(schedules, watches, telegram, listeners))
             else:
                 if not start_scripts:
                     sys.exit("Nothing to run: this program has no 'when Run is clicked' script.")
@@ -5108,95 +5508,326 @@ class Runtime:
 }</script>
 <script type="application/json" id="connections-sample">
 {
-  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email and calendar.",
+  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, web requests and folders.",
   "feeds": {
     "https://example.com/baking/feed": {
       "title": "The Loaf Letter (sample feed)",
       "items": [
-        {"title": "Why your rye starter smells of nail varnish", "link": "https://example.com/baking/rye-starter-smell", "hours_ago": 5,
-         "summary": "A sharp, solvent smell usually means a hungry starter. Feed it more often, or at a higher ratio, for a few days."},
-        {"title": "Autumn flour prices: what's changing", "link": "https://example.com/baking/flour-prices", "hours_ago": 30,
-         "summary": "Millers expect strong bread flour to rise slightly after a wet harvest. Stoneground and heritage flours are least affected."},
-        {"title": "Five shaping mistakes and how to fix them", "link": "https://example.com/baking/shaping-mistakes", "hours_ago": 56,
-         "summary": "Too much flour on the bench, not enough tension, and shaping too early are the most common reasons a loaf spreads."},
-        {"title": "Reader question: can I retard bulk in the fridge?", "link": "https://example.com/baking/retard-bulk", "hours_ago": 80,
-         "summary": "Yes, for up to about 12 hours, if the dough has risen around a third first. Expect a tangier loaf."}
+        {
+          "title": "Why your rye starter smells of nail varnish",
+          "link": "https://example.com/baking/rye-starter-smell",
+          "hours_ago": 5,
+          "summary": "A sharp, solvent smell usually means a hungry starter. Feed it more often, or at a higher ratio, for a few days."
+        },
+        {
+          "title": "Autumn flour prices: what's changing",
+          "link": "https://example.com/baking/flour-prices",
+          "hours_ago": 30,
+          "summary": "Millers expect strong bread flour to rise slightly after a wet harvest. Stoneground and heritage flours are least affected."
+        },
+        {
+          "title": "Five shaping mistakes and how to fix them",
+          "link": "https://example.com/baking/shaping-mistakes",
+          "hours_ago": 56,
+          "summary": "Too much flour on the bench, not enough tension, and shaping too early are the most common reasons a loaf spreads."
+        },
+        {
+          "title": "Reader question: can I retard bulk in the fridge?",
+          "link": "https://example.com/baking/retard-bulk",
+          "hours_ago": 80,
+          "summary": "Yes, for up to about 12 hours, if the dough has risen around a third first. Expect a tangier loaf."
+        }
       ]
     },
     "https://example.com/tech/feed": {
       "title": "Small Tools Weekly (sample feed)",
       "items": [
-        {"title": "Agents that check their own work", "link": "https://example.com/tech/self-checking-agents", "hours_ago": 8,
-         "summary": "A second, independent reviewer catches more mistakes than asking the same model to look again."},
-        {"title": "Home Assistant's autumn release", "link": "https://example.com/tech/ha-autumn-release", "hours_ago": 26,
-         "summary": "New energy dashboards, faster history graphs and better support for Matter locks."},
-        {"title": "Self-hosting on a NUC: a year on", "link": "https://example.com/tech/nuc-year-on", "hours_ago": 70,
-         "summary": "Power use, backups and the one mistake that cost a weekend: no test restores."}
+        {
+          "title": "Agents that check their own work",
+          "link": "https://example.com/tech/self-checking-agents",
+          "hours_ago": 8,
+          "summary": "A second, independent reviewer catches more mistakes than asking the same model to look again."
+        },
+        {
+          "title": "Home Assistant's autumn release",
+          "link": "https://example.com/tech/ha-autumn-release",
+          "hours_ago": 26,
+          "summary": "New energy dashboards, faster history graphs and better support for Matter locks."
+        },
+        {
+          "title": "Self-hosting on a NUC: a year on",
+          "link": "https://example.com/tech/nuc-year-on",
+          "hours_ago": 70,
+          "summary": "Power use, backups and the one mistake that cost a weekend: no test restores."
+        }
       ]
     }
   },
   "github": {
     "login": "sample-baker",
     "repos": [
-      {"full_name": "sample-baker/sourdough-chart", "description": "Interactive chart of fermentation times by temperature", "language": "JavaScript", "stars": 12, "open_issues": 3, "days_ago": 1},
-      {"full_name": "sample-baker/oven-timer", "description": "A Home Assistant timer card for bake schedules", "language": "Python", "stars": 4, "open_issues": 1, "days_ago": 6},
-      {"full_name": "sample-baker/recipes", "description": "Tested recipes in Markdown", "language": "Markdown", "stars": 2, "open_issues": 0, "days_ago": 20}
+      {
+        "full_name": "sample-baker/sourdough-chart",
+        "description": "Interactive chart of fermentation times by temperature",
+        "language": "JavaScript",
+        "stars": 12,
+        "open_issues": 3,
+        "days_ago": 1
+      },
+      {
+        "full_name": "sample-baker/oven-timer",
+        "description": "A Home Assistant timer card for bake schedules",
+        "language": "Python",
+        "stars": 4,
+        "open_issues": 1,
+        "days_ago": 6
+      },
+      {
+        "full_name": "sample-baker/recipes",
+        "description": "Tested recipes in Markdown",
+        "language": "Markdown",
+        "stars": 2,
+        "open_issues": 0,
+        "days_ago": 20
+      }
     ],
     "pulls": [
-      {"repo": "sample-baker/sourdough-chart", "number": 41, "title": "Add rye flour curve", "user": "crumb-shot", "days_ago": 1, "draft": false, "review_requested": true,
-       "body": "Adds a fermentation curve for 100% rye. Rye ferments faster, so the curve sits above wheat at every temperature.",
-       "head": "rye-curve", "base": "main",
-       "files": [{"filename": "src/curves.js", "additions": 24, "deletions": 2,
-                  "patch": "@@ -10,6 +10,28 @@ export const curves = {\n   wheat: [[18, 9], [21, 6.5], [24, 5], [27, 4]],\n+  rye: [[18, 6], [21, 4.5], [24, 3.5], [27, 9]],\n+  // hours of bulk ferment at each temperature (°C)\n }"},
-                 {"filename": "README.md", "additions": 3, "deletions": 0, "patch": "@@ -40,3 +40,6 @@\n+## Rye\n+Rye ferments faster than wheat.\n+Times are for a 20% starter."}],
-       "comments": [{"user": "crumb-shot", "body": "Numbers come from my test bakes in September."}]},
-      {"repo": "sample-baker/oven-timer", "number": 7, "title": "Fix timer drifting after a restart", "user": "sample-baker", "days_ago": 3, "draft": false, "review_requested": false,
-       "body": "Stores the end time instead of the seconds left, so a restart doesn't add time.", "head": "fix-drift", "base": "main",
-       "files": [{"filename": "timer.py", "additions": 9, "deletions": 6, "patch": "@@ -22,9 +22,12 @@\n-    self.left = seconds\n+    self.ends = time.time() + seconds"}],
-       "comments": []},
-      {"repo": "sample-baker/sourdough-chart", "number": 39, "title": "Dark mode colours", "user": "night-loaf", "days_ago": 9, "draft": true, "review_requested": false,
-       "body": "Work in progress.", "head": "dark-mode", "base": "main", "files": [{"filename": "src/theme.css", "additions": 40, "deletions": 3, "patch": ""}], "comments": []}
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "number": 41,
+        "title": "Add rye flour curve",
+        "user": "crumb-shot",
+        "days_ago": 1,
+        "draft": false,
+        "review_requested": true,
+        "body": "Adds a fermentation curve for 100% rye. Rye ferments faster, so the curve sits above wheat at every temperature.",
+        "head": "rye-curve",
+        "base": "main",
+        "files": [
+          {
+            "filename": "src/curves.js",
+            "additions": 24,
+            "deletions": 2,
+            "patch": "@@ -10,6 +10,28 @@ export const curves = {\n   wheat: [[18, 9], [21, 6.5], [24, 5], [27, 4]],\n+  rye: [[18, 6], [21, 4.5], [24, 3.5], [27, 9]],\n+  // hours of bulk ferment at each temperature (°C)\n }"
+          },
+          {
+            "filename": "README.md",
+            "additions": 3,
+            "deletions": 0,
+            "patch": "@@ -40,3 +40,6 @@\n+## Rye\n+Rye ferments faster than wheat.\n+Times are for a 20% starter."
+          }
+        ],
+        "comments": [
+          {
+            "user": "crumb-shot",
+            "body": "Numbers come from my test bakes in September."
+          }
+        ]
+      },
+      {
+        "repo": "sample-baker/oven-timer",
+        "number": 7,
+        "title": "Fix timer drifting after a restart",
+        "user": "sample-baker",
+        "days_ago": 3,
+        "draft": false,
+        "review_requested": false,
+        "body": "Stores the end time instead of the seconds left, so a restart doesn't add time.",
+        "head": "fix-drift",
+        "base": "main",
+        "files": [
+          {
+            "filename": "timer.py",
+            "additions": 9,
+            "deletions": 6,
+            "patch": "@@ -22,9 +22,12 @@\n-    self.left = seconds\n+    self.ends = time.time() + seconds"
+          }
+        ],
+        "comments": []
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "number": 39,
+        "title": "Dark mode colours",
+        "user": "night-loaf",
+        "days_ago": 9,
+        "draft": true,
+        "review_requested": false,
+        "body": "Work in progress.",
+        "head": "dark-mode",
+        "base": "main",
+        "files": [
+          {
+            "filename": "src/theme.css",
+            "additions": 40,
+            "deletions": 3,
+            "patch": ""
+          }
+        ],
+        "comments": []
+      }
     ],
     "issues": [
-      {"repo": "sample-baker/sourdough-chart", "number": 40, "title": "Chart is blank on Safari 17", "user": "toast-rack", "days_ago": 2, "state": "open"},
-      {"repo": "sample-baker/oven-timer", "number": 6, "title": "Timer loses time after Home Assistant restarts", "user": "sample-baker", "days_ago": 4, "state": "open"}
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "number": 40,
+        "title": "Chart is blank on Safari 17",
+        "user": "toast-rack",
+        "days_ago": 2,
+        "state": "open"
+      },
+      {
+        "repo": "sample-baker/oven-timer",
+        "number": 6,
+        "title": "Timer loses time after Home Assistant restarts",
+        "user": "sample-baker",
+        "days_ago": 4,
+        "state": "open"
+      }
     ]
   },
   "telegram": {
     "chat": "You (sample chat)",
     "messages": [
-      {"from": "You", "text": "Remind me to feed the starter at 8 tonight", "hours_ago": 2},
-      {"from": "You", "text": "What temperature should the oven be for a rye loaf?", "hours_ago": 20},
-      {"from": "You", "text": "Ordered 10 kg of strong white flour, arrives Friday", "hours_ago": 50},
-      {"from": "You", "text": "Starter peaked at 6 hours today, kitchen was 23 degrees", "hours_ago": 75}
+      {
+        "from": "You",
+        "text": "Remind me to feed the starter at 8 tonight",
+        "hours_ago": 2
+      },
+      {
+        "from": "You",
+        "text": "What temperature should the oven be for a rye loaf?",
+        "hours_ago": 20
+      },
+      {
+        "from": "You",
+        "text": "Ordered 10 kg of strong white flour, arrives Friday",
+        "hours_ago": 50
+      },
+      {
+        "from": "You",
+        "text": "Starter peaked at 6 hours today, kitchen was 23 degrees",
+        "hours_ago": 75
+      }
     ],
-    "incoming": {"from": "You", "text": "What should I bake this weekend?"}
+    "incoming": {
+      "from": "You",
+      "text": "What should I bake this weekend?"
+    }
   },
   "email": {
     "address": "you@example.com",
     "messages": [
-      {"id": "1042", "from": "Mill & Co <orders@example.com>", "subject": "Your flour order has shipped", "hours_ago": 3,
-       "body": "Hello,\n\nYour order of 10 kg strong white bread flour has shipped and should arrive on Friday between 9am and 1pm.\n\nMill & Co"},
-      {"id": "1041", "from": "Sam Patel <sam@example.com>", "subject": "Baking club on Saturday?", "hours_ago": 9,
-       "body": "Hi! Are you still up for baking club this Saturday at 2pm? I can bring the rye starter. Let me know by Thursday.\n\nSam"},
-      {"id": "1040", "from": "GitHub <notifications@example.com>", "subject": "[sourdough-chart] Review requested: Add rye flour curve (#41)", "hours_ago": 26,
-       "body": "crumb-shot requested your review on #41: Add rye flour curve."},
-      {"id": "1039", "from": "Council <bins@example.com>", "subject": "Bin collection changes", "hours_ago": 50,
-       "body": "From next week, recycling is collected on Tuesdays instead of Mondays."},
-      {"id": "1038", "from": "Newsletter <hello@example.com>", "subject": "50% off proving baskets this weekend only!", "hours_ago": 70,
-       "body": "Don't miss out on our biggest sale of the year."}
+      {
+        "id": "1042",
+        "from": "Mill & Co <orders@example.com>",
+        "subject": "Your flour order has shipped",
+        "hours_ago": 3,
+        "body": "Hello,\n\nYour order of 10 kg strong white bread flour has shipped and should arrive on Friday between 9am and 1pm.\n\nMill & Co"
+      },
+      {
+        "id": "1041",
+        "from": "Sam Patel <sam@example.com>",
+        "subject": "Baking club on Saturday?",
+        "hours_ago": 9,
+        "body": "Hi! Are you still up for baking club this Saturday at 2pm? I can bring the rye starter. Let me know by Thursday.\n\nSam"
+      },
+      {
+        "id": "1040",
+        "from": "GitHub <notifications@example.com>",
+        "subject": "[sourdough-chart] Review requested: Add rye flour curve (#41)",
+        "hours_ago": 26,
+        "body": "crumb-shot requested your review on #41: Add rye flour curve."
+      },
+      {
+        "id": "1039",
+        "from": "Council <bins@example.com>",
+        "subject": "Bin collection changes",
+        "hours_ago": 50,
+        "body": "From next week, recycling is collected on Tuesdays instead of Mondays."
+      },
+      {
+        "id": "1038",
+        "from": "Newsletter <hello@example.com>",
+        "subject": "50% off proving baskets this weekend only!",
+        "hours_ago": 70,
+        "body": "Don't miss out on our biggest sale of the year."
+      }
     ]
   },
   "calendar": {
     "events": [
-      {"day": 0, "start": "10:00", "end": "11:00", "title": "Dentist", "location": "High Street"},
-      {"day": 0, "start": "15:30", "end": "16:00", "title": "Call with the web designer"},
-      {"day": 1, "start": "09:00", "end": "17:30", "title": "Work"},
-      {"day": 2, "all_day": true, "title": "Flour delivery"},
-      {"day": 3, "start": "14:00", "end": "17:00", "title": "Baking club", "location": "Sam's kitchen"},
-      {"day": 4, "start": "11:00", "end": "12:30", "title": "Lunch with family"},
-      {"day": 6, "start": "18:00", "end": "19:00", "title": "Yoga"}
+      {
+        "day": 0,
+        "start": "10:00",
+        "end": "11:00",
+        "title": "Dentist",
+        "location": "High Street"
+      },
+      {
+        "day": 0,
+        "start": "15:30",
+        "end": "16:00",
+        "title": "Call with the web designer"
+      },
+      {
+        "day": 1,
+        "start": "09:00",
+        "end": "17:30",
+        "title": "Work"
+      },
+      {
+        "day": 2,
+        "all_day": true,
+        "title": "Flour delivery"
+      },
+      {
+        "day": 3,
+        "start": "14:00",
+        "end": "17:00",
+        "title": "Baking club",
+        "location": "Sam's kitchen"
+      },
+      {
+        "day": 4,
+        "start": "11:00",
+        "end": "12:30",
+        "title": "Lunch with family"
+      },
+      {
+        "day": 6,
+        "start": "18:00",
+        "end": "19:00",
+        "title": "Yoga"
+      }
     ]
+  },
+  "mqtt": {
+    "topics": {
+      "home/kitchen/temperature": "23.5",
+      "home/proofer/temperature": "26.8",
+      "home/proofer/humidity": "78",
+      "zigbee2mqtt/leak_sensor_sink": "{\"water_leak\": false, \"battery\": 87}",
+      "zigbee2mqtt/oven_plug": "{\"state\": \"OFF\", \"power\": 0}"
+    },
+    "incoming": {
+      "topic": "home/proofer/temperature",
+      "text": "27.4"
+    }
+  },
+  "webhook": {
+    "incoming": {
+      "path": "bake-done",
+      "method": "POST",
+      "text": "{\"loaf\": \"rye\", \"oven\": \"off\", \"core_temperature\": 98}"
+    }
+  },
+  "folder": {
+    "incoming": {
+      "name": "grandmas-loaf.txt",
+      "folder": "inbox",
+      "text": "Grandma's loaf\n2 lb strong white flour\n1 pint warm water\n1 oz fresh yeast\n2 tsp salt\nMix, knead 10 minutes, rise until doubled, shape, bake hot for 40 minutes."
+    }
   }
 }
 </script>
@@ -5318,7 +5949,12 @@ Agent (the model chooses its own steps):
   rb_agent: inputs GOAL, STEPS; fields PLAN ("TRUE" | "FALSE": plan first, revise as it goes); statement input TOOLS holding only tool blocks. Runs a tool-using loop and puts the final answer in the draft.
   rb_agent_builtin: fields KIND ("web": search_web, read_page | "ask": ask_me | "memory": remember, recall, list_memory | "calc": calculate | "time": current_time, time_plus | "file": read_file | "review": review_text | "feeds": read_feed | "linkedin": search_linkedin | "calendar": calendar, free_time | "email": search_email, read_email | "email_send": send_email | "github": my_pull_requests, list_pull_requests, read_pull_request, list_projects, search_github | "github_act": comment_on_github | "telegram": search_telegram | "telegram_send" | "telegram_send_free": send_telegram | "ha_read": find_devices, device_state, device_history | "ha_act" | "ha_act_free": call_service).
   Connections: rb_tg_when (hat; field CONTAINS, "anything" for every message) runs when the Telegram bot gets a message; rb_tg_message: field PART ("text" | "sender" | "chat"), value; rb_tg_send: input TEXT, statement; rb_email_send: inputs TO, SUBJECT, TEXT, statement; rb_feed_news: input URL (empty = the feeds in settings), value, list of records (feed, title, link, date, summary); rb_calendar: input DAYS, value, list of records (day, start, end, title, location).
-  Map Telegram bot handlers (python-telegram-bot, aiogram, a getUpdates loop) to rb_tg_when; smtplib sending to rb_email_send; feedparser to rb_feed_news. rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
+  Listeners (hats, run while the program runs on schedule): rb_mqtt_when (field TOPIC, + and # wildcards), rb_webhook_when (field PATH), rb_email_when (field CONTAINS),
+  rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_cal_when (field N, minutes before an event).
+  rb_event: field KEY (a field of what arrived; "text" always works; empty = the whole record), value. rb_mqtt_read: input TOPIC, value. rb_mqtt_publish: inputs TEXT, TOPIC; field RETAIN ("TRUE" | "FALSE"), statement.
+  Agent tool kinds also: "mqtt": read_mqtt | "mqtt_act" | "mqtt_act_free": publish_mqtt.
+  Map Telegram bot handlers (python-telegram-bot, aiogram, a getUpdates loop) to rb_tg_when; smtplib sending to rb_email_send; feedparser to rb_feed_news;
+  paho-mqtt on_message to rb_mqtt_when and publish() to rb_mqtt_publish; Flask/FastAPI routes that only start work to rb_webhook_when; watchdog folder handlers to rb_folder_when. rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
   Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
   rb_agent_steps: value, the most recent agent's steps as records (step, tool, input, result, status).
   Map open(...).read() on text files to rb_file_choose, writing output files to rb_file_save, try/except to rb_try, retry loops and backoff to rb_retry.
@@ -5426,6 +6062,7 @@ HOW TO MAP CODE
     ["email: search and read","email"],["email: send (asks me first)","email_send"],
     ["GitHub: projects and pull requests","github"],["GitHub: comment (asks me first)","github_act"],
     ["Telegram: search my messages","telegram"],["Telegram: send (asks me first)","telegram_send"],["Telegram: send (no asking)","telegram_send_free"],
+    ["MQTT: read topics","mqtt"],["MQTT: publish (asks me first)","mqtt_act"],["MQTT: publish (no asking)","mqtt_act_free"],
     ["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"],["Home Assistant: control devices (no asking)","ha_act_free"]];
   const TIERS = [["Claude, quick","quick"],["Claude, balanced","default"],["Claude, most capable","complex"],
                  ["Gemini Flash-Lite","gemini-quick"],["Gemini Flash","gemini-default"],["Gemini Pro","gemini-complex"],
@@ -5678,6 +6315,32 @@ HOW TO MAP CODE
       tooltip:"Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar." }),
     S("rb_email_send", "send email to %1 subject %2 %3", [val("TO"), val("SUBJECT"), val("TEXT")], { style:"conn",
       tooltip:"Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
+    { type:"rb_mqtt_when", message0:"when an MQTT message arrives on %1", args0:[{ type:"field_input", name:"TOPIC", text:"home/+/temperature" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when a message arrives on this MQTT topic. + stands for one level and # for everything below, like zigbee2mqtt/#. 'What arrived' gives its topic and text, plus the fields of a JSON message." },
+    { type:"rb_webhook_when", message0:"when a web request arrives at / %1", args0:[{ type:"field_input", name:"PATH", text:"bake-done" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address." },
+    { type:"rb_email_when", message0:"when an email arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text." },
+    { type:"rb_feed_when", message0:"when there's something new in feed %1", args0:[{ type:"field_input", name:"URL", text:"" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text." },
+    { type:"rb_folder_when", message0:"when a file appears in folder %1", args0:[{ type:"field_input", name:"FOLDER", text:"inbox" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file." },
+    { type:"rb_gh_when", message0:"when a pull request asks for my review", nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text." },
+    { type:"rb_cal_when", message0:"when a calendar event starts in %1 minutes", args0:[{ type:"field_number", name:"N", value:15, min:0, max:1440 }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text." },
+    V("rb_event", "what arrived: %1", [{ type:"field_input", name:"KEY", text:"text" }], null, { style:"conn",
+      tooltip:"Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record." }),
+    V("rb_mqtt_read", "latest MQTT message on %1", [val("TOPIC")], null, { style:"conn", inputsInline:true,
+      tooltip:"The latest message on an MQTT topic. Only messages the broker keeps (retained) show up straight away. With + or # in the topic, a record of each topic's latest message. On this page it uses sample topics." }),
+    S("rb_mqtt_publish", "publish MQTT %1 to topic %2 keep it %3", [val("TEXT"), val("TOPIC"), { type:"field_checkbox", name:"RETAIN", checked:false }],
+      { style:"conn", inputsInline:true, tooltip:"Sends a message to your MQTT broker. 'Keep it' asks the broker to remember it for anyone who listens later. 'Ask me before any Home Assistant action' or 'sending messages' makes it ask first. On this page it's only shown." }),
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
@@ -5782,7 +6445,12 @@ HOW TO MAP CODE
       B("rb_agent_tool", { DESC:L("Gives the oven temperature in °C for a bread type.") })
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
-      B("rb_tg_when"), B("rb_tg_message"), B("rb_tg_send", { TEXT:L("Your loaf is ready to come out.") }),
+      { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
+      B("rb_tg_when"), B("rb_mqtt_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_cal_when"),
+      B("rb_event"), B("rb_tg_message"),
+      { kind:"label", text:"Read and send" },
+      B("rb_mqtt_read", { TOPIC:T("home/kitchen/temperature") }), B("rb_mqtt_publish", { TEXT:T("ON"), TOPIC:T("zigbee2mqtt/oven_plug/set") }),
+      B("rb_tg_send", { TEXT:L("Your loaf is ready to come out.") }),
       B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }),
       B("rb_email_send", { TO:T("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
     ]},
@@ -6210,6 +6878,12 @@ HOW TO MAP CODE
   const sAddOne = n => blk("math_change", { VAR:{ id:xId(n) } }, { DELTA:nm(1) });
   const sFinish = () => blk("rb_result");
   const sFinishWith = x => blk("rb_finish_with", null, { TEXT:xT(x) });
+  const xEv = key => xB("rb_event", null, { KEY:key });
+  /* A listener you can also try with Run: Run asks you for a test value; the 'when …' block passes on what arrived. Both go to one script. */
+  const listenWay = (msg, prompt, hat, ...body) => [
+    chain(sStart(), sAskMe(prompt), blk("rb_broadcast_with_wait", null, { MSG:tx(msg), VALUE:xAnswer() })),
+    chain(hat, blk("rb_broadcast_with_wait", null, { MSG:tx(msg), VALUE:xEv("") })),
+    chain(sReceive(msg), ...body)];
   /* P(["var", ...], script) or P(vars, [script, script, ...]) for several scripts side by side. */
   const P = (vars, scripts) => {
     const list = Array.isArray(scripts) ? scripts : [scripts];
@@ -6813,6 +7487,14 @@ HOW TO MAP CODE
             "Only include people you actually found, with the address of their page. Remember the list as 'linkedin contacts'."), STEPS:nm(8),
           TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"linkedin" }), blk("rb_agent_builtin", { KIND:"web" }), blk("rb_agent_builtin", { KIND:"memory" }))) }),
         sFinish())) },
+    { key:"a_mqtt", cat:"Agents", title:"Agent: check the sensors (MQTT)",
+      desc:"Reads your MQTT sensors (Zigbee2MQTT and others), points out anything odd, like a leak, a low battery or a plug left on, and offers to switch things off, asking you first.",
+      tip:"Exported Python: set MQTT_HOST. Change the topics in the goal to where your devices publish.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", null, { GOAL:lt("Check my sensors: read zigbee2mqtt/# and home/#. Tell me about anything odd: a leak, a battery under 20%, a temperature out of the " +
+            "ordinary, or a plug drawing power that probably shouldn't be. If something should be switched off, offer to do it with publish_mqtt."), STEPS:nm(8),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"mqtt" }), blk("rb_agent_builtin", { KIND:"mqtt_act" }))) }),
+        sFinish())) },
     { key:"h_gifts", cat:"Home and baking", title:"Gift ideas within a budget",
       desc:"Suggests six gifts sorted by price, lets you choose one, then writes a gift-card message for it.",
       tip:"Give a budget and a couple of their interests.",
@@ -6889,6 +7571,52 @@ HOW TO MAP CODE
         xSet("digest", xAsk(xJ("Write a short email digest of these news items: group them by topic, one line each on why it's worth reading, with its link. Plain text, friendly.\n\n", xV("news")))),
         blk("rb_email_send", null, { TO:tx("you@example.com"), SUBJECT:tx("Your news digest"), TEXT:xV("digest") }),
         sAdd(xV("digest")), sFinish())) },
+    { key:"x_mqtt", cat:"Automation", title:"Proofer too warm? (MQTT)",
+      desc:"Listens to an MQTT temperature sensor. If the proofer goes over 26°C, it switches the heater off over MQTT and tells you on Telegram. Press Run to try it with a temperature you type.",
+      tip:"Exported Python: set MQTT_HOST in second-thought.ini and run it on schedule. Change the topics to your own sensors (zigbee2mqtt/… for Zigbee2MQTT).",
+      build:() => P([], listenWay("proofer", "Type a proofer temperature to test with, like 27.4", blk("rb_mqtt_when", { TOPIC:"home/proofer/temperature" }),
+        sIf(xMore(xEv("text"), nm(26)),
+          blk("rb_mqtt_publish", { RETAIN:false }, { TEXT:tx("OFF"), TOPIC:tx("zigbee2mqtt/proofer_heater/set") }),
+          blk("rb_tg_send", null, { TEXT:xJ("The proofer reached ", xEv("text"), "°C, so I switched its heater off.") })),
+        sAdd(xJ("Proofer: ", xEv("text"), "°C")), sFinish())) },
+    { key:"x_webhook", cat:"Automation", title:"When the bread is done (web request)",
+      desc:"Waits for a web request, for example from a Home Assistant automation when the oven turns off, then sends you a cooling tip on Telegram. Press Run to try it with text you type.",
+      tip:"Exported Python: set WEBHOOK_SECRET, run it on schedule, and have Home Assistant call http://<this computer>:8765/bake-done?key=<your secret>.",
+      build:() => P(["tip"], listenWay("bake done", "Type what the request would send, like {\"loaf\": \"rye\"}", blk("rb_webhook_when", { PATH:"bake-done" }),
+        xSet("tip", xAsk(xJ("The bread has just come out of the oven. Details: ", xEv("text"), "\nIn one friendly sentence, say how long to let it cool before slicing, and why."))),
+        blk("rb_tg_send", null, { TEXT:xV("tip") }), sAdd(xV("tip")), sFinish())) },
+    { key:"x_mailwatch", cat:"Automation", title:"When the flour shop emails",
+      desc:"Watches your inbox for emails that mention flour, picks out the delivery day, and tells you on Telegram. Press Run to try it with an email you paste.",
+      tip:"Change 'flour' to your shop's name. Exported Python checks your inbox every 2 minutes while it runs on schedule.",
+      build:() => P(["when"], listenWay("flour mail", "Paste an email to test with", blk("rb_email_when", { CONTAINS:"flour" }),
+        xSet("when", xExtract("the delivery day and time, or 'no delivery date' if there isn't one", xEv("text"))),
+        blk("rb_tg_send", null, { TEXT:xJ("Flour email: ", xV("when")) }), sAdd(xV("when")), sFinish())) },
+    { key:"x_feedwatch", cat:"Automation", title:"Tell me when a feed posts something useful",
+      desc:"Checks your news feeds every 15 minutes. When something new appears, Claude decides whether it's worth your time, and only then sends it to Telegram.",
+      tip:"Change the question to match what you care about.",
+      build:() => P([], listenWay("new item", "Type a headline to test with", blk("rb_feed_when", { URL:"" }),
+        sIf(xB("rb_ask_yesno", { TEXT:xJ("Would someone who bakes sourdough and builds small tools want to read this? ", xEv("text")) }),
+          blk("rb_tg_send", null, { TEXT:xJ("Worth reading: ", xEv("text")) })),
+        sAdd(xEv("text")), sFinish())) },
+    { key:"x_folder", cat:"Automation", title:"Convert recipes dropped in a folder",
+      desc:"Watches a folder. Drop in a recipe (PDF, Word or text) and it rewrites it in grams and °C with baker's percentages, and saves the result. Press Run to try it with a recipe you paste.",
+      tip:"Exported Python makes the folder 'recipes-in' next to the program. Results go in the outputs folder.",
+      build:() => P(["grams"], listenWay("recipe", "Paste a recipe to test with", blk("rb_folder_when", { FOLDER:"recipes-in" }),
+        xSet("grams", xAsk(xJ("Rewrite this recipe in grams and °C, with each ingredient's baker's percentage. Keep the method short.\n\n", xEv("text")))),
+        sSave(xV("grams"), "recipe-in-grams", "md"), sAdd(xV("grams")), sFinish())) },
+    { key:"x_review", cat:"Automation", title:"When someone asks for my review (GitHub)",
+      desc:"When a GitHub pull request asks for your review, an agent reads it and sends you a three-line summary on Telegram.",
+      tip:"Exported Python: GitHub is checked every 5 minutes while the program runs on schedule.",
+      build:() => P([], listenWay("review", "Type a pull request to test with, like sample-baker/sourdough-chart #41", blk("rb_gh_when"),
+        blk("rb_agent", null, { GOAL:xJ("A pull request needs my review: ", xEv("text"), "\nRead it, then tell me in three short lines what it changes and anything to look at closely."), STEPS:nm(5),
+          TOOLS:st(blk("rb_agent_builtin", { KIND:"github" })) }),
+        blk("rb_tg_send", null, { TEXT:xB("rb_draft") }), sFinish())) },
+    { key:"x_soon", cat:"Automation", title:"A reminder before each event",
+      desc:"Fifteen minutes before each event in your calendar, sends you a reminder on Telegram with a practical tip.",
+      tip:"Change 15 to how much warning you want.",
+      build:() => P(["note"], listenWay("soon", "Type an event to test with, like 'Dentist at 10:00 (High Street)'", blk("rb_cal_when", { N:15 }),
+        xSet("note", xAsk(xJ("Write a one-line friendly reminder for this, with one practical tip: ", xEv("text")))),
+        blk("rb_tg_send", null, { TEXT:xV("note") }), sAdd(xV("note")), sFinish())) },
     { key:"memory", cat:"Automation", title:"Fresh headline every run", build:EXAMPLES.memory,
       desc:"Remembers every headline it has used, so each run (or each scheduled day) comes up with a new one.",
       tip:"Open the Memory panel after a few runs to see what it has kept." },
@@ -7613,8 +8341,8 @@ HOW TO MAP CODE
   const pyName = () => slug($("io-name").value);
   // Everything in the exported zip: the program, its settings file, what to install, and Windows launchers.
   function exportFiles(progName, code){
-    const base = pyName(), sched = ws.getTopBlocks(false).some(b => ["rb_when_time", "rb_every", "rb_ha_when", "rb_tg_when"].includes(b.type));
-    const req = ["anthropic"].concat(programUsesGemini() ? ["google-genai"] : [], settingsFor().calendar ? ["tzdata"] : []).join("\n") + "\n";
+    const base = pyName(), sched = ws.getTopBlocks(false).some(b => ["rb_when_time", "rb_every", "rb_ha_when"].includes(b.type) || LISTENER_HATS.has(b.type));
+    const req = ["anthropic"].concat(programUsesGemini() ? ["google-genai"] : [], settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : []).join("\n") + "\n";
     const files = [{ name:base + ".py", text:code }, { name:"second-thought.ini", text:iniText(progName) },
                    { name:"requirements.txt", text:req }, { name:"run.bat", text:runBat(base, false) },
                    { name:"run.sh", text:runSh(base, false) }];
@@ -7803,8 +8531,10 @@ HOW TO MAP CODE
     const kinds = new Set(blocks.filter(b => b.type === "rb_agent_builtin").map(b => b.getFieldValue("KIND")));
     const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
     return { keys, llama:programUsesLlama(), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
-             github:has([], ["github", "github_act"]), telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
-             email:has(["rb_email_send"], ["email", "email_send"]), calendar:has(["rb_calendar"], ["calendar"]), feeds:has(["rb_feed_news"], ["feeds"]),
+             github:has(["rb_gh_when"], ["github", "github_act"]), telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
+             email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]), calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
+             feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]), mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
+             webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              pages:has([], ["web"]) };
   }
   function iniText(progName){
@@ -7851,6 +8581,13 @@ HOW TO MAP CODE
       "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
       "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
       "CALENDAR_URL = ");
+    if (need.mqtt) out.push("", "[mqtt]",
+      "; Your MQTT broker, for example Mosquitto in Home Assistant (Settings, Add-ons). Add a username and password if it needs them.",
+      "MQTT_HOST = homeassistant.local", "; MQTT_PORT = 1883", "; MQTT_USERNAME = ", "; MQTT_PASSWORD = ", "; MQTT_TLS = yes   for an encrypted connection (port 8883)");
+    if (need.webhook) out.push("", "[web requests]",
+      "; A long password that every web request must carry: http://<this computer>:8765/<address>?key=<this password>",
+      "; or in an X-Second-Thought-Key header. Requests without it are refused.",
+      "WEBHOOK_SECRET = ", "; WEBHOOK_PORT = 8765");
     if (need.llama) out.push("", "[llama]",
       "; Where your Llama server is. This is Ollama on this computer; change it if Llama lives elsewhere.",
       "LLAMA_BASE_URL = http://localhost:11434/v1", "; LLAMA_API_KEY = ");
@@ -8093,6 +8830,8 @@ HOW TO MAP CODE
         case "rb_ha_snapshot": return "(await R.ha_snapshot(" + I("CAMERA", '""') + "))";
         case "rb_ha_trigger": return "R.ha_trigger()";
         case "rb_tg_message": return "R.telegram_message(" + pyStr(F("PART") || "text") + ")";
+        case "rb_event": return "R.event(" + pyStr(String(F("KEY") || "").trim()) + ")";
+        case "rb_mqtt_read": return "(await R.mqtt_value(" + I("TOPIC", '""') + "))";
         case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
         case "rb_calendar": return "(await R.calendar_records(" + I("DAYS", "7") + "))";
         case "rb_chat": return "(await R.chat(" + I("NAME", '"chat"') + ", " + I("TEXT", '""') + "))";
@@ -8221,6 +8960,7 @@ HOW TO MAP CODE
           case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
           case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
+          case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
           case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + ")"); break;
@@ -8285,7 +9025,11 @@ HOW TO MAP CODE
       return out.length - start;
     }
 
-    const sections = [], starts = [], receivers = {}, schedules = [], watches = [], telegram = [];
+    const sections = [], starts = [], receivers = {}, schedules = [], watches = [], telegram = [], listeners = [];
+    const LISTEN = { rb_mqtt_when:["mqtt", "TOPIC", "when an MQTT message arrives on"], rb_webhook_when:["webhook", "PATH", "when a web request arrives at /"],
+      rb_email_when:["email", "CONTAINS", "when an email arrives containing"], rb_feed_when:["feed", "URL", "when there's something new in feed"],
+      rb_folder_when:["folder", "FOLDER", "when a file appears in folder"], rb_gh_when:["github", null, "when a pull request asks for my review"],
+      rb_cal_when:["calendar", "N", "when a calendar event starts in"] };
     // Saved programs that 'run program' blocks use, each as one function (its 'when Run is clicked' scripts, in order).
     withSubPrograms(subs => {
       subs.forEach(x => programFn.set(x.key, ident("program_" + x.name)));
@@ -8355,6 +9099,13 @@ HOW TO MAP CODE
         if (!stmts(b.getNextBlock(), 1, {}, out)) out.push("    pass");
         const key = msg.toLowerCase();
         (receivers[key] = receivers[key] || []).push(fn);
+      } else if (LISTEN[b.type]) {
+        const [kind, field, words] = LISTEN[b.type], arg = field ? String(b.getFieldValue(field) == null ? "" : b.getFieldValue(field)).trim() : "";
+        const fn = ident("when_" + kind + "_" + (listeners.filter(l => l[0] === kind).length + 1));
+        out.push("async def " + fn + "():");
+        out.push("    \"\"\"" + (words + (field ? " " + (arg || "(your own)") + (kind === "calendar" ? " minutes" : "") : "")).replace(/"/g, "'") + "\"\"\"");
+        if (!stmts(b.getNextBlock(), 1, {}, out)) out.push("    pass");
+        listeners.push([kind, "(" + pyStr(kind) + ", " + pyStr(arg) + ", " + fn + ")"]);
       } else if (b.type === "rb_tg_when") {
         const contains = String(b.getFieldValue("CONTAINS") || "").trim();
         const fn = ident("when_telegram_message_arrives" + (telegram.length ? "_" + (telegram.length + 1) : ""));
@@ -8407,11 +9158,11 @@ HOW TO MAP CODE
       ...settingsFor().keys.map(k => "         " + k[1] + " = your-key"),
       usesHA ? "         HA_URL = http://homeassistant.local:8123" : null,
       usesHA ? "         HA_TOKEN = your-long-lived-token" : null,
-      "  2. Windows: double-click run.bat" + ((schedules.length || watches.length || telegram.length) ? " (or run-on-schedule.bat to keep it running;" : "."),
-      (schedules.length || watches.length || telegram.length) ? "     install-startup.bat makes it start by itself each time you log in)" : null,
-      "     Linux or Mac:  sh run.sh" + ((schedules.length || watches.length || telegram.length) ? "   (or sh run-on-schedule.sh to keep it running;" : ""),
-      (schedules.length || watches.length || telegram.length) ? "     sh install-service.sh makes it start by itself, on Linux or a Mac)" : null,
-      "     Or by hand:  pip install " + (usesGemini ? "anthropic google-genai" : "anthropic") + ", then  python " + fileBase + ".py" + ((schedules.length || watches.length || telegram.length) ? " [--schedule]" : ""),
+      "  2. Windows: double-click run.bat" + ((schedules.length || watches.length || telegram.length || listeners.length) ? " (or run-on-schedule.bat to keep it running;" : "."),
+      (schedules.length || watches.length || telegram.length || listeners.length) ? "     install-startup.bat makes it start by itself each time you log in)" : null,
+      "     Linux or Mac:  sh run.sh" + ((schedules.length || watches.length || telegram.length || listeners.length) ? "   (or sh run-on-schedule.sh to keep it running;" : ""),
+      (schedules.length || watches.length || telegram.length || listeners.length) ? "     sh install-service.sh makes it start by itself, on Linux or a Mac)" : null,
+      "     Or by hand:  pip install " + (usesGemini ? "anthropic google-genai" : "anthropic") + ", then  python " + fileBase + ".py" + ((schedules.length || watches.length || telegram.length || listeners.length) ? " [--schedule]" : ""),
       "  Environment variables with the same names still work, and win over the file.",
       "",
       usesGemini ? "Gemini calls go through the Gemini API and are billed to your Google account." : null,
@@ -8451,9 +9202,10 @@ HOW TO MAP CODE
       "SCHEDULES = [" + schedules.join(", ") + "]",
       "HA_WATCHES = [" + watches.join(", ") + "]",
       telegram.length ? "TELEGRAM_WATCHES = [" + telegram.join(", ") + "]" : null,
+      listeners.length ? "LISTENERS = [" + listeners.map(l => l[1]).join(", ") + "]" : null,
       "",
       "if __name__ == \"__main__\":",
-      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + ")",
+      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + ")",
       ""
     ].filter(l => l !== null).join("\n");
     const code = header + document.getElementById("py-runtime").textContent.replace(/^\n+/, "") + "\n" + program;
@@ -9334,20 +10086,24 @@ HOW TO MAP CODE
         ["read_email", "Read one email in full, by its id from search_email.", ["id"]]],
     email_send:[["send_email", "Send an email from the person's address. The person is asked first, and may say no.", ["to", "subject", "body"]]],
     calendar:[["calendar", "List the person's calendar events, from a day (today, tomorrow, a weekday or YYYY-MM-DD) for some days (7 if you don't say).", ["day", "days"]],
-        ["free_time", "Find free time on one day, between two times (09:00 and 17:30 if you don't say), at least some minutes long (60 if you don't say).", ["day", "from", "to", "minutes"]]]
+        ["free_time", "Find free time on one day, between two times (09:00 and 17:30 if you don't say), at least some minutes long (60 if you don't say).", ["day", "from", "to", "minutes"]]],
+    mqtt:[["read_mqtt", "Get the latest MQTT messages on a topic (+ and # wildcards work, like zigbee2mqtt/+). Messages the broker keeps show up straight away; others only if one arrives within 2 seconds.", ["topic"]]],
+    mqtt_act:[["publish_mqtt", "Publish a message to an MQTT topic, for example to switch something. retain asks the broker to keep it. The person may be asked first, and may say no.", ["topic", "message", "retain"]]]
   };
   AGENT_BUILTINS.ha_act_free = AGENT_BUILTINS.ha_act;
   AGENT_BUILTINS.telegram_send_free = AGENT_BUILTINS.telegram_send;
-  const AGENT_ASKS = new Set(["ha_act", "github_act", "telegram_send", "email_send"]);  // built-in tools that ask before each use
+  AGENT_BUILTINS.mqtt_act_free = AGENT_BUILTINS.mqtt_act;
+  const AGENT_ASKS = new Set(["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act"]);  // built-in tools that ask before each use
   const MAX_AGENT_STEPS = 20;
   // The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL. Matches the runtime.
   const AGENT_INPUT_TYPES = { search_web:{ query:"text" }, ask_me:{ question:"text" }, remember:{ name:"text", value:"text" }, recall:{ name:"text" },
     list_memory:{}, find_devices:{ search:"text" }, device_state:{ entity:"text" }, call_service:{ service:"text", entity:"text", data:"any" },
     read_page:{ url:"text" }, device_history:{ entity:"text", hours:"number" }, calculate:{ expression:"text" }, current_time:{},
     time_plus:{ time:"text", minutes:"number" }, read_file:{ why:"text" }, review_text:{ text:"text", criteria:"text" },
-    read_feed:{ url:"text", limit:"number" }, search_linkedin:{ query:"text" }, my_pull_requests:{}, list_pull_requests:{ repo:"text", state:"text" }, read_pull_request:{ repo:"text", number:"number" }, list_projects:{ owner:"text" }, search_github:{ query:"text" }, comment_on_github:{ repo:"text", number:"number", text:"text" }, search_telegram:{ text:"text" }, send_telegram:{ text:"text" }, search_email:{ query:"text", days:"number" }, read_email:{ id:"text" }, send_email:{ to:"text", subject:"text", body:"text" }, calendar:{ day:"text", days:"number" }, free_time:{ day:"text", "from":"text", to:"text", minutes:"number" } };
+    read_feed:{ url:"text", limit:"number" }, search_linkedin:{ query:"text" }, my_pull_requests:{}, list_pull_requests:{ repo:"text", state:"text" }, read_pull_request:{ repo:"text", number:"number" }, list_projects:{ owner:"text" }, search_github:{ query:"text" }, comment_on_github:{ repo:"text", number:"number", text:"text" }, search_telegram:{ text:"text" }, send_telegram:{ text:"text" }, search_email:{ query:"text", days:"number" }, read_email:{ id:"text" }, send_email:{ to:"text", subject:"text", body:"text" }, calendar:{ day:"text", days:"number" }, free_time:{ day:"text", "from":"text", to:"text", minutes:"number" },
+    read_mqtt:{ topic:"text" }, publish_mqtt:{ topic:"text", message:"text", retain:"yes/no" } };
   const AGENT_OPTIONAL = { find_devices:["search"], call_service:["entity", "data"], device_history:["hours"], read_file:["why"],
-    read_feed:["limit", "url"], list_pull_requests:["state"], list_projects:["owner"], search_telegram:["text"], search_email:["days", "query"], calendar:["day", "days"], free_time:["day", "from", "minutes", "to"] };
+    read_feed:["limit", "url"], list_pull_requests:["state"], list_projects:["owner"], search_telegram:["text"], search_email:["days", "query"], calendar:["day", "days"], free_time:["day", "from", "minutes", "to"], publish_mqtt:["retain"] };
   const MAX_FILE_CHARS = 30000;
   /* Works out a sum like (350 / 500) * 100 exactly, without running any code. Matches the runtime's _Calc. */
   const CALC_FUNCS = ["round", "min", "max", "sqrt", "abs", "floor", "ceil"];
@@ -9427,7 +10183,7 @@ HOW TO MAP CODE
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Email:"emails", Calendar:"calendar events" }[what] || what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics" }[what] || what;
     addStep(what, { mono:true, text:"This page uses sample " + noun + ", so nothing real is read or sent. Exported Python uses your own." }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -9572,6 +10328,53 @@ HOW TO MAP CODE
     const slots = free.filter(([x, y]) => y - x >= need);
     return slots.length ? "Free on " + dayText(start) + ":\n" + slots.map(([x, y]) => "  " + hm(x) + "–" + hm(y)).join("\n")
       : "No free time of " + (Math.floor(num(minutes) + 0.5) || 30) + " minutes on " + dayText(start) + " between " + (from || "09:00") + " and " + (to || "17:30") + ".";
+  }
+  /* MQTT on the page: sample topics. */
+  const MQTT = () => { connNote("MQTT"); return CONN.mqtt || { topics:{} }; };
+  function mqttTopic(topic, publishing){
+    topic = str(topic).trim();
+    if (!topic) fail("MQTT needs a topic, like home/kitchen/temperature.");
+    if (publishing && /[+#]/.test(topic)) fail("You can't publish to a topic with + or # in it: those only work for listening.");
+    return topic;
+  }
+  function mqttMatches(sub, topic){
+    const a = sub.split("/"), b = topic.split("/");
+    for (let i = 0; i < a.length; i++) { if (a[i] === "#") return true; if (i >= b.length || (a[i] !== "+" && a[i] !== b[i])) return false; }
+    return a.length === b.length;
+  }
+  function mqttRead(topic){ topic = mqttTopic(topic); const got = {}; Object.entries(MQTT().topics || {}).forEach(([t, v]) => { if (mqttMatches(topic, t)) got[t] = v; }); return got; }
+  async function mqttPublish(topic, text, retain, approved){
+    topic = mqttTopic(topic, true); text = str(text);
+    if (!approved && !(await allowed(["ha", "messages"], "publish to MQTT " + topic + ": " + short(text, 120)))) return false;
+    MQTT(); addStep("MQTT → " + topic, { text:text + (retain ? "  (kept by the broker)" : "") }).done("sample", "ok");
+    return true;
+  }
+  function mqttRecord(topic, text){
+    const rec = { topic, text };
+    try { const j = JSON.parse(text); if (j && typeof j === "object" && !Array.isArray(j)) Object.entries(j).forEach(([k, v]) => { if (!(k in rec)) rec[k] = v && typeof v === "object" ? JSON.stringify(v) : v; }); } catch(e) {}
+    return rec;
+  }
+  /* What a listener's script gets on the page when you right-click its 'when …' block and choose 'Run this script'. */
+  function sampleArrival(b){
+    switch (b.type) {
+      case "rb_mqtt_when": { const m = (CONN.mqtt || {}).incoming || { topic:"home/test", text:"1" }; return mqttRecord(m.topic, m.text); }
+      case "rb_webhook_when": { const w = (CONN.webhook || {}).incoming || { text:"" }; const rec = mqttRecord("", w.text); delete rec.topic;
+        return Object.assign({ path:str(b.getFieldValue("PATH")).trim().replace(/^\/+|\/+$/g, "") || w.path, method:w.method || "POST" }, rec); }
+      case "rb_email_when": { const m = ((CONN.email || {}).messages || [])[0] || { id:"1", from:"", subject:"", body:"" };
+        return { id:m.id, from:m.from, subject:m.subject, body:m.body, text:"From: " + m.from + "\nSubject: " + m.subject + "\n\n" + m.body }; }
+      case "rb_feed_when": { const it = sampleFeedItems("", 1)[0] || { feed:"", title:"", link:"", date:new Date(), summary:"" };
+        return { feed:it.feed, title:it.title, link:it.link, date:whenText(it.date), summary:it.summary, text:it.title + "\n" + it.summary + "\n" + it.link }; }
+      case "rb_folder_when": { const f = (CONN.folder || {}).incoming || { name:"file.txt", text:"" }, folder = str(b.getFieldValue("FOLDER")).trim() || "inbox";
+        return { name:f.name, path:folder + "/" + f.name, size:f.text.length, text:f.text }; }
+      case "rb_gh_when": { const p = ((CONN.github || {}).pulls || []).find(x => x.review_requested) || { repo:"", number:0, title:"", user:"" };
+        return { repo:p.repo, number:p.number, title:p.title, user:p.user, link:"https://github.com/" + p.repo + "/pull/" + p.number, text:p.repo + " #" + p.number + ": " + p.title + " (by " + p.user + ")" }; }
+      case "rb_cal_when": { const n = Math.max(0, Math.floor(num(b.getFieldValue("N")) + 0.5)), now = new Date();
+        const e = sampleEvents(now, new Date(now.getTime() + 7 * 86400000)).find(x => !x.all_day) || { title:"Event", start:now, end:now, location:"" };
+        const hm = d => pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+        return { title:e.title, start:hm(e.start), end:hm(e.end), location:e.location, minutes:n, text:e.title + " at " + hm(e.start) + (e.location ? " (" + e.location + ")" : "") }; }
+      case "rb_tg_when": { const m = (CONN.telegram || {}).incoming || { from:"You", text:"Hello" }; return { text:m.text, sender:m.from, chat:(CONN.telegram || {}).chat || "" }; }
+    }
+    return "";
   }
   function currentTimeText(){
     const d = new Date();
@@ -9768,6 +10571,9 @@ HOW TO MAP CODE
       case "read_email": return emailRead(a("id"));
       case "send_email": return (await emailSend(a("to"), a("subject"), inp.body == null ? "" : inp.body, run.agentApproved)) ? "Sent." : "Not sent: the person said no.";
       case "calendar": return calendarText(a("day") || "today", inp.days == null ? 7 : inp.days);
+      case "read_mqtt": { const got = mqttRead(a("topic")); return Object.keys(got).sort().map(k => k + ": " + short(got[k], 400)).join("\n") ||
+        "No message on " + a("topic") + " within 2 seconds. Only messages the broker keeps (retained) show up straight away."; }
+      case "publish_mqtt": return (await mqttPublish(a("topic"), inp.message == null ? "" : inp.message, !!inp.retain, run.agentApproved)) ? "Published." : "Not published: the person said no.";
       case "free_time": return freeTime(a("day") || "today", a("from") || "09:00", a("to") || "17:30", inp.minutes == null ? 60 : inp.minutes);
     }
     fail("Unknown tool \u201c" + name + "\u201d.");
@@ -10181,6 +10987,17 @@ HOW TO MAP CODE
       case "rb_msg_value": return tc.payload;
       case "rb_ha_state": case "rb_ha_attr": case "rb_ha_find": case "rb_ha_summary":
       case "rb_ha_history": case "rb_ha_snapshot": case "rb_ha_trigger": return haValue(b, tc);
+      case "rb_event": {
+        const key = str(b.getFieldValue("KEY")).trim(), v = tc.payload;
+        if (!v || typeof v !== "object" || Array.isArray(v)) return ["", "text", "all"].includes(key) ? (v == null ? "" : v) : "";
+        return key === "" || key === "all" ? Object.assign({}, v) : (key in v ? v[key] : "");
+      }
+      case "rb_mqtt_read": {
+        const topic = mqttTopic(await input(b, tc, "TOPIC")), got = mqttRead(topic);
+        if (!/[+#]/.test(topic)) { const v = got[topic] || ""; addStep("MQTT " + topic, { mono:true, text:v || "(no message yet: only messages the broker keeps show up straight away)" }).done("read", "ok"); return v; }
+        addStep("MQTT " + topic, { mono:true, text:Object.keys(got).sort().map(k => k + ": " + short(got[k], 80)).join("\n") || "(nothing)" }).done(Object.keys(got).length + " topics", "ok");
+        return got;
+      }
       case "rb_tg_message": {
         const m = tc.payload && typeof tc.payload === "object" && "text" in tc.payload ? tc.payload : null;
         if (!m) return "";
@@ -10695,6 +11512,7 @@ HOW TO MAP CODE
         haNote(); addStep("Notification → " + target, { text }).done("sample house", "ok"); break;
       }
       case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
+      case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {
         const text = str(await input(b, tc, "TEXT")), player = str(await input(b, tc, "PLAYER")).trim();
@@ -10949,7 +11767,8 @@ HOW TO MAP CODE
   $("step-go").onclick = () => { stepper.on = false; releaseStep(true); updateStepUi(); };
 
   /* ---------- Run this script (right-click a block) ---------- */
-  const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when", "rb_tg_when"]);
+  const LISTENER_HATS = new Set(["rb_tg_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when"]);
+  const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when", ...LISTENER_HATS]);
   function runFromBlock(block){
     if (run && run.active) return;
     const root = block.getRootBlock();
@@ -10957,9 +11776,8 @@ HOW TO MAP CODE
       stepsEl.innerHTML = ""; addStep("Can't run a definition", { text:"Right-click a block that uses this My Block, or the script it's in, to run it." }).done("note", "warn"); return;
     }
     if (root.outputConnection) { startRun([{ evalBlock:root, getNextBlock:() => null }], "manual", true); return; }
-    if (root.type === "rb_tg_when") {  // tried with the sample message, as if it had just arrived
-      const m = (CONN.telegram || {}).incoming || { from:"You", text:"Hello" };
-      startRun([{ getNextBlock:() => root.getNextBlock(), payload:{ text:m.text, sender:m.from, chat:(CONN.telegram || {}).chat || "" } }], "manual", true); return;
+    if (LISTENER_HATS.has(root.type)) {  // tried with a sample of what arrives, as if it had just arrived
+      startRun([{ getNextBlock:() => root.getNextBlock(), payload:sampleArrival(root) }], "manual", true); return;
     }
     if (HATS.has(root.type)) { startRun([root], "manual", true); return; }
     startRun([{ getNextBlock:() => root }], "manual", true);
