@@ -622,6 +622,31 @@ async def new_feature_page_tests(pg):
                                 add(val(blk("rb_ask", inputs={"TEXT": tx("two")}))), add(val(blk("rb_ask", inputs={"TEXT": tx("three")})))))
     EXTRA["t_resume"] = await export_python(pg, "t_resume")
 
+    print("Agent summary")
+    summary_rows = """e => { const st = e.find(x => x.querySelector('.step-name').textContent === 'Agent summary'); if (!st) return null;
+        return [...st.querySelectorAll('tbody tr')].map(r => [...r.cells].map(c => c.textContent)); }"""
+    chain = [tcall("remember", name="s", value="rye"), tcall("recall", name="s"), fin("Your starter is rye.")]
+    status, steps, items = await agent_run(pg, ["memory"], chain)
+    rows = await pg.eval_on_selector_all(".step", summary_rows)
+    check(status.startswith("done") and rows and len(rows) == 3 and rows[1] == ["2", "recall", '{"name": "s"}', "rye", "done"]
+          and rows[2][1] == "final answer" and rows[2][4] == "answer",
+          f"after the agent, a summary table lists each step's tool, input, result and status ({rows[1] if rows else None})")
+    await pg.click("#log-save")
+    await pg.wait_for_timeout(300)
+    saved = [n for n in await pg.evaluate("window.__saved") if "-log-" in n]
+    data = (await pg.evaluate("window.__savedData"))[saved[-1]] if saved else ""
+    check("| Step | Tool | Input | Result | Status |" in data and '| 2 | recall | {"name": "s"} | rye | done |' in data, "the saved log has the summary as a markdown table")
+    stop_prog = script(blk("rb_budget", inputs={"TOKENS": nm(5)}),
+                       blk("rb_agent", inputs={"GOAL": tx("Test goal"), "STEPS": nm(6), "TOOLS": {"block": blk("rb_agent_builtin", fields={"KIND": "memory"})}}))
+    await load_state(pg, stop_prog)
+    await pg.evaluate("r => { window.__agentScript = r; }", chain)
+    try:
+        status = await run_program(pg)
+    finally:
+        await pg.evaluate("window.__agentScript = null")
+    rows = await pg.eval_on_selector_all(".step", summary_rows)
+    check(status == "error" and rows and len(rows) == 1 and rows[0][1] == "remember", f"if the run stops part-way, the summary still shows what the agent had done ({status})")
+
     print("Agent: every path")
     done = lambda a: {"done": True, "answer": a}  # noqa: E731
     tool = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
@@ -1230,6 +1255,8 @@ def python_tests(codes):
         statuses = [l.split(": ", 1)[1] for l in out.split("RESULT")[-1].splitlines() if l.startswith("status: ")]
         check(code_ == 0 and statuses == ["done", "done", "repeat", "answer"] and "tool: recall" in out,
               "t_steps.py gives the agent's steps as records" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        check("▸ Agent summary  [4 steps]" in out and '    2. recall  [done]  {"name": "s"} → rye' in out and "    4. final answer  [answer]" in out,
+              "Python sums up the agent's steps, one line each")
         check(re.search(r"▸ Agent step 1/6: remember  \[done\]\n(    .*\n)*    · Claude, \w+ · \d+\.\d s · \d+ in, \d+ out\n", out),
               "Python prints each step's model, time and exact tokens")
         code_, out, err = run_ag("t_ag_bad")

@@ -169,6 +169,8 @@ If Claude's reply comes out muddled, or it asks for the same tool with the same 
 
 An agent only reads the words that tools send back. It never follows instructions hidden inside them. It still can't unlock a door without asking you.
 
+When the agent finishes, the run log shows an **Agent summary**: a table with one row for each step, showing the tool, what it sent, what came back, and how it went. You get it even if the run stops part-way, because that's when it's most useful.
+
 The block **agent's steps** gives you a list of everything the agent did: each step, the tool, what it sent, what came back, and how it went. Your program can check it, save it, or ask Claude to review it.
 
 Try the examples **Agent: plan my bake** and **Agent with your own tool**.
