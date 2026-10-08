@@ -1264,7 +1264,7 @@ class Runtime:
                  if n else "No token budget for this run.", "set")
 
     # ----- Asking before actions -----
-    ASK_FIRST = {"ha": "any Home Assistant action", "messages": "sending messages and announcements",
+    ASK_FIRST = {"ha": "any smart home action (Home Assistant, Homey or MQTT)", "messages": "sending messages and announcements",
                  "files": "saving files", "all": "all of these"}
 
     def ask_before(self, kind):
@@ -3114,6 +3114,201 @@ class Runtime:
         return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
             else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
 
+    # Homey
+    # Homey Pro's local Web API: HOMEY_URL is its address on your network, HOMEY_API_KEY a key from the Homey Web App
+    # (Settings, API Keys). Give the key the permissions your program needs: devices (view, and control to switch
+    # things), flows (view and start), Logic (view, and edit to set variables).
+    HOMEY_SENSITIVE = {("locked", False), ("garagedoor_closed", False), ("homealarm_state", "disarmed")}
+
+    async def _homey(self, method, path, body=None):
+        url, key = os.environ.get("HOMEY_URL", "").strip().rstrip("/"), os.environ.get("HOMEY_API_KEY", "").strip()
+        if not url or not key:
+            raise RunError(f"Homey needs HOMEY_URL and HOMEY_API_KEY {WHERE_KEYS}. Make a key in the Homey Web App: Settings, API Keys.")
+        if not re.match(r"^https?://", url):
+            url = "http://" + url
+        req = urllib.request.Request(url + "/api/manager" + path, method=method, data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    raw = r.read()
+                    return json.loads(raw) if raw.strip() else None
+            except urllib.error.HTTPError as e:
+                why = {401: "the API key was refused. Check HOMEY_API_KEY", 403: "the API key isn't allowed to do that. Give it more permissions in the Homey Web App",
+                       404: "not found"}.get(e.code, f"Homey answered {e.code}")
+                raise RunError(f"Homey: {why}.") from None
+            except urllib.error.URLError as e:
+                raise RunError(f"Couldn't reach Homey at {url} ({e.reason}).") from None
+        return await asyncio.to_thread(go)
+
+    async def _homey_home(self):
+        """Every device, with its zone's name."""
+        devices = await self._homey("GET", "/devices/device/")
+        try:
+            zones = {k: v.get("name", "") for k, v in (await self._homey("GET", "/zones/zone/")).items()}
+        except RunError:
+            zones = {}
+        out = []
+        for d in (devices or {}).values():
+            caps = {k: c.get("value") for k, c in (d.get("capabilitiesObj") or {}).items()}
+            zone = d.get("zone")
+            zone = zones.get(zone if isinstance(zone, str) else (zone or {}).get("id"), "") or (zone.get("name", "") if isinstance(zone, dict) else "")
+            out.append({"id": d.get("id"), "name": d.get("name", ""), "zone": zone, "class": d.get("class", ""), "caps": caps})
+        out.sort(key=lambda x: (x["zone"], x["name"]))
+        return out
+
+    @staticmethod
+    def _homey_show(v):
+        return "on" if v is True else "off" if v is False else "-" if v is None else to_str(v)
+
+    def _homey_line(self, d):
+        return f"{d['name']} ({d['zone'] or 'no zone'}, {d['class']}): " + ", ".join(f"{k}={self._homey_show(v)}" for k, v in d["caps"].items())
+
+    async def _homey_device(self, name):
+        """A device by its name (or id). An exact name wins; otherwise one device whose name contains the words."""
+        name = to_str(name).strip()
+        if not name:
+            raise RunError("Which Homey device? Give its name, like Kitchen light.")
+        home = await self._homey_home()
+        exact = [d for d in home if d["name"].lower() == name.lower() or d["id"] == name]
+        if exact:
+            return exact[0]
+        some = [d for d in home if all(w in d["name"].lower() for w in name.lower().split())]
+        if len(some) == 1:
+            return some[0]
+        raise RunError(f"There's no Homey device called “{name}”." + (" Did you mean: " + ", ".join(d["name"] for d in some[:6]) + "?" if some else ""))
+
+    async def homey_find(self, text="*"):
+        """Records (name, zone, class, and each capability) for devices whose name, zone or class contain every word."""
+        words = [w for w in to_str(text).lower().split() if w != "*"]
+        found = [d for d in await self._homey_home() if all(w in f"{d['name']} {d['zone']} {d['class']}".lower() for w in words)]
+        return [dict({"name": d["name"], "zone": d["zone"], "class": d["class"]}, **{k: self._homey_show(v) if isinstance(v, bool) else v for k, v in d["caps"].items()})
+                for d in found]
+
+    async def homey_find_text(self, text="*"):
+        words = [w for w in to_str(text).lower().split() if w != "*"]
+        found = [d for d in await self._homey_home() if all(w in f"{d['name']} {d['zone']} {d['class']}".lower() for w in words)]
+        return "\n".join(self._homey_line(d) for d in found) or f"No Homey devices match “{to_str(text).strip()}”."
+
+    async def homey_value(self, capability, device):
+        d = await self._homey_device(device)
+        cap = to_str(capability).strip()
+        if cap not in d["caps"]:
+            raise RunError(f"{d['name']} has no “{cap}”. It has: {', '.join(d['caps']) or 'nothing'}.")
+        v = d["caps"][cap]
+        return self._homey_show(v) if isinstance(v, bool) else v
+
+    @staticmethod
+    def _homey_value_for(old, value):
+        """Turns 'on', 'yes', '50' and so on into the kind of value the capability holds."""
+        v = value
+        if isinstance(old, bool) or (isinstance(v, str) and v.strip().lower() in ("on", "off", "true", "false", "yes", "no")):
+            if isinstance(v, str):
+                t = v.strip().lower()
+                if t not in ("on", "off", "true", "false", "yes", "no", "1", "0"):
+                    raise RunError(f"“{value}” isn't on or off.")
+                return t in ("on", "true", "yes", "1")
+            return bool(v)
+        if isinstance(old, (int, float)):
+            if not _num_like(v):
+                raise RunError(f"“{value}” isn't a number.")
+            return num(v)
+        return to_str(v) if not isinstance(v, (int, float, bool)) else v
+
+    async def homey_set(self, device, capability, value, approved=False):
+        d = await self._homey_device(device)
+        cap = to_str(capability).strip()
+        if cap not in d["caps"]:
+            raise RunError(f"{d['name']} has no “{cap}”. It has: {', '.join(d['caps']) or 'nothing'}.")
+        v = self._homey_value_for(d["caps"][cap], value)
+        what = f"set {d['name']} {cap} to {self._homey_show(v)}"
+        if (cap, v) in self.HOMEY_SENSITIVE:  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
+            if not approved and not await self.confirm(what + " (a safety check: unlocking, opening and disarming always ask)"):
+                return False
+        elif not approved and not await self._allowed(["ha"], what):
+            return False
+        await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
+        self.log("Homey: " + d["name"], f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", "done")
+        return True
+
+    async def _homey_flows(self):
+        flows = []
+        for path, adv in (("/flow/flow/", False), ("/flow/advancedflow/", True)):
+            try:
+                for f in (await self._homey("GET", path) or {}).values():
+                    flows.append({"id": f.get("id"), "name": f.get("name", ""), "advanced": adv, "enabled": f.get("enabled", True),
+                                  "triggerable": f.get("triggerable", True)})
+            except RunError:
+                if not adv:
+                    raise
+        return flows
+
+    async def homey_flows_text(self):
+        return "\n".join(f"{f['name']}" + (" (advanced)" if f["advanced"] else "") + ("" if f["enabled"] else " (turned off)")
+                         for f in sorted(await self._homey_flows(), key=lambda f: f["name"].lower())) or "No flows."
+
+    async def homey_run_flow(self, name, approved=False):
+        name = to_str(name).strip()
+        flows = await self._homey_flows()
+        f = next((x for x in flows if x["name"].lower() == name.lower()), None) or \
+            (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
+        if not f:
+            raise RunError(f"There's no Homey flow called “{name}”.")
+        if not approved and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
+            return False
+        await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
+        self.log("Homey flow started", f["name"], "started")
+        return True
+
+    async def _homey_var(self, name):
+        name = to_str(name).strip()
+        vs = list((await self._homey("GET", "/logic/variable/") or {}).values())
+        v = next((x for x in vs if x.get("name", "").lower() == name.lower()), None)
+        if not v:
+            raise RunError(f"There's no Homey variable called “{name}”." + (" Its variables are: " + ", ".join(x.get("name", "") for x in vs[:12]) if vs else ""))
+        return v
+
+    async def homey_variable(self, name):
+        return (await self._homey_var(name)).get("value", "")
+
+    async def homey_set_variable(self, name, value, approved=False):
+        v = await self._homey_var(name)
+        old = v.get("value")
+        new = self._homey_value_for(old, value) if v.get("type") in ("boolean", "number") else to_str(value)
+        if not approved and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
+            return False
+        await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
+        self.log("Homey variable " + v["name"], f"{self._homey_show(old)} → {self._homey_show(new)}", "set")
+        return True
+
+    async def _listen_homey(self, items):
+        """'when Homey device … changes': checks every 10 seconds and starts the script when a value changes."""
+        before = None
+        print("Watching Homey devices for changes.", flush=True)
+        while True:
+            try:
+                home = await self._homey_home()
+                now = {(d["name"], k): (v, d) for d in home for k, v in d["caps"].items()}
+                if before is not None:
+                    for (dname, cap), (v, d) in now.items():
+                        if (dname, cap) not in before or before[(dname, cap)][0] == v:
+                            continue
+                        old = before[(dname, cap)][0]
+                        for arg, fn in items:
+                            want_dev, _, want_cap = to_str(arg).partition("|")
+                            want_cap = want_cap.strip().lower()
+                            if want_dev.strip().lower() not in (dname.lower(), d["id"]) or want_cap not in ("", "anything", cap.lower()):
+                                continue
+                            rec = {"device": dname, "zone": d["zone"], "capability": cap, "from": self._homey_show(old) if isinstance(old, bool) else old,
+                                   "to": self._homey_show(v) if isinstance(v, bool) else v,
+                                   "text": f"{dname} {cap}: {self._homey_show(old)} → {self._homey_show(v)}"}
+                            self._fire(fn, rec, f"Homey: {dname} {cap}")
+                before = now
+            except RunError as e:
+                print(f"  (Homey check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(10))
+
     # MQTT
     def _mqtt_new(self, on_message=None, topics=()):
         """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
@@ -3219,7 +3414,7 @@ class Runtime:
     # ----- Listeners: scripts that start when something arrives -----
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
-    LISTEN_NAMES = {"mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
+    LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
                     "github": "GitHub", "calendar": "Calendar"}
 
     @staticmethod
@@ -3544,8 +3739,18 @@ class Runtime:
     AGENT_BUILTINS["mqtt_act"] = [("publish_mqtt", "Publish a message to an MQTT topic, for example to switch something. retain asks the broker to keep it. "
                                    "The person may be asked first, and may say no.", ["topic", "message", "retain"])]
     AGENT_BUILTINS["mqtt_act_free"] = AGENT_BUILTINS["mqtt_act"]
+    AGENT_BUILTINS["homey_read"] = [
+        ("find_homey_devices", "Find Homey devices whose name, zone or kind contain some words (leave search empty for all), with every value they "
+         "report, like onoff, dim, measure_temperature or measure_power.", ["search"]),
+        ("list_homey_flows", "List the person's Homey flows by name.", []),
+        ("homey_variable", "Get the value of one of the person's Homey Logic variables, by name.", ["name"])]
+    AGENT_BUILTINS["homey_act"] = [
+        ("set_homey_device", "Set one value of a Homey device, by the device's name: for example onoff to on, dim to 0.5, or target_temperature to 19. "
+         "The person may be asked first, and may say no. Unlocking, opening and disarming always ask.", ["device", "capability", "value"]),
+        ("run_homey_flow", "Start one of the person's Homey flows, by its name. The person may be asked first, and may say no.", ["flow"])]
+    AGENT_BUILTINS["homey_act_free"] = AGENT_BUILTINS["homey_act"]
     AGENT_BUILTINS["telegram_send_free"] = AGENT_BUILTINS["telegram_send"]
-    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act"}  # built-in tools that ask before each use
+    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
@@ -3560,11 +3765,13 @@ class Runtime:
                          "send_telegram": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
                          "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
                          "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"},
-                         "read_mqtt": {"topic": "text"}, "publish_mqtt": {"topic": "text", "message": "text", "retain": "yes/no"}}
+                         "read_mqtt": {"topic": "text"}, "publish_mqtt": {"topic": "text", "message": "text", "retain": "yes/no"},
+                         "find_homey_devices": {"search": "text"}, "list_homey_flows": {}, "homey_variable": {"name": "text"},
+                         "set_homey_device": {"device": "text", "capability": "text", "value": "any"}, "run_homey_flow": {"flow": "text"}}
     AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
                       "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"},
                       "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"},
-                      "publish_mqtt": {"retain"}}
+                      "publish_mqtt": {"retain"}, "find_homey_devices": {"search"}}
     MAX_FILE_CHARS = 30000
     INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
                    "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
@@ -3798,6 +4005,18 @@ class Runtime:
             return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
         if kind == "calendar":
             return await self.calendar_text(a("day") or "today", inp.get("days", 7))
+        if kind == "find_homey_devices":
+            return await self.homey_find_text(a("search") or "*")
+        if kind == "list_homey_flows":
+            return await self.homey_flows_text()
+        if kind == "homey_variable":
+            return to_str(await self.homey_variable(a("name")))
+        if kind == "set_homey_device":
+            done = await self.homey_set(a("device"), a("capability"), inp.get("value", ""), approved)
+            return "Done." if done else "Not done: the person said no, or nobody was there to ask."
+        if kind == "run_homey_flow":
+            done = await self.homey_run_flow(a("flow"), approved)
+            return "Started." if done else "Not started: the person said no, or nobody was there to ask."
         if kind == "read_mqtt":
             got = await self.mqtt_read(a("topic"))
             return "\n".join(f"{k}: {_short(v, 400)}" for k, v in sorted(got.items())) or \

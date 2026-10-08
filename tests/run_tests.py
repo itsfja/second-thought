@@ -887,6 +887,51 @@ async def new_feature_page_tests(pg):
           and "MQTT \u2192 zigbee2mqtt/oven_plug/set" in [n for n, *_ in steps] and "can't publish to a topic with + or #" in step_of(steps, 3, 6, "publish_mqtt"),
           "the MQTT tools read topics with wildcards and publish after asking (sample broker on the page)")
 
+    print("Homey")
+    hm = [tcall("find_homey_devices", search="light"), tcall("set_homey_device", device="Kitchen light", capability="onoff", value="off"),
+          tcall("set_homey_device", device="Front door lock", capability="locked", value=False), tcall("run_homey_flow", flow="good night"),
+          tcall("homey_variable", name="Loaves this week"), tcall("set_homey_device", device="Toaster", capability="onoff", value="on"),
+          tcall("set_homey_device", device="Kitchen light", capability="dim", value="bright"), tcall("list_homey_flows")]
+    status, steps, items = await agent_run(pg, ["homey_read", "homey_act"], hm + [fin("ok")], steps=12, answer="Allow", export="t_hm_agent")
+    names = [n for n, *_ in steps]
+    check(status.startswith("done") and "Kitchen light (Kitchen, light): onoff=on, dim=0.8" in step_of(steps, 1, 12, "find_homey_devices")
+          and "Homey: Kitchen light" in names and "Homey flow started" in names and names.count("Allow this?") == 5
+          and "no Homey device called \u201cToaster\u201d" in step_of(steps, 6, 12, "set_homey_device") and "isn't a number" in step_of(steps, 7, 12, "set_homey_device")
+          and "Baking mode (advanced)" in step_of(steps, 8, 12, "list_homey_flows"),
+          f"Homey tools find devices, switch them and start flows after asking (once per step, even to unlock), and explain mistakes ({names.count('Allow this?')} asks)")
+    num_ = lambda v: {"block": {"type": "math_number", "fields": {"NUM": v}}}  # noqa: E731
+    hm_prog = script(blk("rb_add_result", inputs={"TEXT": {"block": {"type": "rb_homey_value", "inputs": {"CAPABILITY": tx("measure_temperature"), "DEVICE": tx("Proofing box")}}}}),
+                     blk("rb_homey_set", inputs={"DEVICE": tx("Living room lamp"), "CAPABILITY": tx("dim"), "VALUE": num_(0.25)}),
+                     blk("rb_add_result", inputs={"TEXT": {"block": {"type": "rb_homey_value", "inputs": {"CAPABILITY": tx("dim"), "DEVICE": tx("Living room lamp")}}}}),
+                     blk("rb_homey_set_variable", inputs={"NAME": tx("Kitchen note"), "VALUE": tx("Feed the starter")}),
+                     blk("rb_add_result", inputs={"TEXT": {"block": {"type": "rb_homey_variable", "inputs": {"NAME": tx("Kitchen note")}}}}),
+                     blk("rb_homey_flow", inputs={"NAME": tx("Baking mode")}),
+                     blk("rb_add_result", inputs={"TEXT": {"block": {"type": "lists_length", "inputs": {"VALUE": {"block": {"type": "rb_homey_find", "inputs": {"TEXT": tx("kitchen")}}}}}}}),
+                     blk("rb_result"))
+    await load_state(pg, hm_prog)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    check(status.startswith("done") and items == ["26.4", "0.25", "Feed the starter", "5"], f"the Homey blocks read, set, run flows and change variables in the sample home ({items})")
+    EXTRA["t_hm_blocks"] = await export_python(pg, "t_hm_blocks")
+    hm_listen = {"blocks": {"languageVersion": 0, "blocks": [{"type": "rb_homey_when", "x": 20, "y": 20, "fields": {"DEVICE": "Washing machine", "CAPABILITY": "measure_power"},
+                 "next": {"block": blk("rb_say", inputs={"TEXT": {"block": {"type": "text_join", "extraState": {"itemCount": 2}, "inputs": {"ADD0": tx("homey: "),
+                          "ADD1": {"block": {"type": "rb_event", "fields": {"KEY": "text"}}}}}}})}}]}}
+    await load_state(pg, hm_listen)
+    await pg.evaluate("""(() => { const hat = Blockly.getMainWorkspace().getTopBlocks(false)[0];
+        Blockly.ContextMenuRegistry.registry.getItem('rb_run_script').callback({ block:hat }); })()""")
+    for _ in range(40):
+        await pg.wait_for_timeout(100)
+        if await pg.is_enabled("#run"):
+            break
+    said = [t for n, p_, t in await step_texts(pg) if n == "Note"]
+    check(said == ["homey: Washing machine measure_power: 412 \u2192 3.1"], f"on the page, the Homey listener runs with a sample change ({said})")
+    EXTRA["t_hm_listen"] = await export_python(pg, "t_hm_listen")
+    check('LISTENERS = [("homey", "Washing machine|measure_power", when_homey_1)]' in EXTRA["t_hm_listen"], "exported Python listens for the Homey change")
+    await pg.evaluate("document.getElementById('io-name').value = 't_hm_listen'")
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    check("[homey]" in files["second-thought.ini"] and "HOMEY_API_KEY = " in files["second-thought.ini"] and "run-on-schedule.sh" in files,
+          "a Homey program's settings ask for HOMEY_URL and HOMEY_API_KEY")
+
     print("My Blocks")
     double = {"variables": [{"id": "v_x", "name": "x"}], "blocks": {"languageVersion": 0, "blocks": [
         {"type": "rb_start", "x": 20, "y": 20, "next": {"block": add(val({"type": "procedures_callreturn", "extraState": {"name": "double", "params": ["x"]},
@@ -1120,6 +1165,7 @@ def python_tests(codes):
                OPENROUTER_BASE_URL=llama_url, OPENROUTER_API_KEY="test")
     svc_url, svc_log, tg_add, imap_port, smtp_port = fake_services.start()
     broker, mqtt_port = fake_mqtt.start(retained={"zigbee2mqtt/leak_sensor_sink": '{"water_leak": false, "battery": 87}', "zigbee2mqtt/oven_plug": '{"state": "ON", "power": 41}'})
+    env.update(HOMEY_URL=svc_url + "/homey", HOMEY_API_KEY=fake_services.HOMEY_KEY)
     env.update(MQTT_HOST="127.0.0.1", MQTT_PORT=str(mqtt_port), MQTT_USERNAME=fake_mqtt.USER, MQTT_PASSWORD=fake_mqtt.PASSWORD)
     env.update(RB_FEEDS=f"{svc_url}/feeds/baking.rss {svc_url}/feeds/tech.atom", GITHUB_API_URL=svc_url + "/gh", GITHUB_TOKEN=fake_services.GH_TOKEN,
                TELEGRAM_API_URL=svc_url + "/tg", TELEGRAM_BOT_TOKEN=fake_services.TG_TOKEN, TELEGRAM_CHAT_ID=str(fake_services.TG_CHAT),
@@ -1527,6 +1573,31 @@ def python_tests(codes):
         check(any(n.startswith("folder: Spelt loaf") for n in notes) and not any("ignored" in n for n in notes), "the folder listener reads new files and skips hidden ones")
         check(any("Add a spelt recipe" in n for n in notes) and not any("#41" in n for n in notes), "the GitHub listener reacts to new review requests only")
         check(any(n.startswith("calendar: Feed the starter at ") and "(Kitchen)" in n for n in notes), "the calendar listener gives warning before an event")
+
+        print("Homey in Python")
+        for name in ("t_hm_agent", "t_hm_blocks", "t_hm_listen"):
+            (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
+        before = len(svc_log["homey"])
+        code_, out, err = run_cn("t_hm_agent")
+        calls = svc_log["homey"][before:]
+        check(code_ == 0 and "Kitchen light (Kitchen, light): onoff=on, dim=0.8" in out and "PUT /devices/device/d-kitchen-light/capability/onoff" in calls
+              and "PUT /devices/device/d-front-lock/capability/locked" in calls and "f-goodnight" in svc_log["homey_flows"] and out.count("Allow this?") == 5
+              and "no Homey device called “Toaster”" in out and "isn't a number" in out and "Baking mode (advanced)" in out,
+              "Python's Homey tools use the local API: find, switch, unlock asking once, start a flow" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_hm_blocks.py")], env, tmp)
+        res = out.replace("\r\n", "\n").split("RESULT")[-1]
+        check(code_ == 0 and "26.4" in res and "0.25" in res and "Feed the starter" in res and "f-bake" in svc_log["homey_flows"],
+              "t_hm_blocks.py reads and sets devices and variables, and starts an advanced flow" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+
+        def homey_poke():
+            time.sleep(4)
+            svc_log["homey_change"]("Washing machine", "measure_power", 1.5)
+            svc_log["homey_change"]("Garden motion", "alarm_motion", True)
+        threading.Thread(target=homey_poke, daemon=True).start()
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_hm_listen.py")], dict(env, RB_POLL_SECONDS="0.5"), tmp, timeout=12)
+        notes = [l.strip() for l in out.replace("\r\n", "\n").split("\n") if l.strip().startswith("homey: ")]
+        check(len(notes) == 1 and notes[0].startswith("homey: Washing machine measure_power: ") and notes[0].endswith("→ 1.5"),
+              f"t_hm_listen.py starts its script when the washing machine's power changes, and not for other devices ({notes})")
 
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):

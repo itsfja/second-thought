@@ -13,6 +13,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 GH_TOKEN = "gh-test-token"
 TG_TOKEN = "123:tg-test"
+HOMEY_KEY = "homey-test-key"
 TG_CHAT = 4242
 MAIL_USER, MAIL_PASS = "you@example.com", "app-password"
 
@@ -80,7 +81,12 @@ def _ics(soon=False):
 def start():
     data = json.loads((ROOT / "samples" / "connections.json").read_text(encoding="utf-8"))
     gh = data["github"]
-    log = {"gh": [], "tg_sent": [], "tg_updates": [], "mail_sent": []}
+    log = {"gh": [], "tg_sent": [], "tg_updates": [], "mail_sent": [], "homey": [], "homey_flows": []}
+
+    def homey_change(device, cap, value):
+        d = next(x for x in data["homey"]["devices"] if x["name"] == device)
+        d["capabilitiesObj"][cap]["value"] = value
+    log["homey_change"] = homey_change
     feeds = list(data["feeds"].values())
 
     def gh_pr(p):
@@ -114,6 +120,9 @@ def start():
         def do_POST(self):
             self._route("POST")
 
+        def do_PUT(self):
+            self._route("PUT")
+
         def _route(self, method):
             url = urlparse(self.path)
             path, q = unquote(url.path), parse_qs(url.query)
@@ -127,6 +136,8 @@ def start():
                 return self._send(200, _ics(soon=path == "/calendar-soon.ics"), "text/calendar; charset=utf-8")
             if path.startswith("/gh/"):
                 return self._github(method, path[3:], q)
+            if path.startswith("/homey/api/manager/"):
+                return self._homey(method, path[len("/homey/api/manager"):])
             if path.startswith("/tg/bot"):
                 token, _, call = path[7:].partition("/")
                 if token != TG_TOKEN:
@@ -174,6 +185,38 @@ def start():
                             return self._send(201, {"id": 1, "body": body.get("body", "")})
                         return self._send(200, [{"user": {"login": c["user"]}, "body": c["body"]} for c in p["comments"]])
             self._send(404, {"message": "Not Found"})
+
+        def _homey(self, method, path):
+            log["homey"].append(method + " " + path)
+            if self.headers.get("Authorization") != "Bearer " + HOMEY_KEY:
+                return self._send(401, {"error": "invalid_token"})
+            parts = [x for x in path.split("/") if x]
+            hm = data["homey"]
+            if parts == ["devices", "device"]:
+                return self._send(200, {d["id"]: d for d in hm["devices"]})
+            if parts == ["zones", "zone"]:
+                return self._send(200, {k: {"id": k, "name": v} for k, v in hm["zones"].items()})
+            if parts[:2] == ["devices", "device"] and len(parts) == 5 and parts[3] == "capability" and method == "PUT":
+                d = next((x for x in hm["devices"] if x["id"] == parts[2]), None)
+                if not d or parts[4] not in d["capabilitiesObj"]:
+                    return self._send(404, {"error": "not_found"})
+                d["capabilitiesObj"][parts[4]]["value"] = self._body()["value"]
+                return self._send(200, {})
+            if parts in (["flow", "flow"], ["flow", "advancedflow"]):
+                adv = parts[1] == "advancedflow"
+                return self._send(200, {f["id"]: {"id": f["id"], "name": f["name"], "enabled": True, "triggerable": True} for f in hm["flows"] if f["advanced"] == adv})
+            if parts[0] == "flow" and len(parts) == 4 and parts[3] == "trigger" and method == "POST":
+                log["homey_flows"].append(parts[2])
+                return self._send(200, {})
+            if parts == ["logic", "variable"]:
+                return self._send(200, {v["id"]: v for v in hm["variables"]})
+            if parts[:2] == ["logic", "variable"] and len(parts) == 3 and method == "PUT":
+                v = next((x for x in hm["variables"] if x["id"] == parts[2]), None)
+                if not v:
+                    return self._send(404, {"error": "not_found"})
+                v["value"] = self._body()["value"]
+                return self._send(200, v)
+            self._send(404, {"error": "not_found"})
 
         def _telegram(self, call):
             body = self._body()

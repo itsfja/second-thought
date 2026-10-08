@@ -119,6 +119,10 @@ Agent (the model chooses its own steps):
   rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_cal_when (field N, minutes before an event).
   rb_event: field KEY (a field of what arrived; "text" always works; empty = the whole record), value. rb_mqtt_read: input TOPIC, value. rb_mqtt_publish: inputs TEXT, TOPIC; field RETAIN ("TRUE" | "FALSE"), statement.
   Agent tool kinds also: "mqtt": read_mqtt | "mqtt_act" | "mqtt_act_free": publish_mqtt.
+  Homey: rb_homey_when (hat; fields DEVICE, CAPABILITY, "anything" for any value); rb_homey_value: inputs CAPABILITY, DEVICE, value; rb_homey_find: input TEXT, value, list of records;
+  rb_homey_set: inputs DEVICE, CAPABILITY, VALUE, statement; rb_homey_flow: input NAME, statement; rb_homey_variable: input NAME, value; rb_homey_set_variable: inputs NAME, VALUE, statement.
+  Agent tool kinds "homey_read": find_homey_devices, list_homey_flows, homey_variable | "homey_act" | "homey_act_free": set_homey_device, run_homey_flow.
+  Map homey-api / Homey Web API calls (devices.getDevices, setCapabilityValue, flow.triggerFlow, logic.updateVariable) to these blocks.
   Map Telegram bot handlers (python-telegram-bot, aiogram, a getUpdates loop) to rb_tg_when; smtplib sending to rb_email_send; feedparser to rb_feed_news;
   paho-mqtt on_message to rb_mqtt_when and publish() to rb_mqtt_publish; Flask/FastAPI routes that only start work to rb_webhook_when; watchdog folder handlers to rb_folder_when. rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
   Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
