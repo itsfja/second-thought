@@ -3115,7 +3115,8 @@ class Runtime:
             else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
 
     # Homey
-    # Homey Pro's local Web API: HOMEY_URL is its address on your network, HOMEY_API_KEY a key from the Homey Web App
+    # Homey Pro's local Web API: HOMEY_URL is its address on your network (a Homey Self-Hosted Server serves the same
+    # API on port 4859, so add :4859; devices on a Homey Bridge show up through it), HOMEY_API_KEY a key from the Homey Web App
     # (Settings, API Keys). Give the key the permissions your program needs: devices (view, and control to switch
     # things), flows (view and start), Logic (view, and edit to set variables).
     HOMEY_SENSITIVE = {("locked", False), ("garagedoor_closed", False), ("homealarm_state", "disarmed")}
@@ -3139,7 +3140,8 @@ class Runtime:
                        404: "not found"}.get(e.code, f"Homey answered {e.code}")
                 raise RunError(f"Homey: {why}.") from None
             except urllib.error.URLError as e:
-                raise RunError(f"Couldn't reach Homey at {url} ({e.reason}).") from None
+                hint = "" if urllib.parse.urlparse(url).port else " For a Homey Self-Hosted Server, add its port: :4859."
+                raise RunError(f"Couldn't reach Homey at {url} ({e.reason}).{hint}") from None
         return await asyncio.to_thread(go)
 
     async def _homey_home(self):

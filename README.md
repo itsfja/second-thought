@@ -456,6 +456,14 @@ HOMEY_API_KEY = your-api-key
 
 The address is in the Homey app under Settings, General. The computer running the program must be on the same network as your Homey. API keys work with Homey Pro (2023 and later) and Homey Pro mini.
 
+**Homey Self-Hosted Server** serves the same API on port **4859**, so use the address of the computer it runs on, with `:4859` on the end:
+
+```
+HOMEY_URL = http://192.168.1.20:4859
+```
+
+Make the API key in the Homey Web App the same way. A **Homey Bridge** connected to a Self-Hosted Server doesn't need anything of its own: its devices show up through the server. To check it all works, run `python tools/smoke_test.py homey`. It only reads, so nothing is switched.
+
 ---
 
 ## Page 11: What is in this folder
