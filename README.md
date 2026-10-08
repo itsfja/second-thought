@@ -156,8 +156,12 @@ The olive block **agent: work toward …** holds the tools. You can give it:
 
 - **ask me a question**, so it can ask you things only you know.
 - **remember and recall notes**, so it can keep what it learns for next time.
-- **search the web**, for things that change.
-- **Home Assistant: look at devices** and **control devices**. Control devices asks you before every change, because something the agent reads could try to trick it. If you trust everything it reads, choose **control devices (no asking)**.
+- **search the web and read pages**, for things that change. It can search, then read a source page in full. Reading pages only works in exported Python, and only public pages, never addresses on your own network.
+- **work out sums**, so numbers are worked out exactly, not guessed. It knows + − × ÷, powers, brackets and rounding, like `round(350 / 500 * 100, 1)`.
+- **clock times and dates**, for the time now and for adding or taking away minutes, like 09:30 plus 270 minutes. Good for working backwards from when you want bread out of the oven.
+- **read a file I choose**: the agent asks you for a PDF, a Word file or a text file and reads it.
+- **check text against criteria**: a separate, strict reviewer checks the agent's work and lists the problems, so the agent can fix them before it finishes.
+- **Home Assistant: look at devices**, including how a sensor changed over the last day, and **control devices**. Control devices asks you before every change, because something the agent reads could try to trick it. If you trust everything it reads, choose **control devices (no asking)**.
 - **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. **Ask me before each use** starts ticked, so you say yes before your block runs. That matters if the block changes something, because what the agent reads could try to trick it. Untick it for blocks that only work something out, like a calculator.
   In **input types**, say what each input must be, like `flour grams: number; water grams: number`. The types are text, number, yes/no, list and any. The agent's input is checked before your block runs. If it's wrong, for example words where a number should be, the block doesn't run and the agent is told what to fix.
 
@@ -173,7 +177,7 @@ When the agent finishes, the run log shows an **Agent summary**: a table with on
 
 The block **agent's steps** gives you a list of everything the agent did: each step, the tool, what it sent, what came back, and how it went. Your program can check it, save it, or ask Claude to review it.
 
-Try the examples **Agent: plan my bake** and **Agent with your own tool**.
+There are nine agent examples under **Agents** in Browse examples. **Agent: plan my bake** asks and remembers. **Agent with your own tool** uses a My Block. **Agent: bake timetable** works backwards with the clock. **Agent: scale a recipe** does every sum with the sums tool. **Agent: write, check, improve** fixes its work until a reviewer passes it. **Agent: check my recipe file** reads a file you choose. **Agent: research with sources** searches and reads its sources. **Agent: house check-up** and **Agent: bedtime round** look after a Home Assistant house, and the bedtime round asks before switching anything off.
 
 ---
 

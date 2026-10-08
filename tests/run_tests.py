@@ -719,6 +719,51 @@ async def new_feature_page_tests(pg):
           and "Agent plan" not in [n for n, *_ in steps], "with planning off, the prompt never mentions a plan and any plan sent is ignored")
     check("plan=True" in EXTRA["t_ag_plan"], "exported Python keeps planning switched on")
 
+    print("More agent tools")
+    step_of = lambda steps, k, n, name: next((t for s_, p_, t in steps if s_ == f"Agent step {k}/{n}: {name}"), "")  # noqa: E731
+    pill_of = lambda steps, k, n, name: next((p_ for s_, p_, t in steps if s_ == f"Agent step {k}/{n}: {name}"), "")  # noqa: E731
+    sums = ["(350 / 500) * 100", "round(1000 * 0.02, 1)", "2^3^2 - -2^2", "1/3", "min(3, 1) * sqrt(16)", "2 / 0", "flour + 1"]
+    status, steps, items = await agent_run(pg, ["calc"], [tcall("calculate", expression=e) for e in sums] + [fin("ok")], steps=10, export="t_ag_calc")
+    want = ["= 70", "= 20", "= 516", "= 0.333333333333", "= 4"]
+    check(status.startswith("done") and all(step_of(steps, k + 1, 10, "calculate").endswith(w) for k, w in enumerate(want)),
+          "calculate works sums out exactly: brackets, powers, rounding, min and sqrt" + ("" if status.startswith("done") else f" ({status})"))
+    check(pill_of(steps, 6, 10, "calculate") == "tool error" and "divides by zero" in step_of(steps, 6, 10, "calculate")
+          and "I don't know \u201cflour\u201d" in step_of(steps, 7, 10, "calculate"), "a sum it can't do comes back to the agent as an error it can fix")
+    clock = [tcall("time_plus", time="22:00", minutes=600), tcall("time_plus", time="2026-10-10 22:00", minutes="600"),
+             tcall("time_plus", time="00:30", minutes=-3000), tcall("time_plus", time="9:15pm", minutes=30),
+             tcall("time_plus", time="2026-02-30 10:00", minutes=5), tcall("current_time")]
+    status, steps, items = await agent_run(pg, ["time"], clock + [fin("ok")], steps=10, export="t_ag_time")
+    check(status.startswith("done") and step_of(steps, 1, 10, "time_plus").endswith("08:00 (next day)")
+          and step_of(steps, 2, 10, "time_plus").endswith("2026-10-11 08:00 (Sunday)") and step_of(steps, 3, 10, "time_plus").endswith("22:30 (3 days earlier)")
+          and step_of(steps, 4, 10, "time_plus").endswith("21:45"), "time_plus adds and takes away minutes, across midnight and dates, with the day")
+    check("isn't a real date" in step_of(steps, 5, 10, "time_plus")
+          and re.search(r"Result:\n(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday) \d{4}-\d\d-\d\d \d\d:\d\d$", step_of(steps, 6, 10, "current_time")),
+          "a date that doesn't exist is refused, and current_time gives the day, date and time")
+    await pg.evaluate("window.__jsonPrompts = []")
+    status, steps, items = await agent_run(pg, ["review"], [tcall("review_text", text="Hello there", criteria="short; friendly"), fin("ok")], export="t_ag_review")
+    checked = [(p_, t) for s_, p_, t in steps if s_ == "Check: short; friendly"]
+    rprompt = [q for q in await pg.evaluate("window.__jsonPrompts") if "Judge the text ONLY" in q]
+    r1 = step_of(steps, 1, 6, "review_text")
+    check(status.startswith("done") and checked and checked[0][0] in ("passes", "needs work") and rprompt and "short; friendly" in rprompt[0]
+          and "Text:\nHello there" in rprompt[0] and ("Passes every criterion." in r1 or "Doesn't pass yet. Problems: - " in r1),
+          "review_text has a separate reviewer check the text, and the agent gets the verdict and problems")
+    status, steps, items = await agent_run(pg, ["web"], [tcall("read_page", url="http://localhost:8123/"), tcall("read_page", url="ftp://example.com/x"), fin("ok")],
+                                           export="t_ag_page")
+    check(status.startswith("done") and pill_of(steps, 1, 6, "read_page") == "done" and "doesn't work here" in step_of(steps, 1, 6, "read_page")
+          and [p_ for s_, p_, t in steps if s_.startswith("Read page: ")] == ["not live"], "on the page, read_page tells the agent it only works in exported Python")
+    status, steps, items = await agent_run(pg, ["ha_read"], [tcall("device_history", entity="sensor.kitchen_temperature", hours=6), fin("ok")], export="t_ag_hist")
+    check(status.startswith("done") and re.search(r"Result:\n(\w{3} \d\d:\d\d: [\d.]+ ?)+$", step_of(steps, 1, 6, "device_history")),
+          "device_history gives the agent a sensor's recent readings")
+    status, steps, items = await agent_run(pg, ["file"], [tcall("read_file", why="to check the hydration"), fin("ok")], export="t_ag_file")
+    chose = [t for s_, p_, t in steps if s_ == "Choose a file"]
+    check(status.startswith("done") and chose and chose[0].startswith("The agent wants a file: to check the hydration")
+          and "Order rye flour." in step_of(steps, 1, 6, "read_file"), "read_file asks you for a file, saying why, and the agent gets its words")
+    toolbox = await pg.evaluate("""(() => { const b = Blockly.getMainWorkspace().newBlock('rb_agent_builtin');
+        const o = b.getField('KIND').getOptions(false).map(x => x[1]); b.dispose(); return o; })()""")
+    check(all(k in toolbox for k in ("calc", "time", "file", "review")), f"the ready-made tool block offers the new tools ({', '.join(toolbox)})")
+    cats = await pg.eval_on_selector_all("#example optgroup[label='Agents'] option", "e => e.map(o => o.value)")
+    check(len(cats) >= 9 and {"a_bake", "a_tool", "a_timetable", "a_house"} <= set(cats), f"the Agents group in the Example menu has the agent examples ({len(cats)})")
+
     print("My Blocks")
     double = {"variables": [{"id": "v_x", "name": "x"}], "blocks": {"languageVersion": 0, "blocks": [
         {"type": "rb_start", "x": 20, "y": 20, "next": {"block": add(val({"type": "procedures_callreturn", "extraState": {"name": "double", "params": ["x"]},
@@ -1249,6 +1294,38 @@ def python_tests(codes):
         check(code_ == 0 and "▸ Agent step 1/6: hydration  [bad input]" in out and "should be a number, not \"lots\"" in out
               and "▸ Agent step 2/6: hydration  [done]" in out and "    Result:\n    70\n" in out,
               "t_typed.py refuses a wrong-typed input, then runs the corrected one" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        for name in ("t_ag_calc", "t_ag_time", "t_ag_review", "t_ag_hist", "t_ag_file", "t_ag_page"):
+            (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
+        code_, out, err = run_ag("t_ag_calc")
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and all(f"    Result:\n    {w}\n" in out for w in ("(350 / 500) * 100 = 70", "round(1000 * 0.02, 1) = 20", "2^3^2 - -2^2 = 516",
+                                                                       "1/3 = 0.333333333333", "min(3, 1) * sqrt(16) = 4"))
+              and "▸ Agent step 6/10: calculate  [tool error]" in out and "I don't know “flour”" in out,
+              "Python's calculate gives the same answers as the page" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_ag("t_ag_time")
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and all(f"    Result:\n    {w}\n" in out for w in ("08:00 (next day)", "2026-10-11 08:00 (Sunday)", "22:30 (3 days earlier)", "21:45"))
+              and "isn't a real date" in out and re.search(r"    Result:\n    \w+day \d{4}-\d\d-\d\d \d\d:\d\d\n", out),
+              "Python's time_plus and current_time match the page" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_ag("t_ag_review")
+        check(code_ == 0 and "▸ Check: short; friendly" in out and ("Passes every criterion." in out or "Doesn't pass yet. Problems:" in out),
+              "Python's review_text asks a separate reviewer" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_ag("t_ag_hist")
+        check(code_ == 0 and "▸ Agent step 1/6: device_history  [done]" in out, "Python's device_history reads Home Assistant's history"
+              + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_ag("t_ag_file")
+        check(code_ == 0 and "(The agent wants a file: to check the hydration)" in out and "Order rye flour." in out,
+              "Python's read_file asks for a file, saying why, and reads it" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_ag("t_ag_page")
+        check(code_ == 0 and "▸ Agent step 1/6: read_page  [tool error]" in out and "not addresses on your own network" in out
+              and "starting with http:// or https://" in out, "Python's read_page won't read addresses on your own network, or anything but web pages"
+              + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        snippet = ("import json, sys; ns = {'__name__': 'rt', '__file__': sys.argv[1]}; exec(compile(open(sys.argv[1], encoding='utf-8').read(), 'rt', 'exec'), ns); "
+                   "print(json.dumps(ns['page_text']('<html><head><title>Rye &amp; wheat</title><style>p{}</style></head><body><h1>Rye</h1>"
+                   "<script>steal()</script><p>Holds&nbsp;water</p><!-- note --><p>Ferments fast</p></body></html>', 'text/html')))")
+        r = subprocess.run([sys.executable, "-c", snippet, str(ROOT / "python" / "runtime.py")], env=env, capture_output=True, text=True, timeout=60)
+        got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 else None
+        check(got == ["Rye & wheat", "Rye\nHolds water\nFerments fast"], f"read_page keeps a page's words and drops its scripts, styles and tags ({got or r.stderr[-200:]})")
         (pathlib.Path(tmp) / "t_steps.py").write_text(EXTRA["t_steps"], encoding="utf-8")
         code_, out, err = run_ag("t_steps")
         out = out.replace("\r\n", "\n")

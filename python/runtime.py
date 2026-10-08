@@ -593,6 +593,217 @@ def _short(s, n):
     return s if len(s) <= n else s[: n - 1] + "…"
 
 
+# ----- The agent's ready-made helpers: sums, clock times and web pages (the page has the same sums and clock times) -----
+
+class _Calc:
+    """Works out a sum like (350 / 500) * 100 exactly, without running any code: numbers, + - * / ^, brackets and a few functions."""
+    FUNCS = ("round", "min", "max", "sqrt", "abs", "floor", "ceil")
+
+    def __init__(self, text):
+        self.toks = re.findall(r"\d+(?:\.\d*)?|\.\d+|[A-Za-z_]+|\S", to_str(text).replace("×", "*").replace("÷", "/"))
+        self.i = 0
+
+    def peek(self):
+        return self.toks[self.i] if self.i < len(self.toks) else None
+
+    def take(self, want=None):
+        t = self.peek()
+        if t is None:
+            raise ValueError("it ends too soon")
+        if want is not None and t != want:
+            raise ValueError(f"expected “{want}” but found “{t}”")
+        self.i += 1
+        return t
+
+    def run(self):
+        if not self.toks:
+            raise ValueError("it's empty")
+        v = self.expr()
+        if self.peek() is not None:
+            raise ValueError(f"I don't understand “{self.peek()}” there")
+        if not math.isfinite(v):
+            raise ValueError("the answer isn't a number")
+        return v
+
+    def expr(self):
+        v = self.term()
+        while self.peek() in ("+", "-"):
+            v = v + self.term() if self.take() == "+" else v - self.term()
+        return v
+
+    def term(self):
+        v = self.unary()
+        while self.peek() in ("*", "/"):
+            op, r = self.take(), self.unary()
+            if op == "/" and r == 0:
+                raise ValueError("it divides by zero")
+            v = v * r if op == "*" else v / r
+        return v
+
+    def unary(self):
+        if self.peek() in ("-", "+"):
+            return -self.unary() if self.take() == "-" else self.unary()
+        return self.power()
+
+    def power(self):
+        v = self.primary()
+        if self.peek() == "^":
+            self.take()
+            try:
+                v = math.pow(v, self.unary())
+            except (ValueError, OverflowError):
+                raise ValueError("the answer isn't a number") from None
+        return v
+
+    def primary(self):
+        t = self.take()
+        if t == "(":
+            v = self.expr()
+            self.take(")")
+            return v
+        if re.match(r"[\d.]", t):
+            return float(t)
+        name = t.lower()
+        if name == "pi":
+            return math.pi
+        if name not in self.FUNCS:
+            raise ValueError(f"I don't know “{t}” (it can use {', '.join(self.FUNCS)} and pi)")
+        self.take("(")
+        args = [self.expr()]
+        while self.peek() == ",":
+            self.take()
+            args.append(self.expr())
+        self.take(")")
+        if name in ("min", "max"):
+            return min(args) if name == "min" else max(args)
+        if name == "round":
+            places = max(0, min(10, int(round_js(args[1])))) if len(args) > 1 else 0
+            f = 10 ** places
+            return math.floor(args[0] * f + 0.5) / f
+        if len(args) != 1:
+            raise ValueError(f"{name} takes one number")
+        if name == "sqrt" and args[0] < 0:
+            raise ValueError("it takes the square root of a negative number")
+        return {"sqrt": math.sqrt, "abs": abs, "floor": math.floor, "ceil": math.ceil}[name](args[0])
+
+
+def calc_text(expression):
+    """'(350 / 500) * 100' -> '(350 / 500) * 100 = 70'."""
+    expression = to_str(expression).strip()
+    try:
+        v = _Calc(expression).run()
+    except ValueError as e:
+        raise RunError(f"calculate couldn't work out “{_short(expression, 80)}”: {e}.") from None
+    v = float(f"{v:.12g}")
+    shown = str(int(v)) if v.is_integer() and abs(v) < 1e15 else repr(v)
+    return f"{expression} = {shown}"
+
+
+WEEKDAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+
+def time_plus_text(when, minutes):
+    """'09:30' plus 270 -> '14:00'; '2026-10-10 22:00' plus 600 -> '2026-10-11 08:00 (Sunday)'. Negative minutes go back."""
+    m = re.match(r"^\s*(?:(\d{4})-(\d{1,2})-(\d{1,2})[ T]+)?(\d{1,2})[:.](\d{2})\s*(am|pm)?\s*$", to_str(when), re.I)
+    if not m:
+        raise RunError(f"time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{_short(when, 40)}”.")
+    h, mi, ampm = int(m.group(4)), int(m.group(5)), (m.group(6) or "").lower()
+    if ampm:
+        if not 1 <= h <= 12:
+            raise RunError(f"“{to_str(when).strip()}” isn't a time.")
+        h = h % 12 + (12 if ampm == "pm" else 0)
+    if h > 23 or mi > 59:
+        raise RunError(f"“{to_str(when).strip()}” isn't a time.")
+    add = round_js(num(minutes))
+    if m.group(1):
+        try:
+            start = datetime.datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)), h, mi)
+        except ValueError:
+            raise RunError(f"“{to_str(when).strip()}” isn't a real date.") from None
+        t = start + datetime.timedelta(minutes=add)
+        return t.strftime("%Y-%m-%d %H:%M") + f" ({WEEKDAYS[t.weekday()]})"
+    total = h * 60 + mi + add
+    days, t = total // 1440, total % 1440
+    note = {0: "", 1: " (next day)", -1: " (the day before)"}.get(days, f" ({days} days later)" if days > 0 else f" ({-days} days earlier)")
+    return f"{t // 60:02d}:{t % 60:02d}" + note
+
+
+def current_time_text():
+    d = datetime.datetime.now()
+    return f"{WEEKDAYS[d.weekday()]} {d:%Y-%m-%d %H:%M}"
+
+
+MAX_PAGE_CHARS = 12000
+
+
+def page_text(raw, ctype=""):
+    """A web page's readable words: no scripts, styles or tags. Gives (title, text)."""
+    import html as _html
+    if "html" not in ctype.lower() and not re.match(r"\s*<", raw):
+        return "", re.sub(r"[ \t]+", " ", raw).strip()
+    m = re.search(r"<title[^>]*>(.*?)</title>", raw, re.S | re.I)
+    title = _html.unescape(re.sub(r"\s+", " ", m.group(1))).strip() if m else ""
+    raw = re.sub(r"<(script|style|noscript|svg|template|head)\b.*?</\1\s*>", " ", raw, flags=re.S | re.I)
+    raw = re.sub(r"<!--.*?-->", " ", raw, flags=re.S)
+    raw = re.sub(r"<(br|/p|/div|/li|/h[1-6]|/tr|/section|/article)\b[^>]*>", "\n", raw, flags=re.I)
+    text = _html.unescape(re.sub(r"<[^>]+>", " ", raw)).replace("\xa0", " ")
+    text = re.sub(r"[ \t\r\f\v]+", " ", text)
+    text = re.sub(r"\n\s*\n+", "\n\n", re.sub(r" *\n *", "\n", text)).strip()
+    return title, text
+
+
+def _public_only(host):
+    """Refuses addresses on your own network (your router, your server, this computer): read_page is for public pages."""
+    import ipaddress
+    import socket
+    try:
+        infos = socket.getaddrinfo(host, None)
+    except OSError:
+        raise RunError(f"read_page couldn't find the website “{host}”.") from None
+    for info in infos:
+        ip = ipaddress.ip_address(info[4][0].split("%")[0])
+        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
+            raise RunError("read_page only reads public web pages, not addresses on your own network.")
+
+
+class _PublicRedirects(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        u = urllib.parse.urlparse(newurl)
+        if u.scheme not in ("http", "https") or not u.hostname:
+            raise RunError("read_page was sent somewhere that isn't a web page.")
+        _public_only(u.hostname)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def fetch_page(url):
+    url = to_str(url).strip()
+    u = urllib.parse.urlparse(url)
+    if u.scheme not in ("http", "https") or not u.hostname:
+        raise RunError("read_page needs a web address starting with http:// or https://.")
+    _public_only(u.hostname)
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SecondThought/1.0)", "Accept": "text/html,text/plain;q=0.9,*/*;q=0.5"})
+    try:
+        with urllib.request.build_opener(_PublicRedirects).open(req, timeout=20) as r:
+            ctype = r.headers.get("Content-Type", "")
+            data = r.read(3_000_000)
+    except urllib.error.HTTPError as e:
+        raise RunError(f"read_page couldn't open that page: the website answered {e.code}.") from None
+    except urllib.error.URLError as e:
+        raise RunError(f"read_page couldn't reach that page ({e.reason}).") from None
+    if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
+        raise RunError(f"That address isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
+    m = re.search(r"charset=([\w-]+)", ctype, re.I)
+    try:
+        raw = data.decode(m.group(1) if m else "utf-8", "replace")
+    except LookupError:
+        raw = data.decode("utf-8", "replace")
+    title, text = page_text(raw, ctype)
+    if not text:
+        return f"{title or url}\n\n(The page has no readable words. It may need a browser to show its content.)"
+    cut = len(text) > MAX_PAGE_CHARS
+    return (f"{title}\n{url}\n\n" if title else f"{url}\n\n") + text[:MAX_PAGE_CHARS] + ("\n\n… (the page goes on; this is the first part)" if cut else "")
+
+
 class Runtime:
     def __init__(self):
         self.vars = {}
@@ -2182,15 +2393,27 @@ class Runtime:
     # Each step the model replies with JSON: a tool to use, or its final answer. The same protocol runs on the
     # page, so a program behaves the same in both places, and it works with every model and backup.
     AGENT_BUILTINS = {
-        "web": [("search_web", "Search the web and get a short answer with sources. Use for facts that change, like prices or opening times.", ["query"])],
+        "web": [("search_web", "Search the web and get a short answer with sources. Use for facts that change, like prices or opening times.", ["query"]),
+                ("read_page", "Read the words on one public web page, from its address (starting http:// or https://). Use it to check a source properly.", ["url"])],
         "ask": [("ask_me", "Ask the person running this program a question and wait for their answer. Use it for things only they know, or to check a decision.", ["question"])],
         "memory": [("remember", "Save a note under a name. It is kept between runs.", ["name", "value"]),
                    ("recall", "Get the note saved under a name. Gives nothing if there isn't one.", ["name"]),
                    ("list_memory", "List the names of every saved note.", [])],
         "ha_read": [("find_devices", "Find Home Assistant devices and sensors matching some words, with their current states.", ["search"]),
-                    ("device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"])],
+                    ("device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"]),
+                    ("device_history", "See how one Home Assistant entity changed over the past hours (24 if you don't say; at most 168), "
+                     "as a list of times and states.", ["entity", "hours"])],
         "ha_act": [("call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. "
                     "The person may be asked first, and may say no.", ["service", "entity", "data"])],
+        "calc": [("calculate", "Work out a sum exactly, like (350 / 500) * 100 or round(1000 * 0.02, 1). Use it for every sum instead of working it out "
+                  "yourself. It knows + - * / ^, brackets, pi, and round(x, places), min, max, sqrt, abs, floor, ceil.", ["expression"])],
+        "time": [("current_time", "Get the day, date and time now.", []),
+                 ("time_plus", "Add minutes to a clock time and get the new time, like 09:30 plus 270 gives 14:00. Use a negative number to go back. "
+                  "time is HH:MM, or YYYY-MM-DD HH:MM to get the date and day too. Use it for every clock time instead of working it out yourself.",
+                  ["time", "minutes"])],
+        "file": [("read_file", "Ask the person to choose a file (a PDF, a Word file or a text file) and get the words in it. Say why you want it.", ["why"])],
+        "review": [("review_text", "Have a separate, strict reviewer check some text against criteria (separate them with semicolons). It says whether the "
+                    "text passes, and lists each problem. Use it to check your work before you finish.", ["text", "criteria"])],
     }
     AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
     AGENT_ASKS = {"ha_act"}  # built-in tools that ask before each use
@@ -2198,8 +2421,12 @@ class Runtime:
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
                          "recall": {"name": "text"}, "list_memory": {}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
-                         "call_service": {"service": "text", "entity": "text", "data": "any"}}
-    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}}
+                         "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"},
+                         "device_history": {"entity": "text", "hours": "number"}, "calculate": {"expression": "text"}, "current_time": {},
+                         "time_plus": {"time": "text", "minutes": "number"}, "read_file": {"why": "text"},
+                         "review_text": {"text": "text", "criteria": "text"}}
+    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"}}
+    MAX_FILE_CHARS = 30000
     INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
                    "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
 
@@ -2366,6 +2593,38 @@ class Runtime:
             data = json.dumps(data) if isinstance(data, (dict, list)) else to_str(data)
             done = await self.ha_call(a("service"), a("entity"), data)
             return "Done." if done else "Not done: the person said no, or nobody was there to ask."
+        if kind == "device_history":
+            rows = await self.ha_history(a("entity"), inp.get("hours", 24))
+            return "\n".join(f"{r['time']}: {to_str(r['state'])}" for r in rows) or f"No history for “{a('entity')}”."
+        if kind == "read_page":
+            out = await asyncio.to_thread(fetch_page, a("url"))
+            self.log("Read page: " + _short(a("url"), 60), _short(out, 400), "done")
+            return out
+        if kind == "calculate":
+            return calc_text(a("expression"))
+        if kind == "current_time":
+            return current_time_text()
+        if kind == "time_plus":
+            return time_plus_text(a("time"), inp.get("minutes", 0))
+        if kind == "read_file":
+            if a("why"):
+                print(f"\n(The agent wants a file: {a('why')})", flush=True)
+            text = await self.choose_file()
+            cut = len(text) > self.MAX_FILE_CHARS
+            return text[:self.MAX_FILE_CHARS] + (f"\n\n… (the file goes on: this is the first {self.MAX_FILE_CHARS:,} of {len(text):,} characters)" if cut else "")
+        if kind == "review_text":
+            if not a("text"):
+                raise RunError("review_text needs some text to check.")
+            if not a("criteria"):
+                raise RunError("review_text needs criteria to check against.")
+            v = await self._call("You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + a("criteria") +
+                                 "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
+                                 "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
+            problems = [to_str(x) for x in (v.get("problems") or []) if to_str(x).strip()]
+            out = "Passes every criterion." if v["approved"] is True else "Doesn't pass yet. Problems:\n" + "\n".join(
+                "- " + x for x in (problems or ["It doesn't yet meet the criteria."]))
+            self.log("Check: " + _short(a("criteria"), 55), out, "passes" if v["approved"] is True else "needs work")
+            return out
         raise RunError(f"Unknown tool “{kind}”.")
 
     async def agent(self, goal, steps, tools, plan=False):

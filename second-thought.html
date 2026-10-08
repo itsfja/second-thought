@@ -1011,6 +1011,217 @@ def _short(s, n):
     return s if len(s) <= n else s[: n - 1] + "…"
 
 
+# ----- The agent's ready-made helpers: sums, clock times and web pages (the page has the same sums and clock times) -----
+
+class _Calc:
+    """Works out a sum like (350 / 500) * 100 exactly, without running any code: numbers, + - * / ^, brackets and a few functions."""
+    FUNCS = ("round", "min", "max", "sqrt", "abs", "floor", "ceil")
+
+    def __init__(self, text):
+        self.toks = re.findall(r"\d+(?:\.\d*)?|\.\d+|[A-Za-z_]+|\S", to_str(text).replace("×", "*").replace("÷", "/"))
+        self.i = 0
+
+    def peek(self):
+        return self.toks[self.i] if self.i < len(self.toks) else None
+
+    def take(self, want=None):
+        t = self.peek()
+        if t is None:
+            raise ValueError("it ends too soon")
+        if want is not None and t != want:
+            raise ValueError(f"expected “{want}” but found “{t}”")
+        self.i += 1
+        return t
+
+    def run(self):
+        if not self.toks:
+            raise ValueError("it's empty")
+        v = self.expr()
+        if self.peek() is not None:
+            raise ValueError(f"I don't understand “{self.peek()}” there")
+        if not math.isfinite(v):
+            raise ValueError("the answer isn't a number")
+        return v
+
+    def expr(self):
+        v = self.term()
+        while self.peek() in ("+", "-"):
+            v = v + self.term() if self.take() == "+" else v - self.term()
+        return v
+
+    def term(self):
+        v = self.unary()
+        while self.peek() in ("*", "/"):
+            op, r = self.take(), self.unary()
+            if op == "/" and r == 0:
+                raise ValueError("it divides by zero")
+            v = v * r if op == "*" else v / r
+        return v
+
+    def unary(self):
+        if self.peek() in ("-", "+"):
+            return -self.unary() if self.take() == "-" else self.unary()
+        return self.power()
+
+    def power(self):
+        v = self.primary()
+        if self.peek() == "^":
+            self.take()
+            try:
+                v = math.pow(v, self.unary())
+            except (ValueError, OverflowError):
+                raise ValueError("the answer isn't a number") from None
+        return v
+
+    def primary(self):
+        t = self.take()
+        if t == "(":
+            v = self.expr()
+            self.take(")")
+            return v
+        if re.match(r"[\d.]", t):
+            return float(t)
+        name = t.lower()
+        if name == "pi":
+            return math.pi
+        if name not in self.FUNCS:
+            raise ValueError(f"I don't know “{t}” (it can use {', '.join(self.FUNCS)} and pi)")
+        self.take("(")
+        args = [self.expr()]
+        while self.peek() == ",":
+            self.take()
+            args.append(self.expr())
+        self.take(")")
+        if name in ("min", "max"):
+            return min(args) if name == "min" else max(args)
+        if name == "round":
+            places = max(0, min(10, int(round_js(args[1])))) if len(args) > 1 else 0
+            f = 10 ** places
+            return math.floor(args[0] * f + 0.5) / f
+        if len(args) != 1:
+            raise ValueError(f"{name} takes one number")
+        if name == "sqrt" and args[0] < 0:
+            raise ValueError("it takes the square root of a negative number")
+        return {"sqrt": math.sqrt, "abs": abs, "floor": math.floor, "ceil": math.ceil}[name](args[0])
+
+
+def calc_text(expression):
+    """'(350 / 500) * 100' -> '(350 / 500) * 100 = 70'."""
+    expression = to_str(expression).strip()
+    try:
+        v = _Calc(expression).run()
+    except ValueError as e:
+        raise RunError(f"calculate couldn't work out “{_short(expression, 80)}”: {e}.") from None
+    v = float(f"{v:.12g}")
+    shown = str(int(v)) if v.is_integer() and abs(v) < 1e15 else repr(v)
+    return f"{expression} = {shown}"
+
+
+WEEKDAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+
+def time_plus_text(when, minutes):
+    """'09:30' plus 270 -> '14:00'; '2026-10-10 22:00' plus 600 -> '2026-10-11 08:00 (Sunday)'. Negative minutes go back."""
+    m = re.match(r"^\s*(?:(\d{4})-(\d{1,2})-(\d{1,2})[ T]+)?(\d{1,2})[:.](\d{2})\s*(am|pm)?\s*$", to_str(when), re.I)
+    if not m:
+        raise RunError(f"time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{_short(when, 40)}”.")
+    h, mi, ampm = int(m.group(4)), int(m.group(5)), (m.group(6) or "").lower()
+    if ampm:
+        if not 1 <= h <= 12:
+            raise RunError(f"“{to_str(when).strip()}” isn't a time.")
+        h = h % 12 + (12 if ampm == "pm" else 0)
+    if h > 23 or mi > 59:
+        raise RunError(f"“{to_str(when).strip()}” isn't a time.")
+    add = round_js(num(minutes))
+    if m.group(1):
+        try:
+            start = datetime.datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)), h, mi)
+        except ValueError:
+            raise RunError(f"“{to_str(when).strip()}” isn't a real date.") from None
+        t = start + datetime.timedelta(minutes=add)
+        return t.strftime("%Y-%m-%d %H:%M") + f" ({WEEKDAYS[t.weekday()]})"
+    total = h * 60 + mi + add
+    days, t = total // 1440, total % 1440
+    note = {0: "", 1: " (next day)", -1: " (the day before)"}.get(days, f" ({days} days later)" if days > 0 else f" ({-days} days earlier)")
+    return f"{t // 60:02d}:{t % 60:02d}" + note
+
+
+def current_time_text():
+    d = datetime.datetime.now()
+    return f"{WEEKDAYS[d.weekday()]} {d:%Y-%m-%d %H:%M}"
+
+
+MAX_PAGE_CHARS = 12000
+
+
+def page_text(raw, ctype=""):
+    """A web page's readable words: no scripts, styles or tags. Gives (title, text)."""
+    import html as _html
+    if "html" not in ctype.lower() and not re.match(r"\s*<", raw):
+        return "", re.sub(r"[ \t]+", " ", raw).strip()
+    m = re.search(r"<title[^>]*>(.*?)</title>", raw, re.S | re.I)
+    title = _html.unescape(re.sub(r"\s+", " ", m.group(1))).strip() if m else ""
+    raw = re.sub(r"<(script|style|noscript|svg|template|head)\b.*?</\1\s*>", " ", raw, flags=re.S | re.I)
+    raw = re.sub(r"<!--.*?-->", " ", raw, flags=re.S)
+    raw = re.sub(r"<(br|/p|/div|/li|/h[1-6]|/tr|/section|/article)\b[^>]*>", "\n", raw, flags=re.I)
+    text = _html.unescape(re.sub(r"<[^>]+>", " ", raw)).replace("\xa0", " ")
+    text = re.sub(r"[ \t\r\f\v]+", " ", text)
+    text = re.sub(r"\n\s*\n+", "\n\n", re.sub(r" *\n *", "\n", text)).strip()
+    return title, text
+
+
+def _public_only(host):
+    """Refuses addresses on your own network (your router, your server, this computer): read_page is for public pages."""
+    import ipaddress
+    import socket
+    try:
+        infos = socket.getaddrinfo(host, None)
+    except OSError:
+        raise RunError(f"read_page couldn't find the website “{host}”.") from None
+    for info in infos:
+        ip = ipaddress.ip_address(info[4][0].split("%")[0])
+        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
+            raise RunError("read_page only reads public web pages, not addresses on your own network.")
+
+
+class _PublicRedirects(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        u = urllib.parse.urlparse(newurl)
+        if u.scheme not in ("http", "https") or not u.hostname:
+            raise RunError("read_page was sent somewhere that isn't a web page.")
+        _public_only(u.hostname)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def fetch_page(url):
+    url = to_str(url).strip()
+    u = urllib.parse.urlparse(url)
+    if u.scheme not in ("http", "https") or not u.hostname:
+        raise RunError("read_page needs a web address starting with http:// or https://.")
+    _public_only(u.hostname)
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SecondThought/1.0)", "Accept": "text/html,text/plain;q=0.9,*/*;q=0.5"})
+    try:
+        with urllib.request.build_opener(_PublicRedirects).open(req, timeout=20) as r:
+            ctype = r.headers.get("Content-Type", "")
+            data = r.read(3_000_000)
+    except urllib.error.HTTPError as e:
+        raise RunError(f"read_page couldn't open that page: the website answered {e.code}.") from None
+    except urllib.error.URLError as e:
+        raise RunError(f"read_page couldn't reach that page ({e.reason}).") from None
+    if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
+        raise RunError(f"That address isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
+    m = re.search(r"charset=([\w-]+)", ctype, re.I)
+    try:
+        raw = data.decode(m.group(1) if m else "utf-8", "replace")
+    except LookupError:
+        raw = data.decode("utf-8", "replace")
+    title, text = page_text(raw, ctype)
+    if not text:
+        return f"{title or url}\n\n(The page has no readable words. It may need a browser to show its content.)"
+    cut = len(text) > MAX_PAGE_CHARS
+    return (f"{title}\n{url}\n\n" if title else f"{url}\n\n") + text[:MAX_PAGE_CHARS] + ("\n\n… (the page goes on; this is the first part)" if cut else "")
+
+
 class Runtime:
     def __init__(self):
         self.vars = {}
@@ -2600,15 +2811,27 @@ class Runtime:
     # Each step the model replies with JSON: a tool to use, or its final answer. The same protocol runs on the
     # page, so a program behaves the same in both places, and it works with every model and backup.
     AGENT_BUILTINS = {
-        "web": [("search_web", "Search the web and get a short answer with sources. Use for facts that change, like prices or opening times.", ["query"])],
+        "web": [("search_web", "Search the web and get a short answer with sources. Use for facts that change, like prices or opening times.", ["query"]),
+                ("read_page", "Read the words on one public web page, from its address (starting http:// or https://). Use it to check a source properly.", ["url"])],
         "ask": [("ask_me", "Ask the person running this program a question and wait for their answer. Use it for things only they know, or to check a decision.", ["question"])],
         "memory": [("remember", "Save a note under a name. It is kept between runs.", ["name", "value"]),
                    ("recall", "Get the note saved under a name. Gives nothing if there isn't one.", ["name"]),
                    ("list_memory", "List the names of every saved note.", [])],
         "ha_read": [("find_devices", "Find Home Assistant devices and sensors matching some words, with their current states.", ["search"]),
-                    ("device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"])],
+                    ("device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"]),
+                    ("device_history", "See how one Home Assistant entity changed over the past hours (24 if you don't say; at most 168), "
+                     "as a list of times and states.", ["entity", "hours"])],
         "ha_act": [("call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. "
                     "The person may be asked first, and may say no.", ["service", "entity", "data"])],
+        "calc": [("calculate", "Work out a sum exactly, like (350 / 500) * 100 or round(1000 * 0.02, 1). Use it for every sum instead of working it out "
+                  "yourself. It knows + - * / ^, brackets, pi, and round(x, places), min, max, sqrt, abs, floor, ceil.", ["expression"])],
+        "time": [("current_time", "Get the day, date and time now.", []),
+                 ("time_plus", "Add minutes to a clock time and get the new time, like 09:30 plus 270 gives 14:00. Use a negative number to go back. "
+                  "time is HH:MM, or YYYY-MM-DD HH:MM to get the date and day too. Use it for every clock time instead of working it out yourself.",
+                  ["time", "minutes"])],
+        "file": [("read_file", "Ask the person to choose a file (a PDF, a Word file or a text file) and get the words in it. Say why you want it.", ["why"])],
+        "review": [("review_text", "Have a separate, strict reviewer check some text against criteria (separate them with semicolons). It says whether the "
+                    "text passes, and lists each problem. Use it to check your work before you finish.", ["text", "criteria"])],
     }
     AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
     AGENT_ASKS = {"ha_act"}  # built-in tools that ask before each use
@@ -2616,8 +2839,12 @@ class Runtime:
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
                          "recall": {"name": "text"}, "list_memory": {}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
-                         "call_service": {"service": "text", "entity": "text", "data": "any"}}
-    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}}
+                         "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"},
+                         "device_history": {"entity": "text", "hours": "number"}, "calculate": {"expression": "text"}, "current_time": {},
+                         "time_plus": {"time": "text", "minutes": "number"}, "read_file": {"why": "text"},
+                         "review_text": {"text": "text", "criteria": "text"}}
+    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"}}
+    MAX_FILE_CHARS = 30000
     INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
                    "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
 
@@ -2784,6 +3011,38 @@ class Runtime:
             data = json.dumps(data) if isinstance(data, (dict, list)) else to_str(data)
             done = await self.ha_call(a("service"), a("entity"), data)
             return "Done." if done else "Not done: the person said no, or nobody was there to ask."
+        if kind == "device_history":
+            rows = await self.ha_history(a("entity"), inp.get("hours", 24))
+            return "\n".join(f"{r['time']}: {to_str(r['state'])}" for r in rows) or f"No history for “{a('entity')}”."
+        if kind == "read_page":
+            out = await asyncio.to_thread(fetch_page, a("url"))
+            self.log("Read page: " + _short(a("url"), 60), _short(out, 400), "done")
+            return out
+        if kind == "calculate":
+            return calc_text(a("expression"))
+        if kind == "current_time":
+            return current_time_text()
+        if kind == "time_plus":
+            return time_plus_text(a("time"), inp.get("minutes", 0))
+        if kind == "read_file":
+            if a("why"):
+                print(f"\n(The agent wants a file: {a('why')})", flush=True)
+            text = await self.choose_file()
+            cut = len(text) > self.MAX_FILE_CHARS
+            return text[:self.MAX_FILE_CHARS] + (f"\n\n… (the file goes on: this is the first {self.MAX_FILE_CHARS:,} of {len(text):,} characters)" if cut else "")
+        if kind == "review_text":
+            if not a("text"):
+                raise RunError("review_text needs some text to check.")
+            if not a("criteria"):
+                raise RunError("review_text needs criteria to check against.")
+            v = await self._call("You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + a("criteria") +
+                                 "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
+                                 "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
+            problems = [to_str(x) for x in (v.get("problems") or []) if to_str(x).strip()]
+            out = "Passes every criterion." if v["approved"] is True else "Doesn't pass yet. Problems:\n" + "\n".join(
+                "- " + x for x in (problems or ["It doesn't yet meet the criteria."]))
+            self.log("Check: " + _short(a("criteria"), 55), out, "passes" if v["approved"] is True else "needs work")
+            return out
         raise RunError(f"Unknown tool “{kind}”.")
 
     async def agent(self, goal, steps, tools, plan=False):
@@ -4174,7 +4433,7 @@ Files and errors:
   Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
 Agent (the model chooses its own steps):
   rb_agent: inputs GOAL, STEPS; fields PLAN ("TRUE" | "FALSE": plan first, revise as it goes); statement input TOOLS holding only tool blocks. Runs a tool-using loop and puts the final answer in the draft.
-  rb_agent_builtin: fields KIND ("web" | "ask" | "memory" | "ha_read" | "ha_act"). rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
+  rb_agent_builtin: fields KIND ("web": search_web, read_page | "ask": ask_me | "memory": remember, recall, list_memory | "calc": calculate | "time": current_time, time_plus | "file": read_file | "review": review_text | "ha_read": find_devices, device_state, device_history | "ha_act" | "ha_act_free": call_service). rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
   Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
   rb_agent_steps: value, the most recent agent's steps as records (step, tool, input, result, status).
   Map open(...).read() on text files to rb_file_choose, writing output files to rb_file_save, try/except to rb_try, retry loops and backoff to rb_retry.
@@ -4509,9 +4768,9 @@ HOW TO MAP CODE
       previousStatement:"AgentTool", nextStatement:"AgentTool", style:"agent",
       tooltip:"Lets the agent run one of your My Blocks. Its inputs become the tool's inputs, and what it returns is the result the agent sees. Describe it clearly: the description is all the agent knows about it. Input types, for example 'flour grams: number; water grams: number - grams of water', say what each input must be: text, number, yes/no, list or any. The agent's input is checked before the block runs. 'Ask me before each use' starts ticked, because what the agent reads (a web page, a note) could try to steer it: untick it for blocks that only work things out and change nothing." },
     { type:"rb_agent_builtin",
-      message0:"tool: %1", args0:[{ type:"field_dropdown", name:"KIND", options:[["search the web","web"],["ask me a question","ask"],["remember and recall notes","memory"],["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"],["Home Assistant: control devices (no asking)","ha_act_free"]] }],
+      message0:"tool: %1", args0:[{ type:"field_dropdown", name:"KIND", options:[["search the web and read pages","web"],["ask me a question","ask"],["remember and recall notes","memory"],["work out sums","calc"],["clock times and dates","time"],["read a file I choose","file"],["check text against criteria","review"],["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"],["Home Assistant: control devices (no asking)","ha_act_free"]] }],
       previousStatement:"AgentTool", nextStatement:"AgentTool", style:"agent",
-      tooltip:"A ready-made tool for the agent. 'Control devices' asks you before every change, because what the agent reads (a web page, a note) could try to steer it. Choose 'no asking' only if you trust everything it reads. Unlocking, opening and disarming always ask." },
+      tooltip:"A ready-made tool for the agent. 'Work out sums' and 'clock times' get numbers and times exactly right, instead of the model guessing. 'Check text' has a separate reviewer judge the agent's work. 'Read pages' only works in exported Python. 'Control devices' asks you before every change, because what the agent reads (a web page, a note) could try to steer it. Choose 'no asking' only if you trust everything it reads. Unlocking, opening and disarming always ask." },
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
@@ -4608,7 +4867,8 @@ HOW TO MAP CODE
     { kind:"category", name:"Agent", categorystyle:"agent", contents:[
       B("rb_agent", { GOAL:L("Plan a bake for this weekend that suits what I have in"), STEPS:N(6),
         TOOLS:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"ask" }, next:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"memory" } } } } } }, { fields:{ PLAN:true } }),
-      B("rb_agent_builtin"), B("rb_agent_builtin", null, { fields:{ KIND:"ask" } }), B("rb_agent_builtin", null, { fields:{ KIND:"memory" } }),
+      B("rb_agent_builtin"), B("rb_agent_builtin", null, { fields:{ KIND:"ask" } }), B("rb_agent_builtin", null, { fields:{ KIND:"memory" } }), B("rb_agent_builtin", null, { fields:{ KIND:"calc" } }),
+      B("rb_agent_builtin", null, { fields:{ KIND:"time" } }), B("rb_agent_builtin", null, { fields:{ KIND:"file" } }), B("rb_agent_builtin", null, { fields:{ KIND:"review" } }),
       B("rb_agent_tool", { DESC:L("Gives the oven temperature in °C for a bread type.") }), B("rb_agent_steps")
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
@@ -5042,7 +5302,7 @@ HOW TO MAP CODE
       blocks:{ languageVersion:0, blocks:list.map((s, i) => Object.assign({ x:30 + i * 620, y:30 }, s)) } };
   };
 
-  const EXAMPLE_CATEGORIES = ["Writing", "Research", "Design", "Learning", "Work", "Home and baking", "Code and data", "Automation"];
+  const EXAMPLE_CATEGORIES = ["Writing", "Research", "Design", "Learning", "Work", "Home and baking", "Agents", "Code and data", "Automation"];
   const EXAMPLE_LIST = [
     /* ----- Writing ----- */
     { key:"review", cat:"Writing", title:"Review loop", build:EXAMPLES.review,
@@ -5481,7 +5741,7 @@ HOW TO MAP CODE
         sGenerate(),
         sReflect("realistic travel times; breaks for food; suits everyone mentioned; not overpacked", 2),
         sFinish())) },
-    { key:"a_bake", cat:"Home and baking", title:"Agent: plan my bake",
+    { key:"a_bake", cat:"Agents", title:"Agent: plan my bake",
       desc:"An agent that decides its own steps: it checks its notes about your starter, asks you what it needs, saves what it learns, then writes a bake plan.",
       tip:"Run it twice: the second time it remembers your answers. Add the 'search the web' tool, or change the goal.",
       build:() => P([], chain(sStart(),
@@ -5490,7 +5750,7 @@ HOW TO MAP CODE
             "Finish with a short plan: when to feed the starter, mix, shape and bake."), STEPS:nm(8),
           TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"ask" }), blk("rb_agent_builtin", { KIND:"memory" }))) }),
         sFinish())) },
-    { key:"a_tool", cat:"Home and baking", title:"Agent with your own tool",
+    { key:"a_tool", cat:"Agents", title:"Agent with your own tool",
       desc:"Gives an agent one of your My Blocks as a tool: a hydration calculator. It asks you for the weights, uses the calculator, and explains the result.",
       tip:"Make your own My Block that returns a value, then add a 'tool: My Block' block for it with a clear description.",
       build:() => P(["flour grams", "water grams"], [
@@ -5505,6 +5765,65 @@ HOW TO MAP CODE
           inputs:{ RETURN:xB("math_round", { NUM:xB("math_arithmetic", {
             A:xB("math_arithmetic", { A:xV("water grams"), B:xV("flour grams") }, { OP:"DIVIDE" }), B:nm(100) }, { OP:"MULTIPLY" }) }, { OP:"ROUND" }) } }
       ]) },
+    { key:"a_timetable", cat:"Agents", title:"Agent: bake timetable",
+      desc:"Tell it when you want bread out of the oven. It asks how warm your kitchen is, then works backwards with the clock tool, so every time in the plan adds up.",
+      tip:"Answer with a day and time, like 'Saturday 11:00'. Then try asking for two loaves.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", { PLAN:true }, { GOAL:lt("Make me a sourdough timetable. Ask me when I want the bread out of the oven, and how warm my kitchen is. " +
+            "Then work backwards: bake, final proof, shaping, bulk ferment, mixing, and feeding the starter, adjusting the times for the temperature. " +
+            "Use time_plus for every clock time and calculate for any sums. Finish with the timetable: one line per step, with its clock time and what to do."), STEPS:nm(14),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"ask" }), blk("rb_agent_builtin", { KIND:"time" }), blk("rb_agent_builtin", { KIND:"calc" }))) }),
+        sFinish())) },
+    { key:"a_scale", cat:"Agents", title:"Agent: scale a recipe",
+      desc:"Give it a recipe and how much dough you want. It works out the baker's percentages and the new weights with the sums tool, so no number is guessed.",
+      tip:"Try 'three 900 g loaves'. The Agent summary shows every sum it did.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", null, { GOAL:lt("Ask me for my bread recipe, with each ingredient in grams, and how much dough I want. " +
+            "Work out each ingredient as a percentage of the flour, then its new weight, using calculate for every sum. " +
+            "Finish with a table: ingredient, baker's percentage, original grams, new grams (to the nearest gram)."), STEPS:nm(16),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"calc" }), blk("rb_agent_builtin", { KIND:"ask" }))) }),
+        sFinish())) },
+    { key:"a_selfcheck", cat:"Agents", title:"Agent: write, check, improve",
+      desc:"Writes a short piece, has a separate reviewer check it against your criteria, and fixes whatever the reviewer finds until it passes.",
+      tip:"Put your own house style in the criteria. The reviewer sees only the text, not how the agent got there.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", null, { GOAL:lt("Write a welcome of about 100 words for the top of a beginner's sourdough guide. Then use review_text to check it against these criteria: " +
+            "friendly and plain; under 120 words; explains what a starter is; ends with one clear next step. " +
+            "Fix every problem the reviewer finds and check again. Your answer is the version that passes."), STEPS:nm(8),
+          TOOLS:st(blk("rb_agent_builtin", { KIND:"review" })) }),
+        sFinish())) },
+    { key:"a_readfile", cat:"Agents", title:"Agent: check my recipe file",
+      desc:"Asks you for a recipe file (PDF, Word or text), reads it, works out the hydration and salt with the sums tool, and points out anything that looks wrong.",
+      tip:"Any recipe with weights in grams works. A scanned PDF won't: it holds pictures of pages, not words.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", null, { GOAL:lt("Ask me for my recipe file and read it. Work out the hydration and the salt as percentages of the flour, using calculate. " +
+            "In a few lines, tell me whether they suit the kind of bread it is, and anything in the method that seems wrong or missing."), STEPS:nm(8),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"file" }), blk("rb_agent_builtin", { KIND:"calc" }), blk("rb_agent_builtin", { KIND:"ask" }))) }),
+        sFinish())) },
+    { key:"a_research", cat:"Agents", title:"Agent: research with sources",
+      desc:"Searches, reads its sources properly, saves the key facts for next time, and answers with the addresses it used. Exported Python reads the real pages; this page searches from Claude's knowledge.",
+      tip:"Change the question. Run it again and it can start from the facts it saved.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", { PLAN:true }, { GOAL:lt("Find out how rye flour behaves differently from wheat flour in sourdough. Search first, then read at least one good source page in full. " +
+            "Save the three most useful facts as a note called 'rye facts'. Answer in five plain sentences, then list the addresses of the sources you used."), STEPS:nm(8),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"web" }), blk("rb_agent_builtin", { KIND:"memory" }))) }),
+        sFinish())) },
+    { key:"a_house", cat:"Agents", title:"Agent: house check-up",
+      desc:"Looks round your Home Assistant for doors left open, low batteries, devices gone offline and odd temperatures, and lists what needs attention. On this page it uses the sample house.",
+      tip:"In the Home Assistant panel, open a window first and see if it notices.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", { PLAN:true }, { GOAL:lt("Give my house a quick check-up. Look for doors or windows left open, batteries below 20%, devices that are unavailable, " +
+            "and any temperature that has been unusual over the last day (use device_history). Finish with a short list of what needs attention, most urgent first, or say all is well."), STEPS:nm(10),
+          TOOLS:st(blk("rb_agent_builtin", { KIND:"ha_read" })) }),
+        sFinish())) },
+    { key:"a_bedtime", cat:"Agents", title:"Agent: bedtime round",
+      desc:"Finds lights still on and turns them off, asking you before each one. It checks the doors and locks too, but only reports them: it never opens or unlocks anything. On this page it uses the sample house.",
+      tip:"Say 'Don't' to one of its requests and watch it carry on without that light.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", null, { GOAL:lt("It's bedtime. Find the lights that are still on and turn them off, except the landing light. " +
+            "Check the doors and locks and tell me about any that are open or unlocked, but don't change them. Finish with what you did and anything I should check."), STEPS:nm(12),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"ha_read" }), blk("rb_agent_builtin", { KIND:"ha_act" }))) }),
+        sFinish())) },
     { key:"h_gifts", cat:"Home and baking", title:"Gift ideas within a budget",
       desc:"Suggests six gifts sorted by price, lets you choose one, then writes a gift-card message for it.",
       tip:"Give a budget and a couple of their interests.",
@@ -7691,8 +8010,8 @@ HOW TO MAP CODE
 
   /* ---------- Files ---------- */
   const TEXT_EXT = /\.(txt|md|markdown|csv|tsv|json|html?|xml|ya?ml|log|py|js|ts|css|ini|cfg|toml|rtf|srt|vtt)$/i;
-  function chooseTextFile(){
-    return waitForYou("Choose a file", "Pick a PDF, a Word file (.docx), or a text file such as .txt, .md, .csv or .json.", (box, done, step) => {
+  function chooseTextFile(why){
+    return waitForYou("Choose a file", (why ? why + "\n\n" : "") + "Pick a PDF, a Word file (.docx), or a text file such as .txt, .md, .csv or .json.", (box, done, step) => {
       const id = "pickf-" + (++picCount);
       const input = document.createElement("input"); input.type = "file"; input.id = id; input.className = "pickfile";
       input.accept = ".txt,.md,.markdown,.csv,.tsv,.json,.html,.htm,.xml,.yaml,.yml,.log,.py,.js,.css,.toml,.srt,.vtt,.pdf,.docx,text/*,application/pdf";
@@ -7722,7 +8041,7 @@ HOW TO MAP CODE
       use.onclick = () => {
         if (!chosen) { err.textContent = "Choose a file first."; err.hidden = false; return; }
         const c = chosen; done(c, "chosen");
-        step.text(c.name + " \u00b7 " + c.text.length.toLocaleString() + " characters\n\n" + c.text.slice(0, 600) + (c.text.length > 600 ? "\n…" : ""));
+        step.text((why ? why + "\n\n" : "") + c.name + " \u00b7 " + c.text.length.toLocaleString() + " characters\n\n" + c.text.slice(0, 600) + (c.text.length > 600 ? "\n…" : ""));
       };
       row.append(input, label, use);
       box.append(row, info, err);
@@ -7937,22 +8256,102 @@ HOW TO MAP CODE
      Each step Claude replies with JSON: a tool to use, or its final answer. Exported Python runs the same protocol
      (Runtime.agent), so a program behaves the same in both places, with any model. */
   const AGENT_BUILTINS = {
-    web:[["search_web", "Search the web and get a short answer with sources. Use for facts that change, like prices or opening times.", ["query"]]],
+    web:[["search_web", "Search the web and get a short answer with sources. Use for facts that change, like prices or opening times.", ["query"]],
+         ["read_page", "Read the words on one public web page, from its address (starting http:// or https://). Use it to check a source properly.", ["url"]]],
     ask:[["ask_me", "Ask the person running this program a question and wait for their answer. Use it for things only they know, or to check a decision.", ["question"]]],
     memory:[["remember", "Save a note under a name. It is kept between runs.", ["name", "value"]],
             ["recall", "Get the note saved under a name. Gives nothing if there isn't one.", ["name"]],
             ["list_memory", "List the names of every saved note.", []]],
     ha_read:[["find_devices", "Find Home Assistant devices and sensors matching some words, with their current states.", ["search"]],
-             ["device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"]]],
-    ha_act:[["call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. The person may be asked first, and may say no.", ["service", "entity", "data"]]]
+             ["device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"]],
+             ["device_history", "See how one Home Assistant entity changed over the past hours (24 if you don't say; at most 168), as a list of times and states.", ["entity", "hours"]]],
+    ha_act:[["call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. The person may be asked first, and may say no.", ["service", "entity", "data"]]],
+    calc:[["calculate", "Work out a sum exactly, like (350 / 500) * 100 or round(1000 * 0.02, 1). Use it for every sum instead of working it out yourself. It knows + - * / ^, brackets, pi, and round(x, places), min, max, sqrt, abs, floor, ceil.", ["expression"]]],
+    time:[["current_time", "Get the day, date and time now.", []],
+          ["time_plus", "Add minutes to a clock time and get the new time, like 09:30 plus 270 gives 14:00. Use a negative number to go back. time is HH:MM, or YYYY-MM-DD HH:MM to get the date and day too. Use it for every clock time instead of working it out yourself.", ["time", "minutes"]]],
+    file:[["read_file", "Ask the person to choose a file (a PDF, a Word file or a text file) and get the words in it. Say why you want it.", ["why"]]],
+    review:[["review_text", "Have a separate, strict reviewer check some text against criteria (separate them with semicolons). It says whether the text passes, and lists each problem. Use it to check your work before you finish.", ["text", "criteria"]]]
   };
   AGENT_BUILTINS.ha_act_free = AGENT_BUILTINS.ha_act;
   const AGENT_ASKS = new Set(["ha_act"]);  // built-in tools that ask before each use
   const MAX_AGENT_STEPS = 20;
   // The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL. Matches the runtime.
   const AGENT_INPUT_TYPES = { search_web:{ query:"text" }, ask_me:{ question:"text" }, remember:{ name:"text", value:"text" }, recall:{ name:"text" },
-    list_memory:{}, find_devices:{ search:"text" }, device_state:{ entity:"text" }, call_service:{ service:"text", entity:"text", data:"any" } };
-  const AGENT_OPTIONAL = { find_devices:["search"], call_service:["entity", "data"] };
+    list_memory:{}, find_devices:{ search:"text" }, device_state:{ entity:"text" }, call_service:{ service:"text", entity:"text", data:"any" },
+    read_page:{ url:"text" }, device_history:{ entity:"text", hours:"number" }, calculate:{ expression:"text" }, current_time:{},
+    time_plus:{ time:"text", minutes:"number" }, read_file:{ why:"text" }, review_text:{ text:"text", criteria:"text" } };
+  const AGENT_OPTIONAL = { find_devices:["search"], call_service:["entity", "data"], device_history:["hours"], read_file:["why"] };
+  const MAX_FILE_CHARS = 30000;
+  /* Works out a sum like (350 / 500) * 100 exactly, without running any code. Matches the runtime's _Calc. */
+  const CALC_FUNCS = ["round", "min", "max", "sqrt", "abs", "floor", "ceil"];
+  function calcValue(text){
+    const toks = String(text).replace(/\u00d7/g, "*").replace(/\u00f7/g, "/").match(/\d+(?:\.\d*)?|\.\d+|[A-Za-z_]+|\S/g) || [];
+    let i = 0;
+    const bad = m => { throw new Error(m); };
+    const peek = () => i < toks.length ? toks[i] : null;
+    const take = want => { const t = peek(); if (t === null) bad("it ends too soon"); if (want !== undefined && t !== want) bad("expected \u201c" + want + "\u201d but found \u201c" + t + "\u201d"); i++; return t; };
+    const finite = v => { if (!isFinite(v)) bad("the answer isn't a number"); return v; };
+    function expr(){ let v = term(); while (peek() === "+" || peek() === "-") v = take() === "+" ? v + term() : v - term(); return v; }
+    function term(){
+      let v = unary();
+      while (peek() === "*" || peek() === "/") { const op = take(), r = unary(); if (op === "/" && r === 0) bad("it divides by zero"); v = op === "*" ? v * r : v / r; }
+      return v;
+    }
+    function unary(){ if (peek() === "-" || peek() === "+") return take() === "-" ? -unary() : unary(); return power(); }
+    function power(){ let v = primary(); if (peek() === "^") { take(); v = finite(Math.pow(v, unary())); } return v; }
+    function primary(){
+      const t = take();
+      if (t === "(") { const v = expr(); take(")"); return v; }
+      if (/^[\d.]/.test(t)) return parseFloat(t);
+      const name = t.toLowerCase();
+      if (name === "pi") return Math.PI;
+      if (!CALC_FUNCS.includes(name)) bad("I don't know \u201c" + t + "\u201d (it can use " + CALC_FUNCS.join(", ") + " and pi)");
+      take("(");
+      const args = [expr()];
+      while (peek() === ",") { take(); args.push(expr()); }
+      take(")");
+      if (name === "min" || name === "max") return Math[name](...args);
+      if (name === "round") { const places = args.length > 1 ? Math.max(0, Math.min(10, Math.floor(args[1] + 0.5))) : 0, f = Math.pow(10, places); return Math.floor(args[0] * f + 0.5) / f; }
+      if (args.length !== 1) bad(name + " takes one number");
+      if (name === "sqrt" && args[0] < 0) bad("it takes the square root of a negative number");
+      return Math[name](args[0]);
+    }
+    if (!toks.length) bad("it's empty");
+    const v = expr();
+    if (peek() !== null) bad("I don't understand \u201c" + peek() + "\u201d there");
+    return finite(v);
+  }
+  function calcText(expression){
+    expression = str(expression).trim();
+    let v;
+    try { v = calcValue(expression); } catch(e) { fail("calculate couldn't work out \u201c" + short(expression, 80) + "\u201d: " + e.message + "."); }
+    v = Number(v.toPrecision(12));
+    return expression + " = " + String(v);
+  }
+  const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  /* '09:30' plus 270 -> '14:00'; '2026-10-10 22:00' plus 600 -> '2026-10-11 08:00 (Sunday)'. Matches the runtime. */
+  function timePlusText(when, minutes){
+    const m = /^\s*(?:(\d{4})-(\d{1,2})-(\d{1,2})[ T]+)?(\d{1,2})[:.](\d{2})\s*(am|pm)?\s*$/i.exec(str(when));
+    if (!m) fail("time_plus needs a time like 09:30 or 2026-10-10 09:30, not \u201c" + short(when, 40) + "\u201d.");
+    let h = +m[4]; const mi = +m[5], ampm = (m[6] || "").toLowerCase(), shown = str(when).trim();
+    if (ampm) { if (h < 1 || h > 12) fail("\u201c" + shown + "\u201d isn't a time."); h = h % 12 + (ampm === "pm" ? 12 : 0); }
+    if (h > 23 || mi > 59) fail("\u201c" + shown + "\u201d isn't a time.");
+    const add = Math.floor(num(minutes) + 0.5);
+    if (m[1]) {
+      const y = +m[1], mo = +m[2], d = +m[3], start = new Date(Date.UTC(y, mo - 1, d, h, mi));
+      if (start.getUTCFullYear() !== y || start.getUTCMonth() !== mo - 1 || start.getUTCDate() !== d) fail("\u201c" + shown + "\u201d isn't a real date.");
+      const t = new Date(start.getTime() + add * 60000);
+      return t.getUTCFullYear() + "-" + pad2(t.getUTCMonth() + 1) + "-" + pad2(t.getUTCDate()) + " " + pad2(t.getUTCHours()) + ":" + pad2(t.getUTCMinutes()) +
+        " (" + WEEKDAYS[(t.getUTCDay() + 6) % 7] + ")";
+    }
+    const total = h * 60 + mi + add, days = Math.floor(total / 1440), t = ((total % 1440) + 1440) % 1440;
+    const note = days === 0 ? "" : days === 1 ? " (next day)" : days === -1 ? " (the day before)" : days > 0 ? " (" + days + " days later)" : " (" + (-days) + " days earlier)";
+    return pad2(Math.floor(t / 60)) + ":" + pad2(t % 60) + note;
+  }
+  function currentTimeText(){
+    const d = new Date();
+    return WEEKDAYS[(d.getDay() + 6) % 7] + " " + d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+  }
   const INPUT_TYPES = { text:{ type:"string" }, number:{ type:"number" }, "yes/no":{ type:"boolean" }, list:{ type:"array", items:{ type:"string" } }, any:{} };
   const TYPE_ALIASES = { string:"text", "yes or no":"yes/no", boolean:"yes/no", bool:"yes/no", integer:"number" };
   /* 'flour grams: number; water grams: number - grams of water' -> { param: [type, description] }. Undeclared inputs are text. */
@@ -8094,6 +8493,36 @@ HOW TO MAP CODE
       case "call_service": {
         const data = inp.data && typeof inp.data === "object" ? JSON.stringify(inp.data) : a("data");
         return (await haCall(a("service"), a("entity"), data, tc)) ? "Done." : "Not done: the person said no.";
+      }
+      case "device_history": {
+        haNote();
+        const rows = haHistory(haEnt(a("entity")), inp.hours == null ? 24 : inp.hours);
+        return rows.map(r => r.time + ": " + str(r.state)).join("\n") || "No history for \u201c" + a("entity") + "\u201d.";
+      }
+      case "read_page": {
+        if (!/^https?:\/\/[^\s/]+/i.test(a("url"))) fail("read_page needs a web address starting with http:// or https://.");
+        addStep("Read page: " + short(a("url"), 60), { mono:true, text:"This page can't open other websites, so the agent is told to use search_web instead. Exported Python reads the page for real." }).done("not live", "warn");
+        return "This page can't open other websites, so read_page doesn't work here (it does in exported Python). Use search_web instead.";
+      }
+      case "calculate": return calcText(a("expression"));
+      case "current_time": return currentTimeText();
+      case "time_plus": return timePlusText(a("time"), inp.minutes == null ? 0 : inp.minutes);
+      case "read_file": {
+        const f = await chooseTextFile(a("why") ? "The agent wants a file: " + a("why") : "");
+        run.lastFile = f.name;
+        return f.text.length > MAX_FILE_CHARS ? f.text.slice(0, MAX_FILE_CHARS) + "\n\n\u2026 (the file goes on: this is the first " + MAX_FILE_CHARS.toLocaleString("en") + " of " + f.text.length.toLocaleString("en") + " characters)" : f.text;
+      }
+      case "review_text": {
+        if (!a("text")) fail("review_text needs some text to check.");
+        if (!a("criteria")) fail("review_text needs criteria to check against.");
+        const s = addStep("Check: " + short(a("criteria"), 55));
+        const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + a("criteria") +
+          "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. ' +
+          "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS.review);
+        const problems = Array.isArray(v.problems) ? v.problems.map(str).filter(x => x.trim()) : [];
+        const out = v.approved === true ? "Passes every criterion." : "Doesn't pass yet. Problems:\n" + (problems.length ? problems : ["It doesn't yet meet the criteria."]).map(x => "- " + x).join("\n");
+        s.text(out); s.done(v.approved === true ? "passes" : "needs work", v.approved === true ? "ok" : "warn");
+        return out;
       }
     }
     fail("Unknown tool \u201c" + name + "\u201d.");
