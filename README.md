@@ -206,7 +206,7 @@ The pink **Connections** blocks work without an agent too:
   - **when a calendar event starts in … minutes**, for reminders.
 
   **what arrived** gives what started the script. Every listener gives `text`, which sums it up. Each block's tooltip lists its other fields, like `subject` for an email or `topic` for MQTT. **Telegram message** gives a Telegram message's words, sender or chat. On the page, right-click a listener and choose **Run this script** to try it with a sample of what arrives. Listeners only listen while the exported program runs on schedule.
-- **latest MQTT message on …** reads a topic, and **publish MQTT … to topic …** sends one. With **ask me before any Home Assistant action**, publishing asks you first.
+- **latest MQTT message on …** reads a topic, and **publish MQTT … to topic …** sends one. With **ask me before any smart home action**, publishing asks you first.
 - **send Telegram message** and **send email** send something. With **ask me before sending messages and announcements**, they ask you first.
 - **news from feed** gives a list of the latest items. Leave it empty for your own feeds.
 - **calendar for the next … days** gives a list of your events.
@@ -428,6 +428,33 @@ HA_TOKEN = your-long-lived-token
 Then double-click `run-on-schedule.bat` (Windows), or type `sh run-on-schedule.sh` (Linux or Mac). On an always-on Linux computer, `sh install-service.sh` keeps it running for good.
 
 `--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. A small virtual machine or container that's always on is a good home for it.
+
+### Homey
+
+Some homes have a **Homey** instead, or as well. Second Thought talks to Homey Pro too, with its own green blocks in the **Homey** pile:
+
+- **when Homey device … … changes** starts a script when a device's value changes, like the washing machine's power dropping. **what arrived** says which device, what changed, and from what to what.
+- **… of Homey device …** reads one value, like `measure_temperature` of the Proofing box.
+- **Homey devices matching …** lists devices and everything they report.
+- **set Homey device … … to …** switches something, like `onoff` to `off` or `dim` to `0.5`.
+- **run Homey flow …** starts one of your flows. A flow can do anything your Homey can, like sending a Homey notification.
+- **Homey variable …** and **set Homey variable … to …** read and change your Logic variables, so your flows can use them.
+
+There are agent tools too, in the **Tools** pile: **Homey: look at devices, flows and variables**, and **Homey: control devices and start flows**, which asks you before each change.
+
+On the page these blocks use a **pretend Homey home**. Try the examples under **Homey** in Browse examples.
+
+**The same safety rule:** unlocking, opening the garage and switching off the alarm always ask you first.
+
+**Grown-ups, here is how to use your real Homey:** in the Homey Web App (my.homey.app), open Settings, then API Keys, and make a new key. Give it only the permissions the program needs: view devices, control devices, view and start flows, and view and edit Logic. Put it in `second-thought.ini` with your Homey's address on your network:
+
+```
+[homey]
+HOMEY_URL = http://homey-XXXXXXX.local
+HOMEY_API_KEY = your-api-key
+```
+
+The address is in the Homey app under Settings, General. The computer running the program must be on the same network as your Homey. API keys work with Homey Pro (2023 and later) and Homey Pro mini.
 
 ---
 

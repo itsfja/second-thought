@@ -1,5 +1,5 @@
 {
-  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, web requests and folders.",
+  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, Homey, web requests and folders.",
   "feeds": {
     "https://example.com/baking/feed": {
       "title": "The Loaf Letter (sample feed)",
@@ -318,6 +318,265 @@
       "name": "grandmas-loaf.txt",
       "folder": "inbox",
       "text": "Grandma's loaf\n2 lb strong white flour\n1 pint warm water\n1 oz fresh yeast\n2 tsp salt\nMix, knead 10 minutes, rise until doubled, shape, bake hot for 40 minutes."
+    }
+  },
+  "homey": {
+    "zones": {
+      "z-kitchen": "Kitchen",
+      "z-living": "Living room",
+      "z-hall": "Hallway",
+      "z-bed": "Bedroom",
+      "z-utility": "Utility room",
+      "z-garden": "Garden"
+    },
+    "devices": [
+      {
+        "id": "d-kitchen-light",
+        "name": "Kitchen light",
+        "zone": "z-kitchen",
+        "class": "light",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "dim": {
+            "id": "dim",
+            "value": 0.8
+          }
+        }
+      },
+      {
+        "id": "d-living-lamp",
+        "name": "Living room lamp",
+        "zone": "z-living",
+        "class": "light",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "dim": {
+            "id": "dim",
+            "value": 0.4
+          }
+        }
+      },
+      {
+        "id": "d-landing",
+        "name": "Landing light",
+        "zone": "z-hall",
+        "class": "light",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "dim": {
+            "id": "dim",
+            "value": 0.2
+          }
+        }
+      },
+      {
+        "id": "d-bed-lamp",
+        "name": "Bedside lamp",
+        "zone": "z-bed",
+        "class": "light",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": false
+          },
+          "dim": {
+            "id": "dim",
+            "value": 0.3
+          }
+        }
+      },
+      {
+        "id": "d-front-lock",
+        "name": "Front door lock",
+        "zone": "z-hall",
+        "class": "lock",
+        "capabilitiesObj": {
+          "locked": {
+            "id": "locked",
+            "value": false
+          },
+          "measure_battery": {
+            "id": "measure_battery",
+            "value": 64
+          }
+        }
+      },
+      {
+        "id": "d-back-door",
+        "name": "Back door sensor",
+        "zone": "z-kitchen",
+        "class": "sensor",
+        "capabilitiesObj": {
+          "alarm_contact": {
+            "id": "alarm_contact",
+            "value": true
+          },
+          "measure_battery": {
+            "id": "measure_battery",
+            "value": 18
+          }
+        }
+      },
+      {
+        "id": "d-proofer",
+        "name": "Proofing box",
+        "zone": "z-kitchen",
+        "class": "sensor",
+        "capabilitiesObj": {
+          "measure_temperature": {
+            "id": "measure_temperature",
+            "value": 26.4
+          },
+          "measure_humidity": {
+            "id": "measure_humidity",
+            "value": 77
+          }
+        }
+      },
+      {
+        "id": "d-kitchen-temp",
+        "name": "Kitchen thermometer",
+        "zone": "z-kitchen",
+        "class": "sensor",
+        "capabilitiesObj": {
+          "measure_temperature": {
+            "id": "measure_temperature",
+            "value": 22.1
+          },
+          "measure_battery": {
+            "id": "measure_battery",
+            "value": 91
+          }
+        }
+      },
+      {
+        "id": "d-oven-plug",
+        "name": "Oven plug",
+        "zone": "z-kitchen",
+        "class": "socket",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "measure_power": {
+            "id": "measure_power",
+            "value": 1850
+          },
+          "meter_power": {
+            "id": "meter_power",
+            "value": 412.6
+          }
+        }
+      },
+      {
+        "id": "d-washer",
+        "name": "Washing machine",
+        "zone": "z-utility",
+        "class": "socket",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "measure_power": {
+            "id": "measure_power",
+            "value": 3.1
+          },
+          "meter_power": {
+            "id": "meter_power",
+            "value": 233.0
+          }
+        }
+      },
+      {
+        "id": "d-thermostat",
+        "name": "Living room thermostat",
+        "zone": "z-living",
+        "class": "thermostat",
+        "capabilitiesObj": {
+          "target_temperature": {
+            "id": "target_temperature",
+            "value": 20
+          },
+          "measure_temperature": {
+            "id": "measure_temperature",
+            "value": 19.4
+          }
+        }
+      },
+      {
+        "id": "d-garden-motion",
+        "name": "Garden motion",
+        "zone": "z-garden",
+        "class": "sensor",
+        "capabilitiesObj": {
+          "alarm_motion": {
+            "id": "alarm_motion",
+            "value": false
+          },
+          "measure_luminance": {
+            "id": "measure_luminance",
+            "value": 12
+          },
+          "measure_battery": {
+            "id": "measure_battery",
+            "value": 55
+          }
+        }
+      }
+    ],
+    "flows": [
+      {
+        "id": "f-goodnight",
+        "name": "Good night",
+        "advanced": false
+      },
+      {
+        "id": "f-bake",
+        "name": "Baking mode",
+        "advanced": true
+      },
+      {
+        "id": "f-away",
+        "name": "Everyone left",
+        "advanced": false
+      }
+    ],
+    "variables": [
+      {
+        "id": "v-loaves",
+        "name": "Loaves this week",
+        "type": "number",
+        "value": 3
+      },
+      {
+        "id": "v-starter",
+        "name": "Starter fed",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "id": "v-note",
+        "name": "Kitchen note",
+        "type": "string",
+        "value": "Rye starter in the fridge"
+      }
+    ],
+    "incoming": {
+      "device": "Washing machine",
+      "capability": "measure_power",
+      "from": 412,
+      "to": 3.1
     }
   }
 }

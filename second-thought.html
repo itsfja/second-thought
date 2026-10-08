@@ -1682,7 +1682,7 @@ class Runtime:
                  if n else "No token budget for this run.", "set")
 
     # ----- Asking before actions -----
-    ASK_FIRST = {"ha": "any Home Assistant action", "messages": "sending messages and announcements",
+    ASK_FIRST = {"ha": "any smart home action (Home Assistant, Homey or MQTT)", "messages": "sending messages and announcements",
                  "files": "saving files", "all": "all of these"}
 
     def ask_before(self, kind):
@@ -3532,6 +3532,201 @@ class Runtime:
         return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
             else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
 
+    # Homey
+    # Homey Pro's local Web API: HOMEY_URL is its address on your network, HOMEY_API_KEY a key from the Homey Web App
+    # (Settings, API Keys). Give the key the permissions your program needs: devices (view, and control to switch
+    # things), flows (view and start), Logic (view, and edit to set variables).
+    HOMEY_SENSITIVE = {("locked", False), ("garagedoor_closed", False), ("homealarm_state", "disarmed")}
+
+    async def _homey(self, method, path, body=None):
+        url, key = os.environ.get("HOMEY_URL", "").strip().rstrip("/"), os.environ.get("HOMEY_API_KEY", "").strip()
+        if not url or not key:
+            raise RunError(f"Homey needs HOMEY_URL and HOMEY_API_KEY {WHERE_KEYS}. Make a key in the Homey Web App: Settings, API Keys.")
+        if not re.match(r"^https?://", url):
+            url = "http://" + url
+        req = urllib.request.Request(url + "/api/manager" + path, method=method, data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    raw = r.read()
+                    return json.loads(raw) if raw.strip() else None
+            except urllib.error.HTTPError as e:
+                why = {401: "the API key was refused. Check HOMEY_API_KEY", 403: "the API key isn't allowed to do that. Give it more permissions in the Homey Web App",
+                       404: "not found"}.get(e.code, f"Homey answered {e.code}")
+                raise RunError(f"Homey: {why}.") from None
+            except urllib.error.URLError as e:
+                raise RunError(f"Couldn't reach Homey at {url} ({e.reason}).") from None
+        return await asyncio.to_thread(go)
+
+    async def _homey_home(self):
+        """Every device, with its zone's name."""
+        devices = await self._homey("GET", "/devices/device/")
+        try:
+            zones = {k: v.get("name", "") for k, v in (await self._homey("GET", "/zones/zone/")).items()}
+        except RunError:
+            zones = {}
+        out = []
+        for d in (devices or {}).values():
+            caps = {k: c.get("value") for k, c in (d.get("capabilitiesObj") or {}).items()}
+            zone = d.get("zone")
+            zone = zones.get(zone if isinstance(zone, str) else (zone or {}).get("id"), "") or (zone.get("name", "") if isinstance(zone, dict) else "")
+            out.append({"id": d.get("id"), "name": d.get("name", ""), "zone": zone, "class": d.get("class", ""), "caps": caps})
+        out.sort(key=lambda x: (x["zone"], x["name"]))
+        return out
+
+    @staticmethod
+    def _homey_show(v):
+        return "on" if v is True else "off" if v is False else "-" if v is None else to_str(v)
+
+    def _homey_line(self, d):
+        return f"{d['name']} ({d['zone'] or 'no zone'}, {d['class']}): " + ", ".join(f"{k}={self._homey_show(v)}" for k, v in d["caps"].items())
+
+    async def _homey_device(self, name):
+        """A device by its name (or id). An exact name wins; otherwise one device whose name contains the words."""
+        name = to_str(name).strip()
+        if not name:
+            raise RunError("Which Homey device? Give its name, like Kitchen light.")
+        home = await self._homey_home()
+        exact = [d for d in home if d["name"].lower() == name.lower() or d["id"] == name]
+        if exact:
+            return exact[0]
+        some = [d for d in home if all(w in d["name"].lower() for w in name.lower().split())]
+        if len(some) == 1:
+            return some[0]
+        raise RunError(f"There's no Homey device called “{name}”." + (" Did you mean: " + ", ".join(d["name"] for d in some[:6]) + "?" if some else ""))
+
+    async def homey_find(self, text="*"):
+        """Records (name, zone, class, and each capability) for devices whose name, zone or class contain every word."""
+        words = [w for w in to_str(text).lower().split() if w != "*"]
+        found = [d for d in await self._homey_home() if all(w in f"{d['name']} {d['zone']} {d['class']}".lower() for w in words)]
+        return [dict({"name": d["name"], "zone": d["zone"], "class": d["class"]}, **{k: self._homey_show(v) if isinstance(v, bool) else v for k, v in d["caps"].items()})
+                for d in found]
+
+    async def homey_find_text(self, text="*"):
+        words = [w for w in to_str(text).lower().split() if w != "*"]
+        found = [d for d in await self._homey_home() if all(w in f"{d['name']} {d['zone']} {d['class']}".lower() for w in words)]
+        return "\n".join(self._homey_line(d) for d in found) or f"No Homey devices match “{to_str(text).strip()}”."
+
+    async def homey_value(self, capability, device):
+        d = await self._homey_device(device)
+        cap = to_str(capability).strip()
+        if cap not in d["caps"]:
+            raise RunError(f"{d['name']} has no “{cap}”. It has: {', '.join(d['caps']) or 'nothing'}.")
+        v = d["caps"][cap]
+        return self._homey_show(v) if isinstance(v, bool) else v
+
+    @staticmethod
+    def _homey_value_for(old, value):
+        """Turns 'on', 'yes', '50' and so on into the kind of value the capability holds."""
+        v = value
+        if isinstance(old, bool) or (isinstance(v, str) and v.strip().lower() in ("on", "off", "true", "false", "yes", "no")):
+            if isinstance(v, str):
+                t = v.strip().lower()
+                if t not in ("on", "off", "true", "false", "yes", "no", "1", "0"):
+                    raise RunError(f"“{value}” isn't on or off.")
+                return t in ("on", "true", "yes", "1")
+            return bool(v)
+        if isinstance(old, (int, float)):
+            if not _num_like(v):
+                raise RunError(f"“{value}” isn't a number.")
+            return num(v)
+        return to_str(v) if not isinstance(v, (int, float, bool)) else v
+
+    async def homey_set(self, device, capability, value, approved=False):
+        d = await self._homey_device(device)
+        cap = to_str(capability).strip()
+        if cap not in d["caps"]:
+            raise RunError(f"{d['name']} has no “{cap}”. It has: {', '.join(d['caps']) or 'nothing'}.")
+        v = self._homey_value_for(d["caps"][cap], value)
+        what = f"set {d['name']} {cap} to {self._homey_show(v)}"
+        if (cap, v) in self.HOMEY_SENSITIVE:  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
+            if not approved and not await self.confirm(what + " (a safety check: unlocking, opening and disarming always ask)"):
+                return False
+        elif not approved and not await self._allowed(["ha"], what):
+            return False
+        await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
+        self.log("Homey: " + d["name"], f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", "done")
+        return True
+
+    async def _homey_flows(self):
+        flows = []
+        for path, adv in (("/flow/flow/", False), ("/flow/advancedflow/", True)):
+            try:
+                for f in (await self._homey("GET", path) or {}).values():
+                    flows.append({"id": f.get("id"), "name": f.get("name", ""), "advanced": adv, "enabled": f.get("enabled", True),
+                                  "triggerable": f.get("triggerable", True)})
+            except RunError:
+                if not adv:
+                    raise
+        return flows
+
+    async def homey_flows_text(self):
+        return "\n".join(f"{f['name']}" + (" (advanced)" if f["advanced"] else "") + ("" if f["enabled"] else " (turned off)")
+                         for f in sorted(await self._homey_flows(), key=lambda f: f["name"].lower())) or "No flows."
+
+    async def homey_run_flow(self, name, approved=False):
+        name = to_str(name).strip()
+        flows = await self._homey_flows()
+        f = next((x for x in flows if x["name"].lower() == name.lower()), None) or \
+            (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
+        if not f:
+            raise RunError(f"There's no Homey flow called “{name}”.")
+        if not approved and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
+            return False
+        await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
+        self.log("Homey flow started", f["name"], "started")
+        return True
+
+    async def _homey_var(self, name):
+        name = to_str(name).strip()
+        vs = list((await self._homey("GET", "/logic/variable/") or {}).values())
+        v = next((x for x in vs if x.get("name", "").lower() == name.lower()), None)
+        if not v:
+            raise RunError(f"There's no Homey variable called “{name}”." + (" Its variables are: " + ", ".join(x.get("name", "") for x in vs[:12]) if vs else ""))
+        return v
+
+    async def homey_variable(self, name):
+        return (await self._homey_var(name)).get("value", "")
+
+    async def homey_set_variable(self, name, value, approved=False):
+        v = await self._homey_var(name)
+        old = v.get("value")
+        new = self._homey_value_for(old, value) if v.get("type") in ("boolean", "number") else to_str(value)
+        if not approved and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
+            return False
+        await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
+        self.log("Homey variable " + v["name"], f"{self._homey_show(old)} → {self._homey_show(new)}", "set")
+        return True
+
+    async def _listen_homey(self, items):
+        """'when Homey device … changes': checks every 10 seconds and starts the script when a value changes."""
+        before = None
+        print("Watching Homey devices for changes.", flush=True)
+        while True:
+            try:
+                home = await self._homey_home()
+                now = {(d["name"], k): (v, d) for d in home for k, v in d["caps"].items()}
+                if before is not None:
+                    for (dname, cap), (v, d) in now.items():
+                        if (dname, cap) not in before or before[(dname, cap)][0] == v:
+                            continue
+                        old = before[(dname, cap)][0]
+                        for arg, fn in items:
+                            want_dev, _, want_cap = to_str(arg).partition("|")
+                            want_cap = want_cap.strip().lower()
+                            if want_dev.strip().lower() not in (dname.lower(), d["id"]) or want_cap not in ("", "anything", cap.lower()):
+                                continue
+                            rec = {"device": dname, "zone": d["zone"], "capability": cap, "from": self._homey_show(old) if isinstance(old, bool) else old,
+                                   "to": self._homey_show(v) if isinstance(v, bool) else v,
+                                   "text": f"{dname} {cap}: {self._homey_show(old)} → {self._homey_show(v)}"}
+                            self._fire(fn, rec, f"Homey: {dname} {cap}")
+                before = now
+            except RunError as e:
+                print(f"  (Homey check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(10))
+
     # MQTT
     def _mqtt_new(self, on_message=None, topics=()):
         """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
@@ -3637,7 +3832,7 @@ class Runtime:
     # ----- Listeners: scripts that start when something arrives -----
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
-    LISTEN_NAMES = {"mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
+    LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
                     "github": "GitHub", "calendar": "Calendar"}
 
     @staticmethod
@@ -3962,8 +4157,18 @@ class Runtime:
     AGENT_BUILTINS["mqtt_act"] = [("publish_mqtt", "Publish a message to an MQTT topic, for example to switch something. retain asks the broker to keep it. "
                                    "The person may be asked first, and may say no.", ["topic", "message", "retain"])]
     AGENT_BUILTINS["mqtt_act_free"] = AGENT_BUILTINS["mqtt_act"]
+    AGENT_BUILTINS["homey_read"] = [
+        ("find_homey_devices", "Find Homey devices whose name, zone or kind contain some words (leave search empty for all), with every value they "
+         "report, like onoff, dim, measure_temperature or measure_power.", ["search"]),
+        ("list_homey_flows", "List the person's Homey flows by name.", []),
+        ("homey_variable", "Get the value of one of the person's Homey Logic variables, by name.", ["name"])]
+    AGENT_BUILTINS["homey_act"] = [
+        ("set_homey_device", "Set one value of a Homey device, by the device's name: for example onoff to on, dim to 0.5, or target_temperature to 19. "
+         "The person may be asked first, and may say no. Unlocking, opening and disarming always ask.", ["device", "capability", "value"]),
+        ("run_homey_flow", "Start one of the person's Homey flows, by its name. The person may be asked first, and may say no.", ["flow"])]
+    AGENT_BUILTINS["homey_act_free"] = AGENT_BUILTINS["homey_act"]
     AGENT_BUILTINS["telegram_send_free"] = AGENT_BUILTINS["telegram_send"]
-    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act"}  # built-in tools that ask before each use
+    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
@@ -3978,11 +4183,13 @@ class Runtime:
                          "send_telegram": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
                          "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
                          "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"},
-                         "read_mqtt": {"topic": "text"}, "publish_mqtt": {"topic": "text", "message": "text", "retain": "yes/no"}}
+                         "read_mqtt": {"topic": "text"}, "publish_mqtt": {"topic": "text", "message": "text", "retain": "yes/no"},
+                         "find_homey_devices": {"search": "text"}, "list_homey_flows": {}, "homey_variable": {"name": "text"},
+                         "set_homey_device": {"device": "text", "capability": "text", "value": "any"}, "run_homey_flow": {"flow": "text"}}
     AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
                       "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"},
                       "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"},
-                      "publish_mqtt": {"retain"}}
+                      "publish_mqtt": {"retain"}, "find_homey_devices": {"search"}}
     MAX_FILE_CHARS = 30000
     INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
                    "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
@@ -4216,6 +4423,18 @@ class Runtime:
             return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
         if kind == "calendar":
             return await self.calendar_text(a("day") or "today", inp.get("days", 7))
+        if kind == "find_homey_devices":
+            return await self.homey_find_text(a("search") or "*")
+        if kind == "list_homey_flows":
+            return await self.homey_flows_text()
+        if kind == "homey_variable":
+            return to_str(await self.homey_variable(a("name")))
+        if kind == "set_homey_device":
+            done = await self.homey_set(a("device"), a("capability"), inp.get("value", ""), approved)
+            return "Done." if done else "Not done: the person said no, or nobody was there to ask."
+        if kind == "run_homey_flow":
+            done = await self.homey_run_flow(a("flow"), approved)
+            return "Started." if done else "Not started: the person said no, or nobody was there to ask."
         if kind == "read_mqtt":
             got = await self.mqtt_read(a("topic"))
             return "\n".join(f"{k}: {_short(v, 400)}" for k, v in sorted(got.items())) or \
@@ -5508,7 +5727,7 @@ class Runtime:
 }</script>
 <script type="application/json" id="connections-sample">
 {
-  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, web requests and folders.",
+  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, Homey, web requests and folders.",
   "feeds": {
     "https://example.com/baking/feed": {
       "title": "The Loaf Letter (sample feed)",
@@ -5828,6 +6047,265 @@ class Runtime:
       "folder": "inbox",
       "text": "Grandma's loaf\n2 lb strong white flour\n1 pint warm water\n1 oz fresh yeast\n2 tsp salt\nMix, knead 10 minutes, rise until doubled, shape, bake hot for 40 minutes."
     }
+  },
+  "homey": {
+    "zones": {
+      "z-kitchen": "Kitchen",
+      "z-living": "Living room",
+      "z-hall": "Hallway",
+      "z-bed": "Bedroom",
+      "z-utility": "Utility room",
+      "z-garden": "Garden"
+    },
+    "devices": [
+      {
+        "id": "d-kitchen-light",
+        "name": "Kitchen light",
+        "zone": "z-kitchen",
+        "class": "light",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "dim": {
+            "id": "dim",
+            "value": 0.8
+          }
+        }
+      },
+      {
+        "id": "d-living-lamp",
+        "name": "Living room lamp",
+        "zone": "z-living",
+        "class": "light",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "dim": {
+            "id": "dim",
+            "value": 0.4
+          }
+        }
+      },
+      {
+        "id": "d-landing",
+        "name": "Landing light",
+        "zone": "z-hall",
+        "class": "light",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "dim": {
+            "id": "dim",
+            "value": 0.2
+          }
+        }
+      },
+      {
+        "id": "d-bed-lamp",
+        "name": "Bedside lamp",
+        "zone": "z-bed",
+        "class": "light",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": false
+          },
+          "dim": {
+            "id": "dim",
+            "value": 0.3
+          }
+        }
+      },
+      {
+        "id": "d-front-lock",
+        "name": "Front door lock",
+        "zone": "z-hall",
+        "class": "lock",
+        "capabilitiesObj": {
+          "locked": {
+            "id": "locked",
+            "value": false
+          },
+          "measure_battery": {
+            "id": "measure_battery",
+            "value": 64
+          }
+        }
+      },
+      {
+        "id": "d-back-door",
+        "name": "Back door sensor",
+        "zone": "z-kitchen",
+        "class": "sensor",
+        "capabilitiesObj": {
+          "alarm_contact": {
+            "id": "alarm_contact",
+            "value": true
+          },
+          "measure_battery": {
+            "id": "measure_battery",
+            "value": 18
+          }
+        }
+      },
+      {
+        "id": "d-proofer",
+        "name": "Proofing box",
+        "zone": "z-kitchen",
+        "class": "sensor",
+        "capabilitiesObj": {
+          "measure_temperature": {
+            "id": "measure_temperature",
+            "value": 26.4
+          },
+          "measure_humidity": {
+            "id": "measure_humidity",
+            "value": 77
+          }
+        }
+      },
+      {
+        "id": "d-kitchen-temp",
+        "name": "Kitchen thermometer",
+        "zone": "z-kitchen",
+        "class": "sensor",
+        "capabilitiesObj": {
+          "measure_temperature": {
+            "id": "measure_temperature",
+            "value": 22.1
+          },
+          "measure_battery": {
+            "id": "measure_battery",
+            "value": 91
+          }
+        }
+      },
+      {
+        "id": "d-oven-plug",
+        "name": "Oven plug",
+        "zone": "z-kitchen",
+        "class": "socket",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "measure_power": {
+            "id": "measure_power",
+            "value": 1850
+          },
+          "meter_power": {
+            "id": "meter_power",
+            "value": 412.6
+          }
+        }
+      },
+      {
+        "id": "d-washer",
+        "name": "Washing machine",
+        "zone": "z-utility",
+        "class": "socket",
+        "capabilitiesObj": {
+          "onoff": {
+            "id": "onoff",
+            "value": true
+          },
+          "measure_power": {
+            "id": "measure_power",
+            "value": 3.1
+          },
+          "meter_power": {
+            "id": "meter_power",
+            "value": 233.0
+          }
+        }
+      },
+      {
+        "id": "d-thermostat",
+        "name": "Living room thermostat",
+        "zone": "z-living",
+        "class": "thermostat",
+        "capabilitiesObj": {
+          "target_temperature": {
+            "id": "target_temperature",
+            "value": 20
+          },
+          "measure_temperature": {
+            "id": "measure_temperature",
+            "value": 19.4
+          }
+        }
+      },
+      {
+        "id": "d-garden-motion",
+        "name": "Garden motion",
+        "zone": "z-garden",
+        "class": "sensor",
+        "capabilitiesObj": {
+          "alarm_motion": {
+            "id": "alarm_motion",
+            "value": false
+          },
+          "measure_luminance": {
+            "id": "measure_luminance",
+            "value": 12
+          },
+          "measure_battery": {
+            "id": "measure_battery",
+            "value": 55
+          }
+        }
+      }
+    ],
+    "flows": [
+      {
+        "id": "f-goodnight",
+        "name": "Good night",
+        "advanced": false
+      },
+      {
+        "id": "f-bake",
+        "name": "Baking mode",
+        "advanced": true
+      },
+      {
+        "id": "f-away",
+        "name": "Everyone left",
+        "advanced": false
+      }
+    ],
+    "variables": [
+      {
+        "id": "v-loaves",
+        "name": "Loaves this week",
+        "type": "number",
+        "value": 3
+      },
+      {
+        "id": "v-starter",
+        "name": "Starter fed",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "id": "v-note",
+        "name": "Kitchen note",
+        "type": "string",
+        "value": "Rye starter in the fridge"
+      }
+    ],
+    "incoming": {
+      "device": "Washing machine",
+      "capability": "measure_power",
+      "from": 412,
+      "to": 3.1
+    }
   }
 }
 </script>
@@ -5953,6 +6431,10 @@ Agent (the model chooses its own steps):
   rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_cal_when (field N, minutes before an event).
   rb_event: field KEY (a field of what arrived; "text" always works; empty = the whole record), value. rb_mqtt_read: input TOPIC, value. rb_mqtt_publish: inputs TEXT, TOPIC; field RETAIN ("TRUE" | "FALSE"), statement.
   Agent tool kinds also: "mqtt": read_mqtt | "mqtt_act" | "mqtt_act_free": publish_mqtt.
+  Homey: rb_homey_when (hat; fields DEVICE, CAPABILITY, "anything" for any value); rb_homey_value: inputs CAPABILITY, DEVICE, value; rb_homey_find: input TEXT, value, list of records;
+  rb_homey_set: inputs DEVICE, CAPABILITY, VALUE, statement; rb_homey_flow: input NAME, statement; rb_homey_variable: input NAME, value; rb_homey_set_variable: inputs NAME, VALUE, statement.
+  Agent tool kinds "homey_read": find_homey_devices, list_homey_flows, homey_variable | "homey_act" | "homey_act_free": set_homey_device, run_homey_flow.
+  Map homey-api / Homey Web API calls (devices.getDevices, setCapabilityValue, flow.triggerFlow, logic.updateVariable) to these blocks.
   Map Telegram bot handlers (python-telegram-bot, aiogram, a getUpdates loop) to rb_tg_when; smtplib sending to rb_email_send; feedparser to rb_feed_news;
   paho-mqtt on_message to rb_mqtt_when and publish() to rb_mqtt_publish; Flask/FastAPI routes that only start work to rb_webhook_when; watchdog folder handlers to rb_folder_when. rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
   Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
@@ -6008,7 +6490,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -6020,7 +6502,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -6063,6 +6545,7 @@ HOW TO MAP CODE
     ["GitHub: projects and pull requests","github"],["GitHub: comment (asks me first)","github_act"],
     ["Telegram: search my messages","telegram"],["Telegram: send (asks me first)","telegram_send"],["Telegram: send (no asking)","telegram_send_free"],
     ["MQTT: read topics","mqtt"],["MQTT: publish (asks me first)","mqtt_act"],["MQTT: publish (no asking)","mqtt_act_free"],
+    ["Homey: look at devices, flows and variables","homey_read"],["Homey: control devices and start flows (asks me first)","homey_act"],["Homey: control devices and start flows (no asking)","homey_act_free"],
     ["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"],["Home Assistant: control devices (no asking)","ha_act_free"]];
   const TIERS = [["Claude, quick","quick"],["Claude, balanced","default"],["Claude, most capable","complex"],
                  ["Gemini Flash-Lite","gemini-quick"],["Gemini Flash","gemini-default"],["Gemini Pro","gemini-complex"],
@@ -6278,7 +6761,7 @@ HOW TO MAP CODE
       tooltip:"Before each model call, checks how many tokens this run has used. Once it reaches this number, the run stops. 0 means no limit. On this page the count is an estimate; exported Python uses the exact counts." }),
     V("rb_tokens_used", "tokens used so far", [], "Number", { style:"control",
       tooltip:"Tokens this run has used: sent plus received. An estimate on this page, exact in exported Python." }),
-    S("rb_ask_first", "ask me before %1", [{ type:"field_dropdown", name:"WHAT", options:[["any Home Assistant action","ha"],["sending messages and announcements","messages"],["saving files","files"],["all of these","all"]] }],
+    S("rb_ask_first", "ask me before %1", [{ type:"field_dropdown", name:"WHAT", options:[["any smart home action (Home Assistant, Homey, MQTT)","ha"],["sending messages and announcements","messages"],["saving files","files"],["all of these","all"]] }],
       { style:"you", tooltip:"From here on, the program shows what it's about to do and waits for you to allow it. If you say no, it skips that step and carries on. Exported Python asks in the terminal; a scheduled run with nobody there skips it." }),
     /* Agent */
     { type:"rb_agent",
@@ -6341,6 +6824,21 @@ HOW TO MAP CODE
       tooltip:"The latest message on an MQTT topic. Only messages the broker keeps (retained) show up straight away. With + or # in the topic, a record of each topic's latest message. On this page it uses sample topics." }),
     S("rb_mqtt_publish", "publish MQTT %1 to topic %2 keep it %3", [val("TEXT"), val("TOPIC"), { type:"field_checkbox", name:"RETAIN", checked:false }],
       { style:"conn", inputsInline:true, tooltip:"Sends a message to your MQTT broker. 'Keep it' asks the broker to remember it for anyone who listens later. 'Ask me before any Home Assistant action' or 'sending messages' makes it ask first. On this page it's only shown." }),
+    /* Homey */
+    { type:"rb_homey_when", message0:"when Homey device %1 %2 changes", args0:[{ type:"field_input", name:"DEVICE", text:"Washing machine" }, { type:"field_input", name:"CAPABILITY", text:"measure_power" }],
+      nextStatement:null, style:"homey_hat",
+      tooltip:"Runs the blocks below when this Homey device's value changes (checked every 10 seconds). Type 'anything' for any of its values. 'What arrived' gives device, zone, capability, from, to and text. On this page, right-click it and choose 'Run this script' to try it." },
+    V("rb_homey_value", "%1 of Homey device %2", [val("CAPABILITY"), val("DEVICE")], null, { style:"homey", inputsInline:true,
+      tooltip:"One value of a Homey device, by the device's name: onoff (on or off), dim (0 to 1), measure_temperature, measure_power and so on. 'Homey devices matching' shows what each device has." }),
+    V("rb_homey_find", "Homey devices matching %1", [val("TEXT")], "Array", { style:"homey", inputsInline:true,
+      tooltip:"A list of records, one for each device whose name, zone or kind contains all these words ('*' for every device): name, zone, class, and each of its values." }),
+    S("rb_homey_set", "set Homey device %1 %2 to %3", [val("DEVICE"), val("CAPABILITY"), val("VALUE")], { style:"homey", inputsInline:true,
+      tooltip:"Sets a value, like onoff to off, dim to 0.5 or target_temperature to 19. 'Ask me before any smart home action' makes it ask first; unlocking, opening and disarming always ask. On this page it changes the sample home." }),
+    S("rb_homey_flow", "run Homey flow %1", [val("NAME")], { style:"homey", inputsInline:true,
+      tooltip:"Starts one of your Homey flows, by its name. A flow can do anything your Homey can, including sending a Homey notification." }),
+    V("rb_homey_variable", "Homey variable %1", [val("NAME")], null, { style:"homey", inputsInline:true, tooltip:"The value of a Homey Logic variable, by its name." }),
+    S("rb_homey_set_variable", "set Homey variable %1 to %2", [val("NAME"), val("VALUE")], { style:"homey", inputsInline:true,
+      tooltip:"Changes a Homey Logic variable, so your flows can use it." }),
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
@@ -6487,6 +6985,12 @@ HOW TO MAP CODE
       B("rb_ha_call", { SERVICE:T("light.turn_off"), ENTITY:T("light.kitchen"), DATA:T("") }),
       B("rb_ha_notify", { TARGET:T("persistent_notification"), TEXT:L("The back door is still open.") }),
       B("rb_ha_speak", { TEXT:L("Good morning!"), PLAYER:T("media_player.kitchen_speaker") })
+    ]},
+    { kind:"category", name:"Homey", categorystyle:"homey", contents:[
+      B("rb_homey_when"), B("rb_event"),
+      B("rb_homey_find", { TEXT:T("light") }), B("rb_homey_value", { CAPABILITY:T("measure_temperature"), DEVICE:T("Proofing box") }),
+      B("rb_homey_set", { DEVICE:T("Kitchen light"), CAPABILITY:T("onoff"), VALUE:T("off") }), B("rb_homey_flow", { NAME:T("Good night") }),
+      B("rb_homey_variable", { NAME:T("Loaves this week") }), B("rb_homey_set_variable", { NAME:T("Loaves this week"), VALUE:N(4) })
     ]},
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")
@@ -6891,7 +7395,7 @@ HOW TO MAP CODE
       blocks:{ languageVersion:0, blocks:list.map((s, i) => Object.assign({ x:30 + i * 620, y:30 }, s)) } };
   };
 
-  const EXAMPLE_CATEGORIES = ["Writing", "Research", "Design", "Learning", "Work", "Home and baking", "Agents", "Code and data", "Automation"];
+  const EXAMPLE_CATEGORIES = ["Writing", "Research", "Design", "Learning", "Work", "Home and baking", "Agents", "Homey", "Code and data", "Automation"];
   const EXAMPLE_LIST = [
     /* ----- Writing ----- */
     { key:"review", cat:"Writing", title:"Review loop", build:EXAMPLES.review,
@@ -7495,6 +7999,48 @@ HOW TO MAP CODE
             "ordinary, or a plug drawing power that probably shouldn't be. If something should be switched off, offer to do it with publish_mqtt."), STEPS:nm(8),
           TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"mqtt" }), blk("rb_agent_builtin", { KIND:"mqtt_act" }))) }),
         sFinish())) },
+    { key:"y_goodnight", cat:"Homey", title:"Agent: Homey good night",
+      desc:"An agent looks round your Homey: turns off lights left on (asking you first, and leaving the landing light), checks doors and locks and only reports them, and tells you about low batteries. On this page it uses a sample home.",
+      tip:"Exported Python: set HOMEY_URL and HOMEY_API_KEY. Say 'Don't' to one of its requests and it carries on without that one.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", { PLAN:true }, { GOAL:lt("It's bedtime. Using my Homey: turn off every light that's still on, except the landing light. Check the doors and locks " +
+            "and tell me about any that are open or unlocked, but don't change them. List any battery under 20%. Finish with what you did."), STEPS:nm(14),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"homey_read" }), blk("rb_agent_builtin", { KIND:"homey_act" }))) }),
+        sFinish())) },
+    { key:"y_washer", cat:"Homey", title:"Homey: washing's done",
+      desc:"Watches the washing machine's power through Homey. When it drops below 5 W, Claude writes a short reminder and sends it to Telegram. Press Run to try it with a power you type.",
+      tip:"Change the device name to your own plug. Exported Python checks every 10 seconds while it runs on schedule.",
+      build:() => P(["note", "power"], listenWay("washer", "Type the washing machine's power to test with, like 2.5", blk("rb_homey_when", { DEVICE:"Washing machine", CAPABILITY:"measure_power" }),
+        xSet("power", xB("logic_ternary", { IF:xB("text_isEmpty", { VALUE:xEv("to") }), THEN:xEv("text"), ELSE:xEv("to") })),
+        sIf(xLess(xV("power"), 5),
+          xSet("note", xAsk("Write a one-line friendly reminder that the washing has finished and should be hung out before it creases.")),
+          blk("rb_tg_send", null, { TEXT:xV("note") })),
+        sAdd(xJ("Washing machine power: ", xV("power"), " W")), sFinish())) },
+    { key:"y_proofer", cat:"Homey", title:"Homey: keep the proofer just right",
+      desc:"Reads the proofing box's temperature from Homey and, if it's too warm, switches its heater plug off and tells you why. Too cold, and it switches it on.",
+      tip:"Change the device names to yours. Add a 'when Homey device … changes' block to run it whenever the temperature changes.",
+      build:() => P(["temp"], chain(sStart(),
+        xSet("temp", xB("rb_homey_value", { CAPABILITY:tx("measure_temperature"), DEVICE:tx("Proofing box") })),
+        sIf(xMore(xV("temp"), nm(26)), blk("rb_homey_set", null, { DEVICE:tx("Oven plug"), CAPABILITY:tx("onoff"), VALUE:tx("off") }),
+          sAdd(xJ("The proofer is ", xV("temp"), "°C, so the heater is off."))),
+        sIf(xLess(xV("temp"), 23), blk("rb_homey_set", null, { DEVICE:tx("Oven plug"), CAPABILITY:tx("onoff"), VALUE:tx("on") }),
+          sAdd(xJ("The proofer is ", xV("temp"), "°C, so the heater is on."))),
+        sAdd(xJ("Proofer: ", xV("temp"), "°C")), sFinish())) },
+    { key:"y_energy", cat:"Homey", title:"Homey: where's the power going?",
+      desc:"Reads every Homey device that measures power and has Claude explain, in plain English, what's using the most and what to switch off.",
+      tip:"Run it in the evening, when most things should be off.",
+      build:() => P(["devices"], chain(sStart(),
+        xSet("devices", xB("rb_homey_find", { TEXT:tx("*") })),
+        sAdd(xAsk(xJ("From these Homey devices, say in four short lines what is using the most power right now (measure_power, in watts), and what could be switched off.\n\n", xV("devices")))),
+        sFinish())) },
+    { key:"y_bakeday", cat:"Homey", title:"Homey: start baking mode",
+      desc:"Counts this week's loaves in a Homey variable, starts your 'Baking mode' flow, and tells you what your Homey will do. Your flows can then use the variable.",
+      tip:"Make a flow called 'Baking mode' in Homey, and a number variable called 'Loaves this week'.",
+      build:() => P(["loaves"], chain(sStart(),
+        xSet("loaves", xB("math_arithmetic", { A:xB("rb_homey_variable", { NAME:tx("Loaves this week") }), B:nm(1) }, { OP:"ADD" })),
+        blk("rb_homey_set_variable", null, { NAME:tx("Loaves this week"), VALUE:xV("loaves") }),
+        blk("rb_homey_flow", null, { NAME:tx("Baking mode") }),
+        sAdd(xJ("Baking mode is on. Loaf number ", xV("loaves"), " this week.")), sFinish())) },
     { key:"h_gifts", cat:"Home and baking", title:"Gift ideas within a budget",
       desc:"Suggests six gifts sorted by price, lets you choose one, then writes a gift-card message for it.",
       tip:"Give a budget and a couple of their interests.",
@@ -8535,6 +9081,7 @@ HOW TO MAP CODE
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]), calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]), mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
+             homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
   function iniText(progName){
@@ -8581,6 +9128,10 @@ HOW TO MAP CODE
       "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
       "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
       "CALENDAR_URL = ");
+    if (need.homey) out.push("", "[homey]",
+      "; Your Homey Pro's address, and an API key: in the Homey Web App (my.homey.app), Settings, API Keys, New API Key.",
+      "; Give the key the permissions the program needs: View devices, Control devices, View and start flows, View and edit Logic.",
+      "HOMEY_URL = http://homey-XXXXXXX.local", "HOMEY_API_KEY = ");
     if (need.mqtt) out.push("", "[mqtt]",
       "; Your MQTT broker, for example Mosquitto in Home Assistant (Settings, Add-ons). Add a username and password if it needs them.",
       "MQTT_HOST = homeassistant.local", "; MQTT_PORT = 1883", "; MQTT_USERNAME = ", "; MQTT_PASSWORD = ", "; MQTT_TLS = yes   for an encrypted connection (port 8883)");
@@ -8831,6 +9382,9 @@ HOW TO MAP CODE
         case "rb_ha_trigger": return "R.ha_trigger()";
         case "rb_tg_message": return "R.telegram_message(" + pyStr(F("PART") || "text") + ")";
         case "rb_event": return "R.event(" + pyStr(String(F("KEY") || "").trim()) + ")";
+        case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
+        case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
+        case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_mqtt_read": return "(await R.mqtt_value(" + I("TOPIC", '""') + "))";
         case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
         case "rb_calendar": return "(await R.calendar_records(" + I("DAYS", "7") + "))";
@@ -8960,6 +9514,9 @@ HOW TO MAP CODE
           case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
           case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
+          case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
+          case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
+          case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
@@ -9029,7 +9586,7 @@ HOW TO MAP CODE
     const LISTEN = { rb_mqtt_when:["mqtt", "TOPIC", "when an MQTT message arrives on"], rb_webhook_when:["webhook", "PATH", "when a web request arrives at /"],
       rb_email_when:["email", "CONTAINS", "when an email arrives containing"], rb_feed_when:["feed", "URL", "when there's something new in feed"],
       rb_folder_when:["folder", "FOLDER", "when a file appears in folder"], rb_gh_when:["github", null, "when a pull request asks for my review"],
-      rb_cal_when:["calendar", "N", "when a calendar event starts in"] };
+      rb_cal_when:["calendar", "N", "when a calendar event starts in"], rb_homey_when:["homey", "DEVICE|CAPABILITY", "when Homey device"] };
     // Saved programs that 'run program' blocks use, each as one function (its 'when Run is clicked' scripts, in order).
     withSubPrograms(subs => {
       subs.forEach(x => programFn.set(x.key, ident("program_" + x.name)));
@@ -9100,10 +9657,11 @@ HOW TO MAP CODE
         const key = msg.toLowerCase();
         (receivers[key] = receivers[key] || []).push(fn);
       } else if (LISTEN[b.type]) {
-        const [kind, field, words] = LISTEN[b.type], arg = field ? String(b.getFieldValue(field) == null ? "" : b.getFieldValue(field)).trim() : "";
+        const [kind, field, words] = LISTEN[b.type];
+        const arg = !field ? "" : field.split("|").map(f => String(b.getFieldValue(f) == null ? "" : b.getFieldValue(f)).trim()).join("|");
         const fn = ident("when_" + kind + "_" + (listeners.filter(l => l[0] === kind).length + 1));
         out.push("async def " + fn + "():");
-        out.push("    \"\"\"" + (words + (field ? " " + (arg || "(your own)") + (kind === "calendar" ? " minutes" : "") : "")).replace(/"/g, "'") + "\"\"\"");
+        out.push("    \"\"\"" + (words + (field ? " " + (arg.replace("|", " ") || "(your own)") + (kind === "calendar" ? " minutes" : kind === "homey" ? " changes" : "") : "")).replace(/"/g, "'") + "\"\"\"");
         if (!stmts(b.getNextBlock(), 1, {}, out)) out.push("    pass");
         listeners.push([kind, "(" + pyStr(kind) + ", " + pyStr(arg) + ", " + fn + ")"]);
       } else if (b.type === "rb_tg_when") {
@@ -10088,12 +10646,18 @@ HOW TO MAP CODE
     calendar:[["calendar", "List the person's calendar events, from a day (today, tomorrow, a weekday or YYYY-MM-DD) for some days (7 if you don't say).", ["day", "days"]],
         ["free_time", "Find free time on one day, between two times (09:00 and 17:30 if you don't say), at least some minutes long (60 if you don't say).", ["day", "from", "to", "minutes"]]],
     mqtt:[["read_mqtt", "Get the latest MQTT messages on a topic (+ and # wildcards work, like zigbee2mqtt/+). Messages the broker keeps show up straight away; others only if one arrives within 2 seconds.", ["topic"]]],
-    mqtt_act:[["publish_mqtt", "Publish a message to an MQTT topic, for example to switch something. retain asks the broker to keep it. The person may be asked first, and may say no.", ["topic", "message", "retain"]]]
+    mqtt_act:[["publish_mqtt", "Publish a message to an MQTT topic, for example to switch something. retain asks the broker to keep it. The person may be asked first, and may say no.", ["topic", "message", "retain"]]],
+    homey_read:[["find_homey_devices", "Find Homey devices whose name, zone or kind contain some words (leave search empty for all), with every value they report, like onoff, dim, measure_temperature or measure_power.", ["search"]],
+        ["list_homey_flows", "List the person's Homey flows by name.", []],
+        ["homey_variable", "Get the value of one of the person's Homey Logic variables, by name.", ["name"]]],
+    homey_act:[["set_homey_device", "Set one value of a Homey device, by the device's name: for example onoff to on, dim to 0.5, or target_temperature to 19. The person may be asked first, and may say no. Unlocking, opening and disarming always ask.", ["device", "capability", "value"]],
+        ["run_homey_flow", "Start one of the person's Homey flows, by its name. The person may be asked first, and may say no.", ["flow"]]]
   };
   AGENT_BUILTINS.ha_act_free = AGENT_BUILTINS.ha_act;
   AGENT_BUILTINS.telegram_send_free = AGENT_BUILTINS.telegram_send;
   AGENT_BUILTINS.mqtt_act_free = AGENT_BUILTINS.mqtt_act;
-  const AGENT_ASKS = new Set(["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act"]);  // built-in tools that ask before each use
+  AGENT_BUILTINS.homey_act_free = AGENT_BUILTINS.homey_act;
+  const AGENT_ASKS = new Set(["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act"]);  // built-in tools that ask before each use
   const MAX_AGENT_STEPS = 20;
   // The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL. Matches the runtime.
   const AGENT_INPUT_TYPES = { search_web:{ query:"text" }, ask_me:{ question:"text" }, remember:{ name:"text", value:"text" }, recall:{ name:"text" },
@@ -10101,9 +10665,10 @@ HOW TO MAP CODE
     read_page:{ url:"text" }, device_history:{ entity:"text", hours:"number" }, calculate:{ expression:"text" }, current_time:{},
     time_plus:{ time:"text", minutes:"number" }, read_file:{ why:"text" }, review_text:{ text:"text", criteria:"text" },
     read_feed:{ url:"text", limit:"number" }, search_linkedin:{ query:"text" }, my_pull_requests:{}, list_pull_requests:{ repo:"text", state:"text" }, read_pull_request:{ repo:"text", number:"number" }, list_projects:{ owner:"text" }, search_github:{ query:"text" }, comment_on_github:{ repo:"text", number:"number", text:"text" }, search_telegram:{ text:"text" }, send_telegram:{ text:"text" }, search_email:{ query:"text", days:"number" }, read_email:{ id:"text" }, send_email:{ to:"text", subject:"text", body:"text" }, calendar:{ day:"text", days:"number" }, free_time:{ day:"text", "from":"text", to:"text", minutes:"number" },
-    read_mqtt:{ topic:"text" }, publish_mqtt:{ topic:"text", message:"text", retain:"yes/no" } };
+    read_mqtt:{ topic:"text" }, publish_mqtt:{ topic:"text", message:"text", retain:"yes/no" },
+    find_homey_devices:{ search:"text" }, list_homey_flows:{}, homey_variable:{ name:"text" }, set_homey_device:{ device:"text", capability:"text", value:"any" }, run_homey_flow:{ flow:"text" } };
   const AGENT_OPTIONAL = { find_devices:["search"], call_service:["entity", "data"], device_history:["hours"], read_file:["why"],
-    read_feed:["limit", "url"], list_pull_requests:["state"], list_projects:["owner"], search_telegram:["text"], search_email:["days", "query"], calendar:["day", "days"], free_time:["day", "from", "minutes", "to"], publish_mqtt:["retain"] };
+    read_feed:["limit", "url"], list_pull_requests:["state"], list_projects:["owner"], search_telegram:["text"], search_email:["days", "query"], calendar:["day", "days"], free_time:["day", "from", "minutes", "to"], publish_mqtt:["retain"], find_homey_devices:["search"] };
   const MAX_FILE_CHARS = 30000;
   /* Works out a sum like (350 / 500) * 100 exactly, without running any code. Matches the runtime's _Calc. */
   const CALC_FUNCS = ["round", "min", "max", "sqrt", "abs", "floor", "ceil"];
@@ -10183,7 +10748,7 @@ HOW TO MAP CODE
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics" }[what] || what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices" }[what] || what;
     addStep(what, { mono:true, text:"This page uses sample " + noun + ", so nothing real is read or sent. Exported Python uses your own." }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -10354,6 +10919,82 @@ HOW TO MAP CODE
     try { const j = JSON.parse(text); if (j && typeof j === "object" && !Array.isArray(j)) Object.entries(j).forEach(([k, v]) => { if (!(k in rec)) rec[k] = v && typeof v === "object" ? JSON.stringify(v) : v; }); } catch(e) {}
     return rec;
   }
+  /* Homey on the page: a sample home. Exported Python talks to your Homey Pro. Matches the runtime's wording. */
+  const HOMEY = { devices:null };
+  function homeyHome(){
+    connNote("Homey");
+    const h = CONN.homey || { zones:{}, devices:[] };
+    if (!HOMEY.devices) HOMEY.devices = JSON.parse(JSON.stringify(h.devices || []));
+    return HOMEY.devices.map(d => ({ id:d.id, name:d.name, zone:(h.zones || {})[d.zone] || "", class:d.class,
+      caps:Object.fromEntries(Object.entries(d.capabilitiesObj || {}).map(([k, c]) => [k, c.value])) }))
+      .sort((a, b) => (a.zone + "\u0000" + a.name).localeCompare(b.zone + "\u0000" + b.name));
+  }
+  const homeyShow = v => v === true ? "on" : v === false ? "off" : v == null ? "-" : str(v);
+  const homeyLine = d => d.name + " (" + (d.zone || "no zone") + ", " + d.class + "): " + Object.entries(d.caps).map(([k, v]) => k + "=" + homeyShow(v)).join(", ");
+  function homeyDevice(name){
+    name = str(name).trim();
+    if (!name) fail("Which Homey device? Give its name, like Kitchen light.");
+    const home = homeyHome(), exact = home.filter(d => d.name.toLowerCase() === name.toLowerCase() || d.id === name);
+    if (exact.length) return exact[0];
+    const some = home.filter(d => name.toLowerCase().split(/\s+/).every(w => d.name.toLowerCase().includes(w)));
+    if (some.length === 1) return some[0];
+    fail("There's no Homey device called “" + name + "”." + (some.length ? " Did you mean: " + some.slice(0, 6).map(d => d.name).join(", ") + "?" : ""));
+  }
+  const homeyMatch = text => { const words = str(text).toLowerCase().split(/\s+/).filter(w => w && w !== "*");
+    return homeyHome().filter(d => words.every(w => (d.name + " " + d.zone + " " + d.class).toLowerCase().includes(w))); };
+  const homeyFindText = text => homeyMatch(text).map(homeyLine).join("\n") || "No Homey devices match “" + str(text).trim() + "”.";
+  const homeyFind = text => homeyMatch(text).map(d => Object.assign({ name:d.name, zone:d.zone, class:d.class },
+    Object.fromEntries(Object.entries(d.caps).map(([k, v]) => [k, typeof v === "boolean" ? homeyShow(v) : v]))));
+  function homeyValue(cap, device){
+    const d = homeyDevice(device); cap = str(cap).trim();
+    if (!(cap in d.caps)) fail(d.name + " has no “" + cap + "”. It has: " + (Object.keys(d.caps).join(", ") || "nothing") + ".");
+    const v = d.caps[cap]; return typeof v === "boolean" ? homeyShow(v) : v;
+  }
+  function homeyValueFor(old, value){
+    const words = ["on", "off", "true", "false", "yes", "no", "1", "0"];
+    if (typeof old === "boolean" || (typeof value === "string" && words.slice(0, 6).includes(value.trim().toLowerCase()))) {
+      if (typeof value === "string") { const t = value.trim().toLowerCase(); if (!words.includes(t)) fail("“" + value + "” isn't on or off."); return ["on", "true", "yes", "1"].includes(t); }
+      return !!value;
+    }
+    if (typeof old === "number") { if (!isNumLike(value)) fail("“" + value + "” isn't a number."); return num(value); }
+    return typeof value === "number" || typeof value === "boolean" ? value : str(value);
+  }
+  const HOMEY_SENSITIVE = [["locked", false], ["garagedoor_closed", false], ["homealarm_state", "disarmed"]];
+  async function homeySet(device, cap, value, approved){
+    const d = homeyDevice(device); cap = str(cap).trim();
+    if (!(cap in d.caps)) fail(d.name + " has no “" + cap + "”. It has: " + (Object.keys(d.caps).join(", ") || "nothing") + ".");
+    const v = homeyValueFor(d.caps[cap], value), what = "set " + d.name + " " + cap + " to " + homeyShow(v);
+    // Unlocking, opening and disarming always ask, unless you've just said yes to this very change.
+    if (HOMEY_SENSITIVE.some(([c, x]) => c === cap && x === v)) { if (!approved && !(await confirmAction(what + " (a safety check: unlocking, opening and disarming always ask)"))) return false; }
+    else if (!approved && !(await allowed(["ha"], what))) return false;
+    HOMEY.devices.find(x => x.id === d.id).capabilitiesObj[cap].value = v;
+    addStep("Homey: " + d.name, { mono:true, text:cap + ": " + homeyShow(d.caps[cap]) + " → " + homeyShow(v) }).done("sample home", "ok");
+    return true;
+  }
+  const homeyFlows = () => { homeyHome(); return ((CONN.homey || {}).flows || []).slice(); };
+  const homeyFlowsText = () => homeyFlows().sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map(f => f.name + (f.advanced ? " (advanced)" : "")).join("\n") || "No flows.";
+  async function homeyRunFlow(name, approved){
+    name = str(name).trim();
+    const flows = homeyFlows(), some = flows.filter(x => x.name.toLowerCase().includes(name.toLowerCase()));
+    const f = flows.find(x => x.name.toLowerCase() === name.toLowerCase()) || (some.length === 1 ? some[0] : null);
+    if (!f) fail("There's no Homey flow called “" + name + "”.");
+    if (!approved && !(await allowed(["ha"], "start the Homey flow “" + f.name + "”"))) return false;
+    addStep("Homey flow started", { mono:true, text:f.name }).done("sample home", "ok");
+    return true;
+  }
+  function homeyVar(name){
+    name = str(name).trim(); homeyHome();
+    const vs = (CONN.homey || {}).variables || [], v = vs.find(x => x.name.toLowerCase() === name.toLowerCase());
+    if (!v) fail("There's no Homey variable called “" + name + "”." + (vs.length ? " Its variables are: " + vs.slice(0, 12).map(x => x.name).join(", ") : ""));
+    return v;
+  }
+  async function homeySetVariable(name, value, approved){
+    const v = homeyVar(name), old = v.value, nv = ["boolean", "number"].includes(v.type) ? homeyValueFor(old, value) : str(value);
+    if (!approved && !(await allowed(["ha"], "set the Homey variable “" + v.name + "” to " + homeyShow(nv)))) return false;
+    v.value = nv;
+    addStep("Homey variable " + v.name, { mono:true, text:homeyShow(old) + " → " + homeyShow(nv) }).done("sample home", "ok");
+    return true;
+  }
   /* What a listener's script gets on the page when you right-click its 'when …' block and choose 'Run this script'. */
   function sampleArrival(b){
     switch (b.type) {
@@ -10373,6 +11014,11 @@ HOW TO MAP CODE
         const hm = d => pad2(d.getHours()) + ":" + pad2(d.getMinutes());
         return { title:e.title, start:hm(e.start), end:hm(e.end), location:e.location, minutes:n, text:e.title + " at " + hm(e.start) + (e.location ? " (" + e.location + ")" : "") }; }
       case "rb_tg_when": { const m = (CONN.telegram || {}).incoming || { from:"You", text:"Hello" }; return { text:m.text, sender:m.from, chat:(CONN.telegram || {}).chat || "" }; }
+      case "rb_homey_when": { const inc = (CONN.homey || {}).incoming || {}, dev = str(b.getFieldValue("DEVICE")).trim() || inc.device, cap = str(b.getFieldValue("CAPABILITY")).trim();
+        const c = !cap || cap.toLowerCase() === "anything" ? inc.capability : cap, d = ((CONN.homey || {}).devices || []).find(x => x.name.toLowerCase() === dev.toLowerCase());
+        const to = d && d.capabilitiesObj[c] ? d.capabilitiesObj[c].value : inc.to, from = typeof to === "boolean" ? !to : typeof to === "number" && c !== inc.capability ? to + 1 : inc.from;
+        const show = v => typeof v === "boolean" ? homeyShow(v) : v;
+        return { device:d ? d.name : dev, zone:d ? ((CONN.homey || {}).zones || {})[d.zone] || "" : "", capability:c, from:show(from), to:show(to), text:(d ? d.name : dev) + " " + c + ": " + homeyShow(from) + " → " + homeyShow(to) }; }
     }
     return "";
   }
@@ -10571,6 +11217,11 @@ HOW TO MAP CODE
       case "read_email": return emailRead(a("id"));
       case "send_email": return (await emailSend(a("to"), a("subject"), inp.body == null ? "" : inp.body, run.agentApproved)) ? "Sent." : "Not sent: the person said no.";
       case "calendar": return calendarText(a("day") || "today", inp.days == null ? 7 : inp.days);
+      case "find_homey_devices": return homeyFindText(a("search") || "*");
+      case "list_homey_flows": return homeyFlowsText();
+      case "homey_variable": return str(homeyVar(a("name")).value);
+      case "set_homey_device": return (await homeySet(a("device"), a("capability"), inp.value == null ? "" : inp.value, run.agentApproved)) ? "Done." : "Not done: the person said no.";
+      case "run_homey_flow": return (await homeyRunFlow(a("flow"), run.agentApproved)) ? "Started." : "Not started: the person said no.";
       case "read_mqtt": { const got = mqttRead(a("topic")); return Object.keys(got).sort().map(k => k + ": " + short(got[k], 400)).join("\n") ||
         "No message on " + a("topic") + " within 2 seconds. Only messages the broker keeps (retained) show up straight away."; }
       case "publish_mqtt": return (await mqttPublish(a("topic"), inp.message == null ? "" : inp.message, !!inp.retain, run.agentApproved)) ? "Published." : "Not published: the person said no.";
@@ -10992,6 +11643,13 @@ HOW TO MAP CODE
         if (!v || typeof v !== "object" || Array.isArray(v)) return ["", "text", "all"].includes(key) ? (v == null ? "" : v) : "";
         return key === "" || key === "all" ? Object.assign({}, v) : (key in v ? v[key] : "");
       }
+      case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
+      case "rb_homey_find": {
+        const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
+        addStep("Homey: " + short(t, 50), { mono:true, text:homeyMatch(t).map(homeyLine).join("\n") || "(nothing)" }).done(recs.length + " devices", "ok");
+        return recs;
+      }
+      case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_mqtt_read": {
         const topic = mqttTopic(await input(b, tc, "TOPIC")), got = mqttRead(topic);
         if (!/[+#]/.test(topic)) { const v = got[topic] || ""; addStep("MQTT " + topic, { mono:true, text:v || "(no message yet: only messages the broker keeps show up straight away)" }).done("read", "ok"); return v; }
@@ -11369,7 +12027,7 @@ HOW TO MAP CODE
       case "rb_ask_first": {
         const what = b.getFieldValue("WHAT") || "all";
         (what === "all" ? ["ha", "messages", "files"] : [what]).forEach(k => run.askFirst.add(k));
-        addStep("Ask first", { mono:true, text:"From now on, the program asks you before " + { ha:"any Home Assistant action", messages:"sending messages and announcements", files:"saving files", all:"Home Assistant actions, messages and saving files" }[what] + "." +
+        addStep("Ask first", { mono:true, text:"From now on, the program asks you before " + { ha:"any smart home action (Home Assistant, Homey or MQTT)", messages:"sending messages and announcements", files:"saving files", all:"smart home actions, messages and saving files" }[what] + "." +
           (what === "files" || what === "all" ? "\nOn this page the browser already asks before every download." : "") }).done("set", "ok");
         break;
       }
@@ -11512,6 +12170,9 @@ HOW TO MAP CODE
         haNote(); addStep("Notification → " + target, { text }).done("sample house", "ok"); break;
       }
       case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
+      case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
+      case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
+      case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {
@@ -11767,7 +12428,7 @@ HOW TO MAP CODE
   $("step-go").onclick = () => { stepper.on = false; releaseStep(true); updateStepUi(); };
 
   /* ---------- Run this script (right-click a block) ---------- */
-  const LISTENER_HATS = new Set(["rb_tg_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when"]);
+  const LISTENER_HATS = new Set(["rb_homey_when", "rb_tg_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when"]);
   const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when", ...LISTENER_HATS]);
   function runFromBlock(block){
     if (run && run.active) return;
