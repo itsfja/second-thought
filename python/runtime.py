@@ -2369,6 +2369,23 @@ class Runtime:
         raise RunError(f"Unknown tool “{kind}”.")
 
     async def agent(self, goal, steps, tools, plan=False):
+        """Runs the agent, then sums up what it did, one line per step (also when the run stops part-way)."""
+        self.agent_trace = []
+        try:
+            await self._agent_loop(goal, steps, tools, plan)
+        finally:
+            if self.agent_trace:
+                self.log("Agent summary", self.agent_summary(), f"{len(self.agent_trace)} step{'s' if len(self.agent_trace) != 1 else ''}", calls=False)
+
+    def agent_summary(self):
+        lines = []
+        for st in self.agent_trace:
+            what = st["tool"] or ("final answer" if st["status"] == "answer" else "-")
+            detail = " → ".join(x for x in (_short(st["input"], 60), _short(st["result"], 80)) if x)
+            lines.append(f"{st['step']}. {what}  [{st['status']}]" + (f"  {detail}" if detail else ""))
+        return "\n".join(lines)
+
+    async def _agent_loop(self, goal, steps, tools, plan=False):
         goal = to_str(goal).strip()
         if not goal:
             raise RunError("The agent block needs a goal.")

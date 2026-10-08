@@ -77,6 +77,12 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .step-meta{margin-top:6px;font-size:12px;color:var(--muted)}
 .step-prompt{margin-top:4px;font-size:12px}
 .step-prompt summary{cursor:pointer;color:var(--muted)}
+.agent-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}
+.agent-table th{text-align:left;font-weight:600;color:var(--muted);padding:3px 6px;border-bottom:1px solid var(--line)}
+.agent-table td{vertical-align:top;padding:4px 6px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.agent-table td.mono{font-family:var(--font-mono, ui-monospace, monospace)}
+.agent-table .pill{font-size:10px}
+.agent-table th,.agent-table td:nth-child(1),.agent-table td:nth-child(2),.agent-table td:nth-child(5){white-space:nowrap;overflow-wrap:normal}
 .step-prompt pre{margin:6px 0 0;padding:8px;max-height:260px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:6px}
 .log-tools{display:flex;align-items:center;gap:8px}
 .log-tools button{padding:2px 10px;font-size:12px}
@@ -2781,6 +2787,23 @@ class Runtime:
         raise RunError(f"Unknown tool “{kind}”.")
 
     async def agent(self, goal, steps, tools, plan=False):
+        """Runs the agent, then sums up what it did, one line per step (also when the run stops part-way)."""
+        self.agent_trace = []
+        try:
+            await self._agent_loop(goal, steps, tools, plan)
+        finally:
+            if self.agent_trace:
+                self.log("Agent summary", self.agent_summary(), f"{len(self.agent_trace)} step{'s' if len(self.agent_trace) != 1 else ''}", calls=False)
+
+    def agent_summary(self):
+        lines = []
+        for st in self.agent_trace:
+            what = st["tool"] or ("final answer" if st["status"] == "answer" else "-")
+            detail = " → ".join(x for x in (_short(st["input"], 60), _short(st["result"], 80)) if x)
+            lines.append(f"{st['step']}. {what}  [{st['status']}]" + (f"  {detail}" if detail else ""))
+        return "\n".join(lines)
+
+    async def _agent_loop(self, goal, steps, tools, plan=False):
         goal = to_str(goal).strip()
         if not goal:
             raise RunError("The agent block needs a goal.")
@@ -8075,7 +8098,32 @@ HOW TO MAP CODE
     }
     fail("Unknown tool \u201c" + name + "\u201d.");
   }
+  /* Runs the agent, then sums up what it did in a table (also when the run stops part-way). */
   async function runAgent(b, tc){
+    run.agentTrace = [];
+    try { await runAgentLoop(b, tc); }
+    finally { if (run.agentTrace.length) showAgentSummary(run.agentTrace); }
+  }
+  const STATUS_KIND = { done:"ok", answer:"ok", "bad input":"warn", "tool error":"warn", refused:"warn", repeat:"warn", "not a tool":"warn",
+                        unreadable:"warn", "empty answer":"warn", stopped:"bad" };
+  function showAgentSummary(trace){
+    const s = addStep("Agent summary", { text:"" });
+    s.done(trace.length + " step" + (trace.length === 1 ? "" : "s"), "ok");
+    const t = document.createElement("table"); t.className = "agent-table";
+    const head = t.createTHead().insertRow();
+    ["#", "Tool", "Input", "Result", "Status"].forEach(h => { const th = document.createElement("th"); th.textContent = h; head.appendChild(th); });
+    const body = t.createTBody(), md = ["| Step | Tool | Input | Result | Status |", "|---|---|---|---|---|"];
+    const cell = x => String(x).replace(/\|/g, "\\|").replace(/\s+/g, " ");
+    trace.forEach(st => {
+      const r = body.insertRow(), tool = st.tool || (st.status === "answer" ? "final answer" : "\u2013");
+      [[st.step, ""], [tool, ""], [short(st.input, 60), "mono"], [short(st.result, 120), ""]].forEach(([v, cls]) => { const c = r.insertCell(); c.textContent = v; if (cls) c.className = cls; });
+      const pill = document.createElement("span"); pill.className = "pill " + (STATUS_KIND[st.status] || ""); pill.textContent = st.status; r.insertCell().appendChild(pill);
+      md.push("| " + [st.step, tool, short(st.input, 60), short(st.result, 120), st.status].map(cell).join(" | ") + " |");
+    });
+    s.body.innerHTML = ""; s.body.appendChild(t);
+    s.el._md = md.join("\n");
+  }
+  async function runAgentLoop(b, tc){
     const goal = str(await input(b, tc, "GOAL", "")).trim();
     if (!goal) fail("The agent block needs a goal.");
     const n = Math.max(1, Math.min(MAX_AGENT_STEPS, Math.round(num(await input(b, tc, "STEPS", 6))) || 1));
@@ -8084,7 +8132,6 @@ HOW TO MAP CODE
     addStep("Agent", { text:"Goal: " + goal + "\nTools: " + ([...catalogue.keys()].join(", ") || "none") + " · up to " + n + " steps" + (plan ? " · plans first" : "") }).done("started", "ok");
     const history = []; let last = "", prev = null, same = 0, stopped = false;
     const title = (s, t) => { s.el.querySelector(".step-name").textContent = t; };
-    run.agentTrace = [];
     const rec = (i, status, tool, shown, result) => run.agentTrace.push({ step:i, tool:tool || "", input:shown || "", result:short(str(result == null ? "" : result), 2000), status });
     for (let i = 1; i <= n; i++) {
       const label = "Agent step " + i + "/" + n, s = addStep(label);
@@ -9131,7 +9178,8 @@ HOW TO MAP CODE
         (pill && pill.textContent ? " [" + pill.textContent + "]" : "") + (timing ? "  \u00b7  " + timing : ""));
       const pics = body ? body.querySelectorAll("img").length : 0;
       const text = body ? body.innerText.trim() : "";
-      if (text) out.push("", "~~~~", text, "~~~~");
+      if (el._md) out.push("", el._md);  // a table, written as a markdown table
+      else if (text) out.push("", "~~~~", text, "~~~~");
       if (el._calls && el._calls.length) {
         out.push("", "*" + callsSummary(el._calls) + "*");
         el._calls.forEach((c, k) => out.push("", "<details><summary>Prompt sent" + (el._calls.length > 1 ? " (" + (k + 1) + " of " + el._calls.length + ")" : "") + "</summary>", "", "~~~~", c.prompt, "~~~~", "", "</details>"));
