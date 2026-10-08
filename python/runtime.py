@@ -32,7 +32,8 @@ for _stream in (sys.stdout, sys.stderr):
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
-                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME"}
+                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
+                 "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES"}
 
 
 def _load_settings():
@@ -209,6 +210,20 @@ HA_TOKEN = os.environ.get("HA_TOKEN", "")
 HA_TTS_ENTITY = os.environ.get("HA_TTS_ENTITY", "tts.home_assistant_cloud")  # used by the 'say … on' block
 HA_WATCH_SECONDS = 15  # how often 'when … changes' scripts check Home Assistant
 HA_SENSITIVE = (r"^lock\.(unlock|open)$", r"^cover\.open", r"^alarm_control_panel\.alarm_disarm$", r"^valve\.open", r"^garage_door\.open")
+
+# Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
+# GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
+# to comment on pull requests it also needs pull request write access).
+GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
+# Telegram: make a bot by talking to @BotFather in Telegram; it gives you the token. TELEGRAM_CHAT_ID is your own chat
+# with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
+TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
+TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
+# Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
+# worked out for Gmail, iCloud, Yahoo and Fastmail; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
+# Calendar: CALENDAR_URL is your calendar's private iCal address (Google Calendar: Settings, your calendar,
+# "Secret address in iCal format"; Outlook: Settings, Calendar, Shared calendars, Publish; iCloud: share as public).
+# Several addresses can be separated by spaces.
 
 MESSAGE_VALUE = contextvars.ContextVar("message_value", default="")
 MODEL_OVERRIDE = contextvars.ContextVar("model_override", default=None)  # set by 'with model' blocks
@@ -763,45 +778,298 @@ def _public_only(host):
     for info in infos:
         ip = ipaddress.ip_address(info[4][0].split("%")[0])
         if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
-            raise RunError("read_page only reads public web pages, not addresses on your own network.")
+            raise RunError("The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them).")
+
+
+def _local_pages():
+    """local_pages = yes in second-thought.ini lets the agent read pages and feeds on your own network too."""
+    return os.environ.get("RB_LOCAL_PAGES", "").strip().lower() in ("1", "yes", "true", "on")
 
 
 class _PublicRedirects(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         u = urllib.parse.urlparse(newurl)
         if u.scheme not in ("http", "https") or not u.hostname:
-            raise RunError("read_page was sent somewhere that isn't a web page.")
+            raise RunError("That address sent the program somewhere that isn't a web page.")
         _public_only(u.hostname)
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
-def fetch_page(url):
+def get_url(url, trusted=False, what="read_page", limit=3_000_000):
+    """Fetches a web address. Gives (content type, bytes). Addresses that come from your settings are trusted; others
+    (chosen by the agent) must be public, unless local_pages = yes."""
     url = to_str(url).strip()
+    if url.lower().startswith("webcal://"):
+        url = "https://" + url[9:]
     u = urllib.parse.urlparse(url)
     if u.scheme not in ("http", "https") or not u.hostname:
-        raise RunError("read_page needs a web address starting with http:// or https://.")
-    _public_only(u.hostname)
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SecondThought/1.0)", "Accept": "text/html,text/plain;q=0.9,*/*;q=0.5"})
+        raise RunError(f"{what} needs a web address starting with http:// or https://.")
+    guard = not trusted and not _local_pages()
+    if guard:
+        _public_only(u.hostname)
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SecondThought/1.0)",
+                                               "Accept": "text/html,application/xhtml+xml,application/xml,text/plain;q=0.9,*/*;q=0.5"})
+    opener = urllib.request.build_opener(_PublicRedirects) if guard else urllib.request.build_opener()
     try:
-        with urllib.request.build_opener(_PublicRedirects).open(req, timeout=20) as r:
-            ctype = r.headers.get("Content-Type", "")
-            data = r.read(3_000_000)
+        with opener.open(req, timeout=20) as r:
+            return r.headers.get("Content-Type", ""), r.read(limit)
     except urllib.error.HTTPError as e:
-        raise RunError(f"read_page couldn't open that page: the website answered {e.code}.") from None
+        raise RunError(f"{what} couldn't open {_short(url, 80)}: the website answered {e.code}.") from None
     except urllib.error.URLError as e:
-        raise RunError(f"read_page couldn't reach that page ({e.reason}).") from None
+        raise RunError(f"{what} couldn't reach {_short(url, 80)} ({e.reason}).") from None
+
+
+def _decode(data, ctype):
+    m = re.search(r"charset=([\w-]+)", ctype or "", re.I)
+    try:
+        return data.decode(m.group(1) if m else "utf-8", "replace")
+    except LookupError:
+        return data.decode("utf-8", "replace")
+
+
+def fetch_page(url):
+    ctype, data = get_url(url)
+    url = to_str(url).strip()
     if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
         raise RunError(f"That address isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
-    m = re.search(r"charset=([\w-]+)", ctype, re.I)
-    try:
-        raw = data.decode(m.group(1) if m else "utf-8", "replace")
-    except LookupError:
-        raw = data.decode("utf-8", "replace")
-    title, text = page_text(raw, ctype)
+    title, text = page_text(_decode(data, ctype), ctype)
     if not text:
         return f"{title or url}\n\n(The page has no readable words. It may need a browser to show its content.)"
     cut = len(text) > MAX_PAGE_CHARS
     return (f"{title}\n{url}\n\n" if title else f"{url}\n\n") + text[:MAX_PAGE_CHARS] + ("\n\n… (the page goes on; this is the first part)" if cut else "")
+
+
+# ----- News feeds (RSS and Atom) -----
+
+def _when(dt):
+    return f"{WEEKDAYS[dt.weekday()][:3]} {dt:%d %b %H:%M}"
+
+
+def _parse_date(text):
+    import email.utils
+    text = to_str(text).strip()
+    if not text:
+        return None
+    try:
+        d = email.utils.parsedate_to_datetime(text)
+    except (TypeError, ValueError, IndexError):
+        try:
+            d = datetime.datetime.fromisoformat(text.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+    return d.astimezone().replace(tzinfo=None) if d.tzinfo else d
+
+
+def parse_feed(raw):
+    """An RSS or Atom feed -> (title, [{title, link, date, summary}]), newest first."""
+    import xml.etree.ElementTree as ET
+    try:
+        root = ET.fromstring(raw.encode("utf-8") if isinstance(raw, str) else raw)
+    except ET.ParseError:
+        raise RunError("That address isn't a news feed (RSS or Atom).") from None
+    local = lambda el: el.tag.rsplit("}", 1)[-1].lower()  # noqa: E731
+
+    def child(el, *names):
+        for c in el:
+            if local(c) in names and (c.text or "").strip():
+                return c.text.strip()
+        return ""
+    if local(root) not in ("rss", "feed", "rdf"):
+        raise RunError("That address isn't a news feed (RSS or Atom).")
+    channel = next((c for c in root if local(c) == "channel"), root)
+    title = child(channel, "title")
+    items = []
+    for el in root.iter():
+        if local(el) not in ("item", "entry"):
+            continue
+        link = child(el, "link")
+        if not link:
+            for c in el:
+                if local(c) == "link" and c.get("href") and c.get("rel", "alternate") == "alternate":
+                    link = c.get("href")
+                    break
+        summary = child(el, "description", "summary", "content", "encoded")
+        items.append({"title": page_text(child(el, "title"))[1] or "(no title)", "link": link,
+                      "date": _parse_date(child(el, "pubdate", "published", "updated", "date")),
+                      "summary": _short(page_text(summary)[1], 300)})
+    items.sort(key=lambda x: x["date"] or datetime.datetime.min, reverse=True)
+    return title, items
+
+
+# ----- Calendars (iCal) -----
+
+def _ics_lines(text):
+    out = []
+    for line in to_str(text).replace("\r\n", "\n").replace("\r", "\n").split("\n"):
+        if line[:1] in (" ", "\t") and out:
+            out[-1] += line[1:]
+        elif line:
+            out.append(line)
+    return out
+
+
+def _ics_unescape(v):
+    return re.sub(r"\\([\\,;nN])", lambda m: "\n" if m.group(1) in "nN" else m.group(1), v)
+
+
+def _ics_time(value, params):
+    """'20261010T090000Z' or with TZID -> a local datetime; '20261010' -> (date, True) for all-day."""
+    v = value.strip()
+    if re.fullmatch(r"\d{8}", v) or params.get("VALUE") == "DATE":
+        return datetime.datetime.strptime(v[:8], "%Y%m%d"), True
+    d = datetime.datetime.strptime(v[:15], "%Y%m%dT%H%M%S")
+    if v.endswith("Z"):
+        return d.replace(tzinfo=datetime.timezone.utc).astimezone().replace(tzinfo=None), False
+    tz = params.get("TZID")
+    if tz:
+        try:
+            from zoneinfo import ZoneInfo
+            return d.replace(tzinfo=ZoneInfo(tz.strip('"'))).astimezone().replace(tzinfo=None), False
+        except Exception:  # noqa: BLE001 - an unknown time zone: treat it as local time
+            pass
+    return d, False
+
+
+_ICS_DAYS = {"MO": 0, "TU": 1, "WE": 2, "TH": 3, "FR": 4, "SA": 5, "SU": 6}
+
+
+def _ics_repeats(start, rule, until_view):
+    """Start times of a repeating event, up to the end of the view. Handles DAILY, WEEKLY (with BYDAY), MONTHLY, YEARLY,
+    INTERVAL, COUNT and UNTIL: what calendars use for nearly every repeating event."""
+    r = dict(part.split("=", 1) for part in rule.split(";") if "=" in part)
+    freq, step = r.get("FREQ", ""), max(1, int(r.get("INTERVAL", "1") or 1))
+    count = int(r["COUNT"]) if r.get("COUNT", "").isdigit() else None
+    until = _ics_time(r["UNTIL"], {})[0] if r.get("UNTIL") else None
+    if until is not None and len(r["UNTIL"]) == 8:
+        until += datetime.timedelta(days=1) - datetime.timedelta(seconds=1)
+    days = [_ICS_DAYS[d[-2:]] for d in r.get("BYDAY", "").split(",") if d[-2:] in _ICS_DAYS]
+    out, n, i = [], 0, 0
+    while i < 3000:
+        if freq == "DAILY":
+            batch = [start + datetime.timedelta(days=i * step)]
+        elif freq == "WEEKLY":
+            week = start - datetime.timedelta(days=start.weekday()) + datetime.timedelta(weeks=i * step)
+            batch = sorted(week + datetime.timedelta(days=d) for d in (days or [start.weekday()]))
+            batch = [b for b in batch if b >= start]
+        elif freq in ("MONTHLY", "YEARLY"):
+            months = i * step * (12 if freq == "YEARLY" else 1)
+            y, m = start.year + (start.month - 1 + months) // 12, (start.month - 1 + months) % 12 + 1
+            try:
+                batch = [start.replace(year=y, month=m)]
+            except ValueError:  # the 31st in a short month: skipped, as calendars do
+                batch = []
+        else:
+            return [start]
+        for b in batch:
+            if (until and b > until) or (count is not None and n >= count) or b > until_view:
+                return out
+            out.append(b)
+            n += 1
+        i += 1
+    return out
+
+
+def calendar_events(text, start, end):
+    """Events between start and end, from iCal text, as {start, end, all_day, title, location}, in time order."""
+    events, moved, cur = [], set(), None
+    for line in _ics_lines(text):
+        if line == "BEGIN:VEVENT":
+            cur = {}
+            continue
+        if line == "END:VEVENT":
+            if cur is not None:
+                events.append(cur)
+            cur = None
+            continue
+        if cur is None or ":" not in line:
+            continue
+        head, value = line.split(":", 1)
+        name, *ps = head.split(";")
+        params = dict(x.split("=", 1) for x in ps if "=" in x)
+        name = name.upper()
+        if name in ("DTSTART", "DTEND", "RECURRENCE-ID"):
+            try:
+                cur[name] = _ics_time(value, params)
+            except ValueError:
+                pass
+        elif name == "EXDATE":
+            for v in value.split(","):
+                try:
+                    cur.setdefault("EXDATE", set()).add(_ics_time(v, params)[0])
+                except ValueError:
+                    pass
+        elif name in ("SUMMARY", "LOCATION", "RRULE", "UID", "STATUS", "DURATION"):
+            cur[name] = _ics_unescape(value) if name in ("SUMMARY", "LOCATION") else value
+    for e in events:
+        if "RECURRENCE-ID" in e:
+            moved.add((e.get("UID"), e["RECURRENCE-ID"][0]))
+    out = []
+    for e in events:
+        if "DTSTART" not in e or e.get("STATUS", "").upper() == "CANCELLED":
+            continue
+        s0, all_day = e["DTSTART"]
+        if "DTEND" in e:
+            length = e["DTEND"][0] - s0
+        else:
+            m = re.fullmatch(r"P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?", e.get("DURATION", ""))
+            length = datetime.timedelta(days=int(m.group(1) or 0), hours=int(m.group(2) or 0), minutes=int(m.group(3) or 0)) if m \
+                else datetime.timedelta(days=1 if all_day else 0)
+        starts = _ics_repeats(s0, e["RRULE"], end) if e.get("RRULE") and "RECURRENCE-ID" not in e else [s0]
+        for st in starts:
+            if st in e.get("EXDATE", ()) or (("RECURRENCE-ID" not in e) and (e.get("UID"), st) in moved):
+                continue
+            if st + length > start and st < end or (length == datetime.timedelta(0) and start <= st < end):
+                out.append({"start": st, "end": st + length, "all_day": all_day, "title": e.get("SUMMARY", "(no title)"),
+                            "location": e.get("LOCATION", "")})
+    out.sort(key=lambda x: (x["start"], not x["all_day"]))
+    return out
+
+
+def event_line(e):
+    if e["all_day"]:
+        days = max(1, (e["end"] - e["start"]).days)
+        when = "all day" + (f" ({days} days)" if days > 1 else "")
+    else:
+        when = f"{e['start']:%H:%M}–{e['end']:%H:%M}"
+    return f"{when}  {e['title']}" + (f" ({e['location']})" if e["location"] else "")
+
+
+def free_slots(events, day, frm, to, minutes):
+    """Free stretches of at least this many minutes between frm and to (HH:MM) on day."""
+    def at(hhmm):
+        m = re.fullmatch(r"\s*(\d{1,2})[:.](\d{2})\s*", to_str(hhmm))
+        if not m or int(m.group(1)) > 24 or int(m.group(2)) > 59:
+            raise RunError(f"“{hhmm}” isn't a time like 09:00.")
+        return day + datetime.timedelta(hours=int(m.group(1)), minutes=int(m.group(2)))
+    a, b = at(frm), at(to)
+    busy = sorted((max(e["start"], a), min(e["end"], b)) for e in events if not e["all_day"] and e["end"] > a and e["start"] < b)
+    free, t = [], a
+    for s_, e_ in busy:
+        if s_ > t:
+            free.append((t, s_))
+        t = max(t, e_)
+    if b > t:
+        free.append((t, b))
+    need = datetime.timedelta(minutes=max(1, round_js(num(minutes) or 30)))
+    return [(x, y) for x, y in free if y - x >= need]
+
+
+def parse_day(text):
+    """'today', 'tomorrow', a weekday name, or YYYY-MM-DD -> midnight that day."""
+    t = to_str(text).strip().lower()
+    today = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    if t in ("", "today"):
+        return today
+    if t == "tomorrow":
+        return today + datetime.timedelta(days=1)
+    names = [w.lower() for w in WEEKDAYS]
+    if t in names or t[:3] in [n[:3] for n in names]:
+        k = [n[:3] for n in names].index(t[:3])
+        return today + datetime.timedelta(days=(k - today.weekday()) % 7)
+    try:
+        return datetime.datetime.strptime(t, "%Y-%m-%d")
+    except ValueError:
+        raise RunError(f"“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.") from None
 
 
 class Runtime:
@@ -2389,6 +2657,451 @@ class Runtime:
         if self.ending:
             raise asyncio.CancelledError()
 
+    # ----- Connections: news feeds, GitHub, Telegram, email and calendar -----
+    MAX_FEED_ITEMS = 10
+
+    async def feed_items(self, url="", limit=10):
+        """Items from one feed, or from every feed in your settings (feeds = ...) when url is empty."""
+        url = to_str(url).strip()
+        mine = [u for u in re.split(r"[\s,]+", os.environ.get("RB_FEEDS", "")) if u]
+        urls = [url] if url else mine
+        if not urls:
+            raise RunError(f"No feed given, and no feeds in your settings. Add  feeds = <addresses>  {WHERE_KEYS}.")
+        limit = max(1, min(50, round_js(num(limit)) or self.MAX_FEED_ITEMS))
+        out = []
+        for u in urls:
+            ctype, data = await asyncio.to_thread(get_url, u, u in mine, "read_feed", 5_000_000)
+            title, items = parse_feed(data)
+            for it in items[:limit]:
+                out.append(dict(it, feed=title or u))
+        return out
+
+    async def feed_records(self, url):
+        """For the 'news from feed' block: a list of records (feed, title, link, date, summary)."""
+        items = await self.feed_items(url)
+        recs = [{"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
+                 "summary": i["summary"]} for i in items]
+        self.log("News: " + (_short(url, 60) or "your feeds"), "\n".join(f"{r['date']}  {r['title']}" for r in recs[:12]) or "(nothing)",
+                 f"{len(recs)} items")
+        return recs
+
+    @staticmethod
+    def feed_text(items):
+        lines, feed = [], None
+        for i in items:
+            if i["feed"] != feed:
+                feed = i["feed"]
+                lines.append(("\n" if lines else "") + feed)
+            lines.append(f"- {_when(i['date']) if i['date'] else '(no date)'}  {i['title']}" + (f"\n  {i['link']}" if i["link"] else "")
+                         + (f"\n  {i['summary']}" if i["summary"] else ""))
+        return "\n".join(lines) or "The feed has no items."
+
+    # GitHub
+    async def _gh(self, path, method="GET", body=None):
+        token = os.environ.get("GITHUB_TOKEN", "")
+        if not token:
+            raise RunError(f"GitHub needs a token: set GITHUB_TOKEN {WHERE_KEYS} (make one at https://github.com/settings/tokens).")
+        req = urllib.request.Request(GITHUB_API + path, method=method, data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json",
+                                              "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "SecondThought",
+                                              "Content-Type": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=30) as r:
+                    return json.loads(r.read() or b"null")
+            except urllib.error.HTTPError as e:
+                why = {401: "the token was refused. Check GITHUB_TOKEN", 403: "GitHub said no (the token may lack access, or the hourly limit was reached)",
+                       404: "not found, or the token can't see it", 422: "GitHub couldn't use that request"}.get(e.code, f"GitHub answered {e.code}")
+                raise RunError(f"GitHub: {why}.") from None
+            except urllib.error.URLError as e:
+                raise RunError(f"Couldn't reach GitHub ({e.reason}).") from None
+        return await asyncio.to_thread(go)
+
+    @staticmethod
+    def _gh_repo(repo):
+        repo = to_str(repo).strip().removeprefix("https://github.com/").strip("/")
+        if not re.fullmatch(r"[\w.-]+/[\w.-]+", repo):
+            raise RunError(f"“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.")
+        return repo
+
+    @staticmethod
+    def _ago(iso):
+        d = _parse_date(iso)
+        if not d:
+            return ""
+        h = (datetime.datetime.now() - d).total_seconds() / 3600
+        return "just now" if h < 1 else f"{int(h)} h ago" if h < 48 else f"{int(h // 24)} days ago"
+
+    async def gh_repos(self, owner=""):
+        owner = to_str(owner).strip()
+        rows = await self._gh(f"/users/{urllib.parse.quote(owner)}/repos?sort=pushed&per_page=30" if owner else "/user/repos?sort=pushed&per_page=30")
+        return "\n".join(f"{r['full_name']}: {r.get('description') or '(no description)'} · {r.get('language') or '-'} · "
+                         f"★{r.get('stargazers_count', 0)} · {r.get('open_issues_count', 0)} open issues and pull requests · pushed {self._ago(r.get('pushed_at'))}"
+                         for r in rows) or "No projects."
+
+    async def gh_pulls(self, repo, state="open"):
+        repo = self._gh_repo(repo)
+        state = to_str(state).strip().lower() or "open"
+        rows = await self._gh(f"/repos/{repo}/pulls?state={state if state in ('open', 'closed', 'all') else 'open'}&per_page=20&sort=updated&direction=desc")
+        return "\n".join(f"#{r['number']} {r['title']} · by {r['user']['login']} · updated {self._ago(r.get('updated_at'))}"
+                         + (" · draft" if r.get("draft") else "") for r in rows) or f"No {state} pull requests in {repo}."
+
+    async def _gh_search(self, q, n=20):
+        data = await self._gh("/search/issues?per_page=" + str(n) + "&sort=updated&q=" + urllib.parse.quote(q))
+        out = []
+        for r in data.get("items", []):
+            repo = r.get("repository_url", "").split("/repos/", 1)[-1]
+            kind = "pull request" if "pull_request" in r else "issue"
+            out.append(f"{repo} #{r['number']} {r['title']} · {kind} by {r['user']['login']} · {r.get('state', '')} · updated {self._ago(r.get('updated_at'))}")
+        return out
+
+    async def gh_for_me(self):
+        review = await self._gh_search("is:pr is:open review-requested:@me archived:false")
+        mine = await self._gh_search("is:pr is:open author:@me archived:false")
+        return ("Waiting for your review:\n" + ("\n".join(review) or "(none)") + "\n\nYour open pull requests:\n" + ("\n".join(mine) or "(none)"))
+
+    async def gh_search(self, query):
+        query = to_str(query).strip()
+        if not query:
+            raise RunError("search_github needs something to search for.")
+        return "\n".join(await self._gh_search(query)) or f"Nothing found for “{query}”."
+
+    async def gh_read_pr(self, repo, number):
+        repo, n = self._gh_repo(repo), round_js(num(number))
+        pr = await self._gh(f"/repos/{repo}/pulls/{n}")
+        files = await self._gh(f"/repos/{repo}/pulls/{n}/files?per_page=50")
+        comments = await self._gh(f"/repos/{repo}/issues/{n}/comments?per_page=30")
+        lines = [f"{repo} #{n}: {pr['title']}", f"By {pr['user']['login']} · {pr['state']}" + (" · draft" if pr.get("draft") else "")
+                 + (" · merged" if pr.get("merged") else "") + f" · {pr['head']['ref']} → {pr['base']['ref']} · updated {self._ago(pr.get('updated_at'))}",
+                 "", _short(pr.get("body") or "(no description)", 2000), "", f"Files changed ({len(files)}):"]
+        budget = 9000
+        for f in files:
+            lines.append(f"- {f['filename']} (+{f.get('additions', 0)} −{f.get('deletions', 0)})")
+            patch = f.get("patch") or ""
+            if patch and budget > 0:
+                lines.append(patch[:min(1500, budget)])
+                budget -= min(1500, len(patch))
+        if comments:
+            lines += ["", "Comments:"] + [f"- {c['user']['login']}: {_short(c.get('body', ''), 400)}" for c in comments[-10:]]
+        return "\n".join(lines)
+
+    async def gh_comment(self, repo, number, text, approved=False):
+        repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()
+        if not text:
+            raise RunError("A comment needs some text.")
+        if not approved and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
+            return False
+        await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
+        self.log(f"GitHub comment on {repo} #{n}", text, "sent")
+        return True
+
+    # Telegram
+    def _tg_chats(self):
+        return [c for c in re.split(r"[\s,]+", os.environ.get("TELEGRAM_CHAT_ID", "")) if c]
+
+    async def _tg(self, method, params=None, wait=0):
+        token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+        if not token:
+            raise RunError(f"Telegram needs a bot: set TELEGRAM_BOT_TOKEN {WHERE_KEYS} (message @BotFather in Telegram to make one).")
+        req = urllib.request.Request(f"{TELEGRAM_API}/bot{token}/{method}", data=json.dumps(params or {}).encode(),
+                                     headers={"Content-Type": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=wait + 20) as r:
+                    data = json.loads(r.read())
+            except urllib.error.HTTPError as e:
+                try:
+                    data = json.loads(e.read())
+                except ValueError:
+                    data = {"description": f"Telegram answered {e.code}"}
+            except urllib.error.URLError as e:
+                raise RunError(f"Couldn't reach Telegram ({e.reason}).") from None
+            if not data.get("ok"):
+                raise RunError("Telegram: " + to_str(data.get("description") or "it said no") + ".")
+            return data.get("result")
+        return await asyncio.to_thread(go)
+
+    def _tg_load(self):
+        try:
+            with open(TELEGRAM_FILE, encoding="utf-8") as f:
+                return json.load(f)
+        except (OSError, ValueError):
+            return {"offset": 0, "messages": []}
+
+    async def tg_fetch(self, wait=0):
+        """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones."""
+        store = self._tg_load()
+        updates = await self._tg("getUpdates", {"offset": store.get("offset", 0), "timeout": wait,
+                                                "allowed_updates": ["message", "channel_post"]}, wait)
+        mine, new = self._tg_chats(), []
+        for u in updates or []:
+            store["offset"] = max(store.get("offset", 0), u["update_id"] + 1)
+            m = u.get("message") or u.get("channel_post") or {}
+            if "text" not in m and "caption" not in m:
+                continue
+            chat = m.get("chat", {})
+            if str(chat.get("id")) not in mine:
+                print(f"  (A Telegram message from chat {chat.get('id')} was ignored. To let this program use that chat, "
+                      f"set TELEGRAM_CHAT_ID = {chat.get('id')} {WHERE_KEYS}.)", flush=True)
+                continue
+            who = m.get("from", {})
+            new.append({"text": m.get("text") or m.get("caption", ""), "sender": " ".join(x for x in (who.get("first_name"), who.get("last_name")) if x)
+                        or chat.get("title", ""), "chat": str(chat.get("id")), "chat_name": chat.get("title") or chat.get("first_name", ""),
+                        "date": m.get("date", 0)})
+        store["messages"] = (store.get("messages", []) + new)[-2000:]
+        try:
+            with open(TELEGRAM_FILE, "w", encoding="utf-8") as f:
+                json.dump(store, f, ensure_ascii=False)
+        except OSError:
+            pass
+        return new
+
+    async def tg_search(self, text="", limit=20):
+        if not getattr(self, "_tg_polling", False):
+            await self.tg_fetch()
+        words = to_str(text).lower().split()
+        found = [m for m in sorted(self._tg_load().get("messages", []), key=lambda m: -m.get("date", 0)) if all(w in m["text"].lower() for w in words)][:max(1, min(50, round_js(num(limit)) or 20))]
+        return "\n".join(f"{_when(datetime.datetime.fromtimestamp(m['date']))} · {m['sender']}: {_short(m['text'], 300)}" for m in found) \
+            or ("No messages found" + (f" with “{text}”" if words else "") + ". The bot only sees messages sent to it, from the chats in TELEGRAM_CHAT_ID.")
+
+    async def tg_send(self, text, chat="", approved=False):
+        text = to_str(text).strip()
+        if not text:
+            raise RunError("A Telegram message needs some text.")
+        trig = MESSAGE_VALUE.get()
+        chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
+        if not chat:
+            raise RunError(f"Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {WHERE_KEYS}. "
+                           "Send your bot a message first; the program then says which chat it came from.")
+        if not approved and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
+            return False
+        for i in range(0, len(text), 4000):
+            await self._tg("sendMessage", {"chat_id": chat, "text": text[i:i + 4000]})
+        self.log("Telegram message sent", text, "sent")
+        return True
+
+    @staticmethod
+    def telegram_message(part="text"):
+        v = MESSAGE_VALUE.get()
+        if not isinstance(v, dict) or "text" not in v:
+            return ""
+        return {"text": v["text"], "sender": v.get("sender", ""), "chat": v.get("chat_name") or v.get("chat", "")}.get(part, v["text"])
+
+    async def _tg_watch(self, watches):
+        """Long-polls Telegram and starts 'when a Telegram message arrives' scripts."""
+        self._tg_polling = True
+        started, busy = time.time() - 60, None
+        while True:
+            try:
+                new = await self.tg_fetch(wait=25)
+            except RunError as e:
+                print("  (Telegram check failed: " + str(e) + ")", flush=True)
+                await asyncio.sleep(15)
+                continue
+            for m in new:
+                if m["date"] < started:
+                    continue  # sent while the program wasn't running: kept for searching, not acted on
+                for contains, fn in watches:
+                    if contains.strip().lower() not in ("", "anything") and contains.strip().lower() not in m["text"].lower():
+                        continue
+                    if busy and not busy.done():
+                        self.start_script(fn, m)
+                    else:
+                        busy = asyncio.ensure_future(self.run([(fn, m)], "Telegram message"))
+
+    # Email
+    MAIL_SERVERS = {"gmail.com": ("imap.gmail.com", "smtp.gmail.com", 465), "googlemail.com": ("imap.gmail.com", "smtp.gmail.com", 465),
+                    "icloud.com": ("imap.mail.me.com", "smtp.mail.me.com", 587), "me.com": ("imap.mail.me.com", "smtp.mail.me.com", 587),
+                    "yahoo.com": ("imap.mail.yahoo.com", "smtp.mail.yahoo.com", 465), "yahoo.co.uk": ("imap.mail.yahoo.com", "smtp.mail.yahoo.com", 465),
+                    "fastmail.com": ("imap.fastmail.com", "smtp.fastmail.com", 465)}
+
+    def _mail(self):
+        addr, pw = os.environ.get("EMAIL_ADDRESS", "").strip(), os.environ.get("EMAIL_PASSWORD", "")
+        if not addr or not pw:
+            raise RunError(f"Email needs EMAIL_ADDRESS and EMAIL_PASSWORD {WHERE_KEYS}. Use an app password, not your normal one.")
+        guess = self.MAIL_SERVERS.get(addr.rsplit("@", 1)[-1].lower(), (None, None, 465))
+        imap = os.environ.get("EMAIL_IMAP_HOST") or guess[0]
+        smtp = os.environ.get("EMAIL_SMTP_HOST") or guess[1]
+        if not imap or not smtp:
+            raise RunError(f"Set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST {WHERE_KEYS}: your email provider's help pages list them.")
+        secure = os.environ.get("EMAIL_SSL", "yes").strip().lower() not in ("0", "no", "false", "off")
+        return {"addr": addr, "pw": pw, "imap": imap, "imap_port": int(os.environ.get("EMAIL_IMAP_PORT") or (993 if secure else 143)),
+                "smtp": smtp, "smtp_port": int(os.environ.get("EMAIL_SMTP_PORT") or guess[2]), "ssl": secure}
+
+    def _imap(self, c):
+        import imaplib
+        try:
+            m = imaplib.IMAP4_SSL(c["imap"], c["imap_port"], timeout=30) if c["ssl"] else imaplib.IMAP4(c["imap"], c["imap_port"], timeout=30)
+            m.login(c["addr"], c["pw"])
+        except imaplib.IMAP4.error as e:
+            raise RunError(f"The email server refused the login ({_short(e, 120)}). Check EMAIL_PASSWORD is an app password.") from None
+        except OSError as e:
+            raise RunError(f"Couldn't reach the email server {c['imap']} ({e}).") from None
+        return m
+
+    @staticmethod
+    def _mail_text(msg, limit):
+        """The readable text of an email: the plain part, or the HTML part's words."""
+        plain = html = None
+        for part in msg.walk():
+            if part.get_content_maintype() == "multipart" or part.get_filename():
+                continue
+            if part.get_content_type() in ("text/plain", "text/html"):
+                try:
+                    body = part.get_content()
+                except (LookupError, ValueError):
+                    body = part.get_payload(decode=True).decode("utf-8", "replace") if part.get_payload(decode=True) else ""
+                if part.get_content_type() == "text/plain" and plain is None:
+                    plain = body
+                elif html is None:
+                    html = page_text(body, "text/html")[1]
+        text = (plain if plain and plain.strip() else html) or ""
+        return re.sub(r"\n{3,}", "\n\n", text).strip()[:limit]
+
+    @staticmethod
+    def _mail_head(msg, uid):
+        import email.utils
+        d = _parse_date(msg.get("Date", ""))
+        who = email.utils.parseaddr(str(msg.get("From", "")))
+        return f"id {uid} · {_when(d) if d else '?'} · From: {who[0] or who[1]}" + (f" <{who[1]}>" if who[0] else "") + f" · Subject: {msg.get('Subject', '(no subject)')}"
+
+    async def email_search(self, query="", days=7):
+        import email
+        import email.policy
+        c, query, days = self._mail(), to_str(query).strip(), max(1, min(365, round_js(num(days)) or 7))
+
+        def go():
+            m = self._imap(c)
+            try:
+                m.select("INBOX", readonly=True)
+                since = (datetime.datetime.now() - datetime.timedelta(days=days)).strftime("%d-%b-%Y")
+                if query and not query.isascii():
+                    m.literal = query.encode("utf-8")
+                    typ, data = m.uid("SEARCH", "CHARSET", "UTF-8", "SINCE", since, "TEXT")
+                elif query:
+                    typ, data = m.uid("SEARCH", "SINCE", since, "TEXT", '"' + query.replace('"', "") + '"')
+                else:
+                    typ, data = m.uid("SEARCH", "SINCE", since)
+                uids = (data[0] or b"").split()[-20:][::-1]
+                out = []
+                for uid in uids:
+                    typ, got = m.uid("FETCH", uid, "(BODY.PEEK[]<0.20000>)")
+                    raw = next((x[1] for x in got if isinstance(x, tuple)), b"")
+                    msg = email.message_from_bytes(raw, policy=email.policy.default)
+                    out.append(self._mail_head(msg, uid.decode()) + "\n  " + _short(self._mail_text(msg, 600), 200))
+                return out
+            finally:
+                try:
+                    m.logout()
+                except Exception:  # noqa: BLE001
+                    pass
+        found = await asyncio.to_thread(go)
+        return "\n".join(found) or f"No emails in the last {days} days" + (f" with “{query}”." if query else ".")
+
+    async def email_read(self, uid):
+        import email
+        import email.policy
+        c, uid = self._mail(), to_str(uid).strip().removeprefix("id").strip()
+        if not uid.isdigit():
+            raise RunError("read_email needs an email's id number, from search_email.")
+
+        def go():
+            m = self._imap(c)
+            try:
+                m.select("INBOX", readonly=True)
+                typ, got = m.uid("FETCH", uid, "(BODY.PEEK[])")
+                raw = next((x[1] for x in got if isinstance(x, tuple)), None)
+                if not raw:
+                    raise RunError(f"There's no email with id {uid}.")
+                msg = email.message_from_bytes(raw, policy=email.policy.default)
+                files = [p.get_filename() for p in msg.walk() if p.get_filename()]
+                return (self._mail_head(msg, uid) + (f"\nTo: {msg.get('To', '')}" if msg.get("To") else "") + "\n\n" + self._mail_text(msg, 15000)
+                        + (f"\n\nAttachments: {', '.join(files)}" if files else ""))
+            finally:
+                try:
+                    m.logout()
+                except Exception:  # noqa: BLE001
+                    pass
+        return await asyncio.to_thread(go)
+
+    async def email_send(self, to, subject, body, approved=False):
+        import smtplib
+        from email.message import EmailMessage
+        to, subject, body = to_str(to).strip(), to_str(subject).strip(), to_str(body)
+        addrs = [a.strip() for a in re.split(r"[,;]", to) if a.strip()]
+        if not addrs or not all(re.fullmatch(r"[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+", a) for a in addrs):
+            raise RunError(f"“{to}” isn't an email address.")
+        c = self._mail()
+        if not approved and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
+            return False
+        msg = EmailMessage()
+        msg["From"], msg["To"], msg["Subject"] = c["addr"], ", ".join(addrs), subject or "(no subject)"
+        msg.set_content(body)
+
+        def go():
+            try:
+                if c["ssl"] and c["smtp_port"] == 465:
+                    s_ = smtplib.SMTP_SSL(c["smtp"], 465, timeout=30)
+                else:
+                    s_ = smtplib.SMTP(c["smtp"], c["smtp_port"], timeout=30)
+                    if c["ssl"]:
+                        s_.starttls()
+                with s_:
+                    s_.login(c["addr"], c["pw"])
+                    s_.send_message(msg)
+            except smtplib.SMTPException as e:
+                raise RunError(f"The email couldn't be sent ({_short(e, 160)}).") from None
+            except OSError as e:
+                raise RunError(f"Couldn't reach the email server {c['smtp']} ({e}).") from None
+        await asyncio.to_thread(go)
+        self.log(f"Email sent to {to}", f"Subject: {subject}\n\n{_short(body, 600)}", "sent")
+        return True
+
+    # Calendar
+    async def _calendar(self, start, end):
+        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
+        if not urls:
+            raise RunError(f"The calendar needs CALENDAR_URL {WHERE_KEYS}: your calendar's private iCal address.")
+        out = []
+        for u in urls:
+            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
+            text = _decode(data, ctype)
+            if "BEGIN:VCALENDAR" not in text[:2000]:
+                raise RunError("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format').")
+            out += calendar_events(text, start, end)
+        out.sort(key=lambda x: (x["start"], not x["all_day"]))
+        return out
+
+    async def calendar_text(self, day="today", days=7):
+        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
+        events = await self._calendar(start, start + datetime.timedelta(days=days))
+        lines, cur = [], None
+        for e in events:
+            d = max(e["start"], start).date()
+            if d != cur:
+                cur = d
+                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
+            lines.append("  " + event_line(e))
+        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
+
+    async def calendar_records(self, days):
+        start = parse_day("today")
+        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
+        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
+                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
+        self.log("Calendar", "\n".join(f"{r['day']} {r['start'] or 'all day'}  {r['title']}" for r in recs) or "(nothing)", f"{len(recs)} events")
+        return recs
+
+    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
+        start = parse_day(day)
+        events = await self._calendar(start, start + datetime.timedelta(days=1))
+        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
+        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
+        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
+            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
+
     # ----- Agent -----
     # Each step the model replies with JSON: a tool to use, or its final answer. The same protocol runs on the
     # page, so a program behaves the same in both places, and it works with every model and backup.
@@ -2414,9 +3127,36 @@ class Runtime:
         "file": [("read_file", "Ask the person to choose a file (a PDF, a Word file or a text file) and get the words in it. Say why you want it.", ["why"])],
         "review": [("review_text", "Have a separate, strict reviewer check some text against criteria (separate them with semicolons). It says whether the "
                     "text passes, and lists each problem. Use it to check your work before you finish.", ["text", "criteria"])],
+        "feeds": [("read_feed", "Get the latest items from a news feed (RSS or Atom) by its address, or from the person's own feeds if you leave url "
+                   "empty. Each item has a title, date, link and summary. limit is items per feed (10 if you don't say).", ["url", "limit"])],
+        "linkedin": [("search_linkedin", "Search LinkedIn's public pages (people, companies, posts) through a web search. It only finds what "
+                      "LinkedIn shows to everyone.", ["query"])],
+        "github": [("my_pull_requests", "List the GitHub pull requests waiting for the person's review, and their own open ones.", []),
+                   ("list_pull_requests", "List the pull requests in one GitHub project (owner/name). state is open, closed or all (open if you don't say).",
+                    ["repo", "state"]),
+                   ("read_pull_request", "Read one pull request: its description, the files it changes with the changes themselves, and its comments.",
+                    ["repo", "number"]),
+                   ("list_projects", "List GitHub projects, most recently changed first: the person's own, or another owner's if you give one.", ["owner"]),
+                   ("search_github", "Search GitHub issues and pull requests, with GitHub's search words, like 'is:open is:issue repo:owner/name label:bug'.",
+                    ["query"])],
+        "github_act": [("comment_on_github", "Post a comment on a GitHub pull request or issue. The person is asked first, and may say no.",
+                        ["repo", "number", "text"])],
+        "telegram": [("search_telegram", "Search the Telegram messages the person has sent to their bot, newest first. Leave text empty for the latest.",
+                      ["text"])],
+        "telegram_send": [("send_telegram", "Send a Telegram message to the person (or back to the chat a message came from). "
+                           "The person may be asked first, and may say no.", ["text"])],
+        "email": [("search_email", "Search the person's email inbox for recent emails containing some words (or all recent ones if you leave "
+                   "query empty). days is how far back (7 if you don't say). Gives each email's id, date, sender, subject and start.", ["query", "days"]),
+                  ("read_email", "Read one email in full, by its id from search_email.", ["id"])],
+        "email_send": [("send_email", "Send an email from the person's address. The person is asked first, and may say no.", ["to", "subject", "body"])],
+        "calendar": [("calendar", "List the person's calendar events, from a day (today, tomorrow, a weekday or YYYY-MM-DD) for some days (7 if you "
+                      "don't say).", ["day", "days"]),
+                     ("free_time", "Find free time on one day, between two times (09:00 and 17:30 if you don't say), at least some minutes long "
+                      "(60 if you don't say).", ["day", "from", "to", "minutes"])],
     }
     AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
-    AGENT_ASKS = {"ha_act"}  # built-in tools that ask before each use
+    AGENT_BUILTINS["telegram_send_free"] = AGENT_BUILTINS["telegram_send"]
+    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
@@ -2424,8 +3164,16 @@ class Runtime:
                          "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"},
                          "device_history": {"entity": "text", "hours": "number"}, "calculate": {"expression": "text"}, "current_time": {},
                          "time_plus": {"time": "text", "minutes": "number"}, "read_file": {"why": "text"},
-                         "review_text": {"text": "text", "criteria": "text"}}
-    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"}}
+                         "review_text": {"text": "text", "criteria": "text"}, "read_feed": {"url": "text", "limit": "number"},
+                         "search_linkedin": {"query": "text"}, "my_pull_requests": {}, "list_pull_requests": {"repo": "text", "state": "text"},
+                         "read_pull_request": {"repo": "text", "number": "number"}, "list_projects": {"owner": "text"}, "search_github": {"query": "text"},
+                         "comment_on_github": {"repo": "text", "number": "number", "text": "text"}, "search_telegram": {"text": "text"},
+                         "send_telegram": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
+                         "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
+                         "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"}}
+    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
+                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"},
+                      "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"}}
     MAX_FILE_CHARS = 30000
     INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
                    "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
@@ -2625,6 +3373,42 @@ class Runtime:
                 "- " + x for x in (problems or ["It doesn't yet meet the criteria."]))
             self.log("Check: " + _short(a("criteria"), 55), out, "passes" if v["approved"] is True else "needs work")
             return out
+        approved = getattr(self, "_agent_approved", False)
+        if kind == "read_feed":
+            return self.feed_text(await self.feed_items(a("url"), inp.get("limit", 10)))
+        if kind == "search_linkedin":
+            if not a("query"):
+                raise RunError("search_linkedin needs a query.")
+            return await self.web_search("site:linkedin.com " + a("query"))
+        if kind == "my_pull_requests":
+            return await self.gh_for_me()
+        if kind == "list_pull_requests":
+            return await self.gh_pulls(a("repo"), a("state") or "open")
+        if kind == "read_pull_request":
+            return await self.gh_read_pr(a("repo"), inp.get("number", 0))
+        if kind == "list_projects":
+            return await self.gh_repos(a("owner"))
+        if kind == "search_github":
+            return await self.gh_search(a("query"))
+        if kind == "comment_on_github":
+            done = await self.gh_comment(a("repo"), inp.get("number", 0), a("text"), approved)
+            return "Comment posted." if done else "Not posted: the person said no, or nobody was there to ask."
+        if kind == "search_telegram":
+            return await self.tg_search(a("text"))
+        if kind == "send_telegram":
+            done = await self.tg_send(a("text"), "", approved)
+            return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
+        if kind == "search_email":
+            return await self.email_search(a("query"), inp.get("days", 7))
+        if kind == "read_email":
+            return await self.email_read(a("id"))
+        if kind == "send_email":
+            done = await self.email_send(a("to"), a("subject"), inp.get("body", ""), approved)
+            return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
+        if kind == "calendar":
+            return await self.calendar_text(a("day") or "today", inp.get("days", 7))
+        if kind == "free_time":
+            return await self.free_time(a("day") or "today", a("from") or "09:00", a("to") or "17:30", inp.get("minutes", 60))
         raise RunError(f"Unknown tool “{kind}”.")
 
     async def agent(self, goal, steps, tools, plan=False):
@@ -2724,6 +3508,7 @@ class Runtime:
             if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}"):
                 result, refused = "The person said no, so this tool didn't run.", True
             else:
+                self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
                 try:
                     result = await self._agent_run_tool(kind, spec, inp)
                 except (asyncio.CancelledError, Finish):
@@ -2898,13 +3683,17 @@ class Runtime:
             print(f"(The log couldn't be saved: {e})", flush=True)
 
     # ----- Schedules -----
-    async def run_schedules(self, schedules, watches=()):
-        if not schedules and not watches:
-            sys.exit("This program has no scheduled or 'when … changes' scripts.")
+    async def run_schedules(self, schedules, watches=(), telegram=()):
+        if not schedules and not watches and not telegram:
+            sys.exit("This program has no scheduled, 'when … changes' or Telegram scripts.")
         self.schedule_mode = True
         print("Schedules are on. Leave this running; press Ctrl+C to stop.", flush=True)
         if watches:
             asyncio.ensure_future(self._watch(watches))
+        if telegram:
+            if not self._tg_chats():
+                print(f"Telegram: send your bot a message. Until TELEGRAM_CHAT_ID is set {WHERE_KEYS}, the program only says which chat it came from.", flush=True)
+            asyncio.ensure_future(self._tg_watch(telegram))
         fired, next_every = {}, {}
         start = time.time()
         for i, s in enumerate(schedules):
@@ -2970,12 +3759,12 @@ class Runtime:
             first = False
             await asyncio.sleep(HA_WATCH_SECONDS)
 
-    def main(self, start_scripts, receivers, schedules, watches=()):
+    def main(self, start_scripts, receivers, schedules, watches=(), telegram=()):
         self.receivers = {k.lower(): v for k, v in receivers.items()}
-        use_schedule = "--schedule" in sys.argv or ((schedules or watches) and not start_scripts)
+        use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram) and not start_scripts)
         try:
             if use_schedule:
-                asyncio.run(self.run_schedules(schedules, watches))
+                asyncio.run(self.run_schedules(schedules, watches, telegram))
             else:
                 if not start_scripts:
                     sys.exit("Nothing to run: this program has no 'when Run is clicked' script.")

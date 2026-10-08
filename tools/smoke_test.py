@@ -11,7 +11,8 @@ and a real tool call, and which JSON mode every other service accepts.
 
 Keys come from the environment or a second-thought.ini (in this folder, the current folder or your home folder),
 exactly as an exported program finds them. Each service gets a few short questions, so the whole run costs a few
-pence; the tokens used are printed at the end. Llama is checked only if LLAMA_BASE_URL is set.
+pence; the tokens used are printed at the end. Llama is checked only if LLAMA_BASE_URL is set. The connections you've
+set up (GitHub, Telegram, email, calendar, news feeds) are checked by reading only: nothing is sent or posted.
 """
 import asyncio
 import contextlib
@@ -142,6 +143,28 @@ async def check_other(name, tier):
     return [R]
 
 
+async def check_connections(want):
+    """Read-only checks of the connections you've set up. Nothing is sent, posted or changed."""
+    R = fresh("quick")
+    checks = [("GitHub", "GITHUB_TOKEN", "your projects and pull requests", R.gh_for_me),
+              ("Telegram", "TELEGRAM_BOT_TOKEN", "the bot token works", lambda: R._tg("getMe")),
+              ("Email", "EMAIL_ADDRESS", "reading the inbox", lambda: R.email_search("", 2)),
+              ("Calendar", "CALENDAR_URL", "reading the next 7 days", lambda: R.calendar_text("today", 7)),
+              ("News feeds", "RB_FEEDS", "reading your feeds", lambda: R.feed_items("", 3))]
+    for name, env, what, fn in checks:
+        if not want(name):
+            continue
+        if not os.environ.get(env):
+            report(name, "all checks", "SKIP", f"no {env if env != 'RB_FEEDS' else 'feeds'}")
+            continue
+        got = await attempt(name, what, fn())
+        if got is not FAILED:
+            detail = ("@" + got.get("username", "")) if isinstance(got, dict) else f"{len(got)} items" if isinstance(got, list) else f"{len(str(got).splitlines())} lines"
+            report(name, what, True, detail)
+    if want("telegram") and os.environ.get("TELEGRAM_BOT_TOKEN") and not os.environ.get("TELEGRAM_CHAT_ID"):
+        report("Telegram", "your chat", "NOTE", "no TELEGRAM_CHAT_ID yet: message your bot, then run a Telegram program to see your chat number")
+
+
 async def main(only):
     want = lambda name: not only or any(w in name.lower() for w in only)  # noqa: E731
     print("Second Thought: checking the real services\n", flush=True)
@@ -162,6 +185,7 @@ async def main(only):
             report(name, "all checks", "SKIP", f"no {pv['key_env']}")
             continue
         used += await check_other(name, pv["prefix"] + "quick")
+    await check_connections(want)
     totals = {}
     for R in used:
         for who, (tin, tout) in R.usage.items():
