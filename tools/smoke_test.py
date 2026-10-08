@@ -12,7 +12,7 @@ and a real tool call, and which JSON mode every other service accepts.
 Keys come from the environment or a second-thought.ini (in this folder, the current folder or your home folder),
 exactly as an exported program finds them. Each service gets a few short questions, so the whole run costs a few
 pence; the tokens used are printed at the end. Llama is checked only if LLAMA_BASE_URL is set. The connections you've
-set up (GitHub, Telegram, email, calendar, news feeds) are checked by reading only: nothing is sent or posted.
+set up (GitHub, Telegram, email, calendar, news feeds, Homey) are checked by reading only: nothing is sent, posted or switched.
 """
 import asyncio
 import contextlib
@@ -143,6 +143,13 @@ async def check_other(name, tier):
     return [R]
 
 
+async def _homey_check(R):
+    """Devices (with zones) and flows: what the Homey blocks need. Reading only."""
+    home = await R._homey_home()
+    flows = await R._homey_flows()
+    return [f"{len(home)} devices", f"{len({d['zone'] for d in home if d['zone']})} zones", f"{len(flows)} flows"]
+
+
 async def check_connections(want):
     """Read-only checks of the connections you've set up. Nothing is sent, posted or changed."""
     R = fresh("quick")
@@ -150,7 +157,8 @@ async def check_connections(want):
               ("Telegram", "TELEGRAM_BOT_TOKEN", "the bot token works", lambda: R._tg("getMe")),
               ("Email", "EMAIL_ADDRESS", "reading the inbox", lambda: R.email_search("", 2)),
               ("Calendar", "CALENDAR_URL", "reading the next 7 days", lambda: R.calendar_text("today", 7)),
-              ("News feeds", "RB_FEEDS", "reading your feeds", lambda: R.feed_items("", 3))]
+              ("News feeds", "RB_FEEDS", "reading your feeds", lambda: R.feed_items("", 3)),
+              ("Homey", "HOMEY_API_KEY", "reading your devices and flows", lambda: _homey_check(R))]
     for name, env, what, fn in checks:
         if not want(name):
             continue
@@ -159,7 +167,8 @@ async def check_connections(want):
             continue
         got = await attempt(name, what, fn())
         if got is not FAILED:
-            detail = ("@" + got.get("username", "")) if isinstance(got, dict) else f"{len(got)} items" if isinstance(got, list) else f"{len(str(got).splitlines())} lines"
+            detail = ("@" + got.get("username", "")) if isinstance(got, dict) else ", ".join(got) if name == "Homey" else \
+                f"{len(got)} items" if isinstance(got, list) else f"{len(str(got).splitlines())} lines"
             report(name, what, True, detail)
     if want("telegram") and os.environ.get("TELEGRAM_BOT_TOKEN") and not os.environ.get("TELEGRAM_CHAT_ID"):
         report("Telegram", "your chat", "NOTE", "no TELEGRAM_CHAT_ID yet: message your bot, then run a Telegram program to see your chat number")

@@ -1453,9 +1453,11 @@ def python_tests(codes):
         check("; resume = yes" in EXPORTS["review"]["second-thought.ini"], "the exported ini explains the resume setting")
         print("Real-service smoke test (against the stand-ins)")
         smoke_env = {k: v for k, v in env.items() if not k.endswith(("_API_KEY", "_TOKEN")) and k != "LLAMA_BASE_URL"}
-        smoke_env.update(ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test", MISTRAL_API_KEY="test", MISTRAL_BASE_URL=llama_url)
+        smoke_env.update(HOMEY_API_KEY=fake_services.HOMEY_KEY, ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test", MISTRAL_API_KEY="test", MISTRAL_BASE_URL=llama_url)
         r = subprocess.run([sys.executable, str(ROOT / "tools" / "smoke_test.py")], env=smoke_env, cwd=tmp, capture_output=True, text=True, timeout=180)
         out = r.stdout.replace("\r\n", "\n")
+        check("PASS  Homey: reading your devices and flows  (12 devices, 6 zones, 3 flows)" in out,
+              "the smoke test reads your Homey's devices, zones and flows" + ("" if "Homey:" in out else f": {out[-300:]!r}"))
         check(r.returncode == 0 and "PASS  Claude: cut-off reply continued" in out and "PASS  Claude: agent called a typed tool and answered" in out
               and "NOTE  Mistral: JSON mode it accepts  (the full JSON Schema)" in out and "SKIP  OpenAI: all checks" in out,
               "tools/smoke_test.py runs every check and reports each service" + ("" if r.returncode == 0 else f": {(r.stderr or out)[-400:]!r}"))
