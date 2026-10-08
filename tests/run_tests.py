@@ -1685,10 +1685,35 @@ def python_tests(codes):
           f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
 
 
+def example_ini_check():
+    """second-thought.example.ini lists every setting the runtime reads, and reads like a settings file."""
+    import configparser
+    src = (ROOT / "python" / "runtime.py").read_text(encoding="utf-8")
+    names = set(re.findall(r'os\.environ(?:\.get)?[\[(]"([A-Z][A-Z0-9_]*)"', src))
+    for base, keys in re.findall(r'_provider\("[^"]+", "[^"]+", "([A-Z_]+)", "[^"]+", \(([^)]*)\)', src):
+        names.add(base)
+        names.update(re.findall(r'"([A-Z_]+)"', keys))
+    friendly = set(re.findall(r'"([a-z_]+)": "RB_[A-Z_]+"', src.split("SETTING_NAMES = ", 1)[1].split("}", 1)[0]))
+    names -= {"SECOND_THOUGHT_INI"} | {n for n in names if n.startswith("RB_") and any(f'"{f}": "{n}"' in src for f in friendly)}
+    text = (ROOT / "second-thought.example.ini").read_text(encoding="utf-8")
+    listed = {m.upper() for m in re.findall(r"^[;#]?\s*([A-Za-z_][A-Za-z0-9_]*)\s*=", text, re.M)}
+    missing = sorted((names | {f.upper() for f in friendly if f != "model"}) - listed)
+    check(not missing and "SECOND_THOUGHT_INI" in text, "second-thought.example.ini lists every setting the runtime reads" + (f" (missing: {', '.join(missing)})" if missing else ""))
+    cp = configparser.ConfigParser(interpolation=None, inline_comment_prefixes=(";", "#"))
+    try:
+        cp.read_string(text)
+        ok = True
+    except configparser.Error as e:
+        ok = str(e)
+    check(ok is True and cp.get("home assistant", "HA_URL") == "http://homeassistant.local:8123" and cp.get("keys", "ANTHROPIC_API_KEY") == "",
+          "second-thought.example.ini reads as a settings file, with blank keys and its notes switched off" + ("" if ok is True else f": {ok}"))
+
+
 def main():
     sync = subprocess.run([sys.executable, str(ROOT / "tools" / "sync.py"), "--check"], capture_output=True, text=True)
     print("Sources")
     check(sync.returncode == 0, sync.stdout.strip())
+    example_ini_check()
     if not (VENDOR / "blockly").exists():
         sys.exit("Run tests/setup.sh first.")
     codes = asyncio.run(page_tests())
