@@ -489,6 +489,10 @@ async def new_feature_page_tests(pg):
     stopped = [t for n, p_, t in await step_texts(pg) if n == "Run stopped"]
     check(status == "error" and stopped and "needs a goal" in stopped[0], "an agent with no goal says so")
 
+    print("Tool safety default")
+    fresh_ask = await pg.evaluate("(() => { const b = Blockly.getMainWorkspace().newBlock('rb_agent_tool'); const v = b.getFieldValue('ASK'); b.dispose(); return v; })()")
+    check(fresh_ask == "TRUE", "a new 'tool: My Block' starts with 'ask me before each use' ticked")
+
     print("Typed tool inputs")
     tcall = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
     fin = lambda a: {"done": True, "answer": a}  # noqa: E731
