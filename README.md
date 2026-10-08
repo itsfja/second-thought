@@ -81,7 +81,8 @@ The blocks come in different colours. Blocks of the same colour do the same sort
 - **Blue blocks** ask Claude to write.
 - **Purple blocks** ask Claude to check the writing.
 - **Teal blocks** ask *you* a question and wait for your answer.
-- **Olive blocks** make an **agent**: a helper that decides its own steps.
+- **Olive blocks** make an **agent**: a helper that decides its own steps. Its **tools** are a darker olive, in their own **Tools** pile.
+- **Pink blocks**, under **Connections**, talk to Telegram, email, your calendar and news feeds.
 - **Green blocks** show the result at the end.
 
 There are more colours too. You will find them all down the left side of the screen.
@@ -152,7 +153,7 @@ Most programs do exactly what the blocks say, in order. You decide every step.
 
 An **agent** is different. You give it a **goal** and some **tools**, and Claude decides what to do next. It picks a tool, looks at what happened, and picks again. When the goal is met, it writes its answer into the draft.
 
-The olive block **agent: work toward …** holds the tools. You can give it:
+The olive block **agent: work toward …** holds the tools. The tools have their own pile, called **Tools**, just below **Agent**. Drop as many as you like inside the agent. You can give it:
 
 - **ask me a question**, so it can ask you things only you know.
 - **remember and recall notes**, so it can keep what it learns for next time.
@@ -161,6 +162,12 @@ The olive block **agent: work toward …** holds the tools. You can give it:
 - **clock times and dates**, for the time now and for adding or taking away minutes, like 09:30 plus 270 minutes. Good for working backwards from when you want bread out of the oven.
 - **read a file I choose**: the agent asks you for a PDF, a Word file or a text file and reads it.
 - **check text against criteria**: a separate, strict reviewer checks the agent's work and lists the problems, so the agent can fix them before it finishes.
+- **news feeds**, to read the latest from news sites and blogs (RSS or Atom).
+- **search LinkedIn**, which searches LinkedIn's public pages through the web search. LinkedIn doesn't let programs search it directly, so this only finds what LinkedIn shows everyone.
+- **calendar**, to list your events and find free time.
+- **email: search and read**, and **email: send**.
+- **GitHub: projects and pull requests**, to find pull requests waiting for your review and read what they change, and **GitHub: comment**.
+- **Telegram: search my messages** and **Telegram: send**.
 - **Home Assistant: look at devices**, including how a sensor changed over the last day, and **control devices**. Control devices asks you before every change, because something the agent reads could try to trick it. If you trust everything it reads, choose **control devices (no asking)**.
 - **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. **Ask me before each use** starts ticked, so you say yes before your block runs. That matters if the block changes something, because what the agent reads could try to trick it. Untick it for blocks that only work something out, like a calculator.
   In **input types**, say what each input must be, like `flour grams: number; water grams: number`. The types are text, number, yes/no, list and any. The agent's input is checked before your block runs. If it's wrong, for example words where a number should be, the block doesn't run and the agent is told what to fix.
@@ -177,7 +184,34 @@ When the agent finishes, the run log shows an **Agent summary**: a table with on
 
 The block **agent's steps** gives you a list of everything the agent did: each step, the tool, what it sent, what came back, and how it went. Your program can check it, save it, or ask Claude to review it.
 
-There are nine agent examples under **Agents** in Browse examples. **Agent: plan my bake** asks and remembers. **Agent with your own tool** uses a My Block. **Agent: bake timetable** works backwards with the clock. **Agent: scale a recipe** does every sum with the sums tool. **Agent: write, check, improve** fixes its work until a reviewer passes it. **Agent: check my recipe file** reads a file you choose. **Agent: research with sources** searches and reads its sources. **Agent: house check-up** and **Agent: bedtime round** look after a Home Assistant house, and the bedtime round asks before switching anything off.
+Tools that send something or change something (sending an email or a Telegram message, commenting on GitHub, controlling devices) ask you before each use. That matters, because an email, a web page or a pull request can contain words written to trick the agent. Telegram has a **send (no asking)** choice for a bot that answers on its own.
+
+On this page, the feeds, GitHub, email, Telegram and the calendar use **sample** data, like the sample house, so you can try everything safely. Nothing real is read or sent. The exported Python program uses your real ones: see **Connections** below for what to put in second-thought.ini.
+
+There are many agent examples under **Agents** in Browse examples. **Agent: plan my bake** asks and remembers. **Agent with your own tool** uses a My Block. **Agent: bake timetable** works backwards with the clock. **Agent: scale a recipe** does every sum with the sums tool. **Agent: write, check, improve** fixes its work until a reviewer passes it. **Agent: check my recipe file** reads a file you choose. **Agent: research with sources** searches and reads its sources. **Agent: house check-up** and **Agent: bedtime round** look after a Home Assistant house, and the bedtime round asks before switching anything off. **Agent: news round-up** reads your feeds and skips what it showed you last time. **Agent: trip planner** checks your calendar and builds a plan with times and a budget. **Agent: pull requests for me** and **Agent: review and comment on a pull request** work with GitHub. **Agent: inbox triage** sorts your email and drafts replies. **Agent: plan my week** fits baking around your calendar. **Telegram bot that answers** replies to messages you send your bot. **Agent: find people on LinkedIn** searches LinkedIn's public pages.
+
+### Connections
+
+The pink **Connections** blocks work without an agent too:
+
+- **when a Telegram message arrives** starts a script when your bot gets a message. **Telegram message** gives you its words, who sent it, or the chat. On the page, right-click the block and choose **Run this script** to try it with a sample message.
+- **send Telegram message** and **send email** send something. With **ask me before sending messages and announcements**, they ask you first.
+- **news from feed** gives a list of the latest items. Leave it empty for your own feeds.
+- **calendar for the next … days** gives a list of your events.
+
+Try **Morning briefing on Telegram** and **Email me a news digest** under Automation.
+
+In the exported program, second-thought.ini asks only for what your program uses:
+
+- **GitHub:** `GITHUB_TOKEN`, from github.com/settings/tokens. Reading is enough to look. To comment, it needs to write to pull requests too.
+- **Telegram:** in Telegram, message **@BotFather** and send `/newbot`. It gives you `TELEGRAM_BOT_TOKEN`. Then message your bot and run the program: it tells you your chat number for `TELEGRAM_CHAT_ID`. Anyone can message a bot, so it only listens to, and searches, the chats you list there. A bot only sees messages sent to it, so it can't search your other chats.
+- **Email:** `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo and Fastmail find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST`.
+- **Calendar:** `CALENDAR_URL`, your calendar's private iCal address. In Google Calendar it's under Settings, your calendar, **Secret address in iCal format**. It can read your calendar, but not add to it.
+- **News feeds:** `feeds = ` and the feed addresses, with spaces between them.
+
+The agent only reads **public** web pages and feeds, never addresses on your own network, in case something it reads tries to steer it there. Your own feeds and calendar address are fine wherever they are. If you want the agent to read pages on your own network, add `local_pages = yes`.
+
+To listen for Telegram messages all the time, run the program with **run-on-schedule** (see Page 10). Messages that arrived while it was off are kept for searching, but don't start the script.
 
 ---
 
@@ -395,6 +429,7 @@ This folder is where all the parts of Second Thought are kept. Each part has its
 | `python/runtime.py` | The helper that comes with every Python program. It knows how to do each block's job. |
 | `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
 | `ha/sample-house.json` | The pretend house that the Home Assistant blocks use on the page. |
+| `samples/connections.json` | The pretend feeds, GitHub projects, Telegram messages, emails and calendar that the page uses. |
 | `tools/sync.py` | A little tool that copies the parts above into the page, so they always match. |
 | `tests/` | Checks that make sure everything still works. |
 | `README.md` | This book! |

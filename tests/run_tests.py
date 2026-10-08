@@ -9,6 +9,7 @@ a stand-in Anthropic SDK (tests/fakeapi). Nothing calls the real API.
     python tests/run_tests.py    # every time
 """
 import asyncio
+import datetime
 import re
 import json
 import os
@@ -25,6 +26,7 @@ from playwright.async_api import async_playwright
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import fake_ha  # noqa: E402
 import fake_llama  # noqa: E402
+import fake_services  # noqa: E402
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -119,6 +121,11 @@ async def route(r):
     if u.startswith("http://test/"):
         return await r.fulfill(body=DOC, content_type="text/html")
     await r.abort()
+
+
+async def paste(pg, text):
+    """Puts text in the import box. Setting it directly is quicker than typing a whole exported program in."""
+    await pg.evaluate("v => { const t = document.getElementById('io-paste'); t.value = v; t.dispatchEvent(new Event('input')); }", text)
 
 
 async def run_program(pg, timeout_s=30):
@@ -764,6 +771,74 @@ async def new_feature_page_tests(pg):
     cats = await pg.eval_on_selector_all("#example optgroup[label='Agents'] option", "e => e.map(o => o.value)")
     check(len(cats) >= 9 and {"a_bake", "a_tool", "a_timetable", "a_house"} <= set(cats), f"the Agents group in the Example menu has the agent examples ({len(cats)})")
 
+    print("Connections")
+    cats_ = await pg.evaluate("Blockly.getMainWorkspace().getToolbox().getToolboxItems().map(i => i.getName && i.getName()).filter(Boolean)")
+    check({"Agent", "Tools", "Connections"} <= set(cats_) and cats_.index("Tools") == cats_.index("Agent") + 1,
+          f"the tool blocks have their own Tools category, after Agent, and the service blocks are under Connections ({', '.join(cats_)})")
+    kinds = await pg.evaluate("""(() => { const b = Blockly.getMainWorkspace().newBlock('rb_agent_builtin');
+        const o = b.getField('KIND').getOptions(false).map(x => x[1]); b.dispose(); return o; })()""")
+    for k in ("feeds", "linkedin", "calendar", "email", "email_send", "github", "github_act", "telegram", "telegram_send", "telegram_send_free"):
+        status, steps, items = await agent_run(pg, [k], [fin("ok")])
+        listed = next((t for s_, p_, t in steps if s_ == "Agent"), "")
+        check(k in kinds and status.startswith("done") and "Tools: " in listed and "Tools: \u00b7" not in listed, f"the '{k}' tool gives the agent its tools ({listed.splitlines()[-1] if listed else status})")
+    gh_calls = [tcall("my_pull_requests"), tcall("read_pull_request", repo="sample-baker/sourdough-chart", number=41), tcall("search_github", query="rye"),
+                tcall("list_projects"), tcall("list_pull_requests", repo="sample-baker/oven-timer"), tcall("read_pull_request", repo="not a repo", number=1)]
+    status, steps, items = await agent_run(pg, ["github"], gh_calls + [fin("ok")], steps=10, export="t_cn_gh")
+    check(status.startswith("done") and "Waiting for your review: sample-baker/sourdough-chart #41 Add rye flour curve" in step_of(steps, 1, 10, "my_pull_requests")
+          and "Files changed (2): - src/curves.js (+24 \u22122)" in step_of(steps, 2, 10, "read_pull_request")
+          and "isn't a GitHub project" in step_of(steps, 6, 10, "read_pull_request"), "GitHub tools list, read and search pull requests (sample projects on the page)")
+    status, steps, items = await agent_run(pg, ["github_act"], [tcall("comment_on_github", repo="sample-baker/oven-timer", number=7, text="Looks good to me."), fin("ok")],
+                                           answer="Allow", export="t_cn_comment")
+    names = [n for n, *_ in steps]
+    check(status.startswith("done") and names.count("Allow this?") == 1 and "GitHub comment on sample-baker/oven-timer #7" in names,
+          "commenting on GitHub asks you once first")
+    tg = [tcall("search_telegram", text="starter"), tcall("send_telegram", text="Feed the starter at 8")]
+    status, steps, items = await agent_run(pg, ["telegram", "telegram_send"], tg + [fin("ok")], answer="Allow", export="t_cn_tg")
+    check(status.startswith("done") and "Remind me to feed the starter at 8 tonight" in step_of(steps, 1, 6, "search_telegram")
+          and any(n.startswith("Telegram \u2192") for n, *_ in steps), "Telegram tools search your messages and send one, asking first")
+    mail = [tcall("search_email", query="flour"), tcall("read_email", id="1041"), tcall("send_email", to="sam@example.com", subject="Saturday", body="Yes, see you at 2!"),
+            tcall("send_email", to="not an address", subject="x", body="y")]
+    status, steps, items = await agent_run(pg, ["email", "email_send"], mail + [fin("ok")], steps=10, answer="Allow", export="t_cn_mail")
+    check(status.startswith("done") and "Subject: Your flour order has shipped" in step_of(steps, 1, 10, "search_email")
+          and "baking club this Saturday" in step_of(steps, 2, 10, "read_email") and "Email to sam@example.com" in [n for n, *_ in steps]
+          and "isn't an email address" in step_of(steps, 4, 10, "send_email"), "email tools search, read and send (asking first), and refuse a bad address")
+    cal = [tcall("calendar", day="today", days=7), tcall("free_time", day="today", minutes=60), tcall("calendar", day="someday")]
+    status, steps, items = await agent_run(pg, ["calendar"], cal + [fin("ok")], export="t_cn_cal")
+    check(status.startswith("done") and "10:00\u201311:00 Dentist (High Street)" in step_of(steps, 1, 6, "calendar")
+          and "11:00\u201315:30" in step_of(steps, 2, 6, "free_time") and "isn't a day" in step_of(steps, 3, 6, "calendar"),
+          "calendar tools list the week and find free time around events")
+    status, steps, items = await agent_run(pg, ["feeds"], [tcall("read_feed", limit=1), tcall("read_feed", url="http://127.0.0.1:9/feed.xml"), fin("ok")], export="t_cn_feed")
+    check(status.startswith("done") and "The Loaf Letter (sample feed)" in step_of(steps, 1, 6, "read_feed") and "Small Tools Weekly" in step_of(steps, 1, 6, "read_feed")
+          and pill_of(steps, 2, 6, "read_feed") == "tool error", "read_feed reads your feeds (sample feeds on the page)")
+    tg_prog = {"blocks": {"languageVersion": 0, "blocks": [{"type": "rb_tg_when", "x": 20, "y": 20, "fields": {"CONTAINS": "bake"}, "next": {"block":
+               blk("rb_tg_send", inputs={"TEXT": {"block": {"type": "text_join", "extraState": {"itemCount": 2}, "inputs": {"ADD0": tx("Got: "),
+               "ADD1": {"block": {"type": "rb_tg_message", "fields": {"PART": "text"}}}}}}}, nxt=blk("rb_add_result", inputs={"TEXT": {"block": {"type": "rb_tg_message", "fields": {"PART": "sender"}}}}))}}]}}
+    await load_state(pg, tg_prog)
+    await pg.evaluate("""(() => { const ws = Blockly.getMainWorkspace(), hat = ws.getBlocksByType('rb_tg_when')[0];
+        Blockly.ContextMenuRegistry.registry.getItem('rb_run_script').callback({ block:hat }); })()""")
+    for _ in range(60):
+        await pg.wait_for_timeout(100)
+        if await pg.is_enabled("#run") and await pg.query_selector(".result"):
+            break
+    steps = await step_texts(pg)
+    sent = [t for n, p_, t in steps if n.startswith("Telegram \u2192")]
+    check(sent == ["Got: What should I bake this weekend?"] and await pg.text_content(".result-text") == "You",
+          f"on the page, 'Run this script' on the Telegram block tries it with a sample message ({sent})")
+    EXTRA["t_tg_when"] = await export_python(pg, "t_tg_when")
+    check('TELEGRAM_WATCHES = [("bake", when_telegram_message_arrives)]' in EXTRA["t_tg_when"] and "R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES, TELEGRAM_WATCHES)" in EXTRA["t_tg_when"],
+          "exported Python listens for Telegram messages")
+    await pg.select_option("#example", "x_tgbrief")
+    await pg.click("#load")
+    await pg.fill("#io-name", "x_tgbrief")
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    ini = files["second-thought.ini"]
+    check("[telegram]" in ini and "TELEGRAM_BOT_TOKEN = " in ini and "[calendar]" in ini and "CALENDAR_URL = " in ini and "feeds = " in ini
+          and "tzdata" in files["requirements.txt"] and "run-on-schedule.bat" in files, "the exported settings file asks for exactly the connections the program uses")
+    await pg.select_option("#example", "a_prs")
+    await pg.click("#load")
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    check("GITHUB_TOKEN = " in files["second-thought.ini"] and "[telegram]" not in files["second-thought.ini"], "a GitHub agent's settings ask for a GitHub token only")
+
     print("My Blocks")
     double = {"variables": [{"id": "v_x", "name": "x"}], "blocks": {"languageVersion": 0, "blocks": [
         {"type": "rb_start", "x": 20, "y": 20, "next": {"block": add(val({"type": "procedures_callreturn", "extraState": {"name": "double", "params": ["x"]},
@@ -927,12 +1002,12 @@ async def page_tests():
         code, n = codes["brainstorm"]
         await pg.select_option("#example", "review")
         await pg.click("#load")
-        await pg.fill("#io-paste", code)
+        await paste(pg, code)
         await pg.click("#io-load-paste")
         await pg.wait_for_timeout(300)
         n2 = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
         check(n == n2, f"exported Python imports back exactly ({n} blocks)")
-        await pg.fill("#io-paste", code.replace("R.main(START_SCRIPTS", "R.main(START_SCRIPTS  # edited\n    ", 1))
+        await paste(pg, code.replace("R.main(START_SCRIPTS", "R.main(START_SCRIPTS  # edited\n    ", 1))
         await pg.click("#io-load-paste")
         await pg.wait_for_timeout(300)
         choices = await pg.eval_on_selector_all("#io-choice button", "e => e.map(x => x.textContent)")
@@ -995,6 +1070,11 @@ def python_tests(codes):
                HF_BASE_URL=llama_url, HF_TOKEN="test", GROQ_BASE_URL=llama_url, GROQ_API_KEY="test",
                ZAI_BASE_URL=llama_url, ZAI_API_KEY="test", MINIMAX_BASE_URL=llama_url, MINIMAX_API_KEY="test",
                OPENROUTER_BASE_URL=llama_url, OPENROUTER_API_KEY="test")
+    svc_url, svc_log, tg_add, imap_port, smtp_port = fake_services.start()
+    env.update(RB_FEEDS=f"{svc_url}/feeds/baking.rss {svc_url}/feeds/tech.atom", GITHUB_API_URL=svc_url + "/gh", GITHUB_TOKEN=fake_services.GH_TOKEN,
+               TELEGRAM_API_URL=svc_url + "/tg", TELEGRAM_BOT_TOKEN=fake_services.TG_TOKEN, TELEGRAM_CHAT_ID=str(fake_services.TG_CHAT),
+               EMAIL_ADDRESS=fake_services.MAIL_USER, EMAIL_PASSWORD=fake_services.MAIL_PASS, EMAIL_IMAP_HOST="127.0.0.1", EMAIL_SMTP_HOST="127.0.0.1",
+               EMAIL_IMAP_PORT=str(imap_port), EMAIL_SMTP_PORT=str(smtp_port), EMAIL_SSL="no", CALENDAR_URL=svc_url + "/calendar.ics")
     with tempfile.TemporaryDirectory() as tmp:
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
@@ -1283,6 +1363,61 @@ def python_tests(codes):
         check(r.returncode == 0 and "PASS  Claude: cut-off reply continued" in out and "PASS  Claude: agent called a typed tool and answered" in out
               and "NOTE  Mistral: JSON mode it accepts  (the full JSON Schema)" in out and "SKIP  OpenAI: all checks" in out,
               "tools/smoke_test.py runs every check and reports each service" + ("" if r.returncode == 0 else f": {(r.stderr or out)[-400:]!r}"))
+        print("Connections in Python")
+        sent_before = len(svc_log["tg_sent"]), len(svc_log["mail_sent"])
+        check(sent_before[0] >= 2 and sent_before[1] >= 1 and any("Got:" not in m["text"] for m in svc_log["tg_sent"]),
+              f"the examples sent Telegram messages ({sent_before[0]}) and emails ({sent_before[1]}) through the stand-ins")
+        for name in ("t_cn_gh", "t_cn_comment", "t_cn_tg", "t_cn_mail", "t_cn_cal", "t_cn_feed"):
+            (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
+        run_cn = lambda name: drive([sys.executable, "-u", str(pathlib.Path(tmp) / f"{name}.py")],  # noqa: E731
+                                    dict(env, FAKE_AGENT_SCRIPT=json.dumps(AGENT_SCRIPTS[name])), tmp)
+        code_, out, err = run_cn("t_cn_gh")
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and "Waiting for your review: sample-baker/sourdough-chart #41 Add rye flour curve · pull request by crumb-shot" in out
+              and "- src/curves.js (+24 −2) @@" in out and "Comments: - crumb-shot: Num" in out
+              and "isn't a GitHub project" in out and "sample-baker/oven-timer: A Home Assistant timer card" in out,
+              "Python's GitHub tools read pull requests, files, comments and projects" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        before = len(svc_log["gh"])
+        code_, out, err = run_cn("t_cn_comment")
+        posted = [c for c in svc_log["gh"][before:] if c.startswith("POST ")]
+        check(code_ == 0 and "Allow this? let the agent use comment_on_github" in out and posted == ["POST /repos/sample-baker/oven-timer/issues/7/comments"]
+              and out.count("Allow this?") == 1, "Python asks once, then posts the GitHub comment" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        before = len(svc_log["tg_sent"])
+        code_, out, err = run_cn("t_cn_tg")
+        check(code_ == 0 and "Remind me to feed the starter at 8 tonight" in out and "Someone else's message" not in out
+              and [m["text"] for m in svc_log["tg_sent"][before:]] == ["Feed the starter at 8"] and "set TELEGRAM_CHAT_ID = 999" in out,
+              "Python's Telegram tools search only your chats and send after asking" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        before = len(svc_log["mail_sent"])
+        code_, out, err = run_cn("t_cn_mail")
+        mails = svc_log["mail_sent"][before:]
+        check(code_ == 0 and "Subject: Your flour order has shipped" in out and "Attachments: starter-notes.txt" in out and "x()" not in out
+              and len(mails) == 1 and "<sam@example.com>" in mails[0]["to"] and "Yes, see you at 2!" in mails[0]["data"] and "isn't an email address" in out,
+              "Python's email tools search and read the inbox, and send one email after asking" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_cn("t_cn_cal")
+        out = out.replace("\r\n", "\n")
+        try:  # the baking club is at 14:00 London time: shown in this computer's own time zone
+            from zoneinfo import ZoneInfo
+            day = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=3)
+            club = [(day + datetime.timedelta(hours=h)).replace(tzinfo=ZoneInfo("Europe/London")).astimezone().strftime("%H:%M") for h in (14, 17)]
+        except Exception:  # no time zone data (Windows without tzdata): the runtime treats the time as local
+            club = ["14:00", "17:00"]
+        check(code_ == 0 and "10:00–11:00 Dentist (High Street, No. 4)" in out and "15:30–16:00 Call with the web designer" in out
+              and "all day Flour delivery" in out and f"{club[0]}–{club[1]} Baking club" in out and "Cancelled lunch" not in out and "18:00–19:00 Yoga" in out
+              and "Free on " in out and "11:00–15:30" in out and "isn't a day" in out,
+              "Python's calendar reads iCal: time zones, all-day events, repeats, skipped and cancelled events, and free time" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_cn("t_cn_feed")
+        check(code_ == 0 and "The Loaf Letter (sample feed)" in out and "Small Tools Weekly (sample feed)" in out
+              and "not addresses on your own network" in out, "Python reads your RSS and Atom feeds, but not a feed address on your network the agent chose"
+              + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        (pathlib.Path(tmp) / "t_tg_when.py").write_text(EXTRA["t_tg_when"], encoding="utf-8")
+        before = len(svc_log["tg_sent"])
+        tg_add("When should I bake the rye?")
+        tg_add("Nothing to see here")
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_tg_when.py")], env, tmp, timeout=12)
+        got = [m["text"] for m in svc_log["tg_sent"][before:]]
+        check(got == ["Got: When should I bake the rye?"] and "Telegram message" in out,
+              f"t_tg_when.py answers a new Telegram message containing 'bake', and not older ones or others ({got})")
+
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")

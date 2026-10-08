@@ -1,0 +1,92 @@
+{
+  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email and calendar.",
+  "feeds": {
+    "https://example.com/baking/feed": {
+      "title": "The Loaf Letter (sample feed)",
+      "items": [
+        {"title": "Why your rye starter smells of nail varnish", "link": "https://example.com/baking/rye-starter-smell", "hours_ago": 5,
+         "summary": "A sharp, solvent smell usually means a hungry starter. Feed it more often, or at a higher ratio, for a few days."},
+        {"title": "Autumn flour prices: what's changing", "link": "https://example.com/baking/flour-prices", "hours_ago": 30,
+         "summary": "Millers expect strong bread flour to rise slightly after a wet harvest. Stoneground and heritage flours are least affected."},
+        {"title": "Five shaping mistakes and how to fix them", "link": "https://example.com/baking/shaping-mistakes", "hours_ago": 56,
+         "summary": "Too much flour on the bench, not enough tension, and shaping too early are the most common reasons a loaf spreads."},
+        {"title": "Reader question: can I retard bulk in the fridge?", "link": "https://example.com/baking/retard-bulk", "hours_ago": 80,
+         "summary": "Yes, for up to about 12 hours, if the dough has risen around a third first. Expect a tangier loaf."}
+      ]
+    },
+    "https://example.com/tech/feed": {
+      "title": "Small Tools Weekly (sample feed)",
+      "items": [
+        {"title": "Agents that check their own work", "link": "https://example.com/tech/self-checking-agents", "hours_ago": 8,
+         "summary": "A second, independent reviewer catches more mistakes than asking the same model to look again."},
+        {"title": "Home Assistant's autumn release", "link": "https://example.com/tech/ha-autumn-release", "hours_ago": 26,
+         "summary": "New energy dashboards, faster history graphs and better support for Matter locks."},
+        {"title": "Self-hosting on a NUC: a year on", "link": "https://example.com/tech/nuc-year-on", "hours_ago": 70,
+         "summary": "Power use, backups and the one mistake that cost a weekend: no test restores."}
+      ]
+    }
+  },
+  "github": {
+    "login": "sample-baker",
+    "repos": [
+      {"full_name": "sample-baker/sourdough-chart", "description": "Interactive chart of fermentation times by temperature", "language": "JavaScript", "stars": 12, "open_issues": 3, "days_ago": 1},
+      {"full_name": "sample-baker/oven-timer", "description": "A Home Assistant timer card for bake schedules", "language": "Python", "stars": 4, "open_issues": 1, "days_ago": 6},
+      {"full_name": "sample-baker/recipes", "description": "Tested recipes in Markdown", "language": "Markdown", "stars": 2, "open_issues": 0, "days_ago": 20}
+    ],
+    "pulls": [
+      {"repo": "sample-baker/sourdough-chart", "number": 41, "title": "Add rye flour curve", "user": "crumb-shot", "days_ago": 1, "draft": false, "review_requested": true,
+       "body": "Adds a fermentation curve for 100% rye. Rye ferments faster, so the curve sits above wheat at every temperature.",
+       "head": "rye-curve", "base": "main",
+       "files": [{"filename": "src/curves.js", "additions": 24, "deletions": 2,
+                  "patch": "@@ -10,6 +10,28 @@ export const curves = {\n   wheat: [[18, 9], [21, 6.5], [24, 5], [27, 4]],\n+  rye: [[18, 6], [21, 4.5], [24, 3.5], [27, 9]],\n+  // hours of bulk ferment at each temperature (°C)\n }"},
+                 {"filename": "README.md", "additions": 3, "deletions": 0, "patch": "@@ -40,3 +40,6 @@\n+## Rye\n+Rye ferments faster than wheat.\n+Times are for a 20% starter."}],
+       "comments": [{"user": "crumb-shot", "body": "Numbers come from my test bakes in September."}]},
+      {"repo": "sample-baker/oven-timer", "number": 7, "title": "Fix timer drifting after a restart", "user": "sample-baker", "days_ago": 3, "draft": false, "review_requested": false,
+       "body": "Stores the end time instead of the seconds left, so a restart doesn't add time.", "head": "fix-drift", "base": "main",
+       "files": [{"filename": "timer.py", "additions": 9, "deletions": 6, "patch": "@@ -22,9 +22,12 @@\n-    self.left = seconds\n+    self.ends = time.time() + seconds"}],
+       "comments": []},
+      {"repo": "sample-baker/sourdough-chart", "number": 39, "title": "Dark mode colours", "user": "night-loaf", "days_ago": 9, "draft": true, "review_requested": false,
+       "body": "Work in progress.", "head": "dark-mode", "base": "main", "files": [{"filename": "src/theme.css", "additions": 40, "deletions": 3, "patch": ""}], "comments": []}
+    ],
+    "issues": [
+      {"repo": "sample-baker/sourdough-chart", "number": 40, "title": "Chart is blank on Safari 17", "user": "toast-rack", "days_ago": 2, "state": "open"},
+      {"repo": "sample-baker/oven-timer", "number": 6, "title": "Timer loses time after Home Assistant restarts", "user": "sample-baker", "days_ago": 4, "state": "open"}
+    ]
+  },
+  "telegram": {
+    "chat": "You (sample chat)",
+    "messages": [
+      {"from": "You", "text": "Remind me to feed the starter at 8 tonight", "hours_ago": 2},
+      {"from": "You", "text": "What temperature should the oven be for a rye loaf?", "hours_ago": 20},
+      {"from": "You", "text": "Ordered 10 kg of strong white flour, arrives Friday", "hours_ago": 50},
+      {"from": "You", "text": "Starter peaked at 6 hours today, kitchen was 23 degrees", "hours_ago": 75}
+    ],
+    "incoming": {"from": "You", "text": "What should I bake this weekend?"}
+  },
+  "email": {
+    "address": "you@example.com",
+    "messages": [
+      {"id": "1042", "from": "Mill & Co <orders@example.com>", "subject": "Your flour order has shipped", "hours_ago": 3,
+       "body": "Hello,\n\nYour order of 10 kg strong white bread flour has shipped and should arrive on Friday between 9am and 1pm.\n\nMill & Co"},
+      {"id": "1041", "from": "Sam Patel <sam@example.com>", "subject": "Baking club on Saturday?", "hours_ago": 9,
+       "body": "Hi! Are you still up for baking club this Saturday at 2pm? I can bring the rye starter. Let me know by Thursday.\n\nSam"},
+      {"id": "1040", "from": "GitHub <notifications@example.com>", "subject": "[sourdough-chart] Review requested: Add rye flour curve (#41)", "hours_ago": 26,
+       "body": "crumb-shot requested your review on #41: Add rye flour curve."},
+      {"id": "1039", "from": "Council <bins@example.com>", "subject": "Bin collection changes", "hours_ago": 50,
+       "body": "From next week, recycling is collected on Tuesdays instead of Mondays."},
+      {"id": "1038", "from": "Newsletter <hello@example.com>", "subject": "50% off proving baskets this weekend only!", "hours_ago": 70,
+       "body": "Don't miss out on our biggest sale of the year."}
+    ]
+  },
+  "calendar": {
+    "events": [
+      {"day": 0, "start": "10:00", "end": "11:00", "title": "Dentist", "location": "High Street"},
+      {"day": 0, "start": "15:30", "end": "16:00", "title": "Call with the web designer"},
+      {"day": 1, "start": "09:00", "end": "17:30", "title": "Work"},
+      {"day": 2, "all_day": true, "title": "Flour delivery"},
+      {"day": 3, "start": "14:00", "end": "17:00", "title": "Baking club", "location": "Sam's kitchen"},
+      {"day": 4, "start": "11:00", "end": "12:30", "title": "Lunch with family"},
+      {"day": 6, "start": "18:00", "end": "19:00", "title": "Yoga"}
+    ]
+  }
+}

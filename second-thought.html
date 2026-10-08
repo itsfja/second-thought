@@ -450,7 +450,8 @@ for _stream in (sys.stdout, sys.stderr):
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
-                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME"}
+                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
+                 "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES"}
 
 
 def _load_settings():
@@ -627,6 +628,20 @@ HA_TOKEN = os.environ.get("HA_TOKEN", "")
 HA_TTS_ENTITY = os.environ.get("HA_TTS_ENTITY", "tts.home_assistant_cloud")  # used by the 'say … on' block
 HA_WATCH_SECONDS = 15  # how often 'when … changes' scripts check Home Assistant
 HA_SENSITIVE = (r"^lock\.(unlock|open)$", r"^cover\.open", r"^alarm_control_panel\.alarm_disarm$", r"^valve\.open", r"^garage_door\.open")
+
+# Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
+# GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
+# to comment on pull requests it also needs pull request write access).
+GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
+# Telegram: make a bot by talking to @BotFather in Telegram; it gives you the token. TELEGRAM_CHAT_ID is your own chat
+# with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
+TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
+TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
+# Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
+# worked out for Gmail, iCloud, Yahoo and Fastmail; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
+# Calendar: CALENDAR_URL is your calendar's private iCal address (Google Calendar: Settings, your calendar,
+# "Secret address in iCal format"; Outlook: Settings, Calendar, Shared calendars, Publish; iCloud: share as public).
+# Several addresses can be separated by spaces.
 
 MESSAGE_VALUE = contextvars.ContextVar("message_value", default="")
 MODEL_OVERRIDE = contextvars.ContextVar("model_override", default=None)  # set by 'with model' blocks
@@ -1181,45 +1196,298 @@ def _public_only(host):
     for info in infos:
         ip = ipaddress.ip_address(info[4][0].split("%")[0])
         if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
-            raise RunError("read_page only reads public web pages, not addresses on your own network.")
+            raise RunError("The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them).")
+
+
+def _local_pages():
+    """local_pages = yes in second-thought.ini lets the agent read pages and feeds on your own network too."""
+    return os.environ.get("RB_LOCAL_PAGES", "").strip().lower() in ("1", "yes", "true", "on")
 
 
 class _PublicRedirects(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         u = urllib.parse.urlparse(newurl)
         if u.scheme not in ("http", "https") or not u.hostname:
-            raise RunError("read_page was sent somewhere that isn't a web page.")
+            raise RunError("That address sent the program somewhere that isn't a web page.")
         _public_only(u.hostname)
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
-def fetch_page(url):
+def get_url(url, trusted=False, what="read_page", limit=3_000_000):
+    """Fetches a web address. Gives (content type, bytes). Addresses that come from your settings are trusted; others
+    (chosen by the agent) must be public, unless local_pages = yes."""
     url = to_str(url).strip()
+    if url.lower().startswith("webcal://"):
+        url = "https://" + url[9:]
     u = urllib.parse.urlparse(url)
     if u.scheme not in ("http", "https") or not u.hostname:
-        raise RunError("read_page needs a web address starting with http:// or https://.")
-    _public_only(u.hostname)
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SecondThought/1.0)", "Accept": "text/html,text/plain;q=0.9,*/*;q=0.5"})
+        raise RunError(f"{what} needs a web address starting with http:// or https://.")
+    guard = not trusted and not _local_pages()
+    if guard:
+        _public_only(u.hostname)
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SecondThought/1.0)",
+                                               "Accept": "text/html,application/xhtml+xml,application/xml,text/plain;q=0.9,*/*;q=0.5"})
+    opener = urllib.request.build_opener(_PublicRedirects) if guard else urllib.request.build_opener()
     try:
-        with urllib.request.build_opener(_PublicRedirects).open(req, timeout=20) as r:
-            ctype = r.headers.get("Content-Type", "")
-            data = r.read(3_000_000)
+        with opener.open(req, timeout=20) as r:
+            return r.headers.get("Content-Type", ""), r.read(limit)
     except urllib.error.HTTPError as e:
-        raise RunError(f"read_page couldn't open that page: the website answered {e.code}.") from None
+        raise RunError(f"{what} couldn't open {_short(url, 80)}: the website answered {e.code}.") from None
     except urllib.error.URLError as e:
-        raise RunError(f"read_page couldn't reach that page ({e.reason}).") from None
+        raise RunError(f"{what} couldn't reach {_short(url, 80)} ({e.reason}).") from None
+
+
+def _decode(data, ctype):
+    m = re.search(r"charset=([\w-]+)", ctype or "", re.I)
+    try:
+        return data.decode(m.group(1) if m else "utf-8", "replace")
+    except LookupError:
+        return data.decode("utf-8", "replace")
+
+
+def fetch_page(url):
+    ctype, data = get_url(url)
+    url = to_str(url).strip()
     if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
         raise RunError(f"That address isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
-    m = re.search(r"charset=([\w-]+)", ctype, re.I)
-    try:
-        raw = data.decode(m.group(1) if m else "utf-8", "replace")
-    except LookupError:
-        raw = data.decode("utf-8", "replace")
-    title, text = page_text(raw, ctype)
+    title, text = page_text(_decode(data, ctype), ctype)
     if not text:
         return f"{title or url}\n\n(The page has no readable words. It may need a browser to show its content.)"
     cut = len(text) > MAX_PAGE_CHARS
     return (f"{title}\n{url}\n\n" if title else f"{url}\n\n") + text[:MAX_PAGE_CHARS] + ("\n\n… (the page goes on; this is the first part)" if cut else "")
+
+
+# ----- News feeds (RSS and Atom) -----
+
+def _when(dt):
+    return f"{WEEKDAYS[dt.weekday()][:3]} {dt:%d %b %H:%M}"
+
+
+def _parse_date(text):
+    import email.utils
+    text = to_str(text).strip()
+    if not text:
+        return None
+    try:
+        d = email.utils.parsedate_to_datetime(text)
+    except (TypeError, ValueError, IndexError):
+        try:
+            d = datetime.datetime.fromisoformat(text.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+    return d.astimezone().replace(tzinfo=None) if d.tzinfo else d
+
+
+def parse_feed(raw):
+    """An RSS or Atom feed -> (title, [{title, link, date, summary}]), newest first."""
+    import xml.etree.ElementTree as ET
+    try:
+        root = ET.fromstring(raw.encode("utf-8") if isinstance(raw, str) else raw)
+    except ET.ParseError:
+        raise RunError("That address isn't a news feed (RSS or Atom).") from None
+    local = lambda el: el.tag.rsplit("}", 1)[-1].lower()  # noqa: E731
+
+    def child(el, *names):
+        for c in el:
+            if local(c) in names and (c.text or "").strip():
+                return c.text.strip()
+        return ""
+    if local(root) not in ("rss", "feed", "rdf"):
+        raise RunError("That address isn't a news feed (RSS or Atom).")
+    channel = next((c for c in root if local(c) == "channel"), root)
+    title = child(channel, "title")
+    items = []
+    for el in root.iter():
+        if local(el) not in ("item", "entry"):
+            continue
+        link = child(el, "link")
+        if not link:
+            for c in el:
+                if local(c) == "link" and c.get("href") and c.get("rel", "alternate") == "alternate":
+                    link = c.get("href")
+                    break
+        summary = child(el, "description", "summary", "content", "encoded")
+        items.append({"title": page_text(child(el, "title"))[1] or "(no title)", "link": link,
+                      "date": _parse_date(child(el, "pubdate", "published", "updated", "date")),
+                      "summary": _short(page_text(summary)[1], 300)})
+    items.sort(key=lambda x: x["date"] or datetime.datetime.min, reverse=True)
+    return title, items
+
+
+# ----- Calendars (iCal) -----
+
+def _ics_lines(text):
+    out = []
+    for line in to_str(text).replace("\r\n", "\n").replace("\r", "\n").split("\n"):
+        if line[:1] in (" ", "\t") and out:
+            out[-1] += line[1:]
+        elif line:
+            out.append(line)
+    return out
+
+
+def _ics_unescape(v):
+    return re.sub(r"\\([\\,;nN])", lambda m: "\n" if m.group(1) in "nN" else m.group(1), v)
+
+
+def _ics_time(value, params):
+    """'20261010T090000Z' or with TZID -> a local datetime; '20261010' -> (date, True) for all-day."""
+    v = value.strip()
+    if re.fullmatch(r"\d{8}", v) or params.get("VALUE") == "DATE":
+        return datetime.datetime.strptime(v[:8], "%Y%m%d"), True
+    d = datetime.datetime.strptime(v[:15], "%Y%m%dT%H%M%S")
+    if v.endswith("Z"):
+        return d.replace(tzinfo=datetime.timezone.utc).astimezone().replace(tzinfo=None), False
+    tz = params.get("TZID")
+    if tz:
+        try:
+            from zoneinfo import ZoneInfo
+            return d.replace(tzinfo=ZoneInfo(tz.strip('"'))).astimezone().replace(tzinfo=None), False
+        except Exception:  # noqa: BLE001 - an unknown time zone: treat it as local time
+            pass
+    return d, False
+
+
+_ICS_DAYS = {"MO": 0, "TU": 1, "WE": 2, "TH": 3, "FR": 4, "SA": 5, "SU": 6}
+
+
+def _ics_repeats(start, rule, until_view):
+    """Start times of a repeating event, up to the end of the view. Handles DAILY, WEEKLY (with BYDAY), MONTHLY, YEARLY,
+    INTERVAL, COUNT and UNTIL: what calendars use for nearly every repeating event."""
+    r = dict(part.split("=", 1) for part in rule.split(";") if "=" in part)
+    freq, step = r.get("FREQ", ""), max(1, int(r.get("INTERVAL", "1") or 1))
+    count = int(r["COUNT"]) if r.get("COUNT", "").isdigit() else None
+    until = _ics_time(r["UNTIL"], {})[0] if r.get("UNTIL") else None
+    if until is not None and len(r["UNTIL"]) == 8:
+        until += datetime.timedelta(days=1) - datetime.timedelta(seconds=1)
+    days = [_ICS_DAYS[d[-2:]] for d in r.get("BYDAY", "").split(",") if d[-2:] in _ICS_DAYS]
+    out, n, i = [], 0, 0
+    while i < 3000:
+        if freq == "DAILY":
+            batch = [start + datetime.timedelta(days=i * step)]
+        elif freq == "WEEKLY":
+            week = start - datetime.timedelta(days=start.weekday()) + datetime.timedelta(weeks=i * step)
+            batch = sorted(week + datetime.timedelta(days=d) for d in (days or [start.weekday()]))
+            batch = [b for b in batch if b >= start]
+        elif freq in ("MONTHLY", "YEARLY"):
+            months = i * step * (12 if freq == "YEARLY" else 1)
+            y, m = start.year + (start.month - 1 + months) // 12, (start.month - 1 + months) % 12 + 1
+            try:
+                batch = [start.replace(year=y, month=m)]
+            except ValueError:  # the 31st in a short month: skipped, as calendars do
+                batch = []
+        else:
+            return [start]
+        for b in batch:
+            if (until and b > until) or (count is not None and n >= count) or b > until_view:
+                return out
+            out.append(b)
+            n += 1
+        i += 1
+    return out
+
+
+def calendar_events(text, start, end):
+    """Events between start and end, from iCal text, as {start, end, all_day, title, location}, in time order."""
+    events, moved, cur = [], set(), None
+    for line in _ics_lines(text):
+        if line == "BEGIN:VEVENT":
+            cur = {}
+            continue
+        if line == "END:VEVENT":
+            if cur is not None:
+                events.append(cur)
+            cur = None
+            continue
+        if cur is None or ":" not in line:
+            continue
+        head, value = line.split(":", 1)
+        name, *ps = head.split(";")
+        params = dict(x.split("=", 1) for x in ps if "=" in x)
+        name = name.upper()
+        if name in ("DTSTART", "DTEND", "RECURRENCE-ID"):
+            try:
+                cur[name] = _ics_time(value, params)
+            except ValueError:
+                pass
+        elif name == "EXDATE":
+            for v in value.split(","):
+                try:
+                    cur.setdefault("EXDATE", set()).add(_ics_time(v, params)[0])
+                except ValueError:
+                    pass
+        elif name in ("SUMMARY", "LOCATION", "RRULE", "UID", "STATUS", "DURATION"):
+            cur[name] = _ics_unescape(value) if name in ("SUMMARY", "LOCATION") else value
+    for e in events:
+        if "RECURRENCE-ID" in e:
+            moved.add((e.get("UID"), e["RECURRENCE-ID"][0]))
+    out = []
+    for e in events:
+        if "DTSTART" not in e or e.get("STATUS", "").upper() == "CANCELLED":
+            continue
+        s0, all_day = e["DTSTART"]
+        if "DTEND" in e:
+            length = e["DTEND"][0] - s0
+        else:
+            m = re.fullmatch(r"P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?", e.get("DURATION", ""))
+            length = datetime.timedelta(days=int(m.group(1) or 0), hours=int(m.group(2) or 0), minutes=int(m.group(3) or 0)) if m \
+                else datetime.timedelta(days=1 if all_day else 0)
+        starts = _ics_repeats(s0, e["RRULE"], end) if e.get("RRULE") and "RECURRENCE-ID" not in e else [s0]
+        for st in starts:
+            if st in e.get("EXDATE", ()) or (("RECURRENCE-ID" not in e) and (e.get("UID"), st) in moved):
+                continue
+            if st + length > start and st < end or (length == datetime.timedelta(0) and start <= st < end):
+                out.append({"start": st, "end": st + length, "all_day": all_day, "title": e.get("SUMMARY", "(no title)"),
+                            "location": e.get("LOCATION", "")})
+    out.sort(key=lambda x: (x["start"], not x["all_day"]))
+    return out
+
+
+def event_line(e):
+    if e["all_day"]:
+        days = max(1, (e["end"] - e["start"]).days)
+        when = "all day" + (f" ({days} days)" if days > 1 else "")
+    else:
+        when = f"{e['start']:%H:%M}–{e['end']:%H:%M}"
+    return f"{when}  {e['title']}" + (f" ({e['location']})" if e["location"] else "")
+
+
+def free_slots(events, day, frm, to, minutes):
+    """Free stretches of at least this many minutes between frm and to (HH:MM) on day."""
+    def at(hhmm):
+        m = re.fullmatch(r"\s*(\d{1,2})[:.](\d{2})\s*", to_str(hhmm))
+        if not m or int(m.group(1)) > 24 or int(m.group(2)) > 59:
+            raise RunError(f"“{hhmm}” isn't a time like 09:00.")
+        return day + datetime.timedelta(hours=int(m.group(1)), minutes=int(m.group(2)))
+    a, b = at(frm), at(to)
+    busy = sorted((max(e["start"], a), min(e["end"], b)) for e in events if not e["all_day"] and e["end"] > a and e["start"] < b)
+    free, t = [], a
+    for s_, e_ in busy:
+        if s_ > t:
+            free.append((t, s_))
+        t = max(t, e_)
+    if b > t:
+        free.append((t, b))
+    need = datetime.timedelta(minutes=max(1, round_js(num(minutes) or 30)))
+    return [(x, y) for x, y in free if y - x >= need]
+
+
+def parse_day(text):
+    """'today', 'tomorrow', a weekday name, or YYYY-MM-DD -> midnight that day."""
+    t = to_str(text).strip().lower()
+    today = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    if t in ("", "today"):
+        return today
+    if t == "tomorrow":
+        return today + datetime.timedelta(days=1)
+    names = [w.lower() for w in WEEKDAYS]
+    if t in names or t[:3] in [n[:3] for n in names]:
+        k = [n[:3] for n in names].index(t[:3])
+        return today + datetime.timedelta(days=(k - today.weekday()) % 7)
+    try:
+        return datetime.datetime.strptime(t, "%Y-%m-%d")
+    except ValueError:
+        raise RunError(f"“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.") from None
 
 
 class Runtime:
@@ -2807,6 +3075,451 @@ class Runtime:
         if self.ending:
             raise asyncio.CancelledError()
 
+    # ----- Connections: news feeds, GitHub, Telegram, email and calendar -----
+    MAX_FEED_ITEMS = 10
+
+    async def feed_items(self, url="", limit=10):
+        """Items from one feed, or from every feed in your settings (feeds = ...) when url is empty."""
+        url = to_str(url).strip()
+        mine = [u for u in re.split(r"[\s,]+", os.environ.get("RB_FEEDS", "")) if u]
+        urls = [url] if url else mine
+        if not urls:
+            raise RunError(f"No feed given, and no feeds in your settings. Add  feeds = <addresses>  {WHERE_KEYS}.")
+        limit = max(1, min(50, round_js(num(limit)) or self.MAX_FEED_ITEMS))
+        out = []
+        for u in urls:
+            ctype, data = await asyncio.to_thread(get_url, u, u in mine, "read_feed", 5_000_000)
+            title, items = parse_feed(data)
+            for it in items[:limit]:
+                out.append(dict(it, feed=title or u))
+        return out
+
+    async def feed_records(self, url):
+        """For the 'news from feed' block: a list of records (feed, title, link, date, summary)."""
+        items = await self.feed_items(url)
+        recs = [{"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
+                 "summary": i["summary"]} for i in items]
+        self.log("News: " + (_short(url, 60) or "your feeds"), "\n".join(f"{r['date']}  {r['title']}" for r in recs[:12]) or "(nothing)",
+                 f"{len(recs)} items")
+        return recs
+
+    @staticmethod
+    def feed_text(items):
+        lines, feed = [], None
+        for i in items:
+            if i["feed"] != feed:
+                feed = i["feed"]
+                lines.append(("\n" if lines else "") + feed)
+            lines.append(f"- {_when(i['date']) if i['date'] else '(no date)'}  {i['title']}" + (f"\n  {i['link']}" if i["link"] else "")
+                         + (f"\n  {i['summary']}" if i["summary"] else ""))
+        return "\n".join(lines) or "The feed has no items."
+
+    # GitHub
+    async def _gh(self, path, method="GET", body=None):
+        token = os.environ.get("GITHUB_TOKEN", "")
+        if not token:
+            raise RunError(f"GitHub needs a token: set GITHUB_TOKEN {WHERE_KEYS} (make one at https://github.com/settings/tokens).")
+        req = urllib.request.Request(GITHUB_API + path, method=method, data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json",
+                                              "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "SecondThought",
+                                              "Content-Type": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=30) as r:
+                    return json.loads(r.read() or b"null")
+            except urllib.error.HTTPError as e:
+                why = {401: "the token was refused. Check GITHUB_TOKEN", 403: "GitHub said no (the token may lack access, or the hourly limit was reached)",
+                       404: "not found, or the token can't see it", 422: "GitHub couldn't use that request"}.get(e.code, f"GitHub answered {e.code}")
+                raise RunError(f"GitHub: {why}.") from None
+            except urllib.error.URLError as e:
+                raise RunError(f"Couldn't reach GitHub ({e.reason}).") from None
+        return await asyncio.to_thread(go)
+
+    @staticmethod
+    def _gh_repo(repo):
+        repo = to_str(repo).strip().removeprefix("https://github.com/").strip("/")
+        if not re.fullmatch(r"[\w.-]+/[\w.-]+", repo):
+            raise RunError(f"“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.")
+        return repo
+
+    @staticmethod
+    def _ago(iso):
+        d = _parse_date(iso)
+        if not d:
+            return ""
+        h = (datetime.datetime.now() - d).total_seconds() / 3600
+        return "just now" if h < 1 else f"{int(h)} h ago" if h < 48 else f"{int(h // 24)} days ago"
+
+    async def gh_repos(self, owner=""):
+        owner = to_str(owner).strip()
+        rows = await self._gh(f"/users/{urllib.parse.quote(owner)}/repos?sort=pushed&per_page=30" if owner else "/user/repos?sort=pushed&per_page=30")
+        return "\n".join(f"{r['full_name']}: {r.get('description') or '(no description)'} · {r.get('language') or '-'} · "
+                         f"★{r.get('stargazers_count', 0)} · {r.get('open_issues_count', 0)} open issues and pull requests · pushed {self._ago(r.get('pushed_at'))}"
+                         for r in rows) or "No projects."
+
+    async def gh_pulls(self, repo, state="open"):
+        repo = self._gh_repo(repo)
+        state = to_str(state).strip().lower() or "open"
+        rows = await self._gh(f"/repos/{repo}/pulls?state={state if state in ('open', 'closed', 'all') else 'open'}&per_page=20&sort=updated&direction=desc")
+        return "\n".join(f"#{r['number']} {r['title']} · by {r['user']['login']} · updated {self._ago(r.get('updated_at'))}"
+                         + (" · draft" if r.get("draft") else "") for r in rows) or f"No {state} pull requests in {repo}."
+
+    async def _gh_search(self, q, n=20):
+        data = await self._gh("/search/issues?per_page=" + str(n) + "&sort=updated&q=" + urllib.parse.quote(q))
+        out = []
+        for r in data.get("items", []):
+            repo = r.get("repository_url", "").split("/repos/", 1)[-1]
+            kind = "pull request" if "pull_request" in r else "issue"
+            out.append(f"{repo} #{r['number']} {r['title']} · {kind} by {r['user']['login']} · {r.get('state', '')} · updated {self._ago(r.get('updated_at'))}")
+        return out
+
+    async def gh_for_me(self):
+        review = await self._gh_search("is:pr is:open review-requested:@me archived:false")
+        mine = await self._gh_search("is:pr is:open author:@me archived:false")
+        return ("Waiting for your review:\n" + ("\n".join(review) or "(none)") + "\n\nYour open pull requests:\n" + ("\n".join(mine) or "(none)"))
+
+    async def gh_search(self, query):
+        query = to_str(query).strip()
+        if not query:
+            raise RunError("search_github needs something to search for.")
+        return "\n".join(await self._gh_search(query)) or f"Nothing found for “{query}”."
+
+    async def gh_read_pr(self, repo, number):
+        repo, n = self._gh_repo(repo), round_js(num(number))
+        pr = await self._gh(f"/repos/{repo}/pulls/{n}")
+        files = await self._gh(f"/repos/{repo}/pulls/{n}/files?per_page=50")
+        comments = await self._gh(f"/repos/{repo}/issues/{n}/comments?per_page=30")
+        lines = [f"{repo} #{n}: {pr['title']}", f"By {pr['user']['login']} · {pr['state']}" + (" · draft" if pr.get("draft") else "")
+                 + (" · merged" if pr.get("merged") else "") + f" · {pr['head']['ref']} → {pr['base']['ref']} · updated {self._ago(pr.get('updated_at'))}",
+                 "", _short(pr.get("body") or "(no description)", 2000), "", f"Files changed ({len(files)}):"]
+        budget = 9000
+        for f in files:
+            lines.append(f"- {f['filename']} (+{f.get('additions', 0)} −{f.get('deletions', 0)})")
+            patch = f.get("patch") or ""
+            if patch and budget > 0:
+                lines.append(patch[:min(1500, budget)])
+                budget -= min(1500, len(patch))
+        if comments:
+            lines += ["", "Comments:"] + [f"- {c['user']['login']}: {_short(c.get('body', ''), 400)}" for c in comments[-10:]]
+        return "\n".join(lines)
+
+    async def gh_comment(self, repo, number, text, approved=False):
+        repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()
+        if not text:
+            raise RunError("A comment needs some text.")
+        if not approved and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
+            return False
+        await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
+        self.log(f"GitHub comment on {repo} #{n}", text, "sent")
+        return True
+
+    # Telegram
+    def _tg_chats(self):
+        return [c for c in re.split(r"[\s,]+", os.environ.get("TELEGRAM_CHAT_ID", "")) if c]
+
+    async def _tg(self, method, params=None, wait=0):
+        token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+        if not token:
+            raise RunError(f"Telegram needs a bot: set TELEGRAM_BOT_TOKEN {WHERE_KEYS} (message @BotFather in Telegram to make one).")
+        req = urllib.request.Request(f"{TELEGRAM_API}/bot{token}/{method}", data=json.dumps(params or {}).encode(),
+                                     headers={"Content-Type": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=wait + 20) as r:
+                    data = json.loads(r.read())
+            except urllib.error.HTTPError as e:
+                try:
+                    data = json.loads(e.read())
+                except ValueError:
+                    data = {"description": f"Telegram answered {e.code}"}
+            except urllib.error.URLError as e:
+                raise RunError(f"Couldn't reach Telegram ({e.reason}).") from None
+            if not data.get("ok"):
+                raise RunError("Telegram: " + to_str(data.get("description") or "it said no") + ".")
+            return data.get("result")
+        return await asyncio.to_thread(go)
+
+    def _tg_load(self):
+        try:
+            with open(TELEGRAM_FILE, encoding="utf-8") as f:
+                return json.load(f)
+        except (OSError, ValueError):
+            return {"offset": 0, "messages": []}
+
+    async def tg_fetch(self, wait=0):
+        """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones."""
+        store = self._tg_load()
+        updates = await self._tg("getUpdates", {"offset": store.get("offset", 0), "timeout": wait,
+                                                "allowed_updates": ["message", "channel_post"]}, wait)
+        mine, new = self._tg_chats(), []
+        for u in updates or []:
+            store["offset"] = max(store.get("offset", 0), u["update_id"] + 1)
+            m = u.get("message") or u.get("channel_post") or {}
+            if "text" not in m and "caption" not in m:
+                continue
+            chat = m.get("chat", {})
+            if str(chat.get("id")) not in mine:
+                print(f"  (A Telegram message from chat {chat.get('id')} was ignored. To let this program use that chat, "
+                      f"set TELEGRAM_CHAT_ID = {chat.get('id')} {WHERE_KEYS}.)", flush=True)
+                continue
+            who = m.get("from", {})
+            new.append({"text": m.get("text") or m.get("caption", ""), "sender": " ".join(x for x in (who.get("first_name"), who.get("last_name")) if x)
+                        or chat.get("title", ""), "chat": str(chat.get("id")), "chat_name": chat.get("title") or chat.get("first_name", ""),
+                        "date": m.get("date", 0)})
+        store["messages"] = (store.get("messages", []) + new)[-2000:]
+        try:
+            with open(TELEGRAM_FILE, "w", encoding="utf-8") as f:
+                json.dump(store, f, ensure_ascii=False)
+        except OSError:
+            pass
+        return new
+
+    async def tg_search(self, text="", limit=20):
+        if not getattr(self, "_tg_polling", False):
+            await self.tg_fetch()
+        words = to_str(text).lower().split()
+        found = [m for m in sorted(self._tg_load().get("messages", []), key=lambda m: -m.get("date", 0)) if all(w in m["text"].lower() for w in words)][:max(1, min(50, round_js(num(limit)) or 20))]
+        return "\n".join(f"{_when(datetime.datetime.fromtimestamp(m['date']))} · {m['sender']}: {_short(m['text'], 300)}" for m in found) \
+            or ("No messages found" + (f" with “{text}”" if words else "") + ". The bot only sees messages sent to it, from the chats in TELEGRAM_CHAT_ID.")
+
+    async def tg_send(self, text, chat="", approved=False):
+        text = to_str(text).strip()
+        if not text:
+            raise RunError("A Telegram message needs some text.")
+        trig = MESSAGE_VALUE.get()
+        chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
+        if not chat:
+            raise RunError(f"Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {WHERE_KEYS}. "
+                           "Send your bot a message first; the program then says which chat it came from.")
+        if not approved and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
+            return False
+        for i in range(0, len(text), 4000):
+            await self._tg("sendMessage", {"chat_id": chat, "text": text[i:i + 4000]})
+        self.log("Telegram message sent", text, "sent")
+        return True
+
+    @staticmethod
+    def telegram_message(part="text"):
+        v = MESSAGE_VALUE.get()
+        if not isinstance(v, dict) or "text" not in v:
+            return ""
+        return {"text": v["text"], "sender": v.get("sender", ""), "chat": v.get("chat_name") or v.get("chat", "")}.get(part, v["text"])
+
+    async def _tg_watch(self, watches):
+        """Long-polls Telegram and starts 'when a Telegram message arrives' scripts."""
+        self._tg_polling = True
+        started, busy = time.time() - 60, None
+        while True:
+            try:
+                new = await self.tg_fetch(wait=25)
+            except RunError as e:
+                print("  (Telegram check failed: " + str(e) + ")", flush=True)
+                await asyncio.sleep(15)
+                continue
+            for m in new:
+                if m["date"] < started:
+                    continue  # sent while the program wasn't running: kept for searching, not acted on
+                for contains, fn in watches:
+                    if contains.strip().lower() not in ("", "anything") and contains.strip().lower() not in m["text"].lower():
+                        continue
+                    if busy and not busy.done():
+                        self.start_script(fn, m)
+                    else:
+                        busy = asyncio.ensure_future(self.run([(fn, m)], "Telegram message"))
+
+    # Email
+    MAIL_SERVERS = {"gmail.com": ("imap.gmail.com", "smtp.gmail.com", 465), "googlemail.com": ("imap.gmail.com", "smtp.gmail.com", 465),
+                    "icloud.com": ("imap.mail.me.com", "smtp.mail.me.com", 587), "me.com": ("imap.mail.me.com", "smtp.mail.me.com", 587),
+                    "yahoo.com": ("imap.mail.yahoo.com", "smtp.mail.yahoo.com", 465), "yahoo.co.uk": ("imap.mail.yahoo.com", "smtp.mail.yahoo.com", 465),
+                    "fastmail.com": ("imap.fastmail.com", "smtp.fastmail.com", 465)}
+
+    def _mail(self):
+        addr, pw = os.environ.get("EMAIL_ADDRESS", "").strip(), os.environ.get("EMAIL_PASSWORD", "")
+        if not addr or not pw:
+            raise RunError(f"Email needs EMAIL_ADDRESS and EMAIL_PASSWORD {WHERE_KEYS}. Use an app password, not your normal one.")
+        guess = self.MAIL_SERVERS.get(addr.rsplit("@", 1)[-1].lower(), (None, None, 465))
+        imap = os.environ.get("EMAIL_IMAP_HOST") or guess[0]
+        smtp = os.environ.get("EMAIL_SMTP_HOST") or guess[1]
+        if not imap or not smtp:
+            raise RunError(f"Set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST {WHERE_KEYS}: your email provider's help pages list them.")
+        secure = os.environ.get("EMAIL_SSL", "yes").strip().lower() not in ("0", "no", "false", "off")
+        return {"addr": addr, "pw": pw, "imap": imap, "imap_port": int(os.environ.get("EMAIL_IMAP_PORT") or (993 if secure else 143)),
+                "smtp": smtp, "smtp_port": int(os.environ.get("EMAIL_SMTP_PORT") or guess[2]), "ssl": secure}
+
+    def _imap(self, c):
+        import imaplib
+        try:
+            m = imaplib.IMAP4_SSL(c["imap"], c["imap_port"], timeout=30) if c["ssl"] else imaplib.IMAP4(c["imap"], c["imap_port"], timeout=30)
+            m.login(c["addr"], c["pw"])
+        except imaplib.IMAP4.error as e:
+            raise RunError(f"The email server refused the login ({_short(e, 120)}). Check EMAIL_PASSWORD is an app password.") from None
+        except OSError as e:
+            raise RunError(f"Couldn't reach the email server {c['imap']} ({e}).") from None
+        return m
+
+    @staticmethod
+    def _mail_text(msg, limit):
+        """The readable text of an email: the plain part, or the HTML part's words."""
+        plain = html = None
+        for part in msg.walk():
+            if part.get_content_maintype() == "multipart" or part.get_filename():
+                continue
+            if part.get_content_type() in ("text/plain", "text/html"):
+                try:
+                    body = part.get_content()
+                except (LookupError, ValueError):
+                    body = part.get_payload(decode=True).decode("utf-8", "replace") if part.get_payload(decode=True) else ""
+                if part.get_content_type() == "text/plain" and plain is None:
+                    plain = body
+                elif html is None:
+                    html = page_text(body, "text/html")[1]
+        text = (plain if plain and plain.strip() else html) or ""
+        return re.sub(r"\n{3,}", "\n\n", text).strip()[:limit]
+
+    @staticmethod
+    def _mail_head(msg, uid):
+        import email.utils
+        d = _parse_date(msg.get("Date", ""))
+        who = email.utils.parseaddr(str(msg.get("From", "")))
+        return f"id {uid} · {_when(d) if d else '?'} · From: {who[0] or who[1]}" + (f" <{who[1]}>" if who[0] else "") + f" · Subject: {msg.get('Subject', '(no subject)')}"
+
+    async def email_search(self, query="", days=7):
+        import email
+        import email.policy
+        c, query, days = self._mail(), to_str(query).strip(), max(1, min(365, round_js(num(days)) or 7))
+
+        def go():
+            m = self._imap(c)
+            try:
+                m.select("INBOX", readonly=True)
+                since = (datetime.datetime.now() - datetime.timedelta(days=days)).strftime("%d-%b-%Y")
+                if query and not query.isascii():
+                    m.literal = query.encode("utf-8")
+                    typ, data = m.uid("SEARCH", "CHARSET", "UTF-8", "SINCE", since, "TEXT")
+                elif query:
+                    typ, data = m.uid("SEARCH", "SINCE", since, "TEXT", '"' + query.replace('"', "") + '"')
+                else:
+                    typ, data = m.uid("SEARCH", "SINCE", since)
+                uids = (data[0] or b"").split()[-20:][::-1]
+                out = []
+                for uid in uids:
+                    typ, got = m.uid("FETCH", uid, "(BODY.PEEK[]<0.20000>)")
+                    raw = next((x[1] for x in got if isinstance(x, tuple)), b"")
+                    msg = email.message_from_bytes(raw, policy=email.policy.default)
+                    out.append(self._mail_head(msg, uid.decode()) + "\n  " + _short(self._mail_text(msg, 600), 200))
+                return out
+            finally:
+                try:
+                    m.logout()
+                except Exception:  # noqa: BLE001
+                    pass
+        found = await asyncio.to_thread(go)
+        return "\n".join(found) or f"No emails in the last {days} days" + (f" with “{query}”." if query else ".")
+
+    async def email_read(self, uid):
+        import email
+        import email.policy
+        c, uid = self._mail(), to_str(uid).strip().removeprefix("id").strip()
+        if not uid.isdigit():
+            raise RunError("read_email needs an email's id number, from search_email.")
+
+        def go():
+            m = self._imap(c)
+            try:
+                m.select("INBOX", readonly=True)
+                typ, got = m.uid("FETCH", uid, "(BODY.PEEK[])")
+                raw = next((x[1] for x in got if isinstance(x, tuple)), None)
+                if not raw:
+                    raise RunError(f"There's no email with id {uid}.")
+                msg = email.message_from_bytes(raw, policy=email.policy.default)
+                files = [p.get_filename() for p in msg.walk() if p.get_filename()]
+                return (self._mail_head(msg, uid) + (f"\nTo: {msg.get('To', '')}" if msg.get("To") else "") + "\n\n" + self._mail_text(msg, 15000)
+                        + (f"\n\nAttachments: {', '.join(files)}" if files else ""))
+            finally:
+                try:
+                    m.logout()
+                except Exception:  # noqa: BLE001
+                    pass
+        return await asyncio.to_thread(go)
+
+    async def email_send(self, to, subject, body, approved=False):
+        import smtplib
+        from email.message import EmailMessage
+        to, subject, body = to_str(to).strip(), to_str(subject).strip(), to_str(body)
+        addrs = [a.strip() for a in re.split(r"[,;]", to) if a.strip()]
+        if not addrs or not all(re.fullmatch(r"[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+", a) for a in addrs):
+            raise RunError(f"“{to}” isn't an email address.")
+        c = self._mail()
+        if not approved and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
+            return False
+        msg = EmailMessage()
+        msg["From"], msg["To"], msg["Subject"] = c["addr"], ", ".join(addrs), subject or "(no subject)"
+        msg.set_content(body)
+
+        def go():
+            try:
+                if c["ssl"] and c["smtp_port"] == 465:
+                    s_ = smtplib.SMTP_SSL(c["smtp"], 465, timeout=30)
+                else:
+                    s_ = smtplib.SMTP(c["smtp"], c["smtp_port"], timeout=30)
+                    if c["ssl"]:
+                        s_.starttls()
+                with s_:
+                    s_.login(c["addr"], c["pw"])
+                    s_.send_message(msg)
+            except smtplib.SMTPException as e:
+                raise RunError(f"The email couldn't be sent ({_short(e, 160)}).") from None
+            except OSError as e:
+                raise RunError(f"Couldn't reach the email server {c['smtp']} ({e}).") from None
+        await asyncio.to_thread(go)
+        self.log(f"Email sent to {to}", f"Subject: {subject}\n\n{_short(body, 600)}", "sent")
+        return True
+
+    # Calendar
+    async def _calendar(self, start, end):
+        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
+        if not urls:
+            raise RunError(f"The calendar needs CALENDAR_URL {WHERE_KEYS}: your calendar's private iCal address.")
+        out = []
+        for u in urls:
+            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
+            text = _decode(data, ctype)
+            if "BEGIN:VCALENDAR" not in text[:2000]:
+                raise RunError("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format').")
+            out += calendar_events(text, start, end)
+        out.sort(key=lambda x: (x["start"], not x["all_day"]))
+        return out
+
+    async def calendar_text(self, day="today", days=7):
+        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
+        events = await self._calendar(start, start + datetime.timedelta(days=days))
+        lines, cur = [], None
+        for e in events:
+            d = max(e["start"], start).date()
+            if d != cur:
+                cur = d
+                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
+            lines.append("  " + event_line(e))
+        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
+
+    async def calendar_records(self, days):
+        start = parse_day("today")
+        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
+        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
+                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
+        self.log("Calendar", "\n".join(f"{r['day']} {r['start'] or 'all day'}  {r['title']}" for r in recs) or "(nothing)", f"{len(recs)} events")
+        return recs
+
+    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
+        start = parse_day(day)
+        events = await self._calendar(start, start + datetime.timedelta(days=1))
+        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
+        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
+        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
+            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
+
     # ----- Agent -----
     # Each step the model replies with JSON: a tool to use, or its final answer. The same protocol runs on the
     # page, so a program behaves the same in both places, and it works with every model and backup.
@@ -2832,9 +3545,36 @@ class Runtime:
         "file": [("read_file", "Ask the person to choose a file (a PDF, a Word file or a text file) and get the words in it. Say why you want it.", ["why"])],
         "review": [("review_text", "Have a separate, strict reviewer check some text against criteria (separate them with semicolons). It says whether the "
                     "text passes, and lists each problem. Use it to check your work before you finish.", ["text", "criteria"])],
+        "feeds": [("read_feed", "Get the latest items from a news feed (RSS or Atom) by its address, or from the person's own feeds if you leave url "
+                   "empty. Each item has a title, date, link and summary. limit is items per feed (10 if you don't say).", ["url", "limit"])],
+        "linkedin": [("search_linkedin", "Search LinkedIn's public pages (people, companies, posts) through a web search. It only finds what "
+                      "LinkedIn shows to everyone.", ["query"])],
+        "github": [("my_pull_requests", "List the GitHub pull requests waiting for the person's review, and their own open ones.", []),
+                   ("list_pull_requests", "List the pull requests in one GitHub project (owner/name). state is open, closed or all (open if you don't say).",
+                    ["repo", "state"]),
+                   ("read_pull_request", "Read one pull request: its description, the files it changes with the changes themselves, and its comments.",
+                    ["repo", "number"]),
+                   ("list_projects", "List GitHub projects, most recently changed first: the person's own, or another owner's if you give one.", ["owner"]),
+                   ("search_github", "Search GitHub issues and pull requests, with GitHub's search words, like 'is:open is:issue repo:owner/name label:bug'.",
+                    ["query"])],
+        "github_act": [("comment_on_github", "Post a comment on a GitHub pull request or issue. The person is asked first, and may say no.",
+                        ["repo", "number", "text"])],
+        "telegram": [("search_telegram", "Search the Telegram messages the person has sent to their bot, newest first. Leave text empty for the latest.",
+                      ["text"])],
+        "telegram_send": [("send_telegram", "Send a Telegram message to the person (or back to the chat a message came from). "
+                           "The person may be asked first, and may say no.", ["text"])],
+        "email": [("search_email", "Search the person's email inbox for recent emails containing some words (or all recent ones if you leave "
+                   "query empty). days is how far back (7 if you don't say). Gives each email's id, date, sender, subject and start.", ["query", "days"]),
+                  ("read_email", "Read one email in full, by its id from search_email.", ["id"])],
+        "email_send": [("send_email", "Send an email from the person's address. The person is asked first, and may say no.", ["to", "subject", "body"])],
+        "calendar": [("calendar", "List the person's calendar events, from a day (today, tomorrow, a weekday or YYYY-MM-DD) for some days (7 if you "
+                      "don't say).", ["day", "days"]),
+                     ("free_time", "Find free time on one day, between two times (09:00 and 17:30 if you don't say), at least some minutes long "
+                      "(60 if you don't say).", ["day", "from", "to", "minutes"])],
     }
     AGENT_BUILTINS["ha_act_free"] = AGENT_BUILTINS["ha_act"]
-    AGENT_ASKS = {"ha_act"}  # built-in tools that ask before each use
+    AGENT_BUILTINS["telegram_send_free"] = AGENT_BUILTINS["telegram_send"]
+    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
@@ -2842,8 +3582,16 @@ class Runtime:
                          "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"},
                          "device_history": {"entity": "text", "hours": "number"}, "calculate": {"expression": "text"}, "current_time": {},
                          "time_plus": {"time": "text", "minutes": "number"}, "read_file": {"why": "text"},
-                         "review_text": {"text": "text", "criteria": "text"}}
-    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"}}
+                         "review_text": {"text": "text", "criteria": "text"}, "read_feed": {"url": "text", "limit": "number"},
+                         "search_linkedin": {"query": "text"}, "my_pull_requests": {}, "list_pull_requests": {"repo": "text", "state": "text"},
+                         "read_pull_request": {"repo": "text", "number": "number"}, "list_projects": {"owner": "text"}, "search_github": {"query": "text"},
+                         "comment_on_github": {"repo": "text", "number": "number", "text": "text"}, "search_telegram": {"text": "text"},
+                         "send_telegram": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
+                         "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
+                         "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"}}
+    AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
+                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"},
+                      "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"}}
     MAX_FILE_CHARS = 30000
     INPUT_TYPES = {"text": {"type": "string"}, "number": {"type": "number"}, "yes/no": {"type": "boolean"},
                    "list": {"type": "array", "items": {"type": "string"}}, "any": {}}
@@ -3043,6 +3791,42 @@ class Runtime:
                 "- " + x for x in (problems or ["It doesn't yet meet the criteria."]))
             self.log("Check: " + _short(a("criteria"), 55), out, "passes" if v["approved"] is True else "needs work")
             return out
+        approved = getattr(self, "_agent_approved", False)
+        if kind == "read_feed":
+            return self.feed_text(await self.feed_items(a("url"), inp.get("limit", 10)))
+        if kind == "search_linkedin":
+            if not a("query"):
+                raise RunError("search_linkedin needs a query.")
+            return await self.web_search("site:linkedin.com " + a("query"))
+        if kind == "my_pull_requests":
+            return await self.gh_for_me()
+        if kind == "list_pull_requests":
+            return await self.gh_pulls(a("repo"), a("state") or "open")
+        if kind == "read_pull_request":
+            return await self.gh_read_pr(a("repo"), inp.get("number", 0))
+        if kind == "list_projects":
+            return await self.gh_repos(a("owner"))
+        if kind == "search_github":
+            return await self.gh_search(a("query"))
+        if kind == "comment_on_github":
+            done = await self.gh_comment(a("repo"), inp.get("number", 0), a("text"), approved)
+            return "Comment posted." if done else "Not posted: the person said no, or nobody was there to ask."
+        if kind == "search_telegram":
+            return await self.tg_search(a("text"))
+        if kind == "send_telegram":
+            done = await self.tg_send(a("text"), "", approved)
+            return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
+        if kind == "search_email":
+            return await self.email_search(a("query"), inp.get("days", 7))
+        if kind == "read_email":
+            return await self.email_read(a("id"))
+        if kind == "send_email":
+            done = await self.email_send(a("to"), a("subject"), inp.get("body", ""), approved)
+            return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
+        if kind == "calendar":
+            return await self.calendar_text(a("day") or "today", inp.get("days", 7))
+        if kind == "free_time":
+            return await self.free_time(a("day") or "today", a("from") or "09:00", a("to") or "17:30", inp.get("minutes", 60))
         raise RunError(f"Unknown tool “{kind}”.")
 
     async def agent(self, goal, steps, tools, plan=False):
@@ -3142,6 +3926,7 @@ class Runtime:
             if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}"):
                 result, refused = "The person said no, so this tool didn't run.", True
             else:
+                self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
                 try:
                     result = await self._agent_run_tool(kind, spec, inp)
                 except (asyncio.CancelledError, Finish):
@@ -3316,13 +4101,17 @@ class Runtime:
             print(f"(The log couldn't be saved: {e})", flush=True)
 
     # ----- Schedules -----
-    async def run_schedules(self, schedules, watches=()):
-        if not schedules and not watches:
-            sys.exit("This program has no scheduled or 'when … changes' scripts.")
+    async def run_schedules(self, schedules, watches=(), telegram=()):
+        if not schedules and not watches and not telegram:
+            sys.exit("This program has no scheduled, 'when … changes' or Telegram scripts.")
         self.schedule_mode = True
         print("Schedules are on. Leave this running; press Ctrl+C to stop.", flush=True)
         if watches:
             asyncio.ensure_future(self._watch(watches))
+        if telegram:
+            if not self._tg_chats():
+                print(f"Telegram: send your bot a message. Until TELEGRAM_CHAT_ID is set {WHERE_KEYS}, the program only says which chat it came from.", flush=True)
+            asyncio.ensure_future(self._tg_watch(telegram))
         fired, next_every = {}, {}
         start = time.time()
         for i, s in enumerate(schedules):
@@ -3388,12 +4177,12 @@ class Runtime:
             first = False
             await asyncio.sleep(HA_WATCH_SECONDS)
 
-    def main(self, start_scripts, receivers, schedules, watches=()):
+    def main(self, start_scripts, receivers, schedules, watches=(), telegram=()):
         self.receivers = {k.lower(): v for k, v in receivers.items()}
-        use_schedule = "--schedule" in sys.argv or ((schedules or watches) and not start_scripts)
+        use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram) and not start_scripts)
         try:
             if use_schedule:
-                asyncio.run(self.run_schedules(schedules, watches))
+                asyncio.run(self.run_schedules(schedules, watches, telegram))
             else:
                 if not start_scripts:
                     sys.exit("Nothing to run: this program has no 'when Run is clicked' script.")
@@ -4317,6 +5106,100 @@ class Runtime:
   "camera.pet": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#e9dcc6\"/><rect x=\"40\" y=\"100\" width=\"240\" height=\"70\" rx=\"12\" fill=\"#7a5c8f\"/><ellipse cx=\"160\" cy=\"105\" rx=\"55\" ry=\"22\" fill=\"#c8893f\"/><circle cx=\"210\" cy=\"92\" r=\"17\" fill=\"#c8893f\"/><ellipse cx=\"222\" cy=\"80\" rx=\"6\" ry=\"11\" fill=\"#9c6528\"/><circle cx=\"216\" cy=\"90\" r=\"2.5\" fill=\"#222\"/><text x=\"160\" y=\"25\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">PET CAM 15:43</text></svg>"
  }
 }</script>
+<script type="application/json" id="connections-sample">
+{
+  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email and calendar.",
+  "feeds": {
+    "https://example.com/baking/feed": {
+      "title": "The Loaf Letter (sample feed)",
+      "items": [
+        {"title": "Why your rye starter smells of nail varnish", "link": "https://example.com/baking/rye-starter-smell", "hours_ago": 5,
+         "summary": "A sharp, solvent smell usually means a hungry starter. Feed it more often, or at a higher ratio, for a few days."},
+        {"title": "Autumn flour prices: what's changing", "link": "https://example.com/baking/flour-prices", "hours_ago": 30,
+         "summary": "Millers expect strong bread flour to rise slightly after a wet harvest. Stoneground and heritage flours are least affected."},
+        {"title": "Five shaping mistakes and how to fix them", "link": "https://example.com/baking/shaping-mistakes", "hours_ago": 56,
+         "summary": "Too much flour on the bench, not enough tension, and shaping too early are the most common reasons a loaf spreads."},
+        {"title": "Reader question: can I retard bulk in the fridge?", "link": "https://example.com/baking/retard-bulk", "hours_ago": 80,
+         "summary": "Yes, for up to about 12 hours, if the dough has risen around a third first. Expect a tangier loaf."}
+      ]
+    },
+    "https://example.com/tech/feed": {
+      "title": "Small Tools Weekly (sample feed)",
+      "items": [
+        {"title": "Agents that check their own work", "link": "https://example.com/tech/self-checking-agents", "hours_ago": 8,
+         "summary": "A second, independent reviewer catches more mistakes than asking the same model to look again."},
+        {"title": "Home Assistant's autumn release", "link": "https://example.com/tech/ha-autumn-release", "hours_ago": 26,
+         "summary": "New energy dashboards, faster history graphs and better support for Matter locks."},
+        {"title": "Self-hosting on a NUC: a year on", "link": "https://example.com/tech/nuc-year-on", "hours_ago": 70,
+         "summary": "Power use, backups and the one mistake that cost a weekend: no test restores."}
+      ]
+    }
+  },
+  "github": {
+    "login": "sample-baker",
+    "repos": [
+      {"full_name": "sample-baker/sourdough-chart", "description": "Interactive chart of fermentation times by temperature", "language": "JavaScript", "stars": 12, "open_issues": 3, "days_ago": 1},
+      {"full_name": "sample-baker/oven-timer", "description": "A Home Assistant timer card for bake schedules", "language": "Python", "stars": 4, "open_issues": 1, "days_ago": 6},
+      {"full_name": "sample-baker/recipes", "description": "Tested recipes in Markdown", "language": "Markdown", "stars": 2, "open_issues": 0, "days_ago": 20}
+    ],
+    "pulls": [
+      {"repo": "sample-baker/sourdough-chart", "number": 41, "title": "Add rye flour curve", "user": "crumb-shot", "days_ago": 1, "draft": false, "review_requested": true,
+       "body": "Adds a fermentation curve for 100% rye. Rye ferments faster, so the curve sits above wheat at every temperature.",
+       "head": "rye-curve", "base": "main",
+       "files": [{"filename": "src/curves.js", "additions": 24, "deletions": 2,
+                  "patch": "@@ -10,6 +10,28 @@ export const curves = {\n   wheat: [[18, 9], [21, 6.5], [24, 5], [27, 4]],\n+  rye: [[18, 6], [21, 4.5], [24, 3.5], [27, 9]],\n+  // hours of bulk ferment at each temperature (°C)\n }"},
+                 {"filename": "README.md", "additions": 3, "deletions": 0, "patch": "@@ -40,3 +40,6 @@\n+## Rye\n+Rye ferments faster than wheat.\n+Times are for a 20% starter."}],
+       "comments": [{"user": "crumb-shot", "body": "Numbers come from my test bakes in September."}]},
+      {"repo": "sample-baker/oven-timer", "number": 7, "title": "Fix timer drifting after a restart", "user": "sample-baker", "days_ago": 3, "draft": false, "review_requested": false,
+       "body": "Stores the end time instead of the seconds left, so a restart doesn't add time.", "head": "fix-drift", "base": "main",
+       "files": [{"filename": "timer.py", "additions": 9, "deletions": 6, "patch": "@@ -22,9 +22,12 @@\n-    self.left = seconds\n+    self.ends = time.time() + seconds"}],
+       "comments": []},
+      {"repo": "sample-baker/sourdough-chart", "number": 39, "title": "Dark mode colours", "user": "night-loaf", "days_ago": 9, "draft": true, "review_requested": false,
+       "body": "Work in progress.", "head": "dark-mode", "base": "main", "files": [{"filename": "src/theme.css", "additions": 40, "deletions": 3, "patch": ""}], "comments": []}
+    ],
+    "issues": [
+      {"repo": "sample-baker/sourdough-chart", "number": 40, "title": "Chart is blank on Safari 17", "user": "toast-rack", "days_ago": 2, "state": "open"},
+      {"repo": "sample-baker/oven-timer", "number": 6, "title": "Timer loses time after Home Assistant restarts", "user": "sample-baker", "days_ago": 4, "state": "open"}
+    ]
+  },
+  "telegram": {
+    "chat": "You (sample chat)",
+    "messages": [
+      {"from": "You", "text": "Remind me to feed the starter at 8 tonight", "hours_ago": 2},
+      {"from": "You", "text": "What temperature should the oven be for a rye loaf?", "hours_ago": 20},
+      {"from": "You", "text": "Ordered 10 kg of strong white flour, arrives Friday", "hours_ago": 50},
+      {"from": "You", "text": "Starter peaked at 6 hours today, kitchen was 23 degrees", "hours_ago": 75}
+    ],
+    "incoming": {"from": "You", "text": "What should I bake this weekend?"}
+  },
+  "email": {
+    "address": "you@example.com",
+    "messages": [
+      {"id": "1042", "from": "Mill & Co <orders@example.com>", "subject": "Your flour order has shipped", "hours_ago": 3,
+       "body": "Hello,\n\nYour order of 10 kg strong white bread flour has shipped and should arrive on Friday between 9am and 1pm.\n\nMill & Co"},
+      {"id": "1041", "from": "Sam Patel <sam@example.com>", "subject": "Baking club on Saturday?", "hours_ago": 9,
+       "body": "Hi! Are you still up for baking club this Saturday at 2pm? I can bring the rye starter. Let me know by Thursday.\n\nSam"},
+      {"id": "1040", "from": "GitHub <notifications@example.com>", "subject": "[sourdough-chart] Review requested: Add rye flour curve (#41)", "hours_ago": 26,
+       "body": "crumb-shot requested your review on #41: Add rye flour curve."},
+      {"id": "1039", "from": "Council <bins@example.com>", "subject": "Bin collection changes", "hours_ago": 50,
+       "body": "From next week, recycling is collected on Tuesdays instead of Mondays."},
+      {"id": "1038", "from": "Newsletter <hello@example.com>", "subject": "50% off proving baskets this weekend only!", "hours_ago": 70,
+       "body": "Don't miss out on our biggest sale of the year."}
+    ]
+  },
+  "calendar": {
+    "events": [
+      {"day": 0, "start": "10:00", "end": "11:00", "title": "Dentist", "location": "High Street"},
+      {"day": 0, "start": "15:30", "end": "16:00", "title": "Call with the web designer"},
+      {"day": 1, "start": "09:00", "end": "17:30", "title": "Work"},
+      {"day": 2, "all_day": true, "title": "Flour delivery"},
+      {"day": 3, "start": "14:00", "end": "17:00", "title": "Baking club", "location": "Sam's kitchen"},
+      {"day": 4, "start": "11:00", "end": "12:30", "title": "Lunch with family"},
+      {"day": 6, "start": "18:00", "end": "19:00", "title": "Yoga"}
+    ]
+  }
+}
+</script>
 <script type="text/plain" id="convert-guide">
 You convert program code into a block program for "Second Thought", a Scratch-style editor for AI workflows. Output the program as Blockly JSON (described below). Keep the program's logic and order. Prefer the AI blocks over generic ones whenever the code calls a language model.
 
@@ -4433,7 +5316,9 @@ Files and errors:
   Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
 Agent (the model chooses its own steps):
   rb_agent: inputs GOAL, STEPS; fields PLAN ("TRUE" | "FALSE": plan first, revise as it goes); statement input TOOLS holding only tool blocks. Runs a tool-using loop and puts the final answer in the draft.
-  rb_agent_builtin: fields KIND ("web": search_web, read_page | "ask": ask_me | "memory": remember, recall, list_memory | "calc": calculate | "time": current_time, time_plus | "file": read_file | "review": review_text | "ha_read": find_devices, device_state, device_history | "ha_act" | "ha_act_free": call_service). rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
+  rb_agent_builtin: fields KIND ("web": search_web, read_page | "ask": ask_me | "memory": remember, recall, list_memory | "calc": calculate | "time": current_time, time_plus | "file": read_file | "review": review_text | "feeds": read_feed | "linkedin": search_linkedin | "calendar": calendar, free_time | "email": search_email, read_email | "email_send": send_email | "github": my_pull_requests, list_pull_requests, read_pull_request, list_projects, search_github | "github_act": comment_on_github | "telegram": search_telegram | "telegram_send" | "telegram_send_free": send_telegram | "ha_read": find_devices, device_state, device_history | "ha_act" | "ha_act_free": call_service).
+  Connections: rb_tg_when (hat; field CONTAINS, "anything" for every message) runs when the Telegram bot gets a message; rb_tg_message: field PART ("text" | "sender" | "chat"), value; rb_tg_send: input TEXT, statement; rb_email_send: inputs TO, SUBJECT, TEXT, statement; rb_feed_news: input URL (empty = the feeds in settings), value, list of records (feed, title, link, date, summary); rb_calendar: input DAYS, value, list of records (day, start, end, title, location).
+  Map Telegram bot handlers (python-telegram-bot, aiogram, a getUpdates loop) to rb_tg_when; smtplib sending to rb_email_send; feedparser to rb_feed_news. rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
   Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
   rb_agent_steps: value, the most recent agent's steps as records (step, tool, input, result, status).
   Map open(...).read() on text files to rb_file_choose, writing output files to rb_file_save, try/except to rb_try, retry loops and backoff to rb_retry.
@@ -4487,7 +5372,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -4499,7 +5384,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -4534,6 +5419,14 @@ HOW TO MAP CODE
   const S = (type, msg, args, extra) => Object.assign({ type, message0:msg, args0:args || [], previousStatement:null, nextStatement:null }, extra);
   const V = (type, msg, args, output, extra) => Object.assign({ type, message0:msg, args0:args || [], output }, extra);
   const val = name => ({ type:"input_value", name });
+  /* The ready-made agent tools, in the order the Tools category shows them. */
+  const AGENT_TOOL_KINDS = [["search the web and read pages","web"],["ask me a question","ask"],["remember and recall notes","memory"],
+    ["work out sums","calc"],["clock times and dates","time"],["read a file I choose","file"],["check text against criteria","review"],
+    ["news feeds","feeds"],["search LinkedIn (public pages)","linkedin"],["calendar: events and free time","calendar"],
+    ["email: search and read","email"],["email: send (asks me first)","email_send"],
+    ["GitHub: projects and pull requests","github"],["GitHub: comment (asks me first)","github_act"],
+    ["Telegram: search my messages","telegram"],["Telegram: send (asks me first)","telegram_send"],["Telegram: send (no asking)","telegram_send_free"],
+    ["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"],["Home Assistant: control devices (no asking)","ha_act_free"]];
   const TIERS = [["Claude, quick","quick"],["Claude, balanced","default"],["Claude, most capable","complex"],
                  ["Gemini Flash-Lite","gemini-quick"],["Gemini Flash","gemini-default"],["Gemini Pro","gemini-complex"],
                  ["Llama, small","llama-quick"],["Llama, vision","llama-default"],["Llama 4","llama-complex"],
@@ -4765,12 +5658,26 @@ HOW TO MAP CODE
       message1:"what it does %1", args1:[val("DESC")],
       message2:"input types %1", args2:[{ type:"field_input", name:"INPUTS", text:"" }],
       message3:"ask me before each use %1", args3:[{ type:"field_checkbox", name:"ASK", checked:true }],
-      previousStatement:"AgentTool", nextStatement:"AgentTool", style:"agent",
+      previousStatement:"AgentTool", nextStatement:"AgentTool", style:"tools",
       tooltip:"Lets the agent run one of your My Blocks. Its inputs become the tool's inputs, and what it returns is the result the agent sees. Describe it clearly: the description is all the agent knows about it. Input types, for example 'flour grams: number; water grams: number - grams of water', say what each input must be: text, number, yes/no, list or any. The agent's input is checked before the block runs. 'Ask me before each use' starts ticked, because what the agent reads (a web page, a note) could try to steer it: untick it for blocks that only work things out and change nothing." },
     { type:"rb_agent_builtin",
-      message0:"tool: %1", args0:[{ type:"field_dropdown", name:"KIND", options:[["search the web and read pages","web"],["ask me a question","ask"],["remember and recall notes","memory"],["work out sums","calc"],["clock times and dates","time"],["read a file I choose","file"],["check text against criteria","review"],["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"],["Home Assistant: control devices (no asking)","ha_act_free"]] }],
-      previousStatement:"AgentTool", nextStatement:"AgentTool", style:"agent",
-      tooltip:"A ready-made tool for the agent. 'Work out sums' and 'clock times' get numbers and times exactly right, instead of the model guessing. 'Check text' has a separate reviewer judge the agent's work. 'Read pages' only works in exported Python. 'Control devices' asks you before every change, because what the agent reads (a web page, a note) could try to steer it. Choose 'no asking' only if you trust everything it reads. Unlocking, opening and disarming always ask." },
+      message0:"tool: %1", args0:[{ type:"field_dropdown", name:"KIND", options:AGENT_TOOL_KINDS }],
+      previousStatement:"AgentTool", nextStatement:"AgentTool", style:"tools",
+      tooltip:"A ready-made tool for the agent. 'Work out sums' and 'clock times' get numbers and times exactly right, instead of the model guessing. 'Check text' has a separate reviewer judge the agent's work. On this page, feeds, GitHub, Telegram, email and the calendar use sample data; exported Python uses your own (put the keys in second-thought.ini), and reads web pages for real. Sending, commenting and 'control devices' ask you before each one, because what the agent reads (a web page, a note) could try to steer it. Choose 'no asking' only if you trust everything it reads. Unlocking, opening and disarming always ask." },
+    /* Connections */
+    { type:"rb_tg_when", message0:"when a Telegram message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message." },
+    V("rb_tg_message", "Telegram message %1", [{ type:"field_dropdown", name:"PART", options:[["text","text"],["sender","sender"],["chat","chat"]] }], "String",
+      { style:"conn", tooltip:"The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script." }),
+    S("rb_tg_send", "send Telegram message %1", [val("TEXT")], { style:"conn", inputsInline:true,
+      tooltip:"Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
+    V("rb_feed_news", "news from feed %1", [val("URL")], "Array", { style:"conn", inputsInline:true,
+      tooltip:"The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds." }),
+    V("rb_calendar", "calendar for the next %1 days", [val("DAYS")], "Array", { style:"conn", inputsInline:true,
+      tooltip:"Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar." }),
+    S("rb_email_send", "send email to %1 subject %2 %3", [val("TO"), val("SUBJECT"), val("TEXT")], { style:"conn",
+      tooltip:"Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
@@ -4867,9 +5774,17 @@ HOW TO MAP CODE
     { kind:"category", name:"Agent", categorystyle:"agent", contents:[
       B("rb_agent", { GOAL:L("Plan a bake for this weekend that suits what I have in"), STEPS:N(6),
         TOOLS:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"ask" }, next:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"memory" } } } } } }, { fields:{ PLAN:true } }),
-      B("rb_agent_builtin"), B("rb_agent_builtin", null, { fields:{ KIND:"ask" } }), B("rb_agent_builtin", null, { fields:{ KIND:"memory" } }), B("rb_agent_builtin", null, { fields:{ KIND:"calc" } }),
-      B("rb_agent_builtin", null, { fields:{ KIND:"time" } }), B("rb_agent_builtin", null, { fields:{ KIND:"file" } }), B("rb_agent_builtin", null, { fields:{ KIND:"review" } }),
-      B("rb_agent_tool", { DESC:L("Gives the oven temperature in °C for a bread type.") }), B("rb_agent_steps")
+      B("rb_agent_steps")
+    ]},
+    { kind:"category", name:"Tools", categorystyle:"tools", contents:[
+      { kind:"label", text:"Tools for the agent: drop them inside an agent block" },
+      ...AGENT_TOOL_KINDS.map(([, kind]) => B("rb_agent_builtin", null, { fields:{ KIND:kind } })),
+      B("rb_agent_tool", { DESC:L("Gives the oven temperature in °C for a bread type.") })
+    ]},
+    { kind:"category", name:"Connections", categorystyle:"conn", contents:[
+      B("rb_tg_when"), B("rb_tg_message"), B("rb_tg_send", { TEXT:L("Your loaf is ready to come out.") }),
+      B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }),
+      B("rb_email_send", { TO:T("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
       B("rb_ask_me", { TEXT:T("What should I write about?") }), B("rb_answer"), B("rb_approve"), B("rb_choose"), B("rb_ask_first")
@@ -5824,6 +6739,80 @@ HOW TO MAP CODE
             "Check the doors and locks and tell me about any that are open or unlocked, but don't change them. Finish with what you did and anything I should check."), STEPS:nm(12),
           TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"ha_read" }), blk("rb_agent_builtin", { KIND:"ha_act" }))) }),
         sFinish())) },
+    { key:"a_news", cat:"Agents", title:"Agent: news round-up",
+      desc:"Reads your news feeds, skips what it showed you last time, and picks out what's worth your attention, with links. On this page it reads two sample feeds.",
+      tip:"In exported Python, put your own feeds in second-thought.ini (feeds = …). Run it twice: the second time it only shows what's new.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", null, { GOAL:lt("Give me a short news round-up from my feeds. First recall the note 'news seen' and leave out anything already in it. " +
+            "Pick the five items most useful to someone who bakes sourdough and builds small tools, and say in one line each why it matters, with its link. " +
+            "Then remember the titles you showed me as 'news seen', added to what was there."), STEPS:nm(8),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"feeds" }), blk("rb_agent_builtin", { KIND:"memory" }), blk("rb_agent_builtin", { KIND:"web" }))) }),
+        sFinish())) },
+    { key:"a_trip", cat:"Agents", title:"Agent: trip planner",
+      desc:"Asks where you'd like to go and who's coming, finds free days in your calendar, looks things up, and builds a day-by-day plan with times that add up and a rough budget.",
+      tip:"Say who's coming and anything that matters, like 'step-free access' or 'a toddler'. It saves the plan so you can ask for changes next time.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", { PLAN:true }, { GOAL:lt("Plan a short trip with me. Ask where I'd like to go, roughly when, who's coming and what we enjoy. " +
+            "Check my calendar for free days around then. Search for things to do, opening times and travel. " +
+            "Build a relaxed day-by-day plan: use time_plus for every time and calculate for the budget. " +
+            "Remember the plan as 'trip plan', then give it to me with a rough total cost and anything to book ahead."), STEPS:nm(16),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"ask" }), blk("rb_agent_builtin", { KIND:"calendar" }), blk("rb_agent_builtin", { KIND:"web" }), blk("rb_agent_builtin", { KIND:"time" }), blk("rb_agent_builtin", { KIND:"calc" }), blk("rb_agent_builtin", { KIND:"memory" }))) }),
+        sFinish())) },
+    { key:"a_prs", cat:"Agents", title:"Agent: pull requests for me",
+      desc:"Finds the GitHub pull requests waiting for your review, reads each one, and tells you what it changes, what to look at closely, and a suggested comment. It only reads: it posts nothing.",
+      tip:"Needs GITHUB_TOKEN in exported Python. Run it each morning, or put it under a 'when it's 09:00' block.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", null, { GOAL:lt("Find the pull requests waiting for my review. Read each one. For each, tell me in a few lines: what it changes, " +
+            "anything that looks risky or wrong, and a short comment I could leave. Also list my own open pull requests in one line each."), STEPS:nm(10),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"github" }))) }),
+        sFinish())) },
+    { key:"a_prreview", cat:"Agents", title:"Agent: review and comment on a pull request",
+      desc:"Asks which pull request to review, reads it, drafts a review comment, has a separate reviewer check the comment is fair and specific, then posts it, asking you first.",
+      tip:"Say 'Don't' when it asks to post, to read the comment without posting it.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", null, { GOAL:lt("Ask me which pull request to review (project as owner/name, and its number). Read it. " +
+            "Write a review comment: what's good, what to change, with file names. Check the comment with review_text against: " +
+            "specific; kind; mentions files; under 150 words. Fix it until it passes, then post it with comment_on_github."), STEPS:nm(10),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"ask" }), blk("rb_agent_builtin", { KIND:"github" }), blk("rb_agent_builtin", { KIND:"review" }), blk("rb_agent_builtin", { KIND:"github_act" }))) }),
+        sFinish())) },
+    { key:"a_inbox", cat:"Agents", title:"Agent: inbox triage",
+      desc:"Reads your last two days of email, sorts it into needs a reply, worth knowing and ignore, checks your calendar for anything with a date, and drafts the replies. It sends nothing without asking you.",
+      tip:"Needs EMAIL_ADDRESS and an app password in exported Python. Say 'Allow' to send a drafted reply, or 'Don't' to keep it as a draft.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", { PLAN:true }, { GOAL:lt("Look through my email from the last 2 days. Sort it into: needs a reply, worth knowing, and ignore. " +
+            "Read the ones that need a reply. If one asks about a date or time, check my calendar. Draft a short reply to each, " +
+            "and offer to send it with send_email. Finish with the three lists and the drafts."), STEPS:nm(12),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"email" }), blk("rb_agent_builtin", { KIND:"calendar" }), blk("rb_agent_builtin", { KIND:"email_send" }))) }),
+        sFinish())) },
+    { key:"a_week", cat:"Agents", title:"Agent: plan my week",
+      desc:"Looks at your calendar for the week, your recent emails and the notes you've sent your Telegram bot, and suggests when to bake and what needs doing, with times that fit around everything else.",
+      tip:"Send your bot notes to self through the week, like 'order rye flour'. The agent picks them up.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", { PLAN:true }, { GOAL:lt("Help me plan the next 7 days. Look at my calendar, my emails from the last 3 days, and my latest Telegram notes. " +
+            "Find a free 3-hour stretch on two different days for baking. Finish with: a one-line view of each day, the two baking slots, " +
+            "and a short to-do list from my emails and notes."), STEPS:nm(12),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"calendar" }), blk("rb_agent_builtin", { KIND:"email" }), blk("rb_agent_builtin", { KIND:"telegram" }), blk("rb_agent_builtin", { KIND:"time" }))) }),
+        sFinish())) },
+    { key:"a_tgbot", cat:"Agents", title:"Telegram bot that answers",
+      desc:"When you message your Telegram bot, an agent answers, using your calendar, your notes and sums, and sends the reply back. Press Run to try it with a typed message; in exported Python, run it on schedule and it answers real messages.",
+      tip:"In exported Python: make a bot with @BotFather, put the token in second-thought.ini, then run run-on-schedule. It only answers your own chat (TELEGRAM_CHAT_ID).",
+      build:() => P([], [
+        chain(sStart(), sAskMe("Type a message, as if you had sent it to your bot."), blk("rb_broadcast_with_wait", null, { MSG:tx("telegram"), VALUE:xAnswer() })),
+        chain(blk("rb_tg_when", { CONTAINS:"anything" }), blk("rb_broadcast_with_wait", null, { MSG:tx("telegram"), VALUE:xB("rb_tg_message", null, { PART:"text" }) })),
+        chain(sReceive("telegram"),
+          blk("rb_agent", null, { GOAL:xJ("Answer this message from me, briefly and helpfully, as a friendly kitchen assistant. " +
+              "Check my calendar, my notes or the time if it helps, and use calculate for any sums.\n\nMessage: ", xMsg()), STEPS:nm(6),
+            TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"memory" }), blk("rb_agent_builtin", { KIND:"calendar" }), blk("rb_agent_builtin", { KIND:"time" }), blk("rb_agent_builtin", { KIND:"calc" }))) }),
+          blk("rb_tg_send", null, { TEXT:xB("rb_draft") }), sFinish())]) },
+    { key:"a_linkedin", cat:"Agents", title:"Agent: find people on LinkedIn",
+      desc:"Searches LinkedIn's public pages for people and companies on a topic, and lists who they are, what they do and why they might be worth contacting. It only finds what LinkedIn shows everyone, through a web search.",
+      tip:"Change the topic and place. Exported Python searches for real; this page answers from Claude's knowledge.",
+      build:() => P([], chain(sStart(),
+        blk("rb_agent", null, { GOAL:lt("Find people and small companies in London who write or teach about sourdough baking, using LinkedIn's public pages. " +
+            "List up to eight: name, what they do, and one line on why they might be worth contacting about a sourdough reference website. " +
+            "Only include people you actually found, with the address of their page. Remember the list as 'linkedin contacts'."), STEPS:nm(8),
+          TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"linkedin" }), blk("rb_agent_builtin", { KIND:"web" }), blk("rb_agent_builtin", { KIND:"memory" }))) }),
+        sFinish())) },
     { key:"h_gifts", cat:"Home and baking", title:"Gift ideas within a budget",
       desc:"Suggests six gifts sorted by price, lets you choose one, then writes a gift-card message for it.",
       tip:"Give a budget and a couple of their interests.",
@@ -5880,6 +6869,26 @@ HOW TO MAP CODE
         sFinish())) },
 
     /* ----- Automation ----- */
+    { key:"x_tgbrief", cat:"Automation", title:"Morning briefing on Telegram",
+      desc:"On weekdays at 07:15, reads today's calendar and your news feeds, writes a short briefing, and sends it to you on Telegram. Press Run to try it now.",
+      tip:"Exported Python: put your bot token, chat id, calendar address and feeds in second-thought.ini, then use run-on-schedule.",
+      build:() => P(["today", "news", "brief"], [
+        chain(sStart(), sBroadcastWait("briefing")),
+        chain(sAt(7, 15, "weekdays"), sBroadcastWait("briefing")),
+        chain(sReceive("briefing"),
+          xSet("today", xB("rb_calendar", { DAYS:nm(1) })),
+          xSet("news", xB("rb_feed_news", { URL:tx("") })),
+          xSet("brief", xAsk(xJ("Write a short, friendly morning briefing for a phone screen: today's plans in time order, then the three most interesting news items with their links. No headings.\n\nToday's calendar:\n",
+            xV("today"), "\n\nNews:\n", xV("news")))),
+          blk("rb_tg_send", null, { TEXT:xV("brief") }), sAdd(xV("brief")), sFinish())]) },
+    { key:"x_newsmail", cat:"Automation", title:"Email me a news digest",
+      desc:"Reads your news feeds, writes a digest of what's worth reading, and emails it to you. On this page the feeds and the email are samples.",
+      tip:"Change the address in the 'send email' block to your own, and add a 'when it's …' block to send it every week.",
+      build:() => P(["news", "digest"], chain(sStart(),
+        xSet("news", xB("rb_feed_news", { URL:tx("") })),
+        xSet("digest", xAsk(xJ("Write a short email digest of these news items: group them by topic, one line each on why it's worth reading, with its link. Plain text, friendly.\n\n", xV("news")))),
+        blk("rb_email_send", null, { TO:tx("you@example.com"), SUBJECT:tx("Your news digest"), TEXT:xV("digest") }),
+        sAdd(xV("digest")), sFinish())) },
     { key:"memory", cat:"Automation", title:"Fresh headline every run", build:EXAMPLES.memory,
       desc:"Remembers every headline it has used, so each run (or each scheduled day) comes up with a new one.",
       tip:"Open the Memory panel after a few runs to see what it has kept." },
@@ -6604,8 +7613,8 @@ HOW TO MAP CODE
   const pyName = () => slug($("io-name").value);
   // Everything in the exported zip: the program, its settings file, what to install, and Windows launchers.
   function exportFiles(progName, code){
-    const base = pyName(), sched = ws.getTopBlocks(false).some(b => ["rb_when_time", "rb_every", "rb_ha_when"].includes(b.type));
-    const req = ["anthropic"].concat(programUsesGemini() ? ["google-genai"] : []).join("\n") + "\n";
+    const base = pyName(), sched = ws.getTopBlocks(false).some(b => ["rb_when_time", "rb_every", "rb_ha_when", "rb_tg_when"].includes(b.type));
+    const req = ["anthropic"].concat(programUsesGemini() ? ["google-genai"] : [], settingsFor().calendar ? ["tzdata"] : []).join("\n") + "\n";
     const files = [{ name:base + ".py", text:code }, { name:"second-thought.ini", text:iniText(progName) },
                    { name:"requirements.txt", text:req }, { name:"run.bat", text:runBat(base, false) },
                    { name:"run.sh", text:runSh(base, false) }];
@@ -6790,7 +7799,13 @@ HOW TO MAP CODE
     if (programUsesXai()) keys.push(["Grok (xAI)", "XAI_API_KEY", "https://console.x.ai"]);
     if (programUsesOpenAI()) keys.push(["OpenAI", "OPENAI_API_KEY", "https://platform.openai.com"]);
     MORE_PROVIDERS.filter(m => programUsesPrefix(m.prefix)).forEach(m => keys.push([m.who, m.env, m.signup]));
-    return { keys, llama:programUsesLlama(), ha:allProgramBlocks().some(b => b.type.startsWith("rb_ha_")) };
+    const blocks = allProgramBlocks();
+    const kinds = new Set(blocks.filter(b => b.type === "rb_agent_builtin").map(b => b.getFieldValue("KIND")));
+    const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
+    return { keys, llama:programUsesLlama(), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
+             github:has([], ["github", "github_act"]), telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
+             email:has(["rb_email_send"], ["email", "email_send"]), calendar:has(["rb_calendar"], ["calendar"]), feeds:has(["rb_feed_news"], ["feeds"]),
+             pages:has([], ["web"]) };
   }
   function iniText(progName){
     const need = settingsFor(), nl = "\r\n";
@@ -6815,6 +7830,27 @@ HOW TO MAP CODE
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
+    if (need.feeds || need.pages) out.push("", "[feeds and pages]",
+      ...(need.feeds ? ["; Your news feeds (RSS or Atom addresses), separated by spaces. 'News from feed' with nothing in it, and the agent, read these.",
+                        "feeds = "] : []),
+      "; local_pages = yes   let the agent read pages and feeds on your own network too (normally only public ones)");
+    if (need.github) out.push("", "[github]",
+      "; A token from https://github.com/settings/tokens. Fine-grained: read access to contents, issues and pull requests;",
+      "; to let the agent comment, pull requests and issues need read and write.",
+      "GITHUB_TOKEN = ");
+    if (need.telegram) out.push("", "[telegram]",
+      "; Make a bot: in Telegram, message @BotFather and send /newbot. It gives you the token.",
+      "; Then send your bot a message and run this program: it says your chat id. Put it below.",
+      "; The bot only listens to, and searches, the chats listed here (anyone can message a bot).",
+      "TELEGRAM_BOT_TOKEN = ", "TELEGRAM_CHAT_ID = ");
+    if (need.email) out.push("", "[email]",
+      "; Your address and an app password (not your normal password). Gmail: Google account, Security, App passwords.",
+      "; Gmail, iCloud, Yahoo and Fastmail work out their own servers. For others, fill in the servers too.",
+      "EMAIL_ADDRESS = ", "EMAIL_PASSWORD = ", "; EMAIL_IMAP_HOST = ", "; EMAIL_SMTP_HOST = ", "; EMAIL_SMTP_PORT = 465");
+    if (need.calendar) out.push("", "[calendar]",
+      "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
+      "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
+      "CALENDAR_URL = ");
     if (need.llama) out.push("", "[llama]",
       "; Where your Llama server is. This is Ollama on this computer; change it if Llama lives elsewhere.",
       "LLAMA_BASE_URL = http://localhost:11434/v1", "; LLAMA_API_KEY = ");
@@ -7056,6 +8092,9 @@ HOW TO MAP CODE
         case "rb_ha_history": return "(await R.ha_history(" + I("ENTITY", '""') + ", " + I("HOURS", "24") + "))";
         case "rb_ha_snapshot": return "(await R.ha_snapshot(" + I("CAMERA", '""') + "))";
         case "rb_ha_trigger": return "R.ha_trigger()";
+        case "rb_tg_message": return "R.telegram_message(" + pyStr(F("PART") || "text") + ")";
+        case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
+        case "rb_calendar": return "(await R.calendar_records(" + I("DAYS", "7") + "))";
         case "rb_chat": return "(await R.chat(" + I("NAME", '"chat"') + ", " + I("TEXT", '""') + "))";
         case "rb_web_search": return "(await R.web_search(" + I("TEXT", '""') + "))";
         case "rb_rec_new": return "{}";
@@ -7181,6 +8220,8 @@ HOW TO MAP CODE
           case "rb_ha_call": E("await R.ha_call(" + I("SERVICE", '""') + ", " + I("ENTITY", '""') + ", " + I("DATA", '""') + ")"); break;
           case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
+          case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
+          case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
           case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + ")"); break;
           case "rb_agent_tool": case "rb_agent_builtin": break;
@@ -7244,7 +8285,7 @@ HOW TO MAP CODE
       return out.length - start;
     }
 
-    const sections = [], starts = [], receivers = {}, schedules = [], watches = [];
+    const sections = [], starts = [], receivers = {}, schedules = [], watches = [], telegram = [];
     // Saved programs that 'run program' blocks use, each as one function (its 'when Run is clicked' scripts, in order).
     withSubPrograms(subs => {
       subs.forEach(x => programFn.set(x.key, ident("program_" + x.name)));
@@ -7314,6 +8355,13 @@ HOW TO MAP CODE
         if (!stmts(b.getNextBlock(), 1, {}, out)) out.push("    pass");
         const key = msg.toLowerCase();
         (receivers[key] = receivers[key] || []).push(fn);
+      } else if (b.type === "rb_tg_when") {
+        const contains = String(b.getFieldValue("CONTAINS") || "").trim();
+        const fn = ident("when_telegram_message_arrives" + (telegram.length ? "_" + (telegram.length + 1) : ""));
+        out.push("async def " + fn + "():");
+        out.push("    \"\"\"when a Telegram message arrives containing " + (contains || "anything").replace(/"/g, "'") + "\"\"\"");
+        if (!stmts(b.getNextBlock(), 1, {}, out)) out.push("    pass");
+        telegram.push("(" + pyStr(contains) + ", " + fn + ")");
       } else if (b.type === "rb_when_time" || b.type === "rb_every") {
         const fn = ident("scheduled_" + (++nSched));
         if (b.type === "rb_every") {
@@ -7359,11 +8407,11 @@ HOW TO MAP CODE
       ...settingsFor().keys.map(k => "         " + k[1] + " = your-key"),
       usesHA ? "         HA_URL = http://homeassistant.local:8123" : null,
       usesHA ? "         HA_TOKEN = your-long-lived-token" : null,
-      "  2. Windows: double-click run.bat" + ((schedules.length || watches.length) ? " (or run-on-schedule.bat to keep it running;" : "."),
-      (schedules.length || watches.length) ? "     install-startup.bat makes it start by itself each time you log in)" : null,
-      "     Linux or Mac:  sh run.sh" + ((schedules.length || watches.length) ? "   (or sh run-on-schedule.sh to keep it running;" : ""),
-      (schedules.length || watches.length) ? "     sh install-service.sh makes it start by itself, on Linux or a Mac)" : null,
-      "     Or by hand:  pip install " + (usesGemini ? "anthropic google-genai" : "anthropic") + ", then  python " + fileBase + ".py" + ((schedules.length || watches.length) ? " [--schedule]" : ""),
+      "  2. Windows: double-click run.bat" + ((schedules.length || watches.length || telegram.length) ? " (or run-on-schedule.bat to keep it running;" : "."),
+      (schedules.length || watches.length || telegram.length) ? "     install-startup.bat makes it start by itself each time you log in)" : null,
+      "     Linux or Mac:  sh run.sh" + ((schedules.length || watches.length || telegram.length) ? "   (or sh run-on-schedule.sh to keep it running;" : ""),
+      (schedules.length || watches.length || telegram.length) ? "     sh install-service.sh makes it start by itself, on Linux or a Mac)" : null,
+      "     Or by hand:  pip install " + (usesGemini ? "anthropic google-genai" : "anthropic") + ", then  python " + fileBase + ".py" + ((schedules.length || watches.length || telegram.length) ? " [--schedule]" : ""),
       "  Environment variables with the same names still work, and win over the file.",
       "",
       usesGemini ? "Gemini calls go through the Gemini API and are billed to your Google account." : null,
@@ -7402,9 +8450,10 @@ HOW TO MAP CODE
       "RECEIVERS = {" + Object.keys(receivers).map(k => pyStr(k) + ": [" + receivers[k].join(", ") + "]").join(", ") + "}",
       "SCHEDULES = [" + schedules.join(", ") + "]",
       "HA_WATCHES = [" + watches.join(", ") + "]",
+      telegram.length ? "TELEGRAM_WATCHES = [" + telegram.join(", ") + "]" : null,
       "",
       "if __name__ == \"__main__\":",
-      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES)",
+      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + ")",
       ""
     ].filter(l => l !== null).join("\n");
     const code = header + document.getElementById("py-runtime").textContent.replace(/^\n+/, "") + "\n" + program;
@@ -8270,17 +9319,35 @@ HOW TO MAP CODE
     time:[["current_time", "Get the day, date and time now.", []],
           ["time_plus", "Add minutes to a clock time and get the new time, like 09:30 plus 270 gives 14:00. Use a negative number to go back. time is HH:MM, or YYYY-MM-DD HH:MM to get the date and day too. Use it for every clock time instead of working it out yourself.", ["time", "minutes"]]],
     file:[["read_file", "Ask the person to choose a file (a PDF, a Word file or a text file) and get the words in it. Say why you want it.", ["why"]]],
-    review:[["review_text", "Have a separate, strict reviewer check some text against criteria (separate them with semicolons). It says whether the text passes, and lists each problem. Use it to check your work before you finish.", ["text", "criteria"]]]
+    review:[["review_text", "Have a separate, strict reviewer check some text against criteria (separate them with semicolons). It says whether the text passes, and lists each problem. Use it to check your work before you finish.", ["text", "criteria"]]],
+    feeds:[["read_feed", "Get the latest items from a news feed (RSS or Atom) by its address, or from the person's own feeds if you leave url empty. Each item has a title, date, link and summary. limit is items per feed (10 if you don't say).", ["url", "limit"]]],
+    linkedin:[["search_linkedin", "Search LinkedIn's public pages (people, companies, posts) through a web search. It only finds what LinkedIn shows to everyone.", ["query"]]],
+    github:[["my_pull_requests", "List the GitHub pull requests waiting for the person's review, and their own open ones.", []],
+        ["list_pull_requests", "List the pull requests in one GitHub project (owner/name). state is open, closed or all (open if you don't say).", ["repo", "state"]],
+        ["read_pull_request", "Read one pull request: its description, the files it changes with the changes themselves, and its comments.", ["repo", "number"]],
+        ["list_projects", "List GitHub projects, most recently changed first: the person's own, or another owner's if you give one.", ["owner"]],
+        ["search_github", "Search GitHub issues and pull requests, with GitHub's search words, like 'is:open is:issue repo:owner/name label:bug'.", ["query"]]],
+    github_act:[["comment_on_github", "Post a comment on a GitHub pull request or issue. The person is asked first, and may say no.", ["repo", "number", "text"]]],
+    telegram:[["search_telegram", "Search the Telegram messages the person has sent to their bot, newest first. Leave text empty for the latest.", ["text"]]],
+    telegram_send:[["send_telegram", "Send a Telegram message to the person (or back to the chat a message came from). The person may be asked first, and may say no.", ["text"]]],
+    email:[["search_email", "Search the person's email inbox for recent emails containing some words (or all recent ones if you leave query empty). days is how far back (7 if you don't say). Gives each email's id, date, sender, subject and start.", ["query", "days"]],
+        ["read_email", "Read one email in full, by its id from search_email.", ["id"]]],
+    email_send:[["send_email", "Send an email from the person's address. The person is asked first, and may say no.", ["to", "subject", "body"]]],
+    calendar:[["calendar", "List the person's calendar events, from a day (today, tomorrow, a weekday or YYYY-MM-DD) for some days (7 if you don't say).", ["day", "days"]],
+        ["free_time", "Find free time on one day, between two times (09:00 and 17:30 if you don't say), at least some minutes long (60 if you don't say).", ["day", "from", "to", "minutes"]]]
   };
   AGENT_BUILTINS.ha_act_free = AGENT_BUILTINS.ha_act;
-  const AGENT_ASKS = new Set(["ha_act"]);  // built-in tools that ask before each use
+  AGENT_BUILTINS.telegram_send_free = AGENT_BUILTINS.telegram_send;
+  const AGENT_ASKS = new Set(["ha_act", "github_act", "telegram_send", "email_send"]);  // built-in tools that ask before each use
   const MAX_AGENT_STEPS = 20;
   // The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL. Matches the runtime.
   const AGENT_INPUT_TYPES = { search_web:{ query:"text" }, ask_me:{ question:"text" }, remember:{ name:"text", value:"text" }, recall:{ name:"text" },
     list_memory:{}, find_devices:{ search:"text" }, device_state:{ entity:"text" }, call_service:{ service:"text", entity:"text", data:"any" },
     read_page:{ url:"text" }, device_history:{ entity:"text", hours:"number" }, calculate:{ expression:"text" }, current_time:{},
-    time_plus:{ time:"text", minutes:"number" }, read_file:{ why:"text" }, review_text:{ text:"text", criteria:"text" } };
-  const AGENT_OPTIONAL = { find_devices:["search"], call_service:["entity", "data"], device_history:["hours"], read_file:["why"] };
+    time_plus:{ time:"text", minutes:"number" }, read_file:{ why:"text" }, review_text:{ text:"text", criteria:"text" },
+    read_feed:{ url:"text", limit:"number" }, search_linkedin:{ query:"text" }, my_pull_requests:{}, list_pull_requests:{ repo:"text", state:"text" }, read_pull_request:{ repo:"text", number:"number" }, list_projects:{ owner:"text" }, search_github:{ query:"text" }, comment_on_github:{ repo:"text", number:"number", text:"text" }, search_telegram:{ text:"text" }, send_telegram:{ text:"text" }, search_email:{ query:"text", days:"number" }, read_email:{ id:"text" }, send_email:{ to:"text", subject:"text", body:"text" }, calendar:{ day:"text", days:"number" }, free_time:{ day:"text", "from":"text", to:"text", minutes:"number" } };
+  const AGENT_OPTIONAL = { find_devices:["search"], call_service:["entity", "data"], device_history:["hours"], read_file:["why"],
+    read_feed:["limit", "url"], list_pull_requests:["state"], list_projects:["owner"], search_telegram:["text"], search_email:["days", "query"], calendar:["day", "days"], free_time:["day", "from", "minutes", "to"] };
   const MAX_FILE_CHARS = 30000;
   /* Works out a sum like (350 / 500) * 100 exactly, without running any code. Matches the runtime's _Calc. */
   const CALC_FUNCS = ["round", "min", "max", "sqrt", "abs", "floor", "ceil"];
@@ -8347,6 +9414,164 @@ HOW TO MAP CODE
     const total = h * 60 + mi + add, days = Math.floor(total / 1440), t = ((total % 1440) + 1440) % 1440;
     const note = days === 0 ? "" : days === 1 ? " (next day)" : days === -1 ? " (the day before)" : days > 0 ? " (" + days + " days later)" : " (" + (-days) + " days earlier)";
     return pad2(Math.floor(t / 60)) + ":" + pad2(t % 60) + note;
+  }
+  /* ---------- Connections on the page: sample feeds, GitHub, Telegram, email and calendar ----------
+     The page can't reach these services, so it uses the sample data below (like the sample house). The text each one gives
+     back is shaped like what exported Python gives from the real services. */
+  const CONN = (() => { try { return JSON.parse(document.getElementById("connections-sample").textContent); } catch(e) { return {}; } })();
+  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const whenText = d => WEEKDAYS[(d.getDay() + 6) % 7].slice(0, 3) + " " + pad2(d.getDate()) + " " + MONTHS[d.getMonth()] + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+  const dayText = d => WEEKDAYS[(d.getDay() + 6) % 7] + " " + pad2(d.getDate()) + " " + MONTHS[d.getMonth()];
+  const hoursAgo = h => new Date(Date.now() - h * 3600000);
+  const agoText = days => days < 1 ? "just now" : days < 2 ? Math.round(days * 24) + " h ago" : Math.floor(days) + " days ago";
+  function connNote(what){
+    run.connNoted = run.connNoted || {};
+    if (run.connNoted[what]) return; run.connNoted[what] = true;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Email:"emails", Calendar:"calendar events" }[what] || what;
+    addStep(what, { mono:true, text:"This page uses sample " + noun + ", so nothing real is read or sent. Exported Python uses your own." }).done("sample", "warn");
+  }
+  function sampleFeedItems(url, limit){
+    url = str(url).trim(); limit = Math.max(1, Math.min(50, Math.floor(num(limit) + 0.5) || 10));
+    const feeds = CONN.feeds || {}, urls = url ? [url] : Object.keys(feeds);
+    connNote("News feeds");
+    const out = [];
+    urls.forEach(u => {
+      const f = feeds[u];
+      if (!f) fail("This page can't open " + short(u, 80) + ", so it only has its sample feeds: " + Object.keys(feeds).join(", ") + ". Exported Python reads any feed.");
+      f.items.slice().sort((a, b) => a.hours_ago - b.hours_ago).slice(0, limit).forEach(it => out.push({ feed:f.title, title:it.title, link:it.link, date:hoursAgo(it.hours_ago), summary:it.summary }));
+    });
+    return out;
+  }
+  function feedText(items){
+    const lines = []; let feed = null;
+    items.forEach(i => {
+      if (i.feed !== feed) { feed = i.feed; lines.push((lines.length ? "\n" : "") + feed); }
+      lines.push("- " + whenText(i.date) + "  " + i.title + (i.link ? "\n  " + i.link : "") + (i.summary ? "\n  " + i.summary : ""));
+    });
+    return lines.join("\n") || "The feed has no items.";
+  }
+  const GH = () => { connNote("GitHub"); return CONN.github || { repos:[], pulls:[], issues:[] }; };
+  function ghRepo(repo){
+    repo = str(repo).trim().replace(/^https:\/\/github\.com\//, "").replace(/^\/+|\/+$/g, "");
+    if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) fail("“" + repo + "” isn't a GitHub project. Use owner/name, like octocat/hello-world.");
+    return repo;
+  }
+  const ghLine = (r, kind) => r.repo + " #" + r.number + " " + r.title + " · " + kind + " by " + r.user + " · " + (r.state || "open") + " · updated " + agoText(r.days_ago);
+  function ghForMe(){
+    const g = GH(), me = g.login;
+    const review = g.pulls.filter(p => p.review_requested).map(p => ghLine(p, "pull request"));
+    const mine = g.pulls.filter(p => p.user === me).map(p => ghLine(p, "pull request"));
+    return "Waiting for your review:\n" + (review.join("\n") || "(none)") + "\n\nYour open pull requests:\n" + (mine.join("\n") || "(none)");
+  }
+  function ghPulls(repo){
+    repo = ghRepo(repo);
+    const rows = GH().pulls.filter(p => p.repo === repo);
+    return rows.map(p => "#" + p.number + " " + p.title + " · by " + p.user + " · updated " + agoText(p.days_ago) + (p.draft ? " · draft" : "")).join("\n") || "No open pull requests in " + repo + ".";
+  }
+  function ghReadPr(repo, number){
+    repo = ghRepo(repo); const n = Math.floor(num(number) + 0.5);
+    const p = GH().pulls.find(x => x.repo === repo && x.number === n);
+    if (!p) fail("GitHub: not found, or the token can't see it.");
+    const lines = [repo + " #" + n + ": " + p.title, "By " + p.user + " · open" + (p.draft ? " · draft" : "") + " · " + p.head + " → " + p.base + " · updated " + agoText(p.days_ago),
+                   "", short(p.body || "(no description)", 2000), "", "Files changed (" + p.files.length + "):"];
+    p.files.forEach(f => { lines.push("- " + f.filename + " (+" + f.additions + " −" + f.deletions + ")"); if (f.patch) lines.push(f.patch.slice(0, 1500)); });
+    if (p.comments.length) lines.push("", "Comments:", ...p.comments.map(c => "- " + c.user + ": " + short(c.body, 400)));
+    return lines.join("\n");
+  }
+  function ghRepos(owner){
+    const g = GH(); owner = str(owner).trim();
+    const rows = g.repos.filter(r => !owner || r.full_name.split("/")[0].toLowerCase() === owner.toLowerCase());
+    return rows.map(r => r.full_name + ": " + r.description + " · " + r.language + " · ★" + r.stars + " · " + r.open_issues + " open issues and pull requests · pushed " + agoText(r.days_ago)).join("\n") || "No projects.";
+  }
+  function ghSearch(query){
+    query = str(query).trim(); if (!query) fail("search_github needs something to search for.");
+    const g = GH(), words = query.toLowerCase().split(/\s+/).filter(w => !w.includes(":"));
+    const all = g.pulls.map(p => [p, "pull request"]).concat(g.issues.map(i => [i, "issue"]));
+    return all.filter(([r]) => words.every(w => (r.title + " " + r.repo).toLowerCase().includes(w))).map(([r, k]) => ghLine(r, k)).join("\n") || "Nothing found for “" + query + "”.";
+  }
+  async function ghComment(repo, number, text, approved){
+    repo = ghRepo(repo); const n = Math.floor(num(number) + 0.5); text = str(text).trim();
+    if (!text) fail("A comment needs some text.");
+    if (!approved && !(await allowed(["messages"], "comment on " + repo + " #" + n + ": " + short(text, 120)))) return false;
+    GH(); addStep("GitHub comment on " + repo + " #" + n, { text }).done("sample", "ok");
+    return true;
+  }
+  const TG = () => { connNote("Telegram"); return CONN.telegram || { messages:[], chat:"" }; };
+  function tgSearch(text){
+    const words = str(text).toLowerCase().split(/\s+/).filter(Boolean), t = TG();
+    const found = t.messages.slice().sort((a, b) => a.hours_ago - b.hours_ago).filter(m => words.every(w => m.text.toLowerCase().includes(w))).slice(0, 20);
+    return found.map(m => whenText(hoursAgo(m.hours_ago)) + " · " + m.from + ": " + short(m.text, 300)).join("\n") ||
+      ("No messages found" + (words.length ? " with “" + str(text).trim() + "”" : "") + ". The bot only sees messages sent to it, from the chats in TELEGRAM_CHAT_ID.");
+  }
+  async function tgSend(text, approved){
+    text = str(text).trim(); if (!text) fail("A Telegram message needs some text.");
+    if (!approved && !(await allowed(["messages"], "send a Telegram message: " + short(text, 120)))) return false;
+    const t = TG(); addStep("Telegram → " + (t.chat || "your chat"), { text }).done("sample", "ok");
+    return true;
+  }
+  const MAIL = () => { connNote("Email"); return CONN.email || { messages:[] }; };
+  const mailHead = m => "id " + m.id + " · " + whenText(hoursAgo(m.hours_ago)) + " · From: " + m.from + " · Subject: " + m.subject;
+  function emailSearch(query, days){
+    query = str(query).trim(); days = Math.max(1, Math.min(365, Math.floor(num(days) + 0.5) || 7));
+    const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+    const found = MAIL().messages.filter(m => m.hours_ago <= days * 24 && words.every(w => (m.from + " " + m.subject + " " + m.body).toLowerCase().includes(w)));
+    return found.map(m => mailHead(m) + "\n  " + short(m.body, 200)).join("\n") || "No emails in the last " + days + " days" + (query ? " with “" + query + "”." : ".");
+  }
+  function emailRead(id){
+    id = str(id).trim().replace(/^id\s*/, "");
+    if (!/^\d+$/.test(id)) fail("read_email needs an email's id number, from search_email.");
+    const m = MAIL().messages.find(x => x.id === id);
+    if (!m) fail("There's no email with id " + id + ".");
+    return mailHead(m) + "\nTo: " + (CONN.email.address || "you") + "\n\n" + m.body;
+  }
+  async function emailSend(to, subject, body, approved){
+    to = str(to).trim(); subject = str(subject).trim();
+    const addrs = to.split(/[,;]/).map(a => a.trim()).filter(Boolean);
+    if (!addrs.length || !addrs.every(a => /^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$/.test(a))) fail("“" + to + "” isn't an email address.");
+    if (!approved && !(await allowed(["messages"], "send an email to " + to + ": " + subject))) return false;
+    MAIL(); addStep("Email to " + to, { text:"Subject: " + (subject || "(no subject)") + "\n\n" + str(body) }).done("sample", "ok");
+    return true;
+  }
+  function parseDay(text){
+    const t = str(text).trim().toLowerCase(), today = new Date(); today.setHours(0, 0, 0, 0);
+    if (t === "" || t === "today") return today;
+    if (t === "tomorrow") return new Date(today.getTime() + 86400000);
+    const k = WEEKDAYS.map(w => w.slice(0, 3).toLowerCase()).indexOf(t.slice(0, 3));
+    if (k >= 0 && WEEKDAYS.some(w => w.toLowerCase().startsWith(t)) ) { const d = new Date(today); d.setDate(d.getDate() + ((k - (today.getDay() + 6) % 7) + 7) % 7); return d; }
+    const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(t);
+    if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+    fail("“" + text + "” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.");
+  }
+  function sampleEvents(start, end){
+    connNote("Calendar");
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const at = (day, hhmm) => { const d = new Date(today); d.setDate(d.getDate() + day); const [h, m] = (hhmm || "0:0").split(":").map(Number); d.setHours(h, m, 0, 0); return d; };
+    return ((CONN.calendar || {}).events || []).map(e => ({ start:at(e.day, e.all_day ? "0:0" : e.start), end:e.all_day ? at(e.day + 1, "0:0") : at(e.day, e.end),
+      all_day:!!e.all_day, title:e.title, location:e.location || "" })).filter(e => e.end > start && e.start < end).sort((a, b) => a.start - b.start || (b.all_day - a.all_day));
+  }
+  const eventLine = e => (e.all_day ? "all day" : pad2(e.start.getHours()) + ":" + pad2(e.start.getMinutes()) + "–" + pad2(e.end.getHours()) + ":" + pad2(e.end.getMinutes())) +
+    "  " + e.title + (e.location ? " (" + e.location + ")" : "");
+  function calendarText(day, days){
+    const start = parseDay(day); days = Math.max(1, Math.min(62, Math.floor(num(days) + 0.5) || 7));
+    const lines = []; let cur = null;
+    sampleEvents(start, new Date(start.getTime() + days * 86400000)).forEach(e => {
+      const d = e.start < start ? start : e.start, key = d.toDateString();
+      if (key !== cur) { cur = key; lines.push(dayText(d) + ":"); }
+      lines.push("  " + eventLine(e));
+    });
+    return lines.join("\n") || "Nothing in the calendar for the " + days + " day" + (days !== 1 ? "s" : "") + " from " + dayText(start) + ".";
+  }
+  function freeTime(day, from, to, minutes){
+    const start = parseDay(day), at = hhmm => { const m = /^\s*(\d{1,2})[:.](\d{2})\s*$/.exec(str(hhmm)); if (!m || +m[1] > 24 || +m[2] > 59) fail("“" + hhmm + "” isn't a time like 09:00."); return new Date(start.getTime() + (+m[1] * 60 + +m[2]) * 60000); };
+    const a = at(from || "09:00"), b = at(to || "17:30"), need = Math.max(1, Math.floor(num(minutes) + 0.5) || 30) * 60000;
+    const busy = sampleEvents(start, new Date(start.getTime() + 86400000)).filter(e => !e.all_day && e.end > a && e.start < b).map(e => [Math.max(e.start, a), Math.min(e.end, b)]).sort((x, y) => x[0] - y[0]);
+    const free = []; let t = a.getTime();
+    busy.forEach(([s0, e0]) => { if (s0 > t) free.push([t, s0]); t = Math.max(t, e0); });
+    if (b.getTime() > t) free.push([t, b.getTime()]);
+    const hm = ms => { const d = new Date(ms); return pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+    const slots = free.filter(([x, y]) => y - x >= need);
+    return slots.length ? "Free on " + dayText(start) + ":\n" + slots.map(([x, y]) => "  " + hm(x) + "–" + hm(y)).join("\n")
+      : "No free time of " + (Math.floor(num(minutes) + 0.5) || 30) + " minutes on " + dayText(start) + " between " + (from || "09:00") + " and " + (to || "17:30") + ".";
   }
   function currentTimeText(){
     const d = new Date();
@@ -8524,6 +9749,26 @@ HOW TO MAP CODE
         s.text(out); s.done(v.approved === true ? "passes" : "needs work", v.approved === true ? "ok" : "warn");
         return out;
       }
+      case "read_feed": return feedText(sampleFeedItems(a("url"), inp.limit == null ? 10 : inp.limit));
+      case "search_linkedin": {
+        if (!a("query")) fail("search_linkedin needs a query.");
+        const s = addStep("Search LinkedIn (from Claude's knowledge): " + short(a("query"), 40));
+        const out = await ask("Answer this as if summarising a web search of LinkedIn's public pages, from your own knowledge. You cannot browse, so say plainly that it may be out of date, and give no made-up links or profiles.\n\nQuery: site:linkedin.com " + a("query"), s);
+        s.done("not live", "warn"); return out;
+      }
+      case "my_pull_requests": return ghForMe();
+      case "list_pull_requests": return ghPulls(a("repo"));
+      case "read_pull_request": return ghReadPr(a("repo"), inp.number);
+      case "list_projects": return ghRepos(a("owner"));
+      case "search_github": return ghSearch(a("query"));
+      case "comment_on_github": return (await ghComment(a("repo"), inp.number, a("text"), run.agentApproved)) ? "Comment posted." : "Not posted: the person said no.";
+      case "search_telegram": return tgSearch(a("text"));
+      case "send_telegram": return (await tgSend(a("text"), run.agentApproved)) ? "Sent." : "Not sent: the person said no.";
+      case "search_email": return emailSearch(a("query"), inp.days == null ? 7 : inp.days);
+      case "read_email": return emailRead(a("id"));
+      case "send_email": return (await emailSend(a("to"), a("subject"), inp.body == null ? "" : inp.body, run.agentApproved)) ? "Sent." : "Not sent: the person said no.";
+      case "calendar": return calendarText(a("day") || "today", inp.days == null ? 7 : inp.days);
+      case "free_time": return freeTime(a("day") || "today", a("from") || "09:00", a("to") || "17:30", inp.minutes == null ? 60 : inp.minutes);
     }
     fail("Unknown tool \u201c" + name + "\u201d.");
   }
@@ -8628,6 +9873,7 @@ HOW TO MAP CODE
       let result, refused = false;
       if (askFirst && !(await confirmAction("let the agent use " + name + " with " + short(shown, 200)))) { result = "The person said no, so this tool didn't run."; refused = true; }
       else {
+        run.agentApproved = !!askFirst;  // asked once already: the message itself doesn't ask again
         try { result = await agentRunTool(name, t, inp, tc); }
         catch(e) { if (isControlSignal(e) || halting()) throw e; result = "Error: " + (e && e.message ? e.message : String(e)); }
       }
@@ -8935,6 +10181,25 @@ HOW TO MAP CODE
       case "rb_msg_value": return tc.payload;
       case "rb_ha_state": case "rb_ha_attr": case "rb_ha_find": case "rb_ha_summary":
       case "rb_ha_history": case "rb_ha_snapshot": case "rb_ha_trigger": return haValue(b, tc);
+      case "rb_tg_message": {
+        const m = tc.payload && typeof tc.payload === "object" && "text" in tc.payload ? tc.payload : null;
+        if (!m) return "";
+        return { text:m.text, sender:m.sender || "", chat:m.chat || "" }[b.getFieldValue("PART") || "text"];
+      }
+      case "rb_feed_news": {
+        const url = str(await input(b, tc, "URL")).trim();
+        const items = sampleFeedItems(url, 10);
+        const recs = items.map(i => ({ feed:i.feed, title:i.title, link:i.link, date:whenText(i.date), summary:i.summary }));
+        addStep("News: " + (short(url, 60) || "your feeds"), { mono:true, text:recs.slice(0, 12).map(r => r.date + "  " + r.title).join("\n") || "(nothing)" }).done(recs.length + " items", "ok");
+        return recs;
+      }
+      case "rb_calendar": {
+        const days = Math.max(1, Math.min(62, Math.floor(num(await input(b, tc, "DAYS", 7)) + 0.5) || 7)), start = parseDay("today");
+        const recs = sampleEvents(start, new Date(start.getTime() + days * 86400000)).map(e => ({ day:dayText(e.start), start:e.all_day ? "" : pad2(e.start.getHours()) + ":" + pad2(e.start.getMinutes()),
+          end:e.all_day ? "" : pad2(e.end.getHours()) + ":" + pad2(e.end.getMinutes()), title:e.title, location:e.location }));
+        addStep("Calendar", { mono:true, text:recs.map(r => r.day + " " + (r.start || "all day") + "  " + r.title).join("\n") || "(nothing)" }).done(recs.length + " events", "ok");
+        return recs;
+      }
       case "rb_rec_new": return {};
       case "rb_rec_get": { const r = await input(b, tc, "REC"), k = str(await input(b, tc, "KEY")).trim(); if (!isRec(r)) fail("'" + k + " of' needs a record in its second slot."); return k in r ? r[k] : ""; }
       case "rb_rec_has": { const r = await input(b, tc, "REC"), k = str(await input(b, tc, "KEY")).trim(); return isRec(r) && k in r; }
@@ -9429,6 +10694,8 @@ HOW TO MAP CODE
         if (!(await allowed(["ha", "messages"], "send a notification to " + target + ": " + short(text, 120)))) break;
         haNote(); addStep("Notification → " + target, { text }).done("sample house", "ok"); break;
       }
+      case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
+      case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {
         const text = str(await input(b, tc, "TEXT")), player = str(await input(b, tc, "PLAYER")).trim();
         if (!text.trim()) fail("The 'say' block has nothing to say.");
@@ -9682,7 +10949,7 @@ HOW TO MAP CODE
   $("step-go").onclick = () => { stepper.on = false; releaseStep(true); updateStepUi(); };
 
   /* ---------- Run this script (right-click a block) ---------- */
-  const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when"]);
+  const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when", "rb_tg_when"]);
   function runFromBlock(block){
     if (run && run.active) return;
     const root = block.getRootBlock();
@@ -9690,6 +10957,10 @@ HOW TO MAP CODE
       stepsEl.innerHTML = ""; addStep("Can't run a definition", { text:"Right-click a block that uses this My Block, or the script it's in, to run it." }).done("note", "warn"); return;
     }
     if (root.outputConnection) { startRun([{ evalBlock:root, getNextBlock:() => null }], "manual", true); return; }
+    if (root.type === "rb_tg_when") {  // tried with the sample message, as if it had just arrived
+      const m = (CONN.telegram || {}).incoming || { from:"You", text:"Hello" };
+      startRun([{ getNextBlock:() => root.getNextBlock(), payload:{ text:m.text, sender:m.from, chat:(CONN.telegram || {}).chat || "" } }], "manual", true); return;
+    }
     if (HATS.has(root.type)) { startRun([root], "manual", true); return; }
     startRun([{ getNextBlock:() => root }], "manual", true);
   }
