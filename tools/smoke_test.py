@@ -101,6 +101,14 @@ async def check_claude():
                ", ".join(f"{st['tool'] or '-'}:{st['status']}" for st in steps) + (f" · answer: {R.draft[:40]!r}" if R.draft else ""))
     used.append(R)
 
+    R = fresh(tier)
+    if await attempt(s, "agent used the sums tool", R.agent("Use calculate to work out 37 * 43, then give the result as your answer.", 4, [{"kind": "calc"}])) is not FAILED:
+        steps = R.agent_steps()
+        summed = any(st["tool"] == "calculate" and st["status"] == "done" for st in steps)
+        report(s, "agent used the sums tool", summed and any(st["status"] == "answer" for st in steps),
+               ", ".join(f"{st['tool'] or '-'}:{st['status']}" for st in steps) + (f" · answer: {R.draft[:40]!r}" if R.draft else ""))
+    used.append(R)
+
     os.environ["RB_STREAM"] = "yes"
     R = fresh(tier)
     out = await attempt(s, "streaming", R.ask_text("In one short sentence, what is autolyse in bread making?"))
