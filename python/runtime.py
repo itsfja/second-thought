@@ -33,6 +33,7 @@ for _stream in (sys.stdout, sys.stderr):
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
+                 "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
                  "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES"}
 
@@ -63,10 +64,15 @@ def _load_settings():
 SETTINGS_PATH = _load_settings()
 WHERE_KEYS = f"in {SETTINGS_PATH}" if SETTINGS_PATH else f"in {SETTINGS_FILE}, next to this program"
 
-try:
-    from anthropic import AsyncAnthropic
-except ImportError:
-    sys.exit("This program needs the Anthropic SDK. Install it with:  pip install anthropic")
+
+
+def _anthropic_client(**kw):
+    """The Claude client. Imported when first needed, so the rest of this file loads (and can be tested) without the SDK."""
+    try:
+        from anthropic import AsyncAnthropic
+    except ImportError:
+        raise RunError("Claude needs the Anthropic SDK. Install it with:  pip install anthropic") from None
+    return AsyncAnthropic(**kw)
 
 # Model names change over time. Check https://docs.claude.com for current ones.
 MODELS = {
@@ -169,6 +175,12 @@ PROVIDERS = {p["name"]: p for p in [
               "https://openrouter.ai/keys", {"X-OpenRouter-Title": "Second Thought"}),
     _provider("Perplexity", "perplexity-", "PERPLEXITY_BASE_URL", "https://api.perplexity.ai", ("PERPLEXITY_API_KEY",), "https://www.perplexity.ai/account/api"),
 ]}
+# Model names change over time. To use a different model for a tier without editing this file, put
+# MODEL_<TIER> = <model name> in second-thought.ini, like  MODEL_OPENAI_DEFAULT = gpt-6.2-sol  or  MODEL_QUICK = claude-haiku-5.
+for _tier in list(MODELS):
+    _name = os.environ.get("MODEL_" + _tier.upper().replace("-", "_"), "").strip()
+    if _name:
+        MODELS[_tier] = _name
 NO_VISION = {"deepseek-v4-pro", "MiniMax-M2.7-highspeed"}  # models that can't look at photos
 MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
                 "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro",
@@ -194,6 +206,16 @@ def model_label(tier):
 
 
 MAX_TOKENS = 4096
+
+
+def _seconds(name, default):
+    try:
+        return max(0.0, float(os.environ.get(name, "") or default))
+    except ValueError:
+        return default
+
+
+CALL_TIMEOUT = _seconds("RB_CALL_TIMEOUT", 300) or 300  # one model call gives up after this many seconds (call_timeout)
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
 MAX_SCRIPTS = 100       # scripts started by broadcasts in one run
@@ -708,7 +730,17 @@ class _Calc:
 
 
 def read_text_file(path):
-    """The words in a PDF, a .docx or a text file."""
+    """The words in a PDF, a .docx or a text file. Anything that can't be read becomes a plain RunError."""
+    try:
+        return _read_text_file(path)
+    except RunError:
+        raise
+    except Exception as e:  # noqa: BLE001 - a damaged, locked or mislabelled file: say so, don't crash
+        kind = "Word file" if path.lower().endswith(".docx") else "PDF" if path.lower().endswith(".pdf") else "file"
+        raise RunError(f"That {kind} couldn't be read ({type(e).__name__}: {_short(e, 120)}). It may be damaged, locked, or not really a {kind}.") from None
+
+
+def _read_text_file(path):
     low = path.lower()
     if low.endswith(".pdf"):
         try:
@@ -798,18 +830,24 @@ def page_text(raw, ctype=""):
     return title, text
 
 
-def _public_only(host):
-    """Refuses addresses on your own network (your router, your server, this computer): read_page is for public pages."""
+def _public_addresses(host, port):
+    """Looks the name up once, and refuses it if any address is on your own network (your router, your server, this
+    computer). The connection then goes to exactly these addresses, so the name can't change its answer in between."""
     import ipaddress
     import socket
     try:
-        infos = socket.getaddrinfo(host, None)
+        infos = socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)
     except OSError:
-        raise RunError(f"read_page couldn't find the website “{host}”.") from None
+        raise RunError(f"Couldn't find the website “{host}”.") from None
     for info in infos:
         ip = ipaddress.ip_address(info[4][0].split("%")[0])
         if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
             raise RunError("The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them).")
+    return infos
+
+
+def _public_only(host):
+    _public_addresses(host, None)
 
 
 def _local_pages():
@@ -817,13 +855,51 @@ def _local_pages():
     return os.environ.get("RB_LOCAL_PAGES", "").strip().lower() in ("1", "yes", "true", "on")
 
 
+def _pinned_connections():
+    """HTTP and HTTPS connections that check the address they connect to (see _public_addresses). HTTPS still checks the
+    website's certificate against its name."""
+    import http.client
+    import socket
+
+    def connect(conn):
+        err = None
+        for family, kind, proto, _, addr in _public_addresses(conn.host, conn.port):
+            sock = socket.socket(family, kind, proto)
+            try:
+                sock.settimeout(conn.timeout)
+                sock.connect(addr)
+                conn.sock = sock
+                return
+            except OSError as e:
+                err = e
+                sock.close()
+        raise err or OSError("no address to connect to")
+
+    class Plain(http.client.HTTPConnection):
+        def connect(self):
+            connect(self)
+
+    class Secure(http.client.HTTPSConnection):
+        def connect(self):
+            connect(self)
+            self.sock = self._context.wrap_socket(self.sock, server_hostname=self.host)
+
+    class PlainHandler(urllib.request.HTTPHandler):
+        def http_open(self, req):
+            return self.do_open(Plain, req)
+
+    class SecureHandler(urllib.request.HTTPSHandler):
+        def https_open(self, req):
+            return self.do_open(Secure, req)
+    return PlainHandler, SecureHandler
+
+
 class _PublicRedirects(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         u = urllib.parse.urlparse(newurl)
         if u.scheme not in ("http", "https") or not u.hostname:
             raise RunError("That address sent the program somewhere that isn't a web page.")
-        _public_only(u.hostname)
-        return super().redirect_request(req, fp, code, msg, headers, newurl)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)  # the new address is checked as it connects
 
 
 def get_url(url, trusted=False, what="read_page", limit=3_000_000):
@@ -836,11 +912,16 @@ def get_url(url, trusted=False, what="read_page", limit=3_000_000):
     if u.scheme not in ("http", "https") or not u.hostname:
         raise RunError(f"{what} needs a web address starting with http:// or https://.")
     guard = not trusted and not _local_pages()
-    if guard:
-        _public_only(u.hostname)
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SecondThought/1.0)",
                                                "Accept": "text/html,application/xhtml+xml,application/xml,text/plain;q=0.9,*/*;q=0.5"})
-    opener = urllib.request.build_opener(_PublicRedirects) if guard else urllib.request.build_opener()
+    if not guard:
+        opener = urllib.request.build_opener()
+    elif urllib.request.getproxies().get(u.scheme) and not urllib.request.proxy_bypass(u.hostname):
+        # Through a proxy, the proxy looks the name up, so the best this side can do is check it first.
+        _public_only(u.hostname)
+        opener = urllib.request.build_opener(_PublicRedirects)
+    else:
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), *_pinned_connections(), _PublicRedirects)
     try:
         with opener.open(req, timeout=20) as r:
             return r.headers.get("Content-Type", ""), r.read(limit)
@@ -1141,6 +1222,7 @@ class Runtime:
         self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
         self.agent_trace = []        # the most recent agent's steps, for the "agent's steps" block
         self.run_started = time.time()
+        self.max_seconds = _seconds("RB_MAX_SECONDS", 0)  # max_seconds = 600 stops any run that takes longer
         self.programs = []           # names of saved programs running inside this run, innermost last
         self.calls = 0
         self.steps = 0
@@ -1551,7 +1633,7 @@ class Runtime:
         if self.client is None:
             if not os.environ.get("ANTHROPIC_API_KEY"):
                 raise RunError(f"Claude needs a key. Put ANTHROPIC_API_KEY = your-key {WHERE_KEYS} (https://console.anthropic.com).")
-            self.client = AsyncAnthropic()
+            self.client = _anthropic_client(timeout=CALL_TIMEOUT, max_retries=2)
         args = dict(model=model, max_tokens=MAX_TOKENS,
                     messages=(history or []) + [{"role": "user", "content": self._content(prompt, picture)}])
         if self.instructions:
@@ -1638,7 +1720,7 @@ class Runtime:
             headers["Authorization"] = "Bearer " + pv["key"]
         req = urllib.request.Request(pv["base"] + path, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
         try:
-            with urllib.request.urlopen(req, timeout=600) as r:
+            with urllib.request.urlopen(req, timeout=CALL_TIMEOUT) as r:
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
             detail = e.read().decode("utf-8", "replace")[:200]
@@ -2843,7 +2925,14 @@ class Runtime:
             return {"offset": 0, "messages": []}
 
     async def tg_fetch(self, wait=0):
-        """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones."""
+        """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones.
+        One at a time: two scripts fetching at once would read the same messages twice, or lose one."""
+        if getattr(self, "_tg_lock", None) is None:
+            self._tg_lock = asyncio.Lock()
+        async with self._tg_lock:
+            return await self._tg_fetch(wait)
+
+    async def _tg_fetch(self, wait):
         store = self._tg_load()
         updates = await self._tg("getUpdates", {"offset": store.get("offset", 0), "timeout": wait,
                                                 "allowed_updates": ["message", "channel_post"]}, wait)
@@ -3531,10 +3620,12 @@ class Runtime:
                 for fn in fns:
                     loop.call_soon_threadsafe(rt._fire, fn, dict(rec), "Web request /" + rec["path"])
                 self._answer(200, "Started.")
+        if not secret:  # no password, no open port: nothing on the network can even try
+            print(f"Web requests: set WEBHOOK_SECRET {WHERE_KEYS} to a long password. Until then, the program doesn't listen for them.", flush=True)
+            while True:
+                await asyncio.sleep(3600)
         srv = ThreadingHTTPServer((os.environ.get("WEBHOOK_HOST", "0.0.0.0"), port), Hook)
         threading.Thread(target=srv.serve_forever, daemon=True).start()
-        if not secret:
-            print(f"Web requests: set WEBHOOK_SECRET {WHERE_KEYS} to a long password. Until then, every request is refused.", flush=True)
         print(f"Listening for web requests on port {port}: " + ", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths) + ".", flush=True)
         while True:
             await asyncio.sleep(3600)
@@ -4241,6 +4332,9 @@ class Runtime:
                 self.start_script(fn)
         while self.tasks:
             await asyncio.wait(set(self.tasks), timeout=0.5, return_when=asyncio.FIRST_COMPLETED)
+            if self.max_seconds and not self.ending and self.tasks and time.time() - self.run_started > self.max_seconds:
+                self.error = RunError(f"The run took longer than {self.max_seconds:g} seconds (max_seconds in second-thought.ini), so it stopped.")
+                self._end()
             if not self.ending and not self.schedule_mode and self.tasks and self.msg_waiting >= len(self.tasks):
                 names = ", ".join("“" + k + "”" for k in self.msg_waiters)
                 self.error = RunError("Every script is waiting for " + names + ", but nothing running can send it.")

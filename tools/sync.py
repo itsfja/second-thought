@@ -28,7 +28,12 @@ def build(page: str) -> str:
         body = path.read_text(encoding="utf-8")
         if "</script" in body:
             sys.exit(f"{path.relative_to(ROOT)} must not contain '</script' (it is embedded in a script tag).")
+        if opener not in page:
+            sys.exit(f"second-thought.html has no {opener.strip()!r} tag to put {path.relative_to(ROOT)} in. "
+                     "Put the tag back (an empty one is fine), then run this again.")
         start = page.index(opener) + len(opener)
+        if "</script>" not in page[start:]:
+            sys.exit(f"The {opener.strip()!r} tag in second-thought.html isn't closed with </script>.")
         end = page.index("</script>", start)
         page = page[:start] + body + page[end:]
     return page

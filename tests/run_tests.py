@@ -932,6 +932,9 @@ async def new_feature_page_tests(pg):
     check("[homey]" in files["second-thought.ini"] and "HOMEY_API_KEY = " in files["second-thought.ini"] and "run-on-schedule.sh" in files,
           "a Homey program's settings ask for HOMEY_URL and HOMEY_API_KEY")
 
+    await load_state(pg, script(blk("rb_wait", fields={"UNIT": "s"}, inputs={"SECS": nm(30)}), blk("rb_add_result", inputs={"TEXT": tx("too late")}), blk("rb_result")))
+    EXTRA["t_maxsec"] = await export_python(pg, "t_maxsec")
+
     print("My Blocks")
     double = {"variables": [{"id": "v_x", "name": "x"}], "blocks": {"languageVersion": 0, "blocks": [
         {"type": "rb_start", "x": 20, "y": 20, "next": {"block": add(val({"type": "procedures_callreturn", "extraState": {"name": "double", "params": ["x"]},
@@ -1601,6 +1604,139 @@ def python_tests(codes):
         check(len(notes) == 1 and notes[0].startswith("homey: Washing machine measure_power: ") and notes[0].endswith("→ 1.5"),
               f"t_hm_listen.py starts its script when the washing machine's power changes, and not for other devices ({notes})")
 
+        print("Safety and robustness (from the code review)")
+        unit = r"""
+import json, os, socket, sys, threading, asyncio, zipfile
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+for k in list(os.environ):
+    if k.lower().endswith("_proxy"):
+        del os.environ[k]
+sys.modules["anthropic"] = None  # as if the SDK weren't installed
+hits = []
+class H(BaseHTTPRequestHandler):
+    def log_message(self, *a): pass
+    def do_GET(self):
+        hits.append(self.path); self.send_response(200); self.send_header("Content-Length", "2"); self.end_headers(); self.wfile.write(b"ok")
+srv = ThreadingHTTPServer(("127.0.0.1", 0), H); threading.Thread(target=srv.serve_forever, daemon=True).start()
+port = srv.server_address[1]
+out = {}
+ns = {"__name__": "rt", "__file__": sys.argv[1]}
+exec(compile(open(sys.argv[1], encoding="utf-8").read(), "rt", "exec"), ns)
+out["calc"] = ns["calc_text"]("6 * 7")
+real_lookup, lookups = socket.getaddrinfo, []
+def lookup(host, *a, **k):
+    if host == "rebind.example":  # public the first time it's asked, this computer the second time
+        lookups.append(1)
+        return [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("93.184.215.14" if len(lookups) == 1 else "127.0.0.1", port))]
+    return real_lookup(host, *a, **k)
+socket.getaddrinfo = lookup
+real_connect = socket.socket.connect
+def connect(self, addr):
+    if addr[0] == "93.184.215.14":
+        raise ConnectionRefusedError("test: no internet here")
+    return real_connect(self, addr)
+socket.socket.connect = connect
+try:
+    ns["get_url"](f"http://rebind.example:{port}/secret")
+    out["rebind"] = "fetched"
+except ns["RunError"] as e:
+    out["rebind"] = str(e)
+out["hits"], out["lookups"] = len(hits), len(lookups)
+try:
+    ns["get_url"](f"http://127.0.0.1:{port}/direct")
+    out["direct"] = "fetched"
+except ns["RunError"] as e:
+    out["direct"] = str(e)
+os.environ["ANTHROPIC_API_KEY"] = "x"
+R = ns["Runtime"](); R.reset()
+try:
+    asyncio.run(R._call_claude("m", "hi", None, None, False))
+    out["sdk"] = "called"
+except ns["RunError"] as e:
+    out["sdk"] = str(e)
+d = sys.argv[2]
+open(os.path.join(d, "fake.docx"), "w").write("not a zip at all")
+with zipfile.ZipFile(os.path.join(d, "empty.docx"), "w") as z:
+    z.writestr("other.xml", "<x/>")
+for name in ("fake.docx", "empty.docx"):
+    try:
+        ns["read_text_file"](os.path.join(d, name)); out[name] = "read"
+    except ns["RunError"] as e:
+        out[name] = str(e)
+print(json.dumps(out))
+"""
+        r = subprocess.run([sys.executable, "-c", unit, str(ROOT / "python" / "runtime.py"), tmp], capture_output=True, text=True, timeout=120,
+                           env={k: v for k, v in env.items() if k != "PYTHONPATH"})
+        got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
+        check(got.get("calc") == "6 * 7 = 42" and "needs the Anthropic SDK" in got.get("sdk", ""),
+              "the runtime loads without the Anthropic SDK, and says plainly when Claude needs it" + ("" if got else f": {r.stderr[-300:]!r}"))
+        check(got.get("hits") == 0 and got.get("lookups") == 1 and "couldn't reach" in got.get("rebind", ""),
+              f"a name that changes its answer (DNS rebinding) can't reach this computer: looked up once, connected only to the checked address ({got})")
+        check("not addresses on your own network" in got.get("direct", ""), "an address on your own network is still refused")
+        check("Word file couldn't be read" in got.get("fake.docx", "") and "Word file couldn't be read" in got.get("empty.docx", ""),
+              "a damaged or mislabelled Word file gives a plain message, not a crash")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import sync as sync_tool
+        try:
+            sync_tool.build("<html>no tags</html>")
+            msg = ""
+        except SystemExit as e:
+            msg = str(e)
+        check("has no '<script type=\"text/plain\" id=\"py-runtime\">' tag" in msg, f"tools/sync.py explains a missing tag instead of a traceback ({msg[:80]})")
+        (pathlib.Path(tmp) / "t_maxsec.py").write_text(EXTRA["t_maxsec"], encoding="utf-8")
+        t0 = time.time()
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_maxsec.py")], dict(env, RB_MAX_SECONDS="2"), tmp, timeout=40)
+        check(code_ == 1 and "took longer than 2 seconds" in out and "too late" not in out and time.time() - t0 < 20,
+              f"max_seconds stops a run that takes too long ({time.time() - t0:.0f} s)" + ("" if code_ == 1 else f": {(err or out)[-200:]!r}"))
+        log = pathlib.Path(tmp) / "client.log"
+        (pathlib.Path(tmp) / "review.py").write_text(codes["review"][0], encoding="utf-8")
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "review.py")],
+                                dict(env, FAKE_LOG=str(log), RB_CALL_TIMEOUT="45", MODEL_DEFAULT="claude-override-test"), tmp)
+        text = log.read_text() if log.exists() else ""
+        check(code_ == 0 and '"timeout": 45.0' in text and "claude-override-test |" in text,
+              "call_timeout reaches the Claude client, and MODEL_DEFAULT swaps the model a tier uses" + ("" if code_ == 0 else f": {(err or out)[-200:]!r}"))
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "review.py")], dict(env, FAKE_LOG=str(log)), tmp)
+        check('"timeout": 300' in log.read_text(), "each Claude call gives up after 300 seconds unless call_timeout says otherwise")
+        tg_race = r"""
+import asyncio, json, os, sys
+ns = {"__name__": "rt", "__file__": sys.argv[1]}
+exec(compile(open(sys.argv[1], encoding="utf-8").read(), "rt", "exec"), ns)
+ns["TELEGRAM_FILE"] = os.path.join(sys.argv[2], "tg-race.json")
+R = ns["Runtime"](); R.reset()
+async def go():
+    a, b = await asyncio.gather(R.tg_fetch(), R.tg_fetch())
+    return len(a), len(b)
+a, b = asyncio.run(go())
+store = json.load(open(ns["TELEGRAM_FILE"], encoding="utf-8"))
+texts = [m["text"] for m in store["messages"]]
+print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept": len(texts)}))
+"""
+        tg_add("Race check one")
+        tg_add("Race check two")
+        r = subprocess.run([sys.executable, "-c", tg_race, str(ROOT / "python" / "runtime.py"), tmp], capture_output=True, text=True, timeout=60, env=env)
+        got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
+        check(got.get("dupes") == 0 and got.get("kept", 0) > 0 and 0 in (got.get("a"), got.get("b")),
+              f"two scripts fetching Telegram at once take turns: no message is stored twice ({got or r.stderr[-200:]})")
+        (pathlib.Path(tmp) / "t_listen.py").write_text(EXTRA["t_listen"], encoding="utf-8")
+        import socket
+        with socket.socket() as so:
+            so.bind(("127.0.0.1", 0))
+            closed_port = so.getsockname()[1]
+        knock = {}
+
+        def knock_knock():
+            time.sleep(5)
+            try:
+                socket.create_connection(("127.0.0.1", closed_port), timeout=2).close()
+                knock["result"] = "open"
+            except OSError:
+                knock["result"] = "closed"
+        threading.Thread(target=knock_knock, daemon=True).start()
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_listen.py")],
+                                dict(env, WEBHOOK_SECRET="", WEBHOOK_PORT=str(closed_port), WEBHOOK_HOST="127.0.0.1", RB_POLL_SECONDS="0.5"), tmp, timeout=9)
+        check(knock.get("result") == "closed" and "doesn't listen for them" in out,
+              f"without WEBHOOK_SECRET, the web request port isn't opened at all ({knock.get('result')})")
+
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
@@ -1694,11 +1830,12 @@ def example_ini_check():
         names.add(base)
         names.update(re.findall(r'"([A-Z_]+)"', keys))
     friendly = set(re.findall(r'"([a-z_]+)": "RB_[A-Z_]+"', src.split("SETTING_NAMES = ", 1)[1].split("}", 1)[0]))
-    names -= {"SECOND_THOUGHT_INI"} | {n for n in names if n.startswith("RB_") and any(f'"{f}": "{n}"' in src for f in friendly)}
+    prefixes = {n for n in names if n.endswith("_")}  # like MODEL_ + a tier's name: the example shows the pattern
+    names -= {"SECOND_THOUGHT_INI"} | prefixes | {n for n in names if n.startswith("RB_") and any(f'"{f}": "{n}"' in src for f in friendly)}
     text = (ROOT / "second-thought.example.ini").read_text(encoding="utf-8")
     listed = {m.upper() for m in re.findall(r"^[;#]?\s*([A-Za-z_][A-Za-z0-9_]*)\s*=", text, re.M)}
     missing = sorted((names | {f.upper() for f in friendly if f != "model"}) - listed)
-    check(not missing and "SECOND_THOUGHT_INI" in text, "second-thought.example.ini lists every setting the runtime reads" + (f" (missing: {', '.join(missing)})" if missing else ""))
+    check(not missing and "SECOND_THOUGHT_INI" in text and all(re.search("^; " + p_ + "[A-Z]", text, re.M) for p_ in prefixes), "second-thought.example.ini lists every setting the runtime reads" + (f" (missing: {', '.join(missing)})" if missing else ""))
     cp = configparser.ConfigParser(interpolation=None, inline_comment_prefixes=(";", "#"))
     try:
         cp.read_string(text)

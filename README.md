@@ -198,7 +198,7 @@ The pink **Connections** blocks work without an agent too:
 - **Listeners** start a script when something arrives:
   - **when a Telegram message arrives**, for messages to your bot.
   - **when an MQTT message arrives on …**, for a sensor or switch. `+` stands for one level of the topic and `#` for everything below, like `zigbee2mqtt/#`.
-  - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused.
+  - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all.
   - **when an email arrives containing …**, checked every 2 minutes.
   - **when there's something new in feed …**, checked every 15 minutes.
   - **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files.
@@ -329,9 +329,15 @@ save_log = yes
 
 `resume` is for runs that stop part-way, for example because the internet dropped out or you pressed Ctrl+C. The program keeps a note of each finished step. Next time it can pick up where it stopped: Claude's answers, your answers and the messages already sent are reused, not asked or sent again. In a terminal it asks you first. Set `resume = yes` or `resume = no` to decide for programs that run on their own. If you change the program, it starts afresh.
 
+`max_seconds` stops any run that takes longer than that many seconds, whatever it's doing, so a slow helper can't keep a program busy for ages. `call_timeout` gives up on a single call to a helper after that many seconds (300 if you don't say).
+
+Helpers rename their models from time to time. To use a different model without editing the program, add `MODEL_` and the tier's name in capitals, like `MODEL_OPENAI_DEFAULT = gpt-6.2-sol` or `MODEL_QUICK = claude-haiku-4-5-20251001`. `second-thought.example.ini` shows the pattern.
+
 `save_log` keeps a diary of every run in a folder called `logs`, next to the program. Each step in the diary says which helper answered, how long it took and the exact tokens, and the prompts are tucked under **Prompt sent**. This is handy for programs that run on their own while you sleep.
 
 If a program has an **ask me before** block, Python asks you in the terminal and waits for `y` or `n`. When a program runs by itself on a schedule, with nobody there to answer, it says no and carries on.
+
+Memories saved "forever" live in `memory.json`, next to the program. Two programs can share one memory file (`RB_MEMORY_FILE`), but if both save at the same moment, the last one to save wins.
 
 Everything in `second-thought.ini` can also be set as an environment variable with the same name, if you prefer. An environment variable wins over the file.
 

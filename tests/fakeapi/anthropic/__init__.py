@@ -99,4 +99,6 @@ class _Stream:
             yield text[i:i + 7]
     async def get_final_message(self): return self._msg
 class AsyncAnthropic:
-    def __init__(self): self.messages=_Messages()
+    def __init__(self, **kw):
+        self.messages=_Messages()
+        with open(os.environ.get("FAKE_LOG", os.devnull), "a") as f: f.write("CLIENT " + json.dumps(kw) + "\n")
