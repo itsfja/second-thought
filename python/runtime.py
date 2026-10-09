@@ -208,14 +208,27 @@ def model_label(tier):
 MAX_TOKENS = 4096
 
 
-def _seconds(name, default):
-    try:
-        return max(0.0, float(os.environ.get(name, "") or default))
-    except ValueError:
+def _number_setting(name, default, what, whole=False):
+    """A number from the settings (second-thought.ini or the environment). A mistake stops the program and says
+    which setting is wrong, as a mistake anywhere else in second-thought.ini does, rather than being ignored."""
+    raw = os.environ.get(name, "").strip()
+    if not raw:
         return default
+    friendly = next((k for k, v in SETTING_NAMES.items() if v == name), name)
+    try:
+        n = float(raw)
+        if not math.isfinite(n) or n < 0 or (whole and not n.is_integer()):
+            raise ValueError
+    except ValueError:
+        sys.exit(f"{friendly} must be {what}, not “{raw}”. Fix it {WHERE_KEYS}"
+                 + (f" (or the {name} environment variable)." if friendly != name else ".") + " 0 means no limit.")
+    return int(n) if whole else n
 
 
-CALL_TIMEOUT = _seconds("RB_CALL_TIMEOUT", 300) or 300  # one model call gives up after this many seconds (call_timeout)
+# 0 means no limit for all three (call_timeout used to mean 300 at 0; now 0 is no timeout, like the others).
+CALL_TIMEOUT = _number_setting("RB_CALL_TIMEOUT", 300, "a number of seconds, like 120") or None  # one model call gives up after this long
+MAX_SECONDS = _number_setting("RB_MAX_SECONDS", 0, "a number of seconds, like 900")             # any run stops after this long
+BUDGET = _number_setting("RB_BUDGET", 0, "a whole number of tokens, like 50000", whole=True)      # tokens per run
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
 MAX_SCRIPTS = 100       # scripts started by broadcasts in one run
@@ -1213,16 +1226,13 @@ class Runtime:
         self.reflect = None          # the review loop running now: earlier problems and its best draft so far
         self.checkpoints = {}        # 'save checkpoint' snapshots, by name
         self.usage = {}  # provider -> [tokens in, tokens out]
-        try:  # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
-            self.budget = max(0, int(float(os.environ.get("RB_BUDGET", "0") or 0)))
-        except ValueError:
-            self.budget = 0
+        self.budget = BUDGET          # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
         self.trace = []              # every log line, for save_log
         self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
         self.agent_trace = []        # the most recent agent's steps, for the "agent's steps" block
         self.run_started = time.time()
-        self.max_seconds = _seconds("RB_MAX_SECONDS", 0)  # max_seconds = 600 stops any run that takes longer
+        self.max_seconds = MAX_SECONDS  # max_seconds = 600 stops any run that takes longer
         self.programs = []           # names of saved programs running inside this run, innermost last
         self.calls = 0
         self.steps = 0
