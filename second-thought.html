@@ -1132,6 +1132,73 @@ def _locked(path):
                         f.close()
 
 
+class _WebSocket:
+    """Just enough of a WebSocket client (RFC 6455) for Home Assistant's API, using only the standard library."""
+
+    def __init__(self, reader, writer):
+        self.reader, self.writer = reader, writer
+
+    @classmethod
+    async def connect(cls, url, timeout=20):
+        import ssl
+        u = urllib.parse.urlparse(url)
+        secure = u.scheme in ("wss", "https")
+        port = u.port or (443 if secure else 80)
+        reader, writer = await asyncio.wait_for(asyncio.open_connection(
+            u.hostname, port, ssl=ssl.create_default_context() if secure else None, limit=2 ** 24), timeout)
+        key = base64.b64encode(os.urandom(16)).decode()
+        host = u.hostname + (f":{u.port}" if u.port else "")
+        writer.write((f"GET {u.path or '/'}{'?' + u.query if u.query else ''} HTTP/1.1\r\nHost: {host}\r\nUpgrade: websocket\r\n"
+                      f"Connection: Upgrade\r\nSec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\n\r\n").encode())
+        await writer.drain()
+        head = (await asyncio.wait_for(reader.readuntil(b"\r\n\r\n"), timeout)).decode("latin-1")
+        want = base64.b64encode(hashlib.sha1((key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").encode()).digest()).decode()
+        if " 101 " not in head.split("\r\n", 1)[0] or want not in head:
+            writer.close()
+            raise RunError(f"{u.hostname} didn't accept a WebSocket connection at {u.path} ({head.split(chr(13), 1)[0]}).")
+        return cls(reader, writer)
+
+    async def _send(self, opcode, payload):
+        n, mask = len(payload), os.urandom(4)
+        head = bytes([0x80 | opcode]) + (bytes([0x80 | n]) if n < 126 else bytes([0x80 | 126]) + n.to_bytes(2, "big") if n < 65536
+                                          else bytes([0x80 | 127]) + n.to_bytes(8, "big"))
+        self.writer.write(head + mask + bytes(b ^ mask[i % 4] for i, b in enumerate(payload)))
+        await self.writer.drain()
+
+    async def send_json(self, obj):
+        await self._send(1, json.dumps(obj).encode())
+
+    async def recv_json(self):
+        parts = []
+        while True:
+            b0, b1 = await self.reader.readexactly(2)
+            n = b1 & 0x7F
+            if n == 126:
+                n = int.from_bytes(await self.reader.readexactly(2), "big")
+            elif n == 127:
+                n = int.from_bytes(await self.reader.readexactly(8), "big")
+            mask = await self.reader.readexactly(4) if b1 & 0x80 else None
+            data = await self.reader.readexactly(n)
+            if mask:
+                data = bytes(b ^ mask[i % 4] for i, b in enumerate(data))
+            op = b0 & 0x0F
+            if op == 8:
+                raise RunError("Home Assistant closed the connection.")
+            if op == 9:
+                await self._send(10, data)  # a ping: answer it
+                continue
+            if op in (1, 2, 0):
+                parts.append(data)
+                if b0 & 0x80:  # the last piece of the message
+                    return json.loads(b"".join(parts))
+
+    def close(self):
+        try:
+            self.writer.close()
+        except Exception:  # noqa: BLE001
+            pass
+
+
 def _write_json(path, data, **dump_args):
     """Writes JSON so the file is either all old or all new, even if the program stops part-way."""
     tmp = f"{path}.{os.getpid()}.tmp"
@@ -2726,6 +2793,55 @@ class Runtime:
         v = MESSAGE_VALUE.get()
         return v if isinstance(v, dict) else {"entity": "", "name": "", "from": "", "to": ""}
 
+    async def _listen_ha_event(self, items):
+        """'when Home Assistant event … happens': subscribes to Home Assistant's events over its WebSocket API, so a button press,
+        an automation firing or a custom event starts the script at once. Reconnects (after a minute) if the connection drops."""
+        if not HA_TOKEN:
+            raise RunError(f"Home Assistant events need HA_URL and HA_TOKEN {WHERE_KEYS}.")
+        wants = []
+        for arg, fn in items:
+            kind, _, words = to_str(arg).partition("|")
+            kind = kind.strip()
+            wants.append(("" if kind.lower() in ("", "anything") else kind, words.lower().split(), fn))
+        url = re.sub(r"^http", "ws", HA_URL) + "/api/websocket"
+        try:
+            ws = await _WebSocket.connect(url, timeout=10)
+        except asyncio.TimeoutError:
+            raise RunError(f"Home Assistant didn't answer at {url} within 10 seconds.") from None
+        try:
+            # Home Assistant answers these at once; a stalled sign-in becomes an error, so the listener tries again.
+            try:
+                hello = await asyncio.wait_for(ws.recv_json(), 10)
+                if hello.get("type") == "auth_required":
+                    await ws.send_json({"type": "auth", "access_token": HA_TOKEN})
+                    hello = await asyncio.wait_for(ws.recv_json(), 10)
+            except asyncio.TimeoutError:
+                raise RunError("Home Assistant didn't finish signing in for events within 10 seconds.") from None
+            if hello.get("type") != "auth_ok":
+                raise RunError("Home Assistant refused the token for events (auth_invalid). Check HA_TOKEN.")
+            kinds = [None] if any(k == "" for k, _, _ in wants) else sorted({k for k, _, _ in wants})
+            for n, kind in enumerate(kinds, 1):
+                await ws.send_json(dict({"id": n, "type": "subscribe_events"}, **({"event_type": kind} if kind else {})))
+            print("Listening for Home Assistant events: " + ", ".join(k or "everything" for k in kinds) + ".", flush=True)
+            while True:
+                msg = await ws.recv_json()
+                if msg.get("type") == "result" and not msg.get("success", True):
+                    raise RunError("Home Assistant wouldn't send those events: " + to_str((msg.get("error") or {}).get("message")))
+                if msg.get("type") != "event":
+                    continue
+                ev = msg.get("event") or {}
+                kind, data = to_str(ev.get("event_type")), ev.get("data") or {}
+                blob = json.dumps(data, ensure_ascii=False, default=str)
+                rec = {"event_type": kind, "entity": to_str(data.get("entity_id", "")), "data": blob, "time": to_str(ev.get("time_fired", "")),
+                       "text": f"{kind}: {_short(blob, 400)}"}
+                for k, v in data.items():
+                    rec.setdefault(str(k), json.dumps(v, ensure_ascii=False) if isinstance(v, (dict, list)) else v)
+                for want, words, fn in wants:
+                    if (not want or want == kind) and all(w in blob.lower() for w in words):
+                        self._fire(fn, dict(rec), "Home Assistant: " + kind)
+        finally:
+            ws.close()
+
     # ----- Memory -----
     @staticmethod
     def _mem_key(name):
@@ -4161,7 +4277,7 @@ class Runtime:
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
     LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
-                    "github": "GitHub", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page"}
+                    "github": "GitHub", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page", "ha_event": "Home Assistant events"}
 
     @staticmethod
     def event(key="text"):
@@ -6149,8 +6265,36 @@ class Runtime:
   "camera.garden": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#8fc08a\"/><rect x=\"0\" y=\"0\" width=\"320\" height=\"70\" fill=\"#c9dbe8\"/><ellipse cx=\"200\" cy=\"150\" rx=\"28\" ry=\"16\" fill=\"#333\"/><circle cx=\"226\" cy=\"134\" r=\"11\" fill=\"#333\"/><polygon points=\"220,124 224,114 229,124\" fill=\"#333\"/><polygon points=\"228,124 233,114 236,125\" fill=\"#333\"/><path d=\"M172 150 Q150 135 160 120\" stroke=\"#333\" stroke-width=\"5\" fill=\"none\"/><text x=\"160\" y=\"20\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">GARDEN 15:41</text></svg>",
   "camera.garage": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#a9a59c\"/><rect x=\"60\" y=\"40\" width=\"200\" height=\"150\" fill=\"#3a3a3a\"/><rect x=\"60\" y=\"40\" width=\"200\" height=\"110\" fill=\"#d8d4c8\"/><line x1=\"60\" y1=\"70\" x2=\"260\" y2=\"70\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><line x1=\"60\" y1=\"100\" x2=\"260\" y2=\"100\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><line x1=\"60\" y1=\"130\" x2=\"260\" y2=\"130\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><text x=\"160\" y=\"25\" font-size=\"12\" text-anchor=\"middle\" fill=\"#fff\">GARAGE 15:39</text></svg>",
   "camera.pet": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#e9dcc6\"/><rect x=\"40\" y=\"100\" width=\"240\" height=\"70\" rx=\"12\" fill=\"#7a5c8f\"/><ellipse cx=\"160\" cy=\"105\" rx=\"55\" ry=\"22\" fill=\"#c8893f\"/><circle cx=\"210\" cy=\"92\" r=\"17\" fill=\"#c8893f\"/><ellipse cx=\"222\" cy=\"80\" rx=\"6\" ry=\"11\" fill=\"#9c6528\"/><circle cx=\"216\" cy=\"90\" r=\"2.5\" fill=\"#222\"/><text x=\"160\" y=\"25\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">PET CAM 15:43</text></svg>"
- }
-}</script>
+ },
+ "events": [
+  {
+   "event_type": "zha_event",
+   "data": {
+    "device_ieee": "00:15:8d:00:01:02:03:04",
+    "device_name": "Kitchen remote",
+    "command": "on",
+    "args": [],
+    "endpoint_id": 1
+   }
+  },
+  {
+   "event_type": "automation_triggered",
+   "data": {
+    "name": "Porch light at sunset",
+    "entity_id": "automation.porch_light_at_sunset",
+    "source": "sun event"
+   }
+  },
+  {
+   "event_type": "mobile_app_notification_action",
+   "data": {
+    "action": "OPEN_GARAGE",
+    "device_id": "phone_alex"
+   }
+  }
+ ]
+}
+</script>
 <script type="application/json" id="connections-sample">
 {
   "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, Discord, Slack, email, calendar, MQTT, Homey, web requests, folders and watched web pages.",
@@ -6935,12 +7079,15 @@ Memory (survives between runs):
   Map files or databases used only to keep state between runs (json files, pickle, sqlite caches) to these blocks.
 Home Assistant (talks to the user's Home Assistant):
   Hat: rb_ha_when: fields ENTITY (entity id), STATE (target state or "anything"). Inside it, rb_ha_trigger is a record {entity, name, from, to}.
+  Hat: rb_ha_event_when: fields EVENT (event type like "zha_event", "automation_triggered", or "anything"), DATA (optional words the event's data must contain).
+    Inside it, rb_event gives event_type, entity, data (JSON text), time, text, plus each field of the event's data (e.g. device_name, command).
   Values: rb_ha_state (ENTITY), rb_ha_attr (ATTR, ENTITY), rb_ha_find (TEXT: words to match; "*" = all) -> list of records {entity, name, state, unit, area},
     rb_ha_summary (TEXT) -> text lines of matching entities and states, rb_ha_history (ENTITY, HOURS) -> list of records {time, state},
     rb_ha_snapshot (CAMERA) -> picture.
   Statements: rb_ha_call (SERVICE like "light.turn_off", ENTITY, DATA as JSON text or ""), rb_ha_notify (TARGET like "notify.mobile_app_phone" or "persistent_notification", TEXT),
     rb_ha_speak (TEXT, PLAYER media_player entity).
-  Map Home Assistant REST/WebSocket calls, hass.states.get, call_service and AppDaemon listen_state to these blocks.
+  Map Home Assistant REST/WebSocket calls, hass.states.get, call_service and AppDaemon listen_state to these blocks;
+  map AppDaemon listen_event, hass event listeners and WebSocket subscribe_events to rb_ha_event_when.
 Pictures (values are pictures, not text):
   rb_img_choose: the person picks a picture file.  rb_img_draw (TEXT): Claude draws an SVG illustration of the description.
   rb_img_change (IMG, TEXT): redraws the picture with a change.  rb_img_ask (TEXT, IMG): Claude answers a question about the picture (text).
@@ -7482,7 +7629,7 @@ HOW TO MAP CODE
       B("rb_img_show"), B("rb_img_save")
     ]},
     { kind:"category", name:"Home Assistant", categorystyle:"ha", contents:[
-      B("rb_ha_when"), B("rb_ha_trigger"),
+      B("rb_ha_when"), B("rb_ha_trigger"), B("rb_ha_event_when"), B("rb_event"),
       B("rb_ha_state", { ENTITY:T("sensor.living_room_temperature") }), B("rb_ha_attr", { ATTR:T("current_temperature"), ENTITY:T("climate.living_room") }),
       B("rb_ha_summary", { TEXT:T("temperature") }), B("rb_ha_find", { TEXT:T("light") }),
       B("rb_ha_history", { ENTITY:T("sensor.bathroom_humidity"), HOURS:N(24) }), B("rb_ha_snapshot", { CAMERA:T("camera.front_door") }),
@@ -7658,6 +7805,9 @@ HOW TO MAP CODE
   Blockly.defineBlocksWithJsonArray([
     { type:"rb_ha_when", message0:"when %1 changes to %2", args0:[{ type:"field_input", name:"ENTITY", text:"binary_sensor.doorbell" }, { type:"field_input", name:"STATE", text:"on" }],
       nextStatement:null, style:"ha_hat", tooltip:"Runs the blocks below when this entity changes. Type 'anything' to react to any change. Inside, 'what changed' says what happened." },
+    { type:"rb_ha_event_when", message0:"when Home Assistant event %1 happens with %2", args0:[{ type:"field_input", name:"EVENT", text:"zha_event" }, { type:"field_input", name:"DATA", text:"" }],
+      nextStatement:null, style:"ha_hat",
+      tooltip:"Runs the blocks below the moment Home Assistant sends this event: a button or remote press (zha_event, deconz_event), an automation firing (automation_triggered), a phone notification action, or your own event. Type 'anything' for every event. The second box is optional words the event's data must contain, such as the remote's name. 'What arrived' gives event_type, entity, data, time and text, plus each field of the event's data. On this page, right-click it and choose 'Run this script' to try it with a sample event." },
     { type:"rb_ha_state", message0:"state of %1", args0:[{ type:"input_value", name:"ENTITY" }], output:null, style:"ha", inputsInline:true,
       tooltip:"The entity's current state, for example 'on', 'locked' or 19.5." },
     { type:"rb_ha_attr", message0:"%1 of entity %2", args0:[{ type:"input_value", name:"ATTR" }, { type:"input_value", name:"ENTITY" }], output:null, style:"ha", inputsInline:true,
@@ -8851,6 +9001,14 @@ HOW TO MAP CODE
         xSet("summary", xAsk(xJ("Welcome someone home with a 3-sentence summary of what happened while they were out:\n\nFront door: ", xHHist("binary_sensor.front_door", 6),
           "\nHallway motion: ", xHHist("binary_sensor.motion_hallway", 6), "\nDoorbell: ", xHHist("binary_sensor.doorbell", 6)))),
         ...notifyAndKeep(xV("summary")), sFinish())) },
+    { key:"ha_remote", cat:HC.daily, title:"Remote button starts the coffee",
+      desc:"Listens for Home Assistant events. When the Kitchen remote's 'on' button is pressed, switches on the coffee machine and leaves a note; its 'off' button switches it off. Reacts at once, with no polling. Press Run to try it with a button you type." + HA_NOTE,
+      tip:"Or right-click the 'when Home Assistant event' block and choose 'Run this script' to try a sample button press. Change 'kitchen remote' to your remote's name, and zha_event to deconz_event or hue_event if that's what your remote sends (Developer tools \u2192 Events in Home Assistant shows them).",
+      build:() => P(["button"], listenWay("remote", "Type the button to test with: on or off", blk("rb_ha_event_when", { EVENT:"zha_event", DATA:"kitchen remote" }),
+        xSet("button", xB("logic_ternary", { IF:xB("text_isEmpty", { VALUE:xEv("command") }), THEN:xEv("text"), ELSE:xEv("command") })),
+        sIf(xIs(xV("button"), "on"), sHCall("switch.turn_on", "switch.coffee_machine"), sHNotify("Coffee machine on (Kitchen remote).")),
+        sIf(xIs(xV("button"), "off"), sHCall("switch.turn_off", "switch.coffee_machine")),
+        sAdd(xJ("Kitchen remote: ", xV("button"))), sFinish())) },
     { key:"ha_holiday", cat:HC.daily, title:"Holiday lights",
       desc:"Each evening while you're away, Claude picks lights to switch on, based on how the house was really used last week." + HA_NOTE,
       tip:"Only lights can be chosen: the program checks every id starts with 'light.'.",
@@ -10123,7 +10281,8 @@ HOW TO MAP CODE
       rb_folder_when:["folder", "FOLDER", "when a file appears in folder"], rb_gh_when:["github", null, "when a pull request asks for my review"],
       rb_cal_when:["calendar", "N", "when a calendar event starts in"], rb_discord_when:["discord", "CONTAINS", "when a Discord message arrives containing"],
       rb_slack_when:["slack", "CONTAINS", "when a Slack message arrives containing"], rb_page_when:["page", "URL|WORDS|N", "when the web page"],
-      rb_homey_when:["homey", "DEVICE|CAPABILITY", "when Homey device"] };
+      rb_homey_when:["homey", "DEVICE|CAPABILITY", "when Homey device"],
+      rb_ha_event_when:["ha_event", "EVENT|DATA", "when Home Assistant event"] };
     // Saved programs that 'run program' blocks use, each as one function (its 'when Run is clicked' scripts, in order).
     withSubPrograms(subs => {
       subs.forEach(x => programFn.set(x.key, ident("program_" + x.name)));
@@ -10198,7 +10357,8 @@ HOW TO MAP CODE
         const arg = !field ? "" : field.split("|").map(f => String(b.getFieldValue(f) == null ? "" : b.getFieldValue(f)).trim()).join("|");
         const fn = ident("when_" + kind + "_" + (listeners.filter(l => l[0] === kind).length + 1));
         out.push("async def " + fn + "():");
-        const said = kind === "page" ? (([u, w, n]) => " " + u + " changes" + (w ? " (the part with " + w + ")" : "") + ", checked every " + n + " minutes")(arg.split("|"))
+        const said = kind === "ha_event" ? " " + (arg.split("|")[0] || "anything") + " happens" + (arg.split("|")[1] ? " with " + arg.split("|")[1] : "")
+          : kind === "page" ? (([u, w, n]) => " " + u + " changes" + (w ? " (the part with " + w + ")" : "") + ", checked every " + n + " minutes")(arg.split("|"))
           : field ? " " + (arg.replace("|", " ") || "(your own)") + (kind === "calendar" ? " minutes" : kind === "homey" ? " changes" : "") : "";
         out.push("    \"\"\"" + (words + said).replace(/"/g, "'") + "\"\"\"");
         if (!stmts(b.getNextBlock(), 1, {}, out)) out.push("    pass");
@@ -11612,6 +11772,12 @@ HOW TO MAP CODE
         const to = d && d.capabilitiesObj[c] ? d.capabilitiesObj[c].value : inc.to, from = typeof to === "boolean" ? !to : typeof to === "number" && c !== inc.capability ? to + 1 : inc.from;
         const show = v => typeof v === "boolean" ? homeyShow(v) : v;
         return { device:d ? d.name : dev, zone:d ? ((CONN.homey || {}).zones || {})[d.zone] || "" : "", capability:c, from:show(from), to:show(to), text:(d ? d.name : dev) + " " + c + ": " + homeyShow(from) + " → " + homeyShow(to) }; }
+      case "rb_ha_event_when": { const evs = (HA.sample || {}).events || [], want = str(b.getFieldValue("EVENT")).trim(), words = str(b.getFieldValue("DATA")).toLowerCase().split(/\s+/).filter(Boolean);
+        const any = !want || want.toLowerCase() === "anything", fits = e => (any || e.event_type === want) && words.every(w => JSON.stringify(e.data).toLowerCase().includes(w));
+        const e = evs.find(fits) || (evs.find(x => any || x.event_type === want) ? Object.assign({}, evs.find(x => any || x.event_type === want)) : { event_type:any ? "my_event" : want, data:{} });
+        const blob = JSON.stringify(e.data), rec = { event_type:e.event_type, entity:e.data.entity_id || "", data:blob, time:new Date().toISOString(), text:e.event_type + ": " + (blob.length > 400 ? blob.slice(0, 399) + "…" : blob) };
+        Object.entries(e.data).forEach(([k, v]) => { if (!(k in rec)) rec[k] = v && typeof v === "object" ? JSON.stringify(v) : v; });
+        return rec; }
     }
     return "";
   }
@@ -13024,7 +13190,7 @@ HOW TO MAP CODE
   $("step-go").onclick = () => { stepper.on = false; releaseStep(true); updateStepUi(); };
 
   /* ---------- Run this script (right-click a block) ---------- */
-  const LISTENER_HATS = new Set(["rb_homey_when", "rb_tg_when", "rb_discord_when", "rb_slack_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when", "rb_page_when"]);
+  const LISTENER_HATS = new Set(["rb_homey_when", "rb_tg_when", "rb_discord_when", "rb_slack_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when", "rb_page_when", "rb_ha_event_when"]);
   const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when", ...LISTENER_HATS]);
   function runFromBlock(block){
     if (run && run.active) return;

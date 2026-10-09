@@ -208,6 +208,44 @@ store = json.load(open(ns["TELEGRAM_FILE"], encoding="utf-8"))
 print(json.dumps({"new": [m["text"] for m in new], "stored": [m["text"] for m in store["messages"]], "offset": store["offset"]}))
 """
 
+# Home Assistant events over the WebSocket: a wrong token is said plainly, and a big event (over 64 KB) arrives whole (issue #34).
+HA_EVENTS = r"""
+import asyncio, json, os, sys
+sys.path.insert(0, sys.argv[2])
+import fake_ha
+url, _ = fake_ha.start()
+os.environ.update(HA_URL=url, HA_TOKEN="wrong-token")
+ns = {"__name__": "rt", "__file__": sys.argv[1]}
+exec(compile(open(sys.argv[1], encoding="utf-8").read(), "rt", "exec"), ns)
+R = ns["Runtime"](); R.reset()
+out = {}
+async def bad():
+    try:
+        await R._listen_ha_event([("anything|", None)])
+    except ns["RunError"] as e:
+        return str(e)
+out["bad"] = asyncio.run(asyncio.wait_for(bad(), 15))
+ns["HA_TOKEN"] = fake_ha.TOKEN
+fired = []
+R._fire = lambda fn, rec, label: fired.append(rec)
+async def good():
+    task = asyncio.ensure_future(R._listen_ha_event([("zha_event|kitchen remote", None)]))
+    for _ in range(200):
+        if fake_ha.subscribers:
+            break
+        await asyncio.sleep(0.05)
+    await asyncio.to_thread(fake_ha.fire_event, "zha_event", {"device_name": "Hall remote", "command": "on"})
+    await asyncio.to_thread(fake_ha.fire_event, "zha_event", {"device_name": "Kitchen remote", "command": "on", "note": "x" * 70000})
+    for _ in range(200):
+        if fired:
+            break
+        await asyncio.sleep(0.05)
+    task.cancel()
+asyncio.run(good())
+out["fired"] = [{"command": r.get("command"), "device": r.get("device_name"), "note": len(r.get("note", "")), "type": r.get("event_type")} for r in fired]
+print(json.dumps(out))
+"""
+
 # A forward proxy that redirects a public page to this computer: get_url must refuse the second hop (issue #23).
 PROXY_REDIRECT = r"""
 import json, os, socket, sys, threading
@@ -923,7 +961,8 @@ async def new_feature_page_tests(pg):
             ("rb_email_when", {"CONTAINS": "flour"}, "email", "Subject: Your flour order has shipped"), ("rb_feed_when", {"URL": ""}, "feed", "nail varnish"),
             ("rb_folder_when", {"FOLDER": "drop"}, "folder", "Grandma's loaf"), ("rb_gh_when", {}, "github", "#41: Add rye flour curve"),
             ("rb_cal_when", {"N": 15}, "calendar", " at "), ("rb_discord_when", {"CONTAINS": "anything"}, "discord", "first rye loaf"),
-            ("rb_slack_when", {"CONTAINS": "anything"}, "slack", "proving baskets"), ("rb_tg_when", {"CONTAINS": "anything"}, "telegram", "What should I bake")]
+            ("rb_slack_when", {"CONTAINS": "anything"}, "slack", "proving baskets"), ("rb_tg_when", {"CONTAINS": "anything"}, "telegram", "What should I bake"),
+            ("rb_ha_event_when", {"EVENT": "zha_event", "DATA": "kitchen remote"}, "ha_event", "zha_event: {\"device_ieee\"")]
 
     def say_what(kind):
         return blk("rb_say", inputs={"TEXT": {"block": {"type": "text_join", "extraState": {"itemCount": 2}, "inputs": {"ADD0": tx(kind + ": "),
@@ -970,7 +1009,9 @@ async def new_feature_page_tests(pg):
     EXTRA["t_listen"] = await export_python(pg, "t_listen")
     check('LISTENERS = [("mqtt", "home/proofer/temperature", when_mqtt_1), ("webhook", "bake-done", when_webhook_1), ("email", "flour", when_email_1), '
           '("feed", "", when_feed_1), ("folder", "drop", when_folder_1), ("github", "", when_github_1), ("calendar", "15", when_calendar_1), '
-          '("discord", "anything", when_discord_1), ("slack", "anything", when_slack_1)]' in EXTRA["t_listen"]
+          '("discord", "anything", when_discord_1), ("slack", "anything", when_slack_1), '
+          '("ha_event", "zha_event|kitchen remote", when_ha_event_1)]' in EXTRA["t_listen"]
+          and '"""when Home Assistant event zha_event happens with kitchen remote"""' in EXTRA["t_listen"]
           and "R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES, TELEGRAM_WATCHES, listeners=LISTENERS)" in EXTRA["t_listen"],
           "exported Python lists every listener")
     await pg.evaluate("document.getElementById('io-name').value = 't_listen'")
@@ -1668,21 +1709,43 @@ def python_tests(codes):
             (pathlib.Path(tmp) / "drop").mkdir(exist_ok=True)
             (pathlib.Path(tmp) / "drop" / "notes.txt").write_text("Spelt loaf: 500 g spelt, 350 g water.", encoding="utf-8")
             (pathlib.Path(tmp) / "drop" / ".hidden").write_text("ignored", encoding="utf-8")
+        ha_seen = {}
+
+        def ha_poke():
+            """Send Home Assistant events as soon as the program subscribes (its own thread, so the other pokes can't delay it)."""
+            start = time.time()
+            while not fake_ha.subscribers and time.time() - start < 28:
+                time.sleep(0.1)
+            ha_seen["subscribed_after"] = round(time.time() - start, 1) if fake_ha.subscribers else None
+            time.sleep(1.5)  # as with MQTT: give the program a moment after subscribing (on Windows, events in its first second were sometimes missed)
+            ha_seen["sent"] = [fake_ha.fire_event("zha_event", {"device_name": "Hall remote", "command": "on"}),  # another remote
+                               fake_ha.fire_event("call_service", {"domain": "light", "service": "turn_on"}),  # another kind of event
+                               fake_ha.fire_event("zha_event", {"device_name": "Kitchen remote", "command": "on"})]
         before = len(broker.published)
         pk = threading.Thread(target=poke, daemon=True)
         pk.start()
+        threading.Thread(target=ha_poke, daemon=True).start()
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_listen.py")],
                                 dict(env, RB_POLL_SECONDS="0.5", WEBHOOK_PORT=str(hook_port), WEBHOOK_SECRET="hook-secret", WEBHOOK_HOST="127.0.0.1",
                                      CALENDAR_URL=svc_url + "/calendar-soon.ics"), tmp, timeout=30)
         out = out.replace("\r\n", "\n")
-        notes = [l.strip() for l in out.split("\n") if re.match(r"\s+(mqtt|webhook|email|feed|folder|github|calendar|telegram|discord|slack): ", l)]
+        notes = [l.strip() for l in out.split("\n") if re.match(r"\s+(mqtt|webhook|email|feed|folder|github|calendar|telegram|discord|slack|ha_event): ", l)]
         got = {n.split(":", 1)[0] for n in notes}
-        check(got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "calendar", "discord", "slack"},
+        check(got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "calendar", "discord", "slack", "ha_event"},
               f"t_listen.py: every listener started its script when something arrived ({', '.join(sorted(got)) or 'none'})" + ("" if got else f": {(err or out)[-400:]!r}"))
         check("mqtt: 27.9" in notes and not any("19" == n.split(": ", 1)[1] for n in notes if n.startswith("mqtt")) and ("home/proofer/ack", "seen 27.9", False) in broker.published[before:],
               "the MQTT listener reacts to its own topic only, and its script can publish a reply")
         check(hook.get("refused") == 403 and hook.get("ok") == 200 and any(n.startswith("webhook: ") and "spelt" in n for n in notes),
               f"a web request without the key is refused; with it, the script gets what was sent ({hook})")
+        ha_notes = [n for n in notes if n.startswith("ha_event: ")]
+        check(len(ha_notes) == 1 and "Kitchen remote" in ha_notes[0] and ha_notes[0].startswith("ha_event: zha_event: "),
+              f"the Home Assistant event listener reacts to its own remote's event only, at once ({ha_notes})"
+              + ("" if len(ha_notes) == 1 else f" {ha_seen}"))
+        if len(ha_notes) != 1:  # short lines the CI summary keeps (it shows lines with 'error:', cut at 300 characters)
+            for l in [l for l in out.split("\n") if l.strip().startswith("(") or "Listening" in l or "Home Assistant" in l][-12:] + (err or "").splitlines()[-8:]:
+                print("  error: t_listen said: " + l.strip()[:250])
+            for entry in fake_ha.ws_log[-12:]:
+                print(f"  error: fake Home Assistant: {entry}")
         check("Subject: More flour on the way" in out and "Subject: Unrelated" not in out and "Subject: Your flour order has shipped" not in out,
               "the email listener only reacts to new emails that match")
         check(any("steam in home ovens" in n for n in notes) and not any("nail varnish" in n for n in notes), "the feed listener only reacts to new items")
@@ -1924,6 +1987,10 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
         check(got.get("kept") == 100 and got.get("unique") == 100 and got.get("tmp_left") == 0 and not got.get("errors"),
               f"four programs adding to one shared memory list at once keep all 100 items ({got or r.stderr[-200:]})")
+        r = subprocess.run([sys.executable, "-c", HA_EVENTS, rt_path, str(ROOT / "tests")], capture_output=True, text=True, timeout=60, env=env)
+        got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
+        check("refused the token" in (got.get("bad") or "") and got.get("fired") == [{"command": "on", "device": "Kitchen remote", "note": 70000, "type": "zha_event"}],
+              f"Home Assistant events: a wrong token is said plainly, and a 70 KB event arrives whole ({got or r.stderr[-300:]})")
         r = subprocess.run([sys.executable, "-c", TG_MERGE, rt_path], capture_output=True, text=True, timeout=60, env=env)
         got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
         check(got.get("new") == ["second"] and got.get("stored") == ["first", "second"] and got.get("offset") == 1003,

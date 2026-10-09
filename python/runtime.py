@@ -714,6 +714,73 @@ def _locked(path):
                         f.close()
 
 
+class _WebSocket:
+    """Just enough of a WebSocket client (RFC 6455) for Home Assistant's API, using only the standard library."""
+
+    def __init__(self, reader, writer):
+        self.reader, self.writer = reader, writer
+
+    @classmethod
+    async def connect(cls, url, timeout=20):
+        import ssl
+        u = urllib.parse.urlparse(url)
+        secure = u.scheme in ("wss", "https")
+        port = u.port or (443 if secure else 80)
+        reader, writer = await asyncio.wait_for(asyncio.open_connection(
+            u.hostname, port, ssl=ssl.create_default_context() if secure else None, limit=2 ** 24), timeout)
+        key = base64.b64encode(os.urandom(16)).decode()
+        host = u.hostname + (f":{u.port}" if u.port else "")
+        writer.write((f"GET {u.path or '/'}{'?' + u.query if u.query else ''} HTTP/1.1\r\nHost: {host}\r\nUpgrade: websocket\r\n"
+                      f"Connection: Upgrade\r\nSec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\n\r\n").encode())
+        await writer.drain()
+        head = (await asyncio.wait_for(reader.readuntil(b"\r\n\r\n"), timeout)).decode("latin-1")
+        want = base64.b64encode(hashlib.sha1((key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").encode()).digest()).decode()
+        if " 101 " not in head.split("\r\n", 1)[0] or want not in head:
+            writer.close()
+            raise RunError(f"{u.hostname} didn't accept a WebSocket connection at {u.path} ({head.split(chr(13), 1)[0]}).")
+        return cls(reader, writer)
+
+    async def _send(self, opcode, payload):
+        n, mask = len(payload), os.urandom(4)
+        head = bytes([0x80 | opcode]) + (bytes([0x80 | n]) if n < 126 else bytes([0x80 | 126]) + n.to_bytes(2, "big") if n < 65536
+                                          else bytes([0x80 | 127]) + n.to_bytes(8, "big"))
+        self.writer.write(head + mask + bytes(b ^ mask[i % 4] for i, b in enumerate(payload)))
+        await self.writer.drain()
+
+    async def send_json(self, obj):
+        await self._send(1, json.dumps(obj).encode())
+
+    async def recv_json(self):
+        parts = []
+        while True:
+            b0, b1 = await self.reader.readexactly(2)
+            n = b1 & 0x7F
+            if n == 126:
+                n = int.from_bytes(await self.reader.readexactly(2), "big")
+            elif n == 127:
+                n = int.from_bytes(await self.reader.readexactly(8), "big")
+            mask = await self.reader.readexactly(4) if b1 & 0x80 else None
+            data = await self.reader.readexactly(n)
+            if mask:
+                data = bytes(b ^ mask[i % 4] for i, b in enumerate(data))
+            op = b0 & 0x0F
+            if op == 8:
+                raise RunError("Home Assistant closed the connection.")
+            if op == 9:
+                await self._send(10, data)  # a ping: answer it
+                continue
+            if op in (1, 2, 0):
+                parts.append(data)
+                if b0 & 0x80:  # the last piece of the message
+                    return json.loads(b"".join(parts))
+
+    def close(self):
+        try:
+            self.writer.close()
+        except Exception:  # noqa: BLE001
+            pass
+
+
 def _write_json(path, data, **dump_args):
     """Writes JSON so the file is either all old or all new, even if the program stops part-way."""
     tmp = f"{path}.{os.getpid()}.tmp"
@@ -2308,6 +2375,55 @@ class Runtime:
         v = MESSAGE_VALUE.get()
         return v if isinstance(v, dict) else {"entity": "", "name": "", "from": "", "to": ""}
 
+    async def _listen_ha_event(self, items):
+        """'when Home Assistant event … happens': subscribes to Home Assistant's events over its WebSocket API, so a button press,
+        an automation firing or a custom event starts the script at once. Reconnects (after a minute) if the connection drops."""
+        if not HA_TOKEN:
+            raise RunError(f"Home Assistant events need HA_URL and HA_TOKEN {WHERE_KEYS}.")
+        wants = []
+        for arg, fn in items:
+            kind, _, words = to_str(arg).partition("|")
+            kind = kind.strip()
+            wants.append(("" if kind.lower() in ("", "anything") else kind, words.lower().split(), fn))
+        url = re.sub(r"^http", "ws", HA_URL) + "/api/websocket"
+        try:
+            ws = await _WebSocket.connect(url, timeout=10)
+        except asyncio.TimeoutError:
+            raise RunError(f"Home Assistant didn't answer at {url} within 10 seconds.") from None
+        try:
+            # Home Assistant answers these at once; a stalled sign-in becomes an error, so the listener tries again.
+            try:
+                hello = await asyncio.wait_for(ws.recv_json(), 10)
+                if hello.get("type") == "auth_required":
+                    await ws.send_json({"type": "auth", "access_token": HA_TOKEN})
+                    hello = await asyncio.wait_for(ws.recv_json(), 10)
+            except asyncio.TimeoutError:
+                raise RunError("Home Assistant didn't finish signing in for events within 10 seconds.") from None
+            if hello.get("type") != "auth_ok":
+                raise RunError("Home Assistant refused the token for events (auth_invalid). Check HA_TOKEN.")
+            kinds = [None] if any(k == "" for k, _, _ in wants) else sorted({k for k, _, _ in wants})
+            for n, kind in enumerate(kinds, 1):
+                await ws.send_json(dict({"id": n, "type": "subscribe_events"}, **({"event_type": kind} if kind else {})))
+            print("Listening for Home Assistant events: " + ", ".join(k or "everything" for k in kinds) + ".", flush=True)
+            while True:
+                msg = await ws.recv_json()
+                if msg.get("type") == "result" and not msg.get("success", True):
+                    raise RunError("Home Assistant wouldn't send those events: " + to_str((msg.get("error") or {}).get("message")))
+                if msg.get("type") != "event":
+                    continue
+                ev = msg.get("event") or {}
+                kind, data = to_str(ev.get("event_type")), ev.get("data") or {}
+                blob = json.dumps(data, ensure_ascii=False, default=str)
+                rec = {"event_type": kind, "entity": to_str(data.get("entity_id", "")), "data": blob, "time": to_str(ev.get("time_fired", "")),
+                       "text": f"{kind}: {_short(blob, 400)}"}
+                for k, v in data.items():
+                    rec.setdefault(str(k), json.dumps(v, ensure_ascii=False) if isinstance(v, (dict, list)) else v)
+                for want, words, fn in wants:
+                    if (not want or want == kind) and all(w in blob.lower() for w in words):
+                        self._fire(fn, dict(rec), "Home Assistant: " + kind)
+        finally:
+            ws.close()
+
     # ----- Memory -----
     @staticmethod
     def _mem_key(name):
@@ -3743,7 +3859,7 @@ class Runtime:
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
     LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
-                    "github": "GitHub", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page"}
+                    "github": "GitHub", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page", "ha_event": "Home Assistant events"}
 
     @staticmethod
     def event(key="text"):
