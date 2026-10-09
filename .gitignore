@@ -8,6 +8,8 @@ __pycache__/
 # Files written by exported programs
 outputs/
 memory.json
+watched-pages.json
+telegram-messages.json
 *.json.lock
 .DS_Store
 second-thought.ini

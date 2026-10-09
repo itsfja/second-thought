@@ -1,5 +1,5 @@
 {
-  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, Homey, web requests and folders.",
+  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, Homey, web requests, folders and watched web pages.",
   "feeds": {
     "https://example.com/baking/feed": {
       "title": "The Loaf Letter (sample feed)",
@@ -577,6 +577,14 @@
       "capability": "measure_power",
       "from": 412,
       "to": 3.1
+    }
+  },
+  "page": {
+    "incoming": {
+      "url": "https://example.com/shop/rye-flour",
+      "title": "Wholemeal rye flour, 1 kg (sample page)",
+      "before": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.40\nIn stock\nVisitors today: 17",
+      "after": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.65\nOnly 3 left\nVisitors today: 18"
     }
   }
 }
