@@ -1275,8 +1275,9 @@ class Runtime:
         self.receivers = {}
         self.client = None
         self.gemini = None
-        self._input_lock = None
-        self.no_schema = set()       # Claude models that refused a reply shape, so it isn't sent again
+        self._input_lock = asyncio.Lock()  # one question at the keyboard at a time
+        self._tg_lock = asyncio.Lock()  # one Telegram fetch at a time (made here, so two fetches can never make one each)
+        self.no_schema = set()      # Claude models that refused a reply shape, so it isn't sent again
         self.json_modes = {}         # (service, model) -> the JSON mode that service accepts: "schema", "object" or "none"
         self.schedule_mode = False
         self.transient_memory = {}   # kept across runs while this program keeps running
@@ -2643,8 +2644,6 @@ class Runtime:
 
     # ----- You (the person at the keyboard) -----
     async def _input(self, prompt):
-        if self._input_lock is None:
-            self._input_lock = asyncio.Lock()
         async with self._input_lock:
             try:
                 return await asyncio.to_thread(input, prompt)
@@ -3012,8 +3011,6 @@ class Runtime:
     async def tg_fetch(self, wait=0):
         """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones.
         One at a time: two scripts fetching at once would read the same messages twice, or lose one."""
-        if getattr(self, "_tg_lock", None) is None:
-            self._tg_lock = asyncio.Lock()
         async with self._tg_lock:
             return await self._tg_fetch(wait)
 
