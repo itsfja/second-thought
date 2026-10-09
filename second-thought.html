@@ -675,6 +675,12 @@ TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rs
 TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
 # The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
 PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
+# Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
+# turned on, and DISCORD_CHANNEL_ID: the channels it reads and posts in (anyone in a server can post, so only these count).
+# Slack: a bot token (api.slack.com/apps, your app, OAuth & Permissions; scopes channels:history, groups:history,
+# chat:write) and SLACK_CHANNEL_ID, the channels it reads and posts in. Invite the bot to each channel.
+DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
+SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
 # worked out for Gmail, iCloud, Yahoo and Fastmail; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
 # MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
@@ -3532,6 +3538,135 @@ class Runtime:
                     else:
                         busy = asyncio.ensure_future(self.run([(fn, m)], "Telegram message"))
 
+    # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
+    CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
+                         "make": "a bot in the Discord Developer Portal (Applications, your app, Bot), with the Message Content intent on"},
+             "slack": {"name": "Slack", "token": "SLACK_BOT_TOKEN", "channels": "SLACK_CHANNEL_ID", "limit": 3500,
+                       "make": "a Slack app (api.slack.com/apps) with a bot token and the channels:history and chat:write scopes"}}
+
+    def _chat_channels(self, service):
+        return [c for c in re.split(r"[\s,]+", os.environ.get(self.CHATS[service]["channels"], "")) if c]
+
+    async def _chat_api(self, service, method, path, body=None, query=None):
+        c = self.CHATS[service]
+        token = os.environ.get(c["token"], "").strip()
+        if not token:
+            raise RunError(f"{c['name']} needs {c['token']} {WHERE_KEYS}: make {c['make']}.")
+        base = DISCORD_API if service == "discord" else SLACK_API
+        url = base + path + ("?" + urllib.parse.urlencode(query) if query else "")
+        req = urllib.request.Request(url, method=method, data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": ("Bot " if service == "discord" else "Bearer ") + token,
+                                              "Content-Type": "application/json; charset=utf-8", "User-Agent": "SecondThought (+https://claude.ai)"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=30) as r:
+                    data = json.loads(r.read() or b"null")
+            except urllib.error.HTTPError as e:
+                why = {401: f"the bot token was refused. Check {c['token']}", 403: "the bot isn't allowed in that channel. Add it to the channel and give it permission to read and send messages",
+                       404: "there's no such channel, or the bot can't see it", 429: "it's asking the program to slow down. Try again in a minute"}.get(e.code, f"it answered {e.code}")
+                raise RunError(f"{c['name']}: {why}.") from None
+            except urllib.error.URLError as e:
+                raise RunError(f"Couldn't reach {c['name']} ({e.reason}).") from None
+            if service == "slack" and isinstance(data, dict) and not data.get("ok"):
+                err = to_str(data.get("error") or "it said no")
+                why = {"not_in_channel": "the bot isn't in that channel. Invite it with /invite", "channel_not_found": "there's no such channel, or the bot can't see it",
+                       "invalid_auth": f"the bot token was refused. Check {c['token']}", "missing_scope": "the app needs more scopes (channels:history and chat:write)"}.get(err, err)
+                raise RunError(f"Slack: {why}.")
+            return data
+        return await asyncio.to_thread(go)
+
+    async def _chat_read(self, service, channel, after=None, limit=50):
+        """(messages, newest id): messages in one channel, oldest first, as records (text, sender, channel, id), skipping
+        bots, this one included. The newest id counts every message, bots too, so a listener knows where it got to."""
+        out, newest = [], after
+        if service == "discord":
+            q = {"limit": limit, **({"after": after} if after else {})}
+            raw = await self._chat_api("discord", "GET", f"/channels/{urllib.parse.quote(channel)}/messages", query=q) or []
+            newest = max((m["id"] for m in raw), key=int, default=after)
+            for m in sorted(raw, key=lambda x: int(x["id"])):
+                a = m.get("author") or {}
+                if a.get("bot") or not to_str(m.get("content")).strip():
+                    continue
+                out.append({"text": m["content"], "sender": a.get("global_name") or a.get("username", ""), "channel": channel, "id": m["id"],
+                            "date": _parse_date(m.get("timestamp", "")) or datetime.datetime.now()})
+        else:
+            q = {"channel": channel, "limit": limit, **({"oldest": after} if after else {})}
+            raw = [m for m in (await self._chat_api("slack", "GET", "/conversations.history", query=q) or {}).get("messages", []) if m.get("ts") != after]
+            newest = max((m["ts"] for m in raw), key=float, default=after)
+            for m in sorted(raw, key=lambda x: float(x["ts"])):
+                if m.get("bot_id") or m.get("subtype") or not to_str(m.get("text")).strip():
+                    continue
+                out.append({"text": m["text"], "sender": m.get("user", ""), "channel": channel, "id": m["ts"],
+                            "date": datetime.datetime.fromtimestamp(float(m["ts"]))})
+        return out, newest
+
+    def _chat_need_channels(self, service):
+        chans = self._chat_channels(service)
+        if not chans:
+            c = self.CHATS[service]
+            raise RunError(f"{c['name']} needs {c['channels']} {WHERE_KEYS}: the channels it reads and posts in (anyone can post in a "
+                           f"{'server' if service == 'discord' else 'workspace'}, so only these count).")
+        return chans
+
+    async def chat_search(self, service, text="", limit=20):
+        words, found = to_str(text).lower().split(), []
+        for ch in self._chat_need_channels(service):
+            found += [m for m in (await self._chat_read(service, ch, limit=100))[0] if all(w in m["text"].lower() for w in words)]
+        found.sort(key=lambda m: m["date"], reverse=True)
+        name = self.CHATS[service]["name"]
+        return "\n".join(f"{_when(m['date'])} · {m['sender']} in {m['channel']}: {_short(m['text'], 300)}" for m in found[:max(1, min(50, round_js(num(limit)) or 20))]) \
+            or (f"No {name} messages found" + (f" with “{text}”" if words else "") + f". Only the channels in {self.CHATS[service]['channels']} are read.")
+
+    async def chat_send(self, service, text, channel="", approved=False):
+        c = self.CHATS[service]
+        text = to_str(text).strip()
+        if not text:
+            raise RunError(f"A {c['name']} message needs some text.")
+        mine = self._chat_need_channels(service)
+        trig = MESSAGE_VALUE.get()
+        channel = to_str(channel).strip() or (trig.get("channel") if isinstance(trig, dict) and trig.get("service") == service else "") or mine[0]
+        if channel not in mine:
+            raise RunError(f"{c['name']}: channel {channel} isn't in {c['channels']}, so nothing is sent there.")
+        if not approved and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
+            return False
+        for i in range(0, len(text), c["limit"]):
+            part = text[i:i + c["limit"]]
+            if service == "discord":
+                await self._chat_api("discord", "POST", f"/channels/{urllib.parse.quote(channel)}/messages", {"content": part, "allowed_mentions": {"parse": []}})
+            else:
+                await self._chat_api("slack", "POST", "/chat.postMessage", {"channel": channel, "text": part})
+        self.log(f"{c['name']} message sent", text, "sent")
+        return True
+
+    async def _listen_chat(self, service, items):
+        """'when a Discord/Slack message arrives': checks each channel every 10 seconds. Messages already there at the start don't count."""
+        chans = self._chat_need_channels(service)
+        last = {ch: (await self._chat_read(service, ch, limit=1))[1] for ch in chans}
+        if service == "slack":  # Slack's 'oldest' is a time; start from now if the channel was empty
+            last = {ch: v or f"{time.time():.6f}" for ch, v in last.items()}
+        print(f"Listening for {self.CHATS[service]['name']} messages in " + ", ".join(chans) + ".", flush=True)
+        while True:
+            await asyncio.sleep(self._poll(10))
+            for ch in chans:
+                try:
+                    new, last[ch] = await self._chat_read(service, ch, after=last[ch])
+                except RunError as e:
+                    print(f"  ({self.CHATS[service]['name']} check failed: {e})", flush=True)
+                    continue
+                for m in new:
+                    rec = {"service": service, "text": m["text"], "sender": m["sender"], "channel": ch, "id": m["id"]}
+                    for contains, fn in items:
+                        want = to_str(contains).strip().lower()
+                        if want in ("", "anything") or want in m["text"].lower():
+                            self._fire(fn, dict(rec), f"{self.CHATS[service]['name']} message")
+
+    async def _listen_discord(self, items):
+        await self._listen_chat("discord", items)
+
+    async def _listen_slack(self, items):
+        await self._listen_chat("slack", items)
+
     # Email
     MAIL_SERVERS = {"gmail.com": ("imap.gmail.com", "smtp.gmail.com", 465), "googlemail.com": ("imap.gmail.com", "smtp.gmail.com", 465),
                     "icloud.com": ("imap.mail.me.com", "smtp.mail.me.com", 587), "me.com": ("imap.mail.me.com", "smtp.mail.me.com", 587),
@@ -4026,7 +4161,7 @@ class Runtime:
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
     LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
-                    "github": "GitHub", "calendar": "Calendar", "page": "Web page"}
+                    "github": "GitHub", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page"}
 
     @staticmethod
     def event(key="text"):
@@ -4444,7 +4579,13 @@ class Runtime:
         ("run_homey_flow", "Start one of the person's Homey flows, by its name. The person may be asked first, and may say no.", ["flow"])]
     AGENT_BUILTINS["homey_act_free"] = AGENT_BUILTINS["homey_act"]
     AGENT_BUILTINS["telegram_send_free"] = AGENT_BUILTINS["telegram_send"]
-    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act"}  # built-in tools that ask before each use
+    for _svc, _name in (("discord", "Discord"), ("slack", "Slack")):
+        AGENT_BUILTINS[_svc] = [(f"search_{_svc}", f"Search the recent messages in the person's {_name} channels, newest first. Leave text empty for the latest.", ["text"])]
+        AGENT_BUILTINS[_svc + "_send"] = AGENT_BUILTINS[_svc + "_send_free"] = [
+            (f"send_{_svc}", f"Send a {_name} message to the person's channel (or back to the channel a message came from). "
+             "The person may be asked first, and may say no.", ["text"])]
+    del _svc, _name
+    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
@@ -4456,14 +4597,15 @@ class Runtime:
                          "search_linkedin": {"query": "text"}, "my_pull_requests": {}, "list_pull_requests": {"repo": "text", "state": "text"},
                          "read_pull_request": {"repo": "text", "number": "number"}, "list_projects": {"owner": "text"}, "search_github": {"query": "text"},
                          "comment_on_github": {"repo": "text", "number": "number", "text": "text"}, "search_telegram": {"text": "text"},
-                         "send_telegram": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
+                         "send_telegram": {"text": "text"}, "search_discord": {"text": "text"}, "send_discord": {"text": "text"},
+                         "search_slack": {"text": "text"}, "send_slack": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
                          "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
                          "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"},
                          "read_mqtt": {"topic": "text"}, "publish_mqtt": {"topic": "text", "message": "text", "retain": "yes/no"},
                          "find_homey_devices": {"search": "text"}, "list_homey_flows": {}, "homey_variable": {"name": "text"},
                          "set_homey_device": {"device": "text", "capability": "text", "value": "any"}, "run_homey_flow": {"flow": "text"}}
     AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
-                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"},
+                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"}, "search_discord": {"text"}, "search_slack": {"text"},
                       "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"},
                       "publish_mqtt": {"retain"}, "find_homey_devices": {"search"}}
     MAX_FILE_CHARS = 30000
@@ -4685,6 +4827,11 @@ class Runtime:
         if kind == "comment_on_github":
             done = await self.gh_comment(a("repo"), inp.get("number", 0), a("text"), approved)
             return "Comment posted." if done else "Not posted: the person said no, or nobody was there to ask."
+        if kind in ("search_discord", "search_slack"):
+            return await self.chat_search(kind.split("_")[1], a("text"))
+        if kind in ("send_discord", "send_slack"):
+            done = await self.chat_send(kind.split("_")[1], a("text"), "", approved)
+            return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
         if kind == "search_telegram":
             return await self.tg_search(a("text"))
         if kind == "send_telegram":
@@ -6006,7 +6153,7 @@ class Runtime:
 }</script>
 <script type="application/json" id="connections-sample">
 {
-  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, Homey, web requests, folders and watched web pages.",
+  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, Discord, Slack, email, calendar, MQTT, Homey, web requests, folders and watched web pages.",
   "feeds": {
     "https://example.com/baking/feed": {
       "title": "The Loaf Letter (sample feed)",
@@ -6593,6 +6740,54 @@ class Runtime:
       "before": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.40\nIn stock\nVisitors today: 17",
       "after": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.65\nOnly 3 left\nVisitors today: 18"
     }
+  },
+  "discord": {
+    "channel": "#baking (sample server)",
+    "messages": [
+      {
+        "from": "crumb_shot",
+        "text": "Anyone tried the new spelt from the mill? Mine came out dense.",
+        "hours_ago": 1
+      },
+      {
+        "from": "night_loaf",
+        "text": "Bake-along is Sunday at 10, bring your rye starter",
+        "hours_ago": 6
+      },
+      {
+        "from": "You",
+        "text": "Reminder: bake-along recipe is pinned",
+        "hours_ago": 30
+      }
+    ],
+    "incoming": {
+      "from": "crumb_shot",
+      "text": "What hydration should a first rye loaf be?"
+    }
+  },
+  "slack": {
+    "channel": "#kitchen (sample workspace)",
+    "messages": [
+      {
+        "from": "Sam",
+        "text": "Oven's free from 2pm if you want it",
+        "hours_ago": 2
+      },
+      {
+        "from": "Alex",
+        "text": "Who took the last of the rye flour?",
+        "hours_ago": 4
+      },
+      {
+        "from": "You",
+        "text": "Ordering flour on Friday",
+        "hours_ago": 26
+      }
+    ],
+    "incoming": {
+      "from": "Sam",
+      "text": "Can I borrow the proving baskets tomorrow?"
+    }
   }
 }
 </script>
@@ -6724,6 +6919,9 @@ Agent (the model chooses its own steps):
   rb_homey_set: inputs DEVICE, CAPABILITY, VALUE, statement; rb_homey_flow: input NAME, statement; rb_homey_variable: input NAME, value; rb_homey_set_variable: inputs NAME, VALUE, statement.
   Agent tool kinds "homey_read": find_homey_devices, list_homey_flows, homey_variable | "homey_act" | "homey_act_free": set_homey_device, run_homey_flow.
   Map homey-api / Homey Web API calls (devices.getDevices, setCapabilityValue, flow.triggerFlow, logic.updateVariable) to these blocks.
+  Discord and Slack: rb_discord_when, rb_slack_when (hats; field CONTAINS, "anything" for every message; what arrived has text, sender, channel);
+  rb_discord_send, rb_slack_send: input TEXT, statement. Agent tool kinds "discord": search_discord | "discord_send" | "discord_send_free": send_discord, and the same for "slack".
+  Map discord.py on_message / slack_bolt message handlers to these hats, and channel.send / chat_postMessage to the send blocks.
   Map Telegram bot handlers (python-telegram-bot, aiogram, a getUpdates loop) to rb_tg_when; smtplib sending to rb_email_send; feedparser to rb_feed_news;
   paho-mqtt on_message to rb_mqtt_when and publish() to rb_mqtt_publish; Flask/FastAPI routes that only start work to rb_webhook_when; watchdog folder handlers to rb_folder_when. rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
   Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
@@ -6833,6 +7031,8 @@ HOW TO MAP CODE
     ["email: search and read","email"],["email: send (asks me first)","email_send"],
     ["GitHub: projects and pull requests","github"],["GitHub: comment (asks me first)","github_act"],
     ["Telegram: search my messages","telegram"],["Telegram: send (asks me first)","telegram_send"],["Telegram: send (no asking)","telegram_send_free"],
+    ["Discord: search my channels","discord"],["Discord: send (asks me first)","discord_send"],["Discord: send (no asking)","discord_send_free"],
+    ["Slack: search my channels","slack"],["Slack: send (asks me first)","slack_send"],["Slack: send (no asking)","slack_send_free"],
     ["MQTT: read topics","mqtt"],["MQTT: publish (asks me first)","mqtt_act"],["MQTT: publish (no asking)","mqtt_act_free"],
     ["Homey: look at devices, flows and variables","homey_read"],["Homey: control devices and start flows (asks me first)","homey_act"],["Homey: control devices and start flows (no asking)","homey_act_free"],
     ["Home Assistant: look at devices","ha_read"],["Home Assistant: control devices","ha_act"],["Home Assistant: control devices (no asking)","ha_act_free"]];
@@ -7081,6 +7281,16 @@ HOW TO MAP CODE
       { style:"conn", tooltip:"The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script." }),
     S("rb_tg_send", "send Telegram message %1", [val("TEXT")], { style:"conn", inputsInline:true,
       tooltip:"Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
+    { type:"rb_discord_when", message0:"when a Discord message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
+    { type:"rb_slack_when", message0:"when a Slack message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
+    S("rb_discord_send", "send Discord message %1", [val("TEXT")], { style:"conn", inputsInline:true,
+      tooltip:"Posts in Discord: back in the channel a message came from, or in the first channel in DISCORD_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
+    S("rb_slack_send", "send Slack message %1", [val("TEXT")], { style:"conn", inputsInline:true,
+      tooltip:"Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     V("rb_feed_news", "news from feed %1", [val("URL")], "Array", { style:"conn", inputsInline:true,
       tooltip:"The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds." }),
     V("rb_calendar", "calendar for the next %1 days", [val("DAYS")], "Array", { style:"conn", inputsInline:true,
@@ -7237,11 +7447,12 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_tg_when"), B("rb_mqtt_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_cal_when"), B("rb_page_when"),
+      B("rb_tg_when"), B("rb_discord_when"), B("rb_slack_when"), B("rb_mqtt_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_cal_when"), B("rb_page_when"),
       B("rb_event"), B("rb_tg_message"),
       { kind:"label", text:"Read and send" },
       B("rb_mqtt_read", { TOPIC:T("home/kitchen/temperature") }), B("rb_mqtt_publish", { TEXT:T("ON"), TOPIC:T("zigbee2mqtt/oven_plug/set") }),
       B("rb_tg_send", { TEXT:L("Your loaf is ready to come out.") }),
+      B("rb_discord_send", { TEXT:L("The bake-along starts in 10 minutes.") }), B("rb_slack_send", { TEXT:L("The oven's free now.") }),
       B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }),
       B("rb_email_send", { TO:T("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
     ]},
@@ -8275,6 +8486,14 @@ HOW TO MAP CODE
               "Check my calendar, my notes or the time if it helps, and use calculate for any sums.\n\nMessage: ", xMsg()), STEPS:nm(6),
             TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"memory" }), blk("rb_agent_builtin", { KIND:"calendar" }), blk("rb_agent_builtin", { KIND:"time" }), blk("rb_agent_builtin", { KIND:"calc" }))) }),
           blk("rb_tg_send", null, { TEXT:xB("rb_draft") }), sFinish())]) },
+    { key:"a_discord", cat:"Agents", title:"Discord bot that answers baking questions",
+      desc:"When someone asks a question in your Discord channel, an agent answers it, doing any sums with the calculator, and replies in the same channel. Press Run to try it with a question you type.",
+      tip:"In exported Python: make a Discord bot with the Message Content intent, put its token and your channel id in second-thought.ini, then run run-on-schedule. It only reads the channels you list. Swap the pink blocks for the Slack ones to use Slack instead.",
+      build:() => P([], listenWay("question", "Type a question, as if someone had asked it in your Discord channel", blk("rb_discord_when", { CONTAINS:"?" }),
+        blk("rb_agent", null, { GOAL:xJ("Someone in a home baking Discord channel asked the question below. Answer it in a few friendly sentences. " +
+            "Use calculate for any sums. If it isn't about baking, say politely that you only help with baking.\n\nQuestion: ", xEv("text")), STEPS:nm(5),
+          TOOLS:st(blk("rb_agent_builtin", { KIND:"calc" })) }),
+        blk("rb_discord_send", null, { TEXT:xB("rb_draft") }), sFinish())) },
     { key:"a_linkedin", cat:"Agents", title:"Agent: find people on LinkedIn",
       desc:"Searches LinkedIn's public pages for people and companies on a topic, and lists who they are, what they do and why they might be worth contacting. It only finds what LinkedIn shows everyone, through a web search.",
       tip:"Change the topic and place. Exported Python searches for real; this page answers from Claude's knowledge.",
@@ -9378,6 +9597,8 @@ HOW TO MAP CODE
     const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
     return { keys, llama:programUsesLlama(), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
              github:has(["rb_gh_when"], ["github", "github_act"]), telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
+             discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
+             slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]), calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]), mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
@@ -9420,6 +9641,17 @@ HOW TO MAP CODE
       "; Then send your bot a message and run this program: it says your chat id. Put it below.",
       "; The bot only listens to, and searches, the chats listed here (anyone can message a bot).",
       "TELEGRAM_BOT_TOKEN = ", "TELEGRAM_CHAT_ID = ");
+    if (need.discord) out.push("", "[discord]",
+      "; A bot: Discord Developer Portal (discord.com/developers), New Application, Bot, Reset Token. Turn on 'Message Content Intent'",
+      "; on the same page, then invite the bot to your server (OAuth2, URL Generator, bot; Read and Send Messages).",
+      "; The channels it reads and posts in: right-click a channel, Copy Channel ID (turn on Developer Mode first).",
+      "; Anyone in a server can post, so only these channels count. Several can be separated by spaces.",
+      "DISCORD_BOT_TOKEN = ", "DISCORD_CHANNEL_ID = ");
+    if (need.slack) out.push("", "[slack]",
+      "; A Slack app (api.slack.com/apps): OAuth & Permissions, bot scopes channels:history, groups:history and chat:write,",
+      "; then install it and copy the Bot User OAuth Token (xoxb-…). Invite the bot to each channel with /invite.",
+      "; The channels it reads and posts in: open the channel's details; the ID is at the bottom. Several can be separated by spaces.",
+      "SLACK_BOT_TOKEN = ", "SLACK_CHANNEL_ID = ");
     if (need.email) out.push("", "[email]",
       "; Your address and an app password (not your normal password). Gmail: Google account, Security, App passwords.",
       "; Gmail, iCloud, Yahoo and Fastmail work out their own servers. For others, fill in the servers too.",
@@ -9816,6 +10048,7 @@ HOW TO MAP CODE
           case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
           case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
+          case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
           case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
@@ -9888,7 +10121,9 @@ HOW TO MAP CODE
     const LISTEN = { rb_mqtt_when:["mqtt", "TOPIC", "when an MQTT message arrives on"], rb_webhook_when:["webhook", "PATH", "when a web request arrives at /"],
       rb_email_when:["email", "CONTAINS", "when an email arrives containing"], rb_feed_when:["feed", "URL", "when there's something new in feed"],
       rb_folder_when:["folder", "FOLDER", "when a file appears in folder"], rb_gh_when:["github", null, "when a pull request asks for my review"],
-      rb_cal_when:["calendar", "N", "when a calendar event starts in"], rb_page_when:["page", "URL|WORDS|N", "when the web page"], rb_homey_when:["homey", "DEVICE|CAPABILITY", "when Homey device"] };
+      rb_cal_when:["calendar", "N", "when a calendar event starts in"], rb_discord_when:["discord", "CONTAINS", "when a Discord message arrives containing"],
+      rb_slack_when:["slack", "CONTAINS", "when a Slack message arrives containing"], rb_page_when:["page", "URL|WORDS|N", "when the web page"],
+      rb_homey_when:["homey", "DEVICE|CAPABILITY", "when Homey device"] };
     // Saved programs that 'run program' blocks use, each as one function (its 'when Run is clicked' scripts, in order).
     withSubPrograms(subs => {
       subs.forEach(x => programFn.set(x.key, ident("program_" + x.name)));
@@ -10959,20 +11194,24 @@ HOW TO MAP CODE
   };
   AGENT_BUILTINS.ha_act_free = AGENT_BUILTINS.ha_act;
   AGENT_BUILTINS.telegram_send_free = AGENT_BUILTINS.telegram_send;
+  [["discord", "Discord"], ["slack", "Slack"]].forEach(([svc, name]) => {
+    AGENT_BUILTINS[svc] = [["search_" + svc, "Search the recent messages in the person's " + name + " channels, newest first. Leave text empty for the latest.", ["text"]]];
+    AGENT_BUILTINS[svc + "_send"] = AGENT_BUILTINS[svc + "_send_free"] = [["send_" + svc, "Send a " + name + " message to the person's channel (or back to the channel a message came from). The person may be asked first, and may say no.", ["text"]]];
+  });
   AGENT_BUILTINS.mqtt_act_free = AGENT_BUILTINS.mqtt_act;
   AGENT_BUILTINS.homey_act_free = AGENT_BUILTINS.homey_act;
-  const AGENT_ASKS = new Set(["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act"]);  // built-in tools that ask before each use
+  const AGENT_ASKS = new Set(["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"]);  // built-in tools that ask before each use
   const MAX_AGENT_STEPS = 20;
   // The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL. Matches the runtime.
   const AGENT_INPUT_TYPES = { search_web:{ query:"text" }, ask_me:{ question:"text" }, remember:{ name:"text", value:"text" }, recall:{ name:"text" },
     list_memory:{}, find_devices:{ search:"text" }, device_state:{ entity:"text" }, call_service:{ service:"text", entity:"text", data:"any" },
     read_page:{ url:"text" }, device_history:{ entity:"text", hours:"number" }, calculate:{ expression:"text" }, current_time:{},
     time_plus:{ time:"text", minutes:"number" }, read_file:{ why:"text" }, review_text:{ text:"text", criteria:"text" },
-    read_feed:{ url:"text", limit:"number" }, search_linkedin:{ query:"text" }, my_pull_requests:{}, list_pull_requests:{ repo:"text", state:"text" }, read_pull_request:{ repo:"text", number:"number" }, list_projects:{ owner:"text" }, search_github:{ query:"text" }, comment_on_github:{ repo:"text", number:"number", text:"text" }, search_telegram:{ text:"text" }, send_telegram:{ text:"text" }, search_email:{ query:"text", days:"number" }, read_email:{ id:"text" }, send_email:{ to:"text", subject:"text", body:"text" }, calendar:{ day:"text", days:"number" }, free_time:{ day:"text", "from":"text", to:"text", minutes:"number" },
+    read_feed:{ url:"text", limit:"number" }, search_linkedin:{ query:"text" }, my_pull_requests:{}, list_pull_requests:{ repo:"text", state:"text" }, read_pull_request:{ repo:"text", number:"number" }, list_projects:{ owner:"text" }, search_github:{ query:"text" }, comment_on_github:{ repo:"text", number:"number", text:"text" }, search_telegram:{ text:"text" }, send_telegram:{ text:"text" }, search_discord:{ text:"text" }, send_discord:{ text:"text" }, search_slack:{ text:"text" }, send_slack:{ text:"text" }, search_email:{ query:"text", days:"number" }, read_email:{ id:"text" }, send_email:{ to:"text", subject:"text", body:"text" }, calendar:{ day:"text", days:"number" }, free_time:{ day:"text", "from":"text", to:"text", minutes:"number" },
     read_mqtt:{ topic:"text" }, publish_mqtt:{ topic:"text", message:"text", retain:"yes/no" },
     find_homey_devices:{ search:"text" }, list_homey_flows:{}, homey_variable:{ name:"text" }, set_homey_device:{ device:"text", capability:"text", value:"any" }, run_homey_flow:{ flow:"text" } };
   const AGENT_OPTIONAL = { find_devices:["search"], call_service:["entity", "data"], device_history:["hours"], read_file:["why"],
-    read_feed:["limit", "url"], list_pull_requests:["state"], list_projects:["owner"], search_telegram:["text"], search_email:["days", "query"], calendar:["day", "days"], free_time:["day", "from", "minutes", "to"], publish_mqtt:["retain"], find_homey_devices:["search"] };
+    read_feed:["limit", "url"], list_pull_requests:["state"], list_projects:["owner"], search_telegram:["text"], search_discord:["text"], search_slack:["text"], search_email:["days", "query"], calendar:["day", "days"], free_time:["day", "from", "minutes", "to"], publish_mqtt:["retain"], find_homey_devices:["search"] };
   const MAX_FILE_CHARS = 30000;
   /* Works out a sum like (350 / 500) * 100 exactly, without running any code. Matches the runtime's _Calc. */
   const CALC_FUNCS = ["round", "min", "max", "sqrt", "abs", "floor", "ceil"];
@@ -11052,7 +11291,7 @@ HOW TO MAP CODE
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices" }[what] || what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices" }[what] || what;
     addStep(what, { mono:true, text:"This page uses sample " + noun + ", so nothing real is read or sent. Exported Python uses your own." }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -11132,6 +11371,21 @@ HOW TO MAP CODE
     text = str(text).trim(); if (!text) fail("A Telegram message needs some text.");
     if (!approved && !(await allowed(["messages"], "send a Telegram message: " + short(text, 120)))) return false;
     const t = TG(); addStep("Telegram → " + (t.chat || "your chat"), { text }).done("sample", "ok");
+    return true;
+  }
+  /* Discord and Slack on the page: sample channels. Matches the runtime's chat_search and chat_send wording. */
+  const CHAT_NAME = { discord:"Discord", slack:"Slack" };
+  const CHAT = svc => { connNote(CHAT_NAME[svc]); return CONN[svc] || { messages:[], channel:"" }; };
+  function chatSearch(svc, text){
+    const words = str(text).toLowerCase().split(/\s+/).filter(Boolean), c = CHAT(svc);
+    const found = c.messages.slice().sort((a, b) => a.hours_ago - b.hours_ago).filter(m => words.every(w => m.text.toLowerCase().includes(w))).slice(0, 20);
+    return found.map(m => whenText(hoursAgo(m.hours_ago)) + " · " + m.from + " in " + c.channel + ": " + short(m.text, 300)).join("\n") ||
+      ("No " + CHAT_NAME[svc] + " messages found" + (words.length ? " with “" + str(text).trim() + "”" : "") + ". Only the channels in " + svc.toUpperCase() + "_CHANNEL_ID are read.");
+  }
+  async function chatSend(svc, text, approved){
+    text = str(text).trim(); if (!text) fail("A " + CHAT_NAME[svc] + " message needs some text.");
+    if (!approved && !(await allowed(["messages"], "send a " + CHAT_NAME[svc] + " message: " + short(text, 120)))) return false;
+    const c = CHAT(svc); addStep(CHAT_NAME[svc] + " → " + (c.channel || "your channel"), { text }).done("sample", "ok");
     return true;
   }
   const MAIL = () => { connNote("Email"); return CONN.email || { messages:[] }; };
@@ -11350,6 +11604,8 @@ HOW TO MAP CODE
         const pg = (CONN.page || {}).incoming || { url:"", title:"", before:"", after:"" }, url = str(b.getFieldValue("URL")).trim() || pg.url, words = str(b.getFieldValue("WORDS")).trim();
         const before = pagePart(pg.before, words), after = pagePart(pg.after, words), changed = pageChanges(before, after), title = pg.title;
         return { url, title, before, after, changed, text:(title || url) + " changed:\n" + changed }; }
+      case "rb_discord_when": case "rb_slack_when": { const svc = b.type === "rb_discord_when" ? "discord" : "slack", c = CONN[svc] || {}, m = c.incoming || { from:"Someone", text:"Hello" };
+        return { service:svc, text:m.text, sender:m.from, channel:c.channel || "", id:"sample" }; }
       case "rb_tg_when": { const m = (CONN.telegram || {}).incoming || { from:"You", text:"Hello" }; return { text:m.text, sender:m.from, chat:(CONN.telegram || {}).chat || "" }; }
       case "rb_homey_when": { const inc = (CONN.homey || {}).incoming || {}, dev = str(b.getFieldValue("DEVICE")).trim() || inc.device, cap = str(b.getFieldValue("CAPABILITY")).trim();
         const c = !cap || cap.toLowerCase() === "anything" ? inc.capability : cap, d = ((CONN.homey || {}).devices || []).find(x => x.name.toLowerCase() === dev.toLowerCase());
@@ -11550,6 +11806,8 @@ HOW TO MAP CODE
       case "comment_on_github": return (await ghComment(a("repo"), inp.number, a("text"), run.agentApproved)) ? "Comment posted." : "Not posted: the person said no.";
       case "search_telegram": return tgSearch(a("text"));
       case "send_telegram": return (await tgSend(a("text"), run.agentApproved)) ? "Sent." : "Not sent: the person said no.";
+      case "search_discord": case "search_slack": return chatSearch(name.slice(7), a("text"));
+      case "send_discord": case "send_slack": return (await chatSend(name.slice(5), a("text"), run.agentApproved)) ? "Sent." : "Not sent: the person said no.";
       case "search_email": return emailSearch(a("query"), inp.days == null ? 7 : inp.days);
       case "read_email": return emailRead(a("id"));
       case "send_email": return (await emailSend(a("to"), a("subject"), inp.body == null ? "" : inp.body, run.agentApproved)) ? "Sent." : "Not sent: the person said no.";
@@ -12507,6 +12765,7 @@ HOW TO MAP CODE
         haNote(); addStep("Notification → " + target, { text }).done("sample house", "ok"); break;
       }
       case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
+      case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
       case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
@@ -12765,7 +13024,7 @@ HOW TO MAP CODE
   $("step-go").onclick = () => { stepper.on = false; releaseStep(true); updateStepUi(); };
 
   /* ---------- Run this script (right-click a block) ---------- */
-  const LISTENER_HATS = new Set(["rb_homey_when", "rb_tg_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when", "rb_page_when"]);
+  const LISTENER_HATS = new Set(["rb_homey_when", "rb_tg_when", "rb_discord_when", "rb_slack_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when", "rb_page_when"]);
   const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when", ...LISTENER_HATS]);
   function runFromBlock(block){
     if (run && run.active) return;

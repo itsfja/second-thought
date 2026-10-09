@@ -168,6 +168,7 @@ The olive block **agent: work toward …** holds the tools. The tools have their
 - **email: search and read**, and **email: send**.
 - **GitHub: projects and pull requests**, to find pull requests waiting for your review and read what they change, and **GitHub: comment**.
 - **Telegram: search my messages** and **Telegram: send**.
+- **Discord: search my channels** and **Discord: send**, and the same for **Slack**. They only read and post in the channels in your settings.
 - **MQTT: read topics** and **MQTT: publish**, for sensors and switches that talk MQTT (like Zigbee2MQTT).
 - **Home Assistant: look at devices**, including how a sensor changed over the last day, and **control devices**. Control devices asks you before every change, because something the agent reads could try to trick it. If you trust everything it reads, choose **control devices (no asking)**.
 - **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. **Ask me before each use** starts ticked, so you say yes before your block runs. That matters if the block changes something, because what the agent reads could try to trick it. Untick it for blocks that only work something out, like a calculator.
@@ -197,6 +198,7 @@ The pink **Connections** blocks work without an agent too:
 
 - **Listeners** start a script when something arrives:
   - **when a Telegram message arrives**, for messages to your bot.
+  - **when a Discord message arrives** and **when a Slack message arrives**, for messages in your channels, checked every 10 seconds. Only the channels in `DISCORD_CHANNEL_ID` or `SLACK_CHANNEL_ID` count, because anyone in a server or workspace can post; the bot's own messages never count. Discord needs the bot's *Message Content Intent* turned on.
   - **when an MQTT message arrives on …**, for a sensor or switch. `+` stands for one level of the topic and `#` for everything below, like `zigbee2mqtt/#`.
   - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all.
   - **when an email arrives containing …**, checked every 2 minutes.
@@ -208,7 +210,7 @@ The pink **Connections** blocks work without an agent too:
 
   **what arrived** gives what started the script. Every listener gives `text`, which sums it up. Each block's tooltip lists its other fields, like `subject` for an email or `topic` for MQTT. **Telegram message** gives a Telegram message's words, sender or chat. On the page, right-click a listener and choose **Run this script** to try it with a sample of what arrives. Listeners only listen while the exported program runs on schedule.
 - **latest MQTT message on …** reads a topic, and **publish MQTT … to topic …** sends one. With **ask me before any smart home action**, publishing asks you first.
-- **send Telegram message** and **send email** send something. With **ask me before sending messages and announcements**, they ask you first.
+- **send Telegram message**, **send Discord message**, **send Slack message** and **send email** send something. The Discord and Slack ones reply in the channel a message came from, or post in your first channel. With **ask me before sending messages and announcements**, they ask you first.
 - **news from feed** gives a list of the latest items. Leave it empty for your own feeds.
 - **calendar for the next … days** gives a list of your events.
 
