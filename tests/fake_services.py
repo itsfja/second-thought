@@ -81,7 +81,7 @@ def _ics(soon=False):
 def start():
     data = json.loads((ROOT / "samples" / "connections.json").read_text(encoding="utf-8"))
     gh = data["github"]
-    log = {"gh": [], "tg_sent": [], "tg_updates": [], "mail_sent": [], "homey": [], "homey_flows": []}
+    log = {"gh": [], "tg_sent": [], "tg_updates": [], "mail_sent": [], "homey": [], "homey_flows": [], "page": {"price": "£2.40", "visitors": 17}}
 
     def homey_change(device, cap, value):
         d = next(x for x in data["homey"]["devices"] if x["name"] == device)
@@ -130,6 +130,10 @@ def start():
                 return self._send(200, _rss(feeds[0]), "application/rss+xml; charset=utf-8")
             if path == "/feeds/tech.atom":
                 return self._send(200, _atom(feeds[1]), "application/atom+xml")
+            if path == "/watch.html":  # a shop page the page-watch test changes while the program runs
+                pg_ = log["page"]
+                return self._send(200, f"<html><head><title>Rye flour</title></head><body><h1>Wholemeal rye flour, 1 kg</h1><p>Price</p>"
+                                       f"<p>{pg_['price']}</p><p>In stock</p><p>Visitors today: {pg_['visitors']}</p></body></html>", "text/html; charset=utf-8")
             if path == "/feeds/page.html":
                 return self._send(200, "<html><title>Not a feed</title></html>", "text/html")
             if path in ("/calendar.ics", "/calendar-soon.ics"):

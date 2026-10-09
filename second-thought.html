@@ -673,6 +673,8 @@ GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("
 # with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
 TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
 TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
+# The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
+PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
 # worked out for Gmail, iCloud, Yahoo and Fastmail; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
 # MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
@@ -4024,7 +4026,7 @@ class Runtime:
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
     LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
-                    "github": "GitHub", "calendar": "Calendar"}
+                    "github": "GitHub", "calendar": "Calendar", "page": "Web page"}
 
     @staticmethod
     def event(key="text"):
@@ -4294,6 +4296,84 @@ class Runtime:
             except RunError as e:
                 print(f"  (Calendar check failed: {e})", flush=True)
             await asyncio.sleep(self._poll(60))
+
+    # Web pages
+    PAGE_LINES_AFTER = 2       # with 'only the part containing', each matching line keeps this many lines after it
+    MAX_PAGE_KEEP = 200_000    # characters of each page kept to compare with next time
+
+    @staticmethod
+    def page_part(text, words):
+        """The lines that contain all these words, each with the lines after it; the whole text when words is empty."""
+        words = [w for w in to_str(words).lower().split() if w]
+        if not words:
+            return text
+        lines, keep = text.splitlines(), set()
+        for i, line in enumerate(lines):
+            if all(w in line.lower() for w in words):
+                keep.update(range(i, min(len(lines), i + 1 + Runtime.PAGE_LINES_AFTER)))
+        return "\n".join(lines[i] for i in sorted(keep))
+
+    @staticmethod
+    def page_changes(before, after, limit=20):
+        """What changed, line by line: '- old line' then '+ new line', paired where lines were replaced, at most limit lines."""
+        import difflib
+        a, c, out = before.splitlines(), after.splitlines(), []
+        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, c, autojunk=False).get_opcodes():
+            if op == "equal":
+                continue
+            gone, new = a[i1:i2], c[j1:j2]
+            for k in range(max(len(gone), len(new))):
+                out += ["- " + _short(gone[k], 200)] if k < len(gone) and gone[k].strip() else []
+                out += ["+ " + _short(new[k], 200)] if k < len(new) and new[k].strip() else []
+        return "\n".join(out[:limit]) + (f"\n… and {len(out) - limit} more changed lines" if len(out) > limit else "")
+
+    async def _read_page_text(self, url):
+        ctype, data = await asyncio.to_thread(get_url, url, True, "The page watcher", 5_000_000)
+        if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
+            raise RunError(f"{_short(url, 80)} isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
+        return page_text(_decode(data, ctype), ctype)
+
+    async def _listen_page(self, items):
+        await asyncio.gather(*(self._watch_page(arg, fn) for arg, fn in items))
+
+    async def _watch_page(self, arg, fn):
+        """'when the web page … changes': checks the page every N minutes. The first check only remembers it."""
+        url, words, minutes = (to_str(arg).split("|") + ["", "", ""])[:3]
+        url, words = url.strip(), words.strip()
+        every = max(1, round_js(num(minutes)) or 60) * 60
+        key = url + ("  |  " + words.lower() if words else "")
+        quiet_noted = False
+        print(f"Watching {url}" + (f" (the part with “{words}”)" if words else "") + f" for changes, every {every // 60} min.", flush=True)
+        while True:
+            try:
+                title, text = await self._read_page_text(url)
+                now = self.page_part(text, words).strip()[:self.MAX_PAGE_KEEP]
+                if not text.strip() or (words and not now):
+                    if not quiet_noted:
+                        quiet_noted = True
+                        print(f"  (Page watcher: {_short(url, 80)} " + ("has no readable words; it may need a browser to show them." if not text.strip()
+                              else f"has nothing with “{words}” in it right now.") + " It's checked again each time.)", flush=True)
+                else:
+                    quiet_noted = False
+                    with _locked(PAGES_FILE):
+                        try:
+                            with open(PAGES_FILE, encoding="utf-8") as f:
+                                seen = json.load(f)
+                        except (OSError, ValueError):
+                            seen = {}
+                        before = (seen.get(key) or {}).get("text")
+                        if before != now:
+                            seen[key] = {"text": now, "checked": int(time.time())}
+                            _write_json(PAGES_FILE, seen)
+                    if before is not None and before != now:
+                        changed = self.page_changes(before, now)
+                        cut = lambda t: t if len(t) <= 2000 else t[:1999] + "…"  # noqa: E731 - keeps the lines, unlike _short
+                        rec = {"url": url, "title": title, "before": cut(before), "after": cut(now), "changed": changed,
+                               "text": f"{title or url} changed:\n{changed}"}
+                        self._fire(fn, rec, "Page changed: " + _short(title or url, 40))
+            except RunError as e:
+                print(f"  (Page check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(every))
 
     # ----- Agent -----
     # Each step the model replies with JSON: a tool to use, or its final answer. The same protocol runs on the
@@ -5926,7 +6006,7 @@ class Runtime:
 }</script>
 <script type="application/json" id="connections-sample">
 {
-  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, Homey, web requests and folders.",
+  "note": "Sample data for the page. Exported Python uses your real feeds, GitHub, Telegram, email, calendar, MQTT, Homey, web requests, folders and watched web pages.",
   "feeds": {
     "https://example.com/baking/feed": {
       "title": "The Loaf Letter (sample feed)",
@@ -6505,6 +6585,14 @@ class Runtime:
       "from": 412,
       "to": 3.1
     }
+  },
+  "page": {
+    "incoming": {
+      "url": "https://example.com/shop/rye-flour",
+      "title": "Wholemeal rye flour, 1 kg (sample page)",
+      "before": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.40\nIn stock\nVisitors today: 17",
+      "after": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.65\nOnly 3 left\nVisitors today: 18"
+    }
   }
 }
 </script>
@@ -6627,7 +6715,9 @@ Agent (the model chooses its own steps):
   rb_agent_builtin: fields KIND ("web": search_web, read_page | "ask": ask_me | "memory": remember, recall, list_memory | "calc": calculate | "time": current_time, time_plus | "file": read_file | "review": review_text | "feeds": read_feed | "linkedin": search_linkedin | "calendar": calendar, free_time | "email": search_email, read_email | "email_send": send_email | "github": my_pull_requests, list_pull_requests, read_pull_request, list_projects, search_github | "github_act": comment_on_github | "telegram": search_telegram | "telegram_send" | "telegram_send_free": send_telegram | "ha_read": find_devices, device_state, device_history | "ha_act" | "ha_act_free": call_service).
   Connections: rb_tg_when (hat; field CONTAINS, "anything" for every message) runs when the Telegram bot gets a message; rb_tg_message: field PART ("text" | "sender" | "chat"), value; rb_tg_send: input TEXT, statement; rb_email_send: inputs TO, SUBJECT, TEXT, statement; rb_feed_news: input URL (empty = the feeds in settings), value, list of records (feed, title, link, date, summary); rb_calendar: input DAYS, value, list of records (day, start, end, title, location).
   Listeners (hats, run while the program runs on schedule): rb_mqtt_when (field TOPIC, + and # wildcards), rb_webhook_when (field PATH), rb_email_when (field CONTAINS),
-  rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_cal_when (field N, minutes before an event).
+  rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_cal_when (field N, minutes before an event),
+  rb_page_when (fields URL; WORDS, only the lines containing them, empty = the whole page; N, minutes between checks): what arrived has url, title, before, after, changed.
+  Map scripts that poll a web page and compare it with the last copy (requests + hashlib or difflib in a loop) to rb_page_when.
   rb_event: field KEY (a field of what arrived; "text" always works; empty = the whole record), value. rb_mqtt_read: input TOPIC, value. rb_mqtt_publish: inputs TEXT, TOPIC; field RETAIN ("TRUE" | "FALSE"), statement.
   Agent tool kinds also: "mqtt": read_mqtt | "mqtt_act" | "mqtt_act_free": publish_mqtt.
   Homey: rb_homey_when (hat; fields DEVICE, CAPABILITY, "anything" for any value); rb_homey_value: inputs CAPABILITY, DEVICE, value; rb_homey_find: input TEXT, value, list of records;
@@ -7017,6 +7107,10 @@ HOW TO MAP CODE
     { type:"rb_cal_when", message0:"when a calendar event starts in %1 minutes", args0:[{ type:"field_number", name:"N", value:15, min:0, max:1440 }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text." },
+    { type:"rb_page_when", message0:"when the web page %1 changes", args0:[{ type:"field_input", name:"URL", text:"https://example.com/shop/rye-flour" }],
+      message1:"only the part containing %1 checked every %2 minutes", args1:[{ type:"field_input", name:"WORDS", text:"" }, { type:"field_number", name:"N", value:60, min:1, max:1440, precision:1 }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page." },
     V("rb_event", "what arrived: %1", [{ type:"field_input", name:"KEY", text:"text" }], null, { style:"conn",
       tooltip:"Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record." }),
     V("rb_mqtt_read", "latest MQTT message on %1", [val("TOPIC")], null, { style:"conn", inputsInline:true,
@@ -7143,7 +7237,7 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_tg_when"), B("rb_mqtt_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_cal_when"),
+      B("rb_tg_when"), B("rb_mqtt_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_cal_when"), B("rb_page_when"),
       B("rb_event"), B("rb_tg_message"),
       { kind:"label", text:"Read and send" },
       B("rb_mqtt_read", { TOPIC:T("home/kitchen/temperature") }), B("rb_mqtt_publish", { TEXT:T("ON"), TOPIC:T("zigbee2mqtt/oven_plug/set") }),
@@ -8362,6 +8456,13 @@ HOW TO MAP CODE
       build:() => P(["note"], listenWay("soon", "Type an event to test with, like 'Dentist at 10:00 (High Street)'", blk("rb_cal_when", { N:15 }),
         xSet("note", xAsk(xJ("Write a one-line friendly reminder for this, with one practical tip: ", xEv("text")))),
         blk("rb_tg_send", null, { TEXT:xV("note") }), sAdd(xV("note")), sFinish())) },
+    { key:"x_pagewatch", cat:"Automation", title:"Tell me when the flour price changes",
+      desc:"Checks a shop's page every hour, watching only the price. When it changes, Claude says in a line whether it's worth buying now, and sends it to Telegram. Press Run to try it with a change you type.",
+      tip:"Put your own shop's address in the pink block, and the word next to the price (like Price) in 'only the part containing'. Right-click the pink block and choose Run this script to try it with a sample page.",
+      build:() => P(["advice"], listenWay("price", "Type a change to test with, like '- £2.40' then '+ £2.65' on the next line",
+        blk("rb_page_when", { URL:"https://example.com/shop/rye-flour", WORDS:"Price", N:60 }),
+        xSet("advice", xAsk(xJ("The price on a flour shop's page changed. In one friendly line, say what changed and whether it's worth stocking up now.\n\n", xEv("text")))),
+        blk("rb_tg_send", null, { TEXT:xV("advice") }), sAdd(xV("advice")), sFinish())) },
     { key:"memory", cat:"Automation", title:"Fresh headline every run", build:EXAMPLES.memory,
       desc:"Remembers every headline it has used, so each run (or each scheduled day) comes up with a new one.",
       tip:"Open the Memory panel after a few runs to see what it has kept." },
@@ -9787,7 +9888,7 @@ HOW TO MAP CODE
     const LISTEN = { rb_mqtt_when:["mqtt", "TOPIC", "when an MQTT message arrives on"], rb_webhook_when:["webhook", "PATH", "when a web request arrives at /"],
       rb_email_when:["email", "CONTAINS", "when an email arrives containing"], rb_feed_when:["feed", "URL", "when there's something new in feed"],
       rb_folder_when:["folder", "FOLDER", "when a file appears in folder"], rb_gh_when:["github", null, "when a pull request asks for my review"],
-      rb_cal_when:["calendar", "N", "when a calendar event starts in"], rb_homey_when:["homey", "DEVICE|CAPABILITY", "when Homey device"] };
+      rb_cal_when:["calendar", "N", "when a calendar event starts in"], rb_page_when:["page", "URL|WORDS|N", "when the web page"], rb_homey_when:["homey", "DEVICE|CAPABILITY", "when Homey device"] };
     // Saved programs that 'run program' blocks use, each as one function (its 'when Run is clicked' scripts, in order).
     withSubPrograms(subs => {
       subs.forEach(x => programFn.set(x.key, ident("program_" + x.name)));
@@ -9862,7 +9963,9 @@ HOW TO MAP CODE
         const arg = !field ? "" : field.split("|").map(f => String(b.getFieldValue(f) == null ? "" : b.getFieldValue(f)).trim()).join("|");
         const fn = ident("when_" + kind + "_" + (listeners.filter(l => l[0] === kind).length + 1));
         out.push("async def " + fn + "():");
-        out.push("    \"\"\"" + (words + (field ? " " + (arg.replace("|", " ") || "(your own)") + (kind === "calendar" ? " minutes" : kind === "homey" ? " changes" : "") : "")).replace(/"/g, "'") + "\"\"\"");
+        const said = kind === "page" ? (([u, w, n]) => " " + u + " changes" + (w ? " (the part with " + w + ")" : "") + ", checked every " + n + " minutes")(arg.split("|"))
+          : field ? " " + (arg.replace("|", " ") || "(your own)") + (kind === "calendar" ? " minutes" : kind === "homey" ? " changes" : "") : "";
+        out.push("    \"\"\"" + (words + said).replace(/"/g, "'") + "\"\"\"");
         if (!stmts(b.getNextBlock(), 1, {}, out)) out.push("    pass");
         listeners.push([kind, "(" + pyStr(kind) + ", " + pyStr(arg) + ", " + fn + ")"]);
       } else if (b.type === "rb_tg_when") {
@@ -11196,6 +11299,35 @@ HOW TO MAP CODE
     addStep("Homey variable " + v.name, { mono:true, text:homeyShow(old) + " → " + homeyShow(nv) }).done("sample home", "ok");
     return true;
   }
+  /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
+  function pagePart(text, words){
+    const ws = str(words).toLowerCase().split(/\s+/).filter(Boolean);
+    if (!ws.length) return text;
+    const lines = String(text).split(/\r?\n/), keep = new Set();
+    lines.forEach((l, i) => { if (ws.every(w => l.toLowerCase().includes(w))) for (let k = i; k < Math.min(lines.length, i + 3); k++) keep.add(k); });
+    return [...keep].sort((a, b) => a - b).map(i => lines[i]).join("\n");
+  }
+  function pageChanges(before, after, limit){
+    limit = limit || 20;
+    const a = String(before).split("\n"), c = String(after).split("\n"), n = a.length, m = c.length;
+    const L = Array.from({ length:n + 1 }, () => new Array(m + 1).fill(0));  // longest common lines, then walk it
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) L[i][j] = a[i] === c[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    const out = []; let i = 0, j = 0, gone = [], fresh = [];
+    const flush = () => {  // lines replaced together are paired: - old, + new
+      for (let k = 0; k < Math.max(gone.length, fresh.length); k++) {
+        if (k < gone.length && gone[k].trim()) out.push("- " + short(gone[k], 200));
+        if (k < fresh.length && fresh[k].trim()) out.push("+ " + short(fresh[k], 200));
+      }
+      gone = []; fresh = [];
+    };
+    while (i < n || j < m) {
+      if (i < n && j < m && a[i] === c[j]) { flush(); i++; j++; }
+      else if (i < n && (j >= m || L[i + 1][j] >= L[i][j + 1])) gone.push(a[i++]);
+      else fresh.push(c[j++]);
+    }
+    flush();
+    return out.slice(0, limit).join("\n") + (out.length > limit ? "\n\u2026 and " + (out.length - limit) + " more changed lines" : "");
+  }
   /* What a listener's script gets on the page when you right-click its 'when …' block and choose 'Run this script'. */
   function sampleArrival(b){
     switch (b.type) {
@@ -11214,6 +11346,10 @@ HOW TO MAP CODE
         const e = sampleEvents(now, new Date(now.getTime() + 7 * 86400000)).find(x => !x.all_day) || { title:"Event", start:now, end:now, location:"" };
         const hm = d => pad2(d.getHours()) + ":" + pad2(d.getMinutes());
         return { title:e.title, start:hm(e.start), end:hm(e.end), location:e.location, minutes:n, text:e.title + " at " + hm(e.start) + (e.location ? " (" + e.location + ")" : "") }; }
+      case "rb_page_when": {
+        const pg = (CONN.page || {}).incoming || { url:"", title:"", before:"", after:"" }, url = str(b.getFieldValue("URL")).trim() || pg.url, words = str(b.getFieldValue("WORDS")).trim();
+        const before = pagePart(pg.before, words), after = pagePart(pg.after, words), changed = pageChanges(before, after), title = pg.title;
+        return { url, title, before, after, changed, text:(title || url) + " changed:\n" + changed }; }
       case "rb_tg_when": { const m = (CONN.telegram || {}).incoming || { from:"You", text:"Hello" }; return { text:m.text, sender:m.from, chat:(CONN.telegram || {}).chat || "" }; }
       case "rb_homey_when": { const inc = (CONN.homey || {}).incoming || {}, dev = str(b.getFieldValue("DEVICE")).trim() || inc.device, cap = str(b.getFieldValue("CAPABILITY")).trim();
         const c = !cap || cap.toLowerCase() === "anything" ? inc.capability : cap, d = ((CONN.homey || {}).devices || []).find(x => x.name.toLowerCase() === dev.toLowerCase());
@@ -12629,7 +12765,7 @@ HOW TO MAP CODE
   $("step-go").onclick = () => { stepper.on = false; releaseStep(true); updateStepUi(); };
 
   /* ---------- Run this script (right-click a block) ---------- */
-  const LISTENER_HATS = new Set(["rb_homey_when", "rb_tg_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when"]);
+  const LISTENER_HATS = new Set(["rb_homey_when", "rb_tg_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when", "rb_page_when"]);
   const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when", ...LISTENER_HATS]);
   function runFromBlock(block){
     if (run && run.active) return;

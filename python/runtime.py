@@ -255,6 +255,8 @@ GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("
 # with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
 TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
 TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
+# The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
+PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
 # worked out for Gmail, iCloud, Yahoo and Fastmail; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
 # MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
@@ -3606,7 +3608,7 @@ class Runtime:
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
     LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
-                    "github": "GitHub", "calendar": "Calendar"}
+                    "github": "GitHub", "calendar": "Calendar", "page": "Web page"}
 
     @staticmethod
     def event(key="text"):
@@ -3876,6 +3878,84 @@ class Runtime:
             except RunError as e:
                 print(f"  (Calendar check failed: {e})", flush=True)
             await asyncio.sleep(self._poll(60))
+
+    # Web pages
+    PAGE_LINES_AFTER = 2       # with 'only the part containing', each matching line keeps this many lines after it
+    MAX_PAGE_KEEP = 200_000    # characters of each page kept to compare with next time
+
+    @staticmethod
+    def page_part(text, words):
+        """The lines that contain all these words, each with the lines after it; the whole text when words is empty."""
+        words = [w for w in to_str(words).lower().split() if w]
+        if not words:
+            return text
+        lines, keep = text.splitlines(), set()
+        for i, line in enumerate(lines):
+            if all(w in line.lower() for w in words):
+                keep.update(range(i, min(len(lines), i + 1 + Runtime.PAGE_LINES_AFTER)))
+        return "\n".join(lines[i] for i in sorted(keep))
+
+    @staticmethod
+    def page_changes(before, after, limit=20):
+        """What changed, line by line: '- old line' then '+ new line', paired where lines were replaced, at most limit lines."""
+        import difflib
+        a, c, out = before.splitlines(), after.splitlines(), []
+        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, c, autojunk=False).get_opcodes():
+            if op == "equal":
+                continue
+            gone, new = a[i1:i2], c[j1:j2]
+            for k in range(max(len(gone), len(new))):
+                out += ["- " + _short(gone[k], 200)] if k < len(gone) and gone[k].strip() else []
+                out += ["+ " + _short(new[k], 200)] if k < len(new) and new[k].strip() else []
+        return "\n".join(out[:limit]) + (f"\n… and {len(out) - limit} more changed lines" if len(out) > limit else "")
+
+    async def _read_page_text(self, url):
+        ctype, data = await asyncio.to_thread(get_url, url, True, "The page watcher", 5_000_000)
+        if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
+            raise RunError(f"{_short(url, 80)} isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
+        return page_text(_decode(data, ctype), ctype)
+
+    async def _listen_page(self, items):
+        await asyncio.gather(*(self._watch_page(arg, fn) for arg, fn in items))
+
+    async def _watch_page(self, arg, fn):
+        """'when the web page … changes': checks the page every N minutes. The first check only remembers it."""
+        url, words, minutes = (to_str(arg).split("|") + ["", "", ""])[:3]
+        url, words = url.strip(), words.strip()
+        every = max(1, round_js(num(minutes)) or 60) * 60
+        key = url + ("  |  " + words.lower() if words else "")
+        quiet_noted = False
+        print(f"Watching {url}" + (f" (the part with “{words}”)" if words else "") + f" for changes, every {every // 60} min.", flush=True)
+        while True:
+            try:
+                title, text = await self._read_page_text(url)
+                now = self.page_part(text, words).strip()[:self.MAX_PAGE_KEEP]
+                if not text.strip() or (words and not now):
+                    if not quiet_noted:
+                        quiet_noted = True
+                        print(f"  (Page watcher: {_short(url, 80)} " + ("has no readable words; it may need a browser to show them." if not text.strip()
+                              else f"has nothing with “{words}” in it right now.") + " It's checked again each time.)", flush=True)
+                else:
+                    quiet_noted = False
+                    with _locked(PAGES_FILE):
+                        try:
+                            with open(PAGES_FILE, encoding="utf-8") as f:
+                                seen = json.load(f)
+                        except (OSError, ValueError):
+                            seen = {}
+                        before = (seen.get(key) or {}).get("text")
+                        if before != now:
+                            seen[key] = {"text": now, "checked": int(time.time())}
+                            _write_json(PAGES_FILE, seen)
+                    if before is not None and before != now:
+                        changed = self.page_changes(before, now)
+                        cut = lambda t: t if len(t) <= 2000 else t[:1999] + "…"  # noqa: E731 - keeps the lines, unlike _short
+                        rec = {"url": url, "title": title, "before": cut(before), "after": cut(now), "changed": changed,
+                               "text": f"{title or url} changed:\n{changed}"}
+                        self._fire(fn, rec, "Page changed: " + _short(title or url, 40))
+            except RunError as e:
+                print(f"  (Page check failed: {e})", flush=True)
+            await asyncio.sleep(self._poll(every))
 
     # ----- Agent -----
     # Each step the model replies with JSON: a tool to use, or its final answer. The same protocol runs on the

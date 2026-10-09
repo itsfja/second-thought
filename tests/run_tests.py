@@ -941,6 +941,25 @@ async def new_feature_page_tests(pg):
         whole = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
         check(said and said[0].startswith(kind + ": ") and want in said[0] and whole and "text: " in whole[0],
               f"on the page, the {kind} listener runs with a sample of what arrives ({(said or ['nothing'])[0][:60]!r})")
+    page_hat = lambda url, words, label: {"type": "rb_page_when", "fields": {"URL": url, "WORDS": words, "N": 1}, "next": {"block": blk("rb_say", inputs={"TEXT": {"block": {  # noqa: E731
+        "type": "text_join", "extraState": {"itemCount": 2}, "inputs": {"ADD0": tx(label + ": "), "ADD1": {"block": {"type": "rb_event", "fields": {"KEY": "changed"}}}}}}})}}
+    await load_state(pg, {"blocks": {"languageVersion": 0, "blocks": [dict(page_hat("https://example.com/shop/rye-flour", "Price", "page"), x=20, y=20)]}})
+    await pg.evaluate("""(() => { const hat = Blockly.getMainWorkspace().getTopBlocks(false)[0];
+        Blockly.ContextMenuRegistry.registry.getItem('rb_run_script').callback({ block:hat }); })()""")
+    for _ in range(50):
+        await pg.wait_for_timeout(100)
+        if await pg.is_enabled("#run") and [t for n, p_, t in await step_texts(pg) if n == "Note"]:
+            break
+    said = ([t for n, p_, t in await step_texts(pg) if n == "Note"] or [""])[0]
+    check(said == "page: - £2.40\n+ £2.65\n- In stock\n+ Only 3 left",
+          f"on the page, the web page listener runs with a sample change, watching only the lines with 'Price' ({said!r})")
+    two = {"blocks": {"languageVersion": 0, "blocks": [dict(page_hat("http://127.0.0.1:1/watch.html", "Price", "page-part"), x=20, y=20),
+                                                       dict(page_hat("http://127.0.0.1:1/watch.html", "", "page-all"), x=20, y=260)]}}
+    await load_state(pg, two)
+    EXTRA["t_page"] = await export_python(pg, "t_page")
+    check('LISTENERS = [("page", "http://127.0.0.1:1/watch.html|Price|1", when_page_1), ("page", "http://127.0.0.1:1/watch.html||1", when_page_2)]' in EXTRA["t_page"]
+          and "when the web page http://127.0.0.1:1/watch.html changes (the part with Price), checked every 1 minutes" in EXTRA["t_page"],
+          "exported Python watches each web page with its words and interval")
     listen_all = {"blocks": {"languageVersion": 0, "blocks": [dict({"type": t, "x": 20, "y": 20 + 120 * i, "next": {"block": say_what(k)}}, **({"fields": f} if f else {}))
                                                               for i, (t, f, k, w) in enumerate(hats)]}}
     listen_all["blocks"]["blocks"][0]["next"]["block"]["next"] = {"block": blk("rb_mqtt_publish", fields={"RETAIN": "FALSE"},
@@ -1654,6 +1673,29 @@ def python_tests(codes):
         check(any(n.startswith("folder: Spelt loaf") for n in notes) and not any("ignored" in n for n in notes), "the folder listener reads new files and skips hidden ones")
         check(any("Add a spelt recipe" in n for n in notes) and not any("#41" in n for n in notes), "the GitHub listener reacts to new review requests only")
         check(any(n.startswith("calendar: Feed the starter at ") and "(Kitchen)" in n for n in notes), "the calendar listener gives warning before an event")
+
+        page_prog = EXTRA["t_page"].replace("http://127.0.0.1:1/watch.html", svc_url + "/watch.html")
+        (pathlib.Path(tmp) / "t_page.py").write_text(page_prog, encoding="utf-8")
+        watched = pathlib.Path(tmp) / "watched-pages.json"
+        if watched.exists():
+            watched.unlink()
+
+        def page_poke():
+            time.sleep(3)  # the first checks only remember the page
+            svc_log["page"]["visitors"] = 18  # outside the Price part: only the whole-page watcher sees it
+            time.sleep(2.5)
+            svc_log["page"]["price"] = "£2.65"
+        svc_log["page"].update(price="£2.40", visitors=17)
+        threading.Thread(target=page_poke, daemon=True).start()
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_page.py")], dict(env, RB_POLL_SECONDS="0.5"), tmp, timeout=10)
+        out = out.replace("\r\n", "\n")
+        part = re.findall(r"    page-part: (.*)\n    (.*)\n", out)
+        whole = re.findall(r"    page-all: (.*)\n    (.*)\n", out)
+        check(part == [("- £2.40", "+ £2.65")] and ("- Visitors today: 17", "+ Visitors today: 18") in whole and ("- £2.40", "+ £2.65") in whole,
+              f"t_page.py: the whole-page watcher sees both changes, the 'Price' watcher only the price ({part}, {whole})" + ("" if part else f": {(err or out)[-300:]!r}"))
+        check(watched.exists() and "£2.65" in watched.read_text(encoding="utf-8"), "the last copy of each watched page is kept in watched-pages.json")
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_page.py")], dict(env, RB_POLL_SECONDS="0.5"), tmp, timeout=4)
+        check("page-part:" not in out and "page-all:" not in out and "Watching " in out, "after a restart, an unchanged page doesn't count as changed")
 
         print("Homey in Python")
         for name in ("t_hm_agent", "t_hm_blocks", "t_hm_listen"):
