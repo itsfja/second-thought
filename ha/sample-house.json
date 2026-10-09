@@ -911,5 +911,32 @@
   "camera.garden": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#8fc08a\"/><rect x=\"0\" y=\"0\" width=\"320\" height=\"70\" fill=\"#c9dbe8\"/><ellipse cx=\"200\" cy=\"150\" rx=\"28\" ry=\"16\" fill=\"#333\"/><circle cx=\"226\" cy=\"134\" r=\"11\" fill=\"#333\"/><polygon points=\"220,124 224,114 229,124\" fill=\"#333\"/><polygon points=\"228,124 233,114 236,125\" fill=\"#333\"/><path d=\"M172 150 Q150 135 160 120\" stroke=\"#333\" stroke-width=\"5\" fill=\"none\"/><text x=\"160\" y=\"20\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">GARDEN 15:41</text></svg>",
   "camera.garage": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#a9a59c\"/><rect x=\"60\" y=\"40\" width=\"200\" height=\"150\" fill=\"#3a3a3a\"/><rect x=\"60\" y=\"40\" width=\"200\" height=\"110\" fill=\"#d8d4c8\"/><line x1=\"60\" y1=\"70\" x2=\"260\" y2=\"70\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><line x1=\"60\" y1=\"100\" x2=\"260\" y2=\"100\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><line x1=\"60\" y1=\"130\" x2=\"260\" y2=\"130\" stroke=\"#b9b5a8\" stroke-width=\"3\"/><text x=\"160\" y=\"25\" font-size=\"12\" text-anchor=\"middle\" fill=\"#fff\">GARAGE 15:39</text></svg>",
   "camera.pet": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\"><rect width=\"320\" height=\"200\" fill=\"#e9dcc6\"/><rect x=\"40\" y=\"100\" width=\"240\" height=\"70\" rx=\"12\" fill=\"#7a5c8f\"/><ellipse cx=\"160\" cy=\"105\" rx=\"55\" ry=\"22\" fill=\"#c8893f\"/><circle cx=\"210\" cy=\"92\" r=\"17\" fill=\"#c8893f\"/><ellipse cx=\"222\" cy=\"80\" rx=\"6\" ry=\"11\" fill=\"#9c6528\"/><circle cx=\"216\" cy=\"90\" r=\"2.5\" fill=\"#222\"/><text x=\"160\" y=\"25\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">PET CAM 15:43</text></svg>"
- }
+ },
+ "events": [
+  {
+   "event_type": "zha_event",
+   "data": {
+    "device_ieee": "00:15:8d:00:01:02:03:04",
+    "device_name": "Kitchen remote",
+    "command": "on",
+    "args": [],
+    "endpoint_id": 1
+   }
+  },
+  {
+   "event_type": "automation_triggered",
+   "data": {
+    "name": "Porch light at sunset",
+    "entity_id": "automation.porch_light_at_sunset",
+    "source": "sun event"
+   }
+  },
+  {
+   "event_type": "mobile_app_notification_action",
+   "data": {
+    "action": "OPEN_GARAGE",
+    "device_id": "phone_alex"
+   }
+  }
+ ]
 }

@@ -419,6 +419,7 @@ Second Thought can talk to Home Assistant. It has its own blue blocks for this.
 - One block takes a photo from a camera, so Claude can say who is at the door.
 - One block turns a light off, or sends a message to a phone.
 - A special yellow block starts a script by itself when something changes, like the doorbell ringing.
+- Another starts a script the moment Home Assistant sends an **event**, like a button on a remote being pressed.
 
 On the Second Thought page, these blocks use a **pretend house**, so you can try everything safely. Press the **Home Assistant** button to see the pretend house. Change something, like the doorbell, and watch your program spring into action.
 
@@ -438,7 +439,7 @@ HA_TOKEN = your-long-lived-token
 
 Then double-click `run-on-schedule.bat` (Windows), or type `sh run-on-schedule.sh` (Linux or Mac). On an always-on Linux computer, `sh install-service.sh` keeps it running for good.
 
-`--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. A small virtual machine or container that's always on is a good home for it.
+`--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. **when Home Assistant event … happens with …** listens on Home Assistant's WebSocket, using the same `HA_URL` and `HA_TOKEN`, so it reacts at once instead of checking every so often. Use it for remote and button presses (`zha_event`, `deconz_event`, `hue_event`), `automation_triggered`, phone notification actions or your own events. Type `anything` for every event. The second box is optional words the event's data must contain, like the remote's name. **what arrived** gives `event_type`, `entity`, `data`, `time`, `text`, and each field of the event's data, like `command`. Developer tools → Events in Home Assistant shows what your devices send. A small virtual machine or container that's always on is a good home for it.
 
 ### Homey
 

@@ -141,12 +141,15 @@ Memory (survives between runs):
   Map files or databases used only to keep state between runs (json files, pickle, sqlite caches) to these blocks.
 Home Assistant (talks to the user's Home Assistant):
   Hat: rb_ha_when: fields ENTITY (entity id), STATE (target state or "anything"). Inside it, rb_ha_trigger is a record {entity, name, from, to}.
+  Hat: rb_ha_event_when: fields EVENT (event type like "zha_event", "automation_triggered", or "anything"), DATA (optional words the event's data must contain).
+    Inside it, rb_event gives event_type, entity, data (JSON text), time, text, plus each field of the event's data (e.g. device_name, command).
   Values: rb_ha_state (ENTITY), rb_ha_attr (ATTR, ENTITY), rb_ha_find (TEXT: words to match; "*" = all) -> list of records {entity, name, state, unit, area},
     rb_ha_summary (TEXT) -> text lines of matching entities and states, rb_ha_history (ENTITY, HOURS) -> list of records {time, state},
     rb_ha_snapshot (CAMERA) -> picture.
   Statements: rb_ha_call (SERVICE like "light.turn_off", ENTITY, DATA as JSON text or ""), rb_ha_notify (TARGET like "notify.mobile_app_phone" or "persistent_notification", TEXT),
     rb_ha_speak (TEXT, PLAYER media_player entity).
-  Map Home Assistant REST/WebSocket calls, hass.states.get, call_service and AppDaemon listen_state to these blocks.
+  Map Home Assistant REST/WebSocket calls, hass.states.get, call_service and AppDaemon listen_state to these blocks;
+  map AppDaemon listen_event, hass event listeners and WebSocket subscribe_events to rb_ha_event_when.
 Pictures (values are pictures, not text):
   rb_img_choose: the person picks a picture file.  rb_img_draw (TEXT): Claude draws an SVG illustration of the description.
   rb_img_change (IMG, TEXT): redraws the picture with a change.  rb_img_ask (TEXT, IMG): Claude answers a question about the picture (text).
