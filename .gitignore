@@ -8,5 +8,6 @@ __pycache__/
 # Files written by exported programs
 outputs/
 memory.json
+*.json.lock
 .DS_Store
 second-thought.ini

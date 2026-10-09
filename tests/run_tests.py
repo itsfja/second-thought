@@ -166,6 +166,48 @@ async def run_program(pg, timeout_s=30):
     return await pg.inner_text("#status")
 
 
+# Several programs sharing memory.json and the Telegram store (issue #25).
+MEM_RACE = r"""
+import json, os, subprocess, sys, tempfile
+# Four programs at once each add 25 items to one remembered list in a shared memory file: all 100 must be kept.
+rt, d = sys.argv[1], tempfile.mkdtemp()
+mem = os.path.join(d, "shared-memory.json")
+worker = r'''
+import os, sys
+ns = {"__name__": "rt", "__file__": sys.argv[1]}
+exec(compile(open(sys.argv[1], encoding="utf-8").read(), "rt", "exec"), ns)
+R = ns["Runtime"](); R.reset(); R.log = lambda *a, **k: None
+for i in range(25):
+    R.remember_add(f"{sys.argv[2]}-{i}", "shared list", "permanent")
+'''
+env = dict(os.environ, RB_MEMORY_FILE=mem)
+ps = [subprocess.Popen([sys.executable, "-c", worker, rt, f"p{n}"], env=env, stderr=subprocess.PIPE, text=True) for n in range(4)]
+errs = [p.communicate(timeout=120)[1] for p in ps]
+data = json.load(open(mem, encoding="utf-8"))
+items = data["shared list"]["value"]
+left = [f for f in os.listdir(d) if f.endswith(".tmp")]
+print(json.dumps({"kept": len(items), "unique": len(set(items)), "tmp_left": len(left), "errors": [e[-200:] for e in errs if e.strip()]}))
+"""
+TG_MERGE = r"""
+import asyncio, json, os, sys, tempfile
+# Another program sharing the bot saved message 1001 while this one waited on Telegram: this one adds only 1002.
+os.environ["TELEGRAM_CHAT_ID"] = "42"
+ns = {"__name__": "rt", "__file__": sys.argv[1]}
+exec(compile(open(sys.argv[1], encoding="utf-8").read(), "rt", "exec"), ns)
+ns["TELEGRAM_FILE"] = os.path.join(tempfile.mkdtemp(), "tg.json")
+R = ns["Runtime"](); R.reset()
+msg = lambda uid, text: {"update_id": uid, "message": {"text": text, "date": uid, "chat": {"id": 42}, "from": {"first_name": "Francis"}}}
+async def fake_tg(method, params=None, wait=0):
+    # while "waiting", the other program saves 1001
+    json.dump({"offset": 1002, "messages": [{"text": "first", "sender": "Francis", "chat": "42", "chat_name": "", "date": 1001, "update_id": 1001}]},
+              open(ns["TELEGRAM_FILE"], "w", encoding="utf-8"))
+    return [msg(1001, "first"), msg(1002, "second")]
+R._tg = fake_tg
+new = asyncio.run(R.tg_fetch())
+store = json.load(open(ns["TELEGRAM_FILE"], encoding="utf-8"))
+print(json.dumps({"new": [m["text"] for m in new], "stored": [m["text"] for m in store["messages"]], "offset": store["offset"]}))
+"""
+
 EXTRA = {}  # name -> exported Python for the new-feature programs below
 
 
@@ -1717,6 +1759,15 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
         check(got.get("dupes") == 0 and got.get("kept", 0) > 0 and 0 in (got.get("a"), got.get("b")),
               f"two scripts fetching Telegram at once take turns: no message is stored twice ({got or r.stderr[-200:]})")
+        rt_path = str(ROOT / "python" / "runtime.py")
+        r = subprocess.run([sys.executable, "-c", MEM_RACE, rt_path], capture_output=True, text=True, timeout=180, env=env)
+        got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
+        check(got.get("kept") == 100 and got.get("unique") == 100 and got.get("tmp_left") == 0 and not got.get("errors"),
+              f"four programs adding to one shared memory list at once keep all 100 items ({got or r.stderr[-200:]})")
+        r = subprocess.run([sys.executable, "-c", TG_MERGE, rt_path], capture_output=True, text=True, timeout=60, env=env)
+        got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
+        check(got.get("new") == ["second"] and got.get("stored") == ["first", "second"] and got.get("offset") == 1003,
+              f"a Telegram message another program already saved isn't stored or acted on twice ({got or r.stderr[-200:]})")
         (pathlib.Path(tmp) / "t_listen.py").write_text(EXTRA["t_listen"], encoding="utf-8")
         import socket
         with socket.socket() as so:
