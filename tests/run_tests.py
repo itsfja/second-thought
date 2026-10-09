@@ -208,6 +208,40 @@ store = json.load(open(ns["TELEGRAM_FILE"], encoding="utf-8"))
 print(json.dumps({"new": [m["text"] for m in new], "stored": [m["text"] for m in store["messages"]], "offset": store["offset"]}))
 """
 
+# A forward proxy that redirects a public page to this computer: get_url must refuse the second hop (issue #23).
+PROXY_REDIRECT = r"""
+import json, os, socket, sys, threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+for k in list(os.environ):
+    if k.lower().endswith("_proxy"):
+        del os.environ[k]
+seen = []
+class Proxy(BaseHTTPRequestHandler):  # a forward proxy that sends a public page somewhere on this computer
+    def log_message(self, *a): pass
+    def do_GET(self):
+        seen.append(self.path)
+        if "public.example" in self.path:
+            self.send_response(302); self.send_header("Location", f"http://127.0.0.1:{port}/admin"); self.send_header("Content-Length", "0"); self.end_headers()
+        else:
+            self.send_response(200); self.send_header("Content-Length", "6"); self.end_headers(); self.wfile.write(b"secret")
+srv = ThreadingHTTPServer(("127.0.0.1", 0), Proxy); threading.Thread(target=srv.serve_forever, daemon=True).start()
+port = srv.server_address[1]
+os.environ["http_proxy"] = f"http://127.0.0.1:{port}"
+ns = {"__name__": "rt", "__file__": sys.argv[1]}
+exec(compile(open(sys.argv[1], encoding="utf-8").read(), "rt", "exec"), ns)
+real_lookup = socket.getaddrinfo
+socket.getaddrinfo = lambda host, *a, **k: [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("93.184.215.14", 80))] if host == "public.example" else real_lookup(host, *a, **k)
+out = {}
+try:
+    ns["get_url"]("http://public.example/start")
+    out["proxied"] = "fetched"
+except ns["RunError"] as e:
+    out["proxied"] = str(e)
+out["admin_hits"] = sum(1 for p in seen if p.endswith("/admin"))
+out["start_hits"] = sum(1 for p in seen if "public.example" in p)
+print(json.dumps(out))
+"""
+
 EXTRA = {}  # name -> exported Python for the new-feature programs below
 
 
@@ -1715,6 +1749,11 @@ print(json.dumps(out))
         check(got.get("hits") == 0 and got.get("lookups") == 1 and "couldn't reach" in got.get("rebind", ""),
               f"a name that changes its answer (DNS rebinding) can't reach this computer: looked up once, connected only to the checked address ({got})")
         check("not addresses on your own network" in got.get("direct", ""), "an address on your own network is still refused")
+        r = subprocess.run([sys.executable, "-c", PROXY_REDIRECT, str(ROOT / "python" / "runtime.py")], capture_output=True, text=True, timeout=60,
+                           env={k: v for k, v in env.items() if k != "PYTHONPATH"})
+        px = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
+        check(px.get("start_hits") == 1 and px.get("admin_hits") == 0 and "not addresses on your own network" in px.get("proxied", ""),
+              f"behind a proxy, a redirect from a public page to this computer is refused before it's followed ({px or r.stderr[-200:]})")
         check("Word file couldn't be read" in got.get("fake.docx", "") and "Word file couldn't be read" in got.get("empty.docx", ""),
               "a damaged or mislabelled Word file gives a plain message, not a crash")
         sys.path.insert(0, str(ROOT / "tools"))

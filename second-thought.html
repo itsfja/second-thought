@@ -1398,11 +1398,21 @@ def _pinned_connections():
 
 
 class _PublicRedirects(urllib.request.HTTPRedirectHandler):
+    """Follows a redirect only to a web page. Without a proxy, the new address is checked as it connects."""
+    check_hosts = False
+
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         u = urllib.parse.urlparse(newurl)
         if u.scheme not in ("http", "https") or not u.hostname:
             raise RunError("That address sent the program somewhere that isn't a web page.")
-        return super().redirect_request(req, fp, code, msg, headers, newurl)  # the new address is checked as it connects
+        if self.check_hosts:
+            _public_only(u.hostname)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+class _ProxiedRedirects(_PublicRedirects):
+    """Through a proxy nothing is checked as it connects, so every address a redirect sends the program to is checked first."""
+    check_hosts = True
 
 
 def get_url(url, trusted=False, what="read_page", limit=3_000_000):
@@ -1420,9 +1430,10 @@ def get_url(url, trusted=False, what="read_page", limit=3_000_000):
     if not guard:
         opener = urllib.request.build_opener()
     elif urllib.request.getproxies().get(u.scheme) and not urllib.request.proxy_bypass(u.hostname):
-        # Through a proxy, the proxy looks the name up, so the best this side can do is check it first.
+        # Through a proxy, the proxy looks the name up, so the best this side can do is check it first,
+        # and check again wherever a redirect points.
         _public_only(u.hostname)
-        opener = urllib.request.build_opener(_PublicRedirects)
+        opener = urllib.request.build_opener(_ProxiedRedirects)
     else:
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), *_pinned_connections(), _PublicRedirects)
     try:
