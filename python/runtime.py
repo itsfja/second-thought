@@ -635,6 +635,78 @@ def _short(s, n):
     return s if len(s) <= n else s[: n - 1] + "…"
 
 
+# ----- Files that several programs can share (memory.json, the Telegram messages) -----
+# Two programs can point at the same file (RB_MEMORY_FILE). Each change to one is a read, a change and a write, done
+# while holding a lock on "<file>.lock", so two programs saving at once take turns instead of one losing the other's
+# change. Writes go to a temporary file first, which then replaces the real one, so a crash mid-save can't leave half a file.
+_FILE_LOCKS = {}                 # path -> [open lock file, how many times this program holds it]
+_FILE_LOCKS_GUARD = threading.RLock()
+
+
+@contextlib.contextmanager
+def _locked(path):
+    """Holds the lock for a shared file. This program can take it again while holding it (memory blocks nest)."""
+    key = os.path.abspath(path)
+    with _FILE_LOCKS_GUARD:
+        held = _FILE_LOCKS.get(key)
+        if held:
+            held[1] += 1
+        else:
+            try:
+                f = open(key + ".lock", "a+b")
+            except OSError:  # a folder we can't write to: carry on without the lock rather than fail
+                f = None
+            if f is not None:
+                if os.name == "nt":
+                    import msvcrt
+                    give_up = time.monotonic() + 120
+                    while True:
+                        try:
+                            f.seek(0)
+                            msvcrt.locking(f.fileno(), msvcrt.LK_LOCK, 1)  # retries for 10 s, then raises
+                            break
+                        except OSError:
+                            if time.monotonic() > give_up:
+                                f.close()
+                                raise RunError(f"Another program has been using {os.path.basename(key)} for over two minutes, so this one gave up waiting.")
+                else:
+                    import fcntl
+                    fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+            held = _FILE_LOCKS[key] = [f, 1]
+        try:
+            yield
+        finally:
+            held[1] -= 1
+            if not held[1]:
+                del _FILE_LOCKS[key]
+                f = held[0]
+                if f is not None:
+                    try:
+                        if os.name == "nt":
+                            import msvcrt
+                            f.seek(0)
+                            msvcrt.locking(f.fileno(), msvcrt.LK_UNLCK, 1)
+                        else:
+                            import fcntl
+                            fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+                    finally:
+                        f.close()
+
+
+def _write_json(path, data, **dump_args):
+    """Writes JSON so the file is either all old or all new, even if the program stops part-way."""
+    tmp = f"{path}.{os.getpid()}.tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, **dump_args)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+    finally:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+
+
 # ----- The agent's ready-made helpers: sums, clock times and web pages (the page has the same sums and clock times) -----
 
 class _Calc:
@@ -2224,10 +2296,7 @@ class Runtime:
         return {k: v for k, v in data.items() if not (v.get("expires") and v["expires"] <= now)}
 
     def _mem_save(self, data):
-        tmp = MEMORY_FILE + ".tmp"
-        with open(tmp, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=1)
-        os.replace(tmp, MEMORY_FILE)
+        _write_json(MEMORY_FILE, data, indent=1)
 
     @staticmethod
     def _storable(v):
@@ -2240,6 +2309,10 @@ class Runtime:
         return v if isinstance(v, (str, int, float, bool)) else to_str(v)
 
     def _mem_write(self, name, value, kind, expires=None):
+        with _locked(MEMORY_FILE):  # read, change and save as one step, so another program's save isn't lost
+            self._mem_write_now(name, value, kind, expires)
+
+    def _mem_write_now(self, name, value, kind, expires):
         key = self._mem_key(name)
         if kind == "transient":
             self.transient_memory[key] = {"name": to_str(name).strip(), "value": value}
@@ -2276,15 +2349,16 @@ class Runtime:
 
     def remember_add(self, value, name, kind="transient"):
         key = self._mem_key(name)
-        cur, where = self._mem_entry(key)
-        items = []
-        if cur:
-            items = list(cur["value"]) if isinstance(cur["value"], list) else ([] if cur["value"] == "" else [cur["value"]])
-        items.append(value)
-        if cur and where == "saved":
-            self._mem_write(name, items, "permanent", cur.get("expires"))
-        else:
-            self._mem_write(name, items, "transient" if cur else kind)
+        with _locked(MEMORY_FILE):  # the list is read and saved under one lock, so two programs adding at once both count
+            cur, where = self._mem_entry(key)
+            items = []
+            if cur:
+                items = list(cur["value"]) if isinstance(cur["value"], list) else ([] if cur["value"] == "" else [cur["value"]])
+            items.append(value)
+            if cur and where == "saved":
+                self._mem_write(name, items, "permanent", cur.get("expires"))
+            else:
+                self._mem_write(name, items, "transient" if cur else kind)
         self.log("Added to \u201c" + to_str(name).strip() + "\u201d", f"{len(items)} items", "saved")
 
     def recall(self, name):
@@ -2299,10 +2373,11 @@ class Runtime:
     def forget(self, name):
         key = self._mem_key(name)
         self.transient_memory.pop(key, None)
-        data = self._mem_load()
-        if key in data:
-            del data[key]
-            self._mem_save(data)
+        with _locked(MEMORY_FILE):
+            data = self._mem_load()
+            if key in data:
+                del data[key]
+                self._mem_save(data)
         self.log("Forgot \u201c" + to_str(name).strip() + "\u201d", None, "forgotten")
 
     def memory_names(self):
@@ -2933,12 +3008,12 @@ class Runtime:
             return await self._tg_fetch(wait)
 
     async def _tg_fetch(self, wait):
-        store = self._tg_load()
-        updates = await self._tg("getUpdates", {"offset": store.get("offset", 0), "timeout": wait,
+        offset = self._tg_load().get("offset", 0)
+        updates = await self._tg("getUpdates", {"offset": offset, "timeout": wait,
                                                 "allowed_updates": ["message", "channel_post"]}, wait)
-        mine, new = self._tg_chats(), []
+        mine, new, top = self._tg_chats(), [], offset
         for u in updates or []:
-            store["offset"] = max(store.get("offset", 0), u["update_id"] + 1)
+            top = max(top, u["update_id"] + 1)
             m = u.get("message") or u.get("channel_post") or {}
             if "text" not in m and "caption" not in m:
                 continue
@@ -2950,11 +3025,18 @@ class Runtime:
             who = m.get("from", {})
             new.append({"text": m.get("text") or m.get("caption", ""), "sender": " ".join(x for x in (who.get("first_name"), who.get("last_name")) if x)
                         or chat.get("title", ""), "chat": str(chat.get("id")), "chat_name": chat.get("title") or chat.get("first_name", ""),
-                        "date": m.get("date", 0)})
-        store["messages"] = (store.get("messages", []) + new)[-2000:]
+                        "date": m.get("date", 0), "update_id": u["update_id"]})
+        # Another program sharing this bot may have saved messages while this one waited on Telegram. Read the file again
+        # under the lock and add to what's there, skipping any message it already has, instead of writing over it.
         try:
-            with open(TELEGRAM_FILE, "w", encoding="utf-8") as f:
-                json.dump(store, f, ensure_ascii=False)
+            with _locked(TELEGRAM_FILE):
+                store = self._tg_load()
+                have = {m.get("update_id") for m in store.get("messages", []) if m.get("update_id") is not None}
+                fresh = [m for m in new if m["update_id"] not in have]
+                store["offset"] = max(store.get("offset", 0), top)
+                store["messages"] = (store.get("messages", []) + fresh)[-2000:]
+                _write_json(TELEGRAM_FILE, store)
+            new = fresh
         except OSError:
             pass
         return new
