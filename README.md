@@ -329,7 +329,7 @@ save_log = yes
 
 `resume` is for runs that stop part-way, for example because the internet dropped out or you pressed Ctrl+C. The program keeps a note of each finished step. Next time it can pick up where it stopped: Claude's answers, your answers and the messages already sent are reused, not asked or sent again. In a terminal it asks you first. Set `resume = yes` or `resume = no` to decide for programs that run on their own. If you change the program, it starts afresh.
 
-`max_seconds` stops any run that takes longer than that many seconds, whatever it's doing, so a slow helper can't keep a program busy for ages. `call_timeout` gives up on a single call to a helper after that many seconds (300 if you don't say).
+`max_seconds` stops any run that takes longer than that many seconds, whatever it's doing, so a slow helper can't keep a program busy for ages. `call_timeout` gives up on a single call to a helper after that many seconds (300 if you don't say, and 0 means no timeout). If one of these numbers is mistyped, the program stops straight away and says which setting is wrong.
 
 Helpers rename their models from time to time. To use a different model without editing the program, add `MODEL_` and the tier's name in capitals, like `MODEL_OPENAI_DEFAULT = gpt-6.2-sol` or `MODEL_QUICK = claude-haiku-4-5-20251001`. `second-thought.example.ini` shows the pattern.
 

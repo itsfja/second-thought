@@ -1739,6 +1739,14 @@ print(json.dumps(out))
               "call_timeout reaches the Claude client, and MODEL_DEFAULT swaps the model a tier uses" + ("" if code_ == 0 else f": {(err or out)[-200:]!r}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "review.py")], dict(env, FAKE_LOG=str(log)), tmp)
         check('"timeout": 300' in log.read_text(), "each Claude call gives up after 300 seconds unless call_timeout says otherwise")
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "review.py")], dict(env, FAKE_LOG=str(log), RB_CALL_TIMEOUT="0"), tmp)
+        check(code_ == 0 and '"timeout": null' in log.read_text().split("CLIENT ")[-1],
+              "call_timeout = 0 means no timeout, like max_seconds = 0" + ("" if code_ == 0 else f": {(err or out)[-200:]!r}"))
+        for bad in (dict(RB_MAX_SECONDS="banana"), dict(RB_CALL_TIMEOUT="ten"), dict(RB_BUDGET="-5")):
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "review.py")], dict(env, **bad), tmp)
+            name = {"RB_MAX_SECONDS": "max_seconds", "RB_CALL_TIMEOUT": "call_timeout", "RB_BUDGET": "budget"}[next(iter(bad))]
+            check(code_ != 0 and f"{name} must be" in (out + err) and f"“{next(iter(bad.values()))}”" in (out + err),
+                  f"a mistyped {name} stops the program and says which setting is wrong, instead of being ignored")
         tg_race = r"""
 import asyncio, json, os, sys
 ns = {"__name__": "rt", "__file__": sys.argv[1]}
