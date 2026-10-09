@@ -1736,6 +1736,8 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
                                 dict(env, WEBHOOK_SECRET="", WEBHOOK_PORT=str(closed_port), WEBHOOK_HOST="127.0.0.1", RB_POLL_SECONDS="0.5"), tmp, timeout=9)
         check(knock.get("result") == "closed" and "doesn't listen for them" in out,
               f"without WEBHOOK_SECRET, the web request port isn't opened at all ({knock.get('result')})")
+        check(re.search(r"Web requests, \d\d:\d\d: still not listening", out) is not None,
+              "the not-listening notice is said again later (hourly), so it doesn't scroll away for good")
 
         print("Agent paths in Python")
         for name in ("t_ag_bad", "t_ag_repeat", "t_ag_out", "t_ag_ha", "t_ag_plan"):

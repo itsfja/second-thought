@@ -4039,9 +4039,12 @@ class Runtime:
                     loop.call_soon_threadsafe(rt._fire, fn, dict(rec), "Web request /" + rec["path"])
                 self._answer(200, "Started.")
         if not secret:  # no password, no open port: nothing on the network can even try
-            print(f"Web requests: set WEBHOOK_SECRET {WHERE_KEYS} to a long password. Until then, the program doesn't listen for them.", flush=True)
+            # Said again every hour, so someone who opens the window later (or reads the log) still sees why.
+            note = f"set WEBHOOK_SECRET {WHERE_KEYS} to a long password. Until then, the program doesn't listen for them."
+            print("Web requests: " + note, flush=True)
             while True:
-                await asyncio.sleep(3600)
+                await asyncio.sleep(self._poll(3600))
+                print(f"Web requests, {datetime.datetime.now():%H:%M}: still not listening. To turn them on, " + note, flush=True)
         srv = ThreadingHTTPServer((os.environ.get("WEBHOOK_HOST", "0.0.0.0"), port), Hook)
         threading.Thread(target=srv.serve_forever, daemon=True).start()
         print(f"Listening for web requests on port {port}: " + ", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths) + ".", flush=True)
