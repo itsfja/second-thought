@@ -257,6 +257,12 @@ TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rs
 TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
 # The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
 PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
+# Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
+# turned on, and DISCORD_CHANNEL_ID: the channels it reads and posts in (anyone in a server can post, so only these count).
+# Slack: a bot token (api.slack.com/apps, your app, OAuth & Permissions; scopes channels:history, groups:history,
+# chat:write) and SLACK_CHANNEL_ID, the channels it reads and posts in. Invite the bot to each channel.
+DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
+SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
 # worked out for Gmail, iCloud, Yahoo and Fastmail; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
 # MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
@@ -3114,6 +3120,135 @@ class Runtime:
                     else:
                         busy = asyncio.ensure_future(self.run([(fn, m)], "Telegram message"))
 
+    # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
+    CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
+                         "make": "a bot in the Discord Developer Portal (Applications, your app, Bot), with the Message Content intent on"},
+             "slack": {"name": "Slack", "token": "SLACK_BOT_TOKEN", "channels": "SLACK_CHANNEL_ID", "limit": 3500,
+                       "make": "a Slack app (api.slack.com/apps) with a bot token and the channels:history and chat:write scopes"}}
+
+    def _chat_channels(self, service):
+        return [c for c in re.split(r"[\s,]+", os.environ.get(self.CHATS[service]["channels"], "")) if c]
+
+    async def _chat_api(self, service, method, path, body=None, query=None):
+        c = self.CHATS[service]
+        token = os.environ.get(c["token"], "").strip()
+        if not token:
+            raise RunError(f"{c['name']} needs {c['token']} {WHERE_KEYS}: make {c['make']}.")
+        base = DISCORD_API if service == "discord" else SLACK_API
+        url = base + path + ("?" + urllib.parse.urlencode(query) if query else "")
+        req = urllib.request.Request(url, method=method, data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": ("Bot " if service == "discord" else "Bearer ") + token,
+                                              "Content-Type": "application/json; charset=utf-8", "User-Agent": "SecondThought (+https://claude.ai)"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=30) as r:
+                    data = json.loads(r.read() or b"null")
+            except urllib.error.HTTPError as e:
+                why = {401: f"the bot token was refused. Check {c['token']}", 403: "the bot isn't allowed in that channel. Add it to the channel and give it permission to read and send messages",
+                       404: "there's no such channel, or the bot can't see it", 429: "it's asking the program to slow down. Try again in a minute"}.get(e.code, f"it answered {e.code}")
+                raise RunError(f"{c['name']}: {why}.") from None
+            except urllib.error.URLError as e:
+                raise RunError(f"Couldn't reach {c['name']} ({e.reason}).") from None
+            if service == "slack" and isinstance(data, dict) and not data.get("ok"):
+                err = to_str(data.get("error") or "it said no")
+                why = {"not_in_channel": "the bot isn't in that channel. Invite it with /invite", "channel_not_found": "there's no such channel, or the bot can't see it",
+                       "invalid_auth": f"the bot token was refused. Check {c['token']}", "missing_scope": "the app needs more scopes (channels:history and chat:write)"}.get(err, err)
+                raise RunError(f"Slack: {why}.")
+            return data
+        return await asyncio.to_thread(go)
+
+    async def _chat_read(self, service, channel, after=None, limit=50):
+        """(messages, newest id): messages in one channel, oldest first, as records (text, sender, channel, id), skipping
+        bots, this one included. The newest id counts every message, bots too, so a listener knows where it got to."""
+        out, newest = [], after
+        if service == "discord":
+            q = {"limit": limit, **({"after": after} if after else {})}
+            raw = await self._chat_api("discord", "GET", f"/channels/{urllib.parse.quote(channel)}/messages", query=q) or []
+            newest = max((m["id"] for m in raw), key=int, default=after)
+            for m in sorted(raw, key=lambda x: int(x["id"])):
+                a = m.get("author") or {}
+                if a.get("bot") or not to_str(m.get("content")).strip():
+                    continue
+                out.append({"text": m["content"], "sender": a.get("global_name") or a.get("username", ""), "channel": channel, "id": m["id"],
+                            "date": _parse_date(m.get("timestamp", "")) or datetime.datetime.now()})
+        else:
+            q = {"channel": channel, "limit": limit, **({"oldest": after} if after else {})}
+            raw = [m for m in (await self._chat_api("slack", "GET", "/conversations.history", query=q) or {}).get("messages", []) if m.get("ts") != after]
+            newest = max((m["ts"] for m in raw), key=float, default=after)
+            for m in sorted(raw, key=lambda x: float(x["ts"])):
+                if m.get("bot_id") or m.get("subtype") or not to_str(m.get("text")).strip():
+                    continue
+                out.append({"text": m["text"], "sender": m.get("user", ""), "channel": channel, "id": m["ts"],
+                            "date": datetime.datetime.fromtimestamp(float(m["ts"]))})
+        return out, newest
+
+    def _chat_need_channels(self, service):
+        chans = self._chat_channels(service)
+        if not chans:
+            c = self.CHATS[service]
+            raise RunError(f"{c['name']} needs {c['channels']} {WHERE_KEYS}: the channels it reads and posts in (anyone can post in a "
+                           f"{'server' if service == 'discord' else 'workspace'}, so only these count).")
+        return chans
+
+    async def chat_search(self, service, text="", limit=20):
+        words, found = to_str(text).lower().split(), []
+        for ch in self._chat_need_channels(service):
+            found += [m for m in (await self._chat_read(service, ch, limit=100))[0] if all(w in m["text"].lower() for w in words)]
+        found.sort(key=lambda m: m["date"], reverse=True)
+        name = self.CHATS[service]["name"]
+        return "\n".join(f"{_when(m['date'])} · {m['sender']} in {m['channel']}: {_short(m['text'], 300)}" for m in found[:max(1, min(50, round_js(num(limit)) or 20))]) \
+            or (f"No {name} messages found" + (f" with “{text}”" if words else "") + f". Only the channels in {self.CHATS[service]['channels']} are read.")
+
+    async def chat_send(self, service, text, channel="", approved=False):
+        c = self.CHATS[service]
+        text = to_str(text).strip()
+        if not text:
+            raise RunError(f"A {c['name']} message needs some text.")
+        mine = self._chat_need_channels(service)
+        trig = MESSAGE_VALUE.get()
+        channel = to_str(channel).strip() or (trig.get("channel") if isinstance(trig, dict) and trig.get("service") == service else "") or mine[0]
+        if channel not in mine:
+            raise RunError(f"{c['name']}: channel {channel} isn't in {c['channels']}, so nothing is sent there.")
+        if not approved and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
+            return False
+        for i in range(0, len(text), c["limit"]):
+            part = text[i:i + c["limit"]]
+            if service == "discord":
+                await self._chat_api("discord", "POST", f"/channels/{urllib.parse.quote(channel)}/messages", {"content": part, "allowed_mentions": {"parse": []}})
+            else:
+                await self._chat_api("slack", "POST", "/chat.postMessage", {"channel": channel, "text": part})
+        self.log(f"{c['name']} message sent", text, "sent")
+        return True
+
+    async def _listen_chat(self, service, items):
+        """'when a Discord/Slack message arrives': checks each channel every 10 seconds. Messages already there at the start don't count."""
+        chans = self._chat_need_channels(service)
+        last = {ch: (await self._chat_read(service, ch, limit=1))[1] for ch in chans}
+        if service == "slack":  # Slack's 'oldest' is a time; start from now if the channel was empty
+            last = {ch: v or f"{time.time():.6f}" for ch, v in last.items()}
+        print(f"Listening for {self.CHATS[service]['name']} messages in " + ", ".join(chans) + ".", flush=True)
+        while True:
+            await asyncio.sleep(self._poll(10))
+            for ch in chans:
+                try:
+                    new, last[ch] = await self._chat_read(service, ch, after=last[ch])
+                except RunError as e:
+                    print(f"  ({self.CHATS[service]['name']} check failed: {e})", flush=True)
+                    continue
+                for m in new:
+                    rec = {"service": service, "text": m["text"], "sender": m["sender"], "channel": ch, "id": m["id"]}
+                    for contains, fn in items:
+                        want = to_str(contains).strip().lower()
+                        if want in ("", "anything") or want in m["text"].lower():
+                            self._fire(fn, dict(rec), f"{self.CHATS[service]['name']} message")
+
+    async def _listen_discord(self, items):
+        await self._listen_chat("discord", items)
+
+    async def _listen_slack(self, items):
+        await self._listen_chat("slack", items)
+
     # Email
     MAIL_SERVERS = {"gmail.com": ("imap.gmail.com", "smtp.gmail.com", 465), "googlemail.com": ("imap.gmail.com", "smtp.gmail.com", 465),
                     "icloud.com": ("imap.mail.me.com", "smtp.mail.me.com", 587), "me.com": ("imap.mail.me.com", "smtp.mail.me.com", 587),
@@ -3608,7 +3743,7 @@ class Runtime:
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
     LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
-                    "github": "GitHub", "calendar": "Calendar", "page": "Web page"}
+                    "github": "GitHub", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page"}
 
     @staticmethod
     def event(key="text"):
@@ -4026,7 +4161,13 @@ class Runtime:
         ("run_homey_flow", "Start one of the person's Homey flows, by its name. The person may be asked first, and may say no.", ["flow"])]
     AGENT_BUILTINS["homey_act_free"] = AGENT_BUILTINS["homey_act"]
     AGENT_BUILTINS["telegram_send_free"] = AGENT_BUILTINS["telegram_send"]
-    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act"}  # built-in tools that ask before each use
+    for _svc, _name in (("discord", "Discord"), ("slack", "Slack")):
+        AGENT_BUILTINS[_svc] = [(f"search_{_svc}", f"Search the recent messages in the person's {_name} channels, newest first. Leave text empty for the latest.", ["text"])]
+        AGENT_BUILTINS[_svc + "_send"] = AGENT_BUILTINS[_svc + "_send_free"] = [
+            (f"send_{_svc}", f"Send a {_name} message to the person's channel (or back to the channel a message came from). "
+             "The person may be asked first, and may say no.", ["text"])]
+    del _svc, _name
+    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
@@ -4038,14 +4179,15 @@ class Runtime:
                          "search_linkedin": {"query": "text"}, "my_pull_requests": {}, "list_pull_requests": {"repo": "text", "state": "text"},
                          "read_pull_request": {"repo": "text", "number": "number"}, "list_projects": {"owner": "text"}, "search_github": {"query": "text"},
                          "comment_on_github": {"repo": "text", "number": "number", "text": "text"}, "search_telegram": {"text": "text"},
-                         "send_telegram": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
+                         "send_telegram": {"text": "text"}, "search_discord": {"text": "text"}, "send_discord": {"text": "text"},
+                         "search_slack": {"text": "text"}, "send_slack": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
                          "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
                          "free_time": {"day": "text", "from": "text", "to": "text", "minutes": "number"},
                          "read_mqtt": {"topic": "text"}, "publish_mqtt": {"topic": "text", "message": "text", "retain": "yes/no"},
                          "find_homey_devices": {"search": "text"}, "list_homey_flows": {}, "homey_variable": {"name": "text"},
                          "set_homey_device": {"device": "text", "capability": "text", "value": "any"}, "run_homey_flow": {"flow": "text"}}
     AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
-                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"},
+                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"}, "search_discord": {"text"}, "search_slack": {"text"},
                       "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"},
                       "publish_mqtt": {"retain"}, "find_homey_devices": {"search"}}
     MAX_FILE_CHARS = 30000
@@ -4267,6 +4409,11 @@ class Runtime:
         if kind == "comment_on_github":
             done = await self.gh_comment(a("repo"), inp.get("number", 0), a("text"), approved)
             return "Comment posted." if done else "Not posted: the person said no, or nobody was there to ask."
+        if kind in ("search_discord", "search_slack"):
+            return await self.chat_search(kind.split("_")[1], a("text"))
+        if kind in ("send_discord", "send_slack"):
+            done = await self.chat_send(kind.split("_")[1], a("text"), "", approved)
+            return "Sent." if done else "Not sent: the person said no, or nobody was there to ask."
         if kind == "search_telegram":
             return await self.tg_search(a("text"))
         if kind == "send_telegram":

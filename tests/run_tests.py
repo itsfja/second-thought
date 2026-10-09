@@ -922,7 +922,8 @@ async def new_feature_page_tests(pg):
     hats = [("rb_mqtt_when", {"TOPIC": "home/proofer/temperature"}, "mqtt", "27.4"), ("rb_webhook_when", {"PATH": "bake-done"}, "webhook", '"loaf": "rye"'),
             ("rb_email_when", {"CONTAINS": "flour"}, "email", "Subject: Your flour order has shipped"), ("rb_feed_when", {"URL": ""}, "feed", "nail varnish"),
             ("rb_folder_when", {"FOLDER": "drop"}, "folder", "Grandma's loaf"), ("rb_gh_when", {}, "github", "#41: Add rye flour curve"),
-            ("rb_cal_when", {"N": 15}, "calendar", " at "), ("rb_tg_when", {"CONTAINS": "anything"}, "telegram", "What should I bake")]
+            ("rb_cal_when", {"N": 15}, "calendar", " at "), ("rb_discord_when", {"CONTAINS": "anything"}, "discord", "first rye loaf"),
+            ("rb_slack_when", {"CONTAINS": "anything"}, "slack", "proving baskets"), ("rb_tg_when", {"CONTAINS": "anything"}, "telegram", "What should I bake")]
 
     def say_what(kind):
         return blk("rb_say", inputs={"TEXT": {"block": {"type": "text_join", "extraState": {"itemCount": 2}, "inputs": {"ADD0": tx(kind + ": "),
@@ -968,19 +969,27 @@ async def new_feature_page_tests(pg):
     await load_state(pg, listen_all)
     EXTRA["t_listen"] = await export_python(pg, "t_listen")
     check('LISTENERS = [("mqtt", "home/proofer/temperature", when_mqtt_1), ("webhook", "bake-done", when_webhook_1), ("email", "flour", when_email_1), '
-          '("feed", "", when_feed_1), ("folder", "drop", when_folder_1), ("github", "", when_github_1), ("calendar", "15", when_calendar_1)]' in EXTRA["t_listen"]
+          '("feed", "", when_feed_1), ("folder", "drop", when_folder_1), ("github", "", when_github_1), ("calendar", "15", when_calendar_1), '
+          '("discord", "anything", when_discord_1), ("slack", "anything", when_slack_1)]' in EXTRA["t_listen"]
           and "R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES, TELEGRAM_WATCHES, listeners=LISTENERS)" in EXTRA["t_listen"],
           "exported Python lists every listener")
     await pg.evaluate("document.getElementById('io-name').value = 't_listen'")
     files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
     ini = files["second-thought.ini"]
-    check(all(x in ini for x in ("[mqtt]", "MQTT_HOST = ", "[web requests]", "WEBHOOK_SECRET = ", "[email]", "[github]", "[calendar]", "feeds = "))
+    check(all(x in ini for x in ("[mqtt]", "MQTT_HOST = ", "[web requests]", "WEBHOOK_SECRET = ", "[email]", "[github]", "[calendar]", "feeds = ",
+                                 "[discord]", "DISCORD_BOT_TOKEN = ", "DISCORD_CHANNEL_ID = ", "[slack]", "SLACK_BOT_TOKEN = ", "SLACK_CHANNEL_ID = "))
           and "paho-mqtt" in files["requirements.txt"] and "run-on-schedule.sh" in files, "a listening program's settings ask for each connection it listens to")
     mq = [tcall("read_mqtt", topic="zigbee2mqtt/+"), tcall("publish_mqtt", topic="zigbee2mqtt/oven_plug/set", message="OFF"), tcall("publish_mqtt", topic="home/#", message="x")]
     status, steps, items = await agent_run(pg, ["mqtt", "mqtt_act"], mq + [fin("ok")], answer="Allow", export="t_ls_mqtt")
     check(status.startswith("done") and "zigbee2mqtt/leak_sensor_sink: {\"water_leak\": false" in step_of(steps, 1, 6, "read_mqtt")
           and "MQTT \u2192 zigbee2mqtt/oven_plug/set" in [n for n, *_ in steps] and "can't publish to a topic with + or #" in step_of(steps, 3, 6, "publish_mqtt"),
           "the MQTT tools read topics with wildcards and publish after asking (sample broker on the page)")
+    for svc, want_found, chan in (("discord", "Bake-along is Sunday", "#baking"), ("slack", "Oven's free from 2pm", "#kitchen")):
+        status, steps, items = await agent_run(pg, [svc, svc + "_send"], [tcall("search_" + svc, text=want_found.split()[0]), tcall("send_" + svc, text="See you there")] + [fin("ok")],
+                                               answer="Allow", export="t_ls_" + svc)
+        check(status.startswith("done") and want_found in step_of(steps, 1, 6, "search_" + svc)
+              and any(n.startswith(svc.capitalize() + " \u2192 " + chan) for n, *_ in steps) and "Allow this?" in [n for n, *_ in steps],
+              f"the {svc.capitalize()} tools search the sample channel, and send after asking")
 
     print("Homey")
     hm = [tcall("find_homey_devices", search="light"), tcall("set_homey_device", device="Kitchen light", capability="onoff", value="off"),
@@ -1265,6 +1274,8 @@ def python_tests(codes):
     broker, mqtt_port = fake_mqtt.start(retained={"zigbee2mqtt/leak_sensor_sink": '{"water_leak": false, "battery": 87}', "zigbee2mqtt/oven_plug": '{"state": "ON", "power": 41}'})
     env.update(HOMEY_URL=svc_url + "/homey", HOMEY_API_KEY=fake_services.HOMEY_KEY)
     env.update(MQTT_HOST="127.0.0.1", MQTT_PORT=str(mqtt_port), MQTT_USERNAME=fake_mqtt.USER, MQTT_PASSWORD=fake_mqtt.PASSWORD)
+    env.update(DISCORD_API_URL=svc_url + "/discord", DISCORD_BOT_TOKEN=fake_services.DISCORD_TOKEN, DISCORD_CHANNEL_ID=fake_services.DISCORD_CHANNEL,
+               SLACK_API_URL=svc_url + "/slack", SLACK_BOT_TOKEN=fake_services.SLACK_TOKEN, SLACK_CHANNEL_ID=fake_services.SLACK_CHANNEL)
     env.update(RB_FEEDS=f"{svc_url}/feeds/baking.rss {svc_url}/feeds/tech.atom", GITHUB_API_URL=svc_url + "/gh", GITHUB_TOKEN=fake_services.GH_TOKEN,
                TELEGRAM_API_URL=svc_url + "/tg", TELEGRAM_BOT_TOKEN=fake_services.TG_TOKEN, TELEGRAM_CHAT_ID=str(fake_services.TG_CHAT),
                EMAIL_ADDRESS=fake_services.MAIL_USER, EMAIL_PASSWORD=fake_services.MAIL_PASS, EMAIL_IMAP_HOST="127.0.0.1", EMAIL_SMTP_HOST="127.0.0.1",
@@ -1649,6 +1660,11 @@ def python_tests(codes):
             svc_log["add_mail"]("Someone <x@example.com>", "Unrelated", "Nothing about baking.")
             svc_log["add_feed_item"]("Brand new: steam in home ovens", "https://example.com/baking/steam")
             svc_log["add_review"]("Add a spelt recipe")
+            svc_log["discord_add"](fake_services.DISCORD_CHANNEL, "Is the bake-along still on?", "crumb_shot")
+            svc_log["discord_add"](fake_services.DISCORD_CHANNEL, "A bot announcing something", "OtherBot", bot=True)
+            svc_log["discord_add"]("999", "Message in someone else's channel", "stranger")
+            svc_log["slack_add"](fake_services.SLACK_CHANNEL, "Proving baskets are back on the shelf", "U123")
+            svc_log["slack_add"]("C999", "Other workspace channel", "U999")
             (pathlib.Path(tmp) / "drop").mkdir(exist_ok=True)
             (pathlib.Path(tmp) / "drop" / "notes.txt").write_text("Spelt loaf: 500 g spelt, 350 g water.", encoding="utf-8")
             (pathlib.Path(tmp) / "drop" / ".hidden").write_text("ignored", encoding="utf-8")
@@ -1659,9 +1675,9 @@ def python_tests(codes):
                                 dict(env, RB_POLL_SECONDS="0.5", WEBHOOK_PORT=str(hook_port), WEBHOOK_SECRET="hook-secret", WEBHOOK_HOST="127.0.0.1",
                                      CALENDAR_URL=svc_url + "/calendar-soon.ics"), tmp, timeout=30)
         out = out.replace("\r\n", "\n")
-        notes = [l.strip() for l in out.split("\n") if re.match(r"\s+(mqtt|webhook|email|feed|folder|github|calendar|telegram): ", l)]
+        notes = [l.strip() for l in out.split("\n") if re.match(r"\s+(mqtt|webhook|email|feed|folder|github|calendar|telegram|discord|slack): ", l)]
         got = {n.split(":", 1)[0] for n in notes}
-        check(got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "calendar"},
+        check(got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "calendar", "discord", "slack"},
               f"t_listen.py: every listener started its script when something arrived ({', '.join(sorted(got)) or 'none'})" + ("" if got else f": {(err or out)[-400:]!r}"))
         check("mqtt: 27.9" in notes and not any("19" == n.split(": ", 1)[1] for n in notes if n.startswith("mqtt")) and ("home/proofer/ack", "seen 27.9", False) in broker.published[before:],
               "the MQTT listener reacts to its own topic only, and its script can publish a reply")
@@ -1673,6 +1689,47 @@ def python_tests(codes):
         check(any(n.startswith("folder: Spelt loaf") for n in notes) and not any("ignored" in n for n in notes), "the folder listener reads new files and skips hidden ones")
         check(any("Add a spelt recipe" in n for n in notes) and not any("#41" in n for n in notes), "the GitHub listener reacts to new review requests only")
         check(any(n.startswith("calendar: Feed the starter at ") and "(Kitchen)" in n for n in notes), "the calendar listener gives warning before an event")
+        check([n for n in notes if n.startswith("discord: ")] == ["discord: Is the bake-along still on?"],
+              f"the Discord listener reacts to new messages in your channels only: not old ones, bots, or other channels ({[n for n in notes if n.startswith('discord')]})")
+        check([n for n in notes if n.startswith("slack: ")] == ["slack: Proving baskets are back on the shelf"],
+              f"the Slack listener reacts to new messages in your channels only ({[n for n in notes if n.startswith('slack')]})")
+        chat = r"""
+import asyncio, json, os, sys
+ns = {"__name__": "rt", "__file__": sys.argv[1]}
+exec(compile(open(sys.argv[1], encoding="utf-8").read(), "rt", "exec"), ns)
+R = ns["Runtime"](); R.reset(); R.log = lambda *a, **k: None
+out = {}
+async def go():
+    out["d_search"] = await R.chat_search("discord", "bake-along")
+    out["s_search"] = await R.chat_search("slack", "")
+    out["d_sent"] = await R.chat_send("discord", "Hello Discord")
+    out["s_sent"] = await R.chat_send("slack", "x" * 3600)
+    for svc, ch in (("discord", "999"), ("slack", "C999")):
+        try:
+            await R.chat_send(svc, "sneaky", ch); out[svc + "_other"] = "sent"
+        except ns["RunError"] as e:
+            out[svc + "_other"] = str(e)
+    os.environ["SLACK_BOT_TOKEN"] = "wrong"
+    try:
+        await R.chat_search("slack"); out["bad_token"] = "worked"
+    except ns["RunError"] as e:
+        out["bad_token"] = str(e)
+asyncio.run(go())
+print(json.dumps(out))
+"""
+        sent_before = len(svc_log["discord_sent"]), len(svc_log["slack_sent"])
+        r = subprocess.run([sys.executable, "-c", chat, str(ROOT / "python" / "runtime.py")], capture_output=True, text=True, timeout=60, env=env)
+        got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
+        check("Bake-along is Sunday" in got.get("d_search", "") and "bake-along cancelled" not in got.get("d_search", "") and "Bot's own" not in got.get("d_search", "")
+              and "Oven's free from 2pm" in got.get("s_search", "") and "oven broken" not in got.get("s_search", ""),
+              f"Python searches your Discord and Slack channels only, skipping bots ({got or r.stderr[-300:]})")
+        new_d, new_s = svc_log["discord_sent"][sent_before[0]:], svc_log["slack_sent"][sent_before[1]:]
+        check(got.get("d_sent") is True and new_d == [(fake_services.DISCORD_CHANNEL, "Hello Discord")]
+              and [len(t) for c, t in new_s] == [3500, 100] and all(c == fake_services.SLACK_CHANNEL for c, t in new_s),
+              f"Python posts in your first channel, splitting long Slack messages ({new_d}, {[(c, len(t)) for c, t in new_s]})")
+        check("isn't in DISCORD_CHANNEL_ID" in got.get("discord_other", "") and "isn't in SLACK_CHANNEL_ID" in got.get("slack_other", "")
+              and "bot token was refused" in got.get("bad_token", ""),
+              "Python won't post in a channel that isn't in your settings, and says plainly when a token is wrong")
 
         page_prog = EXTRA["t_page"].replace("http://127.0.0.1:1/watch.html", svc_url + "/watch.html")
         (pathlib.Path(tmp) / "t_page.py").write_text(page_prog, encoding="utf-8")

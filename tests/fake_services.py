@@ -15,6 +15,9 @@ GH_TOKEN = "gh-test-token"
 TG_TOKEN = "123:tg-test"
 HOMEY_KEY = "homey-test-key"
 TG_CHAT = 4242
+DISCORD_TOKEN = "discord-test-token"
+SLACK_TOKEN = "xoxb-slack-test"
+DISCORD_CHANNEL, SLACK_CHANNEL = "111", "C111"   # the channels the tests allow; "999" / "C999" are someone else's
 MAIL_USER, MAIL_PASS = "you@example.com", "app-password"
 
 
@@ -81,7 +84,8 @@ def _ics(soon=False):
 def start():
     data = json.loads((ROOT / "samples" / "connections.json").read_text(encoding="utf-8"))
     gh = data["github"]
-    log = {"gh": [], "tg_sent": [], "tg_updates": [], "mail_sent": [], "homey": [], "homey_flows": [], "page": {"price": "£2.40", "visitors": 17}}
+    log = {"gh": [], "tg_sent": [], "tg_updates": [], "mail_sent": [], "homey": [], "homey_flows": [], "discord": {}, "discord_sent": [], "slack": {}, "slack_sent": [],
+           "page": {"price": "£2.40", "visitors": 17}}
 
     def homey_change(device, cap, value):
         d = next(x for x in data["homey"]["devices"] if x["name"] == device)
@@ -142,12 +146,49 @@ def start():
                 return self._github(method, path[3:], q)
             if path.startswith("/homey/api/manager/"):
                 return self._homey(method, path[len("/homey/api/manager"):])
+            if path.startswith("/discord/"):
+                if self.headers.get("Authorization") != "Bot " + DISCORD_TOKEN:
+                    return self._send(401, {"message": "401: Unauthorized", "code": 0})
+                return self._discord(method, path[8:], q)
+            if path.startswith("/slack/"):
+                if self.headers.get("Authorization") != "Bearer " + SLACK_TOKEN:
+                    return self._send(200, {"ok": False, "error": "invalid_auth"})
+                return self._slack(method, path[6:], q)
             if path.startswith("/tg/bot"):
                 token, _, call = path[7:].partition("/")
                 if token != TG_TOKEN:
                     return self._send(401, {"ok": False, "error_code": 401, "description": "Unauthorized"})
                 return self._telegram(call)
             self._send(404, {"message": "Not Found"})
+
+        def _discord(self, method, path, q):
+            parts = path.strip("/").split("/")  # channels/<id>/messages
+            if len(parts) != 3 or parts[0] != "channels" or parts[2] != "messages":
+                return self._send(404, {"message": "Unknown route"})
+            msgs = log["discord"].setdefault(parts[1], [])
+            if method == "POST":
+                body = self._body()
+                log["discord_sent"].append((parts[1], body.get("content", "")))
+                return self._send(200, discord_add(parts[1], body.get("content", ""), "SecondThought", bot=True))
+            after = int((q.get("after") or ["0"])[0])
+            limit = int((q.get("limit") or ["50"])[0])
+            got = [m for m in msgs if int(m["id"]) > after]
+            return self._send(200, list(reversed(got))[:limit] if not after else got[:limit])  # newest first, like Discord without 'after'
+
+        def _slack(self, method, path, q):
+            if path == "/chat.postMessage" and method == "POST":
+                body = self._body()
+                log["slack_sent"].append((body.get("channel"), body.get("text", "")))
+                slack_add(body.get("channel"), body.get("text", ""), "B1", bot=True)
+                return self._send(200, {"ok": True})
+            if path == "/conversations.history":
+                ch = (q.get("channel") or [""])[0]
+                if ch not in log["slack"]:
+                    return self._send(200, {"ok": False, "error": "channel_not_found"})
+                oldest = float((q.get("oldest") or ["0"])[0])
+                got = [m for m in log["slack"][ch] if float(m["ts"]) > oldest]
+                return self._send(200, {"ok": True, "messages": list(reversed(got))[:int((q.get("limit") or ["100"])[0])]})
+            return self._send(200, {"ok": False, "error": "unknown_method"})
 
         def _github(self, method, path, q):
             log["gh"].append(method + " " + path)
@@ -249,6 +290,28 @@ def start():
         tg_add(m["text"], minutes_ago=m["hours_ago"] * 60)
     tg_add("Someone else's message about starter", chat=999, minutes_ago=30)
     imap_port, smtp_port = _mail_servers(data["email"], log)
+
+    ids = [100000]
+
+    def discord_add(channel, text, user, bot=False):
+        ids[0] += 1
+        m = {"id": str(ids[0]), "content": text, "timestamp": _iso(0), "author": {"username": user, "global_name": user, "bot": bot}}
+        log["discord"].setdefault(channel, []).append(m)
+        return m
+
+    def slack_add(channel, text, user, bot=False):
+        ids[0] += 1
+        m = dict({"type": "message", "ts": f"{1700000000 + ids[0]}.000100", "text": text, "user": user}, **({"bot_id": user, "subtype": "bot_message"} if bot else {}))
+        log["slack"].setdefault(channel, []).append(m)
+        return m
+    for m in reversed(data["discord"]["messages"]):
+        discord_add(DISCORD_CHANNEL, m["text"], m["from"])
+    discord_add(DISCORD_CHANNEL, "Bot's own earlier post", "SecondThought", bot=True)  # newest message at start is a bot's
+    discord_add("999", "Someone else's channel: bake-along cancelled", "stranger")
+    for m in reversed(data["slack"]["messages"]):
+        slack_add(SLACK_CHANNEL, m["text"], m["from"])
+    slack_add("C999", "Other channel: oven broken", "stranger")
+    log["discord_add"], log["slack_add"] = discord_add, slack_add
 
     def add_feed_item(title, link):
         feeds[0]["items"].insert(0, {"title": title, "link": link, "hours_ago": 0, "summary": "Just in."})

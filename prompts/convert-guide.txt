@@ -125,6 +125,9 @@ Agent (the model chooses its own steps):
   rb_homey_set: inputs DEVICE, CAPABILITY, VALUE, statement; rb_homey_flow: input NAME, statement; rb_homey_variable: input NAME, value; rb_homey_set_variable: inputs NAME, VALUE, statement.
   Agent tool kinds "homey_read": find_homey_devices, list_homey_flows, homey_variable | "homey_act" | "homey_act_free": set_homey_device, run_homey_flow.
   Map homey-api / Homey Web API calls (devices.getDevices, setCapabilityValue, flow.triggerFlow, logic.updateVariable) to these blocks.
+  Discord and Slack: rb_discord_when, rb_slack_when (hats; field CONTAINS, "anything" for every message; what arrived has text, sender, channel);
+  rb_discord_send, rb_slack_send: input TEXT, statement. Agent tool kinds "discord": search_discord | "discord_send" | "discord_send_free": send_discord, and the same for "slack".
+  Map discord.py on_message / slack_bolt message handlers to these hats, and channel.send / chat_postMessage to the send blocks.
   Map Telegram bot handlers (python-telegram-bot, aiogram, a getUpdates loop) to rb_tg_when; smtplib sending to rb_email_send; feedparser to rb_feed_news;
   paho-mqtt on_message to rb_mqtt_when and publish() to rb_mqtt_publish; Flask/FastAPI routes that only start work to rb_webhook_when; watchdog folder handlers to rb_folder_when. rb_agent_tool: fields NAME (a My Blocks name), INPUTS (input types like "grams: number; note: text - what it is for"; types text, number, yes/no, list, any), ASK ("TRUE" | "FALSE"); input DESC.
   Map tool-calling loops (tools=[...] with a while loop over tool_use / function calls) to rb_agent, each Python tool function to a My Block plus an rb_agent_tool.
