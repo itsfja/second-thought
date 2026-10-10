@@ -19,12 +19,24 @@ that the two agree.
 ## Unreleased
 
 ### Added
+- The agent can use the tools of any MCP server (#43): a **tools from MCP server** block, with the server set up as
+  `MCP_<NAME>` in `second-thought.ini`, either the command that starts it or its https:// address (plus
+  `MCP_<NAME>_TOKEN`). It speaks the current MCP (2026-07-28, every request saying its version, found with
+  `server/discover`) and falls back to the earlier `initialize` handshake (2025-11-25 back to 2024-11-05), over stdio
+  or Streamable HTTP, with nothing extra to install. It asks before tools not marked read-only unless told otherwise,
+  and tool calls are journaled so a resumed run doesn't repeat them. Programs using it list "use the tools of the MCP
+  servers you set up" and ask before their first run. `mcp_timeout` sets how long a call may take.
 - Exported programs list what they can do beyond asking their models (send email, control Home Assistant, publish
   MQTT, read your calendars, and so on), in their notes and in `CAN`. The list is worked out from the blocks; every
   block and agent tool is classified, and a test fails if a new one isn't. Importing a program on the page says what
   it can do, the things that act first (#44).
 - A program that can act on the world lists those things and asks before its first run. The yes is kept in
   `.<program>.approved` until the program file changes. `approve = no` in `second-thought.ini` skips the question.
+
+### Fixed
+- On Python 3.9, two questions at the keyboard at once (or two Telegram fetches) crashed with "attached to a
+  different loop": the runtime's locks were made before the program's event loop started. They're now made when first
+  needed.
 
 ### Changed
 - **Needs one step after re-exporting:** a scheduled program that can act won't start until someone has run it once

@@ -786,7 +786,7 @@ class Connections:
     async def tg_fetch(self, wait=0):
         """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones.
         One at a time: two scripts fetching at once would read the same messages twice, or lose one."""
-        async with self._tg_lock:
+        async with self._lock("telegram"):  # one Telegram fetch at a time
             return await self._tg_fetch(wait)
 
     async def _tg_fetch(self, wait):

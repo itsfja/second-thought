@@ -434,6 +434,7 @@ CAPABILITIES = [
     ("homey_act", "control your Homey devices and start Homey flows", True),
     ("mqtt_publish", "publish MQTT messages", True),
     ("webhook", "accept web requests from other computers", True),
+    ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),

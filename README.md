@@ -504,6 +504,39 @@ Make the API key in the Homey Web App the same way. A **Homey Bridge** connected
 
 ---
 
+## Page 10¾: Borrowing tools
+
+*Picture: a robot at a big wall of hooks, each hook holding a different tool, with a label on every hook.*
+
+The agent comes with its own tools. But lots of other people have made tools too, and they share them in a way called **MCP**. There are MCP tools for reading files, for GitHub, for databases, for calendars, and for hundreds of other jobs.
+
+A collection of MCP tools is called an **MCP server**. To lend one to your agent, put this block inside the agent:
+
+```
+tools from MCP server  files   (asks me before tools that change things)
+```
+
+Then tell the Python program where the server is, in `second-thought.ini`. Some servers are programs that start on your computer:
+
+```
+MCP_FILES = npx -y @modelcontextprotocol/server-filesystem /home/me/recipes
+```
+
+Some live on the internet, at an address:
+
+```
+MCP_TRACKER = https://mcp.example.com/mcp
+MCP_TRACKER_TOKEN = your-token
+```
+
+The name in the block (`files`) and the name in the settings (`MCP_FILES`) must match.
+
+When the agent runs, it asks the server which tools it has, and uses them like its own. Each tool says whether it only looks at things or can change them. The agent asks you before it uses a tool that changes things, unless you choose **(no asking)**. Choose **(asks me before every tool)** to be asked about all of them.
+
+MCP servers only work in the Python program. On the Second Thought page, the agent works without them, and the run log says so.
+
+---
+
 ## Page 11: What is in this folder
 
 *Picture: an open toy box with labelled compartments.*
@@ -513,7 +546,7 @@ This folder is where all the parts of Second Thought are kept. Each part has its
 | Name | What it is |
 |---|---|
 | `second-thought.html` | The Second Thought page itself. This is the part you see on the screen. |
-| `python/second_thought/` | The helper that comes with every Python program, in six smaller parts. It knows how to do each block's job. |
+| `python/second_thought/` | The helper that comes with every Python program, in seven smaller parts. It knows how to do each block's job. |
 | `python/runtime.py` | The same helper, with its parts stuck together into one file. Every Python program gets a copy. `tools/sync.py` makes it, so don't change it by hand. |
 | `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
 | `ha/sample-house.json` | The pretend house that the Home Assistant blocks use on the page. |
@@ -547,7 +580,7 @@ The second line runs the checks. At the end it says **All checks passed**, or it
 
 If you change anything in `python/second_thought/` or `prompts/convert-guide.txt`, run `python tools/sync.py` first, so `python/runtime.py` and the page have your changes too.
 
-The helper's six parts are:
+The helper's seven parts are:
 
 | Part | What it does |
 |---|---|
@@ -555,6 +588,7 @@ The helper's six parts are:
 | `providers.py` | Knows every model service, and how to ask each one. |
 | `core.py` | Limits, mistakes, and the sums and words that match the blocks exactly. |
 | `connectors.py` | Web pages, news, calendars, Home Assistant, messages, MQTT and Homey. |
+| `mcp.py` | Borrowing tools from MCP servers, for the agent. |
 | `agent.py` | The agent block and its tools. |
 | `runtime.py` | Everything else: remembering, drafts, output, scripts and schedules. |
 

@@ -842,6 +842,18 @@ async def new_feature_page_tests(pg):
     check(status.startswith("done") and not any("YOUR PLAN" in q or "plan" in q.split("TOOLS:")[0] for q in prompts)
           and "Agent plan" not in [n for n, *_ in steps], "with planning off, the prompt never mentions a plan and any plan sent is ignored")
     check("plan=True" in EXTRA["t_ag_plan"], "exported Python keeps planning switched on")
+    mcp_tools = blk("rb_agent_mcp", fields={"SERVER": "bakery", "ASK": "changes"})
+    status, steps, items = await agent_run(pg, [mcp_tools], [done("Nothing to add.")], export="t_ag_mcp")
+    notes = [t for n, p_, t in steps if n == "MCP server \u201cbakery\u201d"]
+    check(status.startswith("done") and notes and "can't be reached from this page" in notes[0] and "MCP_BAKERY" in notes[0],
+          "on the page, an agent's MCP server is noted as out of reach, and the run carries on without it")
+    code = EXTRA["t_ag_mcp"]
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    check('{"kind": "mcp", "server": "bakery", "ask": "changes"}' in code and '"can": ["mcp"]' in code
+          and "  - use the tools of the MCP servers you set up" in code.split('"""', 2)[1]
+          and "[mcp servers]" in files["second-thought.ini"] and "\nMCP_BAKERY = \n" in files["second-thought.ini"].replace("\r\n", "\n"),
+          "exported Python hands the agent its MCP server, lists it as something the program can do, and the ini asks for MCP_BAKERY")
+    AGENT_SCRIPTS["t_ag_mcp"] = [tool("bakery_list_loaves"), tool("bakery_add_loaf", name="Rye", grams="900"), done("Added the rye.")]
 
     print("More agent tools")
     step_of = lambda steps, k, n, name: next((t for s_, p_, t in steps if s_ == f"Agent step {k}/{n}: {name}"), "")  # noqa: E731
@@ -2055,7 +2067,7 @@ a, b = asyncio.run(go())
 store = json.load(open(ns["TELEGRAM_FILE"], encoding="utf-8"))
 texts = [m["text"] for m in store["messages"]]
 R2 = ns["Runtime"](); R2.reset()  # made outside any event loop, as exported programs do
-lock0, inside, most = R2._tg_lock, [0], [0]
+inside, most = [0], [0]
 async def slow_fetch(wait):
     inside[0] += 1; most[0] = max(most[0], inside[0])
     await asyncio.sleep(0.05)
@@ -2066,7 +2078,7 @@ async def three():
     await asyncio.gather(R2.tg_fetch(), R2.tg_fetch(), R2.tg_fetch())
 asyncio.run(three())
 print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept": len(texts),
-                  "most_at_once": most[0], "same_lock": R2._tg_lock is lock0}))
+                  "most_at_once": most[0], "same_lock": list(R2.__dict__.get("_locks", {})) == ["telegram"]}))
 """
         tg_add("Race check one")
         tg_add("Race check two")
@@ -2075,7 +2087,7 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         check(got.get("dupes") == 0 and got.get("kept", 0) > 0 and 0 in (got.get("a"), got.get("b")),
               f"two scripts fetching Telegram at once take turns: no message is stored twice ({got or r.stderr[-200:]})")
         check(got.get("most_at_once") == 1 and got.get("same_lock") is True,
-              f"the Telegram lock is made with the runtime, so three fetches at once still go one at a time ({got or r.stderr[-200:]})")
+              f"three Telegram fetches at once share one lock and go one at a time, with the runtime made before the loop ({got or r.stderr[-200:]})")
         rt_path = str(ROOT / "python" / "runtime.py")
         r = subprocess.run([sys.executable, "-c", MEM_RACE, rt_path], capture_output=True, text=True, timeout=180, env=env)
         got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
@@ -2174,6 +2186,18 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         out = out.replace("\r\n", "\n")
         check(code_ == 0 and "▸ Agent plan  [planned]\n    1. save it\n    2. check it" in out and out.count("▸ Agent: plan changed") == 1
               and "▸ Agent: finished in 4 steps" in out, "t_ag_plan.py plans, changes its plan once, then finishes" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        (pathlib.Path(tmp) / "t_ag_mcp.py").write_text(EXTRA["t_ag_mcp"], encoding="utf-8")
+        mcp_log = pathlib.Path(tmp) / "mcp.log"
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_ag_mcp.py")],
+                                dict(env, FAKE_AGENT_SCRIPT=json.dumps(AGENT_SCRIPTS["t_ag_mcp"]), FAKE_MCP_LOG=str(mcp_log),
+                                     MCP_BAKERY=f'"{sys.executable}" "{HERE / "fake_mcp.py"}" legacy'), tmp)
+        out = out.replace("\r\n", "\n")
+        loaves = (pathlib.Path(str(mcp_log) + ".loaves").read_text(encoding="utf-8") if pathlib.Path(str(mcp_log) + ".loaves").exists() else "")
+        check(code_ == 0 and "MCP server \u201cbakery\u201d  [connected]" in out and "4 tools: list_loaves, add_loaf, fail, bake_in" in out
+              and out.count("Allow this? let the agent use bakery_add_loaf") == 1 and "Allow this? let the agent use bakery_list_loaves" not in out
+              and loaves == "Rye (900 g)\n",
+              "t_ag_mcp.py starts its MCP server, asks before the tool that changes things (not the read-only one), and calls it"
+              + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         before = len(ha_calls)
         code_, out, err = run_ag("t_ag_ha")
         check(code_ == 0 and "Allow this? let the agent use call_service" in out and any(c[0] == "light.turn_off" and c[1].get("entity_id") == "light.kitchen" for c in ha_calls[before:]),

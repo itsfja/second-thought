@@ -25,7 +25,7 @@ PAGE = ROOT / "second-thought.html"
 RUNTIME = ROOT / "python" / "runtime.py"
 PACKAGE = ROOT / "python" / "second_thought"
 # The order matters: each module may use names from the ones before it.
-MODULES = ["settings", "providers", "core", "connectors", "agent", "runtime"]
+MODULES = ["settings", "providers", "core", "connectors", "mcp", "agent", "runtime"]
 MARK = "# ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----"
 SERVICES = PACKAGE / "providers.py"   # its SERVICES list is the page's list of model services too
 CAPABILITIES = PACKAGE / "core.py"    # its CAPABILITIES list is the page's list of what programs can do
