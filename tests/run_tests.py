@@ -2415,6 +2415,12 @@ async def i18n_tests():
 
         en, en_errors = await page()
         info = await en.evaluate("window.__i18n()")
+        page_info = await en.evaluate("window.__pageI18n()")
+        # Every text the page passes to tr(), as written in the source.
+        tr_texts = {json.loads('"' + m + '"') for m in re.findall(r'\btr\("((?:[^"\\]|\\.)*)"', PAGE)}
+        page_needs = set(page_info["keys"]) | set(page_info["categories"]) | tr_texts
+        check(len(page_info["keys"]) > 60 and "Run" in page_info["keys"] and "Step: on" in tr_texts,
+              f"the page lists its own words for translators ({len(page_info['keys'])} in the page, {len(tr_texts)} set by code)")
         check(info["lang"] == "en" and info["langs"], f"the page has {len(info['langs'])} translation(s) of the block palette, and English when none is chosen")
         for code, t in info["langs"].items():
             problems = []
@@ -2441,6 +2447,11 @@ async def i18n_tests():
                 problems.append(f"Blockly has no msg/{t['blockly']}.js")
             check(not problems, f"{t.get('name', code)} ({code}) has every block's words, tooltip and choices, with matching placeholders"
                   + (f": {problems[:8]}" if problems else ""))
+            if "page" in t:
+                missing = sorted(page_needs - set(t["page"]))
+                stale = sorted(set(t["page"]) - page_needs)
+                check(not missing and not stale, f"{t.get('name', code)} ({code}) has every one of the page's own words, and none it doesn't use"
+                      + (f": missing {missing[:6]}" if missing else "") + (f"; not on the page {stale[:6]}" if stale else ""))
 
         for code in info["langs"]:
             pg, errors = await page(code)
@@ -2459,6 +2470,31 @@ async def i18n_tests():
                 a, b = [{f["name"]: f["text"] for f in await x.evaluate("window.__exportFiles()")} for x in (en, pg)]
                 same.append(same_export(a) == same_export(b))
             check(all(same), f"the same programs export exactly the same files whether their blocks are shown in English or {code} ({same})")
+            if "page" in t:
+                P = t["page"]
+                shown = await pg.evaluate("""() => ({ missing:window.__pageI18n().missing, lang:document.documentElement.lang,
+                    run:document.getElementById('run').textContent, load:document.getElementById('load').textContent,
+                    step:document.getElementById('step-toggle').textContent, find:document.getElementById('block-search').placeholder,
+                    group:document.querySelector('#gal-body h3').textContent, opt:document.querySelector('#example optgroup').label,
+                    hint:document.querySelector('#bk .hint').innerHTML })""")
+                check(not shown["missing"] and shown["lang"] == code and shown["run"] == P["Run"] and shown["load"] == P["Load"]
+                      and shown["step"] == P["Step: off"] and shown["find"] == P["Find a block…"] and shown["group"] == P["Writing"]
+                      and shown["opt"] == P["Writing"] and "<b>" in shown["hint"],
+                      f"with {code} chosen, the page's buttons, panels and example groups are in {t.get('name', code)} ({shown})")
+                await pg.click("#step-toggle")
+                on = await pg.text_content("#step-toggle")
+                await pg.click("#step-toggle")
+                await pg.click("#bk-toggle")
+                await pg.select_option("#bk-1", "quick")
+                bk = await pg.text_content("#bk-toggle")
+                await pg.select_option("#bk-1", "")
+                await pg.click("#bk-toggle")
+                check(on == P["Step: on"] and bk == P["Backups ({n})"].replace("{n}", "1"),
+                      f"labels the page changes as you go are in {t.get('name', code)} too ({on!r}, {bk!r})")
+                await pg.select_option("#example", "review")
+                await pg.click("#load")
+                status = await run_program(pg)
+                check(status.startswith("done"), f"a program still runs with the page in {code} ({status})")
             await pg.select_option("#example", "brainstorm")
             await pg.click("#load")
             n = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
