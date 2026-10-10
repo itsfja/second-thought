@@ -541,17 +541,17 @@ MCP servers only work in the Python program. On the Second Thought page, the age
 
 ---
 
-## Page 10⅞: Blocks in your language
+## Page 10⅞: Second Thought in your language
 
 *Picture: the same tower of blocks twice, one labelled in English and one in Spanish.*
 
-The blocks can speak more than one language. Choose one from **Blocks**, at the top of the page. The page remembers your choice. If you have never chosen, it uses your browser's language when it can.
+The blocks, and the buttons around them, can speak more than one language. Choose one from **Blocks**, at the top of the page. The page remembers your choice. If you have never chosen, it uses your browser's language when it can.
 
-Changing the language only changes the words on the blocks. Your program stays exactly the same, so a program built in Spanish opens just the same in English, and exports the same Python.
+Changing the language only changes the words you see. Your program stays exactly the same, so a program built in Spanish opens just the same in English, and exports the same Python.
 
-Right now the blocks speak English and Spanish (Español).
+Right now they speak English and Spanish (Español). The run log, the messages the page shows you and the example descriptions are still in English for now.
 
-**Grown-ups:** each language is one file in the `i18n` folder, like `i18n/es.json`. It holds every block's words, its help text and its choices, plus the category names. To add a language, copy that file, translate the words (never the choice values or the `%1` markers), and run `python tools/sync.py`. The checks tell you anything you missed.
+**Grown-ups:** each language is one file in the `i18n` folder, like `i18n/es.json`. It holds every block's words, its help text and its choices, the category names, and the page's own words (under `page`, each English text with its translation). To add a language, copy that file, translate the words (never the choice values, the `%1` markers or the `{name}` markers), and run `python tools/sync.py`. The checks tell you anything you missed.
 
 ---
 
@@ -573,7 +573,7 @@ This folder is where all the parts of Second Thought are kept. Each part has its
 | `tests/` | Checks that make sure everything still works. |
 | `second-thought.example.ini` | Every setting a program understands, with a note on each. Copy it to `second-thought.ini` to use it. |
 | `CHANGELOG.md` | What is new in each version of the helper. |
-| `i18n/` | The words on the blocks in other languages, one file for each. |
+| `i18n/` | The words on the blocks and buttons in other languages, one file for each. |
 | `gallery/` | Programs people have shared, one file for each. They appear on the page under **Community**. |
 | `README.md` | This book! |
 

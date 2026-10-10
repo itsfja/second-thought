@@ -1,7 +1,7 @@
 {
  "name": "Español",
  "blockly": "es",
- "note": "Spanish words for the block palette. Keys are block types and the English parts they replace; dropdown values never change, only their labels. Page buttons named in the text (Run, Schedules, Continue, Programs) keep their English names, as on the page.",
+ "note": "Spanish words for the block palette and the page's buttons and panels. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, keys are the page's English text. Page buttons named in block text use their Spanish names (Ejecutar, Horarios, Programas); Continue is still English, like the rest of the run log, until that is translated.",
  "blocks": {
   "rb_add_result": {
    "message0": "añadir %1 al resultado"
@@ -130,7 +130,7 @@
   },
   "rb_discord_when": {
    "message0": "cuando llegue un mensaje de Discord que contenga %1",
-   "tooltip": "Ejecuta los bloques de debajo cuando alguien escribe en uno de tus canales de Discord (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los canales de DISCORD_CHANNEL_ID, y nunca los mensajes del propio bot. Se comprueba cada 10 segundos. 'Lo que llegó' da texto, remitente y canal. En esta página, haz clic derecho y elige 'Run this script' para probarlo con un mensaje de ejemplo."
+   "tooltip": "Ejecuta los bloques de debajo cuando alguien escribe en uno de tus canales de Discord (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los canales de DISCORD_CHANNEL_ID, y nunca los mensajes del propio bot. Se comprueba cada 10 segundos. 'Lo que llegó' da texto, remitente y canal. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un mensaje de ejemplo."
   },
   "rb_draft": {
    "message0": "borrador"
@@ -153,7 +153,7 @@
   },
   "rb_every": {
    "message0": "cada %1 %2",
-   "tooltip": "Se ejecuta una y otra vez mientras Schedules esté activado y esta página abierta. La primera vez es un intervalo después de activar Schedules."
+   "tooltip": "Se ejecuta una y otra vez mientras Horarios esté en sí y esta página abierta. La primera vez es un intervalo después de poner Horarios en sí."
   },
   "rb_extract": {
    "message0": "extraer %1 de %2"
@@ -199,7 +199,7 @@
   },
   "rb_ha_event_when": {
    "message0": "cuando ocurra el evento de Home Assistant %1 con %2",
-   "tooltip": "Ejecuta los bloques de debajo en cuanto Home Assistant envía este evento: la pulsación de un botón o un mando (zha_event, deconz_event), una automatización que se dispara (automation_triggered), una acción de una notificación del móvil o un evento tuyo. Escribe 'anything' para todos los eventos. La segunda casilla son palabras opcionales que deben estar en los datos del evento, como el nombre del mando. 'Lo que llegó' da event_type, entity, data, time y text, más cada campo de los datos del evento. En esta página, haz clic derecho y elige 'Run this script' para probarlo con un evento de ejemplo."
+   "tooltip": "Ejecuta los bloques de debajo en cuanto Home Assistant envía este evento: la pulsación de un botón o un mando (zha_event, deconz_event), una automatización que se dispara (automation_triggered), una acción de una notificación del móvil o un evento tuyo. Escribe 'anything' para todos los eventos. La segunda casilla son palabras opcionales que deben estar en los datos del evento, como el nombre del mando. 'Lo que llegó' da event_type, entity, data, time y text, más cada campo de los datos del evento. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un evento de ejemplo."
   },
   "rb_ha_find": {
    "message0": "entidades que coinciden con %1",
@@ -263,7 +263,7 @@
   },
   "rb_homey_when": {
    "message0": "cuando cambie %2 del dispositivo Homey %1",
-   "tooltip": "Ejecuta los bloques de debajo cuando cambia este valor del dispositivo Homey (se comprueba cada 10 segundos). Escribe 'anything' para cualquiera de sus valores. 'Lo que llegó' da device, zone, capability, from, to y text. En esta página, haz clic derecho y elige 'Run this script' para probarlo."
+   "tooltip": "Ejecuta los bloques de debajo cuando cambia este valor del dispositivo Homey (se comprueba cada 10 segundos). Escribe 'anything' para cualquiera de sus valores. 'Lo que llegó' da device, zone, capability, from, to y text. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo."
   },
   "rb_img_ask": {
    "message0": "preguntar a Claude %1 sobre la imagen %2",
@@ -342,7 +342,7 @@
   "rb_page_when": {
    "message0": "cuando cambie la página web %1",
    "message1": "solo la parte que contiene %1 comprobada cada %2 minutos",
-   "tooltip": "Ejecuta los bloques de debajo cuando cambian las palabras de una página web. Deja vacío 'solo la parte que contiene' para vigilar la página entera, o escribe palabras (como Precio) para vigilar solo las líneas que las tienen y las dos siguientes, así no cuentan los anuncios y contadores del resto de la página. La primera comprobación solo memoriza la página. 'Lo que llegó' da url, title, before, after, changed (las líneas que cambiaron) y text. No se pueden vigilar las páginas que necesitan un navegador para mostrar sus palabras. En esta página, haz clic derecho y elige 'Run this script' para probarlo con una página de ejemplo."
+   "tooltip": "Ejecuta los bloques de debajo cuando cambian las palabras de una página web. Deja vacío 'solo la parte que contiene' para vigilar la página entera, o escribe palabras (como Precio) para vigilar solo las líneas que las tienen y las dos siguientes, así no cuentan los anuncios y contadores del resto de la página. La primera comprobación solo memoriza la página. 'Lo que llegó' da url, title, before, after, changed (las líneas que cambiaron) y text. No se pueden vigilar las páginas que necesitan un navegador para mostrar sus palabras. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con una página de ejemplo."
   },
   "rb_passed": {
    "message0": "el borrador pasó la revisión"
@@ -356,7 +356,7 @@
   },
   "rb_prompt": {
    "message0": "instrucción %1",
-   "tooltip": "Texto de tu biblioteca de instrucciones (abre Programs para añadirlas)."
+   "tooltip": "Texto de tu biblioteca de instrucciones (abre Programas para añadirlas)."
   },
   "rb_rec_get": {
    "message0": "%1 de %2"
@@ -418,7 +418,7 @@
   },
   "rb_run_program": {
    "message0": "ejecutar el programa %1 con %2",
-   "tooltip": "Ejecuta un programa de tu lista de Programs, como un paso. Tiene su propio borrador, resultado y variables, y devuelve su resultado. Dentro de él, 'valor del mensaje' es el valor que pasas aquí. El Python exportado incluye una copia del programa tal como estaba al exportar."
+   "tooltip": "Ejecuta un programa de tu lista de Programas, como un paso. Tiene su propio borrador, resultado y variables, y devuelve su resultado. Dentro de él, 'valor del mensaje' es el valor que pasas aquí. El Python exportado incluye una copia del programa tal como estaba al exportar."
   },
   "rb_say": {
    "message0": "decir %1",
@@ -443,14 +443,14 @@
   },
   "rb_slack_when": {
    "message0": "cuando llegue un mensaje de Slack que contenga %1",
-   "tooltip": "Ejecuta los bloques de debajo cuando alguien escribe en uno de tus canales de Slack (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los canales de SLACK_CHANNEL_ID, y nunca los mensajes de bots. Se comprueba cada 10 segundos. 'Lo que llegó' da texto, remitente y canal. En esta página, haz clic derecho y elige 'Run this script' para probarlo con un mensaje de ejemplo."
+   "tooltip": "Ejecuta los bloques de debajo cuando alguien escribe en uno de tus canales de Slack (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los canales de SLACK_CHANNEL_ID, y nunca los mensajes de bots. Se comprueba cada 10 segundos. 'Lo que llegó' da texto, remitente y canal. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un mensaje de ejemplo."
   },
   "rb_sort": {
    "message0": "ordenar %1 por %2 %3",
    "tooltip": "Ordena una lista de fichas por un campo. Deja el campo vacío para ordenar elementos sueltos."
   },
   "rb_start": {
-   "message0": "al hacer clic en Run",
+   "message0": "al hacer clic en Ejecutar",
    "tooltip": "Todo programa empieza aquí. Los bloques de debajo se ejecutan de arriba abajo. Si hay varios, se ejecutan a la vez."
   },
   "rb_stop": {
@@ -474,7 +474,7 @@
   },
   "rb_tg_when": {
    "message0": "cuando llegue un mensaje de Telegram que contenga %1",
-   "tooltip": "Ejecuta los bloques de debajo cuando tu bot recibe un mensaje (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los mensajes de tus propios chats (TELEGRAM_CHAT_ID). En el Python exportado escucha todo el tiempo; en esta página, haz clic derecho y elige 'Run this script' para probarlo con un mensaje de ejemplo."
+   "tooltip": "Ejecuta los bloques de debajo cuando tu bot recibe un mensaje (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los mensajes de tus propios chats (TELEGRAM_CHAT_ID). En el Python exportado escucha todo el tiempo; en esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un mensaje de ejemplo."
   },
   "rb_timer": {
    "message0": "cronómetro",
@@ -521,7 +521,7 @@
   },
   "rb_when_time": {
    "message0": "cuando sean las %1 : %2 %3",
-   "tooltip": "Se ejecuta a esta hora (reloj de 24 horas) mientras Schedules esté activado y esta página abierta."
+   "tooltip": "Se ejecuta a esta hora (reloj de 24 horas) mientras Horarios esté en sí y esta página abierta."
   },
   "rb_with_any_model": {
    "message0": "con el modelo de OpenRouter %1",
@@ -665,5 +665,118 @@
   "Read and send": "Leer y enviar",
   "Type in 'Find a block' above the canvas.": "Escribe en 'Find a block', encima del lienzo.",
   "No blocks match": "Ningún bloque coincide con"
+ },
+ "page": {
+  "Second Thought": "Second Thought",
+  "Snap AI steps together, then press Run. Claude does each block in order.": "Encaja pasos de IA y pulsa Ejecutar. Claude hace cada bloque en orden.",
+  "Example": "Ejemplo",
+  "Load": "Cargar",
+  "Browse examples": "Ver ejemplos",
+  "Import / export": "Importar / exportar",
+  "Programs": "Programas",
+  "Memory": "Memoria",
+  "Home Assistant": "Home Assistant",
+  "Model": "Modelo",
+  "The language the blocks are shown in. Programs are the same in every language.": "El idioma en que se muestran los bloques. Los programas son los mismos en todos los idiomas.",
+  "Blocks": "Bloques",
+  "Models to try if the main one fails": "Modelos que probar si falla el principal",
+  "Backups": "Reservas",
+  "Backups ({n})": "Reservas ({n})",
+  "Step: off": "Paso a paso: no",
+  "Step: on": "Paso a paso: sí",
+  "Schedules: off": "Horarios: no",
+  "Schedules: on": "Horarios: sí",
+  "Stop": "Parar",
+  "Run": "Ejecutar",
+  "Example programs": "Programas de ejemplo",
+  "Each one is a complete program. Load it, press Run, then change the words on the blocks to make it yours. Your current program is replaced, so save it first in Programs if you want to keep it.": "Cada uno es un programa completo. Cárgalo, pulsa Ejecutar y cambia las palabras de los bloques para hacerlo tuyo. Sustituye al programa que tienes ahora, así que guárdalo antes en Programas si quieres conservarlo.",
+  "Load this example": "Cargar este ejemplo",
+  "Load this program": "Cargar este programa",
+  "Shared by {author}, made with runtime {runtime}.": "Compartido por {author}, hecho con el runtime {runtime}.",
+  "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "Programas que ha compartido otra gente. Cada uno se revisó antes de añadirlo y dice lo que puede hacer, deducido de sus bloques. Para compartir uno tuyo, lee gallery/README.md en la carpeta de Second Thought.",
+  "Saved programs and prompts": "Programas e instrucciones guardados",
+  "My programs": "Mis programas",
+  "Program name": "Nombre del programa",
+  "Name for the program on the canvas": "Nombre para el programa del lienzo",
+  "Save": "Guardar",
+  "Replace “{name}”": "Sustituir “{name}”",
+  "Undo open": "Deshacer abrir",
+  "Prompt library": "Biblioteca de instrucciones",
+  "Reusable prompt text. Drop the 'prompt' block (in Ask Claude) into any slot and type the prompt's name.": "Texto de instrucciones para reutilizar. Pon el bloque 'instrucción' (en Preguntar a Claude) en cualquier hueco y escribe el nombre de la instrucción.",
+  "Name": "Nombre",
+  "house style": "estilo de la casa",
+  "Text": "Texto",
+  "Save prompt": "Guardar instrucción",
+  "In this page, the Home Assistant blocks use a <b>sample house</b>, so you can build and test safely. Change a state below (press Enter) to try your 'when … changes' scripts. Exported Python connects to your real Home Assistant: set HA_URL and HA_TOKEN (a long-lived access token from your Home Assistant profile, under Security).": "En esta página, los bloques de Home Assistant usan una <b>casa de ejemplo</b>, para que construyas y pruebes sin riesgo. Cambia un estado aquí abajo (pulsa Intro) para probar tus scripts 'cuando … cambie'. El Python exportado se conecta a tu Home Assistant de verdad: pon HA_URL y HA_TOKEN (un token de acceso de larga duración de tu perfil de Home Assistant, en Seguridad).",
+  "Filter entities": "Filtrar entidades",
+  "Filter, e.g. light or kitchen": "Filtrar, p. ej. light o kitchen",
+  "Forget all": "Olvidarlo todo",
+  "Forget everything in memory? This can't be undone.": "¿Olvidar todo lo que hay en la memoria? No se puede deshacer.",
+  "Keep it": "Conservarlo",
+  "Backup models": "Modelos de reserva",
+  "The <b>Model</b> menu is your primary model: it does every step. If it fails on a step (no key, out of credit, service down or unreachable), the first backup answers that step instead, then the second, then the third. The run log says each time a backup steps in.": "El menú <b>Modelo</b> es tu modelo principal: hace todos los pasos. Si falla en un paso (sin clave, sin saldo, servicio caído o inalcanzable), responde ese paso la primera reserva, luego la segunda y luego la tercera. El registro dice cada vez que entra una reserva.",
+  "Blocks that name their own model, such as <b>with model</b>, keep that model, so a panel of judges stays a panel of different judges.": "Los bloques que nombran su propio modelo, como <b>con el modelo</b>, mantienen ese modelo, así que un jurado sigue siendo un jurado de jueces distintos.",
+  "First backup": "Primera reserva",
+  "Second backup": "Segunda reserva",
+  "Third backup": "Tercera reserva",
+  "Import and export": "Importar y exportar",
+  "Export this program": "Exportar este programa",
+  "As a block file": "Como archivo de bloques",
+  "File name": "Nombre del archivo",
+  "Save .json file": "Guardar archivo .json",
+  "Copy as text": "Copiar como texto",
+  "As Python code": "Como código Python",
+  "Runs without this page open, on your computer or a server. Needs an Anthropic API key; API calls are billed separately from claude.ai.": "Funciona sin esta página abierta, en tu ordenador o en un servidor. Necesita una clave de la API de Anthropic; las llamadas a la API se facturan aparte de claude.ai.",
+  "Save Python (.zip)": "Guardar Python (.zip)",
+  "Copy Python code": "Copiar código Python",
+  "Show code": "Ver código",
+  "Hide code": "Ocultar código",
+  "Import a program": "Importar un programa",
+  "Takes a block file, or Python code exported from here. Other code can be converted by Claude. Replaces what's on the canvas; you can undo straight after.": "Acepta un archivo de bloques o código Python exportado desde aquí. Claude puede convertir otro código. Sustituye lo que hay en el lienzo; puedes deshacerlo justo después.",
+  "Choose file (.json, .py, .zip)": "Elegir archivo (.json, .py, .zip)",
+  "Or paste a block file or code": "O pega un archivo de bloques o código",
+  "Load pasted program": "Cargar el programa pegado",
+  "Undo import": "Deshacer importar",
+  "Find a block": "Buscar un bloque",
+  "Find a block…": "Buscar un bloque…",
+  "Zoom": "Zoom",
+  "Zoom in": "Acercar",
+  "Zoom out": "Alejar",
+  "Fit program on screen": "Ajustar el programa a la pantalla",
+  "Fit": "Ajustar",
+  "Run log": "Registro",
+  "Save log": "Guardar registro",
+  "Watch values": "Vigilar valores",
+  "Paused": "En pausa",
+  "Paused before: {step}": "En pausa antes de: {step}",
+  "Next step": "Siguiente paso",
+  "Run to the end": "Ejecutar hasta el final",
+  "Run this script": "Ejecutar este script",
+  "Run this block and show its value": "Ejecutar este bloque y mostrar su valor",
+  "An example program is loaded on the left. Press Run to watch it work here, or pick another example above.": "Hay un programa de ejemplo cargado a la izquierda. Pulsa Ejecutar para verlo funcionar aquí, o elige otro ejemplo arriba.",
+  "Click any white slot on a block to type into it.": "Haz clic en cualquier hueco blanco de un bloque para escribir en él.",
+  "Drag blocks from the categories; drag a block back onto them to delete it. Round slots take values, hexagon slots take yes/no conditions.": "Arrastra bloques desde las categorías; arrastra un bloque de vuelta a ellas para borrarlo. Los huecos redondos aceptan valores; los hexagonales, condiciones de sí o no.",
+  "Only blocks under a \"when Run is clicked\" or \"when I receive\" hat run. Separate scripts run side by side.": "Solo se ejecutan los bloques que cuelgan de un bloque \"al hacer clic en Ejecutar\" o \"al recibir\". Los scripts separados se ejecutan a la vez.",
+  "Writing": "Escritura",
+  "Research": "Investigación",
+  "Design": "Diseño",
+  "Learning": "Aprendizaje",
+  "Work": "Trabajo",
+  "Home and baking": "Casa y panadería",
+  "Agents": "Agentes",
+  "Homey": "Homey",
+  "Code and data": "Código y datos",
+  "Automation": "Automatización",
+  "Home Assistant: no connection needed": "Home Assistant: sin conexión",
+  "Home Assistant: daily life": "Home Assistant: día a día",
+  "Home Assistant: security and cameras": "Home Assistant: seguridad y cámaras",
+  "Home Assistant: energy": "Home Assistant: energía",
+  "Home Assistant: comfort and garden": "Home Assistant: confort y jardín",
+  "Home Assistant: kitchen and household": "Home Assistant: cocina y hogar",
+  "Home Assistant: pets": "Home Assistant: mascotas",
+  "Home Assistant: house health": "Home Assistant: salud de la casa",
+  "Home Assistant: homelab": "Home Assistant: homelab",
+  "Home Assistant: alerts and voice": "Home Assistant: avisos y voz",
+  "Community": "Comunidad"
  }
 }
