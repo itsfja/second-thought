@@ -762,7 +762,9 @@ def to_bool(v):
     return bool(v)
 
 
-_BULLET = re.compile(r"^\s*[-*•\d.)]+\s*")
+# A list item's marker: "- " or "* ", "•", or a number with . or ) after it ("1.", "3)", "(2)"). Only those, so
+# "10 green bottles", "2024 plan", "1.5 kg flour" and "-5 °C" keep their numbers. The page's list() is the same.
+_BULLET = re.compile(r"^\s*(?:[-*](?=\s)|•|\(?\d+[.)](?!\d))\s*")
 
 
 def to_list(v):

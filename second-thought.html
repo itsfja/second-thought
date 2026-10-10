@@ -1111,7 +1111,9 @@ def to_bool(v):
     return bool(v)
 
 
-_BULLET = re.compile(r"^\s*[-*•\d.)]+\s*")
+# A list item's marker: "- " or "* ", "•", or a number with . or ) after it ("1.", "3)", "(2)"). Only those, so
+# "10 green bottles", "2024 plan", "1.5 kg flour" and "-5 °C" keep their numbers. The page's list() is the same.
+_BULLET = re.compile(r"^\s*(?:[-*](?=\s)|•|\(?\d+[.)](?!\d))\s*")
 
 
 def to_list(v):
@@ -12336,7 +12338,8 @@ HOW TO MAP CODE
   const str = v => v == null ? "" : Array.isArray(v) ? v.map(str).join("\n") : isImg(v) ? "[picture: " + v.name + "]"
     : isRec(v) ? Object.keys(v).map(k => k + ": " + (Array.isArray(v[k]) ? v[k].map(str).join(", ") : str(v[k]))).join("\n") : String(v);
   const bool = v => typeof v === "string" ? !(v === "" || v.toLowerCase() === "false" || v === "0") : !!v;
-  const list = v => Array.isArray(v) ? v : (v == null || v === "") ? [] : String(v).split(/\n+/).map(s => s.replace(/^\s*[-*•\d.)]+\s*/, "").trim()).filter(Boolean);
+  const list = v => Array.isArray(v) ? v : (v == null || v === "") ? [] : String(v).split(/\n+/).map(s => s.replace(/^\s*(?:[-*](?=\s)|•|\(?\d+[.)](?!\d))\s*/, "").trim()).filter(Boolean);  // as _BULLET in core.py
+  window.__list = v => list(v);
   const short = (s, n) => { s = str(s).replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n - 1) + "…" : s; };
 
   const halting = () => run.stopped || run.ending;
