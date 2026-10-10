@@ -1402,34 +1402,34 @@ def doctor_tests(codes, env, tmp, llama_url, llama_calls, ha_calls):
     prog = pathlib.Path(tmp) / "doc_doorbell.py"
     prog.write_text(codes["ha_doorbell"][0], encoding="utf-8")
     before = len(ha_calls)
-    r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=env, cwd=tmp, capture_output=True, text=True, timeout=120)
+    r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=env, cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
     out = r.stdout
     check(r.returncode == 0 and "Only reading: nothing is sent" in out and "  ok    Claude: the key works (" in out
           and "  ok    Home Assistant: reached Home Assistant" in out and "  ok    First run: approve = no" in out
           and "Everything checked is ready." in out and len(ha_calls) == before and "Gemini" not in out,
           f"--doctor checks a Home Assistant program's key and connection, switching nothing (exit {r.returncode}): {out[-400:]!r}")
     r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=dict(env, ANTHROPIC_API_KEY="bad", HA_TOKEN="wrong"),
-                       cwd=tmp, capture_output=True, text=True, timeout=120)
+                       cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
     check(r.returncode == 1 and "  FAIL  Claude: refused the key (401). Check ANTHROPIC_API_KEY" in r.stdout
           and "  FAIL  Home Assistant:" in r.stdout and "2 problems to fix" in r.stdout,
           f"a refused key and a wrong Home Assistant token are each a FAIL, and the exit code says so ({r.stdout[-300:]!r})")
     llama = pathlib.Path(tmp) / "doc_llama.py"
     llama.write_text(codes["w_llama"][0], encoding="utf-8")
     r = subprocess.run([sys.executable, "-u", str(llama), "--doctor"], env=dict(env, RB_MODEL_TIER="llama-complex", RB_BACKUPS="none"),
-                       cwd=tmp, capture_output=True, text=True, timeout=120)
+                       cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
     check(r.returncode == 0 and "  NOTE  Llama: the key works, but it doesn't list llama4:16x17b" in r.stdout and "ollama pull llama4:16x17b" in r.stdout,
           f"--doctor notices a Llama model that hasn't been pulled ({r.stdout[-300:]!r})")
     mcp = pathlib.Path(tmp) / "doc_mcp.py"
     mcp.write_text(EXTRA["t_ag_mcp"], encoding="utf-8")
     log = pathlib.Path(tmp) / "doc-mcp.log"
     r = subprocess.run([sys.executable, "-u", str(mcp), "--doctor"], env=dict(env, FAKE_MCP_LOG=str(log),
-                       MCP_BAKERY=f'"{sys.executable}" "{HERE / "fake_mcp.py"}" legacy'), cwd=tmp, capture_output=True, text=True, timeout=120)
+                       MCP_BAKERY=f'"{sys.executable}" "{HERE / "fake_mcp.py"}" legacy'), cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
     sent = [json.loads(x).get("method") for x in log.read_text(encoding="utf-8").splitlines()] if log.exists() else []
     check(r.returncode == 0 and "  ok    MCP server \u201cbakery\u201d: 4 tools, MCP 2025-11-25" in r.stdout and "tools/list" in sent and "tools/call" not in sent,
           f"--doctor lists an MCP server's tools without calling any ({r.stdout[-300:]!r})")
     old = pathlib.Path(tmp) / "doc_old.py"
     old.write_text(codes["review"][0].replace(", can=CAN)", ")"), encoding="utf-8")
-    r = subprocess.run([sys.executable, "-u", str(old), "--doctor"], env=env, cwd=tmp, capture_output=True, text=True, timeout=120)
+    r = subprocess.run([sys.executable, "-u", str(old), "--doctor"], env=env, cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
     check(r.returncode in (0, 1) and "  ok    Claude: the key works" in r.stdout and "Traceback" not in r.stderr,
           f"--doctor also checks a program exported before CAN: whatever is set up ({(r.stderr or r.stdout)[-300:]!r})")
 
@@ -1448,11 +1448,11 @@ def approval_tests(codes, env, tmp):
     code_, out, err = drive([sys.executable, "-u", str(prog)], env, tmp)
     check(code_ == 0 and "This program can:" not in out, "the next run doesn't ask again")
     prog.write_text(codes["a_bedtime"][0] + "\n# edited\n", encoding="utf-8")
-    r = subprocess.run([sys.executable, "-u", str(prog), "--schedule"], env=env, cwd=tmp, capture_output=True, text=True, timeout=60,
+    r = subprocess.run([sys.executable, "-u", str(prog), "--schedule"], env=env, cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=60,
                        stdin=subprocess.DEVNULL)
     check(r.returncode == 1 and "nobody is here to ask" in r.stdout and "approve = no" in r.stdout,
           f"once the file changes, a scheduled run with nobody there stops and says how to allow it (exit {r.returncode})")
-    r = subprocess.run([sys.executable, "-u", str(prog)], env=env, cwd=tmp, capture_output=True, text=True, timeout=60, input="n\n")
+    r = subprocess.run([sys.executable, "-u", str(prog)], env=env, cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=60, input="n\n")
     check(r.returncode == 1 and "Not allowed, so it didn't run." in r.stdout and "RESULT" not in r.stdout, "answering n stops it before it does anything")
     reader = pathlib.Path(tmp) / "gate_reader.py"
     reader.write_text(codes["a_house"][0], encoding="utf-8")
