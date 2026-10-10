@@ -9,6 +9,7 @@ a stand-in Anthropic SDK (tests/fakeapi). Nothing calls the real API.
     python tests/run_tests.py    # every time
 """
 import asyncio
+import base64
 import datetime
 import re
 import json
@@ -118,6 +119,9 @@ async def route(r):
         "field-multilineinput": VENDOR / "field-multilineinput/package/dist/index.js",
         "blockly.min.js": VENDOR / "blockly/package/blockly.min.js",
     }
+    m = re.search(r"/blockly@[^/]+/msg/([a-z-]+)\.js$", u)
+    if m and (VENDOR / "blockly/package/msg" / (m.group(1) + ".js")).exists():  # Blockly's own words for a language
+        return await r.fulfill(path=str(VENDOR / "blockly/package/msg" / (m.group(1) + ".js")), content_type="application/javascript")
     for key, path in files.items():
         if key in u:
             return await r.fulfill(path=str(path), content_type="application/javascript")
@@ -2373,6 +2377,102 @@ def example_ini_check():
           "second-thought.example.ini reads as a settings file, with blank keys and its notes switched off" + ("" if ok is True else f": {ok}"))
 
 
+UNTRANSLATED = {"rb_use_model.TIER", "rb_with_model.TIER"}  # model names stay as they are
+
+
+def same_export(files):
+    """An export's files with what differs between any two exports taken out: the date, and the blocks' random ids."""
+    out = {}
+    for k, v in files.items():
+        v = "\n".join(l for l in v.split("\n") if "Exported from Second Thought on" not in l)
+        if PY_MARK in v:
+            code, rest = v.split(PY_MARK, 1)
+            b64 = "".join(l[2:] for l in rest.split("# BLOCKS:", 1)[1].split("\n") if l.startswith("# "))
+            blocks = json.loads(base64.b64decode(b64).decode("utf-8"))
+            strip = lambda o: {k_: strip(x) for k_, x in o.items() if k_ != "id"} if isinstance(o, dict) else [strip(x) for x in o] if isinstance(o, list) else o  # noqa: E731
+            v = (code, strip(blocks))
+        out[k] = v
+    return out
+
+
+async def i18n_tests():
+    """Every language has every block's words, and a program is the same whatever language its blocks are shown in."""
+    print("Languages")
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+
+        async def page(lang=None):
+            pg = await browser.new_page(viewport={"width": 1400, "height": 1000})
+            errors = []
+            pg.on("pageerror", lambda e: errors.append(str(e)))
+            await pg.route("**/*", route)
+            # Only the first load: after that, the page's own choice (the picker) must stand.
+            await pg.add_init_script(MOCK + (f";try{{if(!sessionStorage.getItem('lang-set')){{localStorage.setItem('second-thought-language','{lang}');"
+                                             "sessionStorage.setItem('lang-set','1')}}catch(e){}" if lang else ""))
+            await pg.goto("http://test/")
+            await pg.wait_for_timeout(1500)
+            return pg, errors
+
+        en, en_errors = await page()
+        info = await en.evaluate("window.__i18n()")
+        check(info["lang"] == "en" and info["langs"], f"the page has {len(info['langs'])} translation(s) of the block palette, and English when none is chosen")
+        for code, t in info["langs"].items():
+            problems = []
+            for d in info["defs"]:
+                mine = t["blocks"].get(d["type"], {})
+                for k, v in d.items():
+                    if re.fullmatch(r"message\d+", k) or k == "tooltip":
+                        if k not in mine:
+                            problems.append(f"{d['type']}.{k} missing")
+                        elif k != "tooltip" and sorted(re.findall(r"%\d+", v)) != sorted(re.findall(r"%\d+", mine[k])):
+                            problems.append(f"{d['type']}.{k} has different %N placeholders")
+                for k, args in d.items():
+                    if re.fullmatch(r"args\d+", k):
+                        for a in args:
+                            if a.get("type") == "field_dropdown" and isinstance(a.get("options"), list) and f"{d['type']}.{a['name']}" not in UNTRANSLATED:
+                                labels = t["options"].get(f"{d['type']}.{a['name']}", {})
+                                problems += [f"{d['type']}.{a['name']}={o[1]} missing" for o in a["options"]
+                                             if isinstance(o[0], str) and o[0] != o[1] and o[1] not in labels]
+            known = {d["type"] for d in info["defs"]}
+            problems += [f"{b} isn't a block" for b in t["blocks"] if b not in known]
+            problems += [f"category {c} missing" for c in info["categories"] if c not in t["categories"]]
+            problems += [f"label {x!r} missing" for x in info["labels"] if x not in t["labels"]]
+            if t.get("blockly") and not (VENDOR / "blockly/package/msg" / (t["blockly"] + ".js")).exists():
+                problems.append(f"Blockly has no msg/{t['blockly']}.js")
+            check(not problems, f"{t.get('name', code)} ({code}) has every block's words, tooltip and choices, with matching placeholders"
+                  + (f": {problems[:8]}" if problems else ""))
+
+        for code in info["langs"]:
+            pg, errors = await page(code)
+            got = await pg.evaluate("""() => { const ws = Blockly.getMainWorkspace(), b = ws.newBlock('rb_start'), w = ws.newBlock('rb_wait');
+                const r = { lang:window.ST_LANG, start:b.toString(), wait:w.getField('UNIT').getText(), cat:ws.getToolbox().getToolboxItems()[0].getName(), ifmsg:Blockly.Msg.CONTROLS_IF_MSG_IF };
+                b.dispose(); w.dispose(); return r; }""")
+            t = info["langs"][code]
+            check(got["lang"] == code and got["start"] == t["blocks"]["rb_start"]["message0"] and got["cat"] == t["categories"]["Events"]
+                  and got["wait"] == t["options"]["rb_wait.UNIT"]["s"] and got["ifmsg"] not in ("if", None),
+                  f"with {code} chosen, blocks, choices, categories and Blockly's own blocks are in {t.get('name', code)} ({got})")
+            same = []
+            for ex in ("review", "a_inbox", "ha_doorbell"):
+                for pg_ in (en, pg):
+                    await pg_.select_option("#example", ex)
+                    await pg_.click("#load")
+                a, b = [{f["name"]: f["text"] for f in await x.evaluate("window.__exportFiles()")} for x in (en, pg)]
+                same.append(same_export(a) == same_export(b))
+            check(all(same), f"the same programs export exactly the same files whether their blocks are shown in English or {code} ({same})")
+            await pg.select_option("#example", "brainstorm")
+            await pg.click("#load")
+            n = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
+            await pg.select_option("#lang", "en")
+            await pg.wait_for_load_state("load")
+            await pg.wait_for_timeout(1500)
+            back = await pg.evaluate("[window.ST_LANG, Blockly.getMainWorkspace().getAllBlocks(false).length]")
+            check(back == ["en", n], f"switching the blocks' language keeps the program on the canvas ({back}, {n} blocks before)")
+            check(not errors, f"no page errors in {code}" + (f": {errors[:2]}" if errors else ""))
+            await pg.close()
+        check(not en_errors, "no page errors in English")
+        await browser.close()
+
+
 def main():
     sync = subprocess.run([sys.executable, str(ROOT / "tools" / "sync.py"), "--check"], capture_output=True, text=True)
     print("Sources")
@@ -2386,6 +2486,7 @@ def main():
     if not (VENDOR / "blockly").exists():
         sys.exit("Run tests/setup.sh first.")
     codes = asyncio.run(page_tests())
+    asyncio.run(i18n_tests())
     python_tests(codes)
     print()
     if failures:

@@ -7,7 +7,7 @@ package's modules, in order, into python/runtime.py (each module's imports, abov
 are left out: in one file every name is already there).
 
 The page is published as one self-contained HTML file, so that runtime, its list of model services (SERVICES
-in python/second_thought/providers.py, as JSON), what programs can do (CAPABILITIES in core.py), the code-conversion prompt
+in python/second_thought/providers.py, as JSON), what programs can do (CAPABILITIES in core.py), the block palette's translations (i18n/*.json), the code-conversion prompt
 (prompts/convert-guide.txt), the Home Assistant sample house (ha/sample-house.json) and the sample feeds,
 GitHub, Telegram, email and calendar (samples/connections.json) are embedded inside it.
 Edit those files (not python/runtime.py, which is rebuilt), then run:
@@ -29,10 +29,12 @@ MODULES = ["settings", "providers", "core", "connectors", "mcp", "agent", "docto
 MARK = "# ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----"
 SERVICES = PACKAGE / "providers.py"   # its SERVICES list is the page's list of model services too
 CAPABILITIES = PACKAGE / "core.py"    # its CAPABILITIES list is the page's list of what programs can do
+I18N = ROOT / "i18n"                  # one <language>.json per language the block palette can be shown in
 PARTS = [
     ('<script type="text/plain" id="py-runtime">\n', RUNTIME),
     ('<script type="application/json" id="services">\n', SERVICES),
     ('<script type="application/json" id="capabilities">\n', CAPABILITIES),
+    ('<script type="application/json" id="i18n">\n', I18N),
     ('<script type="text/plain" id="convert-guide">\n', ROOT / "prompts" / "convert-guide.txt"),
     ('<script type="application/json" id="ha-sample">\n', ROOT / "ha" / "sample-house.json"),
     ('<script type="application/json" id="connections-sample">\n', ROOT / "samples" / "connections.json"),
@@ -79,12 +81,25 @@ def capabilities_json() -> str:
     return literal_json(CAPABILITIES, "CAPABILITIES")
 
 
+def i18n_json() -> str:
+    """Every i18n/<language>.json, as one JSON object for the page: {"es": {...}, ...}."""
+    langs = {}
+    for path in sorted(I18N.glob("*.json")):
+        try:
+            langs[path.stem] = json.loads(path.read_text(encoding="utf-8"))
+        except ValueError as e:
+            sys.exit(f"{path.relative_to(ROOT)} isn't valid JSON: {e}")
+    return json.dumps(langs, ensure_ascii=False, separators=(",", ":")) + "\n"
+
+
 def build(page: str, runtime: str = None) -> str:
     for opener, path in PARTS:
         if path == SERVICES:
             body = services_json()
         elif path == CAPABILITIES and "capabilities" in opener:
             body = capabilities_json()
+        elif path == I18N:
+            body = i18n_json()
         else:
             body = runtime if (path == RUNTIME and runtime is not None) else path.read_text(encoding="utf-8")
         if "</script" in body:
