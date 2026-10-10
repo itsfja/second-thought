@@ -65,7 +65,6 @@ SETTINGS_PATH = _load_settings()
 WHERE_KEYS = f"in {SETTINGS_PATH}" if SETTINGS_PATH else f"in {SETTINGS_FILE}, next to this program"
 
 
-
 def _anthropic_client(**kw):
     """The Claude client. Imported when first needed, so the rest of this file loads (and can be tested) without the SDK."""
     try:
@@ -203,6 +202,336 @@ def model_label(tier):
     if str(tier).startswith("openrouter:"):
         return "OpenRouter: " + tier.split(":", 1)[1]
     return MODEL_LABELS.get(tier, tier)
+
+
+class ModelCalls:
+    """Calling the model services. Part of Runtime (see runtime.py)."""
+    async def _call_live(self, prompt, want_json=False, picture=None, history=None, web=False):
+        if self.ending:
+            raise asyncio.CancelledError()
+        self.calls += 1
+        if self.calls > MAX_AI_CALLS:
+            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+        if self.budget and self.tokens_used() >= self.budget:
+            raise RunError(f"Stopped: this run has used {self.tokens_used():,} tokens, which reaches its budget of {self.budget:,}. "
+                           "Raise the number in the 'limit this run' block (or budget in second-thought.ini).")
+        tier = self.current_tier
+        # Backups stand in for the primary model only. A block that names its own model keeps that model.
+        tiers = [tier] + (self.backups if tier == self.primary else [])
+        last = None
+        for n, t in enumerate(tiers):
+            if n:
+                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn", calls=False)
+            try:
+                text = await self._timed_call(t, prompt, want_json, picture, history, web)
+            except (asyncio.CancelledError, Finish):
+                raise
+            except Exception as e:  # no key, out of credit, service down: try the next backup
+                last = e
+                continue
+            if n:
+                self.backup_used = self.backup_used + 1
+            if not want_json:
+                if getattr(text, "truncated", False):
+                    text = await self._continue(t, prompt, text, history, web)
+                return text
+            schema = want_json if isinstance(want_json, dict) else None
+            try:
+                return self._read_json(text, schema)
+            except BadJSON as e:
+                # One more try on the same model, showing it what went wrong. Counts as a call like any other.
+                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair", calls=False)
+                self.calls += 1
+                if self.calls > MAX_AI_CALLS:
+                    raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+                fix = await self._timed_call(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
+                                            "\nPrevious reply:\n" + _short(text, 2000) +
+                                            "\n\nReply again with only the corrected JSON.", want_json, picture, history, web)
+                return self._read_json(fix, schema)
+        if len(tiers) > 1:
+            both = "its backup" if len(tiers) == 2 else f"all {len(tiers) - 1} backups"
+            msg = f"The primary model and {both} failed. Last error: {last}"
+            raise (Retryable if isinstance(last, Retryable) else RunError)(msg) from last
+        raise last
+
+    async def _continue(self, tier, prompt, text, history, web):
+        """A reply cut off by the length limit: ask once for the rest, on the same model, and join the two parts."""
+        self.log("Reply continued", "The reply reached the length limit, so the model was asked to carry on from where it stopped.",
+                 "continued", calls=False)
+        self.calls += 1
+        if self.calls > MAX_AI_CALLS:
+            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+        turns = (history or []) + [{"role": "user", "content": to_str(prompt)}, {"role": "assistant", "content": to_str(text)}]
+        more = await self._timed_call(tier, CONTINUE_PROMPT, False, None, turns, web)
+        joined = to_str(text) + to_str(more)  # the continuation picks up exactly where the first part stopped
+        if getattr(more, "truncated", False):
+            self.out_of_rounds_hit = True
+            self.log("Cut short", "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. "
+                     "Ask for something shorter, or split the job into smaller steps.", "warn", calls=False)
+        return joined
+
+    @staticmethod
+    def _read_json(text, schema):
+        """Parses a reply and checks it against the schema. Raises BadJSON with a plain reason."""
+        v = _parse_json(text)
+        if schema:
+            v = _fit(v, schema)
+            bad = _shape_problem(v, schema)
+            if bad:
+                raise BadJSON(f"The reply didn't have the expected shape: {bad}.")
+        return v
+
+    async def _call_tier(self, tier, prompt, want_json, picture, history, web):
+        """One model call on one tier. Returns the reply text."""
+        schema = want_json if isinstance(want_json, dict) else None
+        if tier.startswith("gemini-"):
+            text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web, schema)
+            who = "Gemini"
+        elif tier.startswith("perplexity-"):
+            text, sources = await self._call_perplexity(MODELS.get(tier, MODELS["perplexity-default"]), prompt, picture, history)
+            who = "Perplexity"
+            if text and sources and not want_json:
+                text += "\n\nSources:\n" + "\n".join(sources)
+        elif tier.startswith("openrouter:"):
+            who = "OpenRouter"
+            text = await self._call_openai(who, tier.split(":", 1)[1].strip() or MODELS["openrouter-default"], prompt, picture, history, web, schema)
+        elif any(tier.startswith(pv["prefix"]) for pv in PROVIDERS.values()):
+            pv = next(pv for pv in PROVIDERS.values() if tier.startswith(pv["prefix"]))
+            who = pv["name"]
+            text = await self._call_openai(who, MODELS.get(tier, MODELS.get(pv["prefix"] + "default")), prompt, picture, history, web, schema)
+        else:
+            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web, schema)
+            who = "Claude"
+        if not text:
+            raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
+        return text
+
+    async def _call_claude(self, model, prompt, picture, history, web, schema=None):
+        if self.client is None:
+            if not os.environ.get("ANTHROPIC_API_KEY"):
+                raise RunError(f"Claude needs a key. Put ANTHROPIC_API_KEY = your-key {WHERE_KEYS} (https://console.anthropic.com).")
+            self.client = _anthropic_client(timeout=CALL_TIMEOUT, max_retries=2)
+        args = dict(model=model, max_tokens=MAX_TOKENS,
+                    messages=(history or []) + [{"role": "user", "content": self._content(prompt, picture)}])
+        if self.instructions:
+            args["system"] = self.instructions
+        if web:
+            args["tools"] = [WEB_SEARCH_TOOL]
+        if schema and not web and model not in self.no_schema:
+            # Structured outputs: Claude can only write JSON of this shape. https://platform.claude.com/docs/en/build-with-claude/structured-outputs
+            args["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
+        try:
+            msg = await (self._claude_stream(args) if "output_config" not in args and self._streaming() else self.client.messages.create(**args))
+        except Exception as e:  # noqa: BLE001
+            if "output_config" not in args or getattr(e, "status_code", None) != 400:
+                raise
+            # This model or account won't take the shape: ask without it (the reply is still checked), and stop sending it.
+            self.no_schema.add(model)
+            self.log("Structured replies", f"{model} wouldn't accept a reply shape ({_short(str(e), 160)}), so its replies "
+                     "are checked after they arrive instead.", "note")
+            del args["output_config"]
+            msg = await self.client.messages.create(**args)
+        usage = getattr(msg, "usage", None)
+        self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
+        text = "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
+        return Reply(text, getattr(msg, "stop_reason", None) in ("max_tokens", "model_context_window_exceeded"))
+
+    @staticmethod
+    def _streaming():
+        """Stream Claude's text replies? stream = yes/no in second-thought.ini; by default only in an interactive terminal."""
+        v = os.environ.get("RB_STREAM", "").strip().lower()
+        if v in ("1", "yes", "true", "on"):
+            return True
+        if v in ("0", "no", "false", "off"):
+            return False
+        return sys.stdout.isatty()
+
+    async def _claude_stream(self, args):
+        """Streams one reply, showing a single progress line that's cleared when it's done. Returns the final message."""
+        written, shown, width = 0, 0.0, 0
+        async with self.client.messages.stream(**args) as stream:
+            async for chunk in stream.text_stream:
+                written += len(chunk)
+                if time.monotonic() - shown > 0.1:
+                    shown = time.monotonic()
+                    line = f"    … writing: {written:,} characters"
+                    width = max(width, len(line))
+                    sys.stdout.write("\r" + line)
+                    sys.stdout.flush()
+            msg = await stream.get_final_message()
+        if width:
+            sys.stdout.write("\r" + " " * width + "\r")
+            sys.stdout.flush()
+        return msg
+
+    async def _openai_json(self, provider, model, body, schema):
+        """Asks for JSON the strongest way this service accepts: the full shape (json_schema), then any JSON
+        (json_object), then plain. What works is remembered, and the reply is still checked afterwards."""
+        mode = self.json_modes.get((provider, model), "schema") if schema else "none"
+        while True:
+            if mode == "schema":
+                body["response_format"] = {"type": "json_schema", "json_schema": {"name": "reply", "schema": schema, "strict": False}}
+            elif mode == "object":
+                body["response_format"] = {"type": "json_object"}
+            else:
+                body.pop("response_format", None)
+            try:
+                return await asyncio.to_thread(self._openai_request, provider, body)
+            except RunError as e:
+                if mode == "none" or not ("(400)" in str(e) or "(422)" in str(e)):
+                    raise
+                mode = self.JSON_MODES[self.JSON_MODES.index(mode) + 1]
+                self.json_modes[(provider, model)] = mode
+                self.log("Structured replies", f"{provider} ({model}) wouldn't take that JSON mode, so it's asked "
+                         + ("for plain JSON instead." if mode == "object" else "without one, and its replies are checked after they arrive."),
+                         "note", calls=False)
+
+    @staticmethod
+    def _openai_request(provider, body, path="/chat/completions"):
+        """One request to a model service that speaks OpenAI's format (Ollama, DeepSeek, xAI, OpenAI, Mistral, ...)."""
+        pv = PROVIDERS[provider]
+        if pv["signup"] and not pv["key"]:
+            raise RunError(f"This program uses {provider}. Put {pv['key_env']} = your-key {WHERE_KEYS} ({pv['signup']}).")
+        headers = {"Content-Type": "application/json", **pv["headers"]}
+        if pv["key"]:
+            headers["Authorization"] = "Bearer " + pv["key"]
+        req = urllib.request.Request(pv["base"] + path, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
+        try:
+            with urllib.request.urlopen(req, timeout=CALL_TIMEOUT) as r:
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf-8", "replace")[:200]
+            if provider == "Llama" and e.code == 404 and "model" in detail.lower():
+                raise RunError(f"The Llama server doesn't have model {body['model']}. Run:  ollama pull {body['model']}")
+            if e.code == 401:
+                raise RunError(f"{provider} refused the API key (401). Check {pv['key_env']}.")
+            if e.code == 402:
+                raise RunError(f"{provider} says the account has no credit left (402).")
+            if e.code in (400, 403, 404, 422):
+                raise RunError(f"{provider} refused the request ({e.code}): {detail}")
+            raise Retryable(f"{provider} answered {e.code}: {detail}")
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
+            raise Retryable(f"Couldn't reach {provider} at {pv['base']} ({getattr(e, 'reason', e)}).{hint}")
+
+    JSON_MODES = ("schema", "object", "none")
+
+    async def _call_openai(self, provider, model, prompt, picture, history, web, schema=None):
+        messages = [{"role": "system", "content": self.instructions}] if self.instructions else []
+        messages += [{"role": t["role"], "content": to_str(t["content"])} for t in history or []]
+        if web:
+            prompt = "You can't browse the web, so answer from what you know and say clearly that it may be out of date.\n\n" + prompt
+        if picture is not None and picture.svg is None:
+            if model in NO_VISION:
+                raise RunError(f"{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.")
+            if provider in VISION_MODELS and model != VISION_MODELS[provider]:
+                model = VISION_MODELS[provider]  # this service's text models can't see; this one can
+            url = "data:" + picture.media_type + ";base64," + base64.b64encode(picture.data).decode("ascii")
+            content = [{"type": "text", "text": prompt}, {"type": "image_url", "image_url": {"url": url}}]
+        else:
+            content = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
+        messages.append({"role": "user", "content": content})
+        body = {"model": model, "messages": messages, "stream": False}
+        if provider == "OpenAI":
+            # OpenAI's newer models refuse max_tokens, and spend part of the budget thinking before they answer.
+            body["max_completion_tokens"] = MAX_TOKENS * 4
+        else:
+            body["max_tokens"] = MAX_TOKENS
+        if provider == "Qwen":
+            body["enable_thinking"] = False  # Qwen only thinks out loud when streaming
+        data = await self._openai_json(provider, model, body, schema)
+        usage = data.get("usage") or {}
+        self._count(provider, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
+        try:
+            text = data["choices"][0]["message"]["content"] or ""
+            cut = data["choices"][0].get("finish_reason") == "length"
+            return Reply(re.sub(r"<think>.*?</think>\s*", "", text, flags=re.S).strip(), cut)  # some models think out loud first
+        except (KeyError, IndexError, TypeError, AttributeError):
+            return ""
+
+    async def _call_perplexity(self, preset, prompt, picture, history):
+        """Perplexity's Agent API: searches the web, then answers with numbered sources."""
+        if picture is not None and picture.svg is None:
+            raise RunError("Perplexity can't look at photos here. Use Claude, GPT or Gemini for this step.")
+        if picture is not None:
+            prompt += "\n\nThe picture is this SVG drawing:\n" + picture.svg
+        if history:
+            past = "\n\n".join(("Me: " if t["role"] == "user" else "You: ") + to_str(t["content"]) for t in history)
+            prompt = "Our conversation so far:\n\n" + past + "\n\nNow:\n" + prompt
+        body = {"preset": preset, "input": prompt}
+        if self.instructions:
+            body["instructions"] = self.instructions
+        data = await asyncio.to_thread(self._openai_request, "Perplexity", body, "/v1/agent")
+        usage = data.get("usage") or {}
+        self._count("Perplexity", usage.get("input_tokens", 0), usage.get("output_tokens", 0))
+        text, sources, seen = data.get("output_text") or "", [], set()
+        for item in data.get("output") or []:
+            if item.get("type") == "message" and not data.get("output_text"):
+                text += "".join(c.get("text", "") for c in item.get("content") or [] if c.get("type") == "output_text")
+            if item.get("type") == "search_results":
+                for res in item.get("results") or []:
+                    if res.get("url") and res["url"] not in seen:
+                        seen.add(res["url"])
+                        sources.append(f"[{res.get('id', len(sources) + 1)}] {res.get('title') or res['url']}: {res['url']}")
+        return text.strip(), sources
+
+    async def _call_gemini(self, model, prompt, picture, history, web, schema=None):
+        try:
+            from google import genai
+            from google.genai import types
+        except ImportError:
+            raise RunError("This program uses Gemini. Install its package first:  pip install google-genai")
+        if self.gemini is None:
+            if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
+                raise RunError(f"Gemini needs a key. Put GEMINI_API_KEY = your-key {WHERE_KEYS} (https://aistudio.google.com).")
+            self.gemini = genai.Client()
+        contents = []
+        for turn in history or []:
+            maker = types.UserContent if turn["role"] == "user" else types.ModelContent
+            contents.append(maker(parts=[types.Part.from_text(text=to_str(turn["content"]))]))
+        if picture is not None and picture.svg is None:
+            parts = [types.Part.from_bytes(data=picture.data, mime_type=picture.media_type), types.Part.from_text(text=prompt)]
+        else:
+            text = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
+            parts = [types.Part.from_text(text=text)]
+        contents.append(types.UserContent(parts=parts))
+        json_out = bool(schema) and not web and self.json_modes.get(("Gemini", model)) != "none"
+        config = types.GenerateContentConfig(
+            system_instruction=self.instructions or None,
+            max_output_tokens=MAX_TOKENS,
+            tools=[types.Tool(google_search=types.GoogleSearch())] if web else None,
+            **({"response_mime_type": "application/json"} if json_out else {}),  # Gemini then writes only JSON
+        )
+        try:
+            resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
+        except Exception as e:  # noqa: BLE001
+            if not json_out or (getattr(e, "code", None) or getattr(e, "status_code", None)) not in (400, 422):
+                raise
+            self.json_modes[("Gemini", model)] = "none"
+            self.log("Structured replies", f"Gemini ({model}) wouldn't take JSON mode, so its replies are checked after they arrive.",
+                     "note", calls=False)
+            config.response_mime_type = None
+            resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
+        um = getattr(resp, "usage_metadata", None)
+        self._count("Gemini",
+                    getattr(um, "prompt_token_count", None) or getattr(um, "input_tokens", 0),
+                    getattr(um, "candidates_token_count", None) or getattr(um, "output_tokens", 0))
+        try:
+            cands = getattr(resp, "candidates", None) or []
+            cut = bool(cands) and "MAX_TOKENS" in str(getattr(cands[0], "finish_reason", ""))
+            return Reply((resp.text or "").strip(), cut)
+        except ValueError:  # blocked or empty candidate
+            return ""
+
+    @staticmethod
+    def _content(prompt, picture):
+        if picture is None:
+            return prompt
+        if picture.svg is not None:
+            return prompt + "\n\nThe picture is this SVG drawing:\n" + picture.svg
+        return [{"type": "image", "source": {"type": "base64", "media_type": picture.media_type,
+                                             "data": base64.b64encode(picture.data).decode("ascii")}},
+                {"type": "text", "text": prompt}]
 
 
 MAX_TOKENS = 4096
@@ -1355,872 +1684,8 @@ def parse_day(text):
         raise RunError(f"“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.") from None
 
 
-class Runtime:
-    def __init__(self):
-        self.vars = {}
-        self.receivers = {}
-        self.client = None
-        self.gemini = None
-        self._input_lock = asyncio.Lock()  # one question at the keyboard at a time
-        self._tg_lock = asyncio.Lock()  # one Telegram fetch at a time (made here, so two fetches can never make one each)
-        self.no_schema = set()      # Claude models that refused a reply shape, so it isn't sent again
-        self.json_modes = {}         # (service, model) -> the JSON mode that service accepts: "schema", "object" or "none"
-        self.schedule_mode = False
-        self.transient_memory = {}   # kept across runs while this program keeps running
-        self.reset()
-
-    # ----- run state -----
-    def reset(self):
-        self.vars.clear()
-        self.task = ""
-        self.draft = ""
-        self.problems = []
-        self.approved = None
-        self.answer = ""
-        self.result = []
-        self.out_of_rounds_hit = False
-        self.last_error = ""
-        self.instructions = ""
-        self.chats = {}
-        self.reflect = None          # the review loop running now: earlier problems and its best draft so far
-        self.checkpoints = {}        # 'save checkpoint' snapshots, by name
-        self.usage = {}  # provider -> [tokens in, tokens out]
-        self.budget = BUDGET          # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
-        self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
-        self.trace = []              # every log line, for save_log
-        self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
-        self.agent_trace = []        # the most recent agent's steps, for the "agent's steps" block
-        self.run_started = time.time()
-        self.max_seconds = MAX_SECONDS  # max_seconds = 600 stops any run that takes longer
-        self.programs = []           # names of saved programs running inside this run, innermost last
-        self.calls = 0
-        self.steps = 0
-        self.depth = 0
-        self.started = 0
-        self.timer_start = time.monotonic()
-        self.journal, self.replay, self.replay_pos = getattr(self, "journal", None), None, 0
-        self.tier = os.environ.get("RB_MODEL_TIER", globals().get("DEFAULT_TIER", "default"))
-        self.primary = self.tier
-        self.backup_used = 0
-        # Backup models, tried in order when the primary fails on a step. RB_BACKUPS="openai-default,default" overrides.
-        backups = os.environ.get("RB_BACKUPS")
-        if backups is not None and backups.strip().lower() in ("none", "off", "no"):
-            backups = ""
-        backups = [b.strip() for b in backups.split(",")] if backups is not None else list(globals().get("BACKUPS", []))
-        self.backups = [b for i, b in enumerate(backups) if b and b != self.primary and b not in backups[:i]]
-        self.tasks = set()
-        self.ending = False
-        self.error = None
-        self.msg_waiters = {}
-        self.msg_waiting = 0
-
-    def get(self, name):
-        return self.vars.get(name, 0)
-
-    def push_args(self, args):
-        if self.depth >= MAX_DEPTH:
-            raise RunError("A My Blocks block called itself too many times.")
-        self.depth += 1
-        saved = {k: self.vars[k] for k in args if k in self.vars}
-        missing = [k for k in args if k not in self.vars]
-        self.vars.update(args)
-        return saved, missing
-
-    def pop_args(self, token):
-        saved, missing = token
-        self.depth -= 1
-        for k in missing:
-            self.vars.pop(k, None)
-        self.vars.update(saved)
-
-    def unsupported(self, kind):
-        raise RunError("The block '" + kind + "' can't run outside the block editor.")
-
-    def tick(self):
-        self.steps += 1
-        if self.steps > MAX_STEPS:
-            raise RunError(f"Stopped after {MAX_STEPS} steps. A loop may never end; check repeat and while blocks.")
-
-    # ----- logging -----
-    def log(self, label, text=None, status=None, calls=True):
-        """calls=True: attach the model calls made since the last line. calls=False: a note written between a model call
-        and its step, which leaves the calls for the step. A list: exactly these calls (the agent hands each step its own)."""
-        if isinstance(calls, list):
-            pass
-        elif calls:
-            calls, self._pending = self._pending, []
-        else:
-            calls = []
-        meta = self._calls_summary(calls)
-        self.trace.append((time.time(), label, to_str(text) if text else "", status or "", meta, [c["prompt"] for c in calls]))
-        head = f"\n▸ {label}" + (f"  [{status}]" if status else "")
-        print(head, flush=True)
-        if text:
-            for line in to_str(text).splitlines() or [""]:
-                print("    " + line, flush=True)
-        if meta:
-            print("    · " + meta, flush=True)
-
-    @staticmethod
-    def _calls_summary(calls):
-        """'Claude · 1.4 s · 812 in, 120 out' for the model calls behind one step (several for a repair or a backup)."""
-        if not calls:
-            return ""
-        if all(c["who"].startswith("reused") for c in calls):
-            return "reused from the run that stopped: no new call"
-        who = ", ".join(dict.fromkeys(c["who"] for c in calls))
-        secs = sum(c["secs"] for c in calls)
-        tin, tout = sum(c["in"] for c in calls), sum(c["out"] for c in calls)
-        failed = sum(1 for c in calls if not c["ok"])
-        return ((f"{len(calls)} calls · " if len(calls) > 1 else "") + f"{who} · {secs:.1f} s · {tin:,} in, {tout:,} out" +
-                (f" · {failed} failed" if failed else ""))
-
-    def _prompt_text(self, prompt, history, picture):
-        """The prompt as the model received it, for the saved log."""
-        parts = [f"[instructions]\n{self.instructions}"] if self.instructions else []
-        parts += [f"[{h['role']}]\n{to_str(h['content'])}" for h in (history or [])]
-        parts.append(("[user]\n" if parts else "") + to_str(prompt) + ("\n[+ a picture]" if picture is not None else ""))
-        return "\n\n".join(parts)
-
-    async def _timed_call(self, t, prompt, want_json, picture, history, web):
-        """One call on one model, remembered (time, tokens, prompt) for the next log line."""
-        start, before = time.monotonic(), [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
-        ok = False
-        try:
-            text = await self._call_tier(t, prompt, want_json, picture, history, web)
-            ok = True
-            return text
-        finally:
-            after = [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
-            self._pending.append({"who": model_label(t), "secs": time.monotonic() - start, "in": after[0] - before[0],
-                                  "out": after[1] - before[1], "ok": ok, "prompt": self._prompt_text(prompt, history, picture)})
-
-    # ----- Claude -----
-    @property
-    def current_tier(self):
-        return MODEL_OVERRIDE.get() or self.tier
-
-    def _count(self, provider, tokens_in, tokens_out):
-        u = self.usage.setdefault(provider, [0, 0])
-        u[0] += tokens_in or 0
-        u[1] += tokens_out or 0
-
-    def tokens_used(self):
-        return sum(u[0] + u[1] for u in self.usage.values())
-
-    def set_budget(self, n):
-        n = max(0, round_js(num(n)))
-        self.budget = n
-        self.log("Budget", f"This run stops before a model call once it has used {n:,} tokens (used so far: {self.tokens_used():,})."
-                 if n else "No token budget for this run.", "set")
-
-    # ----- Asking before actions -----
-    ASK_FIRST = {"ha": "any smart home action (Home Assistant, Homey or MQTT)", "messages": "sending messages and announcements",
-                 "files": "saving files", "all": "all of these"}
-
-    def ask_before(self, kind):
-        kinds = {"ha", "messages", "files"} if kind == "all" else {kind}
-        self.ask_first |= kinds
-        self.log("Ask first", "From now on, the program asks you before " + self.ASK_FIRST.get(kind, kind) + ".", "set")
-
-    async def _allowed(self, kinds, what):
-        """True if the action may go ahead. Asks first when an 'ask me before' block covers it."""
-        if not (self.ask_first & set(kinds)):
-            return True
-        return await self.confirm(what)
-
-    async def confirm(self, what):
-        """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no."""
-        if self.schedule_mode and not sys.stdin.isatty():
-            self.log("Not done", what + " needs your approval, and nobody is at the keyboard.", "refused")
-            return False
-        if await self.approve("Allow this? " + what):
-            return True
-        self.log("Not done", what + " was refused, so nothing happened.", "refused")
-        return False
-
-    # ----- Resuming after a stop -----
-    # While a program runs, each finished model call, each answer you give and each message or Home Assistant action is
-    # written to a journal next to the program. A run that finishes deletes it. If a run stops part-way, the next start
-    # can replay it: the blocks run again from the top, and every step that matches the journal is reused instead of
-    # repeated (no new tokens, no asking twice, nothing sent twice). At the first step that differs, the rest runs live.
-    def _journal_path(self):
-        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
-        if not prog or not os.path.isfile(prog):
-            return None, None
-        with open(prog, "rb") as f:
-            digest = hashlib.sha256(f.read()).hexdigest()[:16]
-        base = os.path.splitext(os.path.basename(prog))[0]
-        return os.path.join(os.path.dirname(prog), f".{base}.resume.jsonl"), digest
-
-    async def _journal_start(self):
-        """At the start of a run: offer to pick up a run that stopped, then start a fresh journal."""
-        self.journal, self.replay, self.replay_pos, self._replay_noted = None, None, 0, False
-        path, digest = self._journal_path()
-        if not path:
-            return
-        old = []
-        if os.path.isfile(path):
-            try:
-                with open(path, encoding="utf-8") as f:
-                    lines = [json.loads(l) for l in f if l.strip()]
-                if lines and lines[0].get("program") == digest:
-                    old = lines[1:]
-                elif lines:
-                    print("\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)", flush=True)
-            except (OSError, ValueError):
-                old = []
-        if old:
-            choice = os.environ.get("RB_RESUME", "").strip().lower()
-            if choice in ("1", "yes", "true", "on"):
-                use = True
-            elif choice in ("0", "no", "false", "off"):
-                use = False
-            elif sys.stdin.isatty():
-                print(f"\n? The last run stopped part-way, after {len(old)} saved step{'s' if len(old) != 1 else ''}.", flush=True)
-                use = (await self._input("Pick up where it stopped, reusing those? [y/n] > ")).strip().lower() in ("y", "yes")
-            else:
-                use = False
-                print("\n(The last run stopped part-way. Set resume = yes in second-thought.ini to pick up where it stopped.)", flush=True)
-            if use:
-                self.replay = old
-                self.log("Resuming", f"Picking up the run that stopped: {len(old)} saved step{'s' if len(old) != 1 else ''} will be "
-                         "reused instead of repeated.", "resume")
-        try:
-            self.journal = open(path, "w", encoding="utf-8")
-            self.journal.write(json.dumps({"program": digest, "started": time.time()}) + "\n")
-            self.journal.flush()
-        except OSError:
-            self.journal = None
-        self._journal_file = path
-
-    def _journal_end(self, finished):
-        if self.journal:
-            self.journal.close()
-            self.journal = None
-            if finished:
-                try:
-                    os.remove(self._journal_file)
-                except OSError:
-                    pass
-            else:
-                print("Run the program again to pick up where it stopped.", flush=True)
-
-    @staticmethod
-    def _key(*parts):
-        return hashlib.sha256(json.dumps(parts, default=str, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()[:20]
-
-    def _replayed(self, kind, key):
-        """(True, value) if the next saved step is this one; otherwise (False, None), and replaying ends at the first difference."""
-        if self.replay is None:
-            return False, None
-        if self.replay_pos < len(self.replay):
-            e = self.replay[self.replay_pos]
-            if e.get("kind") == kind and e.get("key") == key:
-                self.replay_pos += 1
-                self._record(kind, key, e.get("value"))
-                if self.replay_pos == len(self.replay):
-                    self.replay = None
-                    self.log("Caught up", "That was the last saved step. From here the run carries on as usual.", "resume", calls=False)
-                return True, e.get("value")
-            self.log("Run differs here", "From this step the run isn't the same as the one that stopped, so the rest runs afresh.",
-                     "resume", calls=False)
-        self.replay = None
-        return False, None
-
-    def _record(self, kind, key, value):
-        if self.journal:
-            try:
-                line = json.dumps({"kind": kind, "key": key, "value": value}, ensure_ascii=False)
-            except (TypeError, ValueError):
-                return  # something that can't be saved (a picture): that step will simply run again
-            self.journal.write(line + "\n")
-            self.journal.flush()
-
-    async def _call(self, prompt, want_json=False, picture=None, history=None, web=False):
-        key = self._key("call", self.current_tier, to_str(prompt), want_json, history, web, self.instructions,
-                        hashlib.sha256(picture.data).hexdigest() if isinstance(picture, Picture) else None)
-        hit, v = self._replayed("call", key)
-        if hit:
-            self._pending.append({"who": "reused from the run that stopped", "secs": 0.0, "in": 0, "out": 0, "ok": True, "prompt": to_str(prompt)})
-            return v
-        out = await self._call_live(prompt, want_json, picture, history, web)
-        self._record("call", key, out if want_json else to_str(out))
-        return out
-
-    async def _journaled(self, kind, key, live):
-        hit, v = self._replayed(kind, key)
-        if hit:
-            return v
-        out = await live()
-        self._record(kind, key, out)
-        return out
-
-    async def ask_me(self, q):
-        out = await self._journaled("ask_me", self._key(to_str(q)), lambda: self._ask_me_live(q))
-        self.answer = out
-        return out
-
-    async def approve(self, text):
-        return await self._journaled("approve", self._key(to_str(text)), lambda: self._approve_live(text))
-
-    async def choose(self, items):
-        return await self._journaled("choose", self._key(to_list(items)), lambda: self._choose_live(items))
-
-    async def choose_file(self):
-        return await self._journaled("choose_file", self._key("file"), self._choose_file_live)
-
-    async def ha_call(self, service, entity, data_text=""):
-        key = self._key(to_str(service), to_str(entity), to_str(data_text))
-        hit, v = self._replayed("ha_call", key)
-        if hit:
-            self.log("Home Assistant: " + to_str(service).strip(), f"{to_str(entity)}: already done before the stop, so not done again.", "reused")
-            return v
-        out = await self._ha_call_live(service, entity, data_text)
-        self._record("ha_call", key, out)
-        return out
-
-    async def ha_notify(self, target, text):
-        key = self._key(to_str(target), to_str(text))
-        hit, _ = self._replayed("ha_notify", key)
-        if hit:
-            self.log("Notification → " + (to_str(target).strip() or "persistent_notification"), "Already sent before the stop, so not sent again.", "reused")
-            return
-        await self._ha_notify_live(target, text)
-        self._record("ha_notify", key, True)
-
-    async def ha_speak(self, text, player):
-        key = self._key(to_str(text), to_str(player))
-        hit, _ = self._replayed("ha_speak", key)
-        if hit:
-            self.log("Spoken on " + (to_str(player).strip() or "a speaker"), "Already said before the stop, so not said again.", "reused")
-            return
-        await self._ha_speak_live(text, player)
-        self._record("ha_speak", key, True)
-
-    async def _call_live(self, prompt, want_json=False, picture=None, history=None, web=False):
-        if self.ending:
-            raise asyncio.CancelledError()
-        self.calls += 1
-        if self.calls > MAX_AI_CALLS:
-            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
-        if self.budget and self.tokens_used() >= self.budget:
-            raise RunError(f"Stopped: this run has used {self.tokens_used():,} tokens, which reaches its budget of {self.budget:,}. "
-                           "Raise the number in the 'limit this run' block (or budget in second-thought.ini).")
-        tier = self.current_tier
-        # Backups stand in for the primary model only. A block that names its own model keeps that model.
-        tiers = [tier] + (self.backups if tier == self.primary else [])
-        last = None
-        for n, t in enumerate(tiers):
-            if n:
-                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn", calls=False)
-            try:
-                text = await self._timed_call(t, prompt, want_json, picture, history, web)
-            except (asyncio.CancelledError, Finish):
-                raise
-            except Exception as e:  # no key, out of credit, service down: try the next backup
-                last = e
-                continue
-            if n:
-                self.backup_used = self.backup_used + 1
-            if not want_json:
-                if getattr(text, "truncated", False):
-                    text = await self._continue(t, prompt, text, history, web)
-                return text
-            schema = want_json if isinstance(want_json, dict) else None
-            try:
-                return self._read_json(text, schema)
-            except BadJSON as e:
-                # One more try on the same model, showing it what went wrong. Counts as a call like any other.
-                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair", calls=False)
-                self.calls += 1
-                if self.calls > MAX_AI_CALLS:
-                    raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
-                fix = await self._timed_call(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
-                                            "\nPrevious reply:\n" + _short(text, 2000) +
-                                            "\n\nReply again with only the corrected JSON.", want_json, picture, history, web)
-                return self._read_json(fix, schema)
-        if len(tiers) > 1:
-            both = "its backup" if len(tiers) == 2 else f"all {len(tiers) - 1} backups"
-            msg = f"The primary model and {both} failed. Last error: {last}"
-            raise (Retryable if isinstance(last, Retryable) else RunError)(msg) from last
-        raise last
-
-    async def _continue(self, tier, prompt, text, history, web):
-        """A reply cut off by the length limit: ask once for the rest, on the same model, and join the two parts."""
-        self.log("Reply continued", "The reply reached the length limit, so the model was asked to carry on from where it stopped.",
-                 "continued", calls=False)
-        self.calls += 1
-        if self.calls > MAX_AI_CALLS:
-            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
-        turns = (history or []) + [{"role": "user", "content": to_str(prompt)}, {"role": "assistant", "content": to_str(text)}]
-        more = await self._timed_call(tier, CONTINUE_PROMPT, False, None, turns, web)
-        joined = to_str(text) + to_str(more)  # the continuation picks up exactly where the first part stopped
-        if getattr(more, "truncated", False):
-            self.out_of_rounds_hit = True
-            self.log("Cut short", "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. "
-                     "Ask for something shorter, or split the job into smaller steps.", "warn", calls=False)
-        return joined
-
-    @staticmethod
-    def _read_json(text, schema):
-        """Parses a reply and checks it against the schema. Raises BadJSON with a plain reason."""
-        v = _parse_json(text)
-        if schema:
-            v = _fit(v, schema)
-            bad = _shape_problem(v, schema)
-            if bad:
-                raise BadJSON(f"The reply didn't have the expected shape: {bad}.")
-        return v
-
-    async def _call_tier(self, tier, prompt, want_json, picture, history, web):
-        """One model call on one tier. Returns the reply text."""
-        schema = want_json if isinstance(want_json, dict) else None
-        if tier.startswith("gemini-"):
-            text = await self._call_gemini(MODELS.get(tier, MODELS["gemini-default"]), prompt, picture, history, web, schema)
-            who = "Gemini"
-        elif tier.startswith("perplexity-"):
-            text, sources = await self._call_perplexity(MODELS.get(tier, MODELS["perplexity-default"]), prompt, picture, history)
-            who = "Perplexity"
-            if text and sources and not want_json:
-                text += "\n\nSources:\n" + "\n".join(sources)
-        elif tier.startswith("openrouter:"):
-            who = "OpenRouter"
-            text = await self._call_openai(who, tier.split(":", 1)[1].strip() or MODELS["openrouter-default"], prompt, picture, history, web, schema)
-        elif any(tier.startswith(pv["prefix"]) for pv in PROVIDERS.values()):
-            pv = next(pv for pv in PROVIDERS.values() if tier.startswith(pv["prefix"]))
-            who = pv["name"]
-            text = await self._call_openai(who, MODELS.get(tier, MODELS.get(pv["prefix"] + "default")), prompt, picture, history, web, schema)
-        else:
-            text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web, schema)
-            who = "Claude"
-        if not text:
-            raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
-        return text
-
-    async def _call_claude(self, model, prompt, picture, history, web, schema=None):
-        if self.client is None:
-            if not os.environ.get("ANTHROPIC_API_KEY"):
-                raise RunError(f"Claude needs a key. Put ANTHROPIC_API_KEY = your-key {WHERE_KEYS} (https://console.anthropic.com).")
-            self.client = _anthropic_client(timeout=CALL_TIMEOUT, max_retries=2)
-        args = dict(model=model, max_tokens=MAX_TOKENS,
-                    messages=(history or []) + [{"role": "user", "content": self._content(prompt, picture)}])
-        if self.instructions:
-            args["system"] = self.instructions
-        if web:
-            args["tools"] = [WEB_SEARCH_TOOL]
-        if schema and not web and model not in self.no_schema:
-            # Structured outputs: Claude can only write JSON of this shape. https://platform.claude.com/docs/en/build-with-claude/structured-outputs
-            args["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
-        try:
-            msg = await (self._claude_stream(args) if "output_config" not in args and self._streaming() else self.client.messages.create(**args))
-        except Exception as e:  # noqa: BLE001
-            if "output_config" not in args or getattr(e, "status_code", None) != 400:
-                raise
-            # This model or account won't take the shape: ask without it (the reply is still checked), and stop sending it.
-            self.no_schema.add(model)
-            self.log("Structured replies", f"{model} wouldn't accept a reply shape ({_short(str(e), 160)}), so its replies "
-                     "are checked after they arrive instead.", "note")
-            del args["output_config"]
-            msg = await self.client.messages.create(**args)
-        usage = getattr(msg, "usage", None)
-        self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
-        text = "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
-        return Reply(text, getattr(msg, "stop_reason", None) in ("max_tokens", "model_context_window_exceeded"))
-
-    @staticmethod
-    def _streaming():
-        """Stream Claude's text replies? stream = yes/no in second-thought.ini; by default only in an interactive terminal."""
-        v = os.environ.get("RB_STREAM", "").strip().lower()
-        if v in ("1", "yes", "true", "on"):
-            return True
-        if v in ("0", "no", "false", "off"):
-            return False
-        return sys.stdout.isatty()
-
-    async def _claude_stream(self, args):
-        """Streams one reply, showing a single progress line that's cleared when it's done. Returns the final message."""
-        written, shown, width = 0, 0.0, 0
-        async with self.client.messages.stream(**args) as stream:
-            async for chunk in stream.text_stream:
-                written += len(chunk)
-                if time.monotonic() - shown > 0.1:
-                    shown = time.monotonic()
-                    line = f"    … writing: {written:,} characters"
-                    width = max(width, len(line))
-                    sys.stdout.write("\r" + line)
-                    sys.stdout.flush()
-            msg = await stream.get_final_message()
-        if width:
-            sys.stdout.write("\r" + " " * width + "\r")
-            sys.stdout.flush()
-        return msg
-
-    async def _openai_json(self, provider, model, body, schema):
-        """Asks for JSON the strongest way this service accepts: the full shape (json_schema), then any JSON
-        (json_object), then plain. What works is remembered, and the reply is still checked afterwards."""
-        mode = self.json_modes.get((provider, model), "schema") if schema else "none"
-        while True:
-            if mode == "schema":
-                body["response_format"] = {"type": "json_schema", "json_schema": {"name": "reply", "schema": schema, "strict": False}}
-            elif mode == "object":
-                body["response_format"] = {"type": "json_object"}
-            else:
-                body.pop("response_format", None)
-            try:
-                return await asyncio.to_thread(self._openai_request, provider, body)
-            except RunError as e:
-                if mode == "none" or not ("(400)" in str(e) or "(422)" in str(e)):
-                    raise
-                mode = self.JSON_MODES[self.JSON_MODES.index(mode) + 1]
-                self.json_modes[(provider, model)] = mode
-                self.log("Structured replies", f"{provider} ({model}) wouldn't take that JSON mode, so it's asked "
-                         + ("for plain JSON instead." if mode == "object" else "without one, and its replies are checked after they arrive."),
-                         "note", calls=False)
-
-    @staticmethod
-    def _openai_request(provider, body, path="/chat/completions"):
-        """One request to a model service that speaks OpenAI's format (Ollama, DeepSeek, xAI, OpenAI, Mistral, ...)."""
-        pv = PROVIDERS[provider]
-        if pv["signup"] and not pv["key"]:
-            raise RunError(f"This program uses {provider}. Put {pv['key_env']} = your-key {WHERE_KEYS} ({pv['signup']}).")
-        headers = {"Content-Type": "application/json", **pv["headers"]}
-        if pv["key"]:
-            headers["Authorization"] = "Bearer " + pv["key"]
-        req = urllib.request.Request(pv["base"] + path, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
-        try:
-            with urllib.request.urlopen(req, timeout=CALL_TIMEOUT) as r:
-                return json.loads(r.read())
-        except urllib.error.HTTPError as e:
-            detail = e.read().decode("utf-8", "replace")[:200]
-            if provider == "Llama" and e.code == 404 and "model" in detail.lower():
-                raise RunError(f"The Llama server doesn't have model {body['model']}. Run:  ollama pull {body['model']}")
-            if e.code == 401:
-                raise RunError(f"{provider} refused the API key (401). Check {pv['key_env']}.")
-            if e.code == 402:
-                raise RunError(f"{provider} says the account has no credit left (402).")
-            if e.code in (400, 403, 404, 422):
-                raise RunError(f"{provider} refused the request ({e.code}): {detail}")
-            raise Retryable(f"{provider} answered {e.code}: {detail}")
-        except (urllib.error.URLError, TimeoutError, OSError) as e:
-            hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
-            raise Retryable(f"Couldn't reach {provider} at {pv['base']} ({getattr(e, 'reason', e)}).{hint}")
-
-    JSON_MODES = ("schema", "object", "none")
-
-    async def _call_openai(self, provider, model, prompt, picture, history, web, schema=None):
-        messages = [{"role": "system", "content": self.instructions}] if self.instructions else []
-        messages += [{"role": t["role"], "content": to_str(t["content"])} for t in history or []]
-        if web:
-            prompt = "You can't browse the web, so answer from what you know and say clearly that it may be out of date.\n\n" + prompt
-        if picture is not None and picture.svg is None:
-            if model in NO_VISION:
-                raise RunError(f"{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.")
-            if provider in VISION_MODELS and model != VISION_MODELS[provider]:
-                model = VISION_MODELS[provider]  # this service's text models can't see; this one can
-            url = "data:" + picture.media_type + ";base64," + base64.b64encode(picture.data).decode("ascii")
-            content = [{"type": "text", "text": prompt}, {"type": "image_url", "image_url": {"url": url}}]
-        else:
-            content = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
-        messages.append({"role": "user", "content": content})
-        body = {"model": model, "messages": messages, "stream": False}
-        if provider == "OpenAI":
-            # OpenAI's newer models refuse max_tokens, and spend part of the budget thinking before they answer.
-            body["max_completion_tokens"] = MAX_TOKENS * 4
-        else:
-            body["max_tokens"] = MAX_TOKENS
-        if provider == "Qwen":
-            body["enable_thinking"] = False  # Qwen only thinks out loud when streaming
-        data = await self._openai_json(provider, model, body, schema)
-        usage = data.get("usage") or {}
-        self._count(provider, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
-        try:
-            text = data["choices"][0]["message"]["content"] or ""
-            cut = data["choices"][0].get("finish_reason") == "length"
-            return Reply(re.sub(r"<think>.*?</think>\s*", "", text, flags=re.S).strip(), cut)  # some models think out loud first
-        except (KeyError, IndexError, TypeError, AttributeError):
-            return ""
-
-    async def _call_perplexity(self, preset, prompt, picture, history):
-        """Perplexity's Agent API: searches the web, then answers with numbered sources."""
-        if picture is not None and picture.svg is None:
-            raise RunError("Perplexity can't look at photos here. Use Claude, GPT or Gemini for this step.")
-        if picture is not None:
-            prompt += "\n\nThe picture is this SVG drawing:\n" + picture.svg
-        if history:
-            past = "\n\n".join(("Me: " if t["role"] == "user" else "You: ") + to_str(t["content"]) for t in history)
-            prompt = "Our conversation so far:\n\n" + past + "\n\nNow:\n" + prompt
-        body = {"preset": preset, "input": prompt}
-        if self.instructions:
-            body["instructions"] = self.instructions
-        data = await asyncio.to_thread(self._openai_request, "Perplexity", body, "/v1/agent")
-        usage = data.get("usage") or {}
-        self._count("Perplexity", usage.get("input_tokens", 0), usage.get("output_tokens", 0))
-        text, sources, seen = data.get("output_text") or "", [], set()
-        for item in data.get("output") or []:
-            if item.get("type") == "message" and not data.get("output_text"):
-                text += "".join(c.get("text", "") for c in item.get("content") or [] if c.get("type") == "output_text")
-            if item.get("type") == "search_results":
-                for res in item.get("results") or []:
-                    if res.get("url") and res["url"] not in seen:
-                        seen.add(res["url"])
-                        sources.append(f"[{res.get('id', len(sources) + 1)}] {res.get('title') or res['url']}: {res['url']}")
-        return text.strip(), sources
-
-    async def _call_gemini(self, model, prompt, picture, history, web, schema=None):
-        try:
-            from google import genai
-            from google.genai import types
-        except ImportError:
-            raise RunError("This program uses Gemini. Install its package first:  pip install google-genai")
-        if self.gemini is None:
-            if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
-                raise RunError(f"Gemini needs a key. Put GEMINI_API_KEY = your-key {WHERE_KEYS} (https://aistudio.google.com).")
-            self.gemini = genai.Client()
-        contents = []
-        for turn in history or []:
-            maker = types.UserContent if turn["role"] == "user" else types.ModelContent
-            contents.append(maker(parts=[types.Part.from_text(text=to_str(turn["content"]))]))
-        if picture is not None and picture.svg is None:
-            parts = [types.Part.from_bytes(data=picture.data, mime_type=picture.media_type), types.Part.from_text(text=prompt)]
-        else:
-            text = prompt + ("\n\nThe picture is this SVG drawing:\n" + picture.svg if picture is not None else "")
-            parts = [types.Part.from_text(text=text)]
-        contents.append(types.UserContent(parts=parts))
-        json_out = bool(schema) and not web and self.json_modes.get(("Gemini", model)) != "none"
-        config = types.GenerateContentConfig(
-            system_instruction=self.instructions or None,
-            max_output_tokens=MAX_TOKENS,
-            tools=[types.Tool(google_search=types.GoogleSearch())] if web else None,
-            **({"response_mime_type": "application/json"} if json_out else {}),  # Gemini then writes only JSON
-        )
-        try:
-            resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
-        except Exception as e:  # noqa: BLE001
-            if not json_out or (getattr(e, "code", None) or getattr(e, "status_code", None)) not in (400, 422):
-                raise
-            self.json_modes[("Gemini", model)] = "none"
-            self.log("Structured replies", f"Gemini ({model}) wouldn't take JSON mode, so its replies are checked after they arrive.",
-                     "note", calls=False)
-            config.response_mime_type = None
-            resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
-        um = getattr(resp, "usage_metadata", None)
-        self._count("Gemini",
-                    getattr(um, "prompt_token_count", None) or getattr(um, "input_tokens", 0),
-                    getattr(um, "candidates_token_count", None) or getattr(um, "output_tokens", 0))
-        try:
-            cands = getattr(resp, "candidates", None) or []
-            cut = bool(cands) and "MAX_TOKENS" in str(getattr(cands[0], "finish_reason", ""))
-            return Reply((resp.text or "").strip(), cut)
-        except ValueError:  # blocked or empty candidate
-            return ""
-
-    @staticmethod
-    def _content(prompt, picture):
-        if picture is None:
-            return prompt
-        if picture.svg is not None:
-            return prompt + "\n\nThe picture is this SVG drawing:\n" + picture.svg
-        return [{"type": "image", "source": {"type": "base64", "media_type": picture.media_type,
-                                             "data": base64.b64encode(picture.data).decode("ascii")}},
-                {"type": "text", "text": prompt}]
-
-    async def ask_text(self, p):
-        p = to_str(p)
-        if not p.strip():
-            raise RunError("An 'ask Claude' block is empty.")
-        out = await self._call("Answer the request below. Reply with only the answer, no preamble.\n\n" + p)
-        self.log("Ask Claude: " + _short(p, 60), out, "done")
-        return out
-
-    async def ask_yesno(self, p):
-        p = to_str(p)
-        if not p.strip():
-            raise RunError("A yes/no block is empty.")
-        r = await self._call('Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, SCHEMAS["yesno"])
-        yes = r["answer"] is True
-        self.log("Yes or no: " + _short(p, 60), "Yes" if yes else "No", "done")
-        return yes
-
-    async def ask_number(self, p):
-        p = to_str(p)
-        if not p.strip():
-            raise RunError("An 'ask for a number' block is empty.")
-        r = await self._call('Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, SCHEMAS["number"])
-        n = num(r["number"])
-        self.log("Number: " + _short(p, 60), n, "done")
-        return n
-
-    async def ask_list(self, p):
-        p = to_str(p)
-        if not p.strip():
-            raise RunError("An 'ask for a list' block is empty.")
-        r = await self._call('Reply with only JSON: {"items": [<short strings>]}, no other text.\n\nRequest:\n' + p, SCHEMAS["list"])
-        items = [to_str(i) for i in r["items"] if to_str(i)]
-        self.log("List: " + _short(p, 60), "\n".join("- " + i for i in items) or "(empty list)", f"{len(items)} items")
-        return items
-
-    async def rewrite(self, text, how):
-        text, how = to_str(text), to_str(how)
-        if not text.strip():
-            raise RunError("A 'rewrite' block has nothing to rewrite.")
-        out = await self._call("Rewrite the text below. Instruction: " + how + "\nReply with only the rewritten text.\n\nText:\n" + text)
-        self.log("Rewrite: " + _short(how, 60), out, "done")
-        return out
-
-    async def extract(self, what, text):
-        what, text = to_str(what), to_str(text)
-        if not text.strip():
-            raise RunError("An 'extract' block has no text to read.")
-        out = await self._call("From the text below, extract: " + what + "\nReply with only what you extracted, nothing else.\n\nText:\n" + text)
-        self.log("Extract: " + _short(what, 60), out, "done")
-        return out
-
-    async def score(self, text, criteria):
-        text, criteria = to_str(text), to_str(criteria)
-        r = await self._call("Score the text from 1 to 10 against these criteria: " + criteria +
-                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + text, SCHEMAS["score"])
-        s = max(0, min(10, num(r["score"])))
-        self.log("Score: " + _short(text, 50), f"{s}/10", "done")
-        return s
-
-    async def better(self, a, b, criteria):
-        a, b, criteria = to_str(a), to_str(b), to_str(criteria)
-        r = await self._call("Which text is better for: " + criteria +
-                             '?\nReply with only JSON: {"pick": 1 or 2, "reason": "<one sentence>"}.\n\nText 1:\n' + a + "\n\nText 2:\n" + b, SCHEMAS["pick"])
-        second = num(r["pick"]) == 2
-        self.log("Pick the better one", ("Picked the second" if second else "Picked the first") +
-                 (". " + to_str(r.get("reason")) if r.get("reason") else ""), "done")
-        return b if second else a
-
-    # ----- Conversations, instructions, web search -----
-    def set_instructions(self, text):
-        self.instructions = to_str(text).strip()
-        self.log("Instructions for Claude", self.instructions or "(cleared)", "set")
-
-    async def chat(self, name, message):
-        key = to_str(name).strip().lower() or "chat"
-        message = to_str(message).strip()
-        if not message:
-            raise RunError("The 'chat' block has no message.")
-        hist = self.chats.setdefault(key, [])
-        reply = await self._call(message, history=list(hist))
-        hist += [{"role": "user", "content": message}, {"role": "assistant", "content": reply}]
-        del hist[:-40]
-        self.log(f"Chat {to_str(name).strip()}: " + _short(message, 50), reply, f"turn {len(hist) // 2}")
-        return reply
-
-    def chat_reset(self, name):
-        self.chats.pop(to_str(name).strip().lower(), None)
-        self.log("Conversation " + to_str(name).strip(), "Starting afresh.", "reset")
-
-    async def web_search(self, q):
-        q = to_str(q).strip()
-        if not q:
-            raise RunError("The 'search the web' block is empty.")
-        out = await self._call("Search the web and answer briefly, listing the sources you used as plain URLs at the end.\n\nQuery: " + q,
-                               web=True)
-        self.log("Web search: " + _short(q, 50), out, "done")
-        return out
-
-    # ----- Records -----
-    async def ask_record(self, fields, prompt, many=False):
-        fields, prompt = field_list(fields), to_str(prompt).strip()
-        if not fields:
-            raise RunError("Give the record's fields, separated by commas.")
-        if not prompt:
-            raise RunError("The 'ask Claude for a record' block has no request.")
-        shape = "{" + ", ".join(json.dumps(f) + ": ..." for f in fields) + "}"
-        r = await self._call(('Reply with only JSON: {"items": [<objects, each shaped like ' + shape + '>]}' if many else "Reply with only one JSON object shaped like " + shape) +
-                             ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + prompt, record_schema(fields, many))
-        if many:
-            recs = [to_record(o, fields) for o in r["items"]]
-            self.log("Records: " + _short(prompt, 55), "\n".join(" · ".join(f"{f}: {_short(x[f], 40)}" for f in fields) for x in recs), f"{len(recs)} records")
-            return recs
-        rec = to_record(r, fields)
-        self.log("Record: " + _short(prompt, 55), to_str(rec), "done")
-        return rec
-
-    # ----- Prompt library -----
-    def prompt(self, name):
-        text = PROMPTS.get(to_str(name).strip().lower()) if "PROMPTS" in globals() else None
-        if text is None:
-            raise RunError(f"There's no prompt called “{name}” in this program's prompt library.")
-        return text
-
-    # ----- Files -----
-    async def _choose_file_live(self):
-        print("\n? Choose a file: type the path to a PDF, a .docx, or a text file (.txt, .md, .csv, .json ...).", flush=True)
-        while True:
-            path = (await self._input("Path > ")).strip().strip('"').strip("'")
-            if not os.path.isfile(path):
-                print("  That file doesn't exist. Try again.")
-                continue
-            if os.path.getsize(path) > 25 * 1024 * 1024:
-                print("  That file is over 25 MB. Choose a smaller one.")
-                continue
-            try:
-                text = read_text_file(path)
-            except RunError as e:
-                print("  " + str(e))
-                continue
-            if not text.strip():
-                print("  No text could be found in that file. A scanned PDF holds pictures of pages, not text.")
-                continue
-            self.log("Chose file", f"{path} \u00b7 {len(text):,} characters", "chosen")
-            return text
-
-    async def save_file(self, value, name, ext):
-        if isinstance(value, Picture):
-            raise RunError("To save a picture, use the 'save picture' block.")
-        if ext == "json" and not isinstance(value, str):
-            text = json.dumps(value, default=str, indent=2, ensure_ascii=False)
-        elif ext == "csv" and isinstance(value, list):
-            text = "\n".join(",".join('"' + to_str(c).replace('"', '""') + '"' for c in r) if isinstance(r, list) else to_str(r) for r in value)
-        else:
-            text = to_str(value)
-        if not text:
-            raise RunError("There's nothing to save: the value in the 'save as file' block is empty.")
-        base = re.sub(r"[^\w\-]+", "-", to_str(name)).strip("-") or "output"
-        path = os.path.join(OUTPUT_DIR, f"{base}.{ext}")
-        if not await self._allowed(["files"], f"save {path} ({len(text):,} characters)"):
-            return
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(text)
-        self.log("Save file", "Saved " + path, "saved")
-
-    def result_text(self):
-        items = self.result if self.result else ([self.draft] if self.draft else [])
-        return "\n\n".join(items)
-
-    # ----- Errors and retries -----
-    @staticmethod
-    def _describe(e):
-        return str(e) if isinstance(e, RunError) else f"{type(e).__name__}: {e}"
-
-    def failed(self, e):
-        self.last_error = self._describe(e)
-        self.log("Something failed, so the 'if it fails' part ran", self.last_error, "handled")
-
-    @staticmethod
-    def attempts(n):
-        return max(1, min(10, round_js(num(n)) or 1))
-
-    async def retry_or_raise(self, e, attempt, max_tries):
-        self.last_error = self._describe(e)
-        status = getattr(e, "status_code", None) or getattr(e, "code", None)
-        transient = isinstance(e, Retryable) or (type(e).__module__.startswith(("anthropic", "google")) and
-                                                 not (isinstance(status, int) and status in (400, 401, 403, 404)))
-        if not transient:
-            raise e
-        if attempt >= max_tries:
-            self.log(f"Gave up after {attempt} tries", self.last_error, "failed")
-            raise e
-        wait = 2 * attempt
-        self.log("Retrying", f"Try {attempt} of {max_tries} failed: {self.last_error}\nTrying again in {wait}s.", f"retry {attempt + 1}")
-        await asyncio.sleep(wait)
-
+class Connections:
+    """Home Assistant, the connections (feeds, GitHub, Telegram, email, chat, MQTT, Homey) and listeners. Part of Runtime."""
     # ----- Home Assistant -----
     def _ha_request(self, method, path, body=None, raw=False):
         if not HA_TOKEN:
@@ -2423,552 +1888,6 @@ class Runtime:
                         self._fire(fn, dict(rec), "Home Assistant: " + kind)
         finally:
             ws.close()
-
-    # ----- Memory -----
-    @staticmethod
-    def _mem_key(name):
-        key = to_str(name).strip().lower()
-        if not key:
-            raise RunError("A memory block has no name. Type a name into its name slot.")
-        return key
-
-    def _mem_load(self):
-        try:
-            with open(MEMORY_FILE, encoding="utf-8") as f:
-                data = json.load(f)
-        except (OSError, ValueError):
-            return {}
-        now = time.time() * 1000
-        return {k: v for k, v in data.items() if not (v.get("expires") and v["expires"] <= now)}
-
-    def _mem_save(self, data):
-        _write_json(MEMORY_FILE, data, indent=1)
-
-    @staticmethod
-    def _storable(v):
-        if isinstance(v, Picture):
-            raise RunError("Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.")
-        if isinstance(v, list):
-            return [Runtime._storable(x) for x in v]
-        if v is None:
-            return ""
-        return v if isinstance(v, (str, int, float, bool)) else to_str(v)
-
-    def _mem_write(self, name, value, kind, expires=None):
-        with _locked(MEMORY_FILE):  # read, change and save as one step, so another program's save isn't lost
-            self._mem_write_now(name, value, kind, expires)
-
-    def _mem_write_now(self, name, value, kind, expires):
-        key = self._mem_key(name)
-        if kind == "transient":
-            self.transient_memory[key] = {"name": to_str(name).strip(), "value": value}
-            data = self._mem_load()
-            if key in data:
-                del data[key]
-                self._mem_save(data)
-            return
-        self.transient_memory.pop(key, None)
-        data = self._mem_load()
-        data[key] = {"name": to_str(name).strip(), "value": self._storable(value), "kind": kind,
-                     "expires": expires, "updated": int(time.time() * 1000)}
-        self._mem_save(data)
-
-    def _mem_entry(self, key):
-        if key in self.transient_memory:
-            return self.transient_memory[key], "transient"
-        e = self._mem_load().get(key)
-        return (e, "saved") if e else (None, None)
-
-    def remember(self, value, name, kind="transient"):
-        self._mem_write(name, value, kind)
-        self.log("Remembered \u201c" + to_str(name).strip() + "\u201d", _short(value, 120) + "  \u00b7  " +
-                 ("while running" if kind == "transient" else "forever"), "saved")
-
-    def remember_for(self, value, name, n, unit):
-        ms = min(365 * 86400000, max(0, num(n)) * {"m": 60000, "h": 3600000, "d": 86400000}.get(unit, 86400000))
-        if not ms:
-            raise RunError("A 'remember for' block needs a time above zero.")
-        expires = int(time.time() * 1000 + ms)
-        self._mem_write(name, value, "permanent", expires)
-        until = datetime.datetime.fromtimestamp(expires / 1000).strftime("%a %d %b %H:%M")
-        self.log("Remembered \u201c" + to_str(name).strip() + "\u201d", _short(value, 120) + "  \u00b7  until " + until, "saved")
-
-    def remember_add(self, value, name, kind="transient"):
-        key = self._mem_key(name)
-        with _locked(MEMORY_FILE):  # the list is read and saved under one lock, so two programs adding at once both count
-            cur, where = self._mem_entry(key)
-            items = []
-            if cur:
-                items = list(cur["value"]) if isinstance(cur["value"], list) else ([] if cur["value"] == "" else [cur["value"]])
-            items.append(value)
-            if cur and where == "saved":
-                self._mem_write(name, items, "permanent", cur.get("expires"))
-            else:
-                self._mem_write(name, items, "transient" if cur else kind)
-        self.log("Added to \u201c" + to_str(name).strip() + "\u201d", f"{len(items)} items", "saved")
-
-    def recall(self, name):
-        e, _ = self._mem_entry(self._mem_key(name))
-        if not e:
-            return ""
-        return list(e["value"]) if isinstance(e["value"], list) else e["value"]
-
-    def remembers(self, name):
-        return self._mem_entry(self._mem_key(name))[0] is not None
-
-    def forget(self, name):
-        key = self._mem_key(name)
-        self.transient_memory.pop(key, None)
-        with _locked(MEMORY_FILE):
-            data = self._mem_load()
-            if key in data:
-                del data[key]
-                self._mem_save(data)
-        self.log("Forgot \u201c" + to_str(name).strip() + "\u201d", None, "forgotten")
-
-    def memory_names(self):
-        names = {v["name"] for v in self.transient_memory.values()}
-        names |= {v["name"] for k, v in self._mem_load().items() if k not in self.transient_memory}
-        return sorted(names)
-
-    # ----- Pictures -----
-    _DRAW_RULES = ("Reply with only the SVG code, starting with <svg and ending with </svg>. Use a viewBox, flat shapes and solid fills. "
-                   "No scripts, no external images or fonts, no animation. Only add text if the description asks for it.")
-
-    def _save_file(self, pic, data=None, ext=None):
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
-        ext = ext or _EXT.get(pic.media_type, ".png")
-        base = re.sub(r"[^\w\-]+", "-", pic.name).strip("-") or "picture"
-        path = os.path.join(OUTPUT_DIR, base + ext)
-        i = 2
-        while os.path.exists(path):
-            path = os.path.join(OUTPUT_DIR, f"{base}-{i}{ext}")
-            i += 1
-        with open(path, "wb") as f:
-            f.write(data if data is not None else pic.data)
-        return path
-
-    def _picture_path(self, pic):
-        if not pic.path or not os.path.exists(pic.path):
-            pic.path = self._save_file(pic)
-        return pic.path
-
-    async def choose_picture(self):
-        print("\n? Choose a picture: type the path to a JPEG, PNG, WebP, GIF or SVG file.", flush=True)
-        while True:
-            path = (await self._input("Path > ")).strip().strip('"').strip("'")
-            ext = os.path.splitext(path)[1].lower()
-            if not os.path.isfile(path):
-                print("  That file doesn't exist. Try again.")
-                continue
-            if ext not in _MEDIA:
-                print("  That isn't a JPEG, PNG, WebP, GIF or SVG file.")
-                continue
-            with open(path, "rb") as f:
-                data = f.read()
-            name = os.path.splitext(os.path.basename(path))[0]
-            if ext == ".svg":
-                svg = clean_svg(data.decode("utf-8", "replace"))
-                if not svg:
-                    print("  That SVG file couldn't be read.")
-                    continue
-                pic = Picture(svg.encode("utf-8"), "image/svg+xml", name, svg)
-            else:
-                pic = Picture(data, _MEDIA[ext], name)
-            pic.path = path
-            self.log("Chose picture", path, "chosen")
-            return pic
-
-    async def _draw(self, prompt, label, picture=None):
-        out = await self._call(prompt, picture=picture)
-        svg = clean_svg(out)
-        if not svg:
-            raise Retryable("Claude's drawing came back in a form that can't be used. Run again, or simplify the description.")
-        pic = Picture(svg.encode("utf-8"), "image/svg+xml", None, svg)
-        self.log(label, "Saved to " + self._picture_path(pic), "drawn")
-        return pic
-
-    async def draw_picture(self, desc):
-        desc = to_str(desc).strip()
-        if not desc:
-            raise RunError("The 'draw a picture' block has no description.")
-        return await self._draw("Draw this as a single SVG illustration: " + desc + "\n" + self._DRAW_RULES, "Draw: " + _short(desc, 60))
-
-    async def change_picture(self, pic, how):
-        pic = _need_picture(pic, "change picture")
-        how = to_str(how).strip()
-        if not how:
-            raise RunError("The 'change picture' block has no change in it.")
-        if pic.svg is not None:
-            return await self._draw("Here is an SVG illustration:\n" + pic.svg + "\n\nRedraw it with these changes: " + how +
-                                    "\nKeep everything else the same. " + self._DRAW_RULES, "Change picture: " + _short(how, 60))
-        return await self._draw("Draw a new SVG illustration of the attached picture, with these changes: " + how + "\n" + self._DRAW_RULES,
-                                "Redraw as illustration: " + _short(how, 50), picture=pic)
-
-    async def ask_picture(self, q, pic):
-        q = to_str(q).strip()
-        pic = _need_picture(pic, "ask Claude about picture")
-        if not q:
-            raise RunError("The 'ask Claude about picture' block has no question.")
-        out = await self._call("Look at the attached picture and answer. Reply with only the answer, no preamble.\n\n" + q, picture=pic)
-        self.log("Look at picture: " + _short(q, 55), out, "done")
-        return out
-
-    async def score_picture(self, pic, criteria):
-        pic = _need_picture(pic, "score picture")
-        r = await self._call("Score the attached picture from 1 to 10 against these criteria: " + to_str(criteria) +
-                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', SCHEMAS["score"], picture=pic)
-        s = max(0, min(10, num(r["score"])))
-        self.log("Score picture: " + _short(criteria, 55), f"{s}/10", "done")
-        return s
-
-    def show_picture(self, pic):
-        pic = _need_picture(pic, "show picture")
-        self.log("Picture", self._picture_path(pic), "shown")
-
-    async def save_picture(self, pic, fmt):
-        pic = _need_picture(pic, "save picture")
-        if not await self._allowed(["files"], f"save the picture {pic.name}"):
-            return
-        if fmt == "svg":
-            if pic.svg is None:
-                raise RunError("Only drawn pictures can be saved as SVG. Choose PNG instead.")
-            path = self._save_file(pic, pic.svg.encode("utf-8"), ".svg")
-        elif fmt == "png" and pic.media_type != "image/png":
-            if pic.svg is not None:
-                try:
-                    import cairosvg  # optional: pip install cairosvg
-                    path = self._save_file(pic, cairosvg.svg2png(bytestring=pic.svg.encode("utf-8")), ".png")
-                except ImportError:
-                    path = self._save_file(pic, pic.svg.encode("utf-8"), ".svg")
-                    self.log("Save picture", "PNG needs the cairosvg package (pip install cairosvg), so it was saved as SVG.", "note")
-            else:
-                path = self._save_file(pic)
-        else:
-            path = self._save_file(pic)
-        self.log("Save picture", "Saved " + path, "saved")
-
-    # ----- Draft and Review -----
-    def set_task(self, t):
-        self.task = to_str(t).strip()
-        if not self.task:
-            raise RunError("The task is empty. Type what you want into 'set task to'.")
-        self.log("Task set", self.task, "set")
-
-    def _need_task(self):
-        if not self.task:
-            raise RunError("Add a 'set task to' block before this step.")
-
-    def _need_draft(self):
-        if not self.draft:
-            raise RunError("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.")
-
-    async def generate(self):
-        self._need_task()
-        self.draft = await self._call("Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + self.task)
-        self.problems, self.approved = [], None
-        self.log("Write a first draft", self.draft, "done")
-
-    async def rework(self, instr):
-        self._need_draft()
-        instr = to_str(instr).strip()
-        if not instr:
-            raise RunError("The 'rework the draft' block has no instruction.")
-        self.draft = await self._call("Rewrite the draft below following this instruction: " + instr +
-                                      "\nKeep it true to the original task. Reply with only the rewritten piece.\n\nTask:\n" +
-                                      (self.task or "(none given)") + "\n\nDraft:\n" + self.draft)
-        self.log("Rework: " + _short(instr, 60), self.draft, "done")
-
-    async def revise(self):
-        self._need_draft()
-        if not self.problems:
-            self.log("Revise", "No review problems recorded, so nothing to fix.", "skipped")
-            return
-        fixed = [e for e in (self.reflect or {}).get("earlier", []) if e not in self.problems]
-        keep = ("\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + "\n".join("- " + e for e in fixed)) if fixed else ""
-        self.draft = await self._call("Revise the draft so it fixes every problem listed. Change nothing else that works. "
-                                      "Reply with only the improved piece.\n\nTask:\n" + (self.task or "(none given)") +
-                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft)
-        self.log("Revise to fix the problems", self.draft, "revised")
-
-    def set_draft(self, t):
-        self.draft = to_str(t)
-
-    @contextlib.contextmanager
-    def reviewing(self):
-        """Around a 'review … up to N rounds' loop: remembers each round's problems and its best draft."""
-        before = self.reflect
-        self.reflect = {"earlier": [], "best": None, "round": 0}
-        try:
-            yield
-        finally:
-            self.reflect = before
-
-    async def review(self, criteria, label="Review", in_loop=False):
-        self._need_draft()
-        loop = self.reflect if in_loop else None
-        earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
-                   "and list it again if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
-        v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
-                             to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
-                             '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
-                             "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
-        approved = v["approved"] is True
-        problems = [to_str(p) for p in (v.get("problems") or [])]
-        self.approved = approved
-        self.problems = [] if approved else ([p for p in problems if p] or ["Does not yet meet the criteria."])
-        if loop is not None:
-            loop["round"] += 1
-            best = loop["best"]
-            if best is None or len(self.problems) <= best["n"]:  # a tie goes to the newer draft
-                loop["best"] = {"draft": self.draft, "problems": list(self.problems), "n": len(self.problems), "round": loop["round"]}
-            for p_ in self.problems:
-                if p_ not in loop["earlier"]:
-                    loop["earlier"].append(p_)
-            del loop["earlier"][:-12]
-        if approved:
-            self.log(label, "Meets every criterion.", "approved")
-        else:
-            self.log(label, "\n".join("- " + p for p in self.problems), "needs work")
-        return approved
-
-    def rounds(self, n):
-        return max(1, min(6, round_js(num(n)) or 3))
-
-    def out_of_rounds(self):
-        self.out_of_rounds_hit = True
-        best = (self.reflect or {}).get("best")
-        if best and best["round"] != self.reflect["round"]:
-            self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
-            self.log("Kept the best draft", f"Went back to the draft from round {best['round']}: it had the fewest problems "
-                     f"({best['n']}). The rounds after it didn't improve on it.", "best draft")
-        self.log("Review", "Out of rounds. Keeping the best effort.", "failed")
-
-    # ----- Checkpoints -----
-    _SNAPSHOT = ("task", "draft", "problems", "approved", "answer", "result")
-
-    def save_checkpoint(self, name):
-        name = to_str(name).strip()
-        if not name:
-            raise RunError("The 'save checkpoint' block needs a name.")
-        state = {k: getattr(self, k) for k in self._SNAPSHOT}
-        state["vars"] = dict(self.vars)
-        try:
-            state = copy.deepcopy(state)
-        except Exception:  # noqa: BLE001 - something uncopyable: keep references instead
-            state = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v) for k, v in state.items()}
-        self.checkpoints[name.lower()] = state
-        self.log("Checkpoint “" + name + "”", "Saved the task, draft, review, result and variables" +
-                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "saved")
-
-    def restore_checkpoint(self, name):
-        name = to_str(name).strip()
-        state = self.checkpoints.get(name.lower())
-        if state is None:
-            raise RunError(f"There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.")
-        try:  # a copy, so the same checkpoint can be gone back to more than once
-            state = copy.deepcopy(state)
-        except Exception:  # noqa: BLE001
-            state = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v) for k, v in state.items()}
-        for k in self._SNAPSHOT:
-            setattr(self, k, state[k])
-        self.vars.clear()
-        self.vars.update(state["vars"])
-        self.log("Back to checkpoint “" + name + "”", "Restored the task, draft, review, result and variables" +
-                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "restored")
-
-    # ----- You (the person at the keyboard) -----
-    async def _input(self, prompt):
-        async with self._input_lock:
-            try:
-                return await asyncio.to_thread(input, prompt)
-            except EOFError:
-                raise RunError("This step needs an answer typed at the keyboard, but there's no one to type it.")
-
-    async def _ask_me_live(self, q):
-        q = to_str(q)
-        print("\n? " + q, flush=True)
-        while True:
-            a = (await self._input("> ")).strip()
-            if a:
-                self.answer = a
-                return a
-            print("  Type an answer first.")
-
-    async def _approve_live(self, text):
-        print("\n? Do you approve this?\n", flush=True)
-        for line in to_str(text).splitlines():
-            print("    " + line)
-        while True:
-            a = (await self._input("Approve? [y/n] > ")).strip().lower()
-            if a in ("y", "yes"):
-                return True
-            if a in ("n", "no"):
-                return False
-            print("  Type y or n.")
-
-    async def _choose_live(self, items):
-        items = to_list(items)
-        if not items:
-            raise RunError("'let me choose from' got an empty list.")
-        print("\n? Choose one:", flush=True)
-        for i, it in enumerate(items, 1):
-            print(f"  {i}. {_short(it, 80)}")
-        while True:
-            a = (await self._input("Number > ")).strip()
-            if a.isdigit() and 1 <= int(a) <= len(items):
-                return items[int(a) - 1]
-            print(f"  Type a number from 1 to {len(items)}.")
-
-    async def pause(self, note):
-        print("\n⏸ " + (to_str(note) or "Paused."), flush=True)
-        await self._input("Press Enter to continue > ")
-
-    # ----- Output -----
-    def say(self, v):
-        if isinstance(v, Picture):
-            self.log("Note", "Picture: " + self._picture_path(v))
-        else:
-            self.log("Note", to_str(v))
-
-    def show(self):
-        self.log("Current draft", self.draft or "(no draft yet)")
-
-    def _result_item(self, v):
-        if isinstance(v, Picture):
-            return "[picture: " + self._picture_path(v) + "]"
-        return to_str(v)
-
-    def add_result(self, v):
-        item = self._result_item(v)
-        self.result.append(item)
-        self.log("Added to result", item, "added")
-
-    def finish_with(self, v):
-        self.result = [self._result_item(v)]
-        raise Finish()
-
-    # ----- Lists -----
-    def _index(self, lst, where, at, inserting=False):
-        n = len(lst)
-        if where == "FIRST":
-            return 0
-        if where == "LAST":
-            return n if inserting else n - 1
-        if where == "RANDOM":
-            return random.randrange(max(1, n))
-        if where == "FROM_START":
-            return round_js(num(at)) - 1
-        return n - round_js(num(at)) + (1 if inserting else 0)
-
-    def list_get(self, lst, mode, where, at=1, var=None):
-        lst = list(to_list(lst))
-        i = self._index(lst, where, at)
-        if i < 0 or i >= len(lst):
-            raise RunError(f"A list block asked for item {i + 1} but the list has {len(lst)} items.")
-        v = lst[i]
-        if mode != "GET":
-            del lst[i]
-            if var is not None:
-                self.vars[var] = lst
-        return v
-
-    def list_set(self, var, mode, where, at, value):
-        if var is None:
-            raise RunError("To change a list, put a list variable in the 'in list' slot.")
-        lst = list(to_list(self.get(var)))
-        i = self._index(lst, where, at, mode == "INSERT")
-        if mode == "INSERT":
-            lst.insert(max(0, min(i, len(lst))), value)
-        else:
-            if i < 0 or i >= len(lst):
-                raise RunError("A list 'set' block points past the end of the list.")
-            lst[i] = value
-        self.vars[var] = lst
-
-    # ----- Wait & time -----
-    def timer(self):
-        return round((time.monotonic() - self.timer_start) * 10) / 10
-
-    def reset_timer(self):
-        self.timer_start = time.monotonic()
-
-    def now(self, part):
-        d = datetime.datetime.now()
-        date = d.strftime("%Y-%m-%d")
-        return {"time": d.strftime("%H:%M"), "date": date, "datetime": date + " " + d.strftime("%H:%M"),
-                "hour": d.hour, "minute": d.minute, "weekday": d.strftime("%A")}[part]
-
-    async def wait(self, seconds):
-        secs = max(0, min(86400, num(seconds)))
-        if secs >= 5:
-            self.log("Wait", f"Waiting {secs:g} seconds")
-        await asyncio.sleep(secs)
-
-    async def wait_until_time(self, h, m):
-        now = datetime.datetime.now()
-        t = now.replace(hour=int(h), minute=int(m), second=0, microsecond=0)
-        if t <= now:
-            t += datetime.timedelta(days=1)
-        self.log("Wait until a time", "Waiting until " + t.strftime("%H:%M") + (" tomorrow" if t.date() != now.date() else ""))
-        await asyncio.sleep((t - now).total_seconds())
-
-    async def wait_until(self, check, uses_claude=False):
-        while not to_bool(await check()):
-            await asyncio.sleep(10 if uses_claude else 0.5)
-
-    async def wait_for_message(self, name):
-        key = to_str(name).strip().lower()
-        self.log("Waiting for “" + to_str(name) + "”", "Carries on when another script broadcasts this message.")
-        fut = asyncio.get_running_loop().create_future()
-        self.msg_waiters.setdefault(key, []).append(fut)
-        self.msg_waiting += 1
-        try:
-            MESSAGE_VALUE.set(await fut)
-        finally:
-            self.msg_waiting -= 1
-
-    # ----- Model -----
-    def use_model(self, tier):
-        self.tier = tier
-        self.log("Model", "Using " + model_label(tier))
-
-    @contextlib.asynccontextmanager
-    async def using_model(self, tier):
-        token = MODEL_OVERRIDE.set(tier)
-        self.log("Model", "Using " + model_label(tier) + " for the blocks inside")
-        try:
-            yield
-        finally:
-            MODEL_OVERRIDE.reset(token)
-
-    # ----- Broadcasts and scripts -----
-    def message_value(self):
-        return MESSAGE_VALUE.get()
-
-    def broadcast(self, name, value=""):
-        key = to_str(name).strip().lower()
-        if not key:
-            raise RunError("A broadcast block has no message name.")
-        waiters = self.msg_waiters.pop(key, [])
-        for f in waiters:
-            if not f.done():
-                f.set_result(value)
-        fns = self.receivers.get(key, [])
-        if not fns and not waiters:
-            self.log("Broadcast “" + to_str(name) + "”", "Nobody is listening for this message.", "no listeners")
-            return []
-        self.started += len(fns)
-        if self.started > MAX_SCRIPTS:
-            raise RunError(f"Stopped after starting {MAX_SCRIPTS} scripts. A message may be broadcasting itself in a loop.")
-        return [self.start_script(fn, value) for fn in fns]
-
-    async def broadcast_and_wait(self, name, value=""):
-        tasks = self.broadcast(name, value)
-        if tasks:
-            await asyncio.gather(*tasks, return_exceptions=True)
-        if self.ending:
-            raise asyncio.CancelledError()
 
     # ----- Connections: news feeds, GitHub, Telegram, email and calendar -----
     MAX_FEED_ITEMS = 10
@@ -4143,7 +3062,7 @@ class Runtime:
         lines, keep = text.splitlines(), set()
         for i, line in enumerate(lines):
             if all(w in line.lower() for w in words):
-                keep.update(range(i, min(len(lines), i + 1 + Runtime.PAGE_LINES_AFTER)))
+                keep.update(range(i, min(len(lines), i + 1 + Connections.PAGE_LINES_AFTER)))
         return "\n".join(lines[i] for i in sorted(keep))
 
     @staticmethod
@@ -4208,6 +3127,9 @@ class Runtime:
                 print(f"  (Page check failed: {e})", flush=True)
             await asyncio.sleep(self._poll(every))
 
+
+class AgentTools:
+    """The agent block. Part of Runtime."""
     # ----- Agent -----
     # Each step the model replies with JSON: a tool to use, or its final answer. The same protocol runs on the
     # page, so a program behaves the same in both places, and it works with every model and backup.
@@ -4426,7 +3348,7 @@ class Runtime:
             lines.append('or, once the goal is met (or no tool would help):')
             lines.append('{"done": true, "answer": "<your complete final answer>"}')
             if plan is not None:
-                lines.append(Runtime.PLAN_LATER if plan else Runtime.PLAN_FIRST)
+                lines.append(AgentTools.PLAN_LATER if plan else AgentTools.PLAN_FIRST)
         return "\n".join(lines)
 
     def _agent_take_plan(self, r, plan):
@@ -4685,6 +3607,1092 @@ class Runtime:
     def agent_steps(self):
         """The most recent agent's steps in this run, as records: step, tool, input, result, status."""
         return [dict(r) for r in self.agent_trace]
+
+
+class Runtime(ModelCalls, Connections, AgentTools):
+    def __init__(self):
+        self.vars = {}
+        self.receivers = {}
+        self.client = None
+        self.gemini = None
+        self._input_lock = asyncio.Lock()  # one question at the keyboard at a time
+        self._tg_lock = asyncio.Lock()  # one Telegram fetch at a time (made here, so two fetches can never make one each)
+        self.no_schema = set()      # Claude models that refused a reply shape, so it isn't sent again
+        self.json_modes = {}         # (service, model) -> the JSON mode that service accepts: "schema", "object" or "none"
+        self.schedule_mode = False
+        self.transient_memory = {}   # kept across runs while this program keeps running
+        self.reset()
+
+    # ----- run state -----
+    def reset(self):
+        self.vars.clear()
+        self.task = ""
+        self.draft = ""
+        self.problems = []
+        self.approved = None
+        self.answer = ""
+        self.result = []
+        self.out_of_rounds_hit = False
+        self.last_error = ""
+        self.instructions = ""
+        self.chats = {}
+        self.reflect = None          # the review loop running now: earlier problems and its best draft so far
+        self.checkpoints = {}        # 'save checkpoint' snapshots, by name
+        self.usage = {}  # provider -> [tokens in, tokens out]
+        self.budget = BUDGET          # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
+        self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
+        self.trace = []              # every log line, for save_log
+        self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
+        self.agent_trace = []        # the most recent agent's steps, for the "agent's steps" block
+        self.run_started = time.time()
+        self.max_seconds = MAX_SECONDS  # max_seconds = 600 stops any run that takes longer
+        self.programs = []           # names of saved programs running inside this run, innermost last
+        self.calls = 0
+        self.steps = 0
+        self.depth = 0
+        self.started = 0
+        self.timer_start = time.monotonic()
+        self.journal, self.replay, self.replay_pos = getattr(self, "journal", None), None, 0
+        self.tier = os.environ.get("RB_MODEL_TIER", globals().get("DEFAULT_TIER", "default"))
+        self.primary = self.tier
+        self.backup_used = 0
+        # Backup models, tried in order when the primary fails on a step. RB_BACKUPS="openai-default,default" overrides.
+        backups = os.environ.get("RB_BACKUPS")
+        if backups is not None and backups.strip().lower() in ("none", "off", "no"):
+            backups = ""
+        backups = [b.strip() for b in backups.split(",")] if backups is not None else list(globals().get("BACKUPS", []))
+        self.backups = [b for i, b in enumerate(backups) if b and b != self.primary and b not in backups[:i]]
+        self.tasks = set()
+        self.ending = False
+        self.error = None
+        self.msg_waiters = {}
+        self.msg_waiting = 0
+
+    def get(self, name):
+        return self.vars.get(name, 0)
+
+    def push_args(self, args):
+        if self.depth >= MAX_DEPTH:
+            raise RunError("A My Blocks block called itself too many times.")
+        self.depth += 1
+        saved = {k: self.vars[k] for k in args if k in self.vars}
+        missing = [k for k in args if k not in self.vars]
+        self.vars.update(args)
+        return saved, missing
+
+    def pop_args(self, token):
+        saved, missing = token
+        self.depth -= 1
+        for k in missing:
+            self.vars.pop(k, None)
+        self.vars.update(saved)
+
+    def unsupported(self, kind):
+        raise RunError("The block '" + kind + "' can't run outside the block editor.")
+
+    def tick(self):
+        self.steps += 1
+        if self.steps > MAX_STEPS:
+            raise RunError(f"Stopped after {MAX_STEPS} steps. A loop may never end; check repeat and while blocks.")
+
+    # ----- logging -----
+    def log(self, label, text=None, status=None, calls=True):
+        """calls=True: attach the model calls made since the last line. calls=False: a note written between a model call
+        and its step, which leaves the calls for the step. A list: exactly these calls (the agent hands each step its own)."""
+        if isinstance(calls, list):
+            pass
+        elif calls:
+            calls, self._pending = self._pending, []
+        else:
+            calls = []
+        meta = self._calls_summary(calls)
+        self.trace.append((time.time(), label, to_str(text) if text else "", status or "", meta, [c["prompt"] for c in calls]))
+        head = f"\n▸ {label}" + (f"  [{status}]" if status else "")
+        print(head, flush=True)
+        if text:
+            for line in to_str(text).splitlines() or [""]:
+                print("    " + line, flush=True)
+        if meta:
+            print("    · " + meta, flush=True)
+
+    @staticmethod
+    def _calls_summary(calls):
+        """'Claude · 1.4 s · 812 in, 120 out' for the model calls behind one step (several for a repair or a backup)."""
+        if not calls:
+            return ""
+        if all(c["who"].startswith("reused") for c in calls):
+            return "reused from the run that stopped: no new call"
+        who = ", ".join(dict.fromkeys(c["who"] for c in calls))
+        secs = sum(c["secs"] for c in calls)
+        tin, tout = sum(c["in"] for c in calls), sum(c["out"] for c in calls)
+        failed = sum(1 for c in calls if not c["ok"])
+        return ((f"{len(calls)} calls · " if len(calls) > 1 else "") + f"{who} · {secs:.1f} s · {tin:,} in, {tout:,} out" +
+                (f" · {failed} failed" if failed else ""))
+
+    def _prompt_text(self, prompt, history, picture):
+        """The prompt as the model received it, for the saved log."""
+        parts = [f"[instructions]\n{self.instructions}"] if self.instructions else []
+        parts += [f"[{h['role']}]\n{to_str(h['content'])}" for h in (history or [])]
+        parts.append(("[user]\n" if parts else "") + to_str(prompt) + ("\n[+ a picture]" if picture is not None else ""))
+        return "\n\n".join(parts)
+
+    async def _timed_call(self, t, prompt, want_json, picture, history, web):
+        """One call on one model, remembered (time, tokens, prompt) for the next log line."""
+        start, before = time.monotonic(), [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
+        ok = False
+        try:
+            text = await self._call_tier(t, prompt, want_json, picture, history, web)
+            ok = True
+            return text
+        finally:
+            after = [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
+            self._pending.append({"who": model_label(t), "secs": time.monotonic() - start, "in": after[0] - before[0],
+                                  "out": after[1] - before[1], "ok": ok, "prompt": self._prompt_text(prompt, history, picture)})
+
+    # ----- Claude -----
+    @property
+    def current_tier(self):
+        return MODEL_OVERRIDE.get() or self.tier
+
+    def _count(self, provider, tokens_in, tokens_out):
+        u = self.usage.setdefault(provider, [0, 0])
+        u[0] += tokens_in or 0
+        u[1] += tokens_out or 0
+
+    def tokens_used(self):
+        return sum(u[0] + u[1] for u in self.usage.values())
+
+    def set_budget(self, n):
+        n = max(0, round_js(num(n)))
+        self.budget = n
+        self.log("Budget", f"This run stops before a model call once it has used {n:,} tokens (used so far: {self.tokens_used():,})."
+                 if n else "No token budget for this run.", "set")
+
+    # ----- Asking before actions -----
+    ASK_FIRST = {"ha": "any smart home action (Home Assistant, Homey or MQTT)", "messages": "sending messages and announcements",
+                 "files": "saving files", "all": "all of these"}
+
+    def ask_before(self, kind):
+        kinds = {"ha", "messages", "files"} if kind == "all" else {kind}
+        self.ask_first |= kinds
+        self.log("Ask first", "From now on, the program asks you before " + self.ASK_FIRST.get(kind, kind) + ".", "set")
+
+    async def _allowed(self, kinds, what):
+        """True if the action may go ahead. Asks first when an 'ask me before' block covers it."""
+        if not (self.ask_first & set(kinds)):
+            return True
+        return await self.confirm(what)
+
+    async def confirm(self, what):
+        """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no."""
+        if self.schedule_mode and not sys.stdin.isatty():
+            self.log("Not done", what + " needs your approval, and nobody is at the keyboard.", "refused")
+            return False
+        if await self.approve("Allow this? " + what):
+            return True
+        self.log("Not done", what + " was refused, so nothing happened.", "refused")
+        return False
+
+    # ----- Resuming after a stop -----
+    # While a program runs, each finished model call, each answer you give and each message or Home Assistant action is
+    # written to a journal next to the program. A run that finishes deletes it. If a run stops part-way, the next start
+    # can replay it: the blocks run again from the top, and every step that matches the journal is reused instead of
+    # repeated (no new tokens, no asking twice, nothing sent twice). At the first step that differs, the rest runs live.
+    def _journal_path(self):
+        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
+        if not prog or not os.path.isfile(prog):
+            return None, None
+        with open(prog, "rb") as f:
+            digest = hashlib.sha256(f.read()).hexdigest()[:16]
+        base = os.path.splitext(os.path.basename(prog))[0]
+        return os.path.join(os.path.dirname(prog), f".{base}.resume.jsonl"), digest
+
+    async def _journal_start(self):
+        """At the start of a run: offer to pick up a run that stopped, then start a fresh journal."""
+        self.journal, self.replay, self.replay_pos, self._replay_noted = None, None, 0, False
+        path, digest = self._journal_path()
+        if not path:
+            return
+        old = []
+        if os.path.isfile(path):
+            try:
+                with open(path, encoding="utf-8") as f:
+                    lines = [json.loads(l) for l in f if l.strip()]
+                if lines and lines[0].get("program") == digest:
+                    old = lines[1:]
+                elif lines:
+                    print("\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)", flush=True)
+            except (OSError, ValueError):
+                old = []
+        if old:
+            choice = os.environ.get("RB_RESUME", "").strip().lower()
+            if choice in ("1", "yes", "true", "on"):
+                use = True
+            elif choice in ("0", "no", "false", "off"):
+                use = False
+            elif sys.stdin.isatty():
+                print(f"\n? The last run stopped part-way, after {len(old)} saved step{'s' if len(old) != 1 else ''}.", flush=True)
+                use = (await self._input("Pick up where it stopped, reusing those? [y/n] > ")).strip().lower() in ("y", "yes")
+            else:
+                use = False
+                print("\n(The last run stopped part-way. Set resume = yes in second-thought.ini to pick up where it stopped.)", flush=True)
+            if use:
+                self.replay = old
+                self.log("Resuming", f"Picking up the run that stopped: {len(old)} saved step{'s' if len(old) != 1 else ''} will be "
+                         "reused instead of repeated.", "resume")
+        try:
+            self.journal = open(path, "w", encoding="utf-8")
+            self.journal.write(json.dumps({"program": digest, "started": time.time()}) + "\n")
+            self.journal.flush()
+        except OSError:
+            self.journal = None
+        self._journal_file = path
+
+    def _journal_end(self, finished):
+        if self.journal:
+            self.journal.close()
+            self.journal = None
+            if finished:
+                try:
+                    os.remove(self._journal_file)
+                except OSError:
+                    pass
+            else:
+                print("Run the program again to pick up where it stopped.", flush=True)
+
+    @staticmethod
+    def _key(*parts):
+        return hashlib.sha256(json.dumps(parts, default=str, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()[:20]
+
+    def _replayed(self, kind, key):
+        """(True, value) if the next saved step is this one; otherwise (False, None), and replaying ends at the first difference."""
+        if self.replay is None:
+            return False, None
+        if self.replay_pos < len(self.replay):
+            e = self.replay[self.replay_pos]
+            if e.get("kind") == kind and e.get("key") == key:
+                self.replay_pos += 1
+                self._record(kind, key, e.get("value"))
+                if self.replay_pos == len(self.replay):
+                    self.replay = None
+                    self.log("Caught up", "That was the last saved step. From here the run carries on as usual.", "resume", calls=False)
+                return True, e.get("value")
+            self.log("Run differs here", "From this step the run isn't the same as the one that stopped, so the rest runs afresh.",
+                     "resume", calls=False)
+        self.replay = None
+        return False, None
+
+    def _record(self, kind, key, value):
+        if self.journal:
+            try:
+                line = json.dumps({"kind": kind, "key": key, "value": value}, ensure_ascii=False)
+            except (TypeError, ValueError):
+                return  # something that can't be saved (a picture): that step will simply run again
+            self.journal.write(line + "\n")
+            self.journal.flush()
+
+    async def _call(self, prompt, want_json=False, picture=None, history=None, web=False):
+        key = self._key("call", self.current_tier, to_str(prompt), want_json, history, web, self.instructions,
+                        hashlib.sha256(picture.data).hexdigest() if isinstance(picture, Picture) else None)
+        hit, v = self._replayed("call", key)
+        if hit:
+            self._pending.append({"who": "reused from the run that stopped", "secs": 0.0, "in": 0, "out": 0, "ok": True, "prompt": to_str(prompt)})
+            return v
+        out = await self._call_live(prompt, want_json, picture, history, web)
+        self._record("call", key, out if want_json else to_str(out))
+        return out
+
+    async def _journaled(self, kind, key, live):
+        hit, v = self._replayed(kind, key)
+        if hit:
+            return v
+        out = await live()
+        self._record(kind, key, out)
+        return out
+
+    async def ask_me(self, q):
+        out = await self._journaled("ask_me", self._key(to_str(q)), lambda: self._ask_me_live(q))
+        self.answer = out
+        return out
+
+    async def approve(self, text):
+        return await self._journaled("approve", self._key(to_str(text)), lambda: self._approve_live(text))
+
+    async def choose(self, items):
+        return await self._journaled("choose", self._key(to_list(items)), lambda: self._choose_live(items))
+
+    async def choose_file(self):
+        return await self._journaled("choose_file", self._key("file"), self._choose_file_live)
+
+    async def ha_call(self, service, entity, data_text=""):
+        key = self._key(to_str(service), to_str(entity), to_str(data_text))
+        hit, v = self._replayed("ha_call", key)
+        if hit:
+            self.log("Home Assistant: " + to_str(service).strip(), f"{to_str(entity)}: already done before the stop, so not done again.", "reused")
+            return v
+        out = await self._ha_call_live(service, entity, data_text)
+        self._record("ha_call", key, out)
+        return out
+
+    async def ha_notify(self, target, text):
+        key = self._key(to_str(target), to_str(text))
+        hit, _ = self._replayed("ha_notify", key)
+        if hit:
+            self.log("Notification → " + (to_str(target).strip() or "persistent_notification"), "Already sent before the stop, so not sent again.", "reused")
+            return
+        await self._ha_notify_live(target, text)
+        self._record("ha_notify", key, True)
+
+    async def ha_speak(self, text, player):
+        key = self._key(to_str(text), to_str(player))
+        hit, _ = self._replayed("ha_speak", key)
+        if hit:
+            self.log("Spoken on " + (to_str(player).strip() or "a speaker"), "Already said before the stop, so not said again.", "reused")
+            return
+        await self._ha_speak_live(text, player)
+        self._record("ha_speak", key, True)
+
+    async def ask_text(self, p):
+        p = to_str(p)
+        if not p.strip():
+            raise RunError("An 'ask Claude' block is empty.")
+        out = await self._call("Answer the request below. Reply with only the answer, no preamble.\n\n" + p)
+        self.log("Ask Claude: " + _short(p, 60), out, "done")
+        return out
+
+    async def ask_yesno(self, p):
+        p = to_str(p)
+        if not p.strip():
+            raise RunError("A yes/no block is empty.")
+        r = await self._call('Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, SCHEMAS["yesno"])
+        yes = r["answer"] is True
+        self.log("Yes or no: " + _short(p, 60), "Yes" if yes else "No", "done")
+        return yes
+
+    async def ask_number(self, p):
+        p = to_str(p)
+        if not p.strip():
+            raise RunError("An 'ask for a number' block is empty.")
+        r = await self._call('Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, SCHEMAS["number"])
+        n = num(r["number"])
+        self.log("Number: " + _short(p, 60), n, "done")
+        return n
+
+    async def ask_list(self, p):
+        p = to_str(p)
+        if not p.strip():
+            raise RunError("An 'ask for a list' block is empty.")
+        r = await self._call('Reply with only JSON: {"items": [<short strings>]}, no other text.\n\nRequest:\n' + p, SCHEMAS["list"])
+        items = [to_str(i) for i in r["items"] if to_str(i)]
+        self.log("List: " + _short(p, 60), "\n".join("- " + i for i in items) or "(empty list)", f"{len(items)} items")
+        return items
+
+    async def rewrite(self, text, how):
+        text, how = to_str(text), to_str(how)
+        if not text.strip():
+            raise RunError("A 'rewrite' block has nothing to rewrite.")
+        out = await self._call("Rewrite the text below. Instruction: " + how + "\nReply with only the rewritten text.\n\nText:\n" + text)
+        self.log("Rewrite: " + _short(how, 60), out, "done")
+        return out
+
+    async def extract(self, what, text):
+        what, text = to_str(what), to_str(text)
+        if not text.strip():
+            raise RunError("An 'extract' block has no text to read.")
+        out = await self._call("From the text below, extract: " + what + "\nReply with only what you extracted, nothing else.\n\nText:\n" + text)
+        self.log("Extract: " + _short(what, 60), out, "done")
+        return out
+
+    async def score(self, text, criteria):
+        text, criteria = to_str(text), to_str(criteria)
+        r = await self._call("Score the text from 1 to 10 against these criteria: " + criteria +
+                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + text, SCHEMAS["score"])
+        s = max(0, min(10, num(r["score"])))
+        self.log("Score: " + _short(text, 50), f"{s}/10", "done")
+        return s
+
+    async def better(self, a, b, criteria):
+        a, b, criteria = to_str(a), to_str(b), to_str(criteria)
+        r = await self._call("Which text is better for: " + criteria +
+                             '?\nReply with only JSON: {"pick": 1 or 2, "reason": "<one sentence>"}.\n\nText 1:\n' + a + "\n\nText 2:\n" + b, SCHEMAS["pick"])
+        second = num(r["pick"]) == 2
+        self.log("Pick the better one", ("Picked the second" if second else "Picked the first") +
+                 (". " + to_str(r.get("reason")) if r.get("reason") else ""), "done")
+        return b if second else a
+
+    # ----- Conversations, instructions, web search -----
+    def set_instructions(self, text):
+        self.instructions = to_str(text).strip()
+        self.log("Instructions for Claude", self.instructions or "(cleared)", "set")
+
+    async def chat(self, name, message):
+        key = to_str(name).strip().lower() or "chat"
+        message = to_str(message).strip()
+        if not message:
+            raise RunError("The 'chat' block has no message.")
+        hist = self.chats.setdefault(key, [])
+        reply = await self._call(message, history=list(hist))
+        hist += [{"role": "user", "content": message}, {"role": "assistant", "content": reply}]
+        del hist[:-40]
+        self.log(f"Chat {to_str(name).strip()}: " + _short(message, 50), reply, f"turn {len(hist) // 2}")
+        return reply
+
+    def chat_reset(self, name):
+        self.chats.pop(to_str(name).strip().lower(), None)
+        self.log("Conversation " + to_str(name).strip(), "Starting afresh.", "reset")
+
+    async def web_search(self, q):
+        q = to_str(q).strip()
+        if not q:
+            raise RunError("The 'search the web' block is empty.")
+        out = await self._call("Search the web and answer briefly, listing the sources you used as plain URLs at the end.\n\nQuery: " + q,
+                               web=True)
+        self.log("Web search: " + _short(q, 50), out, "done")
+        return out
+
+    # ----- Records -----
+    async def ask_record(self, fields, prompt, many=False):
+        fields, prompt = field_list(fields), to_str(prompt).strip()
+        if not fields:
+            raise RunError("Give the record's fields, separated by commas.")
+        if not prompt:
+            raise RunError("The 'ask Claude for a record' block has no request.")
+        shape = "{" + ", ".join(json.dumps(f) + ": ..." for f in fields) + "}"
+        r = await self._call(('Reply with only JSON: {"items": [<objects, each shaped like ' + shape + '>]}' if many else "Reply with only one JSON object shaped like " + shape) +
+                             ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + prompt, record_schema(fields, many))
+        if many:
+            recs = [to_record(o, fields) for o in r["items"]]
+            self.log("Records: " + _short(prompt, 55), "\n".join(" · ".join(f"{f}: {_short(x[f], 40)}" for f in fields) for x in recs), f"{len(recs)} records")
+            return recs
+        rec = to_record(r, fields)
+        self.log("Record: " + _short(prompt, 55), to_str(rec), "done")
+        return rec
+
+    # ----- Prompt library -----
+    def prompt(self, name):
+        text = PROMPTS.get(to_str(name).strip().lower()) if "PROMPTS" in globals() else None
+        if text is None:
+            raise RunError(f"There's no prompt called “{name}” in this program's prompt library.")
+        return text
+
+    # ----- Files -----
+    async def _choose_file_live(self):
+        print("\n? Choose a file: type the path to a PDF, a .docx, or a text file (.txt, .md, .csv, .json ...).", flush=True)
+        while True:
+            path = (await self._input("Path > ")).strip().strip('"').strip("'")
+            if not os.path.isfile(path):
+                print("  That file doesn't exist. Try again.")
+                continue
+            if os.path.getsize(path) > 25 * 1024 * 1024:
+                print("  That file is over 25 MB. Choose a smaller one.")
+                continue
+            try:
+                text = read_text_file(path)
+            except RunError as e:
+                print("  " + str(e))
+                continue
+            if not text.strip():
+                print("  No text could be found in that file. A scanned PDF holds pictures of pages, not text.")
+                continue
+            self.log("Chose file", f"{path} \u00b7 {len(text):,} characters", "chosen")
+            return text
+
+    async def save_file(self, value, name, ext):
+        if isinstance(value, Picture):
+            raise RunError("To save a picture, use the 'save picture' block.")
+        if ext == "json" and not isinstance(value, str):
+            text = json.dumps(value, default=str, indent=2, ensure_ascii=False)
+        elif ext == "csv" and isinstance(value, list):
+            text = "\n".join(",".join('"' + to_str(c).replace('"', '""') + '"' for c in r) if isinstance(r, list) else to_str(r) for r in value)
+        else:
+            text = to_str(value)
+        if not text:
+            raise RunError("There's nothing to save: the value in the 'save as file' block is empty.")
+        base = re.sub(r"[^\w\-]+", "-", to_str(name)).strip("-") or "output"
+        path = os.path.join(OUTPUT_DIR, f"{base}.{ext}")
+        if not await self._allowed(["files"], f"save {path} ({len(text):,} characters)"):
+            return
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text)
+        self.log("Save file", "Saved " + path, "saved")
+
+    def result_text(self):
+        items = self.result if self.result else ([self.draft] if self.draft else [])
+        return "\n\n".join(items)
+
+    # ----- Errors and retries -----
+    @staticmethod
+    def _describe(e):
+        return str(e) if isinstance(e, RunError) else f"{type(e).__name__}: {e}"
+
+    def failed(self, e):
+        self.last_error = self._describe(e)
+        self.log("Something failed, so the 'if it fails' part ran", self.last_error, "handled")
+
+    @staticmethod
+    def attempts(n):
+        return max(1, min(10, round_js(num(n)) or 1))
+
+    async def retry_or_raise(self, e, attempt, max_tries):
+        self.last_error = self._describe(e)
+        status = getattr(e, "status_code", None) or getattr(e, "code", None)
+        transient = isinstance(e, Retryable) or (type(e).__module__.startswith(("anthropic", "google")) and
+                                                 not (isinstance(status, int) and status in (400, 401, 403, 404)))
+        if not transient:
+            raise e
+        if attempt >= max_tries:
+            self.log(f"Gave up after {attempt} tries", self.last_error, "failed")
+            raise e
+        wait = 2 * attempt
+        self.log("Retrying", f"Try {attempt} of {max_tries} failed: {self.last_error}\nTrying again in {wait}s.", f"retry {attempt + 1}")
+        await asyncio.sleep(wait)
+
+    # ----- Memory -----
+    @staticmethod
+    def _mem_key(name):
+        key = to_str(name).strip().lower()
+        if not key:
+            raise RunError("A memory block has no name. Type a name into its name slot.")
+        return key
+
+    def _mem_load(self):
+        try:
+            with open(MEMORY_FILE, encoding="utf-8") as f:
+                data = json.load(f)
+        except (OSError, ValueError):
+            return {}
+        now = time.time() * 1000
+        return {k: v for k, v in data.items() if not (v.get("expires") and v["expires"] <= now)}
+
+    def _mem_save(self, data):
+        _write_json(MEMORY_FILE, data, indent=1)
+
+    @staticmethod
+    def _storable(v):
+        if isinstance(v, Picture):
+            raise RunError("Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.")
+        if isinstance(v, list):
+            return [Runtime._storable(x) for x in v]
+        if v is None:
+            return ""
+        return v if isinstance(v, (str, int, float, bool)) else to_str(v)
+
+    def _mem_write(self, name, value, kind, expires=None):
+        with _locked(MEMORY_FILE):  # read, change and save as one step, so another program's save isn't lost
+            self._mem_write_now(name, value, kind, expires)
+
+    def _mem_write_now(self, name, value, kind, expires):
+        key = self._mem_key(name)
+        if kind == "transient":
+            self.transient_memory[key] = {"name": to_str(name).strip(), "value": value}
+            data = self._mem_load()
+            if key in data:
+                del data[key]
+                self._mem_save(data)
+            return
+        self.transient_memory.pop(key, None)
+        data = self._mem_load()
+        data[key] = {"name": to_str(name).strip(), "value": self._storable(value), "kind": kind,
+                     "expires": expires, "updated": int(time.time() * 1000)}
+        self._mem_save(data)
+
+    def _mem_entry(self, key):
+        if key in self.transient_memory:
+            return self.transient_memory[key], "transient"
+        e = self._mem_load().get(key)
+        return (e, "saved") if e else (None, None)
+
+    def remember(self, value, name, kind="transient"):
+        self._mem_write(name, value, kind)
+        self.log("Remembered \u201c" + to_str(name).strip() + "\u201d", _short(value, 120) + "  \u00b7  " +
+                 ("while running" if kind == "transient" else "forever"), "saved")
+
+    def remember_for(self, value, name, n, unit):
+        ms = min(365 * 86400000, max(0, num(n)) * {"m": 60000, "h": 3600000, "d": 86400000}.get(unit, 86400000))
+        if not ms:
+            raise RunError("A 'remember for' block needs a time above zero.")
+        expires = int(time.time() * 1000 + ms)
+        self._mem_write(name, value, "permanent", expires)
+        until = datetime.datetime.fromtimestamp(expires / 1000).strftime("%a %d %b %H:%M")
+        self.log("Remembered \u201c" + to_str(name).strip() + "\u201d", _short(value, 120) + "  \u00b7  until " + until, "saved")
+
+    def remember_add(self, value, name, kind="transient"):
+        key = self._mem_key(name)
+        with _locked(MEMORY_FILE):  # the list is read and saved under one lock, so two programs adding at once both count
+            cur, where = self._mem_entry(key)
+            items = []
+            if cur:
+                items = list(cur["value"]) if isinstance(cur["value"], list) else ([] if cur["value"] == "" else [cur["value"]])
+            items.append(value)
+            if cur and where == "saved":
+                self._mem_write(name, items, "permanent", cur.get("expires"))
+            else:
+                self._mem_write(name, items, "transient" if cur else kind)
+        self.log("Added to \u201c" + to_str(name).strip() + "\u201d", f"{len(items)} items", "saved")
+
+    def recall(self, name):
+        e, _ = self._mem_entry(self._mem_key(name))
+        if not e:
+            return ""
+        return list(e["value"]) if isinstance(e["value"], list) else e["value"]
+
+    def remembers(self, name):
+        return self._mem_entry(self._mem_key(name))[0] is not None
+
+    def forget(self, name):
+        key = self._mem_key(name)
+        self.transient_memory.pop(key, None)
+        with _locked(MEMORY_FILE):
+            data = self._mem_load()
+            if key in data:
+                del data[key]
+                self._mem_save(data)
+        self.log("Forgot \u201c" + to_str(name).strip() + "\u201d", None, "forgotten")
+
+    def memory_names(self):
+        names = {v["name"] for v in self.transient_memory.values()}
+        names |= {v["name"] for k, v in self._mem_load().items() if k not in self.transient_memory}
+        return sorted(names)
+
+    # ----- Pictures -----
+    _DRAW_RULES = ("Reply with only the SVG code, starting with <svg and ending with </svg>. Use a viewBox, flat shapes and solid fills. "
+                   "No scripts, no external images or fonts, no animation. Only add text if the description asks for it.")
+
+    def _save_file(self, pic, data=None, ext=None):
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        ext = ext or _EXT.get(pic.media_type, ".png")
+        base = re.sub(r"[^\w\-]+", "-", pic.name).strip("-") or "picture"
+        path = os.path.join(OUTPUT_DIR, base + ext)
+        i = 2
+        while os.path.exists(path):
+            path = os.path.join(OUTPUT_DIR, f"{base}-{i}{ext}")
+            i += 1
+        with open(path, "wb") as f:
+            f.write(data if data is not None else pic.data)
+        return path
+
+    def _picture_path(self, pic):
+        if not pic.path or not os.path.exists(pic.path):
+            pic.path = self._save_file(pic)
+        return pic.path
+
+    async def choose_picture(self):
+        print("\n? Choose a picture: type the path to a JPEG, PNG, WebP, GIF or SVG file.", flush=True)
+        while True:
+            path = (await self._input("Path > ")).strip().strip('"').strip("'")
+            ext = os.path.splitext(path)[1].lower()
+            if not os.path.isfile(path):
+                print("  That file doesn't exist. Try again.")
+                continue
+            if ext not in _MEDIA:
+                print("  That isn't a JPEG, PNG, WebP, GIF or SVG file.")
+                continue
+            with open(path, "rb") as f:
+                data = f.read()
+            name = os.path.splitext(os.path.basename(path))[0]
+            if ext == ".svg":
+                svg = clean_svg(data.decode("utf-8", "replace"))
+                if not svg:
+                    print("  That SVG file couldn't be read.")
+                    continue
+                pic = Picture(svg.encode("utf-8"), "image/svg+xml", name, svg)
+            else:
+                pic = Picture(data, _MEDIA[ext], name)
+            pic.path = path
+            self.log("Chose picture", path, "chosen")
+            return pic
+
+    async def _draw(self, prompt, label, picture=None):
+        out = await self._call(prompt, picture=picture)
+        svg = clean_svg(out)
+        if not svg:
+            raise Retryable("Claude's drawing came back in a form that can't be used. Run again, or simplify the description.")
+        pic = Picture(svg.encode("utf-8"), "image/svg+xml", None, svg)
+        self.log(label, "Saved to " + self._picture_path(pic), "drawn")
+        return pic
+
+    async def draw_picture(self, desc):
+        desc = to_str(desc).strip()
+        if not desc:
+            raise RunError("The 'draw a picture' block has no description.")
+        return await self._draw("Draw this as a single SVG illustration: " + desc + "\n" + self._DRAW_RULES, "Draw: " + _short(desc, 60))
+
+    async def change_picture(self, pic, how):
+        pic = _need_picture(pic, "change picture")
+        how = to_str(how).strip()
+        if not how:
+            raise RunError("The 'change picture' block has no change in it.")
+        if pic.svg is not None:
+            return await self._draw("Here is an SVG illustration:\n" + pic.svg + "\n\nRedraw it with these changes: " + how +
+                                    "\nKeep everything else the same. " + self._DRAW_RULES, "Change picture: " + _short(how, 60))
+        return await self._draw("Draw a new SVG illustration of the attached picture, with these changes: " + how + "\n" + self._DRAW_RULES,
+                                "Redraw as illustration: " + _short(how, 50), picture=pic)
+
+    async def ask_picture(self, q, pic):
+        q = to_str(q).strip()
+        pic = _need_picture(pic, "ask Claude about picture")
+        if not q:
+            raise RunError("The 'ask Claude about picture' block has no question.")
+        out = await self._call("Look at the attached picture and answer. Reply with only the answer, no preamble.\n\n" + q, picture=pic)
+        self.log("Look at picture: " + _short(q, 55), out, "done")
+        return out
+
+    async def score_picture(self, pic, criteria):
+        pic = _need_picture(pic, "score picture")
+        r = await self._call("Score the attached picture from 1 to 10 against these criteria: " + to_str(criteria) +
+                             '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', SCHEMAS["score"], picture=pic)
+        s = max(0, min(10, num(r["score"])))
+        self.log("Score picture: " + _short(criteria, 55), f"{s}/10", "done")
+        return s
+
+    def show_picture(self, pic):
+        pic = _need_picture(pic, "show picture")
+        self.log("Picture", self._picture_path(pic), "shown")
+
+    async def save_picture(self, pic, fmt):
+        pic = _need_picture(pic, "save picture")
+        if not await self._allowed(["files"], f"save the picture {pic.name}"):
+            return
+        if fmt == "svg":
+            if pic.svg is None:
+                raise RunError("Only drawn pictures can be saved as SVG. Choose PNG instead.")
+            path = self._save_file(pic, pic.svg.encode("utf-8"), ".svg")
+        elif fmt == "png" and pic.media_type != "image/png":
+            if pic.svg is not None:
+                try:
+                    import cairosvg  # optional: pip install cairosvg
+                    path = self._save_file(pic, cairosvg.svg2png(bytestring=pic.svg.encode("utf-8")), ".png")
+                except ImportError:
+                    path = self._save_file(pic, pic.svg.encode("utf-8"), ".svg")
+                    self.log("Save picture", "PNG needs the cairosvg package (pip install cairosvg), so it was saved as SVG.", "note")
+            else:
+                path = self._save_file(pic)
+        else:
+            path = self._save_file(pic)
+        self.log("Save picture", "Saved " + path, "saved")
+
+    # ----- Draft and Review -----
+    def set_task(self, t):
+        self.task = to_str(t).strip()
+        if not self.task:
+            raise RunError("The task is empty. Type what you want into 'set task to'.")
+        self.log("Task set", self.task, "set")
+
+    def _need_task(self):
+        if not self.task:
+            raise RunError("Add a 'set task to' block before this step.")
+
+    def _need_draft(self):
+        if not self.draft:
+            raise RunError("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.")
+
+    async def generate(self):
+        self._need_task()
+        self.draft = await self._call("Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + self.task)
+        self.problems, self.approved = [], None
+        self.log("Write a first draft", self.draft, "done")
+
+    async def rework(self, instr):
+        self._need_draft()
+        instr = to_str(instr).strip()
+        if not instr:
+            raise RunError("The 'rework the draft' block has no instruction.")
+        self.draft = await self._call("Rewrite the draft below following this instruction: " + instr +
+                                      "\nKeep it true to the original task. Reply with only the rewritten piece.\n\nTask:\n" +
+                                      (self.task or "(none given)") + "\n\nDraft:\n" + self.draft)
+        self.log("Rework: " + _short(instr, 60), self.draft, "done")
+
+    async def revise(self):
+        self._need_draft()
+        if not self.problems:
+            self.log("Revise", "No review problems recorded, so nothing to fix.", "skipped")
+            return
+        fixed = [e for e in (self.reflect or {}).get("earlier", []) if e not in self.problems]
+        keep = ("\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + "\n".join("- " + e for e in fixed)) if fixed else ""
+        self.draft = await self._call("Revise the draft so it fixes every problem listed. Change nothing else that works. "
+                                      "Reply with only the improved piece.\n\nTask:\n" + (self.task or "(none given)") +
+                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft)
+        self.log("Revise to fix the problems", self.draft, "revised")
+
+    def set_draft(self, t):
+        self.draft = to_str(t)
+
+    @contextlib.contextmanager
+    def reviewing(self):
+        """Around a 'review … up to N rounds' loop: remembers each round's problems and its best draft."""
+        before = self.reflect
+        self.reflect = {"earlier": [], "best": None, "round": 0}
+        try:
+            yield
+        finally:
+            self.reflect = before
+
+    async def review(self, criteria, label="Review", in_loop=False):
+        self._need_draft()
+        loop = self.reflect if in_loop else None
+        earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
+                   "and list it again if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
+        v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
+                             to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
+                             '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
+                             "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
+        approved = v["approved"] is True
+        problems = [to_str(p) for p in (v.get("problems") or [])]
+        self.approved = approved
+        self.problems = [] if approved else ([p for p in problems if p] or ["Does not yet meet the criteria."])
+        if loop is not None:
+            loop["round"] += 1
+            best = loop["best"]
+            if best is None or len(self.problems) <= best["n"]:  # a tie goes to the newer draft
+                loop["best"] = {"draft": self.draft, "problems": list(self.problems), "n": len(self.problems), "round": loop["round"]}
+            for p_ in self.problems:
+                if p_ not in loop["earlier"]:
+                    loop["earlier"].append(p_)
+            del loop["earlier"][:-12]
+        if approved:
+            self.log(label, "Meets every criterion.", "approved")
+        else:
+            self.log(label, "\n".join("- " + p for p in self.problems), "needs work")
+        return approved
+
+    def rounds(self, n):
+        return max(1, min(6, round_js(num(n)) or 3))
+
+    def out_of_rounds(self):
+        self.out_of_rounds_hit = True
+        best = (self.reflect or {}).get("best")
+        if best and best["round"] != self.reflect["round"]:
+            self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
+            self.log("Kept the best draft", f"Went back to the draft from round {best['round']}: it had the fewest problems "
+                     f"({best['n']}). The rounds after it didn't improve on it.", "best draft")
+        self.log("Review", "Out of rounds. Keeping the best effort.", "failed")
+
+    # ----- Checkpoints -----
+    _SNAPSHOT = ("task", "draft", "problems", "approved", "answer", "result")
+
+    def save_checkpoint(self, name):
+        name = to_str(name).strip()
+        if not name:
+            raise RunError("The 'save checkpoint' block needs a name.")
+        state = {k: getattr(self, k) for k in self._SNAPSHOT}
+        state["vars"] = dict(self.vars)
+        try:
+            state = copy.deepcopy(state)
+        except Exception:  # noqa: BLE001 - something uncopyable: keep references instead
+            state = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v) for k, v in state.items()}
+        self.checkpoints[name.lower()] = state
+        self.log("Checkpoint “" + name + "”", "Saved the task, draft, review, result and variables" +
+                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "saved")
+
+    def restore_checkpoint(self, name):
+        name = to_str(name).strip()
+        state = self.checkpoints.get(name.lower())
+        if state is None:
+            raise RunError(f"There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.")
+        try:  # a copy, so the same checkpoint can be gone back to more than once
+            state = copy.deepcopy(state)
+        except Exception:  # noqa: BLE001
+            state = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v) for k, v in state.items()}
+        for k in self._SNAPSHOT:
+            setattr(self, k, state[k])
+        self.vars.clear()
+        self.vars.update(state["vars"])
+        self.log("Back to checkpoint “" + name + "”", "Restored the task, draft, review, result and variables" +
+                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "restored")
+
+    # ----- You (the person at the keyboard) -----
+    async def _input(self, prompt):
+        async with self._input_lock:
+            try:
+                return await asyncio.to_thread(input, prompt)
+            except EOFError:
+                raise RunError("This step needs an answer typed at the keyboard, but there's no one to type it.")
+
+    async def _ask_me_live(self, q):
+        q = to_str(q)
+        print("\n? " + q, flush=True)
+        while True:
+            a = (await self._input("> ")).strip()
+            if a:
+                self.answer = a
+                return a
+            print("  Type an answer first.")
+
+    async def _approve_live(self, text):
+        print("\n? Do you approve this?\n", flush=True)
+        for line in to_str(text).splitlines():
+            print("    " + line)
+        while True:
+            a = (await self._input("Approve? [y/n] > ")).strip().lower()
+            if a in ("y", "yes"):
+                return True
+            if a in ("n", "no"):
+                return False
+            print("  Type y or n.")
+
+    async def _choose_live(self, items):
+        items = to_list(items)
+        if not items:
+            raise RunError("'let me choose from' got an empty list.")
+        print("\n? Choose one:", flush=True)
+        for i, it in enumerate(items, 1):
+            print(f"  {i}. {_short(it, 80)}")
+        while True:
+            a = (await self._input("Number > ")).strip()
+            if a.isdigit() and 1 <= int(a) <= len(items):
+                return items[int(a) - 1]
+            print(f"  Type a number from 1 to {len(items)}.")
+
+    async def pause(self, note):
+        print("\n⏸ " + (to_str(note) or "Paused."), flush=True)
+        await self._input("Press Enter to continue > ")
+
+    # ----- Output -----
+    def say(self, v):
+        if isinstance(v, Picture):
+            self.log("Note", "Picture: " + self._picture_path(v))
+        else:
+            self.log("Note", to_str(v))
+
+    def show(self):
+        self.log("Current draft", self.draft or "(no draft yet)")
+
+    def _result_item(self, v):
+        if isinstance(v, Picture):
+            return "[picture: " + self._picture_path(v) + "]"
+        return to_str(v)
+
+    def add_result(self, v):
+        item = self._result_item(v)
+        self.result.append(item)
+        self.log("Added to result", item, "added")
+
+    def finish_with(self, v):
+        self.result = [self._result_item(v)]
+        raise Finish()
+
+    # ----- Lists -----
+    def _index(self, lst, where, at, inserting=False):
+        n = len(lst)
+        if where == "FIRST":
+            return 0
+        if where == "LAST":
+            return n if inserting else n - 1
+        if where == "RANDOM":
+            return random.randrange(max(1, n))
+        if where == "FROM_START":
+            return round_js(num(at)) - 1
+        return n - round_js(num(at)) + (1 if inserting else 0)
+
+    def list_get(self, lst, mode, where, at=1, var=None):
+        lst = list(to_list(lst))
+        i = self._index(lst, where, at)
+        if i < 0 or i >= len(lst):
+            raise RunError(f"A list block asked for item {i + 1} but the list has {len(lst)} items.")
+        v = lst[i]
+        if mode != "GET":
+            del lst[i]
+            if var is not None:
+                self.vars[var] = lst
+        return v
+
+    def list_set(self, var, mode, where, at, value):
+        if var is None:
+            raise RunError("To change a list, put a list variable in the 'in list' slot.")
+        lst = list(to_list(self.get(var)))
+        i = self._index(lst, where, at, mode == "INSERT")
+        if mode == "INSERT":
+            lst.insert(max(0, min(i, len(lst))), value)
+        else:
+            if i < 0 or i >= len(lst):
+                raise RunError("A list 'set' block points past the end of the list.")
+            lst[i] = value
+        self.vars[var] = lst
+
+    # ----- Wait & time -----
+    def timer(self):
+        return round((time.monotonic() - self.timer_start) * 10) / 10
+
+    def reset_timer(self):
+        self.timer_start = time.monotonic()
+
+    def now(self, part):
+        d = datetime.datetime.now()
+        date = d.strftime("%Y-%m-%d")
+        return {"time": d.strftime("%H:%M"), "date": date, "datetime": date + " " + d.strftime("%H:%M"),
+                "hour": d.hour, "minute": d.minute, "weekday": d.strftime("%A")}[part]
+
+    async def wait(self, seconds):
+        secs = max(0, min(86400, num(seconds)))
+        if secs >= 5:
+            self.log("Wait", f"Waiting {secs:g} seconds")
+        await asyncio.sleep(secs)
+
+    async def wait_until_time(self, h, m):
+        now = datetime.datetime.now()
+        t = now.replace(hour=int(h), minute=int(m), second=0, microsecond=0)
+        if t <= now:
+            t += datetime.timedelta(days=1)
+        self.log("Wait until a time", "Waiting until " + t.strftime("%H:%M") + (" tomorrow" if t.date() != now.date() else ""))
+        await asyncio.sleep((t - now).total_seconds())
+
+    async def wait_until(self, check, uses_claude=False):
+        while not to_bool(await check()):
+            await asyncio.sleep(10 if uses_claude else 0.5)
+
+    async def wait_for_message(self, name):
+        key = to_str(name).strip().lower()
+        self.log("Waiting for “" + to_str(name) + "”", "Carries on when another script broadcasts this message.")
+        fut = asyncio.get_running_loop().create_future()
+        self.msg_waiters.setdefault(key, []).append(fut)
+        self.msg_waiting += 1
+        try:
+            MESSAGE_VALUE.set(await fut)
+        finally:
+            self.msg_waiting -= 1
+
+    # ----- Model -----
+    def use_model(self, tier):
+        self.tier = tier
+        self.log("Model", "Using " + model_label(tier))
+
+    @contextlib.asynccontextmanager
+    async def using_model(self, tier):
+        token = MODEL_OVERRIDE.set(tier)
+        self.log("Model", "Using " + model_label(tier) + " for the blocks inside")
+        try:
+            yield
+        finally:
+            MODEL_OVERRIDE.reset(token)
+
+    # ----- Broadcasts and scripts -----
+    def message_value(self):
+        return MESSAGE_VALUE.get()
+
+    def broadcast(self, name, value=""):
+        key = to_str(name).strip().lower()
+        if not key:
+            raise RunError("A broadcast block has no message name.")
+        waiters = self.msg_waiters.pop(key, [])
+        for f in waiters:
+            if not f.done():
+                f.set_result(value)
+        fns = self.receivers.get(key, [])
+        if not fns and not waiters:
+            self.log("Broadcast “" + to_str(name) + "”", "Nobody is listening for this message.", "no listeners")
+            return []
+        self.started += len(fns)
+        if self.started > MAX_SCRIPTS:
+            raise RunError(f"Stopped after starting {MAX_SCRIPTS} scripts. A message may be broadcasting itself in a loop.")
+        return [self.start_script(fn, value) for fn in fns]
+
+    async def broadcast_and_wait(self, name, value=""):
+        tasks = self.broadcast(name, value)
+        if tasks:
+            await asyncio.gather(*tasks, return_exceptions=True)
+        if self.ending:
+            raise asyncio.CancelledError()
 
     # ----- Saved programs run as a block -----
     STATE = ("task", "draft", "problems", "approved", "answer", "result", "out_of_rounds_hit", "instructions", "chats", "last_error",

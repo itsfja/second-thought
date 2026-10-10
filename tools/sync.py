@@ -1,31 +1,55 @@
 #!/usr/bin/env python3
-"""Keep second-thought.html in step with its separate source files.
+"""Keep python/runtime.py and second-thought.html in step with their source files.
 
-The page is published as one self-contained HTML file, so the Python runtime
-(python/runtime.py), the code-conversion prompt (prompts/convert-guide.txt), the Home
-Assistant sample house (ha/sample-house.json) and the sample feeds, GitHub, Telegram, email and calendar
-(samples/connections.json) are embedded inside it.
-Edit those files, then run:
+The Python runtime is written as a package, python/second_thought/, so each part can be read, reviewed and
+tested on its own. Exported programs still come as one file with nothing to install, so this joins the
+package's modules, in order, into python/runtime.py (each module's imports, above its "package only" line,
+are left out: in one file every name is already there).
 
-    python tools/sync.py           # write them into second-thought.html
-    python tools/sync.py --check   # exit 1 if the page is out of date (used by the tests)
+The page is published as one self-contained HTML file, so that runtime, the code-conversion prompt
+(prompts/convert-guide.txt), the Home Assistant sample house (ha/sample-house.json) and the sample feeds,
+GitHub, Telegram, email and calendar (samples/connections.json) are embedded inside it.
+Edit those files (not python/runtime.py, which is rebuilt), then run:
+
+    python tools/sync.py           # rebuild python/runtime.py and write everything into second-thought.html
+    python tools/sync.py --check   # exit 1 if either is out of date (used by the tests)
 """
 import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PAGE = ROOT / "second-thought.html"
+RUNTIME = ROOT / "python" / "runtime.py"
+PACKAGE = ROOT / "python" / "second_thought"
+# The order matters: each module may use names from the ones before it.
+MODULES = ["settings", "providers", "core", "connectors", "agent", "runtime"]
+MARK = "# ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----"
 PARTS = [
-    ('<script type="text/plain" id="py-runtime">\n', ROOT / "python" / "runtime.py"),
+    ('<script type="text/plain" id="py-runtime">\n', RUNTIME),
     ('<script type="text/plain" id="convert-guide">\n', ROOT / "prompts" / "convert-guide.txt"),
     ('<script type="application/json" id="ha-sample">\n', ROOT / "ha" / "sample-house.json"),
     ('<script type="application/json" id="connections-sample">\n', ROOT / "samples" / "connections.json"),
 ]
 
 
-def build(page: str) -> str:
+def bundle() -> str:
+    """python/runtime.py, made from the package's modules."""
+    bodies = []
+    for name in MODULES:
+        path = PACKAGE / (name + ".py")
+        if not path.is_file():
+            sys.exit(f"{path.relative_to(ROOT)} is missing. tools/sync.py lists the modules it joins, in MODULES.")
+        text = path.read_text(encoding="utf-8")
+        lines = text.split("\n")
+        if MARK not in lines:
+            sys.exit(f"{path.relative_to(ROOT)} has no line saying where its package-only imports end:\n{MARK}")
+        bodies.append("\n".join(lines[lines.index(MARK) + 1:]).strip("\n"))
+    return "\n\n\n".join(bodies) + "\n"
+
+
+def build(page: str, runtime: str = None) -> str:
     for opener, path in PARTS:
-        body = path.read_text(encoding="utf-8")
+        body = runtime if (path == RUNTIME and runtime is not None) else path.read_text(encoding="utf-8")
         if "</script" in body:
             sys.exit(f"{path.relative_to(ROOT)} must not contain '</script' (it is embedded in a script tag).")
         if opener not in page:
@@ -40,19 +64,29 @@ def build(page: str) -> str:
 
 
 def main() -> int:
+    runtime = bundle()
+    current_rt = RUNTIME.read_text(encoding="utf-8") if RUNTIME.is_file() else ""
     current = PAGE.read_text(encoding="utf-8")
-    updated = build(current)
+    updated = build(current, runtime)
     if "--check" in sys.argv:
+        bad = []
+        if runtime != current_rt:
+            bad.append("python/runtime.py doesn't match python/second_thought/ (edit the package, not runtime.py)")
         if updated != current:
-            print("second-thought.html is out of date. Run: python tools/sync.py")
+            bad.append("second-thought.html is out of date")
+        if bad:
+            print("; ".join(bad) + ". Run: python tools/sync.py")
             return 1
-        print("second-thought.html is in sync.")
+        print("python/runtime.py and second-thought.html are in sync.")
         return 0
+    changed = []
+    if runtime != current_rt:
+        RUNTIME.write_text(runtime, encoding="utf-8")
+        changed.append("python/runtime.py")
     if updated != current:
         PAGE.write_text(updated, encoding="utf-8")
-        print("Updated second-thought.html.")
-    else:
-        print("Already in sync.")
+        changed.append("second-thought.html")
+    print("Updated " + " and ".join(changed) + "." if changed else "Already in sync.")
     return 0
 
 
