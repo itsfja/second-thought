@@ -77,81 +77,152 @@ def _anthropic_client(**kw):
         raise RunError("Claude needs the Anthropic SDK. Install it with:  pip install anthropic") from None
     return AsyncAnthropic(**kw)
 
-# Model names change over time. Check https://docs.claude.com for current ones.
-MODELS = {
-    "quick": "claude-haiku-4-5-20251001",
-    "default": "claude-sonnet-5-5",
-    "complex": "claude-opus-5-5",
+# ----- The model services -----
+# One entry per service. The page reads this list too (tools/sync.py copies it in), so a service added here shows up
+# in the page's model menus, the exported files' notes and settings, and here, with nothing else to change, as long
+# as it speaks OpenAI's chat format ("api": "openai"). The other kinds ("anthropic", "gemini", "perplexity") each
+# have their own code in ModelCalls below.
+#
+#   name        the service's name in messages and usage counts (and in PROVIDERS)
+#   who         a shorter name the page uses when Claude stands in for it, if not name
+#   key_label   how second-thought.ini and the export header label its key, if not name
+#   menu        the heading over its models in the page's menu
+#   api         "openai" (OpenAI's chat format), "anthropic", "gemini" or "perplexity"
+#   prefix      the start of its tier names: "xai-" makes xai-quick, xai-default and xai-complex
+#   any_model   a tier start that names any of its models, like "openrouter:mistralai/mistral-small"
+#   base        the address of its API; base_env is the setting that changes it
+#   keys        the settings its key can be in; the first is the one shown. No signup page means a key is optional
+#   signup      where to get a key
+#   headers     extra HTTP headers to send
+#   tiers       quick, default and complex: (model, label) or (model, label, label in the page's menu). The menus
+#               leave out a quick or complex tier whose model is the same as the default's (it would be the same choice)
+#   no_vision   models that can't look at pictures
+#   vision      (setting, model): where its text models can't see, pictures go to this model instead
+#   pip         packages exported programs need for it
+#   note        lines for the export header: where calls go and who bills them
+#   setup       lines for the export header on setting it up (after the notes)
+#   always      exported programs always need it (Claude)
+# Model names change over time. To use a different model for a tier without editing this file, put
+# MODEL_<TIER> = <model name> in second-thought.ini, like  MODEL_OPENAI_DEFAULT = gpt-6.2-sol  or  MODEL_QUICK = claude-haiku-5.
+SERVICES = [
+    # Check https://docs.claude.com for current model names.
+    {"name": "Claude", "menu": "Claude", "api": "anthropic", "prefix": "", "keys": ["ANTHROPIC_API_KEY"],
+     "signup": "https://console.anthropic.com", "pip": ["anthropic"], "always": True,
+     "tiers": {"quick": ("claude-haiku-4-5-20251001", "Claude, quick", "Quick"),
+               "default": ("claude-sonnet-5-5", "Claude, balanced", "Balanced"),
+               "complex": ("claude-opus-5-5", "Claude, most capable", "Most capable")}},
     # Gemini: needs  pip install google-genai  and GEMINI_API_KEY. See https://ai.google.dev/gemini-api/docs/models
-    "gemini-quick": "gemini-3.5-flash-lite",
-    "gemini-default": "gemini-3.8-flash",
-    "gemini-complex": "gemini-3.1-pro-preview",
+    {"name": "Gemini", "menu": "Gemini", "api": "gemini", "prefix": "gemini-", "keys": ["GEMINI_API_KEY", "GOOGLE_API_KEY"],
+     "signup": "https://aistudio.google.com", "pip": ["google-genai"],
+     "note": ["Gemini calls go through the Gemini API and are billed to your Google account."],
+     "tiers": {"quick": ("gemini-3.5-flash-lite", "Gemini Flash-Lite"), "default": ("gemini-3.8-flash", "Gemini Flash"),
+               "complex": ("gemini-3.1-pro-preview", "Gemini Pro")}},
     # Llama: any OpenAI-compatible server. Default is Ollama on this computer: install from https://ollama.com,
     # then  ollama pull llama3.2-vision:11b  (and the others if you use them). See https://ollama.com/library
-    "llama-quick": "llama3.2:3b",              # small and fast; runs on most computers
-    "llama-default": "llama3.2-vision:11b",    # can look at pictures; about 8 GB of graphics memory
-    "llama-complex": "llama4:16x17b",          # Llama 4 Scout; needs a lot of memory
+    # llama-quick is small and fast and runs on most computers; llama-default can look at pictures and needs about
+    # 8 GB of graphics memory; llama-complex is Llama 4 Scout and needs a lot of memory.
+    {"name": "Llama", "menu": "Llama", "api": "openai", "prefix": "llama-", "base": "http://localhost:11434/v1",
+     "base_env": "LLAMA_BASE_URL", "keys": ["LLAMA_API_KEY"], "signup": None,
+     "setup": ["Llama runs on any OpenAI-compatible server. By default that's Ollama on this computer:",
+               "install it from https://ollama.com, then  ollama pull llama3.2-vision:11b  (see MODELS below).",
+               "Elsewhere? Change LLAMA_BASE_URL in second-thought.ini (and LLAMA_API_KEY if the server needs one)."],
+     "tiers": {"quick": ("llama3.2:3b", "Llama, small"), "default": ("llama3.2-vision:11b", "Llama, vision"),
+               "complex": ("llama4:16x17b", "Llama 4")}},
     # DeepSeek: needs DEEPSEEK_API_KEY (https://platform.deepseek.com). Flash can look at pictures; Pro can't.
-    "deepseek-quick": "deepseek-flash",
-    "deepseek-default": "deepseek-flash",
-    "deepseek-complex": "deepseek-v4-pro",
+    {"name": "DeepSeek", "menu": "DeepSeek", "api": "openai", "prefix": "deepseek-", "base": "https://api.deepseek.com",
+     "base_env": "DEEPSEEK_BASE_URL", "keys": ["DEEPSEEK_API_KEY"], "signup": "https://platform.deepseek.com",
+     "note": ["DeepSeek calls go to DeepSeek's servers (in China), under DeepSeek's terms, billed to your DeepSeek account."],
+     "tiers": {"quick": ("deepseek-flash", "DeepSeek Flash"), "default": ("deepseek-flash", "DeepSeek Flash"),
+               "complex": ("deepseek-v4-pro", "DeepSeek V4 Pro")}, "no_vision": ["deepseek-v4-pro"]},
     # xAI (Grok): needs XAI_API_KEY (https://console.x.ai). Both can look at pictures. See https://docs.x.ai/docs/models
-    "xai-quick": "grok-4.3",
-    "xai-default": "grok-4.3",
-    "xai-complex": "grok-4.7",
+    {"name": "xAI", "who": "Grok", "key_label": "Grok (xAI)", "menu": "Grok, from xAI", "api": "openai", "prefix": "xai-",
+     "base": "https://api.x.ai/v1", "base_env": "XAI_BASE_URL", "keys": ["XAI_API_KEY"], "signup": "https://console.x.ai",
+     "note": ["Grok calls go to xAI's servers, under xAI's terms, billed to your xAI account (https://console.x.ai)."],
+     "tiers": {"quick": ("grok-4.3", "Grok 4.3"), "default": ("grok-4.3", "Grok 4.3"), "complex": ("grok-4.7", "Grok 4.7")}},
     # OpenAI: needs OPENAI_API_KEY (https://platform.openai.com). All three can look at pictures.
     # See https://developers.openai.com/api/docs/models
-    "openai-quick": "gpt-6-luna",
-    "openai-default": "gpt-6.1-sol",
-    "openai-complex": "gpt-6-astra",
+    {"name": "OpenAI", "menu": "OpenAI", "api": "openai", "prefix": "openai-", "base": "https://api.openai.com/v1",
+     "base_env": "OPENAI_BASE_URL", "keys": ["OPENAI_API_KEY"], "signup": "https://platform.openai.com",
+     "note": ["OpenAI calls go through the OpenAI API and are billed to your OpenAI API account, not a ChatGPT plan."],
+     "tiers": {"quick": ("gpt-6-luna", "GPT-6 Luna"), "default": ("gpt-6.1-sol", "GPT-6.1 Sol"),
+               "complex": ("gpt-6-astra", "GPT-6 Astra")}},
     # Mistral (France): needs MISTRAL_API_KEY (https://console.mistral.ai). See https://docs.mistral.ai/getting-started/models
-    "mistral-quick": "mistral-small-latest",
-    "mistral-default": "mistral-medium-latest",
-    "mistral-complex": "mistral-large-latest",
+    {"name": "Mistral", "menu": "Mistral", "api": "openai", "prefix": "mistral-", "base": "https://api.mistral.ai/v1",
+     "base_env": "MISTRAL_BASE_URL", "keys": ["MISTRAL_API_KEY"], "signup": "https://console.mistral.ai",
+     "note": ["Mistral calls go to Mistral AI's servers in the EU, billed to your Mistral account (https://console.mistral.ai)."],
+     "tiers": {"quick": ("mistral-small-latest", "Mistral Small"), "default": ("mistral-medium-latest", "Mistral Medium"),
+               "complex": ("mistral-large-latest", "Mistral Large")}},
     # Qwen (Alibaba Cloud Model Studio): needs DASHSCOPE_API_KEY (https://modelstudio.console.alibabacloud.com).
-    # Pictures go to VISION_MODELS["Qwen"] instead. See https://www.alibabacloud.com/help/en/model-studio/models
-    "qwen-quick": "qwen3.8-flash",
-    "qwen-default": "qwen3.7-plus",
-    "qwen-complex": "qwen3.8-max",
+    # Pictures go to its vision model instead. See https://www.alibabacloud.com/help/en/model-studio/models
+    {"name": "Qwen", "menu": "Qwen, from Alibaba", "api": "openai", "prefix": "qwen-",
+     "base": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1", "base_env": "QWEN_BASE_URL",
+     "keys": ["DASHSCOPE_API_KEY", "QWEN_API_KEY"], "signup": "https://modelstudio.console.alibabacloud.com",
+     "note": ["Qwen calls go to Alibaba Cloud Model Studio (international region; set QWEN_BASE_URL for another), billed to your Alibaba Cloud account."],
+     "tiers": {"quick": ("qwen3.8-flash", "Qwen Flash"), "default": ("qwen3.7-plus", "Qwen Plus"),
+               "complex": ("qwen3.8-max", "Qwen Max")}, "vision": ("QWEN_VISION_MODEL", "qwen3-vl-plus")},
     # Kimi (Moonshot AI): needs MOONSHOT_API_KEY (https://platform.moonshot.ai). Both can look at pictures.
-    "kimi-quick": "kimi-k2.6",
-    "kimi-default": "kimi-k2.6",
-    "kimi-complex": "kimi-k3",
+    {"name": "Kimi", "menu": "Kimi, from Moonshot", "api": "openai", "prefix": "kimi-", "base": "https://api.moonshot.ai/v1",
+     "base_env": "MOONSHOT_BASE_URL", "keys": ["MOONSHOT_API_KEY", "KIMI_API_KEY"], "signup": "https://platform.moonshot.ai",
+     "note": ["Kimi calls go to Moonshot AI's servers (a Chinese company), under Moonshot's terms, billed to your Moonshot account."],
+     "tiers": {"quick": ("kimi-k2.6", "Kimi K2.6"), "default": ("kimi-k2.6", "Kimi K2.6"), "complex": ("kimi-k3", "Kimi K3")}},
     # Perplexity: needs PERPLEXITY_API_KEY (https://www.perplexity.ai/account/api). Always searches the web and
     # lists its sources. These are Agent API presets, not model names. See https://docs.perplexity.ai
-    "perplexity-quick": "fast",
-    "perplexity-default": "low",
-    "perplexity-complex": "high",
+    {"name": "Perplexity", "menu": "Perplexity, searches the web", "api": "perplexity", "prefix": "perplexity-",
+     "base": "https://api.perplexity.ai", "base_env": "PERPLEXITY_BASE_URL", "keys": ["PERPLEXITY_API_KEY"],
+     "signup": "https://www.perplexity.ai/account/api",
+     "note": ["Perplexity searches the web for every step it answers and lists its sources; billed to your Perplexity API account."],
+     "tiers": {"quick": ("fast", "Perplexity, fast"), "default": ("low", "Perplexity, research"),
+               "complex": ("high", "Perplexity, deep research")}},
     # Hugging Face: open models run by Hugging Face's partners. Needs HF_TOKEN (https://huggingface.co/settings/tokens).
     # Any model name from https://huggingface.co/models?inference_provider=all works here.
-    "hf-quick": "google/gemma-4-26B-A4B-it",
-    "hf-default": "google/gemma-4-31B-it",
-    "hf-complex": "openai/gpt-oss-120b",
+    {"name": "Hugging Face", "menu": "Open models on Hugging Face", "api": "openai", "prefix": "hf-",
+     "base": "https://router.huggingface.co/v1", "base_env": "HF_BASE_URL", "keys": ["HF_TOKEN", "HUGGINGFACE_API_KEY"],
+     "signup": "https://huggingface.co/settings/tokens",
+     "note": ["Hugging Face passes open-model calls to one of its partner services; billed to your Hugging Face account. Any model from huggingface.co works: edit MODELS below."],
+     "tiers": {"quick": ("google/gemma-4-26B-A4B-it", "Gemma 4, small"), "default": ("google/gemma-4-31B-it", "Gemma 4"),
+               "complex": ("openai/gpt-oss-120b", "GPT-OSS 120B")}, "vision": ("HF_VISION_MODEL", "google/gemma-4-31B-it")},
     # Groq: open models, very fast. Needs GROQ_API_KEY (https://console.groq.com). See https://console.groq.com/docs/models
-    "groq-quick": "llama-3.1-8b-instant",
-    "groq-default": "llama-3.3-70b-versatile",
-    "groq-complex": "openai/gpt-oss-120b",
+    {"name": "Groq", "menu": "Groq, very fast", "api": "openai", "prefix": "groq-", "base": "https://api.groq.com/openai/v1",
+     "base_env": "GROQ_BASE_URL", "keys": ["GROQ_API_KEY"], "signup": "https://console.groq.com",
+     "note": ["Groq calls go to Groq's servers (US), billed to your Groq account. Groq has a free tier with rate limits."],
+     "tiers": {"quick": ("llama-3.1-8b-instant", "Llama 3.1 8B (Groq)"), "default": ("llama-3.3-70b-versatile", "Llama 3.3 70B (Groq)"),
+               "complex": ("openai/gpt-oss-120b", "GPT-OSS 120B (Groq)")}, "vision": ("GROQ_VISION_MODEL", "qwen/qwen3.8-27b")},
     # GLM (Z.ai, formerly Zhipu): needs ZAI_API_KEY (https://z.ai/manage-apikey/apikey-list). Both can look at pictures.
-    "glm-quick": "glm-5.3-flash",
-    "glm-default": "glm-5.3-flash",
-    "glm-complex": "glm-5.3",
+    {"name": "GLM", "menu": "GLM, from Z.ai", "api": "openai", "prefix": "glm-", "base": "https://api.z.ai/api/paas/v4",
+     "base_env": "ZAI_BASE_URL", "keys": ["ZAI_API_KEY", "ZHIPUAI_API_KEY"], "signup": "https://z.ai/manage-apikey/apikey-list",
+     "note": ["GLM calls go to Z.ai (formerly Zhipu AI, a Chinese company), under Z.ai's terms, billed to your Z.ai account."],
+     "tiers": {"quick": ("glm-5.3-flash", "GLM-5.3 Flash"), "default": ("glm-5.3-flash", "GLM-5.3 Flash"),
+               "complex": ("glm-5.3", "GLM-5.3")}},
     # MiniMax: needs MINIMAX_API_KEY (https://platform.minimax.io). M3 can look at pictures; M2.7 can't.
-    "minimax-quick": "MiniMax-M2.7-highspeed",
-    "minimax-default": "MiniMax-M3",
-    "minimax-complex": "MiniMax-M3",
+    {"name": "MiniMax", "menu": "MiniMax", "api": "openai", "prefix": "minimax-", "base": "https://api.minimax.io/v1",
+     "base_env": "MINIMAX_BASE_URL", "keys": ["MINIMAX_API_KEY"], "signup": "https://platform.minimax.io",
+     "note": ["MiniMax calls go to MiniMax's international servers (a Chinese company), under MiniMax's terms, billed to your MiniMax account."],
+     "tiers": {"quick": ("MiniMax-M2.7-highspeed", "MiniMax M2.7"), "default": ("MiniMax-M3", "MiniMax M3"),
+               "complex": ("MiniMax-M3", "MiniMax M3")}, "no_vision": ["MiniMax-M2.7-highspeed"]},
     # OpenRouter: one key for hundreds of models (https://openrouter.ai/keys). openrouter/auto picks a model for each
     # step. For one particular model use the "with OpenRouter model" block, or a tier like "openrouter:mistralai/..."
     # with any name from https://openrouter.ai/models
-    "openrouter-quick": "openrouter/auto",
-    "openrouter-default": "openrouter/auto",
-    "openrouter-complex": "openrouter/auto",
-}
+    {"name": "OpenRouter", "menu": "OpenRouter, hundreds of models", "api": "openai", "prefix": "openrouter-",
+     "any_model": "openrouter:", "base": "https://openrouter.ai/api/v1", "base_env": "OPENROUTER_BASE_URL",
+     "keys": ["OPENROUTER_API_KEY"], "signup": "https://openrouter.ai/keys", "headers": {"X-OpenRouter-Title": "Second Thought"},
+     "note": ["OpenRouter passes each call to the company that makes the model you chose, under that company's terms; billed to your OpenRouter credit (https://openrouter.ai/keys)."],
+     "tiers": {"quick": ("openrouter/auto", "OpenRouter, auto-pick"), "default": ("openrouter/auto", "OpenRouter, auto-pick"),
+               "complex": ("openrouter/auto", "OpenRouter, auto-pick")}},
+]
+TIER_NAMES = ("quick", "default", "complex")
+
+
+def _tier(service, size):
+    """The tier name for one of a service's sizes: "xai-" and "default" make "xai-default" (Claude's are plain "default")."""
+    return service["prefix"] + size
+
+
+# The tables the rest of the runtime uses, made from SERVICES.
+# MODELS: every tier's model, like MODELS["xai-default"] == "grok-4.3". To change one, edit that service's "tiers" in
+# SERVICES above, or put MODEL_<TIER> = <model name> in second-thought.ini (no editing needed).
+MODELS ={_tier(s, k): s["tiers"][k][0] for s in SERVICES for k in TIER_NAMES if k in s["tiers"]}
 # Where a service's text models can't see, pictures go to one of its models that can.
-VISION_MODELS = {
-    "Qwen": os.environ.get("QWEN_VISION_MODEL", "qwen3-vl-plus"),
-    "Groq": os.environ.get("GROQ_VISION_MODEL", "qwen/qwen3.8-27b"),
-    "Hugging Face": os.environ.get("HF_VISION_MODEL", "google/gemma-4-31B-it"),
-}
+VISION_MODELS = {s["name"]: os.environ.get(s["vision"][0], s["vision"][1]) for s in SERVICES if s.get("vision")}
 
 
 def _provider(name, prefix, base_env, base, key_envs, signup, headers=None):
@@ -160,46 +231,16 @@ def _provider(name, prefix, base_env, base, key_envs, signup, headers=None):
             "key": key, "key_env": key_envs[0], "signup": signup, "headers": headers or {}}
 
 
-# Model services that speak OpenAI's chat format. Change a service's address with its *_BASE_URL variable.
-PROVIDERS = {p["name"]: p for p in [
-    _provider("Llama", "llama-", "LLAMA_BASE_URL", "http://localhost:11434/v1", ("LLAMA_API_KEY",), None),
-    _provider("DeepSeek", "deepseek-", "DEEPSEEK_BASE_URL", "https://api.deepseek.com", ("DEEPSEEK_API_KEY",), "https://platform.deepseek.com"),
-    _provider("xAI", "xai-", "XAI_BASE_URL", "https://api.x.ai/v1", ("XAI_API_KEY",), "https://console.x.ai"),
-    _provider("OpenAI", "openai-", "OPENAI_BASE_URL", "https://api.openai.com/v1", ("OPENAI_API_KEY",), "https://platform.openai.com"),
-    _provider("Mistral", "mistral-", "MISTRAL_BASE_URL", "https://api.mistral.ai/v1", ("MISTRAL_API_KEY",), "https://console.mistral.ai"),
-    _provider("Qwen", "qwen-", "QWEN_BASE_URL", "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
-              ("DASHSCOPE_API_KEY", "QWEN_API_KEY"), "https://modelstudio.console.alibabacloud.com"),
-    _provider("Kimi", "kimi-", "MOONSHOT_BASE_URL", "https://api.moonshot.ai/v1", ("MOONSHOT_API_KEY", "KIMI_API_KEY"), "https://platform.moonshot.ai"),
-    _provider("Hugging Face", "hf-", "HF_BASE_URL", "https://router.huggingface.co/v1", ("HF_TOKEN", "HUGGINGFACE_API_KEY"), "https://huggingface.co/settings/tokens"),
-    _provider("Groq", "groq-", "GROQ_BASE_URL", "https://api.groq.com/openai/v1", ("GROQ_API_KEY",), "https://console.groq.com"),
-    _provider("GLM", "glm-", "ZAI_BASE_URL", "https://api.z.ai/api/paas/v4", ("ZAI_API_KEY", "ZHIPUAI_API_KEY"), "https://z.ai/manage-apikey/apikey-list"),
-    _provider("MiniMax", "minimax-", "MINIMAX_BASE_URL", "https://api.minimax.io/v1", ("MINIMAX_API_KEY",), "https://platform.minimax.io"),
-    _provider("OpenRouter", "openrouter-", "OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1", ("OPENROUTER_API_KEY",),
-              "https://openrouter.ai/keys", {"X-OpenRouter-Title": "Second Thought"}),
-    _provider("Perplexity", "perplexity-", "PERPLEXITY_BASE_URL", "https://api.perplexity.ai", ("PERPLEXITY_API_KEY",), "https://www.perplexity.ai/account/api"),
-]}
-# Model names change over time. To use a different model for a tier without editing this file, put
-# MODEL_<TIER> = <model name> in second-thought.ini, like  MODEL_OPENAI_DEFAULT = gpt-6.2-sol  or  MODEL_QUICK = claude-haiku-5.
-for _tier in list(MODELS):
-    _name = os.environ.get("MODEL_" + _tier.upper().replace("-", "_"), "").strip()
+# Model services that speak OpenAI's chat format (and Perplexity, whose agent API is close to it). Change a service's
+# address with its *_BASE_URL setting.
+PROVIDERS = {s["name"]: _provider(s["name"], s["prefix"], s["base_env"], s["base"], tuple(s["keys"]), s["signup"], s.get("headers"))
+             for s in SERVICES if s["api"] in ("openai", "perplexity")}
+for _tier_name in list(MODELS):
+    _name = os.environ.get("MODEL_" + _tier_name.upper().replace("-", "_"), "").strip()
     if _name:
-        MODELS[_tier] = _name
-NO_VISION = {"deepseek-v4-pro", "MiniMax-M2.7-highspeed"}  # models that can't look at photos
-MODEL_LABELS = {"quick": "Claude, quick", "default": "Claude, balanced", "complex": "Claude, most capable",
-                "gemini-quick": "Gemini Flash-Lite", "gemini-default": "Gemini Flash", "gemini-complex": "Gemini Pro",
-                "llama-quick": "Llama, small", "llama-default": "Llama, vision", "llama-complex": "Llama 4",
-                "deepseek-quick": "DeepSeek Flash", "deepseek-default": "DeepSeek Flash", "deepseek-complex": "DeepSeek V4 Pro",
-                "xai-quick": "Grok 4.3", "xai-default": "Grok 4.3", "xai-complex": "Grok 4.7",
-                "openai-quick": "GPT-6 Luna", "openai-default": "GPT-6.1 Sol", "openai-complex": "GPT-6 Astra",
-                "mistral-quick": "Mistral Small", "mistral-default": "Mistral Medium", "mistral-complex": "Mistral Large",
-                "qwen-quick": "Qwen Flash", "qwen-default": "Qwen Plus", "qwen-complex": "Qwen Max",
-                "kimi-quick": "Kimi K2.6", "kimi-default": "Kimi K2.6", "kimi-complex": "Kimi K3",
-                "perplexity-quick": "Perplexity, fast", "perplexity-default": "Perplexity, research", "perplexity-complex": "Perplexity, deep research",
-                "hf-quick": "Gemma 4, small", "hf-default": "Gemma 4", "hf-complex": "GPT-OSS 120B",
-                "groq-quick": "Llama 3.1 8B (Groq)", "groq-default": "Llama 3.3 70B (Groq)", "groq-complex": "GPT-OSS 120B (Groq)",
-                "glm-quick": "GLM-5.3 Flash", "glm-default": "GLM-5.3 Flash", "glm-complex": "GLM-5.3",
-                "minimax-quick": "MiniMax M2.7", "minimax-default": "MiniMax M3", "minimax-complex": "MiniMax M3",
-                "openrouter-quick": "OpenRouter, auto-pick", "openrouter-default": "OpenRouter, auto-pick", "openrouter-complex": "OpenRouter, auto-pick"}
+        MODELS[_tier_name] = _name
+NO_VISION = {m for s in SERVICES for m in s.get("no_vision", ())}  # models that can't look at photos
+MODEL_LABELS = {_tier(s, k): s["tiers"][k][1] for s in SERVICES for k in TIER_NAMES if k in s["tiers"]}
 
 
 def model_label(tier):

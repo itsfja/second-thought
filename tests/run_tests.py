@@ -1135,6 +1135,14 @@ async def page_tests():
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
 
+        sys.path.insert(0, str(ROOT / "tools"))
+        import sync as sync_tool
+        services = json.loads(sync_tool.services_json())
+        groups = await pg.eval_on_selector_all("#tier optgroup", "e => e.map(g => [g.label, g.children.length])")
+        check([g[0].split(" (runs in")[0] for g in groups] == [s["menu"] for s in services] and all(n >= 1 for _, n in groups)
+              and await pg.input_value("#tier") == "default",
+              f"the model menu has a heading for each of the {len(services)} services in SERVICES, with Claude balanced chosen")
+
         EXAMPLES.extend(await pg.eval_on_selector_all("#example option", "e => e.map(o => o.value)"))
         print(f"Examples in the page ({len(EXAMPLES)})")
         for ex in EXAMPLES:
@@ -2171,9 +2179,14 @@ def example_ini_check():
     import configparser
     src = (ROOT / "python" / "runtime.py").read_text(encoding="utf-8")
     names = set(re.findall(r'os\.environ(?:\.get)?[\[(]"([A-Z][A-Z0-9_]*)"', src))
-    for base, keys in re.findall(r'_provider\("[^"]+", "[^"]+", "([A-Z_]+)", "[^"]+", \(([^)]*)\)', src):
-        names.add(base)
-        names.update(re.findall(r'"([A-Z_]+)"', keys))
+    sys.path.insert(0, str(ROOT / "tools"))
+    import sync as sync_tool
+    services = json.loads(sync_tool.services_json())
+    for s in services:  # each service's address and key settings, and its vision-model setting
+        names.update([s["base_env"]] if s.get("base_env") else [])
+        names.update(s["keys"])
+        names.update([s["vision"][0]] if s.get("vision") else [])
+    check(len(services) >= 15 and all(s["keys"] for s in services), f"the settings check sees all {len(services)} model services")
     friendly = set(re.findall(r'"([a-z_]+)": "RB_[A-Z_]+"', src.split("SETTING_NAMES = ", 1)[1].split("}", 1)[0]))
     prefixes = {n for n in names if n.endswith("_")}  # like MODEL_ + a tier's name: the example shows the pattern
     names -= {"SECOND_THOUGHT_INI"} | prefixes | {n for n in names if n.startswith("RB_") and any(f'"{f}": "{n}"' in src for f in friendly)}
