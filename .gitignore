@@ -11,5 +11,6 @@ memory.json
 watched-pages.json
 telegram-messages.json
 *.json.lock
+.*.approved
 .DS_Store
 second-thought.ini

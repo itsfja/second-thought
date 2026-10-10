@@ -18,6 +18,18 @@ that the two agree.
 
 ## Unreleased
 
+### Added
+- Exported programs list what they can do beyond asking their models (send email, control Home Assistant, publish
+  MQTT, read your calendars, and so on), in their notes and in `CAN`. The list is worked out from the blocks; every
+  block and agent tool is classified, and a test fails if a new one isn't. Importing a program on the page says what
+  it can do, the things that act first (#44).
+- A program that can act on the world lists those things and asks before its first run. The yes is kept in
+  `.<program>.approved` until the program file changes. `approve = no` in `second-thought.ini` skips the question.
+
+### Changed
+- **Needs one step after re-exporting:** a scheduled program that can act won't start until someone has run it once
+  by hand and said yes (or set `approve = no`). Under the rules above that makes the next release 2.0.0.
+
 ### Changed
 - Every model service is now one entry in `SERVICES` (in `python/second_thought/providers.py`). `MODELS`,
   `PROVIDERS` and the other tables are made from it, and the page builds its model menus, backups, block choices,

@@ -45,7 +45,8 @@ SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
                  "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
-                 "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES"}
+                 "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
+                 "approve": "RB_APPROVE"}
 
 
 def _load_settings():

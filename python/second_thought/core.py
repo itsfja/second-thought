@@ -419,6 +419,39 @@ SCHEMAS = {
 }
 
 
+# ----- What a program can do -----
+# Everything a program can do beyond asking its model services, in the order it's listed. The page reads this list too
+# (tools/sync.py copies it in): it works out which of these a program uses from its blocks, shows them when you import a
+# program, and writes them into the exported program, which lists them and asks before its first run if any of them
+# acts on the world (the third value). Each is (id, what it lets the program do, whether that acts on the world).
+CAPABILITIES = [
+    ("email_send", "send email", True),
+    ("telegram_send", "send Telegram messages", True),
+    ("discord_send", "send Discord messages", True),
+    ("slack_send", "send Slack messages", True),
+    ("github_comment", "comment on GitHub", True),
+    ("ha_act", "control your Home Assistant devices", True),
+    ("homey_act", "control your Homey devices and start Homey flows", True),
+    ("mqtt_publish", "publish MQTT messages", True),
+    ("webhook", "accept web requests from other computers", True),
+    ("web", "read public web pages and search the web", False),
+    ("email_read", "read your email", False),
+    ("calendar", "read your calendars", False),
+    ("feeds", "read news feeds", False),
+    ("github_read", "look at your GitHub projects", False),
+    ("telegram_read", "read your Telegram messages", False),
+    ("discord_read", "read your Discord channels", False),
+    ("slack_read", "read your Slack channels", False),
+    ("ha_read", "look at your Home Assistant devices", False),
+    ("homey_read", "look at your Homey devices, flows and variables", False),
+    ("mqtt_read", "read MQTT messages", False),
+    ("folder", "watch a folder for new files", False),
+    ("files_read", "read files you choose", False),
+    ("files_save", "save files in its outputs folder", False),
+    ("memory", "keep notes between runs, in memory.json", False),
+]
+
+
 def record_schema(fields, many=False):
     one = _obj({f: _ANY for f in fields})
     return _obj({"items": {"type": "array", "items": one}}, ["items"]) if many else one
