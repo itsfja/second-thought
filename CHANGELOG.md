@@ -19,6 +19,13 @@ that the two agree.
 ## Unreleased
 
 ### Added
+- `--doctor` checks an exported program's setup without spending anything or acting on anything (#54). It checks only
+  what the program uses (from `CAN`): Python, the settings file, packages, each model service's key (with its free list
+  of models, noting a model it doesn't list, such as a Llama model that hasn't been pulled), and each connection by
+  reading from it: Home Assistant, Homey, MQTT, Telegram, Discord, Slack, email (reading, and signing in to send without
+  sending), GitHub, calendars, feeds, the web-request port, MCP servers' tool lists, memory and the outputs folder. It
+  also says whether the first-run approval is recorded. Exit code 0 when nothing fails. A program exported before `CAN`
+  is checked for whatever is set up. `CAN` now also names the program's MCP servers.
 - The agent's memory tools include `search_memory`, which finds saved notes by what's in their names and contents,
   best first, so a long-running agent with many notes can find the right one without knowing its name (#46). It ranks
   with BM25 over names (counted twice) and contents, with a light trim of English endings and partial matches for word

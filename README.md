@@ -628,6 +628,16 @@ python my-program.py --version
 
 When the helper gets better, its number goes up. `CHANGELOG.md` says what changed each time.
 
+To check that a program has everything it needs before you rely on it, run it like this:
+
+```
+python my-program.py --doctor
+```
+
+*Picture: a doctor listening to a little robot's chest, with a clipboard of ticks.*
+
+It looks at each thing the program uses: its keys, its packages, Home Assistant, email, Telegram, MCP servers and the rest. It says **ok** for each one that works, and **FAIL** with what to fix for each one that doesn't. It only looks: nothing is sent, posted or switched, and it doesn't use any of your model tokens.
+
 Your program does not change by itself. To give it the newer helper, import the program on the Second Thought page, then export it again. The page tells you when a program you import has a different helper.
 
 **Grown-ups:** the numbers follow semantic versioning. The first number goes up when a program might behave differently, the middle one for something new, and the last one for a fix. When you change the helper, write a line in `CHANGELOG.md` under **Unreleased**.
