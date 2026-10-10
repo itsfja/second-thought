@@ -1254,6 +1254,26 @@ async def page_tests():
         choices = await pg.eval_on_selector_all("#io-choice button", "e => e.map(x => x.textContent)")
         check(len(choices) == 2, "edited export is noticed and offers a choice")
 
+        rv = re.search(r'^RUNTIME_VERSION = "([^"]+)"', code, re.M).group(1)
+        check(f", with runtime {rv}." in code[:3000],
+              f"the export header says which runtime it was made with ({rv})")
+        hint = await pg.text_content("#io-py-version")
+        check(f"runtime {rv}" in (hint or ""), f"the export panel says which runtime exports get ({hint!r})")
+        for older, want in [(code.replace(f'RUNTIME_VERSION = "{rv}"', 'RUNTIME_VERSION = "0.9.0"', 1), "exported with runtime 0.9.0"),
+                            (re.sub(r'^RUNTIME_VERSION = .*\n', "", code, count=1, flags=re.M), "from before versions were numbered")]:
+            await paste(pg, rehash_export(older))
+            await pg.click("#io-load-paste")
+            await pg.wait_for_timeout(300)
+            msg = await pg.text_content("#io-import-msg")
+            choices = await pg.eval_on_selector_all("#io-choice button", "e => e.map(x => x.textContent)")
+            check(not choices and "Loaded" in msg and want in msg and f"this page has runtime {rv}" in msg,
+                  f"importing a program made with another runtime loads it and says how to upgrade ({msg[:90]!r}…)")
+        await paste(pg, code)
+        await pg.click("#io-load-paste")
+        await pg.wait_for_timeout(300)
+        msg = await pg.text_content("#io-import-msg")
+        check("runtime" not in msg, "importing a program made with this page's runtime says nothing about runtimes")
+
         await new_feature_page_tests(pg)
 
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
@@ -2101,6 +2121,25 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
           f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
 
 
+PY_MARK = "# ---- Second Thought program: lets the block editor import this file again ----"
+
+
+def js_code_hash(text):
+    """The page's codeHash: FNV-1a over the UTF-16 code units, after trimming line ends."""
+    t = "\n".join(line.rstrip() for line in text.replace("\r\n", "\n").replace("\r", "\n").split("\n")).rstrip("\n")
+    h = 0x811c9dc5
+    units = t.encode("utf-16-le")
+    for i in range(0, len(units), 2):
+        h = ((h ^ int.from_bytes(units[i:i + 2], "little")) * 0x01000193) & 0xFFFFFFFF
+    return f"{h:08x}"
+
+
+def rehash_export(code):
+    """An exported program whose code was changed here, with its CODE-HASH redone, so the page treats it as unedited."""
+    above, below = code.split(PY_MARK, 1)
+    return above + PY_MARK + re.sub(r"# CODE-HASH: [0-9a-f]+", "# CODE-HASH: " + js_code_hash(above), below, count=1)
+
+
 PACKAGE_CHECK = r"""
 import json, os, sys, tempfile
 os.environ["RB_MEMORY_FILE"] = os.path.join(tempfile.mkdtemp(), "memory.json")
@@ -2157,6 +2196,10 @@ def main():
     print("Sources")
     check(sync.returncode == 0, sync.stdout.strip())
     package_check()
+    unit = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", str(HERE / "unit")], capture_output=True, text=True, timeout=300)
+    ran = re.search(r"Ran (\d+) tests?", unit.stderr)
+    check(unit.returncode == 0, f"the unit tests in tests/unit pass ({ran.group(1) if ran else '?'} tests)"
+          + ("" if unit.returncode == 0 else ":\n" + unit.stderr.strip()[-1500:]))
     example_ini_check()
     if not (VENDOR / "blockly").exists():
         sys.exit("Run tests/setup.sh first.")
