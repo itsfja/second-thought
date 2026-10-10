@@ -2395,6 +2395,46 @@ def same_export(files):
     return out
 
 
+# Calls whose first argument the page shows through tr(): its words are what a translation needs.
+SHOWN_BY = ["tr", "addStep", "askStep", "askJSON", "waitForYou", "setStatus", "connNote", ".done"]
+
+
+def code_texts(page):
+    """The texts in the page's code that reach tr(): the first argument of each call in SHOWN_BY, when it is a text
+    or a choice of texts (cond ? "a" : "b"). An argument joined from parts ("Homey: " + name) isn't a text to translate."""
+    js = page[page.index('id="community-gallery"'):]
+    found = set()
+    for name in SHOWN_BY:
+        pattern = (r"\." + name[1:] if name.startswith(".") else r"(?<![\w.])" + name) + r"\("
+        for m in re.finditer(pattern, js):
+            i, depth, arg, quote = m.end(), 0, [], None
+            while i < len(js):
+                c = js[i]
+                if quote:
+                    if c == "\\":
+                        arg.append(js[i:i + 2]); i += 2; continue
+                    if c == quote:
+                        quote = None
+                elif c in "\"'`":
+                    quote = c
+                elif c in "([{":
+                    depth += 1
+                elif c in ")]}":
+                    if depth == 0:
+                        break
+                    depth -= 1
+                elif c == "," and depth == 0:
+                    break
+                arg.append(c); i += 1
+            arg = "".join(arg)
+            bare = re.sub(r'"(?:[^"\\]|\\.)*"', '""', arg)
+            if "+" in bare or not arg.lstrip().startswith(('"', "(")) and "?" not in bare:
+                continue
+            # Only the texts it can show: the whole argument, or a choice after ? or : (not those in a condition).
+            found |= {json.loads('"' + t + '"') for t in re.findall(r'(?:[?:]|\|\|)\s*"((?:[^"\\]|\\.)*)"|^\s*"((?:[^"\\]|\\.)*)"', arg) for t in t if t}
+    return {t for t in found if re.search(r"[A-Za-z]", t)}
+
+
 async def i18n_tests():
     """Every language has every block's words, and a program is the same whatever language its blocks are shown in."""
     print("Languages")
@@ -2416,9 +2456,9 @@ async def i18n_tests():
         en, en_errors = await page()
         info = await en.evaluate("window.__i18n()")
         page_info = await en.evaluate("window.__pageI18n()")
-        # Every text the page passes to tr(), as written in the source.
-        tr_texts = {json.loads('"' + m + '"') for m in re.findall(r'\btr\("((?:[^"\\]|\\.)*)"', PAGE)}
-        page_needs = set(page_info["keys"]) | set(page_info["categories"]) | tr_texts
+        # Every text the page's code shows through tr() (directly, or as a step name, a step's label or the status), as written in the source.
+        tr_texts = code_texts(PAGE)
+        page_needs = set(page_info["keys"]) | set(page_info["categories"]) | tr_texts | set(await en.evaluate("window.__runWords()"))
         check(len(page_info["keys"]) > 60 and "Run" in page_info["keys"] and "Step: on" in tr_texts,
               f"the page lists its own words for translators ({len(page_info['keys'])} in the page, {len(tr_texts)} set by code)")
         check(info["lang"] == "en" and info["langs"], f"the page has {len(info['langs'])} translation(s) of the block palette, and English when none is chosen")
@@ -2491,10 +2531,20 @@ async def i18n_tests():
                 await pg.click("#bk-toggle")
                 check(on == P["Step: on"] and bk == P["Backups ({n})"].replace("{n}", "1"),
                       f"labels the page changes as you go are in {t.get('name', code)} too ({on!r}, {bk!r})")
+                done_word = P["done in {time}"].split("{time}")[0]
                 await pg.select_option("#example", "review")
                 await pg.click("#load")
                 status = await run_program(pg)
-                check(status.startswith("done"), f"a program still runs with the page in {code} ({status})")
+                check(status.startswith(done_word), f"a program still runs with the page in {code} ({status})")
+                await pg.select_option("#example", "interview")
+                await pg.click("#load")
+                status = await run_program(pg)
+                log = await pg.evaluate("""() => ({ names:[...document.querySelectorAll('.step-name')].map(x => x.textContent),
+                    pills:[...document.querySelectorAll('.pill')].map(x => x.textContent), states:[...document.querySelectorAll('.pill')].map(x => x.dataset.state || '') })""")
+                check(status.startswith(done_word) and P["Question for you"] in log["names"] and P["Write a first draft"] in log["names"]
+                      and P["Result"] in log["names"] and P["done"] in log["pills"] and P["answered"] in log["pills"]
+                      and "done" in log["states"] and "running" not in log["states"] and not any(x in ("done", "running", "answered") for x in log["pills"]),
+                      f"the run log's steps, labels and status are in {t.get('name', code)}, and the page still tracks each step in English ({status}; {log['names'][:5]}; {log['pills'][:5]})")
             await pg.select_option("#example", "brainstorm")
             await pg.click("#load")
             n = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")

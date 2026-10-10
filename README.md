@@ -549,7 +549,7 @@ The blocks, and the buttons around them, can speak more than one language. Choos
 
 Changing the language only changes the words you see. Your program stays exactly the same, so a program built in Spanish opens just the same in English, and exports the same Python.
 
-Right now they speak English and Spanish (Español). The run log, the messages the page shows you and the example descriptions are still in English for now.
+Right now they speak English and Spanish (Español). The run log is translated too. The messages the page shows you, what happens inside each step, and the example descriptions are still in English for now.
 
 **Grown-ups:** each language is one file in the `i18n` folder, like `i18n/es.json`. It holds every block's words, its help text and its choices, the category names, and the page's own words (under `page`, each English text with its translation). To add a language, copy that file, translate the words (never the choice values, the `%1` markers or the `{name}` markers), and run `python tools/sync.py`. The checks tell you anything you missed.
 
