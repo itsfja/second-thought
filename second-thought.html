@@ -6380,7 +6380,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             print("\nStopped.")
 </script>
 <script type="application/json" id="i18n">
-{"es":{"name":"Español","blockly":"es","note":"Spanish words for the block palette and the page's buttons and panels. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, keys are the page's English text. Page buttons named in block text use their Spanish names (Ejecutar, Horarios, Programas); Continue is still English, like the rest of the run log, until that is translated.","blocks":{"rb_add_result":{"message0":"añadir %1 al resultado"},"rb_agent":{"message0":"agente: trabajar para %1","message1":"hasta %1 pasos, con estas herramientas:","message2":"%1","message3":"hacer primero un plan, y cambiarlo sobre la marcha %1","tooltip":"Claude decide qué hacer a continuación: en cada paso elige una de las herramientas de dentro, ve lo que pasó y sigue hasta cumplir el objetivo o quedarse sin pasos. Su respuesta final va al borrador. Cada paso es una llamada al modelo. Con 'hacer primero un plan' marcado, escribe un plan corto en su primer paso y lo mantiene al día, sin coste adicional."},"rb_agent_builtin":{"message0":"herramienta: %1","tooltip":"Una herramienta ya hecha para el agente. 'Hacer cuentas' y 'horas y fechas' aciertan con los números y las horas, en lugar de que el modelo los adivine. 'Comprobar un texto' hace que otro revisor juzgue el trabajo del agente. En esta página, los feeds, GitHub, Telegram, el correo y el calendario usan datos de ejemplo; el Python exportado usa los tuyos (pon las claves en second-thought.ini) y lee páginas web de verdad. Enviar, comentar y 'controlar dispositivos' te preguntan antes de cada vez, porque lo que lee el agente (una página web, una nota) podría intentar dirigirlo. Elige 'sin preguntar' solo si te fías de todo lo que lee. Abrir cerraduras, puertas y alarmas siempre pregunta."},"rb_agent_mcp":{"message0":"herramientas del servidor MCP %1 %2","tooltip":"Da al agente todas las herramientas que ofrece un servidor MCP: archivos, GitHub, bases de datos, calendarios y mucho más, de todo el ecosistema MCP. Configura el servidor en second-thought.ini como MCP_<NOMBRE> = la orden que lo arranca (como npx -y @modelcontextprotocol/server-filesystem ~/recetas) o su dirección https://. Solo en el Python exportado: en esta página el agente trabaja sin estas herramientas."},"rb_agent_steps":{"message0":"pasos del agente","tooltip":"Lo que hizo el agente más reciente de esta ejecución: una lista de fichas con paso, herramienta, entrada, resultado y estado (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."},"rb_agent_tool":{"message0":"herramienta: Mi bloque %1","message1":"qué hace %1","message2":"tipos de entrada %1","message3":"preguntarme antes de cada uso %1","tooltip":"Deja que el agente ejecute uno de tus Mis bloques. Sus entradas son las entradas de la herramienta, y lo que devuelve es el resultado que ve el agente. Descríbelo con claridad: la descripción es todo lo que el agente sabe de él. Los tipos de entrada, por ejemplo 'harina gramos: number; agua gramos: number - gramos de agua', dicen qué debe ser cada entrada: text, number, yes/no, list o any. La entrada del agente se comprueba antes de ejecutar el bloque. 'Preguntarme antes de cada uso' viene marcado, porque lo que lee el agente (una página web, una nota) podría intentar dirigirlo: desmárcalo en los bloques que solo calculan y no cambian nada."},"rb_answer":{"message0":"respuesta"},"rb_approve":{"message0":"apruebo %1","tooltip":"Muestra el texto y espera a que lo apruebes o lo devuelvas."},"rb_ask":{"message0":"preguntar a Claude %1","tooltip":"Claude responde con texto."},"rb_ask_first":{"message0":"preguntarme antes de %1","tooltip":"A partir de aquí, el programa muestra lo que va a hacer y espera a que lo permitas. Si dices que no, se salta ese paso y sigue. El Python exportado pregunta en el terminal; una ejecución programada sin nadie delante se lo salta."},"rb_ask_list":{"message0":"pedir a Claude una lista: %1","tooltip":"Claude responde con una lista que puedes recorrer."},"rb_ask_me":{"message0":"preguntarme %1 y esperar","tooltip":"Pausa la ejecución hasta que escribas una respuesta en el registro."},"rb_ask_number":{"message0":"pedir a Claude un número: %1"},"rb_ask_record":{"message0":"pedir a Claude una ficha con los campos %1 : %2","tooltip":"Campos separados por comas, por ejemplo: título, puntuación, notas."},"rb_ask_records":{"message0":"pedir a Claude una lista de fichas con los campos %1 : %2"},"rb_ask_yesno":{"message0":"Claude dice que sí a %1","tooltip":"Claude responde a una pregunta de sí o no."},"rb_better":{"message0":"el mejor entre %1 y %2 en %3"},"rb_broadcast":{"message0":"enviar %1","tooltip":"Pone en marcha todos los guiones 'al recibir' de este mensaje y sigue enseguida."},"rb_broadcast_wait":{"message0":"enviar %1 y esperar","tooltip":"Pone en marcha todos los guiones 'al recibir' de este mensaje y espera a que terminen todos."},"rb_broadcast_with":{"message0":"enviar %1 con %2","tooltip":"Pone en marcha todos los guiones 'al recibir' del mensaje. Cada uno recibe el valor como su 'valor del mensaje'."},"rb_broadcast_with_wait":{"message0":"enviar %1 con %2 y esperar"},"rb_budget":{"message0":"limitar esta ejecución a %1 tokens","tooltip":"Antes de cada llamada a un modelo, comprueba cuántos tokens ha usado esta ejecución. Cuando llega a este número, la ejecución se detiene. 0 significa sin límite. En esta página la cuenta es una estimación; el Python exportado usa las cifras exactas."},"rb_cal_when":{"message0":"cuando un evento del calendario empiece dentro de %1 minutos","tooltip":"Ejecuta los bloques de debajo tantos minutos antes de cada evento de tu calendario (los eventos de día entero no cuentan). 'Lo que llegó' da title, start, end, location, minutes y text."},"rb_calendar":{"message0":"calendario de los próximos %1 días","tooltip":"Los eventos de tu calendario desde hoy, como fichas: day, start, end, title, location. El Python exportado lee CALENDAR_URL (la dirección iCal privada de tu calendario); esta página usa un calendario de ejemplo."},"rb_chat":{"message0":"conversación %1 : %2","tooltip":"Envía un mensaje en una conversación con nombre. Claude ve los turnos anteriores de esa conversación."},"rb_chat_reset":{"message0":"empezar de nuevo la conversación %1"},"rb_checkpoint_restore":{"message0":"volver al punto de control %1","tooltip":"Devuelve la tarea, el borrador, la revisión, el resultado y las variables a como estaban en 'guardar el punto de control'. La memoria, los archivos y los mensajes ya enviados no se deshacen."},"rb_checkpoint_save":{"message0":"guardar el punto de control %1","tooltip":"Guarda la tarea, el borrador, la revisión, el resultado y las variables tal como están ahora, con este nombre, para el resto de la ejecución."},"rb_choose":{"message0":"dejarme elegir de %1"},"rb_clear_instructions":{"message0":"borrar las instrucciones para Claude"},"rb_contains":{"message0":"%1 contiene %2","tooltip":"Verdadero si el primer texto incluye el segundo (sin distinguir mayúsculas)."},"rb_discord_send":{"message0":"enviar mensaje de Discord %1","tooltip":"Escribe en Discord: de vuelta en el canal del que llegó un mensaje, o en el primer canal de DISCORD_CHANNEL_ID. 'Preguntarme antes de enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_discord_when":{"message0":"cuando llegue un mensaje de Discord que contenga %1","tooltip":"Ejecuta los bloques de debajo cuando alguien escribe en uno de tus canales de Discord (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los canales de DISCORD_CHANNEL_ID, y nunca los mensajes del propio bot. Se comprueba cada 10 segundos. 'Lo que llegó' da texto, remitente y canal. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un mensaje de ejemplo."},"rb_draft":{"message0":"borrador"},"rb_email_send":{"message0":"enviar un correo a %1 con asunto %2 %3","tooltip":"Envía un correo desde tu dirección (EMAIL_ADDRESS y una contraseña de aplicación en second-thought.ini). 'Preguntarme antes de enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_email_when":{"message0":"cuando llegue un correo que contenga %1","tooltip":"Ejecuta los bloques de debajo cuando llega un correo nuevo a tu bandeja (se comprueba cada 2 minutos), si su remitente, su asunto o su texto contienen esto. 'Lo que llegó' da from, subject, body y text."},"rb_error":{"message0":"el error","tooltip":"Qué salió mal en el fallo más reciente."},"rb_event":{"message0":"lo que llegó: %1","tooltip":"Dentro de un guion 'cuando llegue …': un campo de lo que llegó. Toda escucha da 'text', que lo resume; la ayuda de cada bloque 'cuando' indica sus otros campos. Déjalo vacío para la ficha entera."},"rb_every":{"message0":"cada %1 %2","tooltip":"Se ejecuta una y otra vez mientras Horarios esté en sí y esta página abierta. La primera vez es un intervalo después de poner Horarios en sí."},"rb_extract":{"message0":"extraer %1 de %2"},"rb_feed_news":{"message0":"noticias del feed %1","tooltip":"Las últimas entradas de un feed de noticias (RSS o Atom), de la más nueva a la más antigua, como fichas: feed, title, link, date, summary. Déjalo vacío para usar tus feeds (feeds = … en second-thought.ini). En esta página usa feeds de ejemplo."},"rb_feed_when":{"message0":"cuando haya algo nuevo en el feed %1","tooltip":"Ejecuta los bloques de debajo por cada entrada nueva de un feed de noticias (se comprueba cada 15 minutos). Déjalo vacío para usar tus feeds. 'Lo que llegó' da feed, title, link, date, summary y text."},"rb_file_choose":{"message0":"texto de un archivo que elija","tooltip":"Pausa la ejecución para que elijas un PDF, un Word .docx o un archivo de texto. Devuelve el texto del archivo."},"rb_file_save":{"message0":"guardar %1 como archivo %2 . %3","tooltip":"Ofrece el texto como descarga. El navegador te pide que lo confirmes."},"rb_finish_with":{"message0":"terminar con %1"},"rb_folder_when":{"message0":"cuando aparezca un archivo en la carpeta %1","tooltip":"Ejecuta los bloques de debajo cuando aparece un archivo nuevo en esta carpeta (junto al programa, salvo que des una ruta completa). 'Lo que llegó' da su nombre, ruta, tamaño y, para un PDF, un Word o un archivo de texto, sus palabras."},"rb_generate":{"message0":"escribir un primer borrador","tooltip":"Claude escribe un borrador que cumple la tarea."},"rb_gh_when":{"message0":"cuando un pull request me pida revisión","tooltip":"Ejecuta los bloques de debajo cuando alguien te pide revisar un pull request de GitHub (se comprueba cada 5 minutos). 'Lo que llegó' da repo, number, title, user, link y text."},"rb_ha_attr":{"message0":"%1 de la entidad %2","tooltip":"Un atributo de una entidad, por ejemplo 'current_temperature' o 'friendly_name'."},"rb_ha_call":{"message0":"llamar a %1 en %2 con %3","tooltip":"Llama a un servicio, por ejemplo light.turn_off. Los datos opcionales son JSON como {\"temperature\": 20}. Abrir cerraduras, puertas y alarmas siempre te pregunta antes."},"rb_ha_event_when":{"message0":"cuando ocurra el evento de Home Assistant %1 con %2","tooltip":"Ejecuta los bloques de debajo en cuanto Home Assistant envía este evento: la pulsación de un botón o un mando (zha_event, deconz_event), una automatización que se dispara (automation_triggered), una acción de una notificación del móvil o un evento tuyo. Escribe 'anything' para todos los eventos. La segunda casilla son palabras opcionales que deben estar en los datos del evento, como el nombre del mando. 'Lo que llegó' da event_type, entity, data, time y text, más cada campo de los datos del evento. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un evento de ejemplo."},"rb_ha_find":{"message0":"entidades que coinciden con %1","tooltip":"Una lista de fichas (entity, name, state, unit, area) de cada entidad cuyo id, nombre, zona o estado contiene todas estas palabras. '*' significa todas."},"rb_ha_history":{"message0":"historial de %1 de las últimas %2 horas","tooltip":"Una lista de fichas (time, state) que muestra cómo cambió la entidad."},"rb_ha_notify":{"message0":"notificar a %1 : %2","tooltip":"Envía una notificación. El destino es un servicio de notificación como notify.mobile_app_my_phone, o persistent_notification para la barra lateral de Home Assistant."},"rb_ha_snapshot":{"message0":"foto de %1","tooltip":"Una imagen de una entidad de cámara. Úsala con los bloques de Imágenes."},"rb_ha_speak":{"message0":"decir %1 en %2","tooltip":"Dice el texto en un reproductor, con la síntesis de voz de Home Assistant."},"rb_ha_state":{"message0":"estado de %1","tooltip":"El estado actual de la entidad, por ejemplo 'on', 'locked' o 19.5."},"rb_ha_summary":{"message0":"lecturas de %1","tooltip":"Una lista en texto de las entidades que coinciden y sus estados, lista para meterla en una pregunta a Claude."},"rb_ha_trigger":{"message0":"qué cambió","tooltip":"En un guion 'cuando … cambie': una ficha con entity, name, from y to."},"rb_ha_when":{"message0":"cuando %1 cambie a %2","tooltip":"Ejecuta los bloques de debajo cuando cambia esta entidad. Escribe 'anything' para reaccionar a cualquier cambio. Dentro, 'qué cambió' dice lo que pasó."},"rb_homey_find":{"message0":"dispositivos Homey que coinciden con %1","tooltip":"Una lista de fichas, una por cada dispositivo cuyo nombre, zona o tipo contiene todas estas palabras ('*' para todos): name, zone, class y cada uno de sus valores."},"rb_homey_flow":{"message0":"ejecutar el flujo de Homey %1","tooltip":"Inicia uno de tus flujos de Homey, por su nombre. Un flujo puede hacer todo lo que puede tu Homey, incluso enviar una notificación de Homey."},"rb_homey_set":{"message0":"fijar %2 del dispositivo Homey %1 en %3","tooltip":"Fija un valor, como onoff en off, dim en 0.5 o target_temperature en 19. 'Preguntarme antes de cualquier acción en casa' hace que pregunte antes; abrir cerraduras, puertas y alarmas siempre pregunta. En esta página cambia la casa de ejemplo."},"rb_homey_set_variable":{"message0":"fijar la variable de Homey %1 en %2","tooltip":"Cambia una variable de Homey Logic, para que la usen tus flujos."},"rb_homey_value":{"message0":"%1 del dispositivo Homey %2","tooltip":"Un valor de un dispositivo Homey, por el nombre del dispositivo: onoff (on u off), dim (de 0 a 1), measure_temperature, measure_power y demás. 'Dispositivos Homey que coinciden con' muestra lo que tiene cada dispositivo."},"rb_homey_variable":{"message0":"variable de Homey %1","tooltip":"El valor de una variable de Homey Logic, por su nombre."},"rb_homey_when":{"message0":"cuando cambie %2 del dispositivo Homey %1","tooltip":"Ejecuta los bloques de debajo cuando cambia este valor del dispositivo Homey (se comprueba cada 10 segundos). Escribe 'anything' para cualquiera de sus valores. 'Lo que llegó' da device, zone, capability, from, to y text. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo."},"rb_img_ask":{"message0":"preguntar a Claude %1 sobre la imagen %2","tooltip":"Claude mira la imagen y responde."},"rb_img_change":{"message0":"cambiar la imagen %1 : %2","tooltip":"Claude vuelve a dibujar la imagen con tu cambio. Una foto vuelve como una ilustración nueva."},"rb_img_choose":{"message0":"imagen que elija","tooltip":"Pausa la ejecución para que elijas una imagen (JPEG, PNG, WebP, GIF o SVG)."},"rb_img_draw":{"message0":"dibujar una imagen de %1","tooltip":"Claude dibuja una ilustración en SVG (formas planas, diagramas, iconos). No puede hacer fotos."},"rb_img_save":{"message0":"guardar la imagen %1 como %2","tooltip":"Ofrece la imagen como descarga. El navegador te pide que lo confirmes."},"rb_img_score":{"message0":"puntuar la imagen %1 sobre 10 en %2"},"rb_img_show":{"message0":"mostrar la imagen %1"},"rb_longtext":{"message0":"%1","tooltip":"Texto largo. Pulsa Intro para una línea nueva; las líneas se ajustan a 80 caracteres."},"rb_mem_add":{"message0":"añadir %1 a la lista recordada %2 %3","tooltip":"Añade un elemento a una lista recordada. Si la lista ya existe, conserva su tipo y su caducidad."},"rb_mem_forget":{"message0":"olvidar %1"},"rb_mem_get":{"message0":"lo que recuerdo como %1","tooltip":"El valor recordado, o un texto vacío si no hay nada recordado con este nombre."},"rb_mem_has":{"message0":"recuerdo %1"},"rb_mem_names":{"message0":"nombres que recuerdo"},"rb_mem_set":{"message0":"recordar %1 como %2 %3","tooltip":"Mientras esta página esté abierta: se guarda entre ejecuciones hasta que recargues o cierres la página. Para siempre: se guarda hasta que lo olvides."},"rb_mem_set_for":{"message0":"recordar %1 como %2 durante %3 %4","tooltip":"Se guarda como 'para siempre', pero se olvida solo pasado este tiempo (hasta 365 días)."},"rb_mqtt_publish":{"message0":"publicar en MQTT %1 en el tema %2 guardarlo %3","tooltip":"Envía un mensaje a tu bróker MQTT. 'Guardarlo' pide al bróker que lo recuerde para quien escuche más tarde. 'Preguntarme antes de cualquier acción en casa' o 'enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_mqtt_read":{"message0":"último mensaje MQTT en %1","tooltip":"El último mensaje de un tema MQTT. Solo aparecen enseguida los mensajes que guarda el bróker (retained). Con + o # en el tema, una ficha con el último mensaje de cada tema. En esta página usa temas de ejemplo."},"rb_mqtt_when":{"message0":"cuando llegue un mensaje MQTT a %1","tooltip":"Ejecuta los bloques de debajo cuando llega un mensaje a este tema MQTT. + vale por un nivel y # por todo lo que hay debajo, como zigbee2mqtt/#. 'Lo que llegó' da su tema y su texto, y los campos de un mensaje JSON."},"rb_msg_value":{"message0":"valor del mensaje","tooltip":"El valor enviado con el mensaje que puso en marcha este guion (o que despertó este 'esperar hasta recibir'). En un programa ejecutado con 'ejecutar el programa', el valor que se le dio."},"rb_now":{"message0":"%1 actual"},"rb_page_when":{"message0":"cuando cambie la página web %1","message1":"solo la parte que contiene %1 comprobada cada %2 minutos","tooltip":"Ejecuta los bloques de debajo cuando cambian las palabras de una página web. Deja vacío 'solo la parte que contiene' para vigilar la página entera, o escribe palabras (como Precio) para vigilar solo las líneas que las tienen y las dos siguientes, así no cuentan los anuncios y contadores del resto de la página. La primera comprobación solo memoriza la página. 'Lo que llegó' da url, title, before, after, changed (las líneas que cambiaron) y text. No se pueden vigilar las páginas que necesitan un navegador para mostrar sus palabras. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con una página de ejemplo."},"rb_passed":{"message0":"el borrador pasó la revisión"},"rb_pause":{"message0":"pausar hasta que haga clic en Continue: %1","tooltip":"Un punto de control. Muestra la nota en el registro y te espera."},"rb_problems":{"message0":"problemas de la revisión"},"rb_prompt":{"message0":"instrucción %1","tooltip":"Texto de tu biblioteca de instrucciones (abre Programas para añadirlas)."},"rb_rec_get":{"message0":"%1 de %2"},"rb_rec_has":{"message0":"%1 tiene el campo %2"},"rb_rec_keys":{"message0":"campos de %1"},"rb_rec_new":{"message0":"nueva ficha"},"rb_rec_set":{"message0":"fijar %1 de %2 en %3","tooltip":"Cambia un campo de una ficha (normalmente una variable con una ficha)."},"rb_receive":{"message0":"al recibir %1","tooltip":"Ejecuta los bloques de debajo cada vez que se envía este mensaje. Varios guiones pueden esperar el mismo mensaje."},"rb_reflect":{"message0":"revisar el borrador según %1","message1":"hasta %1 rondas; si no lo cumple, hacer","message2":"%1","tooltip":"Claude critica el borrador. Si no lo cumple, se ejecutan los bloques de dentro y vuelve a criticarlo. En cada ronda el revisor comprueba también que los problemas anteriores no han vuelto. Si se acaban las rondas, se queda con el borrador con menos problemas, no solo con el último."},"rb_reset_timer":{"message0":"reiniciar el cronómetro"},"rb_result":{"message0":"terminar y mostrar el resultado","tooltip":"Termina la ejecución. Muestra lo que añadiste al resultado, o el borrador si no añadiste nada."},"rb_result_text":{"message0":"el resultado hasta ahora","tooltip":"Todo lo añadido al resultado, como texto."},"rb_retry":{"message0":"reintentar hasta %1 veces","message1":"%1","tooltip":"Si algo de dentro falla de una forma que un segundo intento podría arreglar (una conexión caída, una respuesta confusa), espera un poco y lo vuelve a ejecutar."},"rb_review":{"message0":"revisar el borrador según %1","tooltip":"Una revisión. Usa después 'el borrador pasó la revisión' y 'problemas de la revisión'."},"rb_revise":{"message0":"corregir los problemas de la revisión","tooltip":"Claude corrige los problemas que encontró la última revisión."},"rb_rework":{"message0":"rehacer el borrador: %1","tooltip":"Claude reescribe el borrador siguiendo tu indicación."},"rb_rewrite":{"message0":"reescribir %1 para %2","tooltip":"Por ejemplo: reescribir (borrador) para (traducirlo al francés)."},"rb_run_program":{"message0":"ejecutar el programa %1 con %2","tooltip":"Ejecuta un programa de tu lista de Programas, como un paso. Tiene su propio borrador, resultado y variables, y devuelve su resultado. Dentro de él, 'valor del mensaje' es el valor que pasas aquí. El Python exportado incluye una copia del programa tal como estaba al exportar."},"rb_say":{"message0":"decir %1","tooltip":"Escribe una nota en el registro de la ejecución."},"rb_score":{"message0":"puntuar %1 sobre 10 en %2"},"rb_set_draft":{"message0":"fijar el borrador en %1"},"rb_set_instructions":{"message0":"dar a Claude estas instrucciones: %1","tooltip":"Se envían con cada llamada a Claude después de este bloque; por ejemplo, un papel, un tono o un estilo de la casa."},"rb_show":{"message0":"mostrar el borrador en el registro"},"rb_slack_send":{"message0":"enviar mensaje de Slack %1","tooltip":"Escribe en Slack: de vuelta en el canal del que llegó un mensaje, o en el primer canal de SLACK_CHANNEL_ID. 'Preguntarme antes de enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_slack_when":{"message0":"cuando llegue un mensaje de Slack que contenga %1","tooltip":"Ejecuta los bloques de debajo cuando alguien escribe en uno de tus canales de Slack (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los canales de SLACK_CHANNEL_ID, y nunca los mensajes de bots. Se comprueba cada 10 segundos. 'Lo que llegó' da texto, remitente y canal. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un mensaje de ejemplo."},"rb_sort":{"message0":"ordenar %1 por %2 %3","tooltip":"Ordena una lista de fichas por un campo. Deja el campo vacío para ordenar elementos sueltos."},"rb_start":{"message0":"al hacer clic en Ejecutar","tooltip":"Todo programa empieza aquí. Los bloques de debajo se ejecutan de arriba abajo. Si hay varios, se ejecutan a la vez."},"rb_stop":{"message0":"detener la ejecución","tooltip":"Termina la ejecución aquí. Se muestra lo que ya haya en el resultado."},"rb_task":{"message0":"fijar la tarea en %1","tooltip":"Fija lo que debe producir la IA."},"rb_task_get":{"message0":"tarea"},"rb_tg_message":{"message0":"mensaje de Telegram: %1","tooltip":"El mensaje de Telegram que puso en marcha este guion: sus palabras, quién lo envió o el chat. Vacío fuera de un guion de Telegram."},"rb_tg_send":{"message0":"enviar mensaje de Telegram %1","tooltip":"Envía un mensaje desde tu bot: de vuelta al chat del que llegó un mensaje, o a TELEGRAM_CHAT_ID. 'Preguntarme antes de enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_tg_when":{"message0":"cuando llegue un mensaje de Telegram que contenga %1","tooltip":"Ejecuta los bloques de debajo cuando tu bot recibe un mensaje (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los mensajes de tus propios chats (TELEGRAM_CHAT_ID). En el Python exportado escucha todo el tiempo; en esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un mensaje de ejemplo."},"rb_timer":{"message0":"cronómetro","tooltip":"Segundos desde que empezó la ejecución o se reinició el cronómetro."},"rb_tokens_used":{"message0":"tokens usados hasta ahora","tooltip":"Tokens que ha usado esta ejecución: enviados más recibidos. Una estimación en esta página, exactos en el Python exportado."},"rb_try":{"message0":"intentar","message1":"%1","message2":"si falla","message3":"%1","tooltip":"Ejecuta la primera parte. Si algo falla, ejecuta la segunda en lugar de detener la ejecución."},"rb_use_model":{"message0":"usar el modelo %1","tooltip":"Cambia el modelo de los bloques de IA que vienen después. Los modelos que no son Claude funcionan en el Python exportado; en esta página Claude los sustituye."},"rb_wait":{"message0":"esperar %1 %2","tooltip":"Pausa este guion (hasta 24 horas)."},"rb_wait_msg":{"message0":"esperar hasta recibir %1","tooltip":"Pausa este guion hasta que otro guion envíe el mensaje."},"rb_wait_time":{"message0":"esperar hasta las %1 : %2","tooltip":"Pausa hasta esta hora (reloj de 24 horas). Si ya ha pasado hoy, espera hasta mañana."},"rb_wait_until":{"message0":"esperar hasta que %1","tooltip":"Pausa hasta que la condición se cumpla. Se comprueba dos veces por segundo, o cada 10 segundos si pregunta a Claude."},"rb_web_search":{"message0":"buscar en la web %1","tooltip":"En el Python exportado busca en la web de verdad. En esta página Claude no puede navegar, así que responde con lo que sabe y el registro lo indica."},"rb_webhook_when":{"message0":"cuando llegue una petición web a / %1","tooltip":"Ejecuta los bloques de debajo cuando algo (Home Assistant, IFTTT, un atajo de tu móvil) llama a http://<este ordenador>:8765/bake-done?key=<WEBHOOK_SECRET>. Las peticiones sin la clave se rechazan. 'Lo que llegó' da el texto enviado y los campos del JSON o de la dirección."},"rb_when_time":{"message0":"cuando sean las %1 : %2 %3","tooltip":"Se ejecuta a esta hora (reloj de 24 horas) mientras Horarios esté en sí y esta página abierta."},"rb_with_any_model":{"message0":"con el modelo de OpenRouter %1","message1":"%1","tooltip":"Ejecuta solo los bloques de dentro con cualquier modelo que ofrezca OpenRouter. Escribe su nombre de openrouter.ai/models, por ejemplo mistralai/mistral-small o google/gemma-4-31b-it. openrouter/auto elige uno por ti. Funciona en el Python exportado (necesita OPENROUTER_API_KEY); en esta página Claude lo sustituye."},"rb_with_model":{"message0":"con el modelo %1","message1":"%1","tooltip":"Ejecuta solo los bloques de dentro con este modelo y luego vuelve al anterior. Los modelos que no son Claude funcionan en el Python exportado; en esta página Claude los sustituye."},"rb_word_count":{"message0":"número de palabras de %1"}},"options":{"rb_when_time.DAYS":{"every":"todos los días","weekdays":"entre semana","weekends":"los fines de semana"},"rb_every.UNIT":{"m":"minutos","h":"horas"},"rb_wait.UNIT":{"s":"segundos","m":"minutos","h":"horas"},"rb_now.PART":{"time":"hora","date":"fecha","datetime":"fecha y hora","hour":"hora (0 a 23)","minute":"minuto","weekday":"día de la semana"},"rb_sort.ORDER":{"desc":"de mayor a menor","asc":"de menor a mayor"},"rb_ask_first.WHAT":{"ha":"cualquier acción en casa (Home Assistant, Homey, MQTT)","messages":"enviar mensajes y avisos","files":"guardar archivos","all":"todo lo anterior"},"rb_agent_builtin.KIND":{"web":"buscar en la web y leer páginas","ask":"hacerme una pregunta","memory":"recordar y consultar notas","calc":"hacer cuentas","time":"horas y fechas","file":"leer un archivo que elija","review":"comprobar un texto según criterios","feeds":"feeds de noticias","linkedin":"buscar en LinkedIn (páginas públicas)","calendar":"calendario: eventos y huecos libres","email":"correo: buscar y leer","email_send":"correo: enviar (me pregunta antes)","github":"GitHub: proyectos y pull requests","github_act":"GitHub: comentar (me pregunta antes)","telegram":"Telegram: buscar en mis mensajes","telegram_send":"Telegram: enviar (me pregunta antes)","telegram_send_free":"Telegram: enviar (sin preguntar)","discord":"Discord: buscar en mis canales","discord_send":"Discord: enviar (me pregunta antes)","discord_send_free":"Discord: enviar (sin preguntar)","slack":"Slack: buscar en mis canales","slack_send":"Slack: enviar (me pregunta antes)","slack_send_free":"Slack: enviar (sin preguntar)","mqtt":"MQTT: leer temas","mqtt_act":"MQTT: publicar (me pregunta antes)","mqtt_act_free":"MQTT: publicar (sin preguntar)","homey_read":"Homey: ver dispositivos, flujos y variables","homey_act":"Homey: controlar dispositivos e iniciar flujos (me pregunta antes)","homey_act_free":"Homey: controlar dispositivos e iniciar flujos (sin preguntar)","ha_read":"Home Assistant: ver dispositivos","ha_act":"Home Assistant: controlar dispositivos","ha_act_free":"Home Assistant: controlar dispositivos (sin preguntar)"},"rb_agent_mcp.ASK":{"changes":"(me pregunta antes de las herramientas que cambian cosas)","every":"(me pregunta antes de cada herramienta)","never":"(sin preguntar)"},"rb_tg_message.PART":{"text":"texto","sender":"remitente","chat":"chat"},"rb_mem_set.KIND":{"transient":"mientras esta página esté abierta","permanent":"para siempre"},"rb_mem_set_for.UNIT":{"m":"minutos","h":"horas","d":"días"},"rb_mem_add.KIND":{"transient":"mientras esta página esté abierta","permanent":"para siempre"},"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (imágenes dibujadas)","orig":"archivo original"}},"categories":{"Events":"Eventos","Control":"Control","Wait & time":"Espera y hora","Operators":"Operadores","Text":"Texto","Variables":"Variables","Lists":"Listas","My Blocks":"Mis bloques","Programs":"Programas","Search results":"Resultados de la búsqueda","Draft":"Borrador","Ask Claude":"Preguntar a Claude","Review":"Revisión","Agent":"Agente","Tools":"Herramientas","Connections":"Conexiones","You":"Tú","Records":"Fichas","Files":"Archivos","Memory":"Memoria","Pictures":"Imágenes","Home Assistant":"Home Assistant","Homey":"Homey","Output":"Salida"},"labels":{"Tools for the agent: drop them inside an agent block":"Herramientas para el agente: suéltalas dentro de un bloque de agente","Listeners: they run while the exported program runs on schedule":"Escuchas: funcionan mientras el programa exportado se ejecuta con horario","Read and send":"Leer y enviar","Type in 'Find a block' above the canvas.":"Escribe en 'Find a block', encima del lienzo.","No blocks match":"Ningún bloque coincide con"},"page":{"Second Thought":"Second Thought","Snap AI steps together, then press Run. Claude does each block in order.":"Encaja pasos de IA y pulsa Ejecutar. Claude hace cada bloque en orden.","Example":"Ejemplo","Load":"Cargar","Browse examples":"Ver ejemplos","Import / export":"Importar / exportar","Programs":"Programas","Memory":"Memoria","Home Assistant":"Home Assistant","Model":"Modelo","The language the blocks are shown in. Programs are the same in every language.":"El idioma en que se muestran los bloques. Los programas son los mismos en todos los idiomas.","Blocks":"Bloques","Models to try if the main one fails":"Modelos que probar si falla el principal","Backups":"Reservas","Backups ({n})":"Reservas ({n})","Step: off":"Paso a paso: no","Step: on":"Paso a paso: sí","Schedules: off":"Horarios: no","Schedules: on":"Horarios: sí","Stop":"Parar","Run":"Ejecutar","Example programs":"Programas de ejemplo","Each one is a complete program. Load it, press Run, then change the words on the blocks to make it yours. Your current program is replaced, so save it first in Programs if you want to keep it.":"Cada uno es un programa completo. Cárgalo, pulsa Ejecutar y cambia las palabras de los bloques para hacerlo tuyo. Sustituye al programa que tienes ahora, así que guárdalo antes en Programas si quieres conservarlo.","Load this example":"Cargar este ejemplo","Load this program":"Cargar este programa","Shared by {author}, made with runtime {runtime}.":"Compartido por {author}, hecho con el runtime {runtime}.","Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.":"Programas que ha compartido otra gente. Cada uno se revisó antes de añadirlo y dice lo que puede hacer, deducido de sus bloques. Para compartir uno tuyo, lee gallery/README.md en la carpeta de Second Thought.","Saved programs and prompts":"Programas e instrucciones guardados","My programs":"Mis programas","Program name":"Nombre del programa","Name for the program on the canvas":"Nombre para el programa del lienzo","Save":"Guardar","Replace “{name}”":"Sustituir “{name}”","Undo open":"Deshacer abrir","Prompt library":"Biblioteca de instrucciones","Reusable prompt text. Drop the 'prompt' block (in Ask Claude) into any slot and type the prompt's name.":"Texto de instrucciones para reutilizar. Pon el bloque 'instrucción' (en Preguntar a Claude) en cualquier hueco y escribe el nombre de la instrucción.","Name":"Nombre","house style":"estilo de la casa","Text":"Texto","Save prompt":"Guardar instrucción","In this page, the Home Assistant blocks use a <b>sample house</b>, so you can build and test safely. Change a state below (press Enter) to try your 'when … changes' scripts. Exported Python connects to your real Home Assistant: set HA_URL and HA_TOKEN (a long-lived access token from your Home Assistant profile, under Security).":"En esta página, los bloques de Home Assistant usan una <b>casa de ejemplo</b>, para que construyas y pruebes sin riesgo. Cambia un estado aquí abajo (pulsa Intro) para probar tus scripts 'cuando … cambie'. El Python exportado se conecta a tu Home Assistant de verdad: pon HA_URL y HA_TOKEN (un token de acceso de larga duración de tu perfil de Home Assistant, en Seguridad).","Filter entities":"Filtrar entidades","Filter, e.g. light or kitchen":"Filtrar, p. ej. light o kitchen","Forget all":"Olvidarlo todo","Forget everything in memory? This can't be undone.":"¿Olvidar todo lo que hay en la memoria? No se puede deshacer.","Keep it":"Conservarlo","Backup models":"Modelos de reserva","The <b>Model</b> menu is your primary model: it does every step. If it fails on a step (no key, out of credit, service down or unreachable), the first backup answers that step instead, then the second, then the third. The run log says each time a backup steps in.":"El menú <b>Modelo</b> es tu modelo principal: hace todos los pasos. Si falla en un paso (sin clave, sin saldo, servicio caído o inalcanzable), responde ese paso la primera reserva, luego la segunda y luego la tercera. El registro dice cada vez que entra una reserva.","Blocks that name their own model, such as <b>with model</b>, keep that model, so a panel of judges stays a panel of different judges.":"Los bloques que nombran su propio modelo, como <b>con el modelo</b>, mantienen ese modelo, así que un jurado sigue siendo un jurado de jueces distintos.","First backup":"Primera reserva","Second backup":"Segunda reserva","Third backup":"Tercera reserva","Import and export":"Importar y exportar","Export this program":"Exportar este programa","As a block file":"Como archivo de bloques","File name":"Nombre del archivo","Save .json file":"Guardar archivo .json","Copy as text":"Copiar como texto","As Python code":"Como código Python","Runs without this page open, on your computer or a server. Needs an Anthropic API key; API calls are billed separately from claude.ai.":"Funciona sin esta página abierta, en tu ordenador o en un servidor. Necesita una clave de la API de Anthropic; las llamadas a la API se facturan aparte de claude.ai.","Save Python (.zip)":"Guardar Python (.zip)","Copy Python code":"Copiar código Python","Show code":"Ver código","Hide code":"Ocultar código","Import a program":"Importar un programa","Takes a block file, or Python code exported from here. Other code can be converted by Claude. Replaces what's on the canvas; you can undo straight after.":"Acepta un archivo de bloques o código Python exportado desde aquí. Claude puede convertir otro código. Sustituye lo que hay en el lienzo; puedes deshacerlo justo después.","Choose file (.json, .py, .zip)":"Elegir archivo (.json, .py, .zip)","Or paste a block file or code":"O pega un archivo de bloques o código","Load pasted program":"Cargar el programa pegado","Undo import":"Deshacer importar","Find a block":"Buscar un bloque","Find a block…":"Buscar un bloque…","Zoom":"Zoom","Zoom in":"Acercar","Zoom out":"Alejar","Fit program on screen":"Ajustar el programa a la pantalla","Fit":"Ajustar","Run log":"Registro","Save log":"Guardar registro","Watch values":"Vigilar valores","Paused":"En pausa","Paused before: {step}":"En pausa antes de: {step}","Next step":"Siguiente paso","Run to the end":"Ejecutar hasta el final","Run this script":"Ejecutar este script","Run this block and show its value":"Ejecutar este bloque y mostrar su valor","An example program is loaded on the left. Press Run to watch it work here, or pick another example above.":"Hay un programa de ejemplo cargado a la izquierda. Pulsa Ejecutar para verlo funcionar aquí, o elige otro ejemplo arriba.","Click any white slot on a block to type into it.":"Haz clic en cualquier hueco blanco de un bloque para escribir en él.","Drag blocks from the categories; drag a block back onto them to delete it. Round slots take values, hexagon slots take yes/no conditions.":"Arrastra bloques desde las categorías; arrastra un bloque de vuelta a ellas para borrarlo. Los huecos redondos aceptan valores; los hexagonales, condiciones de sí o no.","Only blocks under a \"when Run is clicked\" or \"when I receive\" hat run. Separate scripts run side by side.":"Solo se ejecutan los bloques que cuelgan de un bloque \"al hacer clic en Ejecutar\" o \"al recibir\". Los scripts separados se ejecutan a la vez.","Writing":"Escritura","Research":"Investigación","Design":"Diseño","Learning":"Aprendizaje","Work":"Trabajo","Home and baking":"Casa y panadería","Agents":"Agentes","Homey":"Homey","Code and data":"Código y datos","Automation":"Automatización","Home Assistant: no connection needed":"Home Assistant: sin conexión","Home Assistant: daily life":"Home Assistant: día a día","Home Assistant: security and cameras":"Home Assistant: seguridad y cámaras","Home Assistant: energy":"Home Assistant: energía","Home Assistant: comfort and garden":"Home Assistant: confort y jardín","Home Assistant: kitchen and household":"Home Assistant: cocina y hogar","Home Assistant: pets":"Home Assistant: mascotas","Home Assistant: house health":"Home Assistant: salud de la casa","Home Assistant: homelab":"Home Assistant: homelab","Home Assistant: alerts and voice":"Home Assistant: avisos y voz","Community":"Comunidad"}}}
+{"es":{"name":"Español","blockly":"es","note":"Spanish words for the block palette and the page. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, keys are the page's English text, with {name} for the parts filled in. Page buttons named in block text use their Spanish names (Ejecutar, Horarios, Programas, Continuar).","blocks":{"rb_add_result":{"message0":"añadir %1 al resultado"},"rb_agent":{"message0":"agente: trabajar para %1","message1":"hasta %1 pasos, con estas herramientas:","message2":"%1","message3":"hacer primero un plan, y cambiarlo sobre la marcha %1","tooltip":"Claude decide qué hacer a continuación: en cada paso elige una de las herramientas de dentro, ve lo que pasó y sigue hasta cumplir el objetivo o quedarse sin pasos. Su respuesta final va al borrador. Cada paso es una llamada al modelo. Con 'hacer primero un plan' marcado, escribe un plan corto en su primer paso y lo mantiene al día, sin coste adicional."},"rb_agent_builtin":{"message0":"herramienta: %1","tooltip":"Una herramienta ya hecha para el agente. 'Hacer cuentas' y 'horas y fechas' aciertan con los números y las horas, en lugar de que el modelo los adivine. 'Comprobar un texto' hace que otro revisor juzgue el trabajo del agente. En esta página, los feeds, GitHub, Telegram, el correo y el calendario usan datos de ejemplo; el Python exportado usa los tuyos (pon las claves en second-thought.ini) y lee páginas web de verdad. Enviar, comentar y 'controlar dispositivos' te preguntan antes de cada vez, porque lo que lee el agente (una página web, una nota) podría intentar dirigirlo. Elige 'sin preguntar' solo si te fías de todo lo que lee. Abrir cerraduras, puertas y alarmas siempre pregunta."},"rb_agent_mcp":{"message0":"herramientas del servidor MCP %1 %2","tooltip":"Da al agente todas las herramientas que ofrece un servidor MCP: archivos, GitHub, bases de datos, calendarios y mucho más, de todo el ecosistema MCP. Configura el servidor en second-thought.ini como MCP_<NOMBRE> = la orden que lo arranca (como npx -y @modelcontextprotocol/server-filesystem ~/recetas) o su dirección https://. Solo en el Python exportado: en esta página el agente trabaja sin estas herramientas."},"rb_agent_steps":{"message0":"pasos del agente","tooltip":"Lo que hizo el agente más reciente de esta ejecución: una lista de fichas con paso, herramienta, entrada, resultado y estado (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."},"rb_agent_tool":{"message0":"herramienta: Mi bloque %1","message1":"qué hace %1","message2":"tipos de entrada %1","message3":"preguntarme antes de cada uso %1","tooltip":"Deja que el agente ejecute uno de tus Mis bloques. Sus entradas son las entradas de la herramienta, y lo que devuelve es el resultado que ve el agente. Descríbelo con claridad: la descripción es todo lo que el agente sabe de él. Los tipos de entrada, por ejemplo 'harina gramos: number; agua gramos: number - gramos de agua', dicen qué debe ser cada entrada: text, number, yes/no, list o any. La entrada del agente se comprueba antes de ejecutar el bloque. 'Preguntarme antes de cada uso' viene marcado, porque lo que lee el agente (una página web, una nota) podría intentar dirigirlo: desmárcalo en los bloques que solo calculan y no cambian nada."},"rb_answer":{"message0":"respuesta"},"rb_approve":{"message0":"apruebo %1","tooltip":"Muestra el texto y espera a que lo apruebes o lo devuelvas."},"rb_ask":{"message0":"preguntar a Claude %1","tooltip":"Claude responde con texto."},"rb_ask_first":{"message0":"preguntarme antes de %1","tooltip":"A partir de aquí, el programa muestra lo que va a hacer y espera a que lo permitas. Si dices que no, se salta ese paso y sigue. El Python exportado pregunta en el terminal; una ejecución programada sin nadie delante se lo salta."},"rb_ask_list":{"message0":"pedir a Claude una lista: %1","tooltip":"Claude responde con una lista que puedes recorrer."},"rb_ask_me":{"message0":"preguntarme %1 y esperar","tooltip":"Pausa la ejecución hasta que escribas una respuesta en el registro."},"rb_ask_number":{"message0":"pedir a Claude un número: %1"},"rb_ask_record":{"message0":"pedir a Claude una ficha con los campos %1 : %2","tooltip":"Campos separados por comas, por ejemplo: título, puntuación, notas."},"rb_ask_records":{"message0":"pedir a Claude una lista de fichas con los campos %1 : %2"},"rb_ask_yesno":{"message0":"Claude dice que sí a %1","tooltip":"Claude responde a una pregunta de sí o no."},"rb_better":{"message0":"el mejor entre %1 y %2 en %3"},"rb_broadcast":{"message0":"enviar %1","tooltip":"Pone en marcha todos los guiones 'al recibir' de este mensaje y sigue enseguida."},"rb_broadcast_wait":{"message0":"enviar %1 y esperar","tooltip":"Pone en marcha todos los guiones 'al recibir' de este mensaje y espera a que terminen todos."},"rb_broadcast_with":{"message0":"enviar %1 con %2","tooltip":"Pone en marcha todos los guiones 'al recibir' del mensaje. Cada uno recibe el valor como su 'valor del mensaje'."},"rb_broadcast_with_wait":{"message0":"enviar %1 con %2 y esperar"},"rb_budget":{"message0":"limitar esta ejecución a %1 tokens","tooltip":"Antes de cada llamada a un modelo, comprueba cuántos tokens ha usado esta ejecución. Cuando llega a este número, la ejecución se detiene. 0 significa sin límite. En esta página la cuenta es una estimación; el Python exportado usa las cifras exactas."},"rb_cal_when":{"message0":"cuando un evento del calendario empiece dentro de %1 minutos","tooltip":"Ejecuta los bloques de debajo tantos minutos antes de cada evento de tu calendario (los eventos de día entero no cuentan). 'Lo que llegó' da title, start, end, location, minutes y text."},"rb_calendar":{"message0":"calendario de los próximos %1 días","tooltip":"Los eventos de tu calendario desde hoy, como fichas: day, start, end, title, location. El Python exportado lee CALENDAR_URL (la dirección iCal privada de tu calendario); esta página usa un calendario de ejemplo."},"rb_chat":{"message0":"conversación %1 : %2","tooltip":"Envía un mensaje en una conversación con nombre. Claude ve los turnos anteriores de esa conversación."},"rb_chat_reset":{"message0":"empezar de nuevo la conversación %1"},"rb_checkpoint_restore":{"message0":"volver al punto de control %1","tooltip":"Devuelve la tarea, el borrador, la revisión, el resultado y las variables a como estaban en 'guardar el punto de control'. La memoria, los archivos y los mensajes ya enviados no se deshacen."},"rb_checkpoint_save":{"message0":"guardar el punto de control %1","tooltip":"Guarda la tarea, el borrador, la revisión, el resultado y las variables tal como están ahora, con este nombre, para el resto de la ejecución."},"rb_choose":{"message0":"dejarme elegir de %1"},"rb_clear_instructions":{"message0":"borrar las instrucciones para Claude"},"rb_contains":{"message0":"%1 contiene %2","tooltip":"Verdadero si el primer texto incluye el segundo (sin distinguir mayúsculas)."},"rb_discord_send":{"message0":"enviar mensaje de Discord %1","tooltip":"Escribe en Discord: de vuelta en el canal del que llegó un mensaje, o en el primer canal de DISCORD_CHANNEL_ID. 'Preguntarme antes de enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_discord_when":{"message0":"cuando llegue un mensaje de Discord que contenga %1","tooltip":"Ejecuta los bloques de debajo cuando alguien escribe en uno de tus canales de Discord (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los canales de DISCORD_CHANNEL_ID, y nunca los mensajes del propio bot. Se comprueba cada 10 segundos. 'Lo que llegó' da texto, remitente y canal. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un mensaje de ejemplo."},"rb_draft":{"message0":"borrador"},"rb_email_send":{"message0":"enviar un correo a %1 con asunto %2 %3","tooltip":"Envía un correo desde tu dirección (EMAIL_ADDRESS y una contraseña de aplicación en second-thought.ini). 'Preguntarme antes de enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_email_when":{"message0":"cuando llegue un correo que contenga %1","tooltip":"Ejecuta los bloques de debajo cuando llega un correo nuevo a tu bandeja (se comprueba cada 2 minutos), si su remitente, su asunto o su texto contienen esto. 'Lo que llegó' da from, subject, body y text."},"rb_error":{"message0":"el error","tooltip":"Qué salió mal en el fallo más reciente."},"rb_event":{"message0":"lo que llegó: %1","tooltip":"Dentro de un guion 'cuando llegue …': un campo de lo que llegó. Toda escucha da 'text', que lo resume; la ayuda de cada bloque 'cuando' indica sus otros campos. Déjalo vacío para la ficha entera."},"rb_every":{"message0":"cada %1 %2","tooltip":"Se ejecuta una y otra vez mientras Horarios esté en sí y esta página abierta. La primera vez es un intervalo después de poner Horarios en sí."},"rb_extract":{"message0":"extraer %1 de %2"},"rb_feed_news":{"message0":"noticias del feed %1","tooltip":"Las últimas entradas de un feed de noticias (RSS o Atom), de la más nueva a la más antigua, como fichas: feed, title, link, date, summary. Déjalo vacío para usar tus feeds (feeds = … en second-thought.ini). En esta página usa feeds de ejemplo."},"rb_feed_when":{"message0":"cuando haya algo nuevo en el feed %1","tooltip":"Ejecuta los bloques de debajo por cada entrada nueva de un feed de noticias (se comprueba cada 15 minutos). Déjalo vacío para usar tus feeds. 'Lo que llegó' da feed, title, link, date, summary y text."},"rb_file_choose":{"message0":"texto de un archivo que elija","tooltip":"Pausa la ejecución para que elijas un PDF, un Word .docx o un archivo de texto. Devuelve el texto del archivo."},"rb_file_save":{"message0":"guardar %1 como archivo %2 . %3","tooltip":"Ofrece el texto como descarga. El navegador te pide que lo confirmes."},"rb_finish_with":{"message0":"terminar con %1"},"rb_folder_when":{"message0":"cuando aparezca un archivo en la carpeta %1","tooltip":"Ejecuta los bloques de debajo cuando aparece un archivo nuevo en esta carpeta (junto al programa, salvo que des una ruta completa). 'Lo que llegó' da su nombre, ruta, tamaño y, para un PDF, un Word o un archivo de texto, sus palabras."},"rb_generate":{"message0":"escribir un primer borrador","tooltip":"Claude escribe un borrador que cumple la tarea."},"rb_gh_when":{"message0":"cuando un pull request me pida revisión","tooltip":"Ejecuta los bloques de debajo cuando alguien te pide revisar un pull request de GitHub (se comprueba cada 5 minutos). 'Lo que llegó' da repo, number, title, user, link y text."},"rb_ha_attr":{"message0":"%1 de la entidad %2","tooltip":"Un atributo de una entidad, por ejemplo 'current_temperature' o 'friendly_name'."},"rb_ha_call":{"message0":"llamar a %1 en %2 con %3","tooltip":"Llama a un servicio, por ejemplo light.turn_off. Los datos opcionales son JSON como {\"temperature\": 20}. Abrir cerraduras, puertas y alarmas siempre te pregunta antes."},"rb_ha_event_when":{"message0":"cuando ocurra el evento de Home Assistant %1 con %2","tooltip":"Ejecuta los bloques de debajo en cuanto Home Assistant envía este evento: la pulsación de un botón o un mando (zha_event, deconz_event), una automatización que se dispara (automation_triggered), una acción de una notificación del móvil o un evento tuyo. Escribe 'anything' para todos los eventos. La segunda casilla son palabras opcionales que deben estar en los datos del evento, como el nombre del mando. 'Lo que llegó' da event_type, entity, data, time y text, más cada campo de los datos del evento. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un evento de ejemplo."},"rb_ha_find":{"message0":"entidades que coinciden con %1","tooltip":"Una lista de fichas (entity, name, state, unit, area) de cada entidad cuyo id, nombre, zona o estado contiene todas estas palabras. '*' significa todas."},"rb_ha_history":{"message0":"historial de %1 de las últimas %2 horas","tooltip":"Una lista de fichas (time, state) que muestra cómo cambió la entidad."},"rb_ha_notify":{"message0":"notificar a %1 : %2","tooltip":"Envía una notificación. El destino es un servicio de notificación como notify.mobile_app_my_phone, o persistent_notification para la barra lateral de Home Assistant."},"rb_ha_snapshot":{"message0":"foto de %1","tooltip":"Una imagen de una entidad de cámara. Úsala con los bloques de Imágenes."},"rb_ha_speak":{"message0":"decir %1 en %2","tooltip":"Dice el texto en un reproductor, con la síntesis de voz de Home Assistant."},"rb_ha_state":{"message0":"estado de %1","tooltip":"El estado actual de la entidad, por ejemplo 'on', 'locked' o 19.5."},"rb_ha_summary":{"message0":"lecturas de %1","tooltip":"Una lista en texto de las entidades que coinciden y sus estados, lista para meterla en una pregunta a Claude."},"rb_ha_trigger":{"message0":"qué cambió","tooltip":"En un guion 'cuando … cambie': una ficha con entity, name, from y to."},"rb_ha_when":{"message0":"cuando %1 cambie a %2","tooltip":"Ejecuta los bloques de debajo cuando cambia esta entidad. Escribe 'anything' para reaccionar a cualquier cambio. Dentro, 'qué cambió' dice lo que pasó."},"rb_homey_find":{"message0":"dispositivos Homey que coinciden con %1","tooltip":"Una lista de fichas, una por cada dispositivo cuyo nombre, zona o tipo contiene todas estas palabras ('*' para todos): name, zone, class y cada uno de sus valores."},"rb_homey_flow":{"message0":"ejecutar el flujo de Homey %1","tooltip":"Inicia uno de tus flujos de Homey, por su nombre. Un flujo puede hacer todo lo que puede tu Homey, incluso enviar una notificación de Homey."},"rb_homey_set":{"message0":"fijar %2 del dispositivo Homey %1 en %3","tooltip":"Fija un valor, como onoff en off, dim en 0.5 o target_temperature en 19. 'Preguntarme antes de cualquier acción en casa' hace que pregunte antes; abrir cerraduras, puertas y alarmas siempre pregunta. En esta página cambia la casa de ejemplo."},"rb_homey_set_variable":{"message0":"fijar la variable de Homey %1 en %2","tooltip":"Cambia una variable de Homey Logic, para que la usen tus flujos."},"rb_homey_value":{"message0":"%1 del dispositivo Homey %2","tooltip":"Un valor de un dispositivo Homey, por el nombre del dispositivo: onoff (on u off), dim (de 0 a 1), measure_temperature, measure_power y demás. 'Dispositivos Homey que coinciden con' muestra lo que tiene cada dispositivo."},"rb_homey_variable":{"message0":"variable de Homey %1","tooltip":"El valor de una variable de Homey Logic, por su nombre."},"rb_homey_when":{"message0":"cuando cambie %2 del dispositivo Homey %1","tooltip":"Ejecuta los bloques de debajo cuando cambia este valor del dispositivo Homey (se comprueba cada 10 segundos). Escribe 'anything' para cualquiera de sus valores. 'Lo que llegó' da device, zone, capability, from, to y text. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo."},"rb_img_ask":{"message0":"preguntar a Claude %1 sobre la imagen %2","tooltip":"Claude mira la imagen y responde."},"rb_img_change":{"message0":"cambiar la imagen %1 : %2","tooltip":"Claude vuelve a dibujar la imagen con tu cambio. Una foto vuelve como una ilustración nueva."},"rb_img_choose":{"message0":"imagen que elija","tooltip":"Pausa la ejecución para que elijas una imagen (JPEG, PNG, WebP, GIF o SVG)."},"rb_img_draw":{"message0":"dibujar una imagen de %1","tooltip":"Claude dibuja una ilustración en SVG (formas planas, diagramas, iconos). No puede hacer fotos."},"rb_img_save":{"message0":"guardar la imagen %1 como %2","tooltip":"Ofrece la imagen como descarga. El navegador te pide que lo confirmes."},"rb_img_score":{"message0":"puntuar la imagen %1 sobre 10 en %2"},"rb_img_show":{"message0":"mostrar la imagen %1"},"rb_longtext":{"message0":"%1","tooltip":"Texto largo. Pulsa Intro para una línea nueva; las líneas se ajustan a 80 caracteres."},"rb_mem_add":{"message0":"añadir %1 a la lista recordada %2 %3","tooltip":"Añade un elemento a una lista recordada. Si la lista ya existe, conserva su tipo y su caducidad."},"rb_mem_forget":{"message0":"olvidar %1"},"rb_mem_get":{"message0":"lo que recuerdo como %1","tooltip":"El valor recordado, o un texto vacío si no hay nada recordado con este nombre."},"rb_mem_has":{"message0":"recuerdo %1"},"rb_mem_names":{"message0":"nombres que recuerdo"},"rb_mem_set":{"message0":"recordar %1 como %2 %3","tooltip":"Mientras esta página esté abierta: se guarda entre ejecuciones hasta que recargues o cierres la página. Para siempre: se guarda hasta que lo olvides."},"rb_mem_set_for":{"message0":"recordar %1 como %2 durante %3 %4","tooltip":"Se guarda como 'para siempre', pero se olvida solo pasado este tiempo (hasta 365 días)."},"rb_mqtt_publish":{"message0":"publicar en MQTT %1 en el tema %2 guardarlo %3","tooltip":"Envía un mensaje a tu bróker MQTT. 'Guardarlo' pide al bróker que lo recuerde para quien escuche más tarde. 'Preguntarme antes de cualquier acción en casa' o 'enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_mqtt_read":{"message0":"último mensaje MQTT en %1","tooltip":"El último mensaje de un tema MQTT. Solo aparecen enseguida los mensajes que guarda el bróker (retained). Con + o # en el tema, una ficha con el último mensaje de cada tema. En esta página usa temas de ejemplo."},"rb_mqtt_when":{"message0":"cuando llegue un mensaje MQTT a %1","tooltip":"Ejecuta los bloques de debajo cuando llega un mensaje a este tema MQTT. + vale por un nivel y # por todo lo que hay debajo, como zigbee2mqtt/#. 'Lo que llegó' da su tema y su texto, y los campos de un mensaje JSON."},"rb_msg_value":{"message0":"valor del mensaje","tooltip":"El valor enviado con el mensaje que puso en marcha este guion (o que despertó este 'esperar hasta recibir'). En un programa ejecutado con 'ejecutar el programa', el valor que se le dio."},"rb_now":{"message0":"%1 actual"},"rb_page_when":{"message0":"cuando cambie la página web %1","message1":"solo la parte que contiene %1 comprobada cada %2 minutos","tooltip":"Ejecuta los bloques de debajo cuando cambian las palabras de una página web. Deja vacío 'solo la parte que contiene' para vigilar la página entera, o escribe palabras (como Precio) para vigilar solo las líneas que las tienen y las dos siguientes, así no cuentan los anuncios y contadores del resto de la página. La primera comprobación solo memoriza la página. 'Lo que llegó' da url, title, before, after, changed (las líneas que cambiaron) y text. No se pueden vigilar las páginas que necesitan un navegador para mostrar sus palabras. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con una página de ejemplo."},"rb_passed":{"message0":"el borrador pasó la revisión"},"rb_pause":{"message0":"pausar hasta que haga clic en Continuar: %1","tooltip":"Un punto de control. Muestra la nota en el registro y te espera."},"rb_problems":{"message0":"problemas de la revisión"},"rb_prompt":{"message0":"instrucción %1","tooltip":"Texto de tu biblioteca de instrucciones (abre Programas para añadirlas)."},"rb_rec_get":{"message0":"%1 de %2"},"rb_rec_has":{"message0":"%1 tiene el campo %2"},"rb_rec_keys":{"message0":"campos de %1"},"rb_rec_new":{"message0":"nueva ficha"},"rb_rec_set":{"message0":"fijar %1 de %2 en %3","tooltip":"Cambia un campo de una ficha (normalmente una variable con una ficha)."},"rb_receive":{"message0":"al recibir %1","tooltip":"Ejecuta los bloques de debajo cada vez que se envía este mensaje. Varios guiones pueden esperar el mismo mensaje."},"rb_reflect":{"message0":"revisar el borrador según %1","message1":"hasta %1 rondas; si no lo cumple, hacer","message2":"%1","tooltip":"Claude critica el borrador. Si no lo cumple, se ejecutan los bloques de dentro y vuelve a criticarlo. En cada ronda el revisor comprueba también que los problemas anteriores no han vuelto. Si se acaban las rondas, se queda con el borrador con menos problemas, no solo con el último."},"rb_reset_timer":{"message0":"reiniciar el cronómetro"},"rb_result":{"message0":"terminar y mostrar el resultado","tooltip":"Termina la ejecución. Muestra lo que añadiste al resultado, o el borrador si no añadiste nada."},"rb_result_text":{"message0":"el resultado hasta ahora","tooltip":"Todo lo añadido al resultado, como texto."},"rb_retry":{"message0":"reintentar hasta %1 veces","message1":"%1","tooltip":"Si algo de dentro falla de una forma que un segundo intento podría arreglar (una conexión caída, una respuesta confusa), espera un poco y lo vuelve a ejecutar."},"rb_review":{"message0":"revisar el borrador según %1","tooltip":"Una revisión. Usa después 'el borrador pasó la revisión' y 'problemas de la revisión'."},"rb_revise":{"message0":"corregir los problemas de la revisión","tooltip":"Claude corrige los problemas que encontró la última revisión."},"rb_rework":{"message0":"rehacer el borrador: %1","tooltip":"Claude reescribe el borrador siguiendo tu indicación."},"rb_rewrite":{"message0":"reescribir %1 para %2","tooltip":"Por ejemplo: reescribir (borrador) para (traducirlo al francés)."},"rb_run_program":{"message0":"ejecutar el programa %1 con %2","tooltip":"Ejecuta un programa de tu lista de Programas, como un paso. Tiene su propio borrador, resultado y variables, y devuelve su resultado. Dentro de él, 'valor del mensaje' es el valor que pasas aquí. El Python exportado incluye una copia del programa tal como estaba al exportar."},"rb_say":{"message0":"decir %1","tooltip":"Escribe una nota en el registro de la ejecución."},"rb_score":{"message0":"puntuar %1 sobre 10 en %2"},"rb_set_draft":{"message0":"fijar el borrador en %1"},"rb_set_instructions":{"message0":"dar a Claude estas instrucciones: %1","tooltip":"Se envían con cada llamada a Claude después de este bloque; por ejemplo, un papel, un tono o un estilo de la casa."},"rb_show":{"message0":"mostrar el borrador en el registro"},"rb_slack_send":{"message0":"enviar mensaje de Slack %1","tooltip":"Escribe en Slack: de vuelta en el canal del que llegó un mensaje, o en el primer canal de SLACK_CHANNEL_ID. 'Preguntarme antes de enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_slack_when":{"message0":"cuando llegue un mensaje de Slack que contenga %1","tooltip":"Ejecuta los bloques de debajo cuando alguien escribe en uno de tus canales de Slack (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los canales de SLACK_CHANNEL_ID, y nunca los mensajes de bots. Se comprueba cada 10 segundos. 'Lo que llegó' da texto, remitente y canal. En esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un mensaje de ejemplo."},"rb_sort":{"message0":"ordenar %1 por %2 %3","tooltip":"Ordena una lista de fichas por un campo. Deja el campo vacío para ordenar elementos sueltos."},"rb_start":{"message0":"al hacer clic en Ejecutar","tooltip":"Todo programa empieza aquí. Los bloques de debajo se ejecutan de arriba abajo. Si hay varios, se ejecutan a la vez."},"rb_stop":{"message0":"detener la ejecución","tooltip":"Termina la ejecución aquí. Se muestra lo que ya haya en el resultado."},"rb_task":{"message0":"fijar la tarea en %1","tooltip":"Fija lo que debe producir la IA."},"rb_task_get":{"message0":"tarea"},"rb_tg_message":{"message0":"mensaje de Telegram: %1","tooltip":"El mensaje de Telegram que puso en marcha este guion: sus palabras, quién lo envió o el chat. Vacío fuera de un guion de Telegram."},"rb_tg_send":{"message0":"enviar mensaje de Telegram %1","tooltip":"Envía un mensaje desde tu bot: de vuelta al chat del que llegó un mensaje, o a TELEGRAM_CHAT_ID. 'Preguntarme antes de enviar mensajes y avisos' hace que pregunte antes. En esta página solo se muestra."},"rb_tg_when":{"message0":"cuando llegue un mensaje de Telegram que contenga %1","tooltip":"Ejecuta los bloques de debajo cuando tu bot recibe un mensaje (escribe 'anything', o palabras que debe contener el mensaje). Solo cuentan los mensajes de tus propios chats (TELEGRAM_CHAT_ID). En el Python exportado escucha todo el tiempo; en esta página, haz clic derecho y elige 'Ejecutar este script' para probarlo con un mensaje de ejemplo."},"rb_timer":{"message0":"cronómetro","tooltip":"Segundos desde que empezó la ejecución o se reinició el cronómetro."},"rb_tokens_used":{"message0":"tokens usados hasta ahora","tooltip":"Tokens que ha usado esta ejecución: enviados más recibidos. Una estimación en esta página, exactos en el Python exportado."},"rb_try":{"message0":"intentar","message1":"%1","message2":"si falla","message3":"%1","tooltip":"Ejecuta la primera parte. Si algo falla, ejecuta la segunda en lugar de detener la ejecución."},"rb_use_model":{"message0":"usar el modelo %1","tooltip":"Cambia el modelo de los bloques de IA que vienen después. Los modelos que no son Claude funcionan en el Python exportado; en esta página Claude los sustituye."},"rb_wait":{"message0":"esperar %1 %2","tooltip":"Pausa este guion (hasta 24 horas)."},"rb_wait_msg":{"message0":"esperar hasta recibir %1","tooltip":"Pausa este guion hasta que otro guion envíe el mensaje."},"rb_wait_time":{"message0":"esperar hasta las %1 : %2","tooltip":"Pausa hasta esta hora (reloj de 24 horas). Si ya ha pasado hoy, espera hasta mañana."},"rb_wait_until":{"message0":"esperar hasta que %1","tooltip":"Pausa hasta que la condición se cumpla. Se comprueba dos veces por segundo, o cada 10 segundos si pregunta a Claude."},"rb_web_search":{"message0":"buscar en la web %1","tooltip":"En el Python exportado busca en la web de verdad. En esta página Claude no puede navegar, así que responde con lo que sabe y el registro lo indica."},"rb_webhook_when":{"message0":"cuando llegue una petición web a / %1","tooltip":"Ejecuta los bloques de debajo cuando algo (Home Assistant, IFTTT, un atajo de tu móvil) llama a http://<este ordenador>:8765/bake-done?key=<WEBHOOK_SECRET>. Las peticiones sin la clave se rechazan. 'Lo que llegó' da el texto enviado y los campos del JSON o de la dirección."},"rb_when_time":{"message0":"cuando sean las %1 : %2 %3","tooltip":"Se ejecuta a esta hora (reloj de 24 horas) mientras Horarios esté en sí y esta página abierta."},"rb_with_any_model":{"message0":"con el modelo de OpenRouter %1","message1":"%1","tooltip":"Ejecuta solo los bloques de dentro con cualquier modelo que ofrezca OpenRouter. Escribe su nombre de openrouter.ai/models, por ejemplo mistralai/mistral-small o google/gemma-4-31b-it. openrouter/auto elige uno por ti. Funciona en el Python exportado (necesita OPENROUTER_API_KEY); en esta página Claude lo sustituye."},"rb_with_model":{"message0":"con el modelo %1","message1":"%1","tooltip":"Ejecuta solo los bloques de dentro con este modelo y luego vuelve al anterior. Los modelos que no son Claude funcionan en el Python exportado; en esta página Claude los sustituye."},"rb_word_count":{"message0":"número de palabras de %1"}},"options":{"rb_when_time.DAYS":{"every":"todos los días","weekdays":"entre semana","weekends":"los fines de semana"},"rb_every.UNIT":{"m":"minutos","h":"horas"},"rb_wait.UNIT":{"s":"segundos","m":"minutos","h":"horas"},"rb_now.PART":{"time":"hora","date":"fecha","datetime":"fecha y hora","hour":"hora (0 a 23)","minute":"minuto","weekday":"día de la semana"},"rb_sort.ORDER":{"desc":"de mayor a menor","asc":"de menor a mayor"},"rb_ask_first.WHAT":{"ha":"cualquier acción en casa (Home Assistant, Homey, MQTT)","messages":"enviar mensajes y avisos","files":"guardar archivos","all":"todo lo anterior"},"rb_agent_builtin.KIND":{"web":"buscar en la web y leer páginas","ask":"hacerme una pregunta","memory":"recordar y consultar notas","calc":"hacer cuentas","time":"horas y fechas","file":"leer un archivo que elija","review":"comprobar un texto según criterios","feeds":"feeds de noticias","linkedin":"buscar en LinkedIn (páginas públicas)","calendar":"calendario: eventos y huecos libres","email":"correo: buscar y leer","email_send":"correo: enviar (me pregunta antes)","github":"GitHub: proyectos y pull requests","github_act":"GitHub: comentar (me pregunta antes)","telegram":"Telegram: buscar en mis mensajes","telegram_send":"Telegram: enviar (me pregunta antes)","telegram_send_free":"Telegram: enviar (sin preguntar)","discord":"Discord: buscar en mis canales","discord_send":"Discord: enviar (me pregunta antes)","discord_send_free":"Discord: enviar (sin preguntar)","slack":"Slack: buscar en mis canales","slack_send":"Slack: enviar (me pregunta antes)","slack_send_free":"Slack: enviar (sin preguntar)","mqtt":"MQTT: leer temas","mqtt_act":"MQTT: publicar (me pregunta antes)","mqtt_act_free":"MQTT: publicar (sin preguntar)","homey_read":"Homey: ver dispositivos, flujos y variables","homey_act":"Homey: controlar dispositivos e iniciar flujos (me pregunta antes)","homey_act_free":"Homey: controlar dispositivos e iniciar flujos (sin preguntar)","ha_read":"Home Assistant: ver dispositivos","ha_act":"Home Assistant: controlar dispositivos","ha_act_free":"Home Assistant: controlar dispositivos (sin preguntar)"},"rb_agent_mcp.ASK":{"changes":"(me pregunta antes de las herramientas que cambian cosas)","every":"(me pregunta antes de cada herramienta)","never":"(sin preguntar)"},"rb_tg_message.PART":{"text":"texto","sender":"remitente","chat":"chat"},"rb_mem_set.KIND":{"transient":"mientras esta página esté abierta","permanent":"para siempre"},"rb_mem_set_for.UNIT":{"m":"minutos","h":"horas","d":"días"},"rb_mem_add.KIND":{"transient":"mientras esta página esté abierta","permanent":"para siempre"},"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (imágenes dibujadas)","orig":"archivo original"}},"categories":{"Events":"Eventos","Control":"Control","Wait & time":"Espera y hora","Operators":"Operadores","Text":"Texto","Variables":"Variables","Lists":"Listas","My Blocks":"Mis bloques","Programs":"Programas","Search results":"Resultados de la búsqueda","Draft":"Borrador","Ask Claude":"Preguntar a Claude","Review":"Revisión","Agent":"Agente","Tools":"Herramientas","Connections":"Conexiones","You":"Tú","Records":"Fichas","Files":"Archivos","Memory":"Memoria","Pictures":"Imágenes","Home Assistant":"Home Assistant","Homey":"Homey","Output":"Salida"},"labels":{"Tools for the agent: drop them inside an agent block":"Herramientas para el agente: suéltalas dentro de un bloque de agente","Listeners: they run while the exported program runs on schedule":"Escuchas: funcionan mientras el programa exportado se ejecuta con horario","Read and send":"Leer y enviar","Type in 'Find a block' above the canvas.":"Escribe en 'Find a block', encima del lienzo.","No blocks match":"Ningún bloque coincide con"},"page":{"Second Thought":"Second Thought","Snap AI steps together, then press Run. Claude does each block in order.":"Encaja pasos de IA y pulsa Ejecutar. Claude hace cada bloque en orden.","Example":"Ejemplo","Load":"Cargar","Browse examples":"Ver ejemplos","Import / export":"Importar / exportar","Programs":"Programas","Memory":"Memoria","Home Assistant":"Home Assistant","Model":"Modelo","The language the blocks are shown in. Programs are the same in every language.":"El idioma en que se muestran los bloques. Los programas son los mismos en todos los idiomas.","Blocks":"Bloques","Models to try if the main one fails":"Modelos que probar si falla el principal","Backups":"Reservas","Backups ({n})":"Reservas ({n})","Step: off":"Paso a paso: no","Step: on":"Paso a paso: sí","Schedules: off":"Horarios: no","Schedules: on":"Horarios: sí","Stop":"Parar","Run":"Ejecutar","Example programs":"Programas de ejemplo","Each one is a complete program. Load it, press Run, then change the words on the blocks to make it yours. Your current program is replaced, so save it first in Programs if you want to keep it.":"Cada uno es un programa completo. Cárgalo, pulsa Ejecutar y cambia las palabras de los bloques para hacerlo tuyo. Sustituye al programa que tienes ahora, así que guárdalo antes en Programas si quieres conservarlo.","Load this example":"Cargar este ejemplo","Load this program":"Cargar este programa","Shared by {author}, made with runtime {runtime}.":"Compartido por {author}, hecho con el runtime {runtime}.","Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.":"Programas que ha compartido otra gente. Cada uno se revisó antes de añadirlo y dice lo que puede hacer, deducido de sus bloques. Para compartir uno tuyo, lee gallery/README.md en la carpeta de Second Thought.","Saved programs and prompts":"Programas e instrucciones guardados","My programs":"Mis programas","Program name":"Nombre del programa","Name for the program on the canvas":"Nombre para el programa del lienzo","Save":"Guardar","Replace “{name}”":"Sustituir “{name}”","Undo open":"Deshacer abrir","Prompt library":"Biblioteca de instrucciones","Reusable prompt text. Drop the 'prompt' block (in Ask Claude) into any slot and type the prompt's name.":"Texto de instrucciones para reutilizar. Pon el bloque 'instrucción' (en Preguntar a Claude) en cualquier hueco y escribe el nombre de la instrucción.","Name":"Nombre","house style":"estilo de la casa","Text":"Texto","Save prompt":"Guardar instrucción","In this page, the Home Assistant blocks use a <b>sample house</b>, so you can build and test safely. Change a state below (press Enter) to try your 'when … changes' scripts. Exported Python connects to your real Home Assistant: set HA_URL and HA_TOKEN (a long-lived access token from your Home Assistant profile, under Security).":"En esta página, los bloques de Home Assistant usan una <b>casa de ejemplo</b>, para que construyas y pruebes sin riesgo. Cambia un estado aquí abajo (pulsa Intro) para probar tus scripts 'cuando … cambie'. El Python exportado se conecta a tu Home Assistant de verdad: pon HA_URL y HA_TOKEN (un token de acceso de larga duración de tu perfil de Home Assistant, en Seguridad).","Filter entities":"Filtrar entidades","Filter, e.g. light or kitchen":"Filtrar, p. ej. light o kitchen","Forget all":"Olvidarlo todo","Forget everything in memory? This can't be undone.":"¿Olvidar todo lo que hay en la memoria? No se puede deshacer.","Keep it":"Conservarlo","Backup models":"Modelos de reserva","The <b>Model</b> menu is your primary model: it does every step. If it fails on a step (no key, out of credit, service down or unreachable), the first backup answers that step instead, then the second, then the third. The run log says each time a backup steps in.":"El menú <b>Modelo</b> es tu modelo principal: hace todos los pasos. Si falla en un paso (sin clave, sin saldo, servicio caído o inalcanzable), responde ese paso la primera reserva, luego la segunda y luego la tercera. El registro dice cada vez que entra una reserva.","Blocks that name their own model, such as <b>with model</b>, keep that model, so a panel of judges stays a panel of different judges.":"Los bloques que nombran su propio modelo, como <b>con el modelo</b>, mantienen ese modelo, así que un jurado sigue siendo un jurado de jueces distintos.","First backup":"Primera reserva","Second backup":"Segunda reserva","Third backup":"Tercera reserva","Import and export":"Importar y exportar","Export this program":"Exportar este programa","As a block file":"Como archivo de bloques","File name":"Nombre del archivo","Save .json file":"Guardar archivo .json","Copy as text":"Copiar como texto","As Python code":"Como código Python","Runs without this page open, on your computer or a server. Needs an Anthropic API key; API calls are billed separately from claude.ai.":"Funciona sin esta página abierta, en tu ordenador o en un servidor. Necesita una clave de la API de Anthropic; las llamadas a la API se facturan aparte de claude.ai.","Save Python (.zip)":"Guardar Python (.zip)","Copy Python code":"Copiar código Python","Show code":"Ver código","Hide code":"Ocultar código","Import a program":"Importar un programa","Takes a block file, or Python code exported from here. Other code can be converted by Claude. Replaces what's on the canvas; you can undo straight after.":"Acepta un archivo de bloques o código Python exportado desde aquí. Claude puede convertir otro código. Sustituye lo que hay en el lienzo; puedes deshacerlo justo después.","Choose file (.json, .py, .zip)":"Elegir archivo (.json, .py, .zip)","Or paste a block file or code":"O pega un archivo de bloques o código","Load pasted program":"Cargar el programa pegado","Undo import":"Deshacer importar","Find a block":"Buscar un bloque","Find a block…":"Buscar un bloque…","Zoom":"Zoom","Zoom in":"Acercar","Zoom out":"Alejar","Fit program on screen":"Ajustar el programa a la pantalla","Fit":"Ajustar","Run log":"Registro","Save log":"Guardar registro","Watch values":"Vigilar valores","Paused":"En pausa","Paused before: {step}":"En pausa antes de: {step}","Next step":"Siguiente paso","Run to the end":"Ejecutar hasta el final","Run this script":"Ejecutar este script","Run this block and show its value":"Ejecutar este bloque y mostrar su valor","An example program is loaded on the left. Press Run to watch it work here, or pick another example above.":"Hay un programa de ejemplo cargado a la izquierda. Pulsa Ejecutar para verlo funcionar aquí, o elige otro ejemplo arriba.","Click any white slot on a block to type into it.":"Haz clic en cualquier hueco blanco de un bloque para escribir en él.","Drag blocks from the categories; drag a block back onto them to delete it. Round slots take values, hexagon slots take yes/no conditions.":"Arrastra bloques desde las categorías; arrastra un bloque de vuelta a ellas para borrarlo. Los huecos redondos aceptan valores; los hexagonales, condiciones de sí o no.","Only blocks under a \"when Run is clicked\" or \"when I receive\" hat run. Separate scripts run side by side.":"Solo se ejecutan los bloques que cuelgan de un bloque \"al hacer clic en Ejecutar\" o \"al recibir\". Los scripts separados se ejecutan a la vez.","Writing":"Escritura","Research":"Investigación","Design":"Diseño","Learning":"Aprendizaje","Work":"Trabajo","Home and baking":"Casa y panadería","Agents":"Agentes","Homey":"Homey","Code and data":"Código y datos","Automation":"Automatización","Home Assistant: no connection needed":"Home Assistant: sin conexión","Home Assistant: daily life":"Home Assistant: día a día","Home Assistant: security and cameras":"Home Assistant: seguridad y cámaras","Home Assistant: energy":"Home Assistant: energía","Home Assistant: comfort and garden":"Home Assistant: confort y jardín","Home Assistant: kitchen and household":"Home Assistant: cocina y hogar","Home Assistant: pets":"Home Assistant: mascotas","Home Assistant: house health":"Home Assistant: salud de la casa","Home Assistant: homelab":"Home Assistant: homelab","Home Assistant: alerts and voice":"Home Assistant: avisos y voz","Community":"Comunidad","Added to result":"Añadido al resultado","Added to “{name}”":"Añadido a “{name}”","Agent":"Agente","Agent plan":"Plan del agente","Agent step {i}/{n}":"Paso {i}/{n} del agente","Agent summary":"Resumen del agente","Agent: out of steps":"Agente: sin pasos","Agent: plan changed":"Agente: plan cambiado","Ask Claude: {request}":"Preguntar a Claude: {request}","Ask first":"Preguntar antes","Back to checkpoint “{name}”":"Vuelta al punto de control “{name}”","Backup":"Reserva","Broadcast “{message}”":"Difusión “{message}”","Broadcasts":"Difusiones","Budget":"Presupuesto","Calendar":"Calendario","Can't run a definition":"No se puede ejecutar una definición","Change picture: {how}":"Cambiar imagen: {how}","Chat {name}: {message}":"Conversación {name}: {message}","Check: {criteria}":"Comprobar: {criteria}","Checkpoint “{name}”":"Punto de control “{name}”","Conversation {name}":"Conversación {name}","Current draft":"Borrador actual","Cut short":"Cortado","Draw: {what}":"Dibujar: {what}","Email":"Correo","Email to {to}":"Correo a {to}","Every {n} h":"Cada {n} h","Every {n} min":"Cada {n} min","Extract: {what}":"Extraer: {what}","Finished":"Terminado","Forgot “{name}”":"Olvidado “{name}”","Gave up after {n} tries":"Abandonado tras {n} intentos","GitHub":"GitHub","GitHub comment on {repo} #{n}":"Comentario de GitHub en {repo} #{n}","Home Assistant: {service}":"Home Assistant: {service}","Homey flow started":"Flujo de Homey iniciado","Homey variable {name}":"Variable de Homey {name}","Instructions for Claude":"Instrucciones para Claude","Kept the best draft":"Se quedó el mejor borrador","List: {request}":"Lista: {request}","Look at picture: {question}":"Mirar imagen: {question}","MCP server “{server}”":"Servidor MCP “{server}”","MQTT":"MQTT","News feeds":"Feeds de noticias","News: {feed}":"Noticias: {feed}","Not done":"No hecho","Note":"Nota","Nothing to run":"Nada que ejecutar","Notification → {target}":"Notificación → {target}","Number: {request}":"Número: {request}","Partial answer":"Respuesta parcial","Pick the better one":"Elegir el mejor","Picture":"Imagen","Program: {name}":"Programa: {name}","Read page: {url}":"Leer página: {url}","Record: {request}":"Ficha: {request}","Records: {request}":"Fichas: {request}","Redraw as illustration: {how}":"Redibujar como ilustración: {how}","Remembered “{name}”":"Recordado “{name}”","Reply continued":"Respuesta continuada","Result":"Resultado","Retrying":"Reintentando","Review":"Revisión","Review, round {n}":"Revisión, ronda {n}","Revise":"Revisar","Revise to fix the problems":"Revisar para arreglar los problemas","Rework: {how}":"Rehacer: {how}","Rewrite: {how}":"Reescribir: {how}","Run stopped":"Ejecución detenida","Save file":"Guardar archivo","Save picture":"Guardar imagen","Scheduled {time}":"Programado {time}","Score picture: {criteria}":"Puntuar imagen: {criteria}","Score: {text}":"Puntuación: {text}","Search (from Claude's knowledge): {query}":"Buscar (con lo que sabe Claude): {query}","Search LinkedIn (from Claude's knowledge): {query}":"Buscar en LinkedIn (con lo que sabe Claude): {query}","Snapshot: {entity}":"Captura: {entity}","Something failed, so the 'if it fails' part ran":"Algo falló, así que se ejecutó la parte 'si falla'","Spoken on {player}":"Dicho en {player}","Stopped":"Detenido","Task set":"Tarea fijada","Telegram":"Telegram","Thinking…":"Pensando…","Unreadable reply":"Respuesta ilegible","Value of that block":"Valor de ese bloque","Wait":"Espera","Wait until a condition":"Esperar una condición","Wait until a time":"Esperar hasta una hora","Waiting for “{message}”":"Esperando “{message}”","Waiting {time}":"Esperando {time}","Waiting until {time}":"Esperando hasta las {time}","Waiting until {time} tomorrow":"Esperando hasta mañana a las {time}","When {entity} changes":"Cuando cambie {entity}","Write a first draft":"Escribir un primer borrador","Yes or no: {question}":"Sí o no: {question}","a speaker":"un altavoz","your channel":"tu canal","your chat":"tu chat","your feeds":"tus feeds","Allow":"Permitir","Allow this?":"¿Lo permites?","Approve":"Aprobar","Choose a file":"Elige un archivo","Choose a file first.":"Elige antes un archivo.","Choose a picture":"Elige una imagen","Choose a picture first.":"Elige antes una imagen.","Choose file":"Elegir archivo","Choose one":"Elige uno","Choose picture":"Elegir imagen","Continue":"Continuar","Do you approve this?":"¿Lo apruebas?","Don't":"No","No answer.":"Sin respuesta.","Question for you":"Pregunta para ti","Reading {file}…":"Leyendo {file}…","Send answer":"Enviar respuesta","Send back":"Devolver","Type an answer first.":"Escribe antes una respuesta.","Use this file":"Usar este archivo","Use this picture":"Usar esta imagen","Your answer":"Tu respuesta","Copied":"Copiado","Selected, press Ctrl+C":"Seleccionado, pulsa Ctrl+C","Saved":"Guardado","Nothing to save yet":"Aún no hay nada que guardar","Tool":"Herramienta","Input":"Entrada","Status":"Estado","final answer":"respuesta final","Nothing remembered yet. Use the Memory blocks to remember values between runs.":"Aún no hay nada recordado. Usa los bloques de Memoria para recordar valores entre ejecuciones.","Forget":"Olvidar","Forget {name}":"Olvidar {name}","Delete":"Borrar","Confirm delete":"Confirmar borrado","running":"en marcha","paused":"en pausa","stopping…":"parando…","stopped":"detenido","error":"error","waiting for you":"esperándote","done in {time}":"hecho en {time}","{n} Claude call":"{n} llamada a Claude","{n} Claude calls":"{n} llamadas a Claude","~{n} tokens":"~{n} tokens","added":"añadido","all finished":"todo terminado","answer":"respuesta","answered":"respondido","approved":"aprobado","backup":"reserva","bad input":"entrada no válida","best draft":"mejor borrador","best effort":"lo mejor posible","cleared":"borrado","continued":"continuado","cut short":"cortado","done":"hecho","drawn":"dibujado","empty answer":"respuesta vacía","ended":"terminado","failed":"falló","failed, out of rounds":"falló, sin rondas","finished":"terminado","forgotten":"olvidado","handled":"gestionado","interrupted":"interrumpido","kept":"conservado","needs work":"hay que mejorarlo","no listeners":"nadie escucha","no output":"sin resultado","not a tool":"no es una herramienta","not live":"no en vivo","not on this page":"no en esta página","note":"nota","passes":"aprueba","planned":"planificado","quiet":"en silencio","read":"leído","received":"recibido","refused":"rechazado","repair":"reparación","repeat":"repetido","reset":"reiniciado","restored":"restaurado","retry {n}":"reintento {n}","revised":"revisado","sample":"de ejemplo","sample home":"casa de ejemplo","sample house":"casa de ejemplo","saved":"guardado","say":"dicho","sent":"enviado","set":"fijado","shown":"mostrado","skipped":"omitido","started":"iniciado","tool error":"error de la herramienta","turn {n}":"turno {n}","unreadable":"ilegible","using tool":"usando herramienta","waiting":"esperando","{n} devices":"{n} dispositivos","{n} events":"{n} eventos","{n} items":"{n} elementos","{n} records":"{n} fichas","{n} step":"{n} paso","{n} steps":"{n} pasos","{n} topics":"{n} temas"}}}
 </script>
 <script type="application/json" id="community-gallery">
 [
@@ -9132,8 +9132,8 @@ HOW TO MAP CODE
     if (haIsSensitive(svc)) {
       const ok = await waitForYou("Allow this?", "The program wants to " + svc.replace(".", ": ").replace(/_/g, " ") + (id ? " on " + id : "") + ". This is a safety check: unlocking, opening and disarming always ask first.", (box, done) => {
         const row = document.createElement("div"); row.className = "row";
-        const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = "Allow";
-        const no = document.createElement("button"); no.type = "button"; no.textContent = "Don't";
+        const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = tr("Allow");
+        const no = document.createElement("button"); no.type = "button"; no.textContent = tr("Don't");
         yes.onclick = () => done(true, "allowed"); no.onclick = () => done(false, "refused");
         row.append(yes, no); box.appendChild(row);
       });
@@ -9142,7 +9142,7 @@ HOW TO MAP CODE
     haNote();
     const before = e ? e.state : null;
     if (e) haApply(svc, e, data);
-    addStep("Home Assistant: " + svc, { mono:true, text:(id || "(no entity)") + (dt ? " with " + dt : "") + (e && e.state !== before ? "\n" + before + " → " + e.state : "") }).done("sample house", "ok");
+    addStep(tr("Home Assistant: {service}", { service:svc }), { mono:true, text:(id || "(no entity)") + (dt ? " with " + dt : "") + (e && e.state !== before ? "\n" + before + " → " + e.state : "") }).done("sample house", "ok");
     if (e && e.state !== before) haChanged(id, before, e.state, false);
     return true;
   }
@@ -9162,7 +9162,7 @@ HOW TO MAP CODE
         const svg = HA.sample.cameras[id];
         if (!svg) fail("The sample house has no camera called “" + id + "”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.");
         const pic = await svgImage(cleanSvg(svg), id.replace("camera.", "") + "-snapshot");
-        const st = addStep("Snapshot: " + id, { text:"" }); showPictureIn(st, pic); st.done("sample house", "ok");
+        const st = addStep(tr("Snapshot: {entity}", { entity:id }), { text:"" }); showPictureIn(st, pic); st.done("sample house", "ok");
         return pic;
       }
       case "rb_ha_trigger": return tc.payload && typeof tc.payload === "object" ? tc.payload : { entity:"", name:"", from:"", to:"" };
@@ -11949,21 +11949,22 @@ HOW TO MAP CODE
     opts = opts || {};
     const el = document.createElement("div"); el.className = "step" + (opts.human ? " human" : "");
     el.dataset.t0 = String(Date.now());
-    el.innerHTML = '<div class="step-top"><span class="step-name"></span><span class="pill">running</span></div><div class="step-body"></div>';
-    el.querySelector(".step-name").textContent = name;
+    el.innerHTML = '<div class="step-top"><span class="step-name"></span><span class="pill" data-state="running"></span></div><div class="step-body"></div>';
+    el.querySelector(".step-name").textContent = tr(name);
+    el.querySelector(".pill").textContent = tr("running");
     const body = el.querySelector(".step-body"); if (opts.mono) body.classList.add("mono");
-    body.textContent = opts.text != null ? opts.text : "Thinking…";
+    body.textContent = opts.text != null ? opts.text : tr("Thinking…");
     stepsEl.appendChild(el); el.scrollIntoView({ block:"nearest" });
     const pill = el.querySelector(".pill");
     return {
       el, body,
       text(t){ body.textContent = t; },
       list(items){ body.innerHTML = ""; const ul = document.createElement("ul"); items.forEach(i => { const li = document.createElement("li"); li.textContent = i; ul.appendChild(li); }); body.appendChild(ul); },
-      done(label, kind){ pill.textContent = label; pill.className = "pill" + (kind ? " " + kind : ""); el.dataset.ms = String(Date.now() - Number(el.dataset.t0)); },
+      done(label, kind){ pill.dataset.state = label; pill.textContent = tr(label); pill.className = "pill" + (kind ? " " + kind : ""); el.dataset.ms = String(Date.now() - Number(el.dataset.t0)); },
       call(c){ (el._calls = el._calls || []).push(c); renderCalls(el); }
     };
   }
-  function setStatus(t){ $("status").textContent = t; }
+  function setStatus(t){ $("status").textContent = tr(t); }
   /* 'Claude · 1.4 s · ~812 in, ~120 out' for the model calls behind one step (several for a repair or a backup). Matches the runtime. */
   function callsSummary(calls){
     if (!calls || !calls.length) return "";
@@ -12157,13 +12158,13 @@ HOW TO MAP CODE
     mem.saved.forEach((e, k) => { if (!mem.transient.has(k) && !(e.expires && e.expires <= now)) rows.push([k, e]); });
     rows.sort((a, b) => a[0].localeCompare(b[0]));
     list.innerHTML = "";
-    if (!rows.length) { const p = document.createElement("div"); p.className = "mem-empty"; p.textContent = "Nothing remembered yet. Use the Memory blocks to remember values between runs."; list.appendChild(p); }
+    if (!rows.length) { const p = document.createElement("div"); p.className = "mem-empty"; p.textContent = tr("Nothing remembered yet. Use the Memory blocks to remember values between runs."); list.appendChild(p); }
     rows.forEach(([k, e]) => {
       const row = document.createElement("div"); row.className = "mem-row";
       const n = document.createElement("div"); n.className = "mem-name"; n.textContent = e.name;
       const kind = document.createElement("span"); kind.className = "mem-kind " + (e.kind === "transient" ? "transient" : e.expires ? "timed" : "permanent"); kind.textContent = kindLabel(e);
       const v = document.createElement("div"); v.className = "mem-val"; v.textContent = memPreview(e.value);
-      const del = document.createElement("button"); del.type = "button"; del.textContent = "Forget"; del.setAttribute("aria-label", "Forget " + e.name);
+      const del = document.createElement("button"); del.type = "button"; del.textContent = tr("Forget"); del.setAttribute("aria-label", tr("Forget {name}", { name:e.name }));
       del.onclick = () => memRemove(k);
       row.append(n, kind, v, del); list.appendChild(row);
     });
@@ -12227,8 +12228,8 @@ HOW TO MAP CODE
         const n = document.createElement("div"); n.className = "mem-name"; n.textContent = e.name;
         const d = document.createElement("div"); d.className = "mem-val"; d.textContent = type === "prompt" ? short(e.text, 90) : "saved " + when(e.updated);
         const open = document.createElement("button"); open.type = "button"; open.textContent = type === "prompt" ? "Edit" : "Open"; open.onclick = () => onOpen(e);
-        const del = document.createElement("button"); del.type = "button"; del.textContent = "Delete";
-        del.onclick = () => { if (del.dataset.armed) libDelete(type, k); else { del.dataset.armed = "1"; del.textContent = "Confirm delete"; del.className = "danger"; setTimeout(() => { if (del.isConnected) { delete del.dataset.armed; del.textContent = "Delete"; del.className = ""; } }, 4000); } };
+        const del = document.createElement("button"); del.type = "button"; del.textContent = tr("Delete");
+        del.onclick = () => { if (del.dataset.armed) libDelete(type, k); else { del.dataset.armed = "1"; del.textContent = tr("Confirm delete"); del.className = "danger"; setTimeout(() => { if (del.isConnected) { delete del.dataset.armed; del.textContent = tr("Delete"); del.className = ""; } }, 4000); } };
         row.append(n, d, open, del); holder.appendChild(row);
       });
     };
@@ -12364,11 +12365,11 @@ HOW TO MAP CODE
       const id = "pick-" + (++picCount);
       const input = document.createElement("input"); input.type = "file"; input.id = id; input.accept = "image/jpeg,image/png,image/webp,image/gif,image/svg+xml,.svg";
       input.className = "pickfile";
-      const label = document.createElement("label"); label.htmlFor = id; label.className = "filebtn"; label.textContent = "Choose picture";
+      const label = document.createElement("label"); label.htmlFor = id; label.className = "filebtn"; label.textContent = tr("Choose picture");
       const preview = document.createElement("img"); preview.className = "pic"; preview.hidden = true; preview.alt = "Chosen picture";
       const err = document.createElement("div"); err.className = "err"; err.hidden = true;
       const row = document.createElement("div"); row.className = "row";
-      const use = document.createElement("button"); use.type = "button"; use.className = "primary"; use.textContent = "Use this picture"; use.disabled = true;
+      const use = document.createElement("button"); use.type = "button"; use.className = "primary"; use.textContent = tr("Use this picture"); use.disabled = true;
       let chosen = null;
       input.onchange = async () => {
         err.hidden = true; chosen = null; use.disabled = true;
@@ -12384,7 +12385,7 @@ HOW TO MAP CODE
           preview.src = chosen.url; preview.hidden = false; use.disabled = false;
         } catch(e) { err.textContent = e.message; err.hidden = false; }
       };
-      use.onclick = () => { if (!chosen) { err.textContent = "Choose a picture first."; err.hidden = false; return; } const pic = chosen; done(pic, "chosen"); showPictureIn(step, pic, pic.name); };
+      use.onclick = () => { if (!chosen) { err.textContent = tr("Choose a picture first."); err.hidden = false; return; } const pic = chosen; done(pic, "chosen"); showPictureIn(step, pic, pic.name); };
       row.append(input, label, use);
       box.append(row, preview, err);
     });
@@ -12397,11 +12398,11 @@ HOW TO MAP CODE
       const id = "pickf-" + (++picCount);
       const input = document.createElement("input"); input.type = "file"; input.id = id; input.className = "pickfile";
       input.accept = ".txt,.md,.markdown,.csv,.tsv,.json,.html,.htm,.xml,.yaml,.yml,.log,.py,.js,.css,.toml,.srt,.vtt,.pdf,.docx,text/*,application/pdf";
-      const label = document.createElement("label"); label.htmlFor = id; label.className = "filebtn"; label.textContent = "Choose file";
+      const label = document.createElement("label"); label.htmlFor = id; label.className = "filebtn"; label.textContent = tr("Choose file");
       const err = document.createElement("div"); err.className = "err"; err.hidden = true;
       const info = document.createElement("div"); info.className = "pic-cap"; info.hidden = true;
       const row = document.createElement("div"); row.className = "row";
-      const use = document.createElement("button"); use.type = "button"; use.className = "primary"; use.textContent = "Use this file"; use.disabled = true;
+      const use = document.createElement("button"); use.type = "button"; use.className = "primary"; use.textContent = tr("Use this file"); use.disabled = true;
       let chosen = null;
       input.onchange = async () => {
         err.hidden = true; info.hidden = true; chosen = null; use.disabled = true;
@@ -12409,7 +12410,7 @@ HOW TO MAP CODE
         try {
           if (f.size > 25 * 1024 * 1024) throw new Error("That file is over 25 MB. Choose a smaller one, or split it.");
           if (/\.(doc|xlsx?|pptx?|zip|png|jpe?g|gif|webp)$/i.test(f.name)) throw new Error("That file type can't be read here. Use a PDF, a .docx, or a text file (pictures go in the Pictures blocks).");
-          info.textContent = "Reading " + f.name + "…"; info.hidden = false;
+          info.textContent = tr("Reading {file}…", { file:f.name }); info.hidden = false;
           let text;
           if (/\.pdf$/i.test(f.name) || f.type === "application/pdf") text = await pdfText(await f.arrayBuffer());
           else if (/\.docx$/i.test(f.name)) text = await docxText(await f.arrayBuffer());
@@ -12421,7 +12422,7 @@ HOW TO MAP CODE
         } catch(e) { err.textContent = e.message; err.hidden = false; }
       };
       use.onclick = () => {
-        if (!chosen) { err.textContent = "Choose a file first."; err.hidden = false; return; }
+        if (!chosen) { err.textContent = tr("Choose a file first."); err.hidden = false; return; }
         const c = chosen; done(c, "chosen");
         step.text((why ? why + "\n\n" : "") + c.name + " \u00b7 " + c.text.length.toLocaleString() + " characters\n\n" + c.text.slice(0, 600) + (c.text.length > 600 ? "\n…" : ""));
       };
@@ -12476,7 +12477,7 @@ HOW TO MAP CODE
   const isControlSignal = e => e instanceof Halt || e instanceof FinishSig || e instanceof BreakSig || e instanceof ContinueSig || e instanceof ReturnSig;
   const RETRYABLE = new Set(["upstream_error", "invalid_json", "empty_completion", "retryable"]);
   function markFailedSince(index){
-    [...stepsEl.children].slice(index).forEach(el => { const p = el.querySelector(".pill"); if (p && ["running","waiting","waiting for you"].includes(p.textContent)) { p.textContent = "failed"; p.className = "pill bad"; const bd = el.querySelector(".step-body"); if (bd && bd.textContent === "Thinking…") bd.textContent = "No answer."; } });
+    [...stepsEl.children].slice(index).forEach(el => { const p = el.querySelector(".pill"); if (p && ["running","waiting","waiting for you"].includes(p.dataset.state)) { p.dataset.state = "failed"; p.textContent = tr("failed"); p.className = "pill bad"; const bd = el.querySelector(".step-body"); if (bd && bd.textContent === "Thinking…") bd.textContent = tr("No answer."); } });
   }
 
   class Halt {}
@@ -12519,7 +12520,7 @@ HOW TO MAP CODE
     if (++run.calls > MAX_AI_CALLS) fail("Stopped after " + MAX_AI_CALLS + " Claude calls in one run, to protect your usage. Check for loops that call Claude too often.");
     if (run.budget && tokensUsed() >= run.budget) fail("Stopped: this run has used about " + tokensUsed().toLocaleString() + " tokens, which reaches its budget of " + run.budget.toLocaleString() + ". Raise the number in the 'limit this run' block.");
     run.tokIn += estTokens(prompt) + (images ? images.length * 1600 : 0);
-    setStatus("running · " + run.calls + " Claude call" + (run.calls === 1 ? "" : "s") + " · ~" + fmtTokens(tokensUsed()) + " tokens");
+    setStatus(tr("running") + " · " + tr(run.calls === 1 ? "{n} Claude call" : "{n} Claude calls", { n:run.calls }) + " · " + tr("~{n} tokens", { n:fmtTokens(tokensUsed()) }));
     const sample = run.sample;
     // Backups stand in for the primary model only; a block that names its own model keeps it.
     const tiers = [run.tier].concat(run.tier === run.primary ? run.backups : []);
@@ -12609,8 +12610,8 @@ HOW TO MAP CODE
     const said = what + (/[.!?]$/.test(what) ? "" : ".");
     const ok = await waitForYou("Allow this?", "The program wants to " + said, (box, done) => {
       const row = document.createElement("div"); row.className = "row";
-      const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = "Allow";
-      const no = document.createElement("button"); no.type = "button"; no.textContent = "Don't";
+      const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = tr("Allow");
+      const no = document.createElement("button"); no.type = "button"; no.textContent = tr("Don't");
       yes.onclick = () => done(true, "allowed"); no.onclick = () => done(false, "refused");
       row.append(yes, no); box.appendChild(row);
     });
@@ -12621,10 +12622,10 @@ HOW TO MAP CODE
   /* The person answers a question in the log. */
   async function askPerson(q){
     const a = await waitForYou("Question for you", q, (box, done) => {
-      const ta = document.createElement("textarea"); ta.id = "answer-" + run.steps + "-" + Date.now(); ta.setAttribute("aria-label", "Your answer");
-      const err = document.createElement("div"); err.className = "err"; err.hidden = true; err.textContent = "Type an answer first.";
+      const ta = document.createElement("textarea"); ta.id = "answer-" + run.steps + "-" + Date.now(); ta.setAttribute("aria-label", tr("Your answer"));
+      const err = document.createElement("div"); err.className = "err"; err.hidden = true; err.textContent = tr("Type an answer first.");
       const row = document.createElement("div"); row.className = "row";
-      const send = document.createElement("button"); send.type = "button"; send.className = "primary"; send.textContent = "Send answer";
+      const send = document.createElement("button"); send.type = "button"; send.className = "primary"; send.textContent = tr("Send answer");
       const go = () => { const v = ta.value.trim(); if (!v) { err.hidden = false; ta.focus(); return; } done(v); };
       send.onclick = go;
       ta.addEventListener("input", () => { err.hidden = true; });
@@ -12843,7 +12844,7 @@ HOW TO MAP CODE
     repo = ghRepo(repo); const n = Math.floor(num(number) + 0.5); text = str(text).trim();
     if (!text) fail("A comment needs some text.");
     if (!approved && !(await allowed(["messages"], "comment on " + repo + " #" + n + ": " + short(text, 120)))) return false;
-    GH(); addStep("GitHub comment on " + repo + " #" + n, { text }).done("sample", "ok");
+    GH(); addStep(tr("GitHub comment on {repo} #{n}", { repo, n }), { text }).done("sample", "ok");
     return true;
   }
   const TG = () => { connNote("Telegram"); return CONN.telegram || { messages:[], chat:"" }; };
@@ -12856,7 +12857,7 @@ HOW TO MAP CODE
   async function tgSend(text, approved){
     text = str(text).trim(); if (!text) fail("A Telegram message needs some text.");
     if (!approved && !(await allowed(["messages"], "send a Telegram message: " + short(text, 120)))) return false;
-    const t = TG(); addStep("Telegram → " + (t.chat || "your chat"), { text }).done("sample", "ok");
+    const t = TG(); addStep("Telegram → " + (t.chat || tr("your chat")), { text }).done("sample", "ok");
     return true;
   }
   /* Discord and Slack on the page: sample channels. Matches the runtime's chat_search and chat_send wording. */
@@ -12871,7 +12872,7 @@ HOW TO MAP CODE
   async function chatSend(svc, text, approved){
     text = str(text).trim(); if (!text) fail("A " + CHAT_NAME[svc] + " message needs some text.");
     if (!approved && !(await allowed(["messages"], "send a " + CHAT_NAME[svc] + " message: " + short(text, 120)))) return false;
-    const c = CHAT(svc); addStep(CHAT_NAME[svc] + " → " + (c.channel || "your channel"), { text }).done("sample", "ok");
+    const c = CHAT(svc); addStep(CHAT_NAME[svc] + " → " + (c.channel || tr("your channel")), { text }).done("sample", "ok");
     return true;
   }
   const MAIL = () => { connNote("Email"); return CONN.email || { messages:[] }; };
@@ -12894,7 +12895,7 @@ HOW TO MAP CODE
     const addrs = to.split(/[,;]/).map(a => a.trim()).filter(Boolean);
     if (!addrs.length || !addrs.every(a => /^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$/.test(a))) fail("“" + to + "” isn't an email address.");
     if (!approved && !(await allowed(["messages"], "send an email to " + to + ": " + subject))) return false;
-    MAIL(); addStep("Email to " + to, { text:"Subject: " + (subject || "(no subject)") + "\n\n" + str(body) }).done("sample", "ok");
+    MAIL(); addStep(tr("Email to {to}", { to }), { text:"Subject: " + (subject || "(no subject)") + "\n\n" + str(body) }).done("sample", "ok");
     return true;
   }
   function parseDay(text){
@@ -13036,7 +13037,7 @@ HOW TO MAP CODE
     const v = homeyVar(name), old = v.value, nv = ["boolean", "number"].includes(v.type) ? homeyValueFor(old, value) : str(value);
     if (!approved && !(await allowed(["ha"], "set the Homey variable “" + v.name + "” to " + homeyShow(nv)))) return false;
     v.value = nv;
-    addStep("Homey variable " + v.name, { mono:true, text:homeyShow(old) + " → " + homeyShow(nv) }).done("sample home", "ok");
+    addStep(tr("Homey variable {name}", { name:v.name }), { mono:true, text:homeyShow(old) + " → " + homeyShow(nv) }).done("sample home", "ok");
     return true;
   }
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
@@ -13172,7 +13173,7 @@ HOW TO MAP CODE
         out.set(agentName(blockName, taken), { desc, params, kind:"block", blockName, def, ask:t.getFieldValue("ASK") === "TRUE", schema });
       } else if (t.type === "rb_agent_mcp") {
         const server = String(t.getFieldValue("SERVER") || "").trim() || "(no name)";
-        addStep("MCP server \u201c" + server + "\u201d", { mono:true, text:"MCP servers can't be reached from this page, so the agent works without this server's tools here. " +
+        addStep(tr("MCP server \u201c{server}\u201d", { server }), { mono:true, text:"MCP servers can't be reached from this page, so the agent works without this server's tools here. " +
           "Export to Python and set " + mcpSetting(server) + " in second-thought.ini to use them." }).done("not on this page", "warn");
       } else if (t.type === "rb_agent_builtin") {
         const kind = t.getFieldValue("KIND");
@@ -13215,7 +13216,7 @@ HOW TO MAP CODE
     if (!Array.isArray(r.plan)) return plan;
     const next = r.plan.map(x => short(str(x).trim(), 120)).filter(Boolean).slice(0, MAX_PLAN);
     if (!next.length || JSON.stringify(next) === JSON.stringify(plan)) return plan;
-    addStep(plan.length ? "Agent: plan changed" : "Agent plan", { text:next.map((x, k) => (k + 1) + ". " + x).join("\n") }).done("planned", "ok");
+    addStep(plan.length ? tr("Agent: plan changed") : tr("Agent plan"), { text:next.map((x, k) => (k + 1) + ". " + x).join("\n") }).done("planned", "ok");
     return next;
   }
   async function callProcByName(def, blockName, args, tc){
@@ -13240,7 +13241,7 @@ HOW TO MAP CODE
       case "block": return callProcByName(t.def, t.blockName, t.params.map(p => inp[p] == null ? "" : inp[p]), tc);
       case "search_web": {
         if (!a("query")) fail("search_web needs a query.");
-        const s = addStep("Search (from Claude's knowledge): " + short(a("query"), 45));
+        const s = addStep(tr("Search (from Claude's knowledge): {query}", { query:short(a("query"), 45) }));
         const out = await ask("Answer this as if summarising a web search, from your own knowledge. You cannot browse, so say plainly when something may be out of date and give no made-up links.\n\nQuery: " + a("query"), s);
         s.done("not live", "warn"); return out;
       }
@@ -13267,7 +13268,7 @@ HOW TO MAP CODE
       }
       case "read_page": {
         if (!/^https?:\/\/[^\s/]+/i.test(a("url"))) fail("read_page needs a web address starting with http:// or https://.");
-        addStep("Read page: " + short(a("url"), 60), { mono:true, text:"This page can't open other websites, so the agent is told to use search_web instead. Exported Python reads the page for real." }).done("not live", "warn");
+        addStep(tr("Read page: {url}", { url:short(a("url"), 60) }), { mono:true, text:"This page can't open other websites, so the agent is told to use search_web instead. Exported Python reads the page for real." }).done("not live", "warn");
         return "This page can't open other websites, so read_page doesn't work here (it does in exported Python). Use search_web instead.";
       }
       case "calculate": return calcText(a("expression"));
@@ -13281,19 +13282,19 @@ HOW TO MAP CODE
       case "review_text": {
         if (!a("text")) fail("review_text needs some text to check.");
         if (!a("criteria")) fail("review_text needs criteria to check against.");
-        const s = addStep("Check: " + short(a("criteria"), 55));
+        const s = addStep(tr("Check: {criteria}", { criteria:short(a("criteria"), 55) }));
         const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + a("criteria") +
           "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. ' +
           "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS.review);
         const problems = Array.isArray(v.problems) ? v.problems.map(str).filter(x => x.trim()) : [];
         const out = v.approved === true ? "Passes every criterion." : "Doesn't pass yet. Problems:\n" + (problems.length ? problems : ["It doesn't yet meet the criteria."]).map(x => "- " + x).join("\n");
-        s.text(out); s.done(v.approved === true ? "passes" : "needs work", v.approved === true ? "ok" : "warn");
+        s.text(out); s.done(v.approved === true ? tr("passes") : tr("needs work"), v.approved === true ? "ok" : "warn");
         return out;
       }
       case "read_feed": return feedText(sampleFeedItems(a("url"), inp.limit == null ? 10 : inp.limit));
       case "search_linkedin": {
         if (!a("query")) fail("search_linkedin needs a query.");
-        const s = addStep("Search LinkedIn (from Claude's knowledge): " + short(a("query"), 40));
+        const s = addStep(tr("Search LinkedIn (from Claude's knowledge): {query}", { query:short(a("query"), 40) }));
         const out = await ask("Answer this as if summarising a web search of LinkedIn's public pages, from your own knowledge. You cannot browse, so say plainly that it may be out of date, and give no made-up links or profiles.\n\nQuery: site:linkedin.com " + a("query"), s);
         s.done("not live", "warn"); return out;
       }
@@ -13331,18 +13332,19 @@ HOW TO MAP CODE
   }
   const STATUS_KIND = { done:"ok", answer:"ok", "bad input":"warn", "tool error":"warn", refused:"warn", repeat:"warn", "not a tool":"warn",
                         unreadable:"warn", "empty answer":"warn", stopped:"bad" };
+  window.__runWords = () => Object.keys(STATUS_KIND);
   function showAgentSummary(trace){
     const s = addStep("Agent summary", { text:"" });
-    s.done(trace.length + " step" + (trace.length === 1 ? "" : "s"), "ok");
+    s.done(tr(trace.length === 1 ? "{n} step" : "{n} steps", { n:trace.length }), "ok");
     const t = document.createElement("table"); t.className = "agent-table";
     const head = t.createTHead().insertRow();
-    ["#", "Tool", "Input", "Result", "Status"].forEach(h => { const th = document.createElement("th"); th.textContent = h; head.appendChild(th); });
+    ["#", tr("Tool"), tr("Input"), tr("Result"), tr("Status")].forEach(h => { const th = document.createElement("th"); th.textContent = h; head.appendChild(th); });
     const body = t.createTBody(), md = ["| Step | Tool | Input | Result | Status |", "|---|---|---|---|---|"];
     const cell = x => String(x).replace(/\|/g, "\\|").replace(/\s+/g, " ");
     trace.forEach(st => {
-      const r = body.insertRow(), tool = st.tool || (st.status === "answer" ? "final answer" : "\u2013");
+      const r = body.insertRow(), tool = st.tool || (st.status === "answer" ? tr("final answer") : "\u2013");
       [[st.step, ""], [tool, ""], [short(st.input, 60), "mono"], [short(st.result, 120), ""]].forEach(([v, cls]) => { const c = r.insertCell(); c.textContent = v; if (cls) c.className = cls; });
-      const pill = document.createElement("span"); pill.className = "pill " + (STATUS_KIND[st.status] || ""); pill.textContent = st.status; r.insertCell().appendChild(pill);
+      const pill = document.createElement("span"); pill.className = "pill " + (STATUS_KIND[st.status] || ""); pill.textContent = tr(st.status); r.insertCell().appendChild(pill);
       md.push("| " + [st.step, tool, short(st.input, 60), short(st.result, 120), st.status].map(cell).join(" | ") + " |");
     });
     s.body.innerHTML = ""; s.body.appendChild(t);
@@ -13359,7 +13361,7 @@ HOW TO MAP CODE
     const title = (s, t) => { s.el.querySelector(".step-name").textContent = t; };
     const rec = (i, status, tool, shown, result) => run.agentTrace.push({ step:i, tool:tool || "", input:shown || "", result:short(str(result == null ? "" : result), 2000), status });
     for (let i = 1; i <= n; i++) {
-      const label = "Agent step " + i + "/" + n, s = addStep(label);
+      const label = tr("Agent step {i}/{n}", { i, n }), s = addStep(label);
       let r;
       try { r = await askChecked(q => ask(q, s, "json"), agentPrompt(goal, catalogue, history, n - i + 1, plan), SCHEMAS.agent); }
       catch(e) { if (e && e.code === "invalid_json") r = null; else throw e; }
@@ -13476,7 +13478,7 @@ HOW TO MAP CODE
       const saved = {}; RUN_STATE.forEach(k => saved[k] = run[k]);
       Object.assign(run, { task:"", draft:"", problems:[], approved:undefined, answer:"", result:[], vars:new Map(), instructions:"", chats:new Map(), outOfRounds:false, lastError:"", checkpoints:new Map(), reflect:null, agentTrace:[] });
       run.programs.push(name);
-      const st = addStep("Program: " + name, { text:"Started" + (str(value).trim() ? " with: " + short(value, 200) : ".") });
+      const st = addStep(tr("Program: {name}", { name }), { text:"Started" + (str(value).trim() ? " with: " + short(value, 200) : ".") });
       st.done("running", "");
       try {
         for (const hat of sub.getTopBlocks(true).filter(b => b.type === "rb_start" && (!b.isEnabled || b.isEnabled()))) {
@@ -13484,7 +13486,7 @@ HOW TO MAP CODE
           catch(e) { if (e instanceof FinishSig) break; throw e; }
         }
         const out = finalText();
-        addStep("Program: " + name, { text:out || "(no result)" }).done("done", "ok");
+        addStep(tr("Program: {name}", { name }), { text:out || "(no result)" }).done("done", "ok");
         st.done("done", "ok");
         return out;
       } catch(e) { if (!isControlSignal(e)) st.done("failed", "bad"); throw e; }
@@ -13571,12 +13573,12 @@ HOW TO MAP CODE
   /* Waits for the person in the log. render(resolve, reject) builds the controls. */
   function waitForYou(title, text, build){
     return new Promise((resolve, reject) => {
-      const s = addStep(title, { human:true, text });
+      const s = addStep(tr(title), { human:true, text });
       s.done("waiting for you", "warn");
       setStatus("waiting for you");
       const box = document.createElement("div"); box.className = "ask"; s.el.appendChild(box);
-      const stopper = () => { run.stoppers.delete(stopper); box.remove(); s.done(run.stopped ? "stopped" : "ended", run.stopped ? "bad" : "warn"); reject(new Halt()); };
-      const finish = (v, label) => { run.stoppers.delete(stopper); box.remove(); s.done(label || "answered", "ok"); if (!run.stoppers.size) setStatus("running"); resolve(v); };
+      const stopper = () => { run.stoppers.delete(stopper); box.remove(); s.done(run.stopped ? tr("stopped") : tr("ended"), run.stopped ? "bad" : "warn"); reject(new Halt()); };
+      const finish = (v, label) => { run.stoppers.delete(stopper); box.remove(); s.done(label || tr("answered"), "ok"); if (!run.stoppers.size) setStatus("running"); resolve(v); };
       run.stoppers.add(stopper);
       build(box, finish, s);
       const f = box.querySelector("textarea,button"); if (f) f.focus();
@@ -13682,42 +13684,42 @@ HOW TO MAP CODE
       /* Ask Claude */
       case "rb_ask": {
         const p = str(await input(b, tc, "TEXT")); if (!p.trim()) fail("An 'ask Claude' block is empty. Type a question into it.");
-        return askStep("Ask Claude: " + short(p, 60), "Answer the request below. Reply with only the answer, no preamble.\n\n" + p);
+        return askStep(tr("Ask Claude: {request}", { request:short(p, 60) }), "Answer the request below. Reply with only the answer, no preamble.\n\n" + p);
       }
       case "rb_ask_yesno": {
         const p = str(await input(b, tc, "TEXT")); if (!p.trim()) fail("A yes/no block is empty.");
-        const r = await askJSON("Yes or no: " + short(p, 60), 'Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, o => o.answer === true ? "Yes" : "No", SCHEMAS.yesno);
+        const r = await askJSON(tr("Yes or no: {question}", { question:short(p, 60) }), 'Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, o => o.answer === true ? "Yes" : "No", SCHEMAS.yesno);
         return r.answer === true;
       }
       case "rb_ask_number": {
         const p = str(await input(b, tc, "TEXT")); if (!p.trim()) fail("An 'ask for a number' block is empty.");
-        const r = await askJSON("Number: " + short(p, 60), 'Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, o => String(num(o.number)), SCHEMAS.number);
+        const r = await askJSON(tr("Number: {request}", { request:short(p, 60) }), 'Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, o => String(num(o.number)), SCHEMAS.number);
         return num(r.number);
       }
       case "rb_ask_list": {
         const p = str(await input(b, tc, "TEXT")); if (!p.trim()) fail("An 'ask for a list' block is empty.");
-        const s = addStep("List: " + short(p, 60));
+        const s = addStep(tr("List: {request}", { request:short(p, 60) }));
         const r = await askChecked(q => ask(q, s, "json"), 'Reply with only JSON: {"items": [<short strings>]}, no other text.\n\nRequest:\n' + p, SCHEMAS.list);
         const items = r.items.map(str).filter(Boolean);
-        s.list(items.length ? items : ["(empty list)"]); s.done(items.length + " items", "ok");
+        s.list(items.length ? items : ["(empty list)"]); s.done(tr("{n} items", { n:items.length }), "ok");
         return items;
       }
       case "rb_rewrite": {
         const t = str(await input(b, tc, "TEXT")), how = str(await input(b, tc, "HOW"));
         if (!t.trim()) fail("A 'rewrite' block has nothing to rewrite.");
-        return askStep("Rewrite: " + short(how, 60), "Rewrite the text below. Instruction: " + how + "\nReply with only the rewritten text.\n\nText:\n" + t);
+        return askStep(tr("Rewrite: {how}", { how:short(how, 60) }), "Rewrite the text below. Instruction: " + how + "\nReply with only the rewritten text.\n\nText:\n" + t);
       }
       case "rb_extract": {
         const what = str(await input(b, tc, "WHAT")), t = str(await input(b, tc, "TEXT"));
         if (!t.trim()) fail("An 'extract' block has no text to read.");
-        return askStep("Extract: " + short(what, 60), "From the text below, extract: " + what + "\nReply with only what you extracted, nothing else.\n\nText:\n" + t);
+        return askStep(tr("Extract: {what}", { what:short(what, 60) }), "From the text below, extract: " + what + "\nReply with only what you extracted, nothing else.\n\nText:\n" + t);
       }
       /* Review */
       case "rb_passed": return run.approved === true;
       case "rb_problems": return run.problems.slice();
       case "rb_score": {
         const t = str(await input(b, tc, "TEXT")), c = str(await input(b, tc, "CRITERIA"));
-        const r = await askJSON("Score: " + short(t, 50), 'Score the text from 1 to 10 against these criteria: ' + c +
+        const r = await askJSON(tr("Score: {text}", { text:short(t, 50) }), 'Score the text from 1 to 10 against these criteria: ' + c +
           '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + t, o => num(o.score) + "/10", SCHEMAS.score);
         return Math.max(0, Math.min(10, num(r.score)));
       }
@@ -13740,14 +13742,14 @@ HOW TO MAP CODE
       case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
       case "rb_homey_find": {
         const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
-        addStep("Homey: " + short(t, 50), { mono:true, text:homeyMatch(t).map(homeyLine).join("\n") || "(nothing)" }).done(recs.length + " devices", "ok");
+        addStep("Homey: " + short(t, 50), { mono:true, text:homeyMatch(t).map(homeyLine).join("\n") || "(nothing)" }).done(tr("{n} devices", { n:recs.length }), "ok");
         return recs;
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_mqtt_read": {
         const topic = mqttTopic(await input(b, tc, "TOPIC")), got = mqttRead(topic);
         if (!/[+#]/.test(topic)) { const v = got[topic] || ""; addStep("MQTT " + topic, { mono:true, text:v || "(no message yet: only messages the broker keeps show up straight away)" }).done("read", "ok"); return v; }
-        addStep("MQTT " + topic, { mono:true, text:Object.keys(got).sort().map(k => k + ": " + short(got[k], 80)).join("\n") || "(nothing)" }).done(Object.keys(got).length + " topics", "ok");
+        addStep("MQTT " + topic, { mono:true, text:Object.keys(got).sort().map(k => k + ": " + short(got[k], 80)).join("\n") || "(nothing)" }).done(tr("{n} topics", { n:Object.keys(got).length }), "ok");
         return got;
       }
       case "rb_tg_message": {
@@ -13759,14 +13761,14 @@ HOW TO MAP CODE
         const url = str(await input(b, tc, "URL")).trim();
         const items = sampleFeedItems(url, 10);
         const recs = items.map(i => ({ feed:i.feed, title:i.title, link:i.link, date:whenText(i.date), summary:i.summary }));
-        addStep("News: " + (short(url, 60) || "your feeds"), { mono:true, text:recs.slice(0, 12).map(r => r.date + "  " + r.title).join("\n") || "(nothing)" }).done(recs.length + " items", "ok");
+        addStep(tr("News: {feed}", { feed:short(url, 60) || tr("your feeds") }), { mono:true, text:recs.slice(0, 12).map(r => r.date + "  " + r.title).join("\n") || "(nothing)" }).done(tr("{n} items", { n:recs.length }), "ok");
         return recs;
       }
       case "rb_calendar": {
         const days = Math.max(1, Math.min(62, Math.floor(num(await input(b, tc, "DAYS", 7)) + 0.5) || 7)), start = parseDay("today");
         const recs = sampleEvents(start, new Date(start.getTime() + days * 86400000)).map(e => ({ day:dayText(e.start), start:e.all_day ? "" : pad2(e.start.getHours()) + ":" + pad2(e.start.getMinutes()),
           end:e.all_day ? "" : pad2(e.end.getHours()) + ":" + pad2(e.end.getMinutes()), title:e.title, location:e.location }));
-        addStep("Calendar", { mono:true, text:recs.map(r => r.day + " " + (r.start || "all day") + "  " + r.title).join("\n") || "(nothing)" }).done(recs.length + " events", "ok");
+        addStep("Calendar", { mono:true, text:recs.map(r => r.day + " " + (r.start || "all day") + "  " + r.title).join("\n") || "(nothing)" }).done(tr("{n} events", { n:recs.length }), "ok");
         return recs;
       }
       case "rb_rec_new": return {};
@@ -13780,12 +13782,12 @@ HOW TO MAP CODE
         if (!p) fail("The 'ask Claude for a record' block has no request.");
         const many = b.type === "rb_ask_records";
         const shape = "{" + fields.map(f => JSON.stringify(f) + ": ...").join(", ") + "}";
-        const s = addStep((many ? "Records: " : "Record: ") + short(p, 55));
+        const s = addStep(tr(many ? "Records: {request}" : "Record: {request}", { request:short(p, 55) }));
         const r = await askChecked(q => ask(q, s, "json"), (many ? 'Reply with only JSON: {"items": [<objects, each shaped like ' + shape + '>]}' : "Reply with only one JSON object shaped like " + shape) +
           ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + p, recordSchema(fields, many));
         if (many) {
           const arr = r.items.map(o => toRecord(o, fields));
-          s.text(arr.map(x => fields.map(f => f + ": " + short(str(x[f]), 40)).join(" \u00b7 ")).join("\n") || "(no records)"); s.done(arr.length + " records", "ok");
+          s.text(arr.map(x => fields.map(f => f + ": " + short(str(x[f]), 40)).join(" \u00b7 ")).join("\n") || "(no records)"); s.done(tr("{n} records", { n:arr.length }), "ok");
           return arr;
         }
         const rec = toRecord(r, fields);
@@ -13807,18 +13809,18 @@ HOW TO MAP CODE
         if (!msg) fail("The 'chat' block has no message.");
         const key = name.toLowerCase();
         const hist = run.chats.get(key) || [];
-        const s = addStep("Chat " + name + ": " + short(msg, 50));
+        const s = addStep(tr("Chat {name}: {message}", { name, message:short(msg, 50) }));
         const reply = await ask(hist.concat([{ role:"user", content:msg }]), s);
         hist.push({ role:"user", content:msg }, { role:"assistant", content:reply });
         while (hist.length > 40) hist.splice(0, 2);
         run.chats.set(key, hist);
-        s.done("turn " + hist.length / 2, "ok");
+        s.done(tr("turn {n}", { n:hist.length / 2 }), "ok");
         return reply;
       }
       case "rb_web_search": {
         const q = str(await input(b, tc, "TEXT")).trim();
         if (!q) fail("The 'search the web' block is empty.");
-        const s = addStep("Search (from Claude's knowledge): " + short(q, 45));
+        const s = addStep(tr("Search (from Claude's knowledge): {query}", { query:short(q, 45) }));
         const out = await ask("Answer this as if summarising a web search, from your own knowledge. You cannot browse, so say plainly when something may be out of date and give no made-up links.\n\nQuery: " + q, s);
         s.done("not live", "warn");
         return out;
@@ -13845,20 +13847,20 @@ HOW TO MAP CODE
       case "rb_img_draw": {
         const d = str(await input(b, tc, "TEXT")).trim();
         if (!d) fail("The 'draw a picture' block has no description.");
-        return drawSvg("Draw this as a single SVG illustration: " + d + "\n" + DRAW_RULES, "Draw: " + short(d, 60));
+        return drawSvg("Draw this as a single SVG illustration: " + d + "\n" + DRAW_RULES, tr("Draw: {what}", { what:short(d, 60) }));
       }
       case "rb_img_change": {
         const pic = needImg(await input(b, tc, "IMG"), "change picture");
         const how = str(await input(b, tc, "TEXT")).trim();
         if (!how) fail("The 'change picture' block has no change in it.");
-        if (pic.svg) return drawSvg("Here is an SVG illustration:\n" + pic.svg + "\n\nRedraw it with these changes: " + how + "\nKeep everything else the same. " + DRAW_RULES, "Change picture: " + short(how, 60));
-        return drawSvg("Draw a new SVG illustration of the attached picture, with these changes: " + how + "\n" + DRAW_RULES, "Redraw as illustration: " + short(how, 50), pic);
+        if (pic.svg) return drawSvg("Here is an SVG illustration:\n" + pic.svg + "\n\nRedraw it with these changes: " + how + "\nKeep everything else the same. " + DRAW_RULES, tr("Change picture: {how}", { how:short(how, 60) }));
+        return drawSvg("Draw a new SVG illustration of the attached picture, with these changes: " + how + "\n" + DRAW_RULES, tr("Redraw as illustration: {how}", { how:short(how, 50) }), pic);
       }
       case "rb_img_ask": {
         const q = str(await input(b, tc, "TEXT")).trim();
         const pic = needImg(await input(b, tc, "IMG"), "ask Claude about picture");
         if (!q) fail("The 'ask Claude about picture' block has no question.");
-        const s = addStep("Look at picture: " + short(q, 55));
+        const s = addStep(tr("Look at picture: {question}", { question:short(q, 55) }));
         const out = await askWithPicture("Look at the attached picture and answer. Reply with only the answer, no preamble.\n\n" + q, pic, s);
         s.done("done", "ok");
         return out;
@@ -13866,7 +13868,7 @@ HOW TO MAP CODE
       case "rb_img_score": {
         const pic = needImg(await input(b, tc, "IMG"), "score picture");
         const c = str(await input(b, tc, "CRITERIA"));
-        const s = addStep("Score picture: " + short(c, 55));
+        const s = addStep(tr("Score picture: {criteria}", { criteria:short(c, 55) }));
         const r = await askChecked(q => askWithPicture(q, pic, s, "json"), "Score the attached picture from 1 to 10 against these criteria: " + c + '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', SCHEMAS.score);
         const n = Math.max(0, Math.min(10, num(r.score)));
         s.text(n + "/10"); s.done("done", "ok");
@@ -13886,8 +13888,8 @@ HOW TO MAP CODE
         const t = str(await input(b, tc, "TEXT"));
         return waitForYou("Do you approve this?", t, (box, done) => {
           const row = document.createElement("div"); row.className = "row";
-          const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = "Approve";
-          const no = document.createElement("button"); no.type = "button"; no.textContent = "Send back";
+          const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = tr("Approve");
+          const no = document.createElement("button"); no.type = "button"; no.textContent = tr("Send back");
           yes.onclick = () => done(true, "approved"); no.onclick = () => done(false, "sent back");
           row.append(yes, no); box.appendChild(row);
         });
@@ -14047,7 +14049,7 @@ HOW TO MAP CODE
         const unit = b.getFieldValue("UNIT") || "s", mult = { s:1, m:60, h:3600 }[unit] || 1;
         const amount = Math.max(0, num(await input(b, tc, "SECS", 1)));
         const secs = Math.min(86400, amount * mult);
-        const label = "Waiting " + (secs >= 60 ? fmtLeft(secs * 1000) : secs + "s");
+        const label = tr("Waiting {time}", { time:secs >= 60 ? fmtLeft(secs * 1000) : secs + "s" });
         const st = secs >= 5 ? addStep("Wait", { mono:true, text:label }) : null;
         if (st) st.done("waiting", "");
         await sleepUntil(Date.now() + secs * 1000, st, label);
@@ -14058,7 +14060,7 @@ HOW TO MAP CODE
         const h = Math.max(0, Math.min(23, Math.round(num(b.getFieldValue("HOUR"))))), m = Math.max(0, Math.min(59, Math.round(num(b.getFieldValue("MINUTE")))));
         const t = new Date(); t.setHours(h, m, 0, 0);
         if (t.getTime() <= Date.now()) t.setDate(t.getDate() + 1);
-        const label = "Waiting until " + pad2(h) + ":" + pad2(m) + (t.getDate() !== new Date().getDate() ? " tomorrow" : "");
+        const label = tr(t.getDate() !== new Date().getDate() ? "Waiting until {time} tomorrow" : "Waiting until {time}", { time:pad2(h) + ":" + pad2(m) });
         const st = addStep("Wait until a time", { mono:true, text:label }); st.done("waiting", "");
         await sleepUntil(t.getTime(), st, label);
         st.text("Reached " + pad2(h) + ":" + pad2(m)); st.done("done", "ok"); mark(b);
@@ -14083,7 +14085,7 @@ HOW TO MAP CODE
         const name = String(b.getFieldValue("MSG") || "").trim();
         if (!name) fail("A 'wait until I receive' block has no message name.");
         const key = name.toLowerCase();
-        const st = addStep("Waiting for \u201c" + name + "\u201d", { mono:true, text:"Carries on when another script broadcasts this message." });
+        const st = addStep(tr("Waiting for \u201c{message}\u201d", { message:name }), { mono:true, text:"Carries on when another script broadcasts this message." });
         st.done("waiting", "");
         tc.payload = await new Promise((resolve, reject) => {
           const w = { resolve:(v) => { cleanup(); resolve(v === undefined ? "" : v); } };
@@ -14106,7 +14108,7 @@ HOW TO MAP CODE
         const note = str(await input(b, tc, "TEXT"));
         await waitForYou("Paused", note || "Paused.", (box, done) => {
           const row = document.createElement("div"); row.className = "row";
-          const go = document.createElement("button"); go.type = "button"; go.className = "primary"; go.textContent = "Continue";
+          const go = document.createElement("button"); go.type = "button"; go.className = "primary"; go.textContent = tr("Continue");
           go.onclick = () => done(true, "continued");
           row.appendChild(go); box.appendChild(row);
         });
@@ -14141,18 +14143,18 @@ HOW TO MAP CODE
         waiters.forEach(w => w.resolve(payload));
         if (!receivers.length && waiters.length) {
           run.broadcasts++;
-          if (run.broadcasts <= 25) addStep("Broadcast \u201c" + msg + "\u201d", { mono:true, text:"Woke " + waiters.length + " waiting script" + (waiters.length === 1 ? "" : "s") + "." }).done("sent", "ok");
+          if (run.broadcasts <= 25) addStep(tr("Broadcast \u201c{message}\u201d", { message:msg }), { mono:true, text:"Woke " + waiters.length + " waiting script" + (waiters.length === 1 ? "" : "s") + "." }).done("sent", "ok");
           break;
         }
-        if (!receivers.length) { addStep("Broadcast \u201c" + msg + "\u201d", { mono:true, text:"No 'when I receive " + msg + "' script is listening, so nothing happened." }).done("no listeners", "warn"); break; }
+        if (!receivers.length) { addStep(tr("Broadcast \u201c{message}\u201d", { message:msg }), { mono:true, text:"No 'when I receive " + msg + "' script is listening, so nothing happened." }).done("no listeners", "warn"); break; }
         run.started += receivers.length;
         if (run.started > MAX_SCRIPTS) fail("Stopped after starting " + MAX_SCRIPTS + " scripts. A message may be broadcasting itself in a loop.");
         if (run.threads.size + receivers.length > MAX_LIVE) fail("Too many scripts running at once (over " + MAX_LIVE + "). Use 'broadcast and wait' inside loops.");
         run.broadcasts++;
         let st = null;
         if (run.broadcasts <= 25) {
-          st = addStep("Broadcast \u201c" + msg + "\u201d", { mono:true, text:receivers.length + " script" + (receivers.length === 1 ? "" : "s") + " started" + (wait ? ", waiting for them to finish" : "") });
-          st.done(wait ? "waiting" : "sent", wait ? "" : "ok");
+          st = addStep(tr("Broadcast \u201c{message}\u201d", { message:msg }), { mono:true, text:receivers.length + " script" + (receivers.length === 1 ? "" : "s") + " started" + (wait ? ", waiting for them to finish" : "") });
+          st.done(wait ? tr("waiting") : tr("sent"), wait ? "" : "ok");
         } else if (run.broadcasts === 26) {
           addStep("Broadcasts", { mono:true, text:"More broadcasts are running. They won't be listed one by one." }).done("quiet", "warn");
         }
@@ -14190,7 +14192,7 @@ HOW TO MAP CODE
         needDraft();
         const instr = str(await input(b, tc, "TEXT")).trim();
         if (!instr) fail("The 'rework the draft' block has no instruction.");
-        run.draft = await askStep("Rework: " + short(instr, 60), "Rewrite the draft below following this instruction: " + instr +
+        run.draft = await askStep(tr("Rework: {how}", { how:short(instr, 60) }), "Rewrite the draft below following this instruction: " + instr +
           "\nKeep it true to the original task. Reply with only the rewritten piece.\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft);
         break;
       }
@@ -14211,17 +14213,17 @@ HOW TO MAP CODE
         if (!name) fail("The 'save checkpoint' block needs a name.");
         const snap = {}; CHECKPOINT_STATE.forEach(k => snap[k] = cloneState(run[k]));
         run.checkpoints.set(name.toLowerCase(), snap);
-        addStep("Checkpoint \u201c" + name + "\u201d", { text:"Saved the task, draft, review, result and variables" + (run.draft ? ". Draft: " + short(run.draft, 80) : ".") }).done("saved", "ok");
+        addStep(tr("Checkpoint \u201c{name}\u201d", { name }), { text:"Saved the task, draft, review, result and variables" + (run.draft ? ". Draft: " + short(run.draft, 80) : ".") }).done("saved", "ok");
         break;
       }
       case "rb_checkpoint_restore": {
         const name = String(b.getFieldValue("NAME") || "").trim(), snap = run.checkpoints.get(name.toLowerCase());
         if (!snap) fail("There's no checkpoint called \u201c" + name + "\u201d in this run. Put a 'save checkpoint' block before this one.");
         CHECKPOINT_STATE.forEach(k => run[k] = cloneState(snap[k]));
-        addStep("Back to checkpoint \u201c" + name + "\u201d", { text:"Restored the task, draft, review, result and variables" + (run.draft ? ". Draft: " + short(run.draft, 80) : ".") }).done("restored", "ok");
+        addStep(tr("Back to checkpoint \u201c{name}\u201d", { name }), { text:"Restored the task, draft, review, result and variables" + (run.draft ? ". Draft: " + short(run.draft, 80) : ".") }).done("restored", "ok");
         break;
       }
-      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), "Review"); break; }
+      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), tr("Review")); break; }
       case "rb_reflect": {
         needDraft();
         const criteria = str(await input(b, tc, "CRITERIA"));
@@ -14231,7 +14233,7 @@ HOW TO MAP CODE
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
-            const { approved, step } = await reviewOnce(criteria, "Review, round " + round, true);
+            const { approved, step } = await reviewOnce(criteria, tr("Review, round {n}", { n:round }), true);
             if (approved) break;
             if (round > max) {
               step.done("failed, out of rounds", "bad"); run.outOfRounds = true;
@@ -14261,7 +14263,7 @@ HOW TO MAP CODE
         const target = str(await input(b, tc, "TARGET")).trim() || "persistent_notification", text = str(await input(b, tc, "TEXT"));
         if (!text.trim()) fail("The 'notify' block has no message.");
         if (!(await allowed(["ha", "messages"], "send a notification to " + target + ": " + short(text, 120)))) break;
-        haNote(); addStep("Notification → " + target, { text }).done("sample house", "ok"); break;
+        haNote(); addStep(tr("Notification → {target}", { target }), { text }).done("sample house", "ok"); break;
       }
       case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
       case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
@@ -14274,14 +14276,14 @@ HOW TO MAP CODE
         const text = str(await input(b, tc, "TEXT")), player = str(await input(b, tc, "PLAYER")).trim();
         if (!text.trim()) fail("The 'say' block has nothing to say.");
         if (!(await allowed(["ha", "messages"], "say on " + (player || "a speaker") + ": " + short(text, 120)))) break;
-        haNote(); addStep("Spoken on " + (player || "a speaker"), { text }).done("sample house", "ok"); break;
+        haNote(); addStep(tr("Spoken on {player}", { player:player || tr("a speaker") }), { text }).done("sample house", "ok"); break;
       }
       case "rb_set_instructions": {
         run.instructions = str(await input(b, tc, "TEXT")).trim();
         addStep("Instructions for Claude", { text:run.instructions || "(cleared)" }).done("set", "ok"); break;
       }
       case "rb_clear_instructions": run.instructions = ""; addStep("Instructions for Claude", { mono:true, text:"Cleared." }).done("cleared", "ok"); break;
-      case "rb_chat_reset": { const n = str(await input(b, tc, "NAME")).trim(); run.chats.delete(n.toLowerCase()); addStep("Conversation " + n, { mono:true, text:"Starting afresh." }).done("reset", "ok"); break; }
+      case "rb_chat_reset": { const n = str(await input(b, tc, "NAME")).trim(); run.chats.delete(n.toLowerCase()); addStep(tr("Conversation {name}", { name:n }), { mono:true, text:"Starting afresh." }).done("reset", "ok"); break; }
       case "rb_rec_set": {
         const k = str(await input(b, tc, "KEY")).trim(), r = await input(b, tc, "REC"), v = await input(b, tc, "VALUE");
         if (!k) fail("The 'set … of record' block needs a field name.");
@@ -14292,7 +14294,7 @@ HOW TO MAP CODE
         const v = await input(b, tc, "VALUE"), name = str(await input(b, tc, "NAME")).trim() || "output", ext = b.getFieldValue("EXT") || "md";
         const st = addStep("Save file", { mono:true, text:"Waiting for you to confirm the download…" }); st.done("waiting", "");
         const msg = await saveTextFile(v, name, ext);
-        st.text(msg); st.done(/^Saved/.test(msg) ? "saved" : "skipped", /^Saved/.test(msg) ? "ok" : "warn");
+        st.text(msg); st.done(/^Saved/.test(msg) ? tr("saved") : tr("skipped"), /^Saved/.test(msg) ? "ok" : "warn");
         break;
       }
       case "rb_try": {
@@ -14319,10 +14321,10 @@ HOW TO MAP CODE
             run.lastError = errText(e);
             const code = e instanceof Error ? null : e && e.code;
             if (!RETRYABLE.has(code)) throw e;
-            if (attempt >= max) { addStep("Gave up after " + attempt + " tries", { text:run.lastError }).done("failed", "bad"); throw e; }
+            if (attempt >= max) { addStep(tr("Gave up after {n} tries", { n:attempt }), { text:run.lastError }).done("failed", "bad"); throw e; }
             const wait = 2000 * attempt;
             const st = addStep("Retrying", { mono:true, text:"Try " + attempt + " of " + max + " failed: " + run.lastError + "\nTrying again in " + (wait / 1000) + "s." });
-            st.done("retry " + (attempt + 1), "warn");
+            st.done(tr("retry {n}", { n:attempt + 1 }), "warn");
             await sleepUntil(Date.now() + wait);
             mark(b);
           }
@@ -14332,7 +14334,7 @@ HOW TO MAP CODE
       case "rb_mem_set": {
         const v = await input(b, tc, "VALUE"), name = str(await input(b, tc, "NAME"));
         const kind = await memWrite(name, v, b.getFieldValue("KIND") || "transient");
-        addStep("Remembered \u201c" + name.trim() + "\u201d", { mono:true, text:memPreview(isImg(v) ? str(v) : v) + "  \u00b7  " + (kind === "transient" ? "while page is open" : "forever") }).done("saved", "ok");
+        addStep(tr("Remembered \u201c{name}\u201d", { name:name.trim() }), { mono:true, text:memPreview(isImg(v) ? str(v) : v) + "  \u00b7  " + (kind === "transient" ? "while page is open" : "forever") }).done("saved", "ok");
         break;
       }
       case "rb_mem_set_for": {
@@ -14341,7 +14343,7 @@ HOW TO MAP CODE
         const ms = Math.min(365 * 86400000, n * { m:60000, h:3600000, d:86400000 }[unit]);
         if (!ms) fail("A 'remember for' block needs a time above zero.");
         const kind = await memWrite(name, v, "permanent", Date.now() + ms);
-        addStep("Remembered \u201c" + name.trim() + "\u201d", { mono:true, text:memPreview(v) + "  \u00b7  " + (kind === "transient" ? "while page is open" : "until " + new Date(Date.now() + ms).toLocaleString([], { weekday:"short", hour:"2-digit", minute:"2-digit", day:"numeric", month:"short" })) }).done("saved", "ok");
+        addStep(tr("Remembered \u201c{name}\u201d", { name:name.trim() }), { mono:true, text:memPreview(v) + "  \u00b7  " + (kind === "transient" ? "while page is open" : "until " + new Date(Date.now() + ms).toLocaleString([], { weekday:"short", hour:"2-digit", minute:"2-digit", day:"numeric", month:"short" })) }).done("saved", "ok");
         break;
       }
       case "rb_mem_add": {
@@ -14351,16 +14353,16 @@ HOW TO MAP CODE
         items.push(v);
         const kind = cur ? (mem.transient.has(key) ? "transient" : "permanent") : (b.getFieldValue("KIND") || "transient");
         await memWrite(name, items, kind, cur && !mem.transient.has(key) ? cur.expires : null);
-        addStep("Added to \u201c" + name.trim() + "\u201d", { mono:true, text:memPreview(items) }).done("saved", "ok");
+        addStep(tr("Added to \u201c{name}\u201d", { name:name.trim() }), { mono:true, text:memPreview(items) }).done("saved", "ok");
         break;
       }
-      case "rb_mem_forget": { const name = str(await input(b, tc, "NAME")); await memRemove(memKey(name)); addStep("Forgot \u201c" + name.trim() + "\u201d", { mono:true, text:"" }).done("forgotten", "ok"); break; }
+      case "rb_mem_forget": { const name = str(await input(b, tc, "NAME")); await memRemove(memKey(name)); addStep(tr("Forgot \u201c{name}\u201d", { name:name.trim() }), { mono:true, text:"" }).done("forgotten", "ok"); break; }
       case "rb_img_show": { const pic = needImg(await input(b, tc, "IMG"), "show picture"); const st = addStep("Picture", { text:"" }); showPictureIn(st, pic); st.done("shown", "ok"); break; }
       case "rb_img_save": {
         const pic = needImg(await input(b, tc, "IMG"), "save picture");
         const st = addStep("Save picture", { mono:true, text:"Waiting for you to confirm the download…" }); st.done("waiting", "");
         const msg = await savePicture(pic, b.getFieldValue("FORMAT") || "png");
-        st.text(msg); st.done(/^Saved/.test(msg) ? "saved" : "skipped", /^Saved/.test(msg) ? "ok" : "warn"); break;
+        st.text(msg); st.done(/^Saved/.test(msg) ? tr("saved") : tr("skipped"), /^Saved/.test(msg) ? "ok" : "warn"); break;
       }
       case "rb_show": addStep("Current draft", { text:run.draft || "(no draft yet)" }).done("shown", "ok"); break;
       case "rb_add_result": {
@@ -14393,9 +14395,10 @@ HOW TO MAP CODE
     if (!items.length) { addStep("Finished", { text:"The program ended without a result. Add 'add … to the result' or 'write a first draft'." }).done("no output", "warn"); return; }
     const text = finalText(), pics = items.filter(isImg);
     const el = document.createElement("div"); el.className = "result";
-    el.innerHTML = '<div class="step-top"><span class="step-name">Result</span><span class="pill ok"></span></div><div class="step-body"></div>' +
+    el.innerHTML = '<div class="step-top"><span class="step-name"></span><span class="pill ok"></span></div><div class="step-body"></div>' +
       '<div class="result-actions"></div>';
-    el.querySelector(".pill").textContent = note || (run.outOfRounds ? "best effort" : "finished");
+    el.querySelector(".step-name").textContent = tr("Result");
+    el.querySelector(".pill").textContent = tr(note || (run.outOfRounds ? "best effort" : "finished"));
     const body = el.querySelector(".step-body"), actions = el.querySelector(".result-actions");
     items.forEach((it, i) => {
       if (isImg(it)) { const im = document.createElement("img"); im.src = it.url; im.alt = it.name; im.className = "pic"; body.appendChild(im); }
@@ -14404,8 +14407,8 @@ HOW TO MAP CODE
     if (text) {
       const copy = document.createElement("button"); copy.type = "button"; copy.textContent = pics.length ? "Copy text" : "Copy result";
       copy.onclick = async () => {
-        try { await navigator.clipboard.writeText(text); copy.textContent = "Copied"; }
-        catch(e) { const r = document.createRange(); r.selectNodeContents(body); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); copy.textContent = "Selected, press Ctrl+C"; }
+        try { await navigator.clipboard.writeText(text); copy.textContent = tr("Copied"); }
+        catch(e) { const r = document.createRange(); r.selectNodeContents(body); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); copy.textContent = tr("Selected, press Ctrl+C"); }
       };
       actions.appendChild(copy);
     }
@@ -14413,7 +14416,7 @@ HOW TO MAP CODE
       const sv = document.createElement("button"); sv.type = "button"; sv.textContent = pics.length > 1 ? "Save picture " + (i + 1) + " (PNG)" : "Save picture (PNG)";
       sv.onclick = async () => {
         sv.disabled = true;
-        try { const blob = pic.type === "image/png" ? pic.blob : await toPng(pic, 2048); await downloads.save({ filename:slug(pic.name) + ".png", data:blob }); sv.textContent = "Saved"; }
+        try { const blob = pic.type === "image/png" ? pic.blob : await toPng(pic, 2048); await downloads.save({ filename:slug(pic.name) + ".png", data:blob }); sv.textContent = tr("Saved"); }
         catch(e) { sv.textContent = e && e.code === "declined" ? "Save cancelled" : "Couldn't save"; }
         finally { sv.disabled = false; }
       };
@@ -14461,12 +14464,12 @@ HOW TO MAP CODE
   }
   $("log-save").onclick = async () => {
     const btn = $("log-save");
-    if (!downloads || !stepsEl.querySelector(".step, .result")) { btn.textContent = "Nothing to save yet"; setTimeout(() => btn.textContent = "Save log", 1600); return; }
+    if (!downloads || !stepsEl.querySelector(".step, .result")) { btn.textContent = tr("Nothing to save yet"); setTimeout(() => btn.textContent = tr("Save log"), 1600); return; }
     const d = new Date(), stamp = d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()) + "-" + pad2(d.getHours()) + pad2(d.getMinutes());
     btn.disabled = true;
-    try { await downloads.save({ filename:slug(($("io-name").value || "").trim() || "run") + "-log-" + stamp + ".md", data:logMarkdown() }); btn.textContent = "Saved"; }
+    try { await downloads.save({ filename:slug(($("io-name").value || "").trim() || "run") + "-log-" + stamp + ".md", data:logMarkdown() }); btn.textContent = tr("Saved"); }
     catch(e) { btn.textContent = e && e.code === "declined" ? "Cancelled" : "Couldn't save"; }
-    finally { btn.disabled = false; setTimeout(() => btn.textContent = "Save log", 1600); }
+    finally { btn.disabled = false; setTimeout(() => btn.textContent = tr("Save log"), 1600); }
   };
 
   /* ---------- Watch panel ---------- */
@@ -14653,11 +14656,11 @@ HOW TO MAP CODE
       while (run.threads.size) await Promise.all([...run.threads]);
       if (run.error) throw run.error;
       if (run.stopped) throw new Halt();
-      stepsEl.querySelectorAll(".pill").forEach(p => { if (["running","waiting","waiting for you"].includes(p.textContent)) { p.textContent = "ended"; p.className = "pill warn"; } });
+      stepsEl.querySelectorAll(".pill").forEach(p => { if (["running","waiting","waiting for you"].includes(p.dataset.state)) { p.dataset.state = "ended"; p.textContent = tr("ended"); p.className = "pill warn"; } });
       if (!(quiet && !resultItems().length)) showResult();
-      setStatus("done in " + fmtLeft(Date.now() - started) + " \u00b7 " + run.calls + " Claude call" + (run.calls === 1 ? "" : "s") + (run.calls ? " \u00b7 ~" + fmtTokens(tokensUsed()) + " tokens" : ""));
+      setStatus(tr("done in {time}", { time:fmtLeft(Date.now() - started) }) + " \u00b7 " + tr(run.calls === 1 ? "{n} Claude call" : "{n} Claude calls", { n:run.calls }) + (run.calls ? " \u00b7 " + tr("~{n} tokens", { n:fmtTokens(tokensUsed()) }) : ""));
     } catch(e) {
-      stepsEl.querySelectorAll(".pill").forEach(p => { if (["running","waiting","waiting for you"].includes(p.textContent)) { p.textContent = "interrupted"; p.className = "pill bad"; } });
+      stepsEl.querySelectorAll(".pill").forEach(p => { if (["running","waiting","waiting for you"].includes(p.dataset.state)) { p.dataset.state = "interrupted"; p.textContent = tr("interrupted"); p.className = "pill bad"; } });
       if (e instanceof Halt) {
         setStatus("stopped");
         if (run.stopped && resultItems().length) { addStep("Stopped", { text:"Run stopped. What was ready so far is below." }).done("stopped", "warn"); showResult("partial"); }
@@ -14698,9 +14701,9 @@ HOW TO MAP CODE
   function hatTime(b){ return [Math.max(0, Math.min(23, Math.round(num(b.getFieldValue("HOUR"))))), Math.max(0, Math.min(59, Math.round(num(b.getFieldValue("MINUTE")))))]; }
   function everyMs(b){ return Math.max(60000, Math.min(86400000, num(b.getFieldValue("N")) * (b.getFieldValue("UNIT") === "h" ? 3600000 : 60000))); }
   function describeHat(b){
-    if (b.type === "rb_ha_when") return "When " + String(b.getFieldValue("ENTITY") || "").trim() + " changes";
-    if (b.type === "rb_every") return "Every " + num(b.getFieldValue("N")) + (b.getFieldValue("UNIT") === "h" ? " h" : " min");
-    const [h, m] = hatTime(b); return "Scheduled " + pad2(h) + ":" + pad2(m);
+    if (b.type === "rb_ha_when") return tr("When {entity} changes", { entity:String(b.getFieldValue("ENTITY") || "").trim() });
+    if (b.type === "rb_every") return tr(b.getFieldValue("UNIT") === "h" ? "Every {n} h" : "Every {n} min", { n:num(b.getFieldValue("N")) });
+    const [h, m] = hatTime(b); return tr("Scheduled {time}", { time:pad2(h) + ":" + pad2(m) });
   }
   function nextDueFor(b, now){
     if (b.type === "rb_every") { if (!sched.nextEvery.has(b.id)) sched.nextEvery.set(b.id, now + everyMs(b)); return sched.nextEvery.get(b.id); }
