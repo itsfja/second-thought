@@ -6,7 +6,8 @@ tested on its own. Exported programs still come as one file with nothing to inst
 package's modules, in order, into python/runtime.py (each module's imports, above its "package only" line,
 are left out: in one file every name is already there).
 
-The page is published as one self-contained HTML file, so that runtime, the code-conversion prompt
+The page is published as one self-contained HTML file, so that runtime, its list of model services (SERVICES
+in python/second_thought/providers.py, as JSON), the code-conversion prompt
 (prompts/convert-guide.txt), the Home Assistant sample house (ha/sample-house.json) and the sample feeds,
 GitHub, Telegram, email and calendar (samples/connections.json) are embedded inside it.
 Edit those files (not python/runtime.py, which is rebuilt), then run:
@@ -14,6 +15,8 @@ Edit those files (not python/runtime.py, which is rebuilt), then run:
     python tools/sync.py           # rebuild python/runtime.py and write everything into second-thought.html
     python tools/sync.py --check   # exit 1 if either is out of date (used by the tests)
 """
+import ast
+import json
 import pathlib
 import sys
 
@@ -24,8 +27,10 @@ PACKAGE = ROOT / "python" / "second_thought"
 # The order matters: each module may use names from the ones before it.
 MODULES = ["settings", "providers", "core", "connectors", "agent", "runtime"]
 MARK = "# ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----"
+SERVICES = PACKAGE / "providers.py"   # its SERVICES list is the page's list of model services too
 PARTS = [
     ('<script type="text/plain" id="py-runtime">\n', RUNTIME),
+    ('<script type="application/json" id="services">\n', SERVICES),
     ('<script type="text/plain" id="convert-guide">\n', ROOT / "prompts" / "convert-guide.txt"),
     ('<script type="application/json" id="ha-sample">\n', ROOT / "ha" / "sample-house.json"),
     ('<script type="application/json" id="connections-sample">\n', ROOT / "samples" / "connections.json"),
@@ -47,9 +52,26 @@ def bundle() -> str:
     return "\n\n\n".join(bodies) + "\n"
 
 
+def services_json() -> str:
+    """The SERVICES list in providers.py, as JSON for the page. It's read, not run, so it must be plain values."""
+    tree = ast.parse(SERVICES.read_text(encoding="utf-8"))
+    found = [n.value for n in tree.body if isinstance(n, ast.Assign) and [ast.unparse(t) for t in n.targets] == ["SERVICES"]]
+    if len(found) != 1:
+        sys.exit(f"{SERVICES.relative_to(ROOT)} should set SERVICES = [...] once, at the top level.")
+    try:
+        services = ast.literal_eval(found[0])
+    except ValueError:
+        sys.exit(f"SERVICES in {SERVICES.relative_to(ROOT)} must be plain values (text, numbers, lists, dicts), "
+                 "since the page reads it as data.")
+    return "[\n" + ",\n".join(json.dumps(x, ensure_ascii=False) for x in services) + "\n]\n"  # one service a line
+
+
 def build(page: str, runtime: str = None) -> str:
     for opener, path in PARTS:
-        body = runtime if (path == RUNTIME and runtime is not None) else path.read_text(encoding="utf-8")
+        if path == SERVICES:
+            body = services_json()
+        else:
+            body = runtime if (path == RUNTIME and runtime is not None) else path.read_text(encoding="utf-8")
         if "</script" in body:
             sys.exit(f"{path.relative_to(ROOT)} must not contain '</script' (it is embedded in a script tag).")
         if opener not in page:

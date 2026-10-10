@@ -18,6 +18,12 @@ that the two agree.
 
 ## Unreleased
 
+### Changed
+- Every model service is now one entry in `SERVICES` (in `python/second_thought/providers.py`). `MODELS`,
+  `PROVIDERS` and the other tables are made from it, and the page builds its model menus, backups, block choices,
+  exported settings and notes from the same list. Exported programs behave exactly as before; adding a service that
+  speaks OpenAI's chat format now needs only its entry (#42).
+
 ## 1.0.0 - 2026-10-10
 
 The first numbered runtime. Programs exported before this have the same runtime, without the number.

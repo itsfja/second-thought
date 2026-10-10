@@ -539,6 +539,8 @@ The helper's six parts are:
 
 Each part starts with the other parts it needs. When `tools/sync.py` sticks them together, it leaves those lines out, because in one file everything is already there.
 
+**Adding a model service.** Every model service is one entry in `SERVICES`, near the top of `providers.py`: its name, its address, where its key goes, and its quick, default and complex models. The page reads the same list (`tools/sync.py` copies it in), so the new service turns up in the model menus, the backups, the blocks, the exported settings file and the notes, all from that one entry. If the service speaks OpenAI's chat format, which most do, that is all it needs. Then add its settings to `second-thought.example.ini` (the checks will say which), and a line to `CHANGELOG.md`.
+
 The checks use pretend helpers, so they never cost anything. To check the real helpers with your own keys, run:
 
 ```
