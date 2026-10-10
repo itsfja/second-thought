@@ -32,13 +32,20 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools):
         self.receivers = {}
         self.client = None
         self.gemini = None
-        self._input_lock = asyncio.Lock()  # one question at the keyboard at a time
-        self._tg_lock = asyncio.Lock()  # one Telegram fetch at a time (made here, so two fetches can never make one each)
         self.no_schema = set()      # Claude models that refused a reply shape, so it isn't sent again
         self.json_modes = {}         # (service, model) -> the JSON mode that service accepts: "schema", "object" or "none"
         self.schedule_mode = False
         self.transient_memory = {}   # kept across runs while this program keeps running
         self.reset()
+
+    def _lock(self, name):
+        """An asyncio lock, made the first time it's needed, inside the running event loop: Python 3.9 ties a lock to
+        the loop that's current when it's made, and exported programs make Runtime before their loop starts. Making it
+        involves no await, so two tasks asking at once still share one lock."""
+        locks = self.__dict__.setdefault("_locks", {})
+        if name not in locks:
+            locks[name] = asyncio.Lock()
+        return locks[name]
 
     # ----- run state -----
     def reset(self):
@@ -920,7 +927,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools):
 
     # ----- You (the person at the keyboard) -----
     async def _input(self, prompt):
-        async with self._input_lock:
+        async with self._lock("input"):  # one question at the keyboard at a time
             try:
                 return await asyncio.to_thread(input, prompt)
             except EOFError:

@@ -33,6 +33,11 @@ that the two agree.
 - A program that can act on the world lists those things and asks before its first run. The yes is kept in
   `.<program>.approved` until the program file changes. `approve = no` in `second-thought.ini` skips the question.
 
+### Fixed
+- On Python 3.9, two questions at the keyboard at once (or two Telegram fetches) crashed with "attached to a
+  different loop": the runtime's locks were made before the program's event loop started. They're now made when first
+  needed.
+
 ### Changed
 - **Needs one step after re-exporting:** a scheduled program that can act won't start until someone has run it once
   by hand and said yes (or set `approve = no`). Under the rules above that makes the next release 2.0.0.

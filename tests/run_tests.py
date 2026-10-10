@@ -2067,7 +2067,7 @@ a, b = asyncio.run(go())
 store = json.load(open(ns["TELEGRAM_FILE"], encoding="utf-8"))
 texts = [m["text"] for m in store["messages"]]
 R2 = ns["Runtime"](); R2.reset()  # made outside any event loop, as exported programs do
-lock0, inside, most = R2._tg_lock, [0], [0]
+inside, most = [0], [0]
 async def slow_fetch(wait):
     inside[0] += 1; most[0] = max(most[0], inside[0])
     await asyncio.sleep(0.05)
@@ -2078,7 +2078,7 @@ async def three():
     await asyncio.gather(R2.tg_fetch(), R2.tg_fetch(), R2.tg_fetch())
 asyncio.run(three())
 print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept": len(texts),
-                  "most_at_once": most[0], "same_lock": R2._tg_lock is lock0}))
+                  "most_at_once": most[0], "same_lock": list(R2.__dict__.get("_locks", {})) == ["telegram"]}))
 """
         tg_add("Race check one")
         tg_add("Race check two")
@@ -2087,7 +2087,7 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         check(got.get("dupes") == 0 and got.get("kept", 0) > 0 and 0 in (got.get("a"), got.get("b")),
               f"two scripts fetching Telegram at once take turns: no message is stored twice ({got or r.stderr[-200:]})")
         check(got.get("most_at_once") == 1 and got.get("same_lock") is True,
-              f"the Telegram lock is made with the runtime, so three fetches at once still go one at a time ({got or r.stderr[-200:]})")
+              f"three Telegram fetches at once share one lock and go one at a time, with the runtime made before the loop ({got or r.stderr[-200:]})")
         rt_path = str(ROOT / "python" / "runtime.py")
         r = subprocess.run([sys.executable, "-c", MEM_RACE, rt_path], capture_output=True, text=True, timeout=180, env=env)
         got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
