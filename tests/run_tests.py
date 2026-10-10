@@ -1190,6 +1190,11 @@ async def page_tests():
         check(not differ and sum(map(len, py_ranks)) >= 14 and py_ranks[queries.index("final")][0][0] == "ﬁnal notes",
               f"the page and Python rank saved notes the same, scores and order, for {len(queries)} searches" + (f" (differ: {differ})" if differ else ""))
 
+        lines = "- a\n* b\n\n3. c\n• d\n4) e\n(5) f\n•h\n1.Item\n10 green bottles\n2024 plan\n1.5 kg flour\n-5 °C overnight\n**Rye** loaf\n  12. twelve"
+        page_list = await pg.evaluate("t => window.__list(t)", lines)
+        check(page_list == rt["to_list"](lines) and "10 green bottles" in page_list and "first" not in page_list,
+              f"the page and Python split a text into list items the same way, keeping numbers that aren't markers ({page_list})")
+
         EXAMPLES.extend(await pg.eval_on_selector_all("#example option", "e => e.map(o => o.value)"))
         print(f"Examples in the page ({len(EXAMPLES)})")
         for ex in EXAMPLES:
@@ -1901,6 +1906,14 @@ def python_tests(codes):
         got = {n.split(":", 1)[0] for n in notes}
         check(got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "calendar", "discord", "slack", "ha_event"},
               f"t_listen.py: every listener started its script when something arrived ({', '.join(sorted(got)) or 'none'})" + ("" if got else f": {(err or out)[-400:]!r}"))
+        if not got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "calendar", "discord", "slack", "ha_event"}:
+            # It has failed now and then on Windows only, with the program gone within a couple of seconds. Show the
+            # traceback in full, each line marked "error:" so the CI summary keeps it, and how long the program lasted.
+            tb = (err or "").splitlines()
+            start = max((i for i, l in enumerate(tb) if l.startswith("Traceback")), default=None)
+            for l in (tb[start:start + 40] if start is not None else tb[-15:]):
+                print("  error: t_listen stderr: " + l.rstrip()[:250])
+            print(f"  error: t_listen exit code {code_}; last output lines: " + " | ".join(out.strip().splitlines()[-6:])[:600])
         check("mqtt: 27.9" in notes and not any("19" == n.split(": ", 1)[1] for n in notes if n.startswith("mqtt")) and ("home/proofer/ack", "seen 27.9", False) in broker.published[before:],
               "the MQTT listener reacts to its own topic only, and its script can publish a reply")
         check(hook.get("refused") == 403 and hook.get("ok") == 200 and any(n.startswith("webhook: ") and "spelt" in n for n in notes),

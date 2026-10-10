@@ -67,6 +67,11 @@ class Text(unittest.TestCase):
 
     def test_to_list_drops_bullets_numbers_and_blank_lines(self):
         self.assertEqual(to_list("- a\n* b\n\n3. c\n• d\n4) e"), ["a", "b", "c", "d", "e"])
+        self.assertEqual(to_list("(5) f\n12. g\n•h\n1.Item"), ["f", "g", "h", "Item"])
+
+    def test_to_list_keeps_numbers_that_arent_markers(self):
+        lines = ["10 green bottles", "2024 plan", "1.5 kg flour", "-5 °C overnight", "**Rye** loaf", "3 eggs"]
+        self.assertEqual(to_list("\n".join(lines)), lines)
         self.assertEqual(to_list(""), [])
         self.assertEqual(to_list(None), [])
         items = [1, 2]

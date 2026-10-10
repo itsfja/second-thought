@@ -45,6 +45,10 @@ that the two agree.
   `.<program>.approved` until the program file changes. `approve = no` in `second-thought.ini` skips the question.
 
 ### Fixed
+- Turning text into a list (the list blocks, and a model's list replies) took any leading digits for list numbering,
+  so "10 green bottles" became "green bottles" and "2024 plan" became "plan"; "-5 °C" lost its sign too. Now only
+  real markers come off: "- " or "* ", "•", and a number followed by "." or ")" ("1.", "3)", "(2)"), but not a
+  number like 1.5. The page does the same, and a test checks the two agree.
 - On Python 3.9, two questions at the keyboard at once (or two Telegram fetches) crashed with "attached to a
   different loop": the runtime's locks were made before the program's event loop started. They're now made when first
   needed.
