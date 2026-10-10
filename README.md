@@ -410,6 +410,27 @@ OPENROUTER_API_KEY = your-openrouter-key
 
 All the helpers except Claude only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
 
+**Asking first.** Some programs do real things: they send emails or messages, switch lights on, or post on GitHub. A program like that asks you before it runs the first time.
+
+*Picture: a robot holding up a list, and a grown-up reading it before saying yes.*
+
+It shows you a list, like this:
+
+```
+This program can:
+  - send email
+  - read your calendars
+It sends what it reads and writes to Claude.
+
+Approve? [y/n] >
+```
+
+Type **y** if that is what you expect it to do. It remembers your answer, so it will not ask again, unless somebody changes the program. Then it asks again, because a changed program might do different things.
+
+The list is written at the top of the program, too. And when you import a program on the Second Thought page, the page tells you what it can do.
+
+A program that runs on a schedule, with nobody there to answer, will not start until you have said yes once. Run it yourself first. If you are sure, and the computer has nobody at it, put `approve = no` in `second-thought.ini`.
+
 ---
 
 ## Page 10½: A clever house

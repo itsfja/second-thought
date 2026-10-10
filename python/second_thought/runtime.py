@@ -16,7 +16,7 @@ import sys
 import time
 from .settings import RUNTIME_VERSION, WHERE_KEYS
 from .providers import ModelCalls, model_label
-from .core import (BUDGET, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
+from .core import (BUDGET, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
     _locked, _need_picture, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js,
     to_bool, to_list, to_record, to_str)
@@ -1345,12 +1345,88 @@ class Runtime(ModelCalls, Connections, AgentTools):
             first = False
             await asyncio.sleep(HA_WATCH_SECONDS)
 
-    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=()):
+    # ----- What the program can do: listed, and asked once before its first run -----
+    @staticmethod
+    def can_lines(can):
+        """What a program can do, as lines to show: one per thing it can do, then the model services it uses."""
+        known = {c[0]: c for c in CAPABILITIES}
+        ids = list((can or {}).get("can", []))
+        order = {c[0]: i for i, c in enumerate(CAPABILITIES)}
+        lines = [known[c][1] if c in known else f"do “{c}”, which this runtime doesn't know about"
+                 for c in sorted(ids, key=lambda c: order.get(c, -1))]
+        services = list((can or {}).get("services", []))
+        tail = [f"It sends what it reads and writes to {services[0] if len(services) == 1 else ', '.join(services[:-1]) + ' and ' + services[-1]}."] if services else []
+        return lines, tail
+
+    @staticmethod
+    def can_acts(can):
+        """Whether the program can act on the world (an unknown capability counts as acting)."""
+        known = {c[0]: c[2] for c in CAPABILITIES}
+        return any(known.get(c, True) for c in (can or {}).get("can", []))
+
+    @staticmethod
+    def _approval_path():
+        """(.<program>.approved next to the program, the program file's SHA-256), or (None, None) without a file."""
+        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
+        if not prog or not os.path.isfile(prog):
+            return None, None
+        with open(prog, "rb") as f:
+            digest = hashlib.sha256(f.read()).hexdigest()
+        base = os.path.splitext(os.path.basename(prog))[0]
+        return os.path.join(os.path.dirname(prog), f".{base}.approved"), digest
+
+    def approve_program(self, can, unattended=False):
+        """True if the program may run. One that can act on the world lists what it can do and asks once; the yes is
+        kept in .<program>.approved until the program file changes. approve = no in second-thought.ini skips this."""
+        if not self.can_acts(can) or os.environ.get("RB_APPROVE", "").strip().lower() in ("no", "0", "false", "off"):
+            return True
+        path, digest = self._approval_path()
+        if path:
+            try:
+                with open(path, encoding="utf-8") as f:
+                    if json.load(f).get("sha256") == digest:
+                        return True
+            except (OSError, ValueError, AttributeError):
+                pass
+        lines, tail = self.can_lines(can)
+        print("\nThis program can:", flush=True)
+        for line in lines:
+            print("  - " + line)
+        for line in tail:
+            print(line)
+        if unattended:
+            print(f"\nIt hasn't been allowed to do these on this computer yet, and nobody is here to ask. Run it once yourself, "
+                  f"not on a schedule, and answer y. Or put approve = no {WHERE_KEYS}.", flush=True)
+            return False
+        print("\n? Allow it to do these things on this computer? It won't ask again unless the program changes.", flush=True)
+        while True:
+            try:
+                a = input("Approve? [y/n] > ").strip().lower()
+            except EOFError:
+                print("\nNobody answered, so it didn't run.")
+                return False
+            if a in ("y", "yes"):
+                break
+            if a in ("n", "no"):
+                print("Not allowed, so it didn't run.")
+                return False
+            print("  Type y or n.")
+        if path:
+            try:
+                _write_json(path, {"sha256": digest, "allowed": list(can.get("can", [])), "runtime": RUNTIME_VERSION,
+                                   "when": datetime.datetime.now().isoformat(timespec="seconds")}, indent=1)
+            except OSError as e:
+                print(f"  (Couldn't note that you said yes, so it will ask again next time: {e})")
+        return True
+
+    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None):
         if "--version" in sys.argv:
             print(f"Second Thought runtime {RUNTIME_VERSION}")
             return
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
+        if not self.approve_program(can, unattended=bool(use_schedule) and not sys.stdin.isatty()):
+            sys.exit(1)
         try:
             if use_schedule:
                 asyncio.run(self.run_schedules(schedules, watches, telegram, listeners))

@@ -388,7 +388,8 @@ SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
                  "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
-                 "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES"}
+                 "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
+                 "approve": "RB_APPROVE"}
 
 
 def _load_settings():
@@ -1321,6 +1322,39 @@ SCHEMAS = {
                    "done": {"type": "boolean"}, "answer": {"type": "string"},
                    "plan": {"type": "array", "items": {"type": "string"}}}),
 }
+
+
+# ----- What a program can do -----
+# Everything a program can do beyond asking its model services, in the order it's listed. The page reads this list too
+# (tools/sync.py copies it in): it works out which of these a program uses from its blocks, shows them when you import a
+# program, and writes them into the exported program, which lists them and asks before its first run if any of them
+# acts on the world (the third value). Each is (id, what it lets the program do, whether that acts on the world).
+CAPABILITIES = [
+    ("email_send", "send email", True),
+    ("telegram_send", "send Telegram messages", True),
+    ("discord_send", "send Discord messages", True),
+    ("slack_send", "send Slack messages", True),
+    ("github_comment", "comment on GitHub", True),
+    ("ha_act", "control your Home Assistant devices", True),
+    ("homey_act", "control your Homey devices and start Homey flows", True),
+    ("mqtt_publish", "publish MQTT messages", True),
+    ("webhook", "accept web requests from other computers", True),
+    ("web", "read public web pages and search the web", False),
+    ("email_read", "read your email", False),
+    ("calendar", "read your calendars", False),
+    ("feeds", "read news feeds", False),
+    ("github_read", "look at your GitHub projects", False),
+    ("telegram_read", "read your Telegram messages", False),
+    ("discord_read", "read your Discord channels", False),
+    ("slack_read", "read your Slack channels", False),
+    ("ha_read", "look at your Home Assistant devices", False),
+    ("homey_read", "look at your Homey devices, flows and variables", False),
+    ("mqtt_read", "read MQTT messages", False),
+    ("folder", "watch a folder for new files", False),
+    ("files_read", "read files you choose", False),
+    ("files_save", "save files in its outputs folder", False),
+    ("memory", "keep notes between runs, in memory.json", False),
+]
 
 
 def record_schema(fields, many=False):
@@ -5323,12 +5357,88 @@ class Runtime(ModelCalls, Connections, AgentTools):
             first = False
             await asyncio.sleep(HA_WATCH_SECONDS)
 
-    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=()):
+    # ----- What the program can do: listed, and asked once before its first run -----
+    @staticmethod
+    def can_lines(can):
+        """What a program can do, as lines to show: one per thing it can do, then the model services it uses."""
+        known = {c[0]: c for c in CAPABILITIES}
+        ids = list((can or {}).get("can", []))
+        order = {c[0]: i for i, c in enumerate(CAPABILITIES)}
+        lines = [known[c][1] if c in known else f"do “{c}”, which this runtime doesn't know about"
+                 for c in sorted(ids, key=lambda c: order.get(c, -1))]
+        services = list((can or {}).get("services", []))
+        tail = [f"It sends what it reads and writes to {services[0] if len(services) == 1 else ', '.join(services[:-1]) + ' and ' + services[-1]}."] if services else []
+        return lines, tail
+
+    @staticmethod
+    def can_acts(can):
+        """Whether the program can act on the world (an unknown capability counts as acting)."""
+        known = {c[0]: c[2] for c in CAPABILITIES}
+        return any(known.get(c, True) for c in (can or {}).get("can", []))
+
+    @staticmethod
+    def _approval_path():
+        """(.<program>.approved next to the program, the program file's SHA-256), or (None, None) without a file."""
+        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
+        if not prog or not os.path.isfile(prog):
+            return None, None
+        with open(prog, "rb") as f:
+            digest = hashlib.sha256(f.read()).hexdigest()
+        base = os.path.splitext(os.path.basename(prog))[0]
+        return os.path.join(os.path.dirname(prog), f".{base}.approved"), digest
+
+    def approve_program(self, can, unattended=False):
+        """True if the program may run. One that can act on the world lists what it can do and asks once; the yes is
+        kept in .<program>.approved until the program file changes. approve = no in second-thought.ini skips this."""
+        if not self.can_acts(can) or os.environ.get("RB_APPROVE", "").strip().lower() in ("no", "0", "false", "off"):
+            return True
+        path, digest = self._approval_path()
+        if path:
+            try:
+                with open(path, encoding="utf-8") as f:
+                    if json.load(f).get("sha256") == digest:
+                        return True
+            except (OSError, ValueError, AttributeError):
+                pass
+        lines, tail = self.can_lines(can)
+        print("\nThis program can:", flush=True)
+        for line in lines:
+            print("  - " + line)
+        for line in tail:
+            print(line)
+        if unattended:
+            print(f"\nIt hasn't been allowed to do these on this computer yet, and nobody is here to ask. Run it once yourself, "
+                  f"not on a schedule, and answer y. Or put approve = no {WHERE_KEYS}.", flush=True)
+            return False
+        print("\n? Allow it to do these things on this computer? It won't ask again unless the program changes.", flush=True)
+        while True:
+            try:
+                a = input("Approve? [y/n] > ").strip().lower()
+            except EOFError:
+                print("\nNobody answered, so it didn't run.")
+                return False
+            if a in ("y", "yes"):
+                break
+            if a in ("n", "no"):
+                print("Not allowed, so it didn't run.")
+                return False
+            print("  Type y or n.")
+        if path:
+            try:
+                _write_json(path, {"sha256": digest, "allowed": list(can.get("can", [])), "runtime": RUNTIME_VERSION,
+                                   "when": datetime.datetime.now().isoformat(timespec="seconds")}, indent=1)
+            except OSError as e:
+                print(f"  (Couldn't note that you said yes, so it will ask again next time: {e})")
+        return True
+
+    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None):
         if "--version" in sys.argv:
             print(f"Second Thought runtime {RUNTIME_VERSION}")
             return
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
+        if not self.approve_program(can, unattended=bool(use_schedule) and not sys.stdin.isatty()):
+            sys.exit(1)
         try:
             if use_schedule:
                 asyncio.run(self.run_schedules(schedules, watches, telegram, listeners))
@@ -5338,6 +5448,34 @@ class Runtime(ModelCalls, Connections, AgentTools):
                 sys.exit(asyncio.run(self.run(start_scripts)))
         except KeyboardInterrupt:
             print("\nStopped.")
+</script>
+<script type="application/json" id="capabilities">
+[
+["email_send", "send email", true],
+["telegram_send", "send Telegram messages", true],
+["discord_send", "send Discord messages", true],
+["slack_send", "send Slack messages", true],
+["github_comment", "comment on GitHub", true],
+["ha_act", "control your Home Assistant devices", true],
+["homey_act", "control your Homey devices and start Homey flows", true],
+["mqtt_publish", "publish MQTT messages", true],
+["webhook", "accept web requests from other computers", true],
+["web", "read public web pages and search the web", false],
+["email_read", "read your email", false],
+["calendar", "read your calendars", false],
+["feeds", "read news feeds", false],
+["github_read", "look at your GitHub projects", false],
+["telegram_read", "read your Telegram messages", false],
+["discord_read", "read your Discord channels", false],
+["slack_read", "read your Slack channels", false],
+["ha_read", "look at your Home Assistant devices", false],
+["homey_read", "look at your Homey devices, flows and variables", false],
+["mqtt_read", "read MQTT messages", false],
+["folder", "watch a folder for new files", false],
+["files_read", "read files you choose", false],
+["files_save", "save files in its outputs folder", false],
+["memory", "keep notes between runs, in memory.json", false]
+]
 </script>
 <script type="application/json" id="services">
 [
@@ -7215,6 +7353,59 @@ HOW TO MAP CODE
     });
   })();
   const tierLabel = t => String(t || "").startsWith("openrouter:") ? "OpenRouter: " + t.slice(11) : (TIERS.find(x => x[1] === t) || [t])[0];
+  // What a program can do (CAPABILITIES in python/second_thought/core.py, copied in by tools/sync.py), worked out from
+  // its blocks. Every block is listed here or in NO_CAPABILITY; a test checks that, so a new block can't be missed.
+  const CAPABILITIES = JSON.parse(document.getElementById("capabilities").textContent);  // [id, what it does, acts]
+  const keeps = b => (b.getFieldValue("KIND") || "transient") === "permanent" ? "memory" : null;
+  const CAP_BLOCKS = {
+    rb_email_send:"email_send", rb_email_when:"email_read", rb_tg_send:"telegram_send", rb_tg_when:"telegram_read", rb_tg_message:"telegram_read",
+    rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read", rb_gh_when:"github_read",
+    rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
+    rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
+    rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
+    rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
+    rb_feed_when:"feeds", rb_folder_when:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
+    rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
+    rb_mem_names:"memory", rb_mem_forget:"memory" };
+  const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
+    "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
+    "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
+    "rb_event rb_every rb_extract rb_finish_with rb_generate rb_img_ask rb_img_change rb_img_draw rb_img_score rb_img_show rb_longtext " +
+    "rb_msg_value rb_now rb_passed rb_pause rb_problems rb_prompt rb_rec_get rb_rec_has rb_rec_keys rb_rec_new rb_rec_set rb_receive " +
+    "rb_reflect rb_reset_timer rb_result rb_result_text rb_retry rb_review rb_revise rb_rework rb_rewrite rb_run_program rb_say rb_score " +
+    "rb_set_draft rb_set_instructions rb_show rb_sort rb_start rb_stop rb_task rb_task_get rb_timer rb_tokens_used rb_try rb_use_model " +
+    "rb_wait rb_wait_msg rb_wait_time rb_wait_until rb_when_time rb_with_any_model rb_with_model rb_word_count").split(" ");
+  // The agent's built-in tools (rb_agent_builtin's KIND). Every kind in AGENT_TOOL_KINDS is listed; null means nothing to declare.
+  const CAP_KINDS = { web:"web", linkedin:"web", file:"files_read", memory:"memory", feeds:"feeds", calendar:"calendar",
+    email:"email_read", email_send:"email_send", github:"github_read", github_act:"github_comment",
+    telegram:"telegram_read", telegram_send:"telegram_send", telegram_send_free:"telegram_send",
+    discord:"discord_read", discord_send:"discord_send", discord_send_free:"discord_send",
+    slack:"slack_read", slack_send:"slack_send", slack_send_free:"slack_send",
+    mqtt:"mqtt_read", mqtt_act:"mqtt_publish", mqtt_act_free:"mqtt_publish",
+    homey_read:"homey_read", homey_act:"homey_act", homey_act_free:"homey_act", ha_read:"ha_read", ha_act:"ha_act", ha_act_free:"ha_act",
+    ask:null, calc:null, time:null, review:null };
+  function blockCapability(b){
+    const c = b.type === "rb_agent_builtin" ? CAP_KINDS[b.getFieldValue("KIND")] : CAP_BLOCKS[b.type];
+    return typeof c === "function" ? c(b) : (c || null);
+  }
+  // [[id, what it does, acts], ...] in CAPABILITIES order, for this program and the saved programs it runs.
+  function programCapabilities(){
+    const got = new Set(allProgramBlocks().map(blockCapability).filter(Boolean));
+    return CAPABILITIES.filter(c => got.has(c[0]));
+  }
+  const andList = xs => xs.length < 2 ? xs.join("") : xs.slice(0, -1).join(", ") + " and " + xs[xs.length - 1];
+  // "It can send email and control your Home Assistant devices. It can also read your calendars." for the import message.
+  function capabilitySentence(caps){
+    const acts = caps.filter(c => c[2]).map(c => c[1]), reads = caps.filter(c => !c[2]).map(c => c[1]);
+    if (!acts.length && !reads.length) return "";
+    return acts.length ? "It can " + andList(acts) + "." + (reads.length ? " It can also " + andList(reads) + "." : "") +
+      " Exported to Python, it asks you before its first run." : "It can " + andList(reads) + ".";
+  }
+  window.__capabilityCheck = () => ({ blocks:Object.keys(CAP_BLOCKS), none:NO_CAPABILITY, kinds:Object.keys(CAP_KINDS),
+    agentKinds:AGENT_TOOL_KINDS.map(k => k[1]), ids:CAPABILITIES.map(c => c[0]),
+    used:[...new Set(Object.values(CAP_BLOCKS).concat(Object.values(CAP_KINDS)).map(c => typeof c === "function" ? "memory" : c).filter(Boolean))],
+    program:programCapabilities().map(c => c[0]) });
   /* ---------- Long text field: wraps at 80 characters, any number of lines ---------- */
   const WRAP = 80;
   function wrapText(text, width){
@@ -9631,7 +9822,8 @@ HOW TO MAP CODE
     $("io-undo").hidden = false;
     clearChoice();
     const count = ws.getAllBlocks(false).length;
-    ioMsg("io-import-msg", (converted ? "Converted " : "Loaded ") + (name ? "\u201c" + name + "\u201d" : "program") + " (" + count + " blocks).", "ok");
+    const can = capabilitySentence(programCapabilities());
+    ioMsg("io-import-msg", (converted ? "Converted " : "Loaded ") + (name ? "\u201c" + name + "\u201d" : "program") + " (" + count + " blocks)." + (can ? " " + can : ""), "ok");
     try { ws.zoomToFit(); } catch(e) {}
     return true;
   }
@@ -9768,7 +9960,8 @@ HOW TO MAP CODE
       "; budget = 50000      stop a run before a model call once it has used this many tokens (0 = no limit)",
       "; save_log = yes      write each run's log to the logs folder, next to the program",
       "; stream = yes        show Claude writing as it goes (yes or no; normally only when you run it in a terminal yourself)",
-      "; resume = yes        if a run stopped part-way, pick up where it stopped next time (yes or no; normally it asks you)");
+      "; resume = yes        if a run stopped part-way, pick up where it stopped next time (yes or no; normally it asks you)",
+      ...(programCapabilities().some(c => c[2]) ? ["; approve = no       don't ask before the first run (for a computer with nobody at it). The program's notes list what it can do"] : []));
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
@@ -9963,6 +10156,14 @@ HOW TO MAP CODE
       (b.type === "rb_use_model" || b.type === "rb_with_model") && has(b.getFieldValue("TIER")));
   }
   const servicesUsed = () => SERVICES.filter(programUses);
+  // The export header's list of what the program can do.
+  function canHeader(caps, services){
+    const acts = caps.some(c => c[2]);
+    return ["What this program can do:"].concat(caps.length ? caps.map(c => "  - " + c[1]) : ["  - nothing beyond asking its models"],
+      ["It sends what it reads and writes to " + andList(services.map(x => x.name)) + "."],
+      acts ? ["Because some of that acts on the world, it lists these and asks you before its first run, and again",
+              "if this file changes. On a computer with nobody at it, put approve = no in second-thought.ini."] : [], [""]);
+  }
   function toPython(progName){
     const used = new Set(["R","V","main","run"]);
     const ident = base => {
@@ -10370,7 +10571,7 @@ HOW TO MAP CODE
 
     const fileBase = slug(progName);
     const when = new Date();
-    const usedServices = servicesUsed();
+    const usedServices = servicesUsed(), caps = programCapabilities();
     const usesHA = allProgramBlocks().some(b => b.type.startsWith("rb_ha_"));
     const header = [
       "#!/usr/bin/env python3",
@@ -10393,6 +10594,7 @@ HOW TO MAP CODE
       "     Or by hand:  pip install " + usedServices.flatMap(s => s.pip || []).join(" ") + ", then  python " + fileBase + ".py" + ((schedules.length || watches.length || telegram.length || listeners.length) ? " [--schedule]" : ""),
       "  Environment variables with the same names still work, and win over the file.",
       "",
+      ...canHeader(caps, usedServices),
       ...usedServices.flatMap(s => s.note || []),
       ...usedServices.flatMap(s => s.setup || []),
       "Claude calls go through the Anthropic API and are billed to your API account,",
@@ -10425,9 +10627,12 @@ HOW TO MAP CODE
       "HA_WATCHES = [" + watches.join(", ") + "]",
       telegram.length ? "TELEGRAM_WATCHES = [" + telegram.join(", ") + "]" : null,
       listeners.length ? "LISTENERS = [" + listeners.map(l => l[1]).join(", ") + "]" : null,
+      "# What this program can do (listed in the notes at the top). If any of it acts on the world, the program asks",
+      "# before its first run, and again whenever this file changes.",
+      "CAN = {\"services\": [" + usedServices.map(x => pyStr(x.name)).join(", ") + "], \"can\": [" + caps.map(c => pyStr(c[0])).join(", ") + "]}",
       "",
       "if __name__ == \"__main__\":",
-      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + ")",
+      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + ", can=CAN)",
       ""
     ].filter(l => l !== null).join("\n");
     const code = header + document.getElementById("py-runtime").textContent.replace(/^\n+/, "") + "\n" + program;

@@ -942,7 +942,7 @@ async def new_feature_page_tests(pg):
     check(sent == ["Got: What should I bake this weekend?"] and await pg.text_content(".result-text") == "You",
           f"on the page, 'Run this script' on the Telegram block tries it with a sample message ({sent})")
     EXTRA["t_tg_when"] = await export_python(pg, "t_tg_when")
-    check('TELEGRAM_WATCHES = [("bake", when_telegram_message_arrives)]' in EXTRA["t_tg_when"] and "R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES, TELEGRAM_WATCHES)" in EXTRA["t_tg_when"],
+    check('TELEGRAM_WATCHES = [("bake", when_telegram_message_arrives)]' in EXTRA["t_tg_when"] and "R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES, TELEGRAM_WATCHES, can=CAN)" in EXTRA["t_tg_when"],
           "exported Python listens for Telegram messages")
     await pg.select_option("#example", "x_tgbrief")
     await pg.click("#load")
@@ -1012,7 +1012,7 @@ async def new_feature_page_tests(pg):
           '("discord", "anything", when_discord_1), ("slack", "anything", when_slack_1), '
           '("ha_event", "zha_event|kitchen remote", when_ha_event_1)]' in EXTRA["t_listen"]
           and '"""when Home Assistant event zha_event happens with kitchen remote"""' in EXTRA["t_listen"]
-          and "R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES, TELEGRAM_WATCHES, listeners=LISTENERS)" in EXTRA["t_listen"],
+          and "R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES, TELEGRAM_WATCHES, listeners=LISTENERS, can=CAN)" in EXTRA["t_listen"],
           "exported Python lists every listener")
     await pg.evaluate("document.getElementById('io-name').value = 't_listen'")
     files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
@@ -1143,6 +1143,20 @@ async def page_tests():
               and await pg.input_value("#tier") == "default",
               f"the model menu has a heading for each of the {len(services)} services in SERVICES, with Claude balanced chosen")
 
+        chk = await pg.evaluate("window.__capabilityCheck()")
+        caps = json.loads(sync_tool.capabilities_json())
+        registered = set(await pg.evaluate("Object.keys(Blockly.Blocks).filter(k => k.startsWith('rb_'))"))
+        listed, none = set(chk["blocks"]), set(chk["none"])
+        listed.add("rb_agent_builtin")  # classified by its tool kind, checked next
+        check(registered == listed | none and not listed & none,
+              "every block is either listed with what it lets a program do, or as doing nothing to declare"
+              + ("" if registered == listed | none else f" (missing: {sorted(registered - listed - none)}; unknown: {sorted((listed | none) - registered)})"))
+        check(set(chk["kinds"]) == set(chk["agentKinds"]), "every agent tool kind says what it lets a program do"
+              + ("" if set(chk["kinds"]) == set(chk["agentKinds"]) else f" ({sorted(set(chk['agentKinds']) ^ set(chk['kinds']))})"))
+        ids = [c[0] for c in caps]
+        check(set(chk["used"]) == set(ids) and chk["ids"] == ids,
+              f"each of the {len(ids)} capabilities in CAPABILITIES comes from some block or tool, and the page has the same list")
+
         EXAMPLES.extend(await pg.eval_on_selector_all("#example option", "e => e.map(o => o.value)"))
         print(f"Examples in the page ({len(EXAMPLES)})")
         for ex in EXAMPLES:
@@ -1246,6 +1260,8 @@ async def page_tests():
               "the ini asks for every key the program uses")
         check("LLAMA_BASE_URL" in judges_ini and "HA_TOKEN" not in judges_ini, "the ini only has the sections the program needs")
         check("HA_TOKEN = " in EXPORTS["ha_doorbell"]["second-thought.ini"], "a Home Assistant program's ini asks for HA_URL and HA_TOKEN")
+        check("; approve = no" in EXPORTS["ha_doorbell"]["second-thought.ini"] and "approve" not in EXPORTS["review"]["second-thought.ini"],
+              "the ini mentions approve = no only for a program that can act")
         check(not any(l.strip().startswith("export ") for l in EXPORTS["w_judges"]["w_judges.py"].splitlines()[:40]),
               "the program's instructions no longer say 'export'")
         code, n = codes["brainstorm"]
@@ -1281,6 +1297,27 @@ async def page_tests():
         await pg.wait_for_timeout(300)
         msg = await pg.text_content("#io-import-msg")
         check("runtime" not in msg, "importing a program made with this page's runtime says nothing about runtimes")
+        await pg.select_option("#example", "a_inbox")
+        await pg.click("#load")
+        inbox = await export_python(pg, "inbox")
+        await pg.select_option("#example", "review")
+        await pg.click("#load")
+        await paste(pg, inbox)
+        await pg.click("#io-load-paste")
+        await pg.wait_for_timeout(300)
+        msg = await pg.text_content("#io-import-msg")
+        check("It can send email. It can also read your email and read your calendars." in msg and "asks you before its first run" in msg,
+              f"importing a program says what it can do, what acts first ({msg[:140]!r}…)")
+        head = inbox.split('"""', 2)[1]
+        check("What this program can do:\n  - send email\n  - read your email\n  - read your calendars\n" in head
+              and "asks you before its first run" in head and 'CAN = {"services": ["Claude"], "can": ["email_send", "email_read", "calendar"]}' in inbox
+              and ", can=CAN)" in inbox,
+              "the export lists what the program can do in its notes, and hands the list to the runtime")
+        await pg.select_option("#example", "brainstorm")
+        await pg.click("#load")
+        plain = await export_python(pg, "plain")
+        check("  - nothing beyond asking its models" in plain and "asks you before its first run" not in plain.split('"""', 2)[1]
+              and '"can": []' in plain, "a program that only asks its models says so, and won't ask before running")
 
         await new_feature_page_tests(pg)
 
@@ -1324,11 +1361,39 @@ def drive(cmd, env, cwd, timeout=120):
     return proc.wait(), "".join(out), proc.stderr.read().decode("utf-8", "replace")
 
 
+def approval_tests(codes, env, tmp):
+    """A program that can act lists what it can do and asks once before its first run; one that only reads doesn't."""
+    print("Asking before the first run")
+    prog = pathlib.Path(tmp) / "gate_bedtime.py"
+    prog.write_text(codes["a_bedtime"][0], encoding="utf-8")
+    approved = pathlib.Path(tmp) / ".gate_bedtime.approved"
+    code_, out, err = drive([sys.executable, "-u", str(prog)], env, tmp)
+    check(code_ == 0 and "This program can:\n  - control your Home Assistant devices\n  - look at your Home Assistant devices" in out.replace("\r\n", "\n")
+          and "It sends what it reads and writes to Claude." in out and approved.exists(),
+          "a program that can control devices lists what it can do, asks before its first run, and remembers the yes"
+          + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+    code_, out, err = drive([sys.executable, "-u", str(prog)], env, tmp)
+    check(code_ == 0 and "This program can:" not in out, "the next run doesn't ask again")
+    prog.write_text(codes["a_bedtime"][0] + "\n# edited\n", encoding="utf-8")
+    r = subprocess.run([sys.executable, "-u", str(prog), "--schedule"], env=env, cwd=tmp, capture_output=True, text=True, timeout=60,
+                       stdin=subprocess.DEVNULL)
+    check(r.returncode == 1 and "nobody is here to ask" in r.stdout and "approve = no" in r.stdout,
+          f"once the file changes, a scheduled run with nobody there stops and says how to allow it (exit {r.returncode})")
+    r = subprocess.run([sys.executable, "-u", str(prog)], env=env, cwd=tmp, capture_output=True, text=True, timeout=60, input="n\n")
+    check(r.returncode == 1 and "Not allowed, so it didn't run." in r.stdout and "RESULT" not in r.stdout, "answering n stops it before it does anything")
+    reader = pathlib.Path(tmp) / "gate_reader.py"
+    reader.write_text(codes["a_house"][0], encoding="utf-8")
+    code_, out, err = drive([sys.executable, "-u", str(reader)], env, tmp)
+    check(code_ == 0 and "This program can:" not in out and not (pathlib.Path(tmp) / ".gate_reader.approved").exists(),
+          "a program that only looks at things runs without asking")
+
+
 def python_tests(codes):
     print("Exported Python runs")
     ha_url, ha_calls = fake_ha.start()
     llama_url, llama_calls = fake_llama.start()
-    env = dict(os.environ, PYTHONPATH=str(HERE / "fakeapi"), PYTHONIOENCODING="utf-8", ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test",
+    # RB_APPROVE=no: these programs are run unattended many times over; approval_tests() checks the first-run question.
+    env = dict(os.environ, RB_APPROVE="no", PYTHONPATH=str(HERE / "fakeapi"), PYTHONIOENCODING="utf-8", ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test",
                HA_URL=ha_url, HA_TOKEN=fake_ha.TOKEN, LLAMA_BASE_URL=llama_url,
                DEEPSEEK_BASE_URL=llama_url, DEEPSEEK_API_KEY="test",
                XAI_BASE_URL=llama_url, XAI_API_KEY="test",
@@ -1350,6 +1415,7 @@ def python_tests(codes):
                EMAIL_ADDRESS=fake_services.MAIL_USER, EMAIL_PASSWORD=fake_services.MAIL_PASS, EMAIL_IMAP_HOST="127.0.0.1", EMAIL_SMTP_HOST="127.0.0.1",
                EMAIL_IMAP_PORT=str(imap_port), EMAIL_SMTP_PORT=str(smtp_port), EMAIL_SSL="no", CALENDAR_URL=svc_url + "/calendar.ics")
     with tempfile.TemporaryDirectory() as tmp:
+        approval_tests(codes, {k: v for k, v in env.items() if k != "RB_APPROVE"}, tmp)
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
             path.write_text(code, encoding="utf-8")
