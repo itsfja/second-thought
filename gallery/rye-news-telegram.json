@@ -1,0 +1,159 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "rye-news-telegram",
+  "gallery": {
+    "title": "Rye news on Telegram",
+    "description": "Reads your news feeds and sends you a Telegram message about any items on rye or wholegrain flour, with their links. On a day with none, it sends nothing.",
+    "tip": "Change rye to whatever you follow, and add a 'when it's …' block so it checks every morning.",
+    "author": "itsfja",
+    "runtime": "2.0.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_news",
+        "name": "news"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "x": 30,
+          "y": 30,
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_news"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_feed_news",
+                    "inputs": {
+                      "URL": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": ""
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_task",
+                  "inputs": {
+                    "TEXT": {
+                      "block": {
+                        "type": "text_join",
+                        "extraState": {
+                          "itemCount": 2
+                        },
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "From these news items, pick any about rye or wholegrain flour and write one short line for each, with its link. If none are, reply with just: nothing today\n\n"
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "variables_get",
+                              "fields": {
+                                "VAR": {
+                                  "id": "g_news"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_generate",
+                      "next": {
+                        "block": {
+                          "type": "controls_if",
+                          "inputs": {
+                            "IF0": {
+                              "block": {
+                                "type": "rb_contains",
+                                "inputs": {
+                                  "A": {
+                                    "block": {
+                                      "type": "rb_draft"
+                                    }
+                                  },
+                                  "B": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "nothing today"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "DO0": {
+                              "block": {
+                                "type": "rb_finish_with",
+                                "inputs": {
+                                  "TEXT": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "No rye news today."
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "ELSE": {
+                              "block": {
+                                "type": "rb_tg_send",
+                                "inputs": {
+                                  "TEXT": {
+                                    "block": {
+                                      "type": "rb_draft"
+                                    }
+                                  }
+                                },
+                                "next": {
+                                  "block": {
+                                    "type": "rb_result"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "hasElse": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

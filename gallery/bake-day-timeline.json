@@ -1,0 +1,116 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "bake-day-timeline",
+  "gallery": {
+    "title": "Bake-day timeline",
+    "description": "Say when you want the bread out of the oven, and Claude works backwards to a timeline for the whole bake, from feeding the starter to cooling, then checks the times add up.",
+    "tip": "Change the recipe in the blue block to your own: a longer cold retard, an enriched dough, two loaves.",
+    "author": "itsfja",
+    "runtime": "2.0.0"
+  },
+  "program": {
+    "variables": [],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "x": 30,
+          "y": 30,
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "When do you want the bread out of the oven? (for example: Saturday at 6pm)"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_task",
+                  "inputs": {
+                    "TEXT": {
+                      "block": {
+                        "type": "text_join",
+                        "extraState": {
+                          "itemCount": 3
+                        },
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "Work backwards from this time and write a bake-day timeline for a standard sourdough loaf: "
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "rb_answer"
+                            }
+                          },
+                          "ADD2": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "\nSteps: feed the starter, mix and autolyse, bulk fermentation with stretch and folds, shape, cold retard overnight, bake, cool. Give each step a day and clock time, one line each."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_generate",
+                      "next": {
+                        "block": {
+                          "type": "rb_reflect",
+                          "inputs": {
+                            "CRITERIA": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "every step has a day and clock time; the times run in order and add up; the bread comes out when asked; no step is missing"
+                                }
+                              }
+                            },
+                            "ROUNDS": {
+                              "shadow": {
+                                "type": "math_number",
+                                "fields": {
+                                  "NUM": 2
+                                }
+                              }
+                            },
+                            "FIX": {
+                              "block": {
+                                "type": "rb_revise"
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_result"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

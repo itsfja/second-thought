@@ -8,7 +8,7 @@ are left out: in one file every name is already there).
 
 The page is published as one self-contained HTML file, so that runtime, its list of model services (SERVICES
 in python/second_thought/providers.py, as JSON), what programs can do (CAPABILITIES in core.py), the block palette's translations (i18n/*.json), the code-conversion prompt
-(prompts/convert-guide.txt), the Home Assistant sample house (ha/sample-house.json) and the sample feeds,
+(prompts/convert-guide.txt), the community gallery's programs (gallery/*.json), the Home Assistant sample house (ha/sample-house.json) and the sample feeds,
 GitHub, Telegram, email and calendar (samples/connections.json) are embedded inside it.
 Edit those files (not python/runtime.py, which is rebuilt), then run:
 
@@ -30,11 +30,14 @@ MARK = "# ---- package only: tools/sync.py leaves everything above this line out
 SERVICES = PACKAGE / "providers.py"   # its SERVICES list is the page's list of model services too
 CAPABILITIES = PACKAGE / "core.py"    # its CAPABILITIES list is the page's list of what programs can do
 I18N = ROOT / "i18n"                  # one <language>.json per language the block palette can be shown in
+GALLERY = ROOT / "gallery"            # the community gallery: one block file per program, with a "gallery" part
+GALLERY_FIELDS = ("title", "description", "tip", "author", "runtime")
 PARTS = [
     ('<script type="text/plain" id="py-runtime">\n', RUNTIME),
     ('<script type="application/json" id="services">\n', SERVICES),
     ('<script type="application/json" id="capabilities">\n', CAPABILITIES),
     ('<script type="application/json" id="i18n">\n', I18N),
+    ('<script type="application/json" id="community-gallery">\n', GALLERY),
     ('<script type="text/plain" id="convert-guide">\n', ROOT / "prompts" / "convert-guide.txt"),
     ('<script type="application/json" id="ha-sample">\n', ROOT / "ha" / "sample-house.json"),
     ('<script type="application/json" id="connections-sample">\n', ROOT / "samples" / "connections.json"),
@@ -92,6 +95,30 @@ def i18n_json() -> str:
     return json.dumps(langs, ensure_ascii=False, separators=(",", ":")) + "\n"
 
 
+def gallery_json() -> str:
+    """Every gallery/<name>.json, as a list for the page, by title. The page works out what each program can do from
+    its blocks; an entry never says so itself (tests/unit/test_gallery.py has the rest of the checks)."""
+    entries = []
+    for path in sorted(GALLERY.glob("*.json")):
+        where = path.relative_to(ROOT)
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except ValueError as e:
+            sys.exit(f"{where} isn't valid JSON: {e}")
+        info = data.get("gallery") if isinstance(data, dict) else None
+        if not isinstance(info, dict) or not isinstance(data.get("program"), dict):
+            sys.exit(f"{where} should be a block file saved from the page, with a \"gallery\" part added (see gallery/README.md).")
+        missing = [f for f in GALLERY_FIELDS if not str(info.get(f, "")).strip()]
+        if missing:
+            sys.exit(f"{where}: the \"gallery\" part needs " + ", ".join(missing) + ".")
+        entry = {"key": "g_" + path.stem.replace("-", "_"), "file": path.name}
+        entry.update({f: str(info[f]).strip() for f in GALLERY_FIELDS})
+        entry["program"] = data["program"]
+        entries.append(entry)
+    entries.sort(key=lambda e: e["title"].lower())
+    return "[\n" + ",\n".join(json.dumps(e, ensure_ascii=False, separators=(",", ":")) for e in entries) + "\n]\n"
+
+
 def build(page: str, runtime: str = None) -> str:
     for opener, path in PARTS:
         if path == SERVICES:
@@ -100,6 +127,8 @@ def build(page: str, runtime: str = None) -> str:
             body = capabilities_json()
         elif path == I18N:
             body = i18n_json()
+        elif path == GALLERY:
+            body = gallery_json()
         else:
             body = runtime if (path == RUNTIME and runtime is not None) else path.read_text(encoding="utf-8")
         if "</script" in body:
