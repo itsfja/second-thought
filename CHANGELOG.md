@@ -18,6 +18,14 @@ that the two agree.
 
 ## Unreleased
 
+## 2.0.0 - 2026-10-10
+
+**Upgrading:** programs keep their old runtime until you import them on the page and export them again. After that,
+a program that can act on the world (send messages, control devices, publish MQTT, accept web requests, comment on
+GitHub, use MCP tools) lists what it can do and asks once before its first run. Run each scheduled one once by hand
+and answer y, or put `approve = no` in `second-thought.ini` on a computer with nobody at it. Then try
+`python my-program.py --doctor` to check everything it needs is in place.
+
 ### Added
 - `--doctor` checks an exported program's setup without spending anything or acting on anything (#54). It checks only
   what the program uses (from `CAN`): Python, the settings file, packages, each model service's key (with its free list
