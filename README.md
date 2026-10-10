@@ -487,11 +487,12 @@ This folder is where all the parts of Second Thought are kept. Each part has its
 | Name | What it is |
 |---|---|
 | `second-thought.html` | The Second Thought page itself. This is the part you see on the screen. |
-| `python/runtime.py` | The helper that comes with every Python program. It knows how to do each block's job. |
+| `python/second_thought/` | The helper that comes with every Python program, in six smaller parts. It knows how to do each block's job. |
+| `python/runtime.py` | The same helper, with its parts stuck together into one file. Every Python program gets a copy. `tools/sync.py` makes it, so don't change it by hand. |
 | `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
 | `ha/sample-house.json` | The pretend house that the Home Assistant blocks use on the page. |
 | `samples/connections.json` | The pretend feeds, GitHub projects, Telegram messages, emails and calendar that the page uses. |
-| `tools/sync.py` | A little tool that copies the parts above into the page, so they always match. |
+| `tools/sync.py` | A little tool that sticks the helper's parts together, then copies the parts above into the page, so they always match. |
 | `tests/` | Checks that make sure everything still works. |
 | `second-thought.example.ini` | Every setting a program understands, with a note on each. Copy it to `second-thought.ini` to use it. |
 | `README.md` | This book! |
@@ -517,7 +518,20 @@ You only need the first line once. It fetches the things the checks need.
 
 The second line runs the checks. At the end it says **All checks passed**, or it tells you which check went wrong.
 
-If you change `python/runtime.py` or `prompts/convert-guide.txt`, run `python tools/sync.py` first, so the page has your changes too.
+If you change anything in `python/second_thought/` or `prompts/convert-guide.txt`, run `python tools/sync.py` first, so `python/runtime.py` and the page have your changes too.
+
+The helper's six parts are:
+
+| Part | What it does |
+|---|---|
+| `settings.py` | Reads `second-thought.ini` before anything else. |
+| `providers.py` | Knows every model service, and how to ask each one. |
+| `core.py` | Limits, mistakes, and the sums and words that match the blocks exactly. |
+| `connectors.py` | Web pages, news, calendars, Home Assistant, messages, MQTT and Homey. |
+| `agent.py` | The agent block and its tools. |
+| `runtime.py` | Everything else: remembering, drafts, output, scripts and schedules. |
+
+Each part starts with the other parts it needs. When `tools/sync.py` sticks them together, it leaves those lines out, because in one file everything is already there.
 
 The checks use pretend helpers, so they never cost anything. To check the real helpers with your own keys, run:
 

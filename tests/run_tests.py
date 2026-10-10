@@ -2101,6 +2101,32 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
           f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
 
 
+PACKAGE_CHECK = r"""
+import json, os, sys, tempfile
+os.environ["RB_MEMORY_FILE"] = os.path.join(tempfile.mkdtemp(), "memory.json")
+sys.path.insert(0, sys.argv[1])
+from second_thought import Runtime
+from second_thought import agent, connectors, core, providers, settings  # noqa: F401
+ns = {"__name__": "rt"}
+exec(compile(open(sys.argv[2], encoding="utf-8").read(), "rt", "exec"), ns)
+names = lambda c: sorted(n for n in dir(c) if not n.startswith("__"))
+R = Runtime(); R.reset(); R.log = lambda *a, **k: None
+R.remember("hello", "greeting", "permanent")
+print(json.dumps({"same": names(Runtime) == names(ns["Runtime"]), "count": len(names(Runtime)),
+                  "recall": R.recall("greeting"), "sdk": "anthropic" in sys.modules}))
+"""
+
+
+def package_check():
+    """python/second_thought imports on its own (no SDK needed) and its Runtime matches the bundled one."""
+    r = subprocess.run([sys.executable, "-I", "-c", PACKAGE_CHECK, str(ROOT / "python"), str(ROOT / "python" / "runtime.py")],
+                       capture_output=True, text=True, timeout=60, cwd=tempfile.gettempdir())
+    got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
+    check(got.get("same") is True and got.get("recall") == "hello" and got.get("sdk") is False,
+          f"python/second_thought imports on its own and its Runtime has the same {got.get('count', '?')} parts as python/runtime.py"
+          + ("" if got else f" ({r.stderr.strip()[-300:]})"))
+
+
 def example_ini_check():
     """second-thought.example.ini lists every setting the runtime reads, and reads like a settings file."""
     import configparser
@@ -2130,6 +2156,7 @@ def main():
     sync = subprocess.run([sys.executable, str(ROOT / "tools" / "sync.py"), "--check"], capture_output=True, text=True)
     print("Sources")
     check(sync.returncode == 0, sync.stdout.strip())
+    package_check()
     example_ini_check()
     if not (VENDOR / "blockly").exists():
         sys.exit("Run tests/setup.sh first.")
