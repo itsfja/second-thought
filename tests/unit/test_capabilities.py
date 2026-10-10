@@ -89,7 +89,7 @@ class Asking(unittest.TestCase):
         self.prog.write_text("print('changed')\n", encoding="utf-8")
         ok, out = self.ask([])
         self.assertFalse(ok)
-        self.assertIn("Nobody answered", out)
+        self.assertIn("nobody is here to ask", out)
 
     def test_no(self):
         ok, out = self.ask(["n"])
