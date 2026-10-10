@@ -133,6 +133,10 @@ def start():
                 return
             url = urlparse(self.path)
             path = unquote(url.path)
+            if path == "/api/":
+                return self._send(200, {"message": "API running."})
+            if path == "/api/config":
+                return self._send(200, {"version": "2026.10.0", "location_name": "Sample house"})
             if path == "/api/states":
                 return self._send(200, list(states.values()))
             if path.startswith("/api/states/"):

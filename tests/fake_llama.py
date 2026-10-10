@@ -20,6 +20,25 @@ def start():
         def log_message(self, *a):
             pass
 
+        def do_GET(self):
+            """GET .../models: the list --doctor reads to try a key. A key of "bad" is refused, like a wrong key."""
+            if not self.path.split("?")[0].rstrip("/").endswith("/models"):
+                self.send_response(404)
+                self.end_headers()
+                return
+            key = (self.headers.get("Authorization") or "").replace("Bearer ", "") or self.headers.get("x-api-key") or self.headers.get("x-goog-api-key") or ""
+            if key == "bad":
+                self.send_response(401)
+                self.end_headers()
+                return
+            ids = ["llama3.2:3b", "llama3.2-vision:11b", "deepseek-flash", "grok-4.3", "gpt-6.1-sol", "claude-sonnet-5-5", "claude-haiku-4-5-20251001"]
+            out = json.dumps({"data": [{"id": i} for i in ids], "models": [{"name": "models/gemini-3.8-flash"}]}).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(out)))
+            self.end_headers()
+            self.wfile.write(out)
+
         def do_POST(self):
             body = json.loads(self.rfile.read(int(self.headers.get("Content-Length") or 0)) or b"{}")
             if self.path.rstrip("/").endswith("/agent"):

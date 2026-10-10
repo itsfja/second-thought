@@ -8,6 +8,7 @@ Each module is one part of the runtime:
     connectors  web pages, feeds, calendars, Home Assistant, messaging, MQTT and Homey (the Connections part)
     mcp         MCP servers and their tools, for the agent (the MCPTools part)
     agent       the agent block (the AgentTools part)
+    doctor      --doctor: checking a program's setup without spending anything (the Doctor part)
     runtime     Runtime itself: run state, logging, memory, drafts, output, scripts and schedules
 
 Exported programs don't use this package. tools/sync.py joins these modules into python/runtime.py, one file

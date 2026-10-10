@@ -1394,6 +1394,46 @@ def drive(cmd, env, cwd, timeout=120):
     return proc.wait(), "".join(out), proc.stderr.read().decode("utf-8", "replace")
 
 
+def doctor_tests(codes, env, tmp, llama_url, llama_calls, ha_calls):
+    """--doctor checks what a program uses, reading only, and says what to fix."""
+    print("--doctor")
+    base = llama_url.rsplit("/v1", 1)[0]
+    env = dict(env, ANTHROPIC_BASE_URL=base, GEMINI_BASE_URL=base)
+    prog = pathlib.Path(tmp) / "doc_doorbell.py"
+    prog.write_text(codes["ha_doorbell"][0], encoding="utf-8")
+    before = len(ha_calls)
+    r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=env, cwd=tmp, capture_output=True, text=True, timeout=120)
+    out = r.stdout
+    check(r.returncode == 0 and "Only reading: nothing is sent" in out and "  ok    Claude: the key works (" in out
+          and "  ok    Home Assistant: reached Home Assistant" in out and "  ok    First run: approve = no" in out
+          and "Everything checked is ready." in out and len(ha_calls) == before and "Gemini" not in out,
+          f"--doctor checks a Home Assistant program's key and connection, switching nothing (exit {r.returncode}): {out[-400:]!r}")
+    r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=dict(env, ANTHROPIC_API_KEY="bad", HA_TOKEN="wrong"),
+                       cwd=tmp, capture_output=True, text=True, timeout=120)
+    check(r.returncode == 1 and "  FAIL  Claude: refused the key (401). Check ANTHROPIC_API_KEY" in r.stdout
+          and "  FAIL  Home Assistant:" in r.stdout and "2 problems to fix" in r.stdout,
+          f"a refused key and a wrong Home Assistant token are each a FAIL, and the exit code says so ({r.stdout[-300:]!r})")
+    llama = pathlib.Path(tmp) / "doc_llama.py"
+    llama.write_text(codes["w_llama"][0], encoding="utf-8")
+    r = subprocess.run([sys.executable, "-u", str(llama), "--doctor"], env=dict(env, RB_MODEL_TIER="llama-complex", RB_BACKUPS="none"),
+                       cwd=tmp, capture_output=True, text=True, timeout=120)
+    check(r.returncode == 0 and "  NOTE  Llama: the key works, but it doesn't list llama4:16x17b" in r.stdout and "ollama pull llama4:16x17b" in r.stdout,
+          f"--doctor notices a Llama model that hasn't been pulled ({r.stdout[-300:]!r})")
+    mcp = pathlib.Path(tmp) / "doc_mcp.py"
+    mcp.write_text(EXTRA["t_ag_mcp"], encoding="utf-8")
+    log = pathlib.Path(tmp) / "doc-mcp.log"
+    r = subprocess.run([sys.executable, "-u", str(mcp), "--doctor"], env=dict(env, FAKE_MCP_LOG=str(log),
+                       MCP_BAKERY=f'"{sys.executable}" "{HERE / "fake_mcp.py"}" legacy'), cwd=tmp, capture_output=True, text=True, timeout=120)
+    sent = [json.loads(x).get("method") for x in log.read_text(encoding="utf-8").splitlines()] if log.exists() else []
+    check(r.returncode == 0 and "  ok    MCP server \u201cbakery\u201d: 4 tools, MCP 2025-11-25" in r.stdout and "tools/list" in sent and "tools/call" not in sent,
+          f"--doctor lists an MCP server's tools without calling any ({r.stdout[-300:]!r})")
+    old = pathlib.Path(tmp) / "doc_old.py"
+    old.write_text(codes["review"][0].replace(", can=CAN)", ")"), encoding="utf-8")
+    r = subprocess.run([sys.executable, "-u", str(old), "--doctor"], env=env, cwd=tmp, capture_output=True, text=True, timeout=120)
+    check(r.returncode in (0, 1) and "  ok    Claude: the key works" in r.stdout and "Traceback" not in r.stderr,
+          f"--doctor also checks a program exported before CAN: whatever is set up ({(r.stderr or r.stdout)[-300:]!r})")
+
+
 def approval_tests(codes, env, tmp):
     """A program that can act lists what it can do and asks once before its first run; one that only reads doesn't."""
     print("Asking before the first run")
@@ -1449,6 +1489,7 @@ def python_tests(codes):
                EMAIL_IMAP_PORT=str(imap_port), EMAIL_SMTP_PORT=str(smtp_port), EMAIL_SSL="no", CALENDAR_URL=svc_url + "/calendar.ics")
     with tempfile.TemporaryDirectory() as tmp:
         approval_tests(codes, {k: v for k, v in env.items() if k != "RB_APPROVE"}, tmp)
+        doctor_tests(codes, env, tmp, llama_url, llama_calls, ha_calls)
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
             path.write_text(code, encoding="utf-8")

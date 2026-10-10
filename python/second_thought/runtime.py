@@ -24,11 +24,12 @@ from .core import (BUDGET, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_
 from .connectors import Connections
 from .mcp import MCPTools
 from .agent import AgentTools
+from .doctor import Doctor
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it too (settings.py doesn't import it)
 
 
-class Runtime(ModelCalls, Connections, MCPTools, AgentTools):
+class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     def __init__(self):
         self.vars = {}
         self.receivers = {}
@@ -1502,6 +1503,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools):
         if "--version" in sys.argv:
             print(f"Second Thought runtime {RUNTIME_VERSION}")
             return
+        if "--doctor" in sys.argv:
+            sys.exit(asyncio.run(self.doctor(can)))
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
         if not self.approve_program(can, unattended=bool(use_schedule) and not sys.stdin.isatty()):
