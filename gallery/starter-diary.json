@@ -1,0 +1,147 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "starter-diary",
+  "gallery": {
+    "title": "Starter diary",
+    "description": "Each run, tell it how your sourdough starter is doing. It keeps a dated diary between runs and tells you how the starter is getting on, and what to change.",
+    "tip": "Run it once a day for a week. Export it to Python and the diary stays in memory.json next to the program.",
+    "author": "itsfja",
+    "runtime": "2.0.0"
+  },
+  "program": {
+    "variables": [],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "x": 30,
+          "y": 30,
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "How was your starter today? (for example: doubled in 6 hours, smells fruity)"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_mem_add",
+                  "fields": {
+                    "KIND": "permanent"
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "text_join",
+                        "extraState": {
+                          "itemCount": 3
+                        },
+                        "inputs": {
+                          "ADD0": {
+                            "block": {
+                              "type": "rb_now",
+                              "fields": {
+                                "PART": "date"
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": ": "
+                              }
+                            }
+                          },
+                          "ADD2": {
+                            "block": {
+                              "type": "rb_answer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "NAME": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "starter diary"
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_task",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "text_join",
+                            "extraState": {
+                              "itemCount": 3
+                            },
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "Here is my sourdough starter diary, one entry a day:\n"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "rb_mem_get",
+                                  "inputs": {
+                                    "NAME": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "starter diary"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "ADD2": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "\nIn three short sentences: how is it doing, is it getting stronger, and what should I change, if anything?"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_generate",
+                          "next": {
+                            "block": {
+                              "type": "rb_result"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

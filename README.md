@@ -253,6 +253,10 @@ Then try your own ideas. Change the words on the blocks. Add new blocks. See wha
 
 You cannot break anything. If you get in a muddle, just load an example again.
 
+At the end of the list is a group called **Community**. These are programs other people made and shared. Each one says who shared it, and what it can do: whether it only talks to Claude, or can also send messages, keep notes or control things. The page works that out from the blocks, so it is always right.
+
+Made something good? You can share it too. The `gallery` folder has a short guide called `README.md` that says how.
+
 ---
 
 ## Page 9: Saving your programs
@@ -570,6 +574,7 @@ This folder is where all the parts of Second Thought are kept. Each part has its
 | `second-thought.example.ini` | Every setting a program understands, with a note on each. Copy it to `second-thought.ini` to use it. |
 | `CHANGELOG.md` | What is new in each version of the helper. |
 | `i18n/` | The words on the blocks in other languages, one file for each. |
+| `gallery/` | Programs people have shared, one file for each. They appear on the page under **Community**. |
 | `README.md` | This book! |
 
 ---
