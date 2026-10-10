@@ -9,6 +9,7 @@ import copy
 import datetime
 import hashlib
 import json
+import math
 import os
 import random
 import re
@@ -24,6 +25,7 @@ from .connectors import Connections
 from .mcp import MCPTools
 from .agent import AgentTools
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
+import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it too (settings.py doesn't import it)
 
 
 class Runtime(ModelCalls, Connections, MCPTools, AgentTools):
@@ -678,6 +680,74 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools):
         names = {v["name"] for v in self.transient_memory.values()}
         names |= {v["name"] for k, v in self._mem_load().items() if k not in self.transient_memory}
         return sorted(names)
+
+    # Searching notes by what's in them. The page ranks them the same way (memRank in second-thought.html), so the agent
+    # finds the same notes in both places: keep the two the same.
+    MEMORY_STOP = frozenset("a an and are as at be but by do for from had has have i if in into is it its me my no not of on "
+                            "or our so than that the their them then there these they this to was we were what when where "
+                            "which who will with you your".split())
+
+    @classmethod
+    def memory_terms(cls, text):
+        """The words searching uses: letters and digits, in lower case (ligatures, superscripts and wide letters made
+        plain), common words left out, and a light trim of English endings (loaves -> loave, proving -> prov, baked -> bak; partial matches catch the rest)."""
+        out = []
+        for w in re.findall(r"[^\W_]+", unicodedata.normalize("NFKC", to_str(text)).lower()):
+            if w in cls.MEMORY_STOP:
+                continue
+            if len(w) > 4 and w.endswith("ing"):
+                w = w[:-3]
+            elif len(w) > 3 and w.endswith("ed"):
+                w = w[:-2]
+            elif len(w) > 3 and w.endswith("s") and not w.endswith("ss"):
+                w = w[:-1]
+            out.append(w)
+        return out
+
+    @classmethod
+    def rank_notes(cls, notes, query, limit=5):
+        """notes: [{"name", "value", "updated"}]. The best matches for the query, best first, each with its score.
+        BM25 over a note's name (counted twice) and its contents; a word that starts the other (bake, bak) counts half.
+        Scores are rounded so the page and Python order them alike; ties go to the newest note, then by name."""
+        terms = list(dict.fromkeys(cls.memory_terms(query)))
+        if not terms or not notes:
+            return []
+        docs = [cls.memory_terms(n["name"]) * 2 + cls.memory_terms(n.get("value", "")) for n in notes]
+        avg = (sum(len(d) for d in docs) / len(docs)) or 1
+        part = lambda t, w: t != w and len(t) >= 3 and len(w) >= 3 and (w.startswith(t) or t.startswith(w))  # noqa: E731
+        found = []
+        for n, d in zip(notes, docs):
+            score = 0.0
+            for t in terms:
+                tf = sum(1.0 if w == t else 0.5 if part(t, w) else 0.0 for w in d)
+                if tf:
+                    df = sum(1 for e in docs if any(w == t or part(t, w) for w in e))
+                    idf = math.log(1 + (len(docs) - df + 0.5) / (df + 0.5))
+                    score += idf * tf * 2.2 / (tf + 1.2 * (0.25 + 0.75 * len(d) / avg))
+            if score > 0:
+                found.append({"name": n["name"], "value": n.get("value", ""), "updated": n.get("updated"), "score": round(score, 6)})
+        found.sort(key=lambda x: (-x["score"], -(x["updated"] or 0), x["name"].lower()))
+        return found[:max(1, int(limit))]
+
+    def memory_search(self, query, limit=5):
+        """Saved notes about something, best first: [{"name", "value", "updated", "score"}]."""
+        now = int(time.time() * 1000)
+        notes = [{"name": v["name"], "value": to_str(v["value"]), "updated": now} for v in self.transient_memory.values()]
+        notes += [{"name": v["name"], "value": to_str(v["value"]), "updated": v.get("updated") or 0}
+                  for k, v in self._mem_load().items() if k not in self.transient_memory]
+        return self.rank_notes(notes, query, limit)
+
+    def memory_search_text(self, query, limit=5):
+        """What the agent's search_memory tool gives back."""
+        query = to_str(query).strip()
+        if not query:
+            raise RunError("search_memory needs some words to look for.")
+        found, total = self.memory_search(query, limit), len(self.memory_names())
+        if not found:
+            return f"No saved note matches “{query}”." + (f" list_memory gives the names of all {total}." if total else " Nothing is saved yet.")
+        when = lambda ms: datetime.datetime.fromtimestamp(ms / 1000).strftime("%Y-%m-%d") if ms else "earlier"  # noqa: E731
+        return (f"Notes matching “{query}”, best first ({len(found)} of {total}):\n" +
+                "\n".join(f"- {f['name']} (saved {when(f['updated'])}): {_short(f['value'], 300)}" for f in found))
 
     # ----- Pictures -----
     _DRAW_RULES = ("Reply with only the SVG code, starting with <svg and ending with </svg>. Use a viewBox, flat shapes and solid fills. "

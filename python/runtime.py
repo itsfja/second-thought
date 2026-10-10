@@ -3767,7 +3767,9 @@ class AgentTools:
         "ask": [("ask_me", "Ask the person running this program a question and wait for their answer. Use it for things only they know, or to check a decision.", ["question"])],
         "memory": [("remember", "Save a note under a name. It is kept between runs.", ["name", "value"]),
                    ("recall", "Get the note saved under a name. Gives nothing if there isn't one.", ["name"]),
-                   ("list_memory", "List the names of every saved note.", [])],
+                   ("list_memory", "List the names of every saved note.", []),
+                   ("search_memory", "Find saved notes about something, best matches first, by the words in their names and "
+                    "contents. Use it when you don't know a note's exact name, or there are many notes.", ["query"])],
         "ha_read": [("find_devices", "Find Home Assistant devices and sensors matching some words, with their current states.", ["search"]),
                     ("device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"]),
                     ("device_history", "See how one Home Assistant entity changed over the past hours (24 if you don't say; at most 168), "
@@ -3837,7 +3839,7 @@ class AgentTools:
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
-                         "recall": {"name": "text"}, "list_memory": {}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
+                         "recall": {"name": "text"}, "list_memory": {}, "search_memory": {"query": "text"}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
                          "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"},
                          "device_history": {"entity": "text", "hours": "number"}, "calculate": {"expression": "text"}, "current_time": {},
                          "time_plus": {"time": "text", "minutes": "number"}, "read_file": {"why": "text"},
@@ -4025,6 +4027,8 @@ class AgentTools:
         if kind == "recall":
             v = self.recall(a("name"))
             return v if to_str(v) else f"Nothing is saved under “{a('name')}”."
+        if kind == "search_memory":
+            return self.memory_search_text(inp.get("query", ""))
         if kind == "list_memory":
             return self.memory_names() or "Nothing is saved yet."
         if kind == "find_devices":
@@ -4253,6 +4257,9 @@ class AgentTools:
     def agent_steps(self):
         """The most recent agent's steps in this run, as records: step, tool, input, result, status."""
         return [dict(r) for r in self.agent_trace]
+
+
+import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it too (settings.py doesn't import it)
 
 
 class Runtime(ModelCalls, Connections, MCPTools, AgentTools):
@@ -4907,6 +4914,74 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools):
         names = {v["name"] for v in self.transient_memory.values()}
         names |= {v["name"] for k, v in self._mem_load().items() if k not in self.transient_memory}
         return sorted(names)
+
+    # Searching notes by what's in them. The page ranks them the same way (memRank in second-thought.html), so the agent
+    # finds the same notes in both places: keep the two the same.
+    MEMORY_STOP = frozenset("a an and are as at be but by do for from had has have i if in into is it its me my no not of on "
+                            "or our so than that the their them then there these they this to was we were what when where "
+                            "which who will with you your".split())
+
+    @classmethod
+    def memory_terms(cls, text):
+        """The words searching uses: letters and digits, in lower case (ligatures, superscripts and wide letters made
+        plain), common words left out, and a light trim of English endings (loaves -> loave, proving -> prov, baked -> bak; partial matches catch the rest)."""
+        out = []
+        for w in re.findall(r"[^\W_]+", unicodedata.normalize("NFKC", to_str(text)).lower()):
+            if w in cls.MEMORY_STOP:
+                continue
+            if len(w) > 4 and w.endswith("ing"):
+                w = w[:-3]
+            elif len(w) > 3 and w.endswith("ed"):
+                w = w[:-2]
+            elif len(w) > 3 and w.endswith("s") and not w.endswith("ss"):
+                w = w[:-1]
+            out.append(w)
+        return out
+
+    @classmethod
+    def rank_notes(cls, notes, query, limit=5):
+        """notes: [{"name", "value", "updated"}]. The best matches for the query, best first, each with its score.
+        BM25 over a note's name (counted twice) and its contents; a word that starts the other (bake, bak) counts half.
+        Scores are rounded so the page and Python order them alike; ties go to the newest note, then by name."""
+        terms = list(dict.fromkeys(cls.memory_terms(query)))
+        if not terms or not notes:
+            return []
+        docs = [cls.memory_terms(n["name"]) * 2 + cls.memory_terms(n.get("value", "")) for n in notes]
+        avg = (sum(len(d) for d in docs) / len(docs)) or 1
+        part = lambda t, w: t != w and len(t) >= 3 and len(w) >= 3 and (w.startswith(t) or t.startswith(w))  # noqa: E731
+        found = []
+        for n, d in zip(notes, docs):
+            score = 0.0
+            for t in terms:
+                tf = sum(1.0 if w == t else 0.5 if part(t, w) else 0.0 for w in d)
+                if tf:
+                    df = sum(1 for e in docs if any(w == t or part(t, w) for w in e))
+                    idf = math.log(1 + (len(docs) - df + 0.5) / (df + 0.5))
+                    score += idf * tf * 2.2 / (tf + 1.2 * (0.25 + 0.75 * len(d) / avg))
+            if score > 0:
+                found.append({"name": n["name"], "value": n.get("value", ""), "updated": n.get("updated"), "score": round(score, 6)})
+        found.sort(key=lambda x: (-x["score"], -(x["updated"] or 0), x["name"].lower()))
+        return found[:max(1, int(limit))]
+
+    def memory_search(self, query, limit=5):
+        """Saved notes about something, best first: [{"name", "value", "updated", "score"}]."""
+        now = int(time.time() * 1000)
+        notes = [{"name": v["name"], "value": to_str(v["value"]), "updated": now} for v in self.transient_memory.values()]
+        notes += [{"name": v["name"], "value": to_str(v["value"]), "updated": v.get("updated") or 0}
+                  for k, v in self._mem_load().items() if k not in self.transient_memory]
+        return self.rank_notes(notes, query, limit)
+
+    def memory_search_text(self, query, limit=5):
+        """What the agent's search_memory tool gives back."""
+        query = to_str(query).strip()
+        if not query:
+            raise RunError("search_memory needs some words to look for.")
+        found, total = self.memory_search(query, limit), len(self.memory_names())
+        if not found:
+            return f"No saved note matches “{query}”." + (f" list_memory gives the names of all {total}." if total else " Nothing is saved yet.")
+        when = lambda ms: datetime.datetime.fromtimestamp(ms / 1000).strftime("%Y-%m-%d") if ms else "earlier"  # noqa: E731
+        return (f"Notes matching “{query}”, best first ({len(found)} of {total}):\n" +
+                "\n".join(f"- {f['name']} (saved {when(f['updated'])}): {_short(f['value'], 300)}" for f in found))
 
     # ----- Pictures -----
     _DRAW_RULES = ("Reply with only the SVG code, starting with <svg and ending with </svg>. Use a viewBox, flat shapes and solid fills. "
