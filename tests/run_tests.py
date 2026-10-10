@@ -842,6 +842,11 @@ async def new_feature_page_tests(pg):
     check(status.startswith("done") and not any("YOUR PLAN" in q or "plan" in q.split("TOOLS:")[0] for q in prompts)
           and "Agent plan" not in [n for n, *_ in steps], "with planning off, the prompt never mentions a plan and any plan sent is ignored")
     check("plan=True" in EXTRA["t_ag_plan"], "exported Python keeps planning switched on")
+    search = [tool("remember", name="rye loaf", value="78% hydration, proved overnight"), tool("search_memory", query="hydration rye"), done("Found it.")]
+    status, steps, items = await agent_run(pg, ["memory"], search, export="t_ag_memsearch")
+    found = [t for n, p_, t in steps if n == "Agent step 2/6: search_memory"]
+    check(status.startswith("done") and found and "Notes matching \u201chydration rye\u201d, best first" in found[0] and "- rye loaf (saved " in found[0],
+          f"the agent's search_memory finds a note by what's in it, on the page ({found[:1]})")
     mcp_tools = blk("rb_agent_mcp", fields={"SERVER": "bakery", "ASK": "changes"})
     status, steps, items = await agent_run(pg, [mcp_tools], [done("Nothing to add.")], export="t_ag_mcp")
     notes = [t for n, p_, t in steps if n == "MCP server \u201cbakery\u201d"]
@@ -1168,6 +1173,22 @@ async def page_tests():
         ids = [c[0] for c in caps]
         check(set(chk["used"]) == set(ids) and chk["ids"] == ids,
               f"each of the {len(ids)} capabilities in CAPABILITIES comes from some block or tool, and the page has the same list")
+
+        rt = {"__name__": "rt"}
+        exec(compile((ROOT / "python" / "runtime.py").read_text(encoding="utf-8"), "rt", "exec"), rt)  # noqa: S102
+        notes = [{"name": n, "value": v, "updated": u} for n, v, u in [
+            ("rye loaf", "78% hydration, 20% wholemeal rye, proved overnight", 3), ("starter feeding", "Feed it 1:5:5 at 8pm; peaks at 7am", 2),
+            ("oven", "Dutch oven at 250 °C for 20 min", 1), ("Crème pâtissière", "Vanilla custard for the brioche", 4),
+            ("shopping", "strong white flour\nrye flour\nsea salt", 5), ("Spelt", "spelt loaves prove faster than wheat", 5),
+            ("Baking days", "Bake on Saturdays, feed the starter on Fridays", 6), ("ﬁnal notes", "ligatures and 2² oddities", 7),
+            ("café", "Cafe\u0301 au lait with breakfast", 8), ("x", "", 0)]]
+        queries = ["rye", "when does the starter peak", "hydrat", "crème", "flour salt", "bake", "proving loaves", "oven 250 °C",
+                   "café", "final", "2", "the of and", "SPELT", "feeding the starter friday"]
+        page_ranks = await pg.evaluate("([notes, qs]) => qs.map(q => window.__memRank(notes, q, 10).map(f => [f.name, f.score]))", [notes, queries])
+        py_ranks = [[[f["name"], f["score"]] for f in rt["Runtime"].rank_notes(notes, q, 10)] for q in queries]
+        differ = [q for q, a, b in zip(queries, page_ranks, py_ranks) if a != b]
+        check(not differ and sum(map(len, py_ranks)) >= 14 and py_ranks[queries.index("final")][0][0] == "ﬁnal notes",
+              f"the page and Python rank saved notes the same, scores and order, for {len(queries)} searches" + (f" (differ: {differ})" if differ else ""))
 
         EXAMPLES.extend(await pg.eval_on_selector_all("#example option", "e => e.map(o => o.value)"))
         print(f"Examples in the page ({len(EXAMPLES)})")
@@ -2182,6 +2203,10 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         check(code_ == 0 and "▸ Agent step 2/6: recall  [repeat]" in out and "▸ Agent: stopped, repeating itself" in out, "t_ag_repeat.py stops an agent that repeats itself")
         code_, out, err = run_ag("t_ag_out")
         check(code_ == 0 and "▸ Agent step 2/2  [not a tool]" in out and "▸ Agent: out of steps  [best effort]" in out, "t_ag_out.py runs out of steps cleanly")
+        (pathlib.Path(tmp) / "t_ag_memsearch.py").write_text(EXTRA["t_ag_memsearch"], encoding="utf-8")
+        code_, out, err = run_ag("t_ag_memsearch")
+        check(code_ == 0 and "Notes matching \u201chydration rye\u201d, best first" in out and "- rye loaf (saved " in out,
+              "t_ag_memsearch.py: search_memory finds the note in Python too" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         code_, out, err = run_ag("t_ag_plan")
         out = out.replace("\r\n", "\n")
         check(code_ == 0 and "▸ Agent plan  [planned]\n    1. save it\n    2. check it" in out and out.count("▸ Agent: plan changed") == 1

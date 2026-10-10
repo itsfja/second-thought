@@ -19,6 +19,10 @@ that the two agree.
 ## Unreleased
 
 ### Added
+- The agent's memory tools include `search_memory`, which finds saved notes by what's in their names and contents,
+  best first, so a long-running agent with many notes can find the right one without knowing its name (#46). It ranks
+  with BM25 over names (counted twice) and contents, with a light trim of English endings and partial matches for word
+  starts, and nothing extra to install. The page ranks notes exactly the same way, and a test checks that.
 - The agent can use the tools of any MCP server (#43): a **tools from MCP server** block, with the server set up as
   `MCP_<NAME>` in `second-thought.ini`, either the command that starts it or its https:// address (plus
   `MCP_<NAME>_TOKEN`). It speaks the current MCP (2026-07-28, every request saying its version, found with
@@ -41,8 +45,6 @@ that the two agree.
 ### Changed
 - **Needs one step after re-exporting:** a scheduled program that can act won't start until someone has run it once
   by hand and said yes (or set `approve = no`). Under the rules above that makes the next release 2.0.0.
-
-### Changed
 - Every model service is now one entry in `SERVICES` (in `python/second_thought/providers.py`). `MODELS`,
   `PROVIDERS` and the other tables are made from it, and the page builds its model menus, backups, block choices,
   exported settings and notes from the same list. Exported programs behave exactly as before; adding a service that

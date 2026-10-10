@@ -23,7 +23,9 @@ class AgentTools:
         "ask": [("ask_me", "Ask the person running this program a question and wait for their answer. Use it for things only they know, or to check a decision.", ["question"])],
         "memory": [("remember", "Save a note under a name. It is kept between runs.", ["name", "value"]),
                    ("recall", "Get the note saved under a name. Gives nothing if there isn't one.", ["name"]),
-                   ("list_memory", "List the names of every saved note.", [])],
+                   ("list_memory", "List the names of every saved note.", []),
+                   ("search_memory", "Find saved notes about something, best matches first, by the words in their names and "
+                    "contents. Use it when you don't know a note's exact name, or there are many notes.", ["query"])],
         "ha_read": [("find_devices", "Find Home Assistant devices and sensors matching some words, with their current states.", ["search"]),
                     ("device_state", "Get the current state of one Home Assistant entity, by its entity id (like sensor.kitchen_temperature).", ["entity"]),
                     ("device_history", "See how one Home Assistant entity changed over the past hours (24 if you don't say; at most 168), "
@@ -93,7 +95,7 @@ class AgentTools:
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
-                         "recall": {"name": "text"}, "list_memory": {}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
+                         "recall": {"name": "text"}, "list_memory": {}, "search_memory": {"query": "text"}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
                          "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"},
                          "device_history": {"entity": "text", "hours": "number"}, "calculate": {"expression": "text"}, "current_time": {},
                          "time_plus": {"time": "text", "minutes": "number"}, "read_file": {"why": "text"},
@@ -281,6 +283,8 @@ class AgentTools:
         if kind == "recall":
             v = self.recall(a("name"))
             return v if to_str(v) else f"Nothing is saved under “{a('name')}”."
+        if kind == "search_memory":
+            return self.memory_search_text(inp.get("query", ""))
         if kind == "list_memory":
             return self.memory_names() or "Nothing is saved yet."
         if kind == "find_devices":

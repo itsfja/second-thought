@@ -161,7 +161,7 @@ An **agent** is different. You give it a **goal** and some **tools**, and Claude
 The olive block **agent: work toward …** holds the tools. The tools have their own pile, called **Tools**, just below **Agent**. Drop as many as you like inside the agent. You can give it:
 
 - **ask me a question**, so it can ask you things only you know.
-- **remember and recall notes**, so it can keep what it learns for next time.
+- **remember and recall notes**, so it can keep what it learns for next time. It can also **search its notes**, so even after hundreds of them it finds the right one by what is in it, without knowing its exact name.
 - **search the web and read pages**, for things that change. It can search, then read a source page in full. Reading pages only works in exported Python, and only public pages, never addresses on your own network.
 - **work out sums**, so numbers are worked out exactly, not guessed. It knows + − × ÷, powers, brackets and rounding, like `round(350 / 500 * 100, 1)`.
 - **clock times and dates**, for the time now and for adding or taking away minutes, like 09:30 plus 270 minutes. Good for working backwards from when you want bread out of the oven.
