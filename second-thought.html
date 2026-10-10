@@ -5406,16 +5406,17 @@ class Runtime(ModelCalls, Connections, AgentTools):
             print("  - " + line)
         for line in tail:
             print(line)
+        nobody = (f"\nIt hasn't been allowed to do these on this computer yet, and nobody is here to ask. Run it once yourself, "
+                  f"not on a schedule, and answer y. Or put approve = no {WHERE_KEYS}.")
         if unattended:
-            print(f"\nIt hasn't been allowed to do these on this computer yet, and nobody is here to ask. Run it once yourself, "
-                  f"not on a schedule, and answer y. Or put approve = no {WHERE_KEYS}.", flush=True)
+            print(nobody, flush=True)
             return False
         print("\n? Allow it to do these things on this computer? It won't ask again unless the program changes.", flush=True)
         while True:
             try:
                 a = input("Approve? [y/n] > ").strip().lower()
-            except EOFError:
-                print("\nNobody answered, so it didn't run.")
+            except EOFError:  # no keyboard after all (on Windows, a scheduled task's input can look like one)
+                print(nobody, flush=True)
                 return False
             if a in ("y", "yes"):
                 break
