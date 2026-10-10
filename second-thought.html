@@ -351,7 +351,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
       <button type="button" id="io-copy">Copy as text</button>
     </div>
     <h3>As Python code</h3>
-    <p class="hint">Runs without this page open, on your computer or a server. Needs an Anthropic API key; API calls are billed separately from claude.ai.</p>
+    <p class="hint">Runs without this page open, on your computer or a server. Needs an Anthropic API key; API calls are billed separately from claude.ai.<span id="io-py-version"></span></p>
     <div class="row">
       <button type="button" id="io-py-save" class="primary" hidden>Save Python (.zip)</button>
       <button type="button" id="io-py-copy">Copy Python code</button>
@@ -437,6 +437,10 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+
+# Which runtime this is. Every exported program carries its own copy of the runtime, so this says which one it has:
+# run the program with --version to see it. What changed in each version is in CHANGELOG.md, in the Second Thought folder.
+RUNTIME_VERSION = "1.0.0"
 
 # Windows consoles and redirected output can't always show every character; never crash over one.
 for _stream in (sys.stdout, sys.stderr):
@@ -5234,6 +5238,7 @@ class Runtime(ModelCalls, Connections, AgentTools):
         prog = os.path.splitext(os.path.basename(sys.argv[0] or "program"))[0] or "program"
         start = datetime.datetime.fromtimestamp(self.run_started)
         lines = [f"# {prog}: run log", "",
+                 f"- Runtime: {RUNTIME_VERSION}",
                  f"- Started: {start:%Y-%m-%d %H:%M:%S} ({getattr(self, 'run_label', 'Run')})",
                  f"- Took: {time.time() - self.run_started:.1f} s",
                  f"- Model calls: {self.calls}"]
@@ -5347,6 +5352,9 @@ class Runtime(ModelCalls, Connections, AgentTools):
             await asyncio.sleep(HA_WATCH_SECONDS)
 
     def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=()):
+        if "--version" in sys.argv:
+            print(f"Second Thought runtime {RUNTIME_VERSION}")
+            return
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
         try:
@@ -9706,7 +9714,10 @@ HOW TO MAP CODE
 
   /* ---------- Python export ---------- */
   const PY_MARK = "# ---- Second Thought program: lets the block editor import this file again ----";
-  const PY_MARKS = [PY_MARK, "# ---- Reflection Blocks program: lets the block editor import this file again ----"];
+  // The runtime embedded below (python/runtime.py) says its own version; exports carry it, so imports can compare.
+  const RUNTIME_VERSION = (document.getElementById("py-runtime").textContent.match(/^RUNTIME_VERSION = "([^"]+)"/m) || [])[1] || "";
+  if (RUNTIME_VERSION) $("io-py-version").textContent = " It comes with runtime " + RUNTIME_VERSION + ".";
+  const PY_MARKS = [PY_MARK,"# ---- Reflection Blocks program: lets the block editor import this file again ----"];
   const pyStr = s => JSON.stringify(String(s == null ? "" : s));
   const pyNum = v => { const n = Number(v); return isFinite(n) ? String(n) : "0"; };
   function codeHash(text){
@@ -10414,7 +10425,8 @@ HOW TO MAP CODE
       "#!/usr/bin/env python3",
       "\"\"\"" + String(progName || "my-program").replace(/"""/g, "'''"),
       "",
-      "Exported from Second Thought on " + when.getFullYear() + "-" + String(when.getMonth() + 1).padStart(2, "0") + "-" + String(when.getDate()).padStart(2, "0") + ".",
+      "Exported from Second Thought on " + when.getFullYear() + "-" + String(when.getMonth() + 1).padStart(2, "0") + "-" + String(when.getDate()).padStart(2, "0") + ", with runtime " + RUNTIME_VERSION + ".",
+      "To get a newer runtime, import this file on the Second Thought page and export it again.",
       "",
       "How to run:",
       "  1. Put your keys in second-thought.ini, in the same folder as this file.",
@@ -10495,7 +10507,8 @@ HOW TO MAP CODE
     try {
       const data = JSON.parse(b64decode(b64));
       if (!data || !data.program) return null;
-      return { data, edited: !hash || codeHash(above) !== hash };
+      const v = above.match(/^RUNTIME_VERSION = "([^"]+)"/m);
+      return { data, edited: !hash || codeHash(above) !== hash, runtime: v ? v[1] : "" };
     } catch(e) { return null; }
   }
 
@@ -10639,11 +10652,18 @@ HOW TO MAP CODE
     });
     c.hidden = false;
   }
+  // After an exported program loads: if it was made with another runtime, say so, and how to upgrade.
+  function noteRuntime(theirs){
+    if (!RUNTIME_VERSION || theirs === RUNTIME_VERSION) return;
+    const m = $("io-import-msg");
+    m.textContent += " Its Python was exported with " + (theirs ? "runtime " + theirs : "a runtime from before versions were numbered") +
+      "; this page has runtime " + RUNTIME_VERSION + ". Export it again to give the Python program the new runtime (CHANGELOG.md says what changed).";
+  }
   function importCode(code, label){
     const ex = readExported(code);
     if (ex) {
       const name = ex.data.name || label;
-      if (!ex.edited) { if (applyProgram(ex.data.program, name)) $("io-name").value = slug(name); return; }
+      if (!ex.edited) { if (applyProgram(ex.data.program, name)) { $("io-name").value = slug(name); noteRuntime(ex.runtime); } return; }
       offerChoice("This code was exported from here and then edited. The blocks saved inside it are from before the edits.", [
         { label:"Convert the edited code with Claude", run:() => convertWithClaude(code, name) },
         { label:"Restore the exported blocks", run:() => { if (applyProgram(ex.data.program, name)) $("io-name").value = slug(name); } }

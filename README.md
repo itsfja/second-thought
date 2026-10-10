@@ -1,5 +1,10 @@
 # Second Thought
 
+[![CI](https://github.com/itsfja/second-thought/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/itsfja/second-thought/actions/workflows/ci.yml)
+[![Runtime](https://img.shields.io/badge/runtime-1.0.0-blue)](CHANGELOG.md)
+[![Python](https://img.shields.io/badge/python-3.9%E2%80%933.13-blue)](.github/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 ### A Ladybird-style book about a clever helper
 
 ---
@@ -495,6 +500,7 @@ This folder is where all the parts of Second Thought are kept. Each part has its
 | `tools/sync.py` | A little tool that sticks the helper's parts together, then copies the parts above into the page, so they always match. |
 | `tests/` | Checks that make sure everything still works. |
 | `second-thought.example.ini` | Every setting a program understands, with a note on each. Copy it to `second-thought.ini` to use it. |
+| `CHANGELOG.md` | What is new in each version of the helper. |
 | `README.md` | This book! |
 
 ---
@@ -540,6 +546,34 @@ python tools/smoke_test.py
 ```
 
 It asks each helper you have a key for a few short questions and says what works. That covers Claude's tidy answers, streaming, carrying on after a long answer is cut off, and the agent using a tool, plus which kind of tidy answer every other helper understands. It costs a few pence and prints the tokens used. Add a name to check only one helper, like `python tools/smoke_test.py claude`.
+
+There are quick checks too, one for each of the helper's parts. They need nothing installed and take less than a second:
+
+```
+python -m unittest discover -s tests/unit
+```
+
+`python tests/run_tests.py` runs them as well.
+
+---
+
+## Page 12½: Which helper have I got?
+
+*Picture: a jar of sourdough starter with a label on it, saying when it was made.*
+
+The helper has a number, like **1.0.0**. Every Python program you export gets its own copy of the helper, and the number goes with it.
+
+To see which helper a program has, run it like this:
+
+```
+python my-program.py --version
+```
+
+When the helper gets better, its number goes up. `CHANGELOG.md` says what changed each time.
+
+Your program does not change by itself. To give it the newer helper, import the program on the Second Thought page, then export it again. The page tells you when a program you import has a different helper.
+
+**Grown-ups:** the numbers follow semantic versioning. The first number goes up when a program might behave differently, the middle one for something new, and the last one for a fix. When you change the helper, write a line in `CHANGELOG.md` under **Unreleased**.
 
 ---
 
