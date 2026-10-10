@@ -21,11 +21,12 @@ from .core import (BUDGET, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_
     _locked, _need_picture, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js,
     to_bool, to_list, to_record, to_str)
 from .connectors import Connections
+from .mcp import MCPTools
 from .agent import AgentTools
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
 
-class Runtime(ModelCalls, Connections, AgentTools):
+class Runtime(ModelCalls, Connections, MCPTools, AgentTools):
     def __init__(self):
         self.vars = {}
         self.receivers = {}

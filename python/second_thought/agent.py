@@ -184,11 +184,21 @@ class AgentTools:
         taken.add(out)
         return out
 
-    def _agent_tools(self, tools):
-        """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}."""
+    def _agent_tools(self, tools, mcp=None):
+        """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}. mcp holds each MCP
+        server's tools, listed beforehand: {server name: [tool, ...]}."""
         out, taken = {}, set()
         for t in tools:
-            if t.get("kind") == "block":
+            if t.get("kind") == "mcp":
+                server, mode = to_str(t.get("server")).strip(), t.get("ask", "changes")
+                for tool in (mcp or {}).get(server, []):
+                    schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {"type": "object"}
+                    params = list((schema.get("properties") or {}).keys()) if isinstance(schema.get("properties"), dict) else []
+                    desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
+                    read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
+                    ask = mode == "every" or (mode == "changes" and not read_only)
+                    out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"]}), ask, schema)
+            elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
                 params = list(t.get("params", []))
@@ -248,6 +258,9 @@ class AgentTools:
 
     async def _agent_run_tool(self, kind, spec, inp):
         a = lambda k: to_str(inp.get(k, "")).strip()  # noqa: E731
+        if kind == "mcp":
+            text, failed = await self.mcp_call(spec["server"], spec["tool"], inp)
+            return ("Error: " + text) if failed else text
         if kind == "block":
             if spec.get("fn") is None:
                 raise RunError(f"There's no My Block called “{spec['name']}”.")
@@ -395,7 +408,12 @@ class AgentTools:
         if not goal:
             raise RunError("The agent block needs a goal.")
         n = max(1, min(self.MAX_AGENT_STEPS, round_js(num(steps)) or 1))
-        catalogue = self._agent_tools(tools)
+        mcp = {}
+        for t in tools:  # each MCP server's tools, asked for once, before the first step
+            server = to_str(t.get("server")).strip()
+            if t.get("kind") == "mcp" and server not in mcp:
+                mcp[server] = await self.mcp_tools(server)
+        catalogue = self._agent_tools(tools, mcp)
         self.log("Agent", f"Goal: {goal}\nTools: {', '.join(catalogue) or 'none'} · up to {n} steps" + (" · plans first" if plan else ""), "started")
         history, last, prev, same = [], "", None, 0
         plan = [] if plan else None
@@ -440,7 +458,7 @@ class AgentTools:
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
-            problem, checked = self.check_tool_input(inp, schema)
+            problem, checked = self.check_mcp_input(inp, schema) if kind == "mcp" else self.check_tool_input(inp, schema)
             if problem:
                 # Checked before running: a tool never gets input it can't use.
                 history.append(f"Step {i}: you asked for {name} with {shown}, but {problem}, so it didn't run. "

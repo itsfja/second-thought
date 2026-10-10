@@ -6,6 +6,7 @@ Each module is one part of the runtime:
     providers   the model services and how each is called (the ModelCalls part of Runtime)
     core        limits, errors and the value helpers that mirror the block editor
     connectors  web pages, feeds, calendars, Home Assistant, messaging, MQTT and Homey (the Connections part)
+    mcp         MCP servers and their tools, for the agent (the MCPTools part)
     agent       the agent block (the AgentTools part)
     runtime     Runtime itself: run state, logging, memory, drafts, output, scripts and schedules
 
