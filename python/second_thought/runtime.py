@@ -14,7 +14,7 @@ import random
 import re
 import sys
 import time
-from .settings import WHERE_KEYS
+from .settings import RUNTIME_VERSION, WHERE_KEYS
 from .providers import ModelCalls, model_label
 from .core import (BUDGET, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
@@ -1232,6 +1232,7 @@ class Runtime(ModelCalls, Connections, AgentTools):
         prog = os.path.splitext(os.path.basename(sys.argv[0] or "program"))[0] or "program"
         start = datetime.datetime.fromtimestamp(self.run_started)
         lines = [f"# {prog}: run log", "",
+                 f"- Runtime: {RUNTIME_VERSION}",
                  f"- Started: {start:%Y-%m-%d %H:%M:%S} ({getattr(self, 'run_label', 'Run')})",
                  f"- Took: {time.time() - self.run_started:.1f} s",
                  f"- Model calls: {self.calls}"]
@@ -1345,6 +1346,9 @@ class Runtime(ModelCalls, Connections, AgentTools):
             await asyncio.sleep(HA_WATCH_SECONDS)
 
     def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=()):
+        if "--version" in sys.argv:
+            print(f"Second Thought runtime {RUNTIME_VERSION}")
+            return
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
         try:

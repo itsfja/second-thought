@@ -20,6 +20,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+# Which runtime this is. Every exported program carries its own copy of the runtime, so this says which one it has:
+# run the program with --version to see it. What changed in each version is in CHANGELOG.md, in the Second Thought folder.
+RUNTIME_VERSION = "1.0.0"
+
 # Windows consoles and redirected output can't always show every character; never crash over one.
 for _stream in (sys.stdout, sys.stderr):
     try:
@@ -4816,6 +4820,7 @@ class Runtime(ModelCalls, Connections, AgentTools):
         prog = os.path.splitext(os.path.basename(sys.argv[0] or "program"))[0] or "program"
         start = datetime.datetime.fromtimestamp(self.run_started)
         lines = [f"# {prog}: run log", "",
+                 f"- Runtime: {RUNTIME_VERSION}",
                  f"- Started: {start:%Y-%m-%d %H:%M:%S} ({getattr(self, 'run_label', 'Run')})",
                  f"- Took: {time.time() - self.run_started:.1f} s",
                  f"- Model calls: {self.calls}"]
@@ -4929,6 +4934,9 @@ class Runtime(ModelCalls, Connections, AgentTools):
             await asyncio.sleep(HA_WATCH_SECONDS)
 
     def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=()):
+        if "--version" in sys.argv:
+            print(f"Second Thought runtime {RUNTIME_VERSION}")
+            return
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
         try:
