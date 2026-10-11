@@ -24,6 +24,7 @@ that the two agree.
 - Exported programs print in Italian when exported from the page in Italian (#76).
 - Exported programs print in Portuguese when exported from the page in Portuguese (#77).
 - Exported programs print in Simplified Chinese when exported from the page in Chinese (#78).
+- Exported programs print in Japanese when exported from the page in Japanese (#79).
 
 ## 2.2.0 - 2026-10-11
 
