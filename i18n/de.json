@@ -443,7 +443,7 @@
   },
   "rb_slack_when": {
    "message0": "wenn eine Slack-Nachricht mit %1 ankommt",
-   "tooltip": "Führt die Blöcke darunter aus, wenn jemand in einem Ihrer Slack-Kanäle postet (geben Sie „irgendetwas“ ein oder Wörter, die die Nachricht enthalten muss). Nur die Kanäle in SLACK_CHANNEL_ID zählen, Nachrichten von Bots nie. Alle 10 Sekunden geprüft. „Was ankam“ liefert text, sender und channel. Auf dieser Seite klicken Sie mit der rechten Maustaste darauf und wählen „Dieses Skript ausführen“, um es mit einer Beispielnachricht zu testen."
+   "tooltip": "Führt die Blöcke darunter aus, wenn jemand in einem Ihrer Slack-Kanäle postet (geben Sie „anything“ ein oder Wörter, die die Nachricht enthalten muss). Nur die Kanäle in SLACK_CHANNEL_ID zählen, Nachrichten von Bots nie. Alle 10 Sekunden geprüft. „Was ankam“ liefert text, sender und channel. Auf dieser Seite klicken Sie mit der rechten Maustaste darauf und wählen „Dieses Skript ausführen“, um es mit einer Beispielnachricht zu testen."
   },
   "rb_sort": {
    "message0": "%1 sortieren nach %2 %3",
@@ -474,7 +474,7 @@
   },
   "rb_tg_when": {
    "message0": "wenn eine Telegram-Nachricht mit %1 ankommt",
-   "tooltip": "Führt die Blöcke darunter aus, wenn Ihr Bot eine Nachricht bekommt (geben Sie „irgendetwas“ ein oder Wörter, die die Nachricht enthalten muss). Nur Nachrichten aus Ihren eigenen Chats zählen (TELEGRAM_CHAT_ID). Im exportierten Python hört er ständig zu; auf dieser Seite klicken Sie mit der rechten Maustaste darauf und wählen „Dieses Skript ausführen“, um es mit einer Beispielnachricht zu testen."
+   "tooltip": "Führt die Blöcke darunter aus, wenn Ihr Bot eine Nachricht bekommt (geben Sie „anything“ ein oder Wörter, die die Nachricht enthalten muss). Nur Nachrichten aus Ihren eigenen Chats zählen (TELEGRAM_CHAT_ID). Im exportierten Python hört er ständig zu; auf dieser Seite klicken Sie mit der rechten Maustaste darauf und wählen „Dieses Skript ausführen“, um es mit einer Beispielnachricht zu testen."
   },
   "rb_timer": {
    "message0": "Stoppuhr",
