@@ -26,6 +26,7 @@ that the two agree.
 - Exported programs print in Simplified Chinese when exported from the page in Chinese (#78).
 - Exported programs print in Japanese when exported from the page in Japanese (#79).
 - Exported programs print in Greek when exported from the page in Greek (#84).
+- Blocks, page and exported programs in Latin, with Latin words for Blockly's own blocks and menus too, since Blockly has none (#85).
 
 ## 2.2.0 - 2026-10-11
 
