@@ -27,6 +27,12 @@ class Files(unittest.TestCase):
                 for field, labels in d["options"].items():
                     self.assertRegex(field, r"^rb_[a-z_]+\.[A-Z_]+$")
                     self.assertTrue(all(isinstance(v, str) and v.strip() for v in labels.values()), field)
+                for key, words in d.get("examples", {}).items():
+                    # Each example: a short title, a description and a tip (the page tests check every example has one).
+                    self.assertRegex(key, r"^[a-z][a-z0-9_]*$")
+                    self.assertEqual(set(words), {"title", "desc", "tip"}, key)
+                    self.assertTrue(all(isinstance(v, str) and v.strip() for v in words.values()), key)
+                    self.assertLessEqual(len(words["title"]), 60, key)
                 for english, words in d.get("page", {}).items():
                     # The page's own words: the same {name} slots and the same bold words, so nothing goes missing.
                     self.assertTrue(isinstance(words, str) and words.strip(), english)
