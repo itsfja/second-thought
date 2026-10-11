@@ -14,6 +14,7 @@ import urllib.error
 import urllib.request
 from .settings import RUNTIME_VERSION, WHERE_KEYS
 from .core import RunError, _number_setting, _short, to_str
+from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import atexit  # noqa: E402,F811 - below the line, so python/runtime.py has them too (settings.py doesn't import these)
 import shlex  # noqa: E402,F811
@@ -149,8 +150,7 @@ class _MCPServer:
             return
         old = next((v for v in versions if v in MCP_LEGACY), None)
         if not old:
-            raise RunError(f"The {self.describe()} speaks MCP {', '.join(versions) or 'versions'} this runtime doesn't. "
-                           "A newer Second Thought may.")
+            raise RunError(tr("The {x} speaks MCP {x2} this runtime doesn't. A newer Second Thought may.", x=self.describe(), x2=', '.join(versions) or tr('versions')))
         self._initialize(old)
 
     def open(self):
@@ -165,7 +165,7 @@ class _MCPServer:
                           MCP_TIMEOUT, legacy=True)
         got = r.get("protocolVersion") if isinstance(r, dict) else None
         if got not in MCP_LEGACY:
-            raise RunError(f"The {self.describe()} wants MCP version “{got}”, which this runtime doesn't speak.")
+            raise RunError(tr("The {x} wants MCP version “{got}”, which this runtime doesn't speak.", x=self.describe(), got=got))
         self.era, self.version = "legacy", got
         self._notify("notifications/initialized")
 
@@ -175,10 +175,9 @@ class _MCPServer:
             r = self._request(method, self._meta(params), MCP_TIMEOUT, schema=schema)
             kind = r.get("resultType", "complete") if isinstance(r, dict) else "complete"
             if kind == "input_required":
-                raise RunError(f"The {self.describe()} wants more input for {method} (a question for you, or a model call), "
-                               "which Second Thought can't give it yet.")
+                raise RunError(tr("The {x} wants more input for {method} (a question for you, or a model call), which Second Thought can't give it yet.", x=self.describe(), method=method))
             if kind != "complete":
-                raise RunError(f"The {self.describe()} gave a kind of result this runtime doesn't know (“{kind}”).")
+                raise RunError(tr("The {x} gave a kind of result this runtime doesn't know (“{kind}”).", x=self.describe(), kind=kind))
             return r
         return self._request(method, params or {}, MCP_TIMEOUT, schema=schema)
 
@@ -190,7 +189,7 @@ class _MCPServer:
                 for t in r.get("tools") or []:
                     if isinstance(t, dict) and isinstance(t.get("name"), str) and t["name"]:
                         if self.checks_headers() and _header_params(t.get("inputSchema") or {}) is None:
-                            print(f"  ({self.describe()}: left out its tool “{t['name']}”, whose x-mcp-header settings are invalid)", flush=True)
+                            print(tr("  ({x}: left out its tool “{name}”, whose x-mcp-header settings are invalid)", x=self.describe(), name=t['name']), flush=True)
                             continue
                         tools.append(t)
                 cursor = r.get("nextCursor")
@@ -221,13 +220,13 @@ class _MCPStdio(_MCPServer):
         if os.name == "nt":  # Windows-style splitting keeps the quotes round a part: take them off
             argv = [a[1:-1] if len(a) > 1 and a[0] == a[-1] == '"' else a for a in argv]
         if not argv:
-            raise RunError(f"{mcp_env_name(name)} is empty. Put the command that starts the server there.")
+            raise RunError(tr("{x} is empty. Put the command that starts the server there.", x=mcp_env_name(name)))
         exe = shutil.which(argv[0]) or argv[0]
         try:
             self.proc = subprocess.Popen([exe] + argv[1:], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                          env=dict(os.environ))
         except OSError as e:
-            raise RunError(f"The {self.describe()} couldn't be started ({mcp_env_name(name)} = {command}): {e}") from None
+            raise RunError(tr("The {x} couldn't be started ({x2} = {command}): {e}", x=self.describe(), x2=mcp_env_name(name), command=command, e=e)) from None
         self._waiting, self._wlock, self._err, self._dead = {}, threading.Lock(), [], False
         threading.Thread(target=self._read, daemon=True).start()
         threading.Thread(target=self._read_err, daemon=True).start()
@@ -272,8 +271,7 @@ class _MCPStdio(_MCPServer):
 
     def _stopped(self):
         tail = " ".join(x for x in self._err[-5:] if x)
-        return RunError(f"The {self.describe()} stopped" + (f": {_short(tail, 300)}" if tail else ".") +
-                        f" Check {mcp_env_name(self.name)} {WHERE_KEYS}.")
+        return RunError(tr("The {x} stopped{x2} Check {x3} {where_keys}.", x=self.describe(), x2=f": {_short(tail, 300)}" if tail else ".", x3=mcp_env_name(self.name), where_keys=WHERE_KEYS))
 
     def _request(self, method, params, timeout, legacy=False, schema=None):
         if self._dead:
@@ -322,7 +320,7 @@ class _MCPStdio(_MCPServer):
             r = self._request("server/discover", self._meta({}), MCP_TIMEOUT)
             self.era, self.version = "modern", MCP_MODERN
         except _NoAnswer:
-            raise RunError(f"The {self.describe()} didn't answer.") from None
+            raise RunError(tr("The {x} didn't answer.", x=self.describe())) from None
 
     def close(self):
         p = self.proc
@@ -393,7 +391,7 @@ class _MCPHttp(_MCPServer):
                 body = None
             return e.code, body
         except (urllib.error.URLError, OSError) as e:
-            raise RunError(f"The {self.describe()} couldn't be reached: {getattr(e, 'reason', e)}") from None
+            raise RunError(tr("The {x} couldn't be reached: {x2}", x=self.describe(), x2=getattr(e, 'reason', e))) from None
         with resp:
             if resp.headers.get("Mcp-Session-Id"):
                 self.session = resp.headers["Mcp-Session-Id"]
@@ -405,7 +403,7 @@ class _MCPHttp(_MCPServer):
             try:
                 body = json.loads(resp.read() or b"null")
             except ValueError:
-                raise RunError(f"The {self.describe()} sent a reply that isn't JSON.") from None
+                raise RunError(tr("The {x} sent a reply that isn't JSON.", x=self.describe())) from None
             if isinstance(body, list):  # an early server answering in a batch
                 body = next((m for m in body if isinstance(m, dict) and m.get("id") == msg["id"]), None)
             return resp.status, body
@@ -453,14 +451,14 @@ class _MCPHttp(_MCPServer):
             msg["id"] = self._id()
             status, body = self._post(msg, self._headers(method, params, schema, legacy), timeout)
         if status in (401, 403):
-            raise RunError(f"The {self.describe()} refused the request ({status}). Check {mcp_env_name(self.name)}_TOKEN {WHERE_KEYS}.")
+            raise RunError(tr("The {x} refused the request ({status}). Check {x2}_TOKEN {where_keys}.", x=self.describe(), status=status, x2=mcp_env_name(self.name), where_keys=WHERE_KEYS))
         err = body.get("error") if isinstance(body, dict) else None
         if isinstance(err, dict):
             raise _RPCError(err.get("code"), to_str(err.get("message")) or "error", err.get("data"))
         if status >= 400:
             raise _RPCError(None, f"HTTP {status}", status)
         if not isinstance(body, dict) or "result" not in body:
-            raise RunError(f"The {self.describe()} didn't reply to {method}.")
+            raise RunError(tr("The {x} didn't reply to {method}.", x=self.describe(), method=method))
         return body.get("result") or {}
 
     def _notify(self, method, params=None):
@@ -482,20 +480,18 @@ class _MCPHttp(_MCPServer):
             self._initialize()
         except _RPCError as e:
             if e.data in (404, 405):
-                raise RunError(f"The {self.describe()} looks like it uses MCP's old HTTP+SSE way of connecting, "
-                               "which Second Thought doesn't speak. Check the address, or use a newer server.") from None
-            raise RunError(f"The {self.describe()} wouldn't start talking: {e.message}") from None
+                raise RunError(tr("The {x} looks like it uses MCP's old HTTP+SSE way of connecting, which Second Thought doesn't speak. Check the address, or use a newer server.", x=self.describe())) from None
+            raise RunError(tr("The {x} wouldn't start talking: {message}", x=self.describe(), message=e.message)) from None
 
 
 def mcp_server(name):
     """A server from its MCP_<NAME> setting: a command (started here) or an http(s) address."""
     key = mcp_env_name(name)
     if key == "MCP_":
-        raise RunError("An MCP tool block needs the server's name.")
+        raise RunError(tr("An MCP tool block needs the server's name."))
     where = os.environ.get(key, "").strip()
     if not where:
-        raise RunError(f"The agent's MCP server “{to_str(name).strip()}” isn't set up. Put {key} = <the command that starts it, "
-                       f"or its https:// address> {WHERE_KEYS}.")
+        raise RunError(tr("The agent's MCP server “{x}” isn't set up. Put {key} = <the command that starts it, or its https:// address> {where_keys}.", x=to_str(name).strip(), key=key, where_keys=WHERE_KEYS))
     if re.match(r"^https?://", where, re.I):
         return _MCPHttp(to_str(name).strip(), where, os.environ.get(key + "_TOKEN", "").strip())
     return _MCPStdio(to_str(name).strip(), where)
@@ -517,11 +513,11 @@ class MCPTools:
         try:
             tools = await asyncio.to_thread(server.list_tools)
         except _RPCError as e:
-            raise RunError(f"The {server.describe()} wouldn't list its tools: {e.message}") from None
+            raise RunError(tr("The {x} wouldn't list its tools: {message}", x=server.describe(), message=e.message)) from None
         except _NoAnswer:
-            raise RunError(f"The {server.describe()} didn't answer when asked for its tools.") from None
-        self.log(f"MCP server “{server.name}”", f"{len(tools)} tool{'s' if len(tools) != 1 else ''}: " +
-                 _short(", ".join(t["name"] for t in tools), 300) + f"  ·  MCP {server.version}", "connected", calls=False)
+            raise RunError(tr("The {x} didn't answer when asked for its tools.", x=server.describe())) from None
+        self.log(tr("MCP server “{name}”", name=server.name), tr("{x}  ·  MCP {version}", x=tr("1 tool: {names}", names=_short(", ".join(t["name"] for t in tools), 300)) if len(tools) == 1 else
+                  tr("{n} tools: {names}", n=len(tools), names=_short(", ".join(t["name"] for t in tools), 300)), version=server.version), tr("connected"), calls=False)
         return tools
 
     async def mcp_call(self, name, tool, args):

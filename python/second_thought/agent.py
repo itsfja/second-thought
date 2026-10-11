@@ -9,6 +9,7 @@ import re
 from .core import (BadJSON, Finish, HA_SENSITIVE, RunError, SCHEMAS, _num_like, _short, calc_text, current_time_text,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
+from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
 
@@ -131,10 +132,9 @@ class AgentTools:
             name, kind = name.strip(), (kind.strip().lower() or "text")
             kind = {"string": "text", "yes or no": "yes/no", "boolean": "yes/no", "bool": "yes/no", "integer": "number"}.get(kind, kind)
             if name.lower() not in by_lower:
-                raise RunError(f"The tool block for “{block_name}” gives a type for “{name}”, but that My Block's inputs are: "
-                               f"{', '.join(params) or 'none'}.")
+                raise RunError(tr("The tool block for “{block_name}” gives a type for “{name}”, but that My Block's inputs are: {x}.", block_name=block_name, name=name, x=', '.join(params) or tr('none')))
             if kind not in cls.INPUT_TYPES:
-                raise RunError(f"“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).")
+                raise RunError(tr("“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).", kind=kind, name=name))
             out[by_lower[name.lower()]] = (kind, desc.strip())
         return out
 
@@ -255,7 +255,7 @@ class AgentTools:
         new = [_short(to_str(x).strip(), 120) for x in new if to_str(x).strip()][:self.MAX_PLAN]
         if not new or new == plan:
             return plan
-        self.log("Agent plan" if not plan else "Agent: plan changed", "\n".join(f"{k}. {x}" for k, x in enumerate(new, 1)), "planned", calls=False)
+        self.log(tr("Agent plan") if not plan else tr("Agent: plan changed"), "\n".join(f"{k}. {x}" for k, x in enumerate(new, 1)), tr("planned"), calls=False)
         return new
 
     async def _agent_run_tool(self, kind, spec, inp):
@@ -265,19 +265,19 @@ class AgentTools:
             return ("Error: " + text) if failed else text
         if kind == "block":
             if spec.get("fn") is None:
-                raise RunError(f"There's no My Block called “{spec['name']}”.")
+                raise RunError(tr("There's no My Block called “{name}”.", name=spec['name']))
             return await spec["fn"](*[inp.get(p_, "") for p_ in spec.get("params", [])])
         if kind == "search_web":
             if not a("query"):
-                raise RunError("search_web needs a query.")
+                raise RunError(tr("search_web needs a query."))
             return await self.web_search(a("query"))
         if kind == "ask_me":
             if not a("question"):
-                raise RunError("ask_me needs a question.")
+                raise RunError(tr("ask_me needs a question."))
             return await self.ask_me(a("question"))
         if kind == "remember":
             if not a("name"):
-                raise RunError("remember needs a name.")
+                raise RunError(tr("remember needs a name."))
             self.remember(inp.get("value", ""), a("name"), "permanent")
             return f"Saved “{a('name')}”."
         if kind == "recall":
@@ -301,7 +301,7 @@ class AgentTools:
             return "\n".join(f"{r['time']}: {to_str(r['state'])}" for r in rows) or f"No history for “{a('entity')}”."
         if kind == "read_page":
             out = await asyncio.to_thread(fetch_page, a("url"))
-            self.log("Read page: " + _short(a("url"), 60), _short(out, 400), "done")
+            self.log(tr("Read page: {x}", x=_short(a("url"), 60)), _short(out, 400), tr("done"))
             return out
         if kind == "calculate":
             return calc_text(a("expression"))
@@ -311,29 +311,29 @@ class AgentTools:
             return time_plus_text(a("time"), inp.get("minutes", 0))
         if kind == "read_file":
             if a("why"):
-                print(f"\n(The agent wants a file: {a('why')})", flush=True)
+                print(tr("\n(The agent wants a file: {x})", x=a('why')), flush=True)
             text = await self.choose_file()
             cut = len(text) > self.MAX_FILE_CHARS
             return text[:self.MAX_FILE_CHARS] + (f"\n\n… (the file goes on: this is the first {self.MAX_FILE_CHARS:,} of {len(text):,} characters)" if cut else "")
         if kind == "review_text":
             if not a("text"):
-                raise RunError("review_text needs some text to check.")
+                raise RunError(tr("review_text needs some text to check."))
             if not a("criteria"):
-                raise RunError("review_text needs criteria to check against.")
+                raise RunError(tr("review_text needs criteria to check against."))
             v = await self._call("You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + a("criteria") +
                                  "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
                                  "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
             problems = [to_str(x) for x in (v.get("problems") or []) if to_str(x).strip()]
             out = "Passes every criterion." if v["approved"] is True else "Doesn't pass yet. Problems:\n" + "\n".join(
                 "- " + x for x in (problems or ["It doesn't yet meet the criteria."]))
-            self.log("Check: " + _short(a("criteria"), 55), out, "passes" if v["approved"] is True else "needs work")
+            self.log(tr("Check: {x}", x=_short(a("criteria"), 55)), out, tr("passes") if v["approved"] is True else tr("needs work"))
             return out
         approved = getattr(self, "_agent_approved", False)
         if kind == "read_feed":
             return self.feed_text(await self.feed_items(a("url"), inp.get("limit", 10)))
         if kind == "search_linkedin":
             if not a("query"):
-                raise RunError("search_linkedin needs a query.")
+                raise RunError(tr("search_linkedin needs a query."))
             return await self.web_search("site:linkedin.com " + a("query"))
         if kind == "my_pull_requests":
             return await self.gh_for_me()
@@ -388,7 +388,7 @@ class AgentTools:
             return "Published." if done else "Not published: the person said no, or nobody was there to ask."
         if kind == "free_time":
             return await self.free_time(a("day") or "today", a("from") or "09:00", a("to") or "17:30", inp.get("minutes", 60))
-        raise RunError(f"Unknown tool “{kind}”.")
+        raise RunError(tr("Unknown tool “{kind}”.", kind=kind))
 
     async def agent(self, goal, steps, tools, plan=False):
         """Runs the agent, then sums up what it did, one line per step (also when the run stops part-way)."""
@@ -397,7 +397,7 @@ class AgentTools:
             await self._agent_loop(goal, steps, tools, plan)
         finally:
             if self.agent_trace:
-                self.log("Agent summary", self.agent_summary(), f"{len(self.agent_trace)} step{'s' if len(self.agent_trace) != 1 else ''}", calls=False)
+                self.log(tr("Agent summary"), self.agent_summary(), tr("1 step") if len(self.agent_trace) == 1 else tr("{n} steps", n=len(self.agent_trace)), calls=False)
 
     def agent_summary(self):
         lines = []
@@ -410,7 +410,7 @@ class AgentTools:
     async def _agent_loop(self, goal, steps, tools, plan=False):
         goal = to_str(goal).strip()
         if not goal:
-            raise RunError("The agent block needs a goal.")
+            raise RunError(tr("The agent block needs a goal."))
         n = max(1, min(self.MAX_AGENT_STEPS, round_js(num(steps)) or 1))
         mcp = {}
         for t in tools:  # each MCP server's tools, asked for once, before the first step
@@ -418,7 +418,7 @@ class AgentTools:
             if t.get("kind") == "mcp" and server not in mcp:
                 mcp[server] = await self.mcp_tools(server)
         catalogue = self._agent_tools(tools, mcp)
-        self.log("Agent", f"Goal: {goal}\nTools: {', '.join(catalogue) or 'none'} · up to {n} steps" + (" · plans first" if plan else ""), "started")
+        self.log(tr("Agent"), tr("Goal: {goal}", goal=goal) + "\n" + tr("Tools: {tools}", tools=", ".join(catalogue) or tr("none")) + " · " + tr("up to {n} steps", n=n) + (" · " + tr("plans first") if plan else ""), tr("started"))
         history, last, prev, same = [], "", None, 0
         plan = [] if plan else None
         self.agent_trace = []
@@ -434,7 +434,7 @@ class AgentTools:
             if not isinstance(r, dict):
                 # An unreadable reply costs a step, not the run: tell the model and carry on.
                 history.append(f"Step {i}: your reply wasn't readable JSON. Reply with only one JSON object, exactly as described.")
-                self.log(label, "The reply wasn't readable JSON, so this step was wasted.", "unreadable", calls=mine)
+                self.log(label, tr("The reply wasn't readable JSON, so this step was wasted."), tr("unreadable"), calls=mine)
                 rec(i, "unreadable")
                 continue
             if plan is not None and not r.get("done"):
@@ -443,11 +443,11 @@ class AgentTools:
                 answer = to_str(r.get("answer", "")).strip()
                 if answer or i == n:
                     self.set_draft(answer)
-                    self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer or "(no answer)", "done", calls=mine)
+                    self.log(tr("Agent: finished in {n} step", n=i) if i == 1 else tr("Agent: finished in {n} steps", n=i), answer or tr("(no answer)"), tr("done"), calls=mine)
                     rec(i, "answer", result=answer)
                     return
                 history.append(f"Step {i}: you said you were done but gave an empty answer. Give your complete final answer.")
-                self.log(label, "It said it was done, but its answer was empty.", "empty answer", calls=mine)
+                self.log(label, tr("It said it was done, but its answer was empty."), tr("empty answer"), calls=mine)
                 rec(i, "empty answer")
                 continue
             name = to_str(r.get("tool", "")).strip()
@@ -457,7 +457,7 @@ class AgentTools:
                 note = ("It replied with a tool on its last step, so it stopped there." if i == n else
                         f"It replied with “{name or 'nothing usable'}”, which isn't one of its tools.")
                 history.append(f"Step {i}: your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.")
-                self.log(label, note, "not a tool", calls=mine)
+                self.log(label, note, tr("not a tool"), calls=mine)
                 rec(i, "not a tool", name)
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
@@ -467,7 +467,7 @@ class AgentTools:
                 # Checked before running: a tool never gets input it can't use.
                 history.append(f"Step {i}: you asked for {name} with {shown}, but {problem}, so it didn't run. "
                                "Give exactly the inputs its schema lists.")
-                self.log(f"{label}: {name}", f"Input: {shown}\n\nIt didn't run: {problem}.", "bad input", calls=mine)
+                self.log(f"{label}: {name}", tr("Input: {shown}\n\nIt didn't run: {problem}.", shown=shown, problem=problem), tr("bad input"), calls=mine)
                 rec(i, "bad input", name, shown, problem)
                 prev, same = None, 0
                 continue
@@ -477,13 +477,13 @@ class AgentTools:
             same = same + 1 if sig == prev else 1
             prev = sig
             if same >= 3:
-                self.log("Agent: stopped, repeating itself", f"It asked for {name} with the same input three times in a row. The draft holds its last result.", "stopped", calls=mine)
+                self.log(tr("Agent: stopped, repeating itself"), tr("It asked for {name} with the same input three times in a row. The draft holds its last result.", name=name), tr("stopped"), calls=mine)
                 rec(i, "stopped", name, shown)
                 break
             if same == 2:
                 history.append(f"Step {i}: you asked for {name} with exactly the same input as the step before, so it didn't run again. "
                                "Its result is above. Do something different, or give your final answer.")
-                self.log(f"{label}: {name}", f"Input: {shown}\n\nThe same call as the step before, so it didn't run again.", "repeat", calls=mine)
+                self.log(f"{label}: {name}", tr("Input: {shown}\n\nThe same call as the step before, so it didn't run again.", shown=shown), tr("repeat"), calls=mine)
                 rec(i, "repeat", name, shown)
                 continue
             if ask and kind == "call_service" and any(re.match(p_, to_str(inp.get("service", "")).strip()) for p_ in HA_SENSITIVE):
@@ -503,10 +503,10 @@ class AgentTools:
             last = text
             history.append(f"Step {i}: you used {name} with {shown}.\nResult: {_short(text, 1500)}")
             status = "refused" if refused else "tool error" if text.startswith("Error: ") else "done"
-            self.log(f"{label}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", status, calls=mine)
+            self.log(f"{label}: {name}", (tr("Why: {why}", why=why) + "\n" if why else "") + tr("Input: {shown}\n\nResult:\n{text}", shown=shown, text=_short(text, 600)), status, calls=mine)
             rec(i, status, name, shown, text)
         else:
-            self.log("Agent: out of steps", f"It used all {n} steps without a final answer. The draft holds its last result.", "best effort")
+            self.log(tr("Agent: out of steps"), tr("It used all {n} steps without a final answer. The draft holds its last result.", n=n), tr("best effort"))
         self.out_of_rounds_hit = True
         self.set_draft(last or "The agent stopped before it had a result.")
 

@@ -2381,11 +2381,13 @@ UNTRANSLATED = {"rb_use_model.TIER", "rb_with_model.TIER"}  # model names stay a
 
 
 def same_export(files):
-    """An export's files with what differs between any two exports taken out: the date, the blocks' random ids, and the
-    note an example opens with (a comment on its first block, written in the page's language)."""
+    """An export's files with what differs between any two exports taken out: the date, the blocks' random ids, the
+    note an example opens with (a comment on its first block, written in the page's language), and the words the
+    program prints in that language (EXPORT_LANGUAGE and EXPORT_WORDS, and the language line in its settings)."""
     out = {}
     for k, v in files.items():
-        v = "\n".join(l for l in v.split("\n") if "Exported from Second Thought on" not in l)
+        v = "\n".join(l for l in v.split("\n") if "Exported from Second Thought on" not in l and not l.startswith("; language = en"))
+        v = re.sub(r"# The language this program prints in.*?\n}\n\n", "", v, flags=re.S)
         if PY_MARK in v:
             code, rest = v.split(PY_MARK, 1)
             b64 = "".join(l[2:] for l in rest.split("# BLOCKS:", 1)[1].split("\n") if l.startswith("# "))
@@ -2568,6 +2570,35 @@ async def i18n_tests():
                     check(shown["option"] == E["title"] and shown["card"] == E["title"] and E["desc"] in shown["desc"]
                           and P["Try: {tip}"].replace("{tip}", E["tip"]) in shown["desc"] and shown["note"].startswith(E["title"]) and E["tip"] in shown["note"],
                           f"with {code} chosen, the examples' titles, descriptions and tips are in {t.get('name', code)} ({shown['option']!r}, {shown['desc'][:80]!r})")
+                if "python" in t:
+                    W = t["python"]
+                    await pg.select_option("#example", "review")
+                    await pg.click("#load")
+                    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+                    en_files = {f["name"]: f["text"] for f in await en.evaluate("window.__exportFiles()")}
+                    prog = next(n for n in files if n.endswith(".py"))
+                    check(f'EXPORT_LANGUAGE = "{code}"' in files[prog] and "EXPORT_WORDS = {" in files[prog] and "language = en" in files["second-thought.ini"]
+                          and "EXPORT_WORDS = {" not in next(v for k, v in en_files.items() if k.endswith(".py")),
+                          f"a program exported with the page in {code} carries its words (and one exported in English doesn't)"
+)
+                    with tempfile.TemporaryDirectory() as tmp:
+                        for n, text in files.items():
+                            pathlib.Path(tmp, n).write_text(text, encoding="utf-8")
+                        env = {k: v for k, v in os.environ.items() if not k.endswith(("_API_KEY", "_TOKEN")) and not k.startswith("RB_")}
+                        # UTF-8 out, as the other runs of exported programs here: a Windows pipe's own code page can't always show every letter.
+                        env.update(RB_APPROVE="no", SECOND_THOUGHT_INI=str(pathlib.Path(tmp, "second-thought.ini")), PYTHONIOENCODING="utf-8")
+                        outs = {}
+                        for lang_, args in (("", []), ("en", []), ("", ["--doctor"])):
+                            r = subprocess.run([sys.executable, prog] + args, cwd=tmp, env=dict(env, **({"RB_LANGUAGE": lang_} if lang_ else {})),
+                                               capture_output=True, encoding="utf-8", errors="replace", stdin=subprocess.DEVNULL, timeout=120)
+                            outs[(lang_, tuple(args))] = r.stdout
+                    said, english, doctor = outs[("", ())], outs[("en", ())], outs[("", ("--doctor",))]
+                    check(W["Task set"] in said and W["\n✖ Run stopped: {msg}"].split("{msg}")[0].strip() in said
+                          and W["Claude needs a key. Put ANTHROPIC_API_KEY = your-key {where_keys} (https://console.anthropic.com)."].split("{where_keys}")[0] in said,
+                          f"the exported program prints its run log and errors in {t.get('name', code)} ({said.strip()[-160:]!r})")
+                    check("Task set" in english and "Run stopped: Claude needs a key" in english, f"language = en switches it back to English ({english.strip()[-120:]!r})")
+                    check(W["Only reading: nothing is sent, posted, switched or charged.\n"].strip() in doctor and "  FAIL  " in doctor,
+                          f"--doctor speaks {t.get('name', code)} too, keeping ok, FAIL and NOTE as they are ({doctor.strip()[:120]!r})")
                 done_word = P["done in {time}"].split("{time}")[0]
                 await pg.select_option("#example", "review")
                 await pg.click("#load")

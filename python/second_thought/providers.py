@@ -16,6 +16,7 @@ import urllib.request
 from .settings import WHERE_KEYS
 from .core import (BadJSON, CALL_TIMEOUT, CONTINUE_PROMPT, Finish, MAX_AI_CALLS, MAX_TOKENS, Reply, Retryable,
     RunError, WEB_SEARCH_TOOL, _fit, _parse_json, _shape_problem, _short, to_str)
+from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
 
@@ -24,7 +25,7 @@ def _anthropic_client(**kw):
     try:
         from anthropic import AsyncAnthropic
     except ImportError:
-        raise RunError("Claude needs the Anthropic SDK. Install it with:  pip install anthropic") from None
+        raise RunError(tr("Claude needs the Anthropic SDK. Install it with:  pip install anthropic")) from None
     return AsyncAnthropic(**kw)
 
 # ----- The model services -----
@@ -206,17 +207,16 @@ class ModelCalls:
             raise asyncio.CancelledError()
         self.calls += 1
         if self.calls > MAX_AI_CALLS:
-            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+            raise RunError(tr("Stopped after {max_ai_calls} model calls in one run, to protect your usage.", max_ai_calls=MAX_AI_CALLS))
         if self.budget and self.tokens_used() >= self.budget:
-            raise RunError(f"Stopped: this run has used {self.tokens_used():,} tokens, which reaches its budget of {self.budget:,}. "
-                           "Raise the number in the 'limit this run' block (or budget in second-thought.ini).")
+            raise RunError(tr("Stopped: this run has used {x} tokens, which reaches its budget of {x2}. Raise the number in the 'limit this run' block (or budget in second-thought.ini).", x=format(self.tokens_used(), ','), x2=format(self.budget, ',')))
         tier = self.current_tier
         # Backups stand in for the primary model only. A block that names its own model keeps that model.
         tiers = [tier] + (self.backups if tier == self.primary else [])
         last = None
         for n, t in enumerate(tiers):
             if n:
-                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn", calls=False)
+                self.log(tr("Backup"), tr("{x} failed: {x2}\nTrying {x3} instead.", x=model_label(tiers[n - 1]), x2=str(last)[:160], x3=model_label(t)), tr("warn"), calls=False)
             try:
                 text = await self._timed_call(t, prompt, want_json, picture, history, web)
             except (asyncio.CancelledError, Finish):
@@ -235,10 +235,10 @@ class ModelCalls:
                 return self._read_json(text, schema)
             except BadJSON as e:
                 # One more try on the same model, showing it what went wrong. Counts as a call like any other.
-                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair", calls=False)
+                self.log(tr("Unreadable reply"), tr("{e}\nAsking once more for a corrected reply.", e=e), tr("repair"), calls=False)
                 self.calls += 1
                 if self.calls > MAX_AI_CALLS:
-                    raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+                    raise RunError(tr("Stopped after {max_ai_calls} model calls in one run, to protect your usage.", max_ai_calls=MAX_AI_CALLS))
                 fix = await self._timed_call(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
                                             "\nPrevious reply:\n" + _short(text, 2000) +
                                             "\n\nReply again with only the corrected JSON.", want_json, picture, history, web)
@@ -251,18 +251,17 @@ class ModelCalls:
 
     async def _continue(self, tier, prompt, text, history, web):
         """A reply cut off by the length limit: ask once for the rest, on the same model, and join the two parts."""
-        self.log("Reply continued", "The reply reached the length limit, so the model was asked to carry on from where it stopped.",
-                 "continued", calls=False)
+        self.log(tr("Reply continued"), tr("The reply reached the length limit, so the model was asked to carry on from where it stopped."),
+                 tr("continued"), calls=False)
         self.calls += 1
         if self.calls > MAX_AI_CALLS:
-            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+            raise RunError(tr("Stopped after {max_ai_calls} model calls in one run, to protect your usage.", max_ai_calls=MAX_AI_CALLS))
         turns = (history or []) + [{"role": "user", "content": to_str(prompt)}, {"role": "assistant", "content": to_str(text)}]
         more = await self._timed_call(tier, CONTINUE_PROMPT, False, None, turns, web)
         joined = to_str(text) + to_str(more)  # the continuation picks up exactly where the first part stopped
         if getattr(more, "truncated", False):
             self.out_of_rounds_hit = True
-            self.log("Cut short", "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. "
-                     "Ask for something shorter, or split the job into smaller steps.", "warn", calls=False)
+            self.log(tr("Cut short"), tr("Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. Ask for something shorter, or split the job into smaller steps."), tr("warn"), calls=False)
         return joined
 
     @staticmethod
@@ -273,7 +272,7 @@ class ModelCalls:
             v = _fit(v, schema)
             bad = _shape_problem(v, schema)
             if bad:
-                raise BadJSON(f"The reply didn't have the expected shape: {bad}.")
+                raise BadJSON(tr("The reply didn't have the expected shape: {bad}.", bad=bad))
         return v
 
     async def _call_tier(self, tier, prompt, want_json, picture, history, web):
@@ -298,13 +297,13 @@ class ModelCalls:
             text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web, schema)
             who = "Claude"
         if not text:
-            raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
+            raise Retryable(tr("{who} returned nothing for this step. Simplify it and try again.", who=who))
         return text
 
     async def _call_claude(self, model, prompt, picture, history, web, schema=None):
         if self.client is None:
             if not os.environ.get("ANTHROPIC_API_KEY"):
-                raise RunError(f"Claude needs a key. Put ANTHROPIC_API_KEY = your-key {WHERE_KEYS} (https://console.anthropic.com).")
+                raise RunError(tr("Claude needs a key. Put ANTHROPIC_API_KEY = your-key {where_keys} (https://console.anthropic.com).", where_keys=WHERE_KEYS))
             self.client = _anthropic_client(timeout=CALL_TIMEOUT, max_retries=2)
         args = dict(model=model, max_tokens=MAX_TOKENS,
                     messages=(history or []) + [{"role": "user", "content": self._content(prompt, picture)}])
@@ -322,8 +321,7 @@ class ModelCalls:
                 raise
             # This model or account won't take the shape: ask without it (the reply is still checked), and stop sending it.
             self.no_schema.add(model)
-            self.log("Structured replies", f"{model} wouldn't accept a reply shape ({_short(str(e), 160)}), so its replies "
-                     "are checked after they arrive instead.", "note")
+            self.log(tr("Structured replies"), tr("{model} wouldn't accept a reply shape ({e}), so its replies are checked after they arrive instead.", model=model, e=_short(str(e), 160)), tr("note"))
             del args["output_config"]
             msg = await self.client.messages.create(**args)
         usage = getattr(msg, "usage", None)
@@ -377,16 +375,17 @@ class ModelCalls:
                     raise
                 mode = self.JSON_MODES[self.JSON_MODES.index(mode) + 1]
                 self.json_modes[(provider, model)] = mode
-                self.log("Structured replies", f"{provider} ({model}) wouldn't take that JSON mode, so it's asked "
-                         + ("for plain JSON instead." if mode == "object" else "without one, and its replies are checked after they arrive."),
-                         "note", calls=False)
+                self.log(tr("Structured replies"), tr("{provider} ({model}) wouldn't take that JSON mode, so it's asked for plain JSON instead." if mode == "object" else
+                            "{provider} ({model}) wouldn't take that JSON mode, so it's asked without one, and its replies are checked after they arrive.",
+                            provider=provider, model=model),
+                         tr("note"), calls=False)
 
     @staticmethod
     def _openai_request(provider, body, path="/chat/completions"):
         """One request to a model service that speaks OpenAI's format (Ollama, DeepSeek, xAI, OpenAI, Mistral, ...)."""
         pv = PROVIDERS[provider]
         if pv["signup"] and not pv["key"]:
-            raise RunError(f"This program uses {provider}. Put {pv['key_env']} = your-key {WHERE_KEYS} ({pv['signup']}).")
+            raise RunError(tr("This program uses {provider}. Put {key_env} = your-key {where_keys} ({signup}).", provider=provider, key_env=pv['key_env'], where_keys=WHERE_KEYS, signup=pv['signup']))
         headers = {"Content-Type": "application/json", **pv["headers"]}
         if pv["key"]:
             headers["Authorization"] = "Bearer " + pv["key"]
@@ -397,17 +396,17 @@ class ModelCalls:
         except urllib.error.HTTPError as e:
             detail = e.read().decode("utf-8", "replace")[:200]
             if provider == "Llama" and e.code == 404 and "model" in detail.lower():
-                raise RunError(f"The Llama server doesn't have model {body['model']}. Run:  ollama pull {body['model']}")
+                raise RunError(tr("The Llama server doesn't have model {model}. Run:  ollama pull {model}", model=body['model']))
             if e.code == 401:
-                raise RunError(f"{provider} refused the API key (401). Check {pv['key_env']}.")
+                raise RunError(tr("{provider} refused the API key (401). Check {key_env}.", provider=provider, key_env=pv['key_env']))
             if e.code == 402:
-                raise RunError(f"{provider} says the account has no credit left (402).")
+                raise RunError(tr("{provider} says the account has no credit left (402).", provider=provider))
             if e.code in (400, 403, 404, 422):
-                raise RunError(f"{provider} refused the request ({e.code}): {detail}")
-            raise Retryable(f"{provider} answered {e.code}: {detail}")
+                raise RunError(tr("{provider} refused the request ({code}): {detail}", provider=provider, code=e.code, detail=detail))
+            raise Retryable(tr("{provider} answered {code}: {detail}", provider=provider, code=e.code, detail=detail))
         except (urllib.error.URLError, TimeoutError, OSError) as e:
             hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
-            raise Retryable(f"Couldn't reach {provider} at {pv['base']} ({getattr(e, 'reason', e)}).{hint}")
+            raise Retryable(tr("Couldn't reach {provider} at {base} ({x}).{hint}", provider=provider, base=pv['base'], x=getattr(e, 'reason', e), hint=hint))
 
     JSON_MODES = ("schema", "object", "none")
 
@@ -418,7 +417,7 @@ class ModelCalls:
             prompt = "You can't browse the web, so answer from what you know and say clearly that it may be out of date.\n\n" + prompt
         if picture is not None and picture.svg is None:
             if model in NO_VISION:
-                raise RunError(f"{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.")
+                raise RunError(tr("{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.", model=model))
             if provider in VISION_MODELS and model != VISION_MODELS[provider]:
                 model = VISION_MODELS[provider]  # this service's text models can't see; this one can
             url = "data:" + picture.media_type + ";base64," + base64.b64encode(picture.data).decode("ascii")
@@ -447,7 +446,7 @@ class ModelCalls:
     async def _call_perplexity(self, preset, prompt, picture, history):
         """Perplexity's Agent API: searches the web, then answers with numbered sources."""
         if picture is not None and picture.svg is None:
-            raise RunError("Perplexity can't look at photos here. Use Claude, GPT or Gemini for this step.")
+            raise RunError(tr("Perplexity can't look at photos here. Use Claude, GPT or Gemini for this step."))
         if picture is not None:
             prompt += "\n\nThe picture is this SVG drawing:\n" + picture.svg
         if history:
@@ -475,10 +474,10 @@ class ModelCalls:
             from google import genai
             from google.genai import types
         except ImportError:
-            raise RunError("This program uses Gemini. Install its package first:  pip install google-genai")
+            raise RunError(tr("This program uses Gemini. Install its package first:  pip install google-genai"))
         if self.gemini is None:
             if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
-                raise RunError(f"Gemini needs a key. Put GEMINI_API_KEY = your-key {WHERE_KEYS} (https://aistudio.google.com).")
+                raise RunError(tr("Gemini needs a key. Put GEMINI_API_KEY = your-key {where_keys} (https://aistudio.google.com).", where_keys=WHERE_KEYS))
             self.gemini = genai.Client()
         contents = []
         for turn in history or []:
@@ -503,8 +502,8 @@ class ModelCalls:
             if not json_out or (getattr(e, "code", None) or getattr(e, "status_code", None)) not in (400, 422):
                 raise
             self.json_modes[("Gemini", model)] = "none"
-            self.log("Structured replies", f"Gemini ({model}) wouldn't take JSON mode, so its replies are checked after they arrive.",
-                     "note", calls=False)
+            self.log(tr("Structured replies"), tr("Gemini ({model}) wouldn't take JSON mode, so its replies are checked after they arrive.", model=model),
+                     tr("note"), calls=False)
             config.response_mime_type = None
             resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
         um = getattr(resp, "usage_metadata", None)
