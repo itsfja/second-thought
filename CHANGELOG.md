@@ -20,6 +20,7 @@ that the two agree.
 
 ### Added
 - Exported programs print in German when exported from the page in German (#74).
+- Exported programs print in Dutch when exported from the page in Dutch (#75).
 
 ## 2.2.0 - 2026-10-11
 

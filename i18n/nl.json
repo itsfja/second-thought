@@ -1,0 +1,2716 @@
+{
+ "name": "Nederlands",
+ "blockly": "nl",
+ "note": "Dutch words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Dutch names (Uitvoeren, Doorgaan, Programma’s).",
+ "blocks": {
+  "rb_add_result": {
+   "message0": "%1 aan het resultaat toevoegen"
+  },
+  "rb_agent": {
+   "message0": "agent: werk toe naar %1",
+   "message1": "tot %1 stappen, met deze hulpmiddelen:",
+   "message2": "%1",
+   "message3": "eerst een plan maken en het onderweg bijstellen %1",
+   "tooltip": "Claude beslist wat er nu moet gebeuren: bij elke stap kiest hij een van de hulpmiddelen erin, ziet wat er gebeurde en gaat door tot het doel bereikt is of de stappen op zijn. Zijn eindantwoord komt in het concept. Elke stap is één modelaanroep. Met ‘eerst een plan maken’ aangevinkt schrijft hij bij zijn eerste stap een kort plan en houdt dat bij, zonder extra kosten."
+  },
+  "rb_agent_builtin": {
+   "message0": "hulpmiddel: %1",
+   "tooltip": "Een kant-en-klaar hulpmiddel voor de agent. ‘Rekenen’ en ‘tijden en datums’ krijgen getallen en tijden precies goed, in plaats van dat het model gokt. ‘Tekst controleren’ laat een aparte beoordelaar het werk van de agent beoordelen. Op deze pagina gebruiken feeds, GitHub, Telegram, e-mail en de agenda voorbeeldgegevens; geëxporteerde Python gebruikt die van jou (zet de sleutels in second-thought.ini) en leest webpagina’s echt. Versturen, reageren en ‘apparaten bedienen’ vragen het je elke keer eerst, omdat wat de agent leest (een webpagina, een notitie) kan proberen hem te sturen. Kies ‘zonder vragen’ alleen als je alles vertrouwt wat hij leest. Ontgrendelen, openen en uitschakelen van alarmen vragen het altijd."
+  },
+  "rb_agent_mcp": {
+   "message0": "hulpmiddelen van MCP-server %1 %2",
+   "tooltip": "Geeft de agent alle hulpmiddelen die een MCP-server biedt: bestanden, GitHub, databases, agenda’s en nog veel meer, uit het hele MCP-ecosysteem. Stel de server in second-thought.ini in als MCP_<NAAM> = het commando dat hem start (zoals npx -y @modelcontextprotocol/server-filesystem ~/recipes) of zijn https://-adres. Alleen in geëxporteerde Python: op deze pagina werkt de agent zonder deze hulpmiddelen."
+  },
+  "rb_agent_steps": {
+   "message0": "stappen van de agent",
+   "tooltip": "Wat de laatste agent in deze run deed: een lijst records met step, tool, input, result en status (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."
+  },
+  "rb_agent_tool": {
+   "message0": "hulpmiddel: Mijn blok %1",
+   "message1": "wat het doet %1",
+   "message2": "invoertypes %1",
+   "message3": "vraag me vóór elk gebruik %1",
+   "tooltip": "Laat de agent een van je Mijn blokken uitvoeren. De invoer ervan wordt de invoer van het hulpmiddel, en wat het teruggeeft is het resultaat dat de agent ziet. Beschrijf het duidelijk: de beschrijving is alles wat de agent ervan weet. Invoertypes, bijvoorbeeld ‘bloem gram: number; water gram: number - gram water’, zeggen wat elke invoer moet zijn: text, number, yes/no, list of any. De invoer van de agent wordt gecontroleerd voordat het blok draait. ‘Vraag me vóór elk gebruik’ staat standaard aan, omdat wat de agent leest (een webpagina, een notitie) kan proberen hem te sturen: zet het uit voor blokken die alleen iets uitrekenen en niets veranderen."
+  },
+  "rb_answer": {
+   "message0": "antwoord"
+  },
+  "rb_approve": {
+   "message0": "ik keur %1 goed",
+   "tooltip": "Toont de tekst en wacht tot je hem goedkeurt of terugstuurt."
+  },
+  "rb_ask": {
+   "message0": "vraag Claude %1",
+   "tooltip": "Claude antwoordt met tekst."
+  },
+  "rb_ask_first": {
+   "message0": "vraag me eerst bij %1",
+   "tooltip": "Vanaf hier laat het programma zien wat het gaat doen en wacht tot je het toestaat. Zeg je nee, dan slaat het die stap over en gaat door. Geëxporteerde Python vraagt het in de terminal; een geplande run zonder iemand erbij slaat het over."
+  },
+  "rb_ask_list": {
+   "message0": "vraag Claude om een lijst: %1",
+   "tooltip": "Claude antwoordt met een lijst die je kunt doorlopen."
+  },
+  "rb_ask_me": {
+   "message0": "vraag me %1 en wacht",
+   "tooltip": "Pauzeert de run tot je een antwoord typt in het logboek."
+  },
+  "rb_ask_number": {
+   "message0": "vraag Claude om een getal: %1"
+  },
+  "rb_ask_record": {
+   "message0": "vraag Claude om een record met velden %1 : %2",
+   "tooltip": "Velden gescheiden door komma’s, bijvoorbeeld: titel, score, notities."
+  },
+  "rb_ask_records": {
+   "message0": "vraag Claude om een lijst records met velden %1 : %2"
+  },
+  "rb_ask_yesno": {
+   "message0": "Claude zegt ja op %1",
+   "tooltip": "Claude beantwoordt een ja/nee-vraag."
+  },
+  "rb_better": {
+   "message0": "beste van %1 en %2 voor %3"
+  },
+  "rb_broadcast": {
+   "message0": "zend %1 uit",
+   "tooltip": "Start elk ‘wanneer ik ontvang’-script voor dit bericht en gaat dan meteen door."
+  },
+  "rb_broadcast_wait": {
+   "message0": "zend %1 uit en wacht",
+   "tooltip": "Start elk ‘wanneer ik ontvang’-script voor dit bericht en wacht tot ze allemaal klaar zijn."
+  },
+  "rb_broadcast_with": {
+   "message0": "zend %1 uit met %2",
+   "tooltip": "Start elk ‘wanneer ik ontvang’-script voor het bericht. Elk krijgt de waarde als zijn ‘berichtwaarde’."
+  },
+  "rb_broadcast_with_wait": {
+   "message0": "zend %1 uit met %2 en wacht"
+  },
+  "rb_budget": {
+   "message0": "beperk deze run tot %1 tokens",
+   "tooltip": "Controleert vóór elke modelaanroep hoeveel tokens deze run heeft gebruikt. Zodra dit getal bereikt is, stopt de run. 0 betekent geen limiet. Op deze pagina is de telling een schatting; geëxporteerde Python gebruikt de exacte aantallen."
+  },
+  "rb_cal_when": {
+   "message0": "wanneer een afspraak over %1 minuten begint",
+   "tooltip": "Voert de blokken eronder uit, zoveel minuten vóór elke afspraak in je agenda (afspraken van een hele dag tellen niet). ‘Wat er binnenkwam’ geeft title, start, end, location, minutes en text."
+  },
+  "rb_calendar": {
+   "message0": "agenda voor de komende %1 dagen",
+   "tooltip": "De afspraken in je agenda vanaf vandaag, als records: day, start, end, title, location. Geëxporteerde Python leest CALENDAR_URL (het privé-iCal-adres van je agenda); deze pagina gebruikt een voorbeeldagenda."
+  },
+  "rb_chat": {
+   "message0": "chat %1 : %2",
+   "tooltip": "Stuurt een bericht in een gesprek met een naam. Claude ziet de eerdere beurten van dat gesprek."
+  },
+  "rb_chat_reset": {
+   "message0": "gesprek %1 opnieuw beginnen"
+  },
+  "rb_checkpoint_restore": {
+   "message0": "terug naar controlepunt %1",
+   "tooltip": "Zet de taak, het concept, de beoordeling, het resultaat en de variabelen terug zoals ze waren bij ‘controlepunt opslaan’. Geheugen, bestanden en al verstuurde berichten worden niet teruggedraaid."
+  },
+  "rb_checkpoint_save": {
+   "message0": "controlepunt %1 opslaan",
+   "tooltip": "Onthoudt de taak, het concept, de beoordeling, het resultaat en de variabelen zoals ze nu zijn, onder deze naam, voor de rest van de run."
+  },
+  "rb_choose": {
+   "message0": "laat me kiezen uit %1"
+  },
+  "rb_clear_instructions": {
+   "message0": "instructies voor Claude wissen"
+  },
+  "rb_contains": {
+   "message0": "%1 bevat %2",
+   "tooltip": "Waar als de eerste tekst de tweede bevat (hoofdletters maken niet uit)."
+  },
+  "rb_discord_send": {
+   "message0": "Discord-bericht %1 versturen",
+   "tooltip": "Plaatst in Discord: terug in het kanaal waar een bericht vandaan kwam, of in het eerste kanaal in DISCORD_CHANNEL_ID. ‘Vraag me eerst bij het versturen van berichten’ laat het eerst vragen. Op deze pagina wordt het alleen getoond."
+  },
+  "rb_discord_when": {
+   "message0": "wanneer een Discord-bericht binnenkomt met %1",
+   "tooltip": "Voert de blokken eronder uit wanneer iemand iets plaatst in een van je Discord-kanalen (typ ‘anything’, of woorden die het bericht moet bevatten). Alleen de kanalen in DISCORD_CHANNEL_ID tellen, en de eigen berichten van de bot nooit. Elke 10 seconden gecontroleerd. ‘Wat er binnenkwam’ geeft text, sender en channel. Klik er op deze pagina met de rechtermuisknop op en kies ‘Dit script uitvoeren’ om het met een voorbeeldbericht te proberen."
+  },
+  "rb_draft": {
+   "message0": "concept"
+  },
+  "rb_email_send": {
+   "message0": "e-mail versturen aan %1 onderwerp %2 %3",
+   "tooltip": "Verstuurt een e-mail vanaf je adres (EMAIL_ADDRESS en een app-wachtwoord in second-thought.ini). ‘Vraag me eerst bij het versturen van berichten’ laat het eerst vragen. Op deze pagina wordt het alleen getoond."
+  },
+  "rb_email_when": {
+   "message0": "wanneer een e-mail binnenkomt met %1",
+   "tooltip": "Voert de blokken eronder uit wanneer er een nieuwe e-mail in je inbox komt (elke 2 minuten gecontroleerd), als de afzender, het onderwerp of de tekst dit bevat. ‘Wat er binnenkwam’ geeft from, subject, body en text."
+  },
+  "rb_error": {
+   "message0": "de fout",
+   "tooltip": "Wat er misging bij de laatste mislukking."
+  },
+  "rb_event": {
+   "message0": "wat er binnenkwam: %1",
+   "tooltip": "In een ‘wanneer … binnenkomt’-script: één veld van wat er binnenkwam. Elke luisteraar geeft ‘text’, die het samenvat; de tooltip van elk ‘wanneer’-blok noemt de andere velden. Laat het leeg voor het hele record."
+  },
+  "rb_every": {
+   "message0": "elke %1 %2",
+   "tooltip": "Draait steeds opnieuw zolang Planningen aan staat en deze pagina open is. De eerste run komt één interval nadat je Planningen aanzet."
+  },
+  "rb_extract": {
+   "message0": "haal %1 uit %2"
+  },
+  "rb_feed_news": {
+   "message0": "nieuws uit feed %1",
+   "tooltip": "De nieuwste items uit een nieuwsfeed (RSS of Atom), nieuwste eerst, als records: feed, title, link, date, summary. Laat het leeg voor je eigen feeds (feeds = … in second-thought.ini). Op deze pagina worden voorbeeldfeeds gebruikt."
+  },
+  "rb_feed_when": {
+   "message0": "wanneer er iets nieuws is in feed %1",
+   "tooltip": "Voert de blokken eronder uit voor elk nieuw item in een nieuwsfeed (elke 15 minuten gecontroleerd). Laat het leeg voor je eigen feeds. ‘Wat er binnenkwam’ geeft feed, title, link, date, summary en text."
+  },
+  "rb_file_choose": {
+   "message0": "tekst van een bestand dat ik kies",
+   "tooltip": "Pauzeert de run zodat je een pdf, een Word-.docx of een tekstbestand kunt kiezen. Geeft de tekst van het bestand terug."
+  },
+  "rb_file_save": {
+   "message0": "%1 opslaan als bestand %2 . %3",
+   "tooltip": "Biedt de tekst aan als download. De browser vraagt je om te bevestigen."
+  },
+  "rb_finish_with": {
+   "message0": "afronden met %1"
+  },
+  "rb_folder_when": {
+   "message0": "wanneer er een bestand verschijnt in map %1",
+   "tooltip": "Voert de blokken eronder uit wanneer er een nieuw bestand in deze map komt (naast het programma, tenzij je een volledig pad opgeeft). ‘Wat er binnenkwam’ geeft de naam, het pad, de grootte en, bij een pdf, Word- of tekstbestand, de woorden erin."
+  },
+  "rb_generate": {
+   "message0": "een eerste concept schrijven",
+   "tooltip": "Claude schrijft een concept dat de taak uitvoert."
+  },
+  "rb_gh_when": {
+   "message0": "wanneer een pull request om mijn review vraagt",
+   "tooltip": "Voert de blokken eronder uit wanneer iemand je vraagt een GitHub-pull request te reviewen (elke 5 minuten gecontroleerd). ‘Wat er binnenkwam’ geeft repo, number, title, user, link en text."
+  },
+  "rb_ha_attr": {
+   "message0": "%1 van entiteit %2",
+   "tooltip": "Eén attribuut van een entiteit, bijvoorbeeld ‘current_temperature’ of ‘friendly_name’."
+  },
+  "rb_ha_call": {
+   "message0": "%1 aanroepen op %2 met %3",
+   "tooltip": "Roept een dienst aan, bijvoorbeeld light.turn_off. Optionele gegevens zijn JSON zoals {\"temperature\": 20}. Ontgrendelen, openen en alarmen uitschakelen vragen het je altijd eerst."
+  },
+  "rb_ha_event_when": {
+   "message0": "wanneer Home Assistant-gebeurtenis %1 plaatsvindt met %2",
+   "tooltip": "Voert de blokken eronder uit zodra Home Assistant deze gebeurtenis stuurt: een druk op een knop of afstandsbediening (zha_event, deconz_event), een automatisering die afgaat (automation_triggered), een actie uit een telefoonmelding, of je eigen gebeurtenis. Typ ‘anything’ voor elke gebeurtenis. Het tweede vak is optioneel: woorden die de gegevens van de gebeurtenis moeten bevatten, zoals de naam van de afstandsbediening. ‘Wat er binnenkwam’ geeft event_type, entity, data, time en text, plus elk veld uit de gegevens van de gebeurtenis. Klik er op deze pagina met de rechtermuisknop op en kies ‘Dit script uitvoeren’ om het met een voorbeeldgebeurtenis te proberen."
+  },
+  "rb_ha_find": {
+   "message0": "entiteiten die passen bij %1",
+   "tooltip": "Een lijst records (entity, name, state, unit, area) voor elke entiteit waarvan de id, naam, ruimte of status al deze woorden bevat. ‘*’ betekent alles."
+  },
+  "rb_ha_history": {
+   "message0": "geschiedenis van %1 van de laatste %2 uur",
+   "tooltip": "Een lijst records (time, state) die laat zien hoe de entiteit veranderde."
+  },
+  "rb_ha_notify": {
+   "message0": "melding %1 : %2",
+   "tooltip": "Stuurt een melding. Het doel is een notify-dienst zoals notify.mobile_app_my_phone, of persistent_notification voor de zijbalk van Home Assistant."
+  },
+  "rb_ha_snapshot": {
+   "message0": "momentopname van %1",
+   "tooltip": "Een beeld van een camera-entiteit. Gebruik het met de Afbeeldingen-blokken."
+  },
+  "rb_ha_speak": {
+   "message0": "zeg %1 op %2",
+   "tooltip": "Spreekt de tekst uit op een mediaspeler, met de tekst-naar-spraak van Home Assistant."
+  },
+  "rb_ha_state": {
+   "message0": "status van %1",
+   "tooltip": "De huidige status van de entiteit, bijvoorbeeld ‘on’, ‘locked’ of 19.5."
+  },
+  "rb_ha_summary": {
+   "message0": "metingen voor %1",
+   "tooltip": "Een lijst in platte tekst van passende entiteiten en hun status, klaar om in een vraag aan Claude te zetten."
+  },
+  "rb_ha_trigger": {
+   "message0": "wat er veranderde",
+   "tooltip": "In een ‘wanneer … verandert’-script: een record met entity, name, from en to."
+  },
+  "rb_ha_when": {
+   "message0": "wanneer %1 verandert in %2",
+   "tooltip": "Voert de blokken eronder uit wanneer deze entiteit verandert. Typ ‘anything’ om op elke verandering te reageren. Daarbinnen zegt ‘wat er veranderde’ wat er gebeurde."
+  },
+  "rb_homey_find": {
+   "message0": "Homey-apparaten die passen bij %1",
+   "tooltip": "Een lijst records, één voor elk apparaat waarvan de naam, zone of soort al deze woorden bevat (‘*’ voor elk apparaat): name, zone, class en elk van zijn waarden."
+  },
+  "rb_homey_flow": {
+   "message0": "Homey-flow %1 starten",
+   "tooltip": "Start een van je Homey-flows, op naam. Een flow kan alles wat je Homey kan, ook een Homey-melding sturen."
+  },
+  "rb_homey_set": {
+   "message0": "Homey-apparaat %1 %2 instellen op %3",
+   "tooltip": "Stelt een waarde in, zoals onoff op off, dim op 0.5 of target_temperature op 19. ‘Vraag me eerst bij elke smarthome-actie’ laat het eerst vragen; ontgrendelen, openen en alarmen uitschakelen vragen het altijd. Op deze pagina verandert het het voorbeeldhuis."
+  },
+  "rb_homey_set_variable": {
+   "message0": "Homey-variabele %1 instellen op %2",
+   "tooltip": "Wijzigt een Homey Logic-variabele, zodat je flows hem kunnen gebruiken."
+  },
+  "rb_homey_value": {
+   "message0": "%1 van Homey-apparaat %2",
+   "tooltip": "Eén waarde van een Homey-apparaat, op naam van het apparaat: onoff (aan of uit), dim (0 tot 1), measure_temperature, measure_power enzovoort. ‘Homey-apparaten die passen bij’ laat zien wat elk apparaat heeft."
+  },
+  "rb_homey_variable": {
+   "message0": "Homey-variabele %1",
+   "tooltip": "De waarde van een Homey Logic-variabele, op naam."
+  },
+  "rb_homey_when": {
+   "message0": "wanneer Homey-apparaat %1 %2 verandert",
+   "tooltip": "Voert de blokken eronder uit wanneer de waarde van dit Homey-apparaat verandert (elke 10 seconden gecontroleerd). Typ ‘anything’ voor elk van zijn waarden. ‘Wat er binnenkwam’ geeft device, zone, capability, from, to en text. Klik er op deze pagina met de rechtermuisknop op en kies ‘Dit script uitvoeren’ om het te proberen."
+  },
+  "rb_img_ask": {
+   "message0": "vraag Claude %1 over afbeelding %2",
+   "tooltip": "Claude bekijkt de afbeelding en antwoordt."
+  },
+  "rb_img_change": {
+   "message0": "afbeelding %1 wijzigen: %2",
+   "tooltip": "Claude tekent de afbeelding opnieuw met jouw wijziging. Van een foto wordt een nieuwe illustratie gemaakt."
+  },
+  "rb_img_choose": {
+   "message0": "afbeelding die ik kies",
+   "tooltip": "Pauzeert de run zodat je een afbeelding kunt kiezen (JPEG, PNG, WebP, GIF of SVG)."
+  },
+  "rb_img_draw": {
+   "message0": "teken een afbeelding van %1",
+   "tooltip": "Claude tekent een illustratie als SVG (vlakke vormen, diagrammen, pictogrammen). Foto’s kan hij niet maken."
+  },
+  "rb_img_save": {
+   "message0": "afbeelding %1 opslaan als %2",
+   "tooltip": "Biedt de afbeelding aan als download. De browser vraagt je om te bevestigen."
+  },
+  "rb_img_score": {
+   "message0": "geef afbeelding %1 een cijfer van 0 tot 10 voor %2"
+  },
+  "rb_img_show": {
+   "message0": "afbeelding %1 tonen"
+  },
+  "rb_longtext": {
+   "message0": "%1",
+   "tooltip": "Lange tekst. Druk op Enter voor een nieuwe regel; regels lopen door bij 80 tekens."
+  },
+  "rb_mem_add": {
+   "message0": "%1 toevoegen aan onthouden lijst %2 %3",
+   "tooltip": "Voegt een item toe aan een onthouden lijst. Bestaat de lijst al, dan houdt hij zijn eigen soort en vervaltijd."
+  },
+  "rb_mem_forget": {
+   "message0": "%1 vergeten"
+  },
+  "rb_mem_get": {
+   "message0": "%1 ophalen",
+   "tooltip": "De onthouden waarde, of lege tekst als er onder deze naam niets onthouden is."
+  },
+  "rb_mem_has": {
+   "message0": "ik onthoud %1"
+  },
+  "rb_mem_names": {
+   "message0": "namen die ik onthoud"
+  },
+  "rb_mem_set": {
+   "message0": "%1 onthouden als %2 %3",
+   "tooltip": "Zolang deze pagina open is: bewaard tussen runs tot je de pagina herlaadt of sluit. Voor altijd: opgeslagen tot je het vergeet."
+  },
+  "rb_mem_set_for": {
+   "message0": "%1 onthouden als %2 gedurende %3 %4",
+   "tooltip": "Opgeslagen zoals ‘voor altijd’, maar na deze tijd automatisch vergeten (tot 365 dagen)."
+  },
+  "rb_mqtt_publish": {
+   "message0": "MQTT %1 publiceren op topic %2, bewaren %3",
+   "tooltip": "Stuurt een bericht naar je MQTT-broker. ‘Bewaren’ vraagt de broker het te bewaren voor iedereen die later luistert. ‘Vraag me eerst bij elke smarthome-actie’ of ‘… bij het versturen van berichten’ laat het eerst vragen. Op deze pagina wordt het alleen getoond."
+  },
+  "rb_mqtt_read": {
+   "message0": "laatste MQTT-bericht op %1",
+   "tooltip": "Het laatste bericht op een MQTT-topic. Alleen berichten die de broker bewaart (retained) verschijnen meteen. Met + of # in het topic een record met het laatste bericht van elk topic. Op deze pagina worden voorbeeldtopics gebruikt."
+  },
+  "rb_mqtt_when": {
+   "message0": "wanneer een MQTT-bericht binnenkomt op %1",
+   "tooltip": "Voert de blokken eronder uit wanneer er een bericht binnenkomt op dit MQTT-topic. + staat voor één niveau en # voor alles eronder, zoals zigbee2mqtt/#. ‘Wat er binnenkwam’ geeft het topic en de tekst, plus de velden van een JSON-bericht."
+  },
+  "rb_msg_value": {
+   "message0": "berichtwaarde",
+   "tooltip": "De waarde die is meegestuurd met het bericht dat dit script startte (of dit ‘wacht tot ik ontvang’ wekte). In een programma gestart met ‘programma uitvoeren’: de waarde die het meekreeg."
+  },
+  "rb_now": {
+   "message0": "huidige %1"
+  },
+  "rb_page_when": {
+   "message0": "wanneer de webpagina %1 verandert",
+   "message1": "alleen het deel met %1, elke %2 minuten gecontroleerd",
+   "tooltip": "Voert de blokken eronder uit wanneer de woorden op een webpagina veranderen. Laat ‘alleen het deel met’ leeg om de hele pagina te volgen, of typ woorden (zoals Prijs) om alleen de regels daarmee en de twee regels erna te volgen, zodat advertenties en tellers elders op de pagina niet meetellen. De eerste controle onthoudt alleen de pagina. ‘Wat er binnenkwam’ geeft url, title, before, after, changed (de gewijzigde regels) en text. Pagina’s die een browser nodig hebben om hun woorden te tonen, kunnen niet gevolgd worden. Klik er op deze pagina met de rechtermuisknop op en kies ‘Dit script uitvoeren’ om het met een voorbeeldpagina te proberen."
+  },
+  "rb_passed": {
+   "message0": "concept is door de beoordeling gekomen"
+  },
+  "rb_pause": {
+   "message0": "pauzeer tot ik op Doorgaan klik: %1",
+   "tooltip": "Een controlepunt. Toont de notitie in het logboek en wacht op jou."
+  },
+  "rb_problems": {
+   "message0": "problemen uit de beoordeling"
+  },
+  "rb_prompt": {
+   "message0": "prompt %1",
+   "tooltip": "Tekst uit je promptbibliotheek (open Programma’s om prompts toe te voegen)."
+  },
+  "rb_rec_get": {
+   "message0": "%1 van %2"
+  },
+  "rb_rec_has": {
+   "message0": "%1 heeft veld %2"
+  },
+  "rb_rec_keys": {
+   "message0": "velden van %1"
+  },
+  "rb_rec_new": {
+   "message0": "nieuw record"
+  },
+  "rb_rec_set": {
+   "message0": "%1 van %2 instellen op %3",
+   "tooltip": "Wijzigt één veld van een record (meestal een recordvariabele)."
+  },
+  "rb_receive": {
+   "message0": "wanneer ik %1 ontvang",
+   "tooltip": "Voert de blokken eronder uit telkens wanneer dit bericht wordt uitgezonden. Meerdere scripts kunnen naar hetzelfde bericht luisteren."
+  },
+  "rb_reflect": {
+   "message0": "beoordeel het concept op %1",
+   "message1": "tot %1 rondes; als het niet slaagt, doe",
+   "message2": "%1",
+   "tooltip": "Claude beoordeelt het concept kritisch. Slaagt het niet, dan draaien de blokken erin en beoordeelt hij opnieuw. Elke ronde controleert de beoordelaar ook dat eerdere problemen niet zijn teruggekomen. Zijn de rondes op, dan wordt het concept met de minste problemen bewaard, niet gewoon het laatste."
+  },
+  "rb_reset_timer": {
+   "message0": "timer resetten"
+  },
+  "rb_result": {
+   "message0": "afronden en het resultaat tonen",
+   "tooltip": "Beëindigt de run. Toont wat je aan het resultaat hebt toegevoegd, of het concept als je niets hebt toegevoegd."
+  },
+  "rb_result_text": {
+   "message0": "het resultaat tot nu toe",
+   "tooltip": "Alles wat aan het resultaat is toegevoegd, als tekst."
+  },
+  "rb_retry": {
+   "message0": "tot %1 keer opnieuw proberen",
+   "message1": "%1",
+   "tooltip": "Mislukt er iets erin op een manier die een tweede poging kan oplossen (een verbroken verbinding, een verminkt antwoord), dan wacht het even en voert het opnieuw uit."
+  },
+  "rb_review": {
+   "message0": "beoordeel het concept op %1",
+   "tooltip": "Eén beoordeling. Gebruik daarna ‘concept is door de beoordeling gekomen’ en ‘problemen uit de beoordeling’."
+  },
+  "rb_revise": {
+   "message0": "herzien om de problemen uit de beoordeling op te lossen",
+   "tooltip": "Claude lost de problemen op die de laatste beoordeling vond."
+  },
+  "rb_rework": {
+   "message0": "het concept herwerken: %1",
+   "tooltip": "Claude herschrijft het concept volgens jouw instructie."
+  },
+  "rb_rewrite": {
+   "message0": "%1 herschrijven: %2",
+   "tooltip": "Bijvoorbeeld: (concept) herschrijven: (vertaal naar het Frans)."
+  },
+  "rb_run_program": {
+   "message0": "programma %1 uitvoeren met %2",
+   "tooltip": "Voert een programma uit je lijst Programma’s uit, als stap. Het krijgt een eigen concept, resultaat en eigen variabelen, en geeft zijn resultaat terug. Daarin is ‘berichtwaarde’ de waarde die je hier meegeeft. Geëxporteerde Python bevat een kopie van het programma zoals het was toen je exporteerde."
+  },
+  "rb_say": {
+   "message0": "zeg %1",
+   "tooltip": "Schrijft een notitie in het runlogboek."
+  },
+  "rb_score": {
+   "message0": "geef %1 een cijfer van 0 tot 10 voor %2"
+  },
+  "rb_set_draft": {
+   "message0": "concept instellen op %1"
+  },
+  "rb_set_instructions": {
+   "message0": "instructies voor Claude instellen op %1",
+   "tooltip": "Wordt na dit blok met elke Claude-aanroep meegestuurd, bijvoorbeeld een rol, een toon of een huisstijl."
+  },
+  "rb_show": {
+   "message0": "het concept in het logboek tonen"
+  },
+  "rb_slack_send": {
+   "message0": "Slack-bericht %1 versturen",
+   "tooltip": "Plaatst in Slack: terug in het kanaal waar een bericht vandaan kwam, of in het eerste kanaal in SLACK_CHANNEL_ID. ‘Vraag me eerst bij het versturen van berichten’ laat het eerst vragen. Op deze pagina wordt het alleen getoond."
+  },
+  "rb_slack_when": {
+   "message0": "wanneer een Slack-bericht binnenkomt met %1",
+   "tooltip": "Voert de blokken eronder uit wanneer iemand iets plaatst in een van je Slack-kanalen (typ ‘anything’, of woorden die het bericht moet bevatten). Alleen de kanalen in SLACK_CHANNEL_ID tellen, en berichten van bots nooit. Elke 10 seconden gecontroleerd. ‘Wat er binnenkwam’ geeft text, sender en channel. Klik er op deze pagina met de rechtermuisknop op en kies ‘Dit script uitvoeren’ om het met een voorbeeldbericht te proberen."
+  },
+  "rb_sort": {
+   "message0": "%1 sorteren op %2 %3",
+   "tooltip": "Sorteert een lijst records op een veld. Laat het veld leeg om gewone items te sorteren."
+  },
+  "rb_start": {
+   "message0": "wanneer op Uitvoeren wordt geklikt",
+   "tooltip": "Elk programma begint hier. Blokken eronder draaien van boven naar beneden. Meerdere hiervan draaien naast elkaar."
+  },
+  "rb_stop": {
+   "message0": "de run stoppen",
+   "tooltip": "Beëindigt de run hier. Wat al in het resultaat staat, wordt getoond."
+  },
+  "rb_task": {
+   "message0": "taak instellen op %1",
+   "tooltip": "Stelt in wat de AI moet maken."
+  },
+  "rb_task_get": {
+   "message0": "taak"
+  },
+  "rb_tg_message": {
+   "message0": "Telegram-bericht %1",
+   "tooltip": "Het Telegram-bericht dat dit script startte: de woorden, wie het stuurde, of de chat. Leeg buiten een Telegram-script."
+  },
+  "rb_tg_send": {
+   "message0": "Telegram-bericht %1 versturen",
+   "tooltip": "Stuurt een bericht vanaf je bot: terug naar de chat waar een bericht vandaan kwam, of naar TELEGRAM_CHAT_ID. ‘Vraag me eerst bij het versturen van berichten’ laat het eerst vragen. Op deze pagina wordt het alleen getoond."
+  },
+  "rb_tg_when": {
+   "message0": "wanneer een Telegram-bericht binnenkomt met %1",
+   "tooltip": "Voert de blokken eronder uit wanneer je bot een bericht krijgt (typ ‘anything’, of woorden die het bericht moet bevatten). Alleen berichten uit je eigen chats tellen (TELEGRAM_CHAT_ID). In geëxporteerde Python luistert hij de hele tijd; klik er op deze pagina met de rechtermuisknop op en kies ‘Dit script uitvoeren’ om het met een voorbeeldbericht te proberen."
+  },
+  "rb_timer": {
+   "message0": "timer",
+   "tooltip": "Seconden sinds de run begon of de timer werd gereset."
+  },
+  "rb_tokens_used": {
+   "message0": "tokens tot nu toe gebruikt",
+   "tooltip": "Tokens die deze run heeft gebruikt: verzonden plus ontvangen. Op deze pagina een schatting, in geëxporteerde Python exact."
+  },
+  "rb_try": {
+   "message0": "probeer",
+   "message1": "%1",
+   "message2": "als het mislukt",
+   "message3": "%1",
+   "tooltip": "Voert het eerste deel uit. Mislukt daarin iets, dan wordt het tweede deel uitgevoerd in plaats van de run te stoppen."
+  },
+  "rb_use_model": {
+   "message0": "model %1 gebruiken",
+   "tooltip": "Wisselt van model voor de AI-blokken na dit blok. Andere modellen dan Claude draaien in geëxporteerde Python; op deze pagina vervangt Claude ze."
+  },
+  "rb_wait": {
+   "message0": "%1 %2 wachten",
+   "tooltip": "Pauzeert dit script (tot 24 uur)."
+  },
+  "rb_wait_msg": {
+   "message0": "wacht tot ik %1 ontvang",
+   "tooltip": "Pauzeert dit script tot een ander script het bericht uitzendt."
+  },
+  "rb_wait_time": {
+   "message0": "wacht tot %1:%2",
+   "tooltip": "Pauzeert tot dit tijdstip (24-uursklok). Is het vandaag al voorbij, dan wacht het tot morgen."
+  },
+  "rb_wait_until": {
+   "message0": "wacht tot %1",
+   "tooltip": "Pauzeert tot de voorwaarde waar is. Twee keer per seconde gecontroleerd, of elke 10 seconden als het Claude iets vraagt."
+  },
+  "rb_web_search": {
+   "message0": "zoek op het web naar %1",
+   "tooltip": "In geëxporteerde Python zoekt dit op het echte web. Op deze pagina kan Claude niet browsen, dus antwoordt hij uit zijn eigen kennis en zegt het logboek dat."
+  },
+  "rb_webhook_when": {
+   "message0": "wanneer een webverzoek binnenkomt op / %1",
+   "tooltip": "Voert de blokken eronder uit wanneer iets (Home Assistant, IFTTT, een opdracht op je telefoon) http://<deze computer>:8765/bake-done?key=<WEBHOOK_SECRET> aanroept. Verzoeken zonder de sleutel worden geweigerd. ‘Wat er binnenkwam’ geeft de verzonden tekst, en de velden van JSON of van het adres."
+  },
+  "rb_when_time": {
+   "message0": "wanneer het %1:%2 is %3",
+   "tooltip": "Draait op dit tijdstip (24-uursklok) zolang Planningen aan staat en deze pagina open is."
+  },
+  "rb_with_any_model": {
+   "message0": "met OpenRouter-model %1",
+   "message1": "%1",
+   "tooltip": "Voert alleen de blokken erin uit op elk model dat OpenRouter aanbiedt. Typ de naam van openrouter.ai/models, bijvoorbeeld mistralai/mistral-small of google/gemma-4-31b-it. openrouter/auto kiest er een voor je. Draait in geëxporteerde Python (heeft OPENROUTER_API_KEY nodig); op deze pagina vervangt Claude het."
+  },
+  "rb_with_model": {
+   "message0": "met model %1",
+   "message1": "%1",
+   "tooltip": "Voert alleen de blokken erin uit op dit model en gaat daarna terug naar het vorige model. Andere modellen dan Claude draaien in geëxporteerde Python; op deze pagina vervangt Claude ze."
+  },
+  "rb_word_count": {
+   "message0": "aantal woorden in %1"
+  }
+ },
+ "options": {
+  "rb_when_time.DAYS": {
+   "every": "elke dag",
+   "weekdays": "op werkdagen",
+   "weekends": "in het weekend"
+  },
+  "rb_every.UNIT": {
+   "m": "minuten",
+   "h": "uur"
+  },
+  "rb_wait.UNIT": {
+   "s": "seconden",
+   "m": "minuten",
+   "h": "uur"
+  },
+  "rb_now.PART": {
+   "time": "tijd",
+   "date": "datum",
+   "datetime": "datum en tijd",
+   "hour": "uur",
+   "minute": "minuut",
+   "weekday": "dag van de week"
+  },
+  "rb_sort.ORDER": {
+   "desc": "hoogste eerst",
+   "asc": "laagste eerst"
+  },
+  "rb_ask_first.WHAT": {
+   "ha": "elke smarthome-actie (Home Assistant, Homey, MQTT)",
+   "messages": "het versturen van berichten en aankondigingen",
+   "files": "het opslaan van bestanden",
+   "all": "al deze dingen"
+  },
+  "rb_agent_builtin.KIND": {
+   "web": "op het web zoeken en pagina’s lezen",
+   "ask": "mij een vraag stellen",
+   "memory": "notities onthouden en ophalen",
+   "calc": "rekenen",
+   "time": "tijden en datums",
+   "file": "een bestand lezen dat ik kies",
+   "review": "tekst controleren op criteria",
+   "feeds": "nieuwsfeeds",
+   "linkedin": "LinkedIn doorzoeken (openbare pagina’s)",
+   "calendar": "agenda: afspraken en vrije tijd",
+   "email": "e-mail: zoeken en lezen",
+   "email_send": "e-mail: versturen (vraagt het me eerst)",
+   "github": "GitHub: projecten en pull requests",
+   "github_act": "GitHub: reageren (vraagt het me eerst)",
+   "telegram": "Telegram: mijn berichten doorzoeken",
+   "telegram_send": "Telegram: versturen (vraagt het me eerst)",
+   "telegram_send_free": "Telegram: versturen (zonder vragen)",
+   "discord": "Discord: mijn kanalen doorzoeken",
+   "discord_send": "Discord: versturen (vraagt het me eerst)",
+   "discord_send_free": "Discord: versturen (zonder vragen)",
+   "slack": "Slack: mijn kanalen doorzoeken",
+   "slack_send": "Slack: versturen (vraagt het me eerst)",
+   "slack_send_free": "Slack: versturen (zonder vragen)",
+   "mqtt": "MQTT: topics lezen",
+   "mqtt_act": "MQTT: publiceren (vraagt het me eerst)",
+   "mqtt_act_free": "MQTT: publiceren (zonder vragen)",
+   "homey_read": "Homey: apparaten, flows en variabelen bekijken",
+   "homey_act": "Homey: apparaten bedienen en flows starten (vraagt het me eerst)",
+   "homey_act_free": "Homey: apparaten bedienen en flows starten (zonder vragen)",
+   "ha_read": "Home Assistant: apparaten bekijken",
+   "ha_act": "Home Assistant: apparaten bedienen",
+   "ha_act_free": "Home Assistant: apparaten bedienen (zonder vragen)"
+  },
+  "rb_agent_mcp.ASK": {
+   "changes": "(vraagt het me vóór hulpmiddelen die iets veranderen)",
+   "every": "(vraagt het me vóór elk hulpmiddel)",
+   "never": "(zonder vragen)"
+  },
+  "rb_tg_message.PART": {
+   "text": "tekst",
+   "sender": "afzender",
+   "chat": "chat"
+  },
+  "rb_mem_set.KIND": {
+   "transient": "zolang deze pagina open is",
+   "permanent": "voor altijd"
+  },
+  "rb_mem_set_for.UNIT": {
+   "m": "minuten",
+   "h": "uur",
+   "d": "dagen"
+  },
+  "rb_mem_add.KIND": {
+   "transient": "zolang deze pagina open is",
+   "permanent": "voor altijd"
+  },
+  "rb_img_save.FORMAT": {
+   "png": "PNG",
+   "svg": "SVG (getekende afbeeldingen)",
+   "orig": "origineel bestand"
+  }
+ },
+ "categories": {
+  "Events": "Gebeurtenissen",
+  "Control": "Besturing",
+  "Wait & time": "Wachten & tijd",
+  "Operators": "Operatoren",
+  "Text": "Tekst",
+  "Variables": "Variabelen",
+  "Lists": "Lijsten",
+  "My Blocks": "Mijn blokken",
+  "Programs": "Programma’s",
+  "Search results": "Zoekresultaten",
+  "Draft": "Concept",
+  "Ask Claude": "Claude vragen",
+  "Review": "Beoordeling",
+  "Agent": "Agent",
+  "Tools": "Hulpmiddelen",
+  "Connections": "Verbindingen",
+  "You": "Jij",
+  "Records": "Records",
+  "Files": "Bestanden",
+  "Memory": "Geheugen",
+  "Pictures": "Afbeeldingen",
+  "Home Assistant": "Home Assistant",
+  "Homey": "Homey",
+  "Output": "Uitvoer"
+ },
+ "labels": {
+  "Tools for the agent: drop them inside an agent block": "Hulpmiddelen voor de agent: zet ze in een agentblok",
+  "Listeners: they run while the exported program runs on schedule": "Luisteraars: ze draaien terwijl het geëxporteerde programma volgens planning draait",
+  "Read and send": "Lezen en versturen",
+  "Type in 'Find a block' above the canvas.": "Typ in ‘Blok zoeken’ boven het werkvlak.",
+  "No blocks match": "Geen blokken gevonden"
+ },
+ "page": {
+  "Second Thought": "Second Thought",
+  "Snap AI steps together, then press Run. Claude does each block in order.": "Klik AI-stappen aan elkaar en druk op Uitvoeren. Claude doet elk blok op volgorde.",
+  "Example": "Voorbeeld",
+  "Load": "Laden",
+  "Browse examples": "Voorbeelden bekijken",
+  "Import / export": "Importeren / exporteren",
+  "Programs": "Programma’s",
+  "Memory": "Geheugen",
+  "Home Assistant": "Home Assistant",
+  "Model": "Model",
+  "The language the blocks are shown in. Programs are the same in every language.": "De taal waarin de blokken worden getoond. Programma’s zijn in elke taal hetzelfde.",
+  "Blocks": "Blokken",
+  "Models to try if the main one fails": "Modellen om te proberen als het hoofdmodel faalt",
+  "Backups": "Reservemodellen",
+  "Backups ({n})": "Reservemodellen ({n})",
+  "Step: off": "Stap voor stap: uit",
+  "Step: on": "Stap voor stap: aan",
+  "Schedules: off": "Planningen: uit",
+  "Schedules: on": "Planningen: aan",
+  "Stop": "Stoppen",
+  "Run": "Uitvoeren",
+  "Example programs": "Voorbeeldprogramma’s",
+  "Each one is a complete program. Load it, press Run, then change the words on the blocks to make it yours. Your current program is replaced, so save it first in Programs if you want to keep it.": "Elk is een compleet programma. Laad het, druk op Uitvoeren en verander dan de woorden op de blokken om het van jou te maken. Je huidige programma wordt vervangen, dus sla het eerst op onder Programma’s als je het wilt houden.",
+  "Load this example": "Dit voorbeeld laden",
+  "Load this program": "Dit programma laden",
+  "Shared by {author}, made with runtime {runtime}.": "Gedeeld door {author}, gemaakt met runtime {runtime}.",
+  "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "Programma’s die anderen hebben gedeeld. Elk is gecontroleerd voordat het werd toegevoegd en zegt wat het kan, afgeleid uit zijn blokken. Om er zelf een te delen, zie gallery/README.md in de map Second Thought.",
+  "Saved programs and prompts": "Opgeslagen programma’s en prompts",
+  "My programs": "Mijn programma’s",
+  "Program name": "Programmanaam",
+  "Name for the program on the canvas": "Naam voor het programma op het werkvlak",
+  "Save": "Opslaan",
+  "Replace “{name}”": "‘{name}’ vervangen",
+  "Undo open": "Openen ongedaan maken",
+  "Prompt library": "Promptbibliotheek",
+  "Reusable prompt text. Drop the 'prompt' block (in Ask Claude) into any slot and type the prompt's name.": "Herbruikbare prompttekst. Zet het blok ‘prompt’ (in Claude vragen) in een willekeurig vak en typ de naam van de prompt.",
+  "Name": "Naam",
+  "house style": "huisstijl",
+  "Text": "Tekst",
+  "Save prompt": "Prompt opslaan",
+  "In this page, the Home Assistant blocks use a <b>sample house</b>, so you can build and test safely. Change a state below (press Enter) to try your 'when … changes' scripts. Exported Python connects to your real Home Assistant: set HA_URL and HA_TOKEN (a long-lived access token from your Home Assistant profile, under Security).": "Op deze pagina gebruiken de Home Assistant-blokken een <b>voorbeeldhuis</b>, zodat je veilig kunt bouwen en testen. Verander hieronder een status (druk op Enter) om je ‘wanneer … verandert’-scripts te proberen. Geëxporteerde Python maakt verbinding met je echte Home Assistant: stel HA_URL en HA_TOKEN in (een langlevend toegangstoken uit je Home Assistant-profiel, onder Beveiliging).",
+  "Filter entities": "Entiteiten filteren",
+  "Filter, e.g. light or kitchen": "Filter, bijv. light of kitchen",
+  "Forget all": "Alles vergeten",
+  "Forget everything in memory? This can't be undone.": "Alles in het geheugen vergeten? Dit kan niet ongedaan worden gemaakt.",
+  "Keep it": "Houden",
+  "Backup models": "Reservemodellen",
+  "The <b>Model</b> menu is your primary model: it does every step. If it fails on a step (no key, out of credit, service down or unreachable), the first backup answers that step instead, then the second, then the third. The run log says each time a backup steps in.": "Het menu <b>Model</b> is je hoofdmodel: het doet elke stap. Faalt het bij een stap (geen sleutel, geen tegoed, dienst plat of onbereikbaar), dan beantwoordt het eerste reservemodel die stap, dan het tweede, dan het derde. Het runlogboek zegt elke keer wanneer een reservemodel inspringt.",
+  "Blocks that name their own model, such as <b>with model</b>, keep that model, so a panel of judges stays a panel of different judges.": "Blokken die hun eigen model noemen, zoals <b>met model</b>, houden dat model, zodat een jury van verschillende beoordelaars een jury van verschillende beoordelaars blijft.",
+  "First backup": "Eerste reservemodel",
+  "Second backup": "Tweede reservemodel",
+  "Third backup": "Derde reservemodel",
+  "Import and export": "Importeren en exporteren",
+  "Export this program": "Dit programma exporteren",
+  "As a block file": "Als blokbestand",
+  "File name": "Bestandsnaam",
+  "Save .json file": ".json-bestand opslaan",
+  "Copy as text": "Kopiëren als tekst",
+  "As Python code": "Als Python-code",
+  "Runs without this page open, on your computer or a server. Needs an Anthropic API key; API calls are billed separately from claude.ai.": "Draait zonder dat deze pagina open is, op je computer of een server. Heeft een Anthropic API-sleutel nodig; API-aanroepen worden apart van claude.ai gefactureerd.",
+  "Save Python (.zip)": "Python opslaan (.zip)",
+  "Copy Python code": "Python-code kopiëren",
+  "Show code": "Code tonen",
+  "Hide code": "Code verbergen",
+  "Import a program": "Een programma importeren",
+  "Takes a block file, or Python code exported from here. Other code can be converted by Claude. Replaces what's on the canvas; you can undo straight after.": "Neemt een blokbestand, of hier geëxporteerde Python-code. Andere code kan Claude omzetten. Vervangt wat er op het werkvlak staat; je kunt het direct daarna ongedaan maken.",
+  "Choose file (.json, .py, .zip)": "Bestand kiezen (.json, .py, .zip)",
+  "Or paste a block file or code": "Of plak een blokbestand of code",
+  "Load pasted program": "Geplakt programma laden",
+  "Undo import": "Importeren ongedaan maken",
+  "Find a block": "Blok zoeken",
+  "Find a block…": "Blok zoeken…",
+  "Zoom": "Zoom",
+  "Zoom in": "Inzoomen",
+  "Zoom out": "Uitzoomen",
+  "Fit program on screen": "Programma passend op het scherm",
+  "Fit": "Passend",
+  "Run log": "Runlogboek",
+  "Save log": "Logboek opslaan",
+  "Watch values": "Waarden volgen",
+  "Paused": "Gepauzeerd",
+  "Paused before: {step}": "Gepauzeerd vóór: {step}",
+  "Next step": "Volgende stap",
+  "Run to the end": "Tot het einde uitvoeren",
+  "Run this script": "Dit script uitvoeren",
+  "Run this block and show its value": "Dit blok uitvoeren en de waarde tonen",
+  "An example program is loaded on the left. Press Run to watch it work here, or pick another example above.": "Links is een voorbeeldprogramma geladen. Druk op Uitvoeren om het hier te zien werken, of kies hierboven een ander voorbeeld.",
+  "Click any white slot on a block to type into it.": "Klik op een wit vak in een blok om erin te typen.",
+  "Drag blocks from the categories; drag a block back onto them to delete it. Round slots take values, hexagon slots take yes/no conditions.": "Sleep blokken uit de categorieën; sleep een blok terug om het te verwijderen. Ronde vakken nemen waarden, zeshoekige vakken ja/nee-voorwaarden.",
+  "Only blocks under a \"when Run is clicked\" or \"when I receive\" hat run. Separate scripts run side by side.": "Alleen blokken onder een ‘wanneer op Uitvoeren wordt geklikt’- of ‘wanneer ik … ontvang’-hoed draaien. Losse scripts draaien naast elkaar.",
+  "Writing": "Schrijven",
+  "Research": "Onderzoek",
+  "Design": "Ontwerp",
+  "Learning": "Leren",
+  "Work": "Werk",
+  "Home and baking": "Huis en bakken",
+  "Agents": "Agents",
+  "Homey": "Homey",
+  "Code and data": "Code en data",
+  "Automation": "Automatisering",
+  "Home Assistant: no connection needed": "Home Assistant: geen verbinding nodig",
+  "Home Assistant: daily life": "Home Assistant: dagelijks leven",
+  "Home Assistant: security and cameras": "Home Assistant: beveiliging en camera’s",
+  "Home Assistant: energy": "Home Assistant: energie",
+  "Home Assistant: comfort and garden": "Home Assistant: comfort en tuin",
+  "Home Assistant: kitchen and household": "Home Assistant: keuken en huishouden",
+  "Home Assistant: pets": "Home Assistant: huisdieren",
+  "Home Assistant: house health": "Home Assistant: gezondheid van het huis",
+  "Home Assistant: homelab": "Home Assistant: homelab",
+  "Home Assistant: alerts and voice": "Home Assistant: meldingen en spraak",
+  "Community": "Community",
+  "Added to result": "Toegevoegd aan resultaat",
+  "Added to “{name}”": "Toegevoegd aan ‘{name}’",
+  "Agent": "Agent",
+  "Agent plan": "Plan van de agent",
+  "Agent step {i}/{n}": "Agent, stap {i}/{n}",
+  "Agent summary": "Samenvatting van de agent",
+  "Agent: out of steps": "Agent: stappen op",
+  "Agent: plan changed": "Agent: plan gewijzigd",
+  "Ask Claude: {request}": "Claude vragen: {request}",
+  "Ask first": "Eerst vragen",
+  "Back to checkpoint “{name}”": "Terug naar controlepunt ‘{name}’",
+  "Backup": "Reservemodel",
+  "Broadcast “{message}”": "‘{message}’ uitzenden",
+  "Broadcasts": "Uitzendingen",
+  "Budget": "Budget",
+  "Calendar": "Agenda",
+  "Can't run a definition": "Een definitie kan niet worden uitgevoerd",
+  "Change picture: {how}": "Afbeelding wijzigen: {how}",
+  "Chat {name}: {message}": "Chat {name}: {message}",
+  "Check: {criteria}": "Controleren: {criteria}",
+  "Checkpoint “{name}”": "Controlepunt ‘{name}’",
+  "Conversation {name}": "Gesprek {name}",
+  "Current draft": "Huidig concept",
+  "Cut short": "Afgekapt",
+  "Draw: {what}": "Tekenen: {what}",
+  "Email": "E-mail",
+  "Email to {to}": "E-mail aan {to}",
+  "Every {n} h": "Elke {n} u",
+  "Every {n} min": "Elke {n} min",
+  "Extract: {what}": "Ophalen: {what}",
+  "Finished": "Klaar",
+  "Forgot “{name}”": "‘{name}’ vergeten",
+  "Gave up after {n} tries": "Opgegeven na {n} pogingen",
+  "GitHub": "GitHub",
+  "GitHub comment on {repo} #{n}": "GitHub-reactie op {repo} #{n}",
+  "Home Assistant: {service}": "Home Assistant: {service}",
+  "Homey flow started": "Homey-flow gestart",
+  "Homey variable {name}": "Homey-variabele {name}",
+  "Instructions for Claude": "Instructies voor Claude",
+  "Kept the best draft": "Het beste concept bewaard",
+  "List: {request}": "Lijst: {request}",
+  "Look at picture: {question}": "Afbeelding bekijken: {question}",
+  "MCP server “{server}”": "MCP-server ‘{server}’",
+  "MQTT": "MQTT",
+  "News feeds": "Nieuwsfeeds",
+  "News: {feed}": "Nieuws: {feed}",
+  "Not done": "Niet gedaan",
+  "Note": "Notitie",
+  "Nothing to run": "Niets om uit te voeren",
+  "Notification → {target}": "Melding → {target}",
+  "Number: {request}": "Getal: {request}",
+  "Partial answer": "Gedeeltelijk antwoord",
+  "Pick the better one": "De betere kiezen",
+  "Picture": "Afbeelding",
+  "Program: {name}": "Programma: {name}",
+  "Read page: {url}": "Pagina lezen: {url}",
+  "Record: {request}": "Record: {request}",
+  "Records: {request}": "Records: {request}",
+  "Redraw as illustration: {how}": "Opnieuw tekenen als illustratie: {how}",
+  "Remembered “{name}”": "‘{name}’ onthouden",
+  "Reply continued": "Antwoord voortgezet",
+  "Result": "Resultaat",
+  "Retrying": "Opnieuw proberen",
+  "Review": "Beoordeling",
+  "Review, round {n}": "Beoordeling, ronde {n}",
+  "Revise": "Herzien",
+  "Revise to fix the problems": "Herzien om de problemen op te lossen",
+  "Rework: {how}": "Herwerken: {how}",
+  "Rewrite: {how}": "Herschrijven: {how}",
+  "Run stopped": "Run gestopt",
+  "Save file": "Bestand opslaan",
+  "Save picture": "Afbeelding opslaan",
+  "Scheduled {time}": "Gepland {time}",
+  "Score picture: {criteria}": "Afbeelding beoordelen: {criteria}",
+  "Score: {text}": "Cijfer: {text}",
+  "Search (from Claude's knowledge): {query}": "Zoeken (uit Claudes kennis): {query}",
+  "Search LinkedIn (from Claude's knowledge): {query}": "LinkedIn doorzoeken (uit Claudes kennis): {query}",
+  "Snapshot: {entity}": "Momentopname: {entity}",
+  "Something failed, so the 'if it fails' part ran": "Er mislukte iets, dus het deel ‘als het mislukt’ draaide",
+  "Spoken on {player}": "Uitgesproken op {player}",
+  "Stopped": "Gestopt",
+  "Task set": "Taak ingesteld",
+  "Telegram": "Telegram",
+  "Thinking…": "Denkt na…",
+  "Unreadable reply": "Onleesbaar antwoord",
+  "Value of that block": "Waarde van dat blok",
+  "Wait": "Wachten",
+  "Wait until a condition": "Wachten op een voorwaarde",
+  "Wait until a time": "Wachten tot een tijdstip",
+  "Waiting for “{message}”": "Wacht op ‘{message}’",
+  "Waiting {time}": "Wacht {time}",
+  "Waiting until {time}": "Wacht tot {time}",
+  "Waiting until {time} tomorrow": "Wacht tot morgen {time}",
+  "When {entity} changes": "Wanneer {entity} verandert",
+  "Write a first draft": "Een eerste concept schrijven",
+  "Yes or no: {question}": "Ja of nee: {question}",
+  "a speaker": "een luidspreker",
+  "your channel": "je kanaal",
+  "your chat": "je chat",
+  "your feeds": "je feeds",
+  "Allow": "Toestaan",
+  "Allow this?": "Dit toestaan?",
+  "Approve": "Goedkeuren",
+  "Choose a file": "Kies een bestand",
+  "Choose a file first.": "Kies eerst een bestand.",
+  "Choose a picture": "Kies een afbeelding",
+  "Choose a picture first.": "Kies eerst een afbeelding.",
+  "Choose file": "Bestand kiezen",
+  "Choose one": "Kies er een",
+  "Choose picture": "Afbeelding kiezen",
+  "Continue": "Doorgaan",
+  "Do you approve this?": "Keur je dit goed?",
+  "Don't": "Niet doen",
+  "No answer.": "Geen antwoord.",
+  "Question for you": "Vraag voor jou",
+  "Reading {file}…": "{file} lezen…",
+  "Send answer": "Antwoord versturen",
+  "Send back": "Terugsturen",
+  "Type an answer first.": "Typ eerst een antwoord.",
+  "Use this file": "Dit bestand gebruiken",
+  "Use this picture": "Deze afbeelding gebruiken",
+  "Your answer": "Jouw antwoord",
+  "Copied": "Gekopieerd",
+  "Selected, press Ctrl+C": "Geselecteerd, druk op Ctrl+C",
+  "Saved": "Opgeslagen",
+  "Nothing to save yet": "Nog niets om op te slaan",
+  "Tool": "Hulpmiddel",
+  "Input": "Invoer",
+  "Status": "Status",
+  "final answer": "eindantwoord",
+  "Nothing remembered yet. Use the Memory blocks to remember values between runs.": "Nog niets onthouden. Gebruik de Geheugen-blokken om waarden tussen runs te onthouden.",
+  "Forget": "Vergeten",
+  "Forget {name}": "{name} vergeten",
+  "Delete": "Verwijderen",
+  "Confirm delete": "Verwijderen bevestigen",
+  "running": "bezig",
+  "paused": "gepauzeerd",
+  "stopping…": "stoppen…",
+  "stopped": "gestopt",
+  "error": "fout",
+  "waiting for you": "wacht op jou",
+  "done in {time}": "klaar in {time}",
+  "{n} Claude call": "{n} Claude-aanroep",
+  "{n} Claude calls": "{n} Claude-aanroepen",
+  "~{n} tokens": "~{n} tokens",
+  "added": "toegevoegd",
+  "all finished": "alles klaar",
+  "answer": "antwoord",
+  "answered": "beantwoord",
+  "approved": "goedgekeurd",
+  "backup": "reserve",
+  "bad input": "ongeldige invoer",
+  "best draft": "beste concept",
+  "best effort": "zo goed mogelijk",
+  "cleared": "gewist",
+  "continued": "voortgezet",
+  "cut short": "afgekapt",
+  "done": "klaar",
+  "drawn": "getekend",
+  "empty answer": "leeg antwoord",
+  "ended": "beëindigd",
+  "failed": "mislukt",
+  "failed, out of rounds": "niet geslaagd, rondes op",
+  "finished": "afgerond",
+  "forgotten": "vergeten",
+  "handled": "opgevangen",
+  "interrupted": "onderbroken",
+  "kept": "bewaard",
+  "needs work": "moet beter",
+  "no listeners": "geen luisteraars",
+  "no output": "geen uitvoer",
+  "not a tool": "geen hulpmiddel",
+  "not live": "niet live",
+  "not on this page": "niet op deze pagina",
+  "note": "notitie",
+  "passes": "geslaagd",
+  "planned": "gepland",
+  "quiet": "stil",
+  "read": "gelezen",
+  "received": "ontvangen",
+  "refused": "geweigerd",
+  "repair": "reparatie",
+  "repeat": "herhaling",
+  "reset": "gereset",
+  "restored": "hersteld",
+  "retry {n}": "poging {n}",
+  "revised": "herzien",
+  "sample": "voorbeeld",
+  "sample home": "voorbeeldwoning",
+  "sample house": "voorbeeldhuis",
+  "saved": "opgeslagen",
+  "say": "zeggen",
+  "sent": "verstuurd",
+  "set": "ingesteld",
+  "shown": "getoond",
+  "skipped": "overgeslagen",
+  "started": "gestart",
+  "tool error": "fout in hulpmiddel",
+  "turn {n}": "beurt {n}",
+  "unreadable": "onleesbaar",
+  "using tool": "gebruikt hulpmiddel",
+  "waiting": "wacht",
+  "{n} devices": "{n} apparaten",
+  "{n} events": "{n} gebeurtenissen",
+  "{n} items": "{n} items",
+  "{n} records": "{n} records",
+  "{n} step": "{n} stap",
+  "{n} steps": "{n} stappen",
+  "{n} topics": "{n} topics",
+  "'Forever' and timed memories are saved in this browser only. They won't follow you to another device.": "Herinneringen ‘voor altijd’ en met een vervaltijd worden alleen in deze browser opgeslagen. Ze gaan niet mee naar een ander apparaat.",
+  "'Forever' and timed memories are saved to your account for this page. Only you can see them.": "Herinneringen ‘voor altijd’ en met een vervaltijd worden voor deze pagina in je account opgeslagen. Alleen jij kunt ze zien.",
+  "A program with that name exists. Press again to replace it.": "Er bestaat al een programma met die naam. Druk nog eens om het te vervangen.",
+  "A save prompt is already open. Finish that one first.": "Er staat al een opslagvraag open. Rond die eerst af.",
+  "Add a 'when it's …' or 'every …' block from Events, with steps under it, before turning Schedules on.": "Voeg een ‘wanneer het … is’- of ‘elke …’-blok uit Gebeurtenissen toe, met stappen eronder, voordat je Planningen aanzet.",
+  "Back to the program you had before.": "Terug naar het programma dat je eerder had.",
+  "Checking where memory can be saved…": "Controleren waar het geheugen kan worden opgeslagen…",
+  "Checking where things can be saved…": "Controleren waar dingen kunnen worden opgeslagen…",
+  "Claude converted everything. Check the blocks before running.": "Claude heeft alles omgezet. Controleer de blokken voordat je uitvoert.",
+  "Claude's conversion didn't come back as a block program. Try again, or simplify the code.": "Claudes omzetting kwam niet terug als blokprogramma. Probeer het opnieuw, of vereenvoudig de code.",
+  "Conversion failed: {problem}": "Omzetten mislukt: {problem}",
+  "Convert the edited code with Claude": "De bewerkte code omzetten met Claude",
+  "Convert with Claude": "Omzetten met Claude",
+  "Converted program ({n} blocks).": "Omgezet programma ({n} blokken).",
+  "Converted “{name}” ({n} blocks).": "‘{name}’ omgezet ({n} blokken).",
+  "Converting needs Claude. Open this page in claude.ai while signed in.": "Voor omzetten is Claude nodig. Open deze pagina in claude.ai terwijl je bent ingelogd.",
+  "Converting with Claude. This can take a minute or two…": "Bezig met omzetten met Claude. Dit kan een minuut of twee duren…",
+  "Copied. Paste it anywhere to keep or share it.": "Gekopieerd. Plak het ergens om het te bewaren of te delen.",
+  "Copy isn't allowed here, so the code is selected below. Press Ctrl+C (or Cmd+C), then save it as {name}.py.": "Kopiëren is hier niet toegestaan, dus de code is hieronder geselecteerd. Druk op Ctrl+C (of Cmd+C) en sla hem op als {name}.py.",
+  "Copy isn't allowed here, so the text is selected below. Press Ctrl+C (or Cmd+C).": "Kopiëren is hier niet toegestaan, dus de tekst is hieronder geselecteerd. Druk op Ctrl+C (of Cmd+C).",
+  "Edit": "Bewerken",
+  "Exported to Python, it asks you before its first run.": "Geëxporteerd naar Python vraagt het je toestemming vóór de eerste run.",
+  "File sent.": "Bestand verstuurd.",
+  "Give it a name first.": "Geef het eerst een naam.",
+  "Give the prompt a name.": "Geef de prompt een naam.",
+  "Import undone. Your previous program is back.": "Importeren ongedaan gemaakt. Je vorige programma is terug.",
+  "It can also {things}.": "Het kan ook {things}.",
+  "It can {things}.": "Het kan {things}.",
+  "It only uses your models: it doesn't connect to anything else.": "Het gebruikt alleen je modellen: het maakt nergens anders verbinding mee.",
+  "Its Python was exported with a runtime from before versions were numbered; this page has runtime {ours}. Export it again to give the Python program the new runtime (CHANGELOG.md says what changed).": "De Python ervan is geëxporteerd met een runtime van vóór de versienummers; deze pagina heeft runtime {ours}. Exporteer het opnieuw om het Python-programma de nieuwe runtime te geven (CHANGELOG.md zegt wat er veranderd is).",
+  "Its Python was exported with runtime {theirs}; this page has runtime {ours}. Export it again to give the Python program the new runtime (CHANGELOG.md says what changed).": "De Python ervan is geëxporteerd met runtime {theirs}; deze pagina heeft runtime {ours}. Exporteer het opnieuw om het Python-programma de nieuwe runtime te geven (CHANGELOG.md zegt wat er veranderd is).",
+  "Loaded program ({n} blocks).": "Programma geladen ({n} blokken).",
+  "Loaded “{name}” ({n} blocks).": "‘{name}’ geladen ({n} blokken).",
+  "Next: {time} (in {left})": "Volgende: {time} (over {left})",
+  "No prompts yet. Add reusable prompt text here, then use the 'prompt' block in Ask Claude.": "Nog geen prompts. Voeg hier herbruikbare prompttekst toe en gebruik dan het blok ‘prompt’ in Claude vragen.",
+  "No saved programs yet. Name the one on the canvas and press Save.": "Nog geen opgeslagen programma’s. Geef het programma op het werkvlak een naam en druk op Opslaan.",
+  "No scheduled scripts": "Geen geplande scripts",
+  "Not converted: {notes}.": "Niet omgezet: {notes}.",
+  "Open": "Openen",
+  "Opened “{name}”.": "‘{name}’ geopend.",
+  "Paste program text or code into the box first.": "Plak eerst programmatekst of code in het vak.",
+  "Python code copied. Save it as {name}.py.": "Python-code gekopieerd. Sla hem op als {name}.py.",
+  "Restore the exported blocks": "De geëxporteerde blokken terugzetten",
+  "Running needs Claude. Open this page in claude.ai while signed in.": "Voor uitvoeren is Claude nodig. Open deze pagina in claude.ai terwijl je bent ingelogd.",
+  "Save cancelled.": "Opslaan geannuleerd.",
+  "Saved in this browser only.": "Alleen in deze browser opgeslagen.",
+  "Saved memory isn't available here. Everything lasts only while the page is open.": "Opgeslagen geheugen is hier niet beschikbaar. Alles blijft alleen bewaard zolang de pagina open is.",
+  "Saved prompt “{name}”. Use it with the 'prompt' block.": "Prompt ‘{name}’ opgeslagen. Gebruik hem met het blok ‘prompt’.",
+  "Saved to your account for this page. Only you can see them.": "Voor deze pagina in je account opgeslagen. Alleen jij kunt ze zien.",
+  "Saved {file}.": "{file} opgeslagen.",
+  "Saved {name}.zip. Unzip it, put your keys in second-thought.ini, then run {name}.py (on Windows, double-click run.bat).": "{name}.zip opgeslagen. Pak het uit, zet je sleutels in second-thought.ini en start dan {name}.py (dubbelklik op Windows op run.bat).",
+  "Saved “{name}”.": "‘{name}’ opgeslagen.",
+  "Saving files isn't available here. Use Copy Python code instead.": "Bestanden opslaan is hier niet beschikbaar. Gebruik in plaats daarvan Python-code kopiëren.",
+  "Saving files isn't available here. Use Copy as text instead.": "Bestanden opslaan is hier niet beschikbaar. Gebruik in plaats daarvan Kopiëren als tekst.",
+  "Saving isn't available here. Use Import / export to keep a copy as a file.": "Opslaan is hier niet beschikbaar. Gebruik Importeren / exporteren om een kopie als bestand te bewaren.",
+  "Saving isn't available here. Use Import / export to keep files instead.": "Opslaan is hier niet beschikbaar. Gebruik in plaats daarvan Importeren / exporteren om bestanden te bewaren.",
+  "Schedules are on. They run only while this page stays open and your computer is awake. Each run uses your Claude usage.": "Planningen staan aan. Ze draaien alleen zolang deze pagina open blijft en je computer wakker is. Elke run gebruikt je Claude-tegoed.",
+  "That couldn't be saved ({problem}).": "Dat kon niet worden opgeslagen ({problem}).",
+  "That file is over 5 MB, which is too big for a program file.": "Dat bestand is groter dan 5 MB, te groot voor een programmabestand.",
+  "That isn't valid program text. Export a program from this page and import that file.": "Dat is geen geldige programmatekst. Exporteer een programma vanaf deze pagina en importeer dat bestand.",
+  "That program couldn't be opened, so the canvas was left as it was.": "Dat programma kon niet worden geopend, dus het werkvlak is gebleven zoals het was.",
+  "That saved program is damaged and can't be opened.": "Dat opgeslagen programma is beschadigd en kan niet worden geopend.",
+  "That zip couldn't be opened: {problem}.": "Die zip kon niet worden geopend: {problem}.",
+  "That's too big to save (over 240 KB).": "Dat is te groot om op te slaan (meer dan 240 KB).",
+  "The code couldn't be generated: {problem}": "De code kon niet worden gemaakt: {problem}",
+  "The file couldn't be read. Try choosing it again.": "Het bestand kon niet worden gelezen. Kies het nog eens.",
+  "The program couldn't be loaded, so your canvas was left as it was. ({problem})": "Het programma kon niet worden geladen, dus je werkvlak is gebleven zoals het was. ({problem})",
+  "This code was exported from here and then edited. The blocks saved inside it are from before the edits.": "Deze code is hier geëxporteerd en daarna bewerkt. De blokken die erin zijn opgeslagen, zijn van vóór de bewerkingen.",
+  "This code wasn't exported from this page. Claude can try to turn it into blocks. That uses your Claude usage, and you can undo it afterwards.": "Deze code is niet vanaf deze pagina geëxporteerd. Claude kan proberen er blokken van te maken. Dat gebruikt je Claude-tegoed, en je kunt het daarna ongedaan maken.",
+  "This doesn't look like a Second Thought program. Export one from this page and import that file.": "Dit lijkt geen Second Thought-programma. Exporteer er een vanaf deze pagina en importeer dat bestand.",
+  "This program uses blocks this page doesn't have: {blocks}.": "Dit programma gebruikt blokken die deze pagina niet heeft: {blocks}.",
+  "Type a name for this program first.": "Typ eerst een naam voor dit programma.",
+  "Type the prompt text.": "Typ de prompttekst.",
+  "Your saved space is full. Delete something first.": "Je opslagruimte is vol. Verwijder eerst iets.",
+  "accept web requests from other computers": "webverzoeken van andere computers aannemen",
+  "comment on GitHub": "reageren op GitHub",
+  "control your Home Assistant devices": "je Home Assistant-apparaten bedienen",
+  "control your Homey devices and start Homey flows": "je Homey-apparaten bedienen en Homey-flows starten",
+  "forever": "voor altijd",
+  "keep notes between runs, in memory.json": "notities tussen runs onthouden, in memory.json",
+  "look at your GitHub projects": "je GitHub-projecten bekijken",
+  "look at your Home Assistant devices": "je Home Assistant-apparaten bekijken",
+  "look at your Homey devices, flows and variables": "je Homey-apparaten, flows en variabelen bekijken",
+  "publish MQTT messages": "MQTT-berichten publiceren",
+  "read MQTT messages": "MQTT-berichten lezen",
+  "read files you choose": "bestanden lezen die jij kiest",
+  "read news feeds": "nieuwsfeeds lezen",
+  "read public web pages and search the web": "openbare webpagina’s lezen en op het web zoeken",
+  "read your Discord channels": "je Discord-kanalen lezen",
+  "read your Slack channels": "je Slack-kanalen lezen",
+  "read your Telegram messages": "je Telegram-berichten lezen",
+  "read your calendars": "je agenda’s lezen",
+  "read your email": "je e-mail lezen",
+  "save files in its outputs folder": "bestanden opslaan in zijn uitvoermap",
+  "saved {when}": "opgeslagen {when}",
+  "send Discord messages": "Discord-berichten versturen",
+  "send Slack messages": "Slack-berichten versturen",
+  "send Telegram messages": "Telegram-berichten versturen",
+  "send email": "e-mail versturen",
+  "unknown error": "onbekende fout",
+  "until {when}": "tot {when}",
+  "use the tools of the MCP servers you set up (they can do whatever those servers can)": "de hulpmiddelen gebruiken van de MCP-servers die je hebt ingesteld (ze kunnen alles wat die servers kunnen)",
+  "watch a folder for new files": "een map in de gaten houden op nieuwe bestanden",
+  "while page is open": "zolang de pagina open is",
+  "{list} and {last}": "{list} en {last}",
+  "'let me choose from' got an empty list.": "‘laat me kiezen uit’ kreeg een lege lijst.",
+  "'{k} of' needs a record in its second slot.": "‘{k} van’ heeft een record nodig in het tweede vak.",
+  "'{name}' called itself too many times.": "‘{name}’ heeft zichzelf te vaak aangeroepen.",
+  "(cleared)": "(gewist)",
+  "(kept by the broker)": "(bewaard door de broker)",
+  "(no answer)": "(geen antwoord)",
+  "(no draft yet)": "(nog geen concept)",
+  "(no entity)": "(geen entiteit)",
+  "(no message yet: only messages the broker keeps show up straight away)": "(nog geen bericht: alleen berichten die de broker bewaart verschijnen meteen)",
+  "(no records)": "(geen records)",
+  "(no result)": "(geen resultaat)",
+  "(no subject)": "(geen onderwerp)",
+  "(nothing)": "(niets)",
+  "A 'remember for' block needs a time above zero.": "Een blok ‘onthouden gedurende’ heeft een tijd boven nul nodig.",
+  "A 'rewrite' block has nothing to rewrite.": "Een blok ‘herschrijven’ heeft niets om te herschrijven.",
+  "A 'wait until I receive' block has no message name.": "Een blok ‘wacht tot ik ontvang’ heeft geen berichtnaam.",
+  "A 'wait until' block has no condition in its slot.": "Een blok ‘wacht tot’ heeft geen voorwaarde in zijn vak.",
+  "A 'when it changes' script started inside the current run.": "Een ‘wanneer het verandert’-script is gestart binnen de huidige run.",
+  "A Telegram message needs some text.": "Een Telegram-bericht heeft wat tekst nodig.",
+  "A broadcast block has no message name.": "Een uitzendblok heeft geen berichtnaam.",
+  "A comment needs some text.": "Een reactie heeft wat tekst nodig.",
+  "A list 'set' block points past the end of the list.": "Een lijstblok ‘instellen’ wijst voorbij het einde van de lijst.",
+  "A list block asked for item {n} but the list has {length} items.": "Een lijstblok vroeg om item {n}, maar de lijst heeft {length} items.",
+  "A memory block has no name. Type a name into its name slot.": "Een geheugenblok heeft geen naam. Typ een naam in het naamvak.",
+  "A scheduled script started inside the current run.": "Een gepland script is gestart binnen de huidige run.",
+  "A yes/no block is empty.": "Een ja/nee-blok is leeg.",
+  "A {service} message needs some text.": "Een {service}-bericht heeft wat tekst nodig.",
+  "Add a 'set task to' block before this step.": "Voeg vóór deze stap een blok ‘taak instellen op’ toe.",
+  "An 'ask Claude' block is empty. Type a question into it.": "Een blok ‘vraag Claude’ is leeg. Typ er een vraag in.",
+  "An 'ask for a list' block is empty.": "Een blok ‘vraag om een lijst’ is leeg.",
+  "An 'ask for a number' block is empty.": "Een blok ‘vraag om een getal’ is leeg.",
+  "An 'extract' block has no text to read.": "Een blok ‘haal uit’ heeft geen tekst om te lezen.",
+  "Can't divide by zero.": "Delen door nul kan niet.",
+  "Carries on when another script broadcasts this message.": "Gaat door wanneer een ander script dit bericht uitzendt.",
+  "Checking every 10 seconds (it asks Claude).": "Elke 10 seconden gecontroleerd (het vraagt Claude).",
+  "Checking every half second.": "Elke halve seconde gecontroleerd.",
+  "Claude's reply wasn't a usable drawing.": "Claudes antwoord was geen bruikbare tekening.",
+  "Cleared.": "Gewist.",
+  "Condition became true.": "Voorwaarde werd waar.",
+  "Did you mean: {names}?": "Bedoelde je: {names}?",
+  "Discord messages": "Discord-berichten",
+  "Drag 'when Run is clicked' from Events and attach your steps under it.": "Sleep ‘wanneer op Uitvoeren wordt geklikt’ uit Gebeurtenissen en hang je stappen eronder.",
+  "Drawing…": "Tekenen…",
+  "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. Ask for something shorter, or split the job into smaller steps.": "Zelfs na doorgaan was het antwoord nog te lang, dus het stopt halverwege. Het wordt bewaard zoals het is, gemarkeerd als ‘zo goed mogelijk’. Vraag om iets korters, of splits de taak in kleinere stappen.",
+  "From now on, the program asks you before {what}.": "Vanaf nu vraagt het programma het je eerst bij {what}.",
+  "GitHub projects": "GitHub-projecten",
+  "GitHub: not found, or the token can't see it.": "GitHub: niet gevonden, of het token kan het niet zien.",
+  "Give the record's fields, separated by commas.": "Geef de velden van het record, gescheiden door komma’s.",
+  "Goal: {goal}": "Doel: {goal}",
+  "Homey devices": "Homey-apparaten",
+  "Input: {shown}": "Invoer: {shown}",
+  "Input: {shown}\n\nIt didn't run: {problem}.": "Invoer: {shown}\n\nHet draaide niet: {problem}.",
+  "Input: {shown}\n\nThe same call as the step before, so it didn't run again.": "Invoer: {shown}\n\nDezelfde aanroep als de stap ervoor, dus hij draaide niet opnieuw.",
+  "It asked for {name} with the same input three times in a row. The draft holds its last result.": "Hij vroeg drie keer achter elkaar om {name} met dezelfde invoer. Het concept bevat zijn laatste resultaat.",
+  "It replied with a tool on its last step, so it stopped there.": "Hij antwoordde bij zijn laatste stap met een hulpmiddel, dus daar stopte hij.",
+  "It replied with “{name}”, which isn't one of its tools.": "Hij antwoordde met ‘{name}’, wat geen van zijn hulpmiddelen is.",
+  "It said it was done, but its answer was empty.": "Hij zei dat hij klaar was, maar zijn antwoord was leeg.",
+  "It used all {n} steps without a final answer. The draft holds its last result.": "Hij gebruikte alle {n} stappen zonder eindantwoord. Het concept bevat zijn laatste resultaat.",
+  "Its variables are: {names}": "De variabelen zijn: {names}",
+  "MCP servers can't be reached from this page, so the agent works without this server's tools here. Export to Python and set {setting} in second-thought.ini to use them.": "MCP-servers zijn vanaf deze pagina niet bereikbaar, dus werkt de agent hier zonder de hulpmiddelen van deze server. Exporteer naar Python en stel {setting} in second-thought.ini in om ze te gebruiken.",
+  "MQTT needs a topic, like home/kitchen/temperature.": "MQTT heeft een topic nodig, zoals home/kitchen/temperature.",
+  "MQTT topics": "MQTT-topics",
+  "Meets every criterion.": "Voldoet aan elk criterium.",
+  "Memory is full. Forget some entries in the Memory panel, then run again.": "Het geheugen is vol. Vergeet wat items in het Geheugen-paneel en voer daarna opnieuw uit.",
+  "More broadcasts are running. They won't be listed one by one.": "Er lopen meer uitzendingen. Ze worden niet één voor één getoond.",
+  "No 'when I receive {msg}' script is listening, so nothing happened.": "Geen ‘wanneer ik {msg} ontvang’-script luistert, dus er gebeurde niets.",
+  "No review problems recorded, so nothing to fix.": "Geen problemen uit de beoordeling vastgelegd, dus niets op te lossen.",
+  "No token budget for this run.": "Geen tokenbudget voor deze run.",
+  "On this page the browser already asks before every download.": "Op deze pagina vraagt de browser al vóór elke download.",
+  "Only drawn pictures can be saved as SVG. Choose PNG instead.": "Alleen getekende afbeeldingen kunnen als SVG worden opgeslagen. Kies in plaats daarvan PNG.",
+  "Paused.": "Gepauzeerd.",
+  "Pick a JPEG, PNG, WebP, GIF or SVG file.": "Kies een JPEG-, PNG-, WebP-, GIF- of SVG-bestand.",
+  "Pick a PDF, a Word file (.docx), or a text file such as .txt, .md, .csv or .json.": "Kies een pdf, een Word-bestand (.docx), of een tekstbestand zoals .txt, .md, .csv of .json.",
+  "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "Afbeeldingen kunnen alleen ‘zolang deze pagina open is’ worden onthouden. Sla de afbeelding op als bestand om hem te bewaren.",
+  "Programs inside programs went more than 10 deep, so the run stopped.": "Programma’s in programma’s gingen meer dan 10 niveaus diep, dus de run is gestopt.",
+  "Reached {time}": "{time} bereikt",
+  "Received “{name}”.": "‘{name}’ ontvangen.",
+  "Restored the task, draft, review, result and variables.": "De taak, het concept, de beoordeling, het resultaat en de variabelen zijn hersteld.",
+  "Restored the task, draft, review, result and variables. Draft: {draft}": "De taak, het concept, de beoordeling, het resultaat en de variabelen zijn hersteld. Concept: {draft}",
+  "Result:": "Resultaat:",
+  "Right-click a block that uses this My Block, or the script it's in, to run it.": "Klik met de rechtermuisknop op een blok dat dit Mijn blok gebruikt, of op het script waar het in zit, om het uit te voeren.",
+  "Run stopped. What was ready so far is below.": "Run gestopt. Wat tot nu toe klaar was, staat hieronder.",
+  "Saved memory isn't available here, so this will only last while the page is open.": "Opgeslagen geheugen is hier niet beschikbaar, dus dit blijft alleen bewaard zolang de pagina open is.",
+  "Saved the task, draft, review, result and variables.": "De taak, het concept, de beoordeling, het resultaat en de variabelen zijn opgeslagen.",
+  "Saved the task, draft, review, result and variables. Draft: {draft}": "De taak, het concept, de beoordeling, het resultaat en de variabelen zijn opgeslagen. Concept: {draft}",
+  "Saving files isn't available in this view.": "Bestanden opslaan is in deze weergave niet beschikbaar.",
+  "Slack messages": "Slack-berichten",
+  "Started with: {value}": "Gestart met: {value}",
+  "Started.": "Gestart.",
+  "Starting afresh.": "Opnieuw beginnen.",
+  "Stopped after starting {n} scripts. A message may be broadcasting itself in a loop.": "Gestopt na het starten van {n} scripts. Misschien zendt een bericht zichzelf in een lus uit.",
+  "Stopped after {n} Claude calls in one run, to protect your usage. Check for loops that call Claude too often.": "Gestopt na {n} Claude-aanroepen in één run, om je tegoed te beschermen. Kijk of er lussen zijn die Claude te vaak aanroepen.",
+  "Stopped after {n} steps. A loop may never end; check repeat and while blocks.": "Gestopt na {n} stappen. Misschien eindigt een lus nooit; controleer herhaal- en zolang-blokken.",
+  "Stopped: this run has used about {used} tokens, which reaches its budget of {budget}. Raise the number in the 'limit this run' block.": "Gestopt: deze run heeft ongeveer {used} tokens gebruikt en daarmee zijn budget van {budget} bereikt. Verhoog het getal in het blok ‘beperk deze run’.",
+  "Subject: {subject}": "Onderwerp: {subject}",
+  "Telegram messages": "Telegram-berichten",
+  "That couldn't be saved to memory ({problem}).": "Dat kon niet in het geheugen worden opgeslagen ({problem}).",
+  "That value is too big to remember (over 200 KB). Remember something shorter.": "Die waarde is te groot om te onthouden (meer dan 200 KB). Onthoud iets korters.",
+  "The 'ask Claude about picture' block has no question.": "Het blok ‘vraag Claude over afbeelding’ heeft geen vraag.",
+  "The 'ask Claude for a record' block has no request.": "Het blok ‘vraag Claude om een record’ heeft geen verzoek.",
+  "The 'change picture' block has no change in it.": "Het blok ‘afbeelding wijzigen’ bevat geen wijziging.",
+  "The 'chat' block has no message.": "Het blok ‘chat’ heeft geen bericht.",
+  "The 'draw a picture' block has no description.": "Het blok ‘teken een afbeelding’ heeft geen beschrijving.",
+  "The 'notify' block has no message.": "Het blok ‘melding’ heeft geen bericht.",
+  "The 'rework the draft' block has no instruction.": "Het blok ‘het concept herwerken’ heeft geen instructie.",
+  "The 'run program' block needs the name of a saved program.": "Het blok ‘programma uitvoeren’ heeft de naam van een opgeslagen programma nodig.",
+  "The 'save checkpoint' block needs a name.": "Het blok ‘controlepunt opslaan’ heeft een naam nodig.",
+  "The 'say' block has nothing to say.": "Het blok ‘zeg’ heeft niets te zeggen.",
+  "The 'search the web' block is empty.": "Het blok ‘zoek op het web’ is leeg.",
+  "The 'set {k} of' block needs a record in its middle slot, such as a variable holding 'new record'.": "Het blok ‘{k} van … instellen’ heeft een record nodig in het middelste vak, zoals een variabele met ‘nieuw record’.",
+  "The 'set … of record' block needs a field name.": "Het blok ‘… van record instellen’ heeft een veldnaam nodig.",
+  "The '{where}' block needs a picture in its picture slot.": "Het blok ‘{where}’ heeft een afbeelding nodig in zijn afbeeldingsvak.",
+  "The agent block needs a goal.": "Het agentblok heeft een doel nodig.",
+  "The block '{type}' can't be used as a value here.": "Het blok ‘{type}’ kan hier niet als waarde worden gebruikt.",
+  "The block '{type}' isn't supported yet.": "Het blok ‘{type}’ wordt nog niet ondersteund.",
+  "The data for {svc} isn't valid JSON. Use something like {\"temperature\": 20}.": "De gegevens voor {svc} zijn geen geldige JSON. Gebruik iets als {\"temperature\": 20}.",
+  "The file couldn't be saved here.": "Het bestand kon hier niet worden opgeslagen.",
+  "The picture couldn't be saved here.": "De afbeelding kon hier niet worden opgeslagen.",
+  "The primary model and all {n} backups failed. Last error: {problem}": "Het hoofdmodel en alle {n} reservemodellen zijn mislukt. Laatste fout: {problem}",
+  "The primary model and its backup failed. Last error: {problem}": "Het hoofdmodel en zijn reservemodel zijn mislukt. Laatste fout: {problem}",
+  "The program ended without a result. Add 'add … to the result' or 'write a first draft'.": "Het programma eindigde zonder resultaat. Voeg ‘… aan het resultaat toevoegen’ of ‘een eerste concept schrijven’ toe.",
+  "The program wants to {action} on {entity}. This is a safety check: unlocking, opening and disarming always ask first.": "Het programma wil {action} uitvoeren op {entity}. Dit is een veiligheidscontrole: ontgrendelen, openen en alarmen uitschakelen vragen het altijd eerst.",
+  "The program wants to {action}. This is a safety check: unlocking, opening and disarming always ask first.": "Het programma wil {action} uitvoeren. Dit is een veiligheidscontrole: ontgrendelen, openen en alarmen uitschakelen vragen het altijd eerst.",
+  "The program wants to {said}": "Het programma wil: {said}",
+  "The program “{name}” runs itself ({chain}), which would never end.": "Het programma ‘{name}’ roept zichzelf aan ({chain}), wat nooit zou eindigen.",
+  "The program “{name}” {problem}, so it can't run as a block.": "Het programma ‘{name}’ {problem}, dus het kan niet als blok draaien.",
+  "The reply didn't have the expected shape: {problem}.\nAsking once more for a corrected reply.": "Het antwoord had niet de verwachte vorm: {problem}.\nNog één keer om een verbeterd antwoord vragen.",
+  "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "Het antwoord bereikte de lengtegrens, dus het model is gevraagd door te gaan waar het stopte.",
+  "The reply wasn't readable JSON, so this step was wasted.": "Het antwoord was geen leesbare JSON, dus deze stap was verspild.",
+  "The sample house has no camera called “{id}”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.": "Het voorbeeldhuis heeft geen camera met de naam ‘{id}’. Probeer camera.front_door, camera.driveway, camera.garden, camera.garage of camera.pet.",
+  "The sample house has no entity called “{id}”. Open the Home Assistant panel to see the ones it has.": "Het voorbeeldhuis heeft geen entiteit met de naam ‘{id}’. Open het Home Assistant-paneel om te zien welke het heeft.",
+  "The saved program “{name}” couldn't be opened.": "Het opgeslagen programma ‘{name}’ kon niet worden geopend.",
+  "The task is empty. Type what you want into 'set task to'.": "De taak is leeg. Typ in ‘taak instellen op’ wat je wilt.",
+  "The tool block for “{blockName}” gives a type for “{name}”, but that My Block's inputs are: {inputs}.": "Het hulpmiddelblok voor ‘{blockName}’ geeft een type voor ‘{name}’, maar de invoer van dat Mijn blok is: {inputs}.",
+  "There's no Homey device called “{name}”.": "Er is geen Homey-apparaat met de naam ‘{name}’.",
+  "There's no Homey flow called “{name}”.": "Er is geen Homey-flow met de naam ‘{name}’.",
+  "There's no Homey variable called “{name}”.": "Er is geen Homey-variabele met de naam ‘{name}’.",
+  "There's no My Block called “{blockName}”.": "Er is geen Mijn blok met de naam ‘{blockName}’.",
+  "There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.": "Er is in deze run geen controlepunt met de naam ‘{name}’. Zet een blok ‘controlepunt opslaan’ vóór dit blok.",
+  "There's no definition for the block '{name}'.": "Er is geen definitie voor het blok ‘{name}’.",
+  "There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.": "Er is nog geen concept. Zet een blok ‘een eerste concept schrijven’ of ‘concept instellen op’ vóór deze stap.",
+  "There's no email with id {id}.": "Er is geen e-mail met id {id}.",
+  "There's no prompt called “{name}” in your prompt library. Open Programs to add it.": "Er is geen prompt met de naam ‘{name}’ in je promptbibliotheek. Open Programma’s om hem toe te voegen.",
+  "There's no saved program called “{name}”. Save it from the Programs button first.": "Er is geen opgeslagen programma met de naam ‘{name}’. Sla het eerst op via de knop Programma’s.",
+  "There's nothing to save: the value in the 'save as file' block is empty.": "Er is niets om op te slaan: de waarde in het blok ‘opslaan als bestand’ is leeg.",
+  "This page can't open other websites, so the agent is told to use search_web instead. Exported Python reads the page for real.": "Deze pagina kan geen andere websites openen, dus de agent krijgt te horen dat hij search_web moet gebruiken. Geëxporteerde Python leest de pagina echt.",
+  "This page can't open {u}, so it only has its sample feeds: {feeds}. Exported Python reads any feed.": "Deze pagina kan {u} niet openen, dus heeft ze alleen haar voorbeeldfeeds: {feeds}. Geëxporteerde Python leest elke feed.",
+  "This page uses a sample house, so nothing real is read or switched. Export to Python to use your own Home Assistant.": "Deze pagina gebruikt een voorbeeldhuis, dus er wordt niets echts gelezen of geschakeld. Exporteer naar Python om je eigen Home Assistant te gebruiken.",
+  "This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.": "Deze pagina gebruikt voorbeeld-{noun}, dus er wordt niets echts gelezen of verstuurd. Geëxporteerde Python gebruikt die van jou.",
+  "This program only has scheduled scripts. Turn Schedules on to let them run, or add 'when Run is clicked' from Events.": "Dit programma heeft alleen geplande scripts. Zet Planningen aan om ze te laten draaien, of voeg ‘wanneer op Uitvoeren wordt geklikt’ uit Gebeurtenissen toe.",
+  "This run stops before a Claude call once it has used about {budget} tokens (about {used} so far).": "Deze run stopt vóór een Claude-aanroep zodra hij ongeveer {budget} tokens heeft gebruikt (tot nu toe ongeveer {used}).",
+  "This view can't send pictures to Claude, so blocks that look at photos can't run here.": "Deze weergave kan geen afbeeldingen naar Claude sturen, dus blokken die foto’s bekijken kunnen hier niet draaien.",
+  "To change a list, put a list variable in the 'in list' slot.": "Om een lijst te wijzigen, zet je een lijstvariabele in het vak ‘in lijst’.",
+  "To save a picture, use the 'save picture' block.": "Gebruik het blok ‘afbeelding opslaan’ om een afbeelding op te slaan.",
+  "Too many scripts running at once (over {n}). Use 'broadcast and wait' inside loops.": "Te veel scripts tegelijk bezig (meer dan {n}). Gebruik ‘uitzenden en wachten’ in lussen.",
+  "Tools: {tools}": "Hulpmiddelen: {tools}",
+  "Try {attempt} of {max} failed: {lastError}\nTrying again in {seconds}s.": "Poging {attempt} van {max} mislukt: {lastError}\nOver {seconds} s opnieuw proberen.",
+  "Unknown tool “{name}”.": "Onbekend hulpmiddel ‘{name}’.",
+  "Using {model}": "{model} gebruiken",
+  "Using {model} for the blocks inside": "{model} gebruiken voor de blokken erin",
+  "Waiting for you to confirm the download…": "Wachten tot je de download bevestigt…",
+  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Terug naar het concept uit ronde {round}: dat had de minste problemen ({n}). De rondes erna verbeterden het niet.",
+  "Which Homey device? Give its name, like Kitchen light.": "Welk Homey-apparaat? Geef de naam, zoals Keukenlamp.",
+  "Why: {why}": "Waarom: {why}",
+  "Woke {n} waiting script.": "{n} wachtend script gewekt.",
+  "Woke {n} waiting scripts.": "{n} wachtende scripts gewekt.",
+  "You can't publish to a topic with + or # in it: those only work for listening.": "Je kunt niet publiceren op een topic met + of # erin: die werken alleen om te luisteren.",
+  "You said no, so the program skipped this: {said}": "Je zei nee, dus het programma heeft dit overgeslagen: {said}",
+  "all day": "hele dag",
+  "any smart home action (Home Assistant, Homey or MQTT)": "elke smarthome-actie (Home Assistant, Homey of MQTT)",
+  "ask_me needs a question.": "ask_me heeft een vraag nodig.",
+  "calculate couldn't work out “{expression}”: {message}.": "calculate kon ‘{expression}’ niet uitrekenen: {message}.",
+  "calendar events": "agenda-afspraken",
+  "emails": "e-mails",
+  "news feeds": "nieuwsfeeds",
+  "none": "geen",
+  "nothing": "niets",
+  "nothing usable": "niets bruikbaars",
+  "plans first": "plant eerst",
+  "read_email needs an email's id number, from search_email.": "read_email heeft het id-nummer van een e-mail nodig, uit search_email.",
+  "read_page needs a web address starting with http:// or https://.": "read_page heeft een webadres nodig dat begint met http:// of https://.",
+  "remember needs a name.": "remember heeft een naam nodig.",
+  "review_text needs criteria to check against.": "review_text heeft criteria nodig om aan te toetsen.",
+  "review_text needs some text to check.": "review_text heeft wat tekst nodig om te controleren.",
+  "saving files": "het opslaan van bestanden",
+  "search_github needs something to search for.": "search_github heeft iets nodig om naar te zoeken.",
+  "search_linkedin needs a query.": "search_linkedin heeft een zoekopdracht nodig.",
+  "search_memory needs some words to look for.": "search_memory heeft wat woorden nodig om naar te zoeken.",
+  "search_web needs a query.": "search_web heeft een zoekopdracht nodig.",
+  "sending messages and announcements": "het versturen van berichten en aankondigingen",
+  "smart home actions, messages and saving files": "smarthome-acties, berichten en het opslaan van bestanden",
+  "time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{when}”.": "time_plus heeft een tijd nodig zoals 09:30 of 2026-10-10 09:30, niet ‘{when}’.",
+  "up to {n} steps": "tot {n} stappen",
+  "with {data}": "met {data}",
+  "{device} has no “{cap}”. It has: {caps}.": "{device} heeft geen ‘{cap}’. Het heeft: {caps}.",
+  "{label} ({left} left)": "{label} (nog {left})",
+  "{model} failed: {problem}\nTrying {next} instead.": "{model} is mislukt: {problem}\nIn plaats daarvan {next} proberen.",
+  "{n} characters": "{n} tekens",
+  "{n} script started": "{n} script gestart",
+  "{n} script started, waiting for it to finish": "{n} script gestart, wachten tot het klaar is",
+  "{n} scripts started": "{n} scripts gestart",
+  "{n} scripts started, waiting for them to finish": "{n} scripts gestart, wachten tot ze klaar zijn",
+  "{service} on {entity} was refused, so nothing happened.": "{service} op {entity} is geweigerd, dus er gebeurde niets.",
+  "{service} was refused, so nothing happened.": "{service} is geweigerd, dus er gebeurde niets.",
+  "{who} can't be reached from this page, so Claude answers in its place. Export to Python to use {who} itself.": "{who} is vanaf deze pagina niet bereikbaar, dus Claude antwoordt in zijn plaats. Exporteer naar Python om {who} zelf te gebruiken.",
+  "“{hhmm}” isn't a time like 09:00.": "‘{hhmm}’ is geen tijd zoals 09:00.",
+  "“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).": "‘{kind}’ is geen type dat de agent kent. Gebruik text, number, yes/no, list of any (voor ‘{name}’).",
+  "“{name}” can't run while other scripts are running at the same time. Run it from a script that runs on its own (not alongside a broadcast).": "‘{name}’ kan niet draaien terwijl er tegelijk andere scripts draaien. Start het vanuit een script dat op zichzelf draait (niet naast een uitzending).",
+  "“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.": "‘{repo}’ is geen GitHub-project. Gebruik eigenaar/naam, zoals octocat/hello-world.",
+  "“{shown}” isn't a real date.": "‘{shown}’ is geen echte datum.",
+  "“{shown}” isn't a time.": "‘{shown}’ is geen tijd.",
+  "“{svc}” isn't a service name. Use domain.service, for example light.turn_off.": "‘{svc}’ is geen dienstnaam. Gebruik domain.service, bijvoorbeeld light.turn_off.",
+  "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "‘{text}’ is geen dag. Gebruik today, tomorrow, een weekdag of JJJJ-MM-DD.",
+  "“{to}” isn't an email address.": "‘{to}’ is geen e-mailadres.",
+  "“{value}” isn't a number.": "‘{value}’ is geen getal.",
+  "“{value}” isn't on or off.": "‘{value}’ is niet on of off.",
+  "Try: {tip}": "Probeer: {tip}",
+  "Shared by {author}.": "Gedeeld door {author}.",
+  "{title} (shared by {author})": "{title} (gedeeld door {author})"
+ },
+ "examples": {
+  "review": {
+   "title": "Beoordelingslus",
+   "desc": "Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.",
+   "tip": "Verander de taak in het blauwe blok en de regels in het paarse."
+  },
+  "interview": {
+   "title": "Eerst interviewen, dan schrijven",
+   "desc": "Vraagt wat er geschreven moet worden en voor wie, maakt een concept en blijft het herwerken tot je op Goedkeuren drukt.",
+   "tip": "Beantwoord de vragen in het runlogboek; stuur het een paar keer terug om het bij te sturen."
+  },
+  "w_email": {
+   "title": "Een e-mail oppoetsen",
+   "desc": "Plak een ruwe e-mail, zeg voor wie hij is en hoe hij moet klinken, en Claude kneedt hem tot je hem goedkeurt.",
+   "tip": "Probeer een lastige: een onbetaalde factuur najagen, of nee zeggen tegen een gunst."
+  },
+  "w_story": {
+   "title": "Verhaaltje voor het slapengaan met controle",
+   "desc": "Schrijft een zacht verhaal voor een bepaald kind en controleert dan of het past bij de leeftijd, rustig is en niet te lang.",
+   "tip": "Verander de controleregels, bijvoorbeeld ‘bevat een rijm’ of ‘leert delen’."
+  },
+  "w_longpost": {
+   "title": "Eerst de opzet, dan het artikel",
+   "desc": "Plant de tussenkoppen, schrijft elke sectie apart, voegt ze samen, controleert of het goed loopt en slaat een .md-bestand op.",
+   "tip": "Verander de taak in elk artikel dat je op je website wilt."
+  },
+  "brainstorm": {
+   "title": "Brainstormen en de beste kiezen",
+   "desc": "Claude bedenkt 6 koppen, geeft elk een cijfer van 0 tot 10 en houdt de hoogst scorende.",
+   "tip": "Vervang koppen door namen, slogans of titels."
+  },
+  "w_social": {
+   "title": "Eén idee, vijf platforms",
+   "desc": "Maakt van één aankondiging een tweet, een LinkedIn-bericht, een Instagram-onderschrift, een e-mail en een sms.",
+   "tip": "Pas de lijst met platforms aan naar de platforms die je echt gebruikt."
+  },
+  "translate": {
+   "title": "Vertalen naar een reeks talen",
+   "desc": "Schrijft een welkomsttekst voor een website in het Engels en vertaalt die dan naar het Frans en Spaans.",
+   "tip": "Voeg meer talen toe aan het lijstblok."
+  },
+  "parallel": {
+   "title": "Twee critici tegelijk",
+   "desc": "Schrijft een concept, waarna twee aparte scripts het tegelijk beoordelen: één op juistheid, één voor beginners.",
+   "tip": "Voeg een derde ‘wanneer ik … ontvang’-script toe met een andere criticus."
+  },
+  "gemini": {
+   "title": "Claude schrijft, Gemini beoordeelt",
+   "desc": "Claude maakt een concept, Gemini controleert het, Claude herziet het. Een tweede mening van een andere AI.",
+   "tip": "Gemini antwoordt alleen in geëxporteerde Python; op de pagina vervangt Claude het."
+  },
+  "w_llama": {
+   "title": "Llama schrijft, Claude beoordeelt",
+   "desc": "Een Llama-model op je eigen computer schrijft het concept en de herzieningen; Claude beoordeelt elke versie aan de hand van jouw regels.",
+   "tip": "Llama antwoordt alleen in geëxporteerde Python (met Ollama aan); op de pagina vervangt Claude het."
+  },
+  "w_judges": {
+   "title": "Zes AI’s jureren",
+   "desc": "Claude, Gemini, Llama, DeepSeek, Grok en GPT geven je tekst elk een cijfer van 0 tot 10; je krijgt alle zes de cijfers en het gemiddelde.",
+   "tip": "Plak een kop, een productbeschrijving of het begin van een verhaal."
+  },
+  "r_brief": {
+   "title": "Onderzoeksbriefing",
+   "desc": "Splitst je onderwerp in 4 vragen, beantwoordt ze allemaal en controleert dan of de hele briefing evenwichtig is en eerlijk over onzekerheid.",
+   "tip": "Probeer ‘Is roggemeel beter voor een starter dan witte bloem?’"
+  },
+  "r_compare": {
+   "title": "Opties vergelijken",
+   "desc": "Zet voor- en nadelen op een rij en voor wie elke optie geschikt is, geeft ze een cijfer en zet de beste bovenaan.",
+   "tip": "Probeer ‘drie broodbloemsoorten’, ‘twee laptops’ of ‘vakantie in Zeeland of de Ardennen’."
+  },
+  "r_sides": {
+   "title": "Beide kanten bepleiten",
+   "desc": "Twee scripts bouwen tegelijk het sterkste pleidooi voor en tegen, waarna een derde stap een eerlijke conclusie schrijft.",
+   "tip": "Gebruik het voor een beslissing waar je mee vastzit."
+  },
+  "r_second": {
+   "title": "Tweede mening van DeepSeek",
+   "desc": "Claude en DeepSeek beantwoorden dezelfde vraag apart; daarna vergelijkt Claude de twee en wijst aan waar ze het oneens zijn.",
+   "tip": "Waar ze het oneens zijn, loont het om dieper te graven of een bron te checken."
+  },
+  "w_gptcheck": {
+   "title": "Claude schrijft, GPT controleert",
+   "desc": "Claude schrijft een stuk, GPT van OpenAI schiet er gaten in, en Claude herschrijft het om elk punt van GPT op te lossen.",
+   "tip": "Het model van een tweede bedrijf ziet dingen waar het eerste blind voor is. Probeer het met een sollicitatiebrief."
+  },
+  "r_sourced": {
+   "title": "Antwoord met bronnen (Perplexity)",
+   "desc": "Perplexity zoekt op het web en antwoordt met genummerde bronnen; daarna wijst Claude elke bewering aan die de bronnen niet onderbouwen.",
+   "tip": "Het beste voor dingen die veranderen: prijzen, openingstijden, recent nieuws. Op deze pagina vervangt Claude het en kan niet zoeken, dus exporteer het om echte bronnen te zien."
+  },
+  "w_worldpanel": {
+   "title": "Ideeën van over de hele wereld",
+   "desc": "Mistral (Frankrijk), Qwen (Alibaba), Kimi (Moonshot), GLM (Z.ai) en MiniMax komen elk met een idee; Claude kiest het sterkste en zegt waarom.",
+   "tip": "Modellen die op verschillende plekken zijn getraind, hebben echt een ander gevoel. Probeer namen voor een product, of een thema voor een feest."
+  },
+  "w_groqstorm": {
+   "title": "Snelle ronde met Groq",
+   "desc": "Het razendsnelle open model van Groq gooit in een oogwenk 20 ruwe ideeën eruit; Claude kiest daarna de vijf beste en schaaft ze bij.",
+   "tip": "Goedkope, snelle modellen zijn geweldig voor kwantiteit; een zorgvuldig model is beter in kiezen. Probeer titels voor blogberichten."
+  },
+  "c_openonly": {
+   "title": "Alleen open modellen (Hugging Face)",
+   "desc": "Gemma 4 schrijft een antwoord en GPT-OSS controleert het. Beide zijn open modellen, via Hugging Face, dus er wordt helemaal geen Claude gebruikt.",
+   "tip": "Handig om open modellen met Claude te vergelijken. Vervang de modelnamen in het geëxporteerde bestand door een willekeurig model op huggingface.co."
+  },
+  "r_anymodel": {
+   "title": "Elk model dat je wilt (OpenRouter)",
+   "desc": "De automatische keuze van OpenRouter beantwoordt je vraag, daarna antwoordt een model dat jij noemt ook, en Claude zegt welk antwoord beter is.",
+   "tip": "Typ een naam van openrouter.ai/models in het tweede blok ‘met OpenRouter-model’, zoals mistralai/mistral-small of google/gemma-4-31b-it."
+  },
+  "r_survey": {
+   "title": "Eerlijke enquêtevragen",
+   "desc": "Schrijft enquêtevragen, geeft elke vraag een cijfer voor neutraliteit en duidelijkheid, en herschrijft de zwakke.",
+   "tip": "Verlaag of verhoog de drempel (7) in het oranje ‘als’-blok."
+  },
+  "files": {
+   "title": "Een bestand samenvatten",
+   "desc": "Kies een bestand (pdf, Word of tekst); Claude vat het samen met actiepunten en slaat summary.md op.",
+   "tip": "Probeer een lang pdf-rapport of de notulen van een vergadering."
+  },
+  "r_pdf_notes": {
+   "title": "Studieaantekeningen uit een document",
+   "desc": "Haalt de kernpunten uit een document, zet de vragen op een rij die het openlaat, en slaat notes.md op.",
+   "tip": "Werkt goed met wetenschappelijke artikelen en lange artikelen die als pdf zijn opgeslagen."
+  },
+  "r_web": {
+   "title": "Wat is er nieuw over een onderwerp",
+   "desc": "Zoekt naar recent nieuws over een onderwerp en onthoudt wanneer je voor het laatst keek.",
+   "tip": "Echt zoeken op het web werkt alleen in geëxporteerde Python; op de pagina antwoordt Claude vanuit wat hij weet."
+  },
+  "pictures": {
+   "title": "Tekenen, beoordelen, opnieuw tekenen",
+   "desc": "Claude tekent een illustratie, beoordeelt zijn eigen tekening kritisch en tekent hem twee keer opnieuw met de verbeteringen.",
+   "tip": "Verander in het eerste roze blok wat er getekend wordt."
+  },
+  "d_logo": {
+   "title": "Logo-ideeën, het beste bewaard",
+   "desc": "Tekent drie logo-ideeën voor je merk, geeft elk een cijfer en bewaart het beste.",
+   "tip": "Beschrijf het gevoel dat je wilt, niet alleen de naam."
+  },
+  "d_critique": {
+   "title": "Beoordeel mijn ontwerp",
+   "desc": "Kies een afbeelding van je poster, pagina of scherm; Claude geeft vriendelijke feedback als expert en de vijf belangrijkste verbeteringen.",
+   "tip": "Maak een screenshot van een webpagina en probeer het."
+  },
+  "d_wireframes": {
+   "title": "App-schermen schetsen",
+   "desc": "Maakt van een app-idee de drie belangrijkste schermen, elk met een eenvoudige wireframe-tekening.",
+   "tip": "Beschrijf je idee in één zin, zoals ‘een app om bij te houden wanneer ik mijn starter voed’."
+  },
+  "d_palette": {
+   "title": "Kleurenpalet uit een sfeer",
+   "desc": "Maakt een palet van vijf kleuren met hexcodes vanuit een sfeer of plek, en tekent dan de kleurstalen.",
+   "tip": "Probeer ‘een bakkerij bij zonsopgang’ of ‘een strandtent in de winter’."
+  },
+  "d_icons": {
+   "title": "Een bijpassende set pictogrammen",
+   "desc": "Vaste instructies houden elke tekening in één stijl, zodat vijf pictogrammen een bijpassende set worden.",
+   "tip": "Verander de stijl in het instructieblok: kleur, lijndikte, gevuld of omlijnd."
+  },
+  "d_name": {
+   "title": "Naam, slogan en eerste logo",
+   "desc": "Stelt vijf namen met slogans voor, laat je er een kiezen en tekent er dan een eerste logo voor.",
+   "tip": "Gebruik het voor een winkel, een club, een product of een hobbyproject."
+  },
+  "l_quiz": {
+   "title": "Een quiz maken",
+   "desc": "Schrijft vijf meerkeuzevragen over elk onderwerp, met het goede antwoord gemarkeerd, en slaat quiz.md op.",
+   "tip": "Zeg voor wie het is: ‘de Tachtigjarige Oorlog, voor groep 7’ of ‘fermentatie, voor volwassenen’."
+  },
+  "l_levels": {
+   "title": "Op drie manieren uitgelegd",
+   "desc": "Legt één idee uit voor een kind van 7, een tiener en een expert, zodat je het op elk niveau ziet.",
+   "tip": "Probeer iets wat je zelf maar half begrijpt."
+  },
+  "l_tutor": {
+   "title": "Oefenen met een bijlesdocent",
+   "desc": "Een geduldige docent stelt je één voor één vragen, geeft hints in plaats van antwoorden en vat aan het eind samen.",
+   "tip": "Verander het aantal rondes in het oranje ‘herhaal’-blok."
+  },
+  "l_flashcards": {
+   "title": "Flashcards uit aantekeningen",
+   "desc": "Kies je aantekeningen; Claude maakt acht flashcards met vraag en antwoord en slaat ze op als tekstbestand.",
+   "tip": "Elke pdf, elk Word-bestand of tekstaantekeningen zijn goed."
+  },
+  "l_plan": {
+   "title": "Studieplan per week",
+   "desc": "Maakt een weekplan uit wat je leert, hoeveel tijd je hebt en hoeveel uur per week.",
+   "tip": "Wees specifiek: ‘basis van Python, 6 weken, 3 uur per week’."
+  },
+  "k_meeting": {
+   "title": "Vergadernotities naar acties",
+   "desc": "Kies de notities van een vergadering; je krijgt een korte samenvatting en een checklist van wie wat wanneer doet.",
+   "tip": "Ruwe, rommelige notities werken prima."
+  },
+  "k_cv": {
+   "title": "Een cv afstemmen op een vacature",
+   "desc": "Kies je cv en plak de vacature; Claude herschrijft het cv zodat het past en controleert dan of elke bewering nog klopt.",
+   "tip": "Houd de regel ‘elke bewering staat in het oorspronkelijke cv’. Die voorkomt dat er iets wordt verzonnen."
+  },
+  "k_complaint": {
+   "title": "Reageren op een klacht",
+   "desc": "Schrijft een warme, eerlijke reactie aan een ontevreden klant, geeft die een cijfer voor empathie, verbetert hem en wacht op je goedkeuring.",
+   "tip": "Pas het instructieblok aan zodat het klinkt als je eigen bedrijf."
+  },
+  "k_products": {
+   "title": "Productbeschrijvingen in bulk",
+   "desc": "Schrijft een winkelbeschrijving voor elk product in een lijst, herschrijft alle die lager dan 7 scoren en slaat ze allemaal op.",
+   "tip": "Vervang de lijst door je eigen producten."
+  },
+  "k_agenda": {
+   "title": "Vergaderagenda met tijden",
+   "desc": "Maakt van het doel, de deelnemers en de duur van een vergadering een agenda met tijden en een doel per punt.",
+   "tip": "Voeg ‘met 5 minuten voor vragen’ toe om te zien hoe hij zich aanpast."
+  },
+  "h_bake": {
+   "title": "Bakschema, terug gerekend",
+   "desc": "Zeg wanneer je het brood uit de oven wilt en krijg een stappenschema dat vanaf dat tijdstip terugrekent.",
+   "tip": "Probeer ‘zaterdag 10 uur’, dan ‘zondag rond lunchtijd, de keuken is koud’."
+  },
+  "h_meals": {
+   "title": "Maaltijden uit wat er in de koelkast ligt",
+   "desc": "Plant vijf eenvoudige avondmaaltijden uit wat je al hebt, en schrijft dan een korte boodschappenlijst voor wat ontbreekt.",
+   "tip": "Noem diëten, dingen die je niet lust, of ‘niets wat langer dan 30 minuten duurt’."
+  },
+  "h_recipe": {
+   "title": "Een recept aanpassen",
+   "desc": "Plak een recept en zeg wat er moet veranderen (halveren, vegan maken, een ingrediënt vervangen); Claude herschrijft het en controleert het dubbel.",
+   "tip": "De controle zorgt dat de hoeveelheden na het omrekenen nog kloppen."
+  },
+  "h_dayout": {
+   "title": "Een dagje uit plannen",
+   "desc": "Plant een ontspannen dag met tijden en plekken, en controleert dan of de reistijden realistisch zijn en niemand buiten de boot valt.",
+   "tip": "Zeg wie er meegaat: ‘opa en oma en een peuter’ verandert alles."
+  },
+  "a_bake": {
+   "title": "Agent: plan mijn bakdag",
+   "desc": "Een agent die zijn eigen stappen kiest: hij leest zijn notities over je starter, vraagt je wat hij nodig heeft, slaat op wat hij leert en schrijft dan een bakplan.",
+   "tip": "Voer hem twee keer uit: de tweede keer onthoudt hij je antwoorden. Voeg het hulpmiddel ‘op het web zoeken’ toe, of verander het doel."
+  },
+  "a_tool": {
+   "title": "Agent met je eigen hulpmiddel",
+   "desc": "Geeft een agent een van je Mijn blokken als hulpmiddel: een hydratatiecalculator. Hij vraagt je om de gewichten, gebruikt de calculator en legt het resultaat uit.",
+   "tip": "Maak je eigen Mijn blok dat een waarde teruggeeft, en voeg er dan een blok ‘hulpmiddel: Mijn blok’ met een duidelijke beschrijving voor toe."
+  },
+  "a_timetable": {
+   "title": "Agent: bakrooster",
+   "desc": "Zeg wanneer je het brood uit de oven wilt. Hij vraagt hoe warm je keuken is en rekent dan terug met het tijdhulpmiddel, zodat elke tijd in het plan klopt.",
+   "tip": "Antwoord met een dag en tijd, zoals ‘zaterdag 11:00’. Vraag daarna om twee broden."
+  },
+  "a_scale": {
+   "title": "Agent: een recept omrekenen",
+   "desc": "Geef hem een recept en hoeveel deeg je wilt. Hij rekent de bakkerspercentages en de nieuwe gewichten uit met het rekenhulpmiddel, zodat geen enkel getal gegokt is.",
+   "tip": "Probeer ‘drie broden van 900 g’. De samenvatting van de agent toont elke berekening."
+  },
+  "a_selfcheck": {
+   "title": "Agent: schrijven, controleren, verbeteren",
+   "desc": "Schrijft een kort stuk, laat een aparte beoordelaar het toetsen aan jouw criteria en lost op wat de beoordelaar vindt tot het slaagt.",
+   "tip": "Zet je eigen huisstijl in de criteria. De beoordelaar ziet alleen de tekst, niet hoe de agent eraan kwam."
+  },
+  "a_readfile": {
+   "title": "Agent: controleer mijn receptbestand",
+   "desc": "Vraagt je om een receptbestand (pdf, Word of tekst), leest het, rekent de hydratatie en het zout uit met het rekenhulpmiddel en wijst alles aan wat niet lijkt te kloppen.",
+   "tip": "Elk recept met gewichten in grammen werkt. Een gescande pdf niet: die bevat afbeeldingen van pagina’s, geen woorden."
+  },
+  "a_research": {
+   "title": "Agent: onderzoek met bronnen",
+   "desc": "Zoekt, leest zijn bronnen goed, slaat de belangrijkste feiten op voor de volgende keer en antwoordt met de adressen die hij gebruikte. Geëxporteerde Python leest de echte pagina’s; deze pagina zoekt vanuit Claudes kennis.",
+   "tip": "Verander de vraag. Voer het opnieuw uit en het kan beginnen met de feiten die het opsloeg."
+  },
+  "a_house": {
+   "title": "Agent: huiscontrole",
+   "desc": "Kijkt in je Home Assistant rond naar deuren die openstaan, bijna lege batterijen, apparaten die offline zijn en vreemde temperaturen, en zet op een rij wat aandacht nodig heeft. Op deze pagina gebruikt hij het voorbeeldhuis.",
+   "tip": "Open eerst een raam in het Home Assistant-paneel en kijk of hij het merkt."
+  },
+  "a_bedtime": {
+   "title": "Agent: ronde voor het slapengaan",
+   "desc": "Vindt lampen die nog aan zijn en zet ze uit, en vraagt het je bij elke lamp. Hij controleert ook de deuren en sloten, maar meldt ze alleen: hij opent of ontgrendelt nooit iets. Op deze pagina gebruikt hij het voorbeeldhuis.",
+   "tip": "Zeg ‘Niet doen’ bij een van zijn verzoeken en kijk hoe hij zonder die lamp verdergaat."
+  },
+  "a_news": {
+   "title": "Agent: nieuwsoverzicht",
+   "desc": "Leest je nieuwsfeeds, slaat over wat hij je vorige keer liet zien en kiest wat je aandacht waard is, met links. Op deze pagina leest hij twee voorbeeldfeeds.",
+   "tip": "Zet in geëxporteerde Python je eigen feeds in second-thought.ini (feeds = …). Voer hem twee keer uit: de tweede keer toont hij alleen wat nieuw is."
+  },
+  "a_trip": {
+   "title": "Agent: reisplanner",
+   "desc": "Vraagt waar je heen wilt en wie er meegaat, vindt vrije dagen in je agenda, zoekt dingen op en maakt een dag-voor-dagplan met tijden die kloppen en een ruw budget.",
+   "tip": "Zeg wie er meegaat en wat belangrijk is, zoals ‘drempelvrij’ of ‘een peuter’. Hij slaat het plan op, zodat je de volgende keer om wijzigingen kunt vragen."
+  },
+  "a_prs": {
+   "title": "Agent: pull requests voor mij",
+   "desc": "Vindt de GitHub-pull requests die op jouw review wachten, leest ze allemaal en vertelt je wat ze veranderen, waar je goed naar moet kijken en een voorgestelde reactie. Hij leest alleen: hij plaatst niets.",
+   "tip": "Heeft GITHUB_TOKEN nodig in geëxporteerde Python. Voer hem elke ochtend uit, of zet hem onder een blok ‘wanneer het 09:00 is’."
+  },
+  "a_prreview": {
+   "title": "Agent: een pull request reviewen en erop reageren",
+   "desc": "Vraagt welke pull request hij moet reviewen, leest hem, schrijft een reviewreactie, laat een aparte beoordelaar controleren of de reactie eerlijk en specifiek is, en plaatst hem dan, nadat hij het je heeft gevraagd.",
+   "tip": "Zeg ‘Niet doen’ wanneer hij wil plaatsen, om de reactie te lezen zonder hem te plaatsen."
+  },
+  "a_inbox": {
+   "title": "Agent: inbox sorteren",
+   "desc": "Leest je e-mail van de laatste twee dagen, sorteert hem in ‘moet beantwoord worden’, ‘goed om te weten’ en ‘negeren’, kijkt in je agenda naar alles met een datum en schrijft de antwoorden. Hij verstuurt niets zonder het je te vragen.",
+   "tip": "Heeft EMAIL_ADDRESS en een app-wachtwoord nodig in geëxporteerde Python. Zeg ‘Toestaan’ om een geschreven antwoord te versturen, of ‘Niet doen’ om het als concept te bewaren."
+  },
+  "a_week": {
+   "title": "Agent: plan mijn week",
+   "desc": "Kijkt naar je agenda voor de week, je recente e-mails en de notities die je naar je Telegram-bot hebt gestuurd, en stelt voor wanneer je bakt en wat er moet gebeuren, met tijden die om al het andere heen passen.",
+   "tip": "Stuur je bot in de loop van de week notities aan jezelf, zoals ‘roggemeel bestellen’. De agent pikt ze op."
+  },
+  "a_tgbot": {
+   "title": "Telegram-bot die antwoordt",
+   "desc": "Als je je Telegram-bot een bericht stuurt, antwoordt een agent met behulp van je agenda, je notities en berekeningen, en stuurt het antwoord terug. Druk op Uitvoeren om het met een getypt bericht te proberen; laat het in geëxporteerde Python volgens planning draaien, dan beantwoordt het echte berichten.",
+   "tip": "In geëxporteerde Python: maak een bot met @BotFather, zet het token in second-thought.ini en start dan run-on-schedule. Hij antwoordt alleen in je eigen chat (TELEGRAM_CHAT_ID)."
+  },
+  "a_discord": {
+   "title": "Discord-bot die bakvragen beantwoordt",
+   "desc": "Als iemand een vraag stelt in je Discord-kanaal, beantwoordt een agent die, doet berekeningen met de calculator en antwoordt in hetzelfde kanaal. Druk op Uitvoeren om het met een getypte vraag te proberen.",
+   "tip": "In geëxporteerde Python: maak een Discord-bot met de Message Content-intent, zet het token en je kanaal-id in second-thought.ini en start dan run-on-schedule. Hij leest alleen de kanalen die je opgeeft. Vervang de roze blokken door de Slack-blokken om in plaats daarvan Slack te gebruiken."
+  },
+  "a_linkedin": {
+   "title": "Agent: mensen vinden op LinkedIn",
+   "desc": "Doorzoekt de openbare pagina’s van LinkedIn naar mensen en bedrijven rond een onderwerp, en zet op een rij wie ze zijn, wat ze doen en waarom ze het benaderen waard kunnen zijn. Hij vindt alleen wat LinkedIn iedereen laat zien, via een zoekopdracht op het web.",
+   "tip": "Verander het onderwerp en de plaats. Geëxporteerde Python zoekt echt; deze pagina antwoordt vanuit Claudes kennis."
+  },
+  "a_mqtt": {
+   "title": "Agent: controleer de sensoren (MQTT)",
+   "desc": "Leest je MQTT-sensoren (Zigbee2MQTT en andere), wijst alles vreemds aan, zoals een lek, een bijna lege batterij of een stekker die aan staat, en biedt aan dingen uit te zetten, nadat hij het je heeft gevraagd.",
+   "tip": "Geëxporteerde Python: stel MQTT_HOST in. Verander de topics in het doel naar waar je apparaten op publiceren."
+  },
+  "y_goodnight": {
+   "title": "Agent: Homey welterusten",
+   "desc": "Een agent kijkt rond in je Homey: zet lampen uit die nog aan zijn (vraagt het je eerst en laat de overlooplamp aan), controleert deuren en sloten en meldt ze alleen, en vertelt je welke batterijen bijna leeg zijn. Op deze pagina gebruikt hij een voorbeeldwoning.",
+   "tip": "Geëxporteerde Python: stel HOMEY_URL en HOMEY_API_KEY in. Zeg ‘Niet doen’ bij een van zijn verzoeken en hij gaat zonder dat verzoek verder."
+  },
+  "y_washer": {
+   "title": "Homey: de was is klaar",
+   "desc": "Houdt via Homey het vermogen van de wasmachine in de gaten. Zakt het onder 5 W, dan schrijft Claude een korte herinnering en stuurt die naar Telegram. Druk op Uitvoeren om het met een getypt vermogen te proberen.",
+   "tip": "Verander de apparaatnaam naar je eigen stekker. Geëxporteerde Python controleert elke 10 seconden zolang het volgens planning draait."
+  },
+  "y_proofer": {
+   "title": "Homey: de rijskast precies goed houden",
+   "desc": "Leest de temperatuur van de rijskast uit Homey en zet, als het te warm is, de stekker van de verwarming uit en vertelt je waarom. Te koud, en hij zet hem aan.",
+   "tip": "Verander de apparaatnamen naar de jouwe. Voeg een blok ‘wanneer Homey-apparaat … verandert’ toe om het bij elke temperatuurverandering te laten draaien."
+  },
+  "y_energy": {
+   "title": "Homey: waar gaat de stroom heen?",
+   "desc": "Leest elk Homey-apparaat dat vermogen meet en laat Claude in gewone taal uitleggen wat het meest verbruikt en wat je uit kunt zetten.",
+   "tip": "Voer het ’s avonds uit, wanneer het meeste uit zou moeten staan."
+  },
+  "y_bakeday": {
+   "title": "Homey: bakmodus starten",
+   "desc": "Telt de broden van deze week in een Homey-variabele, start je flow ‘Baking mode’ en vertelt je wat je Homey gaat doen. Je flows kunnen de variabele daarna gebruiken.",
+   "tip": "Maak in Homey een flow met de naam ‘Baking mode’ en een getalvariabele met de naam ‘Loaves this week’."
+  },
+  "h_gifts": {
+   "title": "Cadeau-ideeën binnen budget",
+   "desc": "Stelt zes cadeaus voor, gesorteerd op prijs, laat je er een kiezen en schrijft dan een tekst voor het cadeaukaartje.",
+   "tip": "Geef een budget en een paar interesses van de ontvanger."
+  },
+  "h_photo": {
+   "title": "Wat staat er op deze foto?",
+   "desc": "Kies een foto van een plant, een kruimstructuur, een gerecht of een apparaat; Claude benoemt het en geeft nuttige tips.",
+   "tip": "Probeer een foto van de kruim van je brood en vraag wat die zegt over de fermentatie."
+  },
+  "c_review": {
+   "title": "Code beoordelen",
+   "desc": "Kies een codebestand; Claude zet de bugs en risico’s op een rij, de ernstigste eerst, en schrijft dan een verbeterde versie.",
+   "tip": "Werkt met Python, JavaScript, shellscripts en de meeste andere talen."
+  },
+  "c_explain": {
+   "title": "Code eenvoudig uitleggen",
+   "desc": "Kies een codebestand; Claude legt per sectie uit wat het doet, voor iemand die nooit heeft geprogrammeerd.",
+   "tip": "Handig voor scripts die je van internet hebt gekopieerd."
+  },
+  "c_csv": {
+   "title": "Inzichten uit een spreadsheet",
+   "desc": "Kies een csv-bestand; Claude vindt de vijf nuttigste inzichten, met het bewijs en waarom elk ertoe doet.",
+   "tip": "Exporteer een spreadsheet eerst als csv (Bestand, Opslaan als, CSV)."
+  },
+  "c_tests": {
+   "title": "Testgevallen bedenken",
+   "desc": "Beschrijf een functie; Claude zet acht testgevallen op een rij, inclusief de lastige randgevallen die mensen vergeten.",
+   "tip": "Beschrijf iets echts: ‘een formulier dat een Nederlandse postcode aanneemt’."
+  },
+  "x_tgbrief": {
+   "title": "Ochtendbriefing op Telegram",
+   "desc": "Leest op werkdagen om 07:15 de agenda van vandaag en je nieuwsfeeds, schrijft een korte briefing en stuurt die naar je op Telegram. Druk op Uitvoeren om het nu te proberen.",
+   "tip": "Geëxporteerde Python: zet je bottoken, chat-id, agenda-adres en feeds in second-thought.ini en gebruik dan run-on-schedule."
+  },
+  "x_newsmail": {
+   "title": "Mail me een nieuwsoverzicht",
+   "desc": "Leest je nieuwsfeeds, schrijft een overzicht van wat het lezen waard is en mailt het je. Op deze pagina zijn de feeds en de e-mail voorbeelden.",
+   "tip": "Verander het adres in het blok ‘e-mail versturen’ naar je eigen adres, en voeg een blok ‘wanneer het … is’ toe om het elke week te versturen."
+  },
+  "x_mqtt": {
+   "title": "Rijskast te warm? (MQTT)",
+   "desc": "Luistert naar een MQTT-temperatuursensor. Gaat de rijskast boven 26 °C, dan zet het de verwarming uit via MQTT en meldt het je op Telegram. Druk op Uitvoeren om het met een getypte temperatuur te proberen.",
+   "tip": "Geëxporteerde Python: stel MQTT_HOST in second-thought.ini in en laat het volgens planning draaien. Verander de topics naar je eigen sensoren (zigbee2mqtt/… voor Zigbee2MQTT)."
+  },
+  "x_webhook": {
+   "title": "Wanneer het brood klaar is (webverzoek)",
+   "desc": "Wacht op een webverzoek, bijvoorbeeld van een Home Assistant-automatisering wanneer de oven uitgaat, en stuurt je dan een afkoeltip op Telegram. Druk op Uitvoeren om het met getypte tekst te proberen.",
+   "tip": "Geëxporteerde Python: stel WEBHOOK_SECRET in, laat het volgens planning draaien en laat Home Assistant http://<deze computer>:8765/bake-done?key=<je geheim> aanroepen."
+  },
+  "x_mailwatch": {
+   "title": "Wanneer de meelwinkel mailt",
+   "desc": "Houdt je inbox in de gaten op e-mails waarin bloem (flour) staat, haalt de bezorgdag eruit en meldt het je op Telegram. Druk op Uitvoeren om het met een geplakte e-mail te proberen.",
+   "tip": "Verander ‘flour’ in de naam van je winkel. Geëxporteerde Python controleert je inbox elke 2 minuten zolang het volgens planning draait."
+  },
+  "x_feedwatch": {
+   "title": "Laat het weten als een feed iets nuttigs plaatst",
+   "desc": "Controleert je nieuwsfeeds elke 15 minuten. Verschijnt er iets nieuws, dan beslist Claude of het je tijd waard is, en pas dan stuurt het dat naar Telegram.",
+   "tip": "Verander de vraag zodat hij past bij wat jij belangrijk vindt."
+  },
+  "x_folder": {
+   "title": "Recepten in een map omzetten",
+   "desc": "Houdt een map in de gaten. Zet er een recept in (pdf, Word of tekst) en het herschrijft het in grammen en °C met bakkerspercentages, en slaat het resultaat op. Druk op Uitvoeren om het met een geplakt recept te proberen.",
+   "tip": "Geëxporteerde Python maakt de map ‘recipes-in’ naast het programma. Resultaten komen in de uitvoermap."
+  },
+  "x_review": {
+   "title": "Wanneer iemand om mijn review vraagt (GitHub)",
+   "desc": "Als een GitHub-pull request om jouw review vraagt, leest een agent hem en stuurt je een samenvatting van drie regels op Telegram.",
+   "tip": "Geëxporteerde Python: GitHub wordt elke 5 minuten gecontroleerd zolang het programma volgens planning draait."
+  },
+  "x_soon": {
+   "title": "Een herinnering vóór elke afspraak",
+   "desc": "Vijftien minuten vóór elke afspraak in je agenda stuurt het je een herinnering met een praktische tip op Telegram.",
+   "tip": "Verander 15 in hoeveel tijd vooraf je gewaarschuwd wilt worden."
+  },
+  "x_pagewatch": {
+   "title": "Laat het weten als de meelprijs verandert",
+   "desc": "Controleert elk uur de pagina van een winkel en kijkt alleen naar de prijs. Verandert die, dan zegt Claude in één regel of het de moeite is om nu te kopen, en stuurt dat naar Telegram. Druk op Uitvoeren om het met een getypte wijziging te proberen.",
+   "tip": "Zet het adres van je eigen winkel in het roze blok, en het woord naast de prijs (zoals Prijs) in ‘alleen het deel met’. Klik met de rechtermuisknop op het roze blok en kies ‘Dit script uitvoeren’ om het met een voorbeeldpagina te proberen."
+  },
+  "memory": {
+   "title": "Elke run een nieuwe kop",
+   "desc": "Onthoudt elke kop die het heeft gebruikt, zodat elke run (of elke geplande dag) met een nieuwe komt.",
+   "tip": "Open na een paar runs het Geheugen-paneel om te zien wat het heeft bewaard."
+  },
+  "a_weekly": {
+   "title": "Vrijdagrapport uit dagelijkse notities",
+   "desc": "Voer het elke dag uit en typ wat je hebt gedaan. Om 16:30 op vrijdag maakt het van de notities van de week een rapport en slaat het op.",
+   "tip": "Zet Planningen aan en laat de pagina op vrijdagmiddag openstaan, of exporteer naar Python."
+  },
+  "a_morning": {
+   "title": "Ochtendbriefing om 7:45",
+   "desc": "Schrijft op werkdagen ’s ochtends een korte briefing: een baktip, een woord van de dag en iets om naar uit te kijken. Het probeert opnieuw als Claude struikelt.",
+   "tip": "Druk op Uitvoeren om het nu te proberen; zet Planningen aan voor het echte werk."
+  },
+  "a_batch": {
+   "title": "Een lijst klussen tegelijk doen",
+   "desc": "Stuurt elke klus uit een lijst naar een eigen script, zodat ze allemaal tegelijk draaien, en wacht dan tot ze allemaal klaar zijn.",
+   "tip": "Voeg klussen toe aan de lijst; ze zijn nog steeds klaar in ongeveer de tijd van één."
+  },
+  "ha_write_automation": {
+   "title": "Een automatisering schrijven",
+   "desc": "Beschrijf in gewone taal wat je wilt; Claude schrijft de automatiserings-YAML, controleert die tegen de huidige Home Assistant-syntaxis en wacht op je goedkeuring.",
+   "tip": "Probeer ‘doe de lamp bij de voordeur aan bij zonsondergang als er iemand thuis is, en om 23:00 uit’."
+  },
+  "ha_explain_automation": {
+   "title": "Een automatisering uitleggen",
+   "desc": "Plak automatiserings-YAML die je online vond; Claude legt het regel voor regel uit en zegt dan in één zin wat het doet.",
+   "tip": "Plak ook eens een blueprint: dat werkt op dezelfde manier."
+  },
+  "ha_debug": {
+   "title": "Waarom ging mijn automatisering niet af?",
+   "desc": "Plak de automatisering en wat er gebeurde (of de trace); Claude zet de waarschijnlijke oorzaken en oplossingen op een rij, de waarschijnlijkste eerst.",
+   "tip": "De trace staat onder Instellingen, Automatiseringen, dan de drie puntjes bij je automatisering."
+  },
+  "ha_dashboard": {
+   "title": "Een dashboard ontwerpen",
+   "desc": "Beschrijf je kamers en apparaten; Claude ontwerpt een dashboardindeling en schrijft de kaart-YAML, en controleert dan of het overzichtelijk en bruikbaar is op een telefoon.",
+   "tip": "Zeg wie het gebruikt: ‘voor de kinderen’ of ‘een tablet aan de muur in de keuken’."
+  },
+  "ha_names": {
+   "title": "Entiteitsnamen opschonen",
+   "desc": "Plak een rommelige lijst entiteits-id’s; je krijgt consequente nieuwe id’s, vriendelijke namen en voorgestelde ruimtes.",
+   "tip": "Kopieer de lijst uit Instellingen, Entiteiten."
+  },
+  "ha_mesh": {
+   "title": "Een Zigbee-mesh plannen",
+   "desc": "Zet je Zigbee- of Z-Wave-apparaten op een rij en waar ze staan; je krijgt advies over waar je routers neerzet zodat het mesh betrouwbaar blijft.",
+   "tip": "Zeg welke apparaten op het lichtnet zitten: stekkers en lampen werken meestal als router."
+  },
+  "ha_buy": {
+   "title": "Welke sensor moet ik kopen?",
+   "desc": "Zeg wat je wilt meten; Claude vergelijkt geschikte soorten apparaten en zet ze in volgorde.",
+   "tip": "Probeer ‘vocht in de badkamer’ of ‘weten wanneer de post komt’."
+  },
+  "ha_morning": {
+   "title": "Ochtendbriefing",
+   "desc": "Om 07:15 (of als je op Uitvoeren drukt): het weer, de afvalbakken, de agenda, wie er thuis is en wat er ’s nachts is blijven aanstaan, in één vriendelijke alinea. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander de tijd op het gele blok, of laat het voorlezen op een luidspreker."
+  },
+  "ha_goodnight": {
+   "title": "Welterusten-controle",
+   "desc": "Controleert deuren, ramen, sloten en lampen, zet in gewone taal op een rij wat niet in orde is, en biedt dan aan om af te sluiten en de lampen uit te doen. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voer het bij bedtijd uit vanaf je telefoon, of voeg een planning voor 22:30 toe."
+  },
+  "ha_leaving": {
+   "title": "Het huis verlaten",
+   "desc": "Wanneer de laatste persoon vertrekt, zet het alle lampen uit die nog aan zijn en vertelt het je wat het heeft uitgezet. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander in het Home Assistant-paneel person.alex in not_home om het te proberen."
+  },
+  "ha_welcome": {
+   "title": "Welkom thuis-samenvatting",
+   "desc": "Wanneer je thuiskomt, vat het samen wat er gebeurde terwijl je weg was: deuren, beweging en bezorgingen. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander in het paneel person.alex in home om het te proberen."
+  },
+  "ha_remote": {
+   "title": "Afstandsbediening start de koffie",
+   "desc": "Luistert naar Home Assistant-gebeurtenissen. Wordt de knop ‘on’ van de keukenafstandsbediening ingedrukt, dan zet het de koffiemachine aan en laat het een notitie achter; de knop ‘off’ zet hem uit. Reageert meteen, zonder te pollen. Druk op Uitvoeren om het met een getypte knop te proberen. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Of klik met de rechtermuisknop op het blok ‘wanneer Home Assistant-gebeurtenis’ en kies ‘Dit script uitvoeren’ om een voorbeelddruk op de knop te proberen. Verander ‘kitchen remote’ in de naam van je afstandsbediening, en zha_event in deconz_event of hue_event als je afstandsbediening dat stuurt (Ontwikkelhulpmiddelen → Gebeurtenissen in Home Assistant laat ze zien)."
+  },
+  "ha_holiday": {
+   "title": "Vakantieverlichting",
+   "desc": "Elke avond terwijl je weg bent, kiest Claude lampen om aan te zetten, op basis van hoe het huis vorige week echt werd gebruikt. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Alleen lampen kunnen worden gekozen: het programma controleert of elke id met ‘light.’ begint."
+  },
+  "ha_weekly": {
+   "title": "Wekelijks huisrapport",
+   "desc": "Op zondagavond: energie, temperaturen, batterijen en alles wat ongewoon is, als kort rapport in een bestand. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Druk op een willekeurige dag op Uitvoeren om het rapport van deze week nu te zien."
+  },
+  "ha_private": {
+   "title": "Privébriefing, blijft thuis",
+   "desc": "Een Llama-model op je eigen computer leest het hele huis en schrijft de briefing, zodat je huisgegevens nooit het huis verlaten. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voer het uit op dezelfde machine als Ollama, naast Home Assistant."
+  },
+  "ha_ask": {
+   "title": "Vraag het aan het huis",
+   "desc": "Vraag wat je wilt (‘Is er iemand thuis?’, ‘Heb ik de oven aan laten staan?’). Claude antwoordt alleen op basis van je Home Assistant-metingen. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Claude zegt het als het antwoord niet in de metingen staat."
+  },
+  "ha_bins": {
+   "title": "Herinnering afvalbakken",
+   "desc": "Controleert om 19:00 of de bakken morgen buiten moeten (rekening houdend met wijzigingen rond feestdagen) en herinnert je welke. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Laat het naar je eigen afvalkalender-sensor kijken."
+  },
+  "ha_doorbell": {
+   "title": "Wie staat er voor de deur?",
+   "desc": "Als de deurbel gaat, kijkt Claude in de camera en vertelt je wie of wat er staat, ook pakketjes. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander in het paneel binary_sensor.doorbell in on om aan te bellen."
+  },
+  "ha_parcel": {
+   "title": "Pakketje buiten laten staan?",
+   "desc": "Kijkt om 18:00 in de camera bij de voordeur en herinnert je eraan als er nog een pakketje op de stoep ligt. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verschuif de tijd naar wanneer je meestal thuiskomt."
+  },
+  "ha_motion": {
+   "title": "Slimmere bewegingsmeldingen",
+   "desc": "Als de tuincamera beweging ziet, controleert Claude het beeld en waarschuwt je alleen voor mensen of voertuigen, niet voor katten of wiegende struiken. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander in het paneel binary_sensor.motion_garden in off en dan in on."
+  },
+  "ha_car": {
+   "title": "Is dat onze auto?",
+   "desc": "Als er iets beweegt op de oprit, beschrijft Claude het voertuig en vergelijkt het met de auto die hij als de jouwe heeft onthouden. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "De eerste run onthoudt je auto; latere runs vergelijken ermee."
+  },
+  "ha_garage": {
+   "title": "Is de garage echt dicht?",
+   "desc": "Vergelijkt om 22:00 de sensor van de garagedeur met wat de camera laat zien, en waarschuwt je als ze het oneens zijn. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Goed voor deuren waarvan de sensoren soms blijven hangen."
+  },
+  "ha_overnight": {
+   "title": "Nachtoverzicht",
+   "desc": "Om 07:00 één rustige samenvatting van alles wat de deuren en bewegingssensoren ’s nachts merkten, in plaats van een stapel meldingen. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voeg meer sensoren toe aan de vraag."
+  },
+  "ha_newdevice": {
+   "title": "Nieuw apparaat op het netwerk",
+   "desc": "Als er een onbekend apparaat op het netwerk komt, legt Claude uit wat het zou kunnen zijn en wat je moet controleren. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Gebruikt de nieuwe-clientsensor van de UniFi-integratie; pas het aan naar die van jou."
+  },
+  "ha_cheap": {
+   "title": "Apparaten laten draaien als stroom goedkoop is",
+   "desc": "Plant wanneer de vaatwasser, de wasmachine en de laadpaal moeten draaien, op basis van het tarief, het goedkoopste moment en de zonneprognose, met een reden voor elk. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voeg je eigen apparaten toe aan de vraag."
+  },
+  "ha_bill": {
+   "title": "Waarom was gisteren duur?",
+   "desc": "Vergelijkt het energieverbruik met het weer en wie er thuis was, en legt in gewone taal uit waarom het omhoog of omlaag ging. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Vraag het een week lang elke ochtend om patronen te zien."
+  },
+  "ha_standby": {
+   "title": "Jacht op sluipverbruik",
+   "desc": "Bekijkt elke vermogensmeting en wijst apparaten aan die waarschijnlijk stroom verspillen in stand-by. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voer het laat op de avond uit, wanneer alles uit zou moeten staan."
+  },
+  "ha_energy_report": {
+   "title": "Energierapport met drie besparingen",
+   "desc": "Een energiesamenvatting in gewone taal met drie praktische manieren om geld te besparen, opgeslagen als bestand. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voer het aan het eind van elke maand uit."
+  },
+  "ha_solar": {
+   "title": "Vannacht de thuisbatterij laden?",
+   "desc": "Weegt om 21:00 de zonneprognose voor morgen, het batterijniveau en de goedkoopste prijs van vannacht af, en stelt voor of je van het net laadt. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Het doet alleen een voorstel; voeg een ‘… aanroepen’-blok toe als je wilt dat het handelt."
+  },
+  "ha_heating_waste": {
+   "title": "Verspilling van verwarming controleren",
+   "desc": "Spoort verwarming op die aan staat terwijl er niemand thuis is, open ramen, of kamers die ver boven hun doel worden verwarmd. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voer het in de winter om de paar uur uit."
+  },
+  "ha_damp": {
+   "title": "Vocht en schimmel in de gaten houden",
+   "desc": "Bekijkt twee dagen luchtvochtigheid in de badkamer en slaapkamer en geeft advies als een kamer vochtig blijft. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Boven 70% gedurende lange tijd begint schimmel."
+  },
+  "ha_sleep": {
+   "title": "Betere slaapkamertemperatuur",
+   "desc": "Bekijkt drie nachten temperatuur en luchtvochtigheid in de slaapkamer en stelt verwarmingsinstellingen voor om beter te slapen. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "De meeste mensen slapen het best bij 16-19 °C."
+  },
+  "ha_window": {
+   "title": "Raam open, verwarming aan",
+   "desc": "Als het keukenraam opengaat terwijl de verwarming aan staat, stelt het voor de verwarming te pauzeren. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander in het paneel binary_sensor.kitchen_window in off en dan in on."
+  },
+  "ha_co2": {
+   "title": "Melding bij een benauwde werkkamer",
+   "desc": "Stelt elke 30 minuten voor een raam open te zetten als de CO₂ in de werkkamer boven 1200 ppm komt. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Boven ongeveer 1000 ppm gaat de concentratie merkbaar omlaag."
+  },
+  "ha_seasonal": {
+   "title": "Het verwarmingsschema bijstellen",
+   "desc": "Bekijkt een week temperaturen en stelt wijzigingen in je verwarmingsschema voor de komende maand voor. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voer het aan het begin van elke maand uit."
+  },
+  "ha_water": {
+   "title": "Vandaag de tuin water geven?",
+   "desc": "Weegt om 07:00 de bodemvochtigheid, recente regen en de verwachting af; is water geven nodig, dan zet het de beregening aan en vertelt het je waarom. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander de beregeningsschakelaar naar die van jou."
+  },
+  "ha_frost": {
+   "title": "Vorstwaarschuwing",
+   "desc": "Controleert om 17:00 de verwachting voor vannacht en herinnert je eraan kwetsbare planten af te dekken als vorst waarschijnlijk is. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voeg ‘en haal de potten binnen’ toe aan het bericht."
+  },
+  "ha_plant": {
+   "title": "Welke plant is dit?",
+   "desc": "Kies een foto van een plant; Claude benoemt hem, geeft verzorgingstips en voegt hem toe aan een onthouden lijst van je planten.",
+   "tip": "Open later Geheugen om de lijst te zien die het heeft opgebouwd."
+  },
+  "ha_greenhouse": {
+   "title": "Kas te warm",
+   "desc": "Herinnert je elke 30 minuten eraan het luik open te zetten als het in de kas boven 26 °C is. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verlaag de grens voor zaailingen."
+  },
+  "ha_proofing": {
+   "title": "Wanneer is het deeg klaar?",
+   "desc": "Zeg in welke fase je deeg is; het leest de rijstemperatuur en schat wanneer het klaar is. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Laat het kijken naar de sensor die naast je deeg staat."
+  },
+  "ha_bake": {
+   "title": "Bakschema voor de keuken van vandaag",
+   "desc": "Rekent terug vanaf wanneer je het brood uit de oven wilt, en past elke stap aan de echte temperatuur van je keuken aan. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Een warme keuken verkort de bulkrijs; daar houdt het rekening mee."
+  },
+  "ha_fridge": {
+   "title": "Koelkast en vriezer in de gaten houden",
+   "desc": "Waarschuwt je elke 30 minuten als de koelkast boven 5 °C komt of de vriezer boven -15 °C. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander in het paneel een temperatuur om de waarschuwing te proberen."
+  },
+  "ha_starter": {
+   "title": "Herinnering om de starter te voeden",
+   "desc": "Leest om 08:00 de keukentemperatuur en stelt voor wanneer je de starter vandaag voedt, en in welke verhouding. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Noem je gebruikelijke verhouding in de vraag."
+  },
+  "ha_oven": {
+   "title": "Oven laten aanstaan",
+   "desc": "Wanneer de laatste persoon vertrekt, controleert het de oven en stuurt het een dringende melding als die nog aan staat. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Zet in het paneel switch.oven op on, en dan person.alex op not_home."
+  },
+  "ha_dinner": {
+   "title": "Wat eten we vanavond?",
+   "desc": "Stelt drie avondmaaltijden voor uit wat er op je boodschappenlijst en in de keuken staat, met wat je nog nodig hebt. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Gebruikt de boodschappenlijst van Home Assistant."
+  },
+  "ha_chores": {
+   "title": "Eerlijk takenrooster",
+   "desc": "Typ elke week wie wat heeft gedaan; het onthoudt het en schrijft dan een eerlijk rooster voor volgende week. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voer het op zondagavond met het gezin uit."
+  },
+  "ha_laundry": {
+   "title": "De was is klaar",
+   "desc": "Als het vermogen van de wasmachine zakt, vertelt het je dat de was klaar is. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander in het paneel het vermogen van de wasmachine in 400 en dan in 2."
+  },
+  "ha_dishwasher": {
+   "title": "Is de vaatwasser schoon?",
+   "desc": "Beantwoordt de eeuwige vraag op basis van de status van de vaatwasser, in een vriendelijke zin. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Zet het op een dashboardknop of vraag het met je stem."
+  },
+  "ha_bedtime": {
+   "title": "Verhaaltje voor het slapengaan op de luidspreker",
+   "desc": "Dimt om 19:30 de lamp in de slaapkamer en leest een nieuw kort verhaaltje voor op de luidspreker in de kinderkamer. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verander de naam en interesses van het kind in het verzoek voor het verhaal."
+  },
+  "ha_checkin": {
+   "title": "Even voorzichtig checken bij een familielid",
+   "desc": "Stuurt om 10:00 de familie een voorzichtig ‘alles goed?’ als er de hele ochtend geen beweging was in het bijgebouw. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Spreek dit eerst af met de persoon; het gaat ook om hun privacy."
+  },
+  "ha_petcam": {
+   "title": "Wat doet de hond?",
+   "desc": "Neemt een beeld van de huisdiercamera en vertelt je in één zin wat je huisdier aan het doen is. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voeg ‘en kauwt hij op iets wat niet mag?’ toe."
+  },
+  "ha_feeder": {
+   "title": "Heeft de voerautomaat gewerkt?",
+   "desc": "Controleert om 09:00 of de voerautomaat vanochtend voer heeft gegeven en of het voer bijna op is. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Zet de tijd net na het schema van de automaat."
+  },
+  "ha_petheat": {
+   "title": "Huisdierkamer te warm",
+   "desc": "Waarschuwt je elke 15 minuten als de kamer waar je huisdier is boven 26 °C komt. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Verlaag het voor langharige rassen."
+  },
+  "ha_batteries": {
+   "title": "Batterijen om te vervangen",
+   "desc": "Vindt elke batterij onder 20% en maakt er een boodschappenlijst van, per kamer, met de waarschijnlijke batterijtypes. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voer het eens per maand uit en een lege sensor verrast je nooit meer."
+  },
+  "ha_offline": {
+   "title": "Wat is er offline gegaan?",
+   "desc": "Zet elke onbeschikbare entiteit op een rij en stelt voor elk de waarschijnlijke oorzaak en oplossing voor. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Apparaten in de schuur en garage vallen vaak weg als het koud wordt."
+  },
+  "ha_maintenance": {
+   "title": "Onderhoud nodig",
+   "desc": "Leest je onderhoudsdatums (cv-ketel, rookmelders, filters) en zet op een rij wat over tijd is of binnenkort moet. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Maak in Home Assistant voor elke klus een input_datetime-helper."
+  },
+  "ha_leak": {
+   "title": "Lekkage!",
+   "desc": "Als een lekkagesensor nat wordt, stuurt het een dringende melding en kondigt het aan wat je als eerste moet doen. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Zet in het paneel binary_sensor.leak_kitchen op on."
+  },
+  "ha_waterflow": {
+   "title": "Druppelende kraan of verborgen lek",
+   "desc": "Controleert om 04:00, wanneer er niets zou moeten lopen, de watermeter en waarschuwt je voor een constante kleine doorstroming. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Werkt met elke watermeter of doorstroomsensor."
+  },
+  "ha_servers": {
+   "title": "Servergezondheid in één regel",
+   "desc": "Leest je Proxmox-, schijf- en back-upsensoren en geeft één regel in gewone taal over hoe het met het homelab gaat. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Gebruikt de sensoren van de Proxmox-integratie; pas het aan naar de jouwe."
+  },
+  "ha_pihole": {
+   "title": "Pi-hole-overzicht",
+   "desc": "Een kort, leesbaar overzicht van wat Pi-hole vandaag heeft geblokkeerd en of er iets ongewoons lijkt. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Gebruikt de sensoren van de Pi-hole-integratie."
+  },
+  "ha_plex": {
+   "title": "Wat is er nieuw op Plex",
+   "desc": "In het weekend een vrolijk overzicht van wat er aan Plex is toegevoegd, met een reden van één regel om elk te kijken. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Gebruikt de sensoren van de Plex-integratie."
+  },
+  "ha_backups": {
+   "title": "Zijn de back-ups gelopen?",
+   "desc": "Controleert om 08:00 de back-up van vannacht en stuurt een dringende melding als die mislukt is. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Laat het kijken naar de sensor die je back-uptaak bijwerkt."
+  },
+  "ha_netdigest": {
+   "title": "Netwerkoverzicht",
+   "desc": "Een wekelijkse blik op het netwerk: nieuwe apparaten, Pi-hole en de drukste machines, met alles wat het controleren waard is. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Voer het op zondagochtend bij de koffie uit."
+  },
+  "ha_rewrite_alerts": {
+   "title": "Ruwe meldingen in gewone taal",
+   "desc": "Plak een stapel ruwe meldingen; Claude voegt dubbele samen en herschrijft ze als een paar duidelijke berichten.",
+   "tip": "Plak de meldingen van een ochtend van je telefoon."
+  },
+  "ha_tone": {
+   "title": "De juiste toon voor het tijdstip",
+   "desc": "Typ een bericht; het wordt herschreven zodat het bij het uur past (zacht laat op de avond, kort en bondig ’s ochtends) en verstuurd. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Probeer hetzelfde bericht om 7 uur ’s ochtends en om 11 uur ’s avonds."
+  },
+  "ha_spoken": {
+   "title": "Gesproken ochtendsamenvatting",
+   "desc": "Spreekt op werkdagen om 07:30 een samenvatting van 30 seconden uit op de keukenluidspreker: het weer, de afvalbakken, de agenda en alles wat open is blijven staan. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Stel in Python HA_TTS_ENTITY in op je tekst-naar-spraakdienst."
+  },
+  "ha_ignored": {
+   "title": "Strenger als je het negeert",
+   "desc": "Stuurt een herinnering, wacht, en stuurt als de achterdeur nog open is een strengere en zegt die hardop. Gebruikt op de pagina het voorbeeldhuis, in geëxporteerde Python je echte Home Assistant.",
+   "tip": "Sluit in het paneel tijdens het wachten de achterdeur om te zien dat het stopt."
+  }
+ },
+ "starters": {
+  "hello": "hallo",
+  "Hello": "Hallo",
+  "Check the draft, then continue": "Controleer het concept en ga dan door",
+  "sourdough": "zuurdesem",
+  "dough": "deeg",
+  "one two three": "een twee drie",
+  "Describe the job here": "Beschrijf hier de klus",
+  "make it friendlier": "maak het vriendelijker",
+  "Suggest a name for a sourdough starter": "Bedenk een naam voor een zuurdesemstarter",
+  "Is rye flour gluten free?": "Is roggemeel glutenvrij?",
+  "Typical hydration % for a beginner loaf": "Gebruikelijke hydratatie in % voor een beginnersbrood",
+  "5 common sourdough mistakes": "5 veelgemaakte fouten met zuurdesem",
+  "make it shorter": "maak het korter",
+  "the key steps": "de belangrijkste stappen",
+  "You write for home bakers: warm, practical, British spelling.": "Je schrijft voor thuisbakkers: warm, praktisch, in correct Nederlands.",
+  "editor": "redacteur",
+  "Here is my draft. What should I fix first?": "Hier is mijn concept. Wat moet ik eerst verbeteren?",
+  "current price of rye flour in the UK": "huidige prijs van roggemeel in Nederland",
+  "accurate; clear; under 200 words": "juist; duidelijk; minder dan 200 woorden",
+  "accurate; clear": "juist; duidelijk",
+  "clear and accurate": "duidelijk en juist",
+  "clarity": "duidelijkheid",
+  "Plan a bake for this weekend that suits what I have in": "Plan een bakdag voor dit weekend die past bij wat ik in huis heb",
+  "Gives the oven temperature in °C for a bread type.": "Geeft de oventemperatuur in °C voor een soort brood.",
+  "Your loaf is ready to come out.": "Je brood kan uit de oven.",
+  "The bake-along starts in 10 minutes.": "Het samen bakken begint over 10 minuten.",
+  "The oven's free now.": "De oven is nu vrij.",
+  "Bake plan": "Bakplan",
+  "Here's the plan for Saturday.": "Hier is het plan voor zaterdag.",
+  "What should I write about?": "Waar moet ik over schrijven?",
+  "score": "score",
+  "name, hydration, notes": "naam, hydratatie, notities",
+  "A beginner sourdough recipe": "Een zuurdesemrecept voor beginners",
+  "title, score, why": "titel, score, waarom",
+  "5 blog post ideas about rye bread, scored 1-10 for search interest": "5 ideeën voor blogberichten over roggebrood, met een cijfer van 1-10 voor zoekinteresse",
+  "summary": "samenvatting",
+  "note": "notitie",
+  "today's draft": "concept van vandaag",
+  "used headlines": "gebruikte koppen",
+  "a sourdough loaf with a crisp ear, flat illustration": "een zuurdesembrood met een knapperig oortje, vlakke illustratie",
+  "make the crust darker": "maak de korst donkerder",
+  "Describe this picture in one sentence.": "Beschrijf deze afbeelding in één zin.",
+  "clear, appealing, easy to read at small size": "duidelijk, aantrekkelijk, goed leesbaar op klein formaat",
+  "The back door is still open.": "De achterdeur staat nog open.",
+  "Good morning!": "Goedemorgen!"
+ },
+ "python": {
+  "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Een eerdere run stopte halverwege, maar het programma is sindsdien veranderd, dus het begint opnieuw.)",
+  "\n(The agent wants a file: {x})": "\n(De agent wil een bestand: {x})",
+  "\n(The last run stopped part-way. Set resume = yes in second-thought.ini to pick up where it stopped.)": "\n(De laatste run stopte halverwege. Zet resume = yes in second-thought.ini om verder te gaan waar hij stopte.)",
+  "\n? Allow it to do these things on this computer? It won't ask again unless the program changes.": "\n? Toestaan dat het deze dingen op deze computer doet? Het vraagt het niet opnieuw, tenzij het programma verandert.",
+  "\n? Choose a file: type the path to a PDF, a .docx, or a text file (.txt, .md, .csv, .json ...).": "\n? Kies een bestand: typ het pad naar een pdf, een .docx of een tekstbestand (.txt, .md, .csv, .json ...).",
+  "\n? Choose a picture: type the path to a JPEG, PNG, WebP, GIF or SVG file.": "\n? Kies een afbeelding: typ het pad naar een JPEG-, PNG-, WebP-, GIF- of SVG-bestand.",
+  "\n? Choose one:": "\n? Kies er een:",
+  "\n? Do you approve this?\n": "\n? Keur je dit goed?\n",
+  "\nStopped.": "\nGestopt.",
+  "\nThe program ended without a result.": "\nHet programma eindigde zonder resultaat.",
+  "\nThis program can:": "\nDit programma kan:",
+  "\n✖ Run stopped: {msg}": "\n✖ Run gestopt: {msg}",
+  "  (A Telegram message from chat {x} was ignored. To let this program use that chat, set TELEGRAM_CHAT_ID = {x} {where_keys}.)": "  (Een Telegram-bericht uit chat {x} is genegeerd. Om dit programma die chat te laten gebruiken, zet je TELEGRAM_CHAT_ID = {x} {where_keys}.)",
+  "  (Calendar check failed: {e})": "  (Controle van de agenda mislukt: {e})",
+  "  (Couldn't note that you said yes, so it will ask again next time: {e})": "  (Kon niet vastleggen dat je ja zei, dus het vraagt het de volgende keer opnieuw: {e})",
+  "  (Email check failed: {e})": "  (Controle van e-mail mislukt: {e})",
+  "  (Feed check failed: {e})": "  (Controle van feed mislukt: {e})",
+  "  (GitHub check failed: {e})": "  (Controle van GitHub mislukt: {e})",
+  "  (Home Assistant check failed: {e})": "  (Controle van Home Assistant mislukt: {e})",
+  "  (Homey check failed: {e})": "  (Controle van Homey mislukt: {e})",
+  "  (Page check failed: {e})": "  (Controle van pagina mislukt: {e})",
+  "  (Telegram check failed: {e})": "  (Controle van Telegram mislukt: {e})",
+  "  ({name} check failed: {e})": "  (Controle van {name} mislukt: {e})",
+  "  ({x}: left out its tool “{name}”, whose x-mcp-header settings are invalid)": "  ({x}: hulpmiddel ‘{name}’ weggelaten, omdat de x-mcp-header-instellingen ongeldig zijn)",
+  "  ({x}: {x2} Trying again in a minute.)": "  ({x}: {x2} Over een minuut opnieuw proberen.)",
+  "  No text could be found in that file. A scanned PDF holds pictures of pages, not text.": "  Er is geen tekst gevonden in dat bestand. Een gescande pdf bevat afbeeldingen van pagina’s, geen tekst.",
+  "  That SVG file couldn't be read.": "  Dat SVG-bestand kon niet worden gelezen.",
+  "  That file doesn't exist. Try again.": "  Dat bestand bestaat niet. Probeer het opnieuw.",
+  "  That file is over 25 MB. Choose a smaller one.": "  Dat bestand is groter dan 25 MB. Kies een kleiner bestand.",
+  "  That isn't a JPEG, PNG, WebP, GIF or SVG file.": "  Dat is geen JPEG-, PNG-, WebP-, GIF- of SVG-bestand.",
+  "  Type a number from 1 to {items}.": "  Typ een getal van 1 tot {items}.",
+  "  Type an answer first.": "  Typ eerst een antwoord.",
+  "  Type y or n.": "  Typ j of n.",
+  "'let me choose from' got an empty list.": "‘laat me kiezen uit’ kreeg een lege lijst.",
+  "'{key} of' needs a record in its second slot.": "‘{key} van’ heeft een record nodig in het tweede vak.",
+  "(Page watcher: {url} has no readable words; it may need a browser to show them. It's checked again each time.)": "(Paginawachter: {url} heeft geen leesbare woorden; misschien is er een browser nodig om ze te tonen. Hij wordt elke keer opnieuw gecontroleerd.)",
+  "(Page watcher: {url} has nothing with “{words}” in it right now. It's checked again each time.)": "(Paginawachter: {url} bevat nu niets met ‘{words}’. Hij wordt elke keer opnieuw gecontroleerd.)",
+  "(The log couldn't be saved: {e})": "(Het logboek kon niet worden opgeslagen: {e})",
+  "(cleared)": "(gewist)",
+  "(empty list)": "(lege lijst)",
+  "(kept by the broker)": "(bewaard door de broker)",
+  "(no answer)": "(geen antwoord)",
+  "(no draft yet)": "(nog geen concept)",
+  "(no message yet: only messages the broker keeps show up straight away)": "(nog geen bericht: alleen berichten die de broker bewaart verschijnen meteen)",
+  "(no result)": "(geen resultaat)",
+  "(nothing)": "(niets)",
+  "1 note above.": "1 opmerking hierboven.",
+  "1 problem to fix: the line marked FAIL. Then run --doctor again.": "1 probleem om op te lossen: de regel met FAIL. Voer daarna --doctor opnieuw uit.",
+  "1 step": "1 stap",
+  "1 tool: {names}": "1 hulpmiddel: {names}",
+  "A 'remember for' block needs a time above zero.": "Een blok ‘onthouden gedurende’ heeft een tijd boven nul nodig.",
+  "A 'rewrite' block has nothing to rewrite.": "Een blok ‘herschrijven’ heeft niets om te herschrijven.",
+  "A My Blocks block called itself too many times.": "Een blok uit Mijn blokken heeft zichzelf te vaak aangeroepen.",
+  "A Telegram message needs some text.": "Een Telegram-bericht heeft wat tekst nodig.",
+  "A broadcast block has no message name.": "Een uitzendblok heeft geen berichtnaam.",
+  "A comment needs some text.": "Een reactie heeft wat tekst nodig.",
+  "A list 'set' block points past the end of the list.": "Een lijstblok ‘instellen’ wijst voorbij het einde van de lijst.",
+  "A list block asked for item {x} but the list has {lst} items.": "Een lijstblok vroeg om item {x}, maar de lijst heeft {lst} items.",
+  "A memory block has no name. Type a name into its name slot.": "Een geheugenblok heeft geen naam. Typ een naam in het naamvak.",
+  "A yes/no block is empty.": "Een ja/nee-blok is leeg.",
+  "A {name} message needs some text.": "Een {name}-bericht heeft wat tekst nodig.",
+  "Add a 'set task to' block before this step.": "Voeg vóór deze stap een blok ‘taak instellen op’ toe.",
+  "Added to result": "Toegevoegd aan resultaat",
+  "Added to “{x}”": "Toegevoegd aan ‘{x}’",
+  "Agent": "Agent",
+  "Agent plan": "Plan van de agent",
+  "Agent summary": "Samenvatting van de agent",
+  "Agent: finished in {n} step": "Agent: klaar in {n} stap",
+  "Agent: finished in {n} steps": "Agent: klaar in {n} stappen",
+  "Agent: out of steps": "Agent: stappen op",
+  "Agent: plan changed": "Agent: plan gewijzigd",
+  "Agent: stopped, repeating itself": "Agent: gestopt, hij herhaalt zichzelf",
+  "Already said before the stop, so not said again.": "Al gezegd vóór de stop, dus niet opnieuw gezegd.",
+  "Already sent before the stop, so not sent again.": "Al verstuurd vóór de stop, dus niet opnieuw verstuurd.",
+  "An 'ask Claude' block is empty.": "Een blok ‘vraag Claude’ is leeg.",
+  "An 'ask for a list' block is empty.": "Een blok ‘vraag om een lijst’ is leeg.",
+  "An 'ask for a number' block is empty.": "Een blok ‘vraag om een getal’ is leeg.",
+  "An 'extract' block has no text to read.": "Een blok ‘haal uit’ heeft geen tekst om te lezen.",
+  "An MCP tool block needs the server's name.": "Een MCP-hulpmiddelblok heeft de naam van de server nodig.",
+  "Another program has been using {x} for over two minutes, so this one gave up waiting.": "Een ander programma gebruikt {x} al meer dan twee minuten, dus dit programma is gestopt met wachten.",
+  "Approve? [y/n] > ": "Goedkeuren? [j/n] > ",
+  "Ask Claude: {p}": "Claude vragen: {p}",
+  "Ask first": "Eerst vragen",
+  "Back to checkpoint “{name}”": "Terug naar controlepunt ‘{name}’",
+  "Backup": "Reservemodel",
+  "Broadcast “{name}”": "‘{name}’ uitzenden",
+  "Budget": "Budget",
+  "CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format').": "CALENDAR_URL is geen iCal-agenda-adres (het moet eindigen op .ics, of komen van ‘geheim adres in iCal-indeling’).",
+  "Calendar": "Agenda",
+  "Can't divide by zero.": "Delen door nul kan niet.",
+  "Carries on when another script broadcasts this message.": "Gaat door wanneer een ander script dit bericht uitzendt.",
+  "Caught up": "Bijgewerkt",
+  "Chat {x}: {message}": "Chat {x}: {message}",
+  "Check: {x}": "Controleren: {x}",
+  "Checking for new email.": "Controleren op nieuwe e-mail.",
+  "Checking {prog} (runtime {runtime_version}, Python {x}).": "{prog} controleren (runtime {runtime_version}, Python {x}).",
+  "Checkpoint “{name}”": "Controlepunt ‘{name}’",
+  "Chose file": "Bestand gekozen",
+  "Chose picture": "Afbeelding gekozen",
+  "Claude needs a key. Put ANTHROPIC_API_KEY = your-key {where_keys} (https://console.anthropic.com).": "Claude heeft een sleutel nodig. Zet ANTHROPIC_API_KEY = je-sleutel {where_keys} (https://console.anthropic.com).",
+  "Claude needs the Anthropic SDK. Install it with:  pip install anthropic": "Claude heeft de Anthropic-SDK nodig. Installeer die met:  pip install anthropic",
+  "Claude's drawing came back in a form that can't be used. Run again, or simplify the description.": "Claudes tekening kwam terug in een vorm die niet bruikbaar is. Voer opnieuw uit, of vereenvoudig de beschrijving.",
+  "Claude's reply came back in an unreadable format. Run again.": "Claudes antwoord kwam terug in een onleesbaar formaat. Voer opnieuw uit.",
+  "Conversation {x}": "Gesprek {x}",
+  "Couldn't find the website “{host}”.": "De website ‘{host}’ is niet gevonden.",
+  "Couldn't reach GitHub ({reason}).": "GitHub niet bereikbaar ({reason}).",
+  "Couldn't reach Home Assistant at {ha_url} ({x}).": "Home Assistant niet bereikbaar op {ha_url} ({x}).",
+  "Couldn't reach Homey at {url} ({reason}).{hint}": "Homey niet bereikbaar op {url} ({reason}).{hint}",
+  "Couldn't reach Telegram ({reason}).": "Telegram niet bereikbaar ({reason}).",
+  "Couldn't reach the MQTT broker at {host}:{port} ({e}).": "De MQTT-broker op {host}:{port} is niet bereikbaar ({e}).",
+  "Couldn't reach the email server {imap} ({e}).": "De e-mailserver {imap} is niet bereikbaar ({e}).",
+  "Couldn't reach the email server {smtp} ({e}).": "De e-mailserver {smtp} is niet bereikbaar ({e}).",
+  "Couldn't reach {name} ({reason}).": "{name} niet bereikbaar ({reason}).",
+  "Couldn't reach {provider} at {base} ({x}).{hint}": "{provider} niet bereikbaar op {base} ({x}).{hint}",
+  "Current draft": "Huidig concept",
+  "Cut short": "Afgekapt",
+  "Did you mean: {names}?": "Bedoelde je: {names}?",
+  "Done · 1 model call": "Klaar · 1 modelaanroep",
+  "Done · {n} model calls": "Klaar · {n} modelaanroepen",
+  "Email (reading)": "E-mail (lezen)",
+  "Email (sending)": "E-mail (versturen)",
+  "Email needs EMAIL_ADDRESS and EMAIL_PASSWORD {where_keys}. Use an app password, not your normal one.": "E-mail heeft EMAIL_ADDRESS en EMAIL_PASSWORD nodig {where_keys}. Gebruik een app-wachtwoord, niet je normale wachtwoord.",
+  "Email sent to {to}": "E-mail verstuurd aan {to}",
+  "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. Ask for something shorter, or split the job into smaller steps.": "Zelfs na doorgaan was het antwoord nog te lang, dus het stopt halverwege. Het wordt bewaard zoals het is, gemarkeerd als ‘zo goed mogelijk’. Vraag om iets korters, of splits de taak in kleinere stappen.",
+  "Every script is waiting for {names}, but nothing running can send it.": "Elk script wacht op {names}, maar niets wat draait kan het versturen.",
+  "Everything checked is ready.": "Alles wat is gecontroleerd, is klaar.",
+  "Extract: {what}": "Ophalen: {what}",
+  "First run": "Eerste run",
+  "Forgot “{x}”": "‘{x}’ vergeten",
+  "From now on, the program asks you before {x}.": "Vanaf nu vraagt het programma het je eerst bij {x}.",
+  "From this step the run isn't the same as the one that stopped, so the rest runs afresh.": "Vanaf deze stap is de run niet meer dezelfde als die die stopte, dus de rest draait opnieuw.",
+  "Gave up after {attempt} tries": "Opgegeven na {attempt} pogingen",
+  "Gemini ({model}) wouldn't take JSON mode, so its replies are checked after they arrive.": "Gemini ({model}) wilde geen JSON-modus aannemen, dus de antwoorden worden gecontroleerd nadat ze binnenkomen.",
+  "Gemini needs a key. Put GEMINI_API_KEY = your-key {where_keys} (https://aistudio.google.com).": "Gemini heeft een sleutel nodig. Zet GEMINI_API_KEY = je-sleutel {where_keys} (https://aistudio.google.com).",
+  "GitHub": "GitHub",
+  "GitHub comment on {repo} #{n}": "GitHub-reactie op {repo} #{n}",
+  "GitHub needs a token: set GITHUB_TOKEN {where_keys} (make one at https://github.com/settings/tokens).": "GitHub heeft een token nodig: stel GITHUB_TOKEN in {where_keys} (maak er een op https://github.com/settings/tokens).",
+  "GitHub: {why}.": "GitHub: {why}.",
+  "Give the record's fields, separated by commas.": "Geef de velden van het record, gescheiden door komma’s.",
+  "Goal: {goal}": "Doel: {goal}",
+  "Home Assistant": "Home Assistant",
+  "Home Assistant answered {code} for {path}.": "Home Assistant antwoordde {code} voor {path}.",
+  "Home Assistant closed the connection.": "Home Assistant heeft de verbinding gesloten.",
+  "Home Assistant didn't answer at {url} within 10 seconds.": "Home Assistant antwoordde niet binnen 10 seconden op {url}.",
+  "Home Assistant didn't finish signing in for events within 10 seconds.": "Home Assistant rondde het inloggen voor gebeurtenissen niet binnen 10 seconden af.",
+  "Home Assistant events need HA_URL and HA_TOKEN {where_keys}.": "Home Assistant-gebeurtenissen hebben HA_URL en HA_TOKEN nodig {where_keys}.",
+  "Home Assistant has nothing at {path} (404). Check the entity or service name.": "Home Assistant heeft niets op {path} (404). Controleer de naam van de entiteit of dienst.",
+  "Home Assistant refused the token (401). Check HA_TOKEN.": "Home Assistant weigerde het token (401). Controleer HA_TOKEN.",
+  "Home Assistant refused the token for events (auth_invalid). Check HA_TOKEN.": "Home Assistant weigerde het token voor gebeurtenissen (auth_invalid). Controleer HA_TOKEN.",
+  "Home Assistant wouldn't send those events: {x}": "Home Assistant wilde die gebeurtenissen niet sturen: {x}",
+  "Home Assistant: {service}": "Home Assistant: {service}",
+  "Home Assistant: {x}": "Home Assistant: {x}",
+  "Homey": "Homey",
+  "Homey flow started": "Homey-flow gestart",
+  "Homey needs HOMEY_URL and HOMEY_API_KEY {where_keys}. Make a key in the Homey Web App: Settings, API Keys.": "Homey heeft HOMEY_URL en HOMEY_API_KEY nodig {where_keys}. Maak een sleutel in de Homey Web App: Instellingen, API-sleutels.",
+  "Homey variable {name}": "Homey-variabele {name}",
+  "Homey: {name}": "Homey: {name}",
+  "Homey: {why}.": "Homey: {why}.",
+  "Input: {shown}\n\nIt didn't run: {problem}.": "Invoer: {shown}\n\nHet draaide niet: {problem}.",
+  "Input: {shown}\n\nResult:\n{text}": "Invoer: {shown}\n\nResultaat:\n{text}",
+  "Input: {shown}\n\nThe same call as the step before, so it didn't run again.": "Invoer: {shown}\n\nDezelfde aanroep als de stap ervoor, dus hij draaide niet opnieuw.",
+  "Instructions for Claude": "Instructies voor Claude",
+  "It asked for {name} with the same input three times in a row. The draft holds its last result.": "Hij vroeg drie keer achter elkaar om {name} met dezelfde invoer. Het concept bevat zijn laatste resultaat.",
+  "It said it was done, but its answer was empty.": "Hij zei dat hij klaar was, maar zijn antwoord was leeg.",
+  "It used all {n} steps without a final answer. The draft holds its last result.": "Hij gebruikte alle {n} stappen zonder eindantwoord. Het concept bevat zijn laatste resultaat.",
+  "Its variables are: {names}": "De variabelen zijn: {names}",
+  "Kept the best draft": "Het beste concept bewaard",
+  "List: {p}": "Lijst: {p}",
+  "Listening for Home Assistant events: {x}.": "Luisteren naar Home Assistant-gebeurtenissen: {x}.",
+  "Listening for MQTT messages on {x}.": "Luisteren naar MQTT-berichten op {x}.",
+  "Listening for web requests on port {port}: {x}.": "Luisteren naar webverzoeken op poort {port}: {x}.",
+  "Listening for {name} messages in {x}.": "Luisteren naar {name}-berichten in {x}.",
+  "Log saved to {path}": "Logboek opgeslagen in {path}",
+  "Look at picture: {q}": "Afbeelding bekijken: {q}",
+  "MCP server “{name}”": "MCP-server ‘{name}’",
+  "MQTT": "MQTT",
+  "MQTT needs MQTT_HOST {where_keys}: your broker's address, like homeassistant.local.": "MQTT heeft MQTT_HOST nodig {where_keys}: het adres van je broker, zoals homeassistant.local.",
+  "MQTT needs a topic, like home/kitchen/temperature.": "MQTT heeft een topic nodig, zoals home/kitchen/temperature.",
+  "MQTT needs the paho-mqtt package: pip install paho-mqtt": "MQTT heeft het pakket paho-mqtt nodig: pip install paho-mqtt",
+  "MQTT {topic}": "MQTT {topic}",
+  "MQTT → {topic}": "MQTT → {topic}",
+  "Meets every criterion.": "Voldoet aan elk criterium.",
+  "Memory": "Geheugen",
+  "Model": "Model",
+  "News feeds": "Nieuwsfeeds",
+  "News: {x}": "Nieuws: {x}",
+  "No": "Nee",
+  "No feed given, and no feeds in your settings. Add  feeds = <addresses>  {where_keys}.": "Geen feed opgegeven, en geen feeds in je instellingen. Voeg  feeds = <adressen>  toe {where_keys}.",
+  "No review problems recorded, so nothing to fix.": "Geen problemen uit de beoordeling vastgelegd, dus niets op te lossen.",
+  "No token budget for this run.": "Geen tokenbudget voor deze run.",
+  "Nobody is listening for this message.": "Niemand luistert naar dit bericht.",
+  "Not allowed, so it didn't run.": "Niet toegestaan, dus het draaide niet.",
+  "Not done": "Niet gedaan",
+  "Note": "Notitie",
+  "Nothing to run: this program has no 'when Run is clicked' script.": "Niets om uit te voeren: dit programma heeft geen ‘wanneer op Uitvoeren wordt geklikt’-script.",
+  "Notification → {target}": "Melding → {target}",
+  "Notification → {x}": "Melding → {x}",
+  "Number > ": "Getal > ",
+  "Number: {p}": "Getal: {p}",
+  "Only drawn pictures can be saved as SVG. Choose PNG instead.": "Alleen getekende afbeeldingen kunnen als SVG worden opgeslagen. Kies in plaats daarvan PNG.",
+  "Only reading: nothing is sent, posted, switched or charged.\n": "Alleen lezen: er wordt niets verstuurd, geplaatst, geschakeld of afgerekend.\n",
+  "Out of rounds. Keeping the best effort.": "Rondes op. Het resultaat zo goed mogelijk wordt bewaard.",
+  "PNG needs the cairosvg package (pip install cairosvg), so it was saved as SVG.": "PNG heeft het pakket cairosvg nodig (pip install cairosvg), dus het is als SVG opgeslagen.",
+  "Package pypdf": "Pakket pypdf",
+  "Package {name}": "Pakket {name}",
+  "Path > ": "Pad > ",
+  "Paused.": "Gepauzeerd.",
+  "Perplexity can't look at photos here. Use Claude, GPT or Gemini for this step.": "Perplexity kan hier geen foto’s bekijken. Gebruik voor deze stap Claude, GPT of Gemini.",
+  "Pick the better one": "De betere kiezen",
+  "Pick up where it stopped, reusing those? [y/n] > ": "Verdergaan waar het stopte en die hergebruiken? [j/n] > ",
+  "Picked the first": "De eerste gekozen",
+  "Picked the second": "De tweede gekozen",
+  "Picking up the run that stopped: 1 saved step will be reused instead of repeated.": "De gestopte run wordt voortgezet: 1 opgeslagen stap wordt hergebruikt in plaats van herhaald.",
+  "Picking up the run that stopped: {n} saved steps will be reused instead of repeated.": "De gestopte run wordt voortgezet: {n} opgeslagen stappen worden hergebruikt in plaats van herhaald.",
+  "Picture": "Afbeelding",
+  "Picture: {x}": "Afbeelding: {x}",
+  "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "Afbeeldingen kunnen alleen ‘zolang deze pagina open is’ worden onthouden. Sla de afbeelding op als bestand om hem te bewaren.",
+  "Press Enter to continue > ": "Druk op Enter om door te gaan > ",
+  "Program: {name}": "Programma: {name}",
+  "Programs inside programs went more than 10 deep, so the run stopped.": "Programma’s in programma’s gingen meer dan 10 niveaus diep, dus de run is gestopt.",
+  "Python": "Python",
+  "RESULT": "RESULTAAT",
+  "RESULT (best effort)": "RESULTAAT (zo goed mogelijk)",
+  "Read page: {x}": "Pagina lezen: {x}",
+  "Reading PDFs needs the pypdf package: pip install pypdf": "Voor het lezen van pdf’s is het pakket pypdf nodig: pip install pypdf",
+  "Record: {prompt}": "Record: {prompt}",
+  "Records: {prompt}": "Records: {prompt}",
+  "Remembered “{x}”": "‘{x}’ onthouden",
+  "Reply continued": "Antwoord voortgezet",
+  "Restored the task, draft, review, result and variables.": "De taak, het concept, de beoordeling, het resultaat en de variabelen zijn hersteld.",
+  "Restored the task, draft, review, result and variables. Draft: {draft}": "De taak, het concept, de beoordeling, het resultaat en de variabelen zijn hersteld. Concept: {draft}",
+  "Resuming": "Hervatten",
+  "Retrying": "Opnieuw proberen",
+  "Review": "Beoordeling",
+  "Revise": "Herzien",
+  "Revise to fix the problems": "Herzien om de problemen op te lossen",
+  "Rework: {instr}": "Herwerken: {instr}",
+  "Rewrite: {how}": "Herschrijven: {how}",
+  "Run differs here": "Run wijkt hier af",
+  "Run logs": "Runlogboeken",
+  "Run the program again to pick up where it stopped.": "Voer het programma opnieuw uit om verder te gaan waar het stopte.",
+  "Save file": "Bestand opslaan",
+  "Save picture": "Afbeelding opslaan",
+  "Saved the task, draft, review, result and variables.": "De taak, het concept, de beoordeling, het resultaat en de variabelen zijn opgeslagen.",
+  "Saved the task, draft, review, result and variables. Draft: {draft}": "De taak, het concept, de beoordeling, het resultaat en de variabelen zijn opgeslagen. Concept: {draft}",
+  "Saved to {x}": "Opgeslagen in {x}",
+  "Saved {path}": "{path} opgeslagen",
+  "Saving files": "Bestanden opslaan",
+  "Schedules are on. Leave this running; press Ctrl+C to stop.": "Planningen staan aan. Laat dit draaien; druk op Ctrl+C om te stoppen.",
+  "Score picture: {criteria}": "Afbeelding beoordelen: {criteria}",
+  "Score: {text}": "Cijfer: {text}",
+  "Second Thought needs 3.9 or newer": "Second Thought heeft 3.9 of nieuwer nodig",
+  "Second Thought runtime {runtime_version}": "Second Thought runtime {runtime_version}",
+  "Set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST {where_keys}: your email provider's help pages list them.": "Stel EMAIL_IMAP_HOST en EMAIL_SMTP_HOST in {where_keys}: de hulppagina’s van je e-mailprovider noemen ze.",
+  "Settings": "Instellingen",
+  "Slack: {why}.": "Slack: {why}.",
+  "Snapshot: {camera}": "Momentopname: {camera}",
+  "Something failed, so the 'if it fails' part ran": "Er mislukte iets, dus het deel ‘als het mislukt’ draaide",
+  "Spoken on {player}": "Uitgesproken op {player}",
+  "Spoken on {x}": "Uitgesproken op {x}",
+  "Started with: {value}": "Gestart met: {value}",
+  "Started.": "Gestart.",
+  "Starting afresh.": "Opnieuw beginnen.",
+  "Stopped after starting {max_scripts} scripts. A message may be broadcasting itself in a loop.": "Gestopt na het starten van {max_scripts} scripts. Misschien zendt een bericht zichzelf in een lus uit.",
+  "Stopped after {max_ai_calls} model calls in one run, to protect your usage.": "Gestopt na {max_ai_calls} modelaanroepen in één run, om je tegoed te beschermen.",
+  "Stopped after {max_steps} steps. A loop may never end; check repeat and while blocks.": "Gestopt na {max_steps} stappen. Misschien eindigt een lus nooit; controleer herhaal- en zolang-blokken.",
+  "Stopped: this run has used {x} tokens, which reaches its budget of {x2}. Raise the number in the 'limit this run' block (or budget in second-thought.ini).": "Gestopt: deze run heeft {x} tokens gebruikt en daarmee zijn budget van {x2} bereikt. Verhoog het getal in het blok ‘beperk deze run’ (of budget in second-thought.ini).",
+  "Structured replies": "Gestructureerde antwoorden",
+  "Subject: {subject}\n\n{body}": "Onderwerp: {subject}\n\n{body}",
+  "Task set": "Taak ingesteld",
+  "Telegram": "Telegram",
+  "Telegram message sent": "Telegram-bericht verstuurd",
+  "Telegram needs a bot: set TELEGRAM_BOT_TOKEN {where_keys} (message @BotFather in Telegram to make one).": "Telegram heeft een bot nodig: stel TELEGRAM_BOT_TOKEN in {where_keys} (stuur in Telegram een bericht aan @BotFather om er een te maken).",
+  "Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.": "Telegram heeft een chat nodig om naar te versturen: stel TELEGRAM_CHAT_ID in {where_keys}. Stuur je bot eerst een bericht; het programma zegt dan uit welke chat het kwam.",
+  "Telegram: send your bot a message. Until TELEGRAM_CHAT_ID is set {where_keys}, the program only says which chat it came from.": "Telegram: stuur je bot een bericht. Tot TELEGRAM_CHAT_ID is ingesteld {where_keys}, zegt het programma alleen uit welke chat het kwam.",
+  "Telegram: {x}.": "Telegram: {x}.",
+  "That address isn't a news feed (RSS or Atom).": "Dat adres is geen nieuwsfeed (RSS of Atom).",
+  "That address isn't a web page or text ({x}).": "Dat adres is geen webpagina of tekst ({x}).",
+  "That address sent the program somewhere that isn't a web page.": "Dat adres stuurde het programma naar iets wat geen webpagina is.",
+  "That file isn't text. Use a PDF, a .docx or a text file.": "Dat bestand is geen tekst. Gebruik een pdf, een .docx of een tekstbestand.",
+  "That was the last saved step. From here the run carries on as usual.": "Dat was de laatste opgeslagen stap. Vanaf hier gaat de run gewoon verder.",
+  "That {kind} couldn't be read ({name}: {e}). It may be damaged, locked, or not really a {kind}.": "Dat bestand ({kind}) kon niet worden gelezen ({name}: {e}). Misschien is het beschadigd, vergrendeld of eigenlijk geen {kind}.",
+  "The 'ask Claude about picture' block has no question.": "Het blok ‘vraag Claude over afbeelding’ heeft geen vraag.",
+  "The 'ask Claude for a record' block has no request.": "Het blok ‘vraag Claude om een record’ heeft geen verzoek.",
+  "The 'change picture' block has no change in it.": "Het blok ‘afbeelding wijzigen’ bevat geen wijziging.",
+  "The 'chat' block has no message.": "Het blok ‘chat’ heeft geen bericht.",
+  "The 'draw a picture' block has no description.": "Het blok ‘teken een afbeelding’ heeft geen beschrijving.",
+  "The 'notify' block has no message.": "Het blok ‘melding’ heeft geen bericht.",
+  "The 'rework the draft' block has no instruction.": "Het blok ‘het concept herwerken’ heeft geen instructie.",
+  "The 'save checkpoint' block needs a name.": "Het blok ‘controlepunt opslaan’ heeft een naam nodig.",
+  "The 'say' block has nothing to say.": "Het blok ‘zeg’ heeft niets te zeggen.",
+  "The 'search the web' block is empty.": "Het blok ‘zoek op het web’ is leeg.",
+  "The 'set {key} of' block needs a record in its middle slot.": "Het blok ‘{key} van … instellen’ heeft een record nodig in het middelste vak.",
+  "The 'set … of record' block needs a field name.": "Het blok ‘… van record instellen’ heeft een veldnaam nodig.",
+  "The '{where}' block needs a picture in its picture slot.": "Het blok ‘{where}’ heeft een afbeelding nodig in zijn afbeeldingsvak.",
+  "The Llama server doesn't have model {model}. Run:  ollama pull {model}": "De Llama-server heeft het model {model} niet. Voer uit:  ollama pull {model}",
+  "The MQTT broker at {host}:{port} didn't answer.": "De MQTT-broker op {host}:{port} antwoordde niet.",
+  "The MQTT broker at {host}:{port} refused the connection ({rc}). Check MQTT_USERNAME and MQTT_PASSWORD.": "De MQTT-broker op {host}:{port} weigerde de verbinding ({rc}). Controleer MQTT_USERNAME en MQTT_PASSWORD.",
+  "The agent block needs a goal.": "Het agentblok heeft een doel nodig.",
+  "The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them).": "De agent leest alleen openbare webpagina’s en feeds, geen adressen op je eigen netwerk (local_pages = yes staat ze toe).",
+  "The agent's MCP server “{x}” isn't set up. Put {key} = <the command that starts it, or its https:// address> {where_keys}.": "De MCP-server ‘{x}’ van de agent is niet ingesteld. Zet {key} = <het commando dat hem start, of zijn https://-adres> {where_keys}.",
+  "The block '{kind}' can't run outside the block editor.": "Het blok ‘{kind}’ kan niet buiten de blokeditor draaien.",
+  "The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.": "De agenda heeft CALENDAR_URL nodig {where_keys}: het privé-iCal-adres van je agenda.",
+  "The data for {service} isn't valid JSON. Use something like {\"temperature\": 20}.": "De gegevens voor {service} zijn geen geldige JSON. Gebruik iets als {\"temperature\": 20}.",
+  "The email couldn't be sent ({e}).": "De e-mail kon niet worden verstuurd ({e}).",
+  "The email server refused the login ({e}). Check EMAIL_PASSWORD is an app password.": "De e-mailserver weigerde het inloggen ({e}). Controleer of EMAIL_PASSWORD een app-wachtwoord is.",
+  "The last run stopped part-way, after 1 saved step.": "De laatste run stopte halverwege, na 1 opgeslagen stap.",
+  "The last run stopped part-way, after {n} saved steps.": "De laatste run stopte halverwege, na {n} opgeslagen stappen.",
+  "The program “{name}” runs itself ({x}), which would never end.": "Het programma ‘{name}’ roept zichzelf aan ({x}), wat nooit zou eindigen.",
+  "The reply didn't have the expected shape: {bad}.": "Het antwoord had niet de verwachte vorm: {bad}.",
+  "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "Het antwoord bereikte de lengtegrens, dus het model is gevraagd door te gaan waar het stopte.",
+  "The reply wasn't readable JSON, so this step was wasted.": "Het antwoord was geen leesbare JSON, dus deze stap was verspild.",
+  "The run took longer than {x} seconds (max_seconds in second-thought.ini), so it stopped.": "De run duurde langer dan {x} seconden (max_seconds in second-thought.ini), dus hij is gestopt.",
+  "The task is empty. Type what you want into 'set task to'.": "De taak is leeg. Typ in ‘taak instellen op’ wat je wilt.",
+  "The tool block for “{block_name}” gives a type for “{name}”, but that My Block's inputs are: {x}.": "Het hulpmiddelblok voor ‘{block_name}’ geeft een type voor ‘{name}’, maar de invoer van dat Mijn blok is: {x}.",
+  "The {x} couldn't be reached: {x2}": "De {x} is niet bereikbaar: {x2}",
+  "The {x} couldn't be started ({x2} = {command}): {e}": "De {x} kon niet worden gestart ({x2} = {command}): {e}",
+  "The {x} didn't answer when asked for its tools.": "De {x} antwoordde niet toen om zijn hulpmiddelen werd gevraagd.",
+  "The {x} didn't answer.": "De {x} antwoordde niet.",
+  "The {x} didn't reply to {method}.": "De {x} antwoordde niet op {method}.",
+  "The {x} gave a kind of result this runtime doesn't know (“{kind}”).": "De {x} gaf een soort resultaat dat deze runtime niet kent (‘{kind}’).",
+  "The {x} looks like it uses MCP's old HTTP+SSE way of connecting, which Second Thought doesn't speak. Check the address, or use a newer server.": "De {x} lijkt de oude HTTP+SSE-verbindingsmanier van MCP te gebruiken, die Second Thought niet spreekt. Controleer het adres, of gebruik een nieuwere server.",
+  "The {x} refused the request ({status}). Check {x2}_TOKEN {where_keys}.": "De {x} weigerde het verzoek ({status}). Controleer {x2}_TOKEN {where_keys}.",
+  "The {x} sent a reply that isn't JSON.": "De {x} stuurde een antwoord dat geen JSON is.",
+  "The {x} speaks MCP {x2} this runtime doesn't. A newer Second Thought may.": "De {x} spreekt MCP {x2}, dat deze runtime niet spreekt. Een nieuwere Second Thought misschien wel.",
+  "The {x} stopped{x2} Check {x3} {where_keys}.": "De {x} is gestopt{x2} Controleer {x3} {where_keys}.",
+  "The {x} wants MCP version “{got}”, which this runtime doesn't speak.": "De {x} wil MCP-versie ‘{got}’, die deze runtime niet spreekt.",
+  "The {x} wants more input for {method} (a question for you, or a model call), which Second Thought can't give it yet.": "De {x} wil meer invoer voor {method} (een vraag aan jou, of een modelaanroep), die Second Thought nog niet kan geven.",
+  "The {x} wouldn't list its tools: {message}": "De {x} wilde zijn hulpmiddelen niet tonen: {message}",
+  "The {x} wouldn't start talking: {message}": "De {x} wilde het gesprek niet beginnen: {message}",
+  "There's no Homey device called “{name}”.": "Er is geen Homey-apparaat met de naam ‘{name}’.",
+  "There's no Homey flow called “{name}”.": "Er is geen Homey-flow met de naam ‘{name}’.",
+  "There's no Homey variable called “{name}”.": "Er is geen Homey-variabele met de naam ‘{name}’.",
+  "There's no My Block called “{name}”.": "Er is geen Mijn blok met de naam ‘{name}’.",
+  "There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.": "Er is in deze run geen controlepunt met de naam ‘{name}’. Zet een blok ‘controlepunt opslaan’ vóór dit blok.",
+  "There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.": "Er is nog geen concept. Zet een blok ‘een eerste concept schrijven’ of ‘concept instellen op’ vóór deze stap.",
+  "There's no email with id {uid}.": "Er is geen e-mail met id {uid}.",
+  "There's no prompt called “{name}” in this program's prompt library.": "Er is geen prompt met de naam ‘{name}’ in de promptbibliotheek van dit programma.",
+  "There's nothing to save: the value in the 'save as file' block is empty.": "Er is niets om op te slaan: de waarde in het blok ‘opslaan als bestand’ is leeg.",
+  "This program has no scheduled scripts, and nothing that listens.": "Dit programma heeft geen geplande scripts, en niets wat luistert.",
+  "This program uses Gemini. Install its package first:  pip install google-genai": "Dit programma gebruikt Gemini. Installeer eerst het pakket:  pip install google-genai",
+  "This program uses Home Assistant. Put HA_URL (for example http://homeassistant.local:8123) and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab) {where_keys}.": "Dit programma gebruikt Home Assistant. Zet HA_URL (bijvoorbeeld http://homeassistant.local:8123) en HA_TOKEN (een langlevend toegangstoken uit je Home Assistant-profiel, tabblad Beveiliging) {where_keys}.",
+  "This program uses {provider}. Put {key_env} = your-key {where_keys} ({signup}).": "Dit programma gebruikt {provider}. Zet {key_env} = je-sleutel {where_keys} ({signup}).",
+  "This run stops before a model call once it has used {x} tokens (used so far: {x2}).": "Deze run stopt vóór een modelaanroep zodra hij {x} tokens heeft gebruikt (tot nu toe gebruikt: {x2}).",
+  "This step needs an answer typed at the keyboard, but there's no one to type it.": "Deze stap heeft een antwoord nodig dat op het toetsenbord wordt getypt, maar er is niemand om het te typen.",
+  "To change a list, put a list variable in the 'in list' slot.": "Om een lijst te wijzigen, zet je een lijstvariabele in het vak ‘in lijst’.",
+  "To save a picture, use the 'save picture' block.": "Gebruik het blok ‘afbeelding opslaan’ om een afbeelding op te slaan.",
+  "Tools: {tools}": "Hulpmiddelen: {tools}",
+  "Try {attempt} of {max_tries} failed: {last_error}\nTrying again in {wait}s.": "Poging {attempt} van {max_tries} mislukt: {last_error}\nOver {wait} s opnieuw proberen.",
+  "Unknown tool “{kind}”.": "Onbekend hulpmiddel ‘{kind}’.",
+  "Unreadable reply": "Onleesbaar antwoord",
+  "Using {x}": "{x} gebruiken",
+  "Using {x} for the blocks inside": "{x} gebruiken voor de blokken erin",
+  "Wait": "Wachten",
+  "Wait until a time": "Wachten tot een tijdstip",
+  "Waiting for “{name}”": "Wacht op ‘{name}’",
+  "Waiting until {time}": "Wacht tot {time}",
+  "Waiting until {time} tomorrow": "Wacht tot morgen {time}",
+  "Waiting {x} seconds": "{x} seconden wachten",
+  "Watching Homey devices for changes.": "Homey-apparaten in de gaten houden op wijzigingen.",
+  "Watching for new files in {x}.": "{x} in de gaten houden op nieuwe bestanden.",
+  "Watching {url} (the part with “{words}”) for changes, every {n} min.": "{url} (het deel met ‘{words}’) in de gaten houden op wijzigingen, elke {n} min.",
+  "Watching {url} for changes, every {n} min.": "{url} in de gaten houden op wijzigingen, elke {n} min.",
+  "Web requests": "Webverzoeken",
+  "Web requests, {x}: still not listening. To turn them on, {note}": "Webverzoeken, {x}: luistert nog niet. Om ze aan te zetten: {note}",
+  "Web requests: {note}": "Webverzoeken: {note}",
+  "Web search: {q}": "Zoeken op het web: {q}",
+  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Terug naar het concept uit ronde {round}: dat had de minste problemen ({n}). De rondes erna verbeterden het niet.",
+  "Which Homey device? Give its name, like Kitchen light.": "Welk Homey-apparaat? Geef de naam, zoals Keukenlamp.",
+  "Why: {why}": "Waarom: {why}",
+  "Write a first draft": "Een eerste concept schrijven",
+  "Yes": "Ja",
+  "Yes or no: {p}": "Ja of nee: {p}",
+  "You can't publish to a topic with + or # in it: those only work for listening.": "Je kunt niet publiceren op een topic met + of # erin: die werken alleen om te luisteren.",
+  "a backup answered 1 step": "een reservemodel beantwoordde 1 stap",
+  "a backup answered {n} steps": "een reservemodel beantwoordde {n} stappen",
+  "a speaker": "een luidspreker",
+  "added": "toegevoegd",
+  "all day": "hele dag",
+  "allowed on this computer": "toegestaan op deze computer",
+  "answered {status} when asked which models it has, so the key couldn't be checked": "antwoordde {status} toen werd gevraagd welke modellen het heeft, dus de sleutel kon niet worden gecontroleerd",
+  "approve = no, so it doesn't ask": "approve = no, dus het vraagt het niet",
+  "approved": "goedgekeurd",
+  "ask_me needs a question.": "ask_me heeft een vraag nodig.",
+  "bad input": "ongeldige invoer",
+  "best draft": "beste concept",
+  "best effort": "zo goed mogelijk",
+  "budget {n}": "budget {n}",
+  "calculate couldn't work out “{expression}”: {e}.": "calculate kon ‘{expression}’ niet uitrekenen: {e}.",
+  "can't be saved in {folder}": "kan niet worden opgeslagen in {folder}",
+  "chosen": "gekozen",
+  "connected": "verbonden",
+  "connected to the broker": "verbonden met de broker",
+  "continued": "voortgezet",
+  "couldn't be reached ({err}).{hint}": "niet bereikbaar ({err}).{hint}",
+  "couldn't sign in to {smtp} to send ({e})": "kon niet inloggen bij {smtp} om te versturen ({e})",
+  "done": "klaar",
+  "drawn": "getekend",
+  "empty answer": "leeg antwoord",
+  "everything": "alles",
+  "failed": "mislukt",
+  "files can't be saved: {where} can't be written to": "bestanden kunnen niet worden opgeslagen: er kan niet worden geschreven in {where}",
+  "files will be saved in {here}": "bestanden worden opgeslagen in {here}",
+  "forever": "voor altijd",
+  "forgotten": "vergeten",
+  "handled": "opgevangen",
+  "installed": "geïnstalleerd",
+  "it said no": "het weigerde",
+  "missing (needed for {why}). Install it with:  pip install {pip}": "ontbreekt (nodig voor {why}). Installeer het met:  pip install {pip}",
+  "needs work": "moet beter",
+  "no WEBHOOK_SECRET {where_keys}, so the program won't listen for web requests. Set it to a long password.": "geen WEBHOOK_SECRET {where_keys}, dus het programma luistert niet naar webverzoeken. Stel het in op een lang wachtwoord.",
+  "no key. Put {x} = your-key {where_keys} ({signup}).": "geen sleutel. Zet {x} = je-sleutel {where_keys} ({signup}).",
+  "no listeners": "geen luisteraars",
+  "no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used": "geen second-thought.ini gevonden naast het programma, in deze map of in je thuismap, dus alleen omgevingsvariabelen worden gebruikt",
+  "no tokens used": "geen tokens gebruikt",
+  "none": "geen",
+  "not a tool": "geen hulpmiddel",
+  "not allowed on this computer yet. Run it once yourself and answer y (a scheduled run won't start until then).": "nog niet toegestaan op deze computer. Voer het één keer zelf uit en antwoord j (een geplande run start pas daarna).",
+  "not installed, so PDFs can't be read (other files can). Install it with:  pip install pypdf": "niet geïnstalleerd, dus pdf’s kunnen niet worden gelezen (andere bestanden wel). Installeer het met:  pip install pypdf",
+  "note": "notitie",
+  "notes can't be saved: {folder} can't be written to": "notities kunnen niet worden opgeslagen: er kan niet worden geschreven in {folder}",
+  "nothing": "niets",
+  "nothing saved yet; notes will go in {memory_file}": "nog niets opgeslagen; notities komen in {memory_file}",
+  "passes": "geslaagd",
+  "planned": "gepland",
+  "plans first": "plant eerst",
+  "port {port} can't be used ({e}): something else may be listening. Change WEBHOOK_PORT.": "poort {port} kan niet worden gebruikt ({e}): misschien luistert er al iets anders. Verander WEBHOOK_PORT.",
+  "port {port} is free, and WEBHOOK_SECRET is set": "poort {port} is vrij, en WEBHOOK_SECRET is ingesteld",
+  "published": "gepubliceerd",
+  "reached": "bereikt",
+  "reached: {home} devices": "bereikt: {home} apparaten",
+  "read": "gelezen",
+  "read the inbox": "de inbox gelezen",
+  "read the next 7 days ({x} lines)": "de komende 7 dagen gelezen ({x} regels)",
+  "read your channels": "je kanalen gelezen",
+  "read your feeds ({items} items)": "je feeds gelezen ({items} items)",
+  "read your pull requests": "je pull requests gelezen",
+  "read {settings_path}": "{settings_path} gelezen",
+  "read_email needs an email's id number, from search_email.": "read_email heeft het id-nummer van een e-mail nodig, uit search_email.",
+  "refused": "geweigerd",
+  "refused the key ({status}). Check {x} {where_keys}.": "weigerde de sleutel ({status}). Controleer {x} {where_keys}.",
+  "remember needs a name.": "remember heeft een naam nodig.",
+  "repair": "reparatie",
+  "repeat": "herhaling",
+  "reset": "gereset",
+  "restored": "hersteld",
+  "resume": "hervatten",
+  "retry {x}": "poging {x}",
+  "reused": "hergebruikt",
+  "review_text needs criteria to check against.": "review_text heeft criteria nodig om aan te toetsen.",
+  "review_text needs some text to check.": "review_text heeft wat tekst nodig om te controleren.",
+  "revised": "herzien",
+  "running": "bezig",
+  "saved": "opgeslagen",
+  "saved in {folder}": "opgeslagen in {folder}",
+  "search_github needs something to search for.": "search_github heeft iets nodig om naar te zoeken.",
+  "search_linkedin needs a query.": "search_linkedin heeft een zoekopdracht nodig.",
+  "search_memory needs some words to look for.": "search_memory heeft wat woorden nodig om naar te zoeken.",
+  "search_web needs a query.": "search_web heeft een zoekopdracht nodig.",
+  "sent": "verstuurd",
+  "set": "ingesteld",
+  "shown": "getoond",
+  "signed in to {smtp} (nothing was sent)": "ingelogd bij {smtp} (er is niets verstuurd)",
+  "skipped": "overgeslagen",
+  "started": "gestart",
+  "stopped": "gestopt",
+  "the bot is @{x}{chat}": "de bot is @{x}{chat}",
+  "the email server refused EMAIL_ADDRESS and EMAIL_PASSWORD {where_keys}. Use an app password.": "de e-mailserver weigerde EMAIL_ADDRESS en EMAIL_PASSWORD {where_keys}. Gebruik een app-wachtwoord.",
+  "the key works": "de sleutel werkt",
+  "the key works ({n} models)": "de sleutel werkt ({n} modellen)",
+  "the key works, but it doesn't list {x}, which this program uses.{hint}": "de sleutel werkt, maar {x}, dat dit programma gebruikt, staat er niet bij.{hint}",
+  "time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{when}”.": "time_plus heeft een tijd nodig zoals 09:30 of 2026-10-10 09:30, niet ‘{when}’.",
+  "turn {x}": "beurt {x}",
+  "unknown type": "onbekend type",
+  "unreadable": "onleesbaar",
+  "up to {n} steps": "tot {n} stappen",
+  "versions": "versies",
+  "warn": "waarschuwing",
+  "while running": "tijdens het draaien",
+  "with {data}": "met {data}",
+  "your feeds": "je feeds",
+  "{entity}: already done before the stop, so not done again.": "{entity}: al gedaan vóór de stop, dus niet opnieuw gedaan.",
+  "{e}\nAsking once more for a corrected reply.": "{e}\nNog één keer om een verbeterd antwoord vragen.",
+  "{friendly} must be {what}, not “{raw}”. Fix it {where_keys} (or the {name} environment variable). 0 means no limit.": "{friendly} moet {what} zijn, niet ‘{raw}’. Pas het aan {where_keys} (of de omgevingsvariabele {name}). 0 betekent geen limiet.",
+  "{friendly} must be {what}, not “{raw}”. Fix it {where_keys}. 0 means no limit.": "{friendly} moet {what} zijn, niet ‘{raw}’. Pas het aan {where_keys}. 0 betekent geen limiet.",
+  "{got} topics": "{got} topics",
+  "{hostname} didn't accept a WebSocket connection at {path} ({x}).": "{hostname} accepteerde geen WebSocket-verbinding op {path} ({x}).",
+  "{items} items": "{items} items",
+  "{memory_file} can't be written to": "er kan niet worden geschreven in {memory_file}",
+  "{memory_file} isn't valid JSON, so saved notes can't be read": "{memory_file} is geen geldige JSON, dus opgeslagen notities kunnen niet worden gelezen",
+  "{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.": "{model} kan geen foto’s bekijken. Gebruik een model dat dat wel kan, zoals DeepSeek Flash of Claude.",
+  "{model} wouldn't accept a reply shape ({e}), so its replies are checked after they arrive instead.": "{model} wilde geen antwoordvorm aannemen ({e}), dus de antwoorden worden in plaats daarvan gecontroleerd nadat ze binnenkomen.",
+  "{name} has no “{cap}”. It has: {x}.": "{name} heeft geen ‘{cap}’. Het heeft: {x}.",
+  "{name} message sent": "{name}-bericht verstuurd",
+  "{name} needs {channels} {where}: the channels it reads and posts in (anyone can post in a server, so only these count).": "{name} heeft {channels} nodig {where}: de kanalen waarin het leest en plaatst (iedereen kan plaatsen in een server, dus alleen deze tellen).",
+  "{name} needs {channels} {where}: the channels it reads and posts in (anyone can post in a workspace, so only these count).": "{name} heeft {channels} nodig {where}: de kanalen waarin het leest en plaatst (iedereen kan plaatsen in een workspace, dus alleen deze tellen).",
+  "{name} needs {token} {where_keys}: make {make}.": "{name} heeft {token} nodig {where_keys}: maak {make}.",
+  "{name}: channel {channel} isn't in {channels}, so nothing is sent there.": "{name}: kanaal {channel} staat niet in {channels}, dus daar wordt niets naartoe gestuurd.",
+  "{n} notes above.": "{n} opmerkingen hierboven.",
+  "{n} problems to fix: the lines marked FAIL. Then run --doctor again.": "{n} problemen om op te lossen: de regels met FAIL. Voer daarna --doctor opnieuw uit.",
+  "{n} saved notes, in {memory_file}": "{n} opgeslagen notities, in {memory_file}",
+  "{n} steps": "{n} stappen",
+  "{n} tools: {names}": "{n} hulpmiddelen: {names}",
+  "{path} · {x} characters": "{path} · {x} tekens",
+  "{provider} ({model}) wouldn't take that JSON mode, so it's asked for plain JSON instead.": "{provider} ({model}) wilde die JSON-modus niet aannemen, dus er wordt in plaats daarvan om gewone JSON gevraagd.",
+  "{provider} ({model}) wouldn't take that JSON mode, so it's asked without one, and its replies are checked after they arrive.": "{provider} ({model}) wilde die JSON-modus niet aannemen, dus er wordt zonder gevraagd, en de antwoorden worden gecontroleerd nadat ze binnenkomen.",
+  "{provider} answered {code}: {detail}": "{provider} antwoordde {code}: {detail}",
+  "{provider} refused the API key (401). Check {key_env}.": "{provider} weigerde de API-sleutel (401). Controleer {key_env}.",
+  "{provider} refused the request ({code}): {detail}": "{provider} weigerde het verzoek ({code}): {detail}",
+  "{provider} says the account has no credit left (402).": "{provider} zegt dat het account geen tegoed meer heeft (402).",
+  "{recs} events": "{recs} gebeurtenissen",
+  "{recs} items": "{recs} items",
+  "{recs} records": "{recs} records",
+  "{service} on {entity} needs your approval, and nobody is at the keyboard.": "{service} op {entity} heeft je goedkeuring nodig, en er zit niemand achter het toetsenbord.",
+  "{service} on {entity} was refused, so nothing happened.": "{service} op {entity} is geweigerd, dus er gebeurde niets.",
+  "{tools} tools, MCP {version}": "{tools} hulpmiddelen, MCP {version}",
+  "{url} isn't a web page or text ({x}).": "{url} is geen webpagina of tekst ({x}).",
+  "{value}  ·  until {until}": "{value}  ·  tot {until}",
+  "{what} couldn't open {url}: the website answered {code}.": "{what} kon {url} niet openen: de website antwoordde {code}.",
+  "{what} couldn't reach {url} ({reason}).": "{what} kon {url} niet bereiken ({reason}).",
+  "{what} needs a web address starting with http:// or https://.": "{what} heeft een webadres nodig dat begint met http:// of https://.",
+  "{what} needs your approval, and nobody is at the keyboard.": "{what} heeft je goedkeuring nodig, en er zit niemand achter het toetsenbord.",
+  "{what} was refused, so nothing happened.": "{what} is geweigerd, dus er gebeurde niets.",
+  "{who} returned nothing for this step. Simplify it and try again.": "{who} gaf niets terug voor deze stap. Vereenvoudig hem en probeer het opnieuw.",
+  "{who}: {tokens_in} tokens in, {tokens_out} out": "{who}: {tokens_in} tokens in, {tokens_out} uit",
+  "{x}  ·  MCP {version}": "{x}  ·  MCP {version}",
+  "{x} failed: {x2}\nTrying {x3} instead.": "{x} is mislukt: {x2}\nIn plaats daarvan {x3} proberen.",
+  "{x} is empty. Put the command that starts the server there.": "{x} is leeg. Zet daar het commando dat de server start.",
+  "{x} is set (Perplexity has no free way to try it, so it isn't checked further)": "{x} is ingesteld (Perplexity heeft geen gratis manier om het te proberen, dus het wordt niet verder gecontroleerd)",
+  "“{entity}” isn't an entity id. Use something like light.kitchen.": "‘{entity}’ is geen entiteits-id. Gebruik iets als light.kitchen.",
+  "“{hhmm}” isn't a time like 09:00.": "‘{hhmm}’ is geen tijd zoals 09:00.",
+  "“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).": "‘{kind}’ is geen type dat de agent kent. Gebruik text, number, yes/no, list of any (voor ‘{name}’).",
+  "“{name}” can't run while other scripts are running at the same time. Run it from a script that runs on its own (not alongside a broadcast).": "‘{name}’ kan niet draaien terwijl er tegelijk andere scripts draaien. Start het vanuit een script dat op zichzelf draait (niet naast een uitzending).",
+  "“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.": "‘{repo}’ is geen GitHub-project. Gebruik eigenaar/naam, zoals octocat/hello-world.",
+  "“{service}” isn't a service name. Use domain.service, for example light.turn_off.": "‘{service}’ is geen dienstnaam. Gebruik domain.service, bijvoorbeeld light.turn_off.",
+  "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "‘{text}’ is geen dag. Gebruik today, tomorrow, een weekdag of JJJJ-MM-DD.",
+  "“{to}” isn't an email address.": "‘{to}’ is geen e-mailadres.",
+  "“{value}” isn't a number.": "‘{value}’ is geen getal.",
+  "“{value}” isn't on or off.": "‘{value}’ is niet on of off.",
+  "“{x}” isn't a real date.": "‘{x}’ is geen echte datum.",
+  "“{x}” isn't a time.": "‘{x}’ is geen tijd.",
+  "any smart home action (Home Assistant, Homey or MQTT)": "elke smarthome-actie (Home Assistant, Homey of MQTT)",
+  "sending messages and announcements": "het versturen van berichten en aankondigingen",
+  "saving files": "het opslaan van bestanden",
+  "all of these": "al deze dingen",
+  "in {path}": "in {path}",
+  "in {path}, next to this program": "in {path}, naast dit programma",
+  "{name} message": "{name}-bericht",
+  "New email: {subject}": "Nieuwe e-mail: {subject}",
+  "New in {feed}": "Nieuw in {feed}",
+  "New file: {name}": "Nieuw bestand: {name}",
+  "Review requested: {pr}": "Review gevraagd: {pr}",
+  "Coming up: {title}": "Binnenkort: {title}",
+  "Page changed: {page}": "Pagina gewijzigd: {page}",
+  "Telegram message": "Telegram-bericht",
+  "Scheduled {time}": "Gepland {time}",
+  "When {entity} changes": "Wanneer {entity} verandert",
+  "Run": "Run",
+  "(yes)": "j, ja",
+  "(no)": "n, nee"
+ }
+}
