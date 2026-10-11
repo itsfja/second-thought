@@ -27,6 +27,8 @@ class Files(unittest.TestCase):
                 for field, labels in d["options"].items():
                     self.assertRegex(field, r"^rb_[a-z_]+\.[A-Z_]+$")
                     self.assertTrue(all(isinstance(v, str) and v.strip() for v in labels.values()), field)
+                for english, words in d.get("starters", {}).items():
+                    self.assertTrue(isinstance(words, str) and words.strip(), english)
                 for key, words in d.get("examples", {}).items():
                     # Each example: a short title, a description and a tip (the page tests check every example has one).
                     self.assertRegex(key, r"^[a-z][a-z0-9_]*$")

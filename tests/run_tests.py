@@ -2465,6 +2465,7 @@ async def i18n_tests():
         info = await en.evaluate("window.__i18n()")
         page_info = await en.evaluate("window.__pageI18n()")
         examples = await en.evaluate("window.__examples()")
+        starters = await en.evaluate("window.__starters()")
         # Every text the page's code shows through tr() (directly, or as a step name, a step's label or the status), as written in the source.
         tr_texts = code_texts(PAGE)
         page_needs = set(page_info["keys"]) | set(page_info["categories"]) | tr_texts | set(await en.evaluate("window.__runWords()"))
@@ -2496,6 +2497,11 @@ async def i18n_tests():
                 problems.append(f"Blockly has no msg/{t['blockly']}.js")
             check(not problems, f"{t.get('name', code)} ({code}) has every block's words, tooltip and choices, with matching placeholders"
                   + (f": {problems[:8]}" if problems else ""))
+            if "starters" in t:
+                missing = sorted(set(starters) - set(t["starters"]))
+                extra = sorted(set(t["starters"]) - set(starters))
+                check(not missing and not extra, f"{t.get('name', code)} ({code}) has the words in every palette block, and no others"
+                      + (f": missing {missing[:6]}" if missing else "") + (f"; not in the palette {extra[:6]}" if extra else ""))
             if "examples" in t:
                 want = {e["key"] for e in examples}
                 lacking = sorted(k for k in want if not all((t["examples"].get(k) or {}).get(f) for f in ("title", "desc", "tip")))
@@ -2546,6 +2552,11 @@ async def i18n_tests():
                 await pg.click("#bk-toggle")
                 check(on == P["Step: on"] and bk == P["Backups ({n})"].replace("{n}", "1"),
                       f"labels the page changes as you go are in {t.get('name', code)} too ({on!r}, {bk!r})")
+                if "starters" in t:
+                    texts = await pg.evaluate("""() => { const out = [];
+                        const walk = items => items.forEach(it => { if (it.kind === 'block' && it.type === 'rb_say') out.push(it.inputs.TEXT.shadow.fields.TEXT); if (it.contents) walk(it.contents); });
+                        walk(Blockly.getMainWorkspace().options.languageTree.contents); return out; }""")
+                    check(t["starters"]["Hello"] in texts, f"with {code} chosen, the words already in the palette's blocks are in {t.get('name', code)} ({texts})")
                 if "examples" in t:
                     E = t["examples"]["review"]
                     await pg.select_option("#example", "review")
