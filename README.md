@@ -1,7 +1,7 @@
 # Second Thought
 
 [![CI](https://github.com/itsfja/second-thought/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/itsfja/second-thought/actions/workflows/ci.yml)
-[![Runtime](https://img.shields.io/badge/runtime-2.1.0-blue)](CHANGELOG.md)
+[![Runtime](https://img.shields.io/badge/runtime-2.2.0-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.9%E2%80%933.13-blue)](.github/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -549,7 +549,7 @@ The blocks, and the buttons around them, can speak more than one language. Choos
 
 Changing the language only changes the words you see. Your program stays exactly the same, so a program built in Spanish opens just the same in English, and exports the same Python.
 
-Right now they speak English and Spanish (Español). The run log, the page's messages and the examples are translated too. Programs shared in the Community gallery keep their authors' words. A Python program you export while the page is in Spanish prints in Spanish too; `language = en` in its `second-thought.ini` switches it back to English.
+Right now they speak English, Spanish (Español) and French (Français). The run log, the page's messages and the examples are translated too. Programs shared in the Community gallery keep their authors' words. A Python program you export while the page is in another language prints in that language too; `language = en` in its `second-thought.ini` switches it back to English.
 
 **Grown-ups:** each language is one file in the `i18n` folder, like `i18n/es.json`. It holds every block's words, its help text and its choices, the category names, the page's own words (under `page`, each English text with its translation), each example's title, description and tip (under `examples`), the words already typed into the palette's blocks (under `starters`), and what exported Python programs print (under `python`). To add a language, copy that file, translate the words (never the choice values, the `%1` markers or the `{name}` markers), and run `python tools/sync.py`. The checks tell you anything you missed.
 

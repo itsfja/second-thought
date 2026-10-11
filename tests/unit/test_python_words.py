@@ -52,11 +52,13 @@ class Tr(unittest.TestCase):
         self.assertEqual(settings.tr("Saved {name}.", name="x"), "Saved x.")
 
     def test_yes_and_no(self):
-        settings.LANGUAGE = "en"
+        settings._WORDS, settings.LANGUAGE = {"(yes)": "s, si, sí", "(no)": "n, no"}, "en"
         self.assertTrue(settings.said_yes(" Y ") and settings.said_yes("yes") and not settings.said_yes("s"))
         settings.LANGUAGE = "es"
         self.assertTrue(settings.said_yes("s") and settings.said_yes("Sí") and settings.said_yes("y"))
         self.assertTrue(settings.said_no("n") and settings.said_no("No") and not settings.said_no("s"))
+        settings._WORDS, settings.LANGUAGE = {"(yes)": "j, ja", "(no)": "n, nein"}, "de"
+        self.assertTrue(settings.said_yes("Ja") and settings.said_no("nein") and not settings.said_yes("s"))
 
 
 class Words(unittest.TestCase):
