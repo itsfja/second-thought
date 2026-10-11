@@ -18,6 +18,9 @@ that the two agree.
 
 ## Unreleased
 
+### Added
+- Exported programs print in German when exported from the page in German (#74).
+
 ## 2.2.0 - 2026-10-11
 
 ### Changed
