@@ -1,7 +1,7 @@
 {
  "name": "Español",
  "blockly": "es",
- "note": "Spanish words for the block palette and the page. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, keys are the page's English text, with {name} for the parts filled in. In examples, keys are the example keys, each with its title, description and tip. Page buttons named in block text use their Spanish names (Ejecutar, Horarios, Programas, Continuar).",
+ "note": "Spanish words for the block palette and the page. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, keys are the page's English text, with {name} for the parts filled in. In examples, keys are the example keys, each with its title, description and tip. In starters, keys are the English words already in the palette's blocks. Page buttons named in block text use their Spanish names (Ejecutar, Horarios, Programas, Continuar).",
  "blocks": {
   "rb_add_result": {
    "message0": "añadir %1 al resultado"
@@ -2103,5 +2103,52 @@
    "desc": "Envía un recordatorio, espera y, si la puerta de atrás sigue abierta, envía otro más firme y lo dice en voz alta. Usa la casa de ejemplo en la página y tu Home Assistant de verdad en el Python exportado.",
    "tip": "En el panel, cierra la puerta de atrás durante la espera para ver cómo se detiene."
   }
+ },
+ "starters": {
+  "hello": "hola",
+  "Hello": "Hola",
+  "Check the draft, then continue": "Revisa el borrador y luego continúa",
+  "sourdough": "masa madre",
+  "dough": "masa",
+  "one two three": "uno dos tres",
+  "Describe the job here": "Describe aquí el trabajo",
+  "make it friendlier": "hazlo más cercano",
+  "Suggest a name for a sourdough starter": "Sugiere un nombre para una masa madre",
+  "Is rye flour gluten free?": "¿La harina de centeno es sin gluten?",
+  "Typical hydration % for a beginner loaf": "Hidratación típica en % para un pan de principiante",
+  "5 common sourdough mistakes": "5 errores comunes con la masa madre",
+  "make it shorter": "hazlo más corto",
+  "the key steps": "los pasos clave",
+  "You write for home bakers: warm, practical, British spelling.": "Escribes para panaderos caseros: cercano, práctico, en español de España.",
+  "editor": "editor",
+  "Here is my draft. What should I fix first?": "Aquí tienes mi borrador. ¿Qué debería arreglar primero?",
+  "current price of rye flour in the UK": "precio actual de la harina de centeno en España",
+  "accurate; clear; under 200 words": "exacto; claro; menos de 200 palabras",
+  "accurate; clear": "exacto; claro",
+  "clear and accurate": "claro y exacto",
+  "clarity": "claridad",
+  "Plan a bake for this weekend that suits what I have in": "Planifica un horneado para este fin de semana con lo que tengo en casa",
+  "Gives the oven temperature in °C for a bread type.": "Da la temperatura del horno en °C para un tipo de pan.",
+  "Your loaf is ready to come out.": "Tu pan está listo para sacarlo.",
+  "The bake-along starts in 10 minutes.": "El horneado en grupo empieza en 10 minutos.",
+  "The oven's free now.": "El horno ya está libre.",
+  "Bake plan": "Plan de horneado",
+  "Here's the plan for Saturday.": "Aquí tienes el plan para el sábado.",
+  "What should I write about?": "¿Sobre qué debería escribir?",
+  "score": "puntuación",
+  "name, hydration, notes": "nombre, hidratación, notas",
+  "A beginner sourdough recipe": "Una receta de masa madre para principiantes",
+  "title, score, why": "título, puntuación, motivo",
+  "5 blog post ideas about rye bread, scored 1-10 for search interest": "5 ideas de entradas de blog sobre pan de centeno, puntuadas del 1 al 10 según el interés de búsqueda",
+  "summary": "resumen",
+  "note": "nota",
+  "today's draft": "borrador de hoy",
+  "used headlines": "titulares usados",
+  "a sourdough loaf with a crisp ear, flat illustration": "un pan de masa madre con una oreja crujiente, ilustración plana",
+  "make the crust darker": "haz la corteza más oscura",
+  "Describe this picture in one sentence.": "Describe esta imagen en una frase.",
+  "clear, appealing, easy to read at small size": "claro, atractivo, fácil de leer en tamaño pequeño",
+  "The back door is still open.": "La puerta de atrás sigue abierta.",
+  "Good morning!": "¡Buenos días!"
  }
 }
