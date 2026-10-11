@@ -2396,7 +2396,7 @@ def same_export(files):
 
 
 # Calls whose first argument the page shows through tr(): its words are what a translation needs.
-SHOWN_BY = ["tr", "addStep", "askStep", "askJSON", "waitForYou", "setStatus", "connNote", ".done"]
+SHOWN_BY = ["tr", "addStep", "askStep", "askJSON", "waitForYou", "setStatus", "connNote", ".done", "libMsg", "showBanner", "offerChoice", ("ioMsg", 1)]
 
 
 def code_texts(page):
@@ -2405,9 +2405,10 @@ def code_texts(page):
     js = page[page.index('id="community-gallery"'):]
     found = set()
     for name in SHOWN_BY:
+        name, which = name if isinstance(name, tuple) else (name, 0)  # (name, n): the nth argument is the shown one
         pattern = (r"\." + name[1:] if name.startswith(".") else r"(?<![\w.])" + name) + r"\("
         for m in re.finditer(pattern, js):
-            i, depth, arg, quote = m.end(), 0, [], None
+            i, depth, arg, quote, n = m.end(), 0, [], None, 0
             while i < len(js):
                 c = js[i]
                 if quote:
@@ -2424,11 +2425,17 @@ def code_texts(page):
                         break
                     depth -= 1
                 elif c == "," and depth == 0:
-                    break
+                    if n == which:
+                        break
+                    n, arg = n + 1, []
+                    i += 1
+                    continue
                 arg.append(c); i += 1
+            if n != which:
+                continue
             arg = "".join(arg)
             bare = re.sub(r'"(?:[^"\\]|\\.)*"', '""', arg)
-            if "+" in bare or not arg.lstrip().startswith(('"', "(")) and "?" not in bare:
+            if "+" in bare or not arg.lstrip().startswith(('"', "(", "{")) and "?" not in bare:
                 continue
             # Only the texts it can show: the whole argument, or a choice after ? or : (not those in a condition).
             found |= {json.loads('"' + t + '"') for t in re.findall(r'(?:[?:]|\|\|)\s*"((?:[^"\\]|\\.)*)"|^\s*"((?:[^"\\]|\\.)*)"', arg) for t in t if t}
@@ -2545,6 +2552,18 @@ async def i18n_tests():
                       and P["Result"] in log["names"] and P["done"] in log["pills"] and P["answered"] in log["pills"]
                       and "done" in log["states"] and "running" not in log["states"] and not any(x in ("done", "running", "answered") for x in log["pills"]),
                       f"the run log's steps, labels and status are in {t.get('name', code)}, and the page still tracks each step in English ({status}; {log['names'][:5]}; {log['pills'][:5]})")
+                await pg.click("#io-toggle")
+                await paste(pg, (ROOT / "gallery" / "rye-news-telegram.json").read_text(encoding="utf-8"))
+                await pg.click("#io-load-paste")
+                msg = await pg.text_content("#io-import-msg")
+                await pg.click("#io-toggle")
+                await pg.click("#mem-toggle")
+                where = await pg.text_content("#mem-where")
+                await pg.click("#mem-toggle")
+                wanted = P["It can {things}."].replace("{things}", P["send Telegram messages"])
+                check(msg.startswith(P["Loaded \u201c{name}\u201d ({n} blocks)."].split("\u201c")[0]) and wanted in msg
+                      and P["Exported to Python, it asks you before its first run."] in msg and where in P.values(),
+                      f"the page's messages, and what a program can do, are in {t.get('name', code)} ({msg!r}; {where!r})")
             await pg.select_option("#example", "brainstorm")
             await pg.click("#load")
             n = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
