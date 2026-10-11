@@ -2552,6 +2552,12 @@ async def i18n_tests():
                       and P["Result"] in log["names"] and P["done"] in log["pills"] and P["answered"] in log["pills"]
                       and "done" in log["states"] and "running" not in log["states"] and not any(x in ("done", "running", "answered") for x in log["pills"]),
                       f"the run log's steps, labels and status are in {t.get('name', code)}, and the page still tracks each step in English ({status}; {log['names'][:5]}; {log['pills'][:5]})")
+                await load_state(pg, {"blocks": {"languageVersion": 0, "blocks": [{"type": "rb_start", "x": 30, "y": 30, "next": {"block": {"type": "rb_generate"}}}]}})
+                await pg.click("#run")
+                await pg.wait_for_function("document.getElementById('run') && !document.getElementById('run').disabled", timeout=15000)
+                bodies = await pg.eval_on_selector_all(".step-body", "e => e.map(x => x.innerText)")
+                check(any(P["Add a 'set task to' block before this step."] in b for b in bodies),
+                      f"what the run log says inside a step, such as why a run stopped, is in {t.get('name', code)} ({bodies[-1:]})")
                 await pg.click("#io-toggle")
                 await paste(pg, (ROOT / "gallery" / "rye-news-telegram.json").read_text(encoding="utf-8"))
                 await pg.click("#io-load-paste")
