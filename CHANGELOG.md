@@ -22,6 +22,7 @@ that the two agree.
 - Exported programs print in German when exported from the page in German (#74).
 - Exported programs print in Dutch when exported from the page in Dutch (#75).
 - Exported programs print in Italian when exported from the page in Italian (#76).
+- Exported programs print in Portuguese when exported from the page in Portuguese (#77).
 
 ## 2.2.0 - 2026-10-11
 
