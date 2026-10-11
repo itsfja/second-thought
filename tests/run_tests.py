@@ -2381,7 +2381,8 @@ UNTRANSLATED = {"rb_use_model.TIER", "rb_with_model.TIER"}  # model names stay a
 
 
 def same_export(files):
-    """An export's files with what differs between any two exports taken out: the date, and the blocks' random ids."""
+    """An export's files with what differs between any two exports taken out: the date, the blocks' random ids, and the
+    note an example opens with (a comment on its first block, written in the page's language)."""
     out = {}
     for k, v in files.items():
         v = "\n".join(l for l in v.split("\n") if "Exported from Second Thought on" not in l)
@@ -2389,7 +2390,7 @@ def same_export(files):
             code, rest = v.split(PY_MARK, 1)
             b64 = "".join(l[2:] for l in rest.split("# BLOCKS:", 1)[1].split("\n") if l.startswith("# "))
             blocks = json.loads(base64.b64decode(b64).decode("utf-8"))
-            strip = lambda o: {k_: strip(x) for k_, x in o.items() if k_ != "id"} if isinstance(o, dict) else [strip(x) for x in o] if isinstance(o, list) else o  # noqa: E731
+            strip = lambda o: {k_: strip(x) for k_, x in o.items() if k_ not in ("id", "icons")} if isinstance(o, dict) else [strip(x) for x in o] if isinstance(o, list) else o  # noqa: E731
             v = (code, strip(blocks))
         out[k] = v
     return out
@@ -2463,6 +2464,7 @@ async def i18n_tests():
         en, en_errors = await page()
         info = await en.evaluate("window.__i18n()")
         page_info = await en.evaluate("window.__pageI18n()")
+        examples = await en.evaluate("window.__examples()")
         # Every text the page's code shows through tr() (directly, or as a step name, a step's label or the status), as written in the source.
         tr_texts = code_texts(PAGE)
         page_needs = set(page_info["keys"]) | set(page_info["categories"]) | tr_texts | set(await en.evaluate("window.__runWords()"))
@@ -2494,6 +2496,12 @@ async def i18n_tests():
                 problems.append(f"Blockly has no msg/{t['blockly']}.js")
             check(not problems, f"{t.get('name', code)} ({code}) has every block's words, tooltip and choices, with matching placeholders"
                   + (f": {problems[:8]}" if problems else ""))
+            if "examples" in t:
+                want = {e["key"] for e in examples}
+                lacking = sorted(k for k in want if not all((t["examples"].get(k) or {}).get(f) for f in ("title", "desc", "tip")))
+                extra = sorted(set(t["examples"]) - want)
+                check(not lacking and not extra, f"{t.get('name', code)} ({code}) has every example's title, description and tip, and no others"
+                      + (f": missing {lacking[:6]}" if lacking else "") + (f"; not examples {extra[:6]}" if extra else ""))
             if "page" in t:
                 missing = sorted(page_needs - set(t["page"]))
                 stale = sorted(set(t["page"]) - page_needs)
@@ -2538,6 +2546,17 @@ async def i18n_tests():
                 await pg.click("#bk-toggle")
                 check(on == P["Step: on"] and bk == P["Backups ({n})"].replace("{n}", "1"),
                       f"labels the page changes as you go are in {t.get('name', code)} too ({on!r}, {bk!r})")
+                if "examples" in t:
+                    E = t["examples"]["review"]
+                    await pg.select_option("#example", "review")
+                    await pg.click("#load")
+                    shown = await pg.evaluate("""() => ({ desc:document.getElementById('ex-desc').textContent,
+                        option:document.querySelector('#example option[value="review"]').textContent,
+                        card:document.querySelector('.gal-card[data-key="review"] h4').textContent,
+                        note:Blockly.getMainWorkspace().getTopBlocks(true)[0].getCommentText() })""")
+                    check(shown["option"] == E["title"] and shown["card"] == E["title"] and E["desc"] in shown["desc"]
+                          and P["Try: {tip}"].replace("{tip}", E["tip"]) in shown["desc"] and shown["note"].startswith(E["title"]) and E["tip"] in shown["note"],
+                          f"with {code} chosen, the examples' titles, descriptions and tips are in {t.get('name', code)} ({shown['option']!r}, {shown['desc'][:80]!r})")
                 done_word = P["done in {time}"].split("{time}")[0]
                 await pg.select_option("#example", "review")
                 await pg.click("#load")
