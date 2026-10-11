@@ -2585,7 +2585,8 @@ async def i18n_tests():
                         for n, text in files.items():
                             pathlib.Path(tmp, n).write_text(text, encoding="utf-8")
                         env = {k: v for k, v in os.environ.items() if not k.endswith(("_API_KEY", "_TOKEN")) and not k.startswith("RB_")}
-                        env.update(RB_APPROVE="no", SECOND_THOUGHT_INI=str(pathlib.Path(tmp, "second-thought.ini")))
+                        # UTF-8 out, as the other runs of exported programs here: a Windows pipe's own code page can't always show every letter.
+                        env.update(RB_APPROVE="no", SECOND_THOUGHT_INI=str(pathlib.Path(tmp, "second-thought.ini")), PYTHONIOENCODING="utf-8")
                         outs = {}
                         for lang_, args in (("", []), ("en", []), ("", ["--doctor"])):
                             r = subprocess.run([sys.executable, prog] + args, cwd=tmp, env=dict(env, **({"RB_LANGUAGE": lang_} if lang_ else {})),
