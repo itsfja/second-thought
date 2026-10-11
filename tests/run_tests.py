@@ -2628,7 +2628,8 @@ async def i18n_tests():
                 where = await pg.text_content("#mem-where")
                 await pg.click("#mem-toggle")
                 wanted = P["It can {things}."].replace("{things}", P["send Telegram messages"])
-                check(msg.startswith(P["Loaded \u201c{name}\u201d ({n} blocks)."].split("\u201c")[0]) and wanted in msg
+                loaded = re.escape(P["Loaded \u201c{name}\u201d ({n} blocks)."]).replace(re.escape("{name}"), ".+").replace(re.escape("{n}"), r"\d+")
+                check(re.match(loaded, msg) and wanted in msg
                       and P["Exported to Python, it asks you before its first run."] in msg and where in P.values(),
                       f"the page's messages, and what a program can do, are in {t.get('name', code)} ({msg!r}; {where!r})")
             await pg.select_option("#example", "brainstorm")

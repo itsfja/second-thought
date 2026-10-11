@@ -18,6 +18,13 @@ that the two agree.
 
 ## Unreleased
 
+## 2.2.0 - 2026-10-11
+
+### Changed
+- A question at the keyboard takes yes and no in the program's language, from its words (`(yes)` and `(no)`, like
+  `o, oui` or `j, ja`), as well as y and n. This used to be built in for Spanish only, so each new language now needs
+  only its words. Added for French (#73).
+
 ## 2.1.0 - 2026-10-11
 
 ### Added

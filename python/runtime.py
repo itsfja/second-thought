@@ -22,7 +22,7 @@ import urllib.request
 
 # Which runtime this is. Every exported program carries its own copy of the runtime, so this says which one it has:
 # run the program with --version to see it. What changed in each version is in CHANGELOG.md, in the Second Thought folder.
-RUNTIME_VERSION = "2.1.0"
+RUNTIME_VERSION = "2.2.0"
 
 # Windows consoles and redirected output can't always show every character; never crash over one.
 for _stream in (sys.stdout, sys.stderr):
@@ -86,14 +86,17 @@ def tr(_text, **slots):
 
 
 def said_yes(answer):
-    """y, yes, or (when the program speaks Spanish) s, sí or si."""
+    """y or yes, or a yes in the program's language: its words give "(yes)" as a list, like "s, si, sí" or "o, oui"."""
     a = str(answer).strip().lower()
-    return a in ("y", "yes") or (LANGUAGE == "es" and a in ("s", "si", "sí"))
+    yes = tr("(yes)")
+    return a in ("y", "yes") or (yes != "(yes)" and a in [w.strip().lower() for w in yes.split(",") if w.strip()])
 
 
 def said_no(answer):
-    """n or no (the same in Spanish)."""
-    return str(answer).strip().lower() in ("n", "no")
+    """n or no, or a no in the program's language ("(no)" in its words, like "n, nein")."""
+    a = str(answer).strip().lower()
+    no = tr("(no)")
+    return a in ("n", "no") or (no != "(no)" and a in [w.strip().lower() for w in no.split(",") if w.strip()])
 
 
 WHERE_KEYS = tr("in {path}", path=SETTINGS_PATH) if SETTINGS_PATH else tr("in {path}, next to this program", path=SETTINGS_FILE)

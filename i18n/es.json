@@ -2709,6 +2709,8 @@
   "Telegram message": "Mensaje de Telegram",
   "Scheduled {time}": "Programado {time}",
   "When {entity} changes": "Cuando cambie {entity}",
-  "Run": "Ejecución"
+  "Run": "Ejecución",
+  "(yes)": "s, si, sí",
+  "(no)": "n, no"
  }
 }
