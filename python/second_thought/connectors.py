@@ -18,6 +18,7 @@ from .settings import WHERE_KEYS
 from .core import (DISCORD_API, GITHUB_API, HA_SENSITIVE, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
     Picture, Retryable, RunError, SLACK_API, TELEGRAM_API, TELEGRAM_FILE, WEEKDAYS, _WebSocket, _locked, _num_like,
     _short, _write_json, num, read_text_file, round_js, to_str)
+from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
 
@@ -48,11 +49,11 @@ def _public_addresses(host, port):
     try:
         infos = socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)
     except OSError:
-        raise RunError(f"Couldn't find the website “{host}”.") from None
+        raise RunError(tr("Couldn't find the website “{host}”.", host=host)) from None
     for info in infos:
         ip = ipaddress.ip_address(info[4][0].split("%")[0])
         if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
-            raise RunError("The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them).")
+            raise RunError(tr("The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them)."))
     return infos
 
 
@@ -111,7 +112,7 @@ class _PublicRedirects(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         u = urllib.parse.urlparse(newurl)
         if u.scheme not in ("http", "https") or not u.hostname:
-            raise RunError("That address sent the program somewhere that isn't a web page.")
+            raise RunError(tr("That address sent the program somewhere that isn't a web page."))
         if self.check_hosts:
             _public_only(u.hostname)
         return super().redirect_request(req, fp, code, msg, headers, newurl)
@@ -130,7 +131,7 @@ def get_url(url, trusted=False, what="read_page", limit=3_000_000):
         url = "https://" + url[9:]
     u = urllib.parse.urlparse(url)
     if u.scheme not in ("http", "https") or not u.hostname:
-        raise RunError(f"{what} needs a web address starting with http:// or https://.")
+        raise RunError(tr("{what} needs a web address starting with http:// or https://.", what=what))
     guard = not trusted and not _local_pages()
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SecondThought/1.0)",
                                                "Accept": "text/html,application/xhtml+xml,application/xml,text/plain;q=0.9,*/*;q=0.5"})
@@ -147,9 +148,9 @@ def get_url(url, trusted=False, what="read_page", limit=3_000_000):
         with opener.open(req, timeout=20) as r:
             return r.headers.get("Content-Type", ""), r.read(limit)
     except urllib.error.HTTPError as e:
-        raise RunError(f"{what} couldn't open {_short(url, 80)}: the website answered {e.code}.") from None
+        raise RunError(tr("{what} couldn't open {url}: the website answered {code}.", what=what, url=_short(url, 80), code=e.code)) from None
     except urllib.error.URLError as e:
-        raise RunError(f"{what} couldn't reach {_short(url, 80)} ({e.reason}).") from None
+        raise RunError(tr("{what} couldn't reach {url} ({reason}).", what=what, url=_short(url, 80), reason=e.reason)) from None
 
 
 def _decode(data, ctype):
@@ -164,7 +165,7 @@ def fetch_page(url):
     ctype, data = get_url(url)
     url = to_str(url).strip()
     if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
-        raise RunError(f"That address isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
+        raise RunError(tr("That address isn't a web page or text ({x}).", x=ctype.split(';')[0] or tr('unknown type')))
     title, text = page_text(_decode(data, ctype), ctype)
     if not text:
         return f"{title or url}\n\n(The page has no readable words. It may need a browser to show its content.)"
@@ -199,7 +200,7 @@ def parse_feed(raw):
     try:
         root = ET.fromstring(raw.encode("utf-8") if isinstance(raw, str) else raw)
     except ET.ParseError:
-        raise RunError("That address isn't a news feed (RSS or Atom).") from None
+        raise RunError(tr("That address isn't a news feed (RSS or Atom).")) from None
     local = lambda el: el.tag.rsplit("}", 1)[-1].lower()  # noqa: E731
 
     def child(el, *names):
@@ -208,7 +209,7 @@ def parse_feed(raw):
                 return c.text.strip()
         return ""
     if local(root) not in ("rss", "feed", "rdf"):
-        raise RunError("That address isn't a news feed (RSS or Atom).")
+        raise RunError(tr("That address isn't a news feed (RSS or Atom)."))
     channel = next((c for c in root if local(c) == "channel"), root)
     title = child(channel, "title")
     items = []
@@ -372,7 +373,7 @@ def free_slots(events, day, frm, to, minutes):
     def at(hhmm):
         m = re.fullmatch(r"\s*(\d{1,2})[:.](\d{2})\s*", to_str(hhmm))
         if not m or int(m.group(1)) > 24 or int(m.group(2)) > 59:
-            raise RunError(f"“{hhmm}” isn't a time like 09:00.")
+            raise RunError(tr("“{hhmm}” isn't a time like 09:00.", hhmm=hhmm))
         return day + datetime.timedelta(hours=int(m.group(1)), minutes=int(m.group(2)))
     a, b = at(frm), at(to)
     busy = sorted((max(e["start"], a), min(e["end"], b)) for e in events if not e["all_day"] and e["end"] > a and e["start"] < b)
@@ -402,7 +403,7 @@ def parse_day(text):
     try:
         return datetime.datetime.strptime(t, "%Y-%m-%d")
     except ValueError:
-        raise RunError(f"“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.") from None
+        raise RunError(tr("“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.", text=text)) from None
 
 
 class Connections:
@@ -410,8 +411,7 @@ class Connections:
     # ----- Home Assistant -----
     def _ha_request(self, method, path, body=None, raw=False):
         if not HA_TOKEN:
-            raise RunError(f"This program uses Home Assistant. Put HA_URL (for example http://homeassistant.local:8123) "
-                           f"and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab) {WHERE_KEYS}.")
+            raise RunError(tr("This program uses Home Assistant. Put HA_URL (for example http://homeassistant.local:8123) and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab) {where_keys}.", where_keys=WHERE_KEYS))
         data = json.dumps(body).encode("utf-8") if body is not None else None
         req = urllib.request.Request(HA_URL + path, data=data, method=method,
                                      headers={"Authorization": "Bearer " + HA_TOKEN, "Content-Type": "application/json"})
@@ -421,12 +421,12 @@ class Connections:
                 return (payload, r.headers.get("Content-Type", "")) if raw else (json.loads(payload or b"null"))
         except urllib.error.HTTPError as e:
             if e.code == 401:
-                raise RunError("Home Assistant refused the token (401). Check HA_TOKEN.")
+                raise RunError(tr("Home Assistant refused the token (401). Check HA_TOKEN."))
             if e.code == 404:
-                raise RunError(f"Home Assistant has nothing at {path} (404). Check the entity or service name.")
-            raise Retryable(f"Home Assistant answered {e.code} for {path}.")
+                raise RunError(tr("Home Assistant has nothing at {path} (404). Check the entity or service name.", path=path))
+            raise Retryable(tr("Home Assistant answered {code} for {path}.", code=e.code, path=path))
         except (urllib.error.URLError, TimeoutError, OSError) as e:
-            raise Retryable(f"Couldn't reach Home Assistant at {HA_URL} ({getattr(e, 'reason', e)}).")
+            raise Retryable(tr("Couldn't reach Home Assistant at {ha_url} ({x}).", ha_url=HA_URL, x=getattr(e, 'reason', e)))
 
     async def _ha(self, method, path, body=None, raw=False):
         return await asyncio.to_thread(self._ha_request, method, path, body, raw)
@@ -438,7 +438,7 @@ class Connections:
     async def _ha_entity(self, entity):
         entity = to_str(entity).strip()
         if not re.match(r"^[a-z_]+\.[a-z0-9_]+$", entity):
-            raise RunError(f"“{entity}” isn't an entity id. Use something like light.kitchen.")
+            raise RunError(tr("“{entity}” isn't an entity id. Use something like light.kitchen.", entity=entity))
         return await self._ha("GET", "/api/states/" + entity)
 
     async def ha_state(self, entity):
@@ -504,19 +504,19 @@ class Connections:
         camera = to_str(camera).strip()
         data, ctype = await self._ha("GET", "/api/camera_proxy/" + camera, raw=True)
         pic = Picture(data, (ctype or "image/jpeg").split(";")[0], camera.replace("camera.", "") + "-snapshot")
-        self.log("Snapshot: " + camera, "Saved to " + self._picture_path(pic), "done")
+        self.log(tr("Snapshot: {camera}", camera=camera), tr("Saved to {x}", x=self._picture_path(pic)), tr("done"))
         return pic
 
     async def _ha_call_live(self, service, entity, data_text=""):
         service, entity = to_str(service).strip(), to_str(entity).strip()
         if not re.match(r"^[a-z_]+\.[a-z0-9_]+$", service):
-            raise RunError(f"“{service}” isn't a service name. Use domain.service, for example light.turn_off.")
+            raise RunError(tr("“{service}” isn't a service name. Use domain.service, for example light.turn_off.", service=service))
         body = {}
         if to_str(data_text).strip():
             try:
                 body = json.loads(to_str(data_text))
             except ValueError:
-                raise RunError(f"The data for {service} isn't valid JSON. Use something like {{\"temperature\": 20}}.")
+                raise RunError(tr("The data for {service} isn't valid JSON. Use something like {\"temperature\": 20}.", service=service))
         if entity:
             body["entity_id"] = entity
         sensitive = any(re.match(p, service) for p in HA_SENSITIVE)
@@ -524,20 +524,20 @@ class Connections:
             return False
         if sensitive:
             if self.schedule_mode and not sys.stdin.isatty():
-                self.log("Not done", f"{service} on {entity} needs your approval, and nobody is at the keyboard.", "refused")
+                self.log(tr("Not done"), tr("{service} on {entity} needs your approval, and nobody is at the keyboard.", service=service, entity=entity), tr("refused"))
                 return False
             if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
-                self.log("Not done", f"{service} on {entity} was refused, so nothing happened.", "refused")
+                self.log(tr("Not done"), tr("{service} on {entity} was refused, so nothing happened.", service=service, entity=entity), tr("refused"))
                 return False
         domain, action = service.split(".", 1)
         await self._ha("POST", f"/api/services/{domain}/{action}", body)
-        self.log("Home Assistant: " + service, entity + (f" with {to_str(data_text).strip()}" if to_str(data_text).strip() else ""), "done")
+        self.log(tr("Home Assistant: {service}", service=service), entity + (" " + tr("with {data}", data=to_str(data_text).strip()) if to_str(data_text).strip() else ""), tr("done"))
         return True
 
     async def _ha_notify_live(self, target, text):
         target, text = to_str(target).strip() or "persistent_notification", to_str(text)
         if not text.strip():
-            raise RunError("The 'notify' block has no message.")
+            raise RunError(tr("The 'notify' block has no message."))
         if not await self._allowed(["ha", "messages"], f"send a notification to {target}: {_short(text, 120)}"):
             return
         if target in ("persistent_notification", "persistent_notification.create"):
@@ -545,16 +545,16 @@ class Connections:
         else:
             svc = target.split(".", 1)[1] if target.startswith("notify.") else target
             await self._ha("POST", f"/api/services/notify/{svc}", {"message": text, "title": "Second Thought"})
-        self.log("Notification → " + target, text, "sent")
+        self.log(tr("Notification → {target}", target=target), text, tr("sent"))
 
     async def _ha_speak_live(self, text, player):
         text, player = to_str(text), to_str(player).strip()
         if not text.strip():
-            raise RunError("The 'say' block has nothing to say.")
+            raise RunError(tr("The 'say' block has nothing to say."))
         if not await self._allowed(["ha", "messages"], f"say on {player or 'a speaker'}: {_short(text, 120)}"):
             return
         await self._ha("POST", "/api/services/tts/speak", {"entity_id": HA_TTS_ENTITY, "media_player_entity_id": player, "message": text})
-        self.log("Spoken on " + player, text, "sent")
+        self.log(tr("Spoken on {player}", player=player), text, tr("sent"))
 
     @staticmethod
     def ha_trigger():
@@ -565,7 +565,7 @@ class Connections:
         """'when Home Assistant event … happens': subscribes to Home Assistant's events over its WebSocket API, so a button press,
         an automation firing or a custom event starts the script at once. Reconnects (after a minute) if the connection drops."""
         if not HA_TOKEN:
-            raise RunError(f"Home Assistant events need HA_URL and HA_TOKEN {WHERE_KEYS}.")
+            raise RunError(tr("Home Assistant events need HA_URL and HA_TOKEN {where_keys}.", where_keys=WHERE_KEYS))
         wants = []
         for arg, fn in items:
             kind, _, words = to_str(arg).partition("|")
@@ -575,7 +575,7 @@ class Connections:
         try:
             ws = await _WebSocket.connect(url, timeout=10)
         except asyncio.TimeoutError:
-            raise RunError(f"Home Assistant didn't answer at {url} within 10 seconds.") from None
+            raise RunError(tr("Home Assistant didn't answer at {url} within 10 seconds.", url=url)) from None
         try:
             # Home Assistant answers these at once; a stalled sign-in becomes an error, so the listener tries again.
             try:
@@ -584,17 +584,17 @@ class Connections:
                     await ws.send_json({"type": "auth", "access_token": HA_TOKEN})
                     hello = await asyncio.wait_for(ws.recv_json(), 10)
             except asyncio.TimeoutError:
-                raise RunError("Home Assistant didn't finish signing in for events within 10 seconds.") from None
+                raise RunError(tr("Home Assistant didn't finish signing in for events within 10 seconds.")) from None
             if hello.get("type") != "auth_ok":
-                raise RunError("Home Assistant refused the token for events (auth_invalid). Check HA_TOKEN.")
+                raise RunError(tr("Home Assistant refused the token for events (auth_invalid). Check HA_TOKEN."))
             kinds = [None] if any(k == "" for k, _, _ in wants) else sorted({k for k, _, _ in wants})
             for n, kind in enumerate(kinds, 1):
                 await ws.send_json(dict({"id": n, "type": "subscribe_events"}, **({"event_type": kind} if kind else {})))
-            print("Listening for Home Assistant events: " + ", ".join(k or "everything" for k in kinds) + ".", flush=True)
+            print(tr("Listening for Home Assistant events: {x}.", x=", ".join(k or tr("everything") for k in kinds)), flush=True)
             while True:
                 msg = await ws.recv_json()
                 if msg.get("type") == "result" and not msg.get("success", True):
-                    raise RunError("Home Assistant wouldn't send those events: " + to_str((msg.get("error") or {}).get("message")))
+                    raise RunError(tr("Home Assistant wouldn't send those events: {x}", x=to_str((msg.get("error") or {}).get("message"))))
                 if msg.get("type") != "event":
                     continue
                 ev = msg.get("event") or {}
@@ -606,7 +606,7 @@ class Connections:
                     rec.setdefault(str(k), json.dumps(v, ensure_ascii=False) if isinstance(v, (dict, list)) else v)
                 for want, words, fn in wants:
                     if (not want or want == kind) and all(w in blob.lower() for w in words):
-                        self._fire(fn, dict(rec), "Home Assistant: " + kind)
+                        self._fire(fn, dict(rec), tr("Home Assistant: {x}", x=kind))
         finally:
             ws.close()
 
@@ -619,7 +619,7 @@ class Connections:
         mine = [u for u in re.split(r"[\s,]+", os.environ.get("RB_FEEDS", "")) if u]
         urls = [url] if url else mine
         if not urls:
-            raise RunError(f"No feed given, and no feeds in your settings. Add  feeds = <addresses>  {WHERE_KEYS}.")
+            raise RunError(tr("No feed given, and no feeds in your settings. Add  feeds = <addresses>  {where_keys}.", where_keys=WHERE_KEYS))
         limit = max(1, min(50, round_js(num(limit)) or self.MAX_FEED_ITEMS))
         out = []
         for u in urls:
@@ -634,8 +634,8 @@ class Connections:
         items = await self.feed_items(url)
         recs = [{"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
                  "summary": i["summary"]} for i in items]
-        self.log("News: " + (_short(url, 60) or "your feeds"), "\n".join(f"{r['date']}  {r['title']}" for r in recs[:12]) or "(nothing)",
-                 f"{len(recs)} items")
+        self.log(tr("News: {x}", x=_short(url, 60) or tr("your feeds")), "\n".join(f"{r['date']}  {r['title']}" for r in recs[:12]) or tr("(nothing)"),
+                 tr("{recs} items", recs=len(recs)))
         return recs
 
     @staticmethod
@@ -653,7 +653,7 @@ class Connections:
     async def _gh(self, path, method="GET", body=None):
         token = os.environ.get("GITHUB_TOKEN", "")
         if not token:
-            raise RunError(f"GitHub needs a token: set GITHUB_TOKEN {WHERE_KEYS} (make one at https://github.com/settings/tokens).")
+            raise RunError(tr("GitHub needs a token: set GITHUB_TOKEN {where_keys} (make one at https://github.com/settings/tokens).", where_keys=WHERE_KEYS))
         req = urllib.request.Request(GITHUB_API + path, method=method, data=json.dumps(body).encode() if body is not None else None,
                                      headers={"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json",
                                               "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "SecondThought",
@@ -666,16 +666,16 @@ class Connections:
             except urllib.error.HTTPError as e:
                 why = {401: "the token was refused. Check GITHUB_TOKEN", 403: "GitHub said no (the token may lack access, or the hourly limit was reached)",
                        404: "not found, or the token can't see it", 422: "GitHub couldn't use that request"}.get(e.code, f"GitHub answered {e.code}")
-                raise RunError(f"GitHub: {why}.") from None
+                raise RunError(tr("GitHub: {why}.", why=why)) from None
             except urllib.error.URLError as e:
-                raise RunError(f"Couldn't reach GitHub ({e.reason}).") from None
+                raise RunError(tr("Couldn't reach GitHub ({reason}).", reason=e.reason)) from None
         return await asyncio.to_thread(go)
 
     @staticmethod
     def _gh_repo(repo):
         repo = to_str(repo).strip().removeprefix("https://github.com/").strip("/")
         if not re.fullmatch(r"[\w.-]+/[\w.-]+", repo):
-            raise RunError(f"“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.")
+            raise RunError(tr("“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.", repo=repo))
         return repo
 
     @staticmethod
@@ -717,7 +717,7 @@ class Connections:
     async def gh_search(self, query):
         query = to_str(query).strip()
         if not query:
-            raise RunError("search_github needs something to search for.")
+            raise RunError(tr("search_github needs something to search for."))
         return "\n".join(await self._gh_search(query)) or f"Nothing found for “{query}”."
 
     async def gh_read_pr(self, repo, number):
@@ -742,11 +742,11 @@ class Connections:
     async def gh_comment(self, repo, number, text, approved=False):
         repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()
         if not text:
-            raise RunError("A comment needs some text.")
+            raise RunError(tr("A comment needs some text."))
         if not approved and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
             return False
         await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
-        self.log(f"GitHub comment on {repo} #{n}", text, "sent")
+        self.log(tr("GitHub comment on {repo} #{n}", repo=repo, n=n), text, tr("sent"))
         return True
 
     # Telegram
@@ -756,7 +756,7 @@ class Connections:
     async def _tg(self, method, params=None, wait=0):
         token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
         if not token:
-            raise RunError(f"Telegram needs a bot: set TELEGRAM_BOT_TOKEN {WHERE_KEYS} (message @BotFather in Telegram to make one).")
+            raise RunError(tr("Telegram needs a bot: set TELEGRAM_BOT_TOKEN {where_keys} (message @BotFather in Telegram to make one).", where_keys=WHERE_KEYS))
         req = urllib.request.Request(f"{TELEGRAM_API}/bot{token}/{method}", data=json.dumps(params or {}).encode(),
                                      headers={"Content-Type": "application/json"})
 
@@ -770,9 +770,9 @@ class Connections:
                 except ValueError:
                     data = {"description": f"Telegram answered {e.code}"}
             except urllib.error.URLError as e:
-                raise RunError(f"Couldn't reach Telegram ({e.reason}).") from None
+                raise RunError(tr("Couldn't reach Telegram ({reason}).", reason=e.reason)) from None
             if not data.get("ok"):
-                raise RunError("Telegram: " + to_str(data.get("description") or "it said no") + ".")
+                raise RunError(tr("Telegram: {x}.", x=to_str(data.get("description") or tr("it said no"))))
             return data.get("result")
         return await asyncio.to_thread(go)
 
@@ -801,8 +801,7 @@ class Connections:
                 continue
             chat = m.get("chat", {})
             if str(chat.get("id")) not in mine:
-                print(f"  (A Telegram message from chat {chat.get('id')} was ignored. To let this program use that chat, "
-                      f"set TELEGRAM_CHAT_ID = {chat.get('id')} {WHERE_KEYS}.)", flush=True)
+                print(tr("  (A Telegram message from chat {x} was ignored. To let this program use that chat, set TELEGRAM_CHAT_ID = {x} {where_keys}.)", x=chat.get('id'), where_keys=WHERE_KEYS), flush=True)
                 continue
             who = m.get("from", {})
             new.append({"text": m.get("text") or m.get("caption", ""), "sender": " ".join(x for x in (who.get("first_name"), who.get("last_name")) if x)
@@ -834,17 +833,16 @@ class Connections:
     async def tg_send(self, text, chat="", approved=False):
         text = to_str(text).strip()
         if not text:
-            raise RunError("A Telegram message needs some text.")
+            raise RunError(tr("A Telegram message needs some text."))
         trig = MESSAGE_VALUE.get()
         chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
         if not chat:
-            raise RunError(f"Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {WHERE_KEYS}. "
-                           "Send your bot a message first; the program then says which chat it came from.")
+            raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
         if not approved and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), 4000):
             await self._tg("sendMessage", {"chat_id": chat, "text": text[i:i + 4000]})
-        self.log("Telegram message sent", text, "sent")
+        self.log(tr("Telegram message sent"), text, tr("sent"))
         return True
 
     @staticmethod
@@ -862,7 +860,7 @@ class Connections:
             try:
                 new = await self.tg_fetch(wait=25)
             except RunError as e:
-                print("  (Telegram check failed: " + str(e) + ")", flush=True)
+                print(tr("  (Telegram check failed: {e})", e=str(e)), flush=True)
                 await asyncio.sleep(15)
                 continue
             for m in new:
@@ -874,7 +872,7 @@ class Connections:
                     if busy and not busy.done():
                         self.start_script(fn, m)
                     else:
-                        busy = asyncio.ensure_future(self.run([(fn, m)], "Telegram message"))
+                        busy = asyncio.ensure_future(self.run([(fn, m)], tr("Telegram message")))
 
     # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
     CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
@@ -889,7 +887,7 @@ class Connections:
         c = self.CHATS[service]
         token = os.environ.get(c["token"], "").strip()
         if not token:
-            raise RunError(f"{c['name']} needs {c['token']} {WHERE_KEYS}: make {c['make']}.")
+            raise RunError(tr("{name} needs {token} {where_keys}: make {make}.", name=c['name'], token=c['token'], where_keys=WHERE_KEYS, make=c['make']))
         base = DISCORD_API if service == "discord" else SLACK_API
         url = base + path + ("?" + urllib.parse.urlencode(query) if query else "")
         req = urllib.request.Request(url, method=method, data=json.dumps(body).encode() if body is not None else None,
@@ -905,12 +903,12 @@ class Connections:
                        404: "there's no such channel, or the bot can't see it", 429: "it's asking the program to slow down. Try again in a minute"}.get(e.code, f"it answered {e.code}")
                 raise RunError(f"{c['name']}: {why}.") from None
             except urllib.error.URLError as e:
-                raise RunError(f"Couldn't reach {c['name']} ({e.reason}).") from None
+                raise RunError(tr("Couldn't reach {name} ({reason}).", name=c['name'], reason=e.reason)) from None
             if service == "slack" and isinstance(data, dict) and not data.get("ok"):
                 err = to_str(data.get("error") or "it said no")
                 why = {"not_in_channel": "the bot isn't in that channel. Invite it with /invite", "channel_not_found": "there's no such channel, or the bot can't see it",
                        "invalid_auth": f"the bot token was refused. Check {c['token']}", "missing_scope": "the app needs more scopes (channels:history and chat:write)"}.get(err, err)
-                raise RunError(f"Slack: {why}.")
+                raise RunError(tr("Slack: {why}.", why=why))
             return data
         return await asyncio.to_thread(go)
 
@@ -943,8 +941,9 @@ class Connections:
         chans = self._chat_channels(service)
         if not chans:
             c = self.CHATS[service]
-            raise RunError(f"{c['name']} needs {c['channels']} {WHERE_KEYS}: the channels it reads and posts in (anyone can post in a "
-                           f"{'server' if service == 'discord' else 'workspace'}, so only these count).")
+            raise RunError(tr("{name} needs {channels} {where}: the channels it reads and posts in (anyone can post in a server, so only these count)." if service == "discord"
+                              else "{name} needs {channels} {where}: the channels it reads and posts in (anyone can post in a workspace, so only these count).",
+                              name=c["name"], channels=c["channels"], where=WHERE_KEYS))
         return chans
 
     async def chat_search(self, service, text="", limit=20):
@@ -960,12 +959,12 @@ class Connections:
         c = self.CHATS[service]
         text = to_str(text).strip()
         if not text:
-            raise RunError(f"A {c['name']} message needs some text.")
+            raise RunError(tr("A {name} message needs some text.", name=c['name']))
         mine = self._chat_need_channels(service)
         trig = MESSAGE_VALUE.get()
         channel = to_str(channel).strip() or (trig.get("channel") if isinstance(trig, dict) and trig.get("service") == service else "") or mine[0]
         if channel not in mine:
-            raise RunError(f"{c['name']}: channel {channel} isn't in {c['channels']}, so nothing is sent there.")
+            raise RunError(tr("{name}: channel {channel} isn't in {channels}, so nothing is sent there.", name=c['name'], channel=channel, channels=c['channels']))
         if not approved and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), c["limit"]):
@@ -974,7 +973,7 @@ class Connections:
                 await self._chat_api("discord", "POST", f"/channels/{urllib.parse.quote(channel)}/messages", {"content": part, "allowed_mentions": {"parse": []}})
             else:
                 await self._chat_api("slack", "POST", "/chat.postMessage", {"channel": channel, "text": part})
-        self.log(f"{c['name']} message sent", text, "sent")
+        self.log(tr("{name} message sent", name=c['name']), text, tr("sent"))
         return True
 
     async def _listen_chat(self, service, items):
@@ -983,21 +982,21 @@ class Connections:
         last = {ch: (await self._chat_read(service, ch, limit=1))[1] for ch in chans}
         if service == "slack":  # Slack's 'oldest' is a time; start from now if the channel was empty
             last = {ch: v or f"{time.time():.6f}" for ch, v in last.items()}
-        print(f"Listening for {self.CHATS[service]['name']} messages in " + ", ".join(chans) + ".", flush=True)
+        print(tr("Listening for {name} messages in {x}.", name=self.CHATS[service]['name'], x=", ".join(chans)), flush=True)
         while True:
             await asyncio.sleep(self._poll(10))
             for ch in chans:
                 try:
                     new, last[ch] = await self._chat_read(service, ch, after=last[ch])
                 except RunError as e:
-                    print(f"  ({self.CHATS[service]['name']} check failed: {e})", flush=True)
+                    print(tr("  ({name} check failed: {e})", name=self.CHATS[service]['name'], e=e), flush=True)
                     continue
                 for m in new:
                     rec = {"service": service, "text": m["text"], "sender": m["sender"], "channel": ch, "id": m["id"]}
                     for contains, fn in items:
                         want = to_str(contains).strip().lower()
                         if want in ("", "anything") or want in m["text"].lower():
-                            self._fire(fn, dict(rec), f"{self.CHATS[service]['name']} message")
+                            self._fire(fn, dict(rec), tr("{name} message", name=self.CHATS[service]['name']))
 
     async def _listen_discord(self, items):
         await self._listen_chat("discord", items)
@@ -1014,12 +1013,12 @@ class Connections:
     def _mail(self):
         addr, pw = os.environ.get("EMAIL_ADDRESS", "").strip(), os.environ.get("EMAIL_PASSWORD", "")
         if not addr or not pw:
-            raise RunError(f"Email needs EMAIL_ADDRESS and EMAIL_PASSWORD {WHERE_KEYS}. Use an app password, not your normal one.")
+            raise RunError(tr("Email needs EMAIL_ADDRESS and EMAIL_PASSWORD {where_keys}. Use an app password, not your normal one.", where_keys=WHERE_KEYS))
         guess = self.MAIL_SERVERS.get(addr.rsplit("@", 1)[-1].lower(), (None, None, 465))
         imap = os.environ.get("EMAIL_IMAP_HOST") or guess[0]
         smtp = os.environ.get("EMAIL_SMTP_HOST") or guess[1]
         if not imap or not smtp:
-            raise RunError(f"Set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST {WHERE_KEYS}: your email provider's help pages list them.")
+            raise RunError(tr("Set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST {where_keys}: your email provider's help pages list them.", where_keys=WHERE_KEYS))
         secure = os.environ.get("EMAIL_SSL", "yes").strip().lower() not in ("0", "no", "false", "off")
         return {"addr": addr, "pw": pw, "imap": imap, "imap_port": int(os.environ.get("EMAIL_IMAP_PORT") or (993 if secure else 143)),
                 "smtp": smtp, "smtp_port": int(os.environ.get("EMAIL_SMTP_PORT") or guess[2]), "ssl": secure}
@@ -1030,9 +1029,9 @@ class Connections:
             m = imaplib.IMAP4_SSL(c["imap"], c["imap_port"], timeout=30) if c["ssl"] else imaplib.IMAP4(c["imap"], c["imap_port"], timeout=30)
             m.login(c["addr"], c["pw"])
         except imaplib.IMAP4.error as e:
-            raise RunError(f"The email server refused the login ({_short(e, 120)}). Check EMAIL_PASSWORD is an app password.") from None
+            raise RunError(tr("The email server refused the login ({e}). Check EMAIL_PASSWORD is an app password.", e=_short(e, 120))) from None
         except OSError as e:
-            raise RunError(f"Couldn't reach the email server {c['imap']} ({e}).") from None
+            raise RunError(tr("Couldn't reach the email server {imap} ({e}).", imap=c['imap'], e=e)) from None
         return m
 
     @staticmethod
@@ -1099,7 +1098,7 @@ class Connections:
         import email.policy
         c, uid = self._mail(), to_str(uid).strip().removeprefix("id").strip()
         if not uid.isdigit():
-            raise RunError("read_email needs an email's id number, from search_email.")
+            raise RunError(tr("read_email needs an email's id number, from search_email."))
 
         def go():
             m = self._imap(c)
@@ -1108,7 +1107,7 @@ class Connections:
                 typ, got = m.uid("FETCH", uid, "(BODY.PEEK[])")
                 raw = next((x[1] for x in got if isinstance(x, tuple)), None)
                 if not raw:
-                    raise RunError(f"There's no email with id {uid}.")
+                    raise RunError(tr("There's no email with id {uid}.", uid=uid))
                 msg = email.message_from_bytes(raw, policy=email.policy.default)
                 files = [p.get_filename() for p in msg.walk() if p.get_filename()]
                 return (self._mail_head(msg, uid) + (f"\nTo: {msg.get('To', '')}" if msg.get("To") else "") + "\n\n" + self._mail_text(msg, 15000)
@@ -1126,7 +1125,7 @@ class Connections:
         to, subject, body = to_str(to).strip(), to_str(subject).strip(), to_str(body)
         addrs = [a.strip() for a in re.split(r"[,;]", to) if a.strip()]
         if not addrs or not all(re.fullmatch(r"[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+", a) for a in addrs):
-            raise RunError(f"“{to}” isn't an email address.")
+            raise RunError(tr("“{to}” isn't an email address.", to=to))
         c = self._mail()
         if not approved and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
             return False
@@ -1146,24 +1145,24 @@ class Connections:
                     s_.login(c["addr"], c["pw"])
                     s_.send_message(msg)
             except smtplib.SMTPException as e:
-                raise RunError(f"The email couldn't be sent ({_short(e, 160)}).") from None
+                raise RunError(tr("The email couldn't be sent ({e}).", e=_short(e, 160))) from None
             except OSError as e:
-                raise RunError(f"Couldn't reach the email server {c['smtp']} ({e}).") from None
+                raise RunError(tr("Couldn't reach the email server {smtp} ({e}).", smtp=c['smtp'], e=e)) from None
         await asyncio.to_thread(go)
-        self.log(f"Email sent to {to}", f"Subject: {subject}\n\n{_short(body, 600)}", "sent")
+        self.log(tr("Email sent to {to}", to=to), tr("Subject: {subject}\n\n{body}", subject=subject, body=_short(body, 600)), tr("sent"))
         return True
 
     # Calendar
     async def _calendar(self, start, end):
         urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
         if not urls:
-            raise RunError(f"The calendar needs CALENDAR_URL {WHERE_KEYS}: your calendar's private iCal address.")
+            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
         out = []
         for u in urls:
             ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
             text = _decode(data, ctype)
             if "BEGIN:VCALENDAR" not in text[:2000]:
-                raise RunError("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format').")
+                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
             out += calendar_events(text, start, end)
         out.sort(key=lambda x: (x["start"], not x["all_day"]))
         return out
@@ -1185,7 +1184,7 @@ class Connections:
         events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
         recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
                  "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
-        self.log("Calendar", "\n".join(f"{r['day']} {r['start'] or 'all day'}  {r['title']}" for r in recs) or "(nothing)", f"{len(recs)} events")
+        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
         return recs
 
     async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
@@ -1206,7 +1205,7 @@ class Connections:
     async def _homey(self, method, path, body=None):
         url, key = os.environ.get("HOMEY_URL", "").strip().rstrip("/"), os.environ.get("HOMEY_API_KEY", "").strip()
         if not url or not key:
-            raise RunError(f"Homey needs HOMEY_URL and HOMEY_API_KEY {WHERE_KEYS}. Make a key in the Homey Web App: Settings, API Keys.")
+            raise RunError(tr("Homey needs HOMEY_URL and HOMEY_API_KEY {where_keys}. Make a key in the Homey Web App: Settings, API Keys.", where_keys=WHERE_KEYS))
         if not re.match(r"^https?://", url):
             url = "http://" + url
         req = urllib.request.Request(url + "/api/manager" + path, method=method, data=json.dumps(body).encode() if body is not None else None,
@@ -1220,10 +1219,10 @@ class Connections:
             except urllib.error.HTTPError as e:
                 why = {401: "the API key was refused. Check HOMEY_API_KEY", 403: "the API key isn't allowed to do that. Give it more permissions in the Homey Web App",
                        404: "not found"}.get(e.code, f"Homey answered {e.code}")
-                raise RunError(f"Homey: {why}.") from None
+                raise RunError(tr("Homey: {why}.", why=why)) from None
             except urllib.error.URLError as e:
                 hint = "" if urllib.parse.urlparse(url).port else " For a Homey Self-Hosted Server, add its port: :4859."
-                raise RunError(f"Couldn't reach Homey at {url} ({e.reason}).{hint}") from None
+                raise RunError(tr("Couldn't reach Homey at {url} ({reason}).{hint}", url=url, reason=e.reason, hint=hint)) from None
         return await asyncio.to_thread(go)
 
     async def _homey_home(self):
@@ -1253,7 +1252,7 @@ class Connections:
         """A device by its name (or id). An exact name wins; otherwise one device whose name contains the words."""
         name = to_str(name).strip()
         if not name:
-            raise RunError("Which Homey device? Give its name, like Kitchen light.")
+            raise RunError(tr("Which Homey device? Give its name, like Kitchen light."))
         home = await self._homey_home()
         exact = [d for d in home if d["name"].lower() == name.lower() or d["id"] == name]
         if exact:
@@ -1261,7 +1260,7 @@ class Connections:
         some = [d for d in home if all(w in d["name"].lower() for w in name.lower().split())]
         if len(some) == 1:
             return some[0]
-        raise RunError(f"There's no Homey device called “{name}”." + (" Did you mean: " + ", ".join(d["name"] for d in some[:6]) + "?" if some else ""))
+        raise RunError(tr("There's no Homey device called “{name}”.", name=name) + (" " + tr("Did you mean: {names}?", names=", ".join(d["name"] for d in some[:6])) if some else ""))
 
     async def homey_find(self, text="*"):
         """Records (name, zone, class, and each capability) for devices whose name, zone or class contain every word."""
@@ -1279,7 +1278,7 @@ class Connections:
         d = await self._homey_device(device)
         cap = to_str(capability).strip()
         if cap not in d["caps"]:
-            raise RunError(f"{d['name']} has no “{cap}”. It has: {', '.join(d['caps']) or 'nothing'}.")
+            raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
         v = d["caps"][cap]
         return self._homey_show(v) if isinstance(v, bool) else v
 
@@ -1291,12 +1290,12 @@ class Connections:
             if isinstance(v, str):
                 t = v.strip().lower()
                 if t not in ("on", "off", "true", "false", "yes", "no", "1", "0"):
-                    raise RunError(f"“{value}” isn't on or off.")
+                    raise RunError(tr("“{value}” isn't on or off.", value=value))
                 return t in ("on", "true", "yes", "1")
             return bool(v)
         if isinstance(old, (int, float)):
             if not _num_like(v):
-                raise RunError(f"“{value}” isn't a number.")
+                raise RunError(tr("“{value}” isn't a number.", value=value))
             return num(v)
         return to_str(v) if not isinstance(v, (int, float, bool)) else v
 
@@ -1304,7 +1303,7 @@ class Connections:
         d = await self._homey_device(device)
         cap = to_str(capability).strip()
         if cap not in d["caps"]:
-            raise RunError(f"{d['name']} has no “{cap}”. It has: {', '.join(d['caps']) or 'nothing'}.")
+            raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
         v = self._homey_value_for(d["caps"][cap], value)
         what = f"set {d['name']} {cap} to {self._homey_show(v)}"
         if (cap, v) in self.HOMEY_SENSITIVE:  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
@@ -1313,7 +1312,7 @@ class Connections:
         elif not approved and not await self._allowed(["ha"], what):
             return False
         await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
-        self.log("Homey: " + d["name"], f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", "done")
+        self.log(tr("Homey: {name}", name=d["name"]), f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", tr("done"))
         return True
 
     async def _homey_flows(self):
@@ -1338,11 +1337,11 @@ class Connections:
         f = next((x for x in flows if x["name"].lower() == name.lower()), None) or \
             (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
         if not f:
-            raise RunError(f"There's no Homey flow called “{name}”.")
+            raise RunError(tr("There's no Homey flow called “{name}”.", name=name))
         if not approved and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
             return False
         await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
-        self.log("Homey flow started", f["name"], "started")
+        self.log(tr("Homey flow started"), f["name"], tr("started"))
         return True
 
     async def _homey_var(self, name):
@@ -1350,7 +1349,7 @@ class Connections:
         vs = list((await self._homey("GET", "/logic/variable/") or {}).values())
         v = next((x for x in vs if x.get("name", "").lower() == name.lower()), None)
         if not v:
-            raise RunError(f"There's no Homey variable called “{name}”." + (" Its variables are: " + ", ".join(x.get("name", "") for x in vs[:12]) if vs else ""))
+            raise RunError(tr("There's no Homey variable called “{name}”.", name=name) + (" " + tr("Its variables are: {names}", names=", ".join(x.get("name", "") for x in vs[:12])) if vs else ""))
         return v
 
     async def homey_variable(self, name):
@@ -1363,13 +1362,13 @@ class Connections:
         if not approved and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
             return False
         await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
-        self.log("Homey variable " + v["name"], f"{self._homey_show(old)} → {self._homey_show(new)}", "set")
+        self.log(tr("Homey variable {name}", name=v["name"]), f"{self._homey_show(old)} → {self._homey_show(new)}", tr("set"))
         return True
 
     async def _listen_homey(self, items):
         """'when Homey device … changes': checks every 10 seconds and starts the script when a value changes."""
         before = None
-        print("Watching Homey devices for changes.", flush=True)
+        print(tr("Watching Homey devices for changes."), flush=True)
         while True:
             try:
                 home = await self._homey_home()
@@ -1390,7 +1389,7 @@ class Connections:
                             self._fire(fn, rec, f"Homey: {dname} {cap}")
                 before = now
             except RunError as e:
-                print(f"  (Homey check failed: {e})", flush=True)
+                print(tr("  (Homey check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(10))
 
     # MQTT
@@ -1399,10 +1398,10 @@ class Connections:
         try:
             import paho.mqtt.client as mqtt
         except ImportError:
-            raise RunError("MQTT needs the paho-mqtt package: pip install paho-mqtt") from None
+            raise RunError(tr("MQTT needs the paho-mqtt package: pip install paho-mqtt")) from None
         host = os.environ.get("MQTT_HOST", "").strip()
         if not host:
-            raise RunError(f"MQTT needs MQTT_HOST {WHERE_KEYS}: your broker's address, like homeassistant.local.")
+            raise RunError(tr("MQTT needs MQTT_HOST {where_keys}: your broker's address, like homeassistant.local.", where_keys=WHERE_KEYS))
         tls = os.environ.get("MQTT_TLS", "").strip().lower() in ("1", "yes", "true", "on")
         port = int(os.environ.get("MQTT_PORT") or (8883 if tls else 1883))
         c = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
@@ -1424,12 +1423,12 @@ class Connections:
         try:
             c.connect(host, port, keepalive=60)
         except OSError as e:
-            raise RunError(f"Couldn't reach the MQTT broker at {host}:{port} ({e}).") from None
+            raise RunError(tr("Couldn't reach the MQTT broker at {host}:{port} ({e}).", host=host, port=port, e=e)) from None
         c.loop_start()
         if not ready.wait(10) or result["rc"].is_failure:
             c.loop_stop()
-            raise RunError(f"The MQTT broker at {host}:{port} " + (f"refused the connection ({result['rc']}). Check MQTT_USERNAME and MQTT_PASSWORD."
-                                                                   if "rc" in result else "didn't answer."))
+            raise RunError(tr("The MQTT broker at {host}:{port} refused the connection ({rc}). Check MQTT_USERNAME and MQTT_PASSWORD.", host=host, port=port, rc=result["rc"])
+                           if "rc" in result else tr("The MQTT broker at {host}:{port} didn't answer.", host=host, port=port))
         return c
 
     @staticmethod
@@ -1450,9 +1449,9 @@ class Connections:
     def _mqtt_topic(topic, publishing=False):
         topic = to_str(topic).strip()
         if not topic:
-            raise RunError("MQTT needs a topic, like home/kitchen/temperature.")
+            raise RunError(tr("MQTT needs a topic, like home/kitchen/temperature."))
         if publishing and ("+" in topic or "#" in topic):
-            raise RunError("You can't publish to a topic with + or # in it: those only work for listening.")
+            raise RunError(tr("You can't publish to a topic with + or # in it: those only work for listening."))
         return topic
 
     async def mqtt_read(self, topic, wait=2.0):
@@ -1476,9 +1475,9 @@ class Connections:
         topic = to_str(topic).strip()
         if "+" not in topic and "#" not in topic:
             v = got.get(topic, "")
-            self.log("MQTT " + topic, v or "(no message yet: only messages the broker keeps show up straight away)", "read")
+            self.log(tr("MQTT {topic}", topic=topic), v or tr("(no message yet: only messages the broker keeps show up straight away)"), tr("read"))
             return v
-        self.log("MQTT " + topic, "\n".join(f"{k}: {_short(v, 80)}" for k, v in sorted(got.items())) or "(nothing)", f"{len(got)} topics")
+        self.log(tr("MQTT {topic}", topic=topic), "\n".join(f"{k}: {_short(v, 80)}" for k, v in sorted(got.items())) or tr("(nothing)"), tr("{got} topics", got=len(got)))
         return got
 
     async def mqtt_publish(self, topic, text, retain=False, approved=False):
@@ -1492,7 +1491,7 @@ class Connections:
         finally:
             c.loop_stop()
             c.disconnect()
-        self.log(f"MQTT → {topic}", text + ("  (kept by the broker)" if retain else ""), "published")
+        self.log(tr("MQTT → {topic}", topic=topic), text + ("  " + tr("(kept by the broker)") if retain else ""), tr("published"))
         return True
 
     # ----- Listeners: scripts that start when something arrives -----
@@ -1540,7 +1539,7 @@ class Connections:
             except asyncio.CancelledError:
                 raise
             except Exception as e:  # noqa: BLE001 - say what went wrong, then try again
-                print(f"  ({self.LISTEN_NAMES.get(kind, kind)}: {self._describe(e)} Trying again in a minute.)", flush=True)
+                print(tr("  ({x}: {x2} Trying again in a minute.)", x=self.LISTEN_NAMES.get(kind, kind), x2=self._describe(e)), flush=True)
                 await asyncio.sleep(self._poll(60))
 
     async def _listen_mqtt(self, items):
@@ -1555,7 +1554,7 @@ class Connections:
                 if mqtt.topic_matches_sub(sub_, msg.topic):
                     loop.call_soon_threadsafe(self._fire, fn, dict(payload), "MQTT " + msg.topic)
         await asyncio.to_thread(self._mqtt_new, on_message, sorted({self._mqtt_topic(t) for t, _ in items}))
-        print("Listening for MQTT messages on " + ", ".join(sorted({t for t, _ in items})) + ".", flush=True)
+        print(tr("Listening for MQTT messages on {x}.", x=", ".join(sorted({t for t, _ in items}))), flush=True)
         while True:
             await asyncio.sleep(3600)
 
@@ -1616,13 +1615,13 @@ class Connections:
         if not secret:  # no password, no open port: nothing on the network can even try
             # Said again every hour, so someone who opens the window later (or reads the log) still sees why.
             note = f"set WEBHOOK_SECRET {WHERE_KEYS} to a long password. Until then, the program doesn't listen for them."
-            print("Web requests: " + note, flush=True)
+            print(tr("Web requests: {note}", note=note), flush=True)
             while True:
                 await asyncio.sleep(self._poll(3600))
-                print(f"Web requests, {datetime.datetime.now():%H:%M}: still not listening. To turn them on, " + note, flush=True)
+                print(tr("Web requests, {x}: still not listening. To turn them on, {note}", x=format(datetime.datetime.now(), '%H:%M'), note=note), flush=True)
         srv = ThreadingHTTPServer((os.environ.get("WEBHOOK_HOST", "0.0.0.0"), port), Hook)
         threading.Thread(target=srv.serve_forever, daemon=True).start()
-        print(f"Listening for web requests on port {port}: " + ", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths) + ".", flush=True)
+        print(tr("Listening for web requests on port {port}: {x}.", port=port, x=", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths)), flush=True)
         while True:
             await asyncio.sleep(3600)
 
@@ -1659,7 +1658,7 @@ class Connections:
 
     async def _listen_email(self, items):
         c, last = self._mail(), None
-        print("Checking for new email.", flush=True)
+        print(tr("Checking for new email."), flush=True)
         while True:
             try:
                 last, new = await asyncio.to_thread(self._mail_new, c, last)
@@ -1668,9 +1667,9 @@ class Connections:
                     for contains, fn in items:
                         want = to_str(contains).strip().lower()
                         if want in ("", "anything") or want in hay:
-                            self._fire(fn, dict(rec), "New email: " + _short(rec["subject"], 40))
+                            self._fire(fn, dict(rec), tr("New email: {subject}", subject=_short(rec["subject"], 40)))
             except RunError as e:
-                print(f"  (Email check failed: {e})", flush=True)
+                print(tr("  (Email check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(120))
 
     async def _listen_feed(self, items):
@@ -1680,7 +1679,7 @@ class Connections:
                 try:
                     got = await self.feed_items(url, 30, trusted=True)
                 except RunError as e:
-                    print(f"  (Feed check failed: {e})", flush=True)
+                    print(tr("  (Feed check failed: {e})", e=e), flush=True)
                     continue
                 keys = {i["link"] or i["title"] for i in got}
                 if url in seen:
@@ -1688,7 +1687,7 @@ class Connections:
                         if (i["link"] or i["title"]) not in seen[url]:
                             rec = {"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
                                    "summary": i["summary"], "text": f"{i['title']}\n{i['summary']}\n{i['link']}".strip()}
-                            self._fire(fn, rec, "New in " + _short(i["feed"], 40))
+                            self._fire(fn, rec, tr("New in {feed}", feed=_short(i["feed"], 40)))
                     seen[url] |= keys
                 else:
                     seen[url] = keys
@@ -1703,7 +1702,7 @@ class Connections:
             os.makedirs(d, exist_ok=True)
             folders.append((d, fn))
         known, waiting = {d: set(os.listdir(d)) for d, _ in folders}, {}
-        print("Watching for new files in " + ", ".join(d for d, _ in folders) + ".", flush=True)
+        print(tr("Watching for new files in {x}.", x=", ".join(d for d, _ in folders)), flush=True)
         while True:
             await asyncio.sleep(self._poll(5))
             for d, fn in folders:
@@ -1725,7 +1724,7 @@ class Connections:
                         text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
                     except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
                         text = ""
-                    self._fire(fn, {"name": n, "path": path, "size": size, "text": text}, "New file: " + n)
+                    self._fire(fn, {"name": n, "path": path, "size": size, "text": text}, tr("New file: {name}", name=n))
                 known[d] &= names
 
     async def _listen_github(self, items):
@@ -1742,10 +1741,10 @@ class Connections:
                     for k, rec in now.items():
                         if k not in seen:
                             for _, fn in items:
-                                self._fire(fn, dict(rec), "Review requested: " + k)
+                                self._fire(fn, dict(rec), tr("Review requested: {pr}", pr=k))
                 seen = set(now)
             except RunError as e:
-                print(f"  (GitHub check failed: {e})", flush=True)
+                print(tr("  (GitHub check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(300))
 
     async def _listen_calendar(self, items):
@@ -1765,9 +1764,9 @@ class Connections:
                             rec = {"title": e["title"], "start": f"{e['start']:%H:%M}", "end": f"{e['end']:%H:%M}", "location": e["location"],
                                    "minutes": max(0, round_js(mins)),
                                    "text": f"{e['title']} at {e['start']:%H:%M}" + (f" ({e['location']})" if e["location"] else "")}
-                            self._fire(fn, rec, "Coming up: " + e["title"])
+                            self._fire(fn, rec, tr("Coming up: {title}", title=e["title"]))
             except RunError as e:
-                print(f"  (Calendar check failed: {e})", flush=True)
+                print(tr("  (Calendar check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(60))
 
     # Web pages
@@ -1803,7 +1802,7 @@ class Connections:
     async def _read_page_text(self, url):
         ctype, data = await asyncio.to_thread(get_url, url, True, "The page watcher", 5_000_000)
         if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
-            raise RunError(f"{_short(url, 80)} isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
+            raise RunError(tr("{url} isn't a web page or text ({x}).", url=_short(url, 80), x=ctype.split(';')[0] or tr('unknown type')))
         return page_text(_decode(data, ctype), ctype)
 
     async def _listen_page(self, items):
@@ -1816,7 +1815,8 @@ class Connections:
         every = max(1, round_js(num(minutes)) or 60) * 60
         key = url + ("  |  " + words.lower() if words else "")
         quiet_noted = False
-        print(f"Watching {url}" + (f" (the part with “{words}”)" if words else "") + f" for changes, every {every // 60} min.", flush=True)
+        print((tr("Watching {url} (the part with “{words}”) for changes, every {n} min.", url=url, words=words, n=every // 60) if words else
+                   tr("Watching {url} for changes, every {n} min.", url=url, n=every // 60)), flush=True)
         while True:
             try:
                 title, text = await self._read_page_text(url)
@@ -1824,8 +1824,9 @@ class Connections:
                 if not text.strip() or (words and not now):
                     if not quiet_noted:
                         quiet_noted = True
-                        print(f"  (Page watcher: {_short(url, 80)} " + ("has no readable words; it may need a browser to show them." if not text.strip()
-                              else f"has nothing with “{words}” in it right now.") + " It's checked again each time.)", flush=True)
+                        print("  " + (tr("(Page watcher: {url} has no readable words; it may need a browser to show them. It's checked again each time.)", url=_short(url, 80))
+                                     if not text.strip() else tr("(Page watcher: {url} has nothing with “{words}” in it right now. It's checked again each time.)",
+                                                                 url=_short(url, 80), words=words)), flush=True)
                 else:
                     quiet_noted = False
                     with _locked(PAGES_FILE):
@@ -1843,7 +1844,7 @@ class Connections:
                         cut = lambda t: t if len(t) <= 2000 else t[:1999] + "…"  # noqa: E731 - keeps the lines, unlike _short
                         rec = {"url": url, "title": title, "before": cut(before), "after": cut(now), "changed": changed,
                                "text": f"{title or url} changed:\n{changed}"}
-                        self._fire(fn, rec, "Page changed: " + _short(title or url, 40))
+                        self._fire(fn, rec, tr("Page changed: {page}", page=_short(title or url, 40)))
             except RunError as e:
-                print(f"  (Page check failed: {e})", flush=True)
+                print(tr("  (Page check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(every))

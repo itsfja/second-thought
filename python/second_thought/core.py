@@ -21,6 +21,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from .settings import SETTING_NAMES, WHERE_KEYS
+from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
 
@@ -39,8 +40,8 @@ def _number_setting(name, default, what, whole=False):
         if not math.isfinite(n) or n < 0 or (whole and not n.is_integer()):
             raise ValueError
     except ValueError:
-        sys.exit(f"{friendly} must be {what}, not “{raw}”. Fix it {WHERE_KEYS}"
-                 + (f" (or the {name} environment variable)." if friendly != name else ".") + " 0 means no limit.")
+        sys.exit((tr("{friendly} must be {what}, not “{raw}”. Fix it {where_keys} (or the {name} environment variable). 0 means no limit.", friendly=friendly, what=what, raw=raw, where_keys=WHERE_KEYS, name=name)
+                  if friendly != name else tr("{friendly} must be {what}, not “{raw}”. Fix it {where_keys}. 0 means no limit.", friendly=friendly, what=what, raw=raw, where_keys=WHERE_KEYS)))
     return int(n) if whole else n
 
 
@@ -160,7 +161,7 @@ def clean_svg(text):
 
 def _need_picture(v, where):
     if not isinstance(v, Picture):
-        raise RunError(f"The '{where}' block needs a picture in its picture slot.")
+        raise RunError(tr("The '{where}' block needs a picture in its picture slot.", where=where))
     return v
 
 
@@ -256,7 +257,7 @@ def arith(a, op, b):
         r = a * b
     elif op == "DIVIDE":
         if b == 0:
-            raise RunError("Can't divide by zero.")
+            raise RunError(tr("Can't divide by zero."))
         r = a / b
     else:
         r = math.pow(a, b)
@@ -282,7 +283,7 @@ def round_op(n, op):
 def modulo(a, b):
     a, b = num(a), num(b)
     if b == 0:
-        raise RunError("Can't divide by zero.")
+        raise RunError(tr("Can't divide by zero."))
     return _clean_num(math.fmod(a, b))
 
 
@@ -346,16 +347,16 @@ def to_record(o, fields=()):
 
 def rec_get(rec, key):
     if not isinstance(rec, dict):
-        raise RunError(f"'{to_str(key)} of' needs a record in its second slot.")
+        raise RunError(tr("'{key} of' needs a record in its second slot.", key=to_str(key)))
     return rec.get(to_str(key).strip(), "")
 
 
 def rec_set(rec, key, value):
     key = to_str(key).strip()
     if not key:
-        raise RunError("The 'set … of record' block needs a field name.")
+        raise RunError(tr("The 'set … of record' block needs a field name."))
     if not isinstance(rec, dict):
-        raise RunError(f"The 'set {key} of' block needs a record in its middle slot.")
+        raise RunError(tr("The 'set {key} of' block needs a record in its middle slot.", key=key))
     rec[key] = value
 
 
@@ -394,7 +395,7 @@ def _parse_json(text):
             return json.loads(text[min(starts):end + 1])
         except ValueError:
             pass
-    raise BadJSON("Claude's reply came back in an unreadable format. Run again.")
+    raise BadJSON(tr("Claude's reply came back in an unreadable format. Run again."))
 
 
 # ----- Structured replies -----
@@ -544,7 +545,7 @@ def _locked(path):
                         except OSError:
                             if time.monotonic() > give_up:
                                 f.close()
-                                raise RunError(f"Another program has been using {os.path.basename(key)} for over two minutes, so this one gave up waiting.")
+                                raise RunError(tr("Another program has been using {x} for over two minutes, so this one gave up waiting.", x=os.path.basename(key)))
                 else:
                     import fcntl
                     fcntl.flock(f.fileno(), fcntl.LOCK_EX)
@@ -592,7 +593,7 @@ class _WebSocket:
         want = base64.b64encode(hashlib.sha1((key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").encode()).digest()).decode()
         if " 101 " not in head.split("\r\n", 1)[0] or want not in head:
             writer.close()
-            raise RunError(f"{u.hostname} didn't accept a WebSocket connection at {u.path} ({head.split(chr(13), 1)[0]}).")
+            raise RunError(tr("{hostname} didn't accept a WebSocket connection at {path} ({x}).", hostname=u.hostname, path=u.path, x=head.split(chr(13), 1)[0]))
         return cls(reader, writer)
 
     async def _send(self, opcode, payload):
@@ -620,7 +621,7 @@ class _WebSocket:
                 data = bytes(b ^ mask[i % 4] for i, b in enumerate(data))
             op = b0 & 0x0F
             if op == 8:
-                raise RunError("Home Assistant closed the connection.")
+                raise RunError(tr("Home Assistant closed the connection."))
             if op == 9:
                 await self._send(10, data)  # a ping: answer it
                 continue
@@ -752,7 +753,7 @@ def read_text_file(path):
         raise
     except Exception as e:  # noqa: BLE001 - a damaged, locked or mislabelled file: say so, don't crash
         kind = "Word file" if path.lower().endswith(".docx") else "PDF" if path.lower().endswith(".pdf") else "file"
-        raise RunError(f"That {kind} couldn't be read ({type(e).__name__}: {_short(e, 120)}). It may be damaged, locked, or not really a {kind}.") from None
+        raise RunError(tr("That {kind} couldn't be read ({name}: {e}). It may be damaged, locked, or not really a {kind}.", kind=kind, name=type(e).__name__, e=_short(e, 120))) from None
 
 
 def _read_text_file(path):
@@ -761,7 +762,7 @@ def _read_text_file(path):
         try:
             from pypdf import PdfReader  # pip install pypdf
         except ImportError:
-            raise RunError("Reading PDFs needs the pypdf package: pip install pypdf") from None
+            raise RunError(tr("Reading PDFs needs the pypdf package: pip install pypdf")) from None
         return "\n\n".join((p.extract_text() or "") for p in PdfReader(path).pages[:300])
     if low.endswith(".docx"):
         import zipfile
@@ -776,7 +777,7 @@ def _read_text_file(path):
     with open(path, "rb") as f:
         raw = f.read(25 * 1024 * 1024)
     if b"\x00" in raw[:4000]:
-        raise RunError("That file isn't text. Use a PDF, a .docx or a text file.")
+        raise RunError(tr("That file isn't text. Use a PDF, a .docx or a text file."))
     return raw.decode("utf-8", "replace")
 
 
@@ -786,7 +787,7 @@ def calc_text(expression):
     try:
         v = _Calc(expression).run()
     except ValueError as e:
-        raise RunError(f"calculate couldn't work out “{_short(expression, 80)}”: {e}.") from None
+        raise RunError(tr("calculate couldn't work out “{expression}”: {e}.", expression=_short(expression, 80), e=e)) from None
     v = float(f"{v:.12g}")
     shown = str(int(v)) if v.is_integer() and abs(v) < 1e15 else repr(v)
     return f"{expression} = {shown}"
@@ -799,20 +800,20 @@ def time_plus_text(when, minutes):
     """'09:30' plus 270 -> '14:00'; '2026-10-10 22:00' plus 600 -> '2026-10-11 08:00 (Sunday)'. Negative minutes go back."""
     m = re.match(r"^\s*(?:(\d{4})-(\d{1,2})-(\d{1,2})[ T]+)?(\d{1,2})[:.](\d{2})\s*(am|pm)?\s*$", to_str(when), re.I)
     if not m:
-        raise RunError(f"time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{_short(when, 40)}”.")
+        raise RunError(tr("time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{when}”.", when=_short(when, 40)))
     h, mi, ampm = int(m.group(4)), int(m.group(5)), (m.group(6) or "").lower()
     if ampm:
         if not 1 <= h <= 12:
-            raise RunError(f"“{to_str(when).strip()}” isn't a time.")
+            raise RunError(tr("“{x}” isn't a time.", x=to_str(when).strip()))
         h = h % 12 + (12 if ampm == "pm" else 0)
     if h > 23 or mi > 59:
-        raise RunError(f"“{to_str(when).strip()}” isn't a time.")
+        raise RunError(tr("“{x}” isn't a time.", x=to_str(when).strip()))
     add = round_js(num(minutes))
     if m.group(1):
         try:
             start = datetime.datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)), h, mi)
         except ValueError:
-            raise RunError(f"“{to_str(when).strip()}” isn't a real date.") from None
+            raise RunError(tr("“{x}” isn't a real date.", x=to_str(when).strip())) from None
         t = start + datetime.timedelta(minutes=add)
         return t.strftime("%Y-%m-%d %H:%M") + f" ({WEEKDAYS[t.weekday()]})"
     total = h * 60 + mi + add

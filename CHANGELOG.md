@@ -18,6 +18,16 @@ that the two agree.
 
 ## Unreleased
 
+## 2.1.0 - 2026-10-11
+
+### Added
+- Exported programs can print in Spanish: the run log, questions at the keyboard (answer s or y for yes), errors,
+  the first-run approval and `--doctor`. A program exported while the page shows Spanish carries the Spanish words
+  (`EXPORT_LANGUAGE` and `EXPORT_WORDS`, above the runtime) and speaks Spanish; `language = en` in
+  `second-thought.ini` switches it back to English. A program exported in English is unchanged. `--doctor` keeps its
+  `ok`, `FAIL` and `NOTE` markers as they are, for scripts that read them. The words live under `python` in
+  `i18n/es.json`, and a test fails if the runtime prints a text that isn't there (#71).
+
 ## 2.0.0 - 2026-10-10
 
 **Upgrading:** programs keep their old runtime until you import them on the page and export them again. After that,

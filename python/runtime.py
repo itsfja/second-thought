@@ -22,7 +22,7 @@ import urllib.request
 
 # Which runtime this is. Every exported program carries its own copy of the runtime, so this says which one it has:
 # run the program with --version to see it. What changed in each version is in CHANGELOG.md, in the Second Thought folder.
-RUNTIME_VERSION = "2.0.0"
+RUNTIME_VERSION = "2.1.0"
 
 # Windows consoles and redirected output can't always show every character; never crash over one.
 for _stream in (sys.stdout, sys.stderr):
@@ -40,7 +40,7 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
                  "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
-                 "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT"}
+                 "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE"}
 
 
 def _load_settings():
@@ -67,7 +67,36 @@ def _load_settings():
 
 
 SETTINGS_PATH = _load_settings()
-WHERE_KEYS = f"in {SETTINGS_PATH}" if SETTINGS_PATH else f"in {SETTINGS_FILE}, next to this program"
+
+
+# ----- Language -----
+# What the program prints (its run log, questions, errors and --doctor) can be in another language. A program exported
+# from a page shown in Spanish carries the Spanish words (EXPORT_WORDS, written above this runtime) and speaks Spanish;
+# language = en in second-thought.ini switches it back to English. A program without the words speaks English.
+_WORDS = globals().get("EXPORT_WORDS") or {}
+LANGUAGE = (os.environ.get("RB_LANGUAGE") or globals().get("EXPORT_LANGUAGE") or "en").strip().lower()
+
+
+def tr(_text, **slots):
+    """The text in the program's language, with each {name} filled in: tr("Saved {name}.", name=n)."""
+    words = _WORDS.get(_text, _text) if LANGUAGE != "en" else _text
+    if not slots:
+        return words
+    return re.sub(r"\{(\w+)\}", lambda m: str(slots[m.group(1)]) if m.group(1) in slots else m.group(0), words)
+
+
+def said_yes(answer):
+    """y, yes, or (when the program speaks Spanish) s, sí or si."""
+    a = str(answer).strip().lower()
+    return a in ("y", "yes") or (LANGUAGE == "es" and a in ("s", "si", "sí"))
+
+
+def said_no(answer):
+    """n or no (the same in Spanish)."""
+    return str(answer).strip().lower() in ("n", "no")
+
+
+WHERE_KEYS = tr("in {path}", path=SETTINGS_PATH) if SETTINGS_PATH else tr("in {path}, next to this program", path=SETTINGS_FILE)
 
 
 def _anthropic_client(**kw):
@@ -75,7 +104,7 @@ def _anthropic_client(**kw):
     try:
         from anthropic import AsyncAnthropic
     except ImportError:
-        raise RunError("Claude needs the Anthropic SDK. Install it with:  pip install anthropic") from None
+        raise RunError(tr("Claude needs the Anthropic SDK. Install it with:  pip install anthropic")) from None
     return AsyncAnthropic(**kw)
 
 # ----- The model services -----
@@ -257,17 +286,16 @@ class ModelCalls:
             raise asyncio.CancelledError()
         self.calls += 1
         if self.calls > MAX_AI_CALLS:
-            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+            raise RunError(tr("Stopped after {max_ai_calls} model calls in one run, to protect your usage.", max_ai_calls=MAX_AI_CALLS))
         if self.budget and self.tokens_used() >= self.budget:
-            raise RunError(f"Stopped: this run has used {self.tokens_used():,} tokens, which reaches its budget of {self.budget:,}. "
-                           "Raise the number in the 'limit this run' block (or budget in second-thought.ini).")
+            raise RunError(tr("Stopped: this run has used {x} tokens, which reaches its budget of {x2}. Raise the number in the 'limit this run' block (or budget in second-thought.ini).", x=format(self.tokens_used(), ','), x2=format(self.budget, ',')))
         tier = self.current_tier
         # Backups stand in for the primary model only. A block that names its own model keeps that model.
         tiers = [tier] + (self.backups if tier == self.primary else [])
         last = None
         for n, t in enumerate(tiers):
             if n:
-                self.log("Backup", f"{model_label(tiers[n - 1])} failed: {str(last)[:160]}\nTrying {model_label(t)} instead.", "warn", calls=False)
+                self.log(tr("Backup"), tr("{x} failed: {x2}\nTrying {x3} instead.", x=model_label(tiers[n - 1]), x2=str(last)[:160], x3=model_label(t)), tr("warn"), calls=False)
             try:
                 text = await self._timed_call(t, prompt, want_json, picture, history, web)
             except (asyncio.CancelledError, Finish):
@@ -286,10 +314,10 @@ class ModelCalls:
                 return self._read_json(text, schema)
             except BadJSON as e:
                 # One more try on the same model, showing it what went wrong. Counts as a call like any other.
-                self.log("Unreadable reply", f"{e}\nAsking once more for a corrected reply.", "repair", calls=False)
+                self.log(tr("Unreadable reply"), tr("{e}\nAsking once more for a corrected reply.", e=e), tr("repair"), calls=False)
                 self.calls += 1
                 if self.calls > MAX_AI_CALLS:
-                    raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+                    raise RunError(tr("Stopped after {max_ai_calls} model calls in one run, to protect your usage.", max_ai_calls=MAX_AI_CALLS))
                 fix = await self._timed_call(t, prompt + "\n\nYour previous reply couldn't be used: " + str(e) +
                                             "\nPrevious reply:\n" + _short(text, 2000) +
                                             "\n\nReply again with only the corrected JSON.", want_json, picture, history, web)
@@ -302,18 +330,17 @@ class ModelCalls:
 
     async def _continue(self, tier, prompt, text, history, web):
         """A reply cut off by the length limit: ask once for the rest, on the same model, and join the two parts."""
-        self.log("Reply continued", "The reply reached the length limit, so the model was asked to carry on from where it stopped.",
-                 "continued", calls=False)
+        self.log(tr("Reply continued"), tr("The reply reached the length limit, so the model was asked to carry on from where it stopped."),
+                 tr("continued"), calls=False)
         self.calls += 1
         if self.calls > MAX_AI_CALLS:
-            raise RunError(f"Stopped after {MAX_AI_CALLS} model calls in one run, to protect your usage.")
+            raise RunError(tr("Stopped after {max_ai_calls} model calls in one run, to protect your usage.", max_ai_calls=MAX_AI_CALLS))
         turns = (history or []) + [{"role": "user", "content": to_str(prompt)}, {"role": "assistant", "content": to_str(text)}]
         more = await self._timed_call(tier, CONTINUE_PROMPT, False, None, turns, web)
         joined = to_str(text) + to_str(more)  # the continuation picks up exactly where the first part stopped
         if getattr(more, "truncated", False):
             self.out_of_rounds_hit = True
-            self.log("Cut short", "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. "
-                     "Ask for something shorter, or split the job into smaller steps.", "warn", calls=False)
+            self.log(tr("Cut short"), tr("Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. Ask for something shorter, or split the job into smaller steps."), tr("warn"), calls=False)
         return joined
 
     @staticmethod
@@ -324,7 +351,7 @@ class ModelCalls:
             v = _fit(v, schema)
             bad = _shape_problem(v, schema)
             if bad:
-                raise BadJSON(f"The reply didn't have the expected shape: {bad}.")
+                raise BadJSON(tr("The reply didn't have the expected shape: {bad}.", bad=bad))
         return v
 
     async def _call_tier(self, tier, prompt, want_json, picture, history, web):
@@ -349,13 +376,13 @@ class ModelCalls:
             text = await self._call_claude(MODELS.get(tier, MODELS["default"]), prompt, picture, history, web, schema)
             who = "Claude"
         if not text:
-            raise Retryable(f"{who} returned nothing for this step. Simplify it and try again.")
+            raise Retryable(tr("{who} returned nothing for this step. Simplify it and try again.", who=who))
         return text
 
     async def _call_claude(self, model, prompt, picture, history, web, schema=None):
         if self.client is None:
             if not os.environ.get("ANTHROPIC_API_KEY"):
-                raise RunError(f"Claude needs a key. Put ANTHROPIC_API_KEY = your-key {WHERE_KEYS} (https://console.anthropic.com).")
+                raise RunError(tr("Claude needs a key. Put ANTHROPIC_API_KEY = your-key {where_keys} (https://console.anthropic.com).", where_keys=WHERE_KEYS))
             self.client = _anthropic_client(timeout=CALL_TIMEOUT, max_retries=2)
         args = dict(model=model, max_tokens=MAX_TOKENS,
                     messages=(history or []) + [{"role": "user", "content": self._content(prompt, picture)}])
@@ -373,8 +400,7 @@ class ModelCalls:
                 raise
             # This model or account won't take the shape: ask without it (the reply is still checked), and stop sending it.
             self.no_schema.add(model)
-            self.log("Structured replies", f"{model} wouldn't accept a reply shape ({_short(str(e), 160)}), so its replies "
-                     "are checked after they arrive instead.", "note")
+            self.log(tr("Structured replies"), tr("{model} wouldn't accept a reply shape ({e}), so its replies are checked after they arrive instead.", model=model, e=_short(str(e), 160)), tr("note"))
             del args["output_config"]
             msg = await self.client.messages.create(**args)
         usage = getattr(msg, "usage", None)
@@ -428,16 +454,17 @@ class ModelCalls:
                     raise
                 mode = self.JSON_MODES[self.JSON_MODES.index(mode) + 1]
                 self.json_modes[(provider, model)] = mode
-                self.log("Structured replies", f"{provider} ({model}) wouldn't take that JSON mode, so it's asked "
-                         + ("for plain JSON instead." if mode == "object" else "without one, and its replies are checked after they arrive."),
-                         "note", calls=False)
+                self.log(tr("Structured replies"), tr("{provider} ({model}) wouldn't take that JSON mode, so it's asked for plain JSON instead." if mode == "object" else
+                            "{provider} ({model}) wouldn't take that JSON mode, so it's asked without one, and its replies are checked after they arrive.",
+                            provider=provider, model=model),
+                         tr("note"), calls=False)
 
     @staticmethod
     def _openai_request(provider, body, path="/chat/completions"):
         """One request to a model service that speaks OpenAI's format (Ollama, DeepSeek, xAI, OpenAI, Mistral, ...)."""
         pv = PROVIDERS[provider]
         if pv["signup"] and not pv["key"]:
-            raise RunError(f"This program uses {provider}. Put {pv['key_env']} = your-key {WHERE_KEYS} ({pv['signup']}).")
+            raise RunError(tr("This program uses {provider}. Put {key_env} = your-key {where_keys} ({signup}).", provider=provider, key_env=pv['key_env'], where_keys=WHERE_KEYS, signup=pv['signup']))
         headers = {"Content-Type": "application/json", **pv["headers"]}
         if pv["key"]:
             headers["Authorization"] = "Bearer " + pv["key"]
@@ -448,17 +475,17 @@ class ModelCalls:
         except urllib.error.HTTPError as e:
             detail = e.read().decode("utf-8", "replace")[:200]
             if provider == "Llama" and e.code == 404 and "model" in detail.lower():
-                raise RunError(f"The Llama server doesn't have model {body['model']}. Run:  ollama pull {body['model']}")
+                raise RunError(tr("The Llama server doesn't have model {model}. Run:  ollama pull {model}", model=body['model']))
             if e.code == 401:
-                raise RunError(f"{provider} refused the API key (401). Check {pv['key_env']}.")
+                raise RunError(tr("{provider} refused the API key (401). Check {key_env}.", provider=provider, key_env=pv['key_env']))
             if e.code == 402:
-                raise RunError(f"{provider} says the account has no credit left (402).")
+                raise RunError(tr("{provider} says the account has no credit left (402).", provider=provider))
             if e.code in (400, 403, 404, 422):
-                raise RunError(f"{provider} refused the request ({e.code}): {detail}")
-            raise Retryable(f"{provider} answered {e.code}: {detail}")
+                raise RunError(tr("{provider} refused the request ({code}): {detail}", provider=provider, code=e.code, detail=detail))
+            raise Retryable(tr("{provider} answered {code}: {detail}", provider=provider, code=e.code, detail=detail))
         except (urllib.error.URLError, TimeoutError, OSError) as e:
             hint = " Is Ollama running? Start it with:  ollama serve" if provider == "Llama" else ""
-            raise Retryable(f"Couldn't reach {provider} at {pv['base']} ({getattr(e, 'reason', e)}).{hint}")
+            raise Retryable(tr("Couldn't reach {provider} at {base} ({x}).{hint}", provider=provider, base=pv['base'], x=getattr(e, 'reason', e), hint=hint))
 
     JSON_MODES = ("schema", "object", "none")
 
@@ -469,7 +496,7 @@ class ModelCalls:
             prompt = "You can't browse the web, so answer from what you know and say clearly that it may be out of date.\n\n" + prompt
         if picture is not None and picture.svg is None:
             if model in NO_VISION:
-                raise RunError(f"{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.")
+                raise RunError(tr("{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.", model=model))
             if provider in VISION_MODELS and model != VISION_MODELS[provider]:
                 model = VISION_MODELS[provider]  # this service's text models can't see; this one can
             url = "data:" + picture.media_type + ";base64," + base64.b64encode(picture.data).decode("ascii")
@@ -498,7 +525,7 @@ class ModelCalls:
     async def _call_perplexity(self, preset, prompt, picture, history):
         """Perplexity's Agent API: searches the web, then answers with numbered sources."""
         if picture is not None and picture.svg is None:
-            raise RunError("Perplexity can't look at photos here. Use Claude, GPT or Gemini for this step.")
+            raise RunError(tr("Perplexity can't look at photos here. Use Claude, GPT or Gemini for this step."))
         if picture is not None:
             prompt += "\n\nThe picture is this SVG drawing:\n" + picture.svg
         if history:
@@ -526,10 +553,10 @@ class ModelCalls:
             from google import genai
             from google.genai import types
         except ImportError:
-            raise RunError("This program uses Gemini. Install its package first:  pip install google-genai")
+            raise RunError(tr("This program uses Gemini. Install its package first:  pip install google-genai"))
         if self.gemini is None:
             if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
-                raise RunError(f"Gemini needs a key. Put GEMINI_API_KEY = your-key {WHERE_KEYS} (https://aistudio.google.com).")
+                raise RunError(tr("Gemini needs a key. Put GEMINI_API_KEY = your-key {where_keys} (https://aistudio.google.com).", where_keys=WHERE_KEYS))
             self.gemini = genai.Client()
         contents = []
         for turn in history or []:
@@ -554,8 +581,8 @@ class ModelCalls:
             if not json_out or (getattr(e, "code", None) or getattr(e, "status_code", None)) not in (400, 422):
                 raise
             self.json_modes[("Gemini", model)] = "none"
-            self.log("Structured replies", f"Gemini ({model}) wouldn't take JSON mode, so its replies are checked after they arrive.",
-                     "note", calls=False)
+            self.log(tr("Structured replies"), tr("Gemini ({model}) wouldn't take JSON mode, so its replies are checked after they arrive.", model=model),
+                     tr("note"), calls=False)
             config.response_mime_type = None
             resp = await self.gemini.aio.models.generate_content(model=model, contents=contents, config=config)
         um = getattr(resp, "usage_metadata", None)
@@ -595,8 +622,8 @@ def _number_setting(name, default, what, whole=False):
         if not math.isfinite(n) or n < 0 or (whole and not n.is_integer()):
             raise ValueError
     except ValueError:
-        sys.exit(f"{friendly} must be {what}, not “{raw}”. Fix it {WHERE_KEYS}"
-                 + (f" (or the {name} environment variable)." if friendly != name else ".") + " 0 means no limit.")
+        sys.exit((tr("{friendly} must be {what}, not “{raw}”. Fix it {where_keys} (or the {name} environment variable). 0 means no limit.", friendly=friendly, what=what, raw=raw, where_keys=WHERE_KEYS, name=name)
+                  if friendly != name else tr("{friendly} must be {what}, not “{raw}”. Fix it {where_keys}. 0 means no limit.", friendly=friendly, what=what, raw=raw, where_keys=WHERE_KEYS)))
     return int(n) if whole else n
 
 
@@ -716,7 +743,7 @@ def clean_svg(text):
 
 def _need_picture(v, where):
     if not isinstance(v, Picture):
-        raise RunError(f"The '{where}' block needs a picture in its picture slot.")
+        raise RunError(tr("The '{where}' block needs a picture in its picture slot.", where=where))
     return v
 
 
@@ -812,7 +839,7 @@ def arith(a, op, b):
         r = a * b
     elif op == "DIVIDE":
         if b == 0:
-            raise RunError("Can't divide by zero.")
+            raise RunError(tr("Can't divide by zero."))
         r = a / b
     else:
         r = math.pow(a, b)
@@ -838,7 +865,7 @@ def round_op(n, op):
 def modulo(a, b):
     a, b = num(a), num(b)
     if b == 0:
-        raise RunError("Can't divide by zero.")
+        raise RunError(tr("Can't divide by zero."))
     return _clean_num(math.fmod(a, b))
 
 
@@ -902,16 +929,16 @@ def to_record(o, fields=()):
 
 def rec_get(rec, key):
     if not isinstance(rec, dict):
-        raise RunError(f"'{to_str(key)} of' needs a record in its second slot.")
+        raise RunError(tr("'{key} of' needs a record in its second slot.", key=to_str(key)))
     return rec.get(to_str(key).strip(), "")
 
 
 def rec_set(rec, key, value):
     key = to_str(key).strip()
     if not key:
-        raise RunError("The 'set … of record' block needs a field name.")
+        raise RunError(tr("The 'set … of record' block needs a field name."))
     if not isinstance(rec, dict):
-        raise RunError(f"The 'set {key} of' block needs a record in its middle slot.")
+        raise RunError(tr("The 'set {key} of' block needs a record in its middle slot.", key=key))
     rec[key] = value
 
 
@@ -950,7 +977,7 @@ def _parse_json(text):
             return json.loads(text[min(starts):end + 1])
         except ValueError:
             pass
-    raise BadJSON("Claude's reply came back in an unreadable format. Run again.")
+    raise BadJSON(tr("Claude's reply came back in an unreadable format. Run again."))
 
 
 # ----- Structured replies -----
@@ -1100,7 +1127,7 @@ def _locked(path):
                         except OSError:
                             if time.monotonic() > give_up:
                                 f.close()
-                                raise RunError(f"Another program has been using {os.path.basename(key)} for over two minutes, so this one gave up waiting.")
+                                raise RunError(tr("Another program has been using {x} for over two minutes, so this one gave up waiting.", x=os.path.basename(key)))
                 else:
                     import fcntl
                     fcntl.flock(f.fileno(), fcntl.LOCK_EX)
@@ -1148,7 +1175,7 @@ class _WebSocket:
         want = base64.b64encode(hashlib.sha1((key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").encode()).digest()).decode()
         if " 101 " not in head.split("\r\n", 1)[0] or want not in head:
             writer.close()
-            raise RunError(f"{u.hostname} didn't accept a WebSocket connection at {u.path} ({head.split(chr(13), 1)[0]}).")
+            raise RunError(tr("{hostname} didn't accept a WebSocket connection at {path} ({x}).", hostname=u.hostname, path=u.path, x=head.split(chr(13), 1)[0]))
         return cls(reader, writer)
 
     async def _send(self, opcode, payload):
@@ -1176,7 +1203,7 @@ class _WebSocket:
                 data = bytes(b ^ mask[i % 4] for i, b in enumerate(data))
             op = b0 & 0x0F
             if op == 8:
-                raise RunError("Home Assistant closed the connection.")
+                raise RunError(tr("Home Assistant closed the connection."))
             if op == 9:
                 await self._send(10, data)  # a ping: answer it
                 continue
@@ -1308,7 +1335,7 @@ def read_text_file(path):
         raise
     except Exception as e:  # noqa: BLE001 - a damaged, locked or mislabelled file: say so, don't crash
         kind = "Word file" if path.lower().endswith(".docx") else "PDF" if path.lower().endswith(".pdf") else "file"
-        raise RunError(f"That {kind} couldn't be read ({type(e).__name__}: {_short(e, 120)}). It may be damaged, locked, or not really a {kind}.") from None
+        raise RunError(tr("That {kind} couldn't be read ({name}: {e}). It may be damaged, locked, or not really a {kind}.", kind=kind, name=type(e).__name__, e=_short(e, 120))) from None
 
 
 def _read_text_file(path):
@@ -1317,7 +1344,7 @@ def _read_text_file(path):
         try:
             from pypdf import PdfReader  # pip install pypdf
         except ImportError:
-            raise RunError("Reading PDFs needs the pypdf package: pip install pypdf") from None
+            raise RunError(tr("Reading PDFs needs the pypdf package: pip install pypdf")) from None
         return "\n\n".join((p.extract_text() or "") for p in PdfReader(path).pages[:300])
     if low.endswith(".docx"):
         import zipfile
@@ -1332,7 +1359,7 @@ def _read_text_file(path):
     with open(path, "rb") as f:
         raw = f.read(25 * 1024 * 1024)
     if b"\x00" in raw[:4000]:
-        raise RunError("That file isn't text. Use a PDF, a .docx or a text file.")
+        raise RunError(tr("That file isn't text. Use a PDF, a .docx or a text file."))
     return raw.decode("utf-8", "replace")
 
 
@@ -1342,7 +1369,7 @@ def calc_text(expression):
     try:
         v = _Calc(expression).run()
     except ValueError as e:
-        raise RunError(f"calculate couldn't work out “{_short(expression, 80)}”: {e}.") from None
+        raise RunError(tr("calculate couldn't work out “{expression}”: {e}.", expression=_short(expression, 80), e=e)) from None
     v = float(f"{v:.12g}")
     shown = str(int(v)) if v.is_integer() and abs(v) < 1e15 else repr(v)
     return f"{expression} = {shown}"
@@ -1355,20 +1382,20 @@ def time_plus_text(when, minutes):
     """'09:30' plus 270 -> '14:00'; '2026-10-10 22:00' plus 600 -> '2026-10-11 08:00 (Sunday)'. Negative minutes go back."""
     m = re.match(r"^\s*(?:(\d{4})-(\d{1,2})-(\d{1,2})[ T]+)?(\d{1,2})[:.](\d{2})\s*(am|pm)?\s*$", to_str(when), re.I)
     if not m:
-        raise RunError(f"time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{_short(when, 40)}”.")
+        raise RunError(tr("time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{when}”.", when=_short(when, 40)))
     h, mi, ampm = int(m.group(4)), int(m.group(5)), (m.group(6) or "").lower()
     if ampm:
         if not 1 <= h <= 12:
-            raise RunError(f"“{to_str(when).strip()}” isn't a time.")
+            raise RunError(tr("“{x}” isn't a time.", x=to_str(when).strip()))
         h = h % 12 + (12 if ampm == "pm" else 0)
     if h > 23 or mi > 59:
-        raise RunError(f"“{to_str(when).strip()}” isn't a time.")
+        raise RunError(tr("“{x}” isn't a time.", x=to_str(when).strip()))
     add = round_js(num(minutes))
     if m.group(1):
         try:
             start = datetime.datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)), h, mi)
         except ValueError:
-            raise RunError(f"“{to_str(when).strip()}” isn't a real date.") from None
+            raise RunError(tr("“{x}” isn't a real date.", x=to_str(when).strip())) from None
         t = start + datetime.timedelta(minutes=add)
         return t.strftime("%Y-%m-%d %H:%M") + f" ({WEEKDAYS[t.weekday()]})"
     total = h * 60 + mi + add
@@ -1409,11 +1436,11 @@ def _public_addresses(host, port):
     try:
         infos = socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)
     except OSError:
-        raise RunError(f"Couldn't find the website “{host}”.") from None
+        raise RunError(tr("Couldn't find the website “{host}”.", host=host)) from None
     for info in infos:
         ip = ipaddress.ip_address(info[4][0].split("%")[0])
         if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
-            raise RunError("The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them).")
+            raise RunError(tr("The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them)."))
     return infos
 
 
@@ -1472,7 +1499,7 @@ class _PublicRedirects(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         u = urllib.parse.urlparse(newurl)
         if u.scheme not in ("http", "https") or not u.hostname:
-            raise RunError("That address sent the program somewhere that isn't a web page.")
+            raise RunError(tr("That address sent the program somewhere that isn't a web page."))
         if self.check_hosts:
             _public_only(u.hostname)
         return super().redirect_request(req, fp, code, msg, headers, newurl)
@@ -1491,7 +1518,7 @@ def get_url(url, trusted=False, what="read_page", limit=3_000_000):
         url = "https://" + url[9:]
     u = urllib.parse.urlparse(url)
     if u.scheme not in ("http", "https") or not u.hostname:
-        raise RunError(f"{what} needs a web address starting with http:// or https://.")
+        raise RunError(tr("{what} needs a web address starting with http:// or https://.", what=what))
     guard = not trusted and not _local_pages()
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SecondThought/1.0)",
                                                "Accept": "text/html,application/xhtml+xml,application/xml,text/plain;q=0.9,*/*;q=0.5"})
@@ -1508,9 +1535,9 @@ def get_url(url, trusted=False, what="read_page", limit=3_000_000):
         with opener.open(req, timeout=20) as r:
             return r.headers.get("Content-Type", ""), r.read(limit)
     except urllib.error.HTTPError as e:
-        raise RunError(f"{what} couldn't open {_short(url, 80)}: the website answered {e.code}.") from None
+        raise RunError(tr("{what} couldn't open {url}: the website answered {code}.", what=what, url=_short(url, 80), code=e.code)) from None
     except urllib.error.URLError as e:
-        raise RunError(f"{what} couldn't reach {_short(url, 80)} ({e.reason}).") from None
+        raise RunError(tr("{what} couldn't reach {url} ({reason}).", what=what, url=_short(url, 80), reason=e.reason)) from None
 
 
 def _decode(data, ctype):
@@ -1525,7 +1552,7 @@ def fetch_page(url):
     ctype, data = get_url(url)
     url = to_str(url).strip()
     if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
-        raise RunError(f"That address isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
+        raise RunError(tr("That address isn't a web page or text ({x}).", x=ctype.split(';')[0] or tr('unknown type')))
     title, text = page_text(_decode(data, ctype), ctype)
     if not text:
         return f"{title or url}\n\n(The page has no readable words. It may need a browser to show its content.)"
@@ -1560,7 +1587,7 @@ def parse_feed(raw):
     try:
         root = ET.fromstring(raw.encode("utf-8") if isinstance(raw, str) else raw)
     except ET.ParseError:
-        raise RunError("That address isn't a news feed (RSS or Atom).") from None
+        raise RunError(tr("That address isn't a news feed (RSS or Atom).")) from None
     local = lambda el: el.tag.rsplit("}", 1)[-1].lower()  # noqa: E731
 
     def child(el, *names):
@@ -1569,7 +1596,7 @@ def parse_feed(raw):
                 return c.text.strip()
         return ""
     if local(root) not in ("rss", "feed", "rdf"):
-        raise RunError("That address isn't a news feed (RSS or Atom).")
+        raise RunError(tr("That address isn't a news feed (RSS or Atom)."))
     channel = next((c for c in root if local(c) == "channel"), root)
     title = child(channel, "title")
     items = []
@@ -1733,7 +1760,7 @@ def free_slots(events, day, frm, to, minutes):
     def at(hhmm):
         m = re.fullmatch(r"\s*(\d{1,2})[:.](\d{2})\s*", to_str(hhmm))
         if not m or int(m.group(1)) > 24 or int(m.group(2)) > 59:
-            raise RunError(f"“{hhmm}” isn't a time like 09:00.")
+            raise RunError(tr("“{hhmm}” isn't a time like 09:00.", hhmm=hhmm))
         return day + datetime.timedelta(hours=int(m.group(1)), minutes=int(m.group(2)))
     a, b = at(frm), at(to)
     busy = sorted((max(e["start"], a), min(e["end"], b)) for e in events if not e["all_day"] and e["end"] > a and e["start"] < b)
@@ -1763,7 +1790,7 @@ def parse_day(text):
     try:
         return datetime.datetime.strptime(t, "%Y-%m-%d")
     except ValueError:
-        raise RunError(f"“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.") from None
+        raise RunError(tr("“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.", text=text)) from None
 
 
 class Connections:
@@ -1771,8 +1798,7 @@ class Connections:
     # ----- Home Assistant -----
     def _ha_request(self, method, path, body=None, raw=False):
         if not HA_TOKEN:
-            raise RunError(f"This program uses Home Assistant. Put HA_URL (for example http://homeassistant.local:8123) "
-                           f"and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab) {WHERE_KEYS}.")
+            raise RunError(tr("This program uses Home Assistant. Put HA_URL (for example http://homeassistant.local:8123) and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab) {where_keys}.", where_keys=WHERE_KEYS))
         data = json.dumps(body).encode("utf-8") if body is not None else None
         req = urllib.request.Request(HA_URL + path, data=data, method=method,
                                      headers={"Authorization": "Bearer " + HA_TOKEN, "Content-Type": "application/json"})
@@ -1782,12 +1808,12 @@ class Connections:
                 return (payload, r.headers.get("Content-Type", "")) if raw else (json.loads(payload or b"null"))
         except urllib.error.HTTPError as e:
             if e.code == 401:
-                raise RunError("Home Assistant refused the token (401). Check HA_TOKEN.")
+                raise RunError(tr("Home Assistant refused the token (401). Check HA_TOKEN."))
             if e.code == 404:
-                raise RunError(f"Home Assistant has nothing at {path} (404). Check the entity or service name.")
-            raise Retryable(f"Home Assistant answered {e.code} for {path}.")
+                raise RunError(tr("Home Assistant has nothing at {path} (404). Check the entity or service name.", path=path))
+            raise Retryable(tr("Home Assistant answered {code} for {path}.", code=e.code, path=path))
         except (urllib.error.URLError, TimeoutError, OSError) as e:
-            raise Retryable(f"Couldn't reach Home Assistant at {HA_URL} ({getattr(e, 'reason', e)}).")
+            raise Retryable(tr("Couldn't reach Home Assistant at {ha_url} ({x}).", ha_url=HA_URL, x=getattr(e, 'reason', e)))
 
     async def _ha(self, method, path, body=None, raw=False):
         return await asyncio.to_thread(self._ha_request, method, path, body, raw)
@@ -1799,7 +1825,7 @@ class Connections:
     async def _ha_entity(self, entity):
         entity = to_str(entity).strip()
         if not re.match(r"^[a-z_]+\.[a-z0-9_]+$", entity):
-            raise RunError(f"“{entity}” isn't an entity id. Use something like light.kitchen.")
+            raise RunError(tr("“{entity}” isn't an entity id. Use something like light.kitchen.", entity=entity))
         return await self._ha("GET", "/api/states/" + entity)
 
     async def ha_state(self, entity):
@@ -1865,19 +1891,19 @@ class Connections:
         camera = to_str(camera).strip()
         data, ctype = await self._ha("GET", "/api/camera_proxy/" + camera, raw=True)
         pic = Picture(data, (ctype or "image/jpeg").split(";")[0], camera.replace("camera.", "") + "-snapshot")
-        self.log("Snapshot: " + camera, "Saved to " + self._picture_path(pic), "done")
+        self.log(tr("Snapshot: {camera}", camera=camera), tr("Saved to {x}", x=self._picture_path(pic)), tr("done"))
         return pic
 
     async def _ha_call_live(self, service, entity, data_text=""):
         service, entity = to_str(service).strip(), to_str(entity).strip()
         if not re.match(r"^[a-z_]+\.[a-z0-9_]+$", service):
-            raise RunError(f"“{service}” isn't a service name. Use domain.service, for example light.turn_off.")
+            raise RunError(tr("“{service}” isn't a service name. Use domain.service, for example light.turn_off.", service=service))
         body = {}
         if to_str(data_text).strip():
             try:
                 body = json.loads(to_str(data_text))
             except ValueError:
-                raise RunError(f"The data for {service} isn't valid JSON. Use something like {{\"temperature\": 20}}.")
+                raise RunError(tr("The data for {service} isn't valid JSON. Use something like {\"temperature\": 20}.", service=service))
         if entity:
             body["entity_id"] = entity
         sensitive = any(re.match(p, service) for p in HA_SENSITIVE)
@@ -1885,20 +1911,20 @@ class Connections:
             return False
         if sensitive:
             if self.schedule_mode and not sys.stdin.isatty():
-                self.log("Not done", f"{service} on {entity} needs your approval, and nobody is at the keyboard.", "refused")
+                self.log(tr("Not done"), tr("{service} on {entity} needs your approval, and nobody is at the keyboard.", service=service, entity=entity), tr("refused"))
                 return False
             if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
-                self.log("Not done", f"{service} on {entity} was refused, so nothing happened.", "refused")
+                self.log(tr("Not done"), tr("{service} on {entity} was refused, so nothing happened.", service=service, entity=entity), tr("refused"))
                 return False
         domain, action = service.split(".", 1)
         await self._ha("POST", f"/api/services/{domain}/{action}", body)
-        self.log("Home Assistant: " + service, entity + (f" with {to_str(data_text).strip()}" if to_str(data_text).strip() else ""), "done")
+        self.log(tr("Home Assistant: {service}", service=service), entity + (" " + tr("with {data}", data=to_str(data_text).strip()) if to_str(data_text).strip() else ""), tr("done"))
         return True
 
     async def _ha_notify_live(self, target, text):
         target, text = to_str(target).strip() or "persistent_notification", to_str(text)
         if not text.strip():
-            raise RunError("The 'notify' block has no message.")
+            raise RunError(tr("The 'notify' block has no message."))
         if not await self._allowed(["ha", "messages"], f"send a notification to {target}: {_short(text, 120)}"):
             return
         if target in ("persistent_notification", "persistent_notification.create"):
@@ -1906,16 +1932,16 @@ class Connections:
         else:
             svc = target.split(".", 1)[1] if target.startswith("notify.") else target
             await self._ha("POST", f"/api/services/notify/{svc}", {"message": text, "title": "Second Thought"})
-        self.log("Notification → " + target, text, "sent")
+        self.log(tr("Notification → {target}", target=target), text, tr("sent"))
 
     async def _ha_speak_live(self, text, player):
         text, player = to_str(text), to_str(player).strip()
         if not text.strip():
-            raise RunError("The 'say' block has nothing to say.")
+            raise RunError(tr("The 'say' block has nothing to say."))
         if not await self._allowed(["ha", "messages"], f"say on {player or 'a speaker'}: {_short(text, 120)}"):
             return
         await self._ha("POST", "/api/services/tts/speak", {"entity_id": HA_TTS_ENTITY, "media_player_entity_id": player, "message": text})
-        self.log("Spoken on " + player, text, "sent")
+        self.log(tr("Spoken on {player}", player=player), text, tr("sent"))
 
     @staticmethod
     def ha_trigger():
@@ -1926,7 +1952,7 @@ class Connections:
         """'when Home Assistant event … happens': subscribes to Home Assistant's events over its WebSocket API, so a button press,
         an automation firing or a custom event starts the script at once. Reconnects (after a minute) if the connection drops."""
         if not HA_TOKEN:
-            raise RunError(f"Home Assistant events need HA_URL and HA_TOKEN {WHERE_KEYS}.")
+            raise RunError(tr("Home Assistant events need HA_URL and HA_TOKEN {where_keys}.", where_keys=WHERE_KEYS))
         wants = []
         for arg, fn in items:
             kind, _, words = to_str(arg).partition("|")
@@ -1936,7 +1962,7 @@ class Connections:
         try:
             ws = await _WebSocket.connect(url, timeout=10)
         except asyncio.TimeoutError:
-            raise RunError(f"Home Assistant didn't answer at {url} within 10 seconds.") from None
+            raise RunError(tr("Home Assistant didn't answer at {url} within 10 seconds.", url=url)) from None
         try:
             # Home Assistant answers these at once; a stalled sign-in becomes an error, so the listener tries again.
             try:
@@ -1945,17 +1971,17 @@ class Connections:
                     await ws.send_json({"type": "auth", "access_token": HA_TOKEN})
                     hello = await asyncio.wait_for(ws.recv_json(), 10)
             except asyncio.TimeoutError:
-                raise RunError("Home Assistant didn't finish signing in for events within 10 seconds.") from None
+                raise RunError(tr("Home Assistant didn't finish signing in for events within 10 seconds.")) from None
             if hello.get("type") != "auth_ok":
-                raise RunError("Home Assistant refused the token for events (auth_invalid). Check HA_TOKEN.")
+                raise RunError(tr("Home Assistant refused the token for events (auth_invalid). Check HA_TOKEN."))
             kinds = [None] if any(k == "" for k, _, _ in wants) else sorted({k for k, _, _ in wants})
             for n, kind in enumerate(kinds, 1):
                 await ws.send_json(dict({"id": n, "type": "subscribe_events"}, **({"event_type": kind} if kind else {})))
-            print("Listening for Home Assistant events: " + ", ".join(k or "everything" for k in kinds) + ".", flush=True)
+            print(tr("Listening for Home Assistant events: {x}.", x=", ".join(k or tr("everything") for k in kinds)), flush=True)
             while True:
                 msg = await ws.recv_json()
                 if msg.get("type") == "result" and not msg.get("success", True):
-                    raise RunError("Home Assistant wouldn't send those events: " + to_str((msg.get("error") or {}).get("message")))
+                    raise RunError(tr("Home Assistant wouldn't send those events: {x}", x=to_str((msg.get("error") or {}).get("message"))))
                 if msg.get("type") != "event":
                     continue
                 ev = msg.get("event") or {}
@@ -1967,7 +1993,7 @@ class Connections:
                     rec.setdefault(str(k), json.dumps(v, ensure_ascii=False) if isinstance(v, (dict, list)) else v)
                 for want, words, fn in wants:
                     if (not want or want == kind) and all(w in blob.lower() for w in words):
-                        self._fire(fn, dict(rec), "Home Assistant: " + kind)
+                        self._fire(fn, dict(rec), tr("Home Assistant: {x}", x=kind))
         finally:
             ws.close()
 
@@ -1980,7 +2006,7 @@ class Connections:
         mine = [u for u in re.split(r"[\s,]+", os.environ.get("RB_FEEDS", "")) if u]
         urls = [url] if url else mine
         if not urls:
-            raise RunError(f"No feed given, and no feeds in your settings. Add  feeds = <addresses>  {WHERE_KEYS}.")
+            raise RunError(tr("No feed given, and no feeds in your settings. Add  feeds = <addresses>  {where_keys}.", where_keys=WHERE_KEYS))
         limit = max(1, min(50, round_js(num(limit)) or self.MAX_FEED_ITEMS))
         out = []
         for u in urls:
@@ -1995,8 +2021,8 @@ class Connections:
         items = await self.feed_items(url)
         recs = [{"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
                  "summary": i["summary"]} for i in items]
-        self.log("News: " + (_short(url, 60) or "your feeds"), "\n".join(f"{r['date']}  {r['title']}" for r in recs[:12]) or "(nothing)",
-                 f"{len(recs)} items")
+        self.log(tr("News: {x}", x=_short(url, 60) or tr("your feeds")), "\n".join(f"{r['date']}  {r['title']}" for r in recs[:12]) or tr("(nothing)"),
+                 tr("{recs} items", recs=len(recs)))
         return recs
 
     @staticmethod
@@ -2014,7 +2040,7 @@ class Connections:
     async def _gh(self, path, method="GET", body=None):
         token = os.environ.get("GITHUB_TOKEN", "")
         if not token:
-            raise RunError(f"GitHub needs a token: set GITHUB_TOKEN {WHERE_KEYS} (make one at https://github.com/settings/tokens).")
+            raise RunError(tr("GitHub needs a token: set GITHUB_TOKEN {where_keys} (make one at https://github.com/settings/tokens).", where_keys=WHERE_KEYS))
         req = urllib.request.Request(GITHUB_API + path, method=method, data=json.dumps(body).encode() if body is not None else None,
                                      headers={"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json",
                                               "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "SecondThought",
@@ -2027,16 +2053,16 @@ class Connections:
             except urllib.error.HTTPError as e:
                 why = {401: "the token was refused. Check GITHUB_TOKEN", 403: "GitHub said no (the token may lack access, or the hourly limit was reached)",
                        404: "not found, or the token can't see it", 422: "GitHub couldn't use that request"}.get(e.code, f"GitHub answered {e.code}")
-                raise RunError(f"GitHub: {why}.") from None
+                raise RunError(tr("GitHub: {why}.", why=why)) from None
             except urllib.error.URLError as e:
-                raise RunError(f"Couldn't reach GitHub ({e.reason}).") from None
+                raise RunError(tr("Couldn't reach GitHub ({reason}).", reason=e.reason)) from None
         return await asyncio.to_thread(go)
 
     @staticmethod
     def _gh_repo(repo):
         repo = to_str(repo).strip().removeprefix("https://github.com/").strip("/")
         if not re.fullmatch(r"[\w.-]+/[\w.-]+", repo):
-            raise RunError(f"“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.")
+            raise RunError(tr("“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.", repo=repo))
         return repo
 
     @staticmethod
@@ -2078,7 +2104,7 @@ class Connections:
     async def gh_search(self, query):
         query = to_str(query).strip()
         if not query:
-            raise RunError("search_github needs something to search for.")
+            raise RunError(tr("search_github needs something to search for."))
         return "\n".join(await self._gh_search(query)) or f"Nothing found for “{query}”."
 
     async def gh_read_pr(self, repo, number):
@@ -2103,11 +2129,11 @@ class Connections:
     async def gh_comment(self, repo, number, text, approved=False):
         repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()
         if not text:
-            raise RunError("A comment needs some text.")
+            raise RunError(tr("A comment needs some text."))
         if not approved and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
             return False
         await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
-        self.log(f"GitHub comment on {repo} #{n}", text, "sent")
+        self.log(tr("GitHub comment on {repo} #{n}", repo=repo, n=n), text, tr("sent"))
         return True
 
     # Telegram
@@ -2117,7 +2143,7 @@ class Connections:
     async def _tg(self, method, params=None, wait=0):
         token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
         if not token:
-            raise RunError(f"Telegram needs a bot: set TELEGRAM_BOT_TOKEN {WHERE_KEYS} (message @BotFather in Telegram to make one).")
+            raise RunError(tr("Telegram needs a bot: set TELEGRAM_BOT_TOKEN {where_keys} (message @BotFather in Telegram to make one).", where_keys=WHERE_KEYS))
         req = urllib.request.Request(f"{TELEGRAM_API}/bot{token}/{method}", data=json.dumps(params or {}).encode(),
                                      headers={"Content-Type": "application/json"})
 
@@ -2131,9 +2157,9 @@ class Connections:
                 except ValueError:
                     data = {"description": f"Telegram answered {e.code}"}
             except urllib.error.URLError as e:
-                raise RunError(f"Couldn't reach Telegram ({e.reason}).") from None
+                raise RunError(tr("Couldn't reach Telegram ({reason}).", reason=e.reason)) from None
             if not data.get("ok"):
-                raise RunError("Telegram: " + to_str(data.get("description") or "it said no") + ".")
+                raise RunError(tr("Telegram: {x}.", x=to_str(data.get("description") or tr("it said no"))))
             return data.get("result")
         return await asyncio.to_thread(go)
 
@@ -2162,8 +2188,7 @@ class Connections:
                 continue
             chat = m.get("chat", {})
             if str(chat.get("id")) not in mine:
-                print(f"  (A Telegram message from chat {chat.get('id')} was ignored. To let this program use that chat, "
-                      f"set TELEGRAM_CHAT_ID = {chat.get('id')} {WHERE_KEYS}.)", flush=True)
+                print(tr("  (A Telegram message from chat {x} was ignored. To let this program use that chat, set TELEGRAM_CHAT_ID = {x} {where_keys}.)", x=chat.get('id'), where_keys=WHERE_KEYS), flush=True)
                 continue
             who = m.get("from", {})
             new.append({"text": m.get("text") or m.get("caption", ""), "sender": " ".join(x for x in (who.get("first_name"), who.get("last_name")) if x)
@@ -2195,17 +2220,16 @@ class Connections:
     async def tg_send(self, text, chat="", approved=False):
         text = to_str(text).strip()
         if not text:
-            raise RunError("A Telegram message needs some text.")
+            raise RunError(tr("A Telegram message needs some text."))
         trig = MESSAGE_VALUE.get()
         chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
         if not chat:
-            raise RunError(f"Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {WHERE_KEYS}. "
-                           "Send your bot a message first; the program then says which chat it came from.")
+            raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
         if not approved and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), 4000):
             await self._tg("sendMessage", {"chat_id": chat, "text": text[i:i + 4000]})
-        self.log("Telegram message sent", text, "sent")
+        self.log(tr("Telegram message sent"), text, tr("sent"))
         return True
 
     @staticmethod
@@ -2223,7 +2247,7 @@ class Connections:
             try:
                 new = await self.tg_fetch(wait=25)
             except RunError as e:
-                print("  (Telegram check failed: " + str(e) + ")", flush=True)
+                print(tr("  (Telegram check failed: {e})", e=str(e)), flush=True)
                 await asyncio.sleep(15)
                 continue
             for m in new:
@@ -2235,7 +2259,7 @@ class Connections:
                     if busy and not busy.done():
                         self.start_script(fn, m)
                     else:
-                        busy = asyncio.ensure_future(self.run([(fn, m)], "Telegram message"))
+                        busy = asyncio.ensure_future(self.run([(fn, m)], tr("Telegram message")))
 
     # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
     CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
@@ -2250,7 +2274,7 @@ class Connections:
         c = self.CHATS[service]
         token = os.environ.get(c["token"], "").strip()
         if not token:
-            raise RunError(f"{c['name']} needs {c['token']} {WHERE_KEYS}: make {c['make']}.")
+            raise RunError(tr("{name} needs {token} {where_keys}: make {make}.", name=c['name'], token=c['token'], where_keys=WHERE_KEYS, make=c['make']))
         base = DISCORD_API if service == "discord" else SLACK_API
         url = base + path + ("?" + urllib.parse.urlencode(query) if query else "")
         req = urllib.request.Request(url, method=method, data=json.dumps(body).encode() if body is not None else None,
@@ -2266,12 +2290,12 @@ class Connections:
                        404: "there's no such channel, or the bot can't see it", 429: "it's asking the program to slow down. Try again in a minute"}.get(e.code, f"it answered {e.code}")
                 raise RunError(f"{c['name']}: {why}.") from None
             except urllib.error.URLError as e:
-                raise RunError(f"Couldn't reach {c['name']} ({e.reason}).") from None
+                raise RunError(tr("Couldn't reach {name} ({reason}).", name=c['name'], reason=e.reason)) from None
             if service == "slack" and isinstance(data, dict) and not data.get("ok"):
                 err = to_str(data.get("error") or "it said no")
                 why = {"not_in_channel": "the bot isn't in that channel. Invite it with /invite", "channel_not_found": "there's no such channel, or the bot can't see it",
                        "invalid_auth": f"the bot token was refused. Check {c['token']}", "missing_scope": "the app needs more scopes (channels:history and chat:write)"}.get(err, err)
-                raise RunError(f"Slack: {why}.")
+                raise RunError(tr("Slack: {why}.", why=why))
             return data
         return await asyncio.to_thread(go)
 
@@ -2304,8 +2328,9 @@ class Connections:
         chans = self._chat_channels(service)
         if not chans:
             c = self.CHATS[service]
-            raise RunError(f"{c['name']} needs {c['channels']} {WHERE_KEYS}: the channels it reads and posts in (anyone can post in a "
-                           f"{'server' if service == 'discord' else 'workspace'}, so only these count).")
+            raise RunError(tr("{name} needs {channels} {where}: the channels it reads and posts in (anyone can post in a server, so only these count)." if service == "discord"
+                              else "{name} needs {channels} {where}: the channels it reads and posts in (anyone can post in a workspace, so only these count).",
+                              name=c["name"], channels=c["channels"], where=WHERE_KEYS))
         return chans
 
     async def chat_search(self, service, text="", limit=20):
@@ -2321,12 +2346,12 @@ class Connections:
         c = self.CHATS[service]
         text = to_str(text).strip()
         if not text:
-            raise RunError(f"A {c['name']} message needs some text.")
+            raise RunError(tr("A {name} message needs some text.", name=c['name']))
         mine = self._chat_need_channels(service)
         trig = MESSAGE_VALUE.get()
         channel = to_str(channel).strip() or (trig.get("channel") if isinstance(trig, dict) and trig.get("service") == service else "") or mine[0]
         if channel not in mine:
-            raise RunError(f"{c['name']}: channel {channel} isn't in {c['channels']}, so nothing is sent there.")
+            raise RunError(tr("{name}: channel {channel} isn't in {channels}, so nothing is sent there.", name=c['name'], channel=channel, channels=c['channels']))
         if not approved and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), c["limit"]):
@@ -2335,7 +2360,7 @@ class Connections:
                 await self._chat_api("discord", "POST", f"/channels/{urllib.parse.quote(channel)}/messages", {"content": part, "allowed_mentions": {"parse": []}})
             else:
                 await self._chat_api("slack", "POST", "/chat.postMessage", {"channel": channel, "text": part})
-        self.log(f"{c['name']} message sent", text, "sent")
+        self.log(tr("{name} message sent", name=c['name']), text, tr("sent"))
         return True
 
     async def _listen_chat(self, service, items):
@@ -2344,21 +2369,21 @@ class Connections:
         last = {ch: (await self._chat_read(service, ch, limit=1))[1] for ch in chans}
         if service == "slack":  # Slack's 'oldest' is a time; start from now if the channel was empty
             last = {ch: v or f"{time.time():.6f}" for ch, v in last.items()}
-        print(f"Listening for {self.CHATS[service]['name']} messages in " + ", ".join(chans) + ".", flush=True)
+        print(tr("Listening for {name} messages in {x}.", name=self.CHATS[service]['name'], x=", ".join(chans)), flush=True)
         while True:
             await asyncio.sleep(self._poll(10))
             for ch in chans:
                 try:
                     new, last[ch] = await self._chat_read(service, ch, after=last[ch])
                 except RunError as e:
-                    print(f"  ({self.CHATS[service]['name']} check failed: {e})", flush=True)
+                    print(tr("  ({name} check failed: {e})", name=self.CHATS[service]['name'], e=e), flush=True)
                     continue
                 for m in new:
                     rec = {"service": service, "text": m["text"], "sender": m["sender"], "channel": ch, "id": m["id"]}
                     for contains, fn in items:
                         want = to_str(contains).strip().lower()
                         if want in ("", "anything") or want in m["text"].lower():
-                            self._fire(fn, dict(rec), f"{self.CHATS[service]['name']} message")
+                            self._fire(fn, dict(rec), tr("{name} message", name=self.CHATS[service]['name']))
 
     async def _listen_discord(self, items):
         await self._listen_chat("discord", items)
@@ -2375,12 +2400,12 @@ class Connections:
     def _mail(self):
         addr, pw = os.environ.get("EMAIL_ADDRESS", "").strip(), os.environ.get("EMAIL_PASSWORD", "")
         if not addr or not pw:
-            raise RunError(f"Email needs EMAIL_ADDRESS and EMAIL_PASSWORD {WHERE_KEYS}. Use an app password, not your normal one.")
+            raise RunError(tr("Email needs EMAIL_ADDRESS and EMAIL_PASSWORD {where_keys}. Use an app password, not your normal one.", where_keys=WHERE_KEYS))
         guess = self.MAIL_SERVERS.get(addr.rsplit("@", 1)[-1].lower(), (None, None, 465))
         imap = os.environ.get("EMAIL_IMAP_HOST") or guess[0]
         smtp = os.environ.get("EMAIL_SMTP_HOST") or guess[1]
         if not imap or not smtp:
-            raise RunError(f"Set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST {WHERE_KEYS}: your email provider's help pages list them.")
+            raise RunError(tr("Set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST {where_keys}: your email provider's help pages list them.", where_keys=WHERE_KEYS))
         secure = os.environ.get("EMAIL_SSL", "yes").strip().lower() not in ("0", "no", "false", "off")
         return {"addr": addr, "pw": pw, "imap": imap, "imap_port": int(os.environ.get("EMAIL_IMAP_PORT") or (993 if secure else 143)),
                 "smtp": smtp, "smtp_port": int(os.environ.get("EMAIL_SMTP_PORT") or guess[2]), "ssl": secure}
@@ -2391,9 +2416,9 @@ class Connections:
             m = imaplib.IMAP4_SSL(c["imap"], c["imap_port"], timeout=30) if c["ssl"] else imaplib.IMAP4(c["imap"], c["imap_port"], timeout=30)
             m.login(c["addr"], c["pw"])
         except imaplib.IMAP4.error as e:
-            raise RunError(f"The email server refused the login ({_short(e, 120)}). Check EMAIL_PASSWORD is an app password.") from None
+            raise RunError(tr("The email server refused the login ({e}). Check EMAIL_PASSWORD is an app password.", e=_short(e, 120))) from None
         except OSError as e:
-            raise RunError(f"Couldn't reach the email server {c['imap']} ({e}).") from None
+            raise RunError(tr("Couldn't reach the email server {imap} ({e}).", imap=c['imap'], e=e)) from None
         return m
 
     @staticmethod
@@ -2460,7 +2485,7 @@ class Connections:
         import email.policy
         c, uid = self._mail(), to_str(uid).strip().removeprefix("id").strip()
         if not uid.isdigit():
-            raise RunError("read_email needs an email's id number, from search_email.")
+            raise RunError(tr("read_email needs an email's id number, from search_email."))
 
         def go():
             m = self._imap(c)
@@ -2469,7 +2494,7 @@ class Connections:
                 typ, got = m.uid("FETCH", uid, "(BODY.PEEK[])")
                 raw = next((x[1] for x in got if isinstance(x, tuple)), None)
                 if not raw:
-                    raise RunError(f"There's no email with id {uid}.")
+                    raise RunError(tr("There's no email with id {uid}.", uid=uid))
                 msg = email.message_from_bytes(raw, policy=email.policy.default)
                 files = [p.get_filename() for p in msg.walk() if p.get_filename()]
                 return (self._mail_head(msg, uid) + (f"\nTo: {msg.get('To', '')}" if msg.get("To") else "") + "\n\n" + self._mail_text(msg, 15000)
@@ -2487,7 +2512,7 @@ class Connections:
         to, subject, body = to_str(to).strip(), to_str(subject).strip(), to_str(body)
         addrs = [a.strip() for a in re.split(r"[,;]", to) if a.strip()]
         if not addrs or not all(re.fullmatch(r"[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+", a) for a in addrs):
-            raise RunError(f"“{to}” isn't an email address.")
+            raise RunError(tr("“{to}” isn't an email address.", to=to))
         c = self._mail()
         if not approved and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
             return False
@@ -2507,24 +2532,24 @@ class Connections:
                     s_.login(c["addr"], c["pw"])
                     s_.send_message(msg)
             except smtplib.SMTPException as e:
-                raise RunError(f"The email couldn't be sent ({_short(e, 160)}).") from None
+                raise RunError(tr("The email couldn't be sent ({e}).", e=_short(e, 160))) from None
             except OSError as e:
-                raise RunError(f"Couldn't reach the email server {c['smtp']} ({e}).") from None
+                raise RunError(tr("Couldn't reach the email server {smtp} ({e}).", smtp=c['smtp'], e=e)) from None
         await asyncio.to_thread(go)
-        self.log(f"Email sent to {to}", f"Subject: {subject}\n\n{_short(body, 600)}", "sent")
+        self.log(tr("Email sent to {to}", to=to), tr("Subject: {subject}\n\n{body}", subject=subject, body=_short(body, 600)), tr("sent"))
         return True
 
     # Calendar
     async def _calendar(self, start, end):
         urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
         if not urls:
-            raise RunError(f"The calendar needs CALENDAR_URL {WHERE_KEYS}: your calendar's private iCal address.")
+            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
         out = []
         for u in urls:
             ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
             text = _decode(data, ctype)
             if "BEGIN:VCALENDAR" not in text[:2000]:
-                raise RunError("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format').")
+                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
             out += calendar_events(text, start, end)
         out.sort(key=lambda x: (x["start"], not x["all_day"]))
         return out
@@ -2546,7 +2571,7 @@ class Connections:
         events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
         recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
                  "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
-        self.log("Calendar", "\n".join(f"{r['day']} {r['start'] or 'all day'}  {r['title']}" for r in recs) or "(nothing)", f"{len(recs)} events")
+        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
         return recs
 
     async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
@@ -2567,7 +2592,7 @@ class Connections:
     async def _homey(self, method, path, body=None):
         url, key = os.environ.get("HOMEY_URL", "").strip().rstrip("/"), os.environ.get("HOMEY_API_KEY", "").strip()
         if not url or not key:
-            raise RunError(f"Homey needs HOMEY_URL and HOMEY_API_KEY {WHERE_KEYS}. Make a key in the Homey Web App: Settings, API Keys.")
+            raise RunError(tr("Homey needs HOMEY_URL and HOMEY_API_KEY {where_keys}. Make a key in the Homey Web App: Settings, API Keys.", where_keys=WHERE_KEYS))
         if not re.match(r"^https?://", url):
             url = "http://" + url
         req = urllib.request.Request(url + "/api/manager" + path, method=method, data=json.dumps(body).encode() if body is not None else None,
@@ -2581,10 +2606,10 @@ class Connections:
             except urllib.error.HTTPError as e:
                 why = {401: "the API key was refused. Check HOMEY_API_KEY", 403: "the API key isn't allowed to do that. Give it more permissions in the Homey Web App",
                        404: "not found"}.get(e.code, f"Homey answered {e.code}")
-                raise RunError(f"Homey: {why}.") from None
+                raise RunError(tr("Homey: {why}.", why=why)) from None
             except urllib.error.URLError as e:
                 hint = "" if urllib.parse.urlparse(url).port else " For a Homey Self-Hosted Server, add its port: :4859."
-                raise RunError(f"Couldn't reach Homey at {url} ({e.reason}).{hint}") from None
+                raise RunError(tr("Couldn't reach Homey at {url} ({reason}).{hint}", url=url, reason=e.reason, hint=hint)) from None
         return await asyncio.to_thread(go)
 
     async def _homey_home(self):
@@ -2614,7 +2639,7 @@ class Connections:
         """A device by its name (or id). An exact name wins; otherwise one device whose name contains the words."""
         name = to_str(name).strip()
         if not name:
-            raise RunError("Which Homey device? Give its name, like Kitchen light.")
+            raise RunError(tr("Which Homey device? Give its name, like Kitchen light."))
         home = await self._homey_home()
         exact = [d for d in home if d["name"].lower() == name.lower() or d["id"] == name]
         if exact:
@@ -2622,7 +2647,7 @@ class Connections:
         some = [d for d in home if all(w in d["name"].lower() for w in name.lower().split())]
         if len(some) == 1:
             return some[0]
-        raise RunError(f"There's no Homey device called “{name}”." + (" Did you mean: " + ", ".join(d["name"] for d in some[:6]) + "?" if some else ""))
+        raise RunError(tr("There's no Homey device called “{name}”.", name=name) + (" " + tr("Did you mean: {names}?", names=", ".join(d["name"] for d in some[:6])) if some else ""))
 
     async def homey_find(self, text="*"):
         """Records (name, zone, class, and each capability) for devices whose name, zone or class contain every word."""
@@ -2640,7 +2665,7 @@ class Connections:
         d = await self._homey_device(device)
         cap = to_str(capability).strip()
         if cap not in d["caps"]:
-            raise RunError(f"{d['name']} has no “{cap}”. It has: {', '.join(d['caps']) or 'nothing'}.")
+            raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
         v = d["caps"][cap]
         return self._homey_show(v) if isinstance(v, bool) else v
 
@@ -2652,12 +2677,12 @@ class Connections:
             if isinstance(v, str):
                 t = v.strip().lower()
                 if t not in ("on", "off", "true", "false", "yes", "no", "1", "0"):
-                    raise RunError(f"“{value}” isn't on or off.")
+                    raise RunError(tr("“{value}” isn't on or off.", value=value))
                 return t in ("on", "true", "yes", "1")
             return bool(v)
         if isinstance(old, (int, float)):
             if not _num_like(v):
-                raise RunError(f"“{value}” isn't a number.")
+                raise RunError(tr("“{value}” isn't a number.", value=value))
             return num(v)
         return to_str(v) if not isinstance(v, (int, float, bool)) else v
 
@@ -2665,7 +2690,7 @@ class Connections:
         d = await self._homey_device(device)
         cap = to_str(capability).strip()
         if cap not in d["caps"]:
-            raise RunError(f"{d['name']} has no “{cap}”. It has: {', '.join(d['caps']) or 'nothing'}.")
+            raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
         v = self._homey_value_for(d["caps"][cap], value)
         what = f"set {d['name']} {cap} to {self._homey_show(v)}"
         if (cap, v) in self.HOMEY_SENSITIVE:  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
@@ -2674,7 +2699,7 @@ class Connections:
         elif not approved and not await self._allowed(["ha"], what):
             return False
         await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
-        self.log("Homey: " + d["name"], f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", "done")
+        self.log(tr("Homey: {name}", name=d["name"]), f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", tr("done"))
         return True
 
     async def _homey_flows(self):
@@ -2699,11 +2724,11 @@ class Connections:
         f = next((x for x in flows if x["name"].lower() == name.lower()), None) or \
             (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
         if not f:
-            raise RunError(f"There's no Homey flow called “{name}”.")
+            raise RunError(tr("There's no Homey flow called “{name}”.", name=name))
         if not approved and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
             return False
         await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
-        self.log("Homey flow started", f["name"], "started")
+        self.log(tr("Homey flow started"), f["name"], tr("started"))
         return True
 
     async def _homey_var(self, name):
@@ -2711,7 +2736,7 @@ class Connections:
         vs = list((await self._homey("GET", "/logic/variable/") or {}).values())
         v = next((x for x in vs if x.get("name", "").lower() == name.lower()), None)
         if not v:
-            raise RunError(f"There's no Homey variable called “{name}”." + (" Its variables are: " + ", ".join(x.get("name", "") for x in vs[:12]) if vs else ""))
+            raise RunError(tr("There's no Homey variable called “{name}”.", name=name) + (" " + tr("Its variables are: {names}", names=", ".join(x.get("name", "") for x in vs[:12])) if vs else ""))
         return v
 
     async def homey_variable(self, name):
@@ -2724,13 +2749,13 @@ class Connections:
         if not approved and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
             return False
         await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
-        self.log("Homey variable " + v["name"], f"{self._homey_show(old)} → {self._homey_show(new)}", "set")
+        self.log(tr("Homey variable {name}", name=v["name"]), f"{self._homey_show(old)} → {self._homey_show(new)}", tr("set"))
         return True
 
     async def _listen_homey(self, items):
         """'when Homey device … changes': checks every 10 seconds and starts the script when a value changes."""
         before = None
-        print("Watching Homey devices for changes.", flush=True)
+        print(tr("Watching Homey devices for changes."), flush=True)
         while True:
             try:
                 home = await self._homey_home()
@@ -2751,7 +2776,7 @@ class Connections:
                             self._fire(fn, rec, f"Homey: {dname} {cap}")
                 before = now
             except RunError as e:
-                print(f"  (Homey check failed: {e})", flush=True)
+                print(tr("  (Homey check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(10))
 
     # MQTT
@@ -2760,10 +2785,10 @@ class Connections:
         try:
             import paho.mqtt.client as mqtt
         except ImportError:
-            raise RunError("MQTT needs the paho-mqtt package: pip install paho-mqtt") from None
+            raise RunError(tr("MQTT needs the paho-mqtt package: pip install paho-mqtt")) from None
         host = os.environ.get("MQTT_HOST", "").strip()
         if not host:
-            raise RunError(f"MQTT needs MQTT_HOST {WHERE_KEYS}: your broker's address, like homeassistant.local.")
+            raise RunError(tr("MQTT needs MQTT_HOST {where_keys}: your broker's address, like homeassistant.local.", where_keys=WHERE_KEYS))
         tls = os.environ.get("MQTT_TLS", "").strip().lower() in ("1", "yes", "true", "on")
         port = int(os.environ.get("MQTT_PORT") or (8883 if tls else 1883))
         c = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
@@ -2785,12 +2810,12 @@ class Connections:
         try:
             c.connect(host, port, keepalive=60)
         except OSError as e:
-            raise RunError(f"Couldn't reach the MQTT broker at {host}:{port} ({e}).") from None
+            raise RunError(tr("Couldn't reach the MQTT broker at {host}:{port} ({e}).", host=host, port=port, e=e)) from None
         c.loop_start()
         if not ready.wait(10) or result["rc"].is_failure:
             c.loop_stop()
-            raise RunError(f"The MQTT broker at {host}:{port} " + (f"refused the connection ({result['rc']}). Check MQTT_USERNAME and MQTT_PASSWORD."
-                                                                   if "rc" in result else "didn't answer."))
+            raise RunError(tr("The MQTT broker at {host}:{port} refused the connection ({rc}). Check MQTT_USERNAME and MQTT_PASSWORD.", host=host, port=port, rc=result["rc"])
+                           if "rc" in result else tr("The MQTT broker at {host}:{port} didn't answer.", host=host, port=port))
         return c
 
     @staticmethod
@@ -2811,9 +2836,9 @@ class Connections:
     def _mqtt_topic(topic, publishing=False):
         topic = to_str(topic).strip()
         if not topic:
-            raise RunError("MQTT needs a topic, like home/kitchen/temperature.")
+            raise RunError(tr("MQTT needs a topic, like home/kitchen/temperature."))
         if publishing and ("+" in topic or "#" in topic):
-            raise RunError("You can't publish to a topic with + or # in it: those only work for listening.")
+            raise RunError(tr("You can't publish to a topic with + or # in it: those only work for listening."))
         return topic
 
     async def mqtt_read(self, topic, wait=2.0):
@@ -2837,9 +2862,9 @@ class Connections:
         topic = to_str(topic).strip()
         if "+" not in topic and "#" not in topic:
             v = got.get(topic, "")
-            self.log("MQTT " + topic, v or "(no message yet: only messages the broker keeps show up straight away)", "read")
+            self.log(tr("MQTT {topic}", topic=topic), v or tr("(no message yet: only messages the broker keeps show up straight away)"), tr("read"))
             return v
-        self.log("MQTT " + topic, "\n".join(f"{k}: {_short(v, 80)}" for k, v in sorted(got.items())) or "(nothing)", f"{len(got)} topics")
+        self.log(tr("MQTT {topic}", topic=topic), "\n".join(f"{k}: {_short(v, 80)}" for k, v in sorted(got.items())) or tr("(nothing)"), tr("{got} topics", got=len(got)))
         return got
 
     async def mqtt_publish(self, topic, text, retain=False, approved=False):
@@ -2853,7 +2878,7 @@ class Connections:
         finally:
             c.loop_stop()
             c.disconnect()
-        self.log(f"MQTT → {topic}", text + ("  (kept by the broker)" if retain else ""), "published")
+        self.log(tr("MQTT → {topic}", topic=topic), text + ("  " + tr("(kept by the broker)") if retain else ""), tr("published"))
         return True
 
     # ----- Listeners: scripts that start when something arrives -----
@@ -2901,7 +2926,7 @@ class Connections:
             except asyncio.CancelledError:
                 raise
             except Exception as e:  # noqa: BLE001 - say what went wrong, then try again
-                print(f"  ({self.LISTEN_NAMES.get(kind, kind)}: {self._describe(e)} Trying again in a minute.)", flush=True)
+                print(tr("  ({x}: {x2} Trying again in a minute.)", x=self.LISTEN_NAMES.get(kind, kind), x2=self._describe(e)), flush=True)
                 await asyncio.sleep(self._poll(60))
 
     async def _listen_mqtt(self, items):
@@ -2916,7 +2941,7 @@ class Connections:
                 if mqtt.topic_matches_sub(sub_, msg.topic):
                     loop.call_soon_threadsafe(self._fire, fn, dict(payload), "MQTT " + msg.topic)
         await asyncio.to_thread(self._mqtt_new, on_message, sorted({self._mqtt_topic(t) for t, _ in items}))
-        print("Listening for MQTT messages on " + ", ".join(sorted({t for t, _ in items})) + ".", flush=True)
+        print(tr("Listening for MQTT messages on {x}.", x=", ".join(sorted({t for t, _ in items}))), flush=True)
         while True:
             await asyncio.sleep(3600)
 
@@ -2977,13 +3002,13 @@ class Connections:
         if not secret:  # no password, no open port: nothing on the network can even try
             # Said again every hour, so someone who opens the window later (or reads the log) still sees why.
             note = f"set WEBHOOK_SECRET {WHERE_KEYS} to a long password. Until then, the program doesn't listen for them."
-            print("Web requests: " + note, flush=True)
+            print(tr("Web requests: {note}", note=note), flush=True)
             while True:
                 await asyncio.sleep(self._poll(3600))
-                print(f"Web requests, {datetime.datetime.now():%H:%M}: still not listening. To turn them on, " + note, flush=True)
+                print(tr("Web requests, {x}: still not listening. To turn them on, {note}", x=format(datetime.datetime.now(), '%H:%M'), note=note), flush=True)
         srv = ThreadingHTTPServer((os.environ.get("WEBHOOK_HOST", "0.0.0.0"), port), Hook)
         threading.Thread(target=srv.serve_forever, daemon=True).start()
-        print(f"Listening for web requests on port {port}: " + ", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths) + ".", flush=True)
+        print(tr("Listening for web requests on port {port}: {x}.", port=port, x=", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths)), flush=True)
         while True:
             await asyncio.sleep(3600)
 
@@ -3020,7 +3045,7 @@ class Connections:
 
     async def _listen_email(self, items):
         c, last = self._mail(), None
-        print("Checking for new email.", flush=True)
+        print(tr("Checking for new email."), flush=True)
         while True:
             try:
                 last, new = await asyncio.to_thread(self._mail_new, c, last)
@@ -3029,9 +3054,9 @@ class Connections:
                     for contains, fn in items:
                         want = to_str(contains).strip().lower()
                         if want in ("", "anything") or want in hay:
-                            self._fire(fn, dict(rec), "New email: " + _short(rec["subject"], 40))
+                            self._fire(fn, dict(rec), tr("New email: {subject}", subject=_short(rec["subject"], 40)))
             except RunError as e:
-                print(f"  (Email check failed: {e})", flush=True)
+                print(tr("  (Email check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(120))
 
     async def _listen_feed(self, items):
@@ -3041,7 +3066,7 @@ class Connections:
                 try:
                     got = await self.feed_items(url, 30, trusted=True)
                 except RunError as e:
-                    print(f"  (Feed check failed: {e})", flush=True)
+                    print(tr("  (Feed check failed: {e})", e=e), flush=True)
                     continue
                 keys = {i["link"] or i["title"] for i in got}
                 if url in seen:
@@ -3049,7 +3074,7 @@ class Connections:
                         if (i["link"] or i["title"]) not in seen[url]:
                             rec = {"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
                                    "summary": i["summary"], "text": f"{i['title']}\n{i['summary']}\n{i['link']}".strip()}
-                            self._fire(fn, rec, "New in " + _short(i["feed"], 40))
+                            self._fire(fn, rec, tr("New in {feed}", feed=_short(i["feed"], 40)))
                     seen[url] |= keys
                 else:
                     seen[url] = keys
@@ -3064,7 +3089,7 @@ class Connections:
             os.makedirs(d, exist_ok=True)
             folders.append((d, fn))
         known, waiting = {d: set(os.listdir(d)) for d, _ in folders}, {}
-        print("Watching for new files in " + ", ".join(d for d, _ in folders) + ".", flush=True)
+        print(tr("Watching for new files in {x}.", x=", ".join(d for d, _ in folders)), flush=True)
         while True:
             await asyncio.sleep(self._poll(5))
             for d, fn in folders:
@@ -3086,7 +3111,7 @@ class Connections:
                         text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
                     except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
                         text = ""
-                    self._fire(fn, {"name": n, "path": path, "size": size, "text": text}, "New file: " + n)
+                    self._fire(fn, {"name": n, "path": path, "size": size, "text": text}, tr("New file: {name}", name=n))
                 known[d] &= names
 
     async def _listen_github(self, items):
@@ -3103,10 +3128,10 @@ class Connections:
                     for k, rec in now.items():
                         if k not in seen:
                             for _, fn in items:
-                                self._fire(fn, dict(rec), "Review requested: " + k)
+                                self._fire(fn, dict(rec), tr("Review requested: {pr}", pr=k))
                 seen = set(now)
             except RunError as e:
-                print(f"  (GitHub check failed: {e})", flush=True)
+                print(tr("  (GitHub check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(300))
 
     async def _listen_calendar(self, items):
@@ -3126,9 +3151,9 @@ class Connections:
                             rec = {"title": e["title"], "start": f"{e['start']:%H:%M}", "end": f"{e['end']:%H:%M}", "location": e["location"],
                                    "minutes": max(0, round_js(mins)),
                                    "text": f"{e['title']} at {e['start']:%H:%M}" + (f" ({e['location']})" if e["location"] else "")}
-                            self._fire(fn, rec, "Coming up: " + e["title"])
+                            self._fire(fn, rec, tr("Coming up: {title}", title=e["title"]))
             except RunError as e:
-                print(f"  (Calendar check failed: {e})", flush=True)
+                print(tr("  (Calendar check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(60))
 
     # Web pages
@@ -3164,7 +3189,7 @@ class Connections:
     async def _read_page_text(self, url):
         ctype, data = await asyncio.to_thread(get_url, url, True, "The page watcher", 5_000_000)
         if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
-            raise RunError(f"{_short(url, 80)} isn't a web page or text ({ctype.split(';')[0] or 'unknown type'}).")
+            raise RunError(tr("{url} isn't a web page or text ({x}).", url=_short(url, 80), x=ctype.split(';')[0] or tr('unknown type')))
         return page_text(_decode(data, ctype), ctype)
 
     async def _listen_page(self, items):
@@ -3177,7 +3202,8 @@ class Connections:
         every = max(1, round_js(num(minutes)) or 60) * 60
         key = url + ("  |  " + words.lower() if words else "")
         quiet_noted = False
-        print(f"Watching {url}" + (f" (the part with “{words}”)" if words else "") + f" for changes, every {every // 60} min.", flush=True)
+        print((tr("Watching {url} (the part with “{words}”) for changes, every {n} min.", url=url, words=words, n=every // 60) if words else
+                   tr("Watching {url} for changes, every {n} min.", url=url, n=every // 60)), flush=True)
         while True:
             try:
                 title, text = await self._read_page_text(url)
@@ -3185,8 +3211,9 @@ class Connections:
                 if not text.strip() or (words and not now):
                     if not quiet_noted:
                         quiet_noted = True
-                        print(f"  (Page watcher: {_short(url, 80)} " + ("has no readable words; it may need a browser to show them." if not text.strip()
-                              else f"has nothing with “{words}” in it right now.") + " It's checked again each time.)", flush=True)
+                        print("  " + (tr("(Page watcher: {url} has no readable words; it may need a browser to show them. It's checked again each time.)", url=_short(url, 80))
+                                     if not text.strip() else tr("(Page watcher: {url} has nothing with “{words}” in it right now. It's checked again each time.)",
+                                                                 url=_short(url, 80), words=words)), flush=True)
                 else:
                     quiet_noted = False
                     with _locked(PAGES_FILE):
@@ -3204,9 +3231,9 @@ class Connections:
                         cut = lambda t: t if len(t) <= 2000 else t[:1999] + "…"  # noqa: E731 - keeps the lines, unlike _short
                         rec = {"url": url, "title": title, "before": cut(before), "after": cut(now), "changed": changed,
                                "text": f"{title or url} changed:\n{changed}"}
-                        self._fire(fn, rec, "Page changed: " + _short(title or url, 40))
+                        self._fire(fn, rec, tr("Page changed: {page}", page=_short(title or url, 40)))
             except RunError as e:
-                print(f"  (Page check failed: {e})", flush=True)
+                print(tr("  (Page check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(every))
 
 
@@ -3344,8 +3371,7 @@ class _MCPServer:
             return
         old = next((v for v in versions if v in MCP_LEGACY), None)
         if not old:
-            raise RunError(f"The {self.describe()} speaks MCP {', '.join(versions) or 'versions'} this runtime doesn't. "
-                           "A newer Second Thought may.")
+            raise RunError(tr("The {x} speaks MCP {x2} this runtime doesn't. A newer Second Thought may.", x=self.describe(), x2=', '.join(versions) or tr('versions')))
         self._initialize(old)
 
     def open(self):
@@ -3360,7 +3386,7 @@ class _MCPServer:
                           MCP_TIMEOUT, legacy=True)
         got = r.get("protocolVersion") if isinstance(r, dict) else None
         if got not in MCP_LEGACY:
-            raise RunError(f"The {self.describe()} wants MCP version “{got}”, which this runtime doesn't speak.")
+            raise RunError(tr("The {x} wants MCP version “{got}”, which this runtime doesn't speak.", x=self.describe(), got=got))
         self.era, self.version = "legacy", got
         self._notify("notifications/initialized")
 
@@ -3370,10 +3396,9 @@ class _MCPServer:
             r = self._request(method, self._meta(params), MCP_TIMEOUT, schema=schema)
             kind = r.get("resultType", "complete") if isinstance(r, dict) else "complete"
             if kind == "input_required":
-                raise RunError(f"The {self.describe()} wants more input for {method} (a question for you, or a model call), "
-                               "which Second Thought can't give it yet.")
+                raise RunError(tr("The {x} wants more input for {method} (a question for you, or a model call), which Second Thought can't give it yet.", x=self.describe(), method=method))
             if kind != "complete":
-                raise RunError(f"The {self.describe()} gave a kind of result this runtime doesn't know (“{kind}”).")
+                raise RunError(tr("The {x} gave a kind of result this runtime doesn't know (“{kind}”).", x=self.describe(), kind=kind))
             return r
         return self._request(method, params or {}, MCP_TIMEOUT, schema=schema)
 
@@ -3385,7 +3410,7 @@ class _MCPServer:
                 for t in r.get("tools") or []:
                     if isinstance(t, dict) and isinstance(t.get("name"), str) and t["name"]:
                         if self.checks_headers() and _header_params(t.get("inputSchema") or {}) is None:
-                            print(f"  ({self.describe()}: left out its tool “{t['name']}”, whose x-mcp-header settings are invalid)", flush=True)
+                            print(tr("  ({x}: left out its tool “{name}”, whose x-mcp-header settings are invalid)", x=self.describe(), name=t['name']), flush=True)
                             continue
                         tools.append(t)
                 cursor = r.get("nextCursor")
@@ -3416,13 +3441,13 @@ class _MCPStdio(_MCPServer):
         if os.name == "nt":  # Windows-style splitting keeps the quotes round a part: take them off
             argv = [a[1:-1] if len(a) > 1 and a[0] == a[-1] == '"' else a for a in argv]
         if not argv:
-            raise RunError(f"{mcp_env_name(name)} is empty. Put the command that starts the server there.")
+            raise RunError(tr("{x} is empty. Put the command that starts the server there.", x=mcp_env_name(name)))
         exe = shutil.which(argv[0]) or argv[0]
         try:
             self.proc = subprocess.Popen([exe] + argv[1:], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                          env=dict(os.environ))
         except OSError as e:
-            raise RunError(f"The {self.describe()} couldn't be started ({mcp_env_name(name)} = {command}): {e}") from None
+            raise RunError(tr("The {x} couldn't be started ({x2} = {command}): {e}", x=self.describe(), x2=mcp_env_name(name), command=command, e=e)) from None
         self._waiting, self._wlock, self._err, self._dead = {}, threading.Lock(), [], False
         threading.Thread(target=self._read, daemon=True).start()
         threading.Thread(target=self._read_err, daemon=True).start()
@@ -3467,8 +3492,7 @@ class _MCPStdio(_MCPServer):
 
     def _stopped(self):
         tail = " ".join(x for x in self._err[-5:] if x)
-        return RunError(f"The {self.describe()} stopped" + (f": {_short(tail, 300)}" if tail else ".") +
-                        f" Check {mcp_env_name(self.name)} {WHERE_KEYS}.")
+        return RunError(tr("The {x} stopped{x2} Check {x3} {where_keys}.", x=self.describe(), x2=f": {_short(tail, 300)}" if tail else ".", x3=mcp_env_name(self.name), where_keys=WHERE_KEYS))
 
     def _request(self, method, params, timeout, legacy=False, schema=None):
         if self._dead:
@@ -3517,7 +3541,7 @@ class _MCPStdio(_MCPServer):
             r = self._request("server/discover", self._meta({}), MCP_TIMEOUT)
             self.era, self.version = "modern", MCP_MODERN
         except _NoAnswer:
-            raise RunError(f"The {self.describe()} didn't answer.") from None
+            raise RunError(tr("The {x} didn't answer.", x=self.describe())) from None
 
     def close(self):
         p = self.proc
@@ -3588,7 +3612,7 @@ class _MCPHttp(_MCPServer):
                 body = None
             return e.code, body
         except (urllib.error.URLError, OSError) as e:
-            raise RunError(f"The {self.describe()} couldn't be reached: {getattr(e, 'reason', e)}") from None
+            raise RunError(tr("The {x} couldn't be reached: {x2}", x=self.describe(), x2=getattr(e, 'reason', e))) from None
         with resp:
             if resp.headers.get("Mcp-Session-Id"):
                 self.session = resp.headers["Mcp-Session-Id"]
@@ -3600,7 +3624,7 @@ class _MCPHttp(_MCPServer):
             try:
                 body = json.loads(resp.read() or b"null")
             except ValueError:
-                raise RunError(f"The {self.describe()} sent a reply that isn't JSON.") from None
+                raise RunError(tr("The {x} sent a reply that isn't JSON.", x=self.describe())) from None
             if isinstance(body, list):  # an early server answering in a batch
                 body = next((m for m in body if isinstance(m, dict) and m.get("id") == msg["id"]), None)
             return resp.status, body
@@ -3648,14 +3672,14 @@ class _MCPHttp(_MCPServer):
             msg["id"] = self._id()
             status, body = self._post(msg, self._headers(method, params, schema, legacy), timeout)
         if status in (401, 403):
-            raise RunError(f"The {self.describe()} refused the request ({status}). Check {mcp_env_name(self.name)}_TOKEN {WHERE_KEYS}.")
+            raise RunError(tr("The {x} refused the request ({status}). Check {x2}_TOKEN {where_keys}.", x=self.describe(), status=status, x2=mcp_env_name(self.name), where_keys=WHERE_KEYS))
         err = body.get("error") if isinstance(body, dict) else None
         if isinstance(err, dict):
             raise _RPCError(err.get("code"), to_str(err.get("message")) or "error", err.get("data"))
         if status >= 400:
             raise _RPCError(None, f"HTTP {status}", status)
         if not isinstance(body, dict) or "result" not in body:
-            raise RunError(f"The {self.describe()} didn't reply to {method}.")
+            raise RunError(tr("The {x} didn't reply to {method}.", x=self.describe(), method=method))
         return body.get("result") or {}
 
     def _notify(self, method, params=None):
@@ -3677,20 +3701,18 @@ class _MCPHttp(_MCPServer):
             self._initialize()
         except _RPCError as e:
             if e.data in (404, 405):
-                raise RunError(f"The {self.describe()} looks like it uses MCP's old HTTP+SSE way of connecting, "
-                               "which Second Thought doesn't speak. Check the address, or use a newer server.") from None
-            raise RunError(f"The {self.describe()} wouldn't start talking: {e.message}") from None
+                raise RunError(tr("The {x} looks like it uses MCP's old HTTP+SSE way of connecting, which Second Thought doesn't speak. Check the address, or use a newer server.", x=self.describe())) from None
+            raise RunError(tr("The {x} wouldn't start talking: {message}", x=self.describe(), message=e.message)) from None
 
 
 def mcp_server(name):
     """A server from its MCP_<NAME> setting: a command (started here) or an http(s) address."""
     key = mcp_env_name(name)
     if key == "MCP_":
-        raise RunError("An MCP tool block needs the server's name.")
+        raise RunError(tr("An MCP tool block needs the server's name."))
     where = os.environ.get(key, "").strip()
     if not where:
-        raise RunError(f"The agent's MCP server “{to_str(name).strip()}” isn't set up. Put {key} = <the command that starts it, "
-                       f"or its https:// address> {WHERE_KEYS}.")
+        raise RunError(tr("The agent's MCP server “{x}” isn't set up. Put {key} = <the command that starts it, or its https:// address> {where_keys}.", x=to_str(name).strip(), key=key, where_keys=WHERE_KEYS))
     if re.match(r"^https?://", where, re.I):
         return _MCPHttp(to_str(name).strip(), where, os.environ.get(key + "_TOKEN", "").strip())
     return _MCPStdio(to_str(name).strip(), where)
@@ -3712,11 +3734,11 @@ class MCPTools:
         try:
             tools = await asyncio.to_thread(server.list_tools)
         except _RPCError as e:
-            raise RunError(f"The {server.describe()} wouldn't list its tools: {e.message}") from None
+            raise RunError(tr("The {x} wouldn't list its tools: {message}", x=server.describe(), message=e.message)) from None
         except _NoAnswer:
-            raise RunError(f"The {server.describe()} didn't answer when asked for its tools.") from None
-        self.log(f"MCP server “{server.name}”", f"{len(tools)} tool{'s' if len(tools) != 1 else ''}: " +
-                 _short(", ".join(t["name"] for t in tools), 300) + f"  ·  MCP {server.version}", "connected", calls=False)
+            raise RunError(tr("The {x} didn't answer when asked for its tools.", x=server.describe())) from None
+        self.log(tr("MCP server “{name}”", name=server.name), tr("{x}  ·  MCP {version}", x=tr("1 tool: {names}", names=_short(", ".join(t["name"] for t in tools), 300)) if len(tools) == 1 else
+                  tr("{n} tools: {names}", n=len(tools), names=_short(", ".join(t["name"] for t in tools), 300)), version=server.version), tr("connected"), calls=False)
         return tools
 
     async def mcp_call(self, name, tool, args):
@@ -3877,10 +3899,9 @@ class AgentTools:
             name, kind = name.strip(), (kind.strip().lower() or "text")
             kind = {"string": "text", "yes or no": "yes/no", "boolean": "yes/no", "bool": "yes/no", "integer": "number"}.get(kind, kind)
             if name.lower() not in by_lower:
-                raise RunError(f"The tool block for “{block_name}” gives a type for “{name}”, but that My Block's inputs are: "
-                               f"{', '.join(params) or 'none'}.")
+                raise RunError(tr("The tool block for “{block_name}” gives a type for “{name}”, but that My Block's inputs are: {x}.", block_name=block_name, name=name, x=', '.join(params) or tr('none')))
             if kind not in cls.INPUT_TYPES:
-                raise RunError(f"“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).")
+                raise RunError(tr("“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).", kind=kind, name=name))
             out[by_lower[name.lower()]] = (kind, desc.strip())
         return out
 
@@ -4001,7 +4022,7 @@ class AgentTools:
         new = [_short(to_str(x).strip(), 120) for x in new if to_str(x).strip()][:self.MAX_PLAN]
         if not new or new == plan:
             return plan
-        self.log("Agent plan" if not plan else "Agent: plan changed", "\n".join(f"{k}. {x}" for k, x in enumerate(new, 1)), "planned", calls=False)
+        self.log(tr("Agent plan") if not plan else tr("Agent: plan changed"), "\n".join(f"{k}. {x}" for k, x in enumerate(new, 1)), tr("planned"), calls=False)
         return new
 
     async def _agent_run_tool(self, kind, spec, inp):
@@ -4011,19 +4032,19 @@ class AgentTools:
             return ("Error: " + text) if failed else text
         if kind == "block":
             if spec.get("fn") is None:
-                raise RunError(f"There's no My Block called “{spec['name']}”.")
+                raise RunError(tr("There's no My Block called “{name}”.", name=spec['name']))
             return await spec["fn"](*[inp.get(p_, "") for p_ in spec.get("params", [])])
         if kind == "search_web":
             if not a("query"):
-                raise RunError("search_web needs a query.")
+                raise RunError(tr("search_web needs a query."))
             return await self.web_search(a("query"))
         if kind == "ask_me":
             if not a("question"):
-                raise RunError("ask_me needs a question.")
+                raise RunError(tr("ask_me needs a question."))
             return await self.ask_me(a("question"))
         if kind == "remember":
             if not a("name"):
-                raise RunError("remember needs a name.")
+                raise RunError(tr("remember needs a name."))
             self.remember(inp.get("value", ""), a("name"), "permanent")
             return f"Saved “{a('name')}”."
         if kind == "recall":
@@ -4047,7 +4068,7 @@ class AgentTools:
             return "\n".join(f"{r['time']}: {to_str(r['state'])}" for r in rows) or f"No history for “{a('entity')}”."
         if kind == "read_page":
             out = await asyncio.to_thread(fetch_page, a("url"))
-            self.log("Read page: " + _short(a("url"), 60), _short(out, 400), "done")
+            self.log(tr("Read page: {x}", x=_short(a("url"), 60)), _short(out, 400), tr("done"))
             return out
         if kind == "calculate":
             return calc_text(a("expression"))
@@ -4057,29 +4078,29 @@ class AgentTools:
             return time_plus_text(a("time"), inp.get("minutes", 0))
         if kind == "read_file":
             if a("why"):
-                print(f"\n(The agent wants a file: {a('why')})", flush=True)
+                print(tr("\n(The agent wants a file: {x})", x=a('why')), flush=True)
             text = await self.choose_file()
             cut = len(text) > self.MAX_FILE_CHARS
             return text[:self.MAX_FILE_CHARS] + (f"\n\n… (the file goes on: this is the first {self.MAX_FILE_CHARS:,} of {len(text):,} characters)" if cut else "")
         if kind == "review_text":
             if not a("text"):
-                raise RunError("review_text needs some text to check.")
+                raise RunError(tr("review_text needs some text to check."))
             if not a("criteria"):
-                raise RunError("review_text needs criteria to check against.")
+                raise RunError(tr("review_text needs criteria to check against."))
             v = await self._call("You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + a("criteria") +
                                  "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
                                  "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
             problems = [to_str(x) for x in (v.get("problems") or []) if to_str(x).strip()]
             out = "Passes every criterion." if v["approved"] is True else "Doesn't pass yet. Problems:\n" + "\n".join(
                 "- " + x for x in (problems or ["It doesn't yet meet the criteria."]))
-            self.log("Check: " + _short(a("criteria"), 55), out, "passes" if v["approved"] is True else "needs work")
+            self.log(tr("Check: {x}", x=_short(a("criteria"), 55)), out, tr("passes") if v["approved"] is True else tr("needs work"))
             return out
         approved = getattr(self, "_agent_approved", False)
         if kind == "read_feed":
             return self.feed_text(await self.feed_items(a("url"), inp.get("limit", 10)))
         if kind == "search_linkedin":
             if not a("query"):
-                raise RunError("search_linkedin needs a query.")
+                raise RunError(tr("search_linkedin needs a query."))
             return await self.web_search("site:linkedin.com " + a("query"))
         if kind == "my_pull_requests":
             return await self.gh_for_me()
@@ -4134,7 +4155,7 @@ class AgentTools:
             return "Published." if done else "Not published: the person said no, or nobody was there to ask."
         if kind == "free_time":
             return await self.free_time(a("day") or "today", a("from") or "09:00", a("to") or "17:30", inp.get("minutes", 60))
-        raise RunError(f"Unknown tool “{kind}”.")
+        raise RunError(tr("Unknown tool “{kind}”.", kind=kind))
 
     async def agent(self, goal, steps, tools, plan=False):
         """Runs the agent, then sums up what it did, one line per step (also when the run stops part-way)."""
@@ -4143,7 +4164,7 @@ class AgentTools:
             await self._agent_loop(goal, steps, tools, plan)
         finally:
             if self.agent_trace:
-                self.log("Agent summary", self.agent_summary(), f"{len(self.agent_trace)} step{'s' if len(self.agent_trace) != 1 else ''}", calls=False)
+                self.log(tr("Agent summary"), self.agent_summary(), tr("1 step") if len(self.agent_trace) == 1 else tr("{n} steps", n=len(self.agent_trace)), calls=False)
 
     def agent_summary(self):
         lines = []
@@ -4156,7 +4177,7 @@ class AgentTools:
     async def _agent_loop(self, goal, steps, tools, plan=False):
         goal = to_str(goal).strip()
         if not goal:
-            raise RunError("The agent block needs a goal.")
+            raise RunError(tr("The agent block needs a goal."))
         n = max(1, min(self.MAX_AGENT_STEPS, round_js(num(steps)) or 1))
         mcp = {}
         for t in tools:  # each MCP server's tools, asked for once, before the first step
@@ -4164,7 +4185,7 @@ class AgentTools:
             if t.get("kind") == "mcp" and server not in mcp:
                 mcp[server] = await self.mcp_tools(server)
         catalogue = self._agent_tools(tools, mcp)
-        self.log("Agent", f"Goal: {goal}\nTools: {', '.join(catalogue) or 'none'} · up to {n} steps" + (" · plans first" if plan else ""), "started")
+        self.log(tr("Agent"), tr("Goal: {goal}", goal=goal) + "\n" + tr("Tools: {tools}", tools=", ".join(catalogue) or tr("none")) + " · " + tr("up to {n} steps", n=n) + (" · " + tr("plans first") if plan else ""), tr("started"))
         history, last, prev, same = [], "", None, 0
         plan = [] if plan else None
         self.agent_trace = []
@@ -4180,7 +4201,7 @@ class AgentTools:
             if not isinstance(r, dict):
                 # An unreadable reply costs a step, not the run: tell the model and carry on.
                 history.append(f"Step {i}: your reply wasn't readable JSON. Reply with only one JSON object, exactly as described.")
-                self.log(label, "The reply wasn't readable JSON, so this step was wasted.", "unreadable", calls=mine)
+                self.log(label, tr("The reply wasn't readable JSON, so this step was wasted."), tr("unreadable"), calls=mine)
                 rec(i, "unreadable")
                 continue
             if plan is not None and not r.get("done"):
@@ -4189,11 +4210,11 @@ class AgentTools:
                 answer = to_str(r.get("answer", "")).strip()
                 if answer or i == n:
                     self.set_draft(answer)
-                    self.log(f"Agent: finished in {i} step{'s' if i != 1 else ''}", answer or "(no answer)", "done", calls=mine)
+                    self.log(tr("Agent: finished in {n} step", n=i) if i == 1 else tr("Agent: finished in {n} steps", n=i), answer or tr("(no answer)"), tr("done"), calls=mine)
                     rec(i, "answer", result=answer)
                     return
                 history.append(f"Step {i}: you said you were done but gave an empty answer. Give your complete final answer.")
-                self.log(label, "It said it was done, but its answer was empty.", "empty answer", calls=mine)
+                self.log(label, tr("It said it was done, but its answer was empty."), tr("empty answer"), calls=mine)
                 rec(i, "empty answer")
                 continue
             name = to_str(r.get("tool", "")).strip()
@@ -4203,7 +4224,7 @@ class AgentTools:
                 note = ("It replied with a tool on its last step, so it stopped there." if i == n else
                         f"It replied with “{name or 'nothing usable'}”, which isn't one of its tools.")
                 history.append(f"Step {i}: your reply wasn't a known tool or a final answer. Use a tool name exactly as listed.")
-                self.log(label, note, "not a tool", calls=mine)
+                self.log(label, note, tr("not a tool"), calls=mine)
                 rec(i, "not a tool", name)
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
@@ -4213,7 +4234,7 @@ class AgentTools:
                 # Checked before running: a tool never gets input it can't use.
                 history.append(f"Step {i}: you asked for {name} with {shown}, but {problem}, so it didn't run. "
                                "Give exactly the inputs its schema lists.")
-                self.log(f"{label}: {name}", f"Input: {shown}\n\nIt didn't run: {problem}.", "bad input", calls=mine)
+                self.log(f"{label}: {name}", tr("Input: {shown}\n\nIt didn't run: {problem}.", shown=shown, problem=problem), tr("bad input"), calls=mine)
                 rec(i, "bad input", name, shown, problem)
                 prev, same = None, 0
                 continue
@@ -4223,13 +4244,13 @@ class AgentTools:
             same = same + 1 if sig == prev else 1
             prev = sig
             if same >= 3:
-                self.log("Agent: stopped, repeating itself", f"It asked for {name} with the same input three times in a row. The draft holds its last result.", "stopped", calls=mine)
+                self.log(tr("Agent: stopped, repeating itself"), tr("It asked for {name} with the same input three times in a row. The draft holds its last result.", name=name), tr("stopped"), calls=mine)
                 rec(i, "stopped", name, shown)
                 break
             if same == 2:
                 history.append(f"Step {i}: you asked for {name} with exactly the same input as the step before, so it didn't run again. "
                                "Its result is above. Do something different, or give your final answer.")
-                self.log(f"{label}: {name}", f"Input: {shown}\n\nThe same call as the step before, so it didn't run again.", "repeat", calls=mine)
+                self.log(f"{label}: {name}", tr("Input: {shown}\n\nThe same call as the step before, so it didn't run again.", shown=shown), tr("repeat"), calls=mine)
                 rec(i, "repeat", name, shown)
                 continue
             if ask and kind == "call_service" and any(re.match(p_, to_str(inp.get("service", "")).strip()) for p_ in HA_SENSITIVE):
@@ -4249,10 +4270,10 @@ class AgentTools:
             last = text
             history.append(f"Step {i}: you used {name} with {shown}.\nResult: {_short(text, 1500)}")
             status = "refused" if refused else "tool error" if text.startswith("Error: ") else "done"
-            self.log(f"{label}: {name}", (f"Why: {why}\n" if why else "") + f"Input: {shown}\n\nResult:\n{_short(text, 600)}", status, calls=mine)
+            self.log(f"{label}: {name}", (tr("Why: {why}", why=why) + "\n" if why else "") + tr("Input: {shown}\n\nResult:\n{text}", shown=shown, text=_short(text, 600)), status, calls=mine)
             rec(i, status, name, shown, text)
         else:
-            self.log("Agent: out of steps", f"It used all {n} steps without a final answer. The draft holds its last result.", "best effort")
+            self.log(tr("Agent: out of steps"), tr("It used all {n} steps without a final answer. The draft holds its last result.", n=n), tr("best effort"))
         self.out_of_rounds_hit = True
         self.set_draft(last or "The agent stopped before it had a result.")
 
@@ -4295,15 +4316,15 @@ class Doctor:
         try:
             return importlib.metadata.version(pip)
         except importlib.metadata.PackageNotFoundError:
-            return "installed"
+            return tr("installed")
 
     async def _doctor_model(self, s):
         """One model service: is its key there, and does the service accept it?"""
         key = next((os.environ[k] for k in s["keys"] if os.environ.get(k)), "")
         if s["signup"] and not key:
-            return "FAIL", f"no key. Put {s['keys'][0]} = your-key {WHERE_KEYS} ({s['signup']})."
+            return "FAIL", tr("no key. Put {x} = your-key {where_keys} ({signup}).", x=s['keys'][0], where_keys=WHERE_KEYS, signup=s['signup'])
         if s["api"] == "perplexity":
-            return "ok", f"{s['keys'][0]} is set (Perplexity has no free way to try it, so it isn't checked further)"
+            return "ok", tr("{x} is set (Perplexity has no free way to try it, so it isn't checked further)", x=s['keys'][0])
         if s["api"] == "anthropic":
             url = (os.environ.get("ANTHROPIC_BASE_URL") or "https://api.anthropic.com").rstrip("/") + "/v1/models?limit=1000"
             headers = {"x-api-key": key, "anthropic-version": "2023-06-01"}
@@ -4316,11 +4337,11 @@ class Doctor:
         status, body, err = await asyncio.to_thread(self._doctor_get, url, headers, self.DOCTOR_TIMEOUT)
         if status == 0:
             hint = " Is Ollama running? Start it with  ollama serve" if s["name"] == "Llama" else ""
-            return "FAIL", f"couldn't be reached ({_short(err, 120)}).{hint}"
+            return "FAIL", tr("couldn't be reached ({err}).{hint}", err=_short(err, 120), hint=hint)
         if status in (401, 403):
-            return "FAIL", f"refused the key ({status}). Check {s['keys'][0]} {WHERE_KEYS}."
+            return "FAIL", tr("refused the key ({status}). Check {x} {where_keys}.", status=status, x=s['keys'][0], where_keys=WHERE_KEYS)
         if status != 200:
-            return "NOTE", f"answered {status} when asked which models it has, so the key couldn't be checked"
+            return "NOTE", tr("answered {status} when asked which models it has, so the key couldn't be checked", status=status)
         items = (body.get("data") or body.get("models") or []) if isinstance(body, dict) else body if isinstance(body, list) else []
         have = {to_str(m.get("id") or m.get("name")).replace("models/", "") for m in items if isinstance(m, dict)}
         used = [MODELS.get(t) for t in self._doctor_tiers() if (t.startswith(s["prefix"]) if s["prefix"] else "-" not in t)]
@@ -4328,8 +4349,8 @@ class Doctor:
         if missing:
             hint = "  ollama pull " + "  /  ollama pull ".join(missing) if s["name"] == "Llama" else \
                 " Check the model name in MODELS, or MODEL_<TIER> in second-thought.ini."
-            return "NOTE", f"the key works, but it doesn't list {', '.join(missing)}, which this program uses.{hint}"
-        return "ok", "the key works" + (f" ({len(have)} models)" if have else "")
+            return "NOTE", tr("the key works, but it doesn't list {x}, which this program uses.{hint}", x=', '.join(missing), hint=hint)
+        return "ok", (tr("the key works ({n} models)", n=len(have)) if have else tr("the key works"))
 
     def _doctor_tiers(self):
         tiers = [getattr(self, "primary", None)] + list(getattr(self, "backups", None) or [])
@@ -4343,35 +4364,35 @@ class Doctor:
             async def ha():
                 await self._ha("GET", "/api/")
                 cfg = await self._ha("GET", "/api/config")
-                return f"reached Home Assistant {cfg.get('version', '')}".strip() if isinstance(cfg, dict) else "reached"
+                return f"reached Home Assistant {cfg.get('version', '')}".strip() if isinstance(cfg, dict) else tr("reached")
             out.append(("Home Assistant", ha))
         if has("homey_read", "homey_act"):
             async def homey():
                 home = await self._homey_home()
-                return f"reached: {len(home)} devices"
+                return tr("reached: {home} devices", home=len(home))
             out.append(("Homey", homey))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
-                return "connected to the broker"
+                return tr("connected to the broker")
             out.append(("MQTT", mqtt))
         if has("telegram_read", "telegram_send"):
             async def tg():
                 me = await self._tg("getMe")
                 chat = "" if os.environ.get("TELEGRAM_CHAT_ID") else (" (no TELEGRAM_CHAT_ID yet: message your bot, then run a "
                                                                       "Telegram program to see your chat number)")
-                return "the bot is @" + to_str((me or {}).get("username")) + chat
+                return tr("the bot is @{x}{chat}", x=to_str((me or {}).get("username")), chat=chat)
             out.append(("Telegram", tg))
         for svc, name in (("discord", "Discord"), ("slack", "Slack")):
             if has(svc + "_read", svc + "_send"):
                 async def chat(svc=svc):
                     await self.chat_search(svc, "", 5)
-                    return "read your channels"
+                    return tr("read your channels")
                 out.append((name, chat))
         if has("email_read"):
             async def mail_in():
                 await self.email_search("", 2)
-                return "read the inbox"
+                return tr("read the inbox")
             out.append(("Email (reading)", mail_in))
         if has("email_send"):
             async def mail_out():
@@ -4387,42 +4408,42 @@ class Doctor:
                 try:
                     await asyncio.to_thread(go)
                 except smtplib.SMTPAuthenticationError:
-                    raise RunError(f"the email server refused EMAIL_ADDRESS and EMAIL_PASSWORD {WHERE_KEYS}. Use an app password.") from None
+                    raise RunError(tr("the email server refused EMAIL_ADDRESS and EMAIL_PASSWORD {where_keys}. Use an app password.", where_keys=WHERE_KEYS)) from None
                 except (smtplib.SMTPException, OSError) as e:
-                    raise RunError(f"couldn't sign in to {c['smtp']} to send ({_short(e, 120)})") from None
-                return f"signed in to {c['smtp']} (nothing was sent)"
+                    raise RunError(tr("couldn't sign in to {smtp} to send ({e})", smtp=c['smtp'], e=_short(e, 120))) from None
+                return tr("signed in to {smtp} (nothing was sent)", smtp=c['smtp'])
             out.append(("Email (sending)", mail_out))
         if has("github_read", "github_comment"):
             async def gh():
                 await self.gh_for_me()
-                return "read your pull requests"
+                return tr("read your pull requests")
             out.append(("GitHub", gh))
         if has("calendar"):
             async def cal():
                 lines = await self.calendar_text("today", 7)
-                return f"read the next 7 days ({len(to_str(lines).splitlines())} lines)"
+                return tr("read the next 7 days ({x} lines)", x=len(to_str(lines).splitlines()))
             out.append(("Calendar", cal))
         if has("feeds") and os.environ.get("RB_FEEDS", "").strip():
             async def feeds():
                 items = await self.feed_items("", 3)
-                return f"read your feeds ({len(items)} items)"
+                return tr("read your feeds ({items} items)", items=len(items))
             out.append(("News feeds", feeds))
         if has("webhook"):
             async def hook():
                 if not os.environ.get("WEBHOOK_SECRET", "").strip():
-                    raise RunError(f"no WEBHOOK_SECRET {WHERE_KEYS}, so the program won't listen for web requests. Set it to a long password.")
+                    raise RunError(tr("no WEBHOOK_SECRET {where_keys}, so the program won't listen for web requests. Set it to a long password.", where_keys=WHERE_KEYS))
                 host, port = os.environ.get("WEBHOOK_HOST", "0.0.0.0"), int(os.environ.get("WEBHOOK_PORT") or 8765)
                 with socket.socket() as so:
                     try:
                         so.bind((host, port))
                     except OSError as e:
-                        raise RunError(f"port {port} can't be used ({_short(e, 80)}): something else may be listening. Change WEBHOOK_PORT.") from None
-                return f"port {port} is free, and WEBHOOK_SECRET is set"
+                        raise RunError(tr("port {port} can't be used ({e}): something else may be listening. Change WEBHOOK_PORT.", port=port, e=_short(e, 80))) from None
+                return tr("port {port} is free, and WEBHOOK_SECRET is set", port=port)
             out.append(("Web requests", hook))
         for name in mcp:
             async def server(name=name):
                 tools = await self.mcp_tools(name)
-                return f"{len(tools)} tools, MCP {self._mcp(name).version}"
+                return tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
             out.append((f"MCP server “{name}”", server))
         if has("memory"):
             async def memory():
@@ -4432,43 +4453,43 @@ class Doctor:
                         try:
                             n = len(json.load(f))
                         except ValueError:
-                            raise RunError(f"{MEMORY_FILE} isn't valid JSON, so saved notes can't be read") from None
+                            raise RunError(tr("{memory_file} isn't valid JSON, so saved notes can't be read", memory_file=MEMORY_FILE)) from None
                     if not os.access(MEMORY_FILE, os.W_OK):
-                        raise RunError(f"{MEMORY_FILE} can't be written to")
-                    return f"{n} saved notes, in {MEMORY_FILE}"
+                        raise RunError(tr("{memory_file} can't be written to", memory_file=MEMORY_FILE))
+                    return tr("{n} saved notes, in {memory_file}", n=n, memory_file=MEMORY_FILE)
                 if not os.access(folder, os.W_OK):
-                    raise RunError(f"notes can't be saved: {folder} can't be written to")
-                return "nothing saved yet; notes will go in " + MEMORY_FILE
+                    raise RunError(tr("notes can't be saved: {folder} can't be written to", folder=folder))
+                return tr("nothing saved yet; notes will go in {memory_file}", memory_file=MEMORY_FILE)
             out.append(("Memory", memory))
         if has("files_save"):
             async def outputs():
                 here = os.path.abspath(OUTPUT_DIR)
                 where = here if os.path.isdir(here) else os.path.dirname(here)
                 if not os.access(where, os.W_OK):
-                    raise RunError(f"files can't be saved: {where} can't be written to")
-                return "files will be saved in " + here
+                    raise RunError(tr("files can't be saved: {where} can't be written to", where=where))
+                return tr("files will be saved in {here}", here=here)
             out.append(("Saving files", outputs))
         return out
 
     async def doctor(self, can):
         """Runs every check, prints one line each, and gives the exit code: 0 when nothing failed."""
         prog = os.path.basename(sys.argv[0] or "this program")
-        print(f"Checking {prog} (runtime {RUNTIME_VERSION}, Python {sys.version.split()[0]}).", flush=True)
-        print("Only reading: nothing is sent, posted, switched or charged.\n", flush=True)
+        print(tr("Checking {prog} (runtime {runtime_version}, Python {x}).", prog=prog, runtime_version=RUNTIME_VERSION, x=sys.version.split()[0]), flush=True)
+        print(tr("Only reading: nothing is sent, posted, switched or charged.\n"), flush=True)
         self.reset()
         quiet, self.log = self.log, (lambda *a, **k: None)
         rows = []
 
         def row(status, area, text):
             rows.append(status)
-            print(f"  {status:<5} {area}: {text}", flush=True)
+            print(f"  {status:<5} {tr(area)}: {text}", flush=True)  # ok, FAIL and NOTE stay as they are, for scripts that read them
 
         known = can is not None
         can = can or {}
         ids = list(can.get("can", [])) if known else [c[0] for c in CAPABILITIES]  # an older program: check whatever is set up
-        row("ok" if sys.version_info >= (3, 9) else "FAIL", "Python", sys.version.split()[0] + ("" if sys.version_info >= (3, 9) else ": Second Thought needs 3.9 or newer"))
-        row("ok" if SETTINGS_PATH else "NOTE", "Settings", f"read {SETTINGS_PATH}" if SETTINGS_PATH else
-            "no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used")
+        row("ok" if sys.version_info >= (3, 9) else "FAIL", "Python", sys.version.split()[0] + ("" if sys.version_info >= (3, 9) else ": " + tr("Second Thought needs 3.9 or newer")))
+        row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=SETTINGS_PATH) if SETTINGS_PATH else
+            tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
         names = list(can.get("services", [])) if known else ["Claude"] + [s["name"] for s in SERVICES
                                                                           if s["name"] != "Claude" and any(os.environ.get(k) for k in s["keys"])]
         services = [s for s in SERVICES if s["name"] in names]
@@ -4478,9 +4499,9 @@ class Doctor:
         needs += [("tzdata", "tzdata", "calendars on Windows")] if os.name == "nt" and known and "calendar" in ids else []
         for module, pip, why in needs:
             v = self._doctor_package(module, pip)
-            row("ok" if v else "FAIL", "Package " + pip, (v if v != "installed" else "installed") if v else f"missing (needed for {why}). Install it with:  pip install {pip}")
+            row("ok" if v else "FAIL", tr("Package {name}", name=pip), (v if v != "installed" else tr("installed")) if v else tr("missing (needed for {why}). Install it with:  pip install {pip}", why=why, pip=pip))
         if known and "files_read" in ids and not self._doctor_package("pypdf", "pypdf"):
-            row("NOTE", "Package pypdf", "not installed, so PDFs can't be read (other files can). Install it with:  pip install pypdf")
+            row("NOTE", "Package pypdf", tr("not installed, so PDFs can't be read (other files can). Install it with:  pip install pypdf"))
         for s in services:
             try:
                 status, text = await self._doctor_model(s)
@@ -4504,13 +4525,12 @@ class Doctor:
                 except (OSError, ValueError, AttributeError):
                     pass
             skip = os.environ.get("RB_APPROVE", "").strip().lower() in ("no", "0", "false", "off")
-            row("ok" if allowed or skip else "NOTE", "First run", "approve = no, so it doesn't ask" if skip else
-                "allowed on this computer" if allowed else "not allowed on this computer yet. Run it once yourself and answer y "
-                "(a scheduled run won't start until then).")
+            row("ok" if allowed or skip else "NOTE", "First run", tr("approve = no, so it doesn't ask") if skip else
+                tr("allowed on this computer") if allowed else tr("not allowed on this computer yet. Run it once yourself and answer y (a scheduled run won't start until then)."))
         if os.environ.get("RB_SAVE_LOG", "").strip().lower() in ("1", "yes", "true", "on"):
             folder = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0] or ".")), LOG_DIR)
             ok = os.access(folder if os.path.isdir(folder) else os.path.dirname(folder), os.W_OK)
-            row("ok" if ok else "FAIL", "Run logs", ("saved in " if ok else "can't be saved in ") + folder)
+            row("ok" if ok else "FAIL", "Run logs", tr("saved in {folder}", folder=folder) if ok else tr("can't be saved in {folder}", folder=folder))
         for server in self.__dict__.get("_mcp_servers", {}).values():
             if hasattr(server, "close"):
                 server.close()
@@ -4518,9 +4538,10 @@ class Doctor:
         fails, notes = rows.count("FAIL"), rows.count("NOTE")
         print()
         if fails:
-            print(f"{fails} problem{'s' if fails != 1 else ''} to fix: the line{'s' if fails != 1 else ''} marked FAIL. Then run --doctor again.")
+            print(tr("1 problem to fix: the line marked FAIL. Then run --doctor again.") if fails == 1 else
+                  tr("{n} problems to fix: the lines marked FAIL. Then run --doctor again.", n=fails))
         else:
-            print("Everything checked is ready." + (f" {notes} note{'s' if notes != 1 else ''} above." if notes else ""))
+            print(tr("Everything checked is ready.") + ((" " + (tr("1 note above.") if notes == 1 else tr("{n} notes above.", n=notes))) if notes else ""))
         return 1 if fails else 0
 
     @staticmethod
@@ -4606,7 +4627,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     def push_args(self, args):
         if self.depth >= MAX_DEPTH:
-            raise RunError("A My Blocks block called itself too many times.")
+            raise RunError(tr("A My Blocks block called itself too many times."))
         self.depth += 1
         saved = {k: self.vars[k] for k in args if k in self.vars}
         missing = [k for k in args if k not in self.vars]
@@ -4621,12 +4642,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.vars.update(saved)
 
     def unsupported(self, kind):
-        raise RunError("The block '" + kind + "' can't run outside the block editor.")
+        raise RunError(tr("The block '{kind}' can't run outside the block editor.", kind=kind))
 
     def tick(self):
         self.steps += 1
         if self.steps > MAX_STEPS:
-            raise RunError(f"Stopped after {MAX_STEPS} steps. A loop may never end; check repeat and while blocks.")
+            raise RunError(tr("Stopped after {max_steps} steps. A loop may never end; check repeat and while blocks.", max_steps=MAX_STEPS))
 
     # ----- logging -----
     def log(self, label, text=None, status=None, calls=True):
@@ -4698,17 +4719,17 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     def set_budget(self, n):
         n = max(0, round_js(num(n)))
         self.budget = n
-        self.log("Budget", f"This run stops before a model call once it has used {n:,} tokens (used so far: {self.tokens_used():,})."
-                 if n else "No token budget for this run.", "set")
+        self.log(tr("Budget"), tr("This run stops before a model call once it has used {x} tokens (used so far: {x2}).", x=format(n, ','), x2=format(self.tokens_used(), ','))
+                 if n else tr("No token budget for this run."), tr("set"))
 
     # ----- Asking before actions -----
-    ASK_FIRST = {"ha": "any smart home action (Home Assistant, Homey or MQTT)", "messages": "sending messages and announcements",
-                 "files": "saving files", "all": "all of these"}
+    ASK_FIRST = {"ha": tr("any smart home action (Home Assistant, Homey or MQTT)"), "messages": tr("sending messages and announcements"),
+                 "files": tr("saving files"), "all": tr("all of these")}
 
     def ask_before(self, kind):
         kinds = {"ha", "messages", "files"} if kind == "all" else {kind}
         self.ask_first |= kinds
-        self.log("Ask first", "From now on, the program asks you before " + self.ASK_FIRST.get(kind, kind) + ".", "set")
+        self.log(tr("Ask first"), tr("From now on, the program asks you before {x}.", x=self.ASK_FIRST.get(kind, kind)), tr("set"))
 
     async def _allowed(self, kinds, what):
         """True if the action may go ahead. Asks first when an 'ask me before' block covers it."""
@@ -4719,11 +4740,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     async def confirm(self, what):
         """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no."""
         if self.schedule_mode and not sys.stdin.isatty():
-            self.log("Not done", what + " needs your approval, and nobody is at the keyboard.", "refused")
+            self.log(tr("Not done"), tr("{what} needs your approval, and nobody is at the keyboard.", what=what), tr("refused"))
             return False
         if await self.approve("Allow this? " + what):
             return True
-        self.log("Not done", what + " was refused, so nothing happened.", "refused")
+        self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
 
     # ----- Resuming after a stop -----
@@ -4754,7 +4775,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 if lines and lines[0].get("program") == digest:
                     old = lines[1:]
                 elif lines:
-                    print("\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)", flush=True)
+                    print(tr("\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)"), flush=True)
             except (OSError, ValueError):
                 old = []
         if old:
@@ -4764,15 +4785,16 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             elif choice in ("0", "no", "false", "off"):
                 use = False
             elif sys.stdin.isatty():
-                print(f"\n? The last run stopped part-way, after {len(old)} saved step{'s' if len(old) != 1 else ''}.", flush=True)
-                use = (await self._input("Pick up where it stopped, reusing those? [y/n] > ")).strip().lower() in ("y", "yes")
+                print("\n? " + (tr("The last run stopped part-way, after 1 saved step.") if len(old) == 1 else
+                              tr("The last run stopped part-way, after {n} saved steps.", n=len(old))), flush=True)
+                use = said_yes(await self._input(tr("Pick up where it stopped, reusing those? [y/n] > ")))
             else:
                 use = False
-                print("\n(The last run stopped part-way. Set resume = yes in second-thought.ini to pick up where it stopped.)", flush=True)
+                print(tr("\n(The last run stopped part-way. Set resume = yes in second-thought.ini to pick up where it stopped.)"), flush=True)
             if use:
                 self.replay = old
-                self.log("Resuming", f"Picking up the run that stopped: {len(old)} saved step{'s' if len(old) != 1 else ''} will be "
-                         "reused instead of repeated.", "resume")
+                self.log(tr("Resuming"), (tr("Picking up the run that stopped: 1 saved step will be reused instead of repeated.") if len(old) == 1 else
+                          tr("Picking up the run that stopped: {n} saved steps will be reused instead of repeated.", n=len(old))), tr("resume"))
         try:
             self.journal = open(path, "w", encoding="utf-8")
             self.journal.write(json.dumps({"program": digest, "started": time.time()}) + "\n")
@@ -4791,7 +4813,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 except OSError:
                     pass
             else:
-                print("Run the program again to pick up where it stopped.", flush=True)
+                print(tr("Run the program again to pick up where it stopped."), flush=True)
 
     @staticmethod
     def _key(*parts):
@@ -4808,10 +4830,10 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 self._record(kind, key, e.get("value"))
                 if self.replay_pos == len(self.replay):
                     self.replay = None
-                    self.log("Caught up", "That was the last saved step. From here the run carries on as usual.", "resume", calls=False)
+                    self.log(tr("Caught up"), tr("That was the last saved step. From here the run carries on as usual."), tr("resume"), calls=False)
                 return True, e.get("value")
-            self.log("Run differs here", "From this step the run isn't the same as the one that stopped, so the rest runs afresh.",
-                     "resume", calls=False)
+            self.log(tr("Run differs here"), tr("From this step the run isn't the same as the one that stopped, so the rest runs afresh."),
+                     tr("resume"), calls=False)
         self.replay = None
         return False, None
 
@@ -4861,7 +4883,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         key = self._key(to_str(service), to_str(entity), to_str(data_text))
         hit, v = self._replayed("ha_call", key)
         if hit:
-            self.log("Home Assistant: " + to_str(service).strip(), f"{to_str(entity)}: already done before the stop, so not done again.", "reused")
+            self.log(tr("Home Assistant: {x}", x=to_str(service).strip()), tr("{entity}: already done before the stop, so not done again.", entity=to_str(entity)), tr("reused"))
             return v
         out = await self._ha_call_live(service, entity, data_text)
         self._record("ha_call", key, out)
@@ -4871,7 +4893,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         key = self._key(to_str(target), to_str(text))
         hit, _ = self._replayed("ha_notify", key)
         if hit:
-            self.log("Notification → " + (to_str(target).strip() or "persistent_notification"), "Already sent before the stop, so not sent again.", "reused")
+            self.log(tr("Notification → {x}", x=to_str(target).strip() or "persistent_notification"), tr("Already sent before the stop, so not sent again."), tr("reused"))
             return
         await self._ha_notify_live(target, text)
         self._record("ha_notify", key, True)
@@ -4880,7 +4902,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         key = self._key(to_str(text), to_str(player))
         hit, _ = self._replayed("ha_speak", key)
         if hit:
-            self.log("Spoken on " + (to_str(player).strip() or "a speaker"), "Already said before the stop, so not said again.", "reused")
+            self.log(tr("Spoken on {x}", x=to_str(player).strip() or tr("a speaker")), tr("Already said before the stop, so not said again."), tr("reused"))
             return
         await self._ha_speak_live(text, player)
         self._record("ha_speak", key, True)
@@ -4888,52 +4910,52 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     async def ask_text(self, p):
         p = to_str(p)
         if not p.strip():
-            raise RunError("An 'ask Claude' block is empty.")
+            raise RunError(tr("An 'ask Claude' block is empty."))
         out = await self._call("Answer the request below. Reply with only the answer, no preamble.\n\n" + p)
-        self.log("Ask Claude: " + _short(p, 60), out, "done")
+        self.log(tr("Ask Claude: {p}", p=_short(p, 60)), out, tr("done"))
         return out
 
     async def ask_yesno(self, p):
         p = to_str(p)
         if not p.strip():
-            raise RunError("A yes/no block is empty.")
+            raise RunError(tr("A yes/no block is empty."))
         r = await self._call('Answer the question. Reply with only JSON: {"answer": true} or {"answer": false}.\n\nQuestion:\n' + p, SCHEMAS["yesno"])
         yes = r["answer"] is True
-        self.log("Yes or no: " + _short(p, 60), "Yes" if yes else "No", "done")
+        self.log(tr("Yes or no: {p}", p=_short(p, 60)), tr("Yes") if yes else tr("No"), tr("done"))
         return yes
 
     async def ask_number(self, p):
         p = to_str(p)
         if not p.strip():
-            raise RunError("An 'ask for a number' block is empty.")
+            raise RunError(tr("An 'ask for a number' block is empty."))
         r = await self._call('Reply with only JSON: {"number": <a single number>}.\n\nRequest:\n' + p, SCHEMAS["number"])
         n = num(r["number"])
-        self.log("Number: " + _short(p, 60), n, "done")
+        self.log(tr("Number: {p}", p=_short(p, 60)), n, tr("done"))
         return n
 
     async def ask_list(self, p):
         p = to_str(p)
         if not p.strip():
-            raise RunError("An 'ask for a list' block is empty.")
+            raise RunError(tr("An 'ask for a list' block is empty."))
         r = await self._call('Reply with only JSON: {"items": [<short strings>]}, no other text.\n\nRequest:\n' + p, SCHEMAS["list"])
         items = [to_str(i) for i in r["items"] if to_str(i)]
-        self.log("List: " + _short(p, 60), "\n".join("- " + i for i in items) or "(empty list)", f"{len(items)} items")
+        self.log(tr("List: {p}", p=_short(p, 60)), "\n".join("- " + i for i in items) or tr("(empty list)"), tr("{items} items", items=len(items)))
         return items
 
     async def rewrite(self, text, how):
         text, how = to_str(text), to_str(how)
         if not text.strip():
-            raise RunError("A 'rewrite' block has nothing to rewrite.")
+            raise RunError(tr("A 'rewrite' block has nothing to rewrite."))
         out = await self._call("Rewrite the text below. Instruction: " + how + "\nReply with only the rewritten text.\n\nText:\n" + text)
-        self.log("Rewrite: " + _short(how, 60), out, "done")
+        self.log(tr("Rewrite: {how}", how=_short(how, 60)), out, tr("done"))
         return out
 
     async def extract(self, what, text):
         what, text = to_str(what), to_str(text)
         if not text.strip():
-            raise RunError("An 'extract' block has no text to read.")
+            raise RunError(tr("An 'extract' block has no text to read."))
         out = await self._call("From the text below, extract: " + what + "\nReply with only what you extracted, nothing else.\n\nText:\n" + text)
-        self.log("Extract: " + _short(what, 60), out, "done")
+        self.log(tr("Extract: {what}", what=_short(what, 60)), out, tr("done"))
         return out
 
     async def score(self, text, criteria):
@@ -4941,7 +4963,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         r = await self._call("Score the text from 1 to 10 against these criteria: " + criteria +
                              '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.\n\nText:\n' + text, SCHEMAS["score"])
         s = max(0, min(10, num(r["score"])))
-        self.log("Score: " + _short(text, 50), f"{s}/10", "done")
+        self.log(tr("Score: {text}", text=_short(text, 50)), f"{s}/10", tr("done"))
         return s
 
     async def better(self, a, b, criteria):
@@ -4949,75 +4971,75 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         r = await self._call("Which text is better for: " + criteria +
                              '?\nReply with only JSON: {"pick": 1 or 2, "reason": "<one sentence>"}.\n\nText 1:\n' + a + "\n\nText 2:\n" + b, SCHEMAS["pick"])
         second = num(r["pick"]) == 2
-        self.log("Pick the better one", ("Picked the second" if second else "Picked the first") +
-                 (". " + to_str(r.get("reason")) if r.get("reason") else ""), "done")
+        self.log(tr("Pick the better one"), (tr("Picked the second") if second else tr("Picked the first")) +
+                 (". " + to_str(r.get("reason")) if r.get("reason") else ""), tr("done"))
         return b if second else a
 
     # ----- Conversations, instructions, web search -----
     def set_instructions(self, text):
         self.instructions = to_str(text).strip()
-        self.log("Instructions for Claude", self.instructions or "(cleared)", "set")
+        self.log(tr("Instructions for Claude"), self.instructions or tr("(cleared)"), tr("set"))
 
     async def chat(self, name, message):
         key = to_str(name).strip().lower() or "chat"
         message = to_str(message).strip()
         if not message:
-            raise RunError("The 'chat' block has no message.")
+            raise RunError(tr("The 'chat' block has no message."))
         hist = self.chats.setdefault(key, [])
         reply = await self._call(message, history=list(hist))
         hist += [{"role": "user", "content": message}, {"role": "assistant", "content": reply}]
         del hist[:-40]
-        self.log(f"Chat {to_str(name).strip()}: " + _short(message, 50), reply, f"turn {len(hist) // 2}")
+        self.log(tr("Chat {x}: {message}", x=to_str(name).strip(), message=_short(message, 50)), reply, tr("turn {x}", x=len(hist) // 2))
         return reply
 
     def chat_reset(self, name):
         self.chats.pop(to_str(name).strip().lower(), None)
-        self.log("Conversation " + to_str(name).strip(), "Starting afresh.", "reset")
+        self.log(tr("Conversation {x}", x=to_str(name).strip()), tr("Starting afresh."), tr("reset"))
 
     async def web_search(self, q):
         q = to_str(q).strip()
         if not q:
-            raise RunError("The 'search the web' block is empty.")
+            raise RunError(tr("The 'search the web' block is empty."))
         out = await self._call("Search the web and answer briefly, listing the sources you used as plain URLs at the end.\n\nQuery: " + q,
                                web=True)
-        self.log("Web search: " + _short(q, 50), out, "done")
+        self.log(tr("Web search: {q}", q=_short(q, 50)), out, tr("done"))
         return out
 
     # ----- Records -----
     async def ask_record(self, fields, prompt, many=False):
         fields, prompt = field_list(fields), to_str(prompt).strip()
         if not fields:
-            raise RunError("Give the record's fields, separated by commas.")
+            raise RunError(tr("Give the record's fields, separated by commas."))
         if not prompt:
-            raise RunError("The 'ask Claude for a record' block has no request.")
+            raise RunError(tr("The 'ask Claude for a record' block has no request."))
         shape = "{" + ", ".join(json.dumps(f) + ": ..." for f in fields) + "}"
         r = await self._call(('Reply with only JSON: {"items": [<objects, each shaped like ' + shape + '>]}' if many else "Reply with only one JSON object shaped like " + shape) +
                              ". Use these exact field names. Numbers as numbers.\n\nRequest:\n" + prompt, record_schema(fields, many))
         if many:
             recs = [to_record(o, fields) for o in r["items"]]
-            self.log("Records: " + _short(prompt, 55), "\n".join(" · ".join(f"{f}: {_short(x[f], 40)}" for f in fields) for x in recs), f"{len(recs)} records")
+            self.log(tr("Records: {prompt}", prompt=_short(prompt, 55)), "\n".join(" · ".join(f"{f}: {_short(x[f], 40)}" for f in fields) for x in recs), tr("{recs} records", recs=len(recs)))
             return recs
         rec = to_record(r, fields)
-        self.log("Record: " + _short(prompt, 55), to_str(rec), "done")
+        self.log(tr("Record: {prompt}", prompt=_short(prompt, 55)), to_str(rec), tr("done"))
         return rec
 
     # ----- Prompt library -----
     def prompt(self, name):
         text = PROMPTS.get(to_str(name).strip().lower()) if "PROMPTS" in globals() else None
         if text is None:
-            raise RunError(f"There's no prompt called “{name}” in this program's prompt library.")
+            raise RunError(tr("There's no prompt called “{name}” in this program's prompt library.", name=name))
         return text
 
     # ----- Files -----
     async def _choose_file_live(self):
-        print("\n? Choose a file: type the path to a PDF, a .docx, or a text file (.txt, .md, .csv, .json ...).", flush=True)
+        print(tr("\n? Choose a file: type the path to a PDF, a .docx, or a text file (.txt, .md, .csv, .json ...)."), flush=True)
         while True:
-            path = (await self._input("Path > ")).strip().strip('"').strip("'")
+            path = (await self._input(tr("Path > "))).strip().strip('"').strip("'")
             if not os.path.isfile(path):
-                print("  That file doesn't exist. Try again.")
+                print(tr("  That file doesn't exist. Try again."))
                 continue
             if os.path.getsize(path) > 25 * 1024 * 1024:
-                print("  That file is over 25 MB. Choose a smaller one.")
+                print(tr("  That file is over 25 MB. Choose a smaller one."))
                 continue
             try:
                 text = read_text_file(path)
@@ -5025,14 +5047,14 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 print("  " + str(e))
                 continue
             if not text.strip():
-                print("  No text could be found in that file. A scanned PDF holds pictures of pages, not text.")
+                print(tr("  No text could be found in that file. A scanned PDF holds pictures of pages, not text."))
                 continue
-            self.log("Chose file", f"{path} \u00b7 {len(text):,} characters", "chosen")
+            self.log(tr("Chose file"), tr("{path} · {x} characters", path=path, x=format(len(text), ',')), tr("chosen"))
             return text
 
     async def save_file(self, value, name, ext):
         if isinstance(value, Picture):
-            raise RunError("To save a picture, use the 'save picture' block.")
+            raise RunError(tr("To save a picture, use the 'save picture' block."))
         if ext == "json" and not isinstance(value, str):
             text = json.dumps(value, default=str, indent=2, ensure_ascii=False)
         elif ext == "csv" and isinstance(value, list):
@@ -5040,7 +5062,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         else:
             text = to_str(value)
         if not text:
-            raise RunError("There's nothing to save: the value in the 'save as file' block is empty.")
+            raise RunError(tr("There's nothing to save: the value in the 'save as file' block is empty."))
         base = re.sub(r"[^\w\-]+", "-", to_str(name)).strip("-") or "output"
         path = os.path.join(OUTPUT_DIR, f"{base}.{ext}")
         if not await self._allowed(["files"], f"save {path} ({len(text):,} characters)"):
@@ -5048,7 +5070,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         os.makedirs(OUTPUT_DIR, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             f.write(text)
-        self.log("Save file", "Saved " + path, "saved")
+        self.log(tr("Save file"), tr("Saved {path}", path=path), tr("saved"))
 
     def result_text(self):
         items = self.result if self.result else ([self.draft] if self.draft else [])
@@ -5061,7 +5083,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     def failed(self, e):
         self.last_error = self._describe(e)
-        self.log("Something failed, so the 'if it fails' part ran", self.last_error, "handled")
+        self.log(tr("Something failed, so the 'if it fails' part ran"), self.last_error, tr("handled"))
 
     @staticmethod
     def attempts(n):
@@ -5075,10 +5097,10 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         if not transient:
             raise e
         if attempt >= max_tries:
-            self.log(f"Gave up after {attempt} tries", self.last_error, "failed")
+            self.log(tr("Gave up after {attempt} tries", attempt=attempt), self.last_error, tr("failed"))
             raise e
         wait = 2 * attempt
-        self.log("Retrying", f"Try {attempt} of {max_tries} failed: {self.last_error}\nTrying again in {wait}s.", f"retry {attempt + 1}")
+        self.log(tr("Retrying"), tr("Try {attempt} of {max_tries} failed: {last_error}\nTrying again in {wait}s.", attempt=attempt, max_tries=max_tries, last_error=self.last_error, wait=wait), tr("retry {x}", x=attempt + 1))
         await asyncio.sleep(wait)
 
     # ----- Memory -----
@@ -5086,7 +5108,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     def _mem_key(name):
         key = to_str(name).strip().lower()
         if not key:
-            raise RunError("A memory block has no name. Type a name into its name slot.")
+            raise RunError(tr("A memory block has no name. Type a name into its name slot."))
         return key
 
     def _mem_load(self):
@@ -5104,7 +5126,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     @staticmethod
     def _storable(v):
         if isinstance(v, Picture):
-            raise RunError("Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.")
+            raise RunError(tr("Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it."))
         if isinstance(v, list):
             return [Runtime._storable(x) for x in v]
         if v is None:
@@ -5138,17 +5160,17 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     def remember(self, value, name, kind="transient"):
         self._mem_write(name, value, kind)
-        self.log("Remembered \u201c" + to_str(name).strip() + "\u201d", _short(value, 120) + "  \u00b7  " +
-                 ("while running" if kind == "transient" else "forever"), "saved")
+        self.log(tr("Remembered “{x}”", x=to_str(name).strip()), _short(value, 120) + "  \u00b7  " +
+                 (tr("while running") if kind == "transient" else tr("forever")), tr("saved"))
 
     def remember_for(self, value, name, n, unit):
         ms = min(365 * 86400000, max(0, num(n)) * {"m": 60000, "h": 3600000, "d": 86400000}.get(unit, 86400000))
         if not ms:
-            raise RunError("A 'remember for' block needs a time above zero.")
+            raise RunError(tr("A 'remember for' block needs a time above zero."))
         expires = int(time.time() * 1000 + ms)
         self._mem_write(name, value, "permanent", expires)
         until = datetime.datetime.fromtimestamp(expires / 1000).strftime("%a %d %b %H:%M")
-        self.log("Remembered \u201c" + to_str(name).strip() + "\u201d", _short(value, 120) + "  \u00b7  until " + until, "saved")
+        self.log(tr("Remembered “{x}”", x=to_str(name).strip()), tr("{value}  ·  until {until}", value=_short(value, 120), until=until), tr("saved"))
 
     def remember_add(self, value, name, kind="transient"):
         key = self._mem_key(name)
@@ -5162,7 +5184,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 self._mem_write(name, items, "permanent", cur.get("expires"))
             else:
                 self._mem_write(name, items, "transient" if cur else kind)
-        self.log("Added to \u201c" + to_str(name).strip() + "\u201d", f"{len(items)} items", "saved")
+        self.log(tr("Added to “{x}”", x=to_str(name).strip()), tr("{items} items", items=len(items)), tr("saved"))
 
     def recall(self, name):
         e, _ = self._mem_entry(self._mem_key(name))
@@ -5181,7 +5203,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             if key in data:
                 del data[key]
                 self._mem_save(data)
-        self.log("Forgot \u201c" + to_str(name).strip() + "\u201d", None, "forgotten")
+        self.log(tr("Forgot “{x}”", x=to_str(name).strip()), None, tr("forgotten"))
 
     def memory_names(self):
         names = {v["name"] for v in self.transient_memory.values()}
@@ -5248,7 +5270,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         """What the agent's search_memory tool gives back."""
         query = to_str(query).strip()
         if not query:
-            raise RunError("search_memory needs some words to look for.")
+            raise RunError(tr("search_memory needs some words to look for."))
         found, total = self.memory_search(query, limit), len(self.memory_names())
         if not found:
             return f"No saved note matches “{query}”." + (f" list_memory gives the names of all {total}." if total else " Nothing is saved yet.")
@@ -5279,15 +5301,15 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         return pic.path
 
     async def choose_picture(self):
-        print("\n? Choose a picture: type the path to a JPEG, PNG, WebP, GIF or SVG file.", flush=True)
+        print(tr("\n? Choose a picture: type the path to a JPEG, PNG, WebP, GIF or SVG file."), flush=True)
         while True:
-            path = (await self._input("Path > ")).strip().strip('"').strip("'")
+            path = (await self._input(tr("Path > "))).strip().strip('"').strip("'")
             ext = os.path.splitext(path)[1].lower()
             if not os.path.isfile(path):
-                print("  That file doesn't exist. Try again.")
+                print(tr("  That file doesn't exist. Try again."))
                 continue
             if ext not in _MEDIA:
-                print("  That isn't a JPEG, PNG, WebP, GIF or SVG file.")
+                print(tr("  That isn't a JPEG, PNG, WebP, GIF or SVG file."))
                 continue
             with open(path, "rb") as f:
                 data = f.read()
@@ -5295,35 +5317,35 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             if ext == ".svg":
                 svg = clean_svg(data.decode("utf-8", "replace"))
                 if not svg:
-                    print("  That SVG file couldn't be read.")
+                    print(tr("  That SVG file couldn't be read."))
                     continue
                 pic = Picture(svg.encode("utf-8"), "image/svg+xml", name, svg)
             else:
                 pic = Picture(data, _MEDIA[ext], name)
             pic.path = path
-            self.log("Chose picture", path, "chosen")
+            self.log(tr("Chose picture"), path, tr("chosen"))
             return pic
 
     async def _draw(self, prompt, label, picture=None):
         out = await self._call(prompt, picture=picture)
         svg = clean_svg(out)
         if not svg:
-            raise Retryable("Claude's drawing came back in a form that can't be used. Run again, or simplify the description.")
+            raise Retryable(tr("Claude's drawing came back in a form that can't be used. Run again, or simplify the description."))
         pic = Picture(svg.encode("utf-8"), "image/svg+xml", None, svg)
-        self.log(label, "Saved to " + self._picture_path(pic), "drawn")
+        self.log(label, tr("Saved to {x}", x=self._picture_path(pic)), tr("drawn"))
         return pic
 
     async def draw_picture(self, desc):
         desc = to_str(desc).strip()
         if not desc:
-            raise RunError("The 'draw a picture' block has no description.")
+            raise RunError(tr("The 'draw a picture' block has no description."))
         return await self._draw("Draw this as a single SVG illustration: " + desc + "\n" + self._DRAW_RULES, "Draw: " + _short(desc, 60))
 
     async def change_picture(self, pic, how):
         pic = _need_picture(pic, "change picture")
         how = to_str(how).strip()
         if not how:
-            raise RunError("The 'change picture' block has no change in it.")
+            raise RunError(tr("The 'change picture' block has no change in it."))
         if pic.svg is not None:
             return await self._draw("Here is an SVG illustration:\n" + pic.svg + "\n\nRedraw it with these changes: " + how +
                                     "\nKeep everything else the same. " + self._DRAW_RULES, "Change picture: " + _short(how, 60))
@@ -5334,9 +5356,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         q = to_str(q).strip()
         pic = _need_picture(pic, "ask Claude about picture")
         if not q:
-            raise RunError("The 'ask Claude about picture' block has no question.")
+            raise RunError(tr("The 'ask Claude about picture' block has no question."))
         out = await self._call("Look at the attached picture and answer. Reply with only the answer, no preamble.\n\n" + q, picture=pic)
-        self.log("Look at picture: " + _short(q, 55), out, "done")
+        self.log(tr("Look at picture: {q}", q=_short(q, 55)), out, tr("done"))
         return out
 
     async def score_picture(self, pic, criteria):
@@ -5344,12 +5366,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         r = await self._call("Score the attached picture from 1 to 10 against these criteria: " + to_str(criteria) +
                              '\nBe strict and consistent. Reply with only JSON: {"score": <1-10>}.', SCHEMAS["score"], picture=pic)
         s = max(0, min(10, num(r["score"])))
-        self.log("Score picture: " + _short(criteria, 55), f"{s}/10", "done")
+        self.log(tr("Score picture: {criteria}", criteria=_short(criteria, 55)), f"{s}/10", tr("done"))
         return s
 
     def show_picture(self, pic):
         pic = _need_picture(pic, "show picture")
-        self.log("Picture", self._picture_path(pic), "shown")
+        self.log(tr("Picture"), self._picture_path(pic), tr("shown"))
 
     async def save_picture(self, pic, fmt):
         pic = _need_picture(pic, "save picture")
@@ -5357,7 +5379,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             return
         if fmt == "svg":
             if pic.svg is None:
-                raise RunError("Only drawn pictures can be saved as SVG. Choose PNG instead.")
+                raise RunError(tr("Only drawn pictures can be saved as SVG. Choose PNG instead."))
             path = self._save_file(pic, pic.svg.encode("utf-8"), ".svg")
         elif fmt == "png" and pic.media_type != "image/png":
             if pic.svg is not None:
@@ -5366,55 +5388,55 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                     path = self._save_file(pic, cairosvg.svg2png(bytestring=pic.svg.encode("utf-8")), ".png")
                 except ImportError:
                     path = self._save_file(pic, pic.svg.encode("utf-8"), ".svg")
-                    self.log("Save picture", "PNG needs the cairosvg package (pip install cairosvg), so it was saved as SVG.", "note")
+                    self.log(tr("Save picture"), tr("PNG needs the cairosvg package (pip install cairosvg), so it was saved as SVG."), tr("note"))
             else:
                 path = self._save_file(pic)
         else:
             path = self._save_file(pic)
-        self.log("Save picture", "Saved " + path, "saved")
+        self.log(tr("Save picture"), tr("Saved {path}", path=path), tr("saved"))
 
     # ----- Draft and Review -----
     def set_task(self, t):
         self.task = to_str(t).strip()
         if not self.task:
-            raise RunError("The task is empty. Type what you want into 'set task to'.")
-        self.log("Task set", self.task, "set")
+            raise RunError(tr("The task is empty. Type what you want into 'set task to'."))
+        self.log(tr("Task set"), self.task, tr("set"))
 
     def _need_task(self):
         if not self.task:
-            raise RunError("Add a 'set task to' block before this step.")
+            raise RunError(tr("Add a 'set task to' block before this step."))
 
     def _need_draft(self):
         if not self.draft:
-            raise RunError("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.")
+            raise RunError(tr("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step."))
 
     async def generate(self):
         self._need_task()
         self.draft = await self._call("Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + self.task)
         self.problems, self.approved = [], None
-        self.log("Write a first draft", self.draft, "done")
+        self.log(tr("Write a first draft"), self.draft, tr("done"))
 
     async def rework(self, instr):
         self._need_draft()
         instr = to_str(instr).strip()
         if not instr:
-            raise RunError("The 'rework the draft' block has no instruction.")
+            raise RunError(tr("The 'rework the draft' block has no instruction."))
         self.draft = await self._call("Rewrite the draft below following this instruction: " + instr +
                                       "\nKeep it true to the original task. Reply with only the rewritten piece.\n\nTask:\n" +
                                       (self.task or "(none given)") + "\n\nDraft:\n" + self.draft)
-        self.log("Rework: " + _short(instr, 60), self.draft, "done")
+        self.log(tr("Rework: {instr}", instr=_short(instr, 60)), self.draft, tr("done"))
 
     async def revise(self):
         self._need_draft()
         if not self.problems:
-            self.log("Revise", "No review problems recorded, so nothing to fix.", "skipped")
+            self.log(tr("Revise"), tr("No review problems recorded, so nothing to fix."), tr("skipped"))
             return
         fixed = [e for e in (self.reflect or {}).get("earlier", []) if e not in self.problems]
         keep = ("\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + "\n".join("- " + e for e in fixed)) if fixed else ""
         self.draft = await self._call("Revise the draft so it fixes every problem listed. Change nothing else that works. "
                                       "Reply with only the improved piece.\n\nTask:\n" + (self.task or "(none given)") +
                                       "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft)
-        self.log("Revise to fix the problems", self.draft, "revised")
+        self.log(tr("Revise to fix the problems"), self.draft, tr("revised"))
 
     def set_draft(self, t):
         self.draft = to_str(t)
@@ -5452,9 +5474,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                     loop["earlier"].append(p_)
             del loop["earlier"][:-12]
         if approved:
-            self.log(label, "Meets every criterion.", "approved")
+            self.log(label, tr("Meets every criterion."), tr("approved"))
         else:
-            self.log(label, "\n".join("- " + p for p in self.problems), "needs work")
+            self.log(label, "\n".join("- " + p for p in self.problems), tr("needs work"))
         return approved
 
     def rounds(self, n):
@@ -5465,9 +5487,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         best = (self.reflect or {}).get("best")
         if best and best["round"] != self.reflect["round"]:
             self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
-            self.log("Kept the best draft", f"Went back to the draft from round {best['round']}: it had the fewest problems "
-                     f"({best['n']}). The rounds after it didn't improve on it.", "best draft")
-        self.log("Review", "Out of rounds. Keeping the best effort.", "failed")
+            self.log(tr("Kept the best draft"), tr("Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.", round=best['round'], n=best['n']), tr("best draft"))
+        self.log(tr("Review"), tr("Out of rounds. Keeping the best effort."), tr("failed"))
 
     # ----- Checkpoints -----
     _SNAPSHOT = ("task", "draft", "problems", "approved", "answer", "result")
@@ -5475,7 +5496,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     def save_checkpoint(self, name):
         name = to_str(name).strip()
         if not name:
-            raise RunError("The 'save checkpoint' block needs a name.")
+            raise RunError(tr("The 'save checkpoint' block needs a name."))
         state = {k: getattr(self, k) for k in self._SNAPSHOT}
         state["vars"] = dict(self.vars)
         try:
@@ -5483,14 +5504,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         except Exception:  # noqa: BLE001 - something uncopyable: keep references instead
             state = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v) for k, v in state.items()}
         self.checkpoints[name.lower()] = state
-        self.log("Checkpoint “" + name + "”", "Saved the task, draft, review, result and variables" +
-                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "saved")
+        self.log(tr("Checkpoint “{name}”", name=name), (tr("Saved the task, draft, review, result and variables. Draft: {draft}", draft=_short(self.draft, 80)) if self.draft else tr("Saved the task, draft, review, result and variables.")), tr("saved"))
 
     def restore_checkpoint(self, name):
         name = to_str(name).strip()
         state = self.checkpoints.get(name.lower())
         if state is None:
-            raise RunError(f"There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.")
+            raise RunError(tr("There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.", name=name))
         try:  # a copy, so the same checkpoint can be gone back to more than once
             state = copy.deepcopy(state)
         except Exception:  # noqa: BLE001
@@ -5499,8 +5519,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             setattr(self, k, state[k])
         self.vars.clear()
         self.vars.update(state["vars"])
-        self.log("Back to checkpoint “" + name + "”", "Restored the task, draft, review, result and variables" +
-                 (f". Draft: {_short(self.draft, 80)}" if self.draft else "."), "restored")
+        self.log(tr("Back to checkpoint “{name}”", name=name), (tr("Restored the task, draft, review, result and variables. Draft: {draft}", draft=_short(self.draft, 80)) if self.draft else tr("Restored the task, draft, review, result and variables.")), tr("restored"))
 
     # ----- You (the person at the keyboard) -----
     async def _input(self, prompt):
@@ -5508,7 +5527,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             try:
                 return await asyncio.to_thread(input, prompt)
             except EOFError:
-                raise RunError("This step needs an answer typed at the keyboard, but there's no one to type it.")
+                raise RunError(tr("This step needs an answer typed at the keyboard, but there's no one to type it."))
 
     async def _ask_me_live(self, q):
         q = to_str(q)
@@ -5518,46 +5537,46 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             if a:
                 self.answer = a
                 return a
-            print("  Type an answer first.")
+            print(tr("  Type an answer first."))
 
     async def _approve_live(self, text):
-        print("\n? Do you approve this?\n", flush=True)
+        print(tr("\n? Do you approve this?\n"), flush=True)
         for line in to_str(text).splitlines():
             print("    " + line)
         while True:
-            a = (await self._input("Approve? [y/n] > ")).strip().lower()
-            if a in ("y", "yes"):
+            a = (await self._input(tr("Approve? [y/n] > "))).strip().lower()
+            if said_yes(a):
                 return True
-            if a in ("n", "no"):
+            if said_no(a):
                 return False
-            print("  Type y or n.")
+            print(tr("  Type y or n."))
 
     async def _choose_live(self, items):
         items = to_list(items)
         if not items:
-            raise RunError("'let me choose from' got an empty list.")
-        print("\n? Choose one:", flush=True)
+            raise RunError(tr("'let me choose from' got an empty list."))
+        print(tr("\n? Choose one:"), flush=True)
         for i, it in enumerate(items, 1):
             print(f"  {i}. {_short(it, 80)}")
         while True:
-            a = (await self._input("Number > ")).strip()
+            a = (await self._input(tr("Number > "))).strip()
             if a.isdigit() and 1 <= int(a) <= len(items):
                 return items[int(a) - 1]
-            print(f"  Type a number from 1 to {len(items)}.")
+            print(tr("  Type a number from 1 to {items}.", items=len(items)))
 
     async def pause(self, note):
-        print("\n⏸ " + (to_str(note) or "Paused."), flush=True)
-        await self._input("Press Enter to continue > ")
+        print("\n⏸ " + (to_str(note) or tr("Paused.")), flush=True)
+        await self._input(tr("Press Enter to continue > "))
 
     # ----- Output -----
     def say(self, v):
         if isinstance(v, Picture):
-            self.log("Note", "Picture: " + self._picture_path(v))
+            self.log(tr("Note"), tr("Picture: {x}", x=self._picture_path(v)))
         else:
-            self.log("Note", to_str(v))
+            self.log(tr("Note"), to_str(v))
 
     def show(self):
-        self.log("Current draft", self.draft or "(no draft yet)")
+        self.log(tr("Current draft"), self.draft or tr("(no draft yet)"))
 
     def _result_item(self, v):
         if isinstance(v, Picture):
@@ -5567,7 +5586,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     def add_result(self, v):
         item = self._result_item(v)
         self.result.append(item)
-        self.log("Added to result", item, "added")
+        self.log(tr("Added to result"), item, tr("added"))
 
     def finish_with(self, v):
         self.result = [self._result_item(v)]
@@ -5590,7 +5609,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         lst = list(to_list(lst))
         i = self._index(lst, where, at)
         if i < 0 or i >= len(lst):
-            raise RunError(f"A list block asked for item {i + 1} but the list has {len(lst)} items.")
+            raise RunError(tr("A list block asked for item {x} but the list has {lst} items.", x=i + 1, lst=len(lst)))
         v = lst[i]
         if mode != "GET":
             del lst[i]
@@ -5600,14 +5619,14 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     def list_set(self, var, mode, where, at, value):
         if var is None:
-            raise RunError("To change a list, put a list variable in the 'in list' slot.")
+            raise RunError(tr("To change a list, put a list variable in the 'in list' slot."))
         lst = list(to_list(self.get(var)))
         i = self._index(lst, where, at, mode == "INSERT")
         if mode == "INSERT":
             lst.insert(max(0, min(i, len(lst))), value)
         else:
             if i < 0 or i >= len(lst):
-                raise RunError("A list 'set' block points past the end of the list.")
+                raise RunError(tr("A list 'set' block points past the end of the list."))
             lst[i] = value
         self.vars[var] = lst
 
@@ -5627,7 +5646,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     async def wait(self, seconds):
         secs = max(0, min(86400, num(seconds)))
         if secs >= 5:
-            self.log("Wait", f"Waiting {secs:g} seconds")
+            self.log(tr("Wait"), tr("Waiting {x} seconds", x=format(secs, 'g')))
         await asyncio.sleep(secs)
 
     async def wait_until_time(self, h, m):
@@ -5635,7 +5654,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         t = now.replace(hour=int(h), minute=int(m), second=0, microsecond=0)
         if t <= now:
             t += datetime.timedelta(days=1)
-        self.log("Wait until a time", "Waiting until " + t.strftime("%H:%M") + (" tomorrow" if t.date() != now.date() else ""))
+        self.log(tr("Wait until a time"), tr("Waiting until {time} tomorrow" if t.date() != now.date() else "Waiting until {time}", time=t.strftime("%H:%M")))
         await asyncio.sleep((t - now).total_seconds())
 
     async def wait_until(self, check, uses_claude=False):
@@ -5644,7 +5663,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     async def wait_for_message(self, name):
         key = to_str(name).strip().lower()
-        self.log("Waiting for “" + to_str(name) + "”", "Carries on when another script broadcasts this message.")
+        self.log(tr("Waiting for “{name}”", name=to_str(name)), tr("Carries on when another script broadcasts this message."))
         fut = asyncio.get_running_loop().create_future()
         self.msg_waiters.setdefault(key, []).append(fut)
         self.msg_waiting += 1
@@ -5656,12 +5675,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     # ----- Model -----
     def use_model(self, tier):
         self.tier = tier
-        self.log("Model", "Using " + model_label(tier))
+        self.log(tr("Model"), tr("Using {x}", x=model_label(tier)))
 
     @contextlib.asynccontextmanager
     async def using_model(self, tier):
         token = MODEL_OVERRIDE.set(tier)
-        self.log("Model", "Using " + model_label(tier) + " for the blocks inside")
+        self.log(tr("Model"), tr("Using {x} for the blocks inside", x=model_label(tier)))
         try:
             yield
         finally:
@@ -5674,18 +5693,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     def broadcast(self, name, value=""):
         key = to_str(name).strip().lower()
         if not key:
-            raise RunError("A broadcast block has no message name.")
+            raise RunError(tr("A broadcast block has no message name."))
         waiters = self.msg_waiters.pop(key, [])
         for f in waiters:
             if not f.done():
                 f.set_result(value)
         fns = self.receivers.get(key, [])
         if not fns and not waiters:
-            self.log("Broadcast “" + to_str(name) + "”", "Nobody is listening for this message.", "no listeners")
+            self.log(tr("Broadcast “{name}”", name=to_str(name)), tr("Nobody is listening for this message."), tr("no listeners"))
             return []
         self.started += len(fns)
         if self.started > MAX_SCRIPTS:
-            raise RunError(f"Stopped after starting {MAX_SCRIPTS} scripts. A message may be broadcasting itself in a loop.")
+            raise RunError(tr("Stopped after starting {max_scripts} scripts. A message may be broadcasting itself in a loop.", max_scripts=MAX_SCRIPTS))
         return [self.start_script(fn, value) for fn in fns]
 
     async def broadcast_and_wait(self, name, value=""):
@@ -5704,13 +5723,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         Gives back its result as text. Model calls, the budget and the step limits are shared with this run."""
         name = to_str(name).strip()
         if name.lower() in (p.lower() for p in self.programs):
-            raise RunError(f"The program “{name}” runs itself (" + " → ".join(self.programs + [name]) + "), which would never end.")
+            raise RunError(tr("The program “{name}” runs itself ({x}), which would never end.", name=name, x=" → ".join(self.programs + [name])))
         if len(self.programs) >= 10:
-            raise RunError("Programs inside programs went more than 10 deep, so the run stopped.")
+            raise RunError(tr("Programs inside programs went more than 10 deep, so the run stopped."))
         busy = [t for t in self.tasks if not t.done() and t is not asyncio.current_task()]
         if busy:
-            raise RunError(f"“{name}” can't run while other scripts are running at the same time. "
-                           "Run it from a script that runs on its own (not alongside a broadcast).")
+            raise RunError(tr("“{name}” can't run while other scripts are running at the same time. Run it from a script that runs on its own (not alongside a broadcast).", name=name))
         saved = {k: getattr(self, k) for k in self.STATE}
         saved_vars = dict(self.vars)
         self.task, self.draft, self.problems, self.approved, self.answer = "", "", [], None, ""
@@ -5719,14 +5737,14 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.vars.clear()
         token = MESSAGE_VALUE.set(value)
         self.programs.append(name)
-        self.log("Program: " + name, "Started" + (f" with: {_short(to_str(value), 200)}" if to_str(value).strip() else "."), "running")
+        self.log(tr("Program: {name}", name=name), (tr("Started with: {value}", value=_short(to_str(value), 200)) if to_str(value).strip() else tr("Started.")), tr("running"))
         try:
             try:
                 await fn()
             except Finish:
                 pass
             out = "\n\n".join(to_str(x) for x in self.result) if self.result else self.draft
-            self.log("Program: " + name, out or "(no result)", "done")
+            self.log(tr("Program: {name}", name=name), out or tr("(no result)"), tr("done"))
             return out
         finally:
             self.programs.pop()
@@ -5764,7 +5782,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             if t is not current:
                 t.cancel()
 
-    async def run(self, scripts, label="Run"):
+    async def run(self, scripts, label=None):
+        label = label or tr("Run")
         self.reset()
         self.run_label = label
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
@@ -5788,26 +5807,28 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         while self.tasks:
             await asyncio.wait(set(self.tasks), timeout=0.5, return_when=asyncio.FIRST_COMPLETED)
             if self.max_seconds and not self.ending and self.tasks and time.time() - self.run_started > self.max_seconds:
-                self.error = RunError(f"The run took longer than {self.max_seconds:g} seconds (max_seconds in second-thought.ini), so it stopped.")
+                self.error = RunError(tr("The run took longer than {x} seconds (max_seconds in second-thought.ini), so it stopped.", x=format(self.max_seconds, 'g')))
                 self._end()
             if not self.ending and not self.schedule_mode and self.tasks and self.msg_waiting >= len(self.tasks):
                 names = ", ".join("“" + k + "”" for k in self.msg_waiters)
-                self.error = RunError("Every script is waiting for " + names + ", but nothing running can send it.")
+                self.error = RunError(tr("Every script is waiting for {names}, but nothing running can send it.", names=names))
                 self._end()
         if self.error:
             msg = str(self.error) if isinstance(self.error, RunError) else f"{type(self.error).__name__}: {self.error}"
-            print("\n✖ Run stopped: " + msg, flush=True)
+            print(tr("\n✖ Run stopped: {msg}", msg=msg), flush=True)
             return 1
         text = "\n\n".join(self.result) if self.result else self.draft
         if text:
-            print("\n" + "=" * 60 + ("\nRESULT (best effort)\n" if self.out_of_rounds_hit else "\nRESULT\n") + "=" * 60, flush=True)
+            print("\n" + "=" * 60 + ("\n" + (tr("RESULT (best effort)") if self.out_of_rounds_hit else tr("RESULT")) + "\n") + "=" * 60, flush=True)
             print(text, flush=True)
         else:
-            print("\nThe program ended without a result.", flush=True)
-        used = " · ".join(f"{who}: {u[0]:,} tokens in, {u[1]:,} out" for who, u in self.usage.items()) or "no tokens used"
-        spare = f" · a backup answered {self.backup_used} step{'s' if self.backup_used != 1 else ''}" if self.backup_used else ""
-        budget = f" · budget {self.budget:,}" if self.budget else ""
-        print(f"\nDone · {self.calls} model call{'s' if self.calls != 1 else ''} · {used}{spare}{budget}", flush=True)
+            print(tr("\nThe program ended without a result."), flush=True)
+        used = " · ".join(tr("{who}: {tokens_in} tokens in, {tokens_out} out", who=who, tokens_in=f"{u[0]:,}", tokens_out=f"{u[1]:,}")
+                          for who, u in self.usage.items()) or tr("no tokens used")
+        spare = (" · " + (tr("a backup answered 1 step") if self.backup_used == 1 else tr("a backup answered {n} steps", n=self.backup_used))
+                 if self.backup_used else "")
+        budget = " · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else ""
+        print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}", flush=True)
         return 0
 
     def save_log(self):
@@ -5847,21 +5868,21 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             path = os.path.join(folder, f"{prog}-{start:%Y%m%d-%H%M%S}.md")
             with open(path, "w", encoding="utf-8") as f:
                 f.write("\n".join(lines))
-            print(f"Log saved to {path}", flush=True)
+            print(tr("Log saved to {path}", path=path), flush=True)
         except OSError as e:
-            print(f"(The log couldn't be saved: {e})", flush=True)
+            print(tr("(The log couldn't be saved: {e})", e=e), flush=True)
 
     # ----- Schedules -----
     async def run_schedules(self, schedules, watches=(), telegram=(), listeners=()):
         if not schedules and not watches and not telegram and not listeners:
-            sys.exit("This program has no scheduled scripts, and nothing that listens.")
+            sys.exit(tr("This program has no scheduled scripts, and nothing that listens."))
         self.schedule_mode = True
-        print("Schedules are on. Leave this running; press Ctrl+C to stop.", flush=True)
+        print(tr("Schedules are on. Leave this running; press Ctrl+C to stop."), flush=True)
         if watches:
             asyncio.ensure_future(self._watch(watches))
         if telegram:
             if not self._tg_chats():
-                print(f"Telegram: send your bot a message. Until TELEGRAM_CHAT_ID is set {WHERE_KEYS}, the program only says which chat it came from.", flush=True)
+                print(tr("Telegram: send your bot a message. Until TELEGRAM_CHAT_ID is set {where_keys}, the program only says which chat it came from.", where_keys=WHERE_KEYS), flush=True)
             asyncio.ensure_future(self._tg_watch(telegram))
         if listeners:
             await self._listen(listeners)
@@ -5895,7 +5916,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                     if busy and not busy.done():
                         self.start_script(fn)
                     else:
-                        busy = asyncio.ensure_future(self.run([fn], s[-2] if s[0] == "every" else f"Scheduled {s[1]:02d}:{s[2]:02d}"))
+                        busy = asyncio.ensure_future(self.run([fn], s[-2] if s[0] == "every" else tr("Scheduled {time}", time=f"{s[1]:02d}:{s[2]:02d}")))
             await asyncio.sleep(5)
 
     async def _watch(self, watches):
@@ -5907,7 +5928,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             try:
                 states = {e["entity_id"]: e for e in await self._ha("GET", "/api/states")}
             except RunError as e:
-                print("  (Home Assistant check failed: " + str(e) + ")", flush=True)
+                print(tr("  (Home Assistant check failed: {e})", e=str(e)), flush=True)
                 await asyncio.sleep(HA_WATCH_SECONDS)
                 continue
             for entity, want, fn in watches:
@@ -5926,7 +5947,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 if busy and not busy.done():
                     self.start_script(fn, payload)
                 else:
-                    busy = asyncio.ensure_future(self.run([(fn, payload)], f"When {entity} changes"))
+                    busy = asyncio.ensure_future(self.run([(fn, payload)], tr("When {entity} changes", entity=entity)))
             first = False
             await asyncio.sleep(HA_WATCH_SECONDS)
 
@@ -5974,7 +5995,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             except (OSError, ValueError, AttributeError):
                 pass
         lines, tail = self.can_lines(can)
-        print("\nThis program can:", flush=True)
+        print(tr("\nThis program can:"), flush=True)
         for line in lines:
             print("  - " + line)
         for line in tail:
@@ -5984,30 +6005,30 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         if unattended:
             print(nobody, flush=True)
             return False
-        print("\n? Allow it to do these things on this computer? It won't ask again unless the program changes.", flush=True)
+        print(tr("\n? Allow it to do these things on this computer? It won't ask again unless the program changes."), flush=True)
         while True:
             try:
-                a = input("Approve? [y/n] > ").strip().lower()
+                a = input(tr("Approve? [y/n] > ")).strip().lower()
             except EOFError:  # no keyboard after all (on Windows, a scheduled task's input can look like one)
                 print(nobody, flush=True)
                 return False
-            if a in ("y", "yes"):
+            if said_yes(a):
                 break
-            if a in ("n", "no"):
-                print("Not allowed, so it didn't run.")
+            if said_no(a):
+                print(tr("Not allowed, so it didn't run."))
                 return False
-            print("  Type y or n.")
+            print(tr("  Type y or n."))
         if path:
             try:
                 _write_json(path, {"sha256": digest, "allowed": list(can.get("can", [])), "runtime": RUNTIME_VERSION,
                                    "when": datetime.datetime.now().isoformat(timespec="seconds")}, indent=1)
             except OSError as e:
-                print(f"  (Couldn't note that you said yes, so it will ask again next time: {e})")
+                print(tr("  (Couldn't note that you said yes, so it will ask again next time: {e})", e=e))
         return True
 
     def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None):
         if "--version" in sys.argv:
-            print(f"Second Thought runtime {RUNTIME_VERSION}")
+            print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
         if "--doctor" in sys.argv:
             sys.exit(asyncio.run(self.doctor(can)))
@@ -6020,7 +6041,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 asyncio.run(self.run_schedules(schedules, watches, telegram, listeners))
             else:
                 if not start_scripts:
-                    sys.exit("Nothing to run: this program has no 'when Run is clicked' script.")
+                    sys.exit(tr("Nothing to run: this program has no 'when Run is clicked' script."))
                 sys.exit(asyncio.run(self.run(start_scripts)))
         except KeyboardInterrupt:
-            print("\nStopped.")
+            print(tr("\nStopped."))
