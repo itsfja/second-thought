@@ -27,6 +27,9 @@ class Files(unittest.TestCase):
                 for field, labels in d["options"].items():
                     self.assertRegex(field, r"^rb_[a-z_]+\.[A-Z_]+$")
                     self.assertTrue(all(isinstance(v, str) and v.strip() for v in labels.values()), field)
+                if "font" in d:
+                    # A font the page loads from Google Fonts for this language only (Linear B): a plain family name.
+                    self.assertRegex(d["font"], r"^[A-Za-z0-9 ]+$")
                 for key, words in d.get("blocklyMsg", {}).items():
                     # Blockly's own words, for a language Blockly has no msg file for (the page tests check it has them all).
                     self.assertRegex(key, r"^[A-Z][A-Z0-9_]*$")
