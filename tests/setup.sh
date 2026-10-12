@@ -11,7 +11,7 @@ python -c "" 2>/dev/null && PY=python   # on Windows, python3 is often a stub
 
 mkdir -p vendor
 cd vendor
-for pkg in blockly@11.2.1 @blockly/field-multilineinput@5.0.15 pdfjs-dist@3.11.174; do
+for pkg in blockly@11.2.1 @blockly/field-multilineinput@5.0.15 pdfjs-dist@3.11.174 @fontsource/noto-sans-linear-b@5.3.0; do
   name="${pkg%@*}"; name="${name#@blockly/}"
   if [ ! -d "$name" ]; then
     tarball=$(npm pack "$pkg" --silent)

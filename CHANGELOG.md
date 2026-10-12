@@ -29,6 +29,7 @@ that the two agree.
 - Blocks, page and exported programs in Latin, with Latin words for Blockly's own blocks and menus too, since Blockly has none (#85).
 - Blocks, page and exported programs in Old English (Ænglisc), with its own words for Blockly's blocks and menus (#92).
 - Blocks, page and exported programs in Middle English (Englisch), the English of Chaucer, with its own words for Blockly's blocks and menus (#96).
+- Mycenaean Greek in Linear B (#95): the page shows Linear B signs, loading the Noto Sans Linear B font for this language only (a language file can now name a `font`), and exported programs print the transcription (ko-no-so).
 
 ## 2.2.0 - 2026-10-11
 
