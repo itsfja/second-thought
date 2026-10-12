@@ -2606,6 +2606,12 @@ async def i18n_tests():
                 english = await en.evaluate("() => [...document.querySelectorAll('link')].some(l => /Linear/.test(l.href))")
                 check(all(f.values()) and not english,
                       f"with {code} chosen, the page loads {t['font']} and its blocks show the signs; English doesn't load it ({f}, english: {english})")
+            want = t.get("dir", "ltr")
+            dirs = await pg.evaluate("""() => ({ page:document.documentElement.dir || 'ltr', blocks:Blockly.getMainWorkspace().RTL,
+                toolbox:getComputedStyle(document.querySelector('.blocklyToolboxDiv') || document.body).direction,
+                code:getComputedStyle(document.getElementById('io-paste')).direction, log:getComputedStyle(document.body).direction })""")
+            check(dirs["page"] == want and dirs["blocks"] == (want == "rtl") and dirs["log"] == want and dirs["code"] == "ltr",
+                  f"with {code} chosen, the page and its blocks run {'right to left' if want == 'rtl' else 'left to right'}, and code stays left to right ({dirs})")
             same = []
             for ex in ("review", "a_inbox", "ha_doorbell"):
                 for pg_ in (en, pg):
@@ -2724,8 +2730,8 @@ async def i18n_tests():
             await pg.select_option("#lang", "en")
             await pg.wait_for_load_state("load")
             await pg.wait_for_timeout(1500)
-            back = await pg.evaluate("[window.ST_LANG, Blockly.getMainWorkspace().getAllBlocks(false).length]")
-            check(back == ["en", n], f"switching the blocks' language keeps the program on the canvas ({back}, {n} blocks before)")
+            back = await pg.evaluate("[window.ST_LANG, Blockly.getMainWorkspace().getAllBlocks(false).length, document.documentElement.dir || 'ltr', Blockly.getMainWorkspace().RTL]")
+            check(back == ["en", n, "ltr", False], f"switching the blocks' language keeps the program on the canvas, left to right again in English ({back}, {n} blocks before)")
             check(not errors, f"no page errors in {code}" + (f": {errors[:2]}" if errors else ""))
             await pg.close()
         check(not en_errors, "no page errors in English")

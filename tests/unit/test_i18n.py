@@ -30,6 +30,9 @@ class Files(unittest.TestCase):
                 if "font" in d:
                     # A font the page loads from Google Fonts for this language only (Linear B): a plain family name.
                     self.assertRegex(d["font"], r"^[A-Za-z0-9 ]+$")
+                if "dir" in d:
+                    # Right-to-left languages (Hebrew, Aramaic) mirror the page; left to right is the default.
+                    self.assertIn(d["dir"], ("ltr", "rtl"))
                 for key, words in d.get("blocklyMsg", {}).items():
                     # Blockly's own words, for a language Blockly has no msg file for (the page tests check it has them all).
                     self.assertRegex(key, r"^[A-Z][A-Z0-9_]*$")

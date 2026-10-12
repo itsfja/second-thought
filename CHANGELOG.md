@@ -32,6 +32,7 @@ that the two agree.
 - Mycenaean Greek in Linear B (#95): the page shows Linear B signs, loading the Noto Sans Linear B font for this language only (a language file can now name a `font`), and exported programs print the transcription (ko-no-so).
 - Blocks, page and exported programs in Koine Greek (Κοινή), in polytonic spelling, with its own words for Blockly's blocks and menus (#87).
 - Blocks, page and exported programs in Old Norse (Norrœnt mál), in normalised Old Icelandic spelling, with its own words for Blockly's blocks and menus (#91).
+- Blocks, page and exported programs in Hebrew (עברית) (#88). A language file can now say `"dir": "rtl"`: the page, Blockly's workspace, toolbox and flyout are then mirrored right to left, while code, file names and the status line stay left to right.
 
 ## 2.2.0 - 2026-10-11
 
