@@ -35,6 +35,7 @@ that the two agree.
 - Blocks, page and exported programs in Hebrew (עברית) (#88). A language file can now say `"dir": "rtl"`: the page, Blockly's workspace, toolbox and flyout are then mirrored right to left, while code, file names and the status line stay left to right.
 - Blocks, page and exported programs in Sanskrit (संस्कृतम्), in Devanagari with the Noto Sans Devanagari font, and its own words for Blockly's blocks and menus (#102). A language's font is now loaded for whichever script it names, not just Linear B.
 - Blocks, page and exported programs in Akkadian (#103): the page in cuneiform, with the Noto Sans Cuneiform font, spelled syllable by syllable from Old Babylonian words; exported programs print the transliteration. A language's font now comes first in the page's font lists, so its script never shows as boxes in bold text.
+- Blocks, page and exported programs in Jewish Babylonian Aramaic (ארמית), right to left like Hebrew (#89). Blockly has no Aramaic translation, so its own blocks and menus come from the file's `blocklyMsg`.
 
 ## 2.2.0 - 2026-10-11
 
