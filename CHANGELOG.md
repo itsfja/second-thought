@@ -33,6 +33,7 @@ that the two agree.
 - Blocks, page and exported programs in Koine Greek (Κοινή), in polytonic spelling, with its own words for Blockly's blocks and menus (#87).
 - Blocks, page and exported programs in Old Norse (Norrœnt mál), in normalised Old Icelandic spelling, with its own words for Blockly's blocks and menus (#91).
 - Blocks, page and exported programs in Hebrew (עברית) (#88). A language file can now say `"dir": "rtl"`: the page, Blockly's workspace, toolbox and flyout are then mirrored right to left, while code, file names and the status line stay left to right.
+- Blocks, page and exported programs in Jewish Babylonian Aramaic (ארמית), right to left like Hebrew (#89). Blockly has no Aramaic translation, so its own blocks and menus come from the file's `blocklyMsg`.
 
 ## 2.2.0 - 2026-10-11
 
