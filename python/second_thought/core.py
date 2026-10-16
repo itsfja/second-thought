@@ -88,7 +88,8 @@ SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
 # MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
 # MQTT_PASSWORD if it needs them. MQTT_TLS = yes for an encrypted connection (port 8883). Needs  pip install paho-mqtt.
 # Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
-# WEBHOOK_PORT is the port to listen on (8765 if you don't say).
+# WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
+# WEBHOOK_HOST = 0.0.0.0, which opens it to every network the computer is on (Home Assistant elsewhere, your phone).
 # Calendar: CALENDAR_URL is your calendar's private iCal address (Google Calendar: Settings, your calendar,
 # "Secret address in iCal format"; Outlook: Settings, Calendar, Shared calendars, Publish; iCloud: share as public).
 # Several addresses can be separated by spaces.

@@ -12,6 +12,7 @@ import urllib.request
 from .settings import RUNTIME_VERSION, SETTINGS_PATH, WHERE_KEYS
 from .providers import MODELS, PROVIDERS, SERVICES
 from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, _short, to_str
+from .connectors import webhook_host
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import importlib.metadata  # noqa: E402,F811 - below the line, so python/runtime.py has them too
@@ -164,7 +165,7 @@ class Doctor:
             async def hook():
                 if not os.environ.get("WEBHOOK_SECRET", "").strip():
                     raise RunError(tr("no WEBHOOK_SECRET {where_keys}, so the program won't listen for web requests. Set it to a long password.", where_keys=WHERE_KEYS))
-                host, port = os.environ.get("WEBHOOK_HOST", "0.0.0.0"), int(os.environ.get("WEBHOOK_PORT") or 8765)
+                host, port = webhook_host(), int(os.environ.get("WEBHOOK_PORT") or 8765)
                 with socket.socket() as so:
                     try:
                         so.bind((host, port))

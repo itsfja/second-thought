@@ -25,6 +25,12 @@ from .settings import tr  # noqa: F401
 MAX_PAGE_CHARS = 12000
 
 
+def webhook_host():
+    """The address web requests are listened for on. Only this computer (127.0.0.1) unless WEBHOOK_HOST says otherwise:
+    WEBHOOK_HOST = 0.0.0.0 for every network the computer is on, so Home Assistant on another machine or your phone can reach it."""
+    return os.environ.get("WEBHOOK_HOST", "").strip() or "127.0.0.1"
+
+
 def page_text(raw, ctype=""):
     """A web page's readable words: no scripts, styles or tags. Gives (title, text)."""
     import html as _html
@@ -1619,9 +1625,12 @@ class Connections:
             while True:
                 await asyncio.sleep(self._poll(3600))
                 print(tr("Web requests, {x}: still not listening. To turn them on, {note}", x=format(datetime.datetime.now(), '%H:%M'), note=note), flush=True)
-        srv = ThreadingHTTPServer((os.environ.get("WEBHOOK_HOST", "0.0.0.0"), port), Hook)
+        host = webhook_host()
+        srv = ThreadingHTTPServer((host, port), Hook)
         threading.Thread(target=srv.serve_forever, daemon=True).start()
-        print(tr("Listening for web requests on port {port}: {x}.", port=port, x=", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths)), flush=True)
+        # On 127.0.0.1 the addresses say so, so it's plain that only this computer can call them (WEBHOOK_HOST opens them up).
+        where = host if host in ("127.0.0.1", "localhost", "::1") else "<this computer>"
+        print(tr("Listening for web requests on port {port}: {x}.", port=port, x=", ".join(f"http://{where}:{port}/{p_}?key=…" for p_ in paths)), flush=True)
         while True:
             await asyncio.sleep(3600)
 
