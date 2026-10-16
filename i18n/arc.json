@@ -1,0 +1,2900 @@
+{
+ "name": "ארמית",
+ "blockly": "en",
+ "dir": "rtl",
+ "note": "Jewish Babylonian Aramaic, the language of the Talmud, in Hebrew square script, for the block palette, the page, the examples and what exported programs print. There is no Blockly translation for Aramaic, so Blockly's own blocks and menus come from blocklyMsg here. The page is right to left (dir: rtl), as for Hebrew: Blockly is mirrored, and code, file names and model names stay left to right. Instructions use the short singular imperative. Modern product words (email, token, API, Home Assistant) stay in Latin letters. Coinages: לבנתא block (a brick), שליחא agent (an agent in Talmudic law), טופסא draft, פנקסא log, זמניא schedules. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Aramaic names (שרי, אזיל, פסוק).",
+ "blocks": {
+  "rb_add_result": {
+   "message0": "אוסיף %1 לפירא"
+  },
+  "rb_agent": {
+   "message0": "שליחא: עביד לות %1",
+   "message1": "עד %1 פסיען, בהלין מאניא:",
+   "message2": "%1",
+   "message3": "עביד עיטתא קדמאה, ושני יתה באורחא %1",
+   "tooltip": "Claude דאין מה למעבד: בכל פסיעתא בחר חד מן מאניא דבגוה, חזי מה הוה, ואזיל עד דמטי לצביונא או עד דשלמו פסיעתא. פתגמא בתראה דיליה עאל לטופסא. כל פסיעתא היא קריאה חדא לחכימא. כד \"עביד עיטתא קדמאה\" רשים, כתב עיטתא זעירתא בפסיעתא קדמייתא ומחדת לה, בלא אגרא יתירא."
+  },
+  "rb_agent_builtin": {
+   "message0": "מאנא: %1",
+   "tooltip": "מאנא מתקן לשליחא. \"חושבנין\" ו\"שעין ויומין\" יהבין מניינין וזמנין כדקא יאות, חלף דיחשוב חכימא. \"בדוק כתבא\" שביק לבודקא אחרנא למדן עבידת שליחא. בדפא הדין, שמועתא, GitHub, Telegram, email וחושבן יומיא משתמשין בדוגמא; Python דנפק משתמש בדילך (שוי מפתחיא ב-second-thought.ini), וקרי דפי רשתא בקושטא. שליחותא, תגובתא ו\"שליט על כלי ביתא\" שאלין יתך קדם כל חדא, דהא מה דשליחא קרי (דף רשתא, רשימא) עלול לאסטאה יתיה. בחר \"בלא שאלתא\" לחוד אי אנת רחיץ בכל מה דקרי. פתיחת מנעולא, פתיחה ובטלות נטירותא תדיר שאלין."
+  },
+  "rb_agent_mcp": {
+   "message0": "מאניא מן משמשא MCP %1 %2",
+   "tooltip": "יהב לשליחא כל מאניא דמשמשא MCP יהב: מגלתא, GitHub, אוצרי ידיעתא, חושבני יומיא וסגי אחרנין, מכל עלמא דMCP. שוי משמשא ב-second-thought.ini כ-MCP_<NAME> = פקודתא דמשריא יתיה (כגון npx -y @modelcontextprotocol/server-filesystem ~/recipes) או אתריה ב-https://. לחוד ב-Python דנפק: בדפא הדין שליחא עביד בלא מאניא אלין."
+  },
+  "rb_agent_steps": {
+   "message0": "פסיעת שליחא",
+   "tooltip": "מה עבד שליחא בתראה בהלוכא הדין: סדרא דשטרי עם step, tool, input, result ו-status (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."
+  },
+  "rb_agent_tool": {
+   "message0": "מאנא: לבנתי %1",
+   "message1": "מה היא עבדא %1",
+   "message2": "זני יהבתא %1",
+   "message3": "שאל יתי קדם כל שמושא %1",
+   "tooltip": "שביק לשליחא למשרי חדא מן לבנתך. יהבתהא הוין יהבת מאנא, ומה דמהדרא הוא פירא דשליחא חזי. פרש יתה בבהירו: פירושא הוא כל מה דשליחא ידע עלה. זני יהבתא, כגון \"flour grams: number; water grams: number - grams of water\", אמרין מה כל יהבתא צריכא למהוי: text, number, yes/no, list או any. יהבתא דשליחא מתבדקא קדם דלבנתא רהטא. \"שאל יתי קדם כל שמושא\" רשים מן שירותא, דהא מה דשליחא קרי (דף רשתא, רשימא) עלול לאסטאה יתיה: בטיל רשמא ללבנין דלחוד מחשבן ולא משנין מדעם."
+  },
+  "rb_answer": {
+   "message0": "פתגמא"
+  },
+  "rb_approve": {
+   "message0": "אנא מודה %1",
+   "tooltip": "מחוי כתבא ומתין עד דתודי עלוהי או תהדריניה."
+  },
+  "rb_ask": {
+   "message0": "שאל Claude %1",
+   "tooltip": "Claude מתיב בכתבא."
+  },
+  "rb_ask_first": {
+   "message0": "שאל יתי קדם %1",
+   "tooltip": "מכען ולהלא, סדורא מחוי מה דהוא עתיד למעבד ומתין עד דתשבוק. אי אמרת לא, שביק פסיעתא ההיא ואזיל. Python דנפק שאיל ב-terminal; הלוכא דזמנא דלית אנש תמן שביק לה."
+  },
+  "rb_ask_list": {
+   "message0": "בעי מן Claude סדרא: %1",
+   "tooltip": "Claude מתיב בסדרא דתיכול לחזרא עלה."
+  },
+  "rb_ask_me": {
+   "message0": "שאל יתי %1 ואמתין",
+   "tooltip": "מפסיק הלוכא עד דתכתוב פתגמא בפנקסא."
+  },
+  "rb_ask_number": {
+   "message0": "בעי מן Claude מניינא: %1"
+  },
+  "rb_ask_record": {
+   "message0": "בעי מן Claude שטרא עם חקליא %1 : %2",
+   "tooltip": "חקליא פריסין בפסיקין, כגון: title, score, notes."
+  },
+  "rb_ask_records": {
+   "message0": "בעי מן Claude סדרא דשטרי עם חקליא %1 : %2"
+  },
+  "rb_ask_yesno": {
+   "message0": "Claude אמר אין ל-%1",
+   "tooltip": "Claude מתיב לשאלתא דאין או לא."
+  },
+  "rb_better": {
+   "message0": "טבא מן %1 ו-%2 ל-%3"
+  },
+  "rb_broadcast": {
+   "message0": "אכריז %1",
+   "tooltip": "משרי כל סדר \"כד אנא מקבל\" לאגרתא הדא, ואזיל מן יד."
+  },
+  "rb_broadcast_wait": {
+   "message0": "אכריז %1 ואמתין",
+   "tooltip": "משרי כל סדר \"כד אנא מקבל\" לאגרתא הדא ומתין עד דכולהון שלמין."
+  },
+  "rb_broadcast_with": {
+   "message0": "אכריז %1 עם %2",
+   "tooltip": "משרי כל סדר \"כד אנא מקבל\" לאגרתא. כל חד מקבל ערכא כ\"ערך אגרתא\" דיליה."
+  },
+  "rb_broadcast_with_wait": {
+   "message0": "אכריז %1 עם %2 ואמתין"
+  },
+  "rb_budget": {
+   "message0": "תחים הלוכא הדין ל-%1 טוקנין",
+   "tooltip": "קדם כל קריאה לחכימא, בדיק כמה טוקנין אכל הלוכא הדין. כד מטי למניינא הדין, הלוכא פסיק. 0 פירושו בלא תחומא. בדפא הדין מניינא הוא אומדנא; Python דנפק משתמש במניינא דקושטא."
+  },
+  "rb_cal_when": {
+   "message0": "כד מאורעא בחושבן יומיא שרי בעוד %1 רגעין",
+   "tooltip": "מרהט לבנין דלתחתא כמה רגעין קדם כל מאורעא בחושבן יומך (מאורעי יומא שלים לא מתמנין). \"מה דאתא\" יהב title, start, end, location, minutes ו-text."
+  },
+  "rb_calendar": {
+   "message0": "חושבן יומיא ל-%1 יומין דאתין",
+   "tooltip": "מאורעי חושבן יומך מן יומא דין, כשטרי: day, start, end, title, location. Python דנפק קרי CALENDAR_URL (אתר iCal טמירא דחושבן יומך); דפא הדין משתמש בחושבן יומיא דדוגמא."
+  },
+  "rb_chat": {
+   "message0": "שיחתא %1 : %2",
+   "tooltip": "משלח אגרתא בשיחתא דאית לה שמא. Claude חזי מלי קדמאי דשיחתא ההיא."
+  },
+  "rb_chat_reset": {
+   "message0": "שרי שיחתא %1 מן חדת"
+  },
+  "rb_checkpoint_restore": {
+   "message0": "תוב לנטירתא %1",
+   "tooltip": "מהדר עבידתא, טופסא, בדיקתא, פירא ומשתניא כמה דהוו ב\"נטור נטירתא\". דוכרנא, מגלתא ואגרן דכבר אשתלחו לא מתבטלין."
+  },
+  "rb_checkpoint_save": {
+   "message0": "נטור נטירתא %1",
+   "tooltip": "דכיר עבידתא, טופסא, בדיקתא, פירא ומשתניא כמה דאינון כען, בשמא הדין, עד סוף הלוכא."
+  },
+  "rb_choose": {
+   "message0": "שבוק לי למבחר מן %1"
+  },
+  "rb_clear_instructions": {
+   "message0": "כנוש פקודיא ל-Claude"
+  },
+  "rb_contains": {
+   "message0": "%1 כליל %2",
+   "tooltip": "קושטא אי כתבא קדמאה כליל תניינא (לא חאיש לאתוון רברבן וזעירן)."
+  },
+  "rb_discord_send": {
+   "message0": "שלח אגרת Discord %1",
+   "tooltip": "כתב ב-Discord: בפלגא דמניה אתת אגרתא, או בפלגא קדמאה ב-DISCORD_CHANNEL_ID. \"שאל יתי קדם שליחות אגרן\" גרים לה למשאל קדמאה. בדפא הדין מתחזיא לחוד."
+  },
+  "rb_discord_when": {
+   "message0": "כד אתיא אגרת Discord דכלילא %1",
+   "tooltip": "מרהט לבנין דלתחתא כד אנש כתב בחד מן פלגי Discord דילך (כתוב 'anything', או מלין דאגרתא צריכא למכלל). לחוד פלגיא ב-DISCORD_CHANNEL_ID מתמנין, ואגרי בוטא גרמיה לעלם לא. מתבדק כל 10 שניין. \"מה דאתא\" יהב text, sender ו-channel. בדפא הדין, דחוף עלה בימינא ובחר \"שרי סדרא הדין\" לנסיותיה באגרתא דדוגמא."
+  },
+  "rb_draft": {
+   "message0": "טופסא"
+  },
+  "rb_email_send": {
+   "message0": "שלח email ל-%1 ענינא %2 %3",
+   "tooltip": "משלח email מן אתרך (EMAIL_ADDRESS ומלת סתרא דאפליקציא ב-second-thought.ini). \"שאל יתי קדם שליחות אגרן\" גרים לה למשאל קדמאה. בדפא הדין מתחזיא לחוד."
+  },
+  "rb_email_when": {
+   "message0": "כד אתי email דכליל %1",
+   "tooltip": "מרהט לבנין דלתחתא כד email חדתא אתי לתיבותך (מתבדק כל 2 רגעין), אי משלחיה, ענייניה או מלוי כלילין דא. \"מה דאתא\" יהב from, subject, body ו-text."
+  },
+  "rb_error": {
+   "message0": "טעותא",
+   "tooltip": "מה אשתבש בכשלא בתראה."
+  },
+  "rb_event": {
+   "message0": "מה דאתא: %1",
+   "tooltip": "בגו סדר \"כד … אתי\": חקלא חד ממה דאתא. כל שמועא יהב 'text', דמכניש ליה; רמזא דכל לבנת \"כד\" מני חקלוהי אחרנין. שבוק ריקן לשטרא שלים."
+  },
+  "rb_every": {
+   "message0": "כל %1 %2",
+   "tooltip": "רהט זמן בתר זמן כל עוד זמניא פתיחין ודפא הדין פתיח. הלוכא קדמאה הוא פסקא חד בתר דפתחת זמניא."
+  },
+  "rb_extract": {
+   "message0": "אפיק %1 מן %2"
+  },
+  "rb_feed_news": {
+   "message0": "שמועתא מן מבועא %1",
+   "tooltip": "שמועתא חדתתא ממבועא (RSS או Atom), חדתתא קדמאה, כשטרי: feed, title, link, date, summary. שבוק ריקן למבועך (feeds = … ב-second-thought.ini). בדפא הדין משתמש במבועי דוגמא."
+  },
+  "rb_feed_when": {
+   "message0": "כד אית מדעם חדת במבועא %1",
+   "tooltip": "מרהט לבנין דלתחתא לכל שמועה חדתא במבועא (מתבדק כל 15 רגעין). שבוק ריקן למבועך. \"מה דאתא\" יהב feed, title, link, date, summary ו-text."
+  },
+  "rb_file_choose": {
+   "message0": "כתבא דמגלתא דאבחר",
+   "tooltip": "מפסיק הלוכא דתבחר PDF, Word .docx או מגלת כתבא. מהדר כתבא דמגלתא."
+  },
+  "rb_file_save": {
+   "message0": "נטור %1 כמגלתא %2 . %3",
+   "tooltip": "יהב כתבא לאחתתא. דפדפנא בעי מנך לאשרא."
+  },
+  "rb_finish_with": {
+   "message0": "שלים ב-%1"
+  },
+  "rb_folder_when": {
+   "message0": "כד מגלתא מתחזיא בתיבותא %1",
+   "tooltip": "מרהט לבנין דלתחתא כד מגלתא חדתא נחתא בתיבותא הדא (לצד סדורא, אי לא יהבת אורחא שלימא). \"מה דאתא\" יהב שמה, אורחה, רבותה, ומלין דבה ל-PDF, Word או מגלת כתבא."
+  },
+  "rb_generate": {
+   "message0": "כתוב טופסא קדמאה",
+   "tooltip": "Claude כתב טופסא דמשלים עבידתא."
+  },
+  "rb_gh_when": {
+   "message0": "כד pull request בעי בדיקתי",
+   "tooltip": "מרהט לבנין דלתחתא כד אנש בעי מנך למבדק pull request ב-GitHub (מתבדק כל 5 רגעין). \"מה דאתא\" יהב repo, number, title, user, link ו-text."
+  },
+  "rb_ha_attr": {
+   "message0": "%1 דישותא %2",
+   "tooltip": "תכונתא חדא דישותא, כגון 'current_temperature' או 'friendly_name'."
+  },
+  "rb_ha_call": {
+   "message0": "קרי ל-%1 על %2 עם %3",
+   "tooltip": "קרי לשמושא, כגון light.turn_off. ידיעתא דלא מחייבא היא JSON כגון {\"temperature\": 20}. פתיחת מנעולא, פתיחה ובטלות נטירותא תדיר שאלין יתך קדמאה."
+  },
+  "rb_ha_event_when": {
+   "message0": "כד מאורע Home Assistant %1 הוה עם %2",
+   "tooltip": "מרהט לבנין דלתחתא ברגעא דHome Assistant משלח מאורעא הדין: דחיפת כפתורא או שלטא (zha_event, deconz_event), שירות עבידתא מגרמה (automation_triggered), עבידתא מן הודעתא בטלפונא, או מאורעא דילך. כתוב 'anything' לכל מאורע. תיבותא תניינא היא מלין דלא מחייבן דידיעת מאורעא צריכא למכלל, כגון שמא דשלטא. \"מה דאתא\" יהב event_type, entity, data, time ו-text, וכל חקלא מידיעת מאורעא. בדפא הדין, דחוף עלה בימינא ובחר \"שרי סדרא הדין\" לנסיותיה במאורעא דדוגמא."
+  },
+  "rb_ha_find": {
+   "message0": "ישותא דשוין ל-%1",
+   "tooltip": "סדרא דשטרי (entity, name, state, unit, area) לכל ישותא דמזהה, שמה, אתרה או מצבה כלילין כל מלין אלין. '*' פירושו כולא."
+  },
+  "rb_ha_history": {
+   "message0": "תולדת %1 ב-%2 שעין בתראין",
+   "tooltip": "סדרא דשטרי (time, state) דמחוי איך ישותא אשתניאת."
+  },
+  "rb_ha_notify": {
+   "message0": "הודע %1 : %2",
+   "tooltip": "משלח הודעתא. מטרתא היא שמושא notify כגון notify.mobile_app_my_phone, או persistent_notification לסטרא דHome Assistant."
+  },
+  "rb_ha_snapshot": {
+   "message0": "צורתא מן %1",
+   "tooltip": "צורתא מן ישות צלמא. שמש בה עם לבני צורתא."
+  },
+  "rb_ha_speak": {
+   "message0": "אמר %1 ב-%2",
+   "tooltip": "אמר כתבא במנגנא, בקריאתא דHome Assistant."
+  },
+  "rb_ha_state": {
+   "message0": "מצבא ד-%1",
+   "tooltip": "מצבא דישותא כען, כגון 'on', 'locked' או 19.5."
+  },
+  "rb_ha_summary": {
+   "message0": "מדידתא ל-%1",
+   "tooltip": "סדרא פשיטא דישותא דשוין ומצביהון, מתקן למשוייה בשאלתא ל-Claude."
+  },
+  "rb_ha_trigger": {
+   "message0": "מה אשתני",
+   "tooltip": "בסדר \"כד … משתני\": שטרא עם entity, name, from ו-to."
+  },
+  "rb_ha_when": {
+   "message0": "כד %1 משתני ל-%2",
+   "tooltip": "מרהט לבנין דלתחתא כד ישותא הדא משתניא. כתוב 'anything' לכל שנוי. בגווה, \"מה אשתני\" אמר מה הוה."
+  },
+  "rb_homey_find": {
+   "message0": "מאני Homey דשוין ל-%1",
+   "tooltip": "סדרא דשטרי, חד לכל מאנא דשמיה, אתריה או זניה כלילין כל מלין אלין ('*' לכל מאנא): name, zone, class, וכל ערך דיליה."
+  },
+  "rb_homey_flow": {
+   "message0": "שרי נגדא דHomey %1",
+   "tooltip": "משרי חד מן נגדי Homey דילך, בשמיה. נגדא יכיל למעבד כל מה דHomey דילך יכיל, ולשלחא הודעת Homey."
+  },
+  "rb_homey_set": {
+   "message0": "שוי מאנא דHomey %1 %2 ל-%3",
+   "tooltip": "שוי ערכא, כגון onoff ל-off, dim ל-0.5 או target_temperature ל-19. \"שאל יתי קדם כל עבידתא דביתא חכימא\" גרים לה למשאל קדמאה; פתיחת מנעולא, פתיחה ובטלות נטירותא תדיר שאלין. בדפא הדין משני ביתא דדוגמא."
+  },
+  "rb_homey_set_variable": {
+   "message0": "שוי משתניא דHomey %1 ל-%2",
+   "tooltip": "משני משתניא דHomey Logic, דנגדך ישמשון ביה."
+  },
+  "rb_homey_value": {
+   "message0": "%1 דמאנא דHomey %2",
+   "tooltip": "ערכא חד דמאנא דHomey, בשמא דמאנא: onoff (on או off), dim (0 עד 1), measure_temperature, measure_power וכדומה. \"מאני Homey דשוין\" מחוי מה אית לכל מאנא."
+  },
+  "rb_homey_variable": {
+   "message0": "משתניא דHomey %1",
+   "tooltip": "ערכא דמשתניא דHomey Logic, בשמיה."
+  },
+  "rb_homey_when": {
+   "message0": "כד %2 דמאנא דHomey %1 משתני",
+   "tooltip": "מרהט לבנין דלתחתא כד ערכא דמאנא דHomey הדין משתני (מתבדק כל 10 שניין). כתוב 'anything' לכל ערכוהי. \"מה דאתא\" יהב device, zone, capability, from, to ו-text. בדפא הדין, דחוף עלה בימינא ובחר \"שרי סדרא הדין\" לנסיותיה."
+  },
+  "rb_img_ask": {
+   "message0": "שאל Claude %1 על צורתא %2",
+   "tooltip": "Claude חזי בצורתא ומתיב."
+  },
+  "rb_img_change": {
+   "message0": "שני צורתא %1 : %2",
+   "tooltip": "Claude צאר צורתא מן חדת עם שנויך. צורת שמשא תייבא כצייורא חדתא."
+  },
+  "rb_img_choose": {
+   "message0": "צורתא דאבחר",
+   "tooltip": "מפסיק הלוכא דתבחר צורתא (JPEG, PNG, WebP, GIF או SVG)."
+  },
+  "rb_img_draw": {
+   "message0": "צור צורתא ד-%1",
+   "tooltip": "Claude צאר צייורא כ-SVG (צורין פשיטן, ציורי שרטוט, סימנין). לא יכיל למעבד צורי שמשא."
+  },
+  "rb_img_save": {
+   "message0": "נטור צורתא %1 כ-%2",
+   "tooltip": "יהב צורתא לאחתתא. דפדפנא בעי מנך לאשרא."
+  },
+  "rb_img_score": {
+   "message0": "שום צורתא %1 מן 10 ל-%2"
+  },
+  "rb_img_show": {
+   "message0": "אחוי צורתא %1"
+  },
+  "rb_longtext": {
+   "message0": "%1",
+   "tooltip": "כתבא אריכא. דחוף Enter לשורתא חדתא; שורתא מתפלגן ב-80 אתוון."
+  },
+  "rb_mem_add": {
+   "message0": "אוסיף %1 לסדרא דכירא %2 %3",
+   "tooltip": "מוסיף מדעם לסדרא דכירא. אי סדרא כבר איתיה, נטיר זניה וזמניה."
+  },
+  "rb_mem_forget": {
+   "message0": "אנשי %1"
+  },
+  "rb_mem_get": {
+   "message0": "אדכר %1",
+   "tooltip": "ערכא דכירא, או כתבא ריקנא אי לא איתדכר מדעם בשמא הדין."
+  },
+  "rb_mem_has": {
+   "message0": "אנא דכיר %1"
+  },
+  "rb_mem_names": {
+   "message0": "שמהן דאנא דכיר"
+  },
+  "rb_mem_set": {
+   "message0": "דכר %1 כ-%2 %3",
+   "tooltip": "כל עוד דפא הדין פתיח: נטיר בין הלוכין עד דתטען דפא מן חדת או תסגריניה. לעלם: נטיר עד דתנשי יתיה."
+  },
+  "rb_mem_set_for": {
+   "message0": "דכר %1 כ-%2 ל-%3 %4",
+   "tooltip": "נטיר כ\"לעלם\", ברם מתנשי מגרמיה בתר זמנא הדין (עד 365 יומין)."
+  },
+  "rb_mqtt_publish": {
+   "message0": "פרסם MQTT %1 בענינא %2 נטור יתיה %3",
+   "tooltip": "משלח אגרתא למתווכא דMQTT דילך. \"נטור יתיה\" בעי מן מתווכא למדכריה לכל דישמע בתר כן. \"שאל יתי קדם כל עבידתא דHome Assistant\" או \"שליחות אגרן\" גרם לה למשאל קדמאה. בדפא הדין מתחזיא לחוד."
+  },
+  "rb_mqtt_read": {
+   "message0": "אגרת MQTT בתרייתא ב-%1",
+   "tooltip": "אגרתא בתרייתא בענינא דMQTT. לחוד אגרן דמתווכא נטיר (retained) מתחזיין מן יד. עם + או # בענינא, שטרא דאגרתא בתרייתא דכל ענין. בדפא הדין משתמש בענייני דוגמא."
+  },
+  "rb_mqtt_when": {
+   "message0": "כד אגרת MQTT אתיא ב-%1",
+   "tooltip": "מרהט לבנין דלתחתא כד אגרתא אתיא בענינא דMQTT הדין. + קאים לדרגא חדא ו-# לכל דלתחתא, כגון zigbee2mqtt/#. \"מה דאתא\" יהב ענינה ו-text, וחקלי אגרת JSON."
+  },
+  "rb_msg_value": {
+   "message0": "ערך אגרתא",
+   "tooltip": "ערכא דאשתלח עם כרוזא דשרא סדרא הדין (או דאתער \"אמתין עד דאקבל\" הדין). בסדורא דרהט ב\"שרי סדורא\", ערכא דאתיהב ליה."
+  },
+  "rb_now": {
+   "message0": "%1 דכען"
+  },
+  "rb_page_when": {
+   "message0": "כד דף רשתא %1 משתני",
+   "message1": "לחוד חולקא דכליל %1 מתבדק כל %2 רגעין",
+   "tooltip": "מרהט לבנין דלתחתא כד מליא בדף רשתא משתניין. שבוק \"לחוד חולקא דכליל\" ריקן למנטר דפא כוליה, או כתוב מלין (כגון דמי) למנטר לחוד שורתא דבהון ותרתין שורתא דבתר כל חדא, דלא יתמנון פרסומין ומניינין באתר אחרן בדפא. בדיקתא קדמייתא דכרא דפא לחוד. \"מה דאתא\" יהב url, title, before, after, changed (שורתא דאשתניו) ו-text. דפין דצריכין דפדפנא לאחואה מליהון לא מתנטרין. בדפא הדין, דחוף עלה בימינא ובחר \"שרי סדרא הדין\" לנסיותיה בדפא דדוגמא."
+  },
+  "rb_passed": {
+   "message0": "טופסא עבר בדיקתא"
+  },
+  "rb_pause": {
+   "message0": "פסוק עד דאדחוף אזיל: %1",
+   "tooltip": "נטירתא. מחוי רשימא בפנקסא ומתין לך."
+  },
+  "rb_problems": {
+   "message0": "פגמי בדיקתא"
+  },
+  "rb_prompt": {
+   "message0": "מימרא %1",
+   "tooltip": "כתבא מן אוצר מימרך (פתח סדורין לאוספא מימרין)."
+  },
+  "rb_rec_get": {
+   "message0": "%1 ד-%2"
+  },
+  "rb_rec_has": {
+   "message0": "ל-%1 אית חקלא %2"
+  },
+  "rb_rec_keys": {
+   "message0": "חקלי %1"
+  },
+  "rb_rec_new": {
+   "message0": "שטרא חדתא"
+  },
+  "rb_rec_set": {
+   "message0": "שוי %1 ד-%2 ל-%3",
+   "tooltip": "משני חקלא חד בשטרא (בדרך כלל משתניא דשטרא)."
+  },
+  "rb_receive": {
+   "message0": "כד אנא מקבל %1",
+   "tooltip": "מרהט לבנין דלתחתא כל אימת דאגרתא הדא מתכרזא. סדרין סגיאין יכלין למשמע לאגרתא חדא."
+  },
+  "rb_reflect": {
+   "message0": "בדוק טופסא כלקבל %1",
+   "message1": "עד %1 סבובין; כד נפיל, עביד",
+   "message2": "%1",
+   "tooltip": "Claude בדיק טופסא. אי נפיל, לבנין דבגוה רהטין, ובתר כן בדיק תוב. בכל סבובא בודקא בדיק נמי דפגמין קדמאין לא תבו. אי סבוביא שלמו, טופסא דאית ביה פגמין זעירין נטיר, לא בתראה לחוד."
+  },
+  "rb_reset_timer": {
+   "message0": "אתקין שעונא"
+  },
+  "rb_result": {
+   "message0": "שלים ואחוי פירא",
+   "tooltip": "משלים הלוכא. מחוי מה דאוספת לפירא, או טופסא אי לא אוספת מדעם."
+  },
+  "rb_result_text": {
+   "message0": "פירא עד כען",
+   "tooltip": "כל מה דאתוסף לפירא, ככתבא."
+  },
+  "rb_retry": {
+   "message0": "נסי תוב עד %1 זמנין",
+   "message1": "%1",
+   "tooltip": "אי מדעם בגוה נפיל באורחא דנסיונא תניינא יכיל לתקנא (קשרא דאתפסק, פתגמא משבשא), מתין קליל ומרהט תוב."
+  },
+  "rb_review": {
+   "message0": "בדוק טופסא כלקבל %1",
+   "tooltip": "בדיקתא חדא. שמש בתר כן ב\"טופסא עבר בדיקתא\" וב\"פגמי בדיקתא\"."
+  },
+  "rb_revise": {
+   "message0": "תקן פגמי בדיקתא",
+   "tooltip": "Claude מתקן פגמיא דבדיקתא בתרייתא אשכחת."
+  },
+  "rb_rework": {
+   "message0": "עביד טופסא מן חדת: %1",
+   "tooltip": "Claude כתב טופסא מן חדת כפקודתך."
+  },
+  "rb_rewrite": {
+   "message0": "כתוב %1 מן חדת: %2",
+   "tooltip": "כגון: כתוב (טופסא) מן חדת: (תרגם ללשן צרפתאה)."
+  },
+  "rb_run_program": {
+   "message0": "שרי סדורא %1 עם %2",
+   "tooltip": "מרהט סדורא מן סדרא דסדורך, כפסיעתא. אית ליה טופסא, פירא ומשתניא דיליה, ומהדר פיריה. בגוה, \"ערך אגרתא\" הוא ערכא דאנת יהב הכא. Python דנפק כליל צורתא דסדורא כמה דהוה בשעתא דאפקתיה."
+  },
+  "rb_say": {
+   "message0": "אמר %1",
+   "tooltip": "כתב רשימא בפנקסא."
+  },
+  "rb_score": {
+   "message0": "שום %1 מן 10 ל-%2"
+  },
+  "rb_set_draft": {
+   "message0": "שוי טופסא ל-%1"
+  },
+  "rb_set_instructions": {
+   "message0": "שוי פקודיא ל-Claude ל-%1",
+   "tooltip": "משתלח עם כל קריאה ל-Claude בתר לבנתא הדא, כגון תפקידא, קלא או נמוסא דביתא."
+  },
+  "rb_show": {
+   "message0": "אחוי טופסא בפנקסא"
+  },
+  "rb_slack_send": {
+   "message0": "שלח אגרת Slack %1",
+   "tooltip": "כתב ב-Slack: בפלגא דמניה אתת אגרתא, או בפלגא קדמאה ב-SLACK_CHANNEL_ID. \"שאל יתי קדם שליחות אגרן\" גרים לה למשאל קדמאה. בדפא הדין מתחזיא לחוד."
+  },
+  "rb_slack_when": {
+   "message0": "כד אתיא אגרת Slack דכלילא %1",
+   "tooltip": "מרהט לבנין דלתחתא כד אנש כתב בחד מן פלגי Slack דילך (כתוב 'anything', או מלין דאגרתא צריכא למכלל). לחוד פלגיא ב-SLACK_CHANNEL_ID מתמנין, ואגרי בוטין לעלם לא. מתבדק כל 10 שניין. \"מה דאתא\" יהב text, sender ו-channel. בדפא הדין, דחוף עלה בימינא ובחר \"שרי סדרא הדין\" לנסיותיה באגרתא דדוגמא."
+  },
+  "rb_sort": {
+   "message0": "סדר %1 לפום %2 %3",
+   "tooltip": "מסדר סדרא דשטרי לפום חקלא. שבוק חקלא ריקן לסדרא מדעם פשיט."
+  },
+  "rb_start": {
+   "message0": "כד שרי מתדחף",
+   "tooltip": "כל סדורא שרי הכא. לבנין דלתחתא רהטין מעילא לתתא. סגיאין כאלין רהטין זה בצד זה."
+  },
+  "rb_stop": {
+   "message0": "פסוק הלוכא",
+   "tooltip": "שלים הלוכא הכא. כל מה דכבר בפירא מתחזי."
+  },
+  "rb_task": {
+   "message0": "שוי עבידתא ל-%1",
+   "tooltip": "שוי מה דבינה עבידא צריכה למעבד."
+  },
+  "rb_task_get": {
+   "message0": "עבידתא"
+  },
+  "rb_tg_message": {
+   "message0": "אגרת Telegram %1",
+   "tooltip": "אגרת Telegram דשרת סדרא הדין: מלהא, מאן שלחה, או שיחתא. ריקנא בר מן סדר Telegram."
+  },
+  "rb_tg_send": {
+   "message0": "שלח אגרת Telegram %1",
+   "tooltip": "משלח אגרתא מן בוטך: לשיחתא דמנה אתת אגרתא, או ל-TELEGRAM_CHAT_ID. \"שאל יתי קדם שליחות אגרן\" גרים לה למשאל קדמאה. בדפא הדין מתחזיא לחוד."
+  },
+  "rb_tg_when": {
+   "message0": "כד אתיא אגרת Telegram דכלילא %1",
+   "tooltip": "מרהט לבנין דלתחתא כד בוטך מקבל אגרתא (כתוב 'anything', או מלין דאגרתא צריכא למכלל). לחוד אגרן משיחתך מתמנין (TELEGRAM_CHAT_ID). ב-Python דנפק שמע תדיר; בדפא הדין, דחוף עלה בימינא ובחר \"שרי סדרא הדין\" לנסיותיה באגרתא דדוגמא."
+  },
+  "rb_timer": {
+   "message0": "שעונא",
+   "tooltip": "שניין מן דשרא הלוכא או מן דאתקין שעונא."
+  },
+  "rb_tokens_used": {
+   "message0": "טוקנין דאתאכלו עד כען",
+   "tooltip": "טוקנין דהלוכא הדין אכל: דאשתלחו ודאתקבלו. אומדנא בדפא הדין, קושטא ב-Python דנפק."
+  },
+  "rb_try": {
+   "message0": "נסי",
+   "message1": "%1",
+   "message2": "אי נפיל",
+   "message3": "%1",
+   "tooltip": "מרהט חולקא קדמאה. אי מדעם ביה נפיל, מרהט חולקא תניינא חלף למפסק הלוכא."
+  },
+  "rb_use_model": {
+   "message0": "שמש בחכימא %1",
+   "tooltip": "מחלף חכימא ללבני בינתא דבתר דא. חכימין דלאו Claude רהטין ב-Python דנפק; בדפא הדין Claude קאים באתרהון."
+  },
+  "rb_wait": {
+   "message0": "אמתין %1 %2",
+   "tooltip": "מפסיק סדרא הדין (עד 24 שעין)."
+  },
+  "rb_wait_msg": {
+   "message0": "אמתין עד דאקבל %1",
+   "tooltip": "מפסיק סדרא הדין עד דסדרא אחרנא מכריז אגרתא."
+  },
+  "rb_wait_time": {
+   "message0": "אמתין עד %1 : %2",
+   "tooltip": "מפסיק עד שעתא הדא (שעונא ד-24 שעין). אי עברת יומא דין, מתין עד למחר."
+  },
+  "rb_wait_until": {
+   "message0": "אמתין עד %1",
+   "tooltip": "מפסיק עד דתנאה קושטא. מתבדק תרתין זמנין בשניא, או כל 10 שניין אי שאיל ל-Claude."
+  },
+  "rb_web_search": {
+   "message0": "בעי ברשתא %1",
+   "tooltip": "ב-Python דנפק דא בעי ברשתא חייתא. בדפא הדין Claude לא יכיל לשוטטא, הלכך מתיב ממנדעיה ופנקסא אמר כן."
+  },
+  "rb_webhook_when": {
+   "message0": "כד בעותא דרשתא אתיא ל-/ %1",
+   "tooltip": "מרהט לבנין דלתחתא כד מדעם (Home Assistant, IFTTT, קפיצא בטלפונך) קרי ל-http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. בעותא בלא מפתחא מתדחין. \"מה דאתא\" יהב כתבא דאשתלח, וחקלי JSON או דאתרא."
+  },
+  "rb_when_time": {
+   "message0": "כד שעתא %1 : %2 %3",
+   "tooltip": "רהט בשעתא הדא (שעונא ד-24 שעין) כל עוד זמניא פתיחין ודפא הדין פתיח."
+  },
+  "rb_with_any_model": {
+   "message0": "עם חכימא דOpenRouter %1",
+   "message1": "%1",
+   "tooltip": "מרהט לחוד לבנין דבגוה בכל חכימא דOpenRouter יהב. כתוב שמיה מן openrouter.ai/models, כגון mistralai/mistral-small או google/gemma-4-31b-it. openrouter/auto בחר חד בשבילך. רהט ב-Python דנפק (צריך OPENROUTER_API_KEY); בדפא הדין Claude קאים באתריה."
+  },
+  "rb_with_model": {
+   "message0": "עם חכימא %1",
+   "message1": "%1",
+   "tooltip": "מרהט לחוד לבנין דבגוה בחכימא הדין, ובתר כן תאיב לחכימא דקדם. חכימין דלאו Claude רהטין ב-Python דנפק; בדפא הדין Claude קאים באתרהון."
+  },
+  "rb_word_count": {
+   "message0": "מניין מלי %1"
+  }
+ },
+ "options": {
+  "rb_when_time.DAYS": {
+   "every": "כל יומא",
+   "weekdays": "ביומי חול",
+   "weekends": "בסופי שבתא"
+  },
+  "rb_every.UNIT": {
+   "m": "רגעין",
+   "h": "שעין"
+  },
+  "rb_wait.UNIT": {
+   "s": "שניין",
+   "m": "רגעין",
+   "h": "שעין"
+  },
+  "rb_now.PART": {
+   "time": "שעתא",
+   "date": "יומא",
+   "datetime": "יומא ושעתא",
+   "hour": "שעתא",
+   "minute": "רגעא",
+   "weekday": "יומא דשבתא"
+  },
+  "rb_sort.ORDER": {
+   "desc": "רמא קדמאה",
+   "asc": "מכיכא קדמאה"
+  },
+  "rb_ask_first.WHAT": {
+   "ha": "כל עבידתא דביתא חכימא (Home Assistant, Homey, MQTT)",
+   "messages": "שליחות אגרן והכרזן",
+   "files": "נטירת מגלתא",
+   "all": "כל אלין"
+  },
+  "rb_agent_builtin.KIND": {
+   "web": "בעי ברשתא וקרי דפין",
+   "ask": "שאל יתי שאלתא",
+   "memory": "דכר ואדכר רשימין",
+   "calc": "חושבנין",
+   "time": "שעין ויומין",
+   "file": "קרי מגלתא דאבחר",
+   "review": "בדוק כתבא כלקבל מכילתא",
+   "feeds": "מבועי שמועתא",
+   "linkedin": "בעי ב-LinkedIn (דפין גליין)",
+   "calendar": "חושבן יומיא: מאורעין וזמן פנוי",
+   "email": "email: בעי וקרי",
+   "email_send": "email: שלח (שאיל יתי קדמאה)",
+   "github": "GitHub: עבידן ו-pull requests",
+   "github_act": "GitHub: תגובתא (שאיל יתי קדמאה)",
+   "telegram": "Telegram: בעי באגרתי",
+   "telegram_send": "Telegram: שלח (שאיל יתי קדמאה)",
+   "telegram_send_free": "Telegram: שלח (בלא שאלתא)",
+   "discord": "Discord: בעי בפלגי",
+   "discord_send": "Discord: שלח (שאיל יתי קדמאה)",
+   "discord_send_free": "Discord: שלח (בלא שאלתא)",
+   "slack": "Slack: בעי בפלגי",
+   "slack_send": "Slack: שלח (שאיל יתי קדמאה)",
+   "slack_send_free": "Slack: שלח (בלא שאלתא)",
+   "mqtt": "MQTT: קרי ענינין",
+   "mqtt_act": "MQTT: פרסם (שאיל יתי קדמאה)",
+   "mqtt_act_free": "MQTT: פרסם (בלא שאלתא)",
+   "homey_read": "Homey: חזי במאנין, בנגדין ובמשתניא",
+   "homey_act": "Homey: שליט במאנין ושרי נגדין (שאיל יתי קדמאה)",
+   "homey_act_free": "Homey: שליט במאנין ושרי נגדין (בלא שאלתא)",
+   "ha_read": "Home Assistant: חזי במאנין",
+   "ha_act": "Home Assistant: שליט במאנין",
+   "ha_act_free": "Home Assistant: שליט במאנין (בלא שאלתא)"
+  },
+  "rb_agent_mcp.ASK": {
+   "changes": "(שאיל יתי קדם מאנין דמשנין מדעם)",
+   "every": "(שאיל יתי קדם כל מאנא)",
+   "never": "(בלא שאלתא)"
+  },
+  "rb_tg_message.PART": {
+   "text": "כתבא",
+   "sender": "משלחא",
+   "chat": "שיחתא"
+  },
+  "rb_mem_set.KIND": {
+   "transient": "כל עוד דפא הדין פתיח",
+   "permanent": "לעלם"
+  },
+  "rb_mem_set_for.UNIT": {
+   "m": "רגעין",
+   "h": "שעין",
+   "d": "יומין"
+  },
+  "rb_mem_add.KIND": {
+   "transient": "כל עוד דפא הדין פתיח",
+   "permanent": "לעלם"
+  },
+  "rb_img_save.FORMAT": {
+   "png": "PNG",
+   "svg": "SVG (צייורין)",
+   "orig": "מגלתא קדמייתא"
+  }
+ },
+ "categories": {
+  "Events": "מאורעין",
+  "Control": "שלטונא",
+  "Wait & time": "מתנתא וזמנא",
+  "Operators": "חושבנין",
+  "Text": "כתבא",
+  "Variables": "משתניא",
+  "Lists": "סדרין",
+  "My Blocks": "לבנתי",
+  "Programs": "סדורין",
+  "Search results": "מה דאשתכח",
+  "Draft": "טופסא",
+  "Ask Claude": "שאל Claude",
+  "Review": "בדיקתא",
+  "Agent": "שליחא",
+  "Tools": "מאניא",
+  "Connections": "קשרין",
+  "You": "אנת",
+  "Records": "שטרי",
+  "Files": "מגלתא",
+  "Memory": "דוכרנא",
+  "Pictures": "צורתא",
+  "Home Assistant": "Home Assistant",
+  "Homey": "Homey",
+  "Output": "מפקנא"
+ },
+ "labels": {
+  "Tools for the agent: drop them inside an agent block": "מאני שליחא: שדי יתהון בגו לבנת שליחא",
+  "Listeners: they run while the exported program runs on schedule": "שמועין: רהטין כל עוד סדורא דנפק רהט בזמניה",
+  "Read and send": "קרי ושלח",
+  "Type in 'Find a block' above the canvas.": "כתוב ב\"בעי לבנתא\" מעילא ללוחא.",
+  "No blocks match": "לית לבנין דשוין"
+ },
+ "page": {
+  "Second Thought": "Second Thought",
+  "Snap AI steps together, then press Run. Claude does each block in order.": "צרף פסיעי בינתא כחדא, ובתר כן דחוף שרי. Claude עביד כל לבנתא בסדרא.",
+  "Example": "דוגמא",
+  "Load": "טעון",
+  "Browse examples": "עיין בדוגמי",
+  "Import / export": "אעיל / אפיק",
+  "Programs": "סדורין",
+  "Memory": "דוכרנא",
+  "Home Assistant": "Home Assistant",
+  "Model": "חכימא",
+  "The language the blocks are shown in. Programs are the same in every language.": "לשנא דלבניא מתחזיין ביה. סדוריא שוין בכל לישן.",
+  "Blocks": "לבניא",
+  "Models to try if the main one fails": "חכימין לנסאה אי רישא נפיל",
+  "Backups": "סמוכין",
+  "Backups ({n})": "סמוכין ({n})",
+  "Step: off": "פסיעא: סגיר",
+  "Step: on": "פסיעא: פתיח",
+  "Schedules: off": "זמניא: סגירין",
+  "Schedules: on": "זמניא: פתיחין",
+  "Stop": "פסוק",
+  "Run": "שרי",
+  "Example programs": "סדורי דוגמא",
+  "Each one is a complete program. Load it, press Run, then change the words on the blocks to make it yours. Your current program is replaced, so save it first in Programs if you want to keep it.": "כל חד הוא סדורא שלים. טעון יתיה, דחוף שרי, ובתר כן שני מליא בלבניא למעבדיה דילך. סדורך דכען יתחלף, הלכך נטור יתיה קדמאה בסדורין אי צבית למנטריה.",
+  "Load this example": "טעון דוגמא הדא",
+  "Load this program": "טעון סדורא הדין",
+  "Shared by {author}, made with runtime {runtime}.": "אתפליג על ידי {author}, אתעביד ב-runtime {runtime}.",
+  "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "סדורין דבני אנשא אחרנין פליגו. כל חד אתבדק קדם דאתוסף, ואמר מה יכיל למעבד, מחושבן לבנוהי. לפלגא דילך, חזי gallery/README.md בתיבותא דSecond Thought.",
+  "Saved programs and prompts": "סדורין ומימרין נטירין",
+  "My programs": "סדורי",
+  "Program name": "שם סדורא",
+  "Name for the program on the canvas": "שמא לסדורא דעל לוחא",
+  "Save": "נטור",
+  "Replace “{name}”": "חלף \"{name}\"",
+  "Undo open": "בטיל פתיחה",
+  "Prompt library": "אוצר מימרין",
+  "Reusable prompt text. Drop the 'prompt' block (in Ask Claude) into any slot and type the prompt's name.": "כתב מימרא לשמושא תוב. שדי לבנת 'מימרא' (בשאל Claude) לכל תיבותא וכתוב שם מימרא.",
+  "Name": "שמא",
+  "house style": "נמוסא דביתא",
+  "Text": "כתבא",
+  "Save prompt": "נטור מימרא",
+  "In this page, the Home Assistant blocks use a <b>sample house</b>, so you can build and test safely. Change a state below (press Enter) to try your 'when … changes' scripts. Exported Python connects to your real Home Assistant: set HA_URL and HA_TOKEN (a long-lived access token from your Home Assistant profile, under Security).": "בדפא הדין, לבני Home Assistant משתמשין ב<b>ביתא דדוגמא</b>, דתיכול למבני ולנסאה בשלמא. שני מצבא לתתא (דחוף Enter) לנסאה סדרי \"כד … משתני\" דילך. Python דנפק מתקשר ל-Home Assistant דקושטא דילך: שוי HA_URL ו-HA_TOKEN (מפתח כניסתא אריך חיין מן פרצופך ב-Home Assistant, תחות Security).",
+  "Filter entities": "סנן ישותא",
+  "Filter, e.g. light or kitchen": "סנן, כגון light או kitchen",
+  "Forget all": "אנשי כולא",
+  "Forget everything in memory? This can't be undone.": "לאנשאה כל מה דבדוכרנא? דא לא מתהדר.",
+  "Keep it": "נטור יתיה",
+  "Backup models": "חכימי סמך",
+  "The <b>Model</b> menu is your primary model: it does every step. If it fails on a step (no key, out of credit, service down or unreachable), the first backup answers that step instead, then the second, then the third. The run log says each time a backup steps in.": "תפריט <b>חכימא</b> הוא חכימא רישא דילך: עביד כל פסיעתא. אי נפיל בפסיעתא (לית מפתחא, אזל ממונא, שמושא נפל או לא מטי), סמכא קדמאה מתיב לפסיעתא ההיא באתריה, בתריה תניינא, בתריה תליתאה. פנקסא אמר כל אימת דסמכא עאל.",
+  "Blocks that name their own model, such as <b>with model</b>, keep that model, so a panel of judges stays a panel of different judges.": "לבנין דמדכרין חכימא דילהון, כגון <b>עם חכימא</b>, נטרין חכימא ההוא, דסיעת דיינין תהוי סיעה דדיינין משניין.",
+  "First backup": "סמכא קדמאה",
+  "Second backup": "סמכא תניינא",
+  "Third backup": "סמכא תליתאה",
+  "Import and export": "אעיל ואפיק",
+  "Export this program": "אפיק סדורא הדין",
+  "As a block file": "כמגלת לבנין",
+  "File name": "שם מגלתא",
+  "Save .json file": "נטור מגלת ‎.json",
+  "Copy as text": "העתק ככתבא",
+  "As Python code": "ככתבא דPython",
+  "Runs without this page open, on your computer or a server. Needs an Anthropic API key; API calls are billed separately from claude.ai.": "רהט בלא דדפא הדין פתיח, במחשבך או במשמשא. צריך מפתח API דAnthropic; קריאות API מתפרען בנפרד מן claude.ai.",
+  "Save Python (.zip)": "נטור Python (‎.zip)",
+  "Copy Python code": "העתק כתבא דPython",
+  "Show code": "אחוי כתבא",
+  "Hide code": "טמר כתבא",
+  "Import a program": "אעיל סדורא",
+  "Takes a block file, or Python code exported from here. Other code can be converted by Claude. Replaces what's on the canvas; you can undo straight after.": "מקבל מגלת לבנין, או כתבא דPython דנפק מן הכא. כתבא אחרנא Claude יכיל לשנאה. מחלף מה דעל לוחא; תיכול לבטלא מן יד.",
+  "Choose file (.json, .py, .zip)": "בחר מגלתא (‎.json, ‏.py, ‏.zip)",
+  "Or paste a block file or code": "או דבק מגלת לבנין או כתבא",
+  "Load pasted program": "טעון סדורא דאתדבק",
+  "Undo import": "בטיל אעלתא",
+  "Find a block": "בעי לבנתא",
+  "Find a block…": "בעי לבנתא…",
+  "Zoom": "רבו",
+  "Zoom in": "קריב",
+  "Zoom out": "רחיק",
+  "Fit program on screen": "שוי סדורא בכל לוחא",
+  "Fit": "שוי",
+  "Run log": "פנקסא",
+  "Save log": "נטור פנקסא",
+  "Watch values": "נטור ערכין",
+  "Paused": "פסיק",
+  "Paused before: {step}": "פסיק קדם: {step}",
+  "Next step": "פסיעתא דבתרה",
+  "Run to the end": "רהט עד סופא",
+  "Run this script": "שרי סדרא הדין",
+  "Run this block and show its value": "שרי לבנתא הדא ואחוי ערכה",
+  "An example program is loaded on the left. Press Run to watch it work here, or pick another example above.": "סדורא דדוגמא טעין בלוחא. דחוף שרי למחזי יתיה עביד הכא, או בחר דוגמא אחרנא מעילא.",
+  "Click any white slot on a block to type into it.": "דחוף על כל תיבותא חוורתא בלבנתא למכתב בה.",
+  "Drag blocks from the categories; drag a block back onto them to delete it. Round slots take values, hexagon slots take yes/no conditions.": "גרור לבנין מן זניא; גרור לבנתא בחזרה לגבהון למחקה. תיבן עגולן מקבלן ערכין, תיבן דשית זויין מקבלן תנאין דאין/לא.",
+  "Only blocks under a \"when Run is clicked\" or \"when I receive\" hat run. Separate scripts run side by side.": "לחוד לבנין תחות כובע \"כד שרי מתדחף\" או \"כד אנא מקבל\" רהטין. סדרין פריסין רהטין זה בצד זה.",
+  "Writing": "כתיבתא",
+  "Research": "חקירתא",
+  "Design": "ציורא",
+  "Learning": "אולפנא",
+  "Work": "עבידתא",
+  "Home and baking": "ביתא ואפייתא",
+  "Agents": "שליחין",
+  "Homey": "Homey",
+  "Code and data": "כתבא וידיעתא",
+  "Automation": "עבידתא מגרמה",
+  "Home Assistant: no connection needed": "Home Assistant: לא צריך קשרא",
+  "Home Assistant: daily life": "Home Assistant: חיי כל יום",
+  "Home Assistant: security and cameras": "Home Assistant: נטירותא וצלמין",
+  "Home Assistant: energy": "Home Assistant: חילא",
+  "Home Assistant: comfort and garden": "Home Assistant: ניחותא וגנתא",
+  "Home Assistant: kitchen and household": "Home Assistant: בית בשולא וביתא",
+  "Home Assistant: pets": "Home Assistant: חיוון",
+  "Home Assistant: house health": "Home Assistant: בריאות ביתא",
+  "Home Assistant: homelab": "Home Assistant: בית מחשבין",
+  "Home Assistant: alerts and voice": "Home Assistant: אזהרין וקלא",
+  "Community": "כנישתא",
+  "Added to result": "אתוסף לפירא",
+  "Added to “{name}”": "אתוסף ל-\"{name}\"",
+  "Agent": "שליחא",
+  "Agent plan": "עיטת שליחא",
+  "Agent step {i}/{n}": "פסיעת שליחא {i}/{n}",
+  "Agent summary": "כנישת שליחא",
+  "Agent: out of steps": "שליחא: שלמו פסיעתא",
+  "Agent: plan changed": "שליחא: עיטתא אשתניאת",
+  "Ask Claude: {request}": "שאל Claude: {request}",
+  "Ask first": "שאל קדמאה",
+  "Back to checkpoint “{name}”": "תוב לנטירתא \"{name}\"",
+  "Backup": "סמכא",
+  "Broadcast “{message}”": "אכרזתא \"{message}\"",
+  "Broadcasts": "אכרזן",
+  "Budget": "תקציבא",
+  "Calendar": "חושבן יומיא",
+  "Can't run a definition": "לא יכיל למרהט הגדרתא",
+  "Change picture: {how}": "שנוי צורתא: {how}",
+  "Chat {name}: {message}": "שיחתא {name}: {message}",
+  "Check: {criteria}": "בדיקתא: {criteria}",
+  "Checkpoint “{name}”": "נטירתא \"{name}\"",
+  "Conversation {name}": "שיחתא {name}",
+  "Current draft": "טופסא דכען",
+  "Cut short": "אתקצר",
+  "Draw: {what}": "צייורא: {what}",
+  "Email": "email",
+  "Email to {to}": "email ל-{to}",
+  "Every {n} h": "כל {n} שעין",
+  "Every {n} min": "כל {n} רגעין",
+  "Extract: {what}": "אפקתא: {what}",
+  "Finished": "שלים",
+  "Forgot “{name}”": "אתנשי \"{name}\"",
+  "Gave up after {n} tries": "שבק בתר {n} נסיונין",
+  "GitHub": "GitHub",
+  "GitHub comment on {repo} #{n}": "תגובת GitHub על {repo} #{n}",
+  "Home Assistant: {service}": "Home Assistant: {service}",
+  "Homey flow started": "נגדא דHomey שרא",
+  "Homey variable {name}": "משתניא דHomey {name}",
+  "Instructions for Claude": "פקודיא ל-Claude",
+  "Kept the best draft": "טופסא טבא נטיר",
+  "List: {request}": "סדרא: {request}",
+  "Look at picture: {question}": "חזי בצורתא: {question}",
+  "MCP server “{server}”": "משמשא MCP \"{server}\"",
+  "MQTT": "MQTT",
+  "News feeds": "מבועי שמועתא",
+  "News: {feed}": "שמועתא: {feed}",
+  "Not done": "לא אתעביד",
+  "Note": "רשימא",
+  "Nothing to run": "לית מה למרהט",
+  "Notification → {target}": "הודעתא ← {target}",
+  "Number: {request}": "מניינא: {request}",
+  "Partial answer": "פתגמא פלגא",
+  "Pick the better one": "בחר טבא",
+  "Picture": "צורתא",
+  "Program: {name}": "סדורא: {name}",
+  "Read page: {url}": "קרי דפא: {url}",
+  "Record: {request}": "שטרא: {request}",
+  "Records: {request}": "שטרי: {request}",
+  "Redraw as illustration: {how}": "צייר מן חדת כצייורא: {how}",
+  "Remembered “{name}”": "אתדכר \"{name}\"",
+  "Reply continued": "פתגמא אתמשך",
+  "Result": "פירא",
+  "Retrying": "מנסי תוב",
+  "Review": "בדיקתא",
+  "Review, round {n}": "בדיקתא, סבובא {n}",
+  "Revise": "תקנתא",
+  "Revise to fix the problems": "תקן פגמיא",
+  "Rework: {how}": "עבידא מן חדת: {how}",
+  "Rewrite: {how}": "כתיבה מן חדת: {how}",
+  "Run stopped": "הלוכא פסק",
+  "Save file": "נטור מגלתא",
+  "Save picture": "נטור צורתא",
+  "Scheduled {time}": "בזמנא {time}",
+  "Score picture: {criteria}": "שום צורתא: {criteria}",
+  "Score: {text}": "שומא: {text}",
+  "Search (from Claude's knowledge): {query}": "בעותא (ממנדע Claude): {query}",
+  "Search LinkedIn (from Claude's knowledge): {query}": "בעותא ב-LinkedIn (ממנדע Claude): {query}",
+  "Snapshot: {entity}": "צורתא: {entity}",
+  "Something failed, so the 'if it fails' part ran": "מדעם נפל, הלכך חולקא \"אי נפיל\" רהט",
+  "Spoken on {player}": "אתאמר ב-{player}",
+  "Stopped": "פסק",
+  "Task set": "עבידתא אתשויאת",
+  "Telegram": "Telegram",
+  "Thinking…": "מעיין…",
+  "Unreadable reply": "פתגמא דלא מתקרי",
+  "Value of that block": "ערכה דלבנתא ההיא",
+  "Wait": "מתנתא",
+  "Wait until a condition": "מתנתא לתנאה",
+  "Wait until a time": "מתנתא לשעתא",
+  "Waiting for “{message}”": "מתין ל-\"{message}\"",
+  "Waiting {time}": "מתין {time}",
+  "Waiting until {time}": "מתין עד {time}",
+  "Waiting until {time} tomorrow": "מתין עד {time} למחר",
+  "When {entity} changes": "כד {entity} משתני",
+  "Write a first draft": "כתוב טופסא קדמאה",
+  "Yes or no: {question}": "אין או לא: {question}",
+  "a speaker": "רמקולא",
+  "your channel": "פלגך",
+  "your chat": "שיחתך",
+  "your feeds": "מבועך",
+  "Allow": "שבוק",
+  "Allow this?": "למשבק דא?",
+  "Approve": "אודי",
+  "Choose a file": "בחר מגלתא",
+  "Choose a file first.": "בחר מגלתא קדמאה.",
+  "Choose a picture": "בחר צורתא",
+  "Choose a picture first.": "בחר צורתא קדמאה.",
+  "Choose file": "בחר מגלתא",
+  "Choose one": "בחר חדא",
+  "Choose picture": "בחר צורתא",
+  "Continue": "אזיל",
+  "Do you approve this?": "אנת מודה בדא?",
+  "Don't": "לא",
+  "No answer.": "לית פתגמא.",
+  "Question for you": "שאלתא לך",
+  "Reading {file}…": "קרי {file}…",
+  "Send answer": "שלח פתגמא",
+  "Send back": "אהדר",
+  "Type an answer first.": "כתוב פתגמא קדמאה.",
+  "Use this file": "שמש במגלתא הדא",
+  "Use this picture": "שמש בצורתא הדא",
+  "Your answer": "פתגמך",
+  "Copied": "אתעתק",
+  "Selected, press Ctrl+C": "בחיר, דחוף Ctrl+C",
+  "Saved": "נטיר",
+  "Nothing to save yet": "לית מה למנטר עד כען",
+  "Tool": "מאנא",
+  "Input": "יהבתא",
+  "Status": "מצבא",
+  "final answer": "פתגמא בתראה",
+  "Nothing remembered yet. Use the Memory blocks to remember values between runs.": "לית מדעם דכיר עד כען. שמש בלבני דוכרנא למדכר ערכין בין הלוכין.",
+  "Forget": "אנשי",
+  "Forget {name}": "אנשי {name}",
+  "Delete": "מחוק",
+  "Confirm delete": "אשר מחיקתא",
+  "running": "רהט",
+  "paused": "פסיק",
+  "stopping…": "פסיק…",
+  "stopped": "פסק",
+  "error": "טעותא",
+  "waiting for you": "מתין לך",
+  "done in {time}": "שלים ב-{time}",
+  "{n} Claude call": "{n} קריאה ל-Claude",
+  "{n} Claude calls": "{n} קריאן ל-Claude",
+  "~{n} tokens": "~{n} טוקנין",
+  "added": "אתוסף",
+  "all finished": "כולא שלים",
+  "answer": "פתגמא",
+  "answered": "אתיב",
+  "approved": "אתאשר",
+  "backup": "סמכא",
+  "bad input": "יהבתא בישתא",
+  "best draft": "טופסא טבא",
+  "best effort": "כמה דאפשר",
+  "cleared": "אתכנש",
+  "continued": "אתמשך",
+  "cut short": "אתקצר",
+  "done": "שלים",
+  "drawn": "אתצייר",
+  "empty answer": "פתגמא ריקנא",
+  "ended": "סף",
+  "failed": "נפל",
+  "failed, out of rounds": "נפל, שלמו סבוביא",
+  "finished": "שלים",
+  "forgotten": "אתנשי",
+  "handled": "אתעביד",
+  "interrupted": "אתפסק",
+  "kept": "נטיר",
+  "needs work": "צריך עבידתא",
+  "no listeners": "לית שמועין",
+  "no output": "לית מפקנא",
+  "not a tool": "לאו מאנא",
+  "not live": "לאו חי",
+  "not on this page": "לאו בדפא הדין",
+  "note": "רשימא",
+  "passes": "עבר",
+  "planned": "אתעט",
+  "quiet": "שקיט",
+  "read": "אתקרי",
+  "received": "אתקבל",
+  "refused": "אתדחי",
+  "repair": "תקנתא",
+  "repeat": "חזרתא",
+  "reset": "אתקין",
+  "restored": "אתהדר",
+  "retry {n}": "נסיונא תוב {n}",
+  "revised": "אתתקן",
+  "sample": "דוגמא",
+  "sample home": "ביתא דדוגמא",
+  "sample house": "ביתא דדוגמא",
+  "saved": "נטיר",
+  "say": "אמר",
+  "sent": "אשתלח",
+  "set": "אתשוי",
+  "shown": "אתחזי",
+  "skipped": "אשתבק",
+  "started": "שרא",
+  "tool error": "טעות מאנא",
+  "turn {n}": "סבובא {n}",
+  "unreadable": "לא מתקרי",
+  "using tool": "משמש במאנא",
+  "waiting": "מתין",
+  "{n} devices": "{n} מאנין",
+  "{n} events": "{n} מאורעין",
+  "{n} items": "{n} מילין",
+  "{n} records": "{n} שטרי",
+  "{n} step": "{n} פסיעא",
+  "{n} steps": "{n} פסיען",
+  "{n} topics": "{n} ענינין",
+  "'Forever' and timed memories are saved in this browser only. They won't follow you to another device.": "דוכרנין \"לעלם\" ודזמנא נטירין בדפדפנא הדין לחוד. לא אזלין עמך למאנא אחרנא.",
+  "'Forever' and timed memories are saved to your account for this page. Only you can see them.": "דוכרנין \"לעלם\" ודזמנא נטירין בחשבונך לדפא הדין. אנת לחודך חזי להון.",
+  "A program with that name exists. Press again to replace it.": "סדורא בשמא הדין איתוהי. דחוף תוב לחלופיה.",
+  "A save prompt is already open. Finish that one first.": "בעות נטירה כבר פתיחא. שלים יתה קדמאה.",
+  "Add a 'when it's …' or 'every …' block from Events, with steps under it, before turning Schedules on.": "אוסיף לבנת \"כד שעתא …\" או \"כל …\" מן מאורעין, עם פסיען תחותה, קדם דתפתח זמניא.",
+  "Back to the program you had before.": "תוב לסדורא דהוה לך קדם.",
+  "Checking where memory can be saved…": "בדיק היכא אפשר למנטר דוכרנא…",
+  "Checking where things can be saved…": "בדיק היכא אפשר למנטר מילין…",
+  "Claude converted everything. Check the blocks before running.": "Claude שני כולא. בדוק לבניא קדם הלוכא.",
+  "Claude's conversion didn't come back as a block program. Try again, or simplify the code.": "שנויא דClaude לא תב כסדורא דלבנין. נסי תוב, או פשוט כתבא.",
+  "Conversion failed: {problem}": "שנויא נפל: {problem}",
+  "Convert the edited code with Claude": "שני כתבא דאתתקן ב-Claude",
+  "Convert with Claude": "שני ב-Claude",
+  "Converted program ({n} blocks).": "סדורא אשתני ({n} לבנין).",
+  "Converted “{name}” ({n} blocks).": "\"{name}\" אשתני ({n} לבנין).",
+  "Converting needs Claude. Open this page in claude.ai while signed in.": "שנויא צריך Claude. פתח דפא הדין ב-claude.ai כד אנת עליל.",
+  "Converting with Claude. This can take a minute or two…": "משני ב-Claude. דא יכיל לממשך רגעא או תרין…",
+  "Copied. Paste it anywhere to keep or share it.": "אתעתק. דבק יתיה בכל אתר למנטריה או לפלגיה.",
+  "Copy isn't allowed here, so the code is selected below. Press Ctrl+C (or Cmd+C), then save it as {name}.py.": "העתקה לא שריא הכא, הלכך כתבא בחיר לתתא. דחוף Ctrl+C (או Cmd+C), ובתר כן נטור יתיה כ-{name}.py.",
+  "Copy isn't allowed here, so the text is selected below. Press Ctrl+C (or Cmd+C).": "העתקה לא שריא הכא, הלכך כתבא בחיר לתתא. דחוף Ctrl+C (או Cmd+C).",
+  "Edit": "תקן",
+  "Exported to Python, it asks you before its first run.": "כד נפק ל-Python, שאיל לך קדם הלוכא קדמאה דיליה.",
+  "File sent.": "מגלתא אשתלחת.",
+  "Give it a name first.": "הב ליה שמא קדמאה.",
+  "Give the prompt a name.": "הב שמא למימרא.",
+  "Import undone. Your previous program is back.": "אעלתא בטילא. סדורך דקדם תב.",
+  "It can also {things}.": "יכיל נמי {things}.",
+  "It can {things}.": "יכיל {things}.",
+  "It only uses your models: it doesn't connect to anything else.": "משמש לחוד בחכימיך: לא מתקשר למדעם אחרן.",
+  "Its Python was exported with a runtime from before versions were numbered; this page has runtime {ours}. Export it again to give the Python program the new runtime (CHANGELOG.md says what changed).": "Python דיליה נפק ב-runtime מן קדם דאתמנו נוסחיא; בדפא הדין runtime {ours}. אפיק יתיה תוב למיהב לסדורא דPython runtime חדתא (CHANGELOG.md אמר מה אשתני).",
+  "Its Python was exported with runtime {theirs}; this page has runtime {ours}. Export it again to give the Python program the new runtime (CHANGELOG.md says what changed).": "Python דיליה נפק ב-runtime {theirs}; בדפא הדין runtime {ours}. אפיק יתיה תוב למיהב לסדורא דPython runtime חדתא (CHANGELOG.md אמר מה אשתני).",
+  "Loaded program ({n} blocks).": "סדורא אטען ({n} לבנין).",
+  "Loaded “{name}” ({n} blocks).": "\"{name}\" אטען ({n} לבנין).",
+  "Next: {time} (in {left})": "דבתר: {time} (בעוד {left})",
+  "No prompts yet. Add reusable prompt text here, then use the 'prompt' block in Ask Claude.": "לית מימרין עד כען. אוסיף הכא כתב מימרא לשמושא תוב, ובתר כן שמש בלבנת 'מימרא' בשאל Claude.",
+  "No saved programs yet. Name the one on the canvas and press Save.": "לית סדורין נטירין עד כען. הב שמא לסדורא דעל לוחא ודחוף נטור.",
+  "No scheduled scripts": "לית סדרין בזמנא",
+  "Not converted: {notes}.": "לא אשתני: {notes}.",
+  "Open": "פתח",
+  "Opened “{name}”.": "\"{name}\" אתפתח.",
+  "Paste program text or code into the box first.": "דבק כתב סדורא או כתבא בתיבותא קדמאה.",
+  "Python code copied. Save it as {name}.py.": "כתבא דPython אתעתק. נטור יתיה כ-{name}.py.",
+  "Restore the exported blocks": "אהדר לבניא דנפקו",
+  "Running needs Claude. Open this page in claude.ai while signed in.": "הלוכא צריך Claude. פתח דפא הדין ב-claude.ai כד אנת עליל.",
+  "Save cancelled.": "נטירתא אתבטלת.",
+  "Saved in this browser only.": "נטיר בדפדפנא הדין לחוד.",
+  "Saved memory isn't available here. Everything lasts only while the page is open.": "דוכרנא נטירא לא איתוהי הכא. כולא קאים לחוד כל עוד דפא פתיח.",
+  "Saved prompt “{name}”. Use it with the 'prompt' block.": "מימרא \"{name}\" נטירא. שמש בה עם לבנת 'מימרא'.",
+  "Saved to your account for this page. Only you can see them.": "נטיר בחשבונך לדפא הדין. אנת לחודך חזי להון.",
+  "Saved {file}.": "{file} נטיר.",
+  "Saved {name}.zip. Unzip it, put your keys in second-thought.ini, then run {name}.py (on Windows, double-click run.bat).": "{name}.zip נטיר. שרי יתיה, שוי מפתחך ב-second-thought.ini, ובתר כן רהט {name}.py (ב-Windows, דחוף תרתין זמנין על run.bat).",
+  "Saved “{name}”.": "\"{name}\" נטיר.",
+  "Saving files isn't available here. Use Copy Python code instead.": "נטירת מגלתא לא איתה הכא. שמש ב\"העתק כתבא דPython\" באתרה.",
+  "Saving files isn't available here. Use Copy as text instead.": "נטירת מגלתא לא איתה הכא. שמש ב\"העתק ככתבא\" באתרה.",
+  "Saving isn't available here. Use Import / export to keep a copy as a file.": "נטירתא לא איתה הכא. שמש באעיל / אפיק למנטר צורתא כמגלתא.",
+  "Saving isn't available here. Use Import / export to keep files instead.": "נטירתא לא איתה הכא. שמש באעיל / אפיק למנטר מגלתא באתרה.",
+  "Schedules are on. They run only while this page stays open and your computer is awake. Each run uses your Claude usage.": "זמניא פתיחין. רהטין לחוד כל עוד דפא הדין פתיח ומחשבך ער. כל הלוכא אכיל מן שמוש Claude דילך.",
+  "That couldn't be saved ({problem}).": "דא לא אתנטר ({problem}).",
+  "That file is over 5 MB, which is too big for a program file.": "מגלתא ההיא יתירא מן 5 MB, רבתא מדי למגלת סדורא.",
+  "That isn't valid program text. Export a program from this page and import that file.": "דא לאו כתב סדורא כשר. אפיק סדורא מן דפא הדין ואעיל מגלתא ההיא.",
+  "That program couldn't be opened, so the canvas was left as it was.": "סדורא ההוא לא אתפתח, הלכך לוחא אשתבק כמה דהוה.",
+  "That saved program is damaged and can't be opened.": "סדורא נטירא ההוא מחבל ולא מתפתח.",
+  "That zip couldn't be opened: {problem}.": "zip ההוא לא אתפתח: {problem}.",
+  "That's too big to save (over 240 KB).": "דא רבא מדי למנטר (יתיר מן 240 KB).",
+  "The code couldn't be generated: {problem}": "כתבא לא אתעביד: {problem}",
+  "The file couldn't be read. Try choosing it again.": "מגלתא לא אתקריאת. נסי למבחרה תוב.",
+  "The program couldn't be loaded, so your canvas was left as it was. ({problem})": "סדורא לא אטען, הלכך לוחך אשתבק כמה דהוה. ({problem})",
+  "This code was exported from here and then edited. The blocks saved inside it are from before the edits.": "כתבא הדין נפק מן הכא ובתר כן אתתקן. לבניא דנטירין בגוה מן קדם תקנתא.",
+  "This code wasn't exported from this page. Claude can try to turn it into blocks. That uses your Claude usage, and you can undo it afterwards.": "כתבא הדין לא נפק מן דפא הדין. Claude יכיל לנסאה למעבדיה לבנין. דא אכיל מן שמוש Claude דילך, ותיכול לבטליה בתר כן.",
+  "This doesn't look like a Second Thought program. Export one from this page and import that file.": "דא לא מתחזי כסדורא דSecond Thought. אפיק חד מן דפא הדין ואעיל מגלתא ההיא.",
+  "This program uses blocks this page doesn't have: {blocks}.": "סדורא הדין משמש בלבנין דלית בדפא הדין: {blocks}.",
+  "Type a name for this program first.": "כתוב שמא לסדורא הדין קדמאה.",
+  "Type the prompt text.": "כתוב כתב מימרא.",
+  "Your saved space is full. Delete something first.": "אתר נטירתך מלי. מחוק מדעם קדמאה.",
+  "accept web requests from other computers": "למקבל בעותי רשתא ממחשבין אחרנין",
+  "comment on GitHub": "למכתב תגובתא ב-GitHub",
+  "control your Home Assistant devices": "למשלט במאני Home Assistant דילך",
+  "control your Homey devices and start Homey flows": "למשלט במאני Homey דילך ולמשרי נגדי Homey",
+  "forever": "לעלם",
+  "keep notes between runs, in memory.json": "למנטר רשימין בין הלוכין, ב-memory.json",
+  "look at your GitHub projects": "למחזי בעבידת GitHub דילך",
+  "look at your Home Assistant devices": "למחזי במאני Home Assistant דילך",
+  "look at your Homey devices, flows and variables": "למחזי במאני Homey דילך, בנגדין ובמשתניא",
+  "publish MQTT messages": "לפרסמא אגרי MQTT",
+  "read MQTT messages": "למקרי אגרי MQTT",
+  "read files you choose": "למקרי מגלתא דאנת בחר",
+  "read news feeds": "למקרי מבועי שמועתא",
+  "read public web pages and search the web": "למקרי דפי רשתא גליין ולמבעי ברשתא",
+  "read your Discord channels": "למקרי פלגי Discord דילך",
+  "read your Slack channels": "למקרי פלגי Slack דילך",
+  "read your Telegram messages": "למקרי אגרי Telegram דילך",
+  "read your calendars": "למקרי חושבני יומך",
+  "read your email": "למקרי email דילך",
+  "save files in its outputs folder": "למנטר מגלתא בתיבות מפקנא דיליה",
+  "saved {when}": "נטיר {when}",
+  "send Discord messages": "למשלח אגרי Discord",
+  "send Slack messages": "למשלח אגרי Slack",
+  "send Telegram messages": "למשלח אגרי Telegram",
+  "send email": "למשלח email",
+  "unknown error": "טעותא דלא ידיעא",
+  "until {when}": "עד {when}",
+  "use the tools of the MCP servers you set up (they can do whatever those servers can)": "לשמשא במאני משמשי MCP דשוית (יכלין למעבד כל מה דמשמשיא אלין יכלין)",
+  "watch a folder for new files": "למנטר תיבותא למגלתא חדתתא",
+  "while page is open": "כל עוד דפא פתיח",
+  "{list} and {last}": "{list} ו{last}",
+  "'let me choose from' got an empty list.": "\"שבוק לי למבחר מן\" קבל סדרא ריקנא.",
+  "'{k} of' needs a record in its second slot.": "\"{k} ד\" צריך שטרא בתיבותא תניינא דיליה.",
+  "'{name}' called itself too many times.": "\"{name}\" קרא לגרמיה זמנין סגיאין מדי.",
+  "(cleared)": "(אתכנש)",
+  "(kept by the broker)": "(נטיר אצל מתווכא)",
+  "(no answer)": "(לית פתגמא)",
+  "(no draft yet)": "(לית טופסא עד כען)",
+  "(no entity)": "(לית ישותא)",
+  "(no message yet: only messages the broker keeps show up straight away)": "(לית אגרתא עד כען: לחוד אגרן דמתווכא נטיר מתחזיין מן יד)",
+  "(no records)": "(לית שטרי)",
+  "(no result)": "(לית פירא)",
+  "(no subject)": "(לית ענינא)",
+  "(nothing)": "(לא מדעם)",
+  "A 'remember for' block needs a time above zero.": "לבנת \"דכר ל\" צריכא זמנא יתיר מן אפס.",
+  "A 'rewrite' block has nothing to rewrite.": "ללבנת \"כתוב מן חדת\" לית מה למכתב מן חדת.",
+  "A 'wait until I receive' block has no message name.": "ללבנת \"אמתין עד דאקבל\" לית שם אגרתא.",
+  "A 'wait until' block has no condition in its slot.": "ללבנת \"אמתין עד\" לית תנאה בתיבותה.",
+  "A 'when it changes' script started inside the current run.": "סדר \"כד משתני\" שרא בגו הלוכא דכען.",
+  "A Telegram message needs some text.": "אגרת Telegram צריכא כתבא.",
+  "A broadcast block has no message name.": "ללבנת אכרזתא לית שם אגרתא.",
+  "A comment needs some text.": "תגובתא צריכא כתבא.",
+  "A list 'set' block points past the end of the list.": "לבנת \"שוי\" דסדרא מחויא לבתר סוף סדרא.",
+  "A list block asked for item {n} but the list has {length} items.": "לבנת סדרא בעת מלה {n} ברם בסדרא אית {length} מילין.",
+  "A memory block has no name. Type a name into its name slot.": "ללבנת דוכרנא לית שמא. כתוב שמא בתיבות שמה.",
+  "A scheduled script started inside the current run.": "סדר דזמנא שרא בגו הלוכא דכען.",
+  "A yes/no block is empty.": "לבנת אין/לא ריקנא.",
+  "A {service} message needs some text.": "אגרת {service} צריכא כתבא.",
+  "Add a 'set task to' block before this step.": "אוסיף לבנת \"שוי עבידתא ל\" קדם פסיעתא הדא.",
+  "An 'ask Claude' block is empty. Type a question into it.": "לבנת \"שאל Claude\" ריקנא. כתוב בה שאלתא.",
+  "An 'ask for a list' block is empty.": "לבנת \"בעי סדרא\" ריקנא.",
+  "An 'ask for a number' block is empty.": "לבנת \"בעי מניינא\" ריקנא.",
+  "An 'extract' block has no text to read.": "ללבנת \"אפיק\" לית כתבא למקרי.",
+  "Can't divide by zero.": "לא אפשר לפלגא באפס.",
+  "Carries on when another script broadcasts this message.": "אזיל כד סדרא אחרנא מכריז אגרתא הדא.",
+  "Checking every 10 seconds (it asks Claude).": "בדיק כל 10 שניין (שאיל ל-Claude).",
+  "Checking every half second.": "בדיק כל פלגות שניא.",
+  "Claude's reply wasn't a usable drawing.": "פתגמא דClaude לא הוה צייורא דמתשמש.",
+  "Cleared.": "אתכנש.",
+  "Condition became true.": "תנאה הוה קושטא.",
+  "Did you mean: {names}?": "האם כוונתך: {names}?",
+  "Discord messages": "אגרי Discord",
+  "Drag 'when Run is clicked' from Events and attach your steps under it.": "גרור \"כד שרי מתדחף\" מן מאורעין וצרף פסיעתך תחותיה.",
+  "Drawing…": "צאר…",
+  "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. Ask for something shorter, or split the job into smaller steps.": "אף בתר המשכה, פתגמא הוה אריך מדי עדיין, הלכך פסיק בפלגא. נטיר כמה דהוא, רשים \"כמה דאפשר\". בעי מדעם קציר, או פלוג עבידתא לפסיען זעירין.",
+  "From now on, the program asks you before {what}.": "מכען ולהלא, סדורא שאיל יתך קדם {what}.",
+  "GitHub projects": "עבידת GitHub",
+  "GitHub: not found, or the token can't see it.": "GitHub: לא אשתכח, או מפתחא לא חזי ליה.",
+  "Give the record's fields, separated by commas.": "הב חקלי שטרא, פריסין בפסיקין.",
+  "Goal: {goal}": "צביונא: {goal}",
+  "Homey devices": "מאני Homey",
+  "Input: {shown}": "יהבתא: {shown}",
+  "Input: {shown}\n\nIt didn't run: {problem}.": "יהבתא: {shown}\n\nלא רהט: {problem}.",
+  "Input: {shown}\n\nThe same call as the step before, so it didn't run again.": "יהבתא: {shown}\n\nקריאה כפסיעתא דקדם, הלכך לא רהט תוב.",
+  "It asked for {name} with the same input three times in a row. The draft holds its last result.": "בעא {name} ביהבתא חדא תלת זמנין בסדרא. טופסא כליל פירא בתראה דיליה.",
+  "It replied with a tool on its last step, so it stopped there.": "אתיב במאנא בפסיעתא בתרייתא, הלכך פסק תמן.",
+  "It replied with “{name}”, which isn't one of its tools.": "אתיב ב-\"{name}\", דלאו חד מן מאנוהי.",
+  "It said it was done, but its answer was empty.": "אמר דשלים, ברם פתגמיה הוה ריקן.",
+  "It used all {n} steps without a final answer. The draft holds its last result.": "אכל כל {n} פסיען בלא פתגמא בתראה. טופסא כליל פירא בתראה דיליה.",
+  "Its variables are: {names}": "משתנוהי: {names}",
+  "MCP servers can't be reached from this page, so the agent works without this server's tools here. Export to Python and set {setting} in second-thought.ini to use them.": "לא אפשר למטי למשמשי MCP מן דפא הדין, הלכך הכא שליחא עביד בלא מאני משמשא הדין. אפיק ל-Python ושוי {setting} ב-second-thought.ini לשמשא בהון.",
+  "MQTT needs a topic, like home/kitchen/temperature.": "MQTT צריך ענינא, כגון home/kitchen/temperature.",
+  "MQTT topics": "ענייני MQTT",
+  "Meets every criterion.": "ממלי כל מכילתא.",
+  "Memory is full. Forget some entries in the Memory panel, then run again.": "דוכרנא מלי. אנשי כמה רשימין בלוח דוכרנא, ובתר כן רהט תוב.",
+  "More broadcasts are running. They won't be listed one by one.": "אכרזן יתירן רהטין. לא יתמנון חדא חדא.",
+  "No 'when I receive {msg}' script is listening, so nothing happened.": "לית סדר \"כד אנא מקבל {msg}\" דשמע, הלכך לא הוה מדעם.",
+  "No review problems recorded, so nothing to fix.": "לא אתכתבו פגמי בדיקתא, הלכך לית מה לתקנא.",
+  "No token budget for this run.": "לית תקציב טוקנין להלוכא הדין.",
+  "On this page the browser already asks before every download.": "בדפא הדין דפדפנא כבר שאיל קדם כל אחתתא.",
+  "Only drawn pictures can be saved as SVG. Choose PNG instead.": "לחוד צייורין מתנטרין כ-SVG. בחר PNG באתרה.",
+  "Paused.": "פסיק.",
+  "Pick a JPEG, PNG, WebP, GIF or SVG file.": "בחר מגלת JPEG, PNG, WebP, GIF או SVG.",
+  "Pick a PDF, a Word file (.docx), or a text file such as .txt, .md, .csv or .json.": "בחר PDF, מגלת Word (‎.docx), או מגלת כתבא כגון ‎.txt, ‏.md, ‏.csv או ‎.json.",
+  "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "צורתא מתדכרין לחוד \"כל עוד דפא הדין פתיח\". נטור צורתא כמגלתא למנטרה.",
+  "Programs inside programs went more than 10 deep, so the run stopped.": "סדורין בגו סדורין עמיקו יתיר מן 10, הלכך הלוכא פסק.",
+  "Reached {time}": "מטא {time}",
+  "Received “{name}”.": "אתקבל \"{name}\".",
+  "Restored the task, draft, review, result and variables.": "עבידתא, טופסא, בדיקתא, פירא ומשתניא אתהדרו.",
+  "Restored the task, draft, review, result and variables. Draft: {draft}": "עבידתא, טופסא, בדיקתא, פירא ומשתניא אתהדרו. טופסא: {draft}",
+  "Result:": "פירא:",
+  "Right-click a block that uses this My Block, or the script it's in, to run it.": "דחוף בימינא על לבנתא דמשמשא בלבנתי הדא, או על סדרא דהיא ביה, למרהטה.",
+  "Run stopped. What was ready so far is below.": "הלוכא פסק. מה דהוה מתקן עד כען לתתא.",
+  "Saved memory isn't available here, so this will only last while the page is open.": "דוכרנא נטירא לא איתוהי הכא, הלכך דא קאים לחוד כל עוד דפא פתיח.",
+  "Saved the task, draft, review, result and variables.": "עבידתא, טופסא, בדיקתא, פירא ומשתניא נטירין.",
+  "Saved the task, draft, review, result and variables. Draft: {draft}": "עבידתא, טופסא, בדיקתא, פירא ומשתניא נטירין. טופסא: {draft}",
+  "Saving files isn't available in this view.": "נטירת מגלתא לא איתה בחזותא הדא.",
+  "Slack messages": "אגרי Slack",
+  "Started with: {value}": "שרא עם: {value}",
+  "Started.": "שרא.",
+  "Starting afresh.": "שרי מן חדת.",
+  "Stopped after starting {n} scripts. A message may be broadcasting itself in a loop.": "פסק בתר דשרא {n} סדרין. אגרתא דלמא מכריזא לגרמה בסבובא.",
+  "Stopped after {n} Claude calls in one run, to protect your usage. Check for loops that call Claude too often.": "פסק בתר {n} קריאן ל-Claude בהלוכא חד, לנטרא שמושך. בדוק סבובין דקרין ל-Claude זמנין סגיאין מדי.",
+  "Stopped after {n} steps. A loop may never end; check repeat and while blocks.": "פסק בתר {n} פסיען. סבובא דלמא לא משתלים לעלם; בדוק לבני תני ו\"כל עוד\".",
+  "Stopped: this run has used about {used} tokens, which reaches its budget of {budget}. Raise the number in the 'limit this run' block.": "פסק: הלוכא הדין אכל בערך {used} טוקנין, דמטי לתקציביה, {budget}. אסגי מניינא בלבנת \"תחים הלוכא הדין\".",
+  "Subject: {subject}": "ענינא: {subject}",
+  "Telegram messages": "אגרי Telegram",
+  "That couldn't be saved to memory ({problem}).": "דא לא אתנטר בדוכרנא ({problem}).",
+  "That value is too big to remember (over 200 KB). Remember something shorter.": "ערכא ההוא רבא מדי למדכר (יתיר מן 200 KB). דכר מדעם קציר.",
+  "The 'ask Claude about picture' block has no question.": "ללבנת \"שאל Claude על צורתא\" לית שאלתא.",
+  "The 'ask Claude for a record' block has no request.": "ללבנת \"בעי מן Claude שטרא\" לית בעותא.",
+  "The 'change picture' block has no change in it.": "ללבנת \"שני צורתא\" לית שנויא.",
+  "The 'chat' block has no message.": "ללבנת \"שיחתא\" לית אגרתא.",
+  "The 'draw a picture' block has no description.": "ללבנת \"צור צורתא\" לית פירושא.",
+  "The 'notify' block has no message.": "ללבנת \"הודע\" לית אגרתא.",
+  "The 'rework the draft' block has no instruction.": "ללבנת \"עביד טופסא מן חדת\" לית פקודתא.",
+  "The 'run program' block needs the name of a saved program.": "לבנת \"שרי סדורא\" צריכא שם סדורא נטירא.",
+  "The 'save checkpoint' block needs a name.": "לבנת \"נטור נטירתא\" צריכא שמא.",
+  "The 'say' block has nothing to say.": "ללבנת \"אמר\" לית מה למימר.",
+  "The 'search the web' block is empty.": "לבנת \"בעי ברשתא\" ריקנא.",
+  "The 'set {k} of' block needs a record in its middle slot, such as a variable holding 'new record'.": "לבנת \"שוי {k} ד\" צריכא שטרא בתיבותא מציעאה, כגון משתניא דנטיר \"שטרא חדתא\".",
+  "The 'set … of record' block needs a field name.": "לבנת \"שוי … דשטרא\" צריכא שם חקלא.",
+  "The '{where}' block needs a picture in its picture slot.": "לבנת \"{where}\" צריכא צורתא בתיבות צורתא.",
+  "The agent block needs a goal.": "לבנת שליחא צריכא צביונא.",
+  "The block '{type}' can't be used as a value here.": "לבנתא '{type}' לא מתשמשא כערכא הכא.",
+  "The block '{type}' isn't supported yet.": "לבנתא '{type}' לא מתקבלא עד כען.",
+  "The data for {svc} isn't valid JSON. Use something like {\"temperature\": 20}.": "ידיעתא ל-{svc} לאו JSON כשר. שמש במדעם כגון {\"temperature\": 20}.",
+  "The file couldn't be saved here.": "מגלתא לא אתנטרת הכא.",
+  "The picture couldn't be saved here.": "צורתא לא אתנטרת הכא.",
+  "The primary model and all {n} backups failed. Last error: {problem}": "חכימא רישא וכל {n} סמוכין נפלו. טעותא בתרייתא: {problem}",
+  "The primary model and its backup failed. Last error: {problem}": "חכימא רישא וסמכיה נפלו. טעותא בתרייתא: {problem}",
+  "The program ended without a result. Add 'add … to the result' or 'write a first draft'.": "סדורא סף בלא פירא. אוסיף \"אוסיף … לפירא\" או \"כתוב טופסא קדמאה\".",
+  "The program wants to {action} on {entity}. This is a safety check: unlocking, opening and disarming always ask first.": "סדורא בעי {action} על {entity}. דא בדיקת שלמא: פתיחת מנעולא, פתיחה ובטלות נטירותא תדיר שאלין קדמאה.",
+  "The program wants to {action}. This is a safety check: unlocking, opening and disarming always ask first.": "סדורא בעי {action}. דא בדיקת שלמא: פתיחת מנעולא, פתיחה ובטלות נטירותא תדיר שאלין קדמאה.",
+  "The program wants to {said}": "סדורא בעי {said}",
+  "The program “{name}” runs itself ({chain}), which would never end.": "סדורא \"{name}\" מרהט לגרמיה ({chain}), דלא משתלים לעלם.",
+  "The program “{name}” {problem}, so it can't run as a block.": "סדורא \"{name}\" {problem}, הלכך לא רהט כלבנתא.",
+  "The reply didn't have the expected shape: {problem}.\nAsking once more for a corrected reply.": "לפתגמא לא הוה דמותא דמצפייא: {problem}.\nבעי תוב זמנא חדא פתגמא מתקנא.",
+  "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "פתגמא מטא לתחום אורכא, הלכך חכימא אתבעי לממשך מן היכא דפסק.",
+  "The reply wasn't readable JSON, so this step was wasted.": "פתגמא לא הוה JSON דמתקרי, הלכך פסיעתא הדא אבדת.",
+  "The sample house has no camera called “{id}”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.": "לביתא דדוגמא לית צלמא בשם \"{id}\". נסי camera.front_door, camera.driveway, camera.garden, camera.garage או camera.pet.",
+  "The sample house has no entity called “{id}”. Open the Home Assistant panel to see the ones it has.": "לביתא דדוגמא לית ישותא בשם \"{id}\". פתח לוח Home Assistant למחזי מה אית ביה.",
+  "The saved program “{name}” couldn't be opened.": "סדורא נטירא \"{name}\" לא אתפתח.",
+  "The task is empty. Type what you want into 'set task to'.": "עבידתא ריקנא. כתוב מה דאנת בעי ב\"שוי עבידתא ל\".",
+  "The tool block for “{blockName}” gives a type for “{name}”, but that My Block's inputs are: {inputs}.": "לבנת מאנא ל-\"{blockName}\" יהבת זנא ל-\"{name}\", ברם יהבת לבנתי ההיא: {inputs}.",
+  "There's no Homey device called “{name}”.": "לית מאנא דHomey בשם \"{name}\".",
+  "There's no Homey flow called “{name}”.": "לית נגדא דHomey בשם \"{name}\".",
+  "There's no Homey variable called “{name}”.": "לית משתניא דHomey בשם \"{name}\".",
+  "There's no My Block called “{blockName}”.": "לית לבנתי בשם \"{blockName}\".",
+  "There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.": "לית נטירתא בשם \"{name}\" בהלוכא הדין. שוי לבנת \"נטור נטירתא\" קדם דא.",
+  "There's no definition for the block '{name}'.": "לית הגדרתא ללבנתא '{name}'.",
+  "There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.": "לית טופסא עד כען. שוי לבנת \"כתוב טופסא קדמאה\" או \"שוי טופסא ל\" קדם פסיעתא הדא.",
+  "There's no email with id {id}.": "לית email עם מזהה {id}.",
+  "There's no prompt called “{name}” in your prompt library. Open Programs to add it.": "לית מימרא בשם \"{name}\" באוצר מימרך. פתח סדורין לאוספה.",
+  "There's no saved program called “{name}”. Save it from the Programs button first.": "לית סדורא נטירא בשם \"{name}\". נטור יתיה קדמאה מן כפתור סדורין.",
+  "There's nothing to save: the value in the 'save as file' block is empty.": "לית מה למנטר: ערכא בלבנת \"נטור כמגלתא\" ריקן.",
+  "This page can't open other websites, so the agent is told to use search_web instead. Exported Python reads the page for real.": "דפא הדין לא יכיל למפתח אתרין אחרנין, הלכך שליחא מתפקד לשמשא ב-search_web באתרה. Python דנפק קרי דפא בקושטא.",
+  "This page can't open {u}, so it only has its sample feeds: {feeds}. Exported Python reads any feed.": "דפא הדין לא יכיל למפתח {u}, הלכך אית ליה לחוד מבועי דוגמא: {feeds}. Python דנפק קרי כל מבוע.",
+  "This page uses a sample house, so nothing real is read or switched. Export to Python to use your own Home Assistant.": "דפא הדין משמש בביתא דדוגמא, הלכך שום מדעם דקושטא לא מתקרי ולא מתחלף. אפיק ל-Python לשמשא ב-Home Assistant דילך.",
+  "This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.": "דפא הדין משמש בדוגמא ({noun}), הלכך שום מדעם דקושטא לא מתקרי ולא משתלח. Python דנפק משמש בדילך.",
+  "This program only has scheduled scripts. Turn Schedules on to let them run, or add 'when Run is clicked' from Events.": "בסדורא הדין לית אלא סדרין דזמנא. פתח זמניא דירהטון, או אוסיף \"כד שרי מתדחף\" מן מאורעין.",
+  "This run stops before a Claude call once it has used about {budget} tokens (about {used} so far).": "הלוכא הדין פסיק קדם קריאה ל-Claude כד אכל בערך {budget} טוקנין (בערך {used} עד כען).",
+  "This view can't send pictures to Claude, so blocks that look at photos can't run here.": "חזותא הדא לא יכלא למשלח צורתא ל-Claude, הלכך לבנין דחזיין בצורין לא רהטין הכא.",
+  "To change a list, put a list variable in the 'in list' slot.": "לשנאה סדרא, שוי משתניא דסדרא בתיבותא \"בסדרא\".",
+  "To save a picture, use the 'save picture' block.": "למנטר צורתא, שמש בלבנת \"נטור צורתא\".",
+  "Too many scripts running at once (over {n}). Use 'broadcast and wait' inside loops.": "סדרין סגיאין מדי רהטין כחדא (יתיר מן {n}). שמש ב\"אכריז ואמתין\" בגו סבובין.",
+  "Tools: {tools}": "מאניא: {tools}",
+  "Try {attempt} of {max} failed: {lastError}\nTrying again in {seconds}s.": "נסיונא {attempt} מן {max} נפל: {lastError}\nמנסי תוב בעוד {seconds} שניין.",
+  "Unknown tool “{name}”.": "מאנא דלא ידיע \"{name}\".",
+  "Using {model}": "משמש ב-{model}",
+  "Using {model} for the blocks inside": "משמש ב-{model} ללבנין דבגוה",
+  "Waiting for you to confirm the download…": "מתין דתאשר אחתתא…",
+  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "תב לטופסא מן סבובא {round}: הוו ביה פגמין זעירין ({n}). סבוביא דבתריה לא אתקנוהי.",
+  "Which Homey device? Give its name, like Kitchen light.": "הי מאנא דHomey? הב שמיה, כגון Kitchen light.",
+  "Why: {why}": "למה: {why}",
+  "Woke {n} waiting script.": "אתער {n} סדר מתין.",
+  "Woke {n} waiting scripts.": "אתער {n} סדרין מתינין.",
+  "You can't publish to a topic with + or # in it: those only work for listening.": "לא תיכול לפרסמא בענינא עם + או #: אינון לשמיעתא לחוד.",
+  "You said no, so the program skipped this: {said}": "אמרת לא, הלכך סדורא שבק דא: {said}",
+  "all day": "כל יומא",
+  "any smart home action (Home Assistant, Homey or MQTT)": "כל עבידתא דביתא חכימא (Home Assistant, Homey או MQTT)",
+  "ask_me needs a question.": "ask_me צריך שאלתא.",
+  "calculate couldn't work out “{expression}”: {message}.": "calculate לא יכיל לחשבא \"{expression}\": {message}.",
+  "calendar events": "מאורעי חושבן יומיא",
+  "emails": "email",
+  "news feeds": "מבועי שמועתא",
+  "none": "לא מדעם",
+  "nothing": "לא מדעם",
+  "nothing usable": "לית מדעם דמתשמש",
+  "plans first": "עביד עיטתא קדמאה",
+  "read_email needs an email's id number, from search_email.": "read_email צריך מניין מזהה דemail, מן search_email.",
+  "read_page needs a web address starting with http:// or https://.": "read_page צריך אתר רשתא דשרי ב-http:// או https://.",
+  "remember needs a name.": "remember צריך שמא.",
+  "review_text needs criteria to check against.": "review_text צריך מכילתא למבדק כלקבלה.",
+  "review_text needs some text to check.": "review_text צריך כתבא למבדק.",
+  "saving files": "נטירת מגלתא",
+  "search_github needs something to search for.": "search_github צריך מדעם למבעי.",
+  "search_linkedin needs a query.": "search_linkedin צריך בעותא.",
+  "search_memory needs some words to look for.": "search_memory צריך כמה מלין למבעי.",
+  "search_web needs a query.": "search_web צריך בעותא.",
+  "sending messages and announcements": "שליחות אגרן והכרזן",
+  "smart home actions, messages and saving files": "עבידת ביתא חכימא, אגרן ונטירת מגלתא",
+  "time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{when}”.": "time_plus צריך שעתא כגון 09:30 או 2026-10-10 09:30, לא \"{when}\".",
+  "up to {n} steps": "עד {n} פסיען",
+  "with {data}": "עם {data}",
+  "{device} has no “{cap}”. It has: {caps}.": "ל-{device} לית \"{cap}\". אית ליה: {caps}.",
+  "{label} ({left} left)": "{label} (פשו {left})",
+  "{model} failed: {problem}\nTrying {next} instead.": "{model} נפל: {problem}\nמנסי {next} באתריה.",
+  "{n} characters": "{n} אתוון",
+  "{n} script started": "{n} סדר שרא",
+  "{n} script started, waiting for it to finish": "{n} סדר שרא, מתין דישתלים",
+  "{n} scripts started": "{n} סדרין שרו",
+  "{n} scripts started, waiting for them to finish": "{n} סדרין שרו, מתין דישתלמון",
+  "{service} on {entity} was refused, so nothing happened.": "{service} על {entity} אתדחי, הלכך לא הוה מדעם.",
+  "{service} was refused, so nothing happened.": "{service} אתדחי, הלכך לא הוה מדעם.",
+  "{who} can't be reached from this page, so Claude answers in its place. Export to Python to use {who} itself.": "לא אפשר למטי ל-{who} מן דפא הדין, הלכך Claude מתיב באתריה. אפיק ל-Python לשמשא ב-{who} גופיה.",
+  "“{hhmm}” isn't a time like 09:00.": "\"{hhmm}\" לאו שעתא כגון 09:00.",
+  "“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).": "\"{kind}\" לאו זנא דשליחא ידע. שמש ב-text, number, yes/no, list או any (ל-\"{name}\").",
+  "“{name}” can't run while other scripts are running at the same time. Run it from a script that runs on its own (not alongside a broadcast).": "\"{name}\" לא יכיל למרהט כד סדרין אחרנין רהטין בהדי. רהט יתיה מן סדרא דרהט לחודוהי (לא בצד אכרזתא).",
+  "“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.": "\"{repo}\" לאו עבידת GitHub. שמש ב-owner/name, כגון octocat/hello-world.",
+  "“{shown}” isn't a real date.": "\"{shown}\" לאו יומא דקושטא.",
+  "“{shown}” isn't a time.": "\"{shown}\" לאו שעתא.",
+  "“{svc}” isn't a service name. Use domain.service, for example light.turn_off.": "\"{svc}\" לאו שם שמושא. שמש ב-domain.service, כגון light.turn_off.",
+  "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "\"{text}\" לאו יומא. שמש ב-today, tomorrow, יומא דשבתא או YYYY-MM-DD.",
+  "“{to}” isn't an email address.": "\"{to}\" לאו אתר email.",
+  "“{value}” isn't a number.": "\"{value}\" לאו מניינא.",
+  "“{value}” isn't on or off.": "\"{value}\" לאו on או off.",
+  "Try: {tip}": "נסי: {tip}",
+  "Shared by {author}.": "אתפליג על ידי {author}.",
+  "{title} (shared by {author})": "{title} (אתפליג על ידי {author})"
+ },
+ "examples": {
+  "review": {
+   "title": "סבובא דבדיקתא",
+   "desc": "Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.",
+   "tip": "שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."
+  },
+  "interview": {
+   "title": "שאל יתי, ובתר כן כתוב",
+   "desc": "שאיל מה למכתב ולמאן, כתב טופסא, ועביד יתיה מן חדת עד דתדחוף אודי.",
+   "tip": "אתיב לשאלתא בפנקסא; אהדר יתיה כמה זמנין לאכוונותיה."
+  },
+  "w_email": {
+   "title": "צחצח email",
+   "desc": "דבק email גלמא, אמר למאן הוא ואיך צריך למשמע, וClaude מעצב יתיה מן חדת עד דתודי.",
+   "tip": "נסי מדעם קשיא: תביעת חוב דלא אתפרע, או סרובא לטיבותא."
+  },
+  "w_story": {
+   "title": "אגדתא דלילא עם בודקא",
+   "desc": "כתב אגדתא רכיכתא לינוקא חד, ובתר כן בדיק דהיא יאיא לשניה, שקיטא ולא אריכא מדי.",
+   "tip": "שני נמוסי בדיקתא, כגון 'כלילא חרוזא' או 'מלפא למפלג'."
+  },
+  "w_longpost": {
+   "title": "קדמאה ראשי פרקין, ובתר כן מאמרא",
+   "desc": "מסדר ראשי פרקין, כתב כל פרקא לחודוהי, מצרף יתהון, בדיק נגדא ונטר מגלת ‎.md.",
+   "tip": "שני עבידתא לכל מאמר דתצבי באתר רשתך."
+  },
+  "brainstorm": {
+   "title": "חשוב סגי ובחר טבא",
+   "desc": "Claude מקריב 6 כותרין, שאם כל חדא מן 10, ונטר דרמא מנהון.",
+   "tip": "חלף כותריא בשמהן, מימרין או שמהת ספרין."
+  },
+  "w_social": {
+   "title": "רעיונא חד, חמשא אתרין",
+   "desc": "מהפך אכרזתא חדא ל-tweet, לכתבא ב-LinkedIn, לכותרת Instagram, ל-email ולאגרתא קצירתא.",
+   "tip": "תקן סדרא דאתריא לאלין דאנת משמש בהון בקושטא."
+  },
+  "translate": {
+   "title": "תרגם לכמה לישנין",
+   "desc": "כתב שלמא לאתר רשתא בלשן אנגלאה, ובתר כן מתרגם לצרפתאה ולאספמיאה.",
+   "tip": "אוסיף לישנין יתירין ללבנת סדרא."
+  },
+  "parallel": {
+   "title": "תרין בודקין כחדא",
+   "desc": "כתב טופסא, ובתר כן תרין סדרין פריסין בדקין יתיה כחדא: חד לקושטא, וחד למתחילין.",
+   "tip": "אוסיף סדר \"כד אנא מקבל\" תליתאה עם בודקא אחרנא."
+  },
+  "gemini": {
+   "title": "Claude כתב, Gemini בדיק",
+   "desc": "Claude כתב טופסא, Gemini בדיק יתיה, Claude מתקן. דעתא תניינא מן בינה אחרתא.",
+   "tip": "Gemini מתיב לחוד ב-Python דנפק; בדפא Claude קאים באתריה."
+  },
+  "w_llama": {
+   "title": "Llama כתב, Claude בדיק",
+   "desc": "חכימא דLlama במחשבך כתב טופסא ותקנתא; Claude בדיק כל נוסחא כלקבל נמוסך.",
+   "tip": "Llama מתיב לחוד ב-Python דנפק (כד Ollama רהט); בדפא Claude קאים באתריה."
+  },
+  "w_judges": {
+   "title": "שית בינות דיינין",
+   "desc": "Claude, Gemini, Llama, DeepSeek, Grok ו-GPT שאמין כל חד כתבך מן 10; תקבל כל שית שומתא ומציעתא.",
+   "tip": "דבק כותרתא, פירוש מקנה או רישא דאגדתא."
+  },
+  "r_brief": {
+   "title": "קצור חקירתא",
+   "desc": "פליג ענינך ל-4 שאלן, מתיב לכל חדא, ובתר כן בדיק דקצורא כוליה שקיל וקושט על מה דלא ידיע.",
+   "tip": "נסי 'האם קמחא דשערי טב למחמצתא מן קמחא חוורא?'"
+  },
+  "r_compare": {
+   "title": "אשוי בחירתא",
+   "desc": "פרס מעליותא, גריעותא ולמאן כל בחירה יאיא, שאם יתהון, ומני טבא קדמאה.",
+   "tip": "נסי 'תלתא קמחי לחמא', 'תרין מחשבין זעירין' או 'פגרא ב-Cornwall או באגמיא'."
+  },
+  "r_sides": {
+   "title": "טען לתרין סטרין",
+   "desc": "תרין סדרין בנין כחדא טענתא תקיפתא לזכו ולחובה, ובתר כן פסיעא תליתאה כתבא מסקנא תריצתא.",
+   "tip": "שמש ביה בהחלטה דאנת תקיע בה."
+  },
+  "r_second": {
+   "title": "דעתא תניינא מן DeepSeek",
+   "desc": "Claude ו-DeepSeek מתיבין לשאלתא חדא כל חד לחודוהי; ובתר כן Claude משוי יתהון ומחוי היכא פליגין.",
+   "tip": "פלוגתא היא אתרא למחפר עמיק או למבדק מקורא."
+  },
+  "w_gptcheck": {
+   "title": "Claude כתב, GPT בדיק",
+   "desc": "Claude כתב מאמרא, GPT דOpenAI משכח ביה פגמין, וClaude כתב יתיה מן חדת לתקנא כל נקודה דGPT אסיק.",
+   "tip": "חכימא דחברתא אחרתא חזי מה דקדמאה סמי ביה. נסי ביה באגרת בעותא."
+  },
+  "r_sourced": {
+   "title": "פתגמא עם מקורין (Perplexity)",
+   "desc": "Perplexity בעי ברשתא ומתיב עם מקורין ממנין; ובתר כן Claude מחוי כל אמירה דמקוריא לא סמכין.",
+   "tip": "טבא למילין דמשתנין: דמין, שעי פתיחה, שמועתא חדתתא. בדפא הדין Claude קאים באתריה ולא יכיל למבעי, הלכך אפיק יתיה למחזי מקורין דקושטא."
+  },
+  "w_worldpanel": {
+   "title": "רעיונין מכל עלמא",
+   "desc": "Mistral (צרפת), Qwen (Alibaba), Kimi (Moonshot), GLM (Z.ai) ו-MiniMax מקריבין כל חד רעיונא; Claude בחר תקיפא ואמר למה.",
+   "tip": "לחכימין דאתלפו באתרין משניין אית בקושטא יצרין משניין. נסי שמהן למקנה, או ענינא לחגא."
+  },
+  "w_groqstorm": {
+   "title": "סבובא קלילא עם Groq",
+   "desc": "חכימא פתיחא וקלילא דGroq מפיק 20 רעיונין גלמין כהרף עינא; ובתר כן Claude בחר חמשא טבין ומצחצח יתהון.",
+   "tip": "חכימין זולין וקלילין טבין לסגיאות; חכימא זהירא טב לבחירה. נסי כותרין לכתבי רשתא."
+  },
+  "c_openonly": {
+   "title": "חכימין פתיחין לחוד (Hugging Face)",
+   "desc": "Gemma 4 כתב טופסא לפתגמא ו-GPT-OSS בדיק יתיה. תרויהון חכימין פתיחין, רהטין דרך Hugging Face, הלכך Claude לא משתמש כלל.",
+   "tip": "טב לאשואה חכימין פתיחין עם Claude. חלף שמהת חכימין במגלתא דנפקת בכל חכימא מן huggingface.co."
+  },
+  "r_anymodel": {
+   "title": "כל חכימא דתצבי (OpenRouter)",
+   "desc": "בחירתא מגרמה דOpenRouter מתיבא לשאלתך, ובתר כן חכימא דאנת אמרת מתיב נמי, וClaude אמר הי פתגמא טב.",
+   "tip": "כתוב כל שם מן openrouter.ai/models בלבנת \"עם חכימא דOpenRouter\" תניינא, כגון mistralai/mistral-small או google/gemma-4-31b-it."
+  },
+  "r_survey": {
+   "title": "שאלי בדיקתא תריצין",
+   "desc": "כתב שאלן לבדיקתא, שאם כל חדא לתריצו ולבהירו, וכתב מן חדת חלשתא.",
+   "tip": "אחית או ארים תחום שומתא (7) בלבנת \"אי\" כתומתא."
+  },
+  "files": {
+   "title": "קצר מגלתא",
+   "desc": "בחר מגלתא (PDF, Word או כתבא); Claude מקצר יתה עם עבידן ונטר summary.md.",
+   "tip": "נסי דין וחשבון PDF אריך או רשימת כנישתא."
+  },
+  "r_pdf_notes": {
+   "title": "רשימי אולפנא מן מגלתא",
+   "desc": "מפיק נקודין עיקריין מן מגלתא, מני שאלן דשבקת פתיחן, ונטר notes.md.",
+   "tip": "עביד טב במאמרי חכמתא ובמאמרין אריכין דנטירין כ-PDF."
+  },
+  "r_web": {
+   "title": "מה חדת בענינא",
+   "desc": "בעי שמועתא חדתתא בענינא ודכיר אימת בדקת בתראה.",
+   "tip": "בעותא חייתא ברשתא עבדא לחוד ב-Python דנפק; בדפא Claude מתיב ממה דידע."
+  },
+  "pictures": {
+   "title": "צייר, בדוק, צייר מן חדת",
+   "desc": "Claude צאר צייורא, בדיק צייוריה, וצאר מן חדת תרתין זמנין עם תקנתא.",
+   "tip": "שני מה דמצטייר בלבנתא ורודתא קדמייתא."
+  },
+  "d_logo": {
+   "title": "רעיוני סימנא, טבא נטיר",
+   "desc": "צאר תלתא רעיוני סימנא לשמך, שאם כל חד, ונטר טבא.",
+   "tip": "פרש רגשא דאנת בעי, לא שמא לחודוהי."
+  },
+  "d_critique": {
+   "title": "בדוק ציורי",
+   "desc": "בחר צורתא דכרזתך, דפך או מסכך; Claude יהב דעת חכים רחימאה וחמשא תקנתא עיקריין.",
+   "tip": "צלם מסכא דדף רשתא ונסי."
+  },
+  "d_wireframes": {
+   "title": "שרטט מסכי אפליקציא",
+   "desc": "מהפך רעיון אפליקציא לתלתא מסכין חשיבין דילה, עם שרטוטא פשיטא דכל חד.",
+   "tip": "פרש רעיונך במלה חדא, כגון 'אפליקציא למנטר מזוני מחמצתי'."
+  },
+  "d_palette": {
+   "title": "לוח גוונין מן רגשא",
+   "desc": "עביד לוח דחמשא גוונין עם כתבי hex מן רגשא או אתרא, ובתר כן צאר דוגמי גוונין.",
+   "tip": "נסי 'בית אופא בצפרא' או 'בית קהוא על כיף ימא בסתוא'."
+  },
+  "d_icons": {
+   "title": "סימנין דשוין",
+   "desc": "פקודין קיימין נטרין כל צייורא בנמוסא חד, הלכך חמשא סימנין נפקין כקבוצא שויא.",
+   "tip": "שני נמוסא בלבנת פקודיא: גוונא, עביות קוא, מלי או קו לחוד."
+  },
+  "d_name": {
+   "title": "שמא, מימרא וסימנא קדמאה",
+   "desc": "מקריב חמשא שמהן עם מימרין, שביק לך למבחר חד, ובתר כן צאר ליה סימנא קדמאה.",
+   "tip": "שמש ביה לחנותא, לחבורתא, למקנה או לעבידתא דרחימא לך."
+  },
+  "l_quiz": {
+   "title": "עביד בחנתא",
+   "desc": "כתב חמש שאלן דבחירה על כל ענין, עם פתגמא קושטא רשים, ונטר quiz.md.",
+   "tip": "אמר למאן היא: 'בית Tudor, לכתתא חמישאה' או 'חמיעותא, לגברין'."
+  },
+  "l_levels": {
+   "title": "פרש בתלתא אורחין",
+   "desc": "מפרש רעיונא חד לינוקא בר 7, לעולימא ולחכימא, דתחזי יתיה בכל דרגא.",
+   "tip": "נסי מדעם דאנת גופך מבין לפלגא."
+  },
+  "l_tutor": {
+   "title": "אתלמד עם רבא",
+   "desc": "רבא מאריך רוח שאיל לך שאלן חדא חדא, יהב רמזין חלף פתגמין, ומקצר בסופא.",
+   "tip": "שני מניין סבוביא בלבנת \"תני\" כתומתא."
+  },
+  "l_flashcards": {
+   "title": "פתקין מן רשימין",
+   "desc": "בחר רשימך; Claude עביד תמניא פתקי שאלה ופתגמא ונטר יתהון כמגלת כתבא.",
+   "tip": "כל PDF, מגלת Word או רשימי כתבא שפירין."
+  },
+  "l_plan": {
+   "title": "סדר אולפנא שבוע בתר שבוע",
+   "desc": "בני סדר שבועי לפום מה דאנת ילף, כמה זמן אית לך וכמה שעין בשבתא.",
+   "tip": "הוי מפרש: 'יסודי Python, 6 שבועין, 3 שעין בשבתא'."
+  },
+  "k_meeting": {
+   "title": "רשימי כנישתא לעבידן",
+   "desc": "בחר רשימין מכנישתא; תקבל קצורא קצירא וסדרא דמאן עביד מה ועד אימת.",
+   "tip": "רשימין גלמין ומבולבלין שפירין."
+  },
+  "k_cv": {
+   "title": "תקן ספר חיין לעבידתא",
+   "desc": "בחר ספר חייך ודבק מודעת עבידתא; Claude כתב ספר חיין מן חדת דיהוי שוי, ובתר כן בדיק דכל אמירה עדיין קושטא.",
+   "tip": "נטור נמוסא 'כל אמירה בספר חיין קדמאה'. הוא מונע בדותא."
+  },
+  "k_complaint": {
+   "title": "אתיב לתרעומתא",
+   "desc": "כתב פתגמא חמימא וקשוטא לזבונא דלא רעי, שאם יתיה לרחמנותא, משפר יתיה, ומתין לאודאתך.",
+   "tip": "תקן לבנת פקודיא לקלא דעסקך."
+  },
+  "k_products": {
+   "title": "פירושי מקנה בסגיאות",
+   "desc": "כתב פירוש חנותא לכל מקנה בסדרא, כתב מן חדת כל חד דשומתיה פחות מן 7, ונטר כולהון.",
+   "tip": "חלף סדרא במקנך."
+  },
+  "k_agenda": {
+   "title": "סדר כנישתא בזמנין",
+   "desc": "מהפך צביון כנישתא, אנשיה ואורכה לסדר בזמנין עם צביונא לכל מלה.",
+   "tip": "אוסיף 'עם 5 רגעין לשאלן' למחזי איך מסתגל."
+  },
+  "h_bake": {
+   "title": "סדר אפייתא, מחושב לאחורא",
+   "desc": "אמר אימת אנת בעי לחמא מן תנורא וקבל סדר פסיעא בתר פסיעא מחושב לאחורא מן שעתא ההיא.",
+   "tip": "נסי 'שבתא 10 בצפרא', ובתר כן 'חד בשבתא בטיהרא, בית בשולא קריר'."
+  },
+  "h_meals": {
+   "title": "מזונין ממה דבמקררא",
+   "desc": "מסדר חמשא סעודתי רמשא פשיטן ממה דכבר אית לך, ובתר כן כתב סדרא קצירא לזבנא לחסרונא.",
+   "tip": "אדכר מזונין, מה דלא רחים לך, או 'לא מדעם דשקיל יתיר מן 30 רגעין'."
+  },
+  "h_recipe": {
+   "title": "תקן מתכונתא",
+   "desc": "דבק מתכונתא ואמר מה לשנאה (פלגה, עבדה בלא בשרא וחלבא, חלף מדעם); Claude כתב יתה מן חדת ובדיק תרתין זמנין.",
+   "tip": "בדיקתא מוכחא דשיעוריא עדיין שוין בתר שנוי מדתא."
+  },
+  "h_dayout": {
+   "title": "סדר יום טיולא",
+   "desc": "מסדר יומא נייחא עם שעין ואתרין, ובתר כן בדיק דזמני אורחא קושט ודלא אנש שביק.",
+   "tip": "אמר מאן אתי: 'סבא וסבתא ותינוקא' משני כולא."
+  },
+  "a_bake": {
+   "title": "שליחא: סדר אפייתי",
+   "desc": "שליחא דדאין פסיעוהי בגרמיה: בדיק רשימוהי על מחמצתך, שאיל לך מה דצריך, נטר מה דילף, ובתר כן כתב סדר אפייתא.",
+   "tip": "רהט יתיה תרתין זמנין: בתניינא דכיר פתגמך. אוסיף מאנא \"בעי ברשתא\", או שני צביונא."
+  },
+  "a_tool": {
+   "title": "שליחא עם מאנא דילך",
+   "desc": "יהב לשליחא חדא מן לבנתך כמאנא: מחשב מיא. שאיל לך על מתקליא, משמש במחשבא, ומפרש פירא.",
+   "tip": "עביד לבנתך דמהדרא ערכא, ובתר כן אוסיף לבנת \"מאנא: לבנתי\" לה עם פירוש בהיר."
+  },
+  "a_timetable": {
+   "title": "שליחא: סדר זמני אפייתא",
+   "desc": "אמר ליה אימת אנת בעי לחמא מן תנורא. שאיל כמה חמים בית בשולך, ובתר כן מחשב לאחורא במאנא דשעונא, דכל שעתא בסדרא שויא.",
+   "tip": "אתיב ביומא ושעתא, כגון 'שבתא 11:00'. ובתר כן נסי למבעי תרתין ככרין."
+  },
+  "a_scale": {
+   "title": "שליחא: שני שיעורי מתכונתא",
+   "desc": "הב ליה מתכונתא וכמה לישא אנת בעי. מחשב אחוזי אופא ומתקלין חדתין במאנא דחושבנין, דלא מניין מתחשב בדמיונא.",
+   "tip": "נסי 'תלתא ככרין ד-900 g'. כנישת שליחא מחויא כל חושבן דעבד."
+  },
+  "a_selfcheck": {
+   "title": "שליחא: כתוב, בדוק, שפר",
+   "desc": "כתב מאמר קציר, שביק לבודקא פריסא למבדקיה כלקבל מכילתך, ומתקן כל מה דבודקא אשכח עד דעבר.",
+   "tip": "שוי נמוסא דביתך במכילתא. בודקא חזי לחוד כתבא, לא איך שליחא מטא לתמן."
+  },
+  "a_readfile": {
+   "title": "שליחא: בדוק מגלת מתכונתי",
+   "desc": "בעי מנך מגלת מתכונתא (PDF, Word או כתבא), קרי יתה, מחשב מיא ומלחא במאנא דחושבנין, ומחוי כל מה דמתחזי שביש.",
+   "tip": "כל מתכונתא עם מתקלין בגרמין עבדא. PDF דסרוק לא: אית ביה צורי דפין, לא מלין."
+  },
+  "a_research": {
+   "title": "שליחא: חקירתא עם מקורין",
+   "desc": "בעי, קרי מקורוהי כדקא יאות, נטר עובדין עיקריין לזמנא דאתי, ומתיב עם אתריא דשמש בהון. Python דנפק קרי דפין דקושטא; דפא הדין בעי ממנדע Claude.",
+   "tip": "שני שאלתא. רהט יתיה תוב ויכיל למשרי מן עובדיא דנטר."
+  },
+  "a_house": {
+   "title": "שליחא: בדיקת ביתא",
+   "desc": "מעיין ב-Home Assistant דילך לתרעין דאשתבקו פתיחין, סוללין חלשין, מאנין דנפלו מן רשתא וחמימין משניין, ומני מה דצריך עיונא. בדפא הדין משמש בביתא דדוגמא.",
+   "tip": "בלוח Home Assistant, פתח כוותא קדמאה וחזי אי הוא אשגח."
+  },
+  "a_bedtime": {
+   "title": "שליחא: סבוב לילא",
+   "desc": "משכח נהורין דעדיין דלקין ומטפי יתהון, ושאיל לך קדם כל חד. בדיק נמי תרעין ומנעולין, ברם מודע עליהון לחוד: לעלם לא פתח ולא שרי מדעם. בדפא הדין משמש בביתא דדוגמא.",
+   "tip": "אמר \"לא\" לחדא מן בעותוהי וחזי איך אזיל בלא נהורא ההוא."
+  },
+  "a_news": {
+   "title": "שליחא: כנישת שמועתא",
+   "desc": "קרי מבועי שמועתך, שביק מה דאחוי לך בזמנא דעבר, ובחר מה דשוי לעיונך, עם קשרין. בדפא הדין קרי תרין מבועי דוגמא.",
+   "tip": "ב-Python דנפק, שוי מבועך ב-second-thought.ini (feeds = …). רהט יתיה תרתין זמנין: בתניינא מחוי לחוד מה דחדת."
+  },
+  "a_trip": {
+   "title": "שליחא: מסדר אורחא",
+   "desc": "שאיל לאן תצבי למיזל ומאן אתי, משכח יומין פנויין בחושבן יומך, בעי מילין, ובני סדר יום בתר יום עם שעין דשוין ותקציבא בקרוב.",
+   "tip": "אמר מאן אתי וכל מה דחשיב, כגון 'כניסה בלא דרגין' או 'תינוקא'. נטר סדרא דתיכול למבעי שנויין בזמנא דאתי."
+  },
+  "a_prs": {
+   "title": "שליחא: pull requests בשבילי",
+   "desc": "משכח pull requests ב-GitHub דמתינין לבדיקתך, קרי כל חדא, ואמר לך מה משניא, במה לעיינא מקריב, ותגובתא מוצעתא. קרי לחוד: לא מפרסם מדעם.",
+   "tip": "צריך GITHUB_TOKEN ב-Python דנפק. רהט יתיה כל צפר, או שוי יתיה תחות לבנת \"כד שעתא 09:00\"."
+  },
+  "a_prreview": {
+   "title": "שליחא: בדוק ואגיב על pull request",
+   "desc": "שאיל הי pull request למבדק, קרי יתה, כתב תגובת בדיקתא, שביק לבודקא פריסא למבדק דתגובתא תריצא ומפרשא, ובתר כן מפרסם יתה, ושאיל לך קדמאה.",
+   "tip": "אמר \"לא\" כד בעי לפרסמא, למקרי תגובתא בלא לפרסמה."
+  },
+  "a_inbox": {
+   "title": "שליחא: סדר תיבת email",
+   "desc": "קרי email דילך מן תרין יומין בתראין, מסדר ל'צריך פתגמא', 'כדאי למידע' ו'שבוק', בדיק בחושבן יומיא כל מדעם דאית ליה יומא, וכתב פתגמין. לא משלח מדעם בלא למשאל לך.",
+   "tip": "צריך EMAIL_ADDRESS ומלת סתרא דאפליקציא ב-Python דנפק. אמר \"שבוק\" למשלח פתגמא כתיבא, או \"לא\" למנטריה כטופסא."
+  },
+  "a_week": {
+   "title": "שליחא: סדר שבתי",
+   "desc": "חזי בחושבן יומך לשבתא, ב-email חדתין דילך וברשימין דשלחת לבוט Telegram דילך, ומקריב אימת למיפא ומה צריך למעבד, בשעין דשוין לכל שאר מילין.",
+   "tip": "שלח לבוטך רשימין לגרמך במשך שבתא, כגון 'אזמין קמחא דשערי'. שליחא כניש יתהון."
+  },
+  "a_tgbot": {
+   "title": "בוט Telegram דמתיב",
+   "desc": "כד אנת משלח אגרתא לבוט Telegram דילך, שליחא מתיב, בחושבן יומך, ברשימך ובחושבנין, ומהדר פתגמא. דחוף שרי לנסיותיה באגרתא כתיבא; ב-Python דנפק, רהט יתיה בזמנא ויתיב לאגרן דקושטא.",
+   "tip": "ב-Python דנפק: עביד בוט עם @BotFather, שוי מפתחא ב-second-thought.ini, ובתר כן רהט run-on-schedule. מתיב לחוד לשיחתך (TELEGRAM_CHAT_ID)."
+  },
+  "a_discord": {
+   "title": "בוט Discord דמתיב לשאלי אפייתא",
+   "desc": "כד אנש שאיל שאלתא בפלגא דDiscord דילך, שליחא מתיב לה, עביד חושבנין במחשבא, ומתיב בפלגא ההוא. דחוף שרי לנסיותיה בשאלתא דתכתוב.",
+   "tip": "ב-Python דנפק: עביד בוט Discord עם Message Content intent, שוי מפתחיה ומזהה פלגך ב-second-thought.ini, ובתר כן רהט run-on-schedule. קרי לחוד פלגין דאנת מני. חלף לבניא ורודתא בלבני Slack לשמשא ב-Slack באתרה."
+  },
+  "a_linkedin": {
+   "title": "שליחא: בעי אנשין ב-LinkedIn",
+   "desc": "בעי בדפין גליין דLinkedIn אנשין וחברין בענינא, ומני מאן אינון, מה עבדין ולמה כדאי לאתקשרא עמהון. משכח לחוד מה דLinkedIn מחוי לכולא, בבעותא ברשתא.",
+   "tip": "שני ענינא ואתרא. Python דנפק בעי בקושטא; דפא הדין מתיב ממנדע Claude."
+  },
+  "a_mqtt": {
+   "title": "שליחא: בדוק חושיא (MQTT)",
+   "desc": "קרי חושי MQTT דילך (Zigbee2MQTT ואחרנין), מחוי כל מדעם משני, כגון דליפתא, סוללא חלשא או תקע דאשתבק דליק, ומקריב לטפאה מילין, ושאיל לך קדמאה.",
+   "tip": "Python דנפק: שוי MQTT_HOST. שני ענינין בצביונא להיכא דמאניך מפרסמין."
+  },
+  "y_goodnight": {
+   "title": "שליחא: לילא טבא עם Homey",
+   "desc": "שליחא מעיין ב-Homey דילך: מטפי נהורין דאשתבקו דלקין (שאיל לך קדמאה, ושביק נהורא דדרגא), בדיק תרעין ומנעולין ומודע עליהון לחוד, ואמר לך על סוללין חלשין. בדפא הדין משמש בביתא דדוגמא.",
+   "tip": "Python דנפק: שוי HOMEY_URL ו-HOMEY_API_KEY. אמר \"לא\" לחדא מן בעותוהי ואזיל בלאה."
+  },
+  "y_washer": {
+   "title": "Homey: כביסתא שלימא",
+   "desc": "נטר חילא דמכונת כביסתא דרך Homey. כד נחית תחות 5 W, Claude כתב דוכרנא קצירא ומשלח ל-Telegram. דחוף שרי לנסיותיה בחילא דתכתוב.",
+   "tip": "שני שם מאנא לתקע דילך. Python דנפק בדיק כל 10 שניין כל עוד רהט בזמנא."
+  },
+  "y_proofer": {
+   "title": "Homey: נטור תיבת תפיחתא כדקא יאות",
+   "desc": "קרי חמימות תיבת תפיחתא מן Homey ואי חמימא מדי, מטפי תקע מחממא ואמר לך למה. קרירא מדי, ומדליק יתיה.",
+   "tip": "שני שמהת מאנין לדילך. אוסיף לבנת \"כד … דמאנא דHomey משתני\" למרהטיה כל אימת דחמימותא משתניא."
+  },
+  "y_energy": {
+   "title": "Homey: לאן אזיל חילא?",
+   "desc": "קרי כל מאנא דHomey דמשער חילא ושביק ל-Claude לפרשא, בלישן פשיט, מה אכיל יתיר ומה לטפאה.",
+   "tip": "רהט יתיה ברמשא, כד רובא דמילין צריכין למהוי טפין."
+  },
+  "y_bakeday": {
+   "title": "Homey: שרי אורח אפייתא",
+   "desc": "מני ככרי שבתא הדא במשתניא דHomey, משרי נגדא 'Baking mode' דילך, ואמר לך מה Homey דילך יעביד. נגדך יכלין בתר כן לשמשא במשתניא.",
+   "tip": "עביד נגדא בשם 'Baking mode' ב-Homey, ומשתניא דמניינא בשם 'Loaves this week'."
+  },
+  "h_gifts": {
+   "title": "רעיוני מתנן בגו תקציבא",
+   "desc": "מקריב שית מתנן מסדרן לפום דמין, שביק לך למבחר חדא, ובתר כן כתב לה ברכתא לפתקא.",
+   "tip": "הב תקציבא ותרין מן רעותהון."
+  },
+  "h_photo": {
+   "title": "מה בצורתא הדא?",
+   "desc": "בחר צורתא דאילנא, דלחמא מגוה, דתבשילא או דמאנא; Claude אמר שמיה ויהב עצין מועילין.",
+   "tip": "נסי צורתא דגו לחמך ושאל מה היא אמרה על חמיעותא."
+  },
+  "c_review": {
+   "title": "בדוק כתבא",
+   "desc": "בחר מגלת כתבא; Claude מני פגמוהי וסכנתוהי, דחמירין קדמאה, ובתר כן כתב נוסחא שפירא.",
+   "tip": "עביד עם Python, JavaScript, כתבי shell ורוב לישניא אחרניא."
+  },
+  "c_explain": {
+   "title": "פרש כתבא בפשיטות",
+   "desc": "בחר מגלת כתבא; Claude מפרש מה הוא עביד, חולקא בתר חולקא, למאן דלעלם לא כתב כתבא.",
+   "tip": "מועיל לכתבין דהעתקת מן רשתא."
+  },
+  "c_csv": {
+   "title": "תובנין מן גליונא",
+   "desc": "בחר מגלת CSV; Claude משכח חמש תובנין מועילין יתיר, עם סהדותא ולמה כל חדא חשיבא.",
+   "tip": "אפיק כל גליון כ-CSV קדמאה (File, Save as, CSV)."
+  },
+  "c_tests": {
+   "title": "חשוב דוגמי בדיקתא",
+   "desc": "פרש תכונתא; Claude מני תמני דוגמי בדיקתא, ועמהון דוגמי קצא קשיין דאנשין נשין.",
+   "tip": "פרש מדעם דקושטא: 'טופס דמקבל מיקוד בריטאה'."
+  },
+  "x_tgbrief": {
+   "title": "בשורת צפרא ב-Telegram",
+   "desc": "ביומי חול ב-07:15, קרי חושבן יומא דין ומבועי שמועתך, כתב בשורתא קצירתא, ומשלח לך ב-Telegram. דחוף שרי לנסיותיה כען.",
+   "tip": "Python דנפק: שוי מפתח בוטך, chat id, אתר חושבן יומיא ומבועיא ב-second-thought.ini, ובתר כן שמש ב-run-on-schedule."
+  },
+  "x_newsmail": {
+   "title": "שלח לי כנישת שמועתא ב-email",
+   "desc": "קרי מבועי שמועתך, כתב כנישא דמה דשוי למקרי, ומשלח לך ב-email. בדפא הדין מבועיא ו-email דוגמא.",
+   "tip": "שני אתרא בלבנת \"שלח email\" לדילך, ואוסיף לבנת \"כד שעתא …\" למשלחה כל שבתא."
+  },
+  "x_mqtt": {
+   "title": "תיבת תפיחתא חמימא מדי? (MQTT)",
+   "desc": "שמע לחוש חמימותא דMQTT. אי תיבת תפיחתא עברת 26°C, מטפי מחממא דרך MQTT ואמר לך ב-Telegram. דחוף שרי לנסיותיה בחמימותא דתכתוב.",
+   "tip": "Python דנפק: שוי MQTT_HOST ב-second-thought.ini ורהט יתיה בזמנא. שני ענינין לחושך (zigbee2mqtt/… ל-Zigbee2MQTT)."
+  },
+  "x_webhook": {
+   "title": "כד לחמא מתקן (בעותא דרשתא)",
+   "desc": "מתין לבעותא דרשתא, כגון מן עבידתא מגרמה דHome Assistant כד תנורא טפי, ובתר כן משלח לך עצה לקרירותא ב-Telegram. דחוף שרי לנסיותיה בכתבא דתכתוב.",
+   "tip": "Python דנפק: שוי WEBHOOK_SECRET, רהט יתיה בזמנא, ושביק ל-Home Assistant למקרי ל-http://<this computer>:8765/bake-done?key=<your secret>."
+  },
+  "x_mailwatch": {
+   "title": "כד חנות קמחא משלחא email",
+   "desc": "נטר תיבת email דילך ל-email דמדכרין קמחא, מפיק יום משלוחא, ואמר לך ב-Telegram. דחוף שרי לנסיותיה ב-email דתדבק.",
+   "tip": "שני 'flour' לשם חנותך. Python דנפק בדיק תיבתך כל 2 רגעין כל עוד רהט בזמנא."
+  },
+  "x_feedwatch": {
+   "title": "אמר לי כד מבועא מפרסם מדעם מועיל",
+   "desc": "בדיק מבועי שמועתך כל 15 רגעין. כד מדעם חדת מתחזי, Claude דאין אי שוי לזמנך, והיכדין לחוד משלח ל-Telegram.",
+   "tip": "שני שאלתא לפום מה דחשיב לך."
+  },
+  "x_folder": {
+   "title": "שני מתכונין דנפלין לתיבותא",
+   "desc": "נטר תיבותא. שדי בה מתכונתא (PDF, Word או כתבא) וכתב יתה מן חדת בגרמין וב-°C עם אחוזי אופא, ונטר פירא. דחוף שרי לנסיותיה במתכונתא דתדבק.",
+   "tip": "Python דנפק עביד תיבותא 'recipes-in' לצד סדורא. פיריא עאלין לתיבות מפקנא."
+  },
+  "x_review": {
+   "title": "כד אנש בעי בדיקתי (GitHub)",
+   "desc": "כד pull request ב-GitHub בעיא בדיקתך, שליחא קרי יתה ומשלח לך קצורא דתלת שורין ב-Telegram.",
+   "tip": "Python דנפק: GitHub מתבדק כל 5 רגעין כל עוד סדורא רהט בזמנא."
+  },
+  "x_soon": {
+   "title": "דוכרנא קדם כל מאורע",
+   "desc": "חמיסר רגעין קדם כל מאורעא בחושבן יומך, משלח לך דוכרנא ב-Telegram עם עצה מעשאה.",
+   "tip": "שני 15 לכמה התראה דאנת בעי."
+  },
+  "x_pagewatch": {
+   "title": "אמר לי כד דמי קמחא משתנין",
+   "desc": "בדיק דפא דחנותא כל שעתא, נטר לחוד דמיא. כד משתנין, Claude אמר בשורתא חדא אי כדאי לזבנא כען, ומשלח ל-Telegram. דחוף שרי לנסיותיה בשנויא דתכתוב.",
+   "tip": "שוי אתר חנותך בלבנתא ורודתא, ומלתא דלצד דמיא (כגון Price) ב\"לחוד חולקא דכליל\". דחוף בימינא על לבנתא ורודתא ובחר \"שרי סדרא הדין\" לנסיותיה בדפא דדוגמא."
+  },
+  "memory": {
+   "title": "כותרתא חדתא בכל הלוכא",
+   "desc": "דכיר כל כותרתא דכבר שמש בה, הלכך כל הלוכא (או כל יום בזמנא) מייתי חדתא.",
+   "tip": "פתח לוח דוכרנא בתר כמה הלוכין למחזי מה נטר."
+  },
+  "a_weekly": {
+   "title": "דין וחשבון דערובתא מן רשימי יומא",
+   "desc": "כל יומא, רהט יתיה וכתוב מה עבדת. ב-16:30 בערובתא מהפך רשימי שבתא לדין וחשבון ונטר יתיה.",
+   "tip": "פתח זמניא ושבוק דפא פתיח בערובתא בתר טיהרא, או אפיק ל-Python."
+  },
+  "a_morning": {
+   "title": "בשורת צפרא ב-7:45",
+   "desc": "בצפרי יומי חול כתב בשורתא קצירתא: עצה לאפייתא, מלתא דיומא ומדעם לצפויי ליה. נסי תוב אי Claude מתקל.",
+   "tip": "דחוף שרי לנסיותיה כען; פתח זמניא למלתא דקושטא."
+  },
+  "a_batch": {
+   "title": "עביד סדרא דעבידן כחדא",
+   "desc": "משלח כל עבידתא בסדרא לסדר דילה דכולהון רהטין כחדא, ובתר כן מתין עד דכל חדא שלימא.",
+   "tip": "אוסיף עבידן לסדרא; עדיין שלמין בערך בזמנא דחדא."
+  },
+  "ha_write_automation": {
+   "title": "כתוב עבידתא מגרמה",
+   "desc": "פרש מה דאנת בעי בלישן פשיט; Claude כתב YAML דעבידתא מגרמה, בדיק כלקבל דקדוק Home Assistant דכען, ומתין לאודאתך.",
+   "tip": "נסי 'אדליק נהורא דאכסדרא במעלי שמשא אי אנש בביתא, טפי ב-23:00'."
+  },
+  "ha_explain_automation": {
+   "title": "פרש עבידתא מגרמה",
+   "desc": "דבק YAML דעבידתא מגרמה דאשכחת ברשתא; Claude מפרש שורתא בתר שורתא, ובתר כן אמר במלה חדא מה היא עבדא.",
+   "tip": "דבק נמי blueprint: עביד באורחא חדא."
+  },
+  "ha_debug": {
+   "title": "למה עבידתי מגרמה לא שריאת?",
+   "desc": "דבק עבידתא מגרמה ומה הוה (או trace דילה); Claude מני טעמין ותקנתא דמסתברין, דמסתבר יתיר קדמאה.",
+   "tip": "trace תחות Settings, Automations, ובתר כן תלת נקודי דעבידתך."
+  },
+  "ha_dashboard": {
+   "title": "צייר לוח מחוונין",
+   "desc": "פרש אדרונך ומאניך; Claude מצייר סדר לוח מחוונין וכתב YAML דפתקיא, ובתר כן בדיק דמסודר ונוח לטלפונא.",
+   "tip": "אמר מאן משמש ביה: 'לינוקיא' או 'לוחא על כותל בית בשולא'."
+  },
+  "ha_names": {
+   "title": "סדר שמהת ישותא",
+   "desc": "דבק סדרא מבולבלא דמזהי ישותא; קבל מזהין חדתין שוין, שמהן רחימין ואתרין מוצעין.",
+   "tip": "העתק סדרא מן Settings, Entities."
+  },
+  "ha_mesh": {
+   "title": "סדר רשת Zigbee",
+   "desc": "מני מאני Zigbee או Z-Wave דילך והיכא אינון; קבל עצה לשויית נתבין דרשתא תתקיים.",
+   "tip": "אמר הי מאנין מתזנין מן כותלא: תקעין ובוצינין בדרך כלל הוין נתבין."
+  },
+  "ha_buy": {
+   "title": "הי חוש לזבנא?",
+   "desc": "אמר מה צריך לך לחשא; Claude משוי זני מאנין דיאין ומסדר יתהון.",
+   "tip": "נסי 'טלותא בבית מסחותא' או 'למידע אימת דואר מטי'."
+  },
+  "ha_morning": {
+   "title": "בשורת צפרא",
+   "desc": "ב-07:15 (או כד תדחוף שרי): אוירא, מאני קטמא, חושבן יומיא, מאן בביתא וכל מדעם דאשתבק דליק בלילא, בפסקא רחימאה חדא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שני שעתא בלבנתא ירוקתא, או אמר יתה ברמקולא."
+  },
+  "ha_goodnight": {
+   "title": "בדיקת לילא טבא",
+   "desc": "בדיק תרעין, כוין, מנעולין ונהורין, מני בלישן פשיט כל מדעם דלא כשר, ובתר כן מקריב למנעל ולטפאה נהוריא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רהט יתיה מן טלפונך בזמן שינתא, או אוסיף זמנא ב-22:30."
+  },
+  "ha_leaving": {
+   "title": "נפקין מן ביתא",
+   "desc": "כד אנשא בתראה נפיק, מטפי כל נהורא דעדיין דליק ואמר לך מה טפא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "בלוח Home Assistant, שני person.alex ל-not_home לנסיותיה."
+  },
+  "ha_welcome": {
+   "title": "קצור כד תאבין לביתא",
+   "desc": "כד אנת תאיב לביתא, מקצר מה הוה כד הוית בר: תרעין, תנועתא ומשלוחין. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שני person.alex ל-home בלוחא לנסיותיה."
+  },
+  "ha_remote": {
+   "title": "כפתור שלטא משרי קהוא",
+   "desc": "שמע למאורעי Home Assistant. כד כפתור 'on' דשלט בית בשולא מתדחף, מדליק מכונת קהוא ושביק רשימא; כפתור 'off' דיליה מטפי לה. מגיב מן יד, בלא בדיקן חוזרין. דחוף שרי לנסיותיה בכפתורא דתכתוב. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "או דחוף בימינא על לבנת \"כד מאורע Home Assistant\" ובחר \"שרי סדרא הדין\" לנסאה דחיפא דדוגמא. שני 'kitchen remote' לשם שלטך, ו-zha_event ל-deconz_event או hue_event אי דא מה דשלטך משלח (Developer tools ← Events ב-Home Assistant מחוי יתהון)."
+  },
+  "ha_holiday": {
+   "title": "נהורי פגרא",
+   "desc": "כל רמשא כד אנת רחיק, Claude בחר נהורין לאדלקא, לפום איך ביתא אתשמש בקושטא בשבתא דעברת. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "לחוד נהורין מתבחרין: סדורא בדיק דכל מזהה שרי ב-'light.'."
+  },
+  "ha_weekly": {
+   "title": "דין וחשבון שבועי דביתא",
+   "desc": "ברמשא דחד בשבתא: חילא, חמימות, סוללין וכל מדעם משני, כדין וחשבון קציר נטיר במגלתא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "דחוף שרי בכל יום למחזי דין וחשבון דשבתא הדא כען."
+  },
+  "ha_private": {
+   "title": "בשורתא טמירתא, נטירא בביתא",
+   "desc": "חכימא דLlama במחשבך קרי ביתא כוליה וכתב בשורתא, הלכך ידיעת ביתך לעלם לא נפקא מן ביתא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רהט יתיה במכונתא חדא עם Ollama, לצד Home Assistant."
+  },
+  "ha_ask": {
+   "title": "שאל לביתא",
+   "desc": "שאל כל מדעם ('אית אנש בביתא?', 'שבקית תנורא דליק?'). Claude מתיב לחוד ממדידת Home Assistant דילך. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "Claude אמר כן אי מדידתא לא כלילן פתגמא."
+  },
+  "ha_bins": {
+   "title": "דוכרנא דיום מאני קטמא",
+   "desc": "ב-19:00, בדיק אי מאני קטמא נפקין למחר (עם שנויי יומי חגא) ומדכר לך הי. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "כוון יתיה לחוש כנישת קטמא דילך."
+  },
+  "ha_doorbell": {
+   "title": "מאן בתרעא?",
+   "desc": "כד זגא דתרעא מקיש, Claude חזי בצלמא ואמר לך מאן או מה תמן, ועמהון חבילין. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "בלוחא, שני binary_sensor.doorbell ל-on לאקשא."
+  },
+  "ha_parcel": {
+   "title": "חבילא אשתבקת בר?",
+   "desc": "ב-18:00, חזי בצלמא דתרעא קדמאה ומדכר לך אי חבילא עדיין יתבא על דרגא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שני שעתא לאימת דאנת בדרך כלל אתי לביתא."
+  },
+  "ha_motion": {
+   "title": "אזהרי תנועה חכימין",
+   "desc": "כד צלמא דגנתא חזי תנועה, Claude בדיק צורתא ומזהר לך לחוד על אנשין או רתיכין, לא על שונרין או אילנין דמתנדנדין. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שני binary_sensor.motion_garden ל-off ובתר כן ל-on בלוחא."
+  },
+  "ha_car": {
+   "title": "דין רתיכא דילן?",
+   "desc": "כד מדעם זע בשבילא, Claude מפרש רתיכא ומשוי יתיה עם דדכיר דילך. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "הלוכא קדמאה דכיר רתיכך; הלוכין דבתר כן משוין עמיה."
+  },
+  "ha_garage": {
+   "title": "בית רתיכא סגיר בקושטא?",
+   "desc": "ב-22:00, משוי חוש תרע בית רתיכא עם מה דצלמא מחוי, ומזהר לך אי פליגין. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "טב לתרעין דחושיהון לזמנין דבקין."
+  },
+  "ha_overnight": {
+   "title": "כנישת לילא",
+   "desc": "ב-07:00, קצור שקיט חד דכל מה דתרעין וחושי תנועה אשגחו בלילא, חלף ערמת אזהרין. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "אוסיף חושין יתירין לשאלתא."
+  },
+  "ha_newdevice": {
+   "title": "מאנא חדתא ברשתא",
+   "desc": "כד מאנא דלא ידיע עאל לרשתא, Claude מפרש מה דלמא הוא ומה למבדק. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "משמש בחוש new-client דUniFi; תקן יתיה לדילך."
+  },
+  "ha_cheap": {
+   "title": "רהט מאנין כד חילא זול",
+   "desc": "מסדר אימת למרהט מדיחא, מכונת כביסתא ומטען רתיכא, מן מחירא, שעתא זולתא ונבואת שמשא, עם טעמא לכל חד. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "אוסיף מאניך לשאלתא."
+  },
+  "ha_bill": {
+   "title": "למה אתמלי הוה יקיר?",
+   "desc": "משוי שמוש חילא עם אוירא ומאן הוה בביתא, ומפרש בלישן פשיט למה סליק או נחת. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שאל יתיה כל צפר שבתא למחזי דפוסין."
+  },
+  "ha_standby": {
+   "title": "צידא דחילא דהמתנה",
+   "desc": "חזי בכל מדידת חילא ומחוי מאנין דדלמא מאבדין חילא בהמתנה. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רהט יתיה בלילא מאוחר, כד כולא צריך למהוי טפי."
+  },
+  "ha_energy_report": {
+   "title": "דין וחשבון חילא עם תלת חסכונין",
+   "desc": "קצור חילא בלישן פשיט עם תלתא אורחין מעשאין לחסכא ממונא, נטיר כמגלתא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רהט יתיה בסוף כל ירחא."
+  },
+  "ha_solar": {
+   "title": "למלאה סוללא בלילא?",
+   "desc": "ב-21:00, שקיל נבואת שמשא דמחר, מפלס סוללא ומחירא זולא דלילא, ומקריב אי למלאה מן רשתא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "לחוד מקריב; אוסיף לבנת \"קרי\" אי אנת בעי דיעביד."
+  },
+  "ha_heating_waste": {
+   "title": "בדיקת אבדן חמימותא",
+   "desc": "משכח חמימותא דרהטא כד לית אנש בביתא, כוין פתיחן, או אדרונין דחמימין יתיר מן צביונהון. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רהט יתיה כל כמה שעין בסתוא."
+  },
+  "ha_damp": {
+   "title": "נטירת טלותא וטחבא",
+   "desc": "חזי בטלותא דתרין יומין בבית מסחותא ובבית משכבא ויהב עצה אי אדרונא נשאר טליל. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "יתיר מן 70% לזמנין אריכין הוא היכא דטחבא שרי."
+  },
+  "ha_sleep": {
+   "title": "חמימות בית משכבא טבא",
+   "desc": "בדיק תלת לילוון דחמימותא וטלותא בבית משכבא ומקריב שוויות חמימותא לשינתא טבא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רוב אנשא דמכין טב ב-16-19°C."
+  },
+  "ha_window": {
+   "title": "כוותא פתיחא, חמימותא דליקא",
+   "desc": "כד כוות בית בשולא מתפתחא כד חמימותא דליקא, מקריב לפסקא חמימותא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שני binary_sensor.kitchen_window ל-off ובתר כן ל-on בלוחא."
+  },
+  "ha_co2": {
+   "title": "אזהרא לבית אולפנא חניק",
+   "desc": "כל 30 רגעין, אי CO₂ בבית אולפנא יתיר מן 1200 ppm, מקריב למפתח כוותא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "יתיר מן בערך 1000 ppm, כוונת לבא נחתא בחזותא."
+  },
+  "ha_seasonal": {
+   "title": "כוון סדר חמימותא",
+   "desc": "בדיק שבתא דחמימות ומקריב שנויין לסדר חמימותך לירחא דאתי. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רהט יתיה בריש כל ירחא."
+  },
+  "ha_water": {
+   "title": "להשקאה גנתא יומא דין?",
+   "desc": "ב-07:00, שקיל טלות ארעא, מטרא דעבר ונבואתא; אי צריך להשקאה מרהט השקיותא ואמר לך למה. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שני מתג השקיותא לדילך."
+  },
+  "ha_frost": {
+   "title": "אזהרת גלידא",
+   "desc": "ב-17:00, בדיק נבואת לילא ומדכר לך לכסאה צמחין רכיכין אי גלידא מסתבר. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "אוסיף 'ואעיל עציציא' לאגרתא."
+  },
+  "ha_plant": {
+   "title": "אמר שם צמחא",
+   "desc": "בחר צורתא דצמחא; Claude אמר שמיה, יהב עצין לנטירותיה, ומוסיף ליה לסדרא דכירא דצמחך.",
+   "tip": "פתח דוכרנא בתר כן למחזי סדרא דבנא."
+  },
+  "ha_greenhouse": {
+   "title": "בית צמחין חמים מדי",
+   "desc": "כל 30 רגעין, אי בית צמחין יתיר מן 26°C, מדכר לך למפתח פתח אוירא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "אחית תחומא לשתילין."
+  },
+  "ha_proofing": {
+   "title": "אימת לישא יהוי מתקן?",
+   "desc": "אמר ליה באיזו דרגא לישך; קרי חמימות תפיחתא ומשער אימת יהוי מתקן. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "כוון יתיה לכל חוש דיתיב לצד לישך."
+  },
+  "ha_bake": {
+   "title": "סדר אפייתא לבית בשולא דיומא דין",
+   "desc": "מחשב לאחורא מן אימת אנת בעי לחמא מן תנורא, ומתקן כל פסיעתא לחמימות בית בשולך דקושטא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "בית בשולא חמים מקצר חמיעותא רבתא; הוא חאיש לדא."
+  },
+  "ha_fridge": {
+   "title": "נטירת מקררא ומקפיא",
+   "desc": "כל 30 רגעין, מזהר לך אי מקררא סליק יתיר מן 5°C או מקפיא יתיר מן ‎-15°C. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שני חמימותא בלוחא לנסאה אזהרתא."
+  },
+  "ha_starter": {
+   "title": "דוכרנא למזון מחמצתא",
+   "desc": "ב-08:00, קרי חמימות בית בשולא ומקריב אימת למזונא מחמצתא יומא דין, ובאיזו מדה. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "אמר מדתך דרגילא בשאלתא."
+  },
+  "ha_oven": {
+   "title": "תנורא אשתבק דליק",
+   "desc": "כד אנשא בתראה נפיק, בדיק תנורא ומשלח אזהרא דחיפא אי עדיין דליק. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "בלוחא, שוי switch.oven ל-on, ובתר כן person.alex ל-not_home."
+  },
+  "ha_dinner": {
+   "title": "מה לסעודת רמשא?",
+   "desc": "מקריב תלת סעודתי רמשא ממה דבסדר זבנך ובבית בשולא, עם מה דעדיין צריך. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "משמש בסדר זבנא דHome Assistant."
+  },
+  "ha_chores": {
+   "title": "סדר עבידת ביתא תריץ",
+   "desc": "כל שבתא, כתוב מאן עבד מה; דכיר, ובתר כן כתב סדרא תריצא לשבתא דאתיא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רהט יתיה ברמשא דחד בשבתא עם משפחתא."
+  },
+  "ha_laundry": {
+   "title": "כביסתא שלימא",
+   "desc": "כד חילא דמכונת כביסתא נחית, אמר לך דכביסתא שלימא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "בלוחא, שני חילא דמכונת כביסתא ל-400 ובתר כן ל-2."
+  },
+  "ha_dishwasher": {
+   "title": "מדיחא נקי?",
+   "desc": "מתיב לשאלתא דלעלם ממצב מדיחא, במלה רחימתא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "אוסיף יתיה לכפתור בלוח מחוונין או שאל יתיה בקלא."
+  },
+  "ha_bedtime": {
+   "title": "אגדתא דלילא ברמקולא",
+   "desc": "ב-19:30, מעמעם נהורא דבית משכבא וקרי אגדתא קצירתא חדתא ברמקולא דבית ינוקיא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שני שם ינוקא ורעותיה בבעותא דאגדתא."
+  },
+  "ha_checkin": {
+   "title": "שאילת שלמא רכיכתא לקריבא",
+   "desc": "ב-10:00, אי לא הוות תנועה בבית סמיכא כל צפרא, משלח שאלתא רכיכתא 'הכל טב?' למשפחתא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "אסכים על דא עם אנשא קדמאה; היא נמי צניעותיה."
+  },
+  "ha_petcam": {
+   "title": "מה כלבא עביד?",
+   "desc": "נסיב צורתא מן צלם חיותא ואמר לך, במלה חדא, מה חיותך עבדא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "אוסיף 'והאם לעיס מדעם דאסיר ליה?'"
+  },
+  "ha_feeder": {
+   "title": "מזונא עבד?",
+   "desc": "ב-09:00, בדיק דמזונא יהב צפרא דין ואי מזונא קריב לאתגמרא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שני שעתא לבתר סדר מזונא."
+  },
+  "ha_petheat": {
+   "title": "אדרון חיותא חמים מדי",
+   "desc": "כל 15 רגעין, מזהר לך אי אדרונא דחיותך ביה עבר 26°C. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "אחית יתיה לזנין דשערהון אריך."
+  },
+  "ha_batteries": {
+   "title": "סוללין לחלפא",
+   "desc": "משכח כל סוללא תחות 20% ומהפך יתהון לסדר זבנא מסדר לפום אדרון, עם זני סוללין דמסתברין. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רהט יתיה זמנא חדא בירחא ולעלם לא תתמה מחוש מית."
+  },
+  "ha_offline": {
+   "title": "מה נפל מן רשתא?",
+   "desc": "מני כל ישותא דלא זמינא ומקריב טעמא ותקנתא דמסתברין לכל חדא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "מאני מחסנא ובית רתיכא נפלין זמנין סגיאין כד קריר."
+  },
+  "ha_maintenance": {
+   "title": "תחזוקתא דמטא זמנה",
+   "desc": "קרי יומי תחזוקתך (דודא, חושי תננא, מסננין) ומני מה דעבר זמניה או קריב. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "עביד עוזר input_datetime לכל עבידתא ב-Home Assistant."
+  },
+  "ha_leak": {
+   "title": "דליפתא!",
+   "desc": "כד חוש דליפתא מתרטב, משלח אזהרא דחיפא ומכריז עבידן קדמאין. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "בלוחא, שוי binary_sensor.leak_kitchen ל-on."
+  },
+  "ha_waterflow": {
+   "title": "ברזא דטפטף או דליפתא טמירתא",
+   "desc": "ב-04:00, כד לא מדעם צריך לרהטא, בדיק מונה מיא ומזהר לך על זרימא זעירא תדירא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "עביד עם כל מונה מיא או חוש זרימא."
+  },
+  "ha_servers": {
+   "title": "בריאות משמשין בשורתא חדא",
+   "desc": "קרי חושי Proxmox, דיסקין וגבויין דילך ויהב שורתא חדא בלישן פשיט על מצב בית מחשבין. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "משמש בחושי Proxmox; תקן לדילך."
+  },
+  "ha_pihole": {
+   "title": "כנישת Pi-hole",
+   "desc": "כנישא קציר ומתקרי דמה דPi-hole אחיד יומא דין ואי מדעם מתחזי משני. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "משמש בחושי Pi-hole."
+  },
+  "ha_plex": {
+   "title": "מה חדת ב-Plex",
+   "desc": "בסוף שבתא, כנישא חדיא דמה דאתוסף ל-Plex, עם טעמא בשורתא חדא למחזי כל חד. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "משמש בחושי Plex."
+  },
+  "ha_backups": {
+   "title": "גבוייא רהטו?",
+   "desc": "ב-08:00, בדיק גבויא דלילא ומשלח אזהרא דחיפא אי נפל. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "כוון יתיה לחוש דעבידת גבויך מחדתא."
+  },
+  "ha_netdigest": {
+   "title": "כנישת רשתא",
+   "desc": "עיונא שבועאה ברשתא: מאנין חדתין, Pi-hole, ומכונתא עסיקין יתיר, עם כל מדעם דשוי למבדק. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "רהט יתיה בצפרא דחד בשבתא עם קהוך."
+  },
+  "ha_rewrite_alerts": {
+   "title": "הפוך אזהרין גלמין ללישן פשיט",
+   "desc": "דבק ערמת הודעתא גלמין; Claude מצרף כפילין וכתב יתהון מן חדת ככמה אגרן בהירן.",
+   "tip": "דבק אזהרין דצפרא חד מן טלפונך."
+  },
+  "ha_tone": {
+   "title": "קלא יאי לשעת יומא",
+   "desc": "כתוב אגרתא; היא מתכתבא מן חדת לפום שעתא (רכיכא בלילא מאוחר, זריזא בצפרא) ומשתלחא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "נסי אגרתא חדא ב-7 בצפרא וב-11 בלילא."
+  },
+  "ha_spoken": {
+   "title": "כנישת צפרא אמירתא",
+   "desc": "ב-07:30 ביומי חול, אמר כנישא ד-30 שניין ברמקולא דבית בשולא: אוירא, מאני קטמא, חושבן יומיא וכל מדעם דאשתבק פתיח. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "שוי HA_TTS_ENTITY ב-Python לשמוש קריאתך."
+  },
+  "ha_ignored": {
+   "title": "תקיף יתיר אי מתעלמין",
+   "desc": "משלח דוכרנא, מתין, ואי תרעא בתראה עדיין פתיח, משלח דוכרנא תקיפא יתיר ואמר יתה בקלא. בדפא משמש בביתא דדוגמא, וב-Python דנפק ב-Home Assistant דקושטא דילך.",
+   "tip": "בלוחא, סגור תרעא בתראה בזמן המתנה למחזי יתיה פסיק."
+  }
+ },
+ "starters": {
+  "hello": "שלם",
+  "Hello": "שלם לכולכון",
+  "Check the draft, then continue": "בדוק עיטתא, ובתר כן אזיל",
+  "sourdough": "מחמצתא",
+  "dough": "לישא",
+  "one two three": "חד תרין תלתא",
+  "Describe the job here": "פרש עבידתא הכא",
+  "make it friendlier": "עבדה רחימאה יתיר",
+  "Suggest a name for a sourdough starter": "אקריב שמא למחמצתא",
+  "Is rye flour gluten free?": "האם קמחא דשערי בלא גלוטן?",
+  "Typical hydration % for a beginner loaf": "% מיא רגיל בלחמא דמתחיל",
+  "5 common sourdough mistakes": "5 טעותין רגילין בלחמא דמחמצתא",
+  "make it shorter": "עבדה קצירא יתיר",
+  "the key steps": "פסיען עיקריין",
+  "You write for home bakers: warm, practical, British spelling.": "אנת כתב לאופי ביתא: בחמימו, במעשה, בכתיבה בריטאה.",
+  "editor": "מגיה",
+  "Here is my draft. What should I fix first?": "הא עיטתי. מה אתקן קדמאה?",
+  "current price of rye flour in the UK": "דמי קמחא דשערי בבריטניא כען",
+  "accurate; clear; under 200 words": "קושטא; בהיר; פחות מן 200 מלין",
+  "accurate; clear": "קושטא; בהיר",
+  "clear and accurate": "בהיר וקושטא",
+  "clarity": "בהירו",
+  "Plan a bake for this weekend that suits what I have in": "סדר אפייתא לשבתא הדא דשויא למה דאית לי",
+  "Gives the oven temperature in °C for a bread type.": "יהב חמימות תנורא ב-°C לכל זן לחמא.",
+  "Your loaf is ready to come out.": "לחמך מתקן למפק.",
+  "The bake-along starts in 10 minutes.": "אפייתא דצבורא שריא בעוד 10 רגעין.",
+  "The oven's free now.": "תנורא פנוי כען.",
+  "Bake plan": "סדר אפייתא",
+  "Here's the plan for Saturday.": "הא סדרא דשבתא.",
+  "What should I write about?": "על מה אכתוב?",
+  "score": "שומא",
+  "name, hydration, notes": "שמא, מיא, רשימין",
+  "A beginner sourdough recipe": "מתכונת לחמא דמחמצתא למתחילין",
+  "title, score, why": "כותרתא, שומא, למה",
+  "5 blog post ideas about rye bread, scored 1-10 for search interest": "5 רעיונין למאמרין על לחמא דשערי, משמין 1-10 לפום בעותא דבעיין",
+  "summary": "קצורא",
+  "note": "רשימא",
+  "today's draft": "סדרא דיומא דין",
+  "used headlines": "כותרין דאשתמשו",
+  "a sourdough loaf with a crisp ear, flat illustration": "ככר מחמצתא עם אודנא חריפא, נמוס פשיט",
+  "make the crust darker": "עבד קלפתא אוכמא יתיר",
+  "Describe this picture in one sentence.": "פרש צורתא הדא במלה חדא.",
+  "clear, appealing, easy to read at small size": "בהיר, רחימאה, מתקרי בשיעורא זעירא",
+  "The back door is still open.": "תרעא בתראה עדיין פתיח.",
+  "Good morning!": "צפרא טבא!"
+ },
+ "python": {
+  "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(רהטא קדמאה פסק בפלגותא, ברם סדרא אשתני מן בתר כן, הלכך שרי מן רישא.)",
+  "\n(The agent wants a file: {x})": "\n(שליחא בעי מגלתא: {x})",
+  "\n(The last run stopped part-way. Set resume = yes in second-thought.ini to pick up where it stopped.)": "\n(רהטא בתראה פסק בפלגותא. שוי resume = yes ב-second-thought.ini למשרי מן אתרא דפסק.)",
+  "\n? Allow it to do these things on this computer? It won't ask again unless the program changes.": "\n? תשבוק לה למעבד הלין על חושבנא הדין? לא תשאל תוב אלא אן ישתני סדרא.",
+  "\n? Choose a file: type the path to a PDF, a .docx, or a text file (.txt, .md, .csv, .json ...).": "\n? בחר מגלתא: כתוב שבילא למגלת PDF, ‏‎.docx או מגלת כתבא (‎.txt, ‏.md, ‏.csv, ‏.json ...).",
+  "\n? Choose a picture: type the path to a JPEG, PNG, WebP, GIF or SVG file.": "\n? בחר צורתא: כתוב שבילא למגלת JPEG, ‏PNG, ‏WebP, ‏GIF או SVG.",
+  "\n? Choose one:": "\n? בחר חד:",
+  "\n? Do you approve this?\n": "\n? האם אנת מקבל דא?\n",
+  "\nStopped.": "\nפסק.",
+  "\nThe program ended without a result.": "\nסדרא שלם בלא פירא.",
+  "\nThis program can:": "\nסדרא הדין יכיל:",
+  "\n✖ Run stopped: {msg}": "\n✖ רהטא פסק: {msg}",
+  "  (A Telegram message from chat {x} was ignored. To let this program use that chat, set TELEGRAM_CHAT_ID = {x} {where_keys}.)": "  (אגרת Telegram מן שועי {x} אשתבקת. למשבק לסדרא הדין לשמשא בשועי הדין, שוי TELEGRAM_CHAT_ID = {x} {where_keys}.)",
+  "  (Calendar check failed: {e})": "  (בדיקת יומניא נפלת: {e})",
+  "  (Couldn't note that you said yes, so it will ask again next time: {e})": "  (לא אפשר למרשם דאמרת אין, הלכך תשאל תוב זמנא אחרינא: {e})",
+  "  (Email check failed: {e})": "  (בדיקת email נפלת: {e})",
+  "  (Feed check failed: {e})": "  (בדיקת הכרזתא נפלת: {e})",
+  "  (GitHub check failed: {e})": "  (בדיקת GitHub נפלת: {e})",
+  "  (Home Assistant check failed: {e})": "  (בדיקת Home Assistant נפלת: {e})",
+  "  (Homey check failed: {e})": "  (בדיקת Homey נפלת: {e})",
+  "  (Page check failed: {e})": "  (בדיקת דפא נפלת: {e})",
+  "  (Telegram check failed: {e})": "  (בדיקת Telegram נפלת: {e})",
+  "  ({name} check failed: {e})": "  (בדיקת {name} נפלת: {e})",
+  "  ({x}: left out its tool “{name}”, whose x-mcp-header settings are invalid)": "  ({x}: שבק מאניה \"{name}\", דתקוני x-mcp-header דיליה לא כשרין)",
+  "  ({x}: {x2} Trying again in a minute.)": "  ({x}: {x2} מנסי תוב בעוד רגעא.)",
+  "  No text could be found in that file. A scanned PDF holds pictures of pages, not text.": "  לית כתבא במגלתא הדא. PDF סריקא נטיר צורי דפין, לא כתבא.",
+  "  That SVG file couldn't be read.": "  לא אפשר למקרי מגלת SVG הדא.",
+  "  That file doesn't exist. Try again.": "  מגלתא הדא ליתהא. נסי תוב.",
+  "  That file is over 25 MB. Choose a smaller one.": "  מגלתא הדא יתירא מן 25 MB. בחר זעירא מינה.",
+  "  That isn't a JPEG, PNG, WebP, GIF or SVG file.": "  דא לאו מגלת JPEG, ‏PNG, ‏WebP, ‏GIF או SVG.",
+  "  Type a number from 1 to {items}.": "  כתוב מניינא מן 1 עד {items}.",
+  "  Type an answer first.": "  כתוב פתגמא קדמאה.",
+  "  Type y or n.": "  כתוב א או ל.",
+  "'let me choose from' got an empty list.": "'let me choose from' קבל רשימא ריקניא.",
+  "'{key} of' needs a record in its second slot.": "'{key} of' צריך רשומא בבית תניינא דיליה.",
+  "(Page watcher: {url} has no readable words; it may need a browser to show them. It's checked again each time.)": "(נטיר דפא: ב-{url} לית מלין דמתקריין; אפשר דצריך דפדפנא לאחזאה יתהון. מתבדק תוב כל זמן.)",
+  "(Page watcher: {url} has nothing with “{words}” in it right now. It's checked again each time.)": "(נטיר דפא: ב-{url} לית מדעם עם \"{words}\" כען. מתבדק תוב כל זמן.)",
+  "(The log couldn't be saved: {e})": "(לא אפשר למנטר פנקסא: {e})",
+  "(cleared)": "(אתמחי)",
+  "(empty list)": "(רשימא ריקניא)",
+  "(kept by the broker)": "(נטיר על ידי סרסורא)",
+  "(no answer)": "(לית פתגם)",
+  "(no draft yet)": "(לית טופסא עד כען)",
+  "(no message yet: only messages the broker keeps show up straight away)": "(לית אגרתא עד כען: אגרן דסרסורא נטר בלחוד מתחזיין מן יד)",
+  "(no result)": "(לית פירא)",
+  "(nothing)": "(לא מדעם)",
+  "1 note above.": "רשימא חדא לעיל.",
+  "1 problem to fix: the line marked FAIL. Then run --doctor again.": "קלקלא חד לתקנא: שורתא דרשימא FAIL. ובתר כן רהט --doctor תוב.",
+  "1 step": "פסיעא חדא",
+  "1 tool: {names}": "מאנא חד: {names}",
+  "A 'remember for' block needs a time above zero.": "לבנת 'remember for' צריכא זמנא יתיר מן אפס.",
+  "A 'rewrite' block has nothing to rewrite.": "בלבנת 'rewrite' לית מדעם למכתב תוב.",
+  "A My Blocks block called itself too many times.": "לבנתא מן My Blocks קרת לנפשה זמנין סגיאין יתיר.",
+  "A Telegram message needs some text.": "אגרת Telegram צריכא כתבא.",
+  "A broadcast block has no message name.": "בלבנת הכרזתא לית שם אגרתא.",
+  "A comment needs some text.": "פירושא צריך כתבא.",
+  "A list 'set' block points past the end of the list.": "לבנת 'set' דרשימא מחויא לבתר סוף רשימא.",
+  "A list block asked for item {x} but the list has {lst} items.": "לבנת רשימא בעת מנא {x} ברם ברשימא אית {lst} מנין.",
+  "A memory block has no name. Type a name into its name slot.": "בלבנת דוכרנא לית שמא. כתוב שמא בבית שמא דילה.",
+  "A yes/no block is empty.": "לבנת אין/לא ריקניא.",
+  "A {name} message needs some text.": "אגרת {name} צריכא כתבא.",
+  "Add a 'set task to' block before this step.": "אוסף לבנת 'set task to' קדם פסיעא הדא.",
+  "Added to result": "אתוסף לפירא",
+  "Added to “{x}”": "אתוסף ל-\"{x}\"",
+  "Agent": "שליחא",
+  "Agent plan": "עיטת שליחא",
+  "Agent summary": "קצור שליחא",
+  "Agent: finished in {n} step": "שליחא: שלם ב-{n} פסיעא",
+  "Agent: finished in {n} steps": "שליחא: שלם ב-{n} פסיען",
+  "Agent: out of steps": "שליחא: שלמו פסיעיא",
+  "Agent: plan changed": "שליחא: עיטתא אשתנית",
+  "Agent: stopped, repeating itself": "שליחא: פסק, תני נפשיה",
+  "Already said before the stop, so not said again.": "כבר אתאמר קדם פסקא, הלכך לא אתאמר תוב.",
+  "Already sent before the stop, so not sent again.": "כבר אשתלח קדם פסקא, הלכך לא אשתלח תוב.",
+  "An 'ask Claude' block is empty.": "לבנת 'ask Claude' ריקניא.",
+  "An 'ask for a list' block is empty.": "לבנת 'ask for a list' ריקניא.",
+  "An 'ask for a number' block is empty.": "לבנת 'ask for a number' ריקניא.",
+  "An 'extract' block has no text to read.": "בלבנת 'extract' לית כתבא למקרי.",
+  "An MCP tool block needs the server's name.": "לבנת מאן MCP צריכא שם שמשא.",
+  "Another program has been using {x} for over two minutes, so this one gave up waiting.": "סדרא אחרינא משמש ב-{x} יתיר מן תרתין רגעין, הלכך הדין שבק ממתן.",
+  "Approve? [y/n] > ": "תקבל? [א/ל] > ",
+  "Ask Claude: {p}": "שאל ל-Claude: {p}",
+  "Ask first": "שאל קדמאה",
+  "Back to checkpoint “{name}”": "תוב לנקודת \"{name}\"",
+  "Backup": "נטירותא",
+  "Broadcast “{name}”": "הכרזת \"{name}\"",
+  "Budget": "תקציבא",
+  "CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format').": "CALENDAR_URL לאו אתר יומנא iCal (צריך לאסתיימא ב-.ics, או למיתי מן 'secret address in iCal format').",
+  "Calendar": "יומנא",
+  "Can't divide by zero.": "לא אפשר לפלגא באפס.",
+  "Carries on when another script broadcasts this message.": "ממשיך כד כתבא אחרינא מכריז אגרתא הדא.",
+  "Caught up": "אדבקת",
+  "Chat {x}: {message}": "שועי {x}: {message}",
+  "Check: {x}": "בדיקא: {x}",
+  "Checking for new email.": "בודק email חדת.",
+  "Checking {prog} (runtime {runtime_version}, Python {x}).": "בודק {prog} (runtime {runtime_version}, ‏Python {x}).",
+  "Checkpoint “{name}”": "נקודת \"{name}\"",
+  "Chose file": "בחר מגלתא",
+  "Chose picture": "בחר צורתא",
+  "Claude needs a key. Put ANTHROPIC_API_KEY = your-key {where_keys} (https://console.anthropic.com).": "Claude צריך מפתחא. שוי ANTHROPIC_API_KEY = your-key {where_keys} ‏(https://console.anthropic.com).",
+  "Claude needs the Anthropic SDK. Install it with:  pip install anthropic": "Claude צריך Anthropic SDK. אחית יתיה ב:  pip install anthropic",
+  "Claude's drawing came back in a form that can't be used. Run again, or simplify the description.": "ציורא דClaude תב בצורתא דלא אפשר לשמשא בה. רהט תוב, או פשיט פירושא.",
+  "Claude's reply came back in an unreadable format. Run again.": "פתגמא דClaude תב בצורתא דלא מתקריא. רהט תוב.",
+  "Conversation {x}": "שועי {x}",
+  "Couldn't find the website “{host}”.": "לא אשכח אתר רשתא \"{host}\".",
+  "Couldn't reach GitHub ({reason}).": "לא אפשר למטי ל-GitHub ‏({reason}).",
+  "Couldn't reach Home Assistant at {ha_url} ({x}).": "לא אפשר למטי ל-Home Assistant ב-{ha_url} ‏({x}).",
+  "Couldn't reach Homey at {url} ({reason}).{hint}": "לא אפשר למטי ל-Homey ב-{url} ‏({reason}).{hint}",
+  "Couldn't reach Telegram ({reason}).": "לא אפשר למטי ל-Telegram ‏({reason}).",
+  "Couldn't reach the MQTT broker at {host}:{port} ({e}).": "לא אפשר למטי לסרסור MQTT ב-{host}:{port} ‏({e}).",
+  "Couldn't reach the email server {imap} ({e}).": "לא אפשר למטי לשמש email ‏{imap} ‏({e}).",
+  "Couldn't reach the email server {smtp} ({e}).": "לא אפשר למטי לשמש email ‏{smtp} ‏({e}).",
+  "Couldn't reach {name} ({reason}).": "לא אפשר למטי ל-{name} ‏({reason}).",
+  "Couldn't reach {provider} at {base} ({x}).{hint}": "לא אפשר למטי ל-{provider} ב-{base} ‏({x}).{hint}",
+  "Current draft": "טופסא דכען",
+  "Cut short": "אתקצר",
+  "Did you mean: {names}?": "האם בעית: {names}?",
+  "Done · 1 model call": "שלם · קריאה חדא למודלא",
+  "Done · {n} model calls": "שלם · {n} קריאן למודלא",
+  "Email (reading)": "email (קריאה)",
+  "Email (sending)": "email (שליחה)",
+  "Email needs EMAIL_ADDRESS and EMAIL_PASSWORD {where_keys}. Use an app password, not your normal one.": "email צריך EMAIL_ADDRESS ו-EMAIL_PASSWORD {where_keys}. שמש במלת סתר דאפליקציא, לא בדילך רגילא.",
+  "Email sent to {to}": "email אשתלח ל-{to}",
+  "Even after carrying on, the reply was still too long, so it stops part-way. It's kept as it is, marked best effort. Ask for something shorter, or split the job into smaller steps.": "אף בתר דאמשיך, פתגמא עדיין אריך יתיר, הלכך פסיק בפלגותא. נטיר כמא דהוא, רשים כמיטב. בעי מדעם קציר, או פלג עבידתא לפסיען זעירין.",
+  "Every script is waiting for {names}, but nothing running can send it.": "כל כתבא מתין ל-{names}, ברם לית מדעם רהיט דיכיל לשלחה.",
+  "Everything checked is ready.": "כל מה דאתבדק מתקן.",
+  "Extract: {what}": "אפיק: {what}",
+  "First run": "רהטא קדמאה",
+  "Forgot “{x}”": "אנשי \"{x}\"",
+  "From now on, the program asks you before {x}.": "מן כען ולהלא, סדרא שאל לך קדם {x}.",
+  "From this step the run isn't the same as the one that stopped, so the rest runs afresh.": "מן פסיעא הדא רהטא לאו כמא דפסק, הלכך שארא רהיט מן רישא.",
+  "Gave up after {attempt} tries": "שבק בתר {attempt} נסיונין",
+  "Gemini ({model}) wouldn't take JSON mode, so its replies are checked after they arrive.": "Gemini ‏({model}) לא קביל JSON mode, הלכך פתגמוהי מתבדקין בתר דאתיין.",
+  "Gemini needs a key. Put GEMINI_API_KEY = your-key {where_keys} (https://aistudio.google.com).": "Gemini צריך מפתחא. שוי GEMINI_API_KEY = your-key {where_keys} ‏(https://aistudio.google.com).",
+  "GitHub": "GitHub",
+  "GitHub comment on {repo} #{n}": "פירוש GitHub על {repo} #{n}",
+  "GitHub needs a token: set GITHUB_TOKEN {where_keys} (make one at https://github.com/settings/tokens).": "GitHub צריך token: שוי GITHUB_TOKEN {where_keys} (עבד חד ב-https://github.com/settings/tokens).",
+  "GitHub: {why}.": "GitHub: {why}.",
+  "Give the record's fields, separated by commas.": "הב שדי רשומא, מתפרשין בפסיקין.",
+  "Goal: {goal}": "תכליתא: {goal}",
+  "Home Assistant": "Home Assistant",
+  "Home Assistant answered {code} for {path}.": "Home Assistant אתיב {code} ל-{path}.",
+  "Home Assistant closed the connection.": "Home Assistant סגר קשרא.",
+  "Home Assistant didn't answer at {url} within 10 seconds.": "Home Assistant לא אתיב ב-{url} בגו 10 שניין.",
+  "Home Assistant didn't finish signing in for events within 10 seconds.": "Home Assistant לא שלים כניסה לאירועין בגו 10 שניין.",
+  "Home Assistant events need HA_URL and HA_TOKEN {where_keys}.": "אירועי Home Assistant צריכין HA_URL ו-HA_TOKEN {where_keys}.",
+  "Home Assistant has nothing at {path} (404). Check the entity or service name.": "ב-Home Assistant לית מדעם ב-{path} ‏(404). בדוק שם entity או שמושא.",
+  "Home Assistant refused the token (401). Check HA_TOKEN.": "Home Assistant סרב ל-token ‏(401). בדוק HA_TOKEN.",
+  "Home Assistant refused the token for events (auth_invalid). Check HA_TOKEN.": "Home Assistant סרב ל-token לאירועין (auth_invalid). בדוק HA_TOKEN.",
+  "Home Assistant wouldn't send those events: {x}": "Home Assistant לא שלח אירועין הלין: {x}",
+  "Home Assistant: {service}": "Home Assistant: ‏{service}",
+  "Home Assistant: {x}": "Home Assistant: ‏{x}",
+  "Homey": "Homey",
+  "Homey flow started": "זרם Homey שרי",
+  "Homey needs HOMEY_URL and HOMEY_API_KEY {where_keys}. Make a key in the Homey Web App: Settings, API Keys.": "Homey צריך HOMEY_URL ו-HOMEY_API_KEY {where_keys}. עבד מפתחא ב-Homey Web App: ‏Settings, ‏API Keys.",
+  "Homey variable {name}": "משתנא Homey ‏{name}",
+  "Homey: {name}": "Homey: ‏{name}",
+  "Homey: {why}.": "Homey: ‏{why}.",
+  "Input: {shown}\n\nIt didn't run: {problem}.": "עלולא: {shown}\n\nלא רהט: {problem}.",
+  "Input: {shown}\n\nResult:\n{text}": "עלולא: {shown}\n\nפירא:\n{text}",
+  "Input: {shown}\n\nThe same call as the step before, so it didn't run again.": "עלולא: {shown}\n\nקריאה כמא דבפסיעא דקדם, הלכך לא רהט תוב.",
+  "Instructions for Claude": "פקודין ל-Claude",
+  "It asked for {name} with the same input three times in a row. The draft holds its last result.": "בעא {name} עם עלולא חד תלת זמנין בזו בתר זו. טופסא נטיר פירא בתראה דיליה.",
+  "It said it was done, but its answer was empty.": "אמר דשלם, ברם פתגמיה ריקן.",
+  "It used all {n} steps without a final answer. The draft holds its last result.": "שמש בכל {n} פסיעין בלא פתגם אחרון. טופסא נטיר פירא בתראה דיליה.",
+  "Its variables are: {names}": "משתניא דיליה: {names}",
+  "Kept the best draft": "נטר טופסא טבא",
+  "List: {p}": "רשימא: {p}",
+  "Listening for Home Assistant events: {x}.": "שמע לאירועי Home Assistant: ‏{x}.",
+  "Listening for MQTT messages on {x}.": "שמע לאגרן MQTT על {x}.",
+  "Listening for web requests on port {port}: {x}.": "שמע לבעותי רשתא בתרעא {port}: ‏{x}.",
+  "Listening for {name} messages in {x}.": "שמע לאגרן {name} ב-{x}.",
+  "Log saved to {path}": "פנקסא אתנטר ב-{path}",
+  "Look at picture: {q}": "חזי בצורתא: {q}",
+  "MCP server “{name}”": "שמש MCP \"{name}\"",
+  "MQTT": "MQTT",
+  "MQTT needs MQTT_HOST {where_keys}: your broker's address, like homeassistant.local.": "MQTT צריך MQTT_HOST {where_keys}: אתר סרסורך, כגון homeassistant.local.",
+  "MQTT needs a topic, like home/kitchen/temperature.": "MQTT צריך topic, כגון home/kitchen/temperature.",
+  "MQTT needs the paho-mqtt package: pip install paho-mqtt": "MQTT צריך חבילת paho-mqtt: ‏pip install paho-mqtt",
+  "MQTT {topic}": "MQTT ‏{topic}",
+  "MQTT → {topic}": "MQTT ← {topic}",
+  "Meets every criterion.": "שוי לכל מכילתא.",
+  "Memory": "דוכרנא",
+  "Model": "מודלא",
+  "News feeds": "הכרזן חדתן",
+  "News: {x}": "חדתא: {x}",
+  "No": "לא",
+  "No feed given, and no feeds in your settings. Add  feeds = <addresses>  {where_keys}.": "לא אתיהבת הכרזתא, ולית הכרזן בתקונך. אוסף  feeds = <addresses>  {where_keys}.",
+  "No review problems recorded, so nothing to fix.": "לא אתרשמו קלקלי בדיקא, הלכך לית מדעם לתקנא.",
+  "No token budget for this run.": "לית תקציב token לרהטא הדין.",
+  "Nobody is listening for this message.": "לית אנש דשמע לאגרתא הדא.",
+  "Not allowed, so it didn't run.": "לא אתשבק, הלכך לא רהט.",
+  "Not done": "לא שלם",
+  "Note": "רשימא",
+  "Nothing to run: this program has no 'when Run is clicked' script.": "לית מדעם למרהט: לסדרא הדין לית כתב 'when Run is clicked'.",
+  "Notification → {target}": "הודעה ← {target}",
+  "Notification → {x}": "הודעה ← {x}",
+  "Number > ": "מניינא > ",
+  "Number: {p}": "מניינא: {p}",
+  "Only drawn pictures can be saved as SVG. Choose PNG instead.": "צורין מציירן בלחוד מתנטרין כ-SVG. בחר PNG באתריה.",
+  "Only reading: nothing is sent, posted, switched or charged.\n": "קריאה בלחוד: לא מדעם משתלח, מתפרסם, מתחלף או מתחייב.\n",
+  "Out of rounds. Keeping the best effort.": "שלמו סבביא. נטר מיטב עמלא.",
+  "PNG needs the cairosvg package (pip install cairosvg), so it was saved as SVG.": "PNG צריך חבילת cairosvg ‏(pip install cairosvg), הלכך אתנטר כ-SVG.",
+  "Package pypdf": "חבילת pypdf",
+  "Package {name}": "חבילת {name}",
+  "Path > ": "שבילא > ",
+  "Paused.": "נח.",
+  "Perplexity can't look at photos here. Use Claude, GPT or Gemini for this step.": "Perplexity לא יכיל למחזי צורין הכא. שמש ב-Claude, ‏GPT או Gemini לפסיעא הדא.",
+  "Pick the better one": "בחר דטב מינהון",
+  "Pick up where it stopped, reusing those? [y/n] > ": "תמשיך מן אתרא דפסק, ותשמש בהון תוב? [א/ל] > ",
+  "Picked the first": "בחר קדמאה",
+  "Picked the second": "בחר תניינא",
+  "Picking up the run that stopped: 1 saved step will be reused instead of repeated.": "ממשיך רהטא דפסק: פסיעא חדא נטירא תשתמש תוב ולא תתעבד תוב.",
+  "Picking up the run that stopped: {n} saved steps will be reused instead of repeated.": "ממשיך רהטא דפסק: {n} פסיען נטירין ישתמשון תוב ולא יתעבדון תוב.",
+  "Picture": "צורתא",
+  "Picture: {x}": "צורתא: {x}",
+  "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "צורין מתדכרין 'while this page is open' בלחוד. נטר צורתא כמגלתא למנטרה.",
+  "Press Enter to continue > ": "דחוק Enter לממשך > ",
+  "Program: {name}": "סדרא: {name}",
+  "Programs inside programs went more than 10 deep, so the run stopped.": "סדרין בגו סדרין נחתו יתיר מן 10 דרגין, הלכך רהטא פסק.",
+  "Python": "Python",
+  "RESULT": "פירא",
+  "RESULT (best effort)": "פירא (מיטב עמלא)",
+  "Read page: {x}": "קרי דפא: {x}",
+  "Reading PDFs needs the pypdf package: pip install pypdf": "קריאת PDF צריכא חבילת pypdf: ‏pip install pypdf",
+  "Record: {prompt}": "רשומא: {prompt}",
+  "Records: {prompt}": "רשומין: {prompt}",
+  "Remembered “{x}”": "אדכר \"{x}\"",
+  "Reply continued": "פתגמא אמשך",
+  "Restored the task, draft, review, result and variables.": "תב עבידתא, טופסא, בדיקא, פירא ומשתניא.",
+  "Restored the task, draft, review, result and variables. Draft: {draft}": "תב עבידתא, טופסא, בדיקא, פירא ומשתניא. טופסא: {draft}",
+  "Resuming": "ממשיך",
+  "Retrying": "מנסי תוב",
+  "Review": "בדיקא",
+  "Revise": "תקן",
+  "Revise to fix the problems": "תקן למסלקא קלקליא",
+  "Rework: {instr}": "עבד תוב: {instr}",
+  "Rewrite: {how}": "כתוב תוב: {how}",
+  "Run differs here": "רהטא משני הכא",
+  "Run logs": "פנקסי רהטא",
+  "Run the program again to pick up where it stopped.": "רהט סדרא תוב לממשך מן אתרא דפסק.",
+  "Save file": "נטר מגלתא",
+  "Save picture": "נטר צורתא",
+  "Saved the task, draft, review, result and variables.": "נטר עבידתא, טופסא, בדיקא, פירא ומשתניא.",
+  "Saved the task, draft, review, result and variables. Draft: {draft}": "נטר עבידתא, טופסא, בדיקא, פירא ומשתניא. טופסא: {draft}",
+  "Saved to {x}": "אתנטר ב-{x}",
+  "Saved {path}": "אתנטר {path}",
+  "Saving files": "נטירת מגלן",
+  "Schedules are on. Leave this running; press Ctrl+C to stop.": "זמניא פעילין. שבוק דא רהיט; דחוק Ctrl+C למפסק.",
+  "Score picture: {criteria}": "שום צורתא: {criteria}",
+  "Score: {text}": "שומא: {text}",
+  "Second Thought needs 3.9 or newer": "Second Thought צריך 3.9 או חדת מינה",
+  "Second Thought runtime {runtime_version}": "Second Thought runtime {runtime_version}",
+  "Set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST {where_keys}: your email provider's help pages list them.": "שוי EMAIL_IMAP_HOST ו-EMAIL_SMTP_HOST {where_keys}: דפי עדרנא דספק email דילך מחוין יתהון.",
+  "Settings": "תקונין",
+  "Slack: {why}.": "Slack: ‏{why}.",
+  "Snapshot: {camera}": "צורת רגעא: {camera}",
+  "Something failed, so the 'if it fails' part ran": "מדעם נפל, הלכך פלגא 'if it fails' רהט",
+  "Spoken on {player}": "אתאמר ב-{player}",
+  "Spoken on {x}": "אתאמר ב-{x}",
+  "Started with: {value}": "שרי עם: {value}",
+  "Started.": "שרי.",
+  "Starting afresh.": "שרי מן רישא.",
+  "Stopped after starting {max_scripts} scripts. A message may be broadcasting itself in a loop.": "פסק בתר דשרא {max_scripts} כתבין. אפשר דאגרתא מכרזא נפשה בחוגא.",
+  "Stopped after {max_ai_calls} model calls in one run, to protect your usage.": "פסק בתר {max_ai_calls} קריאן למודלא ברהטא חד, למנטר שמושך.",
+  "Stopped after {max_steps} steps. A loop may never end; check repeat and while blocks.": "פסק בתר {max_steps} פסיען. אפשר דחוגא לא מסתיים לעלם; בדוק לבני repeat ו-while.",
+  "Stopped: this run has used {x} tokens, which reaches its budget of {x2}. Raise the number in the 'limit this run' block (or budget in second-thought.ini).": "פסק: רהטא הדין שמש ב-{x} tokens, דמטא לתקציבה {x2}. רבי מניינא בלבנת 'limit this run' (או budget ב-second-thought.ini).",
+  "Structured replies": "פתגמין מסדרין",
+  "Subject: {subject}\n\n{body}": "ענינא: {subject}\n\n{body}",
+  "Task set": "עבידתא אתשויאת",
+  "Telegram": "Telegram",
+  "Telegram message sent": "אגרת Telegram אשתלחת",
+  "Telegram needs a bot: set TELEGRAM_BOT_TOKEN {where_keys} (message @BotFather in Telegram to make one).": "Telegram צריך bot: שוי TELEGRAM_BOT_TOKEN {where_keys} (שלח אגרתא ל-@BotFather ב-Telegram למעבד חד).",
+  "Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.": "Telegram צריך שועי לשלחא ליה: שוי TELEGRAM_CHAT_ID {where_keys}. שלח קדמאה אגרתא ל-bot דילך; סדרא אמר מן איזה שועי אתת.",
+  "Telegram: send your bot a message. Until TELEGRAM_CHAT_ID is set {where_keys}, the program only says which chat it came from.": "Telegram: שלח אגרתא ל-bot דילך. עד דישתוי TELEGRAM_CHAT_ID {where_keys}, סדרא אמר בלחוד מן איזה שועי אתת.",
+  "Telegram: {x}.": "Telegram: ‏{x}.",
+  "That address isn't a news feed (RSS or Atom).": "אתרא הדין לאו הכרזת חדתן (RSS או Atom).",
+  "That address isn't a web page or text ({x}).": "אתרא הדין לאו דף רשתא או כתבא ({x}).",
+  "That address sent the program somewhere that isn't a web page.": "אתרא הדין שלח סדרא לאתר דלאו דף רשתא.",
+  "That file isn't text. Use a PDF, a .docx or a text file.": "מגלתא הדא לאו כתבא. שמש ב-PDF, ‏.docx או מגלת כתבא.",
+  "That was the last saved step. From here the run carries on as usual.": "דא הות פסיעא נטירא בתרייתא. מן הכא רהטא ממשיך כרגיל.",
+  "That {kind} couldn't be read ({name}: {e}). It may be damaged, locked, or not really a {kind}.": "לא אפשר למקרי {kind} הדין ({name}: {e}). אפשר דמחבל, נעיל, או לאו {kind} בקושטא.",
+  "The 'ask Claude about picture' block has no question.": "בלבנת 'ask Claude about picture' לית שאלתא.",
+  "The 'ask Claude for a record' block has no request.": "בלבנת 'ask Claude for a record' לית בעותא.",
+  "The 'change picture' block has no change in it.": "בלבנת 'change picture' לית שנויא.",
+  "The 'chat' block has no message.": "בלבנת 'chat' לית אגרתא.",
+  "The 'draw a picture' block has no description.": "בלבנת 'draw a picture' לית פירושא.",
+  "The 'notify' block has no message.": "בלבנת 'notify' לית אגרתא.",
+  "The 'rework the draft' block has no instruction.": "בלבנת 'rework the draft' לית פקודא.",
+  "The 'save checkpoint' block needs a name.": "לבנת 'save checkpoint' צריכא שמא.",
+  "The 'say' block has nothing to say.": "בלבנת 'say' לית מדעם למימר.",
+  "The 'search the web' block is empty.": "לבנת 'search the web' ריקניא.",
+  "The 'set {key} of' block needs a record in its middle slot.": "לבנת 'set {key} of' צריכא רשומא בבית מציעאה דילה.",
+  "The 'set … of record' block needs a field name.": "לבנת 'set … of record' צריכא שם שדא.",
+  "The '{where}' block needs a picture in its picture slot.": "לבנת '{where}' צריכא צורתא בבית צורתא דילה.",
+  "The Llama server doesn't have model {model}. Run:  ollama pull {model}": "לשמש Llama לית מודלא {model}. רהט:  ollama pull {model}",
+  "The MQTT broker at {host}:{port} didn't answer.": "סרסור MQTT ב-{host}:{port} לא אתיב.",
+  "The MQTT broker at {host}:{port} refused the connection ({rc}). Check MQTT_USERNAME and MQTT_PASSWORD.": "סרסור MQTT ב-{host}:{port} סרב לקשרא ({rc}). בדוק MQTT_USERNAME ו-MQTT_PASSWORD.",
+  "The agent block needs a goal.": "לבנת שליחא צריכא תכליתא.",
+  "The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them).": "שליחא קרי בלחוד דפי רשתא והכרזן צבוריין, לא אתרין ברשתא דילך (local_pages = yes שביק להון).",
+  "The agent's MCP server “{x}” isn't set up. Put {key} = <the command that starts it, or its https:// address> {where_keys}.": "שמש MCP \"{x}\" דשליחא לא מתקן. שוי {key} = <פקודא דשרי יתיה, או אתר https:// דיליה> {where_keys}.",
+  "The block '{kind}' can't run outside the block editor.": "לבנת '{kind}' לא יכלא למרהט לבר מן עורך לבניא.",
+  "The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.": "יומנא צריך CALENDAR_URL {where_keys}: אתר iCal פרטי דיומנך.",
+  "The data for {service} isn't valid JSON. Use something like {\"temperature\": 20}.": "דאטא ל-{service} לאו JSON כשר. שמש במדעם כגון {\"temperature\": 20}.",
+  "The email couldn't be sent ({e}).": "לא אפשר למשלח email ({e}).",
+  "The email server refused the login ({e}). Check EMAIL_PASSWORD is an app password.": "שמש email סרב לכניסה ({e}). בדוק דEMAIL_PASSWORD הוא מלת סתר דאפליקציא.",
+  "The last run stopped part-way, after 1 saved step.": "רהטא בתראה פסק בפלגותא, בתר פסיעא חדא נטירא.",
+  "The last run stopped part-way, after {n} saved steps.": "רהטא בתראה פסק בפלגותא, בתר {n} פסיען נטירין.",
+  "The program “{name}” runs itself ({x}), which would never end.": "סדרא \"{name}\" מרהט נפשיה ({x}), ודא לא מסתיים לעלם.",
+  "The reply didn't have the expected shape: {bad}.": "לפתגמא לא הות צורתא דמסתכיא: {bad}.",
+  "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "פתגמא מטא לתחום אורכא, הלכך מודלא אתבעי לממשך מן אתרא דפסק.",
+  "The reply wasn't readable JSON, so this step was wasted.": "פתגמא לא הוה JSON דמתקרי, הלכך פסיעא הדא אבדת.",
+  "The run took longer than {x} seconds (max_seconds in second-thought.ini), so it stopped.": "רהטא נגד יתיר מן {x} שניין (max_seconds ב-second-thought.ini), הלכך פסק.",
+  "The task is empty. Type what you want into 'set task to'.": "עבידתא ריקניא. כתוב מה דצבית ב-'set task to'.",
+  "The tool block for “{block_name}” gives a type for “{name}”, but that My Block's inputs are: {x}.": "לבנת מאנא ל-\"{block_name}\" יהבא זנא ל-\"{name}\", ברם עלולי My Block הדין: {x}.",
+  "The {x} couldn't be reached: {x2}": "לא אפשר למטי ל-{x}: {x2}",
+  "The {x} couldn't be started ({x2} = {command}): {e}": "לא אפשר למשרי {x} ({x2} = {command}): {e}",
+  "The {x} didn't answer when asked for its tools.": "{x} לא אתיב כד אתבעי מאנוהי.",
+  "The {x} didn't answer.": "{x} לא אתיב.",
+  "The {x} didn't reply to {method}.": "{x} לא אתיב ל-{method}.",
+  "The {x} gave a kind of result this runtime doesn't know (“{kind}”).": "{x} יהב זן פירא דruntime הדין לא ידע (\"{kind}\").",
+  "The {x} looks like it uses MCP's old HTTP+SSE way of connecting, which Second Thought doesn't speak. Check the address, or use a newer server.": "{x} נראה דמשמש באורחא עתיקא דMCP ‏HTTP+SSE, דSecond Thought לא ממלל. בדוק אתרא, או שמש בשמש חדת.",
+  "The {x} refused the request ({status}). Check {x2}_TOKEN {where_keys}.": "{x} סרב לבעותא ({status}). בדוק {x2}_TOKEN {where_keys}.",
+  "The {x} sent a reply that isn't JSON.": "{x} שלח פתגמא דלאו JSON.",
+  "The {x} speaks MCP {x2} this runtime doesn't. A newer Second Thought may.": "{x} ממלל MCP {x2} דruntime הדין לא ממלל. Second Thought חדת אפשר דממלל.",
+  "The {x} stopped{x2} Check {x3} {where_keys}.": "{x} פסק{x2} בדוק {x3} {where_keys}.",
+  "The {x} wants MCP version “{got}”, which this runtime doesn't speak.": "{x} בעי MCP נוסחא \"{got}\", דruntime הדין לא ממלל.",
+  "The {x} wants more input for {method} (a question for you, or a model call), which Second Thought can't give it yet.": "{x} בעי עלולא יתיר ל-{method} (שאלתא לך, או קריאה למודלא), דSecond Thought לא יכיל למתן עד כען.",
+  "The {x} wouldn't list its tools: {message}": "{x} לא מני מאנוהי: {message}",
+  "The {x} wouldn't start talking: {message}": "{x} לא שרי למללא: {message}",
+  "There's no Homey device called “{name}”.": "לית מאן Homey דשמיה \"{name}\".",
+  "There's no Homey flow called “{name}”.": "לית זרם Homey דשמיה \"{name}\".",
+  "There's no Homey variable called “{name}”.": "לית משתנא Homey דשמיה \"{name}\".",
+  "There's no My Block called “{name}”.": "לית My Block דשמיה \"{name}\".",
+  "There's no checkpoint called “{name}” in this run. Put a 'save checkpoint' block before this one.": "לית נקודא דשמה \"{name}\" ברהטא הדין. שוי לבנת 'save checkpoint' קדם הדא.",
+  "There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.": "לית טופסא עד כען. שוי לבנת 'write a first draft' או 'set draft to' קדם פסיעא הדא.",
+  "There's no email with id {uid}.": "לית email עם מניין {uid}.",
+  "There's no prompt called “{name}” in this program's prompt library.": "לית בעותא דשמה \"{name}\" בבית ספרי בעותא דסדרא הדין.",
+  "There's nothing to save: the value in the 'save as file' block is empty.": "לית מדעם למנטר: ערכא בלבנת 'save as file' ריקן.",
+  "This program has no scheduled scripts, and nothing that listens.": "לסדרא הדין לית כתבין בזמניא, ולא מדעם דשמע.",
+  "This program uses Gemini. Install its package first:  pip install google-genai": "סדרא הדין משמש ב-Gemini. אחית חבילתיה קדמאה:  pip install google-genai",
+  "This program uses Home Assistant. Put HA_URL (for example http://homeassistant.local:8123) and HA_TOKEN (a long-lived access token from your Home Assistant profile, Security tab) {where_keys}.": "סדרא הדין משמש ב-Home Assistant. שוי HA_URL (כגון http://homeassistant.local:8123) ו-HA_TOKEN (token אריך חיין מן פרצוף Home Assistant דילך, לשון Security) {where_keys}.",
+  "This program uses {provider}. Put {key_env} = your-key {where_keys} ({signup}).": "סדרא הדין משמש ב-{provider}. שוי {key_env} = your-key {where_keys} ({signup}).",
+  "This run stops before a model call once it has used {x} tokens (used so far: {x2}).": "רהטא הדין פסק קדם קריאה למודלא כד שמש ב-{x} tokens (שמש עד כען: {x2}).",
+  "This step needs an answer typed at the keyboard, but there's no one to type it.": "פסיעא הדא צריכא פתגמא דמתכתב במקלדתא, ברם לית אנש למכתביה.",
+  "To change a list, put a list variable in the 'in list' slot.": "לשנאה רשימא, שוי משתנא דרשימא בבית 'in list'.",
+  "To save a picture, use the 'save picture' block.": "למנטר צורתא, שמש בלבנת 'save picture'.",
+  "Tools: {tools}": "מאניא: {tools}",
+  "Try {attempt} of {max_tries} failed: {last_error}\nTrying again in {wait}s.": "נסיון {attempt} מן {max_tries} נפל: {last_error}\nמנסי תוב בעוד {wait}s.",
+  "Unknown tool “{kind}”.": "מאנא לא ידיעא \"{kind}\".",
+  "Unreadable reply": "פתגמא דלא מתקרי",
+  "Using {x}": "משמש ב-{x}",
+  "Using {x} for the blocks inside": "משמש ב-{x} ללבניא דבגו",
+  "Wait": "מתין",
+  "Wait until a time": "מתין עד שעתא",
+  "Waiting for “{name}”": "מתין ל-\"{name}\"",
+  "Waiting until {time}": "מתין עד {time}",
+  "Waiting until {time} tomorrow": "מתין עד {time} מחר",
+  "Waiting {x} seconds": "מתין {x} שניין",
+  "Watching Homey devices for changes.": "נטר מאני Homey לשנויין.",
+  "Watching for new files in {x}.": "נטר מגלן חדתן ב-{x}.",
+  "Watching {url} (the part with “{words}”) for changes, every {n} min.": "נטר {url} (פלגא עם \"{words}\") לשנויין, כל {n} min.",
+  "Watching {url} for changes, every {n} min.": "נטר {url} לשנויין, כל {n} min.",
+  "Web requests": "בעותי רשתא",
+  "Web requests, {x}: still not listening. To turn them on, {note}": "בעותי רשתא, {x}: עדיין לא שמעין. לאדלקא יתהון, {note}",
+  "Web requests: {note}": "בעותי רשתא: {note}",
+  "Web search: {q}": "בעו ברשתא: {q}",
+  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "תב לטופסא מן סבבא {round}: הוו ביה קלקלין זעירין ({n}). סבביא דבתרה לא שפרו עליה.",
+  "Which Homey device? Give its name, like Kitchen light.": "איזה מאן Homey? הב שמיה, כגון Kitchen light.",
+  "Why: {why}": "למה: {why}",
+  "Write a first draft": "כתוב טופסא קדמאה",
+  "Yes": "אין",
+  "Yes or no: {p}": "אין או לא: {p}",
+  "You can't publish to a topic with + or # in it: those only work for listening.": "לא אפשר לפרסמא ב-topic עם + או # ביה: אלין לשמיעה בלחוד.",
+  "a backup answered 1 step": "חליפא אתיב פסיעא חדא",
+  "a backup answered {n} steps": "חליפא אתיב {n} פסיען",
+  "a speaker": "רמקולא",
+  "added": "אתוסף",
+  "all day": "כל יומא",
+  "allowed on this computer": "שביק בחושבנא הדין",
+  "answered {status} when asked which models it has, so the key couldn't be checked": "אתיב {status} כד אתשאל איזה מודלין אית ליה, הלכך לא אפשר למבדק מפתחא",
+  "approve = no, so it doesn't ask": "approve = no, הלכך לא שאל",
+  "approved": "אתקבל",
+  "ask_me needs a question.": "ask_me צריך שאלתא.",
+  "bad input": "עלולא בישא",
+  "best draft": "טופסא טבא",
+  "best effort": "מיטב עמלא",
+  "budget {n}": "תקציבא {n}",
+  "calculate couldn't work out “{expression}”: {e}.": "calculate לא יכיל לחשבא \"{expression}\": {e}.",
+  "can't be saved in {folder}": "לא אפשר למנטר ב-{folder}",
+  "chosen": "אתבחר",
+  "connected": "מקשר",
+  "connected to the broker": "מקשר לסרסורא",
+  "continued": "אמשך",
+  "couldn't be reached ({err}).{hint}": "לא אפשר למטי ליה ({err}).{hint}",
+  "couldn't sign in to {smtp} to send ({e})": "לא אפשר למעל ל-{smtp} למשלח ({e})",
+  "done": "שלם",
+  "drawn": "אתצייר",
+  "empty answer": "פתגמא ריקן",
+  "everything": "כולא",
+  "failed": "נפל",
+  "files can't be saved: {where} can't be written to": "לא אפשר למנטר מגלן: לא אפשר למכתב ב-{where}",
+  "files will be saved in {here}": "מגלן יתנטרן ב-{here}",
+  "forever": "לעלם",
+  "forgotten": "אתנשי",
+  "handled": "אתעבד",
+  "installed": "אחית",
+  "it said no": "אמרת לא",
+  "missing (needed for {why}). Install it with:  pip install {pip}": "חסיר (צריך ל-{why}). אחית יתיה ב:  pip install {pip}",
+  "needs work": "צריך עבידא",
+  "no WEBHOOK_SECRET {where_keys}, so the program won't listen for web requests. Set it to a long password.": "לית WEBHOOK_SECRET {where_keys}, הלכך סדרא לא שמע לבעותי רשתא. שוי יתיה למלת סתר אריכתא.",
+  "no key. Put {x} = your-key {where_keys} ({signup}).": "לית מפתחא. שוי {x} = your-key {where_keys} ({signup}).",
+  "no listeners": "לית שמועין",
+  "no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used": "לא אשתכח second-thought.ini לצד סדרא, בתיקא הדא או בתיקת ביתך, הלכך משתני סביבתא בלחוד משתמשין",
+  "no tokens used": "לא שמש ב-tokens",
+  "none": "לא חד",
+  "not a tool": "לאו מאנא",
+  "not allowed on this computer yet. Run it once yourself and answer y (a scheduled run won't start until then).": "לא שביק בחושבנא הדין עד כען. רהט יתיה זמנא חדא בנפשך ואתיב א (רהטא דזמניא לא שרי עד כן).",
+  "not installed, so PDFs can't be read (other files can). Install it with:  pip install pypdf": "לא אחית, הלכך לא אפשר למקרי PDF (מגלן אחרנין אפשר). אחית יתיה ב:  pip install pypdf",
+  "note": "רשימא",
+  "notes can't be saved: {folder} can't be written to": "לא אפשר למנטר רשימין: לא אפשר למכתב ב-{folder}",
+  "nothing": "לא מדעם",
+  "nothing saved yet; notes will go in {memory_file}": "לא מדעם נטיר עד כען; רשימין יעלון ל-{memory_file}",
+  "passes": "עבר",
+  "planned": "אתעטת",
+  "plans first": "עיטא קדמאה",
+  "port {port} can't be used ({e}): something else may be listening. Change WEBHOOK_PORT.": "לא אפשר לשמשא בתרעא {port} ({e}): אפשר דמדעם אחרן שמע ביה. שני WEBHOOK_PORT.",
+  "port {port} is free, and WEBHOOK_SECRET is set": "תרעא {port} פנוי, ו-WEBHOOK_SECRET שוי",
+  "published": "אתפרסם",
+  "reached": "מטא",
+  "reached: {home} devices": "מטא: {home} מאנין",
+  "read": "אתקרי",
+  "read the inbox": "קרא תיבת אגרן",
+  "read the next 7 days ({x} lines)": "קרא 7 יומין דאתיין ({x} שורין)",
+  "read your channels": "קרא ערוציך",
+  "read your feeds ({items} items)": "קרא הכרזתך ({items} מנין)",
+  "read your pull requests": "קרא pull requests דילך",
+  "read {settings_path}": "קרא {settings_path}",
+  "read_email needs an email's id number, from search_email.": "read_email צריך מניין מזהה דemail, מן search_email.",
+  "refused": "סרב",
+  "refused the key ({status}). Check {x} {where_keys}.": "סרב למפתחא ({status}). בדוק {x} {where_keys}.",
+  "remember needs a name.": "remember צריך שמא.",
+  "repair": "תקנא",
+  "repeat": "תני",
+  "reset": "אפס",
+  "restored": "אתהדר",
+  "resume": "ממשיך",
+  "retry {x}": "נסי תוב {x}",
+  "reused": "אשתמש תוב",
+  "review_text needs criteria to check against.": "review_text צריך מכילתא למבדק כלקבלה.",
+  "review_text needs some text to check.": "review_text צריך כתבא למבדק.",
+  "revised": "אתתקן",
+  "running": "רהיט",
+  "saved": "אתנטר",
+  "saved in {folder}": "נטיר ב-{folder}",
+  "search_github needs something to search for.": "search_github צריך מדעם למבעי.",
+  "search_linkedin needs a query.": "search_linkedin צריך בעותא.",
+  "search_memory needs some words to look for.": "search_memory צריך כמה מלין למבעי.",
+  "search_web needs a query.": "search_web צריך בעותא.",
+  "sent": "אשתלח",
+  "set": "אתשוי",
+  "shown": "אתחזי",
+  "signed in to {smtp} (nothing was sent)": "על ל-{smtp} (לא מדעם אשתלח)",
+  "skipped": "אתדלג",
+  "started": "שרי",
+  "stopped": "פסק",
+  "the bot is @{x}{chat}": "bot הוא @{x}{chat}",
+  "the email server refused EMAIL_ADDRESS and EMAIL_PASSWORD {where_keys}. Use an app password.": "שמש email סרב ל-EMAIL_ADDRESS ו-EMAIL_PASSWORD {where_keys}. שמש במלת סתר דאפליקציא.",
+  "the key works": "מפתחא עביד",
+  "the key works ({n} models)": "מפתחא עביד ({n} מודלין)",
+  "the key works, but it doesn't list {x}, which this program uses.{hint}": "מפתחא עביד, ברם לא מני {x}, דסדרא הדין משמש ביה.{hint}",
+  "time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{when}”.": "time_plus צריך שעתא כגון 09:30 או 2026-10-10 09:30, לא \"{when}\".",
+  "turn {x}": "סבב {x}",
+  "unknown type": "זנא לא ידיעא",
+  "unreadable": "לא מתקרי",
+  "up to {n} steps": "עד {n} פסיען",
+  "versions": "נוסחין",
+  "warn": "אזהרא",
+  "while running": "בעדן רהטא",
+  "with {data}": "עם {data}",
+  "your feeds": "הכרזתך",
+  "{entity}: already done before the stop, so not done again.": "{entity}: כבר אתעבד קדם פסקא, הלכך לא אתעבד תוב.",
+  "{e}\nAsking once more for a corrected reply.": "{e}\nבעי זמנא חדא תוב פתגמא מתקנא.",
+  "{friendly} must be {what}, not “{raw}”. Fix it {where_keys} (or the {name} environment variable). 0 means no limit.": "{friendly} צריך למהוי {what}, לא \"{raw}\". תקן יתיה {where_keys} (או משתנא סביבתא {name}). 0 הוא בלא תחום.",
+  "{friendly} must be {what}, not “{raw}”. Fix it {where_keys}. 0 means no limit.": "{friendly} צריך למהוי {what}, לא \"{raw}\". תקן יתיה {where_keys}. 0 הוא בלא תחום.",
+  "{got} topics": "{got} topics",
+  "{hostname} didn't accept a WebSocket connection at {path} ({x}).": "{hostname} לא קביל קשר WebSocket ב-{path} ({x}).",
+  "{items} items": "{items} מנין",
+  "{memory_file} can't be written to": "לא אפשר למכתב ב-{memory_file}",
+  "{memory_file} isn't valid JSON, so saved notes can't be read": "{memory_file} לאו JSON כשר, הלכך לא אפשר למקרי רשימין נטירין",
+  "{model} can't look at photos. Use a model that can, such as DeepSeek Flash or Claude.": "{model} לא יכיל למחזי צורין. שמש במודלא דיכיל, כגון DeepSeek Flash או Claude.",
+  "{model} wouldn't accept a reply shape ({e}), so its replies are checked after they arrive instead.": "{model} לא קביל צורת פתגמא ({e}), הלכך פתגמוהי מתבדקין בתר דאתיין באתריה.",
+  "{name} has no “{cap}”. It has: {x}.": "ל-{name} לית \"{cap}\". אית ליה: {x}.",
+  "{name} message sent": "אגרת {name} אשתלחת",
+  "{name} needs {channels} {where}: the channels it reads and posts in (anyone can post in a server, so only these count).": "{name} צריך {channels} {where}: ערוציא דקרי ומפרסם בהון (כל אנש יכיל לפרסמא בשמשא, הלכך אלין בלחוד מתחשבין).",
+  "{name} needs {channels} {where}: the channels it reads and posts in (anyone can post in a workspace, so only these count).": "{name} צריך {channels} {where}: ערוציא דקרי ומפרסם בהון (כל אנש יכיל לפרסמא בworkspace, הלכך אלין בלחוד מתחשבין).",
+  "{name} needs {token} {where_keys}: make {make}.": "{name} צריך {token} {where_keys}: עבד {make}.",
+  "{name}: channel {channel} isn't in {channels}, so nothing is sent there.": "{name}: ערוצא {channel} לאו ב-{channels}, הלכך לא מדעם משתלח תמן.",
+  "{n} notes above.": "{n} רשימין לעיל.",
+  "{n} problems to fix: the lines marked FAIL. Then run --doctor again.": "{n} קלקלין לתקנא: שוריא דרשימין FAIL. ובתר כן רהט --doctor תוב.",
+  "{n} saved notes, in {memory_file}": "{n} רשימין נטירין, ב-{memory_file}",
+  "{n} steps": "{n} פסיען",
+  "{n} tools: {names}": "{n} מאנין: {names}",
+  "{path} · {x} characters": "{path} · {x} אתוון",
+  "{provider} ({model}) wouldn't take that JSON mode, so it's asked for plain JSON instead.": "{provider} ({model}) לא קביל JSON mode הדין, הלכך אתבעי JSON פשיטא באתריה.",
+  "{provider} ({model}) wouldn't take that JSON mode, so it's asked without one, and its replies are checked after they arrive.": "{provider} ({model}) לא קביל JSON mode הדין, הלכך אתבעי בלעדוהי, ופתגמוהי מתבדקין בתר דאתיין.",
+  "{provider} answered {code}: {detail}": "{provider} אתיב {code}: {detail}",
+  "{provider} refused the API key (401). Check {key_env}.": "{provider} סרב למפתח API ‏(401). בדוק {key_env}.",
+  "{provider} refused the request ({code}): {detail}": "{provider} סרב לבעותא ({code}): {detail}",
+  "{provider} says the account has no credit left (402).": "{provider} אמר דלית לחשבונא אשראי (402).",
+  "{recs} events": "{recs} אירועין",
+  "{recs} items": "{recs} מנין",
+  "{recs} records": "{recs} רשומין",
+  "{service} on {entity} needs your approval, and nobody is at the keyboard.": "{service} על {entity} צריך קבלתך, ולית אנש במקלדתא.",
+  "{service} on {entity} was refused, so nothing happened.": "{service} על {entity} אתדחי, הלכך לא הוה מדעם.",
+  "{tools} tools, MCP {version}": "{tools} מאנין, MCP {version}",
+  "{url} isn't a web page or text ({x}).": "{url} לאו דף רשתא או כתבא ({x}).",
+  "{value}  ·  until {until}": "{value}  ·  עד {until}",
+  "{what} couldn't open {url}: the website answered {code}.": "{what} לא יכיל למפתח {url}: אתר רשתא אתיב {code}.",
+  "{what} couldn't reach {url} ({reason}).": "{what} לא יכיל למטי ל-{url} ({reason}).",
+  "{what} needs a web address starting with http:// or https://.": "{what} צריך אתר רשתא דשרי ב-http:// או https://.",
+  "{what} needs your approval, and nobody is at the keyboard.": "{what} צריך קבלתך, ולית אנש במקלדתא.",
+  "{what} was refused, so nothing happened.": "{what} אתדחי, הלכך לא הוה מדעם.",
+  "{who} returned nothing for this step. Simplify it and try again.": "{who} לא אהדר מדעם לפסיעא הדא. פשיט יתה ונסי תוב.",
+  "{who}: {tokens_in} tokens in, {tokens_out} out": "{who}: {tokens_in} tokens עאלין, {tokens_out} נפקין",
+  "{x}  ·  MCP {version}": "{x}  ·  MCP {version}",
+  "{x} failed: {x2}\nTrying {x3} instead.": "{x} נפל: {x2}\nמנסי {x3} באתריה.",
+  "{x} is empty. Put the command that starts the server there.": "{x} ריקן. שוי תמן פקודא דשרי שמשא.",
+  "{x} is set (Perplexity has no free way to try it, so it isn't checked further)": "{x} שוי (לPerplexity לית אורח מגן לנסאה, הלכך לא מתבדק יתיר)",
+  "“{entity}” isn't an entity id. Use something like light.kitchen.": "\"{entity}\" לאו מזהה entity. שמש במדעם כגון light.kitchen.",
+  "“{hhmm}” isn't a time like 09:00.": "\"{hhmm}\" לאו שעתא כגון 09:00.",
+  "“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).": "\"{kind}\" לאו זנא דשליחא ידע. שמש ב-text, number, yes/no, list או any (ל-\"{name}\").",
+  "“{name}” can't run while other scripts are running at the same time. Run it from a script that runs on its own (not alongside a broadcast).": "\"{name}\" לא יכיל למרהט כד כתבין אחרנין רהטין בהדי. רהט יתיה מן כתבא דרהט לחודוהי (לא בצד הכרזתא).",
+  "“{repo}” isn't a GitHub project. Use owner/name, like octocat/hello-world.": "\"{repo}\" לאו עבידת GitHub. שמש ב-owner/name, כגון octocat/hello-world.",
+  "“{service}” isn't a service name. Use domain.service, for example light.turn_off.": "\"{service}\" לאו שם שמושא. שמש ב-domain.service, כגון light.turn_off.",
+  "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "\"{text}\" לאו יומא. שמש ב-today, tomorrow, יומא דשבתא או YYYY-MM-DD.",
+  "“{to}” isn't an email address.": "\"{to}\" לאו אתר email.",
+  "“{value}” isn't a number.": "\"{value}\" לאו מניינא.",
+  "“{value}” isn't on or off.": "\"{value}\" לאו on או off.",
+  "“{x}” isn't a real date.": "\"{x}\" לאו יומא דקושטא.",
+  "“{x}” isn't a time.": "\"{x}\" לאו שעתא.",
+  "any smart home action (Home Assistant, Homey or MQTT)": "כל עבידת ביתא חכימא (Home Assistant, ‏Homey או MQTT)",
+  "sending messages and announcements": "שליחות אגרן והכרזן",
+  "saving files": "נטירת מגלתא",
+  "all of these": "כל אלין",
+  "in {path}": "ב-{path}",
+  "in {path}, next to this program": "ב-{path}, לצד סדרא הדין",
+  "{name} message": "אגרת {name}",
+  "New email: {subject}": "email חדת: {subject}",
+  "New in {feed}": "חדת ב-{feed}",
+  "New file: {name}": "מגלתא חדתא: {name}",
+  "Review requested: {pr}": "בדיקא אתבעי: {pr}",
+  "Coming up: {title}": "אתי: {title}",
+  "Page changed: {page}": "דפא אשתני: {page}",
+  "Telegram message": "אגרת Telegram",
+  "Scheduled {time}": "בזמנא {time}",
+  "When {entity} changes": "כד {entity} משתני",
+  "Run": "שרי",
+  "(yes)": "א, אין",
+  "(no)": "ל, לא"
+ },
+ "blocklyMsg": {
+  "ADD_COMMENT": "אוסף פירושא",
+  "CHANGE_VALUE_TITLE": "שני ערכא:",
+  "CLEAN_UP": "סדר לבניא",
+  "COLLAPSED_WARNINGS_WARNING": "בלבניא כנישתא אית אזהרן.",
+  "COLLAPSE_ALL": "כנוש לבניא",
+  "COLLAPSE_BLOCK": "כנוש לבנתא",
+  "CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "פוק מן חוגא",
+  "CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE": "אמשיך לסבבא דבתרה",
+  "CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "פוק מן חוגא דמקיף.",
+  "CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE": "דלג על שאר חוגא, ואמשיך לסבבא דבתרה.",
+  "CONTROLS_FLOW_STATEMENTS_WARNING": "אזהרא: לבנתא הדא משתמשא בגו חוגא בלחוד.",
+  "CONTROLS_FOREACH_TITLE": "לכל מנא %1 ברשימא %2",
+  "CONTROLS_FOREACH_TOOLTIP": "לכל מנא ברשימא, שוי משתנא '%1' למנא, ועבד פקודין.",
+  "CONTROLS_FOR_TITLE": "מני ב-%1 מן %2 עד %3 בפסיעא %4",
+  "CONTROLS_FOR_TOOLTIP": "משתנא '%1' נסיב ערכין מן מניינא דשירותא עד מניינא דסופא, בפסיעא דאתיהבת, ועביד לבניא.",
+  "CONTROLS_IF_ELSEIF_TOOLTIP": "אוסף תנאה ללבנת אן.",
+  "CONTROLS_IF_ELSE_TOOLTIP": "אוסף תנאה בתראה דכליל כולא ללבנת אן.",
+  "CONTROLS_IF_IF_TOOLTIP": "אוסף, סלק או סדר פלגין למתקנא לבנת אן הדא.",
+  "CONTROLS_IF_MSG_ELSE": "ואן לא",
+  "CONTROLS_IF_MSG_ELSEIF": "ואן לא, אן",
+  "CONTROLS_IF_MSG_IF": "אן",
+  "CONTROLS_IF_TOOLTIP_1": "אן ערכא קושטא, עבד פקודין.",
+  "CONTROLS_IF_TOOLTIP_2": "אן ערכא קושטא, עבד קבוצת פקודין קדמייתא. ואן לא, עבד תנייתא.",
+  "CONTROLS_IF_TOOLTIP_3": "אן ערכא קדמאה קושטא, עבד קבוצת פקודין קדמייתא. ואן לא, אן ערכא תניינא קושטא, עבד תנייתא.",
+  "CONTROLS_IF_TOOLTIP_4": "אן ערכא קדמאה קושטא, עבד קבוצת פקודין קדמייתא. ואן לא, אן ערכא תניינא קושטא, עבד תנייתא. אן לית ערכא קושטא, עבד בתרייתא.",
+  "CONTROLS_REPEAT_INPUT_DO": "עבד",
+  "CONTROLS_REPEAT_TITLE": "תני %1 זמנין",
+  "CONTROLS_REPEAT_TOOLTIP": "עבד פקודין כמה זמנין.",
+  "CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "תני עד",
+  "CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "תני כל זמן",
+  "CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "כל זמן דערכא שקרא, עבד פקודין.",
+  "CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "כל זמן דערכא קושטא, עבד פקודין.",
+  "DELETE_ALL_BLOCKS": "למחק כל %1 לבניא?",
+  "DELETE_BLOCK": "מחק לבנתא",
+  "DELETE_VARIABLE": "מחק משתנא '%1'",
+  "DELETE_VARIABLE_CONFIRMATION": "למחק %1 שמושין דמשתנא '%2'?",
+  "DELETE_X_BLOCKS": "מחק %1 לבנין",
+  "DISABLE_BLOCK": "בטל לבנתא",
+  "DUPLICATE_BLOCK": "כפול",
+  "DUPLICATE_COMMENT": "כפול פירושא",
+  "ENABLE_BLOCK": "אפעל לבנתא",
+  "EXPAND_ALL": "פרוס לבניא",
+  "EXPAND_BLOCK": "פרוס לבנתא",
+  "EXTERNAL_INPUTS": "עלולין לבר",
+  "HELP": "עדרנא",
+  "INLINE_INPUTS": "עלולין בשורתא",
+  "LISTS_CREATE_EMPTY_TITLE": "עבד רשימא ריקניא",
+  "LISTS_CREATE_EMPTY_TOOLTIP": "מהדר רשימא באורכא 0, בלא רשומין",
+  "LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "רשימא",
+  "LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "אוסף, סלק או סדר פלגין למתקנא לבנת רשימא הדא.",
+  "LISTS_CREATE_WITH_INPUT_WITH": "עבד רשימא עם",
+  "LISTS_CREATE_WITH_ITEM_TOOLTIP": "אוסף מנא לרשימא.",
+  "LISTS_CREATE_WITH_TOOLTIP": "עבד רשימא עם כל מניין מנין.",
+  "LISTS_GET_INDEX_FIRST": "קדמאה",
+  "LISTS_GET_INDEX_FROM_END": "# מן סופא",
+  "LISTS_GET_INDEX_FROM_START": "#",
+  "LISTS_GET_INDEX_GET": "סב",
+  "LISTS_GET_INDEX_GET_REMOVE": "סב וסלק",
+  "LISTS_GET_INDEX_LAST": "בתראה",
+  "LISTS_GET_INDEX_RANDOM": "באקראי",
+  "LISTS_GET_INDEX_REMOVE": "סלק",
+  "LISTS_GET_INDEX_TOOLTIP_GET_FIRST": "מהדר מנא קדמאה ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_FROM": "מהדר מנא באתרא דאתיהב ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_LAST": "מהדר מנא בתראה ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_RANDOM": "מהדר מנא באקראי ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FIRST": "מסלק ומהדר מנא קדמאה ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM": "מסלק ומהדר מנא באתרא דאתיהב ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_LAST": "מסלק ומהדר מנא בתראה ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_RANDOM": "מסלק ומהדר מנא באקראי ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_REMOVE_FIRST": "מסלק מנא קדמאה ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM": "מסלק מנא באתרא דאתיהב ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_REMOVE_LAST": "מסלק מנא בתראה ברשימא.",
+  "LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM": "מסלק מנא באקראי ברשימא.",
+  "LISTS_INDEX_FROM_END_TOOLTIP": "%1 הוא מנא בתראה.",
+  "LISTS_INDEX_FROM_START_TOOLTIP": "%1 הוא מנא קדמאה.",
+  "LISTS_INLIST": "ברשימא",
+  "LISTS_ISEMPTY_TITLE": "%1 ריקן",
+  "LISTS_ISEMPTY_TOOLTIP": "מהדר קושטא אן רשימא ריקניא.",
+  "LISTS_LENGTH_TITLE": "אורכא ד-%1",
+  "LISTS_LENGTH_TOOLTIP": "מהדר אורכא דרשימא.",
+  "LISTS_SET_INDEX_INPUT_TO": "כ",
+  "LISTS_SET_INDEX_INSERT": "אעיל ב",
+  "LISTS_SET_INDEX_SET": "שוי",
+  "LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST": "מעיל מנא בשירות רשימא.",
+  "LISTS_SET_INDEX_TOOLTIP_INSERT_FROM": "מעיל מנא באתרא דאתיהב ברשימא.",
+  "LISTS_SET_INDEX_TOOLTIP_INSERT_LAST": "מוסיף מנא לסוף רשימא.",
+  "LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM": "מעיל מנא באקראי ברשימא.",
+  "LISTS_SET_INDEX_TOOLTIP_SET_FIRST": "משוי מנא קדמאה ברשימא.",
+  "LISTS_SET_INDEX_TOOLTIP_SET_FROM": "משוי מנא באתרא דאתיהב ברשימא.",
+  "LISTS_SET_INDEX_TOOLTIP_SET_LAST": "משוי מנא בתראה ברשימא.",
+  "LISTS_SET_INDEX_TOOLTIP_SET_RANDOM": "משוי מנא באקראי ברשימא.",
+  "LOGIC_BOOLEAN_FALSE": "שקרא",
+  "LOGIC_BOOLEAN_TOOLTIP": "מהדר קושטא או שקרא.",
+  "LOGIC_BOOLEAN_TRUE": "קושטא",
+  "LOGIC_COMPARE_TOOLTIP_EQ": "מהדר קושטא אן תרין עלוליא שוין.",
+  "LOGIC_COMPARE_TOOLTIP_GT": "מהדר קושטא אן עלולא קדמאה רב מן תניינא.",
+  "LOGIC_COMPARE_TOOLTIP_GTE": "מהדר קושטא אן עלולא קדמאה רב מן תניינא או שוי ליה.",
+  "LOGIC_COMPARE_TOOLTIP_LT": "מהדר קושטא אן עלולא קדמאה זעיר מן תניינא.",
+  "LOGIC_COMPARE_TOOLTIP_LTE": "מהדר קושטא אן עלולא קדמאה זעיר מן תניינא או שוי ליה.",
+  "LOGIC_COMPARE_TOOLTIP_NEQ": "מהדר קושטא אן תרין עלוליא לא שוין.",
+  "LOGIC_NEGATE_TITLE": "לא %1",
+  "LOGIC_NEGATE_TOOLTIP": "מהדר קושטא אן עלולא שקרא. מהדר שקרא אן עלולא קושטא.",
+  "LOGIC_OPERATION_AND": "ו",
+  "LOGIC_OPERATION_OR": "או",
+  "LOGIC_OPERATION_TOOLTIP_AND": "מהדר קושטא אן תרין עלוליא קושטא.",
+  "LOGIC_OPERATION_TOOLTIP_OR": "מהדר קושטא אן לכל הפחות חד מן עלוליא קושטא.",
+  "LOGIC_TERNARY_CONDITION": "בדוק",
+  "LOGIC_TERNARY_IF_FALSE": "אן שקרא",
+  "LOGIC_TERNARY_IF_TRUE": "אן קושטא",
+  "LOGIC_TERNARY_TOOLTIP": "בדוק תנאה ב-'בדוק'. אן תנאה קושטא, מהדר ערך 'אן קושטא'; ואן לא, מהדר ערך 'אן שקרא'.",
+  "MATH_ARITHMETIC_TOOLTIP_ADD": "מהדר סכום תרין מנייניא.",
+  "MATH_ARITHMETIC_TOOLTIP_DIVIDE": "מהדר פלוג תרין מנייניא.",
+  "MATH_ARITHMETIC_TOOLTIP_MINUS": "מהדר שנוי בין תרין מנייניא.",
+  "MATH_ARITHMETIC_TOOLTIP_MULTIPLY": "מהדר כפל תרין מנייניא.",
+  "MATH_ARITHMETIC_TOOLTIP_POWER": "מהדר מניינא קדמאה מרומם בחילא דתניינא.",
+  "MATH_CHANGE_TITLE": "שני %1 ב-%2",
+  "MATH_CHANGE_TOOLTIP": "אוסף מניינא למשתנא '%1'.",
+  "MATH_MODULO_TITLE": "שארא ד-%1 ÷ %2",
+  "MATH_MODULO_TOOLTIP": "מהדר שארא מן פלוג תרין מנייניא.",
+  "MATH_NUMBER_TOOLTIP": "מניינא.",
+  "MATH_RANDOM_INT_TITLE": "מניין שלים באקראי מן %1 עד %2",
+  "MATH_RANDOM_INT_TOOLTIP": "מהדר מניין שלים באקראי בין תרין תחומיא, עמהון.",
+  "MATH_ROUND_OPERATOR_ROUND": "עגל",
+  "MATH_ROUND_OPERATOR_ROUNDDOWN": "עגל לתחתא",
+  "MATH_ROUND_OPERATOR_ROUNDUP": "עגל לעילא",
+  "MATH_ROUND_TOOLTIP": "עגל מניינא לעילא או לתחתא.",
+  "NEW_NUMBER_VARIABLE": "עבד משתנא דמניינא...",
+  "NEW_STRING_VARIABLE": "עבד משתנא דכתבא...",
+  "NEW_VARIABLE": "עבד משתנא...",
+  "NEW_VARIABLE_TITLE": "שם משתנא חדתא:",
+  "NEW_VARIABLE_TYPE_TITLE": "זנא דמשתנא חדתא:",
+  "PROCEDURES_ALLOW_STATEMENTS": "שבוק פקודין",
+  "PROCEDURES_BEFORE_PARAMS": "עם:",
+  "PROCEDURES_CALLNORETURN_TOOLTIP": "רהט עבידתא '%1' דמשמשא עבד.",
+  "PROCEDURES_CALLRETURN_TOOLTIP": "רהט עבידתא '%1' דמשמשא עבד, ושמש בפירה.",
+  "PROCEDURES_CALL_BEFORE_PARAMS": "עם:",
+  "PROCEDURES_CALL_DISABLED_DEF_WARNING": "לא אפשר למרהט עבידתא '%1', דלבנת תחומה בטילא.",
+  "PROCEDURES_CREATE_DO": "עבד '%1'",
+  "PROCEDURES_DEFNORETURN_COMMENT": "פרש עבידתא הדא...",
+  "PROCEDURES_DEFNORETURN_PROCEDURE": "עבד מדעם",
+  "PROCEDURES_DEFNORETURN_TITLE": "ל",
+  "PROCEDURES_DEFNORETURN_TOOLTIP": "עביד עבידתא בלא פירא.",
+  "PROCEDURES_DEFRETURN_RETURN": "אהדר",
+  "PROCEDURES_DEFRETURN_TOOLTIP": "עביד עבידתא עם פירא.",
+  "PROCEDURES_DEF_DUPLICATE_WARNING": "אזהרא: לעבידתא הדא אית עלולין כפילין.",
+  "PROCEDURES_HIGHLIGHT_DEF": "אנהר תחום עבידתא",
+  "PROCEDURES_IFRETURN_TOOLTIP": "אן ערכא קושטא, אהדר ערכא תניינא.",
+  "PROCEDURES_IFRETURN_WARNING": "אזהרא: לבנתא הדא משתמשא בגו תחום עבידתא בלחוד.",
+  "PROCEDURES_MUTATORARG_TITLE": "שם עלולא:",
+  "PROCEDURES_MUTATORARG_TOOLTIP": "אוסף עלולא לעבידתא.",
+  "PROCEDURES_MUTATORCONTAINER_TITLE": "עלולין",
+  "PROCEDURES_MUTATORCONTAINER_TOOLTIP": "אוסף, סלק או סדר עלולין לעבידתא הדא.",
+  "REDO": "עבד תוב",
+  "REMOVE_COMMENT": "סלק פירושא",
+  "RENAME_VARIABLE": "שני שם משתנא...",
+  "RENAME_VARIABLE_TITLE": "שני שם כל משתני '%1' ל:",
+  "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "לאתוון זעירין",
+  "TEXT_CHANGECASE_OPERATOR_TITLECASE": "לאתוון רישין",
+  "TEXT_CHANGECASE_OPERATOR_UPPERCASE": "לאתוון רברבין",
+  "TEXT_CHANGECASE_TOOLTIP": "מהדר פרשגן כתבא באתוון אחרנין.",
+  "TEXT_CREATE_JOIN_ITEM_TOOLTIP": "אוסף מנא לכתבא.",
+  "TEXT_CREATE_JOIN_TITLE_JOIN": "חבר",
+  "TEXT_CREATE_JOIN_TOOLTIP": "אוסף, סלק או סדר פלגין למתקנא לבנת כתבא הדא.",
+  "TEXT_ISEMPTY_TITLE": "%1 ריקן",
+  "TEXT_ISEMPTY_TOOLTIP": "מהדר קושטא אן כתבא דאתיהב ריקן.",
+  "TEXT_JOIN_TITLE_CREATEWITH": "עבד כתבא עם",
+  "TEXT_JOIN_TOOLTIP": "עבד כתבא בחבורא דכל מניין מנין.",
+  "TEXT_LENGTH_TITLE": "אורכא ד-%1",
+  "TEXT_LENGTH_TOOLTIP": "מהדר מניין אתוון (עם ריוחין) בכתבא דאתיהב.",
+  "TEXT_TEXT_TOOLTIP": "אתא, מלה או שורת כתבא.",
+  "UNDO": "בטל",
+  "UNNAMED_KEY": "בלא שם",
+  "VARIABLES_DEFAULT_NAME": "מנא",
+  "VARIABLES_GET_CREATE_SET": "עבד 'שוי %1'",
+  "VARIABLES_GET_TOOLTIP": "מהדר ערכא דמשתנא הדין.",
+  "VARIABLES_SET": "שוי %1 ל-%2",
+  "VARIABLES_SET_CREATE_GET": "עבד 'סב %1'",
+  "VARIABLES_SET_TOOLTIP": "משוי משתנא הדין שוי לעלולא.",
+  "VARIABLE_ALREADY_EXISTS": "משתנא דשמיה '%1' כבר איתוהי.",
+  "VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "משתנא דשמיה '%1' כבר איתוהי לזנא אחרינא: '%2'.",
+  "VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "משתנא דשמיה '%1' כבר איתוהי כעלולא בעבידתא '%2'."
+ }
+}
