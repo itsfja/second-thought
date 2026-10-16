@@ -2701,7 +2701,7 @@ async def i18n_tests():
                     if t.get("font") and FONTS[t["font"]][3]:
                         # A script terminals can't show (Linear B, cuneiform): the terminal gets its transcription, in Latin letters only.
                         odd = sorted({ch for ch in said + doctor if ch.isalpha() and not unicodedata.name(ch, "").startswith("LATIN")})
-                        check(not odd and W["Task set"].isascii(),
+                        check(not odd and all(not c.isalpha() or unicodedata.name(c, "").startswith("LATIN") for c in W["Task set"]),
                               f"the exported program prints {t.get('name', code)} in transcription, with no letters outside Latin script ({odd[:10]}; {W['Task set']!r})")
                 done_word = P["done in {time}"].split("{time}")[0]
                 await pg.select_option("#example", "review")
