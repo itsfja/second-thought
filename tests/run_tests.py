@@ -37,7 +37,16 @@ HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
 VENDOR = HERE / "vendor"
 FIX = HERE / "fixtures"
-LINEAR_B_FONT = VENDOR / "@fontsource/noto-sans-linear-b/package/files/noto-sans-linear-b-linear-b-400-normal.woff2"
+# Fonts a language names for a script most computers lack, served from tests/vendor in place of Google Fonts:
+# family -> (its file, a character of that script, a regex for that script, whether exported programs print a transcription instead).
+FONTS = {
+    "Noto Sans Linear B": (VENDOR / "@fontsource/noto-sans-linear-b/package/files/noto-sans-linear-b-linear-b-400-normal.woff2",
+                           "\U00010000", "[\\u{10000}-\\u{100FF}]", True),
+    "Noto Sans Devanagari": (VENDOR / "@fontsource/noto-sans-devanagari/package/files/noto-sans-devanagari-devanagari-400-normal.woff2",
+                             "\u0915", "[\\u0900-\\u097F]", False),
+    "Noto Sans Cuneiform": (VENDOR / "@fontsource/noto-sans-cuneiform/package/files/noto-sans-cuneiform-cuneiform-400-normal.woff2",
+                            "\U00012000", "[\\u{12000}-\\u{123FF}]", True),
+}
 PAGE = (ROOT / "second-thought.html").read_text(encoding="utf-8")
 DOC = '<!doctype html><html><head><meta charset=utf8><style>[hidden]{display:none!important}</style></head><body>' + PAGE + "</body></html>"
 
@@ -121,11 +130,13 @@ async def route(r):
         "field-multilineinput": VENDOR / "field-multilineinput/package/dist/index.js",
         "blockly.min.js": VENDOR / "blockly/package/blockly.min.js",
     }
-    if "fonts.googleapis.com/css2?family=Noto+Sans+Linear+B" in u:  # the Linear B font, for the language that names it
-        return await r.fulfill(body="@font-face{font-family:'Noto Sans Linear B';src:url(https://fonts.gstatic.com/test/linear-b.woff2) format('woff2')}",
-                               content_type="text/css")
-    if u == "https://fonts.gstatic.com/test/linear-b.woff2":
-        return await r.fulfill(path=str(LINEAR_B_FONT), content_type="font/woff2")
+    for family, (font_file, *_) in FONTS.items():  # a script's font, for the language that names it
+        slug = family.lower().replace(" ", "-")
+        if "fonts.googleapis.com/css2?family=" + family.replace(" ", "+") in u:
+            return await r.fulfill(body=f"@font-face{{font-family:'{family}';src:url(https://fonts.gstatic.com/test/{slug}.woff2) format('woff2')}}",
+                                   content_type="text/css")
+        if u == f"https://fonts.gstatic.com/test/{slug}.woff2":
+            return await r.fulfill(path=str(font_file), content_type="font/woff2")
     m = re.search(r"/blockly@[^/]+/msg/([a-z-]+)\.js$", u)
     if m and (VENDOR / "blockly/package/msg" / (m.group(1) + ".js")).exists():  # Blockly's own words for a language
         return await r.fulfill(path=str(VENDOR / "blockly/package/msg" / (m.group(1) + ".js")), content_type="application/javascript")
@@ -2596,14 +2607,15 @@ async def i18n_tests():
                 check(not own["differ"] and own["repeat"].startswith(t["blocklyMsg"]["CONTROLS_REPEAT_TITLE"].split("%1")[0].strip()),
                       f"with {code} chosen, Blockly's own blocks use the language's own words ({own})")
             if t.get("font"):
-                f = await pg.evaluate("""async (font) => { await document.fonts.load('bold 12px "' + font + '"', '\\u{10000}');
+                _, sample, script, _ = FONTS[t["font"]]
+                f = await pg.evaluate("""async ([font, sample, script]) => { await document.fonts.load('bold 12px "' + font + '"', sample);
                     const ws = Blockly.getMainWorkspace();
                     const text = [...document.querySelectorAll('.blocklyText')].map(e => e.textContent).join(' ');
                     return { link:!!document.querySelector('link[href*="family=' + font.replace(/ /g, '+') + '"]'),
-                             loaded:document.fonts.check('bold 12px "' + font + '"', '\\u{10000}'),
-                             signs:/[\\u{10000}-\\u{100FF}]/u.test(text), page:getComputedStyle(document.body).fontFamily.includes(font),
-                             blocks:ws.getTheme().fontStyle.family.includes(font) }; }""", t["font"])
-                english = await en.evaluate("() => [...document.querySelectorAll('link')].some(l => /Linear/.test(l.href))")
+                             loaded:document.fonts.check('bold 12px "' + font + '"', sample),
+                             signs:new RegExp(script, 'u').test(text), page:getComputedStyle(document.body).fontFamily.includes(font),
+                             blocks:ws.getTheme().fontStyle.family.includes(font) }; }""", [t["font"], sample, script])
+                english = await en.evaluate("() => [...document.querySelectorAll('link')].some(l => /fonts\\.googleapis\\.com\\/css2\\?family=Noto/.test(l.href))")
                 check(all(f.values()) and not english,
                       f"with {code} chosen, the page loads {t['font']} and its blocks show the signs; English doesn't load it ({f}, english: {english})")
             want = t.get("dir", "ltr")
@@ -2686,8 +2698,8 @@ async def i18n_tests():
                     check("Task set" in english and "Run stopped: Claude needs a key" in english, f"language = en switches it back to English ({english.strip()[-120:]!r})")
                     check(W["Only reading: nothing is sent, posted, switched or charged.\n"].strip() in doctor and "  FAIL  " in doctor,
                           f"--doctor speaks {t.get('name', code)} too, keeping ok, FAIL and NOTE as they are ({doctor.strip()[:120]!r})")
-                    if t.get("font"):
-                        # A script the page needs a font for: the terminal gets its transcription, in Latin letters only.
+                    if t.get("font") and FONTS[t["font"]][3]:
+                        # A script terminals can't show (Linear B, cuneiform): the terminal gets its transcription, in Latin letters only.
                         odd = sorted({ch for ch in said + doctor if ch.isalpha() and not unicodedata.name(ch, "").startswith("LATIN")})
                         check(not odd and W["Task set"].isascii(),
                               f"the exported program prints {t.get('name', code)} in transcription, with no letters outside Latin script ({odd[:10]}; {W['Task set']!r})")
