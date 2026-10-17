@@ -673,7 +673,8 @@ SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
 # MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
 # MQTT_PASSWORD if it needs them. MQTT_TLS = yes for an encrypted connection (port 8883). Needs  pip install paho-mqtt.
 # Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
-# WEBHOOK_PORT is the port to listen on (8765 if you don't say).
+# WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
+# WEBHOOK_HOST = 0.0.0.0, which opens it to every network the computer is on (Home Assistant elsewhere, your phone).
 # Calendar: CALENDAR_URL is your calendar's private iCal address (Google Calendar: Settings, your calendar,
 # "Secret address in iCal format"; Outlook: Settings, Calendar, Shared calendars, Publish; iCloud: share as public).
 # Several addresses can be separated by spaces.
@@ -1413,6 +1414,12 @@ def current_time_text():
 
 
 MAX_PAGE_CHARS = 12000
+
+
+def webhook_host():
+    """The address web requests are listened for on. Only this computer (127.0.0.1) unless WEBHOOK_HOST says otherwise:
+    WEBHOOK_HOST = 0.0.0.0 for every network the computer is on, so Home Assistant on another machine or your phone can reach it."""
+    return os.environ.get("WEBHOOK_HOST", "").strip() or "127.0.0.1"
 
 
 def page_text(raw, ctype=""):
@@ -3009,9 +3016,12 @@ class Connections:
             while True:
                 await asyncio.sleep(self._poll(3600))
                 print(tr("Web requests, {x}: still not listening. To turn them on, {note}", x=format(datetime.datetime.now(), '%H:%M'), note=note), flush=True)
-        srv = ThreadingHTTPServer((os.environ.get("WEBHOOK_HOST", "0.0.0.0"), port), Hook)
+        host = webhook_host()
+        srv = ThreadingHTTPServer((host, port), Hook)
         threading.Thread(target=srv.serve_forever, daemon=True).start()
-        print(tr("Listening for web requests on port {port}: {x}.", port=port, x=", ".join(f"http://<this computer>:{port}/{p_}?key=…" for p_ in paths)), flush=True)
+        # On 127.0.0.1 the addresses say so, so it's plain that only this computer can call them (WEBHOOK_HOST opens them up).
+        where = host if host in ("127.0.0.1", "localhost", "::1") else "<this computer>"
+        print(tr("Listening for web requests on port {port}: {x}.", port=port, x=", ".join(f"http://{where}:{port}/{p_}?key=…" for p_ in paths)), flush=True)
         while True:
             await asyncio.sleep(3600)
 
@@ -4435,7 +4445,7 @@ class Doctor:
             async def hook():
                 if not os.environ.get("WEBHOOK_SECRET", "").strip():
                     raise RunError(tr("no WEBHOOK_SECRET {where_keys}, so the program won't listen for web requests. Set it to a long password.", where_keys=WHERE_KEYS))
-                host, port = os.environ.get("WEBHOOK_HOST", "0.0.0.0"), int(os.environ.get("WEBHOOK_PORT") or 8765)
+                host, port = webhook_host(), int(os.environ.get("WEBHOOK_PORT") or 8765)
                 with socket.socket() as so:
                     try:
                         so.bind((host, port))

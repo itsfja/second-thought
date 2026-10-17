@@ -1921,7 +1921,7 @@ def python_tests(codes):
         pk.start()
         threading.Thread(target=ha_poke, daemon=True).start()
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_listen.py")],
-                                dict(env, RB_POLL_SECONDS="0.5", WEBHOOK_PORT=str(hook_port), WEBHOOK_SECRET="hook-secret", WEBHOOK_HOST="127.0.0.1",
+                                dict(env, RB_POLL_SECONDS="0.5", WEBHOOK_PORT=str(hook_port), WEBHOOK_SECRET="hook-secret",
                                      CALENDAR_URL=svc_url + "/calendar-soon.ics"), tmp, timeout=30)
         out = out.replace("\r\n", "\n")
         notes = [l.strip() for l in out.split("\n") if re.match(r"\s+(mqtt|webhook|email|feed|folder|github|calendar|telegram|discord|slack|ha_event): ", l)]
@@ -2214,7 +2214,7 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
                 knock["result"] = "closed"
         threading.Thread(target=knock_knock, daemon=True).start()
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_listen.py")],
-                                dict(env, WEBHOOK_SECRET="", WEBHOOK_PORT=str(closed_port), WEBHOOK_HOST="127.0.0.1", RB_POLL_SECONDS="0.5"), tmp, timeout=9)
+                                dict(env, WEBHOOK_SECRET="", WEBHOOK_PORT=str(closed_port), RB_POLL_SECONDS="0.5"), tmp, timeout=9)
         check(knock.get("result") == "closed" and "doesn't listen for them" in out,
               f"without WEBHOOK_SECRET, the web request port isn't opened at all ({knock.get('result')})")
         check(re.search(r"Web requests, \d\d:\d\d: still not listening", out) is not None,
