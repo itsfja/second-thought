@@ -5,6 +5,20 @@
 [![Python](https://img.shields.io/badge/python-3.9%E2%80%933.13-blue)](.github/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
+**Scratch-style blocks for building AI workflows that check their own work.** Snap together steps like *draft*, *review against these rules*, *revise* and *use these tools*, press Run, and watch each block do its job. When a program does what you want, export it as a single Python file that runs on its own: on a schedule, from a webhook, in Telegram or Home Assistant. It works with Claude, Gemini, GPT, Llama on your own computer, and a dozen other models.
+
+![Building and running a review loop, then exporting it to Python](screenshots/demo.gif)
+
+**Try it in three steps**
+
+1. **Open [Second Thought](https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN)** in claude.ai. Nothing to install, and runs on the page use your claude.ai account.
+2. **Pick an example and press Run.** There are over 150, from a simple review loop to agents that plan a bake or check on the house. Change the text in any block and run it again.
+3. **Export it.** *Import / export → Save Python (.zip)*, unzip, put your API key in `second-thought.ini`, then run `run.bat` (Windows) or `sh run.sh` (Linux, Mac). [Page 10](#page-10-making-a-program-run-on-its-own) has the details.
+
+The rest of this README is a picture book about how it all works. Start at Page 1, or jump to [what's in this folder](#page-11-what-is-in-this-folder) or [checking it still works](#page-12-checking-it-still-works).
+
+---
+
 ### A Ladybird-style book about a clever helper
 
 ---
@@ -575,6 +589,7 @@ This folder is where all the parts of Second Thought are kept. Each part has its
 | `CHANGELOG.md` | What is new in each version of the helper. |
 | `i18n/` | The words on the blocks and buttons in other languages, one file for each. |
 | `gallery/` | Programs people have shared, one file for each. They appear on the page under **Community**. |
+| `screenshots/` | The moving picture at the top of this book, and a still one. `tools/record_demo.py` makes them again after the page changes. |
 | `README.md` | This book! |
 
 ---
