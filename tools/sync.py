@@ -84,15 +84,27 @@ def capabilities_json() -> str:
     return literal_json(CAPABILITIES, "CAPABILITIES")
 
 
+def _lines(value, depth: int) -> str:
+    """JSON with each key of the top `depth` levels of objects on its own line, and everything below that compact."""
+    if depth == 0 or not isinstance(value, dict) or not value:
+        return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    return "{\n" + ",\n".join(json.dumps(k, ensure_ascii=False) + ":" + _lines(v, depth - 1)
+                              for k, v in value.items()) + "\n}"
+
+
 def i18n_json() -> str:
-    """Every i18n/<language>.json, as one JSON object for the page: {"es": {...}, ...}."""
+    """Every i18n/<language>.json, as one JSON object for the page: {"es": {...}, ...}.
+
+    Each language, each of its sections and each entry in a section goes on its own line, so changing one
+    translated phrase changes one line of second-thought.html rather than a line holding every language.
+    """
     langs = {}
     for path in sorted(I18N.glob("*.json")):
         try:
             langs[path.stem] = json.loads(path.read_text(encoding="utf-8"))
         except ValueError as e:
             sys.exit(f"{path.relative_to(ROOT)} isn't valid JSON: {e}")
-    return json.dumps(langs, ensure_ascii=False, separators=(",", ":")) + "\n"
+    return _lines(langs, 3) + "\n"
 
 
 def gallery_json() -> str:
