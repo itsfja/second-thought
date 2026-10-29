@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 
 PY=python3
 python -c "" 2>/dev/null && PY=python   # on Windows, python3 is often a stub
-"$PY" -m pip install --quiet playwright pypdf paho-mqtt
+"$PY" -m pip install --quiet playwright pypdf paho-mqtt pyyaml
 "$PY" -m playwright install chromium
 
 mkdir -p vendor
