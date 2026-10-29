@@ -1360,7 +1360,8 @@
   "Loading it replaces the program on the canvas; you can undo straight after.": "Hladung sett hit on stede þæs forescriftes on þǣm brede; þū miht hit sōna æfter undōn.",
   "Building the program failed: {problem}": "Þæt forescrift ne mihte bēon geworht: {problem}",
   "Undone. Your previous program is back.": "Undōn. Þīn ǣrre forescrift is eft cumen.",
-  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Claudes forescrift is gehladen ({n} stānas). Scēawa þā stānas ǣr þū hit yrne."
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Claudes forescrift is gehladen ({n} stānas). Scēawa þā stānas ǣr þū hit yrne.",
+  "Community: teaching": "Gemanscipe: lār"
  },
  "examples": {
   "review": {

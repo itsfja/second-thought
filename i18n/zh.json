@@ -1360,7 +1360,8 @@
   "Loading it replaces the program on the canvas; you can undo straight after.": "载入会替换画布上的程序；载入后可以马上撤销。",
   "Building the program failed: {problem}": "程序生成失败：{problem}",
   "Undone. Your previous program is back.": "已撤销。之前的程序回来了。",
-  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "已载入 Claude 的程序（{n} 个积木）。运行前请检查这些积木。"
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "已载入 Claude 的程序（{n} 个积木）。运行前请检查这些积木。",
+  "Community: teaching": "社区：教学"
  },
  "examples": {
   "review": {

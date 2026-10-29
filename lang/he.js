@@ -873,7 +873,8 @@
 "Loading it replaces the program on the canvas; you can undo straight after.":"טעינה מחליפה את התוכנית שעל הקנבס; אפשר לבטל מיד אחר כך.",
 "Building the program failed: {problem}":"בניית התוכנית נכשלה: {problem}",
 "Undone. Your previous program is back.":"בוטל. התוכנית הקודמת שלך חזרה.",
-"Loaded Claude's program ({n} blocks). Check the blocks before running.":"התוכנית של Claude נטענה ({n} בלוקים). בדוק את הבלוקים לפני ההרצה."
+"Loaded Claude's program ({n} blocks). Check the blocks before running.":"התוכנית של Claude נטענה ({n} בלוקים). בדוק את הבלוקים לפני ההרצה.",
+"Community: teaching":"קהילה: הוראה"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

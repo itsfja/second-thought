@@ -1360,7 +1360,8 @@
   "Loading it replaces the program on the canvas; you can undo straight after.": "At hlaða því setr þat í stað forritsins á fletinum; þú mátt afturkalla þegar eptir.",
   "Building the program failed: {problem}": "Eigi mátti gera forritit: {problem}",
   "Undone. Your previous program is back.": "Afturkallat. Fyrra forrit þitt er aptr komit.",
-  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Forrit Claudes hlaðit ({n} kubbar). Skoða kubbana áðr en þú keyrir."
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Forrit Claudes hlaðit ({n} kubbar). Skoða kubbana áðr en þú keyrir.",
+  "Community: teaching": "Samfélag: kennsla"
  },
  "examples": {
   "review": {

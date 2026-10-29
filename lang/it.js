@@ -872,7 +872,8 @@
 "Loading it replaces the program on the canvas; you can undo straight after.":"Caricarlo sostituisce il programma sull'area di lavoro; puoi annullare subito dopo.",
 "Building the program failed: {problem}":"Non è stato possibile costruire il programma: {problem}",
 "Undone. Your previous program is back.":"Annullato. Il programma di prima è tornato.",
-"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Programma di Claude caricato ({n} blocchi). Controlla i blocchi prima di eseguirlo."
+"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Programma di Claude caricato ({n} blocchi). Controlla i blocchi prima di eseguirlo.",
+"Community: teaching":"Community: insegnamento"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},

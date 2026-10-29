@@ -1,0 +1,242 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "parent-update",
+  "gallery": {
+    "title": "Parent update",
+    "category": "learning",
+    "description": "Paste this week's lesson plan. Claude writes a warm note to parents, under 150 words, with one thing to try at home, and you approve it before it's emailed.",
+    "tip": "Change the email address to your parents' list. No pupil is ever named.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_plan",
+        "name": "plan"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste this week's lesson plan"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_plan"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_task",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "Write this week's note to parents from the lesson plan: what the class learned, in everyday words, and one thing they could try at home.\n\nLesson plan:\n"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_plan"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 2
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_generate",
+                          "next": {
+                            "block": {
+                              "type": "rb_reflect",
+                              "inputs": {
+                                "CRITERIA": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "warm and friendly; under 150 words; no teaching jargon; one thing to try at home; no pupil named"
+                                    }
+                                  }
+                                },
+                                "ROUNDS": {
+                                  "shadow": {
+                                    "type": "math_number",
+                                    "fields": {
+                                      "NUM": 3
+                                    }
+                                  }
+                                },
+                                "FIX": {
+                                  "block": {
+                                    "type": "rb_revise"
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "controls_if",
+                                  "inputs": {
+                                    "IF0": {
+                                      "block": {
+                                        "type": "rb_approve",
+                                        "inputs": {
+                                          "TEXT": {
+                                            "block": {
+                                              "type": "text_join",
+                                              "inputs": {
+                                                "ADD0": {
+                                                  "shadow": {
+                                                    "type": "rb_longtext",
+                                                    "fields": {
+                                                      "TEXT": "Email this to parents?\n\n"
+                                                    }
+                                                  }
+                                                },
+                                                "ADD1": {
+                                                  "block": {
+                                                    "type": "rb_draft"
+                                                  }
+                                                }
+                                              },
+                                              "extraState": {
+                                                "itemCount": 2
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "DO0": {
+                                      "block": {
+                                        "type": "rb_ask_first",
+                                        "fields": {
+                                          "WHAT": "messages"
+                                        },
+                                        "next": {
+                                          "block": {
+                                            "type": "rb_email_send",
+                                            "inputs": {
+                                              "TO": {
+                                                "shadow": {
+                                                  "type": "text",
+                                                  "fields": {
+                                                    "TEXT": "parents@example.com"
+                                                  }
+                                                }
+                                              },
+                                              "SUBJECT": {
+                                                "shadow": {
+                                                  "type": "text",
+                                                  "fields": {
+                                                    "TEXT": "This week in class"
+                                                  }
+                                                }
+                                              },
+                                              "TEXT": {
+                                                "block": {
+                                                  "type": "rb_draft"
+                                                }
+                                              }
+                                            },
+                                            "next": {
+                                              "block": {
+                                                "type": "rb_result"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "ELSE": {
+                                      "block": {
+                                        "type": "rb_finish_with",
+                                        "inputs": {
+                                          "TEXT": {
+                                            "block": {
+                                              "type": "text_join",
+                                              "inputs": {
+                                                "ADD0": {
+                                                  "shadow": {
+                                                    "type": "rb_longtext",
+                                                    "fields": {
+                                                      "TEXT": "Not sent. The draft, to edit yourself:\n\n"
+                                                    }
+                                                  }
+                                                },
+                                                "ADD1": {
+                                                  "block": {
+                                                    "type": "rb_draft"
+                                                  }
+                                                }
+                                              },
+                                              "extraState": {
+                                                "itemCount": 2
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "hasElse": true
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

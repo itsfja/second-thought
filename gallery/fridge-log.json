@@ -1,0 +1,257 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "fridge-log",
+  "gallery": {
+    "title": "Fridge log",
+    "category": "home",
+    "description": "Each evening, drafts the day's fridge and freezer temperature log from Home Assistant sensors, flagging any reading outside 0–5 °C for the fridge or above −18 °C for the freezer, with the time and what to do. Saved for you to sign.",
+    "tip": "Change the sensors to yours. The log is a draft to check against the thermometer, not a replacement for it.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_log",
+        "name": "log"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "log"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 18,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "log"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "log"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_log"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "Draft today's temperature log for a food business from these readings. A table: time, fridge °C, freezer °C, OK or not. Flag every fridge reading outside 0 to 5 °C and every freezer reading above −18 °C, with the time and the usual action (check the door and seals, move food, call the engineer). Then a line for 'Checked by' and 'Action taken', left blank. Today is "
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_now",
+                                "fields": {
+                                  "PART": "date"
+                                }
+                              }
+                            },
+                            "ADD2": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": ".\n\nFridge, last 24 hours:\n"
+                                }
+                              }
+                            },
+                            "ADD3": {
+                              "block": {
+                                "type": "rb_ha_history",
+                                "inputs": {
+                                  "ENTITY": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "sensor.fridge_temperature"
+                                      }
+                                    }
+                                  },
+                                  "HOURS": {
+                                    "shadow": {
+                                      "type": "math_number",
+                                      "fields": {
+                                        "NUM": 24
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "ADD4": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "\n\nFreezer, last 24 hours:\n"
+                                }
+                              }
+                            },
+                            "ADD5": {
+                              "block": {
+                                "type": "rb_ha_history",
+                                "inputs": {
+                                  "ENTITY": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "sensor.freezer_temperature"
+                                      }
+                                    }
+                                  },
+                                  "HOURS": {
+                                    "shadow": {
+                                      "type": "math_number",
+                                      "fields": {
+                                        "NUM": 24
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 6
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_ask_first",
+                  "fields": {
+                    "WHAT": "files"
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_file_save",
+                      "fields": {
+                        "EXT": "md"
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "variables_get",
+                            "fields": {
+                              "VAR": {
+                                "id": "g_log"
+                              }
+                            }
+                          }
+                        },
+                        "NAME": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "fridge-log-"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "rb_now",
+                                  "fields": {
+                                    "PART": "date"
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 2
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_finish_with",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_log"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

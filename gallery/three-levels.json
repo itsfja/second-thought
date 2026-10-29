@@ -1,0 +1,311 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "three-levels",
+  "gallery": {
+    "title": "Three reading levels",
+    "category": "learning",
+    "description": "One text as three worksheets, for reading ages of about 7, 10 and 13. Each keeps the facts and is checked against its reading age, with three questions at the end. Saved as one file to print.",
+    "tip": "Change the reading ages in the list block to suit your class.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_text",
+        "name": "text"
+      },
+      {
+        "id": "g_level",
+        "name": "level"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste the text to make worksheets from"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_text"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "controls_forEach",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_level"
+                        }
+                      },
+                      "inputs": {
+                        "LIST": {
+                          "block": {
+                            "type": "lists_create_with",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "7"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "10"
+                                  }
+                                }
+                              },
+                              "ADD2": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "13"
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 3
+                            }
+                          }
+                        },
+                        "DO": {
+                          "block": {
+                            "type": "rb_task",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "Rewrite this text as a worksheet for a reading age of about "
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_level"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "ADD2": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": ". Keep every fact. Add a title, and three questions at the end, the last one asking the reader what they think.\n\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD3": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_text"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 4
+                                  }
+                                }
+                              }
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_generate",
+                                "next": {
+                                  "block": {
+                                    "type": "rb_reflect",
+                                    "inputs": {
+                                      "CRITERIA": {
+                                        "block": {
+                                          "type": "text_join",
+                                          "inputs": {
+                                            "ADD0": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "reads at about a reading age of "
+                                                }
+                                              }
+                                            },
+                                            "ADD1": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_level"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "ADD2": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "; every fact from the original is still there and still right; no fact added; short paragraphs; three questions at the end"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "extraState": {
+                                            "itemCount": 3
+                                          }
+                                        }
+                                      },
+                                      "ROUNDS": {
+                                        "shadow": {
+                                          "type": "math_number",
+                                          "fields": {
+                                            "NUM": 3
+                                          }
+                                        }
+                                      },
+                                      "FIX": {
+                                        "block": {
+                                          "type": "rb_revise"
+                                        }
+                                      }
+                                    },
+                                    "next": {
+                                      "block": {
+                                        "type": "rb_add_result",
+                                        "inputs": {
+                                          "TEXT": {
+                                            "block": {
+                                              "type": "text_join",
+                                              "inputs": {
+                                                "ADD0": {
+                                                  "shadow": {
+                                                    "type": "rb_longtext",
+                                                    "fields": {
+                                                      "TEXT": "Reading age "
+                                                    }
+                                                  }
+                                                },
+                                                "ADD1": {
+                                                  "block": {
+                                                    "type": "variables_get",
+                                                    "fields": {
+                                                      "VAR": {
+                                                        "id": "g_level"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "ADD2": {
+                                                  "shadow": {
+                                                    "type": "rb_longtext",
+                                                    "fields": {
+                                                      "TEXT": "\n\n"
+                                                    }
+                                                  }
+                                                },
+                                                "ADD3": {
+                                                  "block": {
+                                                    "type": "rb_draft"
+                                                  }
+                                                }
+                                              },
+                                              "extraState": {
+                                                "itemCount": 4
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_ask_first",
+                          "fields": {
+                            "WHAT": "files"
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_file_save",
+                              "fields": {
+                                "EXT": "md"
+                              },
+                              "inputs": {
+                                "VALUE": {
+                                  "block": {
+                                    "type": "rb_result_text"
+                                  }
+                                },
+                                "NAME": {
+                                  "shadow": {
+                                    "type": "text",
+                                    "fields": {
+                                      "TEXT": "worksheets"
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "allergen-check",
+  "gallery": {
+    "title": "Allergen check",
+    "category": "home",
+    "description": "Paste a recipe card. Claude checks it against the UK's 14 allergens: which each ingredient contains, 'may contain' wording to look at, and anything the card should declare but doesn't. A second pair of eyes, not a guarantee.",
+    "tip": "Paste the ingredients with any sub-recipes (the stock, the sauce): allergens hide there.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste the recipe card, with its ingredients and any allergen statement"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_task",
+                  "inputs": {
+                    "TEXT": {
+                      "block": {
+                        "type": "text_join",
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "Check this recipe card against the UK's 14 allergens (celery; cereals containing gluten (wheat, rye, barley, oats); crustaceans; eggs; fish; lupin; milk; molluscs; mustard; tree nuts; peanuts; sesame; soya; sulphur dioxide and sulphites). Give: a table of each ingredient and the allergens it contains; any 'may contain' or 'made in a kitchen that' wording, and what it would cover; and allergens the card should declare but doesn't. End with the full list to declare, in bold.\n\nRecipe card:\n"
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "rb_answer"
+                            }
+                          }
+                        },
+                        "extraState": {
+                          "itemCount": 2
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_generate",
+                      "next": {
+                        "block": {
+                          "type": "rb_reflect",
+                          "inputs": {
+                            "CRITERIA": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "names all 14 allergens, saying for each whether it's present; every ingredient that contains one is named; sub-recipes and processed ingredients (stock, sauces, bread) are checked; anything unclear says what to ask the supplier; says it is a check to confirm, not a guarantee"
+                                }
+                              }
+                            },
+                            "ROUNDS": {
+                              "shadow": {
+                                "type": "math_number",
+                                "fields": {
+                                  "NUM": 3
+                                }
+                              }
+                            },
+                            "FIX": {
+                              "block": {
+                                "type": "rb_revise"
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_result"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

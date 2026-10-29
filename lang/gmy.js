@@ -873,7 +873,8 @@
 "Loading it replaces the program on the canvas; you can undo straight after.":"𐀀𐀐𐀩 𐀀𐀕𐀺 𐀡𐀫𐀏𐀨𐀔; 𐀀𐀙𐀩 𐀞𐀫.",
 "Building the program failed: {problem}":"𐀡𐀫𐀏𐀨𐀔 𐀃𐀄 𐀸𐀐: {problem}",
 "Undone. Your previous program is back.":"𐀀𐀙𐀩𐀵. 𐀃 𐀡𐀫𐀏𐀨𐀔 𐀀𐀠𐀐𐀵.",
-"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Claude 𐀡𐀫𐀏𐀨𐀔 𐀀𐀐𐀩𐀵 ({n} 𐀠𐀪𐀵). 𐀠𐀪𐀵 𐀂𐀆 𐀞𐀫 𐀁𐀨𐀟."
+"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Claude 𐀡𐀫𐀏𐀨𐀔 𐀀𐀐𐀩𐀵 ({n} 𐀠𐀪𐀵). 𐀠𐀪𐀵 𐀂𐀆 𐀞𐀫 𐀁𐀨𐀟.",
+"Community: teaching":"𐀒𐀜𐀛𐀊: 𐀇𐀅𐀏𐀩"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},

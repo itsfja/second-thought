@@ -872,7 +872,8 @@
 "Loading it replaces the program on the canvas; you can undo straight after.":"Τὸ φορτῶσαι ἀντικαθίστησι τὸ πρόγραμμα τὸ ἐπὶ τοῦ πίνακος· εὐθὺς μετὰ ἀναιρεῖν ἔξεστιν.",
 "Building the program failed: {problem}":"Τὸ πρόγραμμα οὐκ ἐδυνήθη κατασκευασθῆναι· {problem}",
 "Undone. Your previous program is back.":"Ἀνῃρέθη. Τὸ πρότερόν σου πρόγραμμα ἐπανῆλθεν.",
-"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Ἐφορτώθη τὸ τοῦ Claude πρόγραμμα ({n} πλίνθοι). Ἐξέτασον τὰς πλίνθους πρὶν τρέχειν."
+"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Ἐφορτώθη τὸ τοῦ Claude πρόγραμμα ({n} πλίνθοι). Ἐξέτασον τὰς πλίνθους πρὶν τρέχειν.",
+"Community: teaching":"Κοινωνία· διδασκαλία"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

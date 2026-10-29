@@ -37,7 +37,7 @@ LANG = ROOT / "lang"                  # the same, as scripts the page loads one 
 GALLERY = ROOT / "gallery"            # the community gallery: one block file per program, with a "gallery" part
 GALLERY_FIELDS = ("title", "description", "tip", "author", "runtime")
 # A gallery program's optional "category": where the page groups it. Keep in step with GALLERY_GROUPS in the page.
-GALLERY_CATEGORIES = ("github", "coding", "news", "money", "calendar", "home", "odds")
+GALLERY_CATEGORIES = ("github", "coding", "news", "money", "calendar", "home", "learning", "odds")
 PARTS = [
     ('<script type="text/plain" id="py-runtime">\n', RUNTIME),
     ('<script type="application/json" id="services">\n', SERVICES),

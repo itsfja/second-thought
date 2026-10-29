@@ -1361,7 +1361,8 @@
   "Loading it replaces the program on the canvas; you can undo straight after.": "आरोपणं पटे स्थितं कार्यक्रमं प्रतिस्थापयति; तदनन्तरम् एव प्रत्यावर्तयितुं शक्नोषि।",
   "Building the program failed: {problem}": "कार्यक्रमः रचयितुं न शक्तः: {problem}",
   "Undone. Your previous program is back.": "प्रत्यावर्तितम्। तव पूर्वकार्यक्रमः पुनः आगतः।",
-  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Claude इत्यस्य कार्यक्रमः आरोपितः ({n} खण्डाः)। चालनात् पूर्वं खण्डान् परीक्षस्व।"
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Claude इत्यस्य कार्यक्रमः आरोपितः ({n} खण्डाः)। चालनात् पूर्वं खण्डान् परीक्षस्व।",
+  "Community: teaching": "समुदायः: अध्यापनम्"
  },
  "examples": {
   "review": {

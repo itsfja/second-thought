@@ -29,7 +29,7 @@ what it does, and what it can do, which the page works out from its blocks.
    | Field | What to put |
    |---|---|
    | `title` | A short name, up to 40 characters. |
-   | `category` | Where it's grouped on the page: `github`, `coding`, `news`, `money`, `calendar` (calendar and email), `home` (home and baking) or `odds` (odds and ends, if you leave it out). |
+   | `category` | Where it's grouped on the page: `github`, `coding`, `news`, `money`, `calendar` (calendar and email), `home` (home and baking), `learning` (teaching) or `odds` (odds and ends, if you leave it out). |
    | `description` | What it does, in a sentence or two, up to 300 characters. |
    | `tip` | One thing to try or change first, up to 200 characters. |
    | `author` | Your name or GitHub name, up to 40 characters. |

@@ -1360,7 +1360,8 @@
   "Loading it replaces the program on the canvas; you can undo straight after.": "Caricarlo sostituisce il programma sull'area di lavoro; puoi annullare subito dopo.",
   "Building the program failed: {problem}": "Non è stato possibile costruire il programma: {problem}",
   "Undone. Your previous program is back.": "Annullato. Il programma di prima è tornato.",
-  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Programma di Claude caricato ({n} blocchi). Controlla i blocchi prima di eseguirlo."
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Programma di Claude caricato ({n} blocchi). Controlla i blocchi prima di eseguirlo.",
+  "Community: teaching": "Community: insegnamento"
  },
  "examples": {
   "review": {

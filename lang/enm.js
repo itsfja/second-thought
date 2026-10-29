@@ -872,7 +872,8 @@
 "Loading it replaces the program on the canvas; you can undo straight after.":"To lade it putteth it in stede of the devys on the canvas; thou mayst undo it right after.",
 "Building the program failed: {problem}":"The devys myghte nat be maked: {problem}",
 "Undone. Your previous program is back.":"Undoon. Thy former devys is come agayn.",
-"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Laden Claudes devys ({n} blokkes). Loke on the blokkes er thou renne it."
+"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Laden Claudes devys ({n} blokkes). Loke on the blokkes er thou renne it.",
+"Community: teaching":"Felaweshipe: techynge"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},

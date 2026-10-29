@@ -1,0 +1,124 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "easy-read",
+  "gallery": {
+    "title": "Easy read",
+    "category": "odds",
+    "description": "Choose a document. Claude makes an easy-read version: one idea per sentence, everyday words, a heading every few points and a suggested picture for each, checked against easy-read guidance. Saved to print.",
+    "tip": "Easy read is for people with learning disabilities. Ask someone who uses it to check the result.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_task",
+              "inputs": {
+                "TEXT": {
+                  "block": {
+                    "type": "text_join",
+                    "inputs": {
+                      "ADD0": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "Make an easy-read version of this document. Keep what the reader needs to know or do; leave out the rest. For each point, suggest a picture in [square brackets] before it.\n\n"
+                          }
+                        }
+                      },
+                      "ADD1": {
+                        "block": {
+                          "type": "rb_file_choose"
+                        }
+                      }
+                    },
+                    "extraState": {
+                      "itemCount": 2
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_generate",
+                  "next": {
+                    "block": {
+                      "type": "rb_reflect",
+                      "inputs": {
+                        "CRITERIA": {
+                          "shadow": {
+                            "type": "rb_longtext",
+                            "fields": {
+                              "TEXT": "one idea per sentence; sentences of 15 words or fewer; everyday words, with any hard word explained; a heading every three to five points; a suggested picture for each point; numbers written as digits; nothing the reader needs is left out"
+                            }
+                          }
+                        },
+                        "ROUNDS": {
+                          "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                              "NUM": 3
+                            }
+                          }
+                        },
+                        "FIX": {
+                          "block": {
+                            "type": "rb_revise"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_ask_first",
+                          "fields": {
+                            "WHAT": "files"
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_file_save",
+                              "fields": {
+                                "EXT": "md"
+                              },
+                              "inputs": {
+                                "VALUE": {
+                                  "block": {
+                                    "type": "rb_draft"
+                                  }
+                                },
+                                "NAME": {
+                                  "shadow": {
+                                    "type": "text",
+                                    "fields": {
+                                      "TEXT": "easy-read"
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}
