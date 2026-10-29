@@ -1,0 +1,169 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "test-failure-whisperer",
+  "gallery": {
+    "title": "Test failure whisperer",
+    "category": "coding",
+    "description": "When CI fails, your workflow sends it the end of the log. It reads the pull request and posts a short 'Probably this:' comment with the likely cause and one thing to try.",
+    "tip": "Add a workflow step that runs on failure and posts the repo, PR number and last 200 log lines to /ci-failed. GitHub must be able to reach the program.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste what the workflow would send: repo, PR number and the end of the log"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "failed"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_webhook_when",
+          "fields": {
+            "PATH": "ci-failed"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "failed"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "failed"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "block": {
+                    "type": "text_join",
+                    "inputs": {
+                      "ADD0": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "A CI run failed. This is what the workflow sent (the project, the pull request number and the end of the log):\n"
+                          }
+                        }
+                      },
+                      "ADD1": {
+                        "block": {
+                          "type": "rb_msg_value"
+                        }
+                      },
+                      "ADD2": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "\n\nRead the pull request. Work out the most likely cause in two or three sentences, pointing at the file and change that probably caused it, and suggest one thing to try. Then post it as a comment on the pull request, starting 'Probably this:'. If there's no pull request number, don't comment: just answer."
+                          }
+                        }
+                      }
+                    },
+                    "extraState": {
+                      "itemCount": 3
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 8
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "github"
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "github_act"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_result"
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

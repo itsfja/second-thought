@@ -1,0 +1,334 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "competitor-radar",
+  "gallery": {
+    "title": "Competitor radar",
+    "category": "news",
+    "description": "Watches competitors' news or changelog pages, keeps every change, and every 28 days emails a digest of what each one shipped.",
+    "tip": "Add a 'when the web page … changes' hat for each competitor's page, like the one here. The digest goes out 28 days after it starts.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "digest"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_page_when",
+          "fields": {
+            "URL": "https://example.com/competitor/changelog",
+            "WORDS": "",
+            "N": 360
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "change"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 9,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_negate",
+                    "inputs": {
+                      "BOOL": {
+                        "block": {
+                          "type": "rb_mem_has",
+                          "inputs": {
+                            "NAME": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "competitor digest sent"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_mem_set_for",
+                    "fields": {
+                      "UNIT": "d"
+                    },
+                    "inputs": {
+                      "VALUE": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "sent"
+                          }
+                        }
+                      },
+                      "NAME": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "competitor digest sent"
+                          }
+                        }
+                      },
+                      "N": {
+                        "shadow": {
+                          "type": "math_number",
+                          "fields": {
+                            "NUM": 28
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_broadcast_wait",
+                        "inputs": {
+                          "MSG": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": "digest"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "change"
+          },
+          "next": {
+            "block": {
+              "type": "rb_mem_add",
+              "fields": {
+                "KIND": "permanent"
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "text_join",
+                    "inputs": {
+                      "ADD0": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "date"
+                          }
+                        }
+                      },
+                      "ADD1": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": ": "
+                          }
+                        }
+                      },
+                      "ADD2": {
+                        "block": {
+                          "type": "rb_msg_value"
+                        }
+                      }
+                    },
+                    "extraState": {
+                      "itemCount": 3
+                    }
+                  }
+                },
+                "NAME": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "competitor changes"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_finish_with",
+                  "inputs": {
+                    "TEXT": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "Change noted."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "digest"
+          },
+          "next": {
+            "block": {
+              "type": "rb_task",
+              "inputs": {
+                "TEXT": {
+                  "block": {
+                    "type": "text_join",
+                    "inputs": {
+                      "ADD0": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "These are changes I noticed on competitors' pages over the last month, with dates. Write a digest of what each competitor shipped: grouped by competitor, newest first, one line per launch or change, skipping cosmetic edits. If there's nothing, say so.\n\n"
+                          }
+                        }
+                      },
+                      "ADD1": {
+                        "block": {
+                          "type": "rb_mem_get",
+                          "inputs": {
+                            "NAME": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "competitor changes"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "extraState": {
+                      "itemCount": 2
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_generate",
+                  "next": {
+                    "block": {
+                      "type": "rb_email_send",
+                      "inputs": {
+                        "TO": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "you@example.com"
+                            }
+                          }
+                        },
+                        "SUBJECT": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "What competitors shipped this month"
+                            }
+                          }
+                        },
+                        "TEXT": {
+                          "block": {
+                            "type": "rb_draft"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_mem_forget",
+                          "inputs": {
+                            "NAME": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "competitor changes"
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_result"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 550
+        }
+      ]
+    }
+  }
+}

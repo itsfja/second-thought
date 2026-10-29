@@ -1,0 +1,215 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "docs-drift-detector",
+  "gallery": {
+    "title": "Docs drift detector",
+    "category": "coding",
+    "description": "Each Monday, compares a project's README with its code: flags, commands and files the README mentions that don't exist, and ones the code has that it doesn't mention. Opens an issue, or updates the open one.",
+    "tip": "Change the project in the first block. On the page, the sample project's README really has drifted.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_project",
+        "name": "project"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "drift"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 9,
+            "MINUTE": 30,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "weekday"
+                          }
+                        }
+                      },
+                      "B": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Monday"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_broadcast_wait",
+                    "inputs": {
+                      "MSG": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "drift"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "drift"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_project"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "sample-baker/sourdough-chart"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_agent",
+                  "fields": {
+                    "PLAN": false
+                  },
+                  "inputs": {
+                    "GOAL": {
+                      "block": {
+                        "type": "text_join",
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "In the GitHub project "
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "variables_get",
+                              "fields": {
+                                "VAR": {
+                                  "id": "g_project"
+                                }
+                              }
+                            }
+                          },
+                          "ADD2": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": ", read README.md, the top folder, and the code for its command line (look in src/ or the main package). List every flag, command and file the README mentions that the code doesn't have, and every flag the code has that the README doesn't mention. Check your list with review_text against: each difference names where it comes from; nothing invented. If there are differences, search_github for an open issue titled 'README drift' in the project: comment on it if there is one, otherwise open one. If there are none, change nothing and say so."
+                              }
+                            }
+                          }
+                        },
+                        "extraState": {
+                          "itemCount": 3
+                        }
+                      }
+                    },
+                    "STEPS": {
+                      "shadow": {
+                        "type": "math_number",
+                        "fields": {
+                          "NUM": 14
+                        }
+                      }
+                    },
+                    "TOOLS": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "github"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_agent_builtin",
+                            "fields": {
+                              "KIND": "github_act"
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_agent_builtin",
+                                "fields": {
+                                  "KIND": "review"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

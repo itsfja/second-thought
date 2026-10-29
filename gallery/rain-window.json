@@ -1,0 +1,260 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "rain-window",
+  "gallery": {
+    "title": "Rain window",
+    "category": "odds",
+    "description": "Friday evening: the best two-hour window this weekend for drying washing outside, from the forecast, with a runner-up. Sent to you on Telegram.",
+    "tip": "Change the town in the first block. Web search only works in exported Python; on the page Claude says what it would look up.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_town",
+        "name": "town"
+      },
+      {
+        "id": "g_window",
+        "name": "window"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "washing"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 18,
+            "MINUTE": 0,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "weekday"
+                          }
+                        }
+                      },
+                      "B": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Friday"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_broadcast_wait",
+                    "inputs": {
+                      "MSG": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "washing"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "washing"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_town"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "London"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_window"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_ask",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "From this forecast, find the best two-hour window this Saturday or Sunday to dry washing outside: dry, ideally breezy and mild. Give the day and time, and a runner-up. If there isn't one, say so kindly.\n\n"
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "rb_web_search",
+                                    "inputs": {
+                                      "TEXT": {
+                                        "block": {
+                                          "type": "text_join",
+                                          "inputs": {
+                                            "ADD0": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "hourly weather forecast this weekend "
+                                                }
+                                              }
+                                            },
+                                            "ADD1": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_town"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "extraState": {
+                                            "itemCount": 2
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_tg_send",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "🧺 "
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_window"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 2
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_finish_with",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_window"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

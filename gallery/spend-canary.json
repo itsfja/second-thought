@@ -1,0 +1,380 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "spend-canary",
+  "gallery": {
+    "title": "Spend canary",
+    "category": "money",
+    "description": "When a bank statement arrives (a file in a folder, or an email), it lists your recurring charges and tells you which changed price since last month. Statements are sent to the model; only merchants and amounts are kept, in memory.",
+    "tip": "Change the folder to where you save statements, and the email words to what your bank's statement emails say.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_charges",
+        "name": "charges"
+      },
+      {
+        "id": "g_changes",
+        "name": "changes"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste a few lines of a statement to test with"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "statement"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_folder_when",
+          "fields": {
+            "FOLDER": "~/Bank statements"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "statement"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_email_when",
+          "fields": {
+            "CONTAINS": "statement"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "statement"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "statement"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_charges"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "List the card payments and direct debits in this bank statement, one per line, as: merchant — amount. Nothing else.\n\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_changes"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_ask",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "Here are this month's charges, and last month's. List recurring charges (the same merchant both months) whose amount changed, with both amounts. If none did, reply exactly: no changes\n\nThis month:\n"
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_charges"
+                                      }
+                                    }
+                                  }
+                                },
+                                "ADD2": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "\n\nLast month:\n"
+                                    }
+                                  }
+                                },
+                                "ADD3": {
+                                  "block": {
+                                    "type": "rb_mem_get",
+                                    "inputs": {
+                                      "NAME": {
+                                        "shadow": {
+                                          "type": "text",
+                                          "fields": {
+                                            "TEXT": "last month's charges"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 4
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_mem_set",
+                      "fields": {
+                        "KIND": "permanent"
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "variables_get",
+                            "fields": {
+                              "VAR": {
+                                "id": "g_charges"
+                              }
+                            }
+                          }
+                        },
+                        "NAME": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "last month's charges"
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "controls_if",
+                          "inputs": {
+                            "IF0": {
+                              "block": {
+                                "type": "rb_contains",
+                                "inputs": {
+                                  "A": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_changes"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "B": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "no changes"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "DO0": {
+                              "block": {
+                                "type": "rb_finish_with",
+                                "inputs": {
+                                  "TEXT": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "No recurring charge changed price."
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "ELSE": {
+                              "block": {
+                                "type": "rb_email_send",
+                                "inputs": {
+                                  "TO": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "you@example.com"
+                                      }
+                                    }
+                                  },
+                                  "SUBJECT": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "Charges that changed price"
+                                      }
+                                    }
+                                  },
+                                  "TEXT": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_changes"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "next": {
+                                  "block": {
+                                    "type": "rb_finish_with",
+                                    "inputs": {
+                                      "TEXT": {
+                                        "block": {
+                                          "type": "variables_get",
+                                          "fields": {
+                                            "VAR": {
+                                              "id": "g_changes"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "hasElse": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "language-ladybird",
+  "gallery": {
+    "title": "Ladybird lesson",
+    "category": "odds",
+    "description": "Each morning, one page of Second Thought's Ladybird book in a different historical language from its translations, Akkadian days included, with the English alongside and three words to learn.",
+    "tip": "Historical-language versions are as plausible as Second Thought's own translations, no more. Reading pages works in exported Python.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "lesson"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 7,
+            "MINUTE": 30,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "lesson"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "lesson"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "block": {
+                    "type": "text_join",
+                    "inputs": {
+                      "ADD0": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "Today is "
+                          }
+                        }
+                      },
+                      "ADD1": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "weekday"
+                          }
+                        }
+                      },
+                      "ADD2": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": ". Today's language: Monday Latin (la), Tuesday Old English (ang), Wednesday Akkadian (akk), Thursday Old Norse (non), Friday Koine Greek (grc), Saturday Sanskrit (sa), Sunday Mycenaean Greek in Linear B (gmy). Read https://raw.githubusercontent.com/itsfja/second-thought/main/docs/ladybird-book.md and pick one page, a different one each day. Read the language's words at https://raw.githubusercontent.com/itsfja/second-thought/main/i18n/<code>.json. Write that page in today's language, using the file's words where they fit, with the English alongside. Then give three words from it to learn, each with its meaning. End by saying the historical version is plausible, not authoritative."
+                          }
+                        }
+                      }
+                    },
+                    "extraState": {
+                      "itemCount": 3
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 6
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "web"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_email_send",
+                  "inputs": {
+                    "TO": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "you@example.com"
+                        }
+                      }
+                    },
+                    "SUBJECT": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "Today's Ladybird lesson"
+                        }
+                      }
+                    },
+                    "TEXT": {
+                      "block": {
+                        "type": "rb_draft"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

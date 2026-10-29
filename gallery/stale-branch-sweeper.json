@@ -1,0 +1,161 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "stale-branch-sweeper",
+  "gallery": {
+    "title": "Stale branch sweeper",
+    "category": "github",
+    "description": "Each Monday, finds branches with no commits in 90 days and no open pull request, across your recent GitHub projects, and opens one cleanup issue per project, or updates last week's instead of opening another.",
+    "tip": "It asks before opening or commenting. Choose the no-asking tool once you trust what it writes.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "sweep"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 9,
+            "MINUTE": 0,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "weekday"
+                          }
+                        }
+                      },
+                      "B": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Monday"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_broadcast_wait",
+                    "inputs": {
+                      "MSG": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "sweep"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "sweep"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "List my GitHub projects and keep those pushed in the last six months. For each, list its branches. Stale branches have a last commit over 90 days ago, aren't the default branch, and have no open pull request. For each project with stale branches, recall the note 'stale branches <project>'. If it names an issue number, comment on that issue with the updated list. Otherwise open an issue titled 'Stale branches to clean up' listing each branch, how old it is and who last changed it, and remember its number as 'stale branches <project>'. If nothing is stale, change nothing."
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 18
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "github"
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "github_act"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_agent_builtin",
+                            "fields": {
+                              "KIND": "memory"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_result"
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

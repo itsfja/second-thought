@@ -1,0 +1,264 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "guest-mode-announcer",
+  "gallery": {
+    "title": "Guest mode announcer",
+    "category": "home",
+    "description": "When guest mode turns on or off in Home Assistant, the kitchen speaker tells everyone what changes: guest Wi-Fi, quiet hours, heating, cameras.",
+    "tip": "Change the rules in the first block to your house's, and the speaker to yours. Needs an input_boolean.guest_mode helper.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_rules",
+        "name": "rules"
+      },
+      {
+        "id": "g_said",
+        "name": "said"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Type on or off, as if guest mode just changed"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "guests"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_ha_when",
+          "fields": {
+            "ENTITY": "input_boolean.guest_mode",
+            "STATE": "on"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "guests"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "state"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_ha_when",
+          "fields": {
+            "ENTITY": "input_boolean.guest_mode",
+            "STATE": "off"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "guests"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "state"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "guests"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_rules"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Guest Wi-Fi is BakeHouse-Guest, password on the fridge. Quiet after 10pm. The spare room heating comes on. Indoor camera notifications pause."
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_said"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_ask",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "Guest mode just turned "
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "rb_msg_value"
+                                  }
+                                },
+                                "ADD2": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": ". In two warm spoken sentences, tell everyone in the house what changes now (or goes back to normal). Guest mode means: "
+                                    }
+                                  }
+                                },
+                                "ADD3": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_rules"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 4
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_ha_speak",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "variables_get",
+                            "fields": {
+                              "VAR": {
+                                "id": "g_said"
+                              }
+                            }
+                          }
+                        },
+                        "PLAYER": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "media_player.kitchen_speaker"
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_finish_with",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_said"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 290
+        }
+      ]
+    }
+  }
+}
