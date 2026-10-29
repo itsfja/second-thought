@@ -37,6 +37,12 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700;padding-inline:18px}
 button:disabled{opacity:.5;cursor:not-allowed}
 .main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:12px;height:calc(100% - 70px);min-height:600px}
+.describe{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start;margin:0 0 12px}
+.describe textarea{width:100%;min-height:40px;resize:vertical;line-height:1.4}
+.describe .row{display:flex;gap:8px;flex-wrap:wrap}
+.describe-out{grid-column:1 / -1;border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--panel)}
+.describe-out .msg{margin:0 0 6px}
+@media (max-width:700px){.describe{grid-template-columns:1fr}}
 .canvas{position:relative;min-width:0;min-height:560px}
 .zoom{position:absolute;inset-inline-end:12px;bottom:12px;display:flex;gap:6px;z-index:5}
 .zoom button{min-width:36px;padding:6px 10px;font-weight:700}
@@ -316,6 +322,23 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     </div>
     <p class="msg" id="io-import-msg" role="status"></p>
     <div class="row" id="io-choice" hidden></div>
+  </div>
+</section>
+
+<section id="describe" class="describe" aria-label="Describe a program">
+  <label class="sr" for="describe-text">Describe a program</label>
+  <textarea id="describe-text" rows="1"></textarea>
+  <div class="row">
+    <button type="button" id="describe-build" class="primary">Build it</button>
+    <button type="button" id="describe-change" disabled>Change this program</button>
+  </div>
+  <div class="describe-out" id="describe-out" hidden>
+    <p class="msg" id="describe-msg" role="status"></p>
+    <div class="row">
+      <button type="button" id="describe-load" class="primary" hidden>Load it</button>
+      <button type="button" id="describe-discard" hidden>Discard</button>
+      <button type="button" id="describe-undo" hidden>Undo</button>
+    </div>
   </div>
 </section>
 
@@ -8910,7 +8933,7 @@ HOW TO MAP CODE
     const t = PAGE_T[s] || s;
     return vars ? t.replace(/\{(\w+)\}/g, (m, k) => k in vars ? String(vars[k]) : m) : t;
   }
-  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #io, main.main";
+  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #io, #describe, main.main";
   const PAGE_LATER = "script, style, select, textarea, #blockly, #gal-body, #ex-desc, #status, #lib-where, #mem-where";  // filled in by code
   const PAGE_ATTRS = ["title", "placeholder", "aria-label"];
   const RICH = new Set(["B", "I", "EM", "STRONG", "CODE"]);
@@ -12775,6 +12798,98 @@ HOW TO MAP CODE
       ioMsg("io-import-msg", tr("Conversion failed: {problem}", { problem:errText(e) }), "bad");
     } finally { $("io-load-paste").disabled = false; }
   }
+  /* ---------- Describe a program: Claude builds the blocks, you check them before they load ---------- */
+  const DESCRIBE_INTRO = "You build block programs for \"Second Thought\", a Scratch-style editor for AI workflows, from a plain-English " +
+    "description. Output the program as Blockly JSON (described below). Use the fewest blocks that do what was asked, and prefer the AI " +
+    "blocks for anything a language model does. Use the connector blocks (Telegram, email, GitHub, calendar, feeds, Home Assistant and so " +
+    "on) for the services the description names. Times become rb_when_time or rb_every hats, with a 'when Run is clicked' script that does " +
+    "the same job so it can be tried straight away. Put text the person would want to change (a town, an address, a project) in a variable " +
+    "set at the top of the script. If something asked for can't be done with these blocks, leave it out and say so in \"unmapped\". Ignore " +
+    "the HOW TO MAP CODE section below: it's for converting code.";
+  let described = null;  // { state, change }: Claude's program, waiting to be loaded
+  // The program on the canvas for a prompt: variables by name, without ids or positions, which Claude doesn't need.
+  function programForPrompt(state){
+    const names = {}; (state.variables || []).forEach(v => names[v.id] = v.name);
+    const walk = o => {
+      if (Array.isArray(o)) return o.map(walk);
+      if (o && typeof o === "object") {
+        const r = {};
+        Object.keys(o).forEach(k => {
+          if (k === "id" || k === "x" || k === "y") return;
+          r[k] = (k === "VAR" && o[k] && o[k].id) ? { name:names[o[k].id] || o[k].id } : walk(o[k]);
+        });
+        return r;
+      }
+      return o;
+    };
+    return JSON.stringify({ blocks:walk(state.blocks || { languageVersion:0, blocks:[] }) });
+  }
+  const countBlocks = o => !o || typeof o !== "object" ? 0 : Array.isArray(o) ? o.reduce((n, x) => n + countBlocks(x), 0)
+    : (typeof o.type === "string" ? 1 : 0) + Object.keys(o).reduce((n, k) => n + (k === "type" ? 0 : countBlocks(o[k])), 0);
+  function describeMsg(text, kind, buttons){
+    $("describe-out").hidden = !text;
+    const m = $("describe-msg"); m.textContent = text || ""; m.className = "msg" + (kind ? " " + kind : "");
+    ["load", "discard", "undo"].forEach(b => $("describe-" + b).hidden = !(buttons || []).includes(b));
+  }
+  function programOnCanvas(){ return ws.getTopBlocks(false).length > 0; }
+  async function describeProgram(change){
+    const text = $("describe-text").value.trim();
+    if (!text) { describeMsg(tr("Describe what the program should do first."), "bad"); $("describe-text").focus(); return; }
+    const sample = await getSample();
+    if (!sample) { describeMsg(tr("Building a program needs Claude. Open this page in claude.ai while signed in."), "bad"); return; }
+    described = null;
+    $("describe-build").disabled = $("describe-change").disabled = true;
+    describeMsg(tr("Claude is working on the program. This can take a minute…"));
+    const guide = document.getElementById("convert-guide").textContent;
+    const prompt = DESCRIBE_INTRO + "\n\n" + guide.slice(guide.indexOf("FORMAT")) +
+      "\n\nEXAMPLE 1 (review loop):\n" + exampleForPrompt("review") +
+      "\n\nEXAMPLE 2 (broadcast and receivers):\n" + exampleForPrompt("parallel") +
+      (change ? "\n\nTHE PROGRAM NOW:\n" + programForPrompt(saveWs()) + "\n\nCHANGE IT LIKE THIS (keep everything else as it is):\n" : "\n\nDESCRIPTION:\n") +
+      text.slice(0, 4000) + "\n\n" +
+      'Reply with only JSON: {"program": {"blocks": {"languageVersion": 0, "blocks": [ ...top-level scripts... ]}}, ' +
+      '"summary": "one plain sentence on what the program does", "unmapped": ["one short note per thing asked for that you left out"]}';
+    try {
+      const r = await sample.json(prompt, { modelTier:"complex", cache:false });
+      const state = normaliseConverted(r && r.program);
+      if (!state) { describeMsg(tr("Claude's reply wasn't a block program. Try again, or describe it more simply."), "bad"); return; }
+      const bad = unknownTypes(state);
+      if (bad.length) { describeMsg(tr("Claude used blocks this page doesn't have ({blocks}), so nothing was loaded. Try again, or describe it differently.", { blocks:bad.join(", ") }), "bad"); return; }
+      let caps;
+      try { caps = stateCapabilities(state); }
+      catch(e) { describeMsg(tr("Claude's reply wasn't a block program. Try again, or describe it more simply."), "bad"); return; }
+      const notes = Array.isArray(r.unmapped) ? r.unmapped.map(String).filter(Boolean) : [];
+      described = { state, change };
+      describeMsg([typeof r.summary === "string" && r.summary.trim() ? r.summary.trim() : "",
+                   tr("{n} blocks.", { n:countBlocks(state.blocks) }),
+                   capabilitySentence(caps) || tr("It only uses your models: it doesn't connect to anything else."),
+                   notes.length ? tr("Left out: {notes}.", { notes:notes.join("; ") }) : "",
+                   tr("Loading it replaces the program on the canvas; you can undo straight after.")
+                  ].filter(Boolean).join(" "), "", ["load", "discard"]);
+    } catch(e) {
+      describeMsg(tr("Building the program failed: {problem}", { problem:errText(e) }), "bad");
+    } finally {
+      $("describe-build").disabled = false; $("describe-change").disabled = !programOnCanvas();
+    }
+  }
+  $("describe-text").placeholder = tr("Describe a program, like: every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram");
+  $("describe-build").onclick = () => describeProgram(false);
+  $("describe-change").onclick = () => describeProgram(true);
+  $("describe-text").addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); describeProgram(false); } });
+  $("describe-discard").onclick = () => { described = null; describeMsg(""); };
+  $("describe-load").onclick = () => {
+    if (!described) return;
+    const name = described.change ? $("io-name").value.trim() : "";
+    const ok = applyProgram(described.state, name, true);
+    described = null;
+    if (ok) describeMsg(tr("Loaded Claude's program ({n} blocks). Check the blocks before running.", { n:ws.getAllBlocks(false).length }), "ok", ["undo"]);
+    else describeMsg($("io-import-msg").textContent, "bad");
+  };
+  $("describe-undo").onclick = () => {
+    if (!beforeImport) return;
+    load(beforeImport); beforeImport = null; $("io-undo").hidden = true;
+    describeMsg(tr("Undone. Your previous program is back."), "ok");
+  };
+  ws.addChangeListener(e => { if (!e.isUiEvent && !$("describe-build").disabled) $("describe-change").disabled = !programOnCanvas(); });
   function clearChoice(){ const c = $("io-choice"); c.innerHTML = ""; c.hidden = true; }
   function offerChoice(message, choices){
     ioMsg("io-import-msg", message);

@@ -1342,7 +1342,25 @@
   "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "it useth Llama, MCP servauntes or foldres on thyn owene computour, which GitHub may nat reche",
   "it asks you questions while it runs, and nobody is there to answer": "it asketh thee questiouns whil it renneth, and noon is there to answere",
   "This program can't run on GitHub Actions: {why}.": "This devys may nat renne on GitHub Actions: {why}.",
-  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "Saved {name}-actions.zip. Put his files in a prive GitHub repository and adde the secretes that SETUP.md telleth; than it renneth by ordinaunce."
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "Saved {name}-actions.zip. Put his files in a prive GitHub repository and adde the secretes that SETUP.md telleth; than it renneth by ordinaunce.",
+  "Describe a program": "Descryve a devys",
+  "Describe a program, like: every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Descryve a devys, as: every Friday at sixe of the clokke at even, fynde the beste two houres this wikende to drye the wasshynge and sende it me by Telegram",
+  "Build it": "Make it",
+  "Change this program": "Chaunge this devys",
+  "Load it": "Lade it",
+  "Discard": "Caste awey",
+  "Undo": "Undo",
+  "Describe what the program should do first.": "Descryve first what the devys shal do.",
+  "Building a program needs Claude. Open this page in claude.ai while signed in.": "To make a devys nedeth Claude. Open this leef in claude.ai, signed in.",
+  "Claude is working on the program. This can take a minute…": "Claude werketh on the devys. This may take a mynute…",
+  "Claude's reply wasn't a block program. Try again, or describe it more simply.": "Claudes answere was nat a devys of blokkes. Assaye agayn, or descryve it more symply.",
+  "Claude used blocks this page doesn't have ({blocks}), so nothing was loaded. Try again, or describe it differently.": "Claude used blokkes that this leef hath nat ({blocks}), so nothyng was laden. Assaye agayn, or descryve it otherwise.",
+  "{n} blocks.": "{n} blokkes.",
+  "Left out: {notes}.": "Left out: {notes}.",
+  "Loading it replaces the program on the canvas; you can undo straight after.": "To lade it putteth it in stede of the devys on the canvas; thou mayst undo it right after.",
+  "Building the program failed: {problem}": "The devys myghte nat be maked: {problem}",
+  "Undone. Your previous program is back.": "Undoon. Thy former devys is come agayn.",
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Laden Claudes devys ({n} blokkes). Loke on the blokkes er thou renne it."
  },
  "examples": {
   "review": {

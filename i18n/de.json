@@ -1342,7 +1342,25 @@
   "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "es nutzt Llama, MCP-Server oder Ordner auf deinem eigenen Computer, die GitHub nicht erreicht",
   "it asks you questions while it runs, and nobody is there to answer": "es stellt dir Fragen, während es läuft, und niemand ist da, um zu antworten",
   "This program can't run on GitHub Actions: {why}.": "Dieses Programm kann nicht auf GitHub Actions laufen: {why}.",
-  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip gespeichert. Lege die Dateien in ein privates GitHub-Repository und füge die Secrets hinzu, die SETUP.md auflistet; dann läuft es nach Zeitplan."
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip gespeichert. Lege die Dateien in ein privates GitHub-Repository und füge die Secrets hinzu, die SETUP.md auflistet; dann läuft es nach Zeitplan.",
+  "Describe a program": "Beschreibe ein Programm",
+  "Describe a program, like: every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Beschreibe ein Programm, etwa: jeden Freitag um 18 Uhr die besten zwei Stunden am Wochenende zum Wäschetrocknen finden und mir per Telegram schicken",
+  "Build it": "Bauen",
+  "Change this program": "Dieses Programm ändern",
+  "Load it": "Laden",
+  "Discard": "Verwerfen",
+  "Undo": "Rückgängig",
+  "Describe what the program should do first.": "Beschreibe zuerst, was das Programm tun soll.",
+  "Building a program needs Claude. Open this page in claude.ai while signed in.": "Zum Bauen eines Programms braucht es Claude. Öffne diese Seite angemeldet in claude.ai.",
+  "Claude is working on the program. This can take a minute…": "Claude arbeitet am Programm. Das kann eine Minute dauern…",
+  "Claude's reply wasn't a block program. Try again, or describe it more simply.": "Claudes Antwort war kein Blockprogramm. Versuch es noch einmal oder beschreibe es einfacher.",
+  "Claude used blocks this page doesn't have ({blocks}), so nothing was loaded. Try again, or describe it differently.": "Claude hat Blöcke verwendet, die diese Seite nicht hat ({blocks}), also wurde nichts geladen. Versuch es noch einmal oder beschreibe es anders.",
+  "{n} blocks.": "{n} Blöcke.",
+  "Left out: {notes}.": "Weggelassen: {notes}.",
+  "Loading it replaces the program on the canvas; you can undo straight after.": "Laden ersetzt das Programm auf der Arbeitsfläche; du kannst es gleich danach rückgängig machen.",
+  "Building the program failed: {problem}": "Das Programm konnte nicht gebaut werden: {problem}",
+  "Undone. Your previous program is back.": "Rückgängig gemacht. Dein vorheriges Programm ist wieder da.",
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Claudes Programm geladen ({n} Blöcke). Prüfe die Blöcke vor dem Ausführen."
  },
  "examples": {
   "review": {
