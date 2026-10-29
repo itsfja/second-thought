@@ -435,7 +435,7 @@ A program doesn't update itself. To give it a newer runtime, import it on the pa
 | `second-thought.example.ini` | Every setting a program understands, with a note on each. |
 | `tools/sync.py` | Joins the runtime into one file, then copies it and the other embedded parts into the page, so they always match. |
 | `tools/smoke_test.py` | Checks the real model services with your own keys. |
-| `tools/record_demo.py` | Records `screenshots/demo.gif` and `editor.png` from the page. |
+| `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |
 | `tests/` | Unit tests (`tests/unit/`) and the end-to-end suite (`tests/run_tests.py`). |
 | `docs/ladybird-book.md` | The picture book. |
 | `CHANGELOG.md` | What changed in each runtime version. |

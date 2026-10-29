@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Record screenshots/demo.gif and screenshots/editor.png: the Review loop example running, then the export panel.
+"""Record screenshots/demo.gif and screenshots/editor.png (the Review loop example running, then the export panel),
+and screenshots/social-preview.png, the 1280×640 card for the repo's social preview (Settings → General).
 
 It drives the real page in the test suite's headless browser, so run tests/setup.sh once first. Claude's
 replies are scripted below (nothing calls a real model), so the run looks the same every time.
@@ -82,6 +83,56 @@ async def record(frames: pathlib.Path):
         await browser.close()
 
 
+CARD = """<!doctype html><html><head><meta charset=utf-8><style>
+html,body{margin:0;width:1280px;height:640px;overflow:hidden;background:#F3F4F8;font-family:Inter,system-ui,sans-serif;color:#1B1E2B}
+header{padding:44px 56px 0}
+h1{margin:0;font:800 60px/1.05 'Inter Display',Inter,sans-serif;letter-spacing:-1.5px}
+p{margin:14px 0 0;font-size:25px;line-height:1.35;color:#5D6278;max-width:1100px}
+p b{color:#2F4BDB;font-weight:700}
+img{position:absolute;left:56px;top:226px;width:1168px;border-radius:14px;border:1px solid #DADDE8;
+    box-shadow:0 18px 50px rgba(27,30,43,.16)}
+</style></head><body><header><h1>Second Thought</h1>
+<p>Scratch-style blocks for AI workflows that <b>check their own work</b>,<br>then export as a single Python file.</p></header>
+<img src="data:image/png;base64,{shot}"></body></html>"""
+
+
+async def card():
+    """screenshots/social-preview.png: GitHub's 1280×640 social preview, the name above the finished run."""
+    import base64
+    from playwright.async_api import async_playwright
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        pg = await browser.new_page(viewport={"width": 1280, "height": 900}, device_scale_factor=2)
+        await pg.route("**/*", T.route)
+        await pg.add_init_script(MOCK)
+        await pg.goto("http://test/")
+        await pg.wait_for_timeout(1500)
+        await pg.click("#run")
+        for _ in range(160):
+            await pg.wait_for_timeout(250)
+            if await pg.is_disabled("#stop") and await pg.query_selector(".step .result-text"):
+                break
+        # Show the review that failed, then the fix, so the picture tells the story: check, fix, pass.
+        await pg.evaluate("""() => {
+            const steps = document.getElementById('steps');
+            const r1 = [...steps.querySelectorAll('.step')].find(s => s.querySelector('.step-name').textContent.startsWith('Review'));
+            steps.scrollTop = r1 ? r1.offsetTop - steps.offsetTop - 8 : 0;
+            window.scrollTo(0, 0);
+        }""")
+        await pg.wait_for_timeout(200)
+        box = await pg.eval_on_selector(".log", "e => { const r = e.getBoundingClientRect(); return [r.top, r.bottom]; }")
+        shot = await pg.screenshot(clip={"x": 24, "y": box[0], "width": 1232, "height": 520})
+        await pg.set_viewport_size({"width": 1280, "height": 640})
+        await pg.set_content(CARD.replace("{shot}", base64.b64encode(shot).decode()))
+        await pg.wait_for_timeout(300)
+        await pg.screenshot(path=str(OUT / "social-preview.png"))
+        await browser.close()
+    # Halve the 2× capture to 1280×640: sharp, and well under GitHub's 1 MB limit.
+    from PIL import Image
+    im = Image.open(OUT / "social-preview.png")
+    im.resize((1280, 640), Image.LANCZOS).save(OUT / "social-preview.png", optimize=True)
+
+
 def main() -> int:
     if not (T.VENDOR / "blockly").exists():
         sys.exit("Run tests/setup.sh first.")
@@ -91,10 +142,11 @@ def main() -> int:
     with tempfile.TemporaryDirectory() as tmp:
         frames = pathlib.Path(tmp)
         asyncio.run(record(frames))
+        asyncio.run(card())
         subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-framerate", "4", "-i", str(frames / "%04d.png"), "-vf",
                         "scale=960:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=96:stats_mode=diff[p];"
                         "[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle", str(OUT / "demo.gif")], check=True)
-    print(f"Wrote {OUT / 'demo.gif'} and {OUT / 'editor.png'}.")
+    print(f"Wrote demo.gif, editor.png and social-preview.png in {OUT}.")
     return 0
 
 
