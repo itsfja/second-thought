@@ -178,9 +178,13 @@
   "rb_finish_with": {
    "message0": "%1 इत्यनेन समापय"
   },
+  "rb_folder_files": {
+   "message0": "%1 कोशे %2 अनुरूपाः सञ्चिकाः",
+   "tooltip": "कोशस्य सञ्चिकाः, नूतनतमाः प्रथमम्, अभिलेखरूपेण: name, path, modified, size। “अनुरूपाः” *.pdf इव प्रतिरूपम्; सर्वेभ्यः रिक्तं त्यजतु। केवलं पश्यति: न पठति। निर्यातितं Python कोशे पश्यति; इदं पृष्ठम् उदाहरणसञ्चिकाः उपयुङ्क्ते।"
+  },
   "rb_folder_when": {
    "message0": "यदा कोशे %1 सञ्चिका दृश्यते",
-   "tooltip": "यदा अस्मिन् कोशे नूतना सञ्चिका आगच्छति (कार्यक्रमस्य समीपे, यदि पूर्णमार्गं न ददासि) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” तस्याः नाम, मार्गं, परिमाणं, PDF-Word-पाठसञ्चिकानां कृते तस्यां शब्दान् च ददाति।"
+   "tooltip": "यदा अस्मिन् कोशे नूतना सञ्चिका आगच्छति (कार्यक्रमस्य समीपे, यदि पूर्णमार्गं न ददासि) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” तस्याः नाम, मार्गं, परिमाणं, PDF-Word-पाठसञ्चिकानां कृते तस्यां शब्दान् च ददाति। चित्रस्य कृते “picture” तत् चित्रखण्डेभ्यः ददाति।"
   },
   "rb_generate": {
    "message0": "प्रथमं प्रारूपं लिख",
@@ -442,6 +446,10 @@
   "rb_set_instructions": {
    "message0": "Claude-कृते निर्देशान् %1 इति स्थापय",
    "tooltip": "अस्मात् खण्डात् अनन्तरं प्रत्येकेन Claude-आह्वानेन सह प्रेष्यते, यथा भूमिका, स्वरः, गृहशैली वा।"
+  },
+  "rb_setup_check": {
+   "message0": "अस्य कार्यक्रमस्य सज्जतापरीक्षा",
+   "tooltip": "--doctor इव ताः एव परीक्षाः, पाठरूपेण: प्रत्येकं कुञ्चिका, पुटकं, संयोगः च, ok, FAIL, NOTE वा सह। केवलं पठति। केवलं निर्यातिते Python मध्ये; अस्मिन् पृष्ठे तत् वदति।"
   },
   "rb_show": {
    "message0": "पञ्ज्यां प्रारूपं दर्शय"
@@ -1096,7 +1104,6 @@
   "unknown error": "अज्ञातः दोषः",
   "until {when}": "{when} यावत्",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "त्वया स्थापितानां MCP-सेवकानां साधनानि प्रयोक्तुम् (ते सेवकाः यत् कर्तुं शक्नुवन्ति तत् सर्वं तानि कर्तुं शक्नुवन्ति)",
-  "watch a folder for new files": "नूतनसञ्चिकाभ्यः कोशं निरीक्षितुम्",
   "while page is open": "यावत् पृष्ठम् उद्घाटितम्",
   "{list} and {last}": "{list} {last} च",
   "'let me choose from' got an empty list.": "“मध्यात् मां वरयितुं देहि” रिक्तां सूचीम् अलभत।",
@@ -1327,7 +1334,9 @@
   "Community: money": "समुदायः: धनम्",
   "Community: calendar and email": "समुदायः: दिनदर्शिका ईपत्रं च",
   "Community: home and baking": "समुदायः: गृहं पाकः च",
-  "Community: odds and ends": "समुदायः: विविधम्"
+  "Community: odds and ends": "समुदायः: विविधम्",
+  "look at the files in a folder, and watch it for new ones": "कोशे सञ्चिकाः द्रष्टुं, नूतनाभ्यः तं निरीक्षितुं च",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "सज्जतापरीक्षा केवलं निर्यातिते Python मध्ये चलति: इमं कार्यक्रमं निर्यात्य तत्र चालयतु प्रतिवेदनं द्रष्टुम्।"
  },
  "examples": {
   "review": {
@@ -2732,7 +2741,8 @@
   "GitHub issue opened in {repo}: #{n}": "{repo} इत्यत्र GitHub issue उद्घाटितम्: #{n}",
   "GitHub labels on {repo} #{n}": "{repo} #{n} उपरि GitHub-चिह्नानि",
   "New issue: {issue}": "नूतनं issue: {issue}",
-  "New release: {release}": "नूतनं release: {release}"
+  "New release: {release}": "नूतनं release: {release}",
+  "There's no folder {folder}.": "{folder} इति कोशः नास्ति।"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

@@ -471,6 +471,15 @@ def python_tests(codes):
               and "Opened sample-baker/sourdough-chart #44: https://github.com/sample-baker/sourdough-chart/issues/44" in out and "needs a title" in out
               and out.count("Allow this?") == 4, f"Python labels with the project's own labels and opens an issue, asking before each use ({posted})"
               + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        (pathlib.Path(tmp) / "recipes").mkdir(exist_ok=True)
+        for name in ("rye.pdf", "focaccia.txt"):
+            (pathlib.Path(tmp) / "recipes" / name).write_text("x", encoding="utf-8")
+        (pathlib.Path(tmp) / "t_folder_check.py").write_text(EXTRA["t_folder_check"], encoding="utf-8")
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_folder_check.py")], env, tmp)
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and "rye.pdf" in out and "focaccia.txt" not in out and "Only reading: nothing is sent" in out and "  ok    Python: " in out,
+              "in Python, 'files in folder' lists the matching files next to the program, and the setup check gives --doctor's report mid-run"
+              + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         before = len(svc_log["tg_sent"])
         code_, out, err = run_cn("t_cn_tg")
         check(code_ == 0 and "Remind me to feed the starter at 8 tonight" in out and "Someone else's message" not in out

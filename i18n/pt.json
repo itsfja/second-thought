@@ -177,9 +177,13 @@
   "rb_finish_with": {
    "message0": "terminar com %1"
   },
+  "rb_folder_files": {
+   "message0": "ficheiros na pasta %1 que correspondam a %2",
+   "tooltip": "Os ficheiros de uma pasta, os mais recentes primeiro, como registos: name, path, modified, size. «Que correspondam» é um padrão como *.pdf; deixe vazio para todos. Só olha: não os lê. O Python exportado olha na pasta (ao lado do programa, salvo caminho completo); esta página usa ficheiros de exemplo."
+  },
   "rb_folder_when": {
    "message0": "quando aparecer um ficheiro na pasta %1",
-   "tooltip": "Executa os blocos abaixo quando chega um ficheiro novo a esta pasta (ao lado do programa, a não ser que indique um caminho completo). «O que chegou» dá o nome, o caminho, o tamanho e, para um PDF, Word ou ficheiro de texto, as palavras que contém."
+   "tooltip": "Executa os blocos abaixo quando chega um ficheiro novo a esta pasta (ao lado do programa, a não ser que indique um caminho completo). «O que chegou» dá o nome, o caminho, o tamanho e, para um PDF, Word ou ficheiro de texto, as palavras que contém. Para uma imagem, «picture» dá-a aos blocos de imagem."
   },
   "rb_generate": {
    "message0": "escrever um primeiro rascunho",
@@ -441,6 +445,10 @@
   "rb_set_instructions": {
    "message0": "definir as instruções para o Claude como %1",
    "tooltip": "Enviadas com cada chamada ao Claude depois deste bloco, por exemplo um papel, um tom ou um estilo da casa."
+  },
+  "rb_setup_check": {
+   "message0": "a verificação da configuração deste programa",
+   "tooltip": "As mesmas verificações que com --doctor, em texto: cada chave, pacote e ligação que usa, com ok, FAIL ou NOTE. Só lê: nada é enviado, acionado ou cobrado. Só no Python exportado; nesta página diz isso."
   },
   "rb_show": {
    "message0": "mostrar o rascunho no registo"
@@ -1095,7 +1103,6 @@
   "unknown error": "erro desconhecido",
   "until {when}": "até {when}",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "usar as ferramentas dos servidores MCP que configurou (podem fazer tudo o que esses servidores fazem)",
-  "watch a folder for new files": "vigiar uma pasta à procura de ficheiros novos",
   "while page is open": "enquanto a página estiver aberta",
   "{list} and {last}": "{list} e {last}",
   "'let me choose from' got an empty list.": "«deixe-me escolher de» recebeu uma lista vazia.",
@@ -1326,7 +1333,9 @@
   "Community: money": "Comunidade: dinheiro",
   "Community: calendar and email": "Comunidade: calendário e email",
   "Community: home and baking": "Comunidade: casa e padaria",
-  "Community: odds and ends": "Comunidade: diversos"
+  "Community: odds and ends": "Comunidade: diversos",
+  "look at the files in a folder, and watch it for new ones": "ver os ficheiros de uma pasta e vigiá-la à procura de novos",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "A verificação da configuração só funciona no Python exportado: exporte este programa e execute-o lá para ver o relatório."
  },
  "examples": {
   "review": {
@@ -2731,6 +2740,7 @@
   "GitHub issue opened in {repo}: #{n}": "Issue do GitHub aberta em {repo}: #{n}",
   "GitHub labels on {repo} #{n}": "Etiquetas do GitHub em {repo} #{n}",
   "New issue: {issue}": "Nova issue: {issue}",
-  "New release: {release}": "Nova versão: {release}"
+  "New release: {release}": "Nova versão: {release}",
+  "There's no folder {folder}.": "Não existe a pasta {folder}."
  }
 }

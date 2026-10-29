@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"Text einer Datei, die ich wähle","tooltip":"Hält den Lauf an, damit Sie ein PDF, eine Word-.docx oder eine Textdatei auswählen. Gibt den Text der Datei zurück."},
 "rb_file_save":{"message0":"%1 als Datei %2 . %3 speichern","tooltip":"Bietet den Text zum Herunterladen an. Der Browser fragt nach Bestätigung."},
 "rb_finish_with":{"message0":"beenden mit %1"},
-"rb_folder_when":{"message0":"wenn eine Datei im Ordner %1 erscheint","tooltip":"Führt die Blöcke darunter aus, wenn eine neue Datei in diesem Ordner landet (neben dem Programm, außer Sie geben einen vollen Pfad an). „Was ankam“ liefert Name, Pfad, Größe und bei PDF, Word- oder Textdatei die Wörter darin."},
+"rb_folder_files":{"message0":"Dateien im Ordner %1, passend zu %2","tooltip":"Die Dateien in einem Ordner, die neuesten zuerst, als Datensätze: name, path, modified, size. „Passend zu“ ist ein Muster wie *.pdf; leer lassen für alle Dateien. Es schaut nur: Es liest sie nicht. Exportiertes Python schaut in den Ordner (neben dem Programm, außer Sie geben einen vollen Pfad an); diese Seite nutzt Beispieldateien."},
+"rb_folder_when":{"message0":"wenn eine Datei im Ordner %1 erscheint","tooltip":"Führt die Blöcke darunter aus, wenn eine neue Datei in diesem Ordner landet (neben dem Programm, außer Sie geben einen vollen Pfad an). „Was ankam“ liefert Name, Pfad, Größe und bei PDF, Word- oder Textdatei die Wörter darin. Bei einem Bild liefert „picture“ es an die Bildblöcke."},
 "rb_generate":{"message0":"ersten Entwurf schreiben","tooltip":"Claude schreibt einen Entwurf, der die Aufgabe erfüllt."},
 "rb_gh_issue_when":{"message0":"wenn in %1 ein neues Issue eröffnet wird","tooltip":"Führt die Blöcke darunter aus, wenn jemand in diesem GitHub-Projekt ein Issue eröffnet (alle 5 Minuten geprüft; Pull Requests zählen nicht). „Was ankam“ liefert repo, number, title, body, author, labels, link und text."},
 "rb_gh_release_when":{"message0":"wenn in %1 ein Release veröffentlicht wird","tooltip":"Führt die Blöcke darunter aus, wenn dieses GitHub-Projekt ein Release veröffentlicht (alle 15 Minuten geprüft). „Was ankam“ liefert repo, tag, name, previous_tag, notes, link und text."},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"%1 mit 0 bis 10 bewerten nach %2"},
 "rb_set_draft":{"message0":"Entwurf festlegen auf %1"},
 "rb_set_instructions":{"message0":"Anweisungen für Claude festlegen auf %1","tooltip":"Wird nach diesem Block bei jedem Claude-Aufruf mitgeschickt, zum Beispiel eine Rolle, ein Ton oder ein Hausstil."},
+"rb_setup_check":{"message0":"Einrichtungsprüfung dieses Programms","tooltip":"Dieselben Prüfungen wie beim Start mit --doctor, als Text: jeder Schlüssel, jedes Paket und jede Verbindung, die es nutzt, mit ok, FAIL oder NOTE. Es liest nur: Nichts wird gesendet, geschaltet oder berechnet. Nur im exportierten Python; auf dieser Seite sagt es das."},
 "rb_show":{"message0":"den Entwurf im Protokoll zeigen"},
 "rb_slack_send":{"message0":"Slack-Nachricht %1 senden","tooltip":"Postet in Slack: zurück in den Kanal, aus dem eine Nachricht kam, oder in den ersten Kanal in SLACK_CHANNEL_ID. „Mich fragen, bevor Nachrichten gesendet werden“ lässt ihn vorher fragen. Auf dieser Seite wird sie nur angezeigt."},
 "rb_slack_when":{"message0":"wenn eine Slack-Nachricht mit %1 ankommt","tooltip":"Führt die Blöcke darunter aus, wenn jemand in einem Ihrer Slack-Kanäle postet (geben Sie „anything“ ein oder Wörter, die die Nachricht enthalten muss). Nur die Kanäle in SLACK_CHANNEL_ID zählen, Nachrichten von Bots nie. Alle 10 Sekunden geprüft. „Was ankam“ liefert text, sender und channel. Auf dieser Seite klicken Sie mit der rechten Maustaste darauf und wählen „Dieses Skript ausführen“, um es mit einer Beispielnachricht zu testen."},
@@ -613,7 +615,6 @@
 "unknown error":"unbekannter Fehler",
 "until {when}":"bis {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"die Werkzeuge der eingerichteten MCP-Server nutzen (sie können alles, was diese Server können)",
-"watch a folder for new files":"einen Ordner auf neue Dateien beobachten",
 "while page is open":"solange die Seite offen ist",
 "{list} and {last}":"{list} und {last}",
 "'let me choose from' got an empty list.":"„mich wählen lassen aus“ hat eine leere Liste bekommen.",
@@ -844,7 +845,9 @@
 "Community: money":"Community: Geld",
 "Community: calendar and email":"Community: Kalender und E-Mail",
 "Community: home and baking":"Community: Haus und Backen",
-"Community: odds and ends":"Community: Allerlei"
+"Community: odds and ends":"Community: Allerlei",
+"look at the files in a folder, and watch it for new ones":"die Dateien in einem Ordner ansehen und ihn auf neue beobachten",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"Die Einrichtungsprüfung läuft nur im exportierten Python: Exportieren Sie dieses Programm und führen Sie es dort aus, um den Bericht zu sehen."
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -1617,6 +1620,7 @@
 "GitHub issue opened in {repo}: #{n}":"GitHub-Issue in {repo} eröffnet: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub-Labels für {repo} #{n}",
 "New issue: {issue}":"Neues Issue: {issue}",
-"New release: {release}":"Neues Release: {release}"
+"New release: {release}":"Neues Release: {release}",
+"There's no folder {folder}.":"Es gibt keinen Ordner {folder}."
 }
 };

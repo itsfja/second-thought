@@ -50,7 +50,8 @@
 "rb_file_choose":{"message0":"כתבא דמגלתא דאבחר","tooltip":"מפסיק הלוכא דתבחר PDF, Word .docx או מגלת כתבא. מהדר כתבא דמגלתא."},
 "rb_file_save":{"message0":"נטור %1 כמגלתא %2 . %3","tooltip":"יהב כתבא לאחתתא. דפדפנא בעי מנך לאשרא."},
 "rb_finish_with":{"message0":"שלים ב-%1"},
-"rb_folder_when":{"message0":"כד מגלתא מתחזיא בתיבותא %1","tooltip":"מרהט לבנין דלתחתא כד מגלתא חדתא נחתא בתיבותא הדא (לצד סדורא, אי לא יהבת אורחא שלימא). \"מה דאתא\" יהב שמה, אורחה, רבותה, ומלין דבה ל-PDF, Word או מגלת כתבא."},
+"rb_folder_files":{"message0":"מגלתא בתיבותא %1 דדמיין ל-%2","tooltip":"מגלתא דבתיבותא, חדתתא קדמאה, כרשומין: name, path, modified, size. דמיא הוא דוגמא כמו *.pdf; שבוק ריקן לכל מגלתא. חזיא בלחוד: לא קריא להון. Python דמפקין חזי בתיבותא; דפא הדין משמש במגלתא לדוגמא."},
+"rb_folder_when":{"message0":"כד מגלתא מתחזיא בתיבותא %1","tooltip":"מרהט לבנין דלתחתא כד מגלתא חדתא נחתא בתיבותא הדא (לצד סדורא, אי לא יהבת אורחא שלימא). \"מה דאתא\" יהב שמה, אורחה, רבותה, ומלין דבה ל-PDF, Word או מגלת כתבא. לציורא, \"picture\" יהב יתה ללבני ציורא."},
 "rb_generate":{"message0":"כתוב טופסא קדמאה","tooltip":"Claude כתב טופסא דמשלים עבידתא."},
 "rb_gh_issue_when":{"message0":"כד issue חדתא מתפתחא ב-%1","tooltip":"מרהט לבנין דלתחתא כד אנש פתח issue בעבידתא הדא ב-GitHub (מתבדק כל 5 רגעין; pull requests לא מתמנין). \"מה דאתא\" יהב repo, number, title, body, author, labels, link ו-text."},
 "rb_gh_release_when":{"message0":"כד release מתפרסם ב-%1","tooltip":"מרהט לבנין דלתחתא כד עבידתא הדא ב-GitHub מפרסמא release (מתבדק כל 15 רגעין). \"מה דאתא\" יהב repo, tag, name, previous_tag, notes, link ו-text."},
@@ -119,6 +120,7 @@
 "rb_score":{"message0":"שום %1 מן 10 ל-%2"},
 "rb_set_draft":{"message0":"שוי טופסא ל-%1"},
 "rb_set_instructions":{"message0":"שוי פקודיא ל-Claude ל-%1","tooltip":"משתלח עם כל קריאה ל-Claude בתר לבנתא הדא, כגון תפקידא, קלא או נמוסא דביתא."},
+"rb_setup_check":{"message0":"בדיקת מתקנא דסדורא הדין","tooltip":"בדיקתא הנון כמו --doctor, ככתבא: כל מפתח, חבילה וחבורא דמשמש, עם ok, FAIL או NOTE. קריא בלחוד. בלחוד ב-Python דמפקין; בדפא הדין אמר הכין."},
 "rb_show":{"message0":"אחוי טופסא בפנקסא"},
 "rb_slack_send":{"message0":"שלח אגרת Slack %1","tooltip":"כתב ב-Slack: בפלגא דמניה אתת אגרתא, או בפלגא קדמאה ב-SLACK_CHANNEL_ID. \"שאל יתי קדם שליחות אגרן\" גרים לה למשאל קדמאה. בדפא הדין מתחזיא לחוד."},
 "rb_slack_when":{"message0":"כד אתיא אגרת Slack דכלילא %1","tooltip":"מרהט לבנין דלתחתא כד אנש כתב בחד מן פלגי Slack דילך (כתוב 'anything', או מלין דאגרתא צריכא למכלל). לחוד פלגיא ב-SLACK_CHANNEL_ID מתמנין, ואגרי בוטין לעלם לא. מתבדק כל 10 שניין. \"מה דאתא\" יהב text, sender ו-channel. בדפא הדין, דחוף עלה בימינא ובחר \"שרי סדרא הדין\" לנסיותיה באגרתא דדוגמא."},
@@ -614,7 +616,6 @@
 "unknown error":"טעותא דלא ידיעא",
 "until {when}":"עד {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"לשמשא במאני משמשי MCP דשוית (יכלין למעבד כל מה דמשמשיא אלין יכלין)",
-"watch a folder for new files":"למנטר תיבותא למגלתא חדתתא",
 "while page is open":"כל עוד דפא פתיח",
 "{list} and {last}":"{list} ו{last}",
 "'let me choose from' got an empty list.":"\"שבוק לי למבחר מן\" קבל סדרא ריקנא.",
@@ -845,7 +846,9 @@
 "Community: money":"כנישתא: כספא",
 "Community: calendar and email":"כנישתא: חושבן יומיא ו-email",
 "Community: home and baking":"כנישתא: ביתא ואפייתא",
-"Community: odds and ends":"כנישתא: כל מדעם"
+"Community: odds and ends":"כנישתא: כל מדעם",
+"look at the files in a folder, and watch it for new ones":"למחזי מגלתא דבתיבותא, ולמנטר לה למגלתא חדתתא",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"בדיקת מתקנא רהטא בלחוד ב-Python דמפקין: אפיק סדורא הדין ורהט יתה תמן למחזי פתגמא."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1618,7 +1621,8 @@
 "GitHub issue opened in {repo}: #{n}":"issue ב-GitHub אתפתח ב-{repo}: #{n}",
 "GitHub labels on {repo} #{n}":"רשמי GitHub על {repo} #{n}",
 "New issue: {issue}":"issue חדתא: {issue}",
-"New release: {release}":"release חדתא: {release}"
+"New release: {release}":"release חדתא: {release}",
+"There's no folder {folder}.":"לית תיבותא {folder}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

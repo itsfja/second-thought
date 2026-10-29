@@ -177,9 +177,13 @@
   "rb_finish_with": {
    "message0": "fini cum %1"
   },
+  "rb_folder_files": {
+   "message0": "fasciculi in capsa %1 congruentes cum %2",
+   "tooltip": "Fasciculi in capsa, novissimi primi, ut scripturae: name, path, modified, size. «Congruentes» est forma ut *.pdf; vacuum relinque pro omnibus. Solum inspicit: non legit. Python exportatum in capsa inspicit; haec pagina exemplis utitur."
+  },
   "rb_folder_when": {
    "message0": "cum fasciculus in capsa %1 apparet",
-   "tooltip": "Lateres infra exsequitur cum novus fasciculus in hanc capsam venit (iuxta programma, nisi viam plenam das). «Quod advenit» dat nomen, viam, magnitudinem et, pro PDF, Verbo aut textu, verba eius."
+   "tooltip": "Lateres infra exsequitur cum novus fasciculus in hanc capsam venit (iuxta programma, nisi viam plenam das). «Quod advenit» dat nomen, viam, magnitudinem et, pro PDF, Verbo aut textu, verba eius. Pro imagine, «picture» eam dat lateribus imaginum."
   },
   "rb_generate": {
    "message0": "scribe primam adumbrationem",
@@ -441,6 +445,10 @@
   "rb_set_instructions": {
    "message0": "statue praecepta pro Claude ad %1",
    "tooltip": "Cum quaque vocatione Claude post hunc laterem mittitur, exempli gratia partes, tonus aut stilus domesticus."
+  },
+  "rb_setup_check": {
+   "message0": "probatio apparatus huius incepti",
+   "tooltip": "Eaedem probationes ac --doctor, ut textus: quaeque clavis, sarcina et coniunctio qua utitur, cum ok, FAIL aut NOTE. Solum legit: nihil mittitur, commutatur aut solvitur. Solum in Python exportato; in hac pagina id dicit."
   },
   "rb_show": {
    "message0": "ostende adumbrationem in actis"
@@ -1095,7 +1103,6 @@
   "unknown error": "error ignotus",
   "until {when}": "usque ad {when}",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "instrumentis ministrorum MCP a te constitutorum uti (quidquid illi ministri possunt facere possunt)",
-  "watch a folder for new files": "folliculum observare pro novis fasciculis",
   "while page is open": "dum pagina aperta est",
   "{list} and {last}": "{list} et {last}",
   "'let me choose from' got an empty list.": "«sine me eligere ex» indicem vacuum accepit.",
@@ -1326,7 +1333,9 @@
   "Community: money": "Communitas: pecunia",
   "Community: calendar and email": "Communitas: calendarium et epistulae",
   "Community: home and baking": "Communitas: domus et pistura",
-  "Community: odds and ends": "Communitas: varia"
+  "Community: odds and ends": "Communitas: varia",
+  "look at the files in a folder, and watch it for new ones": "fasciculos in capsa inspicere, et eam pro novis observare",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "Probatio apparatus currit solum in Python exportato: hoc inceptum exporta et ibi curre ut relationem videas."
  },
  "examples": {
   "review": {
@@ -2731,7 +2740,8 @@
   "GitHub issue opened in {repo}: #{n}": "Quaestio GitHub in {repo} aperta: #{n}",
   "GitHub labels on {repo} #{n}": "Notae GitHub in {repo} #{n}",
   "New issue: {issue}": "Nova quaestio: {issue}",
-  "New release: {release}": "Nova editio: {release}"
+  "New release: {release}": "Nova editio: {release}",
+  "There's no folder {folder}.": "Non est capsa {folder}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

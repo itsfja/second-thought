@@ -178,9 +178,13 @@
   "rb_finish_with": {
    "message0": "סיים עם %1"
   },
+  "rb_folder_files": {
+   "message0": "קבצים בתיקייה %1 שמתאימים ל-%2",
+   "tooltip": "הקבצים בתיקייה, החדשים קודם, כרשומות: name, path, modified, size. \"שמתאימים\" הוא תבנית כמו *.pdf; השאירו ריק לכל הקבצים. רק מסתכל: לא קורא אותם. Python המיוצא מסתכל בתיקייה (ליד התוכנית, אלא אם תתנו נתיב מלא); הדף הזה משתמש בקבצי דוגמה."
+  },
   "rb_folder_when": {
    "message0": "כשמופיע קובץ בתיקייה %1",
-   "tooltip": "מריץ את הבלוקים שמתחת כשקובץ חדש נוחת בתיקייה הזו (ליד התוכנית, אלא אם תתנו נתיב מלא). \"מה הגיע\" נותן את השם, הנתיב, הגודל, ואת המילים שבו עבור PDF, ‏Word או קובץ טקסט."
+   "tooltip": "מריץ את הבלוקים שמתחת כשקובץ חדש נוחת בתיקייה הזו (ליד התוכנית, אלא אם תתנו נתיב מלא). \"מה הגיע\" נותן את השם, הנתיב, הגודל, ואת המילים שבו עבור PDF, ‏Word או קובץ טקסט. לתמונה, \"picture\" נותן אותה לבלוקי התמונה."
   },
   "rb_generate": {
    "message0": "כתוב טיוטה ראשונה",
@@ -442,6 +446,10 @@
   "rb_set_instructions": {
    "message0": "קבע את ההוראות ל-Claude ל-%1",
    "tooltip": "נשלח עם כל קריאה ל-Claude אחרי הבלוק הזה, למשל תפקיד, טון או סגנון בית."
+  },
+  "rb_setup_check": {
+   "message0": "בדיקת ההגדרות של התוכנית הזו",
+   "tooltip": "אותן בדיקות כמו בהרצה עם --doctor, כטקסט: כל מפתח, חבילה וחיבור שהיא משתמשת בהם, עם ok, ‏FAIL או NOTE. רק קורא: שום דבר לא נשלח, מופעל או מחויב. רק ב-Python המיוצא; בדף הזה הוא אומר זאת."
   },
   "rb_show": {
    "message0": "הצג את הטיוטה ביומן"
@@ -1096,7 +1104,6 @@
   "unknown error": "שגיאה לא ידועה",
   "until {when}": "עד {when}",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "להשתמש בכלים של שרתי ה-MCP שהגדרתם (הם יכולים לעשות כל מה שהשרתים האלה יכולים)",
-  "watch a folder for new files": "לעקוב אחרי תיקייה ולחפש קבצים חדשים",
   "while page is open": "כל עוד הדף פתוח",
   "{list} and {last}": "{list} ו{last}",
   "'let me choose from' got an empty list.": "\"תן לי לבחור מתוך\" קיבל רשימה ריקה.",
@@ -1327,7 +1334,9 @@
   "Community: money": "קהילה: כסף",
   "Community: calendar and email": "קהילה: לוח שנה ודוא״ל",
   "Community: home and baking": "קהילה: בית ואפייה",
-  "Community: odds and ends": "קהילה: שונות"
+  "Community: odds and ends": "קהילה: שונות",
+  "look at the files in a folder, and watch it for new ones": "לראות את הקבצים בתיקייה, ולעקוב אחריה לחפש חדשים",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "בדיקת ההגדרות פועלת רק ב-Python המיוצא: ייצאו את התוכנית הזו והריצו אותה שם כדי לראות את הדוח."
  },
  "examples": {
   "review": {
@@ -2732,6 +2741,7 @@
   "GitHub issue opened in {repo}: #{n}": "נפתח issue ב-GitHub ב-{repo}: #{n}",
   "GitHub labels on {repo} #{n}": "תוויות GitHub על {repo} #{n}",
   "New issue: {issue}": "issue חדש: {issue}",
-  "New release: {release}": "גרסה חדשה: {release}"
+  "New release: {release}": "גרסה חדשה: {release}",
+  "There's no folder {folder}.": "אין תיקייה {folder}."
  }
 }

@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"rit skjals er ek vel","tooltip":"Stǫðvar ferðina svá at þú megir velja PDF, Word .docx, eða ritskjal. Skilar riti skjalsins."},
 "rb_file_save":{"message0":"geym %1 sem skjal %2 . %3","tooltip":"Býðr ritit til niðrhals. Vafrinn biðr þik staðfesta."},
 "rb_finish_with":{"message0":"lúk með %1"},
-"rb_folder_when":{"message0":"þá er skjal birtisk í hirzlu %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er nýtt skjal kemr í þessa hirzlu (hjá forritinu, nema þú gefir allan veg). „Hvat kom“ gefr nafn þess, veg, stærð, ok orðin í því fyrir PDF, Word eða ritskjal."},
+"rb_folder_files":{"message0":"skjǫl í hirzlu %1 er hlýða %2","tooltip":"Skjǫlin í hirzlu, nýjust fyrst, sem skrár: name, path, modified, size. „Hlýða“ er mynstr sem *.pdf; lát tómt fyrir ǫll. Þat sér einungis: þat lesr þau eigi. Útflutt Python sér í hirzluna; þessi síða notar dœmaskjǫl."},
+"rb_folder_when":{"message0":"þá er skjal birtisk í hirzlu %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er nýtt skjal kemr í þessa hirzlu (hjá forritinu, nema þú gefir allan veg). „Hvat kom“ gefr nafn þess, veg, stærð, ok orðin í því fyrir PDF, Word eða ritskjal. Fyrir mynd gefr „picture“ hana myndakubbunum."},
 "rb_generate":{"message0":"rita fyrsta frumrit","tooltip":"Claude ritar frumrit er lýkr verkinu."},
 "rb_gh_issue_when":{"message0":"þá er nýtt issue er opnat í %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er einhverr opnar issue í þessu GitHub verki (skoðat hverjar 5 mínútur; pull requests teljask eigi). „Hvat kom“ gefr repo, number, title, body, author, labels, link ok text."},
 "rb_gh_release_when":{"message0":"þá er útgáfa er birt í %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er þetta GitHub verk birtir útgáfu (release; skoðat hverjar 15 mínútur). „Hvat kom“ gefr repo, tag, name, previous_tag, notes, link ok text."},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"dœm %1 af 10 fyrir %2"},
 "rb_set_draft":{"message0":"set frumrit í %1"},
 "rb_set_instructions":{"message0":"set fyrirmæli til Claude í %1","tooltip":"Sent með hverju kalli til Claude eptir þenna kubb, svá sem hlutverk, rómr eða húsháttr."},
+"rb_setup_check":{"message0":"skoðun búnaðar þessa verks","tooltip":"Somu skoðanir ok --doctor, sem texti: hverr lykill, pakki ok samband er þat notar, með ok, FAIL eða NOTE. Þat lesr einungis. Einungis í útfluttu Python; á þessi síðu segir þat svá."},
 "rb_show":{"message0":"sýn frumritit í annálinum"},
 "rb_slack_send":{"message0":"send Slack-boð %1","tooltip":"Ritar í Slack: aptr í rás þá er boð kom ór, eða í fyrstu rás í SLACK_CHANNEL_ID. „Spyr mik fyrir sendingu boða“ lætr þat spyrja fyrst. Á þessu blaði er þat einungis sýnt."},
 "rb_slack_when":{"message0":"þá er Slack-boð kemr er hefir %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er einhverr ritar í eina af Slack-rásum þínum (rita 'anything', eða orð er boðin skulu hafa). Einungis rásir í SLACK_CHANNEL_ID teljask, ok boð vélmenna aldri. Skoðat hverjar 10 sekúndur. „Hvat kom“ gefr text, sender ok channel. Á þessu blaði, smell hœgra megin á þat ok vel „Keyr þetta ferli“ at reyna þat með sýniboðum."},
@@ -613,7 +615,6 @@
 "unknown error":"ókunn villa",
 "until {when}":"til {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"nota tól MCP-þjóna er þú settir upp (þau mega gera hvat er þeir þjónar mega)",
-"watch a folder for new files":"vakta hirzlu at nýjum skjǫlum",
 "while page is open":"meðan blað er opit",
 "{list} and {last}":"{list} ok {last}",
 "'let me choose from' got an empty list.":"„lát mik velja af“ fekk tóma rǫð.",
@@ -844,7 +845,9 @@
 "Community: money":"Samfélag: fé",
 "Community: calendar and email":"Samfélag: rím ok email",
 "Community: home and baking":"Samfélag: heimili ok bakstr",
-"Community: odds and ends":"Samfélag: ýmislegt"
+"Community: odds and ends":"Samfélag: ýmislegt",
+"look at the files in a folder, and watch it for new ones":"sjá skjǫlin í hirzlu, ok vakta hana at nýjum",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"Skoðun búnaðar keyrir einungis í útfluttu Python: flyt þetta verk út ok keyr þat þar at sjá skýrsluna."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1617,7 +1620,8 @@
 "GitHub issue opened in {repo}: #{n}":"GitHub-issue opnat í {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub-merki á {repo} #{n}",
 "New issue: {issue}":"Nýtt issue: {issue}",
-"New release: {release}":"Ný útgáfa: {release}"
+"New release: {release}":"Ný útgáfa: {release}",
+"There's no folder {folder}.":"Engi hirzla er {folder}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

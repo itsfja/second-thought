@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"testo di un file che scelgo","tooltip":"Mette in pausa l'esecuzione perché tu scelga un PDF, un .docx di Word o un file di testo. Restituisce il testo del file."},
 "rb_file_save":{"message0":"salva %1 come file %2 . %3","tooltip":"Offre il testo da scaricare. Il browser ti chiede di confermare."},
 "rb_finish_with":{"message0":"termina con %1"},
-"rb_folder_when":{"message0":"quando compare un file nella cartella %1","tooltip":"Esegue i blocchi sotto quando un nuovo file arriva in questa cartella (accanto al programma, a meno che tu non dia un percorso completo). «Cosa è arrivato» dà nome, percorso, dimensione e, per un PDF, un file Word o di testo, le parole che contiene."},
+"rb_folder_files":{"message0":"file nella cartella %1 che corrispondono a %2","tooltip":"I file in una cartella, i più recenti prima, come record: name, path, modified, size. «Che corrispondono» è un modello come *.pdf; lascialo vuoto per tutti. Guarda soltanto: non li legge. Il Python esportato guarda nella cartella (accanto al programma, salvo percorso completo); questa pagina usa file di esempio."},
+"rb_folder_when":{"message0":"quando compare un file nella cartella %1","tooltip":"Esegue i blocchi sotto quando un nuovo file arriva in questa cartella (accanto al programma, a meno che tu non dia un percorso completo). «Cosa è arrivato» dà nome, percorso, dimensione e, per un PDF, un file Word o di testo, le parole che contiene. Per un'immagine, «picture» la dà ai blocchi delle immagini."},
 "rb_generate":{"message0":"scrivi una prima bozza","tooltip":"Claude scrive una bozza che svolge il compito."},
 "rb_gh_issue_when":{"message0":"quando viene aperta una nuova issue in %1","tooltip":"Esegue i blocchi sotto quando qualcuno apre una issue in questo progetto GitHub (controllato ogni 5 minuti; le pull request non contano). «Cosa è arrivato» dà repo, number, title, body, author, labels, link e text."},
 "rb_gh_release_when":{"message0":"quando viene pubblicata una versione in %1","tooltip":"Esegue i blocchi sotto quando questo progetto GitHub pubblica una versione (release; controllato ogni 15 minuti). «Cosa è arrivato» dà repo, tag, name, previous_tag, notes, link e text."},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"dai a %1 un voto su 10 per %2"},
 "rb_set_draft":{"message0":"imposta la bozza a %1"},
 "rb_set_instructions":{"message0":"imposta le istruzioni per Claude a %1","tooltip":"Inviate con ogni chiamata a Claude dopo questo blocco, per esempio un ruolo, un tono o uno stile della casa."},
+"rb_setup_check":{"message0":"il controllo della configurazione di questo programma","tooltip":"Gli stessi controlli di --doctor, come testo: ogni chiave, pacchetto e collegamento che usa, con ok, FAIL o NOTE. Legge soltanto: nulla viene inviato, azionato o addebitato. Solo nel Python esportato; in questa pagina lo dice."},
 "rb_show":{"message0":"mostra la bozza nel registro"},
 "rb_slack_send":{"message0":"invia messaggio Slack %1","tooltip":"Pubblica su Slack: nel canale da cui è arrivato un messaggio, oppure nel primo canale in SLACK_CHANNEL_ID. «Chiedimi prima di inviare messaggi» lo fa chiedere prima. In questa pagina viene solo mostrato."},
 "rb_slack_when":{"message0":"quando arriva un messaggio Slack con %1","tooltip":"Esegue i blocchi sotto quando qualcuno scrive in uno dei tuoi canali Slack (scrivi «anything», o parole che il messaggio deve contenere). Contano solo i canali in SLACK_CHANNEL_ID, e mai i messaggi dei bot. Controllato ogni 10 secondi. «Cosa è arrivato» dà text, sender e channel. In questa pagina, fai clic destro e scegli «Esegui questo script» per provarlo con un messaggio di esempio."},
@@ -613,7 +615,6 @@
 "unknown error":"errore sconosciuto",
 "until {when}":"fino a {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"usare gli strumenti dei server MCP che hai configurato (possono fare tutto ciò che fanno quei server)",
-"watch a folder for new files":"sorvegliare una cartella per nuovi file",
 "while page is open":"finché la pagina è aperta",
 "{list} and {last}":"{list} e {last}",
 "'let me choose from' got an empty list.":"«fammi scegliere tra» ha ricevuto un elenco vuoto.",
@@ -844,7 +845,9 @@
 "Community: money":"Community: denaro",
 "Community: calendar and email":"Community: calendario ed email",
 "Community: home and baking":"Community: casa e panificazione",
-"Community: odds and ends":"Community: varie"
+"Community: odds and ends":"Community: varie",
+"look at the files in a folder, and watch it for new ones":"guardare i file in una cartella e sorvegliarla per i nuovi",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"Il controllo della configurazione funziona solo nel Python esportato: esporta questo programma ed eseguilo lì per vedere il rapporto."
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -1617,6 +1620,7 @@
 "GitHub issue opened in {repo}: #{n}":"Issue GitHub aperta in {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"Etichette GitHub su {repo} #{n}",
 "New issue: {issue}":"Nuova issue: {issue}",
-"New release: {release}":"Nuova versione: {release}"
+"New release: {release}":"Nuova versione: {release}",
+"There's no folder {folder}.":"Non esiste la cartella {folder}."
 }
 };

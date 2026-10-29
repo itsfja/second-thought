@@ -23,6 +23,9 @@ that the two agree.
 
 ### Added
 - Two GitHub listeners (#145): **when a new issue is opened in** a project (pull requests don't count), and **when a release is published in** a project, with the release before it as `previous_tag`. Like the pull-request listener, they start from what's new after the program starts, and only need read access.
+- **files in folder … matching …** (#146): a folder's files as records (name, path, modified, size), newest first, without reading them. A program that uses it, or the folder listener, now lists "look at the files in a folder, and watch it for new ones" before its first run.
+- The folder listener gives a picture as `picture` (#146), for PNG, JPEG, WebP and GIF files up to 20 MB, so 'what arrived: picture' goes straight into the picture blocks.
+- **this program's setup check** (#147): the same report as `--doctor`, as text, from inside a running program, for programs that email their own health. It runs the checks on a fresh runtime, so the run's draft and counts are untouched.
 - Five more GitHub tools for the agent (#144). **GitHub: projects and pull requests** can now list a project's branches (`list_branches`) and commits (`list_commits`), and read a file or folder (`read_github_file`). **GitHub: comment, open and label issues** can open issues (`open_issue`) and add labels the project already has (`add_labels`); like commenting, each asks first. Before its first run, a program with that tool now lists "comment on GitHub, and open and label issues"; like any re-exported program, it asks again.
 - Exported programs print in German when exported from the page in German (#74).
 - Exported programs print in Dutch when exported from the page in Dutch (#75).

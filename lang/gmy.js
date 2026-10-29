@@ -50,7 +50,8 @@
 "rb_file_choose":{"message0":"𐀏𐀨𐀔𐀲 𐀳𐀄𐀒 𐀃 𐀐𐀩𐀒","tooltip":"𐀞𐀄𐀁 𐀞𐀨𐀑𐀯 𐀃𐀞 𐀐𐀩𐀐𐀮 PDF, Word .docx, 𐀁 𐀳𐀄𐀒 𐀏𐀨𐀔𐀵. 𐀀𐀡𐀇𐀈𐀯 𐀳𐀄𐀒 𐀏𐀨𐀔𐀲."},
 "rb_file_save":{"message0":"𐀰𐀽 %1 𐀃𐀄𐀵 𐀳𐀄𐀒 %2 . %3","tooltip":"𐀞𐀩𐀐𐀂 𐀏𐀨𐀔𐀲 𐀏𐀲𐀐𐀁. 𐀃 𐀇𐀓𐀶𐀃𐀮𐀒𐀡 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀞𐀂𐀃𐀁."},
 "rb_finish_with":{"message0":"𐀳𐀩𐀄𐀲 𐀕𐀲 %1"},
-"rb_folder_when":{"message0":"𐀃𐀳 𐀳𐀄𐀒 𐀞𐀂𐀚𐀲𐀂 𐀁𐀚 𐀲𐀨𐀫 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 𐀚𐀺 𐀳𐀄𐀒 𐀁𐀨𐀳 𐀁𐀚 𐀵𐀵 𐀲𐀨𐀫 (𐀞𐀫 𐀡𐀫𐀏𐀨𐀔, 𐀁 𐀗𐀜 𐀃𐀫 𐀃𐀈 𐀇𐀈𐀯). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 𐀃𐀜𐀔, 𐀃𐀈, 𐀕𐀐𐀵, 𐀏𐀂 𐀁𐀟𐀀 𐀁𐀚 PDF, Word 𐀁 𐀳𐀄𐀒 𐀏𐀨𐀔𐀵."},
+"rb_folder_files":{"message0":"𐀳𐀄𐀐𐀀 𐀁𐀚 𐀲𐀨𐀫 %1 𐀃𐀗𐀂𐀀 %2","tooltip":"𐀳𐀄𐀐𐀀 𐀁𐀚 𐀲𐀨𐀫, 𐀚𐀷 𐀡𐀫𐀵: name, path, modified, size. *.pdf 𐀁𐀚 %2. 𐀂𐀅𐀁 𐀙𐀚: 𐀃𐀄 𐀀𐀙𐀑𐀜𐀁. Python 𐀂𐀅𐀁 𐀁𐀚 𐀲𐀨𐀫; 𐀝 𐀳𐀄𐀐𐀀 𐀡𐀨𐀅𐀑𐀔."},
+"rb_folder_when":{"message0":"𐀃𐀳 𐀳𐀄𐀒 𐀞𐀂𐀚𐀲𐀂 𐀁𐀚 𐀲𐀨𐀫 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 𐀚𐀺 𐀳𐀄𐀒 𐀁𐀨𐀳 𐀁𐀚 𐀵𐀵 𐀲𐀨𐀫 (𐀞𐀫 𐀡𐀫𐀏𐀨𐀔, 𐀁 𐀗𐀜 𐀃𐀫 𐀃𐀈 𐀇𐀈𐀯). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 𐀃𐀜𐀔, 𐀃𐀈, 𐀕𐀐𐀵, 𐀏𐀂 𐀁𐀟𐀀 𐀁𐀚 PDF, Word 𐀁 𐀳𐀄𐀒 𐀏𐀨𐀔𐀵. 𐀁𐀚 𐀒𐀨𐀞 picture 𐀇𐀈𐀯."},
 "rb_generate":{"message0":"𐀏𐀨𐀟 𐀡𐀫𐀵 𐀐𐀇𐀍","tooltip":"Claude 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀃 𐀸𐀒 𐀳𐀩𐀂."},
 "rb_gh_issue_when":{"message0":"𐀃𐀳 issue 𐀚𐀺 𐀀𐀜𐀂𐀐 𐀁𐀚 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 issue 𐀚𐀺 𐀁𐀚 GitHub (𐀁𐀐𐀲𐀽𐀲𐀂 𐀁𐀏𐀲 5 𐀩𐀡𐀲; pull requests 𐀃𐀄). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 repo, number, title, body, author, labels, link 𐀏𐀂 text."},
 "rb_gh_release_when":{"message0":"𐀃𐀳 release 𐀚𐀺 𐀁𐀚 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 release 𐀚𐀺 𐀁𐀚 GitHub (𐀁𐀐𐀲𐀽𐀲𐀂 𐀁𐀏𐀲 15 𐀩𐀡𐀲). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 repo, tag, name, previous_tag, notes, link 𐀏𐀂 text."},
@@ -119,6 +120,7 @@
 "rb_score":{"message0":"𐀓𐀪𐀚 %1 𐀁𐀏 10 𐀄𐀟𐀩 %2"},
 "rb_set_draft":{"message0":"𐀳𐀮 𐀐𐀇𐀍 𐀁𐀠 %1"},
 "rb_set_instructions":{"message0":"𐀳𐀮 𐀁𐀵𐀩 𐀄𐀟𐀩 Claude 𐀁𐀠 %1","tooltip":"𐀟𐀟𐀲𐀂 𐀕𐀲 𐀞𐀲 𐀏𐀩𐀯 Claude 𐀕𐀲 𐀵𐀵 𐀠𐀪𐀵, 𐀃𐀄𐀵 𐀫𐀫, 𐀵𐀜 𐀁 𐀈𐀗 𐀲𐀫𐀡."},
+"rb_setup_check":{"message0":"𐀁𐀐𐀲𐀽𐀯 𐀡𐀫𐀏𐀨𐀔 𐀵𐀵","tooltip":"𐀁𐀐𐀲𐀽𐀯 𐀃𐀗𐀂𐀀 --doctor, 𐀏𐀨𐀔: ok, FAIL 𐀁 NOTE. 𐀀𐀙𐀑𐀜𐀁 𐀙𐀚. 𐀙𐀚 𐀁𐀚 Python."},
 "rb_show":{"message0":"𐀆𐀂𐀐 𐀐𐀇𐀍 𐀁𐀚 𐀆𐀵"},
 "rb_slack_send":{"message0":"𐀟𐀟 Slack 𐀀𐀐𐀪𐀊 %1","tooltip":"𐀏𐀨𐀟𐀂 𐀁𐀚 Slack: 𐀁𐀚 𐀏𐀙𐀫 𐀃𐀳 𐀀𐀐𐀪𐀊 𐀁𐀨𐀳, 𐀁 𐀁𐀚 𐀡𐀫𐀵 𐀏𐀙𐀫 𐀁𐀚 SLACK_CHANNEL_ID. “𐀁𐀫𐀲 𐀕 𐀡𐀫 𐀡𐀞 𐀀𐀐𐀪𐀊𐀃” 𐀡𐀁𐀂 𐀀𐀵 𐀡𐀫𐀵 𐀁𐀫𐀲𐀁. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀗𐀜 𐀆𐀂𐀐𐀲𐀂."},
 "rb_slack_when":{"message0":"𐀃𐀳 Slack 𐀀𐀐𐀪𐀊 𐀁𐀨𐀳 𐀁𐀒𐀭 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 𐀴𐀚 𐀏𐀨𐀟𐀂 𐀁𐀚 𐀏𐀙𐀫 𐀰 Slack (𐀏𐀨𐀟 “anything”, 𐀁 𐀁𐀟𐀀 𐀀 𐀀𐀐𐀪𐀊 𐀁𐀐𐀁 𐀆𐀂). 𐀗𐀜 𐀏𐀙𐀫 𐀁𐀚 SLACK_CHANNEL_ID 𐀫𐀑𐀽𐀲𐀂, 𐀏𐀂 𐀀𐀐𐀪𐀊 bot 𐀃𐀄𐀡𐀳. 𐀁𐀐𐀲𐀽𐀲𐀂 𐀁𐀏𐀲 10 𐀆𐀄𐀳𐀨. “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 text, sender 𐀏𐀂 channel. 𐀁𐀚 𐀵𐀵 𐀆𐀵, 𐀠𐀁𐀮 𐀆𐀑𐀳𐀨 𐀏𐀂 𐀐𐀩𐀄 “𐀏𐀨𐀁 𐀵𐀲 𐀮𐀨” 𐀟𐀂𐀨𐀁𐀁 𐀕𐀲 𐀞𐀨𐀆𐀓𐀔 𐀀𐀐𐀪𐀊."},
@@ -614,7 +616,6 @@
 "unknown error":"𐀞𐀨𐀔 𐀀𐀒𐀜𐀵",
 "until {when}":"𐀁𐀒𐀳 {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"𐀃𐀏𐀙 MCP 𐀈𐀁𐀫 𐀃 𐀳𐀮 𐀐𐀨𐀁𐀁 (𐀉𐀙𐀲𐀂 𐀞𐀲 𐀃 𐀁𐀐𐀜 𐀈𐀁𐀫 𐀉𐀙𐀲𐀂)",
-"watch a folder for new files":"𐀲𐀨𐀫 𐀢𐀨𐀭𐀁𐀁 𐀄𐀟𐀩 𐀚𐀷 𐀳𐀄𐀐𐀀",
 "while page is open":"𐀃𐀟𐀨 𐀆𐀵 𐀀𐀚𐀺𐀐𐀕𐀜",
 "{list} and {last}":"{list} 𐀏𐀂 {last}",
 "'let me choose from' got an empty list.":"“𐀁𐀀 𐀕 𐀐𐀩𐀐𐀁 𐀀𐀢” 𐀐𐀜 𐀏𐀲𐀫𐀒 𐀁𐀨𐀟.",
@@ -845,7 +846,9 @@
 "Community: money":"𐀒𐀜𐀛𐀊: 𐀀𐀓𐀫",
 "Community: calendar and email":"𐀒𐀜𐀛𐀊: 𐀁𐀕𐀫𐀫𐀑𐀍 𐀏𐀂 email",
 "Community: home and baking":"𐀒𐀜𐀛𐀊: 𐀈𐀗 𐀏𐀂 𐀀𐀵𐀡𐀦",
-"Community: odds and ends":"𐀒𐀜𐀛𐀊: 𐀞𐀲"
+"Community: odds and ends":"𐀒𐀜𐀛𐀊: 𐀞𐀲",
+"look at the files in a folder, and watch it for new ones":"𐀳𐀄𐀐𐀀 𐀁𐀚 𐀲𐀨𐀫 𐀂𐀅𐀁 𐀏𐀂 𐀢𐀨𐀭𐀁𐀁 𐀄𐀟𐀩 𐀚𐀷",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"𐀁𐀐𐀲𐀽𐀯 𐀡𐀫𐀏𐀨𐀔 𐀁𐀚 Python 𐀀𐀡𐀠𐀡𐀗: 𐀀𐀡𐀠𐀡𐀗 𐀁𐀚 Python 𐀏𐀂 𐀃𐀳."
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1618,7 +1621,8 @@
 "GitHub issue opened in {repo}: #{n}":"GitHub issue a-no-i-ke e-ni {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub o-no-ma-ta e-pi {repo} #{n}",
 "New issue: {issue}":"issue ne-wo: {issue}",
-"New release: {release}":"release ne-wo: {release}"
+"New release: {release}":"release ne-wo: {release}",
+"There's no folder {folder}.":"𐀃𐀄 𐀁𐀳 𐀲𐀨𐀫 {folder}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

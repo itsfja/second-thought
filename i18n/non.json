@@ -177,9 +177,13 @@
   "rb_finish_with": {
    "message0": "lúk með %1"
   },
+  "rb_folder_files": {
+   "message0": "skjǫl í hirzlu %1 er hlýða %2",
+   "tooltip": "Skjǫlin í hirzlu, nýjust fyrst, sem skrár: name, path, modified, size. „Hlýða“ er mynstr sem *.pdf; lát tómt fyrir ǫll. Þat sér einungis: þat lesr þau eigi. Útflutt Python sér í hirzluna; þessi síða notar dœmaskjǫl."
+  },
   "rb_folder_when": {
    "message0": "þá er skjal birtisk í hirzlu %1",
-   "tooltip": "Keyrir kubbana hér fyrir neðan þá er nýtt skjal kemr í þessa hirzlu (hjá forritinu, nema þú gefir allan veg). „Hvat kom“ gefr nafn þess, veg, stærð, ok orðin í því fyrir PDF, Word eða ritskjal."
+   "tooltip": "Keyrir kubbana hér fyrir neðan þá er nýtt skjal kemr í þessa hirzlu (hjá forritinu, nema þú gefir allan veg). „Hvat kom“ gefr nafn þess, veg, stærð, ok orðin í því fyrir PDF, Word eða ritskjal. Fyrir mynd gefr „picture“ hana myndakubbunum."
   },
   "rb_generate": {
    "message0": "rita fyrsta frumrit",
@@ -441,6 +445,10 @@
   "rb_set_instructions": {
    "message0": "set fyrirmæli til Claude í %1",
    "tooltip": "Sent með hverju kalli til Claude eptir þenna kubb, svá sem hlutverk, rómr eða húsháttr."
+  },
+  "rb_setup_check": {
+   "message0": "skoðun búnaðar þessa verks",
+   "tooltip": "Somu skoðanir ok --doctor, sem texti: hverr lykill, pakki ok samband er þat notar, með ok, FAIL eða NOTE. Þat lesr einungis. Einungis í útfluttu Python; á þessi síðu segir þat svá."
   },
   "rb_show": {
    "message0": "sýn frumritit í annálinum"
@@ -1095,7 +1103,6 @@
   "unknown error": "ókunn villa",
   "until {when}": "til {when}",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "nota tól MCP-þjóna er þú settir upp (þau mega gera hvat er þeir þjónar mega)",
-  "watch a folder for new files": "vakta hirzlu at nýjum skjǫlum",
   "while page is open": "meðan blað er opit",
   "{list} and {last}": "{list} ok {last}",
   "'let me choose from' got an empty list.": "„lát mik velja af“ fekk tóma rǫð.",
@@ -1326,7 +1333,9 @@
   "Community: money": "Samfélag: fé",
   "Community: calendar and email": "Samfélag: rím ok email",
   "Community: home and baking": "Samfélag: heimili ok bakstr",
-  "Community: odds and ends": "Samfélag: ýmislegt"
+  "Community: odds and ends": "Samfélag: ýmislegt",
+  "look at the files in a folder, and watch it for new ones": "sjá skjǫlin í hirzlu, ok vakta hana at nýjum",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "Skoðun búnaðar keyrir einungis í útfluttu Python: flyt þetta verk út ok keyr þat þar at sjá skýrsluna."
  },
  "examples": {
   "review": {
@@ -2731,7 +2740,8 @@
   "GitHub issue opened in {repo}: #{n}": "GitHub-issue opnat í {repo}: #{n}",
   "GitHub labels on {repo} #{n}": "GitHub-merki á {repo} #{n}",
   "New issue: {issue}": "Nýtt issue: {issue}",
-  "New release: {release}": "Ný útgáfa: {release}"
+  "New release: {release}": "Ný útgáfa: {release}",
+  "There's no folder {folder}.": "Engi hirzla er {folder}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

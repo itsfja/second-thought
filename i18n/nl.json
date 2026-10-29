@@ -177,9 +177,13 @@
   "rb_finish_with": {
    "message0": "afronden met %1"
   },
+  "rb_folder_files": {
+   "message0": "bestanden in map %1 die passen bij %2",
+   "tooltip": "De bestanden in een map, nieuwste eerst, als records: name, path, modified, size. ‘Passen bij’ is een patroon zoals *.pdf; laat het leeg voor alle bestanden. Het kijkt alleen: het leest ze niet. Geëxporteerde Python kijkt in de map (naast het programma, tenzij je een volledig pad geeft); deze pagina gebruikt voorbeeldbestanden."
+  },
   "rb_folder_when": {
    "message0": "wanneer er een bestand verschijnt in map %1",
-   "tooltip": "Voert de blokken eronder uit wanneer er een nieuw bestand in deze map komt (naast het programma, tenzij je een volledig pad opgeeft). ‘Wat er binnenkwam’ geeft de naam, het pad, de grootte en, bij een pdf, Word- of tekstbestand, de woorden erin."
+   "tooltip": "Voert de blokken eronder uit wanneer er een nieuw bestand in deze map komt (naast het programma, tenzij je een volledig pad opgeeft). ‘Wat er binnenkwam’ geeft de naam, het pad, de grootte en, bij een pdf, Word- of tekstbestand, de woorden erin. Bij een afbeelding geeft ‘picture’ die aan de afbeeldingsblokken."
   },
   "rb_generate": {
    "message0": "een eerste concept schrijven",
@@ -441,6 +445,10 @@
   "rb_set_instructions": {
    "message0": "instructies voor Claude instellen op %1",
    "tooltip": "Wordt na dit blok met elke Claude-aanroep meegestuurd, bijvoorbeeld een rol, een toon of een huisstijl."
+  },
+  "rb_setup_check": {
+   "message0": "de instellingencontrole van dit programma",
+   "tooltip": "Dezelfde controles als met --doctor, als tekst: elke sleutel, elk pakket en elke verbinding die het gebruikt, met ok, FAIL of NOTE. Het leest alleen: er wordt niets verstuurd, geschakeld of betaald. Alleen in geëxporteerde Python; op deze pagina zegt het dat."
   },
   "rb_show": {
    "message0": "het concept in het logboek tonen"
@@ -1095,7 +1103,6 @@
   "unknown error": "onbekende fout",
   "until {when}": "tot {when}",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "de hulpmiddelen gebruiken van de MCP-servers die je hebt ingesteld (ze kunnen alles wat die servers kunnen)",
-  "watch a folder for new files": "een map in de gaten houden op nieuwe bestanden",
   "while page is open": "zolang de pagina open is",
   "{list} and {last}": "{list} en {last}",
   "'let me choose from' got an empty list.": "‘laat me kiezen uit’ kreeg een lege lijst.",
@@ -1326,7 +1333,9 @@
   "Community: money": "Community: geld",
   "Community: calendar and email": "Community: agenda en e-mail",
   "Community: home and baking": "Community: huis en bakken",
-  "Community: odds and ends": "Community: allerlei"
+  "Community: odds and ends": "Community: allerlei",
+  "look at the files in a folder, and watch it for new ones": "de bestanden in een map bekijken, en hem in de gaten houden op nieuwe",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "De instellingencontrole werkt alleen in geëxporteerde Python: exporteer dit programma en voer het daar uit om het rapport te zien."
  },
  "examples": {
   "review": {
@@ -2731,6 +2740,7 @@
   "GitHub issue opened in {repo}: #{n}": "GitHub-issue geopend in {repo}: #{n}",
   "GitHub labels on {repo} #{n}": "GitHub-labels op {repo} #{n}",
   "New issue: {issue}": "Nieuw issue: {issue}",
-  "New release: {release}": "Nieuwe release: {release}"
+  "New release: {release}": "Nieuwe release: {release}",
+  "There's no folder {folder}.": "Er is geen map {folder}."
  }
 }
