@@ -52,6 +52,8 @@
 "rb_finish_with":{"message0":"𒄿𒈾 %1 𒄖𒈬𒌨"},
 "rb_folder_when":{"message0":"𒄿𒉡𒈠 𒆪𒉡𒊌𒆪𒌝 𒄿𒈾 𒁉𒊓𒀭𒉌𒅎 %1 𒅔𒈾𒄠𒈠𒅈","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 𒆪𒉡𒊌𒆪𒌝 𒅖𒋗𒌝 𒀀𒈾 𒁉𒊓𒀭𒉌𒅎 𒀭𒉌𒅎 𒅕𒊒𒌒 (𒀉𒋾 𒉈𒁉𒅆𒅎, 𒋗𒌝𒈠 𒄩𒅈𒊏𒈾𒄠 𒂵𒈪𒅕𒋫𒄠 𒆷 𒋫𒈾𒀜𒁲𒅔). „𒊭 𒅅𒋗𒁺” 𒋗𒌝𒋗, 𒄩𒅈𒊏𒀭𒋗, 𒊏𒁍𒊻𒋢, 𒌋 𒀀𒉿𒋾𒅎 𒊭 𒇷𒅁𒁉𒋗 𒀀𒈾 PDF, Word 𒌑𒇻 𒆪𒉡𒊌𒆠𒅎 𒊭 𒀀𒉿𒋾𒅎 𒄿𒈾𒀜𒁲𒅔."},
 "rb_generate":{"message0":"𒈠𒀸𒁕𒊏𒄠 𒉺𒉌𒅎 𒋗𒌅𒌨","tooltip":"Claude 𒈠𒀸𒁕𒊏𒄠 𒊭 𒁺𒌌𒆷𒄠 𒌑𒊭𒀝𒆷𒇻 𒄿𒊭𒀜𒁕𒅈."},
+"rb_gh_issue_when":{"message0":"𒄿𒉡𒈠 issue 𒂊𒅖𒋗𒌝 𒅁𒁉𒋾 𒄿𒈾 %1","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 issue 𒂊𒅖𒋗𒌝 𒄿𒈾 GitHub 𒅁𒁉𒋾 (𒄿𒈾 5 𒌓𒁕𒋾 𒅁𒁀𒅈𒊑; pull requests 𒌑𒌌). „𒊭 𒅅𒋗𒁺” repo, number, title, body, author, labels, link 𒌋 text 𒄿𒈾𒀜𒁲𒅔."},
+"rb_gh_release_when":{"message0":"𒄿𒉡𒈠 release 𒄿𒈾 %1 𒅆𒊭𒅗𒉡","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 release 𒄿𒈾 GitHub 𒅆𒊭𒅗𒉡 (𒄿𒈾 15 𒌓𒁕𒋾 𒅁𒁀𒅈𒊑). „𒊭 𒅅𒋗𒁺” repo, tag, name, previous_tag, notes, link 𒌋 text 𒄿𒈾𒀜𒁲𒅔."},
 "rb_gh_when":{"message0":"𒄿𒉡𒈠 pull request 𒁉𒊑 𒅕𒊑𒅖","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 𒈠𒄠𒈠𒀭 𒁉𒊏𒄠 𒊭 pull request 𒄿𒈾 GitHub 𒅖𒋫𒈾𒀠𒅗 (𒄿𒈾 5 𒌓𒁕𒋾 𒅁𒁀𒅈𒊑). „𒊭 𒅅𒋗𒁺” repo, number, title, user, link 𒌋 text 𒄿𒈾𒀜𒁲𒅔."},
 "rb_ha_attr":{"message0":"%1 𒊭 𒅁𒅆𒅎 %2","tooltip":"𒋛𒅎𒌅𒌝 𒅖𒋾𒀜 𒊭 𒅁𒅆𒅎, 𒆠𒈠 'current_temperature' 𒌑𒇻 'friendly_name'."},
 "rb_ha_call":{"message0":"%1 𒀀𒈾 %2 𒀉𒋾 %3 𒅆𒋛","tooltip":"𒀀𒈾 𒁉𒅋𒆠𒅎 𒄿𒊭𒊍𒋛, 𒆠𒈠 light.turn_off. 𒈪𒅎𒈬𒌝 𒊭 𒆷 𒄩𒀸𒄷 JSON 𒆠𒈠 {\"temperature\": 20}. 𒋛𒅅𒆪𒊏𒄠 𒁉𒌅𒌝, 𒁉𒌅𒌝 𒌋 𒈠𒊍𒍝𒅈𒋫𒄠 𒊏𒈬𒌝 𒅗𒀀𒅀𒀭𒋫𒄠 𒉺𒈾 𒄿𒊭𒀠𒇻𒅗."},
@@ -1614,7 +1616,9 @@
 "(yes)":"a, anna",
 "(no)":"u, ulla",
 "GitHub issue opened in {repo}: #{n}":"petûm issue ina GitHub ana {repo}: #{n}",
-"GitHub labels on {repo} #{n}":"šumū ina GitHub ana {repo} #{n}"
+"GitHub labels on {repo} #{n}":"šumū ina GitHub ana {repo} #{n}",
+"New issue: {issue}":"issue eššum: {issue}",
+"New release: {release}":"release eššum: {release}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

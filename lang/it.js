@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"termina con %1"},
 "rb_folder_when":{"message0":"quando compare un file nella cartella %1","tooltip":"Esegue i blocchi sotto quando un nuovo file arriva in questa cartella (accanto al programma, a meno che tu non dia un percorso completo). «Cosa è arrivato» dà nome, percorso, dimensione e, per un PDF, un file Word o di testo, le parole che contiene."},
 "rb_generate":{"message0":"scrivi una prima bozza","tooltip":"Claude scrive una bozza che svolge il compito."},
+"rb_gh_issue_when":{"message0":"quando viene aperta una nuova issue in %1","tooltip":"Esegue i blocchi sotto quando qualcuno apre una issue in questo progetto GitHub (controllato ogni 5 minuti; le pull request non contano). «Cosa è arrivato» dà repo, number, title, body, author, labels, link e text."},
+"rb_gh_release_when":{"message0":"quando viene pubblicata una versione in %1","tooltip":"Esegue i blocchi sotto quando questo progetto GitHub pubblica una versione (release; controllato ogni 15 minuti). «Cosa è arrivato» dà repo, tag, name, previous_tag, notes, link e text."},
 "rb_gh_when":{"message0":"quando una pull request chiede la mia revisione","tooltip":"Esegue i blocchi sotto quando qualcuno ti chiede di rivedere una pull request su GitHub (controllato ogni 5 minuti). «Cosa è arrivato» dà repo, number, title, user, link e text."},
 "rb_ha_attr":{"message0":"%1 dell'entità %2","tooltip":"Un attributo di un'entità, per esempio «current_temperature» o «friendly_name»."},
 "rb_ha_call":{"message0":"chiama %1 su %2 con %3","tooltip":"Chiama un servizio, per esempio light.turn_off. I dati opzionali sono JSON come {\"temperature\": 20}. Sbloccare, aprire e disattivare allarmi ti chiedono sempre prima."},
@@ -1613,6 +1615,8 @@
 "(yes)":"s, si, sì",
 "(no)":"n, no",
 "GitHub issue opened in {repo}: #{n}":"Issue GitHub aperta in {repo}: #{n}",
-"GitHub labels on {repo} #{n}":"Etichette GitHub su {repo} #{n}"
+"GitHub labels on {repo} #{n}":"Etichette GitHub su {repo} #{n}",
+"New issue: {issue}":"Nuova issue: {issue}",
+"New release: {release}":"Nuova versione: {release}"
 }
 };

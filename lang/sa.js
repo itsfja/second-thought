@@ -52,6 +52,8 @@
 "rb_finish_with":{"message0":"%1 इत्यनेन समापय"},
 "rb_folder_when":{"message0":"यदा कोशे %1 सञ्चिका दृश्यते","tooltip":"यदा अस्मिन् कोशे नूतना सञ्चिका आगच्छति (कार्यक्रमस्य समीपे, यदि पूर्णमार्गं न ददासि) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” तस्याः नाम, मार्गं, परिमाणं, PDF-Word-पाठसञ्चिकानां कृते तस्यां शब्दान् च ददाति।"},
 "rb_generate":{"message0":"प्रथमं प्रारूपं लिख","tooltip":"Claude कार्यं पूरयत् प्रारूपं लिखति।"},
+"rb_gh_issue_when":{"message0":"यदा %1 इत्यत्र नूतनं issue उद्घाट्यते","tooltip":"यदा कश्चित् अस्मिन् GitHub परियोजनायां issue उद्घाटयति (प्रति 5 निमेषेषु परीक्ष्यते; pull requests न गण्यन्ते) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” repo, number, title, body, author, labels, link, text च ददाति।"},
+"rb_gh_release_when":{"message0":"यदा %1 इत्यत्र release प्रकाश्यते","tooltip":"यदा इयं GitHub परियोजना release प्रकाशयति (प्रति 15 निमेषेषु परीक्ष्यते) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” repo, tag, name, previous_tag, notes, link, text च ददाति।"},
 "rb_gh_when":{"message0":"यदा pull request मम समीक्षां याचते","tooltip":"यदा कश्चित् GitHub pull request समीक्षितुं त्वां याचते (प्रति 5 निमेषेषु परीक्ष्यते) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” repo, number, title, user, link, text च ददाति।"},
 "rb_ha_attr":{"message0":"सत्तायाः %2 %1","tooltip":"सत्तायाः एकः गुणः, यथा 'current_temperature' अथवा 'friendly_name'।"},
 "rb_ha_call":{"message0":"%2 उपरि %1 आह्वय %3 सह","tooltip":"सेवाम् आह्वयति, यथा light.turn_off। वैकल्पिकः दत्तांशः JSON यथा {\"temperature\": 20}। तालोद्घाटनं, उद्घाटनं, रक्षायन्त्रविरामः च सर्वदा प्रथमं त्वां पृच्छन्ति।"},
@@ -1614,7 +1616,9 @@
 "(yes)":"आ, आम्",
 "(no)":"न, नहि",
 "GitHub issue opened in {repo}: #{n}":"{repo} इत्यत्र GitHub issue उद्घाटितम्: #{n}",
-"GitHub labels on {repo} #{n}":"{repo} #{n} उपरि GitHub-चिह्नानि"
+"GitHub labels on {repo} #{n}":"{repo} #{n} उपरि GitHub-चिह्नानि",
+"New issue: {issue}":"नूतनं issue: {issue}",
+"New release: {release}":"नूतनं release: {release}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

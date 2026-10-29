@@ -505,9 +505,9 @@ async def new_feature_page_tests(pg):
     names = [n for n, *_ in steps]
     check(status.startswith("done") and "has no label safari" in flat(steps, 1, 10, "add_labels") and "documentation, duplicate, enhancement" in flat(steps, 1, 10, "add_labels")
           and "Labelled sample-baker/sourdough-chart #40: bug, urgent." in flat(steps, 2, 10, "add_labels")
-          and "Opened sample-baker/sourdough-chart #42" in flat(steps, 3, 10, "open_issue") and "needs a title" in flat(steps, 4, 10, "open_issue")
+          and "Opened sample-baker/sourdough-chart #44" in flat(steps, 3, 10, "open_issue") and "needs a title" in flat(steps, 4, 10, "open_issue")
           and names.count("Allow this?") == 4 and "GitHub labels on sample-baker/sourdough-chart #40" in names
-          and "GitHub issue opened in sample-baker/sourdough-chart: #42" in names,
+          and "GitHub issue opened in sample-baker/sourdough-chart: #44" in names,
           f"add_labels uses only the project's labels and open_issue opens one, asking before each use (sample projects on the page) ({names})")
     tg = [tcall("search_telegram", text="starter"), tcall("send_telegram", text="Feed the starter at 8")]
     status, steps, items = await agent_run(pg, ["telegram", "telegram_send"], tg + [fin("ok")], answer="Allow", export="t_cn_tg")
@@ -560,6 +560,8 @@ async def new_feature_page_tests(pg):
     hats = [("rb_mqtt_when", {"TOPIC": "home/proofer/temperature"}, "mqtt", "27.4"), ("rb_webhook_when", {"PATH": "bake-done"}, "webhook", '"loaf": "rye"'),
             ("rb_email_when", {"CONTAINS": "flour"}, "email", "Subject: Your flour order has shipped"), ("rb_feed_when", {"URL": ""}, "feed", "nail varnish"),
             ("rb_folder_when", {"FOLDER": "drop"}, "folder", "Grandma's loaf"), ("rb_gh_when", {}, "github", "#41: Add rye flour curve"),
+            ("rb_gh_issue_when", {"REPO": "sample-baker/sourdough-chart"}, "github_issue", "#43: Typo in README"),
+            ("rb_gh_release_when", {"REPO": "sample-baker/sourdough-chart"}, "github_release", "v1.4.0: Spelt curve and unit toggle"),
             ("rb_cal_when", {"N": 15}, "calendar", " at "), ("rb_discord_when", {"CONTAINS": "anything"}, "discord", "first rye loaf"),
             ("rb_slack_when", {"CONTAINS": "anything"}, "slack", "proving baskets"), ("rb_tg_when", {"CONTAINS": "anything"}, "telegram", "What should I bake"),
             ("rb_ha_event_when", {"EVENT": "zha_event", "DATA": "kitchen remote"}, "ha_event", "zha_event: {\"device_ieee\"")]
@@ -608,7 +610,9 @@ async def new_feature_page_tests(pg):
     await load_state(pg, listen_all)
     EXTRA["t_listen"] = await export_python(pg, "t_listen")
     check('LISTENERS = [("mqtt", "home/proofer/temperature", when_mqtt_1), ("webhook", "bake-done", when_webhook_1), ("email", "flour", when_email_1), '
-          '("feed", "", when_feed_1), ("folder", "drop", when_folder_1), ("github", "", when_github_1), ("calendar", "15", when_calendar_1), '
+          '("feed", "", when_feed_1), ("folder", "drop", when_folder_1), ("github", "", when_github_1), '
+          '("github_issue", "sample-baker/sourdough-chart", when_github_issue_1), ("github_release", "sample-baker/sourdough-chart", when_github_release_1), '
+          '("calendar", "15", when_calendar_1), '
           '("discord", "anything", when_discord_1), ("slack", "anything", when_slack_1), '
           '("ha_event", "zha_event|kitchen remote", when_ha_event_1)]' in EXTRA["t_listen"]
           and '"""when Home Assistant event zha_event happens with kitchen remote"""' in EXTRA["t_listen"]

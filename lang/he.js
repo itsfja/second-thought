@@ -52,6 +52,8 @@
 "rb_finish_with":{"message0":"סיים עם %1"},
 "rb_folder_when":{"message0":"כשמופיע קובץ בתיקייה %1","tooltip":"מריץ את הבלוקים שמתחת כשקובץ חדש נוחת בתיקייה הזו (ליד התוכנית, אלא אם תתנו נתיב מלא). \"מה הגיע\" נותן את השם, הנתיב, הגודל, ואת המילים שבו עבור PDF, ‏Word או קובץ טקסט."},
 "rb_generate":{"message0":"כתוב טיוטה ראשונה","tooltip":"Claude כותב טיוטה שמשלימה את המשימה."},
+"rb_gh_issue_when":{"message0":"כשנפתח issue חדש ב-%1","tooltip":"מריץ את הבלוקים שמתחת כשמישהו פותח issue בפרויקט הזה ב-GitHub (נבדק כל 5 דקות; בקשות משיכה לא נחשבות). \"מה הגיע\" נותן repo, number, title, body, author, labels, link ו-text."},
+"rb_gh_release_when":{"message0":"כשמתפרסמת גרסה ב-%1","tooltip":"מריץ את הבלוקים שמתחת כשהפרויקט הזה ב-GitHub מפרסם גרסה (release; נבדק כל 15 דקות). \"מה הגיע\" נותן repo, tag, name, previous_tag, notes, link ו-text."},
 "rb_gh_when":{"message0":"כשבקשת משיכה מבקשת את הביקורת שלי","tooltip":"מריץ את הבלוקים שמתחת כשמישהו מבקש מכם לבדוק בקשת משיכה ב-GitHub (נבדק כל 5 דקות). \"מה הגיע\" נותן repo, number, title, user, link ו-text."},
 "rb_ha_attr":{"message0":"%1 של הישות %2","tooltip":"מאפיין אחד של ישות, למשל 'current_temperature' או 'friendly_name'."},
 "rb_ha_call":{"message0":"קרא ל-%1 על %2 עם %3","tooltip":"קורא לשירות, למשל light.turn_off. נתונים אופציונליים הם JSON כמו {\"temperature\": 20}. פתיחת מנעול, פתיחה וניטרול אזעקה תמיד שואלים אתכם קודם."},
@@ -1614,6 +1616,8 @@
 "(yes)":"כ, כן",
 "(no)":"ל, לא",
 "GitHub issue opened in {repo}: #{n}":"נפתח issue ב-GitHub ב-{repo}: #{n}",
-"GitHub labels on {repo} #{n}":"תוויות GitHub על {repo} #{n}"
+"GitHub labels on {repo} #{n}":"תוויות GitHub על {repo} #{n}",
+"New issue: {issue}":"issue חדש: {issue}",
+"New release: {release}":"גרסה חדשה: {release}"
 }
 };

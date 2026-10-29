@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"%1 で終える"},
 "rb_folder_when":{"message0":"フォルダー %1 にファイルが現れたとき","tooltip":"このフォルダー（フルパスを指定しなければプログラムの隣）に新しいファイルが置かれたとき、下のブロックを実行します。「届いた内容」は名前、パス、サイズ、そして PDF、Word、テキストファイルなら中の言葉を返します。"},
 "rb_generate":{"message0":"最初の下書きを書く","tooltip":"Claude がタスクをこなす下書きを書きます。"},
+"rb_gh_issue_when":{"message0":"%1 に新しい Issue が作成されたとき","tooltip":"この GitHub プロジェクトで誰かが Issue を作成したとき、下のブロックを実行します（5 分ごとに確認。プルリクエストは含みません）。「届いた内容」は repo、number、title、body、author、labels、link、text を返します。"},
+"rb_gh_release_when":{"message0":"%1 でリリースが公開されたとき","tooltip":"この GitHub プロジェクトがリリースを公開したとき、下のブロックを実行します（15 分ごとに確認）。「届いた内容」は repo、tag、name、previous_tag、notes、link、text を返します。"},
 "rb_gh_when":{"message0":"プルリクエストで私のレビューが求められたとき","tooltip":"GitHub のプルリクエストのレビューを誰かに頼まれたとき、下のブロックを実行します（5 分ごとに確認）。「届いた内容」は repo、number、title、user、link、text を返します。"},
 "rb_ha_attr":{"message0":"エンティティ %2 の %1","tooltip":"エンティティの属性の一つ。例：「current_temperature」や「friendly_name」。"},
 "rb_ha_call":{"message0":"%2 で %1 を呼び出す データ %3","tooltip":"light.turn_off などのサービスを呼び出します。オプションのデータは {\"temperature\": 20} のような JSON です。解錠、開放、警備解除は必ず先に確認します。"},
@@ -1613,6 +1615,8 @@
 "(yes)":"はい, うん, ええ",
 "(no)":"いいえ, いや, ううん",
 "GitHub issue opened in {repo}: #{n}":"{repo} に GitHub Issue を作成：#{n}",
-"GitHub labels on {repo} #{n}":"{repo} #{n} の GitHub ラベル"
+"GitHub labels on {repo} #{n}":"{repo} #{n} の GitHub ラベル",
+"New issue: {issue}":"新しい Issue：{issue}",
+"New release: {release}":"新しいリリース：{release}"
 }
 };

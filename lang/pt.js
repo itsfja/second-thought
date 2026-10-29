@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"terminar com %1"},
 "rb_folder_when":{"message0":"quando aparecer um ficheiro na pasta %1","tooltip":"Executa os blocos abaixo quando chega um ficheiro novo a esta pasta (ao lado do programa, a não ser que indique um caminho completo). «O que chegou» dá o nome, o caminho, o tamanho e, para um PDF, Word ou ficheiro de texto, as palavras que contém."},
 "rb_generate":{"message0":"escrever um primeiro rascunho","tooltip":"O Claude escreve um rascunho que cumpre a tarefa."},
+"rb_gh_issue_when":{"message0":"quando for aberta uma nova issue em %1","tooltip":"Executa os blocos abaixo quando alguém abre uma issue neste projeto do GitHub (verificado a cada 5 minutos; os pull requests não contam). «O que chegou» dá repo, number, title, body, author, labels, link e text."},
+"rb_gh_release_when":{"message0":"quando for publicada uma versão em %1","tooltip":"Executa os blocos abaixo quando este projeto do GitHub publica uma versão (release; verificado a cada 15 minutos). «O que chegou» dá repo, tag, name, previous_tag, notes, link e text."},
 "rb_gh_when":{"message0":"quando um pull request pedir a minha revisão","tooltip":"Executa os blocos abaixo quando alguém lhe pede para rever um pull request no GitHub (verificado a cada 5 minutos). «O que chegou» dá repo, number, title, user, link e text."},
 "rb_ha_attr":{"message0":"%1 da entidade %2","tooltip":"Um atributo de uma entidade, por exemplo «current_temperature» ou «friendly_name»."},
 "rb_ha_call":{"message0":"chamar %1 em %2 com %3","tooltip":"Chama um serviço, por exemplo light.turn_off. Os dados opcionais são JSON como {\"temperature\": 20}. Desbloquear, abrir e desativar alarmes perguntam-lhe sempre primeiro."},
@@ -1613,6 +1615,8 @@
 "(yes)":"s, sim",
 "(no)":"n, não, nao",
 "GitHub issue opened in {repo}: #{n}":"Issue do GitHub aberta em {repo}: #{n}",
-"GitHub labels on {repo} #{n}":"Etiquetas do GitHub em {repo} #{n}"
+"GitHub labels on {repo} #{n}":"Etiquetas do GitHub em {repo} #{n}",
+"New issue: {issue}":"Nova issue: {issue}",
+"New release: {release}":"Nova versão: {release}"
 }
 };

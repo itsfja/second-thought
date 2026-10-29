@@ -166,7 +166,8 @@
         "user": "toast-rack",
         "days_ago": 2,
         "state": "open",
-        "labels": []
+        "labels": [],
+        "body": "On Safari 17 the chart area is empty. No errors in the console. Works in Chrome and Firefox."
       },
       {
         "repo": "sample-baker/oven-timer",
@@ -175,7 +176,18 @@
         "user": "sample-baker",
         "days_ago": 4,
         "state": "open",
-        "labels": []
+        "labels": [],
+        "body": "After Home Assistant restarts, a running timer jumps back to its starting time."
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "number": 43,
+        "title": "Typo in README: 'fermantation'",
+        "user": "crumb-shot",
+        "days_ago": 0.1,
+        "state": "open",
+        "labels": [],
+        "body": "The Usage section says 'fermantation'. Should be 'fermentation'."
       }
     ],
     "labels": {
@@ -281,7 +293,23 @@
         "README.md": "# Oven timer\n\nA Home Assistant card that counts down each stage of a bake.\n",
         "custom_components/oven_timer/__init__.py": "\"\"\"Oven timer.\"\"\"\nDOMAIN = 'oven_timer'\n"
       }
-    }
+    },
+    "releases": [
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "tag": "v1.4.0",
+        "name": "Spelt curve and unit toggle",
+        "days_ago": 2,
+        "notes": "- Spelt curve\n- Celsius/Fahrenheit toggle"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "tag": "v1.3.2",
+        "name": "Tooltip fixes",
+        "days_ago": 40,
+        "notes": "- Tooltips no longer overflow"
+      }
+    ]
   },
   "telegram": {
     "chat": "You (sample chat)",

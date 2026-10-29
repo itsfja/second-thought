@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"以 %1 结束"},
 "rb_folder_when":{"message0":"当文件夹 %1 中出现文件时","tooltip":"当这个文件夹里出现新文件时运行下面的积木（在程序旁边，除非你给出完整路径）。“收到的内容”提供文件名、路径、大小，以及 PDF、Word 或文本文件中的文字。"},
 "rb_generate":{"message0":"写第一版草稿","tooltip":"Claude 写一份完成任务的草稿。"},
+"rb_gh_issue_when":{"message0":"当 %1 中有新 issue 被创建时","tooltip":"当有人在这个 GitHub 项目中创建 issue 时运行下面的积木（每 5 分钟检查一次；拉取请求不算）。“收到的内容”提供 repo、number、title、body、author、labels、link 和 text。"},
+"rb_gh_release_when":{"message0":"当 %1 发布新版本时","tooltip":"当这个 GitHub 项目发布新版本（release）时运行下面的积木（每 15 分钟检查一次）。“收到的内容”提供 repo、tag、name、previous_tag、notes、link 和 text。"},
 "rb_gh_when":{"message0":"当有拉取请求请我审阅时","tooltip":"当有人请你审阅 GitHub 拉取请求时运行下面的积木（每 5 分钟检查一次）。“收到的内容”提供 repo、number、title、user、link 和 text。"},
 "rb_ha_attr":{"message0":"实体 %2 的 %1","tooltip":"实体的某个属性，例如“current_temperature”或“friendly_name”。"},
 "rb_ha_call":{"message0":"在 %2 上调用 %1，数据 %3","tooltip":"调用一个服务，例如 light.turn_off。可选数据是 JSON，如 {\"temperature\": 20}。解锁、开门和撤防总是会先问你。"},
@@ -1613,6 +1615,8 @@
 "(yes)":"是, 是的, 好, 对",
 "(no)":"否, 不, 不是",
 "GitHub issue opened in {repo}: #{n}":"已在 {repo} 创建 GitHub issue：#{n}",
-"GitHub labels on {repo} #{n}":"{repo} #{n} 上的 GitHub 标签"
+"GitHub labels on {repo} #{n}":"{repo} #{n} 上的 GitHub 标签",
+"New issue: {issue}":"新 issue：{issue}",
+"New release: {release}":"新版本：{release}"
 }
 };

@@ -185,6 +185,14 @@
    "message0": "scrivi una prima bozza",
    "tooltip": "Claude scrive una bozza che svolge il compito."
   },
+  "rb_gh_issue_when": {
+   "message0": "quando viene aperta una nuova issue in %1",
+   "tooltip": "Esegue i blocchi sotto quando qualcuno apre una issue in questo progetto GitHub (controllato ogni 5 minuti; le pull request non contano). «Cosa è arrivato» dà repo, number, title, body, author, labels, link e text."
+  },
+  "rb_gh_release_when": {
+   "message0": "quando viene pubblicata una versione in %1",
+   "tooltip": "Esegue i blocchi sotto quando questo progetto GitHub pubblica una versione (release; controllato ogni 15 minuti). «Cosa è arrivato» dà repo, tag, name, previous_tag, notes, link e text."
+  },
   "rb_gh_when": {
    "message0": "quando una pull request chiede la mia revisione",
    "tooltip": "Esegue i blocchi sotto quando qualcuno ti chiede di rivedere una pull request su GitHub (controllato ogni 5 minuti). «Cosa è arrivato» dà repo, number, title, user, link e text."
@@ -2721,6 +2729,8 @@
   "(yes)": "s, si, sì",
   "(no)": "n, no",
   "GitHub issue opened in {repo}: #{n}": "Issue GitHub aperta in {repo}: #{n}",
-  "GitHub labels on {repo} #{n}": "Etichette GitHub su {repo} #{n}"
+  "GitHub labels on {repo} #{n}": "Etichette GitHub su {repo} #{n}",
+  "New issue: {issue}": "Nuova issue: {issue}",
+  "New release: {release}": "Nuova versione: {release}"
  }
 }

@@ -52,6 +52,8 @@
 "rb_finish_with":{"message0":"𐀳𐀩𐀄𐀲 𐀕𐀲 %1"},
 "rb_folder_when":{"message0":"𐀃𐀳 𐀳𐀄𐀒 𐀞𐀂𐀚𐀲𐀂 𐀁𐀚 𐀲𐀨𐀫 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 𐀚𐀺 𐀳𐀄𐀒 𐀁𐀨𐀳 𐀁𐀚 𐀵𐀵 𐀲𐀨𐀫 (𐀞𐀫 𐀡𐀫𐀏𐀨𐀔, 𐀁 𐀗𐀜 𐀃𐀫 𐀃𐀈 𐀇𐀈𐀯). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 𐀃𐀜𐀔, 𐀃𐀈, 𐀕𐀐𐀵, 𐀏𐀂 𐀁𐀟𐀀 𐀁𐀚 PDF, Word 𐀁 𐀳𐀄𐀒 𐀏𐀨𐀔𐀵."},
 "rb_generate":{"message0":"𐀏𐀨𐀟 𐀡𐀫𐀵 𐀐𐀇𐀍","tooltip":"Claude 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀃 𐀸𐀒 𐀳𐀩𐀂."},
+"rb_gh_issue_when":{"message0":"𐀃𐀳 issue 𐀚𐀺 𐀀𐀜𐀂𐀐 𐀁𐀚 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 issue 𐀚𐀺 𐀁𐀚 GitHub (𐀁𐀐𐀲𐀽𐀲𐀂 𐀁𐀏𐀲 5 𐀩𐀡𐀲; pull requests 𐀃𐀄). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 repo, number, title, body, author, labels, link 𐀏𐀂 text."},
+"rb_gh_release_when":{"message0":"𐀃𐀳 release 𐀚𐀺 𐀁𐀚 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 release 𐀚𐀺 𐀁𐀚 GitHub (𐀁𐀐𐀲𐀽𐀲𐀂 𐀁𐀏𐀲 15 𐀩𐀡𐀲). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 repo, tag, name, previous_tag, notes, link 𐀏𐀂 text."},
 "rb_gh_when":{"message0":"𐀃𐀳 pull request 𐀁𐀫𐀲𐀂 𐀁𐀐𐀮𐀲𐀯 𐀁𐀔","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 𐀴𐀚 𐀮 𐀁𐀫𐀲𐀂 𐀁𐀐𐀲𐀽𐀁 GitHub pull request (𐀁𐀐𐀲𐀽𐀲𐀂 𐀁𐀏𐀲 5 𐀩𐀡𐀲). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 repo, number, title, user, link 𐀏𐀂 text."},
 "rb_ha_attr":{"message0":"%1 𐀵𐀵 𐀐𐀩𐀔 %2","tooltip":"𐀃𐀚 𐀂𐀇𐀍 𐀐𐀩𐀔𐀵, 𐀃𐀄𐀵 “current_temperature” 𐀁 “friendly_name”."},
 "rb_ha_call":{"message0":"𐀏𐀩𐀮 %1 𐀁𐀠 %2 𐀕𐀲 %3","tooltip":"𐀏𐀩𐀂 𐀴𐀪𐀠𐀊 (𐀃𐀄𐀵 light.turn_off). 𐀏𐀨𐀔𐀲 𐀞𐀨 𐀏𐀨𐀨 𐀀𐀨 JSON 𐀃𐀄𐀵 {\"temperature\": 20}. 𐀀𐀜𐀂𐀐𐀁 𐀏𐀨𐀹, 𐀀𐀜𐀂𐀐𐀁 𐀏𐀂 𐀀𐀡𐀃𐀠𐀪𐀽𐀁 𐀁𐀫𐀲𐀃𐀯 𐀮 𐀀𐀂𐀁𐀂 𐀡𐀫𐀵."},
@@ -1614,7 +1616,9 @@
 "(yes)":"na-i, nai, na, y",
 "(no)":"o-u, ou, n",
 "GitHub issue opened in {repo}: #{n}":"GitHub issue a-no-i-ke e-ni {repo}: #{n}",
-"GitHub labels on {repo} #{n}":"GitHub o-no-ma-ta e-pi {repo} #{n}"
+"GitHub labels on {repo} #{n}":"GitHub o-no-ma-ta e-pi {repo} #{n}",
+"New issue: {issue}":"issue ne-wo: {issue}",
+"New release: {release}":"release ne-wo: {release}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

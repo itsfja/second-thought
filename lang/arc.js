@@ -52,6 +52,8 @@
 "rb_finish_with":{"message0":"שלים ב-%1"},
 "rb_folder_when":{"message0":"כד מגלתא מתחזיא בתיבותא %1","tooltip":"מרהט לבנין דלתחתא כד מגלתא חדתא נחתא בתיבותא הדא (לצד סדורא, אי לא יהבת אורחא שלימא). \"מה דאתא\" יהב שמה, אורחה, רבותה, ומלין דבה ל-PDF, Word או מגלת כתבא."},
 "rb_generate":{"message0":"כתוב טופסא קדמאה","tooltip":"Claude כתב טופסא דמשלים עבידתא."},
+"rb_gh_issue_when":{"message0":"כד issue חדתא מתפתחא ב-%1","tooltip":"מרהט לבנין דלתחתא כד אנש פתח issue בעבידתא הדא ב-GitHub (מתבדק כל 5 רגעין; pull requests לא מתמנין). \"מה דאתא\" יהב repo, number, title, body, author, labels, link ו-text."},
+"rb_gh_release_when":{"message0":"כד release מתפרסם ב-%1","tooltip":"מרהט לבנין דלתחתא כד עבידתא הדא ב-GitHub מפרסמא release (מתבדק כל 15 רגעין). \"מה דאתא\" יהב repo, tag, name, previous_tag, notes, link ו-text."},
 "rb_gh_when":{"message0":"כד pull request בעי בדיקתי","tooltip":"מרהט לבנין דלתחתא כד אנש בעי מנך למבדק pull request ב-GitHub (מתבדק כל 5 רגעין). \"מה דאתא\" יהב repo, number, title, user, link ו-text."},
 "rb_ha_attr":{"message0":"%1 דישותא %2","tooltip":"תכונתא חדא דישותא, כגון 'current_temperature' או 'friendly_name'."},
 "rb_ha_call":{"message0":"קרי ל-%1 על %2 עם %3","tooltip":"קרי לשמושא, כגון light.turn_off. ידיעתא דלא מחייבא היא JSON כגון {\"temperature\": 20}. פתיחת מנעולא, פתיחה ובטלות נטירותא תדיר שאלין יתך קדמאה."},
@@ -1614,7 +1616,9 @@
 "(yes)":"א, אין",
 "(no)":"ל, לא",
 "GitHub issue opened in {repo}: #{n}":"issue ב-GitHub אתפתח ב-{repo}: #{n}",
-"GitHub labels on {repo} #{n}":"רשמי GitHub על {repo} #{n}"
+"GitHub labels on {repo} #{n}":"רשמי GitHub על {repo} #{n}",
+"New issue: {issue}":"issue חדתא: {issue}",
+"New release: {release}":"release חדתא: {release}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

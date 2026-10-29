@@ -185,6 +185,14 @@
    "message0": "een eerste concept schrijven",
    "tooltip": "Claude schrijft een concept dat de taak uitvoert."
   },
+  "rb_gh_issue_when": {
+   "message0": "wanneer er een nieuw issue wordt geopend in %1",
+   "tooltip": "Voert de blokken eronder uit wanneer iemand een issue opent in dit GitHub-project (elke 5 minuten gecontroleerd; pull requests tellen niet mee). ‘Wat er binnenkwam’ geeft repo, number, title, body, author, labels, link en text."
+  },
+  "rb_gh_release_when": {
+   "message0": "wanneer er een release wordt gepubliceerd in %1",
+   "tooltip": "Voert de blokken eronder uit wanneer dit GitHub-project een release publiceert (elke 15 minuten gecontroleerd). ‘Wat er binnenkwam’ geeft repo, tag, name, previous_tag, notes, link en text."
+  },
   "rb_gh_when": {
    "message0": "wanneer een pull request om mijn review vraagt",
    "tooltip": "Voert de blokken eronder uit wanneer iemand je vraagt een GitHub-pull request te reviewen (elke 5 minuten gecontroleerd). ‘Wat er binnenkwam’ geeft repo, number, title, user, link en text."
@@ -2721,6 +2729,8 @@
   "(yes)": "j, ja",
   "(no)": "n, nee",
   "GitHub issue opened in {repo}: #{n}": "GitHub-issue geopend in {repo}: #{n}",
-  "GitHub labels on {repo} #{n}": "GitHub-labels op {repo} #{n}"
+  "GitHub labels on {repo} #{n}": "GitHub-labels op {repo} #{n}",
+  "New issue: {issue}": "Nieuw issue: {issue}",
+  "New release: {release}": "Nieuwe release: {release}"
  }
 }
