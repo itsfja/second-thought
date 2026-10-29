@@ -1,0 +1,641 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "birthday-reminder-with-gift-ideas",
+  "gallery": {
+    "title": "Birthdays, with gift ideas",
+    "category": "calendar",
+    "description": "A week before each birthday in your calendar, a Telegram reminder with three gift ideas that fit what you've told it about the person. Tell it things any time: message your bot 'note Sam: loves rye bread'.",
+    "tip": "Keep birthdays in a calendar it can read. The more notes you send, the better the ideas get.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_name",
+        "name": "name"
+      },
+      {
+        "id": "g_notes",
+        "name": "notes"
+      },
+      {
+        "id": "g_ideas",
+        "name": "ideas"
+      },
+      {
+        "id": "g_fact",
+        "name": "fact"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Type a calendar event to test with, like 'Sam's birthday'"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "soon"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_cal_when",
+          "fields": {
+            "N": 10080
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "soon"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_tg_when",
+          "fields": {
+            "CONTAINS": "note"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "note"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "soon"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "rb_ask_yesno",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "Is this calendar event someone's birthday?\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "variables_set",
+                    "fields": {
+                      "VAR": {
+                        "id": "g_name"
+                      }
+                    },
+                    "inputs": {
+                      "VALUE": {
+                        "block": {
+                          "type": "rb_extract",
+                          "inputs": {
+                            "WHAT": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "the person's first name"
+                                }
+                              }
+                            },
+                            "TEXT": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "variables_set",
+                        "fields": {
+                          "VAR": {
+                            "id": "g_notes"
+                          }
+                        },
+                        "inputs": {
+                          "VALUE": {
+                            "block": {
+                              "type": "rb_mem_get",
+                              "inputs": {
+                                "NAME": {
+                                  "block": {
+                                    "type": "text_join",
+                                    "inputs": {
+                                      "ADD0": {
+                                        "shadow": {
+                                          "type": "rb_longtext",
+                                          "fields": {
+                                            "TEXT": "about "
+                                          }
+                                        }
+                                      },
+                                      "ADD1": {
+                                        "block": {
+                                          "type": "variables_get",
+                                          "fields": {
+                                            "VAR": {
+                                              "id": "g_name"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "extraState": {
+                                      "itemCount": 2
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "next": {
+                          "block": {
+                            "type": "variables_set",
+                            "fields": {
+                              "VAR": {
+                                "id": "g_ideas"
+                              }
+                            },
+                            "inputs": {
+                              "VALUE": {
+                                "block": {
+                                  "type": "rb_ask",
+                                  "inputs": {
+                                    "TEXT": {
+                                      "block": {
+                                        "type": "text_join",
+                                        "inputs": {
+                                          "ADD0": {
+                                            "shadow": {
+                                              "type": "rb_longtext",
+                                              "fields": {
+                                                "TEXT": "Suggest three birthday presents for "
+                                              }
+                                            }
+                                          },
+                                          "ADD1": {
+                                            "block": {
+                                              "type": "variables_get",
+                                              "fields": {
+                                                "VAR": {
+                                                  "id": "g_name"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "ADD2": {
+                                            "shadow": {
+                                              "type": "rb_longtext",
+                                              "fields": {
+                                                "TEXT": ", each under £40, that fit what I know about them: "
+                                              }
+                                            }
+                                          },
+                                          "ADD3": {
+                                            "block": {
+                                              "type": "variables_get",
+                                              "fields": {
+                                                "VAR": {
+                                                  "id": "g_notes"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "ADD4": {
+                                            "shadow": {
+                                              "type": "rb_longtext",
+                                              "fields": {
+                                                "TEXT": "\nOne line each: the present, and why it suits them. If I know nothing about them, suggest thoughtful general ideas, and end by saying what to tell you about them."
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "extraState": {
+                                          "itemCount": 5
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_tg_send",
+                                "inputs": {
+                                  "TEXT": {
+                                    "block": {
+                                      "type": "text_join",
+                                      "inputs": {
+                                        "ADD0": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": "🎂 "
+                                            }
+                                          }
+                                        },
+                                        "ADD1": {
+                                          "block": {
+                                            "type": "variables_get",
+                                            "fields": {
+                                              "VAR": {
+                                                "id": "g_name"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ADD2": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": "'s birthday is in a week.\n\n"
+                                            }
+                                          }
+                                        },
+                                        "ADD3": {
+                                          "block": {
+                                            "type": "variables_get",
+                                            "fields": {
+                                              "VAR": {
+                                                "id": "g_ideas"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "extraState": {
+                                        "itemCount": 4
+                                      }
+                                    }
+                                  }
+                                },
+                                "next": {
+                                  "block": {
+                                    "type": "rb_finish_with",
+                                    "inputs": {
+                                      "TEXT": {
+                                        "block": {
+                                          "type": "variables_get",
+                                          "fields": {
+                                            "VAR": {
+                                              "id": "g_ideas"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "ELSE": {
+                  "block": {
+                    "type": "rb_finish_with",
+                    "inputs": {
+                      "TEXT": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Not a birthday."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "extraState": {
+                "hasElse": true
+              }
+            }
+          },
+          "x": 550,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "note"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_name"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_extract",
+                    "inputs": {
+                      "WHAT": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "the person's first name"
+                          }
+                        }
+                      },
+                      "TEXT": {
+                        "block": {
+                          "type": "rb_msg_value"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_fact"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_extract",
+                        "inputs": {
+                          "WHAT": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": "what it says about them"
+                              }
+                            }
+                          },
+                          "TEXT": {
+                            "block": {
+                              "type": "rb_msg_value"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_mem_add",
+                      "fields": {
+                        "KIND": "permanent"
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "variables_get",
+                            "fields": {
+                              "VAR": {
+                                "id": "g_fact"
+                              }
+                            }
+                          }
+                        },
+                        "NAME": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "about "
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_name"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 2
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_tg_send",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "text_join",
+                                "inputs": {
+                                  "ADD0": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "Noted for "
+                                      }
+                                    }
+                                  },
+                                  "ADD1": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_name"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "ADD2": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "."
+                                      }
+                                    }
+                                  }
+                                },
+                                "extraState": {
+                                  "itemCount": 3
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_finish_with",
+                              "inputs": {
+                                "TEXT": {
+                                  "block": {
+                                    "type": "text_join",
+                                    "inputs": {
+                                      "ADD0": {
+                                        "shadow": {
+                                          "type": "rb_longtext",
+                                          "fields": {
+                                            "TEXT": "Noted for "
+                                          }
+                                        }
+                                      },
+                                      "ADD1": {
+                                        "block": {
+                                          "type": "variables_get",
+                                          "fields": {
+                                            "VAR": {
+                                              "id": "g_name"
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "ADD2": {
+                                        "shadow": {
+                                          "type": "rb_longtext",
+                                          "fields": {
+                                            "TEXT": ": "
+                                          }
+                                        }
+                                      },
+                                      "ADD3": {
+                                        "block": {
+                                          "type": "variables_get",
+                                          "fields": {
+                                            "VAR": {
+                                              "id": "g_fact"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "extraState": {
+                                      "itemCount": 4
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 550
+        }
+      ]
+    }
+  }
+}

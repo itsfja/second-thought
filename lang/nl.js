@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant: gezondheid van het huis",
 "Home Assistant: homelab":"Home Assistant: homelab",
 "Home Assistant: alerts and voice":"Home Assistant: meldingen en spraak",
-"Community":"Community",
 "Added to result":"Toegevoegd aan resultaat",
 "Added to “{name}”":"Toegevoegd aan ‘{name}’",
 "Agent":"Agent",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (gedeeld door {author})",
 "GitHub issue opened in {repo}: #{n}":"GitHub-issue geopend in {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub-labels op {repo} #{n}",
-"comment on GitHub, and open and label issues":"reageren op GitHub, en issues openen en labelen"
+"comment on GitHub, and open and label issues":"reageren op GitHub, en issues openen en labelen",
+"Community: GitHub":"Community: GitHub",
+"Community: code and data":"Community: code en data",
+"Community: news":"Community: nieuws",
+"Community: money":"Community: geld",
+"Community: calendar and email":"Community: agenda en e-mail",
+"Community: home and baking":"Community: huis en bakken",
+"Community: odds and ends":"Community: allerlei"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

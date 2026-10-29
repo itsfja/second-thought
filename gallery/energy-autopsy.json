@@ -1,0 +1,266 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "energy-autopsy",
+  "gallery": {
+    "title": "Energy autopsy",
+    "category": "home",
+    "description": "Each night, reads the day's power use from Home Assistant and explains the spikes in plain English, like \"the 2 to 4pm spike was the tumble dryer\".",
+    "tip": "Add your own big appliances' power sensors to the question, in place of the washing machine and garage heater.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_explained",
+        "name": "explained"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "autopsy"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 22,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "autopsy"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "autopsy"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_explained"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "Here is today's whole-house power, and the power of some devices. Find the two or three biggest spikes (when, and roughly how many watts) and say which device most likely caused each, like 'the 2 to 4pm spike was the tumble dryer'. Plain English, at most five lines, then one thing worth changing.\n\nHouse power, last 24 hours:\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_ha_history",
+                                "inputs": {
+                                  "ENTITY": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "sensor.house_power"
+                                      }
+                                    }
+                                  },
+                                  "HOURS": {
+                                    "shadow": {
+                                      "type": "math_number",
+                                      "fields": {
+                                        "NUM": 24
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "ADD2": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "\n\nWashing machine, last 24 hours:\n"
+                                }
+                              }
+                            },
+                            "ADD3": {
+                              "block": {
+                                "type": "rb_ha_history",
+                                "inputs": {
+                                  "ENTITY": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "sensor.washing_machine_power"
+                                      }
+                                    }
+                                  },
+                                  "HOURS": {
+                                    "shadow": {
+                                      "type": "math_number",
+                                      "fields": {
+                                        "NUM": 24
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "ADD4": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "\n\nGarage heater, last 24 hours:\n"
+                                }
+                              }
+                            },
+                            "ADD5": {
+                              "block": {
+                                "type": "rb_ha_history",
+                                "inputs": {
+                                  "ENTITY": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "sensor.garage_heater_power"
+                                      }
+                                    }
+                                  },
+                                  "HOURS": {
+                                    "shadow": {
+                                      "type": "math_number",
+                                      "fields": {
+                                        "NUM": 24
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "ADD6": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "\n\nEverything reporting power now:\n"
+                                }
+                              }
+                            },
+                            "ADD7": {
+                              "block": {
+                                "type": "rb_ha_summary",
+                                "inputs": {
+                                  "TEXT": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "power"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 8
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_ha_notify",
+                  "inputs": {
+                    "TARGET": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "persistent_notification"
+                        }
+                      }
+                    },
+                    "TEXT": {
+                      "block": {
+                        "type": "variables_get",
+                        "fields": {
+                          "VAR": {
+                            "id": "g_explained"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_finish_with",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "variables_get",
+                            "fields": {
+                              "VAR": {
+                                "id": "g_explained"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Community gallery
 
-Programs people have shared. Each file here appears on the page under **Browse examples → Community**, with who shared it,
+Programs people have shared. Each file here appears on the page in a **Community** group, by its category (Community: news, Community: home and baking and so on), in both the Example menu and **Browse examples**, with who shared it,
 what it does, and what it can do, which the page works out from its blocks.
 
 ## Sharing a program
@@ -16,6 +16,7 @@ what it does, and what it can do, which the page works out from its blocks.
      "name": "bake-day-timeline",
      "gallery": {
        "title": "Bake-day timeline",
+       "category": "home",
        "description": "Say when you want the bread out of the oven, and Claude works backwards to a timeline.",
        "tip": "Change the recipe in the blue block to your own.",
        "author": "your GitHub name",
@@ -28,6 +29,7 @@ what it does, and what it can do, which the page works out from its blocks.
    | Field | What to put |
    |---|---|
    | `title` | A short name, up to 40 characters. |
+   | `category` | Where it's grouped on the page: `github`, `coding`, `news`, `money`, `calendar` (calendar and email), `home` (home and baking) or `odds` (odds and ends, if you leave it out). |
    | `description` | What it does, in a sentence or two, up to 300 characters. |
    | `tip` | One thing to try or change first, up to 200 characters. |
    | `author` | Your name or GitHub name, up to 40 characters. |
@@ -36,6 +38,8 @@ what it does, and what it can do, which the page works out from its blocks.
    Don't list what the program can do (send email, control devices and so on). The page works that out from the
    blocks and shows it on the card, so it can't be wrong.
 3. **Name the file** in lowercase words joined by `-`, such as `bake-day-timeline.json`, and put it in this folder.
+   Some programs here are written as Python in `tools/gallery_build.py` instead, so their blocks can be reviewed as code.
+   To change one of those, edit it there and run `python tools/gallery_build.py`; the tests check the two match.
 4. **Run `python tools/sync.py`**, which copies the gallery into `second-thought.html`, and open a pull request with
    both files. If you don't use git, open an issue with the block file attached and the `"gallery"` part filled in.
 

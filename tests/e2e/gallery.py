@@ -19,7 +19,19 @@ async def gallery_tests():
         entries = await pg.evaluate("window.__gallery()")
         check(sorted(e["file"] for e in entries) == sorted(files), f"every file in gallery/ is in the page ({len(entries)} entries)")
         groups = await pg.eval_on_selector_all("#example optgroup", "e => e.map(g => g.label)")
-        check("Community" in groups, "the Example menu has a Community group")
+        files_by_key = {"g_" + name[:-5].replace("-", "_"): d for name, d in files.items()}
+        want = {"github": "Community: GitHub", "coding": "Community: code and data", "news": "Community: news", "money": "Community: money",
+                "calendar": "Community: calendar and email", "home": "Community: home and baking", "odds": "Community: odds and ends"}
+        used = [g for k, g in want.items() if any(d["gallery"].get("category", "odds") == k for d in files.values())]
+        community = [g for g in groups if g.startswith("Community: ")]
+        check(community == used and groups.index(community[0]) == groups.index("Research") + 1,
+              f"the Example menu has a Community group for each category in use, in order, straight after Research ({community})")
+        placed = await pg.evaluate("[...document.querySelectorAll('#example optgroup')].flatMap(g => [...g.children].map(o => [o.value, g.label]))")
+        wrong = [k for k, g in placed if k in files_by_key and g != want[files_by_key[k]["gallery"].get("category", "odds")]]
+        check(not wrong, "each gallery program is in its category's group" + (f" (not {wrong})" if wrong else ""))
+        heads = await pg.eval_on_selector_all("#gal-body .gal-cat", "e => e.map(s => [s.querySelector('h3').textContent, !!s.querySelector('.hint')])")
+        check(heads[2] == [used[0], True] and not any(h for t, h in heads if t != used[0]),
+              f"in Browse examples, the community groups come third, and the first explains shared programs ({heads[:4]})")
         caps = await pg.evaluate("Object.fromEntries(JSON.parse(document.getElementById('capabilities').textContent).map(c => [c[0], c]))")
         for e in entries:
             check(not e["unknown"], f"{e['file']} uses only blocks the page has" + (f" (not {e['unknown']})" if e["unknown"] else ""))

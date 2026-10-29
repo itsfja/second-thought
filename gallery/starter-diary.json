@@ -4,6 +4,7 @@
   "name": "starter-diary",
   "gallery": {
     "title": "Starter diary",
+    "category": "home",
     "description": "Each run, tell it how your sourdough starter is doing. It keeps a dated diary between runs and tells you how the starter is getting on, and what to change.",
     "tip": "Run it once a day for a week. Export it to Python and the diary stays in memory.json next to the program.",
     "author": "itsfja",

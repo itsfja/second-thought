@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant: valetudo domus",
 "Home Assistant: homelab":"Home Assistant: officina domestica",
 "Home Assistant: alerts and voice":"Home Assistant: monitiones et vox",
-"Community":"Communitas",
 "Added to result":"Ad effectum additum",
 "Added to “{name}”":"Additum ad «{name}»",
 "Agent":"Procurator",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (communicatum a {author})",
 "GitHub issue opened in {repo}: #{n}":"Quaestio GitHub in {repo} aperta: #{n}",
 "GitHub labels on {repo} #{n}":"Notae GitHub in {repo} #{n}",
-"comment on GitHub, and open and label issues":"in GitHub commentari, et quaestiones aperire ac notare"
+"comment on GitHub, and open and label issues":"in GitHub commentari, et quaestiones aperire ac notare",
+"Community: GitHub":"Communitas: GitHub",
+"Community: code and data":"Communitas: codex et data",
+"Community: news":"Communitas: nuntii",
+"Community: money":"Communitas: pecunia",
+"Community: calendar and email":"Communitas: calendarium et epistulae",
+"Community: home and baking":"Communitas: domus et pistura",
+"Community: odds and ends":"Communitas: varia"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

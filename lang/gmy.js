@@ -302,7 +302,6 @@
 "Home Assistant: house health":"Home Assistant: 𐀈𐀗 𐀄𐀑𐀊",
 "Home Assistant: homelab":"Home Assistant: 𐀈𐀗 𐀸𐀏𐀮𐀳𐀪𐀍",
 "Home Assistant: alerts and voice":"Home Assistant: 𐀀𐀐𐀪𐀊 𐀏𐀂 𐀡𐀚",
-"Community":"𐀒𐀜𐀛𐀊",
 "Added to result":"𐀡𐀮𐀳𐀕𐀜 𐀁𐀚 𐀳𐀫",
 "Added to “{name}”":"𐀡𐀮𐀳𐀕𐀜 𐀁𐀚 “{name}”",
 "Agent":"𐀁𐀠𐀵𐀫𐀡",
@@ -837,7 +836,14 @@
 "{title} (shared by {author})":"{title} (𐀇𐀈𐀕𐀜 𐀄𐀡 {author})",
 "GitHub issue opened in {repo}: #{n}":"GitHub issue 𐀀𐀜𐀂𐀐 𐀁𐀚 {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub 𐀃𐀜𐀔𐀲 𐀁𐀠 {repo} #{n}",
-"comment on GitHub, and open and label issues":"𐀁𐀠𐀏𐀨𐀟𐀁 𐀁𐀚 GitHub 𐀏𐀂 issues 𐀀𐀜𐀂𐀐 𐀏𐀂 𐀃𐀜𐀔𐀲"
+"comment on GitHub, and open and label issues":"𐀁𐀠𐀏𐀨𐀟𐀁 𐀁𐀚 GitHub 𐀏𐀂 issues 𐀀𐀜𐀂𐀐 𐀏𐀂 𐀃𐀜𐀔𐀲",
+"Community: GitHub":"𐀒𐀜𐀛𐀊: GitHub",
+"Community: code and data":"𐀒𐀜𐀛𐀊: code 𐀏𐀂 𐀏𐀨𐀔𐀲",
+"Community: news":"𐀒𐀜𐀛𐀊: 𐀫𐀁",
+"Community: money":"𐀒𐀜𐀛𐀊: 𐀀𐀓𐀫",
+"Community: calendar and email":"𐀒𐀜𐀛𐀊: 𐀁𐀕𐀫𐀫𐀑𐀍 𐀏𐀂 email",
+"Community: home and baking":"𐀒𐀜𐀛𐀊: 𐀈𐀗 𐀏𐀂 𐀀𐀵𐀡𐀦",
+"Community: odds and ends":"𐀒𐀜𐀛𐀊: 𐀞𐀲"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},

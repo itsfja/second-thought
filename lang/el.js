@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant: υγεία του σπιτιού",
 "Home Assistant: homelab":"Home Assistant: homelab",
 "Home Assistant: alerts and voice":"Home Assistant: ειδοποιήσεις και φωνή",
-"Community":"Κοινότητα",
 "Added to result":"Προστέθηκε στο αποτέλεσμα",
 "Added to “{name}”":"Προστέθηκε στο «{name}»",
 "Agent":"Πράκτορας",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (από τον/την {author})",
 "GitHub issue opened in {repo}: #{n}":"Άνοιξε issue στο GitHub στο {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"Ετικέτες GitHub στο {repo} #{n}",
-"comment on GitHub, and open and label issues":"σχολιάζει στο GitHub και ανοίγει και επισημαίνει issues"
+"comment on GitHub, and open and label issues":"σχολιάζει στο GitHub και ανοίγει και επισημαίνει issues",
+"Community: GitHub":"Κοινότητα: GitHub",
+"Community: code and data":"Κοινότητα: κώδικας και δεδομένα",
+"Community: news":"Κοινότητα: ειδήσεις",
+"Community: money":"Κοινότητα: χρήματα",
+"Community: calendar and email":"Κοινότητα: ημερολόγιο και email",
+"Community: home and baking":"Κοινότητα: σπίτι και αρτοποιία",
+"Community: odds and ends":"Κοινότητα: διάφορα"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

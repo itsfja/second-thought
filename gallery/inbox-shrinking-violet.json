@@ -1,0 +1,165 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "inbox-shrinking-violet",
+  "gallery": {
+    "title": "Inbox shrinking violet",
+    "category": "calendar",
+    "description": "Twice a day, sorts your inbox into needs a reply, read later and maybe unsubscribe, with a draft reply for each of the first pile, all in one email to you. It never replies for you.",
+    "tip": "Change the times to suit you. The drafts are in your style if you tell it how you write, in the agent's goal.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "sort inbox"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 9,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "sort inbox"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 16,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "sort inbox"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "sort inbox"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Look through my email from the last day (search_email with days 1) and read the ones you need to. Sort every email into three piles. NEEDS A REPLY: who, what they want, and a short draft reply for each, friendly and brief. READ LATER: one line each on why it's worth it. MAYBE UNSUBSCRIBE: newsletters and promotions, with the sender. Leave out anything already handled. Don't send anything."
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 14
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "email"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_email_send",
+                  "inputs": {
+                    "TO": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "you@example.com"
+                        }
+                      }
+                    },
+                    "SUBJECT": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "Your inbox, sorted"
+                        }
+                      }
+                    },
+                    "TEXT": {
+                      "block": {
+                        "type": "rb_draft"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

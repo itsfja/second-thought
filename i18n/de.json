@@ -777,7 +777,6 @@
   "Home Assistant: house health": "Home Assistant: Zustand des Hauses",
   "Home Assistant: homelab": "Home Assistant: Homelab",
   "Home Assistant: alerts and voice": "Home Assistant: Warnungen und Sprache",
-  "Community": "Community",
   "Added to result": "Zum Ergebnis hinzugefügt",
   "Added to “{name}”": "Zu „{name}“ hinzugefügt",
   "Agent": "Agent",
@@ -1312,7 +1311,14 @@
   "{title} (shared by {author})": "{title} (geteilt von {author})",
   "GitHub issue opened in {repo}: #{n}": "GitHub-Issue in {repo} eröffnet: #{n}",
   "GitHub labels on {repo} #{n}": "GitHub-Labels für {repo} #{n}",
-  "comment on GitHub, and open and label issues": "auf GitHub kommentieren sowie Issues eröffnen und mit Labels versehen"
+  "comment on GitHub, and open and label issues": "auf GitHub kommentieren sowie Issues eröffnen und mit Labels versehen",
+  "Community: GitHub": "Community: GitHub",
+  "Community: code and data": "Community: Code und Daten",
+  "Community: news": "Community: Nachrichten",
+  "Community: money": "Community: Geld",
+  "Community: calendar and email": "Community: Kalender und E-Mail",
+  "Community: home and baking": "Community: Haus und Backen",
+  "Community: odds and ends": "Community: Allerlei"
  },
  "examples": {
   "review": {

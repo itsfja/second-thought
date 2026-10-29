@@ -36,6 +36,8 @@ I18N = ROOT / "i18n"                  # one <language>.json per language the blo
 LANG = ROOT / "lang"                  # the same, as scripts the page loads one at a time: made by this tool
 GALLERY = ROOT / "gallery"            # the community gallery: one block file per program, with a "gallery" part
 GALLERY_FIELDS = ("title", "description", "tip", "author", "runtime")
+# A gallery program's optional "category": where the page groups it. Keep in step with GALLERY_GROUPS in the page.
+GALLERY_CATEGORIES = ("github", "coding", "news", "money", "calendar", "home", "odds")
 PARTS = [
     ('<script type="text/plain" id="py-runtime">\n', RUNTIME),
     ('<script type="application/json" id="services">\n', SERVICES),
@@ -138,7 +140,10 @@ def gallery_json() -> str:
         missing = [f for f in GALLERY_FIELDS if not str(info.get(f, "")).strip()]
         if missing:
             sys.exit(f"{where}: the \"gallery\" part needs " + ", ".join(missing) + ".")
-        entry = {"key": "g_" + path.stem.replace("-", "_"), "file": path.name}
+        category = str(info.get("category", "odds")).strip().lower() or "odds"
+        if category not in GALLERY_CATEGORIES:
+            sys.exit(f"{where}: \"category\" should be one of " + ", ".join(GALLERY_CATEGORIES) + f", not \"{info['category']}\".")
+        entry = {"key": "g_" + path.stem.replace("-", "_"), "file": path.name, "category": category}
         entry.update({f: str(info[f]).strip() for f in GALLERY_FIELDS})
         entry["program"] = data["program"]
         entries.append(entry)

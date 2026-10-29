@@ -37,6 +37,12 @@ class Entries(unittest.TestCase):
     def test_there_is_at_least_one(self):
         self.assertTrue(FILES)
 
+    def test_files_made_by_gallery_build_match_it(self):
+        import subprocess
+        import sys
+        r = subprocess.run([sys.executable, str(support.ROOT / "tools" / "gallery_build.py"), "--check"], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
     def test_readme_explains_how_to_add_one(self):
         self.assertIn('"gallery"', (support.ROOT / "gallery" / "README.md").read_text(encoding="utf-8"))
 
@@ -56,6 +62,8 @@ class Entries(unittest.TestCase):
                     value = info.get(field)
                     self.assertTrue(isinstance(value, str) and value.strip(), f"gallery.{field} is missing")
                     self.assertLessEqual(len(value), most, f"gallery.{field} is over {most} characters")
+                self.assertIn(info.get("category", "odds"), ("github", "coding", "news", "money", "calendar", "home", "odds"),
+                              "gallery.category is one of the groups in gallery/README.md")
                 self.assertRegex(info.get("runtime", ""), r"^\d+\.\d+\.\d+$")
                 self.assertLessEqual(version(info["runtime"]), version(RUNTIME_VERSION), "made with a runtime newer than this one")
                 self.assertNotIn(info["title"].lower(), titles, "two entries have the same title")

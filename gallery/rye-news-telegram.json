@@ -4,6 +4,7 @@
   "name": "rye-news-telegram",
   "gallery": {
     "title": "Rye news on Telegram",
+    "category": "news",
     "description": "Reads your news feeds and sends you a Telegram message about any items on rye or wholegrain flour, with their links. On a day with none, it sends nothing.",
     "tip": "Change rye to whatever you follow, and add a 'when it's …' block so it checks every morning.",
     "author": "itsfja",

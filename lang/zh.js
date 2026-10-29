@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant：房屋健康",
 "Home Assistant: homelab":"Home Assistant：家庭实验室",
 "Home Assistant: alerts and voice":"Home Assistant：提醒与语音",
-"Community":"社区",
 "Added to result":"已加入结果",
 "Added to “{name}”":"已加入“{name}”",
 "Agent":"智能体",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title}（由 {author} 分享）",
 "GitHub issue opened in {repo}: #{n}":"已在 {repo} 创建 GitHub issue：#{n}",
 "GitHub labels on {repo} #{n}":"{repo} #{n} 上的 GitHub 标签",
-"comment on GitHub, and open and label issues":"在 GitHub 上评论，并创建和标记 issue"
+"comment on GitHub, and open and label issues":"在 GitHub 上评论，并创建和标记 issue",
+"Community: GitHub":"社区：GitHub",
+"Community: code and data":"社区：代码与数据",
+"Community: news":"社区：新闻",
+"Community: money":"社区：理财",
+"Community: calendar and email":"社区：日历与邮件",
+"Community: home and baking":"社区：家居与烘焙",
+"Community: odds and ends":"社区：杂项"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

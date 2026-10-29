@@ -150,7 +150,7 @@ To keep listening all the time, run the program with **run-on-schedule** (see [R
 
 Choose an example from **Example** and press **Load**, or press **Browse examples** to see them all with a sentence about each and an idea for something to change. There are over 150, grouped into Writing, Research, Design, Learning, Work, Home and baking, Agents, Homey, Code and data, Automation, and ten groups of Home Assistant examples. **Review loop** is a good first one. You can't break anything: if you get in a muddle, load the example again.
 
-The last group, **Community**, holds programs other people made and shared. Each says who shared it and what it can do: whether it only talks to a model, or can also send messages, keep notes or control things. The page works that out from the blocks, so it's always accurate. To share your own, see [`gallery/README.md`](gallery/README.md).
+The **Community** groups, straight after Writing and Research, hold programs other people made and shared, grouped by topic (GitHub, code and data, news, money, calendar and email, home and baking, odds and ends). Each says who shared it and what it can do: whether it only talks to a model, or can also send messages, keep notes or control things. The page works that out from the blocks, so it's always accurate. To share your own, see [`gallery/README.md`](gallery/README.md).
 
 ---
 
@@ -432,7 +432,7 @@ A program doesn't update itself. To give it a newer runtime, import it on the pa
 | `samples/connections.json` | The sample feeds, GitHub projects, Telegram messages, emails and calendar the page uses. |
 | `i18n/` | The page's words in other languages, one file each. |
 | `lang/` | The same, as scripts the page loads for the chosen language only. `tools/sync.py` makes them; publish them with the page. |
-| `gallery/` | Programs people have shared, one file each. They appear on the page under **Community**. |
+| `gallery/` | Programs people have shared, one file each. They appear on the page in the **Community** groups, by category. |
 | `second-thought.example.ini` | Every setting a program understands, with a note on each. |
 | `tools/sync.py` | Joins the runtime into one file, copies it and the other embedded parts into the page, and writes `lang/`, so they always match. |
 | `tools/smoke_test.py` | Checks the real model services with your own keys. |

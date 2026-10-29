@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant: salud de la casa",
 "Home Assistant: homelab":"Home Assistant: homelab",
 "Home Assistant: alerts and voice":"Home Assistant: avisos y voz",
-"Community":"Comunidad",
 "Added to result":"Añadido al resultado",
 "Added to “{name}”":"Añadido a “{name}”",
 "Agent":"Agente",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (compartido por {author})",
 "GitHub issue opened in {repo}: #{n}":"Issue de GitHub abierto en {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"Etiquetas de GitHub en {repo} #{n}",
-"comment on GitHub, and open and label issues":"comentar en GitHub, y abrir y etiquetar issues"
+"comment on GitHub, and open and label issues":"comentar en GitHub, y abrir y etiquetar issues",
+"Community: GitHub":"Comunidad: GitHub",
+"Community: code and data":"Comunidad: código y datos",
+"Community: news":"Comunidad: noticias",
+"Community: money":"Comunidad: dinero",
+"Community: calendar and email":"Comunidad: calendario y correo",
+"Community: home and baking":"Comunidad: casa y panadería",
+"Community: odds and ends":"Comunidad: miscelánea"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
