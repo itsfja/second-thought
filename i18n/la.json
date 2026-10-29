@@ -2741,7 +2741,8 @@
   "GitHub labels on {repo} #{n}": "Notae GitHub in {repo} #{n}",
   "New issue: {issue}": "Nova quaestio: {issue}",
   "New release: {release}": "Nova editio: {release}",
-  "There's no folder {folder}.": "Non est capsa {folder}."
+  "There's no folder {folder}.": "Non est capsa {folder}.",
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Fortasse abrogatum est. Ut alio utaris programmate non mutato, in second-thought.ini exemplar quod enumerat pone, ut {settings}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

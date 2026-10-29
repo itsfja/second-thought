@@ -8,6 +8,7 @@ and a real tool call, and which JSON mode every other service accepts.
 
     python tools/smoke_test.py              # every service with a key
     python tools/smoke_test.py claude       # only the services whose names contain these words
+    python tools/smoke_test.py models       # only which model names the services no longer list (free)
     python tools/smoke_test.py gallery      # run every gallery program once (see tools/smoke_gallery.py)
 
 Keys come from the environment or a second-thought.ini (in this folder, the current folder or your home folder),
@@ -25,7 +26,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 RT = {"__name__": "second_thought_runtime", "__file__": str(ROOT / "python" / "runtime.py")}
 exec(compile((ROOT / "python" / "runtime.py").read_text(encoding="utf-8"), RT["__file__"], "exec"), RT)  # noqa: S102
-Runtime, PROVIDERS, MODELS = RT["Runtime"], RT["PROVIDERS"], RT["MODELS"]
+Runtime, PROVIDERS, MODELS, SERVICES = RT["Runtime"], RT["PROVIDERS"], RT["MODELS"], RT["SERVICES"]
 
 results = []  # (service, check, PASS / FAIL / SKIP / NOTE, detail)
 FAILED = object()  # what attempt() gives back when a check raised (None is a normal result for some calls)
@@ -204,7 +205,40 @@ async def check_connections(want):
         report("Telegram", "your chat", "NOTE", "no TELEGRAM_CHAT_ID yet: message your bot, then run a Telegram program to see your chat number")
 
 
+async def check_models(want):
+    """For each service with a key, the tiers whose model the service no longer lists: what to update in SERVICES."""
+    R = fresh("quick")
+    for s in SERVICES:
+        name = s["name"]
+        if not want(name) or s["api"] == "perplexity" or (name == "Llama" and not os.environ.get("LLAMA_BASE_URL")):
+            continue
+        key = next((os.environ[k] for k in s["keys"] if os.environ.get(k)), "")
+        if s["signup"] and not key:
+            continue
+        got = await attempt(name, "model names", R._doctor_listed(s, key))
+        if got is FAILED:
+            continue
+        status, have, err = got
+        if status != 200 or not have:
+            report(name, "model names", "NOTE", f"couldn't list its models ({status or err})")
+            continue
+        tiers = R.service_tiers(s)
+        retired = R.retired_models(tiers, have)
+        if not retired:
+            report(name, "model names", True, f"all {len(tiers)} tiers' models are listed")
+        for tier, model, close in retired:
+            setting = R.model_setting(tier).split(" =")[0]
+            fix = f"Change {setting} in your settings" if os.environ.get(setting) else "Update SERVICES in python/second_thought/providers.py"
+            report(name, f"model for {tier}", "NOTE", f"{model} isn't listed, so it may have been retired"
+                   + (f"; the closest it lists is {close}" if close else "") + ". " + fix)
+
+
 async def main(only):
+    if only == ["models"]:
+        print("Second Thought: checking the model names in SERVICES\n", flush=True)
+        await check_models(lambda name: True)
+        print(f"\n{sum(r[2] == 'NOTE' for r in results)} model(s) to look at.")
+        return 0
     want = lambda name: not only or any(w in name.lower() for w in only)  # noqa: E731
     print("Second Thought: checking the real services\n", flush=True)
     used = []
@@ -224,6 +258,7 @@ async def main(only):
             report(name, "all checks", "SKIP", f"no {pv['key_env']}")
             continue
         used += await check_other(name, pv["prefix"] + "quick")
+    await check_models(want)
     await check_connections(want)
     totals = {}
     for R in used:

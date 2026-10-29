@@ -1621,7 +1621,8 @@
 "GitHub labels on {repo} #{n}":"GitHub mearca on {repo} #{n}",
 "New issue: {issue}":"Niwe issue: {issue}",
 "New release: {release}":"Niwe release: {release}",
-"There's no folder {folder}.":"Nis nan hylc {folder}."
+"There's no folder {folder}.":"Nis nan hylc {folder}.",
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Hit wæs wēnunga āweorpen. Tō brūcenne ōþres būtan þǣre forescrifte wendinge, sete gewrit þe hēo tealþ on second-thought.ini, swā swā {settings}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

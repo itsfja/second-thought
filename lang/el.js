@@ -1621,6 +1621,7 @@
 "GitHub labels on {repo} #{n}":"Ετικέτες GitHub στο {repo} #{n}",
 "New issue: {issue}":"Νέο issue: {issue}",
 "New release: {release}":"Νέα έκδοση: {release}",
-"There's no folder {folder}.":"Δεν υπάρχει φάκελος {folder}."
+"There's no folder {folder}.":"Δεν υπάρχει φάκελος {folder}.",
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Ίσως έχει αποσυρθεί. Για να χρησιμοποιήσεις άλλο χωρίς να αλλάξεις το πρόγραμμα, βάλε στο second-thought.ini ένα μοντέλο που αναφέρει, όπως {settings}."
 }
 };

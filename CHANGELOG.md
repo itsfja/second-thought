@@ -19,6 +19,7 @@ that the two agree.
 ## Unreleased
 
 ### Changed
+- `--doctor` says more when a service no longer lists a model the program uses (#190): that it may have been retired, and the `MODEL_<TIER>` line for `second-thought.ini` that switches to a model the service does list, with the nearest one of the same kind as an example.
 - Agents ask in more places, even with the no-asking tools (#188). Every lock, cover and valve action but locking, closing and stopping asks (toggling or setting a position could open them), as does `homeassistant.turn_on`, `turn_off` or `toggle` aimed at one. When an agent chooses them, Home Assistant scripts, scenes, automations and buttons, Homey flows, and MQTT messages saying unlock, open or disarm ask too. An agent with private tools asks before reading a page or feed address that wasn't in its goal or anything it read. An unattended program relying on its agent doing these without asking now says no to them instead.
 - Web requests are now listened for on this computer only (127.0.0.1), not on every network it's on (#106). If Home Assistant on another machine, IFTTT or your phone calls the program, add `WEBHOOK_HOST = 0.0.0.0` to its `second-thought.ini`. `--doctor` checks the same address, and the startup line shows `http://127.0.0.1:…` when only this computer can call it. This needs a major version at release, since such a program stops receiving requests until the line is added.
 

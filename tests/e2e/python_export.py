@@ -62,6 +62,11 @@ def doctor_tests(codes, env, tmp, llama_url, llama_calls, ha_calls):
                        cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
     check(r.returncode == 0 and "  NOTE  Llama: the key works, but it doesn't list llama4:16x17b" in r.stdout and "ollama pull llama4:16x17b" in r.stdout,
           f"--doctor notices a Llama model that hasn't been pulled ({r.stdout[-300:]!r})")
+    r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=dict(env, MODEL_DEFAULT="claude-sonnet-5"),
+                       cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
+    check(r.returncode == 0 and "  NOTE  Claude: the key works, but it doesn't list claude-sonnet-5, which this program uses. It may have been retired."
+          in r.stdout and "such as MODEL_DEFAULT = claude-sonnet-5-5." in r.stdout,
+          f"--doctor says a model may have been retired, and names the setting and a model the service lists ({r.stdout[-400:]!r})")
     mcp = pathlib.Path(tmp) / "doc_mcp.py"
     mcp.write_text(EXTRA["t_ag_mcp"], encoding="utf-8")
     log = pathlib.Path(tmp) / "doc-mcp.log"

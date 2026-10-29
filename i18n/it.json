@@ -2741,6 +2741,7 @@
   "GitHub labels on {repo} #{n}": "Etichette GitHub su {repo} #{n}",
   "New issue: {issue}": "Nuova issue: {issue}",
   "New release: {release}": "Nuova versione: {release}",
-  "There's no folder {folder}.": "Non esiste la cartella {folder}."
+  "There's no folder {folder}.": "Non esiste la cartella {folder}.",
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Forse è stato ritirato. Per usarne un altro senza modificare il programma, metti in second-thought.ini un modello che elenca, per esempio {settings}."
  }
 }

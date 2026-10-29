@@ -2741,6 +2741,7 @@
   "GitHub labels on {repo} #{n}": "{repo} #{n} の GitHub ラベル",
   "New issue: {issue}": "新しい Issue：{issue}",
   "New release: {release}": "新しいリリース：{release}",
-  "There's no folder {folder}.": "フォルダー {folder} がありません。"
+  "There's no folder {folder}.": "フォルダー {folder} がありません。",
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "提供が終了した可能性があります。プログラムを変えずに別のモデルを使うには、一覧にあるモデルを second-thought.ini に書いてください。例: {settings}"
  }
 }

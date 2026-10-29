@@ -2742,7 +2742,8 @@
   "GitHub labels on {repo} #{n}": "šumū ina GitHub ana {repo} #{n}",
   "New issue: {issue}": "issue eššum: {issue}",
   "New release: {release}": "release eššum: {release}",
-  "There's no folder {folder}.": "𒁉𒊓𒀭𒉌𒅎 {folder} 𒌑𒇻 𒅀𒅋𒋗"
+  "There's no folder {folder}.": "𒁉𒊓𒀭𒉌𒅎 {folder} 𒌑𒇻 𒅀𒅋𒋗",
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "ullâmma ina ṭuppi ul šaṭir; šumma tēnītam tuṣbat, nēpešam lā tunakkar: ina second-thought.ini šumam ša šaṭru šukun, kīma {settings}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",
