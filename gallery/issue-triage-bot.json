@@ -1,0 +1,283 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "issue-triage-bot",
+  "gallery": {
+    "title": "Issue triage bot",
+    "category": "github",
+    "description": "When someone opens an issue, it labels it from the project's own labels, links a likely duplicate in a comment, and messages you on Telegram if it looks urgent.",
+    "tip": "Change the project in the hat. Labelling and commenting ask first; use the no-asking tool once you trust it.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_project",
+        "name": "project"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Type an issue to test with, like 'Chart is blank on Safari: nothing shows in the chart area'"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "triage"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_gh_issue_when",
+          "fields": {
+            "REPO": "sample-baker/sourdough-chart"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "triage"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "triage"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_project"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "sample-baker/sourdough-chart"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_agent",
+                  "fields": {
+                    "PLAN": false
+                  },
+                  "inputs": {
+                    "GOAL": {
+                      "block": {
+                        "type": "text_join",
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "A new issue was opened in "
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "variables_get",
+                              "fields": {
+                                "VAR": {
+                                  "id": "g_project"
+                                }
+                              }
+                            }
+                          },
+                          "ADD2": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": ":\n"
+                              }
+                            }
+                          },
+                          "ADD3": {
+                            "block": {
+                              "type": "rb_msg_value"
+                            }
+                          },
+                          "ADD4": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "\n\nFind its number if it isn't given (search_github for the title). Add one or two fitting labels, using only labels the project has. Search the project's open issues for a likely duplicate; if there's a clear one, comment linking it. Finally answer in one line: URGENT if it describes data loss, a security problem or the app not working for everyone, otherwise ROUTINE, then a short reason."
+                              }
+                            }
+                          }
+                        },
+                        "extraState": {
+                          "itemCount": 5
+                        }
+                      }
+                    },
+                    "STEPS": {
+                      "shadow": {
+                        "type": "math_number",
+                        "fields": {
+                          "NUM": 10
+                        }
+                      }
+                    },
+                    "TOOLS": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "github"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_agent_builtin",
+                            "fields": {
+                              "KIND": "github_act"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "controls_if",
+                      "inputs": {
+                        "IF0": {
+                          "block": {
+                            "type": "rb_contains",
+                            "inputs": {
+                              "A": {
+                                "block": {
+                                  "type": "rb_draft"
+                                }
+                              },
+                              "B": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "URGENT"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "DO0": {
+                          "block": {
+                            "type": "rb_tg_send",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "🚨 Urgent issue: "
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "rb_msg_value"
+                                      }
+                                    },
+                                    "ADD2": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD3": {
+                                      "block": {
+                                        "type": "rb_draft"
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 4
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_result"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

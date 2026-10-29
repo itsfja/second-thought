@@ -1,0 +1,224 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "first-issue-fixer",
+  "gallery": {
+    "title": "First-issue fixer",
+    "category": "coding",
+    "description": "When an issue is opened that's trivial to fix from the text alone (a typo, a broken link, a missing line of docs), it reads the file and comments with a suggested patch. It can't run code, so it leaves anything else alone.",
+    "tip": "Change the project in the hat. Commenting asks first. It never opens pull requests or changes the code.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Type an issue to test with, like 'sample-baker/sourdough-chart #43: Typo in README: fermantation'"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "issue"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_gh_issue_when",
+          "fields": {
+            "REPO": "sample-baker/sourdough-chart"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "issue"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "issue"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "rb_ask_yesno",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "Can this GitHub issue be fixed by changing a few lines of text (a typo, a broken link, a missing sentence in the docs), with no need to run code?\n\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_agent",
+                    "fields": {
+                      "PLAN": false
+                    },
+                    "inputs": {
+                      "GOAL": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "This issue looks trivial to fix:\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            },
+                            "ADD2": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "\n\nFind the file it's about (read_github_file, starting from the top folder) and the exact lines. Write the fix as a small unified diff. Post it as a comment on the issue, starting 'Suggested fix (not tested):'. If, once you've read the file, it isn't trivial after all, don't comment: just say why."
+                                }
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 3
+                          }
+                        }
+                      },
+                      "STEPS": {
+                        "shadow": {
+                          "type": "math_number",
+                          "fields": {
+                            "NUM": 8
+                          }
+                        }
+                      },
+                      "TOOLS": {
+                        "block": {
+                          "type": "rb_agent_builtin",
+                          "fields": {
+                            "KIND": "github"
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_agent_builtin",
+                              "fields": {
+                                "KIND": "github_act"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_result"
+                      }
+                    }
+                  }
+                },
+                "ELSE": {
+                  "block": {
+                    "type": "rb_finish_with",
+                    "inputs": {
+                      "TEXT": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Not a text-only fix, so left for a person."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "extraState": {
+                "hasElse": true
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "release-notes-writer",
+  "gallery": {
+    "title": "Release notes writer",
+    "category": "github",
+    "description": "When a release is published, gathers the pull requests merged since the release before it and drafts changelog-ready notes grouped into Added, Changed and Fixed. Saved as a file and emailed to you.",
+    "tip": "Change the project in the hat. It drafts; you paste. It never edits the release itself.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Type a release to test with, like 'sample-baker/sourdough-chart v1.4.0, previous v1.3.2'"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "release"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_gh_release_when",
+          "fields": {
+            "REPO": "sample-baker/sourdough-chart"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "release"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "release"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "block": {
+                    "type": "text_join",
+                    "inputs": {
+                      "ADD0": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "A release was published: "
+                          }
+                        }
+                      },
+                      "ADD1": {
+                        "block": {
+                          "type": "rb_msg_value"
+                        }
+                      },
+                      "ADD2": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": ". Search for the pull requests merged in that project since the previous release (search_github with is:pr is:merged and the project), and read the ones whose titles aren't clear. Draft release notes grouped into Added, Changed and Fixed: one line each, in plain language a user would understand, with the pull request's link. Leave out internal changes (tests, CI, refactoring) unless they change behaviour."
+                          }
+                        }
+                      }
+                    },
+                    "extraState": {
+                      "itemCount": 3
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 12
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "github"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_reflect",
+                  "inputs": {
+                    "CRITERIA": {
+                      "shadow": {
+                        "type": "rb_longtext",
+                        "fields": {
+                          "TEXT": "every line is user-facing language; every line has its pull request link; nothing invented"
+                        }
+                      }
+                    },
+                    "ROUNDS": {
+                      "shadow": {
+                        "type": "math_number",
+                        "fields": {
+                          "NUM": 2
+                        }
+                      }
+                    },
+                    "FIX": {
+                      "block": {
+                        "type": "rb_revise"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_file_save",
+                      "fields": {
+                        "EXT": "md"
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_draft"
+                          }
+                        },
+                        "NAME": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "release-notes"
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_email_send",
+                          "inputs": {
+                            "TO": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "you@example.com"
+                                }
+                              }
+                            },
+                            "SUBJECT": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "Draft release notes"
+                                }
+                              }
+                            },
+                            "TEXT": {
+                              "block": {
+                                "type": "rb_draft"
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_result"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

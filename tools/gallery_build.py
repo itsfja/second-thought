@@ -620,6 +620,65 @@ add(program(
         B("rb_finish_with", TEXT=v.get("window")))], v))
 
 
+# ===== Batch 3: programs that use the GitHub listeners (#145) ===========================================================
+# GitHub: #149
+v = Vars("project")
+add(program(
+    "issue-triage-bot", "Issue triage bot", "github",
+    "When someone opens an issue, it labels it from the project's own labels, links a likely duplicate in a comment, and "
+    "messages you on Telegram if it looks urgent.",
+    "Change the project in the hat. Labelling and commenting ask first; use the no-asking tool once you trust it.",
+    start_and(hat("rb_gh_issue_when", {"REPO": "sample-baker/sourdough-chart"}), msg="triage", value=B("rb_event", {"KEY": "text"}),
+              test="Type an issue to test with, like 'Chart is blank on Safari: nothing shows in the chart area'") + [receive(
+        "triage",
+        v.set("project", B("text", {"TEXT": "sample-baker/sourdough-chart"})),
+        agent(join("A new issue was opened in ", v.get("project"), ":\n", B("rb_msg_value"), "\n\nFind its number if it isn't given "
+                   "(search_github for the title). Add one or two fitting labels, using only labels the project has. Search the "
+                   "project's open issues for a likely duplicate; if there's a clear one, comment linking it. Finally answer in one "
+                   "line: URGENT if it describes data loss, a security problem or the app not working for everyone, otherwise ROUTINE, "
+                   "then a short reason."), ["github", "github_act"], steps=10),
+        if_(B("rb_contains", A=B("rb_draft"), B="URGENT"), B("rb_tg_send", TEXT=join("🚨 Urgent issue: ", B("rb_msg_value"), "\n", B("rb_draft")))),
+        B("rb_result"))], v))
+
+# GitHub: #150
+add(program(
+    "release-notes-writer", "Release notes writer", "github",
+    "When a release is published, gathers the pull requests merged since the release before it and drafts changelog-ready "
+    "notes grouped into Added, Changed and Fixed. Saved as a file and emailed to you.",
+    "Change the project in the hat. It drafts; you paste. It never edits the release itself.",
+    start_and(hat("rb_gh_release_when", {"REPO": "sample-baker/sourdough-chart"}), msg="release", value=B("rb_event", {"KEY": "text"}),
+              test="Type a release to test with, like 'sample-baker/sourdough-chart v1.4.0, previous v1.3.2'") + [receive(
+        "release",
+        agent(join("A release was published: ", B("rb_msg_value"), ". Search for the pull requests merged in that project since the "
+                   "previous release (search_github with is:pr is:merged and the project), and read the ones whose titles aren't clear. "
+                   "Draft release notes grouped into Added, Changed and Fixed: one line each, in plain language a user would understand, "
+                   "with the pull request's link. Leave out internal changes (tests, CI, refactoring) unless they change behaviour."),
+              ["github"], steps=12),
+        B("rb_reflect", CRITERIA=L("every line is user-facing language; every line has its pull request link; nothing invented"),
+          ROUNDS=2, FIX=B("rb_revise")),
+        B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="release-notes"),
+        email_me("Draft release notes", B("rb_draft")),
+        B("rb_result"))]))
+
+# Coding: #166
+add(program(
+    "first-issue-fixer", "First-issue fixer", "coding",
+    "When an issue is opened that's trivial to fix from the text alone (a typo, a broken link, a missing line of docs), it "
+    "reads the file and comments with a suggested patch. It can't run code, so it leaves anything else alone.",
+    "Change the project in the hat. Commenting asks first. It never opens pull requests or changes the code.",
+    start_and(hat("rb_gh_issue_when", {"REPO": "sample-baker/sourdough-chart"}), msg="issue", value=B("rb_event", {"KEY": "text"}),
+              test="Type an issue to test with, like 'sample-baker/sourdough-chart #43: Typo in README: fermantation'") + [receive(
+        "issue",
+        if_(B("rb_ask_yesno", TEXT=join("Can this GitHub issue be fixed by changing a few lines of text (a typo, a broken link, a "
+                                        "missing sentence in the docs), with no need to run code?\n\n", B("rb_msg_value"))),
+            chain(agent(join("This issue looks trivial to fix:\n", B("rb_msg_value"), "\n\nFind the file it's about (read_github_file, "
+                             "starting from the top folder) and the exact lines. Write the fix as a small unified diff. Post it as a "
+                             "comment on the issue, starting 'Suggested fix (not tested):'. If, once you've read the file, it isn't "
+                             "trivial after all, don't comment: just say why."), ["github", "github_act"], steps=8),
+                  B("rb_result")),
+            B("rb_finish_with", TEXT="Not a text-only fix, so left for a person.")))]))
+
+
 def main() -> int:
     bad = []
     for name, data in PROGRAMS:
