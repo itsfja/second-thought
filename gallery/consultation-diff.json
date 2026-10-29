@@ -1,0 +1,175 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "consultation-diff",
+  "gallery": {
+    "title": "Consultation changes",
+    "category": "news",
+    "description": "Choose two versions of a consultation or policy document. Claude lists what changed between them, in plain English, most important first, quoting both versions for each change.",
+    "tip": "Choose the older version first. Works with PDFs, Word files and text files.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_before",
+        "name": "before"
+      },
+      {
+        "id": "g_after",
+        "name": "after"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_say",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "Choose the older version first."
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_before"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_file_choose"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_after"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_file_choose"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_task",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "text_join",
+                                "inputs": {
+                                  "ADD0": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "List what changed between these two versions of a document: what was added, removed or reworded in a way that changes its meaning. Most important first. For each, quote the old and the new wording, then one plain sentence on what the change means. Leave out changes to layout, spelling and numbering.\n\nOLDER VERSION:\n"
+                                      }
+                                    }
+                                  },
+                                  "ADD1": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_before"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "ADD2": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "\n\nNEWER VERSION:\n"
+                                      }
+                                    }
+                                  },
+                                  "ADD3": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_after"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "extraState": {
+                                  "itemCount": 4
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_generate",
+                              "next": {
+                                "block": {
+                                  "type": "rb_reflect",
+                                  "inputs": {
+                                    "CRITERIA": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "every change quotes both versions word for word; nothing listed that didn't change; changes of meaning only; the most important first; plain English"
+                                        }
+                                      }
+                                    },
+                                    "ROUNDS": {
+                                      "shadow": {
+                                        "type": "math_number",
+                                        "fields": {
+                                          "NUM": 3
+                                        }
+                                      }
+                                    },
+                                    "FIX": {
+                                      "block": {
+                                        "type": "rb_revise"
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "rb_result"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}
