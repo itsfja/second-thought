@@ -560,7 +560,7 @@ async def new_feature_page_tests(pg):
     hats = [("rb_mqtt_when", {"TOPIC": "home/proofer/temperature"}, "mqtt", "27.4"), ("rb_webhook_when", {"PATH": "bake-done"}, "webhook", '"loaf": "rye"'),
             ("rb_email_when", {"CONTAINS": "flour"}, "email", "Subject: Your flour order has shipped"), ("rb_feed_when", {"URL": ""}, "feed", "nail varnish"),
             ("rb_folder_when", {"FOLDER": "drop"}, "folder", "Grandma's loaf"), ("rb_gh_when", {}, "github", "#41: Add rye flour curve"),
-            ("rb_gh_issue_when", {"REPO": "sample-baker/sourdough-chart"}, "github_issue", "#43: Typo in README"),
+            ("rb_gh_issue_when", {"REPO": "sample-baker/sourdough-chart"}, "github_issue", "sample-baker/sourdough-chart #"),  # the newest issue: earlier tests may open one
             ("rb_gh_release_when", {"REPO": "sample-baker/sourdough-chart"}, "github_release", "v1.4.0: Spelt curve and unit toggle"),
             ("rb_cal_when", {"N": 15}, "calendar", " at "), ("rb_discord_when", {"CONTAINS": "anything"}, "discord", "first rye loaf"),
             ("rb_slack_when", {"CONTAINS": "anything"}, "slack", "proving baskets"), ("rb_tg_when", {"CONTAINS": "anything"}, "telegram", "What should I bake"),
