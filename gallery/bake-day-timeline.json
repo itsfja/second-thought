@@ -4,6 +4,7 @@
   "name": "bake-day-timeline",
   "gallery": {
     "title": "Bake-day timeline",
+    "category": "home",
     "description": "Say when you want the bread out of the oven, and Claude works backwards to a timeline for the whole bake, from feeding the starter to cooling, then checks the times add up.",
     "tip": "Change the recipe in the blue block to your own: a longer cold retard, an enriched dough, two loaves.",
     "author": "itsfja",

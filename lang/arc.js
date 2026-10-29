@@ -302,7 +302,6 @@
 "Home Assistant: house health":"Home Assistant: בריאות ביתא",
 "Home Assistant: homelab":"Home Assistant: בית מחשבין",
 "Home Assistant: alerts and voice":"Home Assistant: אזהרין וקלא",
-"Community":"כנישתא",
 "Added to result":"אתוסף לפירא",
 "Added to “{name}”":"אתוסף ל-\"{name}\"",
 "Agent":"שליחא",
@@ -837,7 +836,14 @@
 "{title} (shared by {author})":"{title} (אתפליג על ידי {author})",
 "GitHub issue opened in {repo}: #{n}":"issue ב-GitHub אתפתח ב-{repo}: #{n}",
 "GitHub labels on {repo} #{n}":"רשמי GitHub על {repo} #{n}",
-"comment on GitHub, and open and label issues":"למכתב תגובתא ב-GitHub, ולמפתח ולמרשם issues"
+"comment on GitHub, and open and label issues":"למכתב תגובתא ב-GitHub, ולמפתח ולמרשם issues",
+"Community: GitHub":"כנישתא: GitHub",
+"Community: code and data":"כנישתא: כתבא וידיעתא",
+"Community: news":"כנישתא: שמועתא",
+"Community: money":"כנישתא: כספא",
+"Community: calendar and email":"כנישתא: חושבן יומיא ו-email",
+"Community: home and baking":"כנישתא: ביתא ואפייתא",
+"Community: odds and ends":"כנישתא: כל מדעם"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

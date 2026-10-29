@@ -1,0 +1,266 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "morning-briefing",
+  "gallery": {
+    "title": "Morning briefing",
+    "category": "news",
+    "description": "One email each morning: what you need to know today, from your news feeds and a sourced check with Perplexity on anything big overnight, under 300 words.",
+    "tip": "Put your feeds in second-thought.ini (feeds = …). On the page, Claude stands in for Perplexity and the feeds are samples.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_news",
+        "name": "news"
+      },
+      {
+        "id": "g_overnight",
+        "name": "overnight"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "briefing"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 7,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "briefing"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "briefing"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_news"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_feed_news",
+                    "inputs": {
+                      "URL": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": ""
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_with_model",
+                  "fields": {
+                    "TIER": "perplexity-default"
+                  },
+                  "inputs": {
+                    "DO": {
+                      "block": {
+                        "type": "variables_set",
+                        "fields": {
+                          "VAR": {
+                            "id": "g_overnight"
+                          }
+                        },
+                        "inputs": {
+                          "VALUE": {
+                            "block": {
+                              "type": "rb_ask",
+                              "inputs": {
+                                "TEXT": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "In five short bullet points, each with its source, the most important things that happened overnight that someone in the UK should know this morning: world, UK, money, weather."
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_task",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "Write \"What you need to know today\": a short, calm briefing from these feed items and this overnight check. Most important first, one or two lines each, with its link or source.\n\nFeeds:\n"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_news"
+                                    }
+                                  }
+                                }
+                              },
+                              "ADD2": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "\n\nOvernight:\n"
+                                  }
+                                }
+                              },
+                              "ADD3": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_overnight"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 4
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_generate",
+                          "next": {
+                            "block": {
+                              "type": "rb_reflect",
+                              "inputs": {
+                                "CRITERIA": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "under 300 words; nothing said twice; every item has its link or source; plain text"
+                                    }
+                                  }
+                                },
+                                "ROUNDS": {
+                                  "shadow": {
+                                    "type": "math_number",
+                                    "fields": {
+                                      "NUM": 2
+                                    }
+                                  }
+                                },
+                                "FIX": {
+                                  "block": {
+                                    "type": "rb_revise"
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_email_send",
+                                  "inputs": {
+                                    "TO": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "you@example.com"
+                                        }
+                                      }
+                                    },
+                                    "SUBJECT": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "What you need to know today"
+                                        }
+                                      }
+                                    },
+                                    "TEXT": {
+                                      "block": {
+                                        "type": "rb_draft"
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "rb_result"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

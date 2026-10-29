@@ -1,0 +1,156 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "meeting-fairy",
+  "gallery": {
+    "title": "Meeting fairy",
+    "category": "calendar",
+    "description": "The evening before, reads tomorrow's calendar, finds recent emails with the people you're meeting, and sends you a one-page brief for each meeting: what's open between you first.",
+    "tip": "Change 19:00 to when you plan tomorrow. Meetings with nobody else in them are skipped.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "brief"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 19,
+            "MINUTE": 0,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "brief"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "brief"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Look at tomorrow's calendar. For each meeting with other people, search my email from the last 30 days for recent messages from or about them and the topic, and read the useful ones. Write a brief for each meeting: who, when and where; what's open between us (questions, promises, decisions waiting) first; useful background; then two questions I should ask. Check each with review_text against: under one page; open items first; nothing invented."
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 16
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "calendar"
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "email"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_agent_builtin",
+                            "fields": {
+                              "KIND": "review"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_email_send",
+                  "inputs": {
+                    "TO": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "you@example.com"
+                        }
+                      }
+                    },
+                    "SUBJECT": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "Tomorrow's meetings"
+                        }
+                      }
+                    },
+                    "TEXT": {
+                      "block": {
+                        "type": "rb_draft"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

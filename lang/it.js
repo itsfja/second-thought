@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant: salute della casa",
 "Home Assistant: homelab":"Home Assistant: homelab",
 "Home Assistant: alerts and voice":"Home Assistant: avvisi e voce",
-"Community":"Community",
 "Added to result":"Aggiunto al risultato",
 "Added to “{name}”":"Aggiunto a «{name}»",
 "Agent":"Agente",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (condiviso da {author})",
 "GitHub issue opened in {repo}: #{n}":"Issue GitHub aperta in {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"Etichette GitHub su {repo} #{n}",
-"comment on GitHub, and open and label issues":"commentare su GitHub, e aprire ed etichettare issue"
+"comment on GitHub, and open and label issues":"commentare su GitHub, e aprire ed etichettare issue",
+"Community: GitHub":"Community: GitHub",
+"Community: code and data":"Community: codice e dati",
+"Community: news":"Community: notizie",
+"Community: money":"Community: denaro",
+"Community: calendar and email":"Community: calendario ed email",
+"Community: home and baking":"Community: casa e panificazione",
+"Community: odds and ends":"Community: varie"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},

@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant: hele of the hous",
 "Home Assistant: homelab":"Home Assistant: werkhous at home",
 "Home Assistant: alerts and voice":"Home Assistant: warnynges and vois",
-"Community":"Felaweshipe",
 "Added to result":"Added to the effect",
 "Added to “{name}”":"Added to “{name}”",
 "Agent":"Procuratour",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (yshared by {author})",
 "GitHub issue opened in {repo}: #{n}":"GitHub issue opened in {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub markes on {repo} #{n}",
-"comment on GitHub, and open and label issues":"comente on GitHub, and open and marke issues"
+"comment on GitHub, and open and label issues":"comente on GitHub, and open and marke issues",
+"Community: GitHub":"Felaweshipe: GitHub",
+"Community: code and data":"Felaweshipe: code and matere",
+"Community: news":"Felaweshipe: tydinges",
+"Community: money":"Felaweshipe: moneye",
+"Community: calendar and email":"Felaweshipe: kalender and email",
+"Community: home and baking":"Felaweshipe: hous and bakynge",
+"Community: odds and ends":"Felaweshipe: odde thynges"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},

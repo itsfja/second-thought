@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant: huses hælu",
 "Home Assistant: homelab":"Home Assistant: hamweorcstow",
 "Home Assistant: alerts and voice":"Home Assistant: warnunga and stefn",
-"Community":"Gemanscipe",
 "Added to result":"Geiht to wæstme",
 "Added to “{name}”":"Geiht to “{name}”",
 "Agent":"Ærendraca",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (gedæled fram {author})",
 "GitHub issue opened in {repo}: #{n}":"GitHub issue geopenod on {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub mearca on {repo} #{n}",
-"comment on GitHub, and open and label issues":"cwide writan on GitHub, and issues openian and mearcian"
+"comment on GitHub, and open and label issues":"cwide writan on GitHub, and issues openian and mearcian",
+"Community: GitHub":"Gemanscipe: GitHub",
+"Community: code and data":"Gemanscipe: code and cyþþ",
+"Community: news":"Gemanscipe: spell",
+"Community: money":"Gemanscipe: feoh",
+"Community: calendar and email":"Gemanscipe: tidboc and email",
+"Community: home and baking":"Gemanscipe: ham and bacung",
+"Community: odds and ends":"Gemanscipe: gehwæt"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},

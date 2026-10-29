@@ -302,7 +302,6 @@
 "Home Assistant: house health":"Home Assistant: गृहस्वास्थ्यम्",
 "Home Assistant: homelab":"Home Assistant: गृहप्रयोगशाला",
 "Home Assistant: alerts and voice":"Home Assistant: सूचनाः वाणी च",
-"Community":"समुदायः",
 "Added to result":"परिणामे योजितम्",
 "Added to “{name}”":"“{name}” मध्ये योजितम्",
 "Agent":"प्रतिनिधिः",
@@ -837,7 +836,14 @@
 "{title} (shared by {author})":"{title} ({author} इत्यनेन विभक्तः)",
 "GitHub issue opened in {repo}: #{n}":"{repo} इत्यत्र GitHub issue उद्घाटितम्: #{n}",
 "GitHub labels on {repo} #{n}":"{repo} #{n} उपरि GitHub-चिह्नानि",
-"comment on GitHub, and open and label issues":"GitHub उपरि टिप्पणीं कर्तुम्, issues उद्घाटयितुं चिह्नयितुं च"
+"comment on GitHub, and open and label issues":"GitHub उपरि टिप्पणीं कर्तुम्, issues उद्घाटयितुं चिह्नयितुं च",
+"Community: GitHub":"समुदायः: GitHub",
+"Community: code and data":"समुदायः: कूटं दत्तांशः च",
+"Community: news":"समुदायः: वार्ताः",
+"Community: money":"समुदायः: धनम्",
+"Community: calendar and email":"समुदायः: दिनदर्शिका ईपत्रं च",
+"Community: home and baking":"समुदायः: गृहं पाकः च",
+"Community: odds and ends":"समुदायः: विविधम्"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},

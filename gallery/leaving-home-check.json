@@ -1,0 +1,331 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "leaving-home-check",
+  "gallery": {
+    "title": "Leaving-home check",
+    "category": "home",
+    "description": "Your phone calls it as you leave home. If any door or window is still open, the house says so on the kitchen speaker and you get a notification. If everything's shut, it stays quiet.",
+    "tip": "In the Home Assistant app, make an automation for leaving home that calls this program's /leaving address (see Web requests in the README). Change the speaker to yours.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_openings",
+        "name": "openings"
+      },
+      {
+        "id": "g_warning",
+        "name": "warning"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "leaving"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_webhook_when",
+          "fields": {
+            "PATH": "leaving"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "leaving"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": ""
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "leaving"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_openings"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "text_join",
+                    "inputs": {
+                      "ADD0": {
+                        "block": {
+                          "type": "rb_ha_summary",
+                          "inputs": {
+                            "TEXT": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "door"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "ADD1": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "\n"
+                          }
+                        }
+                      },
+                      "ADD2": {
+                        "block": {
+                          "type": "rb_ha_summary",
+                          "inputs": {
+                            "TEXT": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "window"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "extraState": {
+                      "itemCount": 3
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "controls_if",
+                  "inputs": {
+                    "IF0": {
+                      "block": {
+                        "type": "rb_ask_yesno",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "Do these readings show any door or window open (on, or open), not counting the doorbell or anything unavailable?\n\n"
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_openings"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "DO0": {
+                      "block": {
+                        "type": "variables_set",
+                        "fields": {
+                          "VAR": {
+                            "id": "g_warning"
+                          }
+                        },
+                        "inputs": {
+                          "VALUE": {
+                            "block": {
+                              "type": "rb_ask",
+                              "inputs": {
+                                "TEXT": {
+                                  "block": {
+                                    "type": "text_join",
+                                    "inputs": {
+                                      "ADD0": {
+                                        "shadow": {
+                                          "type": "rb_longtext",
+                                          "fields": {
+                                            "TEXT": "In one short spoken sentence, warn someone leaving the house which doors or windows are still open. Use their everyday names.\n\n"
+                                          }
+                                        }
+                                      },
+                                      "ADD1": {
+                                        "block": {
+                                          "type": "variables_get",
+                                          "fields": {
+                                            "VAR": {
+                                              "id": "g_openings"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "extraState": {
+                                      "itemCount": 2
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_ha_speak",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_warning"
+                                    }
+                                  }
+                                }
+                              },
+                              "PLAYER": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "media_player.kitchen_speaker"
+                                  }
+                                }
+                              }
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_ha_notify",
+                                "inputs": {
+                                  "TARGET": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "persistent_notification"
+                                      }
+                                    }
+                                  },
+                                  "TEXT": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_warning"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "next": {
+                                  "block": {
+                                    "type": "rb_finish_with",
+                                    "inputs": {
+                                      "TEXT": {
+                                        "block": {
+                                          "type": "variables_get",
+                                          "fields": {
+                                            "VAR": {
+                                              "id": "g_warning"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "ELSE": {
+                      "block": {
+                        "type": "rb_finish_with",
+                        "inputs": {
+                          "TEXT": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": "Everything's shut. Nothing said."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "extraState": {
+                    "hasElse": true
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

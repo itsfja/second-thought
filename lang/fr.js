@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant : santé de la maison",
 "Home Assistant: homelab":"Home Assistant : homelab",
 "Home Assistant: alerts and voice":"Home Assistant : alertes et voix",
-"Community":"Communauté",
 "Added to result":"Ajouté au résultat",
 "Added to “{name}”":"Ajouté à « {name} »",
 "Agent":"Agent",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (partagé par {author})",
 "GitHub issue opened in {repo}: #{n}":"Issue GitHub ouverte dans {repo} : #{n}",
 "GitHub labels on {repo} #{n}":"Étiquettes GitHub sur {repo} #{n}",
-"comment on GitHub, and open and label issues":"commenter sur GitHub, et ouvrir et étiqueter des issues"
+"comment on GitHub, and open and label issues":"commenter sur GitHub, et ouvrir et étiqueter des issues",
+"Community: GitHub":"Communauté : GitHub",
+"Community: code and data":"Communauté : code et données",
+"Community: news":"Communauté : actualités",
+"Community: money":"Communauté : argent",
+"Community: calendar and email":"Communauté : calendrier et e-mail",
+"Community: home and baking":"Communauté : maison et boulangerie",
+"Community: odds and ends":"Communauté : divers"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},

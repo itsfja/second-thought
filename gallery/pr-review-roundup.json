@@ -1,0 +1,148 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "pr-review-roundup",
+  "gallery": {
+    "title": "PR review roundup",
+    "category": "github",
+    "description": "Each weekday morning, the open pull requests across your GitHub projects, each with a verdict: ready to merge, or needs work, and why in a sentence. Emailed to you.",
+    "tip": "Change 7:30 to when you start work, and the address in the email block to yours.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "roundup"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 7,
+            "MINUTE": 30,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "roundup"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "roundup"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "List my GitHub projects, then the open pull requests in each that changed in the last two weeks, and read each one. Give each a verdict: READY TO MERGE or NEEDS WORK, with one sentence saying why (tests, description, size, anything risky). Group them by project, ready ones first. Before you finish, check your verdicts with review_text against: every verdict names something in the pull request itself; nothing is invented."
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 15
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "github"
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "review"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_email_send",
+                  "inputs": {
+                    "TO": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "you@example.com"
+                        }
+                      }
+                    },
+                    "SUBJECT": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "Pull requests: ready or not"
+                        }
+                      }
+                    },
+                    "TEXT": {
+                      "block": {
+                        "type": "rb_draft"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

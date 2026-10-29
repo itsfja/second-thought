@@ -777,7 +777,6 @@
   "Home Assistant: house health": "Home Assistant：家の健康",
   "Home Assistant: homelab": "Home Assistant：ホームラボ",
   "Home Assistant: alerts and voice": "Home Assistant：通知と音声",
-  "Community": "コミュニティ",
   "Added to result": "結果に追加",
   "Added to “{name}”": "「{name}」に追加",
   "Agent": "エージェント",
@@ -1312,7 +1311,14 @@
   "{title} (shared by {author})": "{title}（{author} さんが共有）",
   "GitHub issue opened in {repo}: #{n}": "{repo} に GitHub Issue を作成：#{n}",
   "GitHub labels on {repo} #{n}": "{repo} #{n} の GitHub ラベル",
-  "comment on GitHub, and open and label issues": "GitHub にコメントし、Issue を作成してラベルを付ける"
+  "comment on GitHub, and open and label issues": "GitHub にコメントし、Issue を作成してラベルを付ける",
+  "Community: GitHub": "コミュニティ：GitHub",
+  "Community: code and data": "コミュニティ：コードとデータ",
+  "Community: news": "コミュニティ：ニュース",
+  "Community: money": "コミュニティ：お金",
+  "Community: calendar and email": "コミュニティ：カレンダーとメール",
+  "Community: home and baking": "コミュニティ：家とパン作り",
+  "Community: odds and ends": "コミュニティ：その他"
  },
  "examples": {
   "review": {

@@ -302,7 +302,6 @@
 "Home Assistant: house health":"Home Assistant: בריאות הבית",
 "Home Assistant: homelab":"Home Assistant: מעבדה ביתית",
 "Home Assistant: alerts and voice":"Home Assistant: התראות וקול",
-"Community":"קהילה",
 "Added to result":"נוסף לתוצאה",
 "Added to “{name}”":"נוסף ל-\"{name}\"",
 "Agent":"סוכן",
@@ -837,7 +836,14 @@
 "{title} (shared by {author})":"{title} (שותפה על ידי {author})",
 "GitHub issue opened in {repo}: #{n}":"נפתח issue ב-GitHub ב-{repo}: #{n}",
 "GitHub labels on {repo} #{n}":"תוויות GitHub על {repo} #{n}",
-"comment on GitHub, and open and label issues":"להגיב ב-GitHub, ולפתוח ולתייג issues"
+"comment on GitHub, and open and label issues":"להגיב ב-GitHub, ולפתוח ולתייג issues",
+"Community: GitHub":"קהילה: GitHub",
+"Community: code and data":"קהילה: קוד ונתונים",
+"Community: news":"קהילה: חדשות",
+"Community: money":"קהילה: כסף",
+"Community: calendar and email":"קהילה: לוח שנה ודוא״ל",
+"Community: home and baking":"קהילה: בית ואפייה",
+"Community: odds and ends":"קהילה: שונות"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

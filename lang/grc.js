@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant· ὑγεία τοῦ οἴκου",
 "Home Assistant: homelab":"Home Assistant· ἐργαστήριον οἰκεῖον",
 "Home Assistant: alerts and voice":"Home Assistant· μηνύματα καὶ φωνή",
-"Community":"Κοινωνία",
 "Added to result":"Προσετέθη τῷ ἀποτελέσματι",
 "Added to “{name}”":"Προσετέθη τῷ «{name}»",
 "Agent":"Ἐπίτροπος",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (μεταδοθὲν ὑπὸ {author})",
 "GitHub issue opened in {repo}: #{n}":"Ἠνοίχθη issue ἐν GitHub ἐν {repo}· #{n}",
 "GitHub labels on {repo} #{n}":"Ἐπιγραφαὶ GitHub ἐπὶ {repo} #{n}",
-"comment on GitHub, and open and label issues":"σχολιάζειν ἐν GitHub, καὶ issues ἀνοίγειν καὶ ἐπιγράφειν"
+"comment on GitHub, and open and label issues":"σχολιάζειν ἐν GitHub, καὶ issues ἀνοίγειν καὶ ἐπιγράφειν",
+"Community: GitHub":"Κοινωνία· GitHub",
+"Community: code and data":"Κοινωνία· κῶδιξ καὶ δεδομένα",
+"Community: news":"Κοινωνία· ἀγγελίαι",
+"Community: money":"Κοινωνία· χρήματα",
+"Community: calendar and email":"Κοινωνία· ἡμερολόγιον καὶ email",
+"Community: home and baking":"Κοινωνία· οἶκος καὶ ἀρτοποιία",
+"Community: odds and ends":"Κοινωνία· παντοδαπά"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

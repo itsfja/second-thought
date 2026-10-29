@@ -301,7 +301,6 @@
 "Home Assistant: house health":"Home Assistant: heilsa hússins",
 "Home Assistant: homelab":"Home Assistant: heimavélastofa",
 "Home Assistant: alerts and voice":"Home Assistant: viðvaranir ok rǫdd",
-"Community":"Samfélag",
 "Added to result":"Bætt við úrslit",
 "Added to “{name}”":"Bætt við „{name}“",
 "Agent":"Erindreki",
@@ -836,7 +835,14 @@
 "{title} (shared by {author})":"{title} (deilt af {author})",
 "GitHub issue opened in {repo}: #{n}":"GitHub-issue opnat í {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub-merki á {repo} #{n}",
-"comment on GitHub, and open and label issues":"rœða á GitHub, ok opna ok merkja issues"
+"comment on GitHub, and open and label issues":"rœða á GitHub, ok opna ok merkja issues",
+"Community: GitHub":"Samfélag: GitHub",
+"Community: code and data":"Samfélag: kóði ok gǫgn",
+"Community: news":"Samfélag: tíðindi",
+"Community: money":"Samfélag: fé",
+"Community: calendar and email":"Samfélag: rím ok email",
+"Community: home and baking":"Samfélag: heimili ok bakstr",
+"Community: odds and ends":"Samfélag: ýmislegt"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
