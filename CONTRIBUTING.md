@@ -71,6 +71,14 @@ CI runs the unit tests on Python 3.9 to 3.13 and Windows, and the end-to-end sui
 
 If you have API keys, `python tools/smoke_test.py` checks the real services (it costs a few pence).
 
+`python tools/smoke_test.py gallery` runs every community gallery program once against the real models, after
+`tests/setup.sh`. Only the models are real: every connection goes to the stand-in services, and the folders the
+programs look in are made-up ones, so nothing real is read or sent. Only the model keys in your settings are passed
+on. A program that needs a service you have no key for is skipped. Each program stops at 20,000 tokens
+(`--budget`), and no new one starts after 400,000 (`--total`). With Claude alone that caps the cost at a few pounds for the
+whole gallery. The report goes to `smoke-gallery.md`. Run it before a release, or after changing a gallery program;
+CI never runs it.
+
 ## Common changes
 
 - **A translation, or a new language:** see [Languages](README.md#languages) in the README. Copy an existing

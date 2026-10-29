@@ -24,7 +24,7 @@ from e2e.page import page_tests  # noqa: E402
 from e2e.python_export import python_tests  # noqa: E402
 from e2e.sources import example_ini_check, package_check  # noqa: E402
 from e2e.i18n import i18n_tests  # noqa: E402
-from e2e.gallery import gallery_tests  # noqa: E402
+from e2e.gallery import gallery_smoke_tests, gallery_tests  # noqa: E402
 
 
 AREAS = ("sources", "page", "i18n", "gallery", "python")
@@ -51,6 +51,7 @@ def main():
         asyncio.run(i18n_tests())
     if "gallery" in areas:
         asyncio.run(gallery_tests())
+        gallery_smoke_tests()
     if "python" in areas:
         python_tests(codes)
     print()

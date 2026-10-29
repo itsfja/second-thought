@@ -8,6 +8,7 @@ and a real tool call, and which JSON mode every other service accepts.
 
     python tools/smoke_test.py              # every service with a key
     python tools/smoke_test.py claude       # only the services whose names contain these words
+    python tools/smoke_test.py gallery      # run every gallery program once (see tools/smoke_gallery.py)
 
 Keys come from the environment or a second-thought.ini (in this folder, the current folder or your home folder),
 exactly as an exported program finds them. Each service gets a few short questions, so the whole run costs a few
@@ -237,4 +238,8 @@ async def main(only):
 
 
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["gallery"]:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import smoke_gallery
+        sys.exit(smoke_gallery.main(sys.argv[2:], PROVIDERS))
     sys.exit(asyncio.run(main([a.lower() for a in sys.argv[1:]])))
