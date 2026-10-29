@@ -1,0 +1,32 @@
+name: Bug
+description: Something on the page or in an exported program doesn't work as it should.
+labels: [bug]
+body:
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      options:
+        - On the page
+        - In an exported Python program
+        - Both
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+      description: The example or program you ran, and the steps to make it happen again. A saved block file (.json) helps a lot.
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: For an exported program, the output of --version and --doctor
+      description: "`python my-program.py --version` and `python my-program.py --doctor`. Check nothing private is in it."
+      render: text
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, or Python version and operating system
+      placeholder: Chrome 141 / Python 3.12 on Windows 11

@@ -439,6 +439,7 @@ A program doesn't update itself. To give it a newer runtime, import it on the pa
 | `tests/` | Unit tests (`tests/unit/`) and the end-to-end suite (`tests/run_tests.py`). |
 | `docs/ladybird-book.md` | The picture book. |
 | `CHANGELOG.md` | What changed in each runtime version. |
+| `CONTRIBUTING.md`, `SECURITY.md` | How to contribute; how to report a security problem, and what an exported program can and can't do. |
 
 The runtime's modules, in the order `tools/sync.py` joins them:
 
@@ -458,6 +459,8 @@ Each module starts with the imports it needs from the others. When `tools/sync.p
 ---
 
 ## Development and tests
+
+[CONTRIBUTING.md](CONTRIBUTING.md) has the rules for a pull request, and [SECURITY.md](SECURITY.md) how to report a security problem and what limits an exported program.
 
 If you change anything in `python/second_thought/`, `i18n/`, `gallery/`, `prompts/convert-guide.txt` or the sample files, run `python tools/sync.py` so `python/runtime.py` and the page pick up your changes. `python tools/sync.py --check` fails if either is out of date, and CI runs it.
 

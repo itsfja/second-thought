@@ -1,0 +1,16 @@
+name: Idea
+description: A new block, agent tool, connection, model service or example.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What you'd like it to do
+      description: What a program could do with it, ideally with an example of the program you'd build.
+    validations:
+      required: true
+  - type: textarea
+    id: acts
+    attributes:
+      label: Does it read, send or change anything?
+      description: Anything a block reads, sends or changes is declared in CAPABILITIES, and acting ones ask before they run. Say which this would be.
