@@ -1,0 +1,265 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "family-archivist",
+  "gallery": {
+    "title": "Family archivist",
+    "category": "home",
+    "description": "Watches a photos folder. For each new picture it notes the date, place and what's happening, groups it with photos from the same event, and drafts captions, asking before it writes anything. Every photo is sent to the model.",
+    "tip": "To keep photos at home, choose Llama in the Model menu. It describes scenes, never who people are.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_about",
+        "name": "about"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_folder_when",
+          "fields": {
+            "FOLDER": "~/Pictures/Family"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "photo"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "picture"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "photo"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_img_choose"
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "photo"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_about"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_img_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "Describe this family photo in one line for an album: the likely date or season, the place if it's obvious, and what's happening. Never say who anyone is, or guess names from faces."
+                          }
+                        }
+                      },
+                      "IMG": {
+                        "block": {
+                          "type": "rb_msg_value"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_mem_add",
+                  "fields": {
+                    "KIND": "permanent"
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "text_join",
+                        "inputs": {
+                          "ADD0": {
+                            "block": {
+                              "type": "rb_now",
+                              "fields": {
+                                "PART": "date"
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": ": "
+                              }
+                            }
+                          },
+                          "ADD2": {
+                            "block": {
+                              "type": "variables_get",
+                              "fields": {
+                                "VAR": {
+                                  "id": "g_about"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "extraState": {
+                          "itemCount": 3
+                        }
+                      }
+                    },
+                    "NAME": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "photo notes"
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_task",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "These are notes on recent family photos, one per line, newest last:\n"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "rb_mem_get",
+                                  "inputs": {
+                                    "NAME": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "photo notes"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "ADD2": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "\n\nGroup them into events (photos from the same day and place go together), give each event a short title, and write a warm one-line caption for the newest photo."
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 3
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_generate",
+                          "next": {
+                            "block": {
+                              "type": "rb_ask_first",
+                              "fields": {
+                                "WHAT": "files"
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_file_save",
+                                  "fields": {
+                                    "EXT": "md"
+                                  },
+                                  "inputs": {
+                                    "VALUE": {
+                                      "block": {
+                                        "type": "rb_draft"
+                                      }
+                                    },
+                                    "NAME": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "album-captions"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "rb_result"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

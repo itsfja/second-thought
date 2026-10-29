@@ -720,6 +720,45 @@ add(program(
          B("rb_finish_with", TEXT=v.get("summary")))], v))
 
 
+# ===== Programs that use folder pictures and the setup check (#146, #147) ==============================================
+# Odds and ends: #175
+v = Vars("report")
+add(program(
+    "second-thought-doctor", "Second Thought doctor", "odds",
+    "Once a week, runs the same checks as --doctor on your keys and connections and emails you the report if anything needs "
+    "fixing, before a program finds out the hard way.",
+    "Point it at the second-thought.ini in your home folder, so it checks the keys every program shares. Only runs in exported Python.",
+    start_and(msg="checkup") + [on_day("Sunday", 8, 0, "checkup"), receive(
+        "checkup",
+        v.set("report", B("rb_setup_check")),
+        if_(B("rb_contains", A=v.get("report"), B="FAIL"),
+            chain(email_me("Second Thought: something to fix", v.get("report")), B("rb_finish_with", TEXT=v.get("report"))),
+            B("rb_finish_with", TEXT=join("All well.\n\n", v.get("report")))))], v))
+
+# Home: #178
+v = Vars("about")
+add(program(
+    "family-archivist", "Family archivist", "home",
+    "Watches a photos folder. For each new picture it notes the date, place and what's happening, groups it with photos from the "
+    "same event, and drafts captions, asking before it writes anything. Every photo is sent to the model.",
+    "To keep photos at home, choose Llama in the Model menu. It describes scenes, never who people are.",
+    [chain(hat("rb_folder_when", {"FOLDER": "~/Pictures/Family"}), B("rb_broadcast_with_wait", MSG="photo", VALUE=B("rb_event", {"KEY": "picture"}))),
+     chain(hat("rb_start"), B("rb_broadcast_with_wait", MSG="photo", VALUE=B("rb_img_choose"))),
+     receive(
+         "photo",
+         v.set("about", B("rb_img_ask", TEXT=L(
+             "Describe this family photo in one line for an album: the likely date or season, the place if it's obvious, and "
+             "what's happening. Never say who anyone is, or guess names from faces."), IMG=B("rb_msg_value"))),
+         B("rb_mem_add", {"KIND": "permanent"}, VALUE=join(B("rb_now", {"PART": "date"}), ": ", v.get("about")), NAME="photo notes"),
+         B("rb_task", TEXT=join("These are notes on recent family photos, one per line, newest last:\n", B("rb_mem_get", NAME="photo notes"),
+                                "\n\nGroup them into events (photos from the same day and place go together), give each event a short "
+                                "title, and write a warm one-line caption for the newest photo.")),
+         B("rb_generate"),
+         B("rb_ask_first", {"WHAT": "files"}),
+         B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="album-captions"),
+         B("rb_result"))], v))
+
+
 def main() -> int:
     bad = []
     for name, data in PROGRAMS:
