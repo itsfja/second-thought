@@ -848,7 +848,14 @@
 "Community: home and baking":"समुदायः: गृहं पाकः च",
 "Community: odds and ends":"समुदायः: विविधम्",
 "look at the files in a folder, and watch it for new ones":"कोशे सञ्चिकाः द्रष्टुं, नूतनाभ्यः तं निरीक्षितुं च",
-"The setup check only runs in exported Python: export this program and run it there to see the report.":"सज्जतापरीक्षा केवलं निर्यातिते Python मध्ये चलति: इमं कार्यक्रमं निर्यात्य तत्र चालयतु प्रतिवेदनं द्रष्टुम्।"
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"सज्जतापरीक्षा केवलं निर्यातिते Python मध्ये चलति: इमं कार्यक्रमं निर्यात्य तत्र चालयतु प्रतिवेदनं द्रष्टुम्।",
+"Save as GitHub Actions (.zip)":"GitHub Actions कृते रक्ष (.zip)",
+"it has no 'when it's' or 'every' script, so there's nothing to run on a schedule":"अस्य 'यदा वेला' 'प्रति' वा लेखः नास्ति, अतः कालयोजनया चालयितव्यं किमपि नास्ति",
+"it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times":"इदं किञ्चित् घटितुं प्रतीक्षते, यथा सन्देशाः, जालयाचनाः परिवर्तनानि वा, GitHub Actions तु इदं नियतकालेषु एव चालयति",
+"it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach":"इदं तव स्वसङ्गणके Llama, MCP सेवकान् कोशान् वा प्रयुङ्क्ते, यान् GitHub न प्राप्नोति",
+"it asks you questions while it runs, and nobody is there to answer":"इदं चलत् त्वां प्रश्नान् पृच्छति, उत्तरं दातुं कोऽपि नास्ति",
+"This program can't run on GitHub Actions: {why}.":"अयं कार्यक्रमः GitHub Actions उपरि चलितुं न शक्नोति: {why}।",
+"Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.":"{name}-actions.zip रक्षितम्। अस्य सञ्चिकाः गुप्ते GitHub कोशे स्थापय, SETUP.md गणितानि रहस्यानि योजय; ततः कालयोजनया चलिष्यति।"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1623,7 +1630,12 @@
 "New issue: {issue}":"नूतनं issue: {issue}",
 "New release: {release}":"नूतनं release: {release}",
 "There's no folder {folder}.":"{folder} इति कोशः नास्ति।",
-"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"सम्भवतः तत् निवृत्तम्। कार्यक्रमम् अपरिवर्त्य अन्यं प्रयोक्तुं second-thought.ini मध्ये गणितं प्रतिरूपं स्थापय, यथा {settings}।"
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"सम्भवतः तत् निवृत्तम्। कार्यक्रमम् अपरिवर्त्य अन्यं प्रयोक्तुं second-thought.ini मध्ये गणितं प्रतिरूपं स्थापय, यथा {settings}।",
+"There's no scheduled script {n}: this program has {count}.":"कालयोजितः लेखः {n} नास्ति: अस्मिन् कार्यक्रमे {count} सन्ति।",
+"Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"कालयोजितस्य लेखस्य {n} ({time}, {days}) कालः न प्राप्तः, अतः किमपि न चालितम्।",
+"weekdays":"कार्यदिनेषु",
+"weekends":"सप्ताहान्तेषु",
+"every day":"प्रतिदिनम्"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

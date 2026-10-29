@@ -208,6 +208,18 @@ To start it automatically:
 - **Windows:** double-click `install-startup.bat` once. The program then starts in a small window each time you log in. To undo it, press Windows+R, type `shell:startup`, and delete "Second Thought - my-program".
 - **Linux or a Mac:** run `sh install-service.sh` once. On Linux it starts whenever the computer starts (it asks for your password to set this up); on a Mac, whenever you log in. It tells you how to watch what the program is doing, and how to turn it off.
 
+### Running on GitHub Actions
+
+A program whose scripts start at set times ('when it's …' and 'every …') can run on GitHub's computers instead, so yours doesn't need to be on. In Import / export, choose **Save as GitHub Actions (.zip)**. The zip has the program, a workflow in `.github/workflows/`, and `SETUP.md`, which lists the repository secrets to add (your keys). Put the files in a **private** repository, add the secrets, and the scripts run at their times. The **Run workflow** button on the Actions tab runs one now.
+
+- **Times:** GitHub's schedules are in UTC. The workflow is worked out for your time zone. Where the clocks change, each time has a winter line and a summer line, and the program only runs a script within an hour after its time, so the other line does nothing. GitHub often starts runs a few minutes late, sometimes skips one when it's busy, and runs 'every' scripts at most every 5 minutes.
+- **What it remembers:** after each run, `memory.json` and `outputs/` are committed back to the repository. That's why the repository should be private. To keep them out of it, the workflow says how to use `actions/cache` instead, but GitHub deletes a cache it hasn't used for 7 days.
+- **Approval:** adding the workflow is your yes to what the program can do (`SETUP.md` lists it), so it runs with `approve = no`. An agent tool that asks first still gets no answer there, so it says no.
+- **What can't run there:** programs that wait for things to happen (messages, web requests, changes, new files); programs that use Llama, MCP servers or folders on your computer; and programs whose scheduled scripts ask you questions. The page says which, and why. Home Assistant, Homey and MQTT have to be reachable from the internet.
+- **Free minutes:** on GitHub's free plan, private repositories get 2,000 a month, and a run takes about a minute.
+
+The workflow runs `python my-program.py --run-schedule 2`, which runs scheduled script 2 once, if it's due. You can use the same thing with any scheduler, such as cron or Windows Task Scheduler: add `--now` to run it whatever the time.
+
 ### Approving what a program can do
 
 A program that does real things (sends email or messages, switches lights, posts on GitHub) asks you before it runs the first time:

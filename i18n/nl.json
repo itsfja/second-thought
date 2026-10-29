@@ -1335,7 +1335,14 @@
   "Community: home and baking": "Community: huis en bakken",
   "Community: odds and ends": "Community: allerlei",
   "look at the files in a folder, and watch it for new ones": "de bestanden in een map bekijken, en hem in de gaten houden op nieuwe",
-  "The setup check only runs in exported Python: export this program and run it there to see the report.": "De instellingencontrole werkt alleen in geëxporteerde Python: exporteer dit programma en voer het daar uit om het rapport te zien."
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "De instellingencontrole werkt alleen in geëxporteerde Python: exporteer dit programma en voer het daar uit om het rapport te zien.",
+  "Save as GitHub Actions (.zip)": "Opslaan voor GitHub Actions (.zip)",
+  "it has no 'when it's' or 'every' script, so there's nothing to run on a schedule": "het heeft geen 'wanneer het … is'- of 'elke'-script, dus er is niets om volgens schema te draaien",
+  "it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times": "het wacht tot er iets gebeurt, zoals berichten, webverzoeken of wijzigingen, en GitHub Actions draait het alleen op vaste tijden",
+  "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "het gebruikt Llama, MCP-servers of mappen op je eigen computer, waar GitHub niet bij kan",
+  "it asks you questions while it runs, and nobody is there to answer": "het stelt je vragen terwijl het draait, en er is niemand om te antwoorden",
+  "This program can't run on GitHub Actions: {why}.": "Dit programma kan niet op GitHub Actions draaien: {why}.",
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip opgeslagen. Zet de bestanden in een privé GitHub-repository en voeg de secrets toe die SETUP.md noemt; dan draait het volgens schema."
  },
  "examples": {
   "review": {
@@ -2742,6 +2749,11 @@
   "New issue: {issue}": "Nieuw issue: {issue}",
   "New release: {release}": "Nieuwe release: {release}",
   "There's no folder {folder}.": "Er is geen map {folder}.",
-  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Misschien is het uit de roulatie genomen. Om een ander te gebruiken zonder het programma te veranderen, zet je een model dat er wel bij staat in second-thought.ini, zoals {settings}."
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Misschien is het uit de roulatie genomen. Om een ander te gebruiken zonder het programma te veranderen, zet je een model dat er wel bij staat in second-thought.ini, zoals {settings}.",
+  "There's no scheduled script {n}: this program has {count}.": "Er is geen gepland script {n}: dit programma heeft er {count}.",
+  "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Het is geen tijd voor gepland script {n} ({time}, {days}), dus er is niets gedraaid.",
+  "weekdays": "op werkdagen",
+  "weekends": "in het weekend",
+  "every day": "elke dag"
  }
 }

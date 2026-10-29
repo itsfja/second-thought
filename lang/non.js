@@ -847,7 +847,14 @@
 "Community: home and baking":"Samfélag: heimili ok bakstr",
 "Community: odds and ends":"Samfélag: ýmislegt",
 "look at the files in a folder, and watch it for new ones":"sjá skjǫlin í hirzlu, ok vakta hana at nýjum",
-"The setup check only runs in exported Python: export this program and run it there to see the report.":"Skoðun búnaðar keyrir einungis í útfluttu Python: flyt þetta verk út ok keyr þat þar at sjá skýrsluna."
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"Skoðun búnaðar keyrir einungis í útfluttu Python: flyt þetta verk út ok keyr þat þar at sjá skýrsluna.",
+"Save as GitHub Actions (.zip)":"Geyma fyrir GitHub Actions (.zip)",
+"it has no 'when it's' or 'every' script, so there's nothing to run on a schedule":"þat hefir ekkert 'þá er klukkan er' né 'hvert' handrit, svá at ekkert er at keyra eptir tíðum",
+"it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times":"þat bíðr þess at eitthvat gerisk, svá sem boð, vefbeiðnir eða breytingar, en GitHub Actions keyrir þat aðeins á settum stundum",
+"it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach":"þat notar Llama, MCP-þjóna eða möppur á þinni eigin tölvu, er GitHub nær eigi til",
+"it asks you questions while it runs, and nobody is there to answer":"þat spyrr þik meðan þat keyrir, ok engi er þar at svara",
+"This program can't run on GitHub Actions: {why}.":"Þetta forrit má eigi keyra á GitHub Actions: {why}.",
+"Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.":"{name}-actions.zip geymt. Set skrár þess í leynt GitHub-hirzlu ok bæt við leyndarmálum er SETUP.md telr; þá keyrir þat eptir tíðum."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1622,7 +1629,12 @@
 "New issue: {issue}":"Nýtt issue: {issue}",
 "New release: {release}":"Ný útgáfa: {release}",
 "There's no folder {folder}.":"Engi hirzla er {folder}.",
-"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Kann vera at því sé hætt. Til at nota annat án þess at breyta forritinu, set líkan er hann telr í second-thought.ini, svá sem {settings}."
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Kann vera at því sé hætt. Til at nota annat án þess at breyta forritinu, set líkan er hann telr í second-thought.ini, svá sem {settings}.",
+"There's no scheduled script {n}: this program has {count}.":"Ekki er tíðsett handrit {n}: þetta forrit hefir {count}.",
+"Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"Eigi er tími tíðsetts handrits {n} ({time}, {days}), svá at ekkert var keyrt.",
+"weekdays":"virka daga",
+"weekends":"um helgar",
+"every day":"hvern dag"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

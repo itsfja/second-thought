@@ -1335,7 +1335,14 @@
   "Community: home and baking": "Κοινότητα: σπίτι και αρτοποιία",
   "Community: odds and ends": "Κοινότητα: διάφορα",
   "look at the files in a folder, and watch it for new ones": "κοιτάζει τα αρχεία σε έναν φάκελο και τον παρακολουθεί για νέα",
-  "The setup check only runs in exported Python: export this program and run it there to see the report.": "Ο έλεγχος ρύθμισης τρέχει μόνο στο εξαγόμενο Python: εξαγάγετε αυτό το πρόγραμμα και τρέξτε το εκεί για να δείτε την αναφορά."
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "Ο έλεγχος ρύθμισης τρέχει μόνο στο εξαγόμενο Python: εξαγάγετε αυτό το πρόγραμμα και τρέξτε το εκεί για να δείτε την αναφορά.",
+  "Save as GitHub Actions (.zip)": "Αποθήκευση για GitHub Actions (.zip)",
+  "it has no 'when it's' or 'every' script, so there's nothing to run on a schedule": "δεν έχει σενάριο 'όταν είναι' ή 'κάθε', άρα δεν υπάρχει τίποτα να τρέξει με πρόγραμμα",
+  "it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times": "περιμένει να συμβεί κάτι, όπως μηνύματα, αιτήματα web ή αλλαγές, και το GitHub Actions το τρέχει μόνο σε ορισμένες ώρες",
+  "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "χρησιμοποιεί Llama, διακομιστές MCP ή φακέλους στον δικό σου υπολογιστή, που το GitHub δεν φτάνει",
+  "it asks you questions while it runs, and nobody is there to answer": "σου κάνει ερωτήσεις ενώ τρέχει, και δεν είναι κανείς εκεί να απαντήσει",
+  "This program can't run on GitHub Actions: {why}.": "Αυτό το πρόγραμμα δεν μπορεί να τρέξει στο GitHub Actions: {why}.",
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "Αποθηκεύτηκε το {name}-actions.zip. Βάλε τα αρχεία του σε ένα ιδιωτικό αποθετήριο GitHub και πρόσθεσε τα secrets που αναφέρει το SETUP.md· μετά τρέχει με το πρόγραμμά του."
  },
  "examples": {
   "review": {
@@ -2742,6 +2749,11 @@
   "New issue: {issue}": "Νέο issue: {issue}",
   "New release: {release}": "Νέα έκδοση: {release}",
   "There's no folder {folder}.": "Δεν υπάρχει φάκελος {folder}.",
-  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Ίσως έχει αποσυρθεί. Για να χρησιμοποιήσεις άλλο χωρίς να αλλάξεις το πρόγραμμα, βάλε στο second-thought.ini ένα μοντέλο που αναφέρει, όπως {settings}."
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Ίσως έχει αποσυρθεί. Για να χρησιμοποιήσεις άλλο χωρίς να αλλάξεις το πρόγραμμα, βάλε στο second-thought.ini ένα μοντέλο που αναφέρει, όπως {settings}.",
+  "There's no scheduled script {n}: this program has {count}.": "Δεν υπάρχει προγραμματισμένο σενάριο {n}: αυτό το πρόγραμμα έχει {count}.",
+  "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Δεν είναι ώρα για το προγραμματισμένο σενάριο {n} ({time}, {days}), άρα δεν έτρεξε τίποτα.",
+  "weekdays": "τις καθημερινές",
+  "weekends": "τα Σαββατοκύριακα",
+  "every day": "κάθε μέρα"
  }
 }

@@ -847,7 +847,14 @@
 "Community: home and baking":"Comunidade: casa e padaria",
 "Community: odds and ends":"Comunidade: diversos",
 "look at the files in a folder, and watch it for new ones":"ver os ficheiros de uma pasta e vigiá-la à procura de novos",
-"The setup check only runs in exported Python: export this program and run it there to see the report.":"A verificação da configuração só funciona no Python exportado: exporte este programa e execute-o lá para ver o relatório."
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"A verificação da configuração só funciona no Python exportado: exporte este programa e execute-o lá para ver o relatório.",
+"Save as GitHub Actions (.zip)":"Guardar para GitHub Actions (.zip)",
+"it has no 'when it's' or 'every' script, so there's nothing to run on a schedule":"não tem nenhum script 'quando forem' ou 'a cada', por isso não há nada para correr segundo um horário",
+"it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times":"espera que algo aconteça, como mensagens, pedidos web ou alterações, e o GitHub Actions só o corre a horas fixas",
+"it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach":"usa Llama, servidores MCP ou pastas no seu próprio computador, a que o GitHub não chega",
+"it asks you questions while it runs, and nobody is there to answer":"faz-lhe perguntas enquanto corre, e não está ninguém para responder",
+"This program can't run on GitHub Actions: {why}.":"Este programa não pode correr no GitHub Actions: {why}.",
+"Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.":"Guardado {name}-actions.zip. Ponha os ficheiros num repositório GitHub privado e adicione os segredos que o SETUP.md lista; depois corre segundo o horário."
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -1622,6 +1629,11 @@
 "New issue: {issue}":"Nova issue: {issue}",
 "New release: {release}":"Nova versão: {release}",
 "There's no folder {folder}.":"Não existe a pasta {folder}.",
-"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Talvez tenha sido retirado. Para usar outro sem mudar o programa, ponha em second-thought.ini um modelo que ela liste, como {settings}."
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Talvez tenha sido retirado. Para usar outro sem mudar o programa, ponha em second-thought.ini um modelo que ela liste, como {settings}.",
+"There's no scheduled script {n}: this program has {count}.":"Não há nenhum script agendado {n}: este programa tem {count}.",
+"Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"Ainda não é hora do script agendado {n} ({time}, {days}), por isso nada foi corrido.",
+"weekdays":"nos dias úteis",
+"weekends":"ao fim de semana",
+"every day":"todos os dias"
 }
 };

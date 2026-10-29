@@ -848,7 +848,14 @@
 "Community: home and baking":"𒌝𒈠𒉡𒌝: 𒁉𒌅𒌝 𒌋 𒂊𒁍𒌝",
 "Community: odds and ends":"𒌝𒈠𒉡𒌝: 𒈪𒅎𒈠 𒋗𒌝𒋗",
 "look at the files in a folder, and watch it for new ones":"𒆪𒉡𒊌𒅗𒋾𒅎 𒄿𒈾 𒁉𒊓𒀭𒉌𒅎 𒀀𒈪𒊑 𒌋 𒀀𒈾 𒆪𒉡𒊌𒅗𒋾𒅎 𒅖𒊺𒋾𒅎 𒈾𒍝𒅈",
-"The setup check only runs in exported Python: export this program and run it there to see the report.":"𒁉𒊑 𒅅𒆷𒆷𒄠 𒄿𒈾 Python 𒀀𒉿𒀀 𒅔𒈾𒀠𒀀𒄠: 𒉡𒁲𒉿 𒀀𒈾 Python 𒌋 𒄿𒈾𒀭𒈾 𒀀𒈪𒊑."
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"𒁉𒊑 𒅅𒆷𒆷𒄠 𒄿𒈾 Python 𒀀𒉿𒀀 𒅔𒈾𒀠𒀀𒄠: 𒉡𒁲𒉿 𒀀𒈾 Python 𒌋 𒄿𒈾𒀭𒈾 𒀀𒈪𒊑.",
+"Save as GitHub Actions (.zip)":"𒀀𒈾 GitHub Actions 𒌑𒍮𒌨 (.zip)",
+"it has no 'when it's' or 'every' script, so there's nothing to run on a schedule":"𒌅𒌒𒁍𒌝 𒊭 '𒄿𒉡𒈠 𒅆𒈠𒉡𒌝' 𒌑 '𒅗𒆷' 𒌌 𒄿𒋗, 𒈪𒅎𒈠 𒊭 𒄿𒈾 𒀀𒁕𒉌𒅎 𒅋𒆷𒆪 𒌌 𒄿𒁀𒀸𒅆",
+"it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times":"𒀀𒁲 𒈪𒅎𒈠 𒅁𒁀𒀸𒋗 𒄿𒋡𒀠, 𒆠𒈠 𒅆𒅁𒊏𒋾𒅎, 𒂊𒊑𒊭𒀜 𒊺𒋾𒅎 𒌑 𒋗𒌦𒈾𒋾𒅎, 𒌑 GitHub Actions 𒄿𒈾 𒀀𒁕𒉌 𒊭𒀝𒉡𒋾𒅎 𒅖𒋼𒅔 𒌑𒊭𒆷𒀝",
+"it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach":"Llama, 𒅈𒁲 MCP 𒌑 𒁉𒊓𒀭𒉌 𒄿𒈾 𒅗𒊍𒁉𒅖𒆪𒉡 𒊏𒈠𒉌𒅗 𒄿𒇷𒅅𒆠, 𒊭 GitHub 𒌌 𒄿𒅗𒀸𒊭𒁺",
+"it asks you questions while it runs, and nobody is there to answer":"𒄿𒉡𒈠 𒅋𒆷𒆪 𒄿𒊭𒀠𒅗, 𒌑 𒈠𒄠𒈠𒀭 𒀀𒈾 𒀀𒉺𒇷𒅎 𒌌 𒄿𒁀𒀸𒅆",
+"This program can't run on GitHub Actions: {why}.":"𒉈𒁉𒋗𒌝 𒀭𒉡𒌝 𒄿𒈾 GitHub Actions 𒌌 𒅋𒆷𒀝: {why}.",
+"Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.":"{name}-actions.zip 𒈾𒍢𒅕. 𒌅𒌒𒉺𒋾𒋗 𒄿𒈾 𒁉𒀉 𒈾𒀝𒅗𒄠𒋾 GitHub 𒊭 𒁉𒊑𒅖𒋾𒅎 𒋗𒆪𒌦 𒌑 𒁉𒊑𒅖𒋾 𒊭 SETUP.md 𒄿𒈠𒀭𒉡 𒊒𒌓𒁲; 𒌑 𒄿𒈾 𒀀𒁕𒉌𒋗 𒅋𒆷𒀝."
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1623,7 +1630,12 @@
 "New issue: {issue}":"issue eššum: {issue}",
 "New release: {release}":"release eššum: {release}",
 "There's no folder {folder}.":"𒁉𒊓𒀭𒉌𒅎 {folder} 𒌑𒇻 𒅀𒅋𒋗",
-"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"ullâmma ina ṭuppi ul šaṭir; šumma tēnītam tuṣbat, nēpešam lā tunakkar: ina second-thought.ini šumam ša šaṭru šukun, kīma {settings}."
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"ullâmma ina ṭuppi ul šaṭir; šumma tēnītam tuṣbat, nēpešam lā tunakkar: ina second-thought.ini šumam ša šaṭru šukun, kīma {settings}.",
+"There's no scheduled script {n}: this program has {count}.":"ṭuppum ša adānim {n} ul ibašši: nēpešum annûm {count} īšu.",
+"Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"adānum ša ṭuppim {n} ({time}, {days}) ul ikšud, mimma ul illik.",
+"weekdays":"ina ūmī šiprim",
+"weekends":"ina ūmī nūḫim",
+"every day":"ūmišam"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

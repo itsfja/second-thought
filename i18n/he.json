@@ -1336,7 +1336,14 @@
   "Community: home and baking": "קהילה: בית ואפייה",
   "Community: odds and ends": "קהילה: שונות",
   "look at the files in a folder, and watch it for new ones": "לראות את הקבצים בתיקייה, ולעקוב אחריה לחפש חדשים",
-  "The setup check only runs in exported Python: export this program and run it there to see the report.": "בדיקת ההגדרות פועלת רק ב-Python המיוצא: ייצאו את התוכנית הזו והריצו אותה שם כדי לראות את הדוח."
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "בדיקת ההגדרות פועלת רק ב-Python המיוצא: ייצאו את התוכנית הזו והריצו אותה שם כדי לראות את הדוח.",
+  "Save as GitHub Actions (.zip)": "שמירה ל-GitHub Actions (.zip)",
+  "it has no 'when it's' or 'every' script, so there's nothing to run on a schedule": "אין לה תסריט 'כשהשעה' או 'כל', אז אין מה להריץ לפי לוח זמנים",
+  "it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times": "היא מחכה שמשהו יקרה, כמו הודעות, בקשות רשת או שינויים, ו-GitHub Actions מריץ אותה רק בשעות קבועות",
+  "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "היא משתמשת ב-Llama, בשרתי MCP או בתיקיות במחשב שלך, ש-GitHub לא יכול להגיע אליהם",
+  "it asks you questions while it runs, and nobody is there to answer": "היא שואלת אותך שאלות בזמן הריצה, ואין מי שיענה",
+  "This program can't run on GitHub Actions: {why}.": "התוכנית הזו לא יכולה לרוץ ב-GitHub Actions: {why}.",
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "נשמר {name}-actions.zip. שים את הקבצים שלו במאגר GitHub פרטי והוסף את הסודות ש-SETUP.md מפרט; אז היא תרוץ לפי לוח הזמנים."
  },
  "examples": {
   "review": {
@@ -2743,6 +2750,11 @@
   "New issue: {issue}": "issue חדש: {issue}",
   "New release: {release}": "גרסה חדשה: {release}",
   "There's no folder {folder}.": "אין תיקייה {folder}.",
-  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "ייתכן שהוא הוצא משימוש. כדי להשתמש באחר בלי לשנות את התוכנית, כתוב ב-second-thought.ini מודל שהוא כן מפרט, למשל {settings}."
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "ייתכן שהוא הוצא משימוש. כדי להשתמש באחר בלי לשנות את התוכנית, כתוב ב-second-thought.ini מודל שהוא כן מפרט, למשל {settings}.",
+  "There's no scheduled script {n}: this program has {count}.": "אין תסריט מתוזמן {n}: לתוכנית הזו יש {count}.",
+  "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "עוד לא הגיע הזמן של תסריט מתוזמן {n} ({time}, {days}), אז לא הורץ כלום.",
+  "weekdays": "בימי חול",
+  "weekends": "בסופי שבוע",
+  "every day": "כל יום"
  }
 }

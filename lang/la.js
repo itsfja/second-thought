@@ -847,7 +847,14 @@
 "Community: home and baking":"Communitas: domus et pistura",
 "Community: odds and ends":"Communitas: varia",
 "look at the files in a folder, and watch it for new ones":"fasciculos in capsa inspicere, et eam pro novis observare",
-"The setup check only runs in exported Python: export this program and run it there to see the report.":"Probatio apparatus currit solum in Python exportato: hoc inceptum exporta et ibi curre ut relationem videas."
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"Probatio apparatus currit solum in Python exportato: hoc inceptum exporta et ibi curre ut relationem videas.",
+"Save as GitHub Actions (.zip)":"Serva ad GitHub Actions (.zip)",
+"it has no 'when it's' or 'every' script, so there's nothing to run on a schedule":"nullum scriptum 'cum est' aut 'quaque' habet, itaque nihil ex horario currendum est",
+"it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times":"exspectat dum aliquid fiat, ut nuntii, petitiones interretiales aut mutationes, et GitHub Actions id certis tantum horis currit",
+"it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach":"Llama, servitores MCP aut capsas in tuo computatro adhibet, quo GitHub pervenire non potest",
+"it asks you questions while it runs, and nobody is there to answer":"dum currit, te interrogat, nec quisquam adest qui respondeat",
+"This program can't run on GitHub Actions: {why}.":"Hoc programma in GitHub Actions currere non potest: {why}.",
+"Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.":"{name}-actions.zip servatum est. Fasciculos eius in repositorium GitHub privatum pone et secreta quae SETUP.md enumerat adde; tum ex horario curret."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1622,7 +1629,12 @@
 "New issue: {issue}":"Nova quaestio: {issue}",
 "New release: {release}":"Nova editio: {release}",
 "There's no folder {folder}.":"Non est capsa {folder}.",
-"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Fortasse abrogatum est. Ut alio utaris programmate non mutato, in second-thought.ini exemplar quod enumerat pone, ut {settings}."
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Fortasse abrogatum est. Ut alio utaris programmate non mutato, in second-thought.ini exemplar quod enumerat pone, ut {settings}.",
+"There's no scheduled script {n}: this program has {count}.":"Nullum est scriptum horarium {n}: hoc programma {count} habet.",
+"Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"Nondum tempus est scripti horarii {n} ({time}, {days}), itaque nihil cucurrit.",
+"weekdays":"diebus profestis",
+"weekends":"diebus Saturni et Solis",
+"every day":"cotidie"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

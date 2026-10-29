@@ -1335,7 +1335,14 @@
   "Community: home and baking": "Felaweshipe: hous and bakynge",
   "Community: odds and ends": "Felaweshipe: odde thynges",
   "look at the files in a folder, and watch it for new ones": "loke on the quaiers in a folder, and wacche it for newe",
-  "The setup check only runs in exported Python: export this program and run it there to see the report.": "The setting-up examinacioun renneth oonly in exported Python: export this werk and renne it there to see the reporte."
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "The setting-up examinacioun renneth oonly in exported Python: export this werk and renne it there to see the reporte.",
+  "Save as GitHub Actions (.zip)": "Save for GitHub Actions (.zip)",
+  "it has no 'when it's' or 'every' script, so there's nothing to run on a schedule": "it hath no 'whan it is' ne 'every' script, so ther is nothyng to renne by ordinaunce",
+  "it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times": "it abideth til thynges bifalle, as messages, web askynges or chaunges, and GitHub Actions renneth it but at set tymes",
+  "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "it useth Llama, MCP servauntes or foldres on thyn owene computour, which GitHub may nat reche",
+  "it asks you questions while it runs, and nobody is there to answer": "it asketh thee questiouns whil it renneth, and noon is there to answere",
+  "This program can't run on GitHub Actions: {why}.": "This devys may nat renne on GitHub Actions: {why}.",
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "Saved {name}-actions.zip. Put his files in a prive GitHub repository and adde the secretes that SETUP.md telleth; than it renneth by ordinaunce."
  },
  "examples": {
   "review": {
@@ -2742,7 +2749,12 @@
   "New issue: {issue}": "Newe issue: {issue}",
   "New release: {release}": "Newe release: {release}",
   "There's no folder {folder}.": "Ther is no folder {folder}.",
-  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Peraventure it is withdrawen. To use another withoute chaunginge the devys, put a model that it telleth in second-thought.ini, as {settings}."
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Peraventure it is withdrawen. To use another withoute chaunginge the devys, put a model that it telleth in second-thought.ini, as {settings}.",
+  "There's no scheduled script {n}: this program has {count}.": "Ther is no ordeyned script {n}: this devys hath {count}.",
+  "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "It is nat tyme for ordeyned script {n} ({time}, {days}), so nothyng was ronne.",
+  "weekdays": "on werkdayes",
+  "weekends": "at the wikes ende",
+  "every day": "every day"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

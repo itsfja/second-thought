@@ -848,7 +848,14 @@
 "Community: home and baking":"𐀒𐀜𐀛𐀊: 𐀈𐀗 𐀏𐀂 𐀀𐀵𐀡𐀦",
 "Community: odds and ends":"𐀒𐀜𐀛𐀊: 𐀞𐀲",
 "look at the files in a folder, and watch it for new ones":"𐀳𐀄𐀐𐀀 𐀁𐀚 𐀲𐀨𐀫 𐀂𐀅𐀁 𐀏𐀂 𐀢𐀨𐀭𐀁𐀁 𐀄𐀟𐀩 𐀚𐀷",
-"The setup check only runs in exported Python: export this program and run it there to see the report.":"𐀁𐀐𐀲𐀽𐀯 𐀡𐀫𐀏𐀨𐀔 𐀁𐀚 Python 𐀀𐀡𐀠𐀡𐀗: 𐀀𐀡𐀠𐀡𐀗 𐀁𐀚 Python 𐀏𐀂 𐀃𐀳."
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"𐀁𐀐𐀲𐀽𐀯 𐀡𐀫𐀏𐀨𐀔 𐀁𐀚 Python 𐀀𐀡𐀠𐀡𐀗: 𐀀𐀡𐀠𐀡𐀗 𐀁𐀚 Python 𐀏𐀂 𐀃𐀳.",
+"Save as GitHub Actions (.zip)":"𐀃𐀪𐀽 GitHub Actions (.zip)",
+"it has no 'when it's' or 'every' script, so there's nothing to run on a schedule":"𐀃𐀄 𐀁𐀐 𐀏𐀨𐀞 '𐀃𐀳 𐀁𐀯' 𐀃𐀄𐀆 '𐀞𐀲', 𐀵𐀵 𐀃𐀄𐀆𐀚 𐀀𐀨𐀫 𐀡𐀫𐀏𐀨𐀔",
+"it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times":"𐀕𐀚 𐀃𐀳 𐀴 ge-ne-ta-i, 𐀺𐀽 𐀀𐀐𐀨, 𐀁𐀩𐀲 𐀃 𐀀𐀗𐀲, GitHub Actions 𐀆 𐀞𐀨 𐀃𐀨𐀂",
+"it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach":"𐀐𐀨𐀲𐀂 Llama, MCP 𐀃 𐀟𐀨𐀏 𐀞𐀨 𐀰𐀂 𐀒𐀢𐀳𐀩, GitHub 𐀃𐀄 𐀓𐀬𐀭",
+"it asks you questions while it runs, and nobody is there to answer":"𐀁𐀫𐀲𐀂 𐀮 𐀃𐀳 𐀁𐀨𐀞, 𐀃𐀄𐀆𐀚 𐀀𐀠𐀏𐀪𐀜",
+"This program can't run on GitHub Actions: {why}.":"𐀵𐀵 𐀡𐀫𐀏𐀨𐀔 𐀃𐀄 𐀉𐀙𐀲𐀂 GitHub Actions: {why}.",
+"Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.":"{name}-actions.zip 𐀃𐀪𐀿𐀵. 𐀆𐀐 𐀏𐀨𐀞 𐀁𐀛 GitHub 𐀂𐀇𐀃 𐀀𐀡𐀳𐀐, 𐀆𐀐 𐀠𐀪𐀲 SETUP.md 𐀏𐀨𐀟; 𐀵𐀳 𐀁𐀨𐀟𐀂."
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1623,7 +1630,12 @@
 "New issue: {issue}":"issue ne-wo: {issue}",
 "New release: {release}":"release ne-wo: {release}",
 "There's no folder {folder}.":"𐀃𐀄 𐀁𐀳 𐀲𐀨𐀫 {folder}.",
-"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"a-ra a-pe-qe-ta-i. to-ra a-ra-jo ke-ra-ta-i o-u po-ro-ka-ra-ma a-me-wo, de-ke second-thought.ini o ka-ra-pe-i, wo-ze {settings}."
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"a-ra a-pe-qe-ta-i. to-ra a-ra-jo ke-ra-ta-i o-u po-ro-ka-ra-ma a-me-wo, de-ke second-thought.ini o ka-ra-pe-i, wo-ze {settings}.",
+"There's no scheduled script {n}: this program has {count}.":"o-u-de-ne ka-ra-pa {n}: to-to po-ro-ka-ra-ma {count} e-ke.",
+"Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"o-u-po o-ra ka-ra-pa {n} ({time}, {days}), o-u-de-ne e-ra-pe.",
+"weekdays":"a-ma we-ko",
+"weekends":"a-ma a-na-pa-u-se-o",
+"every day":"e-ka-ta a-ma"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

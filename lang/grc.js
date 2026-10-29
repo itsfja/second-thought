@@ -847,7 +847,14 @@
 "Community: home and baking":"Κοινωνία· οἶκος καὶ ἀρτοποιία",
 "Community: odds and ends":"Κοινωνία· παντοδαπά",
 "look at the files in a folder, and watch it for new ones":"τὰ τεύχη ἐν φακέλῳ ὁρᾶν, καὶ αὐτὸν τηρεῖν ὑπὲρ νέων",
-"The setup check only runs in exported Python: export this program and run it there to see the report.":"Ὁ ἔλεγχος τῆς παρασκευῆς τρέχει μόνον ἐν τῷ ἐξαχθέντι Python· ἐξάγαγε τοῦτο τὸ πρόγραμμα καὶ τρέξον αὐτὸ ἐκεῖ ἵνα ἴδῃς τὴν ἀναφοράν."
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"Ὁ ἔλεγχος τῆς παρασκευῆς τρέχει μόνον ἐν τῷ ἐξαχθέντι Python· ἐξάγαγε τοῦτο τὸ πρόγραμμα καὶ τρέξον αὐτὸ ἐκεῖ ἵνα ἴδῃς τὴν ἀναφοράν.",
+"Save as GitHub Actions (.zip)":"Σῷσον εἰς GitHub Actions (.zip)",
+"it has no 'when it's' or 'every' script, so there's nothing to run on a schedule":"οὐδὲν ἔχει γράμμα 'ὅταν ᾖ' οὐδὲ 'ἑκάστοτε', ὥστ᾽ οὐδὲν ἔστι κατὰ τάξιν τρέχειν",
+"it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times":"περιμένει ἕως ἄν τι γένηται, οἷον ἀγγελίαι, αἰτήσεις τοῦ ἱστοῦ ἢ μεταβολαί, τὸ δὲ GitHub Actions ἐν ὡρισμέναις μόνον ὥραις αὐτὸ τρέχει",
+"it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach":"χρῆται Llama ἢ θεράπουσι MCP ἢ φακέλοις ἐν τῷ σῷ ὑπολογιστῇ, οἷς τὸ GitHub οὐ προσικνεῖται",
+"it asks you questions while it runs, and nobody is there to answer":"ἐρωτᾷ σε τρέχον, οὐδεὶς δὲ πάρεστιν ἀποκρινούμενος",
+"This program can't run on GitHub Actions: {why}.":"Τοῦτο τὸ πρόγραμμα ἐν GitHub Actions τρέχειν οὐ δύναται· {why}.",
+"Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.":"Ἐσώθη {name}-actions.zip. Θὲς τὰ ἀρχεῖα αὐτοῦ εἰς ἀποθήκην GitHub ἰδίαν καὶ πρόσθες τὰ ἀπόρρητα ἃ τὸ SETUP.md καταλέγει· εἶτα κατὰ τάξιν τρέξει."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1622,7 +1629,12 @@
 "New issue: {issue}":"Νέον issue· {issue}",
 "New release: {release}":"Νέα ἔκδοσις· {release}",
 "There's no folder {folder}.":"Οὐκ ἔστι φάκελος {folder}.",
-"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"ἴσως πέπαυται. ἵνα ἄλλῳ χρῇ μὴ μεταβάλλων τὸ πρόγραμμα, γράψον ἐν τῷ second-thought.ini ὃ καταλέγει, οἷον {settings}."
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"ἴσως πέπαυται. ἵνα ἄλλῳ χρῇ μὴ μεταβάλλων τὸ πρόγραμμα, γράψον ἐν τῷ second-thought.ini ὃ καταλέγει, οἷον {settings}.",
+"There's no scheduled script {n}: this program has {count}.":"Οὐκ ἔστι γράμμα τεταγμένον {n}· τοῦτο τὸ πρόγραμμα {count} ἔχει.",
+"Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"Οὔπω καιρὸς τοῦ τεταγμένου γράμματος {n} ({time}, {days}), ὥστ᾽ οὐδὲν ἔδραμεν.",
+"weekdays":"ἐν ταῖς ἡμέραις τῶν ἔργων",
+"weekends":"ἐν τῷ τέλει τῆς ἑβδομάδος",
+"every day":"καθ᾽ ἡμέραν"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

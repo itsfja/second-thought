@@ -847,7 +847,14 @@
 "Community: home and baking":"社区：家居与烘焙",
 "Community: odds and ends":"社区：杂项",
 "look at the files in a folder, and watch it for new ones":"查看文件夹中的文件，并监视其中的新文件",
-"The setup check only runs in exported Python: export this program and run it there to see the report.":"设置检查只在导出的 Python 中运行：导出这个程序并在那里运行，即可看到报告。"
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"设置检查只在导出的 Python 中运行：导出这个程序并在那里运行，即可看到报告。",
+"Save as GitHub Actions (.zip)":"保存为 GitHub Actions (.zip)",
+"it has no 'when it's' or 'every' script, so there's nothing to run on a schedule":"它没有“当到了”或“每隔”脚本，所以没有可以定时运行的东西",
+"it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times":"它要等事情发生，比如消息、网页请求或变化，而 GitHub Actions 只在固定时间运行它",
+"it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach":"它用到你自己电脑上的 Llama、MCP 服务器或文件夹，GitHub 访问不到",
+"it asks you questions while it runs, and nobody is there to answer":"它运行时会问你问题，而没有人在那里回答",
+"This program can't run on GitHub Actions: {why}.":"这个程序不能在 GitHub Actions 上运行：{why}。",
+"Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.":"已保存 {name}-actions.zip。把其中的文件放进一个私有 GitHub 仓库，并添加 SETUP.md 列出的密钥，之后它就会按时运行。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1622,6 +1629,11 @@
 "New issue: {issue}":"新 issue：{issue}",
 "New release: {release}":"新版本：{release}",
 "There's no folder {folder}.":"没有文件夹 {folder}。",
-"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"它可能已停用。若要不改程序就换用其他模型，请在 second-thought.ini 中写入列表中有的模型，例如 {settings}。"
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"它可能已停用。若要不改程序就换用其他模型，请在 second-thought.ini 中写入列表中有的模型，例如 {settings}。",
+"There's no scheduled script {n}: this program has {count}.":"没有定时脚本 {n}：这个程序有 {count} 个。",
+"Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"还没到定时脚本 {n} 的时间（{time}，{days}），所以什么都没运行。",
+"weekdays":"工作日",
+"weekends":"周末",
+"every day":"每天"
 }
 };
