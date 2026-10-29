@@ -469,7 +469,7 @@ def python_tests(codes):
         check(code_ == 0 and posted == ["POST /repos/sample-baker/sourdough-chart/issues/40/labels", "POST /repos/sample-baker/sourdough-chart/issues"]
               and "has no label safari" in out and "Labelled sample-baker/sourdough-chart #40: bug, urgent." in out
               and "Opened sample-baker/sourdough-chart #42: https://github.com/sample-baker/sourdough-chart/issues/42" in out and "needs a title" in out
-              and out.count("Allow this?") == 1, f"Python labels with the project's own labels and opens an issue, asking once first ({posted})"
+              and out.count("Allow this?") == 4, f"Python labels with the project's own labels and opens an issue, asking before each use ({posted})"
               + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         before = len(svc_log["tg_sent"])
         code_, out, err = run_cn("t_cn_tg")

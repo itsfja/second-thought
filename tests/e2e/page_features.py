@@ -506,9 +506,9 @@ async def new_feature_page_tests(pg):
     check(status.startswith("done") and "has no label safari" in flat(steps, 1, 10, "add_labels") and "documentation, duplicate, enhancement" in flat(steps, 1, 10, "add_labels")
           and "Labelled sample-baker/sourdough-chart #40: bug, urgent." in flat(steps, 2, 10, "add_labels")
           and "Opened sample-baker/sourdough-chart #42" in flat(steps, 3, 10, "open_issue") and "needs a title" in flat(steps, 4, 10, "open_issue")
-          and names.count("Allow this?") == 1 and "GitHub labels on sample-baker/sourdough-chart #40" in names
+          and names.count("Allow this?") == 4 and "GitHub labels on sample-baker/sourdough-chart #40" in names
           and "GitHub issue opened in sample-baker/sourdough-chart: #42" in names,
-          f"add_labels uses only the project's labels and open_issue opens one, asking once first (sample projects on the page) ({names})")
+          f"add_labels uses only the project's labels and open_issue opens one, asking before each use (sample projects on the page) ({names})")
     tg = [tcall("search_telegram", text="starter"), tcall("send_telegram", text="Feed the starter at 8")]
     status, steps, items = await agent_run(pg, ["telegram", "telegram_send"], tg + [fin("ok")], answer="Allow", export="t_cn_tg")
     check(status.startswith("done") and "Remind me to feed the starter at 8 tonight" in step_of(steps, 1, 6, "search_telegram")
