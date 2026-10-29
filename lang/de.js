@@ -149,7 +149,7 @@
 "rb_now.PART":{"time":"Uhrzeit","date":"Datum","datetime":"Datum und Uhrzeit","hour":"Stunde","minute":"Minute","weekday":"Wochentag"},
 "rb_sort.ORDER":{"desc":"höchste zuerst","asc":"niedrigste zuerst"},
 "rb_ask_first.WHAT":{"ha":"eine Smart-Home-Aktion ausgeführt wird (Home Assistant, Homey, MQTT)","messages":"Nachrichten und Ansagen gesendet werden","files":"Dateien gespeichert werden","all":"irgendetwas davon passiert"},
-"rb_agent_builtin.KIND":{"web":"im Web suchen und Seiten lesen","ask":"mir eine Frage stellen","memory":"Notizen merken und abrufen","calc":"Rechnen","time":"Uhrzeiten und Daten","file":"eine Datei lesen, die ich auswähle","review":"Text prüfen anhand von Kriterien","feeds":"Newsfeeds","linkedin":"LinkedIn durchsuchen (öffentliche Seiten)","calendar":"Kalender: Termine und freie Zeit","email":"E-Mail: suchen und lesen","email_send":"E-Mail: senden (fragt mich vorher)","github":"GitHub: Projekte und Pull Requests","github_act":"GitHub: kommentieren (fragt mich vorher)","telegram":"Telegram: meine Nachrichten durchsuchen","telegram_send":"Telegram: senden (fragt mich vorher)","telegram_send_free":"Telegram: senden (ohne Nachfrage)","discord":"Discord: meine Kanäle durchsuchen","discord_send":"Discord: senden (fragt mich vorher)","discord_send_free":"Discord: senden (ohne Nachfrage)","slack":"Slack: meine Kanäle durchsuchen","slack_send":"Slack: senden (fragt mich vorher)","slack_send_free":"Slack: senden (ohne Nachfrage)","mqtt":"MQTT: Topics lesen","mqtt_act":"MQTT: veröffentlichen (fragt mich vorher)","mqtt_act_free":"MQTT: veröffentlichen (ohne Nachfrage)","homey_read":"Homey: Geräte, Flows und Variablen ansehen","homey_act":"Homey: Geräte steuern und Flows starten (fragt mich vorher)","homey_act_free":"Homey: Geräte steuern und Flows starten (ohne Nachfrage)","ha_read":"Home Assistant: Geräte ansehen","ha_act":"Home Assistant: Geräte steuern","ha_act_free":"Home Assistant: Geräte steuern (ohne Nachfrage)"},
+"rb_agent_builtin.KIND":{"web":"im Web suchen und Seiten lesen","ask":"mir eine Frage stellen","memory":"Notizen merken und abrufen","calc":"Rechnen","time":"Uhrzeiten und Daten","file":"eine Datei lesen, die ich auswähle","review":"Text prüfen anhand von Kriterien","feeds":"Newsfeeds","linkedin":"LinkedIn durchsuchen (öffentliche Seiten)","calendar":"Kalender: Termine und freie Zeit","email":"E-Mail: suchen und lesen","email_send":"E-Mail: senden (fragt mich vorher)","github":"GitHub: Projekte und Pull Requests","github_act":"GitHub: kommentieren, Issues eröffnen und labeln (fragt mich vorher)","telegram":"Telegram: meine Nachrichten durchsuchen","telegram_send":"Telegram: senden (fragt mich vorher)","telegram_send_free":"Telegram: senden (ohne Nachfrage)","discord":"Discord: meine Kanäle durchsuchen","discord_send":"Discord: senden (fragt mich vorher)","discord_send_free":"Discord: senden (ohne Nachfrage)","slack":"Slack: meine Kanäle durchsuchen","slack_send":"Slack: senden (fragt mich vorher)","slack_send_free":"Slack: senden (ohne Nachfrage)","mqtt":"MQTT: Topics lesen","mqtt_act":"MQTT: veröffentlichen (fragt mich vorher)","mqtt_act_free":"MQTT: veröffentlichen (ohne Nachfrage)","homey_read":"Homey: Geräte, Flows und Variablen ansehen","homey_act":"Homey: Geräte steuern und Flows starten (fragt mich vorher)","homey_act_free":"Homey: Geräte steuern und Flows starten (ohne Nachfrage)","ha_read":"Home Assistant: Geräte ansehen","ha_act":"Home Assistant: Geräte steuern","ha_act_free":"Home Assistant: Geräte steuern (ohne Nachfrage)"},
 "rb_agent_mcp.ASK":{"changes":"(fragt mich vor Werkzeugen, die etwas ändern)","every":"(fragt mich vor jedem Werkzeug)","never":"(ohne Nachfrage)"},
 "rb_tg_message.PART":{"text":"Text","sender":"Absender","chat":"Chat"},
 "rb_mem_set.KIND":{"transient":"solange diese Seite offen ist","permanent":"für immer"},
@@ -586,7 +586,6 @@
 "Type the prompt text.":"Geben Sie den Prompt-Text ein.",
 "Your saved space is full. Delete something first.":"Ihr Speicherplatz ist voll. Löschen Sie zuerst etwas.",
 "accept web requests from other computers":"Webanfragen von anderen Computern annehmen",
-"comment on GitHub":"auf GitHub kommentieren",
 "control your Home Assistant devices":"Ihre Home-Assistant-Geräte steuern",
 "control your Homey devices and start Homey flows":"Ihre Homey-Geräte steuern und Homey-Flows starten",
 "forever":"für immer",
@@ -834,7 +833,10 @@
 "“{value}” isn't on or off.":"„{value}“ ist weder on noch off.",
 "Try: {tip}":"Probieren Sie: {tip}",
 "Shared by {author}.":"Geteilt von {author}.",
-"{title} (shared by {author})":"{title} (geteilt von {author})"
+"{title} (shared by {author})":"{title} (geteilt von {author})",
+"GitHub issue opened in {repo}: #{n}":"GitHub-Issue in {repo} eröffnet: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub-Labels für {repo} #{n}",
+"comment on GitHub, and open and label issues":"auf GitHub kommentieren sowie Issues eröffnen und mit Labels versehen"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -1603,6 +1605,8 @@
 "When {entity} changes":"Wenn {entity} wechselt",
 "Run":"Lauf",
 "(yes)":"j, ja",
-"(no)":"n, nein"
+"(no)":"n, nein",
+"GitHub issue opened in {repo}: #{n}":"GitHub-Issue in {repo} eröffnet: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub-Labels für {repo} #{n}"
 }
 };

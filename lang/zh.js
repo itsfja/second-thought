@@ -149,7 +149,7 @@
 "rb_now.PART":{"time":"时间","date":"日期","datetime":"日期和时间","hour":"小时数","minute":"分钟数","weekday":"星期几"},
 "rb_sort.ORDER":{"desc":"从高到低","asc":"从低到高"},
 "rb_ask_first.WHAT":{"ha":"任何智能家居操作（Home Assistant、Homey、MQTT）","messages":"发送消息和广播通知","files":"保存文件","all":"以上所有操作"},
-"rb_agent_builtin.KIND":{"web":"搜索网络并阅读网页","ask":"问我一个问题","memory":"记住和回想笔记","calc":"计算","time":"时间与日期","file":"读取我选择的文件","review":"按标准检查文本","feeds":"新闻订阅源","linkedin":"搜索领英（公开页面）","calendar":"日历：事件和空闲时间","email":"邮件：搜索和阅读","email_send":"邮件：发送（先问我）","github":"GitHub：项目和拉取请求","github_act":"GitHub：评论（先问我）","telegram":"Telegram：搜索我的消息","telegram_send":"Telegram：发送（先问我）","telegram_send_free":"Telegram：发送（不询问）","discord":"Discord：搜索我的频道","discord_send":"Discord：发送（先问我）","discord_send_free":"Discord：发送（不询问）","slack":"Slack：搜索我的频道","slack_send":"Slack：发送（先问我）","slack_send_free":"Slack：发送（不询问）","mqtt":"MQTT：读取主题","mqtt_act":"MQTT：发布（先问我）","mqtt_act_free":"MQTT：发布（不询问）","homey_read":"Homey：查看设备、流程和变量","homey_act":"Homey：控制设备和启动流程（先问我）","homey_act_free":"Homey：控制设备和启动流程（不询问）","ha_read":"Home Assistant：查看设备","ha_act":"Home Assistant：控制设备","ha_act_free":"Home Assistant：控制设备（不询问）"},
+"rb_agent_builtin.KIND":{"web":"搜索网络并阅读网页","ask":"问我一个问题","memory":"记住和回想笔记","calc":"计算","time":"时间与日期","file":"读取我选择的文件","review":"按标准检查文本","feeds":"新闻订阅源","linkedin":"搜索领英（公开页面）","calendar":"日历：事件和空闲时间","email":"邮件：搜索和阅读","email_send":"邮件：发送（先问我）","github":"GitHub：项目和拉取请求","github_act":"GitHub：评论、创建和标记 issue（先问我）","telegram":"Telegram：搜索我的消息","telegram_send":"Telegram：发送（先问我）","telegram_send_free":"Telegram：发送（不询问）","discord":"Discord：搜索我的频道","discord_send":"Discord：发送（先问我）","discord_send_free":"Discord：发送（不询问）","slack":"Slack：搜索我的频道","slack_send":"Slack：发送（先问我）","slack_send_free":"Slack：发送（不询问）","mqtt":"MQTT：读取主题","mqtt_act":"MQTT：发布（先问我）","mqtt_act_free":"MQTT：发布（不询问）","homey_read":"Homey：查看设备、流程和变量","homey_act":"Homey：控制设备和启动流程（先问我）","homey_act_free":"Homey：控制设备和启动流程（不询问）","ha_read":"Home Assistant：查看设备","ha_act":"Home Assistant：控制设备","ha_act_free":"Home Assistant：控制设备（不询问）"},
 "rb_agent_mcp.ASK":{"changes":"（在会改变东西的工具之前先问我）","every":"（在每个工具之前先问我）","never":"（不询问）"},
 "rb_tg_message.PART":{"text":"文字","sender":"发送者","chat":"聊天"},
 "rb_mem_set.KIND":{"transient":"本页面打开期间","permanent":"永久"},
@@ -586,7 +586,6 @@
 "Type the prompt text.":"请输入提示词文本。",
 "Your saved space is full. Delete something first.":"你的保存空间已满。请先删除一些东西。",
 "accept web requests from other computers":"接受来自其他电脑的网络请求",
-"comment on GitHub":"在 GitHub 上评论",
 "control your Home Assistant devices":"控制你的 Home Assistant 设备",
 "control your Homey devices and start Homey flows":"控制你的 Homey 设备并启动 Homey 流程",
 "forever":"永久",
@@ -834,7 +833,10 @@
 "“{value}” isn't on or off.":"“{value}”既不是 on 也不是 off。",
 "Try: {tip}":"试试：{tip}",
 "Shared by {author}.":"由 {author} 分享。",
-"{title} (shared by {author})":"{title}（由 {author} 分享）"
+"{title} (shared by {author})":"{title}（由 {author} 分享）",
+"GitHub issue opened in {repo}: #{n}":"已在 {repo} 创建 GitHub issue：#{n}",
+"GitHub labels on {repo} #{n}":"{repo} #{n} 上的 GitHub 标签",
+"comment on GitHub, and open and label issues":"在 GitHub 上评论，并创建和标记 issue"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1603,6 +1605,8 @@
 "When {entity} changes":"当 {entity} 变化时",
 "Run":"运行",
 "(yes)":"是, 是的, 好, 对",
-"(no)":"否, 不, 不是"
+"(no)":"否, 不, 不是",
+"GitHub issue opened in {repo}: #{n}":"已在 {repo} 创建 GitHub issue：#{n}",
+"GitHub labels on {repo} #{n}":"{repo} #{n} 上的 GitHub 标签"
 }
 };

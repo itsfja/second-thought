@@ -149,7 +149,7 @@
 "rb_now.PART":{"time":"tid","date":"dæg","datetime":"dæg and tid","hour":"tid","minute":"minute","weekday":"wucan dæg"},
 "rb_sort.ORDER":{"desc":"hehst ærest","asc":"nyþerost ærest"},
 "rb_ask_first.WHAT":{"ha":"ælcre dæde þæs snoteran huses (Home Assistant, Homey, MQTT)","messages":"sendunge ærendgewrita and bodunga","files":"healdunge fætelsa","all":"eallum þissum"},
-"rb_agent_builtin.KIND":{"web":"on webbe secan and leaf rædan","ask":"me axian","memory":"gemearc gemunan and eft gemyndgian","calc":"rimas asmeagan","time":"tida and dagas","file":"fætels þe ic geceose rædan","review":"gewrit sceawian be regolum","feeds":"spellstreamas","linkedin":"LinkedIn secan (openlicu leaf)","calendar":"tidboc: gelimp and æmtig tid","email":"email: secan and rædan","email_send":"email: sendan (axaþ me ærest)","github":"GitHub: weorc and pull requests","github_act":"GitHub: cwide writan (axaþ me ærest)","telegram":"Telegram: mine ærendgewritu secan","telegram_send":"Telegram: sendan (axaþ me ærest)","telegram_send_free":"Telegram: sendan (butan axunge)","discord":"Discord: mine canalas secan","discord_send":"Discord: sendan (axaþ me ærest)","discord_send_free":"Discord: sendan (butan axunge)","slack":"Slack: mine canalas secan","slack_send":"Slack: sendan (axaþ me ærest)","slack_send_free":"Slack: sendan (butan axunge)","mqtt":"MQTT: intingan rædan","mqtt_act":"MQTT: cyþan (axaþ me ærest)","mqtt_act_free":"MQTT: cyþan (butan axunge)","homey_read":"Homey: searu, floda and wendlingas sceawian","homey_act":"Homey: searu wealdan and floda onginnan (axaþ me ærest)","homey_act_free":"Homey: searu wealdan and floda onginnan (butan axunge)","ha_read":"Home Assistant: searu sceawian","ha_act":"Home Assistant: searu wealdan","ha_act_free":"Home Assistant: searu wealdan (butan axunge)"},
+"rb_agent_builtin.KIND":{"web":"on webbe secan and leaf rædan","ask":"me axian","memory":"gemearc gemunan and eft gemyndgian","calc":"rimas asmeagan","time":"tida and dagas","file":"fætels þe ic geceose rædan","review":"gewrit sceawian be regolum","feeds":"spellstreamas","linkedin":"LinkedIn secan (openlicu leaf)","calendar":"tidboc: gelimp and æmtig tid","email":"email: secan and rædan","email_send":"email: sendan (axaþ me ærest)","github":"GitHub: weorc and pull requests","github_act":"GitHub: cwide writan, issues openian and mearcian (axaþ me ærest)","telegram":"Telegram: mine ærendgewritu secan","telegram_send":"Telegram: sendan (axaþ me ærest)","telegram_send_free":"Telegram: sendan (butan axunge)","discord":"Discord: mine canalas secan","discord_send":"Discord: sendan (axaþ me ærest)","discord_send_free":"Discord: sendan (butan axunge)","slack":"Slack: mine canalas secan","slack_send":"Slack: sendan (axaþ me ærest)","slack_send_free":"Slack: sendan (butan axunge)","mqtt":"MQTT: intingan rædan","mqtt_act":"MQTT: cyþan (axaþ me ærest)","mqtt_act_free":"MQTT: cyþan (butan axunge)","homey_read":"Homey: searu, floda and wendlingas sceawian","homey_act":"Homey: searu wealdan and floda onginnan (axaþ me ærest)","homey_act_free":"Homey: searu wealdan and floda onginnan (butan axunge)","ha_read":"Home Assistant: searu sceawian","ha_act":"Home Assistant: searu wealdan","ha_act_free":"Home Assistant: searu wealdan (butan axunge)"},
 "rb_agent_mcp.ASK":{"changes":"(axaþ me ær tolum þe hwæt wendaþ)","every":"(axaþ me ær ælcum tole)","never":"(butan axunge)"},
 "rb_tg_message.PART":{"text":"gewrit","sender":"sendend","chat":"spræc"},
 "rb_mem_set.KIND":{"transient":"þa hwile þe þis leaf open is","permanent":"a"},
@@ -586,7 +586,6 @@
 "Type the prompt text.":"Writ þære forespræce gewrit.",
 "Your saved space is full. Delete something first.":"Þin gehealden rum is full. Adilga ærest hwæt.",
 "accept web requests from other computers":"webbbena onfon of oþrum rimcræftum",
-"comment on GitHub":"cwide writan on GitHub",
 "control your Home Assistant devices":"þin Home Assistant searu wealdan",
 "control your Homey devices and start Homey flows":"þin Homey searu wealdan and Homey floda onginnan",
 "forever":"a",
@@ -834,7 +833,10 @@
 "“{value}” isn't on or off.":"“{value}” nis on ne off.",
 "Try: {tip}":"Fanda: {tip}",
 "Shared by {author}.":"Gedæled fram {author}.",
-"{title} (shared by {author})":"{title} (gedæled fram {author})"
+"{title} (shared by {author})":"{title} (gedæled fram {author})",
+"GitHub issue opened in {repo}: #{n}":"GitHub issue geopenod on {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub mearca on {repo} #{n}",
+"comment on GitHub, and open and label issues":"cwide writan on GitHub, and issues openian and mearcian"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1603,7 +1605,9 @@
 "When {entity} changes":"Þonne {entity} wendeþ",
 "Run":"Fremme",
 "(yes)":"g, gea, gēa, ġēa, gese",
-"(no)":"n, nese, na"
+"(no)":"n, nese, na",
+"GitHub issue opened in {repo}: #{n}":"GitHub issue geopenod on {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub mearca on {repo} #{n}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

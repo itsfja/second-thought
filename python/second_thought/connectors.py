@@ -4,6 +4,7 @@ Part of the second_thought package. tools/sync.py joins these files, in order, i
 python/runtime.py, which is what ships inside every exported program and the page.
 """
 import asyncio
+import base64
 import datetime
 import json
 import os
@@ -744,6 +745,105 @@ class Connections:
         if comments:
             lines += ["", "Comments:"] + [f"- {c['user']['login']}: {_short(c.get('body', ''), 400)}" for c in comments[-10:]]
         return "\n".join(lines)
+
+    async def gh_branches(self, repo):
+        """Each branch with its last commit's age and author, oldest first, and any open pull request from it."""
+        repo = self._gh_repo(repo)
+        info = await self._gh(f"/repos/{repo}")
+        branches = (await self._gh(f"/repos/{repo}/branches?per_page=100"))[:40]
+        pulls = await self._gh(f"/repos/{repo}/pulls?state=open&per_page=100")
+        open_from = {p["head"]["ref"]: p["number"] for p in pulls  # pull requests from this project's own branches, not forks
+                     if ((p.get("head") or {}).get("repo") or {}).get("full_name", repo) == repo}
+        commits = await asyncio.gather(*(self._gh(f"/repos/{repo}/commits/{b['commit']['sha']}") for b in branches))
+        rows = []
+        for b, c in zip(branches, commits):
+            who = ((c.get("author") or {}).get("login") or (c.get("commit", {}).get("author") or {}).get("name") or "?")
+            when = (c.get("commit", {}).get("committer") or {}).get("date") or (c.get("commit", {}).get("author") or {}).get("date")
+            rows.append((_parse_date(when) or datetime.datetime.min, f"{b['name']} · last commit {self._ago(when)} by {who}"
+                         + (" · default branch" if b["name"] == info.get("default_branch") else "")
+                         + (f" · open pull request #{open_from[b['name']]}" if b["name"] in open_from else "")))
+        rows.sort(key=lambda r: r[0])
+        return "\n".join(r[1] for r in rows) or f"No branches in {repo}."
+
+    @staticmethod
+    def _gh_since(since):
+        """'yesterday', 'today', a number of days, or YYYY-MM-DD, as an ISO time for GitHub. 7 days if empty."""
+        s = to_str(since).strip().lower()
+        today = datetime.datetime.now(datetime.timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+        if s in ("", "week", "last week"):
+            day = today - datetime.timedelta(days=7)
+        elif s == "today":
+            day = today
+        elif s == "yesterday":
+            day = today - datetime.timedelta(days=1)
+        elif re.fullmatch(r"\d+( days?)?", s):
+            day = today - datetime.timedelta(days=int(s.split()[0]))
+        elif re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
+            day = datetime.datetime.strptime(s, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
+        else:
+            return None
+        return day.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    async def gh_commits(self, repo, author="", since=""):
+        """Commits on the default branch, newest first. author 'me' means the token's owner."""
+        repo, author = self._gh_repo(repo), to_str(author).strip()
+        if author.lower() in ("me", "@me"):
+            author = (await self._gh("/user")).get("login", "")
+        start = self._gh_since(since)
+        if not start:
+            return f"“{since}” isn't a time to start from. Use today, yesterday, a number of days, or a date like 2026-10-01."
+        q = f"per_page=50&since={start}" + (f"&author={urllib.parse.quote(author)}" if author else "")
+        rows = await self._gh(f"/repos/{repo}/commits?{q}")
+        return "\n".join(f"{c['sha'][:7]} · {self._ago((c.get('commit', {}).get('author') or {}).get('date'))} · "
+                         f"{(c.get('author') or {}).get('login') or (c.get('commit', {}).get('author') or {}).get('name') or '?'}: "
+                         f"{_short((c.get('commit') or {}).get('message', '').split(chr(10))[0], 200)}" for c in rows) \
+            or f"No commits in {repo}" + (f" by {author}" if author else "") + " in that time."
+
+    async def gh_read_file(self, repo, path="", ref=""):
+        """One file's text, or a folder's contents. ref is a branch, tag or commit (the default branch if empty)."""
+        repo, path, ref = self._gh_repo(repo), to_str(path).strip().strip("/"), to_str(ref).strip()
+        data = await self._gh(f"/repos/{repo}/contents/{urllib.parse.quote(path)}" + (f"?ref={urllib.parse.quote(ref)}" if ref else ""))
+        where = f"{repo}/{path}" + (f" at {ref}" if ref else "")
+        if isinstance(data, list):
+            return f"{where or repo} is a folder:\n" + "\n".join(f"{x['name']}{'/' if x.get('type') == 'dir' else ''}" for x in data)
+        if data.get("encoding") != "base64" or data.get("content") is None:
+            return f"{where} can't be read as text (it's too big for GitHub to send, or not a file)."
+        raw = base64.b64decode(data["content"])
+        try:
+            text = raw.decode("utf-8")
+        except UnicodeDecodeError:
+            return f"{where} isn't a text file ({len(raw):,} bytes)."
+        limit = 30000
+        return f"{where}:\n{text[:limit]}" + (f"\n\n(Only the first {limit:,} of {len(text):,} characters.)" if len(text) > limit else "")
+
+    async def gh_open_issue(self, repo, title, body, approved=False):
+        """Opens an issue, asking first. Says what happened, for the agent."""
+        repo, title, body = self._gh_repo(repo), to_str(title).strip(), to_str(body).strip()
+        if not title:
+            return "Not opened: an issue needs a title."
+        if not approved and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
+            return "Not opened: the person said no, or nobody was there to ask."
+        made = await self._gh(f"/repos/{repo}/issues", "POST", {"title": title, "body": body})
+        self.log(tr("GitHub issue opened in {repo}: #{n}", repo=repo, n=made.get("number")), title + ("\n\n" + body if body else ""), tr("sent"))
+        return f"Opened {repo} #{made.get('number')}: {made.get('html_url', '')}"
+
+    async def gh_add_labels(self, repo, number, labels, approved=False):
+        """Adds labels the repo already has, asking first. Says what happened, for the agent."""
+        repo, n = self._gh_repo(repo), round_js(num(number))
+        want = [to_str(x).strip() for x in (labels if isinstance(labels, list) else re.split(r"\s*,\s*", to_str(labels))) if to_str(x).strip()]
+        if not want:
+            return "Not labelled: give at least one label."
+        have = {lb["name"].lower(): lb["name"] for lb in await self._gh(f"/repos/{repo}/labels?per_page=100")}
+        unknown = [x for x in want if x.lower() not in have]
+        if unknown:
+            return (f"Not labelled: {repo} has no label {', '.join(unknown)}. Use only its own labels: "
+                    + (", ".join(sorted(have.values())) or "(it has none)") + ".")
+        names = [have[x.lower()] for x in want]
+        if not approved and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
+            return "Not labelled: the person said no, or nobody was there to ask."
+        await self._gh(f"/repos/{repo}/issues/{n}/labels", "POST", {"labels": names})
+        self.log(tr("GitHub labels on {repo} #{n}", repo=repo, n=n), ", ".join(names), tr("sent"))
+        return f"Labelled {repo} #{n}: {', '.join(names)}."
 
     async def gh_comment(self, repo, number, text, approved=False):
         repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()

@@ -22,6 +22,7 @@ that the two agree.
 - Web requests are now listened for on this computer only (127.0.0.1), not on every network it's on (#106). If Home Assistant on another machine, IFTTT or your phone calls the program, add `WEBHOOK_HOST = 0.0.0.0` to its `second-thought.ini`. `--doctor` checks the same address, and the startup line shows `http://127.0.0.1:…` when only this computer can call it. This needs a major version at release, since such a program stops receiving requests until the line is added.
 
 ### Added
+- Five more GitHub tools for the agent (#144). **GitHub: projects and pull requests** can now list a project's branches (`list_branches`) and commits (`list_commits`), and read a file or folder (`read_github_file`). **GitHub: comment, open and label issues** can open issues (`open_issue`) and add labels the project already has (`add_labels`); like commenting, each asks first. Before its first run, a program with that tool now lists "comment on GitHub, and open and label issues"; like any re-exported program, it asks again.
 - Exported programs print in German when exported from the page in German (#74).
 - Exported programs print in Dutch when exported from the page in Dutch (#75).
 - Exported programs print in Italian when exported from the page in Italian (#76).

@@ -80,7 +80,7 @@ The olive block **agent: work toward …** holds the tools, which have their own
 - **search LinkedIn**, through the web search. LinkedIn doesn't let programs search it directly, so this only finds what LinkedIn shows everyone.
 - **calendar**, to list your events and find free time.
 - **email: search and read**, and **email: send**.
-- **GitHub: projects and pull requests**, to find pull requests waiting for your review and read what they change, and **GitHub: comment**.
+- **GitHub: projects and pull requests**, to find pull requests waiting for your review and read what they change, list a project's branches and commits, and read its files. **GitHub: comment, open and label issues** comments on pull requests and issues, opens new issues, and adds labels the project already has.
 - **Telegram: search my messages** and **Telegram: send**.
 - **Discord: search my channels** and **Discord: send**, and the same for **Slack**. They only read and post in the channels in your settings.
 - **MQTT: read topics** and **MQTT: publish**, for sensors and switches that talk MQTT (like Zigbee2MQTT).

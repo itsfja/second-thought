@@ -585,7 +585,7 @@
    "email": "ईपत्रम्: अन्वेषणं पठनं च",
    "email_send": "ईपत्रम्: प्रेषणम् (प्रथमं मां पृच्छति)",
    "github": "GitHub: परियोजनाः pull requests च",
-   "github_act": "GitHub: टिप्पणी (प्रथमं मां पृच्छति)",
+   "github_act": "GitHub: टिप्पणी, issues उद्घाटनं चिह्नीकरणं च (प्रथमं मां पृच्छति)",
    "telegram": "Telegram: मम सन्देशेषु अन्वेषणम्",
    "telegram_send": "Telegram: प्रेषणम् (प्रथमं मां पृच्छति)",
    "telegram_send_free": "Telegram: प्रेषणम् (अपृष्ट्वा)",
@@ -1063,7 +1063,6 @@
   "Type the prompt text.": "प्रोम्प्ट्-पाठं टङ्कय।",
   "Your saved space is full. Delete something first.": "तव रक्षणस्थानं पूर्णम्। प्रथमं किमपि लोपय।",
   "accept web requests from other computers": "अन्यसङ्गणकेभ्यः जालयाचनाः स्वीकर्तुम्",
-  "comment on GitHub": "GitHub उपरि टिप्पणीं कर्तुम्",
   "control your Home Assistant devices": "तव Home Assistant-यन्त्राणि नियन्तुम्",
   "control your Homey devices and start Homey flows": "तव Homey-यन्त्राणि नियन्तुं Homey-प्रवाहान् आरब्धुं च",
   "forever": "सदा",
@@ -1311,7 +1310,10 @@
   "“{value}” isn't on or off.": "“{value}” on अथवा off न।",
   "Try: {tip}": "परीक्षस्व: {tip}",
   "Shared by {author}.": "{author} इत्यनेन विभक्तः।",
-  "{title} (shared by {author})": "{title} ({author} इत्यनेन विभक्तः)"
+  "{title} (shared by {author})": "{title} ({author} इत्यनेन विभक्तः)",
+  "GitHub issue opened in {repo}: #{n}": "{repo} इत्यत्र GitHub issue उद्घाटितम्: #{n}",
+  "GitHub labels on {repo} #{n}": "{repo} #{n} उपरि GitHub-चिह्नानि",
+  "comment on GitHub, and open and label issues": "GitHub उपरि टिप्पणीं कर्तुम्, issues उद्घाटयितुं चिह्नयितुं च"
  },
  "examples": {
   "review": {
@@ -2712,7 +2714,9 @@
   "When {entity} changes": "यदा {entity} परिवर्तते",
   "Run": "चालय",
   "(yes)": "आ, आम्",
-  "(no)": "न, नहि"
+  "(no)": "न, नहि",
+  "GitHub issue opened in {repo}: #{n}": "{repo} इत्यत्र GitHub issue उद्घाटितम्: #{n}",
+  "GitHub labels on {repo} #{n}": "{repo} #{n} उपरि GitHub-चिह्नानि"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

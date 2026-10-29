@@ -440,7 +440,7 @@ def python_tests(codes):
         sent_before = len(svc_log["tg_sent"]), len(svc_log["mail_sent"])
         check(sent_before[0] >= 2 and sent_before[1] >= 1 and any("Got:" not in m["text"] for m in svc_log["tg_sent"]),
               f"the examples sent Telegram messages ({sent_before[0]}) and emails ({sent_before[1]}) through the stand-ins")
-        for name in ("t_cn_gh", "t_cn_comment", "t_cn_tg", "t_cn_mail", "t_cn_cal", "t_cn_feed"):
+        for name in ("t_cn_gh", "t_cn_comment", "t_cn_gh_more", "t_cn_issue", "t_cn_tg", "t_cn_mail", "t_cn_cal", "t_cn_feed"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
         run_cn = lambda name: drive([sys.executable, "-u", str(pathlib.Path(tmp) / f"{name}.py")],  # noqa: E731
                                     dict(env, FAKE_AGENT_SCRIPT=json.dumps(AGENT_SCRIPTS[name])), tmp)
@@ -455,6 +455,22 @@ def python_tests(codes):
         posted = [c for c in svc_log["gh"][before:] if c.startswith("POST ")]
         check(code_ == 0 and "Allow this? let the agent use comment_on_github" in out and posted == ["POST /repos/sample-baker/oven-timer/issues/7/comments"]
               and out.count("Allow this?") == 1, "Python asks once, then posts the GitHub comment" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_cn("t_cn_gh_more")
+        out = " ".join(out.split())
+        check(code_ == 0 and 0 <= out.find("old-d3-v5 · last commit 311 days ago by toast-rack") < out.find("main · last commit 24 h ago by sample-baker · default branch")
+              and "rye-curve · last commit 24 h ago by crumb-shot · open pull request #41" in out
+              and "a41c9e2 · " in out and "3e8a52c" in out and "77d3e0a" not in out and "isn't a time to start from" in out
+              and "| `--starter` | starter percentage" in out and "is a folder: chart.js cli.js curves.js" in out and "is a folder: README.md package.json src/" in out,
+              "Python lists branches and commits and reads files and folders, as the page does" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        before = len(svc_log["gh"])
+        code_, out, err = run_cn("t_cn_issue")
+        posted = [c for c in svc_log["gh"][before:] if c.startswith("POST ")]
+        out = " ".join(out.split())
+        check(code_ == 0 and posted == ["POST /repos/sample-baker/sourdough-chart/issues/40/labels", "POST /repos/sample-baker/sourdough-chart/issues"]
+              and "has no label safari" in out and "Labelled sample-baker/sourdough-chart #40: bug, urgent." in out
+              and "Opened sample-baker/sourdough-chart #42: https://github.com/sample-baker/sourdough-chart/issues/42" in out and "needs a title" in out
+              and out.count("Allow this?") == 4, f"Python labels with the project's own labels and opens an issue, asking before each use ({posted})"
+              + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         before = len(svc_log["tg_sent"])
         code_, out, err = run_cn("t_cn_tg")
         check(code_ == 0 and "Remind me to feed the starter at 8 tonight" in out and "Someone else's message" not in out

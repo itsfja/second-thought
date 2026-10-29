@@ -53,9 +53,19 @@ class AgentTools:
                     ["repo", "number"]),
                    ("list_projects", "List GitHub projects, most recently changed first: the person's own, or another owner's if you give one.", ["owner"]),
                    ("search_github", "Search GitHub issues and pull requests, with GitHub's search words, like 'is:open is:issue repo:owner/name label:bug'.",
-                    ["query"])],
+                    ["query"]),
+                   ("list_branches", "List one GitHub project's branches, oldest last commit first, each with when and by whom it was last changed, and any "
+                    "open pull request from it.", ["repo"]),
+                   ("list_commits", "List commits on a GitHub project's main branch, newest first. author is a GitHub login, or me for the person "
+                    "(anyone if you leave it empty); since is today, yesterday, a number of days or YYYY-MM-DD (7 days if you don't say).",
+                    ["repo", "author", "since"]),
+                   ("read_github_file", "Read one file in a GitHub project, like README.md, or list a folder's contents (leave path empty for the top "
+                    "folder). ref is a branch, tag or commit (the main branch if you don't say).", ["repo", "path", "ref"])],
         "github_act": [("comment_on_github", "Post a comment on a GitHub pull request or issue. The person is asked first, and may say no.",
-                        ["repo", "number", "text"])],
+                        ["repo", "number", "text"]),
+                       ("open_issue", "Open a new issue in a GitHub project. The person is asked first, and may say no.", ["repo", "title", "body"]),
+                       ("add_labels", "Add labels to a GitHub issue or pull request. Only labels the project already has work; if one doesn't, "
+                        "you're told which it has. The person is asked first, and may say no.", ["repo", "number", "labels"])],
         "telegram": [("search_telegram", "Search the Telegram messages the person has sent to their bot, newest first. Leave text empty for the latest.",
                       ["text"])],
         "telegram_send": [("send_telegram", "Send a Telegram message to the person (or back to the chat a message came from). "
@@ -103,7 +113,10 @@ class AgentTools:
                          "review_text": {"text": "text", "criteria": "text"}, "read_feed": {"url": "text", "limit": "number"},
                          "search_linkedin": {"query": "text"}, "my_pull_requests": {}, "list_pull_requests": {"repo": "text", "state": "text"},
                          "read_pull_request": {"repo": "text", "number": "number"}, "list_projects": {"owner": "text"}, "search_github": {"query": "text"},
-                         "comment_on_github": {"repo": "text", "number": "number", "text": "text"}, "search_telegram": {"text": "text"},
+                         "comment_on_github": {"repo": "text", "number": "number", "text": "text"},
+                         "list_branches": {"repo": "text"}, "list_commits": {"repo": "text", "author": "text", "since": "text"},
+                         "read_github_file": {"repo": "text", "path": "text", "ref": "text"}, "open_issue": {"repo": "text", "title": "text", "body": "text"},
+                         "add_labels": {"repo": "text", "number": "number", "labels": "list"}, "search_telegram": {"text": "text"},
                          "send_telegram": {"text": "text"}, "search_discord": {"text": "text"}, "send_discord": {"text": "text"},
                          "search_slack": {"text": "text"}, "send_slack": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
                          "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
@@ -112,7 +125,8 @@ class AgentTools:
                          "find_homey_devices": {"search": "text"}, "list_homey_flows": {}, "homey_variable": {"name": "text"},
                          "set_homey_device": {"device": "text", "capability": "text", "value": "any"}, "run_homey_flow": {"flow": "text"}}
     AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
-                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"}, "search_discord": {"text"}, "search_slack": {"text"},
+                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "list_commits": {"author", "since"},
+                      "read_github_file": {"path", "ref"}, "open_issue": {"body"}, "search_telegram": {"text"}, "search_discord": {"text"}, "search_slack": {"text"},
                       "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"},
                       "publish_mqtt": {"retain"}, "find_homey_devices": {"search"}}
     MAX_FILE_CHARS = 30000
@@ -345,6 +359,16 @@ class AgentTools:
             return await self.gh_repos(a("owner"))
         if kind == "search_github":
             return await self.gh_search(a("query"))
+        if kind == "list_branches":
+            return await self.gh_branches(a("repo"))
+        if kind == "list_commits":
+            return await self.gh_commits(a("repo"), a("author"), a("since"))
+        if kind == "read_github_file":
+            return await self.gh_read_file(a("repo"), a("path"), a("ref"))
+        if kind == "open_issue":
+            return await self.gh_open_issue(a("repo"), a("title"), a("body"), approved)
+        if kind == "add_labels":
+            return await self.gh_add_labels(a("repo"), inp.get("number", 0), inp.get("labels") or [], approved)
         if kind == "comment_on_github":
             done = await self.gh_comment(a("repo"), inp.get("number", 0), a("text"), approved)
             return "Comment posted." if done else "Not posted: the person said no, or nobody was there to ask."

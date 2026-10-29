@@ -149,7 +149,7 @@
 "rb_now.PART":{"time":"tijd","date":"datum","datetime":"datum en tijd","hour":"uur","minute":"minuut","weekday":"dag van de week"},
 "rb_sort.ORDER":{"desc":"hoogste eerst","asc":"laagste eerst"},
 "rb_ask_first.WHAT":{"ha":"elke smarthome-actie (Home Assistant, Homey, MQTT)","messages":"het versturen van berichten en aankondigingen","files":"het opslaan van bestanden","all":"al deze dingen"},
-"rb_agent_builtin.KIND":{"web":"op het web zoeken en pagina’s lezen","ask":"mij een vraag stellen","memory":"notities onthouden en ophalen","calc":"rekenen","time":"tijden en datums","file":"een bestand lezen dat ik kies","review":"tekst controleren op criteria","feeds":"nieuwsfeeds","linkedin":"LinkedIn doorzoeken (openbare pagina’s)","calendar":"agenda: afspraken en vrije tijd","email":"e-mail: zoeken en lezen","email_send":"e-mail: versturen (vraagt het me eerst)","github":"GitHub: projecten en pull requests","github_act":"GitHub: reageren (vraagt het me eerst)","telegram":"Telegram: mijn berichten doorzoeken","telegram_send":"Telegram: versturen (vraagt het me eerst)","telegram_send_free":"Telegram: versturen (zonder vragen)","discord":"Discord: mijn kanalen doorzoeken","discord_send":"Discord: versturen (vraagt het me eerst)","discord_send_free":"Discord: versturen (zonder vragen)","slack":"Slack: mijn kanalen doorzoeken","slack_send":"Slack: versturen (vraagt het me eerst)","slack_send_free":"Slack: versturen (zonder vragen)","mqtt":"MQTT: topics lezen","mqtt_act":"MQTT: publiceren (vraagt het me eerst)","mqtt_act_free":"MQTT: publiceren (zonder vragen)","homey_read":"Homey: apparaten, flows en variabelen bekijken","homey_act":"Homey: apparaten bedienen en flows starten (vraagt het me eerst)","homey_act_free":"Homey: apparaten bedienen en flows starten (zonder vragen)","ha_read":"Home Assistant: apparaten bekijken","ha_act":"Home Assistant: apparaten bedienen","ha_act_free":"Home Assistant: apparaten bedienen (zonder vragen)"},
+"rb_agent_builtin.KIND":{"web":"op het web zoeken en pagina’s lezen","ask":"mij een vraag stellen","memory":"notities onthouden en ophalen","calc":"rekenen","time":"tijden en datums","file":"een bestand lezen dat ik kies","review":"tekst controleren op criteria","feeds":"nieuwsfeeds","linkedin":"LinkedIn doorzoeken (openbare pagina’s)","calendar":"agenda: afspraken en vrije tijd","email":"e-mail: zoeken en lezen","email_send":"e-mail: versturen (vraagt het me eerst)","github":"GitHub: projecten en pull requests","github_act":"GitHub: reageren, issues openen en labelen (vraagt het me eerst)","telegram":"Telegram: mijn berichten doorzoeken","telegram_send":"Telegram: versturen (vraagt het me eerst)","telegram_send_free":"Telegram: versturen (zonder vragen)","discord":"Discord: mijn kanalen doorzoeken","discord_send":"Discord: versturen (vraagt het me eerst)","discord_send_free":"Discord: versturen (zonder vragen)","slack":"Slack: mijn kanalen doorzoeken","slack_send":"Slack: versturen (vraagt het me eerst)","slack_send_free":"Slack: versturen (zonder vragen)","mqtt":"MQTT: topics lezen","mqtt_act":"MQTT: publiceren (vraagt het me eerst)","mqtt_act_free":"MQTT: publiceren (zonder vragen)","homey_read":"Homey: apparaten, flows en variabelen bekijken","homey_act":"Homey: apparaten bedienen en flows starten (vraagt het me eerst)","homey_act_free":"Homey: apparaten bedienen en flows starten (zonder vragen)","ha_read":"Home Assistant: apparaten bekijken","ha_act":"Home Assistant: apparaten bedienen","ha_act_free":"Home Assistant: apparaten bedienen (zonder vragen)"},
 "rb_agent_mcp.ASK":{"changes":"(vraagt het me vóór hulpmiddelen die iets veranderen)","every":"(vraagt het me vóór elk hulpmiddel)","never":"(zonder vragen)"},
 "rb_tg_message.PART":{"text":"tekst","sender":"afzender","chat":"chat"},
 "rb_mem_set.KIND":{"transient":"zolang deze pagina open is","permanent":"voor altijd"},
@@ -586,7 +586,6 @@
 "Type the prompt text.":"Typ de prompttekst.",
 "Your saved space is full. Delete something first.":"Je opslagruimte is vol. Verwijder eerst iets.",
 "accept web requests from other computers":"webverzoeken van andere computers aannemen",
-"comment on GitHub":"reageren op GitHub",
 "control your Home Assistant devices":"je Home Assistant-apparaten bedienen",
 "control your Homey devices and start Homey flows":"je Homey-apparaten bedienen en Homey-flows starten",
 "forever":"voor altijd",
@@ -834,7 +833,10 @@
 "“{value}” isn't on or off.":"‘{value}’ is niet on of off.",
 "Try: {tip}":"Probeer: {tip}",
 "Shared by {author}.":"Gedeeld door {author}.",
-"{title} (shared by {author})":"{title} (gedeeld door {author})"
+"{title} (shared by {author})":"{title} (gedeeld door {author})",
+"GitHub issue opened in {repo}: #{n}":"GitHub-issue geopend in {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub-labels op {repo} #{n}",
+"comment on GitHub, and open and label issues":"reageren op GitHub, en issues openen en labelen"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -1603,6 +1605,8 @@
 "When {entity} changes":"Wanneer {entity} verandert",
 "Run":"Run",
 "(yes)":"j, ja",
-"(no)":"n, nee"
+"(no)":"n, nee",
+"GitHub issue opened in {repo}: #{n}":"GitHub-issue geopend in {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub-labels op {repo} #{n}"
 }
 };
