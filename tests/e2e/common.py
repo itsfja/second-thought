@@ -135,6 +135,10 @@ async def route(r):
     for key, path in files.items():
         if key in u:
             return await r.fulfill(path=str(path), content_type="application/javascript")
+    m = re.fullmatch(r"http://test/lang/([a-z]+)\.js", u)
+    if m:  # a language's words, published next to the page
+        path = ROOT / "lang" / (m.group(1) + ".js")
+        return await (r.fulfill(path=str(path), content_type="application/javascript") if path.is_file() else r.fulfill(status=404, body=""))
     if u.startswith("http://test/"):
         return await r.fulfill(body=DOC, content_type="text/html")
     await r.abort()

@@ -6,14 +6,17 @@ tested on its own. Exported programs still come as one file with nothing to inst
 package's modules, in order, into python/runtime.py (each module's imports, above its "package only" line,
 are left out: in one file every name is already there).
 
-The page is published as one self-contained HTML file, so that runtime, its list of model services (SERVICES
-in python/second_thought/providers.py, as JSON), what programs can do (CAPABILITIES in core.py), the block palette's translations (i18n/*.json), the code-conversion prompt
+The page is published as one HTML file, so that runtime, its list of model services (SERVICES
+in python/second_thought/providers.py, as JSON), what programs can do (CAPABILITIES in core.py), a list of the languages in i18n/*.json, the code-conversion prompt
 (prompts/convert-guide.txt), the community gallery's programs (gallery/*.json), the Home Assistant sample house (ha/sample-house.json) and the sample feeds,
 GitHub, Telegram, email and calendar (samples/connections.json) are embedded inside it.
+
+Each translation is too big to embed them all, so each i18n/<language>.json is also written as lang/<language>.js,
+which the page loads for the chosen language only. Publish the lang/ folder with the page, as its supporting files.
 Edit those files (not python/runtime.py, which is rebuilt), then run:
 
-    python tools/sync.py           # rebuild python/runtime.py and write everything into second-thought.html
-    python tools/sync.py --check   # exit 1 if either is out of date (used by the tests)
+    python tools/sync.py           # rebuild python/runtime.py, lang/*.js and write everything into second-thought.html
+    python tools/sync.py --check   # exit 1 if any of them is out of date (used by the tests)
 """
 import ast
 import json
@@ -30,6 +33,7 @@ MARK = "# ---- package only: tools/sync.py leaves everything above this line out
 SERVICES = PACKAGE / "providers.py"   # its SERVICES list is the page's list of model services too
 CAPABILITIES = PACKAGE / "core.py"    # its CAPABILITIES list is the page's list of what programs can do
 I18N = ROOT / "i18n"                  # one <language>.json per language the block palette can be shown in
+LANG = ROOT / "lang"                  # the same, as scripts the page loads one at a time: made by this tool
 GALLERY = ROOT / "gallery"            # the community gallery: one block file per program, with a "gallery" part
 GALLERY_FIELDS = ("title", "description", "tip", "author", "runtime")
 PARTS = [
@@ -92,19 +96,30 @@ def _lines(value, depth: int) -> str:
                               for k, v in value.items()) + "\n}"
 
 
-def i18n_json() -> str:
-    """Every i18n/<language>.json, as one JSON object for the page: {"es": {...}, ...}.
-
-    Each language, each of its sections and each entry in a section goes on its own line, so changing one
-    translated phrase changes one line of second-thought.html rather than a line holding every language.
-    """
+def _languages() -> dict:
     langs = {}
     for path in sorted(I18N.glob("*.json")):
         try:
             langs[path.stem] = json.loads(path.read_text(encoding="utf-8"))
         except ValueError as e:
             sys.exit(f"{path.relative_to(ROOT)} isn't valid JSON: {e}")
-    return _lines(langs, 3) + "\n"
+    return langs
+
+
+def i18n_json() -> str:
+    """The languages the page offers, for its Blocks menu, as {"es": {"name": "Español"}, ...}. The words themselves are in
+    lang/<language>.js, which the page loads for the chosen language only."""
+    return _lines({code: {"name": t.get("name", code)} for code, t in _languages().items()}, 1) + "\n"
+
+
+def lang_files() -> dict:
+    """lang/<language>.js for each i18n/<language>.json: a script that hands the page that language's words.
+
+    Each section and each entry in a section goes on its own line, so changing one translated phrase changes one line.
+    """
+    return {LANG / f"{code}.js": f"/* Made by tools/sync.py from i18n/{code}.json: edit that, not this. */\n"
+                                 f"(window.ST_I18N_FILES = window.ST_I18N_FILES || {{}})[{json.dumps(code)}] = {_lines(t, 2)};\n"
+            for code, t in _languages().items()}
 
 
 def gallery_json() -> str:
@@ -161,16 +176,21 @@ def main() -> int:
     current_rt = RUNTIME.read_text(encoding="utf-8") if RUNTIME.is_file() else ""
     current = PAGE.read_text(encoding="utf-8")
     updated = build(current, runtime)
+    langs = lang_files()
+    stale = sorted(set(LANG.glob("*.js")) - set(langs))
+    old_langs = sorted(path for path, text in langs.items() if not path.is_file() or path.read_text(encoding="utf-8") != text)
     if "--check" in sys.argv:
         bad = []
         if runtime != current_rt:
             bad.append("python/runtime.py doesn't match python/second_thought/ (edit the package, not runtime.py)")
         if updated != current:
             bad.append("second-thought.html is out of date")
+        if old_langs or stale:
+            bad.append("lang/ is out of date (" + ", ".join(p.name for p in old_langs + stale) + ")")
         if bad:
             print("; ".join(bad) + ". Run: python tools/sync.py")
             return 1
-        print("python/runtime.py and second-thought.html are in sync.")
+        print("python/runtime.py, lang/ and second-thought.html are in sync.")
         return 0
     changed = []
     if runtime != current_rt:
@@ -179,6 +199,13 @@ def main() -> int:
     if updated != current:
         PAGE.write_text(updated, encoding="utf-8")
         changed.append("second-thought.html")
+    if old_langs or stale:
+        LANG.mkdir(exist_ok=True)
+        for path in old_langs:
+            path.write_text(langs[path], encoding="utf-8")
+        for path in stale:  # a language whose i18n file was removed
+            path.unlink()
+        changed.append("lang/ (" + ", ".join(p.stem for p in old_langs + stale) + ")")
     print("Updated " + " and ".join(changed) + "." if changed else "Already in sync.")
     return 0
 

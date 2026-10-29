@@ -7,24 +7,30 @@ check your change before opening a pull request.
 
 Second Thought is two things built from one set of sources:
 
-- **The page**, `second-thought.html`: the block editor, published as a single self-contained file.
+- **The page**, `second-thought.html`: the block editor, published with the `lang/` folder beside it.
 - **The runtime**, which every exported Python program carries a copy of.
 
 ```
 python/second_thought/*.py ──┐
                              ├─ tools/sync.py ─→ python/runtime.py   (the runtime, joined into one file)
-i18n/*.json, gallery/*.json, │                 └→ second-thought.html (with the runtime and the rest embedded)
-prompts/, samples/, ha/ ─────┘
+i18n/*.json, gallery/*.json, │                 ├→ second-thought.html (with the runtime and the rest embedded)
+prompts/, samples/, ha/ ─────┘                 └→ lang/*.js           (one per language, loaded by the page)
 ```
 
 The runtime is written as a package, `python/second_thought/`, so each module can be read and tested on its own.
 `tools/sync.py` joins the modules into `python/runtime.py` and copies it, along with the model services, the
-capability list, the translations, the gallery, the conversion prompt and the sample data, into the page. The
-editor's own HTML, CSS and JavaScript are edited in place in `second-thought.html`.
+capability list, the list of languages, the gallery, the conversion prompt and the sample data, into the page. Each
+language's words go into `lang/<language>.js` instead, which the page loads for the chosen language only, so adding a
+language doesn't make the page bigger for everyone. The editor's own HTML, CSS and JavaScript are edited in place in
+`second-thought.html`.
+
+**Publishing.** The page is published as a claude.ai artifact, with every file in `lang/` as a supporting file at the
+same path (`lang/fr.js` and so on). Publish them together: if a language's file is missing, the page still works, in
+English, with a note saying the language couldn't be loaded.
 
 ## The rules
 
-1. **Never edit `python/runtime.py`, or the embedded `<script>` blocks in `second-thought.html`, by hand.** Edit the
+1. **Never edit `python/runtime.py`, `lang/`, or the embedded `<script>` blocks in `second-thought.html`, by hand.** Edit the
    source files, then run:
 
    ```
