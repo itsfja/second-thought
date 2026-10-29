@@ -1,0 +1,278 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "recipe-scaler-weekly",
+  "gallery": {
+    "title": "Weekly recipes and shopping list",
+    "category": "home",
+    "description": "Remembers recipes you drop in a folder. Run it on shopping day: say which recipes and for how many, and it scales them and makes one shopping list grouped by supermarket aisle.",
+    "tip": "Change the folder to where you keep recipes (PDF, Word or text). Run it by hand, since it asks which recipes you want.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_folder_when",
+          "fields": {
+            "FOLDER": "~/Recipes"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "recipe"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "recipe"
+          },
+          "next": {
+            "block": {
+              "type": "rb_mem_add",
+              "fields": {
+                "KIND": "permanent"
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "Write this recipe as one line: its name (serves N): each ingredient with its amount, separated by semicolons.\n\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "NAME": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "recipes"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_finish_with",
+                  "inputs": {
+                    "TEXT": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "Recipe remembered."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Which recipes this week, and for how many people? (Your recipes are listed in the agent's first step.)"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_agent",
+                  "fields": {
+                    "PLAN": false
+                  },
+                  "inputs": {
+                    "GOAL": {
+                      "block": {
+                        "type": "text_join",
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "My recipes, one per line:\n"
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "rb_mem_get",
+                              "inputs": {
+                                "NAME": {
+                                  "shadow": {
+                                    "type": "text",
+                                    "fields": {
+                                      "TEXT": "recipes"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "ADD2": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "\n\nThis week I want: "
+                              }
+                            }
+                          },
+                          "ADD3": {
+                            "block": {
+                              "type": "rb_answer"
+                            }
+                          },
+                          "ADD4": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "\nScale each recipe to the servings I want, using calculate for every amount. If a recipe isn't in my list, use a standard version. Then write one shopping list grouped by supermarket aisle (fruit and veg, bakery, dairy, meat and fish, tins and jars, dry goods, frozen), adding up the same ingredient across recipes."
+                              }
+                            }
+                          }
+                        },
+                        "extraState": {
+                          "itemCount": 5
+                        }
+                      }
+                    },
+                    "STEPS": {
+                      "shadow": {
+                        "type": "math_number",
+                        "fields": {
+                          "NUM": 12
+                        }
+                      }
+                    },
+                    "TOOLS": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "calc"
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_file_save",
+                      "fields": {
+                        "EXT": "md"
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_draft"
+                          }
+                        },
+                        "NAME": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "shopping-list"
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_email_send",
+                          "inputs": {
+                            "TO": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "you@example.com"
+                                }
+                              }
+                            },
+                            "SUBJECT": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "Shopping list"
+                                }
+                              }
+                            },
+                            "TEXT": {
+                              "block": {
+                                "type": "rb_draft"
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_result"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

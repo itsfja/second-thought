@@ -1,0 +1,243 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "dep-watcher",
+  "gallery": {
+    "title": "Dependency watcher",
+    "category": "coding",
+    "description": "Each Monday, reads the releases feeds of your dependencies, summarises breaking changes, and checks your project's dependency file to say whether each one touches you.",
+    "tip": "Put each dependency's releases feed in feeds = …, like https://github.com/d3/d3/releases.atom, and your project in the first block.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_project",
+        "name": "project"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "deps"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 9,
+            "MINUTE": 15,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "weekday"
+                          }
+                        }
+                      },
+                      "B": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Monday"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_broadcast_wait",
+                    "inputs": {
+                      "MSG": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "deps"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "deps"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_project"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "sample-baker/sourdough-chart"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_agent",
+                  "fields": {
+                    "PLAN": false
+                  },
+                  "inputs": {
+                    "GOAL": {
+                      "block": {
+                        "type": "text_join",
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "Recall the note 'releases seen'. Read my feeds (read_feed with no url): they're the releases of my dependencies. For each release newer than the ones I've seen, say in a line whether it has breaking changes, and what. Then read the dependency file in "
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "variables_get",
+                              "fields": {
+                                "VAR": {
+                                  "id": "g_project"
+                                }
+                              }
+                            }
+                          },
+                          "ADD2": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": " (package.json, requirements.txt or pyproject.toml) and say whether each breaking change affects a version I use. Finally remember the newest release of each dependency as 'releases seen'."
+                              }
+                            }
+                          }
+                        },
+                        "extraState": {
+                          "itemCount": 3
+                        }
+                      }
+                    },
+                    "STEPS": {
+                      "shadow": {
+                        "type": "math_number",
+                        "fields": {
+                          "NUM": 12
+                        }
+                      }
+                    },
+                    "TOOLS": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "feeds"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_agent_builtin",
+                            "fields": {
+                              "KIND": "github"
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_agent_builtin",
+                                "fields": {
+                                  "KIND": "memory"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_email_send",
+                      "inputs": {
+                        "TO": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "you@example.com"
+                            }
+                          }
+                        },
+                        "SUBJECT": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "Dependency releases this week"
+                            }
+                          }
+                        },
+                        "TEXT": {
+                          "block": {
+                            "type": "rb_draft"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_result"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

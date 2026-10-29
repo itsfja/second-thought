@@ -1,0 +1,124 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "commit-summariser",
+  "gallery": {
+    "title": "Standup from commits",
+    "category": "coding",
+    "description": "Each weekday morning, your commits from the day before across your GitHub projects, grouped by intent, as standup notes in Slack.",
+    "tip": "Change 8:45 to before your standup. It reads only commits on each project's main branch.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "standup"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 8,
+            "MINUTE": 45,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "standup"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "standup"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "List my GitHub projects and keep those pushed in the last two days. In each, list_commits with author me since yesterday. Group my commits by intent (features, fixes, refactoring, docs, other), one plain-English line each with the project in brackets. End with a one-line summary I could say at standup. If there are none, say so."
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 12
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "github"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_slack_send",
+                  "inputs": {
+                    "TEXT": {
+                      "block": {
+                        "type": "rb_draft"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

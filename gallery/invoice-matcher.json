@@ -1,0 +1,438 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "invoice-matcher",
+  "gallery": {
+    "title": "Invoice matcher",
+    "category": "money",
+    "description": "Keeps a list of the receipts you save to a folder. When an invoice arrives by email, it checks for a matching receipt and emails you if there isn't one.",
+    "tip": "Change the folder to where you keep receipts. It only knows receipts saved after it starts.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_invoice",
+        "name": "invoice"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste an invoice email to test with"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "invoice"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_email_when",
+          "fields": {
+            "CONTAINS": "invoice"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "invoice"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_folder_when",
+          "fields": {
+            "FOLDER": "~/Receipts"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "receipt"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "receipt"
+          },
+          "next": {
+            "block": {
+              "type": "rb_mem_add",
+              "fields": {
+                "KIND": "permanent"
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "In one line, from this receipt: supplier — amount — date. Nothing else.\n\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "NAME": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "receipts"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_finish_with",
+                  "inputs": {
+                    "TEXT": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "Receipt noted."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "invoice"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_invoice"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "In one line, from this invoice: supplier — amount — date. Nothing else.\n\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "controls_if",
+                  "inputs": {
+                    "IF0": {
+                      "block": {
+                        "type": "rb_ask_yesno",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "Is there a receipt for this invoice in the list: the same supplier and amount, within a month?\nInvoice: "
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_invoice"
+                                      }
+                                    }
+                                  }
+                                },
+                                "ADD2": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "\nReceipts:\n"
+                                    }
+                                  }
+                                },
+                                "ADD3": {
+                                  "block": {
+                                    "type": "rb_mem_get",
+                                    "inputs": {
+                                      "NAME": {
+                                        "shadow": {
+                                          "type": "text",
+                                          "fields": {
+                                            "TEXT": "receipts"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 4
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "DO0": {
+                      "block": {
+                        "type": "rb_finish_with",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "Matched: "
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_invoice"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "ELSE": {
+                      "block": {
+                        "type": "rb_email_send",
+                        "inputs": {
+                          "TO": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": "you@example.com"
+                              }
+                            }
+                          },
+                          "SUBJECT": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": "Invoice with no receipt"
+                              }
+                            }
+                          },
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "No receipt found for: "
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_invoice"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 2
+                              }
+                            }
+                          }
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_finish_with",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "No receipt for: "
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_invoice"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 2
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "extraState": {
+                    "hasElse": true
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 550
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,351 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "fx-travel-check",
+  "gallery": {
+    "title": "Travel money check",
+    "category": "money",
+    "description": "Two days before a calendar event abroad, looks up the exchange rate and sends a Telegram reminder about cash, card fees and plugs.",
+    "tip": "It decides from the event's title and place whether it's abroad. Web search only works in exported Python.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_country",
+        "name": "country"
+      },
+      {
+        "id": "g_advice",
+        "name": "advice"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Type an event to test with, like 'Flight to Lisbon'"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "trip"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_cal_when",
+          "fields": {
+            "N": 2880
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "trip"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "trip"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "rb_ask_yesno",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "Does this calendar event take place outside the UK?\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "variables_set",
+                    "fields": {
+                      "VAR": {
+                        "id": "g_country"
+                      }
+                    },
+                    "inputs": {
+                      "VALUE": {
+                        "block": {
+                          "type": "rb_extract",
+                          "inputs": {
+                            "WHAT": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "the country it takes place in"
+                                }
+                              }
+                            },
+                            "TEXT": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "variables_set",
+                        "fields": {
+                          "VAR": {
+                            "id": "g_advice"
+                          }
+                        },
+                        "inputs": {
+                          "VALUE": {
+                            "block": {
+                              "type": "rb_ask",
+                              "inputs": {
+                                "TEXT": {
+                                  "block": {
+                                    "type": "text_join",
+                                    "inputs": {
+                                      "ADD0": {
+                                        "shadow": {
+                                          "type": "rb_longtext",
+                                          "fields": {
+                                            "TEXT": "Using these search results, give today's rate from pounds to the currency of "
+                                          }
+                                        }
+                                      },
+                                      "ADD1": {
+                                        "block": {
+                                          "type": "variables_get",
+                                          "fields": {
+                                            "VAR": {
+                                              "id": "g_country"
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "ADD2": {
+                                        "shadow": {
+                                          "type": "rb_longtext",
+                                          "fields": {
+                                            "TEXT": ", then three short reminders for the trip: cash, card fees abroad, and the plug type.\n\n"
+                                          }
+                                        }
+                                      },
+                                      "ADD3": {
+                                        "block": {
+                                          "type": "rb_web_search",
+                                          "inputs": {
+                                            "TEXT": {
+                                              "block": {
+                                                "type": "text_join",
+                                                "inputs": {
+                                                  "ADD0": {
+                                                    "shadow": {
+                                                      "type": "rb_longtext",
+                                                      "fields": {
+                                                        "TEXT": "pound exchange rate today "
+                                                      }
+                                                    }
+                                                  },
+                                                  "ADD1": {
+                                                    "block": {
+                                                      "type": "variables_get",
+                                                      "fields": {
+                                                        "VAR": {
+                                                          "id": "g_country"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "extraState": {
+                                                  "itemCount": 2
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "extraState": {
+                                      "itemCount": 4
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_tg_send",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "✈️ "
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "rb_msg_value"
+                                      }
+                                    },
+                                    "ADD2": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD3": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_advice"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 4
+                                  }
+                                }
+                              }
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_finish_with",
+                                "inputs": {
+                                  "TEXT": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_advice"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "ELSE": {
+                  "block": {
+                    "type": "rb_finish_with",
+                    "inputs": {
+                      "TEXT": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Not abroad."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "extraState": {
+                "hasElse": true
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}
