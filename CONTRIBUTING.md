@@ -1,6 +1,6 @@
 # Contributing to Second Thought
 
-Thanks for helping. This page covers how the pieces fit together, the few rules that keep them in step, and how to
+Thanks for helping. [ROADMAP.md](ROADMAP.md) says what's planned and in what order; issues labelled `roadmap` are a good place to start. This page covers how the pieces fit together, the few rules that keep them in step, and how to
 check your change before opening a pull request.
 
 ## How the pieces fit
