@@ -436,7 +436,7 @@ A program doesn't update itself. To give it a newer runtime, import it on the pa
 | `tools/sync.py` | Joins the runtime into one file, then copies it and the other embedded parts into the page, so they always match. |
 | `tools/smoke_test.py` | Checks the real model services with your own keys. |
 | `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |
-| `tests/` | Unit tests (`tests/unit/`) and the end-to-end suite (`tests/run_tests.py`). |
+| `tests/` | Unit tests (`tests/unit/`), and the end-to-end suite (`tests/e2e/`, one file per area, run by `tests/run_tests.py`). |
 | `docs/ladybird-book.md` | The picture book. |
 | `CHANGELOG.md` | What changed in each runtime version. |
 | `CONTRIBUTING.md`, `SECURITY.md` | How to contribute; how to report a security problem, and what an exported program can and can't do. |
@@ -477,7 +477,7 @@ bash tests/setup.sh          # once: Playwright, Chromium and local copies of th
 python tests/run_tests.py    # runs the unit tests too
 ```
 
-At the end it says **All checks passed**, or lists what failed.
+At the end it says **All checks passed**, or lists what failed. To run only some areas, name them: `python tests/run_tests.py i18n gallery`. The areas are `sources`, `page`, `i18n`, `gallery` and `python` (which runs `page` too, for the programs it exports).
 
 **Real services.** To check the real model services with your own keys:
 

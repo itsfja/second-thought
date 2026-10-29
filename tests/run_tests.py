@@ -7,6 +7,13 @@ a stand-in Anthropic SDK (tests/fakeapi). Nothing calls the real API.
 
     bash tests/setup.sh          # once
     python tests/run_tests.py    # every time
+
+The tests live in tests/e2e/, one file per area. To run only some areas, name them:
+
+    python tests/run_tests.py i18n gallery
+
+The areas are sources, page, i18n, gallery and python. Python runs the programs the page exports, so naming
+python runs page too.
 """
 import pathlib
 import sys
@@ -20,28 +27,37 @@ from e2e.i18n import i18n_tests  # noqa: E402
 from e2e.gallery import gallery_tests  # noqa: E402
 
 
+AREAS = ("sources", "page", "i18n", "gallery", "python")
+
+
 def main():
-    sync = subprocess.run([sys.executable, str(ROOT / "tools" / "sync.py"), "--check"], capture_output=True, text=True)
-    print("Sources")
-    check(sync.returncode == 0, sync.stdout.strip())
-    package_check()
-    unit = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", str(HERE / "unit")], capture_output=True, text=True, timeout=300)
-    ran = re.search(r"Ran (\d+) tests?", unit.stderr)
-    check(unit.returncode == 0, f"the unit tests in tests/unit pass ({ran.group(1) if ran else '?'} tests)"
-          + ("" if unit.returncode == 0 else ":\n" + unit.stderr.strip()[-1500:]))
-    example_ini_check()
-    if not (VENDOR / "blockly").exists():
+    areas = set(sys.argv[1:]) or set(AREAS)
+    if areas - set(AREAS):
+        sys.exit(f"Unknown area: {', '.join(sorted(areas - set(AREAS)))}. The areas are {', '.join(AREAS)}.")
+    if "sources" in areas:
+        sync = subprocess.run([sys.executable, str(ROOT / "tools" / "sync.py"), "--check"], capture_output=True, text=True)
+        print("Sources")
+        check(sync.returncode == 0, sync.stdout.strip())
+        package_check()
+        unit = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", str(HERE / "unit")], capture_output=True, text=True, timeout=300)
+        ran = re.search(r"Ran (\d+) tests?", unit.stderr)
+        check(unit.returncode == 0, f"the unit tests in tests/unit pass ({ran.group(1) if ran else '?'} tests)"
+              + ("" if unit.returncode == 0 else ":\n" + unit.stderr.strip()[-1500:]))
+        example_ini_check()
+    if areas - {"sources"} and not (VENDOR / "blockly").exists():
         sys.exit("Run tests/setup.sh first.")
-    codes = asyncio.run(page_tests())
-    asyncio.run(i18n_tests())
-    asyncio.run(gallery_tests())
-    python_tests(codes)
+    codes = asyncio.run(page_tests()) if areas & {"page", "python"} else None
+    if "i18n" in areas:
+        asyncio.run(i18n_tests())
+    if "gallery" in areas:
+        asyncio.run(gallery_tests())
+    if "python" in areas:
+        python_tests(codes)
     print()
     if failures:
         print(f"{len(failures)} check(s) failed.")
         sys.exit(1)
     print("All checks passed.")
-
 
 if __name__ == "__main__":
     main()
