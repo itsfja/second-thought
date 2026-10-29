@@ -873,7 +873,8 @@
 "Loading it replaces the program on the canvas; you can undo straight after.":"טעינא מחלפא סדרא דעל לוחא; משכח אנת לאהדרא מן בתר.",
 "Building the program failed: {problem}":"סדרא לא אתבני: {problem}",
 "Undone. Your previous program is back.":"אתהדר. סדרך קדמיא תב.",
-"Loaded Claude's program ({n} blocks). Check the blocks before running.":"אתטען סדרא דClaude ({n} לבנין). בדוק לבניא קדם דתרהט."
+"Loaded Claude's program ({n} blocks). Check the blocks before running.":"אתטען סדרא דClaude ({n} לבנין). בדוק לבניא קדם דתרהט.",
+"Community: teaching":"כנישתא: מלפנותא"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

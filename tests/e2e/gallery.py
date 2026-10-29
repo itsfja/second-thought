@@ -21,7 +21,8 @@ async def gallery_tests():
         groups = await pg.eval_on_selector_all("#example optgroup", "e => e.map(g => g.label)")
         files_by_key = {"g_" + name[:-5].replace("-", "_"): d for name, d in files.items()}
         want = {"github": "Community: GitHub", "coding": "Community: code and data", "news": "Community: news", "money": "Community: money",
-                "calendar": "Community: calendar and email", "home": "Community: home and baking", "odds": "Community: odds and ends"}
+                "calendar": "Community: calendar and email", "home": "Community: home and baking", "learning": "Community: teaching",
+                "odds": "Community: odds and ends"}
         used = [g for k, g in want.items() if any(d["gallery"].get("category", "odds") == k for d in files.values())]
         community = [g for g in groups if g.startswith("Community: ")]
         check(community == used and groups.index(community[0]) == groups.index("Research") + 1,

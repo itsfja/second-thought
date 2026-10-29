@@ -1360,7 +1360,8 @@
   "Loading it replaces the program on the canvas; you can undo straight after.": "Laden ersetzt das Programm auf der Arbeitsfläche; du kannst es gleich danach rückgängig machen.",
   "Building the program failed: {problem}": "Das Programm konnte nicht gebaut werden: {problem}",
   "Undone. Your previous program is back.": "Rückgängig gemacht. Dein vorheriges Programm ist wieder da.",
-  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Claudes Programm geladen ({n} Blöcke). Prüfe die Blöcke vor dem Ausführen."
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Claudes Programm geladen ({n} Blöcke). Prüfe die Blöcke vor dem Ausführen.",
+  "Community: teaching": "Community: Unterricht"
  },
  "examples": {
   "review": {

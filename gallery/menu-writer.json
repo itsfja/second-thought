@@ -1,0 +1,162 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "menu-writer",
+  "gallery": {
+    "title": "Menu writer",
+    "category": "home",
+    "description": "List your dishes and what's in them. Claude writes each one a menu description in your house style, 25 words or fewer, with its allergens from the UK's 14 listed underneath.",
+    "tip": "Describe your house style in the first block: a few words and one description you like.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_house_style",
+        "name": "house style"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_house_style"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Plain and warm. Say where things come from. No 'delicious', 'homemade' or 'mouth-watering'. Like: Rye sourdough, 48-hour ferment, with Netherend butter."
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_ask_me",
+                  "inputs": {
+                    "TEXT": {
+                      "shadow": {
+                        "type": "rb_longtext",
+                        "fields": {
+                          "TEXT": "List the dishes, each with what's in it"
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_task",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "Write a menu description for each dish, in this house style:\n"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_house_style"
+                                    }
+                                  }
+                                }
+                              },
+                              "ADD2": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "\nUnder each, list the allergens it contains from the UK's 14 (celery; cereals containing gluten (wheat, rye, barley, oats); crustaceans; eggs; fish; lupin; milk; molluscs; mustard; tree nuts; peanuts; sesame; soya; sulphur dioxide and sulphites).\n\nDishes:\n"
+                                  }
+                                }
+                              },
+                              "ADD3": {
+                                "block": {
+                                  "type": "rb_answer"
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 4
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_generate",
+                          "next": {
+                            "block": {
+                              "type": "rb_reflect",
+                              "inputs": {
+                                "CRITERIA": {
+                                  "block": {
+                                    "type": "text_join",
+                                    "inputs": {
+                                      "ADD0": {
+                                        "shadow": {
+                                          "type": "rb_longtext",
+                                          "fields": {
+                                            "TEXT": "each description 25 words or fewer; in the house style; every dish lists its allergens, and only ones its ingredients really contain; nothing claimed that the ingredients don't say"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "extraState": {
+                                      "itemCount": 1
+                                    }
+                                  }
+                                },
+                                "ROUNDS": {
+                                  "shadow": {
+                                    "type": "math_number",
+                                    "fields": {
+                                      "NUM": 3
+                                    }
+                                  }
+                                },
+                                "FIX": {
+                                  "block": {
+                                    "type": "rb_revise"
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

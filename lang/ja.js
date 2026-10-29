@@ -872,7 +872,8 @@
 "Loading it replaces the program on the canvas; you can undo straight after.":"読み込むとキャンバスのプログラムが置き換わります。すぐ後なら元に戻せます。",
 "Building the program failed: {problem}":"プログラムを作れませんでした: {problem}",
 "Undone. Your previous program is back.":"元に戻しました。前のプログラムが戻っています。",
-"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Claude のプログラムを読み込みました（ブロック {n} 個）。実行する前にブロックを確かめてください。"
+"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Claude のプログラムを読み込みました（ブロック {n} 個）。実行する前にブロックを確かめてください。",
+"Community: teaching":"コミュニティ：授業"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

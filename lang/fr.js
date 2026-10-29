@@ -872,7 +872,8 @@
 "Loading it replaces the program on the canvas; you can undo straight after.":"Le charger remplace le programme sur le canevas ; vous pouvez annuler juste après.",
 "Building the program failed: {problem}":"La construction du programme a échoué : {problem}",
 "Undone. Your previous program is back.":"Annulé. Votre programme précédent est revenu.",
-"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Programme de Claude chargé ({n} blocs). Vérifiez les blocs avant de lancer."
+"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Programme de Claude chargé ({n} blocs). Vérifiez les blocs avant de lancer.",
+"Community: teaching":"Communauté : enseignement"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},

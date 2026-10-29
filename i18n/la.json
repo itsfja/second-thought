@@ -1360,7 +1360,8 @@
   "Loading it replaces the program on the canvas; you can undo straight after.": "Onerare programma in tabula substituit; statim postea revocare potes.",
   "Building the program failed: {problem}": "Programma strui non potuit: {problem}",
   "Undone. Your previous program is back.": "Revocatum. Programma tuum prius rediit.",
-  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Programma Claudii oneratum est ({n} latera). Latera inspice antequam curras."
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Programma Claudii oneratum est ({n} latera). Latera inspice antequam curras.",
+  "Community: teaching": "Communitas: doctrina"
  },
  "examples": {
   "review": {

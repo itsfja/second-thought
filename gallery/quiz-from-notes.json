@@ -1,0 +1,124 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "quiz-from-notes",
+  "gallery": {
+    "title": "Quiz from notes",
+    "category": "learning",
+    "description": "Choose your lesson notes. Claude writes a ten-question quiz from them, with the answers, and for each question the wrong answer pupils most often give and why it's wrong. Saved to print.",
+    "tip": "Works with a PDF, Word file or text file. Ask for fewer questions in the blue block for a quick starter.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_task",
+              "inputs": {
+                "TEXT": {
+                  "block": {
+                    "type": "text_join",
+                    "inputs": {
+                      "ADD0": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "Write a ten-question quiz from these lesson notes. Mix recall and understanding. After the questions, an answer section: for each question the answer, the wrong answer pupils most often give, and one sentence on why it's wrong.\n\nNotes:\n"
+                          }
+                        }
+                      },
+                      "ADD1": {
+                        "block": {
+                          "type": "rb_file_choose"
+                        }
+                      }
+                    },
+                    "extraState": {
+                      "itemCount": 2
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_generate",
+                  "next": {
+                    "block": {
+                      "type": "rb_reflect",
+                      "inputs": {
+                        "CRITERIA": {
+                          "shadow": {
+                            "type": "rb_longtext",
+                            "fields": {
+                              "TEXT": "every question can be answered from the notes; each has one right answer; the common wrong answers are ones pupils really give, not silly ones; answers kept apart from the questions"
+                            }
+                          }
+                        },
+                        "ROUNDS": {
+                          "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                              "NUM": 3
+                            }
+                          }
+                        },
+                        "FIX": {
+                          "block": {
+                            "type": "rb_revise"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_ask_first",
+                          "fields": {
+                            "WHAT": "files"
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_file_save",
+                              "fields": {
+                                "EXT": "md"
+                              },
+                              "inputs": {
+                                "VALUE": {
+                                  "block": {
+                                    "type": "rb_draft"
+                                  }
+                                },
+                                "NAME": {
+                                  "shadow": {
+                                    "type": "text",
+                                    "fields": {
+                                      "TEXT": "quiz"
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

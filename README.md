@@ -154,7 +154,7 @@ To keep listening all the time, run the program with **run-on-schedule** (see [R
 
 Choose an example from **Example** and press **Load**, or press **Browse examples** to see them all with a sentence about each and an idea for something to change. There are over 150, grouped into Writing, Research, Design, Learning, Work, Home and baking, Agents, Homey, Code and data, Automation, and ten groups of Home Assistant examples. **Review loop** is a good first one. You can't break anything: if you get in a muddle, load the example again.
 
-The **Community** groups, straight after Writing and Research, hold programs other people made and shared, grouped by topic (GitHub, code and data, news, money, calendar and email, home and baking, odds and ends). Each says who shared it and what it can do: whether it only talks to a model, or can also send messages, keep notes or control things. The page works that out from the blocks, so it's always accurate. To share your own, see [`gallery/README.md`](gallery/README.md).
+The **Community** groups, straight after Writing and Research, hold programs other people made and shared, grouped by topic (GitHub, code and data, news, money, calendar and email, home and baking, teaching, odds and ends). Each says who shared it and what it can do: whether it only talks to a model, or can also send messages, keep notes or control things. The page works that out from the blocks, so it's always accurate. To share your own, see [`gallery/README.md`](gallery/README.md).
 
 ---
 

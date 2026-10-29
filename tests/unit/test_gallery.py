@@ -62,7 +62,7 @@ class Entries(unittest.TestCase):
                     value = info.get(field)
                     self.assertTrue(isinstance(value, str) and value.strip(), f"gallery.{field} is missing")
                     self.assertLessEqual(len(value), most, f"gallery.{field} is over {most} characters")
-                self.assertIn(info.get("category", "odds"), ("github", "coding", "news", "money", "calendar", "home", "odds"),
+                self.assertIn(info.get("category", "odds"), ("github", "coding", "news", "money", "calendar", "home", "learning", "odds"),
                               "gallery.category is one of the groups in gallery/README.md")
                 self.assertRegex(info.get("runtime", ""), r"^\d+\.\d+\.\d+$")
                 self.assertLessEqual(version(info["runtime"]), version(RUNTIME_VERSION), "made with a runtime newer than this one")

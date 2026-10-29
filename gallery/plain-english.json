@@ -1,0 +1,108 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "plain-english",
+  "gallery": {
+    "title": "Plain English",
+    "category": "odds",
+    "description": "Paste a letter or notice. Claude rewrites it until it passes a plain-English check: a reading age of about 9 to 11, no jargon, short sentences, and every fact, date and amount kept.",
+    "tip": "Paste one letter at a time. Read the result against the original before you send it.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste the letter or notice"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_task",
+                  "inputs": {
+                    "TEXT": {
+                      "block": {
+                        "type": "text_join",
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "Rewrite this in plain English for anyone to read. Use 'you' and 'we'. Put the most important thing first.\n\n"
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "rb_answer"
+                            }
+                          }
+                        },
+                        "extraState": {
+                          "itemCount": 2
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_generate",
+                      "next": {
+                        "block": {
+                          "type": "rb_reflect",
+                          "inputs": {
+                            "CRITERIA": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "reading age of about 9 to 11; no jargon, or any term that must stay is explained; sentences average 15 to 20 words and none is over 30; active voice; every fact, date, amount and deadline from the original is kept and right; what the reader needs to do is clear"
+                                }
+                              }
+                            },
+                            "ROUNDS": {
+                              "shadow": {
+                                "type": "math_number",
+                                "fields": {
+                                  "NUM": 4
+                                }
+                              }
+                            },
+                            "FIX": {
+                              "block": {
+                                "type": "rb_revise"
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_result"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

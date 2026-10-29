@@ -1,0 +1,269 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "alt-text-folder",
+  "gallery": {
+    "title": "Alt text for a folder",
+    "category": "odds",
+    "description": "Watches a folder. For each new picture, Claude writes alt text, checks it against accessibility guidance (short, says what matters, includes any words in the picture), and adds it to a file, asking before it writes.",
+    "tip": "Change the folder to where your website's pictures go. Every picture is sent to the model.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_alt",
+        "name": "alt"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_folder_when",
+          "fields": {
+            "FOLDER": "~/Pictures/For the website"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "picture"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "picture"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "picture"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_img_choose"
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "picture"
+          },
+          "next": {
+            "block": {
+              "type": "rb_set_draft",
+              "inputs": {
+                "TEXT": {
+                  "block": {
+                    "type": "rb_img_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "Write alt text for this picture, for someone using a screen reader: what matters about it in one or two short sentences. Include any words in the picture. Don't start with 'image of' or 'picture of'."
+                          }
+                        }
+                      },
+                      "IMG": {
+                        "block": {
+                          "type": "rb_msg_value"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_reflect",
+                  "inputs": {
+                    "CRITERIA": {
+                      "shadow": {
+                        "type": "rb_longtext",
+                        "fields": {
+                          "TEXT": "under 125 characters, or two short sentences if there's text in the picture; says what matters, not every detail; any words in the picture are included; doesn't start 'image of' or 'picture of'; doesn't guess who people are"
+                        }
+                      }
+                    },
+                    "ROUNDS": {
+                      "shadow": {
+                        "type": "math_number",
+                        "fields": {
+                          "NUM": 2
+                        }
+                      }
+                    },
+                    "FIX": {
+                      "block": {
+                        "type": "rb_revise"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_alt"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "block": {
+                                  "type": "rb_now",
+                                  "fields": {
+                                    "PART": "datetime"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": ": "
+                                  }
+                                }
+                              },
+                              "ADD2": {
+                                "block": {
+                                  "type": "rb_draft"
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 3
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_mem_add",
+                          "fields": {
+                            "KIND": "permanent"
+                          },
+                          "inputs": {
+                            "VALUE": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_alt"
+                                  }
+                                }
+                              }
+                            },
+                            "NAME": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "alt text"
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_ask_first",
+                              "fields": {
+                                "WHAT": "files"
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_file_save",
+                                  "fields": {
+                                    "EXT": "md"
+                                  },
+                                  "inputs": {
+                                    "VALUE": {
+                                      "block": {
+                                        "type": "rb_mem_get",
+                                        "inputs": {
+                                          "NAME": {
+                                            "shadow": {
+                                              "type": "text",
+                                              "fields": {
+                                                "TEXT": "alt text"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "NAME": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "alt-text"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "rb_finish_with",
+                                      "inputs": {
+                                        "TEXT": {
+                                          "block": {
+                                            "type": "rb_draft"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

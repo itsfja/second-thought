@@ -1,0 +1,279 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "rubric-feedback",
+  "gallery": {
+    "title": "Rubric feedback",
+    "category": "learning",
+    "description": "Paste a pupil's essay. Claude drafts feedback against your mark scheme, checks it's kind, specific and ends with two next steps, and you approve it before it's saved. Nothing goes to the pupil from here.",
+    "tip": "Put your own mark scheme in the first block. The pupil's name isn't needed: leave it out of what you paste.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_mark_scheme",
+        "name": "mark scheme"
+      },
+      {
+        "id": "g_essay",
+        "name": "essay"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_mark_scheme"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "AO1 ideas: a clear argument, developed through the essay.\nAO2 evidence: quotations chosen well and explained.\nAO3 writing: paragraphs that link; accurate spelling and punctuation."
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_ask_me",
+                  "inputs": {
+                    "TEXT": {
+                      "shadow": {
+                        "type": "rb_longtext",
+                        "fields": {
+                          "TEXT": "Paste the essay"
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_essay"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_answer"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_task",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "text_join",
+                                "inputs": {
+                                  "ADD0": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "Write feedback on this essay for the pupil who wrote it, using the mark scheme. Say what works first, then what would lift it, quoting the essay. End with exactly two next steps.\n\nMark scheme:\n"
+                                      }
+                                    }
+                                  },
+                                  "ADD1": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_mark_scheme"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "ADD2": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "\n\nEssay:\n"
+                                      }
+                                    }
+                                  },
+                                  "ADD3": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_essay"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "extraState": {
+                                  "itemCount": 4
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_generate",
+                              "next": {
+                                "block": {
+                                  "type": "rb_reflect",
+                                  "inputs": {
+                                    "CRITERIA": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "every point refers to something in the mark scheme; kind, and talks to the pupil; specific, quoting the essay; ends with exactly two next steps the pupil can act on; no mark or grade; under 200 words"
+                                        }
+                                      }
+                                    },
+                                    "ROUNDS": {
+                                      "shadow": {
+                                        "type": "math_number",
+                                        "fields": {
+                                          "NUM": 3
+                                        }
+                                      }
+                                    },
+                                    "FIX": {
+                                      "block": {
+                                        "type": "rb_revise"
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "controls_if",
+                                      "inputs": {
+                                        "IF0": {
+                                          "block": {
+                                            "type": "rb_approve",
+                                            "inputs": {
+                                              "TEXT": {
+                                                "block": {
+                                                  "type": "text_join",
+                                                  "inputs": {
+                                                    "ADD0": {
+                                                      "shadow": {
+                                                        "type": "rb_longtext",
+                                                        "fields": {
+                                                          "TEXT": "Feedback ready. Save it?\n\n"
+                                                        }
+                                                      }
+                                                    },
+                                                    "ADD1": {
+                                                      "block": {
+                                                        "type": "rb_draft"
+                                                      }
+                                                    }
+                                                  },
+                                                  "extraState": {
+                                                    "itemCount": 2
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "DO0": {
+                                          "block": {
+                                            "type": "rb_ask_first",
+                                            "fields": {
+                                              "WHAT": "files"
+                                            },
+                                            "next": {
+                                              "block": {
+                                                "type": "rb_file_save",
+                                                "fields": {
+                                                  "EXT": "md"
+                                                },
+                                                "inputs": {
+                                                  "VALUE": {
+                                                    "block": {
+                                                      "type": "rb_draft"
+                                                    }
+                                                  },
+                                                  "NAME": {
+                                                    "shadow": {
+                                                      "type": "text",
+                                                      "fields": {
+                                                        "TEXT": "essay-feedback"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "next": {
+                                                  "block": {
+                                                    "type": "rb_result"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ELSE": {
+                                          "block": {
+                                            "type": "rb_finish_with",
+                                            "inputs": {
+                                              "TEXT": {
+                                                "block": {
+                                                  "type": "text_join",
+                                                  "inputs": {
+                                                    "ADD0": {
+                                                      "shadow": {
+                                                        "type": "rb_longtext",
+                                                        "fields": {
+                                                          "TEXT": "Not saved. The draft, to edit yourself:\n\n"
+                                                        }
+                                                      }
+                                                    },
+                                                    "ADD1": {
+                                                      "block": {
+                                                        "type": "rb_draft"
+                                                      }
+                                                    }
+                                                  },
+                                                  "extraState": {
+                                                    "itemCount": 2
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "extraState": {
+                                        "hasElse": true
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

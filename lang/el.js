@@ -872,7 +872,8 @@
 "Loading it replaces the program on the canvas; you can undo straight after.":"Η φόρτωση αντικαθιστά το πρόγραμμα στον καμβά· μπορείς να το αναιρέσεις αμέσως μετά.",
 "Building the program failed: {problem}":"Το πρόγραμμα δεν φτιάχτηκε: {problem}",
 "Undone. Your previous program is back.":"Αναιρέθηκε. Το προηγούμενο πρόγραμμά σου γύρισε.",
-"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Φορτώθηκε το πρόγραμμα του Claude ({n} μπλοκ). Έλεγξε τα μπλοκ πριν το τρέξεις."
+"Loaded Claude's program ({n} blocks). Check the blocks before running.":"Φορτώθηκε το πρόγραμμα του Claude ({n} μπλοκ). Έλεγξε τα μπλοκ πριν το τρέξεις.",
+"Community: teaching":"Κοινότητα: διδασκαλία"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

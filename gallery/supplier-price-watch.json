@@ -1,0 +1,262 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "supplier-price-watch",
+  "gallery": {
+    "title": "Supplier price watch",
+    "category": "home",
+    "description": "Watches a supplier's price list page. When a price moves by more than 5%, you get an email with the item, the old and new price and the change. Smaller moves are ignored.",
+    "tip": "Change the page address in the hat to your supplier's price list. It asks before its first email.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_changes",
+        "name": "changes"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Type a change to test with, like '- Rye flour 25kg £21.00' then '+ Rye flour 25kg £23.50'"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_with_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "prices"
+                        }
+                      }
+                    },
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_page_when",
+          "fields": {
+            "URL": "https://example.com/supplier/price-list",
+            "WORDS": "£",
+            "N": 360
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_with_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "prices"
+                    }
+                  }
+                },
+                "VALUE": {
+                  "block": {
+                    "type": "rb_event",
+                    "fields": {
+                      "KEY": "text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "prices"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "rb_ask_yesno",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "This is how a supplier's price list changed. Lines starting - are before, + after. Did any item's price change by more than 5%?\n\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_msg_value"
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "variables_set",
+                    "fields": {
+                      "VAR": {
+                        "id": "g_changes"
+                      }
+                    },
+                    "inputs": {
+                      "VALUE": {
+                        "block": {
+                          "type": "rb_ask",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "text_join",
+                                "inputs": {
+                                  "ADD0": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "List each item whose price changed by more than 5%: the item, old price → new price, and the change as a percentage. Biggest change first. Nothing else.\n\n"
+                                      }
+                                    }
+                                  },
+                                  "ADD1": {
+                                    "block": {
+                                      "type": "rb_msg_value"
+                                    }
+                                  }
+                                },
+                                "extraState": {
+                                  "itemCount": 2
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_ask_first",
+                        "fields": {
+                          "WHAT": "messages"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_email_send",
+                            "inputs": {
+                              "TO": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "you@example.com"
+                                  }
+                                }
+                              },
+                              "SUBJECT": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "Supplier prices moved"
+                                  }
+                                }
+                              },
+                              "TEXT": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_changes"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_finish_with",
+                                "inputs": {
+                                  "TEXT": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_changes"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "ELSE": {
+                  "block": {
+                    "type": "rb_finish_with",
+                    "inputs": {
+                      "TEXT": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "No price moved by more than 5%."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "extraState": {
+                "hasElse": true
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

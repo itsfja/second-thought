@@ -758,6 +758,227 @@ add(program(
          B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="album-captions"),
          B("rb_result"))], v))
 
+# ----- Teaching (#196): the field's own standards, a mark scheme, a reading age, a word limit, are the review criteria -----
+v = Vars("mark scheme", "essay")
+add(program(
+    "rubric-feedback", "Rubric feedback", "learning",
+    "Paste a pupil's essay. Claude drafts feedback against your mark scheme, checks it's kind, specific and ends with two next "
+    "steps, and you approve it before it's saved. Nothing goes to the pupil from here.",
+    "Put your own mark scheme in the first block. The pupil's name isn't needed: leave it out of what you paste.",
+    [chain(hat("rb_start"),
+           v.set("mark scheme", B("rb_longtext", {"TEXT": "AO1 ideas: a clear argument, developed through the essay.\n"
+                                                   "AO2 evidence: quotations chosen well and explained.\n"
+                                                   "AO3 writing: paragraphs that link; accurate spelling and punctuation."})),
+           B("rb_ask_me", TEXT=L("Paste the essay")),
+           v.set("essay", B("rb_answer")),
+           B("rb_task", TEXT=join("Write feedback on this essay for the pupil who wrote it, using the mark scheme. Say what works first, "
+                                  "then what would lift it, quoting the essay. End with exactly two next steps.\n\nMark scheme:\n",
+                                  v.get("mark scheme"), "\n\nEssay:\n", v.get("essay"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("every point refers to something in the mark scheme; kind, and talks to the pupil; specific, quoting "
+                                      "the essay; ends with exactly two next steps the pupil can act on; no mark or grade; under 200 words"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           if_(B("rb_approve", TEXT=join("Feedback ready. Save it?\n\n", B("rb_draft"))),
+               chain(B("rb_ask_first", {"WHAT": "files"}), B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="essay-feedback"),
+                     B("rb_result")),
+               B("rb_finish_with", TEXT=join("Not saved. The draft, to edit yourself:\n\n", B("rb_draft")))))], v))
+
+v = Vars("text", "level")
+add(program(
+    "three-levels", "Three reading levels", "learning",
+    "One text as three worksheets, for reading ages of about 7, 10 and 13. Each keeps the facts and is checked against its reading "
+    "age, with three questions at the end. Saved as one file to print.",
+    "Change the reading ages in the list block to suit your class.",
+    [chain(hat("rb_start"),
+           B("rb_ask_me", TEXT=L("Paste the text to make worksheets from")),
+           v.set("text", B("rb_answer")),
+           B("controls_forEach", {"VAR": {"id": v.ids["level"]}},
+             LIST={**B("lists_create_with", ADD0="7", ADD1="10", ADD2="13"), "extraState": {"itemCount": 3}},
+             DO=chain(B("rb_task", TEXT=join("Rewrite this text as a worksheet for a reading age of about ", v.get("level"),
+                                             ". Keep every fact. Add a title, and three questions at the end, the last one asking the "
+                                             "reader what they think.\n\n", v.get("text"))),
+                      B("rb_generate"),
+                      B("rb_reflect", CRITERIA=join("reads at about a reading age of ", v.get("level"), "; every fact from the original is "
+                                                    "still there and still right; no fact added; short paragraphs; three questions at the end"),
+                        ROUNDS=3, FIX=B("rb_revise")),
+                      B("rb_add_result", TEXT=join("Reading age ", v.get("level"), "\n\n", B("rb_draft"))))),
+           B("rb_ask_first", {"WHAT": "files"}),
+           B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_result_text"), NAME="worksheets"),
+           B("rb_result"))], v))
+
+v = Vars("plan")
+add(program(
+    "parent-update", "Parent update", "learning",
+    "Paste this week's lesson plan. Claude writes a warm note to parents, under 150 words, with one thing to try at home, and "
+    "you approve it before it's emailed.",
+    "Change the email address to your parents' list. No pupil is ever named.",
+    [chain(hat("rb_start"),
+           B("rb_ask_me", TEXT=L("Paste this week's lesson plan")),
+           v.set("plan", B("rb_answer")),
+           B("rb_task", TEXT=join("Write this week's note to parents from the lesson plan: what the class learned, in everyday words, and "
+                                  "one thing they could try at home.\n\nLesson plan:\n", v.get("plan"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("warm and friendly; under 150 words; no teaching jargon; one thing to try at home; no pupil named"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           if_(B("rb_approve", TEXT=join("Email this to parents?\n\n", B("rb_draft"))),
+               chain(B("rb_ask_first", {"WHAT": "messages"}),
+                     B("rb_email_send", TO="parents@example.com", SUBJECT="This week in class", TEXT=B("rb_draft")),
+                     B("rb_result")),
+               B("rb_finish_with", TEXT=join("Not sent. The draft, to edit yourself:\n\n", B("rb_draft")))))], v))
+
+add(program(
+    "quiz-from-notes", "Quiz from notes", "learning",
+    "Choose your lesson notes. Claude writes a ten-question quiz from them, with the answers, and for each question the wrong "
+    "answer pupils most often give and why it's wrong. Saved to print.",
+    "Works with a PDF, Word file or text file. Ask for fewer questions in the blue block for a quick starter.",
+    [chain(hat("rb_start"),
+           B("rb_task", TEXT=join("Write a ten-question quiz from these lesson notes. Mix recall and understanding. After the questions, "
+                                  "an answer section: for each question the answer, the wrong answer pupils most often give, and one "
+                                  "sentence on why it's wrong.\n\nNotes:\n", B("rb_file_choose"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("every question can be answered from the notes; each has one right answer; the common wrong answers "
+                                      "are ones pupils really give, not silly ones; answers kept apart from the questions"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_ask_first", {"WHAT": "files"}),
+           B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="quiz"),
+           B("rb_result"))]))
+
+# ----- Food businesses (#197): the 14 allergens, the fridge's 0–5 °C, a house style -----
+ALLERGENS = ("celery; cereals containing gluten (wheat, rye, barley, oats); crustaceans; eggs; fish; lupin; milk; molluscs; mustard; "
+             "tree nuts; peanuts; sesame; soya; sulphur dioxide and sulphites")
+add(program(
+    "allergen-check", "Allergen check", "home",
+    "Paste a recipe card. Claude checks it against the UK's 14 allergens: which each ingredient contains, 'may contain' wording to "
+    "look at, and anything the card should declare but doesn't. A second pair of eyes, not a guarantee.",
+    "Paste the ingredients with any sub-recipes (the stock, the sauce): allergens hide there.",
+    [chain(hat("rb_start"),
+           B("rb_ask_me", TEXT=L("Paste the recipe card, with its ingredients and any allergen statement")),
+           B("rb_task", TEXT=join("Check this recipe card against the UK's 14 allergens (" + ALLERGENS + "). Give: a table of each "
+                                  "ingredient and the allergens it contains; any 'may contain' or 'made in a kitchen that' wording, and "
+                                  "what it would cover; and allergens the card should declare but doesn't. End with the full list to "
+                                  "declare, in bold.\n\nRecipe card:\n", B("rb_answer"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("names all 14 allergens, saying for each whether it's present; every ingredient that contains one "
+                                      "is named; sub-recipes and processed ingredients (stock, sauces, bread) are checked; anything "
+                                      "unclear says what to ask the supplier; says it is a check to confirm, not a guarantee"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_result"))]))
+
+v = Vars("log")
+add(program(
+    "fridge-log", "Fridge log", "home",
+    "Each evening, drafts the day's fridge and freezer temperature log from Home Assistant sensors, flagging any reading outside "
+    "0–5 °C for the fridge or above −18 °C for the freezer, with the time and what to do. Saved for you to sign.",
+    "Change the sensors to yours. The log is a draft to check against the thermometer, not a replacement for it.",
+    start_and(when_time(18, 0), msg="log") + [receive(
+        "log",
+        v.set("log", B("rb_ask", TEXT=join(
+            "Draft today's temperature log for a food business from these readings. A table: time, fridge °C, freezer °C, OK or not. "
+            "Flag every fridge reading outside 0 to 5 °C and every freezer reading above −18 °C, with the time and the usual action "
+            "(check the door and seals, move food, call the engineer). Then a line for 'Checked by' and 'Action taken', left blank. "
+            "Today is ", B("rb_now", {"PART": "date"}), ".\n\nFridge, last 24 hours:\n",
+            B("rb_ha_history", ENTITY="sensor.fridge_temperature", HOURS=24),
+            "\n\nFreezer, last 24 hours:\n", B("rb_ha_history", ENTITY="sensor.freezer_temperature", HOURS=24)))),
+        B("rb_ask_first", {"WHAT": "files"}),
+        B("rb_file_save", {"EXT": "md"}, VALUE=v.get("log"), NAME=join("fridge-log-", B("rb_now", {"PART": "date"}))),
+        B("rb_finish_with", TEXT=v.get("log")))], v))
+
+v = Vars("house style")
+add(program(
+    "menu-writer", "Menu writer", "home",
+    "List your dishes and what's in them. Claude writes each one a menu description in your house style, 25 words or fewer, with "
+    "its allergens from the UK's 14 listed underneath.",
+    "Describe your house style in the first block: a few words and one description you like.",
+    [chain(hat("rb_start"),
+           v.set("house style", B("rb_longtext", {"TEXT": "Plain and warm. Say where things come from. No 'delicious', 'homemade' or "
+                                                   "'mouth-watering'. Like: Rye sourdough, 48-hour ferment, with Netherend butter."})),
+           B("rb_ask_me", TEXT=L("List the dishes, each with what's in it")),
+           B("rb_task", TEXT=join("Write a menu description for each dish, in this house style:\n", v.get("house style"),
+                                  "\nUnder each, list the allergens it contains from the UK's 14 (" + ALLERGENS + ").\n\nDishes:\n",
+                                  B("rb_answer"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=join("each description 25 words or fewer; in the house style; every dish lists its allergens, and only "
+                                         "ones its ingredients really contain; nothing claimed that the ingredients don't say"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_result"))], v))
+
+v = Vars("changes")
+add(program(
+    "supplier-price-watch", "Supplier price watch", "home",
+    "Watches a supplier's price list page. When a price moves by more than 5%, you get an email with the item, the old and new "
+    "price and the change. Smaller moves are ignored.",
+    "Change the page address in the hat to your supplier's price list. It asks before its first email.",
+    start_and(hat("rb_page_when", {"URL": "https://example.com/supplier/price-list", "WORDS": "£", "N": 360}), msg="prices",
+              value=B("rb_event", {"KEY": "text"}), test="Type a change to test with, like '- Rye flour 25kg £21.00' then '+ Rye flour 25kg £23.50'") + [
+        receive(
+            "prices",
+            if_(B("rb_ask_yesno", TEXT=join("This is how a supplier's price list changed. Lines starting - are before, + after. Did any "
+                                            "item's price change by more than 5%?\n\n", B("rb_msg_value"))),
+                chain(v.set("changes", B("rb_ask", TEXT=join(
+                          "List each item whose price changed by more than 5%: the item, old price → new price, and the change as a "
+                          "percentage. Biggest change first. Nothing else.\n\n", B("rb_msg_value")))),
+                      B("rb_ask_first", {"WHAT": "messages"}),
+                      email_me("Supplier prices moved", v.get("changes")),
+                      B("rb_finish_with", TEXT=v.get("changes"))),
+                B("rb_finish_with", TEXT="No price moved by more than 5%.")))], v))
+
+# ----- Plain English and accessibility (#198): a reading age, a jargon list, alt-text guidance, easy-read rules -----
+add(program(
+    "plain-english", "Plain English", "odds",
+    "Paste a letter or notice. Claude rewrites it until it passes a plain-English check: a reading age of about 9 to 11, no "
+    "jargon, short sentences, and every fact, date and amount kept.",
+    "Paste one letter at a time. Read the result against the original before you send it.",
+    [chain(hat("rb_start"),
+           B("rb_ask_me", TEXT=L("Paste the letter or notice")),
+           B("rb_task", TEXT=join("Rewrite this in plain English for anyone to read. Use 'you' and 'we'. Put the most important thing "
+                                  "first.\n\n", B("rb_answer"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("reading age of about 9 to 11; no jargon, or any term that must stay is explained; sentences "
+                                      "average 15 to 20 words and none is over 30; active voice; every fact, date, amount and deadline "
+                                      "from the original is kept and right; what the reader needs to do is clear"),
+             ROUNDS=4, FIX=B("rb_revise")),
+           B("rb_result"))]))
+
+v = Vars("alt")
+add(program(
+    "alt-text-folder", "Alt text for a folder", "odds",
+    "Watches a folder. For each new picture, Claude writes alt text, checks it against accessibility guidance (short, says what "
+    "matters, includes any words in the picture), and adds it to a file, asking before it writes.",
+    "Change the folder to where your website's pictures go. Every picture is sent to the model.",
+    [chain(hat("rb_folder_when", {"FOLDER": "~/Pictures/For the website"}),
+           B("rb_broadcast_with_wait", MSG="picture", VALUE=B("rb_event", {"KEY": "picture"}))),
+     chain(hat("rb_start"), B("rb_broadcast_with_wait", MSG="picture", VALUE=B("rb_img_choose"))),
+     receive(
+         "picture",
+         B("rb_set_draft", TEXT=B("rb_img_ask", TEXT=L(
+             "Write alt text for this picture, for someone using a screen reader: what matters about it in one or two short "
+             "sentences. Include any words in the picture. Don't start with 'image of' or 'picture of'."), IMG=B("rb_msg_value"))),
+         B("rb_reflect", CRITERIA=L("under 125 characters, or two short sentences if there's text in the picture; says what matters, not "
+                                    "every detail; any words in the picture are included; doesn't start 'image of' or 'picture of'; "
+                                    "doesn't guess who people are"), ROUNDS=2, FIX=B("rb_revise")),
+         v.set("alt", join(B("rb_now", {"PART": "datetime"}), ": ", B("rb_draft"))),
+         B("rb_mem_add", {"KIND": "permanent"}, VALUE=v.get("alt"), NAME="alt text"),
+         B("rb_ask_first", {"WHAT": "files"}),
+         B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_mem_get", NAME="alt text"), NAME="alt-text"),
+         B("rb_finish_with", TEXT=B("rb_draft")))], v))
+
+add(program(
+    "easy-read", "Easy read", "odds",
+    "Choose a document. Claude makes an easy-read version: one idea per sentence, everyday words, a heading every few points and "
+    "a suggested picture for each, checked against easy-read guidance. Saved to print.",
+    "Easy read is for people with learning disabilities. Ask someone who uses it to check the result.",
+    [chain(hat("rb_start"),
+           B("rb_task", TEXT=join("Make an easy-read version of this document. Keep what the reader needs to know or do; leave out the "
+                                  "rest. For each point, suggest a picture in [square brackets] before it.\n\n", B("rb_file_choose"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("one idea per sentence; sentences of 15 words or fewer; everyday words, with any hard word "
+                                      "explained; a heading every three to five points; a suggested picture for each point; numbers "
+                                      "written as digits; nothing the reader needs is left out"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_ask_first", {"WHAT": "files"}),
+           B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="easy-read"),
+           B("rb_result"))]))
+
 
 def main() -> int:
     bad = []
