@@ -874,7 +874,9 @@
 "Building the program failed: {problem}":"𒉈𒁉𒋗𒌝 𒌌 𒅔𒉈𒁉𒅖: {problem}",
 "Undone. Your previous program is back.":"𒌅𒌨𒊒𒌝. 𒉈𒁉𒅖𒅗 𒈠𒄴𒊒𒌝 𒄿𒌅𒊏.",
 "Loaded Claude's program ({n} blocks). Check the blocks before running.":"𒉈𒁉𒋗𒌝 𒊭 Claude 𒋗𒇻 ({n} 𒇷𒅁𒈾𒌅𒌝). 𒇷𒅁𒈾𒋾 𒄿𒈾 𒉺𒉌 𒀀𒆷𒆠𒅎 𒀀𒈬𒌨.",
-"Community: teaching":"𒌝𒈠𒉡𒌝: 𒌝𒈠𒉡𒌅𒌝"
+"Community: teaching":"𒌝𒈠𒉡𒌝: 𒌝𒈠𒉡𒌅𒌝",
+"This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.":"𒉈𒁉𒋗𒌝 𒀭𒉡𒌝 𒄿𒈾 Second Thought 𒅖𒅆𒅎 𒈾𒍢𒅕 (𒅆𒁲𒅕 𒇷𒅁𒈾𒋾𒅎 {theirs}; 𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒀀𒁲 {ours} 𒄿𒊭𒊍𒋛). 𒄿𒈾 𒌅𒌒𒁉𒅎 𒅖𒅆𒅎 𒁉𒋼.",
+"It was saved with older blocks and has been brought up to date (block format {from} to {to}).":"𒄿𒈾 𒇷𒅁𒈾𒋾𒅎 𒆷𒁉𒊒𒋾𒅎 𒈾𒍢𒅕 𒌑 𒌓𒁲𒅖 (𒅆𒁲𒅕 𒇷𒅁𒈾𒋾𒅎 {from} 𒀀𒈾 {to})."
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},

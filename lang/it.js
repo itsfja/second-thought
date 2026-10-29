@@ -873,7 +873,9 @@
 "Building the program failed: {problem}":"Non è stato possibile costruire il programma: {problem}",
 "Undone. Your previous program is back.":"Annullato. Il programma di prima è tornato.",
 "Loaded Claude's program ({n} blocks). Check the blocks before running.":"Programma di Claude caricato ({n} blocchi). Controlla i blocchi prima di eseguirlo.",
-"Community: teaching":"Community: insegnamento"
+"Community: teaching":"Community: insegnamento",
+"This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.":"Questo programma è stato salvato da un Second Thought più recente (formato blocchi {theirs}; questa pagina legge fino al {ours}). Aprilo con la pagina più recente.",
+"It was saved with older blocks and has been brought up to date (block format {from} to {to}).":"Era stato salvato con blocchi più vecchi ed è stato aggiornato (formato blocchi da {from} a {to})."
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},

@@ -1362,7 +1362,9 @@
   "Building the program failed: {problem}": "סדרא לא אתבני: {problem}",
   "Undone. Your previous program is back.": "אתהדר. סדרך קדמיא תב.",
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "אתטען סדרא דClaude ({n} לבנין). בדוק לבניא קדם דתרהט.",
-  "Community: teaching": "כנישתא: מלפנותא"
+  "Community: teaching": "כנישתא: מלפנותא",
+  "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "סדרא הדין אתנטר בSecond Thought חדתא (דמות לבנין {theirs}; דפא הדין קרא עד {ours}). פתח בדפא חדתא.",
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "אתנטר בלבנין עתיקין ואתחדת (דמות לבנין {from} ל-{to})."
  },
  "examples": {
   "review": {

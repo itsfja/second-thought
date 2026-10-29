@@ -1361,7 +1361,9 @@
   "Building the program failed: {problem}": "Programma strui non potuit: {problem}",
   "Undone. Your previous program is back.": "Revocatum. Programma tuum prius rediit.",
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Programma Claudii oneratum est ({n} latera). Latera inspice antequam curras.",
-  "Community: teaching": "Communitas: doctrina"
+  "Community: teaching": "Communitas: doctrina",
+  "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "Hoc programma a recentiore Second Thought servatum est (forma laterum {theirs}; haec pagina usque ad {ours} legit). Aperi in pagina recentissima.",
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "Lateribus antiquioribus servatum erat et renovatum est (forma laterum {from} ad {to})."
  },
  "examples": {
   "review": {

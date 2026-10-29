@@ -873,7 +873,9 @@
 "Building the program failed: {problem}":"Das Programm konnte nicht gebaut werden: {problem}",
 "Undone. Your previous program is back.":"Rückgängig gemacht. Dein vorheriges Programm ist wieder da.",
 "Loaded Claude's program ({n} blocks). Check the blocks before running.":"Claudes Programm geladen ({n} Blöcke). Prüfe die Blöcke vor dem Ausführen.",
-"Community: teaching":"Community: Unterricht"
+"Community: teaching":"Community: Unterricht",
+"This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.":"Dieses Programm wurde von einem neueren Second Thought gespeichert (Blockformat {theirs}; diese Seite liest bis {ours}). Öffne es auf der neuesten Seite.",
+"It was saved with older blocks and has been brought up to date (block format {from} to {to}).":"Es wurde mit älteren Blöcken gespeichert und auf den neuesten Stand gebracht (Blockformat {from} zu {to})."
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},

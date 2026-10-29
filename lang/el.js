@@ -873,7 +873,9 @@
 "Building the program failed: {problem}":"Το πρόγραμμα δεν φτιάχτηκε: {problem}",
 "Undone. Your previous program is back.":"Αναιρέθηκε. Το προηγούμενο πρόγραμμά σου γύρισε.",
 "Loaded Claude's program ({n} blocks). Check the blocks before running.":"Φορτώθηκε το πρόγραμμα του Claude ({n} μπλοκ). Έλεγξε τα μπλοκ πριν το τρέξεις.",
-"Community: teaching":"Κοινότητα: διδασκαλία"
+"Community: teaching":"Κοινότητα: διδασκαλία",
+"This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.":"Αυτό το πρόγραμμα αποθηκεύτηκε από νεότερο Second Thought (μορφή μπλοκ {theirs}· αυτή η σελίδα διαβάζει έως {ours}). Άνοιξέ το στη νεότερη σελίδα.",
+"It was saved with older blocks and has been brought up to date (block format {from} to {to}).":"Είχε αποθηκευτεί με παλαιότερα μπλοκ και ενημερώθηκε (μορφή μπλοκ {from} σε {to})."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

@@ -873,7 +873,9 @@
 "Building the program failed: {problem}":"Τὸ πρόγραμμα οὐκ ἐδυνήθη κατασκευασθῆναι· {problem}",
 "Undone. Your previous program is back.":"Ἀνῃρέθη. Τὸ πρότερόν σου πρόγραμμα ἐπανῆλθεν.",
 "Loaded Claude's program ({n} blocks). Check the blocks before running.":"Ἐφορτώθη τὸ τοῦ Claude πρόγραμμα ({n} πλίνθοι). Ἐξέτασον τὰς πλίνθους πρὶν τρέχειν.",
-"Community: teaching":"Κοινωνία· διδασκαλία"
+"Community: teaching":"Κοινωνία· διδασκαλία",
+"This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.":"Τοῦτο τὸ πρόγραμμα ὑπὸ νεωτέρου Second Thought ἐσώθη (μορφὴ πλίνθων {theirs}· ἥδε ἡ σελὶς μέχρι {ours} ἀναγιγνώσκει). Ἄνοιξον ἐν τῇ νεωτάτῃ σελίδι.",
+"It was saved with older blocks and has been brought up to date (block format {from} to {to}).":"Παλαιοτέραις πλίνθοις ἐσώθη καὶ ἀνεκαινίσθη (μορφὴ πλίνθων {from} εἰς {to})."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
