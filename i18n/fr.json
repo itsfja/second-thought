@@ -584,7 +584,7 @@
    "email": "e-mail : chercher et lire",
    "email_send": "e-mail : envoyer (me demande d'abord)",
    "github": "GitHub : projets et pull requests",
-   "github_act": "GitHub : commenter (me demande d'abord)",
+   "github_act": "GitHub : commenter, ouvrir et étiqueter des issues (me demande d'abord)",
    "telegram": "Telegram : chercher dans mes messages",
    "telegram_send": "Telegram : envoyer (me demande d'abord)",
    "telegram_send_free": "Telegram : envoyer (sans demander)",
@@ -1062,7 +1062,6 @@
   "Type the prompt text.": "Tapez le texte de l'instruction.",
   "Your saved space is full. Delete something first.": "Votre espace d'enregistrement est plein. Supprimez d'abord quelque chose.",
   "accept web requests from other computers": "accepter des requêtes web d'autres ordinateurs",
-  "comment on GitHub": "commenter sur GitHub",
   "control your Home Assistant devices": "contrôler vos appareils Home Assistant",
   "control your Homey devices and start Homey flows": "contrôler vos appareils Homey et lancer des flows Homey",
   "forever": "pour toujours",
@@ -1310,7 +1309,10 @@
   "“{value}” isn't on or off.": "« {value} » n'est ni on ni off.",
   "Try: {tip}": "Essayez : {tip}",
   "Shared by {author}.": "Partagé par {author}.",
-  "{title} (shared by {author})": "{title} (partagé par {author})"
+  "{title} (shared by {author})": "{title} (partagé par {author})",
+  "GitHub issue opened in {repo}: #{n}": "Issue GitHub ouverte dans {repo} : #{n}",
+  "GitHub labels on {repo} #{n}": "Étiquettes GitHub sur {repo} #{n}",
+  "comment on GitHub, and open and label issues": "commenter sur GitHub, et ouvrir et étiqueter des issues"
  },
  "examples": {
   "review": {
@@ -2711,6 +2713,8 @@
   "When {entity} changes": "Quand {entity} change",
   "Run": "Exécution",
   "(yes)": "o, oui",
-  "(no)": "n, non"
+  "(no)": "n, non",
+  "GitHub issue opened in {repo}: #{n}": "Issue GitHub ouverte dans {repo} : #{n}",
+  "GitHub labels on {repo} #{n}": "Étiquettes GitHub sur {repo} #{n}"
  }
 }

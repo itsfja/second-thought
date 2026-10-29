@@ -584,7 +584,7 @@
    "email": "email: seke and rede",
    "email_send": "email: sende (asketh me first)",
    "github": "GitHub: werkes and pull requests",
-   "github_act": "GitHub: comente (asketh me first)",
+   "github_act": "GitHub: comente, open and marke issues (asketh me first)",
    "telegram": "Telegram: seke my messages",
    "telegram_send": "Telegram: sende (asketh me first)",
    "telegram_send_free": "Telegram: sende (withouten askynge)",
@@ -1062,7 +1062,6 @@
   "Type the prompt text.": "Write the text of the biddyng.",
   "Your saved space is full. Delete something first.": "Thy saved space is ful. Do somwhat awey first.",
   "accept web requests from other computers": "receyve web requestes fro othere engynes",
-  "comment on GitHub": "comente on GitHub",
   "control your Home Assistant devices": "governe thy Home Assistant engynes",
   "control your Homey devices and start Homey flows": "governe thy Homey engynes and bigynne Homey floodes",
   "forever": "for evere",
@@ -1310,7 +1309,10 @@
   "“{value}” isn't on or off.": "“{value}” is neither on ne off.",
   "Try: {tip}": "Assaye: {tip}",
   "Shared by {author}.": "Yshared by {author}.",
-  "{title} (shared by {author})": "{title} (yshared by {author})"
+  "{title} (shared by {author})": "{title} (yshared by {author})",
+  "GitHub issue opened in {repo}: #{n}": "GitHub issue opened in {repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "GitHub markes on {repo} #{n}",
+  "comment on GitHub, and open and label issues": "comente on GitHub, and open and marke issues"
  },
  "examples": {
   "review": {
@@ -2711,7 +2713,9 @@
   "When {entity} changes": "Whan {entity} chaungeth",
   "Run": "Renne",
   "(yes)": "y, ye, yis, yea",
-  "(no)": "n, nay, nat"
+  "(no)": "n, nay, nat",
+  "GitHub issue opened in {repo}: #{n}": "GitHub issue opened in {repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "GitHub markes on {repo} #{n}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

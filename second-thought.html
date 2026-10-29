@@ -1375,7 +1375,7 @@ CAPABILITIES = [
     ("telegram_send", "send Telegram messages", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
-    ("github_comment", "comment on GitHub", True),
+    ("github_comment", "comment on GitHub, and open and label issues", True),
     ("ha_act", "control your Home Assistant devices", True),
     ("homey_act", "control your Homey devices and start Homey flows", True),
     ("mqtt_publish", "publish MQTT messages", True),
@@ -2492,6 +2492,105 @@ class Connections:
         if comments:
             lines += ["", "Comments:"] + [f"- {c['user']['login']}: {_short(c.get('body', ''), 400)}" for c in comments[-10:]]
         return "\n".join(lines)
+
+    async def gh_branches(self, repo):
+        """Each branch with its last commit's age and author, oldest first, and any open pull request from it."""
+        repo = self._gh_repo(repo)
+        info = await self._gh(f"/repos/{repo}")
+        branches = (await self._gh(f"/repos/{repo}/branches?per_page=100"))[:40]
+        pulls = await self._gh(f"/repos/{repo}/pulls?state=open&per_page=100")
+        open_from = {p["head"]["ref"]: p["number"] for p in pulls  # pull requests from this project's own branches, not forks
+                     if ((p.get("head") or {}).get("repo") or {}).get("full_name", repo) == repo}
+        commits = await asyncio.gather(*(self._gh(f"/repos/{repo}/commits/{b['commit']['sha']}") for b in branches))
+        rows = []
+        for b, c in zip(branches, commits):
+            who = ((c.get("author") or {}).get("login") or (c.get("commit", {}).get("author") or {}).get("name") or "?")
+            when = (c.get("commit", {}).get("committer") or {}).get("date") or (c.get("commit", {}).get("author") or {}).get("date")
+            rows.append((_parse_date(when) or datetime.datetime.min, f"{b['name']} · last commit {self._ago(when)} by {who}"
+                         + (" · default branch" if b["name"] == info.get("default_branch") else "")
+                         + (f" · open pull request #{open_from[b['name']]}" if b["name"] in open_from else "")))
+        rows.sort(key=lambda r: r[0])
+        return "\n".join(r[1] for r in rows) or f"No branches in {repo}."
+
+    @staticmethod
+    def _gh_since(since):
+        """'yesterday', 'today', a number of days, or YYYY-MM-DD, as an ISO time for GitHub. 7 days if empty."""
+        s = to_str(since).strip().lower()
+        today = datetime.datetime.now(datetime.timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+        if s in ("", "week", "last week"):
+            day = today - datetime.timedelta(days=7)
+        elif s == "today":
+            day = today
+        elif s == "yesterday":
+            day = today - datetime.timedelta(days=1)
+        elif re.fullmatch(r"\d+( days?)?", s):
+            day = today - datetime.timedelta(days=int(s.split()[0]))
+        elif re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
+            day = datetime.datetime.strptime(s, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
+        else:
+            return None
+        return day.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    async def gh_commits(self, repo, author="", since=""):
+        """Commits on the default branch, newest first. author 'me' means the token's owner."""
+        repo, author = self._gh_repo(repo), to_str(author).strip()
+        if author.lower() in ("me", "@me"):
+            author = (await self._gh("/user")).get("login", "")
+        start = self._gh_since(since)
+        if not start:
+            return f"“{since}” isn't a time to start from. Use today, yesterday, a number of days, or a date like 2026-10-01."
+        q = f"per_page=50&since={start}" + (f"&author={urllib.parse.quote(author)}" if author else "")
+        rows = await self._gh(f"/repos/{repo}/commits?{q}")
+        return "\n".join(f"{c['sha'][:7]} · {self._ago((c.get('commit', {}).get('author') or {}).get('date'))} · "
+                         f"{(c.get('author') or {}).get('login') or (c.get('commit', {}).get('author') or {}).get('name') or '?'}: "
+                         f"{_short((c.get('commit') or {}).get('message', '').split(chr(10))[0], 200)}" for c in rows) \
+            or f"No commits in {repo}" + (f" by {author}" if author else "") + " in that time."
+
+    async def gh_read_file(self, repo, path="", ref=""):
+        """One file's text, or a folder's contents. ref is a branch, tag or commit (the default branch if empty)."""
+        repo, path, ref = self._gh_repo(repo), to_str(path).strip().strip("/"), to_str(ref).strip()
+        data = await self._gh(f"/repos/{repo}/contents/{urllib.parse.quote(path)}" + (f"?ref={urllib.parse.quote(ref)}" if ref else ""))
+        where = f"{repo}/{path}" + (f" at {ref}" if ref else "")
+        if isinstance(data, list):
+            return f"{where or repo} is a folder:\n" + "\n".join(f"{x['name']}{'/' if x.get('type') == 'dir' else ''}" for x in data)
+        if data.get("encoding") != "base64" or data.get("content") is None:
+            return f"{where} can't be read as text (it's too big for GitHub to send, or not a file)."
+        raw = base64.b64decode(data["content"])
+        try:
+            text = raw.decode("utf-8")
+        except UnicodeDecodeError:
+            return f"{where} isn't a text file ({len(raw):,} bytes)."
+        limit = 30000
+        return f"{where}:\n{text[:limit]}" + (f"\n\n(Only the first {limit:,} of {len(text):,} characters.)" if len(text) > limit else "")
+
+    async def gh_open_issue(self, repo, title, body, approved=False):
+        """Opens an issue, asking first. Says what happened, for the agent."""
+        repo, title, body = self._gh_repo(repo), to_str(title).strip(), to_str(body).strip()
+        if not title:
+            return "Not opened: an issue needs a title."
+        if not approved and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
+            return "Not opened: the person said no, or nobody was there to ask."
+        made = await self._gh(f"/repos/{repo}/issues", "POST", {"title": title, "body": body})
+        self.log(tr("GitHub issue opened in {repo}: #{n}", repo=repo, n=made.get("number")), title + ("\n\n" + body if body else ""), tr("sent"))
+        return f"Opened {repo} #{made.get('number')}: {made.get('html_url', '')}"
+
+    async def gh_add_labels(self, repo, number, labels, approved=False):
+        """Adds labels the repo already has, asking first. Says what happened, for the agent."""
+        repo, n = self._gh_repo(repo), round_js(num(number))
+        want = [to_str(x).strip() for x in (labels if isinstance(labels, list) else re.split(r"\s*,\s*", to_str(labels))) if to_str(x).strip()]
+        if not want:
+            return "Not labelled: give at least one label."
+        have = {lb["name"].lower(): lb["name"] for lb in await self._gh(f"/repos/{repo}/labels?per_page=100")}
+        unknown = [x for x in want if x.lower() not in have]
+        if unknown:
+            return (f"Not labelled: {repo} has no label {', '.join(unknown)}. Use only its own labels: "
+                    + (", ".join(sorted(have.values())) or "(it has none)") + ".")
+        names = [have[x.lower()] for x in want]
+        if not approved and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
+            return "Not labelled: the person said no, or nobody was there to ask."
+        await self._gh(f"/repos/{repo}/issues/{n}/labels", "POST", {"labels": names})
+        self.log(tr("GitHub labels on {repo} #{n}", repo=repo, n=n), ", ".join(names), tr("sent"))
+        return f"Labelled {repo} #{n}: {', '.join(names)}."
 
     async def gh_comment(self, repo, number, text, approved=False):
         repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()
@@ -4190,9 +4289,19 @@ class AgentTools:
                     ["repo", "number"]),
                    ("list_projects", "List GitHub projects, most recently changed first: the person's own, or another owner's if you give one.", ["owner"]),
                    ("search_github", "Search GitHub issues and pull requests, with GitHub's search words, like 'is:open is:issue repo:owner/name label:bug'.",
-                    ["query"])],
+                    ["query"]),
+                   ("list_branches", "List one GitHub project's branches, oldest last commit first, each with when and by whom it was last changed, and any "
+                    "open pull request from it.", ["repo"]),
+                   ("list_commits", "List commits on a GitHub project's main branch, newest first. author is a GitHub login, or me for the person "
+                    "(anyone if you leave it empty); since is today, yesterday, a number of days or YYYY-MM-DD (7 days if you don't say).",
+                    ["repo", "author", "since"]),
+                   ("read_github_file", "Read one file in a GitHub project, like README.md, or list a folder's contents (leave path empty for the top "
+                    "folder). ref is a branch, tag or commit (the main branch if you don't say).", ["repo", "path", "ref"])],
         "github_act": [("comment_on_github", "Post a comment on a GitHub pull request or issue. The person is asked first, and may say no.",
-                        ["repo", "number", "text"])],
+                        ["repo", "number", "text"]),
+                       ("open_issue", "Open a new issue in a GitHub project. The person is asked first, and may say no.", ["repo", "title", "body"]),
+                       ("add_labels", "Add labels to a GitHub issue or pull request. Only labels the project already has work; if one doesn't, "
+                        "you're told which it has. The person is asked first, and may say no.", ["repo", "number", "labels"])],
         "telegram": [("search_telegram", "Search the Telegram messages the person has sent to their bot, newest first. Leave text empty for the latest.",
                       ["text"])],
         "telegram_send": [("send_telegram", "Send a Telegram message to the person (or back to the chat a message came from). "
@@ -4240,7 +4349,10 @@ class AgentTools:
                          "review_text": {"text": "text", "criteria": "text"}, "read_feed": {"url": "text", "limit": "number"},
                          "search_linkedin": {"query": "text"}, "my_pull_requests": {}, "list_pull_requests": {"repo": "text", "state": "text"},
                          "read_pull_request": {"repo": "text", "number": "number"}, "list_projects": {"owner": "text"}, "search_github": {"query": "text"},
-                         "comment_on_github": {"repo": "text", "number": "number", "text": "text"}, "search_telegram": {"text": "text"},
+                         "comment_on_github": {"repo": "text", "number": "number", "text": "text"},
+                         "list_branches": {"repo": "text"}, "list_commits": {"repo": "text", "author": "text", "since": "text"},
+                         "read_github_file": {"repo": "text", "path": "text", "ref": "text"}, "open_issue": {"repo": "text", "title": "text", "body": "text"},
+                         "add_labels": {"repo": "text", "number": "number", "labels": "list"}, "search_telegram": {"text": "text"},
                          "send_telegram": {"text": "text"}, "search_discord": {"text": "text"}, "send_discord": {"text": "text"},
                          "search_slack": {"text": "text"}, "send_slack": {"text": "text"}, "search_email": {"query": "text", "days": "number"}, "read_email": {"id": "text"},
                          "send_email": {"to": "text", "subject": "text", "body": "text"}, "calendar": {"day": "text", "days": "number"},
@@ -4249,7 +4361,8 @@ class AgentTools:
                          "find_homey_devices": {"search": "text"}, "list_homey_flows": {}, "homey_variable": {"name": "text"},
                          "set_homey_device": {"device": "text", "capability": "text", "value": "any"}, "run_homey_flow": {"flow": "text"}}
     AGENT_OPTIONAL = {"find_devices": {"search"}, "call_service": {"entity", "data"}, "device_history": {"hours"}, "read_file": {"why"},
-                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "search_telegram": {"text"}, "search_discord": {"text"}, "search_slack": {"text"},
+                      "read_feed": {"url", "limit"}, "list_pull_requests": {"state"}, "list_projects": {"owner"}, "list_commits": {"author", "since"},
+                      "read_github_file": {"path", "ref"}, "open_issue": {"body"}, "search_telegram": {"text"}, "search_discord": {"text"}, "search_slack": {"text"},
                       "search_email": {"query", "days"}, "calendar": {"day", "days"}, "free_time": {"day", "from", "to", "minutes"},
                       "publish_mqtt": {"retain"}, "find_homey_devices": {"search"}}
     MAX_FILE_CHARS = 30000
@@ -4482,6 +4595,16 @@ class AgentTools:
             return await self.gh_repos(a("owner"))
         if kind == "search_github":
             return await self.gh_search(a("query"))
+        if kind == "list_branches":
+            return await self.gh_branches(a("repo"))
+        if kind == "list_commits":
+            return await self.gh_commits(a("repo"), a("author"), a("since"))
+        if kind == "read_github_file":
+            return await self.gh_read_file(a("repo"), a("path"), a("ref"))
+        if kind == "open_issue":
+            return await self.gh_open_issue(a("repo"), a("title"), a("body"), approved)
+        if kind == "add_labels":
+            return await self.gh_add_labels(a("repo"), inp.get("number", 0), inp.get("labels") or [], approved)
         if kind == "comment_on_github":
             done = await self.gh_comment(a("repo"), inp.get("number", 0), a("text"), approved)
             return "Comment posted." if done else "Not posted: the person said no, or nobody was there to ask."
@@ -6452,7 +6575,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 ["telegram_send", "send Telegram messages", true],
 ["discord_send", "send Discord messages", true],
 ["slack_send", "send Slack messages", true],
-["github_comment", "comment on GitHub", true],
+["github_comment", "comment on GitHub, and open and label issues", true],
 ["ha_act", "control your Home Assistant devices", true],
 ["homey_act", "control your Homey devices and start Homey flows", true],
 ["mqtt_publish", "publish MQTT messages", true],
@@ -7606,7 +7729,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         "title": "Chart is blank on Safari 17",
         "user": "toast-rack",
         "days_ago": 2,
-        "state": "open"
+        "state": "open",
+        "labels": []
       },
       {
         "repo": "sample-baker/oven-timer",
@@ -7614,9 +7738,114 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         "title": "Timer loses time after Home Assistant restarts",
         "user": "sample-baker",
         "days_ago": 4,
-        "state": "open"
+        "state": "open",
+        "labels": []
       }
-    ]
+    ],
+    "labels": {
+      "sample-baker/sourdough-chart": [
+        "bug",
+        "enhancement",
+        "documentation",
+        "duplicate",
+        "good first issue",
+        "urgent"
+      ],
+      "sample-baker/oven-timer": [
+        "bug",
+        "enhancement",
+        "question"
+      ]
+    },
+    "branches": [
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "name": "main",
+        "days_ago": 1,
+        "author": "sample-baker"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "name": "rye-curve",
+        "days_ago": 1,
+        "author": "crumb-shot"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "name": "dark-mode-experiment",
+        "days_ago": 142,
+        "author": "sample-baker"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "name": "old-d3-v5",
+        "days_ago": 311,
+        "author": "toast-rack"
+      },
+      {
+        "repo": "sample-baker/oven-timer",
+        "name": "main",
+        "days_ago": 6,
+        "author": "sample-baker"
+      },
+      {
+        "repo": "sample-baker/oven-timer",
+        "name": "restart-fix",
+        "days_ago": 97,
+        "author": "sample-baker"
+      }
+    ],
+    "default_branch": "main",
+    "commits": [
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "sha": "a41c9e2b7d",
+        "author": "sample-baker",
+        "days_ago": 0.6,
+        "message": "Fix tooltip overflow on narrow screens"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "sha": "9b02f1d4c3",
+        "author": "sample-baker",
+        "days_ago": 0.9,
+        "message": "Add Celsius/Fahrenheit toggle\n\nRemembers the choice in localStorage."
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "sha": "77d3e0a1f8",
+        "author": "crumb-shot",
+        "days_ago": 1.2,
+        "message": "Add rye flour curve"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "sha": "3e8a52c9b1",
+        "author": "sample-baker",
+        "days_ago": 3,
+        "message": "Docs: explain the --units flag"
+      },
+      {
+        "repo": "sample-baker/oven-timer",
+        "sha": "c5f71b0e29",
+        "author": "sample-baker",
+        "days_ago": 6,
+        "message": "Refactor: split the card into timer and display"
+      }
+    ],
+    "files": {
+      "sample-baker/sourdough-chart": {
+        "README.md": "# Sourdough chart\n\nAn interactive chart of bulk fermentation times by dough temperature.\n\n## Usage\n\n    npx sourdough-chart --flour wheat --units c\n\n| Flag | What it does |\n|---|---|\n| `--flour` | wheat, rye or spelt |\n| `--units` | c or f |\n| `--starter` | starter percentage (default 20) |\n\nSource is in `src/`: `curves.js` holds the data, `chart.js` draws it.\n",
+        "src/cli.js": "import { parseArgs } from 'node:util';\n\nexport const options = {\n  flour: { type: 'string', default: 'wheat' },\n  units: { type: 'string', default: 'c' },\n  levain: { type: 'string', default: '20' },\n  dark: { type: 'boolean', default: false },\n};\n\nexport const args = parseArgs({ options }).values;\n",
+        "src/curves.js": "export const curves = {\n  wheat: [[18, 9], [21, 6.5], [24, 5], [27, 4]],\n  spelt: [[18, 8], [21, 6], [24, 4.5], [27, 3.5]],\n};\n",
+        "src/chart.js": "// Draws the chart with d3.\nimport * as d3 from 'd3';\n",
+        "package.json": "{\n  \"name\": \"sourdough-chart\",\n  \"version\": \"1.4.0\",\n  \"dependencies\": { \"d3\": \"^7.9.0\" }\n}\n"
+      },
+      "sample-baker/oven-timer": {
+        "README.md": "# Oven timer\n\nA Home Assistant card that counts down each stage of a bake.\n",
+        "custom_components/oven_timer/__init__.py": "\"\"\"Oven timer.\"\"\"\nDOMAIN = 'oven_timer'\n"
+      }
+    }
   },
   "telegram": {
     "chat": "You (sample chat)",
@@ -8194,7 +8423,7 @@ Files and errors:
   Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
 Agent (the model chooses its own steps):
   rb_agent: inputs GOAL, STEPS; fields PLAN ("TRUE" | "FALSE": plan first, revise as it goes); statement input TOOLS holding only tool blocks. Runs a tool-using loop and puts the final answer in the draft.
-  rb_agent_builtin: fields KIND ("web": search_web, read_page | "ask": ask_me | "memory": remember, recall, list_memory | "calc": calculate | "time": current_time, time_plus | "file": read_file | "review": review_text | "feeds": read_feed | "linkedin": search_linkedin | "calendar": calendar, free_time | "email": search_email, read_email | "email_send": send_email | "github": my_pull_requests, list_pull_requests, read_pull_request, list_projects, search_github | "github_act": comment_on_github | "telegram": search_telegram | "telegram_send" | "telegram_send_free": send_telegram | "ha_read": find_devices, device_state, device_history | "ha_act" | "ha_act_free": call_service).
+  rb_agent_builtin: fields KIND ("web": search_web, read_page | "ask": ask_me | "memory": remember, recall, list_memory | "calc": calculate | "time": current_time, time_plus | "file": read_file | "review": review_text | "feeds": read_feed | "linkedin": search_linkedin | "calendar": calendar, free_time | "email": search_email, read_email | "email_send": send_email | "github": my_pull_requests, list_pull_requests, read_pull_request, list_projects, search_github, list_branches, list_commits, read_github_file | "github_act": comment_on_github, open_issue, add_labels | "telegram": search_telegram | "telegram_send" | "telegram_send_free": send_telegram | "ha_read": find_devices, device_state, device_history | "ha_act" | "ha_act_free": call_service).
   Connections: rb_tg_when (hat; field CONTAINS, "anything" for every message) runs when the Telegram bot gets a message; rb_tg_message: field PART ("text" | "sender" | "chat"), value; rb_tg_send: input TEXT, statement; rb_email_send: inputs TO, SUBJECT, TEXT, statement; rb_feed_news: input URL (empty = the feeds in settings), value, list of records (feed, title, link, date, summary); rb_calendar: input DAYS, value, list of records (day, start, end, title, location).
   Listeners (hats, run while the program runs on schedule): rb_mqtt_when (field TOPIC, + and # wildcards), rb_webhook_when (field PATH), rb_email_when (field CONTAINS),
   rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_cal_when (field N, minutes before an event),
@@ -8447,7 +8676,7 @@ HOW TO MAP CODE
     ["work out sums","calc"],["clock times and dates","time"],["read a file I choose","file"],["check text against criteria","review"],
     ["news feeds","feeds"],["search LinkedIn (public pages)","linkedin"],["calendar: events and free time","calendar"],
     ["email: search and read","email"],["email: send (asks me first)","email_send"],
-    ["GitHub: projects and pull requests","github"],["GitHub: comment (asks me first)","github_act"],
+    ["GitHub: projects and pull requests","github"],["GitHub: comment, open and label issues (asks me first)","github_act"],
     ["Telegram: search my messages","telegram"],["Telegram: send (asks me first)","telegram_send"],["Telegram: send (no asking)","telegram_send_free"],
     ["Discord: search my channels","discord"],["Discord: send (asks me first)","discord_send"],["Discord: send (no asking)","discord_send_free"],
     ["Slack: search my channels","slack"],["Slack: send (asks me first)","slack_send"],["Slack: send (no asking)","slack_send_free"],
@@ -12804,8 +13033,13 @@ HOW TO MAP CODE
         ["list_pull_requests", "List the pull requests in one GitHub project (owner/name). state is open, closed or all (open if you don't say).", ["repo", "state"]],
         ["read_pull_request", "Read one pull request: its description, the files it changes with the changes themselves, and its comments.", ["repo", "number"]],
         ["list_projects", "List GitHub projects, most recently changed first: the person's own, or another owner's if you give one.", ["owner"]],
-        ["search_github", "Search GitHub issues and pull requests, with GitHub's search words, like 'is:open is:issue repo:owner/name label:bug'.", ["query"]]],
-    github_act:[["comment_on_github", "Post a comment on a GitHub pull request or issue. The person is asked first, and may say no.", ["repo", "number", "text"]]],
+        ["search_github", "Search GitHub issues and pull requests, with GitHub's search words, like 'is:open is:issue repo:owner/name label:bug'.", ["query"]],
+        ["list_branches", "List one GitHub project's branches, oldest last commit first, each with when and by whom it was last changed, and any open pull request from it.", ["repo"]],
+        ["list_commits", "List commits on a GitHub project's main branch, newest first. author is a GitHub login, or me for the person (anyone if you leave it empty); since is today, yesterday, a number of days or YYYY-MM-DD (7 days if you don't say).", ["repo", "author", "since"]],
+        ["read_github_file", "Read one file in a GitHub project, like README.md, or list a folder's contents (leave path empty for the top folder). ref is a branch, tag or commit (the main branch if you don't say).", ["repo", "path", "ref"]]],
+    github_act:[["comment_on_github", "Post a comment on a GitHub pull request or issue. The person is asked first, and may say no.", ["repo", "number", "text"]],
+        ["open_issue", "Open a new issue in a GitHub project. The person is asked first, and may say no.", ["repo", "title", "body"]],
+        ["add_labels", "Add labels to a GitHub issue or pull request. Only labels the project already has work; if one doesn't, you're told which it has. The person is asked first, and may say no.", ["repo", "number", "labels"]]],
     telegram:[["search_telegram", "Search the Telegram messages the person has sent to their bot, newest first. Leave text empty for the latest.", ["text"]]],
     telegram_send:[["send_telegram", "Send a Telegram message to the person (or back to the chat a message came from). The person may be asked first, and may say no.", ["text"]]],
     email:[["search_email", "Search the person's email inbox for recent emails containing some words (or all recent ones if you leave query empty). days is how far back (7 if you don't say). Gives each email's id, date, sender, subject and start.", ["query", "days"]],
@@ -12836,11 +13070,12 @@ HOW TO MAP CODE
     list_memory:{}, search_memory:{ query:"text" }, find_devices:{ search:"text" }, device_state:{ entity:"text" }, call_service:{ service:"text", entity:"text", data:"any" },
     read_page:{ url:"text" }, device_history:{ entity:"text", hours:"number" }, calculate:{ expression:"text" }, current_time:{},
     time_plus:{ time:"text", minutes:"number" }, read_file:{ why:"text" }, review_text:{ text:"text", criteria:"text" },
-    read_feed:{ url:"text", limit:"number" }, search_linkedin:{ query:"text" }, my_pull_requests:{}, list_pull_requests:{ repo:"text", state:"text" }, read_pull_request:{ repo:"text", number:"number" }, list_projects:{ owner:"text" }, search_github:{ query:"text" }, comment_on_github:{ repo:"text", number:"number", text:"text" }, search_telegram:{ text:"text" }, send_telegram:{ text:"text" }, search_discord:{ text:"text" }, send_discord:{ text:"text" }, search_slack:{ text:"text" }, send_slack:{ text:"text" }, search_email:{ query:"text", days:"number" }, read_email:{ id:"text" }, send_email:{ to:"text", subject:"text", body:"text" }, calendar:{ day:"text", days:"number" }, free_time:{ day:"text", "from":"text", to:"text", minutes:"number" },
+    read_feed:{ url:"text", limit:"number" }, search_linkedin:{ query:"text" }, my_pull_requests:{}, list_pull_requests:{ repo:"text", state:"text" }, read_pull_request:{ repo:"text", number:"number" }, list_projects:{ owner:"text" }, search_github:{ query:"text" }, comment_on_github:{ repo:"text", number:"number", text:"text" }, list_branches:{ repo:"text" }, list_commits:{ repo:"text", author:"text", since:"text" },
+    read_github_file:{ repo:"text", path:"text", ref:"text" }, open_issue:{ repo:"text", title:"text", body:"text" }, add_labels:{ repo:"text", number:"number", labels:"list" }, search_telegram:{ text:"text" }, send_telegram:{ text:"text" }, search_discord:{ text:"text" }, send_discord:{ text:"text" }, search_slack:{ text:"text" }, send_slack:{ text:"text" }, search_email:{ query:"text", days:"number" }, read_email:{ id:"text" }, send_email:{ to:"text", subject:"text", body:"text" }, calendar:{ day:"text", days:"number" }, free_time:{ day:"text", "from":"text", to:"text", minutes:"number" },
     read_mqtt:{ topic:"text" }, publish_mqtt:{ topic:"text", message:"text", retain:"yes/no" },
     find_homey_devices:{ search:"text" }, list_homey_flows:{}, homey_variable:{ name:"text" }, set_homey_device:{ device:"text", capability:"text", value:"any" }, run_homey_flow:{ flow:"text" } };
   const AGENT_OPTIONAL = { find_devices:["search"], call_service:["entity", "data"], device_history:["hours"], read_file:["why"],
-    read_feed:["limit", "url"], list_pull_requests:["state"], list_projects:["owner"], search_telegram:["text"], search_discord:["text"], search_slack:["text"], search_email:["days", "query"], calendar:["day", "days"], free_time:["day", "from", "minutes", "to"], publish_mqtt:["retain"], find_homey_devices:["search"] };
+    read_feed:["limit", "url"], list_pull_requests:["state"], list_projects:["owner"], list_commits:["author", "since"], read_github_file:["path", "ref"], open_issue:["body"], search_telegram:["text"], search_discord:["text"], search_slack:["text"], search_email:["days", "query"], calendar:["day", "days"], free_time:["day", "from", "minutes", "to"], publish_mqtt:["retain"], find_homey_devices:["search"] };
   const MAX_FILE_CHARS = 30000;
   /* Works out a sum like (350 / 500) * 100 exactly, without running any code. Matches the runtime's _Calc. */
   const CALC_FUNCS = ["round", "min", "max", "sqrt", "abs", "floor", "ceil"];
@@ -12981,6 +13216,70 @@ HOW TO MAP CODE
     const g = GH(), words = query.toLowerCase().split(/\s+/).filter(w => !w.includes(":"));
     const all = g.pulls.map(p => [p, "pull request"]).concat(g.issues.map(i => [i, "issue"]));
     return all.filter(([r]) => words.every(w => (r.title + " " + r.repo).toLowerCase().includes(w))).map(([r, k]) => ghLine(r, k)).join("\n") || "Nothing found for “" + query + "”.";
+  }
+  /* Branches, commits, files, new issues and labels, on the sample projects. Match the runtime's gh_branches, gh_commits,
+     gh_read_file, gh_open_issue and gh_add_labels wording. */
+  function ghBranches(repo){
+    repo = ghRepo(repo); const g = GH();
+    const rows = (g.branches || []).filter(b => b.repo === repo).sort((a, b) => b.days_ago - a.days_ago);
+    return rows.map(b => { const pr = g.pulls.find(p => p.repo === repo && p.head === b.name);
+      return b.name + " · last commit " + agoText(b.days_ago) + " by " + b.author + (b.name === (g.default_branch || "main") ? " · default branch" : "") + (pr ? " · open pull request #" + pr.number : ""); }).join("\n")
+      || "No branches in " + repo + ".";
+  }
+  function ghSince(since){
+    const s = str(since).trim().toLowerCase();
+    if (["", "week", "last week"].includes(s)) return 7;
+    if (s === "today") return 0;
+    if (s === "yesterday") return 1;
+    if (/^\d+( days?)?$/.test(s)) return parseInt(s, 10);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return Math.max(0, (Date.now() - new Date(s + "T00:00:00Z").getTime()) / 86400000);
+    return null;
+  }
+  function ghCommits(repo, author, since){
+    repo = ghRepo(repo); const g = GH(); author = str(author).trim();
+    if (["me", "@me"].includes(author.toLowerCase())) author = g.login;
+    const days = ghSince(since);
+    if (days === null) return "“" + str(since) + "” isn't a time to start from. Use today, yesterday, a number of days, or a date like 2026-10-01.";
+    const rows = (g.commits || []).filter(c => c.repo === repo && (!author || c.author.toLowerCase() === author.toLowerCase()) && c.days_ago <= days + 1).sort((a, b) => a.days_ago - b.days_ago);
+    return rows.map(c => c.sha.slice(0, 7) + " · " + agoText(c.days_ago) + " · " + c.author + ": " + short(c.message.split("\n")[0], 200)).join("\n")
+      || "No commits in " + repo + (author ? " by " + author : "") + " in that time.";
+  }
+  function ghReadFile(repo, path, ref){
+    repo = ghRepo(repo); path = str(path).trim().replace(/^\/+|\/+$/g, ""); ref = str(ref).trim();
+    const files = (GH().files || {})[repo];
+    if (!files) fail(tr("GitHub: not found, or the token can't see it."));
+    const where = repo + "/" + path + (ref ? " at " + ref : "");
+    if (files[path] !== undefined) {
+      const text = files[path];
+      return where + ":\n" + text.slice(0, MAX_FILE_CHARS) + (text.length > MAX_FILE_CHARS ? "\n\n(Only the first " + MAX_FILE_CHARS.toLocaleString("en") + " of " + text.length.toLocaleString("en") + " characters.)" : "");
+    }
+    const inside = [...new Set(Object.keys(files).filter(f => !path || f.startsWith(path + "/")).map(f => { const rest = path ? f.slice(path.length + 1) : f;
+      return rest.includes("/") ? rest.split("/")[0] + "/" : rest; }))].sort();
+    if (!inside.length) fail(tr("GitHub: not found, or the token can't see it."));
+    return (path ? where : repo) + " is a folder:\n" + inside.join("\n");
+  }
+  async function ghOpenIssue(repo, title, body, approved){
+    repo = ghRepo(repo); title = str(title).trim(); body = str(body).trim();
+    if (!title) return "Not opened: an issue needs a title.";
+    if (!approved && !(await allowed(["messages"], "open an issue in " + repo + ": " + short(title, 120)))) return "Not opened: the person said no.";
+    const g = GH(), n = Math.max(0, ...g.pulls.concat(g.issues).filter(x => x.repo === repo).map(x => x.number)) + 1;
+    g.issues.push({ repo, number:n, title, user:g.login, days_ago:0, state:"open", labels:[] });
+    addStep(tr("GitHub issue opened in {repo}: #{n}", { repo, n }), { text:title + (body ? "\n\n" + body : "") }).done("sample", "ok");
+    return "Opened " + repo + " #" + n + ": https://github.com/" + repo + "/issues/" + n;
+  }
+  async function ghAddLabels(repo, number, labels, approved){
+    repo = ghRepo(repo); const n = Math.floor(num(number) + 0.5), g = GH();
+    const want = (Array.isArray(labels) ? labels : str(labels).split(/\s*,\s*/)).map(x => str(x).trim()).filter(Boolean);
+    if (!want.length) return "Not labelled: give at least one label.";
+    const have = (g.labels || {})[repo] || [], lower = new Map(have.map(x => [x.toLowerCase(), x]));
+    const unknown = want.filter(x => !lower.has(x.toLowerCase()));
+    if (unknown.length) return "Not labelled: " + repo + " has no label " + unknown.join(", ") + ". Use only its own labels: " + (have.slice().sort().join(", ") || "(it has none)") + ".";
+    const names = want.map(x => lower.get(x.toLowerCase()));
+    if (!approved && !(await allowed(["messages"], "label " + repo + " #" + n + ": " + names.join(", ")))) return "Not labelled: the person said no.";
+    const it = g.issues.concat(g.pulls).find(x => x.repo === repo && x.number === n);
+    if (it) it.labels = [...new Set((it.labels || []).concat(names))];
+    addStep(tr("GitHub labels on {repo} #{n}", { repo, n }), { text:names.join(", ") }).done("sample", "ok");
+    return "Labelled " + repo + " #" + n + ": " + names.join(", ") + ".";
   }
   async function ghComment(repo, number, text, approved){
     repo = ghRepo(repo); const n = Math.floor(num(number) + 0.5); text = str(text).trim();
@@ -13444,6 +13743,11 @@ HOW TO MAP CODE
       case "read_pull_request": return ghReadPr(a("repo"), inp.number);
       case "list_projects": return ghRepos(a("owner"));
       case "search_github": return ghSearch(a("query"));
+      case "list_branches": return ghBranches(a("repo"));
+      case "list_commits": return ghCommits(a("repo"), a("author"), a("since"));
+      case "read_github_file": return ghReadFile(a("repo"), a("path"), a("ref"));
+      case "open_issue": return await ghOpenIssue(a("repo"), a("title"), a("body"), run.agentApproved);
+      case "add_labels": return await ghAddLabels(a("repo"), inp.number, inp.labels || [], run.agentApproved);
       case "comment_on_github": return (await ghComment(a("repo"), inp.number, a("text"), run.agentApproved)) ? "Comment posted." : "Not posted: the person said no.";
       case "search_telegram": return tgSearch(a("text"));
       case "send_telegram": return (await tgSend(a("text"), run.agentApproved)) ? "Sent." : "Not sent: the person said no.";

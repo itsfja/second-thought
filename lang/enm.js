@@ -149,7 +149,7 @@
 "rb_now.PART":{"time":"tyme","date":"day","datetime":"day and tyme","hour":"houre","minute":"minute","weekday":"day of the wike"},
 "rb_sort.ORDER":{"desc":"heighest first","asc":"lowest first"},
 "rb_ask_first.WHAT":{"ha":"any dede of the wise hous (Home Assistant, Homey, MQTT)","messages":"sendynge of messages and pronouncynges","files":"savynge of quaiers","all":"alle thise"},
-"rb_agent_builtin.KIND":{"web":"seke on the web and rede leves","ask":"aske me a questioun","memory":"remembre notes and calle hem to mynde","calc":"rekene sommes","time":"houres and dayes","file":"rede a quaier that I chese","review":"examyne text agayns reules","feeds":"tydinges streemes","linkedin":"seke on LinkedIn (commune leves)","calendar":"kalender: events and free tyme","email":"email: seke and rede","email_send":"email: sende (asketh me first)","github":"GitHub: werkes and pull requests","github_act":"GitHub: comente (asketh me first)","telegram":"Telegram: seke my messages","telegram_send":"Telegram: sende (asketh me first)","telegram_send_free":"Telegram: sende (withouten askynge)","discord":"Discord: seke my chanels","discord_send":"Discord: sende (asketh me first)","discord_send_free":"Discord: sende (withouten askynge)","slack":"Slack: seke my chanels","slack_send":"Slack: sende (asketh me first)","slack_send_free":"Slack: sende (withouten askynge)","mqtt":"MQTT: rede materes","mqtt_act":"MQTT: publisshe (asketh me first)","mqtt_act_free":"MQTT: publisshe (withouten askynge)","homey_read":"Homey: loke on engynes, floodes and variables","homey_act":"Homey: governe engynes and bigynne floodes (asketh me first)","homey_act_free":"Homey: governe engynes and bigynne floodes (withouten askynge)","ha_read":"Home Assistant: loke on engynes","ha_act":"Home Assistant: governe engynes","ha_act_free":"Home Assistant: governe engynes (withouten askynge)"},
+"rb_agent_builtin.KIND":{"web":"seke on the web and rede leves","ask":"aske me a questioun","memory":"remembre notes and calle hem to mynde","calc":"rekene sommes","time":"houres and dayes","file":"rede a quaier that I chese","review":"examyne text agayns reules","feeds":"tydinges streemes","linkedin":"seke on LinkedIn (commune leves)","calendar":"kalender: events and free tyme","email":"email: seke and rede","email_send":"email: sende (asketh me first)","github":"GitHub: werkes and pull requests","github_act":"GitHub: comente, open and marke issues (asketh me first)","telegram":"Telegram: seke my messages","telegram_send":"Telegram: sende (asketh me first)","telegram_send_free":"Telegram: sende (withouten askynge)","discord":"Discord: seke my chanels","discord_send":"Discord: sende (asketh me first)","discord_send_free":"Discord: sende (withouten askynge)","slack":"Slack: seke my chanels","slack_send":"Slack: sende (asketh me first)","slack_send_free":"Slack: sende (withouten askynge)","mqtt":"MQTT: rede materes","mqtt_act":"MQTT: publisshe (asketh me first)","mqtt_act_free":"MQTT: publisshe (withouten askynge)","homey_read":"Homey: loke on engynes, floodes and variables","homey_act":"Homey: governe engynes and bigynne floodes (asketh me first)","homey_act_free":"Homey: governe engynes and bigynne floodes (withouten askynge)","ha_read":"Home Assistant: loke on engynes","ha_act":"Home Assistant: governe engynes","ha_act_free":"Home Assistant: governe engynes (withouten askynge)"},
 "rb_agent_mcp.ASK":{"changes":"(asketh me bifore tooles that chaungen thynges)","every":"(asketh me bifore every tool)","never":"(withouten askynge)"},
 "rb_tg_message.PART":{"text":"text","sender":"sendere","chat":"conversacioun"},
 "rb_mem_set.KIND":{"transient":"whil this leef is open","permanent":"for evere"},
@@ -586,7 +586,6 @@
 "Type the prompt text.":"Write the text of the biddyng.",
 "Your saved space is full. Delete something first.":"Thy saved space is ful. Do somwhat awey first.",
 "accept web requests from other computers":"receyve web requestes fro othere engynes",
-"comment on GitHub":"comente on GitHub",
 "control your Home Assistant devices":"governe thy Home Assistant engynes",
 "control your Homey devices and start Homey flows":"governe thy Homey engynes and bigynne Homey floodes",
 "forever":"for evere",
@@ -834,7 +833,10 @@
 "“{value}” isn't on or off.":"“{value}” is neither on ne off.",
 "Try: {tip}":"Assaye: {tip}",
 "Shared by {author}.":"Yshared by {author}.",
-"{title} (shared by {author})":"{title} (yshared by {author})"
+"{title} (shared by {author})":"{title} (yshared by {author})",
+"GitHub issue opened in {repo}: #{n}":"GitHub issue opened in {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub markes on {repo} #{n}",
+"comment on GitHub, and open and label issues":"comente on GitHub, and open and marke issues"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1603,7 +1605,9 @@
 "When {entity} changes":"Whan {entity} chaungeth",
 "Run":"Renne",
 "(yes)":"y, ye, yis, yea",
-"(no)":"n, nay, nat"
+"(no)":"n, nay, nat",
+"GitHub issue opened in {repo}: #{n}":"GitHub issue opened in {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub markes on {repo} #{n}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

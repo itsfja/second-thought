@@ -584,7 +584,7 @@
    "email": "e-mail: zoeken en lezen",
    "email_send": "e-mail: versturen (vraagt het me eerst)",
    "github": "GitHub: projecten en pull requests",
-   "github_act": "GitHub: reageren (vraagt het me eerst)",
+   "github_act": "GitHub: reageren, issues openen en labelen (vraagt het me eerst)",
    "telegram": "Telegram: mijn berichten doorzoeken",
    "telegram_send": "Telegram: versturen (vraagt het me eerst)",
    "telegram_send_free": "Telegram: versturen (zonder vragen)",
@@ -1062,7 +1062,6 @@
   "Type the prompt text.": "Typ de prompttekst.",
   "Your saved space is full. Delete something first.": "Je opslagruimte is vol. Verwijder eerst iets.",
   "accept web requests from other computers": "webverzoeken van andere computers aannemen",
-  "comment on GitHub": "reageren op GitHub",
   "control your Home Assistant devices": "je Home Assistant-apparaten bedienen",
   "control your Homey devices and start Homey flows": "je Homey-apparaten bedienen en Homey-flows starten",
   "forever": "voor altijd",
@@ -1310,7 +1309,10 @@
   "“{value}” isn't on or off.": "‘{value}’ is niet on of off.",
   "Try: {tip}": "Probeer: {tip}",
   "Shared by {author}.": "Gedeeld door {author}.",
-  "{title} (shared by {author})": "{title} (gedeeld door {author})"
+  "{title} (shared by {author})": "{title} (gedeeld door {author})",
+  "GitHub issue opened in {repo}: #{n}": "GitHub-issue geopend in {repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "GitHub-labels op {repo} #{n}",
+  "comment on GitHub, and open and label issues": "reageren op GitHub, en issues openen en labelen"
  },
  "examples": {
   "review": {
@@ -2711,6 +2713,8 @@
   "When {entity} changes": "Wanneer {entity} verandert",
   "Run": "Run",
   "(yes)": "j, ja",
-  "(no)": "n, nee"
+  "(no)": "n, nee",
+  "GitHub issue opened in {repo}: #{n}": "GitHub-issue geopend in {repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "GitHub-labels op {repo} #{n}"
  }
 }

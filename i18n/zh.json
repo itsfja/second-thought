@@ -584,7 +584,7 @@
    "email": "邮件：搜索和阅读",
    "email_send": "邮件：发送（先问我）",
    "github": "GitHub：项目和拉取请求",
-   "github_act": "GitHub：评论（先问我）",
+   "github_act": "GitHub：评论、创建和标记 issue（先问我）",
    "telegram": "Telegram：搜索我的消息",
    "telegram_send": "Telegram：发送（先问我）",
    "telegram_send_free": "Telegram：发送（不询问）",
@@ -1062,7 +1062,6 @@
   "Type the prompt text.": "请输入提示词文本。",
   "Your saved space is full. Delete something first.": "你的保存空间已满。请先删除一些东西。",
   "accept web requests from other computers": "接受来自其他电脑的网络请求",
-  "comment on GitHub": "在 GitHub 上评论",
   "control your Home Assistant devices": "控制你的 Home Assistant 设备",
   "control your Homey devices and start Homey flows": "控制你的 Homey 设备并启动 Homey 流程",
   "forever": "永久",
@@ -1310,7 +1309,10 @@
   "“{value}” isn't on or off.": "“{value}”既不是 on 也不是 off。",
   "Try: {tip}": "试试：{tip}",
   "Shared by {author}.": "由 {author} 分享。",
-  "{title} (shared by {author})": "{title}（由 {author} 分享）"
+  "{title} (shared by {author})": "{title}（由 {author} 分享）",
+  "GitHub issue opened in {repo}: #{n}": "已在 {repo} 创建 GitHub issue：#{n}",
+  "GitHub labels on {repo} #{n}": "{repo} #{n} 上的 GitHub 标签",
+  "comment on GitHub, and open and label issues": "在 GitHub 上评论，并创建和标记 issue"
  },
  "examples": {
   "review": {
@@ -2711,6 +2713,8 @@
   "When {entity} changes": "当 {entity} 变化时",
   "Run": "运行",
   "(yes)": "是, 是的, 好, 对",
-  "(no)": "否, 不, 不是"
+  "(no)": "否, 不, 不是",
+  "GitHub issue opened in {repo}: #{n}": "已在 {repo} 创建 GitHub issue：#{n}",
+  "GitHub labels on {repo} #{n}": "{repo} #{n} 上的 GitHub 标签"
  }
 }

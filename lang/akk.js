@@ -150,7 +150,7 @@
 "rb_now.PART":{"time":"𒋛𒈠𒉡𒌝","date":"𒌑𒈬𒌝","datetime":"𒌑𒈬𒌝 𒌋 𒋛𒈠𒉡𒌝","hour":"𒁁𒊒𒌝","minute":"𒌓𒁕𒌅𒌝","weekday":"𒌝 𒊺𒁍𒋾𒅎"},
 "rb_sort.ORDER":{"desc":"𒂊𒇻𒌝 𒉺𒈾","asc":"𒊭𒀊𒇻𒌝 𒉺𒈾"},
 "rb_ask_first.WHAT":{"ha":"𒂊𒁉𒅖𒋾𒅎 𒅗𒇷𒊭 𒊭 𒁉𒋾𒅎 𒅎𒆠𒅎 (Home Assistant, Homey, MQTT)","messages":"𒊭𒉺𒅈 𒅆𒅁𒊑 𒌋 𒋗𒁺𒋾𒅎","files":"𒈾𒍝𒅈 𒆪𒉡𒊌𒅗𒋾𒅎","all":"𒀭𒈾𒋾𒅎 𒅗𒇷𒅆𒈾"},
-"rb_agent_builtin.KIND":{"web":"𒄿𒈾 𒊺𒋾𒅎 𒄭𒀀𒌅𒌝 𒌋 𒌅𒌒𒁉 𒅆𒋫𒊍𒋢𒌝","ask":"𒅆𒌅𒌌𒋫𒄠 𒊭𒆷𒀭𒉌","memory":"𒅆𒀉𒊑 𒄩𒊓𒋢𒌝 𒌋 𒄷𒊻𒋢𒋢𒌝","calc":"𒉌𒅅𒅗𒊍𒋛 𒂊𒁍𒍑","time":"𒋛𒈠𒉡 𒌋 𒌑𒈬","file":"𒆪𒉡𒊌𒅗𒄠 𒊭 𒄴𒄭𒊒 𒅆𒋫𒊍𒋛","review":"𒀀𒉿𒋫𒄠 𒀀𒈾 𒍢𒁍𒋾𒅎 𒁉𒊑","feeds":"𒁍𒊻𒋢𒊏𒌅𒌝","linkedin":"𒄿𒈾 LinkedIn 𒄭𒀉 (𒌅𒌒𒁍 𒁉𒌅𒌅𒌝)","calendar":"𒌑𒈬: 𒀉𒋫𒌅𒌝 𒌋 𒋛𒈠𒉡 𒊑𒄣𒌅𒌝","email":"email: 𒄭𒀀𒌅𒌝 𒌋 𒅆𒋫𒊍𒋢𒌝","email_send":"email: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","github":"GitHub: 𒁺𒌌𒇻 𒌋 pull requests","github_act":"GitHub: 𒀀𒉿𒋫𒄠 𒊭𒅗𒉡𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","telegram":"Telegram: 𒄿𒈾 𒅆𒅁𒊑𒅀 𒄭𒀉","telegram_send":"Telegram: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","telegram_send_free":"Telegram: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","discord":"Discord: 𒄿𒈾 𒈾𒊏𒋾𒅀 𒄭𒀉","discord_send":"Discord: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","discord_send_free":"Discord: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","slack":"Slack: 𒄿𒈾 𒈾𒊏𒋾𒅀 𒄭𒀉","slack_send":"Slack: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","slack_send_free":"Slack: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","mqtt":"MQTT: 𒀀𒉿𒋾𒅎 𒅆𒋫𒊍𒋢𒌝","mqtt_act":"MQTT: 𒋗𒁍𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","mqtt_act_free":"MQTT: 𒋗𒁍𒌝 (𒁀𒇻 𒊭𒇷𒅎)","homey_read":"Homey: 𒀀𒈾 𒌑𒉡𒋾𒅎, 𒀠𒅗𒅗𒋾𒅎 𒌋 𒅆𒈾𒋾𒅎 𒈾𒁕𒇻𒌝","homey_act":"Homey: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 𒌋 𒀠𒅗𒅗𒋾𒅎 𒋗𒊻𒁍𒌅𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","homey_act_free":"Homey: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 𒌋 𒀠𒅗𒅗𒋾𒅎 𒋗𒊻𒁍𒌅𒌝 (𒁀𒇻 𒊭𒇷𒅎)","ha_read":"Home Assistant: 𒀀𒈾 𒌑𒉡𒋾𒅎 𒈾𒁕𒇻𒌝","ha_act":"Home Assistant: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝","ha_act_free":"Home Assistant: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)"},
+"rb_agent_builtin.KIND":{"web":"𒄿𒈾 𒊺𒋾𒅎 𒄭𒀀𒌅𒌝 𒌋 𒌅𒌒𒁉 𒅆𒋫𒊍𒋢𒌝","ask":"𒅆𒌅𒌌𒋫𒄠 𒊭𒆷𒀭𒉌","memory":"𒅆𒀉𒊑 𒄩𒊓𒋢𒌝 𒌋 𒄷𒊻𒋢𒋢𒌝","calc":"𒉌𒅅𒅗𒊍𒋛 𒂊𒁍𒍑","time":"𒋛𒈠𒉡 𒌋 𒌑𒈬","file":"𒆪𒉡𒊌𒅗𒄠 𒊭 𒄴𒄭𒊒 𒅆𒋫𒊍𒋛","review":"𒀀𒉿𒋫𒄠 𒀀𒈾 𒍢𒁍𒋾𒅎 𒁉𒊑","feeds":"𒁍𒊻𒋢𒊏𒌅𒌝","linkedin":"𒄿𒈾 LinkedIn 𒄭𒀉 (𒌅𒌒𒁍 𒁉𒌅𒌅𒌝)","calendar":"𒌑𒈬: 𒀉𒋫𒌅𒌝 𒌋 𒋛𒈠𒉡 𒊑𒄣𒌅𒌝","email":"email: 𒄭𒀀𒌅𒌝 𒌋 𒅆𒋫𒊍𒋢𒌝","email_send":"email: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","github":"GitHub: 𒁺𒌌𒇻 𒌋 pull requests","github_act":"GitHub: 𒀀𒉿𒋫𒄠 𒊭𒅗𒉡𒌝, issues 𒁉𒋼𒅎 𒌋 𒋗𒈪 𒊭𒅗𒉡𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","telegram":"Telegram: 𒄿𒈾 𒅆𒅁𒊑𒅀 𒄭𒀉","telegram_send":"Telegram: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","telegram_send_free":"Telegram: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","discord":"Discord: 𒄿𒈾 𒈾𒊏𒋾𒅀 𒄭𒀉","discord_send":"Discord: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","discord_send_free":"Discord: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","slack":"Slack: 𒄿𒈾 𒈾𒊏𒋾𒅀 𒄭𒀉","slack_send":"Slack: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","slack_send_free":"Slack: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","mqtt":"MQTT: 𒀀𒉿𒋾𒅎 𒅆𒋫𒊍𒋢𒌝","mqtt_act":"MQTT: 𒋗𒁍𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","mqtt_act_free":"MQTT: 𒋗𒁍𒌝 (𒁀𒇻 𒊭𒇷𒅎)","homey_read":"Homey: 𒀀𒈾 𒌑𒉡𒋾𒅎, 𒀠𒅗𒅗𒋾𒅎 𒌋 𒅆𒈾𒋾𒅎 𒈾𒁕𒇻𒌝","homey_act":"Homey: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 𒌋 𒀠𒅗𒅗𒋾𒅎 𒋗𒊻𒁍𒌅𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","homey_act_free":"Homey: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 𒌋 𒀠𒅗𒅗𒋾𒅎 𒋗𒊻𒁍𒌅𒌝 (𒁀𒇻 𒊭𒇷𒅎)","ha_read":"Home Assistant: 𒀀𒈾 𒌑𒉡𒋾𒅎 𒈾𒁕𒇻𒌝","ha_act":"Home Assistant: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝","ha_act_free":"Home Assistant: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)"},
 "rb_agent_mcp.ASK":{"changes":"(𒄿𒈾 𒉺𒉌 𒌑𒉡𒋾𒅎 𒊭 𒈪𒅎𒈠 𒌑𒈾𒀝𒅗𒊏 𒄿𒊭𒀠𒆷𒀭𒉌)","every":"(𒄿𒈾 𒉺𒉌 𒌑𒉡𒋾𒅎 𒅗𒇷𒊭 𒄿𒊭𒀠𒆷𒀭𒉌)","never":"(𒁀𒇻 𒊭𒇷𒅎)"},
 "rb_tg_message.PART":{"text":"𒀀𒉿𒌅𒌝","sender":"𒊭𒁉𒊒𒌝","chat":"𒁕𒁀𒁍𒌝"},
 "rb_mem_set.KIND":{"transient":"𒀀𒁲 𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒁉𒌅","permanent":"𒀀𒈾 𒁕𒅈"},
@@ -587,7 +587,6 @@
 "Type the prompt text.":"𒀀𒉿𒀜 𒁉𒅎 𒋗𒌅𒌨.",
 "Your saved space is full. Delete something first.":"𒀀𒊭𒅈 𒈾𒍝𒊑𒅗 𒈠𒇷. 𒉺𒈾 𒈪𒅎𒈠 𒁍𒋗𒌓.",
 "accept web requests from other computers":"𒈠𒄩𒅈 𒂊𒊑𒊭𒀜 𒊺𒋾𒅎 𒅖𒌅 𒌑𒉡𒌓 𒌅𒌒𒊭𒅈𒊑 𒊭𒉡𒋾𒅎",
-"comment on GitHub":"𒊭𒅗𒀭 𒀀𒉿𒋾𒅎 𒄿𒈾 GitHub",
 "control your Home Assistant devices":"𒋗𒋼𒋗𒌨 𒌑𒉡𒌓 Home Assistant 𒅗",
 "control your Homey devices and start Homey flows":"𒋗𒋼𒋗𒌨 𒌑𒉡𒌓 Homey 𒅗 𒌋 𒋗𒊻𒁍𒌓 𒀠𒅗𒅗𒀜 Homey",
 "forever":"𒀀𒈾 𒁕𒅈",
@@ -835,7 +834,10 @@
 "“{value}” isn't on or off.":"„{value}” on 𒌑𒇻 off 𒌌.",
 "Try: {tip}":"𒄭𒀉: {tip}",
 "Shared by {author}.":"𒊭 {author} 𒄿𒍪𒍪.",
-"{title} (shared by {author})":"{title} (𒊭 {author} 𒄿𒍪𒍪)"
+"{title} (shared by {author})":"{title} (𒊭 {author} 𒄿𒍪𒍪)",
+"GitHub issue opened in {repo}: #{n}":"𒁉𒌅𒌝 issue 𒄿𒈾 GitHub 𒀀𒈾 {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"𒋗𒈬 𒄿𒈾 GitHub 𒀀𒈾 {repo} #{n}",
+"comment on GitHub, and open and label issues":"𒊭𒅗𒀭 𒀀𒉿𒋾𒅎 𒄿𒈾 GitHub, 𒁉𒋼𒅎 issues 𒌋 𒊭𒅗𒀭 𒋗𒈪"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1604,7 +1606,9 @@
 "When {entity} changes":"inūma {entity} išanni",
 "Run":"epuš",
 "(yes)":"a, anna",
-"(no)":"u, ulla"
+"(no)":"u, ulla",
+"GitHub issue opened in {repo}: #{n}":"petûm issue ina GitHub ana {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"šumū ina GitHub ana {repo} #{n}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

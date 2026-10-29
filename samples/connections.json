@@ -165,7 +165,8 @@
         "title": "Chart is blank on Safari 17",
         "user": "toast-rack",
         "days_ago": 2,
-        "state": "open"
+        "state": "open",
+        "labels": []
       },
       {
         "repo": "sample-baker/oven-timer",
@@ -173,9 +174,114 @@
         "title": "Timer loses time after Home Assistant restarts",
         "user": "sample-baker",
         "days_ago": 4,
-        "state": "open"
+        "state": "open",
+        "labels": []
       }
-    ]
+    ],
+    "labels": {
+      "sample-baker/sourdough-chart": [
+        "bug",
+        "enhancement",
+        "documentation",
+        "duplicate",
+        "good first issue",
+        "urgent"
+      ],
+      "sample-baker/oven-timer": [
+        "bug",
+        "enhancement",
+        "question"
+      ]
+    },
+    "branches": [
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "name": "main",
+        "days_ago": 1,
+        "author": "sample-baker"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "name": "rye-curve",
+        "days_ago": 1,
+        "author": "crumb-shot"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "name": "dark-mode-experiment",
+        "days_ago": 142,
+        "author": "sample-baker"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "name": "old-d3-v5",
+        "days_ago": 311,
+        "author": "toast-rack"
+      },
+      {
+        "repo": "sample-baker/oven-timer",
+        "name": "main",
+        "days_ago": 6,
+        "author": "sample-baker"
+      },
+      {
+        "repo": "sample-baker/oven-timer",
+        "name": "restart-fix",
+        "days_ago": 97,
+        "author": "sample-baker"
+      }
+    ],
+    "default_branch": "main",
+    "commits": [
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "sha": "a41c9e2b7d",
+        "author": "sample-baker",
+        "days_ago": 0.6,
+        "message": "Fix tooltip overflow on narrow screens"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "sha": "9b02f1d4c3",
+        "author": "sample-baker",
+        "days_ago": 0.9,
+        "message": "Add Celsius/Fahrenheit toggle\n\nRemembers the choice in localStorage."
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "sha": "77d3e0a1f8",
+        "author": "crumb-shot",
+        "days_ago": 1.2,
+        "message": "Add rye flour curve"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "sha": "3e8a52c9b1",
+        "author": "sample-baker",
+        "days_ago": 3,
+        "message": "Docs: explain the --units flag"
+      },
+      {
+        "repo": "sample-baker/oven-timer",
+        "sha": "c5f71b0e29",
+        "author": "sample-baker",
+        "days_ago": 6,
+        "message": "Refactor: split the card into timer and display"
+      }
+    ],
+    "files": {
+      "sample-baker/sourdough-chart": {
+        "README.md": "# Sourdough chart\n\nAn interactive chart of bulk fermentation times by dough temperature.\n\n## Usage\n\n    npx sourdough-chart --flour wheat --units c\n\n| Flag | What it does |\n|---|---|\n| `--flour` | wheat, rye or spelt |\n| `--units` | c or f |\n| `--starter` | starter percentage (default 20) |\n\nSource is in `src/`: `curves.js` holds the data, `chart.js` draws it.\n",
+        "src/cli.js": "import { parseArgs } from 'node:util';\n\nexport const options = {\n  flour: { type: 'string', default: 'wheat' },\n  units: { type: 'string', default: 'c' },\n  levain: { type: 'string', default: '20' },\n  dark: { type: 'boolean', default: false },\n};\n\nexport const args = parseArgs({ options }).values;\n",
+        "src/curves.js": "export const curves = {\n  wheat: [[18, 9], [21, 6.5], [24, 5], [27, 4]],\n  spelt: [[18, 8], [21, 6], [24, 4.5], [27, 3.5]],\n};\n",
+        "src/chart.js": "// Draws the chart with d3.\nimport * as d3 from 'd3';\n",
+        "package.json": "{\n  \"name\": \"sourdough-chart\",\n  \"version\": \"1.4.0\",\n  \"dependencies\": { \"d3\": \"^7.9.0\" }\n}\n"
+      },
+      "sample-baker/oven-timer": {
+        "README.md": "# Oven timer\n\nA Home Assistant card that counts down each stage of a bake.\n",
+        "custom_components/oven_timer/__init__.py": "\"\"\"Oven timer.\"\"\"\nDOMAIN = 'oven_timer'\n"
+      }
+    }
   },
   "telegram": {
     "chat": "You (sample chat)",

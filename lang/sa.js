@@ -150,7 +150,7 @@
 "rb_now.PART":{"time":"वेला","date":"तिथिः","datetime":"तिथिः वेला च","hour":"होरा","minute":"निमेषः","weekday":"वासरः"},
 "rb_sort.ORDER":{"desc":"उच्चतमं प्रथमम्","asc":"निम्नतमं प्रथमम्"},
 "rb_ask_first.WHAT":{"ha":"प्रत्येकस्याः बुद्धिमद्गृहक्रियायाः (Home Assistant, Homey, MQTT)","messages":"सन्देशानाम् उद्घोषणानां च प्रेषणात्","files":"सञ्चिकानां रक्षणात्","all":"एतेभ्यः सर्वेभ्यः"},
-"rb_agent_builtin.KIND":{"web":"जाले अन्वेषणं पृष्ठपठनं च","ask":"मां प्रश्नं पृच्छ","memory":"टिप्पणीः स्मर पुनः स्मर च","calc":"गणनाः कुरु","time":"घटिकाः तिथयः च","file":"मया वृतां सञ्चिकां पठ","review":"मानदण्डैः पाठं परीक्षस्व","feeds":"वार्तास्रोतांसि","linkedin":"LinkedIn अन्विष्य (सार्वजनिकपृष्ठानि)","calendar":"दिनदर्शिका: घटनाः रिक्तसमयः च","email":"ईपत्रम्: अन्वेषणं पठनं च","email_send":"ईपत्रम्: प्रेषणम् (प्रथमं मां पृच्छति)","github":"GitHub: परियोजनाः pull requests च","github_act":"GitHub: टिप्पणी (प्रथमं मां पृच्छति)","telegram":"Telegram: मम सन्देशेषु अन्वेषणम्","telegram_send":"Telegram: प्रेषणम् (प्रथमं मां पृच्छति)","telegram_send_free":"Telegram: प्रेषणम् (अपृष्ट्वा)","discord":"Discord: मम प्रणालेषु अन्वेषणम्","discord_send":"Discord: प्रेषणम् (प्रथमं मां पृच्छति)","discord_send_free":"Discord: प्रेषणम् (अपृष्ट्वा)","slack":"Slack: मम प्रणालेषु अन्वेषणम्","slack_send":"Slack: प्रेषणम् (प्रथमं मां पृच्छति)","slack_send_free":"Slack: प्रेषणम् (अपृष्ट्वा)","mqtt":"MQTT: विषयपठनम्","mqtt_act":"MQTT: प्रकाशनम् (प्रथमं मां पृच्छति)","mqtt_act_free":"MQTT: प्रकाशनम् (अपृष्ट्वा)","homey_read":"Homey: यन्त्राणां प्रवाहाणां चराणां च दर्शनम्","homey_act":"Homey: यन्त्रनियमनं प्रवाहारम्भः च (प्रथमं मां पृच्छति)","homey_act_free":"Homey: यन्त्रनियमनं प्रवाहारम्भः च (अपृष्ट्वा)","ha_read":"Home Assistant: यन्त्रदर्शनम्","ha_act":"Home Assistant: यन्त्रनियमनम्","ha_act_free":"Home Assistant: यन्त्रनियमनम् (अपृष्ट्वा)"},
+"rb_agent_builtin.KIND":{"web":"जाले अन्वेषणं पृष्ठपठनं च","ask":"मां प्रश्नं पृच्छ","memory":"टिप्पणीः स्मर पुनः स्मर च","calc":"गणनाः कुरु","time":"घटिकाः तिथयः च","file":"मया वृतां सञ्चिकां पठ","review":"मानदण्डैः पाठं परीक्षस्व","feeds":"वार्तास्रोतांसि","linkedin":"LinkedIn अन्विष्य (सार्वजनिकपृष्ठानि)","calendar":"दिनदर्शिका: घटनाः रिक्तसमयः च","email":"ईपत्रम्: अन्वेषणं पठनं च","email_send":"ईपत्रम्: प्रेषणम् (प्रथमं मां पृच्छति)","github":"GitHub: परियोजनाः pull requests च","github_act":"GitHub: टिप्पणी, issues उद्घाटनं चिह्नीकरणं च (प्रथमं मां पृच्छति)","telegram":"Telegram: मम सन्देशेषु अन्वेषणम्","telegram_send":"Telegram: प्रेषणम् (प्रथमं मां पृच्छति)","telegram_send_free":"Telegram: प्रेषणम् (अपृष्ट्वा)","discord":"Discord: मम प्रणालेषु अन्वेषणम्","discord_send":"Discord: प्रेषणम् (प्रथमं मां पृच्छति)","discord_send_free":"Discord: प्रेषणम् (अपृष्ट्वा)","slack":"Slack: मम प्रणालेषु अन्वेषणम्","slack_send":"Slack: प्रेषणम् (प्रथमं मां पृच्छति)","slack_send_free":"Slack: प्रेषणम् (अपृष्ट्वा)","mqtt":"MQTT: विषयपठनम्","mqtt_act":"MQTT: प्रकाशनम् (प्रथमं मां पृच्छति)","mqtt_act_free":"MQTT: प्रकाशनम् (अपृष्ट्वा)","homey_read":"Homey: यन्त्राणां प्रवाहाणां चराणां च दर्शनम्","homey_act":"Homey: यन्त्रनियमनं प्रवाहारम्भः च (प्रथमं मां पृच्छति)","homey_act_free":"Homey: यन्त्रनियमनं प्रवाहारम्भः च (अपृष्ट्वा)","ha_read":"Home Assistant: यन्त्रदर्शनम्","ha_act":"Home Assistant: यन्त्रनियमनम्","ha_act_free":"Home Assistant: यन्त्रनियमनम् (अपृष्ट्वा)"},
 "rb_agent_mcp.ASK":{"changes":"(वस्तूनि परिवर्तयद्भ्यः साधनेभ्यः पूर्वं मां पृच्छति)","every":"(प्रत्येकस्मात् साधनात् पूर्वं मां पृच्छति)","never":"(अपृष्ट्वा)"},
 "rb_tg_message.PART":{"text":"पाठः","sender":"प्रेषकः","chat":"संवादः"},
 "rb_mem_set.KIND":{"transient":"यावत् इदं पृष्ठम् उद्घाटितम्","permanent":"सदा"},
@@ -587,7 +587,6 @@
 "Type the prompt text.":"प्रोम्प्ट्-पाठं टङ्कय।",
 "Your saved space is full. Delete something first.":"तव रक्षणस्थानं पूर्णम्। प्रथमं किमपि लोपय।",
 "accept web requests from other computers":"अन्यसङ्गणकेभ्यः जालयाचनाः स्वीकर्तुम्",
-"comment on GitHub":"GitHub उपरि टिप्पणीं कर्तुम्",
 "control your Home Assistant devices":"तव Home Assistant-यन्त्राणि नियन्तुम्",
 "control your Homey devices and start Homey flows":"तव Homey-यन्त्राणि नियन्तुं Homey-प्रवाहान् आरब्धुं च",
 "forever":"सदा",
@@ -835,7 +834,10 @@
 "“{value}” isn't on or off.":"“{value}” on अथवा off न।",
 "Try: {tip}":"परीक्षस्व: {tip}",
 "Shared by {author}.":"{author} इत्यनेन विभक्तः।",
-"{title} (shared by {author})":"{title} ({author} इत्यनेन विभक्तः)"
+"{title} (shared by {author})":"{title} ({author} इत्यनेन विभक्तः)",
+"GitHub issue opened in {repo}: #{n}":"{repo} इत्यत्र GitHub issue उद्घाटितम्: #{n}",
+"GitHub labels on {repo} #{n}":"{repo} #{n} उपरि GitHub-चिह्नानि",
+"comment on GitHub, and open and label issues":"GitHub उपरि टिप्पणीं कर्तुम्, issues उद्घाटयितुं चिह्नयितुं च"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1604,7 +1606,9 @@
 "When {entity} changes":"यदा {entity} परिवर्तते",
 "Run":"चालय",
 "(yes)":"आ, आम्",
-"(no)":"न, नहि"
+"(no)":"न, नहि",
+"GitHub issue opened in {repo}: #{n}":"{repo} इत्यत्र GitHub issue उद्घाटितम्: #{n}",
+"GitHub labels on {repo} #{n}":"{repo} #{n} उपरि GitHub-चिह्नानि"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

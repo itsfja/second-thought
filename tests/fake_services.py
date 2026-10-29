@@ -1,6 +1,7 @@
 """Stand-ins for the services the connection blocks talk to: news feeds, GitHub's API, Telegram's Bot API and an iCal
 calendar, all on one local web server, plus a tiny IMAP and SMTP mail server. They serve the same sample data the page
 uses (samples/connections.json), shaped the way the real services answer."""
+import base64
 import datetime
 import json
 import pathlib
@@ -210,6 +211,13 @@ def start():
                     rows = [gh_search_item(r, pr) for r, pr in [(p, True) for p in gh["pulls"]] + [(i, False) for i in gh["issues"]]
                             if all(t in r["title"].lower() for t in terms)]
                 return self._send(200, {"total_count": len(rows), "items": rows})
+            if path == "/user":
+                return self._send(200, {"login": gh["login"]})
+            if parts[0] == "repos" and len(parts) == 3:
+                return self._send(200, {"full_name": parts[1] + "/" + parts[2], "default_branch": gh.get("default_branch", "main")})
+            if parts[0] == "repos" and len(parts) >= 4 and parts[3] in ("branches", "commits", "contents", "labels") \
+                    or (parts[0] == "repos" and len(parts) in (4, 6) and parts[3] == "issues" and (len(parts) == 4 or parts[5] == "labels")):
+                return self._github_more(method, parts[1] + "/" + parts[2], parts[3:], q)
             if parts[0] == "repos" and len(parts) >= 4:
                 repo = parts[1] + "/" + parts[2]
                 prs = [p for p in gh["pulls"] if p["repo"] == repo]
@@ -230,6 +238,50 @@ def start():
                             return self._send(201, {"id": 1, "body": body.get("body", "")})
                         return self._send(200, [{"user": {"login": c["user"]}, "body": c["body"]} for c in p["comments"]])
             self._send(404, {"message": "Not Found"})
+
+        def _github_more(self, method, repo, rest, q):
+            """Branches, commits, file contents, labels and new issues, for the agent's newer GitHub tools."""
+            def commit(c):
+                when = _iso(c["days_ago"] * 24)
+                return {"sha": c["sha"], "author": {"login": c["author"]}, "commit": {"message": c["message"], "author": {"name": c["author"], "date": when},
+                                                                                      "committer": {"date": when}}}
+            if rest == ["branches"]:
+                return self._send(200, [{"name": b["name"], "commit": {"sha": "br-" + b["name"]}} for b in gh["branches"] if b["repo"] == repo])
+            if rest[0] == "commits" and len(rest) == 2:
+                b = next((b for b in gh["branches"] if b["repo"] == repo and "br-" + b["name"] == rest[1]), None)
+                if not b:
+                    return self._send(404, {"message": "Not Found"})
+                return self._send(200, commit({"sha": rest[1], "author": b["author"], "days_ago": b["days_ago"], "message": "(branch head)"}))
+            if rest == ["commits"]:
+                since = (q.get("since") or [""])[0]
+                author = (q.get("author") or [""])[0].lower()
+                rows = [c for c in gh["commits"] if c["repo"] == repo and (not author or c["author"].lower() == author)
+                        and (not since or _iso(c["days_ago"] * 24) >= since)]
+                return self._send(200, [commit(c) for c in sorted(rows, key=lambda c: c["days_ago"])])
+            if rest[0] == "contents":
+                files, path = gh["files"].get(repo, {}), "/".join(rest[1:])
+                if path in files:
+                    return self._send(200, {"type": "file", "name": path.rsplit("/", 1)[-1], "encoding": "base64",
+                                            "content": base64.b64encode(files[path].encode()).decode()})
+                inside = sorted({(f[len(path) + 1:] if path else f).split("/")[0] + ("/" if "/" in (f[len(path) + 1:] if path else f) else "")
+                                 for f in files if not path or f.startswith(path + "/")})
+                if not inside:
+                    return self._send(404, {"message": "Not Found"})
+                return self._send(200, [{"name": x.rstrip("/"), "type": "dir" if x.endswith("/") else "file"} for x in inside])
+            if rest == ["labels"]:
+                return self._send(200, [{"name": x} for x in gh["labels"].get(repo, [])])
+            if rest == ["issues"] and method == "POST":
+                body = self._body()
+                n = max([x["number"] for x in gh["pulls"] + gh["issues"] if x["repo"] == repo] or [0]) + 1
+                gh["issues"].append({"repo": repo, "number": n, "title": body.get("title", ""), "user": gh["login"], "days_ago": 0, "state": "open", "labels": []})
+                return self._send(201, {"number": n, "html_url": f"https://github.com/{repo}/issues/{n}"})
+            if len(rest) == 3 and rest[2] == "labels" and method == "POST":
+                it = next((x for x in gh["pulls"] + gh["issues"] if x["repo"] == repo and str(x["number"]) == rest[1]), None)
+                if not it:
+                    return self._send(404, {"message": "Not Found"})
+                it["labels"] = sorted(set(it.get("labels", [])) | set(self._body().get("labels", [])))
+                return self._send(200, [{"name": x} for x in it["labels"]])
+            return self._send(404, {"message": "Not Found"})
 
         def _homey(self, method, path):
             log["homey"].append(method + " " + path)

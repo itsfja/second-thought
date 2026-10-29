@@ -149,7 +149,7 @@
 "rb_now.PART":{"time":"hora","date":"dies","datetime":"dies et hora","hour":"hora","minute":"minutum","weekday":"dies hebdomadis"},
 "rb_sort.ORDER":{"desc":"maxima primum","asc":"minima primum"},
 "rb_ask_first.WHAT":{"ha":"quamlibet actionem domus callidae (Home Assistant, Homey, MQTT)","messages":"missionem nuntiorum et praeconiorum","files":"servationem fasciculorum","all":"haec omnia"},
-"rb_agent_builtin.KIND":{"web":"interrete quaerere et paginas legere","ask":"me interrogare","memory":"notas meminisse et recordari","calc":"rationes subducere","time":"horae et dies","file":"fasciculum a me electum legere","review":"textum examinare secundum normas","feeds":"fluxus nuntiorum","linkedin":"LinkedIn quaerere (paginas publicas)","calendar":"calendarium: eventus et tempus liberum","email":"epistula electronica: quaerere et legere","email_send":"epistula electronica: mittere (me prius interrogat)","github":"GitHub: incepta et petitiones trahendi","github_act":"GitHub: commentari (me prius interrogat)","telegram":"Telegram: nuntios meos quaerere","telegram_send":"Telegram: mittere (me prius interrogat)","telegram_send_free":"Telegram: mittere (sine interrogatione)","discord":"Discord: canales meos quaerere","discord_send":"Discord: mittere (me prius interrogat)","discord_send_free":"Discord: mittere (sine interrogatione)","slack":"Slack: canales meos quaerere","slack_send":"Slack: mittere (me prius interrogat)","slack_send_free":"Slack: mittere (sine interrogatione)","mqtt":"MQTT: argumenta legere","mqtt_act":"MQTT: divulgare (me prius interrogat)","mqtt_act_free":"MQTT: divulgare (sine interrogatione)","homey_read":"Homey: apparatus, fluxus operis et variabiles inspicere","homey_act":"Homey: apparatus regere et fluxus incipere (me prius interrogat)","homey_act_free":"Homey: apparatus regere et fluxus incipere (sine interrogatione)","ha_read":"Home Assistant: apparatus inspicere","ha_act":"Home Assistant: apparatus regere","ha_act_free":"Home Assistant: apparatus regere (sine interrogatione)"},
+"rb_agent_builtin.KIND":{"web":"interrete quaerere et paginas legere","ask":"me interrogare","memory":"notas meminisse et recordari","calc":"rationes subducere","time":"horae et dies","file":"fasciculum a me electum legere","review":"textum examinare secundum normas","feeds":"fluxus nuntiorum","linkedin":"LinkedIn quaerere (paginas publicas)","calendar":"calendarium: eventus et tempus liberum","email":"epistula electronica: quaerere et legere","email_send":"epistula electronica: mittere (me prius interrogat)","github":"GitHub: incepta et petitiones trahendi","github_act":"GitHub: commentari, quaestiones aperire ac notare (me prius interrogat)","telegram":"Telegram: nuntios meos quaerere","telegram_send":"Telegram: mittere (me prius interrogat)","telegram_send_free":"Telegram: mittere (sine interrogatione)","discord":"Discord: canales meos quaerere","discord_send":"Discord: mittere (me prius interrogat)","discord_send_free":"Discord: mittere (sine interrogatione)","slack":"Slack: canales meos quaerere","slack_send":"Slack: mittere (me prius interrogat)","slack_send_free":"Slack: mittere (sine interrogatione)","mqtt":"MQTT: argumenta legere","mqtt_act":"MQTT: divulgare (me prius interrogat)","mqtt_act_free":"MQTT: divulgare (sine interrogatione)","homey_read":"Homey: apparatus, fluxus operis et variabiles inspicere","homey_act":"Homey: apparatus regere et fluxus incipere (me prius interrogat)","homey_act_free":"Homey: apparatus regere et fluxus incipere (sine interrogatione)","ha_read":"Home Assistant: apparatus inspicere","ha_act":"Home Assistant: apparatus regere","ha_act_free":"Home Assistant: apparatus regere (sine interrogatione)"},
 "rb_agent_mcp.ASK":{"changes":"(me interrogat ante instrumenta quae aliquid mutant)","every":"(me interrogat ante omne instrumentum)","never":"(sine interrogatione)"},
 "rb_tg_message.PART":{"text":"textus","sender":"missor","chat":"colloquium"},
 "rb_mem_set.KIND":{"transient":"dum haec pagina aperta est","permanent":"in perpetuum"},
@@ -586,7 +586,6 @@
 "Type the prompt text.":"Textum praescripti scribe.",
 "Your saved space is full. Delete something first.":"Spatium servatum tuum plenum est. Primum aliquid dele.",
 "accept web requests from other computers":"petitiones interretiales ab aliis computatris accipere",
-"comment on GitHub":"in GitHub commentari",
 "control your Home Assistant devices":"apparatus Home Assistant tuos regere",
 "control your Homey devices and start Homey flows":"apparatus Homey tuos regere et fluxus Homey incipere",
 "forever":"in perpetuum",
@@ -834,7 +833,10 @@
 "“{value}” isn't on or off.":"«{value}» non est on aut off.",
 "Try: {tip}":"Tempta: {tip}",
 "Shared by {author}.":"Communicatum a {author}.",
-"{title} (shared by {author})":"{title} (communicatum a {author})"
+"{title} (shared by {author})":"{title} (communicatum a {author})",
+"GitHub issue opened in {repo}: #{n}":"Quaestio GitHub in {repo} aperta: #{n}",
+"GitHub labels on {repo} #{n}":"Notae GitHub in {repo} #{n}",
+"comment on GitHub, and open and label issues":"in GitHub commentari, et quaestiones aperire ac notare"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1603,7 +1605,9 @@
 "When {entity} changes":"Cum {entity} mutatur",
 "Run":"Exsequere",
 "(yes)":"i, ita, etiam",
-"(no)":"n, non, minime"
+"(no)":"n, non, minime",
+"GitHub issue opened in {repo}: #{n}":"Quaestio GitHub in {repo} aperta: #{n}",
+"GitHub labels on {repo} #{n}":"Notae GitHub in {repo} #{n}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

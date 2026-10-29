@@ -584,7 +584,7 @@
    "email": "email· ζητεῖν καὶ ἀναγινώσκειν",
    "email_send": "email· πέμπειν (πρῶτον ἐρωτᾷ με)",
    "github": "GitHub· ἔργα καὶ pull requests",
-   "github_act": "GitHub· σχολιάζειν (πρῶτον ἐρωτᾷ με)",
+   "github_act": "GitHub· σχολιάζειν, issues ἀνοίγειν καὶ ἐπιγράφειν (πρῶτον ἐρωτᾷ με)",
    "telegram": "Telegram· τὰς ἐμὰς ἀγγελίας ζητεῖν",
    "telegram_send": "Telegram· πέμπειν (πρῶτον ἐρωτᾷ με)",
    "telegram_send_free": "Telegram· πέμπειν (ἄνευ ἐρωτήσεως)",
@@ -1062,7 +1062,6 @@
   "Type the prompt text.": "Γράψον τὰ γράμματα τοῦ κελεύσματος.",
   "Your saved space is full. Delete something first.": "Ὁ τόπος σου τῆς φυλακῆς πλήρης ἐστίν. Πρῶτον ἀφάνισόν τι.",
   "accept web requests from other computers": "αἰτήσεις δικτύου δέχεσθαι ἐξ ἄλλων λογιστηρίων",
-  "comment on GitHub": "σχολιάζειν ἐν GitHub",
   "control your Home Assistant devices": "τὰς μηχανάς σου Home Assistant κυβερνᾶν",
   "control your Homey devices and start Homey flows": "τὰς μηχανάς σου Homey κυβερνᾶν καὶ ῥοὰς Homey ἄρχειν",
   "forever": "εἰς ἀεί",
@@ -1310,7 +1309,10 @@
   "“{value}” isn't on or off.": "«{value}» οὐκ ἔστιν on οὐδὲ off.",
   "Try: {tip}": "Πείρασον· {tip}",
   "Shared by {author}.": "Μεταδοθὲν ὑπὸ {author}.",
-  "{title} (shared by {author})": "{title} (μεταδοθὲν ὑπὸ {author})"
+  "{title} (shared by {author})": "{title} (μεταδοθὲν ὑπὸ {author})",
+  "GitHub issue opened in {repo}: #{n}": "Ἠνοίχθη issue ἐν GitHub ἐν {repo}· #{n}",
+  "GitHub labels on {repo} #{n}": "Ἐπιγραφαὶ GitHub ἐπὶ {repo} #{n}",
+  "comment on GitHub, and open and label issues": "σχολιάζειν ἐν GitHub, καὶ issues ἀνοίγειν καὶ ἐπιγράφειν"
  },
  "examples": {
   "review": {
@@ -2711,7 +2713,9 @@
   "When {entity} changes": "Ὅταν {entity} ἀλλάσσηται",
   "Run": "Δράμε",
   "(yes)": "ν, ναί, ναι, ναὶ",
-  "(no)": "ο, οὔ, ου, οὐχί, ουχι, οὐ"
+  "(no)": "ο, οὔ, ου, οὐχί, ουχι, οὐ",
+  "GitHub issue opened in {repo}: #{n}": "Ἠνοίχθη issue ἐν GitHub ἐν {repo}· #{n}",
+  "GitHub labels on {repo} #{n}": "Ἐπιγραφαὶ GitHub ἐπὶ {repo} #{n}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

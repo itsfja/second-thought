@@ -149,7 +149,7 @@
 "rb_now.PART":{"time":"ώρα","date":"ημερομηνία","datetime":"ημερομηνία και ώρα","hour":"ώρα της ημέρας (0-23)","minute":"λεπτό","weekday":"ημέρα της εβδομάδας"},
 "rb_sort.ORDER":{"desc":"από το μεγαλύτερο","asc":"από το μικρότερο"},
 "rb_ask_first.WHAT":{"ha":"κάθε ενέργεια έξυπνου σπιτιού (Home Assistant, Homey, MQTT)","messages":"την αποστολή μηνυμάτων και ανακοινώσεων","files":"την αποθήκευση αρχείων","all":"όλα αυτά"},
-"rb_agent_builtin.KIND":{"web":"αναζήτηση στο διαδίκτυο και ανάγνωση σελίδων","ask":"ερώτηση προς εμένα","memory":"μνήμη και ανάκληση σημειώσεων","calc":"κάνε υπολογισμούς","time":"ώρες και ημερομηνίες","file":"ανάγνωση αρχείου που διαλέγω","review":"έλεγξε κείμενο με βάση κριτήρια","feeds":"ροές ειδήσεων","linkedin":"αναζήτηση στο LinkedIn (δημόσιες σελίδες)","calendar":"ημερολόγιο: συμβάντα και ελεύθερος χρόνος","email":"email: αναζήτηση και ανάγνωση","email_send":"email: αποστολή (με ρωτά πρώτα)","github":"GitHub: έργα και pull requests","github_act":"GitHub: σχόλιο (με ρωτά πρώτα)","telegram":"Telegram: αναζήτηση στα μηνύματά μου","telegram_send":"Telegram: αποστολή (με ρωτά πρώτα)","telegram_send_free":"Telegram: αποστολή (χωρίς ερώτηση)","discord":"Discord: αναζήτηση στα κανάλια μου","discord_send":"Discord: αποστολή (με ρωτά πρώτα)","discord_send_free":"Discord: αποστολή (χωρίς ερώτηση)","slack":"Slack: αναζήτηση στα κανάλια μου","slack_send":"Slack: αποστολή (με ρωτά πρώτα)","slack_send_free":"Slack: αποστολή (χωρίς ερώτηση)","mqtt":"MQTT: ανάγνωση θεμάτων","mqtt_act":"MQTT: δημοσίευση (με ρωτά πρώτα)","mqtt_act_free":"MQTT: δημοσίευση (χωρίς ερώτηση)","homey_read":"Homey: προβολή συσκευών, ροών και μεταβλητών","homey_act":"Homey: έλεγχος συσκευών και έναρξη ροών (με ρωτά πρώτα)","homey_act_free":"Homey: έλεγχος συσκευών και έναρξη ροών (χωρίς ερώτηση)","ha_read":"Home Assistant: προβολή συσκευών","ha_act":"Home Assistant: έλεγχος συσκευών","ha_act_free":"Home Assistant: έλεγχος συσκευών (χωρίς ερώτηση)"},
+"rb_agent_builtin.KIND":{"web":"αναζήτηση στο διαδίκτυο και ανάγνωση σελίδων","ask":"ερώτηση προς εμένα","memory":"μνήμη και ανάκληση σημειώσεων","calc":"κάνε υπολογισμούς","time":"ώρες και ημερομηνίες","file":"ανάγνωση αρχείου που διαλέγω","review":"έλεγξε κείμενο με βάση κριτήρια","feeds":"ροές ειδήσεων","linkedin":"αναζήτηση στο LinkedIn (δημόσιες σελίδες)","calendar":"ημερολόγιο: συμβάντα και ελεύθερος χρόνος","email":"email: αναζήτηση και ανάγνωση","email_send":"email: αποστολή (με ρωτά πρώτα)","github":"GitHub: έργα και pull requests","github_act":"GitHub: σχόλιο, άνοιγμα και ετικέτες σε issues (με ρωτά πρώτα)","telegram":"Telegram: αναζήτηση στα μηνύματά μου","telegram_send":"Telegram: αποστολή (με ρωτά πρώτα)","telegram_send_free":"Telegram: αποστολή (χωρίς ερώτηση)","discord":"Discord: αναζήτηση στα κανάλια μου","discord_send":"Discord: αποστολή (με ρωτά πρώτα)","discord_send_free":"Discord: αποστολή (χωρίς ερώτηση)","slack":"Slack: αναζήτηση στα κανάλια μου","slack_send":"Slack: αποστολή (με ρωτά πρώτα)","slack_send_free":"Slack: αποστολή (χωρίς ερώτηση)","mqtt":"MQTT: ανάγνωση θεμάτων","mqtt_act":"MQTT: δημοσίευση (με ρωτά πρώτα)","mqtt_act_free":"MQTT: δημοσίευση (χωρίς ερώτηση)","homey_read":"Homey: προβολή συσκευών, ροών και μεταβλητών","homey_act":"Homey: έλεγχος συσκευών και έναρξη ροών (με ρωτά πρώτα)","homey_act_free":"Homey: έλεγχος συσκευών και έναρξη ροών (χωρίς ερώτηση)","ha_read":"Home Assistant: προβολή συσκευών","ha_act":"Home Assistant: έλεγχος συσκευών","ha_act_free":"Home Assistant: έλεγχος συσκευών (χωρίς ερώτηση)"},
 "rb_agent_mcp.ASK":{"changes":"(με ρωτά πριν από εργαλεία που αλλάζουν κάτι)","every":"(με ρωτά πριν από κάθε εργαλείο)","never":"(χωρίς ερώτηση)"},
 "rb_tg_message.PART":{"text":"κείμενο","sender":"αποστολέας","chat":"συνομιλία"},
 "rb_mem_set.KIND":{"transient":"όσο αυτή η σελίδα είναι ανοιχτή","permanent":"για πάντα"},
@@ -586,7 +586,6 @@
 "Type the prompt text.":"Γράψτε το κείμενο της υπόδειξης.",
 "Your saved space is full. Delete something first.":"Ο αποθηκευτικός σας χώρος γέμισε. Διαγράψτε πρώτα κάτι.",
 "accept web requests from other computers":"δέχεται αιτήματα ιστού από άλλους υπολογιστές",
-"comment on GitHub":"σχολιάζει στο GitHub",
 "control your Home Assistant devices":"ελέγχει τις συσκευές σας στο Home Assistant",
 "control your Homey devices and start Homey flows":"ελέγχει τις συσκευές σας στο Homey και ξεκινά ροές Homey",
 "forever":"για πάντα",
@@ -834,7 +833,10 @@
 "“{value}” isn't on or off.":"Το «{value}» δεν είναι ούτε on ούτε off.",
 "Try: {tip}":"Δοκιμάστε: {tip}",
 "Shared by {author}.":"Το μοιράστηκε ο/η {author}.",
-"{title} (shared by {author})":"{title} (από τον/την {author})"
+"{title} (shared by {author})":"{title} (από τον/την {author})",
+"GitHub issue opened in {repo}: #{n}":"Άνοιξε issue στο GitHub στο {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"Ετικέτες GitHub στο {repo} #{n}",
+"comment on GitHub, and open and label issues":"σχολιάζει στο GitHub και ανοίγει και επισημαίνει issues"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1603,6 +1605,8 @@
 "When {entity} changes":"Όταν αλλάξει το {entity}",
 "Run":"Εκτέλεση",
 "(yes)":"ν, ναι, ναί",
-"(no)":"ο, όχι, οχι"
+"(no)":"ο, όχι, οχι",
+"GitHub issue opened in {repo}: #{n}":"Άνοιξε issue στο GitHub στο {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"Ετικέτες GitHub στο {repo} #{n}"
 }
 };

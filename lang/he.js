@@ -150,7 +150,7 @@
 "rb_now.PART":{"time":"שעה","date":"תאריך","datetime":"תאריך ושעה","hour":"שעה","minute":"דקה","weekday":"יום בשבוע"},
 "rb_sort.ORDER":{"desc":"הגבוה קודם","asc":"הנמוך קודם"},
 "rb_ask_first.WHAT":{"ha":"כל פעולה בבית החכם (Home Assistant, ‏Homey, ‏MQTT)","messages":"שליחת הודעות והכרזות","files":"שמירת קבצים","all":"כל אלה"},
-"rb_agent_builtin.KIND":{"web":"חיפוש ברשת וקריאת דפים","ask":"לשאול אותי שאלה","memory":"לזכור ולהיזכר בפתקים","calc":"חישובים","time":"שעות ותאריכים","file":"לקרוא קובץ שאבחר","review":"בדיקת טקסט מול קריטריונים","feeds":"פידים של חדשות","linkedin":"חיפוש ב-LinkedIn (דפים ציבוריים)","calendar":"לוח שנה: אירועים וזמן פנוי","email":"דוא״ל: חיפוש וקריאה","email_send":"דוא״ל: שליחה (שואל אותי קודם)","github":"GitHub: פרויקטים ובקשות משיכה","github_act":"GitHub: תגובה (שואל אותי קודם)","telegram":"Telegram: חיפוש בהודעות שלי","telegram_send":"Telegram: שליחה (שואל אותי קודם)","telegram_send_free":"Telegram: שליחה (בלי לשאול)","discord":"Discord: חיפוש בערוצים שלי","discord_send":"Discord: שליחה (שואל אותי קודם)","discord_send_free":"Discord: שליחה (בלי לשאול)","slack":"Slack: חיפוש בערוצים שלי","slack_send":"Slack: שליחה (שואל אותי קודם)","slack_send_free":"Slack: שליחה (בלי לשאול)","mqtt":"MQTT: קריאת נושאים","mqtt_act":"MQTT: פרסום (שואל אותי קודם)","mqtt_act_free":"MQTT: פרסום (בלי לשאול)","homey_read":"Homey: צפייה במכשירים, בזרימות ובמשתנים","homey_act":"Homey: שליטה במכשירים והפעלת זרימות (שואל אותי קודם)","homey_act_free":"Homey: שליטה במכשירים והפעלת זרימות (בלי לשאול)","ha_read":"Home Assistant: צפייה במכשירים","ha_act":"Home Assistant: שליטה במכשירים","ha_act_free":"Home Assistant: שליטה במכשירים (בלי לשאול)"},
+"rb_agent_builtin.KIND":{"web":"חיפוש ברשת וקריאת דפים","ask":"לשאול אותי שאלה","memory":"לזכור ולהיזכר בפתקים","calc":"חישובים","time":"שעות ותאריכים","file":"לקרוא קובץ שאבחר","review":"בדיקת טקסט מול קריטריונים","feeds":"פידים של חדשות","linkedin":"חיפוש ב-LinkedIn (דפים ציבוריים)","calendar":"לוח שנה: אירועים וזמן פנוי","email":"דוא״ל: חיפוש וקריאה","email_send":"דוא״ל: שליחה (שואל אותי קודם)","github":"GitHub: פרויקטים ובקשות משיכה","github_act":"GitHub: תגובה, פתיחה ותיוג של issues (שואל אותי קודם)","telegram":"Telegram: חיפוש בהודעות שלי","telegram_send":"Telegram: שליחה (שואל אותי קודם)","telegram_send_free":"Telegram: שליחה (בלי לשאול)","discord":"Discord: חיפוש בערוצים שלי","discord_send":"Discord: שליחה (שואל אותי קודם)","discord_send_free":"Discord: שליחה (בלי לשאול)","slack":"Slack: חיפוש בערוצים שלי","slack_send":"Slack: שליחה (שואל אותי קודם)","slack_send_free":"Slack: שליחה (בלי לשאול)","mqtt":"MQTT: קריאת נושאים","mqtt_act":"MQTT: פרסום (שואל אותי קודם)","mqtt_act_free":"MQTT: פרסום (בלי לשאול)","homey_read":"Homey: צפייה במכשירים, בזרימות ובמשתנים","homey_act":"Homey: שליטה במכשירים והפעלת זרימות (שואל אותי קודם)","homey_act_free":"Homey: שליטה במכשירים והפעלת זרימות (בלי לשאול)","ha_read":"Home Assistant: צפייה במכשירים","ha_act":"Home Assistant: שליטה במכשירים","ha_act_free":"Home Assistant: שליטה במכשירים (בלי לשאול)"},
 "rb_agent_mcp.ASK":{"changes":"(שואל אותי לפני כלים שמשנים דברים)","every":"(שואל אותי לפני כל כלי)","never":"(בלי לשאול)"},
 "rb_tg_message.PART":{"text":"טקסט","sender":"שולח","chat":"צ'אט"},
 "rb_mem_set.KIND":{"transient":"כל עוד הדף הזה פתוח","permanent":"לתמיד"},
@@ -587,7 +587,6 @@
 "Type the prompt text.":"הקלידו את טקסט הפרומפט.",
 "Your saved space is full. Delete something first.":"מקום השמירה שלכם מלא. מחקו משהו קודם.",
 "accept web requests from other computers":"לקבל בקשות רשת ממחשבים אחרים",
-"comment on GitHub":"להגיב ב-GitHub",
 "control your Home Assistant devices":"לשלוט במכשירי ה-Home Assistant שלכם",
 "control your Homey devices and start Homey flows":"לשלוט במכשירי ה-Homey שלכם ולהפעיל זרימות Homey",
 "forever":"לתמיד",
@@ -835,7 +834,10 @@
 "“{value}” isn't on or off.":"\"{value}\" אינו on או off.",
 "Try: {tip}":"נסו: {tip}",
 "Shared by {author}.":"שותפה על ידי {author}.",
-"{title} (shared by {author})":"{title} (שותפה על ידי {author})"
+"{title} (shared by {author})":"{title} (שותפה על ידי {author})",
+"GitHub issue opened in {repo}: #{n}":"נפתח issue ב-GitHub ב-{repo}: #{n}",
+"GitHub labels on {repo} #{n}":"תוויות GitHub על {repo} #{n}",
+"comment on GitHub, and open and label issues":"להגיב ב-GitHub, ולפתוח ולתייג issues"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1604,6 +1606,8 @@
 "When {entity} changes":"כש-{entity} משתנה",
 "Run":"הרץ",
 "(yes)":"כ, כן",
-"(no)":"ל, לא"
+"(no)":"ל, לא",
+"GitHub issue opened in {repo}: #{n}":"נפתח issue ב-GitHub ב-{repo}: #{n}",
+"GitHub labels on {repo} #{n}":"תוויות GitHub על {repo} #{n}"
 }
 };

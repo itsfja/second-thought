@@ -149,7 +149,7 @@
 "rb_now.PART":{"time":"stund","date":"dagr","datetime":"dagr ok stund","hour":"stund","minute":"mínúta","weekday":"vikudagr"},
 "rb_sort.ORDER":{"desc":"hæst fyrst","asc":"lægst fyrst"},
 "rb_ask_first.WHAT":{"ha":"hverju verki snjallhúss (Home Assistant, Homey, MQTT)","messages":"sendingu boða ok tilkynninga","files":"geymslu skjala","all":"ǫllu þessu"},
-"rb_agent_builtin.KIND":{"web":"leita á vefnum ok lesa blǫð","ask":"spyrja mik spurningar","memory":"muna ok minnask minnisgreina","calc":"reikna summur","time":"stundir ok dagar","file":"lesa skjal er ek vel","review":"prófa rit eptir mælikvǫrðum","feeds":"tíðindastraumar","linkedin":"leita á LinkedIn (opin blǫð)","calendar":"rím: atburðir ok frjálsar stundir","email":"email: leita ok lesa","email_send":"email: senda (spyrr mik fyrst)","github":"GitHub: verk ok pull requests","github_act":"GitHub: rœða (spyrr mik fyrst)","telegram":"Telegram: leita í boðum mínum","telegram_send":"Telegram: senda (spyrr mik fyrst)","telegram_send_free":"Telegram: senda (án spurningar)","discord":"Discord: leita í rásum mínum","discord_send":"Discord: senda (spyrr mik fyrst)","discord_send_free":"Discord: senda (án spurningar)","slack":"Slack: leita í rásum mínum","slack_send":"Slack: senda (spyrr mik fyrst)","slack_send_free":"Slack: senda (án spurningar)","mqtt":"MQTT: lesa efni","mqtt_act":"MQTT: birta (spyrr mik fyrst)","mqtt_act_free":"MQTT: birta (án spurningar)","homey_read":"Homey: líta á tæki, flœði ok breytur","homey_act":"Homey: stýra tækjum ok hefja flœði (spyrr mik fyrst)","homey_act_free":"Homey: stýra tækjum ok hefja flœði (án spurningar)","ha_read":"Home Assistant: líta á tæki","ha_act":"Home Assistant: stýra tækjum","ha_act_free":"Home Assistant: stýra tækjum (án spurningar)"},
+"rb_agent_builtin.KIND":{"web":"leita á vefnum ok lesa blǫð","ask":"spyrja mik spurningar","memory":"muna ok minnask minnisgreina","calc":"reikna summur","time":"stundir ok dagar","file":"lesa skjal er ek vel","review":"prófa rit eptir mælikvǫrðum","feeds":"tíðindastraumar","linkedin":"leita á LinkedIn (opin blǫð)","calendar":"rím: atburðir ok frjálsar stundir","email":"email: leita ok lesa","email_send":"email: senda (spyrr mik fyrst)","github":"GitHub: verk ok pull requests","github_act":"GitHub: rœða, opna ok merkja issues (spyrr mik fyrst)","telegram":"Telegram: leita í boðum mínum","telegram_send":"Telegram: senda (spyrr mik fyrst)","telegram_send_free":"Telegram: senda (án spurningar)","discord":"Discord: leita í rásum mínum","discord_send":"Discord: senda (spyrr mik fyrst)","discord_send_free":"Discord: senda (án spurningar)","slack":"Slack: leita í rásum mínum","slack_send":"Slack: senda (spyrr mik fyrst)","slack_send_free":"Slack: senda (án spurningar)","mqtt":"MQTT: lesa efni","mqtt_act":"MQTT: birta (spyrr mik fyrst)","mqtt_act_free":"MQTT: birta (án spurningar)","homey_read":"Homey: líta á tæki, flœði ok breytur","homey_act":"Homey: stýra tækjum ok hefja flœði (spyrr mik fyrst)","homey_act_free":"Homey: stýra tækjum ok hefja flœði (án spurningar)","ha_read":"Home Assistant: líta á tæki","ha_act":"Home Assistant: stýra tækjum","ha_act_free":"Home Assistant: stýra tækjum (án spurningar)"},
 "rb_agent_mcp.ASK":{"changes":"(spyrr mik fyrir tól er breyta hlutum)","every":"(spyrr mik fyrir hvert tól)","never":"(án spurningar)"},
 "rb_tg_message.PART":{"text":"rit","sender":"sendandi","chat":"tal"},
 "rb_mem_set.KIND":{"transient":"meðan þetta blað er opit","permanent":"at eilífu"},
@@ -586,7 +586,6 @@
 "Type the prompt text.":"Rita forskriftarritit.",
 "Your saved space is full. Delete something first.":"Geymslurúm þitt er fullt. Eyð nakkverju fyrst.",
 "accept web requests from other computers":"taka við vefbeiðnum frá ǫðrum tǫlvum",
-"comment on GitHub":"rœða á GitHub",
 "control your Home Assistant devices":"stýra Home Assistant-tækjum þínum",
 "control your Homey devices and start Homey flows":"stýra Homey-tækjum þínum ok hefja Homey-flœði",
 "forever":"at eilífu",
@@ -834,7 +833,10 @@
 "“{value}” isn't on or off.":"„{value}“ er hvárki on né off.",
 "Try: {tip}":"Reyn: {tip}",
 "Shared by {author}.":"Deilt af {author}.",
-"{title} (shared by {author})":"{title} (deilt af {author})"
+"{title} (shared by {author})":"{title} (deilt af {author})",
+"GitHub issue opened in {repo}: #{n}":"GitHub-issue opnat í {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub-merki á {repo} #{n}",
+"comment on GitHub, and open and label issues":"rœða á GitHub, ok opna ok merkja issues"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1603,7 +1605,9 @@
 "When {entity} changes":"Þá er {entity} breytisk",
 "Run":"Keyr",
 "(yes)":"j, já",
-"(no)":"n, nei"
+"(no)":"n, nei",
+"GitHub issue opened in {repo}: #{n}":"GitHub-issue opnat í {repo}: #{n}",
+"GitHub labels on {repo} #{n}":"GitHub-merki á {repo} #{n}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

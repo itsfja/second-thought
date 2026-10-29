@@ -150,7 +150,7 @@
 "rb_now.PART":{"time":"שעתא","date":"יומא","datetime":"יומא ושעתא","hour":"שעתא","minute":"רגעא","weekday":"יומא דשבתא"},
 "rb_sort.ORDER":{"desc":"רמא קדמאה","asc":"מכיכא קדמאה"},
 "rb_ask_first.WHAT":{"ha":"כל עבידתא דביתא חכימא (Home Assistant, Homey, MQTT)","messages":"שליחות אגרן והכרזן","files":"נטירת מגלתא","all":"כל אלין"},
-"rb_agent_builtin.KIND":{"web":"בעי ברשתא וקרי דפין","ask":"שאל יתי שאלתא","memory":"דכר ואדכר רשימין","calc":"חושבנין","time":"שעין ויומין","file":"קרי מגלתא דאבחר","review":"בדוק כתבא כלקבל מכילתא","feeds":"מבועי שמועתא","linkedin":"בעי ב-LinkedIn (דפין גליין)","calendar":"חושבן יומיא: מאורעין וזמן פנוי","email":"email: בעי וקרי","email_send":"email: שלח (שאיל יתי קדמאה)","github":"GitHub: עבידן ו-pull requests","github_act":"GitHub: תגובתא (שאיל יתי קדמאה)","telegram":"Telegram: בעי באגרתי","telegram_send":"Telegram: שלח (שאיל יתי קדמאה)","telegram_send_free":"Telegram: שלח (בלא שאלתא)","discord":"Discord: בעי בפלגי","discord_send":"Discord: שלח (שאיל יתי קדמאה)","discord_send_free":"Discord: שלח (בלא שאלתא)","slack":"Slack: בעי בפלגי","slack_send":"Slack: שלח (שאיל יתי קדמאה)","slack_send_free":"Slack: שלח (בלא שאלתא)","mqtt":"MQTT: קרי ענינין","mqtt_act":"MQTT: פרסם (שאיל יתי קדמאה)","mqtt_act_free":"MQTT: פרסם (בלא שאלתא)","homey_read":"Homey: חזי במאנין, בנגדין ובמשתניא","homey_act":"Homey: שליט במאנין ושרי נגדין (שאיל יתי קדמאה)","homey_act_free":"Homey: שליט במאנין ושרי נגדין (בלא שאלתא)","ha_read":"Home Assistant: חזי במאנין","ha_act":"Home Assistant: שליט במאנין","ha_act_free":"Home Assistant: שליט במאנין (בלא שאלתא)"},
+"rb_agent_builtin.KIND":{"web":"בעי ברשתא וקרי דפין","ask":"שאל יתי שאלתא","memory":"דכר ואדכר רשימין","calc":"חושבנין","time":"שעין ויומין","file":"קרי מגלתא דאבחר","review":"בדוק כתבא כלקבל מכילתא","feeds":"מבועי שמועתא","linkedin":"בעי ב-LinkedIn (דפין גליין)","calendar":"חושבן יומיא: מאורעין וזמן פנוי","email":"email: בעי וקרי","email_send":"email: שלח (שאיל יתי קדמאה)","github":"GitHub: עבידן ו-pull requests","github_act":"GitHub: תגובתא, פתיחה ורשמא ל-issues (שאיל יתי קדמאה)","telegram":"Telegram: בעי באגרתי","telegram_send":"Telegram: שלח (שאיל יתי קדמאה)","telegram_send_free":"Telegram: שלח (בלא שאלתא)","discord":"Discord: בעי בפלגי","discord_send":"Discord: שלח (שאיל יתי קדמאה)","discord_send_free":"Discord: שלח (בלא שאלתא)","slack":"Slack: בעי בפלגי","slack_send":"Slack: שלח (שאיל יתי קדמאה)","slack_send_free":"Slack: שלח (בלא שאלתא)","mqtt":"MQTT: קרי ענינין","mqtt_act":"MQTT: פרסם (שאיל יתי קדמאה)","mqtt_act_free":"MQTT: פרסם (בלא שאלתא)","homey_read":"Homey: חזי במאנין, בנגדין ובמשתניא","homey_act":"Homey: שליט במאנין ושרי נגדין (שאיל יתי קדמאה)","homey_act_free":"Homey: שליט במאנין ושרי נגדין (בלא שאלתא)","ha_read":"Home Assistant: חזי במאנין","ha_act":"Home Assistant: שליט במאנין","ha_act_free":"Home Assistant: שליט במאנין (בלא שאלתא)"},
 "rb_agent_mcp.ASK":{"changes":"(שאיל יתי קדם מאנין דמשנין מדעם)","every":"(שאיל יתי קדם כל מאנא)","never":"(בלא שאלתא)"},
 "rb_tg_message.PART":{"text":"כתבא","sender":"משלחא","chat":"שיחתא"},
 "rb_mem_set.KIND":{"transient":"כל עוד דפא הדין פתיח","permanent":"לעלם"},
@@ -587,7 +587,6 @@
 "Type the prompt text.":"כתוב כתב מימרא.",
 "Your saved space is full. Delete something first.":"אתר נטירתך מלי. מחוק מדעם קדמאה.",
 "accept web requests from other computers":"למקבל בעותי רשתא ממחשבין אחרנין",
-"comment on GitHub":"למכתב תגובתא ב-GitHub",
 "control your Home Assistant devices":"למשלט במאני Home Assistant דילך",
 "control your Homey devices and start Homey flows":"למשלט במאני Homey דילך ולמשרי נגדי Homey",
 "forever":"לעלם",
@@ -835,7 +834,10 @@
 "“{value}” isn't on or off.":"\"{value}\" לאו on או off.",
 "Try: {tip}":"נסי: {tip}",
 "Shared by {author}.":"אתפליג על ידי {author}.",
-"{title} (shared by {author})":"{title} (אתפליג על ידי {author})"
+"{title} (shared by {author})":"{title} (אתפליג על ידי {author})",
+"GitHub issue opened in {repo}: #{n}":"issue ב-GitHub אתפתח ב-{repo}: #{n}",
+"GitHub labels on {repo} #{n}":"רשמי GitHub על {repo} #{n}",
+"comment on GitHub, and open and label issues":"למכתב תגובתא ב-GitHub, ולמפתח ולמרשם issues"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1604,7 +1606,9 @@
 "When {entity} changes":"כד {entity} משתני",
 "Run":"שרי",
 "(yes)":"א, אין",
-"(no)":"ל, לא"
+"(no)":"ל, לא",
+"GitHub issue opened in {repo}: #{n}":"issue ב-GitHub אתפתח ב-{repo}: #{n}",
+"GitHub labels on {repo} #{n}":"רשמי GitHub על {repo} #{n}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

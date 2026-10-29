@@ -584,7 +584,7 @@
    "email": "email: secan and rædan",
    "email_send": "email: sendan (axaþ me ærest)",
    "github": "GitHub: weorc and pull requests",
-   "github_act": "GitHub: cwide writan (axaþ me ærest)",
+   "github_act": "GitHub: cwide writan, issues openian and mearcian (axaþ me ærest)",
    "telegram": "Telegram: mine ærendgewritu secan",
    "telegram_send": "Telegram: sendan (axaþ me ærest)",
    "telegram_send_free": "Telegram: sendan (butan axunge)",
@@ -1062,7 +1062,6 @@
   "Type the prompt text.": "Writ þære forespræce gewrit.",
   "Your saved space is full. Delete something first.": "Þin gehealden rum is full. Adilga ærest hwæt.",
   "accept web requests from other computers": "webbbena onfon of oþrum rimcræftum",
-  "comment on GitHub": "cwide writan on GitHub",
   "control your Home Assistant devices": "þin Home Assistant searu wealdan",
   "control your Homey devices and start Homey flows": "þin Homey searu wealdan and Homey floda onginnan",
   "forever": "a",
@@ -1310,7 +1309,10 @@
   "“{value}” isn't on or off.": "“{value}” nis on ne off.",
   "Try: {tip}": "Fanda: {tip}",
   "Shared by {author}.": "Gedæled fram {author}.",
-  "{title} (shared by {author})": "{title} (gedæled fram {author})"
+  "{title} (shared by {author})": "{title} (gedæled fram {author})",
+  "GitHub issue opened in {repo}: #{n}": "GitHub issue geopenod on {repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "GitHub mearca on {repo} #{n}",
+  "comment on GitHub, and open and label issues": "cwide writan on GitHub, and issues openian and mearcian"
  },
  "examples": {
   "review": {
@@ -2711,7 +2713,9 @@
   "When {entity} changes": "Þonne {entity} wendeþ",
   "Run": "Fremme",
   "(yes)": "g, gea, gēa, ġēa, gese",
-  "(no)": "n, nese, na"
+  "(no)": "n, nese, na",
+  "GitHub issue opened in {repo}: #{n}": "GitHub issue geopenod on {repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "GitHub mearca on {repo} #{n}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

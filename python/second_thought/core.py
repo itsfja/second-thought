@@ -433,7 +433,7 @@ CAPABILITIES = [
     ("telegram_send", "send Telegram messages", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
-    ("github_comment", "comment on GitHub", True),
+    ("github_comment", "comment on GitHub, and open and label issues", True),
     ("ha_act", "control your Home Assistant devices", True),
     ("homey_act", "control your Homey devices and start Homey flows", True),
     ("mqtt_publish", "publish MQTT messages", True),

@@ -585,7 +585,7 @@
    "email": "email: 𐀽𐀳𐀁 𐀏𐀂 𐀀𐀙𐀑𐀜𐀁",
    "email_send": "email: 𐀟𐀟𐀁 (𐀁𐀫𐀲𐀂 𐀕 𐀡𐀫𐀵)",
    "github": "GitHub: 𐀸𐀏 𐀏𐀂 pull requests",
-   "github_act": "GitHub: 𐀁𐀠𐀏𐀨𐀟𐀁 (𐀁𐀫𐀲𐀂 𐀕 𐀡𐀫𐀵)",
+   "github_act": "GitHub: 𐀁𐀠𐀏𐀨𐀟𐀁, issues 𐀀𐀜𐀂𐀐 𐀏𐀂 𐀃𐀜𐀔𐀲 (𐀁𐀫𐀲𐀂 𐀕 𐀡𐀫𐀵)",
    "telegram": "Telegram: 𐀀𐀐𐀪𐀊 𐀁𐀔 𐀽𐀳𐀁",
    "telegram_send": "Telegram: 𐀟𐀟𐀁 (𐀁𐀫𐀲𐀂 𐀕 𐀡𐀫𐀵)",
    "telegram_send_free": "Telegram: 𐀟𐀟𐀁 (𐀀𐀚𐀄 𐀁𐀫𐀲𐀔𐀵)",
@@ -1063,7 +1063,6 @@
   "Type the prompt text.": "𐀏𐀨𐀟 𐀐𐀩𐀄𐀔 𐀏𐀨𐀔𐀲.",
   "Your saved space is full. Delete something first.": "𐀵𐀡 𐀰 𐀰𐀿𐀕𐀜 𐀟𐀩𐀃 𐀁𐀯. 𐀨𐀳 𐀡𐀫𐀵 𐀴.",
   "accept web requests from other computers": "𐀇𐀓𐀶𐀃 𐀁𐀫𐀳𐀔𐀲 𐀆𐀐𐀁 𐀀𐀢 𐀀𐀨 𐀫𐀑𐀯𐀳𐀪𐀊",
-  "comment on GitHub": "𐀁𐀠𐀏𐀨𐀟𐀁 𐀁𐀚 GitHub",
   "control your Home Assistant devices": "Home Assistant 𐀕𐀏𐀙 𐀰 𐀓𐀟𐀩𐀙𐀁",
   "control your Homey devices and start Homey flows": "Homey 𐀕𐀏𐀙 𐀰 𐀓𐀟𐀩𐀙𐀁 𐀏𐀂 Homey 𐀫𐀃 𐀀𐀏𐀁𐀁",
   "forever": "𐀀𐀂𐀁𐀂",
@@ -1311,7 +1310,10 @@
   "“{value}” isn't on or off.": "“{value}” 𐀃𐀄𐀏 on 𐀁 off.",
   "Try: {tip}": "𐀟𐀂𐀨: {tip}",
   "Shared by {author}.": "𐀇𐀈𐀕𐀜 𐀄𐀡 {author}.",
-  "{title} (shared by {author})": "{title} (𐀇𐀈𐀕𐀜 𐀄𐀡 {author})"
+  "{title} (shared by {author})": "{title} (𐀇𐀈𐀕𐀜 𐀄𐀡 {author})",
+  "GitHub issue opened in {repo}: #{n}": "GitHub issue 𐀀𐀜𐀂𐀐 𐀁𐀚 {repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "GitHub 𐀃𐀜𐀔𐀲 𐀁𐀠 {repo} #{n}",
+  "comment on GitHub, and open and label issues": "𐀁𐀠𐀏𐀨𐀟𐀁 𐀁𐀚 GitHub 𐀏𐀂 issues 𐀀𐀜𐀂𐀐 𐀏𐀂 𐀃𐀜𐀔𐀲"
  },
  "examples": {
   "review": {
@@ -2712,7 +2714,9 @@
   "When {entity} changes": "o-te {entity} a-ra-ka-se-ta-i",
   "Run": "da-ra-me",
   "(yes)": "na-i, nai, na, y",
-  "(no)": "o-u, ou, n"
+  "(no)": "o-u, ou, n",
+  "GitHub issue opened in {repo}: #{n}": "GitHub issue a-no-i-ke e-ni {repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "GitHub o-no-ma-ta e-pi {repo} #{n}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

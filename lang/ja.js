@@ -149,7 +149,7 @@
 "rb_now.PART":{"time":"時刻","date":"日付","datetime":"日付と時刻","hour":"時","minute":"分","weekday":"曜日"},
 "rb_sort.ORDER":{"desc":"高い順","asc":"低い順"},
 "rb_ask_first.WHAT":{"ha":"スマートホームの操作（Home Assistant、Homey、MQTT）","messages":"メッセージやお知らせの送信","files":"ファイルの保存","all":"これらすべて"},
-"rb_agent_builtin.KIND":{"web":"Web を検索してページを読む","ask":"私に質問する","memory":"メモを覚えて思い出す","calc":"計算する","time":"時刻と日付","file":"私が選んだファイルを読む","review":"基準に照らしてテキストを確認する","feeds":"ニュースフィード","linkedin":"LinkedIn を検索（公開ページ）","calendar":"カレンダー：予定と空き時間","email":"メール：検索して読む","email_send":"メール：送信（先に確認）","github":"GitHub：プロジェクトとプルリクエスト","github_act":"GitHub：コメント（先に確認）","telegram":"Telegram：自分のメッセージを検索","telegram_send":"Telegram：送信（先に確認）","telegram_send_free":"Telegram：送信（確認なし）","discord":"Discord：自分のチャンネルを検索","discord_send":"Discord：送信（先に確認）","discord_send_free":"Discord：送信（確認なし）","slack":"Slack：自分のチャンネルを検索","slack_send":"Slack：送信（先に確認）","slack_send_free":"Slack：送信（確認なし）","mqtt":"MQTT：トピックを読む","mqtt_act":"MQTT：送信（先に確認）","mqtt_act_free":"MQTT：送信（確認なし）","homey_read":"Homey：機器、フロー、変数を見る","homey_act":"Homey：機器を操作しフローを開始（先に確認）","homey_act_free":"Homey：機器を操作しフローを開始（確認なし）","ha_read":"Home Assistant：機器を見る","ha_act":"Home Assistant：機器を操作する","ha_act_free":"Home Assistant：機器を操作する（確認なし）"},
+"rb_agent_builtin.KIND":{"web":"Web を検索してページを読む","ask":"私に質問する","memory":"メモを覚えて思い出す","calc":"計算する","time":"時刻と日付","file":"私が選んだファイルを読む","review":"基準に照らしてテキストを確認する","feeds":"ニュースフィード","linkedin":"LinkedIn を検索（公開ページ）","calendar":"カレンダー：予定と空き時間","email":"メール：検索して読む","email_send":"メール：送信（先に確認）","github":"GitHub：プロジェクトとプルリクエスト","github_act":"GitHub：コメント、Issue の作成とラベル付け（先に確認）","telegram":"Telegram：自分のメッセージを検索","telegram_send":"Telegram：送信（先に確認）","telegram_send_free":"Telegram：送信（確認なし）","discord":"Discord：自分のチャンネルを検索","discord_send":"Discord：送信（先に確認）","discord_send_free":"Discord：送信（確認なし）","slack":"Slack：自分のチャンネルを検索","slack_send":"Slack：送信（先に確認）","slack_send_free":"Slack：送信（確認なし）","mqtt":"MQTT：トピックを読む","mqtt_act":"MQTT：送信（先に確認）","mqtt_act_free":"MQTT：送信（確認なし）","homey_read":"Homey：機器、フロー、変数を見る","homey_act":"Homey：機器を操作しフローを開始（先に確認）","homey_act_free":"Homey：機器を操作しフローを開始（確認なし）","ha_read":"Home Assistant：機器を見る","ha_act":"Home Assistant：機器を操作する","ha_act_free":"Home Assistant：機器を操作する（確認なし）"},
 "rb_agent_mcp.ASK":{"changes":"（何かを変える道具の前に確認）","every":"（すべての道具の前に確認）","never":"（確認なし）"},
 "rb_tg_message.PART":{"text":"テキスト","sender":"送り主","chat":"チャット"},
 "rb_mem_set.KIND":{"transient":"このページが開いている間","permanent":"ずっと"},
@@ -586,7 +586,6 @@
 "Type the prompt text.":"プロンプトのテキストを入力してください。",
 "Your saved space is full. Delete something first.":"保存領域がいっぱいです。先に何か削除してください。",
 "accept web requests from other computers":"他のコンピューターからの Web リクエストを受け付ける",
-"comment on GitHub":"GitHub にコメントする",
 "control your Home Assistant devices":"Home Assistant の機器を操作する",
 "control your Homey devices and start Homey flows":"Homey の機器を操作し、Homey のフローを開始する",
 "forever":"ずっと",
@@ -834,7 +833,10 @@
 "“{value}” isn't on or off.":"「{value}」は on でも off でもありません。",
 "Try: {tip}":"試してみよう：{tip}",
 "Shared by {author}.":"{author} さんが共有。",
-"{title} (shared by {author})":"{title}（{author} さんが共有）"
+"{title} (shared by {author})":"{title}（{author} さんが共有）",
+"GitHub issue opened in {repo}: #{n}":"{repo} に GitHub Issue を作成：#{n}",
+"GitHub labels on {repo} #{n}":"{repo} #{n} の GitHub ラベル",
+"comment on GitHub, and open and label issues":"GitHub にコメントし、Issue を作成してラベルを付ける"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1603,6 +1605,8 @@
 "When {entity} changes":"{entity} が変わったとき",
 "Run":"実行",
 "(yes)":"はい, うん, ええ",
-"(no)":"いいえ, いや, ううん"
+"(no)":"いいえ, いや, ううん",
+"GitHub issue opened in {repo}: #{n}":"{repo} に GitHub Issue を作成：#{n}",
+"GitHub labels on {repo} #{n}":"{repo} #{n} の GitHub ラベル"
 }
 };

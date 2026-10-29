@@ -485,6 +485,30 @@ async def new_feature_page_tests(pg):
     names = [n for n, *_ in steps]
     check(status.startswith("done") and names.count("Allow this?") == 1 and "GitHub comment on sample-baker/oven-timer #7" in names,
           "commenting on GitHub asks you once first")
+    repo = "sample-baker/sourdough-chart"
+    flat = lambda steps, k, n, name: " ".join(step_of(steps, k, n, name).split())  # noqa: E731
+    gh_more = [tcall("list_branches", repo=repo), tcall("list_commits", repo=repo, author="me", since="7"), tcall("list_commits", repo=repo, since="last Tuesday"),
+               tcall("read_github_file", repo=repo, path="README.md"), tcall("read_github_file", repo=repo, path="src"), tcall("read_github_file", repo=repo)]
+    status, steps, items = await agent_run(pg, ["github"], gh_more + [fin("ok")], steps=10, export="t_cn_gh_more")
+    branches = flat(steps, 1, 10, "list_branches")
+    check(status.startswith("done") and 0 <= branches.find("old-d3-v5 · last commit 311 days ago by toast-rack") < branches.find("main · last commit 24 h ago by sample-baker · default branch")
+          and "rye-curve · last commit 24 h ago by crumb-shot · open pull request #41" in branches,
+          f"list_branches gives each branch's last commit, oldest first, with the default branch and open pull requests marked ({branches!r})")
+    commits = flat(steps, 2, 10, "list_commits")
+    check("a41c9e2 · " in commits and "Fix tooltip overflow" in commits and "3e8a52c" in commits and "crumb-shot" not in commits and "Remembers the choice" not in commits
+          and "isn't a time to start from" in flat(steps, 3, 10, "list_commits"), f"list_commits filters by author (me) and time, one line each ({commits!r})")
+    check("| `--starter` | starter percentage" in flat(steps, 4, 10, "read_github_file") and "is a folder: chart.js cli.js curves.js" in flat(steps, 5, 10, "read_github_file")
+          and "is a folder: README.md package.json src/" in flat(steps, 6, 10, "read_github_file"), "read_github_file reads a file, and lists a folder or the top of the project")
+    acts = [tcall("add_labels", repo=repo, number=40, labels=["bug", "safari"]), tcall("add_labels", repo=repo, number=40, labels=["Bug", "urgent"]),
+            tcall("open_issue", repo=repo, title="Document the --dark flag", body="cli.js has it; the README doesn't."), tcall("open_issue", repo=repo, title="")]
+    status, steps, items = await agent_run(pg, ["github_act"], acts + [fin("ok")], steps=10, answer="Allow", export="t_cn_issue")
+    names = [n for n, *_ in steps]
+    check(status.startswith("done") and "has no label safari" in flat(steps, 1, 10, "add_labels") and "documentation, duplicate, enhancement" in flat(steps, 1, 10, "add_labels")
+          and "Labelled sample-baker/sourdough-chart #40: bug, urgent." in flat(steps, 2, 10, "add_labels")
+          and "Opened sample-baker/sourdough-chart #42" in flat(steps, 3, 10, "open_issue") and "needs a title" in flat(steps, 4, 10, "open_issue")
+          and names.count("Allow this?") == 1 and "GitHub labels on sample-baker/sourdough-chart #40" in names
+          and "GitHub issue opened in sample-baker/sourdough-chart: #42" in names,
+          f"add_labels uses only the project's labels and open_issue opens one, asking once first (sample projects on the page) ({names})")
     tg = [tcall("search_telegram", text="starter"), tcall("send_telegram", text="Feed the starter at 8")]
     status, steps, items = await agent_run(pg, ["telegram", "telegram_send"], tg + [fin("ok")], answer="Allow", export="t_cn_tg")
     check(status.startswith("done") and "Remind me to feed the starter at 8 tonight" in step_of(steps, 1, 6, "search_telegram")

@@ -585,7 +585,7 @@
    "email": "email: בעי וקרי",
    "email_send": "email: שלח (שאיל יתי קדמאה)",
    "github": "GitHub: עבידן ו-pull requests",
-   "github_act": "GitHub: תגובתא (שאיל יתי קדמאה)",
+   "github_act": "GitHub: תגובתא, פתיחה ורשמא ל-issues (שאיל יתי קדמאה)",
    "telegram": "Telegram: בעי באגרתי",
    "telegram_send": "Telegram: שלח (שאיל יתי קדמאה)",
    "telegram_send_free": "Telegram: שלח (בלא שאלתא)",
@@ -1063,7 +1063,6 @@
   "Type the prompt text.": "כתוב כתב מימרא.",
   "Your saved space is full. Delete something first.": "אתר נטירתך מלי. מחוק מדעם קדמאה.",
   "accept web requests from other computers": "למקבל בעותי רשתא ממחשבין אחרנין",
-  "comment on GitHub": "למכתב תגובתא ב-GitHub",
   "control your Home Assistant devices": "למשלט במאני Home Assistant דילך",
   "control your Homey devices and start Homey flows": "למשלט במאני Homey דילך ולמשרי נגדי Homey",
   "forever": "לעלם",
@@ -1311,7 +1310,10 @@
   "“{value}” isn't on or off.": "\"{value}\" לאו on או off.",
   "Try: {tip}": "נסי: {tip}",
   "Shared by {author}.": "אתפליג על ידי {author}.",
-  "{title} (shared by {author})": "{title} (אתפליג על ידי {author})"
+  "{title} (shared by {author})": "{title} (אתפליג על ידי {author})",
+  "GitHub issue opened in {repo}: #{n}": "issue ב-GitHub אתפתח ב-{repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "רשמי GitHub על {repo} #{n}",
+  "comment on GitHub, and open and label issues": "למכתב תגובתא ב-GitHub, ולמפתח ולמרשם issues"
  },
  "examples": {
   "review": {
@@ -2712,7 +2714,9 @@
   "When {entity} changes": "כד {entity} משתני",
   "Run": "שרי",
   "(yes)": "א, אין",
-  "(no)": "ל, לא"
+  "(no)": "ל, לא",
+  "GitHub issue opened in {repo}: #{n}": "issue ב-GitHub אתפתח ב-{repo}: #{n}",
+  "GitHub labels on {repo} #{n}": "רשמי GitHub על {repo} #{n}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",
