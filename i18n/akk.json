@@ -1343,7 +1343,25 @@
   "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "Llama, 𒅈𒁲 MCP 𒌑 𒁉𒊓𒀭𒉌 𒄿𒈾 𒅗𒊍𒁉𒅖𒆪𒉡 𒊏𒈠𒉌𒅗 𒄿𒇷𒅅𒆠, 𒊭 GitHub 𒌌 𒄿𒅗𒀸𒊭𒁺",
   "it asks you questions while it runs, and nobody is there to answer": "𒄿𒉡𒈠 𒅋𒆷𒆪 𒄿𒊭𒀠𒅗, 𒌑 𒈠𒄠𒈠𒀭 𒀀𒈾 𒀀𒉺𒇷𒅎 𒌌 𒄿𒁀𒀸𒅆",
   "This program can't run on GitHub Actions: {why}.": "𒉈𒁉𒋗𒌝 𒀭𒉡𒌝 𒄿𒈾 GitHub Actions 𒌌 𒅋𒆷𒀝: {why}.",
-  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip 𒈾𒍢𒅕. 𒌅𒌒𒉺𒋾𒋗 𒄿𒈾 𒁉𒀉 𒈾𒀝𒅗𒄠𒋾 GitHub 𒊭 𒁉𒊑𒅖𒋾𒅎 𒋗𒆪𒌦 𒌑 𒁉𒊑𒅖𒋾 𒊭 SETUP.md 𒄿𒈠𒀭𒉡 𒊒𒌓𒁲; 𒌑 𒄿𒈾 𒀀𒁕𒉌𒋗 𒅋𒆷𒀝."
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip 𒈾𒍢𒅕. 𒌅𒌒𒉺𒋾𒋗 𒄿𒈾 𒁉𒀉 𒈾𒀝𒅗𒄠𒋾 GitHub 𒊭 𒁉𒊑𒅖𒋾𒅎 𒋗𒆪𒌦 𒌑 𒁉𒊑𒅖𒋾 𒊭 SETUP.md 𒄿𒈠𒀭𒉡 𒊒𒌓𒁲; 𒌑 𒄿𒈾 𒀀𒁕𒉌𒋗 𒅋𒆷𒀝.",
+  "Describe a program": "𒉈𒁉𒊭𒄠 𒋗𒌅𒌨",
+  "Describe a program, like: every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "𒉈𒁉𒊭𒄠 𒋗𒌅𒌨, 𒆠𒈠: 𒄿𒈾 𒌝 𒅕𒁉𒅎 𒄿𒈾 𒅆𒅖𒊺𒀉 𒈬𒅆𒅎, 𒅆𒀉𒋫 𒅆𒈠𒉌 𒁕𒁍𒋾𒅎 𒀀𒈾 𒋗𒁍𒌌𒋾 𒍮𒁀𒋾𒅎 𒈬𒍢 𒌑 𒄿𒈾 Telegram 𒋗𒌒𒊏𒄠",
+  "Build it": "𒂊𒁍𒍑",
+  "Change this program": "𒉈𒁉𒊭𒄠 𒀭𒈾𒄠 𒋗𒌦𒉌",
+  "Load it": "𒋗𒇷",
+  "Discard": "𒈾𒁲",
+  "Undo": "𒌅𒌨𒊒",
+  "Describe what the program should do first.": "𒉺𒈾𒉡𒌝 𒈪𒈾𒄠 𒉈𒁉𒋗𒌝 𒅁𒁉𒅖 𒋗𒌅𒌨.",
+  "Building a program needs Claude. Open this page in claude.ai while signed in.": "𒀀𒈾 𒉈𒁉𒅆𒅎 𒂊𒁉𒅆𒅎 Claude 𒄩𒊺𒄴. 𒌅𒌒𒉺𒄠 𒀭𒈾𒄠 𒄿𒈾 claude.ai 𒁉𒋼.",
+  "Claude is working on the program. This can take a minute…": "Claude 𒄿𒈾 𒉈𒁉𒅆𒅎 𒅁𒁉𒅖. 𒀭𒉡𒌝 𒀀𒁲 𒅖𒋼𒅔 𒅆𒈠𒉌𒅎 𒅋𒆷𒀝…",
+  "Claude's reply wasn't a block program. Try again, or describe it more simply.": "𒀀𒁉𒅋 Claude 𒉈𒁉𒋗𒌝 𒊭 𒇷𒅁𒈾𒋾𒅎 𒌌 𒄿𒁀𒀸𒅆. 𒊭𒉌𒅖 𒂊𒁍𒍑, 𒇻 𒅖𒊑𒅖 𒋗𒌅𒌨.",
+  "Claude used blocks this page doesn't have ({blocks}), so nothing was loaded. Try again, or describe it differently.": "Claude 𒇷𒅁𒈾𒋾 𒊭 𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒆷 𒄿𒋗 ({blocks}) 𒅋𒆠, 𒈪𒅎𒈠 𒌌 𒂊𒇷. 𒊭𒉌𒅖 𒂊𒁍𒍑, 𒇻 𒊭𒉌𒅖 𒋗𒌅𒌨.",
+  "{n} blocks.": "{n} 𒇷𒅁𒈾𒌅𒌝.",
+  "Left out: {notes}.": "𒂊𒍣𒅁: {notes}.",
+  "Loading it replaces the program on the canvas; you can undo straight after.": "𒋗𒇻𒌝 𒉈𒁉𒊭𒄠 𒊭 𒄿𒈾 𒌅𒌒𒁉𒅎 𒌑𒉺𒄴𒄩𒅈; 𒅈𒆠𒋗 𒌅𒋫𒅈𒊏.",
+  "Building the program failed: {problem}": "𒉈𒁉𒋗𒌝 𒌌 𒅔𒉈𒁉𒅖: {problem}",
+  "Undone. Your previous program is back.": "𒌅𒌨𒊒𒌝. 𒉈𒁉𒅖𒅗 𒈠𒄴𒊒𒌝 𒄿𒌅𒊏.",
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "𒉈𒁉𒋗𒌝 𒊭 Claude 𒋗𒇻 ({n} 𒇷𒅁𒈾𒌅𒌝). 𒇷𒅁𒈾𒋾 𒄿𒈾 𒉺𒉌 𒀀𒆷𒆠𒅎 𒀀𒈬𒌨."
  },
  "examples": {
   "review": {

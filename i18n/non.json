@@ -1342,7 +1342,25 @@
   "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "þat notar Llama, MCP-þjóna eða möppur á þinni eigin tölvu, er GitHub nær eigi til",
   "it asks you questions while it runs, and nobody is there to answer": "þat spyrr þik meðan þat keyrir, ok engi er þar at svara",
   "This program can't run on GitHub Actions: {why}.": "Þetta forrit má eigi keyra á GitHub Actions: {why}.",
-  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip geymt. Set skrár þess í leynt GitHub-hirzlu ok bæt við leyndarmálum er SETUP.md telr; þá keyrir þat eptir tíðum."
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip geymt. Set skrár þess í leynt GitHub-hirzlu ok bæt við leyndarmálum er SETUP.md telr; þá keyrir þat eptir tíðum.",
+  "Describe a program": "Lýs forriti",
+  "Describe a program, like: every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Lýs forriti, svá sem: hvern frjádag kl. 18, finn tvær beztu stundir þessa helgi til at þurrka þvátt ok send mér þat á Telegram",
+  "Build it": "Ger þat",
+  "Change this program": "Breyt þessu forriti",
+  "Load it": "Hlað því",
+  "Discard": "Kasta",
+  "Undo": "Afturkalla",
+  "Describe what the program should do first.": "Lýs fyrst hvat forritit skal gera.",
+  "Building a program needs Claude. Open this page in claude.ai while signed in.": "Til at gera forrit þarf Claude. Opna þetta blað í claude.ai innskráðr.",
+  "Claude is working on the program. This can take a minute…": "Claude vinnr at forritinu. Þat má taka mínútu…",
+  "Claude's reply wasn't a block program. Try again, or describe it more simply.": "Svar Claudes var eigi kubbaforrit. Reyn aptr, eða lýs því einfaldara.",
+  "Claude used blocks this page doesn't have ({blocks}), so nothing was loaded. Try again, or describe it differently.": "Claude notaði kubba er þetta blað hefir eigi ({blocks}), svá at ekkert var hlaðit. Reyn aptr, eða lýs því annan veg.",
+  "{n} blocks.": "{n} kubbar.",
+  "Left out: {notes}.": "Sleppt: {notes}.",
+  "Loading it replaces the program on the canvas; you can undo straight after.": "At hlaða því setr þat í stað forritsins á fletinum; þú mátt afturkalla þegar eptir.",
+  "Building the program failed: {problem}": "Eigi mátti gera forritit: {problem}",
+  "Undone. Your previous program is back.": "Afturkallat. Fyrra forrit þitt er aptr komit.",
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Forrit Claudes hlaðit ({n} kubbar). Skoða kubbana áðr en þú keyrir."
  },
  "examples": {
   "review": {

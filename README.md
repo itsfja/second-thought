@@ -38,6 +38,8 @@ The blocks are colour-coded by job:
 
 There are more categories down the left side of the screen.
 
+**Describing a program.** Instead of dragging blocks, type what you want in the box above the canvas, like *every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram*, and press **Build it**. Claude builds the blocks. Before anything loads, the page says what the program does, how many blocks it has, what it can do (send messages, control devices and so on, worked out from the blocks), and anything it left out. **Load it** puts it on the canvas, and **Undo** puts your old program back. To change the program on the canvas, describe the change (*also email it to me*) and press **Change this program**. Claude uses the same block list as converting code, and a program with blocks the page doesn't have is refused. It uses your Claude usage, like any run.
+
 **Running.** Press **Run**. The **run log** on the right adds an entry as each block does its job, and a green box at the end shows the result. Under each step that asks a model something, a grey line says which model answered, how long it took and roughly how many tokens it used; click **Prompt sent** to see exactly what it was asked. Under the result is an estimate of the run's total tokens (on the page this is estimated from the length of the text; exported Python reports exact counts). **Save log** keeps every step, its timing and the result as a file. **Stop** stops everything at once.
 
 **Backups.** The **Model** menu picks the main model. **Backups**, next to it, lists spare models: if the main one can't answer (its key is missing, or the service is down), the first backup does that step instead, and the run log says so.

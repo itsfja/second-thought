@@ -1343,7 +1343,25 @@
   "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "משמשא ב-Llama, בשמשי MCP או בגנזיא דבמחשבא דילך, דלא מטא להון GitHub",
   "it asks you questions while it runs, and nobody is there to answer": "שאלא לך שאלתא כד רהטא, ולית מן דמתיב",
   "This program can't run on GitHub Actions: {why}.": "סדרא הדין לא משכח למרהט ב-GitHub Actions: {why}.",
-  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "אתנטר {name}-actions.zip. שים קבצוהי בבית גנזא דילך דסתיר ב-GitHub ואוסף רזיא דמני SETUP.md; והידין רהט בזמנה."
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "אתנטר {name}-actions.zip. שים קבצוהי בבית גנזא דילך דסתיר ב-GitHub ואוסף רזיא דמני SETUP.md; והידין רהט בזמנה.",
+  "Describe a program": "פרש סדרא",
+  "Describe a program, like: every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "פרש סדרא, כגון: בכל ערובתא בשעת שת ברמשא, אשכח תרתין שעין טבן בשבתא הדא למיבש לבושא ושדר לי ב-Telegram",
+  "Build it": "בני",
+  "Change this program": "שני סדרא הדין",
+  "Load it": "טען",
+  "Discard": "שדי",
+  "Undo": "אהדר",
+  "Describe what the program should do first.": "פרש קדמיא מא דסדרא עבד.",
+  "Building a program needs Claude. Open this page in claude.ai while signed in.": "למבנא סדרא צריך Claude. פתח דפא הדין ב-claude.ai כד עליל אנת.",
+  "Claude is working on the program. This can take a minute…": "Claude עביד בסדרא. הדא תסתבר דקיקא…",
+  "Claude's reply wasn't a block program. Try again, or describe it more simply.": "פתגמא דClaude לא הוא סדרא דלבנין. נסי תוב, או פרש בפשיטותא.",
+  "Claude used blocks this page doesn't have ({blocks}), so nothing was loaded. Try again, or describe it differently.": "Claude אשמש בלבנין דלית בדפא הדין ({blocks}), והלכך לא אתטען מדעם. נסי תוב, או פרש אחרנאית.",
+  "{n} blocks.": "{n} לבנין.",
+  "Left out: {notes}.": "אשתבק: {notes}.",
+  "Loading it replaces the program on the canvas; you can undo straight after.": "טעינא מחלפא סדרא דעל לוחא; משכח אנת לאהדרא מן בתר.",
+  "Building the program failed: {problem}": "סדרא לא אתבני: {problem}",
+  "Undone. Your previous program is back.": "אתהדר. סדרך קדמיא תב.",
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "אתטען סדרא דClaude ({n} לבנין). בדוק לבניא קדם דתרהט."
  },
  "examples": {
   "review": {

@@ -1342,7 +1342,25 @@
   "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "het gebruikt Llama, MCP-servers of mappen op je eigen computer, waar GitHub niet bij kan",
   "it asks you questions while it runs, and nobody is there to answer": "het stelt je vragen terwijl het draait, en er is niemand om te antwoorden",
   "This program can't run on GitHub Actions: {why}.": "Dit programma kan niet op GitHub Actions draaien: {why}.",
-  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip opgeslagen. Zet de bestanden in een privé GitHub-repository en voeg de secrets toe die SETUP.md noemt; dan draait het volgens schema."
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip opgeslagen. Zet de bestanden in een privé GitHub-repository en voeg de secrets toe die SETUP.md noemt; dan draait het volgens schema.",
+  "Describe a program": "Beschrijf een programma",
+  "Describe a program, like: every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Beschrijf een programma, bijvoorbeeld: elke vrijdag om 18.00 uur de beste twee uur dit weekend vinden om de was te drogen en me dat via Telegram sturen",
+  "Build it": "Bouwen",
+  "Change this program": "Dit programma veranderen",
+  "Load it": "Laden",
+  "Discard": "Weggooien",
+  "Undo": "Ongedaan maken",
+  "Describe what the program should do first.": "Beschrijf eerst wat het programma moet doen.",
+  "Building a program needs Claude. Open this page in claude.ai while signed in.": "Voor het bouwen van een programma is Claude nodig. Open deze pagina in claude.ai terwijl je bent ingelogd.",
+  "Claude is working on the program. This can take a minute…": "Claude werkt aan het programma. Dat kan een minuut duren…",
+  "Claude's reply wasn't a block program. Try again, or describe it more simply.": "Het antwoord van Claude was geen blokprogramma. Probeer het opnieuw, of beschrijf het eenvoudiger.",
+  "Claude used blocks this page doesn't have ({blocks}), so nothing was loaded. Try again, or describe it differently.": "Claude gebruikte blokken die deze pagina niet heeft ({blocks}), dus er is niets geladen. Probeer het opnieuw, of beschrijf het anders.",
+  "{n} blocks.": "{n} blokken.",
+  "Left out: {notes}.": "Weggelaten: {notes}.",
+  "Loading it replaces the program on the canvas; you can undo straight after.": "Laden vervangt het programma op het canvas; je kunt het meteen daarna ongedaan maken.",
+  "Building the program failed: {problem}": "Het programma bouwen is mislukt: {problem}",
+  "Undone. Your previous program is back.": "Ongedaan gemaakt. Je vorige programma is terug.",
+  "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Programma van Claude geladen ({n} blokken). Controleer de blokken voordat je het uitvoert."
  },
  "examples": {
   "review": {

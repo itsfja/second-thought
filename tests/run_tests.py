@@ -26,6 +26,7 @@ from e2e.sources import example_ini_check, package_check  # noqa: E402
 from e2e.i18n import i18n_tests  # noqa: E402
 from e2e.gallery import gallery_smoke_tests, gallery_tests  # noqa: E402
 from e2e.actions import actions_tests  # noqa: E402
+from e2e.describe import describe_tests  # noqa: E402
 
 
 AREAS = ("sources", "page", "i18n", "gallery", "python")
@@ -48,6 +49,8 @@ def main():
     if areas - {"sources"} and not (VENDOR / "blockly").exists():
         sys.exit("Run tests/setup.sh first.")
     codes = asyncio.run(page_tests()) if areas & {"page", "python"} else None
+    if "page" in areas:
+        asyncio.run(describe_tests())
     if "i18n" in areas:
         asyncio.run(i18n_tests())
     if "gallery" in areas:
