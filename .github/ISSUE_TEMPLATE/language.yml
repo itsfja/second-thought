@@ -1,0 +1,27 @@
+name: New language
+description: Add a language to the block palette, the page and exported programs.
+labels: [enhancement]
+title: "Add <language> (<its own name>)"
+body:
+  - type: input
+    id: language
+    attributes:
+      label: Language, and its name in itself
+      placeholder: Old Norse (Norrœnt mál)
+    validations:
+      required: true
+  - type: textarea
+    id: script
+    attributes:
+      label: Script and font
+      description: Which script, whether it's right to left, and whether most computers can show it. Scripts they can't need a Noto font, and exported Python usually prints a transliteration instead (as Linear B and Akkadian do).
+  - type: textarea
+    id: words
+    attributes:
+      label: Where the words come from
+      description: For a historical language, how modern ideas (block, agent, model, run log) will be expressed, and how much of the vocabulary is attested.
+  - type: input
+    id: blockly
+    attributes:
+      label: Blockly locale
+      description: Blockly's own code for the language if it has one (like "he"), otherwise "en" plus a blocklyMsg section.
