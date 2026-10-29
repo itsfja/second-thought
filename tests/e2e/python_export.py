@@ -163,6 +163,7 @@ def python_tests(codes):
     with tempfile.TemporaryDirectory() as tmp:
         approval_tests(codes, {k: v for k, v in env.items() if k != "RB_APPROVE"}, tmp)
         doctor_tests(codes, env, tmp, llama_url, llama_calls, ha_calls)
+        mcp_serve_tests(codes, env, tmp)
         for ex, (code, _) in codes.items():
             path = pathlib.Path(tmp) / f"{ex}.py"
             path.write_text(code, encoding="utf-8")
@@ -1023,3 +1024,68 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
     services = {c[0] for c in ha_calls}
     check({"light.turn_off", "persistent_notification.create"} <= services and "lock.lock" in services,
           f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
+
+
+def mcp_session(path, env, cwd, requests):
+    """Talks to `python <path> --mcp` as an MCP client would: one JSON-RPC request per line, one answer per request."""
+    proc = subprocess.Popen([sys.executable, "-u", str(path), "--mcp"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, env=env, cwd=cwd, text=True, encoding="utf-8")
+    answers = []
+    try:
+        for i, (method, params) in enumerate(requests):
+            msg = {"jsonrpc": "2.0", "method": method, "params": params}
+            if method.startswith("notifications/"):
+                proc.stdin.write(json.dumps(msg) + "\n")
+                proc.stdin.flush()
+                continue
+            msg["id"] = i + 1
+            proc.stdin.write(json.dumps(msg) + "\n")
+            proc.stdin.flush()
+            answers.append(json.loads(proc.stdout.readline()))
+        proc.stdin.close()
+        proc.wait(timeout=60)
+    finally:
+        if proc.poll() is None:
+            proc.kill()
+    return proc.returncode, answers, proc.stderr.read()
+
+
+def mcp_serve_tests(codes, env, tmp):
+    """python my-program.py --mcp: the program as one MCP tool, for Claude and other agents."""
+    print("Serving a program as an MCP tool")
+    prog = pathlib.Path(tmp) / "mcp_review.py"
+    prog.write_text(codes["review"][0], encoding="utf-8")
+    call = ("tools/call", {"name": "mcp_review", "arguments": {"value": "rye"}})
+    code, ans, err = mcp_session(prog, env, tmp, [("initialize", {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "test"}}),
+                                                  ("notifications/initialized", {}), ("tools/list", {}), call, call, ("nope", {})])
+    init, listed, first, second, unknown = ans
+    tool = listed.get("result", {}).get("tools", [{}])[0]
+    check(init.get("result", {}).get("protocolVersion") == "2025-06-18" and init["result"]["serverInfo"]["name"] == "mcp_review"
+          and tool.get("name") == "mcp_review" and "value" in tool.get("inputSchema", {}).get("properties", {}),
+          f"--mcp answers initialize and lists one tool named after the program, taking a value ({ans[:2]})")
+    text = (first.get("result", {}).get("content") or [{}])[0].get("text", "")
+    check(first.get("result", {}).get("isError") is False and len(text) > 20 and second.get("result", {}).get("isError") is False
+          and "=== MCP call" in err and "===" not in json.dumps(ans),
+          f"each call runs the program and gives back its result; the run log goes to stderr, never into the protocol ({first})")
+    check(unknown.get("error", {}).get("code") == -32601 and code == 0, "an unknown method is an error, and the server ends when the client closes")
+
+    asks = next((k for k, (c, _) in codes.items() if "R.ask_me(" in c and "START_SCRIPTS = [when_run" in c), None)
+    if asks:
+        path = pathlib.Path(tmp) / "mcp_asks.py"
+        path.write_text(codes[asks][0], encoding="utf-8")
+        _, ans, _ = mcp_session(path, env, tmp, [("tools/call", {"name": "mcp_asks", "arguments": {}})])
+        res = ans[0].get("result", {})
+        check(res.get("isError") is True and "no one to type it" in res["content"][0]["text"],
+              f"a program that asks a question fails the call, with the reason ({asks}: {res})")
+    def can(code):
+        m = re.search(r"^CAN = (\{.*\})$", code, re.M)
+        return json.loads(m.group(1)).get("can", []) if m else []
+    acts = next(k for k, (c, _) in codes.items() if "telegram_send" in can(c) and "START_SCRIPTS = [when_run" in c)
+    path = pathlib.Path(tmp) / "mcp_acts.py"
+    path.write_text(codes[acts][0], encoding="utf-8")
+    _, ans, _ = mcp_session(path, {k: v for k, v in env.items() if k != "RB_APPROVE"}, tmp, [("tools/call", {"name": "mcp_acts", "arguments": {}})])
+    res = ans[0].get("result", {})
+    check(res.get("isError") is True and "hasn't been allowed to without asking" in res["content"][0]["text"],
+          f"a program that can act, never approved, refuses every call and says how to allow it ({acts}: {res})")
+    r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=env, cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
+    check("  ok    MCP tool: with --mcp, it serves one tool, “mcp_review”" in r.stdout, f"--doctor names the tool it would serve ({r.stdout[-300:]!r})")

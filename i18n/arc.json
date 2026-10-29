@@ -2781,7 +2781,11 @@
   "the keychain": "בית מפתחא",
   "Keys": "מפתחא",
   "Keychain": "בית מפתחא",
-  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring מתקן, ברם בית מפתחא לא אתקרי ({problem}), והלכך מפתחא אתין מן סביבתא ומן second-thought.ini בלחוד"
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring מתקן, ברם בית מפתחא לא אתקרי ({problem}), והלכך מפתחא אתין מן סביבתא ומן second-thought.ini בלחוד",
+  "MCP tool": "מאנא MCP",
+  "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "עם --mcp, משמש מאנא חד, „{name}”, לClaude ולעבדא אחרנין",
+  "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "סדרא הדין משכח למעבד בעלמא ולא אתיהב לה למעבד דלא שאלא. רהט יתה זמנא חדא בטרמינל ואתיב y, או שים approve = no בsecond-thought.ini.",
+  "MCP call": "קריתא MCP"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

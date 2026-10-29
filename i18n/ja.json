@@ -2780,6 +2780,10 @@
   "the keychain": "キーチェーン",
   "Keys": "キー",
   "Keychain": "キーチェーン",
-  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring はインストールされていますが、キーチェーンを読めませんでした（{problem}）。キーは環境変数と second-thought.ini からだけ読みます"
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring はインストールされていますが、キーチェーンを読めませんでした（{problem}）。キーは環境変数と second-thought.ini からだけ読みます",
+  "MCP tool": "MCP ツール",
+  "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "--mcp で、ツール「{name}」を Claude やほかのエージェントに提供します",
+  "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "このプログラムは現実に作用できますが、確認なしで行う許可がまだありません。一度ターミナルで実行して y と答えるか、second-thought.ini に approve = no と書いてください。",
+  "MCP call": "MCP 呼び出し"
  }
 }

@@ -2780,6 +2780,10 @@
   "the keychain": "il portachiavi",
   "Keys": "Chiavi",
   "Keychain": "Portachiavi",
-  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring è installato ma non è stato possibile leggere il portachiavi ({problem}), quindi le chiavi vengono solo dall'ambiente e da second-thought.ini"
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring è installato ma non è stato possibile leggere il portachiavi ({problem}), quindi le chiavi vengono solo dall'ambiente e da second-thought.ini",
+  "MCP tool": "Strumento MCP",
+  "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "con --mcp, offre uno strumento, «{name}», a Claude e ad altri agenti",
+  "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "Questo programma può agire sul mondo e non ha ancora il permesso di farlo senza chiedere. Eseguilo una volta in un terminale e rispondi y, oppure metti approve = no in second-thought.ini.",
+  "MCP call": "Chiamata MCP"
  }
 }

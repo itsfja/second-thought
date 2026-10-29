@@ -1660,7 +1660,11 @@
 "the keychain":"τῆς κλειδοθήκης",
 "Keys":"Κλεῖδες",
 "Keychain":"Κλειδοθήκη",
-"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"τὸ keyring ἐγκατέστηται, ἀλλ᾽ ἡ κλειδοθήκη οὐκ ἀνεγνώσθη ({problem}), ὥστε αἱ κλεῖδες ἐκ τοῦ περιβάλλοντος καὶ τοῦ second-thought.ini μόνον ἔρχονται"
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"τὸ keyring ἐγκατέστηται, ἀλλ᾽ ἡ κλειδοθήκη οὐκ ἀνεγνώσθη ({problem}), ὥστε αἱ κλεῖδες ἐκ τοῦ περιβάλλοντος καὶ τοῦ second-thought.ini μόνον ἔρχονται",
+"MCP tool":"Ὄργανον MCP",
+"with --mcp, it serves one tool, “{name}”, to Claude and other agents":"μετὰ --mcp, ἓν ὄργανον, «{name}», παρέχει τῷ Claude καὶ ἄλλοις πράκτορσιν",
+"This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.":"Τοῦτο τὸ πρόγραμμα ἐν τῷ κόσμῳ πράττειν δύναται, οὔπω δ᾽ ἐξεστιν αὐτῷ ἄνευ τοῦ ἐρωτᾶν. Ἅπαξ ἐν τερματικῷ τρέξον καὶ ἀπόκριναι y, ἢ γράψον approve = no ἐν τῷ second-thought.ini.",
+"MCP call":"Κλῆσις MCP"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

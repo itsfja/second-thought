@@ -2780,7 +2780,11 @@
   "the keychain": "clavario",
   "Keys": "Claves",
   "Keychain": "Clavarium",
-  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring institutum est sed clavarium legi non potuit ({problem}), itaque claves tantum ex ambitu et second-thought.ini veniunt"
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring institutum est sed clavarium legi non potuit ({problem}), itaque claves tantum ex ambitu et second-thought.ini veniunt",
+  "MCP tool": "Instrumentum MCP",
+  "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "cum --mcp, unum instrumentum, “{name}”, Claudio aliisque actoribus praebet",
+  "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "Hoc programma in mundo agere potest neque ei licet sine rogando agere. Semel in terminali curre et responde y, aut approve = no in second-thought.ini pone.",
+  "MCP call": "Vocatio MCP"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

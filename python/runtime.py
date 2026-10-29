@@ -1976,7 +1976,7 @@ class Connections:
         if not sensitive and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
             return False
         if sensitive:
-            if self.schedule_mode and not sys.stdin.isatty():
+            if self.nobody_here():
                 self.log(tr("Not done"), tr("{service} on {entity} needs your approval, and nobody is at the keyboard.", service=service, entity=entity), tr("refused"))
                 return False
             if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
@@ -4825,6 +4825,7 @@ class Doctor:
         if KEYCHAIN_PROBLEM:
             row("NOTE", "Keychain", tr("keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the "
                                       "environment and second-thought.ini", problem=_short(KEYCHAIN_PROBLEM, 120)))
+        row("ok", "MCP tool", tr("with --mcp, it serves one tool, “{name}”, to Claude and other agents", name=self.mcp_tool_name()))
         names = list(can.get("services", [])) if known else ["Claude"] + [s["name"] for s in SERVICES
                                                                           if s["name"] != "Claude" and any(os.environ.get(k) for k in s["keys"])]
         services = [s for s in SERVICES if s["name"] in names]
@@ -5072,9 +5073,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             return True
         return await self.confirm(what)
 
+    def nobody_here(self):
+        """True when nobody can answer a question: an unattended scheduled run, or a program serving as an MCP tool."""
+        return getattr(self, "mcp_mode", False) or (self.schedule_mode and not sys.stdin.isatty())
+
     async def confirm(self, what):
         """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no."""
-        if self.schedule_mode and not sys.stdin.isatty():
+        if self.nobody_here():
             self.log(tr("Not done"), tr("{what} needs your approval, and nobody is at the keyboard.", what=what), tr("refused"))
             return False
         if await self.approve("Allow this? " + what):
@@ -5858,6 +5863,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     # ----- You (the person at the keyboard) -----
     async def _input(self, prompt):
+        if getattr(self, "mcp_mode", False):  # stdin is the MCP connection: nobody is there to type
+            raise RunError(tr("This step needs an answer typed at the keyboard, but there's no one to type it."))
         async with self._lock("input"):  # one question at the keyboard at a time
             try:
                 return await asyncio.to_thread(input, prompt)
@@ -6124,7 +6131,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
         finished = False
         try:
-            if not self.schedule_mode:
+            if not self.schedule_mode and not getattr(self, "mcp_mode", False):
                 await self._journal_start()
             code = await self._run(scripts)
             finished = code == 0
@@ -6208,6 +6215,81 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             print(tr("(The log couldn't be saved: {e})", e=e), flush=True)
 
     # ----- Schedules -----
+    # ----- Serving the program as an MCP tool -----
+    # python my-program.py --mcp serves the program to Claude Desktop, Claude Code or any agent that speaks MCP (over
+    # stdio): one tool, named after the program, whose input becomes 'message value' and whose result is the program's
+    # result. Each call runs the 'when Run is clicked' scripts. Nobody is at a keyboard, so a question fails the call, and
+    # an action that would ask first is refused. A program that can act on the world serves only once it's allowed to
+    # without asking (approve = no, or approved once in a terminal), as with a schedule.
+    MCP_PROTOCOLS = ("2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05")
+
+    @staticmethod
+    def mcp_tool_name():
+        base = os.path.splitext(os.path.basename(sys.argv[0] or "program"))[0] or "program"
+        return (re.sub(r"[^A-Za-z0-9_-]+", "_", base).strip("_") or "program")[:64]
+
+    def mcp_tool(self, can):
+        lines, _ = self.can_lines(can)
+        what = (" It can " + "; ".join(lines) + ".") if lines else " It only uses its models."
+        return {"name": self.mcp_tool_name(),
+                "description": f"Runs the Second Thought program “{self.mcp_tool_name()}” and gives back its result.{what}",
+                "inputSchema": {"type": "object", "properties": {"value": {
+                    "type": "string", "description": "What the program starts with: its 'message value'. Leave it out if it needs nothing."}}}}
+
+    async def serve_mcp(self, start_scripts, can):
+        out, sys.stdout = sys.stdout, sys.stderr  # the run log goes to stderr; stdout carries only the protocol
+        self.mcp_mode = True
+        self._can = can
+        refusal = None
+        if not start_scripts:
+            refusal = tr("Nothing to run: this program has no 'when Run is clicked' script.")
+        elif not self.approve_program(can, unattended=True):
+            refusal = tr("This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.")
+        tool = self.mcp_tool(can)
+
+        def send(msg):
+            out.write(json.dumps(msg, ensure_ascii=False) + "\n")
+            out.flush()
+
+        while True:
+            line = await asyncio.to_thread(sys.stdin.readline)
+            if not line:
+                return 0
+            try:
+                msg = json.loads(line)
+            except ValueError:
+                send({"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "Parse error"}})
+                continue
+            if not isinstance(msg, dict) or "id" not in msg:
+                continue  # notifications, such as notifications/initialized, need no answer
+            mid, method, params = msg.get("id"), msg.get("method"), msg.get("params") or {}
+            if method == "initialize":
+                asked = params.get("protocolVersion")
+                send({"jsonrpc": "2.0", "id": mid, "result": {
+                    "protocolVersion": asked if asked in self.MCP_PROTOCOLS else self.MCP_PROTOCOLS[0],
+                    "capabilities": {"tools": {}}, "serverInfo": {"name": tool["name"], "version": RUNTIME_VERSION}}})
+            elif method == "ping":
+                send({"jsonrpc": "2.0", "id": mid, "result": {}})
+            elif method == "tools/list":
+                send({"jsonrpc": "2.0", "id": mid, "result": {"tools": [tool]}})
+            elif method == "tools/call":
+                if params.get("name") != tool["name"]:
+                    send({"jsonrpc": "2.0", "id": mid, "error": {"code": -32602, "message": f"Unknown tool: {params.get('name')}"}})
+                    continue
+                if refusal:
+                    send({"jsonrpc": "2.0", "id": mid, "result": {"content": [{"type": "text", "text": refusal}], "isError": True}})
+                    continue
+                value = to_str((params.get("arguments") or {}).get("value", ""))
+                code = await self.run([(fn, value) for fn in start_scripts], tr("MCP call"))
+                if code == 0:
+                    text = "\n\n".join(to_str(x) for x in self.result) if self.result else to_str(self.draft)
+                else:
+                    text = str(self.error) if isinstance(self.error, RunError) else f"{type(self.error).__name__}: {self.error}"
+                send({"jsonrpc": "2.0", "id": mid, "result": {"content": [{"type": "text", "text": text or tr("\nThe program ended without a result.").strip()}],
+                                                               "isError": code != 0}})
+            else:
+                send({"jsonrpc": "2.0", "id": mid, "error": {"code": -32601, "message": f"Method not found: {method}"}})
+
     @staticmethod
     def schedule_due(s, now, late=datetime.timedelta(hours=1)):
         """Whether a 'when it's' schedule should run now: on one of its days, and no more than an hour late."""
@@ -6406,6 +6488,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         if "--doctor" in sys.argv:
             sys.exit(asyncio.run(self.doctor(can)))
         self.receivers = {k.lower(): v for k, v in receivers.items()}
+        if "--mcp" in sys.argv:
+            sys.exit(asyncio.run(self.serve_mcp(start_scripts, can)))
         if "--run-schedule" in sys.argv:
             sys.exit(self.run_one_schedule(schedules, can))
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)

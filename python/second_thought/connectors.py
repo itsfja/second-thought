@@ -531,7 +531,7 @@ class Connections:
         if not sensitive and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
             return False
         if sensitive:
-            if self.schedule_mode and not sys.stdin.isatty():
+            if self.nobody_here():
                 self.log(tr("Not done"), tr("{service} on {entity} needs your approval, and nobody is at the keyboard.", service=service, entity=entity), tr("refused"))
                 return False
             if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):

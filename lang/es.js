@@ -1660,6 +1660,10 @@
 "the keychain":"el llavero",
 "Keys":"Claves",
 "Keychain":"Llavero",
-"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring está instalado pero no se pudo leer el llavero ({problem}), así que las claves solo vienen del entorno y de second-thought.ini"
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring está instalado pero no se pudo leer el llavero ({problem}), así que las claves solo vienen del entorno y de second-thought.ini",
+"MCP tool":"Herramienta MCP",
+"with --mcp, it serves one tool, “{name}”, to Claude and other agents":"con --mcp, ofrece una herramienta, «{name}», a Claude y a otros agentes",
+"This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.":"Este programa puede actuar en el mundo y no se le ha permitido hacerlo sin preguntar. Ejecútalo una vez en una terminal y responde y, o pon approve = no en second-thought.ini.",
+"MCP call":"Llamada MCP"
 }
 };

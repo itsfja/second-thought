@@ -1660,6 +1660,10 @@
 "the keychain":"le trousseau",
 "Keys":"Clés",
 "Keychain":"Trousseau",
-"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring est installé mais le trousseau n'a pas pu être lu ({problem}), donc les clés viennent seulement de l'environnement et de second-thought.ini"
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring est installé mais le trousseau n'a pas pu être lu ({problem}), donc les clés viennent seulement de l'environnement et de second-thought.ini",
+"MCP tool":"Outil MCP",
+"with --mcp, it serves one tool, “{name}”, to Claude and other agents":"avec --mcp, il fournit un outil, « {name} », à Claude et aux autres agents",
+"This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.":"Ce programme peut agir sur le monde et n'a pas encore été autorisé à le faire sans demander. Lancez-le une fois dans un terminal et répondez y, ou mettez approve = no dans second-thought.ini.",
+"MCP call":"Appel MCP"
 }
 };

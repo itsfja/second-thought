@@ -402,6 +402,17 @@ MCP servers only work in exported programs. On the page, the agent works without
 
 ---
 
+
+### Your program as an MCP tool
+
+It works the other way round too: `python my-program.py --mcp` serves the program as an MCP server (over stdio) with one tool, named after the program. Claude Desktop, Claude Code or any agent that speaks MCP can then call it. Whatever the agent passes as `value` becomes the program's **message value**, each call runs the 'when Run is clicked' scripts, and the program's result comes back as the tool's answer. To add it to Claude Desktop, put this in its MCP settings:
+
+```json
+{"mcpServers": {"my-program": {"command": "python", "args": ["/full/path/to/my-program.py", "--mcp"]}}}
+```
+
+Nobody is at a keyboard when an agent calls it, so a question (an **ask me** or **approve** block) makes the call fail with the reason, and an action that would ask first is refused, as on a schedule. A program that can act on the world serves only once it's been allowed to without asking: run it once in a terminal and answer y, or put `approve = no` in `second-thought.ini`. That's deliberate: an agent calling your program shouldn't be able to do more than you'd let it do unattended. `--doctor` names the tool it would serve.
+
 ## Languages
 
 Choose a language from **Blocks** at the top of the page. The page remembers your choice; if you've never chosen, it uses your browser's language when it can. Changing language only changes the words you see: a program built in Spanish opens the same in English, and exports the same Python.
