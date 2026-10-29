@@ -383,7 +383,7 @@ Choose a language from **Blocks** at the top of the page. The page remembers you
 
 The page speaks English, Spanish (Español), French (Français), German (Deutsch), Dutch (Nederlands), Italian (Italiano), Portuguese (Português), Simplified Chinese (中文), Japanese (日本語), Greek (Ελληνικά), Hebrew (עברית, with the whole page mirrored right to left), Jewish Babylonian Aramaic (ארמית, also right to left), Latin (Latina), Old English (Ænglisc), Middle English (Englisch), Koine Greek (Κοινή), Old Norse (Norrœnt mál), Sanskrit (संस्कृतम्), Akkadian in cuneiform (𒀝𒅗𒁺𒌝, written in transliteration by exported programs) and Mycenaean Greek in Linear B (𐀀𐀏𐀊𐀺, written in transcription by exported programs). The run log, the page's messages and the examples are translated too. Programs shared in the Community gallery keep their authors' words. A Python program you export while the page is in another language prints in that language too; `language = en` in its `second-thought.ini` switches it back to English.
 
-**Adding a language.** Each language is one file in [`i18n/`](i18n), like `i18n/es.json`. It holds every block's words, help text and choices, the category names, the page's own words (under `page`, each English text with its translation), each example's title, description and tip (under `examples`), the words already typed into the palette's blocks (under `starters`), and what exported programs print (under `python`). Copy a file, translate the words (never the choice values, the `%1` markers or the `{name}` markers), and run `python tools/sync.py`. The tests tell you anything you missed.
+**Adding a language.** Each language is one file in [`i18n/`](i18n), like `i18n/es.json`. It holds every block's words, help text and choices, the category names, the page's own words (under `page`, each English text with its translation), each example's title, description and tip (under `examples`), the words already typed into the palette's blocks (under `starters`), and what exported programs print (under `python`). Copy a file, translate the words (never the choice values, the `%1` markers or the `{name}` markers), and run `python tools/sync.py`, which adds it to the page's **Blocks** menu and writes `lang/<language>.js`, the file the page loads when someone picks it. The tests tell you anything you missed.
 
 ---
 
@@ -431,9 +431,10 @@ A program doesn't update itself. To give it a newer runtime, import it on the pa
 | `ha/sample-house.json` | The sample house the Home Assistant blocks use on the page. |
 | `samples/connections.json` | The sample feeds, GitHub projects, Telegram messages, emails and calendar the page uses. |
 | `i18n/` | The page's words in other languages, one file each. |
+| `lang/` | The same, as scripts the page loads for the chosen language only. `tools/sync.py` makes them; publish them with the page. |
 | `gallery/` | Programs people have shared, one file each. They appear on the page under **Community**. |
 | `second-thought.example.ini` | Every setting a program understands, with a note on each. |
-| `tools/sync.py` | Joins the runtime into one file, then copies it and the other embedded parts into the page, so they always match. |
+| `tools/sync.py` | Joins the runtime into one file, copies it and the other embedded parts into the page, and writes `lang/`, so they always match. |
 | `tools/smoke_test.py` | Checks the real model services with your own keys. |
 | `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |
 | `tests/` | Unit tests (`tests/unit/`), and the end-to-end suite (`tests/e2e/`, one file per area, run by `tests/run_tests.py`). |

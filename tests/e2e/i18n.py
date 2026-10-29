@@ -149,7 +149,10 @@ async def i18n_tests():
         page_needs = set(page_info["keys"]) | set(page_info["categories"]) | tr_texts | set(await en.evaluate("window.__runWords()"))
         check(len(page_info["keys"]) > 60 and "Run" in page_info["keys"] and "Step: on" in tr_texts,
               f"the page lists its own words for translators ({len(page_info['keys'])} in the page, {len(tr_texts)} set by code)")
-        check(info["lang"] == "en" and info["langs"], f"the page has {len(info['langs'])} translation(s) of the block palette, and English when none is chosen")
+        files = {path.stem: json.loads(path.read_text(encoding="utf-8")) for path in sorted((ROOT / "i18n").glob("*.json"))}
+        check(info["lang"] == "en" and info["loaded"] is None and info["langs"] == {c: {"name": t.get("name", c)} for c, t in files.items()},
+              f"the page lists all {len(files)} languages by name, loads none of their words, and is in English when none is chosen")
+        info["langs"] = files  # the checks below compare each language's words with the page
         for code, t in info["langs"].items():
             problems = []
             for d in info["defs"]:
@@ -206,6 +209,8 @@ async def i18n_tests():
                 const r = { lang:window.ST_LANG, start:b.toString(), wait:w.getField('UNIT').getText(), cat:ws.getToolbox().getToolboxItems()[0].getName(), ifmsg:Blockly.Msg.CONTROLS_IF_MSG_IF };
                 b.dispose(); w.dispose(); return r; }""")
             t = info["langs"][code]
+            loaded = await pg.evaluate("window.__i18n().loaded")
+            check(loaded == t, f"with {code} chosen, the page loads lang/{code}.js, holding exactly i18n/{code}.json")
             check(got["lang"] == code and got["start"] == t["blocks"]["rb_start"]["message0"] and got["cat"] == t["categories"]["Events"]
                   and got["wait"] == t["options"]["rb_wait.UNIT"]["s"] and got["ifmsg"] not in ("if", None),
                   f"with {code} chosen, blocks, choices, categories and Blockly's own blocks are in {t.get('name', code)} ({got})")
@@ -356,4 +361,23 @@ async def i18n_tests():
             check(not errors, f"no page errors in {code}" + (f": {errors[:2]}" if errors else ""))
             await pg.close()
         check(not en_errors, "no page errors in English")
+
+        # A language whose file doesn't arrive (not published, or the connection dropped): the page works, in English, and says so.
+        pg = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        errors = []
+        pg.on("pageerror", lambda e: errors.append(str(e)))
+        await pg.route("**/*", route)
+        await pg.route("http://test/lang/**", lambda r: r.abort())
+        await pg.add_init_script(MOCK + ";try{localStorage.setItem('second-thought-language','fr')}catch(e){}")
+        await pg.goto("http://test/")
+        await pg.wait_for_timeout(1500)
+        got = await pg.evaluate("""() => ({ lang:window.ST_LANG, missing:window.__i18n().missing, banner:document.getElementById('banner').hidden ? '' :
+            document.getElementById('banner').textContent, picked:document.getElementById('lang').value, run:document.getElementById('run').textContent,
+            kept:localStorage.getItem('second-thought-language') })""")
+        status = await run_program(pg)
+        check(got["lang"] == "en" and got["missing"] == "Français" and "Français words for this page couldn't be loaded" in got["banner"]
+              and got["picked"] == "en" and got["run"] == "Run" and got["kept"] == "fr" and status.startswith("done") and not errors,
+              f"if a language's file can't be loaded, the page runs in English, says so, and keeps the choice to try again ({got}, {status})"
+              + (f": {errors[:2]}" if errors else ""))
+        await pg.close()
         await browser.close()
