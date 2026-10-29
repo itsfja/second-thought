@@ -1654,7 +1654,12 @@
 "Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"कालयोजितस्य लेखस्य {n} ({time}, {days}) कालः न प्राप्तः, अतः किमपि न चालितम्।",
 "weekdays":"कार्यदिनेषु",
 "weekends":"सप्ताहान्तेषु",
-"every day":"प्रतिदिनम्"
+"every day":"प्रतिदिनम्",
+"the environment":"परिवेशात्",
+"the keychain":"कुञ्चिकाकोशात्",
+"Keys":"कुञ्चिकाः",
+"Keychain":"कुञ्चिकाकोशः",
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring स्थापितम्, किन्तु कुञ्चिकाकोशः पठितुं न शक्तः ({problem}), अतः कुञ्चिकाः परिवेशात् second-thought.ini इत्यस्मात् च एव आगच्छन्ति"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

@@ -1654,7 +1654,12 @@
 "Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"adānum ša ṭuppim {n} ({time}, {days}) ul ikšud, mimma ul illik.",
 "weekdays":"ina ūmī šiprim",
 "weekends":"ina ūmī nūḫim",
-"every day":"ūmišam"
+"every day":"ūmišam",
+"the environment":"kibrātim",
+"the keychain":"bīt kunukkī",
+"Keys":"kunukkū",
+"Keychain":"bīt kunukkī",
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring šakin, ullâmma bīt kunukkī ul iššasi ({problem}), kunukkū ištu kibrātim u second-thought.ini ištēn illakūnim"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

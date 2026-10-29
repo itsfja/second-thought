@@ -1654,7 +1654,12 @@
 "Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"o-u-po o-ra ka-ra-pa {n} ({time}, {days}), o-u-de-ne e-ra-pe.",
 "weekdays":"a-ma we-ko",
 "weekends":"a-ma a-na-pa-u-se-o",
-"every day":"e-ka-ta a-ma"
+"every day":"e-ka-ta a-ma",
+"the environment":"pe-ri-ko-ro",
+"the keychain":"ka-ra-wi-po-ro-ko",
+"Keys":"ka-ra-wi-de",
+"Keychain":"ka-ra-wi-po-ro-ko",
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring ke-ta-i, a-ra ka-ra-wi-po-ro-ko o-u a-na-ko-no-to ({problem}), ka-ra-wi-de pe-ri-ko-ro second-thought.ini mo-no"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

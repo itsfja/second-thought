@@ -2773,7 +2773,12 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Nondum tempus est scripti horarii {n} ({time}, {days}), itaque nihil cucurrit.",
   "weekdays": "diebus profestis",
   "weekends": "diebus Saturni et Solis",
-  "every day": "cotidie"
+  "every day": "cotidie",
+  "the environment": "ambitu",
+  "the keychain": "clavario",
+  "Keys": "Claves",
+  "Keychain": "Clavarium",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring institutum est sed clavarium legi non potuit ({problem}), itaque claves tantum ex ambitu et second-thought.ini veniunt"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

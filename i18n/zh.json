@@ -2773,6 +2773,11 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "还没到定时脚本 {n} 的时间（{time}，{days}），所以什么都没运行。",
   "weekdays": "工作日",
   "weekends": "周末",
-  "every day": "每天"
+  "every day": "每天",
+  "the environment": "环境变量",
+  "the keychain": "钥匙串",
+  "Keys": "密钥",
+  "Keychain": "钥匙串",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "已安装 keyring，但无法读取钥匙串（{problem}），所以密钥只来自环境变量和 second-thought.ini"
  }
 }

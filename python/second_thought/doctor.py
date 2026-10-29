@@ -9,7 +9,7 @@ import os
 import sys
 import urllib.error
 import urllib.request
-from .settings import RUNTIME_VERSION, SETTINGS_PATH, WHERE_KEYS
+from .settings import KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM, RUNTIME_VERSION, SETTINGS_PATH, WHERE_KEYS
 from .providers import MODELS, PROVIDERS, SERVICES, TIER_NAMES, _tier
 from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, _short, to_str
 from .connectors import webhook_host
@@ -253,6 +253,13 @@ class Doctor:
         row("ok" if sys.version_info >= (3, 9) else "FAIL", "Python", sys.version.split()[0] + ("" if sys.version_info >= (3, 9) else ": " + tr("Second Thought needs 3.9 or newer")))
         row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=SETTINGS_PATH) if SETTINGS_PATH else
             tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
+        found = [(k, KEY_SOURCES.get(k)) for k in KEYCHAIN_NAMES if os.environ.get(k)]
+        where = {"environment": tr("the environment"), "file": "second-thought.ini", "keychain": tr("the keychain")}
+        if found:
+            row("ok", "Keys", ", ".join(f"{k} ({where.get(src) or where['environment']})" for k, src in found))
+        if KEYCHAIN_PROBLEM:
+            row("NOTE", "Keychain", tr("keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the "
+                                      "environment and second-thought.ini", problem=_short(KEYCHAIN_PROBLEM, 120)))
         names = list(can.get("services", [])) if known else ["Claude"] + [s["name"] for s in SERVICES
                                                                           if s["name"] != "Claude" and any(os.environ.get(k) for k in s["keys"])]
         services = [s for s in SERVICES if s["name"] in names]

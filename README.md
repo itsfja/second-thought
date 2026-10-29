@@ -267,6 +267,15 @@ Memories saved "forever" live in `memory.json`, next to the program. Two program
 
 Everything in `second-thought.ini` can also be set as an environment variable with the same name; an environment variable wins over the file.
 
+**Keys in your keychain.** To keep keys out of `second-thought.ini` (on a shared or backed-up computer, say), put them in your computer's keychain instead: macOS Keychain, Windows Credential Manager, or the Secret Service on Linux. Install the `keyring` package once, then store each key under the name `second-thought`:
+
+```
+pip install keyring
+python -m keyring set second-thought ANTHROPIC_API_KEY
+```
+
+It asks for the key without showing it. A program then finds any key that isn't in the environment or `second-thought.ini` in the keychain. `--doctor` says where each key came from. Without `keyring` installed, nothing changes, and `keychain = no` in `second-thought.ini` turns it off.
+
 [`second-thought.example.ini`](second-thought.example.ini) lists every setting a program understands, with a note on each: keys for every model service, models and backups, run settings, Home Assistant, Homey, MQTT, Telegram, email, calendar, GitHub, web requests and feeds. Copy it to `second-thought.ini` and fill in what you use. A program looks for `second-thought.ini` next to itself first, then in the folder you run it from, then in your home folder, so one copy in your home folder can serve every program you export.
 
 ---

@@ -2774,7 +2774,12 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "לא מטא זמנה דכתבא זמינא {n} ({time}, {days}), והלכך לא רהט מדעם.",
   "weekdays": "ביומי חול",
   "weekends": "בסופי שבתא",
-  "every day": "כל יומא"
+  "every day": "כל יומא",
+  "the environment": "סביבתא",
+  "the keychain": "בית מפתחא",
+  "Keys": "מפתחא",
+  "Keychain": "בית מפתחא",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring מתקן, ברם בית מפתחא לא אתקרי ({problem}), והלכך מפתחא אתין מן סביבתא ומן second-thought.ini בלחוד"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

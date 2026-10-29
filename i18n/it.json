@@ -2773,6 +2773,11 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Non è ancora l'ora dello script pianificato {n} ({time}, {days}), quindi non è stato eseguito niente.",
   "weekdays": "nei giorni feriali",
   "weekends": "nel fine settimana",
-  "every day": "ogni giorno"
+  "every day": "ogni giorno",
+  "the environment": "l'ambiente",
+  "the keychain": "il portachiavi",
+  "Keys": "Chiavi",
+  "Keychain": "Portachiavi",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring è installato ma non è stato possibile leggere il portachiavi ({problem}), quindi le chiavi vengono solo dall'ambiente e da second-thought.ini"
  }
 }

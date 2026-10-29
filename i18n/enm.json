@@ -2773,7 +2773,12 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "It is nat tyme for ordeyned script {n} ({time}, {days}), so nothyng was ronne.",
   "weekdays": "on werkdayes",
   "weekends": "at the wikes ende",
-  "every day": "every day"
+  "every day": "every day",
+  "the environment": "the envyronment",
+  "the keychain": "the keye-cheste",
+  "Keys": "Keyes",
+  "Keychain": "Keye-cheste",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring is set up but the keye-cheste myghte nat be red ({problem}), so keyes comen oonly from the envyronment and second-thought.ini"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

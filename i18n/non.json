@@ -2773,7 +2773,12 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Eigi er tími tíðsetts handrits {n} ({time}, {days}), svá at ekkert var keyrt.",
   "weekdays": "virka daga",
   "weekends": "um helgar",
-  "every day": "hvern dag"
+  "every day": "hvern dag",
+  "the environment": "umhverfinu",
+  "the keychain": "lyklakistunni",
+  "Keys": "Lyklar",
+  "Keychain": "Lyklakista",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring er sett upp en lyklakistuna mátti eigi lesa ({problem}), svá at lyklar koma aðeins ór umhverfinu ok second-thought.ini"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",
