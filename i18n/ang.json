@@ -1335,7 +1335,14 @@
   "Community: home and baking": "Gemanscipe: ham and bacung",
   "Community: odds and ends": "Gemanscipe: gehwæt",
   "look at the files in a folder, and watch it for new ones": "sceawian þa fætelsas on hylce, and weardian hie for niwum",
-  "The setup check only runs in exported Python: export this program and run it there to see the report.": "Seo gearwunge sceawung yrnþ ana on utgesendum Python: sende þis weorc ut and yrn hit þær to geseonne þa andsware."
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "Seo gearwunge sceawung yrnþ ana on utgesendum Python: sende þis weorc ut and yrn hit þær to geseonne þa andsware.",
+  "Save as GitHub Actions (.zip)": "Heald for GitHub Actions (.zip)",
+  "it has no 'when it's' or 'every' script, so there's nothing to run on a schedule": "hit næfþ nan 'þonne hit is' ne 'ælce' gewrit, forþon nis nan þing tō yrnenne be tīdsetnesse",
+  "it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times": "hit bīdeþ oþþæt hwæt gelimpe, swā swā ǣrendgewritu, webbēna oþþe wendinga, and GitHub Actions hit yrnþ būton on gesettum tīdum",
+  "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "hit brycþ Llama, MCP þegnas oþþe fealdas on þīnum āgnum rīmcræftlicum tōle, þe GitHub ne mæg geræcan",
+  "it asks you questions while it runs, and nobody is there to answer": "hit þē āxaþ þā hwīle þe hit yrnþ, and nān man nis þǣr tō andswarienne",
+  "This program can't run on GitHub Actions: {why}.": "Þis forescrift ne mæg yrnan on GitHub Actions: {why}.",
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip is gehealden. Sete his fīlas on dīgle GitHub hord and īec þā dīglu þe SETUP.md tealþ; þonne yrnþ hit be tīdsetnesse."
  },
  "examples": {
   "review": {
@@ -2742,7 +2749,12 @@
   "New issue: {issue}": "Niwe issue: {issue}",
   "New release: {release}": "Niwe release: {release}",
   "There's no folder {folder}.": "Nis nan hylc {folder}.",
-  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Hit wæs wēnunga āweorpen. Tō brūcenne ōþres būtan þǣre forescrifte wendinge, sete gewrit þe hēo tealþ on second-thought.ini, swā swā {settings}."
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Hit wæs wēnunga āweorpen. Tō brūcenne ōþres būtan þǣre forescrifte wendinge, sete gewrit þe hēo tealþ on second-thought.ini, swā swā {settings}.",
+  "There's no scheduled script {n}: this program has {count}.": "Nis nān tīdsett gewrit {n}: þis forescrift hæfþ {count}.",
+  "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Nis gīet tīma for tīdsettum gewrite {n} ({time}, {days}), forþon nāht ne arn.",
+  "weekdays": "on weorcdagum",
+  "weekends": "on wucan ende",
+  "every day": "ælce dæge"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

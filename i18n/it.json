@@ -1335,7 +1335,14 @@
   "Community: home and baking": "Community: casa e panificazione",
   "Community: odds and ends": "Community: varie",
   "look at the files in a folder, and watch it for new ones": "guardare i file in una cartella e sorvegliarla per i nuovi",
-  "The setup check only runs in exported Python: export this program and run it there to see the report.": "Il controllo della configurazione funziona solo nel Python esportato: esporta questo programma ed eseguilo lì per vedere il rapporto."
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "Il controllo della configurazione funziona solo nel Python esportato: esporta questo programma ed eseguilo lì per vedere il rapporto.",
+  "Save as GitHub Actions (.zip)": "Salva per GitHub Actions (.zip)",
+  "it has no 'when it's' or 'every' script, so there's nothing to run on a schedule": "non ha script 'quando sono le' o 'ogni', quindi non c'è niente da eseguire secondo un orario",
+  "it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times": "aspetta che succeda qualcosa, come messaggi, richieste web o cambiamenti, e GitHub Actions lo esegue solo a orari fissi",
+  "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "usa Llama, server MCP o cartelle sul tuo computer, che GitHub non può raggiungere",
+  "it asks you questions while it runs, and nobody is there to answer": "ti fa domande mentre gira, e non c'è nessuno a rispondere",
+  "This program can't run on GitHub Actions: {why}.": "Questo programma non può girare su GitHub Actions: {why}.",
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "Salvato {name}-actions.zip. Metti i suoi file in un repository GitHub privato e aggiungi i secret elencati in SETUP.md; poi girerà secondo l'orario."
  },
  "examples": {
   "review": {
@@ -2742,6 +2749,11 @@
   "New issue: {issue}": "Nuova issue: {issue}",
   "New release: {release}": "Nuova versione: {release}",
   "There's no folder {folder}.": "Non esiste la cartella {folder}.",
-  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Forse è stato ritirato. Per usarne un altro senza modificare il programma, metti in second-thought.ini un modello che elenca, per esempio {settings}."
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "Forse è stato ritirato. Per usarne un altro senza modificare il programma, metti in second-thought.ini un modello che elenca, per esempio {settings}.",
+  "There's no scheduled script {n}: this program has {count}.": "Non c'è uno script pianificato {n}: questo programma ne ha {count}.",
+  "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Non è ancora l'ora dello script pianificato {n} ({time}, {days}), quindi non è stato eseguito niente.",
+  "weekdays": "nei giorni feriali",
+  "weekends": "nel fine settimana",
+  "every day": "ogni giorno"
  }
 }

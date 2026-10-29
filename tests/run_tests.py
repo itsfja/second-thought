@@ -25,6 +25,7 @@ from e2e.python_export import python_tests  # noqa: E402
 from e2e.sources import example_ini_check, package_check  # noqa: E402
 from e2e.i18n import i18n_tests  # noqa: E402
 from e2e.gallery import gallery_smoke_tests, gallery_tests  # noqa: E402
+from e2e.actions import actions_tests  # noqa: E402
 
 
 AREAS = ("sources", "page", "i18n", "gallery", "python")
@@ -54,6 +55,7 @@ def main():
         gallery_smoke_tests()
     if "python" in areas:
         python_tests(codes)
+        asyncio.run(actions_tests())
     print()
     if failures:
         print(f"{len(failures)} check(s) failed.")

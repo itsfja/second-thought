@@ -6163,6 +6163,33 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             print(tr("(The log couldn't be saved: {e})", e=e), flush=True)
 
     # ----- Schedules -----
+    @staticmethod
+    def schedule_due(s, now, late=datetime.timedelta(hours=1)):
+        """Whether a 'when it's' schedule should run now: on one of its days, and no more than an hour late."""
+        _, h, m, days, _fn = s
+        for target in (now.replace(hour=h, minute=m, second=0, microsecond=0) - datetime.timedelta(days=d) for d in (0, 1)):
+            wd = target.weekday()
+            if (days == "every" or (days == "weekdays" and wd < 5) or (days == "weekends" and wd >= 5)) and target <= now < target + late:
+                return True
+        return False
+
+    def run_one_schedule(self, schedules, can):
+        """--run-schedule N runs scheduled script N (counting from 1) once, if it's due now, for a scheduler outside the
+        program such as GitHub Actions. That may start it late, or at both the summer and winter times, so a 'when it's'
+        script only runs within an hour after its time. With --now it runs whatever the time."""
+        args = sys.argv[sys.argv.index("--run-schedule") + 1:]
+        n = int(args[0]) if args and args[0].isdigit() else 0
+        if not 1 <= n <= len(schedules):
+            return tr("There's no scheduled script {n}: this program has {count}.", n=args[0] if args else "", count=len(schedules))
+        s = schedules[n - 1]
+        if s[0] == "time" and "--now" not in sys.argv and not self.schedule_due(s, datetime.datetime.now()):
+            print(tr("Not time for scheduled script {n} ({time}, {days}), so nothing was run.", n=n, time=f"{s[1]:02d}:{s[2]:02d}",
+                     days={"weekdays": tr("weekdays"), "weekends": tr("weekends")}.get(s[3]) or tr("every day")), flush=True)
+            return 0
+        if not self.approve_program(can, unattended=not sys.stdin.isatty()):
+            return 1
+        return asyncio.run(self.run([s[-1]], s[-2] if s[0] == "every" else tr("Scheduled {time}", time=f"{s[1]:02d}:{s[2]:02d}")))
+
     async def run_schedules(self, schedules, watches=(), telegram=(), listeners=()):
         if not schedules and not watches and not telegram and not listeners:
             sys.exit(tr("This program has no scheduled scripts, and nothing that listens."))
@@ -6334,6 +6361,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         if "--doctor" in sys.argv:
             sys.exit(asyncio.run(self.doctor(can)))
         self.receivers = {k.lower(): v for k, v in receivers.items()}
+        if "--run-schedule" in sys.argv:
+            sys.exit(self.run_one_schedule(schedules, can))
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
         if not self.approve_program(can, unattended=bool(use_schedule) and not sys.stdin.isatty()):
             sys.exit(1)

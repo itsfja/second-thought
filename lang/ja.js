@@ -847,7 +847,14 @@
 "Community: home and baking":"コミュニティ：家とパン作り",
 "Community: odds and ends":"コミュニティ：その他",
 "look at the files in a folder, and watch it for new ones":"フォルダーのファイルを見て、新しいファイルが来るのを見張る",
-"The setup check only runs in exported Python: export this program and run it there to see the report.":"設定チェックは書き出した Python でのみ動きます。このプログラムを書き出して、そちらで実行するとレポートが見られます。"
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"設定チェックは書き出した Python でのみ動きます。このプログラムを書き出して、そちらで実行するとレポートが見られます。",
+"Save as GitHub Actions (.zip)":"GitHub Actions 用に保存 (.zip)",
+"it has no 'when it's' or 'every' script, so there's nothing to run on a schedule":"「〜になったとき」や「〜ごとに」のスクリプトがないので、スケジュールで実行するものがありません",
+"it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times":"メッセージやウェブリクエスト、変化などが起きるのを待ちますが、GitHub Actions は決まった時刻にしか実行しません",
+"it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach":"あなたのコンピューター上の Llama、MCP サーバー、フォルダーを使いますが、GitHub からは届きません",
+"it asks you questions while it runs, and nobody is there to answer":"実行中にあなたに質問しますが、答える人がいません",
+"This program can't run on GitHub Actions: {why}.":"このプログラムは GitHub Actions で実行できません: {why}。",
+"Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.":"{name}-actions.zip を保存しました。ファイルを非公開の GitHub リポジトリに置き、SETUP.md にあるシークレットを追加すると、スケジュールどおりに実行されます。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1622,6 +1629,11 @@
 "New issue: {issue}":"新しい Issue：{issue}",
 "New release: {release}":"新しいリリース：{release}",
 "There's no folder {folder}.":"フォルダー {folder} がありません。",
-"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"提供が終了した可能性があります。プログラムを変えずに別のモデルを使うには、一覧にあるモデルを second-thought.ini に書いてください。例: {settings}"
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"提供が終了した可能性があります。プログラムを変えずに別のモデルを使うには、一覧にあるモデルを second-thought.ini に書いてください。例: {settings}",
+"There's no scheduled script {n}: this program has {count}.":"スケジュールのスクリプト {n} はありません。このプログラムには {count} 個あります。",
+"Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"スケジュールのスクリプト {n}（{time}、{days}）の時刻ではないので、何も実行しませんでした。",
+"weekdays":"平日",
+"weekends":"週末",
+"every day":"毎日"
 }
 };
