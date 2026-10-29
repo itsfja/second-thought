@@ -13,176 +13,71 @@
 
 1. **Open [Second Thought](https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN)** in claude.ai. Nothing to install, and runs on the page use your claude.ai account.
 2. **Pick an example and press Run.** There are over 150, from a simple review loop to agents that plan a bake or check on the house. Change the text in any block and run it again.
-3. **Export it.** *Import / export → Save Python (.zip)*, unzip, put your API key in `second-thought.ini`, then run `run.bat` (Windows) or `sh run.sh` (Linux, Mac). [Page 10](#page-10-making-a-program-run-on-its-own) has the details.
+3. **Export it.** *Import / export → Save Python (.zip)*, unzip, put your API key in `second-thought.ini`, then run `run.bat` (Windows) or `sh run.sh` (Linux, Mac). [Exporting to Python](#exporting-to-python) has the details.
 
-The rest of this README is a picture book about how it all works. Start at Page 1, or jump to [what's in this folder](#page-11-what-is-in-this-folder) or [checking it still works](#page-12-checking-it-still-works).
+New to all this? [**The picture book**](docs/ladybird-book.md) is a gentle, Ladybird-style introduction to what Second Thought is and why it checks its own work.
 
----
-
-### A Ladybird-style book about a clever helper
+**Contents:** [Using the page](#using-the-page) · [What a program can do](#what-a-program-can-do) · [The agent](#the-agent) · [Connections](#connections) · [Examples and the gallery](#examples-and-the-gallery) · [Saving programs](#saving-programs) · [Exporting to Python](#exporting-to-python) · [Models](#models) · [Home Assistant](#home-assistant) · [Homey](#homey) · [MCP tools](#mcp-tools) · [Languages](#languages) · [Versions and --doctor](#versions-and---doctor) · [Good to know](#good-to-know) · [Repository layout](#repository-layout) · [Development and tests](#development-and-tests)
 
 ---
 
-## Page 1: Hello
+## Using the page
 
-*Picture: a child at a table with a computer. A friendly ladybird sits on the screen.*
+Each block is one instruction, like *write a first draft*, *review the draft against …* or *revise to fix the review's problems*. Drag blocks from the categories on the left and click them together. Only blocks under a **when Run is clicked** or **when I receive** hat run, top to bottom; separate scripts run side by side. Click any white slot to type into it. Round slots take values, hexagon slots take yes/no conditions.
 
-This is a computer.
+The blocks are colour-coded by job:
 
-A computer is a machine that follows instructions.
+- **Yellow** starts things. **when Run is clicked** goes at the top.
+- **Orange** repeats or chooses.
+- **Blue** asks Claude to write.
+- **Purple** asks Claude to check the writing.
+- **Teal** asks *you* a question and waits for your answer.
+- **Olive** makes an [agent](#the-agent), a helper that decides its own steps. Its tools are a darker olive, in their own **Tools** category.
+- **Pink**, under **Connections**, talks to Telegram, email, your calendar and news feeds.
+- **Green** shows the result.
 
-An instruction is a thing you ask someone to do. "Please shut the door" is an instruction.
+There are more categories down the left side of the screen.
 
-The computer can follow lots of instructions, one after another, very fast.
+**Running.** Press **Run**. The **run log** on the right adds an entry as each block does its job, and a green box at the end shows the result. Under each step that asks a model something, a grey line says which model answered, how long it took and roughly how many tokens it used; click **Prompt sent** to see exactly what it was asked. Under the result is an estimate of the run's total tokens (on the page this is estimated from the length of the text; exported Python reports exact counts). **Save log** keeps every step, its timing and the result as a file. **Stop** stops everything at once.
 
-This book is about a program called **Second Thought**.
-
-A program is a list of instructions for a computer.
-
----
-
-## Page 2: Meet Claude
-
-*Picture: a speech bubble coming out of the computer, saying "How can I help?"*
-
-This is Claude.
-
-Claude lives inside the computer. Claude can read and write.
-
-You can ask Claude to write a story, answer a question, or explain something hard in an easy way.
-
-Claude is very helpful. But Claude is not perfect. Sometimes Claude makes mistakes, just like people do.
+**Backups.** The **Model** menu picks the main model. **Backups**, next to it, lists spare models: if the main one can't answer (its key is missing, or the service is down), the first backup does that step instead, and the run log says so.
 
 ---
 
-## Page 3: Having a second thought
+## What a program can do
 
-*Picture: a child writing in an exercise book, then crossing something out and writing it again, neater.*
-
-When you write a story at school, you write it once.
-
-Then you read it again. You spot a spelling mistake. You see a part that is muddled. You fix them.
-
-Now the story is better.
-
-Reading your work again and making it better is called **having a second thought**.
-
-Second Thought helps Claude do the same thing. Claude writes something. Then Claude checks it. Then Claude makes it better.
-
----
-
-## Page 4: Building blocks
-
-*Picture: bright, coloured blocks that click together like toy bricks. Each block has words on it.*
-
-In Second Thought, you do not need to type long instructions.
-
-Instead, you use **blocks**.
-
-Each block is one instruction. One block says "write a first draft". Another block says "check the draft". Another says "make it better".
-
-You pick up a block with the mouse and drag it to the big space on the screen. You click the blocks together, one under another, like building a tower.
-
-The computer follows the blocks from top to bottom.
-
-If you have used Scratch at school, this will feel familiar. It is very like Scratch.
+- Write, check, then try again until the writing passes. If it runs out of tries, it keeps the best attempt, not the last, and each check makes sure earlier problems haven't come back.
+- **Save a checkpoint** when the draft is good, and **go back to the checkpoint** if later changes make it worse.
+- Ask you questions and wait for your answer.
+- Look at a picture you give it and describe it, or draw simple pictures.
+- Read a document, such as a PDF or a Word file.
+- Save its work as a file.
+- **Remember** things for next time.
+- Do several jobs at the same time.
+- Wait until a time of day, then start a job by itself.
+- Retry when something goes wrong.
+- Stop itself before it uses too many tokens: put **limit this run to … tokens** near the top.
+- Ask you first before it sends a message, says something out loud, saves a file or changes something at home: use **ask me before …**.
+- Use one of your saved programs as a single block: **run program … with …**, from **Programs**.
+- Use other models alongside Claude, for example Claude writes and Gemini reviews. See [Models](#models).
 
 ---
 
-## Page 5: The colours
+## The agent
 
-*Picture: a box of blocks sorted into coloured piles.*
+Most programs do exactly what the blocks say, in order. An **agent** is different: you give it a **goal** and some **tools**, and Claude decides what to do next. It picks a tool, looks at what happened, and picks again. When the goal is met, it writes its answer into the draft.
 
-The blocks come in different colours. Blocks of the same colour do the same sort of job.
+The olive block **agent: work toward …** holds the tools, which have their own category, **Tools**, just below **Agent**. Drop in as many as you like:
 
-- **Yellow blocks** start things. The yellow block "when Run is clicked" always goes at the very top.
-- **Orange blocks** repeat things, or choose between things.
-- **Blue blocks** ask Claude to write.
-- **Purple blocks** ask Claude to check the writing.
-- **Teal blocks** ask *you* a question and wait for your answer.
-- **Olive blocks** make an **agent**: a helper that decides its own steps. Its **tools** are a darker olive, in their own **Tools** pile.
-- **Pink blocks**, under **Connections**, talk to Telegram, email, your calendar and news feeds.
-- **Green blocks** show the result at the end.
-
-There are more colours too. You will find them all down the left side of the screen.
-
----
-
-## Page 6: Pressing Run
-
-*Picture: a big blue button with the word "Run" on it, and a finger about to press it.*
-
-When your blocks are ready, press the blue **Run** button.
-
-On the right-hand side of the screen there is a list called the **run log**. A log is a diary of what happened.
-
-Each time a block does its job, a new line appears in the run log. You can watch Claude working, step by step.
-
-At the end, a green box shows the **result**. The result is what your program made.
-
-Under the result, a small line says roughly how many **tokens** the run used. Tokens are the little pieces of words that Claude reads and writes. Every token uses a tiny bit of your Claude allowance. On the page this number is a good guess, worked out from how long the words are.
-
-Under each step that asks Claude something, a small grey line says which helper answered, how long it took and roughly how many tokens it used. Click **Prompt sent** to see exactly what Claude was asked.
-
-Press **Save log** at the top of the run log to keep a copy of the diary. It saves every step, how long each one took, and the result, as a file you can read later.
-
-If something goes wrong, press **Stop**. Everything will stop straight away.
-
-Next to the **Model** menu is a button called **Backups**. The model you choose in the menu is your main helper. Backups are spare helpers, like substitutes in a football team. If the main helper can't come (perhaps its key is missing, or its computers are having a bad day), the first spare helper does that job instead. The run log tells you when that happens.
-
----
-
-## Page 7: Things Second Thought can do
-
-*Picture: a ladybird holding a long scroll, with a list written on it.*
-
-Second Thought can do many things. Here are some of them.
-
-- It can ask Claude to write, then check, then try again until the writing is good.
-- If it runs out of tries, it keeps the best try, not just the last one. And each time it checks, it makes sure old mistakes haven't crept back in.
-- It can **save a checkpoint** when the draft is good, and **go back to the checkpoint** if later changes make it worse.
-- It can ask you questions and wait for your answer.
-- It can look at a picture you give it and tell you about it.
-- It can draw simple pictures, like a cartoon loaf of bread.
-- It can read a document, such as a PDF or a Word file, and tell you what is in it.
-- It can save its work as a file, so you can keep it.
-- It can **remember** things for next time, like a notebook it keeps in a drawer.
-- It can do several jobs at the same time.
-- It can wait until a certain time of day, and then start a job by itself.
-- If something goes wrong, it can try again.
-- It can stop itself before it uses too many tokens. Put the block **limit this run to … tokens** near the top.
-- It can ask you first, before it sends a message, says something out loud, saves a file or changes something at home. Use the block **ask me before …**.
-- It can use one of your saved programs as a single block inside another program. Use **run program … with …** from the **Programs** colour.
-- It can ask **Gemini** to help too. Gemini is another clever helper, made by a company called Google. Claude can write something, and Gemini can check it. Two helpers spot more mistakes than one.
-- It can ask **Llama**, a helper that can live on your own computer and keep everything private.
-- It can ask **DeepSeek** and **Grok** too. Grok is made by a company called xAI.
-- It can ask **GPT**, the helper made by **OpenAI**. Lots of people know it from ChatGPT.
-- It can ask helpers from all round the world: **Mistral** from France, **Qwen** from Alibaba and **Kimi** from Moonshot.
-- It can ask **Perplexity**, a helper that looks things up on the internet every time, and tells you where it found them.
-- It can ask open helpers from **Hugging Face**, super-speedy ones from **Groq**, and **GLM** and **MiniMax** too.
-- With **OpenRouter**, it can ask almost *any* helper in the world, using just one key.
-
----
-
-## Page 7½: The agent
-
-*Picture: the ladybird standing in front of a toolbox, choosing a spanner.*
-
-Most programs do exactly what the blocks say, in order. You decide every step.
-
-An **agent** is different. You give it a **goal** and some **tools**, and Claude decides what to do next. It picks a tool, looks at what happened, and picks again. When the goal is met, it writes its answer into the draft.
-
-The olive block **agent: work toward …** holds the tools. The tools have their own pile, called **Tools**, just below **Agent**. Drop as many as you like inside the agent. You can give it:
-
-- **ask me a question**, so it can ask you things only you know.
-- **remember and recall notes**, so it can keep what it learns for next time. It can also **search its notes**, so even after hundreds of them it finds the right one by what is in it, without knowing its exact name.
+- **ask me a question**, for things only you know.
+- **remember and recall notes**, to keep what it learns for next time. It can also **search its notes**, so even among hundreds it finds the right one by its content, without knowing its exact name.
 - **search the web and read pages**, for things that change. It can search, then read a source page in full. Reading pages only works in exported Python, and only public pages, never addresses on your own network.
-- **work out sums**, so numbers are worked out exactly, not guessed. It knows + − × ÷, powers, brackets and rounding, like `round(350 / 500 * 100, 1)`.
+- **work out sums**, so numbers are calculated exactly, not guessed: + − × ÷, powers, brackets and rounding, like `round(350 / 500 * 100, 1)`.
 - **clock times and dates**, for the time now and for adding or taking away minutes, like 09:30 plus 270 minutes. Good for working backwards from when you want bread out of the oven.
 - **read a file I choose**: the agent asks you for a PDF, a Word file or a text file and reads it.
 - **check text against criteria**: a separate, strict reviewer checks the agent's work and lists the problems, so the agent can fix them before it finishes.
 - **news feeds**, to read the latest from news sites and blogs (RSS or Atom).
-- **search LinkedIn**, which searches LinkedIn's public pages through the web search. LinkedIn doesn't let programs search it directly, so this only finds what LinkedIn shows everyone.
+- **search LinkedIn**, through the web search. LinkedIn doesn't let programs search it directly, so this only finds what LinkedIn shows everyone.
 - **calendar**, to list your events and find free time.
 - **email: search and read**, and **email: send**.
 - **GitHub: projects and pull requests**, to find pull requests waiting for your review and read what they change, and **GitHub: comment**.
@@ -190,249 +85,130 @@ The olive block **agent: work toward …** holds the tools. The tools have their
 - **Discord: search my channels** and **Discord: send**, and the same for **Slack**. They only read and post in the channels in your settings.
 - **MQTT: read topics** and **MQTT: publish**, for sensors and switches that talk MQTT (like Zigbee2MQTT).
 - **Home Assistant: look at devices**, including how a sensor changed over the last day, and **control devices**. Control devices asks you before every change, because something the agent reads could try to trick it. If you trust everything it reads, choose **control devices (no asking)**.
-- **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. **Ask me before each use** starts ticked, so you say yes before your block runs. That matters if the block changes something, because what the agent reads could try to trick it. Untick it for blocks that only work something out, like a calculator.
-  In **input types**, say what each input must be, like `flour grams: number; water grams: number`. The types are text, number, yes/no, list and any. The agent's input is checked before your block runs. If it's wrong, for example words where a number should be, the block doesn't run and the agent is told what to fix.
+- **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. **Ask me before each use** starts ticked, so you approve before your block runs. That matters if the block changes something. Untick it for blocks that only work something out, like a calculator.
+  In **input types**, say what each input must be, like `flour grams: number; water grams: number`. The types are text, number, yes/no, list and any. The agent's input is checked before your block runs; if it's wrong, for example words where a number should be, the block doesn't run and the agent is told what to fix.
 
-Tick **make a plan first** and the agent writes a short plan along with its first step, then changes it if something surprises it. You can read the plan in the run log. Planning costs nothing extra, because the plan travels with the steps.
+Tick **make a plan first** and the agent writes a short plan with its first step, then changes it if something surprises it. The plan shows in the run log, and costs nothing extra, because it travels with the steps.
 
-Each step is one call to Claude, so set how many steps it may take. If it runs out of steps, the draft holds whatever it found last.
+Each step is one model call, so set how many steps it may take. If it runs out of steps, the draft holds whatever it found last. If a reply comes back unreadable, or it asks for the same tool with the same input twice in a row, the agent tells it and tries again; that uses a step. Three repeats in a row and the agent stops.
 
-If Claude's reply comes out muddled, or it asks for the same tool with the same words twice in a row, the agent tells it and tries again. That uses up a step. If it repeats itself three times, the agent stops.
+An agent only reads the words tools send back. It never follows instructions inside them, and it can't unlock a door without asking you. Tools that send or change something (email, Telegram, GitHub comments, MQTT publish, controlling devices) ask you before each use, because an email, a web page or a pull request can contain words written to trick the agent. Telegram has a **send (no asking)** choice for a bot that answers on its own.
 
-An agent only reads the words that tools send back. It never follows instructions hidden inside them. It still can't unlock a door without asking you.
+When the agent finishes, the run log shows an **Agent summary**: one row per step, with the tool, what it sent, what came back, and how it went. You get it even if the run stops part-way. The block **agent's steps** gives the same as a list, for your program to check, save or have reviewed.
 
-When the agent finishes, the run log shows an **Agent summary**: a table with one row for each step, showing the tool, what it sent, what came back, and how it went. You get it even if the run stops part-way, because that's when it's most useful.
+On the page, the feeds, GitHub, email, Telegram and the calendar use **sample** data, so you can try everything safely; nothing real is read or sent. Exported programs use your real accounts: see [Connections](#connections) for the settings.
 
-The block **agent's steps** gives you a list of everything the agent did: each step, the tool, what it sent, what came back, and how it went. Your program can check it, save it, or ask Claude to review it.
+There are 19 agent examples under **Agents** in **Browse examples**. **Agent: plan my bake** asks and remembers. **Agent with your own tool** uses a My Block. **Agent: bake timetable** works backwards with the clock. **Agent: scale a recipe** does every sum with the sums tool. **Agent: write, check, improve** fixes its work until a reviewer passes it. **Agent: check my recipe file** reads a file you choose. **Agent: research with sources** searches and reads its sources. **Agent: house check-up** and **Agent: bedtime round** look after a Home Assistant house, and the bedtime round asks before switching anything off. **Agent: news round-up** reads your feeds and skips what it showed you last time. **Agent: trip planner** checks your calendar and builds a plan with times and a budget. **Agent: pull requests for me** and **Agent: review and comment on a pull request** work with GitHub. **Agent: inbox triage** sorts your email and drafts replies. **Agent: plan my week** fits baking around your calendar. **Telegram bot that answers** replies to messages you send your bot. **Agent: find people on LinkedIn** searches LinkedIn's public pages.
 
-Tools that send something or change something (sending an email or a Telegram message, commenting on GitHub, publishing to MQTT, controlling devices) ask you before each use. That matters, because an email, a web page or a pull request can contain words written to trick the agent. Telegram has a **send (no asking)** choice for a bot that answers on its own.
+---
 
-On this page, the feeds, GitHub, email, Telegram and the calendar use **sample** data, like the sample house, so you can try everything safely. Nothing real is read or sent. The exported Python program uses your real ones: see **Connections** below for what to put in second-thought.ini.
+## Connections
 
-There are many agent examples under **Agents** in Browse examples. **Agent: plan my bake** asks and remembers. **Agent with your own tool** uses a My Block. **Agent: bake timetable** works backwards with the clock. **Agent: scale a recipe** does every sum with the sums tool. **Agent: write, check, improve** fixes its work until a reviewer passes it. **Agent: check my recipe file** reads a file you choose. **Agent: research with sources** searches and reads its sources. **Agent: house check-up** and **Agent: bedtime round** look after a Home Assistant house, and the bedtime round asks before switching anything off. **Agent: news round-up** reads your feeds and skips what it showed you last time. **Agent: trip planner** checks your calendar and builds a plan with times and a budget. **Agent: pull requests for me** and **Agent: review and comment on a pull request** work with GitHub. **Agent: inbox triage** sorts your email and drafts replies. **Agent: plan my week** fits baking around your calendar. **Telegram bot that answers** replies to messages you send your bot. **Agent: find people on LinkedIn** searches LinkedIn's public pages.
+The pink **Connections** blocks work without an agent too.
 
-### Connections
+**Listeners** start a script when something arrives:
 
-The pink **Connections** blocks work without an agent too:
+- **when a Telegram message arrives**, for messages to your bot.
+- **when a Discord message arrives** and **when a Slack message arrives**, for messages in your channels, checked every 10 seconds. Only the channels in `DISCORD_CHANNEL_ID` or `SLACK_CHANNEL_ID` count, because anyone in a server or workspace can post; the bot's own messages never count. Discord needs the bot's *Message Content Intent* turned on.
+- **when an MQTT message arrives on …**, for a sensor or switch. `+` stands for one level of the topic and `#` for everything below, like `zigbee2mqtt/#`.
+- **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
+- **when an email arrives containing …**, checked every 2 minutes.
+- **when there's something new in feed …**, checked every 15 minutes.
+- **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files.
+- **when a pull request asks for my review**, checked every 5 minutes.
+- **when a calendar event starts in … minutes**, for reminders.
+- **when the web page … changes**, for a price, a stock notice, opening times or the council's bin page. Fill in **only the part containing …** (like `Price`) to watch just the lines with those words and the two lines after each, so adverts and visitor counters elsewhere on the page don't count. It checks every 60 minutes unless you say otherwise. The first check only remembers the page. What changed is in `changed`, with `before` and `after`. The last copy of each page is kept in `watched-pages.json`, next to the program, so a restart doesn't count every page as changed. Pages that need a browser to show their words can't be watched.
 
-- **Listeners** start a script when something arrives:
-  - **when a Telegram message arrives**, for messages to your bot.
-  - **when a Discord message arrives** and **when a Slack message arrives**, for messages in your channels, checked every 10 seconds. Only the channels in `DISCORD_CHANNEL_ID` or `SLACK_CHANNEL_ID` count, because anyone in a server or workspace can post; the bot's own messages never count. Discord needs the bot's *Message Content Intent* turned on.
-  - **when an MQTT message arrives on …**, for a sensor or switch. `+` stands for one level of the topic and `#` for everything below, like `zigbee2mqtt/#`.
-  - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
-  - **when an email arrives containing …**, checked every 2 minutes.
-  - **when there's something new in feed …**, checked every 15 minutes.
-  - **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files.
-  - **when a pull request asks for my review**, checked every 5 minutes.
-  - **when a calendar event starts in … minutes**, for reminders.
-  - **when the web page … changes**, for a price, a stock notice, opening times or the council's bin page. Fill in **only the part containing …** (like `Price`) to watch just the lines with those words and the two lines after each, so adverts and visitor counters elsewhere on the page don't count. It checks every 60 minutes unless you say otherwise. The first check only remembers the page. What changed is in `changed`, with `before` and `after`. The last copy of each page is kept in `watched-pages.json`, next to the program, so a restart doesn't count every page as changed. Pages that need a browser to show their words can't be watched.
+**what arrived** gives what started the script. Every listener gives `text`, which sums it up; each block's tooltip lists its other fields, like `subject` for an email or `topic` for MQTT. **Telegram message** gives a Telegram message's words, sender or chat. On the page, right-click a listener and choose **Run this script** to try it with a sample of what arrives. Listeners only listen while the exported program runs on schedule.
 
-  **what arrived** gives what started the script. Every listener gives `text`, which sums it up. Each block's tooltip lists its other fields, like `subject` for an email or `topic` for MQTT. **Telegram message** gives a Telegram message's words, sender or chat. On the page, right-click a listener and choose **Run this script** to try it with a sample of what arrives. Listeners only listen while the exported program runs on schedule.
+**Other blocks:**
+
 - **latest MQTT message on …** reads a topic, and **publish MQTT … to topic …** sends one. With **ask me before any smart home action**, publishing asks you first.
 - **send Telegram message**, **send Discord message**, **send Slack message** and **send email** send something. The Discord and Slack ones reply in the channel a message came from, or post in your first channel. With **ask me before sending messages and announcements**, they ask you first.
 - **news from feed** gives a list of the latest items. Leave it empty for your own feeds.
 - **calendar for the next … days** gives a list of your events.
 
-Try **Morning briefing on Telegram** and **Email me a news digest** under Automation. Also try the listeners: **Proofer too warm? (MQTT)**, **When the bread is done (web request)**, **When the flour shop emails**, **Tell me when a feed posts something useful**, **Convert recipes dropped in a folder**, **When someone asks for my review (GitHub)** and **A reminder before each event**. Press Run to try each one with something you type. Under Agents, **Agent: check the sensors (MQTT)** looks over your MQTT devices.
+Try **Morning briefing on Telegram** and **Email me a news digest** under Automation, and the listener examples: **Proofer too warm? (MQTT)**, **When the bread is done (web request)**, **When the flour shop emails**, **Tell me when a feed posts something useful**, **Convert recipes dropped in a folder**, **When someone asks for my review (GitHub)** and **A reminder before each event**. Press Run to try each with something you type. Under Agents, **Agent: check the sensors (MQTT)** looks over your MQTT devices.
 
-In the exported program, second-thought.ini asks only for what your program uses:
+**Settings.** An exported program's `second-thought.ini` asks only for what it uses:
 
-- **GitHub:** `GITHUB_TOKEN`, from github.com/settings/tokens. Reading is enough to look. To comment, it needs to write to pull requests too.
+- **GitHub:** `GITHUB_TOKEN`, from github.com/settings/tokens. Read access is enough to look; to comment, it also needs write access to pull requests.
 - **Telegram:** in Telegram, message **@BotFather** and send `/newbot`. It gives you `TELEGRAM_BOT_TOKEN`. Then message your bot and run the program: it tells you your chat number for `TELEGRAM_CHAT_ID`. Anyone can message a bot, so it only listens to, and searches, the chats you list there. A bot only sees messages sent to it, so it can't search your other chats.
 - **Email:** `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo and Fastmail find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST`.
 - **Calendar:** `CALENDAR_URL`, your calendar's private iCal address. In Google Calendar it's under Settings, your calendar, **Secret address in iCal format**. It can read your calendar, but not add to it.
-- **News feeds:** `feeds = ` and the feed addresses, with spaces between them.
-- **MQTT:** `MQTT_HOST`, your broker's address (for Mosquitto in Home Assistant, that's your Home Assistant), plus `MQTT_USERNAME` and `MQTT_PASSWORD` if it needs them. `MQTT_TLS = yes` makes it encrypted. The program needs the paho-mqtt library, which run.bat and run.sh install.
+- **News feeds:** `feeds = ` and the feed addresses, separated by spaces.
+- **MQTT:** `MQTT_HOST`, your broker's address (for Mosquitto in Home Assistant, that's your Home Assistant), plus `MQTT_USERNAME` and `MQTT_PASSWORD` if it needs them. `MQTT_TLS = yes` makes it encrypted. It needs the paho-mqtt library, which run.bat and run.sh install.
 - **Web requests:** `WEBHOOK_SECRET`, a long password, and `WEBHOOK_PORT` if 8765 is taken. Call `http://127.0.0.1:8765/<address>?key=<your secret>` from the same computer, or put the secret in an `X-Second-Thought-Key` header. The program only listens on this computer unless you add `WEBHOOK_HOST = 0.0.0.0`, which lets Home Assistant on another machine, IFTTT or your phone reach it at `http://<this computer>:8765/…`.
 
-The agent only reads **public** web pages and feeds, never addresses on your own network, in case something it reads tries to steer it there. Your own feeds and calendar address are fine wherever they are. If you want the agent to read pages on your own network, add `local_pages = yes`.
+The agent only reads **public** web pages and feeds, never addresses on your own network, in case something it reads tries to steer it there. Your own feeds and calendar address are fine wherever they are. To let the agent read pages on your own network, add `local_pages = yes`.
 
-To keep listening all the time, run the program with **run-on-schedule** (see Page 10). Things that arrived while it was off don't start the script: Telegram messages are kept for searching, and the email, feed, GitHub and folder listeners start from what's new after the program starts.
-
----
-
-## Page 8: Examples to try
-
-*Picture: a shelf of little books, each with a different title.*
-
-You do not have to start from nothing.
-
-At the top of the screen there is a box called **Example**. Choose an example, then press **Load**. Now press **Run** and watch what happens.
-
-There are nearly fifty examples, sorted into groups: **Writing, Research, Design, Learning, Work, Home and baking, Code and data,** and **Automation**. Press **Browse examples** to see them all, with a sentence about each one and an idea for something to change.
-
-Try the example called **Review loop** first. Claude writes about bread, checks its own work, and makes it better.
-
-Then try your own ideas. Change the words on the blocks. Add new blocks. See what happens.
-
-You cannot break anything. If you get in a muddle, just load an example again.
-
-At the end of the list is a group called **Community**. These are programs other people made and shared. Each one says who shared it, and what it can do: whether it only talks to Claude, or can also send messages, keep notes or control things. The page works that out from the blocks, so it is always right.
-
-Made something good? You can share it too. The `gallery` folder has a short guide called `README.md` that says how.
+To keep listening all the time, run the program with **run-on-schedule** (see [Running on a schedule](#running-on-a-schedule)). Things that arrived while it was off don't start the script: Telegram messages are kept for searching, and the email, feed, GitHub and folder listeners start from what's new after the program starts.
 
 ---
 
-## Page 9: Saving your programs
+## Examples and the gallery
 
-*Picture: a child putting a drawing carefully into a folder.*
+Choose an example from **Example** and press **Load**, or press **Browse examples** to see them all with a sentence about each and an idea for something to change. There are over 150, grouped into Writing, Research, Design, Learning, Work, Home and baking, Agents, Homey, Code and data, Automation, and ten groups of Home Assistant examples. **Review loop** is a good first one. You can't break anything: if you get in a muddle, load the example again.
 
-When you make a program you like, you will want to keep it.
-
-Press the **Programs** button at the top of the screen. Type a name for your program and press **Save**.
-
-Next time, open the same box and press **Open** to get your program back.
-
-You can also keep a copy as a file on your computer. Press **Import / export** to do that.
-
-A saved program can be a building block, too. Put **run program "my program" with …** inside another program. The saved program runs, then hands back its result. Inside it, the block **message value** holds whatever you gave it. It has its own draft and its own result, so it can't muddle up yours.
-
-There are two rules. A program can't run itself, because that would never end. And a program that uses **broadcast** blocks can't be used this way: run it on its own instead.
+The last group, **Community**, holds programs other people made and shared. Each says who shared it and what it can do: whether it only talks to a model, or can also send messages, keep notes or control things. The page works that out from the blocks, so it's always accurate. To share your own, see [`gallery/README.md`](gallery/README.md).
 
 ---
 
-## Page 10: Making a program run on its own
+## Saving programs
 
-*Picture: a small computer in a cupboard, quietly working while everyone is asleep.*
+Press **Programs**, type a name and press **Save**. Open the same panel and press **Open** to get it back. To keep a copy as a file, use **Import / export**.
 
-Second Thought can turn your blocks into **Python**.
+A saved program can be a block, too. Put **run program "my program" with …** inside another program. The saved program runs, then hands back its result. Inside it, **message value** holds whatever you gave it. It has its own draft and its own result, so it can't interfere with yours.
 
-Python is a language that computers understand. It is written with words and symbols instead of blocks.
+There are two rules. A program can't run itself, because that would never end. And a program that uses **broadcast** blocks can't be used this way; run it on its own instead.
 
-Once your program is in Python, it can run on another computer by itself, even when the Second Thought page is closed.
+---
 
-This part needs a grown-up, because the Python program needs a special key to talk to Claude. The key is a bit like a library card. It tells Claude who is asking, and it costs a little money each time it is used.
+## Exporting to Python
 
-**Grown-ups, here is how:**
+An exported program runs on any computer by itself, with the page closed. It talks to the model services directly, so it needs an API key, and calls are billed by the service, separately from claude.ai.
 
-Press **Import / export**, then **Save Python (.zip)**. Unzip the file into a folder of its own. Inside you will find:
+Press **Import / export**, then **Save Python (.zip)**, and unzip it into a folder of its own:
 
 | File | What it is |
 |---|---|
-| `my-program.py` | The program. |
-| `second-thought.ini` | The settings: this is where the keys go. |
-| `run.bat` | For Windows. Double-click it to run the program. |
-| `run.sh` | For Linux or a Mac. It does the same job as `run.bat`. |
-| `requirements.txt` | The list of parts Python needs. `run.bat` and `run.sh` install them for you. |
+| `my-program.py` | The program, with the runtime built in. |
+| `second-thought.ini` | Settings, including keys. It lists only what *this* program needs. |
+| `run.bat` | Windows: double-click to run. |
+| `run.sh` | Linux or Mac: the same job as `run.bat`. |
+| `requirements.txt` | The packages it needs. `run.bat` and `run.sh` install them for you. |
 
-Open `second-thought.ini` in Notepad (or any text editor). It lists only the keys *this* program needs. Put each key after its `=` sign, like this, then save:
+Open `second-thought.ini` in any text editor, put each key after its `=` sign, and save:
 
 ```
 [keys]
 ANTHROPIC_API_KEY = sk-ant-your-key-here
 ```
 
-Keep this file private. It holds your keys, so don't email it or put it on the internet.
+Keep this file private: it holds your keys.
 
-**On Windows:** you need Python, from python.org (tick **Add python.exe to PATH** when you install it). Then double-click `run.bat`. The first time, it installs what the program needs.
+**On Windows:** install Python from python.org (tick **Add python.exe to PATH**), then double-click `run.bat`. The first time, it installs what the program needs.
 
-**On Linux or a Mac:** open a terminal in the folder and type:
+**On Linux or a Mac:** in a terminal in the folder, run:
 
 ```
 sh run.sh
 ```
 
-The first time, it makes a private Python folder called `.venv` next to the program and installs what it needs in there, so nothing is installed for the whole computer. (On Debian or Ubuntu, if it says it can't set up Python, run `sudo apt install python3-venv` first.)
+The first time, it makes a private `.venv` next to the program and installs into that, so nothing is installed for the whole computer. (On Debian or Ubuntu, if it can't set up Python, run `sudo apt install python3-venv` first.)
 
-If a program has timed jobs, the zip also has `run-on-schedule.bat` and `run-on-schedule.sh`. These keep running, so the jobs start by themselves. If the program stops with a problem, they start it again 30 seconds later.
+### Running on a schedule
 
-There are also two ways to make the program start all by itself:
+If a program has timed jobs or listeners, the zip also has `run-on-schedule.bat` and `run-on-schedule.sh`. These keep running, so the jobs start by themselves, and if the program stops with a problem they start it again 30 seconds later.
 
-- **Windows:** double-click `install-startup.bat` once. From then on, the program starts in a small window each time you log in. To stop that, press Windows+R, type `shell:startup`, and delete the file called "Second Thought - my-program".
-- **Linux or a Mac:** type `sh install-service.sh` once. On Linux it starts whenever the computer starts (it asks for your password to set this up). On a Mac it starts whenever you log in. It tells you how to watch what the program is doing, and how to turn it off.
+To start it automatically:
 
-The ini file has a `[run]` part, too. Take the `;` off the front of a line to switch it on:
+- **Windows:** double-click `install-startup.bat` once. The program then starts in a small window each time you log in. To undo it, press Windows+R, type `shell:startup`, and delete "Second Thought - my-program".
+- **Linux or a Mac:** run `sh install-service.sh` once. On Linux it starts whenever the computer starts (it asks for your password to set this up); on a Mac, whenever you log in. It tells you how to watch what the program is doing, and how to turn it off.
 
-```
-[run]
-budget = 50000
-save_log = yes
-```
+### Approving what a program can do
 
-`budget` stops each run before a model call once it has used that many tokens. In Python the count is exact, because every company says how many tokens it used. A **limit this run** block in the program wins over this line.
-
-`stream` shows Claude writing as it goes, on one line that counts the letters. Normally this only happens when you run the program in a terminal yourself.
-
-`resume` is for runs that stop part-way, for example because the internet dropped out or you pressed Ctrl+C. The program keeps a note of each finished step. Next time it can pick up where it stopped: Claude's answers, your answers and the messages already sent are reused, not asked or sent again. In a terminal it asks you first. Set `resume = yes` or `resume = no` to decide for programs that run on their own. If you change the program, it starts afresh.
-
-`max_seconds` stops any run that takes longer than that many seconds, whatever it's doing, so a slow helper can't keep a program busy for ages. `call_timeout` gives up on a single call to a helper after that many seconds (300 if you don't say, and 0 means no timeout). If one of these numbers is mistyped, the program stops straight away and says which setting is wrong.
-
-Helpers rename their models from time to time. To use a different model without editing the program, add `MODEL_` and the tier's name in capitals, like `MODEL_OPENAI_DEFAULT = gpt-6.2-sol` or `MODEL_QUICK = claude-haiku-4-5-20251001`. `second-thought.example.ini` shows the pattern.
-
-`save_log` keeps a diary of every run in a folder called `logs`, next to the program. Each step in the diary says which helper answered, how long it took and the exact tokens, and the prompts are tucked under **Prompt sent**. This is handy for programs that run on their own while you sleep.
-
-If a program has an **ask me before** block, Python asks you in the terminal and waits for `y` or `n`. When a program runs by itself on a schedule, with nobody there to answer, it says no and carries on.
-
-Memories saved "forever" live in `memory.json`, next to the program. Two programs can share one memory file (`RB_MEMORY_FILE`): they take turns to save, so neither loses the other's changes, and a save is never left half-written if a program stops part-way. Two programs using the same Telegram bot share `telegram-messages.json` the same way, and a message is only handled once.
-
-Everything in `second-thought.ini` can also be set as an environment variable with the same name, if you prefer. An environment variable wins over the file.
-
-**Every setting in one place:** `second-thought.example.ini`, next to this README, lists every setting a program understands, with a note on each. That covers the keys for every helper, models and backups, run settings, Home Assistant, Homey, MQTT, Telegram, email, calendar, GitHub, web requests and feeds. Copy it to `second-thought.ini` and fill in what you use. Put that copy in your home folder and every program you export can share it, because a program looks for `second-thought.ini` next to itself first, then in the folder you run it from, then in your home folder.
-
-If your program uses Gemini, it needs a second key, from Google. The ini file will have a line ready for it: `GEMINI_API_KEY =`.
-
-There is a third helper too, called **Llama**. Llama is special because it can live on *your own computer*, so nothing you ask it ever leaves the house. To use it, install a free program called **Ollama** and download a Llama model:
-
-```
-ollama pull llama3.2-vision:11b
-```
-
-If Llama lives on a different computer, change this line in the ini file to tell the program where to find it:
-
-```
-LLAMA_BASE_URL = http://that-computer:11434/v1
-```
-
-A fourth helper, **DeepSeek**, is very cheap to use. It lives on DeepSeek's own computers in China, so it needs its own key, and it's best kept for things that aren't private:
-
-```
-DEEPSEEK_API_KEY = your-deepseek-key
-```
-
-A fifth helper, **Grok**, is made by a company called **xAI**. It lives on xAI's own computers, and it needs its own key too:
-
-```
-XAI_API_KEY = your-xai-key
-```
-
-A sixth helper, **GPT**, is made by **OpenAI**, the company behind ChatGPT. A ChatGPT subscription is not the same as an API key, so you need a key from OpenAI's developer site:
-
-```
-OPENAI_API_KEY = your-openai-key
-```
-
-There are lots more helpers. Each one needs its own key, from its own company:
-
-| Helper | Made by | Lives in | The line in the ini file |
-|---|---|---|---|
-| **Mistral** | Mistral AI | France | `MISTRAL_API_KEY = your-key` |
-| **Qwen** | Alibaba | Singapore, for people outside China | `DASHSCOPE_API_KEY = your-key` |
-| **Kimi** | Moonshot AI | China | `MOONSHOT_API_KEY = your-key` |
-| **Perplexity** | Perplexity | America | `PERPLEXITY_API_KEY = your-key` |
-| **Hugging Face** | lots of different people | all over the world | `HF_TOKEN = your-token` |
-| **Groq** | Groq | America | `GROQ_API_KEY = your-key` |
-| **GLM** | Z.ai | China | `ZAI_API_KEY = your-key` |
-| **MiniMax** | MiniMax | China | `MINIMAX_API_KEY = your-key` |
-
-Perplexity is different from the others. It searches the internet for every question, then lists the pages it read at the end of its answer. That makes it good for things that change, like prices and opening times. It can't look at photos, though.
-
-**Hugging Face** is like a huge library of free, open helpers that anyone can share. Second Thought starts you off with Google's Gemma, but you can choose almost any helper in the library.
-
-**Groq** (spelt with a q, so it is not the same as Grok) is very, very fast. It is good for jobs with lots of little steps.
-
-**OpenRouter** is like a big switchboard. One key reaches hundreds of helpers from lots of different companies. Choose **OpenRouter, auto-pick** and it chooses a good helper for each job. Or use the block called **with OpenRouter model**, and type in the name of any helper you like from openrouter.ai/models:
-
-```
-OPENROUTER_API_KEY = your-openrouter-key
-```
-
-All the helpers except Claude only work in the Python program. On the Second Thought page, Claude does their jobs instead, and the run log says so.
-
-**Asking first.** Some programs do real things: they send emails or messages, switch lights on, or post on GitHub. A program like that asks you before it runs the first time.
-
-*Picture: a robot holding up a list, and a grown-up reading it before saying yes.*
-
-It shows you a list, like this:
+A program that does real things (sends email or messages, switches lights, posts on GitHub) asks you before it runs the first time:
 
 ```
 This program can:
@@ -443,37 +219,91 @@ It sends what it reads and writes to Claude.
 Approve? [y/n] >
 ```
 
-Type **y** if that is what you expect it to do. It remembers your answer, so it will not ask again, unless somebody changes the program. Then it asks again, because a changed program might do different things.
+It remembers your answer until the program changes; a changed program might do different things, so it asks again. The same list is written at the top of the program, and the page shows it when you import one.
 
-The list is written at the top of the program, too. And when you import a program on the Second Thought page, the page tells you what it can do.
+A scheduled program, with nobody there to answer, won't start until you've approved it once, so run it yourself first. If you're sure, and the computer is unattended, put `approve = no` in `second-thought.ini`.
 
-A program that runs on a schedule, with nobody there to answer, will not start until you have said yes once. Run it yourself first. If you are sure, and the computer has nobody at it, put `approve = no` in `second-thought.ini`.
+If a program has an **ask me before** block, Python asks in the terminal and waits for `y` or `n`. With nobody there to answer, it says no and carries on.
+
+### Run settings
+
+The ini file has a `[run]` section. Remove the `;` from the start of a line to switch it on:
+
+```
+[run]
+budget = 50000
+save_log = yes
+```
+
+- `budget` stops each run before a model call once it has used that many tokens. In Python the count is exact, because every service reports its usage. A **limit this run** block wins over this line.
+- `stream` shows the model writing as it goes, on one line that counts the characters. Normally this only happens when you run the program in a terminal yourself.
+- `resume` is for runs that stop part-way, for example because the internet dropped or you pressed Ctrl+C. The program keeps a note of each finished step, and next time it can pick up where it stopped: model answers, your answers and messages already sent are reused, not asked or sent again. In a terminal it asks you first; set `resume = yes` or `resume = no` for unattended programs. If you change the program, it starts afresh.
+- `max_seconds` stops any run that takes longer than that, whatever it's doing. `call_timeout` gives up on a single model call after that many seconds (300 by default; 0 means no timeout). If one of these is mistyped, the program stops straight away and says which setting is wrong.
+- `save_log` keeps a log of every run in a `logs` folder next to the program. Each step records which model answered, how long it took and the exact tokens, with the prompts under **Prompt sent**.
+
+Services rename their models from time to time. To use a different model without editing the program, add `MODEL_` and the tier's name in capitals, like `MODEL_OPENAI_DEFAULT = gpt-6.2-sol` or `MODEL_QUICK = claude-haiku-4-5-20251001`. `second-thought.example.ini` shows the pattern.
+
+### Memory and shared files
+
+Memories saved "forever" live in `memory.json`, next to the program. Two programs can share one memory file (`RB_MEMORY_FILE`): they take turns to save, so neither loses the other's changes, and a save is never left half-written if a program stops part-way. Two programs using the same Telegram bot share `telegram-messages.json` the same way, and a message is only handled once.
+
+### Where settings come from
+
+Everything in `second-thought.ini` can also be set as an environment variable with the same name; an environment variable wins over the file.
+
+[`second-thought.example.ini`](second-thought.example.ini) lists every setting a program understands, with a note on each: keys for every model service, models and backups, run settings, Home Assistant, Homey, MQTT, Telegram, email, calendar, GitHub, web requests and feeds. Copy it to `second-thought.ini` and fill in what you use. A program looks for `second-thought.ini` next to itself first, then in the folder you run it from, then in your home folder, so one copy in your home folder can serve every program you export.
 
 ---
 
-## Page 10½: A clever house
+## Models
 
-*Picture: a cosy house at night. A little light glows in every window, and the ladybird waves from the doorstep.*
+On the page, Claude does every job; blocks that name another model are answered by Claude instead, and the run log says so. Exported programs talk to each service directly. Each needs its own key, from its own company:
 
-Some homes have a helper called **Home Assistant**. It knows which lights are on, whether the doors are shut, and how warm each room is. It can switch things on and off, too.
+| Model | Made by | Runs in | Setting |
+|---|---|---|---|
+| **Claude** | Anthropic | America | `ANTHROPIC_API_KEY` |
+| **Gemini** | Google | America | `GEMINI_API_KEY` |
+| **GPT** | OpenAI | America | `OPENAI_API_KEY` |
+| **Grok** | xAI | America | `XAI_API_KEY` |
+| **DeepSeek** | DeepSeek | China | `DEEPSEEK_API_KEY` |
+| **Mistral** | Mistral AI | France | `MISTRAL_API_KEY` |
+| **Qwen** | Alibaba | Singapore, for people outside China | `DASHSCOPE_API_KEY` |
+| **Kimi** | Moonshot AI | China | `MOONSHOT_API_KEY` |
+| **Perplexity** | Perplexity | America | `PERPLEXITY_API_KEY` |
+| **Hugging Face** | many open models | all over the world | `HF_TOKEN` |
+| **Groq** | Groq | America | `GROQ_API_KEY` |
+| **GLM** | Z.ai | China | `ZAI_API_KEY` |
+| **MiniMax** | MiniMax | China | `MINIMAX_API_KEY` |
+| **OpenRouter** | many companies, through one key | wherever each model runs | `OPENROUTER_API_KEY` |
+| **Llama** | Meta, via Ollama | your own computer | `LLAMA_BASE_URL`, plus `LLAMA_API_KEY` if your server needs one |
 
-Second Thought can talk to Home Assistant. It has its own blue blocks for this.
+Some notes:
 
-- One block asks "Is the back door open?"
-- One block takes a photo from a camera, so Claude can say who is at the door.
-- One block turns a light off, or sends a message to a phone.
-- A special yellow block starts a script by itself when something changes, like the doorbell ringing.
-- Another starts a script the moment Home Assistant sends an **event**, like a button on a remote being pressed.
+- **Llama** runs on your own computer, so nothing you ask it leaves the house. Install [Ollama](https://ollama.com) and download a model with `ollama pull llama3.2-vision:11b`. If Ollama runs on another computer, set `LLAMA_BASE_URL = http://that-computer:11434/v1`.
+- **GPT:** a ChatGPT subscription isn't an API key. You need a key from OpenAI's developer site.
+- **DeepSeek** is very cheap. It runs on DeepSeek's own servers in China, so keep it for things that aren't private.
+- **Perplexity** searches the web for every question and lists the pages it read at the end of its answer. That makes it good for things that change, like prices and opening times. It can't look at photos.
+- **Hugging Face** hosts a huge library of open models. Second Thought starts you on Google's Gemma, but you can choose almost any model in the library.
+- **Groq** (with a q, not to be confused with Grok) is very fast, and good for jobs with lots of small steps.
+- **OpenRouter** reaches hundreds of models from many companies with one key. Choose **OpenRouter, auto-pick** and it chooses a model for each job, or use **with OpenRouter model** and type the name of any model from openrouter.ai/models.
 
-On the Second Thought page, these blocks use a **pretend house**, so you can try everything safely. Press the **Home Assistant** button to see the pretend house. Change something, like the doorbell, and watch your program spring into action.
+---
 
-There are more than sixty Home Assistant examples to try. You will find them in **Browse examples**.
+## Home Assistant
 
-**A safety rule:** Second Thought will never unlock a door, open the garage or switch off the alarm without asking you first.
+Second Thought talks to [Home Assistant](https://www.home-assistant.io), with its own blue blocks:
 
-**Grown-ups, here is how to use your real Home Assistant:**
+- Read state: "Is the back door open?"
+- Take a camera snapshot, so a model can say who is at the door.
+- Turn a light off, or send a notification to a phone.
+- A yellow block starts a script when something changes, like the doorbell ringing.
+- Another starts a script the moment Home Assistant fires an **event**, like a button on a remote.
 
-Export the program as a zip and unzip it on a computer at home, on the same network as Home Assistant. Make a long-lived access token in Home Assistant (your profile, then the Security tab), and put it in `second-thought.ini`:
+On the page, these blocks use a **sample house**, so you can try everything safely. Press **Home Assistant** to see it, change something (the doorbell, say), and watch your program react. There are more than 60 Home Assistant examples in **Browse examples**.
+
+**Safety rule:** Second Thought never unlocks a door, opens the garage or switches off the alarm without asking you first.
+
+**Using your real Home Assistant.** Export the program and unzip it on a computer on the same network. Make a long-lived access token in Home Assistant (your profile, then the Security tab), and put it in `second-thought.ini`:
 
 ```
 [home assistant]
@@ -481,13 +311,13 @@ HA_URL = http://homeassistant.local:8123
 HA_TOKEN = your-long-lived-token
 ```
 
-Then double-click `run-on-schedule.bat` (Windows), or type `sh run-on-schedule.sh` (Linux or Mac). On an always-on Linux computer, `sh install-service.sh` keeps it running for good.
+Then run `run-on-schedule.bat` (Windows) or `sh run-on-schedule.sh` (Linux or Mac). On an always-on Linux computer, `sh install-service.sh` keeps it running for good. A small always-on virtual machine or container is a good home for it.
 
-`--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. **when Home Assistant event … happens with …** listens on Home Assistant's WebSocket, using the same `HA_URL` and `HA_TOKEN`, so it reacts at once instead of checking every so often. Use it for remote and button presses (`zha_event`, `deconz_event`, `hue_event`), `automation_triggered`, phone notification actions or your own events. Type `anything` for every event. The second box is optional words the event's data must contain, like the remote's name. **what arrived** gives `event_type`, `entity`, `data`, `time`, `text`, and each field of the event's data, like `command`. Developer tools → Events in Home Assistant shows what your devices send. A small virtual machine or container that's always on is a good home for it.
+`--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. **when Home Assistant event … happens with …** listens on Home Assistant's WebSocket, using the same `HA_URL` and `HA_TOKEN`, so it reacts at once instead of polling. Use it for remote and button presses (`zha_event`, `deconz_event`, `hue_event`), `automation_triggered`, phone notification actions or your own events. Type `anything` for every event. The second box is optional words the event's data must contain, like the remote's name. **what arrived** gives `event_type`, `entity`, `data`, `time`, `text`, and each field of the event's data, like `command`. *Developer tools → Events* in Home Assistant shows what your devices send.
 
-### Homey
+## Homey
 
-Some homes have a **Homey** instead, or as well. Second Thought talks to Homey Pro too, with its own green blocks in the **Homey** pile:
+Second Thought also talks to **Homey Pro**, with its own green blocks under **Homey**:
 
 - **when Homey device … … changes** starts a script when a device's value changes, like the washing machine's power dropping. **what arrived** says which device, what changed, and from what to what.
 - **… of Homey device …** reads one value, like `measure_temperature` of the Proofing box.
@@ -496,13 +326,9 @@ Some homes have a **Homey** instead, or as well. Second Thought talks to Homey P
 - **run Homey flow …** starts one of your flows. A flow can do anything your Homey can, like sending a Homey notification.
 - **Homey variable …** and **set Homey variable … to …** read and change your Logic variables, so your flows can use them.
 
-There are agent tools too, in the **Tools** pile: **Homey: look at devices, flows and variables**, and **Homey: control devices and start flows**, which asks you before each change.
+There are agent tools too, under **Tools**: **Homey: look at devices, flows and variables**, and **Homey: control devices and start flows**, which asks you before each change. On the page these blocks use a **sample Homey home**; try the examples under **Homey** in **Browse examples**. The same safety rule applies: unlocking, opening the garage and switching off the alarm always ask you first.
 
-On the page these blocks use a **pretend Homey home**. Try the examples under **Homey** in Browse examples.
-
-**The same safety rule:** unlocking, opening the garage and switching off the alarm always ask you first.
-
-**Grown-ups, here is how to use your real Homey:** in the Homey Web App (my.homey.app), open Settings, then API Keys, and make a new key. Give it only the permissions the program needs: view devices, control devices, view and start flows, and view and edit Logic. Put it in `second-thought.ini` with your Homey's address on your network:
+**Using your real Homey.** In the Homey Web App (my.homey.app), open Settings, then API Keys, and make a new key with only the permissions the program needs: view devices, control devices, view and start flows, and view and edit Logic. Put it in `second-thought.ini` with your Homey's address:
 
 ```
 [homey]
@@ -510,7 +336,7 @@ HOMEY_URL = http://homey-XXXXXXX.local
 HOMEY_API_KEY = your-api-key
 ```
 
-The address is in the Homey app under Settings, General. The computer running the program must be on the same network as your Homey. API keys work with Homey Pro (2023 and later) and Homey Pro mini.
+The address is in the Homey app under Settings, General. The computer running the program must be on the same network. API keys work with Homey Pro (2023 and later) and Homey Pro mini.
 
 **Homey Self-Hosted Server** serves the same API on port **4859**, so use the address of the computer it runs on, with `:4859` on the end:
 
@@ -518,29 +344,25 @@ The address is in the Homey app under Settings, General. The computer running th
 HOMEY_URL = http://192.168.1.20:4859
 ```
 
-Make the API key in the Homey Web App the same way. A **Homey Bridge** connected to a Self-Hosted Server doesn't need anything of its own: its devices show up through the server. To check it all works, run `python tools/smoke_test.py homey`. It only reads, so nothing is switched.
+Make the API key in the Homey Web App the same way. A **Homey Bridge** connected to a Self-Hosted Server needs nothing of its own: its devices show up through the server. To check it all works, run `python tools/smoke_test.py homey`. It only reads, so nothing is switched.
 
 ---
 
-## Page 10¾: Borrowing tools
+## MCP tools
 
-*Picture: a robot at a big wall of hooks, each hook holding a different tool, with a label on every hook.*
-
-The agent comes with its own tools. But lots of other people have made tools too, and they share them in a way called **MCP**. There are MCP tools for reading files, for GitHub, for databases, for calendars, and for hundreds of other jobs.
-
-A collection of MCP tools is called an **MCP server**. To lend one to your agent, put this block inside the agent:
+The agent can borrow tools from [MCP](https://modelcontextprotocol.io) servers: there are MCP servers for files, GitHub, databases, calendars and hundreds of other jobs. To give one to your agent, put this block inside it:
 
 ```
 tools from MCP server  files   (asks me before tools that change things)
 ```
 
-Then tell the Python program where the server is, in `second-thought.ini`. Some servers are programs that start on your computer:
+Then tell the exported program where the server is, in `second-thought.ini`. A server that starts on your computer:
 
 ```
 MCP_FILES = npx -y @modelcontextprotocol/server-filesystem /home/me/recipes
 ```
 
-Some live on the internet, at an address:
+A server at an address:
 
 ```
 MCP_TRACKER = https://mcp.example.com/mcp
@@ -549,155 +371,119 @@ MCP_TRACKER_TOKEN = your-token
 
 The name in the block (`files`) and the name in the settings (`MCP_FILES`) must match.
 
-When the agent runs, it asks the server which tools it has, and uses them like its own. Each tool says whether it only looks at things or can change them. The agent asks you before it uses a tool that changes things, unless you choose **(no asking)**. Choose **(asks me before every tool)** to be asked about all of them.
+When the agent runs, it asks the server which tools it has and uses them like its own. Each tool says whether it only looks at things or can change them; the agent asks you before using one that changes things, unless you choose **(no asking)**. Choose **(asks me before every tool)** to be asked about all of them.
 
-MCP servers only work in the Python program. On the Second Thought page, the agent works without them, and the run log says so.
-
----
-
-## Page 10⅞: Second Thought in your language
-
-*Picture: the same tower of blocks twice, one labelled in English and one in Spanish.*
-
-The blocks, and the buttons around them, can speak more than one language. Choose one from **Blocks**, at the top of the page. The page remembers your choice. If you have never chosen, it uses your browser's language when it can.
-
-Changing the language only changes the words you see. Your program stays exactly the same, so a program built in Spanish opens just the same in English, and exports the same Python.
-
-Right now they speak English, Spanish (Español), French (Français), German (Deutsch), Dutch (Nederlands), Italian (Italiano), Portuguese (Português), Simplified Chinese (中文), Japanese (日本語), Greek (Ελληνικά), Hebrew (עברית, with the whole page mirrored right to left), Jewish Babylonian Aramaic (ארמית, also right to left), Latin (Latina), Old English (Ænglisc), Middle English (Englisch), Koine Greek (Κοινή), Old Norse (Norrœnt mál), Sanskrit (संस्कृतम्), Akkadian in cuneiform (𒀝𒅗𒁺𒌝, written in transliteration by exported programs) and Mycenaean Greek in Linear B (𐀀𐀏𐀊𐀺, written in transcription by exported programs). The run log, the page's messages and the examples are translated too. Programs shared in the Community gallery keep their authors' words. A Python program you export while the page is in another language prints in that language too; `language = en` in its `second-thought.ini` switches it back to English.
-
-**Grown-ups:** each language is one file in the `i18n` folder, like `i18n/es.json`. It holds every block's words, its help text and its choices, the category names, the page's own words (under `page`, each English text with its translation), each example's title, description and tip (under `examples`), the words already typed into the palette's blocks (under `starters`), and what exported Python programs print (under `python`). To add a language, copy that file, translate the words (never the choice values, the `%1` markers or the `{name}` markers), and run `python tools/sync.py`. The checks tell you anything you missed.
+MCP servers only work in exported programs. On the page, the agent works without them, and the run log says so.
 
 ---
 
-## Page 11: What is in this folder
+## Languages
 
-*Picture: an open toy box with labelled compartments.*
+Choose a language from **Blocks** at the top of the page. The page remembers your choice; if you've never chosen, it uses your browser's language when it can. Changing language only changes the words you see: a program built in Spanish opens the same in English, and exports the same Python.
 
-This folder is where all the parts of Second Thought are kept. Each part has its own place.
+The page speaks English, Spanish (Español), French (Français), German (Deutsch), Dutch (Nederlands), Italian (Italiano), Portuguese (Português), Simplified Chinese (中文), Japanese (日本語), Greek (Ελληνικά), Hebrew (עברית, with the whole page mirrored right to left), Jewish Babylonian Aramaic (ארמית, also right to left), Latin (Latina), Old English (Ænglisc), Middle English (Englisch), Koine Greek (Κοινή), Old Norse (Norrœnt mál), Sanskrit (संस्कृतम्), Akkadian in cuneiform (𒀝𒅗𒁺𒌝, written in transliteration by exported programs) and Mycenaean Greek in Linear B (𐀀𐀏𐀊𐀺, written in transcription by exported programs). The run log, the page's messages and the examples are translated too. Programs shared in the Community gallery keep their authors' words. A Python program you export while the page is in another language prints in that language too; `language = en` in its `second-thought.ini` switches it back to English.
 
-| Name | What it is |
-|---|---|
-| `second-thought.html` | The Second Thought page itself. This is the part you see on the screen. |
-| `python/second_thought/` | The helper that comes with every Python program, in seven smaller parts. It knows how to do each block's job. |
-| `python/runtime.py` | The same helper, with its parts stuck together into one file. Every Python program gets a copy. `tools/sync.py` makes it, so don't change it by hand. |
-| `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
-| `ha/sample-house.json` | The pretend house that the Home Assistant blocks use on the page. |
-| `samples/connections.json` | The pretend feeds, GitHub projects, Telegram messages, emails and calendar that the page uses. |
-| `tools/sync.py` | A little tool that sticks the helper's parts together, then copies the parts above into the page, so they always match. |
-| `tests/` | Checks that make sure everything still works. |
-| `second-thought.example.ini` | Every setting a program understands, with a note on each. Copy it to `second-thought.ini` to use it. |
-| `CHANGELOG.md` | What is new in each version of the helper. |
-| `i18n/` | The words on the blocks and buttons in other languages, one file for each. |
-| `gallery/` | Programs people have shared, one file for each. They appear on the page under **Community**. |
-| `screenshots/` | The moving picture at the top of this book, and a still one. `tools/record_demo.py` makes them again after the page changes. |
-| `README.md` | This book! |
+**Adding a language.** Each language is one file in [`i18n/`](i18n), like `i18n/es.json`. It holds every block's words, help text and choices, the category names, the page's own words (under `page`, each English text with its translation), each example's title, description and tip (under `examples`), the words already typed into the palette's blocks (under `starters`), and what exported programs print (under `python`). Copy a file, translate the words (never the choice values, the `%1` markers or the `{name}` markers), and run `python tools/sync.py`. The tests tell you anything you missed.
 
 ---
 
-## Page 12: Checking it still works
+## Versions and --doctor
 
-*Picture: a doctor with a stethoscope, listening to a computer.*
-
-When somebody changes Second Thought, they must check it still works.
-
-The `tests` folder does this. It pretends to be Claude, so the checks do not cost anything. Then it tries every example, one by one, and makes sure each one finishes properly.
-
-**Grown-ups, here is how:**
-
-```
-bash tests/setup.sh
-python tests/run_tests.py
-```
-
-You only need the first line once. It fetches the things the checks need.
-
-The second line runs the checks. At the end it says **All checks passed**, or it tells you which check went wrong.
-
-If you change anything in `python/second_thought/` or `prompts/convert-guide.txt`, run `python tools/sync.py` first, so `python/runtime.py` and the page have your changes too.
-
-The helper's seven parts are:
-
-| Part | What it does |
-|---|---|
-| `settings.py` | Reads `second-thought.ini` before anything else. |
-| `providers.py` | Knows every model service, and how to ask each one. |
-| `core.py` | Limits, mistakes, and the sums and words that match the blocks exactly. |
-| `connectors.py` | Web pages, news, calendars, Home Assistant, messages, MQTT and Homey. |
-| `mcp.py` | Borrowing tools from MCP servers, for the agent. |
-| `agent.py` | The agent block and its tools. |
-| `runtime.py` | Everything else: remembering, drafts, output, scripts and schedules. |
-
-Each part starts with the other parts it needs. When `tools/sync.py` sticks them together, it leaves those lines out, because in one file everything is already there.
-
-**Adding a model service.** Every model service is one entry in `SERVICES`, near the top of `providers.py`: its name, its address, where its key goes, and its quick, default and complex models. The page reads the same list (`tools/sync.py` copies it in), so the new service turns up in the model menus, the backups, the blocks, the exported settings file and the notes, all from that one entry. If the service speaks OpenAI's chat format, which most do, that is all it needs. Then add its settings to `second-thought.example.ini` (the checks will say which), and a line to `CHANGELOG.md`.
-
-The checks use pretend helpers, so they never cost anything. To check the real helpers with your own keys, run:
-
-```
-python tools/smoke_test.py
-```
-
-It asks each helper you have a key for a few short questions and says what works. That covers Claude's tidy answers, streaming, carrying on after a long answer is cut off, and the agent using a tool, plus which kind of tidy answer every other helper understands. It costs a few pence and prints the tokens used. Add a name to check only one helper, like `python tools/smoke_test.py claude`.
-
-There are quick checks too, one for each of the helper's parts. They need nothing installed and take less than a second:
-
-```
-python -m unittest discover -s tests/unit
-```
-
-`python tests/run_tests.py` runs them as well.
-
----
-
-## Page 12½: Which helper have I got?
-
-*Picture: a jar of sourdough starter with a label on it, saying when it was made.*
-
-The helper has a number, like **2.0.0**. Every Python program you export gets its own copy of the helper, and the number goes with it.
-
-To see which helper a program has, run it like this:
+Every exported program carries its own copy of the runtime, with a version number. To see which one a program has:
 
 ```
 python my-program.py --version
 ```
 
-When the helper gets better, its number goes up. `CHANGELOG.md` says what changed each time.
-
-To check that a program has everything it needs before you rely on it, run it like this:
+To check a program has everything it needs before you rely on it:
 
 ```
 python my-program.py --doctor
 ```
 
-*Picture: a doctor listening to a little robot's chest, with a clipboard of ticks.*
+It checks each thing the program uses (keys, packages, Home Assistant, email, Telegram, MCP servers and the rest) and says **ok** for each that works, or **FAIL** with what to fix. It only looks: nothing is sent, posted or switched, and it uses no model tokens.
 
-It looks at each thing the program uses: its keys, its packages, Home Assistant, email, Telegram, MCP servers and the rest. It says **ok** for each one that works, and **FAIL** with what to fix for each one that doesn't. It only looks: nothing is sent, posted or switched, and it doesn't use any of your model tokens.
-
-Your program does not change by itself. To give it the newer helper, import the program on the Second Thought page, then export it again. The page tells you when a program you import has a different helper.
-
-**Grown-ups:** the numbers follow semantic versioning. The first number goes up when a program might behave differently, the middle one for something new, and the last one for a fix. When you change the helper, write a line in `CHANGELOG.md` under **Unreleased**.
+A program doesn't update itself. To give it a newer runtime, import it on the page and export it again; the page tells you when a program you import has a different runtime. [`CHANGELOG.md`](CHANGELOG.md) says what changed in each version.
 
 ---
 
-## Page 13: A few things to know
+## Good to know
 
-*Picture: a ladybird holding up one finger, as if to say "Remember this".*
-
-- Second Thought keeps its secrets safe. Things it remembers are only seen by you.
-- Inside the page, Claude cannot look things up on the internet. A Python program can.
-- Timed jobs on the page only work while the page is open. For jobs that run while you sleep, use Python.
-- Every answer has a length limit. If Claude runs out of room part-way, the program asks it once to carry on from where it stopped, and joins the two parts. If it's still too long, the run log says **Cut short**, and the result is marked best effort.
-- The page can't see exactly how many tokens Claude used, so it makes a careful guess. Python knows the exact number.
-- Some blocks need an answer in a particular shape, like a number or a yes or no. In Python, Claude is made to write exactly that shape. Most other helpers are asked to write in that shape too, or at least to write tidy JSON. If a helper can't do that, the program remembers and stops asking. Every answer is still checked when it arrives, on the page as well. If an answer comes back muddled, the program sends it back once and says what was wrong. If it's still muddled, that step stops with a clear message, so put it inside **retry** if you'd like another go.
-- On the page, your browser already asks before saving any file. So **ask me before saving files** only adds a question in Python.
-- Some hidden names inside the page still say `reflection-blocks`. That was Second Thought's name when it was very young. They stay the same so that old saved programs still work.
+- Things a program remembers on the page are only visible to you.
+- On the page, Claude can't look things up on the internet. An exported program can.
+- Timed jobs on the page only work while the page is open. For jobs that run while you sleep, export to Python.
+- Every answer has a length limit. If a model runs out of room part-way, the program asks it once to carry on from where it stopped and joins the two parts. If it's still too long, the run log says **Cut short**, and the result is marked best effort.
+- The page can't see exactly how many tokens Claude used, so it estimates. Python knows the exact number.
+- Some blocks need an answer in a particular shape, like a number or a yes or no. In Python, Claude is made to write exactly that shape. Most other models are asked to write in that shape too, or at least to write valid JSON; if one can't, the program remembers and stops asking. Every answer is still checked when it arrives, on the page as well. If an answer comes back malformed, the program sends it back once and says what was wrong. If it's still malformed, that step stops with a clear message, so put it inside **retry** if you'd like another go.
+- On the page, your browser already asks before saving any file, so **ask me before saving files** only adds a question in Python.
+- Some names inside the page still say `reflection-blocks`, Second Thought's original name. They stay the same so that old saved programs still work.
 
 ---
 
-## The end
+## Repository layout
 
-*Picture: the ladybird flying away over a field, towards the sunset.*
+| Path | What it is |
+|---|---|
+| `second-thought.html` | The page itself. |
+| `python/second_thought/` | The runtime that comes with every exported program, as a package of eight modules (below). |
+| `python/runtime.py` | The same runtime joined into one file, which every exported program gets a copy of. `tools/sync.py` builds it, so don't edit it by hand. |
+| `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
+| `ha/sample-house.json` | The sample house the Home Assistant blocks use on the page. |
+| `samples/connections.json` | The sample feeds, GitHub projects, Telegram messages, emails and calendar the page uses. |
+| `i18n/` | The page's words in other languages, one file each. |
+| `gallery/` | Programs people have shared, one file each. They appear on the page under **Community**. |
+| `second-thought.example.ini` | Every setting a program understands, with a note on each. |
+| `tools/sync.py` | Joins the runtime into one file, then copies it and the other embedded parts into the page, so they always match. |
+| `tools/smoke_test.py` | Checks the real model services with your own keys. |
+| `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |
+| `tests/` | Unit tests (`tests/unit/`) and the end-to-end suite (`tests/run_tests.py`). |
+| `docs/ladybird-book.md` | The picture book. |
+| `CHANGELOG.md` | What changed in each runtime version. |
 
-Now you know all about Second Thought.
+The runtime's modules, in the order `tools/sync.py` joins them:
 
-Have fun building. And remember: a second thought is often a better one.
+| Module | What it does |
+|---|---|
+| `settings.py` | Reads `second-thought.ini` and the environment before anything else. |
+| `providers.py` | Every model service, and how to call each one. |
+| `core.py` | Limits, errors, and the sums and text handling that match the blocks exactly. |
+| `connectors.py` | Web pages, news, calendars, Home Assistant, messages, MQTT and Homey. |
+| `mcp.py` | Borrowing tools from MCP servers, for the agent. |
+| `agent.py` | The agent block and its tools. |
+| `doctor.py` | `--doctor`: checks a program's setup without acting on anything. |
+| `runtime.py` | Everything else: memory, drafts, output, scripts and schedules. |
+
+Each module starts with the imports it needs from the others. When `tools/sync.py` joins them, it leaves those lines out, because in one file every name is already there.
+
+---
+
+## Development and tests
+
+If you change anything in `python/second_thought/`, `i18n/`, `gallery/`, `prompts/convert-guide.txt` or the sample files, run `python tools/sync.py` so `python/runtime.py` and the page pick up your changes. `python tools/sync.py --check` fails if either is out of date, and CI runs it.
+
+**Unit tests** need nothing installed and take a few seconds:
+
+```
+python -m unittest discover -s tests/unit
+```
+
+**End-to-end tests** drive the page in a headless browser with stand-ins for Claude, then export every example to Python and run that too, against a stand-in Anthropic SDK. Nothing calls a real model, so they cost nothing.
+
+```
+bash tests/setup.sh          # once: Playwright, Chromium and local copies of the page's libraries
+python tests/run_tests.py    # runs the unit tests too
+```
+
+At the end it says **All checks passed**, or lists what failed.
+
+**Real services.** To check the real model services with your own keys:
+
+```
+python tools/smoke_test.py
+```
+
+It asks each service you have a key for a few short questions and reports what works: structured answers, streaming, continuing after a long answer is cut off, and the agent using a tool, plus which kind of structured answer every other service understands. It costs a few pence and prints the tokens used. Add a name to check one service, like `python tools/smoke_test.py claude`.
+
+**Adding a model service.** Every service is one entry in `SERVICES`, near the top of `providers.py`: its name, its address, where its key goes, and its quick, default and complex models. The page reads the same list (`tools/sync.py` copies it in), so the new service appears in the model menus, the backups, the blocks, the exported settings file and the notes, all from that one entry. If the service speaks OpenAI's chat format, which most do, that's all it needs. Then add its settings to `second-thought.example.ini` (the tests say which), and a line to `CHANGELOG.md`.
+
+**Versioning.** The runtime follows semantic versioning: the major number goes up when an exported program might behave differently, the minor for something new, and the patch for a fix. When you change the runtime, add a line to `CHANGELOG.md` under **Unreleased**.
