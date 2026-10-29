@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"terminer avec %1"},
 "rb_folder_when":{"message0":"quand un fichier apparaît dans le dossier %1","tooltip":"Exécute les blocs en dessous quand un nouveau fichier arrive dans ce dossier (à côté du programme, sauf si vous donnez un chemin complet). « Ce qui est arrivé » donne son nom, son chemin, sa taille, et ses mots pour un PDF, un fichier Word ou texte."},
 "rb_generate":{"message0":"écrire un premier brouillon","tooltip":"Claude écrit un brouillon qui accomplit la tâche."},
+"rb_gh_issue_when":{"message0":"quand une nouvelle issue est ouverte dans %1","tooltip":"Exécute les blocs en dessous quand quelqu'un ouvre une issue dans ce projet GitHub (vérifié toutes les 5 minutes ; les pull requests ne comptent pas). « Ce qui est arrivé » donne repo, number, title, body, author, labels, link et text."},
+"rb_gh_release_when":{"message0":"quand une version est publiée dans %1","tooltip":"Exécute les blocs en dessous quand ce projet GitHub publie une version (release ; vérifié toutes les 15 minutes). « Ce qui est arrivé » donne repo, tag, name, previous_tag, notes, link et text."},
 "rb_gh_when":{"message0":"quand une pull request demande ma relecture","tooltip":"Exécute les blocs en dessous quand quelqu'un vous demande de relire une pull request GitHub (vérifié toutes les 5 minutes). « Ce qui est arrivé » donne repo, number, title, user, link et text."},
 "rb_ha_attr":{"message0":"%1 de l'entité %2","tooltip":"Un attribut d'une entité, par exemple « current_temperature » ou « friendly_name »."},
 "rb_ha_call":{"message0":"appeler %1 sur %2 avec %3","tooltip":"Appelle un service, par exemple light.turn_off. Les données facultatives sont du JSON comme {\"temperature\": 20}. Déverrouiller, ouvrir et désarmer vous demandent toujours d'abord."},
@@ -1613,6 +1615,8 @@
 "(yes)":"o, oui",
 "(no)":"n, non",
 "GitHub issue opened in {repo}: #{n}":"Issue GitHub ouverte dans {repo} : #{n}",
-"GitHub labels on {repo} #{n}":"Étiquettes GitHub sur {repo} #{n}"
+"GitHub labels on {repo} #{n}":"Étiquettes GitHub sur {repo} #{n}",
+"New issue: {issue}":"Nouvelle issue : {issue}",
+"New release: {release}":"Nouvelle version : {release}"
 }
 };

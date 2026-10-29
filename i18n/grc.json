@@ -185,6 +185,14 @@
    "message0": "γράψον πρῶτον σχέδιον",
    "tooltip": "Ὁ Claude γράφει σχέδιον ὃ τὸ ἔργον τελειοῖ."
   },
+  "rb_gh_issue_when": {
+   "message0": "ὅταν νέον issue ἀνοιχθῇ ἐν %1",
+   "tooltip": "Τρέχει τὰς πλίνθους τὰς κάτω ὅταν τις ἀνοίξῃ issue ἐν τούτῳ τῷ ἔργῳ τοῦ GitHub (ἐξετάζεται ἀνὰ 5 λεπτά· τὰ pull requests οὐ λογίζεται). Τὸ «τί ἦλθεν» δίδωσι repo, number, title, body, author, labels, link καὶ text."
+  },
+  "rb_gh_release_when": {
+   "message0": "ὅταν ἔκδοσις δημοσιευθῇ ἐν %1",
+   "tooltip": "Τρέχει τὰς πλίνθους τὰς κάτω ὅταν τοῦτο τὸ ἔργον τοῦ GitHub ἔκδοσιν (release) δημοσιεύσῃ (ἐξετάζεται ἀνὰ 15 λεπτά). Τὸ «τί ἦλθεν» δίδωσι repo, tag, name, previous_tag, notes, link καὶ text."
+  },
   "rb_gh_when": {
    "message0": "ὅταν pull request αἰτῇ τὴν ἐμὴν ἐξέτασιν",
    "tooltip": "Τρέχει τὰς πλίνθους τὰς κάτω ὅταν τις αἰτῇ σε ἐξετάσαι GitHub pull request (ἐξετάζεται ἀνὰ 5 λεπτά). Τὸ «τί ἦλθεν» δίδωσι repo, number, title, user, link καὶ text."
@@ -2721,7 +2729,9 @@
   "(yes)": "ν, ναί, ναι, ναὶ",
   "(no)": "ο, οὔ, ου, οὐχί, ουχι, οὐ",
   "GitHub issue opened in {repo}: #{n}": "Ἠνοίχθη issue ἐν GitHub ἐν {repo}· #{n}",
-  "GitHub labels on {repo} #{n}": "Ἐπιγραφαὶ GitHub ἐπὶ {repo} #{n}"
+  "GitHub labels on {repo} #{n}": "Ἐπιγραφαὶ GitHub ἐπὶ {repo} #{n}",
+  "New issue: {issue}": "Νέον issue· {issue}",
+  "New release: {release}": "Νέα ἔκδοσις· {release}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"lúk með %1"},
 "rb_folder_when":{"message0":"þá er skjal birtisk í hirzlu %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er nýtt skjal kemr í þessa hirzlu (hjá forritinu, nema þú gefir allan veg). „Hvat kom“ gefr nafn þess, veg, stærð, ok orðin í því fyrir PDF, Word eða ritskjal."},
 "rb_generate":{"message0":"rita fyrsta frumrit","tooltip":"Claude ritar frumrit er lýkr verkinu."},
+"rb_gh_issue_when":{"message0":"þá er nýtt issue er opnat í %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er einhverr opnar issue í þessu GitHub verki (skoðat hverjar 5 mínútur; pull requests teljask eigi). „Hvat kom“ gefr repo, number, title, body, author, labels, link ok text."},
+"rb_gh_release_when":{"message0":"þá er útgáfa er birt í %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er þetta GitHub verk birtir útgáfu (release; skoðat hverjar 15 mínútur). „Hvat kom“ gefr repo, tag, name, previous_tag, notes, link ok text."},
 "rb_gh_when":{"message0":"þá er pull request biðr um dóm minn","tooltip":"Keyrir kubbana hér fyrir neðan þá er einhverr biðr þik dœma GitHub pull request (skoðat hverjar 5 mínútur). „Hvat kom“ gefr repo, number, title, user, link ok text."},
 "rb_ha_attr":{"message0":"%1 hlutar %2","tooltip":"Einn eiginleikr hlutar, svá sem 'current_temperature' eða 'friendly_name'."},
 "rb_ha_call":{"message0":"kalla %1 á %2 með %3","tooltip":"Kallar á þjónustu, svá sem light.turn_off. Valfrjáls gǫgn eru JSON sem {\"temperature\": 20}. Upplúkning, opnan ok afvǫrzlun spyrja þik ávallt fyrst."},
@@ -1613,7 +1615,9 @@
 "(yes)":"j, já",
 "(no)":"n, nei",
 "GitHub issue opened in {repo}: #{n}":"GitHub-issue opnat í {repo}: #{n}",
-"GitHub labels on {repo} #{n}":"GitHub-merki á {repo} #{n}"
+"GitHub labels on {repo} #{n}":"GitHub-merki á {repo} #{n}",
+"New issue: {issue}":"Nýtt issue: {issue}",
+"New release: {release}":"Ný útgáfa: {release}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

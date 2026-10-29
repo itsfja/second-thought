@@ -468,7 +468,7 @@ def python_tests(codes):
         out = " ".join(out.split())
         check(code_ == 0 and posted == ["POST /repos/sample-baker/sourdough-chart/issues/40/labels", "POST /repos/sample-baker/sourdough-chart/issues"]
               and "has no label safari" in out and "Labelled sample-baker/sourdough-chart #40: bug, urgent." in out
-              and "Opened sample-baker/sourdough-chart #42: https://github.com/sample-baker/sourdough-chart/issues/42" in out and "needs a title" in out
+              and "Opened sample-baker/sourdough-chart #44: https://github.com/sample-baker/sourdough-chart/issues/44" in out and "needs a title" in out
               and out.count("Allow this?") == 4, f"Python labels with the project's own labels and opens an issue, asking before each use ({posted})"
               + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         before = len(svc_log["tg_sent"])
@@ -542,6 +542,8 @@ def python_tests(codes):
             svc_log["add_mail"]("Someone <x@example.com>", "Unrelated", "Nothing about baking.")
             svc_log["add_feed_item"]("Brand new: steam in home ovens", "https://example.com/baking/steam")
             svc_log["add_review"]("Add a spelt recipe")
+            svc_log["add_issue"]("sample-baker/sourdough-chart", "Chart legend overlaps on mobile")
+            svc_log["add_release"]("sample-baker/sourdough-chart", "v1.5.0", "Rye curve")
             svc_log["discord_add"](fake_services.DISCORD_CHANNEL, "Is the bake-along still on?", "crumb_shot")
             svc_log["discord_add"](fake_services.DISCORD_CHANNEL, "A bot announcing something", "OtherBot", bot=True)
             svc_log["discord_add"]("999", "Message in someone else's channel", "stranger")
@@ -570,11 +572,11 @@ def python_tests(codes):
                                 dict(env, RB_POLL_SECONDS="0.5", WEBHOOK_PORT=str(hook_port), WEBHOOK_SECRET="hook-secret",
                                      CALENDAR_URL=svc_url + "/calendar-soon.ics"), tmp, timeout=30)
         out = out.replace("\r\n", "\n")
-        notes = [l.strip() for l in out.split("\n") if re.match(r"\s+(mqtt|webhook|email|feed|folder|github|calendar|telegram|discord|slack|ha_event): ", l)]
+        notes = [l.strip() for l in out.split("\n") if re.match(r"\s+(mqtt|webhook|email|feed|folder|github_issue|github_release|github|calendar|telegram|discord|slack|ha_event): ", l)]
         got = {n.split(":", 1)[0] for n in notes}
-        check(got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "calendar", "discord", "slack", "ha_event"},
+        check(got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "github_issue", "github_release", "calendar", "discord", "slack", "ha_event"},
               f"t_listen.py: every listener started its script when something arrived ({', '.join(sorted(got)) or 'none'})" + ("" if got else f": {(err or out)[-400:]!r}"))
-        if not got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "calendar", "discord", "slack", "ha_event"}:
+        if not got >= {"mqtt", "webhook", "email", "feed", "folder", "github", "github_issue", "github_release", "calendar", "discord", "slack", "ha_event"}:
             # It has failed now and then on Windows only, with the program gone within a couple of seconds. Show the
             # traceback in full, each line marked "error:" so the CI summary keeps it, and how long the program lasted.
             tb = (err or "").splitlines()
@@ -600,6 +602,10 @@ def python_tests(codes):
         check(any("steam in home ovens" in n for n in notes) and not any("nail varnish" in n for n in notes), "the feed listener only reacts to new items")
         check(any(n.startswith("folder: Spelt loaf") for n in notes) and not any("ignored" in n for n in notes), "the folder listener reads new files and skips hidden ones")
         check(any("Add a spelt recipe" in n for n in notes) and not any("#41" in n for n in notes), "the GitHub listener reacts to new review requests only")
+        gh_new = [n for n in notes if n.startswith(("github_issue: ", "github_release: "))]
+        check(len(gh_new) == 2 and any(n.startswith("github_issue: sample-baker/sourdough-chart #") and n.endswith(": Chart legend overlaps on mobile (by toast-rack)") for n in gh_new)
+              and "github_release: sample-baker/sourdough-chart v1.5.0: Rye curve" in gh_new,
+              f"the new-issue and release listeners react to new ones only, not the issues and releases already there ({gh_new})")
         check(any(n.startswith("calendar: Feed the starter at ") and "(Kitchen)" in n for n in notes), "the calendar listener gives warning before an event")
         check([n for n in notes if n.startswith("discord: ")] == ["discord: Is the bake-along still on?"],
               f"the Discord listener reacts to new messages in your channels only: not old ones, bots, or other channels ({[n for n in notes if n.startswith('discord')]})")

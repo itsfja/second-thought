@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"beenden mit %1"},
 "rb_folder_when":{"message0":"wenn eine Datei im Ordner %1 erscheint","tooltip":"Führt die Blöcke darunter aus, wenn eine neue Datei in diesem Ordner landet (neben dem Programm, außer Sie geben einen vollen Pfad an). „Was ankam“ liefert Name, Pfad, Größe und bei PDF, Word- oder Textdatei die Wörter darin."},
 "rb_generate":{"message0":"ersten Entwurf schreiben","tooltip":"Claude schreibt einen Entwurf, der die Aufgabe erfüllt."},
+"rb_gh_issue_when":{"message0":"wenn in %1 ein neues Issue eröffnet wird","tooltip":"Führt die Blöcke darunter aus, wenn jemand in diesem GitHub-Projekt ein Issue eröffnet (alle 5 Minuten geprüft; Pull Requests zählen nicht). „Was ankam“ liefert repo, number, title, body, author, labels, link und text."},
+"rb_gh_release_when":{"message0":"wenn in %1 ein Release veröffentlicht wird","tooltip":"Führt die Blöcke darunter aus, wenn dieses GitHub-Projekt ein Release veröffentlicht (alle 15 Minuten geprüft). „Was ankam“ liefert repo, tag, name, previous_tag, notes, link und text."},
 "rb_gh_when":{"message0":"wenn ein Pull Request meine Prüfung anfordert","tooltip":"Führt die Blöcke darunter aus, wenn Sie jemand bittet, einen GitHub-Pull-Request zu prüfen (alle 5 Minuten geprüft). „Was ankam“ liefert repo, number, title, user, link und text."},
 "rb_ha_attr":{"message0":"%1 von Entität %2","tooltip":"Ein Attribut einer Entität, zum Beispiel „current_temperature“ oder „friendly_name“."},
 "rb_ha_call":{"message0":"%1 auf %2 aufrufen mit %3","tooltip":"Ruft einen Dienst auf, zum Beispiel light.turn_off. Optionale Daten sind JSON wie {\"temperature\": 20}. Entriegeln, Öffnen und Entschärfen fragen Sie immer vorher."},
@@ -1613,6 +1615,8 @@
 "(yes)":"j, ja",
 "(no)":"n, nein",
 "GitHub issue opened in {repo}: #{n}":"GitHub-Issue in {repo} eröffnet: #{n}",
-"GitHub labels on {repo} #{n}":"GitHub-Labels für {repo} #{n}"
+"GitHub labels on {repo} #{n}":"GitHub-Labels für {repo} #{n}",
+"New issue: {issue}":"Neues Issue: {issue}",
+"New release: {release}":"Neues Release: {release}"
 }
 };

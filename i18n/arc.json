@@ -186,6 +186,14 @@
    "message0": "כתוב טופסא קדמאה",
    "tooltip": "Claude כתב טופסא דמשלים עבידתא."
   },
+  "rb_gh_issue_when": {
+   "message0": "כד issue חדתא מתפתחא ב-%1",
+   "tooltip": "מרהט לבנין דלתחתא כד אנש פתח issue בעבידתא הדא ב-GitHub (מתבדק כל 5 רגעין; pull requests לא מתמנין). \"מה דאתא\" יהב repo, number, title, body, author, labels, link ו-text."
+  },
+  "rb_gh_release_when": {
+   "message0": "כד release מתפרסם ב-%1",
+   "tooltip": "מרהט לבנין דלתחתא כד עבידתא הדא ב-GitHub מפרסמא release (מתבדק כל 15 רגעין). \"מה דאתא\" יהב repo, tag, name, previous_tag, notes, link ו-text."
+  },
   "rb_gh_when": {
    "message0": "כד pull request בעי בדיקתי",
    "tooltip": "מרהט לבנין דלתחתא כד אנש בעי מנך למבדק pull request ב-GitHub (מתבדק כל 5 רגעין). \"מה דאתא\" יהב repo, number, title, user, link ו-text."
@@ -2722,7 +2730,9 @@
   "(yes)": "א, אין",
   "(no)": "ל, לא",
   "GitHub issue opened in {repo}: #{n}": "issue ב-GitHub אתפתח ב-{repo}: #{n}",
-  "GitHub labels on {repo} #{n}": "רשמי GitHub על {repo} #{n}"
+  "GitHub labels on {repo} #{n}": "רשמי GitHub על {repo} #{n}",
+  "New issue: {issue}": "issue חדתא: {issue}",
+  "New release: {release}": "release חדתא: {release}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

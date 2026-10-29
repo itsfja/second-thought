@@ -215,7 +215,7 @@ def start():
                 return self._send(200, {"login": gh["login"]})
             if parts[0] == "repos" and len(parts) == 3:
                 return self._send(200, {"full_name": parts[1] + "/" + parts[2], "default_branch": gh.get("default_branch", "main")})
-            if parts[0] == "repos" and len(parts) >= 4 and parts[3] in ("branches", "commits", "contents", "labels") \
+            if parts[0] == "repos" and len(parts) >= 4 and parts[3] in ("branches", "commits", "contents", "labels", "releases") \
                     or (parts[0] == "repos" and len(parts) in (4, 6) and parts[3] == "issues" and (len(parts) == 4 or parts[5] == "labels")):
                 return self._github_more(method, parts[1] + "/" + parts[2], parts[3:], q)
             if parts[0] == "repos" and len(parts) >= 4:
@@ -268,6 +268,15 @@ def start():
                 if not inside:
                     return self._send(404, {"message": "Not Found"})
                 return self._send(200, [{"name": x.rstrip("/"), "type": "dir" if x.endswith("/") else "file"} for x in inside])
+            if rest == ["issues"] and method == "GET":
+                rows = sorted((i for i in gh["issues"] if i["repo"] == repo and i.get("state", "open") == "open"), key=lambda i: -i["number"])
+                return self._send(200, [{"number": i["number"], "title": i["title"], "body": i.get("body", ""), "user": {"login": i["user"]},
+                                         "labels": [{"name": x} for x in i.get("labels", [])], "html_url": f"https://github.com/{repo}/issues/{i['number']}"}
+                                        for i in rows])
+            if rest == ["releases"]:
+                return self._send(200, [{"id": hash((r["repo"], r["tag"])) & 0xFFFFFFF, "tag_name": r["tag"], "name": r["name"], "body": r.get("notes", ""),
+                                         "draft": False, "html_url": f"https://github.com/{repo}/releases/tag/{r['tag']}"}
+                                        for r in gh.get("releases", []) if r["repo"] == repo])
             if rest == ["labels"]:
                 return self._send(200, [{"name": x} for x in gh["labels"].get(repo, [])])
             if rest == ["issues"] and method == "POST":
@@ -371,7 +380,13 @@ def start():
     def add_review(title):
         gh["pulls"].append({"repo": "sample-baker/recipes", "number": 3, "title": title, "user": "crumb-shot", "days_ago": 0, "draft": False,
                             "review_requested": True, "body": "", "head": "x", "base": "main", "files": [], "comments": []})
-    log["add_feed_item"], log["add_review"] = add_feed_item, add_review
+    def add_issue(repo, title):
+        n = max([x["number"] for x in gh["pulls"] + gh["issues"] if x["repo"] == repo] or [0]) + 1
+        gh["issues"].append({"repo": repo, "number": n, "title": title, "user": "toast-rack", "days_ago": 0, "state": "open", "labels": [], "body": ""})
+
+    def add_release(repo, tag, name):
+        gh["releases"].insert(0, {"repo": repo, "tag": tag, "name": name, "days_ago": 0, "notes": ""})
+    log["add_feed_item"], log["add_review"], log["add_issue"], log["add_release"] = add_feed_item, add_review, add_issue, add_release
     return base, log, tg_add, imap_port, smtp_port
 
 

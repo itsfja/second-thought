@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"fini cum %1"},
 "rb_folder_when":{"message0":"cum fasciculus in capsa %1 apparet","tooltip":"Lateres infra exsequitur cum novus fasciculus in hanc capsam venit (iuxta programma, nisi viam plenam das). «Quod advenit» dat nomen, viam, magnitudinem et, pro PDF, Verbo aut textu, verba eius."},
 "rb_generate":{"message0":"scribe primam adumbrationem","tooltip":"Claude adumbrationem scribit quae pensum perficit."},
+"rb_gh_issue_when":{"message0":"cum nova quaestio in %1 aperitur","tooltip":"Lateres infra exsequitur cum quis quaestionem (issue) in hoc incepto GitHub aperit (singulis 5 minutis inspicitur; petitiones trahendi non numerantur). «Quod advenit» dat repo, number, title, body, author, labels, link et text."},
+"rb_gh_release_when":{"message0":"cum editio in %1 publicatur","tooltip":"Lateres infra exsequitur cum hoc inceptum GitHub editionem (release) publicat (singulis 15 minutis inspicitur). «Quod advenit» dat repo, tag, name, previous_tag, notes, link et text."},
 "rb_gh_when":{"message0":"cum petitio trahendi recognitionem meam rogat","tooltip":"Lateres infra exsequitur cum quis te rogat ut petitionem trahendi in GitHub recognoscas (singulis 5 minutis inspicitur). «Quod advenit» dat repo, number, title, user, link et text."},
 "rb_ha_attr":{"message0":"%1 entitatis %2","tooltip":"Una proprietas entitatis, exempli gratia «current_temperature» aut «friendly_name»."},
 "rb_ha_call":{"message0":"voca %1 in %2 cum %3","tooltip":"Ministerium vocat, exempli gratia light.turn_off. Data optionalia sunt JSON ut {\"temperature\": 20}. Reserare, aperire et custodiam solvere te semper prius interrogant."},
@@ -1613,7 +1615,9 @@
 "(yes)":"i, ita, etiam",
 "(no)":"n, non, minime",
 "GitHub issue opened in {repo}: #{n}":"Quaestio GitHub in {repo} aperta: #{n}",
-"GitHub labels on {repo} #{n}":"Notae GitHub in {repo} #{n}"
+"GitHub labels on {repo} #{n}":"Notae GitHub in {repo} #{n}",
+"New issue: {issue}":"Nova quaestio: {issue}",
+"New release: {release}":"Nova editio: {release}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

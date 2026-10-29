@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"make an ende with %1"},
 "rb_folder_when":{"message0":"whan a quaier appereth in folder %1","tooltip":"Renneth the blokkes bynethe whan a newe quaier cometh into this folder (bisyde the devys, but if thou yeve a ful wey). “What cam” yeveth his name, wey, gretnesse, and the wordes in it for a PDF, Word or text quaier."},
 "rb_generate":{"message0":"write a firste draughte","tooltip":"Claude writeth a draughte that fulfilleth the charge."},
+"rb_gh_issue_when":{"message0":"whan a newe issue is opened in %1","tooltip":"Renneth the blokkes bynethe whan any wight openeth an issue in this GitHub werk (loked on every 5 minutes; pull requests ben nat rekned). “What cam” yeveth repo, number, title, body, author, labels, link and text."},
+"rb_gh_release_when":{"message0":"whan a release is published in %1","tooltip":"Renneth the blokkes bynethe whan this GitHub werk publisheth a release (loked on every 15 minutes). “What cam” yeveth repo, tag, name, previous_tag, notes, link and text."},
 "rb_gh_when":{"message0":"whan a pull request preyeth my examinacioun","tooltip":"Renneth the blokkes bynethe whan any wight preyeth thee to examyne a GitHub pull request (loked on every 5 minutes). “What cam” yeveth repo, number, title, user, link and text."},
 "rb_ha_attr":{"message0":"%1 of thyng %2","tooltip":"Oon propretee of a thyng, as “current_temperature” or “friendly_name”."},
 "rb_ha_call":{"message0":"calle %1 on %2 with %3","tooltip":"Calleth a servyce, as light.turn_off. Matere at thy wille is JSON as {\"temperature\": 20}. Unlokynge, openynge and disarmynge asken thee alwey first."},
@@ -1613,7 +1615,9 @@
 "(yes)":"y, ye, yis, yea",
 "(no)":"n, nay, nat",
 "GitHub issue opened in {repo}: #{n}":"GitHub issue opened in {repo}: #{n}",
-"GitHub labels on {repo} #{n}":"GitHub markes on {repo} #{n}"
+"GitHub labels on {repo} #{n}":"GitHub markes on {repo} #{n}",
+"New issue: {issue}":"Newe issue: {issue}",
+"New release: {release}":"Newe release: {release}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

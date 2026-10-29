@@ -186,6 +186,14 @@
    "message0": "כתוב טיוטה ראשונה",
    "tooltip": "Claude כותב טיוטה שמשלימה את המשימה."
   },
+  "rb_gh_issue_when": {
+   "message0": "כשנפתח issue חדש ב-%1",
+   "tooltip": "מריץ את הבלוקים שמתחת כשמישהו פותח issue בפרויקט הזה ב-GitHub (נבדק כל 5 דקות; בקשות משיכה לא נחשבות). \"מה הגיע\" נותן repo, number, title, body, author, labels, link ו-text."
+  },
+  "rb_gh_release_when": {
+   "message0": "כשמתפרסמת גרסה ב-%1",
+   "tooltip": "מריץ את הבלוקים שמתחת כשהפרויקט הזה ב-GitHub מפרסם גרסה (release; נבדק כל 15 דקות). \"מה הגיע\" נותן repo, tag, name, previous_tag, notes, link ו-text."
+  },
   "rb_gh_when": {
    "message0": "כשבקשת משיכה מבקשת את הביקורת שלי",
    "tooltip": "מריץ את הבלוקים שמתחת כשמישהו מבקש מכם לבדוק בקשת משיכה ב-GitHub (נבדק כל 5 דקות). \"מה הגיע\" נותן repo, number, title, user, link ו-text."
@@ -2722,6 +2730,8 @@
   "(yes)": "כ, כן",
   "(no)": "ל, לא",
   "GitHub issue opened in {repo}: #{n}": "נפתח issue ב-GitHub ב-{repo}: #{n}",
-  "GitHub labels on {repo} #{n}": "תוויות GitHub על {repo} #{n}"
+  "GitHub labels on {repo} #{n}": "תוויות GitHub על {repo} #{n}",
+  "New issue: {issue}": "issue חדש: {issue}",
+  "New release: {release}": "גרסה חדשה: {release}"
  }
 }

@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"τέλεσον μετὰ %1"},
 "rb_folder_when":{"message0":"ὅταν τεῦχος φανῇ ἐν τῷ φακέλῳ %1","tooltip":"Τρέχει τὰς πλίνθους τὰς κάτω ὅταν νέον τεῦχος ἔλθῃ εἰς τοῦτον τὸν φάκελον (παρὰ τῷ προγράμματι, εἰ μὴ ὅλην ὁδὸν δῷς). Τὸ «τί ἦλθεν» δίδωσι τὸ ὄνομα, τὴν ὁδόν, τὸ μέγεθος, καὶ τὰς λέξεις ἐν PDF, Word ἢ τεύχει γραμμάτων."},
 "rb_generate":{"message0":"γράψον πρῶτον σχέδιον","tooltip":"Ὁ Claude γράφει σχέδιον ὃ τὸ ἔργον τελειοῖ."},
+"rb_gh_issue_when":{"message0":"ὅταν νέον issue ἀνοιχθῇ ἐν %1","tooltip":"Τρέχει τὰς πλίνθους τὰς κάτω ὅταν τις ἀνοίξῃ issue ἐν τούτῳ τῷ ἔργῳ τοῦ GitHub (ἐξετάζεται ἀνὰ 5 λεπτά· τὰ pull requests οὐ λογίζεται). Τὸ «τί ἦλθεν» δίδωσι repo, number, title, body, author, labels, link καὶ text."},
+"rb_gh_release_when":{"message0":"ὅταν ἔκδοσις δημοσιευθῇ ἐν %1","tooltip":"Τρέχει τὰς πλίνθους τὰς κάτω ὅταν τοῦτο τὸ ἔργον τοῦ GitHub ἔκδοσιν (release) δημοσιεύσῃ (ἐξετάζεται ἀνὰ 15 λεπτά). Τὸ «τί ἦλθεν» δίδωσι repo, tag, name, previous_tag, notes, link καὶ text."},
 "rb_gh_when":{"message0":"ὅταν pull request αἰτῇ τὴν ἐμὴν ἐξέτασιν","tooltip":"Τρέχει τὰς πλίνθους τὰς κάτω ὅταν τις αἰτῇ σε ἐξετάσαι GitHub pull request (ἐξετάζεται ἀνὰ 5 λεπτά). Τὸ «τί ἦλθεν» δίδωσι repo, number, title, user, link καὶ text."},
 "rb_ha_attr":{"message0":"%1 τοῦ πράγματος %2","tooltip":"Μία ἰδιότης πράγματος, οἷον «current_temperature» ἢ «friendly_name»."},
 "rb_ha_call":{"message0":"κάλεσον %1 ἐπὶ %2 μετὰ %3","tooltip":"Καλεῖ διακονίαν, οἷον light.turn_off. Τὰ ἑκούσια δεδομένα JSON εἰσίν, οἷον {\"temperature\": 20}. Τὸ ἀνοίγειν κλεῖθρα, τὸ ἀνοίγειν καὶ τὸ ἀφοπλίζειν ἀεὶ πρῶτον ἐρωτῶσί σε."},
@@ -1613,7 +1615,9 @@
 "(yes)":"ν, ναί, ναι, ναὶ",
 "(no)":"ο, οὔ, ου, οὐχί, ουχι, οὐ",
 "GitHub issue opened in {repo}: #{n}":"Ἠνοίχθη issue ἐν GitHub ἐν {repo}· #{n}",
-"GitHub labels on {repo} #{n}":"Ἐπιγραφαὶ GitHub ἐπὶ {repo} #{n}"
+"GitHub labels on {repo} #{n}":"Ἐπιγραφαὶ GitHub ἐπὶ {repo} #{n}",
+"New issue: {issue}":"Νέον issue· {issue}",
+"New release: {release}":"Νέα ἔκδοσις· {release}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

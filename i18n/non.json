@@ -185,6 +185,14 @@
    "message0": "rita fyrsta frumrit",
    "tooltip": "Claude ritar frumrit er lýkr verkinu."
   },
+  "rb_gh_issue_when": {
+   "message0": "þá er nýtt issue er opnat í %1",
+   "tooltip": "Keyrir kubbana hér fyrir neðan þá er einhverr opnar issue í þessu GitHub verki (skoðat hverjar 5 mínútur; pull requests teljask eigi). „Hvat kom“ gefr repo, number, title, body, author, labels, link ok text."
+  },
+  "rb_gh_release_when": {
+   "message0": "þá er útgáfa er birt í %1",
+   "tooltip": "Keyrir kubbana hér fyrir neðan þá er þetta GitHub verk birtir útgáfu (release; skoðat hverjar 15 mínútur). „Hvat kom“ gefr repo, tag, name, previous_tag, notes, link ok text."
+  },
   "rb_gh_when": {
    "message0": "þá er pull request biðr um dóm minn",
    "tooltip": "Keyrir kubbana hér fyrir neðan þá er einhverr biðr þik dœma GitHub pull request (skoðat hverjar 5 mínútur). „Hvat kom“ gefr repo, number, title, user, link ok text."
@@ -2721,7 +2729,9 @@
   "(yes)": "j, já",
   "(no)": "n, nei",
   "GitHub issue opened in {repo}: #{n}": "GitHub-issue opnat í {repo}: #{n}",
-  "GitHub labels on {repo} #{n}": "GitHub-merki á {repo} #{n}"
+  "GitHub labels on {repo} #{n}": "GitHub-merki á {repo} #{n}",
+  "New issue: {issue}": "Nýtt issue: {issue}",
+  "New release: {release}": "Ný útgáfa: {release}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

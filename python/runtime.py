@@ -2994,7 +2994,7 @@ class Connections:
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
     LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
-                    "github": "GitHub", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page", "ha_event": "Home Assistant events"}
+                    "github": "GitHub", "github_issue": "GitHub issues", "github_release": "GitHub releases", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page", "ha_event": "Home Assistant events"}
 
     @staticmethod
     def event(key="text"):
@@ -3245,6 +3245,51 @@ class Connections:
             except RunError as e:
                 print(tr("  (GitHub check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(300))
+
+    async def _listen_github_issue(self, items):
+        """New issues in each project named in a 'when a new issue is opened in …' block (pull requests don't count)."""
+        seen = {}
+        while True:
+            for repo in dict.fromkeys(to_str(a).strip() for a, _ in items):
+                try:
+                    rows = await self._gh(f"/repos/{self._gh_repo(repo)}/issues?state=open&sort=created&direction=desc&per_page=30")
+                    now = {r["number"]: r for r in rows if "pull_request" not in r}
+                    if repo in seen:
+                        for n in sorted(set(now) - seen[repo]):
+                            r = now[n]
+                            rec = {"repo": repo, "number": n, "title": r["title"], "body": _short(r.get("body") or "", 4000),
+                                   "author": (r.get("user") or {}).get("login", ""), "labels": [lb.get("name", "") for lb in r.get("labels", [])],
+                                   "link": r.get("html_url", ""), "text": f"{repo} #{n}: {r['title']} (by {(r.get('user') or {}).get('login', '')})"}
+                            for a, fn in items:
+                                if to_str(a).strip() == repo:
+                                    self._fire(fn, dict(rec), tr("New issue: {issue}", issue=f"{repo} #{n}"))
+                    seen[repo] = seen.get(repo, set()) | set(now)
+                except RunError as e:
+                    print(tr("  (GitHub check failed: {e})", e=e), flush=True)
+            await asyncio.sleep(self._poll(300))
+
+    async def _listen_github_release(self, items):
+        """New releases in each project named in a 'when a release is published in …' block."""
+        seen = {}
+        while True:
+            for repo in dict.fromkeys(to_str(a).strip() for a, _ in items):
+                try:
+                    rows = [r for r in await self._gh(f"/repos/{self._gh_repo(repo)}/releases?per_page=10") if not r.get("draft")]
+                    if repo in seen:
+                        for i, r in enumerate(rows):
+                            if r["id"] in seen[repo]:
+                                continue
+                            rec = {"repo": repo, "tag": r.get("tag_name", ""), "name": r.get("name") or r.get("tag_name", ""),
+                                   "previous_tag": rows[i + 1].get("tag_name", "") if i + 1 < len(rows) else "",
+                                   "notes": _short(r.get("body") or "", 4000), "link": r.get("html_url", ""),
+                                   "text": f"{repo} {r.get('tag_name', '')}: {r.get('name') or r.get('tag_name', '')}"}
+                            for a, fn in items:
+                                if to_str(a).strip() == repo:
+                                    self._fire(fn, dict(rec), tr("New release: {release}", release=f"{repo} {rec['tag']}"))
+                    seen[repo] = seen.get(repo, set()) | {r["id"] for r in rows}
+                except RunError as e:
+                    print(tr("  (GitHub check failed: {e})", e=e), flush=True)
+            await asyncio.sleep(self._poll(900))
 
     async def _listen_calendar(self, items):
         fired = set()

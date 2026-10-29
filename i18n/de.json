@@ -185,6 +185,14 @@
    "message0": "ersten Entwurf schreiben",
    "tooltip": "Claude schreibt einen Entwurf, der die Aufgabe erfüllt."
   },
+  "rb_gh_issue_when": {
+   "message0": "wenn in %1 ein neues Issue eröffnet wird",
+   "tooltip": "Führt die Blöcke darunter aus, wenn jemand in diesem GitHub-Projekt ein Issue eröffnet (alle 5 Minuten geprüft; Pull Requests zählen nicht). „Was ankam“ liefert repo, number, title, body, author, labels, link und text."
+  },
+  "rb_gh_release_when": {
+   "message0": "wenn in %1 ein Release veröffentlicht wird",
+   "tooltip": "Führt die Blöcke darunter aus, wenn dieses GitHub-Projekt ein Release veröffentlicht (alle 15 Minuten geprüft). „Was ankam“ liefert repo, tag, name, previous_tag, notes, link und text."
+  },
   "rb_gh_when": {
    "message0": "wenn ein Pull Request meine Prüfung anfordert",
    "tooltip": "Führt die Blöcke darunter aus, wenn Sie jemand bittet, einen GitHub-Pull-Request zu prüfen (alle 5 Minuten geprüft). „Was ankam“ liefert repo, number, title, user, link und text."
@@ -2721,6 +2729,8 @@
   "(yes)": "j, ja",
   "(no)": "n, nein",
   "GitHub issue opened in {repo}: #{n}": "GitHub-Issue in {repo} eröffnet: #{n}",
-  "GitHub labels on {repo} #{n}": "GitHub-Labels für {repo} #{n}"
+  "GitHub labels on {repo} #{n}": "GitHub-Labels für {repo} #{n}",
+  "New issue: {issue}": "Neues Issue: {issue}",
+  "New release: {release}": "Neues Release: {release}"
  }
 }

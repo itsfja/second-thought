@@ -186,6 +186,14 @@
    "message0": "𒈠𒀸𒁕𒊏𒄠 𒉺𒉌𒅎 𒋗𒌅𒌨",
    "tooltip": "Claude 𒈠𒀸𒁕𒊏𒄠 𒊭 𒁺𒌌𒆷𒄠 𒌑𒊭𒀝𒆷𒇻 𒄿𒊭𒀜𒁕𒅈."
   },
+  "rb_gh_issue_when": {
+   "message0": "𒄿𒉡𒈠 issue 𒂊𒅖𒋗𒌝 𒅁𒁉𒋾 𒄿𒈾 %1",
+   "tooltip": "𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 issue 𒂊𒅖𒋗𒌝 𒄿𒈾 GitHub 𒅁𒁉𒋾 (𒄿𒈾 5 𒌓𒁕𒋾 𒅁𒁀𒅈𒊑; pull requests 𒌑𒌌). „𒊭 𒅅𒋗𒁺” repo, number, title, body, author, labels, link 𒌋 text 𒄿𒈾𒀜𒁲𒅔."
+  },
+  "rb_gh_release_when": {
+   "message0": "𒄿𒉡𒈠 release 𒄿𒈾 %1 𒅆𒊭𒅗𒉡",
+   "tooltip": "𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 release 𒄿𒈾 GitHub 𒅆𒊭𒅗𒉡 (𒄿𒈾 15 𒌓𒁕𒋾 𒅁𒁀𒅈𒊑). „𒊭 𒅅𒋗𒁺” repo, tag, name, previous_tag, notes, link 𒌋 text 𒄿𒈾𒀜𒁲𒅔."
+  },
   "rb_gh_when": {
    "message0": "𒄿𒉡𒈠 pull request 𒁉𒊑 𒅕𒊑𒅖",
    "tooltip": "𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 𒈠𒄠𒈠𒀭 𒁉𒊏𒄠 𒊭 pull request 𒄿𒈾 GitHub 𒅖𒋫𒈾𒀠𒅗 (𒄿𒈾 5 𒌓𒁕𒋾 𒅁𒁀𒅈𒊑). „𒊭 𒅅𒋗𒁺” repo, number, title, user, link 𒌋 text 𒄿𒈾𒀜𒁲𒅔."
@@ -2722,7 +2730,9 @@
   "(yes)": "a, anna",
   "(no)": "u, ulla",
   "GitHub issue opened in {repo}: #{n}": "petûm issue ina GitHub ana {repo}: #{n}",
-  "GitHub labels on {repo} #{n}": "šumū ina GitHub ana {repo} #{n}"
+  "GitHub labels on {repo} #{n}": "šumū ina GitHub ana {repo} #{n}",
+  "New issue: {issue}": "issue eššum: {issue}",
+  "New release: {release}": "release eššum: {release}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

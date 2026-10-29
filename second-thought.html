@@ -3351,7 +3351,7 @@ class Connections:
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
     LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
-                    "github": "GitHub", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page", "ha_event": "Home Assistant events"}
+                    "github": "GitHub", "github_issue": "GitHub issues", "github_release": "GitHub releases", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page", "ha_event": "Home Assistant events"}
 
     @staticmethod
     def event(key="text"):
@@ -3602,6 +3602,51 @@ class Connections:
             except RunError as e:
                 print(tr("  (GitHub check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(300))
+
+    async def _listen_github_issue(self, items):
+        """New issues in each project named in a 'when a new issue is opened in …' block (pull requests don't count)."""
+        seen = {}
+        while True:
+            for repo in dict.fromkeys(to_str(a).strip() for a, _ in items):
+                try:
+                    rows = await self._gh(f"/repos/{self._gh_repo(repo)}/issues?state=open&sort=created&direction=desc&per_page=30")
+                    now = {r["number"]: r for r in rows if "pull_request" not in r}
+                    if repo in seen:
+                        for n in sorted(set(now) - seen[repo]):
+                            r = now[n]
+                            rec = {"repo": repo, "number": n, "title": r["title"], "body": _short(r.get("body") or "", 4000),
+                                   "author": (r.get("user") or {}).get("login", ""), "labels": [lb.get("name", "") for lb in r.get("labels", [])],
+                                   "link": r.get("html_url", ""), "text": f"{repo} #{n}: {r['title']} (by {(r.get('user') or {}).get('login', '')})"}
+                            for a, fn in items:
+                                if to_str(a).strip() == repo:
+                                    self._fire(fn, dict(rec), tr("New issue: {issue}", issue=f"{repo} #{n}"))
+                    seen[repo] = seen.get(repo, set()) | set(now)
+                except RunError as e:
+                    print(tr("  (GitHub check failed: {e})", e=e), flush=True)
+            await asyncio.sleep(self._poll(300))
+
+    async def _listen_github_release(self, items):
+        """New releases in each project named in a 'when a release is published in …' block."""
+        seen = {}
+        while True:
+            for repo in dict.fromkeys(to_str(a).strip() for a, _ in items):
+                try:
+                    rows = [r for r in await self._gh(f"/repos/{self._gh_repo(repo)}/releases?per_page=10") if not r.get("draft")]
+                    if repo in seen:
+                        for i, r in enumerate(rows):
+                            if r["id"] in seen[repo]:
+                                continue
+                            rec = {"repo": repo, "tag": r.get("tag_name", ""), "name": r.get("name") or r.get("tag_name", ""),
+                                   "previous_tag": rows[i + 1].get("tag_name", "") if i + 1 < len(rows) else "",
+                                   "notes": _short(r.get("body") or "", 4000), "link": r.get("html_url", ""),
+                                   "text": f"{repo} {r.get('tag_name', '')}: {r.get('name') or r.get('tag_name', '')}"}
+                            for a, fn in items:
+                                if to_str(a).strip() == repo:
+                                    self._fire(fn, dict(rec), tr("New release: {release}", release=f"{repo} {rec['tag']}"))
+                    seen[repo] = seen.get(repo, set()) | {r["id"] for r in rows}
+                except RunError as e:
+                    print(tr("  (GitHub check failed: {e})", e=e), flush=True)
+            await asyncio.sleep(self._poll(900))
 
     async def _listen_calendar(self, items):
         fired = set()
@@ -7754,7 +7799,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         "user": "toast-rack",
         "days_ago": 2,
         "state": "open",
-        "labels": []
+        "labels": [],
+        "body": "On Safari 17 the chart area is empty. No errors in the console. Works in Chrome and Firefox."
       },
       {
         "repo": "sample-baker/oven-timer",
@@ -7763,7 +7809,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         "user": "sample-baker",
         "days_ago": 4,
         "state": "open",
-        "labels": []
+        "labels": [],
+        "body": "After Home Assistant restarts, a running timer jumps back to its starting time."
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "number": 43,
+        "title": "Typo in README: 'fermantation'",
+        "user": "crumb-shot",
+        "days_ago": 0.1,
+        "state": "open",
+        "labels": [],
+        "body": "The Usage section says 'fermantation'. Should be 'fermentation'."
       }
     ],
     "labels": {
@@ -7869,7 +7926,23 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         "README.md": "# Oven timer\n\nA Home Assistant card that counts down each stage of a bake.\n",
         "custom_components/oven_timer/__init__.py": "\"\"\"Oven timer.\"\"\"\nDOMAIN = 'oven_timer'\n"
       }
-    }
+    },
+    "releases": [
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "tag": "v1.4.0",
+        "name": "Spelt curve and unit toggle",
+        "days_ago": 2,
+        "notes": "- Spelt curve\n- Celsius/Fahrenheit toggle"
+      },
+      {
+        "repo": "sample-baker/sourdough-chart",
+        "tag": "v1.3.2",
+        "name": "Tooltip fixes",
+        "days_ago": 40,
+        "notes": "- Tooltips no longer overflow"
+      }
+    ]
   },
   "telegram": {
     "chat": "You (sample chat)",
@@ -8450,7 +8523,7 @@ Agent (the model chooses its own steps):
   rb_agent_builtin: fields KIND ("web": search_web, read_page | "ask": ask_me | "memory": remember, recall, list_memory | "calc": calculate | "time": current_time, time_plus | "file": read_file | "review": review_text | "feeds": read_feed | "linkedin": search_linkedin | "calendar": calendar, free_time | "email": search_email, read_email | "email_send": send_email | "github": my_pull_requests, list_pull_requests, read_pull_request, list_projects, search_github, list_branches, list_commits, read_github_file | "github_act": comment_on_github, open_issue, add_labels | "telegram": search_telegram | "telegram_send" | "telegram_send_free": send_telegram | "ha_read": find_devices, device_state, device_history | "ha_act" | "ha_act_free": call_service).
   Connections: rb_tg_when (hat; field CONTAINS, "anything" for every message) runs when the Telegram bot gets a message; rb_tg_message: field PART ("text" | "sender" | "chat"), value; rb_tg_send: input TEXT, statement; rb_email_send: inputs TO, SUBJECT, TEXT, statement; rb_feed_news: input URL (empty = the feeds in settings), value, list of records (feed, title, link, date, summary); rb_calendar: input DAYS, value, list of records (day, start, end, title, location).
   Listeners (hats, run while the program runs on schedule): rb_mqtt_when (field TOPIC, + and # wildcards), rb_webhook_when (field PATH), rb_email_when (field CONTAINS),
-  rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_cal_when (field N, minutes before an event),
+  rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_gh_issue_when (field REPO, owner/name: a new issue is opened), rb_gh_release_when (field REPO: a release is published), rb_cal_when (field N, minutes before an event),
   rb_page_when (fields URL; WORDS, only the lines containing them, empty = the whole page; N, minutes between checks): what arrived has url, title, before, after, changed.
   Map scripts that poll a web page and compare it with the last copy (requests + hashlib or difflib in a loop) to rb_page_when.
   rb_event: field KEY (a field of what arrived; "text" always works; empty = the whole record), value. rb_mqtt_read: input TOPIC, value. rb_mqtt_publish: inputs TEXT, TOPIC; field RETAIN ("TRUE" | "FALSE"), statement.
@@ -8738,7 +8811,7 @@ HOW TO MAP CODE
   const keeps = b => (b.getFieldValue("KIND") || "transient") === "permanent" ? "memory" : null;
   const CAP_BLOCKS = {
     rb_email_send:"email_send", rb_email_when:"email_read", rb_tg_send:"telegram_send", rb_tg_when:"telegram_read", rb_tg_message:"telegram_read",
-    rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read", rb_gh_when:"github_read",
+    rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read", rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
     rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
@@ -9026,6 +9099,10 @@ HOW TO MAP CODE
       tooltip:"Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file." },
     { type:"rb_gh_when", message0:"when a pull request asks for my review", nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text." },
+    { type:"rb_gh_issue_when", message0:"when a new issue is opened in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone opens an issue in this GitHub project (checked every 5 minutes; pull requests don't count). 'What arrived' gives repo, number, title, body, author, labels, link and text." },
+    { type:"rb_gh_release_when", message0:"when a release is published in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when this GitHub project publishes a release (checked every 15 minutes). 'What arrived' gives repo, tag, name, previous_tag, notes, link and text." },
     { type:"rb_cal_when", message0:"when a calendar event starts in %1 minutes", args0:[{ type:"field_number", name:"N", value:15, min:0, max:1440 }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text." },
@@ -9166,7 +9243,7 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_tg_when"), B("rb_discord_when"), B("rb_slack_when"), B("rb_mqtt_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_cal_when"), B("rb_page_when"),
+      B("rb_tg_when"), B("rb_discord_when"), B("rb_slack_when"), B("rb_mqtt_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_cal_when"), B("rb_page_when"),
       B("rb_event"), B("rb_tg_message"),
       { kind:"label", text:"Read and send" },
       B("rb_mqtt_read", { TOPIC:K("home/kitchen/temperature") }), B("rb_mqtt_publish", { TEXT:K("ON"), TOPIC:K("zigbee2mqtt/oven_plug/set") }),
@@ -11410,7 +11487,7 @@ HOW TO MAP CODE
     const kinds = new Set(blocks.filter(b => b.type === "rb_agent_builtin").map(b => b.getFieldValue("KIND")));
     const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
     return { keys, llama:programUses(serviceNamed("Llama")), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
-             github:has(["rb_gh_when"], ["github", "github_act"]), telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
+             github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]), telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
              discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
              slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]), calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
@@ -11944,6 +12021,7 @@ HOW TO MAP CODE
     const LISTEN = { rb_mqtt_when:["mqtt", "TOPIC", "when an MQTT message arrives on"], rb_webhook_when:["webhook", "PATH", "when a web request arrives at /"],
       rb_email_when:["email", "CONTAINS", "when an email arrives containing"], rb_feed_when:["feed", "URL", "when there's something new in feed"],
       rb_folder_when:["folder", "FOLDER", "when a file appears in folder"], rb_gh_when:["github", null, "when a pull request asks for my review"],
+      rb_gh_issue_when:["github_issue", "REPO", "when a new issue is opened in"], rb_gh_release_when:["github_release", "REPO", "when a release is published in"],
       rb_cal_when:["calendar", "N", "when a calendar event starts in"], rb_discord_when:["discord", "CONTAINS", "when a Discord message arrives containing"],
       rb_slack_when:["slack", "CONTAINS", "when a Slack message arrives containing"], rb_page_when:["page", "URL|WORDS|N", "when the web page"],
       rb_homey_when:["homey", "DEVICE|CAPABILITY", "when Homey device"],
@@ -13554,6 +13632,15 @@ HOW TO MAP CODE
         return { name:f.name, path:folder + "/" + f.name, size:f.text.length, text:f.text }; }
       case "rb_gh_when": { const p = ((CONN.github || {}).pulls || []).find(x => x.review_requested) || { repo:"", number:0, title:"", user:"" };
         return { repo:p.repo, number:p.number, title:p.title, user:p.user, link:"https://github.com/" + p.repo + "/pull/" + p.number, text:p.repo + " #" + p.number + ": " + p.title + " (by " + p.user + ")" }; }
+      case "rb_gh_issue_when": { const repo = str(b.getFieldValue("REPO")).trim(), g = CONN.github || {};
+        const i = (g.issues || []).filter(x => x.repo === repo).sort((a, c) => a.days_ago - c.days_ago)[0] || (g.issues || [])[0] || { repo, number:0, title:"", user:"", body:"" };
+        return { repo:i.repo, number:i.number, title:i.title, body:i.body || "", author:i.user, labels:i.labels || [], link:"https://github.com/" + i.repo + "/issues/" + i.number,
+                 text:i.repo + " #" + i.number + ": " + i.title + " (by " + i.user + ")" }; }
+      case "rb_gh_release_when": { const repo = str(b.getFieldValue("REPO")).trim(), all = (CONN.github || {}).releases || [];
+        const mine = all.filter(x => x.repo === repo).length ? all.filter(x => x.repo === repo) : all;
+        const r = mine[0] || { repo, tag:"", name:"", notes:"" }, prev = mine[1] || {};
+        return { repo:r.repo, tag:r.tag, name:r.name, previous_tag:prev.tag || "", notes:r.notes, link:"https://github.com/" + r.repo + "/releases/tag/" + r.tag,
+                 text:r.repo + " " + r.tag + ": " + r.name }; }
       case "rb_cal_when": { const n = Math.max(0, Math.floor(num(b.getFieldValue("N")) + 0.5)), now = new Date();
         const e = sampleEvents(now, new Date(now.getTime() + 7 * 86400000)).find(x => !x.all_day) || { title:"Event", start:now, end:now, location:"" };
         const hm = d => pad2(d.getHours()) + ":" + pad2(d.getMinutes());
@@ -15001,7 +15088,7 @@ HOW TO MAP CODE
   $("step-go").onclick = () => { stepper.on = false; releaseStep(true); updateStepUi(); };
 
   /* ---------- Run this script (right-click a block) ---------- */
-  const LISTENER_HATS = new Set(["rb_homey_when", "rb_tg_when", "rb_discord_when", "rb_slack_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_cal_when", "rb_page_when", "rb_ha_event_when"]);
+  const LISTENER_HATS = new Set(["rb_homey_when", "rb_tg_when", "rb_discord_when", "rb_slack_when", "rb_mqtt_when", "rb_webhook_when", "rb_email_when", "rb_feed_when", "rb_folder_when", "rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when", "rb_cal_when", "rb_page_when", "rb_ha_event_when"]);
   const HATS = new Set(["rb_start", "rb_receive", "rb_when_time", "rb_every", "rb_ha_when", ...LISTENER_HATS]);
   function runFromBlock(block){
     if (run && run.active) return;

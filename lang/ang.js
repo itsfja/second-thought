@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"geendige mid %1"},
 "rb_folder_when":{"message0":"þonne fætels ætywþ on hylce %1","tooltip":"Fremeþ þa stoccas beneoþan þonne niwe fætels becymþ on þas hylce (wiþ þæt forescrift, buton þu fulne weg sylle). “Hwæt becom” sylþ his naman, weg, micelnesse, and þa word on him for PDF, Word oþþe gewritfætelse."},
 "rb_generate":{"message0":"writ forme frumgewrit","tooltip":"Claude writ frumgewrit þe þæt ærende gefylþ."},
+"rb_gh_issue_when":{"message0":"þonne niwe issue biþ geopenod on %1","tooltip":"Fremeþ þa stoccas beneoþan þonne hwa openaþ issue on þissum GitHub weorce (gesceawod ælce 5 minuta; pull requests ne teliaþ). “Hwæt becom” sylþ repo, number, title, body, author, labels, link and text."},
+"rb_gh_release_when":{"message0":"þonne release biþ forþsend on %1","tooltip":"Fremeþ þa stoccas beneoþan þonne þis GitHub weorc sendeþ forþ release (gesceawod ælce 15 minuta). “Hwæt becom” sylþ repo, tag, name, previous_tag, notes, link and text."},
 "rb_gh_when":{"message0":"þonne pull request biddeþ mine sceawunge","tooltip":"Fremeþ þa stoccas beneoþan þonne hwa þe bitt sceawian GitHub pull request (gesceawod ælce 5 minuta). “Hwæt becom” sylþ repo, number, title, user, link and text."},
 "rb_ha_attr":{"message0":"%1 þæs þinges %2","tooltip":"An agnung þæs þinges, swa “current_temperature” oþþe “friendly_name”."},
 "rb_ha_call":{"message0":"clypa %1 on %2 mid %3","tooltip":"Clypaþ þegnunge, swa light.turn_off. Unnedlicu cyþþ is JSON swa {\"temperature\": 20}. Unlucan, openian and wæpnu unbindan axiaþ þe symle ærest."},
@@ -1613,7 +1615,9 @@
 "(yes)":"g, gea, gēa, ġēa, gese",
 "(no)":"n, nese, na",
 "GitHub issue opened in {repo}: #{n}":"GitHub issue geopenod on {repo}: #{n}",
-"GitHub labels on {repo} #{n}":"GitHub mearca on {repo} #{n}"
+"GitHub labels on {repo} #{n}":"GitHub mearca on {repo} #{n}",
+"New issue: {issue}":"Niwe issue: {issue}",
+"New release: {release}":"Niwe release: {release}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

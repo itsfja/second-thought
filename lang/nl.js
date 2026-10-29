@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"afronden met %1"},
 "rb_folder_when":{"message0":"wanneer er een bestand verschijnt in map %1","tooltip":"Voert de blokken eronder uit wanneer er een nieuw bestand in deze map komt (naast het programma, tenzij je een volledig pad opgeeft). ‘Wat er binnenkwam’ geeft de naam, het pad, de grootte en, bij een pdf, Word- of tekstbestand, de woorden erin."},
 "rb_generate":{"message0":"een eerste concept schrijven","tooltip":"Claude schrijft een concept dat de taak uitvoert."},
+"rb_gh_issue_when":{"message0":"wanneer er een nieuw issue wordt geopend in %1","tooltip":"Voert de blokken eronder uit wanneer iemand een issue opent in dit GitHub-project (elke 5 minuten gecontroleerd; pull requests tellen niet mee). ‘Wat er binnenkwam’ geeft repo, number, title, body, author, labels, link en text."},
+"rb_gh_release_when":{"message0":"wanneer er een release wordt gepubliceerd in %1","tooltip":"Voert de blokken eronder uit wanneer dit GitHub-project een release publiceert (elke 15 minuten gecontroleerd). ‘Wat er binnenkwam’ geeft repo, tag, name, previous_tag, notes, link en text."},
 "rb_gh_when":{"message0":"wanneer een pull request om mijn review vraagt","tooltip":"Voert de blokken eronder uit wanneer iemand je vraagt een GitHub-pull request te reviewen (elke 5 minuten gecontroleerd). ‘Wat er binnenkwam’ geeft repo, number, title, user, link en text."},
 "rb_ha_attr":{"message0":"%1 van entiteit %2","tooltip":"Eén attribuut van een entiteit, bijvoorbeeld ‘current_temperature’ of ‘friendly_name’."},
 "rb_ha_call":{"message0":"%1 aanroepen op %2 met %3","tooltip":"Roept een dienst aan, bijvoorbeeld light.turn_off. Optionele gegevens zijn JSON zoals {\"temperature\": 20}. Ontgrendelen, openen en alarmen uitschakelen vragen het je altijd eerst."},
@@ -1613,6 +1615,8 @@
 "(yes)":"j, ja",
 "(no)":"n, nee",
 "GitHub issue opened in {repo}: #{n}":"GitHub-issue geopend in {repo}: #{n}",
-"GitHub labels on {repo} #{n}":"GitHub-labels op {repo} #{n}"
+"GitHub labels on {repo} #{n}":"GitHub-labels op {repo} #{n}",
+"New issue: {issue}":"Nieuw issue: {issue}",
+"New release: {release}":"Nieuwe release: {release}"
 }
 };

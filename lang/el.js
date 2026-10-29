@@ -51,6 +51,8 @@
 "rb_finish_with":{"message0":"τελείωσε με %1"},
 "rb_folder_when":{"message0":"όταν εμφανιστεί αρχείο στον φάκελο %1","tooltip":"Εκτελεί τα μπλοκ από κάτω όταν ένα νέο αρχείο μπαίνει σε αυτόν τον φάκελο (δίπλα στο πρόγραμμα, εκτός αν δώσετε πλήρη διαδρομή). Το «ό,τι έφτασε» δίνει όνομα, διαδρομή, μέγεθος και, για PDF, Word ή αρχείο κειμένου, τις λέξεις του."},
 "rb_generate":{"message0":"γράψε ένα πρώτο πρόχειρο","tooltip":"Ο Claude γράφει ένα πρόχειρο που ολοκληρώνει την εργασία."},
+"rb_gh_issue_when":{"message0":"όταν ανοίγει νέο issue στο %1","tooltip":"Εκτελεί τα μπλοκ από κάτω όταν κάποιος ανοίγει issue σε αυτό το έργο του GitHub (έλεγχος κάθε 5 λεπτά· τα pull requests δεν μετράνε). Το «ό,τι έφτασε» δίνει repo, number, title, body, author, labels, link και text."},
+"rb_gh_release_when":{"message0":"όταν δημοσιεύεται έκδοση στο %1","tooltip":"Εκτελεί τα μπλοκ από κάτω όταν αυτό το έργο του GitHub δημοσιεύει έκδοση (release· έλεγχος κάθε 15 λεπτά). Το «ό,τι έφτασε» δίνει repo, tag, name, previous_tag, notes, link και text."},
 "rb_gh_when":{"message0":"όταν ένα pull request ζητά τον έλεγχό μου","tooltip":"Εκτελεί τα μπλοκ από κάτω όταν κάποιος σας ζητά να ελέγξετε ένα pull request στο GitHub (έλεγχος κάθε 5 λεπτά). Το «ό,τι έφτασε» δίνει repo, number, title, user, link και text."},
 "rb_ha_attr":{"message0":"%1 της οντότητας %2","tooltip":"Ένα χαρακτηριστικό μιας οντότητας, π.χ. «current_temperature» ή «friendly_name»."},
 "rb_ha_call":{"message0":"κάλεσε %1 στο %2 με %3","tooltip":"Καλεί μια υπηρεσία, π.χ. light.turn_off. Τα προαιρετικά δεδομένα είναι JSON όπως {\"temperature\": 20}. Το ξεκλείδωμα, το άνοιγμα και ο αφοπλισμός σας ρωτούν πάντα πρώτα."},
@@ -1613,6 +1615,8 @@
 "(yes)":"ν, ναι, ναί",
 "(no)":"ο, όχι, οχι",
 "GitHub issue opened in {repo}: #{n}":"Άνοιξε issue στο GitHub στο {repo}: #{n}",
-"GitHub labels on {repo} #{n}":"Ετικέτες GitHub στο {repo} #{n}"
+"GitHub labels on {repo} #{n}":"Ετικέτες GitHub στο {repo} #{n}",
+"New issue: {issue}":"Νέο issue: {issue}",
+"New release: {release}":"Νέα έκδοση: {release}"
 }
 };
