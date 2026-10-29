@@ -2742,7 +2742,8 @@
   "GitHub labels on {repo} #{n}": "רשמי GitHub על {repo} #{n}",
   "New issue: {issue}": "issue חדתא: {issue}",
   "New release: {release}": "release חדתא: {release}",
-  "There's no folder {folder}.": "לית תיבותא {folder}."
+  "There's no folder {folder}.": "לית תיבותא {folder}.",
+  "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.": "דלמא בטיל. למשמש באחרנא דלא לשניא סדרא, שים בגו second-thought.ini דגמא דמני, כדון {settings}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

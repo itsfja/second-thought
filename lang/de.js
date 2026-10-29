@@ -1621,6 +1621,7 @@
 "GitHub labels on {repo} #{n}":"GitHub-Labels für {repo} #{n}",
 "New issue: {issue}":"Neues Issue: {issue}",
 "New release: {release}":"Neues Release: {release}",
-"There's no folder {folder}.":"Es gibt keinen Ordner {folder}."
+"There's no folder {folder}.":"Es gibt keinen Ordner {folder}.",
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Es wurde vielleicht eingestellt. Um ein anderes zu verwenden, ohne das Programm zu ändern, trage in second-thought.ini ein Modell ein, das aufgeführt ist, etwa {settings}."
 }
 };

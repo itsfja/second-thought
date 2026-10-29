@@ -1622,7 +1622,8 @@
 "GitHub labels on {repo} #{n}":"{repo} #{n} उपरि GitHub-चिह्नानि",
 "New issue: {issue}":"नूतनं issue: {issue}",
 "New release: {release}":"नूतनं release: {release}",
-"There's no folder {folder}.":"{folder} इति कोशः नास्ति।"
+"There's no folder {folder}.":"{folder} इति कोशः नास्ति।",
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"सम्भवतः तत् निवृत्तम्। कार्यक्रमम् अपरिवर्त्य अन्यं प्रयोक्तुं second-thought.ini मध्ये गणितं प्रतिरूपं स्थापय, यथा {settings}।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

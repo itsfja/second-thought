@@ -4899,6 +4899,8 @@ class AgentTools:
         return [dict(r) for r in self.agent_trace]
 
 
+import difflib  # noqa: E402,F811 - below the line, so python/runtime.py has it too
+import re  # noqa: E402,F811
 import importlib.metadata  # noqa: E402,F811 - below the line, so python/runtime.py has them too
 import importlib.util  # noqa: E402,F811
 import socket  # noqa: E402,F811
@@ -4935,13 +4937,8 @@ class Doctor:
         except importlib.metadata.PackageNotFoundError:
             return tr("installed")
 
-    async def _doctor_model(self, s):
-        """One model service: is its key there, and does the service accept it?"""
-        key = next((os.environ[k] for k in s["keys"] if os.environ.get(k)), "")
-        if s["signup"] and not key:
-            return "FAIL", tr("no key. Put {x} = your-key {where_keys} ({signup}).", x=s['keys'][0], where_keys=WHERE_KEYS, signup=s['signup'])
-        if s["api"] == "perplexity":
-            return "ok", tr("{x} is set (Perplexity has no free way to try it, so it isn't checked further)", x=s['keys'][0])
+    async def _doctor_listed(self, s, key):
+        """Asks one model service which models it has: (HTTP status, the model names, an error)."""
         if s["api"] == "anthropic":
             url = (os.environ.get("ANTHROPIC_BASE_URL") or "https://api.anthropic.com").rstrip("/") + "/v1/models?limit=1000"
             headers = {"x-api-key": key, "anthropic-version": "2023-06-01"}
@@ -4952,6 +4949,39 @@ class Doctor:
             pv = PROVIDERS[s["name"]]
             url, headers = pv["base"] + "/models", dict(pv["headers"], **({"Authorization": "Bearer " + key} if key else {}))
         status, body, err = await asyncio.to_thread(self._doctor_get, url, headers, self.DOCTOR_TIMEOUT)
+        items = (body.get("data") or body.get("models") or []) if isinstance(body, dict) else body if isinstance(body, list) else []
+        return status, {to_str(m.get("id") or m.get("name")).replace("models/", "") for m in items if isinstance(m, dict)}, err
+
+    @staticmethod
+    def retired_models(tiers, have):
+        """(tier, model, the closest model the service does list) for each tier whose model isn't in the service's list."""
+        out = []
+        for t in tiers:
+            m = MODELS.get(t)
+            if m and have and m not in have and m + ":latest" not in have:
+                family = re.match(r"[^0-9]*", m).group(0)  # claude-opus-, gpt-, gemini-: only suggest one of the same kind
+                same = sorted(h for h in have if h.startswith(family)) if family else sorted(have)
+                close = difflib.get_close_matches(m, same, n=1, cutoff=0.6)
+                out.append((t, m, close[0] if close else ""))
+        return out
+
+    @staticmethod
+    def model_setting(tier, model=""):
+        """The second-thought.ini line that changes a tier's model, like  MODEL_DEFAULT = claude-sonnet-5-5."""
+        return "MODEL_" + tier.upper().replace("-", "_") + " = " + (model or "<model name>")
+
+    @staticmethod
+    def service_tiers(s):
+        return [_tier(s, k) for k in TIER_NAMES if k in s["tiers"]]
+
+    async def _doctor_model(self, s):
+        """One model service: is its key there, and does the service accept it?"""
+        key = next((os.environ[k] for k in s["keys"] if os.environ.get(k)), "")
+        if s["signup"] and not key:
+            return "FAIL", tr("no key. Put {x} = your-key {where_keys} ({signup}).", x=s['keys'][0], where_keys=WHERE_KEYS, signup=s['signup'])
+        if s["api"] == "perplexity":
+            return "ok", tr("{x} is set (Perplexity has no free way to try it, so it isn't checked further)", x=s['keys'][0])
+        status, have, err = await self._doctor_listed(s, key)
         if status == 0:
             hint = " Is Ollama running? Start it with  ollama serve" if s["name"] == "Llama" else ""
             return "FAIL", tr("couldn't be reached ({err}).{hint}", err=_short(err, 120), hint=hint)
@@ -4959,13 +4989,13 @@ class Doctor:
             return "FAIL", tr("refused the key ({status}). Check {x} {where_keys}.", status=status, x=s['keys'][0], where_keys=WHERE_KEYS)
         if status != 200:
             return "NOTE", tr("answered {status} when asked which models it has, so the key couldn't be checked", status=status)
-        items = (body.get("data") or body.get("models") or []) if isinstance(body, dict) else body if isinstance(body, list) else []
-        have = {to_str(m.get("id") or m.get("name")).replace("models/", "") for m in items if isinstance(m, dict)}
-        used = [MODELS.get(t) for t in self._doctor_tiers() if (t.startswith(s["prefix"]) if s["prefix"] else "-" not in t)]
-        missing = sorted({m for m in used if m and have and m not in have and m + ":latest" not in have})
-        if missing:
-            hint = "  ollama pull " + "  /  ollama pull ".join(missing) if s["name"] == "Llama" else \
-                " Check the model name in MODELS, or MODEL_<TIER> in second-thought.ini."
+        used = [t for t in self._doctor_tiers() if (t.startswith(s["prefix"]) if s["prefix"] else "-" not in t)]
+        retired = self.retired_models(used, have)
+        if retired:
+            missing = sorted({m for _, m, _ in retired})
+            hint = "  ollama pull " + "  /  ollama pull ".join(missing) if s["name"] == "Llama" else " " + tr(
+                "It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.",
+                settings="  /  ".join(self.model_setting(t, close) for t, _, close in retired))
             return "NOTE", tr("the key works, but it doesn't list {x}, which this program uses.{hint}", x=', '.join(missing), hint=hint)
         return "ok", (tr("the key works ({n} models)", n=len(have)) if have else tr("the key works"))
 

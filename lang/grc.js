@@ -1621,7 +1621,8 @@
 "GitHub labels on {repo} #{n}":"Ἐπιγραφαὶ GitHub ἐπὶ {repo} #{n}",
 "New issue: {issue}":"Νέον issue· {issue}",
 "New release: {release}":"Νέα ἔκδοσις· {release}",
-"There's no folder {folder}.":"Οὐκ ἔστι φάκελος {folder}."
+"There's no folder {folder}.":"Οὐκ ἔστι φάκελος {folder}.",
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"ἴσως πέπαυται. ἵνα ἄλλῳ χρῇ μὴ μεταβάλλων τὸ πρόγραμμα, γράψον ἐν τῷ second-thought.ini ὃ καταλέγει, οἷον {settings}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

@@ -1622,7 +1622,8 @@
 "GitHub labels on {repo} #{n}":"GitHub o-no-ma-ta e-pi {repo} #{n}",
 "New issue: {issue}":"issue ne-wo: {issue}",
 "New release: {release}":"release ne-wo: {release}",
-"There's no folder {folder}.":"𐀃𐀄 𐀁𐀳 𐀲𐀨𐀫 {folder}."
+"There's no folder {folder}.":"𐀃𐀄 𐀁𐀳 𐀲𐀨𐀫 {folder}.",
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"a-ra a-pe-qe-ta-i. to-ra a-ra-jo ke-ra-ta-i o-u po-ro-ka-ra-ma a-me-wo, de-ke second-thought.ini o ka-ra-pe-i, wo-ze {settings}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

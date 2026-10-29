@@ -88,6 +88,9 @@ CI never runs it.
 - **A gallery program:** see [`gallery/README.md`](gallery/README.md).
 - **A model service:** one entry in `SERVICES` in `providers.py`; see
   [Development and tests](README.md#development-and-tests).
+- **Model names:** services retire models. `python tools/smoke_test.py models` lists, for each service you have a
+  key for, the tiers whose model it no longer lists (it only reads the model list, so it's free). Update those
+  names in `SERVICES`, and add a line to `CHANGELOG.md`.
 - **A new example:** examples live in the page. Add its translations to each language's `examples` section (the
   tests check every language has every example).
 - **The screenshots:** after a visible change to the page, `python tools/record_demo.py` remakes

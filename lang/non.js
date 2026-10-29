@@ -1621,7 +1621,8 @@
 "GitHub labels on {repo} #{n}":"GitHub-merki á {repo} #{n}",
 "New issue: {issue}":"Nýtt issue: {issue}",
 "New release: {release}":"Ný útgáfa: {release}",
-"There's no folder {folder}.":"Engi hirzla er {folder}."
+"There's no folder {folder}.":"Engi hirzla er {folder}.",
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"Kann vera at því sé hætt. Til at nota annat án þess at breyta forritinu, set líkan er hann telr í second-thought.ini, svá sem {settings}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

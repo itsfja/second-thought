@@ -1621,6 +1621,7 @@
 "GitHub labels on {repo} #{n}":"{repo} #{n} 上的 GitHub 标签",
 "New issue: {issue}":"新 issue：{issue}",
 "New release: {release}":"新版本：{release}",
-"There's no folder {folder}.":"没有文件夹 {folder}。"
+"There's no folder {folder}.":"没有文件夹 {folder}。",
+"It may have been retired. To use another without changing the program, put a model it does list in second-thought.ini, such as {settings}.":"它可能已停用。若要不改程序就换用其他模型，请在 second-thought.ini 中写入列表中有的模型，例如 {settings}。"
 }
 };
