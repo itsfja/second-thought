@@ -30,15 +30,28 @@ Everything it reads and writes is sent to the model services it uses.
   The answer is remembered against a hash of the program, so a changed program asks again. A scheduled program won't
   start until it has been approved once, unless you set `approve = no`.
 - **Asking before each action.** Agent tools that send or change something ask before each use, unless you choose a
-  **(no asking)** variant. **ask me before …** blocks do the same for ordinary blocks. Unlocking, opening the garage
-  and switching off an alarm always ask. With nobody there to answer, the answer is no.
+  **(no asking)** variant. **ask me before …** blocks do the same for ordinary blocks. With nobody there to answer, the
+  answer is no.
+- **Some things always ask, even with the no-asking tools.**
+  - **Opening and unlocking.** Anything that could unlock, open or disarm asks: every lock, cover (garage doors, gates)
+    and valve action except locking, closing and stopping, including toggling and setting a position, and
+    `homeassistant.turn_on`, `turn_off` or `toggle` aimed at one.
+  - **Things that could do anything.** When an agent chooses it, running a Home Assistant script, scene or automation,
+    pressing a button, starting a Homey flow, or publishing an MQTT message that says unlock, open or disarm.
+- **No reading made-up addresses next to private data.** An agent that can see private things (email, messages,
+  calendars, GitHub, your home, memory, files, MCP) asks before reading a page or feed whose address wasn't in its goal
+  or in anything it read, since the address itself could carry your data away (`https://example.com/?d=<your emails>`).
+  Addresses it found in search results, feeds or pages don't ask.
 - **Untrusted text stays text.** An agent only reads what its tools return; it's told never to follow instructions
   inside it. Treat this as a mitigation, not a guarantee: anything an agent reads (an email, a web page, a pull
-  request) can try to steer it, which is why acting tools ask first.
+  request) can try to steer it, which is why acting tools ask first. The tests play an agent that has been fully
+  fooled by a hostile email, issue or page, and check that none of these limits gives way; `tools/smoke_test.py` also
+  says whether a real model took the bait.
 - **Web requests.** The listener only starts once `WEBHOOK_SECRET` is set, refuses requests without the secret
   (compared in constant time), and listens on `127.0.0.1` unless you set `WEBHOOK_HOST`.
 - **No local network by default.** The agent's web tools read only public addresses, never ones on your own
-  network, unless you set `local_pages = yes`.
+  network, unless you set `local_pages = yes`. Every address a name resolves to is checked, and so is every redirect.
+  A name whose address changes between the check and the request (DNS rebinding) isn't caught yet.
 - **MCP servers run with your permissions.** A server named by a command in `second-thought.ini` is started as you
   and can do whatever that command can. Only add servers you trust.
 - **Keys stay out of the program.** Keys live in `second-thought.ini` or environment variables, never in the

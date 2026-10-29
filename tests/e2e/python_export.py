@@ -5,8 +5,8 @@ from e2e.common import *  # noqa: F401,F403
 PROMPTS = ("Approve? [y/n] > ", "Number > ", "Path > ", "Press Enter to continue > ", "> ")
 
 
-def drive(cmd, env, cwd, timeout=120):
-    """Run an exported program, answering whatever it asks in the terminal."""
+def drive(cmd, env, cwd, timeout=120, approve="y"):
+    """Run an exported program, answering whatever it asks in the terminal (approve: the answer to every Approve? [y/n])."""
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env, cwd=cwd)
     os.set_blocking(proc.stdout.fileno(), False)
     out, deadline, buf = [], time.time() + timeout, ""
@@ -24,7 +24,7 @@ def drive(cmd, env, cwd, timeout=120):
                 if prompt == "Path > ":
                     reply = str(FIX / ("crumb.png" if buf.rfind("Choose a picture") > buf.rfind("Choose a file") else "notes.txt"))
                 else:
-                    reply = {"Approve? [y/n] > ": "y", "Number > ": "1", "Press Enter to continue > ": ""}.get(prompt, "rye bread for beginners")
+                    reply = {"Approve? [y/n] > ": approve, "Number > ": "1", "Press Enter to continue > ": ""}.get(prompt, "rye bread for beginners")
                 proc.stdin.write((reply + "\n").encode())
                 proc.stdin.flush()
                 buf = ""
@@ -515,6 +515,34 @@ def python_tests(codes):
         got = [m["text"] for m in svc_log["tg_sent"][before:]]
         check(got == ["Got: When should I bake the rye?"] and "Telegram message" in out,
               f"t_tg_when.py answers a new Telegram message containing 'bake', and not older ones or others ({got})")
+
+        print("A fooled agent in Python stays inside the gates")
+        # As on the page: a model that fell for the hostile email tries the attacker's moves. Every ask is answered no.
+        run_no = lambda name: drive([sys.executable, "-u", str(pathlib.Path(tmp) / f"{name}.py")],  # noqa: E731
+                                    dict(env, RB_APPROVE="no", FAKE_AGENT_SCRIPT=json.dumps(AGENT_SCRIPTS[name])), tmp, approve="n")
+        for name in ("t_inj_mail", "t_inj_leak", "t_inj_ha", "t_inj_mqtt"):
+            (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
+        sent = len(svc_log["mail_sent"])
+        code_, out, err = run_no("t_inj_mail")
+        check(code_ == 0 and "IMPORTANT INSTRUCTIONS FOR THE AI ASSISTANT" in out and out.count("Allow this?") == 1
+              and len(svc_log["mail_sent"]) == sent and "[refused]" in out,
+              "Python: a fooled agent's email to the attacker waits for a yes, and a no stops it" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        code_, out, err = run_no("t_inj_leak")
+        check(code_ == 0 and out.count("Allow this?") == 1 and "made this address up" in out and "collect?d=" in out,
+              "Python: an agent that can see private things asks before reading an address it made up, not one from a feed"
+              + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        before = len(ha_calls)
+        code_, out, err = run_no("t_inj_ha")
+        called = [c for c in ha_calls[before:]]
+        check(code_ == 0 and out.count("Approve? [y/n]") == 3 and not any(x in str(called) for x in ("script.turn_on", "cover.toggle", "homeassistant"))
+              and "light" in str(called),
+              f"Python: with 'control devices (no asking)', scripts and opening actions still ask, and a no stops them ({called})"
+              + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        before = len(broker.published)
+        code_, out, err = run_no("t_inj_mqtt")
+        check(code_ == 0 and broker.published[before:] == [("zigbee2mqtt/kitchen_light/set", "ON", False)] and out.count("Allow this?") == 1,
+              f"Python: with 'publish (no asking)', an unlock message asks and a no stops it; an ordinary one goes ({broker.published[before:]})"
+              + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
 
         print("Listeners in Python")
         (pathlib.Path(tmp) / "t_ls_mqtt.py").write_text(EXTRA["t_ls_mqtt"], encoding="utf-8")

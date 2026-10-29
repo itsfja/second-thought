@@ -6,7 +6,7 @@ python/runtime.py, which is what ships inside every exported program and the pag
 import asyncio
 import json
 import re
-from .core import (BadJSON, Finish, HA_SENSITIVE, RunError, SCHEMAS, _num_like, _short, calc_text, current_time_text,
+from .core import (BadJSON, Finish, RunError, SCHEMAS, _num_like, _short, calc_text, current_time_text, ha_sensitive,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
 from .settings import tr  # noqa: F401
@@ -102,6 +102,15 @@ class AgentTools:
             (f"send_{_svc}", f"Send a {_name} message to the person's channel (or back to the channel a message came from). "
              "The person may be asked first, and may say no.", ["text"])]
     del _svc, _name
+    # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it made
+    # up (one that wasn't in its goal or in anything it read) without asking: the address itself could carry the private
+    # things away, like https://example.com/?d=<your emails>.
+    AGENT_PRIVATE = {"email", "email_send", "calendar", "telegram", "telegram_send", "telegram_send_free", "discord", "discord_send",
+                     "discord_send_free", "slack", "slack_send", "slack_send_free", "github", "github_act", "ha_read", "ha_act",
+                     "ha_act_free", "homey_read", "homey_act", "homey_act_free", "mqtt", "mqtt_act", "mqtt_act_free", "memory", "file", "mcp"}
+    # Home Assistant services an agent can't run without asking, even with 'control devices (no asking)': they run scripts,
+    # scenes or automations, or press buttons, and so could do anything, unlocking included.
+    AGENT_HA_INDIRECT = (r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$")
     AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"}  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
@@ -414,6 +423,21 @@ class AgentTools:
             return await self.free_time(a("day") or "today", a("from") or "09:00", a("to") or "17:30", inp.get("minutes", 60))
         raise RunError(tr("Unknown tool “{kind}”.", kind=kind))
 
+    def _agent_must_ask(self, tool, inp, seen, private):
+        """Why a tool that doesn't normally ask must ask this time, or "". A fooled agent's worst moves: running a script or
+        flow (which could do anything), publishing an unlock over MQTT, or reading a made-up address that carries private
+        things away."""
+        if tool == "call_service" and any(re.match(p, to_str(inp.get("service", "")).strip()) for p in self.AGENT_HA_INDIRECT):
+            return "scripts, scenes, automations and buttons always ask, since they could do anything"
+        if tool == "run_homey_flow":
+            return "flows always ask, since they could do anything"
+        if tool == "publish_mqtt" and re.search(r"\b(unlock|open|disarm)", to_str(inp.get("topic", "")) + " " + to_str(inp.get("message", "")), re.I):
+            return "unlocking, opening and disarming always ask"
+        url = to_str(inp.get("url", "")).strip()
+        if tool in ("read_page", "read_feed") and url and private and url not in seen and url.rstrip("/") not in seen:
+            return "the agent made this address up, and it can see private things that an address could carry away"
+        return ""
+
     async def agent(self, goal, steps, tools, plan=False):
         """Runs the agent, then sums up what it did, one line per step (also when the run stops part-way)."""
         self.agent_trace = []
@@ -444,6 +468,8 @@ class AgentTools:
         catalogue = self._agent_tools(tools, mcp)
         self.log(tr("Agent"), tr("Goal: {goal}", goal=goal) + "\n" + tr("Tools: {tools}", tools=", ".join(catalogue) or tr("none")) + " · " + tr("up to {n} steps", n=n) + (" · " + tr("plans first") if plan else ""), tr("started"))
         history, last, prev, same = [], "", None, 0
+        seen = goal  # every address the agent was given or read, for _agent_must_ask
+        private = any(to_str(t.get("kind")) in self.AGENT_PRIVATE for t in tools)
         plan = [] if plan else None
         self.agent_trace = []
         rec = lambda i_, status, tool="", shown="", result="": self.agent_trace.append(  # noqa: E731
@@ -510,10 +536,12 @@ class AgentTools:
                 self.log(f"{label}: {name}", tr("Input: {shown}\n\nThe same call as the step before, so it didn't run again.", shown=shown), tr("repeat"), calls=mine)
                 rec(i, "repeat", name, shown)
                 continue
-            if ask and kind == "call_service" and any(re.match(p_, to_str(inp.get("service", "")).strip()) for p_ in HA_SENSITIVE):
+            if ask and kind == "call_service" and ha_sensitive(inp.get("service", ""), inp.get("entity", "")):
                 ask = False  # unlocking, opening and disarming ask anyway: one question is enough
+            why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
+            ask = ask or bool(why_ask)
             refused = False
-            if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}"):
+            if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
                 result, refused = "The person said no, so this tool didn't run.", True
             else:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
@@ -525,6 +553,7 @@ class AgentTools:
                     result = "Error: " + self._describe(e)
             text = to_str(result) if not isinstance(result, (dict, list)) else json.dumps(result, ensure_ascii=False, default=str)
             last = text
+            seen = (seen + "\n" + text)[-500_000:]
             history.append(f"Step {i}: you used {name} with {shown}.\nResult: {_short(text, 1500)}")
             status = "refused" if refused else "tool error" if text.startswith("Error: ") else "done"
             self.log(f"{label}: {name}", (tr("Why: {why}", why=why) + "\n" if why else "") + tr("Input: {shown}\n\nResult:\n{text}", shown=shown, text=_short(text, 600)), status, calls=mine)
