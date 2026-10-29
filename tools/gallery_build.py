@@ -679,6 +679,47 @@ add(program(
             B("rb_finish_with", TEXT="Not a text-only fix, so left for a person.")))]))
 
 
+# ===== Priority 4 ======================================================================================================
+# Money: #154
+add(program(
+    "subscription-hit-list", "Subscription hit list", "money",
+    "Every 90 days, finds your subscriptions from receipt emails, asks which you've actually used, and suggests which to "
+    "cancel, with what each costs a year and where to cancel it.",
+    "The first review is 90 days after it starts; press Run for one now. It only suggests: you do the cancelling.",
+    start_and(msg="subs") + [every_n_days(90, "subscription review done", "subs"), receive(
+        "subs",
+        agent(L("Search my email from the last 90 days for receipts and renewal notices from subscriptions (streaming, software, "
+                "apps, memberships, boxes). List each subscription once with what it costs a month and a year. Then ask me, in one "
+                "question, which of them I've used in the last month. From my answer, suggest which to cancel, cheapest saving last, "
+                "and for each, search the web for the page where it's cancelled and give its link."), ["email", "ask", "web"], steps=14),
+        B("rb_result"))]))
+
+# Money: #156
+v = Vars("holdings", "summary")
+add(program(
+    "portfolio-breather", "Portfolio breather", "money",
+    "Friday evening, a deliberately calm summary of your holdings: what each did this week and this month, in plain words, with "
+    "no alarms, no predictions and no advice.",
+    "Press Run once to tell it what you hold; it remembers. Prices come from web search, so they can lag. Not financial advice.",
+    [chain(hat("rb_start"),
+           if_(B("logic_negate", BOOL=B("rb_mem_has", NAME="holdings")),
+               chain(B("rb_ask_me", TEXT=L("What do you hold? One per line, like 'Vanguard FTSE Global All Cap: £12,000'.")),
+                     B("rb_mem_set", {"KIND": "permanent"}, VALUE=B("rb_answer"), NAME="holdings"))),
+           B("rb_broadcast_wait", MSG="breathe")),
+     on_day("Friday", 18, 30, "breathe"),
+     receive(
+         "breathe",
+         v.set("holdings", B("rb_mem_get", NAME="holdings")),
+         agent(join("My holdings:\n", v.get("holdings"), "\n\nFor each, search the web for its price now, a week ago and a month ago, "
+                    "and work out the changes with calculate."), ["web", "calc"], steps=12),
+         v.set("summary", B("rb_rewrite", TEXT=B("rb_draft"), HOW=L(
+             "a calm Friday note in plain words: one line per holding with its weekly and monthly change, then one line on the "
+             "whole. No alarms, no predictions, no advice. End with: Prices come from web search and can lag. This isn't "
+             "financial advice."))),
+         email_me("Your week, calmly", v.get("summary")),
+         B("rb_finish_with", TEXT=v.get("summary")))], v))
+
+
 def main() -> int:
     bad = []
     for name, data in PROGRAMS:
