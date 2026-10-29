@@ -14,3 +14,5 @@ telegram-messages.json
 .*.approved
 .DS_Store
 second-thought.ini
+# The report from tools/smoke_test.py gallery
+smoke-gallery.md

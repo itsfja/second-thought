@@ -57,3 +57,30 @@ async def gallery_tests():
                   f"a gallery file imports like any block file, saying what it can do ({msg})")
         check(not errors, "no page errors with the gallery" + (f": {errors[:2]}" if errors else ""))
         await browser.close()
+
+
+def gallery_smoke_tests():
+    """tools/smoke_test.py gallery, the real-model run of the gallery, checked here with the stand-in models: it finishes
+    programs, stops one at its budget, and skips one with no key."""
+    print("Gallery against the models (tools/smoke_test.py gallery)")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = pathlib.Path(tmp)
+        (tmp / "empty.ini").write_text("", encoding="utf-8")
+        report = tmp / "report.md"
+        base = {k: v for k, v in os.environ.items() if not k.endswith(("_API_KEY", "_TOKEN"))}
+        base.update(SECOND_THOUGHT_INI=str(tmp / "empty.ini"), PYTHONIOENCODING="utf-8")
+
+        def run(*args, **env):
+            return subprocess.run([sys.executable, str(ROOT / "tools" / "smoke_test.py"), "gallery", *args, "--report", str(report)],
+                                  env=dict(base, **env), capture_output=True, text=True, timeout=600)
+        r = run("rain", "doctor", "release-notes", "--stand-ins", "--budget", "300")
+        text = report.read_text(encoding="utf-8") if report.exists() else ""
+        check(r.returncode == 0 and "| rain-window | finished |" in text and "| second-thought-doctor | finished |" in text,
+              "it runs gallery programs to the end and writes the report" + ("" if r.returncode == 0 else f": {(r.stderr or r.stdout)[-300:]}"))
+        check("| release-notes-writer | stopped by the budget |" in text and "reaches its budget of 300" in text,
+              "a program that goes over --budget is stopped, and the report says so")
+        check("What the stand-in services were sent: gh" in text, "the programs' connections went to the stand-in services")
+        r = run("rain")
+        text = report.read_text(encoding="utf-8")
+        check(r.returncode == 0 and "| rain-window | skipped |" in text and "needs Claude (ANTHROPIC_API_KEY)" in text,
+              "a program for a service with no key is skipped, naming the key it needs")
