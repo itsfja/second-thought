@@ -16,9 +16,9 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from .settings import WHERE_KEYS
-from .core import (DISCORD_API, GITHUB_API, HA_SENSITIVE, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
+from .core import (DISCORD_API, GITHUB_API, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
     Picture, Retryable, RunError, SLACK_API, TELEGRAM_API, TELEGRAM_FILE, WEEKDAYS, _WebSocket, _locked, _num_like,
-    _short, _write_json, num, read_text_file, round_js, to_str, _MEDIA)
+    _short, _write_json, ha_sensitive, num, read_text_file, round_js, to_str, _MEDIA)
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import fnmatch  # noqa: E402 - below the line, so python/runtime.py has it too
@@ -527,7 +527,7 @@ class Connections:
                 raise RunError(tr("The data for {service} isn't valid JSON. Use something like {\"temperature\": 20}.", service=service))
         if entity:
             body["entity_id"] = entity
-        sensitive = any(re.match(p, service) for p in HA_SENSITIVE)
+        sensitive = ha_sensitive(service, entity)
         if not sensitive and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
             return False
         if sensitive:

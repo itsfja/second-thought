@@ -65,7 +65,22 @@ HA_URL = os.environ.get("HA_URL", "http://homeassistant.local:8123").rstrip("/")
 HA_TOKEN = os.environ.get("HA_TOKEN", "")
 HA_TTS_ENTITY = os.environ.get("HA_TTS_ENTITY", "tts.home_assistant_cloud")  # used by the 'say … on' block
 HA_WATCH_SECONDS = 15  # how often 'when … changes' scripts check Home Assistant
-HA_SENSITIVE = (r"^lock\.(unlock|open)$", r"^cover\.open", r"^alarm_control_panel\.alarm_disarm$", r"^valve\.open", r"^garage_door\.open")
+# Home Assistant actions that unlock, open or disarm: they always ask, even with 'control devices (no asking)'. Locks,
+# covers (garage doors, gates, blinds) and valves: everything but locking, closing and stopping, since toggling or setting a
+# position can open them too.
+HA_SENSITIVE = (r"^lock\.(?!lock$)", r"^cover\.(?!(close_cover|close_cover_tilt|stop_cover|stop_cover_tilt)$)",
+                r"^valve\.(?!(close_valve|stop_valve)$)", r"^alarm_control_panel\.alarm_disarm$", r"^garage_door\.open")
+HA_SENSITIVE_ENTITY = r"^(lock|cover|valve|alarm_control_panel)\."
+
+
+def ha_sensitive(service, entity=""):
+    """True for an action that could unlock, open or disarm: a sensitive service, or homeassistant.turn_on, turn_off or
+    toggle aimed at a lock, cover, valve or alarm (they reach the same devices)."""
+    service = to_str(service).strip()
+    if any(re.match(p, service) for p in HA_SENSITIVE):
+        return True
+    return bool(re.match(r"^homeassistant\.(turn_on|turn_off|toggle)$", service)) and \
+        any(re.match(HA_SENSITIVE_ENTITY, e) for e in re.split(r"[\s,]+", to_str(entity).strip()) if e)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
 # GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
