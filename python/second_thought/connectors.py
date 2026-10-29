@@ -6,7 +6,6 @@ python/runtime.py, which is what ships inside every exported program and the pag
 import asyncio
 import base64
 import datetime
-import fnmatch
 import json
 import os
 import re
@@ -22,6 +21,7 @@ from .core import (DISCORD_API, GITHUB_API, HA_SENSITIVE, HA_TOKEN, HA_TTS_ENTIT
     _short, _write_json, num, read_text_file, round_js, to_str, _MEDIA)
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
+import fnmatch  # noqa: E402 - below the line, so python/runtime.py has it too
 
 
 MAX_PAGE_CHARS = 12000

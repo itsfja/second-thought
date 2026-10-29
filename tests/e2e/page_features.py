@@ -509,7 +509,7 @@ async def new_feature_page_tests(pg):
           and names.count("Allow this?") == 4 and "GitHub labels on sample-baker/sourdough-chart #40" in names
           and "GitHub issue opened in sample-baker/sourdough-chart: #44" in names,
           f"add_labels uses only the project's labels and open_issue opens one, asking before each use (sample projects on the page) ({names})")
-    files_and_check = script(add(blk("rb_folder_files", inputs={"FOLDER": tx("recipes"), "MATCH": tx("*.pdf")})), add(blk("rb_setup_check")))
+    files_and_check = script(add(val(blk("rb_folder_files", inputs={"FOLDER": tx("recipes"), "MATCH": tx("*.pdf")}))), add(val(blk("rb_setup_check"))))
     await load_state(pg, files_and_check)
     status = await run_program(pg)
     items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")

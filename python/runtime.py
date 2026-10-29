@@ -1413,6 +1413,9 @@ def current_time_text():
     return f"{WEEKDAYS[d.weekday()]} {d:%Y-%m-%d %H:%M}"
 
 
+import fnmatch  # noqa: E402 - below the line, so python/runtime.py has it too
+
+
 MAX_PAGE_CHARS = 12000
 
 
