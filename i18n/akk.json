@@ -178,9 +178,13 @@
   "rb_finish_with": {
    "message0": "𒄿𒈾 %1 𒄖𒈬𒌨"
   },
+  "rb_folder_files": {
+   "message0": "𒆪𒉡𒊌𒅗𒀭 𒄿𒈾 𒁉𒊓𒀭𒉌𒅎 %1 𒊭 %2 𒈠𒄩𒊑",
+   "tooltip": "𒆪𒉡𒊌𒅗𒀭 𒄿𒈾 𒁉𒊓𒀭𒉌𒅎, 𒅖𒊺𒋾𒅎 𒅆𒅋𒅖: name, path, modified, size. *.pdf 𒄿𒈾 %2. 𒀀𒈪𒊑 𒌑𒌌 𒄿𒊭𒋾. Python 𒄿𒈾 𒁉𒊓𒀭𒉌𒅎 𒅕𒀀𒀀𒊑; 𒁉𒊑 𒅅𒆷𒆷𒄠 𒆪𒉡𒊌𒅗𒋾 𒈪𒅋𒅆𒅎."
+  },
   "rb_folder_when": {
    "message0": "𒄿𒉡𒈠 𒆪𒉡𒊌𒆪𒌝 𒄿𒈾 𒁉𒊓𒀭𒉌𒅎 %1 𒅔𒈾𒄠𒈠𒅈",
-   "tooltip": "𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 𒆪𒉡𒊌𒆪𒌝 𒅖𒋗𒌝 𒀀𒈾 𒁉𒊓𒀭𒉌𒅎 𒀭𒉌𒅎 𒅕𒊒𒌒 (𒀉𒋾 𒉈𒁉𒅆𒅎, 𒋗𒌝𒈠 𒄩𒅈𒊏𒈾𒄠 𒂵𒈪𒅕𒋫𒄠 𒆷 𒋫𒈾𒀜𒁲𒅔). „𒊭 𒅅𒋗𒁺” 𒋗𒌝𒋗, 𒄩𒅈𒊏𒀭𒋗, 𒊏𒁍𒊻𒋢, 𒌋 𒀀𒉿𒋾𒅎 𒊭 𒇷𒅁𒁉𒋗 𒀀𒈾 PDF, Word 𒌑𒇻 𒆪𒉡𒊌𒆠𒅎 𒊭 𒀀𒉿𒋾𒅎 𒄿𒈾𒀜𒁲𒅔."
+   "tooltip": "𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 𒆪𒉡𒊌𒆪𒌝 𒅖𒋗𒌝 𒀀𒈾 𒁉𒊓𒀭𒉌𒅎 𒀭𒉌𒅎 𒅕𒊒𒌒 (𒀉𒋾 𒉈𒁉𒅆𒅎, 𒋗𒌝𒈠 𒄩𒅈𒊏𒈾𒄠 𒂵𒈪𒅕𒋫𒄠 𒆷 𒋫𒈾𒀜𒁲𒅔). „𒊭 𒅅𒋗𒁺” 𒋗𒌝𒋗, 𒄩𒅈𒊏𒀭𒋗, 𒊏𒁍𒊻𒋢, 𒌋 𒀀𒉿𒋾𒅎 𒊭 𒇷𒅁𒁉𒋗 𒀀𒈾 PDF, Word 𒌑𒇻 𒆪𒉡𒊌𒆠𒅎 𒊭 𒀀𒉿𒋾𒅎 𒄿𒈾𒀜𒁲𒅔. 𒄿𒈾 𒋾𒅆𒈥 picture 𒄿𒈾𒀜𒁲𒅔."
   },
   "rb_generate": {
    "message0": "𒈠𒀸𒁕𒊏𒄠 𒉺𒉌𒅎 𒋗𒌅𒌨",
@@ -442,6 +446,10 @@
   "rb_set_instructions": {
    "message0": "𒁲𒈠𒄠 𒀀𒈾 Claude 𒀀𒈾 %1 𒋗𒆪𒌦",
    "tooltip": "𒀉𒋾 𒅆𒋛𒋾𒅎 𒅗𒇷𒊭 𒀀𒈾 Claude 𒉿𒅈𒆠 𒇷𒁉𒀉𒋾𒅎 𒀭𒉌𒋾𒅎 𒅖𒊭𒀊𒉺𒅈, 𒆠𒈠 𒉺𒅈𒍢𒅎, 𒊑𒅅𒈪𒅎 𒌑𒇻 𒀀𒆷𒀝𒋾𒅎 𒊭 𒁉𒋾𒅎."
+  },
+  "rb_setup_check": {
+   "message0": "𒁉𒊑 𒅅𒆷𒆷𒄠 𒊭 𒉡𒁲𒉿 𒀀𒉌𒄿𒅎",
+   "tooltip": "𒁉𒊑 𒅅𒆷𒆷𒄠 𒆷𒄠𒊑𒆷 --doctor 𒄿𒈾 𒋫𒄠: ok, FAIL 𒌋 NOTE. 𒄿𒊭𒋾 𒀀𒈪𒊑: 𒈪𒅎𒈠 𒌑𒌌 𒅅𒊭𒊭𒀊. Python 𒂊𒉌𒅖."
   },
   "rb_show": {
    "message0": "𒈠𒀸𒁕𒊏𒄠 𒄿𒈾 𒌅𒌒 𒂊𒁉𒅖𒋾𒅎 𒆪𒌌𒇷𒅎"
@@ -1096,7 +1104,6 @@
   "unknown error": "𒄭𒁲𒌅𒌝 𒆷 𒄿𒁺𒌅𒌝",
   "until {when}": "𒀀𒁲 {when}",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "𒇷𒆠 𒌑𒉡𒌓 𒁀𒁉 MCP 𒊭 𒋫𒀸𒆪𒉡 (𒈪𒅎𒈠 𒊭 𒁀𒁍 𒋗𒉡 𒄿𒈠𒊍𒍮 𒄿𒈠𒊍𒍮)",
-  "watch a folder for new files": "𒈾𒍝𒅈 𒁉𒊓𒀭𒉌𒅎 𒀀𒈾 𒆪𒉡𒊌𒅗𒋾𒅎 𒅖𒊺𒋾𒅎",
   "while page is open": "𒀀𒁲 𒌅𒌒𒁍𒌝 𒁉𒌅",
   "{list} and {last}": "{list} 𒌋 {last}",
   "'let me choose from' got an empty list.": "„𒄿𒈾 … 𒇻𒄭𒅕” 𒋗𒈠𒋾𒅎 𒊑𒋡𒋾𒅎 𒅋𒆠.",
@@ -1327,7 +1334,9 @@
   "Community: money": "𒌝𒈠𒉡𒌝: 𒅗𒊍𒉺𒌝",
   "Community: calendar and email": "𒌝𒈠𒉡𒌝: 𒌑𒈬 𒌋 email",
   "Community: home and baking": "𒌝𒈠𒉡𒌝: 𒁉𒌅𒌝 𒌋 𒂊𒁍𒌝",
-  "Community: odds and ends": "𒌝𒈠𒉡𒌝: 𒈪𒅎𒈠 𒋗𒌝𒋗"
+  "Community: odds and ends": "𒌝𒈠𒉡𒌝: 𒈪𒅎𒈠 𒋗𒌝𒋗",
+  "look at the files in a folder, and watch it for new ones": "𒆪𒉡𒊌𒅗𒋾𒅎 𒄿𒈾 𒁉𒊓𒀭𒉌𒅎 𒀀𒈪𒊑 𒌋 𒀀𒈾 𒆪𒉡𒊌𒅗𒋾𒅎 𒅖𒊺𒋾𒅎 𒈾𒍝𒅈",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "𒁉𒊑 𒅅𒆷𒆷𒄠 𒄿𒈾 Python 𒀀𒉿𒀀 𒅔𒈾𒀠𒀀𒄠: 𒉡𒁲𒉿 𒀀𒈾 Python 𒌋 𒄿𒈾𒀭𒈾 𒀀𒈪𒊑."
  },
  "examples": {
   "review": {
@@ -2732,7 +2741,8 @@
   "GitHub issue opened in {repo}: #{n}": "petûm issue ina GitHub ana {repo}: #{n}",
   "GitHub labels on {repo} #{n}": "šumū ina GitHub ana {repo} #{n}",
   "New issue: {issue}": "issue eššum: {issue}",
-  "New release: {release}": "release eššum: {release}"
+  "New release: {release}": "release eššum: {release}",
+  "There's no folder {folder}.": "𒁉𒊓𒀭𒉌𒅎 {folder} 𒌑𒇻 𒅀𒅋𒋗"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

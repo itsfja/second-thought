@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"text of a quaier that I chese","tooltip":"Stinteth the rennyng that thou mayst chese a PDF, a Word .docx, or a quaier of text. Yeldeth the quaieres text."},
 "rb_file_save":{"message0":"save %1 as quaier %2 . %3","tooltip":"Profreth the text to be fet doun. The web brouser preyeth thee to conferme it."},
 "rb_finish_with":{"message0":"make an ende with %1"},
-"rb_folder_when":{"message0":"whan a quaier appereth in folder %1","tooltip":"Renneth the blokkes bynethe whan a newe quaier cometh into this folder (bisyde the devys, but if thou yeve a ful wey). “What cam” yeveth his name, wey, gretnesse, and the wordes in it for a PDF, Word or text quaier."},
+"rb_folder_files":{"message0":"quaiers in folder %1 lyk %2","tooltip":"The quaiers in a folder, newest first, as recordes: name, path, modified, size. “Lyk” is a patroun as *.pdf; lat it be empty for every quaier. It lokeþ oonly: it redeth hem nat. Exported Python lokeþ in the folder; this page useth ensample quaiers."},
+"rb_folder_when":{"message0":"whan a quaier appereth in folder %1","tooltip":"Renneth the blokkes bynethe whan a newe quaier cometh into this folder (bisyde the devys, but if thou yeve a ful wey). “What cam” yeveth his name, wey, gretnesse, and the wordes in it for a PDF, Word or text quaier. For a picture, “picture” yeveth it to the picture blokkes."},
 "rb_generate":{"message0":"write a firste draughte","tooltip":"Claude writeth a draughte that fulfilleth the charge."},
 "rb_gh_issue_when":{"message0":"whan a newe issue is opened in %1","tooltip":"Renneth the blokkes bynethe whan any wight openeth an issue in this GitHub werk (loked on every 5 minutes; pull requests ben nat rekned). “What cam” yeveth repo, number, title, body, author, labels, link and text."},
 "rb_gh_release_when":{"message0":"whan a release is published in %1","tooltip":"Renneth the blokkes bynethe whan this GitHub werk publisheth a release (loked on every 15 minutes). “What cam” yeveth repo, tag, name, previous_tag, notes, link and text."},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"deme %1 out of 10 for %2"},
 "rb_set_draft":{"message0":"sette draughte to %1"},
 "rb_set_instructions":{"message0":"sette instruccioun for Claude to %1","tooltip":"Sent with every callyng of Claude after this blok, as a role, a tone or the maner of the hous."},
+"rb_setup_check":{"message0":"this werkes setting-up examinacioun","tooltip":"The same examinaciouns as --doctor, as text: ech keye, pakke and conneccioun it useth, with ok, FAIL or NOTE. It redeth oonly. Oonly in exported Python; on this page it seith so."},
 "rb_show":{"message0":"shewe the draughte in the book"},
 "rb_slack_send":{"message0":"sende Slack message %1","tooltip":"Writeth in Slack: bak in the chanel a message cam fro, or in the firste chanel in SLACK_CHANNEL_ID. “Aske me bifore sendynge of messages” maketh it aske first. In this leef it is oonly shewed."},
 "rb_slack_when":{"message0":"whan a Slack message cometh conteynynge %1","tooltip":"Renneth the blokkes bynethe whan any wight writeth in oon of thy Slack chanels (write “anything”, or wordes the message moot conteyne). Oonly the chanels in SLACK_CHANNEL_ID ben told, and botes messages nevere. Loked on every 10 secondes. “What cam” yeveth text, sender and channel. In this leef, clikke it with the right hond and chees “Renne this processe” to assaye it with an ensample message."},
@@ -613,7 +615,6 @@
 "unknown error":"unknowe errour",
 "until {when}":"til {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"use the tooles of the MCP servauntz thou settest (they may do what so evere tho servauntz may)",
-"watch a folder for new files":"wacche a folder for newe quaiers",
 "while page is open":"whil the leef is open",
 "{list} and {last}":"{list} and {last}",
 "'let me choose from' got an empty list.":"“lat me chese fro” gat a voyde rolle.",
@@ -844,7 +845,9 @@
 "Community: money":"Felaweshipe: moneye",
 "Community: calendar and email":"Felaweshipe: kalender and email",
 "Community: home and baking":"Felaweshipe: hous and bakynge",
-"Community: odds and ends":"Felaweshipe: odde thynges"
+"Community: odds and ends":"Felaweshipe: odde thynges",
+"look at the files in a folder, and watch it for new ones":"loke on the quaiers in a folder, and wacche it for newe",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"The setting-up examinacioun renneth oonly in exported Python: export this werk and renne it there to see the reporte."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1617,7 +1620,8 @@
 "GitHub issue opened in {repo}: #{n}":"GitHub issue opened in {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub markes on {repo} #{n}",
 "New issue: {issue}":"Newe issue: {issue}",
-"New release: {release}":"Newe release: {release}"
+"New release: {release}":"Newe release: {release}",
+"There's no folder {folder}.":"Ther is no folder {folder}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

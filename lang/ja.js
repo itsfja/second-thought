@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"私が選んだファイルのテキスト","tooltip":"実行を止めて、PDF、Word の .docx、テキストファイルを選べるようにします。ファイルのテキストを返します。"},
 "rb_file_save":{"message0":"%1 をファイル %2 . %3 として保存","tooltip":"テキストをダウンロード用に差し出します。ブラウザーが確認を求めます。"},
 "rb_finish_with":{"message0":"%1 で終える"},
-"rb_folder_when":{"message0":"フォルダー %1 にファイルが現れたとき","tooltip":"このフォルダー（フルパスを指定しなければプログラムの隣）に新しいファイルが置かれたとき、下のブロックを実行します。「届いた内容」は名前、パス、サイズ、そして PDF、Word、テキストファイルなら中の言葉を返します。"},
+"rb_folder_files":{"message0":"フォルダー %1 の %2 に合うファイル","tooltip":"フォルダー内のファイルを新しい順にレコードで返します：name、path、modified、size。「合う」は *.pdf のようなパターンで、空ならすべてです。見るだけで、中身は読みません。書き出した Python はそのフォルダーを見ます（フルパスでなければプログラムの隣）。このページはサンプルのファイルを使います。"},
+"rb_folder_when":{"message0":"フォルダー %1 にファイルが現れたとき","tooltip":"このフォルダー（フルパスを指定しなければプログラムの隣）に新しいファイルが置かれたとき、下のブロックを実行します。「届いた内容」は名前、パス、サイズ、そして PDF、Word、テキストファイルなら中の言葉を返します。画像なら「picture」で画像ブロックに渡せます。"},
 "rb_generate":{"message0":"最初の下書きを書く","tooltip":"Claude がタスクをこなす下書きを書きます。"},
 "rb_gh_issue_when":{"message0":"%1 に新しい Issue が作成されたとき","tooltip":"この GitHub プロジェクトで誰かが Issue を作成したとき、下のブロックを実行します（5 分ごとに確認。プルリクエストは含みません）。「届いた内容」は repo、number、title、body、author、labels、link、text を返します。"},
 "rb_gh_release_when":{"message0":"%1 でリリースが公開されたとき","tooltip":"この GitHub プロジェクトがリリースを公開したとき、下のブロックを実行します（15 分ごとに確認）。「届いた内容」は repo、tag、name、previous_tag、notes、link、text を返します。"},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"%1 を %2 について 10 点満点で採点"},
 "rb_set_draft":{"message0":"下書きを %1 にする"},
 "rb_set_instructions":{"message0":"Claude への指示を %1 にする","tooltip":"このブロックより後のすべての Claude 呼び出しと一緒に送られます。例：役割、口調、社内スタイル。"},
+"rb_setup_check":{"message0":"このプログラムの設定チェック","tooltip":"--doctor で実行したときと同じチェックをテキストで返します。使っているキー、パッケージ、接続ごとに ok、FAIL、NOTE が付きます。読むだけで、何も送信・切り替え・課金しません。書き出した Python でのみ動き、このページではそう伝えます。"},
 "rb_show":{"message0":"下書きをログに表示"},
 "rb_slack_send":{"message0":"Slack メッセージ %1 を送信","tooltip":"Slack に投稿します。メッセージが来たチャンネルに返すか、SLACK_CHANNEL_ID の最初のチャンネルに投稿します。「メッセージやお知らせの送信の前に確認する」で先に確認させられます。このページでは表示するだけです。"},
 "rb_slack_when":{"message0":"%1 を含む Slack メッセージが届いたとき","tooltip":"あなたの Slack チャンネルのどれかに誰かが投稿したとき、下のブロックを実行します（「anything」か、メッセージに含まれるべき言葉を入力します）。数えるのは SLACK_CHANNEL_ID のチャンネルだけで、ボットのメッセージは数えません。10 秒ごとに確認します。「届いた内容」は text、sender、channel を返します。このページでは右クリックして「このスクリプトを実行」を選ぶと、サンプルのメッセージで試せます。"},
@@ -613,7 +615,6 @@
 "unknown error":"不明なエラー",
 "until {when}":"{when} まで",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"設定した MCP サーバーの道具を使う（そのサーバーにできることは何でもできます）",
-"watch a folder for new files":"フォルダーに新しいファイルが来るのを見張る",
 "while page is open":"ページが開いている間",
 "{list} and {last}":"{list}、{last}",
 "'let me choose from' got an empty list.":"「…から選ばせる」に空のリストが渡されました。",
@@ -844,7 +845,9 @@
 "Community: money":"コミュニティ：お金",
 "Community: calendar and email":"コミュニティ：カレンダーとメール",
 "Community: home and baking":"コミュニティ：家とパン作り",
-"Community: odds and ends":"コミュニティ：その他"
+"Community: odds and ends":"コミュニティ：その他",
+"look at the files in a folder, and watch it for new ones":"フォルダーのファイルを見て、新しいファイルが来るのを見張る",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"設定チェックは書き出した Python でのみ動きます。このプログラムを書き出して、そちらで実行するとレポートが見られます。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1617,6 +1620,7 @@
 "GitHub issue opened in {repo}: #{n}":"{repo} に GitHub Issue を作成：#{n}",
 "GitHub labels on {repo} #{n}":"{repo} #{n} の GitHub ラベル",
 "New issue: {issue}":"新しい Issue：{issue}",
-"New release: {release}":"新しいリリース：{release}"
+"New release: {release}":"新しいリリース：{release}",
+"There's no folder {folder}.":"フォルダー {folder} がありません。"
 }
 };

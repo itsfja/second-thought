@@ -450,7 +450,7 @@ CAPABILITIES = [
     ("ha_read", "look at your Home Assistant devices", False),
     ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mqtt_read", "read MQTT messages", False),
-    ("folder", "watch a folder for new files", False),
+    ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
     ("files_save", "save files in its outputs folder", False),
     ("memory", "keep notes between runs, in memory.json", False),

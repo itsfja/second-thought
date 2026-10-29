@@ -178,9 +178,13 @@
   "rb_finish_with": {
    "message0": "שלים ב-%1"
   },
+  "rb_folder_files": {
+   "message0": "מגלתא בתיבותא %1 דדמיין ל-%2",
+   "tooltip": "מגלתא דבתיבותא, חדתתא קדמאה, כרשומין: name, path, modified, size. דמיא הוא דוגמא כמו *.pdf; שבוק ריקן לכל מגלתא. חזיא בלחוד: לא קריא להון. Python דמפקין חזי בתיבותא; דפא הדין משמש במגלתא לדוגמא."
+  },
   "rb_folder_when": {
    "message0": "כד מגלתא מתחזיא בתיבותא %1",
-   "tooltip": "מרהט לבנין דלתחתא כד מגלתא חדתא נחתא בתיבותא הדא (לצד סדורא, אי לא יהבת אורחא שלימא). \"מה דאתא\" יהב שמה, אורחה, רבותה, ומלין דבה ל-PDF, Word או מגלת כתבא."
+   "tooltip": "מרהט לבנין דלתחתא כד מגלתא חדתא נחתא בתיבותא הדא (לצד סדורא, אי לא יהבת אורחא שלימא). \"מה דאתא\" יהב שמה, אורחה, רבותה, ומלין דבה ל-PDF, Word או מגלת כתבא. לציורא, \"picture\" יהב יתה ללבני ציורא."
   },
   "rb_generate": {
    "message0": "כתוב טופסא קדמאה",
@@ -442,6 +446,10 @@
   "rb_set_instructions": {
    "message0": "שוי פקודיא ל-Claude ל-%1",
    "tooltip": "משתלח עם כל קריאה ל-Claude בתר לבנתא הדא, כגון תפקידא, קלא או נמוסא דביתא."
+  },
+  "rb_setup_check": {
+   "message0": "בדיקת מתקנא דסדורא הדין",
+   "tooltip": "בדיקתא הנון כמו --doctor, ככתבא: כל מפתח, חבילה וחבורא דמשמש, עם ok, FAIL או NOTE. קריא בלחוד. בלחוד ב-Python דמפקין; בדפא הדין אמר הכין."
   },
   "rb_show": {
    "message0": "אחוי טופסא בפנקסא"
@@ -1096,7 +1104,6 @@
   "unknown error": "טעותא דלא ידיעא",
   "until {when}": "עד {when}",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "לשמשא במאני משמשי MCP דשוית (יכלין למעבד כל מה דמשמשיא אלין יכלין)",
-  "watch a folder for new files": "למנטר תיבותא למגלתא חדתתא",
   "while page is open": "כל עוד דפא פתיח",
   "{list} and {last}": "{list} ו{last}",
   "'let me choose from' got an empty list.": "\"שבוק לי למבחר מן\" קבל סדרא ריקנא.",
@@ -1327,7 +1334,9 @@
   "Community: money": "כנישתא: כספא",
   "Community: calendar and email": "כנישתא: חושבן יומיא ו-email",
   "Community: home and baking": "כנישתא: ביתא ואפייתא",
-  "Community: odds and ends": "כנישתא: כל מדעם"
+  "Community: odds and ends": "כנישתא: כל מדעם",
+  "look at the files in a folder, and watch it for new ones": "למחזי מגלתא דבתיבותא, ולמנטר לה למגלתא חדתתא",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "בדיקת מתקנא רהטא בלחוד ב-Python דמפקין: אפיק סדורא הדין ורהט יתה תמן למחזי פתגמא."
  },
  "examples": {
   "review": {
@@ -2732,7 +2741,8 @@
   "GitHub issue opened in {repo}: #{n}": "issue ב-GitHub אתפתח ב-{repo}: #{n}",
   "GitHub labels on {repo} #{n}": "רשמי GitHub על {repo} #{n}",
   "New issue: {issue}": "issue חדתא: {issue}",
-  "New release: {release}": "release חדתא: {release}"
+  "New release: {release}": "release חדתא: {release}",
+  "There's no folder {folder}.": "לית תיבותא {folder}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

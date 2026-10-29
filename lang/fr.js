@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"texte d'un fichier que je choisis","tooltip":"Met l'exécution en pause pour que vous choisissiez un PDF, un .docx Word ou un fichier texte. Renvoie le texte du fichier."},
 "rb_file_save":{"message0":"enregistrer %1 comme fichier %2 . %3","tooltip":"Propose le texte en téléchargement. Le navigateur vous demande de confirmer."},
 "rb_finish_with":{"message0":"terminer avec %1"},
-"rb_folder_when":{"message0":"quand un fichier apparaît dans le dossier %1","tooltip":"Exécute les blocs en dessous quand un nouveau fichier arrive dans ce dossier (à côté du programme, sauf si vous donnez un chemin complet). « Ce qui est arrivé » donne son nom, son chemin, sa taille, et ses mots pour un PDF, un fichier Word ou texte."},
+"rb_folder_files":{"message0":"fichiers du dossier %1 correspondant à %2","tooltip":"Les fichiers d'un dossier, les plus récents d'abord, sous forme d'enregistrements : name, path, modified, size. « Correspondant à » est un motif comme *.pdf ; laissez-le vide pour tous. Il ne fait que regarder : il ne les lit pas. Le Python exporté regarde dans le dossier (à côté du programme, sauf chemin complet) ; cette page utilise des fichiers d'exemple."},
+"rb_folder_when":{"message0":"quand un fichier apparaît dans le dossier %1","tooltip":"Exécute les blocs en dessous quand un nouveau fichier arrive dans ce dossier (à côté du programme, sauf si vous donnez un chemin complet). « Ce qui est arrivé » donne son nom, son chemin, sa taille, et ses mots pour un PDF, un fichier Word ou texte. Pour une image, « picture » la donne aux blocs d'image."},
 "rb_generate":{"message0":"écrire un premier brouillon","tooltip":"Claude écrit un brouillon qui accomplit la tâche."},
 "rb_gh_issue_when":{"message0":"quand une nouvelle issue est ouverte dans %1","tooltip":"Exécute les blocs en dessous quand quelqu'un ouvre une issue dans ce projet GitHub (vérifié toutes les 5 minutes ; les pull requests ne comptent pas). « Ce qui est arrivé » donne repo, number, title, body, author, labels, link et text."},
 "rb_gh_release_when":{"message0":"quand une version est publiée dans %1","tooltip":"Exécute les blocs en dessous quand ce projet GitHub publie une version (release ; vérifié toutes les 15 minutes). « Ce qui est arrivé » donne repo, tag, name, previous_tag, notes, link et text."},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"noter %1 sur 10 pour %2"},
 "rb_set_draft":{"message0":"mettre le brouillon à %1"},
 "rb_set_instructions":{"message0":"donner à Claude ces instructions : %1","tooltip":"Envoyé avec chaque appel à Claude après ce bloc, par exemple un rôle, un ton ou un style maison."},
+"rb_setup_check":{"message0":"la vérification de la configuration de ce programme","tooltip":"Les mêmes vérifications qu'avec --doctor, en texte : chaque clé, paquet et connexion qu'il utilise, avec ok, FAIL ou NOTE. Il ne fait que lire : rien n'est envoyé, actionné ni facturé. Seulement dans le Python exporté ; sur cette page, il le dit."},
 "rb_show":{"message0":"afficher le brouillon dans le journal"},
 "rb_slack_send":{"message0":"envoyer un message Slack %1","tooltip":"Publie sur Slack : dans le canal d'où venait un message, ou dans le premier canal de SLACK_CHANNEL_ID. « Me demander avant d'envoyer des messages » le fait demander d'abord. Sur cette page il est seulement affiché."},
 "rb_slack_when":{"message0":"quand arrive un message Slack contenant %1","tooltip":"Exécute les blocs en dessous quand quelqu'un publie dans un de vos canaux Slack (tapez « anything », ou des mots que le message doit contenir). Seuls les canaux de SLACK_CHANNEL_ID comptent, et jamais les messages des bots. Vérifié toutes les 10 secondes. « Ce qui est arrivé » donne text, sender et channel. Sur cette page, faites un clic droit dessus et choisissez « Exécuter ce script » pour l'essayer avec un message d'exemple."},
@@ -613,7 +615,6 @@
 "unknown error":"erreur inconnue",
 "until {when}":"jusqu'à {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"utiliser les outils des serveurs MCP que vous configurez (ils peuvent faire tout ce que font ces serveurs)",
-"watch a folder for new files":"surveiller un dossier pour les nouveaux fichiers",
 "while page is open":"tant que la page est ouverte",
 "{list} and {last}":"{list} et {last}",
 "'let me choose from' got an empty list.":"« me laisser choisir parmi » a reçu une liste vide.",
@@ -844,7 +845,9 @@
 "Community: money":"Communauté : argent",
 "Community: calendar and email":"Communauté : calendrier et e-mail",
 "Community: home and baking":"Communauté : maison et boulangerie",
-"Community: odds and ends":"Communauté : divers"
+"Community: odds and ends":"Communauté : divers",
+"look at the files in a folder, and watch it for new ones":"voir les fichiers d'un dossier et le surveiller pour les nouveaux",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"La vérification de la configuration ne fonctionne que dans le Python exporté : exportez ce programme et lancez-le là pour voir le rapport."
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -1617,6 +1620,7 @@
 "GitHub issue opened in {repo}: #{n}":"Issue GitHub ouverte dans {repo} : #{n}",
 "GitHub labels on {repo} #{n}":"Étiquettes GitHub sur {repo} #{n}",
 "New issue: {issue}":"Nouvelle issue : {issue}",
-"New release: {release}":"Nouvelle version : {release}"
+"New release: {release}":"Nouvelle version : {release}",
+"There's no folder {folder}.":"Le dossier {folder} n'existe pas."
 }
 };

@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"我选择的文件的文本","tooltip":"暂停运行，让你选择一个 PDF、Word .docx 或文本文件。返回该文件的文本。"},
 "rb_file_save":{"message0":"把 %1 保存为文件 %2 . %3","tooltip":"把文本作为下载提供。浏览器会请你确认。"},
 "rb_finish_with":{"message0":"以 %1 结束"},
-"rb_folder_when":{"message0":"当文件夹 %1 中出现文件时","tooltip":"当这个文件夹里出现新文件时运行下面的积木（在程序旁边，除非你给出完整路径）。“收到的内容”提供文件名、路径、大小，以及 PDF、Word 或文本文件中的文字。"},
+"rb_folder_files":{"message0":"文件夹 %1 中匹配 %2 的文件","tooltip":"文件夹中的文件，最新的在前，以记录形式提供：name、path、modified、size。“匹配”是 *.pdf 这样的模式；留空表示全部。只查看，不读取内容。导出的 Python 查看该文件夹（在程序旁边，除非你给出完整路径）；本页使用示例文件。"},
+"rb_folder_when":{"message0":"当文件夹 %1 中出现文件时","tooltip":"当这个文件夹里出现新文件时运行下面的积木（在程序旁边，除非你给出完整路径）。“收到的内容”提供文件名、路径、大小，以及 PDF、Word 或文本文件中的文字。如果是图片，“picture”会把它交给图片积木。"},
 "rb_generate":{"message0":"写第一版草稿","tooltip":"Claude 写一份完成任务的草稿。"},
 "rb_gh_issue_when":{"message0":"当 %1 中有新 issue 被创建时","tooltip":"当有人在这个 GitHub 项目中创建 issue 时运行下面的积木（每 5 分钟检查一次；拉取请求不算）。“收到的内容”提供 repo、number、title、body、author、labels、link 和 text。"},
 "rb_gh_release_when":{"message0":"当 %1 发布新版本时","tooltip":"当这个 GitHub 项目发布新版本（release）时运行下面的积木（每 15 分钟检查一次）。“收到的内容”提供 repo、tag、name、previous_tag、notes、link 和 text。"},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"按 %2 给 %1 打 0 到 10 分"},
 "rb_set_draft":{"message0":"把草稿设为 %1"},
 "rb_set_instructions":{"message0":"把给 Claude 的指示设为 %1","tooltip":"在此积木之后的每次 Claude 调用都会附带发送，例如一个角色、一种语气或一种内部风格。"},
+"rb_setup_check":{"message0":"这个程序的设置检查","tooltip":"与用 --doctor 运行时相同的检查，以文本形式返回：它用到的每个密钥、软件包和连接，标有 ok、FAIL 或 NOTE。只读取：不发送、不切换、不收费。只在导出的 Python 中运行；在本页会说明这一点。"},
 "rb_show":{"message0":"在日志中显示草稿"},
 "rb_slack_send":{"message0":"发送 Slack 消息 %1","tooltip":"在 Slack 中发帖：发回消息来源的频道，或发到 SLACK_CHANNEL_ID 中的第一个频道。“在发送消息之前先问我”会让它先询问。在本页面中只会显示出来。"},
 "rb_slack_when":{"message0":"当收到包含 %1 的 Slack 消息时","tooltip":"当有人在你的某个 Slack 频道发帖时运行下面的积木（输入“anything”，或消息必须包含的词）。只计算 SLACK_CHANNEL_ID 中的频道，机器人的消息永远不算。每 10 秒检查一次。“收到的内容”提供 text、sender 和 channel。在本页面中，右键点击它并选择“运行此脚本”，用示例消息试试。"},
@@ -613,7 +615,6 @@
 "unknown error":"未知错误",
 "until {when}":"直到 {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"使用你设置的 MCP 服务器的工具（这些服务器能做什么，它就能做什么）",
-"watch a folder for new files":"监视文件夹中的新文件",
 "while page is open":"页面打开期间",
 "{list} and {last}":"{list}和{last}",
 "'let me choose from' got an empty list.":"“让我从……中选择”收到了一个空列表。",
@@ -844,7 +845,9 @@
 "Community: money":"社区：理财",
 "Community: calendar and email":"社区：日历与邮件",
 "Community: home and baking":"社区：家居与烘焙",
-"Community: odds and ends":"社区：杂项"
+"Community: odds and ends":"社区：杂项",
+"look at the files in a folder, and watch it for new ones":"查看文件夹中的文件，并监视其中的新文件",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"设置检查只在导出的 Python 中运行：导出这个程序并在那里运行，即可看到报告。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1617,6 +1620,7 @@
 "GitHub issue opened in {repo}: #{n}":"已在 {repo} 创建 GitHub issue：#{n}",
 "GitHub labels on {repo} #{n}":"{repo} #{n} 上的 GitHub 标签",
 "New issue: {issue}":"新 issue：{issue}",
-"New release: {release}":"新版本：{release}"
+"New release: {release}":"新版本：{release}",
+"There's no folder {folder}.":"没有文件夹 {folder}。"
 }
 };

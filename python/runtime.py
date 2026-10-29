@@ -1035,7 +1035,7 @@ CAPABILITIES = [
     ("ha_read", "look at your Home Assistant devices", False),
     ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mqtt_read", "read MQTT messages", False),
-    ("folder", "watch a folder for new files", False),
+    ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
     ("files_save", "save files in its outputs folder", False),
     ("memory", "keep notes between runs, in memory.json", False),
@@ -1411,6 +1411,9 @@ def time_plus_text(when, minutes):
 def current_time_text():
     d = datetime.datetime.now()
     return f"{WEEKDAYS[d.weekday()]} {d:%Y-%m-%d %H:%M}"
+
+
+import fnmatch  # noqa: E402 - below the line, so python/runtime.py has it too
 
 
 MAX_PAGE_CHARS = 12000
@@ -3192,12 +3195,48 @@ class Connections:
                     seen[url] = keys
             await asyncio.sleep(self._poll(900))
 
+    @staticmethod
+    def _folder_path(d):
+        """A folder from a block: a full path, ~/…, or a folder next to the program ("inbox" if empty)."""
+        d = os.path.expanduser(to_str(d).strip() or "inbox")
+        return d if os.path.isabs(d) else os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), d)
+
+    @staticmethod
+    def _folder_file(path, size):
+        """What a new file in a watched folder gives: its name, path and size, the words in it (PDF, Word or text),
+        and for a picture (PNG, JPEG, WebP or GIF, up to 20 MB), the picture itself, for the picture blocks."""
+        name = os.path.basename(path)
+        try:
+            text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
+        except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
+            text = ""
+        rec = {"name": name, "path": path, "size": size, "text": text}
+        media = _MEDIA.get(os.path.splitext(name)[1].lower())
+        if media and media != "image/svg+xml" and size <= 20 * 1024 * 1024:
+            with open(path, "rb") as f:
+                rec["picture"] = Picture(f.read(), media, os.path.splitext(name)[0])
+        return rec
+
+    async def folder_files(self, folder, match=""):
+        """The files in a folder, newest first, as records: name, path, modified (YYYY-MM-DD HH:MM) and size. match is a
+        pattern like *.pdf (every file if empty). Only looks: it doesn't read the files."""
+        d, match = self._folder_path(folder), to_str(match).strip() or "*"
+        if not os.path.isdir(d):
+            raise RunError(tr("There's no folder {folder}.", folder=d))
+        rows = []
+        for n in os.listdir(d):
+            path = os.path.join(d, n)
+            if n.startswith((".", "~")) or not os.path.isfile(path) or not fnmatch.fnmatch(n.lower(), match.lower()):
+                continue
+            st = os.stat(path)
+            rows.append({"name": n, "path": path, "modified": datetime.datetime.fromtimestamp(st.st_mtime).strftime("%Y-%m-%d %H:%M"),
+                         "size": st.st_size})
+        return sorted(rows, key=lambda r: r["modified"], reverse=True)[:500]
+
     async def _listen_folder(self, items):
-        base = os.path.dirname(os.path.abspath(sys.argv[0]))
         folders = []
         for d, fn in items:
-            d = os.path.expanduser(to_str(d).strip() or "inbox")
-            d = d if os.path.isabs(d) else os.path.join(base, d)
+            d = self._folder_path(d)
             os.makedirs(d, exist_ok=True)
             folders.append((d, fn))
         known, waiting = {d: set(os.listdir(d)) for d, _ in folders}, {}
@@ -3219,11 +3258,7 @@ class Connections:
                         continue
                     waiting.pop(path, None)
                     known[d].add(n)
-                    try:
-                        text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
-                    except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
-                        text = ""
-                    self._fire(fn, {"name": n, "path": path, "size": size, "text": text}, tr("New file: {name}", name=n))
+                    self._fire(fn, self._folder_file(path, size), tr("New file: {name}", name=n))
                 known[d] &= names
 
     async def _listen_github(self, items):
@@ -6207,10 +6242,21 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 print(tr("  (Couldn't note that you said yes, so it will ask again next time: {e})", e=e))
         return True
 
+    async def setup_check(self):
+        """The 'this program's setup check' block: the same checks as --doctor, as text. They run on a fresh runtime, so
+        this run's draft, memory and counts are untouched, and only read: nothing is sent, switched or charged."""
+        import contextlib
+        import io
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            await type(self)().doctor(getattr(self, "_can", None))
+        return out.getvalue().strip()
+
     def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None):
         if "--version" in sys.argv:
             print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
+        self._can = can
         if "--doctor" in sys.argv:
             sys.exit(asyncio.run(self.doctor(can)))
         self.receivers = {k.lower(): v for k, v in receivers.items()}

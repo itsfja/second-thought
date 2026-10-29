@@ -177,9 +177,13 @@
   "rb_finish_with": {
    "message0": "τέλεσον μετὰ %1"
   },
+  "rb_folder_files": {
+   "message0": "τεύχη ἐν τῷ φακέλῳ %1 ὅμοια τῷ %2",
+   "tooltip": "Τὰ τεύχη ἐν φακέλῳ, τὰ νεώτατα πρῶτα, ὡς ἀναγραφαί· name, path, modified, size. Τὸ «ὅμοια» ἐστὶ τύπος οἷον *.pdf· κενὸν λεῖπε ὑπὲρ πάντων. Μόνον ὁρᾷ· οὐκ ἀναγινώσκει. Τὸ ἐξαχθὲν Python ὁρᾷ ἐν τῷ φακέλῳ· ἥδε ἡ σελὶς χρῆται παραδείγμασιν."
+  },
   "rb_folder_when": {
    "message0": "ὅταν τεῦχος φανῇ ἐν τῷ φακέλῳ %1",
-   "tooltip": "Τρέχει τὰς πλίνθους τὰς κάτω ὅταν νέον τεῦχος ἔλθῃ εἰς τοῦτον τὸν φάκελον (παρὰ τῷ προγράμματι, εἰ μὴ ὅλην ὁδὸν δῷς). Τὸ «τί ἦλθεν» δίδωσι τὸ ὄνομα, τὴν ὁδόν, τὸ μέγεθος, καὶ τὰς λέξεις ἐν PDF, Word ἢ τεύχει γραμμάτων."
+   "tooltip": "Τρέχει τὰς πλίνθους τὰς κάτω ὅταν νέον τεῦχος ἔλθῃ εἰς τοῦτον τὸν φάκελον (παρὰ τῷ προγράμματι, εἰ μὴ ὅλην ὁδὸν δῷς). Τὸ «τί ἦλθεν» δίδωσι τὸ ὄνομα, τὴν ὁδόν, τὸ μέγεθος, καὶ τὰς λέξεις ἐν PDF, Word ἢ τεύχει γραμμάτων. Ὑπὲρ εἰκόνος, τὸ «picture» δίδωσιν αὐτὴν ταῖς πλίνθοις εἰκόνων."
   },
   "rb_generate": {
    "message0": "γράψον πρῶτον σχέδιον",
@@ -441,6 +445,10 @@
   "rb_set_instructions": {
    "message0": "θὲς τὰς ἐντολὰς τοῦ Claude εἰς %1",
    "tooltip": "Πέμπεται μεθ᾽ ἑκάστης κλήσεως τοῦ Claude μετὰ ταύτην τὴν πλίνθον, οἷον πρόσωπον, τόνος ἢ τρόπος τοῦ οἴκου."
+  },
+  "rb_setup_check": {
+   "message0": "ὁ ἔλεγχος τῆς παρασκευῆς τοῦδε τοῦ προγράμματος",
+   "tooltip": "Οἱ αὐτοὶ ἔλεγχοι οἷς τὸ --doctor, ὡς γράμματα· ἕκαστον κλειδίον, δέμα καὶ σύνδεσμος, μετὰ ok, FAIL ἢ NOTE. Μόνον ἀναγινώσκει. Μόνον ἐν τῷ ἐξαχθέντι Python· ἐν τῇδε τῇ σελίδι τοῦτο λέγει."
   },
   "rb_show": {
    "message0": "δεῖξον τὸ σχέδιον ἐν τῇ ἀναγραφῇ"
@@ -1095,7 +1103,6 @@
   "unknown error": "ἄγνωστον σφάλμα",
   "until {when}": "ἕως {when}",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "τοῖς ὀργάνοις τῶν MCP ὑπηρετῶν οὓς κατέστησας χρῆσθαι (δύνανται ὅσα ἐκεῖνοι οἱ ὑπηρέται δύνανται)",
-  "watch a folder for new files": "φάκελον τηρεῖν ὑπὲρ νέων τευχῶν",
   "while page is open": "ἐν ᾧ ἡ σελὶς ἀνέῳκται",
   "{list} and {last}": "{list} καὶ {last}",
   "'let me choose from' got an empty list.": "Τὸ «ἔασόν με ἐκλέξασθαι ἐκ» κενὸν κατάλογον ἔλαβεν.",
@@ -1326,7 +1333,9 @@
   "Community: money": "Κοινωνία· χρήματα",
   "Community: calendar and email": "Κοινωνία· ἡμερολόγιον καὶ email",
   "Community: home and baking": "Κοινωνία· οἶκος καὶ ἀρτοποιία",
-  "Community: odds and ends": "Κοινωνία· παντοδαπά"
+  "Community: odds and ends": "Κοινωνία· παντοδαπά",
+  "look at the files in a folder, and watch it for new ones": "τὰ τεύχη ἐν φακέλῳ ὁρᾶν, καὶ αὐτὸν τηρεῖν ὑπὲρ νέων",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "Ὁ ἔλεγχος τῆς παρασκευῆς τρέχει μόνον ἐν τῷ ἐξαχθέντι Python· ἐξάγαγε τοῦτο τὸ πρόγραμμα καὶ τρέξον αὐτὸ ἐκεῖ ἵνα ἴδῃς τὴν ἀναφοράν."
  },
  "examples": {
   "review": {
@@ -2731,7 +2740,8 @@
   "GitHub issue opened in {repo}: #{n}": "Ἠνοίχθη issue ἐν GitHub ἐν {repo}· #{n}",
   "GitHub labels on {repo} #{n}": "Ἐπιγραφαὶ GitHub ἐπὶ {repo} #{n}",
   "New issue: {issue}": "Νέον issue· {issue}",
-  "New release: {release}": "Νέα ἔκδοσις· {release}"
+  "New release: {release}": "Νέα ἔκδοσις· {release}",
+  "There's no folder {folder}.": "Οὐκ ἔστι φάκελος {folder}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

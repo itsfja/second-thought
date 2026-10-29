@@ -50,7 +50,8 @@
 "rb_file_choose":{"message0":"הטקסט של קובץ שאבחר","tooltip":"עוצר את ההרצה כדי שתבחרו קובץ PDF, ‏Word ‏‎.docx או קובץ טקסט. מחזיר את הטקסט של הקובץ."},
 "rb_file_save":{"message0":"שמור את %1 כקובץ %2 . %3","tooltip":"מציע את הטקסט להורדה. הדפדפן יבקש מכם לאשר."},
 "rb_finish_with":{"message0":"סיים עם %1"},
-"rb_folder_when":{"message0":"כשמופיע קובץ בתיקייה %1","tooltip":"מריץ את הבלוקים שמתחת כשקובץ חדש נוחת בתיקייה הזו (ליד התוכנית, אלא אם תתנו נתיב מלא). \"מה הגיע\" נותן את השם, הנתיב, הגודל, ואת המילים שבו עבור PDF, ‏Word או קובץ טקסט."},
+"rb_folder_files":{"message0":"קבצים בתיקייה %1 שמתאימים ל-%2","tooltip":"הקבצים בתיקייה, החדשים קודם, כרשומות: name, path, modified, size. \"שמתאימים\" הוא תבנית כמו *.pdf; השאירו ריק לכל הקבצים. רק מסתכל: לא קורא אותם. Python המיוצא מסתכל בתיקייה (ליד התוכנית, אלא אם תתנו נתיב מלא); הדף הזה משתמש בקבצי דוגמה."},
+"rb_folder_when":{"message0":"כשמופיע קובץ בתיקייה %1","tooltip":"מריץ את הבלוקים שמתחת כשקובץ חדש נוחת בתיקייה הזו (ליד התוכנית, אלא אם תתנו נתיב מלא). \"מה הגיע\" נותן את השם, הנתיב, הגודל, ואת המילים שבו עבור PDF, ‏Word או קובץ טקסט. לתמונה, \"picture\" נותן אותה לבלוקי התמונה."},
 "rb_generate":{"message0":"כתוב טיוטה ראשונה","tooltip":"Claude כותב טיוטה שמשלימה את המשימה."},
 "rb_gh_issue_when":{"message0":"כשנפתח issue חדש ב-%1","tooltip":"מריץ את הבלוקים שמתחת כשמישהו פותח issue בפרויקט הזה ב-GitHub (נבדק כל 5 דקות; בקשות משיכה לא נחשבות). \"מה הגיע\" נותן repo, number, title, body, author, labels, link ו-text."},
 "rb_gh_release_when":{"message0":"כשמתפרסמת גרסה ב-%1","tooltip":"מריץ את הבלוקים שמתחת כשהפרויקט הזה ב-GitHub מפרסם גרסה (release; נבדק כל 15 דקות). \"מה הגיע\" נותן repo, tag, name, previous_tag, notes, link ו-text."},
@@ -119,6 +120,7 @@
 "rb_score":{"message0":"דרג את %1 מתוך 10 עבור %2"},
 "rb_set_draft":{"message0":"קבע את הטיוטה ל-%1"},
 "rb_set_instructions":{"message0":"קבע את ההוראות ל-Claude ל-%1","tooltip":"נשלח עם כל קריאה ל-Claude אחרי הבלוק הזה, למשל תפקיד, טון או סגנון בית."},
+"rb_setup_check":{"message0":"בדיקת ההגדרות של התוכנית הזו","tooltip":"אותן בדיקות כמו בהרצה עם --doctor, כטקסט: כל מפתח, חבילה וחיבור שהיא משתמשת בהם, עם ok, ‏FAIL או NOTE. רק קורא: שום דבר לא נשלח, מופעל או מחויב. רק ב-Python המיוצא; בדף הזה הוא אומר זאת."},
 "rb_show":{"message0":"הצג את הטיוטה ביומן"},
 "rb_slack_send":{"message0":"שלח הודעת Slack ‏%1","tooltip":"מפרסם ב-Slack: בחזרה בערוץ שממנו הגיעה הודעה, או בערוץ הראשון ב-SLACK_CHANNEL_ID. \"שאל אותי לפני שליחת הודעות\" גורם לו לשאול קודם. בדף הזה זה רק מוצג."},
 "rb_slack_when":{"message0":"כשמגיעה הודעת Slack שמכילה %1","tooltip":"מריץ את הבלוקים שמתחת כשמישהו מפרסם באחד מערוצי ה-Slack שלכם (הקלידו 'anything', או מילים שההודעה חייבת להכיל). רק הערוצים ב-SLACK_CHANNEL_ID נחשבים, והודעות של בוטים אף פעם לא. נבדק כל 10 שניות. \"מה הגיע\" נותן text, sender ו-channel. בדף הזה, לחצו עליו בלחצן הימני ובחרו \"הרץ את התסריט הזה\" כדי לנסות אותו עם הודעה לדוגמה."},
@@ -614,7 +616,6 @@
 "unknown error":"שגיאה לא ידועה",
 "until {when}":"עד {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"להשתמש בכלים של שרתי ה-MCP שהגדרתם (הם יכולים לעשות כל מה שהשרתים האלה יכולים)",
-"watch a folder for new files":"לעקוב אחרי תיקייה ולחפש קבצים חדשים",
 "while page is open":"כל עוד הדף פתוח",
 "{list} and {last}":"{list} ו{last}",
 "'let me choose from' got an empty list.":"\"תן לי לבחור מתוך\" קיבל רשימה ריקה.",
@@ -845,7 +846,9 @@
 "Community: money":"קהילה: כסף",
 "Community: calendar and email":"קהילה: לוח שנה ודוא״ל",
 "Community: home and baking":"קהילה: בית ואפייה",
-"Community: odds and ends":"קהילה: שונות"
+"Community: odds and ends":"קהילה: שונות",
+"look at the files in a folder, and watch it for new ones":"לראות את הקבצים בתיקייה, ולעקוב אחריה לחפש חדשים",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"בדיקת ההגדרות פועלת רק ב-Python המיוצא: ייצאו את התוכנית הזו והריצו אותה שם כדי לראות את הדוח."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1618,6 +1621,7 @@
 "GitHub issue opened in {repo}: #{n}":"נפתח issue ב-GitHub ב-{repo}: #{n}",
 "GitHub labels on {repo} #{n}":"תוויות GitHub על {repo} #{n}",
 "New issue: {issue}":"issue חדש: {issue}",
-"New release: {release}":"גרסה חדשה: {release}"
+"New release: {release}":"גרסה חדשה: {release}",
+"There's no folder {folder}.":"אין תיקייה {folder}."
 }
 };

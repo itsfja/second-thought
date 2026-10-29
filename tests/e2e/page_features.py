@@ -509,6 +509,15 @@ async def new_feature_page_tests(pg):
           and names.count("Allow this?") == 4 and "GitHub labels on sample-baker/sourdough-chart #40" in names
           and "GitHub issue opened in sample-baker/sourdough-chart: #44" in names,
           f"add_labels uses only the project's labels and open_issue opens one, asking before each use (sample projects on the page) ({names})")
+    files_and_check = script(add(val(blk("rb_folder_files", inputs={"FOLDER": tx("recipes"), "MATCH": tx("*.pdf")}))), add(val(blk("rb_setup_check"))))
+    await load_state(pg, files_and_check)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    whole = " ".join(items)
+    check(status.startswith("done") and "rye-sourdough.pdf" in whole and "receipt-mill-and-co.pdf" in whole and "focaccia.docx" not in whole
+          and "recipes/rye-sourdough.pdf" in whole and "only runs in exported Python" in whole,
+          f"on the page, 'files in folder' lists the sample files matching *.pdf, and the setup check says it runs in exported Python ({whole[:300]!r})")
+    EXTRA["t_folder_check"] = await export_python(pg, "t_folder_check")
     tg = [tcall("search_telegram", text="starter"), tcall("send_telegram", text="Feed the starter at 8")]
     status, steps, items = await agent_run(pg, ["telegram", "telegram_send"], tg + [fin("ok")], answer="Allow", export="t_cn_tg")
     check(status.startswith("done") and "Remind me to feed the starter at 8 tonight" in step_of(steps, 1, 6, "search_telegram")

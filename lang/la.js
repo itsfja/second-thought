@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"textus fasciculi quem eligo","tooltip":"Exsecutionem sistit ut eligas PDF, .docx Verbi, aut fasciculum textus. Textum fasciculi reddit."},
 "rb_file_save":{"message0":"serva %1 ut fasciculum %2 . %3","tooltip":"Textum ad deponendum offert. Navigatrum confirmationem petit."},
 "rb_finish_with":{"message0":"fini cum %1"},
-"rb_folder_when":{"message0":"cum fasciculus in capsa %1 apparet","tooltip":"Lateres infra exsequitur cum novus fasciculus in hanc capsam venit (iuxta programma, nisi viam plenam das). «Quod advenit» dat nomen, viam, magnitudinem et, pro PDF, Verbo aut textu, verba eius."},
+"rb_folder_files":{"message0":"fasciculi in capsa %1 congruentes cum %2","tooltip":"Fasciculi in capsa, novissimi primi, ut scripturae: name, path, modified, size. «Congruentes» est forma ut *.pdf; vacuum relinque pro omnibus. Solum inspicit: non legit. Python exportatum in capsa inspicit; haec pagina exemplis utitur."},
+"rb_folder_when":{"message0":"cum fasciculus in capsa %1 apparet","tooltip":"Lateres infra exsequitur cum novus fasciculus in hanc capsam venit (iuxta programma, nisi viam plenam das). «Quod advenit» dat nomen, viam, magnitudinem et, pro PDF, Verbo aut textu, verba eius. Pro imagine, «picture» eam dat lateribus imaginum."},
 "rb_generate":{"message0":"scribe primam adumbrationem","tooltip":"Claude adumbrationem scribit quae pensum perficit."},
 "rb_gh_issue_when":{"message0":"cum nova quaestio in %1 aperitur","tooltip":"Lateres infra exsequitur cum quis quaestionem (issue) in hoc incepto GitHub aperit (singulis 5 minutis inspicitur; petitiones trahendi non numerantur). «Quod advenit» dat repo, number, title, body, author, labels, link et text."},
 "rb_gh_release_when":{"message0":"cum editio in %1 publicatur","tooltip":"Lateres infra exsequitur cum hoc inceptum GitHub editionem (release) publicat (singulis 15 minutis inspicitur). «Quod advenit» dat repo, tag, name, previous_tag, notes, link et text."},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"aestima %1 ex 10 pro %2"},
 "rb_set_draft":{"message0":"statue adumbrationem ad %1"},
 "rb_set_instructions":{"message0":"statue praecepta pro Claude ad %1","tooltip":"Cum quaque vocatione Claude post hunc laterem mittitur, exempli gratia partes, tonus aut stilus domesticus."},
+"rb_setup_check":{"message0":"probatio apparatus huius incepti","tooltip":"Eaedem probationes ac --doctor, ut textus: quaeque clavis, sarcina et coniunctio qua utitur, cum ok, FAIL aut NOTE. Solum legit: nihil mittitur, commutatur aut solvitur. Solum in Python exportato; in hac pagina id dicit."},
 "rb_show":{"message0":"ostende adumbrationem in actis"},
 "rb_slack_send":{"message0":"mitte nuntium Slack %1","tooltip":"In Slack ponit: in canalem unde nuntius venit, aut in primum canalem in SLACK_CHANNEL_ID. «Interroga me ante missionem nuntiorum» facit ut prius interroget. In hac pagina solum ostenditur."},
 "rb_slack_when":{"message0":"cum nuntius Slack advenit continens %1","tooltip":"Lateres infra exsequitur cum quis in uno ex canalibus Slack tuis scribit (scribe «anything», aut verba quae nuntius continere debet). Solum canales in SLACK_CHANNEL_ID numerantur, et nuntii automatorum numquam. Singulis 10 secundis inspicitur. «Quod advenit» dat text, sender et channel. In hac pagina, dextra preme et elige «Exsequere hoc scriptum» ut cum nuntio exemplari experiaris."},
@@ -613,7 +615,6 @@
 "unknown error":"error ignotus",
 "until {when}":"usque ad {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"instrumentis ministrorum MCP a te constitutorum uti (quidquid illi ministri possunt facere possunt)",
-"watch a folder for new files":"folliculum observare pro novis fasciculis",
 "while page is open":"dum pagina aperta est",
 "{list} and {last}":"{list} et {last}",
 "'let me choose from' got an empty list.":"«sine me eligere ex» indicem vacuum accepit.",
@@ -844,7 +845,9 @@
 "Community: money":"Communitas: pecunia",
 "Community: calendar and email":"Communitas: calendarium et epistulae",
 "Community: home and baking":"Communitas: domus et pistura",
-"Community: odds and ends":"Communitas: varia"
+"Community: odds and ends":"Communitas: varia",
+"look at the files in a folder, and watch it for new ones":"fasciculos in capsa inspicere, et eam pro novis observare",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"Probatio apparatus currit solum in Python exportato: hoc inceptum exporta et ibi curre ut relationem videas."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1617,7 +1620,8 @@
 "GitHub issue opened in {repo}: #{n}":"Quaestio GitHub in {repo} aperta: #{n}",
 "GitHub labels on {repo} #{n}":"Notae GitHub in {repo} #{n}",
 "New issue: {issue}":"Nova quaestio: {issue}",
-"New release: {release}":"Nova editio: {release}"
+"New release: {release}":"Nova editio: {release}",
+"There's no folder {folder}.":"Non est capsa {folder}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

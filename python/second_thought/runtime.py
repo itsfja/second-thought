@@ -1500,10 +1500,21 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 print(tr("  (Couldn't note that you said yes, so it will ask again next time: {e})", e=e))
         return True
 
+    async def setup_check(self):
+        """The 'this program's setup check' block: the same checks as --doctor, as text. They run on a fresh runtime, so
+        this run's draft, memory and counts are untouched, and only read: nothing is sent, switched or charged."""
+        import contextlib
+        import io
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            await type(self)().doctor(getattr(self, "_can", None))
+        return out.getvalue().strip()
+
     def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None):
         if "--version" in sys.argv:
             print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
+        self._can = can
         if "--doctor" in sys.argv:
             sys.exit(asyncio.run(self.doctor(can)))
         self.receivers = {k.lower(): v for k, v in receivers.items()}

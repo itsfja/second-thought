@@ -177,9 +177,13 @@
   "rb_finish_with": {
    "message0": "make an ende with %1"
   },
+  "rb_folder_files": {
+   "message0": "quaiers in folder %1 lyk %2",
+   "tooltip": "The quaiers in a folder, newest first, as recordes: name, path, modified, size. “Lyk” is a patroun as *.pdf; lat it be empty for every quaier. It lokeþ oonly: it redeth hem nat. Exported Python lokeþ in the folder; this page useth ensample quaiers."
+  },
   "rb_folder_when": {
    "message0": "whan a quaier appereth in folder %1",
-   "tooltip": "Renneth the blokkes bynethe whan a newe quaier cometh into this folder (bisyde the devys, but if thou yeve a ful wey). “What cam” yeveth his name, wey, gretnesse, and the wordes in it for a PDF, Word or text quaier."
+   "tooltip": "Renneth the blokkes bynethe whan a newe quaier cometh into this folder (bisyde the devys, but if thou yeve a ful wey). “What cam” yeveth his name, wey, gretnesse, and the wordes in it for a PDF, Word or text quaier. For a picture, “picture” yeveth it to the picture blokkes."
   },
   "rb_generate": {
    "message0": "write a firste draughte",
@@ -441,6 +445,10 @@
   "rb_set_instructions": {
    "message0": "sette instruccioun for Claude to %1",
    "tooltip": "Sent with every callyng of Claude after this blok, as a role, a tone or the maner of the hous."
+  },
+  "rb_setup_check": {
+   "message0": "this werkes setting-up examinacioun",
+   "tooltip": "The same examinaciouns as --doctor, as text: ech keye, pakke and conneccioun it useth, with ok, FAIL or NOTE. It redeth oonly. Oonly in exported Python; on this page it seith so."
   },
   "rb_show": {
    "message0": "shewe the draughte in the book"
@@ -1095,7 +1103,6 @@
   "unknown error": "unknowe errour",
   "until {when}": "til {when}",
   "use the tools of the MCP servers you set up (they can do whatever those servers can)": "use the tooles of the MCP servauntz thou settest (they may do what so evere tho servauntz may)",
-  "watch a folder for new files": "wacche a folder for newe quaiers",
   "while page is open": "whil the leef is open",
   "{list} and {last}": "{list} and {last}",
   "'let me choose from' got an empty list.": "“lat me chese fro” gat a voyde rolle.",
@@ -1326,7 +1333,9 @@
   "Community: money": "Felaweshipe: moneye",
   "Community: calendar and email": "Felaweshipe: kalender and email",
   "Community: home and baking": "Felaweshipe: hous and bakynge",
-  "Community: odds and ends": "Felaweshipe: odde thynges"
+  "Community: odds and ends": "Felaweshipe: odde thynges",
+  "look at the files in a folder, and watch it for new ones": "loke on the quaiers in a folder, and wacche it for newe",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "The setting-up examinacioun renneth oonly in exported Python: export this werk and renne it there to see the reporte."
  },
  "examples": {
   "review": {
@@ -2731,7 +2740,8 @@
   "GitHub issue opened in {repo}: #{n}": "GitHub issue opened in {repo}: #{n}",
   "GitHub labels on {repo} #{n}": "GitHub markes on {repo} #{n}",
   "New issue: {issue}": "Newe issue: {issue}",
-  "New release: {release}": "Newe release: {release}"
+  "New release: {release}": "Newe release: {release}",
+  "There's no folder {folder}.": "Ther is no folder {folder}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

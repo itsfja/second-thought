@@ -1392,7 +1392,7 @@ CAPABILITIES = [
     ("ha_read", "look at your Home Assistant devices", False),
     ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mqtt_read", "read MQTT messages", False),
-    ("folder", "watch a folder for new files", False),
+    ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
     ("files_save", "save files in its outputs folder", False),
     ("memory", "keep notes between runs, in memory.json", False),
@@ -1768,6 +1768,9 @@ def time_plus_text(when, minutes):
 def current_time_text():
     d = datetime.datetime.now()
     return f"{WEEKDAYS[d.weekday()]} {d:%Y-%m-%d %H:%M}"
+
+
+import fnmatch  # noqa: E402 - below the line, so python/runtime.py has it too
 
 
 MAX_PAGE_CHARS = 12000
@@ -3549,12 +3552,48 @@ class Connections:
                     seen[url] = keys
             await asyncio.sleep(self._poll(900))
 
+    @staticmethod
+    def _folder_path(d):
+        """A folder from a block: a full path, ~/…, or a folder next to the program ("inbox" if empty)."""
+        d = os.path.expanduser(to_str(d).strip() or "inbox")
+        return d if os.path.isabs(d) else os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), d)
+
+    @staticmethod
+    def _folder_file(path, size):
+        """What a new file in a watched folder gives: its name, path and size, the words in it (PDF, Word or text),
+        and for a picture (PNG, JPEG, WebP or GIF, up to 20 MB), the picture itself, for the picture blocks."""
+        name = os.path.basename(path)
+        try:
+            text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
+        except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
+            text = ""
+        rec = {"name": name, "path": path, "size": size, "text": text}
+        media = _MEDIA.get(os.path.splitext(name)[1].lower())
+        if media and media != "image/svg+xml" and size <= 20 * 1024 * 1024:
+            with open(path, "rb") as f:
+                rec["picture"] = Picture(f.read(), media, os.path.splitext(name)[0])
+        return rec
+
+    async def folder_files(self, folder, match=""):
+        """The files in a folder, newest first, as records: name, path, modified (YYYY-MM-DD HH:MM) and size. match is a
+        pattern like *.pdf (every file if empty). Only looks: it doesn't read the files."""
+        d, match = self._folder_path(folder), to_str(match).strip() or "*"
+        if not os.path.isdir(d):
+            raise RunError(tr("There's no folder {folder}.", folder=d))
+        rows = []
+        for n in os.listdir(d):
+            path = os.path.join(d, n)
+            if n.startswith((".", "~")) or not os.path.isfile(path) or not fnmatch.fnmatch(n.lower(), match.lower()):
+                continue
+            st = os.stat(path)
+            rows.append({"name": n, "path": path, "modified": datetime.datetime.fromtimestamp(st.st_mtime).strftime("%Y-%m-%d %H:%M"),
+                         "size": st.st_size})
+        return sorted(rows, key=lambda r: r["modified"], reverse=True)[:500]
+
     async def _listen_folder(self, items):
-        base = os.path.dirname(os.path.abspath(sys.argv[0]))
         folders = []
         for d, fn in items:
-            d = os.path.expanduser(to_str(d).strip() or "inbox")
-            d = d if os.path.isabs(d) else os.path.join(base, d)
+            d = self._folder_path(d)
             os.makedirs(d, exist_ok=True)
             folders.append((d, fn))
         known, waiting = {d: set(os.listdir(d)) for d, _ in folders}, {}
@@ -3576,11 +3615,7 @@ class Connections:
                         continue
                     waiting.pop(path, None)
                     known[d].add(n)
-                    try:
-                        text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
-                    except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
-                        text = ""
-                    self._fire(fn, {"name": n, "path": path, "size": size, "text": text}, tr("New file: {name}", name=n))
+                    self._fire(fn, self._folder_file(path, size), tr("New file: {name}", name=n))
                 known[d] &= names
 
     async def _listen_github(self, items):
@@ -6564,10 +6599,21 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 print(tr("  (Couldn't note that you said yes, so it will ask again next time: {e})", e=e))
         return True
 
+    async def setup_check(self):
+        """The 'this program's setup check' block: the same checks as --doctor, as text. They run on a fresh runtime, so
+        this run's draft, memory and counts are untouched, and only read: nothing is sent, switched or charged."""
+        import contextlib
+        import io
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            await type(self)().doctor(getattr(self, "_can", None))
+        return out.getvalue().strip()
+
     def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None):
         if "--version" in sys.argv:
             print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
+        self._can = can
         if "--doctor" in sys.argv:
             sys.exit(asyncio.run(self.doctor(can)))
         self.receivers = {k.lower(): v for k, v in receivers.items()}
@@ -6661,7 +6707,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 ["ha_read", "look at your Home Assistant devices", false],
 ["homey_read", "look at your Homey devices, flows and variables", false],
 ["mqtt_read", "read MQTT messages", false],
-["folder", "watch a folder for new files", false],
+["folder", "look at the files in a folder, and watch it for new ones", false],
 ["files_read", "read files you choose", false],
 ["files_save", "save files in its outputs folder", false],
 ["memory", "keep notes between runs, in memory.json", false]
@@ -8085,7 +8131,34 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
       "name": "grandmas-loaf.txt",
       "folder": "inbox",
       "text": "Grandma's loaf\n2 lb strong white flour\n1 pint warm water\n1 oz fresh yeast\n2 tsp salt\nMix, knead 10 minutes, rise until doubled, shape, bake hot for 40 minutes."
-    }
+    },
+    "files": [
+      {
+        "name": "rye-sourdough.pdf",
+        "size": 184220,
+        "days_ago": 2
+      },
+      {
+        "name": "focaccia.docx",
+        "size": 41870,
+        "days_ago": 9
+      },
+      {
+        "name": "bake-day-notes.txt",
+        "size": 1260,
+        "days_ago": 0.3
+      },
+      {
+        "name": "crumb-shot.jpg",
+        "size": 2380112,
+        "days_ago": 1
+      },
+      {
+        "name": "receipt-mill-and-co.pdf",
+        "size": 52011,
+        "days_ago": 5
+      }
+    ]
   },
   "homey": {
     "zones": {
@@ -8514,7 +8587,7 @@ Files and errors:
   rb_result_text: value, the result so far as text.
   rb_try: statement inputs DO and FAIL (runs FAIL if anything in DO fails).  rb_retry: inputs TIMES, statement input DO (retries temporary failures).
   rb_error: value, the most recent failure message.
-  rb_budget (TOKENS): stop the run before a model call once it has used this many tokens.  rb_tokens_used: value, tokens used so far.
+  rb_budget (TOKENS): stop the run before a model call once it has used this many tokens.  rb_tokens_used: value, tokens used so far.  rb_setup_check: value, the same report as --doctor, as text.
   rb_checkpoint_save, rb_checkpoint_restore: fields NAME. Snapshot and restore the task, draft, review, result and variables (copy.deepcopy of state, then putting it back).
   rb_run_program: fields NAME (a saved program's name); input VALUE; value, that program's result. Inside it, rb_msg_value is VALUE.
   Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
@@ -8524,7 +8597,7 @@ Agent (the model chooses its own steps):
   Connections: rb_tg_when (hat; field CONTAINS, "anything" for every message) runs when the Telegram bot gets a message; rb_tg_message: field PART ("text" | "sender" | "chat"), value; rb_tg_send: input TEXT, statement; rb_email_send: inputs TO, SUBJECT, TEXT, statement; rb_feed_news: input URL (empty = the feeds in settings), value, list of records (feed, title, link, date, summary); rb_calendar: input DAYS, value, list of records (day, start, end, title, location).
   Listeners (hats, run while the program runs on schedule): rb_mqtt_when (field TOPIC, + and # wildcards), rb_webhook_when (field PATH), rb_email_when (field CONTAINS),
   rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_gh_issue_when (field REPO, owner/name: a new issue is opened), rb_gh_release_when (field REPO: a release is published), rb_cal_when (field N, minutes before an event),
-  rb_page_when (fields URL; WORDS, only the lines containing them, empty = the whole page; N, minutes between checks): what arrived has url, title, before, after, changed.
+  rb_page_when (fields URL; WORDS, only the lines containing them, empty = the whole page; N, minutes between checks): what arrived has url, title, before, after, changed. rb_folder_files: inputs FOLDER, MATCH (a pattern like *.pdf, empty for every file), value: a list of records with name, path, modified, size.
   Map scripts that poll a web page and compare it with the last copy (requests + hashlib or difflib in a loop) to rb_page_when.
   rb_event: field KEY (a field of what arrived; "text" always works; empty = the whole record), value. rb_mqtt_read: input TOPIC, value. rb_mqtt_publish: inputs TEXT, TOPIC; field RETAIN ("TRUE" | "FALSE"), statement.
   Agent tool kinds also: "mqtt": read_mqtt | "mqtt_act" | "mqtt_act_free": publish_mqtt.
@@ -8817,7 +8890,7 @@ HOW TO MAP CODE
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
-    rb_feed_when:"feeds", rb_folder_when:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
+    rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
     rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp" };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
@@ -8826,7 +8899,7 @@ HOW TO MAP CODE
     "rb_event rb_every rb_extract rb_finish_with rb_generate rb_img_ask rb_img_change rb_img_draw rb_img_score rb_img_show rb_longtext " +
     "rb_msg_value rb_now rb_passed rb_pause rb_problems rb_prompt rb_rec_get rb_rec_has rb_rec_keys rb_rec_new rb_rec_set rb_receive " +
     "rb_reflect rb_reset_timer rb_result rb_result_text rb_retry rb_review rb_revise rb_rework rb_rewrite rb_run_program rb_say rb_score " +
-    "rb_set_draft rb_set_instructions rb_show rb_sort rb_start rb_stop rb_task rb_task_get rb_timer rb_tokens_used rb_try rb_use_model " +
+    "rb_set_draft rb_set_instructions rb_show rb_sort rb_start rb_stop rb_task rb_task_get rb_setup_check rb_timer rb_tokens_used rb_try rb_use_model " +
     "rb_wait rb_wait_msg rb_wait_time rb_wait_until rb_when_time rb_with_any_model rb_with_model rb_word_count").split(" ");
   // The agent's built-in tools (rb_agent_builtin's KIND). Every kind in AGENT_TOOL_KINDS is listed; null means nothing to declare.
   const CAP_KINDS = { web:"web", linkedin:"web", file:"files_read", memory:"memory", feeds:"feeds", calendar:"calendar",
@@ -9028,6 +9101,8 @@ HOW TO MAP CODE
       tooltip:"Before each model call, checks how many tokens this run has used. Once it reaches this number, the run stops. 0 means no limit. On this page the count is an estimate; exported Python uses the exact counts." }),
     V("rb_tokens_used", "tokens used so far", [], "Number", { style:"control",
       tooltip:"Tokens this run has used: sent plus received. An estimate on this page, exact in exported Python." }),
+    V("rb_setup_check", "this program's setup check", [], "String", { style:"control",
+      tooltip:"The same checks as running the program with --doctor, as text: each key, package and connection it uses, with ok, FAIL or NOTE. It only reads: nothing is sent, switched or charged. Only in exported Python; on this page it says so." }),
     S("rb_ask_first", "ask me before %1", [{ type:"field_dropdown", name:"WHAT", options:[["any smart home action (Home Assistant, Homey, MQTT)","ha"],["sending messages and announcements","messages"],["saving files","files"],["all of these","all"]] }],
       { style:"you", tooltip:"From here on, the program shows what it's about to do and waits for you to allow it. If you say no, it skips that step and carries on. Exported Python asks in the terminal; a scheduled run with nobody there skips it." }),
     /* Agent */
@@ -9078,6 +9153,8 @@ HOW TO MAP CODE
       tooltip:"Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     V("rb_feed_news", "news from feed %1", [val("URL")], "Array", { style:"conn", inputsInline:true,
       tooltip:"The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds." }),
+    V("rb_folder_files", "files in folder %1 matching %2", [val("FOLDER"), val("MATCH")], "Array", { style:"conn", inputsInline:true,
+      tooltip:"The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files." }),
     V("rb_calendar", "calendar for the next %1 days", [val("DAYS")], "Array", { style:"conn", inputsInline:true,
       tooltip:"Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar." }),
     S("rb_email_send", "send email to %1 subject %2 %3", [val("TO"), val("SUBJECT"), val("TEXT")], { style:"conn",
@@ -9096,7 +9173,7 @@ HOW TO MAP CODE
       tooltip:"Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text." },
     { type:"rb_folder_when", message0:"when a file appears in folder %1", args0:[{ type:"field_input", name:"FOLDER", text:"inbox" }],
       nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file." },
+      tooltip:"Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks." },
     { type:"rb_gh_when", message0:"when a pull request asks for my review", nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text." },
     { type:"rb_gh_issue_when", message0:"when a new issue is opened in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
@@ -9182,7 +9259,7 @@ HOW TO MAP CODE
       B("controls_repeat_ext", { TIMES:N(3) }), B("controls_whileUntil"), B("controls_if"),
       B("controls_if", null, { extraState:{ hasElse:true } }),
       B("controls_forEach"), B("controls_for", { FROM:N(1), TO:N(5), BY:N(1) }), B("controls_flow_statements"),
-      B("rb_wait", { SECS:N(1) }), B("rb_wait_until"), B("rb_try"), B("rb_retry", { TIMES:N(3) }), B("rb_error"), B("rb_budget", { TOKENS:N(50000) }), B("rb_tokens_used"), B("rb_use_model"), B("rb_with_model", null, { fields:{ TIER:"gemini-default" } }), B("rb_with_any_model"), B("rb_stop")
+      B("rb_wait", { SECS:N(1) }), B("rb_wait_until"), B("rb_try"), B("rb_retry", { TIMES:N(3) }), B("rb_error"), B("rb_budget", { TOKENS:N(50000) }), B("rb_tokens_used"), B("rb_setup_check"), B("rb_use_model"), B("rb_with_model", null, { fields:{ TIER:"gemini-default" } }), B("rb_with_any_model"), B("rb_stop")
     ]},
     { kind:"category", name:"Wait & time", categorystyle:"time", contents:[
       B("rb_wait", { SECS:N(5) }, { fields:{ UNIT:"m" } }), B("rb_wait_until"), B("rb_wait_time"), B("rb_wait_msg"),
@@ -9249,7 +9326,7 @@ HOW TO MAP CODE
       B("rb_mqtt_read", { TOPIC:K("home/kitchen/temperature") }), B("rb_mqtt_publish", { TEXT:K("ON"), TOPIC:K("zigbee2mqtt/oven_plug/set") }),
       B("rb_tg_send", { TEXT:L("Your loaf is ready to come out.") }),
       B("rb_discord_send", { TEXT:L("The bake-along starts in 10 minutes.") }), B("rb_slack_send", { TEXT:L("The oven's free now.") }),
-      B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }),
+      B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }), B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
       B("rb_email_send", { TO:K("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
@@ -11796,6 +11873,8 @@ HOW TO MAP CODE
         case "rb_answer": return "R.answer";
         case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + "))";
         case "rb_tokens_used": return "R.tokens_used()";
+        case "rb_setup_check": return "(await R.setup_check())";
+        case "rb_folder_files": return "(await R.folder_files(" + I("FOLDER", '""') + ", " + I("MATCH", '""') + "))";
         case "rb_agent_steps": return "R.agent_steps()";
         case "rb_run_program": {
           const name = String(F("NAME") || "").trim();
@@ -14444,6 +14523,14 @@ HOW TO MAP CODE
                  weekday:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()] }[part];
       }
       case "rb_tokens_used": return tokensUsed();
+      case "rb_setup_check": return tr("The setup check only runs in exported Python: export this program and run it there to see the report.");
+      case "rb_folder_files": {
+        const folder = str(await input(b, tc, "FOLDER", "")).trim() || "inbox", match = str(await input(b, tc, "MATCH", "")).trim() || "*";
+        const re = new RegExp("^" + match.toLowerCase().replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*").replace(/\?/g, ".") + "$");
+        const two = n => String(n).padStart(2, "0"), stamp = d => d.getFullYear() + "-" + two(d.getMonth() + 1) + "-" + two(d.getDate()) + " " + two(d.getHours()) + ":" + two(d.getMinutes());
+        return ((CONN.folder || {}).files || []).filter(f => re.test(f.name.toLowerCase())).sort((a, c) => a.days_ago - c.days_ago)
+          .map(f => ({ name:f.name, path:folder + "/" + f.name, modified:stamp(new Date(Date.now() - f.days_ago * 86400000)), size:f.size }));
+      }
       case "rb_agent_steps": return run.agentTrace.map(r => Object.assign({}, r));
       case "rb_run_program": return runProgram(b.getFieldValue("NAME"), await input(b, tc, "VALUE", ""), tc);
       case "rb_approve": {

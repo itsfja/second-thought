@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"tekst van een bestand dat ik kies","tooltip":"Pauzeert de run zodat je een pdf, een Word-.docx of een tekstbestand kunt kiezen. Geeft de tekst van het bestand terug."},
 "rb_file_save":{"message0":"%1 opslaan als bestand %2 . %3","tooltip":"Biedt de tekst aan als download. De browser vraagt je om te bevestigen."},
 "rb_finish_with":{"message0":"afronden met %1"},
-"rb_folder_when":{"message0":"wanneer er een bestand verschijnt in map %1","tooltip":"Voert de blokken eronder uit wanneer er een nieuw bestand in deze map komt (naast het programma, tenzij je een volledig pad opgeeft). ‘Wat er binnenkwam’ geeft de naam, het pad, de grootte en, bij een pdf, Word- of tekstbestand, de woorden erin."},
+"rb_folder_files":{"message0":"bestanden in map %1 die passen bij %2","tooltip":"De bestanden in een map, nieuwste eerst, als records: name, path, modified, size. ‘Passen bij’ is een patroon zoals *.pdf; laat het leeg voor alle bestanden. Het kijkt alleen: het leest ze niet. Geëxporteerde Python kijkt in de map (naast het programma, tenzij je een volledig pad geeft); deze pagina gebruikt voorbeeldbestanden."},
+"rb_folder_when":{"message0":"wanneer er een bestand verschijnt in map %1","tooltip":"Voert de blokken eronder uit wanneer er een nieuw bestand in deze map komt (naast het programma, tenzij je een volledig pad opgeeft). ‘Wat er binnenkwam’ geeft de naam, het pad, de grootte en, bij een pdf, Word- of tekstbestand, de woorden erin. Bij een afbeelding geeft ‘picture’ die aan de afbeeldingsblokken."},
 "rb_generate":{"message0":"een eerste concept schrijven","tooltip":"Claude schrijft een concept dat de taak uitvoert."},
 "rb_gh_issue_when":{"message0":"wanneer er een nieuw issue wordt geopend in %1","tooltip":"Voert de blokken eronder uit wanneer iemand een issue opent in dit GitHub-project (elke 5 minuten gecontroleerd; pull requests tellen niet mee). ‘Wat er binnenkwam’ geeft repo, number, title, body, author, labels, link en text."},
 "rb_gh_release_when":{"message0":"wanneer er een release wordt gepubliceerd in %1","tooltip":"Voert de blokken eronder uit wanneer dit GitHub-project een release publiceert (elke 15 minuten gecontroleerd). ‘Wat er binnenkwam’ geeft repo, tag, name, previous_tag, notes, link en text."},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"geef %1 een cijfer van 0 tot 10 voor %2"},
 "rb_set_draft":{"message0":"concept instellen op %1"},
 "rb_set_instructions":{"message0":"instructies voor Claude instellen op %1","tooltip":"Wordt na dit blok met elke Claude-aanroep meegestuurd, bijvoorbeeld een rol, een toon of een huisstijl."},
+"rb_setup_check":{"message0":"de instellingencontrole van dit programma","tooltip":"Dezelfde controles als met --doctor, als tekst: elke sleutel, elk pakket en elke verbinding die het gebruikt, met ok, FAIL of NOTE. Het leest alleen: er wordt niets verstuurd, geschakeld of betaald. Alleen in geëxporteerde Python; op deze pagina zegt het dat."},
 "rb_show":{"message0":"het concept in het logboek tonen"},
 "rb_slack_send":{"message0":"Slack-bericht %1 versturen","tooltip":"Plaatst in Slack: terug in het kanaal waar een bericht vandaan kwam, of in het eerste kanaal in SLACK_CHANNEL_ID. ‘Vraag me eerst bij het versturen van berichten’ laat het eerst vragen. Op deze pagina wordt het alleen getoond."},
 "rb_slack_when":{"message0":"wanneer een Slack-bericht binnenkomt met %1","tooltip":"Voert de blokken eronder uit wanneer iemand iets plaatst in een van je Slack-kanalen (typ ‘anything’, of woorden die het bericht moet bevatten). Alleen de kanalen in SLACK_CHANNEL_ID tellen, en berichten van bots nooit. Elke 10 seconden gecontroleerd. ‘Wat er binnenkwam’ geeft text, sender en channel. Klik er op deze pagina met de rechtermuisknop op en kies ‘Dit script uitvoeren’ om het met een voorbeeldbericht te proberen."},
@@ -613,7 +615,6 @@
 "unknown error":"onbekende fout",
 "until {when}":"tot {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"de hulpmiddelen gebruiken van de MCP-servers die je hebt ingesteld (ze kunnen alles wat die servers kunnen)",
-"watch a folder for new files":"een map in de gaten houden op nieuwe bestanden",
 "while page is open":"zolang de pagina open is",
 "{list} and {last}":"{list} en {last}",
 "'let me choose from' got an empty list.":"‘laat me kiezen uit’ kreeg een lege lijst.",
@@ -844,7 +845,9 @@
 "Community: money":"Community: geld",
 "Community: calendar and email":"Community: agenda en e-mail",
 "Community: home and baking":"Community: huis en bakken",
-"Community: odds and ends":"Community: allerlei"
+"Community: odds and ends":"Community: allerlei",
+"look at the files in a folder, and watch it for new ones":"de bestanden in een map bekijken, en hem in de gaten houden op nieuwe",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"De instellingencontrole werkt alleen in geëxporteerde Python: exporteer dit programma en voer het daar uit om het rapport te zien."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -1617,6 +1620,7 @@
 "GitHub issue opened in {repo}: #{n}":"GitHub-issue geopend in {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub-labels op {repo} #{n}",
 "New issue: {issue}":"Nieuw issue: {issue}",
-"New release: {release}":"Nieuwe release: {release}"
+"New release: {release}":"Nieuwe release: {release}",
+"There's no folder {folder}.":"Er is geen map {folder}."
 }
 };

@@ -18,9 +18,10 @@ import urllib.request
 from .settings import WHERE_KEYS
 from .core import (DISCORD_API, GITHUB_API, HA_SENSITIVE, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
     Picture, Retryable, RunError, SLACK_API, TELEGRAM_API, TELEGRAM_FILE, WEEKDAYS, _WebSocket, _locked, _num_like,
-    _short, _write_json, num, read_text_file, round_js, to_str)
+    _short, _write_json, num, read_text_file, round_js, to_str, _MEDIA)
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
+import fnmatch  # noqa: E402 - below the line, so python/runtime.py has it too
 
 
 MAX_PAGE_CHARS = 12000
@@ -1802,12 +1803,48 @@ class Connections:
                     seen[url] = keys
             await asyncio.sleep(self._poll(900))
 
+    @staticmethod
+    def _folder_path(d):
+        """A folder from a block: a full path, ~/…, or a folder next to the program ("inbox" if empty)."""
+        d = os.path.expanduser(to_str(d).strip() or "inbox")
+        return d if os.path.isabs(d) else os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), d)
+
+    @staticmethod
+    def _folder_file(path, size):
+        """What a new file in a watched folder gives: its name, path and size, the words in it (PDF, Word or text),
+        and for a picture (PNG, JPEG, WebP or GIF, up to 20 MB), the picture itself, for the picture blocks."""
+        name = os.path.basename(path)
+        try:
+            text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
+        except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
+            text = ""
+        rec = {"name": name, "path": path, "size": size, "text": text}
+        media = _MEDIA.get(os.path.splitext(name)[1].lower())
+        if media and media != "image/svg+xml" and size <= 20 * 1024 * 1024:
+            with open(path, "rb") as f:
+                rec["picture"] = Picture(f.read(), media, os.path.splitext(name)[0])
+        return rec
+
+    async def folder_files(self, folder, match=""):
+        """The files in a folder, newest first, as records: name, path, modified (YYYY-MM-DD HH:MM) and size. match is a
+        pattern like *.pdf (every file if empty). Only looks: it doesn't read the files."""
+        d, match = self._folder_path(folder), to_str(match).strip() or "*"
+        if not os.path.isdir(d):
+            raise RunError(tr("There's no folder {folder}.", folder=d))
+        rows = []
+        for n in os.listdir(d):
+            path = os.path.join(d, n)
+            if n.startswith((".", "~")) or not os.path.isfile(path) or not fnmatch.fnmatch(n.lower(), match.lower()):
+                continue
+            st = os.stat(path)
+            rows.append({"name": n, "path": path, "modified": datetime.datetime.fromtimestamp(st.st_mtime).strftime("%Y-%m-%d %H:%M"),
+                         "size": st.st_size})
+        return sorted(rows, key=lambda r: r["modified"], reverse=True)[:500]
+
     async def _listen_folder(self, items):
-        base = os.path.dirname(os.path.abspath(sys.argv[0]))
         folders = []
         for d, fn in items:
-            d = os.path.expanduser(to_str(d).strip() or "inbox")
-            d = d if os.path.isabs(d) else os.path.join(base, d)
+            d = self._folder_path(d)
             os.makedirs(d, exist_ok=True)
             folders.append((d, fn))
         known, waiting = {d: set(os.listdir(d)) for d, _ in folders}, {}
@@ -1829,11 +1866,7 @@ class Connections:
                         continue
                     waiting.pop(path, None)
                     known[d].add(n)
-                    try:
-                        text = read_text_file(path)[:100000] if size <= 25 * 1024 * 1024 else ""
-                    except Exception:  # noqa: BLE001 - a picture or other file: no text, but the script still runs
-                        text = ""
-                    self._fire(fn, {"name": n, "path": path, "size": size, "text": text}, tr("New file: {name}", name=n))
+                    self._fire(fn, self._folder_file(path, size), tr("New file: {name}", name=n))
                 known[d] &= names
 
     async def _listen_github(self, items):

@@ -49,7 +49,8 @@
 "rb_file_choose":{"message0":"gewrit fætelses þe ic geceose","tooltip":"Ætstent seo fremming þæt þu mæge geceosan PDF, Word .docx, oþþe gewritfætels. Agifþ þæs fætelses gewrit."},
 "rb_file_save":{"message0":"heald %1 swa fætels %2 . %3","tooltip":"Beodeþ þæt gewrit to niþerhlæstanne. Se webbsceawere biddeþ þæt þu hit fæstnige."},
 "rb_finish_with":{"message0":"geendige mid %1"},
-"rb_folder_when":{"message0":"þonne fætels ætywþ on hylce %1","tooltip":"Fremeþ þa stoccas beneoþan þonne niwe fætels becymþ on þas hylce (wiþ þæt forescrift, buton þu fulne weg sylle). “Hwæt becom” sylþ his naman, weg, micelnesse, and þa word on him for PDF, Word oþþe gewritfætelse."},
+"rb_folder_files":{"message0":"fætelsas on hylce %1 þe gelice beoþ %2","tooltip":"Þa fætelsas on hylce, niwost ærest, swa gewritu: name, path, modified, size. Gelic is bysen swa *.pdf; læt hit æmtig for ælcum fætelse. Hit locaþ ana: hit ne rædeþ hie. Utgesend Python locaþ on þære hylce; þis tramet bryceþ bysenfætelsas."},
+"rb_folder_when":{"message0":"þonne fætels ætywþ on hylce %1","tooltip":"Fremeþ þa stoccas beneoþan þonne niwe fætels becymþ on þas hylce (wiþ þæt forescrift, buton þu fulne weg sylle). “Hwæt becom” sylþ his naman, weg, micelnesse, and þa word on him for PDF, Word oþþe gewritfætelse. For bilwite, “picture” sylþ hit þam bilwitstoccum."},
 "rb_generate":{"message0":"writ forme frumgewrit","tooltip":"Claude writ frumgewrit þe þæt ærende gefylþ."},
 "rb_gh_issue_when":{"message0":"þonne niwe issue biþ geopenod on %1","tooltip":"Fremeþ þa stoccas beneoþan þonne hwa openaþ issue on þissum GitHub weorce (gesceawod ælce 5 minuta; pull requests ne teliaþ). “Hwæt becom” sylþ repo, number, title, body, author, labels, link and text."},
 "rb_gh_release_when":{"message0":"þonne release biþ forþsend on %1","tooltip":"Fremeþ þa stoccas beneoþan þonne þis GitHub weorc sendeþ forþ release (gesceawod ælce 15 minuta). “Hwæt becom” sylþ repo, tag, name, previous_tag, notes, link and text."},
@@ -118,6 +119,7 @@
 "rb_score":{"message0":"dem %1 of 10 for %2"},
 "rb_set_draft":{"message0":"sete frumgewrit to %1"},
 "rb_set_instructions":{"message0":"sete lare for Claude to %1","tooltip":"Gesend mid ælcre clypunge Claudes æfter þissum stocce, swa had, sweg oþþe huses wise."},
+"rb_setup_check":{"message0":"þisses weorces gearwunge sceawung","tooltip":"Þa ilcan sceawunga swa --doctor, swa gewrit: ælc cæg, dæl and gemot þe hit bryceþ, mid ok, FAIL oþþe NOTE. Hit rædeþ ana. Ana on utgesendum Python; on þissum tramete hit cweþ swa."},
 "rb_show":{"message0":"ætyw þæt frumgewrit on þære bec"},
 "rb_slack_send":{"message0":"send Slack ærendgewrit %1","tooltip":"Writ on Slack: eft on þam canale þe ærendgewrit of com, oþþe on þam forman canale on SLACK_CHANNEL_ID. “Axa me ær sendunge ærendgewrita” deþ þæt hit ærest axie. On þissum leafe hit biþ ana ætywed."},
 "rb_slack_when":{"message0":"þonne Slack ærendgewrit becymþ þe hæfþ %1","tooltip":"Fremeþ þa stoccas beneoþan þonne hwa writ on anum þinra Slack canala (writ “anything”, oþþe word þe þæt ærendgewrit habban sceal). Ana þa canalas on SLACK_CHANNEL_ID beoþ getealde, and searuþegna ærendgewritu næfre. Gesceawod ælce 10 secunda. “Hwæt becom” sylþ text, sender and channel. On þissum leafe, þyd hit mid þære swiþran and geceos “Fremme þas endebyrdnesse” to fandienne mid bysenlicum ærendgewrite."},
@@ -613,7 +615,6 @@
 "unknown error":"uncuþ gedwola",
 "until {when}":"oþ {when}",
 "use the tools of the MCP servers you set up (they can do whatever those servers can)":"brucan þara tola þara MCP þegna þe þu setest (hie magon don swa hwæt swa þa þegnas magon)",
-"watch a folder for new files":"hylce weardian for niwum fætelsum",
 "while page is open":"þa hwile þe leaf open is",
 "{list} and {last}":"{list} and {last}",
 "'let me choose from' got an empty list.":"“læt me geceosan of” onfeng idles getæles.",
@@ -844,7 +845,9 @@
 "Community: money":"Gemanscipe: feoh",
 "Community: calendar and email":"Gemanscipe: tidboc and email",
 "Community: home and baking":"Gemanscipe: ham and bacung",
-"Community: odds and ends":"Gemanscipe: gehwæt"
+"Community: odds and ends":"Gemanscipe: gehwæt",
+"look at the files in a folder, and watch it for new ones":"sceawian þa fætelsas on hylce, and weardian hie for niwum",
+"The setup check only runs in exported Python: export this program and run it there to see the report.":"Seo gearwunge sceawung yrnþ ana on utgesendum Python: sende þis weorc ut and yrn hit þær to geseonne þa andsware."
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1617,7 +1620,8 @@
 "GitHub issue opened in {repo}: #{n}":"GitHub issue geopenod on {repo}: #{n}",
 "GitHub labels on {repo} #{n}":"GitHub mearca on {repo} #{n}",
 "New issue: {issue}":"Niwe issue: {issue}",
-"New release: {release}":"Niwe release: {release}"
+"New release: {release}":"Niwe release: {release}",
+"There's no folder {folder}.":"Nis nan hylc {folder}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

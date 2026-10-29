@@ -107,7 +107,7 @@ Files and errors:
   rb_result_text: value, the result so far as text.
   rb_try: statement inputs DO and FAIL (runs FAIL if anything in DO fails).  rb_retry: inputs TIMES, statement input DO (retries temporary failures).
   rb_error: value, the most recent failure message.
-  rb_budget (TOKENS): stop the run before a model call once it has used this many tokens.  rb_tokens_used: value, tokens used so far.
+  rb_budget (TOKENS): stop the run before a model call once it has used this many tokens.  rb_tokens_used: value, tokens used so far.  rb_setup_check: value, the same report as --doctor, as text.
   rb_checkpoint_save, rb_checkpoint_restore: fields NAME. Snapshot and restore the task, draft, review, result and variables (copy.deepcopy of state, then putting it back).
   rb_run_program: fields NAME (a saved program's name); input VALUE; value, that program's result. Inside it, rb_msg_value is VALUE.
   Use rb_run_program only when the code calls another saved Second Thought program by name; otherwise use My Blocks.
@@ -117,7 +117,7 @@ Agent (the model chooses its own steps):
   Connections: rb_tg_when (hat; field CONTAINS, "anything" for every message) runs when the Telegram bot gets a message; rb_tg_message: field PART ("text" | "sender" | "chat"), value; rb_tg_send: input TEXT, statement; rb_email_send: inputs TO, SUBJECT, TEXT, statement; rb_feed_news: input URL (empty = the feeds in settings), value, list of records (feed, title, link, date, summary); rb_calendar: input DAYS, value, list of records (day, start, end, title, location).
   Listeners (hats, run while the program runs on schedule): rb_mqtt_when (field TOPIC, + and # wildcards), rb_webhook_when (field PATH), rb_email_when (field CONTAINS),
   rb_feed_when (field URL, empty = your feeds), rb_folder_when (field FOLDER), rb_gh_when (no fields: a pull request asks for my review), rb_gh_issue_when (field REPO, owner/name: a new issue is opened), rb_gh_release_when (field REPO: a release is published), rb_cal_when (field N, minutes before an event),
-  rb_page_when (fields URL; WORDS, only the lines containing them, empty = the whole page; N, minutes between checks): what arrived has url, title, before, after, changed.
+  rb_page_when (fields URL; WORDS, only the lines containing them, empty = the whole page; N, minutes between checks): what arrived has url, title, before, after, changed. rb_folder_files: inputs FOLDER, MATCH (a pattern like *.pdf, empty for every file), value: a list of records with name, path, modified, size.
   Map scripts that poll a web page and compare it with the last copy (requests + hashlib or difflib in a loop) to rb_page_when.
   rb_event: field KEY (a field of what arrived; "text" always works; empty = the whole record), value. rb_mqtt_read: input TOPIC, value. rb_mqtt_publish: inputs TEXT, TOPIC; field RETAIN ("TRUE" | "FALSE"), statement.
   Agent tool kinds also: "mqtt": read_mqtt | "mqtt_act" | "mqtt_act_free": publish_mqtt.
