@@ -1,0 +1,362 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "portfolio-breather",
+  "gallery": {
+    "title": "Portfolio breather",
+    "category": "money",
+    "description": "Friday evening, a deliberately calm summary of your holdings: what each did this week and this month, in plain words, with no alarms, no predictions and no advice.",
+    "tip": "Press Run once to tell it what you hold; it remembers. Prices come from web search, so they can lag. Not financial advice.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_holdings",
+        "name": "holdings"
+      },
+      {
+        "id": "g_summary",
+        "name": "summary"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_negate",
+                    "inputs": {
+                      "BOOL": {
+                        "block": {
+                          "type": "rb_mem_has",
+                          "inputs": {
+                            "NAME": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "holdings"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_ask_me",
+                    "inputs": {
+                      "TEXT": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "What do you hold? One per line, like 'Vanguard FTSE Global All Cap: £12,000'."
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_mem_set",
+                        "fields": {
+                          "KIND": "permanent"
+                        },
+                        "inputs": {
+                          "VALUE": {
+                            "block": {
+                              "type": "rb_answer"
+                            }
+                          },
+                          "NAME": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": "holdings"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_broadcast_wait",
+                  "inputs": {
+                    "MSG": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "breathe"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 18,
+            "MINUTE": 30,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "weekday"
+                          }
+                        }
+                      },
+                      "B": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Friday"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_broadcast_wait",
+                    "inputs": {
+                      "MSG": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "breathe"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "breathe"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_holdings"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_mem_get",
+                    "inputs": {
+                      "NAME": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "holdings"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_agent",
+                  "fields": {
+                    "PLAN": false
+                  },
+                  "inputs": {
+                    "GOAL": {
+                      "block": {
+                        "type": "text_join",
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "My holdings:\n"
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "variables_get",
+                              "fields": {
+                                "VAR": {
+                                  "id": "g_holdings"
+                                }
+                              }
+                            }
+                          },
+                          "ADD2": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "\n\nFor each, search the web for its price now, a week ago and a month ago, and work out the changes with calculate."
+                              }
+                            }
+                          }
+                        },
+                        "extraState": {
+                          "itemCount": 3
+                        }
+                      }
+                    },
+                    "STEPS": {
+                      "shadow": {
+                        "type": "math_number",
+                        "fields": {
+                          "NUM": 12
+                        }
+                      }
+                    },
+                    "TOOLS": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "web"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_agent_builtin",
+                            "fields": {
+                              "KIND": "calc"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_summary"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_rewrite",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "rb_draft"
+                                }
+                              },
+                              "HOW": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "a calm Friday note in plain words: one line per holding with its weekly and monthly change, then one line on the whole. No alarms, no predictions, no advice. End with: Prices come from web search and can lag. This isn't financial advice."
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_email_send",
+                          "inputs": {
+                            "TO": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "you@example.com"
+                                }
+                              }
+                            },
+                            "SUBJECT": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "Your week, calmly"
+                                }
+                              }
+                            },
+                            "TEXT": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_summary"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_finish_with",
+                              "inputs": {
+                                "TEXT": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_summary"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

@@ -620,6 +620,106 @@ add(program(
         B("rb_finish_with", TEXT=v.get("window")))], v))
 
 
+# ===== Batch 3: programs that use the GitHub listeners (#145) ===========================================================
+# GitHub: #149
+v = Vars("project")
+add(program(
+    "issue-triage-bot", "Issue triage bot", "github",
+    "When someone opens an issue, it labels it from the project's own labels, links a likely duplicate in a comment, and "
+    "messages you on Telegram if it looks urgent.",
+    "Change the project in the hat. Labelling and commenting ask first; use the no-asking tool once you trust it.",
+    start_and(hat("rb_gh_issue_when", {"REPO": "sample-baker/sourdough-chart"}), msg="triage", value=B("rb_event", {"KEY": "text"}),
+              test="Type an issue to test with, like 'Chart is blank on Safari: nothing shows in the chart area'") + [receive(
+        "triage",
+        v.set("project", B("text", {"TEXT": "sample-baker/sourdough-chart"})),
+        agent(join("A new issue was opened in ", v.get("project"), ":\n", B("rb_msg_value"), "\n\nFind its number if it isn't given "
+                   "(search_github for the title). Add one or two fitting labels, using only labels the project has. Search the "
+                   "project's open issues for a likely duplicate; if there's a clear one, comment linking it. Finally answer in one "
+                   "line: URGENT if it describes data loss, a security problem or the app not working for everyone, otherwise ROUTINE, "
+                   "then a short reason."), ["github", "github_act"], steps=10),
+        if_(B("rb_contains", A=B("rb_draft"), B="URGENT"), B("rb_tg_send", TEXT=join("🚨 Urgent issue: ", B("rb_msg_value"), "\n", B("rb_draft")))),
+        B("rb_result"))], v))
+
+# GitHub: #150
+add(program(
+    "release-notes-writer", "Release notes writer", "github",
+    "When a release is published, gathers the pull requests merged since the release before it and drafts changelog-ready "
+    "notes grouped into Added, Changed and Fixed. Saved as a file and emailed to you.",
+    "Change the project in the hat. It drafts; you paste. It never edits the release itself.",
+    start_and(hat("rb_gh_release_when", {"REPO": "sample-baker/sourdough-chart"}), msg="release", value=B("rb_event", {"KEY": "text"}),
+              test="Type a release to test with, like 'sample-baker/sourdough-chart v1.4.0, previous v1.3.2'") + [receive(
+        "release",
+        agent(join("A release was published: ", B("rb_msg_value"), ". Search for the pull requests merged in that project since the "
+                   "previous release (search_github with is:pr is:merged and the project), and read the ones whose titles aren't clear. "
+                   "Draft release notes grouped into Added, Changed and Fixed: one line each, in plain language a user would understand, "
+                   "with the pull request's link. Leave out internal changes (tests, CI, refactoring) unless they change behaviour."),
+              ["github"], steps=12),
+        B("rb_reflect", CRITERIA=L("every line is user-facing language; every line has its pull request link; nothing invented"),
+          ROUNDS=2, FIX=B("rb_revise")),
+        B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="release-notes"),
+        email_me("Draft release notes", B("rb_draft")),
+        B("rb_result"))]))
+
+# Coding: #166
+add(program(
+    "first-issue-fixer", "First-issue fixer", "coding",
+    "When an issue is opened that's trivial to fix from the text alone (a typo, a broken link, a missing line of docs), it "
+    "reads the file and comments with a suggested patch. It can't run code, so it leaves anything else alone.",
+    "Change the project in the hat. Commenting asks first. It never opens pull requests or changes the code.",
+    start_and(hat("rb_gh_issue_when", {"REPO": "sample-baker/sourdough-chart"}), msg="issue", value=B("rb_event", {"KEY": "text"}),
+              test="Type an issue to test with, like 'sample-baker/sourdough-chart #43: Typo in README: fermantation'") + [receive(
+        "issue",
+        if_(B("rb_ask_yesno", TEXT=join("Can this GitHub issue be fixed by changing a few lines of text (a typo, a broken link, a "
+                                        "missing sentence in the docs), with no need to run code?\n\n", B("rb_msg_value"))),
+            chain(agent(join("This issue looks trivial to fix:\n", B("rb_msg_value"), "\n\nFind the file it's about (read_github_file, "
+                             "starting from the top folder) and the exact lines. Write the fix as a small unified diff. Post it as a "
+                             "comment on the issue, starting 'Suggested fix (not tested):'. If, once you've read the file, it isn't "
+                             "trivial after all, don't comment: just say why."), ["github", "github_act"], steps=8),
+                  B("rb_result")),
+            B("rb_finish_with", TEXT="Not a text-only fix, so left for a person.")))]))
+
+
+# ===== Priority 4 ======================================================================================================
+# Money: #154
+add(program(
+    "subscription-hit-list", "Subscription hit list", "money",
+    "Every 90 days, finds your subscriptions from receipt emails, asks which you've actually used, and suggests which to "
+    "cancel, with what each costs a year and where to cancel it.",
+    "The first review is 90 days after it starts; press Run for one now. It only suggests: you do the cancelling.",
+    start_and(msg="subs") + [every_n_days(90, "subscription review done", "subs"), receive(
+        "subs",
+        agent(L("Search my email from the last 90 days for receipts and renewal notices from subscriptions (streaming, software, "
+                "apps, memberships, boxes). List each subscription once with what it costs a month and a year. Then ask me, in one "
+                "question, which of them I've used in the last month. From my answer, suggest which to cancel, cheapest saving last, "
+                "and for each, search the web for the page where it's cancelled and give its link."), ["email", "ask", "web"], steps=14),
+        B("rb_result"))]))
+
+# Money: #156
+v = Vars("holdings", "summary")
+add(program(
+    "portfolio-breather", "Portfolio breather", "money",
+    "Friday evening, a deliberately calm summary of your holdings: what each did this week and this month, in plain words, with "
+    "no alarms, no predictions and no advice.",
+    "Press Run once to tell it what you hold; it remembers. Prices come from web search, so they can lag. Not financial advice.",
+    [chain(hat("rb_start"),
+           if_(B("logic_negate", BOOL=B("rb_mem_has", NAME="holdings")),
+               chain(B("rb_ask_me", TEXT=L("What do you hold? One per line, like 'Vanguard FTSE Global All Cap: £12,000'.")),
+                     B("rb_mem_set", {"KIND": "permanent"}, VALUE=B("rb_answer"), NAME="holdings"))),
+           B("rb_broadcast_wait", MSG="breathe")),
+     on_day("Friday", 18, 30, "breathe"),
+     receive(
+         "breathe",
+         v.set("holdings", B("rb_mem_get", NAME="holdings")),
+         agent(join("My holdings:\n", v.get("holdings"), "\n\nFor each, search the web for its price now, a week ago and a month ago, "
+                    "and work out the changes with calculate."), ["web", "calc"], steps=12),
+         v.set("summary", B("rb_rewrite", TEXT=B("rb_draft"), HOW=L(
+             "a calm Friday note in plain words: one line per holding with its weekly and monthly change, then one line on the "
+             "whole. No alarms, no predictions, no advice. End with: Prices come from web search and can lag. This isn't "
+             "financial advice."))),
+         email_me("Your week, calmly", v.get("summary")),
+         B("rb_finish_with", TEXT=v.get("summary")))], v))
+
+
 def main() -> int:
     bad = []
     for name, data in PROGRAMS:

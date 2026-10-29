@@ -1,0 +1,191 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "subscription-hit-list",
+  "gallery": {
+    "title": "Subscription hit list",
+    "category": "money",
+    "description": "Every 90 days, finds your subscriptions from receipt emails, asks which you've actually used, and suggests which to cancel, with what each costs a year and where to cancel it.",
+    "tip": "The first review is 90 days after it starts; press Run for one now. It only suggests: you do the cancelling.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "subs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 9,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_negate",
+                    "inputs": {
+                      "BOOL": {
+                        "block": {
+                          "type": "rb_mem_has",
+                          "inputs": {
+                            "NAME": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "subscription review done"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_mem_set_for",
+                    "fields": {
+                      "UNIT": "d"
+                    },
+                    "inputs": {
+                      "VALUE": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "sent"
+                          }
+                        }
+                      },
+                      "NAME": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "subscription review done"
+                          }
+                        }
+                      },
+                      "N": {
+                        "shadow": {
+                          "type": "math_number",
+                          "fields": {
+                            "NUM": 90
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_broadcast_wait",
+                        "inputs": {
+                          "MSG": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": "subs"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "subs"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Search my email from the last 90 days for receipts and renewal notices from subscriptions (streaming, software, apps, memberships, boxes). List each subscription once with what it costs a month and a year. Then ask me, in one question, which of them I've used in the last month. From my answer, suggest which to cancel, cheapest saving last, and for each, search the web for the page where it's cancelled and give its link."
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 14
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "email"
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "ask"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_agent_builtin",
+                            "fields": {
+                              "KIND": "web"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_result"
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}
