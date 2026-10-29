@@ -1459,6 +1459,20 @@ def doctor_tests(codes, env, tmp, llama_url, llama_calls, ha_calls):
     r = subprocess.run([sys.executable, "-u", str(old), "--doctor"], env=env, cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
     check(r.returncode in (0, 1) and "  ok    Claude: the key works" in r.stdout and "Traceback" not in r.stderr,
           f"--doctor also checks a program exported before CAN: whatever is set up ({(r.stderr or r.stdout)[-300:]!r})")
+    # Every community gallery program: --doctor runs to its summary, once with the test services and once with no keys at all.
+    gallery = sorted(k for k in codes if k.startswith("g_"))
+    check(len(gallery) == len(list((ROOT / "gallery").glob("*.json"))), f"every gallery program was exported ({len(gallery)})")
+    no_keys = {k: v for k, v in env.items() if not (k.endswith(("_API_KEY", "_TOKEN", "_SECRET", "_PASSWORD")) or k == "HF_TOKEN")}
+    for key in gallery:
+        prog = pathlib.Path(tmp) / f"doc_{key}.py"
+        prog.write_text(codes[key][0], encoding="utf-8")
+        for label, run_env, want in (("set up", env, (0, 1)), ("with no keys", no_keys, (1,))):
+            r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=run_env, cwd=tmp, capture_output=True,
+                               encoding="utf-8", errors="replace", timeout=120)
+            summary = "Everything checked is ready." in r.stdout or "to fix: the line" in r.stdout
+            check(r.returncode in want and summary and "Only reading: nothing is sent" in r.stdout and "Traceback" not in r.stderr
+                  and (label == "set up" or "  FAIL  Claude: no key." in r.stdout),
+                  f"--doctor checks gallery program {key[2:]} {label}, and says what to fix (exit {r.returncode}): {(r.stderr or r.stdout)[-300:]!r}")
 
 
 def approval_tests(codes, env, tmp):
