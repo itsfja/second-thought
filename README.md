@@ -463,7 +463,7 @@ Each module starts with the imports it needs from the others. When `tools/sync.p
 
 ## Development and tests
 
-[CONTRIBUTING.md](CONTRIBUTING.md) has the rules for a pull request, and [SECURITY.md](SECURITY.md) how to report a security problem and what limits an exported program.
+[ROADMAP.md](ROADMAP.md) says what's next and why. [CONTRIBUTING.md](CONTRIBUTING.md) has the rules for a pull request, and [SECURITY.md](SECURITY.md) how to report a security problem and what limits an exported program.
 
 If you change anything in `python/second_thought/`, `i18n/`, `gallery/`, `prompts/convert-guide.txt` or the sample files, run `python tools/sync.py` so `python/runtime.py` and the page pick up your changes. `python tools/sync.py --check` fails if either is out of date, and CI runs it.
 
