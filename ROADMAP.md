@@ -12,40 +12,36 @@ Second Thought is for people who have a checklist, a rubric or house rules, but 
 
 The project has grown wide: over 160 examples, 31 community programs, 19 languages, 15 model services. The next gains come from **trust and reach**, not more blocks. Items are ordered by expected benefit against cost; the labels `priority: 1` to `priority: 4` say the same.
 
-## Now: trust
+## Done
+
+Trust: the prompt-injection tests ([#188](https://github.com/itsfja/second-thought/issues/188)) and a real-model run of the gallery ([#189](https://github.com/itsfja/second-thought/issues/189)). Reach: plain-English authoring ([#192](https://github.com/itsfja/second-thought/issues/192)), GitHub Actions export ([#191](https://github.com/itsfja/second-thought/issues/191)), retired-model warnings ([#190](https://github.com/itsfja/second-thought/issues/190)) and six gallery packs ([#196](https://github.com/itsfja/second-thought/issues/196)–[#201](https://github.com/itsfja/second-thought/issues/201)). Depth: test cases for programs ([#193](https://github.com/itsfja/second-thought/issues/193)), a versioned block format ([#195](https://github.com/itsfja/second-thought/issues/195)), programs as MCP tools ([#194](https://github.com/itsfja/second-thought/issues/194)), keys in the keychain ([#123](https://github.com/itsfja/second-thought/issues/123)) and the editor's code in its own files ([#122](https://github.com/itsfja/second-thought/issues/122)).
+
+## Now: keep it safe, and cheaper to change
 
 | | Benefit | Cost |
 |---|---|---|
-| [#188](https://github.com/itsfja/second-thought/issues/188) Prompt-injection test suite: hostile emails, issues and pages must never cause an unasked action | High: agents now read untrusted text and act | Medium |
-| [#189](https://github.com/itsfja/second-thought/issues/189) Run every gallery program once against real models, with a cost cap | High: prompts are only tested against fakes today | Low |
+| [#219](https://github.com/itsfja/second-thought/issues/219) One source for the safety rules, shared by the page and the runtime | High: the asking rules are the safety promise, and are written twice | Medium |
+| [#220](https://github.com/itsfja/second-thought/issues/220) Close the DNS-rebinding gap for pages and feeds the agent reads | Medium-high | Low-medium |
+| [#217](https://github.com/itsfja/second-thought/issues/217) Merge i18n files key by key, so translation PRs stop conflicting | High | Low |
+| [#218](https://github.com/itsfja/second-thought/issues/218) A translation tool: list missing words, add them, write Linear B and cuneiform safely | High | Low-medium |
 
-#188 comes first. The asking gates are the safety story, and gallery programs like issue-triage-bot run against public input.
+#219 comes first. The page and exported Python must agree on what asks, and today that rests on care. #217 and #218 cut the cost of every future change: each new feature now costs 19 translations and, often, a round of conflicts.
 
-## Next: reach
-
-| | Benefit | Cost |
-|---|---|---|
-| [#192](https://github.com/itsfja/second-thought/issues/192) Write a program in plain English: Claude builds the blocks, you check them | Very high | Medium |
-| [#191](https://github.com/itsfja/second-thought/issues/191) Export as a GitHub Actions workflow, so scheduled programs run free | High | Medium |
-| [#190](https://github.com/itsfja/second-thought/issues/190) Warn when a model name has been retired | Medium | Low |
-| [#196](https://github.com/itsfja/second-thought/issues/196) Gallery pack: Teaching | High | Low |
-| [#197](https://github.com/itsfja/second-thought/issues/197) Gallery pack: Food businesses | High | Low |
-| [#198](https://github.com/itsfja/second-thought/issues/198) Gallery pack: Plain English and accessibility | High | Low |
-
-Plain-English authoring is the biggest unlock for the people this is for: the blocks become the readable, checkable form of a request. GitHub Actions export removes the need for an always-on computer, the biggest hurdle after that.
-
-## Later: depth
+## Next: the editor
 
 | | Benefit | Cost |
 |---|---|---|
-| [#193](https://github.com/itsfja/second-thought/issues/193) Tests for programs: saved inputs plus what the result should achieve | High | High |
-| [#195](https://github.com/itsfja/second-thought/issues/195) Version the block file format, with migrations | Medium | Medium |
-| [#194](https://github.com/itsfja/second-thought/issues/194) Serve a program as an MCP tool | Medium | Medium |
-| [#122](https://github.com/itsfja/second-thought/issues/122) Keep the editor's CSS and JS in source files | Medium | Medium |
-| [#123](https://github.com/itsfja/second-thought/issues/123) Optional keychain storage for API keys | Low-medium | Low |
-| [#199](https://github.com/itsfja/second-thought/issues/199) Gallery pack: Charities and volunteer groups | Medium-high | Low |
-| [#200](https://github.com/itsfja/second-thought/issues/200) Gallery pack: Small professional practices | Medium | Low |
-| [#201](https://github.com/itsfja/second-thought/issues/201) Gallery pack: Local news and civic groups | Medium | Low |
+| [#221](https://github.com/itsfja/second-thought/issues/221) Split web/editor.js into files by area | Medium | Medium |
+| [#222](https://github.com/itsfja/second-thought/issues/222) Unit tests for the editor's logic, without a browser | Medium | Medium |
+| [#223](https://github.com/itsfja/second-thought/issues/223) Keyboard and screen-reader use of the blocks and the run log | Medium | Medium |
+
+## Later: polish
+
+| | Benefit | Cost |
+|---|---|---|
+| [#224](https://github.com/itsfja/second-thought/issues/224) Show what a run cost in money, not just tokens | Low-medium | Low, plus upkeep |
+| [#225](https://github.com/itsfja/second-thought/issues/225) When a program asks again, say what's new since it was allowed | Low-medium | Low |
+| [#226](https://github.com/itsfja/second-thought/issues/226) Run Save as GitHub Actions for real once, and write down what's checked | Low-medium | Low |
 
 ## Someday
 
