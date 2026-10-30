@@ -152,13 +152,15 @@
     const h = Math.max(0, Math.min(23, Math.round(Number(b.getFieldValue("HOUR")) || 0))), mi = Math.max(0, Math.min(59, Math.round(Number(b.getFieldValue("MINUTE")) || 0)));
     const days = { every:[0, 1, 2, 3, 4, 5, 6], weekdays:[1, 2, 3, 4, 5], weekends:[0, 6] }[b.getFieldValue("DAYS") || "every"] || [0, 1, 2, 3, 4, 5, 6];
     const y = new Date().getFullYear(), seen = new Map();
-    [0, 6].forEach(month => {
+    // Winter is the month on standard time, the one further behind UTC: January in the north, July in the south.
+    const winter = new Date(y, 0, 15).getTimezoneOffset() >= new Date(y, 6, 15).getTimezoneOffset() ? 0 : 6;
+    [winter, 6 - winter].forEach(month => {
       const local = new Date(y, month, 15, h, mi), utcMin = local.getUTCHours() * 60 + local.getUTCMinutes();
       const shift = Math.floor((h * 60 + mi + local.getTimezoneOffset()) / 1440);  // the day it is in UTC, against the day it is here
       const ds = days.map(d => (d + shift + 7) % 7).sort((a, c) => a - c);
       const dow = days.length === 7 ? "*" : ds.length > 2 && ds[ds.length - 1] - ds[0] === ds.length - 1 ? ds[0] + "-" + ds[ds.length - 1] : ds.join(",");
       const cron = (utcMin % 60) + " " + Math.floor(utcMin / 60) + " * * " + dow;
-      if (!seen.has(cron)) seen.set(cron, month ? "summer" : "winter");
+      if (!seen.has(cron)) seen.set(cron, month === winter ? "winter" : "summer");
     });
     return [...seen].map(([cron, when]) => ({ cron, note:seen.size > 1 ? when : "" }));
   }

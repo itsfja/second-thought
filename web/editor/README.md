@@ -5,6 +5,9 @@ The page's code, one file per area. `tools/sync.py` joins them in the order of t
 file can use what a later one declares once the page has loaded (from an event, say), but not while it's being set up.
 Never edit the copy in `second-thought.html`; edit these, then run `python tools/sync.py`.
 
+A function that needs no page (no blocks on screen, no clicks) can be tested in Node without a browser: add it to
+`window.__editorUnits` at the end of `23-schedules.js` and test it in `tests/editor/`.
+
 To add an area, add a file whose number puts it where it needs to run. To move code between files, move it whole: a
 file needn't end where a function does, but it reads better if it does.
 

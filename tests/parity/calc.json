@@ -1,0 +1,12 @@
+{
+  "about": "calculate: the agent's sums. The runtime (calc_text in core.py) and the page (calcText in web/editor/17-agent.js) give the same answers; tests/unit/test_calc_and_time.py and tests/editor/calc-and-time.test.cjs both read this.",
+  "answers": [
+    ["(350 / 500) * 100", "70"], ["2 + 3 * 4", "14"], ["2 ^ 3 ^ 2", "512"], ["-2 ^ 2", "-4"], ["10 / 4", "2.5"],
+    ["round(2.345, 2)", "2.35"], ["round(2.5)", "3"], ["min(3, 1, 2) + max(4, 5)", "6"], ["sqrt(16) + abs(-1)", "5"],
+    ["floor(2.7) + ceil(2.1)", "5"], ["3 × 4 ÷ 2", "6"], ["0.1 + 0.2", "0.3"], [".5 * 4", "2"], ["pi", "3.14159265359"]
+  ],
+  "mistakes": [
+    ["", "empty"], ["1 / 0", "divides by zero"], ["2 +", "ends too soon"], ["(1 + 2", "ends too soon"],
+    ["sqrt(-1)", "negative"], ["import os", "don't know"], ["1 2", "don't understand"], ["abs(1, 2)", "takes one number"]
+  ]
+}

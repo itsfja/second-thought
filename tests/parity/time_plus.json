@@ -1,0 +1,10 @@
+{
+  "about": "time_plus: a clock time or date plus some minutes. The runtime (time_plus_text in core.py) and the page (timePlusText in web/editor/17-agent.js) give the same answers; tests/unit/test_calc_and_time.py and tests/editor/calc-and-time.test.cjs both read this.",
+  "answers": [
+    ["09:30", 270, "14:00"], ["9.30", "30", "10:00"], ["23:30", 60, "00:30 (next day)"],
+    ["00:15", -30, "23:45 (the day before)"], ["10:00", 4320, "10:00 (3 days later)"],
+    ["10:00", -2880, "10:00 (2 days earlier)"], ["9:00 pm", 30, "21:30"], ["12:00 am", 0, "00:00"], ["12:00 pm", 0, "12:00"],
+    ["2026-10-10 22:00", 600, "2026-10-11 08:00 (Sunday)"], ["2026-02-28T23:00", 120, "2026-03-01 01:00 (Sunday)"]
+  ],
+  "mistakes": ["noon", "25:00", "10:61", "13:00 pm", "2026-02-30 10:00"]
+}
