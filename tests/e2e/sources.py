@@ -62,7 +62,8 @@ def example_ini_check():
     check(len(services) >= 15 and all(s["keys"] for s in services), f"the settings check sees all {len(services)} model services")
     friendly = set(re.findall(r'"([a-z_]+)": "RB_[A-Z_]+"', src.split("SETTING_NAMES = ", 1)[1].split("}", 1)[0]))
     prefixes = {n for n in names if n.endswith("_")}  # like MODEL_ + a tier's name: the example shows the pattern
-    names -= {"SECOND_THOUGHT_INI"} | prefixes | {n for n in names if n.startswith("RB_") and any(f'"{f}": "{n}"' in src for f in friendly)}
+    # GitHub sets GITHUB_ACTIONS on its runners: it isn't a setting.
+    names -= {"SECOND_THOUGHT_INI", "GITHUB_ACTIONS"} | prefixes | {n for n in names if n.startswith("RB_") and any(f'"{f}": "{n}"' in src for f in friendly)}
     text = (ROOT / "second-thought.example.ini").read_text(encoding="utf-8")
     listed = {m.upper() for m in re.findall(r"^[;#]?\s*([A-Za-z_][A-Za-z0-9_]*)\s*=", text, re.M)}
     missing = sorted((names | {f.upper() for f in friendly if f != "model"}) - listed)
