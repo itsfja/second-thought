@@ -1,0 +1,136 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "old-dates",
+  "gallery": {
+    "title": "Old dates",
+    "category": "odds",
+    "description": "Paste a passage from an old document. Claude finds every date in it and gives each in today's form: abbreviations like inst. and 7ber expanded, regnal years worked out, and Old Style dates before 1752 given in both styles.",
+    "tip": "It shows its working for each date. Check regnal years against a list of reigns before you rely on one.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_text",
+        "name": "text"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste the passage with the dates in it"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_text"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_task",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "Find every date in this passage from an old English document and give each in today's form (day month year). For each: quote it as written, then the modern date, then one line of working. Expand abbreviations: inst. (this month), ult. (last month), prox. (next month), 7ber, 8ber, 9ber, Xber (September to December). Work out regnal years (like 'the 3rd year of the reign of George III') from the date the reign began. In England before 1752 the year began on 25 March, so a date from 1 January to 24 March is given as both years, like 10 February 1720/21; the Julian calendar was used until 2 September 1752, so also give the Gregorian date: 11 days later from 1 March 1700, 10 days before that. Say when a date can't be worked out exactly, and why.\n\n"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_text"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 2
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_generate",
+                          "next": {
+                            "block": {
+                              "type": "rb_reflect",
+                              "inputs": {
+                                "CRITERIA": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "every date in the passage is listed, quoted as written; each has a modern date and a line of working; dates between 1 January and 24 March before 1752 show both years, like 1720/21; Julian dates before 1752 also give the Gregorian date; regnal years name the reign and when it began; anything uncertain says so"
+                                    }
+                                  }
+                                },
+                                "ROUNDS": {
+                                  "shadow": {
+                                    "type": "math_number",
+                                    "fields": {
+                                      "NUM": 3
+                                    }
+                                  }
+                                },
+                                "FIX": {
+                                  "block": {
+                                    "type": "rb_revise"
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

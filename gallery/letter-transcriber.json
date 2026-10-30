@@ -1,0 +1,186 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "letter-transcriber",
+  "gallery": {
+    "title": "Letter transcriber",
+    "category": "odds",
+    "description": "Choose a scan or photo of a handwritten letter. Claude transcribes it as written, old spellings and all, marks every word it isn't sure of, and checks the transcription against the usual conventions. Asks before saving it.",
+    "tip": "Use a clear, flat scan. Read it against the original: every [word?] is a guess to check.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_set_draft",
+              "inputs": {
+                "TEXT": {
+                  "block": {
+                    "type": "rb_img_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "Transcribe this handwritten document exactly as written. Keep the original spelling, capitals, punctuation and abbreviations; don't modernise or correct anything. Keep the line breaks. Put a word you're unsure of in square brackets with a question mark, like [Thomas?]; write [illegible] for anything you can't read, and [torn] or [blot] for damage. Put words written above the line in ^carets^. After the transcription, a line '---' and a short note: the likely date and writer if the letter says, and how confident you are overall."
+                          }
+                        }
+                      },
+                      "IMG": {
+                        "block": {
+                          "type": "rb_img_choose"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_reflect",
+                  "inputs": {
+                    "CRITERIA": {
+                      "shadow": {
+                        "type": "rb_longtext",
+                        "fields": {
+                          "TEXT": "spelling, capitals and punctuation are as written, not modernised; abbreviations are kept, not expanded; every uncertain word is marked [word?]; unreadable parts say [illegible]; line breaks are kept; nothing is added that isn't on the page; the note after '---' says how confident it is"
+                        }
+                      }
+                    },
+                    "ROUNDS": {
+                      "shadow": {
+                        "type": "math_number",
+                        "fields": {
+                          "NUM": 2
+                        }
+                      }
+                    },
+                    "FIX": {
+                      "block": {
+                        "type": "rb_revise"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "controls_if",
+                      "inputs": {
+                        "IF0": {
+                          "block": {
+                            "type": "rb_approve",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "Save this transcription?\n\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "rb_draft"
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 2
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "DO0": {
+                          "block": {
+                            "type": "rb_ask_first",
+                            "fields": {
+                              "WHAT": "files"
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_file_save",
+                                "fields": {
+                                  "EXT": "md"
+                                },
+                                "inputs": {
+                                  "VALUE": {
+                                    "block": {
+                                      "type": "rb_draft"
+                                    }
+                                  },
+                                  "NAME": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "transcription"
+                                      }
+                                    }
+                                  }
+                                },
+                                "next": {
+                                  "block": {
+                                    "type": "rb_result"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "ELSE": {
+                          "block": {
+                            "type": "rb_finish_with",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "Not saved. The transcription, to edit yourself:\n\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "rb_draft"
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 2
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "extraState": {
+                        "hasElse": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}
