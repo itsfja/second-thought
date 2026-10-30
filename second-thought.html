@@ -79,6 +79,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .result{border:2px solid var(--ok);border-radius:10px;padding:12px;min-width:0}
 .result .step-body{max-height:none}
 .result-actions{display:flex;gap:8px;margin-top:10px}
+.test-form{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.test-form textarea{min-height:56px;resize:vertical}
 .result-usage{margin-top:8px;font-size:12px;color:var(--muted)}
 .step-meta{margin-top:6px;font-size:12px;color:var(--muted)}
 .step-prompt{margin-top:4px;font-size:12px}
@@ -353,7 +355,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     </div>
   </div>
   <section class="log" aria-live="polite">
-    <div class="log-head"><h2>Run log</h2><span class="log-tools"><button type="button" id="log-save" hidden>Save log</button><span class="status" id="status">idle</span></span></div>
+    <div class="log-head"><h2>Run log</h2><span class="log-tools"><button type="button" id="log-tests" hidden></button><button type="button" id="log-save" hidden>Save log</button><span class="status" id="status">idle</span></span></div>
     <details class="watch" id="watch">
       <summary>Watch values</summary>
       <div id="watch-body" class="watch-body"></div>
@@ -2354,7 +2356,7 @@ class Connections:
         if entity:
             body["entity_id"] = entity
         sensitive = ha_sensitive(service, entity)
-        if not sensitive and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
+        if (not sensitive or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
             return False
         if sensitive:
             if self.nobody_here():
@@ -2648,7 +2650,7 @@ class Connections:
         repo, title, body = self._gh_repo(repo), to_str(title).strip(), to_str(body).strip()
         if not title:
             return "Not opened: an issue needs a title."
-        if not approved and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
             return "Not opened: the person said no, or nobody was there to ask."
         made = await self._gh(f"/repos/{repo}/issues", "POST", {"title": title, "body": body})
         self.log(tr("GitHub issue opened in {repo}: #{n}", repo=repo, n=made.get("number")), title + ("\n\n" + body if body else ""), tr("sent"))
@@ -2666,7 +2668,7 @@ class Connections:
             return (f"Not labelled: {repo} has no label {', '.join(unknown)}. Use only its own labels: "
                     + (", ".join(sorted(have.values())) or "(it has none)") + ".")
         names = [have[x.lower()] for x in want]
-        if not approved and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
             return "Not labelled: the person said no, or nobody was there to ask."
         await self._gh(f"/repos/{repo}/issues/{n}/labels", "POST", {"labels": names})
         self.log(tr("GitHub labels on {repo} #{n}", repo=repo, n=n), ", ".join(names), tr("sent"))
@@ -2676,7 +2678,7 @@ class Connections:
         repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()
         if not text:
             raise RunError(tr("A comment needs some text."))
-        if not approved and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
             return False
         await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
         self.log(tr("GitHub comment on {repo} #{n}", repo=repo, n=n), text, tr("sent"))
@@ -2771,7 +2773,7 @@ class Connections:
         chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
         if not chat:
             raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
-        if not approved and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), 4000):
             await self._tg("sendMessage", {"chat_id": chat, "text": text[i:i + 4000]})
@@ -2898,7 +2900,7 @@ class Connections:
         channel = to_str(channel).strip() or (trig.get("channel") if isinstance(trig, dict) and trig.get("service") == service else "") or mine[0]
         if channel not in mine:
             raise RunError(tr("{name}: channel {channel} isn't in {channels}, so nothing is sent there.", name=c['name'], channel=channel, channels=c['channels']))
-        if not approved and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), c["limit"]):
             part = text[i:i + c["limit"]]
@@ -3060,7 +3062,7 @@ class Connections:
         if not addrs or not all(re.fullmatch(r"[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+", a) for a in addrs):
             raise RunError(tr("“{to}” isn't an email address.", to=to))
         c = self._mail()
-        if not approved and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
             return False
         msg = EmailMessage()
         msg["From"], msg["To"], msg["Subject"] = c["addr"], ", ".join(addrs), subject or "(no subject)"
@@ -3239,10 +3241,10 @@ class Connections:
             raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
         v = self._homey_value_for(d["caps"][cap], value)
         what = f"set {d['name']} {cap} to {self._homey_show(v)}"
-        if (cap, v) in self.HOMEY_SENSITIVE:  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
+        if (cap, v) in self.HOMEY_SENSITIVE and not getattr(self, "testing", False):  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
             if not approved and not await self.confirm(what + " (a safety check: unlocking, opening and disarming always ask)"):
                 return False
-        elif not approved and not await self._allowed(["ha"], what):
+        elif (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], what):
             return False
         await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
         self.log(tr("Homey: {name}", name=d["name"]), f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", tr("done"))
@@ -3271,7 +3273,7 @@ class Connections:
             (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
         if not f:
             raise RunError(tr("There's no Homey flow called “{name}”.", name=name))
-        if not approved and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
             return False
         await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
         self.log(tr("Homey flow started"), f["name"], tr("started"))
@@ -3292,7 +3294,7 @@ class Connections:
         v = await self._homey_var(name)
         old = v.get("value")
         new = self._homey_value_for(old, value) if v.get("type") in ("boolean", "number") else to_str(value)
-        if not approved and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
             return False
         await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
         self.log(tr("Homey variable {name}", name=v["name"]), f"{self._homey_show(old)} → {self._homey_show(new)}", tr("set"))
@@ -3415,7 +3417,7 @@ class Connections:
 
     async def mqtt_publish(self, topic, text, retain=False, approved=False):
         topic, text = self._mqtt_topic(topic, True), to_str(text)
-        if not approved and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
             return False
         c = await asyncio.to_thread(self._mqtt_new)
         try:
@@ -4615,7 +4617,8 @@ class AgentTools:
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
                     ask = mode == "every" or (mode == "changes" and not read_only)
-                    out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"]}), ask, schema)
+                    out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"],
+                                                                                        "read_only": read_only}), ask, schema)
             elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
@@ -4934,7 +4937,10 @@ class AgentTools:
             why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
             ask = ask or bool(why_ask)
             refused = False
-            if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
+            if getattr(self, "testing", False) and (ask or (kind == "mcp" and not spec.get("read_only"))):
+                result, refused = "This is a test run, so tools that change things don't run. Carry on as if it had worked.", True
+                self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=f"{name} {_short(shown, 200)}"), tr("skipped"))
+            elif ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
                 result, refused = "The person said no, so this tool didn't run.", True
             else:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
@@ -5449,7 +5455,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.log(tr("Ask first"), tr("From now on, the program asks you before {x}.", x=self.ASK_FIRST.get(kind, kind)), tr("set"))
 
     async def _allowed(self, kinds, what):
-        """True if the action may go ahead. Asks first when an 'ask me before' block covers it."""
+        """True if the action may go ahead. Asks first when an 'ask me before' block covers it. In a test (--test),
+        nothing acts: it says what it would have done."""
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
         if not (self.ask_first & set(kinds)):
             return True
         return await self.confirm(what)
@@ -5460,6 +5470,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     async def confirm(self, what):
         """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no."""
+        if getattr(self, "testing", False):  # in a test the action itself is skipped (see _allowed), so nobody needs asking
+            return True
         if self.nobody_here():
             self.log(tr("Not done"), tr("{what} needs your approval, and nobody is at the keyboard.", what=what), tr("refused"))
             return False
@@ -5753,6 +5765,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     # ----- Files -----
     async def _choose_file_live(self):
+        if getattr(self, "testing", False):
+            f = self._from_test("file", tr("Choose a file"))
+            return to_str(f.get("text") if isinstance(f, dict) else f)
         print(tr("\n? Choose a file: type the path to a PDF, a .docx, or a text file (.txt, .md, .csv, .json ...)."), flush=True)
         while True:
             path = (await self._input(tr("Path > "))).strip().strip('"').strip("'")
@@ -6022,6 +6037,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         return pic.path
 
     async def choose_picture(self):
+        if getattr(self, "testing", False):
+            raise RunError(tr("Test cases don't keep pictures, so a test can't choose one. Test this part by running the program."))
         print(tr("\n? Choose a picture: type the path to a JPEG, PNG, WebP, GIF or SVG file."), flush=True)
         while True:
             path = (await self._input(tr("Path > "))).strip().strip('"').strip("'")
@@ -6254,6 +6271,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     async def _ask_me_live(self, q):
         q = to_str(q)
+        if getattr(self, "testing", False):
+            return to_str(self._from_test("answer", q))
         print("\n? " + q, flush=True)
         while True:
             a = (await self._input("> ")).strip()
@@ -6263,6 +6282,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             print(tr("  Type an answer first."))
 
     async def _approve_live(self, text):
+        if getattr(self, "testing", False):
+            return bool(self._from_test("approve", text))
         print(tr("\n? Do you approve this?\n"), flush=True)
         for line in to_str(text).splitlines():
             print("    " + line)
@@ -6276,6 +6297,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     async def _choose_live(self, items):
         items = to_list(items)
+        if getattr(self, "testing", False) and items:
+            want = to_str(self._from_test("choose", tr("Choose one")))
+            return next((it for it in items if to_str(it) == want), items[0])
         if not items:
             raise RunError(tr("'let me choose from' got an empty list."))
         print(tr("\n? Choose one:"), flush=True)
@@ -6288,6 +6312,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             print(tr("  Type a number from 1 to {items}.", items=len(items)))
 
     async def pause(self, note):
+        if getattr(self, "testing", False):
+            return
         print("\n⏸ " + (to_str(note) or tr("Paused.")), flush=True)
         await self._input(tr("Press Enter to continue > "))
 
@@ -6512,7 +6538,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
         finished = False
         try:
-            if not self.schedule_mode and not getattr(self, "mcp_mode", False):
+            if not self.schedule_mode and not getattr(self, "mcp_mode", False) and not getattr(self, "testing", False):
                 await self._journal_start()
             code = await self._run(scripts)
             finished = code == 0
@@ -6670,6 +6696,84 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                                                                "isError": code != 0}})
             else:
                 send({"jsonrpc": "2.0", "id": mid, "error": {"code": -32601, "message": f"Method not found: {method}"}})
+    # ----- Tests: python my-program.py --test -----
+    # A test case is a run you were happy with, kept on the page with 'Save as test case': what it started with, your
+    # answers to its questions, the files you chose, and what its result must do. --test replays each one from
+    # <program>.tests.json, next to the program, with the models live, and a strict reviewer checks each result against
+    # its criteria. Nothing acts in a test: messages aren't sent, devices aren't switched, files aren't saved, and memory
+    # is a copy, so tests can be run as often as you like, for example after changing a model.
+    def _from_test(self, kind, what):
+        """The next answer of this kind from the test case, in order."""
+        q = self.test_inputs.get(kind) or []
+        if not q:
+            raise RunError(tr("The test case has no answer for this step ({what}). Save it again from a run that gets this far.", what=_short(to_str(what), 80)))
+        v = q.pop(0)
+        self.log(tr("Test answer"), _short(to_str(v.get("name", "") if isinstance(v, dict) else v), 200), tr("replayed"))
+        return v
+
+    @staticmethod
+    def tests_path():
+        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
+        return os.path.splitext(prog)[0] + ".tests.json"
+
+    async def run_tests(self, start_scripts):
+        import shutil
+        import tempfile
+        path = self.tests_path()
+        try:
+            with open(path, encoding="utf-8") as f:
+                cases = json.load(f)
+        except FileNotFoundError:
+            print(tr("No tests: {path} isn't there. Make them on the page: after a good run, press Save as test case, then export again.", path=path), flush=True)
+            return 1
+        except ValueError as e:
+            print(tr("{path} isn't valid JSON ({problem}).", path=path, problem=e), flush=True)
+            return 1
+        cases = [c for c in (cases if isinstance(cases, list) else []) if isinstance(c, dict)]
+        if not start_scripts:
+            print(tr("Nothing to run: this program has no 'when Run is clicked' script."), flush=True)
+            return 1
+        if not cases:
+            print(tr("No tests: {path} isn't there. Make them on the page: after a good run, press Save as test case, then export again.", path=path), flush=True)
+            return 1
+        self.testing = True
+        results = []
+        real_memory = MEMORY_FILE
+        with tempfile.TemporaryDirectory() as tmp:
+            memory = os.path.join(tmp, "memory.json")
+            try:
+                for i, case in enumerate(cases, 1):
+                    name = to_str(case.get("name")).strip() or tr("Test {n}", n=i)
+                    if os.path.isfile(real_memory):
+                        shutil.copy(real_memory, memory)  # each case starts from your real notes, and can't change them
+                    elif os.path.isfile(memory):
+                        os.remove(memory)
+                    globals()["MEMORY_FILE"] = memory
+                    self.test_inputs = {k: list(v) for k, v in (case.get("inputs") or {}).items() if isinstance(v, list)}
+                    code = await self.run([(fn, to_str(case.get("value", ""))) for fn in start_scripts], tr("Test: {name}", name=name))
+                    criteria = to_str(case.get("criteria")).strip()
+                    if code != 0:
+                        passed, problems = False, [str(self.error) if isinstance(self.error, RunError) else tr("The run stopped.")]
+                    elif not criteria:
+                        passed, problems = True, []
+                    else:
+                        text = "\n\n".join(to_str(x) for x in self.result) if self.result else to_str(self.draft)
+                        self.ending = False  # the run has ended; the check is one more call
+                        self.task, self.draft = "The result of one run of this program.", text or tr("(no result)")
+                        passed = await self.review(criteria, tr("Test check"))
+                        problems = list(self.problems)
+                    results.append((name, passed, problems))
+            finally:
+                globals()["MEMORY_FILE"] = real_memory
+        print("\n" + "=" * 60 + "\n" + tr("TESTS") + "\n" + "=" * 60, flush=True)
+        for name, passed, problems in results:
+            mark = "PASS" if passed else "FAIL"  # stays in English, like --doctor's ok and FAIL, for scripts that read it
+            print(f"{mark:<6}{name}", flush=True)
+            for p_ in problems:
+                print("      - " + p_, flush=True)
+        failed = sum(not p for _, p, _ in results)
+        print("\n" + tr("{passed} of {n} passed.", passed=len(results) - failed, n=len(results)), flush=True)
+        return 1 if failed else 0
 
     @staticmethod
     def schedule_due(s, now, late=datetime.timedelta(hours=1)):
@@ -6871,6 +6975,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         if "--mcp" in sys.argv:
             sys.exit(asyncio.run(self.serve_mcp(start_scripts, can)))
+        if "--test" in sys.argv:
+            sys.exit(asyncio.run(self.run_tests(start_scripts)))
         if "--run-schedule" in sys.argv:
             sys.exit(self.run_one_schedule(schedules, can))
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
@@ -11560,8 +11666,18 @@ HOW TO MAP CODE
       location.reload();
     });
   })();
+  // Test cases for the program on the canvas (see 'Save as test case' and Run tests). They travel with the program: in
+  // block files, exported Python and its zip (<program>.tests.json), saved programs and what the page keeps.
+  let programTests = [];
+  function setTests(tests){ programTests = Array.isArray(tests) ? tests.filter(t => t && typeof t === "object") : []; testsChanged(); }
+  function testsChanged(){
+    try { localStorage.setItem(STORE_KEY + ":tests", JSON.stringify(programTests)); } catch(e) {}
+    const b = document.getElementById("log-tests");
+    if (b) { b.hidden = !programTests.length; b.textContent = tr("Run tests ({n})", { n:programTests.length }); }
+  }
   let saved = null;
   try { const raw = localStorage.getItem(STORE_KEY); if (raw) saved = migrateProgram(JSON.parse(raw), localStorage.getItem(STORE_KEY + ":version")).state; } catch(e) {}
+  try { programTests = JSON.parse(localStorage.getItem(STORE_KEY + ":tests") || "[]"); if (!Array.isArray(programTests)) programTests = []; } catch(e) { programTests = []; }
   try { load(saved || EXAMPLES.review()); } catch(e) { load(EXAMPLES.review()); }
   ws.addChangeListener(ev => {
     if (ev.isUiEvent) return;
@@ -11611,7 +11727,7 @@ HOW TO MAP CODE
     const b = document.createElement("b"); b.textContent = e.title + ": ";
     el.append(b, document.createTextNode(e.desc + (e.community ? " " + communityCanText(e) + " " + tr("Shared by {author}.", { author:e.author }) : "") + " " + tr("Try: {tip}", { tip:e.tip })));
   }
-  function loadExample(key){ load(exampleState(key)); describeExample(key); try { ws.zoomToFit(); if (ws.getScale() > 0.9) ws.setScale(0.9); } catch(e) {} }
+  function loadExample(key){ setTests([]); load(exampleState(key)); describeExample(key); try { ws.zoomToFit(); if (ws.getScale() > 0.9) ws.setScale(0.9); } catch(e) {} }
   function toggleGallery(open){
     const g = $("gallery"); if (open === undefined) open = g.hidden;
     g.hidden = !open; $("ex-toggle").setAttribute("aria-expanded", String(open));
@@ -11678,8 +11794,8 @@ HOW TO MAP CODE
     return s || "my-program";
   }
   function exportText(){
-    return JSON.stringify({ format:FORMAT, version:FORMAT_VERSION, name:$("io-name").value.trim() || "my-program",
-      exported:new Date().toISOString(), program:saveWs() }, null, 2);
+    return JSON.stringify(Object.assign({ format:FORMAT, version:FORMAT_VERSION, name:$("io-name").value.trim() || "my-program",
+      exported:new Date().toISOString(), program:saveWs() }, programTests.length ? { tests:programTests } : {}), null, 2);
   }
   $("io-save").onclick = async () => {
     if (!downloads) return;
@@ -11712,6 +11828,7 @@ HOW TO MAP CODE
                    { name:"run.sh", text:runSh(base, false) }];
     if (sched) files.push({ name:"run-on-schedule.bat", text:runBat(base, true) }, { name:"run-on-schedule.sh", text:runSh(base, true) },
                           { name:"install-startup.bat", text:installStartupBat(base) }, { name:"install-service.sh", text:installServiceSh(base) });
+    if (programTests.length) files.push({ name:base + ".tests.json", text:JSON.stringify(programTests, null, 1) + "\n" });
     return files;
   }
   window.__zipBase64 = async () => { const b = new Uint8Array(await makeZip(window.__exportFiles()).arrayBuffer()); let t = ""; b.forEach(x => t += String.fromCharCode(x)); return btoa(t); };
@@ -11943,7 +12060,7 @@ HOW TO MAP CODE
     const at = ta.value.indexOf("# Your program"); if (at > 0) { ta.focus(); ta.setSelectionRange(at, at); ta.scrollTop = ta.scrollHeight * (at / ta.value.length) - 20; ta.blur(); }
   };
 
-  let beforeImport = null;
+  let beforeImport = null, beforeImportTests = [];
   function unknownTypes(state){
     const bad = new Set();
     const walk = o => {
@@ -11957,7 +12074,7 @@ HOW TO MAP CODE
     walk(state.blocks);
     return [...bad];
   }
-  function applyProgram(state, name, converted, version){
+  function applyProgram(state, name, converted, version, tests){
     if (!state || typeof state !== "object" || !state.blocks || !Array.isArray(state.blocks.blocks)) {
       ioMsg("io-import-msg", "This doesn't look like a Second Thought program. Export one from this page and import that file.", "bad"); return false;
     }
@@ -11975,7 +12092,8 @@ HOW TO MAP CODE
       ioMsg("io-import-msg", tr("The program couldn't be loaded, so your canvas was left as it was. ({problem})", { problem:e && e.message ? e.message : tr("unknown error") }), "bad");
       return false;
     }
-    beforeImport = prev;
+    beforeImport = prev; beforeImportTests = programTests;
+    setTests(tests === undefined ? (converted === "change" ? programTests : []) : tests);
     $("io-undo").hidden = false;
     clearChoice();
     const count = ws.getAllBlocks(false).length;
@@ -11992,7 +12110,7 @@ HOW TO MAP CODE
     try { data = JSON.parse(t); }
     catch(e) { ioMsg("io-import-msg", "That isn't valid program text. Export a program from this page and import that file.", "bad"); return false; }
     const isOurs = data && data.format === FORMAT;
-    const ok = applyProgram(isOurs ? data.program : data, isOurs && data.name ? data.name : sourceLabel, false, isOurs ? data.version : 1);
+    const ok = applyProgram(isOurs ? data.program : data, isOurs && data.name ? data.name : sourceLabel, false, isOurs ? data.version : 1, isOurs ? data.tests || [] : []);
     if (ok && isOurs && data.name) $("io-name").value = slug(data.name);
     return ok;
   }
@@ -12021,7 +12139,7 @@ HOW TO MAP CODE
   $("io-paste").addEventListener("input", () => ioMsg("io-import-msg", ""));
   $("io-undo").onclick = () => {
     if (!beforeImport) return;
-    load(beforeImport); beforeImport = null; $("io-undo").hidden = true;
+    load(beforeImport); beforeImport = null; $("io-undo").hidden = true; setTests(beforeImportTests);
     ioMsg("io-import-msg", "Import undone. Your previous program is back.", "ok");
   };
   const canvasEl = document.querySelector(".canvas");
@@ -12816,7 +12934,7 @@ HOW TO MAP CODE
     const speaks = words ? ["# The language this program prints in (language = en in second-thought.ini switches it to English), and its words.",
       "EXPORT_LANGUAGE = " + pyStr(window.ST_LANG), "EXPORT_WORDS = {", ...Object.keys(words).map(k => "    " + JSON.stringify(k) + ": " + JSON.stringify(words[k]) + ","), "}", "", ""].join("\n") : "";
     const code = header + speaks + document.getElementById("py-runtime").textContent.replace(/^\n+/, "") + "\n" + program;
-    const payload = b64encode(JSON.stringify({ format:FORMAT, version:FORMAT_VERSION, name:progName, program:saveWs() }));
+    const payload = b64encode(JSON.stringify(Object.assign({ format:FORMAT, version:FORMAT_VERSION, name:progName, program:saveWs() }, programTests.length ? { tests:programTests } : {})));
     const lines = [code.replace(/\n+$/, ""), "", "", PY_MARK, "# CODE-HASH: " + codeHash(code), "# BLOCKS:"];
     for (let i = 0; i < payload.length; i += 76) lines.push("# " + payload.slice(i, i + 76));
     return lines.join("\n") + "\n";
@@ -13051,14 +13169,14 @@ HOW TO MAP CODE
   $("describe-load").onclick = () => {
     if (!described) return;
     const name = described.change ? $("io-name").value.trim() : "";
-    const ok = applyProgram(described.state, name, true);
+    const ok = applyProgram(described.state, name, described.change ? "change" : true);
     described = null;
     if (ok) describeMsg(tr("Loaded Claude's program ({n} blocks). Check the blocks before running.", { n:ws.getAllBlocks(false).length }), "ok", ["undo"]);
     else describeMsg($("io-import-msg").textContent, "bad");
   };
   $("describe-undo").onclick = () => {
     if (!beforeImport) return;
-    load(beforeImport); beforeImport = null; $("io-undo").hidden = true;
+    load(beforeImport); beforeImport = null; $("io-undo").hidden = true; setTests(beforeImportTests);
     describeMsg(tr("Undone. Your previous program is back."), "ok");
   };
   ws.addChangeListener(e => { if (!e.isUiEvent && !$("describe-build").disabled) $("describe-change").disabled = !programOnCanvas(); });
@@ -13085,10 +13203,10 @@ HOW TO MAP CODE
     const ex = readExported(code);
     if (ex) {
       const name = ex.data.name || label;
-      if (!ex.edited) { if (applyProgram(ex.data.program, name, false, ex.data.version)) { $("io-name").value = slug(name); noteRuntime(ex.runtime); } return; }
+      if (!ex.edited) { if (applyProgram(ex.data.program, name, false, ex.data.version, ex.data.tests || [])) { $("io-name").value = slug(name); noteRuntime(ex.runtime); } return; }
       offerChoice("This code was exported from here and then edited. The blocks saved inside it are from before the edits.", [
         { label:tr("Convert the edited code with Claude"), run:() => convertWithClaude(code, name) },
-        { label:tr("Restore the exported blocks"), run:() => { if (applyProgram(ex.data.program, name, false, ex.data.version)) $("io-name").value = slug(name); } }
+        { label:tr("Restore the exported blocks"), run:() => { if (applyProgram(ex.data.program, name, false, ex.data.version, ex.data.tests || [])) $("io-name").value = slug(name); } }
       ]);
       return;
     }
@@ -13415,6 +13533,7 @@ HOW TO MAP CODE
       const prev = saveWs();
       try { load(state); try { ws.zoomToFit(); } catch(x) {} }
       catch(err) { load(prev); libMsg("That program couldn't be opened, so the canvas was left as it was.", "bad"); return; }
+      try { setTests(e.tests ? JSON.parse(e.tests) : []); } catch(err) { setTests([]); }
       beforeOpen = prev; $("lib-undo").hidden = false; $("lib-name").value = e.name; $("io-name").value = slug(e.name);
       libMsg(tr("Opened \u201c{name}\u201d.", { name:e.name }), "ok");
     });
@@ -13434,7 +13553,7 @@ HOW TO MAP CODE
     const exists = lib.program.has(memKey(name));
     if (exists && !$("lib-save").dataset.armed) { $("lib-save").dataset.armed = "1"; $("lib-save").textContent = tr("Replace \u201c{name}\u201d", { name }); libMsg("A program with that name exists. Press again to replace it."); return; }
     delete $("lib-save").dataset.armed; $("lib-save").textContent = tr("Save");
-    try { await libSave("program", name, { program:JSON.stringify(saveWs()), version:FORMAT_VERSION }); libMsg(tr("Saved \u201c{name}\u201d.", { name }), "ok"); }
+    try { await libSave("program", name, { program:JSON.stringify(saveWs()), version:FORMAT_VERSION, tests:JSON.stringify(programTests) }); libMsg(tr("Saved \u201c{name}\u201d.", { name }), "ok"); }
     catch(e) { libMsg(e.message, "bad"); }
   };
   $("lib-name").addEventListener("input", () => { delete $("lib-save").dataset.armed; $("lib-save").textContent = tr("Save"); libMsg(""); });
@@ -14836,7 +14955,34 @@ HOW TO MAP CODE
   }
 
   /* Waits for the person in the log. render(resolve, reject) builds the controls. */
-  function waitForYou(title, text, build){
+  // What the person answers during a run is kept (run.inputs), so a good run can become a test case; a test run
+  // (run.replay) gives the same answers back instead of asking. Pictures aren't kept: they're too big.
+  const INPUT_KINDS = { "Question for you":"answer", "Allow this?":"allow", "Do you approve this?":"approve", "Choose one":"choose",
+    "Choose a file":"file", "Choose a picture":"picture", "Paused":"pause" };
+  async function waitForYou(title, text, build){
+    const kind = INPUT_KINDS[title];
+    if (run && run.replay && kind) {
+      if (kind === "picture") fail(tr("Test cases don't keep pictures, so a test can't choose one. Test this part by running the program."));
+      if (kind === "pause") return true;
+      const q = run.replay[kind] || [];
+      if (!q.length) {
+        if (kind === "allow") return true;
+        fail(tr("The test case has no answer for this step ({what}). Save it again from a run that gets this far.", { what:short(String(text || tr(title)), 80) }));
+      }
+      const v = q.shift();
+      addStep(tr("Test answer"), { text:(text ? text + "\n\n" : "") + (kind === "file" ? str(v && v.name) : str(v)) }).done(tr("replayed"), "ok");
+      return v;
+    }
+    const v = await waitForYouLive(title, text, build);
+    if (run && run.inputs && kind && kind !== "picture") {
+      const keep = kind === "file" ? { name:v && v.name, text:v && v.text } : v;
+      let size = 0; try { size = JSON.stringify(keep).length; } catch(e) { size = Infinity; }
+      if (size < 200000) (run.inputs[kind] = run.inputs[kind] || []).push(keep);
+      else run.inputsIncomplete = true;
+    }
+    return v;
+  }
+  function waitForYouLive(title, text, build){
     return new Promise((resolve, reject) => {
       const s = addStep(tr(title), { human:true, text });
       s.done("waiting for you", "warn");
@@ -15695,10 +15841,82 @@ HOW TO MAP CODE
       };
       actions.appendChild(sv);
     });
+    if (!run.replay && run.reason === "manual" && !note) actions.appendChild(saveTestButton(el));
     const use = usageLine();
     if (use) { const u = document.createElement("div"); u.className = "result-usage"; u.textContent = use; el.appendChild(u); }
     stepsEl.appendChild(el); el.scrollIntoView({ block:"nearest" });
   }
+
+  /* ---------- Test cases ---------- */
+  // After a good run: keep its answers with what the result must do. Run tests replays them, with the models live, and a
+  // strict reviewer checks each result. Exported, python my-program.py --test does the same.
+  function saveTestButton(resultEl){
+    const btn = document.createElement("button"); btn.type = "button"; btn.textContent = tr("Save as test case");
+    const inputs = run.inputs, incomplete = run.inputsIncomplete;
+    btn.onclick = () => {
+      btn.disabled = true;
+      const form = document.createElement("div"); form.className = "test-form";
+      const name = document.createElement("input"); name.type = "text"; name.value = tr("Test {n}", { n:programTests.length + 1 });
+      name.setAttribute("aria-label", tr("Test name"));
+      const crit = document.createElement("textarea"); crit.placeholder = tr("What the result must do, separated by semicolons, like: under 200 words; names the date");
+      crit.setAttribute("aria-label", tr("What the result must do"));
+      const row = document.createElement("div"); row.className = "row";
+      const save = document.createElement("button"); save.type = "button"; save.className = "primary"; save.textContent = tr("Save test");
+      const msg = document.createElement("p"); msg.className = "msg";
+      save.onclick = () => {
+        const c = crit.value.trim();
+        if (!c) { msg.textContent = tr("Say what the result must do first."); msg.className = "msg bad"; crit.focus(); return; }
+        programTests.push({ name:name.value.trim() || tr("Test {n}", { n:programTests.length + 1 }), value:"", inputs:JSON.parse(JSON.stringify(inputs)), criteria:c });
+        testsChanged();
+        form.replaceChildren(msg);
+        msg.textContent = tr("Saved. Run tests checks it again whenever you like; exported, it's in the zip for python my-program.py --test.") +
+          (incomplete ? " " + tr("A file was too big to keep, so that step will ask when the test runs.") : "");
+        msg.className = "msg ok";
+      };
+      row.appendChild(save);
+      form.append(name, crit, row, msg);
+      resultEl.appendChild(form); crit.focus();
+    };
+    return btn;
+  }
+  async function runTests(){
+    if (run && run.active) return;
+    const starts = ws.getTopBlocks(true).filter(b => b.type === "rb_start" && (!b.isEnabled || b.isEnabled()));
+    stepsEl.innerHTML = "";
+    if (!starts.length) { addStep("Nothing to run", { text:tr("Drag 'when Run is clicked' from Events and attach your steps under it.") }).done("stopped", "bad"); return; }
+    const outcome = [];
+    for (const t of programTests.slice()) {
+      const hats = starts.map(b => ({ getNextBlock:() => b.getNextBlock(), payload:t.value || "" }));
+      let verdict = null;
+      const check = async () => {
+        if (!String(t.criteria || "").trim()) { verdict = [true, []]; return; }
+        const s = addStep(tr("Test check: {name}", { name:t.name }));
+        const ending = run.ending;
+        run.ending = false;  // the program has finished; the check is one more call
+        try {
+          const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + t.criteria +
+            "\n\nText:\n" + (finalText() || "(no result)") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. ' +
+            "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS.review);
+          const ok = v.approved === true;
+          let probs = ok ? [] : (Array.isArray(v.problems) ? v.problems.map(str).filter(x => x.trim()) : []);
+          if (!ok && !probs.length) probs = [tr("It doesn't yet meet the criteria.")];
+          s.text(ok ? tr("Meets every criterion.") : probs.map(x => "- " + x).join("\n")); s.done(ok ? tr("passed") : tr("failed"), ok ? "ok" : "bad");
+          verdict = [ok, probs];
+        } catch(e) { s.text(errText(e)); s.done("error", "bad"); verdict = [false, [errText(e)]]; }
+        finally { run.ending = ending; }
+      };
+      await startRun(hats, tr("Test: {name}", { name:t.name }), false, t.inputs || {}, check);
+      const [passed, problems] = verdict || [false, [run.error ? errText(threadError(run.error)) : tr("The run stopped.")]];
+      outcome.push([t.name, passed, problems]);
+    }
+    const n = outcome.length, ok = outcome.filter(o => o[1]).length;
+    addStep(tr("Tests"), { text:outcome.map(([name, p, probs]) => (p ? "PASS  " : "FAIL  ") + name + (probs.length ? "\n" + probs.map(x => "      - " + x).join("\n") : "")).join("\n") })
+      .done(tr("{passed} of {n} passed.", { passed:ok, n }), ok === n ? "ok" : "bad");
+    setStatus(tr("{passed} of {n} passed.", { passed:ok, n }));
+  }
+  window.__runTests = runTests;
+  $("log-tests").onclick = () => runTests();
+  testsChanged();
 
   /* ---------- Save the run log ---------- */
   function logMarkdown(){
@@ -15901,7 +16119,7 @@ HOW TO MAP CODE
     setStatus("stopping…");
   };
 
-  async function startRun(hats, reason, quiet){
+  async function startRun(hats, reason, quiet, replay, check){
     if (run && run.active) return false;
     showBanner("");
     if (reason === "manual") stepsEl.innerHTML = "";
@@ -15916,7 +16134,8 @@ HOW TO MAP CODE
             ctls:new Set(), stoppers:new Set(), threads:new Set(), started:0, broadcasts:0, sample:null,
             active:true, ready:false, pending:hats.slice(), timerStart:Date.now(),
             msgWaiters:new Map(), msgNames:new Map(), msgWaiting:0, instructions:"", chats:new Map(), lastError:"",
-            budget:0, tokIn:0, tokOut:0, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map(), agentTrace:[] };
+            budget:0, tokIn:0, tokOut:0, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map(), agentTrace:[],
+            inputs:{}, inputsIncomplete:false, replay:replay ? JSON.parse(JSON.stringify(replay)) : null };
     $("run").disabled = true; $("stop").disabled = false; setStatus("running");
     const started = Date.now();
     try {
@@ -15929,6 +16148,7 @@ HOW TO MAP CODE
       while (run.threads.size) await Promise.all([...run.threads]);
       if (run.error) throw run.error;
       if (run.stopped) throw new Halt();
+      if (check) await check();  // a test's check of the result: one more model call, while the run is still open
       stepsEl.querySelectorAll(".pill").forEach(p => { if (["running","waiting","waiting for you"].includes(p.dataset.state)) { p.dataset.state = "ended"; p.textContent = tr("ended"); p.className = "pill warn"; } });
       if (!(quiet && !resultItems().length)) showResult();
       setStatus(tr("done in {time}", { time:fmtLeft(Date.now() - started) }) + " \u00b7 " + tr(run.calls === 1 ? "{n} Claude call" : "{n} Claude calls", { n:run.calls }) + (run.calls ? " \u00b7 " + tr("~{n} tokens", { n:fmtTokens(tokensUsed()) }) : ""));

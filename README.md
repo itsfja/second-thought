@@ -241,6 +241,12 @@ A scheduled program, with nobody there to answer, won't start until you've appro
 
 If a program has an **ask me before** block, Python asks in the terminal and waits for `y` or `n`. With nobody there to answer, it says no and carries on.
 
+### Test cases
+
+A program that checks its own work deserves a check of its own, especially after you change its model. After a run you're happy with, press **Save as test case** under the result, and say what any good result must do, like *mentions the date; under 200 words; no jargon*. The test case keeps your answers to the program's questions and the files you chose. **Run tests**, at the top of the run log, runs every test case again: it gives the same answers instead of asking, the models answer afresh, and a strict reviewer checks each result against its criteria. The log ends with which passed, and why the others didn't.
+
+Test cases travel with the program: in block files, saved programs, exported Python, and in the zip as `my-program.tests.json`. There, `python my-program.py --test` runs them. Nothing acts in a test: messages aren't sent, devices aren't switched and files aren't saved (the log says what would have been done), and memory is a copy, so tests can be run as often as you like. It prints PASS or FAIL for each, and exits with 1 if any failed, for scripts. Pictures aren't kept, so a test can't choose one.
+
 ### Run settings
 
 The ini file has a `[run]` section. Remove the `;` from the start of a line to switch it on:

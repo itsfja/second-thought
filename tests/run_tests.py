@@ -28,6 +28,7 @@ from e2e.gallery import gallery_smoke_tests, gallery_tests  # noqa: E402
 from e2e.actions import actions_tests  # noqa: E402
 from e2e.describe import describe_tests  # noqa: E402
 from e2e.formats import format_tests  # noqa: E402
+from e2e.program_tests import program_test_tests  # noqa: E402
 
 
 AREAS = ("sources", "page", "i18n", "gallery", "python")
@@ -53,6 +54,7 @@ def main():
     if "page" in areas:
         asyncio.run(describe_tests())
         asyncio.run(format_tests())
+        asyncio.run(program_test_tests())
     if "i18n" in areas:
         asyncio.run(i18n_tests())
     if "gallery" in areas:

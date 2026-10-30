@@ -222,7 +222,8 @@ class AgentTools:
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
                     ask = mode == "every" or (mode == "changes" and not read_only)
-                    out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"]}), ask, schema)
+                    out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"],
+                                                                                        "read_only": read_only}), ask, schema)
             elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
@@ -541,7 +542,10 @@ class AgentTools:
             why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
             ask = ask or bool(why_ask)
             refused = False
-            if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
+            if getattr(self, "testing", False) and (ask or (kind == "mcp" and not spec.get("read_only"))):
+                result, refused = "This is a test run, so tools that change things don't run. Carry on as if it had worked.", True
+                self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=f"{name} {_short(shown, 200)}"), tr("skipped"))
+            elif ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
                 result, refused = "The person said no, so this tool didn't run.", True
             else:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again

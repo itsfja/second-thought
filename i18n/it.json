@@ -1363,7 +1363,28 @@
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Programma di Claude caricato ({n} blocchi). Controlla i blocchi prima di eseguirlo.",
   "Community: teaching": "Community: insegnamento",
   "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "Questo programma è stato salvato da un Second Thought più recente (formato blocchi {theirs}; questa pagina legge fino al {ours}). Aprilo con la pagina più recente.",
-  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "Era stato salvato con blocchi più vecchi ed è stato aggiornato (formato blocchi da {from} a {to})."
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "Era stato salvato con blocchi più vecchi ed è stato aggiornato (formato blocchi da {from} a {to}).",
+  "A file was too big to keep, so that step will ask when the test runs.": "Un file era troppo grande da conservare, quindi quel passo chiederà quando gira il test.",
+  "It doesn't yet meet the criteria.": "Non soddisfa ancora i criteri.",
+  "Run tests ({n})": "Esegui i test ({n})",
+  "Save as test case": "Salva come caso di test",
+  "Save test": "Salva test",
+  "Saved. Run tests checks it again whenever you like; exported, it's in the zip for python my-program.py --test.": "Salvato. «Esegui i test» lo ricontrolla quando vuoi; esportato, è nello zip per python my-program.py --test.",
+  "Say what the result must do first.": "Prima di' cosa deve fare il risultato.",
+  "Test answer": "Risposta del test",
+  "Test cases don't keep pictures, so a test can't choose one. Test this part by running the program.": "I casi di test non conservano le immagini, quindi un test non può sceglierne una. Prova questa parte eseguendo il programma.",
+  "Test check: {name}": "Controllo del test: {name}",
+  "Test name": "Nome del test",
+  "Test {n}": "Test {n}",
+  "Test: {name}": "Test: {name}",
+  "Tests": "Test",
+  "The run stopped.": "L'esecuzione si è fermata.",
+  "The test case has no answer for this step ({what}). Save it again from a run that gets this far.": "Il caso di test non ha una risposta per questo passo ({what}). Salvalo di nuovo da un'esecuzione che arrivi fin qui.",
+  "What the result must do": "Cosa deve fare il risultato",
+  "What the result must do, separated by semicolons, like: under 200 words; names the date": "Cosa deve fare il risultato, separato da punti e virgola, per esempio: meno di 200 parole; indica la data",
+  "passed": "superato",
+  "replayed": "ripetuto",
+  "{passed} of {n} passed.": "{passed} su {n} superati."
  },
  "examples": {
   "review": {
@@ -2784,6 +2805,22 @@
   "MCP tool": "Strumento MCP",
   "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "con --mcp, offre uno strumento, «{name}», a Claude e ad altri agenti",
   "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "Questo programma può agire sul mondo e non ha ancora il permesso di farlo senza chiedere. Eseguilo una volta in un terminale e rispondi y, oppure metti approve = no in second-thought.ini.",
-  "MCP call": "Chiamata MCP"
+  "MCP call": "Chiamata MCP",
+  "Test answer": "Risposta del test",
+  "Test cases don't keep pictures, so a test can't choose one. Test this part by running the program.": "I casi di test non conservano le immagini, quindi un test non può sceglierne una. Prova questa parte eseguendo il programma.",
+  "Test {n}": "Test {n}",
+  "Test: {name}": "Test: {name}",
+  "The run stopped.": "L'esecuzione si è fermata.",
+  "The test case has no answer for this step ({what}). Save it again from a run that gets this far.": "Il caso di test non ha una risposta per questo passo ({what}). Salvalo di nuovo da un'esecuzione che arrivi fin qui.",
+  "replayed": "ripetuto",
+  "{passed} of {n} passed.": "{passed} su {n} superati.",
+  "No tests: {path} isn't there. Make them on the page: after a good run, press Save as test case, then export again.": "Nessun test: {path} non c'è. Creali nella pagina: dopo una buona esecuzione premi «Salva come caso di test», poi esporta di nuovo.",
+  "Not done, because this is a test: {what}": "Non fatto, perché è un test: {what}",
+  "TESTS": "TEST",
+  "Test check": "Controllo del test",
+  "Test run": "Esecuzione di test",
+  "{path} isn't valid JSON ({problem}).": "{path} non è JSON valido ({problem}).",
+  "Choose a file": "Scegli un file",
+  "Choose one": "Scegline uno"
  }
 }
