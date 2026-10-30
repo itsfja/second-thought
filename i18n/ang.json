@@ -2780,7 +2780,11 @@
   "the keychain": "þǣre cǣgcyste",
   "Keys": "Cǣga",
   "Keychain": "Cǣgcyst",
-  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring is geseted ac sēo cǣgcyst ne mihte bēon geræd ({problem}), forþon cumaþ cǣga āna of þǣre ymbhwyrfte and second-thought.ini"
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring is geseted ac sēo cǣgcyst ne mihte bēon geræd ({problem}), forþon cumaþ cǣga āna of þǣre ymbhwyrfte and second-thought.ini",
+  "MCP tool": "MCP tōl",
+  "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "mid --mcp, hit þēnaþ ān tōl, “{name}”, Claude and ōþrum dǣdum",
+  "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "Þis forescrift mæg dōn on worulde and næfþ lēafe tō dōnne būtan āscunge. Yrn hit ǣne on terminal and andswara y, oþþe sete approve = no on second-thought.ini.",
+  "MCP call": "MCP clipung"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

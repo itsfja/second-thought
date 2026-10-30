@@ -1661,7 +1661,11 @@
 "the keychain":"कुञ्चिकाकोशात्",
 "Keys":"कुञ्चिकाः",
 "Keychain":"कुञ्चिकाकोशः",
-"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring स्थापितम्, किन्तु कुञ्चिकाकोशः पठितुं न शक्तः ({problem}), अतः कुञ्चिकाः परिवेशात् second-thought.ini इत्यस्मात् च एव आगच्छन्ति"
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring स्थापितम्, किन्तु कुञ्चिकाकोशः पठितुं न शक्तः ({problem}), अतः कुञ्चिकाः परिवेशात् second-thought.ini इत्यस्मात् च एव आगच्छन्ति",
+"MCP tool":"MCP साधनम्",
+"with --mcp, it serves one tool, “{name}”, to Claude and other agents":"--mcp सह, एतत् Claude अन्येभ्यः कारकेभ्यः च एकं साधनं “{name}” ददाति",
+"This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.":"अयं कार्यक्रमः लोके कर्म कर्तुं शक्नोति, किन्तु अपृष्ट्वा कर्तुम् अनुमतिः नास्ति। एकवारं टर्मिनल् मध्ये चालय y इति उत्तरं च देहि, अथवा second-thought.ini मध्ये approve = no लिख।",
+"MCP call":"MCP आह्वानम्"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

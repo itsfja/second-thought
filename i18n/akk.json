@@ -2781,7 +2781,11 @@
   "the keychain": "bīt kunukkī",
   "Keys": "kunukkū",
   "Keychain": "bīt kunukkī",
-  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring šakin, ullâmma bīt kunukkī ul iššasi ({problem}), kunukkū ištu kibrātim u second-thought.ini ištēn illakūnim"
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring šakin, ullâmma bīt kunukkī ul iššasi ({problem}), kunukkū ištu kibrātim u second-thought.ini ištēn illakūnim",
+  "MCP tool": "unūt MCP",
+  "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "itti --mcp, ištēt unūtam, „{name}“, ana Claude u šaprūtim šanûtim inaddin",
+  "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "nēpešum annûm ina mātim epēšam ileʾʾi, u ana lā šâlim ul nadin. ištīššu ina terminal epuš u y apul, lū approve = no ina second-thought.ini šukun.",
+  "MCP call": "šisīt MCP"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

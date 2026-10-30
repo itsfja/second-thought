@@ -1660,6 +1660,10 @@
 "the keychain":"钥匙串",
 "Keys":"密钥",
 "Keychain":"钥匙串",
-"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"已安装 keyring，但无法读取钥匙串（{problem}），所以密钥只来自环境变量和 second-thought.ini"
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"已安装 keyring，但无法读取钥匙串（{problem}），所以密钥只来自环境变量和 second-thought.ini",
+"MCP tool":"MCP 工具",
+"with --mcp, it serves one tool, “{name}”, to Claude and other agents":"用 --mcp 时，它向 Claude 和其他智能体提供一个工具：“{name}”",
+"This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.":"这个程序能对外界执行操作，但还没有获准不经询问就这样做。请在终端里运行一次并回答 y，或在 second-thought.ini 中写入 approve = no。",
+"MCP call":"MCP 调用"
 }
 };

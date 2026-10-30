@@ -1660,6 +1660,10 @@
 "the keychain":"de sleutelhanger",
 "Keys":"Sleutels",
 "Keychain":"Sleutelhanger",
-"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring is geïnstalleerd maar de sleutelhanger kon niet worden gelezen ({problem}), dus sleutels komen alleen uit de omgeving en second-thought.ini"
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring is geïnstalleerd maar de sleutelhanger kon niet worden gelezen ({problem}), dus sleutels komen alleen uit de omgeving en second-thought.ini",
+"MCP tool":"MCP-tool",
+"with --mcp, it serves one tool, “{name}”, to Claude and other agents":"met --mcp biedt het één tool, ‘{name}’, aan Claude en andere agents",
+"This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.":"Dit programma kan dingen in de wereld doen en mag dat nog niet zonder te vragen. Draai het één keer in een terminal en antwoord y, of zet approve = no in second-thought.ini.",
+"MCP call":"MCP-aanroep"
 }
 };

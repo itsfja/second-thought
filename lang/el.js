@@ -1660,6 +1660,10 @@
 "the keychain":"την κλειδοθήκη",
 "Keys":"Κλειδιά",
 "Keychain":"Κλειδοθήκη",
-"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"το keyring είναι εγκατεστημένο αλλά η κλειδοθήκη δεν διαβάστηκε ({problem}), άρα τα κλειδιά έρχονται μόνο από το περιβάλλον και το second-thought.ini"
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"το keyring είναι εγκατεστημένο αλλά η κλειδοθήκη δεν διαβάστηκε ({problem}), άρα τα κλειδιά έρχονται μόνο από το περιβάλλον και το second-thought.ini",
+"MCP tool":"Εργαλείο MCP",
+"with --mcp, it serves one tool, “{name}”, to Claude and other agents":"με --mcp, προσφέρει ένα εργαλείο, «{name}», στον Claude και σε άλλους πράκτορες",
+"This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.":"Αυτό το πρόγραμμα μπορεί να δράσει στον κόσμο και δεν του έχει επιτραπεί να το κάνει χωρίς να ρωτά. Τρέξ' το μία φορά σε τερματικό και απάντησε y, ή βάλε approve = no στο second-thought.ini.",
+"MCP call":"Κλήση MCP"
 }
 };

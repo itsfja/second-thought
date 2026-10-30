@@ -2781,6 +2781,10 @@
   "the keychain": "מחזיק המפתחות",
   "Keys": "מפתחות",
   "Keychain": "מחזיק מפתחות",
-  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring מותקן אבל לא ניתן היה לקרוא את מחזיק המפתחות ({problem}), אז מפתחות מגיעים רק מהסביבה ומ-second-thought.ini"
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring מותקן אבל לא ניתן היה לקרוא את מחזיק המפתחות ({problem}), אז מפתחות מגיעים רק מהסביבה ומ-second-thought.ini",
+  "MCP tool": "כלי MCP",
+  "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "עם --mcp, הוא מגיש כלי אחד, „{name}”, ל-Claude ולסוכנים אחרים",
+  "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "התוכנית הזו יכולה לפעול בעולם ועוד לא הותר לה לעשות זאת בלי לשאול. הרץ אותה פעם אחת במסוף וענה y, או כתוב approve = no ב-second-thought.ini.",
+  "MCP call": "קריאת MCP"
  }
 }

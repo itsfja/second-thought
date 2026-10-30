@@ -260,6 +260,7 @@ class Doctor:
         if KEYCHAIN_PROBLEM:
             row("NOTE", "Keychain", tr("keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the "
                                       "environment and second-thought.ini", problem=_short(KEYCHAIN_PROBLEM, 120)))
+        row("ok", "MCP tool", tr("with --mcp, it serves one tool, “{name}”, to Claude and other agents", name=self.mcp_tool_name()))
         names = list(can.get("services", [])) if known else ["Claude"] + [s["name"] for s in SERVICES
                                                                           if s["name"] != "Claude" and any(os.environ.get(k) for k in s["keys"])]
         services = [s for s in SERVICES if s["name"] in names]

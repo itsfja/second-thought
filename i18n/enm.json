@@ -2780,7 +2780,11 @@
   "the keychain": "the keye-cheste",
   "Keys": "Keyes",
   "Keychain": "Keye-cheste",
-  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring is set up but the keye-cheste myghte nat be red ({problem}), so keyes comen oonly from the envyronment and second-thought.ini"
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring is set up but the keye-cheste myghte nat be red ({problem}), so keyes comen oonly from the envyronment and second-thought.ini",
+  "MCP tool": "MCP tool",
+  "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "with --mcp, it serveth oon tool, “{name}”, to Claude and othere agentes",
+  "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "This devys may do thynges in the world and hath nat leve to do so withoute askynge. Renne it ones in a terminal and answere y, or put approve = no in second-thought.ini.",
+  "MCP call": "MCP callynge"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

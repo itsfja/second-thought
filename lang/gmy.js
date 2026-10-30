@@ -1661,7 +1661,11 @@
 "the keychain":"ka-ra-wi-po-ro-ko",
 "Keys":"ka-ra-wi-de",
 "Keychain":"ka-ra-wi-po-ro-ko",
-"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring ke-ta-i, a-ra ka-ra-wi-po-ro-ko o-u a-na-ko-no-to ({problem}), ka-ra-wi-de pe-ri-ko-ro second-thought.ini mo-no"
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring ke-ta-i, a-ra ka-ra-wi-po-ro-ko o-u a-na-ko-no-to ({problem}), ka-ra-wi-de pe-ri-ko-ro second-thought.ini mo-no",
+"MCP tool":"MCP ta-ra",
+"with --mcp, it serves one tool, “{name}”, to Claude and other agents":"--mcp, e-me ta-ra, “{name}”, Claude a-ra-jo-i do-se",
+"This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.":"to-to po-ro-ka-ra-ma we-ke-i, o-u-pa-ro e-ra-pe. y a-pi-ka-ri-ne, o approve = no second-thought.ini.",
+"MCP call":"MCP ka-ra-se"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

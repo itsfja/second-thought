@@ -2780,7 +2780,11 @@
   "the keychain": "lyklakistunni",
   "Keys": "Lyklar",
   "Keychain": "Lyklakista",
-  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring er sett upp en lyklakistuna mátti eigi lesa ({problem}), svá at lyklar koma aðeins ór umhverfinu ok second-thought.ini"
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring er sett upp en lyklakistuna mátti eigi lesa ({problem}), svá at lyklar koma aðeins ór umhverfinu ok second-thought.ini",
+  "MCP tool": "MCP-tól",
+  "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "með --mcp þjónar þat einu tóli, „{name}“, Claude ok öðrum erindrekum",
+  "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "Þetta forrit má gera hluti í heiminum ok hefir eigi leyfi at gera þat án þess at spyrja. Keyr þat einu sinni í útstöð ok svara y, eða set approve = no í second-thought.ini.",
+  "MCP call": "MCP-kall"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",
