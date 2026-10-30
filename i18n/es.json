@@ -2844,6 +2844,12 @@
   "Test run": "Ejecución de test",
   "{path} isn't valid JSON ({problem}).": "{path} no es JSON válido ({problem}).",
   "Choose a file": "Elige un archivo",
-  "Choose one": "Elige uno"
+  "Choose one": "Elige uno",
+  "\nThis program has changed since you allowed it on {when}.": "\nEste programa ha cambiado desde que lo permitiste el {when}.",
+  "\nThis program has changed since you allowed it.": "\nEste programa ha cambiado desde que lo permitiste.",
+  "New since then: {what}": "Nuevo desde entonces: {what}",
+  "No longer: {what}": "Ya no: {what}",
+  "What it can do is the same as before.": "Lo que puede hacer es lo mismo que antes.",
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Ejecútalo una vez tú mismo y responde y (una ejecución programada no empezará hasta entonces)."
  }
 }

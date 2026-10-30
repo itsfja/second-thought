@@ -288,16 +288,20 @@ class Doctor:
                 row("FAIL", area, _short(self._describe(e), 240))
         if known and self.can_acts(can):
             path, digest = self._approval_path()
-            allowed = False
+            allowed, before = False, None
             if path and os.path.exists(path):
                 try:
                     with open(path, encoding="utf-8") as f:
-                        allowed = json.load(f).get("sha256") == digest
+                        before = json.load(f)
+                    allowed = before.get("sha256") == digest
                 except (OSError, ValueError, AttributeError):
-                    pass
+                    before = None
             skip = os.environ.get("RB_APPROVE", "").strip().lower() in ("no", "0", "false", "off")
+            changed = " ".join(line.strip() for line in self.changes_since(before, can)) if before and not allowed else ""
             row("ok" if allowed or skip else "NOTE", "First run", tr("approve = no, so it doesn't ask") if skip else
-                tr("allowed on this computer") if allowed else tr("not allowed on this computer yet. Run it once yourself and answer y (a scheduled run won't start until then)."))
+                tr("allowed on this computer") if allowed else
+                tr("{changes} Run it once yourself and answer y (a scheduled run won't start until then).", changes=changed) if changed else
+                tr("not allowed on this computer yet. Run it once yourself and answer y (a scheduled run won't start until then)."))
         if os.environ.get("RB_SAVE_LOG", "").strip().lower() in ("1", "yes", "true", "on"):
             folder = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0] or ".")), LOG_DIR)
             ok = os.access(folder if os.path.isdir(folder) else os.path.dirname(folder), os.W_OK)

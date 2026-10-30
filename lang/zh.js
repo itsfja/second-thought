@@ -1724,6 +1724,12 @@
 "Test run":"测试运行",
 "{path} isn't valid JSON ({problem}).":"{path} 不是有效的 JSON（{problem}）。",
 "Choose a file":"选择一个文件",
-"Choose one":"选一个"
+"Choose one":"选一个",
+"\nThis program has changed since you allowed it on {when}.":"\n这个程序在你于 {when} 允许之后有了改动。",
+"\nThis program has changed since you allowed it.":"\n这个程序在你允许之后有了改动。",
+"New since then: {what}":"新增：{what}",
+"No longer: {what}":"不再：{what}",
+"What it can do is the same as before.":"它能做的事和以前一样。",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} 请自己运行一次并回答 y（在此之前定时运行不会开始）。"
 }
 };

@@ -1725,7 +1725,13 @@
 "Test run":"pe-ra e-ra-pe",
 "{path} isn't valid JSON ({problem}).":"{path} o-u JSON ({problem}).",
 "Choose a file":"ka-ra-pa e-re",
-"Choose one":"e-me e-re"
+"Choose one":"e-me e-re",
+"\nThis program has changed since you allowed it on {when}.":"\nto-to po-ro-ka-ra-ma me-ta-ba-ra-to o-pi-de e-a-se-a {when}.",
+"\nThis program has changed since you allowed it.":"\nto-to po-ro-ka-ra-ma me-ta-ba-ra-to o-pi-de e-a-se-a.",
+"New since then: {what}":"ka-no o-pi-de: {what}",
+"No longer: {what}":"o-u-ke-ti: {what}",
+"What it can do is the same as before.":"o du-na-ta-i po-e-e to-to a-u-to pa-ro.",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} da-ra-me a-u-to a-pa-ka-si e a-po-ki-ri-ne y (o-ra-ja pa-ra-ki-si o-u a-ka-ta-i pa-ro)."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

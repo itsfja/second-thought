@@ -91,6 +91,33 @@ class Asking(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIn("nobody is here to ask", out)
 
+    def test_asking_again_says_what_is_new_and_what_is_gone(self):
+        self.CAN = {"services": ["Claude"], "can": ["email_send", "web"]}
+        self.assertTrue(self.ask(["y"])[0])
+        when = json.loads(self.approved.read_text())["when"][:16].replace("T", " ")
+        self.prog.write_text("print('now it controls the house too')\n", encoding="utf-8")
+        self.CAN = {"services": ["Claude"], "can": ["email_send", "ha_act"]}
+        ok, out = self.ask(["y"])
+        self.assertTrue(ok)
+        self.assertIn(f"This program has changed since you allowed it on {when}.", out)
+        self.assertIn("New since then: control your Home Assistant devices", out)
+        self.assertIn("No longer: read public web pages and search the web", out)
+        self.assertLess(out.index("New since then"), out.index("This program can:"), "what's new comes before the full list")
+        self.assertIn("  - send email", out)
+        self.assertEqual(json.loads(self.approved.read_text())["allowed"], ["email_send", "ha_act"])
+
+    def test_a_change_that_can_do_the_same_says_so(self):
+        self.assertTrue(self.ask(["y"])[0])
+        self.prog.write_text("print('reworded')\n", encoding="utf-8")
+        ok, out = self.ask([], unattended=True)
+        self.assertFalse(ok)
+        self.assertIn("What it can do is the same as before.", out)
+        self.assertNotIn("New since then", out)
+
+    def test_a_first_run_says_nothing_about_changes(self):
+        ok, out = self.ask(["y"])
+        self.assertNotIn("changed since", out)
+
     def test_no(self):
         ok, out = self.ask(["n"])
         self.assertFalse(ok)

@@ -1724,7 +1724,13 @@
 "Test run":"Prófkeyrsla",
 "{path} isn't valid JSON ({problem}).":"{path} er eigi gilt JSON ({problem}).",
 "Choose a file":"Vel skjal",
-"Choose one":"Vel eitt"
+"Choose one":"Vel eitt",
+"\nThis program has changed since you allowed it on {when}.":"\nÞetta forrit hefir breyzk síðan þú leyfðir þat {when}.",
+"\nThis program has changed since you allowed it.":"\nÞetta forrit hefir breyzk síðan þú leyfðir þat.",
+"New since then: {what}":"Nýtt síðan: {what}",
+"No longer: {what}":"Eigi lengr: {what}",
+"What it can do is the same as before.":"Þat er þat getr gert er hit sama sem áðr.",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Keyr þat einu sinni sjálfr ok svara y (settr gangr byrjar eigi fyrr)."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

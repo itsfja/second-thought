@@ -19,6 +19,7 @@ that the two agree.
 ## Unreleased
 
 ### Changed
+- When a program that can act changes and asks to be allowed again, it says what it can do now that it couldn't when you last allowed it, and what it no longer does, before the full list (#225). If nothing changed there, it says so. `--doctor` says the same.
 - Pages and feeds the agent reads through a proxy go to the address that was checked (#220). Before, the proxy looked the name up again, so a name that changed its answer could reach your own network. Redirects are followed and checked the same way, and the certificate is still checked against the name.
 - `--doctor` says more when a service no longer lists a model the program uses (#190): that it may have been retired, and the `MODEL_<TIER>` line for `second-thought.ini` that switches to a model the service does list, with the nearest one of the same kind as an example.
 - Agents ask in more places, even with the no-asking tools (#188). Every lock, cover and valve action but locking, closing and stopping asks (toggling or setting a position could open them), as does `homeassistant.turn_on`, `turn_off` or `toggle` aimed at one. When an agent chooses them, Home Assistant scripts, scenes, automations and buttons, Homey flows, and MQTT messages saying unlock, open or disarm ask too. An agent with private tools asks before reading a page or feed address that wasn't in its goal or anything it read. An unattended program relying on its agent doing these without asking now says no to them instead.

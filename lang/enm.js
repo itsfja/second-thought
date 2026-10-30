@@ -1724,7 +1724,13 @@
 "Test run":"Assay rennynge",
 "{path} isn't valid JSON ({problem}).":"{path} is nat trewe JSON ({problem}).",
 "Choose a file":"Chese a quaier",
-"Choose one":"Chese oon"
+"Choose one":"Chese oon",
+"\nThis program has changed since you allowed it on {when}.":"\nThis programme is chaunged sith thou suffredest it on {when}.",
+"\nThis program has changed since you allowed it.":"\nThis programme is chaunged sith thou suffredest it.",
+"New since then: {what}":"Newe sith thanne: {what}",
+"No longer: {what}":"No lenger: {what}",
+"What it can do is the same as before.":"That it may do is the same as bifore.",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Renne it ones thyself and answere y (a sette rennynge shal nat bigynne til thanne)."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

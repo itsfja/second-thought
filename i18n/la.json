@@ -2844,7 +2844,13 @@
   "Test run": "Cursus probationis",
   "{path} isn't valid JSON ({problem}).": "{path} non est JSON validum ({problem}).",
   "Choose a file": "Elige fasciculum",
-  "Choose one": "Unum elige"
+  "Choose one": "Unum elige",
+  "\nThis program has changed since you allowed it on {when}.": "\nHoc programma mutatum est postquam id die {when} permisisti.",
+  "\nThis program has changed since you allowed it.": "\nHoc programma mutatum est postquam id permisisti.",
+  "New since then: {what}": "Novum ex eo tempore: {what}",
+  "No longer: {what}": "Non iam: {what}",
+  "What it can do is the same as before.": "Quae facere potest eadem sunt atque antea.",
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Semel ipse id curre et y responde (cursus statutus non ante incipiet)."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

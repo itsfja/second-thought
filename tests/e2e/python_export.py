@@ -127,6 +127,8 @@ def approval_tests(codes, env, tmp):
           f"once the file changes, a scheduled run with nobody there stops and says how to allow it (exit {r.returncode})")
     r = subprocess.run([sys.executable, "-u", str(prog)], env=env, cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=60, input="n\n")
     check(r.returncode == 1 and "Not allowed, so it didn't run." in r.stdout and "RESULT" not in r.stdout, "answering n stops it before it does anything")
+    check("This program has changed since you allowed it on " in r.stdout and "What it can do is the same as before." in r.stdout,
+          "asking again, it says the program changed since it was allowed, and that it can do the same as before")
     reader = pathlib.Path(tmp) / "gate_reader.py"
     reader.write_text(codes["a_house"][0], encoding="utf-8")
     code_, out, err = drive([sys.executable, "-u", str(reader)], env, tmp)
