@@ -847,29 +847,31 @@
     { type:"rb_ha_speak", message0:"say %1 on %2", args0:[{ type:"input_value", name:"TEXT" }, { type:"input_value", name:"PLAYER" }],
       previousStatement:null, nextStatement:null, style:"ha", inputsInline:true, tooltip:"Speaks the text on a media player, using Home Assistant's text-to-speech." }
   ]);
-  /* Home Assistant actions that unlock, open or disarm always ask, even with 'control devices (no asking)'. Matches the
-     runtime's HA_SENSITIVE and ha_sensitive: locks, covers and valves except locking, closing and stopping, and
-     homeassistant.turn_on, turn_off or toggle aimed at them. */
-  const HA_SENSITIVE = [/^lock\.(?!lock$)/, /^cover\.(?!(close_cover|close_cover_tilt|stop_cover|stop_cover_tilt)$)/,
-    /^valve\.(?!(close_valve|stop_valve)$)/, /^alarm_control_panel\.alarm_disarm$/, /^garage_door\.open/];
+  /* What always asks: SAFETY in python/second_thought/core.py, copied into the page by tools/sync.py, so the page and
+     exported programs ask before the same things. Home Assistant actions that unlock, open or disarm ask even with
+     'control devices (no asking)', and so do the things a fooled agent could do with a tool that doesn't normally ask. */
+  const SAFETY = JSON.parse(document.getElementById("safety").textContent);
+  const HA_SENSITIVE = SAFETY.ha_sensitive.map(p => new RegExp(p));
   const haIsSensitive = (svc, entity) => { svc = str(svc).trim();
-    return HA_SENSITIVE.some(r => r.test(svc)) || (/^homeassistant\.(turn_on|turn_off|toggle)$/.test(svc)
-      && str(entity).trim().split(/[\s,]+/).some(e => /^(lock|cover|valve|alarm_control_panel)\./.test(e))); };
-  /* What a fooled agent could do with a tool that doesn't normally ask: these ask anyway. Matches the runtime's
-     AGENT_PRIVATE, AGENT_HA_INDIRECT and _agent_must_ask. */
-  const AGENT_PRIVATE = new Set(["email", "email_send", "calendar", "telegram", "telegram_send", "telegram_send_free", "discord", "discord_send",
-    "discord_send_free", "slack", "slack_send", "slack_send_free", "github", "github_act", "ha_read", "ha_act", "ha_act_free", "homey_read",
-    "homey_act", "homey_act_free", "mqtt", "mqtt_act", "mqtt_act_free", "memory", "file", "mcp"]);
-  const AGENT_HA_INDIRECT = [/^script\./, /^scene\./, /^automation\.trigger$/, /^(input_)?button\.press$/];
+    return HA_SENSITIVE.some(r => r.test(svc)) || (new RegExp(SAFETY.ha_generic).test(svc)
+      && str(entity).trim().split(/[\s,]+/).some(e => new RegExp(SAFETY.ha_sensitive_entity).test(e))); };
+  const AGENT_PRIVATE = new Set(SAFETY.agent_private);
+  const AGENT_HA_INDIRECT = SAFETY.agent_ha_indirect.map(p => new RegExp(p));
   function agentMustAsk(tool, inp, seen, isPrivate){
     if (tool === "call_service" && AGENT_HA_INDIRECT.some(r => r.test(str(inp.service).trim()))) return "scripts, scenes, automations and buttons always ask, since they could do anything";
     if (tool === "run_homey_flow") return "flows always ask, since they could do anything";
-    if (tool === "publish_mqtt" && /\b(unlock|open|disarm)/i.test(str(inp.topic) + " " + str(inp.message))) return "unlocking, opening and disarming always ask";
+    if (tool === "publish_mqtt" && new RegExp(SAFETY.mqtt_unlock, "i").test(str(inp.topic) + " " + str(inp.message))) return "unlocking, opening and disarming always ask";
     const url = str(inp.url || "").trim();
     if ((tool === "read_page" || tool === "read_feed") && url && isPrivate && !seen.includes(url) && !seen.includes(url.replace(/\/+$/, "")))
       return "the agent made this address up, and it can see private things that an address could carry away";
     return "";
   }
+  // For the tests: the page's answers to the same questions the runtime answers (tests/e2e/safety.py).
+  window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity)
+    : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
+    : c.kind === "asks" ? AGENT_ASKS.has(c.tool) : c.kind === "private" ? AGENT_PRIVATE.has(c.tool)
+    : agentMustAsk(c.tool, c.input || {}, c.seen || "", !!c.private));
+
   const haVal = v => isNumLike(v) ? num(v) : v;
   function haEnt(id){
     const e = HA.states.get(String(id == null ? "" : id).trim());
@@ -4883,7 +4885,7 @@
   });
   AGENT_BUILTINS.mqtt_act_free = AGENT_BUILTINS.mqtt_act;
   AGENT_BUILTINS.homey_act_free = AGENT_BUILTINS.homey_act;
-  const AGENT_ASKS = new Set(["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"]);  // built-in tools that ask before each use
+  const AGENT_ASKS = new Set(SAFETY.agent_asks);  // built-in tools that ask before each use
   const MAX_AGENT_STEPS = 20;
   // The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL. Matches the runtime.
   const AGENT_INPUT_TYPES = { search_web:{ query:"text" }, ask_me:{ question:"text" }, remember:{ name:"text", value:"text" }, recall:{ name:"text" },
@@ -5265,7 +5267,7 @@
     if (typeof old === "number") { if (!isNumLike(value)) fail(tr("“{value}” isn't a number.", { value })); return num(value); }
     return typeof value === "number" || typeof value === "boolean" ? value : str(value);
   }
-  const HOMEY_SENSITIVE = [["locked", false], ["garagedoor_closed", false], ["homealarm_state", "disarmed"]];
+  const HOMEY_SENSITIVE = SAFETY.homey_sensitive;  // unlocking, opening and disarming
   async function homeySet(device, cap, value, approved){
     const d = homeyDevice(device); cap = str(cap).trim();
     if (!(cap in d.caps)) fail(tr("{device} has no “{cap}”. It has: {caps}.", { device:d.name, cap, caps:Object.keys(d.caps).join(", ") || tr("nothing") }));

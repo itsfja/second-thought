@@ -16,7 +16,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from .settings import WHERE_KEYS
-from .core import (DISCORD_API, GITHUB_API, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
+from .core import (SAFETY, DISCORD_API, GITHUB_API, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
     Picture, Retryable, RunError, SLACK_API, TELEGRAM_API, TELEGRAM_FILE, WEEKDAYS, _WebSocket, _locked, _num_like,
     _short, _write_json, ha_sensitive, num, read_text_file, round_js, to_str, _MEDIA)
 from .settings import tr  # noqa: F401
@@ -1307,7 +1307,7 @@ class Connections:
     # API on port 4859, so add :4859; devices on a Homey Bridge show up through it), HOMEY_API_KEY a key from the Homey Web App
     # (Settings, API Keys). Give the key the permissions your program needs: devices (view, and control to switch
     # things), flows (view and start), Logic (view, and edit to set variables).
-    HOMEY_SENSITIVE = {("locked", False), ("garagedoor_closed", False), ("homealarm_state", "disarmed")}
+    HOMEY_SENSITIVE = {tuple(x) for x in SAFETY["homey_sensitive"]}  # unlocking, opening and disarming: SAFETY in core.py
 
     async def _homey(self, method, path, body=None):
         url, key = os.environ.get("HOMEY_URL", "").strip().rstrip("/"), os.environ.get("HOMEY_API_KEY", "").strip()

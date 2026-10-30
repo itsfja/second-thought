@@ -65,12 +65,37 @@ HA_URL = os.environ.get("HA_URL", "http://homeassistant.local:8123").rstrip("/")
 HA_TOKEN = os.environ.get("HA_TOKEN", "")
 HA_TTS_ENTITY = os.environ.get("HA_TTS_ENTITY", "tts.home_assistant_cloud")  # used by the 'say … on' block
 HA_WATCH_SECONDS = 15  # how often 'when … changes' scripts check Home Assistant
-# Home Assistant actions that unlock, open or disarm: they always ask, even with 'control devices (no asking)'. Locks,
-# covers (garage doors, gates, blinds) and valves: everything but locking, closing and stopping, since toggling or setting a
-# position can open them too.
-HA_SENSITIVE = (r"^lock\.(?!lock$)", r"^cover\.(?!(close_cover|close_cover_tilt|stop_cover|stop_cover_tilt)$)",
-                r"^valve\.(?!(close_valve|stop_valve)$)", r"^alarm_control_panel\.alarm_disarm$", r"^garage_door\.open")
-HA_SENSITIVE_ENTITY = r"^(lock|cover|valve|alarm_control_panel)\."
+# ----- The safety rules: what always asks -----
+# One list, read by exported programs and (copied in by tools/sync.py) by the page, so both ask before the same things.
+# The patterns are regular expressions that mean the same in Python and JavaScript. tests/unit/test_safety.py checks
+# both sides give the same answers.
+SAFETY = {
+    # Home Assistant actions that unlock, open or disarm: they always ask, even with 'control devices (no asking)'. Locks,
+    # covers (garage doors, gates, blinds) and valves: everything but locking, closing and stopping, since toggling or
+    # setting a position can open them too.
+    "ha_sensitive": [r"^lock\.(?!lock$)", r"^cover\.(?!(close_cover|close_cover_tilt|stop_cover|stop_cover_tilt)$)",
+                     r"^valve\.(?!(close_valve|stop_valve)$)", r"^alarm_control_panel\.alarm_disarm$", r"^garage_door\.open"],
+    # homeassistant.turn_on, turn_off and toggle reach any device, so they ask when aimed at one of these.
+    "ha_generic": r"^homeassistant\.(turn_on|turn_off|toggle)$",
+    "ha_sensitive_entity": r"^(lock|cover|valve|alarm_control_panel)\.",
+    # Homey changes that unlock, open or disarm: [capability, value].
+    "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
+    # Built-in agent tools that ask before each use.
+    "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
+    # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it
+    # made up (one that wasn't in its goal or in anything it read) without asking: the address itself could carry the
+    # private things away, like https://example.com/?d=<your emails>.
+    "agent_private": ["email", "email_send", "calendar", "telegram", "telegram_send", "telegram_send_free", "discord", "discord_send",
+                      "discord_send_free", "slack", "slack_send", "slack_send_free", "github", "github_act", "ha_read", "ha_act",
+                      "ha_act_free", "homey_read", "homey_act", "homey_act_free", "mqtt", "mqtt_act", "mqtt_act_free", "memory", "file", "mcp"],
+    # Home Assistant services an agent can't run without asking, even with 'control devices (no asking)': they run
+    # scripts, scenes or automations, or press buttons, and so could do anything, unlocking included.
+    "agent_ha_indirect": [r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$"],
+    # MQTT messages an agent can't publish without asking (matched in the topic and message, any case).
+    "mqtt_unlock": r"\b(unlock|open|disarm)",
+}
+HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
+HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
 def ha_sensitive(service, entity=""):
@@ -79,7 +104,7 @@ def ha_sensitive(service, entity=""):
     service = to_str(service).strip()
     if any(re.match(p, service) for p in HA_SENSITIVE):
         return True
-    return bool(re.match(r"^homeassistant\.(turn_on|turn_off|toggle)$", service)) and \
+    return bool(re.match(SAFETY["ha_generic"], service)) and \
         any(re.match(HA_SENSITIVE_ENTITY, e) for e in re.split(r"[\s,]+", to_str(entity).strip()) if e)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
