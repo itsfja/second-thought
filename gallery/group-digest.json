@@ -1,0 +1,370 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "group-digest",
+  "gallery": {
+    "title": "Group digest",
+    "category": "coding",
+    "description": "Each Monday, the week's new preprints from your arXiv feeds by people in your group, and new mentions of your group's work found on the web, in one short digest. Asks before emailing it.",
+    "tip": "Put the group's names in the first block and your arXiv feeds in second-thought.ini (feeds = …). Change the address.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_group",
+        "name": "group"
+      },
+      {
+        "id": "g_papers",
+        "name": "papers"
+      },
+      {
+        "id": "g_mentions",
+        "name": "mentions"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "digest"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 8,
+            "MINUTE": 0,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "weekday"
+                          }
+                        }
+                      },
+                      "B": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Monday"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_broadcast_wait",
+                    "inputs": {
+                      "MSG": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "digest"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "digest"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_group"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "Ada Lovelace, Charles Babbage; the Analytical Engine group"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_papers"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_feed_news",
+                        "inputs": {
+                          "URL": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": ""
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_mentions"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_web_search",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "new citations or mentions this week of papers by "
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_group"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 2
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_task",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "text_join",
+                                "inputs": {
+                                  "ADD0": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "Write this week's digest for a small research group: "
+                                      }
+                                    }
+                                  },
+                                  "ADD1": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_group"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "ADD2": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": ".\n\nFirst, new preprints from the feeds below with at least one of these people as an author: title, authors, link, and one plain sentence on what it's about. Then new citations or mentions of the group's work from the web search: who mentioned it, where (with the link) and what they said in a sentence. Leave out anything not by or about the group. If there's nothing in a section, say so in one line.\n\nFeeds:\n"
+                                      }
+                                    }
+                                  },
+                                  "ADD3": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_papers"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "ADD4": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "\n\nWeb search:\n"
+                                      }
+                                    }
+                                  },
+                                  "ADD5": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_mentions"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "extraState": {
+                                  "itemCount": 6
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_generate",
+                              "next": {
+                                "block": {
+                                  "type": "rb_review",
+                                  "inputs": {
+                                    "CRITERIA": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "only papers with a group member as an author; every item has its link; mentions say who and where; nothing invented that isn't in the feeds or the search; under 400 words"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "controls_if",
+                                      "inputs": {
+                                        "IF0": {
+                                          "block": {
+                                            "type": "logic_negate",
+                                            "inputs": {
+                                              "BOOL": {
+                                                "block": {
+                                                  "type": "rb_passed"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "DO0": {
+                                          "block": {
+                                            "type": "rb_revise"
+                                          }
+                                        }
+                                      },
+                                      "next": {
+                                        "block": {
+                                          "type": "rb_ask_first",
+                                          "fields": {
+                                            "WHAT": "messages"
+                                          },
+                                          "next": {
+                                            "block": {
+                                              "type": "rb_email_send",
+                                              "inputs": {
+                                                "TO": {
+                                                  "shadow": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "TEXT": "you@example.com"
+                                                    }
+                                                  }
+                                                },
+                                                "SUBJECT": {
+                                                  "shadow": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "TEXT": "This week's group digest"
+                                                    }
+                                                  }
+                                                },
+                                                "TEXT": {
+                                                  "block": {
+                                                    "type": "rb_draft"
+                                                  }
+                                                }
+                                              },
+                                              "next": {
+                                                "block": {
+                                                  "type": "rb_result"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}
