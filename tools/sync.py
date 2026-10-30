@@ -6,7 +6,8 @@ tested on its own. Exported programs still come as one file with nothing to inst
 package's modules, in order, into python/runtime.py (each module's imports, above its "package only" line,
 are left out: in one file every name is already there).
 
-The page is published as one HTML file, so that runtime, its list of model services (SERVICES
+The page is published as one HTML file, so the editor's own styles and code (web/editor.css and web/editor.js), that
+runtime, its list of model services (SERVICES
 in python/second_thought/providers.py, as JSON), what programs can do (CAPABILITIES in core.py), a list of the languages in i18n/*.json, the code-conversion prompt
 (prompts/convert-guide.txt), the community gallery's programs (gallery/*.json), the Home Assistant sample house (ha/sample-house.json) and the sample feeds,
 GitHub, Telegram, email and calendar (samples/connections.json) are embedded inside it.
@@ -47,6 +48,9 @@ PARTS = [
     ('<script type="text/plain" id="convert-guide">\n', ROOT / "prompts" / "convert-guide.txt"),
     ('<script type="application/json" id="ha-sample">\n', ROOT / "ha" / "sample-house.json"),
     ('<script type="application/json" id="connections-sample">\n', ROOT / "samples" / "connections.json"),
+    # The editor itself: its styles and its code. Edit these files, not the copies in the page.
+    ('<style id="editor-css">\n', ROOT / "web" / "editor.css"),
+    ('<script id="editor">\n', ROOT / "web" / "editor.js"),
 ]
 
 
@@ -167,15 +171,16 @@ def build(page: str, runtime: str = None) -> str:
             body = gallery_json()
         else:
             body = runtime if (path == RUNTIME and runtime is not None) else path.read_text(encoding="utf-8")
-        if "</script" in body:
-            sys.exit(f"{path.relative_to(ROOT)} must not contain '</script' (it is embedded in a script tag).")
+        closer = "</style>" if opener.startswith("<style") else "</script>"
+        if closer[:-1] in body:
+            sys.exit(f"{path.relative_to(ROOT)} must not contain '{closer[:-1]}' (it is embedded in a {closer[2:-1]} tag).")
         if opener not in page:
             sys.exit(f"second-thought.html has no {opener.strip()!r} tag to put {path.relative_to(ROOT)} in. "
                      "Put the tag back (an empty one is fine), then run this again.")
         start = page.index(opener) + len(opener)
-        if "</script>" not in page[start:]:
-            sys.exit(f"The {opener.strip()!r} tag in second-thought.html isn't closed with </script>.")
-        end = page.index("</script>", start)
+        if closer not in page[start:]:
+            sys.exit(f"The {opener.strip()!r} tag in second-thought.html isn't closed with {closer}.")
+        end = page.index(closer, start)
         page = page[:start] + body + page[end:]
     return page
 
