@@ -1973,7 +1973,7 @@ class Connections:
         if entity:
             body["entity_id"] = entity
         sensitive = ha_sensitive(service, entity)
-        if not sensitive and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
+        if (not sensitive or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
             return False
         if sensitive:
             if self.nobody_here():
@@ -2267,7 +2267,7 @@ class Connections:
         repo, title, body = self._gh_repo(repo), to_str(title).strip(), to_str(body).strip()
         if not title:
             return "Not opened: an issue needs a title."
-        if not approved and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
             return "Not opened: the person said no, or nobody was there to ask."
         made = await self._gh(f"/repos/{repo}/issues", "POST", {"title": title, "body": body})
         self.log(tr("GitHub issue opened in {repo}: #{n}", repo=repo, n=made.get("number")), title + ("\n\n" + body if body else ""), tr("sent"))
@@ -2285,7 +2285,7 @@ class Connections:
             return (f"Not labelled: {repo} has no label {', '.join(unknown)}. Use only its own labels: "
                     + (", ".join(sorted(have.values())) or "(it has none)") + ".")
         names = [have[x.lower()] for x in want]
-        if not approved and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
             return "Not labelled: the person said no, or nobody was there to ask."
         await self._gh(f"/repos/{repo}/issues/{n}/labels", "POST", {"labels": names})
         self.log(tr("GitHub labels on {repo} #{n}", repo=repo, n=n), ", ".join(names), tr("sent"))
@@ -2295,7 +2295,7 @@ class Connections:
         repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()
         if not text:
             raise RunError(tr("A comment needs some text."))
-        if not approved and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
             return False
         await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
         self.log(tr("GitHub comment on {repo} #{n}", repo=repo, n=n), text, tr("sent"))
@@ -2390,7 +2390,7 @@ class Connections:
         chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
         if not chat:
             raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
-        if not approved and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), 4000):
             await self._tg("sendMessage", {"chat_id": chat, "text": text[i:i + 4000]})
@@ -2517,7 +2517,7 @@ class Connections:
         channel = to_str(channel).strip() or (trig.get("channel") if isinstance(trig, dict) and trig.get("service") == service else "") or mine[0]
         if channel not in mine:
             raise RunError(tr("{name}: channel {channel} isn't in {channels}, so nothing is sent there.", name=c['name'], channel=channel, channels=c['channels']))
-        if not approved and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), c["limit"]):
             part = text[i:i + c["limit"]]
@@ -2679,7 +2679,7 @@ class Connections:
         if not addrs or not all(re.fullmatch(r"[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+", a) for a in addrs):
             raise RunError(tr("“{to}” isn't an email address.", to=to))
         c = self._mail()
-        if not approved and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
             return False
         msg = EmailMessage()
         msg["From"], msg["To"], msg["Subject"] = c["addr"], ", ".join(addrs), subject or "(no subject)"
@@ -2858,10 +2858,10 @@ class Connections:
             raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
         v = self._homey_value_for(d["caps"][cap], value)
         what = f"set {d['name']} {cap} to {self._homey_show(v)}"
-        if (cap, v) in self.HOMEY_SENSITIVE:  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
+        if (cap, v) in self.HOMEY_SENSITIVE and not getattr(self, "testing", False):  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
             if not approved and not await self.confirm(what + " (a safety check: unlocking, opening and disarming always ask)"):
                 return False
-        elif not approved and not await self._allowed(["ha"], what):
+        elif (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], what):
             return False
         await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
         self.log(tr("Homey: {name}", name=d["name"]), f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", tr("done"))
@@ -2890,7 +2890,7 @@ class Connections:
             (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
         if not f:
             raise RunError(tr("There's no Homey flow called “{name}”.", name=name))
-        if not approved and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
             return False
         await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
         self.log(tr("Homey flow started"), f["name"], tr("started"))
@@ -2911,7 +2911,7 @@ class Connections:
         v = await self._homey_var(name)
         old = v.get("value")
         new = self._homey_value_for(old, value) if v.get("type") in ("boolean", "number") else to_str(value)
-        if not approved and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
             return False
         await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
         self.log(tr("Homey variable {name}", name=v["name"]), f"{self._homey_show(old)} → {self._homey_show(new)}", tr("set"))
@@ -3034,7 +3034,7 @@ class Connections:
 
     async def mqtt_publish(self, topic, text, retain=False, approved=False):
         topic, text = self._mqtt_topic(topic, True), to_str(text)
-        if not approved and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
             return False
         c = await asyncio.to_thread(self._mqtt_new)
         try:
@@ -4234,7 +4234,8 @@ class AgentTools:
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
                     ask = mode == "every" or (mode == "changes" and not read_only)
-                    out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"]}), ask, schema)
+                    out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"],
+                                                                                        "read_only": read_only}), ask, schema)
             elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
@@ -4553,7 +4554,10 @@ class AgentTools:
             why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
             ask = ask or bool(why_ask)
             refused = False
-            if ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
+            if getattr(self, "testing", False) and (ask or (kind == "mcp" and not spec.get("read_only"))):
+                result, refused = "This is a test run, so tools that change things don't run. Carry on as if it had worked.", True
+                self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=f"{name} {_short(shown, 200)}"), tr("skipped"))
+            elif ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
                 result, refused = "The person said no, so this tool didn't run.", True
             else:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
@@ -5068,7 +5072,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.log(tr("Ask first"), tr("From now on, the program asks you before {x}.", x=self.ASK_FIRST.get(kind, kind)), tr("set"))
 
     async def _allowed(self, kinds, what):
-        """True if the action may go ahead. Asks first when an 'ask me before' block covers it."""
+        """True if the action may go ahead. Asks first when an 'ask me before' block covers it. In a test (--test),
+        nothing acts: it says what it would have done."""
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
         if not (self.ask_first & set(kinds)):
             return True
         return await self.confirm(what)
@@ -5079,6 +5087,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     async def confirm(self, what):
         """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no."""
+        if getattr(self, "testing", False):  # in a test the action itself is skipped (see _allowed), so nobody needs asking
+            return True
         if self.nobody_here():
             self.log(tr("Not done"), tr("{what} needs your approval, and nobody is at the keyboard.", what=what), tr("refused"))
             return False
@@ -5372,6 +5382,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     # ----- Files -----
     async def _choose_file_live(self):
+        if getattr(self, "testing", False):
+            f = self._from_test("file", tr("Choose a file"))
+            return to_str(f.get("text") if isinstance(f, dict) else f)
         print(tr("\n? Choose a file: type the path to a PDF, a .docx, or a text file (.txt, .md, .csv, .json ...)."), flush=True)
         while True:
             path = (await self._input(tr("Path > "))).strip().strip('"').strip("'")
@@ -5641,6 +5654,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         return pic.path
 
     async def choose_picture(self):
+        if getattr(self, "testing", False):
+            raise RunError(tr("Test cases don't keep pictures, so a test can't choose one. Test this part by running the program."))
         print(tr("\n? Choose a picture: type the path to a JPEG, PNG, WebP, GIF or SVG file."), flush=True)
         while True:
             path = (await self._input(tr("Path > "))).strip().strip('"').strip("'")
@@ -5873,6 +5888,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     async def _ask_me_live(self, q):
         q = to_str(q)
+        if getattr(self, "testing", False):
+            return to_str(self._from_test("answer", q))
         print("\n? " + q, flush=True)
         while True:
             a = (await self._input("> ")).strip()
@@ -5882,6 +5899,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             print(tr("  Type an answer first."))
 
     async def _approve_live(self, text):
+        if getattr(self, "testing", False):
+            return bool(self._from_test("approve", text))
         print(tr("\n? Do you approve this?\n"), flush=True)
         for line in to_str(text).splitlines():
             print("    " + line)
@@ -5895,6 +5914,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
 
     async def _choose_live(self, items):
         items = to_list(items)
+        if getattr(self, "testing", False) and items:
+            want = to_str(self._from_test("choose", tr("Choose one")))
+            return next((it for it in items if to_str(it) == want), items[0])
         if not items:
             raise RunError(tr("'let me choose from' got an empty list."))
         print(tr("\n? Choose one:"), flush=True)
@@ -5907,6 +5929,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             print(tr("  Type a number from 1 to {items}.", items=len(items)))
 
     async def pause(self, note):
+        if getattr(self, "testing", False):
+            return
         print("\n⏸ " + (to_str(note) or tr("Paused.")), flush=True)
         await self._input(tr("Press Enter to continue > "))
 
@@ -6131,7 +6155,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
         finished = False
         try:
-            if not self.schedule_mode and not getattr(self, "mcp_mode", False):
+            if not self.schedule_mode and not getattr(self, "mcp_mode", False) and not getattr(self, "testing", False):
                 await self._journal_start()
             code = await self._run(scripts)
             finished = code == 0
@@ -6289,6 +6313,84 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                                                                "isError": code != 0}})
             else:
                 send({"jsonrpc": "2.0", "id": mid, "error": {"code": -32601, "message": f"Method not found: {method}"}})
+    # ----- Tests: python my-program.py --test -----
+    # A test case is a run you were happy with, kept on the page with 'Save as test case': what it started with, your
+    # answers to its questions, the files you chose, and what its result must do. --test replays each one from
+    # <program>.tests.json, next to the program, with the models live, and a strict reviewer checks each result against
+    # its criteria. Nothing acts in a test: messages aren't sent, devices aren't switched, files aren't saved, and memory
+    # is a copy, so tests can be run as often as you like, for example after changing a model.
+    def _from_test(self, kind, what):
+        """The next answer of this kind from the test case, in order."""
+        q = self.test_inputs.get(kind) or []
+        if not q:
+            raise RunError(tr("The test case has no answer for this step ({what}). Save it again from a run that gets this far.", what=_short(to_str(what), 80)))
+        v = q.pop(0)
+        self.log(tr("Test answer"), _short(to_str(v.get("name", "") if isinstance(v, dict) else v), 200), tr("replayed"))
+        return v
+
+    @staticmethod
+    def tests_path():
+        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
+        return os.path.splitext(prog)[0] + ".tests.json"
+
+    async def run_tests(self, start_scripts):
+        import shutil
+        import tempfile
+        path = self.tests_path()
+        try:
+            with open(path, encoding="utf-8") as f:
+                cases = json.load(f)
+        except FileNotFoundError:
+            print(tr("No tests: {path} isn't there. Make them on the page: after a good run, press Save as test case, then export again.", path=path), flush=True)
+            return 1
+        except ValueError as e:
+            print(tr("{path} isn't valid JSON ({problem}).", path=path, problem=e), flush=True)
+            return 1
+        cases = [c for c in (cases if isinstance(cases, list) else []) if isinstance(c, dict)]
+        if not start_scripts:
+            print(tr("Nothing to run: this program has no 'when Run is clicked' script."), flush=True)
+            return 1
+        if not cases:
+            print(tr("No tests: {path} isn't there. Make them on the page: after a good run, press Save as test case, then export again.", path=path), flush=True)
+            return 1
+        self.testing = True
+        results = []
+        real_memory = MEMORY_FILE
+        with tempfile.TemporaryDirectory() as tmp:
+            memory = os.path.join(tmp, "memory.json")
+            try:
+                for i, case in enumerate(cases, 1):
+                    name = to_str(case.get("name")).strip() or tr("Test {n}", n=i)
+                    if os.path.isfile(real_memory):
+                        shutil.copy(real_memory, memory)  # each case starts from your real notes, and can't change them
+                    elif os.path.isfile(memory):
+                        os.remove(memory)
+                    globals()["MEMORY_FILE"] = memory
+                    self.test_inputs = {k: list(v) for k, v in (case.get("inputs") or {}).items() if isinstance(v, list)}
+                    code = await self.run([(fn, to_str(case.get("value", ""))) for fn in start_scripts], tr("Test: {name}", name=name))
+                    criteria = to_str(case.get("criteria")).strip()
+                    if code != 0:
+                        passed, problems = False, [str(self.error) if isinstance(self.error, RunError) else tr("The run stopped.")]
+                    elif not criteria:
+                        passed, problems = True, []
+                    else:
+                        text = "\n\n".join(to_str(x) for x in self.result) if self.result else to_str(self.draft)
+                        self.ending = False  # the run has ended; the check is one more call
+                        self.task, self.draft = "The result of one run of this program.", text or tr("(no result)")
+                        passed = await self.review(criteria, tr("Test check"))
+                        problems = list(self.problems)
+                    results.append((name, passed, problems))
+            finally:
+                globals()["MEMORY_FILE"] = real_memory
+        print("\n" + "=" * 60 + "\n" + tr("TESTS") + "\n" + "=" * 60, flush=True)
+        for name, passed, problems in results:
+            mark = "PASS" if passed else "FAIL"  # stays in English, like --doctor's ok and FAIL, for scripts that read it
+            print(f"{mark:<6}{name}", flush=True)
+            for p_ in problems:
+                print("      - " + p_, flush=True)
+        failed = sum(not p for _, p, _ in results)
+        print("\n" + tr("{passed} of {n} passed.", passed=len(results) - failed, n=len(results)), flush=True)
+        return 1 if failed else 0
 
     @staticmethod
     def schedule_due(s, now, late=datetime.timedelta(hours=1)):
@@ -6490,6 +6592,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         if "--mcp" in sys.argv:
             sys.exit(asyncio.run(self.serve_mcp(start_scripts, can)))
+        if "--test" in sys.argv:
+            sys.exit(asyncio.run(self.run_tests(start_scripts)))
         if "--run-schedule" in sys.argv:
             sys.exit(self.run_one_schedule(schedules, can))
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)

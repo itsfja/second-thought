@@ -1363,7 +1363,28 @@
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Φορτώθηκε το πρόγραμμα του Claude ({n} μπλοκ). Έλεγξε τα μπλοκ πριν το τρέξεις.",
   "Community: teaching": "Κοινότητα: διδασκαλία",
   "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "Αυτό το πρόγραμμα αποθηκεύτηκε από νεότερο Second Thought (μορφή μπλοκ {theirs}· αυτή η σελίδα διαβάζει έως {ours}). Άνοιξέ το στη νεότερη σελίδα.",
-  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "Είχε αποθηκευτεί με παλαιότερα μπλοκ και ενημερώθηκε (μορφή μπλοκ {from} σε {to})."
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "Είχε αποθηκευτεί με παλαιότερα μπλοκ και ενημερώθηκε (μορφή μπλοκ {from} σε {to}).",
+  "A file was too big to keep, so that step will ask when the test runs.": "Ένα αρχείο ήταν πολύ μεγάλο για να κρατηθεί, οπότε αυτό το βήμα θα ρωτήσει όταν τρέξει το τεστ.",
+  "It doesn't yet meet the criteria.": "Δεν πληροί ακόμα τα κριτήρια.",
+  "Run tests ({n})": "Εκτέλεση τεστ ({n})",
+  "Save as test case": "Αποθήκευση ως τεστ",
+  "Save test": "Αποθήκευση τεστ",
+  "Saved. Run tests checks it again whenever you like; exported, it's in the zip for python my-program.py --test.": "Αποθηκεύτηκε. Η «Εκτέλεση τεστ» το ελέγχει ξανά όποτε θέλεις· στην εξαγωγή μπαίνει στο zip για python my-program.py --test.",
+  "Say what the result must do first.": "Πες πρώτα τι πρέπει να κάνει το αποτέλεσμα.",
+  "Test answer": "Απάντηση τεστ",
+  "Test cases don't keep pictures, so a test can't choose one. Test this part by running the program.": "Τα τεστ δεν κρατούν εικόνες, άρα ένα τεστ δεν μπορεί να διαλέξει εικόνα. Δοκίμασε αυτό το μέρος τρέχοντας το πρόγραμμα.",
+  "Test check: {name}": "Έλεγχος τεστ: {name}",
+  "Test name": "Όνομα τεστ",
+  "Test {n}": "Τεστ {n}",
+  "Test: {name}": "Τεστ: {name}",
+  "Tests": "Τεστ",
+  "The run stopped.": "Η εκτέλεση σταμάτησε.",
+  "The test case has no answer for this step ({what}). Save it again from a run that gets this far.": "Το τεστ δεν έχει απάντηση για αυτό το βήμα ({what}). Αποθήκευσέ το ξανά από μια εκτέλεση που φτάνει ως εδώ.",
+  "What the result must do": "Τι πρέπει να κάνει το αποτέλεσμα",
+  "What the result must do, separated by semicolons, like: under 200 words; names the date": "Τι πρέπει να κάνει το αποτέλεσμα, χωρισμένο με ερωτηματικά, π.χ.: κάτω από 200 λέξεις· αναφέρει την ημερομηνία",
+  "passed": "πέρασε",
+  "replayed": "επαναλήφθηκε",
+  "{passed} of {n} passed.": "{passed} από {n} πέρασαν."
  },
  "examples": {
   "review": {
@@ -2784,6 +2805,22 @@
   "MCP tool": "Εργαλείο MCP",
   "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "με --mcp, προσφέρει ένα εργαλείο, «{name}», στον Claude και σε άλλους πράκτορες",
   "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "Αυτό το πρόγραμμα μπορεί να δράσει στον κόσμο και δεν του έχει επιτραπεί να το κάνει χωρίς να ρωτά. Τρέξ' το μία φορά σε τερματικό και απάντησε y, ή βάλε approve = no στο second-thought.ini.",
-  "MCP call": "Κλήση MCP"
+  "MCP call": "Κλήση MCP",
+  "Test answer": "Απάντηση τεστ",
+  "Test cases don't keep pictures, so a test can't choose one. Test this part by running the program.": "Τα τεστ δεν κρατούν εικόνες, άρα ένα τεστ δεν μπορεί να διαλέξει εικόνα. Δοκίμασε αυτό το μέρος τρέχοντας το πρόγραμμα.",
+  "Test {n}": "Τεστ {n}",
+  "Test: {name}": "Τεστ: {name}",
+  "The run stopped.": "Η εκτέλεση σταμάτησε.",
+  "The test case has no answer for this step ({what}). Save it again from a run that gets this far.": "Το τεστ δεν έχει απάντηση για αυτό το βήμα ({what}). Αποθήκευσέ το ξανά από μια εκτέλεση που φτάνει ως εδώ.",
+  "replayed": "επαναλήφθηκε",
+  "{passed} of {n} passed.": "{passed} από {n} πέρασαν.",
+  "No tests: {path} isn't there. Make them on the page: after a good run, press Save as test case, then export again.": "Κανένα τεστ: το {path} δεν υπάρχει. Φτιάξ' τα στη σελίδα: μετά από μια καλή εκτέλεση πάτα «Αποθήκευση ως τεστ» και κάνε ξανά εξαγωγή.",
+  "Not done, because this is a test: {what}": "Δεν έγινε, γιατί αυτό είναι τεστ: {what}",
+  "TESTS": "ΤΕΣΤ",
+  "Test check": "Έλεγχος τεστ",
+  "Test run": "Εκτέλεση τεστ",
+  "{path} isn't valid JSON ({problem}).": "Το {path} δεν είναι έγκυρο JSON ({problem}).",
+  "Choose a file": "Επιλέξτε αρχείο",
+  "Choose one": "Διαλέξτε ένα"
  }
 }

@@ -1364,7 +1364,28 @@
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "התוכנית של Claude נטענה ({n} בלוקים). בדוק את הבלוקים לפני ההרצה.",
   "Community: teaching": "קהילה: הוראה",
   "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "התוכנית הזו נשמרה ב-Second Thought חדש יותר (פורמט בלוקים {theirs}; הדף הזה קורא עד {ours}). פתח אותה בדף העדכני ביותר.",
-  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "היא נשמרה עם בלוקים ישנים יותר ועודכנה (פורמט בלוקים {from} ל-{to})."
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "היא נשמרה עם בלוקים ישנים יותר ועודכנה (פורמט בלוקים {from} ל-{to}).",
+  "A file was too big to keep, so that step will ask when the test runs.": "קובץ היה גדול מכדי לשמור, אז השלב הזה ישאל כשהבדיקה תרוץ.",
+  "It doesn't yet meet the criteria.": "זה עדיין לא עומד בקריטריונים.",
+  "Run tests ({n})": "הרץ בדיקות ({n})",
+  "Save as test case": "שמור כמקרה בדיקה",
+  "Save test": "שמור בדיקה",
+  "Saved. Run tests checks it again whenever you like; exported, it's in the zip for python my-program.py --test.": "נשמר. „הרץ בדיקות” בודק אותו שוב מתי שתרצה; בייצוא הוא ב-zip עבור python my-program.py --test.",
+  "Say what the result must do first.": "קודם תגיד מה התוצאה צריכה לעשות.",
+  "Test answer": "תשובת בדיקה",
+  "Test cases don't keep pictures, so a test can't choose one. Test this part by running the program.": "מקרי בדיקה לא שומרים תמונות, אז בדיקה לא יכולה לבחור תמונה. בדוק את החלק הזה בהרצת התוכנית.",
+  "Test check: {name}": "בדיקת תוצאה: {name}",
+  "Test name": "שם הבדיקה",
+  "Test {n}": "בדיקה {n}",
+  "Test: {name}": "בדיקה: {name}",
+  "Tests": "בדיקות",
+  "The run stopped.": "ההרצה נעצרה.",
+  "The test case has no answer for this step ({what}). Save it again from a run that gets this far.": "למקרה הבדיקה אין תשובה לשלב הזה ({what}). שמור אותו שוב מהרצה שמגיעה עד כאן.",
+  "What the result must do": "מה התוצאה צריכה לעשות",
+  "What the result must do, separated by semicolons, like: under 200 words; names the date": "מה התוצאה צריכה לעשות, מופרד בנקודה-פסיק, למשל: פחות מ-200 מילים; מציין את התאריך",
+  "passed": "עבר",
+  "replayed": "שוחזר",
+  "{passed} of {n} passed.": "{passed} מתוך {n} עברו."
  },
  "examples": {
   "review": {
@@ -2785,6 +2806,22 @@
   "MCP tool": "כלי MCP",
   "with --mcp, it serves one tool, “{name}”, to Claude and other agents": "עם --mcp, הוא מגיש כלי אחד, „{name}”, ל-Claude ולסוכנים אחרים",
   "This program can act on the world and hasn't been allowed to without asking. Run it once in a terminal and answer y, or put approve = no in second-thought.ini.": "התוכנית הזו יכולה לפעול בעולם ועוד לא הותר לה לעשות זאת בלי לשאול. הרץ אותה פעם אחת במסוף וענה y, או כתוב approve = no ב-second-thought.ini.",
-  "MCP call": "קריאת MCP"
+  "MCP call": "קריאת MCP",
+  "Test answer": "תשובת בדיקה",
+  "Test cases don't keep pictures, so a test can't choose one. Test this part by running the program.": "מקרי בדיקה לא שומרים תמונות, אז בדיקה לא יכולה לבחור תמונה. בדוק את החלק הזה בהרצת התוכנית.",
+  "Test {n}": "בדיקה {n}",
+  "Test: {name}": "בדיקה: {name}",
+  "The run stopped.": "ההרצה נעצרה.",
+  "The test case has no answer for this step ({what}). Save it again from a run that gets this far.": "למקרה הבדיקה אין תשובה לשלב הזה ({what}). שמור אותו שוב מהרצה שמגיעה עד כאן.",
+  "replayed": "שוחזר",
+  "{passed} of {n} passed.": "{passed} מתוך {n} עברו.",
+  "No tests: {path} isn't there. Make them on the page: after a good run, press Save as test case, then export again.": "אין בדיקות: {path} לא קיים. צור אותן בדף: אחרי הרצה טובה לחץ „שמור כמקרה בדיקה”, ואז ייצא שוב.",
+  "Not done, because this is a test: {what}": "לא בוצע, כי זו בדיקה: {what}",
+  "TESTS": "בדיקות",
+  "Test check": "בדיקת תוצאה",
+  "Test run": "הרצת בדיקה",
+  "{path} isn't valid JSON ({problem}).": "{path} אינו JSON תקין ({problem}).",
+  "Choose a file": "בחירת קובץ",
+  "Choose one": "בחרו אחד"
  }
 }

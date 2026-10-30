@@ -528,7 +528,7 @@ class Connections:
         if entity:
             body["entity_id"] = entity
         sensitive = ha_sensitive(service, entity)
-        if not sensitive and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
+        if (not sensitive or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
             return False
         if sensitive:
             if self.nobody_here():
@@ -822,7 +822,7 @@ class Connections:
         repo, title, body = self._gh_repo(repo), to_str(title).strip(), to_str(body).strip()
         if not title:
             return "Not opened: an issue needs a title."
-        if not approved and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
             return "Not opened: the person said no, or nobody was there to ask."
         made = await self._gh(f"/repos/{repo}/issues", "POST", {"title": title, "body": body})
         self.log(tr("GitHub issue opened in {repo}: #{n}", repo=repo, n=made.get("number")), title + ("\n\n" + body if body else ""), tr("sent"))
@@ -840,7 +840,7 @@ class Connections:
             return (f"Not labelled: {repo} has no label {', '.join(unknown)}. Use only its own labels: "
                     + (", ".join(sorted(have.values())) or "(it has none)") + ".")
         names = [have[x.lower()] for x in want]
-        if not approved and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
             return "Not labelled: the person said no, or nobody was there to ask."
         await self._gh(f"/repos/{repo}/issues/{n}/labels", "POST", {"labels": names})
         self.log(tr("GitHub labels on {repo} #{n}", repo=repo, n=n), ", ".join(names), tr("sent"))
@@ -850,7 +850,7 @@ class Connections:
         repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()
         if not text:
             raise RunError(tr("A comment needs some text."))
-        if not approved and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
             return False
         await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
         self.log(tr("GitHub comment on {repo} #{n}", repo=repo, n=n), text, tr("sent"))
@@ -945,7 +945,7 @@ class Connections:
         chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
         if not chat:
             raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
-        if not approved and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), 4000):
             await self._tg("sendMessage", {"chat_id": chat, "text": text[i:i + 4000]})
@@ -1072,7 +1072,7 @@ class Connections:
         channel = to_str(channel).strip() or (trig.get("channel") if isinstance(trig, dict) and trig.get("service") == service else "") or mine[0]
         if channel not in mine:
             raise RunError(tr("{name}: channel {channel} isn't in {channels}, so nothing is sent there.", name=c['name'], channel=channel, channels=c['channels']))
-        if not approved and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), c["limit"]):
             part = text[i:i + c["limit"]]
@@ -1234,7 +1234,7 @@ class Connections:
         if not addrs or not all(re.fullmatch(r"[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+", a) for a in addrs):
             raise RunError(tr("“{to}” isn't an email address.", to=to))
         c = self._mail()
-        if not approved and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
             return False
         msg = EmailMessage()
         msg["From"], msg["To"], msg["Subject"] = c["addr"], ", ".join(addrs), subject or "(no subject)"
@@ -1413,10 +1413,10 @@ class Connections:
             raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
         v = self._homey_value_for(d["caps"][cap], value)
         what = f"set {d['name']} {cap} to {self._homey_show(v)}"
-        if (cap, v) in self.HOMEY_SENSITIVE:  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
+        if (cap, v) in self.HOMEY_SENSITIVE and not getattr(self, "testing", False):  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
             if not approved and not await self.confirm(what + " (a safety check: unlocking, opening and disarming always ask)"):
                 return False
-        elif not approved and not await self._allowed(["ha"], what):
+        elif (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], what):
             return False
         await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
         self.log(tr("Homey: {name}", name=d["name"]), f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", tr("done"))
@@ -1445,7 +1445,7 @@ class Connections:
             (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
         if not f:
             raise RunError(tr("There's no Homey flow called “{name}”.", name=name))
-        if not approved and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
             return False
         await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
         self.log(tr("Homey flow started"), f["name"], tr("started"))
@@ -1466,7 +1466,7 @@ class Connections:
         v = await self._homey_var(name)
         old = v.get("value")
         new = self._homey_value_for(old, value) if v.get("type") in ("boolean", "number") else to_str(value)
-        if not approved and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
             return False
         await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
         self.log(tr("Homey variable {name}", name=v["name"]), f"{self._homey_show(old)} → {self._homey_show(new)}", tr("set"))
@@ -1589,7 +1589,7 @@ class Connections:
 
     async def mqtt_publish(self, topic, text, retain=False, approved=False):
         topic, text = self._mqtt_topic(topic, True), to_str(text)
-        if not approved and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
+        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
             return False
         c = await asyncio.to_thread(self._mqtt_new)
         try:
