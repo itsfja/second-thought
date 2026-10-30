@@ -1,0 +1,137 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "clause-checklist",
+  "gallery": {
+    "title": "Clause checklist",
+    "category": "odds",
+    "description": "Choose a contract. Claude checks it against your clause checklist and lists, for each item, whether it's there (quoting it), unclear or missing, for a professional to review. It isn't advice, and it says so.",
+    "tip": "Put your own checklist in the first block. Use it to prepare for a review, never instead of one.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_checklist",
+        "name": "checklist"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_checklist"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Parties named in full\nTerm and how to end it\nPayment terms and late payment\nLimitation of liability\nConfidentiality\nData protection\nGoverning law\nDispute resolution"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_task",
+                  "inputs": {
+                    "TEXT": {
+                      "block": {
+                        "type": "text_join",
+                        "inputs": {
+                          "ADD0": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "For each item on this checklist, say whether this contract has a clause covering it: PRESENT (quote the clause and give its number), UNCLEAR (say why) or MISSING. Don't give an opinion on whether a clause is good. End with: 'For a professional to review. This is not legal advice.'\n\nChecklist:\n"
+                              }
+                            }
+                          },
+                          "ADD1": {
+                            "block": {
+                              "type": "variables_get",
+                              "fields": {
+                                "VAR": {
+                                  "id": "g_checklist"
+                                }
+                              }
+                            }
+                          },
+                          "ADD2": {
+                            "shadow": {
+                              "type": "rb_longtext",
+                              "fields": {
+                                "TEXT": "\n\nContract:\n"
+                              }
+                            }
+                          },
+                          "ADD3": {
+                            "block": {
+                              "type": "rb_file_choose"
+                            }
+                          }
+                        },
+                        "extraState": {
+                          "itemCount": 4
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_generate",
+                      "next": {
+                        "block": {
+                          "type": "rb_reflect",
+                          "inputs": {
+                            "CRITERIA": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "every checklist item has a verdict; every PRESENT quotes the contract word for word with its clause number; no opinion on whether terms are fair or wise; ends with the not-advice line"
+                                }
+                              }
+                            },
+                            "ROUNDS": {
+                              "shadow": {
+                                "type": "math_number",
+                                "fields": {
+                                  "NUM": 3
+                                }
+                              }
+                            },
+                            "FIX": {
+                              "block": {
+                                "type": "rb_revise"
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_result"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "sar-triage",
+  "gallery": {
+    "title": "Subject access requests",
+    "category": "calendar",
+    "description": "Each weekday morning, finds emails that look like subject access requests (someone asking for the personal data you hold about them) and emails you a list with the date each arrived and its one-month deadline. Admin help, not legal advice.",
+    "tip": "The one-month deadline can be extended in some cases. Check each request yourself; this only makes sure none is missed.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "sar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 8,
+            "MINUTE": 30,
+            "DAYS": "weekdays"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "sar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "sar"
+          },
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Search my email from the last 35 days for subject access requests: anyone asking for a copy of the personal data or information we hold about them, however they word it. Read the likely ones. For each real one: who, the date it arrived, the deadline one calendar month later (use time_plus), and how many days are left. Soonest deadline first. Leave out anything that isn't a request for someone's own data. If there are none, say so in one line. End with: 'This is an admin reminder, not legal advice.'"
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 14
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "email"
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "time"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_ask_first",
+                  "fields": {
+                    "WHAT": "messages"
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_email_send",
+                      "inputs": {
+                        "TO": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "you@example.com"
+                            }
+                          }
+                        },
+                        "SUBJECT": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": "Subject access requests: deadlines"
+                            }
+                          }
+                        },
+                        "TEXT": {
+                          "block": {
+                            "type": "rb_draft"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_result"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "volunteer-rota",
+  "gallery": {
+    "title": "Volunteer rota",
+    "category": "calendar",
+    "description": "Drafts next month's volunteer rota from the shifts in your calendar and the availability people emailed you, fairly shared, and asks you to approve it before emailing it round.",
+    "tip": "Put the shifts in a calendar it can read, and ask volunteers to reply to one email with their dates. Change the address to your list.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_agent",
+              "fields": {
+                "PLAN": false
+              },
+              "inputs": {
+                "GOAL": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Draft next month's volunteer rota. Read the calendar for next month's shifts (calendar with days 40). Search my email from the last 21 days for volunteers' availability replies and read them. Give each shift its volunteers: only people who said they're free then, shared out as evenly as you can, nobody on two shifts in one day. List any shift still short of people at the top. Then a table by date. Check it with review_text against: every name is someone who said they were free; no shift has someone twice; shifts with too few people are listed first."
+                    }
+                  }
+                },
+                "STEPS": {
+                  "shadow": {
+                    "type": "math_number",
+                    "fields": {
+                      "NUM": 16
+                    }
+                  }
+                },
+                "TOOLS": {
+                  "block": {
+                    "type": "rb_agent_builtin",
+                    "fields": {
+                      "KIND": "calendar"
+                    },
+                    "next": {
+                      "block": {
+                        "type": "rb_agent_builtin",
+                        "fields": {
+                          "KIND": "email"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_agent_builtin",
+                            "fields": {
+                              "KIND": "review"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "controls_if",
+                  "inputs": {
+                    "IF0": {
+                      "block": {
+                        "type": "rb_approve",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "Email this rota to the volunteers?\n\n"
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "rb_draft"
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "DO0": {
+                      "block": {
+                        "type": "rb_ask_first",
+                        "fields": {
+                          "WHAT": "messages"
+                        },
+                        "next": {
+                          "block": {
+                            "type": "rb_email_send",
+                            "inputs": {
+                              "TO": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "volunteers@example.com"
+                                  }
+                                }
+                              },
+                              "SUBJECT": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "Next month's rota"
+                                  }
+                                }
+                              },
+                              "TEXT": {
+                                "block": {
+                                  "type": "rb_draft"
+                                }
+                              }
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_result"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "ELSE": {
+                      "block": {
+                        "type": "rb_finish_with",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "Not sent. The draft, to edit yourself:\n\n"
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "rb_draft"
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "extraState": {
+                    "hasElse": true
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

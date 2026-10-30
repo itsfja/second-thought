@@ -1,0 +1,124 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "minutes-to-actions",
+  "gallery": {
+    "title": "Minutes to actions",
+    "category": "odds",
+    "description": "Choose the minutes of a trustees' or committee meeting. Claude lists every action with its owner and date, flags any with no owner or no date, and saves the list to send round.",
+    "tip": "Works with a PDF, Word file or text file. It only lists what the minutes say: anything unclear is flagged, not guessed.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_task",
+              "inputs": {
+                "TEXT": {
+                  "block": {
+                    "type": "text_join",
+                    "inputs": {
+                      "ADD0": {
+                        "shadow": {
+                          "type": "rb_longtext",
+                          "fields": {
+                            "TEXT": "List every action agreed in these meeting minutes: the action, who owns it and when it's due, as a table, by owner. Under the table, list actions with no owner or no date as NEEDS AN OWNER or NEEDS A DATE.\n\nMinutes:\n"
+                          }
+                        }
+                      },
+                      "ADD1": {
+                        "block": {
+                          "type": "rb_file_choose"
+                        }
+                      }
+                    },
+                    "extraState": {
+                      "itemCount": 2
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_generate",
+                  "next": {
+                    "block": {
+                      "type": "rb_reflect",
+                      "inputs": {
+                        "CRITERIA": {
+                          "shadow": {
+                            "type": "rb_longtext",
+                            "fields": {
+                              "TEXT": "every action in the minutes is listed; owners and dates are exactly as the minutes say, never guessed; anything without an owner or date is flagged; decisions that aren't actions are left out"
+                            }
+                          }
+                        },
+                        "ROUNDS": {
+                          "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                              "NUM": 3
+                            }
+                          }
+                        },
+                        "FIX": {
+                          "block": {
+                            "type": "rb_revise"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_ask_first",
+                          "fields": {
+                            "WHAT": "files"
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_file_save",
+                              "fields": {
+                                "EXT": "md"
+                              },
+                              "inputs": {
+                                "VALUE": {
+                                  "block": {
+                                    "type": "rb_draft"
+                                  }
+                                },
+                                "NAME": {
+                                  "shadow": {
+                                    "type": "text",
+                                    "fields": {
+                                      "TEXT": "actions"
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

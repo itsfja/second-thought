@@ -1,0 +1,305 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "grant-check",
+  "gallery": {
+    "title": "Grant check",
+    "category": "odds",
+    "description": "Paste the funder's criteria, then choose your application. Claude checks the application against each criterion in turn, quoting where it meets it and saying what's missing, then gives the three changes that would help most.",
+    "tip": "Copy the criteria from the funder's guidance word for word. It checks; it doesn't rewrite your application.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_criteria",
+        "name": "criteria"
+      },
+      {
+        "id": "g_application",
+        "name": "application"
+      },
+      {
+        "id": "g_criterion",
+        "name": "criterion"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste the funder's criteria"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_criteria"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_ask_list",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "List each separate criterion in this funder's guidance, in its own words, one per item:\n\n"
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "rb_answer"
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_application"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_file_choose"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "controls_forEach",
+                          "fields": {
+                            "VAR": {
+                              "id": "g_criterion"
+                            }
+                          },
+                          "inputs": {
+                            "LIST": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_criteria"
+                                  }
+                                }
+                              }
+                            },
+                            "DO": {
+                              "block": {
+                                "type": "rb_set_draft",
+                                "inputs": {
+                                  "TEXT": {
+                                    "block": {
+                                      "type": "rb_ask",
+                                      "inputs": {
+                                        "TEXT": {
+                                          "block": {
+                                            "type": "text_join",
+                                            "inputs": {
+                                              "ADD0": {
+                                                "shadow": {
+                                                  "type": "rb_longtext",
+                                                  "fields": {
+                                                    "TEXT": "Does this grant application meet this criterion? Say MEETS, PARTLY or MISSING, quote the part of the application that meets it, and say in one sentence what's missing.\n\nCriterion: "
+                                                  }
+                                                }
+                                              },
+                                              "ADD1": {
+                                                "block": {
+                                                  "type": "variables_get",
+                                                  "fields": {
+                                                    "VAR": {
+                                                      "id": "g_criterion"
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "ADD2": {
+                                                "shadow": {
+                                                  "type": "rb_longtext",
+                                                  "fields": {
+                                                    "TEXT": "\n\nApplication:\n"
+                                                  }
+                                                }
+                                              },
+                                              "ADD3": {
+                                                "block": {
+                                                  "type": "variables_get",
+                                                  "fields": {
+                                                    "VAR": {
+                                                      "id": "g_application"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "extraState": {
+                                              "itemCount": 4
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "next": {
+                                  "block": {
+                                    "type": "rb_reflect",
+                                    "inputs": {
+                                      "CRITERIA": {
+                                        "shadow": {
+                                          "type": "rb_longtext",
+                                          "fields": {
+                                            "TEXT": "quotes the application word for word; the verdict fits the quote; says what's missing in one sentence; doesn't invent anything the application doesn't say"
+                                          }
+                                        }
+                                      },
+                                      "ROUNDS": {
+                                        "shadow": {
+                                          "type": "math_number",
+                                          "fields": {
+                                            "NUM": 2
+                                          }
+                                        }
+                                      },
+                                      "FIX": {
+                                        "block": {
+                                          "type": "rb_revise"
+                                        }
+                                      }
+                                    },
+                                    "next": {
+                                      "block": {
+                                        "type": "rb_add_result",
+                                        "inputs": {
+                                          "TEXT": {
+                                            "block": {
+                                              "type": "text_join",
+                                              "inputs": {
+                                                "ADD0": {
+                                                  "block": {
+                                                    "type": "variables_get",
+                                                    "fields": {
+                                                      "VAR": {
+                                                        "id": "g_criterion"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "ADD1": {
+                                                  "shadow": {
+                                                    "type": "rb_longtext",
+                                                    "fields": {
+                                                      "TEXT": "\n"
+                                                    }
+                                                  }
+                                                },
+                                                "ADD2": {
+                                                  "block": {
+                                                    "type": "rb_draft"
+                                                  }
+                                                }
+                                              },
+                                              "extraState": {
+                                                "itemCount": 3
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_add_result",
+                              "inputs": {
+                                "TEXT": {
+                                  "block": {
+                                    "type": "rb_ask",
+                                    "inputs": {
+                                      "TEXT": {
+                                        "block": {
+                                          "type": "text_join",
+                                          "inputs": {
+                                            "ADD0": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "From these checks of a grant application against each criterion, give the three changes that would help it most, most important first.\n\n"
+                                                }
+                                              }
+                                            },
+                                            "ADD1": {
+                                              "block": {
+                                                "type": "rb_result_text"
+                                              }
+                                            }
+                                          },
+                                          "extraState": {
+                                            "itemCount": 2
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

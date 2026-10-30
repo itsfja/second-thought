@@ -1,0 +1,161 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "sourced-check",
+  "gallery": {
+    "title": "Sourced check",
+    "category": "news",
+    "description": "Type a claim. Claude searches the web and says whether good sources support it, contradict it or don't say, with a link for every point. It refuses to give a verdict it can't source.",
+    "tip": "Uses web search, which only works in exported Python; on the page Claude says what it would look up.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_claim",
+        "name": "claim"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Type the claim to check"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_claim"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_task",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "Check this claim against these search results. Verdict first: SUPPORTED, CONTRADICTED, MIXED or NOT ENOUGH TO SAY. Then the evidence, each point with its link. If the results don't settle it, say NOT ENOUGH TO SAY and what a reader could check.\n\nClaim: "
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_claim"
+                                    }
+                                  }
+                                }
+                              },
+                              "ADD2": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "\n\nSearch results:\n"
+                                  }
+                                }
+                              },
+                              "ADD3": {
+                                "block": {
+                                  "type": "rb_web_search",
+                                  "inputs": {
+                                    "TEXT": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_claim"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 4
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_generate",
+                          "next": {
+                            "block": {
+                              "type": "rb_reflect",
+                              "inputs": {
+                                "CRITERIA": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "every point has a link from the search results; no link is invented; the verdict follows from the sourced points only; NOT ENOUGH TO SAY if the sources don't settle it"
+                                    }
+                                  }
+                                },
+                                "ROUNDS": {
+                                  "shadow": {
+                                    "type": "math_number",
+                                    "fields": {
+                                      "NUM": 3
+                                    }
+                                  }
+                                },
+                                "FIX": {
+                                  "block": {
+                                    "type": "rb_revise"
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

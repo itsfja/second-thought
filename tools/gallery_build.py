@@ -979,6 +979,177 @@ add(program(
            B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="easy-read"),
            B("rb_result"))]))
 
+# ----- Charities and volunteer groups (#199): the funder's criteria, availability, the minutes -----
+v = Vars("criteria", "application", "criterion")
+add(program(
+    "grant-check", "Grant check", "odds",
+    "Paste the funder's criteria, then choose your application. Claude checks the application against each criterion in turn, "
+    "quoting where it meets it and saying what's missing, then gives the three changes that would help most.",
+    "Copy the criteria from the funder's guidance word for word. It checks; it doesn't rewrite your application.",
+    [chain(hat("rb_start"),
+           B("rb_ask_me", TEXT=L("Paste the funder's criteria")),
+           v.set("criteria", B("rb_ask_list", TEXT=join("List each separate criterion in this funder's guidance, in its own words, one "
+                                                         "per item:\n\n", B("rb_answer")))),
+           v.set("application", B("rb_file_choose")),
+           B("controls_forEach", {"VAR": {"id": v.ids["criterion"]}}, LIST=v.get("criteria"),
+             DO=chain(B("rb_set_draft", TEXT=B("rb_ask", TEXT=join(
+                          "Does this grant application meet this criterion? Say MEETS, PARTLY or MISSING, quote the part of the "
+                          "application that meets it, and say in one sentence what's missing.\n\nCriterion: ", v.get("criterion"),
+                          "\n\nApplication:\n", v.get("application")))),
+                      B("rb_reflect", CRITERIA=L("quotes the application word for word; the verdict fits the quote; says what's missing "
+                                                 "in one sentence; doesn't invent anything the application doesn't say"),
+                        ROUNDS=2, FIX=B("rb_revise")),
+                      B("rb_add_result", TEXT=join(v.get("criterion"), "\n", B("rb_draft"))))),
+           B("rb_add_result", TEXT=B("rb_ask", TEXT=join(
+               "From these checks of a grant application against each criterion, give the three changes that would help it most, most "
+               "important first.\n\n", B("rb_result_text")))),
+           B("rb_result"))], v))
+
+add(program(
+    "volunteer-rota", "Volunteer rota", "calendar",
+    "Drafts next month's volunteer rota from the shifts in your calendar and the availability people emailed you, fairly shared, "
+    "and asks you to approve it before emailing it round.",
+    "Put the shifts in a calendar it can read, and ask volunteers to reply to one email with their dates. Change the address to your list.",
+    [chain(hat("rb_start"),
+           agent(L("Draft next month's volunteer rota. Read the calendar for next month's shifts (calendar with days 40). Search my email "
+                   "from the last 21 days for volunteers' availability replies and read them. Give each shift its volunteers: only "
+                   "people who said they're free then, shared out as evenly as you can, nobody on two shifts in one day. List any shift "
+                   "still short of people at the top. Then a table by date. Check it with review_text against: every name is someone "
+                   "who said they were free; no shift has someone twice; shifts with too few people are listed first."),
+                 ["calendar", "email", "review"], steps=16),
+           if_(B("rb_approve", TEXT=join("Email this rota to the volunteers?\n\n", B("rb_draft"))),
+               chain(B("rb_ask_first", {"WHAT": "messages"}),
+                     B("rb_email_send", TO="volunteers@example.com", SUBJECT="Next month's rota", TEXT=B("rb_draft")),
+                     B("rb_result")),
+               B("rb_finish_with", TEXT=join("Not sent. The draft, to edit yourself:\n\n", B("rb_draft")))))]))
+
+add(program(
+    "minutes-to-actions", "Minutes to actions", "odds",
+    "Choose the minutes of a trustees' or committee meeting. Claude lists every action with its owner and date, flags any with no "
+    "owner or no date, and saves the list to send round.",
+    "Works with a PDF, Word file or text file. It only lists what the minutes say: anything unclear is flagged, not guessed.",
+    [chain(hat("rb_start"),
+           B("rb_task", TEXT=join("List every action agreed in these meeting minutes: the action, who owns it and when it's due, as a "
+                                  "table, by owner. Under the table, list actions with no owner or no date as NEEDS AN OWNER or NEEDS A "
+                                  "DATE.\n\nMinutes:\n", B("rb_file_choose"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("every action in the minutes is listed; owners and dates are exactly as the minutes say, never guessed; "
+                                      "anything without an owner or date is flagged; decisions that aren't actions are left out"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_ask_first", {"WHAT": "files"}),
+           B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="actions"),
+           B("rb_result"))]))
+
+# ----- Small professional practices, admin not advice (#200): a deadline, a checklist, a reply-by date -----
+add(program(
+    "sar-triage", "Subject access requests", "calendar",
+    "Each weekday morning, finds emails that look like subject access requests (someone asking for the personal data you hold "
+    "about them) and emails you a list with the date each arrived and its one-month deadline. Admin help, not legal advice.",
+    "The one-month deadline can be extended in some cases. Check each request yourself; this only makes sure none is missed.",
+    start_and(when_time(8, 30, "weekdays"), msg="sar") + [receive(
+        "sar",
+        agent(L("Search my email from the last 35 days for subject access requests: anyone asking for a copy of the personal data or "
+                "information we hold about them, however they word it. Read the likely ones. For each real one: who, the date it "
+                "arrived, the deadline one calendar month later (use time_plus), and how many days are left. Soonest deadline first. "
+                "Leave out anything that isn't a request for someone's own data. If there are none, say so in one line. End with: "
+                "'This is an admin reminder, not legal advice.'"), ["email", "time"], steps=14),
+        B("rb_ask_first", {"WHAT": "messages"}),
+        email_me("Subject access requests: deadlines", B("rb_draft")),
+        B("rb_result"))]))
+
+v = Vars("checklist")
+add(program(
+    "clause-checklist", "Clause checklist", "odds",
+    "Choose a contract. Claude checks it against your clause checklist and lists, for each item, whether it's there (quoting it), "
+    "unclear or missing, for a professional to review. It isn't advice, and it says so.",
+    "Put your own checklist in the first block. Use it to prepare for a review, never instead of one.",
+    [chain(hat("rb_start"),
+           v.set("checklist", B("rb_longtext", {"TEXT": "Parties named in full\nTerm and how to end it\nPayment terms and late payment\n"
+                                                 "Limitation of liability\nConfidentiality\nData protection\nGoverning law\n"
+                                                 "Dispute resolution"})),
+           B("rb_task", TEXT=join("For each item on this checklist, say whether this contract has a clause covering it: PRESENT (quote "
+                                  "the clause and give its number), UNCLEAR (say why) or MISSING. Don't give an opinion on whether a "
+                                  "clause is good. End with: 'For a professional to review. This is not legal advice.'\n\nChecklist:\n",
+                                  v.get("checklist"), "\n\nContract:\n", B("rb_file_choose"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("every checklist item has a verdict; every PRESENT quotes the contract word for word with its clause "
+                                      "number; no opinion on whether terms are fair or wise; ends with the not-advice line"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_result"))], v))
+
+add(program(
+    "reply-deadlines", "Reply deadlines", "calendar",
+    "Each Monday morning, finds client emails that still need a reply, with the date each one asked for or the date you'd "
+    "reasonably owe one, soonest first. Emailed to you; it never replies.",
+    "Tell it who your clients are in the agent's goal (a domain, or the words in their signatures) to cut out newsletters.",
+    [*start_and(msg="replies"), on_day("Monday", 8, 0, "replies"), receive(
+        "replies",
+        agent(L("Search my email from the last 14 days for messages from clients that ask for something and haven't had a reply from "
+                "me yet. Read them. For each: who, what they need, and the reply-by date: the date they asked for, or else five working "
+                "days after it arrived (use time_plus). Soonest first, overdue ones marked OVERDUE. Leave out newsletters, receipts and "
+                "anything already answered. Don't reply to anything."), ["email", "time"], steps=16),
+        B("rb_ask_first", {"WHAT": "messages"}),
+        email_me("Replies due this week", B("rb_draft")),
+        B("rb_result"))]))
+
+# ----- Local news and civic groups (#201): a postcode, a source for every claim, two versions of a document -----
+v = Vars("postcode")
+add(program(
+    "planning-digest", "Planning digest", "news",
+    "Each Friday, a digest of new planning applications near a postcode: what's proposed, where, and the date comments close, "
+    "with a link for each. Nothing without a source.",
+    "Change the postcode in the first block. Councils publish differently, so check the first digest against your council's portal.",
+    [*start_and(msg="planning"), on_day("Friday", 7, 30, "planning"), receive(
+        "planning",
+        v.set("postcode", B("text", {"TEXT": "SE1 7PB"})),
+        agent(join("Find planning applications submitted in the last week within about a mile of ", v.get("postcode"), ". Search the "
+                   "web (the local council's planning portal, and planning news sites) and read the pages. For each: the address, what's "
+                   "proposed in one plain sentence, the reference, the date comments close, and the link. Recall the note 'planning "
+                   "seen' and leave out applications already in it, then remember this week's references as 'planning seen'. Check it "
+                   "with review_text against: every application has a link; nothing invented; plain English."),
+              ["web", "memory", "review"], steps=16),
+        email_me("Planning applications near you", B("rb_draft")),
+        B("rb_result"))], v))
+
+v = Vars("claim")
+add(program(
+    "sourced-check", "Sourced check", "news",
+    "Type a claim. Claude searches the web and says whether good sources support it, contradict it or don't say, with a link "
+    "for every point. It refuses to give a verdict it can't source.",
+    "Uses web search, which only works in exported Python; on the page Claude says what it would look up.",
+    [chain(hat("rb_start"),
+           B("rb_ask_me", TEXT=L("Type the claim to check")),
+           v.set("claim", B("rb_answer")),
+           B("rb_task", TEXT=join("Check this claim against these search results. Verdict first: SUPPORTED, CONTRADICTED, MIXED or NOT "
+                                  "ENOUGH TO SAY. Then the evidence, each point with its link. If the results don't settle it, say NOT "
+                                  "ENOUGH TO SAY and what a reader could check.\n\nClaim: ", v.get("claim"), "\n\nSearch results:\n",
+                                  B("rb_web_search", TEXT=v.get("claim")))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("every point has a link from the search results; no link is invented; the verdict follows from the "
+                                      "sourced points only; NOT ENOUGH TO SAY if the sources don't settle it"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_result"))], v))
+
+v = Vars("before", "after")
+add(program(
+    "consultation-diff", "Consultation changes", "news",
+    "Choose two versions of a consultation or policy document. Claude lists what changed between them, in plain English, most "
+    "important first, quoting both versions for each change.",
+    "Choose the older version first. Works with PDFs, Word files and text files.",
+    [chain(hat("rb_start"),
+           B("rb_say", TEXT="Choose the older version first."),
+           v.set("before", B("rb_file_choose")),
+           v.set("after", B("rb_file_choose")),
+           B("rb_task", TEXT=join("List what changed between these two versions of a document: what was added, removed or reworded in a way "
+                                  "that changes its meaning. Most important first. For each, quote the old and the new wording, then one "
+                                  "plain sentence on what the change means. Leave out changes to layout, spelling and numbering.\n\nOLDER "
+                                  "VERSION:\n", v.get("before"), "\n\nNEWER VERSION:\n", v.get("after"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("every change quotes both versions word for word; nothing listed that didn't change; changes of "
+                                      "meaning only; the most important first; plain English"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_result"))], v))
+
 
 def main() -> int:
     bad = []
