@@ -1737,7 +1737,13 @@
 "{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} स्वयम् एकवारं चालय y इति च उत्तरय (तावत् नियतचालनं न आरभते)।",
 "about {cost}":"प्रायः {cost}",
 "under {cost}":"{cost} तः न्यूनम्",
-"{cost} at list prices":"सूचीमूल्येन {cost}"
+"{cost} at list prices":"सूचीमूल्येन {cost}",
+"Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.":"Claude कुञ्चिकां प्रत्याख्यातवान्। {where_keys} ANTHROPIC_API_KEY परीक्षस्व।",
+"Fix the problem above, then start it again with Run workflow on the Actions tab.":"उपरि दोषं शोधय, ततः Actions पृष्ठे Run workflow इत्यनेन पुनः आरभस्व।",
+"Run stopped: {msg}":"चालनं स्थगितम्: {msg}",
+"Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"तव Claude खाते धनं नास्ति। https://console.anthropic.com इत्यत्र योजय, ततः पुनः चालय।",
+"Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"तव Claude कुञ्चिका सम्पूर्णस्य Console सङ्घस्य, न एकस्य कार्यस्थानस्य। कार्यस्थाने कुञ्चिकां रचय (Console इत्यस्य Workspaces पृष्ठम्), अथवा {where_keys} ANTHROPIC_WORKSPACE_ID स्थापय।",
+"as a repository secret (Settings → Secrets and variables → Actions)":"भाण्डारस्य रहस्यरूपेण (Settings → Secrets and variables → Actions)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

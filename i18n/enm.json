@@ -2856,7 +2856,13 @@
   "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Renne it ones thyself and answere y (a sette rennynge shal nat bigynne til thanne).",
   "about {cost}": "aboute {cost}",
   "under {cost}": "lasse than {cost}",
-  "{cost} at list prices": "{cost} at the sette pris"
+  "{cost} at list prices": "{cost} at the sette pris",
+  "Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.": "Claude refused the keye. Loke to ANTHROPIC_API_KEY {where_keys}.",
+  "Fix the problem above, then start it again with Run workflow on the Actions tab.": "Amende the defaute aboven, and thanne bigynne it ageyn with Run workflow on the Actions tab.",
+  "Run stopped: {msg}": "Rennynge stynted: {msg}",
+  "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Thyn Claude acount hath no credit lefte. Adde som at https://console.anthropic.com, and renne it ageyn.",
+  "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Thy Claude keye longeth to al a Console felaweshipe, nat to oon werkplace. Make a keye withinne a werkplace (the Console's Workspaces page), or sette ANTHROPIC_WORKSPACE_ID {where_keys}.",
+  "as a repository secret (Settings → Secrets and variables → Actions)": "as a secree of the hoord (Settings → Secrets and variables → Actions)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

@@ -1736,6 +1736,12 @@
 "{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Τρέξτε το μία φορά εσείς και απαντήστε y (μια προγραμματισμένη εκτέλεση δεν ξεκινά μέχρι τότε).",
 "about {cost}":"περίπου {cost}",
 "under {cost}":"κάτω από {cost}",
-"{cost} at list prices":"{cost} σε τιμές καταλόγου"
+"{cost} at list prices":"{cost} σε τιμές καταλόγου",
+"Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.":"Το Claude απέρριψε το κλειδί. Ελέγξτε το ANTHROPIC_API_KEY {where_keys}.",
+"Fix the problem above, then start it again with Run workflow on the Actions tab.":"Διορθώστε το πρόβλημα παραπάνω και ξεκινήστε το ξανά με Run workflow στην καρτέλα Actions.",
+"Run stopped: {msg}":"Η εκτέλεση σταμάτησε: {msg}",
+"Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"Ο λογαριασμός σας στο Claude δεν έχει πίστωση. Προσθέστε στο https://console.anthropic.com και τρέξτε το ξανά.",
+"Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"Το κλειδί σας για το Claude ανήκει σε ολόκληρο οργανισμό της Console, όχι σε έναν χώρο εργασίας. Φτιάξτε κλειδί μέσα σε χώρο εργασίας (σελίδα Workspaces της Console) ή ορίστε ANTHROPIC_WORKSPACE_ID {where_keys}.",
+"as a repository secret (Settings → Secrets and variables → Actions)":"ως μυστικό του αποθετηρίου (Settings → Secrets and variables → Actions)"
 }
 };

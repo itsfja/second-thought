@@ -1737,7 +1737,13 @@
 "{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} ištēnšu attā šūṣišu u y apul (epištum ša simānim adi inanna ul iššarri).",
 "about {cost}":"kīma {cost}",
 "under {cost}":"eli {cost} mūṭu",
-"{cost} at list prices":"{cost} ina šīmim šaṭrim"
+"{cost} at list prices":"{cost} ina šīmim šaṭrim",
+"Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.":"Claude kunukkam iteršu. ANTHROPIC_API_KEY {where_keys} amur.",
+"Fix the problem above, then start it again with Run workflow on the Actions tab.":"ḫiṭītam ša eliš šutēšer, warka ina Run workflow ša Actions ašnīšu šūṣi.",
+"Run stopped: {msg}":"epištum iprus: {msg}",
+"Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"ina bīt Claude kaspum ul ibašši. ina https://console.anthropic.com ruddi, warka ašnīšu šūṣi.",
+"Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"kunukkka ša Claude ana kalû ālim ša Console šū, ul ana bītim ištēn. kunukkam ina bītim epuš (Workspaces ina Console), ulu ANTHROPIC_WORKSPACE_ID {where_keys} šukun.",
+"as a repository secret (Settings → Secrets and variables → Actions)":"kīma pirištim ša bīt ṭuppim (Settings → Secrets and variables → Actions)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

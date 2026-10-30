@@ -2856,6 +2856,12 @@
   "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} 一度ご自分で実行して y と答えてください(それまで予定の実行は始まりません)。",
   "about {cost}": "約 {cost}",
   "under {cost}": "{cost} 未満",
-  "{cost} at list prices": "定価で {cost}"
+  "{cost} at list prices": "定価で {cost}",
+  "Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.": "Claude がキーを拒否しました。{where_keys} の ANTHROPIC_API_KEY を確認してください。",
+  "Fix the problem above, then start it again with Run workflow on the Actions tab.": "上の問題を直してから、Actions タブの Run workflow でもう一度始めてください。",
+  "Run stopped: {msg}": "実行を停止しました: {msg}",
+  "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Claude アカウントのクレジットがありません。https://console.anthropic.com で追加してから、もう一度実行してください。",
+  "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "この Claude キーはワークスペースではなく Console の組織全体のものです。ワークスペースの中でキーを作るか(Console の Workspaces ページ)、{where_keys} に ANTHROPIC_WORKSPACE_ID を設定してください。",
+  "as a repository secret (Settings → Secrets and variables → Actions)": "リポジトリのシークレットとして (Settings → Secrets and variables → Actions)"
  }
 }

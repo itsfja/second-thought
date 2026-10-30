@@ -21,11 +21,15 @@ from .settings import tr  # noqa: F401
 
 
 def _anthropic_client(**kw):
-    """The Claude client. Imported when first needed, so the rest of this file loads (and can be tested) without the SDK."""
+    """The Claude client. Imported when first needed, so the rest of this file loads (and can be tested) without the SDK.
+    A key made for a whole Console organisation, not one workspace, needs to say which workspace: ANTHROPIC_WORKSPACE_ID."""
     try:
         from anthropic import AsyncAnthropic
     except ImportError:
         raise RunError(tr("Claude needs the Anthropic SDK. Install it with:  pip install anthropic")) from None
+    workspace = os.environ.get("ANTHROPIC_WORKSPACE_ID", "").strip()
+    if workspace:
+        kw["default_headers"] = {**kw.get("default_headers", {}), "anthropic-workspace-id": workspace}
     return AsyncAnthropic(**kw)
 
 # ----- The model services -----

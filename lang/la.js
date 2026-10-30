@@ -1736,7 +1736,13 @@
 "{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Semel ipse id curre et y responde (cursus statutus non ante incipiet).",
 "about {cost}":"circiter {cost}",
 "under {cost}":"minus quam {cost}",
-"{cost} at list prices":"{cost} pretiis indicis"
+"{cost} at list prices":"{cost} pretiis indicis",
+"Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.":"Claude clavem recusavit. ANTHROPIC_API_KEY {where_keys} inspice.",
+"Fix the problem above, then start it again with Run workflow on the Actions tab.":"Vitium supra emenda, deinde rursus incipe per Run workflow in tabula Actions.",
+"Run stopped: {msg}":"Cursus constitit: {msg}",
+"Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"Rationi tuae Claude nihil crediti superest. Adde apud https://console.anthropic.com, deinde rursus curre.",
+"Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"Clavis tua Claude toti societati Consolae pertinet, non uni spatio laboris. Clavem in spatio laboris fac (pagina Workspaces Consolae), aut ANTHROPIC_WORKSPACE_ID {where_keys} pone.",
+"as a repository secret (Settings → Secrets and variables → Actions)":"ut arcanum repositorii (Settings → Secrets and variables → Actions)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

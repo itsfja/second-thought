@@ -15,7 +15,7 @@ import random
 import re
 import sys
 import time
-from .settings import RUNTIME_VERSION, WHERE_KEYS
+from .settings import RUNTIME_VERSION, WHERE_KEYS, on_github_actions
 from .providers import ModelCalls, call_cost, model_label, money
 from .core import (BUDGET, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
@@ -28,6 +28,11 @@ from .doctor import Doctor
 from .settings import said_no, said_yes, tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it too (settings.py doesn't import it)
+
+
+# GitHub Actions turns a line starting with this into an error annotation on the run's page (a workflow command,
+# not words for people). Newlines inside it are written %0A.
+ACTIONS_ERROR = "::error::"
 
 
 class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
@@ -300,6 +305,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                     os.remove(self._journal_file)
                 except OSError:
                     pass
+            elif on_github_actions():  # the record of what's done isn't kept between runs there
+                print(tr("Fix the problem above, then start it again with Run workflow on the Actions tab."), flush=True)
             else:
                 print(tr("Run the program again to pick up where it stopped."), flush=True)
 
@@ -568,6 +575,30 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         return "\n\n".join(items)
 
     # ----- Errors and retries -----
+    def report_stop(self, msg):
+        """The run's last lines when it stops on an error: the reason, and what to do about it when that's known."""
+        print(tr("\n✖ Run stopped: {msg}", msg=msg), flush=True)
+        hint = self.error_hint(msg)
+        if hint:
+            print("  " + hint, flush=True)
+        if on_github_actions():
+            # An annotation: the reason shows on the run's summary page, not only in the step's log.
+            note = tr("Run stopped: {msg}", msg=msg) + ("\n" + hint if hint else "")
+            print(ACTIONS_ERROR + note.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"), flush=True)
+
+    @staticmethod
+    def error_hint(msg):
+        """What to do about a model service's refusal that's worded for programmers, in a line, or ''."""
+        low = to_str(msg).lower()
+        if "not scoped to a workspace" in low:
+            return tr("Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a "
+                      "workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.", where_keys=WHERE_KEYS)
+        if "credit balance is too low" in low:
+            return tr("Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.")
+        if "invalid x-api-key" in low or "authentication_error" in low:
+            return tr("Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.", where_keys=WHERE_KEYS)
+        return ""
+
     @staticmethod
     def _describe(e):
         return str(e) if isinstance(e, RunError) else f"{type(e).__name__}: {e}"
@@ -1318,8 +1349,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 self.error = RunError(tr("Every script is waiting for {names}, but nothing running can send it.", names=names))
                 self._end()
         if self.error:
-            msg = str(self.error) if isinstance(self.error, RunError) else f"{type(self.error).__name__}: {self.error}"
-            print(tr("\n✖ Run stopped: {msg}", msg=msg), flush=True)
+            self.report_stop(str(self.error) if isinstance(self.error, RunError) else f"{type(self.error).__name__}: {self.error}")
             return 1
         text = "\n\n".join(self.result) if self.result else self.draft
         if text:

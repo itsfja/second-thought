@@ -1737,7 +1737,13 @@
 "{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} הפיכו לה זמנא חדא בנפשכון ואתיבו y (הפכא קביעא לא ישרא עד כדו).",
 "about {cost}":"בערך {cost}",
 "under {cost}":"פחות מן {cost}",
-"{cost} at list prices":"{cost} בטימי כתיבי"
+"{cost} at list prices":"{cost} בטימי כתיבי",
+"Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.":"Claude סרב במפתחא. בדוקו ANTHROPIC_API_KEY {where_keys}.",
+"Fix the problem above, then start it again with Run workflow on the Actions tab.":"תקנו סורחנא דלעל, ובתר כן שרו לה תוב ב־Run workflow בדפא Actions.",
+"Run stopped: {msg}":"הפכא פסק: {msg}",
+"Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"לחושבנכון דClaude לית אשראי. אוסיפו ב־https://console.anthropic.com והפיכו לה תוב.",
+"Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"מפתחא דClaude דילכון דכנישתא כלה דConsole הוא, לא דאתר עבדא חד. עבידו מפתחא בגו אתר עבדא (דפא Workspaces דConsole), או שוו ANTHROPIC_WORKSPACE_ID {where_keys}.",
+"as a repository secret (Settings → Secrets and variables → Actions)":"כרזא דבית גנזא (Settings → Secrets and variables → Actions)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

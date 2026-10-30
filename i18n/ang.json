@@ -2856,7 +2856,13 @@
   "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Ȳrn hit ǣne self and andswara y (gesett ryne ne onginþ ǣr þām).",
   "about {cost}": "ymbe {cost}",
   "under {cost}": "lǣsse þonne {cost}",
-  "{cost} at list prices": "{cost} be gesettum weorþe"
+  "{cost} at list prices": "{cost} be gesettum weorþe",
+  "Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.": "Claude wiþsōc þǣre cǣge. Sceāwa ANTHROPIC_API_KEY {where_keys}.",
+  "Fix the problem above, then start it again with Run workflow on the Actions tab.": "Bēt þā unspēde hēr ufan, and onginn hit eft mid Run workflow on þǣm Actions tæppan.",
+  "Run stopped: {msg}": "Ryne ætstōd: {msg}",
+  "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Þīn Claude hord is ǣmtig. Ēac on https://console.anthropic.com, and ȳrn hit eft.",
+  "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Þīn Claude cǣg belimpþ tō ealre Console geferrǣdenne, nā tō ānre weorcstōwe. Wyrc cǣge on weorcstōwe (Workspaces leaf on Console), oþþe sete ANTHROPIC_WORKSPACE_ID {where_keys}.",
+  "as a repository secret (Settings → Secrets and variables → Actions)": "swā dīgol þæs hordes (Settings → Secrets and variables → Actions)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

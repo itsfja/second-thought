@@ -2857,7 +2857,13 @@
   "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} da-ra-me a-u-to a-pa-ka-si e a-po-ki-ri-ne y (o-ra-ja pa-ra-ki-si o-u a-ka-ta-i pa-ro).",
   "about {cost}": "a-pi {cost}",
   "under {cost}": "me-jo {cost}",
-  "{cost} at list prices": "{cost} ti-ma ka-ra-pe-to"
+  "{cost} at list prices": "{cost} ti-ma ka-ra-pe-to",
+  "Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.": "Claude a-pe-ra-ke ka-ra-wi. e-ke-ta-se ANTHROPIC_API_KEY {where_keys}.",
+  "Fix the problem above, then start it again with Run workflow on the Actions tab.": "o-ro-to-o ka-ko a-no, e-pe-i-ta a-pi a-ke-se Run workflow e-ne Actions.",
+  "Run stopped: {msg}": "pa-ra-ki-si pe-pa-u-ta-i: {msg}",
+  "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Claude ko-to-na so o-u-ke-ti e-ke-i. po-ro-te-te e-ne https://console.anthropic.com, e-pe-i-ta a-pi da-ra-me.",
+  "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Claude ka-ra-wi so pa-sa Console ko-i-no-ni-ja, o-u-ka e-ne e-ka-ta-ri-jo. po-e-e ka-ra-wi e-ne e-ka-ta-ri-jo (Workspaces), e ti-te ANTHROPIC_WORKSPACE_ID {where_keys}.",
+  "as a repository secret (Settings → Secrets and variables → Actions)": "o-pe ku-pu-to te-sa-u-ro (Settings → Secrets and variables → Actions)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

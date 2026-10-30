@@ -2856,6 +2856,12 @@
   "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} 请自己运行一次并回答 y（在此之前定时运行不会开始）。",
   "about {cost}": "约 {cost}",
   "under {cost}": "不到 {cost}",
-  "{cost} at list prices": "按标价 {cost}"
+  "{cost} at list prices": "按标价 {cost}",
+  "Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.": "Claude 拒绝了这个密钥。请检查 {where_keys} 的 ANTHROPIC_API_KEY。",
+  "Fix the problem above, then start it again with Run workflow on the Actions tab.": "先解决上面的问题，再在 Actions 标签页用 Run workflow 重新运行。",
+  "Run stopped: {msg}": "运行已停止：{msg}",
+  "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "你的 Claude 账户余额不足。请到 https://console.anthropic.com 充值，然后再运行。",
+  "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "你的 Claude 密钥属于整个 Console 组织，而不是某个工作区。请在工作区里创建密钥（Console 的 Workspaces 页面），或在 {where_keys} 设置 ANTHROPIC_WORKSPACE_ID。",
+  "as a repository secret (Settings → Secrets and variables → Actions)": "作为仓库机密（Settings → Secrets and variables → Actions）"
  }
 }

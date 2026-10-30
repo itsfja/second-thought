@@ -158,6 +158,33 @@ def _proxied_get(url, headers, limit, what, proxy):
     raise RunError(tr("{what} couldn't reach {url} ({reason}).", what=what, url=_short(start, 80), reason="too many redirects"))
 
 
+
+# Models write Markdown (**bold**, *italics*, `code`, [links](https://…), # headings). Telegram and Slack each have
+# their own formatting, so it's turned into theirs before sending; Discord reads Markdown as it is.
+_MD_LINK = re.compile(r"\[([^\]\n]+)\]\((https?://[^\s)]+)\)")
+
+
+def markdown_to_telegram(text):
+    """Telegram's HTML formatting for a model's Markdown. Everything else is escaped, so nothing in it reads as a tag."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    t = _MD_LINK.sub(lambda m: f'<a href="{m.group(2).replace(chr(34), "&quot;")}">{m.group(1)}</a>', t)
+    t = re.sub(r"`([^`\n]+)`", r"<code>\1</code>", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"<b>\1</b>", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"<b>\1</b>", t)
+    t = re.sub(r"__(?=\S)(.+?)(?<=\S)__", r"<b>\1</b>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"<i>\1</i>", t)
+    return t
+
+
+def markdown_to_slack(text):
+    """Slack's own formatting (*bold*, _italics_, <url|text>) for a model's Markdown."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")  # Slack reads these as its own
+    t = _MD_LINK.sub(lambda m: f"<{m.group(2)}|{m.group(1)}>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"_\1_", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"*\1*", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"*\1*", t)
+    return t
+
 class _PinnedTunnel(http.client.HTTPSConnection):
     """An https connection through a proxy's tunnel to an exact address, checking the certificate against the name."""
     sni = None
@@ -990,7 +1017,13 @@ class Connections:
         if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), 4000):
-            await self._tg("sendMessage", {"chat_id": chat, "text": text[i:i + 4000]})
+            part = text[i:i + 4000]
+            try:
+                await self._tg("sendMessage", {"chat_id": chat, "text": markdown_to_telegram(part), "parse_mode": "HTML"})
+            except RunError as e:
+                if "parse" not in str(e).lower():  # only formatting Telegram can't read: then it goes as plain text
+                    raise
+                await self._tg("sendMessage", {"chat_id": chat, "text": part})
         self.log(tr("Telegram message sent"), text, tr("sent"))
         return True
 
@@ -1121,7 +1154,7 @@ class Connections:
             if service == "discord":
                 await self._chat_api("discord", "POST", f"/channels/{urllib.parse.quote(channel)}/messages", {"content": part, "allowed_mentions": {"parse": []}})
             else:
-                await self._chat_api("slack", "POST", "/chat.postMessage", {"channel": channel, "text": part})
+                await self._chat_api("slack", "POST", "/chat.postMessage", {"channel": channel, "text": markdown_to_slack(part)})
         self.log(tr("{name} message sent", name=c['name']), text, tr("sent"))
         return True
 

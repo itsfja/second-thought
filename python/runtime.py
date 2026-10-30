@@ -137,15 +137,25 @@ def said_no(answer):
     return a in ("n", "no") or (no != "(no)" and a in [w.strip().lower() for w in no.split(",") if w.strip()])
 
 
-WHERE_KEYS = tr("in {path}", path=SETTINGS_PATH) if SETTINGS_PATH else tr("in {path}, next to this program", path=SETTINGS_FILE)
+def on_github_actions():
+    """Running on GitHub Actions (saved with Save as GitHub Actions), where settings are the repository's secrets."""
+    return os.environ.get("GITHUB_ACTIONS", "").lower() == "true"
+
+
+WHERE_KEYS = (tr("as a repository secret (Settings → Secrets and variables → Actions)") if on_github_actions() else
+              tr("in {path}", path=SETTINGS_PATH) if SETTINGS_PATH else tr("in {path}, next to this program", path=SETTINGS_FILE))
 
 
 def _anthropic_client(**kw):
-    """The Claude client. Imported when first needed, so the rest of this file loads (and can be tested) without the SDK."""
+    """The Claude client. Imported when first needed, so the rest of this file loads (and can be tested) without the SDK.
+    A key made for a whole Console organisation, not one workspace, needs to say which workspace: ANTHROPIC_WORKSPACE_ID."""
     try:
         from anthropic import AsyncAnthropic
     except ImportError:
         raise RunError(tr("Claude needs the Anthropic SDK. Install it with:  pip install anthropic")) from None
+    workspace = os.environ.get("ANTHROPIC_WORKSPACE_ID", "").strip()
+    if workspace:
+        kw["default_headers"] = {**kw.get("default_headers", {}), "anthropic-workspace-id": workspace}
     return AsyncAnthropic(**kw)
 
 # ----- The model services -----
@@ -1659,6 +1669,33 @@ def _proxied_get(url, headers, limit, what, proxy):
     raise RunError(tr("{what} couldn't reach {url} ({reason}).", what=what, url=_short(start, 80), reason="too many redirects"))
 
 
+
+# Models write Markdown (**bold**, *italics*, `code`, [links](https://…), # headings). Telegram and Slack each have
+# their own formatting, so it's turned into theirs before sending; Discord reads Markdown as it is.
+_MD_LINK = re.compile(r"\[([^\]\n]+)\]\((https?://[^\s)]+)\)")
+
+
+def markdown_to_telegram(text):
+    """Telegram's HTML formatting for a model's Markdown. Everything else is escaped, so nothing in it reads as a tag."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    t = _MD_LINK.sub(lambda m: f'<a href="{m.group(2).replace(chr(34), "&quot;")}">{m.group(1)}</a>', t)
+    t = re.sub(r"`([^`\n]+)`", r"<code>\1</code>", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"<b>\1</b>", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"<b>\1</b>", t)
+    t = re.sub(r"__(?=\S)(.+?)(?<=\S)__", r"<b>\1</b>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"<i>\1</i>", t)
+    return t
+
+
+def markdown_to_slack(text):
+    """Slack's own formatting (*bold*, _italics_, <url|text>) for a model's Markdown."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")  # Slack reads these as its own
+    t = _MD_LINK.sub(lambda m: f"<{m.group(2)}|{m.group(1)}>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"_\1_", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"*\1*", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"*\1*", t)
+    return t
+
 class _PinnedTunnel(http.client.HTTPSConnection):
     """An https connection through a proxy's tunnel to an exact address, checking the certificate against the name."""
     sni = None
@@ -2491,7 +2528,13 @@ class Connections:
         if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), 4000):
-            await self._tg("sendMessage", {"chat_id": chat, "text": text[i:i + 4000]})
+            part = text[i:i + 4000]
+            try:
+                await self._tg("sendMessage", {"chat_id": chat, "text": markdown_to_telegram(part), "parse_mode": "HTML"})
+            except RunError as e:
+                if "parse" not in str(e).lower():  # only formatting Telegram can't read: then it goes as plain text
+                    raise
+                await self._tg("sendMessage", {"chat_id": chat, "text": part})
         self.log(tr("Telegram message sent"), text, tr("sent"))
         return True
 
@@ -2622,7 +2665,7 @@ class Connections:
             if service == "discord":
                 await self._chat_api("discord", "POST", f"/channels/{urllib.parse.quote(channel)}/messages", {"content": part, "allowed_mentions": {"parse": []}})
             else:
-                await self._chat_api("slack", "POST", "/chat.postMessage", {"channel": channel, "text": part})
+                await self._chat_api("slack", "POST", "/chat.postMessage", {"channel": channel, "text": markdown_to_slack(part)})
         self.log(tr("{name} message sent", name=c['name']), text, tr("sent"))
         return True
 
@@ -4992,6 +5035,11 @@ class Doctor:
 import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it too (settings.py doesn't import it)
 
 
+# GitHub Actions turns a line starting with this into an error annotation on the run's page (a workflow command,
+# not words for people). Newlines inside it are written %0A.
+ACTIONS_ERROR = "::error::"
+
+
 class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
     def __init__(self):
         self.vars = {}
@@ -5262,6 +5310,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                     os.remove(self._journal_file)
                 except OSError:
                     pass
+            elif on_github_actions():  # the record of what's done isn't kept between runs there
+                print(tr("Fix the problem above, then start it again with Run workflow on the Actions tab."), flush=True)
             else:
                 print(tr("Run the program again to pick up where it stopped."), flush=True)
 
@@ -5530,6 +5580,30 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         return "\n\n".join(items)
 
     # ----- Errors and retries -----
+    def report_stop(self, msg):
+        """The run's last lines when it stops on an error: the reason, and what to do about it when that's known."""
+        print(tr("\n✖ Run stopped: {msg}", msg=msg), flush=True)
+        hint = self.error_hint(msg)
+        if hint:
+            print("  " + hint, flush=True)
+        if on_github_actions():
+            # An annotation: the reason shows on the run's summary page, not only in the step's log.
+            note = tr("Run stopped: {msg}", msg=msg) + ("\n" + hint if hint else "")
+            print(ACTIONS_ERROR + note.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"), flush=True)
+
+    @staticmethod
+    def error_hint(msg):
+        """What to do about a model service's refusal that's worded for programmers, in a line, or ''."""
+        low = to_str(msg).lower()
+        if "not scoped to a workspace" in low:
+            return tr("Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a "
+                      "workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.", where_keys=WHERE_KEYS)
+        if "credit balance is too low" in low:
+            return tr("Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.")
+        if "invalid x-api-key" in low or "authentication_error" in low:
+            return tr("Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.", where_keys=WHERE_KEYS)
+        return ""
+
     @staticmethod
     def _describe(e):
         return str(e) if isinstance(e, RunError) else f"{type(e).__name__}: {e}"
@@ -6280,8 +6354,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                 self.error = RunError(tr("Every script is waiting for {names}, but nothing running can send it.", names=names))
                 self._end()
         if self.error:
-            msg = str(self.error) if isinstance(self.error, RunError) else f"{type(self.error).__name__}: {self.error}"
-            print(tr("\n✖ Run stopped: {msg}", msg=msg), flush=True)
+            self.report_stop(str(self.error) if isinstance(self.error, RunError) else f"{type(self.error).__name__}: {self.error}")
             return 1
         text = "\n\n".join(self.result) if self.result else self.draft
         if text:
