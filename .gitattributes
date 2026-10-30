@@ -1,0 +1,5 @@
+# Translation files merge key by key (tools/merge_i18n.py), and files tools/sync.py makes keep our side, to be
+# rebuilt. Both need turning on once in your clone:  python tools/merge_i18n.py --install
+i18n/*.json merge=i18n
+lang/*.js merge=generated
+python/runtime.py merge=generated

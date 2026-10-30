@@ -52,6 +52,19 @@ English, with a note saying the language couldn't be loaded.
 
 4. **One change per pull request**, on its own branch, linked to its issue (`Closes #123`).
 
+
+**Merging translation files.** Pull requests that add words usually add them at the end of the same sections of
+`i18n/*.json`, which git calls a conflict. Run this once in your clone, and git merges those files key by key instead,
+keeping the words both sides added:
+
+```
+python tools/merge_i18n.py --install
+```
+
+Only a word changed differently on both sides is still a conflict. Files `tools/sync.py` makes (`python/runtime.py`,
+`lang/*.js`) keep your side, so after a merge or rebase run `python tools/sync.py` and commit what it rebuilds.
+GitHub's web editor doesn't use merge drivers, so resolve those conflicts locally.
+
 ## Checking your change
 
 Unit tests need nothing installed and take a few seconds:
