@@ -110,6 +110,9 @@ CI never runs it.
 - **Model names:** services retire models. `python tools/smoke_test.py models` lists, for each service you have a
   key for, the tiers whose model it no longer lists (it only reads the model list, so it's free). Update those
   names in `SERVICES`, and add a line to `CHANGELOG.md`.
+- **What always asks** (unlocking, opening and disarming, the agent tools that ask, what a fooled agent can't do
+  unasked): edit `SAFETY` in `python/second_thought/core.py`, then run `tools/sync.py`, which copies it into the page.
+  Both sides read that one list, and `tests/e2e/safety.py` checks they give the same answers.
 - **Changing a block's shape** (renaming a block, a field or an input, or changing what a field holds): saved programs,
   gallery files and exported Python all keep the old shape. Bump `FORMAT_VERSION` in the page and add
   `MIGRATIONS[old version]`, a function that turns an old program into a new one. Every way a program loads runs it.

@@ -6,7 +6,7 @@ python/runtime.py, which is what ships inside every exported program and the pag
 import asyncio
 import json
 import re
-from .core import (BadJSON, Finish, RunError, SCHEMAS, _num_like, _short, calc_text, current_time_text, ha_sensitive,
+from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, _num_like, _short, calc_text, current_time_text, ha_sensitive,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
 from .settings import tr  # noqa: F401
@@ -102,16 +102,10 @@ class AgentTools:
             (f"send_{_svc}", f"Send a {_name} message to the person's channel (or back to the channel a message came from). "
              "The person may be asked first, and may say no.", ["text"])]
     del _svc, _name
-    # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it made
-    # up (one that wasn't in its goal or in anything it read) without asking: the address itself could carry the private
-    # things away, like https://example.com/?d=<your emails>.
-    AGENT_PRIVATE = {"email", "email_send", "calendar", "telegram", "telegram_send", "telegram_send_free", "discord", "discord_send",
-                     "discord_send_free", "slack", "slack_send", "slack_send_free", "github", "github_act", "ha_read", "ha_act",
-                     "ha_act_free", "homey_read", "homey_act", "homey_act_free", "mqtt", "mqtt_act", "mqtt_act_free", "memory", "file", "mcp"}
-    # Home Assistant services an agent can't run without asking, even with 'control devices (no asking)': they run scripts,
-    # scenes or automations, or press buttons, and so could do anything, unlocking included.
-    AGENT_HA_INDIRECT = (r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$")
-    AGENT_ASKS = {"ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"}  # built-in tools that ask before each use
+    # What a fooled agent could do with a tool that doesn't normally ask: these ask anyway. The lists are SAFETY in core.py.
+    AGENT_PRIVATE = set(SAFETY["agent_private"])
+    AGENT_HA_INDIRECT = tuple(SAFETY["agent_ha_indirect"])
+    AGENT_ASKS = set(SAFETY["agent_asks"])  # built-in tools that ask before each use
     MAX_AGENT_STEPS = 20
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
@@ -432,7 +426,7 @@ class AgentTools:
             return "scripts, scenes, automations and buttons always ask, since they could do anything"
         if tool == "run_homey_flow":
             return "flows always ask, since they could do anything"
-        if tool == "publish_mqtt" and re.search(r"\b(unlock|open|disarm)", to_str(inp.get("topic", "")) + " " + to_str(inp.get("message", "")), re.I):
+        if tool == "publish_mqtt" and re.search(SAFETY["mqtt_unlock"], to_str(inp.get("topic", "")) + " " + to_str(inp.get("message", "")), re.I):
             return "unlocking, opening and disarming always ask"
         url = to_str(inp.get("url", "")).strip()
         if tool in ("read_page", "read_feed") and url and private and url not in seen and url.rstrip("/") not in seen:
