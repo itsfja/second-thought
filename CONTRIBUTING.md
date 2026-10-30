@@ -86,6 +86,11 @@ CI never runs it.
   `i18n/*.json`, translate the words (never the choice values, `%1` or `{name}` markers), and run `tools/sync.py`.
   The tests list anything missing. Scripts most computers lack need a `"font"`, plus a copy in `tests/setup.sh` and
   `FONTS` in `tests/run_tests.py`; see the Linear B, Sanskrit and Akkadian files for examples.
+- **New words in a change:** every text shown through `tr()` needs a translation in each language. `python
+  tools/i18n.py missing` lists what's missing. Write the translations into one file (`{"page": {"English": {"de": "…",
+  …}}, "python": {…}}`) and `python tools/i18n.py add words.json` puts each in its language file. Give Mycenaean Greek
+  and Akkadian page words romanised, as their Python words are; the tool writes them in Linear B and cuneiform,
+  leaving `{placeholders}`, names and file names alone. `python tools/i18n.py script akk "…"` shows a line first.
 - **A gallery program:** see [`gallery/README.md`](gallery/README.md).
 - **A model service:** one entry in `SERVICES` in `providers.py`; see
   [Development and tests](README.md#development-and-tests).
