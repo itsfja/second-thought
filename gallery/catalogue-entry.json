@@ -1,0 +1,276 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "catalogue-entry",
+  "gallery": {
+    "title": "Catalogue entry",
+    "category": "odds",
+    "description": "Choose a transcription or description of an archive item. Claude drafts a catalogue entry with the elements ISAD(G) needs, checks it against them, and asks before saving. It never invents a date or a creator the item doesn't give.",
+    "tip": "Put your own reference code and repository in the answer to the first question.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_item",
+        "name": "item"
+      },
+      {
+        "id": "g_reference",
+        "name": "reference"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "The reference code and repository, like 'ABC/1/2, Anytown Record Office'"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_reference"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_answer"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_item"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_file_choose"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_task",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "text_join",
+                                "inputs": {
+                                  "ADD0": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "Draft an archive catalogue entry for this item, following ISAD(G). Give these elements, each on its own line with its name: Reference code; Title; Date(s); Level of description; Extent and medium; Name of creator(s); Scope and content; Conditions governing access; Language/scripts of material. Use only what the item shows: write 'not known' rather than guess, and give dates as the item states them, with any you've inferred in square brackets. Scope and content is a few plain sentences: who, what, where, when.\n\nReference and repository: "
+                                      }
+                                    }
+                                  },
+                                  "ADD1": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_reference"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "ADD2": {
+                                    "shadow": {
+                                      "type": "rb_longtext",
+                                      "fields": {
+                                        "TEXT": "\n\nThe item:\n"
+                                      }
+                                    }
+                                  },
+                                  "ADD3": {
+                                    "block": {
+                                      "type": "variables_get",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_item"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "extraState": {
+                                  "itemCount": 4
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_generate",
+                              "next": {
+                                "block": {
+                                  "type": "rb_reflect",
+                                  "inputs": {
+                                    "CRITERIA": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "all nine ISAD(G) elements are there, each named; nothing is invented: unknowns say 'not known' and inferred dates are in square brackets; dates are as the item gives them; scope and content says who, what, where and when in plain sentences; the reference code is the one given"
+                                        }
+                                      }
+                                    },
+                                    "ROUNDS": {
+                                      "shadow": {
+                                        "type": "math_number",
+                                        "fields": {
+                                          "NUM": 3
+                                        }
+                                      }
+                                    },
+                                    "FIX": {
+                                      "block": {
+                                        "type": "rb_revise"
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "controls_if",
+                                      "inputs": {
+                                        "IF0": {
+                                          "block": {
+                                            "type": "rb_approve",
+                                            "inputs": {
+                                              "TEXT": {
+                                                "block": {
+                                                  "type": "text_join",
+                                                  "inputs": {
+                                                    "ADD0": {
+                                                      "shadow": {
+                                                        "type": "rb_longtext",
+                                                        "fields": {
+                                                          "TEXT": "Save this catalogue entry?\n\n"
+                                                        }
+                                                      }
+                                                    },
+                                                    "ADD1": {
+                                                      "block": {
+                                                        "type": "rb_draft"
+                                                      }
+                                                    }
+                                                  },
+                                                  "extraState": {
+                                                    "itemCount": 2
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "DO0": {
+                                          "block": {
+                                            "type": "rb_ask_first",
+                                            "fields": {
+                                              "WHAT": "files"
+                                            },
+                                            "next": {
+                                              "block": {
+                                                "type": "rb_file_save",
+                                                "fields": {
+                                                  "EXT": "md"
+                                                },
+                                                "inputs": {
+                                                  "VALUE": {
+                                                    "block": {
+                                                      "type": "rb_draft"
+                                                    }
+                                                  },
+                                                  "NAME": {
+                                                    "shadow": {
+                                                      "type": "text",
+                                                      "fields": {
+                                                        "TEXT": "catalogue-entry"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "next": {
+                                                  "block": {
+                                                    "type": "rb_result"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ELSE": {
+                                          "block": {
+                                            "type": "rb_finish_with",
+                                            "inputs": {
+                                              "TEXT": {
+                                                "block": {
+                                                  "type": "text_join",
+                                                  "inputs": {
+                                                    "ADD0": {
+                                                      "shadow": {
+                                                        "type": "rb_longtext",
+                                                        "fields": {
+                                                          "TEXT": "Not saved. The entry, to edit yourself:\n\n"
+                                                        }
+                                                      }
+                                                    },
+                                                    "ADD1": {
+                                                      "block": {
+                                                        "type": "rb_draft"
+                                                      }
+                                                    }
+                                                  },
+                                                  "extraState": {
+                                                    "itemCount": 2
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "extraState": {
+                                        "hasElse": true
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

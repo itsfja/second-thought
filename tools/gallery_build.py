@@ -1151,6 +1151,82 @@ add(program(
            B("rb_result"))], v))
 
 
+# ----- Archives and family history (#202): transcription conventions, the calendar change, a cataloguing standard -----
+add(program(
+    "letter-transcriber", "Letter transcriber", "odds",
+    "Choose a scan or photo of a handwritten letter. Claude transcribes it as written, old spellings and all, marks every word "
+    "it isn't sure of, and checks the transcription against the usual conventions. Asks before saving it.",
+    "Use a clear, flat scan. Read it against the original: every [word?] is a guess to check.",
+    [chain(hat("rb_start"),
+           B("rb_set_draft", TEXT=B("rb_img_ask", TEXT=L(
+               "Transcribe this handwritten document exactly as written. Keep the original spelling, capitals, punctuation and "
+               "abbreviations; don't modernise or correct anything. Keep the line breaks. Put a word you're unsure of in square "
+               "brackets with a question mark, like [Thomas?]; write [illegible] for anything you can't read, and [torn] or "
+               "[blot] for damage. Put words written above the line in ^carets^. After the transcription, a line '---' and a "
+               "short note: the likely date and writer if the letter says, and how confident you are overall."),
+               IMG=B("rb_img_choose"))),
+           B("rb_reflect", CRITERIA=L("spelling, capitals and punctuation are as written, not modernised; abbreviations are kept, not "
+                                      "expanded; every uncertain word is marked [word?]; unreadable parts say [illegible]; line breaks "
+                                      "are kept; nothing is added that isn't on the page; the note after '---' says how confident it is"),
+             ROUNDS=2, FIX=B("rb_revise")),
+           if_(B("rb_approve", TEXT=join("Save this transcription?\n\n", B("rb_draft"))),
+               chain(B("rb_ask_first", {"WHAT": "files"}), B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="transcription"),
+                     B("rb_result")),
+               B("rb_finish_with", TEXT=join("Not saved. The transcription, to edit yourself:\n\n", B("rb_draft")))))]))
+
+v = Vars("text")
+add(program(
+    "old-dates", "Old dates", "odds",
+    "Paste a passage from an old document. Claude finds every date in it and gives each in today's form: abbreviations like "
+    "inst. and 7ber expanded, regnal years worked out, and Old Style dates before 1752 given in both styles.",
+    "It shows its working for each date. Check regnal years against a list of reigns before you rely on one.",
+    [chain(hat("rb_start"),
+           B("rb_ask_me", TEXT=L("Paste the passage with the dates in it")),
+           v.set("text", B("rb_answer")),
+           B("rb_task", TEXT=join(
+               "Find every date in this passage from an old English document and give each in today's form (day month year). For "
+               "each: quote it as written, then the modern date, then one line of working. Expand abbreviations: inst. (this month), "
+               "ult. (last month), prox. (next month), 7ber, 8ber, 9ber, Xber (September to December). Work out regnal years (like "
+               "'the 3rd year of the reign of George III') from the date the reign began. In England before 1752 the year began on "
+               "25 March, so a date from 1 January to 24 March is given as both years, like 10 February 1720/21; the Julian "
+               "calendar was used until 2 September 1752, so also give the Gregorian date: 11 days later from 1 March 1700, 10 days before that. "
+               "Say when a date can't be worked out exactly, and why.\n\n", v.get("text"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("every date in the passage is listed, quoted as written; each has a modern date and a line of "
+                                      "working; dates between 1 January and 24 March before 1752 show both years, like 1720/21; Julian "
+                                      "dates before 1752 also give the Gregorian date; regnal years name the reign and when it began; "
+                                      "anything uncertain says so"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_result"))], v))
+
+v = Vars("item", "reference")
+add(program(
+    "catalogue-entry", "Catalogue entry", "odds",
+    "Choose a transcription or description of an archive item. Claude drafts a catalogue entry with the elements ISAD(G) needs, "
+    "checks it against them, and asks before saving. It never invents a date or a creator the item doesn't give.",
+    "Put your own reference code and repository in the answer to the first question.",
+    [chain(hat("rb_start"),
+           B("rb_ask_me", TEXT=L("The reference code and repository, like 'ABC/1/2, Anytown Record Office'")),
+           v.set("reference", B("rb_answer")),
+           v.set("item", B("rb_file_choose")),
+           B("rb_task", TEXT=join(
+               "Draft an archive catalogue entry for this item, following ISAD(G). Give these elements, each on its own line with "
+               "its name: Reference code; Title; Date(s); Level of description; Extent and medium; Name of creator(s); Scope and "
+               "content; Conditions governing access; Language/scripts of material. Use only what the item shows: write 'not "
+               "known' rather than guess, and give dates as the item states them, with any you've inferred in square brackets. "
+               "Scope and content is a few plain sentences: who, what, where, when.\n\nReference and repository: ",
+               v.get("reference"), "\n\nThe item:\n", v.get("item"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("all nine ISAD(G) elements are there, each named; nothing is invented: unknowns say 'not known' and "
+                                      "inferred dates are in square brackets; dates are as the item gives them; scope and content says "
+                                      "who, what, where and when in plain sentences; the reference code is the one given"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           if_(B("rb_approve", TEXT=join("Save this catalogue entry?\n\n", B("rb_draft"))),
+               chain(B("rb_ask_first", {"WHAT": "files"}), B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="catalogue-entry"),
+                     B("rb_result")),
+               B("rb_finish_with", TEXT=join("Not saved. The entry, to edit yourself:\n\n", B("rb_draft")))))], v))
+
+
 def main() -> int:
     bad = []
     for name, data in PROGRAMS:
