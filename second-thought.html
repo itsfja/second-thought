@@ -2,7 +2,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<style>
+<style id="editor-css">
 /* Layout: workbench. Toolbar on top, block canvas left, run log right; stacks at phone width. */
 :root{
   --bg:#F3F4F8; --panel:#FFFFFF; --ink:#1B1E2B; --muted:#5D6278; --line:#DADDE8;
@@ -9102,7 +9102,7 @@ HOW TO MAP CODE
   })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@blockly/field-multilineinput@5.0.15/dist/index.js"></script>
-<script>
+<script id="editor">
 (function(){
   const $ = id => document.getElementById(id);
   const STORE_KEY = "reflection-blocks-program-v3";

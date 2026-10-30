@@ -466,7 +466,8 @@ A program doesn't update itself. To give it a newer runtime, import it on the pa
 
 | Path | What it is |
 |---|---|
-| `second-thought.html` | The page itself. |
+| `second-thought.html` | The page itself: its HTML, with everything below embedded by `tools/sync.py`. |
+| `web/editor.css`, `web/editor.js` | The editor's styles and code. `tools/sync.py` copies them into the page. |
 | `python/second_thought/` | The runtime that comes with every exported program, as a package of eight modules (below). |
 | `python/runtime.py` | The same runtime joined into one file, which every exported program gets a copy of. `tools/sync.py` builds it, so don't edit it by hand. |
 | `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
