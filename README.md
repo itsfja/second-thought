@@ -42,6 +42,8 @@ There are more categories down the left side of the screen.
 
 **Running.** Press **Run**. The **run log** on the right adds an entry as each block does its job, and a green box at the end shows the result. Under each step that asks a model something, a grey line says which model answered, how long it took and roughly how many tokens it used; click **Prompt sent** to see exactly what it was asked. Under the result is an estimate of the run's total tokens (on the page this is estimated from the length of the text; exported Python reports exact counts). **Save log** keeps every step, its timing and the result as a file. **Stop** stops everything at once.
 
+**With the keyboard, or a screen reader.** Every button, menu and panel works with **Tab** and **Enter**. When a run asks you something, the answer box takes the focus and a screen reader reads the question; **Ctrl+Enter** sends a typed answer. New steps in the run log, and the run's status, are read out as they happen. To build programs without a mouse, press the **?** button by the zoom buttons and turn on **Build programs with the keyboard** (or press **Ctrl+Shift+K** in the block editor): **T** opens the blocks, **W**, **A**, **S** and **D** move around, and **Enter** puts a block in or marks where the next one goes. The **?** panel lists every key, and the page remembers the choice. Where the cursor is, and which category or block is chosen, is read out.
+
 **Backups.** The **Model** menu picks the main model. **Backups**, next to it, lists spare models: if the main one can't answer (its key is missing, or the service is down), the first backup does that step instead, and the run log says so.
 
 ---

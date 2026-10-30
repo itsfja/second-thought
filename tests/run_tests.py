@@ -30,6 +30,7 @@ from e2e.describe import describe_tests  # noqa: E402
 from e2e.formats import format_tests  # noqa: E402
 from e2e.program_tests import program_test_tests  # noqa: E402
 from e2e.safety import safety_tests  # noqa: E402
+from e2e.access import access_tests  # noqa: E402
 
 
 AREAS = ("sources", "page", "i18n", "gallery", "python")
@@ -57,6 +58,7 @@ def main():
         asyncio.run(format_tests())
         asyncio.run(program_test_tests())
         asyncio.run(safety_tests())
+        asyncio.run(access_tests())
     if "i18n" in areas:
         asyncio.run(i18n_tests())
     if "gallery" in areas:

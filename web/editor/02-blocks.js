@@ -32,7 +32,7 @@
     const t = PAGE_T[s] || s;
     return vars ? t.replace(/\{(\w+)\}/g, (m, k) => k in vars ? String(vars[k]) : m) : t;
   }
-  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #io, #describe, main.main";
+  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #keys, #io, #describe, main.main";
   const PAGE_LATER = "script, style, select, textarea, #blockly, #gal-body, #ex-desc, #status, #lib-where, #mem-where";  // filled in by code
   const PAGE_ATTRS = ["title", "placeholder", "aria-label"];
   const RICH = new Set(["B", "I", "EM", "STRONG", "CODE"]);
@@ -61,7 +61,8 @@
     return keys;
   }
   const PAGE_KEYS = pageTexts(!!window.ST_I18N);
-  if (window.ST_I18N) document.documentElement.lang = window.ST_LANG;
+  // The page's language, for screen readers (and dates): in English, the browser's kind of English if it has one.
+  document.documentElement.lang = window.ST_I18N ? window.ST_LANG : (/^en(-|$)/i.test(navigator.language || "") ? navigator.language : "en");
   window.__pageI18n = () => ({ lang:window.ST_LANG || "en", keys:[...new Set(PAGE_KEYS)], missing:[...new Set(PAGE_KEYS)].filter(k => !PAGE_T[k]),
     categories:[...new Set(EXAMPLE_CATEGORIES.concat(window.__galleryGroups || []))] });
   function localizeToolbox(tb){
