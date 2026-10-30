@@ -11,6 +11,8 @@ async def new_feature_page_tests(pg):
     status = await pg.inner_text("#status")
     check(usage.startswith("About ") and "estimated" in usage and "tokens" in status,
           f"the result shows an estimated token count ({status} | {usage[:60]})")
+    check(re.search(r"At the models' list prices that's (about \$\d+\.\d\d|under \$0\.01); on this page it counts toward your Claude usage", usage),
+          f"and what that would cost at the models' list prices ({usage[-140:]})")
     budget = script(blk("rb_budget", inputs={"TOKENS": nm(5)}), add(val(blk("rb_ask", inputs={"TEXT": tx("first question")}))),
                     add(val(blk("rb_ask", inputs={"TEXT": tx("second question")}))))
     await load_state(pg, budget)

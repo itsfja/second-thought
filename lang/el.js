@@ -919,7 +919,10 @@
 "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.":"Τα <b>Ctrl+C</b>, <b>Ctrl+X</b> και <b>Ctrl+V</b> αντιγράφουν, αποκόπτουν και επικολλούν. Το <b>Shift</b> με <b>W</b>, <b>A</b>, <b>S</b> ή <b>D</b> κινείται στον κενό χώρο, και το <b>Esc</b> φεύγει από τα μπλοκ.",
 "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Ένας αναγνώστης οθόνης λέει πού είναι ο δρομέας. Παντού αλλού, το <b>Tab</b> πηγαίνει από κουμπί σε κουμπί. Όταν ένα πρόγραμμα σας ρωτά κάτι, το πλαίσιο απάντησης παίρνει την εστίαση, και το <b>Ctrl+Enter</b> στέλνει μια γραπτή απάντηση.",
 "Press the question mark button for keyboard help.":"Πατήστε το κουμπί με το ερωτηματικό για βοήθεια με το πληκτρολόγιο.",
-"Keyboard help":"Βοήθεια πληκτρολογίου"
+"Keyboard help":"Βοήθεια πληκτρολογίου",
+"about {cost}":"περίπου {cost}",
+"under {cost}":"κάτω από {cost}",
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Με τις τιμές καταλόγου των μοντέλων αυτό είναι {cost}· σε αυτή τη σελίδα μετρά στη χρήση σας του Claude."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1730,6 +1733,9 @@
 "New since then: {what}":"Νέο από τότε: {what}",
 "No longer: {what}":"Όχι πια: {what}",
 "What it can do is the same as before.":"Όσα μπορεί να κάνει είναι ίδια με πριν.",
-"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Τρέξτε το μία φορά εσείς και απαντήστε y (μια προγραμματισμένη εκτέλεση δεν ξεκινά μέχρι τότε)."
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Τρέξτε το μία φορά εσείς και απαντήστε y (μια προγραμματισμένη εκτέλεση δεν ξεκινά μέχρι τότε).",
+"about {cost}":"περίπου {cost}",
+"under {cost}":"κάτω από {cost}",
+"{cost} at list prices":"{cost} σε τιμές καταλόγου"
 }
 };

@@ -1407,7 +1407,10 @@
   "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.": "<b>Ctrl+C</b>、<b>Ctrl+X</b>、<b>Ctrl+V</b> でコピー、切り取り、貼り付けができます。<b>Shift</b> と <b>W</b>、<b>A</b>、<b>S</b>、<b>D</b> で空きスペースを移動し、<b>Esc</b> でブロックから出ます。",
   "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "スクリーンリーダーがカーソルの位置を読み上げます。ほかの場所では <b>Tab</b> でボタンを移動します。プログラムが質問すると答えの欄にフォーカスが移り、<b>Ctrl+Enter</b> で入力した答えを送ります。",
   "Press the question mark button for keyboard help.": "キーボードのヘルプは疑問符のボタンを押してください。",
-  "Keyboard help": "キーボードのヘルプ"
+  "Keyboard help": "キーボードのヘルプ",
+  "about {cost}": "約 {cost}",
+  "under {cost}": "{cost} 未満",
+  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "モデルの定価では {cost} です。このページでは代わりに Claude の利用分として数えられます。"
  },
  "examples": {
   "review": {
@@ -2850,6 +2853,9 @@
   "New since then: {what}": "新しくできること: {what}",
   "No longer: {what}": "できなくなったこと: {what}",
   "What it can do is the same as before.": "できることは前と同じです。",
-  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} 一度ご自分で実行して y と答えてください(それまで予定の実行は始まりません)。"
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} 一度ご自分で実行して y と答えてください(それまで予定の実行は始まりません)。",
+  "about {cost}": "約 {cost}",
+  "under {cost}": "{cost} 未満",
+  "{cost} at list prices": "定価で {cost}"
  }
 }

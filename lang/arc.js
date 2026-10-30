@@ -920,7 +920,10 @@
 "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.":"<b>Ctrl+C</b>‏, <b>Ctrl+X</b> ו־<b>Ctrl+V</b> מעתקין, גזרין ומדבקין. <b>Shift</b> עם <b>W</b>‏, <b>A</b>‏, <b>S</b> או <b>D</b> זע באתרא ריקנא, ו־<b>Esc</b> שבק לבנין.",
 "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"קרויא דמחזיתא אמר היכא סמנא. בכל אתר אחרנא, <b>Tab</b> זע בין כפתורין. כד תכניתא שאלא לך מדעם, תיבא דפתגמא נסבא חורא, ו־<b>Ctrl+Enter</b> שדר פתגמא כתיבא.",
 "Press the question mark button for keyboard help.":"דחוק כפתורא דסימן שאלתא לעדרנא דלוחא דמפתחין.",
-"Keyboard help":"עדרנא דלוחא דמפתחין"
+"Keyboard help":"עדרנא דלוחא דמפתחין",
+"about {cost}":"בערך {cost}",
+"under {cost}":"פחות מן {cost}",
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"בטימי כתיבי דדמותא הדא {cost}; בדפא הדא מתחשב בתשמשתכון דClaude."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1731,7 +1734,10 @@
 "New since then: {what}":"חדת מן כדו: {what}",
 "No longer: {what}":"לא עוד: {what}",
 "What it can do is the same as before.":"מא דיכלא למעבד הוא כקדמין.",
-"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} הפיכו לה זמנא חדא בנפשכון ואתיבו y (הפכא קביעא לא ישרא עד כדו)."
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} הפיכו לה זמנא חדא בנפשכון ואתיבו y (הפכא קביעא לא ישרא עד כדו).",
+"about {cost}":"בערך {cost}",
+"under {cost}":"פחות מן {cost}",
+"{cost} at list prices":"{cost} בטימי כתיבי"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

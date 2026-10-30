@@ -1408,7 +1408,10 @@
   "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.": "<b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> च प्रतिलिखन्ति, छिन्दन्ति, योजयन्ति च। <b>Shift</b> <b>W</b>, <b>A</b>, <b>S</b>, <b>D</b> वा सह रिक्तस्थाने चलति, <b>Esc</b> च खण्डान् त्यजति।",
   "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "पटलपाठकः सूचकः कुत्र इति वदति। अन्यत्र, <b>Tab</b> गण्डेषु चलति। यदा क्रमः त्वां किञ्चित् पृच्छति, उत्तरपेटिका ध्यानं लभते, <b>Ctrl+Enter</b> च लिखितम् उत्तरं प्रेषयति।",
   "Press the question mark button for keyboard help.": "कुञ्जीपटलसाहाय्याय प्रश्नचिह्नगण्डं नुद।",
-  "Keyboard help": "कुञ्जीपटलसाहाय्यम्"
+  "Keyboard help": "कुञ्जीपटलसाहाय्यम्",
+  "about {cost}": "प्रायः {cost}",
+  "under {cost}": "{cost} तः न्यूनम्",
+  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "प्रतिमानानां सूचीमूल्येन तत् {cost}; अस्मिन् पृष्ठे तु तव Claude-उपयोगे गण्यते।"
  },
  "examples": {
   "review": {
@@ -2851,7 +2854,10 @@
   "New since then: {what}": "ततः परं नूतनम्: {what}",
   "No longer: {what}": "न पुनः: {what}",
   "What it can do is the same as before.": "यत् कर्तुं शक्नोति तत् पूर्ववत् एव।",
-  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} स्वयम् एकवारं चालय y इति च उत्तरय (तावत् नियतचालनं न आरभते)।"
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} स्वयम् एकवारं चालय y इति च उत्तरय (तावत् नियतचालनं न आरभते)।",
+  "about {cost}": "प्रायः {cost}",
+  "under {cost}": "{cost} तः न्यूनम्",
+  "{cost} at list prices": "सूचीमूल्येन {cost}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

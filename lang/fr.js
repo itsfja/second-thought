@@ -919,7 +919,10 @@
 "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.":"<b>Ctrl+C</b>, <b>Ctrl+X</b> et <b>Ctrl+V</b> copient, coupent et collent. <b>Maj</b> avec <b>W</b>, <b>A</b>, <b>S</b> ou <b>D</b> se déplace dans l'espace vide, et <b>Échap</b> quitte les blocs.",
 "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Un lecteur d'écran annonce où se trouve le curseur. Partout ailleurs, <b>Tab</b> passe d'un bouton à l'autre. Quand un programme vous pose une question, la zone de réponse reçoit le focus, et <b>Ctrl+Entrée</b> envoie une réponse tapée.",
 "Press the question mark button for keyboard help.":"Appuyez sur le bouton point d'interrogation pour l'aide au clavier.",
-"Keyboard help":"Aide au clavier"
+"Keyboard help":"Aide au clavier",
+"about {cost}":"environ {cost}",
+"under {cost}":"moins de {cost}",
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Aux prix catalogue des modèles, cela fait {cost} ; sur cette page, cela compte plutôt dans votre utilisation de Claude."
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -1730,6 +1733,9 @@
 "New since then: {what}":"Nouveau depuis : {what}",
 "No longer: {what}":"Plus maintenant : {what}",
 "What it can do is the same as before.":"Ce qu'il peut faire est le même qu'avant.",
-"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Lancez-le une fois vous-même et répondez y (une exécution planifiée ne démarrera pas avant)."
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Lancez-le une fois vous-même et répondez y (une exécution planifiée ne démarrera pas avant).",
+"about {cost}":"environ {cost}",
+"under {cost}":"moins de {cost}",
+"{cost} at list prices":"{cost} aux prix catalogue"
 }
 };

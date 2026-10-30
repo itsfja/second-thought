@@ -16,7 +16,7 @@ import re
 import sys
 import time
 from .settings import RUNTIME_VERSION, WHERE_KEYS
-from .providers import ModelCalls, model_label
+from .providers import ModelCalls, call_cost, model_label, money
 from .core import (BUDGET, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
     _locked, _need_picture, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js,
@@ -67,6 +67,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.reflect = None          # the review loop running now: earlier problems and its best draft so far
         self.checkpoints = {}        # 'save checkpoint' snapshots, by name
         self.usage = {}  # provider -> [tokens in, tokens out]
+        self.cost = [0.0, True]      # what the run's model calls cost in US dollars, and whether every one had a known price
         self.budget = BUDGET          # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
         self.trace = []              # every log line, for save_log
@@ -174,6 +175,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             return text
         finally:
             after = [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
+            if after != before:
+                cost = call_cost(t, after[0] - before[0], after[1] - before[1])
+                self.cost = [self.cost[0] + (cost or 0), self.cost[1] and cost is not None]
             self._pending.append({"who": model_label(t), "secs": time.monotonic() - start, "in": after[0] - before[0],
                                   "out": after[1] - before[1], "ok": ok, "prompt": self._prompt_text(prompt, history, picture)})
 
@@ -1328,8 +1332,15 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         spare = (" · " + (tr("a backup answered 1 step") if self.backup_used == 1 else tr("a backup answered {n} steps", n=self.backup_used))
                  if self.backup_used else "")
         budget = " · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else ""
-        print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}", flush=True)
+        print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}{self.cost_text()}", flush=True)
         return 0
+
+    def cost_text(self):
+        """' · about $0.03 at list prices' for the end line, or '' when nothing was charged or a model's price isn't known."""
+        spent, known = self.cost
+        if not known or not self.usage or not spent:
+            return ""
+        return " · " + tr("{cost} at list prices", cost=money(spent))
 
     def save_log(self):
         """With save_log = yes in second-thought.ini, writes this run's log to logs/<program>-<date>-<time>.md."""
@@ -1344,6 +1355,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                  f"- Model calls: {self.calls}"]
         for who, u in self.usage.items():
             lines.append(f"- {who}: {u[0]:,} tokens in, {u[1]:,} out")
+        if self.cost_text():
+            lines.append(f"- Cost: {self.cost_text()[3:]}")
         if self.budget:
             lines.append(f"- Budget: {self.budget:,} tokens")
         if self.error:

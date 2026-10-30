@@ -121,7 +121,9 @@ CI never runs it.
   [Development and tests](README.md#development-and-tests).
 - **Model names:** services retire models. `python tools/smoke_test.py models` lists, for each service you have a
   key for, the tiers whose model it no longer lists (it only reads the model list, so it's free). Update those
-  names in `SERVICES`, and add a line to `CHANGELOG.md`.
+  names in `SERVICES`, and add a line to `CHANGELOG.md`. It also lists services whose `prices` were checked more than 90
+  days ago: look them up at `prices_source` and update `prices` and `prices_checked`. A tier's model with no price
+  just shows no cost, so add one only from the service's own price list, or a source you'd trust as much.
 - **What always asks** (unlocking, opening and disarming, the agent tools that ask, what a fooled agent can't do
   unasked): edit `SAFETY` in `python/second_thought/core.py`, then run `tools/sync.py`, which copies it into the page.
   Both sides read that one list, and `tests/e2e/safety.py` checks they give the same answers.

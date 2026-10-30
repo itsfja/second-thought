@@ -920,7 +920,10 @@
 "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.":"<b>Ctrl+C</b>, <b>Ctrl+X</b> 𒌑 <b>Ctrl+V</b> 𒄿𒊭𒀜𒁕𒊒, 𒄿𒈾𒀝𒆠𒋢 𒌑 𒄿𒊭𒀝𒅗𒉡. <b>Shift</b> 𒀉𒋾 <b>W</b>, <b>A</b>, <b>S</b> 𒌑𒇻 <b>D</b> 𒄿𒈾 𒀸𒊑𒅎 𒊑𒆠𒅎 𒀉𒋫𒈾𒀠𒆷𒀝, 𒌑 <b>Esc</b> 𒇷𒅁𒈾𒋾𒅎 𒌑𒈠𒀸𒊭𒅈.",
 "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"𒊭𒋢𒌝 𒀀𒊭𒅈 𒋡𒀭 𒌅𒌒𒁉𒅎 𒄿𒋡𒀊𒁉. 𒄿𒈾 𒀸𒊑𒅎 𒊭𒉌𒅎, <b>Tab</b> 𒄿𒈾 𒁉𒊑𒀉 𒅖𒁲 𒅋𒆷𒀝. 𒄿𒉡𒈠 𒉈𒁉𒋗𒌝 𒈪𒅎𒈠 𒄿𒊭𒀠𒅗, 𒌅𒌒𒅆𒅅𒆪𒌝 𒊭 𒀀𒁉𒅋𒋾𒅎 𒊻𒈾𒄠 𒄿𒇷𒅅𒆠, 𒌑 <b>Ctrl+Enter</b> 𒀀𒁉𒅋𒋫𒄠 𒊭𒁲𒅕𒋫𒄠 𒄿𒊭𒀊𒉺𒅈.",
 "Press the question mark button for keyboard help.":"𒅖𒁕 𒅆𒇷𒅎 𒈠𒄩𒊍 𒀀𒈾 𒋫𒀊𒁍𒋾𒅎 𒊭 𒌅𒌒𒁉 𒋡𒋾𒅎.",
-"Keyboard help":"𒋫𒀊𒁍𒌅𒌝 𒊭 𒌅𒌒𒁉 𒋡𒋾𒅎"
+"Keyboard help":"𒋫𒀊𒁍𒌅𒌝 𒊭 𒌅𒌒𒁉 𒋡𒋾𒅎",
+"about {cost}":"𒆠𒈠 {cost}",
+"under {cost}":"𒂊𒇷 {cost} 𒈬𒌅",
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"𒄿𒈾 𒅆𒈪𒅎 𒊭𒀜𒊑𒅎 𒊭 𒋫𒄠𒅆𒆷𒋾𒅎 {cost}; 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒀀𒈾 𒂊𒁉𒅖𒋾𒅗 𒊭 Claude 𒅎𒈠𒀭𒉡."
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1731,7 +1734,10 @@
 "New since then: {what}":"eššum ištu inanna: {what}",
 "No longer: {what}":"ul šanîš: {what}",
 "What it can do is the same as before.":"ša epēšam ile''û kīma pānîšu.",
-"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} ištēnšu attā šūṣišu u y apul (epištum ša simānim adi inanna ul iššarri)."
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} ištēnšu attā šūṣišu u y apul (epištum ša simānim adi inanna ul iššarri).",
+"about {cost}":"kīma {cost}",
+"under {cost}":"eli {cost} mūṭu",
+"{cost} at list prices":"{cost} ina šīmim šaṭrim"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

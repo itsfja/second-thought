@@ -256,7 +256,7 @@
     for (let n = 0; n < tiers.length; n++) {
       if (n) addStep("Backup", { mono:true, text:tr("{model} failed: {problem}\nTrying {next} instead.", { model:tierLabel(tiers[n - 1]), problem:String((last && last.message) || last).slice(0, 160), next:tierLabel(tiers[n]) }) }).done("backup", "warn");
       const t0 = performance.now(), tin = estTokens(prompt) + (images ? images.length * 1600 : 0);
-      const note = (ok, out) => { if (step && step.call) step.call({ who:tierLabel(tiers[n]), ms:performance.now() - t0, tin, tout:ok ? estTokens(out) : 0, ok, prompt:promptText(prompt, images) }); };
+      const note = (ok, out) => { addCost(tiers[n], tin, ok ? estTokens(out) : 0); if (step && step.call) step.call({ who:tierLabel(tiers[n]), ms:performance.now() - t0, tin, tout:ok ? estTokens(out) : 0, ok, prompt:promptText(prompt, images) }); };
       try {
         const got = await askOn(tiers[n], prompt, step, mode, images, sample);
         const out = mode === "json" ? got : got.text;
@@ -283,7 +283,7 @@
     let more;
     try { more = await askOn(tier, turns, step, "text", null, sample); }
     finally { if (step) step.prefix = ""; }
-    run.tokIn += estTokens(turns); run.tokOut += estTokens(more.text);
+    run.tokIn += estTokens(turns); run.tokOut += estTokens(more.text); addCost(tier, estTokens(turns), estTokens(more.text));
     if (step && step.call) step.call({ who:tierLabel(tier), ms:performance.now() - t0, tin:estTokens(turns), tout:estTokens(more.text), ok:true, prompt:promptText(turns) });
     const joined = text + more.text;  // the continuation picks up exactly where the first part stopped
     if (step) step.text(joined);
@@ -323,10 +323,22 @@
   }
   const tokensUsed = () => run ? run.tokIn + run.tokOut : 0;
   const fmtTokens = n => n >= 10000 ? Math.round(n / 1000) + "k" : n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
+  /* What the run would cost at the models' list prices (SERVICES' "prices", US dollars per million tokens). On this page
+     Claude answers for every model, so that's the price used for another service's tier of the same size. */
+  const PRICES = {};
+  SERVICES.forEach(s => Object.keys(s.tiers).forEach(k => { const p = s.prices && s.prices[s.tiers[k][0]]; if (p) PRICES[s.prefix + k] = p; }));
+  function addCost(tier, tin, tout){
+    const p = PRICES[isElsewhere(tier) ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier];
+    if (!p) { run.costKnown = false; return; }
+    run.cost += (tin * p[0] + tout * p[1]) / 1e6;
+  }
+  // 'about $0.03' or 'under $0.01'. Matches the runtime's money().
+  const money = d => d < 0.005 ? tr("under {cost}", { cost:"$0.01" }) : tr("about {cost}", { cost:"$" + d.toFixed(2) });
   function usageLine(){
     if (!run || !run.calls) return "";
     return "About " + tokensUsed().toLocaleString() + " tokens (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from the length of the text. Exported Python reports exact counts." +
-      (run.budget ? " Budget: " + run.budget.toLocaleString() + "." : "");
+      (run.budget ? " Budget: " + run.budget.toLocaleString() + "." : "") +
+      (run.costKnown && run.cost ? " " + tr("At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.", { cost:money(run.cost) }) : "");
   }
 
   /* 'ask me before …': returns true if the action may go ahead. */

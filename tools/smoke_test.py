@@ -8,7 +8,7 @@ and a real tool call, and which JSON mode every other service accepts.
 
     python tools/smoke_test.py              # every service with a key
     python tools/smoke_test.py claude       # only the services whose names contain these words
-    python tools/smoke_test.py models       # only which model names the services no longer list (free)
+    python tools/smoke_test.py models       # only which model names the services no longer list, and prices to look up again (free)
     python tools/smoke_test.py gallery      # run every gallery program once (see tools/smoke_gallery.py)
 
 Keys come from the environment or a second-thought.ini (in this folder, the current folder or your home folder),
@@ -17,6 +17,7 @@ pence; the tokens used are printed at the end. Llama is checked only if LLAMA_BA
 set up (GitHub, Telegram, email, calendar, news feeds, Homey) are checked by reading only: nothing is sent, posted or switched.
 """
 import asyncio
+import datetime
 import contextlib
 import io
 import os
@@ -205,8 +206,21 @@ async def check_connections(want):
         report("Telegram", "your chat", "NOTE", "no TELEGRAM_CHAT_ID yet: message your bot, then run a Telegram program to see your chat number")
 
 
+def check_prices(want, today=None):
+    """Prices in SERVICES looked up more than 90 days ago: services change them, so the run's cost would drift. Free."""
+    today = today or datetime.date.today()
+    for s in SERVICES:
+        if not want(s["name"]) or not s.get("prices"):
+            continue
+        age = (today - datetime.date.fromisoformat(s["prices_checked"])).days
+        if age > 90:
+            report(s["name"], "prices", "NOTE", f"checked {age} days ago ({s['prices_checked']}). Look them up again at "
+                   f"{s['prices_source']} and update prices and prices_checked in SERVICES")
+
+
 async def check_models(want):
     """For each service with a key, the tiers whose model the service no longer lists: what to update in SERVICES."""
+    check_prices(want)
     R = fresh("quick")
     for s in SERVICES:
         name = s["name"]
@@ -237,7 +251,7 @@ async def main(only):
     if only == ["models"]:
         print("Second Thought: checking the model names in SERVICES\n", flush=True)
         await check_models(lambda name: True)
-        print(f"\n{sum(r[2] == 'NOTE' for r in results)} model(s) to look at.")
+        print(f"\n{sum(r[2] == 'NOTE' for r in results)} thing(s) to look at.")
         return 0
     want = lambda name: not only or any(w in name.lower() for w in only)  # noqa: E731
     print("Second Thought: checking the real services\n", flush=True)
