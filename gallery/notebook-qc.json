@@ -1,0 +1,305 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "notebook-qc",
+  "gallery": {
+    "title": "Notebook QC",
+    "category": "coding",
+    "description": "Paste a protocol, then choose a lab notebook entry. Claude checks the entry against each step in turn: done as written, changed (and whether the change was recorded), or missing, quoting the entry. Then the three things to fix first.",
+    "tip": "Paste the protocol's numbered steps. It checks what was written down; it can't check what was done.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_protocol",
+        "name": "protocol"
+      },
+      {
+        "id": "g_entry",
+        "name": "entry"
+      },
+      {
+        "id": "g_step",
+        "name": "step"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_ask_me",
+              "inputs": {
+                "TEXT": {
+                  "shadow": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Paste the protocol's steps"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_protocol"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_ask_list",
+                        "inputs": {
+                          "TEXT": {
+                            "block": {
+                              "type": "text_join",
+                              "inputs": {
+                                "ADD0": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "List each separate step of this lab protocol, in its own words, one per item, keeping any quantities, times and temperatures:\n\n"
+                                    }
+                                  }
+                                },
+                                "ADD1": {
+                                  "block": {
+                                    "type": "rb_answer"
+                                  }
+                                }
+                              },
+                              "extraState": {
+                                "itemCount": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_entry"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_file_choose"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "controls_forEach",
+                          "fields": {
+                            "VAR": {
+                              "id": "g_step"
+                            }
+                          },
+                          "inputs": {
+                            "LIST": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_protocol"
+                                  }
+                                }
+                              }
+                            },
+                            "DO": {
+                              "block": {
+                                "type": "rb_set_draft",
+                                "inputs": {
+                                  "TEXT": {
+                                    "block": {
+                                      "type": "rb_ask",
+                                      "inputs": {
+                                        "TEXT": {
+                                          "block": {
+                                            "type": "text_join",
+                                            "inputs": {
+                                              "ADD0": {
+                                                "shadow": {
+                                                  "type": "rb_longtext",
+                                                  "fields": {
+                                                    "TEXT": "Does this lab notebook entry record this protocol step? Say DONE, CHANGED or MISSING. Quote the part of the entry that records it. For CHANGED, say what differs (a quantity, time, temperature, reagent or order) and whether the entry gives a reason. Don't assume anything the entry doesn't say.\n\nStep: "
+                                                  }
+                                                }
+                                              },
+                                              "ADD1": {
+                                                "block": {
+                                                  "type": "variables_get",
+                                                  "fields": {
+                                                    "VAR": {
+                                                      "id": "g_step"
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "ADD2": {
+                                                "shadow": {
+                                                  "type": "rb_longtext",
+                                                  "fields": {
+                                                    "TEXT": "\n\nNotebook entry:\n"
+                                                  }
+                                                }
+                                              },
+                                              "ADD3": {
+                                                "block": {
+                                                  "type": "variables_get",
+                                                  "fields": {
+                                                    "VAR": {
+                                                      "id": "g_entry"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "extraState": {
+                                              "itemCount": 4
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "next": {
+                                  "block": {
+                                    "type": "rb_reflect",
+                                    "inputs": {
+                                      "CRITERIA": {
+                                        "shadow": {
+                                          "type": "rb_longtext",
+                                          "fields": {
+                                            "TEXT": "quotes the entry word for word, or says nothing in it records the step; the verdict fits the quote; a change names the quantity, time, temperature or reagent that differs; says whether a reason was recorded; invents nothing"
+                                          }
+                                        }
+                                      },
+                                      "ROUNDS": {
+                                        "shadow": {
+                                          "type": "math_number",
+                                          "fields": {
+                                            "NUM": 2
+                                          }
+                                        }
+                                      },
+                                      "FIX": {
+                                        "block": {
+                                          "type": "rb_revise"
+                                        }
+                                      }
+                                    },
+                                    "next": {
+                                      "block": {
+                                        "type": "rb_add_result",
+                                        "inputs": {
+                                          "TEXT": {
+                                            "block": {
+                                              "type": "text_join",
+                                              "inputs": {
+                                                "ADD0": {
+                                                  "block": {
+                                                    "type": "variables_get",
+                                                    "fields": {
+                                                      "VAR": {
+                                                        "id": "g_step"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "ADD1": {
+                                                  "shadow": {
+                                                    "type": "rb_longtext",
+                                                    "fields": {
+                                                      "TEXT": "\n"
+                                                    }
+                                                  }
+                                                },
+                                                "ADD2": {
+                                                  "block": {
+                                                    "type": "rb_draft"
+                                                  }
+                                                }
+                                              },
+                                              "extraState": {
+                                                "itemCount": 3
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_add_result",
+                              "inputs": {
+                                "TEXT": {
+                                  "block": {
+                                    "type": "rb_ask",
+                                    "inputs": {
+                                      "TEXT": {
+                                        "block": {
+                                          "type": "text_join",
+                                          "inputs": {
+                                            "ADD0": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "From these checks of a lab notebook entry against its protocol, give the three things most worth fixing or writing down, most important first: unrecorded changes before missing steps.\n\n"
+                                                }
+                                              }
+                                            },
+                                            "ADD1": {
+                                              "block": {
+                                                "type": "rb_result_text"
+                                              }
+                                            }
+                                          },
+                                          "extraState": {
+                                            "itemCount": 2
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}

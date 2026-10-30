@@ -1225,6 +1225,81 @@ add(program(
                chain(B("rb_ask_first", {"WHAT": "files"}), B("rb_file_save", {"EXT": "md"}, VALUE=B("rb_draft"), NAME="catalogue-entry"),
                      B("rb_result")),
                B("rb_finish_with", TEXT=join("Not saved. The entry, to edit yourself:\n\n", B("rb_draft")))))], v))
+# ----- Small research labs (#203): the protocol, the instrument's ranges, the group's own work -----
+v = Vars("protocol", "entry", "step")
+add(program(
+    "notebook-qc", "Notebook QC", "coding",
+    "Paste a protocol, then choose a lab notebook entry. Claude checks the entry against each step in turn: done as written, "
+    "changed (and whether the change was recorded), or missing, quoting the entry. Then the three things to fix first.",
+    "Paste the protocol's numbered steps. It checks what was written down; it can't check what was done.",
+    [chain(hat("rb_start"),
+           B("rb_ask_me", TEXT=L("Paste the protocol's steps")),
+           v.set("protocol", B("rb_ask_list", TEXT=join("List each separate step of this lab protocol, in its own words, one per item, "
+                                                         "keeping any quantities, times and temperatures:\n\n", B("rb_answer")))),
+           v.set("entry", B("rb_file_choose")),
+           B("controls_forEach", {"VAR": {"id": v.ids["step"]}}, LIST=v.get("protocol"),
+             DO=chain(B("rb_set_draft", TEXT=B("rb_ask", TEXT=join(
+                          "Does this lab notebook entry record this protocol step? Say DONE, CHANGED or MISSING. Quote the part of the "
+                          "entry that records it. For CHANGED, say what differs (a quantity, time, temperature, reagent or order) and "
+                          "whether the entry gives a reason. Don't assume anything the entry doesn't say.\n\nStep: ", v.get("step"),
+                          "\n\nNotebook entry:\n", v.get("entry")))),
+                      B("rb_reflect", CRITERIA=L("quotes the entry word for word, or says nothing in it records the step; the verdict "
+                                                 "fits the quote; a change names the quantity, time, temperature or reagent that differs; "
+                                                 "says whether a reason was recorded; invents nothing"),
+                        ROUNDS=2, FIX=B("rb_revise")),
+                      B("rb_add_result", TEXT=join(v.get("step"), "\n", B("rb_draft"))))),
+           B("rb_add_result", TEXT=B("rb_ask", TEXT=join(
+               "From these checks of a lab notebook entry against its protocol, give the three things most worth fixing or writing "
+               "down, most important first: unrecorded changes before missing steps.\n\n", B("rb_result_text")))),
+           B("rb_result"))], v))
+
+v = Vars("ranges", "log")
+add(program(
+    "instrument-ranges", "Instrument ranges", "coding",
+    "Choose an instrument's log (a CSV or text export). Claude lists every reading outside the ranges you set, with its time, "
+    "and checks nothing in range was flagged. Then a line on any pattern, like a drift through the day.",
+    "Put your instruments' ranges in the first block, one per line, with units. Long logs: export a day at a time.",
+    [chain(hat("rb_start"),
+           v.set("ranges", B("rb_longtext", {"TEXT": "Incubator temperature: 36.5 to 37.5 °C\n"
+                                                    "CO2: 4.5 to 5.5 %\n"
+                                                    "Humidity: 90 to 98 %"})),
+           v.set("log", B("rb_file_choose")),
+           B("rb_task", TEXT=join(
+               "This is an instrument log. Using these expected ranges, list every reading outside its range: the time (or row), the "
+               "measurement, the value as logged, and the range it's outside. Readings with no range set are ignored. Then one line "
+               "on any pattern among them (a drift, a time of day, one sensor), or say there's none. If every reading is in range, "
+               "say so in one line.\n\nRanges:\n", v.get("ranges"), "\n\nLog:\n", v.get("log"))),
+           B("rb_generate"),
+           B("rb_reflect", CRITERIA=L("every reading listed is really outside its range, with its value quoted as logged; each gives its "
+                                      "time or row and the range; units match the ranges; nothing in range is listed; the pattern line "
+                                      "is backed by the readings listed"),
+             ROUNDS=3, FIX=B("rb_revise")),
+           B("rb_result"))], v))
+
+v = Vars("group", "papers", "mentions")
+add(program(
+    "group-digest", "Group digest", "coding",
+    "Each Monday, the week's new preprints from your arXiv feeds by people in your group, and new mentions of your group's work "
+    "found on the web, in one short digest. Asks before emailing it.",
+    "Put the group's names in the first block and your arXiv feeds in second-thought.ini (feeds = …). Change the address.",
+    start_and(msg="digest") + [on_day("Monday", 8, 0, "digest"), receive(
+        "digest",
+        v.set("group", B("text", {"TEXT": "Ada Lovelace, Charles Babbage; the Analytical Engine group"})),
+        v.set("papers", B("rb_feed_news", URL="")),
+        v.set("mentions", B("rb_web_search", TEXT=join("new citations or mentions this week of papers by ", v.get("group")))),
+        B("rb_task", TEXT=join(
+            "Write this week's digest for a small research group: ", v.get("group"), ".\n\nFirst, new preprints from the feeds "
+            "below with at least one of these people as an author: title, authors, link, and one plain sentence on what it's about. "
+            "Then new citations or mentions of the group's work from the web search: who mentioned it, where (with the link) and "
+            "what they said in a sentence. Leave out anything not by or about the group. If there's nothing in a section, say so "
+            "in one line.\n\nFeeds:\n", v.get("papers"), "\n\nWeb search:\n", v.get("mentions"))),
+        B("rb_generate"),
+        B("rb_review", CRITERIA=L("only papers with a group member as an author; every item has its link; mentions say who and where; "
+                                  "nothing invented that isn't in the feeds or the search; under 400 words")),
+        if_(B("logic_negate", BOOL=B("rb_passed")), B("rb_revise")),
+        B("rb_ask_first", {"WHAT": "messages"}),
+        email_me("This week's group digest", B("rb_draft")),
+        B("rb_result"))], v))
 
 
 def main() -> int:

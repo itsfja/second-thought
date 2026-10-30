@@ -1,0 +1,163 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "instrument-ranges",
+  "gallery": {
+    "title": "Instrument ranges",
+    "category": "coding",
+    "description": "Choose an instrument's log (a CSV or text export). Claude lists every reading outside the ranges you set, with its time, and checks nothing in range was flagged. Then a line on any pattern, like a drift through the day.",
+    "tip": "Put your instruments' ranges in the first block, one per line, with units. Long logs: export a day at a time.",
+    "author": "itsfja",
+    "runtime": "2.2.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_ranges",
+        "name": "ranges"
+      },
+      {
+        "id": "g_log",
+        "name": "log"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_ranges"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_longtext",
+                    "fields": {
+                      "TEXT": "Incubator temperature: 36.5 to 37.5 °C\nCO2: 4.5 to 5.5 %\nHumidity: 90 to 98 %"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_log"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_file_choose"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_task",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "This is an instrument log. Using these expected ranges, list every reading outside its range: the time (or row), the measurement, the value as logged, and the range it's outside. Readings with no range set are ignored. Then one line on any pattern among them (a drift, a time of day, one sensor), or say there's none. If every reading is in range, say so in one line.\n\nRanges:\n"
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_ranges"
+                                    }
+                                  }
+                                }
+                              },
+                              "ADD2": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "\n\nLog:\n"
+                                  }
+                                }
+                              },
+                              "ADD3": {
+                                "block": {
+                                  "type": "variables_get",
+                                  "fields": {
+                                    "VAR": {
+                                      "id": "g_log"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 4
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_generate",
+                          "next": {
+                            "block": {
+                              "type": "rb_reflect",
+                              "inputs": {
+                                "CRITERIA": {
+                                  "shadow": {
+                                    "type": "rb_longtext",
+                                    "fields": {
+                                      "TEXT": "every reading listed is really outside its range, with its value quoted as logged; each gives its time or row and the range; units match the ranges; nothing in range is listed; the pattern line is backed by the readings listed"
+                                    }
+                                  }
+                                },
+                                "ROUNDS": {
+                                  "shadow": {
+                                    "type": "math_number",
+                                    "fields": {
+                                      "NUM": 3
+                                    }
+                                  }
+                                },
+                                "FIX": {
+                                  "block": {
+                                    "type": "rb_revise"
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_result"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        }
+      ]
+    }
+  }
+}
