@@ -421,7 +421,8 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
                  "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
-                 "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE"}
+                 "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
+                 "keychain": "RB_KEYCHAIN"}
 
 
 def _load_settings():
@@ -444,10 +445,47 @@ def _load_settings():
             key = SETTING_NAMES.get(name.lower(), name.upper())
             if value and not os.environ.get(key):
                 os.environ[key] = value
+                KEY_SOURCES[key] = "file"
     return path
 
 
+# Where each key came from, for --doctor: "environment", "file" (second-thought.ini) or "keychain".
+KEY_SOURCES = {k: "environment" for k in os.environ}
 SETTINGS_PATH = _load_settings()
+
+# ----- Keychain (optional) -----
+# Keys can live in your computer's keychain (macOS Keychain, Windows Credential Manager, the Secret Service on Linux)
+# instead of second-thought.ini, if the keyring package is installed:  pip install keyring  then, for each key,
+#   python -m keyring set second-thought ANTHROPIC_API_KEY
+# A key in the environment or second-thought.ini wins over the keychain. Without keyring, nothing changes.
+KEYCHAIN_SERVICE = "second-thought"
+KEYCHAIN_NAMES = (
+    "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
+    "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
+    "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET")
+
+
+def _load_keychain():
+    """Fills in keys missing from the environment and second-thought.ini from the keychain. Gives back the problem, if
+    keyring is installed but couldn't be read (no keychain on this computer, say); None otherwise."""
+    import importlib.util
+    if os.environ.get("RB_KEYCHAIN", "").strip().lower() in ("no", "0", "false", "off") or importlib.util.find_spec("keyring") is None:
+        return None
+    try:
+        import keyring
+        for name in KEYCHAIN_NAMES:
+            if not os.environ.get(name):
+                value = keyring.get_password(KEYCHAIN_SERVICE, name)
+                if value:
+                    os.environ[name] = value.strip()
+                    KEY_SOURCES[name] = "keychain"
+    except Exception as e:  # noqa: BLE001 - a keychain that can't be read must never stop a program
+        return f"{type(e).__name__}: {e}"
+    return None
+
+
+KEYCHAIN_PROBLEM = _load_keychain()
 
 
 # ----- Language -----
@@ -5161,6 +5199,13 @@ class Doctor:
         row("ok" if sys.version_info >= (3, 9) else "FAIL", "Python", sys.version.split()[0] + ("" if sys.version_info >= (3, 9) else ": " + tr("Second Thought needs 3.9 or newer")))
         row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=SETTINGS_PATH) if SETTINGS_PATH else
             tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
+        found = [(k, KEY_SOURCES.get(k)) for k in KEYCHAIN_NAMES if os.environ.get(k)]
+        where = {"environment": tr("the environment"), "file": "second-thought.ini", "keychain": tr("the keychain")}
+        if found:
+            row("ok", "Keys", ", ".join(f"{k} ({where.get(src) or where['environment']})" for k, src in found))
+        if KEYCHAIN_PROBLEM:
+            row("NOTE", "Keychain", tr("keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the "
+                                      "environment and second-thought.ini", problem=_short(KEYCHAIN_PROBLEM, 120)))
         names = list(can.get("services", [])) if known else ["Claude"] + [s["name"] for s in SERVICES
                                                                           if s["name"] != "Claude" and any(os.environ.get(k) for k in s["keys"])]
         services = [s for s in SERVICES if s["name"] in names]

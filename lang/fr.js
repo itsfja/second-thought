@@ -1653,6 +1653,11 @@
 "Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"Ce n'est pas l'heure du script planifié {n} ({time}, {days}), donc rien n'a été lancé.",
 "weekdays":"en semaine",
 "weekends":"le week-end",
-"every day":"tous les jours"
+"every day":"tous les jours",
+"the environment":"l'environnement",
+"the keychain":"le trousseau",
+"Keys":"Clés",
+"Keychain":"Trousseau",
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring est installé mais le trousseau n'a pas pu être lu ({problem}), donc les clés viennent seulement de l'environnement et de second-thought.ini"
 }
 };

@@ -1654,6 +1654,11 @@
 "Not time for scheduled script {n} ({time}, {days}), so nothing was run.":"עוד לא הגיע הזמן של תסריט מתוזמן {n} ({time}, {days}), אז לא הורץ כלום.",
 "weekdays":"בימי חול",
 "weekends":"בסופי שבוע",
-"every day":"כל יום"
+"every day":"כל יום",
+"the environment":"הסביבה",
+"the keychain":"מחזיק המפתחות",
+"Keys":"מפתחות",
+"Keychain":"מחזיק מפתחות",
+"keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini":"keyring מותקן אבל לא ניתן היה לקרוא את מחזיק המפתחות ({problem}), אז מפתחות מגיעים רק מהסביבה ומ-second-thought.ini"
 }
 };

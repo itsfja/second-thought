@@ -2773,7 +2773,12 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Οὔπω καιρὸς τοῦ τεταγμένου γράμματος {n} ({time}, {days}), ὥστ᾽ οὐδὲν ἔδραμεν.",
   "weekdays": "ἐν ταῖς ἡμέραις τῶν ἔργων",
   "weekends": "ἐν τῷ τέλει τῆς ἑβδομάδος",
-  "every day": "καθ᾽ ἡμέραν"
+  "every day": "καθ᾽ ἡμέραν",
+  "the environment": "τοῦ περιβάλλοντος",
+  "the keychain": "τῆς κλειδοθήκης",
+  "Keys": "Κλεῖδες",
+  "Keychain": "Κλειδοθήκη",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "τὸ keyring ἐγκατέστηται, ἀλλ᾽ ἡ κλειδοθήκη οὐκ ἀνεγνώσθη ({problem}), ὥστε αἱ κλεῖδες ἐκ τοῦ περιβάλλοντος καὶ τοῦ second-thought.ini μόνον ἔρχονται"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

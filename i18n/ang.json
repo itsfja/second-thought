@@ -2773,7 +2773,12 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Nis gīet tīma for tīdsettum gewrite {n} ({time}, {days}), forþon nāht ne arn.",
   "weekdays": "on weorcdagum",
   "weekends": "on wucan ende",
-  "every day": "ælce dæge"
+  "every day": "ælce dæge",
+  "the environment": "þǣre ymbhwyrfte",
+  "the keychain": "þǣre cǣgcyste",
+  "Keys": "Cǣga",
+  "Keychain": "Cǣgcyst",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring is geseted ac sēo cǣgcyst ne mihte bēon geræd ({problem}), forþon cumaþ cǣga āna of þǣre ymbhwyrfte and second-thought.ini"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

@@ -2773,6 +2773,11 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "No es la hora del guion programado {n} ({time}, {days}), así que no se ejecutó nada.",
   "weekdays": "entre semana",
   "weekends": "los fines de semana",
-  "every day": "todos los días"
+  "every day": "todos los días",
+  "the environment": "el entorno",
+  "the keychain": "el llavero",
+  "Keys": "Claves",
+  "Keychain": "Llavero",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring está instalado pero no se pudo leer el llavero ({problem}), así que las claves solo vienen del entorno y de second-thought.ini"
  }
 }

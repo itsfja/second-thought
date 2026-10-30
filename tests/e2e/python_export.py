@@ -56,6 +56,17 @@ def doctor_tests(codes, env, tmp, llama_url, llama_calls, ha_calls):
     check(r.returncode == 1 and "  FAIL  Claude: refused the key (401). Check ANTHROPIC_API_KEY" in r.stdout
           and "  FAIL  Home Assistant:" in r.stdout and "2 problems to fix" in r.stdout,
           f"a refused key and a wrong Home Assistant token are each a FAIL, and the exit code says so ({r.stdout[-300:]!r})")
+    chain = {k: v for k, v in env.items() if k != "ANTHROPIC_API_KEY"}
+    chain["PYTHONPATH"] = os.pathsep.join([env["PYTHONPATH"], str(HERE / "fakekeyring")])
+    r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=dict(chain, FAKE_KEYCHAIN='{"ANTHROPIC_API_KEY": "test"}'),
+                       cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
+    check(r.returncode == 0 and "  ok    Keys: ANTHROPIC_API_KEY (the keychain), " in r.stdout and "HA_TOKEN (the environment)" in r.stdout
+          and "  ok    Claude: the key works (" in r.stdout,
+          f"with keyring installed, a key missing from the environment and settings comes from the keychain, and --doctor says where each key came from ({r.stdout[-400:]!r})")
+    r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=dict(chain, FAKE_KEYCHAIN="broken"),
+                       cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=120)
+    check(r.returncode == 1 and "  NOTE  Keychain: keyring is installed but the keychain couldn't be read (NoKeyringError" in r.stdout
+          and "  FAIL  Claude: no key." in r.stdout, f"a keychain that can't be read is a note, not a crash ({r.stdout[-400:]!r})")
     llama = pathlib.Path(tmp) / "doc_llama.py"
     llama.write_text(codes["w_llama"][0], encoding="utf-8")
     r = subprocess.run([sys.executable, "-u", str(llama), "--doctor"], env=dict(env, RB_MODEL_TIER="llama-complex", RB_BACKUPS="none"),

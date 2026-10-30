@@ -2773,6 +2773,11 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Δεν είναι ώρα για το προγραμματισμένο σενάριο {n} ({time}, {days}), άρα δεν έτρεξε τίποτα.",
   "weekdays": "τις καθημερινές",
   "weekends": "τα Σαββατοκύριακα",
-  "every day": "κάθε μέρα"
+  "every day": "κάθε μέρα",
+  "the environment": "το περιβάλλον",
+  "the keychain": "την κλειδοθήκη",
+  "Keys": "Κλειδιά",
+  "Keychain": "Κλειδοθήκη",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "το keyring είναι εγκατεστημένο αλλά η κλειδοθήκη δεν διαβάστηκε ({problem}), άρα τα κλειδιά έρχονται μόνο από το περιβάλλον και το second-thought.ini"
  }
 }

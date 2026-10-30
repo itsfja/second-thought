@@ -2773,6 +2773,11 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "スケジュールのスクリプト {n}（{time}、{days}）の時刻ではないので、何も実行しませんでした。",
   "weekdays": "平日",
   "weekends": "週末",
-  "every day": "毎日"
+  "every day": "毎日",
+  "the environment": "環境変数",
+  "the keychain": "キーチェーン",
+  "Keys": "キー",
+  "Keychain": "キーチェーン",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring はインストールされていますが、キーチェーンを読めませんでした（{problem}）。キーは環境変数と second-thought.ini からだけ読みます"
  }
 }

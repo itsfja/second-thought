@@ -2773,6 +2773,11 @@
   "Not time for scheduled script {n} ({time}, {days}), so nothing was run.": "Het is geen tijd voor gepland script {n} ({time}, {days}), dus er is niets gedraaid.",
   "weekdays": "op werkdagen",
   "weekends": "in het weekend",
-  "every day": "elke dag"
+  "every day": "elke dag",
+  "the environment": "de omgeving",
+  "the keychain": "de sleutelhanger",
+  "Keys": "Sleutels",
+  "Keychain": "Sleutelhanger",
+  "keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the environment and second-thought.ini": "keyring is geïnstalleerd maar de sleutelhanger kon niet worden gelezen ({problem}), dus sleutels komen alleen uit de omgeving en second-thought.ini"
  }
 }
