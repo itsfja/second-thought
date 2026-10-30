@@ -6,7 +6,8 @@ tested on its own. Exported programs still come as one file with nothing to inst
 package's modules, in order, into python/runtime.py (each module's imports, above its "package only" line,
 are left out: in one file every name is already there).
 
-The page is published as one HTML file, so the editor's own styles and code (web/editor.css and web/editor.js), that
+The page is published as one HTML file, so the editor's own styles and code (web/editor.css, and web/editor/*.js joined
+in the order of their names), that
 runtime, its list of model services (SERVICES
 in python/second_thought/providers.py, as JSON), what programs can do (CAPABILITIES in core.py), a list of the languages in i18n/*.json, the code-conversion prompt
 (prompts/convert-guide.txt), the community gallery's programs (gallery/*.json), the Home Assistant sample house (ha/sample-house.json) and the sample feeds,
@@ -40,6 +41,25 @@ GALLERY = ROOT / "gallery"            # the community gallery: one block file pe
 GALLERY_FIELDS = ("title", "description", "tip", "author", "runtime")
 # A gallery program's optional "category": where the page groups it. Keep in step with GALLERY_GROUPS in the page.
 GALLERY_CATEGORIES = ("github", "coding", "news", "money", "calendar", "home", "learning", "odds")
+# The editor's code, one file per area. They're joined in the order of their names into one function in the page, so a
+# name declared in one file is seen by all of them. web/editor/README.md says what each holds.
+EDITOR = ROOT / "web" / "editor"
+
+
+def editor_js() -> str:
+    """web/editor/*.js, joined in order."""
+    files = sorted(EDITOR.glob("*.js"))
+    if not files:
+        sys.exit("web/editor/ has no .js files: the editor's code lives there.")
+    texts = []
+    for path in files:
+        text = path.read_text(encoding="utf-8")
+        if not text.endswith("\n"):
+            text += "\n"
+        texts.append(text)
+    return "".join(texts)
+
+
 PARTS = [
     ('<script type="text/plain" id="py-runtime">\n', RUNTIME),
     ('<script type="application/json" id="services">\n', SERVICES),
@@ -52,7 +72,7 @@ PARTS = [
     ('<script type="application/json" id="connections-sample">\n', ROOT / "samples" / "connections.json"),
     # The editor itself: its styles and its code. Edit these files, not the copies in the page.
     ('<style id="editor-css">\n', ROOT / "web" / "editor.css"),
-    ('<script id="editor">\n', ROOT / "web" / "editor.js"),
+    ('<script id="editor">\n', EDITOR),
 ]
 
 
@@ -182,6 +202,8 @@ def build(page: str, runtime: str = None) -> str:
             body = i18n_json()
         elif path == GALLERY:
             body = gallery_json()
+        elif path == EDITOR:
+            body = editor_js()
         else:
             body = runtime if (path == RUNTIME and runtime is not None) else path.read_text(encoding="utf-8")
         closer = "</style>" if opener.startswith("<style") else "</script>"

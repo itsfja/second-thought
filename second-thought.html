@@ -9236,11 +9236,13 @@ HOW TO MAP CODE
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@blockly/field-multilineinput@5.0.15/dist/index.js"></script>
 <script id="editor">
+  // 00-start.js: The editor's opening: shared limits and small helpers ($, STORE_KEY, MAX_*). Every file below runs inside the same function, so names declared in one are seen by the rest.
 (function(){
   const $ = id => document.getElementById(id);
   const STORE_KEY = "reflection-blocks-program-v3";
   const MAX_AI_CALLS = 60, MAX_STEPS = 20000, MAX_DEPTH = 60, MAX_SCRIPTS = 100, MAX_LIVE = 30;
 
+  // 01-theme.js: Colours and Blockly's theme.
   /* ---------- Colours and theme ---------- */
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
@@ -9288,6 +9290,7 @@ HOW TO MAP CODE
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   }
 
+  // 02-blocks.js: Every block's definition, and the long-text field.
   /* ---------- Custom blocks ---------- */
   // Every Second Thought block is defined through here, so its words can be shown in another language (I18N, below).
   const BLOCK_DEFS = [];
@@ -9767,6 +9770,7 @@ HOW TO MAP CODE
       { style:"pictures", inputsInline:true, tooltip:"Offers the picture as a download. The browser asks you to confirm." })
   ]);
 
+  // 03-toolbox.js: The block palette (toolbox) and its categories.
   /* ---------- Toolbox ---------- */
   // The words already in the palette's blocks are in the page's language ("starters" in i18n/<language>.json). K() is
   // for text that must stay as it is: entity ids, topics, message names, and the sample home's own device names.
@@ -9903,6 +9907,7 @@ HOW TO MAP CODE
     ]}
   ]};
 
+  // 04-examples.js: Building example programs: the helpers the example library uses.
   /* ---------- Example programs ---------- */
   const st = (o) => ({ block:o });
   const sh = (type, fields) => ({ shadow:{ type, fields } });
@@ -10048,6 +10053,7 @@ HOW TO MAP CODE
   };
 
 
+  // 05-home-assistant.js: Home Assistant on the page: the sample house, its blocks' behaviour and the safety rules (SAFETY, copied in by tools/sync.py).
   /* ---------- Home Assistant ---------- */
   /* In the page these blocks talk to a built-in sample house; exported Python talks to your real Home Assistant. */
   const HA = { sample:null, states:new Map() };
@@ -10249,6 +10255,7 @@ HOW TO MAP CODE
     setTimeout(() => Blockly.svgResize(ws), 0);
   }
 
+  // 06-example-library.js: The example library, Home Assistant examples included.
   /* ---------- Example library ---------- */
   /* Small builders so each example reads like a recipe. Variables are named, and get ids from their names. */
   const xId = n => "x_" + String(n).replace(/[^A-Za-z0-9]+/g, "_");
@@ -11694,6 +11701,7 @@ HOW TO MAP CODE
   const GALLERY = (() => { try { return JSON.parse(document.getElementById("community-gallery").textContent || "[]"); } catch(e) { return []; } })();
   /* Each program's "category" picks its group (tools/sync.py checks it's one of these). The groups that have programs go
      near the top, after Writing and Research, so shared programs aren't buried under the built-in ones. */
+  // 07-format.js: Block file format versions and their migrations.
   // ----- Block file format -----
   // Block files say which version of the blocks' shapes they were saved with ("version"). When a block's fields or inputs
   // change shape, bump FORMAT_VERSION and add MIGRATIONS[the old version]: a function that turns a program saved with that
@@ -11754,6 +11762,7 @@ HOW TO MAP CODE
     return capabilitySentence(communityCaps[e.key]) || tr("It only uses your models: it doesn't connect to anything else.");
   }
 
+  // 08-workspace.js: The Blockly workspace: injecting it, saving and loading, the autosave.
   /* ---------- Workspace ---------- */
   const ws = Blockly.inject("blockly", {
     toolbox:localizeToolbox(toolbox), renderer:"zelos", theme:makeTheme(isDark()),
@@ -11880,6 +11889,7 @@ HOW TO MAP CODE
   new MutationObserver(retheme).observe(document.documentElement, { attributes:true, attributeFilter:["data-theme"] });
   window.addEventListener("resize", () => Blockly.svgResize(ws));
 
+  // 09-import-export.js: Import and export: block files, backup models, Save as GitHub Actions.
   /* ---------- Import / export ---------- */
   /* ----- Backup models: tried in order when the primary (the Model menu) fails on a step ----- */
   const BK_LS = "second-thought-backups";
@@ -12287,6 +12297,7 @@ HOW TO MAP CODE
     readFile(e.dataTransfer.files[0]);
   });
 
+  // 10-python-export.js: Turning blocks into Python, and the exported settings and launchers.
   /* ---------- Python export ---------- */
   const PY_MARK = "# ---- Second Thought program: lets the block editor import this file again ----";
   // The runtime embedded below (python/runtime.py) says its own version; exports carry it, so imports can compare.
@@ -13095,6 +13106,7 @@ HOW TO MAP CODE
     } catch(e) { return null; }
   }
 
+  // 11-zip.js: Making and reading zip files.
   /* ---------- Zip (single file out; read .py from any zip) ---------- */
   const CRC_TABLE = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
   function crc32(bytes){ let c = 0xFFFFFFFF; for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
@@ -13176,6 +13188,7 @@ HOW TO MAP CODE
     throw new Error("this zip uses a compression this browser can't open");
   }
 
+  // 12-claude.js: Asking Claude to convert code or build a program from a description, and Claude access.
   /* ---------- Claude conversion of other code ---------- */
   function exampleForPrompt(key){
     const ex = EXAMPLES[key]();
@@ -13372,6 +13385,7 @@ HOW TO MAP CODE
     : (e && (e.code === "user" || e.code === "retryable" || e.shape)) ? e.message
     : ERR[e && e.code] || ("Something went wrong talking to Claude" + (e && e.code ? " (" + e.code + ")" : "") + ". Run again.");
 
+  // 13-run-log.js: The run log's steps.
   /* ---------- Run log UI ---------- */
   const stepsEl = $("steps");
   function addStep(name, opts){
@@ -13419,6 +13433,7 @@ HOW TO MAP CODE
     return t.length > 20000 ? t.slice(0, 20000) + "\n\u2026 (" + (t.length - 20000).toLocaleString() + " more characters)" : t + (images && images.length ? "\n[+ " + images.length + " picture" + (images.length === 1 ? "" : "s") + "]" : "");
   }
 
+  // 14-memory.js: Memory that survives between runs.
   /* ---------- Interpreter ---------- */
   /* ---------- Memory ---------- */
   const MEM_LS = "reflection-blocks-memory-v1";
@@ -13615,6 +13630,7 @@ HOW TO MAP CODE
   };
   setInterval(() => { if (!$("mem").hidden) renderMemory(); }, 30000);
 
+  // 15-library.js: Saved programs and the prompt library.
   /* ---------- Saved programs and prompt library ---------- */
   const LIB_LS = "reflection-blocks-library-v1";
   const lib = { program:new Map(), prompt:new Map() };
@@ -13702,6 +13718,7 @@ HOW TO MAP CODE
   };
   setTimeout(memInit, 0);
 
+  // 16-pictures-files.js: Pictures, files and error messages.
   /* ---------- Pictures ---------- */
   const IMG_TYPES = ["image/jpeg","image/png","image/webp","image/gif"];
   function isRec(v){ return !!(v && typeof v === "object" && !Array.isArray(v) && v.kind !== "image" && !(v instanceof Blob)); }
@@ -14067,6 +14084,7 @@ HOW TO MAP CODE
     return a;
   }
 
+  // 17-agent.js: The agent and its built-in tools.
   /* ---------- Agent ----------
      Each step Claude replies with JSON: a tool to use, or its final answer. Exported Python runs the same protocol
      (Runtime.agent), so a program behaves the same in both places, with any model. */
@@ -14203,6 +14221,7 @@ HOW TO MAP CODE
     const note = days === 0 ? "" : days === 1 ? " (next day)" : days === -1 ? " (the day before)" : days > 0 ? " (" + days + " days later)" : " (" + (-days) + " days earlier)";
     return pad2(Math.floor(t / 60)) + ":" + pad2(t % 60) + note;
   }
+  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT and the rest.
   /* ---------- Connections on the page: sample feeds, GitHub, Telegram, email and calendar ----------
      The page can't reach these services, so it uses the sample data below (like the sample house). The text each one gives
      back is shaped like what exported Python gives from the real services. */
@@ -15019,6 +15038,7 @@ HOW TO MAP CODE
     s.done("done", "ok");
     return out;
   }
+  // 19-interpreter.js: Running blocks: structured replies, asking you, values and statements, results.
   /* ---------- Structured replies ----------
      Each block that wants JSON names the shape it expects (the same shapes as SCHEMAS in the Python runtime).
      A reply that can't be read, or doesn't fit, is sent back once with the problem; a second miss stops the step. */
@@ -15982,6 +16002,7 @@ HOW TO MAP CODE
     stepsEl.appendChild(el); el.scrollIntoView({ block:"nearest" });
   }
 
+  // 20-test-cases.js: Test cases: Save as test case and Run tests.
   /* ---------- Test cases ---------- */
   // After a good run: keep its answers with what the result must do. Run tests replays them, with the models live, and a
   // strict reviewer checks each result. Exported, python my-program.py --test does the same.
@@ -16053,6 +16074,7 @@ HOW TO MAP CODE
   $("log-tests").onclick = () => runTests();
   testsChanged();
 
+  // 21-log-watch-step.js: Saving the log, the watch panel, step mode and running one script.
   /* ---------- Save the run log ---------- */
   function logMarkdown(){
     const name = ($("io-name").value || "").trim() || "my program";
@@ -16177,6 +16199,7 @@ HOW TO MAP CODE
     });
   } catch(e) {}
 
+  // 22-search.js: Finding a block.
   /* ---------- Block search ---------- */
   const searchIndex = [];
   (function buildIndex(){
@@ -16319,6 +16342,7 @@ HOW TO MAP CODE
     startRun(starts, "manual");
   };
 
+  // 23-schedules.js: Schedules and listeners on the page, and the editor's closing line.
   /* ---------- Schedules ---------- */
   const sched = { armed:false, timer:null, lastFired:new Map(), nextEvery:new Map(), wake:null };
   function scheduleHats(){

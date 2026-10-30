@@ -12,7 +12,7 @@ Second Thought is two things built from one set of sources:
 
 ```
 python/second_thought/*.py ──┐
-web/editor.css, editor.js,   ├─ tools/sync.py ─→ python/runtime.py   (the runtime, joined into one file)
+web/editor.css, editor/*.js, ├─ tools/sync.py ─→ python/runtime.py   (the runtime, joined into one file)
 i18n/*.json, gallery/*.json, │                 ├→ second-thought.html (with the editor, the runtime and the rest embedded)
 prompts/, samples/, ha/ ─────┘                 └→ lang/*.js           (one per language, loaded by the page)
 ```
@@ -21,8 +21,8 @@ The runtime is written as a package, `python/second_thought/`, so each module ca
 `tools/sync.py` joins the modules into `python/runtime.py` and copies it, along with the model services, the
 capability list, the list of languages, the gallery, the conversion prompt and the sample data, into the page. Each
 language's words go into `lang/<language>.js` instead, which the page loads for the chosen language only, so adding a
-language doesn't make the page bigger for everyone. The editor's styles and code live in `web/editor.css` and
-`web/editor.js`, which `tools/sync.py` copies into the page too, so they can be read and reviewed on their own. Only its
+language doesn't make the page bigger for everyone. The editor's styles live in `web/editor.css` and its code in
+`web/editor/`, one file per area joined in name order (its README says what each holds), which `tools/sync.py` copies into the page too, so they can be read and reviewed on their own. Only its
 HTML (the toolbar, panels and log) is edited in `second-thought.html` itself.
 
 **Publishing.** The page is published as a claude.ai artifact, with every file in `lang/` as a supporting file at the
