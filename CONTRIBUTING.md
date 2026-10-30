@@ -73,6 +73,18 @@ Unit tests need nothing installed and take a few seconds:
 python -m unittest discover -s tests/unit
 ```
 
+The editor's own functions (sums, clock times, schedules and their GitHub Actions cron lines, block formats, page
+words) have unit tests too, run in Node without a browser, in about a second. They need Node 22 or later, and
+`tools/sync.py` run first:
+
+```
+node --test "tests/editor/*.test.cjs"
+```
+
+`tests/editor/page.cjs` runs the editor's code with stand-ins for the page; the functions it can test are listed in
+`window.__editorUnits`, at the end of `web/editor/23-schedules.js`. Where the runtime has the same function, the cases
+are in `tests/parity/`, which the Python tests read as well, so both sides stay alike.
+
 The end-to-end suite drives the page in a headless browser and runs every example's exported Python against stand-in
 services. Nothing calls a real model.
 
@@ -81,7 +93,7 @@ bash tests/setup.sh          # once
 python tests/run_tests.py    # unit tests too; ends with "All checks passed"
 ```
 
-CI runs the unit tests on Python 3.9 to 3.13 and Windows, and the end-to-end suite on Linux and Windows.
+CI runs the unit tests (and the editor's) on Python 3.9 to 3.13 and Windows, and the end-to-end suite on Linux and Windows.
 
 If you have API keys, `python tools/smoke_test.py` checks the real services (it costs a few pence).
 

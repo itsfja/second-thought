@@ -16,6 +16,7 @@ The areas are sources, page, i18n, gallery and python. Python runs the programs 
 python runs page too.
 """
 import pathlib
+import shutil
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))  # tests/, so tests/e2e is importable
@@ -30,6 +31,19 @@ from e2e.describe import describe_tests  # noqa: E402
 from e2e.formats import format_tests  # noqa: E402
 from e2e.program_tests import program_test_tests  # noqa: E402
 from e2e.safety import safety_tests  # noqa: E402
+
+
+def editor_unit_tests():
+    """The editor's own functions, run in Node without a browser (tests/editor/)."""
+    node = shutil.which("node")
+    if not node:
+        print("  (Node isn't installed, so the editor's unit tests in tests/editor were skipped)")
+        return
+    files = sorted(str(p) for p in (HERE / "editor").glob("*.test.cjs"))
+    out = subprocess.run([node, "--test", *files], capture_output=True, text=True, timeout=300)
+    passed = re.search(r"^# pass (\d+)", out.stdout, re.M)
+    check(out.returncode == 0, f"the editor's unit tests in tests/editor pass ({passed.group(1) if passed else '?'} tests)"
+          + ("" if out.returncode == 0 else ":\n" + (out.stdout + out.stderr).strip()[-2500:]))
 
 
 AREAS = ("sources", "page", "i18n", "gallery", "python")
@@ -49,6 +63,7 @@ def main():
         check(unit.returncode == 0, f"the unit tests in tests/unit pass ({ran.group(1) if ran else '?'} tests)"
               + ("" if unit.returncode == 0 else ":\n" + unit.stderr.strip()[-1500:]))
         example_ini_check()
+        editor_unit_tests()
     if areas - {"sources"} and not (VENDOR / "blockly").exists():
         sys.exit("Run tests/setup.sh first.")
     codes = asyncio.run(page_tests()) if areas & {"page", "python"} else None
