@@ -143,5 +143,11 @@ def said_no(answer):
     return a in ("n", "no") or (no != "(no)" and a in [w.strip().lower() for w in no.split(",") if w.strip()])
 
 
-WHERE_KEYS = tr("in {path}", path=SETTINGS_PATH) if SETTINGS_PATH else tr("in {path}, next to this program", path=SETTINGS_FILE)
+def on_github_actions():
+    """Running on GitHub Actions (saved with Save as GitHub Actions), where settings are the repository's secrets."""
+    return os.environ.get("GITHUB_ACTIONS", "").lower() == "true"
+
+
+WHERE_KEYS = (tr("as a repository secret (Settings → Secrets and variables → Actions)") if on_github_actions() else
+              tr("in {path}", path=SETTINGS_PATH) if SETTINGS_PATH else tr("in {path}, next to this program", path=SETTINGS_FILE))
 

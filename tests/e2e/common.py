@@ -26,6 +26,10 @@ import fake_services  # noqa: E402
 import fake_mqtt  # noqa: E402
 
 HERE = pathlib.Path(__file__).resolve().parent.parent  # tests/
+# CI runs on GitHub Actions, where GITHUB_ACTIONS is set, and exported programs then behave as they would there
+# (settings named as repository secrets, error annotations). The tests check how they behave on your computer, so
+# it's cleared for every program they start; tests of the Actions behaviour set it themselves.
+os.environ.pop("GITHUB_ACTIONS", None)
 ROOT = HERE.parent
 VENDOR = HERE / "vendor"
 FIX = HERE / "fixtures"

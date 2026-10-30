@@ -2856,7 +2856,13 @@
   "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Αὐτὸς ἅπαξ τρέξον αὐτὸ καὶ ἀπόκριναι y (ὁ τεταγμένος δρόμος οὐκ ἄρξεται πρὶν τοῦτο).",
   "about {cost}": "περὶ {cost}",
   "under {cost}": "ἔλαττον {cost}",
-  "{cost} at list prices": "{cost} ταῖς γεγραμμέναις τιμαῖς"
+  "{cost} at list prices": "{cost} ταῖς γεγραμμέναις τιμαῖς",
+  "Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.": "Ὁ Claude τὴν κλεῖν ἀπεδοκίμασεν. Σκόπει τὸ ANTHROPIC_API_KEY {where_keys}.",
+  "Fix the problem above, then start it again with Run workflow on the Actions tab.": "Διόρθωσον τὸ ἄνω κακόν, εἶτα πάλιν ἄρξαι διὰ τοῦ Run workflow ἐν τῷ Actions.",
+  "Run stopped: {msg}": "Ὁ δρόμος ἐπαύσατο: {msg}",
+  "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Ὁ σὸς τοῦ Claude λόγος οὐκέτι ἔχει πίστιν. Πρόσθες ἐν https://console.anthropic.com, εἶτα πάλιν τρέξον.",
+  "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Ἡ σὴ τοῦ Claude κλεὶς ὅλης τῆς ἐν τῇ Console ἑταιρείας ἐστίν, οὐχ ἑνὸς ἐργαστηρίου. Ποίησον κλεῖν ἐν ἐργαστηρίῳ (ἡ σελὶς Workspaces τῆς Console), ἢ θὲς ANTHROPIC_WORKSPACE_ID {where_keys}.",
+  "as a repository secret (Settings → Secrets and variables → Actions)": "ὡς ἀπόρρητον τοῦ ἀποθετηρίου (Settings → Secrets and variables → Actions)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

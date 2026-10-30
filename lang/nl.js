@@ -1736,6 +1736,12 @@
 "{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Start het één keer zelf en antwoord y (een geplande run begint pas daarna).",
 "about {cost}":"ongeveer {cost}",
 "under {cost}":"minder dan {cost}",
-"{cost} at list prices":"{cost} tegen catalogusprijzen"
+"{cost} at list prices":"{cost} tegen catalogusprijzen",
+"Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.":"Claude weigerde de sleutel. Controleer ANTHROPIC_API_KEY {where_keys}.",
+"Fix the problem above, then start it again with Run workflow on the Actions tab.":"Los het probleem hierboven op en start het opnieuw met Run workflow op het tabblad Actions.",
+"Run stopped: {msg}":"Run gestopt: {msg}",
+"Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"Je Claude-account heeft geen tegoed meer. Vul aan op https://console.anthropic.com en start het opnieuw.",
+"Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"Je Claude-sleutel hoort bij een hele Console-organisatie, niet bij één werkruimte. Maak een sleutel in een werkruimte (de pagina Workspaces in de Console) of stel ANTHROPIC_WORKSPACE_ID in {where_keys}.",
+"as a repository secret (Settings → Secrets and variables → Actions)":"als repository-secret (Settings → Secrets and variables → Actions)"
 }
 };

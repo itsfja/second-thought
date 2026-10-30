@@ -9,6 +9,7 @@ import sys
 import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+os.environ.pop("GITHUB_ACTIONS", None)  # see tests/e2e/common.py: CI is GitHub Actions, but these test your computer
 TMP = pathlib.Path(tempfile.mkdtemp(prefix="second-thought-unit-"))
 (TMP / "empty.ini").write_text("", encoding="utf-8")
 os.environ["SECOND_THOUGHT_INI"] = str(TMP / "empty.ini")

@@ -125,6 +125,8 @@
   // The settings a program needs, as [setting, the repository secret it comes from, required].
   function actionsSecrets(){
     const n = settingsFor(), out = n.keys.map(k => [k[1], k[1], true]);
+    // A Claude key made for a whole Console organisation, not one workspace, also needs the workspace (#226).
+    if (n.keys.some(k => k[1] === "ANTHROPIC_API_KEY")) out.push(["ANTHROPIC_WORKSPACE_ID", "ANTHROPIC_WORKSPACE_ID", false]);
     const add = (on, req, opt) => { if (on) { req.forEach(k => out.push([k, k, true])); (opt || []).forEach(k => out.push([k, k, false])); } };
     add(n.ha, ["HA_URL", "HA_TOKEN"]);
     if (n.github) out.push(["GITHUB_TOKEN", "ST_GITHUB_TOKEN", true]);  // secret names can't start with GITHUB_
@@ -207,8 +209,8 @@
       "    runs-on: ubuntu-latest",
       "    timeout-minutes: 30",
       "    steps:",
-      "      - uses: actions/checkout@v4",
-      "      - uses: actions/setup-python@v5",
+      "      - uses: actions/checkout@v5",
+      "      - uses: actions/setup-python@v6",
       "        with:",
       "          python-version: \"3.12\"",
       "          cache: pip",
@@ -249,12 +251,13 @@
       "3. In the repository, go to **Settings → Secrets and variables → Actions → New repository secret**, and add:", "",
       ...secrets.map(([env, secret, req]) => "   - `" + secret + "`" + (req ? "" : " (if you need it)") + (secret !== env ? ": the token you'd put as " + env + " (GitHub doesn't allow secret names starting GITHUB_)" : "")),
       "",
-      "4. On the **Actions** tab, choose the workflow and **Run workflow** to try a script now.", "",
+      "4. On the **Actions** tab, choose the workflow and **Run workflow** to try a script now. If it fails, the reason is on the run's page.", "",
       "## Good to know", "",
       "- Times are worked out for " + tz + ". GitHub often starts a scheduled run a few minutes late, and sometimes skips one.",
       "- On GitHub's free plan, private repositories get 2,000 minutes a month. Each run takes about a minute.",
       "- Home Assistant, Homey and MQTT have to be reachable from the internet, not just your home network.",
       "- Model calls are billed to your API accounts, as on your own computer.",
+      ...(secrets.some(s => s[0] === "ANTHROPIC_WORKSPACE_ID") ? ["- Make your Claude key inside a workspace (the Console's Workspaces page). A key made for the whole organisation also needs the `ANTHROPIC_WORKSPACE_ID` secret."] : []),
       ...(caps.some(c => c[2]) ? ["", "## What it can do", "", "Adding the workflow is your yes to these, as answering y is when it runs on your computer:", "",
         ...caps.map(c => "- " + c[1])] : []),
       ""

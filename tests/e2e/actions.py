@@ -70,6 +70,11 @@ async def actions_tests():
             check("secrets." not in wf.split("env:")[0] and data["permissions"] == {"contents": "write"}
                   and any("git push" in (s.get("run") or "") for s in data["jobs"]["run"]["steps"]),
                   "what it remembers is committed back to the repository after each run")
+            uses = [st_["uses"] for st_ in data["jobs"]["run"]["steps"] if "uses" in st_]
+            check(uses == ["actions/checkout@v5", "actions/setup-python@v6"], f"it uses the current actions, which run on Node.js 24 ({uses})")
+            check(step["env"].get("ANTHROPIC_WORKSPACE_ID") == "${{ secrets.ANTHROPIC_WORKSPACE_ID }}"
+                  and "`ANTHROPIC_WORKSPACE_ID` (if you need it)" in next(f["text"] for f in files if f["name"] == "SETUP.md"),
+                  "a Claude key made for a whole organisation can say its workspace, with an optional secret SETUP.md explains")
 
             await paste_gallery(pg, "rain-window")
             files = await pg.evaluate("window.__actionsFiles()")

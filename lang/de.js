@@ -1736,6 +1736,12 @@
 "{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Führen Sie es einmal selbst aus und antworten Sie mit y (ein geplanter Lauf startet erst dann).",
 "about {cost}":"etwa {cost}",
 "under {cost}":"unter {cost}",
-"{cost} at list prices":"{cost} zu Listenpreisen"
+"{cost} at list prices":"{cost} zu Listenpreisen",
+"Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.":"Claude hat den Schlüssel abgelehnt. Prüfen Sie ANTHROPIC_API_KEY {where_keys}.",
+"Fix the problem above, then start it again with Run workflow on the Actions tab.":"Beheben Sie das Problem oben und starten Sie es dann mit Run workflow im Tab Actions neu.",
+"Run stopped: {msg}":"Lauf gestoppt: {msg}",
+"Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"Ihr Claude-Konto hat kein Guthaben mehr. Laden Sie unter https://console.anthropic.com auf und starten Sie es erneut.",
+"Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"Ihr Claude-Schlüssel gehört zu einer ganzen Console-Organisation, nicht zu einem Workspace. Erstellen Sie einen Schlüssel in einem Workspace (Seite Workspaces in der Console) oder setzen Sie ANTHROPIC_WORKSPACE_ID {where_keys}.",
+"as a repository secret (Settings → Secrets and variables → Actions)":"als Repository-Secret (Settings → Secrets and variables → Actions)"
 }
 };

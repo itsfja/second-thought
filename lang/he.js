@@ -1737,6 +1737,12 @@
 "{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} הריצו אותה פעם אחת בעצמכם וענו y (הרצה מתוזמנת לא תתחיל עד אז).",
 "about {cost}":"בערך {cost}",
 "under {cost}":"פחות מ־{cost}",
-"{cost} at list prices":"{cost} במחירון"
+"{cost} at list prices":"{cost} במחירון",
+"Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.":"Claude דחה את המפתח. בדקו את ANTHROPIC_API_KEY {where_keys}.",
+"Fix the problem above, then start it again with Run workflow on the Actions tab.":"תקנו את הבעיה שלמעלה, ואז הפעילו שוב עם Run workflow בלשונית Actions.",
+"Run stopped: {msg}":"ההרצה נעצרה: {msg}",
+"Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"בחשבון ה־Claude שלכם נגמר הקרדיט. הוסיפו ב־https://console.anthropic.com והריצו שוב.",
+"Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"מפתח ה־Claude שלכם שייך לארגון שלם ב־Console, לא לסביבת עבודה אחת. צרו מפתח בתוך סביבת עבודה (דף Workspaces ב־Console), או הגדירו ANTHROPIC_WORKSPACE_ID {where_keys}.",
+"as a repository secret (Settings → Secrets and variables → Actions)":"כסוד של המאגר (Settings → Secrets and variables → Actions)"
 }
 };

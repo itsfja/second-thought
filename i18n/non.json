@@ -2856,7 +2856,13 @@
   "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Keyr þat einu sinni sjálfr ok svara y (settr gangr byrjar eigi fyrr).",
   "about {cost}": "um {cost}",
   "under {cost}": "minna en {cost}",
-  "{cost} at list prices": "{cost} at skráðu verði"
+  "{cost} at list prices": "{cost} at skráðu verði",
+  "Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.": "Claude hafnaði lyklinum. Athuga ANTHROPIC_API_KEY {where_keys}.",
+  "Fix the problem above, then start it again with Run workflow on the Actions tab.": "Bæt vandann hér fyrir ofan, ok byrja þat síðan aptr með Run workflow á Actions-flipanum.",
+  "Run stopped: {msg}": "Gangr stöðvaðisk: {msg}",
+  "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Claude-reikningr þinn er inneignarlauss. Bæt við á https://console.anthropic.com, ok keyr þat aptr.",
+  "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Claude-lykill þinn heyrir til allrar Console-stofnunar, eigi eins vinnurúms. Ger lykil í vinnurúmi (Workspaces-síða Console), eða set ANTHROPIC_WORKSPACE_ID {where_keys}.",
+  "as a repository secret (Settings → Secrets and variables → Actions)": "sem leyndarmál geymslunnar (Settings → Secrets and variables → Actions)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",
