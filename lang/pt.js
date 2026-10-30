@@ -919,7 +919,10 @@
 "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.":"<b>Ctrl+C</b>, <b>Ctrl+X</b> e <b>Ctrl+V</b> copiam, cortam e colam. <b>Shift</b> com <b>W</b>, <b>A</b>, <b>S</b> ou <b>D</b> anda pelo espaço vazio, e <b>Esc</b> sai dos blocos.",
 "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Um leitor de ecrã diz onde está o cursor. No resto da página, <b>Tab</b> passa de botão em botão. Quando um programa lhe pergunta algo, a caixa da resposta recebe o foco, e <b>Ctrl+Enter</b> envia uma resposta escrita.",
 "Press the question mark button for keyboard help.":"Prima o botão do ponto de interrogação para a ajuda do teclado.",
-"Keyboard help":"Ajuda do teclado"
+"Keyboard help":"Ajuda do teclado",
+"about {cost}":"cerca de {cost}",
+"under {cost}":"menos de {cost}",
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Aos preços de tabela dos modelos seriam {cost}; nesta página conta para a sua utilização do Claude."
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -1730,6 +1733,9 @@
 "New since then: {what}":"Novo desde então: {what}",
 "No longer: {what}":"Já não: {what}",
 "What it can do is the same as before.":"O que pode fazer é o mesmo que antes.",
-"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Execute-o uma vez você mesmo e responda y (uma execução agendada só começa depois disso)."
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Execute-o uma vez você mesmo e responda y (uma execução agendada só começa depois disso).",
+"about {cost}":"cerca de {cost}",
+"under {cost}":"menos de {cost}",
+"{cost} at list prices":"{cost} a preços de tabela"
 }
 };

@@ -1407,7 +1407,10 @@
   "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.": "<b>Ctrl+C</b>、<b>Ctrl+X</b> 和 <b>Ctrl+V</b> 复制、剪切和粘贴。<b>Shift</b> 加 <b>W</b>、<b>A</b>、<b>S</b> 或 <b>D</b> 在空白处移动，<b>Esc</b> 离开积木。",
   "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "屏幕阅读器会读出光标的位置。在其他地方，<b>Tab</b> 在按钮之间移动。程序问你问题时，焦点会移到回答框，<b>Ctrl+Enter</b> 发送输入的回答。",
   "Press the question mark button for keyboard help.": "按问号按钮查看键盘帮助。",
-  "Keyboard help": "键盘帮助"
+  "Keyboard help": "键盘帮助",
+  "about {cost}": "约 {cost}",
+  "under {cost}": "不到 {cost}",
+  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "按模型标价约为 {cost}；在本页面上则计入你的 Claude 用量。"
  },
  "examples": {
   "review": {
@@ -2850,6 +2853,9 @@
   "New since then: {what}": "新增：{what}",
   "No longer: {what}": "不再：{what}",
   "What it can do is the same as before.": "它能做的事和以前一样。",
-  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} 请自己运行一次并回答 y（在此之前定时运行不会开始）。"
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} 请自己运行一次并回答 y（在此之前定时运行不会开始）。",
+  "about {cost}": "约 {cost}",
+  "under {cost}": "不到 {cost}",
+  "{cost} at list prices": "按标价 {cost}"
  }
 }

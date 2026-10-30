@@ -919,7 +919,10 @@
 "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.":"<b>Ctrl+C</b>, <b>Ctrl+X</b> en <b>Ctrl+V</b> kopiëren, knippen en plakken. <b>Shift</b> met <b>W</b>, <b>A</b>, <b>S</b> of <b>D</b> beweegt door de lege ruimte, en <b>Esc</b> verlaat de blokken.",
 "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Een schermlezer leest voor waar de cursor is. Overal anders gaat <b>Tab</b> van knop naar knop. Als een programma je iets vraagt, krijgt het antwoordvak de focus, en <b>Ctrl+Enter</b> stuurt een getypt antwoord.",
 "Press the question mark button for keyboard help.":"Druk op de vraagtekenknop voor hulp bij het toetsenbord.",
-"Keyboard help":"Hulp bij het toetsenbord"
+"Keyboard help":"Hulp bij het toetsenbord",
+"about {cost}":"ongeveer {cost}",
+"under {cost}":"minder dan {cost}",
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Tegen de catalogusprijzen van de modellen is dat {cost}; op deze pagina telt het mee voor je Claude-gebruik."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -1730,6 +1733,9 @@
 "New since then: {what}":"Nieuw sindsdien: {what}",
 "No longer: {what}":"Niet meer: {what}",
 "What it can do is the same as before.":"Wat het kan doen is hetzelfde als eerst.",
-"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Start het één keer zelf en antwoord y (een geplande run begint pas daarna)."
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Start het één keer zelf en antwoord y (een geplande run begint pas daarna).",
+"about {cost}":"ongeveer {cost}",
+"under {cost}":"minder dan {cost}",
+"{cost} at list prices":"{cost} tegen catalogusprijzen"
 }
 };

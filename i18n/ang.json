@@ -1407,7 +1407,10 @@
   "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.": "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> āwrītaþ, ceorfaþ and settaþ. <b>Shift</b> mid <b>W</b>, <b>A</b>, <b>S</b> oþþe <b>D</b> færþ ofer þā īdlan stōwe, and <b>Esc</b> forlǣt þā stoccas.",
   "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "Scīrrǣdere rǣt hwǣr se bīcn sīe. Elles hwǣr, <b>Tab</b> færþ betwux cnæppum. Þonne gediht þē hwæt āxaþ, sēo andswarubox onfēhþ þone fōcus, and <b>Ctrl+Enter</b> sent gewritene andsware.",
   "Press the question mark button for keyboard help.": "Þȳ þone cnæpp þæs ascungmearces for cǣgbredes fultume.",
-  "Keyboard help": "Cǣgbredes fultum"
+  "Keyboard help": "Cǣgbredes fultum",
+  "about {cost}": "ymbe {cost}",
+  "under {cost}": "lǣsse þonne {cost}",
+  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "Be þǣra bysena gesettum weorþe þæt is {cost}; on þissum leafe hit biþ geteald tō þīnre Claude notunge."
  },
  "examples": {
   "review": {
@@ -2850,7 +2853,10 @@
   "New since then: {what}": "Nīwe siþþan: {what}",
   "No longer: {what}": "Nā leng: {what}",
   "What it can do is the same as before.": "Þæt hit dōn mæg is þæt ilce swā ǣr.",
-  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Ȳrn hit ǣne self and andswara y (gesett ryne ne onginþ ǣr þām)."
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Ȳrn hit ǣne self and andswara y (gesett ryne ne onginþ ǣr þām).",
+  "about {cost}": "ymbe {cost}",
+  "under {cost}": "lǣsse þonne {cost}",
+  "{cost} at list prices": "{cost} be gesettum weorþe"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

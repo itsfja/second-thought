@@ -91,7 +91,7 @@
             ctls:new Set(), stoppers:new Set(), threads:new Set(), started:0, broadcasts:0, sample:null,
             active:true, ready:false, pending:hats.slice(), timerStart:Date.now(),
             msgWaiters:new Map(), msgNames:new Map(), msgWaiting:0, instructions:"", chats:new Map(), lastError:"",
-            budget:0, tokIn:0, tokOut:0, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map(), agentTrace:[],
+            budget:0, tokIn:0, tokOut:0, cost:0, costKnown:true, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map(), agentTrace:[],
             inputs:{}, inputsIncomplete:false, replay:replay ? JSON.parse(JSON.stringify(replay)) : null };
     $("run").disabled = true; $("stop").disabled = false; setStatus("running");
     const started = Date.now();

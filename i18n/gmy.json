@@ -1408,7 +1408,10 @@
   "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.": "<b>Ctrl+C</b>, <b>Ctrl+X</b> 𐀁 <b>Ctrl+V</b> 𐀏𐀨𐀟, 𐀳𐀕 𐀁 𐀴𐀳. <b>Shift</b> 𐀕𐀲 <b>W</b>, <b>A</b>, <b>S</b> 𐀁 <b>D</b> 𐀑𐀚𐀁 𐀁𐀚 𐀐𐀜 𐀒𐀨, 𐀁 <b>Esc</b> 𐀩𐀂𐀟 𐀠𐀪𐀵.",
   "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "𐀀𐀙𐀑𐀜𐀲 𐀩𐀐 𐀃𐀢 𐀆𐀂𐀒𐀲. 𐀀𐀨𐀒, <b>Tab</b> 𐀀𐀐 𐀀𐀢 𐀃𐀞 𐀁𐀠 𐀃𐀞. 𐀃𐀳 𐀡𐀫𐀏𐀨𐀔 𐀁𐀫𐀲𐀁 𐀮, 𐀀𐀡𐀑𐀪𐀯 𐀳𐀏 𐀨𐀟, 𐀁 <b>Ctrl+Enter</b> 𐀟𐀟 𐀀𐀡𐀑𐀪𐀯.",
   "Press the question mark button for keyboard help.": "𐀠𐀁𐀮 𐀁𐀫𐀳𐀔 𐀃𐀞 𐀞𐀨 𐀏𐀨𐀟𐀳𐀪𐀍 𐀃𐀟𐀨.",
-  "Keyboard help": "𐀏𐀨𐀟𐀳𐀪𐀍 𐀃𐀟𐀨"
+  "Keyboard help": "𐀏𐀨𐀟𐀳𐀪𐀍 𐀃𐀟𐀨",
+  "about {cost}": "𐀀𐀠 {cost}",
+  "under {cost}": "𐀕𐀍 {cost}",
+  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "𐀴𐀔 𐀏𐀨𐀟𐀵 𐀵𐀵 {cost}; 𐀁𐀚 𐀆𐀵 𐀵𐀵 Claude 𐀓𐀨𐀯."
  },
  "examples": {
   "review": {
@@ -2851,7 +2854,10 @@
   "New since then: {what}": "ka-no o-pi-de: {what}",
   "No longer: {what}": "o-u-ke-ti: {what}",
   "What it can do is the same as before.": "o du-na-ta-i po-e-e to-to a-u-to pa-ro.",
-  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} da-ra-me a-u-to a-pa-ka-si e a-po-ki-ri-ne y (o-ra-ja pa-ra-ki-si o-u a-ka-ta-i pa-ro)."
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} da-ra-me a-u-to a-pa-ka-si e a-po-ki-ri-ne y (o-ra-ja pa-ra-ki-si o-u a-ka-ta-i pa-ro).",
+  "about {cost}": "a-pi {cost}",
+  "under {cost}": "me-jo {cost}",
+  "{cost} at list prices": "{cost} ti-ma ka-ra-pe-to"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

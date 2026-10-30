@@ -173,6 +173,9 @@ def _anthropic_client(**kw):
 #   note        lines for the export header: where calls go and who bills them
 #   setup       lines for the export header on setting it up (after the notes)
 #   always      exported programs always need it (Claude)
+#   prices      {model: (US dollars per million tokens in, out)}, for the run's cost; a model with none shows no cost
+#   prices_checked, prices_source   when the prices were looked up (YYYY-MM-DD) and where. Prices change:
+#               python tools/smoke_test.py models notes any older than 90 days
 # Model names change over time. To use a different model for a tier without editing this file, put
 # MODEL_<TIER> = <model name> in second-thought.ini, like  MODEL_OPENAI_DEFAULT = gpt-6.2-sol  or  MODEL_QUICK = claude-haiku-5.
 SERVICES = [
@@ -181,13 +184,17 @@ SERVICES = [
      "signup": "https://console.anthropic.com", "pip": ["anthropic"], "always": True,
      "tiers": {"quick": ("claude-haiku-4-5-20251001", "Claude, quick", "Quick"),
                "default": ("claude-sonnet-5-5", "Claude, balanced", "Balanced"),
-               "complex": ("claude-opus-5-5", "Claude, most capable", "Most capable")}},
+               "complex": ("claude-opus-5-5", "Claude, most capable", "Most capable")},
+     "prices": {"claude-haiku-4-5-20251001": (1, 5), "claude-sonnet-5-5": (2, 10), "claude-opus-5-5": (4, 20)},
+     "prices_checked": "2026-10-30", "prices_source": "https://platform.claude.com/docs/en/about-claude/pricing"},
     # Gemini: needs  pip install google-genai  and GEMINI_API_KEY. See https://ai.google.dev/gemini-api/docs/models
     {"name": "Gemini", "menu": "Gemini", "api": "gemini", "prefix": "gemini-", "keys": ["GEMINI_API_KEY", "GOOGLE_API_KEY"],
      "signup": "https://aistudio.google.com", "pip": ["google-genai"],
      "note": ["Gemini calls go through the Gemini API and are billed to your Google account."],
      "tiers": {"quick": ("gemini-3.5-flash-lite", "Gemini Flash-Lite"), "default": ("gemini-3.8-flash", "Gemini Flash"),
-               "complex": ("gemini-3.1-pro-preview", "Gemini Pro")}},
+               "complex": ("gemini-3.1-pro-preview", "Gemini Pro")},
+     "prices": {"gemini-3.5-flash-lite": (0.30, 2.50), "gemini-3.8-flash": (0.75, 3.75), "gemini-3.1-pro-preview": (2, 12)},
+     "prices_checked": "2026-10-30", "prices_source": "https://computeprices.com/api-pricing/gemini"},
     # Llama: any OpenAI-compatible server. Default is Ollama on this computer: install from https://ollama.com,
     # then  ollama pull llama3.2-vision:11b  (and the others if you use them). See https://ollama.com/library
     # llama-quick is small and fast and runs on most computers; llama-default can look at pictures and needs about
@@ -204,19 +211,25 @@ SERVICES = [
      "base_env": "DEEPSEEK_BASE_URL", "keys": ["DEEPSEEK_API_KEY"], "signup": "https://platform.deepseek.com",
      "note": ["DeepSeek calls go to DeepSeek's servers (in China), under DeepSeek's terms, billed to your DeepSeek account."],
      "tiers": {"quick": ("deepseek-flash", "DeepSeek Flash"), "default": ("deepseek-flash", "DeepSeek Flash"),
-               "complex": ("deepseek-v4-pro", "DeepSeek V4 Pro")}, "no_vision": ["deepseek-v4-pro"]},
+               "complex": ("deepseek-v4-pro", "DeepSeek V4 Pro")}, "no_vision": ["deepseek-v4-pro"],
+     # Peak-hour prices (01:00-04:00 and 06:00-10:00 UTC on weekdays); off-peak is half.
+     "prices": {"deepseek-flash": (0.30, 1.20), "deepseek-v4-pro": (1.32, 3.96)},
+     "prices_checked": "2026-10-30", "prices_source": "https://api-docs.deepseek.com/quick_start/pricing"},
     # xAI (Grok): needs XAI_API_KEY (https://console.x.ai). Both can look at pictures. See https://docs.x.ai/docs/models
     {"name": "xAI", "who": "Grok", "key_label": "Grok (xAI)", "menu": "Grok, from xAI", "api": "openai", "prefix": "xai-",
      "base": "https://api.x.ai/v1", "base_env": "XAI_BASE_URL", "keys": ["XAI_API_KEY"], "signup": "https://console.x.ai",
      "note": ["Grok calls go to xAI's servers, under xAI's terms, billed to your xAI account (https://console.x.ai)."],
-     "tiers": {"quick": ("grok-4.3", "Grok 4.3"), "default": ("grok-4.3", "Grok 4.3"), "complex": ("grok-4.7", "Grok 4.7")}},
+     "tiers": {"quick": ("grok-4.3", "Grok 4.3"), "default": ("grok-4.3", "Grok 4.3"), "complex": ("grok-4.7", "Grok 4.7")},
+     "prices": {"grok-4.3": (1.25, 2.50)}, "prices_checked": "2026-08-21", "prices_source": "https://www.morphllm.com/grok-api-pricing"},
     # OpenAI: needs OPENAI_API_KEY (https://platform.openai.com). All three can look at pictures.
     # See https://developers.openai.com/api/docs/models
     {"name": "OpenAI", "menu": "OpenAI", "api": "openai", "prefix": "openai-", "base": "https://api.openai.com/v1",
      "base_env": "OPENAI_BASE_URL", "keys": ["OPENAI_API_KEY"], "signup": "https://platform.openai.com",
      "note": ["OpenAI calls go through the OpenAI API and are billed to your OpenAI API account, not a ChatGPT plan."],
      "tiers": {"quick": ("gpt-6-luna", "GPT-6 Luna"), "default": ("gpt-6.1-sol", "GPT-6.1 Sol"),
-               "complex": ("gpt-6-astra", "GPT-6 Astra")}},
+               "complex": ("gpt-6-astra", "GPT-6 Astra")},
+     "prices": {"gpt-6-luna": (0.10, 0.50), "gpt-6.1-sol": (2, 10)},
+     "prices_checked": "2026-10-30", "prices_source": "https://computingforgeeks.com/gpt-6-sol-luna-released-features-benchmarks/"},
     # Mistral (France): needs MISTRAL_API_KEY (https://console.mistral.ai). See https://docs.mistral.ai/getting-started/models
     {"name": "Mistral", "menu": "Mistral", "api": "openai", "prefix": "mistral-", "base": "https://api.mistral.ai/v1",
      "base_env": "MISTRAL_BASE_URL", "keys": ["MISTRAL_API_KEY"], "signup": "https://console.mistral.ai",
@@ -312,6 +325,24 @@ for _tier_name in list(MODELS):
         MODELS[_tier_name] = _name
 NO_VISION = {m for s in SERVICES for m in s.get("no_vision", ())}  # models that can't look at photos
 MODEL_LABELS = {_tier(s, k): s["tiers"][k][1] for s in SERVICES for k in TIER_NAMES if k in s["tiers"]}
+# PRICES: what each tier's model costs, in US dollars per million tokens (in, out), from its service's "prices" (each
+# service says when they were checked, and where: services change them). A tier whose model has no price, or was
+# changed with MODEL_<TIER>, has none, and a run that uses it shows no cost rather than a wrong one.
+PRICES = {_tier(s, k): tuple(s["prices"][MODELS[_tier(s, k)]]) for s in SERVICES for k in TIER_NAMES
+          if k in s["tiers"] and MODELS.get(_tier(s, k)) in s.get("prices", {})}
+
+
+def call_cost(tier, tokens_in, tokens_out):
+    """What one model call cost in US dollars, or None if its model's price isn't known."""
+    p = PRICES.get(tier)
+    return None if p is None else ((tokens_in or 0) * p[0] + (tokens_out or 0) * p[1]) / 1_000_000
+
+
+def money(dollars):
+    """A run's cost for people: 'about $0.03', 'under $0.01', 'about $1.20'."""
+    if dollars < 0.005:
+        return tr("under {cost}", cost="$0.01")
+    return tr("about {cost}", cost=f"${dollars:,.2f}")
 
 
 def model_label(tier):
@@ -4998,6 +5029,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.reflect = None          # the review loop running now: earlier problems and its best draft so far
         self.checkpoints = {}        # 'save checkpoint' snapshots, by name
         self.usage = {}  # provider -> [tokens in, tokens out]
+        self.cost = [0.0, True]      # what the run's model calls cost in US dollars, and whether every one had a known price
         self.budget = BUDGET          # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
         self.trace = []              # every log line, for save_log
@@ -5105,6 +5137,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
             return text
         finally:
             after = [sum(u[i] for u in self.usage.values()) for i in (0, 1)]
+            if after != before:
+                cost = call_cost(t, after[0] - before[0], after[1] - before[1])
+                self.cost = [self.cost[0] + (cost or 0), self.cost[1] and cost is not None]
             self._pending.append({"who": model_label(t), "secs": time.monotonic() - start, "in": after[0] - before[0],
                                   "out": after[1] - before[1], "ok": ok, "prompt": self._prompt_text(prompt, history, picture)})
 
@@ -6259,8 +6294,15 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         spare = (" · " + (tr("a backup answered 1 step") if self.backup_used == 1 else tr("a backup answered {n} steps", n=self.backup_used))
                  if self.backup_used else "")
         budget = " · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else ""
-        print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}", flush=True)
+        print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}{self.cost_text()}", flush=True)
         return 0
+
+    def cost_text(self):
+        """' · about $0.03 at list prices' for the end line, or '' when nothing was charged or a model's price isn't known."""
+        spent, known = self.cost
+        if not known or not self.usage or not spent:
+            return ""
+        return " · " + tr("{cost} at list prices", cost=money(spent))
 
     def save_log(self):
         """With save_log = yes in second-thought.ini, writes this run's log to logs/<program>-<date>-<time>.md."""
@@ -6275,6 +6317,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
                  f"- Model calls: {self.calls}"]
         for who, u in self.usage.items():
             lines.append(f"- {who}: {u[0]:,} tokens in, {u[1]:,} out")
+        if self.cost_text():
+            lines.append(f"- Cost: {self.cost_text()[3:]}")
         if self.budget:
             lines.append(f"- Budget: {self.budget:,} tokens")
         if self.error:

@@ -1408,7 +1408,10 @@
   "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.": "<b>Ctrl+C</b>‏, <b>Ctrl+X</b> ו־<b>Ctrl+V</b> מעתיקים, גוזרים ומדביקים. <b>Shift</b> עם <b>W</b>‏, <b>A</b>‏, <b>S</b> או <b>D</b> זז בשטח הריק, ו־<b>Esc</b> יוצא מהבלוקים.",
   "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "קורא מסך מקריא היכן הסמן. בכל מקום אחר, <b>Tab</b> עובר בין הכפתורים. כשתוכנית שואלת אתכם משהו, תיבת התשובה מקבלת את המיקוד, ו־<b>Ctrl+Enter</b> שולח תשובה מוקלדת.",
   "Press the question mark button for keyboard help.": "הקישו על כפתור סימן השאלה לעזרה במקלדת.",
-  "Keyboard help": "עזרה במקלדת"
+  "Keyboard help": "עזרה במקלדת",
+  "about {cost}": "בערך {cost}",
+  "under {cost}": "פחות מ־{cost}",
+  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "לפי מחירון המודלים זה {cost}; בדף הזה זה נספר במקום זאת בשימוש שלכם ב־Claude."
  },
  "examples": {
   "review": {
@@ -2851,6 +2854,9 @@
   "New since then: {what}": "חדש מאז: {what}",
   "No longer: {what}": "כבר לא: {what}",
   "What it can do is the same as before.": "מה שהיא יכולה לעשות זהה לקודם.",
-  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} הריצו אותה פעם אחת בעצמכם וענו y (הרצה מתוזמנת לא תתחיל עד אז)."
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} הריצו אותה פעם אחת בעצמכם וענו y (הרצה מתוזמנת לא תתחיל עד אז).",
+  "about {cost}": "בערך {cost}",
+  "under {cost}": "פחות מ־{cost}",
+  "{cost} at list prices": "{cost} במחירון"
  }
 }

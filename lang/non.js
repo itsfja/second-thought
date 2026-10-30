@@ -919,7 +919,10 @@
 "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.":"<b>Ctrl+C</b>, <b>Ctrl+X</b> ok <b>Ctrl+V</b> afrita, skera ok líma. <b>Shift</b> með <b>W</b>, <b>A</b>, <b>S</b> eða <b>D</b> ferr um tómt rúm, ok <b>Esc</b> yfirgefr kubbana.",
 "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Skjálesari segir hvar bendillinn er. Annars staðar ferr <b>Tab</b> milli hnappa. Þá er forrit spyrr þik einhvers, fær svarreitrinn athyglina, ok <b>Ctrl+Enter</b> sendir ritat svar.",
 "Press the question mark button for keyboard help.":"Ýt á spurningarmerkis-hnappinn fyrir lyklaborðshjálp.",
-"Keyboard help":"Lyklaborðshjálp"
+"Keyboard help":"Lyklaborðshjálp",
+"about {cost}":"um {cost}",
+"under {cost}":"minna en {cost}",
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"At skráðu verði líkananna er þat {cost}; á þessi síðu telsk þat til notkunar þinnar á Claude."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1730,7 +1733,10 @@
 "New since then: {what}":"Nýtt síðan: {what}",
 "No longer: {what}":"Eigi lengr: {what}",
 "What it can do is the same as before.":"Þat er þat getr gert er hit sama sem áðr.",
-"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Keyr þat einu sinni sjálfr ok svara y (settr gangr byrjar eigi fyrr)."
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Keyr þat einu sinni sjálfr ok svara y (settr gangr byrjar eigi fyrr).",
+"about {cost}":"um {cost}",
+"under {cost}":"minna en {cost}",
+"{cost} at list prices":"{cost} at skráðu verði"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

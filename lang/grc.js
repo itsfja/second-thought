@@ -919,7 +919,10 @@
 "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.":"Τὰ <b>Ctrl+C</b>, <b>Ctrl+X</b> καὶ <b>Ctrl+V</b> ἀντιγράφει, ἐκτέμνει καὶ ἐντίθησιν. Τὸ <b>Shift</b> μετὰ <b>W</b>, <b>A</b>, <b>S</b> ἢ <b>D</b> κινεῖται ἐν τῇ κενῇ χώρᾳ, καὶ τὸ <b>Esc</b> λείπει τὰς πλίνθους.",
 "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Ἀναγνώστης ὄψεως λέγει ποῦ ἐστιν ὁ δείκτης. Ἀλλαχοῦ, τὸ <b>Tab</b> ἀπὸ κομβίου εἰς κομβίον ἄγει. Ὅταν πρόγραμμα ἐρωτᾷ σέ τι, ἡ θήκη τῆς ἀποκρίσεως τὴν προσοχὴν λαμβάνει, καὶ τὸ <b>Ctrl+Enter</b> πέμπει γεγραμμένην ἀπόκρισιν.",
 "Press the question mark button for keyboard help.":"Πίεσον τὸ κομβίον τοῦ ἐρωτηματικοῦ πρὸς βοήθειαν πληκτρολογίου.",
-"Keyboard help":"Βοήθεια πληκτρολογίου"
+"Keyboard help":"Βοήθεια πληκτρολογίου",
+"about {cost}":"περὶ {cost}",
+"under {cost}":"ἔλαττον {cost}",
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Ταῖς γεγραμμέναις τιμαῖς τῶν προτύπων τοῦτ' ἔστι {cost}· ἐν ταύτῃ δὲ τῇ σελίδι εἰς τὴν σὴν τοῦ Claude χρῆσιν λογίζεται."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1730,7 +1733,10 @@
 "New since then: {what}":"Καινὸν ἐξ ἐκείνου: {what}",
 "No longer: {what}":"Οὐκέτι: {what}",
 "What it can do is the same as before.":"Ἃ δύναται ποιεῖν τὰ αὐτά ἐστι τοῖς πρότερον.",
-"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Αὐτὸς ἅπαξ τρέξον αὐτὸ καὶ ἀπόκριναι y (ὁ τεταγμένος δρόμος οὐκ ἄρξεται πρὶν τοῦτο)."
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Αὐτὸς ἅπαξ τρέξον αὐτὸ καὶ ἀπόκριναι y (ὁ τεταγμένος δρόμος οὐκ ἄρξεται πρὶν τοῦτο).",
+"about {cost}":"περὶ {cost}",
+"under {cost}":"ἔλαττον {cost}",
+"{cost} at list prices":"{cost} ταῖς γεγραμμέναις τιμαῖς"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

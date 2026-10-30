@@ -919,7 +919,10 @@
 "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.":"<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copie, kutte and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> meveth aboute the voyde space, and <b>Esc</b> leveth the blokkes.",
 "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"A screen redere redeth out where the cursour is. Every where elles, <b>Tab</b> meveth bitwixe the botouns. Whan a programme asketh thee aught, the answere box getteth the focus, and <b>Ctrl+Enter</b> sendeth a writen answere.",
 "Press the question mark button for keyboard help.":"Presse the botoun of the questioun mark for keybord helpe.",
-"Keyboard help":"Keybord helpe"
+"Keyboard help":"Keybord helpe",
+"about {cost}":"aboute {cost}",
+"under {cost}":"lasse than {cost}",
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"At the sette pris of the modeles that is {cost}; on this page it is told to thyn usage of Claude instede."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1730,7 +1733,10 @@
 "New since then: {what}":"Newe sith thanne: {what}",
 "No longer: {what}":"No lenger: {what}",
 "What it can do is the same as before.":"That it may do is the same as bifore.",
-"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Renne it ones thyself and answere y (a sette rennynge shal nat bigynne til thanne)."
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Renne it ones thyself and answere y (a sette rennynge shal nat bigynne til thanne).",
+"about {cost}":"aboute {cost}",
+"under {cost}":"lasse than {cost}",
+"{cost} at list prices":"{cost} at the sette pris"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

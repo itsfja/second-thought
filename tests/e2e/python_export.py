@@ -120,6 +120,9 @@ def approval_tests(codes, env, tmp):
           + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
     code_, out, err = drive([sys.executable, "-u", str(prog)], env, tmp)
     check(code_ == 0 and "This program can:" not in out, "the next run doesn't ask again")
+    done = next((line for line in out.splitlines() if line.startswith("Done · ")), "")
+    check(re.search(r"Claude: [\d,]+ tokens in, [\d,]+ out · (about \$\d+\.\d\d|under \$0\.01) at list prices$", done),
+          f"the end line says what the run cost at Claude's list prices ({done})")
     prog.write_text(codes["a_bedtime"][0] + "\n# edited\n", encoding="utf-8")
     r = subprocess.run([sys.executable, "-u", str(prog), "--schedule"], env=env, cwd=tmp, capture_output=True, encoding="utf-8", errors="replace", timeout=60,
                        stdin=subprocess.DEVNULL)

@@ -1407,7 +1407,10 @@
   "<b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.": "<b>Strg+C</b>, <b>Strg+X</b> und <b>Strg+V</b> kopieren, schneiden aus und fügen ein. <b>Umschalt</b> mit <b>W</b>, <b>A</b>, <b>S</b> oder <b>D</b> bewegt sich über die leere Fläche, und <b>Esc</b> verlässt die Blöcke.",
   "A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "Ein Bildschirmleser sagt, wo der Cursor ist. Überall sonst wechselt <b>Tab</b> zwischen den Schaltflächen. Wenn ein Programm Sie etwas fragt, bekommt das Antwortfeld den Fokus, und <b>Strg+Enter</b> schickt eine getippte Antwort.",
   "Press the question mark button for keyboard help.": "Drücken Sie die Fragezeichen-Schaltfläche für Hilfe zur Tastatur.",
-  "Keyboard help": "Hilfe zur Tastatur"
+  "Keyboard help": "Hilfe zur Tastatur",
+  "about {cost}": "etwa {cost}",
+  "under {cost}": "unter {cost}",
+  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "Zu den Listenpreisen der Modelle sind das {cost}; auf dieser Seite zählt es stattdessen zu Ihrer Claude-Nutzung."
  },
  "examples": {
   "review": {
@@ -2850,6 +2853,9 @@
   "New since then: {what}": "Neu seitdem: {what}",
   "No longer: {what}": "Nicht mehr: {what}",
   "What it can do is the same as before.": "Was es tun kann, ist dasselbe wie vorher.",
-  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Führen Sie es einmal selbst aus und antworten Sie mit y (ein geplanter Lauf startet erst dann)."
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Führen Sie es einmal selbst aus und antworten Sie mit y (ein geplanter Lauf startet erst dann).",
+  "about {cost}": "etwa {cost}",
+  "under {cost}": "unter {cost}",
+  "{cost} at list prices": "{cost} zu Listenpreisen"
  }
 }
