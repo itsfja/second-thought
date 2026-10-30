@@ -13,6 +13,8 @@ in window.__editorUnits, at the end of web/editor/23-schedules.js.
 const fs = require("fs"), path = require("path"), vm = require("vm");
 
 const ROOT = path.resolve(__dirname, "..", "..");
+// A Windows checkout may have \r\n line ends; the page is built with \n ones.
+const read = file => fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n");
 
 // A stand-in for anything the page has and Node doesn't: it can be called, constructed, read and written, and every
 // part of it is another stand-in. It's never a promise, and iterating over it gives nothing.
@@ -41,7 +43,7 @@ function element(text){
 
 function load(options = {}){
   const lang = options.lang || "en";
-  const page = fs.readFileSync(path.join(ROOT, "second-thought.html"), "utf8");
+  const page = read(path.join(ROOT, "second-thought.html"));
   const data = {};
   for (const m of page.matchAll(/<script type="(?:application\/json|text\/plain)" id="([^"]+)">\n([\s\S]*?)<\/script>/g)) data[m[1]] = m[2];
 
@@ -74,7 +76,7 @@ function load(options = {}){
   g.window = g.self = g.globalThis = g;
   vm.createContext(g);
   if (lang !== "en") {
-    vm.runInContext(fs.readFileSync(path.join(ROOT, "lang", lang + ".js"), "utf8"), g, { filename:"lang/" + lang + ".js" });
+    vm.runInContext(read(path.join(ROOT, "lang", lang + ".js")), g, { filename:"lang/" + lang + ".js" });
     g.ST_I18N = g.ST_I18N_FILES[lang];
     if (!g.ST_I18N) throw new Error("lang/" + lang + ".js didn't load");
   }
@@ -82,7 +84,7 @@ function load(options = {}){
   const dir = path.join(ROOT, "web", "editor"), files = [];
   let code = "", line = 1;
   for (const name of fs.readdirSync(dir).filter(f => f.endsWith(".js")).sort()) {
-    let text = fs.readFileSync(path.join(dir, name), "utf8");
+    let text = read(path.join(dir, name));
     if (!text.endsWith("\n")) text += "\n";
     files.push([line, name]);
     code += text;
@@ -101,4 +103,4 @@ function load(options = {}){
 // Objects made in the editor have its Object and Array, so compare them with deepEqual after this.
 const plain = v => JSON.parse(JSON.stringify(v));
 
-module.exports = { load, plain, ROOT };
+module.exports = { load, plain, read, ROOT };

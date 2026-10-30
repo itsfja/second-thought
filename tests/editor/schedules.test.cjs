@@ -22,12 +22,15 @@ const TIMES = [[9, 0, "weekdays"], [21, 0, "weekends"], [8, 30, "every"], [0, 15
 if (process.env.ST_TZ_CHILD) {
   // In the child: print what the page makes, for the parent to check.
   const units = load().__editorUnits;
-  process.stdout.write(JSON.stringify(TIMES.map(([h, m, d]) => units.actionsCrons(hat({ HOUR:h, MINUTE:m, DAYS:d })))));
+  process.stdout.write(JSON.stringify({ zone:Intl.DateTimeFormat().resolvedOptions().timeZone,
+    crons:TIMES.map(([h, m, d]) => units.actionsCrons(hat({ HOUR:h, MINUTE:m, DAYS:d }))) }));
 } else {
   for (const [tz, want] of Object.entries(CRONS)) {
-    test("GitHub Actions cron lines in " + tz, () => {
-      const out = execFileSync(process.execPath, [__filename], { env:{ ...process.env, TZ:tz, ST_TZ_CHILD:"1" }, encoding:"utf8" });
-      const got = JSON.parse(out);
+    test("GitHub Actions cron lines in " + tz, t => {
+      const out = JSON.parse(execFileSync(process.execPath, [__filename], { env:{ ...process.env, TZ:tz, ST_TZ_CHILD:"1" }, encoding:"utf8" }));
+      const same = z => new Intl.DateTimeFormat("en", { timeZone:z }).resolvedOptions().timeZone;  // Asia/Kolkata may be Asia/Calcutta
+      if (same(out.zone) !== same(tz)) return t.skip("this computer's Node ignores TZ (it says " + out.zone + ")");
+      const got = out.crons;
       TIMES.forEach(([h, m, d], i) => {
         assert.deepEqual(got[i].map(c => c.cron), want[i], tz + " " + h + ":" + m + " " + d);
         assert.deepEqual(got[i].map(c => c.note), want[i].length > 1 ? ["winter", "summer"] : [""], tz + " notes");

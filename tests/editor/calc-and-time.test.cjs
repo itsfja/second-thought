@@ -1,11 +1,11 @@
 // calculate and time_plus in the page. The cases are in tests/parity/, which the runtime's tests read too.
 "use strict";
 const test = require("node:test"), assert = require("node:assert/strict");
-const fs = require("fs"), path = require("path");
-const { load, ROOT } = require("./page.cjs");
+const path = require("path");
+const { load, read, ROOT } = require("./page.cjs");
 
 const units = load().__editorUnits;
-const parity = name => JSON.parse(fs.readFileSync(path.join(ROOT, "tests", "parity", name), "utf8"));
+const parity = name => JSON.parse(read(path.join(ROOT, "tests", "parity", name)));
 const message = f => { try { f(); } catch (e) { return e.message; } assert.fail("expected an error"); };
 
 test("calculate gives the runtime's answers", () => {
