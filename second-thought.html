@@ -7,7 +7,7 @@
 :root{
   --bg:#F3F4F8; --panel:#FFFFFF; --ink:#1B1E2B; --muted:#5D6278; --line:#DADDE8;
   --accent:#2F4BDB; --accent-ink:#FFFFFF;
-  --ok:#1E8A63; --ok-bg:#DFF3EA; --warn:#A8670A; --warn-bg:#FCEFD9; --bad:#B4344F; --bad-bg:#FBE3E8; --run-bg:#E3E8FD;
+  --ok:#187652; --ok-bg:#DFF3EA; --warn:#8A5408; --warn-bg:#FCEFD9; --bad:#B4344F; --bad-bg:#FBE3E8; --run-bg:#E3E8FD;
   --font-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
   --font-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -186,6 +186,8 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   .log{min-height:380px}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+.io .check{display:flex;gap:8px;align-items:center;font-size:14px}
+.keys-list{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:4px}
 </style>
 
 <header class="bar">
@@ -286,6 +288,21 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <p class="msg" id="bk-msg" role="status"></p>
   </div>
 </section>
+<section id="keys" class="io" hidden aria-label="Keyboard">
+  <div class="io-col">
+    <h2>Keyboard</h2>
+    <label class="check"><input type="checkbox" id="keys-on"> Build programs with the keyboard</label>
+    <p class="hint">Turn it on here or with <b>Ctrl+Shift+K</b>. Then, anywhere but a typing box:</p>
+    <ul class="hint keys-list">
+      <li><b>T</b> opens the blocks: <b>W</b> and <b>S</b> choose a category, <b>D</b> opens it, <b>W</b> and <b>S</b> choose a block, and <b>Enter</b> puts it in your program.</li>
+      <li>In your program, <b>W</b> and <b>S</b> move to the part before and after, <b>D</b> goes into a block and <b>A</b> comes back out.</li>
+      <li><b>Enter</b> on a slot marks it, so the next block you choose goes there. <b>Enter</b> on a field lets you type in it or choose.</li>
+      <li><b>I</b> moves the block at the cursor to the marked slot, <b>X</b> takes it off what it's joined to, and <b>Delete</b> removes it.</li>
+      <li><b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.</li>
+    </ul>
+    <p class="hint">A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.</p>
+  </div>
+</section>
 <section id="io" class="io" hidden aria-label="Import and export">
   <div class="io-col">
     <h2>Export this program</h2>
@@ -344,18 +361,21 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   </div>
 </section>
 
+<div id="announce" class="sr" role="status" aria-live="polite"></div>
 <main class="main">
   <div class="canvas">
     <div class="finder"><label for="block-search" class="sr">Find a block</label><input type="search" id="block-search" placeholder="Find a block…" autocomplete="off"></div>
     <div id="blockly" aria-label="Block editor"></div>
+    <p id="keys-where" class="sr">Press the question mark button for keyboard help.</p>
     <div class="zoom" role="group" aria-label="Zoom">
       <button type="button" id="zin" aria-label="Zoom in">+</button>
       <button type="button" id="zout" aria-label="Zoom out">−</button>
       <button type="button" id="zfit" aria-label="Fit program on screen">Fit</button>
+      <button type="button" id="keys-toggle" aria-expanded="false" aria-controls="keys" aria-label="Keyboard help" title="Keyboard help">?</button>
     </div>
   </div>
-  <section class="log" aria-live="polite">
-    <div class="log-head"><h2>Run log</h2><span class="log-tools"><button type="button" id="log-tests" hidden></button><button type="button" id="log-save" hidden>Save log</button><span class="status" id="status">idle</span></span></div>
+  <section class="log" aria-label="Run log">
+    <div class="log-head"><h2>Run log</h2><span class="log-tools"><button type="button" id="log-tests" hidden></button><button type="button" id="log-save" hidden>Save log</button><span class="status" id="status" role="status">idle</span></span></div>
     <details class="watch" id="watch">
       <summary>Watch values</summary>
       <div id="watch-body" class="watch-body"></div>
@@ -367,7 +387,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
         <button type="button" id="step-go">Run to the end</button>
       </div>
     </div>
-    <div id="steps">
+    <div id="steps" role="log" aria-relevant="additions">
       <div class="empty">
         An example program is loaded on the left. Press Run to watch it work here, or pick another example above.
         <ol>
@@ -9235,6 +9255,7 @@ HOW TO MAP CODE
   })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@blockly/field-multilineinput@5.0.15/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@blockly/keyboard-navigation@0.7.0/dist/index.js"></script>
 <script id="editor">
   // 00-start.js: The editor's opening: shared limits and small helpers ($, STORE_KEY, MAX_*). Every file below runs inside the same function, so names declared in one are seen by the rest.
 (function(){
@@ -9324,7 +9345,7 @@ HOW TO MAP CODE
     const t = PAGE_T[s] || s;
     return vars ? t.replace(/\{(\w+)\}/g, (m, k) => k in vars ? String(vars[k]) : m) : t;
   }
-  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #io, #describe, main.main";
+  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #keys, #io, #describe, main.main";
   const PAGE_LATER = "script, style, select, textarea, #blockly, #gal-body, #ex-desc, #status, #lib-where, #mem-where";  // filled in by code
   const PAGE_ATTRS = ["title", "placeholder", "aria-label"];
   const RICH = new Set(["B", "I", "EM", "STRONG", "CODE"]);
@@ -9353,7 +9374,8 @@ HOW TO MAP CODE
     return keys;
   }
   const PAGE_KEYS = pageTexts(!!window.ST_I18N);
-  if (window.ST_I18N) document.documentElement.lang = window.ST_LANG;
+  // The page's language, for screen readers (and dates): in English, the browser's kind of English if it has one.
+  document.documentElement.lang = window.ST_I18N ? window.ST_LANG : (/^en(-|$)/i.test(navigator.language || "") ? navigator.language : "en");
   window.__pageI18n = () => ({ lang:window.ST_LANG || "en", keys:[...new Set(PAGE_KEYS)], missing:[...new Set(PAGE_KEYS)].filter(k => !PAGE_T[k]),
     categories:[...new Set(EXAMPLE_CATEGORIES.concat(window.__galleryGroups || []))] });
   function localizeToolbox(tb){
@@ -11889,6 +11911,82 @@ HOW TO MAP CODE
   new MutationObserver(retheme).observe(document.documentElement, { attributes:true, attributeFilter:["data-theme"] });
   window.addEventListener("resize", () => Blockly.svgResize(ws));
 
+  /* ---------- Building with the keyboard ---------- */
+  // Blockly's keyboard navigation (the @blockly/keyboard-navigation plugin), turned on in the keyboard help (?) or with
+  // Ctrl+Shift+K, and remembered. A screen reader hears where the cursor goes, through the page's announcer.
+  function announce(text){
+    const a = $("announce"); a.textContent = "";
+    setTimeout(() => { a.textContent = text; }, 30);  // emptied first, so the same words are read again
+  }
+  const KEYS_KEY = "second-thought-keyboard";
+  // Blockly listens for keys on the box it draws in, so that box can take the focus (Tab reaches it), and a screen
+  // reader passes keys straight to it (an "application"), named, with where to find the keyboard help.
+  const editorEl = ws.getInjectionDiv();
+  editorEl.tabIndex = 0; editorEl.setAttribute("role", "application");
+  editorEl.setAttribute("aria-label", tr("Block editor")); editorEl.setAttribute("aria-describedby", "keys-where");
+  let keyNav = null;
+  if (typeof window.NavigationController === "function") {
+    // The plugin for Blockly 11 calls the toolbox's moves by their older names (selectNext_); Blockly 11.2 dropped the "_".
+    ["selectNext", "selectPrevious", "selectParent", "selectChild"].forEach(n => {
+      const proto = Blockly.Toolbox.prototype;
+      if (!proto[n + "_"] && proto[n]) proto[n + "_"] = function(){ return this[n](); };
+    });
+    try { keyNav = new window.NavigationController(); keyNav.init(); keyNav.addWorkspace(ws); } catch(e) { keyNav = null; }
+  }
+  const keyboardOn = () => !!ws.keyboardAccessibilityMode;
+  function setKeyboard(on, quiet){
+    if (!keyNav) return;
+    if (on !== keyboardOn()) { if (on) keyNav.enable(ws); else keyNav.disable(ws); }
+    keyboardChanged(quiet);
+  }
+  function keyboardChanged(quiet){
+    $("keys-on").checked = keyboardOn();
+    try { localStorage.setItem(KEYS_KEY, keyboardOn() ? "on" : ""); } catch(e) {}
+    if (quiet) return;
+    announce(tr(keyboardOn() ? "Building with the keyboard is on. Press T for the blocks." : "Building with the keyboard is off."));
+    // Blockly hears keys inside the block editor only, so that's where the keyboard goes next.
+    if (keyboardOn() && !editorEl.contains(document.activeElement)) setTimeout(() => editorEl.focus(), 0);
+  }
+  function describeNode(node){
+    if (!node) return "";
+    const T = Blockly.ASTNode.types, type = node.getType(), at = node.getLocation();
+    const blockText = b => { try { return squash(b.toString()) || b.type; } catch(e) { return b.type; } };
+    if (type === T.WORKSPACE) return tr("Empty space");
+    if (type === T.STACK) return tr("Script: {block}", { block:blockText(at) });
+    if (type === T.BLOCK) return tr("Block: {block}", { block:blockText(at) });
+    if (type === T.FIELD) return tr("Field {value}, in: {block}", { value:squash(at.getText ? at.getText() : at.getValue()), block:blockText(at.getSourceBlock()) });
+    if (type === T.INPUT) return tr("Slot {name}, in: {block}", { name:at.getParentInput && at.getParentInput() ? at.getParentInput().name : "", block:blockText(at.getSourceBlock()) });
+    if (type === T.NEXT) return tr("After: {block}", { block:blockText(at.getSourceBlock()) });
+    if (type === T.PREVIOUS || type === T.OUTPUT) return tr("Before: {block}", { block:blockText(at.getSourceBlock()) });
+    return "";
+  }
+  if (keyNav) {
+    ws.addChangeListener(e => {
+      if (e && e.type === Blockly.Events.MARKER_MOVE && e.isCursor && keyboardOn()) { const t = describeNode(e.newNode); if (t) announce(t); }
+    });
+    // The flyout's cursor (choosing a block from a category) has its own workspace.
+    const flyWs = () => { const f = ws.getToolbox() && ws.getToolbox().getFlyout(); return f && f.getWorkspace(); };
+    if (flyWs()) flyWs().addChangeListener(e => {
+      if (e && e.type === Blockly.Events.MARKER_MOVE && e.isCursor && keyboardOn() && e.newNode) {
+        const at = e.newNode.getLocation(); if (at && at.toString) announce(tr("Block to add: {block}", { block:squash(at.toString()) }));
+      }
+    });
+    ws.addChangeListener(e => {
+      if (e && e.type === Blockly.Events.TOOLBOX_ITEM_SELECT && keyboardOn() && e.newItem) announce(tr("Category: {name}", { name:e.newItem }));  // its shown name
+    });
+    // Ctrl+Shift+K is the plugin's own switch: keep the box and the saved choice in step with it.
+    document.addEventListener("keydown", e => { if (e.ctrlKey && e.shiftKey && (e.key === "K" || e.key === "k")) setTimeout(() => keyboardChanged(), 0); });
+    let saved = ""; try { saved = localStorage.getItem(KEYS_KEY) || ""; } catch(e) {}
+    if (saved === "on") setKeyboard(true, true);
+  }
+  $("keys-on").disabled = !keyNav;
+  $("keys-on").addEventListener("change", e => setKeyboard(e.target.checked));
+  $("keys-toggle").onclick = () => {
+    const el = $("keys"), open = el.hidden;
+    el.hidden = !open; $("keys-toggle").setAttribute("aria-expanded", String(open));
+    if (open) $("keys-on").focus();
+    setTimeout(() => Blockly.svgResize(ws), 0);
+  };
   // 09-import-export.js: Import and export: block files, backup models, Save as GitHub Actions.
   /* ---------- Import / export ---------- */
   /* ----- Backup models: tried in order when the primary (the Model menu) fails on a step ----- */
@@ -15145,6 +15243,10 @@ HOW TO MAP CODE
       s.done("waiting for you", "warn");
       setStatus("waiting for you");
       const box = document.createElement("div"); box.className = "ask"; s.el.appendChild(box);
+      // The answer's controls are a group named by the question, so a screen reader says what's being asked when the focus moves in.
+      const qid = "ask-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7);
+      s.el.querySelector(".step-name").id = qid + "-t"; s.body.id = qid + "-q";
+      box.setAttribute("role", "group"); box.setAttribute("aria-labelledby", qid + "-t " + qid + "-q");
       const stopper = () => { run.stoppers.delete(stopper); box.remove(); s.done(run.stopped ? tr("stopped") : tr("ended"), run.stopped ? "bad" : "warn"); reject(new Halt()); };
       const finish = (v, label) => { run.stoppers.delete(stopper); box.remove(); s.done(label || tr("answered"), "ok"); if (!run.stoppers.size) setStatus("running"); resolve(v); };
       run.stoppers.add(stopper);

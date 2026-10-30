@@ -2,7 +2,7 @@
 :root{
   --bg:#F3F4F8; --panel:#FFFFFF; --ink:#1B1E2B; --muted:#5D6278; --line:#DADDE8;
   --accent:#2F4BDB; --accent-ink:#FFFFFF;
-  --ok:#1E8A63; --ok-bg:#DFF3EA; --warn:#A8670A; --warn-bg:#FCEFD9; --bad:#B4344F; --bad-bg:#FBE3E8; --run-bg:#E3E8FD;
+  --ok:#187652; --ok-bg:#DFF3EA; --warn:#8A5408; --warn-bg:#FCEFD9; --bad:#B4344F; --bad-bg:#FBE3E8; --run-bg:#E3E8FD;
   --font-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
   --font-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -181,3 +181,5 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   .log{min-height:380px}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+.io .check{display:flex;gap:8px;align-items:center;font-size:14px}
+.keys-list{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:4px}

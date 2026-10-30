@@ -121,6 +121,7 @@ async def route(r):
         "pdf.min.js": VENDOR / "pdfjs-dist/package/build/pdf.min.js",
         "field-multilineinput": VENDOR / "field-multilineinput/package/dist/index.js",
         "blockly.min.js": VENDOR / "blockly/package/blockly.min.js",
+        "keyboard-navigation": VENDOR / "keyboard-navigation/package/dist/index.js",
     }
     for family, (font_file, *_) in FONTS.items():  # a script's font, for the language that names it
         slug = family.lower().replace(" ", "-")

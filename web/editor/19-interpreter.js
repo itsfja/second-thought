@@ -103,6 +103,10 @@
       s.done("waiting for you", "warn");
       setStatus("waiting for you");
       const box = document.createElement("div"); box.className = "ask"; s.el.appendChild(box);
+      // The answer's controls are a group named by the question, so a screen reader says what's being asked when the focus moves in.
+      const qid = "ask-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7);
+      s.el.querySelector(".step-name").id = qid + "-t"; s.body.id = qid + "-q";
+      box.setAttribute("role", "group"); box.setAttribute("aria-labelledby", qid + "-t " + qid + "-q");
       const stopper = () => { run.stoppers.delete(stopper); box.remove(); s.done(run.stopped ? tr("stopped") : tr("ended"), run.stopped ? "bad" : "warn"); reject(new Halt()); };
       const finish = (v, label) => { run.stoppers.delete(stopper); box.remove(); s.done(label || tr("answered"), "ok"); if (!run.stoppers.size) setStatus("running"); resolve(v); };
       run.stoppers.add(stopper);

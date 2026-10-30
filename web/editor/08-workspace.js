@@ -125,3 +125,79 @@
   new MutationObserver(retheme).observe(document.documentElement, { attributes:true, attributeFilter:["data-theme"] });
   window.addEventListener("resize", () => Blockly.svgResize(ws));
 
+  /* ---------- Building with the keyboard ---------- */
+  // Blockly's keyboard navigation (the @blockly/keyboard-navigation plugin), turned on in the keyboard help (?) or with
+  // Ctrl+Shift+K, and remembered. A screen reader hears where the cursor goes, through the page's announcer.
+  function announce(text){
+    const a = $("announce"); a.textContent = "";
+    setTimeout(() => { a.textContent = text; }, 30);  // emptied first, so the same words are read again
+  }
+  const KEYS_KEY = "second-thought-keyboard";
+  // Blockly listens for keys on the box it draws in, so that box can take the focus (Tab reaches it), and a screen
+  // reader passes keys straight to it (an "application"), named, with where to find the keyboard help.
+  const editorEl = ws.getInjectionDiv();
+  editorEl.tabIndex = 0; editorEl.setAttribute("role", "application");
+  editorEl.setAttribute("aria-label", tr("Block editor")); editorEl.setAttribute("aria-describedby", "keys-where");
+  let keyNav = null;
+  if (typeof window.NavigationController === "function") {
+    // The plugin for Blockly 11 calls the toolbox's moves by their older names (selectNext_); Blockly 11.2 dropped the "_".
+    ["selectNext", "selectPrevious", "selectParent", "selectChild"].forEach(n => {
+      const proto = Blockly.Toolbox.prototype;
+      if (!proto[n + "_"] && proto[n]) proto[n + "_"] = function(){ return this[n](); };
+    });
+    try { keyNav = new window.NavigationController(); keyNav.init(); keyNav.addWorkspace(ws); } catch(e) { keyNav = null; }
+  }
+  const keyboardOn = () => !!ws.keyboardAccessibilityMode;
+  function setKeyboard(on, quiet){
+    if (!keyNav) return;
+    if (on !== keyboardOn()) { if (on) keyNav.enable(ws); else keyNav.disable(ws); }
+    keyboardChanged(quiet);
+  }
+  function keyboardChanged(quiet){
+    $("keys-on").checked = keyboardOn();
+    try { localStorage.setItem(KEYS_KEY, keyboardOn() ? "on" : ""); } catch(e) {}
+    if (quiet) return;
+    announce(tr(keyboardOn() ? "Building with the keyboard is on. Press T for the blocks." : "Building with the keyboard is off."));
+    // Blockly hears keys inside the block editor only, so that's where the keyboard goes next.
+    if (keyboardOn() && !editorEl.contains(document.activeElement)) setTimeout(() => editorEl.focus(), 0);
+  }
+  function describeNode(node){
+    if (!node) return "";
+    const T = Blockly.ASTNode.types, type = node.getType(), at = node.getLocation();
+    const blockText = b => { try { return squash(b.toString()) || b.type; } catch(e) { return b.type; } };
+    if (type === T.WORKSPACE) return tr("Empty space");
+    if (type === T.STACK) return tr("Script: {block}", { block:blockText(at) });
+    if (type === T.BLOCK) return tr("Block: {block}", { block:blockText(at) });
+    if (type === T.FIELD) return tr("Field {value}, in: {block}", { value:squash(at.getText ? at.getText() : at.getValue()), block:blockText(at.getSourceBlock()) });
+    if (type === T.INPUT) return tr("Slot {name}, in: {block}", { name:at.getParentInput && at.getParentInput() ? at.getParentInput().name : "", block:blockText(at.getSourceBlock()) });
+    if (type === T.NEXT) return tr("After: {block}", { block:blockText(at.getSourceBlock()) });
+    if (type === T.PREVIOUS || type === T.OUTPUT) return tr("Before: {block}", { block:blockText(at.getSourceBlock()) });
+    return "";
+  }
+  if (keyNav) {
+    ws.addChangeListener(e => {
+      if (e && e.type === Blockly.Events.MARKER_MOVE && e.isCursor && keyboardOn()) { const t = describeNode(e.newNode); if (t) announce(t); }
+    });
+    // The flyout's cursor (choosing a block from a category) has its own workspace.
+    const flyWs = () => { const f = ws.getToolbox() && ws.getToolbox().getFlyout(); return f && f.getWorkspace(); };
+    if (flyWs()) flyWs().addChangeListener(e => {
+      if (e && e.type === Blockly.Events.MARKER_MOVE && e.isCursor && keyboardOn() && e.newNode) {
+        const at = e.newNode.getLocation(); if (at && at.toString) announce(tr("Block to add: {block}", { block:squash(at.toString()) }));
+      }
+    });
+    ws.addChangeListener(e => {
+      if (e && e.type === Blockly.Events.TOOLBOX_ITEM_SELECT && keyboardOn() && e.newItem) announce(tr("Category: {name}", { name:e.newItem }));  // its shown name
+    });
+    // Ctrl+Shift+K is the plugin's own switch: keep the box and the saved choice in step with it.
+    document.addEventListener("keydown", e => { if (e.ctrlKey && e.shiftKey && (e.key === "K" || e.key === "k")) setTimeout(() => keyboardChanged(), 0); });
+    let saved = ""; try { saved = localStorage.getItem(KEYS_KEY) || ""; } catch(e) {}
+    if (saved === "on") setKeyboard(true, true);
+  }
+  $("keys-on").disabled = !keyNav;
+  $("keys-on").addEventListener("change", e => setKeyboard(e.target.checked));
+  $("keys-toggle").onclick = () => {
+    const el = $("keys"), open = el.hidden;
+    el.hidden = !open; $("keys-toggle").setAttribute("aria-expanded", String(open));
+    if (open) $("keys-on").focus();
+    setTimeout(() => Blockly.svgResize(ws), 0);
+  };
