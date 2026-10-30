@@ -873,7 +873,9 @@
 "Building the program failed: {problem}":"プログラムを作れませんでした: {problem}",
 "Undone. Your previous program is back.":"元に戻しました。前のプログラムが戻っています。",
 "Loaded Claude's program ({n} blocks). Check the blocks before running.":"Claude のプログラムを読み込みました（ブロック {n} 個）。実行する前にブロックを確かめてください。",
-"Community: teaching":"コミュニティ：授業"
+"Community: teaching":"コミュニティ：授業",
+"This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.":"このプログラムは新しい Second Thought で保存されています（ブロック形式 {theirs}。このページは {ours} まで読めます）。最新のページで開いてください。",
+"It was saved with older blocks and has been brought up to date (block format {from} to {to}).":"古いブロックで保存されていたので、最新の形に更新しました（ブロック形式 {from} から {to}）。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

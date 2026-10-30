@@ -1361,7 +1361,9 @@
   "Building the program failed: {problem}": "La construction du programme a échoué : {problem}",
   "Undone. Your previous program is back.": "Annulé. Votre programme précédent est revenu.",
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Programme de Claude chargé ({n} blocs). Vérifiez les blocs avant de lancer.",
-  "Community: teaching": "Communauté : enseignement"
+  "Community: teaching": "Communauté : enseignement",
+  "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "Ce programme a été enregistré par un Second Thought plus récent (format de blocs {theirs} ; cette page lit jusqu'au {ours}). Ouvrez-le sur la page la plus récente.",
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "Il avait été enregistré avec des blocs plus anciens et a été mis à jour (format de blocs {from} vers {to})."
  },
  "examples": {
   "review": {

@@ -91,6 +91,9 @@ CI never runs it.
 - **Model names:** services retire models. `python tools/smoke_test.py models` lists, for each service you have a
   key for, the tiers whose model it no longer lists (it only reads the model list, so it's free). Update those
   names in `SERVICES`, and add a line to `CHANGELOG.md`.
+- **Changing a block's shape** (renaming a block, a field or an input, or changing what a field holds): saved programs,
+  gallery files and exported Python all keep the old shape. Bump `FORMAT_VERSION` in the page and add
+  `MIGRATIONS[old version]`, a function that turns an old program into a new one. Every way a program loads runs it.
 - **A new example:** examples live in the page. Add its translations to each language's `examples` section (the
   tests check every language has every example).
 - **The screenshots:** after a visible change to the page, `python tools/record_demo.py` remakes

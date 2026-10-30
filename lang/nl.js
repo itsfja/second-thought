@@ -873,7 +873,9 @@
 "Building the program failed: {problem}":"Het programma bouwen is mislukt: {problem}",
 "Undone. Your previous program is back.":"Ongedaan gemaakt. Je vorige programma is terug.",
 "Loaded Claude's program ({n} blocks). Check the blocks before running.":"Programma van Claude geladen ({n} blokken). Controleer de blokken voordat je het uitvoert.",
-"Community: teaching":"Community: lesgeven"
+"Community: teaching":"Community: lesgeven",
+"This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.":"Dit programma is opgeslagen door een nieuwere Second Thought (blokformaat {theirs}; deze pagina leest tot {ours}). Open het op de nieuwste pagina.",
+"It was saved with older blocks and has been brought up to date (block format {from} to {to}).":"Het was opgeslagen met oudere blokken en is bijgewerkt (blokformaat {from} naar {to})."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

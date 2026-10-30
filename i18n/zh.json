@@ -1361,7 +1361,9 @@
   "Building the program failed: {problem}": "程序生成失败：{problem}",
   "Undone. Your previous program is back.": "已撤销。之前的程序回来了。",
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "已载入 Claude 的程序（{n} 个积木）。运行前请检查这些积木。",
-  "Community: teaching": "社区：教学"
+  "Community: teaching": "社区：教学",
+  "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "这个程序是用更新版本的 Second Thought 保存的（积木格式 {theirs}；本页面最多读取 {ours}）。请在最新的页面中打开。",
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "它是用旧版积木保存的，已更新到最新（积木格式 {from} 到 {to}）。"
  },
  "examples": {
   "review": {

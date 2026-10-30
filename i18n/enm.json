@@ -1361,7 +1361,9 @@
   "Building the program failed: {problem}": "The devys myghte nat be maked: {problem}",
   "Undone. Your previous program is back.": "Undoon. Thy former devys is come agayn.",
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Laden Claudes devys ({n} blokkes). Loke on the blokkes er thou renne it.",
-  "Community: teaching": "Felaweshipe: techynge"
+  "Community: teaching": "Felaweshipe: techynge",
+  "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "This devys was saved by a newer Second Thought (blokke fourme {theirs}; this leef redeth up to {ours}). Open it on the newest leef.",
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "It was saved with elder blokkes and hath ben brought up to date (blokke fourme {from} to {to})."
  },
  "examples": {
   "review": {

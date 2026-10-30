@@ -1361,7 +1361,9 @@
   "Building the program failed: {problem}": "Eigi mátti gera forritit: {problem}",
   "Undone. Your previous program is back.": "Afturkallat. Fyrra forrit þitt er aptr komit.",
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "Forrit Claudes hlaðit ({n} kubbar). Skoða kubbana áðr en þú keyrir.",
-  "Community: teaching": "Samfélag: kennsla"
+  "Community: teaching": "Samfélag: kennsla",
+  "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "Þetta forrit var geymt af nýrra Second Thought (kubbasnið {theirs}; þetta blað lesr upp at {ours}). Opna þat á nýjasta blaðinu.",
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "Þat var geymt með eldri kubbum ok hefir verit fært til nýs (kubbasnið {from} til {to})."
  },
  "examples": {
   "review": {

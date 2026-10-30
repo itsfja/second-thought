@@ -1362,7 +1362,9 @@
   "Building the program failed: {problem}": "בניית התוכנית נכשלה: {problem}",
   "Undone. Your previous program is back.": "בוטל. התוכנית הקודמת שלך חזרה.",
   "Loaded Claude's program ({n} blocks). Check the blocks before running.": "התוכנית של Claude נטענה ({n} בלוקים). בדוק את הבלוקים לפני ההרצה.",
-  "Community: teaching": "קהילה: הוראה"
+  "Community: teaching": "קהילה: הוראה",
+  "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "התוכנית הזו נשמרה ב-Second Thought חדש יותר (פורמט בלוקים {theirs}; הדף הזה קורא עד {ours}). פתח אותה בדף העדכני ביותר.",
+  "It was saved with older blocks and has been brought up to date (block format {from} to {to}).": "היא נשמרה עם בלוקים ישנים יותר ועודכנה (פורמט בלוקים {from} ל-{to})."
  },
  "examples": {
   "review": {

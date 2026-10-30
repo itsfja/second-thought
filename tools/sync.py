@@ -145,6 +145,10 @@ def gallery_json() -> str:
             sys.exit(f"{where}: \"category\" should be one of " + ", ".join(GALLERY_CATEGORIES) + f", not \"{info['category']}\".")
         entry = {"key": "g_" + path.stem.replace("-", "_"), "file": path.name, "category": category}
         entry.update({f: str(info[f]).strip() for f in GALLERY_FIELDS})
+        version = data.get("version", 1)
+        if not isinstance(version, int) or version < 1:
+            sys.exit(f"{where}: \"version\" should be a whole number, the block format the program was saved with.")
+        entry["version"] = version
         entry["program"] = data["program"]
         entries.append(entry)
     entries.sort(key=lambda e: e["title"].lower())

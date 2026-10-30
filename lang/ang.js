@@ -873,7 +873,9 @@
 "Building the program failed: {problem}":"Þæt forescrift ne mihte bēon geworht: {problem}",
 "Undone. Your previous program is back.":"Undōn. Þīn ǣrre forescrift is eft cumen.",
 "Loaded Claude's program ({n} blocks). Check the blocks before running.":"Claudes forescrift is gehladen ({n} stānas). Scēawa þā stānas ǣr þū hit yrne.",
-"Community: teaching":"Gemanscipe: lār"
+"Community: teaching":"Gemanscipe: lār",
+"This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.":"Þis forescrift wæs gehealden þurh nīwran Second Thought (stāna hīw {theirs}; þis lēaf rǣdeþ oþ {ours}). Ontȳn hit on þǣm nīwestan lēafe.",
+"It was saved with older blocks and has been brought up to date (block format {from} to {to}).":"Hit wæs gehealden mid ieldrum stānum and is gebrōht tō nīwnesse (stāna hīw {from} tō {to})."
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
