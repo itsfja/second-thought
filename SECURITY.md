@@ -51,7 +51,9 @@ Everything it reads and writes is sent to the model services it uses.
   (compared in constant time), and listens on `127.0.0.1` unless you set `WEBHOOK_HOST`.
 - **No local network by default.** The agent's web tools read only public addresses, never ones on your own
   network, unless you set `local_pages = yes`. Every address a name resolves to is checked, and so is every redirect.
-  A name whose address changes between the check and the request (DNS rebinding) isn't caught yet.
+  Each name is looked up once and the connection goes to exactly the address that was checked, so a name can't change
+  its answer in between (DNS rebinding). Through a proxy, the proxy is sent to that address too: the request names the
+  address, and an https tunnel goes to it while the certificate is still checked against the name.
 - **MCP servers run with your permissions.** A server named by a command in `second-thought.ini` is started as you
   and can do whatever that command can. Only add servers you trust.
 - **Keys stay out of the program.** Keys live in `second-thought.ini` or environment variables, never in the

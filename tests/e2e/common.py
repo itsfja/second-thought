@@ -274,9 +274,9 @@ for k in list(os.environ):
 seen = []
 class Proxy(BaseHTTPRequestHandler):  # a forward proxy that sends a public page somewhere on this computer
     def log_message(self, *a): pass
-    def do_GET(self):
-        seen.append(self.path)
-        if "public.example" in self.path:
+    def do_GET(self):  # the program sends the proxy the checked address, with the name as Host
+        seen.append(self.headers.get("Host", "") + " " + self.path)
+        if "public.example" in self.headers.get("Host", ""):
             self.send_response(302); self.send_header("Location", f"http://127.0.0.1:{port}/admin"); self.send_header("Content-Length", "0"); self.end_headers()
         else:
             self.send_response(200); self.send_header("Content-Length", "6"); self.end_headers(); self.wfile.write(b"secret")

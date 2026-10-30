@@ -1850,6 +1850,7 @@ def current_time_text():
 
 
 import fnmatch  # noqa: E402 - below the line, so python/runtime.py has it too
+import http.client  # noqa: E402
 
 
 MAX_PAGE_CHARS = 12000
@@ -1891,10 +1892,6 @@ def _public_addresses(host, port):
         if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
             raise RunError(tr("The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them)."))
     return infos
-
-
-def _public_only(host):
-    _public_addresses(host, None)
 
 
 def _local_pages():
@@ -1941,22 +1938,70 @@ def _pinned_connections():
     return PlainHandler, SecureHandler
 
 
-class _PublicRedirects(urllib.request.HTTPRedirectHandler):
-    """Follows a redirect only to a web page. Without a proxy, the new address is checked as it connects."""
-    check_hosts = False
+def _proxied_get(url, headers, limit, what, proxy):
+    """Fetches an address through a proxy without letting the name change its answer (DNS rebinding). Left to itself,
+    the proxy would look the name up again, and a hostile name could then point at your own network. So the name is
+    looked up and checked here, and the proxy is sent to that exact address: for http the request names the address,
+    with the name as Host; for https the tunnel goes to the address, and the certificate is still checked against the
+    name. Each redirect is followed here and checked the same way."""
+    import base64
+    import ssl
+    p = urllib.parse.urlparse(proxy if "://" in proxy else "http://" + proxy)
+    auth = {}
+    if p.username:
+        token = base64.b64encode(f"{urllib.parse.unquote(p.username)}:{urllib.parse.unquote(p.password or '')}".encode()).decode()
+        auth = {"Proxy-Authorization": "Basic " + token}
+    start = url
+    for _hop in range(6):
+        u = urllib.parse.urlparse(url)
+        if u.scheme not in ("http", "https") or not u.hostname:
+            raise RunError(tr("That address sent the program somewhere that isn't a web page."))
+        port = u.port or (443 if u.scheme == "https" else 80)
+        ip = _public_addresses(u.hostname, port)[0][4][0].split("%")[0]
+        at = f"[{ip}]" if ":" in ip else ip
+        path = (u.path or "/") + ("?" + u.query if u.query else "")
+        hdrs = dict(headers, Host=u.hostname + (f":{u.port}" if u.port else ""))
+        try:
+            if u.scheme == "http":
+                conn = http.client.HTTPConnection(p.hostname, p.port or 80, timeout=20)
+                conn.request("GET", f"http://{at}:{port}{path}", headers=dict(hdrs, **auth))
+            else:
+                conn = _PinnedTunnel(p.hostname, p.port or 80, timeout=20, context=ssl.create_default_context())
+                conn.sni = u.hostname
+                conn.set_tunnel(ip, port, headers=auth)
+                conn.request("GET", path, headers=hdrs)
+            r = conn.getresponse()
+            if r.status in (301, 302, 303, 307, 308) and r.getheader("Location"):
+                url = urllib.parse.urljoin(url, r.getheader("Location"))
+                conn.close()
+                continue
+            if r.status >= 400:
+                conn.close()
+                raise RunError(tr("{what} couldn't open {url}: the website answered {code}.", what=what, url=_short(start, 80), code=r.status))
+            ctype, data = r.getheader("Content-Type", ""), r.read(limit)
+            conn.close()
+            return ctype, data
+        except (OSError, http.client.HTTPException) as e:
+            raise RunError(tr("{what} couldn't reach {url} ({reason}).", what=what, url=_short(start, 80), reason=e)) from None
+    raise RunError(tr("{what} couldn't reach {url} ({reason}).", what=what, url=_short(start, 80), reason="too many redirects"))
 
+
+class _PinnedTunnel(http.client.HTTPSConnection):
+    """An https connection through a proxy's tunnel to an exact address, checking the certificate against the name."""
+    sni = None
+
+    def connect(self):
+        http.client.HTTPConnection.connect(self)  # connects to the proxy and opens the tunnel
+        self.sock = self._context.wrap_socket(self.sock, server_hostname=self.sni or self.host)
+
+
+class _PublicRedirects(urllib.request.HTTPRedirectHandler):
+    """Follows a redirect only to a web page. The new address is checked as it connects (see _pinned_connections)."""
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         u = urllib.parse.urlparse(newurl)
         if u.scheme not in ("http", "https") or not u.hostname:
             raise RunError(tr("That address sent the program somewhere that isn't a web page."))
-        if self.check_hosts:
-            _public_only(u.hostname)
         return super().redirect_request(req, fp, code, msg, headers, newurl)
-
-
-class _ProxiedRedirects(_PublicRedirects):
-    """Through a proxy nothing is checked as it connects, so every address a redirect sends the program to is checked first."""
-    check_hosts = True
 
 
 def get_url(url, trusted=False, what="read_page", limit=3_000_000):
@@ -1974,10 +2019,7 @@ def get_url(url, trusted=False, what="read_page", limit=3_000_000):
     if not guard:
         opener = urllib.request.build_opener()
     elif urllib.request.getproxies().get(u.scheme) and not urllib.request.proxy_bypass(u.hostname):
-        # Through a proxy, the proxy looks the name up, so the best this side can do is check it first,
-        # and check again wherever a redirect points.
-        _public_only(u.hostname)
-        opener = urllib.request.build_opener(_ProxiedRedirects)
+        return _proxied_get(url, dict(req.header_items()), limit, what, urllib.request.getproxies()[u.scheme])
     else:
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), *_pinned_connections(), _PublicRedirects)
     try:
