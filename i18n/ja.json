@@ -2844,6 +2844,12 @@
   "Test run": "テスト実行",
   "{path} isn't valid JSON ({problem}).": "{path} は正しい JSON ではありません（{problem}）。",
   "Choose a file": "ファイルを選んでください",
-  "Choose one": "一つ選んでください"
+  "Choose one": "一つ選んでください",
+  "\nThis program has changed since you allowed it on {when}.": "\nこのプログラムは {when} に許可したあと変更されています。",
+  "\nThis program has changed since you allowed it.": "\nこのプログラムは許可したあと変更されています。",
+  "New since then: {what}": "新しくできること: {what}",
+  "No longer: {what}": "できなくなったこと: {what}",
+  "What it can do is the same as before.": "できることは前と同じです。",
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} 一度ご自分で実行して y と答えてください(それまで予定の実行は始まりません)。"
  }
 }

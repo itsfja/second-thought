@@ -1725,7 +1725,13 @@
 "Test run":"רהטא דבוחנא",
 "{path} isn't valid JSON ({problem}).":"{path} לא הוא JSON שריר ({problem}).",
 "Choose a file":"בחר מגלתא",
-"Choose one":"בחר חדא"
+"Choose one":"בחר חדא",
+"\nThis program has changed since you allowed it on {when}.":"\nתכניתא הדא אשתניאת מן דשבקתון לה ב־{when}.",
+"\nThis program has changed since you allowed it.":"\nתכניתא הדא אשתניאת מן דשבקתון לה.",
+"New since then: {what}":"חדת מן כדו: {what}",
+"No longer: {what}":"לא עוד: {what}",
+"What it can do is the same as before.":"מא דיכלא למעבד הוא כקדמין.",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} הפיכו לה זמנא חדא בנפשכון ואתיבו y (הפכא קביעא לא ישרא עד כדו)."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

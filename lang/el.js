@@ -1724,6 +1724,12 @@
 "Test run":"Εκτέλεση τεστ",
 "{path} isn't valid JSON ({problem}).":"Το {path} δεν είναι έγκυρο JSON ({problem}).",
 "Choose a file":"Επιλέξτε αρχείο",
-"Choose one":"Διαλέξτε ένα"
+"Choose one":"Διαλέξτε ένα",
+"\nThis program has changed since you allowed it on {when}.":"\nΤο πρόγραμμα άλλαξε από τότε που το επιτρέψατε, στις {when}.",
+"\nThis program has changed since you allowed it.":"\nΤο πρόγραμμα άλλαξε από τότε που το επιτρέψατε.",
+"New since then: {what}":"Νέο από τότε: {what}",
+"No longer: {what}":"Όχι πια: {what}",
+"What it can do is the same as before.":"Όσα μπορεί να κάνει είναι ίδια με πριν.",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Τρέξτε το μία φορά εσείς και απαντήστε y (μια προγραμματισμένη εκτέλεση δεν ξεκινά μέχρι τότε)."
 }
 };

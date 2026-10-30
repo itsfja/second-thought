@@ -1725,6 +1725,12 @@
 "Test run":"הרצת בדיקה",
 "{path} isn't valid JSON ({problem}).":"{path} אינו JSON תקין ({problem}).",
 "Choose a file":"בחירת קובץ",
-"Choose one":"בחרו אחד"
+"Choose one":"בחרו אחד",
+"\nThis program has changed since you allowed it on {when}.":"\nהתוכנית השתנתה מאז שאישרתם אותה ב־{when}.",
+"\nThis program has changed since you allowed it.":"\nהתוכנית השתנתה מאז שאישרתם אותה.",
+"New since then: {what}":"חדש מאז: {what}",
+"No longer: {what}":"כבר לא: {what}",
+"What it can do is the same as before.":"מה שהיא יכולה לעשות זהה לקודם.",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} הריצו אותה פעם אחת בעצמכם וענו y (הרצה מתוזמנת לא תתחיל עד אז)."
 }
 };

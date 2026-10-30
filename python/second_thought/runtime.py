@@ -1661,19 +1661,42 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         base = os.path.splitext(os.path.basename(prog))[0]
         return os.path.join(os.path.dirname(prog), f".{base}.approved"), digest
 
+    def changes_since(self, before, can):
+        """When the program was allowed before and has changed since: lines saying so, and what it can do now that it
+        couldn't then, and the other way round, so the full list that follows needn't be read for what's new."""
+        if not isinstance(before, dict) or not isinstance(before.get("allowed"), list):
+            return []
+        was, now = [str(c) for c in before["allowed"]], list((can or {}).get("can", []))
+        when = str(before.get("when", ""))[:16].replace("T", " ")
+        out = [tr("\nThis program has changed since you allowed it on {when}.", when=when) if when else
+               tr("\nThis program has changed since you allowed it.")]
+        new = self.can_lines({"can": [c for c in now if c not in was]})[0]
+        gone = self.can_lines({"can": [c for c in was if c not in now]})[0]
+        if new:
+            out.append(tr("New since then: {what}", what="; ".join(new)))
+        if gone:
+            out.append(tr("No longer: {what}", what="; ".join(gone)))
+        if not new and not gone:
+            out.append(tr("What it can do is the same as before."))
+        return out
+
     def approve_program(self, can, unattended=False):
         """True if the program may run. One that can act on the world lists what it can do and asks once; the yes is
         kept in .<program>.approved until the program file changes. approve = no in second-thought.ini skips this."""
         if not self.can_acts(can) or os.environ.get("RB_APPROVE", "").strip().lower() in ("no", "0", "false", "off"):
             return True
         path, digest = self._approval_path()
+        before = None
         if path:
             try:
                 with open(path, encoding="utf-8") as f:
-                    if json.load(f).get("sha256") == digest:
-                        return True
+                    before = json.load(f)
+                if before.get("sha256") == digest:
+                    return True
             except (OSError, ValueError, AttributeError):
-                pass
+                before = None
+        for line in self.changes_since(before, can):
+            print(line, flush=True)
         lines, tail = self.can_lines(can)
         print(tr("\nThis program can:"), flush=True)
         for line in lines:

@@ -2844,6 +2844,12 @@
   "Test run": "Testrun",
   "{path} isn't valid JSON ({problem}).": "{path} is geen geldige JSON ({problem}).",
   "Choose a file": "Kies een bestand",
-  "Choose one": "Kies er een"
+  "Choose one": "Kies er een",
+  "\nThis program has changed since you allowed it on {when}.": "\nDit programma is veranderd sinds je het op {when} toestond.",
+  "\nThis program has changed since you allowed it.": "\nDit programma is veranderd sinds je het toestond.",
+  "New since then: {what}": "Nieuw sindsdien: {what}",
+  "No longer: {what}": "Niet meer: {what}",
+  "What it can do is the same as before.": "Wat het kan doen is hetzelfde als eerst.",
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} Start het één keer zelf en antwoord y (een geplande run begint pas daarna)."
  }
 }

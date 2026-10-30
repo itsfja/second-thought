@@ -1725,7 +1725,13 @@
 "Test run":"परीक्षा-चालनम्",
 "{path} isn't valid JSON ({problem}).":"{path} शुद्धं JSON नास्ति ({problem})।",
 "Choose a file":"सञ्चिकां वृणु",
-"Choose one":"एकं वृणु"
+"Choose one":"एकं वृणु",
+"\nThis program has changed since you allowed it on {when}.":"\nत्वया {when} अनुमतेः अनन्तरं अयं क्रमः परिवर्तितः।",
+"\nThis program has changed since you allowed it.":"\nत्वया अनुमतेः अनन्तरं अयं क्रमः परिवर्तितः।",
+"New since then: {what}":"ततः परं नूतनम्: {what}",
+"No longer: {what}":"न पुनः: {what}",
+"What it can do is the same as before.":"यत् कर्तुं शक्नोति तत् पूर्ववत् एव।",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} स्वयम् एकवारं चालय y इति च उत्तरय (तावत् नियतचालनं न आरभते)।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

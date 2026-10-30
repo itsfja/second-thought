@@ -1724,7 +1724,13 @@
 "Test run":"Fandunge yrnung",
 "{path} isn't valid JSON ({problem}).":"{path} nis riht JSON ({problem}).",
 "Choose a file":"Geceos fætels",
-"Choose one":"Geceos an"
+"Choose one":"Geceos an",
+"\nThis program has changed since you allowed it on {when}.":"\nÞis gediht is gewend siþþan þū hit lȳfdest on {when}.",
+"\nThis program has changed since you allowed it.":"\nÞis gediht is gewend siþþan þū hit lȳfdest.",
+"New since then: {what}":"Nīwe siþþan: {what}",
+"No longer: {what}":"Nā leng: {what}",
+"What it can do is the same as before.":"Þæt hit dōn mæg is þæt ilce swā ǣr.",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Ȳrn hit ǣne self and andswara y (gesett ryne ne onginþ ǣr þām)."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

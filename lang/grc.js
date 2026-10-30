@@ -1724,7 +1724,13 @@
 "Test run":"Δρόμος δοκιμῆς",
 "{path} isn't valid JSON ({problem}).":"Τὸ {path} οὐκ ἔστιν ὀρθὸν JSON ({problem}).",
 "Choose a file":"Ἔκλεξαι τεῦχος",
-"Choose one":"Ἔκλεξαι ἕν"
+"Choose one":"Ἔκλεξαι ἕν",
+"\nThis program has changed since you allowed it on {when}.":"\nΤοῦτο τὸ πρόγραμμα μεταβέβληται ἀφ' οὗ ἐπέτρεψας αὐτὸ τῇ {when}.",
+"\nThis program has changed since you allowed it.":"\nΤοῦτο τὸ πρόγραμμα μεταβέβληται ἀφ' οὗ ἐπέτρεψας αὐτό.",
+"New since then: {what}":"Καινὸν ἐξ ἐκείνου: {what}",
+"No longer: {what}":"Οὐκέτι: {what}",
+"What it can do is the same as before.":"Ἃ δύναται ποιεῖν τὰ αὐτά ἐστι τοῖς πρότερον.",
+"{changes} Run it once yourself and answer y (a scheduled run won't start until then).":"{changes} Αὐτὸς ἅπαξ τρέξον αὐτὸ καὶ ἀπόκριναι y (ὁ τεταγμένος δρόμος οὐκ ἄρξεται πρὶν τοῦτο)."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

@@ -2845,7 +2845,13 @@
   "Test run": "alakti litim",
   "{path} isn't valid JSON ({problem}).": "{path} JSON kīnum ul ibašši ({problem}).",
   "Choose a file": "ṭuppam ilqe",
-  "Choose one": "ištēn ilqe"
+  "Choose one": "ištēn ilqe",
+  "\nThis program has changed since you allowed it on {when}.": "\nnēpešum annûm ištu ina {when} tušširušu inninni.",
+  "\nThis program has changed since you allowed it.": "\nnēpešum annûm ištu tušširušu inninni.",
+  "New since then: {what}": "eššum ištu inanna: {what}",
+  "No longer: {what}": "ul šanîš: {what}",
+  "What it can do is the same as before.": "ša epēšam ile''û kīma pānîšu.",
+  "{changes} Run it once yourself and answer y (a scheduled run won't start until then).": "{changes} ištēnšu attā šūṣišu u y apul (epištum ša simānim adi inanna ul iššarri)."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",
