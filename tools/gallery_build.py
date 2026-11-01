@@ -14,7 +14,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 GALLERY = ROOT / "gallery"
-AUTHOR, RUNTIME = "itsfja", "2.2.0"
+AUTHOR, RUNTIME = "itsfja", "3.0.0"
 _ids = itertools.count(1)
 
 

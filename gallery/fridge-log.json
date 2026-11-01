@@ -8,7 +8,7 @@
     "description": "Each evening, drafts the day's fridge and freezer temperature log from Home Assistant sensors, flagging any reading outside 0–5 °C for the fridge or above −18 °C for the freezer, with the time and what to do. Saved for you to sign.",
     "tip": "Change the sensors to yours. The log is a draft to check against the thermometer, not a replacement for it.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

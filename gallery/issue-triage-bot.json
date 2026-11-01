@@ -8,7 +8,7 @@
     "description": "When someone opens an issue, it labels it from the project's own labels, links a likely duplicate in a comment, and messages you on Telegram if it looks urgent.",
     "tip": "Change the project in the hat. Labelling and commenting ask first; use the no-asking tool once you trust it.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

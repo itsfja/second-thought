@@ -8,7 +8,7 @@
     "description": "Watches a photos folder. For each new picture it notes the date, place and what's happening, groups it with photos from the same event, and drafts captions, asking before it writes anything. Every photo is sent to the model.",
     "tip": "To keep photos at home, choose Llama in the Model menu. It describes scenes, never who people are.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

@@ -8,7 +8,7 @@
     "description": "Choose a contract. Claude checks it against your clause checklist and lists, for each item, whether it's there (quoting it), unclear or missing, for a professional to review. It isn't advice, and it says so.",
     "tip": "Put your own checklist in the first block. Use it to prepare for a review, never instead of one.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

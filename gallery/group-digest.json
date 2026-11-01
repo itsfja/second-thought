@@ -8,7 +8,7 @@
     "description": "Each Monday, the week's new preprints from your arXiv feeds by people in your group, and new mentions of your group's work found on the web, in one short digest. Asks before emailing it.",
     "tip": "Put the group's names in the first block and your arXiv feeds in second-thought.ini (feeds = …). Change the address.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

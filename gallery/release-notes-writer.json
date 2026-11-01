@@ -8,7 +8,7 @@
     "description": "When a release is published, gathers the pull requests merged since the release before it and drafts changelog-ready notes grouped into Added, Changed and Fixed. Saved as a file and emailed to you.",
     "tip": "Change the project in the hat. It drafts; you paste. It never edits the release itself.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

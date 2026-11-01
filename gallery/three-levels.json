@@ -8,7 +8,7 @@
     "description": "One text as three worksheets, for reading ages of about 7, 10 and 13. Each keeps the facts and is checked against its reading age, with three questions at the end. Saved as one file to print.",
     "tip": "Change the reading ages in the list block to suit your class.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

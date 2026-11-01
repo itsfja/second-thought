@@ -8,7 +8,7 @@
     "description": "A week before each birthday in your calendar, a Telegram reminder with three gift ideas that fit what you've told it about the person. Tell it things any time: message your bot 'note Sam: loves rye bread'.",
     "tip": "Keep birthdays in a calendar it can read. The more notes you send, the better the ideas get.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

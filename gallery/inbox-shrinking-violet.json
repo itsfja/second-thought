@@ -8,7 +8,7 @@
     "description": "Twice a day, sorts your inbox into needs a reply, read later and maybe unsubscribe, with a draft reply for each of the first pile, all in one email to you. It never replies for you.",
     "tip": "Change the times to suit you. The drafts are in your style if you tell it how you write, in the agent's goal.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

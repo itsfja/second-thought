@@ -8,7 +8,7 @@
     "description": "Your phone calls it as you leave home. If any door or window is still open, the house says so on the kitchen speaker and you get a notification. If everything's shut, it stays quiet.",
     "tip": "In the Home Assistant app, make an automation for leaving home that calls this program's /leaving address (see Web requests in the README). Change the speaker to yours.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

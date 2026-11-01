@@ -8,7 +8,7 @@
     "description": "The evening before, reads tomorrow's calendar, finds recent emails with the people you're meeting, and sends you a one-page brief for each meeting: what's open between you first.",
     "tip": "Change 19:00 to when you plan tomorrow. Meetings with nobody else in them are skipped.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

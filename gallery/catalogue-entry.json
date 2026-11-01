@@ -8,7 +8,7 @@
     "description": "Choose a transcription or description of an archive item. Claude drafts a catalogue entry with the elements ISAD(G) needs, checks it against them, and asks before saving. It never invents a date or a creator the item doesn't give.",
     "tip": "Put your own reference code and repository in the answer to the first question.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

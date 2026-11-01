@@ -8,7 +8,7 @@
     "description": "Choose a scan or photo of a handwritten letter. Claude transcribes it as written, old spellings and all, marks every word it isn't sure of, and checks the transcription against the usual conventions. Asks before saving it.",
     "tip": "Use a clear, flat scan. Read it against the original: every [word?] is a guess to check.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

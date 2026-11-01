@@ -8,7 +8,7 @@
     "description": "Each Monday, finds branches with no commits in 90 days and no open pull request, across your recent GitHub projects, and opens one cleanup issue per project, or updates last week's instead of opening another.",
     "tip": "It asks before opening or commenting. Choose the no-asking tool once you trust what it writes.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

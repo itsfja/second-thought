@@ -8,7 +8,7 @@
     "description": "Every 90 days, finds your subscriptions from receipt emails, asks which you've actually used, and suggests which to cancel, with what each costs a year and where to cancel it.",
     "tip": "The first review is 90 days after it starts; press Run for one now. It only suggests: you do the cancelling.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

@@ -8,7 +8,7 @@
     "description": "Each Monday, compares a project's README with its code: flags, commands and files the README mentions that don't exist, and ones the code has that it doesn't mention. Opens an issue, or updates the open one.",
     "tip": "Change the project in the first block. On the page, the sample project's README really has drifted.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

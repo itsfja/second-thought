@@ -8,7 +8,7 @@
     "description": "Paste a letter or notice. Claude rewrites it until it passes a plain-English check: a reading age of about 9 to 11, no jargon, short sentences, and every fact, date and amount kept.",
     "tip": "Paste one letter at a time. Read the result against the original before you send it.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

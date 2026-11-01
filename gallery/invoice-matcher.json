@@ -8,7 +8,7 @@
     "description": "Keeps a list of the receipts you save to a folder. When an invoice arrives by email, it checks for a matching receipt and emails you if there isn't one.",
     "tip": "Change the folder to where you keep receipts. It only knows receipts saved after it starts.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

@@ -8,7 +8,7 @@
     "description": "Watches a folder. For each new picture, Claude writes alt text, checks it against accessibility guidance (short, says what matters, includes any words in the picture), and adds it to a file, asking before it writes.",
     "tip": "Change the folder to where your website's pictures go. Every picture is sent to the model.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

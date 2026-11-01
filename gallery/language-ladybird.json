@@ -8,7 +8,7 @@
     "description": "Each morning, one page of Second Thought's Ladybird book in a different historical language from its translations, Akkadian days included, with the English alongside and three words to learn.",
     "tip": "Historical-language versions are as plausible as Second Thought's own translations, no more. Reading pages works in exported Python.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

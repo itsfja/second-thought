@@ -8,7 +8,7 @@
     "description": "Choose an instrument's log (a CSV or text export). Claude lists every reading outside the ranges you set, with its time, and checks nothing in range was flagged. Then a line on any pattern, like a drift through the day.",
     "tip": "Put your instruments' ranges in the first block, one per line, with units. Long logs: export a day at a time.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

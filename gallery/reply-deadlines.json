@@ -8,7 +8,7 @@
     "description": "Each Monday morning, finds client emails that still need a reply, with the date each one asked for or the date you'd reasonably owe one, soonest first. Emailed to you; it never replies.",
     "tip": "Tell it who your clients are in the agent's goal (a domain, or the words in their signatures) to cut out newsletters.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

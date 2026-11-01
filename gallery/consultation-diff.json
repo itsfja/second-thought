@@ -8,7 +8,7 @@
     "description": "Choose two versions of a consultation or policy document. Claude lists what changed between them, in plain English, most important first, quoting both versions for each change.",
     "tip": "Choose the older version first. Works with PDFs, Word files and text files.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

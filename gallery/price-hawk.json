@@ -8,7 +8,7 @@
     "description": "Watches any product page and sends you a Telegram message when the price drops, or reaches your target. Rises and everything else on the page are ignored.",
     "tip": "Change the page address and 'Price' in the hat to the product and the word next to its price. Set a target, or 0 for any drop.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

@@ -8,7 +8,7 @@
     "description": "Choose a document. Claude makes an easy-read version: one idea per sentence, everyday words, a heading every few points and a suggested picture for each, checked against easy-read guidance. Saved to print.",
     "tip": "Easy read is for people with learning disabilities. Ask someone who uses it to check the result.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

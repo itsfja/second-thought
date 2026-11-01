@@ -8,7 +8,7 @@
     "description": "Drafts next month's volunteer rota from the shifts in your calendar and the availability people emailed you, fairly shared, and asks you to approve it before emailing it round.",
     "tip": "Put the shifts in a calendar it can read, and ask volunteers to reply to one email with their dates. Change the address to your list.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

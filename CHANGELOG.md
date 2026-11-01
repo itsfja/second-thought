@@ -18,6 +18,17 @@ that the two agree.
 
 ## Unreleased
 
+## 3.0.0 - 2026-11-01
+
+**Before you upgrade.** A major version, for one change: web requests are now listened for on this computer only.
+If Home Assistant on another machine, IFTTT or your phone calls your program, add `WEBHOOK_HOST = 0.0.0.0` to its
+`second-thought.ini` before re-exporting, or it stops receiving them. Nothing else needs doing: programs that act ask
+once to be allowed again (the file changed), saying what's new.
+
+**Known issues.** Claude refuses the agent step's reply shape, so agent steps are checked after they arrive rather
+than while Claude writes (#250); agents still work. The *language-ladybird* gallery program stops after reading a
+language file (#251).
+
 ### Changed
 - Found by running a program on GitHub Actions for real (#226). Telegram messages show a model's Markdown as Telegram's own formatting, so `**bold**` arrives bold (Slack gets its own formatting too; Discord already read Markdown). A Claude key made for a whole Console organisation, not one workspace, works with the new `ANTHROPIC_WORKSPACE_ID` setting, and a run refused for that, for no credit or for a wrong key now says what to do in plain words. On GitHub Actions a run that stops puts its reason on the run's page (an error annotation), says to fix it and use Run workflow rather than to run it again to carry on, and says settings are repository secrets rather than lines in `second-thought.ini`. Save as GitHub Actions uses `actions/checkout@v5` and `actions/setup-python@v6`, and offers an optional `ANTHROPIC_WORKSPACE_ID` secret.
 - When a program that can act changes and asks to be allowed again, it says what it can do now that it couldn't when you last allowed it, and what it no longer does, before the full list (#225). If nothing changed there, it says so. `--doctor` says the same.

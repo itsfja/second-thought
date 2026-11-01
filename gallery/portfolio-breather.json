@@ -8,7 +8,7 @@
     "description": "Friday evening, a deliberately calm summary of your holdings: what each did this week and this month, in plain words, with no alarms, no predictions and no advice.",
     "tip": "Press Run once to tell it what you hold; it remembers. Prices come from web search, so they can lag. Not financial advice.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

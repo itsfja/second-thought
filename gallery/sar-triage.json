@@ -8,7 +8,7 @@
     "description": "Each weekday morning, finds emails that look like subject access requests (someone asking for the personal data you hold about them) and emails you a list with the date each arrived and its one-month deadline. Admin help, not legal advice.",
     "tip": "The one-month deadline can be extended in some cases. Check each request yourself; this only makes sure none is missed.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {
