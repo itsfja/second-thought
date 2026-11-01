@@ -7,6 +7,24 @@ on:
     branches: [ main ]
 
 jobs:
+  # Whether a pull request changes anything but Markdown. The end-to-end jobs (the slow ones) are skipped when it
+  # doesn't; the unit tests always run, since some of them read README.md, CHANGELOG.md and gallery/README.md.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.diff.outputs.code }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - id: diff
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          other=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" | grep -v '\.md$' || true)
+          echo "Changed, not Markdown: ${other:-none}"
+          echo "code=$([ -n "$other" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
   unit:
     # The runtime's parts on their own: seconds, nothing to install, every Python an exported program might meet.
     strategy:
@@ -19,10 +37,10 @@ jobs:
             python-version: "3.12"
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -42,12 +60,14 @@ jobs:
         run: node --test "tests/editor/*.test.cjs"
 
   test:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -60,12 +80,14 @@ jobs:
           python tests/run_tests.py
 
   windows:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
