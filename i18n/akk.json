@@ -2863,7 +2863,11 @@
   "Run stopped: {msg}": "epištum iprus: {msg}",
   "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "ina bīt Claude kaspum ul ibašši. ina https://console.anthropic.com ruddi, warka ašnīšu šūṣi.",
   "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "kunukkka ša Claude ana kalû ālim ša Console šū, ul ana bītim ištēn. kunukkam ina bītim epuš (Workspaces ina Console), ulu ANTHROPIC_WORKSPACE_ID {where_keys} šukun.",
-  "as a repository secret (Settings → Secrets and variables → Actions)": "kīma pirištim ša bīt ṭuppim (Settings → Secrets and variables → Actions)"
+  "as a repository secret (Settings → Secrets and variables → Actions)": "kīma pirištim ša bīt ṭuppim (Settings → Secrets and variables → Actions)",
+  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude ana alaktim annîtim apālam ul imgur. ša iddinūšum amur (qibīt alaktim, ina ṭuppim), u šanîš qibi ulu ša išassû ezib.",
+  "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude ana alaktim annîtim mimma ul utīr (ina „{stop}” iprus). ušaqqil u ašnīšu piqid.",
+  "Stopped · 1 model call": "iprus · šisītum 1 ana tamšīlim",
+  "Stopped · {n} model calls": "iprus · šisâtum {n} ana tamšīlim"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

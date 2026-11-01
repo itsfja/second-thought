@@ -2863,7 +2863,11 @@
   "Run stopped: {msg}": "pa-ra-ki-si pe-pa-u-ta-i: {msg}",
   "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Claude ko-to-na so o-u-ke-ti e-ke-i. po-ro-te-te e-ne https://console.anthropic.com, e-pe-i-ta a-pi da-ra-me.",
   "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Claude ka-ra-wi so pa-sa Console ko-i-no-ni-ja, o-u-ka e-ne e-ka-ta-ri-jo. po-e-e ka-ra-wi e-ne e-ka-ta-ri-jo (Workspaces), e ti-te ANTHROPIC_WORKSPACE_ID {where_keys}.",
-  "as a repository secret (Settings → Secrets and variables → Actions)": "o-pe ku-pu-to te-sa-u-ro (Settings → Secrets and variables → Actions)"
+  "as a repository secret (Settings → Secrets and variables → Actions)": "o-pe ku-pu-to te-sa-u-ro (Settings → Secrets and variables → Actions)",
+  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude o-u-ke-te-re a-po-ki-ri-ne to-to pa-sa. i-de o e-do-ke (ke-re-u-ma pa-sa, e-ne de-to), e a-ra-ko re-ke e ra-i-pe o a-na-ki-no-ke.",
+  "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude o-u-de a-po-do-ke e-ne to-to pa-sa (pe-pa-u-ta-i me-ta „{stop}”). a-pa-ra-ra po-e-e e a-pi pe-i-ra.",
+  "Stopped · 1 model call": "pe-pa-u-ta-i · 1 ka-re-si tu-po",
+  "Stopped · {n} model calls": "pe-pa-u-ta-i · {n} ka-re-se tu-po"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

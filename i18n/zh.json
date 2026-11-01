@@ -2862,6 +2862,10 @@
   "Run stopped: {msg}": "运行已停止：{msg}",
   "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "你的 Claude 账户余额不足。请到 https://console.anthropic.com 充值，然后再运行。",
   "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "你的 Claude 密钥属于整个 Console 组织，而不是某个工作区。请在工作区里创建密钥（Console 的 Workspaces 页面），或在 {where_keys} 设置 ANTHROPIC_WORKSPACE_ID。",
-  "as a repository secret (Settings → Secrets and variables → Actions)": "作为仓库机密（Settings → Secrets and variables → Actions）"
+  "as a repository secret (Settings → Secrets and variables → Actions)": "作为仓库机密（Settings → Secrets and variables → Actions）",
+  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude 拒绝回答这一步。看看它收到了什么（日志或保存的日志里这一步的提示），换个说法，或去掉它读的内容。",
+  "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude 这一步什么也没返回（停止原因：“{stop}”）。请简化后再试。",
+  "Stopped · 1 model call": "已停止 · 1 次模型调用",
+  "Stopped · {n} model calls": "已停止 · {n} 次模型调用"
  }
 }

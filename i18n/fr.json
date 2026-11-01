@@ -2862,6 +2862,10 @@
   "Run stopped: {msg}": "Exécution arrêtée : {msg}",
   "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Votre compte Claude n'a plus de crédit. Ajoutez-en sur https://console.anthropic.com, puis relancez.",
   "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Votre clé Claude appartient à toute une organisation de la Console, pas à un espace de travail. Créez une clé dans un espace de travail (page Workspaces de la Console), ou définissez ANTHROPIC_WORKSPACE_ID {where_keys}.",
-  "as a repository secret (Settings → Secrets and variables → Actions)": "comme secret du dépôt (Settings → Secrets and variables → Actions)"
+  "as a repository secret (Settings → Secrets and variables → Actions)": "comme secret du dépôt (Settings → Secrets and variables → Actions)",
+  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude a refusé de répondre à cette étape. Regardez ce qu'il a reçu (le prompt de l'étape, dans le journal ou le journal enregistré), et formulez-le autrement ou retirez ce qu'il lisait.",
+  "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude n'a rien renvoyé pour cette étape (il s'est arrêté avec « {stop} »). Simplifiez-la et réessayez.",
+  "Stopped · 1 model call": "Arrêté · 1 appel au modèle",
+  "Stopped · {n} model calls": "Arrêté · {n} appels au modèle"
  }
 }

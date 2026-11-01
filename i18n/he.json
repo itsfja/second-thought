@@ -2863,6 +2863,10 @@
   "Run stopped: {msg}": "ההרצה נעצרה: {msg}",
   "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "בחשבון ה־Claude שלכם נגמר הקרדיט. הוסיפו ב־https://console.anthropic.com והריצו שוב.",
   "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "מפתח ה־Claude שלכם שייך לארגון שלם ב־Console, לא לסביבת עבודה אחת. צרו מפתח בתוך סביבת עבודה (דף Workspaces ב־Console), או הגדירו ANTHROPIC_WORKSPACE_ID {where_keys}.",
-  "as a repository secret (Settings → Secrets and variables → Actions)": "כסוד של המאגר (Settings → Secrets and variables → Actions)"
+  "as a repository secret (Settings → Secrets and variables → Actions)": "כסוד של המאגר (Settings → Secrets and variables → Actions)",
+  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude סירב לענות על השלב הזה. בדקו מה הוא קיבל (ההנחיה של השלב, ביומן או ביומן השמור), ונסחו אחרת או הוציאו את מה שהוא קרא.",
+  "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude לא החזיר דבר בשלב הזה (הוא עצר עם „{stop}”). פשטו אותו ונסו שוב.",
+  "Stopped · 1 model call": "נעצר · קריאה אחת למודל",
+  "Stopped · {n} model calls": "נעצר · {n} קריאות למודל"
  }
 }

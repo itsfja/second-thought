@@ -1742,6 +1742,10 @@
 "Run stopped: {msg}":"Η εκτέλεση σταμάτησε: {msg}",
 "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"Ο λογαριασμός σας στο Claude δεν έχει πίστωση. Προσθέστε στο https://console.anthropic.com και τρέξτε το ξανά.",
 "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"Το κλειδί σας για το Claude ανήκει σε ολόκληρο οργανισμό της Console, όχι σε έναν χώρο εργασίας. Φτιάξτε κλειδί μέσα σε χώρο εργασίας (σελίδα Workspaces της Console) ή ορίστε ANTHROPIC_WORKSPACE_ID {where_keys}.",
-"as a repository secret (Settings → Secrets and variables → Actions)":"ως μυστικό του αποθετηρίου (Settings → Secrets and variables → Actions)"
+"as a repository secret (Settings → Secrets and variables → Actions)":"ως μυστικό του αποθετηρίου (Settings → Secrets and variables → Actions)",
+"Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.":"Το Claude αρνήθηκε να απαντήσει σε αυτό το βήμα. Δείτε τι του δόθηκε (το prompt του βήματος, στο αρχείο καταγραφής ή στο αποθηκευμένο) και διατυπώστε το αλλιώς ή αφαιρέστε ό,τι διάβαζε.",
+"Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.":"Το Claude δεν επέστρεψε τίποτα σε αυτό το βήμα (σταμάτησε με «{stop}»). Απλοποιήστε το και δοκιμάστε ξανά.",
+"Stopped · 1 model call":"Σταμάτησε · 1 κλήση μοντέλου",
+"Stopped · {n} model calls":"Σταμάτησε · {n} κλήσεις μοντέλου"
 }
 };

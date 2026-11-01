@@ -2862,7 +2862,11 @@
   "Run stopped: {msg}": "Gangr stöðvaðisk: {msg}",
   "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Claude-reikningr þinn er inneignarlauss. Bæt við á https://console.anthropic.com, ok keyr þat aptr.",
   "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Claude-lykill þinn heyrir til allrar Console-stofnunar, eigi eins vinnurúms. Ger lykil í vinnurúmi (Workspaces-síða Console), eða set ANTHROPIC_WORKSPACE_ID {where_keys}.",
-  "as a repository secret (Settings → Secrets and variables → Actions)": "sem leyndarmál geymslunnar (Settings → Secrets and variables → Actions)"
+  "as a repository secret (Settings → Secrets and variables → Actions)": "sem leyndarmál geymslunnar (Settings → Secrets and variables → Actions)",
+  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude vildi eigi svara þessu skrefi. Sjá hvat því var gefit (fyrirmæli skrefsins, í skránni eða vistaðri skrá), ok seg þat á annan hátt eða slepp því er þat las.",
+  "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude skilaði engu fyrir þetta skref (þat stöðvaðisk með „{stop}“). Einfalda þat ok reyn aptr.",
+  "Stopped · 1 model call": "Stöðvat · 1 kall á líkan",
+  "Stopped · {n} model calls": "Stöðvat · {n} köll á líkan"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

@@ -2862,7 +2862,11 @@
   "Run stopped: {msg}": "Ryne ætstōd: {msg}",
   "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Þīn Claude hord is ǣmtig. Ēac on https://console.anthropic.com, and ȳrn hit eft.",
   "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Þīn Claude cǣg belimpþ tō ealre Console geferrǣdenne, nā tō ānre weorcstōwe. Wyrc cǣge on weorcstōwe (Workspaces leaf on Console), oþþe sete ANTHROPIC_WORKSPACE_ID {where_keys}.",
-  "as a repository secret (Settings → Secrets and variables → Actions)": "swā dīgol þæs hordes (Settings → Secrets and variables → Actions)"
+  "as a repository secret (Settings → Secrets and variables → Actions)": "swā dīgol þæs hordes (Settings → Secrets and variables → Actions)",
+  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude nolde andswarian þissum stæpe. Sceāwa hwæt him gesealdon wæs (þæs stæpes bebod, on þǣre ǣrendbōc), and sege hit ōþre wīsan oþþe forlǣt þæt hē rǣdde.",
+  "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude ne sealde nāht for þissum stæpe (hē ætstōd mid „{stop}”). Ānfealda hine and fanda eft.",
+  "Stopped · 1 model call": "Ætstōd · 1 bysene clipung",
+  "Stopped · {n} model calls": "Ætstōd · {n} bysene clipunga"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

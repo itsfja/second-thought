@@ -18,6 +18,9 @@ that the two agree.
 
 ## Unreleased
 
+### Fixed
+- When Claude's reply has no text, the run says why (#251): a refusal says Claude declined to answer and isn't asked again three times; anything else names the reason Claude stopped. A reply shape Claude won't take is now remembered on its own, so Claude's other replies are still held to their shapes (#250). A run that stops says how many model calls and tokens it had used, and their cost, as the end of a finished run does.
+
 ## 3.0.0 - 2026-11-01
 
 **Before you upgrade.** A major version, for one change: web requests are now listened for on this computer only.
