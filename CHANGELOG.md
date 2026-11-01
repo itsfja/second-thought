@@ -19,6 +19,7 @@ that the two agree.
 ## Unreleased
 
 ### Fixed
+- Claude holds an agent's steps to their shape again while it writes (#250). The step's tool inputs were an open object, which Claude's structured replies refuse ("'additionalProperties' must be explicitly set to false"), so every step was checked after it arrived instead. A step's inputs now list every input of the agent's tools, none required, each tool's own inputs still checked when it's called. An agent given a very large set of tools may still be over Claude's limits for a reply shape; it then falls back to checking afterwards, as before.
 - When Claude's reply has no text, the run says why (#251): a refusal says Claude declined to answer and isn't asked again three times; anything else names the reason Claude stopped. A reply shape Claude won't take is now remembered on its own, so Claude's other replies are still held to their shapes (#250). A run that stops says how many model calls and tokens it had used, and their cost, as the end of a finished run does.
 
 ## 3.0.0 - 2026-11-01

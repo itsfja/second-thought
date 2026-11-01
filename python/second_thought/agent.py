@@ -6,7 +6,7 @@ python/runtime.py, which is what ships inside every exported program and the pag
 import asyncio
 import json
 import re
-from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, _num_like, _short, calc_text, current_time_text, ha_sensitive,
+from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
 from .settings import tr  # noqa: F401
@@ -154,6 +154,23 @@ class AgentTools:
                 raise RunError(tr("“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).", kind=kind, name=name))
             out[by_lower[name.lower()]] = (kind, desc.strip())
         return out
+
+    @staticmethod
+    def agent_step_schema(catalogue):
+        """The shape of one agent step, for these tools. Claude's structured replies need every object closed, so the
+        step's "input" lists every input any of the tools takes, none of them required: each tool's own inputs are
+        checked when it's called (check_tool_input). An input two tools type differently may be either (#250)."""
+        props = {}
+        for entry in catalogue.values():
+            for k, v in ((entry[4] or {}).get("properties") or {}).items():
+                v = {x: y for x, y in v.items() if x != "description"}
+                if k not in props:
+                    props[k] = v
+                elif v != props[k] and v not in props[k].get("anyOf", []):
+                    props[k] = {"anyOf": props[k].get("anyOf", [props[k]]) + [v]}
+        step = json.loads(json.dumps(SCHEMAS["agent"]))
+        step["properties"]["input"] = {"type": "object", "properties": props, "required": [], "additionalProperties": False}
+        return Shape(step, SCHEMAS["agent"])
 
     @classmethod
     def tool_schema(cls, types, optional=()):
@@ -469,10 +486,11 @@ class AgentTools:
         self.agent_trace = []
         rec = lambda i_, status, tool="", shown="", result="": self.agent_trace.append(  # noqa: E731
             {"step": i_, "tool": tool, "input": shown, "result": _short(to_str(result), 2000), "status": status})
+        step_shape = self.agent_step_schema(catalogue)
         for i in range(1, n + 1):
             label = f"Agent step {i}/{n}"
             try:
-                r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1, plan), SCHEMAS["agent"])
+                r = await self._call(self.agent_prompt(goal, catalogue, history, n - i + 1, plan), step_shape)
             except BadJSON:
                 r = None
             mine, self._pending = self._pending, []  # this step's model calls, kept apart from anything a tool logs

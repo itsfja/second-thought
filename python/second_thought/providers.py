@@ -303,6 +303,7 @@ class ModelCalls:
     def _read_json(text, schema):
         """Parses a reply and checks it against the schema. Raises BadJSON with a plain reason."""
         v = _parse_json(text)
+        schema = getattr(schema, "check", schema)
         if schema:
             v = _fit(v, schema)
             bad = _shape_problem(v, schema)

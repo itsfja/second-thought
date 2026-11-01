@@ -446,6 +446,15 @@ def _parse_json(text):
 _ANY = {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}]}
 
 
+class Shape(dict):
+    """A reply shape sent to Claude, with a looser one (check) to judge the reply by afterwards. The agent's step is held
+    to its tools' input types while Claude writes, but a wrong-typed input is still the tool's to refuse, as 'bad input'
+    with the reason, not a reply to repair."""
+    def __init__(self, shape, check):
+        super().__init__(shape)
+        self.check = check
+
+
 def _obj(props, required=()):
     return {"type": "object", "properties": props, "required": list(required), "additionalProperties": False}
 
