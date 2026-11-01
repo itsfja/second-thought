@@ -8,7 +8,7 @@
     "description": "List your dishes and what's in them. Claude writes each one a menu description in your house style, 25 words or fewer, with its allergens from the UK's 14 listed underneath.",
     "tip": "Describe your house style in the first block: a few words and one description you like.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

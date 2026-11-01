@@ -8,7 +8,7 @@
     "description": "Watches competitors' news or changelog pages, keeps every change, and every 28 days emails a digest of what each one shipped.",
     "tip": "Add a 'when the web page … changes' hat for each competitor's page, like the one here. The digest goes out 28 days after it starts.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

@@ -8,7 +8,7 @@
     "description": "Watches one topic, like quantum computing funding. Each Monday, a synthesis of what changed since last week, with a source for every claim and nothing it already told you.",
     "tip": "Change the topic in the first block. It remembers each week's synthesis, so the second week is where it shines.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

@@ -8,7 +8,7 @@
     "description": "Two days before a calendar event abroad, looks up the exchange rate and sends a Telegram reminder about cash, card fees and plugs.",
     "tip": "It decides from the event's title and place whether it's abroad. Web search only works in exported Python.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

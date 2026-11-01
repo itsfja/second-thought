@@ -8,7 +8,7 @@
     "description": "Each Monday, reads the releases feeds of your dependencies, summarises breaking changes, and checks your project's dependency file to say whether each one touches you.",
     "tip": "Put each dependency's releases feed in feeds = …, like https://github.com/d3/d3/releases.atom, and your project in the first block.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

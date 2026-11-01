@@ -8,7 +8,7 @@
     "description": "Friday evening: the best two-hour window this weekend for drying washing outside, from the forecast, with a runner-up. Sent to you on Telegram.",
     "tip": "Change the town in the first block. Web search only works in exported Python; on the page Claude says what it would look up.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

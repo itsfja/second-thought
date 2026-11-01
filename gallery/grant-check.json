@@ -8,7 +8,7 @@
     "description": "Paste the funder's criteria, then choose your application. Claude checks the application against each criterion in turn, quoting where it meets it and saying what's missing, then gives the three changes that would help most.",
     "tip": "Copy the criteria from the funder's guidance word for word. It checks; it doesn't rewrite your application.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

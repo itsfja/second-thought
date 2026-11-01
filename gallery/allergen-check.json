@@ -8,7 +8,7 @@
     "description": "Paste a recipe card. Claude checks it against the UK's 14 allergens: which each ingredient contains, 'may contain' wording to look at, and anything the card should declare but doesn't. A second pair of eyes, not a guarantee.",
     "tip": "Paste the ingredients with any sub-recipes (the stock, the sauce): allergens hide there.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

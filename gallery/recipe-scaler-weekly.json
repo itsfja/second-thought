@@ -8,7 +8,7 @@
     "description": "Remembers recipes you drop in a folder. Run it on shopping day: say which recipes and for how many, and it scales them and makes one shopping list grouped by supermarket aisle.",
     "tip": "Change the folder to where you keep recipes (PDF, Word or text). Run it by hand, since it asks which recipes you want.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

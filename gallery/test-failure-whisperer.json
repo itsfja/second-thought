@@ -8,7 +8,7 @@
     "description": "When CI fails, your workflow sends it the end of the log. It reads the pull request and posts a short 'Probably this:' comment with the likely cause and one thing to try.",
     "tip": "Add a workflow step that runs on failure and posts the repo, PR number and last 200 log lines to /ci-failed. GitHub must be able to reach the program.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

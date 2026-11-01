@@ -8,7 +8,7 @@
     "description": "Type a claim. Claude searches the web and says whether good sources support it, contradict it or don't say, with a link for every point. It refuses to give a verdict it can't source.",
     "tip": "Uses web search, which only works in exported Python; on the page Claude says what it would look up.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

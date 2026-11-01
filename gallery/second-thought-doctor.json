@@ -8,7 +8,7 @@
     "description": "Once a week, runs the same checks as --doctor on your keys and connections and emails you the report if anything needs fixing, before a program finds out the hard way.",
     "tip": "Point it at the second-thought.ini in your home folder, so it checks the keys every program shares. Only runs in exported Python.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

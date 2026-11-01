@@ -8,7 +8,7 @@
     "description": "Watches your council's agenda page and emails you when an item matches your topics, with the meeting and its date.",
     "tip": "Change the page to your council's agendas and the topics in the first block. Agendas only in PDFs can't be watched.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

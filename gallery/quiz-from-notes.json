@@ -8,7 +8,7 @@
     "description": "Choose your lesson notes. Claude writes a ten-question quiz from them, with the answers, and for each question the wrong answer pupils most often give and why it's wrong. Saved to print.",
     "tip": "Works with a PDF, Word file or text file. Ask for fewer questions in the blue block for a quick starter.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

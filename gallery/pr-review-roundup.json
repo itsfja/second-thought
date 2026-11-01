@@ -8,7 +8,7 @@
     "description": "Each weekday morning, the open pull requests across your GitHub projects, each with a verdict: ready to merge, or needs work, and why in a sentence. Emailed to you.",
     "tip": "Change 7:30 to when you start work, and the address in the email block to yours.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

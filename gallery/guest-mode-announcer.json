@@ -8,7 +8,7 @@
     "description": "When guest mode turns on or off in Home Assistant, the kitchen speaker tells everyone what changes: guest Wi-Fi, quiet hours, heating, cameras.",
     "tip": "Change the rules in the first block to your house's, and the speaker to yours. Needs an input_boolean.guest_mode helper.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

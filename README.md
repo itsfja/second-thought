@@ -1,7 +1,7 @@
 # Second Thought
 
 [![CI](https://github.com/itsfja/second-thought/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/itsfja/second-thought/actions/workflows/ci.yml)
-[![Runtime](https://img.shields.io/badge/runtime-2.2.0-blue)](CHANGELOG.md)
+[![Runtime](https://img.shields.io/badge/runtime-3.0.0-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.9%E2%80%933.13-blue)](.github/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 

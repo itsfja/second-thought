@@ -8,7 +8,7 @@
     "description": "One email each morning: what you need to know today, from your news feeds and a sourced check with Perplexity on anything big overnight, under 300 words.",
     "tip": "Put your feeds in second-thought.ini (feeds = …). On the page, Claude stands in for Perplexity and the feeds are samples.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

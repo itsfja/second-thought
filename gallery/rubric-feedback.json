@@ -8,7 +8,7 @@
     "description": "Paste a pupil's essay. Claude drafts feedback against your mark scheme, checks it's kind, specific and ends with two next steps, and you approve it before it's saved. Nothing goes to the pupil from here.",
     "tip": "Put your own mark scheme in the first block. The pupil's name isn't needed: leave it out of what you paste.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

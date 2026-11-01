@@ -8,7 +8,7 @@
     "description": "Watches a supplier's price list page. When a price moves by more than 5%, you get an email with the item, the old and new price and the change. Smaller moves are ignored.",
     "tip": "Change the page address in the hat to your supplier's price list. It asks before its first email.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

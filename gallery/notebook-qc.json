@@ -8,7 +8,7 @@
     "description": "Paste a protocol, then choose a lab notebook entry. Claude checks the entry against each step in turn: done as written, changed (and whether the change was recorded), or missing, quoting the entry. Then the three things to fix first.",
     "tip": "Paste the protocol's numbered steps. It checks what was written down; it can't check what was done.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

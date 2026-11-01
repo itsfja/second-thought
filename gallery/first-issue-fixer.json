@@ -8,7 +8,7 @@
     "description": "When an issue is opened that's trivial to fix from the text alone (a typo, a broken link, a missing line of docs), it reads the file and comments with a suggested patch. It can't run code, so it leaves anything else alone.",
     "tip": "Change the project in the hat. Commenting asks first. It never opens pull requests or changes the code.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

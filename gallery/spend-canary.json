@@ -8,7 +8,7 @@
     "description": "When a bank statement arrives (a file in a folder, or an email), it lists your recurring charges and tells you which changed price since last month. Statements are sent to the model; only merchants and amounts are kept, in memory.",
     "tip": "Change the folder to where you save statements, and the email words to what your bank's statement emails say.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [

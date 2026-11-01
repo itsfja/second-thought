@@ -8,7 +8,7 @@
     "description": "Choose the minutes of a trustees' or committee meeting. Claude lists every action with its owner and date, flags any with no owner or no date, and saves the list to send round.",
     "tip": "Works with a PDF, Word file or text file. It only lists what the minutes say: anything unclear is flagged, not guessed.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "blocks": {

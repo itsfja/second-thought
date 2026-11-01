@@ -8,7 +8,7 @@
     "description": "Each Friday, a digest of new planning applications near a postcode: what's proposed, where, and the date comments close, with a link for each. Nothing without a source.",
     "tip": "Change the postcode in the first block. Councils publish differently, so check the first digest against your council's portal.",
     "author": "itsfja",
-    "runtime": "2.2.0"
+    "runtime": "3.0.0"
   },
   "program": {
     "variables": [
