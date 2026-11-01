@@ -429,6 +429,7 @@ class ModelCalls:
     def _read_json(text, schema):
         """Parses a reply and checks it against the schema. Raises BadJSON with a plain reason."""
         v = _parse_json(text)
+        schema = getattr(schema, "check", schema)
         if schema:
             v = _fit(v, schema)
             bad = _shape_problem(v, schema)
@@ -1118,6 +1119,15 @@ def _parse_json(text):
 # decoding). Every other model is checked after it replies, and asked once to fix a reply that doesn't fit.
 # The page keeps a copy of these shapes (SCHEMAS in second-thought.html); keep the two the same.
 _ANY = {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}]}
+
+
+class Shape(dict):
+    """A reply shape sent to Claude, with a looser one (check) to judge the reply by afterwards. The agent's step is held
+    to its tools' input types while Claude writes, but a wrong-typed input is still the tool's to refuse, as 'bad input'
+    with the reason, not a reply to repair."""
+    def __init__(self, shape, check):
+        super().__init__(shape)
+        self.check = check
 
 
 def _obj(props, required=()):
@@ -4333,7 +4343,7 @@ class AgentTools:
                     props[k] = {"anyOf": props[k].get("anyOf", [props[k]]) + [v]}
         step = json.loads(json.dumps(SCHEMAS["agent"]))
         step["properties"]["input"] = {"type": "object", "properties": props, "required": [], "additionalProperties": False}
-        return step
+        return Shape(step, SCHEMAS["agent"])
 
     @classmethod
     def tool_schema(cls, types, optional=()):

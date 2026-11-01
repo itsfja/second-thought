@@ -6,7 +6,7 @@ python/runtime.py, which is what ships inside every exported program and the pag
 import asyncio
 import json
 import re
-from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, _num_like, _short, calc_text, current_time_text, ha_sensitive,
+from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
 from .settings import tr  # noqa: F401
@@ -170,7 +170,7 @@ class AgentTools:
                     props[k] = {"anyOf": props[k].get("anyOf", [props[k]]) + [v]}
         step = json.loads(json.dumps(SCHEMAS["agent"]))
         step["properties"]["input"] = {"type": "object", "properties": props, "required": [], "additionalProperties": False}
-        return step
+        return Shape(step, SCHEMAS["agent"])
 
     @classmethod
     def tool_schema(cls, types, optional=()):
