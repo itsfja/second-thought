@@ -17,7 +17,7 @@ learn by trial and error.
 ## The environment (cloud sessions)
 - **GitHub:** only `gh api` (REST) works: GraphQL (`gh pr`, `gh issue`) is blocked. Open PRs with
   `gh api repos/itsfja/second-thought/pulls -f title=… -f head=<branch> -f base=main -F body=@file`. Actions job logs,
-  secrets and branch deletion are blocked too; ask Francis for logs (or read annotations via `check-runs/<id>/annotations`).
+  secrets, branch deletion, tags and releases are blocked too (Francis makes releases on GitHub); ask Francis for logs (or read annotations via `check-runs/<id>/annotations`).
 - **Pushing a new branch:** pushes sometimes fail with a server error; retry after a few seconds. If a stop hook says
   a branch has no remote, `git push -u origin <branch>` again.
 - **Tests:** `bash tests/setup.sh` once (it fetches `tests/vendor`, git-ignored). In a git worktree, symlink

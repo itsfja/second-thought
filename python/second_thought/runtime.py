@@ -41,7 +41,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.receivers = {}
         self.client = None
         self.gemini = None
-        self.no_schema = set()      # Claude models that refused a reply shape, so it isn't sent again
+        self.no_schema = set()      # (Claude model, reply shape) pairs Claude refused, so that shape isn't sent to it again
         self.json_modes = {}         # (service, model) -> the JSON mode that service accepts: "schema", "object" or "none"
         self.schedule_mode = False
         self.transient_memory = {}   # kept across runs while this program keeps running
@@ -581,6 +581,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         hint = self.error_hint(msg)
         if hint:
             print("  " + hint, flush=True)
+        if self.calls:  # what the run had used when it stopped, as the end line would have said
+            used = " · ".join(tr("{who}: {tokens_in} tokens in, {tokens_out} out", who=who, tokens_in=f"{u[0]:,}", tokens_out=f"{u[1]:,}")
+                              for who, u in self.usage.items()) or tr("no tokens used")
+            print("\n" + (tr("Stopped · 1 model call") if self.calls == 1 else tr("Stopped · {n} model calls", n=self.calls))
+                  + f" · {used}{self.cost_text()}", flush=True)
         if on_github_actions():
             # An annotation: the reason shows on the run's summary page, not only in the step's log.
             note = tr("Run stopped: {msg}", msg=msg) + ("\n" + hint if hint else "")

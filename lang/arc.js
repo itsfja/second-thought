@@ -1743,7 +1743,11 @@
 "Run stopped: {msg}":"הפכא פסק: {msg}",
 "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"לחושבנכון דClaude לית אשראי. אוסיפו ב־https://console.anthropic.com והפיכו לה תוב.",
 "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"מפתחא דClaude דילכון דכנישתא כלה דConsole הוא, לא דאתר עבדא חד. עבידו מפתחא בגו אתר עבדא (דפא Workspaces דConsole), או שוו ANTHROPIC_WORKSPACE_ID {where_keys}.",
-"as a repository secret (Settings → Secrets and variables → Actions)":"כרזא דבית גנזא (Settings → Secrets and variables → Actions)"
+"as a repository secret (Settings → Secrets and variables → Actions)":"כרזא דבית גנזא (Settings → Secrets and variables → Actions)",
+"Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.":"Claude לא צבא למתב פתגמא לדרגא הדא. חזו מא דאתיהב לה (פקודתא דדרגא, בפנקסא או בפנקסא נטירא), ואמרו לה בצורתא אחרתא או שבקו מא דקריא הות.",
+"Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.":"Claude לא אהדר מדעם לדרגא הדא (פסק ב־„{stop}”). פשטו לה ונסו תוב.",
+"Stopped · 1 model call":"פסק · קריאה חדא לדמותא",
+"Stopped · {n} model calls":"פסק · {n} קריאן לדמותא"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

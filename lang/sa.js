@@ -1743,7 +1743,11 @@
 "Run stopped: {msg}":"चालनं स्थगितम्: {msg}",
 "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"तव Claude खाते धनं नास्ति। https://console.anthropic.com इत्यत्र योजय, ततः पुनः चालय।",
 "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"तव Claude कुञ्चिका सम्पूर्णस्य Console सङ्घस्य, न एकस्य कार्यस्थानस्य। कार्यस्थाने कुञ्चिकां रचय (Console इत्यस्य Workspaces पृष्ठम्), अथवा {where_keys} ANTHROPIC_WORKSPACE_ID स्थापय।",
-"as a repository secret (Settings → Secrets and variables → Actions)":"भाण्डारस्य रहस्यरूपेण (Settings → Secrets and variables → Actions)"
+"as a repository secret (Settings → Secrets and variables → Actions)":"भाण्डारस्य रहस्यरूपेण (Settings → Secrets and variables → Actions)",
+"Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.":"Claude अस्य पदस्य उत्तरं दातुं न ऐच्छत्। तस्मै किं दत्तम् इति पश्य (पदस्य आदेशः, लेखे रक्षितलेखे वा), अन्यथा वद यत् पठति स्म तत् त्यज वा।",
+"Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.":"Claude अस्मिन् पदे किमपि न प्रत्यर्पयत् («{stop}» इत्यनेन स्थगितम्)। सरलं कृत्वा पुनः प्रयतस्व।",
+"Stopped · 1 model call":"स्थगितम् · 1 प्रतिमानाह्वानम्",
+"Stopped · {n} model calls":"स्थगितम् · {n} प्रतिमानाह्वानानि"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

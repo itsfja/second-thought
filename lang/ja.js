@@ -1742,6 +1742,10 @@
 "Run stopped: {msg}":"実行を停止しました: {msg}",
 "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"Claude アカウントのクレジットがありません。https://console.anthropic.com で追加してから、もう一度実行してください。",
 "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"この Claude キーはワークスペースではなく Console の組織全体のものです。ワークスペースの中でキーを作るか(Console の Workspaces ページ)、{where_keys} に ANTHROPIC_WORKSPACE_ID を設定してください。",
-"as a repository secret (Settings → Secrets and variables → Actions)":"リポジトリのシークレットとして (Settings → Secrets and variables → Actions)"
+"as a repository secret (Settings → Secrets and variables → Actions)":"リポジトリのシークレットとして (Settings → Secrets and variables → Actions)",
+"Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.":"Claude はこのステップへの回答を断りました。渡した内容(ログや保存したログにあるステップのプロンプト)を確認し、言い方を変えるか、読ませていたものを外してください。",
+"Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.":"Claude はこのステップで何も返しませんでした(「{stop}」で止まりました)。簡単にしてもう一度試してください。",
+"Stopped · 1 model call":"停止 · モデル呼び出し 1 回",
+"Stopped · {n} model calls":"停止 · モデル呼び出し {n} 回"
 }
 };

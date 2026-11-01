@@ -875,7 +875,9 @@ class ModelCalls:
             args["system"] = self.instructions
         if web:
             args["tools"] = [WEB_SEARCH_TOOL]
-        if schema and not web and model not in self.no_schema:
+        # A shape Claude won't take is remembered with its model, so the other shapes are still held while Claude writes.
+        shape = (model, json.dumps(schema, sort_keys=True)) if schema else None
+        if schema and not web and shape not in self.no_schema:
             # Structured outputs: Claude can only write JSON of this shape. https://platform.claude.com/docs/en/build-with-claude/structured-outputs
             args["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
         try:
@@ -884,14 +886,22 @@ class ModelCalls:
             if "output_config" not in args or getattr(e, "status_code", None) != 400:
                 raise
             # This model or account won't take the shape: ask without it (the reply is still checked), and stop sending it.
-            self.no_schema.add(model)
+            self.no_schema.add(shape)
+            self.no_schema_why = str(e)
             self.log(tr("Structured replies"), tr("{model} wouldn't accept a reply shape ({e}), so its replies are checked after they arrive instead.", model=model, e=_short(str(e), 160)), tr("note"))
             del args["output_config"]
             msg = await self.client.messages.create(**args)
         usage = getattr(msg, "usage", None)
         self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
         text = "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
-        return Reply(text, getattr(msg, "stop_reason", None) in ("max_tokens", "model_context_window_exceeded"))
+        stop = getattr(msg, "stop_reason", None)
+        if not text and stop == "refusal":
+            # Claude declined to answer. Asking the same again gets the same answer, so it isn't retried.
+            raise RunError(tr("Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or "
+                              "the saved log), and word it another way or leave out what it was reading."))
+        if not text and stop:
+            raise Retryable(tr("Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.", stop=stop))
+        return Reply(text, stop in ("max_tokens", "model_context_window_exceeded"))
 
     @staticmethod
     def _streaming():
@@ -5449,7 +5459,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self.receivers = {}
         self.client = None
         self.gemini = None
-        self.no_schema = set()      # Claude models that refused a reply shape, so it isn't sent again
+        self.no_schema = set()      # (Claude model, reply shape) pairs Claude refused, so that shape isn't sent to it again
         self.json_modes = {}         # (service, model) -> the JSON mode that service accepts: "schema", "object" or "none"
         self.schedule_mode = False
         self.transient_memory = {}   # kept across runs while this program keeps running
@@ -5989,6 +5999,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         hint = self.error_hint(msg)
         if hint:
             print("  " + hint, flush=True)
+        if self.calls:  # what the run had used when it stopped, as the end line would have said
+            used = " · ".join(tr("{who}: {tokens_in} tokens in, {tokens_out} out", who=who, tokens_in=f"{u[0]:,}", tokens_out=f"{u[1]:,}")
+                              for who, u in self.usage.items()) or tr("no tokens used")
+            print("\n" + (tr("Stopped · 1 model call") if self.calls == 1 else tr("Stopped · {n} model calls", n=self.calls))
+                  + f" · {used}{self.cost_text()}", flush=True)
         if on_github_actions():
             # An annotation: the reason shows on the run's summary page, not only in the step's log.
             note = tr("Run stopped: {msg}", msg=msg) + ("\n" + hint if hint else "")

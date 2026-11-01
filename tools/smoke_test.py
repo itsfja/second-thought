@@ -100,7 +100,8 @@ async def check_claude():
         steps = R.agent_steps()
         used_add = any(st["tool"] == "add" and st["status"] == "done" for st in steps)
         answered = any(st["status"] == "answer" for st in steps)
-        report(s, "agent step shape accepted", not R.no_schema, "constrained" if not R.no_schema else "shape refused, checked afterwards instead")
+        report(s, "agent step shape accepted", not R.no_schema, "constrained" if not R.no_schema else
+               "shape refused, checked afterwards instead: " + getattr(R, "no_schema_why", "")[:400])
         report(s, "agent called a typed tool and answered", used_add and answered,
                ", ".join(f"{st['tool'] or '-'}:{st['status']}" for st in steps) + (f" · answer: {R.draft[:40]!r}" if R.draft else ""))
     used.append(R)

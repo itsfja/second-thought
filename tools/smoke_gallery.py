@@ -150,6 +150,14 @@ def main(argv, providers, use_fake_models=False, report_path=None):
         print("No gallery program matches " + " ".join(args.only))
         return 1
     print(f"Second Thought: running {len(names)} gallery program(s) against the " + ("stand-in" if use_fake_models else "real") + " models\n", flush=True)
+    try:
+        import playwright  # noqa: F401
+    except ImportError:
+        print("The gallery run drives the page in a browser, which needs the test setup first:  bash tests/setup.sh")
+        return 1
+    if not (ROOT / "tests" / "vendor" / "blockly").is_dir():
+        print("tests/vendor is missing (the page's libraries, for running it offline). Run:  bash tests/setup.sh  (it needs npm, from Node.js)")
+        return 1
     print("Exporting from the page…", flush=True)
     codes = asyncio.run(export_all(names))
 

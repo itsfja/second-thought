@@ -2862,7 +2862,11 @@
   "Run stopped: {msg}": "Cursus constitit: {msg}",
   "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.": "Rationi tuae Claude nihil crediti superest. Adde apud https://console.anthropic.com, deinde rursus curre.",
   "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.": "Clavis tua Claude toti societati Consolae pertinet, non uni spatio laboris. Clavem in spatio laboris fac (pagina Workspaces Consolae), aut ANTHROPIC_WORKSPACE_ID {where_keys} pone.",
-  "as a repository secret (Settings → Secrets and variables → Actions)": "ut arcanum repositorii (Settings → Secrets and variables → Actions)"
+  "as a repository secret (Settings → Secrets and variables → Actions)": "ut arcanum repositorii (Settings → Secrets and variables → Actions)",
+  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude huic gradui respondere noluit. Inspice quid acceperit (mandatum gradus, in actis vel actis servatis), et aliter dic vel omitte quod legebat.",
+  "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude nihil huic gradui reddidit (constitit cum «{stop}»). Simplicius fac et rursus tempta.",
+  "Stopped · 1 model call": "Constitit · 1 vocatio exemplaris",
+  "Stopped · {n} model calls": "Constitit · {n} vocationes exemplaris"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

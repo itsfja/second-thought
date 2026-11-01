@@ -1742,7 +1742,11 @@
 "Run stopped: {msg}":"Rennynge stynted: {msg}",
 "Your Claude account is out of credit. Add some at https://console.anthropic.com, then run it again.":"Thyn Claude acount hath no credit lefte. Adde som at https://console.anthropic.com, and renne it ageyn.",
 "Your Claude key belongs to a whole Console organisation, not one workspace. Make a key inside a workspace (the Console's Workspaces page), or set ANTHROPIC_WORKSPACE_ID {where_keys}.":"Thy Claude keye longeth to al a Console felaweshipe, nat to oon werkplace. Make a keye withinne a werkplace (the Console's Workspaces page), or sette ANTHROPIC_WORKSPACE_ID {where_keys}.",
-"as a repository secret (Settings → Secrets and variables → Actions)":"as a secree of the hoord (Settings → Secrets and variables → Actions)"
+"as a repository secret (Settings → Secrets and variables → Actions)":"as a secree of the hoord (Settings → Secrets and variables → Actions)",
+"Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.":"Claude wolde nat answere this steppe. Loke what it was yeven (the steppes biddynge, in the log or the kept log), and seye it another wey or leve out that it radde.",
+"Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.":"Claude yaf nothyng for this steppe (it stynted with “{stop}”). Make it simplere and assaye ageyn.",
+"Stopped · 1 model call":"Stynted · 1 clepynge of the model",
+"Stopped · {n} model calls":"Stynted · {n} clepynges of the model"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",
