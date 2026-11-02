@@ -272,6 +272,11 @@ class Doctor:
         names = list(can.get("services", [])) if known else ["Claude"] + [s["name"] for s in SERVICES
                                                                           if s["name"] != "Claude" and any(os.environ.get(k) for k in s["keys"])]
         services = [s for s in SERVICES if s["name"] in names]
+        for s in services:
+            for line in self.allowance_lines([_tier(s, "default")]):
+                row("ok", "Allowances", line)
+        if self.allowance_note() and services:
+            row("NOTE", "Allowances", self.allowance_note())
         needs = [("anthropic", "anthropic", "Claude")] if any(s["api"] == "anthropic" for s in services) else []
         needs += [("google.genai", "google-genai", "Gemini")] if any(s["api"] == "gemini" for s in services) else []
         needs += [("paho.mqtt.client", "paho-mqtt", "MQTT")] if known and any(i in ids for i in ("mqtt_read", "mqtt_publish")) else []

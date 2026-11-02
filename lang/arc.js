@@ -1804,7 +1804,17 @@
 "Models: {list}.":"מודלין: {list}.",
 "on this computer":"בחושבנא הדין",
 "through {service}":"באורח {service}",
-"{model}, by {maker}, {where}":"{model}, מן {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, מן {maker}, {where}",
+"Allowances":"מנתא",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"ב־GitHub Actions מניינא לא קאים בין רהטין, הלכך מנתא חלין על כל רהטא בלחודוהי.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"פסק: מנתא לכל {window} דילה {amount} לקלידא דנא ד־{service} מטת ({spent} אתאפיק). מתחדתא ב־{when}.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"פסק: ל־{model} לית טימי ידיעא, הלכך נפקתיה לא מתמניא במנתא דקלידא דנא. אשתמש במודלא עם טימי.",
+"hourly":"שעתא",
+"daily":"יומא",
+"weekly":"שבועא",
+"monthly":"ירחא",
+"{pct}% of the {window} allowance of {amount}":"‏{pct}% ממנתא לכל {window} דילה {amount}",
+"{service} key: {list}":"קלידא ד־{service}: {list}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

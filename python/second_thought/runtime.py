@@ -24,6 +24,7 @@ from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, H
 from .connectors import Connections
 from .mcp import MCPTools
 from .agent import AgentTools
+from .spending import Spending, any_allowance
 from .doctor import Doctor
 from .update import Updates
 from .settings import said_no, said_yes, tr  # noqa: F401
@@ -36,7 +37,7 @@ import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it t
 ACTIONS_ERROR = "::error::"
 
 
-class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
+class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, Updates):
     def __init__(self):
         self.vars = {}
         self.receivers = {}
@@ -74,6 +75,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         self.checkpoints = {}        # 'save checkpoint' snapshots, by name
         self.usage = {}  # provider -> [tokens in, tokens out]
         self.cost = [0.0, True]      # what the run's model calls cost in US dollars, and whether every one had a known price
+        self.tiers_used = []         # the tiers that answered, for each key's allowances at the end
         self.budget = BUDGET          # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
         # The same in money at list prices: budget_dollars = 0.50, or budget_money = 0.40 in the program's currency (which
         # wins). budget_dollars is what's checked, in US dollars; the amount and its currency are what's shown.
@@ -188,6 +190,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
             if after != before:
                 cost = call_cost(t, after[0] - before[0], after[1] - before[1])
                 self.cost = [self.cost[0] + (cost or 0), self.cost[1] and cost is not None]
+                self.tiers_used.append(t)
+                if cost:
+                    self.spend(t, cost)
             self._pending.append({"who": f"{model_byline(t)} ({band_text(t)})", "secs": time.monotonic() - start, "in": after[0] - before[0],
                                   "out": after[1] - before[1], "ok": ok, "prompt": self._prompt_text(prompt, history, picture)})
 
@@ -1386,6 +1391,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         budget = (" · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else "") + \
             (" · " + tr("budget {n}", n=self.budget_text()) if self.budget_dollars else "")
         print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}{self.cost_text()}", flush=True)
+        for line in self.allowance_lines(self.tiers_used) + ([self.allowance_note()] if self.allowance_note() and self.tiers_used else []):
+            print("  " + line, flush=True)
         return 0
 
     def cost_text(self):
@@ -1414,6 +1421,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
             lines.append(f"- Budget: {self.budget:,} tokens")
         if self.budget_dollars:
             lines.append(f"- Budget: {self.budget_text()} at list prices")
+        for line in self.allowance_lines(self.tiers_used):
+            lines.append(f"- Allowance: {line}")
         if self.error:
             lines.append(f"- Stopped with an error: {self._describe(self.error)}")
         lines.append("")
@@ -1812,6 +1821,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
             print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
         self._can = can
+        any_allowance()  # so does a mistyped quota_daily (or another allowance)
         fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run. Not when the
         # runtime loads: in python/runtime.py, providers comes before core, whose _number_setting it uses (#274)
         if "--doctor" in sys.argv:

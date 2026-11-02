@@ -30,7 +30,7 @@ PAGE = ROOT / "second-thought.html"
 RUNTIME = ROOT / "python" / "runtime.py"
 PACKAGE = ROOT / "python" / "second_thought"
 # The order matters: each module may use names from the ones before it.
-MODULES = ["settings", "providers", "core", "connectors", "mcp", "agent", "doctor", "update", "runtime"]
+MODULES = ["settings", "providers", "core", "connectors", "mcp", "agent", "spending", "doctor", "update", "runtime"]
 RUNTIME_START = "# ---- Second Thought runtime starts here: --update-runtime replaces everything down to the line that says it ends ----"
 RUNTIME_END = "# ---- Second Thought runtime ends here ----"
 MARK = "# ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----"

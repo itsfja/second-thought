@@ -1803,6 +1803,16 @@
 "Models: {list}.":"モデル：{list}。",
 "on this computer":"このコンピューター上",
 "through {service}":"{service} 経由",
-"{model}, by {maker}, {where}":"{model}（{maker} 製、{where}）"
+"{model}, by {maker}, {where}":"{model}（{maker} 製、{where}）",
+"Allowances":"上限",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"GitHub Actions では実行ごとに集計が消えるので、上限はそれぞれの実行にだけ適用されます。",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"停止しました：この {service} キーの {window} の上限 {amount} に達しました（{spent} 使用）。{when} にリセットされます。",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"停止しました：{model} の価格が不明なため、このキーの上限に対して支出を数えられません。価格のわかるモデルを使ってください。",
+"hourly":"1 時間",
+"daily":"1 日",
+"weekly":"1 週間",
+"monthly":"1 か月",
+"{pct}% of the {window} allowance of {amount}":"{window} の上限 {amount} の {pct}%",
+"{service} key: {list}":"{service} キー：{list}"
 }
 };

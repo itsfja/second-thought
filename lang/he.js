@@ -1804,6 +1804,16 @@
 "Models: {list}.":"מודלים: {list}.",
 "on this computer":"במחשב הזה",
 "through {service}":"דרך {service}",
-"{model}, by {maker}, {where}":"{model}, של {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, של {maker}, {where}",
+"Allowances":"מכסות",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"ב־GitHub Actions הספירה לא נשמרת בין הרצות, ולכן המכסות חלות על כל הרצה בנפרד.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"נעצר: הגעת למכסה לכל {window} של {amount} עבור מפתח {service} הזה ({spent} הוצאו). היא מתאפסת ב־{when}.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"נעצר: ל־{model} אין מחיר ידוע, ולכן אי אפשר לספור את ההוצאה שלו במכסות של המפתח הזה. השתמשו במודל עם מחיר.",
+"hourly":"שעה",
+"daily":"יום",
+"weekly":"שבוע",
+"monthly":"חודש",
+"{pct}% of the {window} allowance of {amount}":"‏{pct}% מהמכסה לכל {window} של {amount}",
+"{service} key: {list}":"מפתח {service}: {list}"
 }
 };

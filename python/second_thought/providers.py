@@ -428,6 +428,7 @@ class ModelCalls:
         tiers = [tier] + (self.backups if tier == self.primary else [])
         if self.budget_dollars:
             tiers = self._within_money_budget(tiers)
+        tiers = self._within_allowances(tiers)  # each key's hourly, daily, weekly and monthly allowance (#269)
         last = None
         for n, t in enumerate(tiers):
             if n:

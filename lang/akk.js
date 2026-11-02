@@ -1804,7 +1804,17 @@
 "Models: {list}.":"ṭēmū: {list}.",
 "on this computer":"ina ṭupšarrūtim annītim",
 "through {service}":"ina qāti {service}",
-"{model}, by {maker}, {where}":"{model}, ša {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, ša {maker}, {where}",
+"Allowances":"isqū",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"ina GitHub Actions minûtum birīt epšētim ul izzaz, aššum kīam isqū ana epištim ištiat ibaššû.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"iprus: isqum ša {window} ša {amount} ana kakkim ša {service} kašid ({spent} nadnu). ina {when} uddaš.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"iprus: {model} šīmam idûm ul išu, aššum kīam nadānšu ana isqī kakkim annîm ul immanni. ṭēmam ša šīmam išû epuš.",
+"hourly":"šiddum",
+"daily":"ūmum",
+"weekly":"šebûtum",
+"monthly":"warḫum",
+"{pct}% of the {window} allowance of {amount}":"{pct}% ša isqim ša {window} ša {amount}",
+"{service} key: {list}":"kakkum ša {service}: {list}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

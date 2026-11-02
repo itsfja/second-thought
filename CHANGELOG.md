@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Added
+- Allowances for each key (#269): `quota_hourly`, `quota_daily`, `quota_weekly` and `quota_monthly` in `second-thought.ini`, in the program's currency, and `quota_<window>_<service>` for one service's own. Each key's spending at list prices is kept by the hour next to `memory.json`, as a hash of the key, for about 40 days, across every run of every program on this computer. A run stops before a model call once an allowance is used up and says when it resets; the end of a run, a saved log and `--doctor` say how much of each has gone. A model with no known price is refused under an allowance, and backups without room are left out. On GitHub Actions the tally starts afresh each run, and `--doctor` says so.
+
 ## 3.4.1 - 2026-11-02
 
 ### Fixed

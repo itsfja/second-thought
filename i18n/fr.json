@@ -2930,6 +2930,16 @@
   "Models: {list}.": "Modèles : {list}.",
   "on this computer": "sur cet ordinateur",
   "through {service}": "via {service}",
-  "{model}, by {maker}, {where}": "{model}, par {maker}, {where}"
+  "{model}, by {maker}, {where}": "{model}, par {maker}, {where}",
+  "Allowances": "Allocations",
+  "On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.": "Sur GitHub Actions, le décompte ne se conserve pas d’une exécution à l’autre : les allocations ne valent que pour chaque exécution.",
+  "Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.": "Arrêté : l’allocation par {window} de {amount} de cette clé {service} est atteinte ({spent} dépensés). Elle repart à {when}.",
+  "Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.": "Arrêté : {model} n’a pas de prix connu, ses dépenses ne peuvent donc pas être décomptées des allocations de cette clé. Utilisez un modèle avec un prix.",
+  "hourly": "heure",
+  "daily": "jour",
+  "weekly": "semaine",
+  "monthly": "mois",
+  "{pct}% of the {window} allowance of {amount}": "{pct} % de l’allocation par {window} de {amount}",
+  "{service} key: {list}": "Clé {service} : {list}"
  }
 }

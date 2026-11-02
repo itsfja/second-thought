@@ -1804,7 +1804,17 @@
 "Models: {list}.":"प्रतिरूपाणि: {list}।",
 "on this computer":"अस्मिन् सङ्गणके",
 "through {service}":"{service} द्वारा",
-"{model}, by {maker}, {where}":"{model}, {maker} कृतम्, {where}"
+"{model}, by {maker}, {where}":"{model}, {maker} कृतम्, {where}",
+"Allowances":"भागाः",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"GitHub Actions मध्ये गणना चालनयोः मध्ये न तिष्ठति, अतः भागाः प्रत्येकस्मिन् चालने पृथक् प्रवर्तन्ते।",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"स्थगितम्: अस्य {service}-कुञ्चिकायाः प्रति{window} {amount} इति भागः प्राप्तः ({spent} व्ययितम्)। {when} समये पुनः आरभते।",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"स्थगितम्: {model} इत्यस्य मूल्यं न ज्ञातम्, अतः तस्य व्ययः अस्याः कुञ्चिकायाः भागेषु गणयितुं न शक्यते। मूल्ययुक्तं प्रतिरूपं प्रयुङ्क्ष्व।",
+"hourly":"होरम्",
+"daily":"दिनम्",
+"weekly":"सप्ताहम्",
+"monthly":"मासम्",
+"{pct}% of the {window} allowance of {amount}":"प्रति{window} {amount} इति भागस्य {pct}%",
+"{service} key: {list}":"{service}-कुञ्चिका: {list}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

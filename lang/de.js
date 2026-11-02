@@ -1803,6 +1803,16 @@
 "Models: {list}.":"Modelle: {list}.",
 "on this computer":"auf diesem Computer",
 "through {service}":"über {service}",
-"{model}, by {maker}, {where}":"{model}, von {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, von {maker}, {where}",
+"Allowances":"Kontingente",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"Auf GitHub Actions bleibt die Zählung zwischen Läufen nicht erhalten, daher gelten Kontingente nur für jeden Lauf einzeln.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"Gestoppt: Das Kontingent pro {window} von {amount} für diesen {service}-Schlüssel ist erreicht ({spent} ausgegeben). Es wird um {when} zurückgesetzt.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"Gestoppt: {model} hat keinen bekannten Preis, daher können seine Ausgaben nicht gegen die Kontingente dieses Schlüssels gezählt werden. Nutzen Sie ein Modell mit Preis.",
+"hourly":"Stunde",
+"daily":"Tag",
+"weekly":"Woche",
+"monthly":"Monat",
+"{pct}% of the {window} allowance of {amount}":"{pct} % des Kontingents pro {window} von {amount}",
+"{service} key: {list}":"{service}-Schlüssel: {list}"
 }
 };

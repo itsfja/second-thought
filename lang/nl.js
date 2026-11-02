@@ -1803,6 +1803,16 @@
 "Models: {list}.":"Modellen: {list}.",
 "on this computer":"op deze computer",
 "through {service}":"via {service}",
-"{model}, by {maker}, {where}":"{model}, van {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, van {maker}, {where}",
+"Allowances":"Tegoeden",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"Op GitHub Actions blijft de telling niet bewaard tussen runs, dus tegoeden gelden per run.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"Gestopt: het tegoed per {window} van {amount} voor deze {service}-sleutel is bereikt ({spent} uitgegeven). Het begint opnieuw om {when}.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"Gestopt: {model} heeft geen bekende prijs, dus de uitgaven kunnen niet worden meegeteld voor de tegoeden van deze sleutel. Gebruik een model met een prijs.",
+"hourly":"uur",
+"daily":"dag",
+"weekly":"week",
+"monthly":"maand",
+"{pct}% of the {window} allowance of {amount}":"{pct}% van het tegoed per {window} van {amount}",
+"{service} key: {list}":"{service}-sleutel: {list}"
 }
 };

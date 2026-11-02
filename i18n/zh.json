@@ -2930,6 +2930,16 @@
   "Models: {list}.": "模型：{list}。",
   "on this computer": "在本机上",
   "through {service}": "经由 {service}",
-  "{model}, by {maker}, {where}": "{model}，{maker} 出品，{where}"
+  "{model}, by {maker}, {where}": "{model}，{maker} 出品，{where}",
+  "Allowances": "额度",
+  "On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.": "在 GitHub Actions 上，统计不会在运行之间保留，所以额度只对每次运行单独生效。",
+  "Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.": "已停止：此 {service} 密钥每{window}的额度 {amount} 已用完（已花费 {spent}）。将于 {when} 重置。",
+  "Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.": "已停止：{model} 没有已知价格，因此无法将其花费计入此密钥的额度。请使用有价格的模型。",
+  "hourly": "小时",
+  "daily": "天",
+  "weekly": "周",
+  "monthly": "月",
+  "{pct}% of the {window} allowance of {amount}": "每{window}额度 {amount} 的 {pct}%",
+  "{service} key: {list}": "{service} 密钥：{list}"
  }
 }
