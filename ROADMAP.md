@@ -18,14 +18,17 @@ Trust: the prompt-injection tests ([#188](https://github.com/itsfja/second-thoug
 
 Safety and cost of change, released in 3.0.0: one source for the safety rules ([#219](https://github.com/itsfja/second-thought/issues/219)), the DNS-rebinding gap closed ([#220](https://github.com/itsfja/second-thought/issues/220)), translation files merged key by key ([#217](https://github.com/itsfja/second-thought/issues/217)) and a translation tool ([#218](https://github.com/itsfja/second-thought/issues/218)). The editor split into files by area ([#221](https://github.com/itsfja/second-thought/issues/221)), with unit tests ([#222](https://github.com/itsfja/second-thought/issues/222)) and keyboard and screen-reader use ([#223](https://github.com/itsfja/second-thought/issues/223)). Polish: a run's cost in money ([#224](https://github.com/itsfja/second-thought/issues/224)), saying what's new when a program asks again ([#225](https://github.com/itsfja/second-thought/issues/225)), and a real run on GitHub Actions ([#226](https://github.com/itsfja/second-thought/issues/226)).
 
-## Now: fixes reach people
+Fixes reach people, released in 3.1.0: exported programs say when their runtime is out of date and update it in place ([#244](https://github.com/itsfja/second-thought/issues/244)).
+
+## Now: what a run costs, in terms people use
 
 | | Benefit | Cost |
 |---|---|---|
-| [#244](https://github.com/itsfja/second-thought/issues/244) Tell exported programs when their runtime is out of date, and update it in place | High: each program carries a frozen runtime, so a security fix reaches only those who re-export | Medium |
 | [#241](https://github.com/itsfja/second-thought/issues/241) A budget in money, not just tokens | Medium: people think in money, and unattended runs need a cap | Low |
+| [#263](https://github.com/itsfja/second-thought/issues/263) Costs and money budgets in pounds, euros, yen or yuan | Medium: "about £0.02" means more than "about $0.03" to most people | Low-medium |
+| [#264](https://github.com/itsfja/second-thought/issues/264) How expensive each model is, and how much of each key's allowance is used, with plan settings | Medium-high for unattended programs | Medium |
 
-#244 comes first. It's the gap SECURITY.md names, and 3.0.0 and 3.0.1 are already fixes nobody is told about. #241 is cheap now the run knows its cost.
+In that order, as each builds on the one before. #241 is ready for review. #263 converts its budgets and costs. #264 then shows allowances in the chosen currency, and its plan table gets the same date-and-source upkeep as the prices.
 
 ## Next: GitHub as a home
 
