@@ -16,7 +16,7 @@ import re
 import sys
 import time
 from .settings import RUNTIME_VERSION, WHERE_KEYS, on_github_actions
-from .providers import CURRENCY, ModelCalls, amount_text, call_cost, model_label, money, per_dollar, rate_note
+from .providers import CURRENCY, ModelCalls, amount_text, band_text, call_cost, model_byline, model_label, money, per_dollar, rate_note
 from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
     _locked, _need_picture, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js,
@@ -188,7 +188,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
             if after != before:
                 cost = call_cost(t, after[0] - before[0], after[1] - before[1])
                 self.cost = [self.cost[0] + (cost or 0), self.cost[1] and cost is not None]
-            self._pending.append({"who": model_label(t), "secs": time.monotonic() - start, "in": after[0] - before[0],
+            self._pending.append({"who": f"{model_byline(t)} ({band_text(t)})", "secs": time.monotonic() - start, "in": after[0] - before[0],
                                   "out": after[1] - before[1], "ok": ok, "prompt": self._prompt_text(prompt, history, picture)})
 
     # ----- Claude -----

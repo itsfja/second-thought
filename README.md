@@ -319,6 +319,8 @@ On the page, Claude does every job; blocks that name another model are answered 
 
 Some notes:
 
+- **How expensive:** the model menus, the run log and `--doctor` give each model a band from its list price per million output tokens. The bands are **free**, **budget** (up to $5), **standard** (up to $15) and **premium**. Llama on your own computer is free. A model whose price Second Thought doesn't know yet says **price unknown**, rather than guessing.
+- **Who makes it:** for a service that runs other companies' models, the run log says both, like *Gemma 4, by Google, through Hugging Face*: the bill and the limits come from the service.
 - **Llama** runs on your own computer, so nothing you ask it leaves the house. Install [Ollama](https://ollama.com) and download a model with `ollama pull llama3.2-vision:11b`. If Ollama runs on another computer, set `LLAMA_BASE_URL = http://that-computer:11434/v1`.
 - **GPT:** a ChatGPT subscription isn't an API key. You need a key from OpenAI's developer site.
 - **DeepSeek** is very cheap. It runs on DeepSeek's own servers in China, so keep it for things that aren't private.

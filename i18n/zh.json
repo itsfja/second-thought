@@ -1430,7 +1430,12 @@
   "yen": "日元",
   "yuan": "人民币",
   "Currency": "货币",
-  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "显示费用和金额预算所用的货币。各服务以美元收费；其他货币使用欧洲中央银行 {date} 的汇率。"
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "显示费用和金额预算所用的货币。各服务以美元收费；其他货币使用欧洲中央银行 {date} 的汇率。",
+  "free": "免费",
+  "budget": "经济",
+  "standard": "标准",
+  "premium": "高端",
+  "price unknown": "价格未知"
  },
  "examples": {
   "review": {
@@ -2916,6 +2921,15 @@
   "at the ECB rate of {date}": "按欧洲央行 {date} 的汇率",
   "at the rate set {where_keys}": "按 {where_keys} 设定的汇率",
   "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.": "currency 必须是 usd、gbp、eur、jpy 或 cny，而不是“{raw}”。请 {where_keys} 修改。",
-  "{code}, {note} (1 US dollar = {rate})": "{code}，{note}（1 美元 = {rate}）"
+  "{code}, {note} (1 US dollar = {rate})": "{code}，{note}（1 美元 = {rate}）",
+  "free": "免费",
+  "budget": "经济",
+  "standard": "标准",
+  "premium": "高端",
+  "price unknown": "价格未知",
+  "Models: {list}.": "模型：{list}。",
+  "on this computer": "在本机上",
+  "through {service}": "经由 {service}",
+  "{model}, by {maker}, {where}": "{model}，{maker} 出品，{where}"
  }
 }

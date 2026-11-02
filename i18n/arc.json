@@ -1431,7 +1431,12 @@
   "yen": "ין",
   "yuan": "יואן",
   "Currency": "מטבעא",
-  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "מטבעא דבה מתחזין נפקתא ותחומי כספא. שמשיא גבן בדולרין אמריקאין; מטבעין אחרנין משתמשין בשערא דבנקא מציעאה אירופאה מן {date}."
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "מטבעא דבה מתחזין נפקתא ותחומי כספא. שמשיא גבן בדולרין אמריקאין; מטבעין אחרנין משתמשין בשערא דבנקא מציעאה אירופאה מן {date}.",
+  "free": "מגן",
+  "budget": "זול",
+  "standard": "רגיל",
+  "premium": "יקיר",
+  "price unknown": "טימי לא ידיע"
  },
  "examples": {
   "review": {
@@ -2917,7 +2922,16 @@
   "at the ECB rate of {date}": "בשערא דECB מן {date}",
   "at the rate set {where_keys}": "בשערא דאתקבע {where_keys}",
   "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.": "currency צריך למהוי usd, gbp, eur, jpy או cny, ולא “{raw}”. תקן יתיה {where_keys}.",
-  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (‏1 דולר אמריקאה = {rate})"
+  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (‏1 דולר אמריקאה = {rate})",
+  "free": "מגן",
+  "budget": "זול",
+  "standard": "רגיל",
+  "premium": "יקיר",
+  "price unknown": "טימי לא ידיע",
+  "Models: {list}.": "מודלין: {list}.",
+  "on this computer": "בחושבנא הדין",
+  "through {service}": "באורח {service}",
+  "{model}, by {maker}, {where}": "{model}, מן {maker}, {where}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

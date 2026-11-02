@@ -104,6 +104,17 @@
   const serviceOf = t => { t = String(t || ""); return SERVICES.find(s => s.prefix && (t.startsWith(s.prefix) || (s.any_model && t.startsWith(s.any_model)))) || null; };
   const serviceNamed = name => SERVICES.find(s => s.name === name);
   const isElsewhere = t => !!serviceOf(t);
+  /* How expensive each model is (BANDS in python/second_thought/providers.py): from its list price per million output
+     tokens; free when it runs on this computer (Llama through Ollama, as set up by default); no band without a price. */
+  const BANDS = JSON.parse(document.getElementById("money").textContent).bands;
+  function priceBand(s, k){
+    if (s.name === "Llama" && /^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(s.base || "")) return "free";
+    const p = s.prices && s.prices[s.tiers[k][0]];
+    if (!p) return null;
+    const hit = BANDS.find(([top]) => p[1] <= top);
+    return hit ? hit[1] : "premium";
+  }
+  const bandText = band => ({ free:tr("free"), budget:tr("budget"), standard:tr("standard"), premium:tr("premium") })[band] || tr("price unknown");
   (function fillTierMenu(){
     const sel = $("tier");
     SERVICES.forEach(s => {
@@ -111,7 +122,7 @@
       g.label = s.menu + (s.api === "anthropic" ? "" : " (runs in exported Python)");
       menuSizes(s).forEach(k => {
         const o = document.createElement("option");
-        o.value = s.prefix + k; o.textContent = s.tiers[k][2] || s.tiers[k][1];
+        o.value = s.prefix + k; o.textContent = (s.tiers[k][2] || s.tiers[k][1]) + " · " + bandText(priceBand(s, k));
         if (o.value === "default") o.selected = true;
         g.appendChild(o);
       });

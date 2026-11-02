@@ -935,7 +935,12 @@
 "yen":"γιεν",
 "yuan":"γουάν",
 "Currency":"Νόμισμα",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Το νόμισμα στο οποίο εμφανίζονται τα κόστη και οι χρηματικοί προϋπολογισμοί. Οι υπηρεσίες χρεώνουν σε δολάρια ΗΠΑ· τα άλλα νομίσματα χρησιμοποιούν την ισοτιμία της Ευρωπαϊκής Κεντρικής Τράπεζας της {date}."
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Το νόμισμα στο οποίο εμφανίζονται τα κόστη και οι χρηματικοί προϋπολογισμοί. Οι υπηρεσίες χρεώνουν σε δολάρια ΗΠΑ· τα άλλα νομίσματα χρησιμοποιούν την ισοτιμία της Ευρωπαϊκής Κεντρικής Τράπεζας της {date}.",
+"free":"δωρεάν",
+"budget":"οικονομικό",
+"standard":"κανονικό",
+"premium":"premium",
+"price unknown":"άγνωστη τιμή"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1789,6 +1794,15 @@
 "at the ECB rate of {date}":"με την ισοτιμία της ΕΚΤ της {date}",
 "at the rate set {where_keys}":"με την ισοτιμία που ορίστηκε {where_keys}",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"το currency πρέπει να είναι usd, gbp, eur, jpy ή cny, όχι «{raw}». Διορθώστε το {where_keys}.",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 δολάριο ΗΠΑ = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 δολάριο ΗΠΑ = {rate})",
+"free":"δωρεάν",
+"budget":"οικονομικό",
+"standard":"κανονικό",
+"premium":"premium",
+"price unknown":"άγνωστη τιμή",
+"Models: {list}.":"Μοντέλα: {list}.",
+"on this computer":"σε αυτόν τον υπολογιστή",
+"through {service}":"μέσω {service}",
+"{model}, by {maker}, {where}":"{model}, της {maker}, {where}"
 }
 };

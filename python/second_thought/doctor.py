@@ -10,7 +10,7 @@ import sys
 import urllib.error
 import urllib.request
 from .settings import KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM, RUNTIME_VERSION, SETTINGS_PATH, WHERE_KEYS
-from .providers import CURRENCY, MODELS, PROVIDERS, SERVICES, TIER_NAMES, _tier, amount_text, fixed_rate, per_dollar, rate_note, rates
+from .providers import CURRENCY, MODELS, PROVIDERS, SERVICES, TIER_NAMES, _tier, amount_text, band_text, model_byline, fixed_rate, per_dollar, rate_note, rates
 from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, _short, to_str
 from .connectors import webhook_host
 from .settings import tr  # noqa: F401
@@ -286,7 +286,8 @@ class Doctor:
                 status, text = await self._doctor_model(s)
             except Exception as e:  # noqa: BLE001 - one check's trouble is reported, then the next runs
                 status, text = "FAIL", _short(self._describe(e), 200)
-            row(status, s["name"], text)
+            sizes = [k for k in TIER_NAMES if k in s["tiers"] and (k == "default" or s["tiers"][k][0] != s["tiers"]["default"][0])]
+            row(status, s["name"], text + " " + tr("Models: {list}.", list=", ".join(f"{model_byline(_tier(s, k))} ({band_text(_tier(s, k))})" for k in sizes)))
         for area, check in await self._doctor_connections(ids, [n for n in can.get("mcp", []) if to_str(n).strip()]):
             if not known and not self._doctor_configured(area):
                 continue

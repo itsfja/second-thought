@@ -936,7 +936,12 @@
 "yen":"येन",
 "yuan":"युआन",
 "Currency":"मुद्रा",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"यस्यां मुद्रायां व्ययाः धनसीमाः च दर्श्यन्ते। सेवाः अमेरिकी-डॉलर-मध्ये शुल्कं गृह्णन्ति; अन्याः मुद्राः यूरोपीय-केन्द्रीय-अधिकोषस्य {date} दिनाङ्कस्य विनिमयदरं प्रयुञ्जते।"
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"यस्यां मुद्रायां व्ययाः धनसीमाः च दर्श्यन्ते। सेवाः अमेरिकी-डॉलर-मध्ये शुल्कं गृह्णन्ति; अन्याः मुद्राः यूरोपीय-केन्द्रीय-अधिकोषस्य {date} दिनाङ्कस्य विनिमयदरं प्रयुञ्जते।",
+"free":"निःशुल्कम्",
+"budget":"अल्पमूल्यम्",
+"standard":"सामान्यम्",
+"premium":"महार्घम्",
+"price unknown":"मूल्यम् अज्ञातम्"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1790,7 +1795,16 @@
 "at the ECB rate of {date}":"ECB इत्यस्य {date} दिनाङ्कस्य दरेण",
 "at the rate set {where_keys}":"{where_keys} निर्धारितेन दरेण",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency usd, gbp, eur, jpy अथवा cny भवेत्, न तु “{raw}”। {where_keys} संशोधय।",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 अमेरिकी-डॉलर = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 अमेरिकी-डॉलर = {rate})",
+"free":"निःशुल्कम्",
+"budget":"अल्पमूल्यम्",
+"standard":"सामान्यम्",
+"premium":"महार्घम्",
+"price unknown":"मूल्यम् अज्ञातम्",
+"Models: {list}.":"प्रतिरूपाणि: {list}।",
+"on this computer":"अस्मिन् सङ्गणके",
+"through {service}":"{service} द्वारा",
+"{model}, by {maker}, {where}":"{model}, {maker} कृतम्, {where}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

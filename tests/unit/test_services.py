@@ -15,7 +15,7 @@ import sync  # noqa: E402
 
 APIS = {"anthropic", "gemini", "openai", "perplexity"}
 FIELDS = {"prices", "prices_checked", "prices_source", "name", "who", "key_label", "menu", "api", "prefix", "any_model", "base", "base_env", "keys", "signup", "headers",
-          "tiers", "no_vision", "vision", "pip", "note", "setup", "always"}
+          "tiers", "no_vision", "vision", "pip", "note", "setup", "always", "maker", "makers"}
 
 
 class WellFormed(unittest.TestCase):
