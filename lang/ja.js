@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"分","h":"時間","d":"日"},
 "rb_mem_add.KIND":{"transient":"このページが開いている間","permanent":"ずっと"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG（描いた画像）","orig":"元のファイル"},
-"rb_budget.UNIT":{"tokens":"トークン","dollars":"米ドル"}
+"rb_budget.UNIT":{"tokens":"トークン","dollars":"米ドル","gbp":"ポンド","eur":"ユーロ","jpy":"円","cny":"人民元"}
 },
 "categories":{
 "Events":"イベント",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"停止しました：この実行がすでに使ったモデルの価格が不明なため、{budget} の予算内に収められません。価格のわかるモデルを使うか、トークン数の予算にしてください。",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"停止しました：この実行は定価で約 {cost} を使い、予算の {budget} に達しました。「この実行を制限」ブロックの金額を上げてください。",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"停止しました：{model} の価格が不明なため、この実行を {budget} の予算内に収められません。価格のわかるモデルを使うか、トークン数の予算にしてください。",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"この実行は、定価で約 {budget} を使った時点で、次の Claude の呼び出しの前に止まります（これまでに約 {cost}）。"
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"この実行は、定価で約 {budget} を使った時点で、次の Claude の呼び出しの前に止まります（これまでに約 {cost}）。",
+"US dollars":"米ドル",
+"pounds":"ポンド",
+"euros":"ユーロ",
+"yen":"円",
+"yuan":"人民元",
+"Currency":"通貨",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"費用と金額の予算を表示する通貨です。各サービスは米ドルで請求します。ほかの通貨は欧州中央銀行の {date} のレートを使います。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1776,6 +1783,12 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"停止しました：この実行がすでに使ったモデルの価格が不明なため、{x} の予算内に収められません。価格のわかるモデルを使うか、トークン数の予算にしてください。",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"停止しました：この実行は定価で {x} を使い、予算の {x2} に達しました。「この実行を制限」ブロックの金額を上げてください（または second-thought.ini の budget_dollars）。",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"停止しました：{model} の価格が不明なため、この実行を {x} の予算内に収められません。価格のわかるモデルを使うか、トークン数の予算にしてください。",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"この実行は、定価で {x} を使った時点で、次のモデル呼び出しの前に止まります（これまでの支出：{x2}）。"
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"この実行は、定価で {x} を使った時点で、次のモデル呼び出しの前に止まります（これまでの支出：{x2}）。",
+"Currency":"通貨",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"今日のレートを取得できなかったため（{err}）、手元にある最新のものを使います。",
+"at the ECB rate of {date}":"ECB の {date} のレートで",
+"at the rate set {where_keys}":"{where_keys} で設定したレートで",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency は usd、gbp、eur、jpy、cny のいずれかにしてください（「{raw}」ではなく）。{where_keys} で直してください。",
+"{code}, {note} (1 US dollar = {rate})":"{code}、{note}（1 米ドル = {rate}）"
 }
 };

@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"λεπτά","h":"ώρες","d":"ημέρες"},
 "rb_mem_add.KIND":{"transient":"όσο αυτή η σελίδα είναι ανοιχτή","permanent":"για πάντα"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (σχεδιασμένες εικόνες)","orig":"αρχικό αρχείο"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολάρια ΗΠΑ"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολάρια ΗΠΑ","gbp":"λίρες","eur":"ευρώ","jpy":"γιεν","cny":"γουάν"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Διακόπηκε: ένα μοντέλο που έχει ήδη χρησιμοποιήσει αυτή η εκτέλεση δεν έχει γνωστή τιμή, οπότε δεν μπορεί να κρατηθεί στον προϋπολογισμό των {budget}. Χρησιμοποιήστε μοντέλα με τιμή, ή προϋπολογισμό σε tokens.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Διακόπηκε: αυτή η εκτέλεση έχει ξοδέψει περίπου {cost} σε τιμές καταλόγου, που φτάνει τον προϋπολογισμό της των {budget}. Αυξήστε το ποσό στο μπλοκ «περιόρισε αυτή την εκτέλεση».",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Διακόπηκε: το {model} δεν έχει γνωστή τιμή, οπότε αυτή η εκτέλεση δεν μπορεί να κρατηθεί στον προϋπολογισμό των {budget}. Χρησιμοποιήστε μοντέλο με τιμή, ή προϋπολογισμό σε tokens.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Αυτή η εκτέλεση σταματά πριν από μια κλήση στο Claude μόλις ξοδέψει περίπου {budget} σε τιμές καταλόγου (περίπου {cost} ως τώρα)."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Αυτή η εκτέλεση σταματά πριν από μια κλήση στο Claude μόλις ξοδέψει περίπου {budget} σε τιμές καταλόγου (περίπου {cost} ως τώρα).",
+"US dollars":"δολάρια ΗΠΑ",
+"pounds":"λίρες",
+"euros":"ευρώ",
+"yen":"γιεν",
+"yuan":"γουάν",
+"Currency":"Νόμισμα",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Το νόμισμα στο οποίο εμφανίζονται τα κόστη και οι χρηματικοί προϋπολογισμοί. Οι υπηρεσίες χρεώνουν σε δολάρια ΗΠΑ· τα άλλα νομίσματα χρησιμοποιούν την ισοτιμία της Ευρωπαϊκής Κεντρικής Τράπεζας της {date}."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1776,6 +1783,12 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Διακόπηκε: ένα μοντέλο που έχει ήδη χρησιμοποιήσει αυτή η εκτέλεση δεν έχει γνωστή τιμή, οπότε δεν μπορεί να κρατηθεί στον προϋπολογισμό των {x}. Χρησιμοποιήστε μοντέλα με τιμή, ή προϋπολογισμό σε tokens.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Διακόπηκε: αυτή η εκτέλεση έχει ξοδέψει {x} σε τιμές καταλόγου, που φτάνει τον προϋπολογισμό της των {x2}. Αυξήστε το ποσό στο μπλοκ «περιόρισε αυτή την εκτέλεση» (ή budget_dollars στο second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Διακόπηκε: το {model} δεν έχει γνωστή τιμή, οπότε αυτή η εκτέλεση δεν μπορεί να κρατηθεί στον προϋπολογισμό των {x}. Χρησιμοποιήστε μοντέλο με τιμή, ή προϋπολογισμό σε tokens.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Αυτή η εκτέλεση σταματά πριν από μια κλήση μοντέλου μόλις ξοδέψει {x} σε τιμές καταλόγου (ως τώρα: {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Αυτή η εκτέλεση σταματά πριν από μια κλήση μοντέλου μόλις ξοδέψει {x} σε τιμές καταλόγου (ως τώρα: {x2}).",
+"Currency":"Νόμισμα",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"Η σημερινή ισοτιμία δεν ήταν δυνατό να ληφθεί ({err}), οπότε χρησιμοποιείται η τελευταία διαθέσιμη.",
+"at the ECB rate of {date}":"με την ισοτιμία της ΕΚΤ της {date}",
+"at the rate set {where_keys}":"με την ισοτιμία που ορίστηκε {where_keys}",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"το currency πρέπει να είναι usd, gbp, eur, jpy ή cny, όχι «{raw}». Διορθώστε το {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 δολάριο ΗΠΑ = {rate})"
 }
 };

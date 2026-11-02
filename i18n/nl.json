@@ -650,7 +650,11 @@
   },
   "rb_budget.UNIT": {
    "tokens": "tokens",
-   "dollars": "Amerikaanse dollar"
+   "dollars": "Amerikaanse dollar",
+   "gbp": "pond",
+   "eur": "euro",
+   "jpy": "yen",
+   "cny": "yuan"
   }
  },
  "categories": {
@@ -1419,7 +1423,14 @@
   "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.": "Gestopt: een model dat deze run al heeft gebruikt heeft geen bekende prijs, dus de run kan niet aan zijn budget van {budget} worden gehouden. Gebruik modellen met een prijs, of een budget in tokens.",
   "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.": "Gestopt: deze run heeft ongeveer {cost} uitgegeven tegen catalogusprijzen en bereikt daarmee zijn budget van {budget}. Verhoog het bedrag in het blok 'beperk deze run'.",
   "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.": "Gestopt: {model} heeft geen bekende prijs, dus deze run kan niet aan zijn budget van {budget} worden gehouden. Gebruik een model met een prijs, of een budget in tokens.",
-  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "Deze run stopt voor een aanroep van Claude zodra hij ongeveer {budget} heeft uitgegeven tegen catalogusprijzen (tot nu toe ongeveer {cost})."
+  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "Deze run stopt voor een aanroep van Claude zodra hij ongeveer {budget} heeft uitgegeven tegen catalogusprijzen (tot nu toe ongeveer {cost}).",
+  "US dollars": "Amerikaanse dollar",
+  "pounds": "pond",
+  "euros": "euro",
+  "yen": "yen",
+  "yuan": "yuan",
+  "Currency": "Valuta",
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "De valuta waarin kosten en geldbudgetten worden getoond. Diensten rekenen in Amerikaanse dollar af; andere valuta gebruiken de koers van de Europese Centrale Bank van {date}."
  },
  "examples": {
   "review": {
@@ -2899,6 +2910,12 @@
   "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.": "Gestopt: een model dat deze run al heeft gebruikt heeft geen bekende prijs, dus de run kan niet aan zijn budget van {x} worden gehouden. Gebruik modellen met een prijs, of een budget in tokens.",
   "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).": "Gestopt: deze run heeft {x} uitgegeven tegen catalogusprijzen en bereikt daarmee zijn budget van {x2}. Verhoog het bedrag in het blok 'beperk deze run' (of budget_dollars in second-thought.ini).",
   "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.": "Gestopt: {model} heeft geen bekende prijs, dus deze run kan niet aan zijn budget van {x} worden gehouden. Gebruik een model met een prijs, of een budget in tokens.",
-  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "Deze run stopt voor een modelaanroep zodra hij {x} heeft uitgegeven tegen catalogusprijzen (tot nu toe uitgegeven: {x2})."
+  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "Deze run stopt voor een modelaanroep zodra hij {x} heeft uitgegeven tegen catalogusprijzen (tot nu toe uitgegeven: {x2}).",
+  "Currency": "Valuta",
+  "Today's rate couldn't be fetched ({err}), so it uses the last one it has.": "De koers van vandaag kon niet worden opgehaald ({err}), dus de laatst bekende wordt gebruikt.",
+  "at the ECB rate of {date}": "tegen de ECB-koers van {date}",
+  "at the rate set {where_keys}": "tegen de koers ingesteld {where_keys}",
+  "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.": "currency moet usd, gbp, eur, jpy of cny zijn, niet ‘{raw}’. Pas het aan {where_keys}.",
+  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (1 Amerikaanse dollar = {rate})"
  }
 }

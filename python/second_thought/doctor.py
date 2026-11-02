@@ -10,7 +10,7 @@ import sys
 import urllib.error
 import urllib.request
 from .settings import KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM, RUNTIME_VERSION, SETTINGS_PATH, WHERE_KEYS
-from .providers import MODELS, PROVIDERS, SERVICES, TIER_NAMES, _tier
+from .providers import CURRENCY, MODELS, PROVIDERS, SERVICES, TIER_NAMES, _tier, amount_text, fixed_rate, per_dollar, rate_note, rates
 from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, _short, to_str
 from .connectors import webhook_host
 from .settings import tr  # noqa: F401
@@ -251,6 +251,11 @@ class Doctor:
         can = can or {}
         ids = list(can.get("can", [])) if known else [c[0] for c in CAPABILITIES]  # an older program: check whatever is set up
         row("ok" if sys.version_info >= (3, 9) else "FAIL", "Python", sys.version.split()[0] + ("" if sys.version_info >= (3, 9) else ": " + tr("Second Thought needs 3.9 or newer")))
+        if CURRENCY != "usd":
+            r = rates()
+            row("NOTE" if r["problem"] and not fixed_rate() else "ok", "Currency",
+                tr("{code}, {note} (1 US dollar = {rate})", code=CURRENCY.upper(), note=rate_note(), rate=amount_text(per_dollar(CURRENCY), CURRENCY))
+                + ("" if fixed_rate() or not r["problem"] else " " + tr("Today's rate couldn't be fetched ({err}), so it uses the last one it has.", err=r["problem"])))
         update = self.update_status()
         if update:
             row(update[0], "Runtime", update[1])

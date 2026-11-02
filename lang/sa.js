@@ -161,7 +161,7 @@
 "rb_mem_set_for.UNIT":{"m":"निमेषाः","h":"होराः","d":"दिनानि"},
 "rb_mem_add.KIND":{"transient":"यावत् इदं पृष्ठम् उद्घाटितम्","permanent":"सदा"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (रेखाचित्राणि)","orig":"मूलसञ्चिका"},
-"rb_budget.UNIT":{"tokens":"टोकन","dollars":"अमेरिकी-डॉलर"}
+"rb_budget.UNIT":{"tokens":"टोकन","dollars":"अमेरिकी-डॉलर","gbp":"पौण्ड","eur":"यूरो","jpy":"येन","cny":"युआन"}
 },
 "categories":{
 "Events":"घटनाः",
@@ -929,7 +929,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"स्थगितम्: अनेन चालनेन पूर्वमेव प्रयुक्तस्य प्रतिरूपस्य मूल्यं न ज्ञातम्, अतः {budget} इति सीमायाम् अन्तः धारयितुं न शक्यते। मूल्ययुक्तानि प्रतिरूपाणि प्रयुङ्क्ष्व, अथवा टोकन-सीमाम्।",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"स्थगितम्: अनेन चालनेन सूचीमूल्यैः प्रायः {cost} व्ययितम्, यत् {budget} इति सीमां प्राप्नोति। 'इदं चालनं सीमय' इति खण्डे राशिं वर्धय।",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"स्थगितम्: {model} इत्यस्य मूल्यं न ज्ञातम्, अतः इदं चालनं {budget} इति सीमायाम् अन्तः धारयितुं न शक्यते। मूल्ययुक्तं प्रतिरूपं प्रयुङ्क्ष्व, अथवा टोकन-सीमाम्।",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"सूचीमूल्यैः प्रायः {budget} व्ययिते सति इदं चालनं Claude-आह्वानात् पूर्वं स्थगते (अद्यावधि प्रायः {cost})।"
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"सूचीमूल्यैः प्रायः {budget} व्ययिते सति इदं चालनं Claude-आह्वानात् पूर्वं स्थगते (अद्यावधि प्रायः {cost})।",
+"US dollars":"अमेरिकी-डॉलर",
+"pounds":"पौण्ड",
+"euros":"यूरो",
+"yen":"येन",
+"yuan":"युआन",
+"Currency":"मुद्रा",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"यस्यां मुद्रायां व्ययाः धनसीमाः च दर्श्यन्ते। सेवाः अमेरिकी-डॉलर-मध्ये शुल्कं गृह्णन्ति; अन्याः मुद्राः यूरोपीय-केन्द्रीय-अधिकोषस्य {date} दिनाङ्कस्य विनिमयदरं प्रयुञ्जते।"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1777,7 +1784,13 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"स्थगितम्: अनेन चालनेन पूर्वमेव प्रयुक्तस्य प्रतिरूपस्य मूल्यं न ज्ञातम्, अतः {x} इति सीमायाम् अन्तः धारयितुं न शक्यते। मूल्ययुक्तानि प्रतिरूपाणि प्रयुङ्क्ष्व, अथवा टोकन-सीमाम्।",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"स्थगितम्: अनेन चालनेन सूचीमूल्यैः {x} व्ययितम्, यत् {x2} इति सीमां प्राप्नोति। 'इदं चालनं सीमय' इति खण्डे राशिं वर्धय (अथवा second-thought.ini मध्ये budget_dollars)।",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"स्थगितम्: {model} इत्यस्य मूल्यं न ज्ञातम्, अतः इदं चालनं {x} इति सीमायाम् अन्तः धारयितुं न शक्यते। मूल्ययुक्तं प्रतिरूपं प्रयुङ्क्ष्व, अथवा टोकन-सीमाम्।",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"सूचीमूल्यैः {x} व्ययिते सति इदं चालनं प्रतिरूप-आह्वानात् पूर्वं स्थगते (अद्यावधि व्ययितम्: {x2})।"
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"सूचीमूल्यैः {x} व्ययिते सति इदं चालनं प्रतिरूप-आह्वानात् पूर्वं स्थगते (अद्यावधि व्ययितम्: {x2})।",
+"Currency":"मुद्रा",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"अद्यतनः विनिमयदरः आनेतुं न अशक्यत ({err}), अतः यः अन्तिमः अस्ति सः प्रयुज्यते।",
+"at the ECB rate of {date}":"ECB इत्यस्य {date} दिनाङ्कस्य दरेण",
+"at the rate set {where_keys}":"{where_keys} निर्धारितेन दरेण",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency usd, gbp, eur, jpy अथवा cny भवेत्, न तु “{raw}”। {where_keys} संशोधय।",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 अमेरिकी-डॉलर = {rate})"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

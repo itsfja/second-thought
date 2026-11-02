@@ -16,8 +16,8 @@ import re
 import sys
 import time
 from .settings import RUNTIME_VERSION, WHERE_KEYS, on_github_actions
-from .providers import ModelCalls, call_cost, dollars, model_label, money
-from .core import (BUDGET, BUDGET_DOLLARS, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
+from .providers import CURRENCY, ModelCalls, amount_text, call_cost, model_label, money, per_dollar, rate_note
+from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
     _locked, _need_picture, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js,
     to_bool, to_list, to_record, to_str)
@@ -75,7 +75,10 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         self.usage = {}  # provider -> [tokens in, tokens out]
         self.cost = [0.0, True]      # what the run's model calls cost in US dollars, and whether every one had a known price
         self.budget = BUDGET          # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
-        self.budget_dollars = BUDGET_DOLLARS  # the same in US dollars at list prices: budget_dollars = 0.50
+        # The same in money at list prices: budget_dollars = 0.50, or budget_money = 0.40 in the program's currency (which
+        # wins). budget_dollars is what's checked, in US dollars; the amount and its currency are what's shown.
+        self.budget_amount, self.budget_unit = (BUDGET_MONEY, CURRENCY) if BUDGET_MONEY else (BUDGET_DOLLARS, "usd")
+        self.budget_dollars = self.budget_amount / per_dollar(self.budget_unit) if self.budget_amount else 0
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
         self.trace = []              # every log line, for save_log
         self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
@@ -198,15 +201,21 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         u[0] += tokens_in or 0
         u[1] += tokens_out or 0
 
+    def budget_text(self):
+        """The money budget as it was set, in its currency: '$0.50', '£0.40', '¥75'."""
+        return amount_text(self.budget_amount, self.budget_unit)
+
     def tokens_used(self):
         return sum(u[0] + u[1] for u in self.usage.values())
 
     def set_budget(self, n, unit="tokens"):
-        if unit == "dollars":
+        """'limit this run': unit is tokens, or a currency: "dollars" (US), "gbp", "eur", "jpy" or "cny"."""
+        if unit != "tokens":
             n = max(0.0, num(n))
-            self.budget_dollars = n
+            self.budget_amount, self.budget_unit = n, ("usd" if unit == "dollars" else unit)
+            self.budget_dollars = n / per_dollar(self.budget_unit) if n else 0
             self.log(tr("Budget"), tr("This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).",
-                                      x=dollars(n), x2=money(self.cost[0])) if n else tr("No money budget for this run."), tr("set"))
+                                      x=self.budget_text(), x2=money(self.cost[0], self.budget_unit)) if n else tr("No money budget for this run."), tr("set"))
             return
         n = max(0, round_js(num(n)))
         self.budget = n
@@ -1375,7 +1384,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         spare = (" · " + (tr("a backup answered 1 step") if self.backup_used == 1 else tr("a backup answered {n} steps", n=self.backup_used))
                  if self.backup_used else "")
         budget = (" · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else "") + \
-            (" · " + tr("budget {n}", n=dollars(self.budget_dollars)) if self.budget_dollars else "")
+            (" · " + tr("budget {n}", n=self.budget_text()) if self.budget_dollars else "")
         print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}{self.cost_text()}", flush=True)
         return 0
 
@@ -1400,11 +1409,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         for who, u in self.usage.items():
             lines.append(f"- {who}: {u[0]:,} tokens in, {u[1]:,} out")
         if self.cost_text():
-            lines.append(f"- Cost: {self.cost_text()[3:]}")
+            lines.append(f"- Cost: {self.cost_text()[3:]}" + (f" ({rate_note()})" if rate_note() else ""))
         if self.budget:
             lines.append(f"- Budget: {self.budget:,} tokens")
         if self.budget_dollars:
-            lines.append(f"- Budget: {dollars(self.budget_dollars)} at list prices")
+            lines.append(f"- Budget: {self.budget_text()} at list prices")
         if self.error:
             lines.append(f"- Stopped with an error: {self._describe(self.error)}")
         lines.append("")

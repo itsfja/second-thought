@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"minutes","h":"houres","d":"dayes"},
 "rb_mem_add.KIND":{"transient":"whil this leef is open","permanent":"for evere"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (peynted ymages)","orig":"first quaier"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollers of Amerike"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollers of Amerike","gbp":"poundes","eur":"euros","jpy":"yen","cny":"yuan"}
 },
 "categories":{
 "Events":"Events",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Stinted: a model that this rennyng hath used afore hath no knowen pris, so it may nat be holden withinne his budget of {budget}. Use models with a pris, or a budget in tokens.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Stinted: this rennyng hath spent aboute {cost} at the listed pris, which reacheth his budget of {budget}. Rayse the somme in the 'lymite this rennyng' blok.",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Stinted: {model} hath no knowen pris, so this rennyng may nat be holden withinne his budget of {budget}. Use a model with a pris, or a budget in tokens.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"This rennyng stinteth er a callyng of Claude as soone as it hath spent aboute {budget} at the listed pris (aboute {cost} til now)."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"This rennyng stinteth er a callyng of Claude as soone as it hath spent aboute {budget} at the listed pris (aboute {cost} til now).",
+"US dollars":"dollers of Amerike",
+"pounds":"poundes",
+"euros":"euros",
+"yen":"yen",
+"yuan":"yuan",
+"Currency":"Moneye",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"The moneye that costes and budgetes in moneye ben shewed in. The services axen paiement in dollers of Amerike; othere moneyes usen the eschaunge of the Europeen Centre Bank of {date}."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1776,7 +1783,13 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Stinted: a model that this rennyng hath used afore hath no knowen pris, so it may nat be holden withinne his budget of {x}. Use models with a pris, or a budget in tokens.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Stinted: this rennyng hath spent {x} at the listed pris, which reacheth his budget of {x2}. Rayse the somme in the 'lymite this rennyng' blok (or budget_dollars in second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Stinted: {model} hath no knowen pris, so this rennyng may nat be holden withinne his budget of {x}. Use a model with a pris, or a budget in tokens.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"This rennyng stinteth er a callyng of the model as soone as it hath spent {x} at the listed pris (spent til now: {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"This rennyng stinteth er a callyng of the model as soone as it hath spent {x} at the listed pris (spent til now: {x2}).",
+"Currency":"Moneye",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"The eschaunge of this day myghte nat be fecched ({err}), so it useth the laste that it hath.",
+"at the ECB rate of {date}":"at the ECB eschaunge of {date}",
+"at the rate set {where_keys}":"at the eschaunge set {where_keys}",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency moot be usd, gbp, eur, jpy or cny, nat “{raw}”. Amende it {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 doller of Amerike = {rate})"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

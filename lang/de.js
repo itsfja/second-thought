@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"Minuten","h":"Stunden","d":"Tage"},
 "rb_mem_add.KIND":{"transient":"solange diese Seite offen ist","permanent":"für immer"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (gezeichnete Bilder)","orig":"Originaldatei"},
-"rb_budget.UNIT":{"tokens":"Tokens","dollars":"US-Dollar"}
+"rb_budget.UNIT":{"tokens":"Tokens","dollars":"US-Dollar","gbp":"Pfund","eur":"Euro","jpy":"Yen","cny":"Yuan"}
 },
 "categories":{
 "Events":"Ereignisse",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Gestoppt: Ein Modell, das dieser Lauf schon benutzt hat, hat keinen bekannten Preis, daher kann der Lauf nicht an sein Budget von {budget} gehalten werden. Nutzen Sie Modelle mit Preis oder ein Budget in Tokens.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Gestoppt: Dieser Lauf hat etwa {cost} zu Listenpreisen ausgegeben und damit sein Budget von {budget} erreicht. Erhöhen Sie den Betrag im Block „diesen Lauf begrenzen“.",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Gestoppt: {model} hat keinen bekannten Preis, daher kann dieser Lauf nicht an sein Budget von {budget} gehalten werden. Nutzen Sie ein Modell mit Preis oder ein Budget in Tokens.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Dieser Lauf stoppt vor einem Claude-Aufruf, sobald er etwa {budget} zu Listenpreisen ausgegeben hat (bisher etwa {cost})."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Dieser Lauf stoppt vor einem Claude-Aufruf, sobald er etwa {budget} zu Listenpreisen ausgegeben hat (bisher etwa {cost}).",
+"US dollars":"US-Dollar",
+"pounds":"Pfund",
+"euros":"Euro",
+"yen":"Yen",
+"yuan":"Yuan",
+"Currency":"Währung",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Die Währung, in der Kosten und Geldbudgets angezeigt werden. Die Dienste rechnen in US-Dollar ab; andere Währungen nutzen den Kurs der Europäischen Zentralbank vom {date}."
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -1776,6 +1783,12 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Gestoppt: Ein Modell, das dieser Lauf schon benutzt hat, hat keinen bekannten Preis, daher kann der Lauf nicht an sein Budget von {x} gehalten werden. Nutzen Sie Modelle mit Preis oder ein Budget in Tokens.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Gestoppt: Dieser Lauf hat {x} zu Listenpreisen ausgegeben und damit sein Budget von {x2} erreicht. Erhöhen Sie den Betrag im Block „diesen Lauf begrenzen“ (oder budget_dollars in second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Gestoppt: {model} hat keinen bekannten Preis, daher kann dieser Lauf nicht an sein Budget von {x} gehalten werden. Nutzen Sie ein Modell mit Preis oder ein Budget in Tokens.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Dieser Lauf stoppt vor einem Modellaufruf, sobald er {x} zu Listenpreisen ausgegeben hat (bisher ausgegeben: {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Dieser Lauf stoppt vor einem Modellaufruf, sobald er {x} zu Listenpreisen ausgegeben hat (bisher ausgegeben: {x2}).",
+"Currency":"Währung",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"Der heutige Kurs konnte nicht abgerufen werden ({err}), daher wird der letzte vorhandene verwendet.",
+"at the ECB rate of {date}":"zum EZB-Kurs vom {date}",
+"at the rate set {where_keys}":"zum Kurs, der {where_keys} festgelegt ist",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency muss usd, gbp, eur, jpy oder cny sein, nicht „{raw}“. Korrigieren Sie es {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 US-Dollar = {rate})"
 }
 };

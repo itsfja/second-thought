@@ -10,7 +10,7 @@
       out.push("- Claude calls: " + run.calls);
       if (run.calls) out.push("- Tokens: about " + tokensUsed().toLocaleString() + " (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from text length");
       if (run.budget) out.push("- Budget: " + run.budget.toLocaleString() + " tokens");
-      if (run.budgetDollars) out.push("- Budget: " + dollars(run.budgetDollars) + " at list prices");
+      if (run.budgetDollars) out.push("- Budget: " + budgetText() + " at list prices");
     }
     out.push("- Status: " + $("status").textContent, "");
     let n = 0;

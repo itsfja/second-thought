@@ -651,7 +651,11 @@
   },
   "rb_budget.UNIT": {
    "tokens": "טוקנים",
-   "dollars": "דולר אמריקאי"
+   "dollars": "דולר אמריקאי",
+   "gbp": "לירה שטרלינג",
+   "eur": "אירו",
+   "jpy": "ין",
+   "cny": "יואן"
   }
  },
  "categories": {
@@ -1420,7 +1424,14 @@
   "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.": "נעצר: למודל שההרצה הזו כבר השתמשה בו אין מחיר ידוע, ולכן אי אפשר להחזיק אותה בתקציב של {budget}. השתמשו במודלים עם מחיר, או בתקציב בטוקנים.",
   "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.": "נעצר: ההרצה הזו הוציאה בערך {cost} לפי מחירי המחירון, וכך הגיעה לתקציב של {budget}. הגדילו את הסכום בבלוק 'הגבל את ההרצה הזו'.",
   "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.": "נעצר: ל־{model} אין מחיר ידוע, ולכן אי אפשר להחזיק את ההרצה הזו בתקציב של {budget}. השתמשו במודל עם מחיר, או בתקציב בטוקנים.",
-  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "ההרצה הזו נעצרת לפני קריאה ל־Claude ברגע שהוציאה בערך {budget} לפי מחירי המחירון (בערך {cost} עד עכשיו)."
+  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "ההרצה הזו נעצרת לפני קריאה ל־Claude ברגע שהוציאה בערך {budget} לפי מחירי המחירון (בערך {cost} עד עכשיו).",
+  "US dollars": "דולר אמריקאי",
+  "pounds": "לירה שטרלינג",
+  "euros": "אירו",
+  "yen": "ין",
+  "yuan": "יואן",
+  "Currency": "מטבע",
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "המטבע שבו מוצגים העלויות ותקציבי הכסף. השירותים גובים בדולר אמריקאי; מטבעות אחרים משתמשים בשער של הבנק המרכזי האירופי מ־{date}."
  },
  "examples": {
   "review": {
@@ -2900,6 +2911,12 @@
   "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.": "נעצר: למודל שההרצה הזו כבר השתמשה בו אין מחיר ידוע, ולכן אי אפשר להחזיק אותה בתקציב של {x}. השתמשו במודלים עם מחיר, או בתקציב בטוקנים.",
   "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).": "נעצר: ההרצה הזו הוציאה {x} לפי מחירי המחירון, וכך הגיעה לתקציב של {x2}. הגדילו את הסכום בבלוק 'הגבל את ההרצה הזו' (או budget_dollars ב־second-thought.ini).",
   "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.": "נעצר: ל־{model} אין מחיר ידוע, ולכן אי אפשר להחזיק את ההרצה הזו בתקציב של {x}. השתמשו במודל עם מחיר, או בתקציב בטוקנים.",
-  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "ההרצה הזו נעצרת לפני קריאה למודל ברגע שהוציאה {x} לפי מחירי המחירון (הוצאה עד עכשיו: {x2})."
+  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "ההרצה הזו נעצרת לפני קריאה למודל ברגע שהוציאה {x} לפי מחירי המחירון (הוצאה עד עכשיו: {x2}).",
+  "Currency": "מטבע",
+  "Today's rate couldn't be fetched ({err}), so it uses the last one it has.": "לא ניתן היה להביא את השער של היום ({err}), ולכן נעשה שימוש בשער האחרון שיש.",
+  "at the ECB rate of {date}": "לפי שער הבנק המרכזי האירופי מ־{date}",
+  "at the rate set {where_keys}": "לפי השער שנקבע {where_keys}",
+  "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.": "currency צריך להיות usd, gbp, eur, jpy או cny, לא “{raw}”. תקנו אותו {where_keys}.",
+  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (‏1 דולר אמריקאי = {rate})"
  }
 }

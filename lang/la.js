@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"minuta","h":"horas","d":"dies"},
 "rb_mem_add.KIND":{"transient":"dum haec pagina aperta est","permanent":"in perpetuum"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (imagines pictae)","orig":"fasciculus originalis"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollaria Americana"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollaria Americana","gbp":"librae","eur":"euro","jpy":"yen","cny":"yuan"}
 },
 "categories":{
 "Events":"Eventus",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Sistitum: exemplar quo haec exsecutio iam usa est pretium notum non habet, itaque intra summam {budget} teneri non potest. Exemplaribus cum pretio utere, aut summa in tokens.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Sistitum: haec exsecutio circiter {cost} pretiis indicis impendit, quod summam {budget} attingit. Auge quantitatem in clauso 'hanc exsecutionem circumscribe'.",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Sistitum: {model} pretium notum non habet, itaque haec exsecutio intra summam {budget} teneri non potest. Exemplari cum pretio utere, aut summa in tokens.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Haec exsecutio ante vocationem Claude sistitur ubi circiter {budget} pretiis indicis impendit (circiter {cost} adhuc)."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Haec exsecutio ante vocationem Claude sistitur ubi circiter {budget} pretiis indicis impendit (circiter {cost} adhuc).",
+"US dollars":"dollaria Americana",
+"pounds":"librae",
+"euros":"euro",
+"yen":"yen",
+"yuan":"yuan",
+"Currency":"Moneta",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Moneta in qua sumptus et summae pecuniae ostenduntur. Officia in dollariis Americanis exigunt; aliae monetae cursu Argentariae Centralis Europaeae diei {date} utuntur."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1776,7 +1783,13 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Sistitum: exemplar quo haec exsecutio iam usa est pretium notum non habet, itaque intra summam {x} teneri non potest. Exemplaribus cum pretio utere, aut summa in tokens.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Sistitum: haec exsecutio {x} pretiis indicis impendit, quod summam {x2} attingit. Auge quantitatem in clauso 'hanc exsecutionem circumscribe' (aut budget_dollars in second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Sistitum: {model} pretium notum non habet, itaque haec exsecutio intra summam {x} teneri non potest. Exemplari cum pretio utere, aut summa in tokens.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Haec exsecutio ante vocationem exemplaris sistitur ubi {x} pretiis indicis impendit (adhuc impensum: {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Haec exsecutio ante vocationem exemplaris sistitur ubi {x} pretiis indicis impendit (adhuc impensum: {x2}).",
+"Currency":"Moneta",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"Cursus hodiernus afferri non potuit ({err}), itaque ultimus qui adest adhibetur.",
+"at the ECB rate of {date}":"cursu ACE diei {date}",
+"at the rate set {where_keys}":"cursu {where_keys} statuto",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency esse debet usd, gbp, eur, jpy aut cny, non “{raw}”. Corrige {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 dollarium Americanum = {rate})"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

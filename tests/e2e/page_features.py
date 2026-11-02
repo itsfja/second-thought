@@ -34,6 +34,10 @@ async def new_feature_page_tests(pg):
           f"a budget in US dollars stops the run once it has spent that much ({status}: {stopped[0][:120] if stopped else steps[-1:]})")
     EXTRA["t_budget_dollars"] = await export_python(pg, "t_budget_dollars")
     check('R.set_budget(0.0001, "dollars")' in EXTRA["t_budget_dollars"], "and the exported program keeps the unit")
+    pounds = script(blk("rb_budget", fields={"UNIT": "gbp"}, inputs={"TOKENS": nm(0.4)}), add(val(blk("rb_ask", inputs={"TEXT": tx("q")}))))
+    await load_state(pg, pounds)
+    check('R.set_budget(0.4, "gbp")' in await export_python(pg, "t_budget_pounds"), "a budget in pounds exports with its currency")
+    await pg.select_option("#currency", "gbp")
     budget_ok = script(blk("rb_budget", inputs={"TOKENS": nm(1000000)}), add(val(blk("rb_ask", inputs={"TEXT": tx("q")}))),
                        add(val(blk("rb_tokens_used"))))
     await load_state(pg, budget_ok)
@@ -41,6 +45,9 @@ async def new_feature_page_tests(pg):
     items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
     check(status.startswith("done") and len(items) == 2 and items[1].isdigit() and int(items[1]) > 0,
           f"'tokens used so far' gives a number, and a roomy budget lets the run finish ({status}, {items[-1:]})")
+    usage = await pg.text_content(".result-usage") if await pg.query_selector(".result-usage") else ""
+    check(re.search(r"that's (about £\d+\.\d\d|under £0\.01)", usage), f"with Currency set to pounds, the cost is shown in pounds ({usage[-110:]})")
+    await pg.select_option("#currency", "usd")
 
     print("Saving the run log")
     await pg.click("#log-save")

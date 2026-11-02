@@ -28,6 +28,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 RT = {"__name__": "second_thought_runtime", "__file__": str(ROOT / "python" / "runtime.py")}
 exec(compile((ROOT / "python" / "runtime.py").read_text(encoding="utf-8"), RT["__file__"], "exec"), RT)  # noqa: S102
 Runtime, PROVIDERS, MODELS, SERVICES = RT["Runtime"], RT["PROVIDERS"], RT["MODELS"], RT["SERVICES"]
+RATES = RT["RATES"]
 
 results = []  # (service, check, PASS / FAIL / SKIP / NOTE, detail)
 FAILED = object()  # what attempt() gives back when a check raised (None is a normal result for some calls)
@@ -217,6 +218,11 @@ def check_prices(want, today=None):
         if age > 90:
             report(s["name"], "prices", "NOTE", f"checked {age} days ago ({s['prices_checked']}). Look them up again at "
                    f"{s['prices_source']} and update prices and prices_checked in SERVICES")
+    # The built-in exchange rates: the page's only rates, and exported programs' last resort when offline.
+    age = (today - datetime.date.fromisoformat(RATES["date"])).days
+    if age > 30:
+        report("Currencies", "built-in rates", "NOTE", f"from {RATES['date']}, {age} days ago. Copy the day's rates from "
+               f"{RATES['source']} into RATES in providers.py")
 
 
 async def check_models(want):

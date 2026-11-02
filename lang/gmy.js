@@ -161,7 +161,7 @@
 "rb_mem_set_for.UNIT":{"m":"𐀩𐀡𐀲","h":"𐀃𐀨","d":"𐀀𐀔"},
 "rb_mem_add.KIND":{"transient":"𐀃𐀟𐀨 𐀵𐀵 𐀆𐀵 𐀀𐀚𐀺𐀐𐀕𐀜","permanent":"𐀀𐀂𐀁𐀂"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (𐀁𐀒𐀚 𐀏𐀨𐀟𐀕𐀙)","orig":"𐀳𐀄𐀒 𐀀𐀏𐀨𐀵"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"US dollar"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"US dollar","gbp":"pound","eur":"euro","jpy":"yen","cny":"yuan"}
 },
 "categories":{
 "Events":"𐀱𐀞𐀲",
@@ -929,7 +929,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"𐀟𐀞𐀄𐀕𐀜: 𐀫𐀑𐀯𐀳𐀪𐀍 𐀃 𐀵𐀵 𐀏𐀨𐀁 𐀁𐀐𐀐𐀩𐀵 𐀃𐀄 𐀁𐀐 𐀴𐀔 𐀒𐀜𐀲, 𐀃𐀄𐀵 𐀃𐀄 𐀠𐀐𐀵 𐀳𐀩𐀔 {budget} 𐀢𐀨𐀐. 𐀐𐀩𐀳 𐀫𐀑𐀯𐀳𐀪𐀊 𐀕𐀲 𐀴𐀔, 𐀁 𐀳𐀩𐀔 tokens.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"𐀟𐀞𐀄𐀕𐀜: 𐀵𐀵 𐀏𐀨𐀁 𐀀𐀙𐀩𐀐 𐀟𐀪 {cost} 𐀴𐀔𐀂 𐀏𐀲𐀫𐀒, 𐀃 𐀳𐀩𐀔 {budget} 𐀁𐀑𐀚𐀵. 𐀀𐀄𐀐𐀮 𐀡𐀰 𐀁𐀠 𐀞𐀴𐀛𐀴𐀍 '𐀒𐀪𐀮 𐀵𐀵 𐀏𐀨𐀁'.",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"𐀟𐀞𐀄𐀕𐀜: {model} 𐀃𐀄 𐀁𐀐 𐀴𐀔 𐀒𐀜𐀲, 𐀃𐀄𐀵 𐀵𐀵 𐀏𐀨𐀁 𐀃𐀄 𐀠𐀐𐀵 𐀳𐀩𐀔 {budget} 𐀢𐀨𐀐. 𐀐𐀩𐀳 𐀫𐀑𐀯𐀳𐀪𐀍 𐀕𐀲 𐀴𐀔, 𐀁 𐀳𐀩𐀔 tokens.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"𐀵𐀵 𐀏𐀨𐀁 𐀞𐀄𐀁𐀲𐀂 𐀞𐀫 𐀏𐀩𐀯 Claude 𐀃𐀳 𐀀𐀙𐀩𐀐 𐀟𐀪 {budget} 𐀴𐀔𐀂 𐀏𐀲𐀫𐀒 (𐀟𐀪 {cost} 𐀕𐀑𐀪 𐀝)."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"𐀵𐀵 𐀏𐀨𐀁 𐀞𐀄𐀁𐀲𐀂 𐀞𐀫 𐀏𐀩𐀯 Claude 𐀃𐀳 𐀀𐀙𐀩𐀐 𐀟𐀪 {budget} 𐀴𐀔𐀂 𐀏𐀲𐀫𐀒 (𐀟𐀪 {cost} 𐀕𐀑𐀪 𐀝).",
+"US dollars":"US dollar",
+"pounds":"pound",
+"euros":"euro",
+"yen":"yen",
+"yuan":"yuan",
+"Currency":"𐀜𐀖𐀭𐀔",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"𐀜𐀖𐀭𐀔 𐀁𐀠 𐀃 𐀅𐀞𐀙 𐀏𐀂 𐀓𐀬𐀰 𐀳𐀩𐀔 𐀆𐀑𐀝𐀲𐀂. e-re-ga-si-ja 𐀀𐀞𐀂𐀳𐀂 𐀁𐀠 US dollar; 𐀀𐀨 𐀜𐀖𐀭𐀔 𐀴𐀔 ECB {date} 𐀐𐀩𐀲𐀂."
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1777,7 +1784,13 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"pe-pa-u-me-no: ro-ki-si-te-ri-jo o to-to ka-ra-e e-ke-ke-re-to o-u e-ke ti-ma ko-no-ta, o-u-to o-u pi-ke-to te-re-ma {x} pu-ra-ke. ke-re-te ro-ki-si-te-ri-ja me-ta ti-ma, e te-re-ma tokens.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"pe-pa-u-me-no: to-to ka-ra-e a-na-re-ke {x} ti-ma-i ka-ta-ro-ko, o te-re-ma {x2} e-ki-ne-to. a-u-ke-se po-so e-pi pa-ti-ni-ti-jo 'ko-ri-se to-to ka-ra-e' (e budget_dollars e-pi second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"pe-pa-u-me-no: {model} o-u e-ke ti-ma ko-no-ta, o-u-to to-to ka-ra-e o-u pi-ke-to te-re-ma {x} pu-ra-ke. ke-re-te ro-ki-si-te-ri-jo me-ta ti-ma, e te-re-ma tokens.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"to-to ka-ra-e pa-u-e-ta-i pa-ro ka-re-si ro-ki-si-te-ri-jo o-te a-na-re-ke {x} ti-ma-i ka-ta-ro-ko (a-na-re-me-na me-ki-ri nu: {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"to-to ka-ra-e pa-u-e-ta-i pa-ro ka-re-si ro-ki-si-te-ri-jo o-te a-na-re-ke {x} ti-ma-i ka-ta-ro-ko (a-na-re-me-na me-ki-ri nu: {x2}).",
+"Currency":"no-mi-sa-ma",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"ti-ma a-me-ra o-u ko-mi-sa-te ({err}), o-u-to e-ka-ta ke-re-ta-i.",
+"at the ECB rate of {date}":"ti-ma ECB {date}",
+"at the rate set {where_keys}":"ti-ma o-ri-me-na {where_keys}",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency usd, gbp, eur, jpy e cny e-me-ne, o-u {raw}. o-to-ro-se {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 US dollar = {rate})"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

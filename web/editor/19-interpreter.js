@@ -654,9 +654,12 @@
       }
       case "rb_reset_timer": run.timerStart = Date.now(); break;
       case "rb_budget": {
-        if (b.getFieldValue("UNIT") === "dollars") {
-          run.budgetDollars = Math.max(0, num(await input(b, tc, "TOKENS", 0)));
-          addStep("Budget", { mono:true, text:run.budgetDollars ? tr("This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).", { budget:dollars(run.budgetDollars), cost:dollars(run.cost) }) : tr("No money budget for this run.") }).done("set", "ok");
+        const unit = b.getFieldValue("UNIT") || "tokens";
+        if (unit !== "tokens") {
+          run.budgetUnit = unit === "dollars" ? "usd" : unit;
+          run.budgetAmount = Math.max(0, num(await input(b, tc, "TOKENS", 0)));
+          run.budgetDollars = run.budgetAmount / perDollar(run.budgetUnit);
+          addStep("Budget", { mono:true, text:run.budgetDollars ? tr("This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).", { budget:budgetText(), cost:amountText(run.cost * perDollar(run.budgetUnit), run.budgetUnit) }) : tr("No money budget for this run.") }).done("set", "ok");
           break;
         }
         run.budget = Math.max(0, Math.round(num(await input(b, tc, "TOKENS", 0))));

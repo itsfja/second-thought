@@ -44,7 +44,8 @@ for _stream in (sys.stdout, sys.stderr):
 SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
-                 "budget": "RB_BUDGET", "budget_dollars": "RB_BUDGET_DOLLARS", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
+                 "budget": "RB_BUDGET", "budget_dollars": "RB_BUDGET_DOLLARS", "budget_money": "RB_BUDGET_MONEY",
+                 "currency": "RB_CURRENCY", "exchange_rate": "RB_EXCHANGE_RATE", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
                  "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
                  "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK",

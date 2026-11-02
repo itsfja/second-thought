@@ -41,7 +41,8 @@ for _stream in (sys.stdout, sys.stderr):
 SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
-                 "budget": "RB_BUDGET", "budget_dollars": "RB_BUDGET_DOLLARS", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
+                 "budget": "RB_BUDGET", "budget_dollars": "RB_BUDGET_DOLLARS", "budget_money": "RB_BUDGET_MONEY",
+                 "currency": "RB_CURRENCY", "exchange_rate": "RB_EXCHANGE_RATE", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
                  "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
                  "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK",
@@ -352,18 +353,118 @@ def call_cost(tier, tokens_in, tokens_out):
     return None if p is None else ((tokens_in or 0) * p[0] + (tokens_out or 0) * p[1]) / 1_000_000
 
 
-def money(dollars):
-    """A run's cost for people: 'about $0.03', 'under $0.01', 'about $1.20'."""
-    if dollars < 0.005:
-        return tr("under {cost}", cost="$0.01")
-    return tr("about {cost}", cost=f"${dollars:,.2f}")
+# ----- Currencies -----
+# Prices are in US dollars, as the services publish and bill them. A run's cost and its money budget can be shown in
+# another currency: currency = gbp in second-thought.ini. Each has a symbol before the amount, or a code after it (yuan,
+# so it isn't mistaken for yen), and its decimals (yen has none). The page reads this and RATES too (tools/sync.py).
+CURRENCIES = {"usd": {"symbol": "$", "decimals": 2}, "gbp": {"symbol": "£", "decimals": 2}, "eur": {"symbol": "€", "decimals": 2},
+              "jpy": {"symbol": "¥", "decimals": 0}, "cny": {"code": "CNY", "decimals": 2}}
+# RATES: the European Central Bank's euro reference rates on one day. Exported programs fetch the day's rates (once a
+# day, kept next to memory.json); these are what they fall back on, and the page's only rates, since it can't fetch
+# them. python tools/smoke_test.py models notes them when they're more than 30 days old.
+RATES = {"date": "2026-10-30", "per_euro": {"usd": 1.1172, "gbp": 0.8338, "jpy": 175.68, "cny": 7.4326},
+         "source": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html"}
+ECB_DAILY = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
+CURRENCY = (os.environ.get("RB_CURRENCY") or "usd").strip().lower()
+if CURRENCY not in CURRENCIES:
+    sys.exit(tr("currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.", raw=CURRENCY, where_keys=WHERE_KEYS))
+_RATES = {}  # the rates this program is using: per_euro, where they came from, and any problem fetching them
+
+
+def _rates_file():
+    from .core import MEMORY_FILE
+    return os.path.join(os.path.dirname(os.path.abspath(MEMORY_FILE)), ".second-thought-rates.json")
+
+
+def rates():
+    """{"per_euro": {...}, "date", "how": "ecb" or "built-in", "problem"}: fetched from the ECB at most once a day, kept
+    next to memory.json, else the last kept, else RATES. Never fails, so a money budget always has a rate."""
+    if _RATES:
+        return _RATES
+    kept = None
+    try:
+        with open(_rates_file(), encoding="utf-8") as f:
+            kept = json.load(f)
+        if time.time() - kept.get("fetched", 0) < 12 * 3600 and isinstance(kept.get("per_euro"), dict):
+            _RATES.update(per_euro=kept["per_euro"], date=kept.get("date", ""), how="ecb", problem="")
+            return _RATES
+    except (OSError, ValueError, AttributeError):
+        kept = None
+    problem = ""
+    try:
+        url = os.environ.get("RB_RATES_URL") or ECB_DAILY
+        with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "second-thought"}), timeout=10) as r:
+            xml = r.read(200_000).decode("utf-8", "replace")
+        per = {m.group(1).lower(): float(m.group(2)) for m in re.finditer(r"currency=['\"]([A-Z]{3})['\"]\s+rate=['\"]([\d.]+)['\"]", xml)}
+        day = re.search(r"time=['\"](\d{4}-\d{2}-\d{2})['\"]", xml)
+        if not all(c in per for c in CURRENCIES if c != "eur"):
+            raise ValueError("the rates file didn't have every currency")
+        _RATES.update(per_euro=per, date=day.group(1) if day else "", how="ecb", problem="")
+        try:
+            with open(_rates_file(), "w", encoding="utf-8") as f:
+                json.dump({"per_euro": per, "date": _RATES["date"], "fetched": time.time()}, f)
+        except OSError:
+            pass
+        return _RATES
+    except (urllib.error.URLError, OSError, ValueError) as e:
+        problem = _short(to_str(getattr(e, "reason", None) or e), 100)
+    if kept and isinstance(kept.get("per_euro"), dict):
+        _RATES.update(per_euro=kept["per_euro"], date=kept.get("date", ""), how="ecb", problem=problem)
+    else:
+        _RATES.update(per_euro=RATES["per_euro"], date=RATES["date"], how="built-in", problem=problem)
+    return _RATES
+
+
+def fixed_rate():
+    """exchange_rate in second-thought.ini: one US dollar in the program's currency, instead of the ECB's rate; or 0."""
+    if CURRENCY == "usd":
+        return 0
+    return _number_setting("RB_EXCHANGE_RATE", 0, "how much one US dollar is in your currency, like 0.79")
+
+
+def per_dollar(cur):
+    """How much one US dollar is in this currency."""
+    if cur == "usd":
+        return 1.0
+    if cur == CURRENCY and fixed_rate():
+        return fixed_rate()
+    per = rates()["per_euro"]
+    return (1.0 if cur == "eur" else per[cur]) / per["usd"]
+
+
+def amount_text(value, cur):
+    """An amount in a currency, exactly: '$0.50', '£12.00', '¥75', '0.40 CNY', and its digits under the smallest coin."""
+    c = CURRENCIES[cur]
+    smallest = 10 ** -c["decimals"]
+    text = (f"{value:.6f}".rstrip("0").rstrip(".") if 0 < value < smallest else f"{value:,.{c['decimals']}f}")
+    return c["symbol"] + text if "symbol" in c else text + " " + c["code"]
+
+
+def money(dollars, cur=None):
+    """A cost for people, in the program's currency (or cur): 'about £0.02', 'under ¥1', 'about $1.20'."""
+    cur = cur or CURRENCY
+    value = dollars * per_dollar(cur)
+    smallest = 10 ** -CURRENCIES[cur]["decimals"]
+    if value < smallest / 2:
+        return tr("under {cost}", cost=amount_text(smallest, cur))
+    return tr("about {cost}", cost=amount_text(max(round(value, CURRENCIES[cur]["decimals"]), smallest), cur))
 
 
 def dollars(amount):
-    """An exact amount, like a budget: '$0.50', '$12.00', and '$0.004' under a cent, rather than '$0.00'."""
-    if 0 < amount < 0.01:
-        return "$" + f"{amount:.6f}".rstrip("0")
-    return f"${amount:,.2f}"
+    """An exact amount in US dollars, like a budget: '$0.50', '$12.00', and '$0.004' under a cent, rather than '$0.00'."""
+    return amount_text(amount, "usd")
+
+
+fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run
+
+
+def rate_note():
+    """Where the run's rate came from, for the saved log and --doctor: '' in US dollars."""
+    if CURRENCY == "usd":
+        return ""
+    if fixed_rate():
+        return tr("at the rate set {where_keys}", where_keys=WHERE_KEYS)
+    return tr("at the ECB rate of {date}", date=rates()["date"])
 
 
 def model_label(tier):
@@ -380,13 +481,13 @@ class ModelCalls:
         budget = self.budget_dollars
         if call_cost(tiers[0], 0, 0) is None:
             raise RunError(tr("Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.",
-                              model=model_label(tiers[0]), x=dollars(budget)))
+                              model=model_label(tiers[0]), x=self.budget_text()))
         if not self.cost[1]:
             raise RunError(tr("Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.",
-                              x=dollars(budget)))
+                              x=self.budget_text()))
         if self.cost[0] >= budget:
             raise RunError(tr("Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).",
-                              x=money(self.cost[0]), x2=dollars(budget)))
+                              x=money(self.cost[0], self.budget_unit), x2=self.budget_text()))
         return [t for t in tiers if call_cost(t, 0, 0) is not None]
 
     async def _call_live(self, prompt, want_json=False, picture=None, history=None, web=False):
@@ -753,6 +854,7 @@ CALL_TIMEOUT = _number_setting("RB_CALL_TIMEOUT", 300, "a number of seconds, lik
 MAX_SECONDS = _number_setting("RB_MAX_SECONDS", 0, "a number of seconds, like 900")             # any run stops after this long
 BUDGET = _number_setting("RB_BUDGET", 0, "a whole number of tokens, like 50000", whole=True)      # tokens per run
 BUDGET_DOLLARS = _number_setting("RB_BUDGET_DOLLARS", 0, "an amount in US dollars, like 0.50")  # US dollars per run, at list prices
+BUDGET_MONEY = _number_setting("RB_BUDGET_MONEY", 0, "an amount in your currency, like 0.40")  # the same in the program's currency
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
 MAX_SCRIPTS = 100       # scripts started by broadcasts in one run
@@ -5022,6 +5124,11 @@ class Doctor:
         can = can or {}
         ids = list(can.get("can", [])) if known else [c[0] for c in CAPABILITIES]  # an older program: check whatever is set up
         row("ok" if sys.version_info >= (3, 9) else "FAIL", "Python", sys.version.split()[0] + ("" if sys.version_info >= (3, 9) else ": " + tr("Second Thought needs 3.9 or newer")))
+        if CURRENCY != "usd":
+            r = rates()
+            row("NOTE" if r["problem"] and not fixed_rate() else "ok", "Currency",
+                tr("{code}, {note} (1 US dollar = {rate})", code=CURRENCY.upper(), note=rate_note(), rate=amount_text(per_dollar(CURRENCY), CURRENCY))
+                + ("" if fixed_rate() or not r["problem"] else " " + tr("Today's rate couldn't be fetched ({err}), so it uses the last one it has.", err=r["problem"])))
         update = self.update_status()
         if update:
             row(update[0], "Runtime", update[1])
@@ -5339,7 +5446,10 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         self.usage = {}  # provider -> [tokens in, tokens out]
         self.cost = [0.0, True]      # what the run's model calls cost in US dollars, and whether every one had a known price
         self.budget = BUDGET          # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
-        self.budget_dollars = BUDGET_DOLLARS  # the same in US dollars at list prices: budget_dollars = 0.50
+        # The same in money at list prices: budget_dollars = 0.50, or budget_money = 0.40 in the program's currency (which
+        # wins). budget_dollars is what's checked, in US dollars; the amount and its currency are what's shown.
+        self.budget_amount, self.budget_unit = (BUDGET_MONEY, CURRENCY) if BUDGET_MONEY else (BUDGET_DOLLARS, "usd")
+        self.budget_dollars = self.budget_amount / per_dollar(self.budget_unit) if self.budget_amount else 0
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
         self.trace = []              # every log line, for save_log
         self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
@@ -5462,15 +5572,21 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         u[0] += tokens_in or 0
         u[1] += tokens_out or 0
 
+    def budget_text(self):
+        """The money budget as it was set, in its currency: '$0.50', '£0.40', '¥75'."""
+        return amount_text(self.budget_amount, self.budget_unit)
+
     def tokens_used(self):
         return sum(u[0] + u[1] for u in self.usage.values())
 
     def set_budget(self, n, unit="tokens"):
-        if unit == "dollars":
+        """'limit this run': unit is tokens, or a currency: "dollars" (US), "gbp", "eur", "jpy" or "cny"."""
+        if unit != "tokens":
             n = max(0.0, num(n))
-            self.budget_dollars = n
+            self.budget_amount, self.budget_unit = n, ("usd" if unit == "dollars" else unit)
+            self.budget_dollars = n / per_dollar(self.budget_unit) if n else 0
             self.log(tr("Budget"), tr("This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).",
-                                      x=dollars(n), x2=money(self.cost[0])) if n else tr("No money budget for this run."), tr("set"))
+                                      x=self.budget_text(), x2=money(self.cost[0], self.budget_unit)) if n else tr("No money budget for this run."), tr("set"))
             return
         n = max(0, round_js(num(n)))
         self.budget = n
@@ -6639,7 +6755,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         spare = (" · " + (tr("a backup answered 1 step") if self.backup_used == 1 else tr("a backup answered {n} steps", n=self.backup_used))
                  if self.backup_used else "")
         budget = (" · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else "") + \
-            (" · " + tr("budget {n}", n=dollars(self.budget_dollars)) if self.budget_dollars else "")
+            (" · " + tr("budget {n}", n=self.budget_text()) if self.budget_dollars else "")
         print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}{self.cost_text()}", flush=True)
         return 0
 
@@ -6664,11 +6780,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         for who, u in self.usage.items():
             lines.append(f"- {who}: {u[0]:,} tokens in, {u[1]:,} out")
         if self.cost_text():
-            lines.append(f"- Cost: {self.cost_text()[3:]}")
+            lines.append(f"- Cost: {self.cost_text()[3:]}" + (f" ({rate_note()})" if rate_note() else ""))
         if self.budget:
             lines.append(f"- Budget: {self.budget:,} tokens")
         if self.budget_dollars:
-            lines.append(f"- Budget: {dollars(self.budget_dollars)} at list prices")
+            lines.append(f"- Budget: {self.budget_text()} at list prices")
         if self.error:
             lines.append(f"- Stopped with an error: {self._describe(self.error)}")
         lines.append("")
