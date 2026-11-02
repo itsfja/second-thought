@@ -22,8 +22,10 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+## 3.4.0 - 2026-11-02
+
 ### Added
-- How expensive each model is (part of #264). The run log names each model with its band: free, budget, standard or premium, from its list price per million output tokens, or price unknown. Llama on this computer is free. `--doctor` lists each service's models with their bands. A router's models say who makes them, like *Gemma 4, by Google, through Hugging Face*.
+- How expensive each model is (#264). The run log names each model with its band: free, budget, standard or premium, from its list price per million output tokens, or price unknown. Llama on this computer is free. `--doctor` lists each service's models with their bands. A router's models say who makes them, like *Gemma 4, by Google, through Hugging Face*.
 
 ## 3.3.0 - 2026-11-02
 
