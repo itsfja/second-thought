@@ -1,0 +1,33 @@
+# ארמית: everyday words
+
+Made by tools/sync.py from i18n/arc.json: edit that, not this.
+
+- Events: מאורעין
+- Control: שלטונא
+- Wait & time: מתנתא וזמנא
+- Operators: חושבנין
+- Text: כתבא
+- Variables: משתניא
+- Lists: סדרין
+- My Blocks: לבנתי
+- Programs: סדורין
+- Search results: מה דאשתכח
+- Draft: טופסא
+- Ask Claude: שאל Claude
+- Review: בדיקתא
+- Agent: שליחא
+- Tools: מאניא
+- Connections: קשרין
+- You: אנת
+- Records: שטרי
+- Files: מגלתא
+- Memory: דוכרנא
+- Pictures: צורתא
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Output: מפקנא
+- Tools for the agent: drop them inside an agent block: מאני שליחא: שדי יתהון בגו לבנת שליחא
+- Listeners: they run while the exported program runs on schedule: שמועין: רהטין כל עוד סדורא דנפק רהט בזמניה
+- Read and send: קרי ושלח
+- Type in 'Find a block' above the canvas.: כתוב ב"בעי לבנתא" מעילא ללוחא.
+- No blocks match: לית לבנין דשוין

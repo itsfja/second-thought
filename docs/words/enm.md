@@ -1,0 +1,33 @@
+# Englisch: everyday words
+
+Made by tools/sync.py from i18n/enm.json: edit that, not this.
+
+- Events: Events
+- Control: Governaunce
+- Wait & time: Abidynge and tyme
+- Operators: Werkers
+- Text: Text
+- Variables: Variables
+- Lists: Rolles
+- My Blocks: My blokkes
+- Programs: Devyses
+- Search results: Thynges founde
+- Draft: Draughte
+- Ask Claude: Aske Claude
+- Review: Examinacioun
+- Agent: Procuratour
+- Tools: Tooles
+- Connections: Knottes
+- You: Thou
+- Records: Recordes
+- Files: Quaiers
+- Memory: Memorie
+- Pictures: Ymages
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Output: Outcome
+- Tools for the agent: drop them inside an agent block: Tooles for the procuratour: lay hem withinne a procuratoures blok
+- Listeners: they run while the exported program runs on schedule: Herkeners: they rennen whil the devys sent out renneth by ordinaunce
+- Read and send: Rede and sende
+- Type in 'Find a block' above the canvas.: Write in “Fynde a blok” above the table.
+- No blocks match: No blok acordeth

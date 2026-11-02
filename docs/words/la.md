@@ -1,0 +1,33 @@
+# Latina: everyday words
+
+Made by tools/sync.py from i18n/la.json: edit that, not this.
+
+- Events: Eventus
+- Control: Moderatio
+- Wait & time: Mora et tempus
+- Operators: Operatores
+- Text: Textus
+- Variables: Variabiles
+- Lists: Indices
+- My Blocks: Lateres mei
+- Programs: Programmata
+- Search results: Effectus quaestionis
+- Draft: Adumbratio
+- Ask Claude: Interroga Claude
+- Review: Recognitio
+- Agent: Procurator
+- Tools: Instrumenta
+- Connections: Conexiones
+- You: Tu
+- Records: Schedae
+- Files: Fasciculi
+- Memory: Memoria
+- Pictures: Imagines
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Output: Exitus
+- Tools for the agent: drop them inside an agent block: Instrumenta procuratoris: intra laterem procuratoris pone
+- Listeners: they run while the exported program runs on schedule: Auscultatores: currunt dum programma exportatum ex horario currit
+- Read and send: Lege et mitte
+- Type in 'Find a block' above the canvas.: Scribe in «Inveni laterem» supra tabulam.
+- No blocks match: Nullus later congruit

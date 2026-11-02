@@ -594,9 +594,9 @@ add(program(
         agent(join("Today is ", B("rb_now", {"PART": "weekday"}), ". Today's language: Monday Latin (la), Tuesday Old English (ang), "
                    "Wednesday Akkadian (akk), Thursday Old Norse (non), Friday Koine Greek (grc), Saturday Sanskrit (sa), Sunday "
                    "Mycenaean Greek in Linear B (gmy). Read https://raw.githubusercontent.com/itsfja/second-thought/main/docs/ladybird-book.md "
-                   "and pick one page, a different one each day. Read the language's words at "
-                   "https://raw.githubusercontent.com/itsfja/second-thought/main/i18n/<code>.json. Write that page in today's "
-                   "language, using the file's words where they fit, with the English alongside. Then give three words from it to "
+                   "and pick one page, a different one each day. Read the language's everyday words at "
+                   "https://raw.githubusercontent.com/itsfja/second-thought/main/docs/words/<code>.md. Write that page in today's "
+                   "language, using those words where they fit, with the English alongside. Then give three words from it to "
                    "learn, each with its meaning. End by saying the historical version is plausible, not authoritative."),
               ["web"], steps=6),
         email_me("Today's Ladybird lesson", B("rb_draft")),

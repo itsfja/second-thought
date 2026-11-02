@@ -1,0 +1,33 @@
+# 日本語: everyday words
+
+Made by tools/sync.py from i18n/ja.json: edit that, not this.
+
+- Events: イベント
+- Control: 制御
+- Wait & time: 待機と時間
+- Operators: 演算
+- Text: テキスト
+- Variables: 変数
+- Lists: リスト
+- My Blocks: マイブロック
+- Programs: プログラム
+- Search results: 検索結果
+- Draft: 下書き
+- Ask Claude: Claude に聞く
+- Review: レビュー
+- Agent: エージェント
+- Tools: 道具
+- Connections: 連携
+- You: あなた
+- Records: レコード
+- Files: ファイル
+- Memory: 記憶
+- Pictures: 画像
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Output: 出力
+- Tools for the agent: drop them inside an agent block: エージェントの道具：エージェントブロックの中に入れます
+- Listeners: they run while the exported program runs on schedule: 受信ブロック：書き出したプログラムがスケジュールで動く間に働きます
+- Read and send: 読む・送る
+- Type in 'Find a block' above the canvas.: 作業エリアの上の「ブロックを探す」に入力します。
+- No blocks match: 一致するブロックはありません

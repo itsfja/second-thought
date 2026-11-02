@@ -154,9 +154,27 @@ def lang_files() -> dict:
 
     Each section and each entry in a section goes on its own line, so changing one translated phrase changes one line.
     """
-    return {LANG / f"{code}.js": f"/* Made by tools/sync.py from i18n/{code}.json: edit that, not this. */\n"
-                                 f"(window.ST_I18N_FILES = window.ST_I18N_FILES || {{}})[{json.dumps(code)}] = {_lines(t, 2)};\n"
-            for code, t in _languages().items()}
+    files = {LANG / f"{code}.js": f"/* Made by tools/sync.py from i18n/{code}.json: edit that, not this. */\n"
+                                  f"(window.ST_I18N_FILES = window.ST_I18N_FILES || {{}})[{json.dumps(code)}] = {_lines(t, 2)};\n"
+             for code, t in _languages().items()}
+    files.update(word_lists())
+    return files
+
+
+WORDS = ROOT / "docs" / "words"
+
+
+def word_lists() -> dict:
+    """docs/words/<language>.md: a short list of each language's everyday words (the block categories and labels), for
+    the Ladybird lesson gallery program to read instead of the whole language file."""
+    out = {}
+    for code, t in _languages().items():
+        pairs = [(k, v) for section in ("categories", "labels") for k, v in (t.get(section) or {}).items() if isinstance(v, str)]
+        if pairs:
+            out[WORDS / f"{code}.md"] = (f"# {t.get('name', code)}: everyday words\n\n"
+                                         f"Made by tools/sync.py from i18n/{code}.json: edit that, not this.\n\n"
+                                         + "".join(f"- {k}: {v}\n" for k, v in pairs))
+    return out
 
 
 def gallery_json() -> str:
@@ -250,6 +268,7 @@ def main() -> int:
         changed.append("second-thought.html")
     if old_langs or stale:
         LANG.mkdir(exist_ok=True)
+        WORDS.mkdir(parents=True, exist_ok=True)
         for path in old_langs:
             path.write_text(langs[path], encoding="utf-8")
         for path in stale:  # a language whose i18n file was removed
