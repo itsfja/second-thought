@@ -1803,6 +1803,16 @@
 "Models: {list}.":"Modelos: {list}.",
 "on this computer":"en este ordenador",
 "through {service}":"a través de {service}",
-"{model}, by {maker}, {where}":"{model}, de {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, de {maker}, {where}",
+"Allowances":"Asignaciones",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"En GitHub Actions la cuenta no se conserva entre ejecuciones, así que las asignaciones valen solo para cada ejecución.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"Detenido: se ha alcanzado la asignación por {window} de {amount} de esta clave de {service} ({spent} gastado). Se reinicia a las {when}.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"Detenido: {model} no tiene precio conocido, así que su gasto no se puede contar contra las asignaciones de esta clave. Usa un modelo con precio.",
+"hourly":"hora",
+"daily":"día",
+"weekly":"semana",
+"monthly":"mes",
+"{pct}% of the {window} allowance of {amount}":"{pct} % de la asignación por {window} de {amount}",
+"{service} key: {list}":"Clave de {service}: {list}"
 }
 };

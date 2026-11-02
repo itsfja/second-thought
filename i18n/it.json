@@ -2930,6 +2930,16 @@
   "Models: {list}.": "Modelli: {list}.",
   "on this computer": "su questo computer",
   "through {service}": "tramite {service}",
-  "{model}, by {maker}, {where}": "{model}, di {maker}, {where}"
+  "{model}, by {maker}, {where}": "{model}, di {maker}, {where}",
+  "Allowances": "Quote",
+  "On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.": "Su GitHub Actions il conteggio non si conserva tra un’esecuzione e l’altra, quindi le quote valgono per ogni singola esecuzione.",
+  "Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.": "Fermato: la quota per {window} di {amount} per questa chiave {service} è stata raggiunta ({spent} spesi). Si azzera alle {when}.",
+  "Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.": "Fermato: {model} non ha un prezzo noto, quindi la sua spesa non si può contare nelle quote di questa chiave. Usa un modello con un prezzo.",
+  "hourly": "ora",
+  "daily": "giorno",
+  "weekly": "settimana",
+  "monthly": "mese",
+  "{pct}% of the {window} allowance of {amount}": "{pct}% della quota per {window} di {amount}",
+  "{service} key: {list}": "Chiave {service}: {list}"
  }
 }

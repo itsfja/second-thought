@@ -2931,7 +2931,17 @@
   "Models: {list}.": "ro-ki-si-te-ri-ja: {list}.",
   "on this computer": "e-pi to-to ro-ki-si-te-ri-jo",
   "through {service}": "di-a {service}",
-  "{model}, by {maker}, {where}": "{model}, u-po {maker}, {where}"
+  "{model}, by {maker}, {where}": "{model}, u-po {maker}, {where}",
+  "Allowances": "me-tu-ra",
+  "On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.": "e-pi GitHub Actions a-ri-to-mo o-u me-ne-i, o-u-to me-tu-ra e-pi e-ka-ta ka-ra-si.",
+  "Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.": "pe-pa-u-me-no: me-tu-ro ka-ta {window} {amount} {service} ka-ra-wi e-ki-ne-to ({spent} a-na-re-me-no). ne-wo-ta-i {when}.",
+  "Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.": "pe-pa-u-me-no: {model} o-u e-ke ti-ma ko-no-ta, o-u-to da-pa-na o-u a-ri-to-me-ta-i. ke-re-te ro-ki-si-te-ri-jo me-ta ti-ma.",
+  "hourly": "o-ra",
+  "daily": "a-ma-ra",
+  "weekly": "e-pa-do-ma",
+  "monthly": "me-ne",
+  "{pct}% of the {window} allowance of {amount}": "{pct}% me-tu-ro ka-ta {window} {amount}",
+  "{service} key: {list}": "{service} ka-ra-wi: {list}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

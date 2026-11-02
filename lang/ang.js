@@ -1803,7 +1803,17 @@
 "Models: {list}.":"Bysena: {list}.",
 "on this computer":"on þissum rimcræfte",
 "through {service}":"þurh {service}",
-"{model}, by {maker}, {where}":"{model}, fram {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, fram {maker}, {where}",
+"Allowances":"Dælas",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"On GitHub Actions ne biþ þæt getæl gehealden betweox fremmingum, forþy gelimpaþ þa dælas to ælcre fremminge synderlice.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"Ætstanden: se dæl on {window} of {amount} for þissum {service} cæge is geræht ({spent} aspended). He biþ eft geniwod on {when}.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"Ætstanden: {model} næfþ nanne cuþne weorþ, forþy ne mæg his spending beon geteald wiþ þissre cæge dælas. Bruc gecyndes mid weorþe.",
+"hourly":"tide",
+"daily":"dæge",
+"weekly":"wucan",
+"monthly":"monþe",
+"{pct}% of the {window} allowance of {amount}":"{pct}% þæs dæles on {window} of {amount}",
+"{service} key: {list}":"{service} cæg: {list}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

@@ -2930,6 +2930,16 @@
   "Models: {list}.": "Μοντέλα: {list}.",
   "on this computer": "σε αυτόν τον υπολογιστή",
   "through {service}": "μέσω {service}",
-  "{model}, by {maker}, {where}": "{model}, της {maker}, {where}"
+  "{model}, by {maker}, {where}": "{model}, της {maker}, {where}",
+  "Allowances": "Όρια",
+  "On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.": "Στο GitHub Actions η καταμέτρηση δεν διατηρείται μεταξύ εκτελέσεων, οπότε τα όρια ισχύουν για κάθε εκτέλεση χωριστά.",
+  "Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.": "Διακόπηκε: το όριο ανά {window} των {amount} για αυτό το κλειδί {service} συμπληρώθηκε ({spent} ξοδεύτηκαν). Μηδενίζεται στις {when}.",
+  "Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.": "Διακόπηκε: το {model} δεν έχει γνωστή τιμή, οπότε τα έξοδά του δεν μετρούν στα όρια αυτού του κλειδιού. Χρησιμοποιήστε μοντέλο με τιμή.",
+  "hourly": "ώρα",
+  "daily": "ημέρα",
+  "weekly": "εβδομάδα",
+  "monthly": "μήνα",
+  "{pct}% of the {window} allowance of {amount}": "{pct}% του ορίου ανά {window} των {amount}",
+  "{service} key: {list}": "Κλειδί {service}: {list}"
  }
 }

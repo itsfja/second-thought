@@ -1803,7 +1803,17 @@
 "Models: {list}.":"Πρότυπα· {list}.",
 "on this computer":"ἐν τούτῳ τῷ λογιστηρίῳ",
 "through {service}":"διὰ {service}",
-"{model}, by {maker}, {where}":"{model}, ὑπὸ {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, ὑπὸ {maker}, {where}",
+"Allowances":"Μέτρα",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"Ἐν GitHub Actions ὁ λογισμὸς οὐ μένει μεταξὺ τῶν πράξεων, διὸ τὰ μέτρα καθ’ ἑκάστην πρᾶξιν ἰσχύει.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"Πεπαυμένον· τὸ μέτρον κατὰ {window} τῶν {amount} τῆσδε τῆς κλειδὸς {service} ἐξίκετο ({spent} ἀνηλωμένα). Ἀνανεοῦται τῇ {when}.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"Πεπαυμένον· τὸ {model} οὐκ ἔχει γνωστὴν τιμήν, διὸ ἡ δαπάνη αὐτοῦ οὐ λογίζεται εἰς τὰ μέτρα τῆσδε τῆς κλειδός. Χρῶ προγράμματι μετὰ τιμῆς.",
+"hourly":"ὥραν",
+"daily":"ἡμέραν",
+"weekly":"ἑβδομάδα",
+"monthly":"μῆνα",
+"{pct}% of the {window} allowance of {amount}":"{pct}% τοῦ μέτρου κατὰ {window} τῶν {amount}",
+"{service} key: {list}":"Κλεὶς {service}· {list}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

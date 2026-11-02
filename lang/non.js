@@ -1803,7 +1803,17 @@
 "Models: {list}.":"Líkǫn: {list}.",
 "on this computer":"á þessi tǫlvu",
 "through {service}":"um {service}",
-"{model}, by {maker}, {where}":"{model}, frá {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, frá {maker}, {where}",
+"Allowances":"Heimildir",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"Á GitHub Actions helzk talningin eigi milli ferða, svá at heimildir gilda fyrir hverja ferð eina.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"Stǫðvat: heimildin á {window} {amount} fyrir þenna {service}-lykil er náð ({spent} eytt). Hon hefsk aptr {when}.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"Stǫðvat: {model} hefir ekki kunnt verð, svá at eyðslu þess má eigi telja móti heimildum þessa lykils. Nota líkan með verði.",
+"hourly":"stund",
+"daily":"dag",
+"weekly":"viku",
+"monthly":"mánuð",
+"{pct}% of the {window} allowance of {amount}":"{pct}% heimildarinnar á {window} {amount}",
+"{service} key: {list}":"{service}-lykill: {list}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

@@ -2930,7 +2930,17 @@
   "Models: {list}.": "Exemplaria: {list}.",
   "on this computer": "in hoc computatro",
   "through {service}": "per {service}",
-  "{model}, by {maker}, {where}": "{model}, a {maker}, {where}"
+  "{model}, by {maker}, {where}": "{model}, a {maker}, {where}",
+  "Allowances": "Modi",
+  "On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.": "In GitHub Actions numerus inter exsecutiones non servatur, itaque modi in singulas exsecutiones valent.",
+  "Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.": "Sistitum: modus in {window} {amount} huius clavis {service} attactus est ({spent} impensum). Renovatur hora {when}.",
+  "Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.": "Sistitum: {model} pretium notum non habet, itaque eius impensa in modos huius clavis numerari non potest. Exemplari cum pretio utere.",
+  "hourly": "horam",
+  "daily": "diem",
+  "weekly": "hebdomadem",
+  "monthly": "mensem",
+  "{pct}% of the {window} allowance of {amount}": "{pct}% modi in {window} {amount}",
+  "{service} key: {list}": "Clavis {service}: {list}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

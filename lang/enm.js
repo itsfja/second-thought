@@ -1803,7 +1803,17 @@
 "Models: {list}.":"Models: {list}.",
 "on this computer":"on this engyn",
 "through {service}":"thurgh {service}",
-"{model}, by {maker}, {where}":"{model}, by {maker}, {where}"
+"{model}, by {maker}, {where}":"{model}, by {maker}, {where}",
+"Allowances":"Allowaunces",
+"On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.":"On GitHub Actions the tale lasteth nat bitwixe rennynges, so allowaunces holden for ech rennyng by itself.",
+"Stopped: the {window} allowance of {amount} for this {service} key has been reached ({spent} spent). It resets at {when}.":"Stinted: the allowaunce by the {window} of {amount} for this {service} keye is reched ({spent} spent). It bigynneth newe at {when}.",
+"Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.":"Stinted: {model} hath no knowen pris, so his spendyng may nat be rekened agayn this keyes allowaunces. Use a model with a pris.",
+"hourly":"houre",
+"daily":"day",
+"weekly":"wyke",
+"monthly":"monthe",
+"{pct}% of the {window} allowance of {amount}":"{pct}% of the allowaunce by the {window} of {amount}",
+"{service} key: {list}":"{service} keye: {list}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",
