@@ -22,10 +22,12 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
-## 3.2.0 - 2026-11-02
+## 3.3.0 - 2026-11-02
 
 ### Added
 - Costs and money budgets in pounds, euros, yen or yuan (#263). `currency = gbp` (or `eur`, `jpy`, `cny`) in `second-thought.ini` shows the run's cost in that currency, like *about £0.02 at list prices*, and a saved log says which rate. Services charge in US dollars, so the program converts at the European Central Bank's rate of the day, fetched at most once a day and kept next to the program; offline it uses the last one kept, or a built-in one, so a money budget always has a rate. `exchange_rate` fixes the rate instead. The **limit this run** block takes pounds, euros, yen and yuan, and `budget_money` is a budget in the program's currency. `--doctor` shows the currency and its rate. Yen are whole; yuan show their code (0.40 CNY), so they aren't taken for yen.
+
+## 3.2.0 - 2026-11-02
 
 ### Added
 - A budget in money (#241). The **limit this run** block takes a unit, tokens or US dollars, and `budget_dollars = 0.50` in `second-thought.ini` caps every run. In dollars, a run stops before a model call once it has spent that much at the models' list prices. A model with no known price can't be counted, so the run stops and says so rather than running with no limit, and backups with no known price are left out. The end line and a saved log show the budget. Programs exported before keep their budgets in tokens.
