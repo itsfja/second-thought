@@ -20,15 +20,17 @@ Safety and cost of change, released in 3.0.0: one source for the safety rules ([
 
 Fixes reach people, released in 3.1.0: exported programs say when their runtime is out of date and update it in place ([#244](https://github.com/itsfja/second-thought/issues/244)).
 
-## Now: what a run costs, in terms people use
+What a run costs, in terms people use, released in 3.2.0 and 3.3.0: a budget in money ([#241](https://github.com/itsfja/second-thought/issues/241)), and costs and budgets in pounds, euros, yen or yuan ([#263](https://github.com/itsfja/second-thought/issues/263)).
+
+## Now: what models and keys cost
 
 | | Benefit | Cost |
 |---|---|---|
-| [#241](https://github.com/itsfja/second-thought/issues/241) A budget in money, not just tokens | Medium: people think in money, and unattended runs need a cap | Low |
-| [#263](https://github.com/itsfja/second-thought/issues/263) Costs and money budgets in pounds, euros, yen or yuan | Medium: "about £0.02" means more than "about $0.03" to most people | Low-medium |
-| [#264](https://github.com/itsfja/second-thought/issues/264) How expensive each model is, and how much of each key's allowance is used, with plan settings | Medium-high for unattended programs | Medium |
+| [#264](https://github.com/itsfja/second-thought/issues/264) Say how expensive each model is, and who makes it | Medium: pick a model knowing its price band | Low |
+| [#269](https://github.com/itsfja/second-thought/issues/269) Track each key's spending on this computer, with hourly, daily, weekly and monthly allowances | Medium-high for unattended programs | Medium |
+| [#270](https://github.com/itsfja/second-thought/issues/270) Show the limits services report, and set each account's plan to measure against | Medium | Medium, plus upkeep |
 
-In that order, as each builds on the one before. #241 is ready for review. #263 converts its budgets and costs. #264 then shows allowances in the chosen currency, and its plan table gets the same date-and-source upkeep as the prices.
+#264 was split in three, in this order: #264 is ready for review, #269 is the ledger the allowances come from, and #270 measures against each plan's published limits using that ledger. [#243](https://github.com/itsfja/second-thought/issues/243) (prices for the rest of the services) makes all three more useful, since a model with no price has no band and can't be counted.
 
 ## Next: GitHub as a home
 
