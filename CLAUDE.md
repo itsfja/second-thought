@@ -9,6 +9,10 @@ learn by trial and error.
 - "#n is conflicted": rebase that PR's branch on main, rebuild with `python tools/sync.py`, push with
   `--force-with-lease`.
 - After PRs that change the page are merged, republish the artifact (below).
+- Releasing: a "Release x.y.z" PR (Unreleased becomes x.y.z, `RUNTIME_VERSION` and the README badge follow) is merged
+  first; then Francis publishes the GitHub release on main. The Release workflow refuses a tag whose runtime says
+  another version, and then `--update-runtime` has nothing to download. If that happens, the tag has to be deleted
+  and made again on main (deleting the release alone leaves the tag where it was).
 - The language issues (#129–139) are paused until Francis says otherwise.
 - Never commit `second-thought.ini` or keys. Real-key checks (`tools/smoke_test.py`) cost money: Francis runs them,
   or says to.
