@@ -982,8 +982,8 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
               "t_steps.py gives the agent's steps as records" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         check("▸ Agent summary  [4 steps]" in out and '    2. recall  [done]  {"name": "s"} → rye' in out and "    4. final answer  [answer]" in out,
               "Python sums up the agent's steps, one line each")
-        check(re.search(r"▸ Agent step 1/6: remember  \[done\]\n(    .*\n)*    · Claude, \w+ · \d+\.\d s · \d+ in, \d+ out\n", out),
-              "Python prints each step's model, time and exact tokens")
+        check(re.search(r"▸ Agent step 1/6: remember  \[done\]\n(    .*\n)*    · Claude, \w+ \((budget|standard|premium)\) · \d+\.\d s · \d+ in, \d+ out\n", out),
+              "Python prints each step's model with its price band, time and exact tokens")
         code_, out, err = run_ag("t_ag_bad")
         check(code_ == 0 and "▸ Agent step 1/6  [unreadable]" in out and "▸ Agent: finished in 2 steps" in out, "t_ag_bad.py survives an unreadable reply" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         code_, out, err = run_ag("t_ag_repeat")
