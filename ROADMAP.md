@@ -14,41 +14,38 @@ The project has grown wide: over 160 examples, 31 community programs, 19 languag
 
 ## Done
 
-Trust: the prompt-injection tests ([#188](https://github.com/itsfja/second-thought/issues/188)) and a real-model run of the gallery ([#189](https://github.com/itsfja/second-thought/issues/189)). Reach: plain-English authoring ([#192](https://github.com/itsfja/second-thought/issues/192)), GitHub Actions export ([#191](https://github.com/itsfja/second-thought/issues/191)), retired-model warnings ([#190](https://github.com/itsfja/second-thought/issues/190)) and six gallery packs ([#196](https://github.com/itsfja/second-thought/issues/196)–[#201](https://github.com/itsfja/second-thought/issues/201)). Depth: test cases for programs ([#193](https://github.com/itsfja/second-thought/issues/193)), a versioned block format ([#195](https://github.com/itsfja/second-thought/issues/195)), programs as MCP tools ([#194](https://github.com/itsfja/second-thought/issues/194)), keys in the keychain ([#123](https://github.com/itsfja/second-thought/issues/123)) and the editor's code in its own files ([#122](https://github.com/itsfja/second-thought/issues/122)).
+Trust: the prompt-injection tests ([#188](https://github.com/itsfja/second-thought/issues/188)) and a real-model run of the gallery ([#189](https://github.com/itsfja/second-thought/issues/189)). Reach: plain-English authoring ([#192](https://github.com/itsfja/second-thought/issues/192)), GitHub Actions export ([#191](https://github.com/itsfja/second-thought/issues/191)), retired-model warnings ([#190](https://github.com/itsfja/second-thought/issues/190)) and eight gallery packs ([#196](https://github.com/itsfja/second-thought/issues/196)–[#203](https://github.com/itsfja/second-thought/issues/203)). Depth: test cases for programs ([#193](https://github.com/itsfja/second-thought/issues/193)), a versioned block format ([#195](https://github.com/itsfja/second-thought/issues/195)), programs as MCP tools ([#194](https://github.com/itsfja/second-thought/issues/194)), keys in the keychain ([#123](https://github.com/itsfja/second-thought/issues/123)) and the editor's code in its own files ([#122](https://github.com/itsfja/second-thought/issues/122)).
 
-## Now: keep it safe, and cheaper to change
+Safety and cost of change, released in 3.0.0: one source for the safety rules ([#219](https://github.com/itsfja/second-thought/issues/219)), the DNS-rebinding gap closed ([#220](https://github.com/itsfja/second-thought/issues/220)), translation files merged key by key ([#217](https://github.com/itsfja/second-thought/issues/217)) and a translation tool ([#218](https://github.com/itsfja/second-thought/issues/218)). The editor split into files by area ([#221](https://github.com/itsfja/second-thought/issues/221)), with unit tests ([#222](https://github.com/itsfja/second-thought/issues/222)) and keyboard and screen-reader use ([#223](https://github.com/itsfja/second-thought/issues/223)). Polish: a run's cost in money ([#224](https://github.com/itsfja/second-thought/issues/224)), saying what's new when a program asks again ([#225](https://github.com/itsfja/second-thought/issues/225)), and a real run on GitHub Actions ([#226](https://github.com/itsfja/second-thought/issues/226)).
 
-| | Benefit | Cost |
-|---|---|---|
-| [#219](https://github.com/itsfja/second-thought/issues/219) One source for the safety rules, shared by the page and the runtime | High: the asking rules are the safety promise, and are written twice | Medium |
-| [#220](https://github.com/itsfja/second-thought/issues/220) Close the DNS-rebinding gap for pages and feeds the agent reads | Medium-high | Low-medium |
-| [#217](https://github.com/itsfja/second-thought/issues/217) Merge i18n files key by key, so translation PRs stop conflicting | High | Low |
-| [#218](https://github.com/itsfja/second-thought/issues/218) A translation tool: list missing words, add them, write Linear B and cuneiform safely | High | Low-medium |
-
-#219 comes first. The page and exported Python must agree on what asks, and today that rests on care. #217 and #218 cut the cost of every future change: each new feature now costs 19 translations and, often, a round of conflicts.
-
-## Next: the editor
+## Now: fixes reach people
 
 | | Benefit | Cost |
 |---|---|---|
-| [#221](https://github.com/itsfja/second-thought/issues/221) Split web/editor.js into files by area | Medium | Medium |
-| [#222](https://github.com/itsfja/second-thought/issues/222) Unit tests for the editor's logic, without a browser | Medium | Medium |
-| [#223](https://github.com/itsfja/second-thought/issues/223) Keyboard and screen-reader use of the blocks and the run log | Medium | Medium |
+| [#244](https://github.com/itsfja/second-thought/issues/244) Tell exported programs when their runtime is out of date, and update it in place | High: each program carries a frozen runtime, so a security fix reaches only those who re-export | Medium |
+| [#241](https://github.com/itsfja/second-thought/issues/241) A budget in money, not just tokens | Medium: people think in money, and unattended runs need a cap | Low |
 
-## Later: polish
+#244 comes first. It's the gap SECURITY.md names, and 3.0.0 and 3.0.1 are already fixes nobody is told about. #241 is cheap now the run knows its cost.
+
+## Next: GitHub as a home
 
 | | Benefit | Cost |
 |---|---|---|
-| [#224](https://github.com/itsfja/second-thought/issues/224) Show what a run cost in money, not just tokens | Low-medium | Low, plus upkeep |
-| [#225](https://github.com/itsfja/second-thought/issues/225) When a program asks again, say what's new since it was allowed | Low-medium | Low |
-| [#226](https://github.com/itsfja/second-thought/issues/226) Run Save as GitHub Actions for real once, and write down what's checked | Low-medium | Low |
+| [#246](https://github.com/itsfja/second-thought/issues/246) Run a program's test cases on GitHub Actions | Medium-high, and distinctive | Low-medium |
+| [#245](https://github.com/itsfja/second-thought/issues/245) Publish the page on GitHub Pages as a second front door | Medium | Low |
+
+## Later: upkeep
+
+| | Benefit | Cost |
+|---|---|---|
+| [#242](https://github.com/itsfja/second-thought/issues/242) Blockly 12, with its own keyboard navigation | Medium | Medium |
+| [#243](https://github.com/itsfja/second-thought/issues/243) Prices for the rest of the model services | Low-medium | Low, plus upkeep |
 
 ## Someday
 
 | | Notes |
 |---|---|
-| [#202](https://github.com/itsfja/second-thought/issues/202) Gallery pack: Archives and family history | A natural home for the historical languages |
-| [#203](https://github.com/itsfja/second-thought/issues/203) Gallery pack: Small research labs | arXiv fisher, generalised |
+| [#247](https://github.com/itsfja/second-thought/issues/247) Gallery: Premium Bonds generations | Waiting on a few real lines of NS&I's pages, numbers changed |
 | [#129](https://github.com/itsfja/second-thought/issues/129)–[#139](https://github.com/itsfja/second-thought/issues/139) Eleven more languages | Paused for now; each costs only the people who pick it since #120 |
 
 ## If there's a successor
