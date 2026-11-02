@@ -1430,7 +1430,12 @@
   "yen": "yens",
   "yuan": "yuans",
   "Currency": "Devise",
-  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "La devise dans laquelle les coûts et les budgets en argent sont affichés. Les services facturent en dollars américains ; les autres devises utilisent le taux de la Banque centrale européenne du {date}."
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "La devise dans laquelle les coûts et les budgets en argent sont affichés. Les services facturent en dollars américains ; les autres devises utilisent le taux de la Banque centrale européenne du {date}.",
+  "free": "gratuit",
+  "budget": "économique",
+  "standard": "standard",
+  "premium": "premium",
+  "price unknown": "prix inconnu"
  },
  "examples": {
   "review": {
@@ -2916,6 +2921,15 @@
   "at the ECB rate of {date}": "au taux de la BCE du {date}",
   "at the rate set {where_keys}": "au taux fixé {where_keys}",
   "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.": "currency doit être usd, gbp, eur, jpy ou cny, pas « {raw} ». Corrigez-le {where_keys}.",
-  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (1 dollar américain = {rate})"
+  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (1 dollar américain = {rate})",
+  "free": "gratuit",
+  "budget": "économique",
+  "standard": "standard",
+  "premium": "premium",
+  "price unknown": "prix inconnu",
+  "Models: {list}.": "Modèles : {list}.",
+  "on this computer": "sur cet ordinateur",
+  "through {service}": "via {service}",
+  "{model}, by {maker}, {where}": "{model}, par {maker}, {where}"
  }
 }

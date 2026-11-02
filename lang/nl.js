@@ -935,7 +935,12 @@
 "yen":"yen",
 "yuan":"yuan",
 "Currency":"Valuta",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"De valuta waarin kosten en geldbudgetten worden getoond. Diensten rekenen in Amerikaanse dollar af; andere valuta gebruiken de koers van de Europese Centrale Bank van {date}."
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"De valuta waarin kosten en geldbudgetten worden getoond. Diensten rekenen in Amerikaanse dollar af; andere valuta gebruiken de koers van de Europese Centrale Bank van {date}.",
+"free":"gratis",
+"budget":"voordelig",
+"standard":"standaard",
+"premium":"premium",
+"price unknown":"prijs onbekend"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -1789,6 +1794,15 @@
 "at the ECB rate of {date}":"tegen de ECB-koers van {date}",
 "at the rate set {where_keys}":"tegen de koers ingesteld {where_keys}",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency moet usd, gbp, eur, jpy of cny zijn, niet ‘{raw}’. Pas het aan {where_keys}.",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 Amerikaanse dollar = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 Amerikaanse dollar = {rate})",
+"free":"gratis",
+"budget":"voordelig",
+"standard":"standaard",
+"premium":"premium",
+"price unknown":"prijs onbekend",
+"Models: {list}.":"Modellen: {list}.",
+"on this computer":"op deze computer",
+"through {service}":"via {service}",
+"{model}, by {maker}, {where}":"{model}, van {maker}, {where}"
 }
 };

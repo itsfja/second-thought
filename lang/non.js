@@ -935,7 +935,12 @@
 "yen":"jen",
 "yuan":"júan",
 "Currency":"Mynt",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Myntin er kostnaðr ok fjármǫrk eru sýnd í. Þjónusturnar heimta í Ameríkudǫlum; aðrar myntir nota gengi Evrópska seðlabankans frá {date}."
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Myntin er kostnaðr ok fjármǫrk eru sýnd í. Þjónusturnar heimta í Ameríkudǫlum; aðrar myntir nota gengi Evrópska seðlabankans frá {date}.",
+"free":"ókeypis",
+"budget":"ódýrt",
+"standard":"venjulegt",
+"premium":"dýrt",
+"price unknown":"verð ókunnt"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1789,7 +1794,16 @@
 "at the ECB rate of {date}":"at gengi ECB frá {date}",
 "at the rate set {where_keys}":"at genginu er sett er {where_keys}",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency skal vera usd, gbp, eur, jpy eða cny, eigi „{raw}“. Bæt þat {where_keys}.",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 Ameríkudalr = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 Ameríkudalr = {rate})",
+"free":"ókeypis",
+"budget":"ódýrt",
+"standard":"venjulegt",
+"premium":"dýrt",
+"price unknown":"verð ókunnt",
+"Models: {list}.":"Líkǫn: {list}.",
+"on this computer":"á þessi tǫlvu",
+"through {service}":"um {service}",
+"{model}, by {maker}, {where}":"{model}, frá {maker}, {where}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

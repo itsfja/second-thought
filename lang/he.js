@@ -936,7 +936,12 @@
 "yen":"ין",
 "yuan":"יואן",
 "Currency":"מטבע",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"המטבע שבו מוצגים העלויות ותקציבי הכסף. השירותים גובים בדולר אמריקאי; מטבעות אחרים משתמשים בשער של הבנק המרכזי האירופי מ־{date}."
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"המטבע שבו מוצגים העלויות ותקציבי הכסף. השירותים גובים בדולר אמריקאי; מטבעות אחרים משתמשים בשער של הבנק המרכזי האירופי מ־{date}.",
+"free":"חינם",
+"budget":"חסכוני",
+"standard":"רגיל",
+"premium":"פרימיום",
+"price unknown":"מחיר לא ידוע"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1790,6 +1795,15 @@
 "at the ECB rate of {date}":"לפי שער הבנק המרכזי האירופי מ־{date}",
 "at the rate set {where_keys}":"לפי השער שנקבע {where_keys}",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency צריך להיות usd, gbp, eur, jpy או cny, לא “{raw}”. תקנו אותו {where_keys}.",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (‏1 דולר אמריקאי = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (‏1 דולר אמריקאי = {rate})",
+"free":"חינם",
+"budget":"חסכוני",
+"standard":"רגיל",
+"premium":"פרימיום",
+"price unknown":"מחיר לא ידוע",
+"Models: {list}.":"מודלים: {list}.",
+"on this computer":"במחשב הזה",
+"through {service}":"דרך {service}",
+"{model}, by {maker}, {where}":"{model}, של {maker}, {where}"
 }
 };

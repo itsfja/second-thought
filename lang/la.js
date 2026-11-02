@@ -935,7 +935,12 @@
 "yen":"yen",
 "yuan":"yuan",
 "Currency":"Moneta",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Moneta in qua sumptus et summae pecuniae ostenduntur. Officia in dollariis Americanis exigunt; aliae monetae cursu Argentariae Centralis Europaeae diei {date} utuntur."
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Moneta in qua sumptus et summae pecuniae ostenduntur. Officia in dollariis Americanis exigunt; aliae monetae cursu Argentariae Centralis Europaeae diei {date} utuntur.",
+"free":"gratis",
+"budget":"parci",
+"standard":"communis",
+"premium":"pretiosus",
+"price unknown":"pretium ignotum"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1789,7 +1794,16 @@
 "at the ECB rate of {date}":"cursu ACE diei {date}",
 "at the rate set {where_keys}":"cursu {where_keys} statuto",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency esse debet usd, gbp, eur, jpy aut cny, non “{raw}”. Corrige {where_keys}.",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 dollarium Americanum = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 dollarium Americanum = {rate})",
+"free":"gratis",
+"budget":"parci",
+"standard":"communis",
+"premium":"pretiosus",
+"price unknown":"pretium ignotum",
+"Models: {list}.":"Exemplaria: {list}.",
+"on this computer":"in hoc computatro",
+"through {service}":"per {service}",
+"{model}, by {maker}, {where}":"{model}, a {maker}, {where}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

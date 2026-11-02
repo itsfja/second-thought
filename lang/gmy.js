@@ -936,7 +936,12 @@
 "yen":"yen",
 "yuan":"yuan",
 "Currency":"𐀜𐀖𐀭𐀔",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"𐀜𐀖𐀭𐀔 𐀁𐀠 𐀃 𐀅𐀞𐀙 𐀏𐀂 𐀓𐀬𐀰 𐀳𐀩𐀔 𐀆𐀑𐀝𐀲𐀂. e-re-ga-si-ja 𐀀𐀞𐀂𐀳𐀂 𐀁𐀠 US dollar; 𐀀𐀨 𐀜𐀖𐀭𐀔 𐀴𐀔 ECB {date} 𐀐𐀩𐀲𐀂."
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"𐀜𐀖𐀭𐀔 𐀁𐀠 𐀃 𐀅𐀞𐀙 𐀏𐀂 𐀓𐀬𐀰 𐀳𐀩𐀔 𐀆𐀑𐀝𐀲𐀂. e-re-ga-si-ja 𐀀𐀞𐀂𐀳𐀂 𐀁𐀠 US dollar; 𐀀𐀨 𐀜𐀖𐀭𐀔 𐀴𐀔 ECB {date} 𐀐𐀩𐀲𐀂.",
+"free":"𐀀𐀴𐀗",
+"budget":"𐀃𐀪𐀒𐀴𐀗",
+"standard":"𐀕𐀰",
+"premium":"𐀡𐀬𐀴𐀗",
+"price unknown":"𐀴𐀔 𐀀𐀒𐀜𐀵"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1790,7 +1795,16 @@
 "at the ECB rate of {date}":"ti-ma ECB {date}",
 "at the rate set {where_keys}":"ti-ma o-ri-me-na {where_keys}",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency usd, gbp, eur, jpy e cny e-me-ne, o-u {raw}. o-to-ro-se {where_keys}.",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 US dollar = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 US dollar = {rate})",
+"free":"a-ti-mo",
+"budget":"o-ri-ko-ti-mo",
+"standard":"me-so",
+"premium":"po-ru-ti-mo",
+"price unknown":"ti-ma a-ko-no-to",
+"Models: {list}.":"ro-ki-si-te-ri-ja: {list}.",
+"on this computer":"e-pi to-to ro-ki-si-te-ri-jo",
+"through {service}":"di-a {service}",
+"{model}, by {maker}, {where}":"{model}, u-po {maker}, {where}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

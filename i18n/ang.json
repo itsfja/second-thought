@@ -1430,7 +1430,12 @@
   "yen": "yen",
   "yuan": "yuan",
   "Currency": "Feohcynn",
-  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "Þæt feohcynn þe ondlean and feohgemetu on sind geeowod. Þa þenunga manigaþ on Americaniscum dollarum; oþru feohcynn brucaþ þæs Europiscan Heafodbancan weorþes of {date}."
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "Þæt feohcynn þe ondlean and feohgemetu on sind geeowod. Þa þenunga manigaþ on Americaniscum dollarum; oþru feohcynn brucaþ þæs Europiscan Heafodbancan weorþes of {date}.",
+  "free": "orceapes",
+  "budget": "lytelceap",
+  "standard": "gemæne",
+  "premium": "deorwyrþe",
+  "price unknown": "weorþ uncuþ"
  },
  "examples": {
   "review": {
@@ -2916,7 +2921,16 @@
   "at the ECB rate of {date}": "be þæs ECB weorþe of {date}",
   "at the rate set {where_keys}": "be þam weorþe þe is geseted {where_keys}",
   "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.": "currency sceal beon usd, gbp, eur, jpy oþþe cny, na “{raw}”. Gerihte hit {where_keys}.",
-  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (1 Americanisc dollar = {rate})"
+  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (1 Americanisc dollar = {rate})",
+  "free": "orceapes",
+  "budget": "lytelceap",
+  "standard": "gemæne",
+  "premium": "deorwyrþe",
+  "price unknown": "weorþ uncuþ",
+  "Models: {list}.": "Bysena: {list}.",
+  "on this computer": "on þissum rimcræfte",
+  "through {service}": "þurh {service}",
+  "{model}, by {maker}, {where}": "{model}, fram {maker}, {where}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

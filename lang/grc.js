@@ -935,7 +935,12 @@
 "yen":"γιέν",
 "yuan":"γιουάν",
 "Currency":"Νόμισμα",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Τὸ νόμισμα ἐν ᾧ αἱ δαπάναι καὶ οἱ ὅροι χρημάτων δείκνυνται. Αἱ ὑπηρεσίαι ἐν δολλαρίοις Ἀμερικανικοῖς πράττονται· τὰ ἄλλα νομίσματα χρῶνται τῇ τιμῇ τῆς Εὐρωπαϊκῆς Κεντρικῆς Τραπέζης τῆς {date}."
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Τὸ νόμισμα ἐν ᾧ αἱ δαπάναι καὶ οἱ ὅροι χρημάτων δείκνυνται. Αἱ ὑπηρεσίαι ἐν δολλαρίοις Ἀμερικανικοῖς πράττονται· τὰ ἄλλα νομίσματα χρῶνται τῇ τιμῇ τῆς Εὐρωπαϊκῆς Κεντρικῆς Τραπέζης τῆς {date}.",
+"free":"δωρεάν",
+"budget":"εὔωνον",
+"standard":"μέσον",
+"premium":"πολυτελές",
+"price unknown":"τιμὴ ἄγνωστος"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1789,7 +1794,16 @@
 "at the ECB rate of {date}":"τῇ τιμῇ τῆς ΕΚΤ τῆς {date}",
 "at the rate set {where_keys}":"τῇ τιμῇ τῇ ὡρισμένῃ {where_keys}",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"τὸ currency δεῖ εἶναι usd, gbp, eur, jpy ἢ cny, οὐ «{raw}». Ἐπανόρθωσον {where_keys}.",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 δολλάριον Ἀμερικανικόν = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 δολλάριον Ἀμερικανικόν = {rate})",
+"free":"δωρεάν",
+"budget":"εὔωνον",
+"standard":"μέσον",
+"premium":"πολυτελές",
+"price unknown":"τιμὴ ἄγνωστος",
+"Models: {list}.":"Πρότυπα· {list}.",
+"on this computer":"ἐν τούτῳ τῷ λογιστηρίῳ",
+"through {service}":"διὰ {service}",
+"{model}, by {maker}, {where}":"{model}, ὑπὸ {maker}, {where}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

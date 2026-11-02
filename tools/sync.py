@@ -127,10 +127,10 @@ def safety_json() -> str:
 
 
 def money_json() -> str:
-    """CURRENCIES and RATES in providers.py, for the page."""
+    """CURRENCIES, RATES and BANDS in providers.py, for the page."""
     tree = ast.parse(SERVICES.read_text(encoding="utf-8"))
     out = {}
-    for name in ("CURRENCIES", "RATES"):
+    for name in ("CURRENCIES", "RATES", "BANDS"):
         found = [n.value for n in tree.body if isinstance(n, ast.Assign) and [ast.unparse(t) for t in n.targets] == [name]]
         if len(found) != 1:
             sys.exit(f"python/second_thought/providers.py should set {name} = {{...}} once, at the top level.")

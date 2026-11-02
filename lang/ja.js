@@ -935,7 +935,12 @@
 "yen":"円",
 "yuan":"人民元",
 "Currency":"通貨",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"費用と金額の予算を表示する通貨です。各サービスは米ドルで請求します。ほかの通貨は欧州中央銀行の {date} のレートを使います。"
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"費用と金額の予算を表示する通貨です。各サービスは米ドルで請求します。ほかの通貨は欧州中央銀行の {date} のレートを使います。",
+"free":"無料",
+"budget":"低価格",
+"standard":"標準",
+"premium":"プレミアム",
+"price unknown":"価格不明"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1789,6 +1794,15 @@
 "at the ECB rate of {date}":"ECB の {date} のレートで",
 "at the rate set {where_keys}":"{where_keys} で設定したレートで",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency は usd、gbp、eur、jpy、cny のいずれかにしてください（「{raw}」ではなく）。{where_keys} で直してください。",
-"{code}, {note} (1 US dollar = {rate})":"{code}、{note}（1 米ドル = {rate}）"
+"{code}, {note} (1 US dollar = {rate})":"{code}、{note}（1 米ドル = {rate}）",
+"free":"無料",
+"budget":"低価格",
+"standard":"標準",
+"premium":"プレミアム",
+"price unknown":"価格不明",
+"Models: {list}.":"モデル：{list}。",
+"on this computer":"このコンピューター上",
+"through {service}":"{service} 経由",
+"{model}, by {maker}, {where}":"{model}（{maker} 製、{where}）"
 }
 };

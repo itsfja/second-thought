@@ -935,7 +935,12 @@
 "yen":"yenes",
 "yuan":"yuanes",
 "Currency":"Moneda",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"La moneda en que se muestran los costes y los presupuestos en dinero. Los servicios cobran en dólares estadounidenses; las demás monedas usan el tipo del Banco Central Europeo del {date}."
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"La moneda en que se muestran los costes y los presupuestos en dinero. Los servicios cobran en dólares estadounidenses; las demás monedas usan el tipo del Banco Central Europeo del {date}.",
+"free":"gratis",
+"budget":"económico",
+"standard":"estándar",
+"premium":"prémium",
+"price unknown":"precio desconocido"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
@@ -1789,6 +1794,15 @@
 "at the ECB rate of {date}":"al tipo del BCE del {date}",
 "at the rate set {where_keys}":"al tipo fijado {where_keys}",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency debe ser usd, gbp, eur, jpy o cny, no “{raw}”. Corrígelo {where_keys}.",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 dólar estadounidense = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 dólar estadounidense = {rate})",
+"free":"gratis",
+"budget":"económico",
+"standard":"estándar",
+"premium":"prémium",
+"price unknown":"precio desconocido",
+"Models: {list}.":"Modelos: {list}.",
+"on this computer":"en este ordenador",
+"through {service}":"a través de {service}",
+"{model}, by {maker}, {where}":"{model}, de {maker}, {where}"
 }
 };

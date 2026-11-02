@@ -935,7 +935,12 @@
 "yen":"Yen",
 "yuan":"Yuan",
 "Currency":"Währung",
-"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Die Währung, in der Kosten und Geldbudgets angezeigt werden. Die Dienste rechnen in US-Dollar ab; andere Währungen nutzen den Kurs der Europäischen Zentralbank vom {date}."
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Die Währung, in der Kosten und Geldbudgets angezeigt werden. Die Dienste rechnen in US-Dollar ab; andere Währungen nutzen den Kurs der Europäischen Zentralbank vom {date}.",
+"free":"kostenlos",
+"budget":"günstig",
+"standard":"standard",
+"premium":"premium",
+"price unknown":"Preis unbekannt"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -1789,6 +1794,15 @@
 "at the ECB rate of {date}":"zum EZB-Kurs vom {date}",
 "at the rate set {where_keys}":"zum Kurs, der {where_keys} festgelegt ist",
 "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency muss usd, gbp, eur, jpy oder cny sein, nicht „{raw}“. Korrigieren Sie es {where_keys}.",
-"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 US-Dollar = {rate})"
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 US-Dollar = {rate})",
+"free":"kostenlos",
+"budget":"günstig",
+"standard":"standard",
+"premium":"premium",
+"price unknown":"Preis unbekannt",
+"Models: {list}.":"Modelle: {list}.",
+"on this computer":"auf diesem Computer",
+"through {service}":"über {service}",
+"{model}, by {maker}, {where}":"{model}, von {maker}, {where}"
 }
 };

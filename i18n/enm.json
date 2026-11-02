@@ -1430,7 +1430,12 @@
   "yen": "yen",
   "yuan": "yuan",
   "Currency": "Moneye",
-  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "The moneye that costes and budgetes in moneye ben shewed in. The services axen paiement in dollers of Amerike; othere moneyes usen the eschaunge of the Europeen Centre Bank of {date}."
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "The moneye that costes and budgetes in moneye ben shewed in. The services axen paiement in dollers of Amerike; othere moneyes usen the eschaunge of the Europeen Centre Bank of {date}.",
+  "free": "frely",
+  "budget": "good chepe",
+  "standard": "commune",
+  "premium": "precious",
+  "price unknown": "pris unknowe"
  },
  "examples": {
   "review": {
@@ -2916,7 +2921,16 @@
   "at the ECB rate of {date}": "at the ECB eschaunge of {date}",
   "at the rate set {where_keys}": "at the eschaunge set {where_keys}",
   "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.": "currency moot be usd, gbp, eur, jpy or cny, nat “{raw}”. Amende it {where_keys}.",
-  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (1 doller of Amerike = {rate})"
+  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (1 doller of Amerike = {rate})",
+  "free": "frely",
+  "budget": "good chepe",
+  "standard": "commune",
+  "premium": "precious",
+  "price unknown": "pris unknowe",
+  "Models: {list}.": "Models: {list}.",
+  "on this computer": "on this engyn",
+  "through {service}": "thurgh {service}",
+  "{model}, by {maker}, {where}": "{model}, by {maker}, {where}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",
