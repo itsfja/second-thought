@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 from .settings import WHERE_KEYS
 from .core import (BadJSON, CALL_TIMEOUT, CONTINUE_PROMPT, Finish, MAX_AI_CALLS, MAX_TOKENS, Reply, Retryable,
-    RunError, WEB_SEARCH_TOOL, _fit, _number_setting, _parse_json, _shape_problem, _short, to_str)
+    MEMORY_FILE, RunError, WEB_SEARCH_TOOL, _fit, _number_setting, _parse_json, _shape_problem, _short, to_str)
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
@@ -243,7 +243,6 @@ _RATES = {}  # the rates this program is using: per_euro, where they came from, 
 
 
 def _rates_file():
-    from .core import MEMORY_FILE
     return os.path.join(os.path.dirname(os.path.abspath(MEMORY_FILE)), ".second-thought-rates.json")
 
 
@@ -324,9 +323,6 @@ def money(dollars, cur=None):
 def dollars(amount):
     """An exact amount in US dollars, like a budget: '$0.50', '$12.00', and '$0.004' under a cent, rather than '$0.00'."""
     return amount_text(amount, "usd")
-
-
-fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run
 
 
 def rate_note():

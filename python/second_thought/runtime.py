@@ -16,7 +16,7 @@ import re
 import sys
 import time
 from .settings import RUNTIME_VERSION, WHERE_KEYS, on_github_actions
-from .providers import CURRENCY, ModelCalls, amount_text, band_text, call_cost, model_byline, model_label, money, per_dollar, rate_note
+from .providers import CURRENCY, ModelCalls, amount_text, fixed_rate, band_text, call_cost, model_byline, model_label, money, per_dollar, rate_note
 from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
     _locked, _need_picture, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js,
@@ -1812,6 +1812,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
             print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
         self._can = can
+        fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run. Not when the
+        # runtime loads: in python/runtime.py, providers comes before core, whose _number_setting it uses (#274)
         if "--doctor" in sys.argv:
             sys.exit(asyncio.run(self.doctor(can)))
         if "--update-runtime" in sys.argv:

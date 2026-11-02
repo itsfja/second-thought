@@ -29,6 +29,12 @@ class Version(unittest.TestCase):
         text = (support.ROOT / "python" / "runtime.py").read_text(encoding="utf-8")
         self.assertIn(f'RUNTIME_VERSION = "{RUNTIME_VERSION}"', text, "python/runtime.py is out of date: run python tools/sync.py")
 
+    def test_bundle_has_no_package_imports(self):
+        # A 'from .core import X' inside a function survives the join and fails in every exported program (#274).
+        text = (support.ROOT / "python" / "runtime.py").read_text(encoding="utf-8")
+        found = [line.strip() for line in text.splitlines() if re.match(r"\s*from \.", line) or "import second_thought" in line]
+        self.assertEqual(found, [], "python/runtime.py imports from the package: import at the top of the module instead")
+
     def test_exported_program_prints_it(self):
         runtime = (support.ROOT / "python" / "runtime.py").read_text(encoding="utf-8")
         with tempfile.TemporaryDirectory() as tmp:
