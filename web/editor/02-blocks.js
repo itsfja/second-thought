@@ -338,8 +338,8 @@
       tooltip:"If something inside fails in a way a second try could fix (a dropped connection, a garbled reply), waits a little and runs it again." },
     V("rb_error", "the error", [], "String", { style:"control", tooltip:"What went wrong in the most recent failure." }),
     /* Budget and asking first */
-    S("rb_budget", "limit this run to %1 tokens", [val("TOKENS")], { style:"control", inputsInline:true,
-      tooltip:"Before each model call, checks how many tokens this run has used. Once it reaches this number, the run stops. 0 means no limit. On this page the count is an estimate; exported Python uses the exact counts." }),
+    S("rb_budget", "limit this run to %1 %2", [val("TOKENS"), { type:"field_dropdown", name:"UNIT", options:[["tokens","tokens"],["US dollars","dollars"]] }], { style:"control", inputsInline:true,
+      tooltip:"Before each model call, checks how many tokens this run has used, or what it has spent at the models' list prices. Once it reaches this amount, the run stops. 0 means no limit. In dollars, a model with no known price can't be counted, so the run stops rather than going on with no limit. On this page the counts are estimates; exported Python uses the exact counts." }),
     V("rb_tokens_used", "tokens used so far", [], "Number", { style:"control",
       tooltip:"Tokens this run has used: sent plus received. An estimate on this page, exact in exported Python." }),
     V("rb_setup_check", "this program's setup check", [], "String", { style:"control",

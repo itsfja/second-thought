@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"divulga %1 et exspecta","tooltip":"Omnia scripta «cum accipio» huius nuntii incipit et exspectat dum omnia finiantur."},
 "rb_broadcast_with":{"message0":"divulga %1 cum %2","tooltip":"Omnia scripta «cum accipio» nuntii incipit. Quodque valorem accipit ut «valorem nuntii»."},
 "rb_broadcast_with_wait":{"message0":"divulga %1 cum %2 et exspecta"},
-"rb_budget":{"message0":"hanc exsecutionem ad %1 tokens circumscribe","tooltip":"Ante quamque vocationem exemplaris inspicit quot tokens haec exsecutio iam consumpserit. Cum hunc numerum attingit, exsecutio desinit. 0 significat nullum finem. In hac pagina numerus aestimatur; Python exportatum numeros accuratos adhibet."},
+"rb_budget":{"message0":"hanc exsecutionem ad %1 %2 circumscribe","tooltip":"Ante quamque vocationem exemplaris inspicit quot tokens haec exsecutio consumpserit, aut quantum pretiis indicis exemplarium impenderit. Ubi hanc quantitatem attingit, exsecutio sistitur. 0 nullum finem significat. In dollariis exemplar sine pretio noto numerari non potest, itaque exsecutio sistitur potius quam sine fine pergat. In hac pagina numeri aestimationes sunt; Python exportatum numeros exactos adhibet."},
 "rb_cal_when":{"message0":"cum eventus calendarii post %1 minuta incipit","tooltip":"Lateres infra exsequitur tot minutis ante quemque eventum calendarii tui (eventus totius diei non numerantur). «Quod advenit» dat title, start, end, location, minutes et text."},
 "rb_calendar":{"message0":"calendarium proximorum %1 dierum","tooltip":"Eventus calendarii tui ab hodie, ut schedae: day, start, end, title, location. Python exportatum CALENDAR_URL legit (inscriptionem iCal privatam calendarii tui); haec pagina calendario exemplari utitur."},
 "rb_chat":{"message0":"colloquium %1 : %2","tooltip":"Nuntium in colloquio nominato mittit. Claude priores vices illius colloquii videt."},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"dum haec pagina aperta est","permanent":"in perpetuum"},
 "rb_mem_set_for.UNIT":{"m":"minuta","h":"horas","d":"dies"},
 "rb_mem_add.KIND":{"transient":"dum haec pagina aperta est","permanent":"in perpetuum"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (imagines pictae)","orig":"fasciculus originalis"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (imagines pictae)","orig":"fasciculus originalis"},
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollaria Americana"}
 },
 "categories":{
 "Events":"Eventus",
@@ -922,7 +923,12 @@
 "Keyboard help":"Auxilium claviaturae",
 "about {cost}":"circiter {cost}",
 "under {cost}":"minus quam {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Pretiis indicis exemplorum id est {cost}; in hac pagina ad usum tuum Claude numeratur."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Pretiis indicis exemplorum id est {cost}; in hac pagina ad usum tuum Claude numeratur.",
+"No money budget for this run.":"Nulla pecuniae summa huic exsecutioni.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Sistitum: exemplar quo haec exsecutio iam usa est pretium notum non habet, itaque intra summam {budget} teneri non potest. Exemplaribus cum pretio utere, aut summa in tokens.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Sistitum: haec exsecutio circiter {cost} pretiis indicis impendit, quod summam {budget} attingit. Auge quantitatem in clauso 'hanc exsecutionem circumscribe'.",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Sistitum: {model} pretium notum non habet, itaque haec exsecutio intra summam {budget} teneri non potest. Exemplari cum pretio utere, aut summa in tokens.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Haec exsecutio ante vocationem Claude sistitur ubi circiter {budget} pretiis indicis impendit (circiter {cost} adhuc)."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1765,7 +1771,12 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"{path} scribi non potuit ({err}). Nihil mutatum est.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Runtime ex {version} in {latest} renovatum est. Vetus fasciculus ut {backup} servatus est.",
 "What changed: {url}":"Quid mutatum sit: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"Fasciculus mutatus est, itaque ante proximam exsecutionem iterum veniam petet."
+"The file changed, so it asks to be allowed again before its next run.":"Fasciculus mutatus est, itaque ante proximam exsecutionem iterum veniam petet.",
+"No money budget for this run.":"Nulla pecuniae summa huic exsecutioni.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Sistitum: exemplar quo haec exsecutio iam usa est pretium notum non habet, itaque intra summam {x} teneri non potest. Exemplaribus cum pretio utere, aut summa in tokens.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Sistitum: haec exsecutio {x} pretiis indicis impendit, quod summam {x2} attingit. Auge quantitatem in clauso 'hanc exsecutionem circumscribe' (aut budget_dollars in second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Sistitum: {model} pretium notum non habet, itaque haec exsecutio intra summam {x} teneri non potest. Exemplari cum pretio utere, aut summa in tokens.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Haec exsecutio ante vocationem exemplaris sistitur ubi {x} pretiis indicis impendit (adhuc impensum: {x2})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

@@ -82,6 +82,7 @@
       "; backups = " + (backupTiers().join(", ") || "none"),
       "", "[run]",
       "; budget = 50000      stop a run before a model call once it has used this many tokens (0 = no limit)",
+      "; budget_dollars = 0.50   or once it has spent this much, in US dollars at the models' list prices (0 = no limit)",
       "; save_log = yes      write each run's log to the logs folder, next to the program",
       "; stream = yes        show Claude writing as it goes (yes or no; normally only when you run it in a terminal yourself)",
       "; resume = yes        if a run stopped part-way, pick up where it stopped next time (yes or no; normally it asks you)",
@@ -524,7 +525,7 @@
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
-          case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + ")"); break;
+          case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + (b.getFieldValue("UNIT") === "dollars" ? ", \"dollars\"" : "") + ")"); break;
           case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": break;
           case "rb_agent": {
             const tools = [];

@@ -49,6 +49,7 @@ def _number_setting(name, default, what, whole=False):
 CALL_TIMEOUT = _number_setting("RB_CALL_TIMEOUT", 300, "a number of seconds, like 120") or None  # one model call gives up after this long
 MAX_SECONDS = _number_setting("RB_MAX_SECONDS", 0, "a number of seconds, like 900")             # any run stops after this long
 BUDGET = _number_setting("RB_BUDGET", 0, "a whole number of tokens, like 50000", whole=True)      # tokens per run
+BUDGET_DOLLARS = _number_setting("RB_BUDGET_DOLLARS", 0, "an amount in US dollars, like 0.50")  # US dollars per run, at list prices
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
 MAX_SCRIPTS = 100       # scripts started by broadcasts in one run

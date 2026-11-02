@@ -247,11 +247,16 @@
     if (halting()) throw new Halt();
     if (++run.calls > MAX_AI_CALLS) fail(tr("Stopped after {n} Claude calls in one run, to protect your usage. Check for loops that call Claude too often.", { n:MAX_AI_CALLS }));
     if (run.budget && tokensUsed() >= run.budget) fail(tr("Stopped: this run has used about {used} tokens, which reaches its budget of {budget}. Raise the number in the 'limit this run' block.", { used:tokensUsed().toLocaleString(), budget:run.budget.toLocaleString() }));
+    if (run.budgetDollars) {
+      if (!priceOf(run.tier)) fail(tr("Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.", { model:tierLabel(run.tier), budget:dollars(run.budgetDollars) }));
+      if (!run.costKnown) fail(tr("Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.", { budget:dollars(run.budgetDollars) }));
+      if (run.cost >= run.budgetDollars) fail(tr("Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.", { cost:dollars(run.cost), budget:dollars(run.budgetDollars) }));
+    }
     run.tokIn += estTokens(prompt) + (images ? images.length * 1600 : 0);
     setStatus(tr("running") + " · " + tr(run.calls === 1 ? "{n} Claude call" : "{n} Claude calls", { n:run.calls }) + " · " + tr("~{n} tokens", { n:fmtTokens(tokensUsed()) }));
     const sample = run.sample;
     // Backups stand in for the primary model only; a block that names its own model keeps it.
-    const tiers = [run.tier].concat(run.tier === run.primary ? run.backups : []);
+    const tiers = [run.tier].concat(run.tier === run.primary ? run.backups : []).filter((t, i) => !i || !run.budgetDollars || priceOf(t));
     let last = null;
     for (let n = 0; n < tiers.length; n++) {
       if (n) addStep("Backup", { mono:true, text:tr("{model} failed: {problem}\nTrying {next} instead.", { model:tierLabel(tiers[n - 1]), problem:String((last && last.message) || last).slice(0, 160), next:tierLabel(tiers[n]) }) }).done("backup", "warn");
@@ -327,17 +332,20 @@
      Claude answers for every model, so that's the price used for another service's tier of the same size. */
   const PRICES = {};
   SERVICES.forEach(s => Object.keys(s.tiers).forEach(k => { const p = s.prices && s.prices[s.tiers[k][0]]; if (p) PRICES[s.prefix + k] = p; }));
+  const priceOf = tier => PRICES[isElsewhere(tier) ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier];
   function addCost(tier, tin, tout){
-    const p = PRICES[isElsewhere(tier) ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier];
+    const p = priceOf(tier);
     if (!p) { run.costKnown = false; return; }
     run.cost += (tin * p[0] + tout * p[1]) / 1e6;
   }
   // 'about $0.03' or 'under $0.01'. Matches the runtime's money().
   const money = d => d < 0.005 ? tr("under {cost}", { cost:"$0.01" }) : tr("about {cost}", { cost:"$" + d.toFixed(2) });
+  // An exact amount, like a budget: '$0.50'. Matches the runtime's dollars().
+  const dollars = d => d > 0 && d < 0.01 ? "$" + d.toFixed(6).replace(/0+$/, "") : "$" + d.toLocaleString("en-US", { minimumFractionDigits:2, maximumFractionDigits:2 });
   function usageLine(){
     if (!run || !run.calls) return "";
     return "About " + tokensUsed().toLocaleString() + " tokens (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from the length of the text. Exported Python reports exact counts." +
-      (run.budget ? " Budget: " + run.budget.toLocaleString() + "." : "") +
+      (run.budget ? " Budget: " + run.budget.toLocaleString() + "." : "") + (run.budgetDollars ? " Budget: " + dollars(run.budgetDollars) + "." : "") +
       (run.costKnown && run.cost ? " " + tr("At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.", { cost:money(run.cost) }) : "");
   }
 

@@ -60,7 +60,7 @@ There are more categories down the left side of the screen.
 - Do several jobs at the same time.
 - Wait until a time of day, then start a job by itself.
 - Retry when something goes wrong.
-- Stop itself before it uses too many tokens: put **limit this run to … tokens** near the top.
+- Stop itself before it uses too many tokens, or spends too much: put **limit this run to …** near the top, in tokens or US dollars.
 - Ask you first before it sends a message, says something out loud, saves a file or changes something at home: use **ask me before …**.
 - Use one of your saved programs as a single block: **run program … with …**, from **Programs**.
 - Use other models alongside Claude, for example Claude writes and Gemini reviews. See [Models](#models).
@@ -264,6 +264,7 @@ save_log = yes
 ```
 
 - `budget` stops each run before a model call once it has used that many tokens. In Python the count is exact, because every service reports its usage. A **limit this run** block wins over this line.
+- `budget_dollars` does the same in US dollars, at the models' list prices, like `budget_dollars = 0.50`. That's safer for a program that runs on its own, on a schedule or on GitHub Actions. A model whose price isn't known can't be counted, so a run that would use one stops and says so, rather than going on with no limit; backups with no known price are skipped. A run checks before each call, so its last call can take it a little past the amount.
 - `stream` shows the model writing as it goes, on one line that counts the characters. Normally this only happens when you run the program in a terminal yourself.
 - `resume` is for runs that stop part-way, for example because the internet dropped or you pressed Ctrl+C. The program keeps a note of each finished step, and next time it can pick up where it stopped: model answers, your answers and messages already sent are reused, not asked or sent again. In a terminal it asks you first; set `resume = yes` or `resume = no` for unattended programs. If you change the program, it starts afresh.
 - `max_seconds` stops any run that takes longer than that, whatever it's doing. `call_timeout` gives up on a single model call after that many seconds (300 by default; 0 means no timeout). If one of these is mistyped, the program stops straight away and says which setting is wrong.

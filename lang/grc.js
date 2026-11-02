@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"κήρυξον %1 καὶ μένε","tooltip":"Ἄρχεται πάσης σειρᾶς «ὅταν λάβω» περὶ ταύτης τῆς ἀγγελίας καὶ μένει ἕως ἂν πᾶσαι τελεσθῶσιν."},
 "rb_broadcast_with":{"message0":"κήρυξον %1 μετὰ %2","tooltip":"Ἄρχεται πάσης σειρᾶς «ὅταν λάβω» περὶ τῆς ἀγγελίας. Ἑκάστη λαμβάνει τὴν τιμὴν ὡς «τιμὴ τῆς ἀγγελίας»."},
 "rb_broadcast_with_wait":{"message0":"κήρυξον %1 μετὰ %2 καὶ μένε"},
-"rb_budget":{"message0":"ὅρισον ταύτην τὴν πρᾶξιν εἰς %1 tokens","tooltip":"Πρὸ ἑκάστης κλήσεως τοῦ τύπου ἐξετάζει πόσα tokens ἡ πρᾶξις αὕτη ἀνήλωσεν. Ὅταν τοῦτον τὸν ἀριθμὸν φθάσῃ, ἡ πρᾶξις παύεται. 0 σημαίνει οὐδένα ὅρον. Ἐν τῇδε τῇ σελίδι ὁ ἀριθμὸς εἰκασία ἐστίν· ὁ ἐξαχθεὶς Python τοῖς ἀκριβέσι χρῆται."},
+"rb_budget":{"message0":"ὅρισον ταύτην τὴν πρᾶξιν εἰς %1 %2","tooltip":"Πρὸ ἑκάστης κλήσεως προγράμματος ἐξετάζει πόσα tokens ἀνήλωσεν αὕτη ἡ πρᾶξις, ἢ πόσον ἀνήλωσε ταῖς τιμαῖς τοῦ καταλόγου τῶν προγραμμάτων. Ὅταν τοῦτο τὸ ποσὸν ἐξίκηται, ἡ πρᾶξις παύεται. Τὸ 0 σημαίνει οὐδένα ὅρον. Ἐν δολλαρίοις, πρόγραμμα ἄνευ γνωστῆς τιμῆς οὐ δύναται ἀριθμεῖσθαι, διὸ ἡ πρᾶξις παύεται μᾶλλον ἢ ἄνευ ὅρου προχωρεῖ. Ἐν ταύτῃ τῇ σελίδι οἱ ἀριθμοὶ εἰκασίαι εἰσίν· τὸ ἐξαχθὲν Python χρῆται τοῖς ἀκριβέσιν."},
 "rb_cal_when":{"message0":"ὅταν συμβὰν ἡμερολογίου ἄρχηται ἐν %1 λεπτοῖς","tooltip":"Τρέχει τὰς πλίνθους τὰς κάτω τοσαῦτα λεπτὰ πρὸ ἑκάστου συμβάντος ἐν τῷ ἡμερολογίῳ σου (τὰ ὅλης ἡμέρας οὐ λογίζεται). Τὸ «τί ἦλθεν» δίδωσι title, start, end, location, minutes καὶ text."},
 "rb_calendar":{"message0":"ἡμερολόγιον τῶν ἑπομένων %1 ἡμερῶν","tooltip":"Τὰ συμβάντα τοῦ ἡμερολογίου σου ἀπὸ σήμερον, ὡς γραφαί· day, start, end, title, location. Ὁ ἐξαχθεὶς Python ἀναγινώσκει τὸ CALENDAR_URL (τὸν ἴδιον iCal τόπον τοῦ ἡμερολογίου σου)· ἥδε ἡ σελὶς παραδείγματι ἡμερολογίου χρῆται."},
 "rb_chat":{"message0":"ὁμίλει %1 : %2","tooltip":"Πέμπει ἀγγελίαν ἐν ὀνομαστῇ ὁμιλίᾳ. Ὁ Claude βλέπει τὰ πρότερα τῆς ὁμιλίας ἐκείνης."},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"ἐν ᾧ ἥδε ἡ σελὶς ἀνέῳκται","permanent":"εἰς ἀεί"},
 "rb_mem_set_for.UNIT":{"m":"λεπτά","h":"ὥρας","d":"ἡμέρας"},
 "rb_mem_add.KIND":{"transient":"ἐν ᾧ ἥδε ἡ σελὶς ἀνέῳκται","permanent":"εἰς ἀεί"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (γεγραμμέναι εἰκόνες)","orig":"τὸ ἀρχικὸν τεῦχος"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (γεγραμμέναι εἰκόνες)","orig":"τὸ ἀρχικὸν τεῦχος"},
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολλάρια Ἀμερικανικά"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -922,7 +923,12 @@
 "Keyboard help":"Βοήθεια πληκτρολογίου",
 "about {cost}":"περὶ {cost}",
 "under {cost}":"ἔλαττον {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Ταῖς γεγραμμέναις τιμαῖς τῶν προτύπων τοῦτ' ἔστι {cost}· ἐν ταύτῃ δὲ τῇ σελίδι εἰς τὴν σὴν τοῦ Claude χρῆσιν λογίζεται."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Ταῖς γεγραμμέναις τιμαῖς τῶν προτύπων τοῦτ' ἔστι {cost}· ἐν ταύτῃ δὲ τῇ σελίδι εἰς τὴν σὴν τοῦ Claude χρῆσιν λογίζεται.",
+"No money budget for this run.":"Οὐδεὶς χρημάτων ὅρος ταύτῃ τῇ πράξει.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Πεπαυμένον· πρόγραμμα ᾧ ἤδη ἐχρήσατο αὕτη ἡ πρᾶξις οὐκ ἔχει γνωστὴν τιμήν, διὸ οὐ δύναται ἐντὸς τοῦ ὅρου τῶν {budget} μένειν. Χρῶ προγράμμασι μετὰ τιμῆς, ἢ ὅρῳ ἐν tokens.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Πεπαυμένον· αὕτη ἡ πρᾶξις ἀνήλωσε περὶ {cost} ταῖς τιμαῖς τοῦ καταλόγου, ὃ τὸν ὅρον τῶν {budget} ἐξικνεῖται. Αὔξησον τὸ ποσὸν ἐν τῷ πλινθίῳ «ὅρισον ταύτην τὴν πρᾶξιν».",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Πεπαυμένον· τὸ {model} οὐκ ἔχει γνωστὴν τιμήν, διὸ αὕτη ἡ πρᾶξις οὐ δύναται ἐντὸς τοῦ ὅρου τῶν {budget} μένειν. Χρῶ προγράμματι μετὰ τιμῆς, ἢ ὅρῳ ἐν tokens.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Αὕτη ἡ πρᾶξις παύεται πρὸ κλήσεως τοῦ Claude ὅταν ἀναλώσῃ περὶ {budget} ταῖς τιμαῖς τοῦ καταλόγου (περὶ {cost} μέχρι νῦν)."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1765,7 +1771,12 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"Οὐκ ἐξῆν γράψαι τὸ {path} ({err}). Οὐδὲν μετεβλήθη.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Τὸ runtime ἀνενεώθη ἐκ τῆς {version} εἰς τὴν {latest}. Τὸ παλαιὸν τεῦχος σῴζεται ὡς {backup}.",
 "What changed: {url}":"Τί μετεβλήθη· {url}",
-"The file changed, so it asks to be allowed again before its next run.":"Τὸ τεῦχος μετεβλήθη, διὸ πάλιν αἰτήσει ἄδειαν πρὸ τῆς ἐχομένης πράξεως."
+"The file changed, so it asks to be allowed again before its next run.":"Τὸ τεῦχος μετεβλήθη, διὸ πάλιν αἰτήσει ἄδειαν πρὸ τῆς ἐχομένης πράξεως.",
+"No money budget for this run.":"Οὐδεὶς χρημάτων ὅρος ταύτῃ τῇ πράξει.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Πεπαυμένον· πρόγραμμα ᾧ ἤδη ἐχρήσατο αὕτη ἡ πρᾶξις οὐκ ἔχει γνωστὴν τιμήν, διὸ οὐ δύναται ἐντὸς τοῦ ὅρου τῶν {x} μένειν. Χρῶ προγράμμασι μετὰ τιμῆς, ἢ ὅρῳ ἐν tokens.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Πεπαυμένον· αὕτη ἡ πρᾶξις ἀνήλωσε {x} ταῖς τιμαῖς τοῦ καταλόγου, ὃ τὸν ὅρον τῶν {x2} ἐξικνεῖται. Αὔξησον τὸ ποσὸν ἐν τῷ πλινθίῳ «ὅρισον ταύτην τὴν πρᾶξιν» (ἢ budget_dollars ἐν τῷ second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Πεπαυμένον· τὸ {model} οὐκ ἔχει γνωστὴν τιμήν, διὸ αὕτη ἡ πρᾶξις οὐ δύναται ἐντὸς τοῦ ὅρου τῶν {x} μένειν. Χρῶ προγράμματι μετὰ τιμῆς, ἢ ὅρῳ ἐν tokens.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Αὕτη ἡ πρᾶξις παύεται πρὸ κλήσεως προγράμματος ὅταν ἀναλώσῃ {x} ταῖς τιμαῖς τοῦ καταλόγου (ἀνηλωμένα μέχρι νῦν· {x2})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",
