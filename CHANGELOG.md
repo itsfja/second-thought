@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Fixed
+- A program with `currency` set to `gbp`, `eur`, `jpy` or `cny` stopped as it started, and one whose **limit this run** block was in pounds, euros, yen or yuan stopped when it set the budget (#274). Both came in with 3.3.0: two names the runtime only found when run as part of the package, not inside an exported program. A program on 3.3.0 or 3.4.0 with a currency set needs the `currency` line taken out of `second-thought.ini` before `--update-runtime` will run; put it back afterwards.
+
 ## 3.4.0 - 2026-11-02
 
 ### Added

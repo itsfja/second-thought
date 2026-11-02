@@ -160,6 +160,38 @@ class Budgets(unittest.TestCase):
             self.assertGreater(rt.budget_dollars, 0, "always has a rate, so never no limit")
 
 
+class AsAnExportedProgram(unittest.TestCase):
+    """python/runtime.py, joined from the package in a different order from the package's imports, run as a program
+    with each currency (#274): a module using a name from one joined after it fails only here."""
+
+    def run_with(self, **env):
+        runtime = (support.ROOT / "python" / "runtime.py").read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            prog = os.path.join(tmp, "prog.py")
+            with open(prog, "w", encoding="utf-8") as f:
+                f.write(runtime + "\nR = Runtime()\nprint(money(1.0))\nR.main([], {}, [])\n")
+            full = {k: v for k, v in os.environ.items() if not k.startswith("RB_")}
+            full.update(SECOND_THOUGHT_INI=os.path.join(tmp, "none.ini"), RB_RATES_URL="http://127.0.0.1:9/none", **env)
+            return subprocess.run([sys.executable, "-I", prog], capture_output=True, text=True, timeout=60, cwd=tmp, env=full)
+
+    def test_each_currency_starts(self):
+        for cur, sign in (("usd", "$"), ("gbp", "£"), ("eur", "€"), ("jpy", "¥"), ("cny", "CNY")):
+            with self.subTest(currency=cur):
+                r = self.run_with(RB_CURRENCY=cur)
+                self.assertIn("Nothing to run", r.stdout + r.stderr, r.stderr[-400:])
+                self.assertIn(sign, r.stdout)
+
+    def test_with_a_fixed_rate(self):
+        r = self.run_with(RB_CURRENCY="gbp", RB_EXCHANGE_RATE="0.8")
+        self.assertIn("about £0.80", r.stdout, r.stderr[-400:])
+
+    def test_a_mistyped_rate_stops_it_saying_which_setting(self):
+        r = self.run_with(RB_CURRENCY="gbp", RB_EXCHANGE_RATE="lots")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("exchange_rate", r.stderr)
+        self.assertNotIn("NameError", r.stderr)
+
+
 class Settings(unittest.TestCase):
     def test_a_mistyped_currency_stops_the_program_saying_so(self):
         runtime = (support.ROOT / "python" / "runtime.py").read_text(encoding="utf-8")

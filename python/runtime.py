@@ -374,7 +374,6 @@ _RATES = {}  # the rates this program is using: per_euro, where they came from, 
 
 
 def _rates_file():
-    from .core import MEMORY_FILE
     return os.path.join(os.path.dirname(os.path.abspath(MEMORY_FILE)), ".second-thought-rates.json")
 
 
@@ -455,9 +454,6 @@ def money(dollars, cur=None):
 def dollars(amount):
     """An exact amount in US dollars, like a budget: '$0.50', '$12.00', and '$0.004' under a cent, rather than '$0.00'."""
     return amount_text(amount, "usd")
-
-
-fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run
 
 
 def rate_note():
@@ -7244,6 +7240,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
             print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
         self._can = can
+        fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run. Not when the
+        # runtime loads: in python/runtime.py, providers comes before core, whose _number_setting it uses (#274)
         if "--doctor" in sys.argv:
             sys.exit(asyncio.run(self.doctor(can)))
         if "--update-runtime" in sys.argv:
