@@ -1746,6 +1746,25 @@
 "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.":"Το Claude αρνήθηκε να απαντήσει σε αυτό το βήμα. Δείτε τι του δόθηκε (το prompt του βήματος, στο αρχείο καταγραφής ή στο αποθηκευμένο) και διατυπώστε το αλλιώς ή αφαιρέστε ό,τι διάβαζε.",
 "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.":"Το Claude δεν επέστρεψε τίποτα σε αυτό το βήμα (σταμάτησε με «{stop}»). Απλοποιήστε το και δοκιμάστε ξανά.",
 "Stopped · 1 model call":"Σταμάτησε · 1 κλήση μοντέλου",
-"Stopped · {n} model calls":"Σταμάτησε · {n} κλήσεις μοντέλου"
+"Stopped · {n} model calls":"Σταμάτησε · {n} κλήσεις μοντέλου",
+"Runtime":"Runtime",
+"{version} is the latest":"η {version} είναι η πιο πρόσφατη",
+"couldn't check for a newer one ({err})":"δεν ήταν δυνατός ο έλεγχος για νεότερη ({err})",
+"{latest} is out, with a security fix (this program has {version}). {how}":"Κυκλοφόρησε η {latest}, με διόρθωση ασφαλείας (αυτό το πρόγραμμα έχει την {version}). {how}",
+"{latest} is out (this program has {version}). {how}":"Κυκλοφόρησε η {latest} (αυτό το πρόγραμμα έχει την {version}). {how}",
+"Run it with --update-runtime to get it.":"Εκτελέστε το με --update-runtime για να την αποκτήσετε.",
+"Import this file on the Second Thought page and export it again to get it.":"Εισαγάγετε αυτό το αρχείο στη σελίδα του Second Thought και εξαγάγετέ το ξανά για να την αποκτήσετε.",
+"Import this file on the Second Thought page and export it again.":"Εισαγάγετε αυτό το αρχείο στη σελίδα του Second Thought και εξαγάγετέ το ξανά.",
+"This file doesn't mark where its runtime starts and ends, so it can't be updated in place.":"Αυτό το αρχείο δεν σημειώνει πού αρχίζει και πού τελειώνει το runtime του, οπότε δεν μπορεί να ενημερωθεί επί τόπου.",
+"Couldn't check for a newer runtime ({err}).":"Δεν ήταν δυνατός ο έλεγχος για νεότερο runtime ({err}).",
+"Runtime {latest} is a new major version, which may change what this program does, so it isn't applied here.":"Το runtime {latest} είναι νέα κύρια έκδοση, που μπορεί να αλλάξει ό,τι κάνει αυτό το πρόγραμμα, οπότε δεν εφαρμόζεται εδώ.",
+"Runtime {version} is the latest, so there's nothing to update.":"Το runtime {version} είναι το πιο πρόσφατο, οπότε δεν υπάρχει τίποτα για ενημέρωση.",
+"Release {latest} has no runtime to download.":"Η έκδοση {latest} δεν έχει runtime για λήψη.",
+"The downloaded runtime doesn't match its SHA-256, so it wasn't used. Nothing was changed.":"Το runtime που κατέβηκε δεν ταιριάζει με το SHA-256 του, οπότε δεν χρησιμοποιήθηκε. Δεν άλλαξε τίποτα.",
+"The downloaded runtime isn't a {latest} runtime, so it wasn't used. Nothing was changed.":"Το runtime που κατέβηκε δεν είναι runtime {latest}, οπότε δεν χρησιμοποιήθηκε. Δεν άλλαξε τίποτα.",
+"Couldn't write {path} ({err}). Nothing was changed.":"Δεν ήταν δυνατή η εγγραφή του {path} ({err}). Δεν άλλαξε τίποτα.",
+"Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Το runtime ενημερώθηκε από {version} σε {latest}. Το παλιό αρχείο αποθηκεύτηκε ως {backup}.",
+"What changed: {url}":"Τι άλλαξε: {url}",
+"The file changed, so it asks to be allowed again before its next run.":"Το αρχείο άλλαξε, οπότε θα ζητήσει ξανά άδεια πριν από την επόμενη εκτέλεση."
 }
 };

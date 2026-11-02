@@ -25,6 +25,7 @@ from .connectors import Connections
 from .mcp import MCPTools
 from .agent import AgentTools
 from .doctor import Doctor
+from .update import Updates
 from .settings import said_no, said_yes, tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it too (settings.py doesn't import it)
@@ -35,7 +36,7 @@ import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it t
 ACTIONS_ERROR = "::error::"
 
 
-class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
+class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
     def __init__(self):
         self.vars = {}
         self.receivers = {}
@@ -1794,6 +1795,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor):
         self._can = can
         if "--doctor" in sys.argv:
             sys.exit(asyncio.run(self.doctor(can)))
+        if "--update-runtime" in sys.argv:
+            sys.exit(self.update_runtime(can))
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         if "--mcp" in sys.argv:
             sys.exit(asyncio.run(self.serve_mcp(start_scripts, can)))

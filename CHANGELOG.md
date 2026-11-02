@@ -12,11 +12,20 @@ Versions follow [semantic versioning](https://semver.org):
   agent tool.
 - **Patch** (1.0.1): a fix that makes a program do what it was always meant to.
 
+A release that fixes a security problem lists it under a `### Security` heading, in this file and in the release's
+notes on GitHub: that heading is what makes `--doctor` fail until the program is updated.
+
 When you change `python/second_thought/`, add a line under **Unreleased**. When releasing, rename Unreleased to
 the new version and set `RUNTIME_VERSION` in `python/second_thought/settings.py` to match. The unit tests check
-that the two agree.
+that the two agree. Publishing the release on GitHub attaches `runtime.py` and `runtime.py.sha256` to it (the Release
+workflow), which is what `--update-runtime` downloads; a release made before that can be given them with Run workflow.
 
 ## Unreleased
+
+### Added
+- `--doctor` (and **this program's setup check**) says when a newer runtime is out (#244): a NOTE for a newer version, a FAIL when its release notes have a Security section. It asks GitHub's list of releases; if that can't be reached, it's a NOTE. `update_check = no` in `second-thought.ini` turns it off.
+- `--update-runtime` puts the newest runtime of the same major version into the program file in place (#244), so a fix reaches a program without exporting it again. It downloads the release's `runtime.py`, refuses it unless it matches the release's SHA-256 and says the version it should, and keeps the old file as `.bak`. The blocks, settings and the program's own code stay as they are, and the page still recognises the file on import. A program that acts asks to be allowed again, since the file changed. A newer major version isn't applied: it says to export the program again from the page.
+- The runtime's first and last lines mark where it starts and ends in an exported program, so `--update-runtime` can find it.
 
 ## 3.0.1 - 2026-11-02
 

@@ -30,6 +30,9 @@ HERE = pathlib.Path(__file__).resolve().parent.parent  # tests/
 # (settings named as repository secrets, error annotations). The tests check how they behave on your computer, so
 # it's cleared for every program they start; tests of the Actions behaviour set it themselves.
 os.environ.pop("GITHUB_ACTIONS", None)
+# --doctor would ask GitHub for a newer runtime on every run; tests/unit/test_update_runtime.py checks that against a
+# stand-in, so these runs don't depend on GitHub (or its limit on unsigned requests).
+os.environ["RB_UPDATE_CHECK"] = "no"
 ROOT = HERE.parent
 VENDOR = HERE / "vendor"
 FIX = HERE / "fixtures"

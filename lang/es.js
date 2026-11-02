@@ -1746,6 +1746,25 @@
 "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.":"Claude se negó a responder a este paso. Mira lo que recibió (el prompt del paso, en el registro o el registro guardado) y dilo de otra forma o quita lo que estaba leyendo.",
 "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.":"Claude no devolvió nada en este paso (se detuvo con «{stop}»). Simplifícalo y vuelve a intentarlo.",
 "Stopped · 1 model call":"Detenido · 1 llamada al modelo",
-"Stopped · {n} model calls":"Detenido · {n} llamadas al modelo"
+"Stopped · {n} model calls":"Detenido · {n} llamadas al modelo",
+"Runtime":"Runtime",
+"{version} is the latest":"{version} es la más reciente",
+"couldn't check for a newer one ({err})":"no se pudo buscar una más reciente ({err})",
+"{latest} is out, with a security fix (this program has {version}). {how}":"Ha salido {latest}, con una corrección de seguridad (este programa tiene {version}). {how}",
+"{latest} is out (this program has {version}). {how}":"Ha salido {latest} (este programa tiene {version}). {how}",
+"Run it with --update-runtime to get it.":"Ejecútalo con --update-runtime para obtenerla.",
+"Import this file on the Second Thought page and export it again to get it.":"Importa este archivo en la página de Second Thought y vuelve a exportarlo para obtenerla.",
+"Import this file on the Second Thought page and export it again.":"Importa este archivo en la página de Second Thought y vuelve a exportarlo.",
+"This file doesn't mark where its runtime starts and ends, so it can't be updated in place.":"Este archivo no marca dónde empieza y termina su runtime, así que no se puede actualizar en su sitio.",
+"Couldn't check for a newer runtime ({err}).":"No se pudo buscar un runtime más reciente ({err}).",
+"Runtime {latest} is a new major version, which may change what this program does, so it isn't applied here.":"El runtime {latest} es una versión mayor nueva, que puede cambiar lo que hace este programa, así que aquí no se aplica.",
+"Runtime {version} is the latest, so there's nothing to update.":"El runtime {version} es el más reciente, así que no hay nada que actualizar.",
+"Release {latest} has no runtime to download.":"La versión {latest} no tiene runtime para descargar.",
+"The downloaded runtime doesn't match its SHA-256, so it wasn't used. Nothing was changed.":"El runtime descargado no coincide con su SHA-256, así que no se usó. No se cambió nada.",
+"The downloaded runtime isn't a {latest} runtime, so it wasn't used. Nothing was changed.":"El runtime descargado no es un runtime {latest}, así que no se usó. No se cambió nada.",
+"Couldn't write {path} ({err}). Nothing was changed.":"No se pudo escribir {path} ({err}). No se cambió nada.",
+"Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Runtime actualizado de {version} a {latest}. El archivo anterior se guardó como {backup}.",
+"What changed: {url}":"Qué cambió: {url}",
+"The file changed, so it asks to be allowed again before its next run.":"El archivo cambió, así que volverá a pedir permiso antes de la próxima ejecución."
 }
 };

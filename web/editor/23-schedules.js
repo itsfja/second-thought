@@ -87,6 +87,6 @@
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && sched.armed) { sched.wake = null; wakeLock(true); schedTick(); } });
   updateSchedChip();
   // For tests/editor, which runs these in Node without a browser: the editor's functions that need no page.
-  window.__editorUnits = { calcText, calcValue, timePlusText, nextDueFor, actionsCrons, migrateProgram, unknownTypes, tr,
+  window.__editorUnits = { calcText, calcValue, timePlusText, nextDueFor, actionsCrons, migrateProgram, unknownTypes, tr, codeHash, readExported,
     localizeBlock, short, pad2, num, str };
 })();

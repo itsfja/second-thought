@@ -2866,6 +2866,25 @@
   "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude 拒绝回答这一步。看看它收到了什么（日志或保存的日志里这一步的提示），换个说法，或去掉它读的内容。",
   "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude 这一步什么也没返回（停止原因：“{stop}”）。请简化后再试。",
   "Stopped · 1 model call": "已停止 · 1 次模型调用",
-  "Stopped · {n} model calls": "已停止 · {n} 次模型调用"
+  "Stopped · {n} model calls": "已停止 · {n} 次模型调用",
+  "Runtime": "运行时",
+  "{version} is the latest": "{version} 是最新版本",
+  "couldn't check for a newer one ({err})": "无法检查是否有更新的版本（{err}）",
+  "{latest} is out, with a security fix (this program has {version}). {how}": "{latest} 已发布，包含安全修复（此程序为 {version}）。{how}",
+  "{latest} is out (this program has {version}). {how}": "{latest} 已发布（此程序为 {version}）。{how}",
+  "Run it with --update-runtime to get it.": "用 --update-runtime 运行它即可获取。",
+  "Import this file on the Second Thought page and export it again to get it.": "在 Second Thought 页面导入此文件并重新导出即可获取。",
+  "Import this file on the Second Thought page and export it again.": "请在 Second Thought 页面导入此文件并重新导出。",
+  "This file doesn't mark where its runtime starts and ends, so it can't be updated in place.": "此文件没有标出其运行时的起止位置，因此无法就地更新。",
+  "Couldn't check for a newer runtime ({err}).": "无法检查是否有更新的运行时（{err}）。",
+  "Runtime {latest} is a new major version, which may change what this program does, so it isn't applied here.": "运行时 {latest} 是新的主版本，可能改变此程序的行为，因此不在这里应用。",
+  "Runtime {version} is the latest, so there's nothing to update.": "运行时 {version} 已是最新，没有需要更新的内容。",
+  "Release {latest} has no runtime to download.": "版本 {latest} 没有可下载的运行时。",
+  "The downloaded runtime doesn't match its SHA-256, so it wasn't used. Nothing was changed.": "下载的运行时与其 SHA-256 不符，因此未使用。没有做任何更改。",
+  "The downloaded runtime isn't a {latest} runtime, so it wasn't used. Nothing was changed.": "下载的运行时不是 {latest} 运行时，因此未使用。没有做任何更改。",
+  "Couldn't write {path} ({err}). Nothing was changed.": "无法写入 {path}（{err}）。没有做任何更改。",
+  "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.": "运行时已从 {version} 更新到 {latest}。旧文件已保存为 {backup}。",
+  "What changed: {url}": "更改内容：{url}",
+  "The file changed, so it asks to be allowed again before its next run.": "文件已更改，因此下次运行前会再次请求许可。"
  }
 }

@@ -451,7 +451,17 @@ python my-program.py --doctor
 
 It checks each thing the program uses (keys, packages, Home Assistant, email, Telegram, MCP servers and the rest) and says **ok** for each that works, or **FAIL** with what to fix. It only looks: nothing is sent, posted or switched, and it uses no model tokens.
 
-A program doesn't update itself. To give it a newer runtime, import it on the page and export it again; the page tells you when a program you import has a different runtime. [`CHANGELOG.md`](CHANGELOG.md) says what changed in each version.
+It also asks GitHub whether a newer runtime is out. A newer one is a **NOTE**; one whose release notes say it fixes a security problem is a **FAIL**. If GitHub can't be reached, that's a NOTE, never a failure. `update_check = no` in `second-thought.ini` turns the check off.
+
+A program never updates itself, but you can update it in place:
+
+```
+python my-program.py --update-runtime
+```
+
+This downloads the newest release's runtime of the same major version, checks it against the SHA-256 published with it, and swaps it into the program file. The blocks, your settings and anything after the runtime stay as they are, and the old file is kept as `my-program.py.bak`. The file has changed, so a program that acts asks to be allowed again, saying what's new. A new major version isn't applied this way, since it may change what the program does: import the program on the page and export it again instead. Programs exported before runtime 3.1.0 don't have `--update-runtime`; export them again once.
+
+[`CHANGELOG.md`](CHANGELOG.md) says what changed in each version.
 
 ---
 
@@ -502,6 +512,7 @@ The runtime's modules, in the order `tools/sync.py` joins them:
 | `mcp.py` | Borrowing tools from MCP servers, for the agent. |
 | `agent.py` | The agent block and its tools. |
 | `doctor.py` | `--doctor`: checks a program's setup without acting on anything. |
+| `update.py` | Whether a newer runtime is out, and `--update-runtime`, which swaps it into the program file. |
 | `runtime.py` | Everything else: memory, drafts, output, scripts and schedules. |
 
 Each module starts with the imports it needs from the others. When `tools/sync.py` joins them, it leaves those lines out, because in one file every name is already there.

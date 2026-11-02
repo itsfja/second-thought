@@ -2867,6 +2867,25 @@
   "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude סירב לענות על השלב הזה. בדקו מה הוא קיבל (ההנחיה של השלב, ביומן או ביומן השמור), ונסחו אחרת או הוציאו את מה שהוא קרא.",
   "Claude returned nothing for this step (it stopped with “{stop}”). Simplify it and try again.": "Claude לא החזיר דבר בשלב הזה (הוא עצר עם „{stop}”). פשטו אותו ונסו שוב.",
   "Stopped · 1 model call": "נעצר · קריאה אחת למודל",
-  "Stopped · {n} model calls": "נעצר · {n} קריאות למודל"
+  "Stopped · {n} model calls": "נעצר · {n} קריאות למודל",
+  "Runtime": "Runtime",
+  "{version} is the latest": "‏{version} היא העדכנית ביותר",
+  "couldn't check for a newer one ({err})": "לא ניתן היה לבדוק אם יש חדשה יותר ({err})",
+  "{latest} is out, with a security fix (this program has {version}). {how}": "‏{latest} יצאה, עם תיקון אבטחה (לתוכנית הזו יש {version}). {how}",
+  "{latest} is out (this program has {version}). {how}": "‏{latest} יצאה (לתוכנית הזו יש {version}). {how}",
+  "Run it with --update-runtime to get it.": "הריצו אותה עם ‎--update-runtime כדי לקבל אותה.",
+  "Import this file on the Second Thought page and export it again to get it.": "ייבאו את הקובץ הזה בדף של Second Thought וייצאו אותו שוב כדי לקבל אותה.",
+  "Import this file on the Second Thought page and export it again.": "ייבאו את הקובץ הזה בדף של Second Thought וייצאו אותו שוב.",
+  "This file doesn't mark where its runtime starts and ends, so it can't be updated in place.": "הקובץ הזה לא מסמן היכן ה־runtime שלו מתחיל ונגמר, ולכן אי אפשר לעדכן אותו במקום.",
+  "Couldn't check for a newer runtime ({err}).": "לא ניתן היה לבדוק אם יש runtime חדש יותר ({err}).",
+  "Runtime {latest} is a new major version, which may change what this program does, so it isn't applied here.": "‏runtime {latest} היא גרסה ראשית חדשה, שעלולה לשנות את מה שהתוכנית עושה, ולכן היא לא מוחלת כאן.",
+  "Runtime {version} is the latest, so there's nothing to update.": "‏runtime {version} היא העדכנית ביותר, אז אין מה לעדכן.",
+  "Release {latest} has no runtime to download.": "לגרסה {latest} אין runtime להורדה.",
+  "The downloaded runtime doesn't match its SHA-256, so it wasn't used. Nothing was changed.": "ה־runtime שהורד לא תואם ל־SHA-256 שלו, ולכן לא נעשה בו שימוש. שום דבר לא שונה.",
+  "The downloaded runtime isn't a {latest} runtime, so it wasn't used. Nothing was changed.": "ה־runtime שהורד אינו runtime {latest}, ולכן לא נעשה בו שימוש. שום דבר לא שונה.",
+  "Couldn't write {path} ({err}). Nothing was changed.": "לא ניתן היה לכתוב את {path} ({err}). שום דבר לא שונה.",
+  "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.": "ה־runtime עודכן מ־{version} ל־{latest}. הקובץ הישן נשמר בשם {backup}.",
+  "What changed: {url}": "מה השתנה: {url}",
+  "The file changed, so it asks to be allowed again before its next run.": "הקובץ השתנה, ולכן היא תבקש שוב רשות לפני ההרצה הבאה."
  }
 }

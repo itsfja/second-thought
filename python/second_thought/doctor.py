@@ -251,6 +251,9 @@ class Doctor:
         can = can or {}
         ids = list(can.get("can", [])) if known else [c[0] for c in CAPABILITIES]  # an older program: check whatever is set up
         row("ok" if sys.version_info >= (3, 9) else "FAIL", "Python", sys.version.split()[0] + ("" if sys.version_info >= (3, 9) else ": " + tr("Second Thought needs 3.9 or newer")))
+        update = self.update_status()
+        if update:
+            row(update[0], "Runtime", update[1])
         row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=SETTINGS_PATH) if SETTINGS_PATH else
             tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
         found = [(k, KEY_SOURCES.get(k)) for k in KEYCHAIN_NAMES if os.environ.get(k)]
