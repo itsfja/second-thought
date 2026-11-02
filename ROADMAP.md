@@ -26,11 +26,11 @@ What a run costs, in terms people use, released in 3.2.0 and 3.3.0: a budget in 
 
 | | Benefit | Cost |
 |---|---|---|
-| [#264](https://github.com/itsfja/second-thought/issues/264) Say how expensive each model is, and who makes it | Medium: pick a model knowing its price band | Low |
 | [#269](https://github.com/itsfja/second-thought/issues/269) Track each key's spending on this computer, with hourly, daily, weekly and monthly allowances | Medium-high for unattended programs | Medium |
+| [#243](https://github.com/itsfja/second-thought/issues/243) Prices for the rest of the model services | Medium now: without a price a model has no band ([#264](https://github.com/itsfja/second-thought/issues/264)) and is refused under an allowance | Low, plus upkeep |
 | [#270](https://github.com/itsfja/second-thought/issues/270) Show the limits services report, and set each account's plan to measure against | Medium | Medium, plus upkeep |
 
-#264 was split in three, in this order: #264 is ready for review, #269 is the ledger the allowances come from, and #270 measures against each plan's published limits using that ledger. [#243](https://github.com/itsfja/second-thought/issues/243) (prices for the rest of the services) makes all three more useful, since a model with no price has no band and can't be counted.
+#264 shipped in 3.4.1. #269 is the ledger the allowances come from. #243 moved up from Later: most services other than Claude still have no price, so bands and allowances don't reach them yet. #270 then measures against each plan's published limits.
 
 ## Next: GitHub as a home
 
@@ -39,18 +39,18 @@ What a run costs, in terms people use, released in 3.2.0 and 3.3.0: a budget in 
 | [#246](https://github.com/itsfja/second-thought/issues/246) Run a program's test cases on GitHub Actions | Medium-high, and distinctive | Low-medium |
 | [#245](https://github.com/itsfja/second-thought/issues/245) Publish the page on GitHub Pages as a second front door | Medium | Low |
 
-## Later: upkeep
+## Later: important, not urgent
 
 | | Benefit | Cost |
 |---|---|---|
+| [#262](https://github.com/itsfja/second-thought/issues/262) Kraken (crypto) through its MCP server, with live-money tools always asking | Medium, and a strong test of "actions ask first" | Medium |
+| [#247](https://github.com/itsfja/second-thought/issues/247) Gallery: Premium Bonds generations | Medium: an agent whose arithmetic is checked | Low-medium, once a few real lines of NS&I's pages are in (numbers changed) |
 | [#242](https://github.com/itsfja/second-thought/issues/242) Blockly 12, with its own keyboard navigation | Medium | Medium |
-| [#243](https://github.com/itsfja/second-thought/issues/243) Prices for the rest of the model services | Low-medium | Low, plus upkeep |
 
 ## Someday
 
 | | Notes |
 |---|---|
-| [#247](https://github.com/itsfja/second-thought/issues/247) Gallery: Premium Bonds generations | Waiting on a few real lines of NS&I's pages, numbers changed |
 | [#129](https://github.com/itsfja/second-thought/issues/129)–[#139](https://github.com/itsfja/second-thought/issues/139) Eleven more languages | Paused for now; each costs only the people who pick it since #120 |
 
 ## If there's a successor
