@@ -1,0 +1,33 @@
+# Ænglisc: everyday words
+
+Made by tools/sync.py from i18n/ang.json: edit that, not this.
+
+- Events: Gelimpu
+- Control: Wealdung
+- Wait & time: Abid and tid
+- Operators: Wyrceras
+- Text: Gewrit
+- Variables: Wendlingas
+- Lists: Getælu
+- My Blocks: Mine stoccas
+- Programs: Forescrifta
+- Search results: Findunga
+- Draft: Frumgewrit
+- Ask Claude: Axa Claude
+- Review: Sceawung
+- Agent: Ærendraca
+- Tools: Tol
+- Connections: Gebindu
+- You: Þu
+- Records: Gemearcu
+- Files: Fætelsas
+- Memory: Gemynd
+- Pictures: Anlicnessa
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Output: Utgang
+- Tools for the agent: drop them inside an agent block: Tol for þone ærendracan: lege hie innan ærendracan stocce
+- Listeners: they run while the exported program runs on schedule: Hlystendas: hie yrnaþ þa hwile þe þæt utgelædde forescrift be tidsetnesse yrnþ
+- Read and send: Ræd and send
+- Type in 'Find a block' above the canvas.: Writ on “Find stocc” ofer þam brede.
+- No blocks match: Nan stocc ne gelimpþ
