@@ -88,8 +88,8 @@
    "message0": "difundir %1 com %2 e esperar"
   },
   "rb_budget": {
-   "message0": "limitar esta execução a %1 tokens",
-   "tooltip": "Antes de cada chamada ao modelo, verifica quantos tokens esta execução já usou. Quando chega a este número, a execução para. 0 significa sem limite. Nesta página a contagem é uma estimativa; o Python exportado usa as contagens exatas."
+   "message0": "limitar esta execução a %1 %2",
+   "tooltip": "Antes de cada chamada ao modelo, verifica quantos tokens esta execução usou, ou quanto gastou aos preços de tabela dos modelos. Quando atinge esse valor, a execução para. 0 significa sem limite. Em dólares, um modelo sem preço conhecido não pode ser contado, por isso a execução para em vez de continuar sem limite. Nesta página as contagens são estimativas; o Python exportado usa as contagens exatas."
   },
   "rb_cal_when": {
    "message0": "quando um evento do calendário começar daqui a %1 minutos",
@@ -647,6 +647,10 @@
    "png": "PNG",
    "svg": "SVG (imagens desenhadas)",
    "orig": "ficheiro original"
+  },
+  "rb_budget.UNIT": {
+   "tokens": "tokens",
+   "dollars": "dólares americanos"
   }
  },
  "categories": {
@@ -1410,7 +1414,12 @@
   "Keyboard help": "Ajuda do teclado",
   "about {cost}": "cerca de {cost}",
   "under {cost}": "menos de {cost}",
-  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "Aos preços de tabela dos modelos seriam {cost}; nesta página conta para a sua utilização do Claude."
+  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "Aos preços de tabela dos modelos seriam {cost}; nesta página conta para a sua utilização do Claude.",
+  "No money budget for this run.": "Sem orçamento em dinheiro para esta execução.",
+  "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.": "Parado: um modelo que esta execução já usou não tem preço conhecido, por isso não pode ser mantida no orçamento de {budget}. Use modelos com preço, ou um orçamento em tokens.",
+  "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.": "Parado: esta execução gastou cerca de {cost} a preços de tabela, o que atinge o orçamento de {budget}. Aumente o valor no bloco 'limitar esta execução'.",
+  "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.": "Parado: {model} não tem preço conhecido, por isso esta execução não pode ser mantida no orçamento de {budget}. Use um modelo com preço, ou um orçamento em tokens.",
+  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "Esta execução para antes de uma chamada ao Claude quando tiver gasto cerca de {budget} a preços de tabela (cerca de {cost} até agora)."
  },
  "examples": {
   "review": {
@@ -2885,6 +2894,11 @@
   "Couldn't write {path} ({err}). Nothing was changed.": "Não foi possível escrever {path} ({err}). Nada foi alterado.",
   "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.": "Runtime atualizado de {version} para {latest}. O ficheiro antigo foi guardado como {backup}.",
   "What changed: {url}": "O que mudou: {url}",
-  "The file changed, so it asks to be allowed again before its next run.": "O ficheiro mudou, por isso volta a pedir autorização antes da próxima execução."
+  "The file changed, so it asks to be allowed again before its next run.": "O ficheiro mudou, por isso volta a pedir autorização antes da próxima execução.",
+  "No money budget for this run.": "Sem orçamento em dinheiro para esta execução.",
+  "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.": "Parado: um modelo que esta execução já usou não tem preço conhecido, por isso não pode ser mantida no orçamento de {x}. Use modelos com preço, ou um orçamento em tokens.",
+  "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).": "Parado: esta execução gastou {x} a preços de tabela, o que atinge o orçamento de {x2}. Aumente o valor no bloco 'limitar esta execução' (ou budget_dollars em second-thought.ini).",
+  "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.": "Parado: {model} não tem preço conhecido, por isso esta execução não pode ser mantida no orçamento de {x}. Use um modelo com preço, ou um orçamento em tokens.",
+  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "Esta execução para antes de uma chamada ao modelo quando tiver gasto {x} a preços de tabela (gasto até agora: {x2})."
  }
 }

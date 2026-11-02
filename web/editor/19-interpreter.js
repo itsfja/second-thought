@@ -654,6 +654,11 @@
       }
       case "rb_reset_timer": run.timerStart = Date.now(); break;
       case "rb_budget": {
+        if (b.getFieldValue("UNIT") === "dollars") {
+          run.budgetDollars = Math.max(0, num(await input(b, tc, "TOKENS", 0)));
+          addStep("Budget", { mono:true, text:run.budgetDollars ? tr("This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).", { budget:dollars(run.budgetDollars), cost:money(run.cost) }) : tr("No money budget for this run.") }).done("set", "ok");
+          break;
+        }
         run.budget = Math.max(0, Math.round(num(await input(b, tc, "TOKENS", 0))));
         addStep("Budget", { mono:true, text:run.budget ? tr("This run stops before a Claude call once it has used about {budget} tokens (about {used} so far).", { budget:run.budget.toLocaleString(), used:tokensUsed().toLocaleString() }) : tr("No token budget for this run.") }).done("set", "ok");
         break;

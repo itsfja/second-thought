@@ -26,7 +26,7 @@
 "rb_broadcast_wait":{"message0":"%1 उद्घोषय प्रतीक्षस्व च","tooltip":"अस्य सन्देशस्य प्रत्येकं “यदा अहं प्राप्नोमि” इति प्रक्रमम् आरभते, सर्वे समाप्ताः यावत् प्रतीक्षते च।"},
 "rb_broadcast_with":{"message0":"%1 उद्घोषय %2 सह","tooltip":"सन्देशस्य प्रत्येकं “यदा अहं प्राप्नोमि” इति प्रक्रमम् आरभते। प्रत्येकः मूल्यं स्वस्य “सन्देशमूल्यम्” इति प्राप्नोति।"},
 "rb_broadcast_with_wait":{"message0":"%1 उद्घोषय %2 सह प्रतीक्षस्व च"},
-"rb_budget":{"message0":"इदं चालनं %1 टोकन-पर्यन्तं सीमय","tooltip":"प्रतिरूपस्य प्रत्येकस्मात् आह्वानात् पूर्वम् अनेन चालनेन कति टोकनानि उपयुक्तानि इति परीक्षते। यदा एषा सङ्ख्या प्राप्यते, चालनं स्थगति। 0 इत्यस्य अर्थः सीमा नास्ति। अस्मिन् पृष्ठे गणना अनुमानम्; निर्यातितः Python यथार्थगणनाः प्रयुङ्क्ते।"},
+"rb_budget":{"message0":"इदं चालनं %1 %2-पर्यन्तं सीमय","tooltip":"प्रत्येकस्मात् प्रतिरूप-आह्वानात् पूर्वम् अनेन चालनेन कति टोकनानि प्रयुक्तानि, अथवा प्रतिरूपाणां सूचीमूल्यैः कियत् व्ययितम् इति परीक्षते। तां राशिं प्राप्य चालनं स्थगते। 0 इत्यस्य अर्थः सीमा नास्ति। डॉलर-मध्ये अज्ञातमूल्यं प्रतिरूपं गणयितुं न शक्यते, अतः चालनं सीमां विना न अनुवर्तते, अपि तु स्थगते। अस्मिन् पृष्ठे गणनाः अनुमानाः; निर्यातितं Python यथार्थगणनाः प्रयुङ्क्ते।"},
 "rb_cal_when":{"message0":"यदा दिनदर्शिकायाः घटना %1 निमेषेषु आरभते","tooltip":"तव दिनदर्शिकायां प्रत्येकस्याः घटनायाः एतावद्भिः निमेषैः पूर्वम् अधःस्थान् खण्डान् चालयति (सम्पूर्णदिवसीयाः घटनाः न गण्यन्ते)। “यत् आगतम्” title, start, end, location, minutes, text च ददाति।"},
 "rb_calendar":{"message0":"आगामिनां %1 दिनानां दिनदर्शिका","tooltip":"अद्यतः तव दिनदर्शिकायाः घटनाः, अभिलेखरूपेण: day, start, end, title, location। निर्यातितः Python CALENDAR_URL (तव दिनदर्शिकायाः गोप्यः iCal-सङ्केतः) पठति; इदं पृष्ठं निदर्शनदिनदर्शिकां प्रयुङ्क्ते।"},
 "rb_chat":{"message0":"संवादः %1 : %2","tooltip":"नामयुक्ते संवादे सन्देशं प्रेषयति। Claude तस्य संवादस्य पूर्ववचनानि पश्यति।"},
@@ -160,7 +160,8 @@
 "rb_mem_set.KIND":{"transient":"यावत् इदं पृष्ठम् उद्घाटितम्","permanent":"सदा"},
 "rb_mem_set_for.UNIT":{"m":"निमेषाः","h":"होराः","d":"दिनानि"},
 "rb_mem_add.KIND":{"transient":"यावत् इदं पृष्ठम् उद्घाटितम्","permanent":"सदा"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (रेखाचित्राणि)","orig":"मूलसञ्चिका"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (रेखाचित्राणि)","orig":"मूलसञ्चिका"},
+"rb_budget.UNIT":{"tokens":"टोकन","dollars":"अमेरिकी-डॉलर"}
 },
 "categories":{
 "Events":"घटनाः",
@@ -923,7 +924,12 @@
 "Keyboard help":"कुञ्जीपटलसाहाय्यम्",
 "about {cost}":"प्रायः {cost}",
 "under {cost}":"{cost} तः न्यूनम्",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"प्रतिमानानां सूचीमूल्येन तत् {cost}; अस्मिन् पृष्ठे तु तव Claude-उपयोगे गण्यते।"
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"प्रतिमानानां सूचीमूल्येन तत् {cost}; अस्मिन् पृष्ठे तु तव Claude-उपयोगे गण्यते।",
+"No money budget for this run.":"अस्य चालनस्य धनसीमा नास्ति।",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"स्थगितम्: अनेन चालनेन पूर्वमेव प्रयुक्तस्य प्रतिरूपस्य मूल्यं न ज्ञातम्, अतः {budget} इति सीमायाम् अन्तः धारयितुं न शक्यते। मूल्ययुक्तानि प्रतिरूपाणि प्रयुङ्क्ष्व, अथवा टोकन-सीमाम्।",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"स्थगितम्: अनेन चालनेन सूचीमूल्यैः प्रायः {cost} व्ययितम्, यत् {budget} इति सीमां प्राप्नोति। 'इदं चालनं सीमय' इति खण्डे राशिं वर्धय।",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"स्थगितम्: {model} इत्यस्य मूल्यं न ज्ञातम्, अतः इदं चालनं {budget} इति सीमायाम् अन्तः धारयितुं न शक्यते। मूल्ययुक्तं प्रतिरूपं प्रयुङ्क्ष्व, अथवा टोकन-सीमाम्।",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"सूचीमूल्यैः प्रायः {budget} व्ययिते सति इदं चालनं Claude-आह्वानात् पूर्वं स्थगते (अद्यावधि प्रायः {cost})।"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1766,7 +1772,12 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"{path} लेखितुं न अशक्यत ({err})। किमपि न परिवर्तितम्।",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"runtime {version} तः {latest} पर्यन्तं नवीकृतम्। पुरातनी सञ्चिका {backup} इति रक्षिता।",
 "What changed: {url}":"किं परिवर्तितम्: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"सञ्चिका परिवर्तिता, अतः अग्रिमचालनात् पूर्वं पुनः अनुमतिं याचते।"
+"The file changed, so it asks to be allowed again before its next run.":"सञ्चिका परिवर्तिता, अतः अग्रिमचालनात् पूर्वं पुनः अनुमतिं याचते।",
+"No money budget for this run.":"अस्य चालनस्य धनसीमा नास्ति।",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"स्थगितम्: अनेन चालनेन पूर्वमेव प्रयुक्तस्य प्रतिरूपस्य मूल्यं न ज्ञातम्, अतः {x} इति सीमायाम् अन्तः धारयितुं न शक्यते। मूल्ययुक्तानि प्रतिरूपाणि प्रयुङ्क्ष्व, अथवा टोकन-सीमाम्।",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"स्थगितम्: अनेन चालनेन सूचीमूल्यैः {x} व्ययितम्, यत् {x2} इति सीमां प्राप्नोति। 'इदं चालनं सीमय' इति खण्डे राशिं वर्धय (अथवा second-thought.ini मध्ये budget_dollars)।",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"स्थगितम्: {model} इत्यस्य मूल्यं न ज्ञातम्, अतः इदं चालनं {x} इति सीमायाम् अन्तः धारयितुं न शक्यते। मूल्ययुक्तं प्रतिरूपं प्रयुङ्क्ष्व, अथवा टोकन-सीमाम्।",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"सूचीमूल्यैः {x} व्ययिते सति इदं चालनं प्रतिरूप-आह्वानात् पूर्वं स्थगते (अद्यावधि व्ययितम्: {x2})।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

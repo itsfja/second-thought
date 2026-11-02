@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"crye %1 and abide","tooltip":"Bigynneth every processe “whan I receyve” for this message and abideth til they alle be doon."},
 "rb_broadcast_with":{"message0":"crye %1 with %2","tooltip":"Bigynneth every processe “whan I receyve” for the message. Ech oon geteth the valewe as his “valewe of the message”."},
 "rb_broadcast_with_wait":{"message0":"crye %1 with %2 and abide"},
-"rb_budget":{"message0":"lymite this rennyng to %1 tokens","tooltip":"Bifore ech callyng of the patron, it loketh how many tokens this rennyng hath spent. Whan it cometh to this nombre, the rennyng stinteth. 0 meneth no lymite. In this leef the tale is a gesse; the Python sent out useth the verray tales."},
+"rb_budget":{"message0":"lymite this rennyng to %1 %2","tooltip":"Er every callyng of the model, it loketh how many tokens this rennyng hath used, or what it hath spent at the listed pris of the models. Whan it reacheth that somme, the rennyng stinteth. 0 meneth no lymite. In dollers, a model withoute knowen pris may nat be rekened, so the rennyng stinteth rather than goon forth withoute lymite. On this page the rekenynges ben gessed; the Python sent out useth the exacte rekenynges."},
 "rb_cal_when":{"message0":"whan a kalender event bigynneth in %1 minutes","tooltip":"Renneth the blokkes bynethe so many minutes bifore ech event in thy kalender (events of al the day ben nat told). “What cam” yeveth title, start, end, location, minutes and text."},
 "rb_calendar":{"message0":"kalender for the nexte %1 dayes","tooltip":"Thy kalenderes events fro this day, as recordes: day, start, end, title, location. The Python sent out redeth CALENDAR_URL (thy kalenderes prive iCal place); this leef useth an ensample kalender."},
 "rb_chat":{"message0":"speke %1 : %2","tooltip":"Sendeth a message in a named conversacioun. Claude seeth the eerlier turnes of that conversacioun."},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"whil this leef is open","permanent":"for evere"},
 "rb_mem_set_for.UNIT":{"m":"minutes","h":"houres","d":"dayes"},
 "rb_mem_add.KIND":{"transient":"whil this leef is open","permanent":"for evere"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (peynted ymages)","orig":"first quaier"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (peynted ymages)","orig":"first quaier"},
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollers of Amerike"}
 },
 "categories":{
 "Events":"Events",
@@ -922,7 +923,12 @@
 "Keyboard help":"Keybord helpe",
 "about {cost}":"aboute {cost}",
 "under {cost}":"lasse than {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"At the sette pris of the modeles that is {cost}; on this page it is told to thyn usage of Claude instede."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"At the sette pris of the modeles that is {cost}; on this page it is told to thyn usage of Claude instede.",
+"No money budget for this run.":"Ther is no budget in moneye for this rennyng.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Stinted: a model that this rennyng hath used afore hath no knowen pris, so it may nat be holden withinne his budget of {budget}. Use models with a pris, or a budget in tokens.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Stinted: this rennyng hath spent aboute {cost} at the listed pris, which reacheth his budget of {budget}. Rayse the somme in the 'lymite this rennyng' blok.",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Stinted: {model} hath no knowen pris, so this rennyng may nat be holden withinne his budget of {budget}. Use a model with a pris, or a budget in tokens.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"This rennyng stinteth er a callyng of Claude as soone as it hath spent aboute {budget} at the listed pris (aboute {cost} til now)."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1765,7 +1771,12 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"Myghte nat write {path} ({err}). Nothyng was chaunged.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Renewed the runtime fro {version} to {latest}. The olde quaier is kept as {backup}.",
 "What changed: {url}":"What chaunged: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"The quaier chaunged, so it shal axe leve ayein er his nexte rennyng."
+"The file changed, so it asks to be allowed again before its next run.":"The quaier chaunged, so it shal axe leve ayein er his nexte rennyng.",
+"No money budget for this run.":"Ther is no budget in moneye for this rennyng.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Stinted: a model that this rennyng hath used afore hath no knowen pris, so it may nat be holden withinne his budget of {x}. Use models with a pris, or a budget in tokens.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Stinted: this rennyng hath spent {x} at the listed pris, which reacheth his budget of {x2}. Rayse the somme in the 'lymite this rennyng' blok (or budget_dollars in second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Stinted: {model} hath no knowen pris, so this rennyng may nat be holden withinne his budget of {x}. Use a model with a pris, or a budget in tokens.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"This rennyng stinteth er a callyng of the model as soone as it hath spent {x} at the listed pris (spent til now: {x2})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

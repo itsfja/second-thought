@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"diffuser %1 et attendre","tooltip":"Lance tous les scripts « quand je reçois » de ce message et attend qu'ils aient tous fini."},
 "rb_broadcast_with":{"message0":"diffuser %1 avec %2","tooltip":"Lance tous les scripts « quand je reçois » du message. Chacun reçoit la valeur comme sa « valeur du message »."},
 "rb_broadcast_with_wait":{"message0":"diffuser %1 avec %2 et attendre"},
-"rb_budget":{"message0":"limiter cette exécution à %1 jetons","tooltip":"Avant chaque appel au modèle, vérifie combien de jetons cette exécution a utilisés. Une fois ce nombre atteint, l'exécution s'arrête. 0 veut dire sans limite. Sur cette page le compte est une estimation ; le Python exporté utilise les comptes exacts."},
+"rb_budget":{"message0":"limiter cette exécution à %1 %2","tooltip":"Avant chaque appel au modèle, vérifie combien de jetons cette exécution a utilisés, ou ce qu’elle a dépensé aux prix catalogue des modèles. Une fois ce montant atteint, l’exécution s’arrête. 0 signifie pas de limite. En dollars, un modèle sans prix connu ne peut pas être compté : l’exécution s’arrête plutôt que de continuer sans limite. Sur cette page, les comptes sont des estimations ; le Python exporté utilise les comptes exacts."},
 "rb_cal_when":{"message0":"quand un événement du calendrier commence dans %1 minutes","tooltip":"Exécute les blocs en dessous ce nombre de minutes avant chaque événement de votre calendrier (les événements d'une journée entière ne comptent pas). « Ce qui est arrivé » donne title, start, end, location, minutes et text."},
 "rb_calendar":{"message0":"calendrier des %1 prochains jours","tooltip":"Les événements de votre calendrier à partir d'aujourd'hui, en fiches : day, start, end, title, location. Le Python exporté lit CALENDAR_URL (l'adresse iCal privée de votre calendrier) ; cette page utilise un calendrier d'exemple."},
 "rb_chat":{"message0":"conversation %1 : %2","tooltip":"Envoie un message dans une conversation nommée. Claude voit les tours précédents de cette conversation."},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"tant que cette page est ouverte","permanent":"pour toujours"},
 "rb_mem_set_for.UNIT":{"m":"minutes","h":"heures","d":"jours"},
 "rb_mem_add.KIND":{"transient":"tant que cette page est ouverte","permanent":"pour toujours"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (images dessinées)","orig":"fichier d'origine"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (images dessinées)","orig":"fichier d'origine"},
+"rb_budget.UNIT":{"tokens":"jetons","dollars":"dollars américains"}
 },
 "categories":{
 "Events":"Événements",
@@ -922,7 +923,12 @@
 "Keyboard help":"Aide au clavier",
 "about {cost}":"environ {cost}",
 "under {cost}":"moins de {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Aux prix catalogue des modèles, cela fait {cost} ; sur cette page, cela compte plutôt dans votre utilisation de Claude."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Aux prix catalogue des modèles, cela fait {cost} ; sur cette page, cela compte plutôt dans votre utilisation de Claude.",
+"No money budget for this run.":"Pas de budget en argent pour cette exécution.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Arrêté : un modèle déjà utilisé par cette exécution n’a pas de prix connu, elle ne peut donc pas être tenue à son budget de {budget}. Utilisez des modèles avec un prix, ou un budget en jetons.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Arrêté : cette exécution a dépensé environ {cost} aux prix catalogue, ce qui atteint son budget de {budget}. Augmentez le montant dans le bloc « limiter cette exécution ».",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Arrêté : {model} n’a pas de prix connu, cette exécution ne peut donc pas être tenue à son budget de {budget}. Utilisez un modèle avec un prix, ou un budget en jetons.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Cette exécution s’arrête avant un appel à Claude dès qu’elle a dépensé environ {budget} aux prix catalogue (environ {cost} jusqu’ici)."
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -1765,6 +1771,11 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"Impossible d’écrire {path} ({err}). Rien n’a été modifié.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Runtime mis à jour de {version} à {latest}. L’ancien fichier est enregistré sous {backup}.",
 "What changed: {url}":"Ce qui a changé : {url}",
-"The file changed, so it asks to be allowed again before its next run.":"Le fichier a changé : il redemandera l’autorisation avant sa prochaine exécution."
+"The file changed, so it asks to be allowed again before its next run.":"Le fichier a changé : il redemandera l’autorisation avant sa prochaine exécution.",
+"No money budget for this run.":"Pas de budget en argent pour cette exécution.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Arrêté : un modèle déjà utilisé par cette exécution n’a pas de prix connu, elle ne peut donc pas être tenue à son budget de {x}. Utilisez des modèles avec un prix, ou un budget en jetons.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Arrêté : cette exécution a dépensé {x} aux prix catalogue, ce qui atteint son budget de {x2}. Augmentez le montant dans le bloc « limiter cette exécution » (ou budget_dollars dans second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Arrêté : {model} n’a pas de prix connu, cette exécution ne peut donc pas être tenue à son budget de {x}. Utilisez un modèle avec un prix, ou un budget en jetons.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Cette exécution s’arrête avant un appel au modèle dès qu’elle a dépensé {x} aux prix catalogue (dépensé jusqu’ici : {x2})."
 }
 };

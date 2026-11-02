@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"%1 を送って待つ","tooltip":"このメッセージを待つ「受け取ったとき」のスクリプトをすべて開始し、すべて終わるまで待ちます。"},
 "rb_broadcast_with":{"message0":"%1 を %2 と一緒に送る","tooltip":"このメッセージを待つ「受け取ったとき」のスクリプトをすべて開始します。それぞれが値を「メッセージの値」として受け取ります。"},
 "rb_broadcast_with_wait":{"message0":"%1 を %2 と一緒に送って待つ"},
-"rb_budget":{"message0":"この実行を %1 トークンまでにする","tooltip":"モデルを呼び出す前に、この実行でこれまでに使ったトークン数を確認します。この数に達すると実行は止まります。0 は制限なしです。このページの数は推定値で、書き出した Python は正確な数を使います。"},
+"rb_budget":{"message0":"この実行を %1 %2までにする","tooltip":"モデルを呼び出す前に毎回、この実行が使ったトークン数、またはモデルの定価で使った金額を確認します。この量に達すると実行は止まります。0 は制限なしです。ドルの場合、価格が不明なモデルは数えられないので、制限なしで続けずに止まります。このページの数は推定です。書き出した Python は正確な数を使います。"},
 "rb_cal_when":{"message0":"カレンダーの予定が %1 分後に始まるとき","tooltip":"カレンダーの各予定の、この分数だけ前に下のブロックを実行します（終日の予定は数えません）。「届いた内容」は title、start、end、location、minutes、text を返します。"},
 "rb_calendar":{"message0":"今後 %1 日間のカレンダー","tooltip":"今日からのカレンダーの予定を、day、start、end、title、location のレコードで返します。書き出した Python は CALENDAR_URL（カレンダーの非公開 iCal アドレス）を読み、このページはサンプルのカレンダーを使います。"},
 "rb_chat":{"message0":"会話 %1 ：%2","tooltip":"名前を付けた会話でメッセージを送ります。Claude はその会話のこれまでのやり取りを見ます。"},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"このページが開いている間","permanent":"ずっと"},
 "rb_mem_set_for.UNIT":{"m":"分","h":"時間","d":"日"},
 "rb_mem_add.KIND":{"transient":"このページが開いている間","permanent":"ずっと"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG（描いた画像）","orig":"元のファイル"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG（描いた画像）","orig":"元のファイル"},
+"rb_budget.UNIT":{"tokens":"トークン","dollars":"米ドル"}
 },
 "categories":{
 "Events":"イベント",
@@ -922,7 +923,12 @@
 "Keyboard help":"キーボードのヘルプ",
 "about {cost}":"約 {cost}",
 "under {cost}":"{cost} 未満",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"モデルの定価では {cost} です。このページでは代わりに Claude の利用分として数えられます。"
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"モデルの定価では {cost} です。このページでは代わりに Claude の利用分として数えられます。",
+"No money budget for this run.":"この実行には金額の予算がありません。",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"停止しました：この実行がすでに使ったモデルの価格が不明なため、{budget} の予算内に収められません。価格のわかるモデルを使うか、トークン数の予算にしてください。",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"停止しました：この実行は定価で約 {cost} を使い、予算の {budget} に達しました。「この実行を制限」ブロックの金額を上げてください。",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"停止しました：{model} の価格が不明なため、この実行を {budget} の予算内に収められません。価格のわかるモデルを使うか、トークン数の予算にしてください。",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"この実行は、定価で約 {budget} を使った時点で、次の Claude の呼び出しの前に止まります（これまでに約 {cost}）。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1765,6 +1771,11 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"{path} に書き込めませんでした（{err}）。何も変更していません。",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"ランタイムを {version} から {latest} に更新しました。古いファイルは {backup} として保存しています。",
 "What changed: {url}":"変更点: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"ファイルが変わったので、次に実行する前にもう一度許可を求めます。"
+"The file changed, so it asks to be allowed again before its next run.":"ファイルが変わったので、次に実行する前にもう一度許可を求めます。",
+"No money budget for this run.":"この実行には金額の予算がありません。",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"停止しました：この実行がすでに使ったモデルの価格が不明なため、{x} の予算内に収められません。価格のわかるモデルを使うか、トークン数の予算にしてください。",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"停止しました：この実行は定価で {x} を使い、予算の {x2} に達しました。「この実行を制限」ブロックの金額を上げてください（または second-thought.ini の budget_dollars）。",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"停止しました：{model} の価格が不明なため、この実行を {x} の予算内に収められません。価格のわかるモデルを使うか、トークン数の予算にしてください。",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"この実行は、定価で {x} を使った時点で、次のモデル呼び出しの前に止まります（これまでの支出：{x2}）。"
 }
 };

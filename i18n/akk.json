@@ -89,8 +89,8 @@
    "message0": "%1 𒀉𒋾 %2 𒅆𒋛 𒌋 𒄑𒍣𒄑"
   },
   "rb_budget": {
-   "message0": "𒂊𒁉𒅖𒋫𒄠 𒀭𒉌𒋫𒄠 𒀀𒈾 %1 token 𒅗𒀠𒇷",
-   "tooltip": "𒄿𒈾 𒉺𒉌 𒅆𒋛𒋾𒅎 𒅖𒋾𒀜 𒀀𒈾 𒀊𒅗𒀠𒇷𒅎, 𒈪𒈾𒄠 token 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒄿𒋫𒅗𒀠 𒄿𒁀𒅈𒊑. 𒄿𒉡𒈠 𒈪𒉡𒋫𒄠 𒀭𒉌𒋫𒄠 𒄿𒅗𒀸𒊭𒀜, 𒂊𒁉𒅖𒌅𒌝 𒄿𒉺𒅈𒊏𒊍. 0 𒁀𒇻 𒅗𒇷𒅎. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒈪𒉡𒌅𒌝 𒄭𒁲𒌅𒌝; 𒉈𒁉𒋗𒌝 𒊭 Python 𒈪𒈾𒋾𒅎 𒆠𒈾𒋾𒅎 𒄿𒇷𒅅𒆠."
+   "message0": "𒂊𒁉𒅖𒋫𒄠 𒀭𒉌𒋫𒄠 𒀀𒈾 %1 %2 𒅗𒀠𒇷",
+   "tooltip": "𒆷𒈠 𒁲𒈠𒄠 𒄿𒊓𒊍𒋢, 𒈠𒆷 token 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒅋𒄣, 𒌑𒇻 𒈠𒆷 𒄿𒈾 𒅆𒅎 𒌅𒌒𒁉𒅎 𒈾𒀜𒉡 𒄿𒁀𒅈𒊑. 𒆠𒈠 𒅗𒊍𒉺𒄠 𒋗𒀀𒋾 𒅅𒋗𒁺, 𒂊𒁉𒅖𒌅𒌝 𒅁𒊒𒊻. 0 𒈪𒅅𒋢𒌝 𒌌 𒄿𒁀𒀸𒅆. 𒄿𒈾 dollar, 𒁲𒈬𒌝 𒊭 𒅆𒈠𒄠 𒄿𒁺𒌝 𒌌 𒄿𒋗 𒌌 𒅎𒈠𒀭𒉌, 𒀸𒋗𒌝 𒆠𒄠 𒂊𒁉𒅖𒌅𒌝 𒅁𒊒𒊻. 𒄿𒈾 𒁉𒀉 𒀭𒉌𒋾𒅎 𒈪𒉡𒌅𒌝 𒋼𒂖𒌅𒌝; Python 𒋗𒍮𒌝 𒈪𒉡𒋫𒄠 𒆠𒈾𒄠 𒄿𒇷𒅅𒆠."
   },
   "rb_cal_when": {
    "message0": "𒄿𒉡𒈠 𒀉𒌅𒌝 𒄿𒈾 𒌑𒈪 𒄿𒈾 %1 𒌓𒁕𒋾 𒅖𒊭𒀝𒅗𒀭",
@@ -648,6 +648,10 @@
    "png": "PNG",
    "svg": "SVG (𒂊𒍢𒊏𒌅𒌝)",
    "orig": "𒆪𒉡𒊌𒆪𒌝 𒈠𒄴𒊒𒌝"
+  },
+  "rb_budget.UNIT": {
+   "tokens": "token",
+   "dollars": "US dollar"
   }
  },
  "categories": {
@@ -1411,7 +1415,12 @@
   "Keyboard help": "𒋫𒀊𒁍𒌅𒌝 𒊭 𒌅𒌒𒁉 𒋡𒋾𒅎",
   "about {cost}": "𒆠𒈠 {cost}",
   "under {cost}": "𒂊𒇷 {cost} 𒈬𒌅",
-  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "𒄿𒈾 𒅆𒈪𒅎 𒊭𒀜𒊑𒅎 𒊭 𒋫𒄠𒅆𒆷𒋾𒅎 {cost}; 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒀀𒈾 𒂊𒁉𒅖𒋾𒅗 𒊭 Claude 𒅎𒈠𒀭𒉡."
+  "At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.": "𒄿𒈾 𒅆𒈪𒅎 𒊭𒀜𒊑𒅎 𒊭 𒋫𒄠𒅆𒆷𒋾𒅎 {cost}; 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒀀𒈾 𒂊𒁉𒅖𒋾𒅗 𒊭 Claude 𒅎𒈠𒀭𒉡.",
+  "No money budget for this run.": "𒄿𒈾 𒂊𒁉𒅖𒋾𒅎 𒀭𒉌𒋾𒅎 𒈪𒅅𒋢𒌝 𒊭 𒅗𒊍𒁉𒅎 𒌌 𒄿𒁀𒀸𒅆.",
+  "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.": "𒅁𒊒𒊻: 𒁲𒈬𒌝 𒊭 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒌌𒌅 𒉺𒈾 𒄿𒁍𒋗 𒅆𒈠𒄠 𒄿𒁺𒌝 𒌌 𒄿𒋗, 𒀸𒋗𒌝 𒆠𒄠 𒄿𒈾 𒈪𒅅𒋛𒅎 𒊭 {budget} 𒌌 𒄿𒈾𒊍𒍝𒅈. 𒁲𒈪 𒊭 𒅆𒈠𒄠 𒄿𒋗 𒂊𒁍𒍑, 𒌑𒇻 𒈪𒅅𒊓𒄠 𒄿𒈾 token.",
+  "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.": "𒅁𒊒𒊻: 𒄿𒈾 𒂊𒁉𒅖𒋾𒅎 𒀭𒉌𒋾𒅎 𒆠𒈠 {cost} 𒄿𒈾 𒅆𒅎 𒌅𒌒𒁉𒅎 𒈾𒀜𒉡, 𒈪𒅅𒊓𒄠 𒊭 {budget} 𒅅𒋗𒌓. 𒄿𒈾 𒇷𒁉𒀉𒋾 '𒂊𒁉𒅖𒋫𒄠 𒀭𒉌𒋫𒄠 𒅗𒇻' 𒅗𒊍𒉺𒄠 šuqqi.",
+  "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.": "𒅁𒊒𒊻: {model} 𒅆𒈠𒄠 𒄿𒁺𒌝 𒌌 𒄿𒋗, 𒀸𒋗𒌝 𒆠𒄠 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒄿𒈾 𒈪𒅅𒋛𒅎 𒊭 {budget} 𒌌 𒄿𒈾𒊍𒍝𒅈. 𒁲𒈠𒄠 𒊭 𒅆𒈠𒄠 𒄿𒋗 𒂊𒁍𒍑, 𒌑𒇻 𒈪𒅅𒊓𒄠 𒄿𒈾 token.",
+  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒆷𒈠 Claude 𒄿𒊓𒊍𒋢 𒅁𒊒𒊻, 𒆠𒈠 𒅖𒌅 𒆠𒈠 {budget} 𒄿𒈾 𒅆𒅎 𒌅𒌒𒁉𒅎 𒈾𒀜𒉡 (𒀀𒁲 𒄿𒈾𒀭𒈾 𒆠𒈠 {cost})."
  },
  "examples": {
   "review": {
@@ -2886,7 +2895,12 @@
   "Couldn't write {path} ({err}). Nothing was changed.": "{path} šaṭāram ul imṣi ({err}). mimma ul inninni.",
   "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.": "runtime ištu {version} ana {latest} uddiš. ṭuppum labirum kīma {backup} naṣir.",
   "What changed: {url}": "ša inninnû: {url}",
-  "The file changed, so it asks to be allowed again before its next run.": "ṭuppum inninni, aššum kīam lāma epištim warkītim anniam ištanâl."
+  "The file changed, so it asks to be allowed again before its next run.": "ṭuppum inninni, aššum kīam lāma epištim warkītim anniam ištanâl.",
+  "No money budget for this run.": "ina epištim annītim miksum ša kaspim ul ibašši.",
+  "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.": "iprus: ṭēmum ša epištum annītum ultu pāna īpušu šīmam idûm ul išu, aššum kīam ina miksim ša {x} ul inaṣṣar. ṭēmī ša šīmam išû epuš, ulū miksam ina token.",
+  "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).": "iprus: ina epištim annītim {x} ina šīm ṭuppim nadnu, miksam ša {x2} ikšud. ina libitti 'epištam annītam kalû' kaspam šuqqi (ulū budget_dollars ina second-thought.ini).",
+  "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.": "iprus: {model} šīmam idûm ul išu, aššum kīam epištum annītum ina miksim ša {x} ul inaṣṣar. ṭēmam ša šīmam išû epuš, ulū miksam ina token.",
+  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "epištum annītum lāma ṭēmam isassû iprus, kīma ištu {x} ina šīm ṭuppim nadnu (adi inanna nadnu: {x2})."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

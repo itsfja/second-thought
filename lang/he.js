@@ -26,7 +26,7 @@
 "rb_broadcast_wait":{"message0":"שדר %1 וחכה","tooltip":"מפעיל כל תסריט \"כשאני מקבל\" של ההודעה הזו ומחכה שכולם יסתיימו."},
 "rb_broadcast_with":{"message0":"שדר %1 עם %2","tooltip":"מפעיל כל תסריט \"כשאני מקבל\" של ההודעה. כל אחד מקבל את הערך בתור \"ערך ההודעה\" שלו."},
 "rb_broadcast_with_wait":{"message0":"שדר %1 עם %2 וחכה"},
-"rb_budget":{"message0":"הגבל את ההרצה הזו ל-%1 טוקנים","tooltip":"לפני כל קריאה למודל, בודק כמה טוקנים ההרצה הזו כבר ניצלה. כשהיא מגיעה למספר הזה, ההרצה נעצרת. 0 פירושו בלי הגבלה. בדף הזה הספירה היא הערכה; Python המיוצא משתמש בספירה המדויקת."},
+"rb_budget":{"message0":"הגבל את ההרצה הזו ל-%1 %2","tooltip":"לפני כל קריאה למודל, בודק כמה טוקנים ההרצה הזו השתמשה, או כמה הוציאה לפי מחירי המחירון של המודלים. כשהיא מגיעה לסכום הזה, ההרצה נעצרת. 0 פירושו בלי הגבלה. בדולרים, אי אפשר לספור מודל בלי מחיר ידוע, ולכן ההרצה נעצרת במקום להמשיך בלי הגבלה. בדף הזה הספירות הן הערכות; ה־Python המיוצא משתמש בספירות המדויקות."},
 "rb_cal_when":{"message0":"כשאירוע בלוח השנה מתחיל בעוד %1 דקות","tooltip":"מריץ את הבלוקים שמתחת כך וכך דקות לפני כל אירוע בלוח השנה שלכם (אירועים של יום שלם לא נחשבים). \"מה הגיע\" נותן title, start, end, location, minutes ו-text."},
 "rb_calendar":{"message0":"לוח השנה ל-%1 הימים הבאים","tooltip":"האירועים בלוח השנה שלכם מהיום, כרשומות: day, start, end, title, location. Python המיוצא קורא את CALENDAR_URL (כתובת ה-iCal הפרטית של לוח השנה שלכם); הדף הזה משתמש בלוח שנה לדוגמה."},
 "rb_chat":{"message0":"שיחה %1 : %2","tooltip":"שולח הודעה בשיחה בעלת שם. Claude רואה את התורות הקודמים של אותה שיחה."},
@@ -160,7 +160,8 @@
 "rb_mem_set.KIND":{"transient":"כל עוד הדף הזה פתוח","permanent":"לתמיד"},
 "rb_mem_set_for.UNIT":{"m":"דקות","h":"שעות","d":"ימים"},
 "rb_mem_add.KIND":{"transient":"כל עוד הדף הזה פתוח","permanent":"לתמיד"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (תמונות מצוירות)","orig":"הקובץ המקורי"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (תמונות מצוירות)","orig":"הקובץ המקורי"},
+"rb_budget.UNIT":{"tokens":"טוקנים","dollars":"דולר אמריקאי"}
 },
 "categories":{
 "Events":"אירועים",
@@ -923,7 +924,12 @@
 "Keyboard help":"עזרה במקלדת",
 "about {cost}":"בערך {cost}",
 "under {cost}":"פחות מ־{cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"לפי מחירון המודלים זה {cost}; בדף הזה זה נספר במקום זאת בשימוש שלכם ב־Claude."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"לפי מחירון המודלים זה {cost}; בדף הזה זה נספר במקום זאת בשימוש שלכם ב־Claude.",
+"No money budget for this run.":"אין תקציב כספי להרצה הזו.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"נעצר: למודל שההרצה הזו כבר השתמשה בו אין מחיר ידוע, ולכן אי אפשר להחזיק אותה בתקציב של {budget}. השתמשו במודלים עם מחיר, או בתקציב בטוקנים.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"נעצר: ההרצה הזו הוציאה בערך {cost} לפי מחירי המחירון, וכך הגיעה לתקציב של {budget}. הגדילו את הסכום בבלוק 'הגבל את ההרצה הזו'.",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"נעצר: ל־{model} אין מחיר ידוע, ולכן אי אפשר להחזיק את ההרצה הזו בתקציב של {budget}. השתמשו במודל עם מחיר, או בתקציב בטוקנים.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"ההרצה הזו נעצרת לפני קריאה ל־Claude ברגע שהוציאה בערך {budget} לפי מחירי המחירון (בערך {cost} עד עכשיו)."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1766,6 +1772,11 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"לא ניתן היה לכתוב את {path} ({err}). שום דבר לא שונה.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"ה־runtime עודכן מ־{version} ל־{latest}. הקובץ הישן נשמר בשם {backup}.",
 "What changed: {url}":"מה השתנה: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"הקובץ השתנה, ולכן היא תבקש שוב רשות לפני ההרצה הבאה."
+"The file changed, so it asks to be allowed again before its next run.":"הקובץ השתנה, ולכן היא תבקש שוב רשות לפני ההרצה הבאה.",
+"No money budget for this run.":"אין תקציב כספי להרצה הזו.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"נעצר: למודל שההרצה הזו כבר השתמשה בו אין מחיר ידוע, ולכן אי אפשר להחזיק אותה בתקציב של {x}. השתמשו במודלים עם מחיר, או בתקציב בטוקנים.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"נעצר: ההרצה הזו הוציאה {x} לפי מחירי המחירון, וכך הגיעה לתקציב של {x2}. הגדילו את הסכום בבלוק 'הגבל את ההרצה הזו' (או budget_dollars ב־second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"נעצר: ל־{model} אין מחיר ידוע, ולכן אי אפשר להחזיק את ההרצה הזו בתקציב של {x}. השתמשו במודל עם מחיר, או בתקציב בטוקנים.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"ההרצה הזו נעצרת לפני קריאה למודל ברגע שהוציאה {x} לפי מחירי המחירון (הוצאה עד עכשיו: {x2})."
 }
 };

@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Added
+- A budget in money (#241). The **limit this run** block takes a unit, tokens or US dollars, and `budget_dollars = 0.50` in `second-thought.ini` caps every run. In dollars, a run stops before a model call once it has spent that much at the models' list prices. A model with no known price can't be counted, so the run stops and says so rather than running with no limit, and backups with no known price are left out. The end line and a saved log show the budget. Programs exported before keep their budgets in tokens.
+
 ## 3.1.0 - 2026-11-02
 
 ### Added

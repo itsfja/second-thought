@@ -229,6 +229,13 @@ def money(dollars):
     return tr("about {cost}", cost=f"${dollars:,.2f}")
 
 
+def dollars(amount):
+    """An exact amount, like a budget: '$0.50', '$12.00', and '$0.004' under a cent, rather than '$0.00'."""
+    if 0 < amount < 0.01:
+        return "$" + f"{amount:.6f}".rstrip("0")
+    return f"${amount:,.2f}"
+
+
 def model_label(tier):
     if str(tier).startswith("openrouter:"):
         return "OpenRouter: " + tier.split(":", 1)[1]
@@ -237,6 +244,21 @@ def model_label(tier):
 
 class ModelCalls:
     """Calling the model services. Part of Runtime (see runtime.py)."""
+    def _within_money_budget(self, tiers):
+        """With a budget in dollars: stops the run once it's spent, or if the model to be called has no known price (it
+        couldn't be counted, so the run would have no limit). Backups with no price are left out. Gives the tiers to try."""
+        budget = self.budget_dollars
+        if call_cost(tiers[0], 0, 0) is None:
+            raise RunError(tr("Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.",
+                              model=model_label(tiers[0]), x=dollars(budget)))
+        if not self.cost[1]:
+            raise RunError(tr("Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.",
+                              x=dollars(budget)))
+        if self.cost[0] >= budget:
+            raise RunError(tr("Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).",
+                              x=money(self.cost[0]), x2=dollars(budget)))
+        return [t for t in tiers if call_cost(t, 0, 0) is not None]
+
     async def _call_live(self, prompt, want_json=False, picture=None, history=None, web=False):
         if self.ending:
             raise asyncio.CancelledError()
@@ -248,6 +270,8 @@ class ModelCalls:
         tier = self.current_tier
         # Backups stand in for the primary model only. A block that names its own model keeps that model.
         tiers = [tier] + (self.backups if tier == self.primary else [])
+        if self.budget_dollars:
+            tiers = self._within_money_budget(tiers)
         last = None
         for n, t in enumerate(tiers):
             if n:

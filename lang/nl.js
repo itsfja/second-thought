@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"zend %1 uit en wacht","tooltip":"Start elk ‘wanneer ik ontvang’-script voor dit bericht en wacht tot ze allemaal klaar zijn."},
 "rb_broadcast_with":{"message0":"zend %1 uit met %2","tooltip":"Start elk ‘wanneer ik ontvang’-script voor het bericht. Elk krijgt de waarde als zijn ‘berichtwaarde’."},
 "rb_broadcast_with_wait":{"message0":"zend %1 uit met %2 en wacht"},
-"rb_budget":{"message0":"beperk deze run tot %1 tokens","tooltip":"Controleert vóór elke modelaanroep hoeveel tokens deze run heeft gebruikt. Zodra dit getal bereikt is, stopt de run. 0 betekent geen limiet. Op deze pagina is de telling een schatting; geëxporteerde Python gebruikt de exacte aantallen."},
+"rb_budget":{"message0":"beperk deze run tot %1 %2","tooltip":"Controleert voor elke modelaanroep hoeveel tokens deze run heeft gebruikt, of wat hij heeft uitgegeven tegen de catalogusprijzen van de modellen. Zodra dat bedrag is bereikt, stopt de run. 0 betekent geen grens. In dollars kan een model zonder bekende prijs niet worden meegeteld, dus stopt de run in plaats van zonder grens door te gaan. Op deze pagina zijn de tellingen schattingen; het geëxporteerde Python gebruikt de exacte tellingen."},
 "rb_cal_when":{"message0":"wanneer een afspraak over %1 minuten begint","tooltip":"Voert de blokken eronder uit, zoveel minuten vóór elke afspraak in je agenda (afspraken van een hele dag tellen niet). ‘Wat er binnenkwam’ geeft title, start, end, location, minutes en text."},
 "rb_calendar":{"message0":"agenda voor de komende %1 dagen","tooltip":"De afspraken in je agenda vanaf vandaag, als records: day, start, end, title, location. Geëxporteerde Python leest CALENDAR_URL (het privé-iCal-adres van je agenda); deze pagina gebruikt een voorbeeldagenda."},
 "rb_chat":{"message0":"chat %1 : %2","tooltip":"Stuurt een bericht in een gesprek met een naam. Claude ziet de eerdere beurten van dat gesprek."},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"zolang deze pagina open is","permanent":"voor altijd"},
 "rb_mem_set_for.UNIT":{"m":"minuten","h":"uur","d":"dagen"},
 "rb_mem_add.KIND":{"transient":"zolang deze pagina open is","permanent":"voor altijd"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (getekende afbeeldingen)","orig":"origineel bestand"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (getekende afbeeldingen)","orig":"origineel bestand"},
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"Amerikaanse dollar"}
 },
 "categories":{
 "Events":"Gebeurtenissen",
@@ -922,7 +923,12 @@
 "Keyboard help":"Hulp bij het toetsenbord",
 "about {cost}":"ongeveer {cost}",
 "under {cost}":"minder dan {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Tegen de catalogusprijzen van de modellen is dat {cost}; op deze pagina telt het mee voor je Claude-gebruik."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Tegen de catalogusprijzen van de modellen is dat {cost}; op deze pagina telt het mee voor je Claude-gebruik.",
+"No money budget for this run.":"Geen geldbudget voor deze run.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Gestopt: een model dat deze run al heeft gebruikt heeft geen bekende prijs, dus de run kan niet aan zijn budget van {budget} worden gehouden. Gebruik modellen met een prijs, of een budget in tokens.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Gestopt: deze run heeft ongeveer {cost} uitgegeven tegen catalogusprijzen en bereikt daarmee zijn budget van {budget}. Verhoog het bedrag in het blok 'beperk deze run'.",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Gestopt: {model} heeft geen bekende prijs, dus deze run kan niet aan zijn budget van {budget} worden gehouden. Gebruik een model met een prijs, of een budget in tokens.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Deze run stopt voor een aanroep van Claude zodra hij ongeveer {budget} heeft uitgegeven tegen catalogusprijzen (tot nu toe ongeveer {cost})."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -1765,6 +1771,11 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"Kon {path} niet schrijven ({err}). Er is niets veranderd.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Runtime bijgewerkt van {version} naar {latest}. Het oude bestand is bewaard als {backup}.",
 "What changed: {url}":"Wat er veranderd is: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"Het bestand is veranderd, dus het vraagt opnieuw toestemming voor de volgende keer dat het draait."
+"The file changed, so it asks to be allowed again before its next run.":"Het bestand is veranderd, dus het vraagt opnieuw toestemming voor de volgende keer dat het draait.",
+"No money budget for this run.":"Geen geldbudget voor deze run.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Gestopt: een model dat deze run al heeft gebruikt heeft geen bekende prijs, dus de run kan niet aan zijn budget van {x} worden gehouden. Gebruik modellen met een prijs, of een budget in tokens.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Gestopt: deze run heeft {x} uitgegeven tegen catalogusprijzen en bereikt daarmee zijn budget van {x2}. Verhoog het bedrag in het blok 'beperk deze run' (of budget_dollars in second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Gestopt: {model} heeft geen bekende prijs, dus deze run kan niet aan zijn budget van {x} worden gehouden. Gebruik een model met een prijs, of een budget in tokens.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Deze run stopt voor een modelaanroep zodra hij {x} heeft uitgegeven tegen catalogusprijzen (tot nu toe uitgegeven: {x2})."
 }
 };

@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"boda %1 and abid","tooltip":"Onginþ ælce endebyrdnesse “þonne ic onfo” for þissum ærendgewrite and abit oþ þæt hie ealle geendod sien."},
 "rb_broadcast_with":{"message0":"boda %1 mid %2","tooltip":"Onginþ ælce endebyrdnesse “þonne ic onfo” for þam ærendgewrite. Ælc onfehþ þæs weorþes swa his “ærendgewrites weorþ”."},
 "rb_broadcast_with_wait":{"message0":"boda %1 mid %2 and abid"},
-"rb_budget":{"message0":"gemæra þas fremminge to %1 tokenum","tooltip":"Ær ælcre clypunge þære bysene, hit sceawaþ hu fela tokena þeos fremming bryce. Sona swa hit þis rim gerecþ, seo fremming ætstent. 0 tacnaþ nan gemære. On þissum leafe þæt getæl is wena; se utgelædda Python brycþ þæra rihtra getæla."},
+"rb_budget":{"message0":"gemæra þas fremminge to %1 %2","tooltip":"Ær ælcre gecyndclipunge sceawaþ hu fela tokena þeos fremming hæfþ gebroced, oþþe hwæt heo hæfþ aspended be þara gecynda bocweorþum. Sona swa heo þone dæl geræcþ, seo fremming stent. 0 tacnaþ nan gemære. On dollarum ne mæg gecynd butan cuþum weorþe beon geteald, forþy stent seo fremming ma þonne heo butan gemære forþga. On þissum leafe sind þa getalu gewenu; se utgelædda Python brycþ þa nearwan getalu."},
 "rb_cal_when":{"message0":"þonne tidbec gelimp onginþ on %1 minutum","tooltip":"Fremeþ þa stoccas beneoþan swa fela minuta ær ælcum gelimpe on þinre tidbec (gelimp ealles dæges ne beoþ getealde). “Hwæt becom” sylþ title, start, end, location, minutes and text."},
 "rb_calendar":{"message0":"tidboc for þam nihstan %1 dagum","tooltip":"Þinre tidbec gelimp fram todæge, swa gemearcu: day, start, end, title, location. Se utgelædda Python ræt CALENDAR_URL (þinre tidbec diegle iCal stow); þis leaf brycþ bysenlicre tidbec."},
 "rb_chat":{"message0":"spræc %1 : %2","tooltip":"Sent ærendgewrit on genemnedre spræce. Claude gesihþ þa ærran wrixlas þære spræce."},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"þa hwile þe þis leaf open is","permanent":"a"},
 "rb_mem_set_for.UNIT":{"m":"minuta","h":"tida","d":"dagas"},
 "rb_mem_add.KIND":{"transient":"þa hwile þe þis leaf open is","permanent":"a"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (atyfrede anlicnessa)","orig":"frumlic fætels"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (atyfrede anlicnessa)","orig":"frumlic fætels"},
+"rb_budget.UNIT":{"tokens":"tokenum","dollars":"Americanum dollarum"}
 },
 "categories":{
 "Events":"Gelimpu",
@@ -922,7 +923,12 @@
 "Keyboard help":"Cǣgbredes fultum",
 "about {cost}":"ymbe {cost}",
 "under {cost}":"lǣsse þonne {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Be þǣra bysena gesettum weorþe þæt is {cost}; on þissum leafe hit biþ geteald tō þīnre Claude notunge."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Be þǣra bysena gesettum weorþe þæt is {cost}; on þissum leafe hit biþ geteald tō þīnre Claude notunge.",
+"No money budget for this run.":"Nis nan feohgemet for þisse fremminge.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Ætstanden: an gecynd þe þeos fremming ær breac næfþ nanne cuþne weorþ, forþy ne mæg heo beon gehealden binnan hire gemete of {budget}. Bruc gecynda mid weorþe, oþþe gemetes on tokenum.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Ætstanden: þeos fremming hæfþ aspended ymbe {cost} be bocweorþum, and þæt geræcþ hire gemet of {budget}. Hebbe þone dæl on þam stocce 'gemæra þas fremminge'.",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Ætstanden: {model} næfþ nanne cuþne weorþ, forþy ne mæg þeos fremming beon gehealden binnan hire gemete of {budget}. Bruc gecyndes mid weorþe, oþþe gemetes on tokenum.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Þeos fremming stent ær clipunge to Claude sona swa heo hæfþ aspended ymbe {budget} be bocweorþum (ymbe {cost} oþ nu)."
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1765,7 +1771,12 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"Ne mihte writan {path} ({err}). Naht ne wæs awend.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Se runtime wæs geniwod fram {version} to {latest}. Se ealda fætels is gehealden swa {backup}.",
 "What changed: {url}":"Hwæt awend wæs: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"Se fætels wæs awend, forþy hit bit eft leafe ær his næstan fremminge."
+"The file changed, so it asks to be allowed again before its next run.":"Se fætels wæs awend, forþy hit bit eft leafe ær his næstan fremminge.",
+"No money budget for this run.":"Nis nan feohgemet for þisse fremminge.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Ætstanden: an gecynd þe þeos fremming ær breac næfþ nanne cuþne weorþ, forþy ne mæg heo beon gehealden binnan hire gemete of {x}. Bruc gecynda mid weorþe, oþþe gemetes on tokenum.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Ætstanden: þeos fremming hæfþ aspended {x} be bocweorþum, and þæt geræcþ hire gemet of {x2}. Hebbe þone dæl on þam stocce 'gemæra þas fremminge' (oþþe budget_dollars on second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Ætstanden: {model} næfþ nanne cuþne weorþ, forþy ne mæg þeos fremming beon gehealden binnan hire gemete of {x}. Bruc gecyndes mid weorþe, oþþe gemetes on tokenum.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Þeos fremming stent ær gecyndclipunge sona swa heo hæfþ aspended {x} be bocweorþum (aspended oþ nu: {x2})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

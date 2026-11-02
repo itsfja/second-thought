@@ -41,7 +41,7 @@ for _stream in (sys.stdout, sys.stderr):
 SETTINGS_FILE = "second-thought.ini"
 SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
-                 "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
+                 "budget": "RB_BUDGET", "budget_dollars": "RB_BUDGET_DOLLARS", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
                  "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
                  "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK",
@@ -359,6 +359,13 @@ def money(dollars):
     return tr("about {cost}", cost=f"${dollars:,.2f}")
 
 
+def dollars(amount):
+    """An exact amount, like a budget: '$0.50', '$12.00', and '$0.004' under a cent, rather than '$0.00'."""
+    if 0 < amount < 0.01:
+        return "$" + f"{amount:.6f}".rstrip("0")
+    return f"${amount:,.2f}"
+
+
 def model_label(tier):
     if str(tier).startswith("openrouter:"):
         return "OpenRouter: " + tier.split(":", 1)[1]
@@ -367,6 +374,21 @@ def model_label(tier):
 
 class ModelCalls:
     """Calling the model services. Part of Runtime (see runtime.py)."""
+    def _within_money_budget(self, tiers):
+        """With a budget in dollars: stops the run once it's spent, or if the model to be called has no known price (it
+        couldn't be counted, so the run would have no limit). Backups with no price are left out. Gives the tiers to try."""
+        budget = self.budget_dollars
+        if call_cost(tiers[0], 0, 0) is None:
+            raise RunError(tr("Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.",
+                              model=model_label(tiers[0]), x=dollars(budget)))
+        if not self.cost[1]:
+            raise RunError(tr("Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.",
+                              x=dollars(budget)))
+        if self.cost[0] >= budget:
+            raise RunError(tr("Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).",
+                              x=money(self.cost[0]), x2=dollars(budget)))
+        return [t for t in tiers if call_cost(t, 0, 0) is not None]
+
     async def _call_live(self, prompt, want_json=False, picture=None, history=None, web=False):
         if self.ending:
             raise asyncio.CancelledError()
@@ -378,6 +400,8 @@ class ModelCalls:
         tier = self.current_tier
         # Backups stand in for the primary model only. A block that names its own model keeps that model.
         tiers = [tier] + (self.backups if tier == self.primary else [])
+        if self.budget_dollars:
+            tiers = self._within_money_budget(tiers)
         last = None
         for n, t in enumerate(tiers):
             if n:
@@ -728,6 +752,7 @@ def _number_setting(name, default, what, whole=False):
 CALL_TIMEOUT = _number_setting("RB_CALL_TIMEOUT", 300, "a number of seconds, like 120") or None  # one model call gives up after this long
 MAX_SECONDS = _number_setting("RB_MAX_SECONDS", 0, "a number of seconds, like 900")             # any run stops after this long
 BUDGET = _number_setting("RB_BUDGET", 0, "a whole number of tokens, like 50000", whole=True)      # tokens per run
+BUDGET_DOLLARS = _number_setting("RB_BUDGET_DOLLARS", 0, "an amount in US dollars, like 0.50")  # US dollars per run, at list prices
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
 MAX_SCRIPTS = 100       # scripts started by broadcasts in one run
@@ -5314,6 +5339,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
         self.usage = {}  # provider -> [tokens in, tokens out]
         self.cost = [0.0, True]      # what the run's model calls cost in US dollars, and whether every one had a known price
         self.budget = BUDGET          # budget = 50000 in second-thought.ini caps every run; a 'limit this run' block changes it
+        self.budget_dollars = BUDGET_DOLLARS  # the same in US dollars at list prices: budget_dollars = 0.50
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
         self.trace = []              # every log line, for save_log
         self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
@@ -5439,7 +5465,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
     def tokens_used(self):
         return sum(u[0] + u[1] for u in self.usage.values())
 
-    def set_budget(self, n):
+    def set_budget(self, n, unit="tokens"):
+        if unit == "dollars":
+            n = max(0.0, num(n))
+            self.budget_dollars = n
+            self.log(tr("Budget"), tr("This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).",
+                                      x=dollars(n), x2=money(self.cost[0])) if n else tr("No money budget for this run."), tr("set"))
+            return
         n = max(0, round_js(num(n)))
         self.budget = n
         self.log(tr("Budget"), tr("This run stops before a model call once it has used {x} tokens (used so far: {x2}).", x=format(n, ','), x2=format(self.tokens_used(), ','))
@@ -6606,7 +6638,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
                           for who, u in self.usage.items()) or tr("no tokens used")
         spare = (" · " + (tr("a backup answered 1 step") if self.backup_used == 1 else tr("a backup answered {n} steps", n=self.backup_used))
                  if self.backup_used else "")
-        budget = " · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else ""
+        budget = (" · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else "") + \
+            (" · " + tr("budget {n}", n=dollars(self.budget_dollars)) if self.budget_dollars else "")
         print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}{self.cost_text()}", flush=True)
         return 0
 
@@ -6634,6 +6667,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Doctor, Updates):
             lines.append(f"- Cost: {self.cost_text()[3:]}")
         if self.budget:
             lines.append(f"- Budget: {self.budget:,} tokens")
+        if self.budget_dollars:
+            lines.append(f"- Budget: {dollars(self.budget_dollars)} at list prices")
         if self.error:
             lines.append(f"- Stopped with an error: {self._describe(self.error)}")
         lines.append("")

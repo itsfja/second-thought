@@ -26,7 +26,7 @@
 "rb_broadcast_wait":{"message0":"%1 𒅆𒋛 𒌋 𒄑𒍣𒄑","tooltip":"𒅗𒆷 𒂊𒁉𒅖𒋾𒅎 „𒄿𒉡𒈠 𒄿𒇷𒅅𒄣” 𒊭 𒅆𒅁𒊑𒅎 𒀭𒉌𒅎 𒍑𒋼𒅆𒅕 𒌋 𒀀𒁲 𒅗𒇻𒅆𒈾 𒅅𒈬𒊏 𒄿𒆠𒅁."},
 "rb_broadcast_with":{"message0":"%1 𒀉𒋾 %2 𒅆𒋛","tooltip":"𒅗𒆷 𒂊𒁉𒅖𒋾𒅎 „𒄿𒉡𒈠 𒄿𒇷𒅅𒄣” 𒊭 𒅆𒅁𒊑𒅎 𒍑𒋼𒅆𒅕. 𒅖𒋾𒀜 𒅖𒋾𒀜 𒅆𒈠𒄠 𒆠𒈠 „𒅆𒅎 𒅆𒅁𒊑𒅎” 𒊭𒊭 𒄿𒇷𒅅𒆠."},
 "rb_broadcast_with_wait":{"message0":"%1 𒀉𒋾 %2 𒅆𒋛 𒌋 𒄑𒍣𒄑"},
-"rb_budget":{"message0":"𒂊𒁉𒅖𒋫𒄠 𒀭𒉌𒋫𒄠 𒀀𒈾 %1 token 𒅗𒀠𒇷","tooltip":"𒄿𒈾 𒉺𒉌 𒅆𒋛𒋾𒅎 𒅖𒋾𒀜 𒀀𒈾 𒀊𒅗𒀠𒇷𒅎, 𒈪𒈾𒄠 token 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒄿𒋫𒅗𒀠 𒄿𒁀𒅈𒊑. 𒄿𒉡𒈠 𒈪𒉡𒋫𒄠 𒀭𒉌𒋫𒄠 𒄿𒅗𒀸𒊭𒀜, 𒂊𒁉𒅖𒌅𒌝 𒄿𒉺𒅈𒊏𒊍. 0 𒁀𒇻 𒅗𒇷𒅎. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒈪𒉡𒌅𒌝 𒄭𒁲𒌅𒌝; 𒉈𒁉𒋗𒌝 𒊭 Python 𒈪𒈾𒋾𒅎 𒆠𒈾𒋾𒅎 𒄿𒇷𒅅𒆠."},
+"rb_budget":{"message0":"𒂊𒁉𒅖𒋫𒄠 𒀭𒉌𒋫𒄠 𒀀𒈾 %1 %2 𒅗𒀠𒇷","tooltip":"𒆷𒈠 𒁲𒈠𒄠 𒄿𒊓𒊍𒋢, 𒈠𒆷 token 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒅋𒄣, 𒌑𒇻 𒈠𒆷 𒄿𒈾 𒅆𒅎 𒌅𒌒𒁉𒅎 𒈾𒀜𒉡 𒄿𒁀𒅈𒊑. 𒆠𒈠 𒅗𒊍𒉺𒄠 𒋗𒀀𒋾 𒅅𒋗𒁺, 𒂊𒁉𒅖𒌅𒌝 𒅁𒊒𒊻. 0 𒈪𒅅𒋢𒌝 𒌌 𒄿𒁀𒀸𒅆. 𒄿𒈾 dollar, 𒁲𒈬𒌝 𒊭 𒅆𒈠𒄠 𒄿𒁺𒌝 𒌌 𒄿𒋗 𒌌 𒅎𒈠𒀭𒉌, 𒀸𒋗𒌝 𒆠𒄠 𒂊𒁉𒅖𒌅𒌝 𒅁𒊒𒊻. 𒄿𒈾 𒁉𒀉 𒀭𒉌𒋾𒅎 𒈪𒉡𒌅𒌝 𒋼𒂖𒌅𒌝; Python 𒋗𒍮𒌝 𒈪𒉡𒋫𒄠 𒆠𒈾𒄠 𒄿𒇷𒅅𒆠."},
 "rb_cal_when":{"message0":"𒄿𒉡𒈠 𒀉𒌅𒌝 𒄿𒈾 𒌑𒈪 𒄿𒈾 %1 𒌓𒁕𒋾 𒅖𒊭𒀝𒅗𒀭","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌓𒁕𒋾 𒈠𒆷 𒄿𒈾 𒉺𒉌 𒀉𒋾𒅎 𒅖𒋾𒀜 𒅖𒋾𒀜 𒄿𒈾 𒌑𒈪𒅗 𒌑𒊺𒁉𒅖 (𒀉𒋫𒌅𒌝 𒊭 𒌑𒈪𒅎 𒂵𒄠𒊑𒅎 𒌌 𒅎𒈠𒈾). „𒊭 𒅅𒋗𒁺” title, start, end, location, minutes 𒌋 text 𒄿𒈾𒀜𒁲𒅔."},
 "rb_calendar":{"message0":"𒌑𒈬 𒀀𒈾 %1 𒌑𒈪 𒊭 𒅋𒇷𒆪𒉌","tooltip":"𒀉𒋫𒌅𒌝 𒊭 𒌑𒈪𒅗 𒅖𒌅 𒌑𒈪𒅎 𒀭𒉌𒅎, 𒆠𒈠 𒅆𒀉𒊑: day, start, end, location, title. 𒉈𒁉𒋗𒌝 𒊭 Python CALENDAR_URL 𒄿𒊭𒊍𒋛 (𒀀𒊭𒅈 iCal 𒊭 𒌑𒈪𒅗 𒉺𒊍𒊒𒌝); 𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒌑𒈪 𒋫𒄠𒅆𒇷𒅎 𒄿𒇷𒅅𒆠."},
 "rb_chat":{"message0":"𒁕𒁀𒁍𒌝 %1 : %2","tooltip":"𒅆𒅁𒊏𒄠 𒄿𒈾 𒁕𒁀𒁉𒅎 𒊭 𒋗𒈠𒄠 𒄿𒋗 𒄿𒊭𒀊𒉺𒅈. Claude 𒀀𒉿𒋾𒅎 𒉺𒈾𒋾𒅎 𒊭 𒁕𒁀𒁉𒅎 𒋗𒀀𒋾 𒅎𒈠𒅈."},
@@ -160,7 +160,8 @@
 "rb_mem_set.KIND":{"transient":"𒀀𒁲 𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒁉𒌅","permanent":"𒀀𒈾 𒁕𒅈"},
 "rb_mem_set_for.UNIT":{"m":"𒌓𒁕𒌅","h":"𒁁𒊒","d":"𒌑𒈬"},
 "rb_mem_add.KIND":{"transient":"𒀀𒁲 𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒁉𒌅","permanent":"𒀀𒈾 𒁕𒅈"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (𒂊𒍢𒊏𒌅𒌝)","orig":"𒆪𒉡𒊌𒆪𒌝 𒈠𒄴𒊒𒌝"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (𒂊𒍢𒊏𒌅𒌝)","orig":"𒆪𒉡𒊌𒆪𒌝 𒈠𒄴𒊒𒌝"},
+"rb_budget.UNIT":{"tokens":"token","dollars":"US dollar"}
 },
 "categories":{
 "Events":"𒀉𒋫𒌅𒌝",
@@ -923,7 +924,12 @@
 "Keyboard help":"𒋫𒀊𒁍𒌅𒌝 𒊭 𒌅𒌒𒁉 𒋡𒋾𒅎",
 "about {cost}":"𒆠𒈠 {cost}",
 "under {cost}":"𒂊𒇷 {cost} 𒈬𒌅",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"𒄿𒈾 𒅆𒈪𒅎 𒊭𒀜𒊑𒅎 𒊭 𒋫𒄠𒅆𒆷𒋾𒅎 {cost}; 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒀀𒈾 𒂊𒁉𒅖𒋾𒅗 𒊭 Claude 𒅎𒈠𒀭𒉡."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"𒄿𒈾 𒅆𒈪𒅎 𒊭𒀜𒊑𒅎 𒊭 𒋫𒄠𒅆𒆷𒋾𒅎 {cost}; 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒀀𒈾 𒂊𒁉𒅖𒋾𒅗 𒊭 Claude 𒅎𒈠𒀭𒉡.",
+"No money budget for this run.":"𒄿𒈾 𒂊𒁉𒅖𒋾𒅎 𒀭𒉌𒋾𒅎 𒈪𒅅𒋢𒌝 𒊭 𒅗𒊍𒁉𒅎 𒌌 𒄿𒁀𒀸𒅆.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"𒅁𒊒𒊻: 𒁲𒈬𒌝 𒊭 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒌌𒌅 𒉺𒈾 𒄿𒁍𒋗 𒅆𒈠𒄠 𒄿𒁺𒌝 𒌌 𒄿𒋗, 𒀸𒋗𒌝 𒆠𒄠 𒄿𒈾 𒈪𒅅𒋛𒅎 𒊭 {budget} 𒌌 𒄿𒈾𒊍𒍝𒅈. 𒁲𒈪 𒊭 𒅆𒈠𒄠 𒄿𒋗 𒂊𒁍𒍑, 𒌑𒇻 𒈪𒅅𒊓𒄠 𒄿𒈾 token.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"𒅁𒊒𒊻: 𒄿𒈾 𒂊𒁉𒅖𒋾𒅎 𒀭𒉌𒋾𒅎 𒆠𒈠 {cost} 𒄿𒈾 𒅆𒅎 𒌅𒌒𒁉𒅎 𒈾𒀜𒉡, 𒈪𒅅𒊓𒄠 𒊭 {budget} 𒅅𒋗𒌓. 𒄿𒈾 𒇷𒁉𒀉𒋾 '𒂊𒁉𒅖𒋫𒄠 𒀭𒉌𒋫𒄠 𒅗𒇻' 𒅗𒊍𒉺𒄠 šuqqi.",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"𒅁𒊒𒊻: {model} 𒅆𒈠𒄠 𒄿𒁺𒌝 𒌌 𒄿𒋗, 𒀸𒋗𒌝 𒆠𒄠 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒄿𒈾 𒈪𒅅𒋛𒅎 𒊭 {budget} 𒌌 𒄿𒈾𒊍𒍝𒅈. 𒁲𒈠𒄠 𒊭 𒅆𒈠𒄠 𒄿𒋗 𒂊𒁍𒍑, 𒌑𒇻 𒈪𒅅𒊓𒄠 𒄿𒈾 token.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒆷𒈠 Claude 𒄿𒊓𒊍𒋢 𒅁𒊒𒊻, 𒆠𒈠 𒅖𒌅 𒆠𒈠 {budget} 𒄿𒈾 𒅆𒅎 𒌅𒌒𒁉𒅎 𒈾𒀜𒉡 (𒀀𒁲 𒄿𒈾𒀭𒈾 𒆠𒈠 {cost})."
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1766,7 +1772,12 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"{path} šaṭāram ul imṣi ({err}). mimma ul inninni.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"runtime ištu {version} ana {latest} uddiš. ṭuppum labirum kīma {backup} naṣir.",
 "What changed: {url}":"ša inninnû: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"ṭuppum inninni, aššum kīam lāma epištim warkītim anniam ištanâl."
+"The file changed, so it asks to be allowed again before its next run.":"ṭuppum inninni, aššum kīam lāma epištim warkītim anniam ištanâl.",
+"No money budget for this run.":"ina epištim annītim miksum ša kaspim ul ibašši.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"iprus: ṭēmum ša epištum annītum ultu pāna īpušu šīmam idûm ul išu, aššum kīam ina miksim ša {x} ul inaṣṣar. ṭēmī ša šīmam išû epuš, ulū miksam ina token.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"iprus: ina epištim annītim {x} ina šīm ṭuppim nadnu, miksam ša {x2} ikšud. ina libitti 'epištam annītam kalû' kaspam šuqqi (ulū budget_dollars ina second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"iprus: {model} šīmam idûm ul išu, aššum kīam epištum annītum ina miksim ša {x} ul inaṣṣar. ṭēmam ša šīmam išû epuš, ulū miksam ina token.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"epištum annītum lāma ṭēmam isassû iprus, kīma ištu {x} ina šīm ṭuppim nadnu (adi inanna nadnu: {x2})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

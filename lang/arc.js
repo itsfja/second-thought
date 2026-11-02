@@ -26,7 +26,7 @@
 "rb_broadcast_wait":{"message0":"אכריז %1 ואמתין","tooltip":"משרי כל סדר \"כד אנא מקבל\" לאגרתא הדא ומתין עד דכולהון שלמין."},
 "rb_broadcast_with":{"message0":"אכריז %1 עם %2","tooltip":"משרי כל סדר \"כד אנא מקבל\" לאגרתא. כל חד מקבל ערכא כ\"ערך אגרתא\" דיליה."},
 "rb_broadcast_with_wait":{"message0":"אכריז %1 עם %2 ואמתין"},
-"rb_budget":{"message0":"תחים הלוכא הדין ל-%1 טוקנין","tooltip":"קדם כל קריאה לחכימא, בדיק כמה טוקנין אכל הלוכא הדין. כד מטי למניינא הדין, הלוכא פסיק. 0 פירושו בלא תחומא. בדפא הדין מניינא הוא אומדנא; Python דנפק משתמש במניינא דקושטא."},
+"rb_budget":{"message0":"תחים הלוכא הדין ל-%1 %2","tooltip":"קדם כל קריאת מודלא, בדק כמה טוקנין רהטא הדין אשתמש, או כמה אפיק בטימי ספרא דמודליא. כד מטא לסכומא הדין, רהטא פסק. 0 לית תחומא. בדולרין, מודלא דלית ליה טימי ידיעא לא אפשר למנייה, הלכך רהטא פסק ולא אזיל בלא תחומא. בדפא הדין מניינא אומדנא אינון; Python דנפק משתמש במניינא חתימא."},
 "rb_cal_when":{"message0":"כד מאורעא בחושבן יומיא שרי בעוד %1 רגעין","tooltip":"מרהט לבנין דלתחתא כמה רגעין קדם כל מאורעא בחושבן יומך (מאורעי יומא שלים לא מתמנין). \"מה דאתא\" יהב title, start, end, location, minutes ו-text."},
 "rb_calendar":{"message0":"חושבן יומיא ל-%1 יומין דאתין","tooltip":"מאורעי חושבן יומך מן יומא דין, כשטרי: day, start, end, title, location. Python דנפק קרי CALENDAR_URL (אתר iCal טמירא דחושבן יומך); דפא הדין משתמש בחושבן יומיא דדוגמא."},
 "rb_chat":{"message0":"שיחתא %1 : %2","tooltip":"משלח אגרתא בשיחתא דאית לה שמא. Claude חזי מלי קדמאי דשיחתא ההיא."},
@@ -160,7 +160,8 @@
 "rb_mem_set.KIND":{"transient":"כל עוד דפא הדין פתיח","permanent":"לעלם"},
 "rb_mem_set_for.UNIT":{"m":"רגעין","h":"שעין","d":"יומין"},
 "rb_mem_add.KIND":{"transient":"כל עוד דפא הדין פתיח","permanent":"לעלם"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (צייורין)","orig":"מגלתא קדמייתא"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (צייורין)","orig":"מגלתא קדמייתא"},
+"rb_budget.UNIT":{"tokens":"טוקנין","dollars":"דולרין אמריקאין"}
 },
 "categories":{
 "Events":"מאורעין",
@@ -923,7 +924,12 @@
 "Keyboard help":"עדרנא דלוחא דמפתחין",
 "about {cost}":"בערך {cost}",
 "under {cost}":"פחות מן {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"בטימי כתיבי דדמותא הדא {cost}; בדפא הדא מתחשב בתשמשתכון דClaude."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"בטימי כתיבי דדמותא הדא {cost}; בדפא הדא מתחשב בתשמשתכון דClaude.",
+"No money budget for this run.":"לית תחומא דכספא לרהטא הדין.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"פסק: למודל דרהטא הדין כבר אשתמש ביה לית טימי ידיעא, הלכך לא אפשר למנטריה בגו תחומיה דילה {budget}. אשתמש במודלין עם טימי, או בתחומא בטוקנין.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"פסק: רהטא הדין אפיק בערך {cost} בטימי ספרא, ומטא לתחומיה {budget}. אסגי סכומא בלבנתא 'תחים הלוכא הדין'.",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"פסק: ל־{model} לית טימי ידיעא, הלכך לא אפשר למנטר רהטא הדין בגו תחומיה {budget}. אשתמש במודלא עם טימי, או בתחומא בטוקנין.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"רהטא הדין פסק קדם קריאה ל־Claude כד אפיק בערך {budget} בטימי ספרא (בערך {cost} עד כען)."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1766,7 +1772,12 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"לא אפשר למכתב {path} ({err}). מדעם לא אשתני.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"‏runtime אתחדתת מן {version} ל־{latest}. מגלתא עתיקתא נטירא כ־{backup}.",
 "What changed: {url}":"מה דאשתני: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"מגלתא אשתניאת, הלכך תשאל רשותא תוב קדם רהטא דבתרה."
+"The file changed, so it asks to be allowed again before its next run.":"מגלתא אשתניאת, הלכך תשאל רשותא תוב קדם רהטא דבתרה.",
+"No money budget for this run.":"לית תחומא דכספא לרהטא הדין.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"פסק: למודל דרהטא הדין כבר אשתמש ביה לית טימי ידיעא, הלכך לא אפשר למנטריה בגו תחומיה דילה {x}. אשתמש במודלין עם טימי, או בתחומא בטוקנין.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"פסק: רהטא הדין אפיק {x} בטימי ספרא, ומטא לתחומיה {x2}. אסגי סכומא בלבנתא 'תחים הלוכא הדין' (או budget_dollars ב־second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"פסק: ל־{model} לית טימי ידיעא, הלכך לא אפשר למנטר רהטא הדין בגו תחומיה {x}. אשתמש במודלא עם טימי, או בתחומא בטוקנין.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"רהטא הדין פסק קדם קריאת מודלא כד אפיק {x} בטימי ספרא (דאתאפיק עד כען: {x2})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

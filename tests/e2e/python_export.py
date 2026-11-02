@@ -1018,6 +1018,10 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         check(code_ != 0 and "reaches its budget of 5" in out, "t_budget.py stops at its budget, using the exact counts" + ("" if code_ else f": {out[-200:]}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget.py")], dict(env, RB_BUDGET="7"), tmp)
         check(code_ != 0 and "budget of 5" in out, "a budget block wins over budget in the settings")
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget_dollars.py")], env, tmp)
+        check(code_ != 0 and "reaches its budget of $0.0001" in out, "t_budget_dollars.py stops once it has spent its budget in US dollars" + ("" if code_ else f": {out[-200:]}"))
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_budget_dollars.py")], dict(env, RB_MODEL_TIER="llama-default"), tmp)
+        check(code_ != 0 and "no known price" in out and "Llama" in out, "a model with no known price is refused under a budget in US dollars, rather than run with no limit" + ("" if code_ else f": {out[-200:]}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_askfirst.py")], dict(env, RB_SAVE_LOG="yes"), tmp)
         saved = pathlib.Path(tmp) / "outputs" / "ask-first-note.txt"
         check(code_ == 0 and "Allow this? save" in out and saved.exists(), "t_askfirst.py asks before saving the file, then saves it" + ("" if code_ == 0 else f": {(err or out)[-300:]}"))

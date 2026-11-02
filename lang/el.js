@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"μετάδωσε %1 και περίμενε","tooltip":"Ξεκινά κάθε σενάριο «όταν λάβω» για αυτό το μήνυμα και περιμένει να τελειώσουν όλα."},
 "rb_broadcast_with":{"message0":"μετάδωσε %1 με %2","tooltip":"Ξεκινά κάθε σενάριο «όταν λάβω» για το μήνυμα. Καθένα παίρνει την τιμή ως «τιμή μηνύματος»."},
 "rb_broadcast_with_wait":{"message0":"μετάδωσε %1 με %2 και περίμενε"},
-"rb_budget":{"message0":"περιόρισε αυτή την εκτέλεση σε %1 tokens","tooltip":"Πριν από κάθε κλήση στο μοντέλο, ελέγχει πόσα tokens έχει χρησιμοποιήσει η εκτέλεση. Μόλις φτάσει αυτόν τον αριθμό, η εκτέλεση σταματά. Το 0 σημαίνει χωρίς όριο. Σε αυτή τη σελίδα η μέτρηση είναι εκτίμηση· η εξαγόμενη Python χρησιμοποιεί τους ακριβείς αριθμούς."},
+"rb_budget":{"message0":"περιόρισε αυτή την εκτέλεση σε %1 %2","tooltip":"Πριν από κάθε κλήση μοντέλου, ελέγχει πόσα tokens έχει χρησιμοποιήσει αυτή η εκτέλεση, ή πόσα έχει ξοδέψει στις τιμές καταλόγου των μοντέλων. Μόλις φτάσει αυτό το ποσό, η εκτέλεση σταματά. Το 0 σημαίνει χωρίς όριο. Σε δολάρια, ένα μοντέλο χωρίς γνωστή τιμή δεν μπορεί να μετρηθεί, οπότε η εκτέλεση σταματά αντί να συνεχίσει χωρίς όριο. Σε αυτή τη σελίδα οι μετρήσεις είναι εκτιμήσεις· το εξαγόμενο Python χρησιμοποιεί τις ακριβείς."},
 "rb_cal_when":{"message0":"όταν ένα συμβάν ημερολογίου αρχίζει σε %1 λεπτά","tooltip":"Εκτελεί τα μπλοκ από κάτω τόσα λεπτά πριν από κάθε συμβάν του ημερολογίου σας (τα ολοήμερα δεν μετρούν). Το «ό,τι έφτασε» δίνει title, start, end, location, minutes και text."},
 "rb_calendar":{"message0":"ημερολόγιο για τις επόμενες %1 ημέρες","tooltip":"Τα συμβάντα του ημερολογίου σας από σήμερα, ως εγγραφές: day, start, end, title, location. Η εξαγόμενη Python διαβάζει το CALENDAR_URL (την ιδιωτική διεύθυνση iCal του ημερολογίου σας)· αυτή η σελίδα χρησιμοποιεί ημερολόγιο δείγματος."},
 "rb_chat":{"message0":"συνομιλία %1 : %2","tooltip":"Στέλνει μήνυμα σε μια συνομιλία με όνομα. Ο Claude βλέπει τα προηγούμενα μηνύματα αυτής της συνομιλίας."},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"όσο αυτή η σελίδα είναι ανοιχτή","permanent":"για πάντα"},
 "rb_mem_set_for.UNIT":{"m":"λεπτά","h":"ώρες","d":"ημέρες"},
 "rb_mem_add.KIND":{"transient":"όσο αυτή η σελίδα είναι ανοιχτή","permanent":"για πάντα"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (σχεδιασμένες εικόνες)","orig":"αρχικό αρχείο"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (σχεδιασμένες εικόνες)","orig":"αρχικό αρχείο"},
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολάρια ΗΠΑ"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -922,7 +923,12 @@
 "Keyboard help":"Βοήθεια πληκτρολογίου",
 "about {cost}":"περίπου {cost}",
 "under {cost}":"κάτω από {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Με τις τιμές καταλόγου των μοντέλων αυτό είναι {cost}· σε αυτή τη σελίδα μετρά στη χρήση σας του Claude."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"Με τις τιμές καταλόγου των μοντέλων αυτό είναι {cost}· σε αυτή τη σελίδα μετρά στη χρήση σας του Claude.",
+"No money budget for this run.":"Δεν υπάρχει χρηματικός προϋπολογισμός γι’ αυτή την εκτέλεση.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Διακόπηκε: ένα μοντέλο που έχει ήδη χρησιμοποιήσει αυτή η εκτέλεση δεν έχει γνωστή τιμή, οπότε δεν μπορεί να κρατηθεί στον προϋπολογισμό των {budget}. Χρησιμοποιήστε μοντέλα με τιμή, ή προϋπολογισμό σε tokens.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Διακόπηκε: αυτή η εκτέλεση έχει ξοδέψει περίπου {cost} σε τιμές καταλόγου, που φτάνει τον προϋπολογισμό της των {budget}. Αυξήστε το ποσό στο μπλοκ «περιόρισε αυτή την εκτέλεση».",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Διακόπηκε: το {model} δεν έχει γνωστή τιμή, οπότε αυτή η εκτέλεση δεν μπορεί να κρατηθεί στον προϋπολογισμό των {budget}. Χρησιμοποιήστε μοντέλο με τιμή, ή προϋπολογισμό σε tokens.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Αυτή η εκτέλεση σταματά πριν από μια κλήση στο Claude μόλις ξοδέψει περίπου {budget} σε τιμές καταλόγου (περίπου {cost} ως τώρα)."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1765,6 +1771,11 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"Δεν ήταν δυνατή η εγγραφή του {path} ({err}). Δεν άλλαξε τίποτα.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Το runtime ενημερώθηκε από {version} σε {latest}. Το παλιό αρχείο αποθηκεύτηκε ως {backup}.",
 "What changed: {url}":"Τι άλλαξε: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"Το αρχείο άλλαξε, οπότε θα ζητήσει ξανά άδεια πριν από την επόμενη εκτέλεση."
+"The file changed, so it asks to be allowed again before its next run.":"Το αρχείο άλλαξε, οπότε θα ζητήσει ξανά άδεια πριν από την επόμενη εκτέλεση.",
+"No money budget for this run.":"Δεν υπάρχει χρηματικός προϋπολογισμός γι’ αυτή την εκτέλεση.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Διακόπηκε: ένα μοντέλο που έχει ήδη χρησιμοποιήσει αυτή η εκτέλεση δεν έχει γνωστή τιμή, οπότε δεν μπορεί να κρατηθεί στον προϋπολογισμό των {x}. Χρησιμοποιήστε μοντέλα με τιμή, ή προϋπολογισμό σε tokens.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Διακόπηκε: αυτή η εκτέλεση έχει ξοδέψει {x} σε τιμές καταλόγου, που φτάνει τον προϋπολογισμό της των {x2}. Αυξήστε το ποσό στο μπλοκ «περιόρισε αυτή την εκτέλεση» (ή budget_dollars στο second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Διακόπηκε: το {model} δεν έχει γνωστή τιμή, οπότε αυτή η εκτέλεση δεν μπορεί να κρατηθεί στον προϋπολογισμό των {x}. Χρησιμοποιήστε μοντέλο με τιμή, ή προϋπολογισμό σε tokens.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Αυτή η εκτέλεση σταματά πριν από μια κλήση μοντέλου μόλις ξοδέψει {x} σε τιμές καταλόγου (ως τώρα: {x2})."
 }
 };

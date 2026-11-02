@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"广播 %1 并等待","tooltip":"启动所有收听此消息的“当我收到”脚本，并等它们全部完成。"},
 "rb_broadcast_with":{"message0":"广播 %1 并附带 %2","tooltip":"启动所有收听此消息的“当我收到”脚本。每个脚本都会把这个值作为它的“消息值”。"},
 "rb_broadcast_with_wait":{"message0":"广播 %1 并附带 %2 并等待"},
-"rb_budget":{"message0":"将本次运行限制在 %1 个 token 以内","tooltip":"每次调用模型前，检查本次运行已用了多少 token。一旦达到这个数，运行就会停止。0 表示不限制。在本页面中这个计数是估算的；导出的 Python 使用准确的数字。"},
+"rb_budget":{"message0":"将本次运行限制在 %1 %2 以内","tooltip":"每次调用模型前，检查本次运行已用了多少 token，或按模型标价已花了多少钱。达到这个数额后，运行就会停止。0 表示不限制。按美元计时，没有已知价格的模型无法计算，所以运行会停止，而不是不受限制地继续。在本页上这些数字是估算；导出的 Python 使用精确数字。"},
 "rb_cal_when":{"message0":"当日历事件在 %1 分钟后开始时","tooltip":"在你日历中每个事件开始前这么多分钟，运行下面的积木（全天事件不算）。“收到的内容”提供 title、start、end、location、minutes 和 text。"},
 "rb_calendar":{"message0":"未来 %1 天的日历","tooltip":"从今天起你日历中的事件，作为记录：day、start、end、title、location。导出的 Python 读取 CALENDAR_URL（你日历的私人 iCal 地址）；本页面使用示例日历。"},
 "rb_chat":{"message0":"对话 %1 ：%2","tooltip":"在一个有名字的对话中发送消息。Claude 能看到该对话之前的内容。"},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"本页面打开期间","permanent":"永久"},
 "rb_mem_set_for.UNIT":{"m":"分钟","h":"小时","d":"天"},
 "rb_mem_add.KIND":{"transient":"本页面打开期间","permanent":"永久"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG（绘制的图片）","orig":"原始文件"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG（绘制的图片）","orig":"原始文件"},
+"rb_budget.UNIT":{"tokens":"个 token","dollars":"美元"}
 },
 "categories":{
 "Events":"事件",
@@ -922,7 +923,12 @@
 "Keyboard help":"键盘帮助",
 "about {cost}":"约 {cost}",
 "under {cost}":"不到 {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"按模型标价约为 {cost}；在本页面上则计入你的 Claude 用量。"
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"按模型标价约为 {cost}；在本页面上则计入你的 Claude 用量。",
+"No money budget for this run.":"本次运行没有金额预算。",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"已停止：本次运行已经用过的某个模型没有已知价格，因此无法控制在 {budget} 的预算内。请使用有价格的模型，或改用按 token 计的预算。",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"已停止：本次运行按标价已花费约 {cost}，达到了 {budget} 的预算。请在“限制本次运行”积木中调高金额。",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"已停止：{model} 没有已知价格，因此本次运行无法控制在 {budget} 的预算内。请使用有价格的模型，或改用按 token 计的预算。",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"本次运行按标价花费约 {budget} 后，会在下一次调用 Claude 之前停止（目前约 {cost}）。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1765,6 +1771,11 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"无法写入 {path}（{err}）。没有做任何更改。",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"运行时已从 {version} 更新到 {latest}。旧文件已保存为 {backup}。",
 "What changed: {url}":"更改内容：{url}",
-"The file changed, so it asks to be allowed again before its next run.":"文件已更改，因此下次运行前会再次请求许可。"
+"The file changed, so it asks to be allowed again before its next run.":"文件已更改，因此下次运行前会再次请求许可。",
+"No money budget for this run.":"本次运行没有金额预算。",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"已停止：本次运行已经用过的某个模型没有已知价格，因此无法控制在 {x} 的预算内。请使用有价格的模型，或改用按 token 计的预算。",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"已停止：本次运行按标价已花费 {x}，达到了 {x2} 的预算。请在“限制本次运行”积木中调高金额（或 second-thought.ini 中的 budget_dollars）。",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"已停止：{model} 没有已知价格，因此本次运行无法控制在 {x} 的预算内。请使用有价格的模型，或改用按 token 计的预算。",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"本次运行按标价花费 {x} 后，会在下一次调用模型之前停止（目前已花费：{x2}）。"
 }
 };

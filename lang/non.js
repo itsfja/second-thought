@@ -25,7 +25,7 @@
 "rb_broadcast_wait":{"message0":"kalla %1 ok bíð","tooltip":"Hefr hvert ferli „þá er ek fæ“ fyrir þessi boð ok bíðr unz ǫll eru lokin."},
 "rb_broadcast_with":{"message0":"kalla %1 með %2","tooltip":"Hefr hvert ferli „þá er ek fæ“ fyrir boðin. Hvert fær gildit sem sitt „gildi boðanna“."},
 "rb_broadcast_with_wait":{"message0":"kalla %1 með %2 ok bíð"},
-"rb_budget":{"message0":"tak mark þessarar ferðar við %1 tokens","tooltip":"Fyrir hvert kall til líkansins skoðar þat hversu mǫrg tokens þessi ferð hefir eytt. Þá er hon nær þessari tǫlu, stǫðvask ferðin. 0 merkir ekkert mark. Á þessu blaði er talit ágizkan; útfluttr Python notar hin sǫnnu tǫl."},
+"rb_budget":{"message0":"tak mark þessarar ferðar við %1 %2","tooltip":"Fyrir hvert líkanskall skoðar hon hversu mǫrg tokens þessi ferð hefir notat, eða hvat hon hefir eytt at skráðu verði líkananna. Þá er hon nær þeiri upphæð, stǫðvask ferðin. 0 merkir ekkert mark. Í dǫlum má eigi telja líkan án kunns verðs, svá at ferðin stǫðvask heldr en at fara fram án marks. Á þessi síðu eru tǫlurnar ágizkun; útflutt Python notar nákvæmar tǫlur."},
 "rb_cal_when":{"message0":"þá er atburðr í ríminu hefsk eptir %1 mínútur","tooltip":"Keyrir kubbana hér fyrir neðan svá mǫrgum mínútum fyrir hvern atburð í ríminu þínu (atburðir alls dags teljask eigi). „Hvat kom“ gefr title, start, end, location, minutes ok text."},
 "rb_calendar":{"message0":"rím fyrir næstu %1 daga","tooltip":"Atburðir ríms þíns frá deginum í dag, sem skrár: day, start, end, title, location. Útfluttr Python les CALENDAR_URL (leyndan iCal-stað ríms þíns); þetta blað notar sýnirím."},
 "rb_chat":{"message0":"tala %1 : %2","tooltip":"Sendir boð í nefndu tali. Claude sér hin fyrri orðaskipti þess tals."},
@@ -159,7 +159,8 @@
 "rb_mem_set.KIND":{"transient":"meðan þetta blað er opit","permanent":"at eilífu"},
 "rb_mem_set_for.UNIT":{"m":"mínútur","h":"stundir","d":"daga"},
 "rb_mem_add.KIND":{"transient":"meðan þetta blað er opit","permanent":"at eilífu"},
-"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (dregnar myndir)","orig":"upphafligt skjal"}
+"rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (dregnar myndir)","orig":"upphafligt skjal"},
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"Ameríkudali"}
 },
 "categories":{
 "Events":"Atburðir",
@@ -922,7 +923,12 @@
 "Keyboard help":"Lyklaborðshjálp",
 "about {cost}":"um {cost}",
 "under {cost}":"minna en {cost}",
-"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"At skráðu verði líkananna er þat {cost}; á þessi síðu telsk þat til notkunar þinnar á Claude."
+"At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.":"At skráðu verði líkananna er þat {cost}; á þessi síðu telsk þat til notkunar þinnar á Claude.",
+"No money budget for this run.":"Ekki er fjármark fyrir þessa ferð.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Stǫðvat: líkan er þessi ferð hefir þegar notat hefir ekki kunnt verð, svá at hana má eigi halda innan marks síns, {budget}. Nota líkǫn með verði, eða mark í tokens.",
+"Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Stǫðvat: þessi ferð hefir eytt um {cost} at skráðu verði, ok nær þat marki hennar, {budget}. Hækka upphæðina í kubbinum 'tak mark þessarar ferðar'.",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Stǫðvat: {model} hefir ekki kunnt verð, svá at þessa ferð má eigi halda innan marks síns, {budget}. Nota líkan með verði, eða mark í tokens.",
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Þessi ferð stǫðvask fyrir kall til Claude jafnskjótt sem hon hefir eytt um {budget} at skráðu verði (um {cost} hingat til)."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1765,7 +1771,12 @@
 "Couldn't write {path} ({err}). Nothing was changed.":"Gat eigi ritat {path} ({err}). Engu var breytt.",
 "Updated the runtime from {version} to {latest}. The old file is saved as {backup}.":"Runtime var nýjat frá {version} til {latest}. Hit gamla skjal er geymt sem {backup}.",
 "What changed: {url}":"Hvat breyttisk: {url}",
-"The file changed, so it asks to be allowed again before its next run.":"Skjalit breyttisk, svá at þat biðr leyfis aptr fyrir næstu ferð."
+"The file changed, so it asks to be allowed again before its next run.":"Skjalit breyttisk, svá at þat biðr leyfis aptr fyrir næstu ferð.",
+"No money budget for this run.":"Ekki er fjármark fyrir þessa ferð.",
+"Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Stǫðvat: líkan er þessi ferð hefir þegar notat hefir ekki kunnt verð, svá at hana má eigi halda innan marks síns, {x}. Nota líkǫn með verði, eða mark í tokens.",
+"Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Stǫðvat: þessi ferð hefir eytt {x} at skráðu verði, ok nær þat marki hennar, {x2}. Hækka upphæðina í kubbinum 'tak mark þessarar ferðar' (eða budget_dollars í second-thought.ini).",
+"Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Stǫðvat: {model} hefir ekki kunnt verð, svá at þessa ferð má eigi halda innan marks síns, {x}. Nota líkan með verði, eða mark í tokens.",
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Þessi ferð stǫðvask fyrir líkanskall jafnskjótt sem hon hefir eytt {x} at skráðu verði (eytt hingat til: {x2})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

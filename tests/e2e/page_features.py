@@ -23,6 +23,16 @@ async def new_feature_page_tests(pg):
     check(status == "error" and stopped and "budget of 5" in stopped[0],
           f"a run over its budget stops before the next call ({status}: {stopped[0][:90] if stopped else steps[-1:]})")
     EXTRA["t_budget"] = await export_python(pg, "t_budget")
+    money = script(blk("rb_budget", fields={"UNIT": "dollars"}, inputs={"TOKENS": nm(0.0001)}),
+                   add(val(blk("rb_ask", inputs={"TEXT": tx("first question")}))), add(val(blk("rb_ask", inputs={"TEXT": tx("second question")}))))
+    await load_state(pg, money)
+    status = await run_program(pg)
+    steps = await step_texts(pg)
+    stopped = [t for n, p_, t in steps if n == "Run stopped"]
+    check(status == "error" and stopped and "budget of $0.0001" in stopped[0] and "at list prices" in stopped[0],
+          f"a budget in US dollars stops the run once it has spent that much ({status}: {stopped[0][:120] if stopped else steps[-1:]})")
+    EXTRA["t_budget_dollars"] = await export_python(pg, "t_budget_dollars")
+    check('R.set_budget(0.0001, "dollars")' in EXTRA["t_budget_dollars"], "and the exported program keeps the unit")
     budget_ok = script(blk("rb_budget", inputs={"TOKENS": nm(1000000)}), add(val(blk("rb_ask", inputs={"TEXT": tx("q")}))),
                        add(val(blk("rb_tokens_used"))))
     await load_state(pg, budget_ok)
