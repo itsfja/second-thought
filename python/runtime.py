@@ -44,7 +44,8 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "budget": "RB_BUDGET", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
                  "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
-                 "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK"}
+                 "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK",
+                 "releases_url": "RB_RELEASES_URL"}
 
 
 def _load_settings():
