@@ -9,6 +9,7 @@ Each module is one part of the runtime:
     mcp         MCP servers and their tools, for the agent (the MCPTools part)
     agent       the agent block (the AgentTools part)
     doctor      --doctor: checking a program's setup without spending anything (the Doctor part)
+    update      a newer runtime: --doctor says when one is out, --update-runtime puts it in (the Updates part)
     runtime     Runtime itself: run state, logging, memory, drafts, output, scripts and schedules
 
 Exported programs don't use this package. tools/sync.py joins these modules into python/runtime.py, one file

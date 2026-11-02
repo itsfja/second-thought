@@ -30,7 +30,9 @@ PAGE = ROOT / "second-thought.html"
 RUNTIME = ROOT / "python" / "runtime.py"
 PACKAGE = ROOT / "python" / "second_thought"
 # The order matters: each module may use names from the ones before it.
-MODULES = ["settings", "providers", "core", "connectors", "mcp", "agent", "doctor", "runtime"]
+MODULES = ["settings", "providers", "core", "connectors", "mcp", "agent", "doctor", "update", "runtime"]
+RUNTIME_START = "# ---- Second Thought runtime starts here: --update-runtime replaces everything down to the line that says it ends ----"
+RUNTIME_END = "# ---- Second Thought runtime ends here ----"
 MARK = "# ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----"
 SERVICES = PACKAGE / "providers.py"   # its SERVICES list is the page's list of model services too
 CAPABILITIES = PACKAGE / "core.py"    # its CAPABILITIES list is the page's list of what programs can do
@@ -88,7 +90,9 @@ def bundle() -> str:
         if MARK not in lines:
             sys.exit(f"{path.relative_to(ROOT)} has no line saying where its package-only imports end:\n{MARK}")
         bodies.append("\n".join(lines[lines.index(MARK) + 1:]).strip("\n"))
-    return "\n\n\n".join(bodies) + "\n"
+    # First and last, the lines --update-runtime looks for (python/second_thought/update.py), so it can swap the
+    # runtime inside an exported program for a newer release's python/runtime.py.
+    return "\n\n\n".join([RUNTIME_START] + bodies + [RUNTIME_END]) + "\n"
 
 
 def literal_json(path: pathlib.Path, name: str) -> str:

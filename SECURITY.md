@@ -7,8 +7,11 @@ Please don't open a public issue for a security problem. Use **Report a vulnerab
 runtime version (`python my-program.py --version`). You'll get a reply as soon as it's been looked at; fixes go out
 as a new runtime version, noted in [CHANGELOG.md](CHANGELOG.md).
 
-Fixes are made to the latest runtime only. An exported program keeps the runtime it was exported with, so to get a
-fix, import the program on the page and export it again.
+Fixes are made to the latest runtime only. An exported program keeps the runtime it was exported with, so a fix
+reaches it in one of two ways. `python my-program.py --update-runtime` puts the newest release of the same major
+version into the file in place, after checking it against the SHA-256 published with the release. For a new major
+version, import the program on the page and export it again. `--doctor` says when a newer runtime is out, and fails
+when the release says it fixes a security problem. Programs exported before 3.1.0 need exporting again once.
 
 ## What an exported program can do
 

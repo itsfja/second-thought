@@ -1,0 +1,10 @@
+{
+  "note": "The page's codeHash() (web/editor/10-python-export.js) and the runtime's code_hash() (python/second_thought/update.py) give these answers. --update-runtime rewrites # CODE-HASH with the runtime's, and the page checks it on import.",
+  "answers": [
+    ["", "811c9dc5"],
+    ["a\nb", "28e4c710"],
+    ["café 𒀭", "286aa27b"],
+    ["x \ny﻿\n", "ce89968a"],
+    ["print('hi')  \r\n\r\n\n", "8439c16a"]
+  ]
+}

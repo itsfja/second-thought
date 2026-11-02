@@ -1,0 +1,51 @@
+name: Release
+
+# When a release is published, attach the runtime it ships with, and its SHA-256. An exported program's
+# --update-runtime downloads these two files (python/second_thought/update.py) and refuses the runtime unless they
+# match and it says the release's version. Run it by hand (Run workflow) to attach them to a release made earlier.
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "The release's tag, like v3.1.0"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG }}
+
+      - name: Check the runtime is the release's version and starts and ends where it should
+        shell: bash
+        run: |
+          want="${TAG#v}"
+          have=$(sed -n 's/^RUNTIME_VERSION = "\(.*\)"$/\1/p' python/runtime.py | head -1)
+          if [ "$have" != "$want" ]; then
+            echo "::error::python/runtime.py says $have, but the release is $TAG. Set RUNTIME_VERSION and run tools/sync.py before releasing."
+            exit 1
+          fi
+          if ! head -1 python/runtime.py | grep -q '^# ---- Second Thought runtime starts here' \
+             || ! tail -1 python/runtime.py | grep -q '^# ---- Second Thought runtime ends here ----$'; then
+            echo "::error::python/runtime.py doesn't start and end with the lines --update-runtime looks for (runtime 3.1.0 and later)."
+            exit 1
+          fi
+
+      - name: Attach runtime.py and runtime.py.sha256
+        shell: bash
+        run: |
+          cp python/runtime.py runtime.py
+          sha256sum runtime.py > runtime.py.sha256
+          cat runtime.py.sha256
+          gh release upload "$TAG" runtime.py runtime.py.sha256 --clobber --repo "${{ github.repository }}"
