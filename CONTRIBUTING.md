@@ -124,6 +124,9 @@ CI never runs it.
   names in `SERVICES`, and add a line to `CHANGELOG.md`. It also lists services whose `prices` were checked more than 90
   days ago: look them up at `prices_source` and update `prices` and `prices_checked`. A tier's model with no price
   just shows no cost, so add one only from the service's own price list, or a source you'd trust as much.
+- **Exchange rates:** `RATES` in `providers.py` is the European Central Bank's rates on one day: the page's only
+  rates, and exported programs' last resort offline. `python tools/smoke_test.py models` notes them when they're more
+  than 30 days old; copy the day's rates from `RATES["source"]` and change the date.
 - **What always asks** (unlocking, opening and disarming, the agent tools that ask, what a fooled agent can't do
   unasked): edit `SAFETY` in `python/second_thought/core.py`, then run `tools/sync.py`, which copies it into the page.
   Both sides read that one list, and `tests/e2e/safety.py` checks they give the same answers.

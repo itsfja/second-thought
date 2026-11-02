@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"分钟","h":"小时","d":"天"},
 "rb_mem_add.KIND":{"transient":"本页面打开期间","permanent":"永久"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG（绘制的图片）","orig":"原始文件"},
-"rb_budget.UNIT":{"tokens":"个 token","dollars":"美元"}
+"rb_budget.UNIT":{"tokens":"个 token","dollars":"美元","gbp":"英镑","eur":"欧元","jpy":"日元","cny":"人民币"}
 },
 "categories":{
 "Events":"事件",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"已停止：本次运行已经用过的某个模型没有已知价格，因此无法控制在 {budget} 的预算内。请使用有价格的模型，或改用按 token 计的预算。",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"已停止：本次运行按标价已花费约 {cost}，达到了 {budget} 的预算。请在“限制本次运行”积木中调高金额。",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"已停止：{model} 没有已知价格，因此本次运行无法控制在 {budget} 的预算内。请使用有价格的模型，或改用按 token 计的预算。",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"本次运行按标价花费约 {budget} 后，会在下一次调用 Claude 之前停止（目前约 {cost}）。"
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"本次运行按标价花费约 {budget} 后，会在下一次调用 Claude 之前停止（目前约 {cost}）。",
+"US dollars":"美元",
+"pounds":"英镑",
+"euros":"欧元",
+"yen":"日元",
+"yuan":"人民币",
+"Currency":"货币",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"显示费用和金额预算所用的货币。各服务以美元收费；其他货币使用欧洲中央银行 {date} 的汇率。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1776,6 +1783,12 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"已停止：本次运行已经用过的某个模型没有已知价格，因此无法控制在 {x} 的预算内。请使用有价格的模型，或改用按 token 计的预算。",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"已停止：本次运行按标价已花费 {x}，达到了 {x2} 的预算。请在“限制本次运行”积木中调高金额（或 second-thought.ini 中的 budget_dollars）。",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"已停止：{model} 没有已知价格，因此本次运行无法控制在 {x} 的预算内。请使用有价格的模型，或改用按 token 计的预算。",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"本次运行按标价花费 {x} 后，会在下一次调用模型之前停止（目前已花费：{x2}）。"
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"本次运行按标价花费 {x} 后，会在下一次调用模型之前停止（目前已花费：{x2}）。",
+"Currency":"货币",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"无法获取今天的汇率（{err}），因此使用已有的最近汇率。",
+"at the ECB rate of {date}":"按欧洲央行 {date} 的汇率",
+"at the rate set {where_keys}":"按 {where_keys} 设定的汇率",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency 必须是 usd、gbp、eur、jpy 或 cny，而不是“{raw}”。请 {where_keys} 修改。",
+"{code}, {note} (1 US dollar = {rate})":"{code}，{note}（1 美元 = {rate}）"
 }
 };

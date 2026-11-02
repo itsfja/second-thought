@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 from .settings import WHERE_KEYS
 from .core import (BadJSON, CALL_TIMEOUT, CONTINUE_PROMPT, Finish, MAX_AI_CALLS, MAX_TOKENS, Reply, Retryable,
-    RunError, WEB_SEARCH_TOOL, _fit, _parse_json, _shape_problem, _short, to_str)
+    RunError, WEB_SEARCH_TOOL, _fit, _number_setting, _parse_json, _shape_problem, _short, to_str)
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
@@ -222,18 +222,118 @@ def call_cost(tier, tokens_in, tokens_out):
     return None if p is None else ((tokens_in or 0) * p[0] + (tokens_out or 0) * p[1]) / 1_000_000
 
 
-def money(dollars):
-    """A run's cost for people: 'about $0.03', 'under $0.01', 'about $1.20'."""
-    if dollars < 0.005:
-        return tr("under {cost}", cost="$0.01")
-    return tr("about {cost}", cost=f"${dollars:,.2f}")
+# ----- Currencies -----
+# Prices are in US dollars, as the services publish and bill them. A run's cost and its money budget can be shown in
+# another currency: currency = gbp in second-thought.ini. Each has a symbol before the amount, or a code after it (yuan,
+# so it isn't mistaken for yen), and its decimals (yen has none). The page reads this and RATES too (tools/sync.py).
+CURRENCIES = {"usd": {"symbol": "$", "decimals": 2}, "gbp": {"symbol": "£", "decimals": 2}, "eur": {"symbol": "€", "decimals": 2},
+              "jpy": {"symbol": "¥", "decimals": 0}, "cny": {"code": "CNY", "decimals": 2}}
+# RATES: the European Central Bank's euro reference rates on one day. Exported programs fetch the day's rates (once a
+# day, kept next to memory.json); these are what they fall back on, and the page's only rates, since it can't fetch
+# them. python tools/smoke_test.py models notes them when they're more than 30 days old.
+RATES = {"date": "2026-10-30", "per_euro": {"usd": 1.1172, "gbp": 0.8338, "jpy": 175.68, "cny": 7.4326},
+         "source": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html"}
+ECB_DAILY = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
+CURRENCY = (os.environ.get("RB_CURRENCY") or "usd").strip().lower()
+if CURRENCY not in CURRENCIES:
+    sys.exit(tr("currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.", raw=CURRENCY, where_keys=WHERE_KEYS))
+_RATES = {}  # the rates this program is using: per_euro, where they came from, and any problem fetching them
+
+
+def _rates_file():
+    from .core import MEMORY_FILE
+    return os.path.join(os.path.dirname(os.path.abspath(MEMORY_FILE)), ".second-thought-rates.json")
+
+
+def rates():
+    """{"per_euro": {...}, "date", "how": "ecb" or "built-in", "problem"}: fetched from the ECB at most once a day, kept
+    next to memory.json, else the last kept, else RATES. Never fails, so a money budget always has a rate."""
+    if _RATES:
+        return _RATES
+    kept = None
+    try:
+        with open(_rates_file(), encoding="utf-8") as f:
+            kept = json.load(f)
+        if time.time() - kept.get("fetched", 0) < 12 * 3600 and isinstance(kept.get("per_euro"), dict):
+            _RATES.update(per_euro=kept["per_euro"], date=kept.get("date", ""), how="ecb", problem="")
+            return _RATES
+    except (OSError, ValueError, AttributeError):
+        kept = None
+    problem = ""
+    try:
+        url = os.environ.get("RB_RATES_URL") or ECB_DAILY
+        with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "second-thought"}), timeout=10) as r:
+            xml = r.read(200_000).decode("utf-8", "replace")
+        per = {m.group(1).lower(): float(m.group(2)) for m in re.finditer(r"currency=['\"]([A-Z]{3})['\"]\s+rate=['\"]([\d.]+)['\"]", xml)}
+        day = re.search(r"time=['\"](\d{4}-\d{2}-\d{2})['\"]", xml)
+        if not all(c in per for c in CURRENCIES if c != "eur"):
+            raise ValueError("the rates file didn't have every currency")
+        _RATES.update(per_euro=per, date=day.group(1) if day else "", how="ecb", problem="")
+        try:
+            with open(_rates_file(), "w", encoding="utf-8") as f:
+                json.dump({"per_euro": per, "date": _RATES["date"], "fetched": time.time()}, f)
+        except OSError:
+            pass
+        return _RATES
+    except (urllib.error.URLError, OSError, ValueError) as e:
+        problem = _short(to_str(getattr(e, "reason", None) or e), 100)
+    if kept and isinstance(kept.get("per_euro"), dict):
+        _RATES.update(per_euro=kept["per_euro"], date=kept.get("date", ""), how="ecb", problem=problem)
+    else:
+        _RATES.update(per_euro=RATES["per_euro"], date=RATES["date"], how="built-in", problem=problem)
+    return _RATES
+
+
+def fixed_rate():
+    """exchange_rate in second-thought.ini: one US dollar in the program's currency, instead of the ECB's rate; or 0."""
+    if CURRENCY == "usd":
+        return 0
+    return _number_setting("RB_EXCHANGE_RATE", 0, "how much one US dollar is in your currency, like 0.79")
+
+
+def per_dollar(cur):
+    """How much one US dollar is in this currency."""
+    if cur == "usd":
+        return 1.0
+    if cur == CURRENCY and fixed_rate():
+        return fixed_rate()
+    per = rates()["per_euro"]
+    return (1.0 if cur == "eur" else per[cur]) / per["usd"]
+
+
+def amount_text(value, cur):
+    """An amount in a currency, exactly: '$0.50', '£12.00', '¥75', '0.40 CNY', and its digits under the smallest coin."""
+    c = CURRENCIES[cur]
+    smallest = 10 ** -c["decimals"]
+    text = (f"{value:.6f}".rstrip("0").rstrip(".") if 0 < value < smallest else f"{value:,.{c['decimals']}f}")
+    return c["symbol"] + text if "symbol" in c else text + " " + c["code"]
+
+
+def money(dollars, cur=None):
+    """A cost for people, in the program's currency (or cur): 'about £0.02', 'under ¥1', 'about $1.20'."""
+    cur = cur or CURRENCY
+    value = dollars * per_dollar(cur)
+    smallest = 10 ** -CURRENCIES[cur]["decimals"]
+    if value < smallest / 2:
+        return tr("under {cost}", cost=amount_text(smallest, cur))
+    return tr("about {cost}", cost=amount_text(max(round(value, CURRENCIES[cur]["decimals"]), smallest), cur))
 
 
 def dollars(amount):
-    """An exact amount, like a budget: '$0.50', '$12.00', and '$0.004' under a cent, rather than '$0.00'."""
-    if 0 < amount < 0.01:
-        return "$" + f"{amount:.6f}".rstrip("0")
-    return f"${amount:,.2f}"
+    """An exact amount in US dollars, like a budget: '$0.50', '$12.00', and '$0.004' under a cent, rather than '$0.00'."""
+    return amount_text(amount, "usd")
+
+
+fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run
+
+
+def rate_note():
+    """Where the run's rate came from, for the saved log and --doctor: '' in US dollars."""
+    if CURRENCY == "usd":
+        return ""
+    if fixed_rate():
+        return tr("at the rate set {where_keys}", where_keys=WHERE_KEYS)
+    return tr("at the ECB rate of {date}", date=rates()["date"])
 
 
 def model_label(tier):
@@ -250,13 +350,13 @@ class ModelCalls:
         budget = self.budget_dollars
         if call_cost(tiers[0], 0, 0) is None:
             raise RunError(tr("Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.",
-                              model=model_label(tiers[0]), x=dollars(budget)))
+                              model=model_label(tiers[0]), x=self.budget_text()))
         if not self.cost[1]:
             raise RunError(tr("Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.",
-                              x=dollars(budget)))
+                              x=self.budget_text()))
         if self.cost[0] >= budget:
             raise RunError(tr("Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).",
-                              x=money(self.cost[0]), x2=dollars(budget)))
+                              x=money(self.cost[0], self.budget_unit), x2=self.budget_text()))
         return [t for t in tiers if call_cost(t, 0, 0) is not None]
 
     async def _call_live(self, prompt, want_json=False, picture=None, history=None, web=False):

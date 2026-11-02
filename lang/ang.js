@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"minuta","h":"tida","d":"dagas"},
 "rb_mem_add.KIND":{"transient":"þa hwile þe þis leaf open is","permanent":"a"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (atyfrede anlicnessa)","orig":"frumlic fætels"},
-"rb_budget.UNIT":{"tokens":"tokenum","dollars":"Americanum dollarum"}
+"rb_budget.UNIT":{"tokens":"tokenum","dollars":"Americanum dollarum","gbp":"pund","eur":"euro","jpy":"yen","cny":"yuan"}
 },
 "categories":{
 "Events":"Gelimpu",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Ætstanden: an gecynd þe þeos fremming ær breac næfþ nanne cuþne weorþ, forþy ne mæg heo beon gehealden binnan hire gemete of {budget}. Bruc gecynda mid weorþe, oþþe gemetes on tokenum.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Ætstanden: þeos fremming hæfþ aspended ymbe {cost} be bocweorþum, and þæt geræcþ hire gemet of {budget}. Hebbe þone dæl on þam stocce 'gemæra þas fremminge'.",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Ætstanden: {model} næfþ nanne cuþne weorþ, forþy ne mæg þeos fremming beon gehealden binnan hire gemete of {budget}. Bruc gecyndes mid weorþe, oþþe gemetes on tokenum.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Þeos fremming stent ær clipunge to Claude sona swa heo hæfþ aspended ymbe {budget} be bocweorþum (ymbe {cost} oþ nu)."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Þeos fremming stent ær clipunge to Claude sona swa heo hæfþ aspended ymbe {budget} be bocweorþum (ymbe {cost} oþ nu).",
+"US dollars":"Americanisce dollaras",
+"pounds":"pund",
+"euros":"euro",
+"yen":"yen",
+"yuan":"yuan",
+"Currency":"Feohcynn",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Þæt feohcynn þe ondlean and feohgemetu on sind geeowod. Þa þenunga manigaþ on Americaniscum dollarum; oþru feohcynn brucaþ þæs Europiscan Heafodbancan weorþes of {date}."
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1776,7 +1783,13 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Ætstanden: an gecynd þe þeos fremming ær breac næfþ nanne cuþne weorþ, forþy ne mæg heo beon gehealden binnan hire gemete of {x}. Bruc gecynda mid weorþe, oþþe gemetes on tokenum.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Ætstanden: þeos fremming hæfþ aspended {x} be bocweorþum, and þæt geræcþ hire gemet of {x2}. Hebbe þone dæl on þam stocce 'gemæra þas fremminge' (oþþe budget_dollars on second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Ætstanden: {model} næfþ nanne cuþne weorþ, forþy ne mæg þeos fremming beon gehealden binnan hire gemete of {x}. Bruc gecyndes mid weorþe, oþþe gemetes on tokenum.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Þeos fremming stent ær gecyndclipunge sona swa heo hæfþ aspended {x} be bocweorþum (aspended oþ nu: {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Þeos fremming stent ær gecyndclipunge sona swa heo hæfþ aspended {x} be bocweorþum (aspended oþ nu: {x2}).",
+"Currency":"Feohcynn",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"Ne mihte man fetian þæs dæges weorþ ({err}), forþy man brycþ þæs nihstan þe man hæfþ.",
+"at the ECB rate of {date}":"be þæs ECB weorþe of {date}",
+"at the rate set {where_keys}":"be þam weorþe þe is geseted {where_keys}",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency sceal beon usd, gbp, eur, jpy oþþe cny, na “{raw}”. Gerihte hit {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 Americanisc dollar = {rate})"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

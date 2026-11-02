@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"mínútur","h":"stundir","d":"daga"},
 "rb_mem_add.KIND":{"transient":"meðan þetta blað er opit","permanent":"at eilífu"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (dregnar myndir)","orig":"upphafligt skjal"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"Ameríkudali"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"Ameríkudali","gbp":"pund","eur":"evrur","jpy":"jen","cny":"júan"}
 },
 "categories":{
 "Events":"Atburðir",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Stǫðvat: líkan er þessi ferð hefir þegar notat hefir ekki kunnt verð, svá at hana má eigi halda innan marks síns, {budget}. Nota líkǫn með verði, eða mark í tokens.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Stǫðvat: þessi ferð hefir eytt um {cost} at skráðu verði, ok nær þat marki hennar, {budget}. Hækka upphæðina í kubbinum 'tak mark þessarar ferðar'.",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Stǫðvat: {model} hefir ekki kunnt verð, svá at þessa ferð má eigi halda innan marks síns, {budget}. Nota líkan með verði, eða mark í tokens.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Þessi ferð stǫðvask fyrir kall til Claude jafnskjótt sem hon hefir eytt um {budget} at skráðu verði (um {cost} hingat til)."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Þessi ferð stǫðvask fyrir kall til Claude jafnskjótt sem hon hefir eytt um {budget} at skráðu verði (um {cost} hingat til).",
+"US dollars":"Ameríkudalir",
+"pounds":"pund",
+"euros":"evrur",
+"yen":"jen",
+"yuan":"júan",
+"Currency":"Mynt",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Myntin er kostnaðr ok fjármǫrk eru sýnd í. Þjónusturnar heimta í Ameríkudǫlum; aðrar myntir nota gengi Evrópska seðlabankans frá {date}."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1776,7 +1783,13 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Stǫðvat: líkan er þessi ferð hefir þegar notat hefir ekki kunnt verð, svá at hana má eigi halda innan marks síns, {x}. Nota líkǫn með verði, eða mark í tokens.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Stǫðvat: þessi ferð hefir eytt {x} at skráðu verði, ok nær þat marki hennar, {x2}. Hækka upphæðina í kubbinum 'tak mark þessarar ferðar' (eða budget_dollars í second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Stǫðvat: {model} hefir ekki kunnt verð, svá at þessa ferð má eigi halda innan marks síns, {x}. Nota líkan með verði, eða mark í tokens.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Þessi ferð stǫðvask fyrir líkanskall jafnskjótt sem hon hefir eytt {x} at skráðu verði (eytt hingat til: {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Þessi ferð stǫðvask fyrir líkanskall jafnskjótt sem hon hefir eytt {x} at skráðu verði (eytt hingat til: {x2}).",
+"Currency":"Mynt",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"Gengi dagsins varð eigi sótt ({err}), svá at hit síðasta er til er notat.",
+"at the ECB rate of {date}":"at gengi ECB frá {date}",
+"at the rate set {where_keys}":"at genginu er sett er {where_keys}",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency skal vera usd, gbp, eur, jpy eða cny, eigi „{raw}“. Bæt þat {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 Ameríkudalr = {rate})"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

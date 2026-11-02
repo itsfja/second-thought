@@ -161,7 +161,7 @@
 "rb_mem_set_for.UNIT":{"m":"רגעין","h":"שעין","d":"יומין"},
 "rb_mem_add.KIND":{"transient":"כל עוד דפא הדין פתיח","permanent":"לעלם"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (צייורין)","orig":"מגלתא קדמייתא"},
-"rb_budget.UNIT":{"tokens":"טוקנין","dollars":"דולרין אמריקאין"}
+"rb_budget.UNIT":{"tokens":"טוקנין","dollars":"דולרין אמריקאין","gbp":"ליטרין","eur":"אירו","jpy":"ין","cny":"יואן"}
 },
 "categories":{
 "Events":"מאורעין",
@@ -929,7 +929,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"פסק: למודל דרהטא הדין כבר אשתמש ביה לית טימי ידיעא, הלכך לא אפשר למנטריה בגו תחומיה דילה {budget}. אשתמש במודלין עם טימי, או בתחומא בטוקנין.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"פסק: רהטא הדין אפיק בערך {cost} בטימי ספרא, ומטא לתחומיה {budget}. אסגי סכומא בלבנתא 'תחים הלוכא הדין'.",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"פסק: ל־{model} לית טימי ידיעא, הלכך לא אפשר למנטר רהטא הדין בגו תחומיה {budget}. אשתמש במודלא עם טימי, או בתחומא בטוקנין.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"רהטא הדין פסק קדם קריאה ל־Claude כד אפיק בערך {budget} בטימי ספרא (בערך {cost} עד כען)."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"רהטא הדין פסק קדם קריאה ל־Claude כד אפיק בערך {budget} בטימי ספרא (בערך {cost} עד כען).",
+"US dollars":"דולרין אמריקאין",
+"pounds":"ליטרין",
+"euros":"אירו",
+"yen":"ין",
+"yuan":"יואן",
+"Currency":"מטבעא",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"מטבעא דבה מתחזין נפקתא ותחומי כספא. שמשיא גבן בדולרין אמריקאין; מטבעין אחרנין משתמשין בשערא דבנקא מציעאה אירופאה מן {date}."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1777,7 +1784,13 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"פסק: למודל דרהטא הדין כבר אשתמש ביה לית טימי ידיעא, הלכך לא אפשר למנטריה בגו תחומיה דילה {x}. אשתמש במודלין עם טימי, או בתחומא בטוקנין.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"פסק: רהטא הדין אפיק {x} בטימי ספרא, ומטא לתחומיה {x2}. אסגי סכומא בלבנתא 'תחים הלוכא הדין' (או budget_dollars ב־second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"פסק: ל־{model} לית טימי ידיעא, הלכך לא אפשר למנטר רהטא הדין בגו תחומיה {x}. אשתמש במודלא עם טימי, או בתחומא בטוקנין.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"רהטא הדין פסק קדם קריאת מודלא כד אפיק {x} בטימי ספרא (דאתאפיק עד כען: {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"רהטא הדין פסק קדם קריאת מודלא כד אפיק {x} בטימי ספרא (דאתאפיק עד כען: {x2}).",
+"Currency":"מטבעא",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"שערא דיומא לא אתיתי ({err}), הלכך משתמש בבתראה דאית.",
+"at the ECB rate of {date}":"בשערא דECB מן {date}",
+"at the rate set {where_keys}":"בשערא דאתקבע {where_keys}",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency צריך למהוי usd, gbp, eur, jpy או cny, ולא “{raw}”. תקן יתיה {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (‏1 דולר אמריקאה = {rate})"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

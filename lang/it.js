@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"minuti","h":"ore","d":"giorni"},
 "rb_mem_add.KIND":{"transient":"finché questa pagina è aperta","permanent":"per sempre"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (immagini disegnate)","orig":"file originale"},
-"rb_budget.UNIT":{"tokens":"token","dollars":"dollari USA"}
+"rb_budget.UNIT":{"tokens":"token","dollars":"dollari USA","gbp":"sterline","eur":"euro","jpy":"yen","cny":"yuan"}
 },
 "categories":{
 "Events":"Eventi",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Fermato: un modello già usato da questa esecuzione non ha un prezzo noto, quindi non si può tenere entro il budget di {budget}. Usa modelli con un prezzo, o un budget in token.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Fermato: questa esecuzione ha speso circa {cost} ai prezzi di listino, raggiungendo il budget di {budget}. Aumenta l’importo nel blocco 'limita questa esecuzione'.",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Fermato: {model} non ha un prezzo noto, quindi questa esecuzione non si può tenere entro il budget di {budget}. Usa un modello con un prezzo, o un budget in token.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Questa esecuzione si ferma prima di una chiamata a Claude quando ha speso circa {budget} ai prezzi di listino (circa {cost} finora)."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Questa esecuzione si ferma prima di una chiamata a Claude quando ha speso circa {budget} ai prezzi di listino (circa {cost} finora).",
+"US dollars":"dollari USA",
+"pounds":"sterline",
+"euros":"euro",
+"yen":"yen",
+"yuan":"yuan",
+"Currency":"Valuta",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"La valuta in cui sono mostrati costi e budget in denaro. I servizi fatturano in dollari USA; le altre valute usano il cambio della Banca centrale europea del {date}."
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -1776,6 +1783,12 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Fermato: un modello già usato da questa esecuzione non ha un prezzo noto, quindi non si può tenere entro il budget di {x}. Usa modelli con un prezzo, o un budget in token.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Fermato: questa esecuzione ha speso {x} ai prezzi di listino, raggiungendo il budget di {x2}. Aumenta l’importo nel blocco 'limita questa esecuzione' (o budget_dollars in second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Fermato: {model} non ha un prezzo noto, quindi questa esecuzione non si può tenere entro il budget di {x}. Usa un modello con un prezzo, o un budget in token.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Questa esecuzione si ferma prima di una chiamata al modello quando ha speso {x} ai prezzi di listino (speso finora: {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Questa esecuzione si ferma prima di una chiamata al modello quando ha speso {x} ai prezzi di listino (speso finora: {x2}).",
+"Currency":"Valuta",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"Non è stato possibile scaricare il cambio di oggi ({err}), quindi si usa l’ultimo disponibile.",
+"at the ECB rate of {date}":"al cambio BCE del {date}",
+"at the rate set {where_keys}":"al cambio impostato {where_keys}",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"currency deve essere usd, gbp, eur, jpy o cny, non “{raw}”. Correggilo {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 dollaro USA = {rate})"
 }
 };

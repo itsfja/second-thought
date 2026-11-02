@@ -248,9 +248,9 @@
     if (++run.calls > MAX_AI_CALLS) fail(tr("Stopped after {n} Claude calls in one run, to protect your usage. Check for loops that call Claude too often.", { n:MAX_AI_CALLS }));
     if (run.budget && tokensUsed() >= run.budget) fail(tr("Stopped: this run has used about {used} tokens, which reaches its budget of {budget}. Raise the number in the 'limit this run' block.", { used:tokensUsed().toLocaleString(), budget:run.budget.toLocaleString() }));
     if (run.budgetDollars) {
-      if (!priceOf(run.tier)) fail(tr("Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.", { model:tierLabel(run.tier), budget:dollars(run.budgetDollars) }));
-      if (!run.costKnown) fail(tr("Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.", { budget:dollars(run.budgetDollars) }));
-      if (run.cost >= run.budgetDollars) fail(tr("Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.", { cost:dollars(run.cost), budget:dollars(run.budgetDollars) }));
+      if (!priceOf(run.tier)) fail(tr("Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.", { model:tierLabel(run.tier), budget:budgetText() }));
+      if (!run.costKnown) fail(tr("Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.", { budget:budgetText() }));
+      if (run.cost >= run.budgetDollars) fail(tr("Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.", { cost:amountText(run.cost * perDollar(run.budgetUnit), run.budgetUnit), budget:budgetText() }));
     }
     run.tokIn += estTokens(prompt) + (images ? images.length * 1600 : 0);
     setStatus(tr("running") + " · " + tr(run.calls === 1 ? "{n} Claude call" : "{n} Claude calls", { n:run.calls }) + " · " + tr("~{n} tokens", { n:fmtTokens(tokensUsed()) }));
@@ -338,14 +338,41 @@
     if (!p) { run.costKnown = false; return; }
     run.cost += (tin * p[0] + tout * p[1]) / 1e6;
   }
-  // 'about $0.03' or 'under $0.01'. Matches the runtime's money().
-  const money = d => d < 0.005 ? tr("under {cost}", { cost:"$0.01" }) : tr("about {cost}", { cost:"$" + d.toFixed(2) });
-  // An exact amount, like a budget: '$0.50'. Matches the runtime's dollars().
-  const dollars = d => d > 0 && d < 0.01 ? "$" + d.toFixed(6).replace(/0+$/, "") : "$" + d.toLocaleString("en-US", { minimumFractionDigits:2, maximumFractionDigits:2 });
+  /* Currencies (CURRENCIES and RATES in python/second_thought/providers.py): prices are in US dollars; costs and money
+     budgets can be shown in pounds, euros, yen or yuan, at the European Central Bank's rate of RATES.date. The page can't
+     fetch the day's rate, so it uses that one; exported programs fetch theirs. */
+  const MONEY = JSON.parse(document.getElementById("money").textContent);
+  const currencyName = k => ({ usd:tr("US dollars"), gbp:tr("pounds"), eur:tr("euros"), jpy:tr("yen"), cny:tr("yuan") })[k];
+  const CURRENCY_KEY = "second-thought-currency";
+  const currency = () => { const v = $("currency").value; return MONEY.currencies[v] ? v : "usd"; };
+  const perDollar = cur => cur === "usd" ? 1 : (cur === "eur" ? 1 : MONEY.rates.per_euro[cur]) / MONEY.rates.per_euro.usd;
+  // An exact amount: '$0.50', '£12.00', '¥75', '0.40 CNY', and its digits under the smallest coin. Matches amount_text().
+  function amountText(v, cur){
+    const c = MONEY.currencies[cur], small = Math.pow(10, -c.decimals);
+    const text = v > 0 && v < small ? v.toFixed(6).replace(/0+$/, "").replace(/\.$/, "") : v.toLocaleString("en-US", { minimumFractionDigits:c.decimals, maximumFractionDigits:c.decimals });
+    return c.symbol ? c.symbol + text : text + " " + c.code;
+  }
+  // 'about £0.02' or 'under ¥1', in the page's currency (or cur). Matches the runtime's money().
+  function money(d, cur){
+    cur = cur || currency();
+    const c = MONEY.currencies[cur], small = Math.pow(10, -c.decimals), v = d * perDollar(cur);
+    if (v < small / 2) return tr("under {cost}", { cost:amountText(small, cur) });
+    return tr("about {cost}", { cost:amountText(Math.max(Number(v.toFixed(c.decimals)), small), cur) });
+  }
+  const dollars = d => amountText(d, "usd");
+  const budgetText = () => amountText(run.budgetAmount, run.budgetUnit);
+  (function(){
+    const sel = $("currency");
+    Object.keys(MONEY.currencies).forEach(k => { const o = document.createElement("option"); o.value = k; o.textContent = currencyName(k); sel.appendChild(o); });
+    let saved = ""; try { saved = localStorage.getItem(CURRENCY_KEY) || ""; } catch(e) {}
+    sel.value = MONEY.currencies[saved] ? saved : "usd";
+    sel.title = tr("The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.", { date:MONEY.rates.date });
+    sel.addEventListener("change", () => { try { localStorage.setItem(CURRENCY_KEY, sel.value); } catch(e) {} });
+  })();
   function usageLine(){
     if (!run || !run.calls) return "";
     return "About " + tokensUsed().toLocaleString() + " tokens (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from the length of the text. Exported Python reports exact counts." +
-      (run.budget ? " Budget: " + run.budget.toLocaleString() + "." : "") + (run.budgetDollars ? " Budget: " + dollars(run.budgetDollars) + "." : "") +
+      (run.budget ? " Budget: " + run.budget.toLocaleString() + "." : "") + (run.budgetDollars ? " Budget: " + budgetText() + "." : "") +
       (run.costKnown && run.cost ? " " + tr("At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.", { cost:money(run.cost) }) : "");
   }
 

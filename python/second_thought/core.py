@@ -50,6 +50,7 @@ CALL_TIMEOUT = _number_setting("RB_CALL_TIMEOUT", 300, "a number of seconds, lik
 MAX_SECONDS = _number_setting("RB_MAX_SECONDS", 0, "a number of seconds, like 900")             # any run stops after this long
 BUDGET = _number_setting("RB_BUDGET", 0, "a whole number of tokens, like 50000", whole=True)      # tokens per run
 BUDGET_DOLLARS = _number_setting("RB_BUDGET_DOLLARS", 0, "an amount in US dollars, like 0.50")  # US dollars per run, at list prices
+BUDGET_MONEY = _number_setting("RB_BUDGET_MONEY", 0, "an amount in your currency, like 0.40")  # the same in the program's currency
 MAX_AI_CALLS = 60       # per run, to protect your usage
 MAX_STEPS = 20000       # stops loops that never end
 MAX_SCRIPTS = 100       # scripts started by broadcasts in one run

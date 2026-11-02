@@ -650,7 +650,11 @@
   },
   "rb_budget.UNIT": {
    "tokens": "tokens",
-   "dollars": "dólares americanos"
+   "dollars": "dólares americanos",
+   "gbp": "libras",
+   "eur": "euros",
+   "jpy": "ienes",
+   "cny": "yuans"
   }
  },
  "categories": {
@@ -1419,7 +1423,14 @@
   "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.": "Parado: um modelo que esta execução já usou não tem preço conhecido, por isso não pode ser mantida no orçamento de {budget}. Use modelos com preço, ou um orçamento em tokens.",
   "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.": "Parado: esta execução gastou cerca de {cost} a preços de tabela, o que atinge o orçamento de {budget}. Aumente o valor no bloco 'limitar esta execução'.",
   "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.": "Parado: {model} não tem preço conhecido, por isso esta execução não pode ser mantida no orçamento de {budget}. Use um modelo com preço, ou um orçamento em tokens.",
-  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "Esta execução para antes de uma chamada ao Claude quando tiver gasto cerca de {budget} a preços de tabela (cerca de {cost} até agora)."
+  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "Esta execução para antes de uma chamada ao Claude quando tiver gasto cerca de {budget} a preços de tabela (cerca de {cost} até agora).",
+  "US dollars": "dólares americanos",
+  "pounds": "libras",
+  "euros": "euros",
+  "yen": "ienes",
+  "yuan": "yuans",
+  "Currency": "Moeda",
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "A moeda em que os custos e os orçamentos em dinheiro são mostrados. Os serviços cobram em dólares americanos; as outras moedas usam a taxa do Banco Central Europeu de {date}."
  },
  "examples": {
   "review": {
@@ -2899,6 +2910,12 @@
   "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.": "Parado: um modelo que esta execução já usou não tem preço conhecido, por isso não pode ser mantida no orçamento de {x}. Use modelos com preço, ou um orçamento em tokens.",
   "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).": "Parado: esta execução gastou {x} a preços de tabela, o que atinge o orçamento de {x2}. Aumente o valor no bloco 'limitar esta execução' (ou budget_dollars em second-thought.ini).",
   "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.": "Parado: {model} não tem preço conhecido, por isso esta execução não pode ser mantida no orçamento de {x}. Use um modelo com preço, ou um orçamento em tokens.",
-  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "Esta execução para antes de uma chamada ao modelo quando tiver gasto {x} a preços de tabela (gasto até agora: {x2})."
+  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "Esta execução para antes de uma chamada ao modelo quando tiver gasto {x} a preços de tabela (gasto até agora: {x2}).",
+  "Currency": "Moeda",
+  "Today's rate couldn't be fetched ({err}), so it uses the last one it has.": "Não foi possível obter a taxa de hoje ({err}), por isso usa-se a última disponível.",
+  "at the ECB rate of {date}": "à taxa do BCE de {date}",
+  "at the rate set {where_keys}": "à taxa definida {where_keys}",
+  "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.": "currency tem de ser usd, gbp, eur, jpy ou cny, não “{raw}”. Corrija-o {where_keys}.",
+  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (1 dólar americano = {rate})"
  }
 }

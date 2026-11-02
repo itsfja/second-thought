@@ -37,6 +37,7 @@ MARK = "# ---- package only: tools/sync.py leaves everything above this line out
 SERVICES = PACKAGE / "providers.py"   # its SERVICES list is the page's list of model services too
 CAPABILITIES = PACKAGE / "core.py"    # its CAPABILITIES list is the page's list of what programs can do
 SAFETY = object()                     # SAFETY in core.py: what always asks, the same rules on the page
+MONEY = object()                      # CURRENCIES and RATES in providers.py: the page shows costs the same way
 I18N = ROOT / "i18n"                  # one <language>.json per language the block palette can be shown in
 LANG = ROOT / "lang"                  # the same, as scripts the page loads one at a time: made by this tool
 GALLERY = ROOT / "gallery"            # the community gallery: one block file per program, with a "gallery" part
@@ -67,6 +68,7 @@ PARTS = [
     ('<script type="application/json" id="services">\n', SERVICES),
     ('<script type="application/json" id="capabilities">\n', CAPABILITIES),
     ('<script type="application/json" id="safety">\n', SAFETY),
+    ('<script type="application/json" id="money">\n', MONEY),
     ('<script type="application/json" id="i18n">\n', I18N),
     ('<script type="application/json" id="community-gallery">\n', GALLERY),
     ('<script type="text/plain" id="convert-guide">\n', ROOT / "prompts" / "convert-guide.txt"),
@@ -122,6 +124,18 @@ def safety_json() -> str:
     if len(found) != 1:
         sys.exit("python/second_thought/core.py should set SAFETY = {...} once, at the top level.")
     return json.dumps(ast.literal_eval(found[0]), ensure_ascii=False, indent=1) + "\n"
+
+
+def money_json() -> str:
+    """CURRENCIES and RATES in providers.py, for the page."""
+    tree = ast.parse(SERVICES.read_text(encoding="utf-8"))
+    out = {}
+    for name in ("CURRENCIES", "RATES"):
+        found = [n.value for n in tree.body if isinstance(n, ast.Assign) and [ast.unparse(t) for t in n.targets] == [name]]
+        if len(found) != 1:
+            sys.exit(f"python/second_thought/providers.py should set {name} = {{...}} once, at the top level.")
+        out[name.lower()] = ast.literal_eval(found[0])
+    return json.dumps(out, ensure_ascii=False, indent=1) + "\n"
 
 
 def capabilities_json() -> str:
@@ -220,6 +234,8 @@ def build(page: str, runtime: str = None) -> str:
             body = capabilities_json()
         elif path is SAFETY:
             body = safety_json()
+        elif path is MONEY:
+            body = money_json()
         elif path == I18N:
             body = i18n_json()
         elif path == GALLERY:

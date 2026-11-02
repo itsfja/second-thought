@@ -160,7 +160,7 @@
 "rb_mem_set_for.UNIT":{"m":"λεπτά","h":"ὥρας","d":"ἡμέρας"},
 "rb_mem_add.KIND":{"transient":"ἐν ᾧ ἥδε ἡ σελὶς ἀνέῳκται","permanent":"εἰς ἀεί"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (γεγραμμέναι εἰκόνες)","orig":"τὸ ἀρχικὸν τεῦχος"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολλάρια Ἀμερικανικά"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολλάρια Ἀμερικανικά","gbp":"λῖτραι","eur":"εὐρώ","jpy":"γιέν","cny":"γιουάν"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -928,7 +928,14 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.":"Πεπαυμένον· πρόγραμμα ᾧ ἤδη ἐχρήσατο αὕτη ἡ πρᾶξις οὐκ ἔχει γνωστὴν τιμήν, διὸ οὐ δύναται ἐντὸς τοῦ ὅρου τῶν {budget} μένειν. Χρῶ προγράμμασι μετὰ τιμῆς, ἢ ὅρῳ ἐν tokens.",
 "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.":"Πεπαυμένον· αὕτη ἡ πρᾶξις ἀνήλωσε περὶ {cost} ταῖς τιμαῖς τοῦ καταλόγου, ὃ τὸν ὅρον τῶν {budget} ἐξικνεῖται. Αὔξησον τὸ ποσὸν ἐν τῷ πλινθίῳ «ὅρισον ταύτην τὴν πρᾶξιν».",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.":"Πεπαυμένον· τὸ {model} οὐκ ἔχει γνωστὴν τιμήν, διὸ αὕτη ἡ πρᾶξις οὐ δύναται ἐντὸς τοῦ ὅρου τῶν {budget} μένειν. Χρῶ προγράμματι μετὰ τιμῆς, ἢ ὅρῳ ἐν tokens.",
-"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Αὕτη ἡ πρᾶξις παύεται πρὸ κλήσεως τοῦ Claude ὅταν ἀναλώσῃ περὶ {budget} ταῖς τιμαῖς τοῦ καταλόγου (περὶ {cost} μέχρι νῦν)."
+"This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).":"Αὕτη ἡ πρᾶξις παύεται πρὸ κλήσεως τοῦ Claude ὅταν ἀναλώσῃ περὶ {budget} ταῖς τιμαῖς τοῦ καταλόγου (περὶ {cost} μέχρι νῦν).",
+"US dollars":"δολλάρια Ἀμερικανικά",
+"pounds":"λῖτραι",
+"euros":"εὐρώ",
+"yen":"γιέν",
+"yuan":"γιουάν",
+"Currency":"Νόμισμα",
+"The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.":"Τὸ νόμισμα ἐν ᾧ αἱ δαπάναι καὶ οἱ ὅροι χρημάτων δείκνυνται. Αἱ ὑπηρεσίαι ἐν δολλαρίοις Ἀμερικανικοῖς πράττονται· τὰ ἄλλα νομίσματα χρῶνται τῇ τιμῇ τῆς Εὐρωπαϊκῆς Κεντρικῆς Τραπέζης τῆς {date}."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1776,7 +1783,13 @@
 "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.":"Πεπαυμένον· πρόγραμμα ᾧ ἤδη ἐχρήσατο αὕτη ἡ πρᾶξις οὐκ ἔχει γνωστὴν τιμήν, διὸ οὐ δύναται ἐντὸς τοῦ ὅρου τῶν {x} μένειν. Χρῶ προγράμμασι μετὰ τιμῆς, ἢ ὅρῳ ἐν tokens.",
 "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).":"Πεπαυμένον· αὕτη ἡ πρᾶξις ἀνήλωσε {x} ταῖς τιμαῖς τοῦ καταλόγου, ὃ τὸν ὅρον τῶν {x2} ἐξικνεῖται. Αὔξησον τὸ ποσὸν ἐν τῷ πλινθίῳ «ὅρισον ταύτην τὴν πρᾶξιν» (ἢ budget_dollars ἐν τῷ second-thought.ini).",
 "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.":"Πεπαυμένον· τὸ {model} οὐκ ἔχει γνωστὴν τιμήν, διὸ αὕτη ἡ πρᾶξις οὐ δύναται ἐντὸς τοῦ ὅρου τῶν {x} μένειν. Χρῶ προγράμματι μετὰ τιμῆς, ἢ ὅρῳ ἐν tokens.",
-"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Αὕτη ἡ πρᾶξις παύεται πρὸ κλήσεως προγράμματος ὅταν ἀναλώσῃ {x} ταῖς τιμαῖς τοῦ καταλόγου (ἀνηλωμένα μέχρι νῦν· {x2})."
+"This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).":"Αὕτη ἡ πρᾶξις παύεται πρὸ κλήσεως προγράμματος ὅταν ἀναλώσῃ {x} ταῖς τιμαῖς τοῦ καταλόγου (ἀνηλωμένα μέχρι νῦν· {x2}).",
+"Currency":"Νόμισμα",
+"Today's rate couldn't be fetched ({err}), so it uses the last one it has.":"Ἡ σημερινὴ τιμὴ οὐκ ἠδυνήθη κομισθῆναι ({err}), διὸ ἡ ἐσχάτη ἡ οὖσα χρῆται.",
+"at the ECB rate of {date}":"τῇ τιμῇ τῆς ΕΚΤ τῆς {date}",
+"at the rate set {where_keys}":"τῇ τιμῇ τῇ ὡρισμένῃ {where_keys}",
+"currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.":"τὸ currency δεῖ εἶναι usd, gbp, eur, jpy ἢ cny, οὐ «{raw}». Ἐπανόρθωσον {where_keys}.",
+"{code}, {note} (1 US dollar = {rate})":"{code}, {note} (1 δολλάριον Ἀμερικανικόν = {rate})"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

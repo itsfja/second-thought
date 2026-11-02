@@ -651,7 +651,11 @@
   },
   "rb_budget.UNIT": {
    "tokens": "token",
-   "dollars": "US dollar"
+   "dollars": "US dollar",
+   "gbp": "pound",
+   "eur": "euro",
+   "jpy": "yen",
+   "cny": "yuan"
   }
  },
  "categories": {
@@ -1420,7 +1424,14 @@
   "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.": "𒅁𒊒𒊻: 𒁲𒈬𒌝 𒊭 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒌌𒌅 𒉺𒈾 𒄿𒁍𒋗 𒅆𒈠𒄠 𒄿𒁺𒌝 𒌌 𒄿𒋗, 𒀸𒋗𒌝 𒆠𒄠 𒄿𒈾 𒈪𒅅𒋛𒅎 𒊭 {budget} 𒌌 𒄿𒈾𒊍𒍝𒅈. 𒁲𒈪 𒊭 𒅆𒈠𒄠 𒄿𒋗 𒂊𒁍𒍑, 𒌑𒇻 𒈪𒅅𒊓𒄠 𒄿𒈾 token.",
   "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.": "𒅁𒊒𒊻: 𒄿𒈾 𒂊𒁉𒅖𒋾𒅎 𒀭𒉌𒋾𒅎 𒆠𒈠 {cost} 𒄿𒈾 𒅆𒅎 𒌅𒌒𒁉𒅎 𒈾𒀜𒉡, 𒈪𒅅𒊓𒄠 𒊭 {budget} 𒅅𒋗𒌓. 𒄿𒈾 𒇷𒁉𒀉𒋾 '𒂊𒁉𒅖𒋫𒄠 𒀭𒉌𒋫𒄠 𒅗𒇻' 𒅗𒊍𒉺𒄠 šuqqi.",
   "Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.": "𒅁𒊒𒊻: {model} 𒅆𒈠𒄠 𒄿𒁺𒌝 𒌌 𒄿𒋗, 𒀸𒋗𒌝 𒆠𒄠 𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒄿𒈾 𒈪𒅅𒋛𒅎 𒊭 {budget} 𒌌 𒄿𒈾𒊍𒍝𒅈. 𒁲𒈠𒄠 𒊭 𒅆𒈠𒄠 𒄿𒋗 𒂊𒁍𒍑, 𒌑𒇻 𒈪𒅅𒊓𒄠 𒄿𒈾 token.",
-  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒆷𒈠 Claude 𒄿𒊓𒊍𒋢 𒅁𒊒𒊻, 𒆠𒈠 𒅖𒌅 𒆠𒈠 {budget} 𒄿𒈾 𒅆𒅎 𒌅𒌒𒁉𒅎 𒈾𒀜𒉡 (𒀀𒁲 𒄿𒈾𒀭𒈾 𒆠𒈠 {cost})."
+  "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "𒂊𒁉𒅖𒌅𒌝 𒀭𒉌𒌅𒌝 𒆷𒈠 Claude 𒄿𒊓𒊍𒋢 𒅁𒊒𒊻, 𒆠𒈠 𒅖𒌅 𒆠𒈠 {budget} 𒄿𒈾 𒅆𒅎 𒌅𒌒𒁉𒅎 𒈾𒀜𒉡 (𒀀𒁲 𒄿𒈾𒀭𒈾 𒆠𒈠 {cost}).",
+  "US dollars": "US dollar",
+  "pounds": "pound",
+  "euros": "euro",
+  "yen": "yen",
+  "yuan": "yuan",
+  "Currency": "𒅗𒊍𒁍𒌝",
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "𒅗𒊍𒁍𒌝 𒊭 𒈾𒁕𒉡𒌝 𒌑 𒈪𒅅𒋢𒌝 𒊭 𒅗𒊍𒁉𒅎 𒄿𒈾 𒇷𒅁𒁉𒋗 𒅔𒈾𒄠𒈠𒊒. 𒂊𒁉𒋗 𒄿𒈾 US dollar 𒄿𒇷𒅅𒄣; 𒅗𒊍𒁍 𒊭𒉡𒌅𒌝 𒈠𒄭𒅕 ECB 𒊭 {date} 𒄿𒇷𒅅𒄣."
  },
  "examples": {
   "review": {
@@ -2900,7 +2911,13 @@
   "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {x}. Use models with a price, or a budget in tokens.": "iprus: ṭēmum ša epištum annītum ultu pāna īpušu šīmam idûm ul išu, aššum kīam ina miksim ša {x} ul inaṣṣar. ṭēmī ša šīmam išû epuš, ulū miksam ina token.",
   "Stopped: this run has spent {x} at list prices, which reaches its budget of {x2}. Raise the amount in the 'limit this run' block (or budget_dollars in second-thought.ini).": "iprus: ina epištim annītim {x} ina šīm ṭuppim nadnu, miksam ša {x2} ikšud. ina libitti 'epištam annītam kalû' kaspam šuqqi (ulū budget_dollars ina second-thought.ini).",
   "Stopped: {model} has no known price, so this run can't be held to its budget of {x}. Use a model with a price, or a budget in tokens.": "iprus: {model} šīmam idûm ul išu, aššum kīam epištum annītum ina miksim ša {x} ul inaṣṣar. ṭēmam ša šīmam išû epuš, ulū miksam ina token.",
-  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "epištum annītum lāma ṭēmam isassû iprus, kīma ištu {x} ina šīm ṭuppim nadnu (adi inanna nadnu: {x2})."
+  "This run stops before a model call once it has spent {x} at list prices (spent so far: {x2}).": "epištum annītum lāma ṭēmam isassû iprus, kīma ištu {x} ina šīm ṭuppim nadnu (adi inanna nadnu: {x2}).",
+  "Currency": "kaspum",
+  "Today's rate couldn't be fetched ({err}), so it uses the last one it has.": "maḫīr ūmim annîm ul ilqû ({err}), aššum kīam maḫīram arkîm ša ibaššû ileqqe.",
+  "at the ECB rate of {date}": "ina maḫīr ECB ša {date}",
+  "at the rate set {where_keys}": "ina maḫīr ša {where_keys} šaknu",
+  "currency must be usd, gbp, eur, jpy or cny, not “{raw}”. Fix it {where_keys}.": "currency lū usd, gbp, eur, jpy ulū cny, ul {raw}. {where_keys} šutešir.",
+  "{code}, {note} (1 US dollar = {rate})": "{code}, {note} (1 US dollar = {rate})"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",
