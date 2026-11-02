@@ -656,7 +656,7 @@
       case "rb_budget": {
         if (b.getFieldValue("UNIT") === "dollars") {
           run.budgetDollars = Math.max(0, num(await input(b, tc, "TOKENS", 0)));
-          addStep("Budget", { mono:true, text:run.budgetDollars ? tr("This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).", { budget:dollars(run.budgetDollars), cost:money(run.cost) }) : tr("No money budget for this run.") }).done("set", "ok");
+          addStep("Budget", { mono:true, text:run.budgetDollars ? tr("This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).", { budget:dollars(run.budgetDollars), cost:dollars(run.cost) }) : tr("No money budget for this run.") }).done("set", "ok");
           break;
         }
         run.budget = Math.max(0, Math.round(num(await input(b, tc, "TOKENS", 0))));

@@ -250,7 +250,7 @@
     if (run.budgetDollars) {
       if (!priceOf(run.tier)) fail(tr("Stopped: {model} has no known price, so this run can't be held to its budget of {budget}. Use a model with a price, or a budget in tokens.", { model:tierLabel(run.tier), budget:dollars(run.budgetDollars) }));
       if (!run.costKnown) fail(tr("Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.", { budget:dollars(run.budgetDollars) }));
-      if (run.cost >= run.budgetDollars) fail(tr("Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.", { cost:money(run.cost), budget:dollars(run.budgetDollars) }));
+      if (run.cost >= run.budgetDollars) fail(tr("Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.", { cost:dollars(run.cost), budget:dollars(run.budgetDollars) }));
     }
     run.tokIn += estTokens(prompt) + (images ? images.length * 1600 : 0);
     setStatus(tr("running") + " · " + tr(run.calls === 1 ? "{n} Claude call" : "{n} Claude calls", { n:run.calls }) + " · " + tr("~{n} tokens", { n:fmtTokens(tokensUsed()) }));

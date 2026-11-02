@@ -29,7 +29,8 @@ async def new_feature_page_tests(pg):
     status = await run_program(pg)
     steps = await step_texts(pg)
     stopped = [t for n, p_, t in steps if n == "Run stopped"]
-    check(status == "error" and stopped and "budget of $0.0001" in stopped[0] and "at list prices" in stopped[0],
+    check(status == "error" and stopped and "budget of $0.0001" in stopped[0] and "at list prices" in stopped[0]
+          and re.search(r"spent about \$0\.\d+ at list prices", stopped[0]),
           f"a budget in US dollars stops the run once it has spent that much ({status}: {stopped[0][:120] if stopped else steps[-1:]})")
     EXTRA["t_budget_dollars"] = await export_python(pg, "t_budget_dollars")
     check('R.set_budget(0.0001, "dollars")' in EXTRA["t_budget_dollars"], "and the exported program keeps the unit")
