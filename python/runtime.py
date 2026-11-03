@@ -25,7 +25,7 @@ import urllib.request
 
 # Which runtime this is. Every exported program carries its own copy of the runtime, so this says which one it has:
 # run the program with --version to see it. What changed in each version is in CHANGELOG.md, in the Second Thought folder.
-RUNTIME_VERSION = "3.5.0"
+RUNTIME_VERSION = "3.6.0"
 
 # Windows consoles and redirected output can't always show every character; never crash over one.
 for _stream in (sys.stdout, sys.stderr):
