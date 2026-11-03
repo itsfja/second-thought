@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"όταν είναι %1 : %2 %3","tooltip":"Τρέχει αυτή την ώρα (24ωρο) όσο ο Προγραμματισμός είναι ενεργός και η σελίδα ανοιχτή."},
 "rb_with_any_model":{"message0":"με το μοντέλο OpenRouter %1","message1":"%1","tooltip":"Εκτελεί μόνο τα μπλοκ μέσα σε οποιοδήποτε μοντέλο προσφέρει το OpenRouter. Γράψτε το όνομά του από το openrouter.ai/models, π.χ. mistralai/mistral-small ή google/gemma-4-31b-it. Το openrouter/auto διαλέγει ένα για εσάς. Τρέχει στην εξαγόμενη Python (χρειάζεται OPENROUTER_API_KEY)· σε αυτή τη σελίδα το αντικαθιστά ο Claude."},
 "rb_with_model":{"message0":"με το μοντέλο %1","message1":"%1","tooltip":"Εκτελεί μόνο τα μπλοκ μέσα σε αυτό το μοντέλο και μετά επιστρέφει στο προηγούμενο. Μοντέλα εκτός του Claude τρέχουν στην εξαγόμενη Python· σε αυτή τη σελίδα τα αντικαθιστά ο Claude."},
-"rb_word_count":{"message0":"πλήθος λέξεων του %1"}
+"rb_word_count":{"message0":"πλήθος λέξεων του %1"},
+"rb_agent_kraken":{"message0":"εργαλεία Kraken %1","tooltip":"Δίνει στον πράκτορα τα εργαλεία του Kraken, από το kraken-cli: τιμές αγοράς, υπόλοιπα και εντολές σας, και εικονικές συναλλαγές σε πραγματικές τιμές. Οι πραγματικές συναλλαγές του επιτρέπουν και αληθινές εντολές, αλλά κάθε εργαλείο που μπορεί να μετακινήσει χρήματα σας ρωτά πρώτα, ακόμη κι όταν τίποτε άλλο δεν ρωτά, και δεν εκτελείται ποτέ με χρονοδιάγραμμα ή στο GitHub Actions. Χρειάζεται εγκατεστημένο kraken-cli, και KRAKEN_API_KEY και KRAKEN_API_SECRET στο second-thought.ini για τον λογαριασμό σας (οι τιμές και οι εικονικές συναλλαγές δεν χρειάζονται κλειδί). Μόνο σε εξαγμένη Python."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"κάθε μέρα","weekdays":"τις καθημερινές","weekends":"τα Σαββατοκύριακα"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"λεπτά","h":"ώρες","d":"ημέρες"},
 "rb_mem_add.KIND":{"transient":"όσο αυτή η σελίδα είναι ανοιχτή","permanent":"για πάντα"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (σχεδιασμένες εικόνες)","orig":"αρχικό αρχείο"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολάρια ΗΠΑ","gbp":"λίρες","eur":"ευρώ","jpy":"γιεν","cny":"γουάν"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολάρια ΗΠΑ","gbp":"λίρες","eur":"ευρώ","jpy":"γιεν","cny":"γουάν"},
+"rb_agent_kraken.MODE":{"read":"(τιμές, ο λογαριασμός σας και εικονικές συναλλαγές)","live":"(και πραγματικές συναλλαγές: ρωτά πριν από κάθε εντολή)"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"Αυτό δεν μοιάζει με κλειδί API της Anthropic. Ξεκινούν με sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"Αυτό το πρόγραμμα περιήγησης δεν κρατά το κλειδί. Επιτρέψτε τα δεδομένα ιστότοπου για αυτή τη σελίδα και δοκιμάστε ξανά.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"Το κλειδί πηγαίνει μόνο από αυτό το πρόγραμμα περιήγησης στο api.anthropic.com, και οι εκτελέσεις χρεώνονται στον λογαριασμό του. Διατηρείται μέχρι να κλείσετε αυτή την καρτέλα, εκτός αν επιλέξετε Απομνημόνευση. Δεν αποθηκεύεται ποτέ σε προγράμματα, εξαγωγές ή στο αρχείο εκτέλεσης. Δημιουργήστε ένα στο console.anthropic.com.",
-"Claude's API said: {problem}":"Το API του Claude απάντησε: {problem}"
+"Claude's API said: {problem}":"Το API του Claude απάντησε: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"Τα εργαλεία του Kraken δεν είναι προσβάσιμα από αυτή τη σελίδα, οπότε ο πράκτορας δουλεύει χωρίς αυτά εδώ. Εξαγάγετε σε Python, με εγκατεστημένο το kraken-cli, για να τα χρησιμοποιήσετε.",
+"read your Kraken balances and orders, market prices, and trade on paper":"να διαβάζει τα υπόλοιπα και τις εντολές σας στο Kraken, τις τιμές της αγοράς, και να κάνει εικονικές συναλλαγές",
+"trade on your Kraken account with real money (asking you before every order)":"να κάνει συναλλαγές στον λογαριασμό σας στο Kraken με πραγματικά χρήματα (ρωτώντας σας πριν από κάθε εντολή)"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1847,6 +1853,12 @@
 "Test":"Τεστ",
 "Test cases: {passed} of {n} passed":"Περιπτώσεις ελέγχου: πέρασαν {passed} από {n}",
 "Test failed: {name}":"Το τεστ απέτυχε: {name}",
-"What was wrong":"Τι δεν πήγε καλά"
+"What was wrong":"Τι δεν πήγε καλά",
+"Allow this? It could move real money: {what}":"Να επιτραπεί; Μπορεί να μετακινήσει πραγματικά χρήματα: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Το Kraken απέρριψε το KRAKEN_API_KEY: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"Το kraken-cli δεν είναι εγκατεστημένο, οπότε τα εργαλεία του Kraken δεν μπορούν να ξεκινήσουν. Εγκαταστήστε το: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"το κλειδί σας για το Kraken λειτουργεί",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"Το {key} ξεκινά τον διακομιστή με --allow-dangerous, που απενεργοποιεί τον δικό του έλεγχο πριν από εργαλεία που μετακινούν χρήματα. Αφαιρέστε το.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"Το {what} μπορεί να μετακινήσει πραγματικά χρήματα, οπότε εκτελείται μόνο όταν είστε εκεί να πείτε ναι, και δεν είναι κανείς."
 }
 };

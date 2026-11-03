@@ -146,6 +146,7 @@ def python_tests(codes):
     # RB_APPROVE=no: these programs are run unattended many times over; approval_tests() checks the first-run question.
     env = dict(os.environ, RB_APPROVE="no", PYTHONPATH=str(HERE / "fakeapi"), PYTHONIOENCODING="utf-8", ANTHROPIC_API_KEY="test", GEMINI_API_KEY="test",
                HA_URL=ha_url, HA_TOKEN=fake_ha.TOKEN, LLAMA_BASE_URL=llama_url,
+               MCP_KRAKEN=f'"{sys.executable}" "{HERE / "fake_kraken.py"}"',  # the Kraken tools block (#262)
                DEEPSEEK_BASE_URL=llama_url, DEEPSEEK_API_KEY="test",
                XAI_BASE_URL=llama_url, XAI_API_KEY="test",
                OPENAI_BASE_URL=llama_url, OPENAI_API_KEY="test",

@@ -49,6 +49,9 @@
   function allProgramBlocks(){
     return withSubPrograms(subs => ws.getAllBlocks(false).concat(...subs.filter(x => x.ws).map(x => x.ws.getAllBlocks(false))));
   }
+  // The Kraken tools block's choice, for --doctor: "live" if any asks for live trading.
+  const krakenMode = () => { const k = allProgramBlocks().filter(b => b.type === "rb_agent_kraken");
+    return k.length ? (k.some(b => b.getFieldValue("MODE") === "live") ? "live" : "read") : ""; };
   function settingsFor(){
     const keys = servicesUsed().filter(s => s.signup).map(s => [s.key_label || s.name, s.keys[0], s.signup]);
     const blocks = allProgramBlocks();
@@ -62,6 +65,7 @@
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]), mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
+             kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -96,6 +100,12 @@
       "; For example:  MCP_FILES = npx -y @modelcontextprotocol/server-filesystem /home/me/recipes",
       "; A server this program starts gets these settings as its environment, so its own keys can go here too.",
       ...need.mcp.map(n => mcpSetting(n) + " = "));
+    if (need.kraken) out.push("", "[kraken]",
+      "; Kraken's tools come from kraken-cli (https://docs.kraken.com/home/mcp): install it, then the program starts it itself.",
+      "; Prices and paper trading need no key. For your account, make an API key at kraken.com (Settings, API) with the",
+      "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
+      "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
+      "; MCP_KRAKEN = kraken mcp -s market,account,paper     to choose Kraken's services yourself (never add --allow-dangerous)");
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
@@ -529,12 +539,13 @@
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
           case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + (b.getFieldValue("UNIT") && b.getFieldValue("UNIT") !== "tokens" ? ", " + pyStr(b.getFieldValue("UNIT")) : "") + ")"); break;
-          case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": break;
+          case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": case "rb_agent_kraken": break;
           case "rb_agent": {
             const tools = [];
             for (let t = b.getInputTargetBlock("TOOLS"); t; t = t.getNextBlock()) {
               if (!enabled(t)) continue;
               if (t.type === "rb_agent_builtin") tools.push('{"kind": ' + pyStr(t.getFieldValue("KIND")) + "}");
+              else if (t.type === "rb_agent_kraken") tools.push('{"kind": "mcp", "server": "kraken", "ask": "never", "command": ' + pyStr(KRAKEN_COMMANDS[t.getFieldValue("MODE")] || KRAKEN_COMMANDS.read) + "}");  // money tools ask anyway
               else if (t.type === "rb_agent_mcp") tools.push('{"kind": "mcp", "server": ' + pyStr(String(t.getFieldValue("SERVER") || "").trim()) + ', "ask": ' + pyStr(t.getFieldValue("ASK") || "changes") + "}");
               else if (t.type === "rb_agent_tool") {
                 const name = String(t.getFieldValue("NAME") || "").trim();
@@ -776,7 +787,8 @@
       "# What this program can do (listed in the notes at the top). If any of it acts on the world, the program asks",
       "# before its first run, and again whenever this file changes.",
       "CAN = {\"services\": [" + usedServices.map(x => pyStr(x.name)).join(", ") + "], \"can\": [" + caps.map(c => pyStr(c[0])).join(", ") + "]" +
-        (settingsFor().mcp.length ? ", \"mcp\": [" + settingsFor().mcp.map(pyStr).join(", ") + "]" : "") + "}",
+        (settingsFor().mcp.length ? ", \"mcp\": [" + settingsFor().mcp.map(pyStr).join(", ") + "]" : "") +
+        (krakenMode() ? ", \"kraken\": " + pyStr(krakenMode()) : "") + "}",
       "",
       "if __name__ == \"__main__\":",
       "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + ", can=CAN)",

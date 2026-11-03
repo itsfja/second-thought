@@ -552,6 +552,10 @@
   },
   "rb_word_count": {
    "message0": "𐀀𐀪𐀵𐀗 𐀁𐀟𐀃 %1"
+  },
+  "rb_agent_kraken": {
+   "message0": "Kraken 𐀃𐀏𐀙 %1",
+   "tooltip": "𐀇𐀈𐀯 𐀞𐀨𐀒𐀵 Kraken 𐀃𐀏𐀙, 𐀀𐀡 kraken-cli: 𐀀𐀒𐀨 𐀴𐀕, 𐀃𐀟𐀫𐀰 𐀏𐀂 𐀁𐀵𐀨, 𐀏𐀂 𐀁𐀡𐀫𐀽 𐀁𐀠 𐀞𐀢𐀫. 𐀀𐀨𐀳𐀀 𐀁𐀡𐀫𐀽 𐀁𐀀𐀁 𐀏𐀂 𐀀𐀨𐀳𐀀 𐀁𐀵𐀨, 𐀃𐀏𐀜𐀆 𐀓𐀬𐀰 𐀑𐀚𐀃𐀲 𐀁𐀫𐀲 𐀞𐀫𐀵, 𐀃𐀄𐀟𐀡 𐀒𐀲 𐀒𐀫𐀜 𐀁𐀚 GitHub Actions 𐀳𐀩𐀐𐀁. 𐀆𐀂 kraken-cli, 𐀏𐀂 KRAKEN_API_KEY 𐀏𐀂 KRAKEN_API_SECRET 𐀁𐀚 second-thought.ini. 𐀗𐀜 𐀁𐀚 Python."
   }
  },
  "options": {
@@ -656,6 +660,10 @@
    "eur": "euro",
    "jpy": "yen",
    "cny": "yuan"
+  },
+  "rb_agent_kraken.MODE": {
+   "read": "(𐀴𐀕, 𐀏𐀨𐀵𐀪𐀰 𐀏𐀂 𐀁𐀡𐀫𐀽 𐀁𐀠 𐀞𐀢𐀫)",
+   "live": "(𐀏𐀂 𐀀𐀨𐀳𐀀 𐀁𐀡𐀫𐀽: 𐀁𐀫𐀲 𐀞𐀫 𐀞𐀲 𐀁𐀵𐀨)"
   }
  },
  "categories": {
@@ -1450,7 +1458,11 @@
   "That doesn't look like an Anthropic API key. They start with sk-ant-.": "𐀵𐀵 𐀃𐀄 𐀞𐀂𐀚𐀲𐀂 𐀏𐀨𐀹 Anthropic API. 𐀀𐀨𐀒𐀵 sk-ant-.",
   "This browser won't keep the key. Allow site data for this page, then try again.": "𐀵𐀆 𐀇𐀓𐀶𐀃𐀮𐀒𐀡 𐀏𐀨𐀹 𐀃𐀄 𐀢𐀨𐀮𐀂. 𐀁𐀀𐀮 𐀵𐀡 𐀆𐀈𐀕𐀙, 𐀁𐀟𐀂𐀲 𐀀𐀚𐀟𐀂𐀨.",
   "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.": "𐀏𐀨𐀹 𐀗𐀜 𐀀𐀡 𐀵𐀆 𐀇𐀓𐀶𐀃𐀮𐀒𐀡 𐀁𐀚 api.anthropic.com 𐀂𐀋𐀵; 𐀃𐀟𐀫 𐀁𐀠 𐀏𐀨𐀵𐀪. 𐀢𐀨𐀮𐀲𐀂 𐀀𐀐𐀪 𐀵𐀵 𐀠𐀙𐀐 𐀐𐀬𐀮, 𐀀𐀂 𐀕 𐀕𐀚𐀕𐀜 𐀮𐀔𐀂𐀚. 𐀃𐀄𐀟𐀡 𐀁𐀚 𐀡𐀫𐀏𐀨𐀔, 𐀁𐀏𐀺𐀏, 𐀁𐀚 𐀆𐀫𐀗 𐀳𐀄𐀒 𐀢𐀨𐀮𐀲𐀂. 𐀡𐀁𐀮 𐀃𐀚 𐀁𐀚 console.anthropic.com.",
-  "Claude's API said: {problem}": "Claude API 𐀁𐀁𐀟: {problem}"
+  "Claude's API said: {problem}": "Claude API 𐀁𐀁𐀟: {problem}",
+  "Kraken": "Kraken",
+  "Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.": "Kraken 𐀃𐀏𐀙 𐀃𐀄 𐀀𐀠𐀐𐀲𐀂 𐀀𐀡 𐀵𐀆 𐀠𐀙𐀐; 𐀁𐀚𐀲𐀆 𐀞𐀨𐀒𐀵 𐀀𐀚𐀄 𐀁𐀏𐀽𐀲𐀂. 𐀁𐀏𐀐 Python, kraken-cli 𐀐𐀲𐀕𐀜, 𐀐𐀩𐀮𐀲𐀂.",
+  "read your Kraken balances and orders, market prices, and trade on paper": "𐀀𐀙𐀐𐀚𐀮𐀐 Kraken 𐀃𐀟𐀫 𐀏𐀂 𐀁𐀵𐀨, 𐀀𐀒𐀨 𐀴𐀕, 𐀏𐀂 𐀁𐀡𐀫𐀽 𐀁𐀠 𐀞𐀢𐀫",
+  "trade on your Kraken account with real money (asking you before every order)": "𐀁𐀡𐀫𐀽 𐀁𐀠 Kraken 𐀏𐀨𐀵𐀪 𐀀𐀨𐀳𐀀 𐀓𐀬𐀰 (𐀁𐀫𐀲 𐀞𐀫 𐀞𐀲 𐀁𐀵𐀨)"
  },
  "examples": {
   "review": {
@@ -2975,7 +2987,13 @@
   "Test": "pe-i-ra",
   "Test cases: {passed} of {n} passed": "pe-i-ra-i: {passed} e-ke {n} e-pe-tu-ke",
   "Test failed: {name}": "pe-i-ra a-pe-tu-ke: {name}",
-  "What was wrong": "ti a-ma-ra-te"
+  "What was wrong": "ti a-ma-ra-te",
+  "Allow this? It could move real money: {what}": "e-a-se? du-na-ta-i a-ra-te-a ku-ru-so ki-ne-e: {what}",
+  "Kraken refused KRAKEN_API_KEY: {problem}": "Kraken KRAKEN_API_KEY a-pe-wo-ne: {problem}",
+  "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp": "kraken-cli o-u ke-ta-i, Kraken o-ka-na o-u du-na-ta a-ra-ke-ta-i. ke-ta-se: https://docs.kraken.com/home/mcp",
+  "your Kraken key works": "Kraken ka-ra-wi-so e-ka-ze-ta-i",
+  "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "{key} a-ra-ke-ta-i ta-ra-pe-ze me-ta --allow-dangerous, o pa-u-e ta-ra-ke-ta pa-ro o-ka-na ku-ru-so ki-ne-o-ta. a-pe-re-e.",
+  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} du-na-ta-i a-ra-te-a ku-ru-so ki-ne-e; mo-no te-re-ke-e o-te pa-re-si na-i pa-to, o-u-de-e pa-re-si."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

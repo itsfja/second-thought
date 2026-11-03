@@ -14,12 +14,14 @@ from .providers import CURRENCY, MODELS, dollars, record_limits, PROVIDERS, SERV
 from .spending import PLANS, plan_of, reported_lines
 from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, _short, to_str
 from .connectors import webhook_host
+from .mcp import KRAKEN_COMMANDS, mcp_env_name
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import difflib  # noqa: E402,F811 - below the line, so python/runtime.py has it too
 import re  # noqa: E402,F811
 import importlib.metadata  # noqa: E402,F811 - below the line, so python/runtime.py has them too
 import importlib.util  # noqa: E402,F811
+import shutil  # noqa: E402,F811
 import socket  # noqa: E402,F811
 
 
@@ -209,8 +211,22 @@ class Doctor:
             out.append(("Web requests", hook))
         for name in mcp:
             async def server(name=name):
+                key = mcp_env_name(name)
+                command = os.environ.get(key, "").strip() or self.__dict__.get("_mcp_defaults", {}).get(key, "")
+                if re.search(r"(^|\s)--allow-dangerous\b", command):
+                    raise RunError(tr("{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.", key=key))
+                if re.match(r"^\s*kraken(\.exe)?\s", command) and not shutil.which("kraken"):
+                    raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 tools = await self.mcp_tools(name)
-                return tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
+                text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
+                names = {to_str(t.get("name")) for t in tools}
+                if key == "MCP_KRAKEN" and os.environ.get("KRAKEN_API_KEY") and names & {"kraken_auth_test", "kraken_balance"}:
+                    # The key, checked with a read-only call; what it reads isn't shown.
+                    reply, failed = await self.mcp_call(name, "kraken_auth_test" if "kraken_auth_test" in names else "kraken_balance", {})
+                    if failed:
+                        raise RunError(tr("Kraken refused KRAKEN_API_KEY: {problem}", problem=_short(reply, 160)))
+                    text += " · " + tr("your Kraken key works")
+                return text
             out.append((f"MCP server “{name}”", server))
         if has("memory"):
             async def memory():
@@ -305,7 +321,11 @@ class Doctor:
             row(status, s["name"], text + " " + tr("Models: {list}.", list=", ".join(f"{model_byline(_tier(s, k))} ({band_text(_tier(s, k))})" for k in sizes)))
         for line in reported_lines([s["name"] for s in services]):
             row("ok", "Limits", line)
-        for area, check in await self._doctor_connections(ids, [n for n in can.get("mcp", []) if to_str(n).strip()]):
+        servers = [n for n in can.get("mcp", []) if to_str(n).strip()]
+        if can.get("kraken"):  # the Kraken tools block: its own command, unless MCP_KRAKEN says otherwise
+            self.__dict__.setdefault("_mcp_defaults", {})["MCP_KRAKEN"] = KRAKEN_COMMANDS.get(can["kraken"], KRAKEN_COMMANDS["read"])
+            servers.append("kraken")
+        for area, check in await self._doctor_connections(ids, servers):
             if not known and not self._doctor_configured(area):
                 continue
             try:

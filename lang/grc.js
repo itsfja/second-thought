@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"ὅταν ᾖ %1 : %2 %3","tooltip":"Τρέχει ἐν ταύτῃ τῇ ὥρᾳ (ὡρολόγιον 24 ὡρῶν) ἐν ᾧ αἱ Ὧραι ἐνεργοῦσι καὶ ἥδε ἡ σελὶς ἀνέῳκται."},
 "rb_with_any_model":{"message0":"μετὰ τοῦ τύπου OpenRouter %1","message1":"%1","tooltip":"Τρέχει μόνας τὰς ἔσω πλίνθους ἐπὶ παντὸς τύπου ὃν ὁ OpenRouter παρέχει. Γράψον τὸ ὄνομα ἐκ openrouter.ai/models, οἷον mistralai/mistral-small ἢ google/gemma-4-31b-it. Τὸ openrouter/auto ἐκλέγεταί σοι ἕνα. Τρέχει ἐν τῷ ἐξαχθέντι Python (δεῖται OPENROUTER_API_KEY)· ἐν τῇδε τῇ σελίδι ὁ Claude ἀντ᾽ αὐτοῦ ἵσταται."},
 "rb_with_model":{"message0":"μετὰ τοῦ τύπου %1","message1":"%1","tooltip":"Τρέχει μόνας τὰς ἔσω πλίνθους ἐπὶ τούτου τοῦ τύπου, εἶτα εἰς τὸν πρότερον ἐπανέρχεται. Τύποι ἄλλοι τοῦ Claude τρέχουσιν ἐν τῷ ἐξαχθέντι Python· ἐν τῇδε τῇ σελίδι ὁ Claude ἀντ᾽ αὐτῶν ἵσταται."},
-"rb_word_count":{"message0":"ἀριθμὸς λέξεων τοῦ %1"}
+"rb_word_count":{"message0":"ἀριθμὸς λέξεων τοῦ %1"},
+"rb_agent_kraken":{"message0":"τὰ τοῦ Kraken ὄργανα %1","tooltip":"Δίδωσι τῷ πράκτορι τὰ αὐτοῦ τοῦ Kraken ὄργανα, ἐκ τοῦ kraken-cli· τιμὰς τῆς ἀγορᾶς, τὰ ὑπόλοιπα καὶ τὰς ἐντολάς σου, καὶ ἐμπορίαν ἐπὶ χάρτου ἐν ἀληθιναῖς τιμαῖς. Ἡ ἀληθινὴ ἐμπορία καὶ ἀληθινὰς ἐντολὰς διδόναι ἐᾷ, πᾶν δὲ ὄργανον τὸ χρήματα κινῆσαι δυνάμενον πρῶτον ἐρωτᾷ σε, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ, καὶ οὐδέποτε κατὰ τάξιν χρόνου ἢ ἐν GitHub Actions τρέχει. Δεῖται τοῦ kraken-cli ἐγκατεστημένου, καὶ KRAKEN_API_KEY καὶ KRAKEN_API_SECRET ἐν second-thought.ini τῷ λόγῳ σου (αἱ τιμαὶ καὶ ὁ χάρτης κλειδὸς οὐ δέονται). Μόνον ἐν τῇ ἐξαχθείσῃ Python."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"καθ᾽ ἡμέραν","weekdays":"ἐν ταῖς ἡμέραις τῶν ἔργων","weekends":"ἐν τῷ τέλει τῆς ἑβδομάδος"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"λεπτά","h":"ὥρας","d":"ἡμέρας"},
 "rb_mem_add.KIND":{"transient":"ἐν ᾧ ἥδε ἡ σελὶς ἀνέῳκται","permanent":"εἰς ἀεί"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (γεγραμμέναι εἰκόνες)","orig":"τὸ ἀρχικὸν τεῦχος"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολλάρια Ἀμερικανικά","gbp":"λῖτραι","eur":"εὐρώ","jpy":"γιέν","cny":"γιουάν"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"δολλάρια Ἀμερικανικά","gbp":"λῖτραι","eur":"εὐρώ","jpy":"γιέν","cny":"γιουάν"},
+"rb_agent_kraken.MODE":{"read":"(τιμαί, ὁ λόγος σου καὶ ἐμπορία ἐπὶ χάρτου)","live":"(καὶ ἀληθινὴ ἐμπορία· ἐρωτᾷ πρὸ πάσης ἐντολῆς)"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"Τοῦτο οὐ φαίνεται κλεὶς API τῆς Anthropic. Ἄρχονται ἀπὸ sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"Ὅδε ὁ περιηγητὴς τὴν κλεῖδα οὐ φυλάσσει. Ἔασον τὰ τοῦ τόπου δεδομένα τῇδε τῇ σελίδι, εἶτα αὖθις πειρῶ.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"Ἡ κλεὶς ἀπὸ τοῦδε τοῦ περιηγητοῦ εἰς api.anthropic.com μόνον πορεύεται, οἱ δὲ δρόμοι τῷ λόγῳ αὐτῆς γράφονται. Φυλάσσεται ἕως ἂν τήνδε τὴν καρτέλαν κλείσῃς, εἰ μὴ τὸ Μέμνησο σημήνῃς. Οὐδέποτε ἐν προγράμμασιν, ἐξαγωγαῖς ἢ τῷ τοῦ δρόμου ὑπομνήματι φυλάσσεται. Ποίησον μίαν ἐν console.anthropic.com.",
-"Claude's API said: {problem}":"Ἡ τοῦ Claude API εἶπεν· {problem}"
+"Claude's API said: {problem}":"Ἡ τοῦ Claude API εἶπεν· {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"Τὰ τοῦ Kraken ὄργανα ἀπὸ τῆσδε τῆς σελίδος οὐχ ἁπτά ἐστιν, ὥστε ὁ πράκτωρ ἐνθάδε ἄνευ αὐτῶν ἐργάζεται. Ἐξάγαγε εἰς Python, τοῦ kraken-cli ἐγκατεστημένου, ἵνα αὐτοῖς χρῇ.",
+"read your Kraken balances and orders, market prices, and trade on paper":"τὰ ὑπόλοιπα καὶ τὰς ἐντολάς σου ἐν Kraken καὶ τὰς τιμὰς τῆς ἀγορᾶς ἀναγιγνώσκειν, καὶ ἐπὶ χάρτου ἐμπορεύεσθαι",
+"trade on your Kraken account with real money (asking you before every order)":"ἐν τῷ λόγῳ σου τῷ τοῦ Kraken ἀληθινοῖς χρήμασιν ἐμπορεύεσθαι (ἐρωτῶν σε πρὸ πάσης ἐντολῆς)"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1847,7 +1853,13 @@
 "Test":"Δοκίμασμα",
 "Test cases: {passed} of {n} passed":"Δοκιμασίαι· {passed} ἐκ {n} ἐπέτυχον",
 "Test failed: {name}":"Τὸ δοκίμασμα ἀπέτυχε· {name}",
-"What was wrong":"Τί ἡμάρτηται"
+"What was wrong":"Τί ἡμάρτηται",
+"Allow this? It could move real money: {what}":"Ἐᾷς; Χρήματα ἀληθινὰ κινῆσαι δύναται· {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Τὸ Kraken τὸ KRAKEN_API_KEY ἀπέρριψεν· {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"Τὸ kraken-cli οὐκ ἐγκατέστηται, ὥστε τὰ τοῦ Kraken ὄργανα ἄρξασθαι οὐ δύναται. Ἐγκατάστησον αὐτό· https://docs.kraken.com/home/mcp",
+"your Kraken key works":"ἡ σὴ κλεὶς τοῦ Kraken ἐνεργεῖ",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"Τὸ {key} τὸν διακονητὴν μετὰ τοῦ --allow-dangerous ἄρχει, ὃ τὸν ἴδιον ἔλεγχον πρὸ τῶν ὀργάνων τῶν χρήματα κινούντων παύει. Ἄφελε αὐτό.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"Τὸ {what} χρήματα ἀληθινὰ κινῆσαι δύναται, ὥστε μόνον γίγνεται ὅταν πάρει ναὶ φάναι, οὐδεὶς δὲ πάρεστιν."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

@@ -144,7 +144,8 @@
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
-    rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp" };
+    rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp",
+    rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }) };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
     "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
@@ -181,7 +182,7 @@
   }
   window.__capabilityCheck = () => ({ blocks:Object.keys(CAP_BLOCKS), none:NO_CAPABILITY, kinds:Object.keys(CAP_KINDS),
     agentKinds:AGENT_TOOL_KINDS.map(k => k[1]), ids:CAPABILITIES.map(c => c[0]),
-    used:[...new Set(Object.values(CAP_BLOCKS).concat(Object.values(CAP_KINDS)).map(c => typeof c === "function" ? "memory" : c).filter(Boolean))],
+    used:[...new Set(Object.values(CAP_BLOCKS).concat(Object.values(CAP_KINDS)).flatMap(c => typeof c === "function" ? (c.gives || ["memory"]) : [c]).filter(Boolean))],
     program:programCapabilities().map(c => c[0]) });
   /* ---------- Long text field: wraps at 80 characters, any number of lines ---------- */
   const WRAP = 80;
@@ -385,6 +386,12 @@
       tooltip:"Gives the agent every tool an MCP server offers: files, GitHub, databases, calendars and much more, from the whole MCP ecosystem. " +
         "Set the server up in second-thought.ini as MCP_<NAME> = the command that starts it (like npx -y @modelcontextprotocol/server-filesystem ~/recipes) " +
         "or its https:// address. Only in exported Python: on this page the agent works without these tools." },
+    { type:"rb_agent_kraken",
+      message0:"Kraken tools %1", args0:[{ type:"field_dropdown", name:"MODE", options:[["(prices, your account and paper trading)","read"],["(and live trading: asks before every order)","live"]] }],
+      previousStatement:"AgentTool", nextStatement:"AgentTool", style:"tools",
+      tooltip:"Gives the agent Kraken's own tools, from kraken-cli: market prices, your balances and orders, and paper trading at live prices. " +
+        "Live trading also lets it place real orders, but every tool that can move money asks you first, even when nobody else does, and never runs on a schedule or on GitHub Actions. " +
+        "Needs kraken-cli installed, and KRAKEN_API_KEY and KRAKEN_API_SECRET in second-thought.ini for your account (prices and paper trading need no key). Only in exported Python." },
     /* Connections */
     { type:"rb_tg_when", message0:"when a Telegram message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
       nextStatement:null, style:"conn_hat",

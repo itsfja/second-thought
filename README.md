@@ -423,6 +423,18 @@ When the agent runs, it asks the server which tools it has and uses them like it
 
 MCP servers only work in exported programs. On the page, the agent works without them, and the run log says so.
 
+### Kraken
+
+For crypto, the **Kraken tools** block gives the agent [Kraken](https://www.kraken.com)'s own MCP server, from [kraken-cli](https://docs.kraken.com/home/mcp), with no settings to write:
+
+```
+Kraken tools  (prices, your account and paper trading)
+```
+
+That's market prices, your balances, orders and trade history, and paper trading at live prices, which never touches your money. Choose **(and live trading: asks before every order)** to let it place real spot orders too. Install kraken-cli first. For your account, put `KRAKEN_API_KEY` and `KRAKEN_API_SECRET` in `second-thought.ini`, from a Kraken API key with the fewest permissions it needs: query only, unless the program trades, and never withdrawal. Prices and paper trading need no key.
+
+Every Kraken tool that can move real money (orders, futures, staking, transfers, withdrawals) **always asks you first**, even with (no asking) and even in a 'tools from MCP server' block, and never runs when nobody is there to answer: on a schedule, on GitHub Actions or with `--mcp`, it's refused and the run log says why. Kraken asks agents to set `acknowledged: true` on those calls; the agent never can, only your yes does. `--doctor` checks kraken-cli is installed and your key works, and fails if `MCP_KRAKEN` has `--allow-dangerous`.
+
 ---
 
 

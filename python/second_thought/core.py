@@ -95,6 +95,20 @@ SAFETY = {
     "agent_ha_indirect": [r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$"],
     # MQTT messages an agent can't publish without asking (matched in the topic and message, any case).
     "mqtt_unlock": r"\b(unlock|open|disarm)",
+    # MCP tools that can reach real money (#262): they always ask, even with (no asking), never run with nobody there
+    # to ask (a schedule, GitHub Actions, --mcp), and the agent can't answer for the person. Kraken's own list: every tool
+    # its agents/tool-catalog.json marks dangerous, paper_safe or local_or_live (kraken-cli 0.5.1, checked 2026-11-03).
+    # Any MCP tool that takes an "acknowledged" input counts too: that's how Kraken marks one, so a new tool is covered.
+    "mcp_money": ["kraken_earn_allocate", "kraken_earn_deallocate", "kraken_export_delete", "kraken_export_retrieve",
+                  "kraken_futures_batch_order", "kraken_futures_cancel", "kraken_futures_cancel_after", "kraken_futures_cancel_all",
+                  "kraken_futures_edit_order", "kraken_futures_order_buy", "kraken_futures_order_sell", "kraken_futures_set_leverage",
+                  "kraken_futures_set_pnl_preference", "kraken_futures_set_subaccount_status", "kraken_futures_transfer",
+                  "kraken_futures_wallet_transfer", "kraken_order_amend", "kraken_order_batch", "kraken_order_buy", "kraken_order_cancel",
+                  "kraken_order_cancel_after", "kraken_order_cancel_all", "kraken_order_cancel_batch", "kraken_order_edit",
+                  "kraken_order_sell", "kraken_paper_reset", "kraken_subaccount_create", "kraken_subaccount_transfer",
+                  "kraken_wallet_transfer", "kraken_withdraw", "kraken_withdrawal_cancel", "kraken_workspace_create",
+                  "kraken_workspace_promote", "kraken_workspace_reset"],
+    "mcp_money_input": "acknowledged",
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
@@ -490,6 +504,8 @@ CAPABILITIES = [
     ("mqtt_publish", "publish MQTT messages", True),
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
+    ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
+    ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),

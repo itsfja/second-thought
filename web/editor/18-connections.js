@@ -459,6 +459,7 @@
     return [null, out];
   }
   // The setting an MCP server's command or address goes in: "my files" -> MCP_MY_FILES (as the runtime's mcp_env_name).
+  const KRAKEN_COMMANDS = { read:"kraken mcp -s market,account,paper", live:"kraken mcp -s market,account,paper,trade" };  // KRAKEN_COMMANDS in mcp.py
   const mcpSetting = name => "MCP_" + String(name || "").trim().replace(/[^A-Za-z0-9]+/g, "_").replace(/^_+|_+$/g, "").toUpperCase();
   function agentName(name, taken){
     const base = String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "tool";
@@ -480,6 +481,8 @@
       } else if (t.type === "rb_agent_mcp") {
         const server = String(t.getFieldValue("SERVER") || "").trim() || "(no name)";
         addStep(tr("MCP server \u201c{server}\u201d", { server }), { mono:true, text:tr("MCP servers can't be reached from this page, so the agent works without this server's tools here. Export to Python and set {setting} in second-thought.ini to use them.", { setting:mcpSetting(server) }) }).done("not on this page", "warn");
+      } else if (t.type === "rb_agent_kraken") {
+        addStep("Kraken", { mono:true, text:tr("Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.") }).done("not on this page", "warn");
       } else if (t.type === "rb_agent_builtin") {
         const kind = t.getFieldValue("KIND");
         (AGENT_BUILTINS[kind] || []).forEach(([n, desc, params]) => {

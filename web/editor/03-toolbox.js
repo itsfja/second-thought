@@ -77,6 +77,7 @@
       { kind:"label", text:"Tools for the agent: drop them inside an agent block" },
       ...AGENT_TOOL_KINDS.map(([, kind]) => B("rb_agent_builtin", null, { fields:{ KIND:kind } })),
       B("rb_agent_mcp"),
+      B("rb_agent_kraken"),
       B("rb_agent_tool", { DESC:L("Gives the oven temperature in °C for a bread type.") })
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[

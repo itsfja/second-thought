@@ -505,7 +505,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET")
 
 
 def _load_keychain():
@@ -1439,6 +1439,20 @@ SAFETY = {
     "agent_ha_indirect": [r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$"],
     # MQTT messages an agent can't publish without asking (matched in the topic and message, any case).
     "mqtt_unlock": r"\b(unlock|open|disarm)",
+    # MCP tools that can reach real money (#262): they always ask, even with (no asking), never run with nobody there
+    # to ask (a schedule, GitHub Actions, --mcp), and the agent can't answer for the person. Kraken's own list: every tool
+    # its agents/tool-catalog.json marks dangerous, paper_safe or local_or_live (kraken-cli 0.5.1, checked 2026-11-03).
+    # Any MCP tool that takes an "acknowledged" input counts too: that's how Kraken marks one, so a new tool is covered.
+    "mcp_money": ["kraken_earn_allocate", "kraken_earn_deallocate", "kraken_export_delete", "kraken_export_retrieve",
+                  "kraken_futures_batch_order", "kraken_futures_cancel", "kraken_futures_cancel_after", "kraken_futures_cancel_all",
+                  "kraken_futures_edit_order", "kraken_futures_order_buy", "kraken_futures_order_sell", "kraken_futures_set_leverage",
+                  "kraken_futures_set_pnl_preference", "kraken_futures_set_subaccount_status", "kraken_futures_transfer",
+                  "kraken_futures_wallet_transfer", "kraken_order_amend", "kraken_order_batch", "kraken_order_buy", "kraken_order_cancel",
+                  "kraken_order_cancel_after", "kraken_order_cancel_all", "kraken_order_cancel_batch", "kraken_order_edit",
+                  "kraken_order_sell", "kraken_paper_reset", "kraken_subaccount_create", "kraken_subaccount_transfer",
+                  "kraken_wallet_transfer", "kraken_withdraw", "kraken_withdrawal_cancel", "kraken_workspace_create",
+                  "kraken_workspace_promote", "kraken_workspace_reset"],
+    "mcp_money_input": "acknowledged",
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
@@ -1834,6 +1848,8 @@ CAPABILITIES = [
     ("mqtt_publish", "publish MQTT messages", True),
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
+    ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
+    ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -4782,12 +4798,26 @@ class _MCPHttp(_MCPServer):
             raise RunError(tr("The {x} wouldn't start talking: {message}", x=self.describe(), message=e.message)) from None
 
 
-def mcp_server(name):
-    """A server from its MCP_<NAME> setting: a command (started here) or an http(s) address."""
+# The 'Kraken tools' block (#262): Kraken's own MCP server, in kraken-cli (https://docs.kraken.com/home/mcp), with the
+# services each choice starts. MCP_KRAKEN in second-thought.ini wins over these.
+KRAKEN_COMMANDS = {"read": "kraken mcp -s market,account,paper", "live": "kraken mcp -s market,account,paper,trade"}
+
+
+def mcp_money(tool):
+    """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, or one taking an "acknowledged"
+    input (Kraken's mark for them)."""
+    schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {}
+    props = schema.get("properties") if isinstance(schema.get("properties"), dict) else {}
+    return to_str(tool.get("name")) in SAFETY["mcp_money"] or SAFETY["mcp_money_input"] in props
+
+
+def mcp_server(name, default=""):
+    """A server from its MCP_<NAME> setting: a command (started here) or an http(s) address. default is the command to
+    use when there's no setting (the Kraken block's)."""
     key = mcp_env_name(name)
     if key == "MCP_":
         raise RunError(tr("An MCP tool block needs the server's name."))
-    where = os.environ.get(key, "").strip()
+    where = os.environ.get(key, "").strip() or to_str(default).strip()
     if not where:
         raise RunError(tr("The agent's MCP server “{x}” isn't set up. Put {key} = <the command that starts it, or its https:// address> {where_keys}.", x=to_str(name).strip(), key=key, where_keys=WHERE_KEYS))
     if re.match(r"^https?://", where, re.I):
@@ -4802,7 +4832,7 @@ class MCPTools:
         servers = self.__dict__.setdefault("_mcp_servers", {})
         key = mcp_env_name(name)
         if key not in servers:
-            servers[key] = mcp_server(name)
+            servers[key] = mcp_server(name, self.__dict__.get("_mcp_defaults", {}).get(key, ""))
         return servers[key]
 
     async def mcp_tools(self, name):
@@ -5064,6 +5094,18 @@ class AgentTools:
         taken.add(out)
         return out
 
+    async def confirm_money(self, what):
+        """Asks before an MCP tool that can reach real money (#262). Never with nobody there to answer, whatever the
+        approve setting says, and never answered from a stopped run's journal: the person says yes, now, each time."""
+        unattended = self.nobody_here() or bool(os.environ.get("GITHUB_ACTIONS")) or not sys.stdin.isatty()
+        if unattended:
+            self.log(tr("Not done"), tr("{what} could move real money, so it only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
+            return False
+        if await self._approve_live(tr("Allow this? It could move real money: {what}", what=what)):
+            return True
+        self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
+        return False
+
     def _agent_tools(self, tools, mcp=None):
         """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}. mcp holds each MCP
         server's tools, listed beforehand: {server name: [tool, ...]}."""
@@ -5076,9 +5118,15 @@ class AgentTools:
                     params = list((schema.get("properties") or {}).keys()) if isinstance(schema.get("properties"), dict) else []
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
-                    ask = mode == "every" or (mode == "changes" and not read_only)
+                    money = mcp_money(tool)  # real money: always asks, whatever the block says (#262)
+                    ask = money or mode == "every" or (mode == "changes" and not read_only)
+                    if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
+                        schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k != SAFETY["mcp_money_input"]},
+                                      required=[k for k in schema.get("required") or [] if k != SAFETY["mcp_money_input"]])
+                        params = [k for k in params if k != SAFETY["mcp_money_input"]]
                     out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"],
-                                                                                        "read_only": read_only}), ask, schema)
+                                                                                        "read_only": read_only, "money": money,
+                                                                                        "acknowledge": money and SAFETY["mcp_money_input"] in ((tool.get("inputSchema") or {}).get("properties") or {})}), ask, schema)
             elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
@@ -5320,6 +5368,8 @@ class AgentTools:
         for t in tools:  # each MCP server's tools, asked for once, before the first step
             server = to_str(t.get("server")).strip()
             if t.get("kind") == "mcp" and server not in mcp:
+                if t.get("command"):  # the Kraken block: its own command, unless MCP_KRAKEN says otherwise
+                    self.__dict__.setdefault("_mcp_defaults", {})[mcp_env_name(server)] = to_str(t["command"])
                 mcp[server] = await self.mcp_tools(server)
         catalogue = self._agent_tools(tools, mcp)
         self.log(tr("Agent"), tr("Goal: {goal}", goal=goal) + "\n" + tr("Tools: {tools}", tools=", ".join(catalogue) or tr("none")) + " · " + tr("up to {n} steps", n=n) + (" · " + tr("plans first") if plan else ""), tr("started"))
@@ -5368,6 +5418,8 @@ class AgentTools:
                 rec(i, "not a tool", name)
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
+            if spec.get("money") and isinstance(inp, dict):
+                inp = {k: v for k, v in inp.items() if k != SAFETY["mcp_money_input"]}  # only a yes from the person sets it
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
             problem, checked = self.check_mcp_input(inp, schema) if kind == "mcp" else self.check_tool_input(inp, schema)
             if problem:
@@ -5401,11 +5453,15 @@ class AgentTools:
             if getattr(self, "testing", False) and (ask or (kind == "mcp" and not spec.get("read_only"))):
                 result, refused = "This is a test run, so tools that change things don't run. Carry on as if it had worked.", True
                 self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=f"{name} {_short(shown, 200)}"), tr("skipped"))
-            elif ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
+            elif spec.get("money") and not await self.confirm_money(f"let the agent use {name} with {_short(shown, 200)}"):
+                result, refused = "This tool can move real money, and the person didn't allow it, so it didn't run.", True
+            elif not spec.get("money") and ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
                 result, refused = "The person said no, so this tool didn't run.", True
             else:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
                 try:
+                    if spec.get("acknowledge"):
+                        inp = dict(inp, **{SAFETY["mcp_money_input"]: True})  # the person said yes, just now
                     result = await self._agent_run_tool(kind, spec, inp)
                 except (asyncio.CancelledError, Finish):
                     raise
@@ -5725,6 +5781,7 @@ import difflib  # noqa: E402,F811 - below the line, so python/runtime.py has it 
 import re  # noqa: E402,F811
 import importlib.metadata  # noqa: E402,F811 - below the line, so python/runtime.py has them too
 import importlib.util  # noqa: E402,F811
+import shutil  # noqa: E402,F811
 import socket  # noqa: E402,F811
 
 
@@ -5914,8 +5971,22 @@ class Doctor:
             out.append(("Web requests", hook))
         for name in mcp:
             async def server(name=name):
+                key = mcp_env_name(name)
+                command = os.environ.get(key, "").strip() or self.__dict__.get("_mcp_defaults", {}).get(key, "")
+                if re.search(r"(^|\s)--allow-dangerous\b", command):
+                    raise RunError(tr("{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.", key=key))
+                if re.match(r"^\s*kraken(\.exe)?\s", command) and not shutil.which("kraken"):
+                    raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 tools = await self.mcp_tools(name)
-                return tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
+                text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
+                names = {to_str(t.get("name")) for t in tools}
+                if key == "MCP_KRAKEN" and os.environ.get("KRAKEN_API_KEY") and names & {"kraken_auth_test", "kraken_balance"}:
+                    # The key, checked with a read-only call; what it reads isn't shown.
+                    reply, failed = await self.mcp_call(name, "kraken_auth_test" if "kraken_auth_test" in names else "kraken_balance", {})
+                    if failed:
+                        raise RunError(tr("Kraken refused KRAKEN_API_KEY: {problem}", problem=_short(reply, 160)))
+                    text += " · " + tr("your Kraken key works")
+                return text
             out.append((f"MCP server “{name}”", server))
         if has("memory"):
             async def memory():
@@ -6010,7 +6081,11 @@ class Doctor:
             row(status, s["name"], text + " " + tr("Models: {list}.", list=", ".join(f"{model_byline(_tier(s, k))} ({band_text(_tier(s, k))})" for k in sizes)))
         for line in reported_lines([s["name"] for s in services]):
             row("ok", "Limits", line)
-        for area, check in await self._doctor_connections(ids, [n for n in can.get("mcp", []) if to_str(n).strip()]):
+        servers = [n for n in can.get("mcp", []) if to_str(n).strip()]
+        if can.get("kraken"):  # the Kraken tools block: its own command, unless MCP_KRAKEN says otherwise
+            self.__dict__.setdefault("_mcp_defaults", {})["MCP_KRAKEN"] = KRAKEN_COMMANDS.get(can["kraken"], KRAKEN_COMMANDS["read"])
+            servers.append("kraken")
+        for area, check in await self._doctor_connections(ids, servers):
             if not known and not self._doctor_configured(area):
                 continue
             try:
@@ -8153,6 +8228,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_instrument_ranges","file":"instrument-ranges.json","category":"coding","title":"Instrument ranges","description":"Choose an instrument's log (a CSV or text export). Claude lists every reading outside the ranges you set, with its time, and checks nothing in range was flagged. Then a line on any pattern, like a drift through the day.","tip":"Put your instruments' ranges in the first block, one per line, with units. Long logs: export a day at a time.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_ranges","name":"ranges"},{"id":"g_log","name":"log"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_ranges"}},"inputs":{"VALUE":{"block":{"type":"rb_longtext","fields":{"TEXT":"Incubator temperature: 36.5 to 37.5 °C\nCO2: 4.5 to 5.5 %\nHumidity: 90 to 98 %"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_log"}},"inputs":{"VALUE":{"block":{"type":"rb_file_choose"}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This is an instrument log. Using these expected ranges, list every reading outside its range: the time (or row), the measurement, the value as logged, and the range it's outside. Readings with no range set are ignored. Then one line on any pattern among them (a drift, a time of day, one sensor), or say there's none. If every reading is in range, say so in one line.\n\nRanges:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_ranges"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nLog:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_log"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every reading listed is really outside its range, with its value quoted as logged; each gives its time or row and the range; units match the ranges; nothing in range is listed; the pattern line is backed by the readings listed"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_invoice_matcher","file":"invoice-matcher.json","category":"money","title":"Invoice matcher","description":"Keeps a list of the receipts you save to a folder. When an invoice arrives by email, it checks for a matching receipt and emails you if there isn't one.","tip":"Change the folder to where you keep receipts. It only knows receipts saved after it starts.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_invoice","name":"invoice"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste an invoice email to test with"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"invoice"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_email_when","fields":{"CONTAINS":"invoice"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"invoice"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_folder_when","fields":{"FOLDER":"~/Receipts"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"receipt"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":290},{"type":"rb_receive","fields":{"MSG":"receipt"},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In one line, from this receipt: supplier — amount — date. Nothing else.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"receipts"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Receipt noted."}}}}}}}},"x":550,"y":290},{"type":"rb_receive","fields":{"MSG":"invoice"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_invoice"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In one line, from this invoice: supplier — amount — date. Nothing else.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_ask_yesno","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Is there a receipt for this invoice in the list: the same supplier and amount, within a month?\nInvoice: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nReceipts:\n"}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"receipts"}}}}}}},"extraState":{"itemCount":4}}}}}},"DO0":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Matched: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}}},"extraState":{"itemCount":2}}}}}},"ELSE":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Invoice with no receipt"}}},"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"No receipt found for: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"No receipt for: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}}},"extraState":{"itemCount":2}}}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":550}]}}},
 {"key":"g_issue_triage_bot","file":"issue-triage-bot.json","category":"github","title":"Issue triage bot","description":"When someone opens an issue, it labels it from the project's own labels, links a likely duplicate in a comment, and messages you on Telegram if it looks urgent.","tip":"Change the project in the hat. Labelling and commenting ask first; use the no-asking tool once you trust it.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_project","name":"project"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type an issue to test with, like 'Chart is blank on Safari: nothing shows in the chart area'"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"triage"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_gh_issue_when","fields":{"REPO":"sample-baker/sourdough-chart"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"triage"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"triage"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_project"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"sample-baker/sourdough-chart"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"A new issue was opened in "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_project"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":":\n"}}},"ADD3":{"block":{"type":"rb_msg_value"}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nFind its number if it isn't given (search_github for the title). Add one or two fitting labels, using only labels the project has. Search the project's open issues for a likely duplicate; if there's a clear one, comment linking it. Finally answer in one line: URGENT if it describes data loss, a security problem or the app not working for everyone, otherwise ROUTINE, then a short reason."}}}},"extraState":{"itemCount":5}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":10}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github_act"}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_contains","inputs":{"A":{"block":{"type":"rb_draft"}},"B":{"shadow":{"type":"text","fields":{"TEXT":"URGENT"}}}}}},"DO0":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"🚨 Urgent issue: "}}},"ADD1":{"block":{"type":"rb_msg_value"}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD3":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"rb_result"}}}}}}}},"x":30,"y":290}]}}},
+{"key":"g_kraken_week","file":"kraken-week.json","category":"money","title":"Kraken week in review","description":"Each Sunday evening, reads your Kraken balances and this week's prices, and emails what your holdings are worth in pounds, each one's share, and how each moved over the week. It only reads: it places no orders.","tip":"Needs kraken-cli, and a Kraken API key that can only query. Change the email address in the email block to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"review"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"review"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"review"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Read my Kraken balances. For each asset I hold, get its price in pounds today and seven days ago (daily OHLC). Then write a short summary: the total in pounds, each holding's value and share of the total, and how much each moved over the week, biggest moves first. Only read: don't place, change or cancel any orders."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":10}}},"TOOLS":{"block":{"type":"rb_agent_kraken","fields":{"MODE":"read"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your Kraken week"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_language_ladybird","file":"language-ladybird.json","category":"odds","title":"Ladybird lesson","description":"Each morning, one page of Second Thought's Ladybird book in a different historical language from its translations, Akkadian days included, with the English alongside and three words to learn.","tip":"Historical-language versions are as plausible as Second Thought's own translations, no more. Reading pages works in exported Python.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"lesson"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"lesson"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"lesson"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Today is "}}},"ADD1":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". Today's language: Monday Latin (la), Tuesday Old English (ang), Wednesday Akkadian (akk), Thursday Old Norse (non), Friday Koine Greek (grc), Saturday Sanskrit (sa), Sunday Mycenaean Greek in Linear B (gmy). Read https://raw.githubusercontent.com/itsfja/second-thought/main/docs/ladybird-book.md and pick one page, a different one each day. Read the language's everyday words at https://raw.githubusercontent.com/itsfja/second-thought/main/docs/words/<code>.md. Write that page in today's language, using those words where they fit, with the English alongside. Then give three words from it to learn, each with its meaning. End by saying the historical version is plausible, not authoritative."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":6}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Today's Ladybird lesson"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_leaving_home_check","file":"leaving-home-check.json","category":"home","title":"Leaving-home check","description":"Your phone calls it as you leave home. If any door or window is still open, the house says so on the kitchen speaker and you get a notification. If everything's shut, it stays quiet.","tip":"In the Home Assistant app, make an automation for leaving home that calls this program's /leaving address (see Web requests in the README). Change the speaker to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_openings","name":"openings"},{"id":"g_warning","name":"warning"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"leaving"}}},"VALUE":{"shadow":{"type":"text","fields":{"TEXT":null}}}}}},"x":30,"y":30},{"type":"rb_webhook_when","fields":{"PATH":"leaving"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"leaving"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":""}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"leaving"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_openings"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"rb_ha_summary","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"door"}}}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_ha_summary","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"window"}}}}}}},"extraState":{"itemCount":3}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_ask_yesno","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Do these readings show any door or window open (on, or open), not counting the doorbell or anything unavailable?\n\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_openings"}}}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_warning"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In one short spoken sentence, warn someone leaving the house which doors or windows are still open. Use their everyday names.\n\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_openings"}}}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"rb_ha_speak","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_warning"}}}},"PLAYER":{"shadow":{"type":"text","fields":{"TEXT":"media_player.kitchen_speaker"}}}},"next":{"block":{"type":"rb_ha_notify","inputs":{"TARGET":{"shadow":{"type":"text","fields":{"TEXT":"persistent_notification"}}},"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_warning"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_warning"}}}}}}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Everything's shut. Nothing said."}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":290}]}}},
 {"key":"g_letter_transcriber","file":"letter-transcriber.json","category":"odds","title":"Letter transcriber","description":"Choose a scan or photo of a handwritten letter. Claude transcribes it as written, old spellings and all, marks every word it isn't sure of, and checks the transcription against the usual conventions. Asks before saving it.","tip":"Use a clear, flat scan. Read it against the original: every [word?] is a guess to check.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_set_draft","inputs":{"TEXT":{"block":{"type":"rb_img_ask","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Transcribe this handwritten document exactly as written. Keep the original spelling, capitals, punctuation and abbreviations; don't modernise or correct anything. Keep the line breaks. Put a word you're unsure of in square brackets with a question mark, like [Thomas?]; write [illegible] for anything you can't read, and [torn] or [blot] for damage. Put words written above the line in ^carets^. After the transcription, a line '---' and a short note: the likely date and writer if the letter says, and how confident you are overall."}}},"IMG":{"block":{"type":"rb_img_choose"}}}}}},"next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"spelling, capitals and punctuation are as written, not modernised; abbreviations are kept, not expanded; every uncertain word is marked [word?]; unreadable parts say [illegible]; line breaks are kept; nothing is added that isn't on the page; the note after '---' says how confident it is"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":2}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_approve","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Save this transcription?\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"transcription"}}}},"next":{"block":{"type":"rb_result"}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Not saved. The transcription, to edit yourself:\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"hasElse":true}}}}}}},"x":30,"y":30}]}}},
@@ -8203,6 +8279,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["mqtt_publish", "publish MQTT messages", true],
 ["webhook", "accept web requests from other computers", true],
 ["mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", true],
+["kraken_trade", "trade on your Kraken account with real money (asking you before every order)", true],
+["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["web", "read public web pages and search the web", false],
 ["email_read", "read your email", false],
 ["calendar", "read your calendars", false],
@@ -8289,7 +8367,44 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   "^automation\\.trigger$",
   "^(input_)?button\\.press$"
  ],
- "mqtt_unlock": "\\b(unlock|open|disarm)"
+ "mqtt_unlock": "\\b(unlock|open|disarm)",
+ "mcp_money": [
+  "kraken_earn_allocate",
+  "kraken_earn_deallocate",
+  "kraken_export_delete",
+  "kraken_export_retrieve",
+  "kraken_futures_batch_order",
+  "kraken_futures_cancel",
+  "kraken_futures_cancel_after",
+  "kraken_futures_cancel_all",
+  "kraken_futures_edit_order",
+  "kraken_futures_order_buy",
+  "kraken_futures_order_sell",
+  "kraken_futures_set_leverage",
+  "kraken_futures_set_pnl_preference",
+  "kraken_futures_set_subaccount_status",
+  "kraken_futures_transfer",
+  "kraken_futures_wallet_transfer",
+  "kraken_order_amend",
+  "kraken_order_batch",
+  "kraken_order_buy",
+  "kraken_order_cancel",
+  "kraken_order_cancel_after",
+  "kraken_order_cancel_all",
+  "kraken_order_cancel_batch",
+  "kraken_order_edit",
+  "kraken_order_sell",
+  "kraken_paper_reset",
+  "kraken_subaccount_create",
+  "kraken_subaccount_transfer",
+  "kraken_wallet_transfer",
+  "kraken_withdraw",
+  "kraken_withdrawal_cancel",
+  "kraken_workspace_create",
+  "kraken_workspace_promote",
+  "kraken_workspace_reset"
+ ],
+ "mcp_money_input": "acknowledged"
 }
 </script>
 <script type="application/json" id="money">
@@ -10544,7 +10659,8 @@ HOW TO MAP CODE
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
-    rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp" };
+    rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp",
+    rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }) };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
     "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
@@ -10581,7 +10697,7 @@ HOW TO MAP CODE
   }
   window.__capabilityCheck = () => ({ blocks:Object.keys(CAP_BLOCKS), none:NO_CAPABILITY, kinds:Object.keys(CAP_KINDS),
     agentKinds:AGENT_TOOL_KINDS.map(k => k[1]), ids:CAPABILITIES.map(c => c[0]),
-    used:[...new Set(Object.values(CAP_BLOCKS).concat(Object.values(CAP_KINDS)).map(c => typeof c === "function" ? "memory" : c).filter(Boolean))],
+    used:[...new Set(Object.values(CAP_BLOCKS).concat(Object.values(CAP_KINDS)).flatMap(c => typeof c === "function" ? (c.gives || ["memory"]) : [c]).filter(Boolean))],
     program:programCapabilities().map(c => c[0]) });
   /* ---------- Long text field: wraps at 80 characters, any number of lines ---------- */
   const WRAP = 80;
@@ -10785,6 +10901,12 @@ HOW TO MAP CODE
       tooltip:"Gives the agent every tool an MCP server offers: files, GitHub, databases, calendars and much more, from the whole MCP ecosystem. " +
         "Set the server up in second-thought.ini as MCP_<NAME> = the command that starts it (like npx -y @modelcontextprotocol/server-filesystem ~/recipes) " +
         "or its https:// address. Only in exported Python: on this page the agent works without these tools." },
+    { type:"rb_agent_kraken",
+      message0:"Kraken tools %1", args0:[{ type:"field_dropdown", name:"MODE", options:[["(prices, your account and paper trading)","read"],["(and live trading: asks before every order)","live"]] }],
+      previousStatement:"AgentTool", nextStatement:"AgentTool", style:"tools",
+      tooltip:"Gives the agent Kraken's own tools, from kraken-cli: market prices, your balances and orders, and paper trading at live prices. " +
+        "Live trading also lets it place real orders, but every tool that can move money asks you first, even when nobody else does, and never runs on a schedule or on GitHub Actions. " +
+        "Needs kraken-cli installed, and KRAKEN_API_KEY and KRAKEN_API_SECRET in second-thought.ini for your account (prices and paper trading need no key). Only in exported Python." },
     /* Connections */
     { type:"rb_tg_when", message0:"when a Telegram message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
       nextStatement:null, style:"conn_hat",
@@ -10969,6 +11091,7 @@ HOW TO MAP CODE
       { kind:"label", text:"Tools for the agent: drop them inside an agent block" },
       ...AGENT_TOOL_KINDS.map(([, kind]) => B("rb_agent_builtin", null, { fields:{ KIND:kind } })),
       B("rb_agent_mcp"),
+      B("rb_agent_kraken"),
       B("rb_agent_tool", { DESC:L("Gives the oven temperature in °C for a bread type.") })
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
@@ -13606,6 +13729,9 @@ HOW TO MAP CODE
   function allProgramBlocks(){
     return withSubPrograms(subs => ws.getAllBlocks(false).concat(...subs.filter(x => x.ws).map(x => x.ws.getAllBlocks(false))));
   }
+  // The Kraken tools block's choice, for --doctor: "live" if any asks for live trading.
+  const krakenMode = () => { const k = allProgramBlocks().filter(b => b.type === "rb_agent_kraken");
+    return k.length ? (k.some(b => b.getFieldValue("MODE") === "live") ? "live" : "read") : ""; };
   function settingsFor(){
     const keys = servicesUsed().filter(s => s.signup).map(s => [s.key_label || s.name, s.keys[0], s.signup]);
     const blocks = allProgramBlocks();
@@ -13619,6 +13745,7 @@ HOW TO MAP CODE
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]), mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
+             kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -13653,6 +13780,12 @@ HOW TO MAP CODE
       "; For example:  MCP_FILES = npx -y @modelcontextprotocol/server-filesystem /home/me/recipes",
       "; A server this program starts gets these settings as its environment, so its own keys can go here too.",
       ...need.mcp.map(n => mcpSetting(n) + " = "));
+    if (need.kraken) out.push("", "[kraken]",
+      "; Kraken's tools come from kraken-cli (https://docs.kraken.com/home/mcp): install it, then the program starts it itself.",
+      "; Prices and paper trading need no key. For your account, make an API key at kraken.com (Settings, API) with the",
+      "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
+      "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
+      "; MCP_KRAKEN = kraken mcp -s market,account,paper     to choose Kraken's services yourself (never add --allow-dangerous)");
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
@@ -14086,12 +14219,13 @@ HOW TO MAP CODE
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
           case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + (b.getFieldValue("UNIT") && b.getFieldValue("UNIT") !== "tokens" ? ", " + pyStr(b.getFieldValue("UNIT")) : "") + ")"); break;
-          case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": break;
+          case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": case "rb_agent_kraken": break;
           case "rb_agent": {
             const tools = [];
             for (let t = b.getInputTargetBlock("TOOLS"); t; t = t.getNextBlock()) {
               if (!enabled(t)) continue;
               if (t.type === "rb_agent_builtin") tools.push('{"kind": ' + pyStr(t.getFieldValue("KIND")) + "}");
+              else if (t.type === "rb_agent_kraken") tools.push('{"kind": "mcp", "server": "kraken", "ask": "never", "command": ' + pyStr(KRAKEN_COMMANDS[t.getFieldValue("MODE")] || KRAKEN_COMMANDS.read) + "}");  // money tools ask anyway
               else if (t.type === "rb_agent_mcp") tools.push('{"kind": "mcp", "server": ' + pyStr(String(t.getFieldValue("SERVER") || "").trim()) + ', "ask": ' + pyStr(t.getFieldValue("ASK") || "changes") + "}");
               else if (t.type === "rb_agent_tool") {
                 const name = String(t.getFieldValue("NAME") || "").trim();
@@ -14333,7 +14467,8 @@ HOW TO MAP CODE
       "# What this program can do (listed in the notes at the top). If any of it acts on the world, the program asks",
       "# before its first run, and again whenever this file changes.",
       "CAN = {\"services\": [" + usedServices.map(x => pyStr(x.name)).join(", ") + "], \"can\": [" + caps.map(c => pyStr(c[0])).join(", ") + "]" +
-        (settingsFor().mcp.length ? ", \"mcp\": [" + settingsFor().mcp.map(pyStr).join(", ") + "]" : "") + "}",
+        (settingsFor().mcp.length ? ", \"mcp\": [" + settingsFor().mcp.map(pyStr).join(", ") + "]" : "") +
+        (krakenMode() ? ", \"kraken\": " + pyStr(krakenMode()) : "") + "}",
       "",
       "if __name__ == \"__main__\":",
       "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + ", can=CAN)",
@@ -16131,6 +16266,7 @@ HOW TO MAP CODE
     return [null, out];
   }
   // The setting an MCP server's command or address goes in: "my files" -> MCP_MY_FILES (as the runtime's mcp_env_name).
+  const KRAKEN_COMMANDS = { read:"kraken mcp -s market,account,paper", live:"kraken mcp -s market,account,paper,trade" };  // KRAKEN_COMMANDS in mcp.py
   const mcpSetting = name => "MCP_" + String(name || "").trim().replace(/[^A-Za-z0-9]+/g, "_").replace(/^_+|_+$/g, "").toUpperCase();
   function agentName(name, taken){
     const base = String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "tool";
@@ -16152,6 +16288,8 @@ HOW TO MAP CODE
       } else if (t.type === "rb_agent_mcp") {
         const server = String(t.getFieldValue("SERVER") || "").trim() || "(no name)";
         addStep(tr("MCP server \u201c{server}\u201d", { server }), { mono:true, text:tr("MCP servers can't be reached from this page, so the agent works without this server's tools here. Export to Python and set {setting} in second-thought.ini to use them.", { setting:mcpSetting(server) }) }).done("not on this page", "warn");
+      } else if (t.type === "rb_agent_kraken") {
+        addStep("Kraken", { mono:true, text:tr("Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.") }).done("not on this page", "warn");
       } else if (t.type === "rb_agent_builtin") {
         const kind = t.getFieldValue("KIND");
         (AGENT_BUILTINS[kind] || []).forEach(([n, desc, params]) => {
@@ -17285,7 +17423,7 @@ HOW TO MAP CODE
         break;
       }
       case "rb_ask_me": { run.answer = await askPerson(str(await input(b, tc, "TEXT"))); break; }
-      case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": break;  // only used inside an agent block
+      case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": case "rb_agent_kraken": break;  // only used inside an agent block
       case "rb_agent": await runAgent(b, tc); break;
       case "rb_say": {
         const v = await input(b, tc, "TEXT");

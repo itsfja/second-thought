@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"当到了 %1 : %2 %3","tooltip":"在“定时”打开且本页面开着时，在这个时间运行（24 小时制）。"},
 "rb_with_any_model":{"message0":"使用 OpenRouter 模型 %1","message1":"%1","tooltip":"只让里面的积木在 OpenRouter 提供的任意模型上运行。从 openrouter.ai/models 输入它的名字，例如 mistralai/mistral-small 或 google/gemma-4-31b-it。openrouter/auto 会替你选一个。在导出的 Python 中运行（需要 OPENROUTER_API_KEY）；在本页面中由 Claude 代替。"},
 "rb_with_model":{"message0":"使用模型 %1","message1":"%1","tooltip":"只让里面的积木在这个模型上运行，然后回到之前的模型。Claude 以外的模型在导出的 Python 中运行；在本页面中由 Claude 代替它们。"},
-"rb_word_count":{"message0":"%1 的字数"}
+"rb_word_count":{"message0":"%1 的字数"},
+"rb_agent_kraken":{"message0":"Kraken 工具 %1","tooltip":"把 kraken-cli 中 Kraken 自己的工具交给智能体：市场价格、你的余额和订单，以及按实时价格的模拟交易。真实交易还能让它下真实订单，但每个可能动用资金的工具都会先问你，即使其他都不问，而且绝不会按计划或在 GitHub Actions 上运行。需要安装 kraken-cli，并在 second-thought.ini 中为你的账户设置 KRAKEN_API_KEY 和 KRAKEN_API_SECRET（价格和模拟交易不需要密钥）。仅在导出的 Python 中可用。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"分钟","h":"小时","d":"天"},
 "rb_mem_add.KIND":{"transient":"本页面打开期间","permanent":"永久"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG（绘制的图片）","orig":"原始文件"},
-"rb_budget.UNIT":{"tokens":"个 token","dollars":"美元","gbp":"英镑","eur":"欧元","jpy":"日元","cny":"人民币"}
+"rb_budget.UNIT":{"tokens":"个 token","dollars":"美元","gbp":"英镑","eur":"欧元","jpy":"日元","cny":"人民币"},
+"rb_agent_kraken.MODE":{"read":"（价格、你的账户和模拟交易）","live":"（以及真实交易：每次下单前都会问）"}
 },
 "categories":{
 "Events":"事件",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"这看起来不像 Anthropic API 密钥。它们以 sk-ant- 开头。",
 "This browser won't keep the key. Allow site data for this page, then try again.":"此浏览器无法保存密钥。请允许此页面的网站数据，然后重试。",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"密钥只会从此浏览器发送到 api.anthropic.com，运行费用记入其账户。除非勾选“记住”，否则它只保留到你关闭此标签页。它绝不会保存在程序、导出文件或运行日志中。可在 console.anthropic.com 创建密钥。",
-"Claude's API said: {problem}":"Claude 的 API 返回：{problem}"
+"Claude's API said: {problem}":"Claude 的 API 返回：{problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"此页面无法连接 Kraken 的工具，因此智能体在这里不使用它们。请安装 kraken-cli 并导出为 Python 来使用。",
+"read your Kraken balances and orders, market prices, and trade on paper":"读取你的 Kraken 余额和订单、市场价格，并进行模拟交易",
+"trade on your Kraken account with real money (asking you before every order)":"用真金白银在你的 Kraken 账户上交易（每次下单前都会问你）"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1847,6 +1853,12 @@
 "Test":"测试",
 "Test cases: {passed} of {n} passed":"测试用例：{n} 个中通过 {passed} 个",
 "Test failed: {name}":"测试失败：{name}",
-"What was wrong":"问题所在"
+"What was wrong":"问题所在",
+"Allow this? It could move real money: {what}":"允许吗？这可能会动用真金白银：{what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken 拒绝了 KRAKEN_API_KEY：{problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"未安装 kraken-cli，因此 Kraken 的工具无法启动。请安装：https://docs.kraken.com/home/mcp",
+"your Kraken key works":"你的 Kraken 密钥可用",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} 用 --allow-dangerous 启动服务器，这会关闭它在动用资金的工具前的检查。请去掉它。",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} 可能会动用真金白银，所以只在你在场并同意时运行，而现在没有人在。"
 }
 };
