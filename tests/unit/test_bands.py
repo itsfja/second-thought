@@ -22,6 +22,21 @@ class Bands(unittest.TestCase):
                         self.assertIsNone(price_band(tier))
                         self.assertEqual(band_text(tier), "price unknown")
 
+    def test_newly_priced_services_have_bands(self):
+        # #243: the services' own price pages
+        self.assertEqual(price_band("openai-complex"), "premium")
+        self.assertEqual(price_band("xai-complex"), "standard")
+        self.assertEqual([price_band(f"mistral-{k}") for k in ("quick", "default", "complex")], ["budget", "standard", "budget"])
+        self.assertEqual(price_band("kimi-complex"), "standard")
+        self.assertIsNone(price_band("kimi-default"), "Kimi K2.6 has no published price")
+
+    def test_prices_come_from_the_services_own_pages(self):
+        third_party = ("computeprices.com", "morphllm.com", "computingforgeeks.com")
+        for s in SERVICES:
+            if s.get("prices"):
+                with self.subTest(service=s["name"]):
+                    self.assertFalse(any(t in s["prices_source"] for t in third_party), s["prices_source"])
+
     def test_bands_are_in_order(self):
         tops = [top for top, _ in BANDS]
         self.assertEqual(tops, sorted(tops))

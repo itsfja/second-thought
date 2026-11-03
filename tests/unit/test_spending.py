@@ -119,9 +119,9 @@ class Allowances(Base):
                 self.rt._within_allowances(["default"], now=NOW)
 
     def test_an_unpriced_model_is_refused_under_an_allowance(self):
-        with Env(RB_QUOTA_DAILY="1", OPENAI_API_KEY="sk-o"):
+        with Env(RB_QUOTA_DAILY="1", MOONSHOT_API_KEY="sk-k"):
             with self.assertRaises(RunError) as e:
-                self.rt._within_allowances(["openai-complex"], now=NOW)
+                self.rt._within_allowances(["kimi-default"], now=NOW)  # Kimi K2.6: no published price
         self.assertIn("no known price", str(e.exception))
 
     def test_backups_without_room_are_left_out(self):

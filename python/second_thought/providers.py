@@ -79,8 +79,9 @@ SERVICES = [
      "note": ["Gemini calls go through the Gemini API and are billed to your Google account."],
      "tiers": {"quick": ("gemini-3.5-flash-lite", "Gemini Flash-Lite"), "default": ("gemini-3.8-flash", "Gemini Flash"),
                "complex": ("gemini-3.1-pro-preview", "Gemini Pro")},
+     # Standard paid tier; Pro's is for prompts up to 200k tokens. Gemini 3.8 Flash goes up to (1.50, 7.50) on 2027-01-01.
      "prices": {"gemini-3.5-flash-lite": (0.30, 2.50), "gemini-3.8-flash": (0.75, 3.75), "gemini-3.1-pro-preview": (2, 12)},
-     "prices_checked": "2026-10-30", "prices_source": "https://computeprices.com/api-pricing/gemini"},
+     "prices_checked": "2026-11-03", "prices_source": "https://ai.google.dev/gemini-api/docs/pricing"},
     # Llama: any OpenAI-compatible server. Default is Ollama on this computer: install from https://ollama.com,
     # then  ollama pull llama3.2-vision:11b  (and the others if you use them). See https://ollama.com/library
     # llama-quick is small and fast and runs on most computers; llama-default can look at pictures and needs about
@@ -106,7 +107,8 @@ SERVICES = [
      "base": "https://api.x.ai/v1", "base_env": "XAI_BASE_URL", "keys": ["XAI_API_KEY"], "signup": "https://console.x.ai",
      "note": ["Grok calls go to xAI's servers, under xAI's terms, billed to your xAI account (https://console.x.ai)."],
      "tiers": {"quick": ("grok-4.3", "Grok 4.3"), "default": ("grok-4.3", "Grok 4.3"), "complex": ("grok-4.7", "Grok 4.7")},
-     "prices": {"grok-4.3": (1.25, 2.50)}, "prices_checked": "2026-08-21", "prices_source": "https://www.morphllm.com/grok-api-pricing"},
+     # Grok 4.7 from the models page; Grok 4.3 is on https://x.ai/api instead.
+     "prices": {"grok-4.3": (1.25, 2.50), "grok-4.7": (2, 6)}, "prices_checked": "2026-11-03", "prices_source": "https://docs.x.ai/developers/models"},
     # OpenAI: needs OPENAI_API_KEY (https://platform.openai.com). All three can look at pictures.
     # See https://developers.openai.com/api/docs/models
     {"name": "OpenAI", "maker": "OpenAI", "menu": "OpenAI", "api": "openai", "prefix": "openai-", "base": "https://api.openai.com/v1",
@@ -114,14 +116,18 @@ SERVICES = [
      "note": ["OpenAI calls go through the OpenAI API and are billed to your OpenAI API account, not a ChatGPT plan."],
      "tiers": {"quick": ("gpt-6-luna", "GPT-6 Luna"), "default": ("gpt-6.1-sol", "GPT-6.1 Sol"),
                "complex": ("gpt-6-astra", "GPT-6 Astra")},
-     "prices": {"gpt-6-luna": (0.10, 0.50), "gpt-6.1-sol": (2, 10)},
-     "prices_checked": "2026-10-30", "prices_source": "https://computingforgeeks.com/gpt-6-sol-luna-released-features-benchmarks/"},
+     "prices": {"gpt-6-luna": (0.10, 0.50), "gpt-6.1-sol": (2, 10), "gpt-6-astra": (10, 50)},
+     "prices_checked": "2026-11-03", "prices_source": "https://developers.openai.com/api/docs/pricing"},
     # Mistral (France): needs MISTRAL_API_KEY (https://console.mistral.ai). See https://docs.mistral.ai/getting-started/models
     {"name": "Mistral", "maker": "Mistral AI", "menu": "Mistral", "api": "openai", "prefix": "mistral-", "base": "https://api.mistral.ai/v1",
      "base_env": "MISTRAL_BASE_URL", "keys": ["MISTRAL_API_KEY"], "signup": "https://console.mistral.ai",
      "note": ["Mistral calls go to Mistral AI's servers in the EU, billed to your Mistral account (https://console.mistral.ai)."],
      "tiers": {"quick": ("mistral-small-latest", "Mistral Small"), "default": ("mistral-medium-latest", "Mistral Medium"),
-               "complex": ("mistral-large-latest", "Mistral Large")}},
+               "complex": ("mistral-large-latest", "Mistral Large")},
+     # Small 4 and Large 4 from the API price list; Medium 3.5 isn't on it, so it's from Mistral's own announcement
+     # (https://mistral.ai/news/vibe-remote-agents-mistral-medium-3-5/). mistral.ai/pricing gives Large as (0.5, 1.5).
+     "prices": {"mistral-small-latest": (0.15, 0.60), "mistral-medium-latest": (1.50, 7.50), "mistral-large-latest": (0.70, 2.10)},
+     "prices_checked": "2026-11-03", "prices_source": "https://docs.mistral.ai/inference/pricing"},
     # Qwen (Alibaba Cloud Model Studio): needs DASHSCOPE_API_KEY (https://modelstudio.console.alibabacloud.com).
     # Pictures go to its vision model instead. See https://www.alibabacloud.com/help/en/model-studio/models
     {"name": "Qwen", "maker": "Alibaba", "menu": "Qwen, from Alibaba", "api": "openai", "prefix": "qwen-",
@@ -129,12 +135,17 @@ SERVICES = [
      "keys": ["DASHSCOPE_API_KEY", "QWEN_API_KEY"], "signup": "https://modelstudio.console.alibabacloud.com",
      "note": ["Qwen calls go to Alibaba Cloud Model Studio (international region; set QWEN_BASE_URL for another), billed to your Alibaba Cloud account."],
      "tiers": {"quick": ("qwen3.8-flash", "Qwen Flash"), "default": ("qwen3.7-plus", "Qwen Plus"),
-               "complex": ("qwen3.8-max", "Qwen Max")}, "vision": ("QWEN_VISION_MODEL", "qwen3-vl-plus")},
+               "complex": ("qwen3.8-max", "Qwen Max")}, "vision": ("QWEN_VISION_MODEL", "qwen3-vl-plus"),
+     # International (Singapore) list prices; Plus's for prompts up to 256k tokens.
+     "prices": {"qwen3.8-flash": (0.15, 0.47), "qwen3.7-plus": (0.40, 1.60), "qwen3.8-max": (2, 6)},
+     "prices_checked": "2026-11-03", "prices_source": "https://www.alibabacloud.com/help/en/model-studio/model-pricing"},
     # Kimi (Moonshot AI): needs MOONSHOT_API_KEY (https://platform.moonshot.ai). Both can look at pictures.
     {"name": "Kimi", "maker": "Moonshot AI", "menu": "Kimi, from Moonshot", "api": "openai", "prefix": "kimi-", "base": "https://api.moonshot.ai/v1",
      "base_env": "MOONSHOT_BASE_URL", "keys": ["MOONSHOT_API_KEY", "KIMI_API_KEY"], "signup": "https://platform.moonshot.ai",
      "note": ["Kimi calls go to Moonshot AI's servers (a Chinese company), under Moonshot's terms, billed to your Moonshot account."],
-     "tiers": {"quick": ("kimi-k2.6", "Kimi K2.6"), "default": ("kimi-k2.6", "Kimi K2.6"), "complex": ("kimi-k3", "Kimi K3")}},
+     "tiers": {"quick": ("kimi-k2.6", "Kimi K2.6"), "default": ("kimi-k2.6", "Kimi K2.6"), "complex": ("kimi-k3", "Kimi K3")},
+     # Kimi K2.6 has no price on Kimi's own pages yet, so it shows none.
+     "prices": {"kimi-k3": (3, 15)}, "prices_checked": "2026-11-03", "prices_source": "https://www.kimi.ai/resources/kimi-k3-pricing"},
     # Perplexity: needs PERPLEXITY_API_KEY (https://www.perplexity.ai/account/api). Always searches the web and
     # lists its sources. These are Agent API presets, not model names. See https://docs.perplexity.ai
     {"name": "Perplexity", "maker": "Perplexity", "menu": "Perplexity, searches the web", "api": "perplexity", "prefix": "perplexity-",
@@ -156,19 +167,25 @@ SERVICES = [
      "base_env": "GROQ_BASE_URL", "keys": ["GROQ_API_KEY"], "signup": "https://console.groq.com",
      "note": ["Groq calls go to Groq's servers (US), billed to your Groq account. Groq has a free tier with rate limits."],
      "tiers": {"quick": ("llama-3.1-8b-instant", "Llama 3.1 8B (Groq)"), "default": ("llama-3.3-70b-versatile", "Llama 3.3 70B (Groq)"),
-               "complex": ("openai/gpt-oss-120b", "GPT-OSS 120B (Groq)")}, "vision": ("GROQ_VISION_MODEL", "qwen/qwen3.8-27b")},
+               "complex": ("openai/gpt-oss-120b", "GPT-OSS 120B (Groq)")}, "vision": ("GROQ_VISION_MODEL", "qwen/qwen3.8-27b"),
+     # Groq's model list gives its Llama models' prices as "contact sales", so they show none.
+     "prices": {"openai/gpt-oss-120b": (0.15, 0.60)}, "prices_checked": "2026-11-03", "prices_source": "https://console.groq.com/docs/models"},
     # GLM (Z.ai, formerly Zhipu): needs ZAI_API_KEY (https://z.ai/manage-apikey/apikey-list). Both can look at pictures.
     {"name": "GLM", "maker": "Z.ai", "menu": "GLM, from Z.ai", "api": "openai", "prefix": "glm-", "base": "https://api.z.ai/api/paas/v4",
      "base_env": "ZAI_BASE_URL", "keys": ["ZAI_API_KEY", "ZHIPUAI_API_KEY"], "signup": "https://z.ai/manage-apikey/apikey-list",
      "note": ["GLM calls go to Z.ai (formerly Zhipu AI, a Chinese company), under Z.ai's terms, billed to your Z.ai account."],
      "tiers": {"quick": ("glm-5.3-flash", "GLM-5.3 Flash"), "default": ("glm-5.3-flash", "GLM-5.3 Flash"),
-               "complex": ("glm-5.3", "GLM-5.3")}},
+               "complex": ("glm-5.3", "GLM-5.3")},
+     "prices": {"glm-5.3-flash": (0.15, 0.50), "glm-5.3": (1.40, 4.40)},
+     "prices_checked": "2026-11-03", "prices_source": "https://docs.z.ai/guides/overview/pricing"},
     # MiniMax: needs MINIMAX_API_KEY (https://platform.minimax.io). M3 can look at pictures; M2.7 can't.
     {"name": "MiniMax", "maker": "MiniMax", "menu": "MiniMax", "api": "openai", "prefix": "minimax-", "base": "https://api.minimax.io/v1",
      "base_env": "MINIMAX_BASE_URL", "keys": ["MINIMAX_API_KEY"], "signup": "https://platform.minimax.io",
      "note": ["MiniMax calls go to MiniMax's international servers (a Chinese company), under MiniMax's terms, billed to your MiniMax account."],
      "tiers": {"quick": ("MiniMax-M2.7-highspeed", "MiniMax M2.7"), "default": ("MiniMax-M3", "MiniMax M3"),
-               "complex": ("MiniMax-M3", "MiniMax M3")}, "no_vision": ["MiniMax-M2.7-highspeed"]},
+               "complex": ("MiniMax-M3", "MiniMax M3")}, "no_vision": ["MiniMax-M2.7-highspeed"],
+     # Standard tier, prompts up to 512k tokens. M2.7-highspeed isn't on MiniMax's price list any more, so it shows none.
+     "prices": {"MiniMax-M3": (0.30, 1.20)}, "prices_checked": "2026-11-03", "prices_source": "https://platform.minimax.io/docs/pricing/overview"},
     # OpenRouter: one key for hundreds of models (https://openrouter.ai/keys). openrouter/auto picks a model for each
     # step. For one particular model use the "with OpenRouter model" block, or a tier like "openrouter:mistralai/..."
     # with any name from https://openrouter.ai/models
