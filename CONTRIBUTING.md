@@ -29,6 +29,32 @@ HTML (the toolbar, panels and log) is edited in `second-thought.html` itself.
 same path (`lang/fr.js` and so on). Publish them together: if a language's file is missing, the page still works, in
 English, with a note saying the language couldn't be loaded.
 
+### Built-in connections, and MCP for the rest
+
+Second Thought builds in its own connections to the services it ships with: Telegram, Discord, Slack, email, GitHub,
+Home Assistant, Homey, MQTT, calendars, news feeds, web pages, folders and web requests (`connectors.py`), and every
+model service (`providers.py`). Anything else comes through MCP (`mcp.py`), from servers a person adds themselves. No
+MCP server comes built in. That's deliberate, for two reasons:
+
+- **One file you own.** An exported program runs on Python's standard library and a model service's SDK. A built-in
+  connection adds nothing to install; an MCP server is another program, kept somewhere else, that has to be installed
+  and kept running.
+- **The asking rules are exact.** For a built-in connection, `SAFETY` in `core.py` says precisely which actions always
+  ask, like unlocking, opening, disarming and sending, and the tests check the page and the runtime agree. Through MCP,
+  the program can only go by each server's own say-so about which of its tools change things.
+
+So:
+
+- **A service people already use with Second Thought, with an API that's stable and documented,** is built in, as
+  above: its capabilities declared, what it does that acts in `SAFETY`, the same answers on the page and in Python, and
+  tests with a stand-in for the service. It may not need a package beyond the standard library; if one helps, it's
+  optional, and `--doctor` says how to install it (as `pypdf` is for PDFs).
+- **A service whose API someone else maintains, or one with a good MCP server of its own,** comes through MCP. Where
+  some of its tools spend money or change things that matter, they go in `SAFETY` too, by name, so they always ask
+  (Kraken, #262).
+- **Swapping a built-in connection for an MCP server** needs a reason that outweighs both points above, and it keeps the
+  asking rules the built-in one had.
+
 ## The rules
 
 1. **Never edit `python/runtime.py`, `lang/`, or the embedded `<style>` and `<script>` blocks in `second-thought.html`, by hand.** Edit the
