@@ -304,17 +304,15 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 </section>
 <section id="keys" class="io" hidden aria-label="Keyboard">
   <div class="io-col">
-    <h2>Keyboard</h2>
-    <label class="check"><input type="checkbox" id="keys-on"> Build programs with the keyboard</label>
-    <p class="hint">Turn it on here or with <b>Ctrl+Shift+K</b>. Then, anywhere but a typing box:</p>
+    <h2 id="keys-title" tabindex="-1">Keyboard</h2>
+    <p class="hint">You can build programs with the keyboard alone. Press <b>Tab</b> until you reach the block editor, then:</p>
     <ul class="hint keys-list">
-      <li><b>T</b> opens the blocks: <b>W</b> and <b>S</b> choose a category, <b>D</b> opens it, <b>W</b> and <b>S</b> choose a block, and <b>Enter</b> puts it in your program.</li>
-      <li>In your program, <b>W</b> and <b>S</b> move to the part before and after, <b>D</b> goes into a block and <b>A</b> comes back out.</li>
-      <li><b>Enter</b> on a slot marks it, so the next block you choose goes there. <b>Enter</b> on a field lets you type in it or choose.</li>
-      <li><b>I</b> moves the block at the cursor to the marked slot, <b>X</b> takes it off what it's joined to, and <b>Delete</b> removes it.</li>
-      <li><b>Ctrl+C</b>, <b>Ctrl+X</b> and <b>Ctrl+V</b> copy, cut and paste. <b>Shift</b> with <b>W</b>, <b>A</b>, <b>S</b> or <b>D</b> moves around the empty space, and <b>Esc</b> leaves the blocks.</li>
+      <li><b>T</b> opens the blocks: the <b>up</b> and <b>down</b> arrows choose a category, <b>right</b> opens it, <b>up</b> and <b>down</b> choose a block, and <b>Enter</b> adds it. Move it into place with the arrow keys, then press <b>Enter</b> again.</li>
+      <li>In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.</li>
+      <li><b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.</li>
+      <li><b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.</li>
     </ul>
-    <p class="hint">A screen reader reads out where the cursor is. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.</p>
+    <p class="hint">A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.</p>
   </div>
 </section>
 <section id="io" class="io" hidden aria-label="Import and export">
@@ -375,7 +373,6 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   </div>
 </section>
 
-<div id="announce" class="sr" role="status" aria-live="polite"></div>
 <main class="main">
   <div class="canvas">
     <div class="finder"><label for="block-search" class="sr">Find a block</label><input type="search" id="block-search" placeholder="Find a block…" autocomplete="off"></div>
@@ -10398,7 +10395,7 @@ HOW TO MAP CODE
 - Model names become rb_use_model: small/fast models "quick", large models "complex", otherwise "default".
 - Every block type you use must be from this list.
 </script>
-<script src="https://cdn.jsdelivr.net/npm/blockly@11.2.1/blockly.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blockly@13.4.0/blockly.min.js"></script>
 <script>
   /* The block palette's language: the one chosen on this page, else the browser's, else English. The page lists the
      languages it has ("i18n" above); each one's words are in lang/<language>.js, published next to the page, and only
@@ -10427,7 +10424,7 @@ HOW TO MAP CODE
     /* A right-to-left language (Hebrew, Aramaic) says "dir": "rtl": the whole page, and Blockly with it, is mirrored. */
     if (window.ST_I18N && window.ST_I18N.dir === "rtl") document.documentElement.dir = "rtl";
     if (window.ST_I18N && window.ST_I18N.blockly)
-      document.write('<script src="https://cdn.jsdelivr.net/npm/blockly@11.2.1/msg/' + window.ST_I18N.blockly + '.js"><\/script>');
+      document.write('<script src="https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/' + window.ST_I18N.blockly + '.js"><\/script>');
     /* A script many computers have no font for (Linear B, Devanagari, cuneiform) names one in its i18n file: loaded from Google Fonts for that
        language only, and put first in the page's font lists, so the script's own letters always come from it (with it last,
        Chrome could keep drawing boxes for some text shaped before the font arrived). */
@@ -10456,8 +10453,7 @@ HOW TO MAP CODE
     ["Blockly.JavaScript","Blockly.Dart","Blockly.Lua","Blockly.PHP","Blockly.Python"].forEach(n => { if (!window[n]) window[n] = gen; });
   })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@blockly/field-multilineinput@5.0.15/dist/index.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@blockly/keyboard-navigation@0.7.0/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@blockly/field-multilineinput@13.4.0/dist/index.js"></script>
 <script id="editor">
   // 00-start.js: The editor's opening: shared limits and small helpers ($, STORE_KEY, MAX_*). Every file below runs inside the same function, so names declared in one are seen by the rest.
 (function(){
@@ -13133,79 +13129,17 @@ HOW TO MAP CODE
   window.addEventListener("resize", () => Blockly.svgResize(ws));
 
   /* ---------- Building with the keyboard ---------- */
-  // Blockly's keyboard navigation (the @blockly/keyboard-navigation plugin), turned on in the keyboard help (?) or with
-  // Ctrl+Shift+K, and remembered. A screen reader hears where the cursor goes, through the page's announcer.
-  function announce(text){
-    const a = $("announce"); a.textContent = "";
-    setTimeout(() => { a.textContent = text; }, 30);  // emptied first, so the same words are read again
-  }
-  const KEYS_KEY = "second-thought-keyboard";
+  // Blockly 13 builds programs from the keyboard itself, always on (#242): T for the blocks, the arrow keys to move,
+  // Enter to act, and each block, field and category is named for a screen reader. The ? panel lists the keys.
   // Blockly listens for keys on the box it draws in, so that box can take the focus (Tab reaches it), and a screen
   // reader passes keys straight to it (an "application"), named, with where to find the keyboard help.
   const editorEl = ws.getInjectionDiv();
   editorEl.tabIndex = 0; editorEl.setAttribute("role", "application");
   editorEl.setAttribute("aria-label", tr("Block editor")); editorEl.setAttribute("aria-describedby", "keys-where");
-  let keyNav = null;
-  if (typeof window.NavigationController === "function") {
-    // The plugin for Blockly 11 calls the toolbox's moves by their older names (selectNext_); Blockly 11.2 dropped the "_".
-    ["selectNext", "selectPrevious", "selectParent", "selectChild"].forEach(n => {
-      const proto = Blockly.Toolbox.prototype;
-      if (!proto[n + "_"] && proto[n]) proto[n + "_"] = function(){ return this[n](); };
-    });
-    try { keyNav = new window.NavigationController(); keyNav.init(); keyNav.addWorkspace(ws); } catch(e) { keyNav = null; }
-  }
-  const keyboardOn = () => !!ws.keyboardAccessibilityMode;
-  function setKeyboard(on, quiet){
-    if (!keyNav) return;
-    if (on !== keyboardOn()) { if (on) keyNav.enable(ws); else keyNav.disable(ws); }
-    keyboardChanged(quiet);
-  }
-  function keyboardChanged(quiet){
-    $("keys-on").checked = keyboardOn();
-    try { localStorage.setItem(KEYS_KEY, keyboardOn() ? "on" : ""); } catch(e) {}
-    if (quiet) return;
-    announce(tr(keyboardOn() ? "Building with the keyboard is on. Press T for the blocks." : "Building with the keyboard is off."));
-    // Blockly hears keys inside the block editor only, so that's where the keyboard goes next.
-    if (keyboardOn() && !editorEl.contains(document.activeElement)) setTimeout(() => editorEl.focus(), 0);
-  }
-  function describeNode(node){
-    if (!node) return "";
-    const T = Blockly.ASTNode.types, type = node.getType(), at = node.getLocation();
-    const blockText = b => { try { return squash(b.toString()) || b.type; } catch(e) { return b.type; } };
-    if (type === T.WORKSPACE) return tr("Empty space");
-    if (type === T.STACK) return tr("Script: {block}", { block:blockText(at) });
-    if (type === T.BLOCK) return tr("Block: {block}", { block:blockText(at) });
-    if (type === T.FIELD) return tr("Field {value}, in: {block}", { value:squash(at.getText ? at.getText() : at.getValue()), block:blockText(at.getSourceBlock()) });
-    if (type === T.INPUT) return tr("Slot {name}, in: {block}", { name:at.getParentInput && at.getParentInput() ? at.getParentInput().name : "", block:blockText(at.getSourceBlock()) });
-    if (type === T.NEXT) return tr("After: {block}", { block:blockText(at.getSourceBlock()) });
-    if (type === T.PREVIOUS || type === T.OUTPUT) return tr("Before: {block}", { block:blockText(at.getSourceBlock()) });
-    return "";
-  }
-  if (keyNav) {
-    ws.addChangeListener(e => {
-      if (e && e.type === Blockly.Events.MARKER_MOVE && e.isCursor && keyboardOn()) { const t = describeNode(e.newNode); if (t) announce(t); }
-    });
-    // The flyout's cursor (choosing a block from a category) has its own workspace.
-    const flyWs = () => { const f = ws.getToolbox() && ws.getToolbox().getFlyout(); return f && f.getWorkspace(); };
-    if (flyWs()) flyWs().addChangeListener(e => {
-      if (e && e.type === Blockly.Events.MARKER_MOVE && e.isCursor && keyboardOn() && e.newNode) {
-        const at = e.newNode.getLocation(); if (at && at.toString) announce(tr("Block to add: {block}", { block:squash(at.toString()) }));
-      }
-    });
-    ws.addChangeListener(e => {
-      if (e && e.type === Blockly.Events.TOOLBOX_ITEM_SELECT && keyboardOn() && e.newItem) announce(tr("Category: {name}", { name:e.newItem }));  // its shown name
-    });
-    // Ctrl+Shift+K is the plugin's own switch: keep the box and the saved choice in step with it.
-    document.addEventListener("keydown", e => { if (e.ctrlKey && e.shiftKey && (e.key === "K" || e.key === "k")) setTimeout(() => keyboardChanged(), 0); });
-    let saved = ""; try { saved = localStorage.getItem(KEYS_KEY) || ""; } catch(e) {}
-    if (saved === "on") setKeyboard(true, true);
-  }
-  $("keys-on").disabled = !keyNav;
-  $("keys-on").addEventListener("change", e => setKeyboard(e.target.checked));
   $("keys-toggle").onclick = () => {
     const el = $("keys"), open = el.hidden;
     el.hidden = !open; $("keys-toggle").setAttribute("aria-expanded", String(open));
-    if (open) $("keys-on").focus();
+    if (open) $("keys-title").focus();
     setTimeout(() => Blockly.svgResize(ws), 0);
   };
   // 09-import-export.js: Import and export: block files, backup models, Save as GitHub Actions.

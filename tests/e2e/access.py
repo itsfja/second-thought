@@ -1,5 +1,5 @@
 """Using the page with the keyboard alone, and a screen reader: a run answered from the keyboard, building a program
-with Blockly's keyboard navigation, and axe-core finding no serious problems."""
+with Blockly 13's own keyboard navigation, and axe-core finding no serious problems."""
 from e2e.common import *  # noqa: F401,F403
 
 AXE = VENDOR / "axe-core/package/axe.min.js"
@@ -75,36 +75,29 @@ async def access_tests():
         check(await pg.get_attribute("#steps", "role") == "log" and await pg.get_attribute("#status", "role") == "status",
               "the run log's new steps and the run's status are read out as they happen")
 
-        # Building a program with the keyboard: the ? button, then the box, then Blockly's keyboard navigation.
+        # Building a program with the keyboard (Blockly 13's own, #242): the ? button says how, then Tab to the
+        # block editor, T for the blocks, the arrows to a block, Enter to add it and Enter again to place it.
         await pg.evaluate("document.activeElement && document.activeElement.blur()")
         check(await tab_to(pg, "#keys-toggle"), "Tab reaches the keyboard help (?)")
         await pg.keyboard.press("Enter")
-        check(await pg.is_visible("#keys") and await pg.evaluate("document.activeElement.id") == "keys-on",
-              "it opens the keyboard help, with the focus on the switch")
-        await pg.keyboard.press("Space")
-        await pg.wait_for_timeout(200)
-        check(await pg.evaluate("Blockly.getMainWorkspace().keyboardAccessibilityMode") and
-              await pg.evaluate("document.activeElement.classList.contains('injectionDiv')"),
-              "Space turns keyboard building on, and the focus goes to the block editor")
+        help_text = await pg.inner_text("#keys") if await pg.is_visible("#keys") else ""
+        check(await pg.evaluate("document.activeElement.id") == "keys-title" and "T opens the blocks" in help_text and "Ctrl+Shift+K" not in help_text,
+              "it opens the keyboard help, with the focus on it, listing Blockly's keys")
+        await pg.keyboard.press("Escape")
+        check(await tab_to(pg, ".injectionDiv"), "Tab reaches the block editor")
         before = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
         heard = []
-        for key in ("s", "t", "s", "d", "s", "Enter"):
+        named = """() => { const a = document.activeElement; return [a.getAttribute('role'), a.getAttribute('aria-label') || a.textContent.trim().slice(0, 60)]; }"""
+        for key in ("t", "ArrowDown", "ArrowRight", "ArrowDown", "Enter"):
             await pg.keyboard.press(key)
-            await pg.wait_for_timeout(120)
-            heard.append(await pg.inner_text("#announce"))
+            await pg.wait_for_timeout(150)
+            heard.append(await pg.evaluate(named))
+        await pg.keyboard.press("Enter")  # puts it where it is
+        await pg.wait_for_timeout(150)
         after = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
-        check(after == before + 1, f"T, a category, a block and Enter add the block to the program ({before} blocks, then {after})")
-        check(any(h.startswith("Category: ") for h in heard) and any(h.startswith("Block to add: ") for h in heard)
-              and any(h.startswith(("Before: ", "Block: ", "After: ")) for h in heard),
-              f"a screen reader hears where the cursor is at each step ({heard})")
-        await pg.keyboard.press("Control+Shift+K")
-        await pg.wait_for_timeout(200)
-        check(not await pg.is_checked("#keys-on") and not await pg.evaluate("Blockly.getMainWorkspace().keyboardAccessibilityMode"),
-              "Ctrl+Shift+K turns it off, and the switch follows")
-        await pg.keyboard.press("Control+Shift+K")
-        await pg.reload()
-        await pg.wait_for_timeout(1500)
-        check(await pg.evaluate("Blockly.getMainWorkspace().keyboardAccessibilityMode") and await pg.is_checked("#keys-on"),
-              "the choice is remembered next time")
+        check(after > before, f"T, a category, a block and Enter add the block to the program ({before} blocks, then {after})")
+        check(heard[0][0] == "treeitem" and heard[0][1] and heard[2][0] == "option" and heard[2][1],
+              f"a screen reader hears each category and block as the keys reach it ({heard[:3]})")
+        check(not await pg.evaluate("typeof window.NavigationController") == "function", "no keyboard plugin: it's Blockly's own")
         check(not errors, "no page errors" + (f" ({errors})" if errors else ""))
         await browser.close()
