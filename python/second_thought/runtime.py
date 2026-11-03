@@ -35,6 +35,7 @@ import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it t
 # GitHub Actions turns a line starting with this into an error annotation on the run's page (a workflow command,
 # not words for people). Newlines inside it are written %0A.
 ACTIONS_ERROR = "::error::"
+ACTIONS_ERROR_TITLED = "::error title={title}::"  # an error on the run's page with a heading of its own
 
 
 class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, Updates):
@@ -1604,7 +1605,35 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 print("      - " + p_, flush=True)
         failed = sum(not p for _, p, _ in results)
         print("\n" + tr("{passed} of {n} passed.", passed=len(results) - failed, n=len(results)), flush=True)
+        if on_github_actions():
+            self.report_tests_on_actions(results)
         return 1 if failed else 0
+
+    def report_tests_on_actions(self, results):
+        """On GitHub Actions (#246): each failed case as an error on the run's page, and a table of every case in the
+        job's summary, with what the tests cost."""
+        esc = lambda s: to_str(s).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")  # noqa: E731
+        for name, passed, problems in results:
+            if not passed:
+                title = esc(tr("Test failed: {name}", name=name)).replace(",", "%2C").replace(":", "%3A")
+                marker = ACTIONS_ERROR_TITLED.replace("{title}", title)
+                print(marker + esc("\n".join(problems) or tr("The run stopped.")), flush=True)
+        path = os.environ.get("GITHUB_STEP_SUMMARY", "")
+        if not path:
+            return
+        cell = lambda s: to_str(s).replace("|", "\\|").replace("\n", " ")  # noqa: E731
+        failed = sum(not p for _, p, _ in results)
+        lines = ["## " + tr("Test cases: {passed} of {n} passed", passed=len(results) - failed, n=len(results)), "",
+                 "| | " + tr("Test") + " | " + tr("What was wrong") + " |", "|---|---|---|"]
+        lines += [f"| {'✅' if passed else '❌'} | {cell(name)} | {cell('; '.join(problems))} |" for name, passed, problems in results]
+        cost = self.cost_text()
+        if cost:
+            lines += ["", tr("These {n} tests cost {cost}.", n=len(results), cost=cost[len(" · "):])]
+        try:
+            with open(path, "a", encoding="utf-8") as f:
+                f.write("\n".join(lines) + "\n")
+        except OSError:
+            pass
 
     @staticmethod
     def schedule_due(s, now, late=datetime.timedelta(hours=1)):

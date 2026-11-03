@@ -2956,7 +2956,12 @@
   "{service} reports {list}": "{service} a-ke-re-re {list}",
   "{service} {plan} plan: {cap} (published {date}).": "{service} {plan} su-ma-po-ro: {cap} ({date}).",
   "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "te-re-ma-ta {service} su-mo-po-ne-o {plan} su-ma-po-ro: po-ro-te-te {setting} = {plan_lower} {where_keys}",
-  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} o-u su-ma-po-ro {service}. ke-re-te e-ne: {names}."
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} o-u su-ma-po-ro {service}. ke-re-te e-ne: {names}.",
+  "These {n} tests cost {cost}.": "to-ta {n} pe-i-ra ti-ma-i {cost}.",
+  "Test": "pe-i-ra",
+  "Test cases: {passed} of {n} passed": "pe-i-ra-i: {passed} e-ke {n} e-pe-tu-ke",
+  "Test failed: {name}": "pe-i-ra a-pe-tu-ke: {name}",
+  "What was wrong": "ti a-ma-ra-te"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

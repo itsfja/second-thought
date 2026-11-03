@@ -2956,7 +2956,12 @@
   "{service} reports {list}": "{service} מודע: {list}",
   "{service} {plan} plan: {cap} (published {date}).": "{service}, קיימא {plan}: {cap} (אתפרסם ב־{date}).",
   "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "תחומי {service} שוין לקיימא {plan}: אוסף {setting} = {plan_lower} {where_keys}",
-  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} לאו קיימא ד־{service}. אשתמש בחד מן: {names}."
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} לאו קיימא ד־{service}. אשתמש בחד מן: {names}.",
+  "These {n} tests cost {cost}.": "{n} בדיקתא אלין עלו {cost}.",
+  "Test": "בדיקתא",
+  "Test cases: {passed} of {n} passed": "בדיקתא: {passed} מן {n} עברו",
+  "Test failed: {name}": "בדיקתא נפלת: {name}",
+  "What was wrong": "מה הוה עקים"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

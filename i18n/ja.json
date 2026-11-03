@@ -2955,6 +2955,11 @@
   "{service} reports {list}": "{service} の報告：{list}",
   "{service} {plan} plan: {cap} (published {date}).": "{service} の {plan} プラン：{cap}（{date} 公開）。",
   "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "{service} の制限は {plan} プランと一致します：{where_keys} に {setting} = {plan_lower} を追加してください",
-  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} は {service} のプランではありません。次のいずれかにしてください：{names}。"
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} は {service} のプランではありません。次のいずれかにしてください：{names}。",
+  "These {n} tests cost {cost}.": "この {n} 件のテストの費用は {cost} でした。",
+  "Test": "テスト",
+  "Test cases: {passed} of {n} passed": "テストケース：{n} 件中 {passed} 件合格",
+  "Test failed: {name}": "テスト失敗：{name}",
+  "What was wrong": "問題点"
  }
 }

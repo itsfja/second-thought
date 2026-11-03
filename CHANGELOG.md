@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Added
+- `--test` on GitHub Actions (#246): each failed case is an error on the run's page, with what was wrong, and the job's summary has a table of every case and what the tests cost. **Save as GitHub Actions** adds a test job when the program has test cases: it runs them when the program, its tests or the workflow are pushed, and from **Run workflow**, never on the schedule. `SETUP.md` says what a test run costs and how to make the scheduled runs wait while the tests fail.
+
 ## 3.7.0 - 2026-11-03
 
 ### Added

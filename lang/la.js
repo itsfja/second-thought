@@ -1828,7 +1828,12 @@
 "{service} reports {list}":"{service} nuntiat {list}",
 "{service} {plan} plan: {cap} (published {date}).":"{service}, consilium {plan}: {cap} (editum {date}).",
 "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"Fines {service} consilio {plan} congruunt: adde {setting} = {plan_lower} {where_keys}",
-"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} non est consilium {service}. Utere uno ex his: {names}."
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} non est consilium {service}. Utere uno ex his: {names}.",
+"These {n} tests cost {cost}.":"Haec {n} probamenta constiterunt {cost}.",
+"Test":"Probamentum",
+"Test cases: {passed} of {n} passed":"Casus probandi: {passed} ex {n} probati",
+"Test failed: {name}":"Probamentum defecit: {name}",
+"What was wrong":"Quid erraverit"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

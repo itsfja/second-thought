@@ -180,6 +180,9 @@
       byCron.get(c.cron).push(i + 1);
     }));
     const run = n => "python " + base + ".py --run-schedule " + n + " || failed=1";
+    // Test cases (#246): a test job runs them when the program or its tests are pushed, and from Run workflow. Never on the
+    // schedule: they call the real models, so they cost what runs do.
+    const tests = programTests.length > 0, TESTS = "tests: run the test cases";
     const wf = [
       "# " + progName + ": runs on GitHub Actions at the times its 'when it's' and 'every' scripts say.",
       "# Saved from Second Thought with runtime " + RUNTIME_VERSION + ". SETUP.md says which secrets to add.",
@@ -192,6 +195,8 @@
       "on:",
       "  schedule:",
       ...cronLines,
+      ...(tests ? ["  push:   # the test cases run when the program, its tests or this workflow change",
+                   "    paths:", "      - " + q(base + ".py"), "      - " + q(base + ".tests.json"), "      - " + q(".github/workflows/" + base + ".yml")] : []),
       "  workflow_dispatch:   # the Run workflow button on the Actions tab: runs a script now",
       "    inputs:",
       "      script:",
@@ -199,6 +204,7 @@
       "        type: choice",
       "        options:",
       ...hats.map((b, i) => "          - " + q(label(b, i))),
+      ...(tests ? ["          - " + q(TESTS)] : []),
       "permissions:",
       "  contents: write   # to save what the program remembers (memory.json) and makes (outputs/) back to the repository",
       "concurrency:",
@@ -206,6 +212,8 @@
       "  cancel-in-progress: false",
       "jobs:",
       "  run:",
+      // Quoted: the option's ": " would otherwise end the YAML value early, and GitHub would refuse the workflow.
+      ...(tests ? ["    if: " + q("github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.script != '" + TESTS + "')")] : []),
       "    runs-on: ubuntu-latest",
       "    timeout-minutes: 30",
       "    steps:",
@@ -239,6 +247,28 @@
       "          git diff --cached --quiet || { git commit -m \"What " + base.replace(/"/g, "") + " remembered\" && git push; }",
       "      # To keep memory.json out of the repository instead (for a public one), delete the step above and use",
       "      # actions/cache: restore it before the run and save it after. A cache GitHub hasn't used for 7 days is deleted.",
+      ...(tests ? [
+      "  test:",
+      "    # The program's test cases: each replays its saved answers with the real models, and a reviewer checks the",
+      "    # result. Nothing is sent or changed, and what it remembers is a copy. A failed case shows on the run's page.",
+      "    if: " + q("github.event_name == 'push' || inputs.script == '" + TESTS + "'"),
+      "    runs-on: ubuntu-latest",
+      "    timeout-minutes: 30",
+      "    permissions:",
+      "      contents: read",
+      "    steps:",
+      "      - uses: actions/checkout@v5",
+      "      - uses: actions/setup-python@v6",
+      "        with:",
+      "          python-version: \"3.12\"",
+      "          cache: pip",
+      "      - run: pip install -r requirements.txt",
+      "      - name: Run the test cases",
+      "        env:",
+      "          TZ: " + q(tz),
+      "          PYTHONIOENCODING: utf-8",
+      ...secrets.map(([env, secret]) => "          " + env + ": ${{ secrets." + secret + " }}"),
+      "        run: python " + base + ".py --test"] : []),
       ""
     ].join("\n");
     const caps = programCapabilities();
@@ -258,12 +288,26 @@
       "- Home Assistant, Homey and MQTT have to be reachable from the internet, not just your home network.",
       "- Model calls are billed to your API accounts, as on your own computer.",
       ...(secrets.some(s => s[0] === "ANTHROPIC_WORKSPACE_ID") ? ["- Make your Claude key inside a workspace (the Console's Workspaces page). A key made for the whole organisation also needs the `ANTHROPIC_WORKSPACE_ID` secret."] : []),
+      ...(tests ? ["", "## Test cases", "",
+        "The workflow also runs the program's " + (programTests.length === 1 ? "test case" : programTests.length + " test cases") + " (`" + base + ".tests.json`) whenever you push a change to the program, its tests or the workflow, and from **Run workflow** with **" + TESTS + "**. A failed case shows on the run's page, and the run's summary has a table of them all.", "",
+        "- They never run on the schedule. Each case replays its saved answers with the real models, then a reviewer checks the result, so a test run costs about what a run of the program does for each case, plus one review. The summary says what it cost.",
+        "- Nothing is sent or changed during a test, and what the program remembers is a copy.",
+        ...(caps.some(c => c[2]) ? ["- To stop the scheduled runs while the last test run has failed, add this step to the `run` job, before **Run the script that's due**, and `actions: read` under `permissions`:", "",
+          "  ```yaml",
+          "      - name: Skip while the tests fail",
+          "        env:",
+          "          GH_TOKEN: ${{ github.token }}",
+          "        run: |",
+          "          last=$(gh api \"repos/${{ github.repository }}/actions/workflows/" + base + ".yml/runs?event=push&status=completed&per_page=1\" --jq '.workflow_runs[0].conclusion // \"\"')",
+          "          if [ \"$last\" = \"failure\" ]; then echo \"::error::The last test run failed, so the scheduled run was skipped.\"; exit 1; fi",
+          "  ```"] : [])] : []),
       ...(caps.some(c => c[2]) ? ["", "## What it can do", "", "Adding the workflow is your yes to these, as answering y is when it runs on your computer:", "",
         ...caps.map(c => "- " + c[1])] : []),
       ""
     ].join("\n");
     const req = servicesUsed().flatMap(s => s.pip || []).concat(settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : []).join("\n") + "\n";
     return [{ name:base + ".py", text:code }, { name:"requirements.txt", text:req }, { name:".github/workflows/" + base + ".yml", text:wf },
+            ...(tests ? [{ name:base + ".tests.json", text:JSON.stringify(programTests, null, 1) + "\n" }] : []),
             { name:"SETUP.md", text:setup }, { name:".gitignore", text:"second-thought.ini\n__pycache__/\n" }];
   }
   window.__actionsFiles = () => { try { return actionsFiles($("io-name").value.trim() || "my-program", toPython($("io-name").value.trim() || "my-program")); } catch(e) { return { error:e.message }; } };

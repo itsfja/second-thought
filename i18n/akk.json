@@ -2956,7 +2956,12 @@
   "{service} reports {list}": "{service} iqbi {list}",
   "{service} {plan} plan: {cap} (published {date}).": "{service}, riksum {plan}: {cap} ({date}).",
   "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "miṣrātum ša {service} itti riksim {plan} mitḫarā: {setting} = {plan_lower} {where_keys} šukun",
-  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} riksum ša {service} ul šu. ištēn ina annûtim epuš: {names}."
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} riksum ša {service} ul šu. ištēn ina annûtim epuš: {names}.",
+  "These {n} tests cost {cost}.": "{n} litāti annûtum {cost} iqbû.",
+  "Test": "littum",
+  "Test cases: {passed} of {n} passed": "litātum: {passed} ina {n} išlimā",
+  "Test failed: {name}": "littum imqut: {name}",
+  "What was wrong": "mīnum la išariš"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

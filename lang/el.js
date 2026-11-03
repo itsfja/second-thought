@@ -1828,6 +1828,11 @@
 "{service} reports {list}":"Το {service} αναφέρει: {list}",
 "{service} {plan} plan: {cap} (published {date}).":"{service}, πρόγραμμα {plan}: {cap} (δημοσιεύτηκε {date}).",
 "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"Τα όρια του {service} ταιριάζουν με το πρόγραμμα {plan}: προσθέστε {setting} = {plan_lower} {where_keys}",
-"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"Το {setting} = {plan} δεν είναι πρόγραμμα του {service}. Χρησιμοποιήστε ένα από: {names}."
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"Το {setting} = {plan} δεν είναι πρόγραμμα του {service}. Χρησιμοποιήστε ένα από: {names}.",
+"These {n} tests cost {cost}.":"Αυτά τα {n} τεστ κόστισαν {cost}.",
+"Test":"Τεστ",
+"Test cases: {passed} of {n} passed":"Περιπτώσεις ελέγχου: πέρασαν {passed} από {n}",
+"Test failed: {name}":"Το τεστ απέτυχε: {name}",
+"What was wrong":"Τι δεν πήγε καλά"
 }
 };
