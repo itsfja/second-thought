@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"%1 : %2 になったとき %3","tooltip":"スケジュールがオンでこのページが開いている間、この時刻（24 時間制）に実行します。"},
 "rb_with_any_model":{"message0":"OpenRouter のモデル %1 で","message1":"%1","tooltip":"中のブロックだけを、OpenRouter が提供する任意のモデルで実行します。openrouter.ai/models の名前を入力します。例：mistralai/mistral-small、google/gemma-4-31b-it。openrouter/auto は自動で選びます。書き出した Python で動きます（OPENROUTER_API_KEY が必要）。このページでは Claude が代わりを務めます。"},
 "rb_with_model":{"message0":"モデル %1 で","message1":"%1","tooltip":"中のブロックだけをこのモデルで実行し、その後は前のモデルに戻ります。Claude 以外のモデルは書き出した Python で動き、このページでは Claude が代わりを務めます。"},
-"rb_word_count":{"message0":"%1 の単語数"}
+"rb_word_count":{"message0":"%1 の単語数"},
+"rb_agent_kraken":{"message0":"Kraken のツール %1","tooltip":"エージェントに kraken-cli の Kraken 公式ツールを渡します：市場価格、残高と注文、実際の価格でのペーパートレード。実際の取引を選ぶと本物の注文も出せますが、お金を動かせるツールはどれも、ほかが確認しない設定でも必ず先にあなたに確認し、スケジュールや GitHub Actions では決して実行されません。kraken-cli のインストールと、口座用に second-thought.ini の KRAKEN_API_KEY と KRAKEN_API_SECRET が必要です（価格とペーパートレードはキー不要）。書き出した Python でのみ動きます。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"分","h":"時間","d":"日"},
 "rb_mem_add.KIND":{"transient":"このページが開いている間","permanent":"ずっと"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG（描いた画像）","orig":"元のファイル"},
-"rb_budget.UNIT":{"tokens":"トークン","dollars":"米ドル","gbp":"ポンド","eur":"ユーロ","jpy":"円","cny":"人民元"}
+"rb_budget.UNIT":{"tokens":"トークン","dollars":"米ドル","gbp":"ポンド","eur":"ユーロ","jpy":"円","cny":"人民元"},
+"rb_agent_kraken.MODE":{"read":"（価格、口座、ペーパートレード）","live":"（実際の取引も：注文の前に毎回確認）"}
 },
 "categories":{
 "Events":"イベント",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"Anthropic の API キーではないようです。キーは sk-ant- で始まります。",
 "This browser won't keep the key. Allow site data for this page, then try again.":"このブラウザーはキーを保存できません。このページのサイトデータを許可してから、もう一度お試しください。",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"キーはこのブラウザーから api.anthropic.com にだけ送られ、実行はそのアカウントに課金されます。「記憶する」にチェックしない限り、このタブを閉じるまで保持されます。プログラム、エクスポート、実行ログには保存されません。キーは console.anthropic.com で作成できます。",
-"Claude's API said: {problem}":"Claude の API の応答: {problem}"
+"Claude's API said: {problem}":"Claude の API の応答: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"このページからは Kraken のツールに接続できないため、ここではエージェントはそれらなしで動きます。使うには、kraken-cli をインストールして Python に書き出してください。",
+"read your Kraken balances and orders, market prices, and trade on paper":"Kraken の残高と注文、市場価格を読み、ペーパートレードを行う",
+"trade on your Kraken account with real money (asking you before every order)":"実際のお金で Kraken アカウントで取引する（注文の前に毎回確認します）"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1847,6 +1853,12 @@
 "Test":"テスト",
 "Test cases: {passed} of {n} passed":"テストケース：{n} 件中 {passed} 件合格",
 "Test failed: {name}":"テスト失敗：{name}",
-"What was wrong":"問題点"
+"What was wrong":"問題点",
+"Allow this? It could move real money: {what}":"許可しますか？ 実際のお金が動く可能性があります: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken が KRAKEN_API_KEY を拒否しました: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli がインストールされていないため、Kraken のツールを起動できません。インストールしてください: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"Kraken のキーは有効です",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} はサーバーを --allow-dangerous 付きで起動しています。これはお金を動かすツールの前の確認を無効にします。外してください。",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} は実際のお金を動かす可能性があるため、あなたがその場で「はい」と言えるときだけ実行されます。今は誰もいません。"
 }
 };

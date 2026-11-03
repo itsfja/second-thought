@@ -145,7 +145,8 @@
 "rb_when_time":{"message0":"यदा वेला %1 : %2 %3","tooltip":"यावत् कालयोजनाः सक्रियाः इदं पृष्ठं च उद्घाटितं तावत् अस्यां वेलायां चलति (24-होरा-घटिका)।"},
 "rb_with_any_model":{"message0":"OpenRouter-प्रतिरूपेण %1","message1":"%1","tooltip":"केवलम् अन्तःस्थान् खण्डान् OpenRouter यत् किमपि प्रतिरूपं ददाति तस्मिन् चालयति। openrouter.ai/models तः तस्य नाम टङ्कय, यथा mistralai/mistral-small अथवा google/gemma-4-31b-it। openrouter/auto तव कृते एकं वृणोति। निर्यातिते Python मध्ये चलति (OPENROUTER_API_KEY अपेक्षते); अस्मिन् पृष्ठे Claude तस्य स्थाने तिष्ठति।"},
 "rb_with_model":{"message0":"प्रतिरूपेण %1","message1":"%1","tooltip":"केवलम् अन्तःस्थान् खण्डान् अस्मिन् प्रतिरूपे चालयति, ततः पूर्वप्रतिरूपं प्रत्यागच्छति। Claude-भिन्नानि प्रतिरूपाणि निर्यातिते Python मध्ये चलन्ति; अस्मिन् पृष्ठे Claude तेषां स्थाने तिष्ठति।"},
-"rb_word_count":{"message0":"%1 इत्यस्य शब्दसङ्ख्या"}
+"rb_word_count":{"message0":"%1 इत्यस्य शब्दसङ्ख्या"},
+"rb_agent_kraken":{"message0":"Kraken साधनानि %1","tooltip":"कर्त्रे kraken-cli इत्यस्मात् Kraken इत्यस्य स्वसाधनानि ददाति: आपणमूल्यानि, तव शेषाः आदेशाः च, सत्यमूल्यैः पत्रव्यापारः च। सत्यव्यापारः सत्यादेशान् अपि दातुं ददाति, किन्तु धनं चालयितुं समर्थं प्रत्येकं साधनं प्रथमं त्वां पृच्छति, यदा अन्यत् किमपि न पृच्छति तदापि, कालसूच्या GitHub Actions इत्यत्र वा कदापि न चलति। kraken-cli स्थापितम्, तव लेखाय second-thought.ini इत्यत्र KRAKEN_API_KEY KRAKEN_API_SECRET च आवश्यकानि (मूल्यानां पत्रव्यापारस्य च कुञ्चिका न आवश्यकी)। केवलं निर्यातिते Python इत्यत्र।"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"प्रतिदिनम्","weekdays":"कार्यदिनेषु","weekends":"सप्ताहान्तेषु"},
@@ -161,7 +162,8 @@
 "rb_mem_set_for.UNIT":{"m":"निमेषाः","h":"होराः","d":"दिनानि"},
 "rb_mem_add.KIND":{"transient":"यावत् इदं पृष्ठम् उद्घाटितम्","permanent":"सदा"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (रेखाचित्राणि)","orig":"मूलसञ्चिका"},
-"rb_budget.UNIT":{"tokens":"टोकन","dollars":"अमेरिकी-डॉलर","gbp":"पौण्ड","eur":"यूरो","jpy":"येन","cny":"युआन"}
+"rb_budget.UNIT":{"tokens":"टोकन","dollars":"अमेरिकी-डॉलर","gbp":"पौण्ड","eur":"यूरो","jpy":"येन","cny":"युआन"},
+"rb_agent_kraken.MODE":{"read":"(मूल्यानि, तव लेखः, पत्रव्यापारः च)","live":"(सत्यव्यापारः अपि: प्रत्यादेशात् पूर्वं पृच्छति)"}
 },
 "categories":{
 "Events":"घटनाः",
@@ -955,7 +957,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"एषा Anthropic API कुञ्चिका इव न दृश्यते। ताः sk-ant- इत्यनेन आरभन्ते।",
 "This browser won't keep the key. Allow site data for this page, then try again.":"अयं विचरकः कुञ्चिकां न रक्षति। अस्य पृष्ठस्य स्थानदत्तांशम् अनुमन्यस्व, ततः पुनः प्रयतस्व।",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"कुञ्चिका केवलम् अस्मात् विचरकात् api.anthropic.com प्रति गच्छति, धावनानां मूल्यं च तस्याः लेखे गण्यते। यावत् त्वम् इदं पत्रकं न पिदधासि तावत् रक्ष्यते, यदि 'स्मर' इति न चिह्नयसि। कार्यक्रमेषु निर्यातेषु धावनपञ्जिकायां वा कदापि न रक्ष्यते। console.anthropic.com इत्यत्र एकां रचय।",
-"Claude's API said: {problem}":"Claude इत्यस्य API अवदत्: {problem}"
+"Claude's API said: {problem}":"Claude इत्यस्य API अवदत्: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"अस्मात् पृष्ठात् Kraken इत्यस्य साधनानि न प्राप्यन्ते, अतः अत्र कर्ता तैः विना कार्यं करोति। तानि प्रयोक्तुं kraken-cli स्थापयित्वा Python प्रति निर्यातय।",
+"read your Kraken balances and orders, market prices, and trade on paper":"तव Kraken शेषान् आदेशान् आपणमूल्यानि च पठितुं, पत्रे व्यापारं कर्तुं च",
+"trade on your Kraken account with real money (asking you before every order)":"तव Kraken लेखे सत्यधनेन व्यापारं कर्तुं (प्रत्यादेशात् पूर्वं त्वां पृच्छन्)"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1848,7 +1854,13 @@
 "Test":"परीक्षा",
 "Test cases: {passed} of {n} passed":"परीक्षाः: {n} मध्ये {passed} उत्तीर्णाः",
 "Test failed: {name}":"परीक्षा विफला: {name}",
-"What was wrong":"किं दुष्टम् आसीत्"
+"What was wrong":"किं दुष्टम् आसीत्",
+"Allow this? It could move real money: {what}":"अनुमन्यसे किम्? एतत् सत्यधनं चालयितुं शक्नोति: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken KRAKEN_API_KEY इत्येतत् निराकरोत्: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli न स्थापितम्, अतः Kraken इत्यस्य साधनानि आरब्धुं न शक्नुवन्ति। तत् स्थापय: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"तव Kraken कुञ्चिका कार्यं करोति",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} --allow-dangerous इत्यनेन सेवकम् आरभते, यत् धनचालकसाधनेभ्यः पूर्वं तस्य स्वपरीक्षां निवारयति। तत् अपनय।",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} सत्यधनं चालयितुं शक्नोति, अतः यदा त्वम् 'आम्' इति वक्तुम् उपस्थितः तदा एव चलति, कोऽपि च न उपस्थितः।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

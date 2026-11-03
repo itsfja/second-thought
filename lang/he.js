@@ -145,7 +145,8 @@
 "rb_when_time":{"message0":"כשהשעה %1 : %2 %3","tooltip":"רץ בשעה הזו (שעון 24 שעות) כל עוד התזמונים פעילים והדף הזה פתוח."},
 "rb_with_any_model":{"message0":"עם מודל OpenRouter ‏%1","message1":"%1","tooltip":"מריץ רק את הבלוקים שבפנים על כל מודל ש-OpenRouter מציע. הקלידו את השם שלו מ-openrouter.ai/models, למשל mistralai/mistral-small או google/gemma-4-31b-it. ‏openrouter/auto בוחר אחד בשבילכם. רץ ב-Python המיוצא (צריך OPENROUTER_API_KEY); בדף הזה Claude ממלא את מקומו."},
 "rb_with_model":{"message0":"עם המודל %1","message1":"%1","tooltip":"מריץ רק את הבלוקים שבפנים על המודל הזה, ואז חוזר למודל הקודם. מודלים שאינם Claude רצים ב-Python המיוצא; בדף הזה Claude ממלא את מקומם."},
-"rb_word_count":{"message0":"מספר המילים ב-%1"}
+"rb_word_count":{"message0":"מספר המילים ב-%1"},
+"rb_agent_kraken":{"message0":"הכלים של Kraken %1","tooltip":"נותן לסוכן את הכלים של Kraken עצמה, מ-kraken-cli: מחירי שוק, היתרות וההוראות שלך, ומסחר על הנייר במחירים אמיתיים. מסחר אמיתי מאפשר לו גם לתת הוראות אמיתיות, אבל כל כלי שיכול להזיז כסף שואל אותך קודם, גם כשדבר אחר לא שואל, ולעולם לא רץ לפי לוח זמנים או ב-GitHub Actions. צריך kraken-cli מותקן, ו-KRAKEN_API_KEY ו-KRAKEN_API_SECRET ב-second-thought.ini לחשבון שלך (מחירים ומסחר על הנייר לא צריכים מפתח). רק ב-Python המיוצא."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יום","weekdays":"בימי חול","weekends":"בסופי שבוע"},
@@ -161,7 +162,8 @@
 "rb_mem_set_for.UNIT":{"m":"דקות","h":"שעות","d":"ימים"},
 "rb_mem_add.KIND":{"transient":"כל עוד הדף הזה פתוח","permanent":"לתמיד"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (תמונות מצוירות)","orig":"הקובץ המקורי"},
-"rb_budget.UNIT":{"tokens":"טוקנים","dollars":"דולר אמריקאי","gbp":"לירה שטרלינג","eur":"אירו","jpy":"ין","cny":"יואן"}
+"rb_budget.UNIT":{"tokens":"טוקנים","dollars":"דולר אמריקאי","gbp":"לירה שטרלינג","eur":"אירו","jpy":"ין","cny":"יואן"},
+"rb_agent_kraken.MODE":{"read":"(מחירים, החשבון שלך ומסחר על הנייר)","live":"(וגם מסחר אמיתי: שואל לפני כל הוראה)"}
 },
 "categories":{
 "Events":"אירועים",
@@ -955,7 +957,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"זה לא נראה כמו מפתח API של Anthropic. הם מתחילים ב-sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"הדפדפן הזה לא שומר את המפתח. אפשר נתוני אתר לדף הזה ונסה שוב.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"המפתח נשלח רק מהדפדפן הזה אל api.anthropic.com, וההרצות מחויבות בחשבון שלו. הוא נשמר עד שתסגור את הלשונית, אלא אם תסמן 'לזכור'. הוא לעולם לא נשמר בתוכניות, בייצוא או ביומן ההרצה. אפשר ליצור מפתח ב-console.anthropic.com.",
-"Claude's API said: {problem}":"ה-API של Claude השיב: {problem}"
+"Claude's API said: {problem}":"ה-API של Claude השיב: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"אי אפשר להגיע לכלים של Kraken מהדף הזה, ולכן כאן הסוכן עובד בלעדיהם. כדי להשתמש בהם, ייצא ל-Python כשה-kraken-cli מותקן.",
+"read your Kraken balances and orders, market prices, and trade on paper":"לקרוא את היתרות וההוראות שלך ב-Kraken ואת מחירי השוק, ולסחור על הנייר",
+"trade on your Kraken account with real money (asking you before every order)":"לסחור בחשבון ה-Kraken שלך בכסף אמיתי (ושואל אותך לפני כל הוראה)"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1848,6 +1854,12 @@
 "Test":"בדיקה",
 "Test cases: {passed} of {n} passed":"מקרי בדיקה: {passed} מתוך {n} עברו",
 "Test failed: {name}":"הבדיקה נכשלה: {name}",
-"What was wrong":"מה לא היה תקין"
+"What was wrong":"מה לא היה תקין",
+"Allow this? It could move real money: {what}":"לאשר? זה עלול להזיז כסף אמיתי: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken דחה את KRAKEN_API_KEY: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli לא מותקן, ולכן הכלים של Kraken לא יכולים לפעול. התקן אותו: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"מפתח ה-Kraken שלך עובד",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} מפעיל את השרת עם --allow-dangerous, וזה מכבה את הבדיקה שלו לפני כלים שמזיזים כסף. הסר את זה.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} עלול להזיז כסף אמיתי, ולכן הוא רץ רק כשאתה שם כדי לאשר, ואין אף אחד."
 }
 };

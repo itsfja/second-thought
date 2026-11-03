@@ -145,7 +145,8 @@
 "rb_when_time":{"message0":"𒄿𒉡𒈠 𒋛𒈠𒉡𒌝 %1 : %2 %3","tooltip":"𒄿𒈾 𒋛𒈠𒉌𒅎 𒀭𒉌𒅎 𒅋𒆷𒀝 (𒋗𒌓 𒋛𒈠𒉌𒅎 𒊭 24 𒁁𒊑) 𒀀𒁲 𒀀𒁕𒉡 𒁉𒌅 𒌋 𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒁉𒌅."},
 "rb_with_any_model":{"message0":"𒀉𒋾 𒀊𒅗𒀠𒇷𒅎 𒊭 OpenRouter %1","message1":"%1","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭 𒇷𒅁𒁉 𒂊𒁲𒅖𒋗𒉡 𒄿𒈾 𒀊𒅗𒀠𒇷𒅎 𒈠𒆷 OpenRouter 𒄿𒈾𒀜𒁲𒉡 𒌑𒊺𒁉𒅖. 𒋗𒌝𒋗 𒅖𒌅 openrouter.ai/models 𒋗𒌅𒌨, 𒆠𒈠 mistralai/mistral-small 𒌑𒇻 google/gemma-4-31b-it. openrouter/auto 𒅖𒋼𒅔 𒀀𒈾 𒅗𒅆𒅎 𒄴𒄭𒅕. 𒄿𒈾 𒉈𒁉𒅆𒅎 𒊭 Python 𒅋𒆷𒀝 (OPENROUTER_API_KEY 𒄩𒅆𒄴); 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 Claude 𒄿𒈾 𒀸𒊑𒋗 𒄑𒍝𒊍."},
 "rb_with_model":{"message0":"𒀉𒋾 𒀊𒅗𒀠𒇷𒅎 %1","message1":"%1","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭 𒇷𒅁𒁉 𒂊𒁲𒅖𒋗𒉡 𒄿𒈾 𒀊𒅗𒀠𒇷𒅎 𒀭𒉌𒅎 𒌑𒊺𒁉𒅖, 𒌋 𒀀𒈾 𒀊𒅗𒀠𒇷𒅎 𒉺𒉌𒅎 𒄿𒋫𒅈. 𒀊𒅗𒀠𒇻 𒊭 𒆷 Claude 𒄿𒈾 𒉈𒁉𒅆𒅎 𒊭 Python 𒅁𒁍𒋗; 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 Claude 𒄿𒈾 𒀸𒊑𒋗𒉡 𒄑𒍝𒊍."},
-"rb_word_count":{"message0":"𒈪𒉡𒌓 𒀀𒉿𒋾𒅎 𒊭 %1"}
+"rb_word_count":{"message0":"𒈪𒉡𒌓 𒀀𒉿𒋾𒅎 𒊭 %1"},
+"rb_agent_kraken":{"message0":"𒌑𒉡𒌓 Kraken %1","tooltip":"𒀀𒈾 𒉿𒆠𒇷𒅎 𒌑𒉡𒌓 Kraken 𒅖𒌅 kraken-cli 𒄿𒈾𒀜𒁲𒅔: 𒅆𒅎 𒈠𒄭𒊑𒅎, 𒅆𒈠𒋾𒅗 𒌑 𒅆𒅁𒊏𒋾𒅗, 𒌑 𒊭𒈬 𒄿𒈾 𒌅𒌒𒁉𒅎 𒄿𒈾 𒅆𒈪𒅎 𒆠𒉌𒅎. 𒊭𒈬 𒆠𒉡𒌝 𒅆𒅁𒊏𒋾 𒆠𒈾𒋾 𒈾𒁕𒈾𒄠 𒌑𒊭𒅈𒅆, 𒌑𒉡𒌅𒌝 𒈠𒆷 𒅗𒊍𒉺𒄠 𒌑𒈾𒅈𒊏𒌅 𒉺𒈾𒉡𒌝 𒄿𒊭𒀠𒅗, 𒈠𒋾𒈠 𒄿𒈾 𒀀𒁕𒉌𒅎 𒌑 𒄿𒈾 GitHub Actions 𒌌 𒅋𒆷𒀝. kraken-cli 𒌑 KRAKEN_API_KEY 𒌑 KRAKEN_API_SECRET 𒄿𒈾 second-thought.ini 𒄩𒀸𒄩. 𒄿𒈾 Python 𒅖𒋼𒅔."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌑𒈪𒊭𒄠","weekdays":"𒄿𒈾 𒌑𒈪 𒅆𒅁𒊑𒅎","weekends":"𒄿𒈾 𒌑𒈪 𒉡𒄭𒅎"},
@@ -161,7 +162,8 @@
 "rb_mem_set_for.UNIT":{"m":"𒌓𒁕𒌅","h":"𒁁𒊒","d":"𒌑𒈬"},
 "rb_mem_add.KIND":{"transient":"𒀀𒁲 𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒁉𒌅","permanent":"𒀀𒈾 𒁕𒅈"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (𒂊𒍢𒊏𒌅𒌝)","orig":"𒆪𒉡𒊌𒆪𒌝 𒈠𒄴𒊒𒌝"},
-"rb_budget.UNIT":{"tokens":"token","dollars":"US dollar","gbp":"pound","eur":"euro","jpy":"yen","cny":"yuan"}
+"rb_budget.UNIT":{"tokens":"token","dollars":"US dollar","gbp":"pound","eur":"euro","jpy":"yen","cny":"yuan"},
+"rb_agent_kraken.MODE":{"read":"(𒅆𒈬, 𒉌𒅅𒅗𒊍𒋢𒅗 𒌑 𒊭𒈬 𒄿𒈾 𒌅𒌒𒁉𒅎)","live":"(𒌑 𒊭𒈬 𒆠𒉡𒌝: 𒆷𒈠 𒅆𒅁𒊑𒅎 𒈠𒆷 𒄿𒊭𒀠)"}
 },
 "categories":{
 "Events":"𒀉𒋫𒌅𒌝",
@@ -955,7 +957,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"𒀭𒉡𒌝 𒆠𒈠 𒆪𒉡𒊌𒆠 𒊭 Anthropic API 𒌌 𒅔𒈾𒈪𒅕. 𒄿𒈾 sk-ant- 𒅖𒊭𒅈𒊒.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"𒁀𒀊 𒊺𒋾𒅎 𒀭𒉡𒌝 𒆪𒉡𒊌𒅗𒄠 𒌌 𒄿𒈾𒊍𒍝𒅈. 𒀀𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒅆𒀉𒊑 𒀸𒊑𒅎 𒄿𒁲𒅔, 𒌑 𒊭𒉌𒋫𒄠 𒂊𒁍𒍑.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"𒆪𒉡𒊌𒆪𒌝 𒅖𒌅 𒁀𒀊 𒊺𒋾𒅎 𒀭𒉌𒅎 𒀀𒈾 api.anthropic.com 𒅖𒋼𒅔 𒅋𒆷𒀝, 𒌑 𒅆𒅎 𒀀𒆷𒆠 𒀀𒈾 𒉌𒅅𒅗𒊍𒋛𒋗 𒅖𒊭𒀜𒁕𒅈. 𒀀𒁲 𒌅𒌒𒉺𒄠 𒀭𒈾𒄠 𒋼𒁉𒄴𒄷 𒈾𒍢𒅕, 𒋗𒌝𒈠 𒄷𒊻𒋢𒊻 𒆷 𒋫𒊭𒀜𒁕𒅈. 𒄿𒈾 𒉈𒁉𒅆, 𒄿𒈾 𒋗𒍝𒋾𒅎 𒌑 𒄿𒈾 𒌅𒌒𒁉 𒀀𒆷𒆠𒅎 𒈠𒋾𒈠 𒌌 𒅖𒊭𒀝𒅗𒀭. 𒄿𒈾 console.anthropic.com 𒅖𒋼𒅔 𒂊𒁍𒍑.",
-"Claude's API said: {problem}":"API 𒊭 Claude 𒅅𒁉: {problem}"
+"Claude's API said: {problem}":"API 𒊭 Claude 𒅅𒁉: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"𒌑𒉡𒌓 Kraken 𒅖𒌅 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒌌 𒅅𒅗𒀸𒊭𒀜, 𒊭 𒄿𒈾 𒇷𒅁𒁉 𒉿𒆠𒅋 𒄿𒈾 𒁀𒇷𒅆𒈾 𒅁𒁍𒍑. 𒀀𒈾 Python 𒋗𒍢, kraken-cli 𒊭𒆠𒅔, 𒀀𒈾 𒇷𒆠𒅆𒈾.",
+"read your Kraken balances and orders, market prices, and trade on paper":"𒅆𒈠𒀜 𒌑 𒅆𒅁𒊏𒋾𒅗 𒊭 Kraken 𒌑 𒅆𒅎 𒈠𒄭𒊑𒅎 𒊭𒋢, 𒌑 𒄿𒈾 𒌅𒌒𒁉𒅎 𒊭𒈬",
+"trade on your Kraken account with real money (asking you before every order)":"𒄿𒈾 𒉌𒅅𒅗𒊍𒋛𒅗 𒊭 Kraken 𒄿𒈾 𒅗𒊍𒁉𒅎 𒆠𒉌𒅎 𒊭𒈬 (𒆷𒈠 𒅆𒅁𒊑𒅎 𒈠𒆷 𒄿𒊭𒀠𒅗)"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1848,7 +1854,13 @@
 "Test":"littum",
 "Test cases: {passed} of {n} passed":"litātum: {passed} ina {n} išlimā",
 "Test failed: {name}":"littum imqut: {name}",
-"What was wrong":"mīnum la išariš"
+"What was wrong":"mīnum la išariš",
+"Allow this? It could move real money: {what}":"tanaddin? kaspam kīnam unarraṭ: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken KRAKEN_API_KEY imēs: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli ul šakin, unūt Kraken ul iššarrâ. šukunšu: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"kunukkaka ša Kraken ippuš",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} wardam itti --allow-dangerous ušarri, ša barâšu lāma unūt kaspam unarraṭā ubattal. šūlīšu.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} kaspam kīnam unarraṭ, ša adi attā ana annam qabêm tazzazzu illak, u mamman ul ibašši."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

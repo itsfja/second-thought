@@ -5,10 +5,13 @@ python/runtime.py, which is what ships inside every exported program and the pag
 """
 import asyncio
 import json
+import os
 import re
+import sys
 from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
+from .mcp import mcp_env_name, mcp_money
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
@@ -220,6 +223,18 @@ class AgentTools:
         taken.add(out)
         return out
 
+    async def confirm_money(self, what):
+        """Asks before an MCP tool that can reach real money (#262). Never with nobody there to answer, whatever the
+        approve setting says, and never answered from a stopped run's journal: the person says yes, now, each time."""
+        unattended = self.nobody_here() or bool(os.environ.get("GITHUB_ACTIONS")) or not sys.stdin.isatty()
+        if unattended:
+            self.log(tr("Not done"), tr("{what} could move real money, so it only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
+            return False
+        if await self._approve_live(tr("Allow this? It could move real money: {what}", what=what)):
+            return True
+        self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
+        return False
+
     def _agent_tools(self, tools, mcp=None):
         """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}. mcp holds each MCP
         server's tools, listed beforehand: {server name: [tool, ...]}."""
@@ -232,9 +247,15 @@ class AgentTools:
                     params = list((schema.get("properties") or {}).keys()) if isinstance(schema.get("properties"), dict) else []
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
-                    ask = mode == "every" or (mode == "changes" and not read_only)
+                    money = mcp_money(tool)  # real money: always asks, whatever the block says (#262)
+                    ask = money or mode == "every" or (mode == "changes" and not read_only)
+                    if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
+                        schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k != SAFETY["mcp_money_input"]},
+                                      required=[k for k in schema.get("required") or [] if k != SAFETY["mcp_money_input"]])
+                        params = [k for k in params if k != SAFETY["mcp_money_input"]]
                     out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"],
-                                                                                        "read_only": read_only}), ask, schema)
+                                                                                        "read_only": read_only, "money": money,
+                                                                                        "acknowledge": money and SAFETY["mcp_money_input"] in ((tool.get("inputSchema") or {}).get("properties") or {})}), ask, schema)
             elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
@@ -476,6 +497,8 @@ class AgentTools:
         for t in tools:  # each MCP server's tools, asked for once, before the first step
             server = to_str(t.get("server")).strip()
             if t.get("kind") == "mcp" and server not in mcp:
+                if t.get("command"):  # the Kraken block: its own command, unless MCP_KRAKEN says otherwise
+                    self.__dict__.setdefault("_mcp_defaults", {})[mcp_env_name(server)] = to_str(t["command"])
                 mcp[server] = await self.mcp_tools(server)
         catalogue = self._agent_tools(tools, mcp)
         self.log(tr("Agent"), tr("Goal: {goal}", goal=goal) + "\n" + tr("Tools: {tools}", tools=", ".join(catalogue) or tr("none")) + " · " + tr("up to {n} steps", n=n) + (" · " + tr("plans first") if plan else ""), tr("started"))
@@ -524,6 +547,8 @@ class AgentTools:
                 rec(i, "not a tool", name)
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
+            if spec.get("money") and isinstance(inp, dict):
+                inp = {k: v for k, v in inp.items() if k != SAFETY["mcp_money_input"]}  # only a yes from the person sets it
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
             problem, checked = self.check_mcp_input(inp, schema) if kind == "mcp" else self.check_tool_input(inp, schema)
             if problem:
@@ -557,11 +582,15 @@ class AgentTools:
             if getattr(self, "testing", False) and (ask or (kind == "mcp" and not spec.get("read_only"))):
                 result, refused = "This is a test run, so tools that change things don't run. Carry on as if it had worked.", True
                 self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=f"{name} {_short(shown, 200)}"), tr("skipped"))
-            elif ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
+            elif spec.get("money") and not await self.confirm_money(f"let the agent use {name} with {_short(shown, 200)}"):
+                result, refused = "This tool can move real money, and the person didn't allow it, so it didn't run.", True
+            elif not spec.get("money") and ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
                 result, refused = "The person said no, so this tool didn't run.", True
             else:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
                 try:
+                    if spec.get("acknowledge"):
+                        inp = dict(inp, **{SAFETY["mcp_money_input"]: True})  # the person said yes, just now
                     result = await self._agent_run_tool(kind, spec, inp)
                 except (asyncio.CancelledError, Finish):
                     raise

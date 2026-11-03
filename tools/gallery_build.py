@@ -348,6 +348,22 @@ add(program(
               ["github", "github_act", "memory"], steps=18),
         B("rb_result"))]))
 
+# Money: #262. Read-only: Kraken's prices and your balances, never an order.
+add(program(
+    "kraken-week", "Kraken week in review", "money",
+    "Each Sunday evening, reads your Kraken balances and this week's prices, and emails what your holdings are worth in "
+    "pounds, each one's share, and how each moved over the week. It only reads: it places no orders.",
+    "Needs kraken-cli, and a Kraken API key that can only query. Change the email address in the email block to yours.",
+    start_and(msg="review") + [on_day("Sunday", 18, 0, "review"), receive(
+        "review",
+        B("rb_agent", {"PLAN": False}, GOAL=L(
+            "Read my Kraken balances. For each asset I hold, get its price in pounds today and seven days ago (daily OHLC). "
+            "Then write a short summary: the total in pounds, each holding's value and share of the total, and how much each "
+            "moved over the week, biggest moves first. Only read: don't place, change or cancel any orders."),
+          STEPS=10, TOOLS=B("rb_agent_kraken", {"MODE": "read"})),
+        email_me("Your Kraken week", B("rb_draft")),
+        B("rb_result"))]))
+
 # Money: #152
 v = Vars("charges", "changes")
 add(program(

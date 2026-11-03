@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"whan it is %1 : %2 %3","tooltip":"Renneth at this houre (orloge of 24 houres) whil Ordinaunces ben on and this leef is open."},
 "rb_with_any_model":{"message0":"with OpenRouter patron %1","message1":"%1","tooltip":"Renneth oonly the blokkes withinne on any patron that OpenRouter profreth. Write his name fro openrouter.ai/models, as mistralai/mistral-small or google/gemma-4-31b-it. openrouter/auto cheseth oon for thee. Renneth in the Python sent out (nedeth OPENROUTER_API_KEY); in this leef Claude standeth in his stede."},
 "rb_with_model":{"message0":"with patron %1","message1":"%1","tooltip":"Renneth oonly the blokkes withinne on this patron, and than goth bak to the patron bifore. Patrons other than Claude rennen in the Python sent out; in this leef Claude standeth in hir stede."},
-"rb_word_count":{"message0":"tale of wordes of %1"}
+"rb_word_count":{"message0":"tale of wordes of %1"},
+"rb_agent_kraken":{"message0":"Kraken tooles %1","tooltip":"Yeveth the agent Krakens owene tooles, fro kraken-cli: market prys, thy balaunces and ordres, and chaffare on papir at verray prys. Verray chaffare lat it eek yeve verray ordres, but every tool that may meve moneye asketh thee first, yea whan noght elles asketh, and nevere renneth by a tyme-table ne on GitHub Actions. It nedeth kraken-cli installed, and KRAKEN_API_KEY and KRAKEN_API_SECRET in second-thought.ini for thyn accompte (prys and papir nede no keye). Oonly in exported Python."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"minutes","h":"houres","d":"dayes"},
 "rb_mem_add.KIND":{"transient":"whil this leef is open","permanent":"for evere"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (peynted ymages)","orig":"first quaier"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollers of Amerike","gbp":"poundes","eur":"euros","jpy":"yen","cny":"yuan"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollers of Amerike","gbp":"poundes","eur":"euros","jpy":"yen","cny":"yuan"},
+"rb_agent_kraken.MODE":{"read":"(prys, thyn accompte and chaffare on papir)","live":"(and verray chaffare: asketh bifore every ordre)"}
 },
 "categories":{
 "Events":"Events",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"That semeth nat an Anthropic API keye. They bigynne with sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"This browser wol nat kepe the keye. Suffre site data for this page, and assaye agayn.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"The keye goth oonly fro this browser to api.anthropic.com, and rennynges ben set to his accompte. It is kept til thou close this tabbe, but if thou marke Remembre. It is nevere saved in programmes, exportes or the rennynge log. Make oon at console.anthropic.com.",
-"Claude's API said: {problem}":"Claudes API seyde: {problem}"
+"Claude's API said: {problem}":"Claudes API seyde: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"Krakens tooles may nat be reched fro this page, so the agent werketh withouten hem here. Exporte to Python, with kraken-cli installed, to use hem.",
+"read your Kraken balances and orders, market prices, and trade on paper":"rede thyn Kraken balaunces and ordres, market prys, and chaffare on papir",
+"trade on your Kraken account with real money (asking you before every order)":"chaffare on thyn Kraken accompte with verray moneye (askynge thee bifore every ordre)"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1847,7 +1853,13 @@
 "Test":"Assay",
 "Test cases: {passed} of {n} passed":"Assayes: {passed} of {n} passed",
 "Test failed: {name}":"Assay failed: {name}",
-"What was wrong":"What was amys"
+"What was wrong":"What was amys",
+"Allow this? It could move real money: {what}":"Suffrest thou this? It myghte meve verray moneye: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken refused KRAKEN_API_KEY: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli is nat installed, so Krakens tooles may nat bigynne. Installe it: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"thyn Kraken keye werketh",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} bigynneth the servour with --allow-dangerous, which turneth of his owene check bifore tooles that meve moneye. Take it out.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} myghte meve verray moneye, so it renneth oonly whan thou art there to seye ye, and no man is."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

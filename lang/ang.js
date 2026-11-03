@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"þonne hit is %1 : %2 %3","tooltip":"Yrnþ on þisse tide (24-tidum tidmetende) þa hwile þe Tidsetnessa sind on and þis leaf open is."},
 "rb_with_any_model":{"message0":"mid OpenRouter bysene %1","message1":"%1","tooltip":"Fremeþ ana þa stoccas þærinne on ælcre bysene þe OpenRouter beodeþ. Writ hire naman of openrouter.ai/models, swa mistralai/mistral-small oþþe google/gemma-4-31b-it. openrouter/auto geceosþ ane for þe. Yrnþ on utgelæddum Python (behofaþ OPENROUTER_API_KEY); on þissum leafe Claude stent for hire."},
 "rb_with_model":{"message0":"mid bysene %1","message1":"%1","tooltip":"Fremeþ ana þa stoccas þærinne on þisse bysene, and gæþ siþþan eft to þære ærran bysene. Bysena butan Claude yrnaþ on utgelæddum Python; on þissum leafe Claude stent for him."},
-"rb_word_count":{"message0":"worda getæl %1"}
+"rb_word_count":{"message0":"worda getæl %1"},
+"rb_agent_kraken":{"message0":"Krakenes tōl %1","tooltip":"Selþ þǣm dǣdere Krakenes āgnu tōl, of kraken-cli: cēapstōwe weorþ, þīne lāfe and bebodu, and cēap on bōcfelle æt sōþum weorþe. Sōþ cēap lǣt hine ēac sōþ bebodu syllan, ac ǣlc tōl þe feoh styrian mæg āxaþ þē ǣrest, þēah nān ōþer ne āxie, and næfre ne fērþ be tīdum oþþe on GitHub Actions. Hit behōfaþ kraken-cli gesett, and KRAKEN_API_KEY and KRAKEN_API_SECRET on second-thought.ini for þīnum gerīme (weorþ and bōcfell ne behōfiaþ cǣges). Ān on ūtsendum Python."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"minuta","h":"tida","d":"dagas"},
 "rb_mem_add.KIND":{"transient":"þa hwile þe þis leaf open is","permanent":"a"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (atyfrede anlicnessa)","orig":"frumlic fætels"},
-"rb_budget.UNIT":{"tokens":"tokenum","dollars":"Americanum dollarum","gbp":"pund","eur":"euro","jpy":"yen","cny":"yuan"}
+"rb_budget.UNIT":{"tokens":"tokenum","dollars":"Americanum dollarum","gbp":"pund","eur":"euro","jpy":"yen","cny":"yuan"},
+"rb_agent_kraken.MODE":{"read":"(weorþ, þīn gerīm and cēap on bōcfelle)","live":"(and sōþ cēap: āxaþ ǣr ǣlcum bebode)"}
 },
 "categories":{
 "Events":"Gelimpu",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"Þæt ne þyncþ Anthropic API cǣg. Hīe onginnaþ mid sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"Þes sēcend ne healdeþ þone cǣg. Lǣt stōwe gegaderunge for þisum leafe, and fanda eft.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"Se cǣg fērþ ān of þissum sēcende tō api.anthropic.com, and se ceap þāra fremminga biþ his gerīme geteald. He biþ gehealden oþ þæt þū þisne tæppel belūce, būton þū Gemune mearcie. Næfre ne biþ he gehealden on ƿeorcum, ūtsendungum oþþe þǣre fremminge bōc. Ƿyrc ǣnne on console.anthropic.com.",
-"Claude's API said: {problem}":"Claudes API cwæþ: {problem}"
+"Claude's API said: {problem}":"Claudes API cwæþ: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"Krakenes tōl ne magon bēon gerǣht of þissum leafe, forþon se dǣdere ƿyrcþ hēr būtan him. Sende ūt tō Python, mid kraken-cli gesett, tō brūcenne heora.",
+"read your Kraken balances and orders, market prices, and trade on paper":"þīne Kraken lāfe and bebodu and cēapstōwe weorþ rǣdan, and on bōcfelle cēapian",
+"trade on your Kraken account with real money (asking you before every order)":"cēapian on þīnum Kraken gerīme mid sōþum fēo (āxiende þē ǣr ǣlcum bebode)"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1847,7 +1853,13 @@
 "Test":"Fandung",
 "Test cases: {passed} of {n} passed":"Fandunga: {passed} of {n} geþungen",
 "Test failed: {name}":"Fandung misfeoll: {name}",
-"What was wrong":"Hwæt woh wæs"
+"What was wrong":"Hwæt woh wæs",
+"Allow this? It could move real money: {what}":"Lǣtst þū þis? Hit mihte sōþ feoh styrian: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken wiþsōc KRAKEN_API_KEY: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli nis gesett, forþon Krakenes tōl ne magon onginnan. Sete hit: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"þīn Kraken cǣg ƿyrcþ",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} onginþ þone þegn mid --allow-dangerous, þe ācwencþ his āgene fandunge ǣr tōlum þe feoh styriaþ. Nim hit ūt.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} mihte sōþ feoh styrian, forþon hit fērþ ān þonne þū þǣr eart gēse tō cweþenne, and nān man nis þǣr."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

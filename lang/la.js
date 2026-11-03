@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"cum est %1 : %2 %3","tooltip":"Hac hora currit (horologio 24 horarum) dum Horaria accensa sunt et haec pagina aperta est."},
 "rb_with_any_model":{"message0":"cum exemplari OpenRouter %1","message1":"%1","tooltip":"Solum lateres intus in quolibet exemplari quod OpenRouter praebet exsequitur. Nomen eius ex openrouter.ai/models scribe, exempli gratia mistralai/mistral-small aut google/gemma-4-31b-it. openrouter/auto unum pro te eligit. In Python exportato currit (OPENROUTER_API_KEY eget); in hac pagina Claude pro eo stat."},
 "rb_with_model":{"message0":"cum exemplari %1","message1":"%1","tooltip":"Solum lateres intus in hoc exemplari exsequitur, deinde ad exemplar prius redit. Exemplaria praeter Claude in Python exportato currunt; in hac pagina Claude pro eis stat."},
-"rb_word_count":{"message0":"numerus verborum %1"}
+"rb_word_count":{"message0":"numerus verborum %1"},
+"rb_agent_kraken":{"message0":"instrumenta Kraken %1","tooltip":"Actori dat instrumenta ipsius Kraken, ex kraken-cli: pretia fori, rationes et mandata tua, et mercaturam in charta pretiis veris. Mercatura vera etiam mandata vera dare sinit, sed omne instrumentum quod pecuniam movere potest te prius rogat, etiam cum nihil aliud rogat, neque umquam ex ordine temporum aut in GitHub Actions currit. Requirit kraken-cli institutum, et KRAKEN_API_KEY et KRAKEN_API_SECRET in second-thought.ini pro ratione tua (pretia et charta clave non egent). Tantum in Python exportato."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"minuta","h":"horas","d":"dies"},
 "rb_mem_add.KIND":{"transient":"dum haec pagina aperta est","permanent":"in perpetuum"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (imagines pictae)","orig":"fasciculus originalis"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollaria Americana","gbp":"librae","eur":"euro","jpy":"yen","cny":"yuan"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"dollaria Americana","gbp":"librae","eur":"euro","jpy":"yen","cny":"yuan"},
+"rb_agent_kraken.MODE":{"read":"(pretia, ratio tua et mercatura in charta)","live":"(et mercatura vera: ante omne mandatum rogat)"}
 },
 "categories":{
 "Events":"Eventus",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"Id clavis API Anthropic non videtur. Incipiunt a sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"Hic navigator clavem non servat. Data situs huic paginae permitte, deinde iterum conare.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"Clavis ab hoc navigatro ad api.anthropic.com solum it, et cursus rationi eius imputantur. Servatur donec hanc tabulam claudas, nisi Memento notaveris. Numquam in programmatis, exportationibus aut actis cursus servatur. Fac unam apud console.anthropic.com.",
-"Claude's API said: {problem}":"API Claude dixit: {problem}"
+"Claude's API said: {problem}":"API Claude dixit: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"Instrumenta Kraken ex hac pagina attingi non possunt, itaque actor hic sine eis laborat. In Python exporta, kraken-cli instituto, ut eis utaris.",
+"read your Kraken balances and orders, market prices, and trade on paper":"rationes et mandata tua Kraken et pretia fori legere, et in charta mercari",
+"trade on your Kraken account with real money (asking you before every order)":"in ratione tua Kraken pecunia vera mercari (te ante omne mandatum rogans)"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1847,7 +1853,13 @@
 "Test":"Probamentum",
 "Test cases: {passed} of {n} passed":"Casus probandi: {passed} ex {n} probati",
 "Test failed: {name}":"Probamentum defecit: {name}",
-"What was wrong":"Quid erraverit"
+"What was wrong":"Quid erraverit",
+"Allow this? It could move real money: {what}":"Permittisne? Pecuniam veram movere potest: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken KRAKEN_API_KEY recusavit: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli institutum non est, itaque instrumenta Kraken incipere non possunt. Institue id: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"clavis tua Kraken valet",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} ministratorem cum --allow-dangerous incipit, quod probationem eius ante instrumenta pecuniam moventia exstinguit. Tolle id.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} pecuniam veram movere potest, itaque solum fit cum ades ut ita dicas, et nemo adest."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

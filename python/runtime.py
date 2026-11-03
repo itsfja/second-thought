@@ -88,7 +88,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET")
 
 
 def _load_keychain():
@@ -1022,6 +1022,20 @@ SAFETY = {
     "agent_ha_indirect": [r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$"],
     # MQTT messages an agent can't publish without asking (matched in the topic and message, any case).
     "mqtt_unlock": r"\b(unlock|open|disarm)",
+    # MCP tools that can reach real money (#262): they always ask, even with (no asking), never run with nobody there
+    # to ask (a schedule, GitHub Actions, --mcp), and the agent can't answer for the person. Kraken's own list: every tool
+    # its agents/tool-catalog.json marks dangerous, paper_safe or local_or_live (kraken-cli 0.5.1, checked 2026-11-03).
+    # Any MCP tool that takes an "acknowledged" input counts too: that's how Kraken marks one, so a new tool is covered.
+    "mcp_money": ["kraken_earn_allocate", "kraken_earn_deallocate", "kraken_export_delete", "kraken_export_retrieve",
+                  "kraken_futures_batch_order", "kraken_futures_cancel", "kraken_futures_cancel_after", "kraken_futures_cancel_all",
+                  "kraken_futures_edit_order", "kraken_futures_order_buy", "kraken_futures_order_sell", "kraken_futures_set_leverage",
+                  "kraken_futures_set_pnl_preference", "kraken_futures_set_subaccount_status", "kraken_futures_transfer",
+                  "kraken_futures_wallet_transfer", "kraken_order_amend", "kraken_order_batch", "kraken_order_buy", "kraken_order_cancel",
+                  "kraken_order_cancel_after", "kraken_order_cancel_all", "kraken_order_cancel_batch", "kraken_order_edit",
+                  "kraken_order_sell", "kraken_paper_reset", "kraken_subaccount_create", "kraken_subaccount_transfer",
+                  "kraken_wallet_transfer", "kraken_withdraw", "kraken_withdrawal_cancel", "kraken_workspace_create",
+                  "kraken_workspace_promote", "kraken_workspace_reset"],
+    "mcp_money_input": "acknowledged",
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
@@ -1417,6 +1431,8 @@ CAPABILITIES = [
     ("mqtt_publish", "publish MQTT messages", True),
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
+    ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
+    ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -4365,12 +4381,26 @@ class _MCPHttp(_MCPServer):
             raise RunError(tr("The {x} wouldn't start talking: {message}", x=self.describe(), message=e.message)) from None
 
 
-def mcp_server(name):
-    """A server from its MCP_<NAME> setting: a command (started here) or an http(s) address."""
+# The 'Kraken tools' block (#262): Kraken's own MCP server, in kraken-cli (https://docs.kraken.com/home/mcp), with the
+# services each choice starts. MCP_KRAKEN in second-thought.ini wins over these.
+KRAKEN_COMMANDS = {"read": "kraken mcp -s market,account,paper", "live": "kraken mcp -s market,account,paper,trade"}
+
+
+def mcp_money(tool):
+    """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, or one taking an "acknowledged"
+    input (Kraken's mark for them)."""
+    schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {}
+    props = schema.get("properties") if isinstance(schema.get("properties"), dict) else {}
+    return to_str(tool.get("name")) in SAFETY["mcp_money"] or SAFETY["mcp_money_input"] in props
+
+
+def mcp_server(name, default=""):
+    """A server from its MCP_<NAME> setting: a command (started here) or an http(s) address. default is the command to
+    use when there's no setting (the Kraken block's)."""
     key = mcp_env_name(name)
     if key == "MCP_":
         raise RunError(tr("An MCP tool block needs the server's name."))
-    where = os.environ.get(key, "").strip()
+    where = os.environ.get(key, "").strip() or to_str(default).strip()
     if not where:
         raise RunError(tr("The agent's MCP server “{x}” isn't set up. Put {key} = <the command that starts it, or its https:// address> {where_keys}.", x=to_str(name).strip(), key=key, where_keys=WHERE_KEYS))
     if re.match(r"^https?://", where, re.I):
@@ -4385,7 +4415,7 @@ class MCPTools:
         servers = self.__dict__.setdefault("_mcp_servers", {})
         key = mcp_env_name(name)
         if key not in servers:
-            servers[key] = mcp_server(name)
+            servers[key] = mcp_server(name, self.__dict__.get("_mcp_defaults", {}).get(key, ""))
         return servers[key]
 
     async def mcp_tools(self, name):
@@ -4647,6 +4677,18 @@ class AgentTools:
         taken.add(out)
         return out
 
+    async def confirm_money(self, what):
+        """Asks before an MCP tool that can reach real money (#262). Never with nobody there to answer, whatever the
+        approve setting says, and never answered from a stopped run's journal: the person says yes, now, each time."""
+        unattended = self.nobody_here() or bool(os.environ.get("GITHUB_ACTIONS")) or not sys.stdin.isatty()
+        if unattended:
+            self.log(tr("Not done"), tr("{what} could move real money, so it only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
+            return False
+        if await self._approve_live(tr("Allow this? It could move real money: {what}", what=what)):
+            return True
+        self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
+        return False
+
     def _agent_tools(self, tools, mcp=None):
         """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}. mcp holds each MCP
         server's tools, listed beforehand: {server name: [tool, ...]}."""
@@ -4659,9 +4701,15 @@ class AgentTools:
                     params = list((schema.get("properties") or {}).keys()) if isinstance(schema.get("properties"), dict) else []
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
-                    ask = mode == "every" or (mode == "changes" and not read_only)
+                    money = mcp_money(tool)  # real money: always asks, whatever the block says (#262)
+                    ask = money or mode == "every" or (mode == "changes" and not read_only)
+                    if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
+                        schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k != SAFETY["mcp_money_input"]},
+                                      required=[k for k in schema.get("required") or [] if k != SAFETY["mcp_money_input"]])
+                        params = [k for k in params if k != SAFETY["mcp_money_input"]]
                     out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"],
-                                                                                        "read_only": read_only}), ask, schema)
+                                                                                        "read_only": read_only, "money": money,
+                                                                                        "acknowledge": money and SAFETY["mcp_money_input"] in ((tool.get("inputSchema") or {}).get("properties") or {})}), ask, schema)
             elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
@@ -4903,6 +4951,8 @@ class AgentTools:
         for t in tools:  # each MCP server's tools, asked for once, before the first step
             server = to_str(t.get("server")).strip()
             if t.get("kind") == "mcp" and server not in mcp:
+                if t.get("command"):  # the Kraken block: its own command, unless MCP_KRAKEN says otherwise
+                    self.__dict__.setdefault("_mcp_defaults", {})[mcp_env_name(server)] = to_str(t["command"])
                 mcp[server] = await self.mcp_tools(server)
         catalogue = self._agent_tools(tools, mcp)
         self.log(tr("Agent"), tr("Goal: {goal}", goal=goal) + "\n" + tr("Tools: {tools}", tools=", ".join(catalogue) or tr("none")) + " · " + tr("up to {n} steps", n=n) + (" · " + tr("plans first") if plan else ""), tr("started"))
@@ -4951,6 +5001,8 @@ class AgentTools:
                 rec(i, "not a tool", name)
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
+            if spec.get("money") and isinstance(inp, dict):
+                inp = {k: v for k, v in inp.items() if k != SAFETY["mcp_money_input"]}  # only a yes from the person sets it
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
             problem, checked = self.check_mcp_input(inp, schema) if kind == "mcp" else self.check_tool_input(inp, schema)
             if problem:
@@ -4984,11 +5036,15 @@ class AgentTools:
             if getattr(self, "testing", False) and (ask or (kind == "mcp" and not spec.get("read_only"))):
                 result, refused = "This is a test run, so tools that change things don't run. Carry on as if it had worked.", True
                 self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=f"{name} {_short(shown, 200)}"), tr("skipped"))
-            elif ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
+            elif spec.get("money") and not await self.confirm_money(f"let the agent use {name} with {_short(shown, 200)}"):
+                result, refused = "This tool can move real money, and the person didn't allow it, so it didn't run.", True
+            elif not spec.get("money") and ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):
                 result, refused = "The person said no, so this tool didn't run.", True
             else:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
                 try:
+                    if spec.get("acknowledge"):
+                        inp = dict(inp, **{SAFETY["mcp_money_input"]: True})  # the person said yes, just now
                     result = await self._agent_run_tool(kind, spec, inp)
                 except (asyncio.CancelledError, Finish):
                     raise
@@ -5308,6 +5364,7 @@ import difflib  # noqa: E402,F811 - below the line, so python/runtime.py has it 
 import re  # noqa: E402,F811
 import importlib.metadata  # noqa: E402,F811 - below the line, so python/runtime.py has them too
 import importlib.util  # noqa: E402,F811
+import shutil  # noqa: E402,F811
 import socket  # noqa: E402,F811
 
 
@@ -5497,8 +5554,22 @@ class Doctor:
             out.append(("Web requests", hook))
         for name in mcp:
             async def server(name=name):
+                key = mcp_env_name(name)
+                command = os.environ.get(key, "").strip() or self.__dict__.get("_mcp_defaults", {}).get(key, "")
+                if re.search(r"(^|\s)--allow-dangerous\b", command):
+                    raise RunError(tr("{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.", key=key))
+                if re.match(r"^\s*kraken(\.exe)?\s", command) and not shutil.which("kraken"):
+                    raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 tools = await self.mcp_tools(name)
-                return tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
+                text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
+                names = {to_str(t.get("name")) for t in tools}
+                if key == "MCP_KRAKEN" and os.environ.get("KRAKEN_API_KEY") and names & {"kraken_auth_test", "kraken_balance"}:
+                    # The key, checked with a read-only call; what it reads isn't shown.
+                    reply, failed = await self.mcp_call(name, "kraken_auth_test" if "kraken_auth_test" in names else "kraken_balance", {})
+                    if failed:
+                        raise RunError(tr("Kraken refused KRAKEN_API_KEY: {problem}", problem=_short(reply, 160)))
+                    text += " · " + tr("your Kraken key works")
+                return text
             out.append((f"MCP server “{name}”", server))
         if has("memory"):
             async def memory():
@@ -5593,7 +5664,11 @@ class Doctor:
             row(status, s["name"], text + " " + tr("Models: {list}.", list=", ".join(f"{model_byline(_tier(s, k))} ({band_text(_tier(s, k))})" for k in sizes)))
         for line in reported_lines([s["name"] for s in services]):
             row("ok", "Limits", line)
-        for area, check in await self._doctor_connections(ids, [n for n in can.get("mcp", []) if to_str(n).strip()]):
+        servers = [n for n in can.get("mcp", []) if to_str(n).strip()]
+        if can.get("kraken"):  # the Kraken tools block: its own command, unless MCP_KRAKEN says otherwise
+            self.__dict__.setdefault("_mcp_defaults", {})["MCP_KRAKEN"] = KRAKEN_COMMANDS.get(can["kraken"], KRAKEN_COMMANDS["read"])
+            servers.append("kraken")
+        for area, check in await self._doctor_connections(ids, servers):
             if not known and not self._doctor_configured(area):
                 continue
             try:

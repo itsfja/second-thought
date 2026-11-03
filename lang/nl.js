@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"wanneer het %1:%2 is %3","tooltip":"Draait op dit tijdstip (24-uursklok) zolang Planningen aan staat en deze pagina open is."},
 "rb_with_any_model":{"message0":"met OpenRouter-model %1","message1":"%1","tooltip":"Voert alleen de blokken erin uit op elk model dat OpenRouter aanbiedt. Typ de naam van openrouter.ai/models, bijvoorbeeld mistralai/mistral-small of google/gemma-4-31b-it. openrouter/auto kiest er een voor je. Draait in geëxporteerde Python (heeft OPENROUTER_API_KEY nodig); op deze pagina vervangt Claude het."},
 "rb_with_model":{"message0":"met model %1","message1":"%1","tooltip":"Voert alleen de blokken erin uit op dit model en gaat daarna terug naar het vorige model. Andere modellen dan Claude draaien in geëxporteerde Python; op deze pagina vervangt Claude ze."},
-"rb_word_count":{"message0":"aantal woorden in %1"}
+"rb_word_count":{"message0":"aantal woorden in %1"},
+"rb_agent_kraken":{"message0":"Kraken-tools %1","tooltip":"Geeft de agent de eigen tools van Kraken, uit kraken-cli: marktprijzen, je saldi en orders, en papierhandel tegen echte prijzen. Echte handel laat hem ook echte orders plaatsen, maar elke tool die geld kan verplaatsen vraagt het je eerst, ook als verder niets vraagt, en draait nooit volgens schema of op GitHub Actions. Heeft kraken-cli nodig, en KRAKEN_API_KEY en KRAKEN_API_SECRET in second-thought.ini voor je account (prijzen en papierhandel niet). Alleen in geëxporteerd Python."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"elke dag","weekdays":"op werkdagen","weekends":"in het weekend"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"minuten","h":"uur","d":"dagen"},
 "rb_mem_add.KIND":{"transient":"zolang deze pagina open is","permanent":"voor altijd"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (getekende afbeeldingen)","orig":"origineel bestand"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"Amerikaanse dollar","gbp":"pond","eur":"euro","jpy":"yen","cny":"yuan"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"Amerikaanse dollar","gbp":"pond","eur":"euro","jpy":"yen","cny":"yuan"},
+"rb_agent_kraken.MODE":{"read":"(prijzen, je account en papierhandel)","live":"(en echte handel: vraagt vóór elke order)"}
 },
 "categories":{
 "Events":"Gebeurtenissen",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"Dat lijkt geen Anthropic-API-sleutel. Die beginnen met sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"Deze browser bewaart de sleutel niet. Sta sitegegevens toe voor deze pagina en probeer het opnieuw.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"De sleutel gaat alleen van deze browser naar api.anthropic.com, en runs komen op rekening van het account ervan. Hij blijft bewaard tot je dit tabblad sluit, tenzij je Onthouden aanvinkt. Hij wordt nooit opgeslagen in programma's, exports of het runlogboek. Maak er een aan op console.anthropic.com.",
-"Claude's API said: {problem}":"De API van Claude zei: {problem}"
+"Claude's API said: {problem}":"De API van Claude zei: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"De tools van Kraken zijn vanaf deze pagina niet bereikbaar, dus de agent werkt hier zonder. Exporteer naar Python, met kraken-cli geïnstalleerd, om ze te gebruiken.",
+"read your Kraken balances and orders, market prices, and trade on paper":"je Kraken-saldi en -orders en marktprijzen lezen, en op papier handelen",
+"trade on your Kraken account with real money (asking you before every order)":"met echt geld handelen op je Kraken-account (vraagt je vóór elke order)"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -1847,6 +1853,12 @@
 "Test":"Test",
 "Test cases: {passed} of {n} passed":"Testgevallen: {passed} van {n} geslaagd",
 "Test failed: {name}":"Test mislukt: {name}",
-"What was wrong":"Wat er mis was"
+"What was wrong":"Wat er mis was",
+"Allow this? It could move real money: {what}":"Toestaan? Dit kan echt geld verplaatsen: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken weigerde KRAKEN_API_KEY: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli is niet geïnstalleerd, dus de tools van Kraken kunnen niet starten. Installeer het: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"je Kraken-sleutel werkt",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} start de server met --allow-dangerous, wat zijn eigen controle uitzet vóór tools die geld verplaatsen. Haal het weg.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} kan echt geld verplaatsen, dus het draait alleen als jij er bent om ja te zeggen, en er is niemand."
 }
 };

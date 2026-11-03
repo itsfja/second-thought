@@ -22,6 +22,12 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Added
+- Kraken (#262): the **Kraken tools** block gives an agent Kraken's own MCP server from kraken-cli, with market prices, your account and paper trading, or with live spot trading too. `KRAKEN_API_KEY` and `KRAKEN_API_SECRET` are new keys, and `MCP_KRAKEN` chooses its services. `--doctor` checks kraken-cli and the key, and fails on `--allow-dangerous`. A new gallery program, **Kraken week in review**, only reads.
+
+### Security
+- MCP tools that can move real money, Kraken's list in `SAFETY` and any tool that takes an `acknowledged` input, always ask, even with (no asking), and never run with nobody there to answer (a schedule, GitHub Actions, `--mcp`), whatever `approve` says. The agent can't set `acknowledged` itself: only a yes from you does, asked at the time, never replayed from a stopped run.
+
 ## 3.8.0 - 2026-11-03
 
 ### Added

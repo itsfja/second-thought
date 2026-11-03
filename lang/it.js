@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"quando sono le %1 : %2 %3","tooltip":"Gira a quest'ora (formato 24 ore) finché Pianificazioni è attivo e questa pagina è aperta."},
 "rb_with_any_model":{"message0":"con il modello OpenRouter %1","message1":"%1","tooltip":"Esegue solo i blocchi all'interno su qualsiasi modello offerto da OpenRouter. Scrivi il suo nome da openrouter.ai/models, per esempio mistralai/mistral-small o google/gemma-4-31b-it. openrouter/auto ne sceglie uno per te. Gira nel Python esportato (serve OPENROUTER_API_KEY); in questa pagina Claude lo sostituisce."},
 "rb_with_model":{"message0":"con il modello %1","message1":"%1","tooltip":"Esegue solo i blocchi all'interno su questo modello, poi torna al modello di prima. I modelli diversi da Claude girano nel Python esportato; in questa pagina Claude li sostituisce."},
-"rb_word_count":{"message0":"numero di parole di %1"}
+"rb_word_count":{"message0":"numero di parole di %1"},
+"rb_agent_kraken":{"message0":"strumenti Kraken %1","tooltip":"Dà all'agente gli strumenti di Kraken, da kraken-cli: prezzi di mercato, saldi e ordini, e trading simulato a prezzi reali. Il trading reale gli permette anche di dare ordini veri, ma ogni strumento che può spostare denaro ti chiede prima, anche quando nient'altro chiede, e non parte mai in programmazione né su GitHub Actions. Richiede kraken-cli installato, e KRAKEN_API_KEY e KRAKEN_API_SECRET in second-thought.ini per il tuo account (prezzi e trading simulato non richiedono chiavi). Solo nel Python esportato."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ogni giorno","weekdays":"nei giorni feriali","weekends":"nel fine settimana"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"minuti","h":"ore","d":"giorni"},
 "rb_mem_add.KIND":{"transient":"finché questa pagina è aperta","permanent":"per sempre"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (immagini disegnate)","orig":"file originale"},
-"rb_budget.UNIT":{"tokens":"token","dollars":"dollari USA","gbp":"sterline","eur":"euro","jpy":"yen","cny":"yuan"}
+"rb_budget.UNIT":{"tokens":"token","dollars":"dollari USA","gbp":"sterline","eur":"euro","jpy":"yen","cny":"yuan"},
+"rb_agent_kraken.MODE":{"read":"(prezzi, il tuo account e trading simulato)","live":"(e trading reale: chiede prima di ogni ordine)"}
 },
 "categories":{
 "Events":"Eventi",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"Non sembra una chiave API di Anthropic. Iniziano con sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"Questo browser non conserva la chiave. Consenti i dati del sito per questa pagina, poi riprova.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"La chiave va solo da questo browser ad api.anthropic.com, e le esecuzioni sono addebitate al suo account. Resta finché non chiudi questa scheda, a meno che tu non spunti Ricorda. Non viene mai salvata nei programmi, nelle esportazioni o nel registro di esecuzione. Creane una su console.anthropic.com.",
-"Claude's API said: {problem}":"L'API di Claude ha risposto: {problem}"
+"Claude's API said: {problem}":"L'API di Claude ha risposto: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"Gli strumenti di Kraken non sono raggiungibili da questa pagina, quindi qui l'agente lavora senza. Esporta in Python, con kraken-cli installato, per usarli.",
+"read your Kraken balances and orders, market prices, and trade on paper":"leggere saldi e ordini Kraken e prezzi di mercato, e fare trading simulato",
+"trade on your Kraken account with real money (asking you before every order)":"fare trading sul tuo account Kraken con denaro vero (chiedendoti prima di ogni ordine)"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -1847,6 +1853,12 @@
 "Test":"Test",
 "Test cases: {passed} of {n} passed":"Casi di test: {passed} su {n} superati",
 "Test failed: {name}":"Test fallito: {name}",
-"What was wrong":"Cosa non andava"
+"What was wrong":"Cosa non andava",
+"Allow this? It could move real money: {what}":"Consentire? Potrebbe spostare denaro vero: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken ha rifiutato KRAKEN_API_KEY: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli non è installato, quindi gli strumenti di Kraken non possono partire. Installalo: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"la tua chiave Kraken funziona",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} avvia il server con --allow-dangerous, che disattiva il suo controllo prima degli strumenti che spostano denaro. Toglilo.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} potrebbe spostare denaro vero, quindi parte solo se ci sei tu a dire di sì, e non c'è nessuno."
 }
 };

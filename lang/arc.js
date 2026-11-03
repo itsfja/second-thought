@@ -145,7 +145,8 @@
 "rb_when_time":{"message0":"כד שעתא %1 : %2 %3","tooltip":"רהט בשעתא הדא (שעונא ד-24 שעין) כל עוד זמניא פתיחין ודפא הדין פתיח."},
 "rb_with_any_model":{"message0":"עם חכימא דOpenRouter %1","message1":"%1","tooltip":"מרהט לחוד לבנין דבגוה בכל חכימא דOpenRouter יהב. כתוב שמיה מן openrouter.ai/models, כגון mistralai/mistral-small או google/gemma-4-31b-it. openrouter/auto בחר חד בשבילך. רהט ב-Python דנפק (צריך OPENROUTER_API_KEY); בדפא הדין Claude קאים באתריה."},
 "rb_with_model":{"message0":"עם חכימא %1","message1":"%1","tooltip":"מרהט לחוד לבנין דבגוה בחכימא הדין, ובתר כן תאיב לחכימא דקדם. חכימין דלאו Claude רהטין ב-Python דנפק; בדפא הדין Claude קאים באתרהון."},
-"rb_word_count":{"message0":"מניין מלי %1"}
+"rb_word_count":{"message0":"מניין מלי %1"},
+"rb_agent_kraken":{"message0":"מאני Kraken %1","tooltip":"יהב לסוכנא מאני Kraken דיליה, מן kraken-cli: דמי שוקא, שארייך ופקודייך, ותגרא על נירא בדמין שרירין. תגרא שרירא שבק ליה אף למתן פקודין שרירין, ברם כל מאן דיכל לשנאה כספא שאל לך קדמיתא, אף כד מדעם אחרנא לא שאל, ולעלם לא רהט בזבנא קביעא או ב־GitHub Actions. צריך kraken-cli מתקן, ו־KRAKEN_API_KEY ו־KRAKEN_API_SECRET ב־second-thought.ini לחושבנך (דמין ונירא לא צריכין מפתחא). בלחוד ב־Python מפקא."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יומא","weekdays":"ביומי חול","weekends":"בסופי שבתא"},
@@ -161,7 +162,8 @@
 "rb_mem_set_for.UNIT":{"m":"רגעין","h":"שעין","d":"יומין"},
 "rb_mem_add.KIND":{"transient":"כל עוד דפא הדין פתיח","permanent":"לעלם"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (צייורין)","orig":"מגלתא קדמייתא"},
-"rb_budget.UNIT":{"tokens":"טוקנין","dollars":"דולרין אמריקאין","gbp":"ליטרין","eur":"אירו","jpy":"ין","cny":"יואן"}
+"rb_budget.UNIT":{"tokens":"טוקנין","dollars":"דולרין אמריקאין","gbp":"ליטרין","eur":"אירו","jpy":"ין","cny":"יואן"},
+"rb_agent_kraken.MODE":{"read":"(דמין, חושבנך ותגרא על נירא)","live":"(ותגרא שרירא: שאל קדם כל פקודא)"}
 },
 "categories":{
 "Events":"מאורעין",
@@ -955,7 +957,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"הדא לא מתחזיא מפתח API דאנתרופיק. שרין ב־sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"דפדפנא הדין לא נטר מפתחא. שבוק ידיעת אתרא לדפא הדין, ונסי תוב.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"מפתחא אזיל בלחוד מן דפדפנא הדין ל־api.anthropic.com, ורהטיא על חושבניה. מתנטר עד דתסגר לשוניתא הדא, אלא אן תרשום אדכר. לעלם לא מתנטר בתכניתא, במפקנא או בספר רהטא. עביד חד ב־console.anthropic.com.",
-"Claude's API said: {problem}":"API דקלוד אמר: {problem}"
+"Claude's API said: {problem}":"API דקלוד אמר: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"מאני Kraken לא מתמטין מן דפא הדין, ובכן סוכנא עבד הכא בלעדיהון. אפיק ל־Python, כד kraken-cli מתקן, למשתמשו בהון.",
+"read your Kraken balances and orders, market prices, and trade on paper":"למקרא שארי ופקודי Kraken דילך ודמי שוקא, ולמתגר על נירא",
+"trade on your Kraken account with real money (asking you before every order)":"למתגר בחושבן Kraken דילך בכספא שרירא (ושאל לך קדם כל פקודא)"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1848,7 +1854,13 @@
 "Test":"בדיקתא",
 "Test cases: {passed} of {n} passed":"בדיקתא: {passed} מן {n} עברו",
 "Test failed: {name}":"בדיקתא נפלת: {name}",
-"What was wrong":"מה הוה עקים"
+"What was wrong":"מה הוה עקים",
+"Allow this? It could move real money: {what}":"תשבוק הדא? יכלא לשנאה כספא שרירא: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken סרב ל־KRAKEN_API_KEY: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli לא מתקן, ובכן מאני Kraken לא יכלין למשרא. תקן יתה: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"מפתח Kraken דילך עבד",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} משרא לשמשא עם --allow-dangerous, דמבטל בדיקתה דיליה קדם מאנין דמשנין כספא. סב יתה.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} יכלא לשנאה כספא שרירא, ובכן רהטא בלחוד כד אנת תמן למאמר אין, ולית אנש."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

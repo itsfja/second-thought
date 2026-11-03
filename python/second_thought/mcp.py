@@ -13,7 +13,7 @@ import time
 import urllib.error
 import urllib.request
 from .settings import RUNTIME_VERSION, WHERE_KEYS
-from .core import RunError, _number_setting, _short, to_str
+from .core import SAFETY, RunError, _number_setting, _short, to_str
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import atexit  # noqa: E402,F811 - below the line, so python/runtime.py has them too (settings.py doesn't import these)
@@ -484,12 +484,26 @@ class _MCPHttp(_MCPServer):
             raise RunError(tr("The {x} wouldn't start talking: {message}", x=self.describe(), message=e.message)) from None
 
 
-def mcp_server(name):
-    """A server from its MCP_<NAME> setting: a command (started here) or an http(s) address."""
+# The 'Kraken tools' block (#262): Kraken's own MCP server, in kraken-cli (https://docs.kraken.com/home/mcp), with the
+# services each choice starts. MCP_KRAKEN in second-thought.ini wins over these.
+KRAKEN_COMMANDS = {"read": "kraken mcp -s market,account,paper", "live": "kraken mcp -s market,account,paper,trade"}
+
+
+def mcp_money(tool):
+    """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, or one taking an "acknowledged"
+    input (Kraken's mark for them)."""
+    schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {}
+    props = schema.get("properties") if isinstance(schema.get("properties"), dict) else {}
+    return to_str(tool.get("name")) in SAFETY["mcp_money"] or SAFETY["mcp_money_input"] in props
+
+
+def mcp_server(name, default=""):
+    """A server from its MCP_<NAME> setting: a command (started here) or an http(s) address. default is the command to
+    use when there's no setting (the Kraken block's)."""
     key = mcp_env_name(name)
     if key == "MCP_":
         raise RunError(tr("An MCP tool block needs the server's name."))
-    where = os.environ.get(key, "").strip()
+    where = os.environ.get(key, "").strip() or to_str(default).strip()
     if not where:
         raise RunError(tr("The agent's MCP server “{x}” isn't set up. Put {key} = <the command that starts it, or its https:// address> {where_keys}.", x=to_str(name).strip(), key=key, where_keys=WHERE_KEYS))
     if re.match(r"^https?://", where, re.I):
@@ -504,7 +518,7 @@ class MCPTools:
         servers = self.__dict__.setdefault("_mcp_servers", {})
         key = mcp_env_name(name)
         if key not in servers:
-            servers[key] = mcp_server(name)
+            servers[key] = mcp_server(name, self.__dict__.get("_mcp_defaults", {}).get(key, ""))
         return servers[key]
 
     async def mcp_tools(self, name):

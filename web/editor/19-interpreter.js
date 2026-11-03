@@ -796,7 +796,7 @@
         break;
       }
       case "rb_ask_me": { run.answer = await askPerson(str(await input(b, tc, "TEXT"))); break; }
-      case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": break;  // only used inside an agent block
+      case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": case "rb_agent_kraken": break;  // only used inside an agent block
       case "rb_agent": await runAgent(b, tc); break;
       case "rb_say": {
         const v = await input(b, tc, "TEXT");

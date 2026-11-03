@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"wenn es %1:%2 ist %3","tooltip":"Läuft zu dieser Uhrzeit (24-Stunden-Format), solange Zeitpläne eingeschaltet und diese Seite offen ist."},
 "rb_with_any_model":{"message0":"mit OpenRouter-Modell %1","message1":"%1","tooltip":"Führt nur die Blöcke darin auf einem beliebigen Modell aus, das OpenRouter anbietet. Geben Sie seinen Namen von openrouter.ai/models ein, zum Beispiel mistralai/mistral-small oder google/gemma-4-31b-it. openrouter/auto wählt eines für Sie. Läuft im exportierten Python (braucht OPENROUTER_API_KEY); auf dieser Seite springt Claude ein."},
 "rb_with_model":{"message0":"mit Modell %1","message1":"%1","tooltip":"Führt nur die Blöcke darin auf diesem Modell aus und kehrt dann zum vorherigen Modell zurück. Andere Modelle als Claude laufen im exportierten Python; auf dieser Seite springt Claude für sie ein."},
-"rb_word_count":{"message0":"Wortzahl von %1"}
+"rb_word_count":{"message0":"Wortzahl von %1"},
+"rb_agent_kraken":{"message0":"Kraken-Werkzeuge %1","tooltip":"Gibt dem Agenten Krakens eigene Werkzeuge aus kraken-cli: Marktpreise, deine Guthaben und Aufträge, und Papierhandel zu echten Preisen. Echter Handel lässt ihn auch echte Aufträge geben, aber jedes Werkzeug, das Geld bewegen kann, fragt dich zuerst, auch wenn sonst nichts fragt, und läuft nie nach Zeitplan oder auf GitHub Actions. Braucht installiertes kraken-cli, und KRAKEN_API_KEY und KRAKEN_API_SECRET in second-thought.ini für dein Konto (Preise und Papierhandel brauchen keinen Schlüssel). Nur im exportierten Python."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"jeden Tag","weekdays":"an Wochentagen","weekends":"am Wochenende"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"Minuten","h":"Stunden","d":"Tage"},
 "rb_mem_add.KIND":{"transient":"solange diese Seite offen ist","permanent":"für immer"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (gezeichnete Bilder)","orig":"Originaldatei"},
-"rb_budget.UNIT":{"tokens":"Tokens","dollars":"US-Dollar","gbp":"Pfund","eur":"Euro","jpy":"Yen","cny":"Yuan"}
+"rb_budget.UNIT":{"tokens":"Tokens","dollars":"US-Dollar","gbp":"Pfund","eur":"Euro","jpy":"Yen","cny":"Yuan"},
+"rb_agent_kraken.MODE":{"read":"(Preise, dein Konto und Papierhandel)","live":"(und echter Handel: fragt vor jedem Auftrag)"}
 },
 "categories":{
 "Events":"Ereignisse",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"Das sieht nicht wie ein Anthropic-API-Schlüssel aus. Sie beginnen mit sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"Dieser Browser behält den Schlüssel nicht. Erlaube Websitedaten für diese Seite und versuche es erneut.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"Der Schlüssel geht nur von diesem Browser an api.anthropic.com, und Läufe werden seinem Konto berechnet. Er bleibt, bis du diesen Tab schließt, außer du kreuzt „Merken“ an. Er wird nie in Programmen, Exporten oder dem Laufprotokoll gespeichert. Einen erstellst du unter console.anthropic.com.",
-"Claude's API said: {problem}":"Claudes API meldete: {problem}"
+"Claude's API said: {problem}":"Claudes API meldete: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"Krakens Werkzeuge sind von dieser Seite aus nicht erreichbar, daher arbeitet der Agent hier ohne sie. Exportiere nach Python, mit installiertem kraken-cli, um sie zu nutzen.",
+"read your Kraken balances and orders, market prices, and trade on paper":"deine Kraken-Guthaben und -Aufträge und Marktpreise lesen und auf Papier handeln",
+"trade on your Kraken account with real money (asking you before every order)":"mit echtem Geld auf deinem Kraken-Konto handeln (fragt dich vor jedem Auftrag)"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -1847,6 +1853,12 @@
 "Test":"Test",
 "Test cases: {passed} of {n} passed":"Testfälle: {passed} von {n} bestanden",
 "Test failed: {name}":"Test fehlgeschlagen: {name}",
-"What was wrong":"Was nicht stimmte"
+"What was wrong":"Was nicht stimmte",
+"Allow this? It could move real money: {what}":"Erlauben? Das könnte echtes Geld bewegen: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken hat KRAKEN_API_KEY abgelehnt: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli ist nicht installiert, daher können Krakens Werkzeuge nicht starten. Installiere es: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"dein Kraken-Schlüssel funktioniert",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} startet den Server mit --allow-dangerous, was seine eigene Prüfung vor Werkzeugen abschaltet, die Geld bewegen. Nimm es heraus.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} könnte echtes Geld bewegen, darum läuft es nur, wenn du da bist und Ja sagst, und niemand ist da."
 }
 };

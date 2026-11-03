@@ -144,7 +144,8 @@
 "rb_when_time":{"message0":"þá er klukkan er %1 : %2 %3","tooltip":"Keyrir á þessi stund (24 stunda klukka) meðan Tíðir eru á ok þetta blað er opit."},
 "rb_with_any_model":{"message0":"með OpenRouter-líkani %1","message1":"%1","tooltip":"Keyrir einungis kubbana hér inni á hverju líkani er OpenRouter býðr. Rita nafn þess af openrouter.ai/models, svá sem mistralai/mistral-small eða google/gemma-4-31b-it. openrouter/auto velr eitt fyrir þik. Keyrir í útfluttum Python (þarf OPENROUTER_API_KEY); á þessu blaði stendr Claude í stað þess."},
 "rb_with_model":{"message0":"með líkani %1","message1":"%1","tooltip":"Keyrir einungis kubbana hér inni á þessu líkani, ok hverfr síðan aptr til líkansins er áðr var. Ǫnnur líkǫn en Claude keyra í útfluttum Python; á þessu blaði stendr Claude í stað þeira."},
-"rb_word_count":{"message0":"orðafjǫldi %1"}
+"rb_word_count":{"message0":"orðafjǫldi %1"},
+"rb_agent_kraken":{"message0":"Kraken tól %1","tooltip":"Gefr erindreka eigin tól Krakens, ór kraken-cli: markaðsverð, innistæður þínar ok boð, ok kaup á pappír við sǫnnu verði. Sǫnn kaup láta hann ok gefa sǫnn boð, en hvert tól er hreyfa má fé spyrr þik fyrst, þótt ekki annat spyrji, ok keyrir aldri eptir tímaskrá né á GitHub Actions. Þarf kraken-cli sett upp, ok KRAKEN_API_KEY ok KRAKEN_API_SECRET í second-thought.ini fyrir reikning þinn (verð ok pappír þurfa engan lykil). Einungis í útfluttu Python."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -160,7 +161,8 @@
 "rb_mem_set_for.UNIT":{"m":"mínútur","h":"stundir","d":"daga"},
 "rb_mem_add.KIND":{"transient":"meðan þetta blað er opit","permanent":"at eilífu"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (dregnar myndir)","orig":"upphafligt skjal"},
-"rb_budget.UNIT":{"tokens":"tokens","dollars":"Ameríkudali","gbp":"pund","eur":"evrur","jpy":"jen","cny":"júan"}
+"rb_budget.UNIT":{"tokens":"tokens","dollars":"Ameríkudali","gbp":"pund","eur":"evrur","jpy":"jen","cny":"júan"},
+"rb_agent_kraken.MODE":{"read":"(verð, reikningr þinn ok kaup á pappír)","live":"(ok sǫnn kaup: spyrr fyrir hvert boð)"}
 },
 "categories":{
 "Events":"Atburðir",
@@ -954,7 +956,11 @@
 "That doesn't look like an Anthropic API key. They start with sk-ant-.":"Þat sýnisk eigi Anthropic API lykill. Þeir byrja á sk-ant-.",
 "This browser won't keep the key. Allow site data for this page, then try again.":"Þessi vafri geymir eigi lykilinn. Leyf staðar gögn fyrir þessa síðu, ok reyn aptr.",
 "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"Lykillinn ferr einungis af þessum vafra til api.anthropic.com, ok keyrslur fara á reikning hans. Hann er geymdr þar til þú lýkr þessum flipa, nema þú merkir Mun. Hann er aldri geymdr í forritum, útflutningum eða keyrslubók. Gerðu einn á console.anthropic.com.",
-"Claude's API said: {problem}":"API Claudes sagði: {problem}"
+"Claude's API said: {problem}":"API Claudes sagði: {problem}",
+"Kraken":"Kraken",
+"Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.":"Tól Krakens nást eigi af þessi síðu, svá at erindrekinn vinnr án þeira hér. Flyt út í Python, með kraken-cli sett upp, til at nota þau.",
+"read your Kraken balances and orders, market prices, and trade on paper":"lesa Kraken innistæður þínar ok boð, markaðsverð, ok kaupa á pappír",
+"trade on your Kraken account with real money (asking you before every order)":"kaupa á Kraken reikningi þínum með sǫnnu fé (spyrjandi þik fyrir hvert boð)"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1847,7 +1853,13 @@
 "Test":"Prófun",
 "Test cases: {passed} of {n} passed":"Prófanir: {passed} af {n} stóðusk",
 "Test failed: {name}":"Prófun brást: {name}",
-"What was wrong":"Hvat var rangt"
+"What was wrong":"Hvat var rangt",
+"Allow this? It could move real money: {what}":"Leyfir þú þetta? Þat gæti hreyft sǫnnu fé: {what}",
+"Kraken refused KRAKEN_API_KEY: {problem}":"Kraken hafnaði KRAKEN_API_KEY: {problem}",
+"kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli er eigi sett upp, svá at tól Krakens megu eigi byrja. Set þat upp: https://docs.kraken.com/home/mcp",
+"your Kraken key works":"Kraken lykill þinn virkar",
+"{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} byrjar þjóninn með --allow-dangerous, er slekkr hans eigin prófun fyrir tól er hreyfa fé. Tak þat út.",
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} gæti hreyft sǫnnu fé, svá at þat keyrir einungis þá er þú ert þar at segja já, ok enginn er þar."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",
