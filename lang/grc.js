@@ -940,7 +940,9 @@
 "budget":"εὔωνον",
 "standard":"μέσον",
 "premium":"πολυτελές",
-"price unknown":"τιμὴ ἄγνωστος"
+"price unknown":"τιμὴ ἄγνωστος",
+"Second Thought on claude.ai":"Τὸ Second Thought ἐν τῷ claude.ai",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Τοῦτο τὸ ἀντίγραφον τοῦ Second Thought δύναται προγράμματα ποιεῖν, ἐν παραδείγμασι δοκιμάζειν, ἐξηγεῖσθαι καὶ ἐξάγειν, ἀλλ’ οὐ μετὰ τοῦ Claude πράττειν. Πρὸς τοῦτο, ἄνοιξον ἐν τῷ claude.ai·"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

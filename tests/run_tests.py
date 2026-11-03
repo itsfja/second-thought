@@ -27,6 +27,7 @@ from e2e.sources import example_ini_check, package_check  # noqa: E402
 from e2e.i18n import i18n_tests  # noqa: E402
 from e2e.gallery import gallery_smoke_tests, gallery_tests  # noqa: E402
 from e2e.actions import actions_tests  # noqa: E402
+from e2e.pages import pages_tests  # noqa: E402
 from e2e.describe import describe_tests  # noqa: E402
 from e2e.formats import format_tests  # noqa: E402
 from e2e.program_tests import program_test_tests  # noqa: E402
@@ -74,6 +75,7 @@ def main():
         asyncio.run(program_test_tests())
         asyncio.run(safety_tests())
         asyncio.run(access_tests())
+        asyncio.run(pages_tests())
     if "i18n" in areas:
         asyncio.run(i18n_tests())
     if "gallery" in areas:

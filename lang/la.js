@@ -940,7 +940,9 @@
 "budget":"parci",
 "standard":"communis",
 "premium":"pretiosus",
-"price unknown":"pretium ignotum"
+"price unknown":"pretium ignotum",
+"Second Thought on claude.ai":"Second Thought in claude.ai",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Hoc exemplar Second Thought programmata construere, in datis exemplaribus probare, explicare et exportare potest, sed non cum Claude exsequi. Ad id, aperi in claude.ai:"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

@@ -940,7 +940,9 @@
 "budget":"lytelceap",
 "standard":"gemæne",
 "premium":"deorwyrþe",
-"price unknown":"weorþ uncuþ"
+"price unknown":"weorþ uncuþ",
+"Second Thought on claude.ai":"Second Thought on claude.ai",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Þeos bysen Second Thought mæg programmas wyrcan, on bysenum fandian, reccan and utlædan, ac ne mæg hie mid Claude fremman. For þæm, ontyn hie on claude.ai:"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},

@@ -1,0 +1,48 @@
+name: Pages
+
+# When a release is published, puts that release's page on GitHub Pages as a second front door (#245): the page and
+# its languages, built by tools/pages.py. Off claude.ai the page can build, try on sample data, explain and export
+# programs, but not run them with Claude, and it says so. Run workflow publishes main's page now.
+#
+# The repository owner turns Pages on once: Settings → Pages → Build and deployment → Source: GitHub Actions.
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.release.tag_name || github.ref }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Build the site
+        run: python tools/pages.py _site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

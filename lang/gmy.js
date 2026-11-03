@@ -941,7 +941,9 @@
 "budget":"𐀃𐀪𐀒𐀴𐀗",
 "standard":"𐀕𐀰",
 "premium":"𐀡𐀬𐀴𐀗",
-"price unknown":"𐀴𐀔 𐀀𐀒𐀜𐀵"
+"price unknown":"𐀴𐀔 𐀀𐀒𐀜𐀵",
+"Second Thought on claude.ai":"Second Thought 𐀁𐀠 claude.ai",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"𐀵𐀵 𐀀𐀴𐀒𐀡 Second Thought 𐀫𐀑𐀯𐀳𐀪𐀊 𐀳𐀄𐀐𐀁, 𐀟𐀂𐀨𐀁, e-ke-ge-e 𐀏𐀂 𐀁𐀏𐀐𐀁, 𐀀𐀨 𐀃𐀄 𐀕𐀲 Claude 𐀏𐀨𐀁. 𐀁𐀠 𐀵𐀵, 𐀀𐀜𐀐 𐀁𐀠 claude.ai:"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},

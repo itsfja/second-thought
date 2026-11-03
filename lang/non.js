@@ -940,7 +940,9 @@
 "budget":"ódýrt",
 "standard":"venjulegt",
 "premium":"dýrt",
-"price unknown":"verð ókunnt"
+"price unknown":"verð ókunnt",
+"Second Thought on claude.ai":"Second Thought á claude.ai",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Þetta eintak af Second Thought má smíða forrit, reyna þau á dæmagǫgnum, skýra þau ok flytja út, en eigi keyra þau með Claude. Til þess, opna þat á claude.ai:"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},

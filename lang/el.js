@@ -940,7 +940,9 @@
 "budget":"οικονομικό",
 "standard":"κανονικό",
 "premium":"premium",
-"price unknown":"άγνωστη τιμή"
+"price unknown":"άγνωστη τιμή",
+"Second Thought on claude.ai":"Το Second Thought στο claude.ai",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Αυτό το αντίγραφο του Second Thought μπορεί να φτιάχνει προγράμματα, να τα δοκιμάζει με δείγματα δεδομένων, να τα εξηγεί και να τα εξάγει, αλλά όχι να τα εκτελεί με το Claude. Γι’ αυτό, ανοίξτε το στο claude.ai:"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

@@ -941,7 +941,9 @@
 "budget":"זול",
 "standard":"רגיל",
 "premium":"יקיר",
-"price unknown":"טימי לא ידיע"
+"price unknown":"טימי לא ידיע",
+"Second Thought on claude.ai":"Second Thought ב־claude.ai",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"נוסחא הדא דSecond Thought יכלא למבנא פרוגרמין, למבדק יתהון על ידיעתא דדוגמא, לפרשא ולמפקא יתהון, ברם לא לרהטא יתהון עם Claude. להדא, פתח יתה ב־claude.ai:"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

@@ -12,6 +12,8 @@
 **Try it in three steps**
 
 1. **Open [Second Thought](https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN)** in claude.ai. Nothing to install, and runs on the page use your claude.ai account.
+
+   There's also a copy at **[itsfja.github.io/second-thought](https://itsfja.github.io/second-thought/)**, updated with each release. It builds programs, tries them on sample data, explains and exports them, but it can't run them with Claude: for that, use the page on claude.ai. Exported Python runs anywhere either way.
 2. **Pick an example and press Run.** There are over 150, from a simple review loop to agents that plan a bake or check on the house. Change the text in any block and run it again.
 3. **Export it.** *Import / export → Save Python (.zip)*, unzip, put your API key in `second-thought.ini`, then run `run.bat` (Windows) or `sh run.sh` (Linux, Mac). [Exporting to Python](#exporting-to-python) has the details.
 
@@ -504,6 +506,7 @@ This downloads the newest release's runtime of the same major version, checks it
 | `second-thought.example.ini` | Every setting a program understands, with a note on each. |
 | `tools/sync.py` | Joins the runtime into one file, copies it and the other embedded parts into the page, and writes `lang/`, so they always match. |
 | `tools/smoke_test.py` | Checks the real model services with your own keys. |
+| `tools/pages.py` | Builds the copy of the page for GitHub Pages, which `.github/workflows/pages.yml` publishes with each release. |
 | `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |
 | `tests/` | Unit tests (`tests/unit/`), and the end-to-end suite (`tests/e2e/`, one file per area, run by `tests/run_tests.py`). |
 | `docs/ladybird-book.md` | The picture book. |
