@@ -22,6 +22,8 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+## 3.6.0 - 2026-11-03
+
 ### Added
 - Prices for more models (#243), each from the service's own price page, dated: Mistral Small, Medium and Large; Qwen Flash, Plus and Max; Kimi K3; GLM-5.3 and GLM-5.3 Flash; MiniMax M3; GPT-OSS 120B on Groq; GPT-6 Astra; and Grok 4.7. Runs on them now show their cost, their models have a price band, and they can be held to a money budget or an allowance. OpenAI's, xAI's and Gemini's prices now come from their own pages too (the figures didn't change). Still without a price, because the service doesn't publish one: Kimi K2.6, Groq's Llama models and MiniMax M2.7.
 
