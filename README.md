@@ -13,7 +13,7 @@
 
 1. **Open [Second Thought](https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN)** in claude.ai. Nothing to install, and runs on the page use your claude.ai account.
 
-   There's also a copy at **[itsfja.github.io/second-thought](https://itsfja.github.io/second-thought/)**, updated with each release. It builds programs, tries them on sample data, explains and exports them, but it can't run them with Claude: for that, use the page on claude.ai. Exported Python runs anywhere either way.
+   There's also a copy at **[itsfja.github.io/second-thought](https://itsfja.github.io/second-thought/)**, updated with each release. It builds programs, tries them on sample data, explains and exports them. To run them with Claude there, press **Use your own API key** and paste an Anthropic API key (from [console.anthropic.com](https://console.anthropic.com)): runs are charged to that key's account. The key goes only from your browser to api.anthropic.com, is kept until you close the tab unless you tick **Remember on this browser**, and is never put in a saved program, an export or the run log; **Forget my key** removes it. Or use the page on claude.ai, which needs no key. Exported Python runs anywhere either way.
 2. **Pick an example and press Run.** There are over 150, from a simple review loop to agents that plan a bake or check on the house. Change the text in any block and run it again.
 3. **Export it.** *Import / export → Save Python (.zip)*, unzip, put your API key in `second-thought.ini`, then run `run.bat` (Windows) or `sh run.sh` (Linux, Mac). [Exporting to Python](#exporting-to-python) has the details.
 

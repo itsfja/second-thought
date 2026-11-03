@@ -942,7 +942,19 @@
 "premium":"プレミアム",
 "price unknown":"価格不明",
 "Second Thought on claude.ai":"claude.ai の Second Thought",
-"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"この Second Thought のコピーでは、プログラムを作り、サンプルデータで試し、説明し、書き出すことができますが、Claude で実行することはできません。実行するには claude.ai で開いてください："
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"この Second Thought のコピーでは、プログラムを作り、サンプルデータで試し、説明し、書き出すことができますが、Claude で実行することはできません。実行するには claude.ai で開いてください：",
+"Use your own API key":"自分の API キーを使う",
+"Forget my key":"キーを忘れる",
+"Your Anthropic API key":"あなたの Anthropic API キー",
+"Remember on this browser":"このブラウザーに記憶する",
+"Use this key":"このキーを使う",
+"Cancel":"キャンセル",
+"Programs run with your own API key ({key}), charged to its Anthropic account.":"プログラムはあなた自身の API キー ({key}) で実行され、そのキーの Anthropic アカウントに課金されます。",
+"Or use your own API key, from the bar at the top.":"または、上部のバーから自分の API キーを使ってください。",
+"That doesn't look like an Anthropic API key. They start with sk-ant-.":"Anthropic の API キーではないようです。キーは sk-ant- で始まります。",
+"This browser won't keep the key. Allow site data for this page, then try again.":"このブラウザーはキーを保存できません。このページのサイトデータを許可してから、もう一度お試しください。",
+"The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"キーはこのブラウザーから api.anthropic.com にだけ送られ、実行はそのアカウントに課金されます。「記憶する」にチェックしない限り、このタブを閉じるまで保持されます。プログラム、エクスポート、実行ログには保存されません。キーは console.anthropic.com で作成できます。",
+"Claude's API said: {problem}":"Claude の API の応答: {problem}"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

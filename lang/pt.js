@@ -942,7 +942,19 @@
 "premium":"premium",
 "price unknown":"preço desconhecido",
 "Second Thought on claude.ai":"Second Thought no claude.ai",
-"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Esta cópia do Second Thought pode criar programas, experimentá-los com dados de exemplo, explicá-los e exportá-los, mas não executá-los com o Claude. Para isso, abra-a no claude.ai:"
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Esta cópia do Second Thought pode criar programas, experimentá-los com dados de exemplo, explicá-los e exportá-los, mas não executá-los com o Claude. Para isso, abra-a no claude.ai:",
+"Use your own API key":"Usar a sua própria chave de API",
+"Forget my key":"Esquecer a minha chave",
+"Your Anthropic API key":"A sua chave de API da Anthropic",
+"Remember on this browser":"Lembrar neste navegador",
+"Use this key":"Usar esta chave",
+"Cancel":"Cancelar",
+"Programs run with your own API key ({key}), charged to its Anthropic account.":"Os programas correm com a sua própria chave de API ({key}), cobrados à respetiva conta da Anthropic.",
+"Or use your own API key, from the bar at the top.":"Ou use a sua própria chave de API, na barra do topo.",
+"That doesn't look like an Anthropic API key. They start with sk-ant-.":"Isso não parece uma chave de API da Anthropic. Começam por sk-ant-.",
+"This browser won't keep the key. Allow site data for this page, then try again.":"Este navegador não guarda a chave. Permita dados do site para esta página e tente de novo.",
+"The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"A chave vai apenas deste navegador para api.anthropic.com, e as execuções são cobradas à respetiva conta. Fica guardada até fechar este separador, a não ser que marque Lembrar. Nunca é guardada em programas, exportações ou no registo de execução. Crie uma em console.anthropic.com.",
+"Claude's API said: {problem}":"A API do Claude disse: {problem}"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},

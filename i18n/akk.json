@@ -1438,7 +1438,19 @@
   "premium": "𒈠𒄭𒊒𒌝 𒊏𒁍𒌝",
   "price unknown": "𒈠𒄭𒊒𒌝 𒌌 𒄿𒁺",
   "Second Thought on claude.ai": "Second Thought 𒄿𒈾 claude.ai",
-  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "mehrum 𒀭𒉡𒌝 𒊭 Second Thought 𒌅𒌒𒊭𒅈𒊒𒋫𒄠 𒂊𒁉𒊭𒄠, 𒄿𒈾 𒈪𒈾𒋾𒅎 𒊭 𒋫𒄠𒅆𒇷𒅎 𒆷𒋫𒅗𒄠, 𒉺𒊭𒊏𒄠 𒌑 𒋗𒍝𒄠 ile'i, 𒌑𒆷 𒀉𒋾 Claude 𒂊𒁉𒊭𒄠 𒌌 ile'i. 𒀀𒈾 𒋗𒀀𒋾, 𒄿𒈾 claude.ai 𒁉𒋼:"
+  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "mehrum 𒀭𒉡𒌝 𒊭 Second Thought 𒌅𒌒𒊭𒅈𒊒𒋫𒄠 𒂊𒁉𒊭𒄠, 𒄿𒈾 𒈪𒈾𒋾𒅎 𒊭 𒋫𒄠𒅆𒇷𒅎 𒆷𒋫𒅗𒄠, 𒉺𒊭𒊏𒄠 𒌑 𒋗𒍝𒄠 ile'i, 𒌑𒆷 𒀉𒋾 Claude 𒂊𒁉𒊭𒄠 𒌌 ile'i. 𒀀𒈾 𒋗𒀀𒋾, 𒄿𒈾 claude.ai 𒁉𒋼:",
+  "Use your own API key": "𒆪𒉡𒊌𒅗𒅗 𒊭 API 𒇷𒆠",
+  "Forget my key": "𒆪𒉡𒊌𒆠 𒈠𒅆",
+  "Your Anthropic API key": "𒆪𒉡𒊌𒅗𒅗 𒊭 Anthropic API",
+  "Remember on this browser": "𒄿𒈾 𒁀𒀊 𒊺𒋾𒅎 𒀭𒉌𒅎 𒄷𒊻𒋢𒊻",
+  "Use this key": "𒆪𒉡𒊌𒅗𒄠 𒀭𒈾𒄠 𒇷𒆠",
+  "Cancel": "𒂊𒍣𒅁",
+  "Programs run with your own API key ({key}), charged to its Anthropic account.": "𒉈𒁉𒋗 𒄿𒈾 𒆪𒉡𒊌𒆠𒅗 𒊭 API ({key}) 𒅋𒆷𒆪; 𒅆𒈬𒌝 𒀀𒈾 𒉌𒅅𒅗𒊍𒋛 𒊭 Anthropic 𒅖𒊭𒀜𒁕𒅈.",
+  "Or use your own API key, from the bar at the top.": "𒌑𒇻 𒆪𒉡𒊌𒅗𒅗 𒊭 API 𒇷𒆠, 𒅖𒌅 𒌅𒌒𒁉𒅎 𒂊𒇷𒅎.",
+  "That doesn't look like an Anthropic API key. They start with sk-ant-.": "𒀭𒉡𒌝 𒆠𒈠 𒆪𒉡𒊌𒆠 𒊭 Anthropic API 𒌌 𒅔𒈾𒈪𒅕. 𒄿𒈾 sk-ant- 𒅖𒊭𒅈𒊒.",
+  "This browser won't keep the key. Allow site data for this page, then try again.": "𒁀𒀊 𒊺𒋾𒅎 𒀭𒉡𒌝 𒆪𒉡𒊌𒅗𒄠 𒌌 𒄿𒈾𒊍𒍝𒅈. 𒀀𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒅆𒀉𒊑 𒀸𒊑𒅎 𒄿𒁲𒅔, 𒌑 𒊭𒉌𒋫𒄠 𒂊𒁍𒍑.",
+  "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.": "𒆪𒉡𒊌𒆪𒌝 𒅖𒌅 𒁀𒀊 𒊺𒋾𒅎 𒀭𒉌𒅎 𒀀𒈾 api.anthropic.com 𒅖𒋼𒅔 𒅋𒆷𒀝, 𒌑 𒅆𒅎 𒀀𒆷𒆠 𒀀𒈾 𒉌𒅅𒅗𒊍𒋛𒋗 𒅖𒊭𒀜𒁕𒅈. 𒀀𒁲 𒌅𒌒𒉺𒄠 𒀭𒈾𒄠 𒋼𒁉𒄴𒄷 𒈾𒍢𒅕, 𒋗𒌝𒈠 𒄷𒊻𒋢𒊻 𒆷 𒋫𒊭𒀜𒁕𒅈. 𒄿𒈾 𒉈𒁉𒅆, 𒄿𒈾 𒋗𒍝𒋾𒅎 𒌑 𒄿𒈾 𒌅𒌒𒁉 𒀀𒆷𒆠𒅎 𒈠𒋾𒈠 𒌌 𒅖𒊭𒀝𒅗𒀭. 𒄿𒈾 console.anthropic.com 𒅖𒋼𒅔 𒂊𒁍𒍑.",
+  "Claude's API said: {problem}": "API 𒊭 Claude 𒅅𒁉: {problem}"
  },
  "examples": {
   "review": {

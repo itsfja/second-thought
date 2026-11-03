@@ -224,7 +224,17 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 </header>
 <p id="ex-desc" class="exdesc"></p>
 <div id="banner" class="banner" hidden></div>
-<div id="offsite" class="banner" hidden><span id="offsite-text"></span> <a id="offsite-link" href="https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN" target="_blank" rel="noopener"></a></div>
+<div id="offsite" class="banner" hidden><span id="offsite-text"></span> <a id="offsite-link" href="https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN" target="_blank" rel="noopener"></a>
+  <button id="own-key" type="button" class="own-key-btn"></button> <button id="own-key-forget" type="button" class="own-key-btn" hidden></button>
+  <div id="own-key-panel" class="own-key-panel" hidden>
+    <label for="own-key-input" id="own-key-label"></label>
+    <input id="own-key-input" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
+    <label class="own-key-remember"><input id="own-key-remember" type="checkbox"> <span id="own-key-remember-text"></span></label>
+    <button id="own-key-use" type="button" class="primary"></button> <button id="own-key-cancel" type="button"></button>
+    <p id="own-key-note" class="hint"></p>
+    <p id="own-key-msg" class="msg bad" role="alert"></p>
+  </div>
+</div>
 <section id="gallery" class="gallery" hidden aria-label="Example programs">
   <div class="gal-head">
     <h2>Example programs</h2>
@@ -13129,7 +13139,7 @@ HOW TO MAP CODE
       return { status:"saved" };
     } });
     // And it says what it can do here, and where to run programs with Claude.
-    $("offsite-text").textContent = tr("This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:");
+    // (the words, and the key controls for running with your own API key, are in 12-claude.js: showOwnKey)
     $("offsite-link").textContent = tr("Second Thought on claude.ai");
     $("offsite").hidden = false;
   }
@@ -14466,7 +14476,7 @@ HOW TO MAP CODE
   }
   async function convertWithClaude(code, label){
     const sample = await getSample();
-    if (!sample) { ioMsg("io-import-msg", "Converting needs Claude. Open this page in claude.ai while signed in.", "bad"); return; }
+    if (!sample) { ioMsg("io-import-msg", tr("Converting needs Claude. Open this page in claude.ai while signed in.") + orOwnKey(), "bad"); return; }
     clearChoice();
     ioMsg("io-import-msg", "Converting with Claude. This can take a minute or two…");
     $("io-load-paste").disabled = true;
@@ -14527,7 +14537,7 @@ HOW TO MAP CODE
     const text = $("describe-text").value.trim();
     if (!text) { describeMsg(tr("Describe what the program should do first."), "bad"); $("describe-text").focus(); return; }
     const sample = await getSample();
-    if (!sample) { describeMsg(tr("Building a program needs Claude. Open this page in claude.ai while signed in."), "bad"); return; }
+    if (!sample) { describeMsg(tr("Building a program needs Claude. Open this page in claude.ai while signed in.") + orOwnKey(), "bad"); return; }
     described = null;
     $("describe-build").disabled = $("describe-change").disabled = true;
     describeMsg(tr("Claude is working on the program. This can take a minute…"));
@@ -14619,8 +14629,140 @@ HOW TO MAP CODE
   /* ---------- Claude access ---------- */
   let samplePromise = null;
   function getSample(){
-    if (!samplePromise) samplePromise = (window.claude && window.claude.use) ? window.claude.use("sample").catch(() => null) : Promise.resolve(null);
+    if (!samplePromise) samplePromise = (window.claude && window.claude.use) ? window.claude.use("sample").catch(() => null)
+      : Promise.resolve(ownKey.get() ? ownKeySample(ownKey.get()) : null);
     return samplePromise;
+  }
+
+  /* ---------- Your own API key, off claude.ai (#293) ----------
+     The copy on GitHub Pages has no Claude of its own, so it can call Claude's API with a key the person gives it. The
+     key goes only from this browser to api.anthropic.com (the copy's Content-Security-Policy allows no other
+     connection), and calls are charged to that key's account. It's kept for this browser tab unless "Remember on this
+     browser" is ticked; it's never put in a saved program, an export, the run log or a test case. */
+  const OWN_KEY = "second-thought-anthropic-key";
+  const ownKey = {
+    get(){ for (const s of ["sessionStorage", "localStorage"]) { try { const k = window[s].getItem(OWN_KEY); if (k) return k; } catch(e) {} } return ""; },
+    set(key, remember){
+      ownKey.forget();
+      try { window[remember ? "localStorage" : "sessionStorage"].setItem(OWN_KEY, key); } catch(e) { return false; }
+      return true;
+    },
+    forget(){ for (const s of ["sessionStorage", "localStorage"]) { try { window[s].removeItem(OWN_KEY); } catch(e) {} } },
+    shown(key){ return "…" + String(key).slice(-4); }  // only the last four characters are ever shown
+  };
+  const API_URL = "https://api.anthropic.com/v1/messages";
+  const API_MAX_TOKENS = 16000;
+  const JSON_ONLY = "Reply with only the JSON value asked for: no code fences, no other text before or after it.";
+  const blobBase64 = blob => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(",")[1]); r.onerror = () => rej(r.error); r.readAsDataURL(blob); });
+  // Claude's API's own error, as one of the codes errText knows.
+  function apiError(status, body){
+    const msg = String((body && body.error && body.error.message) || "");
+    if (status === 401) return { code:"bad_key", message:msg };
+    if (status === 403) return { code:"key_not_allowed", message:msg };
+    if (status === 429) return { code:"rate_limited", message:msg };
+    if (/credit balance/i.test(msg)) return { code:"no_credit", message:msg };
+    if (/prompt is too long|too many tokens/i.test(msg)) return { code:"prompt_too_large", message:msg };
+    if (status === 529 || status >= 500) return { code:"overloaded", message:msg };
+    return { code:"api_error", message:msg || ("HTTP " + status) };
+  }
+  // Reads the API's streamed reply (server-sent events), passing the text so far to onText as it arrives.
+  async function readStream(resp, onText){
+    const reader = resp.body.getReader(), dec = new TextDecoder();
+    let buf = "", text = "", stop = null;
+    const handle = ev => {
+      if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "text_delta") {
+        text += ev.delta.text; if (onText) onText({ text, delta:ev.delta.text });
+      } else if (ev.type === "message_delta" && ev.delta && ev.delta.stop_reason) stop = ev.delta.stop_reason;
+      else if (ev.type === "error") throw apiError(ev.error && ev.error.type === "overloaded_error" ? 529 : 500, ev);
+    };
+    for (;;) {
+      const { done, value } = await reader.read();
+      buf += dec.decode(value || new Uint8Array(), { stream:!done });
+      let i;
+      while ((i = buf.indexOf("\n\n")) >= 0) {
+        const chunk = buf.slice(0, i); buf = buf.slice(i + 2);
+        const data = chunk.split("\n").filter(l => l.startsWith("data:")).map(l => l.slice(5).trim()).join("");
+        if (data) handle(JSON.parse(data));
+      }
+      if (done) break;
+    }
+    return { text, stop };
+  }
+  // A stand-in for claude.ai's "sample" (the same calls the page makes there), calling Claude's API with the key.
+  function ownKeySample(key){
+    const model = tier => { const t = SERVICES[0].tiers; return (t[tier] || t.default)[0]; };
+    async function call(input, o, system){
+      const turns = (typeof input === "string" ? [{ role:"user", content:input }] : input).map(t => ({ role:t.role, content:t.content }));
+      if (o.images && o.images.length) {
+        const last = turns[turns.length - 1], parts = [];
+        for (const b of o.images) parts.push({ type:"image", source:{ type:"base64", media_type:b.type || "image/png", data:await blobBase64(b) } });
+        last.content = parts.concat([{ type:"text", text:String(last.content) }]);
+      }
+      const body = { model:model(o.modelTier), max_tokens:API_MAX_TOKENS, stream:true, messages:turns };
+      if (system) body.system = system;
+      let resp;
+      try {
+        resp = await fetch(API_URL, { method:"POST", signal:o.signal, body:JSON.stringify(body), headers:{
+          "content-type":"application/json", "x-api-key":key, "anthropic-version":"2023-06-01",
+          "anthropic-dangerous-direct-browser-access":"true" } });
+      } catch(e) {
+        if (e && e.name === "AbortError") throw { code:"cancelled" };
+        throw { code:"network", message:String(e && e.message || e) };
+      }
+      if (!resp.ok) { let j = null; try { j = await resp.json(); } catch(e) {} throw apiError(resp.status, j); }
+      let got;
+      try { got = await readStream(resp, o.onText); }
+      catch(e) { if (e && e.name === "AbortError") throw { code:"cancelled" }; throw e; }
+      if (got.stop === "refusal") throw { code:"refused" };
+      if (!got.text.trim() && got.stop !== "max_tokens") throw { code:"empty_completion" };
+      return { text:got.text, truncated:got.stop === "max_tokens" };
+    }
+    const f = (input, o = {}) => call(input, o);
+    f.json = async (input, o = {}) => {
+      const { text } = await call(input, Object.assign({}, o, { onText:null }), JSON_ONLY);
+      const t = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+      try { return JSON.parse(t); } catch(e) {}
+      const a = t.search(/[[{]/), z = Math.max(t.lastIndexOf("}"), t.lastIndexOf("]"));
+      if (a >= 0 && z > a) { try { return JSON.parse(t.slice(a, z + 1)); } catch(e) {} }
+      throw { code:"invalid_json", message:"The reply wasn't readable JSON.", text };
+    };
+    f.limits = async () => ({ maxPromptBytes:262144, images:{ maxCount:20, maxInputBytes:5000000, mediaTypes:["image/jpeg", "image/png", "image/webp", "image/gif"] } });
+    f.ownKey = true;
+    return f;
+  }
+  // The offsite banner's key controls: "Use your own API key", and once one is given, which key and "Forget my key".
+  // Off claude.ai, a "needs Claude" message says where else Claude can come from.
+  const orOwnKey = () => (window.claude && window.claude.use) ? "" : " " + tr("Or use your own API key, from the bar at the top.");
+  function showOwnKey(){
+    if (window.claude && window.claude.use) return;
+    const key = ownKey.get();
+    $("offsite-text").textContent = key
+      ? tr("Programs run with your own API key ({key}), charged to its Anthropic account.", { key:ownKey.shown(key) })
+      : tr("This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:");
+    $("offsite-link").hidden = !!key;
+    $("own-key").hidden = !!key || !$("own-key-panel").hidden;
+    $("own-key-forget").hidden = !key;
+  }
+  if (!(window.claude && window.claude.use)) {
+    $("own-key").textContent = tr("Use your own API key");
+    $("own-key-forget").textContent = tr("Forget my key");
+    $("own-key-label").textContent = tr("Your Anthropic API key");
+    $("own-key-remember-text").textContent = tr("Remember on this browser");
+    $("own-key-use").textContent = tr("Use this key");
+    $("own-key-cancel").textContent = tr("Cancel");
+    $("own-key-note").textContent = tr("The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.");
+    const close = () => { $("own-key-panel").hidden = true; $("own-key-input").value = ""; $("own-key-msg").textContent = ""; showOwnKey(); };
+    $("own-key").onclick = () => { $("own-key-panel").hidden = false; showOwnKey(); $("own-key-input").focus(); };
+    $("own-key-cancel").onclick = close;
+    $("own-key-use").onclick = () => {
+      const key = $("own-key-input").value.trim();
+      if (!/^sk-ant-[\w-]{20,}$/.test(key)) { $("own-key-msg").textContent = tr("That doesn't look like an Anthropic API key. They start with sk-ant-."); return; }
+      if (!ownKey.set(key, $("own-key-remember").checked)) { $("own-key-msg").textContent = tr("This browser won't keep the key. Allow site data for this page, then try again."); return; }
+      samplePromise = null; showBanner(""); close();
+    };
+    $("own-key-input").onkeydown = e => { if (e.key === "Enter") $("own-key-use").click(); };
+    $("own-key-forget").onclick = () => { ownKey.forget(); samplePromise = null; showOwnKey(); };
+    showOwnKey();
   }
   getSample();
   function showBanner(msg){ const b = $("banner"); b.textContent = tr(msg); b.hidden = !msg; }
@@ -14632,10 +14774,17 @@ HOW TO MAP CODE
     refused:"Claude declined this step. Change the wording and try again.",
     empty_completion:"Claude returned nothing for this step. Simplify it and try again.",
     invalid_json:"Claude's reply came back in an unreadable format. Run again.",
-    prompt_too_large:"The text is too long for one step. Shorten it."
+    prompt_too_large:"The text is too long for one step. Shorten it.",
+    // Your own API key (#293)
+    bad_key:"Claude's API refused your API key. Check it, or forget it and enter it again.",
+    key_not_allowed:"Your API key isn't allowed to do that. Check its permissions in the Claude Console.",
+    no_credit:"Your Anthropic account has no credit left for this key. Add some in the Claude Console, then run again.",
+    overloaded:"Claude's API is busy right now. Wait a moment and run again.",
+    network:"api.anthropic.com couldn't be reached. Check your connection and run again."
   };
   const errText = e => (e instanceof Error) ? ("The page hit an error: " + e.message)
     : (e && (e.code === "user" || e.code === "retryable" || e.shape)) ? e.message
+    : (e && e.code === "api_error") ? tr("Claude's API said: {problem}", { problem:e.message })
     : ERR[e && e.code] || ("Something went wrong talking to Claude" + (e && e.code ? " (" + e.code + ")" : "") + ". Run again.");
 
   // 13-run-log.js: The run log's steps.
@@ -17611,7 +17760,7 @@ HOW TO MAP CODE
     const started = Date.now();
     try {
       run.sample = await getSample();
-      if (!run.sample) { showBanner("Running needs Claude. Open this page in claude.ai while signed in."); throw new Halt(); }
+      if (!run.sample) { showBanner(tr("Running needs Claude. Open this page in claude.ai while signed in.") + orOwnKey()); throw new Halt(); }
       await memInit();
       run.ready = true;
       run.pending.forEach(h => h.evalBlock ? startScript(null, "", h.evalBlock) : startScript(h.getNextBlock(), h.payload));

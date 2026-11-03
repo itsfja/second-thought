@@ -943,7 +943,19 @@
 "premium":"𐀡𐀬𐀴𐀗",
 "price unknown":"𐀴𐀔 𐀀𐀒𐀜𐀵",
 "Second Thought on claude.ai":"Second Thought 𐀁𐀠 claude.ai",
-"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"𐀵𐀵 𐀀𐀴𐀒𐀡 Second Thought 𐀫𐀑𐀯𐀳𐀪𐀊 𐀳𐀄𐀐𐀁, 𐀟𐀂𐀨𐀁, e-ke-ge-e 𐀏𐀂 𐀁𐀏𐀐𐀁, 𐀀𐀨 𐀃𐀄 𐀕𐀲 Claude 𐀏𐀨𐀁. 𐀁𐀠 𐀵𐀵, 𐀀𐀜𐀐 𐀁𐀠 claude.ai:"
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"𐀵𐀵 𐀀𐀴𐀒𐀡 Second Thought 𐀫𐀑𐀯𐀳𐀪𐀊 𐀳𐀄𐀐𐀁, 𐀟𐀂𐀨𐀁, e-ke-ge-e 𐀏𐀂 𐀁𐀏𐀐𐀁, 𐀀𐀨 𐀃𐀄 𐀕𐀲 Claude 𐀏𐀨𐀁. 𐀁𐀠 𐀵𐀵, 𐀀𐀜𐀐 𐀁𐀠 claude.ai:",
+"Use your own API key":"𐀐𐀨 𐀏𐀨𐀹𐀰 API",
+"Forget my key":"𐀏𐀨𐀹𐀗 𐀩𐀲",
+"Your Anthropic API key":"𐀏𐀨𐀹𐀰 Anthropic API",
+"Remember on this browser":"𐀕𐀚𐀕𐀜 𐀁𐀚 𐀵𐀆 𐀇𐀓𐀶𐀃𐀮𐀒𐀡",
+"Use this key":"𐀐𐀨 𐀵𐀆 𐀏𐀨𐀹",
+"Cancel":"𐀀𐀠𐀁𐀮",
+"Programs run with your own API key ({key}), charged to its Anthropic account.":"𐀡𐀫𐀏𐀨𐀔 𐀳𐀩𐀐𐀁 𐀏𐀨𐀹𐀆𐀰 API ({key}); 𐀃𐀟𐀫 𐀁𐀠 Anthropic 𐀏𐀨𐀵𐀪.",
+"Or use your own API key, from the bar at the top.":"𐀁 𐀐𐀨 𐀏𐀨𐀹𐀰 API, 𐀀𐀡 𐀀𐀒𐀨𐀲 𐀲𐀂𐀛𐀊.",
+"That doesn't look like an Anthropic API key. They start with sk-ant-.":"𐀵𐀵 𐀃𐀄 𐀞𐀂𐀚𐀲𐀂 𐀏𐀨𐀹 Anthropic API. 𐀀𐀨𐀒𐀵 sk-ant-.",
+"This browser won't keep the key. Allow site data for this page, then try again.":"𐀵𐀆 𐀇𐀓𐀶𐀃𐀮𐀒𐀡 𐀏𐀨𐀹 𐀃𐀄 𐀢𐀨𐀮𐀂. 𐀁𐀀𐀮 𐀵𐀡 𐀆𐀈𐀕𐀙, 𐀁𐀟𐀂𐀲 𐀀𐀚𐀟𐀂𐀨.",
+"The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"𐀏𐀨𐀹 𐀗𐀜 𐀀𐀡 𐀵𐀆 𐀇𐀓𐀶𐀃𐀮𐀒𐀡 𐀁𐀚 api.anthropic.com 𐀂𐀋𐀵; 𐀃𐀟𐀫 𐀁𐀠 𐀏𐀨𐀵𐀪. 𐀢𐀨𐀮𐀲𐀂 𐀀𐀐𐀪 𐀵𐀵 𐀠𐀙𐀐 𐀐𐀬𐀮, 𐀀𐀂 𐀕 𐀕𐀚𐀕𐀜 𐀮𐀔𐀂𐀚. 𐀃𐀄𐀟𐀡 𐀁𐀚 𐀡𐀫𐀏𐀨𐀔, 𐀁𐀏𐀺𐀏, 𐀁𐀚 𐀆𐀫𐀗 𐀳𐀄𐀒 𐀢𐀨𐀮𐀲𐀂. 𐀡𐀁𐀮 𐀃𐀚 𐀁𐀚 console.anthropic.com.",
+"Claude's API said: {problem}":"Claude API 𐀁𐀁𐀟: {problem}"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},

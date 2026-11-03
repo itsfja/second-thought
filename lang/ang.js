@@ -942,7 +942,19 @@
 "premium":"deorwyrþe",
 "price unknown":"weorþ uncuþ",
 "Second Thought on claude.ai":"Second Thought on claude.ai",
-"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Þeos bysen Second Thought mæg programmas wyrcan, on bysenum fandian, reccan and utlædan, ac ne mæg hie mid Claude fremman. For þæm, ontyn hie on claude.ai:"
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Þeos bysen Second Thought mæg programmas wyrcan, on bysenum fandian, reccan and utlædan, ac ne mæg hie mid Claude fremman. For þæm, ontyn hie on claude.ai:",
+"Use your own API key":"Bruc þīnne āgenne API cǣg",
+"Forget my key":"Forgit mīnne cǣg",
+"Your Anthropic API key":"Þīn Anthropic API cǣg",
+"Remember on this browser":"Gemune on þissum sēcende",
+"Use this key":"Bruc þisne cǣg",
+"Cancel":"Forlǣt",
+"Programs run with your own API key ({key}), charged to its Anthropic account.":"Ƿeorc fremmaþ mid þīnum āgnum API cǣge ({key}); se ceap biþ his Anthropic gerīme geteald.",
+"Or use your own API key, from the bar at the top.":"Oþþe bruc þīnne āgenne API cǣg, of þǣm bende ufan.",
+"That doesn't look like an Anthropic API key. They start with sk-ant-.":"Þæt ne þyncþ Anthropic API cǣg. Hīe onginnaþ mid sk-ant-.",
+"This browser won't keep the key. Allow site data for this page, then try again.":"Þes sēcend ne healdeþ þone cǣg. Lǣt stōwe gegaderunge for þisum leafe, and fanda eft.",
+"The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"Se cǣg fērþ ān of þissum sēcende tō api.anthropic.com, and se ceap þāra fremminga biþ his gerīme geteald. He biþ gehealden oþ þæt þū þisne tæppel belūce, būton þū Gemune mearcie. Næfre ne biþ he gehealden on ƿeorcum, ūtsendungum oþþe þǣre fremminge bōc. Ƿyrc ǣnne on console.anthropic.com.",
+"Claude's API said: {problem}":"Claudes API cwæþ: {problem}"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},

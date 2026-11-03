@@ -942,7 +942,19 @@
 "premium":"premium",
 "price unknown":"prijs onbekend",
 "Second Thought on claude.ai":"Second Thought op claude.ai",
-"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Deze kopie van Second Thought kan programma’s bouwen, uitproberen met voorbeeldgegevens, uitleggen en exporteren, maar niet uitvoeren met Claude. Open hem daarvoor op claude.ai:"
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Deze kopie van Second Thought kan programma’s bouwen, uitproberen met voorbeeldgegevens, uitleggen en exporteren, maar niet uitvoeren met Claude. Open hem daarvoor op claude.ai:",
+"Use your own API key":"Je eigen API-sleutel gebruiken",
+"Forget my key":"Mijn sleutel vergeten",
+"Your Anthropic API key":"Je Anthropic-API-sleutel",
+"Remember on this browser":"Onthouden in deze browser",
+"Use this key":"Deze sleutel gebruiken",
+"Cancel":"Annuleren",
+"Programs run with your own API key ({key}), charged to its Anthropic account.":"Programma's draaien met je eigen API-sleutel ({key}), op rekening van het Anthropic-account ervan.",
+"Or use your own API key, from the bar at the top.":"Of gebruik je eigen API-sleutel, via de balk bovenaan.",
+"That doesn't look like an Anthropic API key. They start with sk-ant-.":"Dat lijkt geen Anthropic-API-sleutel. Die beginnen met sk-ant-.",
+"This browser won't keep the key. Allow site data for this page, then try again.":"Deze browser bewaart de sleutel niet. Sta sitegegevens toe voor deze pagina en probeer het opnieuw.",
+"The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"De sleutel gaat alleen van deze browser naar api.anthropic.com, en runs komen op rekening van het account ervan. Hij blijft bewaard tot je dit tabblad sluit, tenzij je Onthouden aanvinkt. Hij wordt nooit opgeslagen in programma's, exports of het runlogboek. Maak er een aan op console.anthropic.com.",
+"Claude's API said: {problem}":"De API van Claude zei: {problem}"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

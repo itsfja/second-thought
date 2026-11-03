@@ -942,7 +942,19 @@
 "premium":"πολυτελές",
 "price unknown":"τιμὴ ἄγνωστος",
 "Second Thought on claude.ai":"Τὸ Second Thought ἐν τῷ claude.ai",
-"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Τοῦτο τὸ ἀντίγραφον τοῦ Second Thought δύναται προγράμματα ποιεῖν, ἐν παραδείγμασι δοκιμάζειν, ἐξηγεῖσθαι καὶ ἐξάγειν, ἀλλ’ οὐ μετὰ τοῦ Claude πράττειν. Πρὸς τοῦτο, ἄνοιξον ἐν τῷ claude.ai·"
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Τοῦτο τὸ ἀντίγραφον τοῦ Second Thought δύναται προγράμματα ποιεῖν, ἐν παραδείγμασι δοκιμάζειν, ἐξηγεῖσθαι καὶ ἐξάγειν, ἀλλ’ οὐ μετὰ τοῦ Claude πράττειν. Πρὸς τοῦτο, ἄνοιξον ἐν τῷ claude.ai·",
+"Use your own API key":"Τῇ σῇ κλειδὶ API χρῶ",
+"Forget my key":"Ἐπιλάθου τῆς κλειδός μου",
+"Your Anthropic API key":"Ἡ σὴ κλεὶς API τῆς Anthropic",
+"Remember on this browser":"Μέμνησο ἐν τῷδε τῷ περιηγητῇ",
+"Use this key":"Τῇδε τῇ κλειδὶ χρῶ",
+"Cancel":"Ἄφες",
+"Programs run with your own API key ({key}), charged to its Anthropic account.":"Τὰ προγράμματα τῇ σῇ κλειδὶ API ({key}) τρέχει, τὸ δὲ ἀνάλωμα τῷ λόγῳ αὐτῆς τῷ τῆς Anthropic γράφεται.",
+"Or use your own API key, from the bar at the top.":"Ἢ τῇ σῇ κλειδὶ API χρῶ, ἀπὸ τῆς ἄνω ταινίας.",
+"That doesn't look like an Anthropic API key. They start with sk-ant-.":"Τοῦτο οὐ φαίνεται κλεὶς API τῆς Anthropic. Ἄρχονται ἀπὸ sk-ant-.",
+"This browser won't keep the key. Allow site data for this page, then try again.":"Ὅδε ὁ περιηγητὴς τὴν κλεῖδα οὐ φυλάσσει. Ἔασον τὰ τοῦ τόπου δεδομένα τῇδε τῇ σελίδι, εἶτα αὖθις πειρῶ.",
+"The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"Ἡ κλεὶς ἀπὸ τοῦδε τοῦ περιηγητοῦ εἰς api.anthropic.com μόνον πορεύεται, οἱ δὲ δρόμοι τῷ λόγῳ αὐτῆς γράφονται. Φυλάσσεται ἕως ἂν τήνδε τὴν καρτέλαν κλείσῃς, εἰ μὴ τὸ Μέμνησο σημήνῃς. Οὐδέποτε ἐν προγράμμασιν, ἐξαγωγαῖς ἢ τῷ τοῦ δρόμου ὑπομνήματι φυλάσσεται. Ποίησον μίαν ἐν console.anthropic.com.",
+"Claude's API said: {problem}":"Ἡ τοῦ Claude API εἶπεν· {problem}"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

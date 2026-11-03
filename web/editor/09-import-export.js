@@ -52,7 +52,7 @@
       return { status:"saved" };
     } });
     // And it says what it can do here, and where to run programs with Claude.
-    $("offsite-text").textContent = tr("This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:");
+    // (the words, and the key controls for running with your own API key, are in 12-claude.js: showOwnKey)
     $("offsite-link").textContent = tr("Second Thought on claude.ai");
     $("offsite").hidden = false;
   }
