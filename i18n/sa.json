@@ -3137,7 +3137,7 @@
   "PROCEDURES_MUTATORCONTAINER_TOOLTIP": "अस्य कार्यस्य निवेशान् योजय, अपनय, पुनः क्रमय वा।",
   "REDO": "पुनः कुरु",
   "REMOVE_COMMENT": "टिप्पणीम् अपनय",
-  "RENAME_VARIABLE": "चरं पुनः नामय...",
+  "RENAME_VARIABLE": "'%1' चरस्य नाम परिवर्तय",
   "RENAME_VARIABLE_TITLE": "सर्वान् '%1' चरान् इति पुनः नामय:",
   "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "लघ्वक्षरेषु",
   "TEXT_CHANGECASE_OPERATOR_TITLECASE": "शीर्षकाक्षरेषु",

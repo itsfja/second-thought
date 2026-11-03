@@ -3136,7 +3136,7 @@
   "PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Adde, take awey or sette newe in ordre the inputtes of this werk.",
   "REDO": "Do agayn",
   "REMOVE_COMMENT": "Take awey comente",
-  "RENAME_VARIABLE": "Name the variable newe...",
+  "RENAME_VARIABLE": "Renamen the '%1' variable",
   "RENAME_VARIABLE_TITLE": "Name alle '%1' variables newe as:",
   "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "to smale lettres",
   "TEXT_CHANGECASE_OPERATOR_TITLECASE": "to Grete Lettres At The Bigynnynge",

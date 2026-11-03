@@ -2004,7 +2004,7 @@
 "PROCEDURES_MUTATORCONTAINER_TOOLTIP":"𐀡𐀮𐀳𐀮, 𐀀𐀟𐀩 𐀁 𐀀𐀠 𐀲𐀮𐀮 𐀁𐀰𐀈 𐀵𐀵 𐀸𐀒.",
 "REDO":"𐀀𐀠 𐀡𐀁𐀮",
 "REMOVE_COMMENT":"𐀀𐀟𐀩 𐀁𐀠𐀏𐀨𐀟",
-"RENAME_VARIABLE":"𐀀𐀠 𐀃𐀜𐀔𐀽 𐀀𐀫𐀍𐀵...",
+"RENAME_VARIABLE":"𐀀𐀟 𐀃𐀜𐀔𐀽 '%1' 𐀀𐀫𐀒𐀲",
 "RENAME_VARIABLE_TITLE":"𐀀𐀠 𐀃𐀜𐀔𐀽 𐀞𐀲 '%1' 𐀀𐀫𐀍𐀲 𐀁𐀠:",
 "TEXT_CHANGECASE_OPERATOR_LOWERCASE":"𐀁𐀠 𐀖𐀏 𐀏𐀨𐀔𐀲",
 "TEXT_CHANGECASE_OPERATOR_TITLECASE":"𐀁𐀠 𐀕𐀏 𐀀𐀏 𐀏𐀨𐀔𐀲",

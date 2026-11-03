@@ -3137,7 +3137,7 @@
   "PROCEDURES_MUTATORCONTAINER_TOOLTIP": "אוסף, סלק או סדר עלולין לעבידתא הדא.",
   "REDO": "עבד תוב",
   "REMOVE_COMMENT": "סלק פירושא",
-  "RENAME_VARIABLE": "שני שם משתנא...",
+  "RENAME_VARIABLE": "שני שמה דמשתנא '%1'",
   "RENAME_VARIABLE_TITLE": "שני שם כל משתני '%1' ל:",
   "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "לאתוון זעירין",
   "TEXT_CHANGECASE_OPERATOR_TITLECASE": "לאתוון רישין",

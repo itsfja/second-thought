@@ -3136,7 +3136,7 @@
   "PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Bæt við, tak brott eða skipa aptr ílǫgum þessa verks.",
   "REDO": "Ger aptr",
   "REMOVE_COMMENT": "Tak brott athugasemd",
-  "RENAME_VARIABLE": "Nefn breytu at nýju...",
+  "RENAME_VARIABLE": "Endrnefn breytuna '%1'",
   "RENAME_VARIABLE_TITLE": "Nefn allar '%1'-breytur at nýju sem:",
   "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "í smáa stafi",
   "TEXT_CHANGECASE_OPERATOR_TITLECASE": "í Stóra Upphafsstafi",

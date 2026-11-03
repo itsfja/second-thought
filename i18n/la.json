@@ -3136,7 +3136,7 @@
   "PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Ingressus huius functionis adde, remove aut reordina.",
   "REDO": "Refac",
   "REMOVE_COMMENT": "Remove commentarium",
-  "RENAME_VARIABLE": "Variabilem renomina...",
+  "RENAME_VARIABLE": "Variabilem '%1' renomina",
   "RENAME_VARIABLE_TITLE": "Omnes variabiles '%1' renomina ad:",
   "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "ad litteras minusculas",
   "TEXT_CHANGECASE_OPERATOR_TITLECASE": "ad Litteras Initiales Maiusculas",

@@ -3136,7 +3136,7 @@
   "PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Yc, afyrr oþþe endebyrda eft þisse wyrcinge ingehyda.",
   "REDO": "Edwyrc",
   "REMOVE_COMMENT": "Afyrr cwide",
-  "RENAME_VARIABLE": "Ednemn wendling...",
+  "RENAME_VARIABLE": "Nemn eft þone '%1' wendendlican",
   "RENAME_VARIABLE_TITLE": "Ednemn ealle '%1' wendlingas to:",
   "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "to lytlum stafum",
   "TEXT_CHANGECASE_OPERATOR_TITLECASE": "to Heafodstafum On Fruman",

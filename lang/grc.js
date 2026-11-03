@@ -2003,7 +2003,7 @@
 "PROCEDURES_MUTATORCONTAINER_TOOLTIP":"Πρόσθες, ἄφελε ἢ ἀνάταξον τὰς εἰσόδους τούτου τοῦ ἔργου.",
 "REDO":"Πάλιν ποίησον",
 "REMOVE_COMMENT":"Ἄφελε τὸ σχόλιον",
-"RENAME_VARIABLE":"Μετονόμασον τὸ μεταβλητόν...",
+"RENAME_VARIABLE":"Μετονόμασον τὴν μεταβλητὴν '%1'",
 "RENAME_VARIABLE_TITLE":"Μετονόμασον πάντα τὰ μεταβλητὰ '%1' εἰς·",
 "TEXT_CHANGECASE_OPERATOR_LOWERCASE":"εἰς μικρὰ γράμματα",
 "TEXT_CHANGECASE_OPERATOR_TITLECASE":"εἰς Ἀρχικὰ Κεφαλαῖα",
