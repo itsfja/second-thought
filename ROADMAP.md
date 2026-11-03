@@ -22,17 +22,9 @@ Fixes reach people, released in 3.1.0: exported programs say when their runtime 
 
 What a run costs, in terms people use, released in 3.2.0 and 3.3.0: a budget in money ([#241](https://github.com/itsfja/second-thought/issues/241)), and costs and budgets in pounds, euros, yen or yuan ([#263](https://github.com/itsfja/second-thought/issues/263)).
 
-## Now: what models and keys cost
+What models and keys cost, released in 3.4.1 to 3.7.0: how expensive each model is and who makes it ([#264](https://github.com/itsfja/second-thought/issues/264)), prices for the rest of the services ([#243](https://github.com/itsfja/second-thought/issues/243)), each key's spending with hourly, daily, weekly and monthly allowances ([#269](https://github.com/itsfja/second-thought/issues/269)), and each account's plan with the limits services report ([#270](https://github.com/itsfja/second-thought/issues/270)). Also fixed: programs with a currency set stopped at start ([#274](https://github.com/itsfja/second-thought/issues/274)).
 
-| | Benefit | Cost |
-|---|---|---|
-| [#269](https://github.com/itsfja/second-thought/issues/269) Track each key's spending on this computer, with hourly, daily, weekly and monthly allowances | Medium-high for unattended programs | Medium |
-| [#243](https://github.com/itsfja/second-thought/issues/243) Prices for the rest of the model services | Medium now: without a price a model has no band ([#264](https://github.com/itsfja/second-thought/issues/264)) and is refused under an allowance | Low, plus upkeep |
-| [#270](https://github.com/itsfja/second-thought/issues/270) Show the limits services report, and set each account's plan to measure against | Medium | Medium, plus upkeep |
-
-#264 shipped in 3.4.1. #269 is the ledger the allowances come from. #243 moved up from Later: most services other than Claude still have no price, so bands and allowances don't reach them yet. #270 then measures against each plan's published limits.
-
-## Next: GitHub as a home
+## Now: GitHub as a home
 
 | | Benefit | Cost |
 |---|---|---|
@@ -46,6 +38,7 @@ What a run costs, in terms people use, released in 3.2.0 and 3.3.0: a budget in 
 | [#262](https://github.com/itsfja/second-thought/issues/262) Kraken (crypto) through its MCP server, with live-money tools always asking | Medium, and a strong test of "actions ask first" | Medium |
 | [#247](https://github.com/itsfja/second-thought/issues/247) Gallery: Premium Bonds generations | Medium: an agent whose arithmetic is checked | Low-medium, once a few real lines of NS&I's pages are in (numbers changed) |
 | [#242](https://github.com/itsfja/second-thought/issues/242) Blockly 12, with its own keyboard navigation | Medium | Medium |
+| [#281](https://github.com/itsfja/second-thought/issues/281) MiniMax's quick tier: move from M2.7-highspeed to M3.1-Flash | Low-medium | Low |
 
 ## Someday
 
