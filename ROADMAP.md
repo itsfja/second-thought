@@ -24,12 +24,15 @@ What a run costs, in terms people use, released in 3.2.0 and 3.3.0: a budget in 
 
 What models and keys cost, released in 3.4.1 to 3.7.0: how expensive each model is and who makes it ([#264](https://github.com/itsfja/second-thought/issues/264)), prices for the rest of the services ([#243](https://github.com/itsfja/second-thought/issues/243)), each key's spending with hourly, daily, weekly and monthly allowances ([#269](https://github.com/itsfja/second-thought/issues/269)), and each account's plan with the limits services report ([#270](https://github.com/itsfja/second-thought/issues/270)). Also fixed: programs with a currency set stopped at start ([#274](https://github.com/itsfja/second-thought/issues/274)).
 
-## Now: GitHub as a home
+GitHub as a home, released in 3.8.0: a program's test cases on GitHub Actions ([#246](https://github.com/itsfja/second-thought/issues/246)), and the page on GitHub Pages as a second front door ([#245](https://github.com/itsfja/second-thought/issues/245)).
+
+## Now: the Pages copy, fully usable
 
 | | Benefit | Cost |
 |---|---|---|
-| [#246](https://github.com/itsfja/second-thought/issues/246) Run a program's test cases on GitHub Actions | Medium-high, and distinctive | Low-medium |
-| [#245](https://github.com/itsfja/second-thought/issues/245) Publish the page on GitHub Pages as a second front door | Medium | Low |
+| [#293](https://github.com/itsfja/second-thought/issues/293) On the Pages copy, run programs with your own API key | Medium-high: the second front door works for people without claude.ai | Medium |
+
+The Pages copy builds, tries and exports programs, but can't run them, or use Build it and Change this program. With a person's own Claude key it can, as long as the key stays safe: kept for the session unless they choose otherwise, sent only to Anthropic, and behind a security policy that stops any other script reading it.
 
 ## Later: important, not urgent
 
