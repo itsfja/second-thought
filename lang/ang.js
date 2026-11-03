@@ -1813,7 +1813,22 @@
 "weekly":"wucan",
 "monthly":"monþe",
 "{pct}% of the {window} allowance of {amount}":"{pct}% þæs dæles on {window} of {amount}",
-"{service} key: {list}":"{service} cæg: {list}"
+"{service} key: {list}":"{service} cæg: {list}",
+"Limits":"Gemæru",
+"Plan":"Gecwide",
+"Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.":"Ætstanden: þes {service} cæg hæfþ aspended {spent} þisne monþ, and þæt geræcþ þæs {plan} gecwides monþlic hrof of {cap}. {service} ne onfehþ clipunga oþ {when}.",
+"input tokens":"inngangende tokenas",
+"monthly cap {amount}":"monþlic hrof {amount}",
+"no monthly cap published":"nan monþlic hrof cyþed",
+"output tokens":"utgangende tokenas",
+"requests":"bena",
+"tokens":"tokenas",
+"{pct}% of its {kind} left":"{pct}% his {kind} belifen",
+"{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer":"{service} ({plan} gecwide): {pct}% þæs hrofes of {cap} on þissum monþe, geteald on þissum rimcræfte",
+"{service} reports {list}":"{service} cyþ {list}",
+"{service} {plan} plan: {cap} (published {date}).":"{service} {plan} gecwide: {cap} (cyþed {date}).",
+"{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"{service} gemæru geþwærlæcaþ his {plan} gecwide: ice {setting} = {plan_lower} {where_keys}",
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} nis {service} gecwide. Bruc anes þissa: {names}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

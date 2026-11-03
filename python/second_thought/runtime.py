@@ -24,7 +24,7 @@ from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, H
 from .connectors import Connections
 from .mcp import MCPTools
 from .agent import AgentTools
-from .spending import Spending, any_allowance
+from .spending import Spending, any_allowance, check_plans, reported_lines
 from .doctor import Doctor
 from .update import Updates
 from .settings import said_no, said_yes, tr  # noqa: F401
@@ -1391,7 +1391,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         budget = (" · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else "") + \
             (" · " + tr("budget {n}", n=self.budget_text()) if self.budget_dollars else "")
         print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}{self.cost_text()}", flush=True)
-        for line in self.allowance_lines(self.tiers_used) + ([self.allowance_note()] if self.allowance_note() and self.tiers_used else []):
+        for line in (self.allowance_lines(self.tiers_used) + reported_lines(low_only=True, hints=False) + self.plan_hints_once()
+                     + ([self.allowance_note()] if self.allowance_note() and self.tiers_used else [])):
             print("  " + line, flush=True)
         return 0
 
@@ -1423,6 +1424,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             lines.append(f"- Budget: {self.budget_text()} at list prices")
         for line in self.allowance_lines(self.tiers_used):
             lines.append(f"- Allowance: {line}")
+        for line in reported_lines():
+            lines.append(f"- Limits: {line}")
         if self.error:
             lines.append(f"- Stopped with an error: {self._describe(self.error)}")
         lines.append("")
@@ -1822,6 +1825,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             return
         self._can = can
         any_allowance()  # so does a mistyped quota_daily (or another allowance)
+        check_plans()  # and a PLAN_ setting naming a plan its service doesn't have
         fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run. Not when the
         # runtime loads: in python/runtime.py, providers comes before core, whose _number_setting it uses (#274)
         if "--doctor" in sys.argv:

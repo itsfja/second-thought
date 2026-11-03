@@ -409,6 +409,42 @@ def model_byline(tier):
     return tr("{model}, by {maker}, {where}", model=model_label(tier), maker=maker, where=where)
 
 
+# What each service last reported about its rate limits, from the headers of its replies (#270):
+# {service: {"model": the model called, "limits": {kind: {"limit", "remaining", "reset"}}}}. Claude, OpenAI and Groq send
+# them; others don't. Kinds are requests, tokens, input-tokens and output-tokens.
+REPORTED = {}
+
+
+def limits_from_headers(headers):
+    """{kind: {"limit": n, "remaining": n, "reset": text}} from a reply's rate-limit headers: Claude's
+    anthropic-ratelimit-<kind>-<what>, and OpenAI's and Groq's x-ratelimit-<what>-<kind>."""
+    found = {}
+    for name, value in (dict(headers or {})).items():
+        name = to_str(name).lower()
+        m = re.match(r"anthropic-ratelimit-(requests|tokens|input-tokens|output-tokens)-(limit|remaining|reset)$", name)
+        kind, what = (m.group(1), m.group(2)) if m else (None, None)
+        if not m:
+            m = re.match(r"x-ratelimit-(limit|remaining|reset)-(requests|tokens)$", name)
+            kind, what = (m.group(2), m.group(1)) if m else (None, None)
+        if kind:
+            found.setdefault(kind, {})[what] = to_str(value).strip()
+    out = {}
+    for kind, v in found.items():
+        try:
+            limit, remaining = int(float(v["limit"])), int(float(v["remaining"]))
+        except (KeyError, ValueError):
+            continue
+        if limit > 0:
+            out[kind] = {"limit": limit, "remaining": max(0, remaining), "reset": v.get("reset", "")}
+    return out
+
+
+def record_limits(service, model, headers):
+    limits = limits_from_headers(headers)
+    if limits:
+        REPORTED[service] = {"model": model, "limits": limits}
+
+
 def model_label(tier):
     if str(tier).startswith("openrouter:"):
         return "OpenRouter: " + tier.split(":", 1)[1]
@@ -551,7 +587,7 @@ class ModelCalls:
             # Structured outputs: Claude can only write JSON of this shape. https://platform.claude.com/docs/en/build-with-claude/structured-outputs
             args["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
         try:
-            msg = await (self._claude_stream(args) if "output_config" not in args and self._streaming() else self.client.messages.create(**args))
+            msg = await (self._claude_stream(args) if "output_config" not in args and self._streaming() else self._claude_create(args))
         except Exception as e:  # noqa: BLE001
             if "output_config" not in args or getattr(e, "status_code", None) != 400:
                 raise
@@ -560,7 +596,7 @@ class ModelCalls:
             self.no_schema_why = str(e)
             self.log(tr("Structured replies"), tr("{model} wouldn't accept a reply shape ({e}), so its replies are checked after they arrive instead.", model=model, e=_short(str(e), 160)), tr("note"))
             del args["output_config"]
-            msg = await self.client.messages.create(**args)
+            msg = await self._claude_create(args)
         usage = getattr(msg, "usage", None)
         self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
         text = "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
@@ -583,6 +619,16 @@ class ModelCalls:
             return False
         return sys.stdout.isatty()
 
+    async def _claude_create(self, args):
+        """One Claude reply, keeping the rate limits its headers report (#270). An SDK without with_raw_response just asks."""
+        raw = getattr(self.client.messages, "with_raw_response", None)
+        if raw is None:
+            return await self.client.messages.create(**args)
+        response = await raw.create(**args)
+        record_limits("Claude", args.get("model", ""), getattr(response, "headers", {}))
+        msg = response.parse()
+        return (await msg) if asyncio.iscoroutine(msg) else msg
+
     async def _claude_stream(self, args):
         """Streams one reply, showing a single progress line that's cleared when it's done. Returns the final message."""
         written, shown, width = 0, 0.0, 0
@@ -596,6 +642,7 @@ class ModelCalls:
                     sys.stdout.write("\r" + line)
                     sys.stdout.flush()
             msg = await stream.get_final_message()
+            record_limits("Claude", args.get("model", ""), getattr(getattr(stream, "response", None), "headers", {}))
         if width:
             sys.stdout.write("\r" + " " * width + "\r")
             sys.stdout.flush()
@@ -636,6 +683,7 @@ class ModelCalls:
         req = urllib.request.Request(pv["base"] + path, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
         try:
             with urllib.request.urlopen(req, timeout=CALL_TIMEOUT) as r:
+                record_limits(provider, body.get("model", ""), r.headers)
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
             detail = e.read().decode("utf-8", "replace")[:200]

@@ -2941,7 +2941,22 @@
   "weekly": "šebûtum",
   "monthly": "warḫum",
   "{pct}% of the {window} allowance of {amount}": "{pct}% ša isqim ša {window} ša {amount}",
-  "{service} key: {list}": "kakkum ša {service}: {list}"
+  "{service} key: {list}": "kakkum ša {service}: {list}",
+  "Limits": "miṣrātum",
+  "Plan": "riksum",
+  "Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.": "iprus: kakkum annûm ša {service} ina warḫim annîm {spent} iddin, miṣram ša warḫim ša riksim {plan}, {cap}, ikšud. {service} adi {when} šisītam ul imaḫḫar.",
+  "input tokens": "token ša erēbim",
+  "monthly cap {amount}": "miṣrum ša warḫim {amount}",
+  "no monthly cap published": "miṣrum ša warḫim ul šapir",
+  "output tokens": "token ša aṣîm",
+  "requests": "erištum",
+  "tokens": "token",
+  "{pct}% of its {kind} left": "{pct}% ša {kind}-šu rēḫu",
+  "{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer": "{service} (riksum {plan}): {pct}% ša miṣrim ša {cap} ina warḫim annîm, ina ṭupšarrūtim annītim manû",
+  "{service} reports {list}": "{service} iqbi {list}",
+  "{service} {plan} plan: {cap} (published {date}).": "{service}, riksum {plan}: {cap} ({date}).",
+  "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "miṣrātum ša {service} itti riksim {plan} mitḫarā: {setting} = {plan_lower} {where_keys} šukun",
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} riksum ša {service} ul šu. ištēn ina annûtim epuš: {names}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

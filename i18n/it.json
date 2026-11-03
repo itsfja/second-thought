@@ -2940,6 +2940,21 @@
   "weekly": "settimana",
   "monthly": "mese",
   "{pct}% of the {window} allowance of {amount}": "{pct}% della quota per {window} di {amount}",
-  "{service} key: {list}": "Chiave {service}: {list}"
+  "{service} key: {list}": "Chiave {service}: {list}",
+  "Limits": "Limiti",
+  "Plan": "Piano",
+  "Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.": "Fermato: questa chiave {service} ha speso {spent} questo mese, raggiungendo il tetto mensile del piano {plan} di {cap}. {service} non accetta chiamate fino a {when}.",
+  "input tokens": "token in ingresso",
+  "monthly cap {amount}": "tetto mensile di {amount}",
+  "no monthly cap published": "nessun tetto mensile pubblicato",
+  "output tokens": "token in uscita",
+  "requests": "richieste",
+  "tokens": "token",
+  "{pct}% of its {kind} left": "{pct}% dei suoi {kind} rimasti",
+  "{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer": "{service} (piano {plan}): {pct}% del tetto di {cap} di questo mese, contato su questo computer",
+  "{service} reports {list}": "{service} indica {list}",
+  "{service} {plan} plan: {cap} (published {date}).": "{service}, piano {plan}: {cap} (pubblicato il {date}).",
+  "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "I limiti di {service} corrispondono al suo piano {plan}: aggiungi {setting} = {plan_lower} {where_keys}",
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} non è un piano di {service}. Usa uno di: {names}."
  }
 }

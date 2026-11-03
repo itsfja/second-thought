@@ -2940,7 +2940,22 @@
   "weekly": "viku",
   "monthly": "mánuð",
   "{pct}% of the {window} allowance of {amount}": "{pct}% heimildarinnar á {window} {amount}",
-  "{service} key: {list}": "{service}-lykill: {list}"
+  "{service} key: {list}": "{service}-lykill: {list}",
+  "Limits": "Takmǫrk",
+  "Plan": "Áskrift",
+  "Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.": "Stǫðvat: þessi {service}-lykill hefir eytt {spent} í þessum mánuði, ok nær þat mánaðarþaki {plan}-áskriftar, {cap}. {service} tekr eigi við kǫllum fyrr en {when}.",
+  "input tokens": "inntaks-tokens",
+  "monthly cap {amount}": "mánaðarþak {amount}",
+  "no monthly cap published": "ekkert mánaðarþak birt",
+  "output tokens": "úttaks-tokens",
+  "requests": "beiðnir",
+  "tokens": "tokens",
+  "{pct}% of its {kind} left": "{pct}% af {kind} þess eptir",
+  "{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer": "{service} ({plan}-áskrift): {pct}% af þaki {cap} þessa mánaðar, talit á þessi tǫlvu",
+  "{service} reports {list}": "{service} segir {list}",
+  "{service} {plan} plan: {cap} (published {date}).": "{service}, {plan}-áskrift: {cap} (birt {date}).",
+  "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "Takmǫrk {service} samsvara {plan}-áskrift: bæt við {setting} = {plan_lower} {where_keys}",
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} er eigi áskrift {service}. Nota eina af: {names}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

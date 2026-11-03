@@ -218,6 +218,12 @@ def check_prices(want, today=None):
         if age > 90:
             report(s["name"], "prices", "NOTE", f"checked {age} days ago ({s['prices_checked']}). Look them up again at "
                    f"{s['prices_source']} and update prices and prices_checked in SERVICES")
+    # Each service's plans and their published caps (#270).
+    for service, p in RT["PLANS"].items():
+        age = (today - datetime.date.fromisoformat(p["checked"])).days
+        if want(service) and age > 90:
+            report(service, "plans", "NOTE", f"checked {age} days ago ({p['checked']}). Look them up again at {p['source']} "
+                   "and update PLANS in spending.py")
     # The built-in exchange rates: the page's only rates, and exported programs' last resort when offline.
     age = (today - datetime.date.fromisoformat(RATES["date"])).days
     if age > 30:

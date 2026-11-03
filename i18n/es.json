@@ -2940,6 +2940,21 @@
   "weekly": "semana",
   "monthly": "mes",
   "{pct}% of the {window} allowance of {amount}": "{pct} % de la asignación por {window} de {amount}",
-  "{service} key: {list}": "Clave de {service}: {list}"
+  "{service} key: {list}": "Clave de {service}: {list}",
+  "Limits": "Límites",
+  "Plan": "Plan",
+  "Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.": "Detenido: esta clave de {service} ha gastado {spent} este mes, lo que alcanza el tope mensual del plan {plan} de {cap}. {service} deja de aceptar llamadas hasta {when}.",
+  "input tokens": "tokens de entrada",
+  "monthly cap {amount}": "tope mensual de {amount}",
+  "no monthly cap published": "no se publica tope mensual",
+  "output tokens": "tokens de salida",
+  "requests": "solicitudes",
+  "tokens": "tokens",
+  "{pct}% of its {kind} left": "{pct} % de sus {kind} disponible",
+  "{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer": "{service} (plan {plan}): {pct} % del tope de {cap} de este mes, contado en este ordenador",
+  "{service} reports {list}": "{service} informa {list}",
+  "{service} {plan} plan: {cap} (published {date}).": "{service}, plan {plan}: {cap} (publicado el {date}).",
+  "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "Los límites de {service} coinciden con su plan {plan}: añade {setting} = {plan_lower} {where_keys}",
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} no es un plan de {service}. Usa uno de: {names}."
  }
 }
