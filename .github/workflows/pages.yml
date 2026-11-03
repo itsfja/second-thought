@@ -4,7 +4,12 @@ name: Pages
 # its languages, built by tools/pages.py. Off claude.ai the page can build, try on sample data, explain and export
 # programs, but not run them with Claude, and it says so. Run workflow publishes main's page now.
 #
-# The repository owner turns Pages on once: Settings → Pages → Build and deployment → Source: GitHub Actions.
+# The repository owner sets two things once:
+#   1. Settings → Pages → Build and deployment → Source: GitHub Actions.
+#   2. Settings → Environments → github-pages → Deployment branches and tags → Add deployment branch or tag rule:
+#      Tag, v*. GitHub only lets main deploy to Pages by default, and a release runs from its tag (v3.8.0 was
+#      refused: "not allowed to deploy to github-pages due to environment protection rules"). Until then, Run workflow
+#      from main publishes main's page.
 
 on:
   release:
