@@ -22,6 +22,8 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+## 3.9.0 - 2026-11-03
+
 ### Added
 - Kraken (#262): the **Kraken tools** block gives an agent Kraken's own MCP server from kraken-cli, with market prices, your account and paper trading, or with live spot trading too. `KRAKEN_API_KEY` and `KRAKEN_API_SECRET` are new keys, and `MCP_KRAKEN` chooses its services. `--doctor` checks kraken-cli and the key, and fails on `--allow-dangerous`. A new gallery program, **Kraken week in review**, only reads.
 
