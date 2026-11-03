@@ -10539,6 +10539,8 @@ HOW TO MAP CODE
   // The text written in the page is swapped once, here; text the page sets later goes through tr(), and the tests
   // check every text given to tr has a translation.
   const PAGE_T = (window.ST_I18N && I18N.page) || {};
+  // A variable's name: Blockly 13 keeps it behind getName() (#242).
+  const varName = v => v && (typeof v.getName === "function" ? v.getName() : v.name);
   function tr(s, vars){
     const t = PAGE_T[s] || s;
     return vars ? t.replace(/\{(\w+)\}/g, (m, k) => k in vars ? String(vars[k]) : m) : t;
@@ -14164,7 +14166,7 @@ HOW TO MAP CODE
               else if (t.type === "rb_agent_tool") {
                 const name = String(t.getFieldValue("NAME") || "").trim();
                 const def = Blockly.Procedures.getDefinition(name, t.workspace || ws);
-                const params = def && def.getVarModels ? def.getVarModels().map(v => v.name) : [];
+                const params = def && def.getVarModels ? def.getVarModels().map(varName) : [];
                 tools.push('{"kind": "block", "name": ' + pyStr(name) + ', "desc": ' + inp(t, "DESC", '""') + ', "inputs": ' + pyStr(t.getFieldValue("INPUTS") || "") + ', "params": [' + params.map(pyStr).join(", ") +
                   '], "fn": ' + (def ? procId(name) : "None") + ', "ask": ' + (t.getFieldValue("ASK") === "TRUE" ? "True" : "False") + "}");
               }
@@ -14246,7 +14248,7 @@ HOW TO MAP CODE
         const procOut = [];
         defs.forEach(b => {
           const name = b.getFieldValue("NAME");
-          const params = (b.getVarModels ? b.getVarModels() : []).map(v => v.name);
+          const params = (b.getVarModels ? b.getVarModels() : []).map(varName);
           const args = params.map(p => ident("arg_" + p));
           procOut.push("async def " + procId(name) + "(" + args.join(", ") + "):");
           procOut.push("    \"\"\"My Block in " + x.name.replace(/"/g, "'") + ": " + name.replace(/"{3}/g, "\x27\x27\x27") + "\"\"\"");
@@ -14270,7 +14272,7 @@ HOW TO MAP CODE
       const out = [];
       if (b.type === "procedures_defnoreturn" || b.type === "procedures_defreturn") {
         const name = b.getFieldValue("NAME");
-        const params = (b.getVarModels ? b.getVarModels() : []).map(v => v.name);
+        const params = (b.getVarModels ? b.getVarModels() : []).map(varName);
         const args = params.map(p => ident("arg_" + p));
         out.push("async def " + procId(name) + "(" + args.join(", ") + "):");
         out.push("    \"\"\"My Block: " + name.replace(/"""/g, "'''") + "\"\"\"");
@@ -16215,7 +16217,7 @@ HOW TO MAP CODE
       if (t.type === "rb_agent_tool") {
         const blockName = String(t.getFieldValue("NAME") || "").trim();
         const def = Blockly.Procedures.getDefinition(blockName, t.workspace || ws);
-        const params = def && def.getVarModels ? def.getVarModels().map(v => v.name) : [];
+        const params = def && def.getVarModels ? def.getVarModels().map(varName) : [];
         const desc = str(await input(t, tc, "DESC", "")).trim() || "Runs the My Block \u201c" + blockName + "\u201d.";
         const schema = toolSchema(parseInputTypes(t.getFieldValue("INPUTS"), params, blockName));
         out.set(agentName(blockName, taken), { desc, params, kind:"block", blockName, def, ask:t.getFieldValue("ASK") === "TRUE", schema });
@@ -17666,7 +17668,7 @@ HOW TO MAP CODE
     if (run.answer) add("answer", short(run.answer, 120));
     if (run.approved !== undefined) add("passed review", run.approved ? "yes" : "no");
     if (run.problems && run.problems.length) add("review problems", run.problems.map(p => "\u2022 " + short(p, 80)).join("\n"));
-    run.vars.forEach((v, id) => { const m = ws.getVariableById(id); add(m ? m.name : id, isImg(v) ? str(v) : isRec(v) ? short(str(v).replace(/\n/g, " \u00b7 "), 200) : Array.isArray(v) ? memPreview(v) : short(str(v), 160)); });
+    run.vars.forEach((v, id) => { const m = ws.getVariableMap().getVariableById(id); add(m ? varName(m) : id, isImg(v) ? str(v) : isRec(v) ? short(str(v).replace(/\n/g, " \u00b7 "), 200) : Array.isArray(v) ? memPreview(v) : short(str(v), 160)); });
     run.chats.forEach((h, k) => add("chat " + k, (h.length / 2) + " turns"));
     if (run.result.length) add("result", run.result.length + " part" + (run.result.length === 1 ? "" : "s"));
     if (run.lastError) add("last error", short(run.lastError, 160));
