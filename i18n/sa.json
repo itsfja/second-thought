@@ -2956,7 +2956,12 @@
   "{service} reports {list}": "{service} सूचयति {list}",
   "{service} {plan} plan: {cap} (published {date}).": "{service}, {plan}-योजना: {cap} ({date} प्रकाशितम्)।",
   "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "{service} इत्यस्य सीमाः {plan}-योजनया सङ्गच्छन्ते: {where_keys} {setting} = {plan_lower} योजय",
-  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} {service} इत्यस्य योजना नास्ति। एतेषु एकां प्रयुङ्क्ष्व: {names}।"
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} {service} इत्यस्य योजना नास्ति। एतेषु एकां प्रयुङ्क्ष्व: {names}।",
+  "These {n} tests cost {cost}.": "एताः {n} परीक्षाः {cost} मूल्याः अभवन्।",
+  "Test": "परीक्षा",
+  "Test cases: {passed} of {n} passed": "परीक्षाः: {n} मध्ये {passed} उत्तीर्णाः",
+  "Test failed: {name}": "परीक्षा विफला: {name}",
+  "What was wrong": "किं दुष्टम् आसीत्"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

@@ -112,7 +112,40 @@ async def actions_tests():
             check("can't run on GitHub Actions: it asks you questions" in msg, f"the page says why, instead of saving ({msg})")
             await pg.click("#io-toggle")
 
-            await load_state(pg, sched)
+            # Test cases (#246): a test job, run on push and from Run workflow, never on the schedule.
+            with_tests = {"format": "reflection-blocks", "version": 1, "name": "tested", "program": program(when_time(9, 0, "every", add(tx("x")))),
+                          "tests": [{"name": "Says x", "value": "", "inputs": {}, "criteria": "It says x."}]}
+            await pg.click("#io-toggle")
+            await pg.fill("#io-paste", json.dumps(with_tests))
+            await pg.click("#io-load-paste")
+            await pg.wait_for_timeout(300)
+            await pg.click("#io-toggle")
+            await pg.fill("#io-name", "tested")
+            files = await pg.evaluate("window.__actionsFiles()")
+            names = [f["name"] for f in files]
+            wf, data, on = workflow(files)
+            setup = next(f["text"] for f in files if f["name"] == "SETUP.md")
+            test_job = data["jobs"].get("test", {})
+            check("tested.tests.json" in names and set(on["push"]["paths"]) == {"tested.py", "tested.tests.json", ".github/workflows/tested.yml"},
+                  f"a program with test cases brings them, and they run when the program, its tests or the workflow change ({names})")
+            check(test_job.get("if") == "github.event_name == 'push' || inputs.script == 'tests: run the test cases'"
+                  and "schedule" in data["jobs"]["run"]["if"] and "push" not in data["jobs"]["run"]["if"]
+                  and test_job["steps"][-1]["run"] == "python tested.py --test" and test_job["permissions"] == {"contents": "read"},
+                  "the test job runs on push and from Run workflow, never on the schedule; the scheduled job never on push")
+            check(on["workflow_dispatch"]["inputs"]["script"]["options"][-1] == "tests: run the test cases"
+                  and test_job["steps"][-1 - 0]["env"].get("ANTHROPIC_API_KEY") == "${{ secrets.ANTHROPIC_API_KEY }}",
+                  "Run workflow offers the tests too, and they get the model keys")
+            check("## Test cases" in setup and "never run on the schedule" in setup, "SETUP.md says when they run and what they cost")
+
+            await pg.click("#io-toggle")
+            await pg.fill("#io-paste", json.dumps({"format": "reflection-blocks", "version": 1, "name": "sched", "program": sched}))
+            await pg.click("#io-load-paste")  # a block file with no test cases clears them, as it does for a person
+            await pg.wait_for_timeout(300)
+            await pg.click("#io-toggle")
+            files = await pg.evaluate("window.__actionsFiles()")
+            _, data, on = workflow(files)
+            check("push" not in on and "test" not in data["jobs"] and "if" not in data["jobs"]["run"],
+                  "a program without test cases gets the workflow as before")
             await pg.click("#io-toggle")
             await pg.fill("#io-name", "my-program")
             files = await pg.evaluate("window.__actionsFiles()")

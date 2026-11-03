@@ -1828,7 +1828,12 @@
 "{service} reports {list}":"{service} telleth {list}",
 "{service} {plan} plan: {cap} (published {date}).":"{service} {plan} covenaunt: {cap} (publisshed {date}).",
 "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"{service} lymites acorden with his {plan} covenaunt: adde {setting} = {plan_lower} {where_keys}",
-"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} is nat oon of {service} covenauntes. Use oon of: {names}."
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} is nat oon of {service} covenauntes. Use oon of: {names}.",
+"These {n} tests cost {cost}.":"Thise {n} assayes costed {cost}.",
+"Test":"Assay",
+"Test cases: {passed} of {n} passed":"Assayes: {passed} of {n} passed",
+"Test failed: {name}":"Assay failed: {name}",
+"What was wrong":"What was amys"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

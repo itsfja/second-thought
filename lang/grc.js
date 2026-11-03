@@ -1828,7 +1828,12 @@
 "{service} reports {list}":"Τὸ {service} ἀγγέλλει· {list}",
 "{service} {plan} plan: {cap} (published {date}).":"{service}, συμβόλαιον {plan}· {cap} (ἐκδοθὲν {date}).",
 "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"Οἱ ὅροι τοῦ {service} τῷ συμβολαίῳ {plan} συμφωνοῦσιν· πρόσθες {setting} = {plan_lower} {where_keys}",
-"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"Τὸ {setting} = {plan} οὐκ ἔστι συμβόλαιον τοῦ {service}. Χρῶ ἑνὶ τούτων· {names}."
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"Τὸ {setting} = {plan} οὐκ ἔστι συμβόλαιον τοῦ {service}. Χρῶ ἑνὶ τούτων· {names}.",
+"These {n} tests cost {cost}.":"Ταῦτα τὰ {n} δοκιμάσματα ἐκόστισε {cost}.",
+"Test":"Δοκίμασμα",
+"Test cases: {passed} of {n} passed":"Δοκιμασίαι· {passed} ἐκ {n} ἐπέτυχον",
+"Test failed: {name}":"Τὸ δοκίμασμα ἀπέτυχε· {name}",
+"What was wrong":"Τί ἡμάρτηται"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

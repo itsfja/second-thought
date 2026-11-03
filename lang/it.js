@@ -1828,6 +1828,11 @@
 "{service} reports {list}":"{service} indica {list}",
 "{service} {plan} plan: {cap} (published {date}).":"{service}, piano {plan}: {cap} (pubblicato il {date}).",
 "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"I limiti di {service} corrispondono al suo piano {plan}: aggiungi {setting} = {plan_lower} {where_keys}",
-"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} non è un piano di {service}. Usa uno di: {names}."
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} non è un piano di {service}. Usa uno di: {names}.",
+"These {n} tests cost {cost}.":"Questi {n} test sono costati {cost}.",
+"Test":"Test",
+"Test cases: {passed} of {n} passed":"Casi di test: {passed} su {n} superati",
+"Test failed: {name}":"Test fallito: {name}",
+"What was wrong":"Cosa non andava"
 }
 };

@@ -2955,6 +2955,11 @@
   "{service} reports {list}": "{service} meldt {list}",
   "{service} {plan} plan: {cap} (published {date}).": "{service}, {plan}-abonnement: {cap} (gepubliceerd op {date}).",
   "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "De limieten van {service} passen bij het {plan}-abonnement: voeg {setting} = {plan_lower} toe {where_keys}",
-  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} is geen abonnement van {service}. Gebruik een van: {names}."
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} is geen abonnement van {service}. Gebruik een van: {names}.",
+  "These {n} tests cost {cost}.": "Deze {n} tests kostten {cost}.",
+  "Test": "Test",
+  "Test cases: {passed} of {n} passed": "Testgevallen: {passed} van {n} geslaagd",
+  "Test failed: {name}": "Test mislukt: {name}",
+  "What was wrong": "Wat er mis was"
  }
 }

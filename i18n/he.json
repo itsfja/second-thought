@@ -2956,6 +2956,11 @@
   "{service} reports {list}": "{service} מדווח: {list}",
   "{service} {plan} plan: {cap} (published {date}).": "{service}, תוכנית {plan}: {cap} (פורסם ב־{date}).",
   "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "המגבלות של {service} תואמות את תוכנית {plan}: הוסיפו {setting} = {plan_lower} {where_keys}",
-  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} אינה תוכנית של {service}. השתמשו באחת מאלה: {names}."
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} אינה תוכנית של {service}. השתמשו באחת מאלה: {names}.",
+  "These {n} tests cost {cost}.": "{n} הבדיקות האלה עלו {cost}.",
+  "Test": "בדיקה",
+  "Test cases: {passed} of {n} passed": "מקרי בדיקה: {passed} מתוך {n} עברו",
+  "Test failed: {name}": "הבדיקה נכשלה: {name}",
+  "What was wrong": "מה לא היה תקין"
  }
 }

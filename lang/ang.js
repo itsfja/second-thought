@@ -1828,7 +1828,12 @@
 "{service} reports {list}":"{service} cyþ {list}",
 "{service} {plan} plan: {cap} (published {date}).":"{service} {plan} gecwide: {cap} (cyþed {date}).",
 "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"{service} gemæru geþwærlæcaþ his {plan} gecwide: ice {setting} = {plan_lower} {where_keys}",
-"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} nis {service} gecwide. Bruc anes þissa: {names}."
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} nis {service} gecwide. Bruc anes þissa: {names}.",
+"These {n} tests cost {cost}.":"Þas {n} fandunga costodon {cost}.",
+"Test":"Fandung",
+"Test cases: {passed} of {n} passed":"Fandunga: {passed} of {n} geþungen",
+"Test failed: {name}":"Fandung misfeoll: {name}",
+"What was wrong":"Hwæt woh wæs"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

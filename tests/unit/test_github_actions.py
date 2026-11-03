@@ -84,5 +84,38 @@ class Markdown(unittest.TestCase):
             self.assertEqual(markdown_to_slack(text), text)
 
 
+class TestReport(unittest.TestCase):
+    """--test on GitHub Actions (#246): failures on the run's page, and every case in the job's summary."""
+
+    def test_annotations_and_summary(self):
+        import tempfile
+        rt = Runtime()
+        rt.reset()
+        rt.usage, rt.cost = {"Claude": [1200, 300]}, [0.0054, True]
+        results = [("Says hello", True, []), ("Counts: to | ten", False, ["It stopped at 9.", "No list."])]
+        with tempfile.TemporaryDirectory() as tmp:
+            summary = os.path.join(tmp, "summary.md")
+            out = io.StringIO()
+            with mock.patch.dict(os.environ, {"GITHUB_ACTIONS": "true", "GITHUB_STEP_SUMMARY": summary}), redirect_stdout(out):
+                rt.report_tests_on_actions(results)
+            text = open(summary, encoding="utf-8").read()
+        lines = out.getvalue().splitlines()
+        self.assertEqual(len(lines), 1, "only the failed case is an error")
+        self.assertTrue(lines[0].startswith("::error title=Test failed%3A Counts%3A to | ten::"), lines[0])
+        self.assertTrue(lines[0].endswith("It stopped at 9.%0ANo list."))
+        self.assertIn("## Test cases: 1 of 2 passed", text)
+        self.assertIn("| ✅ | Says hello |  |", text)
+        self.assertIn("| ❌ | Counts: to \\| ten | It stopped at 9.; No list. |", text)
+        self.assertIn("These 2 tests cost about $0.01 at list prices.", text)
+
+    def test_no_summary_file_still_annotates(self):
+        rt = Runtime()
+        rt.reset()
+        out = io.StringIO()
+        with mock.patch.dict(os.environ, {"GITHUB_ACTIONS": "true", "GITHUB_STEP_SUMMARY": ""}), redirect_stdout(out):
+            rt.report_tests_on_actions([("A", False, [])])
+        self.assertIn("The run stopped.", out.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

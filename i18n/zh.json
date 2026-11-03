@@ -2955,6 +2955,11 @@
   "{service} reports {list}": "{service} 报告：{list}",
   "{service} {plan} plan: {cap} (published {date}).": "{service} {plan} 套餐：{cap}（{date} 公布）。",
   "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "{service} 的限制与其 {plan} 套餐一致：请在 {where_keys} 添加 {setting} = {plan_lower}",
-  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} 不是 {service} 的套餐。请使用以下之一：{names}。"
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} 不是 {service} 的套餐。请使用以下之一：{names}。",
+  "These {n} tests cost {cost}.": "这 {n} 个测试花费 {cost}。",
+  "Test": "测试",
+  "Test cases: {passed} of {n} passed": "测试用例：{n} 个中通过 {passed} 个",
+  "Test failed: {name}": "测试失败：{name}",
+  "What was wrong": "问题所在"
  }
 }

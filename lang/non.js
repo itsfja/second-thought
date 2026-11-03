@@ -1828,7 +1828,12 @@
 "{service} reports {list}":"{service} segir {list}",
 "{service} {plan} plan: {cap} (published {date}).":"{service}, {plan}-áskrift: {cap} (birt {date}).",
 "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"Takmǫrk {service} samsvara {plan}-áskrift: bæt við {setting} = {plan_lower} {where_keys}",
-"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} er eigi áskrift {service}. Nota eina af: {names}."
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} er eigi áskrift {service}. Nota eina af: {names}.",
+"These {n} tests cost {cost}.":"Þessar {n} prófanir kostuðu {cost}.",
+"Test":"Prófun",
+"Test cases: {passed} of {n} passed":"Prófanir: {passed} af {n} stóðusk",
+"Test failed: {name}":"Prófun brást: {name}",
+"What was wrong":"Hvat var rangt"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",
