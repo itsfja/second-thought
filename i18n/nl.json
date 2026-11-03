@@ -1435,7 +1435,9 @@
   "budget": "voordelig",
   "standard": "standaard",
   "premium": "premium",
-  "price unknown": "prijs onbekend"
+  "price unknown": "prijs onbekend",
+  "Second Thought on claude.ai": "Second Thought op claude.ai",
+  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "Deze kopie van Second Thought kan programma’s bouwen, uitproberen met voorbeeldgegevens, uitleggen en exporteren, maar niet uitvoeren met Claude. Open hem daarvoor op claude.ai:"
  },
  "examples": {
   "review": {

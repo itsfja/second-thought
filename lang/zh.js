@@ -940,7 +940,9 @@
 "budget":"经济",
 "standard":"标准",
 "premium":"高端",
-"price unknown":"价格未知"
+"price unknown":"价格未知",
+"Second Thought on claude.ai":"claude.ai 上的 Second Thought",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"这份 Second Thought 副本可以构建程序、用示例数据试用、解释并导出程序，但不能用 Claude 运行它们。要运行，请在 claude.ai 上打开："
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

@@ -1435,7 +1435,9 @@
   "budget": "低価格",
   "standard": "標準",
   "premium": "プレミアム",
-  "price unknown": "価格不明"
+  "price unknown": "価格不明",
+  "Second Thought on claude.ai": "claude.ai の Second Thought",
+  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "この Second Thought のコピーでは、プログラムを作り、サンプルデータで試し、説明し、書き出すことができますが、Claude で実行することはできません。実行するには claude.ai で開いてください："
  },
  "examples": {
   "review": {

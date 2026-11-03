@@ -940,7 +940,9 @@
 "budget":"económico",
 "standard":"estándar",
 "premium":"prémium",
-"price unknown":"precio desconocido"
+"price unknown":"precio desconocido",
+"Second Thought on claude.ai":"Second Thought en claude.ai",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Esta copia de Second Thought puede crear programas, probarlos con datos de ejemplo, explicarlos y exportarlos, pero no ejecutarlos con Claude. Para eso, ábrela en claude.ai:"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

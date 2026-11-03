@@ -1435,7 +1435,9 @@
   "budget": "günstig",
   "standard": "standard",
   "premium": "premium",
-  "price unknown": "Preis unbekannt"
+  "price unknown": "Preis unbekannt",
+  "Second Thought on claude.ai": "Second Thought auf claude.ai",
+  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "Diese Kopie von Second Thought kann Programme bauen, mit Beispieldaten ausprobieren, erklären und exportieren, aber nicht mit Claude ausführen. Dafür öffnen Sie sie auf claude.ai:"
  },
  "examples": {
   "review": {

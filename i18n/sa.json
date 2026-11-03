@@ -1436,7 +1436,9 @@
   "budget": "अल्पमूल्यम्",
   "standard": "सामान्यम्",
   "premium": "महार्घम्",
-  "price unknown": "मूल्यम् अज्ञातम्"
+  "price unknown": "मूल्यम् अज्ञातम्",
+  "Second Thought on claude.ai": "claude.ai मध्ये Second Thought",
+  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "Second Thought इत्यस्य इयं प्रतिलिपिः कार्यक्रमान् रचयितुं, उदाहरणदत्तांशैः परीक्षितुं, व्याख्यातुं निर्यातयितुं च शक्नोति, परन्तु Claude सह चालयितुं न शक्नोति। तदर्थं claude.ai मध्ये उद्घाटय:"
  },
  "examples": {
   "review": {

@@ -224,6 +224,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 </header>
 <p id="ex-desc" class="exdesc"></p>
 <div id="banner" class="banner" hidden></div>
+<div id="offsite" class="banner" hidden><span id="offsite-text"></span> <a id="offsite-link" href="https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN" target="_blank" rel="noopener"></a></div>
 <section id="gallery" class="gallery" hidden aria-label="Example programs">
   <div class="gal-head">
     <h2>Example programs</h2>
@@ -13087,8 +13088,21 @@ HOW TO MAP CODE
     setTimeout(() => Blockly.svgResize(ws), 0);
   };
   let downloads = null;
+  const showSaves = d => { downloads = d; $("io-save").hidden = !d; $("io-py-save").hidden = !d; $("io-gha-save").hidden = !d; $("log-save").hidden = !d; };
   if (window.claude && window.claude.use) {
-    window.claude.use("downloads").then(d => { downloads = d; $("io-save").hidden = !d; $("io-py-save").hidden = !d; $("io-gha-save").hidden = !d; $("log-save").hidden = !d; }).catch(() => {});
+    window.claude.use("downloads").then(showSaves).catch(() => {});
+  } else {
+    // Off claude.ai (the copy on GitHub Pages, #245) the browser saves files itself, with an ordinary download.
+    showSaves({ save:async ({ filename, data }) => {
+      const url = URL.createObjectURL(new Blob([data])), a = document.createElement("a");
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      return { status:"saved" };
+    } });
+    // And it says what it can do here, and where to run programs with Claude.
+    $("offsite-text").textContent = tr("This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:");
+    $("offsite-link").textContent = tr("Second Thought on claude.ai");
+    $("offsite").hidden = false;
   }
   function slug(name){
     const s = String(name || "").trim().replace(/\.json$/i, "").replace(/[^\w\- ]+/g, "").replace(/\s+/g, "-").slice(0, 80);

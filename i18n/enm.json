@@ -1435,7 +1435,9 @@
   "budget": "good chepe",
   "standard": "commune",
   "premium": "precious",
-  "price unknown": "pris unknowe"
+  "price unknown": "pris unknowe",
+  "Second Thought on claude.ai": "Second Thought on claude.ai",
+  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "This copie of Second Thought may make programmes, assaye hem on ensample datas, expowne hem and sende hem out, but it may nat renne hem with Claude. For that, open it on claude.ai:"
  },
  "examples": {
   "review": {

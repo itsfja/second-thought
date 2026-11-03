@@ -941,7 +941,9 @@
 "budget":"חסכוני",
 "standard":"רגיל",
 "premium":"פרימיום",
-"price unknown":"מחיר לא ידוע"
+"price unknown":"מחיר לא ידוע",
+"Second Thought on claude.ai":"Second Thought ב־claude.ai",
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"העותק הזה של Second Thought יכול לבנות תוכניות, לנסות אותן על נתוני דוגמה, להסביר אותן ולייצא אותן, אבל לא להריץ אותן עם Claude. לשם כך, פתחו אותו ב־claude.ai:"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
