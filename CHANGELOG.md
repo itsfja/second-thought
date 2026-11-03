@@ -22,6 +22,8 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+## 3.7.0 - 2026-11-03
+
 ### Added
 - Each account's plan, and the limits services report (#270). `PLAN_CLAUDE`, `PLAN_OPENAI`, `PLAN_GEMINI` and `PLAN_GROQ` in `second-thought.ini` name the plan, in the service's own words (Claude: start, build, scale; OpenAI: free, build, launch, grow; and so on). A misspelt one stops the program, listing the right names. Where the service publishes a monthly spend cap, this computer's spending (#269) is counted against it, shown at the end of a run, in a saved log and in `--doctor`, and a run stops before a call once it's reached. Claude's month is in UTC, as Claude's cap is. The rate limits Claude, OpenAI and Groq report with each reply are shown, labelled as theirs, in a saved log and `--doctor`, and at the end of a run when one is nearly used up. If Claude's match one plan, the end of a run suggests the `PLAN_` line, once on each computer. The plans and caps are dated, with sources, like the prices.
 
