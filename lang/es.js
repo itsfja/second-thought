@@ -942,7 +942,19 @@
 "premium":"prémium",
 "price unknown":"precio desconocido",
 "Second Thought on claude.ai":"Second Thought en claude.ai",
-"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Esta copia de Second Thought puede crear programas, probarlos con datos de ejemplo, explicarlos y exportarlos, pero no ejecutarlos con Claude. Para eso, ábrela en claude.ai:"
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Esta copia de Second Thought puede crear programas, probarlos con datos de ejemplo, explicarlos y exportarlos, pero no ejecutarlos con Claude. Para eso, ábrela en claude.ai:",
+"Use your own API key":"Usar tu propia clave de API",
+"Forget my key":"Olvidar mi clave",
+"Your Anthropic API key":"Tu clave de API de Anthropic",
+"Remember on this browser":"Recordar en este navegador",
+"Use this key":"Usar esta clave",
+"Cancel":"Cancelar",
+"Programs run with your own API key ({key}), charged to its Anthropic account.":"Los programas se ejecutan con tu propia clave de API ({key}), con cargo a su cuenta de Anthropic.",
+"Or use your own API key, from the bar at the top.":"O usa tu propia clave de API, desde la barra de arriba.",
+"That doesn't look like an Anthropic API key. They start with sk-ant-.":"Eso no parece una clave de API de Anthropic. Empiezan por sk-ant-.",
+"This browser won't keep the key. Allow site data for this page, then try again.":"Este navegador no guarda la clave. Permite los datos del sitio para esta página y vuelve a intentarlo.",
+"The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"La clave solo va de este navegador a api.anthropic.com, y las ejecuciones se cargan a su cuenta. Se guarda hasta que cierres esta pestaña, salvo que marques Recordar. Nunca se guarda en programas, exportaciones ni en el registro de ejecución. Crea una en console.anthropic.com.",
+"Claude's API said: {problem}":"La API de Claude dijo: {problem}"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

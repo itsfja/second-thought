@@ -1438,7 +1438,19 @@
   "premium": "יקיר",
   "price unknown": "טימי לא ידיע",
   "Second Thought on claude.ai": "Second Thought ב־claude.ai",
-  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "נוסחא הדא דSecond Thought יכלא למבנא פרוגרמין, למבדק יתהון על ידיעתא דדוגמא, לפרשא ולמפקא יתהון, ברם לא לרהטא יתהון עם Claude. להדא, פתח יתה ב־claude.ai:"
+  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "נוסחא הדא דSecond Thought יכלא למבנא פרוגרמין, למבדק יתהון על ידיעתא דדוגמא, לפרשא ולמפקא יתהון, ברם לא לרהטא יתהון עם Claude. להדא, פתח יתה ב־claude.ai:",
+  "Use your own API key": "אשתמש במפתח API דילך",
+  "Forget my key": "אנשי מפתחי",
+  "Your Anthropic API key": "מפתח API דילך דאנתרופיק",
+  "Remember on this browser": "אדכר בדפדפנא הדין",
+  "Use this key": "אשתמש במפתחא הדין",
+  "Cancel": "בטל",
+  "Programs run with your own API key ({key}), charged to its Anthropic account.": "תכניתא רהטן במפתח API דילך ({key}), ודמיהון על חושבן Anthropic דיליה.",
+  "Or use your own API key, from the bar at the top.": "או אשתמש במפתח API דילך, מן סרגלא דלעל.",
+  "That doesn't look like an Anthropic API key. They start with sk-ant-.": "הדא לא מתחזיא מפתח API דאנתרופיק. שרין ב־sk-ant-.",
+  "This browser won't keep the key. Allow site data for this page, then try again.": "דפדפנא הדין לא נטר מפתחא. שבוק ידיעת אתרא לדפא הדין, ונסי תוב.",
+  "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.": "מפתחא אזיל בלחוד מן דפדפנא הדין ל־api.anthropic.com, ורהטיא על חושבניה. מתנטר עד דתסגר לשוניתא הדא, אלא אן תרשום אדכר. לעלם לא מתנטר בתכניתא, במפקנא או בספר רהטא. עביד חד ב־console.anthropic.com.",
+  "Claude's API said: {problem}": "API דקלוד אמר: {problem}"
  },
  "examples": {
   "review": {

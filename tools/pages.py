@@ -4,18 +4,47 @@
 
 On claude.ai the page is wrapped in a document (doctype, character set, viewport) when it's published; on GitHub Pages
 it's served as it is, so this wraps it the same way. Off claude.ai there's no Claude to call: the page says so itself,
-and saves files with ordinary browser downloads.
+saves files with ordinary browser downloads, and can run programs with the person's own API key (#293).
+
+Because a key can be typed into this copy, it gets a Content-Security-Policy: scripts only from this site, the two
+places the page loads libraries from, and the page's own inline scripts (by their hashes, worked out here); and
+connections only to this site and api.anthropic.com, so nothing else the page loads could send the key anywhere.
 """
+import base64
+import hashlib
 import pathlib
+import re
 import shutil
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 HEAD = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n'
+        '<meta http-equiv="Content-Security-Policy" content="{csp}">\n'
         '<style>:root{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>\n'
         '</head>\n<body>\n')
 TAIL = '\n</body>\n</html>\n'
+LIBRARIES = "https://cdn.jsdelivr.net https://cdnjs.cloudflare.com"  # Blockly and its plugins; the PDF reader
+API = "https://api.anthropic.com"
+INLINE_SCRIPT = re.compile(r"<script(?![^>]*\b(?:src|type)=)[^>]*>(.*?)</script>", re.S)
+
+
+def csp(page):
+    """The policy for this page: its inline scripts allowed by hash, so an injected one wouldn't run."""
+    hashes = " ".join("'sha256-" + base64.b64encode(hashlib.sha256(m.group(1).encode("utf-8")).digest()).decode() + "'"
+                      for m in INLINE_SCRIPT.finditer(page))
+    return "; ".join([
+        "default-src 'self'",
+        f"script-src 'self' {LIBRARIES} {hashes}",
+        f"worker-src 'self' blob: {LIBRARIES}",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  # Blockly writes its own styles
+        "font-src 'self' https://fonts.gstatic.com",
+        "img-src 'self' data: blob: https://blockly-demo.appspot.com",  # Blockly's sprites
+        f"connect-src 'self' {API}",
+        "object-src 'none'",
+        "base-uri 'none'",
+        "form-action 'none'",
+    ])
 
 
 def build(out):
@@ -24,7 +53,7 @@ def build(out):
         shutil.rmtree(out)
     (out / "lang").mkdir(parents=True)
     page = (ROOT / "second-thought.html").read_text(encoding="utf-8")
-    (out / "index.html").write_text(HEAD + page + TAIL, encoding="utf-8")
+    (out / "index.html").write_text(HEAD.replace("{csp}", csp(page)) + page + TAIL, encoding="utf-8")
     for f in sorted((ROOT / "lang").glob("*.js")):
         shutil.copy(f, out / "lang" / f.name)
     (out / ".nojekyll").write_text("", encoding="utf-8")  # serve the files as they are

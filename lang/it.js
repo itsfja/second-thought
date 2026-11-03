@@ -942,7 +942,19 @@
 "premium":"premium",
 "price unknown":"prezzo sconosciuto",
 "Second Thought on claude.ai":"Second Thought su claude.ai",
-"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Questa copia di Second Thought può creare programmi, provarli su dati di esempio, spiegarli ed esportarli, ma non eseguirli con Claude. Per farlo, aprila su claude.ai:"
+"This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:":"Questa copia di Second Thought può creare programmi, provarli su dati di esempio, spiegarli ed esportarli, ma non eseguirli con Claude. Per farlo, aprila su claude.ai:",
+"Use your own API key":"Usa la tua chiave API",
+"Forget my key":"Dimentica la mia chiave",
+"Your Anthropic API key":"La tua chiave API di Anthropic",
+"Remember on this browser":"Ricorda in questo browser",
+"Use this key":"Usa questa chiave",
+"Cancel":"Annulla",
+"Programs run with your own API key ({key}), charged to its Anthropic account.":"I programmi girano con la tua chiave API ({key}), addebitati al suo account Anthropic.",
+"Or use your own API key, from the bar at the top.":"Oppure usa la tua chiave API, dalla barra in alto.",
+"That doesn't look like an Anthropic API key. They start with sk-ant-.":"Non sembra una chiave API di Anthropic. Iniziano con sk-ant-.",
+"This browser won't keep the key. Allow site data for this page, then try again.":"Questo browser non conserva la chiave. Consenti i dati del sito per questa pagina, poi riprova.",
+"The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.":"La chiave va solo da questo browser ad api.anthropic.com, e le esecuzioni sono addebitate al suo account. Resta finché non chiudi questa scheda, a meno che tu non spunti Ricorda. Non viene mai salvata nei programmi, nelle esportazioni o nel registro di esecuzione. Creane una su console.anthropic.com.",
+"Claude's API said: {problem}":"L'API di Claude ha risposto: {problem}"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},

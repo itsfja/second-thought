@@ -97,7 +97,7 @@
     const started = Date.now();
     try {
       run.sample = await getSample();
-      if (!run.sample) { showBanner("Running needs Claude. Open this page in claude.ai while signed in."); throw new Halt(); }
+      if (!run.sample) { showBanner(tr("Running needs Claude. Open this page in claude.ai while signed in.") + orOwnKey()); throw new Halt(); }
       await memInit();
       run.ready = true;
       run.pending.forEach(h => h.evalBlock ? startScript(null, "", h.evalBlock) : startScript(h.getNextBlock(), h.payload));
