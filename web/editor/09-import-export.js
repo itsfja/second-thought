@@ -212,7 +212,8 @@
       "  cancel-in-progress: false",
       "jobs:",
       "  run:",
-      ...(tests ? ["    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.script != " + q(TESTS).replace(/"/g, "'") + ")"] : []),
+      // Quoted: the option's ": " would otherwise end the YAML value early, and GitHub would refuse the workflow.
+      ...(tests ? ["    if: " + q("github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.script != '" + TESTS + "')")] : []),
       "    runs-on: ubuntu-latest",
       "    timeout-minutes: 30",
       "    steps:",
@@ -250,7 +251,7 @@
       "  test:",
       "    # The program's test cases: each replays its saved answers with the real models, and a reviewer checks the",
       "    # result. Nothing is sent or changed, and what it remembers is a copy. A failed case shows on the run's page.",
-      "    if: github.event_name == 'push' || inputs.script == " + q(TESTS).replace(/"/g, "'"),
+      "    if: " + q("github.event_name == 'push' || inputs.script == '" + TESTS + "'"),
       "    runs-on: ubuntu-latest",
       "    timeout-minutes: 30",
       "    permissions:",

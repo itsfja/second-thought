@@ -119,8 +119,8 @@ async def actions_tests():
             await pg.fill("#io-paste", json.dumps(with_tests))
             await pg.click("#io-load-paste")
             await pg.wait_for_timeout(300)
-            await pg.click("#io-toggle")
             await pg.fill("#io-name", "tested")
+            await pg.click("#io-toggle")
             files = await pg.evaluate("window.__actionsFiles()")
             names = [f["name"] for f in files]
             wf, data, on = workflow(files)
