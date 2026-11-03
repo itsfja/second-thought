@@ -2941,7 +2941,22 @@
   "weekly": "सप्ताहम्",
   "monthly": "मासम्",
   "{pct}% of the {window} allowance of {amount}": "प्रति{window} {amount} इति भागस्य {pct}%",
-  "{service} key: {list}": "{service}-कुञ्चिका: {list}"
+  "{service} key: {list}": "{service}-कुञ्चिका: {list}",
+  "Limits": "सीमाः",
+  "Plan": "योजना",
+  "Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.": "स्थगितम्: अनया {service}-कुञ्चिकया अस्मिन् मासे {spent} व्ययितम्, यत् {plan}-योजनायाः मासिकसीमां {cap} प्राप्नोति। {service} {when} पर्यन्तं आह्वानानि न स्वीकरोति।",
+  "input tokens": "निवेश-टोकनानि",
+  "monthly cap {amount}": "मासिकसीमा {amount}",
+  "no monthly cap published": "मासिकसीमा न प्रकाशिता",
+  "output tokens": "निर्गम-टोकनानि",
+  "requests": "अनुरोधाः",
+  "tokens": "टोकनानि",
+  "{pct}% of its {kind} left": "{kind} {pct}% अवशिष्टम्",
+  "{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer": "{service} ({plan}-योजना): अस्य मासस्य {cap} सीमायाः {pct}%, अस्मिन् सङ्गणके गणितम्",
+  "{service} reports {list}": "{service} सूचयति {list}",
+  "{service} {plan} plan: {cap} (published {date}).": "{service}, {plan}-योजना: {cap} ({date} प्रकाशितम्)।",
+  "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "{service} इत्यस्य सीमाः {plan}-योजनया सङ्गच्छन्ते: {where_keys} {setting} = {plan_lower} योजय",
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} {service} इत्यस्य योजना नास्ति। एतेषु एकां प्रयुङ्क्ष्व: {names}।"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

@@ -1813,6 +1813,21 @@
 "weekly":"1 週間",
 "monthly":"1 か月",
 "{pct}% of the {window} allowance of {amount}":"{window} の上限 {amount} の {pct}%",
-"{service} key: {list}":"{service} キー：{list}"
+"{service} key: {list}":"{service} キー：{list}",
+"Limits":"制限",
+"Plan":"プラン",
+"Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.":"停止しました：この {service} キーは今月 {spent} を使い、{plan} プランの月額上限 {cap} に達しました。{service} は {when} まで呼び出しを受け付けません。",
+"input tokens":"入力トークン",
+"monthly cap {amount}":"月額上限 {amount}",
+"no monthly cap published":"月額上限は公開されていません",
+"output tokens":"出力トークン",
+"requests":"リクエスト",
+"tokens":"トークン",
+"{pct}% of its {kind} left":"{kind}の残り {pct}%",
+"{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer":"{service}（{plan} プラン）：今月の上限 {cap} の {pct}%（このコンピューターでの集計）",
+"{service} reports {list}":"{service} の報告：{list}",
+"{service} {plan} plan: {cap} (published {date}).":"{service} の {plan} プラン：{cap}（{date} 公開）。",
+"{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"{service} の制限は {plan} プランと一致します：{where_keys} に {setting} = {plan_lower} を追加してください",
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} は {service} のプランではありません。次のいずれかにしてください：{names}。"
 }
 };

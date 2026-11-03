@@ -2941,7 +2941,22 @@
   "weekly": "שבועא",
   "monthly": "ירחא",
   "{pct}% of the {window} allowance of {amount}": "‏{pct}% ממנתא לכל {window} דילה {amount}",
-  "{service} key: {list}": "קלידא ד־{service}: {list}"
+  "{service} key: {list}": "קלידא ד־{service}: {list}",
+  "Limits": "תחומין",
+  "Plan": "קיימא",
+  "Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.": "פסק: קלידא דנא ד־{service} אפיק {spent} בירחא הדין, ומטא לתקרתא דירחא דקיימא {plan}, {cap}. {service} לא מקבל קריאן עד {when}.",
+  "input tokens": "טוקני מעלנא",
+  "monthly cap {amount}": "תקרתא דירחא {amount}",
+  "no monthly cap published": "לית תקרתא דירחא מפרסמא",
+  "output tokens": "טוקני מפקנא",
+  "requests": "בעותא",
+  "tokens": "טוקנין",
+  "{pct}% of its {kind} left": "‏{pct}% מן {kind} דילה פשין",
+  "{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer": "{service} (קיימא {plan}): ‏{pct}% מן תקרת {cap} דירחא הדין, מניין בחושבנא הדין",
+  "{service} reports {list}": "{service} מודע: {list}",
+  "{service} {plan} plan: {cap} (published {date}).": "{service}, קיימא {plan}: {cap} (אתפרסם ב־{date}).",
+  "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "תחומי {service} שוין לקיימא {plan}: אוסף {setting} = {plan_lower} {where_keys}",
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} לאו קיימא ד־{service}. אשתמש בחד מן: {names}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

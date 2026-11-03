@@ -1813,7 +1813,22 @@
 "weekly":"wyke",
 "monthly":"monthe",
 "{pct}% of the {window} allowance of {amount}":"{pct}% of the allowaunce by the {window} of {amount}",
-"{service} key: {list}":"{service} keye: {list}"
+"{service} key: {list}":"{service} keye: {list}",
+"Limits":"Lymites",
+"Plan":"Covenaunt",
+"Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.":"Stinted: this {service} keye hath spent {spent} this monthe, which reacheth the {plan} covenauntes monthly roof of {cap}. {service} taketh no callynges til {when}.",
+"input tokens":"tokens in",
+"monthly cap {amount}":"monthly roof {amount}",
+"no monthly cap published":"no monthly roof publisshed",
+"output tokens":"tokens out",
+"requests":"axynges",
+"tokens":"tokens",
+"{pct}% of its {kind} left":"{pct}% of his {kind} lefte",
+"{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer":"{service} ({plan} covenaunt): {pct}% of this monthes roof of {cap}, rekened on this engyn",
+"{service} reports {list}":"{service} telleth {list}",
+"{service} {plan} plan: {cap} (published {date}).":"{service} {plan} covenaunt: {cap} (publisshed {date}).",
+"{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"{service} lymites acorden with his {plan} covenaunt: adde {setting} = {plan_lower} {where_keys}",
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} is nat oon of {service} covenauntes. Use oon of: {names}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

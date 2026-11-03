@@ -2940,6 +2940,21 @@
   "weekly": "εβδομάδα",
   "monthly": "μήνα",
   "{pct}% of the {window} allowance of {amount}": "{pct}% του ορίου ανά {window} των {amount}",
-  "{service} key: {list}": "Κλειδί {service}: {list}"
+  "{service} key: {list}": "Κλειδί {service}: {list}",
+  "Limits": "Όρια",
+  "Plan": "Πρόγραμμα",
+  "Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.": "Διακόπηκε: αυτό το κλειδί {service} ξόδεψε {spent} αυτόν τον μήνα, που φτάνει το μηνιαίο ανώτατο όριο του προγράμματος {plan}, {cap}. Το {service} δεν δέχεται κλήσεις έως τις {when}.",
+  "input tokens": "tokens εισόδου",
+  "monthly cap {amount}": "μηνιαίο ανώτατο όριο {amount}",
+  "no monthly cap published": "δεν δημοσιεύεται μηνιαίο ανώτατο όριο",
+  "output tokens": "tokens εξόδου",
+  "requests": "αιτήματα",
+  "tokens": "tokens",
+  "{pct}% of its {kind} left": "απομένει το {pct}% των {kind}",
+  "{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer": "{service} (πρόγραμμα {plan}): {pct}% του ορίου των {cap} αυτού του μήνα, μετρημένο σε αυτόν τον υπολογιστή",
+  "{service} reports {list}": "Το {service} αναφέρει: {list}",
+  "{service} {plan} plan: {cap} (published {date}).": "{service}, πρόγραμμα {plan}: {cap} (δημοσιεύτηκε {date}).",
+  "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "Τα όρια του {service} ταιριάζουν με το πρόγραμμα {plan}: προσθέστε {setting} = {plan_lower} {where_keys}",
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "Το {setting} = {plan} δεν είναι πρόγραμμα του {service}. Χρησιμοποιήστε ένα από: {names}."
  }
 }

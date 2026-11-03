@@ -1813,6 +1813,21 @@
 "weekly":"week",
 "monthly":"maand",
 "{pct}% of the {window} allowance of {amount}":"{pct}% van het tegoed per {window} van {amount}",
-"{service} key: {list}":"{service}-sleutel: {list}"
+"{service} key: {list}":"{service}-sleutel: {list}",
+"Limits":"Limieten",
+"Plan":"Abonnement",
+"Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.":"Gestopt: deze {service}-sleutel heeft deze maand {spent} uitgegeven en bereikt daarmee het maandplafond van het {plan}-abonnement, {cap}. {service} neemt tot {when} geen aanroepen meer aan.",
+"input tokens":"invoertokens",
+"monthly cap {amount}":"maandplafond van {amount}",
+"no monthly cap published":"geen maandplafond gepubliceerd",
+"output tokens":"uitvoertokens",
+"requests":"verzoeken",
+"tokens":"tokens",
+"{pct}% of its {kind} left":"{pct}% van zijn {kind} over",
+"{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer":"{service} ({plan}-abonnement): {pct}% van het plafond van {cap} deze maand, geteld op deze computer",
+"{service} reports {list}":"{service} meldt {list}",
+"{service} {plan} plan: {cap} (published {date}).":"{service}, {plan}-abonnement: {cap} (gepubliceerd op {date}).",
+"{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"De limieten van {service} passen bij het {plan}-abonnement: voeg {setting} = {plan_lower} toe {where_keys}",
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} is geen abonnement van {service}. Gebruik een van: {names}."
 }
 };

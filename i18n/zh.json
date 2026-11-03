@@ -2940,6 +2940,21 @@
   "weekly": "周",
   "monthly": "月",
   "{pct}% of the {window} allowance of {amount}": "每{window}额度 {amount} 的 {pct}%",
-  "{service} key: {list}": "{service} 密钥：{list}"
+  "{service} key: {list}": "{service} 密钥：{list}",
+  "Limits": "限制",
+  "Plan": "套餐",
+  "Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.": "已停止：此 {service} 密钥本月已花费 {spent}，达到 {plan} 套餐的每月上限 {cap}。{service} 在 {when} 之前不再接受调用。",
+  "input tokens": "输入 token",
+  "monthly cap {amount}": "每月上限 {amount}",
+  "no monthly cap published": "未公布每月上限",
+  "output tokens": "输出 token",
+  "requests": "请求",
+  "tokens": "token",
+  "{pct}% of its {kind} left": "{kind}剩余 {pct}%",
+  "{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer": "{service}（{plan} 套餐）：本月 {cap} 上限的 {pct}%，按本机统计",
+  "{service} reports {list}": "{service} 报告：{list}",
+  "{service} {plan} plan: {cap} (published {date}).": "{service} {plan} 套餐：{cap}（{date} 公布）。",
+  "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "{service} 的限制与其 {plan} 套餐一致：请在 {where_keys} 添加 {setting} = {plan_lower}",
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "{setting} = {plan} 不是 {service} 的套餐。请使用以下之一：{names}。"
  }
 }

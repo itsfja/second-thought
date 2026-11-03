@@ -1814,7 +1814,22 @@
 "weekly":"e-pa-do-ma",
 "monthly":"me-ne",
 "{pct}% of the {window} allowance of {amount}":"{pct}% me-tu-ro ka-ta {window} {amount}",
-"{service} key: {list}":"{service} ka-ra-wi: {list}"
+"{service} key: {list}":"{service} ka-ra-wi: {list}",
+"Limits":"te-re-ma-ta",
+"Plan":"su-ma-po-ro",
+"Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.":"pe-pa-u-me-no: to-to {service} ka-ra-wi a-na-re-ke {spent} to-to me-ne, o te-re-ma me-ni-jo {plan} su-ma-po-ro {cap} e-ki-ne-to. {service} o-u de-ke-ta-i ka-re-si me-ki-ri {when}.",
+"input tokens":"tokens e-so-do",
+"monthly cap {amount}":"te-re-ma me-ni-jo {amount}",
+"no monthly cap published":"o-u-de te-re-ma me-ni-jo",
+"output tokens":"tokens e-ko-do",
+"requests":"a-i-te-ma-ta",
+"tokens":"tokens",
+"{pct}% of its {kind} left":"{pct}% {kind} ro-i-po",
+"{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer":"{service} ({plan} su-ma-po-ro): {pct}% te-re-ma {cap} to-to me-ne, e-pi to-to ro-ki-si-te-ri-jo",
+"{service} reports {list}":"{service} a-ke-re-re {list}",
+"{service} {plan} plan: {cap} (published {date}).":"{service} {plan} su-ma-po-ro: {cap} ({date}).",
+"{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"te-re-ma-ta {service} su-mo-po-ne-o {plan} su-ma-po-ro: po-ro-te-te {setting} = {plan_lower} {where_keys}",
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} o-u su-ma-po-ro {service}. ke-re-te e-ne: {names}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

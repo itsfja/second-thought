@@ -24,6 +24,8 @@ class _Messages:
     scripted = 0
     cut = 0
     def stream(self, **kw): return _Stream(self.create(**kw))
+    @property
+    def with_raw_response(self): return _RawMessages(self)
     async def create(self, model, max_tokens, messages, **kw):
         _Messages.made = getattr(_Messages, "made", 0) + 1
         if os.environ.get("FAKE_FAIL_AT") and _Messages.made == int(os.environ["FAKE_FAIL_AT"]):
@@ -83,6 +85,16 @@ class _Messages:
             _Messages.cut += 1
             return _M("TEXT[" + p[:30].replace("\n"," ") + "]", "max_tokens")
         return _M("TEXT[" + p[:30].replace("\n"," ") + "]")
+# The SDK's with_raw_response: the same reply, with headers. Like Claude's on the Start plan for Sonnet (#270).
+_HEADERS = {"anthropic-ratelimit-requests-limit": "4000", "anthropic-ratelimit-requests-remaining": "3999",
+            "anthropic-ratelimit-requests-reset": "2026-11-03T12:00:00Z", "anthropic-ratelimit-input-tokens-limit": "2000000",
+            "anthropic-ratelimit-input-tokens-remaining": "1900000", "anthropic-ratelimit-input-tokens-reset": "2026-11-03T12:00:00Z"}
+class _Raw:
+    def __init__(self, msg): self._msg = msg; self.headers = dict(_HEADERS)
+    async def parse(self): return self._msg
+class _RawMessages:
+    def __init__(self, messages): self._messages = messages
+    async def create(self, **kw): return _Raw(await self._messages.create(**kw))
 class _Stream:
     """Like the SDK's message stream: text_stream gives the text in pieces, then get_final_message()."""
     def __init__(self, coro): self._coro = coro

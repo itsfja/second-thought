@@ -10,7 +10,8 @@ import sys
 import urllib.error
 import urllib.request
 from .settings import KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM, RUNTIME_VERSION, SETTINGS_PATH, WHERE_KEYS
-from .providers import CURRENCY, MODELS, PROVIDERS, SERVICES, TIER_NAMES, _tier, amount_text, band_text, model_byline, fixed_rate, per_dollar, rate_note, rates
+from .providers import CURRENCY, MODELS, dollars, record_limits, PROVIDERS, SERVICES, TIER_NAMES, _tier, amount_text, band_text, model_byline, fixed_rate, per_dollar, rate_note, rates
+from .spending import PLANS, plan_of, reported_lines
 from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, _short, to_str
 from .connectors import webhook_host
 from .settings import tr  # noqa: F401
@@ -31,10 +32,13 @@ class Doctor:
     DOCTOR_TIMEOUT = 20
 
     @staticmethod
-    def _doctor_get(url, headers, timeout):
-        """(status, parsed JSON or None, error text). Status 0 means it couldn't be reached."""
+    def _doctor_get(url, headers, timeout, service=None):
+        """(status, parsed JSON or None, error text). Status 0 means it couldn't be reached. With a service, keeps any
+        rate limits its reply reports (#270): some services send them even on the free list of models."""
         try:
             with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=timeout) as r:
+                if service:
+                    record_limits(service, "", r.headers)
                 try:
                     return r.status, json.loads(r.read(3_000_000) or b"null"), ""
                 except ValueError:
@@ -64,7 +68,7 @@ class Doctor:
         else:
             pv = PROVIDERS[s["name"]]
             url, headers = pv["base"] + "/models", dict(pv["headers"], **({"Authorization": "Bearer " + key} if key else {}))
-        status, body, err = await asyncio.to_thread(self._doctor_get, url, headers, self.DOCTOR_TIMEOUT)
+        status, body, err = await asyncio.to_thread(self._doctor_get, url, headers, self.DOCTOR_TIMEOUT, s["name"])
         items = (body.get("data") or body.get("models") or []) if isinstance(body, dict) else body if isinstance(body, list) else []
         return status, {to_str(m.get("id") or m.get("name")).replace("models/", "") for m in items if isinstance(m, dict)}, err
 
@@ -275,6 +279,12 @@ class Doctor:
         for s in services:
             for line in self.allowance_lines([_tier(s, "default")]):
                 row("ok", "Allowances", line)
+            plan = plan_of(s["name"])
+            if plan:
+                p = PLANS[s["name"]]
+                cap = p["plans"][plan]
+                row("ok", "Plan", tr("{service} {plan} plan: {cap} (published {date}).", service=s["name"], plan=plan.title(), date=p["checked"],
+                                     cap=tr("monthly cap {amount}", amount=dollars(cap)) if cap else tr("no monthly cap published")))
         if self.allowance_note() and services:
             row("NOTE", "Allowances", self.allowance_note())
         needs = [("anthropic", "anthropic", "Claude")] if any(s["api"] == "anthropic" for s in services) else []
@@ -293,6 +303,8 @@ class Doctor:
                 status, text = "FAIL", _short(self._describe(e), 200)
             sizes = [k for k in TIER_NAMES if k in s["tiers"] and (k == "default" or s["tiers"][k][0] != s["tiers"]["default"][0])]
             row(status, s["name"], text + " " + tr("Models: {list}.", list=", ".join(f"{model_byline(_tier(s, k))} ({band_text(_tier(s, k))})" for k in sizes)))
+        for line in reported_lines([s["name"] for s in services]):
+            row("ok", "Limits", line)
         for area, check in await self._doctor_connections(ids, [n for n in can.get("mcp", []) if to_str(n).strip()]):
             if not known and not self._doctor_configured(area):
                 continue

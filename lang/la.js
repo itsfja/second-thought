@@ -1813,7 +1813,22 @@
 "weekly":"hebdomadem",
 "monthly":"mensem",
 "{pct}% of the {window} allowance of {amount}":"{pct}% modi in {window} {amount}",
-"{service} key: {list}":"Clavis {service}: {list}"
+"{service} key: {list}":"Clavis {service}: {list}",
+"Limits":"Fines",
+"Plan":"Consilium",
+"Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.":"Sistitum: haec clavis {service} hoc mense {spent} impendit, quod summam menstruam consilii {plan}, {cap}, attingit. {service} vocationes non accipit usque ad {when}.",
+"input tokens":"tokens ingredientia",
+"monthly cap {amount}":"summa menstrua {amount}",
+"no monthly cap published":"nulla summa menstrua edita",
+"output tokens":"tokens egredientia",
+"requests":"petitiones",
+"tokens":"tokens",
+"{pct}% of its {kind} left":"{pct}% eius {kind} reliquum",
+"{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer":"{service} (consilium {plan}): {pct}% summae {cap} huius mensis, in hoc computatro numeratum",
+"{service} reports {list}":"{service} nuntiat {list}",
+"{service} {plan} plan: {cap} (published {date}).":"{service}, consilium {plan}: {cap} (editum {date}).",
+"{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"Fines {service} consilio {plan} congruunt: adde {setting} = {plan_lower} {where_keys}",
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} non est consilium {service}. Utere uno ex his: {names}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

@@ -2940,7 +2940,22 @@
   "weekly": "ἑβδομάδα",
   "monthly": "μῆνα",
   "{pct}% of the {window} allowance of {amount}": "{pct}% τοῦ μέτρου κατὰ {window} τῶν {amount}",
-  "{service} key: {list}": "Κλεὶς {service}· {list}"
+  "{service} key: {list}": "Κλεὶς {service}· {list}",
+  "Limits": "Ὅροι",
+  "Plan": "Συμβόλαιον",
+  "Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.": "Πεπαυμένον· ἥδε ἡ κλεὶς {service} τοῦτον τὸν μῆνα ἀνήλωσε {spent}, ὃ τὸ μηνιαῖον ἄκρον τοῦ συμβολαίου {plan}, {cap}, ἐξικνεῖται. Τὸ {service} οὐ δέχεται κλήσεις μέχρι {when}.",
+  "input tokens": "tokens εἰσόδου",
+  "monthly cap {amount}": "μηνιαῖον ἄκρον {amount}",
+  "no monthly cap published": "οὐδὲν μηνιαῖον ἄκρον ἐκδεδομένον",
+  "output tokens": "tokens ἐξόδου",
+  "requests": "αἰτήματα",
+  "tokens": "tokens",
+  "{pct}% of its {kind} left": "{pct}% τῶν {kind} λοιπόν",
+  "{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer": "{service} (συμβόλαιον {plan})· {pct}% τοῦ ἄκρου τῶν {cap} τούτου τοῦ μηνός, ἐν τούτῳ τῷ λογιστηρίῳ ἠριθμημένον",
+  "{service} reports {list}": "Τὸ {service} ἀγγέλλει· {list}",
+  "{service} {plan} plan: {cap} (published {date}).": "{service}, συμβόλαιον {plan}· {cap} (ἐκδοθὲν {date}).",
+  "{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}": "Οἱ ὅροι τοῦ {service} τῷ συμβολαίῳ {plan} συμφωνοῦσιν· πρόσθες {setting} = {plan_lower} {where_keys}",
+  "{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.": "Τὸ {setting} = {plan} οὐκ ἔστι συμβόλαιον τοῦ {service}. Χρῶ ἑνὶ τούτων· {names}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

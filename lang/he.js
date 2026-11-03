@@ -1814,6 +1814,21 @@
 "weekly":"שבוע",
 "monthly":"חודש",
 "{pct}% of the {window} allowance of {amount}":"‏{pct}% מהמכסה לכל {window} של {amount}",
-"{service} key: {list}":"מפתח {service}: {list}"
+"{service} key: {list}":"מפתח {service}: {list}",
+"Limits":"מגבלות",
+"Plan":"תוכנית",
+"Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.":"נעצר: מפתח {service} הזה הוציא החודש {spent}, וכך הגיע לתקרה החודשית של תוכנית {plan}, {cap}. {service} לא מקבל קריאות עד {when}.",
+"input tokens":"טוקני קלט",
+"monthly cap {amount}":"תקרה חודשית של {amount}",
+"no monthly cap published":"לא פורסמה תקרה חודשית",
+"output tokens":"טוקני פלט",
+"requests":"בקשות",
+"tokens":"טוקנים",
+"{pct}% of its {kind} left":"‏{pct}% מה{kind} שלו נותרו",
+"{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer":"{service} (תוכנית {plan}): ‏{pct}% מתקרת {cap} של החודש, לפי הספירה במחשב הזה",
+"{service} reports {list}":"{service} מדווח: {list}",
+"{service} {plan} plan: {cap} (published {date}).":"{service}, תוכנית {plan}: {cap} (פורסם ב־{date}).",
+"{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}":"המגבלות של {service} תואמות את תוכנית {plan}: הוסיפו {setting} = {plan_lower} {where_keys}",
+"{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.":"{setting} = {plan} אינה תוכנית של {service}. השתמשו באחת מאלה: {names}."
 }
 };

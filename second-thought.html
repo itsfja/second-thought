@@ -947,6 +947,42 @@ def model_byline(tier):
     return tr("{model}, by {maker}, {where}", model=model_label(tier), maker=maker, where=where)
 
 
+# What each service last reported about its rate limits, from the headers of its replies (#270):
+# {service: {"model": the model called, "limits": {kind: {"limit", "remaining", "reset"}}}}. Claude, OpenAI and Groq send
+# them; others don't. Kinds are requests, tokens, input-tokens and output-tokens.
+REPORTED = {}
+
+
+def limits_from_headers(headers):
+    """{kind: {"limit": n, "remaining": n, "reset": text}} from a reply's rate-limit headers: Claude's
+    anthropic-ratelimit-<kind>-<what>, and OpenAI's and Groq's x-ratelimit-<what>-<kind>."""
+    found = {}
+    for name, value in (dict(headers or {})).items():
+        name = to_str(name).lower()
+        m = re.match(r"anthropic-ratelimit-(requests|tokens|input-tokens|output-tokens)-(limit|remaining|reset)$", name)
+        kind, what = (m.group(1), m.group(2)) if m else (None, None)
+        if not m:
+            m = re.match(r"x-ratelimit-(limit|remaining|reset)-(requests|tokens)$", name)
+            kind, what = (m.group(2), m.group(1)) if m else (None, None)
+        if kind:
+            found.setdefault(kind, {})[what] = to_str(value).strip()
+    out = {}
+    for kind, v in found.items():
+        try:
+            limit, remaining = int(float(v["limit"])), int(float(v["remaining"]))
+        except (KeyError, ValueError):
+            continue
+        if limit > 0:
+            out[kind] = {"limit": limit, "remaining": max(0, remaining), "reset": v.get("reset", "")}
+    return out
+
+
+def record_limits(service, model, headers):
+    limits = limits_from_headers(headers)
+    if limits:
+        REPORTED[service] = {"model": model, "limits": limits}
+
+
 def model_label(tier):
     if str(tier).startswith("openrouter:"):
         return "OpenRouter: " + tier.split(":", 1)[1]
@@ -1089,7 +1125,7 @@ class ModelCalls:
             # Structured outputs: Claude can only write JSON of this shape. https://platform.claude.com/docs/en/build-with-claude/structured-outputs
             args["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
         try:
-            msg = await (self._claude_stream(args) if "output_config" not in args and self._streaming() else self.client.messages.create(**args))
+            msg = await (self._claude_stream(args) if "output_config" not in args and self._streaming() else self._claude_create(args))
         except Exception as e:  # noqa: BLE001
             if "output_config" not in args or getattr(e, "status_code", None) != 400:
                 raise
@@ -1098,7 +1134,7 @@ class ModelCalls:
             self.no_schema_why = str(e)
             self.log(tr("Structured replies"), tr("{model} wouldn't accept a reply shape ({e}), so its replies are checked after they arrive instead.", model=model, e=_short(str(e), 160)), tr("note"))
             del args["output_config"]
-            msg = await self.client.messages.create(**args)
+            msg = await self._claude_create(args)
         usage = getattr(msg, "usage", None)
         self._count("Claude", getattr(usage, "input_tokens", 0), getattr(usage, "output_tokens", 0))
         text = "".join(getattr(b, "text", "") or "" for b in msg.content if getattr(b, "type", "text") == "text").strip()
@@ -1121,6 +1157,16 @@ class ModelCalls:
             return False
         return sys.stdout.isatty()
 
+    async def _claude_create(self, args):
+        """One Claude reply, keeping the rate limits its headers report (#270). An SDK without with_raw_response just asks."""
+        raw = getattr(self.client.messages, "with_raw_response", None)
+        if raw is None:
+            return await self.client.messages.create(**args)
+        response = await raw.create(**args)
+        record_limits("Claude", args.get("model", ""), getattr(response, "headers", {}))
+        msg = response.parse()
+        return (await msg) if asyncio.iscoroutine(msg) else msg
+
     async def _claude_stream(self, args):
         """Streams one reply, showing a single progress line that's cleared when it's done. Returns the final message."""
         written, shown, width = 0, 0.0, 0
@@ -1134,6 +1180,7 @@ class ModelCalls:
                     sys.stdout.write("\r" + line)
                     sys.stdout.flush()
             msg = await stream.get_final_message()
+            record_limits("Claude", args.get("model", ""), getattr(getattr(stream, "response", None), "headers", {}))
         if width:
             sys.stdout.write("\r" + " " * width + "\r")
             sys.stdout.flush()
@@ -1174,6 +1221,7 @@ class ModelCalls:
         req = urllib.request.Request(pv["base"] + path, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
         try:
             with urllib.request.urlopen(req, timeout=CALL_TIMEOUT) as r:
+                record_limits(provider, body.get("model", ""), r.headers)
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
             detail = e.read().decode("utf-8", "replace")[:200]
@@ -5375,6 +5423,77 @@ SPENDING_DAYS = 40
 WINDOWS = ("hourly", "daily", "weekly", "monthly")
 
 
+# Each service's plans (#270), as the service names them, with the monthly spend cap it publishes in US dollars (None:
+# no cap, or none published). PLAN_<SERVICE> = <plan> in second-thought.ini says which an account is on. Plans and caps
+# change: check them at "source" (python tools/smoke_test.py models notes them when "checked" is over 90 days old).
+#   utc_months  the cap runs by the calendar month in UTC (Claude pauses at the cap until 00:00 UTC on the 1st)
+#   rpm         {model: {plan: requests per minute}}: published per-minute limits, to suggest which plan a key is on
+PLANS = {
+    "Claude": {"plans": {"evaluation": None, "start": 500, "build": 1000, "scale": 200000, "custom": None}, "utc_months": True,
+               "rpm": {"claude-sonnet-5-5": {"start": 4000, "build": 10000, "scale": 13000},
+                       "claude-opus-5-5": {"start": 4000, "build": 10000, "scale": 13000},
+                       "claude-haiku-4-5-20251001": {"start": 1000, "build": 5000, "scale": 10000}},
+               "checked": "2026-11-03", "source": "https://platform.claude.com/docs/en/api/rate-limits"},
+    "OpenAI": {"plans": {"free": 100, "build": 500, "launch": 5000, "grow": 200000},
+               "checked": "2026-11-03", "source": "https://developers.openai.com/api/docs/guides/rate-limits"},
+    # Gemini's tiers have billing caps and a spend limit per rolling 10 minutes, but no monthly cap and no per-model limits
+    # on the page (they're in AI Studio), so naming the plan only labels the key.
+    "Gemini": {"plans": {"free": None, "tier 1": None, "tier 2": None, "tier 3": None},
+               "checked": "2026-11-03", "source": "https://ai.google.dev/gemini-api/docs/rate-limits"},
+    "Groq": {"plans": {"free": None, "developer": None},
+             "checked": "2026-11-03", "source": "https://console.groq.com/docs/rate-limits"},
+}
+
+
+def plan_setting(service):
+    return "PLAN_" + _slug(service)
+
+
+def plan_of(service):
+    """The plan PLAN_<SERVICE> names, made lower case with single spaces, or ''."""
+    return re.sub(r"\s+", " ", os.environ.get(plan_setting(service), "")).strip().lower()
+
+
+def check_plans():
+    """Stops the program, saying which names are allowed, if a PLAN_ setting names a plan its service doesn't have."""
+    for service, p in PLANS.items():
+        plan = plan_of(service)
+        if plan and plan not in p["plans"]:
+            sys.exit(tr("{setting} = {plan} isn't one of {service}'s plans. Use one of: {names}.", setting=plan_setting(service),
+                        plan=plan, service=service, names=", ".join(p["plans"])))
+
+
+def plan_cap(service):
+    """(plan, monthly cap in US dollars, whether the month is in UTC) for the plan set for this service, or None."""
+    plan = plan_of(service)
+    p = PLANS.get(service)
+    if not p or not plan or not p["plans"].get(plan):
+        return None
+    return plan, p["plans"][plan], bool(p.get("utc_months"))
+
+
+def month_start(now, utc):
+    """The local time this month began: in UTC for a service whose month is in UTC, else in local time."""
+    if not utc:
+        return window_start("monthly", now)
+    offset = datetime.datetime.now().astimezone().utcoffset() or datetime.timedelta(0)
+    now_utc = now - offset
+    start_utc = now_utc.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    return start_utc + offset
+
+
+def next_month(start):
+    return (start.replace(day=28) + datetime.timedelta(days=4)).replace(day=1)
+
+
+def suggest_plan(service, reported):
+    """The plan whose published per-minute requests limit matches what the service reported for this model, or ''."""
+    rpm = PLANS.get(service, {}).get("rpm", {}).get(reported.get("model", ""), {})
+    limit = reported.get("limits", {}).get("requests", {}).get("limit")
+    hits = [plan for plan, n in rpm.items() if n == limit]
+    return hits[0] if len(hits) == 1 else ""
+
+
 def spending_file():
     return os.path.join(os.path.dirname(os.path.abspath(MEMORY_FILE)), ".second-thought-spending.json")
 
@@ -5424,7 +5543,7 @@ def allowances_for(service):
 
 
 def any_allowance():
-    return any(allowances_for(s["name"]) for s in SERVICES)
+    return any(allowances_for(s["name"]) or plan_cap(s["name"]) for s in SERVICES)
 
 
 class Spending:
@@ -5469,6 +5588,15 @@ class Spending:
         hours = self._ledger_read()["keys"].get(kid, {}).get("hours", {})
         return sum(v for h, v in hours.items() if h >= start)
 
+    def spent_since(self, tier, start):
+        """What this tier's key has spent since a local time, in US dollars."""
+        _, kid = key_id(tier)
+        if not kid:
+            return 0.0
+        first = start.strftime("%Y-%m-%dT%H")
+        hours = self._ledger_read()["keys"].get(kid, {}).get("hours", {})
+        return sum(v for h, v in hours.items() if h >= first)
+
     def _within_allowances(self, tiers, now=None):
         """Stops the run if the model to be called has no room left in its key's allowances, or no known price under
         one (it couldn't be counted). Backups without room or a price are left out. Gives the tiers to try."""
@@ -5477,11 +5605,20 @@ class Spending:
         def problem(tier):
             service, _ = key_id(tier)
             limits = allowances_for(service) if service else {}
-            if not limits:
+            cap = plan_cap(service) if service else None
+            if not limits and not cap:
                 return None
             if call_cost(tier, 0, 0) is None:
                 return tr("Stopped: {model} has no known price, so its spending can't be counted against this key's allowances. Use a model with a price.",
                           model=model_label(tier))
+            if cap:
+                plan, usd, utc = cap
+                start = month_start(now, utc)
+                spent = self.spent_since(tier, start)
+                if spent >= usd:
+                    return tr("Stopped: this {service} key has spent {spent} this month, which reaches the {plan} plan's monthly cap of {cap}. {service} stops taking calls there until {when}.",
+                              service=service, spent=dollars(spent), plan=plan.title(), cap=dollars(usd),
+                              when=next_month(start).strftime("%Y-%m-%d %H:%M"))
             for window, limit in limits.items():
                 spent = self.spent(tier, window, now) * per_dollar(CURRENCY)
                 if spent >= limit:
@@ -5505,6 +5642,11 @@ class Spending:
                 continue
             seen.add(service)
             limits = allowances_for(service)
+            cap = plan_cap(service)
+            if cap:
+                plan, usd, utc = cap
+                out.append(tr("{service} ({plan} plan): {pct}% of this month's {cap} cap, counted on this computer", service=service,
+                              plan=plan.title(), pct=round(100 * self.spent_since(tier, month_start(now, utc)) / usd), cap=dollars(usd)))
             if not limits:
                 continue
             parts = [tr("{pct}% of the {window} allowance of {amount}", pct=round(100 * self.spent(tier, w, now) * per_dollar(CURRENCY) / a),
@@ -5512,12 +5654,56 @@ class Spending:
             out.append(tr("{service} key: {list}", service=service, list=", ".join(parts)))
         return out
 
+    def plan_hints_once(self):
+        """The plan hints for this run's services, each given once on this computer (kept in the ledger), so the end of
+        a run doesn't repeat it every time. --doctor and saved logs always give them."""
+        lines = []
+        path = spending_file()
+        try:
+            with _locked(path):
+                data = self._ledger_read()
+                given = set(data.get("hinted", []))
+                for service, r in REPORTED.items():
+                    hint = suggest_plan(service, r)
+                    if hint and not plan_of(service) and service not in given:
+                        lines.append(tr("{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}", service=service,
+                                        plan=hint.title(), setting=plan_setting(service), plan_lower=hint, where_keys=WHERE_KEYS))
+                        given.add(service)
+                if lines:
+                    data["hinted"] = sorted(given)
+                    _write_json(path, data)
+        except (OSError, RunError):
+            return []
+        return lines
+
     @staticmethod
     def allowance_note():
         """Why allowances count less than they seem to, where that's so: on GitHub Actions the ledger starts afresh."""
         if on_github_actions() and any_allowance():
             return tr("On GitHub Actions the tally doesn't last between runs, so allowances apply to each run on its own.")
         return ""
+
+
+LOW = 0.25  # the end of a run mentions a service's limits only when one has less than this left
+
+
+def reported_lines(services=None, low_only=False, hints=True):
+    """What services reported about their rate limits in this run, labelled as theirs, and a plan they seem to be on.
+    low_only: only services with a limit nearly used up (for the end of a run, which shouldn't say it every time)."""
+    words = {"requests": tr("requests"), "tokens": tr("tokens"), "input-tokens": tr("input tokens"), "output-tokens": tr("output tokens")}
+    out = []
+    for service, r in REPORTED.items():
+        if services is not None and service not in services:
+            continue
+        if low_only and not any(v["remaining"] < LOW * v["limit"] for v in r["limits"].values()):
+            continue
+        parts = [tr("{pct}% of its {kind} left", pct=round(100 * v["remaining"] / v["limit"]), kind=words[k]) for k, v in r["limits"].items()]
+        out.append(tr("{service} reports {list}", service=service, list=", ".join(parts)))
+        hint = suggest_plan(service, r) if hints else ""
+        if hint and not plan_of(service):
+            out.append(tr("{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}", service=service,
+                          plan=hint.title(), setting=plan_setting(service), plan_lower=hint, where_keys=WHERE_KEYS))
+    return out
 
 
 def window_word(window):
@@ -5540,10 +5726,13 @@ class Doctor:
     DOCTOR_TIMEOUT = 20
 
     @staticmethod
-    def _doctor_get(url, headers, timeout):
-        """(status, parsed JSON or None, error text). Status 0 means it couldn't be reached."""
+    def _doctor_get(url, headers, timeout, service=None):
+        """(status, parsed JSON or None, error text). Status 0 means it couldn't be reached. With a service, keeps any
+        rate limits its reply reports (#270): some services send them even on the free list of models."""
         try:
             with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=timeout) as r:
+                if service:
+                    record_limits(service, "", r.headers)
                 try:
                     return r.status, json.loads(r.read(3_000_000) or b"null"), ""
                 except ValueError:
@@ -5573,7 +5762,7 @@ class Doctor:
         else:
             pv = PROVIDERS[s["name"]]
             url, headers = pv["base"] + "/models", dict(pv["headers"], **({"Authorization": "Bearer " + key} if key else {}))
-        status, body, err = await asyncio.to_thread(self._doctor_get, url, headers, self.DOCTOR_TIMEOUT)
+        status, body, err = await asyncio.to_thread(self._doctor_get, url, headers, self.DOCTOR_TIMEOUT, s["name"])
         items = (body.get("data") or body.get("models") or []) if isinstance(body, dict) else body if isinstance(body, list) else []
         return status, {to_str(m.get("id") or m.get("name")).replace("models/", "") for m in items if isinstance(m, dict)}, err
 
@@ -5784,6 +5973,12 @@ class Doctor:
         for s in services:
             for line in self.allowance_lines([_tier(s, "default")]):
                 row("ok", "Allowances", line)
+            plan = plan_of(s["name"])
+            if plan:
+                p = PLANS[s["name"]]
+                cap = p["plans"][plan]
+                row("ok", "Plan", tr("{service} {plan} plan: {cap} (published {date}).", service=s["name"], plan=plan.title(), date=p["checked"],
+                                     cap=tr("monthly cap {amount}", amount=dollars(cap)) if cap else tr("no monthly cap published")))
         if self.allowance_note() and services:
             row("NOTE", "Allowances", self.allowance_note())
         needs = [("anthropic", "anthropic", "Claude")] if any(s["api"] == "anthropic" for s in services) else []
@@ -5802,6 +5997,8 @@ class Doctor:
                 status, text = "FAIL", _short(self._describe(e), 200)
             sizes = [k for k in TIER_NAMES if k in s["tiers"] and (k == "default" or s["tiers"][k][0] != s["tiers"]["default"][0])]
             row(status, s["name"], text + " " + tr("Models: {list}.", list=", ".join(f"{model_byline(_tier(s, k))} ({band_text(_tier(s, k))})" for k in sizes)))
+        for line in reported_lines([s["name"] for s in services]):
+            row("ok", "Limits", line)
         for area, check in await self._doctor_connections(ids, [n for n in can.get("mcp", []) if to_str(n).strip()]):
             if not known and not self._doctor_configured(area):
                 continue
@@ -7403,7 +7600,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         budget = (" · " + tr("budget {n}", n=f"{self.budget:,}") if self.budget else "") + \
             (" · " + tr("budget {n}", n=self.budget_text()) if self.budget_dollars else "")
         print("\n" + (tr("Done · 1 model call") if self.calls == 1 else tr("Done · {n} model calls", n=self.calls)) + f" · {used}{spare}{budget}{self.cost_text()}", flush=True)
-        for line in self.allowance_lines(self.tiers_used) + ([self.allowance_note()] if self.allowance_note() and self.tiers_used else []):
+        for line in (self.allowance_lines(self.tiers_used) + reported_lines(low_only=True, hints=False) + self.plan_hints_once()
+                     + ([self.allowance_note()] if self.allowance_note() and self.tiers_used else [])):
             print("  " + line, flush=True)
         return 0
 
@@ -7435,6 +7633,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             lines.append(f"- Budget: {self.budget_text()} at list prices")
         for line in self.allowance_lines(self.tiers_used):
             lines.append(f"- Allowance: {line}")
+        for line in reported_lines():
+            lines.append(f"- Limits: {line}")
         if self.error:
             lines.append(f"- Stopped with an error: {self._describe(self.error)}")
         lines.append("")
@@ -7834,6 +8034,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             return
         self._can = can
         any_allowance()  # so does a mistyped quota_daily (or another allowance)
+        check_plans()  # and a PLAN_ setting naming a plan its service doesn't have
         fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run. Not when the
         # runtime loads: in python/runtime.py, providers comes before core, whose _number_setting it uses (#274)
         if "--doctor" in sys.argv:
