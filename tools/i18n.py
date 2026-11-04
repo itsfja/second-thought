@@ -101,21 +101,38 @@ def _sign(syllable):
         return None
 
 
+# ----- Hieroglyphs (#136) -----
+# Middle Egyptian in standard transliteration, each sound written with its one-consonant sign (Gardiner's uniliterals)
+# in a linear run: no biliterals, logograms, determinatives or groupings, which fonts and browsers show patchily.
+# Markers in the transliteration (. and = for endings and suffixes, - between parts) aren't written.
+EGY_SIGNS = {"ꜣ": "G001", "j": "M017", "i": "M017", "y": "Z004", "ꜥ": "D036", "w": "G043", "b": "D058", "p": "Q003", "f": "I009",
+             "m": "G017", "n": "N035", "r": "D021", "h": "O004", "ḥ": "V028", "ḫ": "AA001", "ẖ": "F032", "s": "S029", "z": "O034",
+             "š": "N037", "q": "N029", "k": "V031", "g": "W011", "t": "X001", "ṯ": "V013", "d": "D046", "ḏ": "I010"}
+EGY_SIGNS = {k: unicodedata.lookup("EGYPTIAN HIEROGLYPH " + v) for k, v in EGY_SIGNS.items()}
+EGY_LETTERS = "ꜣjiyꜥwbpfmnrhḥḫẖszšqkgtṯdḏ.=-"
+
+
 def to_script(lang, text, missing=None):
-    """A romanised line in Linear B (gmy) or cuneiform (akk). Placeholders, names, file names and code are kept."""
+    """A romanised line in Linear B (gmy), cuneiform (akk) or hieroglyphs (egy). Placeholders, names, file names and
+    code are kept."""
     missing = set() if missing is None else missing
-    letters = "a-z0-9-" if lang == "gmy" else AKK_LETTERS
+    letters = "a-z0-9-" if lang == "gmy" else EGY_LETTERS if lang == "egy" else AKK_LETTERS
     out = []
     for token in text.split(" "):
         m = re.fullmatch(f"([^{letters}]*?)([{letters}]+)([^{letters}]*)", token)
-        if not m or PLACEHOLDER.search(token) or re.search(r"[A-Z]", token):
+        if not m or PLACEHOLDER.search(token) or re.search(r"[A-Z]", token) or (lang == "egy" and re.search(r"[acelouvx0-9]", token)):
             out.append(token)
             continue
         pre, word, post = m.groups()
         if pre.endswith((".", "/", "_")) or (post[:1] in "._/" and re.match(r"[._/]\w", post)):
             out.append(token)  # part of a file name, an address or code
             continue
-        if lang == "gmy":
+        if lang == "egy":
+            sounds = [c for c in word if c not in ".=-"]
+            written = "".join(EGY_SIGNS[c] for c in sounds) if sounds and all(c in EGY_SIGNS for c in sounds) else None
+            if written is None:
+                missing.update(c for c in sounds if c not in EGY_SIGNS)
+        elif lang == "gmy":
             parts = word.split("-")
             written = "".join(LINEAR_B[p] for p in parts) if parts and all(p in LINEAR_B for p in parts) else None
             if written is None:
@@ -130,7 +147,7 @@ def to_script(lang, text, missing=None):
     return " ".join(out)
 
 
-SCRIPTS = {"gmy", "akk"}
+SCRIPTS = {"gmy", "akk", "egy"}
 
 
 # ----- The words each language needs -----

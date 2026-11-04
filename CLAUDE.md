@@ -13,7 +13,7 @@ learn by trial and error.
   first; then Francis publishes the GitHub release on main. The Release workflow refuses a tag whose runtime says
   another version, and then `--update-runtime` has nothing to download. If that happens, the tag has to be deleted
   and made again on main (deleting the release alone leaves the tag where it was).
-- The language issues (#129–139) are paused until Francis says otherwise.
+- The language issues (#129–139) are paused until Francis says otherwise (he asked for #136, Middle Egyptian).
 - Never commit `second-thought.ini` or keys. Real-key checks (`tools/smoke_test.py`) cost money: Francis runs them,
   or says to.
 - Commit messages and PR bodies say what changed and why, in plain English, ending with the attribution lines.
@@ -29,12 +29,12 @@ learn by trial and error.
   takes about 25 minutes, so run it in the background. `python tests/run_tests.py sources i18n gallery` is quicker.
 - **CI runs on GitHub Actions**, where `GITHUB_ACTIONS` is set; the tests clear it (tests/e2e/common.py).
 - **i18n merges:** `python tools/merge_i18n.py --install` once per clone.
-- **New words:** `python tools/i18n.py missing`, then write translations for all 19 languages into a JSON file and
-  `python tools/i18n.py add words.json` (Mycenaean Greek and Akkadian romanised; the tool writes the scripts).
+- **New words:** `python tools/i18n.py missing`, then write translations for all 20 languages into a JSON file and
+  `python tools/i18n.py add words.json` (Mycenaean Greek, Akkadian and Middle Egyptian romanised; the tool writes the scripts).
 
 ## The artifact
 The page is published at https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN. Publish `second-thought.html` with every
-`lang/<code>.js` as a supporting file at `lang/<code>.js` (all 19), to that URL. If the publish says files changed
+`lang/<code>.js` as a supporting file at `lang/<code>.js` (all 20), to that URL. If the publish says files changed
 since last seen, read them first (they'll match an earlier main), then publish.
 
 ## Loose ends
