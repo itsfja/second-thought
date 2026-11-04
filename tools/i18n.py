@@ -111,11 +111,45 @@ EGY_SIGNS = {"ꜣ": "G001", "j": "M017", "i": "M017", "y": "Z004", "ꜥ": "D036"
 EGY_SIGNS = {k: unicodedata.lookup("EGYPTIAN HIEROGLYPH " + v) for k, v in EGY_SIGNS.items()}
 EGY_LETTERS = "ꜣjiyꜥwbpfmnrhḥḫẖszšqkgtṯdḏ.=-"
 
+# ----- Coptic (#131) -----
+# Sahidic in a Latin transliteration, letter for letter: š f h j c are ϣ ϥ ϩ ϫ ϭ, ē ō are ⲏ ⲱ, u and y are ⲩ. In the
+# Greek words Coptic borrowed (COP_GREEK: praksis, khartēs, kephalē…), th ph kh ps ks are the one letters ⲑ ⲫ ⲭ ⲯ ⲝ;
+# elsewhere they're two (p-shai, the writing, is ⲡⲥϩⲁⲓ). Supralinear strokes aren't written. A lowercase word that should
+# stay in Latin letters (email, token, web) is written with ^ in front: ^email. Words with capitals, numbers or dots
+# stay as they are anyway.
+COP_PAIRS = {"th": "ⲑ", "ph": "ⲫ", "kh": "ⲭ", "ps": "ⲯ", "ks": "ⲝ"}
+COP_GREEK = re.compile(r"arkh|bathm|boēth|kephal|khair|khart|khrōm|praks|taks|phōn|zōgraph|tukh|graph|thēk|psykh|ksen|thron|phil|phys")
+COP_SIGNS = dict(zip("abgdezēiklmnoprstuyōšfhjc", "ⲁⲃⲅⲇⲉⲍⲏⲓⲕⲗⲙⲛⲟⲡⲣⲥⲧⲩⲩⲱϣϥϩϫϭ"))
+COP_LETTERS = "abgdezēiklmnoprstuyōšfhjc"
+
+
+def coptic(word):
+    """A transliterated Sahidic word in Coptic letters, or None if it has a letter Coptic doesn't."""
+    out, i = [], 0
+    greek = [range(m.start(), m.end()) for m in COP_GREEK.finditer(word)]
+    while i < len(word):
+        if word[i:i + 2] in COP_PAIRS and any(i in r and i + 1 in r for r in greek):
+            out.append(COP_PAIRS[word[i:i + 2]])
+            i += 2
+        elif word[i] in COP_SIGNS:
+            out.append(COP_SIGNS[word[i]])
+            i += 1
+        else:
+            return None
+    return "".join(out)
+
+
+def unmark(text):
+    """The text with the ^ marks (keep this word in Latin letters) taken out, as exported Python shows it."""
+    return re.sub(r"\^(?=\w)", "", text)
+
 
 def to_script(lang, text, missing=None):
     """A romanised line in Linear B (gmy), cuneiform (akk) or hieroglyphs (egy). Placeholders, names, file names and
     code are kept."""
     missing = set() if missing is None else missing
+    if lang == "cop":
+        return _to_coptic(text, missing)
     letters = "a-z0-9-" if lang == "gmy" else EGY_LETTERS if lang == "egy" else AKK_LETTERS
     out = []
     for token in text.split(" "):
@@ -147,7 +181,34 @@ def to_script(lang, text, missing=None):
     return " ".join(out)
 
 
-SCRIPTS = {"gmy", "akk", "egy"}
+def _to_coptic(text, missing):
+    if "\n" in text:
+        return "\n".join(_to_coptic(line, missing) for line in text.split("\n"))
+    out = []
+    for token in text.split(" "):
+        if re.search(r"</?[a-z]+>", token):  # <b>word</b>: the words beside the tags
+            out.append("".join(part if re.fullmatch(r"</?[a-z]+>", part) else _to_coptic(part, missing)
+                               for part in re.split(r"(</?[a-z]+>)", token)))
+            continue
+        if token.startswith("^") or PLACEHOLDER.search(token) or re.search(r"[A-Z0-9_/@]|:\S", token) or re.search(r"(^|\w)\.\w", token):
+            out.append(unmark(token))
+            continue
+        m = re.fullmatch(f"([^{COP_LETTERS}]*?)([{COP_LETTERS}]+)([^{COP_LETTERS}]*)", token)
+        if not m:
+            missing.update(c for c in token if c.isalpha() and c not in COP_LETTERS)
+            out.append(token)
+            continue
+        pre, word, post = m.groups()
+        written = coptic(word)
+        if written is None or re.search(r"[a-zāīū]", post):
+            missing.update(c for c in token if c.isalpha() and c not in COP_LETTERS)
+            out.append(token)
+            continue
+        out.append(pre + written + post)
+    return " ".join(out)
+
+
+SCRIPTS = {"gmy", "akk", "egy", "cop"}
 
 
 # ----- The words each language needs -----
@@ -205,7 +266,7 @@ def cmd_add(path):
                     problems.append(f"{section} “{english[:50]}”: there's no language {code}")
                     continue
                 gaps = set()
-                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else text
+                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else unmark(text) if code == "cop" else text
                 if gaps:
                     problems.append(f"{section} “{english[:50]}”: {code} has no sign for {', '.join(sorted(gaps))}, so those stay romanised")
                 if sorted(PLACEHOLDER.findall(value)) != want:
