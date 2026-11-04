@@ -26,21 +26,13 @@ What models and keys cost, released in 3.4.1 to 3.7.0: how expensive each model 
 
 GitHub as a home, released in 3.8.0: a program's test cases on GitHub Actions ([#246](https://github.com/itsfja/second-thought/issues/246)), and the page on GitHub Pages as a second front door ([#245](https://github.com/itsfja/second-thought/issues/245)).
 
-## Now: the Pages copy, fully usable
-
-| | Benefit | Cost |
-|---|---|---|
-| [#293](https://github.com/itsfja/second-thought/issues/293) On the Pages copy, run programs with your own API key | Medium-high: the second front door works for people without claude.ai | Medium |
-
-The Pages copy builds, tries and exports programs, but can't run them, or use Build it and Change this program. With a person's own Claude key it can, as long as the key stays safe: kept for the session unless they choose otherwise, sent only to Anthropic, and behind a security policy that stops any other script reading it.
+Reach and trust, released in 3.9.0 and 3.9.1: the Pages copy runs programs with your own API key ([#293](https://github.com/itsfja/second-thought/issues/293)), Kraken through its own MCP server with tools that move money always asking ([#262](https://github.com/itsfja/second-thought/issues/262)), and Blockly 13 with its own keyboard navigation ([#242](https://github.com/itsfja/second-thought/issues/242)).
 
 ## Later: important, not urgent
 
 | | Benefit | Cost |
 |---|---|---|
-| [#262](https://github.com/itsfja/second-thought/issues/262) Kraken (crypto) through its MCP server, with live-money tools always asking | Medium, and a strong test of "actions ask first" | Medium |
 | [#247](https://github.com/itsfja/second-thought/issues/247) Gallery: Premium Bonds generations | Medium: an agent whose arithmetic is checked | Low-medium, once a few real lines of NS&I's pages are in (numbers changed) |
-| [#242](https://github.com/itsfja/second-thought/issues/242) Blockly 12, with its own keyboard navigation | Medium | Medium |
 | [#281](https://github.com/itsfja/second-thought/issues/281) MiniMax's quick tier: move from M2.7-highspeed to M3.1-Flash | Low-medium | Low |
 
 ## Someday
