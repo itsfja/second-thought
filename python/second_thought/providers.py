@@ -178,14 +178,17 @@ SERVICES = [
                "complex": ("glm-5.3", "GLM-5.3")},
      "prices": {"glm-5.3-flash": (0.15, 0.50), "glm-5.3": (1.40, 4.40)},
      "prices_checked": "2026-11-03", "prices_source": "https://docs.z.ai/guides/overview/pricing"},
-    # MiniMax: needs MINIMAX_API_KEY (https://platform.minimax.io). M3 can look at pictures; M2.7 can't.
+    # MiniMax: needs MINIMAX_API_KEY (https://platform.minimax.io). M3 and M3.1 Flash both look at pictures.
     {"name": "MiniMax", "maker": "MiniMax", "menu": "MiniMax", "api": "openai", "prefix": "minimax-", "base": "https://api.minimax.io/v1",
      "base_env": "MINIMAX_BASE_URL", "keys": ["MINIMAX_API_KEY"], "signup": "https://platform.minimax.io",
      "note": ["MiniMax calls go to MiniMax's international servers (a Chinese company), under MiniMax's terms, billed to your MiniMax account."],
-     "tiers": {"quick": ("MiniMax-M2.7-highspeed", "MiniMax M2.7"), "default": ("MiniMax-M3", "MiniMax M3"),
-               "complex": ("MiniMax-M3", "MiniMax M3")}, "no_vision": ["MiniMax-M2.7-highspeed"],
-     # Standard tier, prompts up to 512k tokens. M2.7-highspeed isn't on MiniMax's price list any more, so it shows none.
-     "prices": {"MiniMax-M3": (0.30, 1.20)}, "prices_checked": "2026-11-03", "prices_source": "https://platform.minimax.io/docs/pricing/overview"},
+     # The quick tier was M2.7-highspeed until #281: it's no longer on MiniMax's price list or its API's list of models.
+     # M3.1 Flash (released 2026-10-19) is its everyday model; MODEL_MINIMAX_QUICK = MiniMax-M2.7-highspeed keeps the old one.
+     "tiers": {"quick": ("MiniMax-M3.1-Flash", "MiniMax M3.1 Flash"), "default": ("MiniMax-M3", "MiniMax M3"),
+               "complex": ("MiniMax-M3", "MiniMax M3")},
+     # Standard tier, prompts up to 512k tokens.
+     "prices": {"MiniMax-M3.1-Flash": (0.15, 0.60), "MiniMax-M3": (0.30, 1.20)}, "prices_checked": "2026-11-04",
+     "prices_source": "https://platform.minimax.io/docs/pricing/overview"},
     # OpenRouter: one key for hundreds of models (https://openrouter.ai/keys). openrouter/auto picks a model for each
     # step. For one particular model use the "with OpenRouter model" block, or a tier like "openrouter:mistralai/..."
     # with any name from https://openrouter.ai/models
