@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Changed
+- MiniMax's quick tier is MiniMax M3.1 Flash (#281), at $0.15 / $0.60 per million tokens, instead of M2.7-highspeed, which is no longer on MiniMax's price list or its API's list of models. It can look at pictures. To keep the old model while MiniMax still serves it, set `MODEL_MINIMAX_QUICK = MiniMax-M2.7-highspeed`.
+
 ## 3.9.1 - 2026-11-04
 
 ### Changed

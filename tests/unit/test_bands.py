@@ -4,7 +4,7 @@ import os
 import unittest
 
 import support  # noqa: F401
-from second_thought.providers import BANDS, PRICES, SERVICES, _tier, band_text, maker_of, model_byline, price_band
+from second_thought.providers import BANDS, MODELS, PRICES, SERVICES, _tier, band_text, maker_of, model_byline, price_band
 
 
 class Bands(unittest.TestCase):
@@ -29,6 +29,14 @@ class Bands(unittest.TestCase):
         self.assertEqual([price_band(f"mistral-{k}") for k in ("quick", "default", "complex")], ["budget", "standard", "budget"])
         self.assertEqual(price_band("kimi-complex"), "standard")
         self.assertIsNone(price_band("kimi-default"), "Kimi K2.6 has no published price")
+
+    def test_minimax_quick_is_m31_flash_with_a_price(self):
+        # #281: M2.7-highspeed had no price, so no band, and was refused under a money budget
+        self.assertEqual(_tier(next(s for s in SERVICES if s["name"] == "MiniMax"), "quick"), "minimax-quick")
+        self.assertEqual(MODELS["minimax-quick"], "MiniMax-M3.1-Flash")
+        self.assertEqual(PRICES["minimax-quick"], (0.15, 0.60))
+        self.assertEqual(price_band("minimax-quick"), "budget")
+        self.assertFalse(next(s for s in SERVICES if s["name"] == "MiniMax").get("no_vision"), "M3.1 Flash sees pictures")
 
     def test_prices_come_from_the_services_own_pages(self):
         third_party = ("computeprices.com", "morphllm.com", "computingforgeeks.com")
