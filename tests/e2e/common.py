@@ -45,6 +45,8 @@ FONTS = {
                              "\u0915", "[\\u0900-\\u097F]", False),
     "Noto Sans Cuneiform": (VENDOR / "@fontsource/noto-sans-cuneiform/package/files/noto-sans-cuneiform-cuneiform-400-normal.woff2",
                             "\U00012000", "[\\u{12000}-\\u{123FF}]", True),
+    "Noto Sans Egyptian Hieroglyphs": (VENDOR / "@fontsource/noto-sans-egyptian-hieroglyphs/package/files/noto-sans-egyptian-hieroglyphs-egyptian-hieroglyphs-400-normal.woff2",
+                                       "\U00013216", "[\\u{13000}-\\u{1342F}]", True),
 }
 PAGE = (ROOT / "second-thought.html").read_text(encoding="utf-8")
 DOC = '<!doctype html><html><head><meta charset=utf8><style>[hidden]{display:none!important}</style></head><body>' + PAGE + "</body></html>"

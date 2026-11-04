@@ -1,4 +1,4 @@
-"""tools/i18n.py: writing Linear B and cuneiform from romanised words, and adding translations."""
+"""tools/i18n.py: writing Linear B, cuneiform and hieroglyphs from romanised words, and adding translations."""
 import json
 import pathlib
 import sys
@@ -15,6 +15,12 @@ import i18n as tool  # noqa: E402
 class Scripts(unittest.TestCase):
     def test_linear_b_words_become_signs(self):
         self.assertEqual(tool.to_script("gmy", "ka-ra-pe"), "\U0001000F\U00010028\U0001001F")
+
+    def test_egyptian_transliteration_becomes_hieroglyphs(self):
+        # #136: each sound in its one-consonant sign, in a linear run; markers (. = -) aren't written
+        self.assertEqual(tool.to_script("egy", "rꜣ n kmt"), "\U0001308B\U0001313F \U00013216 \U000133A1\U00013153\U000133CF")
+        self.assertEqual(tool.to_script("egy", "sḏm.n=f"), tool.to_script("egy", "sḏmnf"))
+        self.assertEqual(tool.to_script("egy", "nḏ Claude {x} abc second-thought.ini"), "\U00013216\U00013193 Claude {x} abc second-thought.ini")
 
     def test_placeholders_names_and_files_are_kept(self):
         for lang, word in [("gmy", "to"), ("akk", "ana")]:
