@@ -22,6 +22,13 @@ class Scripts(unittest.TestCase):
         self.assertEqual(tool.to_script("egy", "sḏm.n=f"), tool.to_script("egy", "sḏmnf"))
         self.assertEqual(tool.to_script("egy", "nḏ Claude {x} abc second-thought.ini"), "\U00013216\U00013193 Claude {x} abc second-thought.ini")
 
+    def test_coptic_transliteration_becomes_coptic_letters(self):
+        # #131: one letter each; th, ph, kh, ps, ks join only in Greek loanwords; ^ keeps a word in Latin letters
+        self.assertEqual(tool.to_script("cop", "ari tpraksis"), "ⲁⲣⲓ ⲧⲡⲣⲁⲝⲓⲥ")
+        self.assertEqual(tool.to_script("cop", "pshai"), "ⲡⲥϩⲁⲓ")
+        self.assertEqual(tool.to_script("cop", "ari ^Run {x} second-thought.ini"), "ⲁⲣⲓ Run {x} second-thought.ini")
+        self.assertEqual(tool.unmark("ari ^Run"), "ari Run")
+
     def test_placeholders_names_and_files_are_kept(self):
         for lang, word in [("gmy", "to"), ("akk", "ana")]:
             for keep in ["{to}", "{name}-actions.zip", "GitHub", "SETUP.md", "second-thought.ini", "python my-program.py --test"]:
