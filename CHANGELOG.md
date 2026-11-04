@@ -22,6 +22,11 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+## 3.9.1 - 2026-11-04
+
+### Changed
+- Nothing in the runtime: exported programs behave exactly as with 3.9.0. This release puts the page's newest version on GitHub Pages, with Blockly 13 and its own keyboard navigation (#242).
+
 ## 3.9.0 - 2026-11-03
 
 ### Added
