@@ -550,7 +550,7 @@
               else if (t.type === "rb_agent_tool") {
                 const name = String(t.getFieldValue("NAME") || "").trim();
                 const def = Blockly.Procedures.getDefinition(name, t.workspace || ws);
-                const params = def && def.getVarModels ? def.getVarModels().map(v => v.name) : [];
+                const params = def && def.getVarModels ? def.getVarModels().map(varName) : [];
                 tools.push('{"kind": "block", "name": ' + pyStr(name) + ', "desc": ' + inp(t, "DESC", '""') + ', "inputs": ' + pyStr(t.getFieldValue("INPUTS") || "") + ', "params": [' + params.map(pyStr).join(", ") +
                   '], "fn": ' + (def ? procId(name) : "None") + ', "ask": ' + (t.getFieldValue("ASK") === "TRUE" ? "True" : "False") + "}");
               }
@@ -632,7 +632,7 @@
         const procOut = [];
         defs.forEach(b => {
           const name = b.getFieldValue("NAME");
-          const params = (b.getVarModels ? b.getVarModels() : []).map(v => v.name);
+          const params = (b.getVarModels ? b.getVarModels() : []).map(varName);
           const args = params.map(p => ident("arg_" + p));
           procOut.push("async def " + procId(name) + "(" + args.join(", ") + "):");
           procOut.push("    \"\"\"My Block in " + x.name.replace(/"/g, "'") + ": " + name.replace(/"{3}/g, "\x27\x27\x27") + "\"\"\"");
@@ -656,7 +656,7 @@
       const out = [];
       if (b.type === "procedures_defnoreturn" || b.type === "procedures_defreturn") {
         const name = b.getFieldValue("NAME");
-        const params = (b.getVarModels ? b.getVarModels() : []).map(v => v.name);
+        const params = (b.getVarModels ? b.getVarModels() : []).map(varName);
         const args = params.map(p => ident("arg_" + p));
         out.push("async def " + procId(name) + "(" + args.join(", ") + "):");
         out.push("    \"\"\"My Block: " + name.replace(/"""/g, "'''") + "\"\"\"");

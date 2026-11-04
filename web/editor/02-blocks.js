@@ -28,6 +28,8 @@
   // The text written in the page is swapped once, here; text the page sets later goes through tr(), and the tests
   // check every text given to tr has a translation.
   const PAGE_T = (window.ST_I18N && I18N.page) || {};
+  // A variable's name: Blockly 13 keeps it behind getName() (#242).
+  const varName = v => v && (typeof v.getName === "function" ? v.getName() : v.name);
   function tr(s, vars){
     const t = PAGE_T[s] || s;
     return vars ? t.replace(/\{(\w+)\}/g, (m, k) => k in vars ? String(vars[k]) : m) : t;

@@ -474,7 +474,7 @@
       if (t.type === "rb_agent_tool") {
         const blockName = String(t.getFieldValue("NAME") || "").trim();
         const def = Blockly.Procedures.getDefinition(blockName, t.workspace || ws);
-        const params = def && def.getVarModels ? def.getVarModels().map(v => v.name) : [];
+        const params = def && def.getVarModels ? def.getVarModels().map(varName) : [];
         const desc = str(await input(t, tc, "DESC", "")).trim() || "Runs the My Block \u201c" + blockName + "\u201d.";
         const schema = toolSchema(parseInputTypes(t.getFieldValue("INPUTS"), params, blockName));
         out.set(agentName(blockName, taken), { desc, params, kind:"block", blockName, def, ask:t.getFieldValue("ASK") === "TRUE", schema });

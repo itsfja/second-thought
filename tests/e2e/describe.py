@@ -44,7 +44,7 @@ async def describe_tests():
 
         await pg.click("#describe-load")
         types = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).map(b => b.type)")
-        names = await pg.evaluate("Blockly.getMainWorkspace().getAllVariables().map(v => v.name)")
+        names = await pg.evaluate("Blockly.getMainWorkspace().getVariableMap().getAllVariables().map(v => v.getName())")
         msg = await pg.text_content("#describe-msg")
         check("rb_tg_send" in types and "rb_when_time" in types and "town" in names and await pg.is_visible("#describe-undo")
               and "Loaded Claude's program (7 blocks). Check the blocks before running." in msg,

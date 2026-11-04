@@ -57,7 +57,7 @@
     if (run.answer) add("answer", short(run.answer, 120));
     if (run.approved !== undefined) add("passed review", run.approved ? "yes" : "no");
     if (run.problems && run.problems.length) add("review problems", run.problems.map(p => "\u2022 " + short(p, 80)).join("\n"));
-    run.vars.forEach((v, id) => { const m = ws.getVariableById(id); add(m ? m.name : id, isImg(v) ? str(v) : isRec(v) ? short(str(v).replace(/\n/g, " \u00b7 "), 200) : Array.isArray(v) ? memPreview(v) : short(str(v), 160)); });
+    run.vars.forEach((v, id) => { const m = ws.getVariableMap().getVariableById(id); add(m ? varName(m) : id, isImg(v) ? str(v) : isRec(v) ? short(str(v).replace(/\n/g, " \u00b7 "), 200) : Array.isArray(v) ? memPreview(v) : short(str(v), 160)); });
     run.chats.forEach((h, k) => add("chat " + k, (h.length / 2) + " turns"));
     if (run.result.length) add("result", run.result.length + " part" + (run.result.length === 1 ? "" : "s"));
     if (run.lastError) add("last error", short(run.lastError, 160));

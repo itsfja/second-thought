@@ -39,7 +39,7 @@ def csp(page):
         f"worker-src 'self' blob: {LIBRARIES}",
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  # Blockly writes its own styles
         "font-src 'self' https://fonts.gstatic.com",
-        "img-src 'self' data: blob: https://blockly-demo.appspot.com",  # Blockly's sprites
+        "img-src 'self' data: blob: https://static.blockly.com",  # Blockly's sprites (Blockly 13's media path)
         f"connect-src 'self' {API}",
         "object-src 'none'",
         "base-uri 'none'",
