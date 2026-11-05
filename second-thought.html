@@ -1424,6 +1424,9 @@ SAFETY = {
     # homeassistant.turn_on, turn_off and toggle reach any device, so they ask when aimed at one of these.
     "ha_generic": r"^homeassistant\.(turn_on|turn_off|toggle)$",
     "ha_sensitive_entity": r"^(lock|cover|valve|alarm_control_panel)\.",
+    # Targets other than entities (in a service call's data, or its "target"): with the generic services above, we can't
+    # see which devices they reach, so they ask too (#303). So does entity_id "all", or no target at all.
+    "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
     # Homey changes that unlock, open or disarm: [capability, value].
     "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
     # Built-in agent tools that ask before each use.
@@ -1458,14 +1461,29 @@ HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
-def ha_sensitive(service, entity=""):
+def ha_sensitive(service, entity="", data=None):
     """True for an action that could unlock, open or disarm: a sensitive service, or homeassistant.turn_on, turn_off or
-    toggle aimed at a lock, cover, valve or alarm (they reach the same devices)."""
+    toggle that could reach a lock, cover, valve or alarm (they reach the same devices). That's judged on the call as
+    sent: the entity and any entity_id in the data (JSON text or a dict); an area, device, floor or label target,
+    entity_id "all" or no target at all count too, since we can't see what they reach (#303)."""
     service = to_str(service).strip()
     if any(re.match(p, service) for p in HA_SENSITIVE):
         return True
-    return bool(re.match(SAFETY["ha_generic"], service)) and \
-        any(re.match(HA_SENSITIVE_ENTITY, e) for e in re.split(r"[\s,]+", to_str(entity).strip()) if e)
+    if not re.match(SAFETY["ha_generic"], service):
+        return False
+    if not isinstance(data, dict):
+        try:
+            data = json.loads(to_str(data)) if to_str(data).strip() else {}
+        except ValueError:
+            data = {}
+        data = data if isinstance(data, dict) else {}
+    parts = [data] + ([data["target"]] if isinstance(data.get("target"), dict) else [])
+    if any(p.get(k) not in (None, "", []) for p in parts for k in SAFETY["ha_wide_targets"]):
+        return True
+    ids = [to_str(entity)] + [i for p in parts for i in (p.get("entity_id") if isinstance(p.get("entity_id"), list) else [p.get("entity_id")])
+                              if i is not None]
+    ids = [e for i in ids for e in re.split(r"[\s,]+", to_str(i).strip()) if e]
+    return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
 # GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
@@ -2814,15 +2832,15 @@ class Connections:
                 raise RunError(tr("The data for {service} isn't valid JSON. Use something like {\"temperature\": 20}.", service=service))
         if entity:
             body["entity_id"] = entity
-        sensitive = ha_sensitive(service, entity)
+        sensitive = ha_sensitive(service, entity, body)
         if (not sensitive or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
             return False
         if sensitive:
             if self.nobody_here():
-                self.log(tr("Not done"), tr("{service} on {entity} needs your approval, and nobody is at the keyboard.", service=service, entity=entity), tr("refused"))
+                self.log(tr("Not done"), tr("{service} on {entity} needs your approval, and nobody is at the keyboard.", service=service, entity=entity or "Home Assistant"), tr("refused"))
                 return False
             if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
-                self.log(tr("Not done"), tr("{service} on {entity} was refused, so nothing happened.", service=service, entity=entity), tr("refused"))
+                self.log(tr("Not done"), tr("{service} on {entity} was refused, so nothing happened.", service=service, entity=entity or "Home Assistant"), tr("refused"))
                 return False
         domain, action = service.split(".", 1)
         await self._ha("POST", f"/api/services/{domain}/{action}", body)
@@ -5445,7 +5463,7 @@ class AgentTools:
                 self.log(f"{label}: {name}", tr("Input: {shown}\n\nThe same call as the step before, so it didn't run again.", shown=shown), tr("repeat"), calls=mine)
                 rec(i, "repeat", name, shown)
                 continue
-            if ask and kind == "call_service" and ha_sensitive(inp.get("service", ""), inp.get("entity", "")):
+            if ask and kind == "call_service" and ha_sensitive(inp.get("service", ""), inp.get("entity", ""), inp.get("data")):
                 ask = False  # unlocking, opening and disarming ask anyway: one question is enough
             why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
             ask = ask or bool(why_ask)
@@ -8311,6 +8329,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
  ],
  "ha_generic": "^homeassistant\\.(turn_on|turn_off|toggle)$",
  "ha_sensitive_entity": "^(lock|cover|valve|alarm_control_panel)\\.",
+ "ha_wide_targets": [
+  "area_id",
+  "device_id",
+  "floor_id",
+  "label_id"
+ ],
  "homey_sensitive": [
   [
    "locked",
@@ -11342,9 +11366,18 @@ HOW TO MAP CODE
      'control devices (no asking)', and so do the things a fooled agent could do with a tool that doesn't normally ask. */
   const SAFETY = JSON.parse(document.getElementById("safety").textContent);
   const HA_SENSITIVE = SAFETY.ha_sensitive.map(p => new RegExp(p));
-  const haIsSensitive = (svc, entity) => { svc = str(svc).trim();
-    return HA_SENSITIVE.some(r => r.test(svc)) || (new RegExp(SAFETY.ha_generic).test(svc)
-      && str(entity).trim().split(/[\s,]+/).some(e => new RegExp(SAFETY.ha_sensitive_entity).test(e))); };
+  // Judged on the call as sent (#303): the entity and any entity_id in the data; an area, device, floor or label target,
+  // entity_id "all" or no target at all ask too with the generic services, since we can't see what they reach.
+  const haIsSensitive = (svc, entity, data) => { svc = str(svc).trim();
+    if (HA_SENSITIVE.some(r => r.test(svc))) return true;
+    if (!new RegExp(SAFETY.ha_generic).test(svc)) return false;
+    const isObj = x => !!x && typeof x === "object" && !Array.isArray(x);
+    if (!isObj(data)) { try { data = str(data).trim() ? JSON.parse(str(data)) : {}; } catch(e) { data = {}; } if (!isObj(data)) data = {}; }
+    const parts = [data].concat(isObj(data.target) ? [data.target] : []);
+    if (parts.some(p => SAFETY.ha_wide_targets.some(k => p[k] != null && p[k] !== "" && !(Array.isArray(p[k]) && !p[k].length)))) return true;
+    const ids = [str(entity)].concat(...parts.map(p => Array.isArray(p.entity_id) ? p.entity_id : [p.entity_id]).map(a => a.filter(i => i != null)))
+      .flatMap(i => str(i).trim().split(/[\s,]+/)).filter(Boolean);
+    return !ids.length || ids.some(e => e.toLowerCase() === "all" || new RegExp(SAFETY.ha_sensitive_entity).test(e)); };
   const AGENT_PRIVATE = new Set(SAFETY.agent_private);
   const AGENT_HA_INDIRECT = SAFETY.agent_ha_indirect.map(p => new RegExp(p));
   function agentMustAsk(tool, inp, seen, isPrivate){
@@ -11357,7 +11390,7 @@ HOW TO MAP CODE
     return "";
   }
   // For the tests: the page's answers to the same questions the runtime answers (tests/e2e/safety.py).
-  window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity)
+  window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
     : c.kind === "asks" ? AGENT_ASKS.has(c.tool) : c.kind === "private" ? AGENT_PRIVATE.has(c.tool)
     : agentMustAsk(c.tool, c.input || {}, c.seen || "", !!c.private));
@@ -11436,8 +11469,9 @@ HOW TO MAP CODE
     const dt = str(dataText).trim();
     if (dt) { try { data = JSON.parse(dt); } catch(e) { fail(tr("The data for {svc} isn't valid JSON. Use something like {\"temperature\": 20}.", { svc })); } }
     const e = id ? haEnt(id) : null;
-    if (!haIsSensitive(svc, id) && !(await allowed(["ha"], svc.replace(".", ": ").replace(/_/g, " ") + (id ? " on " + id : "")))) return false;
-    if (haIsSensitive(svc, id)) {
+    const sensitive = haIsSensitive(svc, id, data);
+    if (!sensitive && !(await allowed(["ha"], svc.replace(".", ": ").replace(/_/g, " ") + (id ? " on " + id : "")))) return false;
+    if (sensitive) {
       const ok = await waitForYou("Allow this?", tr(id ? "The program wants to {action} on {entity}. This is a safety check: unlocking, opening and disarming always ask first." : "The program wants to {action}. This is a safety check: unlocking, opening and disarming always ask first.", { action:svc.replace(".", ": ").replace(/_/g, " "), entity:id }), (box, done) => {
         const row = document.createElement("div"); row.className = "row";
         const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = tr("Allow");
@@ -16485,7 +16519,7 @@ HOW TO MAP CODE
       }
       s.text((why ? tr("Why: {why}", { why }) + "\n" : "") + tr("Input: {shown}", { shown })); s.done("using tool", "");
       let askFirst = t.ask;
-      if (askFirst && t.kind === "call_service" && haIsSensitive(inp.service, inp.entity)) askFirst = false;  // those ask anyway: one question is enough
+      if (askFirst && t.kind === "call_service" && haIsSensitive(inp.service, inp.entity, inp.data)) askFirst = false;  // those ask anyway: one question is enough
       const whyAsk = askFirst ? "" : agentMustAsk(t.kind, inp, seen, isPrivate);
       askFirst = askFirst || !!whyAsk;
       let result, refused = false;

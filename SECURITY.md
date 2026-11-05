@@ -38,7 +38,8 @@ Everything it reads and writes is sent to the model services it uses.
 - **Some things always ask, even with the no-asking tools.**
   - **Opening and unlocking.** Anything that could unlock, open or disarm asks: every lock, cover (garage doors, gates)
     and valve action except locking, closing and stopping, including toggling and setting a position, and
-    `homeassistant.turn_on`, `turn_off` or `toggle` aimed at one.
+    `homeassistant.turn_on`, `turn_off` or `toggle` that could reach one: named as the entity or in the data, or
+    aimed at a whole area, device, floor or label, at `all`, or at nothing in particular (we can't see what those reach).
   - **Things that could do anything.** When an agent chooses it, running a Home Assistant script, scene or automation,
     pressing a button, starting a Homey flow, or publishing an MQTT message that says unlock, open or disarm.
 - **No reading made-up addresses next to private data.** An agent that can see private things (email, messages,

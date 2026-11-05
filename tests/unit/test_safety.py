@@ -1,6 +1,8 @@
 """What always asks, whatever tool an agent was given: actions that could unlock, open or disarm, and (for agents) things
 that could do anything, or a made-up address next to private data."""
+import asyncio
 import unittest
+from unittest import mock
 
 import support  # noqa: F401
 from second_thought.agent import AgentTools as Agent
@@ -20,6 +22,40 @@ class Sensitive(unittest.TestCase):
                                 ("valve.close_valve", ""), ("alarm_control_panel.alarm_arm_away", ""), ("light.turn_on", "light.kitchen"),
                                 ("homeassistant.toggle", "light.kitchen"), ("switch.turn_off", "switch.oven")]:
             self.assertFalse(ha_sensitive(service, entity), f"{service} on {entity}")
+
+
+    def test_the_target_in_the_data_counts_too(self):
+        # #303: the generic services judged on the whole call, not just the entity input
+        for entity, data in [("", '{"entity_id": "lock.front_door"}'), ("", {"entity_id": ["light.hall", "cover.garage_door"]}),
+                             ("", '{"area_id": "hallway"}'), ("", {"device_id": ["abc"]}), ("", '{"floor_id": "ground"}'),
+                             ("", {"label_id": "doors"}), ("", {"target": {"area_id": "hallway"}}), ("", '{"entity_id": "all"}'),
+                             ("", ""), ("", "{}"), ("light.hall", {"target": {"entity_id": "lock.back_door"}})]:
+            self.assertTrue(ha_sensitive("homeassistant.toggle", entity, data), f"{entity} {data}")
+        for entity, data in [("light.hall", '{"brightness": 120}'), ("", {"entity_id": "light.hall"}), ("", {"entity_id": ["switch.a", "fan.b"]}),
+                             ("", {"target": {"entity_id": "light.hall"}, "area_id": ""})]:
+            self.assertFalse(ha_sensitive("homeassistant.turn_on", entity, data), f"{entity} {data}")
+        # Everyday services keep their area targets without asking; sensitive ones asked already.
+        self.assertFalse(ha_sensitive("light.turn_on", "", '{"area_id": "hallway"}'))
+        self.assertTrue(ha_sensitive("cover.open_cover", "", '{"area_id": "hallway"}'))
+
+
+class ServiceCall(unittest.TestCase):
+    """#303 end to end: a lock named only in the data isn't sent when nobody is there to ask."""
+    def call(self, service, entity, data):
+        from second_thought.runtime import Runtime
+        rt = Runtime()
+        sent = mock.AsyncMock(return_value={})
+        with mock.patch.object(rt, "nobody_here", return_value=True), mock.patch.object(rt, "_allowed", mock.AsyncMock(return_value=True)), \
+                mock.patch.object(rt, "_ha", sent), mock.patch.object(rt, "log"):
+            done = asyncio.run(rt._ha_call_live(service, entity, data))
+        return done, sent.await_count
+
+    def test_lock_in_the_data_is_refused_unattended(self):
+        self.assertEqual(self.call("homeassistant.toggle", "", '{"entity_id": "lock.front_door"}'), (False, 0))
+        self.assertEqual(self.call("homeassistant.turn_on", "", '{"area_id": "hallway"}'), (False, 0))
+
+    def test_everyday_call_still_goes(self):
+        self.assertEqual(self.call("homeassistant.turn_on", "", '{"entity_id": "light.hall"}'), (True, 1))
 
 
 class AgentMustAsk(unittest.TestCase):

@@ -13,6 +13,14 @@ HA = [("lock.unlock", "lock.front_door"), ("lock.lock", "lock.front_door"), ("lo
       ("alarm_control_panel.alarm_arm_away", ""), ("garage_door.open", ""), ("homeassistant.toggle", "lock.front_door"),
       ("homeassistant.turn_off", "light.kitchen, cover.garage"), ("homeassistant.turn_on", "light.kitchen"), ("light.turn_on", "light.kitchen"),
       ("  lock.unlock  ", ""), ("switch.turn_on", "switch.alarm_control_panel")]
+# The target in the data (#303): (service, entity, data), as text or as the agent's own object.
+HA_DATA = [("homeassistant.toggle", "", '{"entity_id": "lock.front_door"}'), ("homeassistant.turn_on", "", {"entity_id": ["light.a", "cover.b"]}),
+           ("homeassistant.turn_off", "", '{"area_id": "hallway"}'), ("homeassistant.turn_on", "", {"target": {"device_id": "abc"}}),
+           ("homeassistant.turn_on", "", {"floor_id": "ground"}), ("homeassistant.toggle", "", '{"label_id": ["doors"]}'),
+           ("homeassistant.turn_on", "", '{"entity_id": "all"}'), ("homeassistant.turn_on", "", ""), ("homeassistant.turn_on", "", "{not json"),
+           ("homeassistant.turn_on", "light.kitchen", '{"brightness": 120}'), ("homeassistant.turn_on", "", {"entity_id": "light.kitchen"}),
+           ("homeassistant.turn_on", "", {"target": {"entity_id": "switch.fan"}, "area_id": ""}), ("light.turn_on", "", '{"area_id": "hallway"}'),
+           ("homeassistant.turn_on", "light.hall", {"target": {"entity_id": "valve.water"}})]
 TOOLS = [("call_service", {"service": "script.morning"}), ("call_service", {"service": "scene.movie"}),
          ("call_service", {"service": "automation.trigger"}), ("call_service", {"service": "input_button.press"}),
          ("call_service", {"service": "button.press"}), ("call_service", {"service": "light.turn_on"}),
@@ -25,6 +33,7 @@ TOOLS = [("call_service", {"service": "script.morning"}), ("call_service", {"ser
 async def safety_tests():
     print("Safety rules: the page and exported programs agree")
     cases = [{"kind": "ha", "service": s, "entity": e} for s, e in HA]
+    cases += [{"kind": "ha", "service": s, "entity": e, "data": d} for s, e, d in HA_DATA]
     cases += [{"kind": "homey", "capability": c, "value": v} for c, v in [("locked", False), ("locked", True), ("garagedoor_closed", False),
                                                                           ("garagedoor_closed", True), ("homealarm_state", "disarmed"),
                                                                           ("homealarm_state", "armed"), ("onoff", False)]]
@@ -36,7 +45,7 @@ async def safety_tests():
     want = []
     for c in cases:
         if c["kind"] == "ha":
-            want.append(ha_sensitive(c["service"], c["entity"]))
+            want.append(ha_sensitive(c["service"], c["entity"], c.get("data")))
         elif c["kind"] == "homey":
             want.append((c["capability"], c["value"]) in Connections.HOMEY_SENSITIVE)
         elif c["kind"] == "asks":
