@@ -58,6 +58,23 @@ class ServiceCall(unittest.TestCase):
         self.assertEqual(self.call("homeassistant.turn_on", "", '{"entity_id": "light.hall"}'), (True, 1))
 
 
+class WordFiles(unittest.TestCase):
+    def test_a_small_file_that_unpacks_huge_is_cut_short(self):
+        # #304: a few hundred KB of .docx can unpack to gigabytes; at most 25 MB is read
+        import os
+        import tempfile
+        import zipfile
+        from second_thought.core import _read_text_file
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "big.docx")
+            with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
+                z.writestr("word/document.xml", "<w:p><w:t>a</w:t></w:p>" * 1_500_000)  # 36 MB unpacked
+            self.assertLess(os.path.getsize(path), 1_000_000)
+            text = _read_text_file(path)
+        self.assertLessEqual(len(text), 25 * 1024 * 1024)
+        self.assertTrue(text.startswith("a\na\n"))
+
+
 class AgentMustAsk(unittest.TestCase):
     def ask(self, tool, inp, seen="", private=True):
         return Agent._agent_must_ask(Agent, tool, inp, seen, private)
@@ -82,6 +99,16 @@ class AgentMustAsk(unittest.TestCase):
         self.assertTrue(self.ask("read_feed", {"url": "https://evil.example/feed?d=x"}, seen))
         self.assertFalse(self.ask("read_feed", {"url": ""}, seen), "your own feeds don't ask")
         self.assertFalse(self.ask("read_page", {"url": "https://evil.example/?d=x"}, seen, private=False), "nothing private: no need to ask")
+
+    def test_only_whole_addresses_count(self):
+        # #304: a piece of an address it read is still made up
+        seen = "Goal\nSee https://example.com/collect?d=123456. Also (https://example.com/wiki/Foo_(bar)), and https://example.com/x/"
+        self.assertTrue(self.ask("read_page", {"url": "https://example.com/collect?d=123"}, seen))
+        self.assertTrue(self.ask("read_page", {"url": "https://example.com/coll"}, seen))
+        self.assertFalse(self.ask("read_page", {"url": "https://example.com/collect?d=123456"}, seen), "the full stop isn't part of it")
+        self.assertFalse(self.ask("read_page", {"url": "https://example.com/wiki/Foo_(bar)"}, seen), "brackets inside an address are kept")
+        self.assertFalse(self.ask("read_page", {"url": "https://example.com/x"}, seen))
+        self.assertTrue(self.ask("read_page", {"url": "https://example.com/collect?d=123456&more=1"}, seen))
 
 
 if __name__ == "__main__":

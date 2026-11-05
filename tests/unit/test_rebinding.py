@@ -101,6 +101,17 @@ class Rebinding(unittest.TestCase):
             connectors.get_url("http://private.example/")
         self.assertIn("your own network", str(e.exception))
 
+    def test_shared_and_wrapped_private_addresses_are_refused_too(self):
+        # #304: Tailscale's shared 100.64.0.0/10, IPv4-mapped and NAT64-wrapped private addresses, old IPv6 site-local
+        for ip in ("100.64.0.1", "100.101.2.3", "::ffff:100.64.0.1", "::ffff:192.168.1.1", "::ffff:0.0.0.0", "64:ff9b::c0a8:101",
+                   "64:ff9b::7f00:1", "fec0::1", "0.1.2.3", "fd7a:115c:a1e0::1"):
+            family = socket.AF_INET6 if ":" in ip else socket.AF_INET
+            with self.subTest(ip=ip), mock.patch("socket.getaddrinfo", return_value=[(family, socket.SOCK_STREAM, 6, "", (ip, 80))]):
+                with self.assertRaises(RunError):
+                    connectors._public_addresses("x.example", 80)
+        with mock.patch("socket.getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 6, "", (PUBLIC, 80))]):
+            self.assertTrue(connectors._public_addresses("x.example", 80))
+
     def test_through_a_proxy_the_request_names_the_checked_address(self):
         self.use_proxy()
         ctype, data = connectors.get_url("http://rebind.example/page?q=1")

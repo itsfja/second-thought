@@ -45,7 +45,9 @@ Everything it reads and writes is sent to the model services it uses.
 - **No reading made-up addresses next to private data.** An agent that can see private things (email, messages,
   calendars, GitHub, your home, memory, files, MCP) asks before reading a page or feed whose address wasn't in its goal
   or in anything it read, since the address itself could carry your data away (`https://example.com/?d=<your emails>`).
-  Addresses it found in search results, feeds or pages don't ask.
+  Addresses it found in search results, feeds or pages don't ask; only a whole address counts, not part of one. A
+  search query leaves your computer too, for the search service (not the sites in its results), so an agent that
+  can see private things could put some of them in a query; a search service is a place you chose to send text to.
 - **Untrusted text stays text.** An agent only reads what its tools return; it's told never to follow instructions
   inside it. Treat this as a mitigation, not a guarantee: anything an agent reads (an email, a web page, a pull
   request) can try to steer it, which is why acting tools ask first. The tests play an agent that has been fully
@@ -54,7 +56,7 @@ Everything it reads and writes is sent to the model services it uses.
 - **Web requests.** The listener only starts once `WEBHOOK_SECRET` is set, refuses requests without the secret
   (compared in constant time), and listens on `127.0.0.1` unless you set `WEBHOOK_HOST`.
 - **No local network by default.** The agent's web tools read only public addresses, never ones on your own
-  network, unless you set `local_pages = yes`. Every address a name resolves to is checked, and so is every redirect.
+  network (including shared addresses such as Tailscale's `100.64.0.0/10`), unless you set `local_pages = yes`. Every address a name resolves to is checked, and so is every redirect.
   Each name is looked up once and the connection goes to exactly the address that was checked, so a name can't change
   its answer in between (DNS rebinding). Through a proxy, the proxy is sent to that address too: the request names the
   address, and an https tunnel goes to it while the certificate is still checked against the name.

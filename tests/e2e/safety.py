@@ -27,7 +27,9 @@ TOOLS = [("call_service", {"service": "script.morning"}), ("call_service", {"ser
          ("call_service", {"service": "automation.turn_off"}), ("run_homey_flow", {"flow": "Away"}),
          ("publish_mqtt", {"topic": "zigbee2mqtt/front_door/set", "message": '{"state": "UNLOCK"}'}),
          ("publish_mqtt", {"topic": "garage/Open", "message": "1"}), ("publish_mqtt", {"topic": "lights/kitchen", "message": "on"}),
-         ("publish_mqtt", {"topic": "a", "message": "reopening soon"}), ("read_page", {"url": "https://example.com/?d=secret"})]
+         ("publish_mqtt", {"topic": "a", "message": "reopening soon"}), ("read_page", {"url": "https://example.com/?d=secret"}),
+         ("read_page", {"url": "https://example.com/?d=sec"}), ("read_page", {"url": "https://example.com"}),
+         ("read_feed", {"url": "https://example.com/?d=secret/"}), ("read_page", {"url": "https://example.com/wiki/A_(b)"})]
 
 
 async def safety_tests():
@@ -40,7 +42,7 @@ async def safety_tests():
     kinds = sorted(set(SAFETY["agent_private"]) | set(SAFETY["agent_asks"]) | {"web", "calc", "time", "review", "feeds", "telegram_send_free"})
     cases += [{"kind": "asks", "tool": k} for k in kinds] + [{"kind": "private", "tool": k} for k in kinds]
     for private in (False, True):
-        for seen in ("", "https://example.com/?d=secret"):
+        for seen in ("", "https://example.com/?d=secret", "See https://example.com/?d=secret. Or (https://example.com/wiki/A_(b))."):
             cases += [{"kind": "must", "tool": t, "input": i, "private": private, "seen": seen} for t, i in TOOLS]
     want = []
     for c in cases:

@@ -24,6 +24,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ### Security
 - `homeassistant.turn_on`, `turn_off` and `toggle` ask before reaching a lock, cover, valve or alarm wherever the target is named (#303). Before, only the entity was checked: a lock named in the data (`{"entity_id": "lock.front_door"}`), or a whole area, device, floor or label, went ahead without asking, also for an agent that a page or email had fooled. Those generic services now ask when the data names one of those devices, targets an area, device, floor or label, says `all`, or names nothing, since what they reach can't be seen. Everyday services (`light.turn_on` on an area) are unchanged.
+- The agent's web tools refuse shared addresses too, such as the `100.64.0.0/10` range Tailscale gives the devices on your tailnet, and old IPv6 site-local ones (#304). Before, a page or email could steer an agent to a Home Assistant on your tailnet.
+- An agent that can see private things asks before reading an address it wasn't given or didn't read, judged on whole addresses (#304). Before, any piece of an address it had read passed as one it had seen.
+- A Word file is read up to 25 MB unpacked (#304), so a small `.docx` that unpacks to gigabytes can't stop a program that watches a folder.
 
 ### Changed
 - MiniMax's quick tier is MiniMax M3.1 Flash (#281), at $0.15 / $0.60 per million tokens, instead of M2.7-highspeed, which is no longer on MiniMax's price list or its API's list of models. It can look at pictures. To keep the old model while MiniMax still serves it, set `MODEL_MINIMAX_QUICK = MiniMax-M2.7-highspeed`.

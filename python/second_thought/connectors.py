@@ -61,7 +61,10 @@ def _public_addresses(host, port):
         raise RunError(tr("Couldn't find the website “{host}”.", host=host)) from None
     for info in infos:
         ip = ipaddress.ip_address(info[4][0].split("%")[0])
-        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
+        # not is_global adds shared space such as Tailscale's 100.64.0.0/10 (#304); the checks before it stay, since
+        # NAT64 addresses (64:ff9b::/96) count as global even when they wrap a private one.
+        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified \
+                or not ip.is_global or getattr(ip, "is_site_local", False):
             raise RunError(tr("The agent only reads public web pages and feeds, not addresses on your own network (local_pages = yes allows them)."))
     return infos
 
