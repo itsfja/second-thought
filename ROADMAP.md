@@ -34,6 +34,7 @@ Two languages and two security fixes, released in 3.9.2: Middle Egyptian ([#136]
 
 | | Benefit | Cost |
 |---|---|---|
+| [#321](https://github.com/itsfja/second-thought/issues/321) The page runs programs with the service of your choice | High: off claude.ai the page runs only with Claude (#293); a program whose primary is another service sees Claude standing in until after export, so GitHub — the Pages copy or a local clone — can't try the model the program will really use | Medium-high: a second family of model calls in the browser (OpenAI-compatible, which most services speak), keys and a wider security policy for more than one service, and a third page behaviour to keep true |
 | [#247](https://github.com/itsfja/second-thought/issues/247) Gallery: Premium Bonds generations | Medium: an agent whose arithmetic is checked | Low-medium, once a few real lines of NS&I's pages are in (numbers changed) |
 
 ## Someday
