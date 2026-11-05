@@ -98,6 +98,9 @@ SAFETY = {
     "agent_ha_indirect": [r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$"],
     # MQTT messages an agent can't publish without asking (matched in the topic and message, any case).
     "mqtt_unlock": r"\b(unlock|open|disarm)",
+    # An address in what the agent was given or read (#304): whole addresses are compared, never a piece of one. Ends in
+    # . , ; : ! ? and a ) that closes nothing are punctuation, not part of the address.
+    "agent_seen_address": r"https?://[^\s\"'<>\[\]{}]+",
     # MCP tools that can reach real money (#262): they always ask, even with (no asking), never run with nobody there
     # to ask (a schedule, GitHub Actions, --mcp), and the agent can't answer for the person. Kraken's own list: every tool
     # its agents/tool-catalog.json marks dangerous, paper_safe or local_or_live (kraken-cli 0.5.1, checked 2026-11-03).
@@ -115,6 +118,16 @@ SAFETY = {
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
+
+
+def seen_addresses(text):
+    """Every web address in text, whole, without trailing punctuation or slashes: what an agent was given or read (#304)."""
+    out = set()
+    for m in re.findall(SAFETY["agent_seen_address"], to_str(text)):
+        while m and (m[-1] in ".,;:!?" or (m[-1] == ")" and m.count("(") < m.count(")"))):
+            m = m[:-1]
+        out.add(m.rstrip("/"))
+    return out
 
 
 def ha_sensitive(service, entity="", data=None):
@@ -852,8 +865,8 @@ def _read_text_file(path):
         return "\n\n".join((p.extract_text() or "") for p in PdfReader(path).pages[:300])
     if low.endswith(".docx"):
         import zipfile
-        with zipfile.ZipFile(path) as z:
-            xml = z.read("word/document.xml").decode("utf-8", "replace")
+        with zipfile.ZipFile(path) as z, z.open("word/document.xml") as f:
+            xml = f.read(25 * 1024 * 1024).decode("utf-8", "replace")  # at most 25 MB unpacked, however small the file (#304)
         xml = re.sub(r"<w:tab/>", "\t", xml)
         xml = re.sub(r"</w:p>|<w:br[^>]*/>", "\n", xml)
         text = re.sub(r"<[^>]+>", "", xml)

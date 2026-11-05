@@ -55,12 +55,16 @@
     return !ids.length || ids.some(e => e.toLowerCase() === "all" || new RegExp(SAFETY.ha_sensitive_entity).test(e)); };
   const AGENT_PRIVATE = new Set(SAFETY.agent_private);
   const AGENT_HA_INDIRECT = SAFETY.agent_ha_indirect.map(p => new RegExp(p));
+  // Every web address in text, whole (#304): the same as seen_addresses in exported programs.
+  const seenAddresses = text => new Set((str(text).match(new RegExp(SAFETY.agent_seen_address, "g")) || []).map(m => {
+    while (m && (".,;:!?".includes(m.slice(-1)) || (m.slice(-1) === ")" && m.split("(").length < m.split(")").length))) m = m.slice(0, -1);
+    return m.replace(/\/+$/, ""); }));
   function agentMustAsk(tool, inp, seen, isPrivate){
     if (tool === "call_service" && AGENT_HA_INDIRECT.some(r => r.test(str(inp.service).trim()))) return "scripts, scenes, automations and buttons always ask, since they could do anything";
     if (tool === "run_homey_flow") return "flows always ask, since they could do anything";
     if (tool === "publish_mqtt" && new RegExp(SAFETY.mqtt_unlock, "i").test(str(inp.topic) + " " + str(inp.message))) return "unlocking, opening and disarming always ask";
     const url = str(inp.url || "").trim();
-    if ((tool === "read_page" || tool === "read_feed") && url && isPrivate && !seen.includes(url) && !seen.includes(url.replace(/\/+$/, "")))
+    if ((tool === "read_page" || tool === "read_feed") && url && isPrivate && !seenAddresses(seen).has(url.replace(/\/+$/, "")))
       return "the agent made this address up, and it can see private things that an address could carry away";
     return "";
   }

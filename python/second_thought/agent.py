@@ -8,7 +8,7 @@ import json
 import os
 import re
 import sys
-from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive,
+from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive, seen_addresses,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
 from .mcp import mcp_env_name, mcp_money
@@ -467,7 +467,7 @@ class AgentTools:
         if tool == "publish_mqtt" and re.search(SAFETY["mqtt_unlock"], to_str(inp.get("topic", "")) + " " + to_str(inp.get("message", "")), re.I):
             return "unlocking, opening and disarming always ask"
         url = to_str(inp.get("url", "")).strip()
-        if tool in ("read_page", "read_feed") and url and private and url not in seen and url.rstrip("/") not in seen:
+        if tool in ("read_page", "read_feed") and url and private and url.rstrip("/") not in seen_addresses(seen):
             return "the agent made this address up, and it can see private things that an address could carry away"
         return ""
 
