@@ -41,9 +41,18 @@
      'control devices (no asking)', and so do the things a fooled agent could do with a tool that doesn't normally ask. */
   const SAFETY = JSON.parse(document.getElementById("safety").textContent);
   const HA_SENSITIVE = SAFETY.ha_sensitive.map(p => new RegExp(p));
-  const haIsSensitive = (svc, entity) => { svc = str(svc).trim();
-    return HA_SENSITIVE.some(r => r.test(svc)) || (new RegExp(SAFETY.ha_generic).test(svc)
-      && str(entity).trim().split(/[\s,]+/).some(e => new RegExp(SAFETY.ha_sensitive_entity).test(e))); };
+  // Judged on the call as sent (#303): the entity and any entity_id in the data; an area, device, floor or label target,
+  // entity_id "all" or no target at all ask too with the generic services, since we can't see what they reach.
+  const haIsSensitive = (svc, entity, data) => { svc = str(svc).trim();
+    if (HA_SENSITIVE.some(r => r.test(svc))) return true;
+    if (!new RegExp(SAFETY.ha_generic).test(svc)) return false;
+    const isObj = x => !!x && typeof x === "object" && !Array.isArray(x);
+    if (!isObj(data)) { try { data = str(data).trim() ? JSON.parse(str(data)) : {}; } catch(e) { data = {}; } if (!isObj(data)) data = {}; }
+    const parts = [data].concat(isObj(data.target) ? [data.target] : []);
+    if (parts.some(p => SAFETY.ha_wide_targets.some(k => p[k] != null && p[k] !== "" && !(Array.isArray(p[k]) && !p[k].length)))) return true;
+    const ids = [str(entity)].concat(...parts.map(p => Array.isArray(p.entity_id) ? p.entity_id : [p.entity_id]).map(a => a.filter(i => i != null)))
+      .flatMap(i => str(i).trim().split(/[\s,]+/)).filter(Boolean);
+    return !ids.length || ids.some(e => e.toLowerCase() === "all" || new RegExp(SAFETY.ha_sensitive_entity).test(e)); };
   const AGENT_PRIVATE = new Set(SAFETY.agent_private);
   const AGENT_HA_INDIRECT = SAFETY.agent_ha_indirect.map(p => new RegExp(p));
   function agentMustAsk(tool, inp, seen, isPrivate){
@@ -56,7 +65,7 @@
     return "";
   }
   // For the tests: the page's answers to the same questions the runtime answers (tests/e2e/safety.py).
-  window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity)
+  window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
     : c.kind === "asks" ? AGENT_ASKS.has(c.tool) : c.kind === "private" ? AGENT_PRIVATE.has(c.tool)
     : agentMustAsk(c.tool, c.input || {}, c.seen || "", !!c.private));
@@ -135,8 +144,9 @@
     const dt = str(dataText).trim();
     if (dt) { try { data = JSON.parse(dt); } catch(e) { fail(tr("The data for {svc} isn't valid JSON. Use something like {\"temperature\": 20}.", { svc })); } }
     const e = id ? haEnt(id) : null;
-    if (!haIsSensitive(svc, id) && !(await allowed(["ha"], svc.replace(".", ": ").replace(/_/g, " ") + (id ? " on " + id : "")))) return false;
-    if (haIsSensitive(svc, id)) {
+    const sensitive = haIsSensitive(svc, id, data);
+    if (!sensitive && !(await allowed(["ha"], svc.replace(".", ": ").replace(/_/g, " ") + (id ? " on " + id : "")))) return false;
+    if (sensitive) {
       const ok = await waitForYou("Allow this?", tr(id ? "The program wants to {action} on {entity}. This is a safety check: unlocking, opening and disarming always ask first." : "The program wants to {action}. This is a safety check: unlocking, opening and disarming always ask first.", { action:svc.replace(".", ": ").replace(/_/g, " "), entity:id }), (box, done) => {
         const row = document.createElement("div"); row.className = "row";
         const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = tr("Allow");

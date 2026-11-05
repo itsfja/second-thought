@@ -737,7 +737,7 @@
       }
       s.text((why ? tr("Why: {why}", { why }) + "\n" : "") + tr("Input: {shown}", { shown })); s.done("using tool", "");
       let askFirst = t.ask;
-      if (askFirst && t.kind === "call_service" && haIsSensitive(inp.service, inp.entity)) askFirst = false;  // those ask anyway: one question is enough
+      if (askFirst && t.kind === "call_service" && haIsSensitive(inp.service, inp.entity, inp.data)) askFirst = false;  // those ask anyway: one question is enough
       const whyAsk = askFirst ? "" : agentMustAsk(t.kind, inp, seen, isPrivate);
       askFirst = askFirst || !!whyAsk;
       let result, refused = false;

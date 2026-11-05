@@ -574,7 +574,7 @@ class AgentTools:
                 self.log(f"{label}: {name}", tr("Input: {shown}\n\nThe same call as the step before, so it didn't run again.", shown=shown), tr("repeat"), calls=mine)
                 rec(i, "repeat", name, shown)
                 continue
-            if ask and kind == "call_service" and ha_sensitive(inp.get("service", ""), inp.get("entity", "")):
+            if ask and kind == "call_service" and ha_sensitive(inp.get("service", ""), inp.get("entity", ""), inp.get("data")):
                 ask = False  # unlocking, opening and disarming ask anyway: one question is enough
             why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
             ask = ask or bool(why_ask)

@@ -1010,6 +1010,9 @@ SAFETY = {
     # homeassistant.turn_on, turn_off and toggle reach any device, so they ask when aimed at one of these.
     "ha_generic": r"^homeassistant\.(turn_on|turn_off|toggle)$",
     "ha_sensitive_entity": r"^(lock|cover|valve|alarm_control_panel)\.",
+    # Targets other than entities (in a service call's data, or its "target"): with the generic services above, we can't
+    # see which devices they reach, so they ask too (#303). So does entity_id "all", or no target at all.
+    "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
     # Homey changes that unlock, open or disarm: [capability, value].
     "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
     # Built-in agent tools that ask before each use.
@@ -1044,14 +1047,29 @@ HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
-def ha_sensitive(service, entity=""):
+def ha_sensitive(service, entity="", data=None):
     """True for an action that could unlock, open or disarm: a sensitive service, or homeassistant.turn_on, turn_off or
-    toggle aimed at a lock, cover, valve or alarm (they reach the same devices)."""
+    toggle that could reach a lock, cover, valve or alarm (they reach the same devices). That's judged on the call as
+    sent: the entity and any entity_id in the data (JSON text or a dict); an area, device, floor or label target,
+    entity_id "all" or no target at all count too, since we can't see what they reach (#303)."""
     service = to_str(service).strip()
     if any(re.match(p, service) for p in HA_SENSITIVE):
         return True
-    return bool(re.match(SAFETY["ha_generic"], service)) and \
-        any(re.match(HA_SENSITIVE_ENTITY, e) for e in re.split(r"[\s,]+", to_str(entity).strip()) if e)
+    if not re.match(SAFETY["ha_generic"], service):
+        return False
+    if not isinstance(data, dict):
+        try:
+            data = json.loads(to_str(data)) if to_str(data).strip() else {}
+        except ValueError:
+            data = {}
+        data = data if isinstance(data, dict) else {}
+    parts = [data] + ([data["target"]] if isinstance(data.get("target"), dict) else [])
+    if any(p.get(k) not in (None, "", []) for p in parts for k in SAFETY["ha_wide_targets"]):
+        return True
+    ids = [to_str(entity)] + [i for p in parts for i in (p.get("entity_id") if isinstance(p.get("entity_id"), list) else [p.get("entity_id")])
+                              if i is not None]
+    ids = [e for i in ids for e in re.split(r"[\s,]+", to_str(i).strip()) if e]
+    return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
 # GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
@@ -2400,15 +2418,15 @@ class Connections:
                 raise RunError(tr("The data for {service} isn't valid JSON. Use something like {\"temperature\": 20}.", service=service))
         if entity:
             body["entity_id"] = entity
-        sensitive = ha_sensitive(service, entity)
+        sensitive = ha_sensitive(service, entity, body)
         if (not sensitive or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
             return False
         if sensitive:
             if self.nobody_here():
-                self.log(tr("Not done"), tr("{service} on {entity} needs your approval, and nobody is at the keyboard.", service=service, entity=entity), tr("refused"))
+                self.log(tr("Not done"), tr("{service} on {entity} needs your approval, and nobody is at the keyboard.", service=service, entity=entity or "Home Assistant"), tr("refused"))
                 return False
             if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
-                self.log(tr("Not done"), tr("{service} on {entity} was refused, so nothing happened.", service=service, entity=entity), tr("refused"))
+                self.log(tr("Not done"), tr("{service} on {entity} was refused, so nothing happened.", service=service, entity=entity or "Home Assistant"), tr("refused"))
                 return False
         domain, action = service.split(".", 1)
         await self._ha("POST", f"/api/services/{domain}/{action}", body)
@@ -5031,7 +5049,7 @@ class AgentTools:
                 self.log(f"{label}: {name}", tr("Input: {shown}\n\nThe same call as the step before, so it didn't run again.", shown=shown), tr("repeat"), calls=mine)
                 rec(i, "repeat", name, shown)
                 continue
-            if ask and kind == "call_service" and ha_sensitive(inp.get("service", ""), inp.get("entity", "")):
+            if ask and kind == "call_service" and ha_sensitive(inp.get("service", ""), inp.get("entity", ""), inp.get("data")):
                 ask = False  # unlocking, opening and disarming ask anyway: one question is enough
             why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
             ask = ask or bool(why_ask)
