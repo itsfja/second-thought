@@ -22,6 +22,8 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+## 3.9.2 - 2026-11-05
+
 ### Security
 - `homeassistant.turn_on`, `turn_off` and `toggle` ask before reaching a lock, cover, valve or alarm wherever the target is named (#303). Before, only the entity was checked: a lock named in the data (`{"entity_id": "lock.front_door"}`), or a whole area, device, floor or label, went ahead without asking, also for an agent that a page or email had fooled. Those generic services now ask when the data names one of those devices, targets an area, device, floor or label, says `all`, or names nothing, since what they reach can't be seen. Everyday services (`light.turn_on` on an area) are unchanged.
 - The agent's web tools refuse shared addresses too, such as the `100.64.0.0/10` range Tailscale gives the devices on your tailnet, and old IPv6 site-local ones (#304). Before, a page or email could steer an agent to a Home Assistant on your tailnet.
