@@ -28,6 +28,8 @@ GitHub as a home, released in 3.8.0: a program's test cases on GitHub Actions ([
 
 Reach and trust, released in 3.9.0 and 3.9.1: the Pages copy runs programs with your own API key ([#293](https://github.com/itsfja/second-thought/issues/293)), Kraken through its own MCP server with tools that move money always asking ([#262](https://github.com/itsfja/second-thought/issues/262)), and Blockly 13 with its own keyboard navigation ([#242](https://github.com/itsfja/second-thought/issues/242)). Then MiniMax's quick tier moved to M3.1 Flash, which has a price ([#281](https://github.com/itsfja/second-thought/issues/281)).
 
+Two languages and two security fixes, released in 3.9.2: Middle Egyptian ([#136](https://github.com/itsfja/second-thought/issues/136)) and Sahidic Coptic ([#131](https://github.com/itsfja/second-thought/issues/131)) on the page; Home Assistant's generic services ask whatever their target ([#303](https://github.com/itsfja/second-thought/issues/303)); and the agent refuses shared addresses such as Tailscale's, compares whole addresses, and reads Word files up to 25 MB ([#304](https://github.com/itsfja/second-thought/issues/304)). Both came from outside reviews of the code.
+
 ## Later: important, not urgent
 
 | | Benefit | Cost |
