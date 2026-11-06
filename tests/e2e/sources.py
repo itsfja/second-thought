@@ -76,3 +76,66 @@ def example_ini_check():
         ok = str(e)
     check(ok is True and cp.get("home assistant", "HA_URL") == "http://homeassistant.local:8123" and cp.get("keys", "ANTHROPIC_API_KEY") == "",
           "second-thought.example.ini reads as a settings file, with blank keys and its notes switched off" + ("" if ok is True else f": {ok}"))
+
+
+# Counts the docs spell out as words ("ten groups of Home Assistant examples"), so they can be checked like digits.
+NUMBER_WORDS = {w: n for n, w in
+                enumerate("one two three four five six seven eight nine ten eleven twelve".split(), 1)}
+# The words the number may be written as: a digit, or one of the words above.
+_MAYBE_A_NUMBER = r"(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d+)"
+
+
+def _said(pattern, texts):
+    """Every counting phrase in the docs that matches, as (the number said, the words that said it)."""
+    found = []
+    for text in texts:
+        for m in re.finditer(pattern, text):
+            word = next(g for g in m.groups() if g is not None)
+            found.append((int(word) if word.isdigit() else NUMBER_WORDS.get(word), " ".join(m.group(0).split())))
+    return found
+
+
+def _counts(what, found, actual, over=False):
+    """The docs count 'what' at least once, and every count matches what the sources have ('over N' stays below it)."""
+    ok = bool(found) and all(n is not None and (n < actual if over else n == actual) for n, _ in found)
+    check(ok, f"the docs' {what} counts match the sources ({actual} now)" +
+          ("" if ok else f", but the docs say: {'; '.join(words for _, words in found)}"))
+
+
+def docs_check():
+    """The numbers in README.md, ROADMAP.md and docs/ladybird-book.md match the sources: the runtime's module table,
+    and every count of examples, community programs, languages, model services or Home Assistant examples (#308).
+    Counts drift as the project grows, so anything the docs count is checked against what it counts."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    import sync as sync_tool
+    texts = [(ROOT / name).read_text(encoding="utf-8") for name in ("README.md", "ROADMAP.md", "docs/ladybird-book.md")]
+
+    # The module table lists exactly what python/second_thought/ holds, in tools/sync.py's join order.
+    readme = texts[0]
+    table = readme[readme.index("The runtime's modules, in the order"):readme.index("Each module starts with")]
+    listed = re.findall(r"^\| `([a-z_]+)\.py` \|", table, re.M)
+    check(listed == sync_tool.MODULES,
+          "README.md's module table lists every module in python/second_thought/, in tools/sync.py's join order "
+          f"(it lists: {', '.join(listed) or 'nothing'})")
+    m = re.search(r"package of (\w+) modules", readme)
+    check(m is not None and NUMBER_WORDS.get(m.group(1)) == len(sync_tool.MODULES),
+          f"README.md says 'a package of {m.group(1) if m else '…'} modules'; "
+          f"python/second_thought/ has {len(sync_tool.MODULES)}")
+
+    # What the sources can count, and what the docs say about each.
+    library = (ROOT / "web" / "editor" / "06-example-library.js").read_text(encoding="utf-8")
+    examples = len(re.findall(r'\{ key:"', library))
+    _counts("example", [(int(m.group(1)), m.group(0)) for t in texts for m in re.finditer(r"over (\d+)", t)
+                        if "example" in t[max(0, m.start() - 120):m.end() + 120]], examples, over=True)
+    _counts("community program", _said(rf"over {_MAYBE_A_NUMBER} community programs|(?<!over ){_MAYBE_A_NUMBER} community programs", texts),
+            len(list((ROOT / "gallery").glob("*.json"))))
+    _counts("language", _said(rf"over {_MAYBE_A_NUMBER} languages|(?<!over ){_MAYBE_A_NUMBER} languages", texts),
+            len(list((ROOT / "i18n").glob("*.json"))))
+    _counts("model service", _said(rf"over {_MAYBE_A_NUMBER} model services|(?<!over ){_MAYBE_A_NUMBER} model services", texts),
+            len(json.loads(sync_tool.services_json())))
+    _counts("agent example", _said(rf"(?<!over ){_MAYBE_A_NUMBER} agent examples", texts),
+            len(re.findall(r'cat:"Agents"', library)))
+    _counts("Home Assistant example", _said(r"more than (\d+) Home Assistant examples", texts),
+            len(re.findall(r"cat:HC\.", library)), over=True)
+    _counts("group of Home Assistant examples", _said(rf"{_MAYBE_A_NUMBER} groups of Home Assistant examples", texts),
+            len(set(re.findall(r'"(Home Assistant:[^"]+)"', library))))
