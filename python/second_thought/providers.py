@@ -764,17 +764,33 @@ class ModelCalls:
                         sources.append(f"[{res.get('id', len(sources) + 1)}] {res.get('title') or res['url']}: {res['url']}")
         return text.strip(), sources
 
+    GEMINI_WAITS = (5, 15)  # seconds before the second and third tries
+
     async def _gemini_generate(self, model, contents, config):
         """One Gemini request, given up after CALL_TIMEOUT like every other service's (#329). The client's own timeout
-        should end it first; the wait here is a backstop in case it doesn't."""
-        try:
-            return await asyncio.wait_for(self.gemini.aio.models.generate_content(model=model, contents=contents, config=config),
-                                          CALL_TIMEOUT + min(30, CALL_TIMEOUT) if CALL_TIMEOUT else None)
-        except Exception as e:  # noqa: BLE001
-            if isinstance(e, (TimeoutError, asyncio.TimeoutError)) or "Timeout" in type(e).__name__:
-                raise Retryable(tr("Couldn't reach {provider} at {base} ({x}).{hint}", provider="Gemini",
-                                   base="generativelanguage.googleapis.com", x=f"{type(e).__name__}, {CALL_TIMEOUT} s", hint="")) from e
-            raise
+        should end it first; the wait here is a backstop in case it doesn't. A busy answer (408, 429, 5xx, such as
+        503 "high demand") or a timeout is tried twice more, as Anthropic's library does for Claude; then it's a
+        Retryable, so backups and 'try … times' blocks take over."""
+        tries = len(self.GEMINI_WAITS) + 1
+        for attempt in range(1, tries + 1):
+            try:
+                return await asyncio.wait_for(self.gemini.aio.models.generate_content(model=model, contents=contents, config=config),
+                                              CALL_TIMEOUT + min(30, CALL_TIMEOUT) if CALL_TIMEOUT else None)
+            except Exception as e:  # noqa: BLE001
+                code = getattr(e, "code", None) or getattr(e, "status_code", None)
+                if isinstance(e, (TimeoutError, asyncio.TimeoutError)) or "Timeout" in type(e).__name__:
+                    err = Retryable(tr("Couldn't reach {provider} at {base} ({x}).{hint}", provider="Gemini",
+                                       base="generativelanguage.googleapis.com", x=f"{type(e).__name__}, {CALL_TIMEOUT} s", hint=""))
+                elif code in (408, 429, 500, 502, 503, 504):
+                    err = Retryable(tr("{provider} answered {code}: {detail}", provider="Gemini", code=code, detail=str(e)[:200]))
+                else:
+                    raise
+                if attempt == tries:
+                    raise err from e
+                wait = self.GEMINI_WAITS[attempt - 1]
+                self.log(tr("Retrying"), tr("Try {attempt} of {max_tries} failed: {last_error}\nTrying again in {wait}s.", attempt=attempt,
+                                            max_tries=tries, last_error=str(err), wait=wait), tr("retry {x}", x=attempt + 1), calls=False)
+                await asyncio.sleep(wait)
 
     async def _call_gemini(self, model, prompt, picture, history, web, schema=None):
         try:

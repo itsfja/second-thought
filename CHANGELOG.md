@@ -30,6 +30,7 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ### Fixed
 - A Gemini call gives up after `RB_CALL_TIMEOUT` (300 seconds unless you change it), like every other service's, and is tried again (#329). google-genai waits forever by default, so a dropped connection could stall a program for good, with nothing on screen.
+- A busy answer from Gemini (408, 429 or 5xx, such as 503 "This model is currently experiencing high demand") is tried twice more, after 5 and 15 seconds, as Claude's are, before backups or a 'try … times' block take over (#329). Before, the first one stopped the run.
 
 ## 3.9.2 - 2026-11-05
 

@@ -36,9 +36,52 @@ class GeminiTimeout(unittest.TestCase):
         rt = Runtime()
         asyncio.run(rt._call_gemini("gemini-test", "Hello", None, [], False))  # makes the client
         rt.gemini.aio.models = Hangs()
-        with mock.patch.object(providers, "CALL_TIMEOUT", 0.05), self.assertRaises(Retryable) as e:
+        with mock.patch.object(providers, "CALL_TIMEOUT", 0.05), mock.patch.object(Runtime, "GEMINI_WAITS", (0, 0)), \
+                mock.patch.object(rt, "log"), self.assertRaises(Retryable) as e:
             asyncio.run(rt._call_gemini("gemini-test", "Hello", None, [], False))
         self.assertIn("Gemini", str(e.exception))
+
+    def busy(self, failures, code=503):
+        """Gemini answers `code` this many times, then replies."""
+        rt = Runtime()
+        asyncio.run(rt._call_gemini("gemini-test", "Hello", None, [], False))
+        real, calls = rt.gemini.aio.models, []
+
+        class Busy:
+            async def generate_content(self, **kw):
+                calls.append(1)
+                if len(calls) <= failures:
+                    raise ServerError(code)
+                return await real.generate_content(**kw)
+        rt.gemini.aio.models = Busy()
+        with mock.patch.object(Runtime, "GEMINI_WAITS", (0, 0)), mock.patch.object(rt, "log") as log:
+            try:
+                reply = asyncio.run(rt._call_gemini("gemini-test", "Hello", None, [], False))
+            except Exception as e:  # noqa: BLE001
+                reply = e
+        return reply, len(calls), log.call_count
+
+    def test_a_busy_answer_is_tried_twice_more(self):
+        # The 503 "high demand" that stopped runs at once (#329)
+        reply, calls, logged = self.busy(2)
+        self.assertNotIsInstance(reply, Exception)
+        self.assertEqual((calls, logged), (3, 2))
+        reply, calls, _ = self.busy(3)
+        self.assertIsInstance(reply, Retryable)
+        self.assertIn("503", str(reply))
+        self.assertEqual(calls, 3)
+
+    def test_a_refusal_is_not_tried_again(self):
+        reply, calls, _ = self.busy(1, code=401)
+        self.assertIsInstance(reply, ServerError)
+        self.assertEqual(calls, 1)
+
+
+class ServerError(Exception):
+    """Like google.genai.errors.ServerError: the HTTP status is in .code."""
+    def __init__(self, code):
+        super().__init__(f"{code} UNAVAILABLE")
+        self.code = code
 
 
 if __name__ == "__main__":
