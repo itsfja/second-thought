@@ -40,9 +40,9 @@ async def pages_tests():
         policy = re.search(r'http-equiv="Content-Security-Policy" content="([^"]+)"', index)
         policy = policy.group(1) if policy else ""
         connect = next((d for d in policy.split("; ") if d.startswith("connect-src")), "")
-        check(connect == "connect-src 'self' https://api.anthropic.com" and "'unsafe-inline'" not in policy.split("style-src")[0]
+        check(connect == "connect-src 'self' https://api.anthropic.com https://cdnjs.cloudflare.com" and "'unsafe-inline'" not in policy.split("style-src")[0]
               and policy.count("'sha256-") == len(pages_tool.INLINE_SCRIPT.findall(index)),
-              f"the copy has a Content-Security-Policy: connections only to itself and Claude's API, inline scripts by hash ({connect})")
+              f"the copy has a Content-Security-Policy: connections only to itself, Claude's API and the CDN the PDF reader's bytes are fetched from to check them, inline scripts by hash ({connect})")
         check(index.startswith("<!doctype html>") and '<meta charset="utf-8">' in index and 'name="viewport"' in index
               and len(langs) == len(list((ROOT / "lang").glob("*.js"))) and (site / ".nojekyll").exists(),
               f"tools/pages.py builds index.html as a whole document, with every language beside it ({len(langs)})")
