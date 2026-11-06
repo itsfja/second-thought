@@ -24,6 +24,8 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ### Security
 - `--update-runtime` checks the release's signature when the runtime holds a signing key (#311): `UPDATE_SIGNING_KEY` in update.py carries the public half of an Ed25519 key whose private half is kept off GitHub (tools/sign_runtime.py signs each release's runtime.py, and the `.sig` is attached to the release). A runtime that isn't signed by that key is refused, so whoever can publish a release can't make a runtime this program will run. Until the first signed release, the key is empty and the SHA-256 check applies as before.
+- Kraken's tools are judged the safe way round (#309): only the 118 that kraken-cli 0.5.1's catalog marks read-only or local (market data, account history, paper trading) run without the money question. Every other `kraken_` tool counts as money, so one added by a later kraken-cli asks and is refused unattended, instead of running like an ordinary tool. Before, money tools were recognised from a list of 34 names or an `acknowledged` input.
+- In an agent, an MCP tool marked `destructiveHint` (MCP's mark for one that can delete or overwrite) asks first even under (no asking), and is refused when nobody is there (#309).
 
 ### Added
 - `approve_by = telegram` in second-thought.ini (#305): a run with nobody at the keyboard, which before refused anything that had to ask first, asks on Telegram instead. The question goes to `TELEGRAM_CHAT_ID` with a fresh four-digit code; only a reply from that chat with that code, within five minutes, allows it, and the run log says who approved. Money moves and unlocks go through the same path, and it is never answered from a stopped run's journal.

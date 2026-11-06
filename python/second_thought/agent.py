@@ -11,7 +11,7 @@ import sys
 from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive, seen_addresses,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
-from .mcp import mcp_env_name, mcp_money
+from .mcp import mcp_destructive, mcp_env_name, mcp_money
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
@@ -251,7 +251,7 @@ class AgentTools:
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
                     money = mcp_money(tool)  # real money: always asks, whatever the block says (#262)
-                    ask = money or mode == "every" or (mode == "changes" and not read_only)
+                    ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only)
                     if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
                         schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k != SAFETY["mcp_money_input"]},
                                       required=[k for k in schema.get("required") or [] if k != SAFETY["mcp_money_input"]])

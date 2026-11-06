@@ -83,7 +83,10 @@ Everything it reads and writes is sent to the model services it uses.
   its answer in between (DNS rebinding). Through a proxy, the proxy is sent to that address too: the request names the
   address, and an https tunnel goes to it while the certificate is still checked against the name.
 - **MCP servers run with your permissions.** A server named by a command in `second-thought.ini` is started as you
-  and can do whatever that command can. Only add servers you trust.
+  and can do whatever that command can. Only add servers you trust. In an agent, a tool the server marks
+  `destructiveHint` (one that can delete or overwrite) always asks first, even under (no asking). Kraken's tools are
+  judged the safe way round: only the ones known not to move money run without asking, so a tool a later kraken-cli
+  adds counts as money until it's checked.
 - **approve_by = telegram asks on your phone.** A run with nobody at the keyboard refuses anything that must ask
   first, unless `approve_by = telegram` is set in `second-thought.ini`: then the question goes to your Telegram with a
   fresh four-digit code, and only a reply from your chat with that code, within five minutes, allows it. Anyone who

@@ -490,11 +490,20 @@ KRAKEN_COMMANDS = {"read": "kraken mcp -s market,account,paper", "live": "kraken
 
 
 def mcp_money(tool):
-    """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, or one taking an "acknowledged"
-    input (Kraken's mark for them)."""
+    """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, one taking an "acknowledged" input
+    (Kraken's mark for them), or a Kraken tool not known to be safe, so one we've never seen asks (#309)."""
     schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {}
     props = schema.get("properties") if isinstance(schema.get("properties"), dict) else {}
-    return to_str(tool.get("name")) in SAFETY["mcp_money"] or SAFETY["mcp_money_input"] in props
+    name = to_str(tool.get("name"))
+    return name in SAFETY["mcp_money"] or SAFETY["mcp_money_input"] in props or \
+        (name.startswith("kraken_") and name not in SAFETY["mcp_kraken_safe"])
+
+
+def mcp_destructive(tool):
+    """True for an MCP tool its server marks destructiveHint (MCP's mark for one that can delete or overwrite): it
+    asks first even under (no asking), and is refused with nobody there to ask (#309). Read-only tools never count."""
+    notes = tool.get("annotations") if isinstance(tool.get("annotations"), dict) else {}
+    return notes.get("destructiveHint") is True and notes.get("readOnlyHint") is not True
 
 
 def mcp_server(name, default=""):
