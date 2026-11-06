@@ -2994,6 +2994,7 @@
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} סורבל בטלגרם על ידי {who}, ולכן לא קרה כלום.",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} לא אושר בזמן בטלגרם, ולכן לא קרה כלום.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} אישר את {what} בכך שהשיב כן {code} בטלגרם.",
-  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "המהדורה {latest} אינה חתומה במפתח שבידי הראנטיים הזה, ולכן לא נעשה בה שימוש. לא השתנה דבר."
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "המהדורה {latest} אינה חתומה במפתח שבידי הראנטיים הזה, ולכן לא נעשה בה שימוש. לא השתנה דבר.",
+  "{n} of them can change things": "{n} מהם יכולים לשנות דברים"
  }
 }

@@ -2993,7 +2993,8 @@
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} ὑπὸ {who} ἐν Telegram ἠρνήθη· οὐδὲν οὖν ἐγένετο.",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} οὐκ ἐν καιρῷ ἐν Telegram ἐδοκιμάσθη· οὐδὲν οὖν ἐγένετο.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} ἔκρινε τὸ {what}, ἀποκρινάμενος ναὶ {code} ἐν Telegram.",
-  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Ἡ ἔκδοσις {latest} οὐ τέτακται τῇ κλειδί ᾗ τοῦτο τὸ runtime ἔχει, οὖν οὐκ ἐχρήσθη. Οὐδὲν ἠλλάγη."
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Ἡ ἔκδοσις {latest} οὐ τέτακται τῇ κλειδί ᾗ τοῦτο τὸ runtime ἔχει, οὖν οὐκ ἐχρήσθη. Οὐδὲν ἠλλάγη.",
+  "{n} of them can change things": "{n} ἐξ αὐτῶν δύναται πράγματα μεταβάλλειν"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

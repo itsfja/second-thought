@@ -1860,6 +1860,7 @@
 "{what} was refused on Telegram by {who}, so nothing happened.":"{who} 在 Telegram 上拒绝了{what}，所以什么也没有发生。",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} 未在时限内在 Telegram 上获得批准，所以什么也没有发生。",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} 在 Telegram 上回复“是 {code}”批准了{what}。",
-"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"发行版 {latest} 未由此运行时持有的密钥签名，因此未被使用。没有任何更改。"
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"发行版 {latest} 未由此运行时持有的密钥签名，因此未被使用。没有任何更改。",
+"{n} of them can change things":"其中 {n} 个可以改动内容"
 }
 };

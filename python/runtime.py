@@ -1077,6 +1077,11 @@ SAFETY = {
     # The other way round, so it fails safe (#309): Kraken's tools known not to move money, the ones its catalog marks
     # read_only or local (paper trading, notes); kraken-cli 0.5.1, checked 2026-11-06. Any other kraken_ tool, such as
     # one a later kraken-cli adds, counts as money and asks.
+    # MCP tools that ask first even under (no asking), like those marked destructiveHint (#333): GitHub's that change a
+    # repository's code or history, or make, remove or fork one, which its own server doesn't mark destructive
+    # (github-mcp-server, checked 2026-11-06). Any server's tool by these names counts; read-only marks still win.
+    "mcp_always_ask": ["create_or_update_file", "create_repository", "create_repository_ruleset", "delete_file", "delete_repository",
+                       "fork_repository", "merge_pull_request", "push_files", "update_pull_request_branch"],
     "mcp_kraken_safe": ["kraken_assets", "kraken_auth_show", "kraken_auth_test", "kraken_balance",
                      "kraken_closed_orders", "kraken_credit_lines", "kraken_deposit_addresses",
                      "kraken_deposit_methods", "kraken_deposit_status", "kraken_earn_allocate_status",
@@ -4503,10 +4508,12 @@ def mcp_money(tool):
 
 
 def mcp_destructive(tool):
-    """True for an MCP tool its server marks destructiveHint (MCP's mark for one that can delete or overwrite): it
-    asks first even under (no asking), and is refused with nobody there to ask (#309). Read-only tools never count."""
+    """True for an MCP tool that asks first even under (no asking), and is refused with nobody there to ask: one its
+    server marks destructiveHint, MCP's mark for one that can delete or overwrite (#309), or one of SAFETY's
+    mcp_always_ask, such as GitHub's merge and push (#333). A tool marked read-only never counts."""
     notes = tool.get("annotations") if isinstance(tool.get("annotations"), dict) else {}
-    return notes.get("destructiveHint") is True and notes.get("readOnlyHint") is not True
+    return notes.get("readOnlyHint") is not True and \
+        (notes.get("destructiveHint") is True or to_str(tool.get("name")) in SAFETY["mcp_always_ask"])
 
 
 def mcp_server(name, default=""):
@@ -5680,6 +5687,9 @@ class Doctor:
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 tools = await self.mcp_tools(name)
                 text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
+                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True))
+                if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
+                    text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}
                 if key == "MCP_KRAKEN" and os.environ.get("KRAKEN_API_KEY") and names & {"kraken_auth_test", "kraken_balance"}:
                     # The key, checked with a read-only call; what it reads isn't shown.

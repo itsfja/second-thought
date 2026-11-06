@@ -1861,7 +1861,8 @@
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} इत्येषा Telegram-इत्यत्र {who} इत्यनेन निषिद्धा; अतः न किञ्चिदभवत्।",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} इत्येषा Telegram-इत्यत्र समये अनुमता नाभवत्; अतः न किञ्चिदभवत्।",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} इत्यनेन आम् {code} इत्युत्तरेण Telegram-इत्यत्र {what} अनुमतम्।",
-"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"प्रकाशनम् {latest} अस्मिन् runtime-इत्यस्य कुञ्चिकया हस्ताक्षरितम् नास्ति, अतः तत् न प्रयुक्तम्। न किञ्चित् परिवर्तितम्।"
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"प्रकाशनम् {latest} अस्मिन् runtime-इत्यस्य कुञ्चिकया हस्ताक्षरितम् नास्ति, अतः तत् न प्रयुक्तम्। न किञ्चित् परिवर्तितम्।",
+"{n} of them can change things":"तेषु {n} वस्तूनि परिवर्तयितुं शक्नुवन्ति"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

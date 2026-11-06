@@ -2993,6 +2993,7 @@
   "{what} was refused on Telegram by {who}, so nothing happened.": "Το {what} αρνήθηκε στο Telegram ο {who}, οπότε δεν έγινε τίποτα.",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "Το {what} δεν εγκρίθηκε εγκαίρως στο Telegram, οπότε δεν έγινε τίποτα.",
   "{who} approved {what} by replying yes {code} on Telegram.": "Ο {who} ενέκρινε το {what} απαντώντας ναι {code} στο Telegram.",
-  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Η έκδοση {latest} δεν είναι υπογεγραμμένη από το κλειδί που κρατά αυτό το runtime, οπότε δεν χρησιμοποιήθηκε. Τίποτα δεν άλλαξε."
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Η έκδοση {latest} δεν είναι υπογεγραμμένη από το κλειδί που κρατά αυτό το runtime, οπότε δεν χρησιμοποιήθηκε. Τίποτα δεν άλλαξε.",
+  "{n} of them can change things": "{n} από αυτά μπορούν να αλλάξουν πράγματα"
  }
 }

@@ -421,7 +421,23 @@ The name in the block (`files`) and the name in the settings (`MCP_FILES`) must 
 
 When the agent runs, it asks the server which tools it has and uses them like its own. Each tool says whether it only looks at things or can change them; the agent asks you before using one that changes things, unless you choose **(no asking)**. Choose **(asks me before every tool)** to be asked about all of them.
 
+A tool its server marks as one that can delete or overwrite (`destructiveHint`) always asks, even with **(no asking)**, and so never runs when nobody is there to answer. `--doctor` lists each server's tools and says how many of them can change things.
+
 MCP servers only work in exported programs. On the page, the agent works without them, and the run log says so.
+
+### GitHub
+
+GitHub's own MCP server ([github-mcp-server](https://github.com/github/github-mcp-server)) lets an agent read a repository properly: its files, the file tree, code search, issues and pull requests. For reading, start it with `--read-only`, so it offers no tool that can change anything, and give it a [fine-grained token](https://github.com/settings/personal-access-tokens) that can only read (Contents, Issues, Pull requests and Metadata):
+
+```ini
+[mcp servers]
+MCP_GITHUB = docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN ghcr.io/github/github-mcp-server stdio --read-only --toolsets repos,issues,pull_requests
+GITHUB_PERSONAL_ACCESS_TOKEN = your-read-only-token
+```
+
+Then put `tools from MCP server github` inside an agent. Without Docker, `MCP_GITHUB = https://api.githubcopilot.com/mcp/` with the token in `MCP_GITHUB_TOKEN` uses GitHub's hosted server. Started without `--read-only`, its changes (issues, comments, pull requests) ask first, unless you choose (no asking); merging, pushing, changing or deleting files and making, forking or deleting repositories **always** ask, and never run unattended. `--doctor` should say 0 of its tools can change things.
+
+The **Review a GitHub repository** program in the gallery uses it: the agent reads a repository's tree, README, main files and issues, and writes an assessment where every point names the file or issue it came from. The older GitHub connection (`GITHUB_TOKEN`, for blocks like the pull request round-up) stays as it is: use it for those blocks, and the MCP server when an agent needs to look around a repository.
 
 ### Kraken
 

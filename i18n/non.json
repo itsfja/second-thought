@@ -2993,7 +2993,8 @@
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} var synat í Telegram af {who}, þess vegna gerðist ekkert.",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} var ekki samþykkt í tíma í Telegram, þess vegna gerðist ekkert.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} samþykkti {what}, svarande já {code} í Telegram.",
-  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Útgáfan {latest} er ekki undirrituð með lyklinum sem þetta runtime heldur, því var henni ekki haldið. Ekkert breyttist."
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Útgáfan {latest} er ekki undirrituð með lyklinum sem þetta runtime heldur, því var henni ekki haldið. Ekkert breyttist.",
+  "{n} of them can change things": "{n} þeira megu hluti breyta"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

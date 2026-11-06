@@ -2993,6 +2993,7 @@
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} fue rechazado en Telegram por {who}, así que no pasó nada.",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} no fue aprobado a tiempo en Telegram, así que no pasó nada.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} aprobó {what} respondiendo sí {code} en Telegram.",
-  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "El release {latest} no está firmado por la clave que este runtime tiene, así que no se usó. No se cambió nada."
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "El release {latest} no está firmado por la clave que este runtime tiene, así que no se usó. No se cambió nada.",
+  "{n} of them can change things": "{n} de ellas pueden cambiar cosas"
  }
 }

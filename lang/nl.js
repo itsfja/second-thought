@@ -1860,6 +1860,7 @@
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} werd op Telegram geweigerd door {who}, dus er gebeurde niets.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} werd niet op tijd goedgekeurd op Telegram, dus er gebeurde niets.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} keurde {what} goed door ja {code} op Telegram te antwoorden.",
-"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Release {latest} is niet ondertekend door de sleutel die deze runtime vasthoudt, dus het is niet gebruikt. Er is niets veranderd."
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Release {latest} is niet ondertekend door de sleutel die deze runtime vasthoudt, dus het is niet gebruikt. Er is niets veranderd.",
+"{n} of them can change things":"{n} daarvan kunnen iets veranderen"
 }
 };

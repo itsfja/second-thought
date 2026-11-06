@@ -118,6 +118,11 @@ SAFETY = {
     # The other way round, so it fails safe (#309): Kraken's tools known not to move money, the ones its catalog marks
     # read_only or local (paper trading, notes); kraken-cli 0.5.1, checked 2026-11-06. Any other kraken_ tool, such as
     # one a later kraken-cli adds, counts as money and asks.
+    # MCP tools that ask first even under (no asking), like those marked destructiveHint (#333): GitHub's that change a
+    # repository's code or history, or make, remove or fork one, which its own server doesn't mark destructive
+    # (github-mcp-server, checked 2026-11-06). Any server's tool by these names counts; read-only marks still win.
+    "mcp_always_ask": ["create_or_update_file", "create_repository", "create_repository_ruleset", "delete_file", "delete_repository",
+                       "fork_repository", "merge_pull_request", "push_files", "update_pull_request_branch"],
     "mcp_kraken_safe": ["kraken_assets", "kraken_auth_show", "kraken_auth_test", "kraken_balance",
                      "kraken_closed_orders", "kraken_credit_lines", "kraken_deposit_addresses",
                      "kraken_deposit_methods", "kraken_deposit_status", "kraken_earn_allocate_status",

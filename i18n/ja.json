@@ -2993,6 +2993,7 @@
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} は Telegram で {who} に拒否されたため、何も起こりませんでした。",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} は時間内に Telegram で承認されなかったため、何も起こりませんでした。",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} が Telegram で「はい {code}」と返信して{what}を承認しました。",
-  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "リリース {latest} はこのランタイムが持つ鍵で署名されていないため、使用されませんでした。何も変更されていません。"
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "リリース {latest} はこのランタイムが持つ鍵で署名されていないため、使用されませんでした。何も変更されていません。",
+  "{n} of them can change things": "うち {n} 個は変更を加えられます"
  }
 }
