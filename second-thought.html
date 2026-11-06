@@ -8238,6 +8238,28 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 "zh":{"name":"中文（简体）"}
 }
 </script>
+<script type="application/json" id="sri">
+{
+ "blocklyMsg": {
+  "de": "sha384-fhDu1BuHnZ19+FX7N3A3XybnpswfbLDgsYapHZJDgBPhv5/GzmmmhE0IMBqXIlCT",
+  "el": "sha384-dUtXm6ReZzmV9EXwEp7mYbPJkgrWq+lclAMmE+lLLjlRqxyfX5fkAOAUSanhmvN6",
+  "en": "sha384-LNiikKZp6q7pI3132IsJSk2ROdbFMw1InaMaEg7j4FviQFueroYNaxEx5W4Aj592",
+  "es": "sha384-Pc7JyzskR4Lri/niMl3TbYhvzdGMTTq2tWR9bHTZVhCIqnpBGhRz3DzSdpBoz4M5",
+  "fr": "sha384-il2hQYHAo5ueRk562/rWJ6841VdkRsrD4E1n4qkMbPHRisQpakUdjmhltRep34yP",
+  "he": "sha384-rkQPTTDPjGX07KtjIccA51llM8iYksOj8soXesCjPShn8VSHyqTPJ4/K691EAe4U",
+  "it": "sha384-A1Sd6MXCzsnon0SLW+7XzqxLCn9q41eWn+IA6FFA4QtVCdUlg/clz0exijlczZ7J",
+  "ja": "sha384-aTlFY4nxDxsr3L65YurOkTEiOTFUjhrPOODY53qOmdG1Jvwo4cgK5vMEZBj/EGb1",
+  "la": "sha384-8qEL3kyduExSFDorYz7ZbVWRwZ7HtNUYLQAdacNxyKfXcfrzTsfg+6GfNBAskss5",
+  "nl": "sha384-pS1Mf/s2g5KZKIqYj2DbKheUqUJWz6zYiN8qo4TPWEKW0jt7f+aO49BGon1mKslc",
+  "pt": "sha384-iotmwitz+UeqTuNfE0Fhmtwc9z5M4c+Dlw3qeb81/AGM60GBYZouYEGipZCorBnu",
+  "zh-hans": "sha384-c9P1MEsH7K6oOmMftwuurS/LQhUa3CSbwNtF5Io8aqACCwOAxj+Dqp3zZQ+M+l1x"
+ },
+ "pdf": {
+  "main": "sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e",
+  "worker": "sha384-SnzOobpRMLXZ52iJvZm/C0fYw0OQemTXzTjIsdsfMcrCtCEe9qgzxTd3RSklO5x2"
+ }
+}
+</script>
 <script type="application/json" id="community-gallery">
 [
 {"key":"g_allergen_check","file":"allergen-check.json","category":"home","title":"Allergen check","description":"Paste a recipe card. Claude checks it against the UK's 14 allergens: which each ingredient contains, 'may contain' wording to look at, and anything the card should declare but doesn't. A second pair of eyes, not a guarantee.","tip":"Paste the ingredients with any sub-recipes (the stock, the sauce): allergens hide there.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste the recipe card, with its ingredients and any allergen statement"}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Check this recipe card against the UK's 14 allergens (celery; cereals containing gluten (wheat, rye, barley, oats); crustaceans; eggs; fish; lupin; milk; molluscs; mustard; tree nuts; peanuts; sesame; soya; sulphur dioxide and sulphites). Give: a table of each ingredient and the allergens it contains; any 'may contain' or 'made in a kitchen that' wording, and what it would cover; and allergens the card should declare but doesn't. End with the full list to declare, in bold.\n\nRecipe card:\n"}}},"ADD1":{"block":{"type":"rb_answer"}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"names all 14 allergens, saying for each whether it's present; every ingredient that contains one is named; sub-recipes and processed ingredients (stock, sauces, bread) are checked; anything unclear says what to ask the supplier; says it is a check to confirm, not a guarantee"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":30}]}}},
@@ -10441,7 +10463,19 @@ HOW TO MAP CODE
 - Model names become rb_use_model: small/fast models "quick", large models "complex", otherwise "default".
 - Every block type you use must be from this list.
 </script>
-<script src="https://cdn.jsdelivr.net/npm/blockly@13.4.0/blockly.min.js"></script>
+<script>
+  /* If the block library or its plugin below doesn't arrive, or doesn't match the fingerprint the page expects (#310),
+     say so: without them there is no editor. The PDF reader, loaded later, says so where it's used instead. */
+  window.addEventListener("error", function(e){
+    var t = e.target;
+    if (t && t.tagName === "SCRIPT" && /blockly\.min\.js|field-multilineinput/.test(t.src || "")) {
+      var b = document.getElementById("banner");
+      b.textContent = "Second Thought couldn't load its blocks library. Check your connection and reload to try again.";
+      b.hidden = false;
+    }
+  }, true);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/blockly@13.4.0/blockly.min.js" integrity="sha384-sjYH4Q9qX0q3eQEO8T7XdpI99CuEntjyy3lEdh04q6Bw+ARsPzDKnt0QqDqgHijm" crossorigin="anonymous"></script>
 <script>
   /* The block palette's language: the one chosen on this page, else the browser's, else English. The page lists the
      languages it has ("i18n" above); each one's words are in lang/<language>.js, published next to the page, and only
@@ -10469,8 +10503,12 @@ HOW TO MAP CODE
     if (lang !== "en" && !window.ST_I18N) { window.ST_I18N_MISSING = window.ST_LANG_NAME; window.ST_LANG = "en"; }
     /* A right-to-left language (Hebrew, Aramaic) says "dir": "rtl": the whole page, and Blockly with it, is mirrored. */
     if (window.ST_I18N && window.ST_I18N.dir === "rtl") document.documentElement.dir = "rtl";
+    var msgSri = {};
+    try { msgSri = JSON.parse(document.getElementById("sri").textContent || "{}"); } catch(e) {}
+    msgSri = (msgSri.blocklyMsg || {})[(window.ST_I18N || {}).blockly] || "";
     if (window.ST_I18N && window.ST_I18N.blockly)
-      document.write('<script src="https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/' + window.ST_I18N.blockly + '.js"><\/script>');
+      document.write('<script src="https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/' + window.ST_I18N.blockly + '.js"'
+        + (msgSri ? ' integrity="' + msgSri + '" crossorigin="anonymous"' : '') + '><\/script>');
     /* A script many computers have no font for (Linear B, Devanagari, cuneiform) names one in its i18n file: loaded from Google Fonts for that
        language only, and put first in the page's font lists, so the script's own letters always come from it (with it last,
        Chrome could keep drawing boxes for some text shaped before the font arrived). */
@@ -10499,7 +10537,7 @@ HOW TO MAP CODE
     ["Blockly.JavaScript","Blockly.Dart","Blockly.Lua","Blockly.PHP","Blockly.Python"].forEach(n => { if (!window[n]) window[n] = gen; });
   })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@blockly/field-multilineinput@13.4.0/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@blockly/field-multilineinput@13.4.0/dist/index.js" integrity="sha384-zWTTEEu/Dk9yfPWuEOs6MI/8Y34ayfrlh1VxoMJRMbByb4/AXcg9whue/lxdxxGr" crossorigin="anonymous"></script>
 <script id="editor">
   // 00-start.js: The editor's opening: shared limits and small helpers ($, STORE_KEY, MAX_*). Every file below runs inside the same function, so names declared in one are seen by the rest.
 (function(){
@@ -15412,13 +15450,27 @@ HOW TO MAP CODE
     });
   }
   let pdfLoading = null;
-  function loadScript(src){ return new Promise((res, rej) => { const el = document.createElement("script"); el.src = src; el.onload = res; el.onerror = () => rej(new Error("The PDF reader couldn't load. Check your connection and try again.")); document.head.appendChild(el); }); }
+  /* Each library file carries its published SHA-384 (#310), so a file that doesn't match doesn't run. */
+  function loadScript(src, integrity){ return new Promise((res, rej) => { const el = document.createElement("script"); el.src = src; el.crossOrigin = "anonymous"; if (integrity) el.integrity = integrity; el.onload = res; el.onerror = () => rej(new Error("The PDF reader couldn't load. Check your connection and try again.")); document.head.appendChild(el); }); }
+  /* The worker isn't a script tag, so it can't carry an integrity attribute: its bytes are fetched, checked against the
+     same fingerprint (in the page's "sri" part), and only then made into a worker. */
+  async function loadWorker(src, integrity){
+    if (!integrity || !window.crypto || !crypto.subtle) throw new Error("The PDF reader couldn't load. Check your connection and try again.");
+    let reply;
+    try { reply = await fetch(src); } catch(e) { throw new Error("The PDF reader couldn't load. Check your connection and try again."); }
+    if (!reply.ok) throw new Error("The PDF reader couldn't load. Check your connection and try again.");
+    const buf = await reply.arrayBuffer();
+    const sum = new Uint8Array(await crypto.subtle.digest("SHA-384", buf));
+    let bin = ""; sum.forEach(b => bin += String.fromCharCode(b));
+    if ("sha384-" + btoa(bin) !== integrity) throw new Error("The PDF reader's file didn't match the fingerprint the page expects, so it wasn't run. Try again later.");
+    return new Worker(URL.createObjectURL(new Blob([buf], { type: "text/javascript" })));
+  }
   async function pdfText(buf){
     if (!pdfLoading) pdfLoading = (async () => {
       const base = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
-      await loadScript(base + "pdf.min.js");
-      await loadScript(base + "pdf.worker.min.js");
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = base + "pdf.worker.min.js";
+      const sri = JSON.parse(($("sri") && $("sri").textContent) || "{}").pdf || {};
+      await loadScript(base + "pdf.min.js", sri.main);
+      window.pdfjsLib.GlobalWorkerOptions.workerPort = await loadWorker(base + "pdf.worker.min.js", sri.worker);
     })();
     try { await pdfLoading; } catch(e) { pdfLoading = null; throw e; }
     const doc = await window.pdfjsLib.getDocument({ data:new Uint8Array(buf), isEvalSupported:false }).promise;

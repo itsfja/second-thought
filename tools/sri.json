@@ -1,0 +1,18 @@
+{
+ "https://cdn.jsdelivr.net/npm/@blockly/field-multilineinput@13.4.0/dist/index.js": "sha384-zWTTEEu/Dk9yfPWuEOs6MI/8Y34ayfrlh1VxoMJRMbByb4/AXcg9whue/lxdxxGr",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/blockly.min.js": "sha384-sjYH4Q9qX0q3eQEO8T7XdpI99CuEntjyy3lEdh04q6Bw+ARsPzDKnt0QqDqgHijm",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/de.js": "sha384-fhDu1BuHnZ19+FX7N3A3XybnpswfbLDgsYapHZJDgBPhv5/GzmmmhE0IMBqXIlCT",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/el.js": "sha384-dUtXm6ReZzmV9EXwEp7mYbPJkgrWq+lclAMmE+lLLjlRqxyfX5fkAOAUSanhmvN6",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/en.js": "sha384-LNiikKZp6q7pI3132IsJSk2ROdbFMw1InaMaEg7j4FviQFueroYNaxEx5W4Aj592",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/es.js": "sha384-Pc7JyzskR4Lri/niMl3TbYhvzdGMTTq2tWR9bHTZVhCIqnpBGhRz3DzSdpBoz4M5",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/fr.js": "sha384-il2hQYHAo5ueRk562/rWJ6841VdkRsrD4E1n4qkMbPHRisQpakUdjmhltRep34yP",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/he.js": "sha384-rkQPTTDPjGX07KtjIccA51llM8iYksOj8soXesCjPShn8VSHyqTPJ4/K691EAe4U",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/it.js": "sha384-A1Sd6MXCzsnon0SLW+7XzqxLCn9q41eWn+IA6FFA4QtVCdUlg/clz0exijlczZ7J",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/ja.js": "sha384-aTlFY4nxDxsr3L65YurOkTEiOTFUjhrPOODY53qOmdG1Jvwo4cgK5vMEZBj/EGb1",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/la.js": "sha384-8qEL3kyduExSFDorYz7ZbVWRwZ7HtNUYLQAdacNxyKfXcfrzTsfg+6GfNBAskss5",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/nl.js": "sha384-pS1Mf/s2g5KZKIqYj2DbKheUqUJWz6zYiN8qo4TPWEKW0jt7f+aO49BGon1mKslc",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/pt.js": "sha384-iotmwitz+UeqTuNfE0Fhmtwc9z5M4c+Dlw3qeb81/AGM60GBYZouYEGipZCorBnu",
+ "https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/zh-hans.js": "sha384-c9P1MEsH7K6oOmMftwuurS/LQhUa3CSbwNtF5Io8aqACCwOAxj+Dqp3zZQ+M+l1x",
+ "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js": "sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e",
+ "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js": "sha384-SnzOobpRMLXZ52iJvZm/C0fYw0OQemTXzTjIsdsfMcrCtCEe9qgzxTd3RSklO5x2"
+}

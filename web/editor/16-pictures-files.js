@@ -159,13 +159,27 @@
     });
   }
   let pdfLoading = null;
-  function loadScript(src){ return new Promise((res, rej) => { const el = document.createElement("script"); el.src = src; el.onload = res; el.onerror = () => rej(new Error("The PDF reader couldn't load. Check your connection and try again.")); document.head.appendChild(el); }); }
+  /* Each library file carries its published SHA-384 (#310), so a file that doesn't match doesn't run. */
+  function loadScript(src, integrity){ return new Promise((res, rej) => { const el = document.createElement("script"); el.src = src; el.crossOrigin = "anonymous"; if (integrity) el.integrity = integrity; el.onload = res; el.onerror = () => rej(new Error("The PDF reader couldn't load. Check your connection and try again.")); document.head.appendChild(el); }); }
+  /* The worker isn't a script tag, so it can't carry an integrity attribute: its bytes are fetched, checked against the
+     same fingerprint (in the page's "sri" part), and only then made into a worker. */
+  async function loadWorker(src, integrity){
+    if (!integrity || !window.crypto || !crypto.subtle) throw new Error("The PDF reader couldn't load. Check your connection and try again.");
+    let reply;
+    try { reply = await fetch(src); } catch(e) { throw new Error("The PDF reader couldn't load. Check your connection and try again."); }
+    if (!reply.ok) throw new Error("The PDF reader couldn't load. Check your connection and try again.");
+    const buf = await reply.arrayBuffer();
+    const sum = new Uint8Array(await crypto.subtle.digest("SHA-384", buf));
+    let bin = ""; sum.forEach(b => bin += String.fromCharCode(b));
+    if ("sha384-" + btoa(bin) !== integrity) throw new Error("The PDF reader's file didn't match the fingerprint the page expects, so it wasn't run. Try again later.");
+    return new Worker(URL.createObjectURL(new Blob([buf], { type: "text/javascript" })));
+  }
   async function pdfText(buf){
     if (!pdfLoading) pdfLoading = (async () => {
       const base = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
-      await loadScript(base + "pdf.min.js");
-      await loadScript(base + "pdf.worker.min.js");
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = base + "pdf.worker.min.js";
+      const sri = JSON.parse(($("sri") && $("sri").textContent) || "{}").pdf || {};
+      await loadScript(base + "pdf.min.js", sri.main);
+      window.pdfjsLib.GlobalWorkerOptions.workerPort = await loadWorker(base + "pdf.worker.min.js", sri.worker);
     })();
     try { await pdfLoading; } catch(e) { pdfLoading = null; throw e; }
     const doc = await window.pdfjsLib.getDocument({ data:new Uint8Array(buf), isEvalSupported:false }).promise;

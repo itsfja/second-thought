@@ -139,3 +139,34 @@ def docs_check():
             len(re.findall(r"cat:HC\.", library)), over=True)
     _counts("group of Home Assistant examples", _said(rf"{_MAYBE_A_NUMBER} groups of Home Assistant examples", texts),
             len(set(re.findall(r'"(Home Assistant:[^"]+)"', library))))
+
+
+def sri_check():
+    """tools/sri.json pins every CDN file the page loads with its SHA-384 (#310): each one is fingerprinted, the page's
+    script tags carry theirs, the page's "sri" part holds the ones the page's code adds itself, and the vendor copies
+    the tests unpack hash to the same fingerprints the page pins."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    import sync as sync_tool
+    urls, table = sync_tool.sri_urls(), sync_tool.sri()
+    bad = sorted(set(urls) ^ set(table) | {u for u in urls if not re.fullmatch(r"sha384-[A-Za-z0-9+/]{64}", table.get(u, ""))})
+    check(urls and not bad, f"tools/sri.json fingerprints every CDN file the page loads ({len(urls)} of them), each a SHA-384"
+          + (f"; wrong or missing: {', '.join(bad)}" if bad else ""))
+    page = (ROOT / "second-thought.html").read_text(encoding="utf-8")
+    tagged = [(url, attrs) for url, attrs in
+              re.findall(r'<script src="(https://cdn\.(?:jsdelivr\.net|cdnjs\.cloudflare\.com)/[^"]+)"([^>]*)>', page)
+              if "'" not in url]  # the palette's language file is written by the page's own code, with its fingerprint
+    wrong = [url for url, attrs in tagged
+             if f'integrity="{table.get(url)}"' not in attrs or 'crossorigin="anonymous"' not in attrs]
+    check(tagged and not wrong, f"every CDN script tag in the page carries its fingerprint and crossorigin ({len(tagged)} tags)"
+          + (f"; bare or stale: {', '.join(wrong)}" if wrong else ""))
+    part = f'<script type="application/json" id="sri">\n{sync_tool.sri_json()}</script>'
+    check(part in page, 'the page\'s "sri" part matches what tools/sri.json says the page checks files against')
+    if VENDOR.is_dir():  # tests/setup.sh unpacked the same files the CDNs serve: they must hash to the page's pins
+        import hashlib
+        wrong = []
+        for url in urls:
+            path = sync_tool._vendor_copy(url)
+            if path and path.is_file() and "sha384-" + base64.b64encode(hashlib.sha384(path.read_bytes()).digest()).decode() != table.get(url):
+                wrong.append(url)
+        check(not wrong, "the vendor copies the tests unpack hash to the fingerprints the page pins"
+              + (f"; don't: {', '.join(wrong)}" if wrong else ""))

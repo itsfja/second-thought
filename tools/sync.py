@@ -19,11 +19,21 @@ Edit those files (not python/runtime.py, which is rebuilt), then run:
 
     python tools/sync.py           # rebuild python/runtime.py, lang/*.js and write everything into second-thought.html
     python tools/sync.py --check   # exit 1 if any of them is out of date (used by the tests)
+    python tools/sync.py --sri     # refetch the page's CDN libraries and rewrite tools/sri.json, their fingerprints
+
+The page's libraries (Blockly and its plugins, the PDF reader) load from jsDelivr and cdnjs, pinned to exact versions,
+and each carries the SHA-384 in tools/sri.json as an integrity attribute (#310), so a file the CDN didn't publish
+doesn't run. Bump a version in the page and run --sri, then sync, to move the fingerprint with it; --sri uses the
+vendor copies tests/setup.sh makes when they're there, and the internet otherwise (the two agree byte for byte).
 """
 import ast
+import base64
+import hashlib
 import json
 import pathlib
+import re
 import sys
+import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PAGE = ROOT / "second-thought.html"
@@ -38,6 +48,7 @@ SERVICES = PACKAGE / "providers.py"   # its SERVICES list is the page's list of 
 CAPABILITIES = PACKAGE / "core.py"    # its CAPABILITIES list is the page's list of what programs can do
 SAFETY = object()                     # SAFETY in core.py: what always asks, the same rules on the page
 MONEY = object()                      # CURRENCIES and RATES in providers.py: the page shows costs the same way
+SRI = object()                       # tools/sri.json: the fingerprints of the page's CDN libraries (#310)
 I18N = ROOT / "i18n"                  # one <language>.json per language the block palette can be shown in
 LANG = ROOT / "lang"                  # the same, as scripts the page loads one at a time: made by this tool
 GALLERY = ROOT / "gallery"            # the community gallery: one block file per program, with a "gallery" part
@@ -47,6 +58,10 @@ GALLERY_CATEGORIES = ("github", "coding", "news", "money", "calendar", "home", "
 # The editor's code, one file per area. They're joined in the order of their names into one function in the page, so a
 # name declared in one file is seen by all of them. web/editor/README.md says what each holds.
 EDITOR = ROOT / "web" / "editor"
+# The fingerprints of the page's CDN libraries (#310): their SHA-384, made by `sync.py --sri` and carried by the page
+# as each script's integrity attribute, so a file the CDN didn't publish doesn't run.
+SRI_FILE = ROOT / "tools" / "sri.json"
+VENDOR = ROOT / "tests" / "vendor"   # tests/setup.sh unpacks the same packages here, for the tests to serve offline
 
 
 def editor_js() -> str:
@@ -70,6 +85,7 @@ PARTS = [
     ('<script type="application/json" id="safety">\n', SAFETY),
     ('<script type="application/json" id="money">\n', MONEY),
     ('<script type="application/json" id="i18n">\n', I18N),
+    ('<script type="application/json" id="sri">\n', SRI),
     ('<script type="application/json" id="community-gallery">\n', GALLERY),
     ('<script type="text/plain" id="convert-guide">\n', ROOT / "prompts" / "convert-guide.txt"),
     ('<script type="application/json" id="ha-sample">\n', ROOT / "ha" / "sample-house.json"),
@@ -78,6 +94,97 @@ PARTS = [
     ('<style id="editor-css">\n', ROOT / "web" / "editor.css"),
     ('<script id="editor">\n', EDITOR),
 ]
+
+
+def sri() -> dict:
+    """tools/sri.json: the SHA-384 of every library file the page loads from a CDN, as {url: "sha384-…"}."""
+    if not SRI_FILE.is_file():
+        sys.exit("tools/sri.json is missing: run python tools/sync.py --sri to fingerprint the page's libraries.")
+    try:
+        return json.loads(SRI_FILE.read_text(encoding="utf-8"))
+    except ValueError as e:
+        sys.exit(f"tools/sri.json isn't valid JSON: {e}")
+
+
+def sri_urls() -> list:
+    """Every library URL the page loads from a CDN: its own script tags, Blockly's words for each language (loaded by
+    the page for the language someone picks), and the PDF reader and its worker (loaded when a program reads a PDF).
+    Found in the page and the editor's code, so a URL added there is picked up."""
+    page = PAGE.read_text(encoding="utf-8")
+    urls = list(re.findall(r'src="(https://cdn\.jsdelivr\.net/[^"\']+\.js|https://cdnjs\.cloudflare\.com/[^"\']+\.js)"', page))
+    m = re.search(r'<script src="(https://cdn\.jsdelivr\.net/npm/blockly@[\d.]+)/msg/', page)
+    if m:  # one file per language the palette can be shown in
+        urls += [f"{m.group(1)}/msg/{t['blockly']}.js" for t in _languages().values() if t.get("blockly")]
+    m = re.search(r'const base = "(https://cdnjs\.cloudflare\.com/[^"]+?)/?";', editor_js())
+    if m:
+        base = m.group(1).rstrip("/")
+        urls += [base + "/pdf.min.js", base + "/pdf.worker.min.js"]
+    return sorted(set(urls))
+
+
+def _vendor_copy(url: str):
+    """The same file in tests/vendor, where tests/setup.sh unpacks the npm packages the CDNs serve (verified: the
+    CDN's file and the package's are the same bytes), or None for the ones it doesn't unpack."""
+    m = re.fullmatch(r"https://cdn\.jsdelivr\.net/npm/(@blockly/)?([^/@]+)@[\d.]+/(.+)", url)
+    if m:  # tests/setup.sh unpacks @blockly's plugins under their bare name
+        return VENDOR / m.group(2) / "package" / m.group(3)
+    m = re.fullmatch(r"https://cdnjs\.cloudflare\.com/ajax/libs/pdf\.js/[\d.]+/(pdf(?:\.worker)?\.min\.js)", url)
+    if m:  # cdnjs serves pdfjs-dist's build files
+        return VENDOR / "pdfjs-dist" / "package" / "build" / m.group(1)
+
+
+def sri_refresh() -> int:
+    """`sync.py --sri`: fingerprint every CDN library the page loads, from the vendor copies if they're there and the
+    internet otherwise, and rewrite tools/sri.json. Bump a version in the page, run this, then run sync."""
+    table = {}
+    for url in sri_urls():
+        path = _vendor_copy(url)
+        try:
+            data = path.read_bytes() if path and path.is_file() else urllib.request.urlopen(url, timeout=30).read()
+        except OSError as e:
+            sys.exit(f"couldn't fingerprint {url}: {e}")
+        table[url] = "sha384-" + base64.b64encode(hashlib.sha384(data).digest()).decode()
+    SRI_FILE.write_text(json.dumps(table, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"tools/sri.json: fingerprinted {len(table)} library files. Run python tools/sync.py to put the hashes in the page.")
+    return 0
+
+
+def sri_json() -> str:
+    """The fingerprints the page needs as it runs, as JSON for it: Blockly's words for each language, and the PDF
+    reader and its worker (which isn't a script tag, so the page checks its bytes itself before making it a worker)."""
+    table, urls = sri(), sri_urls()
+    missing = [u for u in urls if u not in table]
+    if missing:
+        sys.exit("tools/sri.json has no fingerprint for " + ", ".join(missing) + ". Run python tools/sync.py --sri.")
+    out = {"blocklyMsg": {}, "pdf": {}}
+    for url in urls:
+        m = re.search(r"/msg/([a-z-]+)\.js$", url)
+        if m:
+            out["blocklyMsg"][m.group(1)] = table[url]
+        elif url.endswith("/pdf.min.js"):
+            out["pdf"]["main"] = table[url]
+        elif url.endswith("/pdf.worker.min.js"):
+            out["pdf"]["worker"] = table[url]
+    return json.dumps(out, ensure_ascii=False, indent=1) + "\n"
+
+
+def add_sri(page: str) -> str:
+    """Give every CDN script tag in the page its fingerprint and crossorigin, so the browser refuses a file that
+    doesn't match (#310). The tags carry nothing else, so this writes them whole and runs again cleanly."""
+    table, missing = sri(), []
+
+    def fix(m):
+        url = m.group(1)
+        if url not in table:
+            missing.append(url)
+            return m.group(0)
+        return f'<script src="{url}" integrity="{table[url]}" crossorigin="anonymous">'
+
+    page = re.sub(r'<script src="(https://cdn\.jsdelivr\.net/[^"\']+\.js|https://cdnjs\.cloudflare\.com/[^"\']+\.js)"'
+                  r'(?: integrity="[^"]*"| crossorigin="[^"]*")*>', fix, page)
+    if missing:
+        sys.exit("tools/sri.json has no fingerprint for " + ", ".join(missing) + ". Run python tools/sync.py --sri.")
+    return page
 
 
 def bundle() -> str:
@@ -236,6 +343,8 @@ def build(page: str, runtime: str = None) -> str:
             body = safety_json()
         elif path is MONEY:
             body = money_json()
+        elif path is SRI:
+            body = sri_json()
         elif path == I18N:
             body = i18n_json()
         elif path == GALLERY:
@@ -255,10 +364,12 @@ def build(page: str, runtime: str = None) -> str:
             sys.exit(f"The {opener.strip()!r} tag in second-thought.html isn't closed with {closer}.")
         end = page.index(closer, start)
         page = page[:start] + body + page[end:]
-    return page
+    return add_sri(page)
 
 
 def main() -> int:
+    if "--sri" in sys.argv:
+        return sri_refresh()
     runtime = bundle()
     current_rt = RUNTIME.read_text(encoding="utf-8") if RUNTIME.is_file() else ""
     current = PAGE.read_text(encoding="utf-8")

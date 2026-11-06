@@ -222,6 +222,21 @@ async def page_tests():
 
         await new_feature_page_tests(pg)
 
+        # A blocks library that arrives different from the file the page pinned (a tampered CDN, or a proxy that
+        # rewrote it): the browser refuses to run it, and the page says so rather than showing half an editor (#310).
+        pg2 = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        await pg2.route("**/*", route)
+        tampered = (VENDOR / "blockly" / "package" / "blockly.min.js").read_bytes() + b" "  # not the pinned bytes
+        await pg2.route("**/blockly.min.js", lambda r: r.fulfill(body=tampered, content_type="application/javascript"))
+        await pg2.add_init_script(MOCK)
+        await pg2.goto("http://test/")
+        await pg2.wait_for_timeout(1500)
+        got = await pg2.evaluate("typeof Blockly === 'undefined' && !document.getElementById('banner').hidden\n"
+                                 "  ? document.getElementById('banner').textContent : ''")
+        check(got == "Second Thought couldn't load its blocks library. Check your connection and reload to try again.",
+              f"a blocks library that doesn't match the page's fingerprint doesn't run, and the page says so ({got!r})")
+        await pg2.close()
+
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()
         return codes

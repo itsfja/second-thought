@@ -9,6 +9,9 @@ from second_thought import settings
 from second_thought.providers import SERVICES
 
 sys.path.insert(0, str(support.ROOT / "tests" / "fakekeyring"))
+# Importing the runtime may have loaded the real keyring package (if this computer has it); the stand-in above is
+# what these tests exercise, so drop the cached real one and let the next import find the stand-in.
+sys.modules.pop("keyring", None)
 
 
 class Keychain(unittest.TestCase):

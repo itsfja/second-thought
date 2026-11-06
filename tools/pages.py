@@ -8,7 +8,8 @@ saves files with ordinary browser downloads, and can run programs with the perso
 
 Because a key can be typed into this copy, it gets a Content-Security-Policy: scripts only from this site, the two
 places the page loads libraries from, and the page's own inline scripts (by their hashes, worked out here); and
-connections only to this site and api.anthropic.com, so nothing else the page loads could send the key anywhere.
+connections only to this site, api.anthropic.com, and cdnjs (the PDF worker's bytes are fetched to be checked
+against their fingerprint before it runs, #310), so nothing else the page loads could send the key anywhere.
 """
 import base64
 import hashlib
@@ -40,7 +41,7 @@ def csp(page):
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  # Blockly writes its own styles
         "font-src 'self' https://fonts.gstatic.com",
         "img-src 'self' data: blob: https://static.blockly.com",  # Blockly's sprites (Blockly 13's media path)
-        f"connect-src 'self' {API}",
+        f"connect-src 'self' {API} https://cdnjs.cloudflare.com",  # cdnjs: the PDF worker's bytes, fetched to check them (#310)
         "object-src 'none'",
         "base-uri 'none'",
         "form-action 'none'",
