@@ -30,6 +30,8 @@ Reach and trust, released in 3.9.0 and 3.9.1: the Pages copy runs programs with 
 
 Two languages and two security fixes, released in 3.9.2: Middle Egyptian ([#136](https://github.com/itsfja/second-thought/issues/136)) and Sahidic Coptic ([#131](https://github.com/itsfja/second-thought/issues/131)) on the page; Home Assistant's generic services ask whatever their target ([#303](https://github.com/itsfja/second-thought/issues/303)); and the agent refuses shared addresses such as Tailscale's, compares whole addresses, and reads Word files up to 25 MB ([#304](https://github.com/itsfja/second-thought/issues/304)). Both came from outside reviews of the code.
 
+Released in 3.10.0, mostly from the outside reviews: unknown Kraken tools count as money and destructive MCP tools always ask ([#309](https://github.com/itsfja/second-thought/issues/309)); releases can be signed with a key kept off GitHub ([#311](https://github.com/itsfja/second-thought/issues/311)); unattended runs ask on Telegram instead of refusing ([#305](https://github.com/itsfja/second-thought/issues/305)); **Change this program** says what's different before loading ([#306](https://github.com/itsfja/second-thought/issues/306)); GitHub through its own MCP server, with a **Review a GitHub repository** program ([#333](https://github.com/itsfja/second-thought/issues/333)); and Gemini calls that give up after a time limit and retry when it's busy ([#329](https://github.com/itsfja/second-thought/issues/329)).
+
 ## Later: important, not urgent
 
 | | Benefit | Cost |
