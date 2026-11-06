@@ -1,11 +1,20 @@
 """End-to-end tests of Describe a program: Claude (the stand-in) builds the blocks, the page says what they can do and
-what was left out before loading them, follow-up changes send the current program, and unknown blocks are refused."""
+what was left out before loading them, follow-up changes send the current program and say what's different before
+loading it, and unknown blocks are refused."""
 from e2e.common import *  # noqa: F401,F403
 
 WASHING = {"blocks": {"languageVersion": 0, "blocks": [
     {"type": "rb_when_time", "fields": {"HOUR": 18, "MINUTE": 0, "DAYS": "weekdays"},
      "next": {"block": {"type": "rb_tg_send", "inputs": {"TEXT": {"block": {"type": "rb_ask", "inputs": {"TEXT": {"block": {"type": "rb_longtext",
               "fields": {"TEXT": "The best two hours this weekend to dry washing in London"}}}}}}}}}},
+    {"type": "rb_start", "next": {"block": {"type": "variables_set", "fields": {"VAR": {"name": "town"}},
+              "inputs": {"VALUE": {"block": {"type": "text", "fields": {"TEXT": "London"}}}}}}}]}}
+
+# The same program with email instead of Telegram and a different town: a change whose differences the page should point out (#306).
+WASHING_EMAIL = {"blocks": {"languageVersion": 0, "blocks": [
+    {"type": "rb_when_time", "fields": {"HOUR": 18, "MINUTE": 0, "DAYS": "weekdays"},
+     "next": {"block": {"type": "rb_email_send", "inputs": {"TEXT": {"block": {"type": "rb_ask", "inputs": {"TEXT": {"block": {"type": "rb_longtext",
+              "fields": {"TEXT": "The best two hours this weekend to dry washing in Manchester"}}}}}}}}}},
     {"type": "rb_start", "next": {"block": {"type": "variables_set", "fields": {"VAR": {"name": "town"}},
               "inputs": {"VALUE": {"block": {"type": "text", "fields": {"TEXT": "London"}}}}}}}]}}
 
@@ -50,7 +59,7 @@ async def describe_tests():
               and "Loaded Claude's program (7 blocks). Check the blocks before running." in msg,
               f"Load it puts the blocks on the canvas, with Undo ({msg})")
 
-        await pg.evaluate("r => { window.__jsonScript = r; window.__jsonPrompts = []; }", [{"program": WASHING, "summary": "Also emails it.", "unmapped": []}])
+        await pg.evaluate("r => { window.__jsonScript = r; window.__jsonPrompts = []; }", [{"program": WASHING_EMAIL, "summary": "Also emails it.", "unmapped": []}])
         await pg.fill("#describe-text", "also email it to me")
         await pg.click("#describe-change")
         await pg.wait_for_function("!document.getElementById('describe-load').hidden || document.getElementById('describe-msg').className.includes('bad')")
@@ -59,6 +68,12 @@ async def describe_tests():
         check("CHANGE IT LIKE THIS (keep everything else as it is):\nalso email it to me" in prompt and '"rb_tg_send"' in now
               and '{"name": "town"}' in now.replace('{"name":"town"}', '{"name": "town"}') and '"id"' not in now,
               "Change this program sends the program on the canvas (variables by name, no ids) with the change")
+        msg = await pg.text_content("#describe-msg")
+        bold = await pg.evaluate("() => Array.from(document.querySelectorAll('#describe-msg strong')).map(s => s.textContent)")
+        check("New: send email." in bold and "Gone: send Telegram messages." in bold
+              and "1 scripts added, 1 removed." in msg and "1 blocks added, 1 removed." in msg
+              and "Text changed in 2 blocks." in msg,
+              f"before loading a change, it says what's different, with new and gone connections in bold ({msg} / {bold})")
         await pg.click("#describe-discard")
         check(not await pg.is_visible("#describe-out"), "Discard drops Claude's version")
 
