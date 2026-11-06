@@ -2984,6 +2984,7 @@
   "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp": "kraken-cli ist nicht installiert, daher können Krakens Werkzeuge nicht starten. Installiere es: https://docs.kraken.com/home/mcp",
   "your Kraken key works": "dein Kraken-Schlüssel funktioniert",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "{key} startet den Server mit --allow-dangerous, was seine eigene Prüfung vor Werkzeugen abschaltet, die Geld bewegen. Nimm es heraus.",
-  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} könnte echtes Geld bewegen, darum läuft es nur, wenn du da bist und Ja sagst, und niemand ist da."
+  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} könnte echtes Geld bewegen, darum läuft es nur, wenn du da bist und Ja sagst, und niemand ist da.",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Das Release {latest} ist nicht vom Schlüssel dieses Runtimes signiert, also wurde es nicht verwendet. Nichts wurde geändert."
  }
 }

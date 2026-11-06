@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Security
+- `--update-runtime` checks the release's signature when the runtime holds a signing key (#311): `UPDATE_SIGNING_KEY` in update.py carries the public half of an Ed25519 key whose private half is kept off GitHub (tools/sign_runtime.py signs each release's runtime.py, and the `.sig` is attached to the release). A runtime that isn't signed by that key is refused, so whoever can publish a release can't make a runtime this program will run. Until the first signed release, the key is empty and the SHA-256 check applies as before.
+
 ## 3.9.2 - 2026-11-05
 
 ### Security

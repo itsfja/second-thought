@@ -2,6 +2,7 @@
 
 A stand-in for GitHub's releases API runs on this computer; RB_RELEASES_URL points the runtime at it.
 """
+import base64
 import hashlib
 import http.server
 import json
@@ -29,6 +30,24 @@ def as_version(runtime, version):
     return re.sub(r'^RUNTIME_VERSION = "[^"]+"', f'RUNTIME_VERSION = "{version}"', runtime, count=1, flags=re.M)
 
 
+# A test key for #311: Ed25519 signing as RFC 8032 has it, so the tests need no openssl.
+def ed25519_sign(msg, seed_hex):
+    seed = bytes.fromhex(seed_hex)
+    h = hashlib.sha512(seed).digest()
+    a = (int.from_bytes(h[:32], "little") & (1 << 254) - 8) | (1 << 254)
+    a_point = update._ed25519_point_mul(a, update._B)
+    pub = (a_point[1] | ((a_point[0] & 1) << 255)).to_bytes(32, "little")
+    r = int.from_bytes(hashlib.sha512(h[32:] + msg).digest(), "little") % update._L
+    r_point = update._ed25519_point_mul(r, update._B)
+    r_bytes = (r_point[1] | ((r_point[0] & 1) << 255)).to_bytes(32, "little")
+    s = (r + int.from_bytes(hashlib.sha512(r_bytes + pub + msg).digest(), "little") % update._L * a) % update._L
+    return r_bytes + s.to_bytes(32, "little"), pub.hex()
+
+
+def with_signing_key(runtime, key_hex):
+    return re.sub(r'^UPDATE_SIGNING_KEY = "[^"]*"', f'UPDATE_SIGNING_KEY = "{key_hex}"', runtime, count=1, flags=re.M)
+
+
 class Releases:
     """Serves a releases list and its files: files maps a path to bytes; releases is the list served at /releases."""
 
@@ -51,7 +70,7 @@ class Releases:
         self.url = f"http://127.0.0.1:{self.server.server_port}"
         threading.Thread(target=self.server.serve_forever, daemon=True).start()
 
-    def release(self, version, runtime=None, body="", sha=None, draft=False):
+    def release(self, version, runtime=None, body="", sha=None, draft=False, sig=None):
         rel = {"tag_name": "v" + version, "draft": draft, "prerelease": False, "body": body,
                "html_url": f"https://github.com/itsfja/second-thought/releases/tag/v{version}", "assets": []}
         if runtime is not None:
@@ -60,6 +79,9 @@ class Releases:
             self.files[f"/{version}/runtime.py.sha256"] = f"{sha or hashlib.sha256(data).hexdigest()}  runtime.py\n".encode()
             rel["assets"] = [{"name": "runtime.py", "browser_download_url": f"{self.url}/{version}/runtime.py"},
                              {"name": "runtime.py.sha256", "browser_download_url": f"{self.url}/{version}/runtime.py.sha256"}]
+            if sig is not None:
+                self.files[f"/{version}/runtime.py.sig"] = (base64.b64encode(sig) + b"\n")
+                rel["assets"].append({"name": "runtime.py.sig", "browser_download_url": f"{self.url}/{version}/runtime.py.sig"})
         self.releases.append(rel)
         return rel
 
@@ -115,6 +137,26 @@ class Pieces(unittest.TestCase):
 
     def test_unmarked_files_are_left_alone(self):
         self.assertIsNone(update.with_runtime("print('no runtime here')\n", RUNTIME))
+
+    def test_ed25519_checking_matches_a_trusted_implementation(self):
+        # The public key and both signatures were made with the cryptography package's Ed25519 from the seed below,
+        # and the check agrees with RFC 8032's "[S]B = R + [k]A" equation.
+        pub = bytes.fromhex("e96311c74f7ca9fd4787be246d8f3f48e358148a87891bae5bd9b06ceeb1091f")
+        self.assertTrue(update._ed25519_ok(bytes.fromhex(
+            "7b99e9672bcbc3905017f7d4cac49d7ebede05384677fada7aa0d813c3116c4b"
+            "cb2238f9368eadcb20a6bac7b8e45fd3e963537269efecbc9d5ed8f550dc3408"), b"", pub))
+        msg = b"the new runtime"
+        self.assertTrue(update._ed25519_ok(bytes.fromhex(
+            "334b8e49cbb81895d0318a358f4c96bd7332e1d0bd3a7d7b8f154e2e3b923342"
+            "db7b2d4ed6c651e8c23f64c36a06d25b524f4b161fae8d8a391f09e6762a5b0d"), msg, pub))
+        self.assertFalse(update._ed25519_ok(bytes.fromhex(
+            "334b8e49cbb81895d0318a358f4c96bd7332e1d0bd3a7d7b8f154e2e3b923342"
+            "db7b2d4ed6c651e8c23f64c36a06d25b524f4b161fae8d8a391f09e6762a5b0d"), msg + b" ", pub))
+        self.assertFalse(update._ed25519_ok(bytes.fromhex("00" * 64), msg, pub))
+        self.assertFalse(update._ed25519_ok(b"too short", msg, pub))
+        made, pub_hex = ed25519_sign(msg, "9d61b19deffd5a60ba844af492ec2cc44449c56967b326719603b61e15d72a9d")
+        self.assertTrue(update._ed25519_ok(made, msg, bytes.fromhex(pub_hex)))
+        self.assertFalse(update._ed25519_ok(made, msg + b" ", bytes.fromhex(pub_hex)))
 
 
 class Doctor(unittest.TestCase):
@@ -241,6 +283,39 @@ class UpdateInPlace(unittest.TestCase):
         self.gh.release(RUNTIME_VERSION)
         r = self.run_it("--update-runtime")
         self.assertEqual((r.returncode, "nothing to update" in r.stdout), (0, True), r.stdout + r.stderr)
+
+
+class SignedRelease(UpdateInPlace):
+    """A runtime that holds a signing key (#311) refuses a release that isn't signed by it."""
+
+    SEED = "9d61b19deffd5a60ba844af492ec2cc44449c56967b326719603b61e15d72a9d"
+
+    def test_a_signed_release_updates(self):
+        new_runtime = as_version(RUNTIME, NEXT)
+        sig, pub_hex = ed25519_sign(new_runtime.encode("utf-8"), self.SEED)
+        self.write(with_signing_key(exported(RUNTIME), pub_hex))
+        self.gh.release(NEXT, new_runtime, sig=sig)
+        r = self.run_it("--update-runtime")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn(f"from {RUNTIME_VERSION} to {NEXT}", r.stdout)
+
+    def test_an_unsigned_release_is_refused(self):
+        before = with_signing_key(exported(RUNTIME), "11" * 32)
+        self.write(before)
+        self.gh.release(NEXT, as_version(RUNTIME, NEXT))
+        r = self.run_it("--update-runtime")
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("isn't signed", r.stdout)
+        self.assertEqual(self.read(), before)
+
+    def test_a_wrongly_signed_release_is_refused(self):
+        before = with_signing_key(exported(RUNTIME), "11" * 32)
+        self.write(before)
+        self.gh.release(NEXT, as_version(RUNTIME, NEXT), sig=b"\x01" * 64)
+        r = self.run_it("--update-runtime")
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("isn't signed", r.stdout)
+        self.assertEqual(self.read(), before)
 
 
 if __name__ == "__main__":

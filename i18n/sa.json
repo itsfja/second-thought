@@ -2985,7 +2985,8 @@
   "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp": "kraken-cli न स्थापितम्, अतः Kraken इत्यस्य साधनानि आरब्धुं न शक्नुवन्ति। तत् स्थापय: https://docs.kraken.com/home/mcp",
   "your Kraken key works": "तव Kraken कुञ्चिका कार्यं करोति",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "{key} --allow-dangerous इत्यनेन सेवकम् आरभते, यत् धनचालकसाधनेभ्यः पूर्वं तस्य स्वपरीक्षां निवारयति। तत् अपनय।",
-  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} सत्यधनं चालयितुं शक्नोति, अतः यदा त्वम् 'आम्' इति वक्तुम् उपस्थितः तदा एव चलति, कोऽपि च न उपस्थितः।"
+  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} सत्यधनं चालयितुं शक्नोति, अतः यदा त्वम् 'आम्' इति वक्तुम् उपस्थितः तदा एव चलति, कोऽपि च न उपस्थितः।",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "प्रकाशनम् {latest} अस्मिन् runtime-इत्यस्य कुञ्चिकया हस्ताक्षरितम् नास्ति, अतः तत् न प्रयुक्तम्। न किञ्चित् परिवर्तितम्।"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

@@ -1851,7 +1851,8 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli er eigi sett upp, svá at tól Krakens megu eigi byrja. Set þat upp: https://docs.kraken.com/home/mcp",
 "your Kraken key works":"Kraken lykill þinn virkar",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} byrjar þjóninn með --allow-dangerous, er slekkr hans eigin prófun fyrir tól er hreyfa fé. Tak þat út.",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} gæti hreyft sǫnnu fé, svá at þat keyrir einungis þá er þú ert þar at segja já, ok enginn er þar."
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} gæti hreyft sǫnnu fé, svá at þat keyrir einungis þá er þú ert þar at segja já, ok enginn er þar.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Útgáfan {latest} er ekki undirrituð með lyklinum sem þetta runtime heldur, því var henni ekki haldið. Ekkert breyttist."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

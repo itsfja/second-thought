@@ -2985,6 +2985,7 @@
   "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp": "kraken-cli לא מותקן, ולכן הכלים של Kraken לא יכולים לפעול. התקן אותו: https://docs.kraken.com/home/mcp",
   "your Kraken key works": "מפתח ה-Kraken שלך עובד",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "{key} מפעיל את השרת עם --allow-dangerous, וזה מכבה את הבדיקה שלו לפני כלים שמזיזים כסף. הסר את זה.",
-  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} עלול להזיז כסף אמיתי, ולכן הוא רץ רק כשאתה שם כדי לאשר, ואין אף אחד."
+  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} עלול להזיז כסף אמיתי, ולכן הוא רץ רק כשאתה שם כדי לאשר, ואין אף אחד.",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "המהדורה {latest} אינה חתומה במפתח שבידי הראנטיים הזה, ולכן לא נעשה בה שימוש. לא השתנה דבר."
  }
 }

@@ -1851,7 +1851,8 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli nis gesett, forþon Krakenes tōl ne magon onginnan. Sete hit: https://docs.kraken.com/home/mcp",
 "your Kraken key works":"þīn Kraken cǣg ƿyrcþ",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} onginþ þone þegn mid --allow-dangerous, þe ācwencþ his āgene fandunge ǣr tōlum þe feoh styriaþ. Nim hit ūt.",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} mihte sōþ feoh styrian, forþon hit fērþ ān þonne þū þǣr eart gēse tō cweþenne, and nān man nis þǣr."
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} mihte sōþ feoh styrian, forþon hit fērþ ān þonne þū þǣr eart gēse tō cweþenne, and nān man nis þǣr.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Ūtgyf {latest} nis mid þǣre cǣg þe þis runtime hæfþ gebēcnaþ, þy hit ne wæs brȳcd. Nāþing nis awended."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

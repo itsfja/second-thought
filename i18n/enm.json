@@ -2984,7 +2984,8 @@
   "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp": "kraken-cli is nat installed, so Krakens tooles may nat bigynne. Installe it: https://docs.kraken.com/home/mcp",
   "your Kraken key works": "thyn Kraken keye werketh",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "{key} bigynneth the servour with --allow-dangerous, which turneth of his owene check bifore tooles that meve moneye. Take it out.",
-  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} myghte meve verray moneye, so it renneth oonly whan thou art there to seye ye, and no man is."
+  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} myghte meve verray moneye, so it renneth oonly whan thou art there to seye ye, and no man is.",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "The reles {latest} is not sealed with the key that this runtime holdeth, therfore it was not used. No thing is chaunged."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

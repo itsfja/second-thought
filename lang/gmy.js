@@ -1852,7 +1852,8 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli o-u ke-ta-i, Kraken o-ka-na o-u du-na-ta a-ra-ke-ta-i. ke-ta-se: https://docs.kraken.com/home/mcp",
 "your Kraken key works":"Kraken ka-ra-wi-so e-ka-ze-ta-i",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} a-ra-ke-ta-i ta-ra-pe-ze me-ta --allow-dangerous, o pa-u-e ta-ra-ke-ta pa-ro o-ka-na ku-ru-so ki-ne-o-ta. a-pe-re-e.",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} du-na-ta-i a-ra-te-a ku-ru-so ki-ne-e; mo-no te-re-ke-e o-te pa-re-si na-i pa-to, o-u-de-e pa-re-si."
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} du-na-ta-i a-ra-te-a ku-ru-so ki-ne-e; mo-no te-re-ke-e o-te pa-re-si na-i pa-to, o-u-de-e pa-re-si.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"{latest} o-u te-me-no o-no ke-ro, a-pe o-u-ke. a-pe-me-na-o-u-ke."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

@@ -2984,7 +2984,8 @@
   "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp": "kraken-cli institutum non est, itaque instrumenta Kraken incipere non possunt. Institue id: https://docs.kraken.com/home/mcp",
   "your Kraken key works": "clavis tua Kraken valet",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "{key} ministratorem cum --allow-dangerous incipit, quod probationem eius ante instrumenta pecuniam moventia exstinguit. Tolle id.",
-  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} pecuniam veram movere potest, itaque solum fit cum ades ut ita dicas, et nemo adest."
+  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} pecuniam veram movere potest, itaque solum fit cum ades ut ita dicas, et nemo adest.",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Editio {latest} clave quam hoc runtime tenet non signata est, ergo non adhibita est. Nihil mutatum est."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

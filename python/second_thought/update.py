@@ -3,6 +3,7 @@
 Part of the second_thought package. tools/sync.py joins these files, in order, into
 python/runtime.py, which is what ships inside every exported program and the page.
 """
+import base64
 import hashlib
 import json
 import os
@@ -26,6 +27,70 @@ PROGRAM_MARKS = tuple("# ---- " + who + " program: lets the block editor import 
 RELEASES = "https://api.github.com/repos/itsfja/second-thought/releases"
 UPDATE_TIMEOUT = 20
 RUNTIME_ASSET_LIMIT = 8_000_000
+
+# The public half of the key releases are signed with (#311): 32 bytes of Ed25519 public key, as 64 hex characters.
+# The private half never touches GitHub: each release's runtime.py is signed on the maintainer's computer
+# (tools/sign_runtime.py) and the .sig is attached to the release. --update-runtime then refuses a runtime whose
+# signature doesn't match, so whoever can publish a release can't publish a runtime this program will run. Empty means
+# no release has been signed yet, and --update-runtime keeps checking the SHA-256 as before.
+UPDATE_SIGNING_KEY = ""
+
+# Pure-Python Ed25519 signature checking (RFC 8032): the standard library has none, and an exported program installs
+# nothing. Only verification: signing happens off GitHub, with tools/sign_runtime.py.
+_P = 2 ** 255 - 19
+_L = 0x1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed
+_D = -121665 * pow(121666, _P - 2, _P) % _P
+_BY = 4 * pow(5, _P - 2, _P) % _P
+_BX = pow((_BY * _BY - 1) * pow(_D * _BY * _BY + 1, _P - 2, _P), (_P + 3) // 8, _P)
+if (_BX * _BX - (_BY * _BY - 1) * pow(_D * _BY * _BY + 1, _P - 2, _P)) % _P != 0:
+    _BX = _BX * pow(2, (_P - 1) // 4, _P) % _P
+if _BX % 2 != 0:
+    _BX = _P - _BX
+_B = (_BX, _BY)
+
+
+def _ed25519_point_add(p1, p2):
+    x1, y1 = p1
+    x2, y2 = p2
+    x3 = (x1 * y2 + x2 * y1) * pow(1 + _D * x1 * x2 * y1 * y2, _P - 2, _P)
+    y3 = (y1 * y2 + x1 * x2) * pow(1 - _D * x1 * x2 * y1 * y2, _P - 2, _P)
+    return x3 % _P, y3 % _P
+
+
+def _ed25519_point_mul(k, p1):
+    out = (0, 1)
+    while k > 0:
+        if k & 1:
+            out = _ed25519_point_add(out, p1)
+        p1 = _ed25519_point_add(p1, p1)
+        k >>= 1
+    return out
+
+
+def _ed25519_decompress(s):
+    y = int.from_bytes(s, "little") & (2 ** 255 - 1)
+    x = pow((y * y - 1) * pow(_D * y * y + 1, _P - 2, _P), (_P + 3) // 8, _P)
+    if (x * x - (y * y - 1) * pow(_D * y * y + 1, _P - 2, _P)) % _P != 0:
+        x = x * pow(2, (_P - 1) // 4, _P) % _P
+    if x % 2 != (s[31] >> 7) & 1:
+        x = _P - x
+    return x, y
+
+
+def _ed25519_ok(sig, msg, pub):
+    """True if sig (64 bytes) is pub's signature of msg: R + h·A == s·B, as RFC 8032 has it."""
+    if len(sig) != 64 or len(pub) != 32:
+        return False
+    try:
+        r = _ed25519_decompress(sig[:32])
+        a = _ed25519_decompress(pub)
+        s = int.from_bytes(sig[32:], "little")
+        if s >= _L:
+            return False
+        h = int.from_bytes(hashlib.sha512(sig[:32] + pub + msg).digest(), "little") % _L
+        return _ed25519_point_add(r, _ed25519_point_mul(h, a)) == _ed25519_point_mul(s, _B)
+    except (ValueError, ZeroDivisionError):
+        return False
 
 # JavaScript's \s, which the page's code hash trims from the end of each line.
 _JS_SPACE = "\t\n\v\f\r                  　﻿"
@@ -176,6 +241,17 @@ class Updates:
         if len(body) > RUNTIME_ASSET_LIMIT or not expected or hashlib.sha256(body).hexdigest() != expected[0].lower():
             print(tr("The downloaded runtime doesn't match its SHA-256, so it wasn't used. Nothing was changed."))
             return 1
+        if UPDATE_SIGNING_KEY:
+            sig = b""
+            if assets.get("runtime.py.sig"):
+                try:
+                    raw = self._releases_get(assets["runtime.py.sig"], 200)
+                    sig = base64.b64decode(raw.decode("utf-8", "replace").strip(), validate=True)
+                except (urllib.error.URLError, OSError, ValueError):
+                    sig = b""
+            if not _ed25519_ok(sig, body, bytes.fromhex(UPDATE_SIGNING_KEY)):
+                print(tr("Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.", latest=latest))
+                return 1
         try:
             runtime = body.decode("utf-8").replace("\r\n", "\n")
         except UnicodeDecodeError:

@@ -2984,6 +2984,7 @@
   "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp": "Το kraken-cli δεν είναι εγκατεστημένο, οπότε τα εργαλεία του Kraken δεν μπορούν να ξεκινήσουν. Εγκαταστήστε το: https://docs.kraken.com/home/mcp",
   "your Kraken key works": "το κλειδί σας για το Kraken λειτουργεί",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "Το {key} ξεκινά τον διακομιστή με --allow-dangerous, που απενεργοποιεί τον δικό του έλεγχο πριν από εργαλεία που μετακινούν χρήματα. Αφαιρέστε το.",
-  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "Το {what} μπορεί να μετακινήσει πραγματικά χρήματα, οπότε εκτελείται μόνο όταν είστε εκεί να πείτε ναι, και δεν είναι κανείς."
+  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "Το {what} μπορεί να μετακινήσει πραγματικά χρήματα, οπότε εκτελείται μόνο όταν είστε εκεί να πείτε ναι, και δεν είναι κανείς.",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Η έκδοση {latest} δεν είναι υπογεγραμμένη από το κλειδί που κρατά αυτό το runtime, οπότε δεν χρησιμοποιήθηκε. Τίποτα δεν άλλαξε."
  }
 }

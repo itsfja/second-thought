@@ -2975,7 +2975,8 @@
   "“{value}” isn't a number.": "“{value}” n tnw pw.",
   "“{value}” isn't on or off.": "“{value}” n on m off pw.",
   "“{x}” isn't a real date.": "“{x}” n hrw mꜣꜥ pw.",
-  "“{x}” isn't a time.": "“{x}” n wnwt pw."
+  "“{x}” isn't a time.": "“{x}” n wnwt pw.",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "{latest} n ḥtm.tw m ḫtm n jrt pn, n jr.tw=f. nn ḫprjw n ḫprjw."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",
