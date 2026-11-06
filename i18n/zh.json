@@ -1448,7 +1448,12 @@
   "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.": "在程序中，方向键在积木、它们的插槽和字段之间移动。在字段上按 <b>Enter</b> 可以输入或选择，<b>W</b> 让你回到程序。",
   "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.": "<b>M</b> 移动当前积木（方向键，然后 <b>Enter</b>，或按 <b>Esc</b> 停止），<b>X</b> 把它从连接处拆下，<b>D</b> 复制一份，<b>Delete</b> 删除它。",
   "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.": "<b>N</b> 和 <b>B</b> 跳到下一个和上一个脚本，<b>I</b> 读出你的位置，<b>Ctrl+Enter</b> 打开积木的菜单。<b>Ctrl+C</b>、<b>Ctrl+X</b>、<b>Ctrl+V</b> 和 <b>Ctrl+Z</b> 用于复制、剪切、粘贴和撤销。",
-  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "屏幕阅读器会在你到达每个积木、字段和类别时读出它们，<b>Alt+Shift+A</b> 会在进出积木时加上提示音。在其他地方，<b>Tab</b> 在按钮之间移动。当程序问你问题时，回答框会获得焦点，<b>Ctrl+Enter</b> 发送你输入的回答。"
+  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "屏幕阅读器会在你到达每个积木、字段和类别时读出它们，<b>Alt+Shift+A</b> 会在进出积木时加上提示音。在其他地方，<b>Tab</b> 在按钮之间移动。当程序问你问题时，回答框会获得焦点，<b>Ctrl+Enter</b> 发送你输入的回答。",
+  "New: {what}.": "新增：{what}。",
+  "Gone: {what}.": "移除：{what}。",
+  "{n} scripts added, {m} removed.": "新增 {n} 个脚本，移除 {m} 个。",
+  "{n} blocks added, {m} removed.": "新增 {n} 个积木，移除 {m} 个。",
+  "Text changed in {n} blocks.": "{n} 个积木的文字有改动。"
  },
  "examples": {
   "review": {

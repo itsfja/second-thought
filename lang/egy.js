@@ -947,7 +947,12 @@
 "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.":"“{text}” 𓈖 𓉔𓂋𓅱 𓊪𓅱 𓇋𓂋 today, tomorrow, 𓉔𓂋𓅱 𓈖 𓋴𓅱 𓅓 YYYY-MM-DD.",
 "“{to}” isn't an email address.":"“{to}” 𓈖 𓋴𓏏 𓈖 email 𓊪𓅱",
 "“{value}” isn't a number.":"“{value}” 𓈖 𓏏𓈖𓅱 𓊪𓅱",
-"“{value}” isn't on or off.":"“{value}” 𓈖 on 𓅓 off 𓊪𓅱"
+"“{value}” isn't on or off.":"“{value}” 𓈖 on 𓅓 off 𓊪𓅱",
+"New: {what}.":"𓅓𓂋𓏏: {what}.",
+"Gone: {what}.":"𓈎𓂋𓏏: {what}.",
+"{n} scripts added, {m} removed.":"𓋴𓊪𓏏 {n} 𓂋𓈖𓏏, 𓈎𓂋𓏏 {m}.",
+"{n} blocks added, {m} removed.":"𓋴𓊪𓏏 {n} 𓎡𓂋𓏏, 𓈎𓂋𓏏 {m}.",
+"Text changed in {n} blocks.":"𓏠𓈎𓏏 {n} 𓎡𓂋𓏏."
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},

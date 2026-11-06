@@ -1439,7 +1439,12 @@
   "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "“{text}” 𓈖 𓉔𓂋𓅱 𓊪𓅱 𓇋𓂋 today, tomorrow, 𓉔𓂋𓅱 𓈖 𓋴𓅱 𓅓 YYYY-MM-DD.",
   "“{to}” isn't an email address.": "“{to}” 𓈖 𓋴𓏏 𓈖 email 𓊪𓅱",
   "“{value}” isn't a number.": "“{value}” 𓈖 𓏏𓈖𓅱 𓊪𓅱",
-  "“{value}” isn't on or off.": "“{value}” 𓈖 on 𓅓 off 𓊪𓅱"
+  "“{value}” isn't on or off.": "“{value}” 𓈖 on 𓅓 off 𓊪𓅱",
+  "New: {what}.": "𓅓𓂋𓏏: {what}.",
+  "Gone: {what}.": "𓈎𓂋𓏏: {what}.",
+  "{n} scripts added, {m} removed.": "𓋴𓊪𓏏 {n} 𓂋𓈖𓏏, 𓈎𓂋𓏏 {m}.",
+  "{n} blocks added, {m} removed.": "𓋴𓊪𓏏 {n} 𓎡𓂋𓏏, 𓈎𓂋𓏏 {m}.",
+  "Text changed in {n} blocks.": "𓏠𓈎𓏏 {n} 𓎡𓂋𓏏."
  },
  "examples": {
   "review": {
