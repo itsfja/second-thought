@@ -2985,6 +2985,14 @@
   "your Kraken key works": "Kraken のキーは有効です",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "{key} はサーバーを --allow-dangerous 付きで起動しています。これはお金を動かすツールの前の確認を無効にします。外してください。",
   "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} は実際のお金を動かす可能性があるため、あなたがその場で「はい」と言えるときだけ実行されます。今は誰もいません。",
+  "Approved on Telegram": "Telegram で承認されました",
+  "Second Thought: allow {what}? Reply yes {code} within 5 minutes.": "Second Thought: {what} を許可しますか？5 分以内に「はい {code}」と返信してください。",
+  "it could move real money: {what}": "実際のお金を動かす可能性があります: {what}",
+  "someone": "誰か",
+  "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.": "{what} には承認が必要です。approve_by = telegram が設定されていますが、TELEGRAM_BOT_TOKEN と TELEGRAM_CHAT_ID {where_keys} は設定されていません。",
+  "{what} was refused on Telegram by {who}, so nothing happened.": "{what} は Telegram で {who} に拒否されたため、何も起こりませんでした。",
+  "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} は時間内に Telegram で承認されなかったため、何も起こりませんでした。",
+  "{who} approved {what} by replying yes {code} on Telegram.": "{who} が Telegram で「はい {code}」と返信して{what}を承認しました。",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "リリース {latest} はこのランタイムが持つ鍵で署名されていないため、使用されませんでした。何も変更されていません。"
  }
 }

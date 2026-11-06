@@ -1852,6 +1852,14 @@
 "your Kraken key works":"þīn Kraken cǣg ƿyrcþ",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} onginþ þone þegn mid --allow-dangerous, þe ācwencþ his āgene fandunge ǣr tōlum þe feoh styriaþ. Nim hit ūt.",
 "{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} mihte sōþ feoh styrian, forþon hit fērþ ān þonne þū þǣr eart gēse tō cweþenne, and nān man nis þǣr.",
+"Approved on Telegram":"Geafad on Telegram.",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought: lǣf {what}? Andswara gēa {code} wiþinnan fīf minutum.",
+"it could move real money: {what}":"hit miht sōþ feoh styran: {what}",
+"someone":"sumor",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} þearf þīnre lǣfe; approve_by = telegram is gesett, ac TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} ne sind.",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{what} wæs on Telegram fram {who} forwierned, þy næs nāþing gedōn.",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} næs on tīde on Telegram geafad, þy næs nāþing gedōn.",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} geafade {what}, andswarnde gēa {code} on Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Ūtgyf {latest} nis mid þǣre cǣg þe þis runtime hæfþ gebēcnaþ, þy hit ne wæs brȳcd. Nāþing nis awended."
 },
 "blocklyMsg":{

@@ -459,7 +459,7 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "currency": "RB_CURRENCY", "exchange_rate": "RB_EXCHANGE_RATE", "rates_url": "RB_RATES_URL", "quota_hourly": "RB_QUOTA_HOURLY",
                  "quota_daily": "RB_QUOTA_DAILY", "quota_weekly": "RB_QUOTA_WEEKLY", "quota_monthly": "RB_QUOTA_MONTHLY", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
-                 "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
+                 "approve": "RB_APPROVE", "approve_by": "RB_APPROVE_BY", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
                  "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK",
                  "releases_url": "RB_RELEASES_URL"}
 
@@ -5130,11 +5130,14 @@ class AgentTools:
 
     async def confirm_money(self, what):
         """Asks before an MCP tool that can reach real money (#262). Never with nobody there to answer, whatever the
-        approve setting says, and never answered from a stopped run's journal: the person says yes, now, each time."""
+        approve setting says, unless approve_by = telegram is set: then it asks on your phone (#305), never answered
+        from a stopped run's journal: the person says yes, now, each time."""
         unattended = self.nobody_here() or bool(os.environ.get("GITHUB_ACTIONS")) or not sys.stdin.isatty()
-        if unattended:
+        if unattended and os.environ.get("RB_APPROVE_BY", "").strip().lower() != "telegram":
             self.log(tr("Not done"), tr("{what} could move real money, so it only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
             return False
+        if unattended:
+            return await self._approve_telegram(tr("it could move real money: {what}", what=what))
         if await self._approve_live(tr("Allow this? It could move real money: {what}", what=what)):
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
@@ -6656,15 +6659,46 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         return getattr(self, "mcp_mode", False) or (self.schedule_mode and not sys.stdin.isatty())
 
     async def confirm(self, what):
-        """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no."""
+        """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no, unless
+        approve_by = telegram is set: then the question goes to your phone (#305)."""
         if getattr(self, "testing", False):  # in a test the action itself is skipped (see _allowed), so nobody needs asking
             return True
         if self.nobody_here():
+            if os.environ.get("RB_APPROVE_BY", "").strip().lower() == "telegram":
+                return await self._approve_telegram(what)
             self.log(tr("Not done"), tr("{what} needs your approval, and nobody is at the keyboard.", what=what), tr("refused"))
             return False
         if await self.approve("Allow this? " + what):
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
+        return False
+
+    def _approval_code(self):
+        """A fresh four-digit code for one Telegram question (#305): a reply counts only with it, and each question has its own."""
+        return f"{random.randint(0, 9999):04d}"
+
+    async def _approve_telegram(self, what):
+        """Asks on Telegram when nobody is at the keyboard (#305): the question goes to TELEGRAM_CHAT_ID with a fresh
+        four-digit code, and only a reply from that chat with that code, before the time runs out, counts. Anything else,
+        or no answer, is a no. Never answered from a stopped run's journal: the person says yes, now, each time."""
+        chat = next(iter(self._tg_chats()), "")
+        if not os.environ.get("TELEGRAM_BOT_TOKEN", "") or not chat:
+            self.log(tr("Not done"), tr("{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.", what=what, where_keys=WHERE_KEYS), tr("refused"))
+            return False
+        code = self._approval_code()
+        await self._tg("sendMessage", {"chat_id": chat, "text": tr("Second Thought: allow {what}? Reply yes {code} within 5 minutes.", what=what, code=code)})
+        deadline = time.monotonic() + getattr(self, "_approve_wait", 300)
+        while time.monotonic() < deadline:
+            for m in await self.tg_fetch(wait=max(0, min(30, deadline - time.monotonic()))):
+                words = set(m["text"].lower().split())
+                if m["chat"] != chat or code not in words:
+                    continue
+                if any(said_no(w) for w in words):
+                    self.log(tr("Not done"), tr("{what} was refused on Telegram by {who}, so nothing happened.", what=what, who=m["sender"] or tr("someone")), tr("refused"))
+                    return False
+                self.log(tr("Approved on Telegram"), tr("{who} approved {what} by replying yes {code} on Telegram.", who=m["sender"] or tr("someone"), what=what, code=code), tr("approved"))
+                return True
+        self.log(tr("Not done"), tr("{what} wasn't approved on Telegram in time, so nothing happened.", what=what), tr("refused"))
         return False
 
     # ----- Resuming after a stop -----

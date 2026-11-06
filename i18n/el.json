@@ -2985,6 +2985,14 @@
   "your Kraken key works": "το κλειδί σας για το Kraken λειτουργεί",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "Το {key} ξεκινά τον διακομιστή με --allow-dangerous, που απενεργοποιεί τον δικό του έλεγχο πριν από εργαλεία που μετακινούν χρήματα. Αφαιρέστε το.",
   "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "Το {what} μπορεί να μετακινήσει πραγματικά χρήματα, οπότε εκτελείται μόνο όταν είστε εκεί να πείτε ναι, και δεν είναι κανείς.",
+  "Approved on Telegram": "Εγκρίθηκε στο Telegram",
+  "Second Thought: allow {what}? Reply yes {code} within 5 minutes.": "Second Thought: να επιτραπεί {what}; Απάντα ναι {code} μέσα σε 5 λεπτά.",
+  "it could move real money: {what}": "μπορεί να κινήσει πραγματικά χρήματα: {what}",
+  "someone": "κάποιος",
+  "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.": "Το {what} χρειάζεται την έγκρισή σου· έχει οριστεί approve_by = telegram, αλλά όχι TELEGRAM_BOT_TOKEN και TELEGRAM_CHAT_ID {where_keys}.",
+  "{what} was refused on Telegram by {who}, so nothing happened.": "Το {what} αρνήθηκε στο Telegram ο {who}, οπότε δεν έγινε τίποτα.",
+  "{what} wasn't approved on Telegram in time, so nothing happened.": "Το {what} δεν εγκρίθηκε εγκαίρως στο Telegram, οπότε δεν έγινε τίποτα.",
+  "{who} approved {what} by replying yes {code} on Telegram.": "Ο {who} ενέκρινε το {what} απαντώντας ναι {code} στο Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Η έκδοση {latest} δεν είναι υπογεγραμμένη από το κλειδί που κρατά αυτό το runtime, οπότε δεν χρησιμοποιήθηκε. Τίποτα δεν άλλαξε."
  }
 }

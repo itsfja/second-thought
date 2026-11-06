@@ -1852,6 +1852,14 @@
 "your Kraken key works":"dein Kraken-Schlüssel funktioniert",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} startet den Server mit --allow-dangerous, was seine eigene Prüfung vor Werkzeugen abschaltet, die Geld bewegen. Nimm es heraus.",
 "{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} könnte echtes Geld bewegen, darum läuft es nur, wenn du da bist und Ja sagst, und niemand ist da.",
+"Approved on Telegram":"Auf Telegram genehmigt",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought: {what} erlauben? Antworte ja {code} innerhalb von 5 Minuten.",
+"it could move real money: {what}":"es könnte echtes Geld bewegen: {what}",
+"someone":"jemand",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} braucht deine Zustimmung, approve_by = telegram ist gesetzt, aber TELEGRAM_BOT_TOKEN und TELEGRAM_CHAT_ID {where_keys} sind es nicht.",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{what} wurde auf Telegram von {who} abgelehnt, also ist nichts geschehen.",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} wurde nicht rechtzeitig auf Telegram genehmigt, also ist nichts geschehen.",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} hat {what} genehmigt, mit der Antwort ja {code} auf Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Das Release {latest} ist nicht vom Schlüssel dieses Runtimes signiert, also wurde es nicht verwendet. Nichts wurde geändert."
 }
 };

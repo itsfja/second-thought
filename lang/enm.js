@@ -1852,6 +1852,14 @@
 "your Kraken key works":"thyn Kraken keye werketh",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} bigynneth the servour with --allow-dangerous, which turneth of his owene check bifore tooles that meve moneye. Take it out.",
 "{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} myghte meve verray moneye, so it renneth oonly whan thou art there to seye ye, and no man is.",
+"Approved on Telegram":"Aproved on Telegram.",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought: suffre {what}? Answer ye {code} within fyve minuten.",
+"it could move real money: {what}":"it may move verray money: {what}",
+"someone":"some wight",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} hath nede of thyn approvment; approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} ben not.",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{what} was refused on Telegram by {who}, so no thing bifel.",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} was not apered in tyme on Telegram, so no thing bifel.",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} apered {what}, answeringe ye {code} on Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"The reles {latest} is not sealed with the key that this runtime holdeth, therfore it was not used. No thing is chaunged."
 },
 "blocklyMsg":{

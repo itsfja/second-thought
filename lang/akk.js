@@ -1853,6 +1853,14 @@
 "your Kraken key works":"kunukkaka ša Kraken ippuš",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} wardam itti --allow-dangerous ušarri, ša barâšu lāma unūt kaspam unarraṭā ubattal. šūlīšu.",
 "{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} kaspam kīnam unarraṭ, ša adi attā ana annam qabêm tazzazzu illak, u mamman ul ibašši.",
+"Approved on Telegram":"ina Telegram šuknu.",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought: {what} šuknu? Sib ja {code} ina 5 šiḫri.",
+"it could move real money: {what}":"kaspa gamra šūlû: {what}",
+"someone":"amēlu",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"ana {what} šibqīka; approve_by = telegram šutru, TELEGRAM_BOT_TOKEN u TELEGRAM_CHAT_ID {where_keys} lā šutru.",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{what} ina Telegram ana {who} zēnu; ay ipšu.",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} ina Telegram ina adannišu lā šuknu; ay ipšu.",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} {what} šuknu, sibâ ja {code} ina Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"{latest} lā kanīk ina ṭābti ša runtime šuātu, ay ipšu. ay šanû."
 },
 "blocklyMsg":{

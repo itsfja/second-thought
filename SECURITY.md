@@ -84,6 +84,10 @@ Everything it reads and writes is sent to the model services it uses.
   address, and an https tunnel goes to it while the certificate is still checked against the name.
 - **MCP servers run with your permissions.** A server named by a command in `second-thought.ini` is started as you
   and can do whatever that command can. Only add servers you trust.
+- **approve_by = telegram asks on your phone.** A run with nobody at the keyboard refuses anything that must ask
+  first, unless `approve_by = telegram` is set in `second-thought.ini`: then the question goes to your Telegram with a
+  fresh four-digit code, and only a reply from your chat with that code, within five minutes, allows it. Anyone who
+  can read your Telegram can allow it, so the phone that reads it should be yours.
 - **Keys stay out of the program.** Keys live in `second-thought.ini` or environment variables, never in the
   exported `.py` file. `second-thought.ini` is git-ignored here; keep yours private.
 

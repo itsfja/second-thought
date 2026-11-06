@@ -2985,6 +2985,14 @@
   "your Kraken key works": "clavis tua Kraken valet",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "{key} ministratorem cum --allow-dangerous incipit, quod probationem eius ante instrumenta pecuniam moventia exstinguit. Tolle id.",
   "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} pecuniam veram movere potest, itaque solum fit cum ades ut ita dicas, et nemo adest.",
+  "Approved on Telegram": "Approbatum in Telegram.",
+  "Second Thought: allow {what}? Reply yes {code} within 5 minutes.": "Second Thought: licetne {what}? Sponde sic {code} intra quinque minuta.",
+  "it could move real money: {what}": "pecuniam veram movere potest: {what}",
+  "someone": "aliquis",
+  "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.": "{what} probationem tuam desiderat; approve_by = telegram positum est, sed TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID {where_keys} non sunt.",
+  "{what} was refused on Telegram by {who}, so nothing happened.": "{what} in Telegram a {who} repulsum est; itaque nihil factum est.",
+  "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} non tempestive in Telegram probatum est; itaque nihil factum est.",
+  "{who} approved {what} by replying yes {code} on Telegram.": "{who} {what} probavit, respondens sic {code} in Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Editio {latest} clave quam hoc runtime tenet non signata est, ergo non adhibita est. Nihil mutatum est."
  },
  "blocklyMsg": {

@@ -910,6 +910,36 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         got = json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {}
         check(got.get("new") == ["second"] and got.get("stored") == ["first", "second"] and got.get("offset") == 1003,
               f"a Telegram message another program already saved isn't stored or acted on twice ({got or r.stderr[-200:]})")
+
+        print("Approve from your phone")
+        tg_env = dict(env, TG_FILE=os.path.join(tmp, "tg-approve.json"))
+        def run_tg_approve(reply, *whats, chat=fake_services.TG_CHAT, codes="4821", wait=3):
+            if reply is not None:
+                tg_add(reply, chat=chat)
+            r = subprocess.run([sys.executable, "-c", TG_APPROVE, rt_path, codes, str(wait), *(whats or ("unlock the front door",))],
+                               capture_output=True, text=True, timeout=90, env=tg_env, stdin=subprocess.DEVNULL)
+            return json.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 and r.stdout.strip() else {"err": (r.stderr or r.stdout)[-300:]}
+        got = run_tg_approve("yes 4821")
+        check(got.get("asks") == [True] and any("Approved on Telegram" in l[0] and "Sample Baker" in l[1] and "4821" in l[1] for l in got.get("log", [])),
+              f"an unattended run that must ask sends the question to Telegram, and a reply from your chat with the code allows it ({got})")
+        got = run_tg_approve("no 4821")
+        check(got.get("asks") == [False] and any("refused on Telegram" in l[1] and "Sample Baker" in l[1] for l in got.get("log", [])),
+              f"a no with the code refuses it, and the run log says who ({got})")
+        got = run_tg_approve("yes 9999")
+        check(got.get("asks") == [False] and any("in time" in l[1] for l in got.get("log", [])),
+              f"a reply with the wrong code doesn't count, and after the time runs out it's a no ({got})")
+        got = run_tg_approve("yes 4821", chat=9999)
+        check(got.get("asks") == [False] and any("in time" in l[1] for l in got.get("log", [])),
+              f"a reply from another chat is ignored, so the time runs out ({got})")
+        tg_add("yes 4821")
+        tg_add("yes 4821")
+        got = run_tg_approve(None, "unlock the front door", "open the garage", codes="4821,7777", wait=3)
+        check(got.get("asks") == [True, False] and any("in time" in l[1] for l in got.get("log", [])),
+              f"each question has its own code, so a code that worked once doesn't work for the next one ({got})")
+        got = run_tg_approve("yes 4821", "money:buy one Bitcoin", wait=3)
+        check(got.get("asks") == [True] and any("Approved on Telegram" in l[0] and "real money" in l[1] for l in got.get("log", [])),
+              f"a money move goes through the same Telegram path, saying it could move real money ({got})")
+
         (pathlib.Path(tmp) / "t_listen.py").write_text(EXTRA["t_listen"], encoding="utf-8")
         import socket
         with socket.socket() as so:

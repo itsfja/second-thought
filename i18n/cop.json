@@ -2976,6 +2976,14 @@
   "“{value}” isn't on or off.": "“{value}” on ē off an pe.",
   "“{x}” isn't a real date.": "“{x}” ouhoou mme an pe.",
   "“{x}” isn't a time.": "“{x}” ouoeiš an pe.",
+  "Approved on Telegram": "ⲧⲁⲓⲟ ⲛ̄ⲧⲁⲩⲟ ⲛ̄ⲟⲩⲛ̄ⲧⲁⲩⲟ ⲙ̄ⲙⲟⲛ ϩⲛ̄ Telegram.",
+  "Second Thought: allow {what}? Reply yes {code} within 5 minutes.": "Second Thought: ⲟⲩⲛ̄ⲧⲁⲩⲟ ⲛ̄{what}? ϩⲉⲥⲟⲩⲛ̄ ⲛ̄ⲧⲁⲓⲟ {code} ϩⲛ̄ ⲡⲙⲏⲧ ⲛ̄ϩⲟⲩⲣⲉ.",
+  "it could move real money: {what}": "ⲙ̄ⲙⲟⲛ ϩⲛ̄ ⲟⲩⲟⲩⲱⲛⲓ ⲛ̄ϩⲙϩⲁⲗ ϣⲁⲣⲱⲙⲡⲉ: {what}",
+  "someone": "ⲟⲩⲣⲱⲙⲡⲉ",
+  "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.": "{what} ⲧⲛ̄ⲛⲟⲩ ⲛ̄ⲧⲁⲓⲟ; approve_by = telegram ⲡⲉ, ⲟⲩⲁⲓⲉⲓⲛ ⲛ̄TELEGRAM_BOT_TOKEN ⲛ̄ⲉⲛⲧⲁⲓⲟ ⲛ̄TELEGRAM_CHAT_ID {where_keys} ⲛ̄ⲛⲉⲥⲟⲟⲩ.",
+  "{what} was refused on Telegram by {who}, so nothing happened.": "{what} ⲁϥϫⲟ ⲙ̄ⲙⲟϥ ϩⲛ̄ Telegram ⲙ̄ⲡ{who}, ϣⲁⲣⲱⲙⲡⲉ ⲙ̄ⲡⲛⲁϣⲉ.",
+  "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} ⲙ̄ⲡⲉⲣⲉⲧⲁⲓⲟ ⲛ̄ⲧⲉⲩϩⲟⲩⲛⲟ ϩⲛ̄ Telegram, ϣⲁⲣⲱⲙⲡⲉ ⲙ̄ⲡⲛⲁϣⲉ.",
+  "{who} approved {what} by replying yes {code} on Telegram.": "{who} ⲁϥⲧⲁⲓⲟ ⲙ̄ⲙⲟϥ ⲛ̄{what} ϩⲱⲥⲉ ϫⲉ ⲟⲩⲛ̄ⲧⲁⲩⲟ {code} ϩⲛ̄ Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "ⲧⲁⲓⲟⲩⲟ ⲛ̄{latest} ⲙ̄ⲡⲉⲣⲉϣⲱⲡⲓ ⲙ̄ⲟⲩⲟⲩⲛ̄ϩⲟⲩⲛ ϩⲛ̄ ⲡⲥⲉⲛⲁⲓⲟ ⲛ̄ⲧⲉ ⲡⲣⲁⲛⲧⲁⲓⲙ, ϣⲁⲣⲱⲙⲡⲉ ⲙ̄ⲡⲉⲣⲉⲧⲁⲓⲟ ⲙ̄ⲙⲟϥ. ⲟⲩⲟⲉⲓⲛ ⲛ̄ϣⲟⲡ."
  },
  "blocklyMsg": {
