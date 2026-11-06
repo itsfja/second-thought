@@ -31,6 +31,26 @@ class Money(unittest.TestCase):
         for prefix in ("kraken_order_", "kraken_futures_order_", "kraken_withdraw", "kraken_earn_allocate", "kraken_subaccount_transfer"):
             self.assertTrue(any(n.startswith(prefix) for n in SAFETY["mcp_money"]), prefix)
 
+    def test_a_kraken_tool_we_dont_know_counts_as_money(self):
+        # #309: the safe way round, so a tool a later kraken-cli adds asks until it's checked
+        self.assertTrue(mcp.mcp_money({"name": "kraken_staking_stake"}))
+        self.assertTrue(mcp.mcp_money({"name": "kraken_futures_order_buy_v2"}))
+        for name in ("kraken_ticker", "kraken_balance", "kraken_paper_buy", "kraken_futures_paper_sell", "kraken_withdrawal_status"):
+            self.assertFalse(mcp.mcp_money({"name": name}), name)
+        self.assertFalse(mcp.mcp_money({"name": "get_file_contents"}), "other servers keep their own rules")
+        self.assertTrue(set(SAFETY["mcp_kraken_safe"]).isdisjoint(SAFETY["mcp_money"]))
+
+    def test_destructive_tools_ask_even_with_no_asking(self):
+        rt = Runtime()
+        tools = [{"name": "delete_file", "annotations": {"destructiveHint": True}},
+                 {"name": "list_files", "annotations": {"readOnlyHint": True, "destructiveHint": True}},
+                 {"name": "add_note", "annotations": {"destructiveHint": False}}, {"name": "update_note"}]
+        cat = rt._agent_tools([{"kind": "mcp", "server": "files", "ask": "never"}], {"files": tools})
+        asks = {spec[2][1]["tool"]: spec[3] for spec in cat.values()}
+        self.assertEqual(asks, {"delete_file": True, "list_files": False, "add_note": False, "update_note": False})
+        self.assertTrue(mcp.mcp_destructive(tools[0]))
+        self.assertFalse(mcp.mcp_destructive(tools[1]), "read-only wins")
+
     def test_the_block_starts_read_only_services_unless_live_is_chosen(self):
         self.assertEqual(mcp.KRAKEN_COMMANDS["read"], "kraken mcp -s market,account,paper")
         self.assertNotIn("trade", mcp.KRAKEN_COMMANDS["read"])
