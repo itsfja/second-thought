@@ -507,7 +507,7 @@ This downloads the newest release's runtime of the same major version, checks it
 |---|---|
 | `second-thought.html` | The page itself: its HTML, with everything below embedded by `tools/sync.py`. |
 | `web/editor.css`, `web/editor/` | The editor's styles, and its code in one file per area (see `web/editor/README.md`). `tools/sync.py` copies them into the page. |
-| `python/second_thought/` | The runtime that comes with every exported program, as a package of eight modules (below). |
+| `python/second_thought/` | The runtime that comes with every exported program, as a package of ten modules (below). |
 | `python/runtime.py` | The same runtime joined into one file, which every exported program gets a copy of. `tools/sync.py` builds it, so don't edit it by hand. |
 | `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
 | `ha/sample-house.json` | The sample house the Home Assistant blocks use on the page. |
@@ -535,6 +535,7 @@ The runtime's modules, in the order `tools/sync.py` joins them:
 | `connectors.py` | Web pages, news, calendars, Home Assistant, messages, MQTT and Homey. |
 | `mcp.py` | Borrowing tools from MCP servers, for the agent. |
 | `agent.py` | The agent block and its tools. |
+| `spending.py` | What each key has spent on this computer, and its hourly, daily, weekly and monthly allowances. |
 | `doctor.py` | `--doctor`: checks a program's setup without acting on anything. |
 | `update.py` | Whether a newer runtime is out, and `--update-runtime`, which swaps it into the program file. |
 | `runtime.py` | Everything else: memory, drafts, output, scripts and schedules. |

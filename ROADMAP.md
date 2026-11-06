@@ -10,7 +10,7 @@ Second Thought is for people who have a checklist, a rubric or house rules, but 
 2. **Actions ask first.** A program says what it can do before its first run, and asks before each thing it sends or changes.
 3. **One file you own.** Any program exports as a single Python file that runs with nothing else installed.
 
-The project has grown wide: over 160 examples, 31 community programs, 21 languages, 15 model services. The next gains come from **trust and reach**, not more blocks. Items are ordered by expected benefit against cost; the labels `priority: 1` to `priority: 4` say the same.
+The project has grown wide: over 150 examples, 61 community programs, 21 languages, 15 model services. The next gains come from **trust and reach**, not more blocks. Items are ordered by expected benefit against cost; the labels `priority: 1` to `priority: 4` say the same.
 
 ## Done
 
@@ -36,6 +36,22 @@ Two languages and two security fixes, released in 3.9.2: Middle Egyptian ([#136]
 |---|---|---|
 | [#321](https://github.com/itsfja/second-thought/issues/321) The page runs programs with the service of your choice | High: off claude.ai the page runs only with Claude (#293); a program whose primary is another service sees Claude standing in until after export, so GitHub — the Pages copy or a local clone — can't try the model the program will really use | Medium-high: a second family of model calls in the browser (OpenAI-compatible, which most services speak), keys and a wider security policy for more than one service, and a third page behaviour to keep true |
 | [#247](https://github.com/itsfja/second-thought/issues/247) Gallery: Premium Bonds generations | Medium: an agent whose arithmetic is checked | Low-medium, once a few real lines of NS&I's pages are in (numbers changed) |
+
+## Backlog: raised in the reviews, not yet scheduled
+
+Everything the outside reviews of the code raised that isn't closed or listed above, `priority: 3` first and then `priority: 4`:
+
+| | Benefit | Cost |
+|---|---|---|
+| [#305](https://github.com/itsfja/second-thought/issues/305) Approve from your phone: unattended runs ask on Telegram instead of refusing | High: a scheduled program that reaches a question no longer stops at the exact moment it matters, and the ask-first rule holds, answered fresh each time | Medium: a per-run question on Telegram with a short-lived answer, never replayed from a stopped run's journal |
+| [#306](https://github.com/itsfja/second-thought/issues/306) Change this program: say what's different before loading it, new connections first | Medium: a changed program might do different things, so the page should say what before it loads, as Python's approval does | Low-medium: compare the two programs' blocks and describe the difference |
+| [#309](https://github.com/itsfja/second-thought/issues/309) Kraken: a tool we don't know counts as money, and MCP tools marked destructive ask | Medium: the money rules follow what the server says its tools do, rather than a list that goes stale as kraken-cli changes | Low-medium: ask the server's tool catalog, and mark unknown tools as money rather than ordinary |
+| [#311](https://github.com/itsfja/second-thought/issues/311) --update-runtime: say what the SHA-256 proves, and decide on signed releases | High: the updater is code execution on every exported program that self-updates, so its anchor wants a hold somewhere the repo can't reach | Medium: a signed manifest, or the SHA published in a second place the updater checks against |
+| [#307](https://github.com/itsfja/second-thought/issues/307) Private files only for you, and second-thought.ini can't set LD_PRELOAD and friends | Medium: a settings file is shared and backed up more often than keys are, so it shouldn't be able to change how the program itself runs | Low-medium: keep the settings that change process behaviour to the environment |
+| [#312](https://github.com/itsfja/second-thought/issues/312) Agent answers say where each fact came from | Medium: a made-up fact has no source to name, so provenance is a prompt-injection check as well as something a reader can follow | Medium: the agent carries its sources with its steps, and the summary shows them |
+| [#313](https://github.com/itsfja/second-thought/issues/313) CI quality floor: Ruff, and fuzz tests for the parsers that read outside input | Medium: a linter and fuzzing catch what a careful writer misses, before a change lands, cheaply forever | Low-medium: a CI job; the parsers already have unit tests to hang the cases on |
+| [#314](https://github.com/itsfja/second-thought/issues/314) A downloadable offline page as a release asset | Medium: the page keeps working when a CDN doesn't, and "one file you own" applies to the product itself | Medium: the libraries vendored in, and a release workflow that attaches the file |
+| [#320](https://github.com/itsfja/second-thought/issues/320) Trust Wallet through its Agent Kit's MCP server (twak), money tools asking | Medium: the money rules reach another service, with the same always-asking before anything that moves money | Medium: an MCP server, so no settings beyond its own, and the money tools named in SAFETY |
 
 ## Someday
 
