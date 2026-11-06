@@ -13,6 +13,23 @@ version into the file in place, after checking it against the SHA-256 published 
 version, import the program on the page and export it again. `--doctor` says when a newer runtime is out, and fails
 when the release says it fixes a security problem. Programs exported before 3.1.0 need exporting again once.
 
+## What the SHA-256 check proves, and what it doesn't
+
+`--update-runtime` downloads the release's `runtime.py` and refuses it unless it matches `runtime.py.sha256`, published
+with the same release. That proves the download arrived intact: a corrupted or truncated file won't match. It can't
+prove the runtime is the one the project meant to publish, because both files come from the same place: the release,
+and its fingerprint with it, are made by the same GitHub account and workflow. Whoever could publish a release, or take
+over the account or the repository, could make a changed `runtime.py` and its matching SHA-256 together, and the check
+would pass. The runtime is code that then runs as you, with your permissions and your keys, so this is a limit to know
+about, not a corner case.
+
+Updating is always your choice: nothing updates itself, and `--update-runtime` writes the new runtime only when you run
+it. To check a release by hand instead, compare its `runtime.py` with the tagged source: check out the release's tag,
+run `python tools/sync.py --check` (which rebuilds `python/runtime.py` from the sources and says if they disagree), and
+compare the result with the file attached to the release. A release that doesn't match its own tagged source is one not
+to use. Signing releases with a key kept off GitHub, so `--update-runtime` could refuse an unsigned or wrongly signed
+runtime, is issue [#311](https://github.com/itsfja/second-thought/issues/311).
+
 ## What an exported program can do
 
 An exported program runs as you, on your computer, with the keys in its `second-thought.ini`. What it can do is
