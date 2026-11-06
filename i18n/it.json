@@ -2979,6 +2979,14 @@
   "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp": "kraken-cli non è installato, quindi gli strumenti di Kraken non possono partire. Installalo: https://docs.kraken.com/home/mcp",
   "your Kraken key works": "la tua chiave Kraken funziona",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "{key} avvia il server con --allow-dangerous, che disattiva il suo controllo prima degli strumenti che spostano denaro. Toglilo.",
-  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} potrebbe spostare denaro vero, quindi parte solo se ci sei tu a dire di sì, e non c'è nessuno."
+  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "{what} potrebbe spostare denaro vero, quindi parte solo se ci sei tu a dire di sì, e non c'è nessuno.",
+  "Approved on Telegram": "Approvato su Telegram",
+  "Second Thought: allow {what}? Reply yes {code} within 5 minutes.": "Second Thought: permettere {what}? Rispondi sì {code} entro 5 minuti.",
+  "it could move real money: {what}": "potrebbe muovere denaro vero: {what}",
+  "someone": "qualcuno",
+  "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.": "{what} richiede la tua approvazione, approve_by = telegram è impostato, ma TELEGRAM_BOT_TOKEN e TELEGRAM_CHAT_ID {where_keys} no.",
+  "{what} was refused on Telegram by {who}, so nothing happened.": "{what} è stato rifiutato su Telegram da {who}, quindi non è successo nulla.",
+  "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} non è stato approvato in tempo su Telegram, quindi non è successo nulla.",
+  "{who} approved {what} by replying yes {code} on Telegram.": "{who} ha approvato {what} rispondendo sì {code} su Telegram."
  }
 }

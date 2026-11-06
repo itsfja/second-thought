@@ -1847,6 +1847,14 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli לא מותקן, ולכן הכלים של Kraken לא יכולים לפעול. התקן אותו: https://docs.kraken.com/home/mcp",
 "your Kraken key works":"מפתח ה-Kraken שלך עובד",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} מפעיל את השרת עם --allow-dangerous, וזה מכבה את הבדיקה שלו לפני כלים שמזיזים כסף. הסר את זה.",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} עלול להזיז כסף אמיתי, ולכן הוא רץ רק כשאתה שם כדי לאשר, ואין אף אחד."
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} עלול להזיז כסף אמיתי, ולכן הוא רץ רק כשאתה שם כדי לאשר, ואין אף אחד.",
+"Approved on Telegram":"אושר בטלגרם",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought: לאפשר {what}? השב כן {code} בתוך 5 דקות.",
+"it could move real money: {what}":"זה יכול להזיז כסף אמיתי: {what}",
+"someone":"מישהו",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} דורש את אישורך; הוגדר approve_by = telegram, אך לא TELEGRAM_BOT_TOKEN וגם לא TELEGRAM_CHAT_ID {where_keys}.",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{what} סורבל בטלגרם על ידי {who}, ולכן לא קרה כלום.",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} לא אושר בזמן בטלגרם, ולכן לא קרה כלום.",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} אישר את {what} בכך שהשיב כן {code} בטלגרם."
 }
 };

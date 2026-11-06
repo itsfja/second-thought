@@ -1846,6 +1846,14 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"未安装 kraken-cli，因此 Kraken 的工具无法启动。请安装：https://docs.kraken.com/home/mcp",
 "your Kraken key works":"你的 Kraken 密钥可用",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} 用 --allow-dangerous 启动服务器，这会关闭它在动用资金的工具前的检查。请去掉它。",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} 可能会动用真金白银，所以只在你在场并同意时运行，而现在没有人在。"
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} 可能会动用真金白银，所以只在你在场并同意时运行，而现在没有人在。",
+"Approved on Telegram":"已在 Telegram 上批准",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought：允许{what}吗？请在 5 分钟内回复“是 {code}”。",
+"it could move real money: {what}":"它可能动用真实资金：{what}",
+"someone":"某人",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} 需要你的批准；已设置 approve_by = telegram，但没有设置 TELEGRAM_BOT_TOKEN 和 TELEGRAM_CHAT_ID {where_keys}。",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{who} 在 Telegram 上拒绝了{what}，所以什么也没有发生。",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} 未在时限内在 Telegram 上获得批准，所以什么也没有发生。",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} 在 Telegram 上回复“是 {code}”批准了{what}。"
 }
 };

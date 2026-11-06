@@ -1847,7 +1847,15 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli न स्थापितम्, अतः Kraken इत्यस्य साधनानि आरब्धुं न शक्नुवन्ति। तत् स्थापय: https://docs.kraken.com/home/mcp",
 "your Kraken key works":"तव Kraken कुञ्चिका कार्यं करोति",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} --allow-dangerous इत्यनेन सेवकम् आरभते, यत् धनचालकसाधनेभ्यः पूर्वं तस्य स्वपरीक्षां निवारयति। तत् अपनय।",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} सत्यधनं चालयितुं शक्नोति, अतः यदा त्वम् 'आम्' इति वक्तुम् उपस्थितः तदा एव चलति, कोऽपि च न उपस्थितः।"
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} सत्यधनं चालयितुं शक्नोति, अतः यदा त्वम् 'आम्' इति वक्तुम् उपस्थितः तदा एव चलति, कोऽपि च न उपस्थितः।",
+"Approved on Telegram":"अनुमतम् Telegram इत्यत्र।",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought: {what} अनुमतम्? पञ्चनिमेषाभ्यन्तरे आम् {code} इत्युत्तरताम्।",
+"it could move real money: {what}":"इदं वास्तविकं धनं चालयितुं शक्नोति: {what}",
+"someone":"कश्चित्",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} तवानुमति: अपेक्षते; approve_by = telegram स्थापितम्, परन्तु TELEGRAM_BOT_TOKEN तथा TELEGRAM_CHAT_ID {where_keys} न स्तः।",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{what} इत्येषा Telegram-इत्यत्र {who} इत्यनेन निषिद्धा; अतः न किञ्चिदभवत्।",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} इत्येषा Telegram-इत्यत्र समये अनुमता नाभवत्; अतः न किञ्चिदभवत्।",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} इत्यनेन आम् {code} इत्युत्तरेण Telegram-इत्यत्र {what} अनुमतम्।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

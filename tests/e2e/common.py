@@ -237,6 +237,31 @@ store = json.load(open(ns["TELEGRAM_FILE"], encoding="utf-8"))
 print(json.dumps({"new": [m["text"] for m in new], "stored": [m["text"] for m in store["messages"]], "offset": store["offset"]}))
 """
 
+# Approve from your phone (#305): an unattended run asks on Telegram with a fresh four-digit code, and only a reply
+# from your chat with that code counts. argv: the runtime, the codes to hand out, the wait in seconds, then the asks
+# to make (a "money:" one goes through confirm_money, the agent's money path).
+TG_APPROVE = r"""
+import asyncio, json, os, sys, tempfile
+os.environ["RB_APPROVE_BY"] = "telegram"
+os.environ["TELEGRAM_CHAT_ID"] = "4242"
+ns = {"__name__": "rt", "__file__": sys.argv[1]}
+exec(compile(open(sys.argv[1], encoding="utf-8").read(), "rt", "exec"), ns)
+ns["TELEGRAM_FILE"] = os.environ.get("TG_FILE") or os.path.join(tempfile.mkdtemp(), "tg.json")
+R = ns["Runtime"](); R.reset()
+R.schedule_mode = True
+codes = sys.argv[2].split(",")
+R._approval_code = lambda: codes.pop(0) if len(codes) > 1 else codes[0]
+R._approve_wait = float(sys.argv[3])
+log = []
+R.log = lambda title, detail, kind: log.append([str(title), str(detail), str(kind)])
+async def main():
+    asks = []
+    for what in sys.argv[4:]:
+        asks.append(await (R.confirm_money(what[6:]) if what.startswith("money:") else R.confirm(what)))
+    return asks
+print(json.dumps({"asks": asyncio.run(asyncio.wait_for(main(), 60)), "log": log}))
+"""
+
 # Home Assistant events over the WebSocket: a wrong token is said plainly, and a big event (over 64 KB) arrives whole (issue #34).
 HA_EVENTS = r"""
 import asyncio, json, os, sys

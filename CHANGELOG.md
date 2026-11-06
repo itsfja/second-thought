@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Added
+- `approve_by = telegram` in second-thought.ini (#305): a run with nobody at the keyboard, which before refused anything that had to ask first, asks on Telegram instead. The question goes to `TELEGRAM_CHAT_ID` with a fresh four-digit code; only a reply from that chat with that code, within five minutes, allows it, and the run log says who approved. Money moves and unlocks go through the same path, and it is never answered from a stopped run's journal.
+
 ## 3.9.2 - 2026-11-05
 
 ### Security

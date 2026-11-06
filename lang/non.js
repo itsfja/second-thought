@@ -1846,7 +1846,15 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli er eigi sett upp, svá at tól Krakens megu eigi byrja. Set þat upp: https://docs.kraken.com/home/mcp",
 "your Kraken key works":"Kraken lykill þinn virkar",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} byrjar þjóninn með --allow-dangerous, er slekkr hans eigin prófun fyrir tól er hreyfa fé. Tak þat út.",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} gæti hreyft sǫnnu fé, svá at þat keyrir einungis þá er þú ert þar at segja já, ok enginn er þar."
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} gæti hreyft sǫnnu fé, svá at þat keyrir einungis þá er þú ert þar at segja já, ok enginn er þar.",
+"Approved on Telegram":"Samþykkt í Telegrami.",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought: lofa {what}? Svara já {code} innan fimm mínútna.",
+"it could move real money: {what}":"þat má færa raunfé: {what}",
+"someone":"einhver",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} þarf þíns samþykkis; approve_by = telegram er sett, en TELEGRAM_BOT_TOKEN og TELEGRAM_CHAT_ID {where_keys} eru ekki.",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{what} var synat í Telegram af {who}, þess vegna gerðist ekkert.",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} var ekki samþykkt í tíma í Telegram, þess vegna gerðist ekkert.",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} samþykkti {what}, svarande já {code} í Telegram."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

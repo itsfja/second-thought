@@ -48,7 +48,7 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "currency": "RB_CURRENCY", "exchange_rate": "RB_EXCHANGE_RATE", "rates_url": "RB_RATES_URL", "quota_hourly": "RB_QUOTA_HOURLY",
                  "quota_daily": "RB_QUOTA_DAILY", "quota_weekly": "RB_QUOTA_WEEKLY", "quota_monthly": "RB_QUOTA_MONTHLY", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
-                 "approve": "RB_APPROVE", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
+                 "approve": "RB_APPROVE", "approve_by": "RB_APPROVE_BY", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
                  "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK",
                  "releases_url": "RB_RELEASES_URL"}
 

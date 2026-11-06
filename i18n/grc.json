@@ -2979,7 +2979,15 @@
   "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp": "Τὸ kraken-cli οὐκ ἐγκατέστηται, ὥστε τὰ τοῦ Kraken ὄργανα ἄρξασθαι οὐ δύναται. Ἐγκατάστησον αὐτό· https://docs.kraken.com/home/mcp",
   "your Kraken key works": "ἡ σὴ κλεὶς τοῦ Kraken ἐνεργεῖ",
   "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.": "Τὸ {key} τὸν διακονητὴν μετὰ τοῦ --allow-dangerous ἄρχει, ὃ τὸν ἴδιον ἔλεγχον πρὸ τῶν ὀργάνων τῶν χρήματα κινούντων παύει. Ἄφελε αὐτό.",
-  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "Τὸ {what} χρήματα ἀληθινὰ κινῆσαι δύναται, ὥστε μόνον γίγνεται ὅταν πάρει ναὶ φάναι, οὐδεὶς δὲ πάρεστιν."
+  "{what} could move real money, so it only runs when you're there to say yes, and nobody is.": "Τὸ {what} χρήματα ἀληθινὰ κινῆσαι δύναται, ὥστε μόνον γίγνεται ὅταν πάρει ναὶ φάναι, οὐδεὶς δὲ πάρεστιν.",
+  "Approved on Telegram": "Ἐδοκίμασται ἐν Telegram.",
+  "Second Thought: allow {what}? Reply yes {code} within 5 minutes.": "Second Thought: ἐπιτρέψαι {what}; Ἀπόκριναι ναὶ {code} ἐντὸς πέντε λεπτῶν.",
+  "it could move real money: {what}": "δύναται κινῆσαι ἀληθινὸν ἀργύριον: {what}",
+  "someone": "τις",
+  "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.": "{what} τῆς σῆς ἐγκρίσεως δεῖται· τὸ approve_by = telegram θείται, τὰ δὲ TELEGRAM_BOT_TOKEN καὶ TELEGRAM_CHAT_ID {where_keys} οὔ.",
+  "{what} was refused on Telegram by {who}, so nothing happened.": "{what} ὑπὸ {who} ἐν Telegram ἠρνήθη· οὐδὲν οὖν ἐγένετο.",
+  "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} οὐκ ἐν καιρῷ ἐν Telegram ἐδοκιμάσθη· οὐδὲν οὖν ἐγένετο.",
+  "{who} approved {what} by replying yes {code} on Telegram.": "{who} ἔκρινε τὸ {what}, ἀποκρινάμενος ναὶ {code} ἐν Telegram."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

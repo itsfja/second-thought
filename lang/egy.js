@@ -1846,7 +1846,15 @@
 "“{value}” isn't a number.":"“{value}” n tnw pw.",
 "“{value}” isn't on or off.":"“{value}” n on m off pw.",
 "“{x}” isn't a real date.":"“{x}” n hrw mꜣꜥ pw.",
-"“{x}” isn't a time.":"“{x}” n wnwt pw."
+"“{x}” isn't a time.":"“{x}” n wnwt pw.",
+"Approved on Telegram":"sjp.n.tw m Telegram",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought: rdj {what}? hꜣb 'yes {code}' ḥr 5 minwt.",
+"it could move real money: {what}":"šnj=f ḥꜣ mꜣꜥ: {what}",
+"someone":"s wꜥ",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} jr=s mr sjp=k; approve_by = telegram rdj.tw, nn TELEGRAM_BOT_TOKEN ḥnꜥ TELEGRAM_CHAT_ID {where_keys} nn=s.",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{what} ꜣnn m Telegram jn {who}, nn ḫprjw n ḫprjw.",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} n sjp.n.tw m Telegram m rnpst, nn ḫprjw n ḫprjw.",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} sjp.n=f {what} m hꜣb 'yes {code}' m Telegram."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

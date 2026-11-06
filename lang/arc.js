@@ -1847,7 +1847,15 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli לא מתקן, ובכן מאני Kraken לא יכלין למשרא. תקן יתה: https://docs.kraken.com/home/mcp",
 "your Kraken key works":"מפתח Kraken דילך עבד",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} משרא לשמשא עם --allow-dangerous, דמבטל בדיקתה דיליה קדם מאנין דמשנין כספא. סב יתה.",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} יכלא לשנאה כספא שרירא, ובכן רהטא בלחוד כד אנת תמן למאמר אין, ולית אנש."
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} יכלא לשנאה כספא שרירא, ובכן רהטא בלחוד כד אנת תמן למאמר אין, ולית אנש.",
+"Approved on Telegram":"אתרשים בטלגרם.",
+"Second Thought: allow {what}? Reply yes {code} within 5 minutes.":"Second Thought: לשרי {what}? ענ יא {code} בתר חמש דקין.",
+"it could move real money: {what}":"יכיל לזוז ממון גלי: {what}",
+"someone":"חד",
+"{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} בעי לך רשו; approve_by = telegram אתדכר, אבל TELEGRAM_BOT_TOKEN ו TELEGRAM_CHAT_ID {where_keys} לא.",
+"{what} was refused on Telegram by {who}, so nothing happened.":"{what} אתדחי בטלגרם על ידי {who}, ולהן לא אתעביד כלום.",
+"{what} wasn't approved on Telegram in time, so nothing happened.":"{what} לא אתרשים בזמן בטלגרם, ולהן לא אתעביד כלום.",
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} אתרשים {what} במענה יא {code} בטלגרם."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",
