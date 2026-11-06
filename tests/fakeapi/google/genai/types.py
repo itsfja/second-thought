@@ -34,6 +34,11 @@ class GenerateContentConfig:
         self.__dict__.update(kw)
 
 
+class HttpOptions:
+    def __init__(self, **kw):
+        self.__dict__.update(kw)
+
+
 class GoogleSearch:
     pass
 

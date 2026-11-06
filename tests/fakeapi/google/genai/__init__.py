@@ -25,4 +25,5 @@ class _Models:
 
 class Client:
     def __init__(self, *a, **kw):
+        self.http_options = kw.get("http_options")
         self.aio = SimpleNamespace(models=_Models())
