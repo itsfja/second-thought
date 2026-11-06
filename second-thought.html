@@ -6183,6 +6183,70 @@ RELEASES = "https://api.github.com/repos/itsfja/second-thought/releases"
 UPDATE_TIMEOUT = 20
 RUNTIME_ASSET_LIMIT = 8_000_000
 
+# The public half of the key releases are signed with (#311): 32 bytes of Ed25519 public key, as 64 hex characters.
+# The private half never touches GitHub: each release's runtime.py is signed on the maintainer's computer
+# (tools/sign_runtime.py) and the .sig is attached to the release. --update-runtime then refuses a runtime whose
+# signature doesn't match, so whoever can publish a release can't publish a runtime this program will run. Empty means
+# no release has been signed yet, and --update-runtime keeps checking the SHA-256 as before.
+UPDATE_SIGNING_KEY = ""
+
+# Pure-Python Ed25519 signature checking (RFC 8032): the standard library has none, and an exported program installs
+# nothing. Only verification: signing happens off GitHub, with tools/sign_runtime.py.
+_P = 2 ** 255 - 19
+_L = 0x1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed
+_D = -121665 * pow(121666, _P - 2, _P) % _P
+_BY = 4 * pow(5, _P - 2, _P) % _P
+_BX = pow((_BY * _BY - 1) * pow(_D * _BY * _BY + 1, _P - 2, _P), (_P + 3) // 8, _P)
+if (_BX * _BX - (_BY * _BY - 1) * pow(_D * _BY * _BY + 1, _P - 2, _P)) % _P != 0:
+    _BX = _BX * pow(2, (_P - 1) // 4, _P) % _P
+if _BX % 2 != 0:
+    _BX = _P - _BX
+_B = (_BX, _BY)
+
+
+def _ed25519_point_add(p1, p2):
+    x1, y1 = p1
+    x2, y2 = p2
+    x3 = (x1 * y2 + x2 * y1) * pow(1 + _D * x1 * x2 * y1 * y2, _P - 2, _P)
+    y3 = (y1 * y2 + x1 * x2) * pow(1 - _D * x1 * x2 * y1 * y2, _P - 2, _P)
+    return x3 % _P, y3 % _P
+
+
+def _ed25519_point_mul(k, p1):
+    out = (0, 1)
+    while k > 0:
+        if k & 1:
+            out = _ed25519_point_add(out, p1)
+        p1 = _ed25519_point_add(p1, p1)
+        k >>= 1
+    return out
+
+
+def _ed25519_decompress(s):
+    y = int.from_bytes(s, "little") & (2 ** 255 - 1)
+    x = pow((y * y - 1) * pow(_D * y * y + 1, _P - 2, _P), (_P + 3) // 8, _P)
+    if (x * x - (y * y - 1) * pow(_D * y * y + 1, _P - 2, _P)) % _P != 0:
+        x = x * pow(2, (_P - 1) // 4, _P) % _P
+    if x % 2 != (s[31] >> 7) & 1:
+        x = _P - x
+    return x, y
+
+
+def _ed25519_ok(sig, msg, pub):
+    """True if sig (64 bytes) is pub's signature of msg: R + h·A == s·B, as RFC 8032 has it."""
+    if len(sig) != 64 or len(pub) != 32:
+        return False
+    try:
+        r = _ed25519_decompress(sig[:32])
+        a = _ed25519_decompress(pub)
+        s = int.from_bytes(sig[32:], "little")
+        if s >= _L:
+            return False
+        h = int.from_bytes(hashlib.sha512(sig[:32] + pub + msg).digest(), "little") % _L
+        return _ed25519_point_add(r, _ed25519_point_mul(h, a)) == _ed25519_point_mul(s, _B)
+    except (ValueError, ZeroDivisionError):
+        return False
+
 # JavaScript's \s, which the page's code hash trims from the end of each line.
 _JS_SPACE = "\t\n\v\f\r                  　﻿"
 
@@ -6332,6 +6396,17 @@ class Updates:
         if len(body) > RUNTIME_ASSET_LIMIT or not expected or hashlib.sha256(body).hexdigest() != expected[0].lower():
             print(tr("The downloaded runtime doesn't match its SHA-256, so it wasn't used. Nothing was changed."))
             return 1
+        if UPDATE_SIGNING_KEY:
+            sig = b""
+            if assets.get("runtime.py.sig"):
+                try:
+                    raw = self._releases_get(assets["runtime.py.sig"], 200)
+                    sig = base64.b64decode(raw.decode("utf-8", "replace").strip(), validate=True)
+                except (urllib.error.URLError, OSError, ValueError):
+                    sig = b""
+            if not _ed25519_ok(sig, body, bytes.fromhex(UPDATE_SIGNING_KEY)):
+                print(tr("Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.", latest=latest))
+                return 1
         try:
             runtime = body.decode("utf-8").replace("\r\n", "\n")
         except UnicodeDecodeError:
@@ -14730,9 +14805,68 @@ HOW TO MAP CODE
   }
   const countBlocks = o => !o || typeof o !== "object" ? 0 : Array.isArray(o) ? o.reduce((n, x) => n + countBlocks(x), 0)
     : (typeof o.type === "string" ? 1 : 0) + Object.keys(o).reduce((n, k) => n + (k === "type" ? 0 : countBlocks(o[k])), 0);
+  /* ---------- What's different between the program on the canvas and Claude's reply (#306) ----------
+     Scripts are compared by their blocks' types in order, blocks by type, and text by the words in a block's fields:
+     enough to say what to look at, not a full merge view. New and gone connections come first, in bold. */
+  function walkBlocks(o, fn){
+    if (Array.isArray(o)) { o.forEach(x => walkBlocks(x, fn)); return; }
+    if (o && typeof o === "object") {
+      if (typeof o.type === "string") fn(o);
+      Object.keys(o).forEach(k => { if (k !== "type") walkBlocks(o[k], fn); });
+    }
+  }
+  function scriptKinds(state){
+    const chains = [];
+    ((state && state.blocks && state.blocks.blocks) || []).forEach(top => {
+      const chain = [];
+      for (let b = top; b; b = (b.next && b.next.block) || null) chain.push(b.type);
+      chains.push(chain.join(" > "));
+    });
+    return chains;
+  }
+  function blockKinds(state){
+    const types = [];
+    walkBlocks(state && state.blocks, b => types.push(b.type));
+    return types;
+  }
+  function blockTexts(state){
+    const texts = [];
+    walkBlocks(state && state.blocks, b => {
+      const f = b.fields || {};
+      Object.keys(f).forEach(k => { if (typeof f[k] === "string" || typeof f[k] === "number") texts.push(b.type + " " + f[k]); });
+    });
+    return texts;
+  }
+  function multisetDiff(before, after){
+    const count = xs => xs.reduce((m, x) => (m[x] = (m[x] || 0) + 1, m), {});
+    const b = count(before), a = count(after), out = { added:0, removed:0 };
+    Object.keys(a).forEach(k => out.added += Math.max(0, a[k] - (b[k] || 0)));
+    Object.keys(b).forEach(k => out.removed += Math.max(0, b[k] - (a[k] || 0)));
+    return out;
+  }
+  function changeParts(before, after){
+    const parts = [], has = (caps, id) => caps.some(c => c[0] === id);
+    const beforeCaps = stateCapabilities(before), afterCaps = stateCapabilities(after);
+    afterCaps.forEach(c => { if (!has(beforeCaps, c[0])) parts.push({ b:tr("New: {what}.", { what:tr(c[1]) }) }); });
+    beforeCaps.forEach(c => { if (!has(afterCaps, c[0])) parts.push({ b:tr("Gone: {what}.", { what:tr(c[1]) }) }); });
+    const scripts = multisetDiff(scriptKinds(before), scriptKinds(after));
+    if (scripts.added || scripts.removed) parts.push(tr("{n} scripts added, {m} removed.", { n:scripts.added, m:scripts.removed }));
+    const blocks = multisetDiff(blockKinds(before), blockKinds(after));
+    if (blocks.added || blocks.removed) parts.push(tr("{n} blocks added, {m} removed.", { n:blocks.added, m:blocks.removed }));
+    const texts = multisetDiff(blockTexts(before), blockTexts(after));
+    if (texts.added || texts.removed) parts.push(tr("Text changed in {n} blocks.", { n:texts.added + texts.removed }));
+    return parts;
+  }
   function describeMsg(text, kind, buttons){
     $("describe-out").hidden = !text;
-    const m = $("describe-msg"); m.textContent = text || ""; m.className = "msg" + (kind ? " " + kind : "");
+    const m = $("describe-msg"); m.className = "msg" + (kind ? " " + kind : "");
+    m.replaceChildren();
+    (Array.isArray(text) ? text : [text]).filter(p => p && (typeof p === "string" || p.b)).forEach((part, i) => {
+      if (i) m.appendChild(document.createTextNode(" "));
+      const el = document.createElement(typeof part === "string" ? "span" : "strong");
+      el.textContent = typeof part === "string" ? part : part.b;
+      m.appendChild(el);
+    });
     ["load", "discard", "undo"].forEach(b => $("describe-" + b).hidden = !(buttons || []).includes(b));
   }
   function programOnCanvas(){ return ws.getTopBlocks(false).length > 0; }
@@ -14763,12 +14897,14 @@ HOW TO MAP CODE
       catch(e) { describeMsg(tr("Claude's reply wasn't a block program. Try again, or describe it more simply."), "bad"); return; }
       const notes = Array.isArray(r.unmapped) ? r.unmapped.map(String).filter(Boolean) : [];
       described = { state, change };
+      const diff = change ? changeParts(saveWs(), state) : [];
       describeMsg([typeof r.summary === "string" && r.summary.trim() ? r.summary.trim() : "",
                    tr("{n} blocks.", { n:countBlocks(state.blocks) }),
                    capabilitySentence(caps) || tr("It only uses your models: it doesn't connect to anything else."),
+                   ...diff,
                    notes.length ? tr("Left out: {notes}.", { notes:notes.join("; ") }) : "",
                    tr("Loading it replaces the program on the canvas; you can undo straight after.")
-                  ].filter(Boolean).join(" "), "", ["load", "discard"]);
+                  ].filter(Boolean), "", ["load", "discard"]);
     } catch(e) {
       describeMsg(tr("Building the program failed: {problem}", { problem:errText(e) }), "bad");
     } finally {

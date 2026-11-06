@@ -913,7 +913,7 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
 
         print("Approve from your phone")
         tg_env = dict(env, TG_FILE=os.path.join(tmp, "tg-approve.json"))
-        def run_tg_approve(reply, chat=fake_services.TG_CHAT, codes="4821", wait=3, *whats):
+        def run_tg_approve(reply, *whats, chat=fake_services.TG_CHAT, codes="4821", wait=3):
             if reply is not None:
                 tg_add(reply, chat=chat)
             r = subprocess.run([sys.executable, "-c", TG_APPROVE, rt_path, codes, str(wait), *(whats or ("unlock the front door",))],
@@ -933,7 +933,7 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
               f"a reply from another chat is ignored, so the time runs out ({got})")
         tg_add("yes 4821")
         tg_add("yes 4821")
-        got = run_tg_approve(None, codes="4821,7777", wait=3, *("unlock the front door", "open the garage"))
+        got = run_tg_approve(None, "unlock the front door", "open the garage", codes="4821,7777", wait=3)
         check(got.get("asks") == [True, False] and any("in time" in l[1] for l in got.get("log", [])),
               f"each question has its own code, so a code that worked once doesn't work for the next one ({got})")
         got = run_tg_approve("yes 4821", "money:buy one Bitcoin", wait=3)

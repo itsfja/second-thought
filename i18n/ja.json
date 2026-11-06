@@ -1448,7 +1448,12 @@
   "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.": "プログラムの中では、矢印キーでブロックとそのスロット、フィールドの間を移動します。フィールドで <b>Enter</b> を押すと入力や選択ができ、<b>W</b> でプログラムに戻ります。",
   "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.": "<b>M</b> で今いるブロックを動かし（矢印キー、続けて <b>Enter</b>、やめるときは <b>Esc</b>）、<b>X</b> でつながりから外し、<b>D</b> でコピーし、<b>Delete</b> で削除します。",
   "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.": "<b>N</b> と <b>B</b> で次と前のスクリプトへ移り、<b>I</b> で今の場所を読み上げ、<b>Ctrl+Enter</b> でブロックのメニューを開きます。<b>Ctrl+C</b>、<b>Ctrl+X</b>、<b>Ctrl+V</b>、<b>Ctrl+Z</b> でコピー、切り取り、貼り付け、元に戻すができます。",
-  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "スクリーンリーダーは、ブロック、フィールド、カテゴリーに着くたびに読み上げます。<b>Alt+Shift+A</b> でブロックの出入りに音の合図を加えられます。それ以外の場所では <b>Tab</b> でボタン間を移動します。プログラムが質問すると回答欄にフォーカスが移り、<b>Ctrl+Enter</b> で入力した答えを送ります。"
+  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "スクリーンリーダーは、ブロック、フィールド、カテゴリーに着くたびに読み上げます。<b>Alt+Shift+A</b> でブロックの出入りに音の合図を加えられます。それ以外の場所では <b>Tab</b> でボタン間を移動します。プログラムが質問すると回答欄にフォーカスが移り、<b>Ctrl+Enter</b> で入力した答えを送ります。",
+  "New: {what}.": "新規: {what}。",
+  "Gone: {what}.": "なくなった: {what}。",
+  "{n} scripts added, {m} removed.": "スクリプト {n} 個追加、{m} 個削除。",
+  "{n} blocks added, {m} removed.": "ブロック {n} 個追加、{m} 個削除。",
+  "Text changed in {n} blocks.": "{n} 個のブロックのテキストが変わりました。"
  },
  "examples": {
   "review": {
@@ -2987,6 +2992,7 @@
   "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.": "{what} には承認が必要です。approve_by = telegram が設定されていますが、TELEGRAM_BOT_TOKEN と TELEGRAM_CHAT_ID {where_keys} は設定されていません。",
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} は Telegram で {who} に拒否されたため、何も起こりませんでした。",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} は時間内に Telegram で承認されなかったため、何も起こりませんでした。",
-  "{who} approved {what} by replying yes {code} on Telegram.": "{who} が Telegram で「はい {code}」と返信して{what}を承認しました。"
+  "{who} approved {what} by replying yes {code} on Telegram.": "{who} が Telegram で「はい {code}」と返信して{what}を承認しました。",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "リリース {latest} はこのランタイムが持つ鍵で署名されていないため、使用されませんでした。何も変更されていません。"
  }
 }

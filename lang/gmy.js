@@ -948,7 +948,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"𐀁𐀚 𐀡𐀫𐀏𐀨𐀔, ↑ ↓ 𐀑𐀚𐀃𐀯 𐀕𐀲𐀓𐀱 𐀠𐀪𐀵. <b>Enter</b> 𐀁𐀠 𐀟𐀇𐀍 𐀏𐀨𐀟𐀁 𐀁 𐀀𐀂𐀩𐀁, 𐀏𐀂 <b>W</b> 𐀀𐀞𐀐𐀁 𐀁𐀚 𐀡𐀫𐀏𐀨𐀔.",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"<b>M</b> 𐀑𐀚𐀁 𐀠𐀪𐀵 (↑ ↓, 𐀁𐀟𐀂𐀲 <b>Enter</b>, 𐀁 <b>Esc</b>), <b>X</b> 𐀀𐀡𐀬𐀁, <b>D</b> 𐀀𐀴𐀏𐀨𐀡 𐀡𐀁𐀁, 𐀏𐀂 <b>Delete</b> 𐀀𐀞𐀂𐀩𐀁.",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"<b>N</b> 𐀏𐀂 <b>B</b> 𐀁𐀚 𐀁𐀡𐀕𐀜 𐀏𐀂 𐀡𐀫𐀳𐀫, <b>I</b> 𐀞𐀵 𐀡𐀄 𐀁𐀯, 𐀏𐀂 <b>Ctrl+Enter</b> 𐀏𐀲𐀫𐀒 𐀀𐀜𐀐. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> 𐀏𐀂 <b>Ctrl+Z</b>.",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"𐀀𐀙𐀐𐀜𐀮 𐀞𐀲 𐀠𐀪𐀵 𐀏𐀂 𐀟𐀇𐀍 𐀀𐀙𐀑𐀜𐀮𐀐𐀂; <b>Alt+Shift+A</b> 𐀁𐀒 𐀡𐀫𐀴𐀳𐀯. 𐀀𐀫𐀳 <b>Tab</b> 𐀑𐀚𐀁. 𐀃𐀳 𐀡𐀫𐀏𐀨𐀔 𐀁𐀫𐀲, <b>Ctrl+Enter</b> 𐀀𐀡𐀏𐀪𐀯 𐀟𐀟𐀂."
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"𐀀𐀙𐀐𐀜𐀮 𐀞𐀲 𐀠𐀪𐀵 𐀏𐀂 𐀟𐀇𐀍 𐀀𐀙𐀑𐀜𐀮𐀐𐀂; <b>Alt+Shift+A</b> 𐀁𐀒 𐀡𐀫𐀴𐀳𐀯. 𐀀𐀫𐀳 <b>Tab</b> 𐀑𐀚𐀁. 𐀃𐀳 𐀡𐀫𐀏𐀨𐀔 𐀁𐀫𐀲, <b>Ctrl+Enter</b> 𐀀𐀡𐀏𐀪𐀯 𐀟𐀟𐀂.",
+"New: {what}.":"𐀏𐀂𐀜: {what}.",
+"Gone: {what}.":"𐀀𐀡𐀈𐀐: {what}.",
+"{n} scripts added, {m} removed.":"{n} 𐀏𐀒 𐀀𐀐𐀩, {m} 𐀀𐀟𐀈𐀐.",
+"{n} blocks added, {m} removed.":"{n} 𐀵𐀫𐀐𐀩 𐀀𐀐𐀩, {m} 𐀀𐀟𐀈𐀐.",
+"Text changed in {n} blocks.":"𐀒𐀵𐀙 ina {n} 𐀵𐀫𐀐𐀩."
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1855,7 +1860,8 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"a-pe {what} te-re-si; approve_by = telegram ke-ka-ro-me-no, TELEGRAM_BOT_TOKEN jo TELEGRAM_CHAT_ID {where_keys} o-u-ke.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} a-po-do-ke me Telegram a-po {who}, a-pe-me-na-o-u-ke.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} me-te Telegram a-pe o-u-ke a-ko-ro; a-pe-me-na-o-u-ke.",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} {what} a-ke-re, a-po-we ja {code} me Telegram."
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} {what} a-ke-re, a-po-we ja {code} me Telegram.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"{latest} o-u te-me-no o-no ke-ro, a-pe o-u-ke. a-pe-me-na-o-u-ke."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

@@ -1449,7 +1449,12 @@
   "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.": "𒄿𒈾 𒉈𒁉𒅆𒅗 𒅆𒅋𒋫𒄷 𒄿𒈾 𒁉𒊑𒀉 𒇷𒅁𒈾𒋾𒅎 𒅋𒆷𒆪. <b>Enter</b> 𒄿𒈾 𒅅𒇷𒅎 𒊭𒁕𒊏𒄠 𒌑 𒈾𒊓𒋡𒄠 𒌑𒊭𒅈𒅆, 𒌑 <b>W</b> 𒀀𒈾 𒉈𒁉𒅆𒅗 𒌑𒋫𒅈.",
   "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.": "<b>M</b> 𒇷𒁉𒀉𒋫𒅗 𒌑𒈾𒀸 (𒅆𒅋𒋫𒄷, 𒌑 <b>Enter</b>, 𒌑𒇻 <b>Esc</b>), <b>X</b> 𒄿𒉺𒀜𒁕𒅈, <b>D</b> 𒂵𒁀𒊏𒄠 𒅁𒁍𒍑, 𒌑 <b>Delete</b> 𒄿𒈾𒊍𒊓𒄴.",
   "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.": "<b>N</b> 𒌑 <b>B</b> 𒀀𒈾 𒅆𒀉𒊑𒅎 𒉿𒅈𒆠𒅎 𒌑 𒈠𒄴𒊑𒅎 𒅋𒆷𒆪, <b>I</b> 𒀀𒊭𒅈𒅗 𒄿𒋡𒀊𒁉, 𒌑 <b>Ctrl+Enter</b> 𒁉𒀉 𒇷𒁉𒀉𒋾𒅎 𒄿𒁉𒀉𒋼. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> 𒌑 <b>Ctrl+Z</b>.",
-  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "𒊭𒋢 𒌅𒌒𒁉𒅎 𒇷𒅁𒈾𒋾𒅎 𒌑 𒅅𒇷𒋾𒅎 𒈠𒆷 𒋫𒅗𒀸𒊭𒁺 𒄿𒊭𒊍𒋛, 𒌑 <b>Alt+Shift+A</b> 𒊑𒅅𒈪 𒄿𒈾𒀜𒁲𒅔. 𒄿𒈾 𒀸𒊑𒅎 𒊭𒉌𒅎 <b>Tab</b> 𒄿𒈾 𒁉𒊑𒀉 𒆪𒌒𒁉 𒅋𒆷𒀝. 𒄿𒉡𒈠 𒉈𒁉𒋗𒌝 𒈪𒅎𒈠 𒄿𒊭𒀠𒅗, <b>Ctrl+Enter</b> 𒀀𒁉𒅋𒋫𒄠 𒄿𒊭𒀊𒉺𒅈."
+  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "𒊭𒋢 𒌅𒌒𒁉𒅎 𒇷𒅁𒈾𒋾𒅎 𒌑 𒅅𒇷𒋾𒅎 𒈠𒆷 𒋫𒅗𒀸𒊭𒁺 𒄿𒊭𒊍𒋛, 𒌑 <b>Alt+Shift+A</b> 𒊑𒅅𒈪 𒄿𒈾𒀜𒁲𒅔. 𒄿𒈾 𒀸𒊑𒅎 𒊭𒉌𒅎 <b>Tab</b> 𒄿𒈾 𒁉𒊑𒀉 𒆪𒌒𒁉 𒅋𒆷𒀝. 𒄿𒉡𒈠 𒉈𒁉𒋗𒌝 𒈪𒅎𒈠 𒄿𒊭𒀠𒅗, <b>Ctrl+Enter</b> 𒀀𒁉𒅋𒋫𒄠 𒄿𒊭𒀊𒉺𒅈.",
+  "New: {what}.": "𒅖𒋗: {what}.",
+  "Gone: {what}.": "𒈾𒊍𒄷: {what}.",
+  "{n} scripts added, {m} removed.": "{n} 𒁕𒁲 𒊏𒅗𒋢, {m} 𒈾𒊓𒄷.",
+  "{n} blocks added, {m} removed.": "{n} 𒀊𒈾𒋾 𒊏𒅗𒋢, {m} 𒈾𒊓𒄷.",
+  "Text changed in {n} blocks.": "𒅆𒅁𒊒 𒄿𒈾 {n} 𒀊𒉌 𒊭𒉡."
  },
  "examples": {
   "review": {
@@ -2988,7 +2993,8 @@
   "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.": "ana {what} šibqīka; approve_by = telegram šutru, TELEGRAM_BOT_TOKEN u TELEGRAM_CHAT_ID {where_keys} lā šutru.",
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} ina Telegram ana {who} zēnu; ay ipšu.",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} ina Telegram ina adannišu lā šuknu; ay ipšu.",
-  "{who} approved {what} by replying yes {code} on Telegram.": "{who} {what} šuknu, sibâ ja {code} ina Telegram."
+  "{who} approved {what} by replying yes {code} on Telegram.": "{who} {what} šuknu, sibâ ja {code} ina Telegram.",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "{latest} lā kanīk ina ṭābti ša runtime šuātu, ay ipšu. ay šanû."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

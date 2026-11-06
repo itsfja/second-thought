@@ -948,7 +948,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"בתכניתך, מפתחי גיריא זיעין בין לבניא, אתריהון וחקליהון. <b>Enter</b> על חקלא שבק לך למכתב בה או למבחר, ו־<b>W</b> מהפך לך לתכניתך.",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"<b>M</b> משני ללבנא דאנת עלוהי (גיריא, ובתר כן <b>Enter</b>, או <b>Esc</b> למפסק), <b>X</b> שרא לה מן מא דמחבר בה, <b>D</b> עבד פרשגנא, ו־<b>Delete</b> מעבר לה.",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"<b>N</b> ו־<b>B</b> אזלין לכתבא דבתר ודקדם, <b>I</b> אמר היכא אנת, ו־<b>Ctrl+Enter</b> פתח תפריט דלבנא. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> ו־<b>Ctrl+Z</b> מעתקין, גזרין, מדבקין ומבטלין.",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"קריא מסכא קרא כל לבנא, חקלא וזנא כד מטית להון, ו־<b>Alt+Shift+A</b> מוסף קלין כד עליל ונפק מן לבניא. בכל אתר אחרן, <b>Tab</b> זיע בין כפתוריא. כד תכניתא שאלא לך מדעם, תיבת פתגמא נסבא מוקדא, ו־<b>Ctrl+Enter</b> שדר פתגמא כתיבא."
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"קריא מסכא קרא כל לבנא, חקלא וזנא כד מטית להון, ו־<b>Alt+Shift+A</b> מוסף קלין כד עליל ונפק מן לבניא. בכל אתר אחרן, <b>Tab</b> זיע בין כפתוריא. כד תכניתא שאלא לך מדעם, תיבת פתגמא נסבא מוקדא, ו־<b>Ctrl+Enter</b> שדר פתגמא כתיבא.",
+"New: {what}.":"חדש: {what}.",
+"Gone: {what}.":"אסתלק: {what}.",
+"{n} scripts added, {m} removed.":"אתוספו {n} סדרין, אתבקו {m}.",
+"{n} blocks added, {m} removed.":"אתוספו {n} לבנין, אתבקו {m}.",
+"Text changed in {n} blocks.":"אשתני מללא ב {n} לבנין."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1855,7 +1860,8 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} בעי לך רשו; approve_by = telegram אתדכר, אבל TELEGRAM_BOT_TOKEN ו TELEGRAM_CHAT_ID {where_keys} לא.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} אתדחי בטלגרם על ידי {who}, ולהן לא אתעביד כלום.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} לא אתרשים בזמן בטלגרם, ולהן לא אתעביד כלום.",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} אתרשים {what} במענה יא {code} בטלגרם."
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} אתרשים {what} במענה יא {code} בטלגרם.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"שררא {latest} לא אתחתם בממון די ראנטיים הדין, ולהן לא אתעביד בה. לא אתדבר כלום."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

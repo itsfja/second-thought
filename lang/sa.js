@@ -948,7 +948,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"तव कार्यक्रमे बाणकुञ्च्यः खण्डेषु तेषां स्थानेषु क्षेत्रेषु च चलन्ति। क्षेत्रे <b>Enter</b> लेखितुं वरितुं वा ददाति, <b>W</b> च कार्यक्रमं प्रति प्रत्यानयति।",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"<b>M</b> यस्मिन् खण्डे असि तं चालयति (बाणाः, ततः <b>Enter</b>, विरमितुं वा <b>Esc</b>), <b>X</b> तं संयोगात् मोचयति, <b>D</b> प्रतिलिपिं करोति, <b>Delete</b> तं निष्कासयति।",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"<b>N</b> <b>B</b> च अग्रिमं पूर्वं च लिपिं गच्छतः, <b>I</b> त्वं कुत्र असि इति वदति, <b>Ctrl+Enter</b> खण्डस्य सूचीम् उद्घाटयति। <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b>, <b>Ctrl+Z</b> च प्रतिलिखन्ति, छिन्दन्ति, निवेशयन्ति, निवर्तयन्ति च।",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"पटपाठकः प्रत्येकं खण्डं क्षेत्रं वर्गं च प्राप्तमात्रं पठति, <b>Alt+Shift+A</b> च खण्डेषु प्रवेशे निर्गमे च ध्वनिसङ्केतान् योजयति। अन्यत्र सर्वत्र <b>Tab</b> गुण्डिकासु चलति। यदा कार्यक्रमः त्वां किमपि पृच्छति, उत्तरपेटिका केन्द्रं लभते, <b>Ctrl+Enter</b> च लिखितम् उत्तरं प्रेषयति।"
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"पटपाठकः प्रत्येकं खण्डं क्षेत्रं वर्गं च प्राप्तमात्रं पठति, <b>Alt+Shift+A</b> च खण्डेषु प्रवेशे निर्गमे च ध्वनिसङ्केतान् योजयति। अन्यत्र सर्वत्र <b>Tab</b> गुण्डिकासु चलति। यदा कार्यक्रमः त्वां किमपि पृच्छति, उत्तरपेटिका केन्द्रं लभते, <b>Ctrl+Enter</b> च लिखितम् उत्तरं प्रेषयति।",
+"New: {what}.":"नवीनम्: {what}।",
+"Gone: {what}.":"अपाहृतम्: {what}।",
+"{n} scripts added, {m} removed.":"{n} कार्यक्रमाः योजिताः, {m} अपाहृताः।",
+"{n} blocks added, {m} removed.":"{n} खण्डाः योजिताः, {m} अपाहृताः।",
+"Text changed in {n} blocks.":"{n} खण्डेषु पाठः परिवर्तितः।"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1855,7 +1860,8 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} तवानुमति: अपेक्षते; approve_by = telegram स्थापितम्, परन्तु TELEGRAM_BOT_TOKEN तथा TELEGRAM_CHAT_ID {where_keys} न स्तः।",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} इत्येषा Telegram-इत्यत्र {who} इत्यनेन निषिद्धा; अतः न किञ्चिदभवत्।",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} इत्येषा Telegram-इत्यत्र समये अनुमता नाभवत्; अतः न किञ्चिदभवत्।",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} इत्यनेन आम् {code} इत्युत्तरेण Telegram-इत्यत्र {what} अनुमतम्।"
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} इत्यनेन आम् {code} इत्युत्तरेण Telegram-इत्यत्र {what} अनुमतम्।",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"प्रकाशनम् {latest} अस्मिन् runtime-इत्यस्य कुञ्चिकया हस्ताक्षरितम् नास्ति, अतः तत् न प्रयुक्तम्। न किञ्चित् परिवर्तितम्।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

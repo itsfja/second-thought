@@ -947,7 +947,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"Nel programma, le frecce si muovono tra i blocchi, i loro spazi e i loro campi. <b>Invio</b> su un campo ti fa scrivere o scegliere, e <b>W</b> ti riporta al programma.",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"<b>M</b> sposta il blocco su cui sei (le frecce, poi <b>Invio</b>, o <b>Esc</b> per smettere), <b>X</b> lo stacca da ciò a cui è unito, <b>D</b> ne fa una copia e <b>Canc</b> lo toglie.",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"<b>N</b> e <b>B</b> vanno allo script successivo e precedente, <b>I</b> dice dove sei e <b>Ctrl+Invio</b> apre il menu di un blocco. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> e <b>Ctrl+Z</b> copiano, tagliano, incollano e annullano.",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Un lettore di schermo legge ogni blocco, campo e categoria quando li raggiungi, e <b>Alt+Maiusc+A</b> aggiunge suoni quando entri ed esci dai blocchi. Ovunque altrove, <b>Tab</b> passa da un pulsante all'altro. Quando un programma ti chiede qualcosa, la casella di risposta prende il focus e <b>Ctrl+Invio</b> invia una risposta scritta."
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Un lettore di schermo legge ogni blocco, campo e categoria quando li raggiungi, e <b>Alt+Maiusc+A</b> aggiunge suoni quando entri ed esci dai blocchi. Ovunque altrove, <b>Tab</b> passa da un pulsante all'altro. Quando un programma ti chiede qualcosa, la casella di risposta prende il focus e <b>Ctrl+Invio</b> invia una risposta scritta.",
+"New: {what}.":"Nuovo: {what}.",
+"Gone: {what}.":"Rimosso: {what}.",
+"{n} scripts added, {m} removed.":"{n} sequenze aggiunte, {m} rimosse.",
+"{n} blocks added, {m} removed.":"{n} blocchi aggiunti, {m} rimossi.",
+"Text changed in {n} blocks.":"Testo cambiato in {n} blocchi."
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -1854,6 +1859,7 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} richiede la tua approvazione, approve_by = telegram è impostato, ma TELEGRAM_BOT_TOKEN e TELEGRAM_CHAT_ID {where_keys} no.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} è stato rifiutato su Telegram da {who}, quindi non è successo nulla.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} non è stato approvato in tempo su Telegram, quindi non è successo nulla.",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} ha approvato {what} rispondendo sì {code} su Telegram."
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} ha approvato {what} rispondendo sì {code} su Telegram.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Il release {latest} non è firmato dalla chiave che questo runtime possiede, quindi non è stato usato. Nulla è stato cambiato."
 }
 };

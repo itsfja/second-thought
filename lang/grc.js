@@ -947,7 +947,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"Ἐν τῷ προγράμματί σου τὰ βέλη μεταξὺ τῶν πλίνθων, τῶν θέσεων καὶ τῶν πεδίων κινεῖται. Τὸ <b>Enter</b> ἐπὶ πεδίου γράφειν ἢ αἱρεῖσθαι ἐᾷ, τὸ δὲ <b>W</b> εἰς τὸ πρόγραμμα ἐπανάγει.",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"Τὸ <b>M</b> τὴν πλίνθον ἐφ᾽ ἧς εἶ κινεῖ (τὰ βέλη, εἶτα <b>Enter</b>, ἢ <b>Esc</b> παύεσθαι), τὸ <b>X</b> ἀπολύει, τὸ <b>D</b> ἀντίγραφον ποιεῖ, καὶ τὸ <b>Delete</b> ἀφαιρεῖ.",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"Τὰ <b>N</b> καὶ <b>B</b> εἰς τὸ ἑπόμενον καὶ τὸ πρότερον σκρίπτον ἄγει, τὸ <b>I</b> λέγει ποῦ εἶ, καὶ τὸ <b>Ctrl+Enter</b> τὸν κατάλογον τῆς πλίνθου ἀνοίγει. Τὰ <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> καὶ <b>Ctrl+Z</b> ἀντιγράφει, τέμνει, ἐντίθησι καὶ ἀναιρεῖ.",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Ὁ ἀναγνώστης τῆς ὄψεως ἑκάστην πλίνθον, πεδίον καὶ γένος ἀναγιγνώσκει ὡς ἀφικνῇ, καὶ τὸ <b>Alt+Shift+A</b> ἤχους προστίθησιν εἰσιόντι καὶ ἐξιόντι τῶν πλίνθων. Πανταχοῦ ἄλλοθι τὸ <b>Tab</b> μεταξὺ τῶν κομβίων κινεῖ. Ὅταν πρόγραμμα ἐρωτᾷ σέ τι, τὸ τῆς ἀποκρίσεως κιβώτιον τὴν ἑστίαν λαμβάνει, καὶ τὸ <b>Ctrl+Enter</b> γεγραμμένην ἀπόκρισιν πέμπει."
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Ὁ ἀναγνώστης τῆς ὄψεως ἑκάστην πλίνθον, πεδίον καὶ γένος ἀναγιγνώσκει ὡς ἀφικνῇ, καὶ τὸ <b>Alt+Shift+A</b> ἤχους προστίθησιν εἰσιόντι καὶ ἐξιόντι τῶν πλίνθων. Πανταχοῦ ἄλλοθι τὸ <b>Tab</b> μεταξὺ τῶν κομβίων κινεῖ. Ὅταν πρόγραμμα ἐρωτᾷ σέ τι, τὸ τῆς ἀποκρίσεως κιβώτιον τὴν ἑστίαν λαμβάνει, καὶ τὸ <b>Ctrl+Enter</b> γεγραμμένην ἀπόκρισιν πέμπει.",
+"New: {what}.":"Καινόν: {what}.",
+"Gone: {what}.":"Ἀφανισθέν: {what}.",
+"{n} scripts added, {m} removed.":"{n} προγράμματα προσετέθη, {m} ἀφῃρέθη.",
+"{n} blocks added, {m} removed.":"{n} πλίνθοι προσετέθησαν, {m} ἀφῃρέθησαν.",
+"Text changed in {n} blocks.":"Ὁ λόγος ἐν {n} πλίνθοις ἐμεταλλάγη."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1854,7 +1859,8 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} τῆς σῆς ἐγκρίσεως δεῖται· τὸ approve_by = telegram θείται, τὰ δὲ TELEGRAM_BOT_TOKEN καὶ TELEGRAM_CHAT_ID {where_keys} οὔ.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} ὑπὸ {who} ἐν Telegram ἠρνήθη· οὐδὲν οὖν ἐγένετο.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} οὐκ ἐν καιρῷ ἐν Telegram ἐδοκιμάσθη· οὐδὲν οὖν ἐγένετο.",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} ἔκρινε τὸ {what}, ἀποκρινάμενος ναὶ {code} ἐν Telegram."
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} ἔκρινε τὸ {what}, ἀποκρινάμενος ναὶ {code} ἐν Telegram.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Ἡ ἔκδοσις {latest} οὐ τέτακται τῇ κλειδί ᾗ τοῦτο τὸ runtime ἔχει, οὖν οὐκ ἐχρήσθη. Οὐδὲν ἠλλάγη."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

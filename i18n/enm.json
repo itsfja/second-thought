@@ -1448,7 +1448,12 @@
   "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.": "In thy programme, the arwe keyes meve bitwixe bloks, hir slottes and hir feeldes. <b>Enter</b> on a feeld lat thee write therin or chese, and <b>W</b> bringeth thee bak to thy programme.",
   "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.": "<b>M</b> meveth the blok thou art on (the arwes, thanne <b>Enter</b>, or <b>Esc</b> to stinte), <b>X</b> taketh it of that it is joyned to, <b>D</b> maketh a copie, and <b>Delete</b> remeveth it.",
   "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.": "<b>N</b> and <b>B</b> goon to the nexte and the former script, <b>I</b> seith wher thou art, and <b>Ctrl+Enter</b> openeth a bloks menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copie, kitte, paste and undo.",
-  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "A screne reder redeth out every blok, feeld and kinde as thou comest to it, and <b>Alt+Shift+A</b> addeth soundes as thou goost in and out of bloks. Everywher elles, <b>Tab</b> meveth bitwixe buttons. Whan a programme asketh thee aught, the answere box taketh the focus, and <b>Ctrl+Enter</b> sendeth a typed answere."
+  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "A screne reder redeth out every blok, feeld and kinde as thou comest to it, and <b>Alt+Shift+A</b> addeth soundes as thou goost in and out of bloks. Everywher elles, <b>Tab</b> meveth bitwixe buttons. Whan a programme asketh thee aught, the answere box taketh the focus, and <b>Ctrl+Enter</b> sendeth a typed answere.",
+  "New: {what}.": "New: {what}.",
+  "Gone: {what}.": "Gon: {what}.",
+  "{n} scripts added, {m} removed.": "{n} scripts y-added, {m} remeved.",
+  "{n} blocks added, {m} removed.": "{n} blokkes y-added, {m} remeved.",
+  "Text changed in {n} blocks.": "Text chaunged in {n} blokkes."
  },
  "examples": {
   "review": {
@@ -2987,7 +2992,8 @@
   "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.": "{what} hath nede of thyn approvment; approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} ben not.",
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} was refused on Telegram by {who}, so no thing bifel.",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} was not apered in tyme on Telegram, so no thing bifel.",
-  "{who} approved {what} by replying yes {code} on Telegram.": "{who} apered {what}, answeringe ye {code} on Telegram."
+  "{who} approved {what} by replying yes {code} on Telegram.": "{who} apered {what}, answeringe ye {code} on Telegram.",
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "The reles {latest} is not sealed with the key that this runtime holdeth, therfore it was not used. No thing is chaunged."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

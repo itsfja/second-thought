@@ -947,7 +947,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"En tu programa, las flechas se mueven entre bloques, sus huecos y sus campos. <b>Intro</b> en un campo te deja escribir en él o elegir, y <b>W</b> te devuelve a tu programa.",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"<b>M</b> mueve el bloque en el que estás (las flechas, luego <b>Intro</b>, o <b>Esc</b> para parar), <b>X</b> lo separa de lo que lo une, <b>D</b> hace una copia y <b>Supr</b> lo quita.",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"<b>N</b> y <b>B</b> van al guion siguiente y al anterior, <b>I</b> dice dónde estás y <b>Ctrl+Intro</b> abre el menú de un bloque. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> y <b>Ctrl+Z</b> copian, cortan, pegan y deshacen.",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Un lector de pantalla lee cada bloque, campo y categoría al llegar a ellos, y <b>Alt+Mayús+A</b> añade sonidos al entrar y salir de los bloques. En todo lo demás, <b>Tab</b> pasa entre botones. Cuando un programa te pregunta algo, el cuadro de respuesta recibe el foco y <b>Ctrl+Intro</b> envía una respuesta escrita."
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Un lector de pantalla lee cada bloque, campo y categoría al llegar a ellos, y <b>Alt+Mayús+A</b> añade sonidos al entrar y salir de los bloques. En todo lo demás, <b>Tab</b> pasa entre botones. Cuando un programa te pregunta algo, el cuadro de respuesta recibe el foco y <b>Ctrl+Intro</b> envía una respuesta escrita.",
+"New: {what}.":"Nuevo: {what}.",
+"Gone: {what}.":"Ya no: {what}.",
+"{n} scripts added, {m} removed.":"{n} secuencias añadidas, {m} eliminadas.",
+"{n} blocks added, {m} removed.":"{n} bloques añadidos, {m} eliminados.",
+"Text changed in {n} blocks.":"Texto cambiado en {n} bloques."
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
@@ -1854,6 +1859,7 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} necesita tu aprobación, approve_by = telegram está puesto, pero TELEGRAM_BOT_TOKEN y TELEGRAM_CHAT_ID {where_keys} no.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} fue rechazado en Telegram por {who}, así que no pasó nada.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} no fue aprobado a tiempo en Telegram, así que no pasó nada.",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} aprobó {what} respondiendo sí {code} en Telegram."
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} aprobó {what} respondiendo sí {code} en Telegram.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"El release {latest} no está firmado por la clave que este runtime tiene, así que no se usó. No se cambió nada."
 }
 };

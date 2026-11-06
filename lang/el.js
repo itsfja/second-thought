@@ -947,7 +947,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"Στο πρόγραμμά σας, τα βέλη κινούνται ανάμεσα στα μπλοκ, τις υποδοχές και τα πεδία τους. Το <b>Enter</b> σε ένα πεδίο σας αφήνει να γράψετε ή να επιλέξετε, και το <b>W</b> σας επιστρέφει στο πρόγραμμα.",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"Το <b>M</b> μετακινεί το μπλοκ όπου βρίσκεστε (τα βέλη, μετά <b>Enter</b>, ή <b>Esc</b> για διακοπή), το <b>X</b> το αποσπά, το <b>D</b> φτιάχνει αντίγραφο, και το <b>Delete</b> το αφαιρεί.",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"Τα <b>N</b> και <b>B</b> πηγαίνουν στο επόμενο και στο προηγούμενο σενάριο, το <b>I</b> λέει πού βρίσκεστε, και το <b>Ctrl+Enter</b> ανοίγει το μενού ενός μπλοκ. Τα <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> και <b>Ctrl+Z</b> αντιγράφουν, αποκόπτουν, επικολλούν και αναιρούν.",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Ένας αναγνώστης οθόνης διαβάζει κάθε μπλοκ, πεδίο και κατηγορία μόλις φτάσετε σε αυτά, και το <b>Alt+Shift+A</b> προσθέτει ηχητικά σήματα καθώς μπαίνετε και βγαίνετε από μπλοκ. Παντού αλλού, το <b>Tab</b> μετακινείται ανάμεσα στα κουμπιά. Όταν ένα πρόγραμμα σας ρωτά κάτι, το πλαίσιο απάντησης παίρνει την εστίαση, και το <b>Ctrl+Enter</b> στέλνει μια πληκτρολογημένη απάντηση."
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Ένας αναγνώστης οθόνης διαβάζει κάθε μπλοκ, πεδίο και κατηγορία μόλις φτάσετε σε αυτά, και το <b>Alt+Shift+A</b> προσθέτει ηχητικά σήματα καθώς μπαίνετε και βγαίνετε από μπλοκ. Παντού αλλού, το <b>Tab</b> μετακινείται ανάμεσα στα κουμπιά. Όταν ένα πρόγραμμα σας ρωτά κάτι, το πλαίσιο απάντησης παίρνει την εστίαση, και το <b>Ctrl+Enter</b> στέλνει μια πληκτρολογημένη απάντηση.",
+"New: {what}.":"Νέο: {what}.",
+"Gone: {what}.":"Έφυγε: {what}.",
+"{n} scripts added, {m} removed.":"Προστέθηκαν {n} σενάρια, αφαιρέθηκαν {m}.",
+"{n} blocks added, {m} removed.":"Προστέθηκαν {n} μπλοκ, αφαιρέθηκαν {m}.",
+"Text changed in {n} blocks.":"Το κείμενο άλλαξε σε {n} μπλοκ."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1854,6 +1859,7 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"Το {what} χρειάζεται την έγκρισή σου· έχει οριστεί approve_by = telegram, αλλά όχι TELEGRAM_BOT_TOKEN και TELEGRAM_CHAT_ID {where_keys}.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"Το {what} αρνήθηκε στο Telegram ο {who}, οπότε δεν έγινε τίποτα.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"Το {what} δεν εγκρίθηκε εγκαίρως στο Telegram, οπότε δεν έγινε τίποτα.",
-"{who} approved {what} by replying yes {code} on Telegram.":"Ο {who} ενέκρινε το {what} απαντώντας ναι {code} στο Telegram."
+"{who} approved {what} by replying yes {code} on Telegram.":"Ο {who} ενέκρινε το {what} απαντώντας ναι {code} στο Telegram.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Η έκδοση {latest} δεν είναι υπογεγραμμένη από το κλειδί που κρατά αυτό το runtime, οπότε δεν χρησιμοποιήθηκε. Τίποτα δεν άλλαξε."
 }
 };

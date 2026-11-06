@@ -27,8 +27,13 @@ Updating is always your choice: nothing updates itself, and `--update-runtime` w
 it. To check a release by hand instead, compare its `runtime.py` with the tagged source: check out the release's tag,
 run `python tools/sync.py --check` (which rebuilds `python/runtime.py` from the sources and says if they disagree), and
 compare the result with the file attached to the release. A release that doesn't match its own tagged source is one not
-to use. Signing releases with a key kept off GitHub, so `--update-runtime` could refuse an unsigned or wrongly signed
-runtime, is issue [#311](https://github.com/itsfja/second-thought/issues/311).
+to use.
+
+Releases are also signed with an Ed25519 key kept off GitHub ([#311](https://github.com/itsfja/second-thought/issues/311)):
+`tools/sign_runtime.py` signs each release's `runtime.py` on the maintainer's computer, the `.sig` is attached to the
+release, and the runtime holds the key's public half (`UPDATE_SIGNING_KEY` in update.py), so `--update-runtime` refuses
+a runtime that isn't signed by it — whoever can publish a release, or take over the account, can't make a matching
+pair the way they can with the SHA-256. Until the first signed release, the key is empty and only the SHA-256 applies.
 
 ## What an exported program can do
 

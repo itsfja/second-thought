@@ -948,7 +948,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"בתוכנית שלך, החצים זזים בין בלוקים, החריצים שלהם והשדות שלהם. <b>Enter</b> על שדה מאפשר להקליד בו או לבחור, ו-<b>W</b> מחזיר אותך לתוכנית.",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"<b>M</b> מזיז את הבלוק שאתה עליו (החצים, ואז <b>Enter</b>, או <b>Esc</b> כדי לעצור), <b>X</b> מנתק אותו ממה שהוא מחובר אליו, <b>D</b> יוצר עותק, ו-<b>Delete</b> מסיר אותו.",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"<b>N</b> ו-<b>B</b> עוברים לסקריפט הבא והקודם, <b>I</b> אומר איפה אתה, ו-<b>Ctrl+Enter</b> פותח את התפריט של בלוק. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> ו-<b>Ctrl+Z</b> מעתיקים, גוזרים, מדביקים ומבטלים.",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"קורא מסך מקריא כל בלוק, שדה וקטגוריה כשאתה מגיע אליהם, ו-<b>Alt+Shift+A</b> מוסיף צלילים כשאתה נכנס לבלוקים ויוצא מהם. בכל מקום אחר, <b>Tab</b> עובר בין כפתורים. כשתוכנית שואלת אותך משהו, תיבת התשובה מקבלת את המיקוד, ו-<b>Ctrl+Enter</b> שולח תשובה מוקלדת."
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"קורא מסך מקריא כל בלוק, שדה וקטגוריה כשאתה מגיע אליהם, ו-<b>Alt+Shift+A</b> מוסיף צלילים כשאתה נכנס לבלוקים ויוצא מהם. בכל מקום אחר, <b>Tab</b> עובר בין כפתורים. כשתוכנית שואלת אותך משהו, תיבת התשובה מקבלת את המיקוד, ו-<b>Ctrl+Enter</b> שולח תשובה מוקלדת.",
+"New: {what}.":"חדש: {what}.",
+"Gone: {what}.":"נעלם: {what}.",
+"{n} scripts added, {m} removed.":"נוספו {n} סקריפטים, הוסרו {m}.",
+"{n} blocks added, {m} removed.":"נוספו {n} בלוקים, הוסרו {m}.",
+"Text changed in {n} blocks.":"הטקסט השתנה ב־{n} בלוקים."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1855,6 +1860,7 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} דורש את אישורך; הוגדר approve_by = telegram, אך לא TELEGRAM_BOT_TOKEN וגם לא TELEGRAM_CHAT_ID {where_keys}.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} סורבל בטלגרם על ידי {who}, ולכן לא קרה כלום.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} לא אושר בזמן בטלגרם, ולכן לא קרה כלום.",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} אישר את {what} בכך שהשיב כן {code} בטלגרם."
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} אישר את {what} בכך שהשיב כן {code} בטלגרם.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"המהדורה {latest} אינה חתומה במפתח שבידי הראנטיים הזה, ולכן לא נעשה בה שימוש. לא השתנה דבר."
 }
 };

@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Security
+- `--update-runtime` checks the release's signature when the runtime holds a signing key (#311): `UPDATE_SIGNING_KEY` in update.py carries the public half of an Ed25519 key whose private half is kept off GitHub (tools/sign_runtime.py signs each release's runtime.py, and the `.sig` is attached to the release). A runtime that isn't signed by that key is refused, so whoever can publish a release can't make a runtime this program will run. Until the first signed release, the key is empty and the SHA-256 check applies as before.
+
 ### Added
 - `approve_by = telegram` in second-thought.ini (#305): a run with nobody at the keyboard, which before refused anything that had to ask first, asks on Telegram instead. The question goes to `TELEGRAM_CHAT_ID` with a fresh four-digit code; only a reply from that chat with that code, within five minutes, allows it, and the run log says who approved. Money moves and unlocks go through the same path, and it is never answered from a stopped run's journal.
 

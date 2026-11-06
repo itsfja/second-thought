@@ -947,7 +947,12 @@
 "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.":"“{text}” 𓈖 𓉔𓂋𓅱 𓊪𓅱 𓇋𓂋 today, tomorrow, 𓉔𓂋𓅱 𓈖 𓋴𓅱 𓅓 YYYY-MM-DD.",
 "“{to}” isn't an email address.":"“{to}” 𓈖 𓋴𓏏 𓈖 email 𓊪𓅱",
 "“{value}” isn't a number.":"“{value}” 𓈖 𓏏𓈖𓅱 𓊪𓅱",
-"“{value}” isn't on or off.":"“{value}” 𓈖 on 𓅓 off 𓊪𓅱"
+"“{value}” isn't on or off.":"“{value}” 𓈖 on 𓅓 off 𓊪𓅱",
+"New: {what}.":"𓅓𓂋𓏏: {what}.",
+"Gone: {what}.":"𓈎𓂋𓏏: {what}.",
+"{n} scripts added, {m} removed.":"𓋴𓊪𓏏 {n} 𓂋𓈖𓏏, 𓈎𓂋𓏏 {m}.",
+"{n} blocks added, {m} removed.":"𓋴𓊪𓏏 {n} 𓎡𓂋𓏏, 𓈎𓂋𓏏 {m}.",
+"Text changed in {n} blocks.":"𓏠𓈎𓏏 {n} 𓎡𓂋𓏏."
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -1854,7 +1859,8 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} jr=s mr sjp=k; approve_by = telegram rdj.tw, nn TELEGRAM_BOT_TOKEN ḥnꜥ TELEGRAM_CHAT_ID {where_keys} nn=s.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} ꜣnn m Telegram jn {who}, nn ḫprjw n ḫprjw.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} n sjp.n.tw m Telegram m rnpst, nn ḫprjw n ḫprjw.",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} sjp.n=f {what} m hꜣb 'yes {code}' m Telegram."
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} sjp.n=f {what} m hꜣb 'yes {code}' m Telegram.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"{latest} n ḥtm.tw m ḫtm n jrt pn, n jr.tw=f. nn ḫprjw n ḫprjw."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

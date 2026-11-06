@@ -947,7 +947,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"In deinem Programm bewegen die Pfeiltasten zwischen Blöcken, ihren Steckplätzen und ihren Feldern. <b>Enter</b> auf einem Feld lässt dich hineinschreiben oder wählen, und <b>W</b> bringt dich zurück zu deinem Programm.",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"<b>M</b> bewegt den Block, auf dem du bist (die Pfeiltasten, dann <b>Enter</b>, oder <b>Esc</b> zum Abbrechen), <b>X</b> löst ihn von dem, woran er hängt, <b>D</b> macht eine Kopie, und <b>Entf</b> entfernt ihn.",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"<b>N</b> und <b>B</b> gehen zum nächsten und vorigen Skript, <b>I</b> sagt, wo du bist, und <b>Strg+Enter</b> öffnet das Menü eines Blocks. <b>Strg+C</b>, <b>Strg+X</b>, <b>Strg+V</b> und <b>Strg+Z</b> kopieren, schneiden aus, fügen ein und machen rückgängig.",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Ein Bildschirmleser liest jeden Block, jedes Feld und jede Kategorie vor, sobald du sie erreichst, und <b>Alt+Umschalt+A</b> fügt Töne hinzu, wenn du in Blöcke hinein- und herausgehst. Überall sonst wechselt <b>Tab</b> zwischen den Knöpfen. Wenn ein Programm dich etwas fragt, bekommt das Antwortfeld den Fokus, und <b>Strg+Enter</b> schickt eine getippte Antwort."
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Ein Bildschirmleser liest jeden Block, jedes Feld und jede Kategorie vor, sobald du sie erreichst, und <b>Alt+Umschalt+A</b> fügt Töne hinzu, wenn du in Blöcke hinein- und herausgehst. Überall sonst wechselt <b>Tab</b> zwischen den Knöpfen. Wenn ein Programm dich etwas fragt, bekommt das Antwortfeld den Fokus, und <b>Strg+Enter</b> schickt eine getippte Antwort.",
+"New: {what}.":"Neu: {what}.",
+"Gone: {what}.":"Entfallen: {what}.",
+"{n} scripts added, {m} removed.":"{n} Skripte hinzugefügt, {m} entfernt.",
+"{n} blocks added, {m} removed.":"{n} Blöcke hinzugefügt, {m} entfernt.",
+"Text changed in {n} blocks.":"Text in {n} Blöcken geändert."
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -1854,6 +1859,7 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} braucht deine Zustimmung, approve_by = telegram ist gesetzt, aber TELEGRAM_BOT_TOKEN und TELEGRAM_CHAT_ID {where_keys} sind es nicht.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} wurde auf Telegram von {who} abgelehnt, also ist nichts geschehen.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} wurde nicht rechtzeitig auf Telegram genehmigt, also ist nichts geschehen.",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} hat {what} genehmigt, mit der Antwort ja {code} auf Telegram."
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} hat {what} genehmigt, mit der Antwort ja {code} auf Telegram.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Das Release {latest} ist nicht vom Schlüssel dieses Runtimes signiert, also wurde es nicht verwendet. Nichts wurde geändert."
 }
 };

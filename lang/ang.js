@@ -947,7 +947,12 @@
 "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.":"On þīnum ƿeorce þā strǣlcǣgas styriaþ betweox stoccum, heora stōwum and heora feldum. <b>Enter</b> on felda lǣt þē on wrītan oþþe cēosan, and <b>W</b> bringþ þē eft tō þīnum ƿeorce.",
 "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.":"<b>M</b> styraþ þone stocc þe þū on eart (þā strǣlas, þonne <b>Enter</b>, oþþe <b>Esc</b> tō geswīcenne), <b>X</b> nimþ hine of þǣm þe hē tō gefēged is, <b>D</b> ƿyrcþ efenlīcnesse, and <b>Delete</b> āfyrþ hine.",
 "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.":"<b>N</b> and <b>B</b> gāþ tō þǣm æfterran and þǣm ǣrran gewrite, <b>I</b> sægþ hwǣr þū eart, and <b>Ctrl+Enter</b> openaþ stoccas getæl. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> āwrītaþ, ceorfaþ, settaþ and undōþ.",
-"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Sēo scīrrǣdend rǣt ǣlcne stocc, feld and cynn swā þū hīe gerǣcst, and <b>Alt+Shift+A</b> ēcþ swēgas þonne þū on stoccas gǣst and of. Ǣghwǣr elles <b>Tab</b> styraþ betweox cnæppum. Þonne ƿeorc þē hwæt āxaþ, se andswaru-box onfēhþ þone ord, and <b>Ctrl+Enter</b> sendeþ getȳpede andsware."
+"A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.":"Sēo scīrrǣdend rǣt ǣlcne stocc, feld and cynn swā þū hīe gerǣcst, and <b>Alt+Shift+A</b> ēcþ swēgas þonne þū on stoccas gǣst and of. Ǣghwǣr elles <b>Tab</b> styraþ betweox cnæppum. Þonne ƿeorc þē hwæt āxaþ, se andswaru-box onfēhþ þone ord, and <b>Ctrl+Enter</b> sendeþ getȳpede andsware.",
+"New: {what}.":"Nīwe: {what}.",
+"Gone: {what}.":"Āfēred: {what}.",
+"{n} scripts added, {m} removed.":"{n} forescriftas tōlǣdde, {m} āfērde.",
+"{n} blocks added, {m} removed.":"{n} stānas tōlǣdde, {m} āfērde.",
+"Text changed in {n} blocks.":"Se gewrit on {n} stānum awended."
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1854,7 +1859,8 @@
 "{what} needs your approval, approve_by = telegram is set, but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} are not.":"{what} þearf þīnre lǣfe; approve_by = telegram is gesett, ac TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID {where_keys} ne sind.",
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} wæs on Telegram fram {who} forwierned, þy næs nāþing gedōn.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} næs on tīde on Telegram geafad, þy næs nāþing gedōn.",
-"{who} approved {what} by replying yes {code} on Telegram.":"{who} geafade {what}, andswarnde gēa {code} on Telegram."
+"{who} approved {what} by replying yes {code} on Telegram.":"{who} geafade {what}, andswarnde gēa {code} on Telegram.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Ūtgyf {latest} nis mid þǣre cǣg þe þis runtime hæfþ gebēcnaþ, þy hit ne wæs brȳcd. Nāþing nis awended."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",
