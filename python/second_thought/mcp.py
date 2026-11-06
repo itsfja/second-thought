@@ -500,10 +500,12 @@ def mcp_money(tool):
 
 
 def mcp_destructive(tool):
-    """True for an MCP tool its server marks destructiveHint (MCP's mark for one that can delete or overwrite): it
-    asks first even under (no asking), and is refused with nobody there to ask (#309). Read-only tools never count."""
+    """True for an MCP tool that asks first even under (no asking), and is refused with nobody there to ask: one its
+    server marks destructiveHint, MCP's mark for one that can delete or overwrite (#309), or one of SAFETY's
+    mcp_always_ask, such as GitHub's merge and push (#333). A tool marked read-only never counts."""
     notes = tool.get("annotations") if isinstance(tool.get("annotations"), dict) else {}
-    return notes.get("destructiveHint") is True and notes.get("readOnlyHint") is not True
+    return notes.get("readOnlyHint") is not True and \
+        (notes.get("destructiveHint") is True or to_str(tool.get("name")) in SAFETY["mcp_always_ask"])
 
 
 def mcp_server(name, default=""):

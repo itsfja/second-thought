@@ -1861,7 +1861,8 @@
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} אתדחי בטלגרם על ידי {who}, ולהן לא אתעביד כלום.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} לא אתרשים בזמן בטלגרם, ולהן לא אתעביד כלום.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} אתרשים {what} במענה יא {code} בטלגרם.",
-"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"שררא {latest} לא אתחתם בממון די ראנטיים הדין, ולהן לא אתעביד בה. לא אתדבר כלום."
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"שררא {latest} לא אתחתם בממון די ראנטיים הדין, ולהן לא אתעביד בה. לא אתדבר כלום.",
+"{n} of them can change things":"{n} מנהון משנין מדעם"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

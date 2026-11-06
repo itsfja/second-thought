@@ -2993,7 +2993,8 @@
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} wæs on Telegram fram {who} forwierned, þy næs nāþing gedōn.",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} næs on tīde on Telegram geafad, þy næs nāþing gedōn.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} geafade {what}, andswarnde gēa {code} on Telegram.",
-  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Ūtgyf {latest} nis mid þǣre cǣg þe þis runtime hæfþ gebēcnaþ, þy hit ne wæs brȳcd. Nāþing nis awended."
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Ūtgyf {latest} nis mid þǣre cǣg þe þis runtime hæfþ gebēcnaþ, þy hit ne wæs brȳcd. Nāþing nis awended.",
+  "{n} of them can change things": "{n} of him magon þing awendan"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

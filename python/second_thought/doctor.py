@@ -219,6 +219,9 @@ class Doctor:
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 tools = await self.mcp_tools(name)
                 text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
+                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True))
+                if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
+                    text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}
                 if key == "MCP_KRAKEN" and os.environ.get("KRAKEN_API_KEY") and names & {"kraken_auth_test", "kraken_balance"}:
                     # The key, checked with a read-only call; what it reads isn't shown.

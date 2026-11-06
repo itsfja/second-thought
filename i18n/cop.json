@@ -2984,7 +2984,8 @@
   "{what} was refused on Telegram by {who}, so nothing happened.": "{what} ⲁϥϫⲟ ⲙ̄ⲙⲟϥ ϩⲛ̄ Telegram ⲙ̄ⲡ{who}, ϣⲁⲣⲱⲙⲡⲉ ⲙ̄ⲡⲛⲁϣⲉ.",
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} ⲙ̄ⲡⲉⲣⲉⲧⲁⲓⲟ ⲛ̄ⲧⲉⲩϩⲟⲩⲛⲟ ϩⲛ̄ Telegram, ϣⲁⲣⲱⲙⲡⲉ ⲙ̄ⲡⲛⲁϣⲉ.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} ⲁϥⲧⲁⲓⲟ ⲙ̄ⲙⲟϥ ⲛ̄{what} ϩⲱⲥⲉ ϫⲉ ⲟⲩⲛ̄ⲧⲁⲩⲟ {code} ϩⲛ̄ Telegram.",
-  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "ⲧⲁⲓⲟⲩⲟ ⲛ̄{latest} ⲙ̄ⲡⲉⲣⲉϣⲱⲡⲓ ⲙ̄ⲟⲩⲟⲩⲛ̄ϩⲟⲩⲛ ϩⲛ̄ ⲡⲥⲉⲛⲁⲓⲟ ⲛ̄ⲧⲉ ⲡⲣⲁⲛⲧⲁⲓⲙ, ϣⲁⲣⲱⲙⲡⲉ ⲙ̄ⲡⲉⲣⲉⲧⲁⲓⲟ ⲙ̄ⲙⲟϥ. ⲟⲩⲟⲉⲓⲛ ⲛ̄ϣⲟⲡ."
+  "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "ⲧⲁⲓⲟⲩⲟ ⲛ̄{latest} ⲙ̄ⲡⲉⲣⲉϣⲱⲡⲓ ⲙ̄ⲟⲩⲟⲩⲛ̄ϩⲟⲩⲛ ϩⲛ̄ ⲡⲥⲉⲛⲁⲓⲟ ⲛ̄ⲧⲉ ⲡⲣⲁⲛⲧⲁⲓⲙ, ϣⲁⲣⲱⲙⲡⲉ ⲙ̄ⲡⲉⲣⲉⲧⲁⲓⲟ ⲙ̄ⲙⲟϥ. ⲟⲩⲟⲉⲓⲛ ⲛ̄ϣⲟⲡ.",
+  "{n} of them can change things": "{n} nhētou šaujōbe nhenhōb"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

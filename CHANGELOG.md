@@ -28,6 +28,7 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 - In an agent, an MCP tool marked `destructiveHint` (MCP's mark for one that can delete or overwrite) asks first even under (no asking), and is refused when nobody is there (#309).
 
 ### Added
+- GitHub through its own MCP server (#333): a recipe in the example ini and README for `MCP_GITHUB` (github-mcp-server with `--read-only` and a token that can only read, or GitHub's hosted server), and a gallery program, **Review a GitHub repository**, where an agent reads a repository's tree, README, main files and issues and writes an assessment with every point sourced. Merging, pushing, changing or deleting files and making, forking or deleting repositories always ask, even under (no asking), and never run unattended. `--doctor` says how many of each MCP server's tools can change things.
 - `approve_by = telegram` in second-thought.ini (#305): a run with nobody at the keyboard, which before refused anything that had to ask first, asks on Telegram instead. The question goes to `TELEGRAM_CHAT_ID` with a fresh four-digit code; only a reply from that chat with that code, within five minutes, allows it, and the run log says who approved. Money moves and unlocks go through the same path, and it is never answered from a stopped run's journal.
 
 ### Fixed

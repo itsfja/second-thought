@@ -1860,7 +1860,8 @@
 "{what} was refused on Telegram by {who}, so nothing happened.":"{what} was refused on Telegram by {who}, so no thing bifel.",
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} was not apered in tyme on Telegram, so no thing bifel.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} apered {what}, answeringe ye {code} on Telegram.",
-"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"The reles {latest} is not sealed with the key that this runtime holdeth, therfore it was not used. No thing is chaunged."
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"The reles {latest} is not sealed with the key that this runtime holdeth, therfore it was not used. No thing is chaunged.",
+"{n} of them can change things":"{n} of hem may chaunge thynges"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",
