@@ -1846,7 +1846,8 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"Τὸ kraken-cli οὐκ ἐγκατέστηται, ὥστε τὰ τοῦ Kraken ὄργανα ἄρξασθαι οὐ δύναται. Ἐγκατάστησον αὐτό· https://docs.kraken.com/home/mcp",
 "your Kraken key works":"ἡ σὴ κλεὶς τοῦ Kraken ἐνεργεῖ",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"Τὸ {key} τὸν διακονητὴν μετὰ τοῦ --allow-dangerous ἄρχει, ὃ τὸν ἴδιον ἔλεγχον πρὸ τῶν ὀργάνων τῶν χρήματα κινούντων παύει. Ἄφελε αὐτό.",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"Τὸ {what} χρήματα ἀληθινὰ κινῆσαι δύναται, ὥστε μόνον γίγνεται ὅταν πάρει ναὶ φάναι, οὐδεὶς δὲ πάρεστιν."
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"Τὸ {what} χρήματα ἀληθινὰ κινῆσαι δύναται, ὥστε μόνον γίγνεται ὅταν πάρει ναὶ φάναι, οὐδεὶς δὲ πάρεστιν.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Ἡ ἔκδοσις {latest} οὐ τέτακται τῇ κλειδί ᾗ τοῦτο τὸ runtime ἔχει, οὖν οὐκ ἐχρήσθη. Οὐδὲν ἠλλάγη."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

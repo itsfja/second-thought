@@ -1847,7 +1847,8 @@
 "kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp":"kraken-cli ul šakin, unūt Kraken ul iššarrâ. šukunšu: https://docs.kraken.com/home/mcp",
 "your Kraken key works":"kunukkaka ša Kraken ippuš",
 "{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.":"{key} wardam itti --allow-dangerous ušarri, ša barâšu lāma unūt kaspam unarraṭā ubattal. šūlīšu.",
-"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} kaspam kīnam unarraṭ, ša adi attā ana annam qabêm tazzazzu illak, u mamman ul ibašši."
+"{what} could move real money, so it only runs when you're there to say yes, and nobody is.":"{what} kaspam kīnam unarraṭ, ša adi attā ana annam qabêm tazzazzu illak, u mamman ul ibašši.",
+"Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"{latest} lā kanīk ina ṭābti ša runtime šuātu, ay ipšu. ay šanû."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",
