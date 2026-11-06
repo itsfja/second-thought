@@ -249,6 +249,7 @@ exec(compile(open(sys.argv[1], encoding="utf-8").read(), "rt", "exec"), ns)
 ns["TELEGRAM_FILE"] = os.environ.get("TG_FILE") or os.path.join(tempfile.mkdtemp(), "tg.json")
 R = ns["Runtime"](); R.reset()
 R.schedule_mode = True
+R.mcp_mode = True  # Windows counts the NUL device the test gives as stdin as a keyboard, so force the unattended path
 codes = sys.argv[2].split(",")
 R._approval_code = lambda: codes.pop(0) if len(codes) > 1 else codes[0]
 R._approve_wait = float(sys.argv[3])
