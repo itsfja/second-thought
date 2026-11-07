@@ -953,7 +953,10 @@
 "Gone: {what}.":"अपाहृतम्: {what}।",
 "{n} scripts added, {m} removed.":"{n} कार्यक्रमाः योजिताः, {m} अपाहृताः।",
 "{n} blocks added, {m} removed.":"{n} खण्डाः योजिताः, {m} अपाहृताः।",
-"Text changed in {n} blocks.":"{n} खण्डेषु पाठः परिवर्तितः।"
+"Text changed in {n} blocks.":"{n} खण्डेषु पाठः परिवर्तितः।",
+"Review stuck":"समीक्षा स्तब्धा",
+"stuck":"स्तब्धम्",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1862,7 +1865,10 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} इत्येषा Telegram-इत्यत्र समये अनुमता नाभवत्; अतः न किञ्चिदभवत्।",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} इत्यनेन आम् {code} इत्युत्तरेण Telegram-इत्यत्र {what} अनुमतम्।",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"प्रकाशनम् {latest} अस्मिन् runtime-इत्यस्य कुञ्चिकया हस्ताक्षरितम् नास्ति, अतः तत् न प्रयुक्तम्। न किञ्चित् परिवर्तितम्।",
-"{n} of them can change things":"तेषु {n} वस्तूनि परिवर्तयितुं शक्नुवन्ति"
+"{n} of them can change things":"तेषु {n} वस्तूनि परिवर्तयितुं शक्नुवन्ति",
+"Review stuck":"समीक्षा स्तब्धा",
+"stuck":"स्तब्धम्",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

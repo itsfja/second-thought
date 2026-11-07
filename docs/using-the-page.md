@@ -37,7 +37,7 @@ There are more categories down the left side of the screen.
 
 ![Write a first draft, review it against your rules, revise to fix the problems and review again; when it's approved, or out of rounds, finish with the best draft](../screenshots/review-loop.svg)
 
-- Write, check, then try again until the writing passes. If it runs out of tries, it keeps the best attempt, not the last, and each check makes sure earlier problems haven't come back.
+- Write, check, then try again until the writing passes. If it runs out of tries, it keeps the best attempt, not the last, and each check makes sure earlier problems haven't come back. If the review raises the same problems after two revisions in a row, it stops there and says so: revising can't fix them, so the program probably needs something it wasn't given, such as a web page, a file or a fact.
 - **Save a checkpoint** when the draft is good, and **go back to the checkpoint** if later changes make it worse.
 - Ask you questions and wait for your answer.
 - Look at a picture you give it and describe it, or draw simple pictures.

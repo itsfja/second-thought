@@ -1454,7 +1454,10 @@
   "Gone: {what}.": "𐀀𐀡𐀈𐀐: {what}.",
   "{n} scripts added, {m} removed.": "{n} 𐀏𐀒 𐀀𐀐𐀩, {m} 𐀀𐀟𐀈𐀐.",
   "{n} blocks added, {m} removed.": "{n} 𐀵𐀫𐀐𐀩 𐀀𐀐𐀩, {m} 𐀀𐀟𐀈𐀐.",
-  "Text changed in {n} blocks.": "𐀒𐀵𐀙 ina {n} 𐀵𐀫𐀐𐀩."
+  "Text changed in {n} blocks.": "𐀒𐀵𐀙 ina {n} 𐀵𐀫𐀐𐀩.",
+  "Review stuck": "𐀁𐀐𐀮𐀲𐀯 𐀁𐀐𐀵",
+  "stuck": "𐀁𐀐𐀵",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𐀁𐀐𐀮𐀲𐀯 𐀕𐀲 𐀉𐀺 𐀁𐀞𐀐𐀮𐀲 𐀵𐀵 𐀒𐀏𐀲 𐀁𐀩𐀁, 𐀃𐀄𐀑 𐀁𐀞𐀐𐀮𐀲 𐀀𐀐𐀲𐀚. 𐀐𐀩𐀯𐀍 𐀔𐀲 𐀞𐀫𐀳𐀐 𐀃𐀄𐀑 𐀁𐀵𐀐, 𐀞𐀑𐀙, 𐀢𐀏𐀲 𐀁𐀳𐀃: 𐀈𐀮 𐀵𐀵 (𐀁𐀚 𐀁𐀏𐀨, 𐀁𐀵𐀐 𐀀𐀏𐀲 𐀞𐀑𐀙 𐀁𐀩𐀄𐀐𐀳), 𐀀𐀞𐀨 𐀁𐀡𐀟."
  },
  "examples": {
   "review": {
@@ -2995,7 +2998,10 @@
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} me-te Telegram a-pe o-u-ke a-ko-ro; a-pe-me-na-o-u-ke.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} {what} a-ke-re, a-po-we ja {code} me Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "{latest} o-u te-me-no o-no ke-ro, a-pe o-u-ke. a-pe-me-na-o-u-ke.",
-  "{n} of them can change things": "{n} a-me-u-si-ja ka-re-ma-ta"
+  "{n} of them can change things": "{n} a-me-u-si-ja ka-re-ma-ta",
+  "Review stuck": "e-ke-se-ta-si e-ke-to",
+  "stuck": "e-ke-to",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "e-ke-se-ta-si me-ta du-wo e-pa-ke-se-ta to-to ko-ka-ta e-re-e, o-u-ki e-pa-ke-se-ta a-ke-ta-ne. ke-re-si-jo ma-ta pa-ro-te-ke o-u-ki e-to-ke, pa-ki-na, pu-ka-ta e-te-o: do-se to-to (e-ne e-ka-ra, e-to-ke a-ka-ta pa-ki-na e-re-u-ke-te), a-pa-ra e-po-pe."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

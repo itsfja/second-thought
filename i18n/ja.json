@@ -1453,7 +1453,10 @@
   "Gone: {what}.": "なくなった: {what}。",
   "{n} scripts added, {m} removed.": "スクリプト {n} 個追加、{m} 個削除。",
   "{n} blocks added, {m} removed.": "ブロック {n} 個追加、{m} 個削除。",
-  "Text changed in {n} blocks.": "{n} 個のブロックのテキストが変わりました。"
+  "Text changed in {n} blocks.": "{n} 個のブロックのテキストが変わりました。",
+  "Review stuck": "レビューが行き詰まりました",
+  "stuck": "行き詰まり",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。"
  },
  "examples": {
   "review": {
@@ -2994,6 +2997,9 @@
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} は時間内に Telegram で承認されなかったため、何も起こりませんでした。",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} が Telegram で「はい {code}」と返信して{what}を承認しました。",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "リリース {latest} はこのランタイムが持つ鍵で署名されていないため、使用されませんでした。何も変更されていません。",
-  "{n} of them can change things": "うち {n} 個は変更を加えられます"
+  "{n} of them can change things": "うち {n} 個は変更を加えられます",
+  "Review stuck": "レビューが行き詰まりました",
+  "stuck": "行き詰まり",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。"
  }
 }

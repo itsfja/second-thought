@@ -1453,7 +1453,10 @@
   "Gone: {what}.": "En moins : {what}.",
   "{n} scripts added, {m} removed.": "{n} scripts ajoutés, {m} supprimés.",
   "{n} blocks added, {m} removed.": "{n} blocs ajoutés, {m} supprimés.",
-  "Text changed in {n} blocks.": "Texte modifié dans {n} blocs."
+  "Text changed in {n} blocks.": "Texte modifié dans {n} blocs.",
+  "Review stuck": "Relecture bloquée",
+  "stuck": "bloqué",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez."
  },
  "examples": {
   "review": {
@@ -2994,6 +2997,9 @@
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} n'a pas été approuvé à temps sur Telegram, donc rien ne s'est passé.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} a approuvé {what} en répondant oui {code} sur Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "La version {latest} n'est pas signée par la clé que ce runtime détient, donc elle n'a pas été utilisée. Rien n'a été changé.",
-  "{n} of them can change things": "{n} d'entre eux peuvent modifier des choses"
+  "{n} of them can change things": "{n} d'entre eux peuvent modifier des choses",
+  "Review stuck": "Relecture bloquée",
+  "stuck": "bloqué",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez."
  }
 }

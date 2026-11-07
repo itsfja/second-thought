@@ -953,7 +953,10 @@
 "Gone: {what}.":"נעלם: {what}.",
 "{n} scripts added, {m} removed.":"נוספו {n} סקריפטים, הוסרו {m}.",
 "{n} blocks added, {m} removed.":"נוספו {n} בלוקים, הוסרו {m}.",
-"Text changed in {n} blocks.":"הטקסט השתנה ב־{n} בלוקים."
+"Text changed in {n} blocks.":"הטקסט השתנה ב־{n} בלוקים.",
+"Review stuck":"הביקורת נתקעה",
+"stuck":"תקוע",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1862,6 +1865,9 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} לא אושר בזמן בטלגרם, ולכן לא קרה כלום.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} אישר את {what} בכך שהשיב כן {code} בטלגרם.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"המהדורה {latest} אינה חתומה במפתח שבידי הראנטיים הזה, ולכן לא נעשה בה שימוש. לא השתנה דבר.",
-"{n} of them can change things":"{n} מהם יכולים לשנות דברים"
+"{n} of them can change things":"{n} מהם יכולים לשנות דברים",
+"Review stuck":"הביקורת נתקעה",
+"stuck":"תקוע",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב."
 }
 };

@@ -952,7 +952,10 @@
 "Gone: {what}.":"ⲟⲩⲁⲓ: {what}.",
 "{n} scripts added, {m} removed.":"{n} ⲥⲁϩ ⲛ̄ⲟⲩⲛ̄ⲧⲁⲩⲟ, {m} ⲛ̄ⲕⲁⲁⲥ.",
 "{n} blocks added, {m} removed.":"{n} ⳛ⳱⳱ⳉ ⲛ̄ⲟⲩⲛ̄ⲧⲁⲩⲟ, {m} ⲛ̄ⲕⲁⲁⲥ.",
-"Text changed in {n} blocks.":"Ϧⲉⲛ {n} ⳛ⳱⳱ⳉ ⲡⲥⲁϫⲓ ⲛ̄ⲧⲁⲓⲟ."
+"Text changed in {n} blocks.":"Ϧⲉⲛ {n} ⳛ⳱⳱ⳉ ⲡⲥⲁϫⲓ ⲛ̄ⲧⲁⲓⲟ.",
+"Review stuck":"ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲁⲥⲁϩⲟ ⲉⲣⲁⲧϫ",
+"stuck":"ⲁⲥⲁϩⲟ",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲁⲥϫⲟ ⲛⲛⲓⲡⲉⲧⲕⲱⲃ ⲛⲧⲉⲣⲧⲡⲉ ⲙⲛⲛⲥⲁ ⲥⲙⲛⲧⲓ ⲥⲛⲁⲩ, ⲉⲧⲃⲉ ⲡⲁⲓ ⲡⲥⲙⲛⲧⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲧⲁⲗϭⲟ ⲙⲙⲟⲟⲩ. ⲉⲓⲉ ⲡⲓⲣⲟⲅⲣⲁⲙⲙⲁ ⲉⲣⲉ ⲟⲩϩⲱⲃ ϣⲁⲁⲧ ⲙⲙⲟϥ ⲉⲧⲉ ⲙⲡⲟⲩⲧⲁⲁϥ ⲛⲁϥ, ⲛϩⲉ ⲛⲟⲩϣⲱϣⲧ ⲛⲧⲉ web, ⲟⲩϫⲱⲱⲙⲉ ⲏ ⲟⲩⲙⲉ: ⲙⲁ ⲛⲁϥ ⲙⲙⲟϥ (ϩⲙ ⲡϣⲓⲛⲉ, ⲏ ϩⲓⲧⲛ ⲟⲩⲁⲅⲅⲉⲗⲟⲥ ⲉϥϣⲟϣ ⲛⲛϣⲱϣⲧ ⲛⲧⲉ web), ⲁⲩⲱ ⲁⲁϥ ⲟⲛ."
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -1861,7 +1864,10 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} ⲙ̄ⲡⲉⲣⲉⲧⲁⲓⲟ ⲛ̄ⲧⲉⲩϩⲟⲩⲛⲟ ϩⲛ̄ Telegram, ϣⲁⲣⲱⲙⲡⲉ ⲙ̄ⲡⲛⲁϣⲉ.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} ⲁϥⲧⲁⲓⲟ ⲙ̄ⲙⲟϥ ⲛ̄{what} ϩⲱⲥⲉ ϫⲉ ⲟⲩⲛ̄ⲧⲁⲩⲟ {code} ϩⲛ̄ Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"ⲧⲁⲓⲟⲩⲟ ⲛ̄{latest} ⲙ̄ⲡⲉⲣⲉϣⲱⲡⲓ ⲙ̄ⲟⲩⲟⲩⲛ̄ϩⲟⲩⲛ ϩⲛ̄ ⲡⲥⲉⲛⲁⲓⲟ ⲛ̄ⲧⲉ ⲡⲣⲁⲛⲧⲁⲓⲙ, ϣⲁⲣⲱⲙⲡⲉ ⲙ̄ⲡⲉⲣⲉⲧⲁⲓⲟ ⲙ̄ⲙⲟϥ. ⲟⲩⲟⲉⲓⲛ ⲛ̄ϣⲟⲡ.",
-"{n} of them can change things":"{n} nhētou šaujōbe nhenhōb"
+"{n} of them can change things":"{n} nhētou šaujōbe nhenhōb",
+"Review stuck":"tdokimasia asaho eratj",
+"stuck":"asaho",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"tdokimasia asjo nnipetkōb ntertpe mnnsa smnti snau, etbe pai psmnti nnefšcom etalco mmoou. eie pirogramma ere ouhōb šaat mmof ete mpoutaaf naf, nhe noušōšt nte web, oujōōme ē oume: ma naf mmof (hm pšine, ē hitn ouaggelos efšoš nnšōšt nte web), auō aaf on."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

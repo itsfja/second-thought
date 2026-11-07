@@ -952,7 +952,10 @@
 "Gone: {what}.":"Έφυγε: {what}.",
 "{n} scripts added, {m} removed.":"Προστέθηκαν {n} σενάρια, αφαιρέθηκαν {m}.",
 "{n} blocks added, {m} removed.":"Προστέθηκαν {n} μπλοκ, αφαιρέθηκαν {m}.",
-"Text changed in {n} blocks.":"Το κείμενο άλλαξε σε {n} μπλοκ."
+"Text changed in {n} blocks.":"Το κείμενο άλλαξε σε {n} μπλοκ.",
+"Review stuck":"Ο έλεγχος κόλλησε",
+"stuck":"κόλλησε",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Ο έλεγχος βρήκε τα ίδια προβλήματα μετά από δύο αναθεωρήσεις, άρα η αναθεώρηση δεν μπορεί να τα διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1861,6 +1864,9 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"Το {what} δεν εγκρίθηκε εγκαίρως στο Telegram, οπότε δεν έγινε τίποτα.",
 "{who} approved {what} by replying yes {code} on Telegram.":"Ο {who} ενέκρινε το {what} απαντώντας ναι {code} στο Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Η έκδοση {latest} δεν είναι υπογεγραμμένη από το κλειδί που κρατά αυτό το runtime, οπότε δεν χρησιμοποιήθηκε. Τίποτα δεν άλλαξε.",
-"{n} of them can change things":"{n} από αυτά μπορούν να αλλάξουν πράγματα"
+"{n} of them can change things":"{n} από αυτά μπορούν να αλλάξουν πράγματα",
+"Review stuck":"Ο έλεγχος κόλλησε",
+"stuck":"κόλλησε",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Ο έλεγχος βρήκε τα ίδια προβλήματα μετά από δύο αναθεωρήσεις, άρα η αναθεώρηση δεν μπορεί να τα διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά."
 }
 };

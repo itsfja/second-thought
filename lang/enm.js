@@ -952,7 +952,10 @@
 "Gone: {what}.":"Gon: {what}.",
 "{n} scripts added, {m} removed.":"{n} scripts y-added, {m} remeved.",
 "{n} blocks added, {m} removed.":"{n} blokkes y-added, {m} remeved.",
-"Text changed in {n} blocks.":"Text chaunged in {n} blokkes."
+"Text changed in {n} blocks.":"Text chaunged in {n} blokkes.",
+"Review stuck":"Examinacioun is stoken fast",
+"stuck":"stoken",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1861,7 +1864,10 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} was not apered in tyme on Telegram, so no thing bifel.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} apered {what}, answeringe ye {code} on Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"The reles {latest} is not sealed with the key that this runtime holdeth, therfore it was not used. No thing is chaunged.",
-"{n} of them can change things":"{n} of hem may chaunge thynges"
+"{n} of them can change things":"{n} of hem may chaunge thynges",
+"Review stuck":"Examinacioun is stoken fast",
+"stuck":"stoken",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",
