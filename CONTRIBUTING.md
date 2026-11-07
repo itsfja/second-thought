@@ -119,7 +119,8 @@ bash tests/setup.sh          # once
 python tests/run_tests.py    # unit tests too; ends with "All checks passed"
 ```
 
-CI runs the unit tests (and the editor's) on Python 3.9 to 3.13 and Windows, and the end-to-end suite on Linux and Windows.
+CI runs the unit tests (and the editor's) on Python 3.9 to 3.13 and Windows, and the end-to-end suite on Linux and Windows,
+in three parts side by side on each (`page`, `python`, and `sources i18n gallery`), so a failure names its part.
 
 If you have API keys, `python tools/smoke_test.py` checks the real services (it costs a few pence).
 
