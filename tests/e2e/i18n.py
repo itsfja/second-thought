@@ -62,7 +62,7 @@ def same_export(files):
     program prints in that language (EXPORT_LANGUAGE and EXPORT_WORDS, and the language line in its settings)."""
     out = {}
     for k, v in files.items():
-        v = "\n".join(l for l in v.split("\n") if "Exported from Second Thought on" not in l and not l.startswith("; language = en"))
+        v = "\n".join(l for l in v.split("\n") if "Exported from Second Thought on" not in l and not l.startswith(("; language = en", "; language: ")))  # the line and its note (#338)
         v = re.sub(r"# The language this program prints in.*?\n}\n\n", "", v, flags=re.S)
         if PY_MARK in v:
             code, rest = v.split(PY_MARK, 1)

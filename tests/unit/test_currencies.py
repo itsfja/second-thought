@@ -193,6 +193,23 @@ class AsAnExportedProgram(unittest.TestCase):
 
 
 class Settings(unittest.TestCase):
+    def test_an_older_exports_note_left_on_the_line_is_ignored(self):
+        # #338: before 3.10.1 the export wrote "; currency = gbp      show costs…", and people took the ; off
+        runtime = (support.ROOT / "python" / "runtime.py").read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            prog, ini = os.path.join(tmp, "prog.py"), os.path.join(tmp, "second-thought.ini")
+            with open(prog, "w", encoding="utf-8") as f:
+                f.write(runtime + "\nimport os\nprint(repr(os.environ.get('RB_CURRENCY')), repr(os.environ.get('RB_SAVE_LOG')), "
+                                  "repr(os.environ.get('RB_BUDGET')), repr(os.environ.get('RB_BACKUPS')), repr(os.environ.get('EMAIL_PASSWORD')))\n")
+            with open(ini, "w", encoding="utf-8") as f:
+                f.write("[run]\ncurrency = gbp      show costs and money budgets in usd, gbp, eur, jpy or cny (the ECB's rate)\n"
+                        "save_log = yes      write each run's log to the logs folder\nbudget = 50000      stop a run before a model call\n"
+                        "[models]\nbackups = claude-quick, gemini-flash\n[keys]\nEMAIL_PASSWORD = abcd efgh  ijkl mnop\n")
+            env = {k: v for k, v in os.environ.items() if not k.startswith("RB_") and k != "EMAIL_PASSWORD"}
+            env.update(SECOND_THOUGHT_INI=ini, RB_RATES_URL="http://127.0.0.1:9/none")
+            r = subprocess.run([sys.executable, "-I", prog], capture_output=True, text=True, timeout=60, cwd=tmp, env=env)
+        self.assertIn("'gbp' 'yes' '50000' 'claude-quick, gemini-flash' 'abcd efgh  ijkl mnop'", r.stdout, r.stderr[-400:])
+
     def test_a_mistyped_currency_stops_the_program_saying_so(self):
         runtime = (support.ROOT / "python" / "runtime.py").read_text(encoding="utf-8")
         with tempfile.TemporaryDirectory() as tmp:
