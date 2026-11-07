@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"terminer avec %1"},
 "rb_folder_files":{"message0":"fichiers du dossier %1 correspondant à %2","tooltip":"Les fichiers d'un dossier, les plus récents d'abord, sous forme d'enregistrements : name, path, modified, size. « Correspondant à » est un motif comme *.pdf ; laissez-le vide pour tous. Il ne fait que regarder : il ne les lit pas. Le Python exporté regarde dans le dossier (à côté du programme, sauf chemin complet) ; cette page utilise des fichiers d'exemple."},
 "rb_folder_when":{"message0":"quand un fichier apparaît dans le dossier %1","tooltip":"Exécute les blocs en dessous quand un nouveau fichier arrive dans ce dossier (à côté du programme, sauf si vous donnez un chemin complet). « Ce qui est arrivé » donne son nom, son chemin, sa taille, et ses mots pour un PDF, un fichier Word ou texte. Pour une image, « picture » la donne aux blocs d'image."},
-"rb_generate":{"message0":"écrire un premier brouillon","tooltip":"Claude écrit un brouillon qui accomplit la tâche."},
+"rb_generate":{"message0":"écrire un premier brouillon %1 en utilisant le web","tooltip":"Claude écrit un brouillon qui accomplit la tâche."},
 "rb_gh_issue_when":{"message0":"quand une nouvelle issue est ouverte dans %1","tooltip":"Exécute les blocs en dessous quand quelqu'un ouvre une issue dans ce projet GitHub (vérifié toutes les 5 minutes ; les pull requests ne comptent pas). « Ce qui est arrivé » donne repo, number, title, body, author, labels, link et text."},
 "rb_gh_release_when":{"message0":"quand une version est publiée dans %1","tooltip":"Exécute les blocs en dessous quand ce projet GitHub publie une version (release ; vérifié toutes les 15 minutes). « Ce qui est arrivé » donne repo, tag, name, previous_tag, notes, link et text."},
 "rb_gh_when":{"message0":"quand une pull request demande ma relecture","tooltip":"Exécute les blocs en dessous quand quelqu'un vous demande de relire une pull request GitHub (vérifié toutes les 5 minutes). « Ce qui est arrivé » donne repo, number, title, user, link et text."},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"le résultat jusqu'ici","tooltip":"Tout ce qui a été ajouté au résultat, en texte."},
 "rb_retry":{"message0":"réessayer jusqu'à %1 fois","message1":"%1","tooltip":"Si quelque chose à l'intérieur échoue d'une façon qu'un nouvel essai pourrait régler (une connexion coupée, une réponse illisible), attend un peu et le relance."},
 "rb_review":{"message0":"relire le brouillon selon %1","tooltip":"Une relecture. Utilisez ensuite « le brouillon a passé la relecture » et « problèmes de la relecture »."},
-"rb_revise":{"message0":"réviser pour corriger les problèmes de la relecture","tooltip":"Claude corrige les problèmes trouvés par la dernière relecture."},
+"rb_revise":{"message0":"réviser pour corriger les problèmes de la relecture %1 en utilisant le web","tooltip":"Claude corrige les problèmes trouvés par la dernière relecture."},
 "rb_rework":{"message0":"retravailler le brouillon : %1","tooltip":"Claude réécrit le brouillon en suivant votre instruction."},
 "rb_rewrite":{"message0":"réécrire %1 pour %2","tooltip":"Par exemple : réécrire (brouillon) pour (traduire en anglais)."},
 "rb_run_program":{"message0":"exécuter le programme %1 avec %2","tooltip":"Exécute un programme de votre liste Programmes, comme une étape. Il a son propre brouillon, son propre résultat et ses propres variables, et renvoie son résultat. À l'intérieur, « valeur du message » est la valeur que vous passez ici. Le Python exporté contient une copie du programme tel qu'il était à l'export."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Texte modifié dans {n} blocs.",
 "Review stuck":"Relecture bloquée",
 "stuck":"bloqué",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez.",
+"Using the web":"En utilisant le web",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Cette page ne peut pas utiliser le web : le brouillon ci-dessus a été écrit sans. Le programme exporté utilise le web.",
+"Web address in the task":"Adresse web dans la tâche",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"La tâche cite une adresse web, mais cette étape ne peut pas l'ouvrir. Cochez 'en utilisant le web' sur le bloc, ou mettez le texte de la page dans la tâche."
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -1867,6 +1871,8 @@
 "{n} of them can change things":"{n} d'entre eux peuvent modifier des choses",
 "Review stuck":"Relecture bloquée",
 "stuck":"bloqué",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez.",
+"Web address in the task":"Adresse web dans la tâche",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"La tâche cite une adresse web, mais cette étape ne peut pas l'ouvrir. Cochez 'en utilisant le web' sur le bloc, ou mettez le texte de la page dans la tâche."
 }
 };

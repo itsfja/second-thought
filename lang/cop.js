@@ -27,9 +27,9 @@
 "rb_reset_timer":{"message0":"ⲕⲟⲧⲉ ⲙⲡⲱⲡ ⲛⲟⲩⲟⲉⲓϣ"},
 "rb_now":{"message0":"%1 ⲙⲡⲟⲟⲩ"},
 "rb_task":{"message0":"ⲕⲱ ⲙⲡϩⲱⲃ ⲉ %1","tooltip":"ϣⲁϥⲕⲱ ⲙⲡⲉⲧⲉⲣⲉ ⲡⲥⲁⲃⲉ ⲛⲁⲁⲁϥ."},
-"rb_generate":{"message0":"ⲥϩⲁⲓ ⲛⲧϣⲟⲣⲡ ⲛⲥϩⲁⲓ","tooltip":"Claude ϣⲁϥⲥϩⲁⲓ ⲛⲧϣⲟⲣⲡ ⲛⲥϩⲁⲓ ⲉⲧϫⲱⲕ ⲙⲡϩⲱⲃ ⲉⲃⲟⲗ."},
+"rb_generate":{"message0":"ⲥϩⲁⲓ ⲛⲧϣⲟⲣⲡ ⲛⲥϩⲁⲓ %1 ϩⲓⲧⲛ ⲡϣⲛⲉ","tooltip":"Claude ϣⲁϥⲥϩⲁⲓ ⲛⲧϣⲟⲣⲡ ⲛⲥϩⲁⲓ ⲉⲧϫⲱⲕ ⲙⲡϩⲱⲃ ⲉⲃⲟⲗ."},
 "rb_rework":{"message0":"ⲁⲣⲓ ⲡⲥϩⲁⲓ ⲛⲕⲉⲥⲟⲡ: %1","tooltip":"Claude ϣⲁϥⲥϩⲁⲓ ⲙⲡⲥϩⲁⲓ ⲛⲕⲉⲥⲟⲡ ⲕⲁⲧⲁ ⲧⲉⲕⲥⲃⲱ."},
-"rb_revise":{"message0":"ⲧⲁϩⲟ ⲡⲥϩⲁⲓ ⲉⲣⲁⲧ ⲕⲁⲧⲁ ⲛϩⲓⲥⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","tooltip":"Claude ϣⲁϥⲧⲁϩⲟ ⲛϩⲓⲥⲉ ⲛⲧⲁϥⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ϩⲁϩ ⲛⲧϣⲟⲣⲡ."},
+"rb_revise":{"message0":"ⲧⲁϩⲟ ⲡⲥϩⲁⲓ ⲉⲣⲁⲧ ⲕⲁⲧⲁ ⲛϩⲓⲥⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ %1 ϩⲓⲧⲛ ⲡϣⲛⲉ","tooltip":"Claude ϣⲁϥⲧⲁϩⲟ ⲛϩⲓⲥⲉ ⲛⲧⲁϥⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ϩⲁϩ ⲛⲧϣⲟⲣⲡ."},
 "rb_set_draft":{"message0":"ⲕⲱ ⲡⲥϩⲁⲓ ⲉ %1"},
 "rb_draft":{"message0":"ⲡⲥϩⲁⲓ"},
 "rb_checkpoint_save":{"message0":"ϩⲁⲣⲉϩ ⲉⲥⲏⲙⲉⲓⲟⲛ %1","tooltip":"ϣⲁϥⲣⲡⲙⲉⲉⲩⲉ ⲙⲡϩⲱⲃ, ⲡⲥϩⲁⲓ, ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ, ⲡⲕⲁⲣⲡⲟⲥ ⲙⲛ ⲛⲡⲉⲧϣⲓⲃⲉ ⲕⲁⲧⲁ ⲡⲉ ⲧⲉⲛⲟⲩ, ϩⲛ ⲡⲉⲓⲣⲁⲛ, ϣⲁⲡⲁϩⲟⲩ ⲛⲧⲡⲣⲁⲝⲓⲥ."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Ϧⲉⲛ {n} ⳛ⳱⳱ⳉ ⲡⲥⲁϫⲓ ⲛ̄ⲧⲁⲓⲟ.",
 "Review stuck":"ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲁⲥⲁϩⲟ ⲉⲣⲁⲧϫ",
 "stuck":"ⲁⲥⲁϩⲟ",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲁⲥϫⲟ ⲛⲛⲓⲡⲉⲧⲕⲱⲃ ⲛⲧⲉⲣⲧⲡⲉ ⲙⲛⲛⲥⲁ ⲥⲙⲛⲧⲓ ⲥⲛⲁⲩ, ⲉⲧⲃⲉ ⲡⲁⲓ ⲡⲥⲙⲛⲧⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲧⲁⲗϭⲟ ⲙⲙⲟⲟⲩ. ⲉⲓⲉ ⲡⲓⲣⲟⲅⲣⲁⲙⲙⲁ ⲉⲣⲉ ⲟⲩϩⲱⲃ ϣⲁⲁⲧ ⲙⲙⲟϥ ⲉⲧⲉ ⲙⲡⲟⲩⲧⲁⲁϥ ⲛⲁϥ, ⲛϩⲉ ⲛⲟⲩϣⲱϣⲧ ⲛⲧⲉ web, ⲟⲩϫⲱⲱⲙⲉ ⲏ ⲟⲩⲙⲉ: ⲙⲁ ⲛⲁϥ ⲙⲙⲟϥ (ϩⲙ ⲡϣⲓⲛⲉ, ⲏ ϩⲓⲧⲛ ⲟⲩⲁⲅⲅⲉⲗⲟⲥ ⲉϥϣⲟϣ ⲛⲛϣⲱϣⲧ ⲛⲧⲉ web), ⲁⲩⲱ ⲁⲁϥ ⲟⲛ."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲁⲥϫⲟ ⲛⲛⲓⲡⲉⲧⲕⲱⲃ ⲛⲧⲉⲣⲧⲡⲉ ⲙⲛⲛⲥⲁ ⲥⲙⲛⲧⲓ ⲥⲛⲁⲩ, ⲉⲧⲃⲉ ⲡⲁⲓ ⲡⲥⲙⲛⲧⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲧⲁⲗϭⲟ ⲙⲙⲟⲟⲩ. ⲉⲓⲉ ⲡⲓⲣⲟⲅⲣⲁⲙⲙⲁ ⲉⲣⲉ ⲟⲩϩⲱⲃ ϣⲁⲁⲧ ⲙⲙⲟϥ ⲉⲧⲉ ⲙⲡⲟⲩⲧⲁⲁϥ ⲛⲁϥ, ⲛϩⲉ ⲛⲟⲩϣⲱϣⲧ ⲛⲧⲉ web, ⲟⲩϫⲱⲱⲙⲉ ⲏ ⲟⲩⲙⲉ: ⲙⲁ ⲛⲁϥ ⲙⲙⲟϥ (ϩⲙ ⲡϣⲓⲛⲉ, ⲏ ϩⲓⲧⲛ ⲟⲩⲁⲅⲅⲉⲗⲟⲥ ⲉϥϣⲟϣ ⲛⲛϣⲱϣⲧ ⲛⲧⲉ web), ⲁⲩⲱ ⲁⲁϥ ⲟⲛ.",
+"Using the web":"ϩⲓⲧⲛ ⲡϣⲛⲉ",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"ⲡⲉϫⲱⲱⲙⲉ ⲡⲁⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲉⲡ ⲡϣⲛⲉ, ⲉⲧⲃⲉ ⲡⲁⲓ ⲛⲧⲁⲩⲥⲕϩⲁⲓ ⲡⲥⲙⲛⲧⲓ ⲉⲧⲥⲁ ⲡⲧⲡⲉ ⲁϫⲙ ⲡϣⲛⲉ. ⲡⲓⲣⲟⲅⲣⲁⲙⲙⲁ ⲛⲧⲁⲩⲛⲧϥ ⲉⲃⲟⲗ ϣⲁϥⲉⲉⲡ ⲡϣⲛⲉ.",
+"Web address in the task":"ⲡⲣⲓⲛ ⲛⲡϣⲛⲉ ϩⲙ ⲡϣⲓⲛⲉ",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"ⲡϣⲓⲛⲉ ϫⲱ ⲙⲡⲣⲓⲛ ⲛⲡϣⲛⲉ, ⲁⲗⲗⲁ ⲡⲧϣⲟϣⲓ ⲡⲁⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲟⲩⲱⲛ ⲙⲙⲟϥ. ⲧⲱⲧⲉ 'ϩⲓⲧⲛ ⲡϣⲛⲉ' ϩⲓϫⲙ ⲡⲱⲛⲉ, ⲏ ⲙⲁ ⲛⲛϣⲁϫⲉ ⲙⲡϫⲱⲱⲙⲉ ϩⲙ ⲡϣⲓⲛⲉ."
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -1867,7 +1871,9 @@
 "{n} of them can change things":"{n} nhētou šaujōbe nhenhōb",
 "Review stuck":"tdokimasia asaho eratj",
 "stuck":"asaho",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"tdokimasia asjo nnipetkōb ntertpe mnnsa smnti snau, etbe pai psmnti nnefšcom etalco mmoou. eie pirogramma ere ouhōb šaat mmof ete mpoutaaf naf, nhe noušōšt nte web, oujōōme ē oume: ma naf mmof (hm pšine, ē hitn ouaggelos efšoš nnšōšt nte web), auō aaf on."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"tdokimasia asjo nnipetkōb ntertpe mnnsa smnti snau, etbe pai psmnti nnefšcom etalco mmoou. eie pirogramma ere ouhōb šaat mmof ete mpoutaaf naf, nhe noušōšt nte web, oujōōme ē oume: ma naf mmof (hm pšine, ē hitn ouaggelos efšoš nnšōšt nte web), auō aaf on.",
+"Web address in the task":"prin npšne hm pšine",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"pšine jō mprin npšne, alla ptšoši pai nnefšcom eouōn mmof. tōte 'hitn pšne' hijm pōne, ē ma nnšaje mpjōōme hm pšine."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

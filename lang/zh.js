@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"以 %1 结束"},
 "rb_folder_files":{"message0":"文件夹 %1 中匹配 %2 的文件","tooltip":"文件夹中的文件，最新的在前，以记录形式提供：name、path、modified、size。“匹配”是 *.pdf 这样的模式；留空表示全部。只查看，不读取内容。导出的 Python 查看该文件夹（在程序旁边，除非你给出完整路径）；本页使用示例文件。"},
 "rb_folder_when":{"message0":"当文件夹 %1 中出现文件时","tooltip":"当这个文件夹里出现新文件时运行下面的积木（在程序旁边，除非你给出完整路径）。“收到的内容”提供文件名、路径、大小，以及 PDF、Word 或文本文件中的文字。如果是图片，“picture”会把它交给图片积木。"},
-"rb_generate":{"message0":"写第一版草稿","tooltip":"Claude 写一份完成任务的草稿。"},
+"rb_generate":{"message0":"写第一版草稿 %1 使用网络","tooltip":"Claude 写一份完成任务的草稿。"},
 "rb_gh_issue_when":{"message0":"当 %1 中有新 issue 被创建时","tooltip":"当有人在这个 GitHub 项目中创建 issue 时运行下面的积木（每 5 分钟检查一次；拉取请求不算）。“收到的内容”提供 repo、number、title、body、author、labels、link 和 text。"},
 "rb_gh_release_when":{"message0":"当 %1 发布新版本时","tooltip":"当这个 GitHub 项目发布新版本（release）时运行下面的积木（每 15 分钟检查一次）。“收到的内容”提供 repo、tag、name、previous_tag、notes、link 和 text。"},
 "rb_gh_when":{"message0":"当有拉取请求请我审阅时","tooltip":"当有人请你审阅 GitHub 拉取请求时运行下面的积木（每 5 分钟检查一次）。“收到的内容”提供 repo、number、title、user、link 和 text。"},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"目前的结果","tooltip":"加入结果的所有内容，作为文本。"},
 "rb_retry":{"message0":"最多重试 %1 次","message1":"%1","tooltip":"如果里面的某件事以重试可能修好的方式失败（连接中断、回复乱码），稍等一下再运行一次。"},
 "rb_review":{"message0":"按 %1 审阅草稿","tooltip":"一次审阅。之后使用“草稿通过了审阅”和“审阅发现的问题”。"},
-"rb_revise":{"message0":"修改以解决审阅发现的问题","tooltip":"Claude 修正上一次审阅发现的问题。"},
+"rb_revise":{"message0":"修改以解决审阅发现的问题 %1 使用网络","tooltip":"Claude 修正上一次审阅发现的问题。"},
 "rb_rework":{"message0":"改写草稿：%1","tooltip":"Claude 按照你的指示重写草稿。"},
 "rb_rewrite":{"message0":"把 %1 改写为 %2","tooltip":"例如：把（草稿）改写为（翻译成法语）。"},
 "rb_run_program":{"message0":"运行程序 %1，传入 %2","tooltip":"把“程序”列表中的一个程序作为一个步骤来运行。它有自己的草稿、结果和变量，并返回自己的结果。在它里面，“消息值”就是你在这里传入的值。导出的 Python 包含该程序在你导出时的副本。"},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"{n} 个积木的文字有改动。",
 "Review stuck":"审阅卡住了",
 "stuck":"卡住",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。"
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。",
+"Using the web":"使用网络",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"这个页面无法使用网络，所以上面的草稿是在没有网络的情况下写的。导出的程序会使用网络。",
+"Web address in the task":"任务中的网址",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1867,6 +1871,8 @@
 "{n} of them can change things":"其中 {n} 个可以改动内容",
 "Review stuck":"审阅卡住了",
 "stuck":"卡住",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。"
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。",
+"Web address in the task":"任务中的网址",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。"
 }
 };

@@ -993,11 +993,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         if not self.draft:
             raise RunError(tr("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step."))
 
-    async def generate(self):
+    _WEB_ADDRESS = re.compile(r"https?://|\b[a-z0-9-]+(\.[a-z0-9-]+)*\.(com|org|net|io|dev|ai|app|co\.uk|org\.uk|gov\.uk)\b", re.I)
+
+    async def generate(self, web=False):
+        """write a first draft; with web=True ('using the web' ticked, #332) the model can search and read the web."""
         self._need_task()
-        self.draft = await self._call("Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + self.task)
+        self.draft = await self._call("Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + self.task,
+                                      web=bool(web))
         self.problems, self.approved = [], None
         self.log(tr("Write a first draft"), self.draft, tr("done"))
+        if not web and self._WEB_ADDRESS.search(self.task or ""):
+            self.log(tr("Web address in the task"), tr("The task names a web address, but this step can't open it. Tick 'using the web' on "
+                                                       "the block, or put the page's words in the task."), tr("note"))
 
     async def rework(self, instr):
         self._need_draft()
@@ -1009,7 +1016,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                                       (self.task or "(none given)") + "\n\nDraft:\n" + self.draft)
         self.log(tr("Rework: {instr}", instr=_short(instr, 60)), self.draft, tr("done"))
 
-    async def revise(self):
+    async def revise(self, web=False):
         self._need_draft()
         if not self.problems:
             self.log(tr("Revise"), tr("No review problems recorded, so nothing to fix."), tr("skipped"))
@@ -1018,7 +1025,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         keep = ("\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + "\n".join("- " + e for e in fixed)) if fixed else ""
         self.draft = await self._call("Revise the draft so it fixes every problem listed. Change nothing else that works. "
                                       "Reply with only the improved piece.\n\nTask:\n" + (self.task or "(none given)") +
-                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft)
+                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft,
+                                      web=bool(web))
         self.log(tr("Revise to fix the problems"), self.draft, tr("revised"))
 
     def set_draft(self, t):

@@ -187,7 +187,7 @@
    "tooltip": "𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒄿𒉡𒈠 𒆪𒉡𒊌𒆪𒌝 𒅖𒋗𒌝 𒀀𒈾 𒁉𒊓𒀭𒉌𒅎 𒀭𒉌𒅎 𒅕𒊒𒌒 (𒀉𒋾 𒉈𒁉𒅆𒅎, 𒋗𒌝𒈠 𒄩𒅈𒊏𒈾𒄠 𒂵𒈪𒅕𒋫𒄠 𒆷 𒋫𒈾𒀜𒁲𒅔). „𒊭 𒅅𒋗𒁺” 𒋗𒌝𒋗, 𒄩𒅈𒊏𒀭𒋗, 𒊏𒁍𒊻𒋢, 𒌋 𒀀𒉿𒋾𒅎 𒊭 𒇷𒅁𒁉𒋗 𒀀𒈾 PDF, Word 𒌑𒇻 𒆪𒉡𒊌𒆠𒅎 𒊭 𒀀𒉿𒋾𒅎 𒄿𒈾𒀜𒁲𒅔. 𒄿𒈾 𒋾𒅆𒈥 picture 𒄿𒈾𒀜𒁲𒅔."
   },
   "rb_generate": {
-   "message0": "𒈠𒀸𒁕𒊏𒄠 𒉺𒉌𒅎 𒋗𒌅𒌨",
+   "message0": "𒈠𒀸𒁕𒊏𒄠 𒉺𒉌𒅎 𒋗𒌅𒌨 %1 𒄿𒈾 𒆠 𒊺𒋾𒅎",
    "tooltip": "Claude 𒈠𒀸𒁕𒊏𒄠 𒊭 𒁺𒌌𒆷𒄠 𒌑𒊭𒀝𒆷𒇻 𒄿𒊭𒀜𒁕𒅈."
   },
   "rb_gh_issue_when": {
@@ -418,7 +418,7 @@
    "tooltip": "𒁉𒊒𒌝 𒅖𒋼𒅔. 𒉿𒅈𒅗 „𒈠𒀸𒁕𒊒𒌝 𒁉𒊏𒄠 𒄿𒋼𒅅” 𒌋 „𒄭𒁕𒌅𒌝 𒊭 𒁉𒊑𒅎” 𒇷𒆠."
   },
   "rb_revise": {
-   "message0": "𒄭𒁕𒋾 𒁉𒊑𒅎 𒋗𒋼𒊺𒅕",
+   "message0": "𒄭𒁕𒋾 𒁉𒊑𒅎 𒋗𒋼𒊺𒅕 %1 𒄿𒈾 𒆠 𒊺𒋾𒅎",
    "tooltip": "Claude 𒄭𒁕𒋾𒅎 𒊭 𒁉𒊒𒌝 𒉿𒅈𒆪𒌝 𒅅𒋗𒁺 𒍑𒋼𒅖𒊺𒅕."
   },
   "rb_rework": {
@@ -1457,7 +1457,11 @@
   "Text changed in {n} blocks.": "𒅆𒅁𒊒 𒄿𒈾 {n} 𒀊𒉌 𒊭𒉡.",
   "Review stuck": "𒁉𒊒𒌝 𒅅𒆷",
   "stuck": "𒅗𒇷",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𒁉𒊒𒌝 𒉿𒅈𒆠 𒅆𒈾 𒋾𒅅𒉌 𒄭𒁕𒋾𒅎 𒅖𒋾𒀀𒋾𒅎 𒅅𒁉, 𒀸𒋗𒌝 𒆠𒄠 𒋾𒅅𒉡𒌝 𒌌 𒄿𒇷 𒀀𒈾 𒋗𒋼𒋗𒊑𒅎. 𒀀𒈾 𒈾𒊑𒅎 𒈪𒅎𒈠 𒊭 𒆷 𒄿𒇷𒅅𒄣 𒄩𒅆𒄴, 𒆠𒈠 𒌅𒌒𒁉𒅎, 𒅆𒀉𒊑𒅎 𒌑𒇻 𒀀𒉿𒋾𒅎 𒆠𒈾𒋾𒅎: 𒋗𒌅 𒀀𒈾 𒈾𒊑𒅎 𒆠𒅖 (𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒇻 𒄿𒈾 𒁲𒈪𒅎 𒊭 𒌅𒌒𒁉 𒄿𒊭𒊍𒋢), 𒌑 𒌅𒌨 𒂊𒁍𒍑."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𒁉𒊒𒌝 𒉿𒅈𒆠 𒅆𒈾 𒋾𒅅𒉌 𒄭𒁕𒋾𒅎 𒅖𒋾𒀀𒋾𒅎 𒅅𒁉, 𒀸𒋗𒌝 𒆠𒄠 𒋾𒅅𒉡𒌝 𒌌 𒄿𒇷 𒀀𒈾 𒋗𒋼𒋗𒊑𒅎. 𒀀𒈾 𒈾𒊑𒅎 𒈪𒅎𒈠 𒊭 𒆷 𒄿𒇷𒅅𒄣 𒄩𒅆𒄴, 𒆠𒈠 𒌅𒌒𒁉𒅎, 𒅆𒀉𒊑𒅎 𒌑𒇻 𒀀𒉿𒋾𒅎 𒆠𒈾𒋾𒅎: 𒋗𒌅 𒀀𒈾 𒈾𒊑𒅎 𒆠𒅖 (𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒇻 𒄿𒈾 𒁲𒈪𒅎 𒊭 𒌅𒌒𒁉 𒄿𒊭𒊍𒋢), 𒌑 𒌅𒌨 𒂊𒁍𒍑.",
+  "Using the web": "𒄿𒈾 𒆠 𒊺𒋾𒅎",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒀀𒈾 𒊺𒋾𒅎 𒌌 𒄿𒇷, 𒀸𒋗𒌝 𒆠𒄠 𒈠𒀸𒁕𒊒𒌝 𒂊𒇷𒅖 𒄿𒈾 𒁀𒇻𒌝 𒊺𒋾 𒊭𒁲𒅕. 𒈾𒊒𒌝 𒊭 𒌑𒊺𒍮 𒊺𒋫𒄠 𒄿𒆷𒀝𒆠.",
+  "Web address in the task": "𒋗𒈬𒌝 𒊭 𒊺𒋾𒅎 𒄿𒈾 𒅆𒁉𒅕𒋾𒅎",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "𒅆𒁉𒅕𒌅𒌝 𒋗𒈠 𒊭 𒊺𒋾𒅎 𒅅𒁉, 𒌑 𒁲𒈬𒌝 𒀭𒉡𒌝 𒌌 𒄿𒁉𒀉𒋼. 𒄿𒈾 𒇷𒁉𒀉𒋾 '𒄿𒈾 𒆠 𒊺𒋾𒅎' 𒋗𒈪, 𒌑𒇻 𒀀𒉿𒋾𒅎 𒊭 𒌅𒌒𒁉𒅎 𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒋗𒆪𒌦."
  },
  "examples": {
   "review": {
@@ -3001,7 +3005,9 @@
   "{n} of them can change things": "{n} ina libbišunu mimma ušannâ",
   "Review stuck": "bīrum ikla",
   "stuck": "kali",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "bīrum warki šinā tiqnī ḫiṭâtim ištiātim iqbi, aššum kīam tiqnum ul ile ana šutēšurim. ana narêm mimma ša lā ileqqû ḫašiḫ, kīma ṭuppim, šiṭrim ulū awatim kīnatim: šūtu ana narêm qīš (ina šipirtim lū ina ṭēmim ša ṭuppī išassû), u tūr epuš."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "bīrum warki šinā tiqnī ḫiṭâtim ištiātim iqbi, aššum kīam tiqnum ul ile ana šutēšurim. ana narêm mimma ša lā ileqqû ḫašiḫ, kīma ṭuppim, šiṭrim ulū awatim kīnatim: šūtu ana narêm qīš (ina šipirtim lū ina ṭēmim ša ṭuppī išassû), u tūr epuš.",
+  "Web address in the task": "šumum ša šētim ina šipirtim",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "šipirtum šuma ša šētim iqbi, u ṭēmum annûm ul ipette. ina libitti 'ina qê šētim' šumi, ulū awâtim ša ṭuppim ina šipirtim šukun."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

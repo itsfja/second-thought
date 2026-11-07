@@ -186,7 +186,7 @@
    "tooltip": "Keyrir kubbana hér fyrir neðan þá er nýtt skjal kemr í þessa hirzlu (hjá forritinu, nema þú gefir allan veg). „Hvat kom“ gefr nafn þess, veg, stærð, ok orðin í því fyrir PDF, Word eða ritskjal. Fyrir mynd gefr „picture“ hana myndakubbunum."
   },
   "rb_generate": {
-   "message0": "rita fyrsta frumrit",
+   "message0": "rita fyrsta frumrit %1 með vefnum",
    "tooltip": "Claude ritar frumrit er lýkr verkinu."
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "Einn dómr. Nota „frumrit stóðsk dóm“ ok „brestir dómsins“ eptir á."
   },
   "rb_revise": {
-   "message0": "endrbœt at laga bresti dómsins",
+   "message0": "endrbœt at laga bresti dómsins %1 með vefnum",
    "tooltip": "Claude lagar þá bresti er hinn síðasti dómr fann."
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "Texti breyttist í {n} kubbum.",
   "Review stuck": "Dómr sat fastr",
   "stuck": "fastr",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr.",
+  "Using the web": "Með vefnum",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Þessi síða má eigi nýta vefinn, svá at frumritit hér fyrir ofan var ritat án hans. Útflutta forritit nýtir vefinn.",
+  "Web address in the task": "Vefnafn í verkinu",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit."
  },
  "examples": {
   "review": {
@@ -3000,7 +3004,9 @@
   "{n} of them can change things": "{n} þeira megu hluti breyta",
   "Review stuck": "Dómr sat fastr",
   "stuck": "fastr",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr.",
+  "Web address in the task": "Vefnafn í verkinu",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

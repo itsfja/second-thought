@@ -52,7 +52,7 @@
 "rb_finish_with":{"message0":"%1 इत्यनेन समापय"},
 "rb_folder_files":{"message0":"%1 कोशे %2 अनुरूपाः सञ्चिकाः","tooltip":"कोशस्य सञ्चिकाः, नूतनतमाः प्रथमम्, अभिलेखरूपेण: name, path, modified, size। “अनुरूपाः” *.pdf इव प्रतिरूपम्; सर्वेभ्यः रिक्तं त्यजतु। केवलं पश्यति: न पठति। निर्यातितं Python कोशे पश्यति; इदं पृष्ठम् उदाहरणसञ्चिकाः उपयुङ्क्ते।"},
 "rb_folder_when":{"message0":"यदा कोशे %1 सञ्चिका दृश्यते","tooltip":"यदा अस्मिन् कोशे नूतना सञ्चिका आगच्छति (कार्यक्रमस्य समीपे, यदि पूर्णमार्गं न ददासि) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” तस्याः नाम, मार्गं, परिमाणं, PDF-Word-पाठसञ्चिकानां कृते तस्यां शब्दान् च ददाति। चित्रस्य कृते “picture” तत् चित्रखण्डेभ्यः ददाति।"},
-"rb_generate":{"message0":"प्रथमं प्रारूपं लिख","tooltip":"Claude कार्यं पूरयत् प्रारूपं लिखति।"},
+"rb_generate":{"message0":"प्रथमं प्रारूपं लिख %1 जालस्य साहाय्येन","tooltip":"Claude कार्यं पूरयत् प्रारूपं लिखति।"},
 "rb_gh_issue_when":{"message0":"यदा %1 इत्यत्र नूतनं issue उद्घाट्यते","tooltip":"यदा कश्चित् अस्मिन् GitHub परियोजनायां issue उद्घाटयति (प्रति 5 निमेषेषु परीक्ष्यते; pull requests न गण्यन्ते) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” repo, number, title, body, author, labels, link, text च ददाति।"},
 "rb_gh_release_when":{"message0":"यदा %1 इत्यत्र release प्रकाश्यते","tooltip":"यदा इयं GitHub परियोजना release प्रकाशयति (प्रति 15 निमेषेषु परीक्ष्यते) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” repo, tag, name, previous_tag, notes, link, text च ददाति।"},
 "rb_gh_when":{"message0":"यदा pull request मम समीक्षां याचते","tooltip":"यदा कश्चित् GitHub pull request समीक्षितुं त्वां याचते (प्रति 5 निमेषेषु परीक्ष्यते) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” repo, number, title, user, link, text च ददाति।"},
@@ -112,7 +112,7 @@
 "rb_result_text":{"message0":"इदानीं यावत् परिणामः","tooltip":"परिणामे योजितं सर्वं, पाठरूपेण।"},
 "rb_retry":{"message0":"%1 वारान् यावत् पुनः प्रयतस्व","message1":"%1","tooltip":"यदि अन्तः किमपि तथा विफलं यथा द्वितीयः प्रयत्नः तत् समादध्यात् (त्रुटितः सम्बन्धः, विकृतम् उत्तरम्), किञ्चित् प्रतीक्ष्य पुनः चालयति।"},
 "rb_review":{"message0":"प्रारूपं %1 अनुसृत्य समीक्षस्व","tooltip":"एका समीक्षा। ततः “प्रारूपं समीक्षाम् उत्तीर्णम्” “समीक्षायाः दोषाः” च प्रयुङ्क्ष्व।"},
-"rb_revise":{"message0":"समीक्षायाः दोषान् शोधयितुं संस्कुरु","tooltip":"अन्तिमया समीक्षया लब्धान् दोषान् Claude शोधयति।"},
+"rb_revise":{"message0":"समीक्षायाः दोषान् शोधयितुं संस्कुरु %1 जालस्य साहाय्येन","tooltip":"अन्तिमया समीक्षया लब्धान् दोषान् Claude शोधयति।"},
 "rb_rework":{"message0":"प्रारूपं पुनः रचय: %1","tooltip":"Claude तव निर्देशम् अनुसृत्य प्रारूपं पुनः लिखति।"},
 "rb_rewrite":{"message0":"%1 पुनः लिख: %2","tooltip":"यथा: (प्रारूपम्) पुनः लिख: (फ्रेञ्चभाषायाम् अनूदय)।"},
 "rb_run_program":{"message0":"कार्यक्रमं %1 %2 सह चालय","tooltip":"तव कार्यक्रमसूच्याः कार्यक्रमं पदरूपेण चालयति। तस्य स्वकीयं प्रारूपं, परिणामः, चराः च सन्ति, सः स्वपरिणामं प्रतिददाति च। तस्य अन्तः “सन्देशमूल्यम्” अत्र त्वया दत्तं मूल्यम्। निर्यातितः Python कार्यक्रमस्य प्रतिलिपिं धारयति यथा निर्यातकाले आसीत्।"},
@@ -956,7 +956,11 @@
 "Text changed in {n} blocks.":"{n} खण्डेषु पाठः परिवर्तितः।",
 "Review stuck":"समीक्षा स्तब्धा",
 "stuck":"स्तब्धम्",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।"
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।",
+"Using the web":"जालस्य साहाय्येन",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"इदं पृष्ठं जालं उपयोक्तुं न शक्नोति, अतः उपरितनं प्रारूपं तेन विना लिखितम्। निर्यातितः कार्यक्रमः जालं उपयुङ्क्ते।",
+"Web address in the task":"कार्ये जालसङ्केतः",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1868,7 +1872,9 @@
 "{n} of them can change things":"तेषु {n} वस्तूनि परिवर्तयितुं शक्नुवन्ति",
 "Review stuck":"समीक्षा स्तब्धा",
 "stuck":"स्तब्धम्",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।"
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।",
+"Web address in the task":"कार्ये जालसङ्केतः",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

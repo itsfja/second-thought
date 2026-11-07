@@ -7562,11 +7562,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         if not self.draft:
             raise RunError(tr("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step."))
 
-    async def generate(self):
+    _WEB_ADDRESS = re.compile(r"https?://|\b[a-z0-9-]+(\.[a-z0-9-]+)*\.(com|org|net|io|dev|ai|app|co\.uk|org\.uk|gov\.uk)\b", re.I)
+
+    async def generate(self, web=False):
+        """write a first draft; with web=True ('using the web' ticked, #332) the model can search and read the web."""
         self._need_task()
-        self.draft = await self._call("Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + self.task)
+        self.draft = await self._call("Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + self.task,
+                                      web=bool(web))
         self.problems, self.approved = [], None
         self.log(tr("Write a first draft"), self.draft, tr("done"))
+        if not web and self._WEB_ADDRESS.search(self.task or ""):
+            self.log(tr("Web address in the task"), tr("The task names a web address, but this step can't open it. Tick 'using the web' on "
+                                                       "the block, or put the page's words in the task."), tr("note"))
 
     async def rework(self, instr):
         self._need_draft()
@@ -7578,7 +7585,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                                       (self.task or "(none given)") + "\n\nDraft:\n" + self.draft)
         self.log(tr("Rework: {instr}", instr=_short(instr, 60)), self.draft, tr("done"))
 
-    async def revise(self):
+    async def revise(self, web=False):
         self._need_draft()
         if not self.problems:
             self.log(tr("Revise"), tr("No review problems recorded, so nothing to fix."), tr("skipped"))
@@ -7587,7 +7594,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         keep = ("\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + "\n".join("- " + e for e in fixed)) if fixed else ""
         self.draft = await self._call("Revise the draft so it fixes every problem listed. Change nothing else that works. "
                                       "Reply with only the improved piece.\n\nTask:\n" + (self.task or "(none given)") +
-                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft)
+                                      "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft,
+                                      web=bool(web))
         self.log(tr("Revise to fix the problems"), self.draft, tr("revised"))
 
     def set_draft(self, t):
@@ -11337,9 +11345,9 @@ HOW TO MAP CODE
       null, { style:"time" }),
     /* Draft */
     S("rb_task", "set task to %1", [val("TEXT")], { style:"draft", tooltip:"Sets what the AI should produce." }),
-    S("rb_generate", "write a first draft", [], { style:"draft", tooltip:"Claude writes a draft that completes the task." }),
+    S("rb_generate", "write a first draft %1 using the web", [{ type:"field_checkbox", name:"WEB", checked:false }], { style:"draft", tooltip:"Claude writes a draft that completes the task." }),
     S("rb_rework", "rework the draft: %1", [val("TEXT")], { style:"draft", tooltip:"Claude rewrites the draft following your instruction." }),
-    S("rb_revise", "revise to fix the review's problems", [], { style:"draft", tooltip:"Claude fixes the problems the last review found." }),
+    S("rb_revise", "revise to fix the review's problems %1 using the web", [{ type:"field_checkbox", name:"WEB", checked:false }], { style:"draft", tooltip:"Claude fixes the problems the last review found." }),
     S("rb_set_draft", "set draft to %1", [val("TEXT")], { style:"draft" }),
     V("rb_draft", "draft", [], "String", { style:"draft" }),
     S("rb_checkpoint_save", "save checkpoint %1", [{ type:"field_input", name:"NAME", text:"good draft" }], { style:"draft",
@@ -14686,9 +14694,9 @@ HOW TO MAP CODE
           case "rb_broadcast": E("R.broadcast(" + I("MSG", '""') + ")"); break;
           case "rb_broadcast_wait": E("await R.broadcast_and_wait(" + I("MSG", '""') + ")"); break;
           case "rb_task": E("R.set_task(" + I("TEXT", '""') + ")"); break;
-          case "rb_generate": E("await R.generate()"); break;
+          case "rb_generate": E("await R.generate(" + (F("WEB") === "TRUE" ? "web=True" : "") + ")"); break;
           case "rb_rework": E("await R.rework(" + I("TEXT", '""') + ")"); break;
-          case "rb_revise": E("await R.revise()"); break;
+          case "rb_revise": E("await R.revise(" + (F("WEB") === "TRUE" ? "web=True" : "") + ")"); break;
           case "rb_set_draft": E("R.set_draft(" + I("TEXT", '""') + ")"); break;
           case "rb_checkpoint_save": E("R.save_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
           case "rb_checkpoint_restore": E("R.restore_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
@@ -15151,7 +15159,9 @@ HOW TO MAP CODE
     "blocks for anything a language model does. Use the connector blocks (Telegram, email, GitHub, calendar, feeds, Home Assistant and so " +
     "on) for the services the description names. Times become rb_when_time or rb_every hats, with a 'when Run is clicked' script that does " +
     "the same job so it can be tried straight away. Put text the person would want to change (a town, an address, a project) in a variable " +
-    "set at the top of the script. If something asked for can't be done with these blocks, leave it out and say so in \"unmapped\". Ignore " +
+    "set at the top of the script. If the description names a web page, a site or a GitHub repository to read, the program must read " +
+    "it: an rb_agent with the web tool (or the GitHub tools) whose answer becomes the draft, or 'using the web' ticked on " +
+    "rb_generate; a plain draft can't open addresses. If something asked for can't be done with these blocks, leave it out and say so in \"unmapped\". Ignore " +
     "the HOW TO MAP CODE section below: it's for converting code.";
   let described = null;  // { state, change }: Claude's program, waiting to be loaded
   // The program on the canvas for a prompt: variables by name, without ids or positions, which Claude doesn't need.
@@ -17732,6 +17742,16 @@ HOW TO MAP CODE
   }
   window.__sameProblem = sameProblem;
 
+  // A draft or revise step and the web (#332): ticked, this page can't search, so say the exported program will; not
+  // ticked but the task names a web address, say the step can't open it.
+  const WEB_ADDRESS = /https?:\/\/|\b[a-z0-9-]+(\.[a-z0-9-]+)*\.(com|org|net|io|dev|ai|app|co\.uk|org\.uk|gov\.uk)\b/i;
+  function webNote(b, task){
+    if (b.getFieldValue("WEB") === "TRUE")
+      addStep("Using the web", { text:tr("This page can't use the web, so the draft above was written without it. The exported program uses the web.") }).done("not live", "warn");
+    else if (WEB_ADDRESS.test(task || ""))
+      addStep("Web address in the task", { text:tr("The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.") }).done("note", "warn");
+  }
+
   async function reviewOnce(criteria, label, inLoop){
     const s = addStep(label);
     const loop = inLoop ? run.reflect : null;
@@ -17962,6 +17982,7 @@ HOW TO MAP CODE
         needTask();
         run.draft = await askStep("Write a first draft", "Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + run.task);
         run.problems = []; run.approved = undefined;
+        webNote(b, run.task);
         break;
       }
       case "rb_rework": {
@@ -17981,6 +18002,7 @@ HOW TO MAP CODE
         run.draft = await ask("Revise the draft so it fixes every problem listed. Change nothing else that works. Reply with only the improved piece.\n\nTask:\n" +
           (run.task || "(none given)") + "\n\nProblems:\n" + run.problems.map(p => "- " + p).join("\n") + keep + "\n\nDraft:\n" + run.draft, s);
         s.done("revised", "ok");
+        webNote(b, "");
         break;
       }
       case "rb_set_draft": run.draft = str(await input(b, tc, "TEXT")); break;

@@ -186,7 +186,7 @@
    "tooltip": "Εκτελεί τα μπλοκ από κάτω όταν ένα νέο αρχείο μπαίνει σε αυτόν τον φάκελο (δίπλα στο πρόγραμμα, εκτός αν δώσετε πλήρη διαδρομή). Το «ό,τι έφτασε» δίνει όνομα, διαδρομή, μέγεθος και, για PDF, Word ή αρχείο κειμένου, τις λέξεις του. Για εικόνα, το «picture» τη δίνει στα μπλοκ εικόνας."
   },
   "rb_generate": {
-   "message0": "γράψε ένα πρώτο πρόχειρο",
+   "message0": "γράψε ένα πρώτο πρόχειρο %1 με χρήση του ιστού",
    "tooltip": "Ο Claude γράφει ένα πρόχειρο που ολοκληρώνει την εργασία."
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "Ένας έλεγχος. Χρησιμοποιήστε μετά τα «το πρόχειρο πέρασε τον έλεγχο» και «προβλήματα του ελέγχου»."
   },
   "rb_revise": {
-   "message0": "αναθεώρησε για να διορθωθούν τα προβλήματα του ελέγχου",
+   "message0": "αναθεώρησε για να διορθωθούν τα προβλήματα του ελέγχου %1 με χρήση του ιστού",
    "tooltip": "Ο Claude διορθώνει τα προβλήματα που βρήκε ο τελευταίος έλεγχος."
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "Το κείμενο άλλαξε σε {n} μπλοκ.",
   "Review stuck": "Ο έλεγχος κόλλησε",
   "stuck": "κόλλησε",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ο έλεγχος βρήκε τα ίδια προβλήματα μετά από δύο αναθεωρήσεις, άρα η αναθεώρηση δεν μπορεί να τα διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ο έλεγχος βρήκε τα ίδια προβλήματα μετά από δύο αναθεωρήσεις, άρα η αναθεώρηση δεν μπορεί να τα διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά.",
+  "Using the web": "Με χρήση του ιστού",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Αυτή η σελίδα δεν μπορεί να χρησιμοποιήσει τον ιστό, οπότε το πρόχειρο παραπάνω γράφτηκε χωρίς αυτόν. Το εξαγόμενο πρόγραμμα χρησιμοποιεί τον ιστό.",
+  "Web address in the task": "Διεύθυνση ιστού στην εργασία",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Η εργασία αναφέρει μια διεύθυνση ιστού, αλλά αυτό το βήμα δεν μπορεί να την ανοίξει. Τσέκαρε 'με χρήση του ιστού' στο μπλοκ ή βάλε το κείμενο της σελίδας στην εργασία."
  },
  "examples": {
   "review": {
@@ -3000,6 +3004,8 @@
   "{n} of them can change things": "{n} από αυτά μπορούν να αλλάξουν πράγματα",
   "Review stuck": "Ο έλεγχος κόλλησε",
   "stuck": "κόλλησε",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ο έλεγχος βρήκε τα ίδια προβλήματα μετά από δύο αναθεωρήσεις, άρα η αναθεώρηση δεν μπορεί να τα διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ο έλεγχος βρήκε τα ίδια προβλήματα μετά από δύο αναθεωρήσεις, άρα η αναθεώρηση δεν μπορεί να τα διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά.",
+  "Web address in the task": "Διεύθυνση ιστού στην εργασία",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Η εργασία αναφέρει μια διεύθυνση ιστού, αλλά αυτό το βήμα δεν μπορεί να την ανοίξει. Τσέκαρε 'με χρήση του ιστού' στο μπλοκ ή βάλε το κείμενο της σελίδας στην εργασία."
  }
 }

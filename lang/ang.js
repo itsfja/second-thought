@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"geendige mid %1"},
 "rb_folder_files":{"message0":"fætelsas on hylce %1 þe gelice beoþ %2","tooltip":"Þa fætelsas on hylce, niwost ærest, swa gewritu: name, path, modified, size. Gelic is bysen swa *.pdf; læt hit æmtig for ælcum fætelse. Hit locaþ ana: hit ne rædeþ hie. Utgesend Python locaþ on þære hylce; þis tramet bryceþ bysenfætelsas."},
 "rb_folder_when":{"message0":"þonne fætels ætywþ on hylce %1","tooltip":"Fremeþ þa stoccas beneoþan þonne niwe fætels becymþ on þas hylce (wiþ þæt forescrift, buton þu fulne weg sylle). “Hwæt becom” sylþ his naman, weg, micelnesse, and þa word on him for PDF, Word oþþe gewritfætelse. For bilwite, “picture” sylþ hit þam bilwitstoccum."},
-"rb_generate":{"message0":"writ forme frumgewrit","tooltip":"Claude writ frumgewrit þe þæt ærende gefylþ."},
+"rb_generate":{"message0":"writ forme frumgewrit %1 þurh þæt webb","tooltip":"Claude writ frumgewrit þe þæt ærende gefylþ."},
 "rb_gh_issue_when":{"message0":"þonne niwe issue biþ geopenod on %1","tooltip":"Fremeþ þa stoccas beneoþan þonne hwa openaþ issue on þissum GitHub weorce (gesceawod ælce 5 minuta; pull requests ne teliaþ). “Hwæt becom” sylþ repo, number, title, body, author, labels, link and text."},
 "rb_gh_release_when":{"message0":"þonne release biþ forþsend on %1","tooltip":"Fremeþ þa stoccas beneoþan þonne þis GitHub weorc sendeþ forþ release (gesceawod ælce 15 minuta). “Hwæt becom” sylþ repo, tag, name, previous_tag, notes, link and text."},
 "rb_gh_when":{"message0":"þonne pull request biddeþ mine sceawunge","tooltip":"Fremeþ þa stoccas beneoþan þonne hwa þe bitt sceawian GitHub pull request (gesceawod ælce 5 minuta). “Hwæt becom” sylþ repo, number, title, user, link and text."},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"se wæstm oþ þis","tooltip":"Eall þæt to þam wæstme geiht wæs, swa gewrit."},
 "rb_retry":{"message0":"fanda eft oþ %1 siþum","message1":"%1","tooltip":"Gif hwæt þærinne mistimþ on wisan þe oþer fandung mihte gebetan (forloren gebind, gemenged andswaru), hit abit hwon and fremeþ hit eft."},
 "rb_review":{"message0":"sceawa þæt frumgewrit be %1","tooltip":"An sceawung. Bruc “frumgewrit oferferde sceawunge” and “sceawunge leahtras” æfterweard."},
-"rb_revise":{"message0":"edwyrc to betanne þære sceawunge leahtras","tooltip":"Claude beteþ þa leahtras þe seo ytemeste sceawung funde."},
+"rb_revise":{"message0":"edwyrc to betanne þære sceawunge leahtras %1 þurh þæt webb","tooltip":"Claude beteþ þa leahtras þe seo ytemeste sceawung funde."},
 "rb_rework":{"message0":"edwyrc þæt frumgewrit: %1","tooltip":"Claude writ þæt frumgewrit eft æfter þinre lare."},
 "rb_rewrite":{"message0":"edwrit %1 to %2","tooltip":"Swa: edwrit (frumgewrit) to (awend on Frencisc)."},
 "rb_run_program":{"message0":"fremme forescrift %1 mid %2","tooltip":"Fremeþ forescrift of þinum getæle Forescrifta, swa stæp. Hit hæfþ his agen frumgewrit, wæstm and wendlingas, and agifþ his wæstm. Þærinne, “ærendgewrites weorþ” is þæt weorþ þe þu her sylst. Se utgelædda Python hæfþ bysene þæs forescriftes swa hit wæs þa þu hit utlæddest."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Se gewrit on {n} stānum awended.",
 "Review stuck":"Sceawung ætstod",
 "stuck":"ætstod",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Seo sceawung fand þa ilcan gedwolan æfter twam bētum, swa bētung ne mæg hie gerihtan. Þam crafte wana wenunga sum þing þe him ne wæs gegifen, swa swa webbsīde, ġewrit oþþe soþ: sele him þæt (on þam weorce, to bisene, oþþe þurh ǣrendracan þe webbsīdan rǣdan mæg), and yrn eft."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Seo sceawung fand þa ilcan gedwolan æfter twam bētum, swa bētung ne mæg hie gerihtan. Þam crafte wana wenunga sum þing þe him ne wæs gegifen, swa swa webbsīde, ġewrit oþþe soþ: sele him þæt (on þam weorce, to bisene, oþþe þurh ǣrendracan þe webbsīdan rǣdan mæg), and yrn eft.",
+"Using the web":"Þurh þæt webb",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Þēos sīde ne mæg þæt webb brūcan, swā þæt frumgewrit ufan wæs būtan him gewriten. Þæt ūtgelǣdde ġecræft brȳcþ þæs webbes.",
+"Web address in the task":"Webbnama on þǣm weorce",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Þæt weorc nemneþ webbnaman, ac þes stæpe ne mæg hine openian. Mearca 'þurh þæt webb' on þǣm stāne, oþþe sete þǣre sīdan word on þæt weorc."
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1867,7 +1871,9 @@
 "{n} of them can change things":"{n} of him magon þing awendan",
 "Review stuck":"Sceawung ætstod",
 "stuck":"ætstod",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Seo sceawung fand þa ilcan gedwolan æfter twam bētum, swa bētung ne mæg hie gerihtan. Þam crafte wana wenunga sum þing þe him ne wæs gegifen, swa swa webbsīde, ġewrit oþþe soþ: sele him þæt (on þam weorce, to bisene, oþþe þurh ǣrendracan þe webbsīdan rǣdan mæg), and yrn eft."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Seo sceawung fand þa ilcan gedwolan æfter twam bētum, swa bētung ne mæg hie gerihtan. Þam crafte wana wenunga sum þing þe him ne wæs gegifen, swa swa webbsīde, ġewrit oþþe soþ: sele him þæt (on þam weorce, to bisene, oþþe þurh ǣrendracan þe webbsīdan rǣdan mæg), and yrn eft.",
+"Web address in the task":"Webbnama on þǣm weorce",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Þæt weorc nemneþ webbnaman, ac þes stæpe ne mæg hine openian. Mearca 'þurh þæt webb' on þǣm stāne, oþþe sete þǣre sīdan word on þæt weorc."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

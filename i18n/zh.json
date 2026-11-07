@@ -186,7 +186,7 @@
    "tooltip": "当这个文件夹里出现新文件时运行下面的积木（在程序旁边，除非你给出完整路径）。“收到的内容”提供文件名、路径、大小，以及 PDF、Word 或文本文件中的文字。如果是图片，“picture”会把它交给图片积木。"
   },
   "rb_generate": {
-   "message0": "写第一版草稿",
+   "message0": "写第一版草稿 %1 使用网络",
    "tooltip": "Claude 写一份完成任务的草稿。"
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "一次审阅。之后使用“草稿通过了审阅”和“审阅发现的问题”。"
   },
   "rb_revise": {
-   "message0": "修改以解决审阅发现的问题",
+   "message0": "修改以解决审阅发现的问题 %1 使用网络",
    "tooltip": "Claude 修正上一次审阅发现的问题。"
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "{n} 个积木的文字有改动。",
   "Review stuck": "审阅卡住了",
   "stuck": "卡住",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。"
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。",
+  "Using the web": "使用网络",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "这个页面无法使用网络，所以上面的草稿是在没有网络的情况下写的。导出的程序会使用网络。",
+  "Web address in the task": "任务中的网址",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。"
  },
  "examples": {
   "review": {
@@ -3000,6 +3004,8 @@
   "{n} of them can change things": "其中 {n} 个可以改动内容",
   "Review stuck": "审阅卡住了",
   "stuck": "卡住",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。"
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。",
+  "Web address in the task": "任务中的网址",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。"
  }
 }

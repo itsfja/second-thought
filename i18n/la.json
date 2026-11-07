@@ -186,7 +186,7 @@
    "tooltip": "Lateres infra exsequitur cum novus fasciculus in hanc capsam venit (iuxta programma, nisi viam plenam das). «Quod advenit» dat nomen, viam, magnitudinem et, pro PDF, Verbo aut textu, verba eius. Pro imagine, «picture» eam dat lateribus imaginum."
   },
   "rb_generate": {
-   "message0": "scribe primam adumbrationem",
+   "message0": "scribe primam adumbrationem %1 ope interretis",
    "tooltip": "Claude adumbrationem scribit quae pensum perficit."
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "Una recognitio. Postea utere «adumbratio recognitionem superavit» et «vitia recognitionis»."
   },
   "rb_revise": {
-   "message0": "retracta ut vitia recognitionis corrigas",
+   "message0": "retracta ut vitia recognitionis corrigas %1 ope interretis",
    "tooltip": "Claude vitia corrigit quae ultima recognitio invenit."
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "Textus in {n} lateribus mutatus.",
   "Review stuck": "Recognitio haesit",
   "stuck": "haeret",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre.",
+  "Using the web": "Ope interretis",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Haec pagina interrete uti non potest, itaque adumbratio supra sine eo scripta est. Programma exportatum interrete utitur.",
+  "Web address in the task": "Inscriptio interretialis in penso",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Pensum inscriptionem interretialem nominat, sed hic gradus eam aperire non potest. Nota 'ope interretis' in latere, aut verba paginae in pensum pone."
  },
  "examples": {
   "review": {
@@ -3000,7 +3004,9 @@
   "{n} of them can change things": "{n} ex eis res mutare possunt",
   "Review stuck": "Recognitio haesit",
   "stuck": "haeret",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre.",
+  "Web address in the task": "Inscriptio interretialis in penso",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Pensum inscriptionem interretialem nominat, sed hic gradus eam aperire non potest. Nota 'ope interretis' in latere, aut verba paginae in pensum pone."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

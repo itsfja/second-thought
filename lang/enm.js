@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"make an ende with %1"},
 "rb_folder_files":{"message0":"quaiers in folder %1 lyk %2","tooltip":"The quaiers in a folder, newest first, as recordes: name, path, modified, size. “Lyk” is a patroun as *.pdf; lat it be empty for every quaier. It lokeþ oonly: it redeth hem nat. Exported Python lokeþ in the folder; this page useth ensample quaiers."},
 "rb_folder_when":{"message0":"whan a quaier appereth in folder %1","tooltip":"Renneth the blokkes bynethe whan a newe quaier cometh into this folder (bisyde the devys, but if thou yeve a ful wey). “What cam” yeveth his name, wey, gretnesse, and the wordes in it for a PDF, Word or text quaier. For a picture, “picture” yeveth it to the picture blokkes."},
-"rb_generate":{"message0":"write a firste draughte","tooltip":"Claude writeth a draughte that fulfilleth the charge."},
+"rb_generate":{"message0":"write a firste draughte %1 by the webbe","tooltip":"Claude writeth a draughte that fulfilleth the charge."},
 "rb_gh_issue_when":{"message0":"whan a newe issue is opened in %1","tooltip":"Renneth the blokkes bynethe whan any wight openeth an issue in this GitHub werk (loked on every 5 minutes; pull requests ben nat rekned). “What cam” yeveth repo, number, title, body, author, labels, link and text."},
 "rb_gh_release_when":{"message0":"whan a release is published in %1","tooltip":"Renneth the blokkes bynethe whan this GitHub werk publisheth a release (loked on every 15 minutes). “What cam” yeveth repo, tag, name, previous_tag, notes, link and text."},
 "rb_gh_when":{"message0":"whan a pull request preyeth my examinacioun","tooltip":"Renneth the blokkes bynethe whan any wight preyeth thee to examyne a GitHub pull request (loked on every 5 minutes). “What cam” yeveth repo, number, title, user, link and text."},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"the effect as yet","tooltip":"Al that was added to the effect, as text."},
 "rb_retry":{"message0":"assaye agayn up to %1 tymes","message1":"%1","tooltip":"If somwhat withinne failleth in a manere that a seconde assay myghte amende (a broken knotte, a garbled answere), it abideth a litel and renneth it agayn."},
 "rb_review":{"message0":"examyne the draughte agayns %1","tooltip":"Oon examinacioun. Use “draughte passed examinacioun” and “defautes of the examinacioun” afterward."},
-"rb_revise":{"message0":"amende to correcte the examinacioun defautes","tooltip":"Claude correcteth the defautes that the laste examinacioun foond."},
+"rb_revise":{"message0":"amende to correcte the examinacioun defautes %1 by the webbe","tooltip":"Claude correcteth the defautes that the laste examinacioun foond."},
 "rb_rework":{"message0":"werke the draughte newe: %1","tooltip":"Claude writeth the draughte agayn after thyn instruccioun."},
 "rb_rewrite":{"message0":"write %1 agayn to %2","tooltip":"As thus: write (draughte) agayn to (translate into Frenssh)."},
 "rb_run_program":{"message0":"renne devys %1 with %2","tooltip":"Renneth a devys out of thy rolle of Devyses, as a pas. It hath his owene draughte, effect and variables, and yeldeth his effect. Withinne it, “valewe of the message” is the valewe thou yevest heer. The Python sent out hath a copie of the devys as it was whan thou sentest it out."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Text chaunged in {n} blokkes.",
 "Review stuck":"Examinacioun is stoken fast",
 "stuck":"stoken",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft.",
+"Using the web":"By the webbe",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"This page may nat use the webbe, so the draughte above was writen withouten it. The exported program useth the webbe.",
+"Web address in the task":"Webbe adresse in the taske",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"The taske nameth a webbe adresse, but this stappe may nat open it. Marke 'by the webbe' on the blok, or put the pages wordes in the taske."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1867,7 +1871,9 @@
 "{n} of them can change things":"{n} of hem may chaunge thynges",
 "Review stuck":"Examinacioun is stoken fast",
 "stuck":"stoken",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft.",
+"Web address in the task":"Webbe adresse in the taske",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"The taske nameth a webbe adresse, but this stappe may nat open it. Marke 'by the webbe' on the blok, or put the pages wordes in the taske."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

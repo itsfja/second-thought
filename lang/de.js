@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"beenden mit %1"},
 "rb_folder_files":{"message0":"Dateien im Ordner %1, passend zu %2","tooltip":"Die Dateien in einem Ordner, die neuesten zuerst, als Datensätze: name, path, modified, size. „Passend zu“ ist ein Muster wie *.pdf; leer lassen für alle Dateien. Es schaut nur: Es liest sie nicht. Exportiertes Python schaut in den Ordner (neben dem Programm, außer Sie geben einen vollen Pfad an); diese Seite nutzt Beispieldateien."},
 "rb_folder_when":{"message0":"wenn eine Datei im Ordner %1 erscheint","tooltip":"Führt die Blöcke darunter aus, wenn eine neue Datei in diesem Ordner landet (neben dem Programm, außer Sie geben einen vollen Pfad an). „Was ankam“ liefert Name, Pfad, Größe und bei PDF, Word- oder Textdatei die Wörter darin. Bei einem Bild liefert „picture“ es an die Bildblöcke."},
-"rb_generate":{"message0":"ersten Entwurf schreiben","tooltip":"Claude schreibt einen Entwurf, der die Aufgabe erfüllt."},
+"rb_generate":{"message0":"ersten Entwurf schreiben %1 mit dem Web","tooltip":"Claude schreibt einen Entwurf, der die Aufgabe erfüllt."},
 "rb_gh_issue_when":{"message0":"wenn in %1 ein neues Issue eröffnet wird","tooltip":"Führt die Blöcke darunter aus, wenn jemand in diesem GitHub-Projekt ein Issue eröffnet (alle 5 Minuten geprüft; Pull Requests zählen nicht). „Was ankam“ liefert repo, number, title, body, author, labels, link und text."},
 "rb_gh_release_when":{"message0":"wenn in %1 ein Release veröffentlicht wird","tooltip":"Führt die Blöcke darunter aus, wenn dieses GitHub-Projekt ein Release veröffentlicht (alle 15 Minuten geprüft). „Was ankam“ liefert repo, tag, name, previous_tag, notes, link und text."},
 "rb_gh_when":{"message0":"wenn ein Pull Request meine Prüfung anfordert","tooltip":"Führt die Blöcke darunter aus, wenn Sie jemand bittet, einen GitHub-Pull-Request zu prüfen (alle 5 Minuten geprüft). „Was ankam“ liefert repo, number, title, user, link und text."},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"das bisherige Ergebnis","tooltip":"Alles, was zum Ergebnis hinzugefügt wurde, als Text."},
 "rb_retry":{"message0":"bis zu %1 Mal wiederholen","message1":"%1","tooltip":"Schlägt etwas darin auf eine Weise fehl, die ein zweiter Versuch beheben könnte (eine abgebrochene Verbindung, eine verstümmelte Antwort), wartet es kurz und führt es erneut aus."},
 "rb_review":{"message0":"den Entwurf prüfen anhand von %1","tooltip":"Eine Prüfung. Verwenden Sie danach „Entwurf hat die Prüfung bestanden“ und „Probleme der Prüfung“."},
-"rb_revise":{"message0":"überarbeiten, um die Probleme der Prüfung zu beheben","tooltip":"Claude behebt die Probleme, die die letzte Prüfung gefunden hat."},
+"rb_revise":{"message0":"überarbeiten, um die Probleme der Prüfung zu beheben %1 mit dem Web","tooltip":"Claude behebt die Probleme, die die letzte Prüfung gefunden hat."},
 "rb_rework":{"message0":"den Entwurf überarbeiten: %1","tooltip":"Claude schreibt den Entwurf nach Ihrer Anweisung neu."},
 "rb_rewrite":{"message0":"%1 umschreiben: %2","tooltip":"Zum Beispiel: (Entwurf) umschreiben: (ins Französische übersetzen)."},
 "rb_run_program":{"message0":"Programm %1 ausführen mit %2","tooltip":"Führt ein Programm aus Ihrer Programmliste als Schritt aus. Es bekommt seinen eigenen Entwurf, sein eigenes Ergebnis und eigene Variablen und gibt sein Ergebnis zurück. Darin ist „Wert der Nachricht“ der Wert, den Sie hier übergeben. Exportiertes Python enthält eine Kopie des Programms im Zustand beim Export."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Text in {n} Blöcken geändert.",
 "Review stuck":"Prüfung steckt fest",
 "stuck":"festgefahren",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Die Prüfung hat nach zwei Überarbeitungen dieselben Probleme genannt, also kann Überarbeiten sie nicht beheben. Dem Programm fehlt vielleicht etwas, das es nicht bekommen hat, etwa eine Webseite, eine Datei oder eine Tatsache: Gib es ihm (zum Beispiel in der Aufgabe oder über einen Agenten, der Webseiten lesen kann) und starte es dann neu."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Die Prüfung hat nach zwei Überarbeitungen dieselben Probleme genannt, also kann Überarbeiten sie nicht beheben. Dem Programm fehlt vielleicht etwas, das es nicht bekommen hat, etwa eine Webseite, eine Datei oder eine Tatsache: Gib es ihm (zum Beispiel in der Aufgabe oder über einen Agenten, der Webseiten lesen kann) und starte es dann neu.",
+"Using the web":"Mit dem Web",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Diese Seite kann das Web nicht nutzen, also wurde der Entwurf oben ohne es geschrieben. Das exportierte Programm nutzt das Web.",
+"Web address in the task":"Webadresse in der Aufgabe",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Die Aufgabe nennt eine Webadresse, aber dieser Schritt kann sie nicht öffnen. Hake am Block 'mit dem Web' an oder setze den Text der Seite in die Aufgabe."
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -1867,6 +1871,8 @@
 "{n} of them can change things":"{n} davon können etwas ändern",
 "Review stuck":"Prüfung steckt fest",
 "stuck":"festgefahren",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Die Prüfung hat nach zwei Überarbeitungen dieselben Probleme genannt, also kann Überarbeiten sie nicht beheben. Dem Programm fehlt vielleicht etwas, das es nicht bekommen hat, etwa eine Webseite, eine Datei oder eine Tatsache: Gib es ihm (zum Beispiel in der Aufgabe oder über einen Agenten, der Webseiten lesen kann) und starte es dann neu."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Die Prüfung hat nach zwei Überarbeitungen dieselben Probleme genannt, also kann Überarbeiten sie nicht beheben. Dem Programm fehlt vielleicht etwas, das es nicht bekommen hat, etwa eine Webseite, eine Datei oder eine Tatsache: Gib es ihm (zum Beispiel in der Aufgabe oder über einen Agenten, der Webseiten lesen kann) und starte es dann neu.",
+"Web address in the task":"Webadresse in der Aufgabe",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Die Aufgabe nennt eine Webadresse, aber dieser Schritt kann sie nicht öffnen. Hake am Block 'mit dem Web' an oder setze den Text der Seite in die Aufgabe."
 }
 };

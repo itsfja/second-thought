@@ -503,9 +503,9 @@
           case "rb_broadcast": E("R.broadcast(" + I("MSG", '""') + ")"); break;
           case "rb_broadcast_wait": E("await R.broadcast_and_wait(" + I("MSG", '""') + ")"); break;
           case "rb_task": E("R.set_task(" + I("TEXT", '""') + ")"); break;
-          case "rb_generate": E("await R.generate()"); break;
+          case "rb_generate": E("await R.generate(" + (F("WEB") === "TRUE" ? "web=True" : "") + ")"); break;
           case "rb_rework": E("await R.rework(" + I("TEXT", '""') + ")"); break;
-          case "rb_revise": E("await R.revise()"); break;
+          case "rb_revise": E("await R.revise(" + (F("WEB") === "TRUE" ? "web=True" : "") + ")"); break;
           case "rb_set_draft": E("R.set_draft(" + I("TEXT", '""') + ")"); break;
           case "rb_checkpoint_save": E("R.save_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
           case "rb_checkpoint_restore": E("R.restore_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;

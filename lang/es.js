@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"terminar con %1"},
 "rb_folder_files":{"message0":"archivos de la carpeta %1 que coincidan con %2","tooltip":"Los archivos de una carpeta, los más recientes primero, como registros: name, path, modified, size. 'Que coincidan' es un patrón como *.pdf; déjalo vacío para todos. Solo mira: no los lee. El Python exportado mira en la carpeta (junto al programa, salvo que des una ruta completa); esta página usa archivos de ejemplo."},
 "rb_folder_when":{"message0":"cuando aparezca un archivo en la carpeta %1","tooltip":"Ejecuta los bloques de debajo cuando aparece un archivo nuevo en esta carpeta (junto al programa, salvo que des una ruta completa). 'Lo que llegó' da su nombre, ruta, tamaño y, para un PDF, un Word o un archivo de texto, sus palabras. Para una imagen, 'picture' la da a los bloques de imagen."},
-"rb_generate":{"message0":"escribir un primer borrador","tooltip":"Claude escribe un borrador que cumple la tarea."},
+"rb_generate":{"message0":"escribir un primer borrador %1 usando la web","tooltip":"Claude escribe un borrador que cumple la tarea."},
 "rb_gh_issue_when":{"message0":"cuando se abra un issue nuevo en %1","tooltip":"Ejecuta los bloques de debajo cuando alguien abre un issue en este proyecto de GitHub (se comprueba cada 5 minutos; los pull requests no cuentan). 'Lo que llegó' da repo, number, title, body, author, labels, link y text."},
 "rb_gh_release_when":{"message0":"cuando se publique una versión en %1","tooltip":"Ejecuta los bloques de debajo cuando este proyecto de GitHub publica una versión (release; se comprueba cada 15 minutos). 'Lo que llegó' da repo, tag, name, previous_tag, notes, link y text."},
 "rb_gh_when":{"message0":"cuando un pull request me pida revisión","tooltip":"Ejecuta los bloques de debajo cuando alguien te pide revisar un pull request de GitHub (se comprueba cada 5 minutos). 'Lo que llegó' da repo, number, title, user, link y text."},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"el resultado hasta ahora","tooltip":"Todo lo añadido al resultado, como texto."},
 "rb_retry":{"message0":"reintentar hasta %1 veces","message1":"%1","tooltip":"Si algo de dentro falla de una forma que un segundo intento podría arreglar (una conexión caída, una respuesta confusa), espera un poco y lo vuelve a ejecutar."},
 "rb_review":{"message0":"revisar el borrador según %1","tooltip":"Una revisión. Usa después 'el borrador pasó la revisión' y 'problemas de la revisión'."},
-"rb_revise":{"message0":"corregir los problemas de la revisión","tooltip":"Claude corrige los problemas que encontró la última revisión."},
+"rb_revise":{"message0":"corregir los problemas de la revisión %1 usando la web","tooltip":"Claude corrige los problemas que encontró la última revisión."},
 "rb_rework":{"message0":"rehacer el borrador: %1","tooltip":"Claude reescribe el borrador siguiendo tu indicación."},
 "rb_rewrite":{"message0":"reescribir %1 para %2","tooltip":"Por ejemplo: reescribir (borrador) para (traducirlo al francés)."},
 "rb_run_program":{"message0":"ejecutar el programa %1 con %2","tooltip":"Ejecuta un programa de tu lista de Programas, como un paso. Tiene su propio borrador, resultado y variables, y devuelve su resultado. Dentro de él, 'valor del mensaje' es el valor que pasas aquí. El Python exportado incluye una copia del programa tal como estaba al exportar."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Texto cambiado en {n} bloques.",
 "Review stuck":"Revisión atascada",
 "stuck":"atascado",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La revisión señaló los mismos problemas tras dos correcciones, así que corregir no puede arreglarlos. Puede que al programa le falte algo que no se le dio, como una página web, un archivo o un dato: dáselo (en la tarea, por ejemplo, o mediante un agente que pueda leer páginas web) y vuelve a ejecutarlo."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La revisión señaló los mismos problemas tras dos correcciones, así que corregir no puede arreglarlos. Puede que al programa le falte algo que no se le dio, como una página web, un archivo o un dato: dáselo (en la tarea, por ejemplo, o mediante un agente que pueda leer páginas web) y vuelve a ejecutarlo.",
+"Using the web":"Usando la web",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Esta página no puede usar la web, así que el borrador de arriba se escribió sin ella. El programa exportado usa la web.",
+"Web address in the task":"Dirección web en la tarea",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"La tarea nombra una dirección web, pero este paso no puede abrirla. Marca 'usando la web' en el bloque, o pon el texto de la página en la tarea."
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
@@ -1867,6 +1871,8 @@
 "{n} of them can change things":"{n} de ellas pueden cambiar cosas",
 "Review stuck":"Revisión atascada",
 "stuck":"atascado",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La revisión señaló los mismos problemas tras dos correcciones, así que corregir no puede arreglarlos. Puede que al programa le falte algo que no se le dio, como una página web, un archivo o un dato: dáselo (en la tarea, por ejemplo, o mediante un agente que pueda leer páginas web) y vuelve a ejecutarlo."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La revisión señaló los mismos problemas tras dos correcciones, así que corregir no puede arreglarlos. Puede que al programa le falte algo que no se le dio, como una página web, un archivo o un dato: dáselo (en la tarea, por ejemplo, o mediante un agente que pueda leer páginas web) y vuelve a ejecutarlo.",
+"Web address in the task":"Dirección web en la tarea",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"La tarea nombra una dirección web, pero este paso no puede abrirla. Marca 'usando la web' en el bloque, o pon el texto de la página en la tarea."
 }
 };

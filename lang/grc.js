@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"τέλεσον μετὰ %1"},
 "rb_folder_files":{"message0":"τεύχη ἐν τῷ φακέλῳ %1 ὅμοια τῷ %2","tooltip":"Τὰ τεύχη ἐν φακέλῳ, τὰ νεώτατα πρῶτα, ὡς ἀναγραφαί· name, path, modified, size. Τὸ «ὅμοια» ἐστὶ τύπος οἷον *.pdf· κενὸν λεῖπε ὑπὲρ πάντων. Μόνον ὁρᾷ· οὐκ ἀναγινώσκει. Τὸ ἐξαχθὲν Python ὁρᾷ ἐν τῷ φακέλῳ· ἥδε ἡ σελὶς χρῆται παραδείγμασιν."},
 "rb_folder_when":{"message0":"ὅταν τεῦχος φανῇ ἐν τῷ φακέλῳ %1","tooltip":"Τρέχει τὰς πλίνθους τὰς κάτω ὅταν νέον τεῦχος ἔλθῃ εἰς τοῦτον τὸν φάκελον (παρὰ τῷ προγράμματι, εἰ μὴ ὅλην ὁδὸν δῷς). Τὸ «τί ἦλθεν» δίδωσι τὸ ὄνομα, τὴν ὁδόν, τὸ μέγεθος, καὶ τὰς λέξεις ἐν PDF, Word ἢ τεύχει γραμμάτων. Ὑπὲρ εἰκόνος, τὸ «picture» δίδωσιν αὐτὴν ταῖς πλίνθοις εἰκόνων."},
-"rb_generate":{"message0":"γράψον πρῶτον σχέδιον","tooltip":"Ὁ Claude γράφει σχέδιον ὃ τὸ ἔργον τελειοῖ."},
+"rb_generate":{"message0":"γράψον πρῶτον σχέδιον %1 διὰ τοῦ δικτύου","tooltip":"Ὁ Claude γράφει σχέδιον ὃ τὸ ἔργον τελειοῖ."},
 "rb_gh_issue_when":{"message0":"ὅταν νέον issue ἀνοιχθῇ ἐν %1","tooltip":"Τρέχει τὰς πλίνθους τὰς κάτω ὅταν τις ἀνοίξῃ issue ἐν τούτῳ τῷ ἔργῳ τοῦ GitHub (ἐξετάζεται ἀνὰ 5 λεπτά· τὰ pull requests οὐ λογίζεται). Τὸ «τί ἦλθεν» δίδωσι repo, number, title, body, author, labels, link καὶ text."},
 "rb_gh_release_when":{"message0":"ὅταν ἔκδοσις δημοσιευθῇ ἐν %1","tooltip":"Τρέχει τὰς πλίνθους τὰς κάτω ὅταν τοῦτο τὸ ἔργον τοῦ GitHub ἔκδοσιν (release) δημοσιεύσῃ (ἐξετάζεται ἀνὰ 15 λεπτά). Τὸ «τί ἦλθεν» δίδωσι repo, tag, name, previous_tag, notes, link καὶ text."},
 "rb_gh_when":{"message0":"ὅταν pull request αἰτῇ τὴν ἐμὴν ἐξέτασιν","tooltip":"Τρέχει τὰς πλίνθους τὰς κάτω ὅταν τις αἰτῇ σε ἐξετάσαι GitHub pull request (ἐξετάζεται ἀνὰ 5 λεπτά). Τὸ «τί ἦλθεν» δίδωσι repo, number, title, user, link καὶ text."},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"τὸ ἀποτέλεσμα ἕως νῦν","tooltip":"Πάντα τὰ τῷ ἀποτελέσματι προστεθέντα, ὡς γράμματα."},
 "rb_retry":{"message0":"πείρασον πάλιν ἕως %1 φοράς","message1":"%1","tooltip":"Ἐάν τι ἔσω ἀποτύχῃ τρόπῳ ὃν δευτέρα πεῖρα ἰάσαιτο (δεσμὸς λυθείς, ἀπόκρισις τεταραγμένη), μικρὸν μένει καὶ πάλιν τρέχει."},
 "rb_review":{"message0":"ἐξέτασον τὸ σχέδιον κατὰ %1","tooltip":"Μία ἐξέτασις. Χρῶ ὕστερον τῷ «τὸ σχέδιον τὴν ἐξέτασιν παρῆλθεν» καὶ τῷ «τὰ σφάλματα τῆς ἐξετάσεως»."},
-"rb_revise":{"message0":"διόρθωσον ἵνα τὰ σφάλματα τῆς ἐξετάσεως ἰαθῇ","tooltip":"Ὁ Claude ἰᾶται τὰ σφάλματα ἃ ἡ ἐσχάτη ἐξέτασις εὗρεν."},
+"rb_revise":{"message0":"διόρθωσον ἵνα τὰ σφάλματα τῆς ἐξετάσεως ἰαθῇ %1 διὰ τοῦ δικτύου","tooltip":"Ὁ Claude ἰᾶται τὰ σφάλματα ἃ ἡ ἐσχάτη ἐξέτασις εὗρεν."},
 "rb_rework":{"message0":"ἀνέργασαι τὸ σχέδιον· %1","tooltip":"Ὁ Claude πάλιν γράφει τὸ σχέδιον κατὰ τὴν σὴν ἐντολήν."},
 "rb_rewrite":{"message0":"ἀνάγραψον %1 εἰς %2","tooltip":"Οἷον· ἀνάγραψον (σχέδιον) εἰς (μετάφρασον εἰς Γαλλικά)."},
 "rb_run_program":{"message0":"τρέχε πρόγραμμα %1 μετὰ %2","tooltip":"Τρέχει πρόγραμμα ἐκ τοῦ καταλόγου τῶν Προγραμμάτων σου, ὡς βῆμα. Ἔχει τὸ ἴδιον σχέδιον, ἀποτέλεσμα καὶ μεταβλητά, καὶ ἀποδίδωσι τὸ ἀποτέλεσμα. Ἔσω, ἡ «τιμὴ τῆς ἀγγελίας» ἡ τιμή ἐστιν ἣν ἐνταῦθα δίδως. Ὁ ἐξαχθεὶς Python ἔχει ἀντίγραφον τοῦ προγράμματος οἷον ἦν ὅτε ἐξήγαγες."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Ὁ λόγος ἐν {n} πλίνθοις ἐμεταλλάγη.",
 "Review stuck":"Ἡ ἐξέτασις ἐνέμεινεν",
 "stuck":"ἐνέμεινεν",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Ἡ ἐξέτασις μετὰ δύο διορθώσεις τὰ αὐτὰ ἁμαρτήματα εὗρεν, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὰ ἰᾶσθαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Ἡ ἐξέτασις μετὰ δύο διορθώσεις τὰ αὐτὰ ἁμαρτήματα εὗρεν, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὰ ἰᾶσθαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε.",
+"Using the web":"Διὰ τοῦ δικτύου",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Ἥδε ἡ σελὶς τῷ δικτύῳ χρῆσθαι οὐ δύναται, ὥστε τὸ ἄνω σχέδιον ἄνευ αὐτοῦ ἐγράφη. Τὸ δὲ ἐξαχθὲν πρόγραμμα τῷ δικτύῳ χρῆται.",
+"Web address in the task":"Διεύθυνσις τοῦ δικτύου ἐν τῷ ἔργῳ",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Τὸ ἔργον διεύθυνσιν τοῦ δικτύου ὀνομάζει, ἀλλ' ὅδε ὁ βαθμὸς αὐτὴν ἀνοίγειν οὐ δύναται. Σημείωσον 'διὰ τοῦ δικτύου' ἐπὶ τῷ πλινθίῳ, ἢ θὲς τοὺς τῆς σελίδος λόγους ἐν τῷ ἔργῳ."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1867,7 +1871,9 @@
 "{n} of them can change things":"{n} ἐξ αὐτῶν δύναται πράγματα μεταβάλλειν",
 "Review stuck":"Ἡ ἐξέτασις ἐνέμεινεν",
 "stuck":"ἐνέμεινεν",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Ἡ ἐξέτασις μετὰ δύο διορθώσεις τὰ αὐτὰ ἁμαρτήματα εὗρεν, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὰ ἰᾶσθαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Ἡ ἐξέτασις μετὰ δύο διορθώσεις τὰ αὐτὰ ἁμαρτήματα εὗρεν, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὰ ἰᾶσθαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε.",
+"Web address in the task":"Διεύθυνσις τοῦ δικτύου ἐν τῷ ἔργῳ",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Τὸ ἔργον διεύθυνσιν τοῦ δικτύου ὀνομάζει, ἀλλ' ὅδε ὁ βαθμὸς αὐτὴν ἀνοίγειν οὐ δύναται. Σημείωσον 'διὰ τοῦ δικτύου' ἐπὶ τῷ πλινθίῳ, ἢ θὲς τοὺς τῆς σελίδος λόγους ἐν τῷ ἔργῳ."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

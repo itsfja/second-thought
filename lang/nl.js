@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"afronden met %1"},
 "rb_folder_files":{"message0":"bestanden in map %1 die passen bij %2","tooltip":"De bestanden in een map, nieuwste eerst, als records: name, path, modified, size. ‘Passen bij’ is een patroon zoals *.pdf; laat het leeg voor alle bestanden. Het kijkt alleen: het leest ze niet. Geëxporteerde Python kijkt in de map (naast het programma, tenzij je een volledig pad geeft); deze pagina gebruikt voorbeeldbestanden."},
 "rb_folder_when":{"message0":"wanneer er een bestand verschijnt in map %1","tooltip":"Voert de blokken eronder uit wanneer er een nieuw bestand in deze map komt (naast het programma, tenzij je een volledig pad opgeeft). ‘Wat er binnenkwam’ geeft de naam, het pad, de grootte en, bij een pdf, Word- of tekstbestand, de woorden erin. Bij een afbeelding geeft ‘picture’ die aan de afbeeldingsblokken."},
-"rb_generate":{"message0":"een eerste concept schrijven","tooltip":"Claude schrijft een concept dat de taak uitvoert."},
+"rb_generate":{"message0":"een eerste concept schrijven %1 met het web","tooltip":"Claude schrijft een concept dat de taak uitvoert."},
 "rb_gh_issue_when":{"message0":"wanneer er een nieuw issue wordt geopend in %1","tooltip":"Voert de blokken eronder uit wanneer iemand een issue opent in dit GitHub-project (elke 5 minuten gecontroleerd; pull requests tellen niet mee). ‘Wat er binnenkwam’ geeft repo, number, title, body, author, labels, link en text."},
 "rb_gh_release_when":{"message0":"wanneer er een release wordt gepubliceerd in %1","tooltip":"Voert de blokken eronder uit wanneer dit GitHub-project een release publiceert (elke 15 minuten gecontroleerd). ‘Wat er binnenkwam’ geeft repo, tag, name, previous_tag, notes, link en text."},
 "rb_gh_when":{"message0":"wanneer een pull request om mijn review vraagt","tooltip":"Voert de blokken eronder uit wanneer iemand je vraagt een GitHub-pull request te reviewen (elke 5 minuten gecontroleerd). ‘Wat er binnenkwam’ geeft repo, number, title, user, link en text."},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"het resultaat tot nu toe","tooltip":"Alles wat aan het resultaat is toegevoegd, als tekst."},
 "rb_retry":{"message0":"tot %1 keer opnieuw proberen","message1":"%1","tooltip":"Mislukt er iets erin op een manier die een tweede poging kan oplossen (een verbroken verbinding, een verminkt antwoord), dan wacht het even en voert het opnieuw uit."},
 "rb_review":{"message0":"beoordeel het concept op %1","tooltip":"Eén beoordeling. Gebruik daarna ‘concept is door de beoordeling gekomen’ en ‘problemen uit de beoordeling’."},
-"rb_revise":{"message0":"herzien om de problemen uit de beoordeling op te lossen","tooltip":"Claude lost de problemen op die de laatste beoordeling vond."},
+"rb_revise":{"message0":"herzien om de problemen uit de beoordeling op te lossen %1 met het web","tooltip":"Claude lost de problemen op die de laatste beoordeling vond."},
 "rb_rework":{"message0":"het concept herwerken: %1","tooltip":"Claude herschrijft het concept volgens jouw instructie."},
 "rb_rewrite":{"message0":"%1 herschrijven: %2","tooltip":"Bijvoorbeeld: (concept) herschrijven: (vertaal naar het Frans)."},
 "rb_run_program":{"message0":"programma %1 uitvoeren met %2","tooltip":"Voert een programma uit je lijst Programma’s uit, als stap. Het krijgt een eigen concept, resultaat en eigen variabelen, en geeft zijn resultaat terug. Daarin is ‘berichtwaarde’ de waarde die je hier meegeeft. Geëxporteerde Python bevat een kopie van het programma zoals het was toen je exporteerde."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Tekst gewijzigd in {n} blokken.",
 "Review stuck":"Beoordeling loopt vast",
 "stuck":"vastgelopen",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit.",
+"Using the web":"Met het web",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Deze pagina kan het web niet gebruiken, dus het concept hierboven is zonder geschreven. Het geëxporteerde programma gebruikt het web.",
+"Web address in the task":"Webadres in de taak",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -1867,6 +1871,8 @@
 "{n} of them can change things":"{n} daarvan kunnen iets veranderen",
 "Review stuck":"Beoordeling loopt vast",
 "stuck":"vastgelopen",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit.",
+"Web address in the task":"Webadres in de taak",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak."
 }
 };

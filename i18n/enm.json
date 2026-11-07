@@ -186,7 +186,7 @@
    "tooltip": "Renneth the blokkes bynethe whan a newe quaier cometh into this folder (bisyde the devys, but if thou yeve a ful wey). “What cam” yeveth his name, wey, gretnesse, and the wordes in it for a PDF, Word or text quaier. For a picture, “picture” yeveth it to the picture blokkes."
   },
   "rb_generate": {
-   "message0": "write a firste draughte",
+   "message0": "write a firste draughte %1 by the webbe",
    "tooltip": "Claude writeth a draughte that fulfilleth the charge."
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "Oon examinacioun. Use “draughte passed examinacioun” and “defautes of the examinacioun” afterward."
   },
   "rb_revise": {
-   "message0": "amende to correcte the examinacioun defautes",
+   "message0": "amende to correcte the examinacioun defautes %1 by the webbe",
    "tooltip": "Claude correcteth the defautes that the laste examinacioun foond."
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "Text chaunged in {n} blokkes.",
   "Review stuck": "Examinacioun is stoken fast",
   "stuck": "stoken",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft.",
+  "Using the web": "By the webbe",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "This page may nat use the webbe, so the draughte above was writen withouten it. The exported program useth the webbe.",
+  "Web address in the task": "Webbe adresse in the taske",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "The taske nameth a webbe adresse, but this stappe may nat open it. Marke 'by the webbe' on the blok, or put the pages wordes in the taske."
  },
  "examples": {
   "review": {
@@ -3000,7 +3004,9 @@
   "{n} of them can change things": "{n} of hem may chaunge thynges",
   "Review stuck": "Examinacioun is stoken fast",
   "stuck": "stoken",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft.",
+  "Web address in the task": "Webbe adresse in the taske",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "The taske nameth a webbe adresse, but this stappe may nat open it. Marke 'by the webbe' on the blok, or put the pages wordes in the taske."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

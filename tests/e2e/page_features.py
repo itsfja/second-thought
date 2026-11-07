@@ -166,6 +166,18 @@ async def new_feature_page_tests(pg):
     EXTRA["t_checkpoint"] = await export_python(pg, "t_checkpoint")
     check("with R.reviewing():" in EXTRA["t_bestdraft"] and 'R.restore_checkpoint("cp")' in EXTRA["t_checkpoint"], "exported Python has the review loop and checkpoints")
 
+    print("Drafts and the web (#332)")
+    await load_state(pg, script(blk("rb_task", inputs={"TEXT": tx("Sum up github.com/itsfja/second-thought")}), blk("rb_generate")))
+    status = await run_program(pg)
+    note = [t for n, p_, t in await step_texts(pg) if n == "Web address in the task"]
+    check(status.startswith("done") and note and "can't open it" in note[0], "a task that names a web address, drafted without the web, says so")
+    await load_state(pg, script(blk("rb_task", inputs={"TEXT": tx("Sum up github.com/itsfja/second-thought")}), blk("rb_generate", fields={"WEB": "TRUE"})))
+    status = await run_program(pg)
+    names = [n for n, *_ in await step_texts(pg)]
+    code = await export_python(pg, "t_draft_web")
+    check(status.startswith("done") and "Using the web" in names and "Web address in the task" not in names and "await R.generate(web=True)" in code,
+          "'using the web' ticked: the page says it can't search here, and the exported program drafts with the web")
+
     print("Agent")
     done = lambda a: {"done": True, "answer": a}  # noqa: E731
     tool = lambda n, **kw: {"tool": n, "input": kw, "why": "test"}  # noqa: E731
