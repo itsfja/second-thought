@@ -50,6 +50,13 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "releases_url": "RB_RELEASES_URL"}
 
 
+# Settings whose value is one word or number. Programs exported before 3.10.1 wrote their notes on the same line, as in
+# "; save_log = yes      write each run's log…": with the ; taken off, the note isn't part of the value (#338).
+ONE_WORD_SETTINGS = {"primary", "model", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
+                     "exchange_rate", "quota_hourly", "quota_daily", "quota_weekly", "quota_monthly", "save_log", "stream", "resume",
+                     "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check"}
+
+
 def _load_settings():
     import configparser
     here = os.path.dirname(os.path.abspath(sys.argv[0])) if sys.argv and sys.argv[0] else os.getcwd()
@@ -67,6 +74,8 @@ def _load_settings():
     for section in cp.sections():
         for name, value in cp.items(section):
             value = value.strip().strip('"').strip("'")
+            if name.lower() in ONE_WORD_SETTINGS:  # an older export's note left on the line when the ; came off (#338)
+                value = re.split(r"\s{2,}", value, maxsplit=1)[0].strip('"').strip("'")
             key = SETTING_NAMES.get(name.lower(), name.upper())
             if value and not os.environ.get(key):
                 os.environ[key] = value

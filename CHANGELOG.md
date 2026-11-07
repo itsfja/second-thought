@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Fixed
+- A one-word setting in `second-thought.ini` (`currency`, `save_log`, `budget`, `stream`, `resume`, `approve`, `language` and the like) ignores a note left after it (#338). Programs exported before now wrote notes on the same line, as in `; save_log = yes      write each run's log…`; with the `;` taken off, the note became part of the value and the program stopped. The page now writes each note on a line of its own, above its setting.
+
 ### Added
 - Trust Wallet through its Agent Kit's MCP server (#320): name the server `trustwallet` (or start it with `twak serve`) and an agent can read your self-custody wallet: balances, portfolio, prices, history, swap quotes and token risk checks. Its tools carry no MCP annotations, so they're judged the safe way round, like Kraken's: only those known to look count as safe, and transfers, swaps, token approvals, payments and any tool a later twak adds count as money, so they always ask and never run unattended. The agent can't set twak's `autoApprove`; only the person's yes does. `create_automation` is never offered, because an automation trades later, out of sight. A gallery program, **Wallet health check**, emails what you hold and any risky tokens each Sunday, and only reads.
 

@@ -71,6 +71,8 @@
   }
   function iniText(progName){
     const need = settingsFor(), nl = "\r\n";
+    // A setting's note, then the setting: left as a note itself unless `on`, so a ; to take off and nothing to clear.
+    const note = (name, example, what, on) => ["; " + name + ": " + what, (on ? "" : "; ") + name + " = " + example];
     const out = [
       "; Settings for " + progName + ". Fill in the keys, then save this file.",
       "; It must stay in the same folder as the program.",
@@ -85,19 +87,18 @@
       "; primary = " + $("tier").value,
       "; backups = " + (backupTiers().join(", ") || "none"),
       "", "[run]",
-      "; budget = 50000      stop a run before a model call once it has used this many tokens (0 = no limit)",
-      "; budget_dollars = 0.50   or once it has spent this much, in US dollars at the models' list prices (0 = no limit)",
-      "; budget_money = 0.40     the same in the currency below (it wins over budget_dollars)",
-      // A setting line can't carry a note: the note would be read as part of the value. So the currency chosen on the
-      // page gets the note on a line of its own above it (#338).
-      ...(currency() === "usd" ? ["; currency = gbp      show costs and money budgets in usd, gbp, eur, jpy or cny (the European Central Bank's rate of the day)"]
-        : ["; currency: show costs and money budgets in usd, gbp, eur, jpy or cny (the European Central Bank's rate of the day)", "currency = " + currency()]),
-      "; exchange_rate = 0.79    fix one US dollar in that currency, instead of fetching the day's rate",
-      "; save_log = yes      write each run's log to the logs folder, next to the program",
-      "; stream = yes        show Claude writing as it goes (yes or no; normally only when you run it in a terminal yourself)",
-      "; resume = yes        if a run stopped part-way, pick up where it stopped next time (yes or no; normally it asks you)",
-      ...(programCapabilities().some(c => c[2]) ? ["; approve = no       don't ask before the first run (for a computer with nobody at it). The program's notes list what it can do"] : []),
-      ...(exportWords() ? ["; language = en      print in English instead of " + window.ST_I18N.name + " (the run log, questions, errors and --doctor)"] : []));
+      // Every note goes on a line of its own, above its setting: a setting line can't carry one, so taking the ; off a
+      // line like "; save_log = yes   write each run's log" would make the note part of the value (#338).
+      ...note("budget", "50000", "stop a run before a model call once it has used this many tokens (0 = no limit)"),
+      ...note("budget_dollars", "0.50", "or once it has spent this much, in US dollars at the models' list prices (0 = no limit)"),
+      ...note("budget_money", "0.40", "the same in the currency below (it wins over budget_dollars)"),
+      ...note("currency", currency() === "usd" ? "gbp" : currency(), "show costs and money budgets in usd, gbp, eur, jpy or cny (the European Central Bank's rate of the day)", currency() !== "usd"),
+      ...note("exchange_rate", "0.79", "fix one US dollar in that currency, instead of fetching the day's rate"),
+      ...note("save_log", "yes", "write each run's log to the logs folder, next to the program"),
+      ...note("stream", "yes", "show Claude writing as it goes (yes or no; normally only when you run it in a terminal yourself)"),
+      ...note("resume", "yes", "if a run stopped part-way, pick up where it stopped next time (yes or no; normally it asks you)"),
+      ...(programCapabilities().some(c => c[2]) ? note("approve", "no", "don't ask before the first run (for a computer with nobody at it). The program's notes list what it can do") : []),
+      ...(exportWords() ? note("language", "en", "print in English instead of " + window.ST_I18N.name + " (the run log, questions, errors and --doctor)") : []));
     if (need.mcp.length) out.push("", "[mcp servers]",
       "; Each MCP server the agent uses: the command that starts it, or its https:// address (and MCP_<NAME>_TOKEN = ... if it needs one).",
       "; For example:  MCP_FILES = npx -y @modelcontextprotocol/server-filesystem /home/me/recipes",
@@ -108,14 +109,14 @@
       "; Prices and paper trading need no key. For your account, make an API key at kraken.com (Settings, API) with the",
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
-      "; MCP_KRAKEN = kraken mcp -s market,account,paper     to choose Kraken's services yourself (never add --allow-dangerous)");
+      ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
     if (need.feeds || need.pages) out.push("", "[feeds and pages]",
       ...(need.feeds ? ["; Your news feeds (RSS or Atom addresses), separated by spaces. 'News from feed' with nothing in it, and the agent, read these.",
                         "feeds = "] : []),
-      "; local_pages = yes   let the agent read pages and feeds on your own network too (normally only public ones)");
+      ...note("local_pages", "yes", "let the agent read pages and feeds on your own network too (normally only public ones)"));
     if (need.github) out.push("", "[github]",
       "; A token from https://github.com/settings/tokens. Fine-grained: read access to contents, issues and pull requests;",
       "; to let the agent comment, pull requests and issues need read and write.",
