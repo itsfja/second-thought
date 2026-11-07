@@ -138,26 +138,30 @@ def colour(text):
     return "\n".join(out)
 
 
+# Plain SVG text (not HTML labels) in a font every computer has, with room to spare: a box sized for one font and shown
+# in another was clipping words ("draft" came out as "dra") where GitHub shows the SVG.
+INIT = """%%{init: {"htmlLabels": false, "flowchart": {"htmlLabels": false, "padding": 18, "nodeSpacing": 40, "rankSpacing": 45},
+          "themeVariables": {"fontFamily": "Arial, Helvetica, sans-serif", "fontSize": "15px"}}}%%
+"""
 DIAGRAMS = {
-    "review-loop": """flowchart LR
+    "review-loop": INIT + """flowchart LR
     T["set task"] --> D["write a first draft"]
     D --> R{"review against<br/>your rules"}
     R -- "problems" --> V["revise to fix them"]
     V --> R
-    R -- "approved,<br/>or out of rounds:<br/>the best draft" --> F["finish and show<br/>the result"]
-    classDef task fill:#4C7EF3,stroke:#3a63c4,color:#fff
+    R -- "approved, or out of rounds:<br/>the best draft" --> F["finish and show<br/>the result"]
     classDef draft fill:#4C7EF3,stroke:#3a63c4,color:#fff
     classDef review fill:#8A55D7,stroke:#6b3fb0,color:#fff
     classDef finish fill:#2E9E5B,stroke:#237a46,color:#fff
     class T,D,V draft
     class R review
     class F finish""",
-    "settings-layers": """flowchart TB
-    E["Ordinary environment variables<br/><code>ANTHROPIC_API_KEY</code>, <code>RB_BUDGET</code><br/><i>win over everything</i>"]
-    P["3. The program's own second-thought.ini<br/><i>what's particular to it</i>"]
-    H["2. second-thought.ini in your home folder<br/><i>email, keys, currency your programs share</i>"]
-    S["1. ST_ variables<br/><code>ST_EMAIL_ADDRESS</code>, <code>ST_CURRENCY</code><br/><i>every program on the computer</i>"]
-    K["The keychain<br/><i>fills in any key still missing</i>"]
+    "settings-layers": INIT + """flowchart TB
+    E["Ordinary environment variables<br/>ANTHROPIC_API_KEY, RB_BUDGET<br/>win over everything"]
+    P["3. The program's own second-thought.ini<br/>what's particular to it"]
+    H["2. second-thought.ini in your home folder<br/>email, keys, currency your programs share"]
+    S["1. ST_ variables<br/>ST_EMAIL_ADDRESS, ST_CURRENCY<br/>every program on the computer"]
+    K["The keychain<br/>fills in any key still missing"]
     E -- "over" --> P -- "over" --> H -- "over" --> S -- "then" --> K
     classDef top fill:#2F4BDB,stroke:#24399f,color:#fff
     classDef layer fill:#EEF1FD,stroke:#9aa8e8,color:#1B1E2B
