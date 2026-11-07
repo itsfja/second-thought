@@ -9,521 +9,82 @@
 
 ![Building and running a review loop, then exporting it to Python](screenshots/demo.gif)
 
-**Try it in three steps**
+## Try it
 
-1. **Open [Second Thought](https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN)** in claude.ai. Nothing to install, and runs on the page use your claude.ai account.
-
-   There's also a copy at **[itsfja.github.io/second-thought](https://itsfja.github.io/second-thought/)**, updated with each release. It builds programs, tries them on sample data, explains and exports them. To run them with Claude there, press **Use your own API key** and paste an Anthropic API key (from [console.anthropic.com](https://console.anthropic.com)): runs are charged to that key's account. The key goes only from your browser to api.anthropic.com, is kept until you close the tab unless you tick **Remember on this browser**, and is never put in a saved program, an export or the run log; **Forget my key** removes it. Or use the page on claude.ai, which needs no key. Exported Python runs anywhere either way.
-2. **Pick an example and press Run.** There are over 150, from a simple review loop to agents that plan a bake or check on the house. Change the text in any block and run it again.
-3. **Export it.** *Import / export → Save Python (.zip)*, unzip, put your API key in `second-thought.ini`, then run `run.bat` (Windows) or `sh run.sh` (Linux, Mac). [Exporting to Python](#exporting-to-python) has the details.
+1. **Open [Second Thought](https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN)** in claude.ai. There's nothing to install, and runs use your claude.ai account. There's also a copy at **[itsfja.github.io/second-thought](https://itsfja.github.io/second-thought/)**, updated with each release, which runs Claude with your own API key ([how](docs/using-the-page.md#using-the-page)).
+2. **Pick an example and press Run.** There are over 150, from a simple review loop to agents that plan a bake or check on the house. Change the words in any block and run it again.
+3. **Export it.** *Import / export → Save Python (.zip)*, unzip, put your API key in `second-thought.ini`, then run `run.bat` (Windows) or `sh run.sh` (Linux, Mac). [Running exported programs](docs/running.md) has the details.
 
 New to all this? [**The picture book**](docs/ladybird-book.md) is a gentle, Ladybird-style introduction to what Second Thought is and why it checks its own work.
 
-**Contents:** [Using the page](#using-the-page) · [What a program can do](#what-a-program-can-do) · [The agent](#the-agent) · [Connections](#connections) · [Examples and the gallery](#examples-and-the-gallery) · [Saving programs](#saving-programs) · [Exporting to Python](#exporting-to-python) · [Models](#models) · [Home Assistant](#home-assistant) · [Homey](#homey) · [MCP tools](#mcp-tools) · [Languages](#languages) · [Versions and --doctor](#versions-and---doctor) · [Good to know](#good-to-know) · [Repository layout](#repository-layout) · [Development and tests](#development-and-tests)
+## What it can do
 
----
+<table>
+<tr>
+<td width="50%" valign="top">
 
-## Using the page
+**Check its own work.** Write, review against rules you wrote down, revise, and go round again until it passes. If it runs out of tries it keeps the best attempt, not the last. [More](docs/using-the-page.md#what-a-program-can-do)
 
-Each block is one instruction, like *write a first draft*, *review the draft against …* or *revise to fix the review's problems*. Drag blocks from the categories on the left and click them together. Only blocks under a **when Run is clicked** or **when I receive** hat run, top to bottom; separate scripts run side by side. Click any white slot to type into it. Round slots take values, hexagon slots take yes/no conditions.
+<img src="screenshots/review-loop.svg" alt="Write a first draft, review it against your rules, revise to fix the problems and review again; when it's approved, or out of rounds, finish with the best draft">
 
-The blocks are colour-coded by job:
+</td>
+<td width="50%" valign="top">
 
-- **Yellow** starts things. **when Run is clicked** goes at the top.
-- **Orange** repeats or chooses.
-- **Blue** asks Claude to write.
-- **Purple** asks Claude to check the writing.
-- **Teal** asks *you* a question and waits for your answer.
-- **Olive** makes an [agent](#the-agent), a helper that decides its own steps. Its tools are a darker olive, in their own **Tools** category.
-- **Pink**, under **Connections**, talks to Telegram, email, your calendar and news feeds.
-- **Green** shows the result.
+**Agents.** Give a model a goal and tools (your house, your files, the web, a calculator, MCP servers) and it plans, acts and reports, with every step in the run log. Anything that changes the world asks you first. [More](docs/agent.md)
 
-There are more categories down the left side of the screen.
+<img src="screenshots/agent-run.png" alt="The run log after an agent checked the sample house: its answer lists the open back door and kitchen window, three low batteries and an unavailable sensor, above a table of the tools it used" width="420">
 
-**Describing a program.** Instead of dragging blocks, type what you want in the box above the canvas, like *every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram*, and press **Build it**. Claude builds the blocks. Before anything loads, the page says what the program does, how many blocks it has, what it can do (send messages, control devices and so on, worked out from the blocks), and anything it left out. **Load it** puts it on the canvas, and **Undo** puts your old program back. To change the program on the canvas, describe the change (*also email it to me*) and press **Change this program**. Claude uses the same block list as converting code, and a program with blocks the page doesn't have is refused. It uses your Claude usage, like any run.
+</td>
+</tr>
+<tr>
+<td valign="top">
 
-**Running.** Press **Run**. The **run log** on the right adds an entry as each block does its job, and a green box at the end shows the result. Under each step that asks a model something, a grey line says which model answered, how long it took and roughly how many tokens it used; click **Prompt sent** to see exactly what it was asked. Under the result is an estimate of the run's total tokens (on the page this is estimated from the length of the text; exported Python reports exact counts), and what that would cost at the models' list prices, in US dollars. On the page the run counts toward your Claude usage instead; exported Python's last line gives the cost from the exact counts, like *about $0.03 at list prices*. Prices are kept for the services whose prices have been checked; a run using any other model shows no cost rather than a wrong one, and web searches and other per-request charges aren't included. **Save log** keeps every step, its timing and the result as a file. **Stop** stops everything at once.
+**Your home and your apps.** Home Assistant, Homey, MQTT, Telegram, Discord, Slack, email, calendars, feeds, GitHub. On the page they use sample data, so you can build safely. [More](docs/connections.md)
 
-**With the keyboard, or a screen reader.** Every button, menu and panel works with **Tab** and **Enter**. When a run asks you something, the answer box takes the focus and a screen reader reads the question; **Ctrl+Enter** sends a typed answer. New steps in the run log, and the run's status, are read out as they happen. Programs can be built without a mouse too, using Blockly's own keyboard navigation, always on: **Tab** to the block editor, **T** opens the blocks, the arrow keys move, **Enter** adds a block or edits a field, and **M** moves a block. The **?** button by the zoom buttons lists every key. A screen reader reads out each block, field and category as you reach it.
+<img src="screenshots/home-assistant.png" alt="The Home Assistant panel on the page, listing the sample house's people, weather, bins and calendar with their states">
 
-**Backups.** The **Model** menu picks the main model. **Backups**, next to it, lists spare models: if the main one can't answer (its key is missing, or the service is down), the first backup does that step instead, and the run log says so.
+</td>
+<td valign="top">
 
----
+**One file you own.** Export a single Python file that runs on your computer, on a schedule, or on GitHub Actions, with `--doctor` to check everything's set up. [More](docs/running.md)
 
-## What a program can do
+<img src="screenshots/terminal-run.png" alt="An exported program running in a terminal: it sets the task, writes a draft, a review finds two problems, it revises, and the second review approves">
 
-- Write, check, then try again until the writing passes. If it runs out of tries, it keeps the best attempt, not the last, and each check makes sure earlier problems haven't come back.
-- **Save a checkpoint** when the draft is good, and **go back to the checkpoint** if later changes make it worse.
-- Ask you questions and wait for your answer.
-- Look at a picture you give it and describe it, or draw simple pictures.
-- Read a document, such as a PDF or a Word file.
-- Save its work as a file.
-- **Remember** things for next time.
-- Do several jobs at the same time.
-- Wait until a time of day, then start a job by itself.
-- Retry when something goes wrong.
-- Stop itself before it uses too many tokens, or spends too much: put **limit this run to …** near the top, in tokens or US dollars.
-- Ask you first before it sends a message, says something out loud, saves a file or changes something at home: use **ask me before …**.
-- Use one of your saved programs as a single block: **run program … with …**, from **Programs**.
-- Use other models alongside Claude, for example Claude writes and Gemini reviews. See [Models](#models).
+</td>
+</tr>
+<tr>
+<td valign="top">
 
----
+**Over 150 examples and a community gallery.** Writing, research, baking, the house, money, code. Load one, press Run, then make it yours. [More](docs/using-the-page.md#examples-and-the-gallery)
 
-## The agent
+<img src="screenshots/examples.png" alt="The example browser: cards for Review loop, Interview me then write, Polish an email and more, each with a Load this example button">
 
-Most programs do exactly what the blocks say, in order. An **agent** is different: you give it a **goal** and some **tools**, and Claude decides what to do next. It picks a tool, looks at what happened, and picks again. When the goal is met, it writes its answer into the draft.
+</td>
+<td valign="top">
 
-The olive block **agent: work toward …** holds the tools, which have their own category, **Tools**, just below **Agent**. Drop in as many as you like:
+**MCP and money, carefully.** Use any MCP server's tools, GitHub's among them. Kraken and Trust Wallet tools that move money always ask first and never run unattended. [More](docs/mcp.md)
 
-- **ask me a question**, for things only you know.
-- **remember and recall notes**, to keep what it learns for next time. It can also **search its notes**, so even among hundreds it finds the right one by its content, without knowing its exact name.
-- **search the web and read pages**, for things that change. It can search, then read a source page in full. Reading pages only works in exported Python, and only public pages, never addresses on your own network.
-- **work out sums**, so numbers are calculated exactly, not guessed: + − × ÷, powers, brackets and rounding, like `round(350 / 500 * 100, 1)`.
-- **clock times and dates**, for the time now and for adding or taking away minutes, like 09:30 plus 270 minutes. Good for working backwards from when you want bread out of the oven.
-- **read a file I choose**: the agent asks you for a PDF, a Word file or a text file and reads it.
-- **check text against criteria**: a separate, strict reviewer checks the agent's work and lists the problems, so the agent can fix them before it finishes.
-- **news feeds**, to read the latest from news sites and blogs (RSS or Atom).
-- **search LinkedIn**, through the web search. LinkedIn doesn't let programs search it directly, so this only finds what LinkedIn shows everyone.
-- **calendar**, to list your events and find free time.
-- **email: search and read**, and **email: send**.
-- **GitHub: projects and pull requests**, to find pull requests waiting for your review and read what they change, list a project's branches and commits, and read its files. **GitHub: comment, open and label issues** comments on pull requests and issues, opens new issues, and adds labels the project already has.
-- **Telegram: search my messages** and **Telegram: send**.
-- **Discord: search my channels** and **Discord: send**, and the same for **Slack**. They only read and post in the channels in your settings.
-- **MQTT: read topics** and **MQTT: publish**, for sensors and switches that talk MQTT (like Zigbee2MQTT).
-- **Home Assistant: look at devices**, including how a sensor changed over the last day, and **control devices**. Control devices asks you before every change, because something the agent reads could try to trick it. If you trust everything it reads, choose **control devices (no asking)**.
-- **tool: My Block**, to turn one of your own My Blocks into a tool. Write a clear sentence about what it does, because that sentence is all the agent knows about it. **Ask me before each use** starts ticked, so you approve before your block runs. That matters if the block changes something. Untick it for blocks that only work something out, like a calculator.
-  In **input types**, say what each input must be, like `flour grams: number; water grams: number`. The types are text, number, yes/no, list and any. The agent's input is checked before your block runs; if it's wrong, for example words where a number should be, the block doesn't run and the agent is told what to fix.
+<img src="screenshots/terminal-doctor.png" alt="--doctor checking a wallet program: every line ok, including the Trust Wallet MCP server with 26 of its 61 tools able to change things, and one note">
 
-Tick **make a plan first** and the agent writes a short plan with its first step, then changes it if something surprises it. The plan shows in the run log, and costs nothing extra, because it travels with the steps.
+</td>
+</tr>
+</table>
 
-Each step is one model call, so set how many steps it may take. If it runs out of steps, the draft holds whatever it found last. If a reply comes back unreadable, or it asks for the same tool with the same input twice in a row, the agent tells it and tries again; that uses a step. Three repeats in a row and the agent stops.
+It also speaks 21 other languages besides English, from Spanish and Japanese to Akkadian in cuneiform ([Languages](docs/using-the-page.md#languages)), and works with 15 model services, with backups if one is down ([Models](docs/settings.md#models)).
 
-An agent only reads the words tools send back. It never follows instructions inside them, and it can't unlock a door without asking you. Tools that send or change something (email, Telegram, GitHub comments, MQTT publish, controlling devices) ask you before each use, because an email, a web page or a pull request can contain words written to trick the agent. Telegram has a **send (no asking)** choice for a bot that answers on its own. Even with the no-asking tools, unlocking, opening and disarming always ask, and so do the things that could do anything when the agent chooses them: Home Assistant scripts, scenes, automations and buttons, Homey flows, and MQTT messages that say unlock, open or disarm. An agent that can see private things (email, messages, your home, memory) also asks before reading a page address it made up, since the address could carry your data away. [SECURITY.md](SECURITY.md) has the details.
+## Read more
 
-When the agent finishes, the run log shows an **Agent summary**: one row per step, with the tool, what it sent, what came back, and how it went. You get it even if the run stops part-way. The block **agent's steps** gives the same as a list, for your program to check, save or have reviewed.
-
-On the page, the feeds, GitHub, email, Telegram and the calendar use **sample** data, so you can try everything safely; nothing real is read or sent. Exported programs use your real accounts: see [Connections](#connections) for the settings.
-
-There are 19 agent examples under **Agents** in **Browse examples**. **Agent: plan my bake** asks and remembers. **Agent with your own tool** uses a My Block. **Agent: bake timetable** works backwards with the clock. **Agent: scale a recipe** does every sum with the sums tool. **Agent: write, check, improve** fixes its work until a reviewer passes it. **Agent: check my recipe file** reads a file you choose. **Agent: research with sources** searches and reads its sources. **Agent: house check-up** and **Agent: bedtime round** look after a Home Assistant house, and the bedtime round asks before switching anything off. **Agent: news round-up** reads your feeds and skips what it showed you last time. **Agent: trip planner** checks your calendar and builds a plan with times and a budget. **Agent: pull requests for me** and **Agent: review and comment on a pull request** work with GitHub. **Agent: inbox triage** sorts your email and drafts replies. **Agent: plan my week** fits baking around your calendar. **Telegram bot that answers** replies to messages you send your bot. **Agent: find people on LinkedIn** searches LinkedIn's public pages.
-
----
-
-## Connections
-
-The pink **Connections** blocks work without an agent too.
-
-**Listeners** start a script when something arrives:
-
-- **when a Telegram message arrives**, for messages to your bot.
-- **when a Discord message arrives** and **when a Slack message arrives**, for messages in your channels, checked every 10 seconds. Only the channels in `DISCORD_CHANNEL_ID` or `SLACK_CHANNEL_ID` count, because anyone in a server or workspace can post; the bot's own messages never count. Discord needs the bot's *Message Content Intent* turned on.
-- **when an MQTT message arrives on …**, for a sensor or switch. `+` stands for one level of the topic and `#` for everything below, like `zigbee2mqtt/#`.
-- **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
-- **when an email arrives containing …**, checked every 2 minutes.
-- **when there's something new in feed …**, checked every 15 minutes.
-- **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files. For a picture (PNG, JPEG, WebP or GIF), **what arrived: picture** gives the picture itself, for the picture blocks.
-- **when a pull request asks for my review**, checked every 5 minutes.
-- **when a new issue is opened in** `owner/name`, checked every 5 minutes (pull requests don't count), and **when a release is published in** `owner/name`, checked every 15 minutes. **what arrived** gives the issue's `number`, `title`, `body`, `author` and `labels`, or the release's `tag`, `name`, `previous_tag` and `notes`.
-- **when a calendar event starts in … minutes**, for reminders.
-- **when the web page … changes**, for a price, a stock notice, opening times or the council's bin page. Fill in **only the part containing …** (like `Price`) to watch just the lines with those words and the two lines after each, so adverts and visitor counters elsewhere on the page don't count. It checks every 60 minutes unless you say otherwise. The first check only remembers the page. What changed is in `changed`, with `before` and `after`. The last copy of each page is kept in `watched-pages.json`, next to the program, so a restart doesn't count every page as changed. Pages that need a browser to show their words can't be watched.
-
-**what arrived** gives what started the script. Every listener gives `text`, which sums it up; each block's tooltip lists its other fields, like `subject` for an email or `topic` for MQTT. **Telegram message** gives a Telegram message's words, sender or chat. On the page, right-click a listener and choose **Run this script** to try it with a sample of what arrives. Listeners only listen while the exported program runs on schedule.
-
-**Other blocks:**
-
-- **latest MQTT message on …** reads a topic, and **publish MQTT … to topic …** sends one. With **ask me before any smart home action**, publishing asks you first.
-- **send Telegram message**, **send Discord message**, **send Slack message** and **send email** send something. The Discord and Slack ones reply in the channel a message came from, or post in your first channel. With **ask me before sending messages and announcements**, they ask you first.
-- **news from feed** gives a list of the latest items. Leave it empty for your own feeds.
-- **calendar for the next … days** gives a list of your events.
-- **files in folder … matching …** gives a list of the files in a folder, newest first (name, path, modified, size), like every `*.pdf`. It only looks; it doesn't read them.
-
-Try **Morning briefing on Telegram** and **Email me a news digest** under Automation, and the listener examples: **Proofer too warm? (MQTT)**, **When the bread is done (web request)**, **When the flour shop emails**, **Tell me when a feed posts something useful**, **Convert recipes dropped in a folder**, **When someone asks for my review (GitHub)** and **A reminder before each event**. Press Run to try each with something you type. Under Agents, **Agent: check the sensors (MQTT)** looks over your MQTT devices.
-
-**Settings.** An exported program's `second-thought.ini` asks only for what it uses:
-
-- **GitHub:** `GITHUB_TOKEN`, from github.com/settings/tokens. Read access is enough to look; to comment, it also needs write access to pull requests.
-- **Telegram:** in Telegram, message **@BotFather** and send `/newbot`. It gives you `TELEGRAM_BOT_TOKEN`. Then message your bot and run the program: it tells you your chat number for `TELEGRAM_CHAT_ID`. Anyone can message a bot, so it only listens to, and searches, the chats you list there. A bot only sees messages sent to it, so it can't search your other chats.
-- **Email:** `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo and Fastmail find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST`.
-- **Calendar:** `CALENDAR_URL`, your calendar's private iCal address. In Google Calendar it's under Settings, your calendar, **Secret address in iCal format**. It can read your calendar, but not add to it.
-- **News feeds:** `feeds = ` and the feed addresses, separated by spaces.
-- **MQTT:** `MQTT_HOST`, your broker's address (for Mosquitto in Home Assistant, that's your Home Assistant), plus `MQTT_USERNAME` and `MQTT_PASSWORD` if it needs them. `MQTT_TLS = yes` makes it encrypted. It needs the paho-mqtt library, which run.bat and run.sh install.
-- **Web requests:** `WEBHOOK_SECRET`, a long password, and `WEBHOOK_PORT` if 8765 is taken. Call `http://127.0.0.1:8765/<address>?key=<your secret>` from the same computer, or put the secret in an `X-Second-Thought-Key` header. The program only listens on this computer unless you add `WEBHOOK_HOST = 0.0.0.0`, which lets Home Assistant on another machine, IFTTT or your phone reach it at `http://<this computer>:8765/…`.
-
-The agent only reads **public** web pages and feeds, never addresses on your own network, in case something it reads tries to steer it there. Your own feeds and calendar address are fine wherever they are. To let the agent read pages on your own network, add `local_pages = yes`.
-
-To keep listening all the time, run the program with **run-on-schedule** (see [Running on a schedule](#running-on-a-schedule)). Things that arrived while it was off don't start the script: Telegram messages are kept for searching, and the email, feed, GitHub and folder listeners start from what's new after the program starts.
-
----
-
-## Examples and the gallery
-
-Choose an example from **Example** and press **Load**, or press **Browse examples** to see them all with a sentence about each and an idea for something to change. There are over 150, grouped into Writing, Research, Design, Learning, Work, Home and baking, Agents, Homey, Code and data, Automation, and ten groups of Home Assistant examples. **Review loop** is a good first one. You can't break anything: if you get in a muddle, load the example again.
-
-The **Community** groups, straight after Writing and Research, hold programs other people made and shared, grouped by topic (GitHub, code and data, news, money, calendar and email, home and baking, teaching, odds and ends). Each says who shared it and what it can do: whether it only talks to a model, or can also send messages, keep notes or control things. The page works that out from the blocks, so it's always accurate. To share your own, see [`gallery/README.md`](gallery/README.md).
-
----
-
-## Saving programs
-
-Press **Programs**, type a name and press **Save**. Open the same panel and press **Open** to get it back. To keep a copy as a file, use **Import / export**.
-
-A saved program can be a block, too. Put **run program "my program" with …** inside another program. The saved program runs, then hands back its result. Inside it, **message value** holds whatever you gave it. It has its own draft and its own result, so it can't interfere with yours.
-
-There are two rules. A program can't run itself, because that would never end. And a program that uses **broadcast** blocks can't be used this way; run it on its own instead.
-
----
-
-## Exporting to Python
-
-An exported program runs on any computer by itself, with the page closed. It talks to the model services directly, so it needs an API key, and calls are billed by the service, separately from claude.ai.
-
-Press **Import / export**, then **Save Python (.zip)**, and unzip it into a folder of its own:
-
-| File | What it is |
+| Page | What's in it |
 |---|---|
-| `my-program.py` | The program, with the runtime built in. |
-| `second-thought.ini` | Settings, including keys. It lists only what *this* program needs. |
-| `run.bat` | Windows: double-click to run. |
-| `run.sh` | Linux or Mac: the same job as `run.bat`. |
-| `requirements.txt` | The packages it needs. `run.bat` and `run.sh` install them for you. |
-
-Open `second-thought.ini` in any text editor, put each key after its `=` sign, and save:
-
-```
-[keys]
-ANTHROPIC_API_KEY = sk-ant-your-key-here
-```
-
-Keep this file private: it holds your keys.
-
-**On Windows:** install Python from python.org (tick **Add python.exe to PATH**), then double-click `run.bat`. The first time, it installs what the program needs.
-
-**On Linux or a Mac:** in a terminal in the folder, run:
-
-```
-sh run.sh
-```
-
-The first time, it makes a private `.venv` next to the program and installs into that, so nothing is installed for the whole computer. (On Debian or Ubuntu, if it can't set up Python, run `sudo apt install python3-venv` first.)
-
-### Running on a schedule
-
-If a program has timed jobs or listeners, the zip also has `run-on-schedule.bat` and `run-on-schedule.sh`. These keep running, so the jobs start by themselves, and if the program stops with a problem they start it again 30 seconds later.
-
-To start it automatically:
-
-- **Windows:** double-click `install-startup.bat` once. The program then starts in a small window each time you log in. To undo it, press Windows+R, type `shell:startup`, and delete "Second Thought - my-program".
-- **Linux or a Mac:** run `sh install-service.sh` once. On Linux it starts whenever the computer starts (it asks for your password to set this up); on a Mac, whenever you log in. It tells you how to watch what the program is doing, and how to turn it off.
-
-### Running on GitHub Actions
-
-A program whose scripts start at set times ('when it's …' and 'every …') can run on GitHub's computers instead, so yours doesn't need to be on. In Import / export, choose **Save as GitHub Actions (.zip)**. The zip has the program, a workflow in `.github/workflows/`, and `SETUP.md`, which lists the repository secrets to add (your keys). Put the files in a **private** repository, add the secrets, and the scripts run at their times. The **Run workflow** button on the Actions tab runs one now.
-
-If the program has test cases (**Save as test case** after a good run), the workflow runs them too: whenever you push a change to the program, its tests or the workflow, and from **Run workflow**. They never run on the schedule, since they call the real models. A failed case shows on the run's page, and the run's summary has a table of every case and what the tests cost. `SETUP.md` shows how to make the scheduled runs wait while the last test run has failed.
-
-- **Times:** GitHub's schedules are in UTC. The workflow is worked out for your time zone. Where the clocks change, each time has a winter line and a summer line, and the program only runs a script within an hour after its time, so the other line does nothing. GitHub often starts runs a few minutes late, sometimes skips one when it's busy, and runs 'every' scripts at most every 5 minutes.
-- **What it remembers:** after each run, `memory.json` and `outputs/` are committed back to the repository. That's why the repository should be private. To keep them out of it, the workflow says how to use `actions/cache` instead, but GitHub deletes a cache it hasn't used for 7 days.
-- **Approval:** adding the workflow is your yes to what the program can do (`SETUP.md` lists it), so it runs with `approve = no`. An agent tool that asks first still gets no answer there, so it says no.
-- **What can't run there:** programs that wait for things to happen (messages, web requests, changes, new files); programs that use Llama, MCP servers or folders on your computer; and programs whose scheduled scripts ask you questions. The page says which, and why. Home Assistant, Homey and MQTT have to be reachable from the internet.
-- **Free minutes:** on GitHub's free plan, private repositories get 2,000 a month, and a run takes about a minute.
-- **When it fails:** the reason is on the run's page on GitHub, under Annotations, as well as in the log.
-- **Claude keys:** make the key inside a workspace (the Console's Workspaces page). A key made for the whole organisation also needs the `ANTHROPIC_WORKSPACE_ID` secret.
-
-**Checked on GitHub** (October 2026, #226). The *Rain window* gallery program, saved as GitHub Actions for Europe/London into a private repository with its three secrets, ran from the Run workflow button: the secrets reached the program, the time zone was London's, the right script ran, the forecast was looked up and the answer arrived on Telegram, in 27 seconds. The scheduled runs start from the cron lines as above. That first real run found what's now fixed: a Claude key made for a whole organisation was refused (so `ANTHROPIC_WORKSPACE_ID` and a plain explanation), the reason for a failure was only in the log, the end of a failed run said to run it again to carry on (which can't happen there), the actions were the old Node.js 20 ones, and Telegram showed the reply's Markdown asterisks instead of bold. What it remembers being committed back is checked by the tests with stand-in services, since the program used doesn't remember anything.
-
-The workflow runs `python my-program.py --run-schedule 2`, which runs scheduled script 2 once, if it's due. You can use the same thing with any scheduler, such as cron or Windows Task Scheduler: add `--now` to run it whatever the time.
-
-### Approving what a program can do
-
-A program that does real things (sends email or messages, switches lights, posts on GitHub) asks you before it runs the first time:
-
-```
-This program can:
-  - send email
-  - read your calendars
-It sends what it reads and writes to Claude.
-
-Approve? [y/n] >
-```
-
-It remembers your answer until the program changes; a changed program might do different things, so it asks again. The same list is written at the top of the program, and the page shows it when you import one.
-
-A scheduled program, with nobody there to answer, won't start until you've approved it once, so run it yourself first. If you're sure, and the computer is unattended, put `approve = no` in `second-thought.ini`.
-
-If a program has an **ask me before** block, Python asks in the terminal and waits for `y` or `n`. With nobody there to answer, it says no and carries on.
-
-### Test cases
-
-A program that checks its own work deserves a check of its own, especially after you change its model. After a run you're happy with, press **Save as test case** under the result, and say what any good result must do, like *mentions the date; under 200 words; no jargon*. The test case keeps your answers to the program's questions and the files you chose. **Run tests**, at the top of the run log, runs every test case again: it gives the same answers instead of asking, the models answer afresh, and a strict reviewer checks each result against its criteria. The log ends with which passed, and why the others didn't.
-
-Test cases travel with the program: in block files, saved programs, exported Python, and in the zip as `my-program.tests.json`. There, `python my-program.py --test` runs them. Nothing acts in a test: messages aren't sent, devices aren't switched and files aren't saved (the log says what would have been done), and memory is a copy, so tests can be run as often as you like. It prints PASS or FAIL for each, and exits with 1 if any failed, for scripts. Pictures aren't kept, so a test can't choose one.
-
-### Run settings
-
-The ini file has a `[run]` section. Remove the `;` from the start of a line to switch it on:
-
-```
-[run]
-budget = 50000
-save_log = yes
-```
-
-- `budget` stops each run before a model call once it has used that many tokens. In Python the count is exact, because every service reports its usage. A **limit this run** block wins over this line.
-- `budget_dollars` does the same in US dollars, at the models' list prices, like `budget_dollars = 0.50`. That's safer for a program that runs on its own, on a schedule or on GitHub Actions. A model whose price isn't known can't be counted, so a run that would use one stops and says so, rather than going on with no limit; backups with no known price are skipped. A run checks before each call, so its last call can take it a little past the amount.
-- `currency = gbp` shows costs, and the money budget, in pounds sterling. `eur`, `jpy` (yen) and `cny` (yuan) work too; `usd` is the default. Services charge in US dollars, so the program converts at the European Central Bank's rate of the day, fetched once a day and kept next to the program. Offline, it uses the last rate it kept, or one built into the program, and never goes without a rate. `exchange_rate = 0.79` fixes one US dollar in your currency instead. Your card's own rate and fees may differ from the program's figure. On the page, choose **Currency** beside the model: the page can't fetch the day's rate, so it uses the built-in one and says its date.
-- `quota_daily = 1.00`, and `quota_hourly`, `quota_weekly` and `quota_monthly`, are allowances for each key across every run of every program on this computer, in your currency. The end of a run says how much of each has gone, like *Claude key: 34% of the daily allowance of £1.00*, and a run stops before a call once one is used up, saying when it resets. `quota_daily_claude = 2.00` gives one service its own. The tally is kept next to `memory.json`, with a hash of each key, never the key itself. It can't see programs on other computers or your claude.ai use, and on GitHub Actions it starts afresh each run.
-- `PLAN_CLAUDE = start` (or `PLAN_OPENAI`, `PLAN_GEMINI`, `PLAN_GROQ`) says which plan an account is on, using the service's own plan names. Where the service publishes a monthly spend cap (Claude and OpenAI do), the program counts this computer's spending against it, says how much has gone, like *Claude (Start plan): 12% of this month's $500.00 cap, counted on this computer*, and stops before a call once it's reached. Claude's cap runs by the month in UTC, as Claude's does. Claude, OpenAI and Groq also report their own rate limits with each reply: a saved log and `--doctor` show them, labelled as the service's, and the end of a run mentions them when one is nearly used up. If Claude's reported limits match one plan, the program suggests the `PLAN_` line, once.
-- `budget_money = 0.40` is a money budget in that currency; it wins over `budget_dollars`. The **limit this run** block can also be set in pounds, euros, yen or yuan.
-- `stream` shows the model writing as it goes, on one line that counts the characters. Normally this only happens when you run the program in a terminal yourself.
-- `resume` is for runs that stop part-way, for example because the internet dropped or you pressed Ctrl+C. The program keeps a note of each finished step, and next time it can pick up where it stopped: model answers, your answers and messages already sent are reused, not asked or sent again. In a terminal it asks you first; set `resume = yes` or `resume = no` for unattended programs. If you change the program, it starts afresh.
-- `max_seconds` stops any run that takes longer than that, whatever it's doing. `call_timeout` gives up on a single model call after that many seconds (300 by default; 0 means no timeout). If one of these is mistyped, the program stops straight away and says which setting is wrong.
-- `save_log` keeps a log of every run in a `logs` folder next to the program. Each step records which model answered, how long it took and the exact tokens, with the prompts under **Prompt sent**.
-
-Services rename and retire their models from time to time. `--doctor` says when a service no longer lists a model the program uses, and suggests one it does list. To use a different model without editing the program, add `MODEL_` and the tier's name in capitals, like `MODEL_OPENAI_DEFAULT = gpt-6.2-sol` or `MODEL_QUICK = claude-haiku-4-5-20251001`. `second-thought.example.ini` shows the pattern.
-
-### Memory and shared files
-
-Memories saved "forever" live in `memory.json`, next to the program. Two programs can share one memory file (`RB_MEMORY_FILE`): they take turns to save, so neither loses the other's changes, and a save is never left half-written if a program stops part-way. Two programs using the same Telegram bot share `telegram-messages.json` the same way, and a message is only handled once.
-
-### Where settings come from
-
-Everything in `second-thought.ini` can also be set as an environment variable with the same name; an environment variable wins over the file.
-
-**Keys in your keychain.** To keep keys out of `second-thought.ini` (on a shared or backed-up computer, say), put them in your computer's keychain instead: macOS Keychain, Windows Credential Manager, or the Secret Service on Linux. Install the `keyring` package once, then store each key under the name `second-thought`:
-
-```
-pip install keyring
-python -m keyring set second-thought ANTHROPIC_API_KEY
-```
-
-It asks for the key without showing it. A program then finds any key that isn't in the environment or `second-thought.ini` in the keychain. `--doctor` says where each key came from. Without `keyring` installed, nothing changes, and `keychain = no` in `second-thought.ini` turns it off.
-
-[`second-thought.example.ini`](second-thought.example.ini) lists every setting a program understands, with a note on each: keys for every model service, models and backups, run settings, Home Assistant, Homey, MQTT, Telegram, email, calendar, GitHub, web requests and feeds. Copy it to `second-thought.ini` and fill in what you use. Settings come in three layers, each one over the one before:
-
-1. **`ST_` environment variables**, for every program on the computer: the setting's name after `ST_`, such as `ST_EMAIL_ADDRESS` or `ST_CURRENCY`. On Windows, `setx ST_CURRENCY gbp`, then open a new window.
-2. **`second-thought.ini` in your home folder**, for what your programs share: email, keys, currency.
-3. **The program's own `second-thought.ini`**, next to it (or in the folder you run it from, or wherever `SECOND_THOUGHT_INI` points), for what's particular to it.
-
-So a program's own file only needs its own settings. An ordinary environment variable with the setting's usual name (`ANTHROPIC_API_KEY`, `RB_BUDGET`) still wins over all three, and the keychain fills in any key still missing. `--doctor` says which file or variable each key came from.
-
----
-
-## Models
-
-On the page, Claude does every job; blocks that name another model are answered by Claude instead, and the run log says so. Exported programs talk to each service directly. Each needs its own key, from its own company:
-
-| Model | Made by | Runs in | Setting |
-|---|---|---|---|
-| **Claude** | Anthropic | America | `ANTHROPIC_API_KEY` |
-| **Gemini** | Google | America | `GEMINI_API_KEY` |
-| **GPT** | OpenAI | America | `OPENAI_API_KEY` |
-| **Grok** | xAI | America | `XAI_API_KEY` |
-| **DeepSeek** | DeepSeek | China | `DEEPSEEK_API_KEY` |
-| **Mistral** | Mistral AI | France | `MISTRAL_API_KEY` |
-| **Qwen** | Alibaba | Singapore, for people outside China | `DASHSCOPE_API_KEY` |
-| **Kimi** | Moonshot AI | China | `MOONSHOT_API_KEY` |
-| **Perplexity** | Perplexity | America | `PERPLEXITY_API_KEY` |
-| **Hugging Face** | many open models | all over the world | `HF_TOKEN` |
-| **Groq** | Groq | America | `GROQ_API_KEY` |
-| **GLM** | Z.ai | China | `ZAI_API_KEY` |
-| **MiniMax** | MiniMax | China | `MINIMAX_API_KEY` |
-| **OpenRouter** | many companies, through one key | wherever each model runs | `OPENROUTER_API_KEY` |
-| **Llama** | Meta, via Ollama | your own computer | `LLAMA_BASE_URL`, plus `LLAMA_API_KEY` if your server needs one |
-
-Some notes:
-
-- **How expensive:** the model menus, the run log and `--doctor` give each model a band from its list price per million output tokens. The bands are **free**, **budget** (up to $5), **standard** (up to $15) and **premium**. Llama on your own computer is free. A model whose price Second Thought doesn't know yet says **price unknown**, rather than guessing.
-- **Who makes it:** for a service that runs other companies' models, the run log says both, like *Gemma 4, by Google, through Hugging Face*: the bill and the limits come from the service.
-- **Llama** runs on your own computer, so nothing you ask it leaves the house. Install [Ollama](https://ollama.com) and download a model with `ollama pull llama3.2-vision:11b`. If Ollama runs on another computer, set `LLAMA_BASE_URL = http://that-computer:11434/v1`.
-- **GPT:** a ChatGPT subscription isn't an API key. You need a key from OpenAI's developer site.
-- **DeepSeek** is very cheap. It runs on DeepSeek's own servers in China, so keep it for things that aren't private.
-- **Perplexity** searches the web for every question and lists the pages it read at the end of its answer. That makes it good for things that change, like prices and opening times. It can't look at photos.
-- **Hugging Face** hosts a huge library of open models. Second Thought starts you on Google's Gemma, but you can choose almost any model in the library.
-- **Groq** (with a q, not to be confused with Grok) is very fast, and good for jobs with lots of small steps.
-- **OpenRouter** reaches hundreds of models from many companies with one key. Choose **OpenRouter, auto-pick** and it chooses a model for each job, or use **with OpenRouter model** and type the name of any model from openrouter.ai/models.
-
----
-
-## Home Assistant
-
-Second Thought talks to [Home Assistant](https://www.home-assistant.io), with its own blue blocks:
-
-- Read state: "Is the back door open?"
-- Take a camera snapshot, so a model can say who is at the door.
-- Turn a light off, or send a notification to a phone.
-- A yellow block starts a script when something changes, like the doorbell ringing.
-- Another starts a script the moment Home Assistant fires an **event**, like a button on a remote.
-
-On the page, these blocks use a **sample house**, so you can try everything safely. Press **Home Assistant** to see it, change something (the doorbell, say), and watch your program react. There are more than 60 Home Assistant examples in **Browse examples**.
-
-**Safety rule:** Second Thought never unlocks a door, opens the garage or switches off the alarm without asking you first.
-
-**Using your real Home Assistant.** Export the program and unzip it on a computer on the same network. Make a long-lived access token in Home Assistant (your profile, then the Security tab), and put it in `second-thought.ini`:
-
-```
-[home assistant]
-HA_URL = http://homeassistant.local:8123
-HA_TOKEN = your-long-lived-token
-```
-
-Then run `run-on-schedule.bat` (Windows) or `sh run-on-schedule.sh` (Linux or Mac). On an always-on Linux computer, `sh install-service.sh` keeps it running for good. A small always-on virtual machine or container is a good home for it.
-
-`--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. **when Home Assistant event … happens with …** listens on Home Assistant's WebSocket, using the same `HA_URL` and `HA_TOKEN`, so it reacts at once instead of polling. Use it for remote and button presses (`zha_event`, `deconz_event`, `hue_event`), `automation_triggered`, phone notification actions or your own events. Type `anything` for every event. The second box is optional words the event's data must contain, like the remote's name. **what arrived** gives `event_type`, `entity`, `data`, `time`, `text`, and each field of the event's data, like `command`. *Developer tools → Events* in Home Assistant shows what your devices send.
-
-## Homey
-
-Second Thought also talks to **Homey Pro**, with its own green blocks under **Homey**:
-
-- **when Homey device … … changes** starts a script when a device's value changes, like the washing machine's power dropping. **what arrived** says which device, what changed, and from what to what.
-- **… of Homey device …** reads one value, like `measure_temperature` of the Proofing box.
-- **Homey devices matching …** lists devices and everything they report.
-- **set Homey device … … to …** switches something, like `onoff` to `off` or `dim` to `0.5`.
-- **run Homey flow …** starts one of your flows. A flow can do anything your Homey can, like sending a Homey notification.
-- **Homey variable …** and **set Homey variable … to …** read and change your Logic variables, so your flows can use them.
-
-There are agent tools too, under **Tools**: **Homey: look at devices, flows and variables**, and **Homey: control devices and start flows**, which asks you before each change. On the page these blocks use a **sample Homey home**; try the examples under **Homey** in **Browse examples**. The same safety rule applies: unlocking, opening the garage and switching off the alarm always ask you first.
-
-**Using your real Homey.** In the Homey Web App (my.homey.app), open Settings, then API Keys, and make a new key with only the permissions the program needs: view devices, control devices, view and start flows, and view and edit Logic. Put it in `second-thought.ini` with your Homey's address:
-
-```
-[homey]
-HOMEY_URL = http://homey-XXXXXXX.local
-HOMEY_API_KEY = your-api-key
-```
-
-The address is in the Homey app under Settings, General. The computer running the program must be on the same network. API keys work with Homey Pro (2023 and later) and Homey Pro mini.
-
-**Homey Self-Hosted Server** serves the same API on port **4859**, so use the address of the computer it runs on, with `:4859` on the end:
-
-```
-HOMEY_URL = http://192.168.1.20:4859
-```
-
-Make the API key in the Homey Web App the same way. A **Homey Bridge** connected to a Self-Hosted Server needs nothing of its own: its devices show up through the server. To check it all works, run `python tools/smoke_test.py homey`. It only reads, so nothing is switched.
-
----
-
-## MCP tools
-
-The agent can borrow tools from [MCP](https://modelcontextprotocol.io) servers: there are MCP servers for files, GitHub, databases, calendars and hundreds of other jobs. To give one to your agent, put this block inside it:
-
-```
-tools from MCP server  files   (asks me before tools that change things)
-```
-
-Then tell the exported program where the server is, in `second-thought.ini`. A server that starts on your computer:
-
-```
-MCP_FILES = npx -y @modelcontextprotocol/server-filesystem /home/me/recipes
-```
-
-A server at an address:
-
-```
-MCP_TRACKER = https://mcp.example.com/mcp
-MCP_TRACKER_TOKEN = your-token
-```
-
-The name in the block (`files`) and the name in the settings (`MCP_FILES`) must match.
-
-When the agent runs, it asks the server which tools it has and uses them like its own. Each tool says whether it only looks at things or can change them; the agent asks you before using one that changes things, unless you choose **(no asking)**. Choose **(asks me before every tool)** to be asked about all of them.
-
-A tool its server marks as one that can delete or overwrite (`destructiveHint`) always asks, even with **(no asking)**, and so never runs when nobody is there to answer. `--doctor` lists each server's tools and says how many of them can change things.
-
-MCP servers only work in exported programs. On the page, the agent works without them, and the run log says so.
-
-### GitHub
-
-GitHub's own MCP server ([github-mcp-server](https://github.com/github/github-mcp-server)) lets an agent read a repository properly: its files, the file tree, code search, issues and pull requests. For reading, start it with `--read-only`, so it offers no tool that can change anything, and give it a [fine-grained token](https://github.com/settings/personal-access-tokens) that can only read (Contents, Issues, Pull requests and Metadata):
-
-```ini
-[mcp servers]
-MCP_GITHUB = docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN ghcr.io/github/github-mcp-server stdio --read-only --toolsets repos,issues,pull_requests
-GITHUB_PERSONAL_ACCESS_TOKEN = your-read-only-token
-```
-
-Then put `tools from MCP server github` inside an agent. Without Docker, `MCP_GITHUB = https://api.githubcopilot.com/mcp/` with the token in `MCP_GITHUB_TOKEN` uses GitHub's hosted server. Started without `--read-only`, its changes (issues, comments, pull requests) ask first, unless you choose (no asking); merging, pushing, changing or deleting files and making, forking or deleting repositories **always** ask, and never run unattended. `--doctor` should say 0 of its tools can change things.
-
-The **Review a GitHub repository** program in the gallery uses it: the agent reads a repository's tree, README, main files and issues, and writes an assessment where every point names the file or issue it came from. The older GitHub connection (`GITHUB_TOKEN`, for blocks like the pull request round-up) stays as it is: use it for those blocks, and the MCP server when an agent needs to look around a repository.
-
-### Kraken
-
-For crypto, the **Kraken tools** block gives the agent [Kraken](https://www.kraken.com)'s own MCP server, from [kraken-cli](https://docs.kraken.com/home/mcp), with no settings to write:
-
-```
-Kraken tools  (prices, your account and paper trading)
-```
-
-That's market prices, your balances, orders and trade history, and paper trading at live prices, which never touches your money. Choose **(and live trading: asks before every order)** to let it place real spot orders too. Install kraken-cli first. For your account, put `KRAKEN_API_KEY` and `KRAKEN_API_SECRET` in `second-thought.ini`, from a Kraken API key with the fewest permissions it needs: query only, unless the program trades, and never withdrawal. Prices and paper trading need no key.
-
-Every Kraken tool that can move real money (orders, futures, staking, transfers, withdrawals) **always asks you first**, even with (no asking) and even in a 'tools from MCP server' block, and never runs when nobody is there to answer: on a schedule, on GitHub Actions or with `--mcp`, it's refused and the run log says why. Kraken asks agents to set `acknowledged: true` on those calls; the agent never can, only your yes does. The list works the safe way round: only the Kraken tools known not to move money (market data, your account's history, paper trading) skip that question, so a tool added by a later kraken-cli asks until it has been checked. `--doctor` checks kraken-cli is installed and your key works, and fails if `MCP_KRAKEN` has `--allow-dangerous`.
-
-
-### Trust Wallet
-
-[Trust Wallet](https://trustwallet.com)'s Agent Kit (`twak`, from `npm install -g @trustwallet/cli`) runs an MCP server for your self-custody wallet. Set it up with `twak init` and `twak wallet create`, then name the server `trustwallet`:
-
-```ini
-[mcp servers]
-MCP_TRUSTWALLET = twak serve
-TWAK_ACCESS_ID = your-access-id
-TWAK_HMAC_SECRET = your-hmac-secret
-```
-
-and put `tools from MCP server trustwallet` inside an agent. Balances, your portfolio, prices, history, swap quotes and token risk checks run without asking. Its tools don't say which only look, so Second Thought works the safe way round, as with Kraken: **everything else counts as money** (transfers, swaps, token approvals, payments, and any tool a later twak adds), so it always asks you first, even with (no asking), and never runs when nobody is there to answer. The agent can't set twak's `autoApprove`; only your yes does. Automations (`create_automation`) are never offered to the agent, because they trade later, inside twak, where nothing here can ask. On-chain sends can't be undone, so keep the wallet's password in your system's keychain, as twak does by default, rather than in `second-thought.ini`.
-
-The **Wallet health check** program in the gallery uses it: each Sunday it emails what you hold, what it's worth, and any token whose risk check looks bad. It only reads.
----
-
-
-### Your program as an MCP tool
-
-It works the other way round too: `python my-program.py --mcp` serves the program as an MCP server (over stdio) with one tool, named after the program. Claude Desktop, Claude Code or any agent that speaks MCP can then call it. Whatever the agent passes as `value` becomes the program's **message value**, each call runs the 'when Run is clicked' scripts, and the program's result comes back as the tool's answer. To add it to Claude Desktop, put this in its MCP settings:
-
-```json
-{"mcpServers": {"my-program": {"command": "python", "args": ["/full/path/to/my-program.py", "--mcp"]}}}
-```
-
-Nobody is at a keyboard when an agent calls it, so a question (an **ask me** or **approve** block) makes the call fail with the reason, and an action that would ask first is refused, as on a schedule. A program that can act on the world serves only once it's been allowed to without asking: run it once in a terminal and answer y, or put `approve = no` in `second-thought.ini`. That's deliberate: an agent calling your program shouldn't be able to do more than you'd let it do unattended. `--doctor` names the tool it would serve.
-
-## Languages
-
-Choose a language from **Blocks** at the top of the page. The page remembers your choice; if you've never chosen, it uses your browser's language when it can. Changing language only changes the words you see: a program built in Spanish opens the same in English, and exports the same Python.
-
-The page speaks English, Spanish (Español), French (Français), German (Deutsch), Dutch (Nederlands), Italian (Italiano), Portuguese (Português), Simplified Chinese (中文), Japanese (日本語), Greek (Ελληνικά), Hebrew (עברית, with the whole page mirrored right to left), Jewish Babylonian Aramaic (ארמית, also right to left), Latin (Latina), Old English (Ænglisc), Middle English (Englisch), Koine Greek (Κοινή), Old Norse (Norrœnt mál), Sanskrit (संस्कृतम्), Akkadian in cuneiform (𒀝𒅗𒁺𒌝, written in transliteration by exported programs), Mycenaean Greek in Linear B (𐀀𐀏𐀊𐀺, written in transcription by exported programs) Middle Egyptian in hieroglyphs (𓂋𓄿 𓈖 𓎡𓅓𓏏, written in transliteration by exported programs) and Sahidic Coptic (ⲧⲙⲛⲧⲣⲙⲛⲕⲏⲙⲉ, written in transliteration by exported programs). The run log, the page's messages and the examples are translated too. Programs shared in the Community gallery keep their authors' words. A Python program you export while the page is in another language prints in that language too; `language = en` in its `second-thought.ini` switches it back to English.
-
-**Adding a language.** Each language is one file in [`i18n/`](i18n), like `i18n/es.json`. It holds every block's words, help text and choices, the category names, the page's own words (under `page`, each English text with its translation), each example's title, description and tip (under `examples`), the words already typed into the palette's blocks (under `starters`), and what exported programs print (under `python`). Copy a file, translate the words (never the choice values, the `%1` markers or the `{name}` markers), and run `python tools/sync.py`, which adds it to the page's **Blocks** menu and writes `lang/<language>.js`, the file the page loads when someone picks it. The tests tell you anything you missed.
-
----
-
-## Versions and --doctor
-
-Every exported program carries its own copy of the runtime, with a version number. To see which one a program has:
-
-```
-python my-program.py --version
-```
-
-To check a program has everything it needs before you rely on it:
-
-```
-python my-program.py --doctor
-```
-
-It checks each thing the program uses (keys, packages, Home Assistant, email, Telegram, MCP servers and the rest) and says **ok** for each that works, or **FAIL** with what to fix. It only looks: nothing is sent, posted or switched, and it uses no model tokens.
-
-It also asks GitHub whether a newer runtime is out. A newer one is a **NOTE**; one whose release notes say it fixes a security problem is a **FAIL**. If GitHub can't be reached, that's a NOTE, never a failure. `update_check = no` in `second-thought.ini` turns the check off.
-
-A program never updates itself, but you can update it in place:
-
-```
-python my-program.py --update-runtime
-```
-
-This downloads the newest release's runtime of the same major version, checks it against the SHA-256 published with it, and swaps it into the program file. The blocks, your settings and anything after the runtime stay as they are, and the old file is kept as `my-program.py.bak`. The file has changed, so a program that acts asks to be allowed again, saying what's new. A new major version isn't applied this way, since it may change what the program does: import the program on the page and export it again instead. Programs exported before runtime 3.1.0 don't have `--update-runtime`; export them again once.
-
-[`CHANGELOG.md`](CHANGELOG.md) says what changed in each version.
-
----
+| [Using the page](docs/using-the-page.md) | The blocks, what a program can do, the examples and gallery, saving, languages |
+| [The agent](docs/agent.md) | Goals and tools, planning, what always asks first |
+| [Connections](docs/connections.md) | Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey |
+| [MCP tools](docs/mcp.md) | Any MCP server, GitHub, Kraken, Trust Wallet, and your program as a tool |
+| [Running exported programs](docs/running.md) | Exporting, schedules, GitHub Actions, approving, test cases, memory, `--doctor` and updates |
+| [Settings and models](docs/settings.md) | Where settings come from, the run settings, models and backups |
+| [SECURITY.md](SECURITY.md) | What a program can and can't do, and how to report a problem |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How the code fits together, the repository layout, and the tests |
+| [CHANGELOG.md](CHANGELOG.md) · [ROADMAP.md](ROADMAP.md) | What changed in each release, and what's next |
 
 ## Good to know
 
@@ -536,80 +97,6 @@ This downloads the newest release's runtime of the same major version, checks it
 - On the page, your browser already asks before saving any file, so **ask me before saving files** only adds a question in Python.
 - Some names inside the page still say `reflection-blocks`, Second Thought's original name. They stay the same so that old saved programs still work.
 
----
+## Licence
 
-## Repository layout
-
-| Path | What it is |
-|---|---|
-| `second-thought.html` | The page itself: its HTML, with everything below embedded by `tools/sync.py`. |
-| `web/editor.css`, `web/editor/` | The editor's styles, and its code in one file per area (see `web/editor/README.md`). `tools/sync.py` copies them into the page. |
-| `python/second_thought/` | The runtime that comes with every exported program, as a package of ten modules (below). |
-| `python/runtime.py` | The same runtime joined into one file, which every exported program gets a copy of. `tools/sync.py` builds it, so don't edit it by hand. |
-| `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
-| `ha/sample-house.json` | The sample house the Home Assistant blocks use on the page. |
-| `samples/connections.json` | The sample feeds, GitHub projects, Telegram messages, emails and calendar the page uses. |
-| `i18n/` | The page's words in other languages, one file each. |
-| `lang/` | The same, as scripts the page loads for the chosen language only. `tools/sync.py` makes them; publish them with the page. |
-| `gallery/` | Programs people have shared, one file each. They appear on the page in the **Community** groups, by category. |
-| `second-thought.example.ini` | Every setting a program understands, with a note on each. |
-| `tools/sync.py` | Joins the runtime into one file, copies it and the other embedded parts into the page, and writes `lang/`, so they always match. |
-| `tools/smoke_test.py` | Checks the real model services with your own keys. |
-| `tools/pages.py` | Builds the copy of the page for GitHub Pages, which `.github/workflows/pages.yml` publishes with each release. |
-| `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |
-| `tests/` | Unit tests (`tests/unit/`), and the end-to-end suite (`tests/e2e/`, one file per area, run by `tests/run_tests.py`). |
-| `docs/ladybird-book.md` | The picture book. |
-| `CHANGELOG.md` | What changed in each runtime version. |
-| `CONTRIBUTING.md`, `SECURITY.md` | How to contribute; how to report a security problem, and what an exported program can and can't do. |
-
-The runtime's modules, in the order `tools/sync.py` joins them:
-
-| Module | What it does |
-|---|---|
-| `settings.py` | Reads `second-thought.ini` and the environment before anything else. |
-| `providers.py` | Every model service, and how to call each one. |
-| `core.py` | Limits, errors, and the sums and text handling that match the blocks exactly. |
-| `connectors.py` | Web pages, news, calendars, Home Assistant, messages, MQTT and Homey. |
-| `mcp.py` | Borrowing tools from MCP servers, for the agent. |
-| `agent.py` | The agent block and its tools. |
-| `spending.py` | What each key has spent on this computer, and its hourly, daily, weekly and monthly allowances. |
-| `doctor.py` | `--doctor`: checks a program's setup without acting on anything. |
-| `update.py` | Whether a newer runtime is out, and `--update-runtime`, which swaps it into the program file. |
-| `runtime.py` | Everything else: memory, drafts, output, scripts and schedules. |
-
-Each module starts with the imports it needs from the others. When `tools/sync.py` joins them, it leaves those lines out, because in one file every name is already there.
-
----
-
-## Development and tests
-
-[ROADMAP.md](ROADMAP.md) says what's next and why. [CONTRIBUTING.md](CONTRIBUTING.md) has the rules for a pull request, and [SECURITY.md](SECURITY.md) how to report a security problem and what limits an exported program.
-
-If you change anything in `python/second_thought/`, `i18n/`, `gallery/`, `prompts/convert-guide.txt` or the sample files, run `python tools/sync.py` so `python/runtime.py` and the page pick up your changes. `python tools/sync.py --check` fails if either is out of date, and CI runs it.
-
-**Unit tests** need nothing installed and take a few seconds:
-
-```
-python -m unittest discover -s tests/unit
-```
-
-**End-to-end tests** drive the page in a headless browser with stand-ins for Claude, then export every example to Python and run that too, against a stand-in Anthropic SDK. Nothing calls a real model, so they cost nothing.
-
-```
-bash tests/setup.sh          # once: Playwright, Chromium and local copies of the page's libraries
-python tests/run_tests.py    # runs the unit tests too
-```
-
-At the end it says **All checks passed**, or lists what failed. To run only some areas, name them: `python tests/run_tests.py i18n gallery`. The areas are `sources`, `page`, `i18n`, `gallery` and `python` (which runs `page` too, for the programs it exports).
-
-**Real services.** To check the real model services with your own keys:
-
-```
-python tools/smoke_test.py
-```
-
-It asks each service you have a key for a few short questions and reports what works: structured answers, streaming, continuing after a long answer is cut off, and the agent using a tool, plus which kind of structured answer every other service understands. It costs a few pence and prints the tokens used. Add a name to check one service, like `python tools/smoke_test.py claude`.
-
-**Adding a model service.** Every service is one entry in `SERVICES`, near the top of `providers.py`: its name, its address, where its key goes, and its quick, default and complex models. The page reads the same list (`tools/sync.py` copies it in), so the new service appears in the model menus, the backups, the blocks, the exported settings file and the notes, all from that one entry. If the service speaks OpenAI's chat format, which most do, that's all it needs. Then add its settings to `second-thought.example.ini` (the tests say which), and a line to `CHANGELOG.md`.
-
-**Versioning.** The runtime follows semantic versioning: the major number goes up when an exported program might behave differently, the minor for something new, and the patch for a fix. When you change the runtime, add a line to `CHANGELOG.md` under **Unreleased**.
+[MIT](LICENSE). Contributions are welcome: [CONTRIBUTING.md](CONTRIBUTING.md) explains how.

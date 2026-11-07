@@ -134,7 +134,7 @@ CI never runs it.
 
 ## Common changes
 
-- **A translation, or a new language:** see [Languages](README.md#languages) in the README. Copy an existing
+- **A translation, or a new language:** see [Languages](docs/using-the-page.md#languages) in the guide. Copy an existing
   `i18n/*.json`, translate the words (never the choice values, `%1` or `{name}` markers), and run `tools/sync.py`.
   The tests list anything missing. Scripts most computers lack need a `"font"`, plus a copy in `tests/setup.sh` and
   `FONTS` in `tests/e2e/common.py`; see the Linear B, Sanskrit, Akkadian, Middle Egyptian and Coptic files for examples.
@@ -146,7 +146,7 @@ CI never runs it.
   leaving `{placeholders}`, names and file names alone. `python tools/i18n.py script akk "…"` shows a line first.
 - **A gallery program:** see [`gallery/README.md`](gallery/README.md).
 - **A model service:** one entry in `SERVICES` in `providers.py`; see
-  [Development and tests](README.md#development-and-tests).
+  [Development and tests](#development-and-tests).
 - **Model names:** services retire models. `python tools/smoke_test.py models` lists, for each service you have a
   key for, the tiers whose model it no longer lists (it only reads the model list, so it's free). Update those
   names in `SERVICES`, and add a line to `CHANGELOG.md`. It also lists services whose `prices` were checked more than 90
@@ -170,3 +170,77 @@ CI never runs it.
 
 Use the issue templates. For a bug in an exported program, include the output of `python my-program.py --version`
 and `--doctor` (with your keys removed). For anything security-related, see [SECURITY.md](SECURITY.md) instead.
+
+## Repository layout
+
+| Path | What it is |
+|---|---|
+| `second-thought.html` | The page itself: its HTML, with everything below embedded by `tools/sync.py`. |
+| `web/editor.css`, `web/editor/` | The editor's styles, and its code in one file per area (see `web/editor/README.md`). `tools/sync.py` copies them into the page. |
+| `python/second_thought/` | The runtime that comes with every exported program, as a package of ten modules (below). |
+| `python/runtime.py` | The same runtime joined into one file, which every exported program gets a copy of. `tools/sync.py` builds it, so don't edit it by hand. |
+| `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
+| `ha/sample-house.json` | The sample house the Home Assistant blocks use on the page. |
+| `samples/connections.json` | The sample feeds, GitHub projects, Telegram messages, emails and calendar the page uses. |
+| `i18n/` | The page's words in other languages, one file each. |
+| `lang/` | The same, as scripts the page loads for the chosen language only. `tools/sync.py` makes them; publish them with the page. |
+| `gallery/` | Programs people have shared, one file each. They appear on the page in the **Community** groups, by category. |
+| `second-thought.example.ini` | Every setting a program understands, with a note on each. |
+| `tools/sync.py` | Joins the runtime into one file, copies it and the other embedded parts into the page, and writes `lang/`, so they always match. |
+| `tools/smoke_test.py` | Checks the real model services with your own keys. |
+| `tools/pages.py` | Builds the copy of the page for GitHub Pages, which `.github/workflows/pages.yml` publishes with each release. |
+| `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |
+| `tests/` | Unit tests (`tests/unit/`), and the end-to-end suite (`tests/e2e/`, one file per area, run by `tests/run_tests.py`). |
+| `docs/ladybird-book.md` | The picture book. |
+| `CHANGELOG.md` | What changed in each runtime version. |
+| `CONTRIBUTING.md`, `SECURITY.md` | How to contribute; how to report a security problem, and what an exported program can and can't do. |
+
+The runtime's modules, in the order `tools/sync.py` joins them:
+
+| Module | What it does |
+|---|---|
+| `settings.py` | Reads `second-thought.ini` and the environment before anything else. |
+| `providers.py` | Every model service, and how to call each one. |
+| `core.py` | Limits, errors, and the sums and text handling that match the blocks exactly. |
+| `connectors.py` | Web pages, news, calendars, Home Assistant, messages, MQTT and Homey. |
+| `mcp.py` | Borrowing tools from MCP servers, for the agent. |
+| `agent.py` | The agent block and its tools. |
+| `spending.py` | What each key has spent on this computer, and its hourly, daily, weekly and monthly allowances. |
+| `doctor.py` | `--doctor`: checks a program's setup without acting on anything. |
+| `update.py` | Whether a newer runtime is out, and `--update-runtime`, which swaps it into the program file. |
+| `runtime.py` | Everything else: memory, drafts, output, scripts and schedules. |
+
+Each module starts with the imports it needs from the others. When `tools/sync.py` joins them, it leaves those lines out, because in one file every name is already there.
+
+## Development and tests
+
+[ROADMAP.md](ROADMAP.md) says what's next and why. [CONTRIBUTING.md](CONTRIBUTING.md) has the rules for a pull request, and [SECURITY.md](SECURITY.md) how to report a security problem and what limits an exported program.
+
+If you change anything in `python/second_thought/`, `i18n/`, `gallery/`, `prompts/convert-guide.txt` or the sample files, run `python tools/sync.py` so `python/runtime.py` and the page pick up your changes. `python tools/sync.py --check` fails if either is out of date, and CI runs it.
+
+**Unit tests** need nothing installed and take a few seconds:
+
+```
+python -m unittest discover -s tests/unit
+```
+
+**End-to-end tests** drive the page in a headless browser with stand-ins for Claude, then export every example to Python and run that too, against a stand-in Anthropic SDK. Nothing calls a real model, so they cost nothing.
+
+```
+bash tests/setup.sh          # once: Playwright, Chromium and local copies of the page's libraries
+python tests/run_tests.py    # runs the unit tests too
+```
+
+At the end it says **All checks passed**, or lists what failed. To run only some areas, name them: `python tests/run_tests.py i18n gallery`. The areas are `sources`, `page`, `i18n`, `gallery` and `python` (which runs `page` too, for the programs it exports).
+
+**Real services.** To check the real model services with your own keys:
+
+```
+python tools/smoke_test.py
+```
+
+It asks each service you have a key for a few short questions and reports what works: structured answers, streaming, continuing after a long answer is cut off, and the agent using a tool, plus which kind of structured answer every other service understands. It costs a few pence and prints the tokens used. Add a name to check one service, like `python tools/smoke_test.py claude`.
+
+**Adding a model service.** Every service is one entry in `SERVICES`, near the top of `providers.py`: its name, its address, where its key goes, and its quick, default and complex models. The page reads the same list (`tools/sync.py` copies it in), so the new service appears in the model menus, the backups, the blocks, the exported settings file and the notes, all from that one entry. If the service speaks OpenAI's chat format, which most do, that's all it needs. Then add its settings to `second-thought.example.ini` (the tests say which), and a line to `CHANGELOG.md`.
+
+**Versioning.** The runtime follows semantic versioning: the major number goes up when an exported program might behave differently, the minor for something new, and the patch for a fix. When you change the runtime, add a line to `CHANGELOG.md` under **Unreleased**.
