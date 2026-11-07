@@ -19,7 +19,7 @@ from .settings import RUNTIME_VERSION, WHERE_KEYS, on_github_actions
 from .providers import CURRENCY, ModelCalls, amount_text, fixed_rate, band_text, call_cost, model_byline, model_label, money, per_dollar, rate_note
 from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
-    _locked, _need_picture, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js,
+    _locked, _need_picture, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js, same_problem,
     to_bool, to_list, to_record, to_str)
 from .connectors import Connections
 from .mcp import MCPTools
@@ -1028,7 +1028,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
     def reviewing(self):
         """Around a 'review … up to N rounds' loop: remembers each round's problems and its best draft."""
         before = self.reflect
-        self.reflect = {"earlier": [], "best": None, "round": 0}
+        self.reflect = {"earlier": [], "best": None, "round": 0, "last": None, "same": 0}
         try:
             yield
         finally:
@@ -1038,7 +1038,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self._need_draft()
         loop = self.reflect if in_loop else None
         earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
-                   "and list it again if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
+                   "and list it again, in the same words, if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
         v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
                              to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
                              '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
@@ -1056,11 +1056,33 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 if p_ not in loop["earlier"]:
                     loop["earlier"].append(p_)
             del loop["earlier"][:-12]
+            # No progress: nothing new, and no fewer problems than the round before (#331)
+            last = loop["last"]
+            same = (not approved and last is not None and len(self.problems) >= len(last)
+                    and all(any(same_problem(p_, q) for q in last) for p_ in self.problems))
+            loop["same"] = loop["same"] + 1 if same else 0
+            loop["last"] = list(self.problems)
         if approved:
             self.log(label, tr("Meets every criterion."), tr("approved"))
         else:
             self.log(label, "\n".join("- " + p for p in self.problems), tr("needs work"))
         return approved
+
+    def stuck(self):
+        """True, having said why, once a review loop's review has raised the same problems after two revisions in a row
+        (#331): revising can't fix them, probably because the program lacks something, so the loop stops there and
+        keeps its best draft rather than spending its remaining rounds."""
+        loop = self.reflect or {}
+        if loop.get("same", 0) < 2:
+            return False
+        self.out_of_rounds_hit = True
+        best = loop.get("best")
+        if best and best["round"] != loop["round"]:
+            self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
+        self.log(tr("Review stuck"), tr("The review raised the same problems after two revisions, so revising can't fix them. The program may need "
+                                        "something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or "
+                                        "through an agent that can read web pages), then run again."), tr("stuck"))
+        return True
 
     def rounds(self, n):
         return max(1, min(6, round_js(num(n)) or 3))

@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Changed
+- A review loop stops when it's stuck (#331): if the review raises the same problems after two revisions in a row, revising can't fix them, so the loop keeps its best draft, marks the result best effort, and says the program probably needs something it wasn't given (a web page, a file, a fact), instead of spending its remaining rounds. A problem counts as the same when it's in the same words or mostly the same longer words, and the reviewer is now asked to repeat a returning problem in the same words. Programs exported before this keep looping as before until they're exported again.
+
 ## 3.11.0 - 2026-11-07
 
 ### Fixed

@@ -1453,7 +1453,10 @@
   "Gone: {what}.": "Weg: {what}.",
   "{n} scripts added, {m} removed.": "{n} scripts toegevoegd, {m} verwijderd.",
   "{n} blocks added, {m} removed.": "{n} blokken toegevoegd, {m} verwijderd.",
-  "Text changed in {n} blocks.": "Tekst gewijzigd in {n} blokken."
+  "Text changed in {n} blocks.": "Tekst gewijzigd in {n} blokken.",
+  "Review stuck": "Beoordeling loopt vast",
+  "stuck": "vastgelopen",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit."
  },
  "examples": {
   "review": {
@@ -2994,6 +2997,9 @@
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} werd niet op tijd goedgekeurd op Telegram, dus er gebeurde niets.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} keurde {what} goed door ja {code} op Telegram te antwoorden.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Release {latest} is niet ondertekend door de sleutel die deze runtime vasthoudt, dus het is niet gebruikt. Er is niets veranderd.",
-  "{n} of them can change things": "{n} daarvan kunnen iets veranderen"
+  "{n} of them can change things": "{n} daarvan kunnen iets veranderen",
+  "Review stuck": "Beoordeling loopt vast",
+  "stuck": "vastgelopen",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit."
  }
 }

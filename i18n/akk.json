@@ -1454,7 +1454,10 @@
   "Gone: {what}.": "𒈾𒊍𒄷: {what}.",
   "{n} scripts added, {m} removed.": "{n} 𒁕𒁲 𒊏𒅗𒋢, {m} 𒈾𒊓𒄷.",
   "{n} blocks added, {m} removed.": "{n} 𒀊𒈾𒋾 𒊏𒅗𒋢, {m} 𒈾𒊓𒄷.",
-  "Text changed in {n} blocks.": "𒅆𒅁𒊒 𒄿𒈾 {n} 𒀊𒉌 𒊭𒉡."
+  "Text changed in {n} blocks.": "𒅆𒅁𒊒 𒄿𒈾 {n} 𒀊𒉌 𒊭𒉡.",
+  "Review stuck": "𒁉𒊒𒌝 𒅅𒆷",
+  "stuck": "𒅗𒇷",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𒁉𒊒𒌝 𒉿𒅈𒆠 𒅆𒈾 𒋾𒅅𒉌 𒄭𒁕𒋾𒅎 𒅖𒋾𒀀𒋾𒅎 𒅅𒁉, 𒀸𒋗𒌝 𒆠𒄠 𒋾𒅅𒉡𒌝 𒌌 𒄿𒇷 𒀀𒈾 𒋗𒋼𒋗𒊑𒅎. 𒀀𒈾 𒈾𒊑𒅎 𒈪𒅎𒈠 𒊭 𒆷 𒄿𒇷𒅅𒄣 𒄩𒅆𒄴, 𒆠𒈠 𒌅𒌒𒁉𒅎, 𒅆𒀉𒊑𒅎 𒌑𒇻 𒀀𒉿𒋾𒅎 𒆠𒈾𒋾𒅎: 𒋗𒌅 𒀀𒈾 𒈾𒊑𒅎 𒆠𒅖 (𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒇻 𒄿𒈾 𒁲𒈪𒅎 𒊭 𒌅𒌒𒁉 𒄿𒊭𒊍𒋢), 𒌑 𒌅𒌨 𒂊𒁍𒍑."
  },
  "examples": {
   "review": {
@@ -2995,7 +2998,10 @@
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} ina Telegram ina adannišu lā šuknu; ay ipšu.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} {what} šuknu, sibâ ja {code} ina Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "{latest} lā kanīk ina ṭābti ša runtime šuātu, ay ipšu. ay šanû.",
-  "{n} of them can change things": "{n} ina libbišunu mimma ušannâ"
+  "{n} of them can change things": "{n} ina libbišunu mimma ušannâ",
+  "Review stuck": "bīrum ikla",
+  "stuck": "kali",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "bīrum warki šinā tiqnī ḫiṭâtim ištiātim iqbi, aššum kīam tiqnum ul ile ana šutēšurim. ana narêm mimma ša lā ileqqû ḫašiḫ, kīma ṭuppim, šiṭrim ulū awatim kīnatim: šūtu ana narêm qīš (ina šipirtim lū ina ṭēmim ša ṭuppī išassû), u tūr epuš."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

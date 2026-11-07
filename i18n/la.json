@@ -1453,7 +1453,10 @@
   "Gone: {what}.": "Amissum: {what}.",
   "{n} scripts added, {m} removed.": "{n} scripta addita, {m} remota.",
   "{n} blocks added, {m} removed.": "{n} latera addita, {m} remota.",
-  "Text changed in {n} blocks.": "Textus in {n} lateribus mutatus."
+  "Text changed in {n} blocks.": "Textus in {n} lateribus mutatus.",
+  "Review stuck": "Recognitio haesit",
+  "stuck": "haeret",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre."
  },
  "examples": {
   "review": {
@@ -2994,7 +2997,10 @@
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} non tempestive in Telegram probatum est; itaque nihil factum est.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} {what} probavit, respondens sic {code} in Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Editio {latest} clave quam hoc runtime tenet non signata est, ergo non adhibita est. Nihil mutatum est.",
-  "{n} of them can change things": "{n} ex eis res mutare possunt"
+  "{n} of them can change things": "{n} ex eis res mutare possunt",
+  "Review stuck": "Recognitio haesit",
+  "stuck": "haeret",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

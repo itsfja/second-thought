@@ -1453,7 +1453,10 @@
   "Gone: {what}.": "Farnit: {what}.",
   "{n} scripts added, {m} removed.": "{n} skriptum bætt, {m} fjarlægð.",
   "{n} blocks added, {m} removed.": "{n} kubbum bætt, {m} fjarlægð.",
-  "Text changed in {n} blocks.": "Texti breyttist í {n} kubbum."
+  "Text changed in {n} blocks.": "Texti breyttist í {n} kubbum.",
+  "Review stuck": "Dómr sat fastr",
+  "stuck": "fastr",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr."
  },
  "examples": {
   "review": {
@@ -2994,7 +2997,10 @@
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} var ekki samþykkt í tíma í Telegram, þess vegna gerðist ekkert.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} samþykkti {what}, svarande já {code} í Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Útgáfan {latest} er ekki undirrituð með lyklinum sem þetta runtime heldur, því var henni ekki haldið. Ekkert breyttist.",
-  "{n} of them can change things": "{n} þeira megu hluti breyta"
+  "{n} of them can change things": "{n} þeira megu hluti breyta",
+  "Review stuck": "Dómr sat fastr",
+  "stuck": "fastr",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

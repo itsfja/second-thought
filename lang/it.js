@@ -952,7 +952,10 @@
 "Gone: {what}.":"Rimosso: {what}.",
 "{n} scripts added, {m} removed.":"{n} sequenze aggiunte, {m} rimosse.",
 "{n} blocks added, {m} removed.":"{n} blocchi aggiunti, {m} rimossi.",
-"Text changed in {n} blocks.":"Testo cambiato in {n} blocchi."
+"Text changed in {n} blocks.":"Testo cambiato in {n} blocchi.",
+"Review stuck":"Revisione bloccata",
+"stuck":"bloccato",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La revisione ha segnalato gli stessi problemi dopo due correzioni, quindi correggere non può risolverli. Forse al programma manca qualcosa che non ha ricevuto, come una pagina web, un file o un fatto: daglielo (nel compito, per esempio, o tramite un agente che sa leggere le pagine web), poi eseguilo di nuovo."
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -1861,6 +1864,9 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} non è stato approvato in tempo su Telegram, quindi non è successo nulla.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} ha approvato {what} rispondendo sì {code} su Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"Il release {latest} non è firmato dalla chiave che questo runtime possiede, quindi non è stato usato. Nulla è stato cambiato.",
-"{n} of them can change things":"{n} di questi possono cambiare qualcosa"
+"{n} of them can change things":"{n} di questi possono cambiare qualcosa",
+"Review stuck":"Revisione bloccata",
+"stuck":"bloccato",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La revisione ha segnalato gli stessi problemi dopo due correzioni, quindi correggere non può risolverli. Forse al programma manca qualcosa che non ha ricevuto, come una pagina web, un file o un fatto: daglielo (nel compito, per esempio, o tramite un agente che sa leggere le pagine web), poi eseguilo di nuovo."
 }
 };

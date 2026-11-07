@@ -180,6 +180,16 @@ HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
+def same_problem(a, b):
+    """Whether two review problems say the same thing (#331): the same words, or mostly the same longer words, since a
+    reviewer asked to repeat a problem doesn't always manage it word for word."""
+    words = lambda t: {w for w in re.findall(r"[a-z0-9]+", to_str(t).lower()) if len(w) > 3}  # noqa: E731
+    if to_str(a).strip().lower() == to_str(b).strip().lower():
+        return True
+    wa, wb = words(a), words(b)
+    return bool(wa and wb) and len(wa & wb) >= 0.6 * min(len(wa), len(wb))
+
+
 def seen_addresses(text):
     """Every web address in text, whole, without trailing punctuation or slashes: what an agent was given or read (#304)."""
     out = set()
