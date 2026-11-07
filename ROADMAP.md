@@ -32,6 +32,8 @@ Two languages and two security fixes, released in 3.9.2: Middle Egyptian ([#136]
 
 Released in 3.10.0, mostly from the outside reviews: unknown Kraken tools count as money and destructive MCP tools always ask ([#309](https://github.com/itsfja/second-thought/issues/309)); releases can be signed with a key kept off GitHub ([#311](https://github.com/itsfja/second-thought/issues/311)); unattended runs ask on Telegram instead of refusing ([#305](https://github.com/itsfja/second-thought/issues/305)); **Change this program** says what's different before loading ([#306](https://github.com/itsfja/second-thought/issues/306)); GitHub through its own MCP server, with a **Review a GitHub repository** program ([#333](https://github.com/itsfja/second-thought/issues/333)); and Gemini calls that give up after a time limit and retry when it's busy ([#329](https://github.com/itsfja/second-thought/issues/329)).
 
+Released in 3.11.0: Trust Wallet through its Agent Kit's MCP server, with money tools asking and a **Wallet health check** program ([#320](https://github.com/itsfja/second-thought/issues/320)); settings in layers, `ST_` variables then your home folder's ini then the program's ([#340](https://github.com/itsfja/second-thought/issues/340)); and exported settings files with every note on its own line ([#338](https://github.com/itsfja/second-thought/issues/338)). CI runs its end-to-end suite in three parts side by side ([#341](https://github.com/itsfja/second-thought/pull/341)).
+
 ## Later: important, not urgent
 
 | | Benefit | Cost |

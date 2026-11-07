@@ -194,7 +194,7 @@ class AsAnExportedProgram(unittest.TestCase):
 
 class Settings(unittest.TestCase):
     def test_an_older_exports_note_left_on_the_line_is_ignored(self):
-        # #338: before 3.10.1 the export wrote "; currency = gbp      show costs…", and people took the ; off
+        # #338: before 3.11.0 the export wrote "; currency = gbp      show costs…", and people took the ; off
         runtime = (support.ROOT / "python" / "runtime.py").read_text(encoding="utf-8")
         with tempfile.TemporaryDirectory() as tmp:
             prog, ini = os.path.join(tmp, "prog.py"), os.path.join(tmp, "second-thought.ini")

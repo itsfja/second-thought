@@ -22,6 +22,8 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+## 3.11.0 - 2026-11-07
+
 ### Fixed
 - A one-word setting in `second-thought.ini` (`currency`, `save_log`, `budget`, `stream`, `resume`, `approve`, `language` and the like) ignores a note left after it (#338). Programs exported before now wrote notes on the same line, as in `; save_log = yes      write each run's log…`; with the `;` taken off, the note became part of the value and the program stopped. The page now writes each note on a line of its own, above its setting.
 

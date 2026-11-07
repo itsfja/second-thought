@@ -439,7 +439,7 @@ import urllib.request
 
 # Which runtime this is. Every exported program carries its own copy of the runtime, so this says which one it has:
 # run the program with --version to see it. What changed in each version is in CHANGELOG.md, in the Second Thought folder.
-RUNTIME_VERSION = "3.10.0"
+RUNTIME_VERSION = "3.11.0"
 
 # Windows consoles and redirected output can't always show every character; never crash over one.
 for _stream in (sys.stdout, sys.stderr):
@@ -464,7 +464,7 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "releases_url": "RB_RELEASES_URL"}
 
 
-# Settings whose value is one word or number. Programs exported before 3.10.1 wrote their notes on the same line, as in
+# Settings whose value is one word or number. Programs exported before 3.11.0 wrote their notes on the same line, as in
 # "; save_log = yes      write each run's log…": with the ; taken off, the note isn't part of the value (#338).
 ONE_WORD_SETTINGS = {"primary", "model", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
                      "exchange_rate", "quota_hourly", "quota_daily", "quota_weekly", "quota_monthly", "save_log", "stream", "resume",
