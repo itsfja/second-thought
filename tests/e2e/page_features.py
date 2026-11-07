@@ -129,9 +129,21 @@ async def new_feature_page_tests(pg):
           and "- a\n- b\n- c" in prompts[3], "each round, the reviewer is shown the problems earlier rounds found")
     status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a"), {"approved": True}])
     check(status.startswith("done") and items[0] == "v2" and "Kept the best draft" not in [n for n, *_ in steps], "an approved draft is kept as it is")
-    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a", "b"), nope("a"), nope("a"), nope("a")])
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a", "b"), nope("a"), nope("a", "c"), nope("a")])
     check(status.startswith("done") and items[0] == "v4" and "Kept the best draft" not in [n for n, *_ in steps],
           "when the last draft is as good as any, it stays (a tie goes to the newer draft)")
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a", "b"), nope("a", "b"), nope("A", "b "), nope("a", "b")])
+    stuck = [t for n, p_, t in steps if n == "Review stuck"]
+    check(status.startswith("done") and items[0] == "v3" and stuck and "can't fix them" in stuck[0] and len(prompts) == 3
+          and "in the same words" in prompts[1],
+          f"the same problems after two revisions in a row stop the loop early, saying why (#331) ({items}, {len(prompts)} reviews)")
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a"), nope("a"), nope("b"), nope("b"), nope("b")])
+    check("Review stuck" not in [n for n, *_ in steps] and len(prompts) == 4,
+          "a new problem resets the count, so the loop only stops when it's really stuck")
+    same = await pg.evaluate("""() => [__sameProblem('The draft is not specific to github.com/itsfja/second-thought, offering only a generic checklist instead.',
+        'The response is not specific to github.com/itsfja/second-thought; it provides a generic checklist rather than an analysis.'),
+        __sameProblem('Too long', 'Has no title')]""")
+    check(same == [True, False], f"two wordings of one problem count as the same, different problems don't ({same})")
     revise_loop = script(blk("rb_set_draft", inputs={"TEXT": tx("x")}),
                          blk("rb_reflect", inputs={"CRITERIA": tx("short; titled"), "ROUNDS": nm(2), "FIX": {"block": blk("rb_revise")}}),
                          blk("rb_review", inputs={"CRITERIA": tx("short")}))

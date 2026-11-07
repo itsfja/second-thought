@@ -1453,7 +1453,10 @@
   "Gone: {what}.": "Ἀφανισθέν: {what}.",
   "{n} scripts added, {m} removed.": "{n} προγράμματα προσετέθη, {m} ἀφῃρέθη.",
   "{n} blocks added, {m} removed.": "{n} πλίνθοι προσετέθησαν, {m} ἀφῃρέθησαν.",
-  "Text changed in {n} blocks.": "Ὁ λόγος ἐν {n} πλίνθοις ἐμεταλλάγη."
+  "Text changed in {n} blocks.": "Ὁ λόγος ἐν {n} πλίνθοις ἐμεταλλάγη.",
+  "Review stuck": "Ἡ ἐξέτασις ἐνέμεινεν",
+  "stuck": "ἐνέμεινεν",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ἡ ἐξέτασις μετὰ δύο διορθώσεις τὰ αὐτὰ ἁμαρτήματα εὗρεν, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὰ ἰᾶσθαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε."
  },
  "examples": {
   "review": {
@@ -2994,7 +2997,10 @@
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} οὐκ ἐν καιρῷ ἐν Telegram ἐδοκιμάσθη· οὐδὲν οὖν ἐγένετο.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} ἔκρινε τὸ {what}, ἀποκρινάμενος ναὶ {code} ἐν Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "Ἡ ἔκδοσις {latest} οὐ τέτακται τῇ κλειδί ᾗ τοῦτο τὸ runtime ἔχει, οὖν οὐκ ἐχρήσθη. Οὐδὲν ἠλλάγη.",
-  "{n} of them can change things": "{n} ἐξ αὐτῶν δύναται πράγματα μεταβάλλειν"
+  "{n} of them can change things": "{n} ἐξ αὐτῶν δύναται πράγματα μεταβάλλειν",
+  "Review stuck": "Ἡ ἐξέτασις ἐνέμεινεν",
+  "stuck": "ἐνέμεινεν",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ἡ ἐξέτασις μετὰ δύο διορθώσεις τὰ αὐτὰ ἁμαρτήματα εὗρεν, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὰ ἰᾶσθαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

@@ -952,7 +952,10 @@
 "Gone: {what}.":"Ya no: {what}.",
 "{n} scripts added, {m} removed.":"{n} secuencias añadidas, {m} eliminadas.",
 "{n} blocks added, {m} removed.":"{n} bloques añadidos, {m} eliminados.",
-"Text changed in {n} blocks.":"Texto cambiado en {n} bloques."
+"Text changed in {n} blocks.":"Texto cambiado en {n} bloques.",
+"Review stuck":"Revisión atascada",
+"stuck":"atascado",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La revisión señaló los mismos problemas tras dos correcciones, así que corregir no puede arreglarlos. Puede que al programa le falte algo que no se le dio, como una página web, un archivo o un dato: dáselo (en la tarea, por ejemplo, o mediante un agente que pueda leer páginas web) y vuelve a ejecutarlo."
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
@@ -1861,6 +1864,9 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} no fue aprobado a tiempo en Telegram, así que no pasó nada.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} aprobó {what} respondiendo sí {code} en Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"El release {latest} no está firmado por la clave que este runtime tiene, así que no se usó. No se cambió nada.",
-"{n} of them can change things":"{n} de ellas pueden cambiar cosas"
+"{n} of them can change things":"{n} de ellas pueden cambiar cosas",
+"Review stuck":"Revisión atascada",
+"stuck":"atascado",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La revisión señaló los mismos problemas tras dos correcciones, así que corregir no puede arreglarlos. Puede que al programa le falte algo que no se le dio, como una página web, un archivo o un dato: dáselo (en la tarea, por ejemplo, o mediante un agente que pueda leer páginas web) y vuelve a ejecutarlo."
 }
 };

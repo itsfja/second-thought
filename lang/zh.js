@@ -952,7 +952,10 @@
 "Gone: {what}.":"移除：{what}。",
 "{n} scripts added, {m} removed.":"新增 {n} 个脚本，移除 {m} 个。",
 "{n} blocks added, {m} removed.":"新增 {n} 个积木，移除 {m} 个。",
-"Text changed in {n} blocks.":"{n} 个积木的文字有改动。"
+"Text changed in {n} blocks.":"{n} 个积木的文字有改动。",
+"Review stuck":"审阅卡住了",
+"stuck":"卡住",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1861,6 +1864,9 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} 未在时限内在 Telegram 上获得批准，所以什么也没有发生。",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} 在 Telegram 上回复“是 {code}”批准了{what}。",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"发行版 {latest} 未由此运行时持有的密钥签名，因此未被使用。没有任何更改。",
-"{n} of them can change things":"其中 {n} 个可以改动内容"
+"{n} of them can change things":"其中 {n} 个可以改动内容",
+"Review stuck":"审阅卡住了",
+"stuck":"卡住",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。"
 }
 };

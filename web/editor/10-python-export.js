@@ -522,6 +522,8 @@
             out.push(pad + "        if " + rnd + " > " + max + ":");
             out.push(pad + "            R.out_of_rounds()");
             out.push(pad + "            break");
+            out.push(pad + "        if R.stuck():");
+            out.push(pad + "            break");
             stmts(b.getInputTargetBlock("FIX"), ind + 2, Object.assign({}, ctx, { loop:true }), out);
             break;
           }

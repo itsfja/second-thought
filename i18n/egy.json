@@ -1444,7 +1444,10 @@
   "Gone: {what}.": "𓈎𓂋𓏏: {what}.",
   "{n} scripts added, {m} removed.": "𓋴𓊪𓏏 {n} 𓂋𓈖𓏏, 𓈎𓂋𓏏 {m}.",
   "{n} blocks added, {m} removed.": "𓋴𓊪𓏏 {n} 𓎡𓂋𓏏, 𓈎𓂋𓏏 {m}.",
-  "Text changed in {n} blocks.": "𓏠𓈎𓏏 {n} 𓎡𓂋𓏏."
+  "Text changed in {n} blocks.": "𓏠𓈎𓏏 {n} 𓎡𓂋𓏏.",
+  "Review stuck": "𓋴𓇋𓊪 𓂝𓎛𓂝",
+  "stuck": "𓂝𓎛𓂝",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𓋴𓇋𓊪 𓆓𓂧𓆑 𓇋𓋴𓆑𓏏 𓅱𓂝𓏏 𓅓𓐍𓏏 𓋴𓅓𓈖𓐍𓅱 2, 𓈖𓈖 𓋴𓅓𓈖𓐍 𓂋𓐍𓆑 𓇋𓂋𓋴𓏏 𓐍𓂋𓂧 𓈖 𓇋𓂋𓏏 𓎛𓈖 𓐍𓏏 𓈖𓈖 𓂋𓂧𓇋𓏏𓅱 𓈖𓆑, 𓅓𓇋 𓋴𓈙 𓈖 𓏏𓄿, 𓆓𓅓𓂝 𓅓 𓅓𓄿𓂝𓏏: 𓂋𓂧𓇋 𓋴𓅱 𓈖𓆑 (𓅓 𓇋𓂋𓏏, 𓅓 𓅱𓊪𓅱𓏏𓇋 𓂋𓐍𓆑 𓈙𓂧𓇋 𓋴𓈙𓅱 𓈖 𓏏𓄿), 𓇋𓂋 𓋴𓅱 𓅓 𓅱𓎛𓅓"
  },
  "examples": {
   "review": {
@@ -2985,7 +2988,10 @@
   "{what} wasn't approved on Telegram in time, so nothing happened.": "{what} n sjp.n.tw m Telegram m rnpst, nn ḫprjw n ḫprjw.",
   "{who} approved {what} by replying yes {code} on Telegram.": "{who} sjp.n=f {what} m hꜣb 'yes {code}' m Telegram.",
   "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.": "{latest} n ḥtm.tw m ḫtm n jrt pn, n jr.tw=f. nn ḫprjw n ḫprjw.",
-  "{n} of them can change things": "{n} jm=sn šnj=sn ḫt"
+  "{n} of them can change things": "{n} jm=sn šnj=sn ḫt",
+  "Review stuck": "sjp ꜥḥꜥ",
+  "stuck": "ꜥḥꜥ",
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "sjp ḏd=f jsft wꜥt m-ḫt smnḫw 2, nn smnḫ rḫ=f jr=st. ḫrd n jrt ḥn ḫt nn rdj.tw n=f, mj sš n tꜣ, ḏmꜥ m mꜣꜥt: rdj sw n=f (m jrt, m wpwtj rḫ=f šdj sšw n tꜣ), jr sw m wḥm."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

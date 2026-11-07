@@ -953,7 +953,10 @@
 "Gone: {what}.":"אסתלק: {what}.",
 "{n} scripts added, {m} removed.":"אתוספו {n} סדרין, אתבקו {m}.",
 "{n} blocks added, {m} removed.":"אתוספו {n} לבנין, אתבקו {m}.",
-"Text changed in {n} blocks.":"אשתני מללא ב {n} לבנין."
+"Text changed in {n} blocks.":"אשתני מללא ב {n} לבנין.",
+"Review stuck":"בדיקא אתעכבת",
+"stuck":"מתעכב",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1862,7 +1865,10 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} לא אתרשים בזמן בטלגרם, ולהן לא אתעביד כלום.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} אתרשים {what} במענה יא {code} בטלגרם.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"שררא {latest} לא אתחתם בממון די ראנטיים הדין, ולהן לא אתעביד בה. לא אתדבר כלום.",
-"{n} of them can change things":"{n} מנהון משנין מדעם"
+"{n} of them can change things":"{n} מנהון משנין מדעם",
+"Review stuck":"בדיקא אתעכבת",
+"stuck":"מתעכב",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

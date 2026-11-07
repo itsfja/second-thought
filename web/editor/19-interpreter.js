@@ -507,10 +507,22 @@
   const needTask = () => { if (!run.task) fail(tr("Add a 'set task to' block before this step.")); };
   const needDraft = () => { if (!run.draft) fail(tr("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.")); };
 
+  // Whether two review problems say the same thing (#331): the same words, or mostly the same longer words. Matches
+  // same_problem in exported programs.
+  function sameProblem(a, b){
+    if (str(a).trim().toLowerCase() === str(b).trim().toLowerCase()) return true;
+    const words = t => new Set((str(t).toLowerCase().match(/[a-z0-9]+/g) || []).filter(w => w.length > 3));
+    const wa = words(a), wb = words(b);
+    if (!wa.size || !wb.size) return false;
+    let both = 0; wa.forEach(w => { if (wb.has(w)) both++; });
+    return both >= 0.6 * Math.min(wa.size, wb.size);
+  }
+  window.__sameProblem = sameProblem;
+
   async function reviewOnce(criteria, label, inLoop){
     const s = addStep(label);
     const loop = inLoop ? run.reflect : null;
-    const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again if it has come back:\n" +
+    const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again, in the same words, if it has come back:\n" +
       loop.earlier.map(e => "- " + e).join("\n") : "";
     const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" + criteria +
       "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
@@ -526,6 +538,11 @@
         loop.best = { draft:run.draft, problems:run.problems.slice(), n:run.problems.length, round:loop.round };
       run.problems.forEach(p => { if (!loop.earlier.includes(p)) loop.earlier.push(p); });
       loop.earlier = loop.earlier.slice(-12);
+      // No progress: nothing new, and no fewer problems than the round before (#331)
+      const last = loop.last;
+      const same = !approved && last && run.problems.length >= last.length && run.problems.every(p => last.some(q => sameProblem(p, q)));
+      loop.same = same ? (loop.same || 0) + 1 : 0;
+      loop.last = run.problems.slice();
     }
     if (approved) { s.text(tr("Meets every criterion.")); s.done("approved", "ok"); }
     else { s.list(run.problems); s.done("needs work", "warn"); }
@@ -775,7 +792,7 @@
         const criteria = str(await input(b, tc, "CRITERIA"));
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
         const before = run.reflect;
-        run.reflect = { earlier:[], best:null, round:0 };
+        run.reflect = { earlier:[], best:null, round:0, last:null, same:0 };
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
@@ -788,6 +805,13 @@
                 run.draft = best.draft; run.problems = best.problems.slice(); run.approved = false;
                 addStep("Kept the best draft", { text:tr("Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.", { round:best.round, n:best.n }) }).done("best draft", "warn");
               }
+              break;
+            }
+            if (run.reflect.same >= 2) {  // the same problems after two revisions in a row: revising can't fix them (#331)
+              step.done("stuck", "bad"); run.outOfRounds = true;
+              const best = run.reflect.best;
+              if (best && best.round !== run.reflect.round) { run.draft = best.draft; run.problems = best.problems.slice(); run.approved = false; }
+              addStep("Review stuck", { text:tr("The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.") }).done("stuck", "warn");
               break;
             }
             if ((await body(b, "FIX", tc)) === "break") break;

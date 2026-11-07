@@ -952,7 +952,10 @@
 "Gone: {what}.":"Removido: {what}.",
 "{n} scripts added, {m} removed.":"{n} sequências adicionadas, {m} removidas.",
 "{n} blocks added, {m} removed.":"{n} blocos adicionados, {m} removidos.",
-"Text changed in {n} blocks.":"Texto alterado em {n} blocos."
+"Text changed in {n} blocks.":"Texto alterado em {n} blocos.",
+"Review stuck":"Revisão travada",
+"stuck":"travado",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"A revisão apontou os mesmos problemas após duas correções, então corrigir não os resolve. Talvez falte ao programa algo que não lhe foi dado, como uma página web, um arquivo ou um fato: dê isso a ele (na tarefa, por exemplo, ou por meio de um agente que leia páginas web) e execute de novo."
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -1861,6 +1864,9 @@
 "{what} wasn't approved on Telegram in time, so nothing happened.":"{what} não foi aprovado a tempo no Telegram, portanto nada aconteceu.",
 "{who} approved {what} by replying yes {code} on Telegram.":"{who} aprovou {what} respondendo sim {code} no Telegram.",
 "Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.":"O release {latest} não está assinado pela chave que este runtime guarda, portanto não foi usado. Nada foi mudado.",
-"{n} of them can change things":"{n} delas podem alterar coisas"
+"{n} of them can change things":"{n} delas podem alterar coisas",
+"Review stuck":"Revisão travada",
+"stuck":"travado",
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"A revisão apontou os mesmos problemas após duas correções, então corrigir não os resolve. Talvez falte ao programa algo que não lhe foi dado, como uma página web, um arquivo ou um fato: dê isso a ele (na tarefa, por exemplo, ou por meio de um agente que leia páginas web) e execute de novo."
 }
 };

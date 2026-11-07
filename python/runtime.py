@@ -1174,6 +1174,16 @@ HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
+def same_problem(a, b):
+    """Whether two review problems say the same thing (#331): the same words, or mostly the same longer words, since a
+    reviewer asked to repeat a problem doesn't always manage it word for word."""
+    words = lambda t: {w for w in re.findall(r"[a-z0-9]+", to_str(t).lower()) if len(w) > 3}  # noqa: E731
+    if to_str(a).strip().lower() == to_str(b).strip().lower():
+        return True
+    wa, wb = words(a), words(b)
+    return bool(wa and wb) and len(wa & wb) >= 0.6 * min(len(wa), len(wb))
+
+
 def seen_addresses(text):
     """Every web address in text, whole, without trailing punctuation or slashes: what an agent was given or read (#304)."""
     out = set()
@@ -7173,7 +7183,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
     def reviewing(self):
         """Around a 'review … up to N rounds' loop: remembers each round's problems and its best draft."""
         before = self.reflect
-        self.reflect = {"earlier": [], "best": None, "round": 0}
+        self.reflect = {"earlier": [], "best": None, "round": 0, "last": None, "same": 0}
         try:
             yield
         finally:
@@ -7183,7 +7193,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self._need_draft()
         loop = self.reflect if in_loop else None
         earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
-                   "and list it again if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
+                   "and list it again, in the same words, if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
         v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
                              to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
                              '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
@@ -7201,11 +7211,33 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 if p_ not in loop["earlier"]:
                     loop["earlier"].append(p_)
             del loop["earlier"][:-12]
+            # No progress: nothing new, and no fewer problems than the round before (#331)
+            last = loop["last"]
+            same = (not approved and last is not None and len(self.problems) >= len(last)
+                    and all(any(same_problem(p_, q) for q in last) for p_ in self.problems))
+            loop["same"] = loop["same"] + 1 if same else 0
+            loop["last"] = list(self.problems)
         if approved:
             self.log(label, tr("Meets every criterion."), tr("approved"))
         else:
             self.log(label, "\n".join("- " + p for p in self.problems), tr("needs work"))
         return approved
+
+    def stuck(self):
+        """True, having said why, once a review loop's review has raised the same problems after two revisions in a row
+        (#331): revising can't fix them, probably because the program lacks something, so the loop stops there and
+        keeps its best draft rather than spending its remaining rounds."""
+        loop = self.reflect or {}
+        if loop.get("same", 0) < 2:
+            return False
+        self.out_of_rounds_hit = True
+        best = loop.get("best")
+        if best and best["round"] != loop["round"]:
+            self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
+        self.log(tr("Review stuck"), tr("The review raised the same problems after two revisions, so revising can't fix them. The program may need "
+                                        "something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or "
+                                        "through an agent that can read web pages), then run again."), tr("stuck"))
+        return True
 
     def rounds(self, n):
         return max(1, min(6, round_js(num(n)) or 3))

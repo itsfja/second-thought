@@ -1588,6 +1588,16 @@ HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
+def same_problem(a, b):
+    """Whether two review problems say the same thing (#331): the same words, or mostly the same longer words, since a
+    reviewer asked to repeat a problem doesn't always manage it word for word."""
+    words = lambda t: {w for w in re.findall(r"[a-z0-9]+", to_str(t).lower()) if len(w) > 3}  # noqa: E731
+    if to_str(a).strip().lower() == to_str(b).strip().lower():
+        return True
+    wa, wb = words(a), words(b)
+    return bool(wa and wb) and len(wa & wb) >= 0.6 * min(len(wa), len(wb))
+
+
 def seen_addresses(text):
     """Every web address in text, whole, without trailing punctuation or slashes: what an agent was given or read (#304)."""
     out = set()
@@ -7587,7 +7597,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
     def reviewing(self):
         """Around a 'review … up to N rounds' loop: remembers each round's problems and its best draft."""
         before = self.reflect
-        self.reflect = {"earlier": [], "best": None, "round": 0}
+        self.reflect = {"earlier": [], "best": None, "round": 0, "last": None, "same": 0}
         try:
             yield
         finally:
@@ -7597,7 +7607,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self._need_draft()
         loop = self.reflect if in_loop else None
         earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
-                   "and list it again if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
+                   "and list it again, in the same words, if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
         v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
                              to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
                              '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
@@ -7615,11 +7625,33 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 if p_ not in loop["earlier"]:
                     loop["earlier"].append(p_)
             del loop["earlier"][:-12]
+            # No progress: nothing new, and no fewer problems than the round before (#331)
+            last = loop["last"]
+            same = (not approved and last is not None and len(self.problems) >= len(last)
+                    and all(any(same_problem(p_, q) for q in last) for p_ in self.problems))
+            loop["same"] = loop["same"] + 1 if same else 0
+            loop["last"] = list(self.problems)
         if approved:
             self.log(label, tr("Meets every criterion."), tr("approved"))
         else:
             self.log(label, "\n".join("- " + p for p in self.problems), tr("needs work"))
         return approved
+
+    def stuck(self):
+        """True, having said why, once a review loop's review has raised the same problems after two revisions in a row
+        (#331): revising can't fix them, probably because the program lacks something, so the loop stops there and
+        keeps its best draft rather than spending its remaining rounds."""
+        loop = self.reflect or {}
+        if loop.get("same", 0) < 2:
+            return False
+        self.out_of_rounds_hit = True
+        best = loop.get("best")
+        if best and best["round"] != loop["round"]:
+            self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
+        self.log(tr("Review stuck"), tr("The review raised the same problems after two revisions, so revising can't fix them. The program may need "
+                                        "something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or "
+                                        "through an agent that can read web pages), then run again."), tr("stuck"))
+        return True
 
     def rounds(self, n):
         return max(1, min(6, round_js(num(n)) or 3))
@@ -14673,6 +14705,8 @@ HOW TO MAP CODE
             out.push(pad + "        if " + rnd + " > " + max + ":");
             out.push(pad + "            R.out_of_rounds()");
             out.push(pad + "            break");
+            out.push(pad + "        if R.stuck():");
+            out.push(pad + "            break");
             stmts(b.getInputTargetBlock("FIX"), ind + 2, Object.assign({}, ctx, { loop:true }), out);
             break;
           }
@@ -17686,10 +17720,22 @@ HOW TO MAP CODE
   const needTask = () => { if (!run.task) fail(tr("Add a 'set task to' block before this step.")); };
   const needDraft = () => { if (!run.draft) fail(tr("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.")); };
 
+  // Whether two review problems say the same thing (#331): the same words, or mostly the same longer words. Matches
+  // same_problem in exported programs.
+  function sameProblem(a, b){
+    if (str(a).trim().toLowerCase() === str(b).trim().toLowerCase()) return true;
+    const words = t => new Set((str(t).toLowerCase().match(/[a-z0-9]+/g) || []).filter(w => w.length > 3));
+    const wa = words(a), wb = words(b);
+    if (!wa.size || !wb.size) return false;
+    let both = 0; wa.forEach(w => { if (wb.has(w)) both++; });
+    return both >= 0.6 * Math.min(wa.size, wb.size);
+  }
+  window.__sameProblem = sameProblem;
+
   async function reviewOnce(criteria, label, inLoop){
     const s = addStep(label);
     const loop = inLoop ? run.reflect : null;
-    const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again if it has come back:\n" +
+    const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again, in the same words, if it has come back:\n" +
       loop.earlier.map(e => "- " + e).join("\n") : "";
     const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" + criteria +
       "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
@@ -17705,6 +17751,11 @@ HOW TO MAP CODE
         loop.best = { draft:run.draft, problems:run.problems.slice(), n:run.problems.length, round:loop.round };
       run.problems.forEach(p => { if (!loop.earlier.includes(p)) loop.earlier.push(p); });
       loop.earlier = loop.earlier.slice(-12);
+      // No progress: nothing new, and no fewer problems than the round before (#331)
+      const last = loop.last;
+      const same = !approved && last && run.problems.length >= last.length && run.problems.every(p => last.some(q => sameProblem(p, q)));
+      loop.same = same ? (loop.same || 0) + 1 : 0;
+      loop.last = run.problems.slice();
     }
     if (approved) { s.text(tr("Meets every criterion.")); s.done("approved", "ok"); }
     else { s.list(run.problems); s.done("needs work", "warn"); }
@@ -17954,7 +18005,7 @@ HOW TO MAP CODE
         const criteria = str(await input(b, tc, "CRITERIA"));
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
         const before = run.reflect;
-        run.reflect = { earlier:[], best:null, round:0 };
+        run.reflect = { earlier:[], best:null, round:0, last:null, same:0 };
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
@@ -17967,6 +18018,13 @@ HOW TO MAP CODE
                 run.draft = best.draft; run.problems = best.problems.slice(); run.approved = false;
                 addStep("Kept the best draft", { text:tr("Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.", { round:best.round, n:best.n }) }).done("best draft", "warn");
               }
+              break;
+            }
+            if (run.reflect.same >= 2) {  // the same problems after two revisions in a row: revising can't fix them (#331)
+              step.done("stuck", "bad"); run.outOfRounds = true;
+              const best = run.reflect.best;
+              if (best && best.round !== run.reflect.round) { run.draft = best.draft; run.problems = best.problems.slice(); run.approved = false; }
+              addStep("Review stuck", { text:tr("The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.") }).done("stuck", "warn");
               break;
             }
             if ((await body(b, "FIX", tc)) === "break") break;

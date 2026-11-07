@@ -369,6 +369,11 @@ def python_tests(codes):
         out = out.replace("\r\n", "\n")
         check(code_ == 0 and "▸ Kept the best draft  [best draft]" in out and "RESULT (best effort)\n" + "=" * 60 + "\nv2\n\na\n" in out,
               "t_bestdraft.py keeps round 2's draft" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+        reviews = [json.dumps({"approved": False, "problems": p_}) for p_ in (["a", "b"], ["a", "b"], ["A", "b "], ["a", "b"])]
+        code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_bestdraft.py")], dict(env, FAKE_JSON_SCRIPT=json.dumps(reviews)), tmp)
+        out = out.replace("\r\n", "\n")
+        check(code_ == 0 and "▸ Review stuck  [stuck]" in out and "Review, round 4" not in out and "RESULT (best effort)" in out,
+              "t_bestdraft.py stops a stuck review loop early, saying why (#331)" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
         code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_checkpoint.py")], env, tmp)
         out = out.replace("\r\n", "\n")
         check(code_ == 0 and "RESULT\n" + "=" * 60 + "\nr1\n\ngood 1\n" in out, "t_checkpoint.py goes back to its checkpoint, twice" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
