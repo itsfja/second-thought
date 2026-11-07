@@ -78,6 +78,8 @@
       "; It must stay in the same folder as the program.",
       "; Keep it private: it holds your API keys. Don't email it or put it on GitHub.",
       "; Lines starting with ; are notes and are ignored.",
+      "; Settings your programs share, such as email and keys, can go in second-thought.ini in your home folder,",
+      "; or in ST_ environment variables (ST_EMAIL_ADDRESS, ST_CURRENCY): every program reads those first, then this file.",
       "",
       "[keys]"
     ];

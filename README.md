@@ -297,7 +297,13 @@ python -m keyring set second-thought ANTHROPIC_API_KEY
 
 It asks for the key without showing it. A program then finds any key that isn't in the environment or `second-thought.ini` in the keychain. `--doctor` says where each key came from. Without `keyring` installed, nothing changes, and `keychain = no` in `second-thought.ini` turns it off.
 
-[`second-thought.example.ini`](second-thought.example.ini) lists every setting a program understands, with a note on each: keys for every model service, models and backups, run settings, Home Assistant, Homey, MQTT, Telegram, email, calendar, GitHub, web requests and feeds. Copy it to `second-thought.ini` and fill in what you use. A program looks for `second-thought.ini` next to itself first, then in the folder you run it from, then in your home folder, so one copy in your home folder can serve every program you export.
+[`second-thought.example.ini`](second-thought.example.ini) lists every setting a program understands, with a note on each: keys for every model service, models and backups, run settings, Home Assistant, Homey, MQTT, Telegram, email, calendar, GitHub, web requests and feeds. Copy it to `second-thought.ini` and fill in what you use. Settings come in three layers, each one over the one before:
+
+1. **`ST_` environment variables**, for every program on the computer: the setting's name after `ST_`, such as `ST_EMAIL_ADDRESS` or `ST_CURRENCY`. On Windows, `setx ST_CURRENCY gbp`, then open a new window.
+2. **`second-thought.ini` in your home folder**, for what your programs share: email, keys, currency.
+3. **The program's own `second-thought.ini`**, next to it (or in the folder you run it from, or wherever `SECOND_THOUGHT_INI` points), for what's particular to it.
+
+So a program's own file only needs its own settings. An ordinary environment variable with the setting's usual name (`ANTHROPIC_API_KEY`, `RB_BUDGET`) still wins over all three, and the keychain fills in any key still missing. `--doctor` says which file or variable each key came from.
 
 ---
 
