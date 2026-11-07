@@ -451,6 +451,21 @@ That's market prices, your balances, orders and trade history, and paper trading
 
 Every Kraken tool that can move real money (orders, futures, staking, transfers, withdrawals) **always asks you first**, even with (no asking) and even in a 'tools from MCP server' block, and never runs when nobody is there to answer: on a schedule, on GitHub Actions or with `--mcp`, it's refused and the run log says why. Kraken asks agents to set `acknowledged: true` on those calls; the agent never can, only your yes does. The list works the safe way round: only the Kraken tools known not to move money (market data, your account's history, paper trading) skip that question, so a tool added by a later kraken-cli asks until it has been checked. `--doctor` checks kraken-cli is installed and your key works, and fails if `MCP_KRAKEN` has `--allow-dangerous`.
 
+
+### Trust Wallet
+
+[Trust Wallet](https://trustwallet.com)'s Agent Kit (`twak`, from `npm install -g @trustwallet/cli`) runs an MCP server for your self-custody wallet. Set it up with `twak init` and `twak wallet create`, then name the server `trustwallet`:
+
+```ini
+[mcp servers]
+MCP_TRUSTWALLET = twak serve
+TWAK_ACCESS_ID = your-access-id
+TWAK_HMAC_SECRET = your-hmac-secret
+```
+
+and put `tools from MCP server trustwallet` inside an agent. Balances, your portfolio, prices, history, swap quotes and token risk checks run without asking. Its tools don't say which only look, so Second Thought works the safe way round, as with Kraken: **everything else counts as money** (transfers, swaps, token approvals, payments, and any tool a later twak adds), so it always asks you first, even with (no asking), and never runs when nobody is there to answer. The agent can't set twak's `autoApprove`; only your yes does. Automations (`create_automation`) are never offered to the agent, because they trade later, inside twak, where nothing here can ask. On-chain sends can't be undone, so keep the wallet's password in your system's keychain, as twak does by default, rather than in `second-thought.ini`.
+
+The **Wallet health check** program in the gallery uses it: each Sunday it emails what you hold, what it's worth, and any token whose risk check looks bad. It only reads.
 ---
 
 

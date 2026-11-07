@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Added
+- Trust Wallet through its Agent Kit's MCP server (#320): name the server `trustwallet` (or start it with `twak serve`) and an agent can read your self-custody wallet: balances, portfolio, prices, history, swap quotes and token risk checks. Its tools carry no MCP annotations, so they're judged the safe way round, like Kraken's: only those known to look count as safe, and transfers, swaps, token approvals, payments and any tool a later twak adds count as money, so they always ask and never run unattended. The agent can't set twak's `autoApprove`; only the person's yes does. `create_automation` is never offered, because an automation trades later, out of sight. A gallery program, **Wallet health check**, emails what you hold and any risky tokens each Sunday, and only reads.
+
 ## 3.10.0 - 2026-11-06
 
 ### Security

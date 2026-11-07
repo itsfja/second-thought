@@ -1487,7 +1487,22 @@ SAFETY = {
                   "kraken_order_sell", "kraken_paper_reset", "kraken_subaccount_create", "kraken_subaccount_transfer",
                   "kraken_wallet_transfer", "kraken_withdraw", "kraken_withdrawal_cancel", "kraken_workspace_create",
                   "kraken_workspace_promote", "kraken_workspace_reset"],
-    "mcp_money_input": "acknowledged",
+    # Inputs that say "yes, really" to a money tool: Kraken's acknowledged, and Trust Wallet's autoApprove (x402
+    # payments, #320). The agent is never offered them; only the person's yes sets them.
+    "mcp_money_inputs": ["acknowledged", "autoApprove"],
+    # Trust Wallet's Agent Kit (twak serve, #320), judged the safe way round like Kraken: only these tools run without
+    # the money question (balances, prices, history, quotes, risk checks, price alerts); any other counts as money,
+    # including transfer, swap, token approvals and x402 payments, and any tool a later twak adds. twak 0.24.3, checked
+    # 2026-11-06. Its tools carry no MCP annotations, so this list is all there is.
+    "mcp_twak_safe": ["check_alerts", "check_allowance", "check_token_risk", "competition_status", "create_alert", "delete_alert",
+                      "delete_automation", "erc8004_get_metadata", "erc8004_show", "erc8183_policy_info", "erc8183_status",
+                      "get_address", "get_asset_info", "get_balance", "get_offramp_quote", "get_offramp_url", "get_onramp_quote",
+                      "get_onramp_url", "get_swap_history", "get_swap_quote", "get_token_holdings", "get_token_price",
+                      "get_transaction_details", "get_transaction_history", "get_trending_tokens", "get_wallet_status",
+                      "list_addresses", "list_alerts", "list_automations", "search_assets", "token_balance", "validate_transaction",
+                      "wallet_balance", "wallet_portfolio", "x402_quote"],
+    # Never offered to an agent (#320): an automation trades later, inside twak, where nothing here can ask first.
+    "mcp_twak_never": ["create_automation"],
     # The other way round, so it fails safe (#309): Kraken's tools known not to move money, the ones its catalog marks
     # read_only or local (paper trading, notes); kraken-cli 0.5.1, checked 2026-11-06. Any other kraken_ tool, such as
     # one a later kraken-cli adds, counts as money and asks.
@@ -4917,8 +4932,15 @@ def mcp_money(tool):
     schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {}
     props = schema.get("properties") if isinstance(schema.get("properties"), dict) else {}
     name = to_str(tool.get("name"))
-    return name in SAFETY["mcp_money"] or SAFETY["mcp_money_input"] in props or \
+    return name in SAFETY["mcp_money"] or any(k in props for k in SAFETY["mcp_money_inputs"]) or \
         (name.startswith("kraken_") and name not in SAFETY["mcp_kraken_safe"])
+
+
+def mcp_is_twak(server, command=""):
+    """True for Trust Wallet's Agent Kit (#320): a server named trustwallet (or twak), or one started with twak serve."""
+    name = re.sub(r"[^a-z]", "", to_str(server).lower())
+    return name in ("trustwallet", "twak") or bool(re.search(r"(^|[\s\"'/\\])twak(\.cmd|\.exe)?[\"']?\s+serve\b", to_str(command))) \
+        or "@trustwallet/cli" in to_str(command)
 
 
 def mcp_destructive(tool):
@@ -5235,20 +5257,23 @@ class AgentTools:
         for t in tools:
             if t.get("kind") == "mcp":
                 server, mode = to_str(t.get("server")).strip(), t.get("ask", "changes")
+                twak = mcp_is_twak(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
                 for tool in (mcp or {}).get(server, []):
+                    if twak and tool.get("name") in SAFETY["mcp_twak_never"]:
+                        continue  # trades later, out of sight: not offered at all (#320)
                     schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {"type": "object"}
                     params = list((schema.get("properties") or {}).keys()) if isinstance(schema.get("properties"), dict) else []
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
-                    money = mcp_money(tool)  # real money: always asks, whatever the block says (#262)
+                    money = mcp_money(tool) or (twak and tool.get("name") not in SAFETY["mcp_twak_safe"])  # real money: always asks (#262, #320)
                     ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only)
                     if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
-                        schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k != SAFETY["mcp_money_input"]},
-                                      required=[k for k in schema.get("required") or [] if k != SAFETY["mcp_money_input"]])
-                        params = [k for k in params if k != SAFETY["mcp_money_input"]]
+                        schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k not in SAFETY["mcp_money_inputs"]},
+                                      required=[k for k in schema.get("required") or [] if k not in SAFETY["mcp_money_inputs"]])
+                        params = [k for k in params if k not in SAFETY["mcp_money_inputs"]]
                     out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"],
                                                                                         "read_only": read_only, "money": money,
-                                                                                        "acknowledge": money and SAFETY["mcp_money_input"] in ((tool.get("inputSchema") or {}).get("properties") or {})}), ask, schema)
+                                                                                        "acknowledge": [k for k in SAFETY["mcp_money_inputs"] if money and k in ((tool.get("inputSchema") or {}).get("properties") or {})]}), ask, schema)
             elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
@@ -5541,7 +5566,7 @@ class AgentTools:
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
             if spec.get("money") and isinstance(inp, dict):
-                inp = {k: v for k, v in inp.items() if k != SAFETY["mcp_money_input"]}  # only a yes from the person sets it
+                inp = {k: v for k, v in inp.items() if k not in SAFETY["mcp_money_inputs"]}  # only a yes from the person sets it
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
             problem, checked = self.check_mcp_input(inp, schema) if kind == "mcp" else self.check_tool_input(inp, schema)
             if problem:
@@ -5583,7 +5608,7 @@ class AgentTools:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
                 try:
                     if spec.get("acknowledge"):
-                        inp = dict(inp, **{SAFETY["mcp_money_input"]: True})  # the person said yes, just now
+                        inp = dict(inp, **{k: True for k in spec["acknowledge"]})  # the person said yes, just now
                     result = await self._agent_run_tool(kind, spec, inp)
                 except (asyncio.CancelledError, Finish):
                     raise
@@ -6101,7 +6126,9 @@ class Doctor:
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 tools = await self.mcp_tools(name)
                 text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
-                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True))
+                twak = mcp_is_twak(name, command)  # its tools carry no marks, so its own safe list says which only look (#320)
+                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True)
+                              and not (twak and t.get("name") in SAFETY["mcp_twak_safe"]))
                 if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
                     text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}
@@ -8520,6 +8547,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_topic_sentinel","file":"topic-sentinel.json","category":"news","title":"Topic sentinel","description":"Watches one topic, like quantum computing funding. Each Monday, a synthesis of what changed since last week, with a source for every claim and nothing it already told you.","tip":"Change the topic in the first block. It remembers each week's synthesis, so the second week is where it shines.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_topic","name":"topic"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sentinel"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":0,"DAYS":"weekdays"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Monday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sentinel"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"sentinel"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_topic"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"quantum computing funding"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"You watch one topic for me: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_topic"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":".\nFirst recall the note 'last synthesis' (it may not exist yet). Search the web for news on the topic from the past week and read the best sources in full. Write a short synthesis of what changed since the last one: new funding, programmes, results or policy. Give a source link for every claim, and leave out anything the last synthesis already said. Check it with review_text against: every claim has a source; nothing repeats last week. Then remember it as 'last synthesis'."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":15}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"memory"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This week in "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_topic"}}}}},"extraState":{"itemCount":2}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_fx_travel_check","file":"fx-travel-check.json","category":"money","title":"Travel money check","description":"Two days before a calendar event abroad, looks up the exchange rate and sends a Telegram reminder about cash, card fees and plugs.","tip":"It decides from the event's title and place whether it's abroad. Web search only works in exported Python.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_country","name":"country"},{"id":"g_advice","name":"advice"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type an event to test with, like 'Flight to Lisbon'"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"trip"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_cal_when","fields":{"N":2880},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"trip"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"trip"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_ask_yesno","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Does this calendar event take place outside the UK?\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_country"}},"inputs":{"VALUE":{"block":{"type":"rb_extract","inputs":{"WHAT":{"shadow":{"type":"text","fields":{"TEXT":"the country it takes place in"}}},"TEXT":{"block":{"type":"rb_msg_value"}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_advice"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Using these search results, give today's rate from pounds to the currency of "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_country"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":", then three short reminders for the trip: cash, card fees abroad, and the plug type.\n\n"}}},"ADD3":{"block":{"type":"rb_web_search","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"pound exchange rate today "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_country"}}}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"✈️ "}}},"ADD1":{"block":{"type":"rb_msg_value"}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_advice"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_advice"}}}}}}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Not abroad."}}}}}}},"extraState":{"hasElse":true}}},"x":30,"y":290}]}}},
 {"key":"g_volunteer_rota","file":"volunteer-rota.json","category":"calendar","title":"Volunteer rota","description":"Drafts next month's volunteer rota from the shifts in your calendar and the availability people emailed you, fairly shared, and asks you to approve it before emailing it round.","tip":"Put the shifts in a calendar it can read, and ask volunteers to reply to one email with their dates. Change the address to your list.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Draft next month's volunteer rota. Read the calendar for next month's shifts (calendar with days 40). Search my email from the last 21 days for volunteers' availability replies and read them. Give each shift its volunteers: only people who said they're free then, shared out as evenly as you can, nobody on two shifts in one day. List any shift still short of people at the top. Then a table by date. Check it with review_text against: every name is someone who said they were free; no shift has someone twice; shifts with too few people are listed first."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":16}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calendar"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"email"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_approve","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Email this rota to the volunteers?\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"rb_ask_first","fields":{"WHAT":"messages"},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"volunteers@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Next month's rota"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Not sent. The draft, to edit yourself:\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":30}]}}},
+{"key":"g_wallet_health_check","file":"wallet-health-check.json","category":"money","title":"Wallet health check","description":"Each Sunday evening, reads your Trust Wallet through its Agent Kit: what you hold and what it's worth, how prices moved, and a risk check on every token, flagging any that look like scams or have little liquidity. Emailed to you. It only reads: it never sends, swaps or approves.","tip":"Needs Trust Wallet's Agent Kit (npm install -g @trustwallet/cli) as MCP_TRUSTWALLET in second-thought.ini: the example ini shows how. Change the email address to yours.","author":"itsfja","runtime":"3.10.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","x":30,"y":30,"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"x":550,"y":30,"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}}}}},{"type":"rb_receive","fields":{"MSG":"check"},"x":30,"y":290,"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Read my Trust Wallet: the wallet's status, then its portfolio (every token, how much, and its value). For each token, get its price now and run a risk check. Then write a short summary: the total value, each holding and its share, and a section headed 'Worth a look' listing any token whose risk check is medium or high, with the reasons it gave. Only read: don't send, swap, approve or pay for anything."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":15}}},"TOOLS":{"block":{"type":"rb_agent_mcp","fields":{"SERVER":"trustwallet","ASK":"changes"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your wallet this week"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}]}}},
 {"key":"g_recipe_scaler_weekly","file":"recipe-scaler-weekly.json","category":"home","title":"Weekly recipes and shopping list","description":"Remembers recipes you drop in a folder. Run it on shopping day: say which recipes and for how many, and it scales them and makes one shopping list grouped by supermarket aisle.","tip":"Change the folder to where you keep recipes (PDF, Word or text). Run it by hand, since it asks which recipes you want.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_folder_when","fields":{"FOLDER":"~/Recipes"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"recipe"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":30},{"type":"rb_receive","fields":{"MSG":"recipe"},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write this recipe as one line: its name (serves N): each ingredient with its amount, separated by semicolons.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Recipe remembered."}}}}}}}},"x":550,"y":30},{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Which recipes this week, and for how many people? (Your recipes are listed in the agent's first step.)"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"My recipes, one per line:\n"}}},"ADD1":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nThis week I want: "}}},"ADD3":{"block":{"type":"rb_answer"}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nScale each recipe to the servings I want, using calculate for every amount. If a recipe isn't in my list, use a standard version. Then write one shopping list grouped by supermarket aisle (fruit and veg, bakery, dairy, meat and fish, tins and jars, dry goods, frozen), adding up the same ingredient across recipes."}}}},"extraState":{"itemCount":5}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":12}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calc"}}}},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"shopping-list"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Shopping list"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":290}]}}}
 ]
 </script>
@@ -8667,7 +8695,50 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   "kraken_workspace_promote",
   "kraken_workspace_reset"
  ],
- "mcp_money_input": "acknowledged",
+ "mcp_money_inputs": [
+  "acknowledged",
+  "autoApprove"
+ ],
+ "mcp_twak_safe": [
+  "check_alerts",
+  "check_allowance",
+  "check_token_risk",
+  "competition_status",
+  "create_alert",
+  "delete_alert",
+  "delete_automation",
+  "erc8004_get_metadata",
+  "erc8004_show",
+  "erc8183_policy_info",
+  "erc8183_status",
+  "get_address",
+  "get_asset_info",
+  "get_balance",
+  "get_offramp_quote",
+  "get_offramp_url",
+  "get_onramp_quote",
+  "get_onramp_url",
+  "get_swap_history",
+  "get_swap_quote",
+  "get_token_holdings",
+  "get_token_price",
+  "get_transaction_details",
+  "get_transaction_history",
+  "get_trending_tokens",
+  "get_wallet_status",
+  "list_addresses",
+  "list_alerts",
+  "list_automations",
+  "search_assets",
+  "token_balance",
+  "validate_transaction",
+  "wallet_balance",
+  "wallet_portfolio",
+  "x402_quote"
+ ],
+ "mcp_twak_never": [
+  "create_automation"
+ ],
  "mcp_always_ask": [
   "create_or_update_file",
   "create_repository",

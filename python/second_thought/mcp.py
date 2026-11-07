@@ -495,8 +495,15 @@ def mcp_money(tool):
     schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {}
     props = schema.get("properties") if isinstance(schema.get("properties"), dict) else {}
     name = to_str(tool.get("name"))
-    return name in SAFETY["mcp_money"] or SAFETY["mcp_money_input"] in props or \
+    return name in SAFETY["mcp_money"] or any(k in props for k in SAFETY["mcp_money_inputs"]) or \
         (name.startswith("kraken_") and name not in SAFETY["mcp_kraken_safe"])
+
+
+def mcp_is_twak(server, command=""):
+    """True for Trust Wallet's Agent Kit (#320): a server named trustwallet (or twak), or one started with twak serve."""
+    name = re.sub(r"[^a-z]", "", to_str(server).lower())
+    return name in ("trustwallet", "twak") or bool(re.search(r"(^|[\s\"'/\\])twak(\.cmd|\.exe)?[\"']?\s+serve\b", to_str(command))) \
+        or "@trustwallet/cli" in to_str(command)
 
 
 def mcp_destructive(tool):

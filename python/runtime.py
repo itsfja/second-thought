@@ -1073,7 +1073,22 @@ SAFETY = {
                   "kraken_order_sell", "kraken_paper_reset", "kraken_subaccount_create", "kraken_subaccount_transfer",
                   "kraken_wallet_transfer", "kraken_withdraw", "kraken_withdrawal_cancel", "kraken_workspace_create",
                   "kraken_workspace_promote", "kraken_workspace_reset"],
-    "mcp_money_input": "acknowledged",
+    # Inputs that say "yes, really" to a money tool: Kraken's acknowledged, and Trust Wallet's autoApprove (x402
+    # payments, #320). The agent is never offered them; only the person's yes sets them.
+    "mcp_money_inputs": ["acknowledged", "autoApprove"],
+    # Trust Wallet's Agent Kit (twak serve, #320), judged the safe way round like Kraken: only these tools run without
+    # the money question (balances, prices, history, quotes, risk checks, price alerts); any other counts as money,
+    # including transfer, swap, token approvals and x402 payments, and any tool a later twak adds. twak 0.24.3, checked
+    # 2026-11-06. Its tools carry no MCP annotations, so this list is all there is.
+    "mcp_twak_safe": ["check_alerts", "check_allowance", "check_token_risk", "competition_status", "create_alert", "delete_alert",
+                      "delete_automation", "erc8004_get_metadata", "erc8004_show", "erc8183_policy_info", "erc8183_status",
+                      "get_address", "get_asset_info", "get_balance", "get_offramp_quote", "get_offramp_url", "get_onramp_quote",
+                      "get_onramp_url", "get_swap_history", "get_swap_quote", "get_token_holdings", "get_token_price",
+                      "get_transaction_details", "get_transaction_history", "get_trending_tokens", "get_wallet_status",
+                      "list_addresses", "list_alerts", "list_automations", "search_assets", "token_balance", "validate_transaction",
+                      "wallet_balance", "wallet_portfolio", "x402_quote"],
+    # Never offered to an agent (#320): an automation trades later, inside twak, where nothing here can ask first.
+    "mcp_twak_never": ["create_automation"],
     # The other way round, so it fails safe (#309): Kraken's tools known not to move money, the ones its catalog marks
     # read_only or local (paper trading, notes); kraken-cli 0.5.1, checked 2026-11-06. Any other kraken_ tool, such as
     # one a later kraken-cli adds, counts as money and asks.
@@ -4503,8 +4518,15 @@ def mcp_money(tool):
     schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {}
     props = schema.get("properties") if isinstance(schema.get("properties"), dict) else {}
     name = to_str(tool.get("name"))
-    return name in SAFETY["mcp_money"] or SAFETY["mcp_money_input"] in props or \
+    return name in SAFETY["mcp_money"] or any(k in props for k in SAFETY["mcp_money_inputs"]) or \
         (name.startswith("kraken_") and name not in SAFETY["mcp_kraken_safe"])
+
+
+def mcp_is_twak(server, command=""):
+    """True for Trust Wallet's Agent Kit (#320): a server named trustwallet (or twak), or one started with twak serve."""
+    name = re.sub(r"[^a-z]", "", to_str(server).lower())
+    return name in ("trustwallet", "twak") or bool(re.search(r"(^|[\s\"'/\\])twak(\.cmd|\.exe)?[\"']?\s+serve\b", to_str(command))) \
+        or "@trustwallet/cli" in to_str(command)
 
 
 def mcp_destructive(tool):
@@ -4821,20 +4843,23 @@ class AgentTools:
         for t in tools:
             if t.get("kind") == "mcp":
                 server, mode = to_str(t.get("server")).strip(), t.get("ask", "changes")
+                twak = mcp_is_twak(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
                 for tool in (mcp or {}).get(server, []):
+                    if twak and tool.get("name") in SAFETY["mcp_twak_never"]:
+                        continue  # trades later, out of sight: not offered at all (#320)
                     schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {"type": "object"}
                     params = list((schema.get("properties") or {}).keys()) if isinstance(schema.get("properties"), dict) else []
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
-                    money = mcp_money(tool)  # real money: always asks, whatever the block says (#262)
+                    money = mcp_money(tool) or (twak and tool.get("name") not in SAFETY["mcp_twak_safe"])  # real money: always asks (#262, #320)
                     ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only)
                     if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
-                        schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k != SAFETY["mcp_money_input"]},
-                                      required=[k for k in schema.get("required") or [] if k != SAFETY["mcp_money_input"]])
-                        params = [k for k in params if k != SAFETY["mcp_money_input"]]
+                        schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k not in SAFETY["mcp_money_inputs"]},
+                                      required=[k for k in schema.get("required") or [] if k not in SAFETY["mcp_money_inputs"]])
+                        params = [k for k in params if k not in SAFETY["mcp_money_inputs"]]
                     out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"],
                                                                                         "read_only": read_only, "money": money,
-                                                                                        "acknowledge": money and SAFETY["mcp_money_input"] in ((tool.get("inputSchema") or {}).get("properties") or {})}), ask, schema)
+                                                                                        "acknowledge": [k for k in SAFETY["mcp_money_inputs"] if money and k in ((tool.get("inputSchema") or {}).get("properties") or {})]}), ask, schema)
             elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
@@ -5127,7 +5152,7 @@ class AgentTools:
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
             if spec.get("money") and isinstance(inp, dict):
-                inp = {k: v for k, v in inp.items() if k != SAFETY["mcp_money_input"]}  # only a yes from the person sets it
+                inp = {k: v for k, v in inp.items() if k not in SAFETY["mcp_money_inputs"]}  # only a yes from the person sets it
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
             problem, checked = self.check_mcp_input(inp, schema) if kind == "mcp" else self.check_tool_input(inp, schema)
             if problem:
@@ -5169,7 +5194,7 @@ class AgentTools:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
                 try:
                     if spec.get("acknowledge"):
-                        inp = dict(inp, **{SAFETY["mcp_money_input"]: True})  # the person said yes, just now
+                        inp = dict(inp, **{k: True for k in spec["acknowledge"]})  # the person said yes, just now
                     result = await self._agent_run_tool(kind, spec, inp)
                 except (asyncio.CancelledError, Finish):
                     raise
@@ -5687,7 +5712,9 @@ class Doctor:
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 tools = await self.mcp_tools(name)
                 text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
-                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True))
+                twak = mcp_is_twak(name, command)  # its tools carry no marks, so its own safe list says which only look (#320)
+                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True)
+                              and not (twak and t.get("name") in SAFETY["mcp_twak_safe"]))
                 if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
                     text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}

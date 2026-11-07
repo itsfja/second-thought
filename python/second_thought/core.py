@@ -114,7 +114,22 @@ SAFETY = {
                   "kraken_order_sell", "kraken_paper_reset", "kraken_subaccount_create", "kraken_subaccount_transfer",
                   "kraken_wallet_transfer", "kraken_withdraw", "kraken_withdrawal_cancel", "kraken_workspace_create",
                   "kraken_workspace_promote", "kraken_workspace_reset"],
-    "mcp_money_input": "acknowledged",
+    # Inputs that say "yes, really" to a money tool: Kraken's acknowledged, and Trust Wallet's autoApprove (x402
+    # payments, #320). The agent is never offered them; only the person's yes sets them.
+    "mcp_money_inputs": ["acknowledged", "autoApprove"],
+    # Trust Wallet's Agent Kit (twak serve, #320), judged the safe way round like Kraken: only these tools run without
+    # the money question (balances, prices, history, quotes, risk checks, price alerts); any other counts as money,
+    # including transfer, swap, token approvals and x402 payments, and any tool a later twak adds. twak 0.24.3, checked
+    # 2026-11-06. Its tools carry no MCP annotations, so this list is all there is.
+    "mcp_twak_safe": ["check_alerts", "check_allowance", "check_token_risk", "competition_status", "create_alert", "delete_alert",
+                      "delete_automation", "erc8004_get_metadata", "erc8004_show", "erc8183_policy_info", "erc8183_status",
+                      "get_address", "get_asset_info", "get_balance", "get_offramp_quote", "get_offramp_url", "get_onramp_quote",
+                      "get_onramp_url", "get_swap_history", "get_swap_quote", "get_token_holdings", "get_token_price",
+                      "get_transaction_details", "get_transaction_history", "get_trending_tokens", "get_wallet_status",
+                      "list_addresses", "list_alerts", "list_automations", "search_assets", "token_balance", "validate_transaction",
+                      "wallet_balance", "wallet_portfolio", "x402_quote"],
+    # Never offered to an agent (#320): an automation trades later, inside twak, where nothing here can ask first.
+    "mcp_twak_never": ["create_automation"],
     # The other way round, so it fails safe (#309): Kraken's tools known not to move money, the ones its catalog marks
     # read_only or local (paper trading, notes); kraken-cli 0.5.1, checked 2026-11-06. Any other kraken_ tool, such as
     # one a later kraken-cli adds, counts as money and asks.

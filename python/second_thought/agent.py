@@ -11,7 +11,7 @@ import sys
 from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive, seen_addresses,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
-from .mcp import mcp_destructive, mcp_env_name, mcp_money
+from .mcp import mcp_destructive, mcp_env_name, mcp_is_twak, mcp_money
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
@@ -245,20 +245,23 @@ class AgentTools:
         for t in tools:
             if t.get("kind") == "mcp":
                 server, mode = to_str(t.get("server")).strip(), t.get("ask", "changes")
+                twak = mcp_is_twak(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
                 for tool in (mcp or {}).get(server, []):
+                    if twak and tool.get("name") in SAFETY["mcp_twak_never"]:
+                        continue  # trades later, out of sight: not offered at all (#320)
                     schema = tool.get("inputSchema") if isinstance(tool.get("inputSchema"), dict) else {"type": "object"}
                     params = list((schema.get("properties") or {}).keys()) if isinstance(schema.get("properties"), dict) else []
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
-                    money = mcp_money(tool)  # real money: always asks, whatever the block says (#262)
+                    money = mcp_money(tool) or (twak and tool.get("name") not in SAFETY["mcp_twak_safe"])  # real money: always asks (#262, #320)
                     ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only)
                     if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
-                        schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k != SAFETY["mcp_money_input"]},
-                                      required=[k for k in schema.get("required") or [] if k != SAFETY["mcp_money_input"]])
-                        params = [k for k in params if k != SAFETY["mcp_money_input"]]
+                        schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k not in SAFETY["mcp_money_inputs"]},
+                                      required=[k for k in schema.get("required") or [] if k not in SAFETY["mcp_money_inputs"]])
+                        params = [k for k in params if k not in SAFETY["mcp_money_inputs"]]
                     out[self._agent_name(server + " " + tool["name"], taken)] = (desc, params, ("mcp", {"server": server, "tool": tool["name"],
                                                                                         "read_only": read_only, "money": money,
-                                                                                        "acknowledge": money and SAFETY["mcp_money_input"] in ((tool.get("inputSchema") or {}).get("properties") or {})}), ask, schema)
+                                                                                        "acknowledge": [k for k in SAFETY["mcp_money_inputs"] if money and k in ((tool.get("inputSchema") or {}).get("properties") or {})]}), ask, schema)
             elif t.get("kind") == "block":
                 name = self._agent_name(t["name"], taken)
                 desc = to_str(t.get("desc")).strip() or f"Runs the My Block “{t['name']}”."
@@ -551,7 +554,7 @@ class AgentTools:
                 continue
             desc, params, (kind, spec), ask, schema = catalogue[name]
             if spec.get("money") and isinstance(inp, dict):
-                inp = {k: v for k, v in inp.items() if k != SAFETY["mcp_money_input"]}  # only a yes from the person sets it
+                inp = {k: v for k, v in inp.items() if k not in SAFETY["mcp_money_inputs"]}  # only a yes from the person sets it
             shown = json.dumps(inp, ensure_ascii=False, default=str, sort_keys=True)
             problem, checked = self.check_mcp_input(inp, schema) if kind == "mcp" else self.check_tool_input(inp, schema)
             if problem:
@@ -593,7 +596,7 @@ class AgentTools:
                 self._agent_approved = bool(ask)  # asked once already: the message itself doesn't ask again
                 try:
                     if spec.get("acknowledge"):
-                        inp = dict(inp, **{SAFETY["mcp_money_input"]: True})  # the person said yes, just now
+                        inp = dict(inp, **{k: True for k in spec["acknowledge"]})  # the person said yes, just now
                     result = await self._agent_run_tool(kind, spec, inp)
                 except (asyncio.CancelledError, Finish):
                     raise

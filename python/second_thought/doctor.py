@@ -12,9 +12,9 @@ import urllib.request
 from .settings import KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM, RUNTIME_VERSION, SETTINGS_PATH, WHERE_KEYS
 from .providers import CURRENCY, MODELS, dollars, record_limits, PROVIDERS, SERVICES, TIER_NAMES, _tier, amount_text, band_text, model_byline, fixed_rate, per_dollar, rate_note, rates
 from .spending import PLANS, plan_of, reported_lines
-from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, _short, to_str
+from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, SAFETY, _short, to_str
 from .connectors import webhook_host
-from .mcp import KRAKEN_COMMANDS, mcp_env_name
+from .mcp import KRAKEN_COMMANDS, mcp_env_name, mcp_is_twak
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import difflib  # noqa: E402,F811 - below the line, so python/runtime.py has it too
@@ -219,7 +219,9 @@ class Doctor:
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 tools = await self.mcp_tools(name)
                 text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
-                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True))
+                twak = mcp_is_twak(name, command)  # its tools carry no marks, so its own safe list says which only look (#320)
+                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True)
+                              and not (twak and t.get("name") in SAFETY["mcp_twak_safe"]))
                 if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
                     text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}

@@ -1,0 +1,313 @@
+[
+ {
+  "name": "get_wallet_status",
+  "description": "Returns the current wallet binding for this MCP server session: state (\"unbound\" | \"local\" | \"wc-pairing\" | \"wc-connected\"), wallet type (when bound), peer name",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "showQr": {
+     "type": "boolean",
+     "description": "Include the pairing QR image (only while state=\"wc-pairing\"). Only when the user asks to see it again."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "wallet_portfolio",
+  "description": "Read the active wallet's full portfolio across chains: native-coin and known-token balances, each with its USD value, plus the total USD. Operates on the active",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "chains": {
+     "type": "string",
+     "description": "Comma-separated chain keys to include (e.g. \"ethereum,bsc,base\"). Omit to include every supported chain. Each entry accepts the same forms as the canonical `chain` input. Chain (e.g., \"ethereum\", \"bsc\", \"solana\"). Accepts chain key, CAIP-2 (\"eip155:1\"), EVM chainId (\"56\", \"0x38\"), aliases (\"matic\", \"op\"), and asset IDs (\"c60\")."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_token_price",
+  "description": "Get current USD price for a token",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "chain": {
+     "type": "string",
+     "description": "Chain (e.g., \"ethereum\", \"bsc\", \"solana\"). Accepts chain key, CAIP-2 (\"eip155:1\"), EVM chainId (\"56\", \"0x38\"), aliases (\"matic\", \"op\"), and asset IDs (\"c60\")."
+    },
+    "token": {
+     "type": "string",
+     "description": "Token symbol or address"
+    }
+   },
+   "required": [
+    "chain",
+    "token"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "check_token_risk",
+  "description": "Check security and risk information for a token (honeypot detection, audit status, freeze authority). Omit `tokenAddress` to check the chain native coin.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "chain": {
+     "type": "string",
+     "description": "Chain (e.g., \"ethereum\", \"bsc\", \"solana\"). Accepts chain key, CAIP-2 (\"eip155:1\"), EVM chainId (\"56\", \"0x38\"), aliases (\"matic\", \"op\"), and asset IDs (\"c60\")."
+    },
+    "tokenAddress": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Token contract address (ERC-20 / SPL). Omit for the chain native coin (ETH, BNB, SOL, etc.)."
+    }
+   },
+   "required": [
+    "chain"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "transfer",
+  "description": "Transfer native or ERC-20 tokens to a destination address. Resolves ENS for the \"to\" field, applies a USD safety cap, and works with both the local agent wallet",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "chain": {
+     "type": "string",
+     "description": "Chain (e.g., \"ethereum\", \"bsc\", \"solana\"). Accepts chain key, CAIP-2 (\"eip155:1\"), EVM chainId (\"56\", \"0x38\"), aliases (\"matic\", \"op\"), and asset IDs (\"c60\")."
+    },
+    "to": {
+     "type": "string",
+     "description": "Destination address or ENS name (e.g., vitalik.eth)"
+    },
+    "amount": {
+     "type": "string",
+     "description": "Amount in human-readable format (e.g., \"1.5\", \"0.01\")"
+    },
+    "tokenAddress": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Token contract address (ERC-20 / SPL). Omit for the chain native coin (ETH, BNB, SOL, etc.)."
+    },
+    "decimals": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 36,
+     "description": "Token decimals (non-negative integer). Omit for native coins and for tokens twak recognizes \u2014 decimals are derived from the registry or token search. REQUIRED when tokenAddress is a contract twak does not recognize; look up the value on the token contract."
+    },
+    "memo": {
+     "type": "string",
+     "description": "Optional memo/note (local agent wallet only)."
+    },
+    "confirmTo": {
+     "type": "string",
+     "description": "Pin the expected resolved address \u2014 the transfer is rejected if ENS resolves to a different address."
+    }
+   },
+   "required": [
+    "chain",
+    "to",
+    "amount"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "swap",
+  "description": "Execute a token swap via Trust Wallet (supports all chains including cross-chain)",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "fromChain": {
+     "type": "string",
+     "description": "Source chain. Chain (e.g., \"ethereum\", \"bsc\", \"solana\"). Accepts chain key, CAIP-2 (\"eip155:1\"), EVM chainId (\"56\", \"0x38\"), aliases (\"matic\", \"op\"), and asset IDs (\"c60\")."
+    },
+    "fromToken": {
+     "type": "string",
+     "description": "Source token symbol or address"
+    },
+    "toChain": {
+     "type": "string",
+     "description": "Destination chain. Chain (e.g., \"ethereum\", \"bsc\", \"solana\"). Accepts chain key, CAIP-2 (\"eip155:1\"), EVM chainId (\"56\", \"0x38\"), aliases (\"matic\", \"op\"), and asset IDs (\"c60\")."
+    },
+    "toToken": {
+     "type": "string",
+     "description": "Destination token symbol or address"
+    },
+    "amount": {
+     "type": "string",
+     "description": "Human-readable amount to swap"
+    },
+    "slippage": {
+     "type": "string",
+     "default": "1",
+     "description": "Slippage tolerance % (max 50)"
+    }
+   },
+   "required": [
+    "fromChain",
+    "fromToken",
+    "toChain",
+    "toToken",
+    "amount"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "x402_request",
+  "description": "Make an HTTP request to an x402 payment-gated endpoint. Handles the full flow: sends the initial request, parses any 402 challenge, signs an EIP-3009 or Permit2",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "url": {
+     "type": "string",
+     "description": "Target endpoint URL. Must be HTTPS. Resolves via DNS; private/local IPs are rejected before any payment."
+    },
+    "method": {
+     "type": "string",
+     "default": "GET",
+     "description": "HTTP verb (GET, POST, PUT, ...). Case-insensitive."
+    },
+    "body": {
+     "type": "string",
+     "description": "Pre-serialized request body. For JSON payloads, pass JSON.stringify(...) on the caller side."
+    },
+    "maxPaymentAtomic": {
+     "type": "string",
+     "description": "Hard cap on payment amount in the asset's smallest atomic unit (integer string, e.g. \"10000\" = 0.01 USDC at 6 decimals). If the server demands more than this cap, the call returns code: 'PAYMENT_AMOUNT_EXCEEDED' rather than overpaying. The user has pre-committed to this cap \u2014 do NOT raise it without asking the user."
+    },
+    "autoApprove": {
+     "type": "boolean",
+     "default": true,
+     "description": "When true (default), silently grants an UNLIMITED Permit2 allowance if the endpoint requires it \u2014 DANGEROUS, see SAFETY in the action description. Defaults true because MCP agents cannot interact with a prompt, but you MUST consult the user before relying on this on any endpoint you have not paid before. Set to false to surface code: 'PERMIT2_APPROVAL_REQUIRED' instead and route approval out-of-band."
+    },
+    "preferNetwork": {
+     "type": "string",
+     "description": "Optional override: restrict payment to this chain when the endpoint offers multiple. Pass the `chain` of a quoted option (\"base\"); other chain forms (\"eip155:8453\", \"8453\") are resolved too. Use this when the user has a balance on a specific chain \u2014 without it, the picker chooses based on transfer-method preference (EIP-3009 over Permit2), which can land on a chain where the wallet has no funds. If no offered entry matches, the call returns code: 'NO_MATCHING_ROUTE' with the list of offered networks so you can re-ask the user."
+    },
+    "preferMethod": {
+     "type": "string",
+     "description": "Optional override: restrict payment to this transfer method (\"eip3009\", \"permit2\", or \"permit2-exact\"). Case-insensitive. Use this to force the gasless route (eip3009) or to insist on a specific Permit2 variant. If no offered entry matches, the call returns code: 'NO_MATCHING_ROUTE'."
+    },
+    "preferAsset": {
+     "type": "string",
+     "description": "Optional override: restrict payment to entries matching this asset. Matches the entry's `asset` field (contract address, exact, case-insensitive) or its `tokenName` field (substring, case-insensitive). Pass the exact value from the quote's output. Returns code: 'NO_MATCHING_ROUTE' when nothing matches."
+    }
+   },
+   "required": [
+    "url",
+    "maxPaymentAtomic"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "create_automation",
+  "description": "Create a DCA (recurring buy) or limit order (buy/sell when a price condition is met). The rule is saved immediately but only EXECUTES while a watcher is polling",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "type": {
+     "type": "string",
+     "enum": [
+      "dca",
+      "limit"
+     ],
+     "description": "Automation type: dca (recurring) or limit (price trigger)"
+    },
+    "fromToken": {
+     "type": "string",
+     "description": "Source token symbol or address"
+    },
+    "toToken": {
+     "type": "string",
+     "description": "Destination token symbol or address"
+    },
+    "chain": {
+     "type": "string",
+     "default": "ethereum",
+     "description": "Chain (e.g., \"ethereum\", \"bsc\", \"solana\"). Accepts chain key, CAIP-2 (\"eip155:1\"), EVM chainId (\"56\", \"0x38\"), aliases (\"matic\", \"op\"), and asset IDs (\"c60\")."
+    },
+    "amount": {
+     "type": "string",
+     "description": "Amount of fromToken per execution"
+    },
+    "intervalMs": {
+     "type": "number",
+     "description": "Interval in milliseconds for DCA (e.g., 86400000 for daily)"
+    },
+    "targetPrice": {
+     "type": "number",
+     "description": "Target price in USD for limit orders"
+    },
+    "condition": {
+     "type": "string",
+     "enum": [
+      "above",
+      "below"
+     ],
+     "description": "Price condition for limit orders"
+    }
+   },
+   "required": [
+    "type",
+    "fromToken",
+    "toToken",
+    "amount"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "create_alert",
+  "description": "Create a price alert. Triggers when the asset price crosses a target. Omit `tokenAddress` to watch the chain native coin (ETH, BNB, SOL, etc.).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "chain": {
+     "type": "string",
+     "description": "Chain (e.g., \"ethereum\", \"bsc\", \"solana\"). Accepts chain key, CAIP-2 (\"eip155:1\"), EVM chainId (\"56\", \"0x38\"), aliases (\"matic\", \"op\"), and asset IDs (\"c60\")."
+    },
+    "tokenAddress": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Token contract address (ERC-20 / SPL). Omit for the chain native coin (ETH, BNB, SOL, etc.)."
+    },
+    "condition": {
+     "type": "string",
+     "enum": [
+      "above",
+      "below"
+     ],
+     "description": "Alert when price goes above or below target"
+    },
+    "targetPrice": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "description": "Target price in USD"
+    }
+   },
+   "required": [
+    "chain",
+    "condition",
+    "targetPrice"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ }
+]
