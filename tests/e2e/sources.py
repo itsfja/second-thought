@@ -63,11 +63,11 @@ def example_ini_check():
     friendly = set(re.findall(r'"([a-z_]+)": "RB_[A-Z_]+"', src.split("SETTING_NAMES = ", 1)[1].split("}", 1)[0]))
     prefixes = {n for n in names if n.endswith("_")}  # like MODEL_ + a tier's name: the example shows the pattern
     # GitHub sets GITHUB_ACTIONS and GITHUB_STEP_SUMMARY on its runners: they aren't settings.
-    names -= {"SECOND_THOUGHT_INI", "GITHUB_ACTIONS", "GITHUB_STEP_SUMMARY"} | prefixes | {n for n in names if n.startswith("RB_") and any(f'"{f}": "{n}"' in src for f in friendly)}
+    names -= {"SECOND_THOUGHT_INI", "SECOND_THOUGHT_HOME_INI", "GITHUB_ACTIONS", "GITHUB_STEP_SUMMARY"} | prefixes | {n for n in names if n.startswith("RB_") and any(f'"{f}": "{n}"' in src for f in friendly)}
     text = (ROOT / "second-thought.example.ini").read_text(encoding="utf-8")
     listed = {m.upper() for m in re.findall(r"^[;#]?\s*([A-Za-z_][A-Za-z0-9_]*)\s*=", text, re.M)}
     missing = sorted((names | {f.upper() for f in friendly if f != "model"}) - listed)
-    check(not missing and "SECOND_THOUGHT_INI" in text and all(re.search("^; " + p_ + "[A-Z]", text, re.M) for p_ in prefixes), "second-thought.example.ini lists every setting the runtime reads" + (f" (missing: {', '.join(missing)})" if missing else ""))
+    check(not missing and "SECOND_THOUGHT_INI" in text and "SECOND_THOUGHT_HOME_INI" in text and all(re.search("^; " + p_ + "[A-Z]", text, re.M) for p_ in prefixes), "second-thought.example.ini lists every setting the runtime reads" + (f" (missing: {', '.join(missing)})" if missing else ""))
     cp = configparser.ConfigParser(interpolation=None, inline_comment_prefixes=(";", "#"))
     try:
         cp.read_string(text)

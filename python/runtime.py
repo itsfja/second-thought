@@ -57,35 +57,61 @@ ONE_WORD_SETTINGS = {"primary", "model", "max_seconds", "call_timeout", "budget"
                      "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check"}
 
 
-def _load_settings():
+def _settings_value(name, value):
+    """A setting's value as written: quotes taken off, and for a one-word setting, a note left after it dropped."""
+    value = value.strip().strip('"').strip("'")
+    if name.lower() in ONE_WORD_SETTINGS:  # an older export's note left on the line when the ; came off (#338)
+        value = re.split(r"\s{2,}", value, maxsplit=1)[0].strip('"').strip("'")
+    return value
+
+
+def _read_ini(path):
     import configparser
-    here = os.path.dirname(os.path.abspath(sys.argv[0])) if sys.argv and sys.argv[0] else os.getcwd()
-    places = [os.environ.get("SECOND_THOUGHT_INI", ""), os.path.join(here, SETTINGS_FILE),
-              os.path.join(os.getcwd(), SETTINGS_FILE), os.path.join(os.path.expanduser("~"), SETTINGS_FILE)]
-    path = next((p for p in places if p and os.path.isfile(p)), None)
-    if not path:
-        return None
     cp = configparser.ConfigParser(interpolation=None, inline_comment_prefixes=(";", "#"))
     cp.optionxform = str
     try:
         cp.read(path, encoding="utf-8-sig")  # -sig: Notepad sometimes adds a marker at the start
     except (configparser.Error, UnicodeDecodeError) as e:
         sys.exit(f"There's a mistake in {path}:\n{e}")
-    for section in cp.sections():
-        for name, value in cp.items(section):
-            value = value.strip().strip('"').strip("'")
-            if name.lower() in ONE_WORD_SETTINGS:  # an older export's note left on the line when the ; came off (#338)
-                value = re.split(r"\s{2,}", value, maxsplit=1)[0].strip('"').strip("'")
-            key = SETTING_NAMES.get(name.lower(), name.upper())
-            if value and not os.environ.get(key):
-                os.environ[key] = value
-                KEY_SOURCES[key] = "file"
-    return path
+    return [(name, value) for section in cp.sections() for name, value in cp.items(section)]
 
 
-# Where each key came from, for --doctor: "environment", "file" (second-thought.ini) or "keychain".
-KEY_SOURCES = {k: "environment" for k in os.environ}
-SETTINGS_PATH = _load_settings()
+def _load_settings():
+    """Settings come in three layers, each one over the one before (#340):
+      1. ST_ environment variables, for every program on this computer: ST_EMAIL_ADDRESS, ST_CURRENCY and so on, the
+         setting's own name after ST_ (on Windows: setx ST_CURRENCY gbp);
+      2. second-thought.ini in your home folder, for what's common to your programs;
+      3. second-thought.ini for this program: SECOND_THOUGHT_INI if set, else the one next to the program, else the one
+         in the current folder.
+    An ordinary environment variable (ANTHROPIC_API_KEY, RB_BUDGET) still wins over all three, and the keychain fills in
+    any key still missing. Gives back the files read, home first."""
+    here = os.path.dirname(os.path.abspath(sys.argv[0])) if sys.argv and sys.argv[0] else os.getcwd()
+    home = os.environ.get("SECOND_THOUGHT_HOME_INI") or os.path.join(os.path.expanduser("~"), SETTINGS_FILE)
+    places = [os.environ.get("SECOND_THOUGHT_INI", ""), os.path.join(here, SETTINGS_FILE), os.path.join(os.getcwd(), SETTINGS_FILE)]
+    own = next((p for p in places if p and os.path.isfile(p)), None)
+    home = home if os.path.isfile(home) and not (own and os.path.samefile(home, own)) else None
+    chosen = {}  # environment key -> (value, where)
+    for env_name, value in os.environ.items():
+        if env_name.upper().startswith("ST_") and len(env_name) > 3:
+            name = env_name[3:]
+            chosen[SETTING_NAMES.get(name.lower(), name.upper())] = (_settings_value(name, value), "st:" + env_name)
+    for path, where in ((home, "home"), (own, "file")):
+        for name, value in _read_ini(path) if path else []:
+            value = _settings_value(name, value)
+            if value:
+                chosen[SETTING_NAMES.get(name.lower(), name.upper())] = (value, where)
+    for key, (value, where) in chosen.items():
+        if value and not os.environ.get(key):
+            os.environ[key] = value
+            KEY_SOURCES[key] = where
+    return [p for p in (home, own) if p]
+
+
+# Where each key came from, for --doctor: "environment", "st:<its ST_ variable>", "home" (second-thought.ini in your
+# home folder), "file" (this program's second-thought.ini) or "keychain".
+KEY_SOURCES = {k: "environment" for k in os.environ if not k.upper().startswith("ST_")}
+SETTINGS_PATHS = _load_settings()
+SETTINGS_PATH = SETTINGS_PATHS[-1] if SETTINGS_PATHS else None  # the one to fix things in: this program's, else the home one
 
 # ----- Keychain (optional) -----
 # Keys can live in your computer's keychain (macOS Keychain, Windows Credential Manager, the Secret Service on Linux)
@@ -5786,12 +5812,14 @@ class Doctor:
         update = self.update_status()
         if update:
             row(update[0], "Runtime", update[1])
-        row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=SETTINGS_PATH) if SETTINGS_PATH else
+        row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=" + ".join(SETTINGS_PATHS)) if SETTINGS_PATH else
             tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
         found = [(k, KEY_SOURCES.get(k)) for k in KEYCHAIN_NAMES if os.environ.get(k)]
         where = {"environment": tr("the environment"), "file": "second-thought.ini", "keychain": tr("the keychain")}
         if found:
-            row("ok", "Keys", ", ".join(f"{k} ({where.get(src) or where['environment']})" for k, src in found))
+            # an ST_ variable by its name, the home folder's file by its path (#340)
+            label = lambda src: src[3:] if (src or "").startswith("st:") else SETTINGS_PATHS[0] if src == "home" else where.get(src) or where["environment"]  # noqa: E731
+            row("ok", "Keys", ", ".join(f"{k} ({label(src)})" for k, src in found))
         if KEYCHAIN_PROBLEM:
             row("NOTE", "Keychain", tr("keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the "
                                       "environment and second-thought.ini", problem=_short(KEYCHAIN_PROBLEM, 120)))

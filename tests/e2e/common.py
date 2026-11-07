@@ -30,6 +30,10 @@ HERE = pathlib.Path(__file__).resolve().parent.parent  # tests/
 # (settings named as repository secrets, error annotations). The tests check how they behave on your computer, so
 # it's cleared for every program they start; tests of the Actions behaviour set it themselves.
 os.environ.pop("GITHUB_ACTIONS", None)
+# Nor your own settings: the home folder's second-thought.ini and ST_ variables apply to every program (#340).
+os.environ["SECOND_THOUGHT_HOME_INI"] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "no-home-settings.ini")
+for _name in [n for n in os.environ if n.upper().startswith("ST_")]:
+    del os.environ[_name]
 # --doctor would ask GitHub for a newer runtime on every run; tests/unit/test_update_runtime.py checks that against a
 # stand-in, so these runs don't depend on GitHub (or its limit on unsigned requests).
 os.environ["RB_UPDATE_CHECK"] = "no"

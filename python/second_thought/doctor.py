@@ -9,7 +9,7 @@ import os
 import sys
 import urllib.error
 import urllib.request
-from .settings import KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM, RUNTIME_VERSION, SETTINGS_PATH, WHERE_KEYS
+from .settings import KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM, RUNTIME_VERSION, SETTINGS_PATH, SETTINGS_PATHS, WHERE_KEYS
 from .providers import CURRENCY, MODELS, dollars, record_limits, PROVIDERS, SERVICES, TIER_NAMES, _tier, amount_text, band_text, model_byline, fixed_rate, per_dollar, rate_note, rates
 from .spending import PLANS, plan_of, reported_lines
 from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, SAFETY, _short, to_str
@@ -284,12 +284,14 @@ class Doctor:
         update = self.update_status()
         if update:
             row(update[0], "Runtime", update[1])
-        row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=SETTINGS_PATH) if SETTINGS_PATH else
+        row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=" + ".join(SETTINGS_PATHS)) if SETTINGS_PATH else
             tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
         found = [(k, KEY_SOURCES.get(k)) for k in KEYCHAIN_NAMES if os.environ.get(k)]
         where = {"environment": tr("the environment"), "file": "second-thought.ini", "keychain": tr("the keychain")}
         if found:
-            row("ok", "Keys", ", ".join(f"{k} ({where.get(src) or where['environment']})" for k, src in found))
+            # an ST_ variable by its name, the home folder's file by its path (#340)
+            label = lambda src: src[3:] if (src or "").startswith("st:") else SETTINGS_PATHS[0] if src == "home" else where.get(src) or where["environment"]  # noqa: E731
+            row("ok", "Keys", ", ".join(f"{k} ({label(src)})" for k, src in found))
         if KEYCHAIN_PROBLEM:
             row("NOTE", "Keychain", tr("keyring is installed but the keychain couldn't be read ({problem}), so keys only come from the "
                                       "environment and second-thought.ini", problem=_short(KEYCHAIN_PROBLEM, 120)))
