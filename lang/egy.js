@@ -27,9 +27,9 @@
 "rb_reset_timer":{"message0":"𓋴𓐍𓊪𓂋 𓎛𓋴𓃀 𓄿𓏏 𓅓 𓅓𓄿𓅱"},
 "rb_now":{"message0":"%1 𓈖𓏏𓏭 𓅓 𓅓𓇋𓈖"},
 "rb_task":{"message0":"𓂋𓂧𓇋 𓅱𓊪𓅱𓏏 𓂋 %1","tooltip":"𓂋𓂧𓇋 𓇋𓂋𓇋 𓂋𓐍𓐍𓏏"},
-"rb_generate":{"message0":"𓋴𓈙 𓋴𓈙𓅱 𓏏𓊪𓇋","tooltip":"Claude 𓋴𓈙 𓋴𓈙𓅱 𓂋 𓎡𓅓 𓅱𓊪𓅱𓏏"},
+"rb_generate":{"message0":"𓋴𓈙 𓋴𓈙𓅱 𓏏𓊪𓇋 %1 𓎛𓈖𓂝 𓂝𓆓 𓈖 𓏏𓄿","tooltip":"Claude 𓋴𓈙 𓋴𓈙𓅱 𓂋 𓎡𓅓 𓅱𓊪𓅱𓏏"},
 "rb_rework":{"message0":"𓇋𓂋 𓋴𓈙𓅱 𓅓 𓅓𓄿𓅱𓏏: %1","tooltip":"Claude 𓋴𓈙 𓋴𓈙𓅱 𓅓 𓅓𓄿𓅱𓏏 𓐍𓆑𓏏 𓋴𓃀𓄿𓏭𓏏𓎡"},
-"rb_revise":{"message0":"𓋴𓅓𓈖𓐍 𓋴𓈙𓅱 𓂋 𓇋𓋴𓆑𓏏 𓈖𓏏 𓋴𓇋𓊪","tooltip":"Claude 𓋴𓅓𓈖𓐍 𓇋𓋴𓆑𓏏 𓎼𓅓𓇋𓈖 𓋴𓇋𓊪 𓐍𓄿𓂝"},
+"rb_revise":{"message0":"𓋴𓅓𓈖𓐍 𓋴𓈙𓅱 𓂋 𓇋𓋴𓆑𓏏 𓈖𓏏 𓋴𓇋𓊪 %1 𓎛𓈖𓂝 𓂝𓆓 𓈖 𓏏𓄿","tooltip":"Claude 𓋴𓅓𓈖𓐍 𓇋𓋴𓆑𓏏 𓎼𓅓𓇋𓈖 𓋴𓇋𓊪 𓐍𓄿𓂝"},
 "rb_set_draft":{"message0":"𓂋𓂧𓇋 𓋴𓈙𓅱 𓂋 %1"},
 "rb_draft":{"message0":"𓋴𓈙𓅱"},
 "rb_checkpoint_save":{"message0":"𓋴𓄿𓅱 𓋴𓅓𓈖𓏏 %1","tooltip":"𓋴𓐍𓄿 𓅱𓊪𓅱𓏏, 𓋴𓈙𓅱, 𓋴𓇋𓊪, 𓐍𓊪𓂋𓏏 𓎛𓈖𓂝 𓈙𓈖𓇋𓅱 𓅓𓇋 𓅱𓈖𓋴𓈖 𓅓𓇋𓈖, 𓄡𓂋 𓂋𓈖 𓊪𓈖, 𓂋 𓊪𓎛𓅱𓏭 𓇋𓂋𓏏"},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"𓏠𓈎𓏏 {n} 𓎡𓂋𓏏.",
 "Review stuck":"𓋴𓇋𓊪 𓂝𓎛𓂝",
 "stuck":"𓂝𓎛𓂝",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"𓋴𓇋𓊪 𓆓𓂧𓆑 𓇋𓋴𓆑𓏏 𓅱𓂝𓏏 𓅓𓐍𓏏 𓋴𓅓𓈖𓐍𓅱 2, 𓈖𓈖 𓋴𓅓𓈖𓐍 𓂋𓐍𓆑 𓇋𓂋𓋴𓏏 𓐍𓂋𓂧 𓈖 𓇋𓂋𓏏 𓎛𓈖 𓐍𓏏 𓈖𓈖 𓂋𓂧𓇋𓏏𓅱 𓈖𓆑, 𓅓𓇋 𓋴𓈙 𓈖 𓏏𓄿, 𓆓𓅓𓂝 𓅓 𓅓𓄿𓂝𓏏: 𓂋𓂧𓇋 𓋴𓅱 𓈖𓆑 (𓅓 𓇋𓂋𓏏, 𓅓 𓅱𓊪𓅱𓏏𓇋 𓂋𓐍𓆑 𓈙𓂧𓇋 𓋴𓈙𓅱 𓈖 𓏏𓄿), 𓇋𓂋 𓋴𓅱 𓅓 𓅱𓎛𓅓"
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"𓋴𓇋𓊪 𓆓𓂧𓆑 𓇋𓋴𓆑𓏏 𓅱𓂝𓏏 𓅓𓐍𓏏 𓋴𓅓𓈖𓐍𓅱 2, 𓈖𓈖 𓋴𓅓𓈖𓐍 𓂋𓐍𓆑 𓇋𓂋𓋴𓏏 𓐍𓂋𓂧 𓈖 𓇋𓂋𓏏 𓎛𓈖 𓐍𓏏 𓈖𓈖 𓂋𓂧𓇋𓏏𓅱 𓈖𓆑, 𓅓𓇋 𓋴𓈙 𓈖 𓏏𓄿, 𓆓𓅓𓂝 𓅓 𓅓𓄿𓂝𓏏: 𓂋𓂧𓇋 𓋴𓅱 𓈖𓆑 (𓅓 𓇋𓂋𓏏, 𓅓 𓅱𓊪𓅱𓏏𓇋 𓂋𓐍𓆑 𓈙𓂧𓇋 𓋴𓈙𓅱 𓈖 𓏏𓄿), 𓇋𓂋 𓋴𓅱 𓅓 𓅱𓎛𓅓",
+"Using the web":"𓎛𓈖𓂝 𓂝𓆓 𓈖 𓏏𓄿",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"𓈖𓈖 𓂋𓐍 𓊪𓄿 𓆓𓅓𓂝 𓇋𓂋 𓂝𓆓 𓈖 𓏏𓄿, 𓋴𓈙𓈖𓏏𓅱 𓋴𓈙𓅱 𓎛𓂋𓇋 𓅓𓐍𓅓𓏏𓆑 𓇋𓂋𓏏 𓊪𓂋𓏏𓅱 𓇋𓂋𓆑 𓂝𓆓 𓈖 𓏏𓄿",
+"Web address in the task":"𓂋𓈖 𓈖 𓂝𓆓 𓅓 𓇋𓂋𓏏",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"𓇋𓂋𓏏 𓆓𓂧 𓂋𓈖 𓈖 𓂝𓆓 𓈖 𓏏𓄿, 𓈖𓈖 𓂋𓐍 𓈖𓅓𓏏𓏏 𓏏𓈖 𓅱𓈖 𓋴𓅱 𓆓𓂝𓂋 '𓎛𓈖𓂝 𓂝𓆓 𓈖 𓏏𓄿' 𓎛𓂋 𓇋𓈖𓂋, 𓅓 𓂋𓂧𓇋 𓅓𓂧𓅱𓏏 𓈖 𓆓𓅓𓂝 𓅓 𓇋𓂋𓏏"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -1867,7 +1871,9 @@
 "{n} of them can change things":"{n} jm=sn šnj=sn ḫt",
 "Review stuck":"sjp ꜥḥꜥ",
 "stuck":"ꜥḥꜥ",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"sjp ḏd=f jsft wꜥt m-ḫt smnḫw 2, nn smnḫ rḫ=f jr=st. ḫrd n jrt ḥn ḫt nn rdj.tw n=f, mj sš n tꜣ, ḏmꜥ m mꜣꜥt: rdj sw n=f (m jrt, m wpwtj rḫ=f šdj sšw n tꜣ), jr sw m wḥm."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"sjp ḏd=f jsft wꜥt m-ḫt smnḫw 2, nn smnḫ rḫ=f jr=st. ḫrd n jrt ḥn ḫt nn rdj.tw n=f, mj sš n tꜣ, ḏmꜥ m mꜣꜥt: rdj sw n=f (m jrt, m wpwtj rḫ=f šdj sšw n tꜣ), jr sw m wḥm.",
+"Web address in the task":"rn n ꜥḏ m jrt",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"jrt ḏd rn n ꜥḏ n tꜣ, nn rḫ nmtt tn wn sw. ḏꜥr 'ḥnꜥ ꜥḏ n tꜣ' ḥr jnr, m rdj mdwt n ḏmꜥ m jrt."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

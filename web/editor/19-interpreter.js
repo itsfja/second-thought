@@ -519,6 +519,16 @@
   }
   window.__sameProblem = sameProblem;
 
+  // A draft or revise step and the web (#332): ticked, this page can't search, so say the exported program will; not
+  // ticked but the task names a web address, say the step can't open it.
+  const WEB_ADDRESS = /https?:\/\/|\b[a-z0-9-]+(\.[a-z0-9-]+)*\.(com|org|net|io|dev|ai|app|co\.uk|org\.uk|gov\.uk)\b/i;
+  function webNote(b, task){
+    if (b.getFieldValue("WEB") === "TRUE")
+      addStep("Using the web", { text:tr("This page can't use the web, so the draft above was written without it. The exported program uses the web.") }).done("not live", "warn");
+    else if (WEB_ADDRESS.test(task || ""))
+      addStep("Web address in the task", { text:tr("The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.") }).done("note", "warn");
+  }
+
   async function reviewOnce(criteria, label, inLoop){
     const s = addStep(label);
     const loop = inLoop ? run.reflect : null;
@@ -749,6 +759,7 @@
         needTask();
         run.draft = await askStep("Write a first draft", "Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + run.task);
         run.problems = []; run.approved = undefined;
+        webNote(b, run.task);
         break;
       }
       case "rb_rework": {
@@ -768,6 +779,7 @@
         run.draft = await ask("Revise the draft so it fixes every problem listed. Change nothing else that works. Reply with only the improved piece.\n\nTask:\n" +
           (run.task || "(none given)") + "\n\nProblems:\n" + run.problems.map(p => "- " + p).join("\n") + keep + "\n\nDraft:\n" + run.draft, s);
         s.done("revised", "ok");
+        webNote(b, "");
         break;
       }
       case "rb_set_draft": run.draft = str(await input(b, tc, "TEXT")); break;

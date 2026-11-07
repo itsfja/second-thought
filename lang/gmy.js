@@ -52,7 +52,7 @@
 "rb_finish_with":{"message0":"𐀳𐀩𐀄𐀲 𐀕𐀲 %1"},
 "rb_folder_files":{"message0":"𐀳𐀄𐀐𐀀 𐀁𐀚 𐀲𐀨𐀫 %1 𐀃𐀗𐀂𐀀 %2","tooltip":"𐀳𐀄𐀐𐀀 𐀁𐀚 𐀲𐀨𐀫, 𐀚𐀷 𐀡𐀫𐀵: name, path, modified, size. *.pdf 𐀁𐀚 %2. 𐀂𐀅𐀁 𐀙𐀚: 𐀃𐀄 𐀀𐀙𐀑𐀜𐀁. Python 𐀂𐀅𐀁 𐀁𐀚 𐀲𐀨𐀫; 𐀝 𐀳𐀄𐀐𐀀 𐀡𐀨𐀅𐀑𐀔."},
 "rb_folder_when":{"message0":"𐀃𐀳 𐀳𐀄𐀒 𐀞𐀂𐀚𐀲𐀂 𐀁𐀚 𐀲𐀨𐀫 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 𐀚𐀺 𐀳𐀄𐀒 𐀁𐀨𐀳 𐀁𐀚 𐀵𐀵 𐀲𐀨𐀫 (𐀞𐀫 𐀡𐀫𐀏𐀨𐀔, 𐀁 𐀗𐀜 𐀃𐀫 𐀃𐀈 𐀇𐀈𐀯). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 𐀃𐀜𐀔, 𐀃𐀈, 𐀕𐀐𐀵, 𐀏𐀂 𐀁𐀟𐀀 𐀁𐀚 PDF, Word 𐀁 𐀳𐀄𐀒 𐀏𐀨𐀔𐀵. 𐀁𐀚 𐀒𐀨𐀞 picture 𐀇𐀈𐀯."},
-"rb_generate":{"message0":"𐀏𐀨𐀟 𐀡𐀫𐀵 𐀐𐀇𐀍","tooltip":"Claude 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀃 𐀸𐀒 𐀳𐀩𐀂."},
+"rb_generate":{"message0":"𐀏𐀨𐀟 𐀡𐀫𐀵 𐀐𐀇𐀍 %1 𐀟𐀨𐀲𐀫","tooltip":"Claude 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀃 𐀸𐀒 𐀳𐀩𐀂."},
 "rb_gh_issue_when":{"message0":"𐀃𐀳 issue 𐀚𐀺 𐀀𐀜𐀂𐀐 𐀁𐀚 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 issue 𐀚𐀺 𐀁𐀚 GitHub (𐀁𐀐𐀲𐀽𐀲𐀂 𐀁𐀏𐀲 5 𐀩𐀡𐀲; pull requests 𐀃𐀄). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 repo, number, title, body, author, labels, link 𐀏𐀂 text."},
 "rb_gh_release_when":{"message0":"𐀃𐀳 release 𐀚𐀺 𐀁𐀚 %1","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 release 𐀚𐀺 𐀁𐀚 GitHub (𐀁𐀐𐀲𐀽𐀲𐀂 𐀁𐀏𐀲 15 𐀩𐀡𐀲). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 repo, tag, name, previous_tag, notes, link 𐀏𐀂 text."},
 "rb_gh_when":{"message0":"𐀃𐀳 pull request 𐀁𐀫𐀲𐀂 𐀁𐀐𐀮𐀲𐀯 𐀁𐀔","tooltip":"𐀏𐀨𐀁 𐀠𐀪𐀵 𐀏𐀵 𐀃𐀳 𐀴𐀚 𐀮 𐀁𐀫𐀲𐀂 𐀁𐀐𐀲𐀽𐀁 GitHub pull request (𐀁𐀐𐀲𐀽𐀲𐀂 𐀁𐀏𐀲 5 𐀩𐀡𐀲). “𐀴 𐀁𐀨𐀳” 𐀇𐀈𐀯 repo, number, title, user, link 𐀏𐀂 text."},
@@ -112,7 +112,7 @@
 "rb_result_text":{"message0":"𐀳𐀫 𐀕𐀑 𐀝","tooltip":"𐀞𐀲 𐀡𐀮𐀳𐀕𐀙 𐀁𐀚 𐀳𐀫, 𐀃𐀄𐀵 𐀏𐀨𐀔𐀲."},
 "rb_retry":{"message0":"𐀟𐀂𐀨 𐀀𐀠 𐀕𐀑 %1 𐀑𐀯","message1":"%1","tooltip":"𐀁 𐀴 𐀁𐀚𐀵𐀰 𐀀𐀔𐀲𐀚𐀂 𐀃𐀄𐀵 𐀆𐀄𐀳𐀨 𐀟𐀂𐀨 𐀂𐀀𐀭𐀲𐀂 (𐀆𐀰𐀗 𐀨𐀄𐀕𐀜, 𐀀𐀡𐀑𐀪𐀯 𐀲𐀨𐀏𐀕𐀙), 𐀕𐀚𐀂 𐀃𐀪𐀒 𐀏𐀂 𐀏𐀨𐀁𐀂 𐀀𐀠."},
 "rb_review":{"message0":"𐀁𐀐𐀲𐀽 𐀐𐀇𐀍 𐀏𐀲 %1","tooltip":"𐀃𐀚 𐀁𐀐𐀮𐀲𐀯. 𐀐𐀨𐀃𐀠𐀳 “𐀐𐀇𐀍 𐀁𐀐𐀮𐀲𐀯 𐀞𐀩𐀨𐀳” 𐀏𐀂 “𐀁𐀐𐀮𐀲𐀯 𐀞𐀨𐀔𐀲”."},
-"rb_revise":{"message0":"𐀇𐀃𐀵𐀮 𐀃𐀞 𐀁𐀐𐀮𐀲𐀯 𐀞𐀨𐀔𐀲 𐀂𐀀𐀭𐀲𐀂","tooltip":"Claude 𐀂𐀀𐀲𐀂 𐀞𐀨𐀔𐀲 𐀃 𐀄𐀲𐀲 𐀁𐀐𐀮𐀲𐀯 𐀁𐀄𐀩."},
+"rb_revise":{"message0":"𐀇𐀃𐀵𐀮 𐀃𐀞 𐀁𐀐𐀮𐀲𐀯 𐀞𐀨𐀔𐀲 𐀂𐀀𐀭𐀲𐀂 %1 𐀟𐀨𐀲𐀫","tooltip":"Claude 𐀂𐀀𐀲𐀂 𐀞𐀨𐀔𐀲 𐀃 𐀄𐀲𐀲 𐀁𐀐𐀮𐀲𐀯 𐀁𐀄𐀩."},
 "rb_rework":{"message0":"𐀀𐀠 𐀸𐀐 𐀐𐀇𐀍: %1","tooltip":"Claude 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀀𐀠 𐀏𐀲 𐀁𐀵𐀩 𐀰."},
 "rb_rewrite":{"message0":"𐀀𐀠 𐀏𐀨𐀟 %1 𐀁𐀠 %2","tooltip":"𐀃𐀄𐀵: 𐀀𐀠 𐀏𐀨𐀟 (𐀐𐀇𐀍) 𐀁𐀠 (𐀁𐀚 Frankish)."},
 "rb_run_program":{"message0":"𐀏𐀨𐀁 𐀡𐀫𐀏𐀨𐀔 %1 𐀕𐀲 %2","tooltip":"𐀏𐀨𐀁𐀂 𐀡𐀫𐀏𐀨𐀔 𐀀𐀢 𐀏𐀲𐀫𐀒 𐀡𐀫𐀏𐀨𐀔𐀵 𐀰, 𐀃𐀄𐀵 𐀡𐀅. 𐀁𐀐𐀂 𐀰 𐀐𐀇𐀍, 𐀳𐀫 𐀏𐀂 𐀀𐀫𐀍𐀲, 𐀏𐀂 𐀀𐀡𐀇𐀈𐀯 𐀳𐀫. 𐀁𐀚𐀵𐀰, “𐀀𐀐𐀪𐀊 𐀴𐀔” 𐀁𐀯 𐀴𐀔 𐀃 𐀁𐀚𐀲𐀄𐀲 𐀇𐀈𐀯. Python 𐀁𐀏𐀕𐀜 𐀁𐀐𐀂 𐀀𐀴𐀏𐀨𐀡 𐀡𐀫𐀏𐀨𐀔𐀵 𐀃𐀄𐀵 𐀁𐀚 𐀃𐀳 𐀁𐀏𐀏𐀐."},
@@ -956,7 +956,11 @@
 "Text changed in {n} blocks.":"𐀒𐀵𐀙 ina {n} 𐀵𐀫𐀐𐀩.",
 "Review stuck":"𐀁𐀐𐀮𐀲𐀯 𐀁𐀐𐀵",
 "stuck":"𐀁𐀐𐀵",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"𐀁𐀐𐀮𐀲𐀯 𐀕𐀲 𐀉𐀺 𐀁𐀞𐀐𐀮𐀲 𐀵𐀵 𐀒𐀏𐀲 𐀁𐀩𐀁, 𐀃𐀄𐀑 𐀁𐀞𐀐𐀮𐀲 𐀀𐀐𐀲𐀚. 𐀐𐀩𐀯𐀍 𐀔𐀲 𐀞𐀫𐀳𐀐 𐀃𐀄𐀑 𐀁𐀵𐀐, 𐀞𐀑𐀙, 𐀢𐀏𐀲 𐀁𐀳𐀃: 𐀈𐀮 𐀵𐀵 (𐀁𐀚 𐀁𐀏𐀨, 𐀁𐀵𐀐 𐀀𐀏𐀲 𐀞𐀑𐀙 𐀁𐀩𐀄𐀐𐀳), 𐀀𐀞𐀨 𐀁𐀡𐀟."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"𐀁𐀐𐀮𐀲𐀯 𐀕𐀲 𐀉𐀺 𐀁𐀞𐀐𐀮𐀲 𐀵𐀵 𐀒𐀏𐀲 𐀁𐀩𐀁, 𐀃𐀄𐀑 𐀁𐀞𐀐𐀮𐀲 𐀀𐀐𐀲𐀚. 𐀐𐀩𐀯𐀍 𐀔𐀲 𐀞𐀫𐀳𐀐 𐀃𐀄𐀑 𐀁𐀵𐀐, 𐀞𐀑𐀙, 𐀢𐀏𐀲 𐀁𐀳𐀃: 𐀈𐀮 𐀵𐀵 (𐀁𐀚 𐀁𐀏𐀨, 𐀁𐀵𐀐 𐀀𐀏𐀲 𐀞𐀑𐀙 𐀁𐀩𐀄𐀐𐀳), 𐀀𐀞𐀨 𐀁𐀡𐀟.",
+"Using the web":"𐀟𐀨𐀲𐀫",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"𐀵𐀵 𐀞𐀑𐀙 𐀃𐀄𐀑 𐀟𐀨𐀲𐀫 𐀐𐀩𐀲, 𐀵𐀨𐀟𐀨𐀭𐀕𐀜 𐀀𐀚𐀄 𐀁𐀨𐀟. 𐀐𐀩𐀯𐀍 𐀁𐀏𐀨𐀵 𐀟𐀨𐀲𐀫 𐀐𐀩𐀲.",
+"Web address in the task":"𐀃𐀜𐀔 𐀟𐀨𐀲𐀫 𐀁𐀚 𐀁𐀏𐀨",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"𐀁𐀏𐀨 𐀃𐀜𐀔 𐀟𐀨𐀲𐀫 𐀁𐀩𐀁, 𐀃𐀄𐀑 𐀀𐀜𐀐 𐀵𐀵 𐀡𐀟. 𐀟𐀨𐀲𐀫 𐀁𐀠 𐀨𐀲 𐀏𐀨𐀟, 𐀁 𐀞𐀑𐀙 𐀺𐀏 𐀁𐀚 𐀁𐀏𐀨 𐀳𐀐."
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1868,7 +1872,9 @@
 "{n} of them can change things":"{n} a-me-u-si-ja ka-re-ma-ta",
 "Review stuck":"e-ke-se-ta-si e-ke-to",
 "stuck":"e-ke-to",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"e-ke-se-ta-si me-ta du-wo e-pa-ke-se-ta to-to ko-ka-ta e-re-e, o-u-ki e-pa-ke-se-ta a-ke-ta-ne. ke-re-si-jo ma-ta pa-ro-te-ke o-u-ki e-to-ke, pa-ki-na, pu-ka-ta e-te-o: do-se to-to (e-ne e-ka-ra, e-to-ke a-ka-ta pa-ki-na e-re-u-ke-te), a-pa-ra e-po-pe."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"e-ke-se-ta-si me-ta du-wo e-pa-ke-se-ta to-to ko-ka-ta e-re-e, o-u-ki e-pa-ke-se-ta a-ke-ta-ne. ke-re-si-jo ma-ta pa-ro-te-ke o-u-ki e-to-ke, pa-ki-na, pu-ka-ta e-te-o: do-se to-to (e-ne e-ka-ra, e-to-ke a-ka-ta pa-ki-na e-re-u-ke-te), a-pa-ra e-po-pe.",
+"Web address in the task":"o-no-ma pe-ra-ta-ro e-ne e-ka-ra",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"e-ka-ra o-no-ma pe-ra-ta-ro e-re-e, o-u-ki a-no-ke to-to po-pe. pe-ra-ta-ro e-pi ra-ta ka-ra-pe, e pa-ki-na wo-ka e-ne e-ka-ra te-ke."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

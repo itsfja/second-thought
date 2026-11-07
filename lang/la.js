@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"fini cum %1"},
 "rb_folder_files":{"message0":"fasciculi in capsa %1 congruentes cum %2","tooltip":"Fasciculi in capsa, novissimi primi, ut scripturae: name, path, modified, size. «Congruentes» est forma ut *.pdf; vacuum relinque pro omnibus. Solum inspicit: non legit. Python exportatum in capsa inspicit; haec pagina exemplis utitur."},
 "rb_folder_when":{"message0":"cum fasciculus in capsa %1 apparet","tooltip":"Lateres infra exsequitur cum novus fasciculus in hanc capsam venit (iuxta programma, nisi viam plenam das). «Quod advenit» dat nomen, viam, magnitudinem et, pro PDF, Verbo aut textu, verba eius. Pro imagine, «picture» eam dat lateribus imaginum."},
-"rb_generate":{"message0":"scribe primam adumbrationem","tooltip":"Claude adumbrationem scribit quae pensum perficit."},
+"rb_generate":{"message0":"scribe primam adumbrationem %1 ope interretis","tooltip":"Claude adumbrationem scribit quae pensum perficit."},
 "rb_gh_issue_when":{"message0":"cum nova quaestio in %1 aperitur","tooltip":"Lateres infra exsequitur cum quis quaestionem (issue) in hoc incepto GitHub aperit (singulis 5 minutis inspicitur; petitiones trahendi non numerantur). «Quod advenit» dat repo, number, title, body, author, labels, link et text."},
 "rb_gh_release_when":{"message0":"cum editio in %1 publicatur","tooltip":"Lateres infra exsequitur cum hoc inceptum GitHub editionem (release) publicat (singulis 15 minutis inspicitur). «Quod advenit» dat repo, tag, name, previous_tag, notes, link et text."},
 "rb_gh_when":{"message0":"cum petitio trahendi recognitionem meam rogat","tooltip":"Lateres infra exsequitur cum quis te rogat ut petitionem trahendi in GitHub recognoscas (singulis 5 minutis inspicitur). «Quod advenit» dat repo, number, title, user, link et text."},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"effectus adhuc","tooltip":"Omnia ad effectum addita, ut textus."},
 "rb_retry":{"message0":"itera usque ad %1 vices","message1":"%1","tooltip":"Si quid intus deficit modo quem secundus conatus sanare possit (conexio amissa, responsum confusum), paulum exspectat et iterum exsequitur."},
 "rb_review":{"message0":"recognosce adumbrationem secundum %1","tooltip":"Una recognitio. Postea utere «adumbratio recognitionem superavit» et «vitia recognitionis»."},
-"rb_revise":{"message0":"retracta ut vitia recognitionis corrigas","tooltip":"Claude vitia corrigit quae ultima recognitio invenit."},
+"rb_revise":{"message0":"retracta ut vitia recognitionis corrigas %1 ope interretis","tooltip":"Claude vitia corrigit quae ultima recognitio invenit."},
 "rb_rework":{"message0":"retracta adumbrationem: %1","tooltip":"Claude adumbrationem rescribit secundum praeceptum tuum."},
 "rb_rewrite":{"message0":"rescribe %1 ut %2","tooltip":"Exempli gratia: rescribe (adumbrationem) ut (in Gallicum verte)."},
 "rb_run_program":{"message0":"exsequere programma %1 cum %2","tooltip":"Programma ex indice Programmatum tuorum ut gradum exsequitur. Suam adumbrationem, effectum et variabiles habet, et effectum suum reddit. Intus, «valor nuntii» est valor quem hic tradis. Python exportatum exemplar programmatis continet quale erat cum exportavisti."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Textus in {n} lateribus mutatus.",
 "Review stuck":"Recognitio haesit",
 "stuck":"haeret",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre.",
+"Using the web":"Ope interretis",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Haec pagina interrete uti non potest, itaque adumbratio supra sine eo scripta est. Programma exportatum interrete utitur.",
+"Web address in the task":"Inscriptio interretialis in penso",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Pensum inscriptionem interretialem nominat, sed hic gradus eam aperire non potest. Nota 'ope interretis' in latere, aut verba paginae in pensum pone."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1867,7 +1871,9 @@
 "{n} of them can change things":"{n} ex eis res mutare possunt",
 "Review stuck":"Recognitio haesit",
 "stuck":"haeret",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre.",
+"Web address in the task":"Inscriptio interretialis in penso",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Pensum inscriptionem interretialem nominat, sed hic gradus eam aperire non potest. Nota 'ope interretis' in latere, aut verba paginae in pensum pone."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

@@ -186,7 +186,7 @@
    "tooltip": "Executa os blocos abaixo quando chega um ficheiro novo a esta pasta (ao lado do programa, a não ser que indique um caminho completo). «O que chegou» dá o nome, o caminho, o tamanho e, para um PDF, Word ou ficheiro de texto, as palavras que contém. Para uma imagem, «picture» dá-a aos blocos de imagem."
   },
   "rb_generate": {
-   "message0": "escrever um primeiro rascunho",
+   "message0": "escrever um primeiro rascunho %1 usando a web",
    "tooltip": "O Claude escreve um rascunho que cumpre a tarefa."
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "Uma revisão. Use depois «o rascunho passou na revisão» e «problemas da revisão»."
   },
   "rb_revise": {
-   "message0": "rever para corrigir os problemas da revisão",
+   "message0": "rever para corrigir os problemas da revisão %1 usando a web",
    "tooltip": "O Claude corrige os problemas que a última revisão encontrou."
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "Texto alterado em {n} blocos.",
   "Review stuck": "Revisão travada",
   "stuck": "travado",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "A revisão apontou os mesmos problemas após duas correções, então corrigir não os resolve. Talvez falte ao programa algo que não lhe foi dado, como uma página web, um arquivo ou um fato: dê isso a ele (na tarefa, por exemplo, ou por meio de um agente que leia páginas web) e execute de novo."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "A revisão apontou os mesmos problemas após duas correções, então corrigir não os resolve. Talvez falte ao programa algo que não lhe foi dado, como uma página web, um arquivo ou um fato: dê isso a ele (na tarefa, por exemplo, ou por meio de um agente que leia páginas web) e execute de novo.",
+  "Using the web": "Usando a web",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Esta página não pode usar a web, então o rascunho acima foi escrito sem ela. O programa exportado usa a web.",
+  "Web address in the task": "Endereço web na tarefa",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "A tarefa cita um endereço web, mas este passo não consegue abri-lo. Marque 'usando a web' no bloco, ou coloque o texto da página na tarefa."
  },
  "examples": {
   "review": {
@@ -3000,6 +3004,8 @@
   "{n} of them can change things": "{n} delas podem alterar coisas",
   "Review stuck": "Revisão travada",
   "stuck": "travado",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "A revisão apontou os mesmos problemas após duas correções, então corrigir não os resolve. Talvez falte ao programa algo que não lhe foi dado, como uma página web, um arquivo ou um fato: dê isso a ele (na tarefa, por exemplo, ou por meio de um agente que leia páginas web) e execute de novo."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "A revisão apontou os mesmos problemas após duas correções, então corrigir não os resolve. Talvez falte ao programa algo que não lhe foi dado, como uma página web, um arquivo ou um fato: dê isso a ele (na tarefa, por exemplo, ou por meio de um agente que leia páginas web) e execute de novo.",
+  "Web address in the task": "Endereço web na tarefa",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "A tarefa cita um endereço web, mas este passo não consegue abri-lo. Marque 'usando a web' no bloco, ou coloque o texto da página na tarefa."
  }
 }

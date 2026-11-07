@@ -187,7 +187,7 @@
    "tooltip": "यदा अस्मिन् कोशे नूतना सञ्चिका आगच्छति (कार्यक्रमस्य समीपे, यदि पूर्णमार्गं न ददासि) तदा अधःस्थान् खण्डान् चालयति। “यत् आगतम्” तस्याः नाम, मार्गं, परिमाणं, PDF-Word-पाठसञ्चिकानां कृते तस्यां शब्दान् च ददाति। चित्रस्य कृते “picture” तत् चित्रखण्डेभ्यः ददाति।"
   },
   "rb_generate": {
-   "message0": "प्रथमं प्रारूपं लिख",
+   "message0": "प्रथमं प्रारूपं लिख %1 जालस्य साहाय्येन",
    "tooltip": "Claude कार्यं पूरयत् प्रारूपं लिखति।"
   },
   "rb_gh_issue_when": {
@@ -418,7 +418,7 @@
    "tooltip": "एका समीक्षा। ततः “प्रारूपं समीक्षाम् उत्तीर्णम्” “समीक्षायाः दोषाः” च प्रयुङ्क्ष्व।"
   },
   "rb_revise": {
-   "message0": "समीक्षायाः दोषान् शोधयितुं संस्कुरु",
+   "message0": "समीक्षायाः दोषान् शोधयितुं संस्कुरु %1 जालस्य साहाय्येन",
    "tooltip": "अन्तिमया समीक्षया लब्धान् दोषान् Claude शोधयति।"
   },
   "rb_rework": {
@@ -1457,7 +1457,11 @@
   "Text changed in {n} blocks.": "{n} खण्डेषु पाठः परिवर्तितः।",
   "Review stuck": "समीक्षा स्तब्धा",
   "stuck": "स्तब्धम्",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।"
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।",
+  "Using the web": "जालस्य साहाय्येन",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "इदं पृष्ठं जालं उपयोक्तुं न शक्नोति, अतः उपरितनं प्रारूपं तेन विना लिखितम्। निर्यातितः कार्यक्रमः जालं उपयुङ्क्ते।",
+  "Web address in the task": "कार्ये जालसङ्केतः",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।"
  },
  "examples": {
   "review": {
@@ -3001,7 +3005,9 @@
   "{n} of them can change things": "तेषु {n} वस्तूनि परिवर्तयितुं शक्नुवन्ति",
   "Review stuck": "समीक्षा स्तब्धा",
   "stuck": "स्तब्धम्",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।"
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।",
+  "Web address in the task": "कार्ये जालसङ्केतः",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

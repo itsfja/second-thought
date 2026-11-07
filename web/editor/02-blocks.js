@@ -273,9 +273,9 @@
       null, { style:"time" }),
     /* Draft */
     S("rb_task", "set task to %1", [val("TEXT")], { style:"draft", tooltip:"Sets what the AI should produce." }),
-    S("rb_generate", "write a first draft", [], { style:"draft", tooltip:"Claude writes a draft that completes the task." }),
+    S("rb_generate", "write a first draft %1 using the web", [{ type:"field_checkbox", name:"WEB", checked:false }], { style:"draft", tooltip:"Claude writes a draft that completes the task." }),
     S("rb_rework", "rework the draft: %1", [val("TEXT")], { style:"draft", tooltip:"Claude rewrites the draft following your instruction." }),
-    S("rb_revise", "revise to fix the review's problems", [], { style:"draft", tooltip:"Claude fixes the problems the last review found." }),
+    S("rb_revise", "revise to fix the review's problems %1 using the web", [{ type:"field_checkbox", name:"WEB", checked:false }], { style:"draft", tooltip:"Claude fixes the problems the last review found." }),
     S("rb_set_draft", "set draft to %1", [val("TEXT")], { style:"draft" }),
     V("rb_draft", "draft", [], "String", { style:"draft" }),
     S("rb_checkpoint_save", "save checkpoint %1", [{ type:"field_input", name:"NAME", text:"good draft" }], { style:"draft",

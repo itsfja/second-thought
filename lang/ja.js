@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"%1 で終える"},
 "rb_folder_files":{"message0":"フォルダー %1 の %2 に合うファイル","tooltip":"フォルダー内のファイルを新しい順にレコードで返します：name、path、modified、size。「合う」は *.pdf のようなパターンで、空ならすべてです。見るだけで、中身は読みません。書き出した Python はそのフォルダーを見ます（フルパスでなければプログラムの隣）。このページはサンプルのファイルを使います。"},
 "rb_folder_when":{"message0":"フォルダー %1 にファイルが現れたとき","tooltip":"このフォルダー（フルパスを指定しなければプログラムの隣）に新しいファイルが置かれたとき、下のブロックを実行します。「届いた内容」は名前、パス、サイズ、そして PDF、Word、テキストファイルなら中の言葉を返します。画像なら「picture」で画像ブロックに渡せます。"},
-"rb_generate":{"message0":"最初の下書きを書く","tooltip":"Claude がタスクをこなす下書きを書きます。"},
+"rb_generate":{"message0":"最初の下書きを書く %1 ウェブを使う","tooltip":"Claude がタスクをこなす下書きを書きます。"},
 "rb_gh_issue_when":{"message0":"%1 に新しい Issue が作成されたとき","tooltip":"この GitHub プロジェクトで誰かが Issue を作成したとき、下のブロックを実行します（5 分ごとに確認。プルリクエストは含みません）。「届いた内容」は repo、number、title、body、author、labels、link、text を返します。"},
 "rb_gh_release_when":{"message0":"%1 でリリースが公開されたとき","tooltip":"この GitHub プロジェクトがリリースを公開したとき、下のブロックを実行します（15 分ごとに確認）。「届いた内容」は repo、tag、name、previous_tag、notes、link、text を返します。"},
 "rb_gh_when":{"message0":"プルリクエストで私のレビューが求められたとき","tooltip":"GitHub のプルリクエストのレビューを誰かに頼まれたとき、下のブロックを実行します（5 分ごとに確認）。「届いた内容」は repo、number、title、user、link、text を返します。"},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"これまでの結果","tooltip":"結果に追加されたすべてを、テキストで。"},
 "rb_retry":{"message0":"最大 %1 回やり直す","message1":"%1","tooltip":"中の何かが、もう一度やれば直りそうな形で失敗したとき（接続が切れた、返事が崩れた）、少し待ってからもう一度実行します。"},
 "rb_review":{"message0":"%1 に照らして下書きをレビュー","tooltip":"1 回のレビュー。その後「下書きがレビューに合格した」と「レビューで見つかった問題」を使います。"},
-"rb_revise":{"message0":"レビューの問題を直すように修正","tooltip":"Claude が前回のレビューで見つかった問題を直します。"},
+"rb_revise":{"message0":"レビューの問題を直すように修正 %1 ウェブを使う","tooltip":"Claude が前回のレビューで見つかった問題を直します。"},
 "rb_rework":{"message0":"下書きを手直し：%1","tooltip":"Claude があなたの指示に沿って下書きを書き直します。"},
 "rb_rewrite":{"message0":"%1 を %2 ように書き直す","tooltip":"例：（下書き）を（フランス語に訳す）ように書き直す。"},
 "rb_run_program":{"message0":"プログラム %1 を %2 で実行","tooltip":"プログラムの一覧にあるプログラムを、1 つのステップとして実行します。専用の下書き、結果、変数を持ち、自分の結果を返します。その中では「メッセージの値」がここで渡す値です。書き出した Python には、書き出した時点のプログラムのコピーが入ります。"},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"{n} 個のブロックのテキストが変わりました。",
 "Review stuck":"レビューが行き詰まりました",
 "stuck":"行き詰まり",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。"
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。",
+"Using the web":"ウェブを使う",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"このページではウェブを使えないため、上の下書きはウェブなしで書かれました。エクスポートしたプログラムはウェブを使います。",
+"Web address in the task":"タスク内のウェブアドレス",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1867,6 +1871,8 @@
 "{n} of them can change things":"うち {n} 個は変更を加えられます",
 "Review stuck":"レビューが行き詰まりました",
 "stuck":"行き詰まり",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。"
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。",
+"Web address in the task":"タスク内のウェブアドレス",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。"
 }
 };

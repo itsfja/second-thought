@@ -187,7 +187,7 @@
    "tooltip": "מריץ את הבלוקים שמתחת כשקובץ חדש נוחת בתיקייה הזו (ליד התוכנית, אלא אם תתנו נתיב מלא). \"מה הגיע\" נותן את השם, הנתיב, הגודל, ואת המילים שבו עבור PDF, ‏Word או קובץ טקסט. לתמונה, \"picture\" נותן אותה לבלוקי התמונה."
   },
   "rb_generate": {
-   "message0": "כתוב טיוטה ראשונה",
+   "message0": "כתוב טיוטה ראשונה %1 בעזרת הרשת",
    "tooltip": "Claude כותב טיוטה שמשלימה את המשימה."
   },
   "rb_gh_issue_when": {
@@ -418,7 +418,7 @@
    "tooltip": "ביקורת אחת. השתמשו אחר כך ב\"הטיוטה עברה ביקורת\" וב\"בעיות שעלו בביקורת\"."
   },
   "rb_revise": {
-   "message0": "תקן את הבעיות שעלו בביקורת",
+   "message0": "תקן את הבעיות שעלו בביקורת %1 בעזרת הרשת",
    "tooltip": "Claude מתקן את הבעיות שהביקורת האחרונה מצאה."
   },
   "rb_rework": {
@@ -1457,7 +1457,11 @@
   "Text changed in {n} blocks.": "הטקסט השתנה ב־{n} בלוקים.",
   "Review stuck": "הביקורת נתקעה",
   "stuck": "תקוע",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
+  "Using the web": "בעזרת הרשת",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "הדף הזה לא יכול להשתמש ברשת, ולכן הטיוטה שלמעלה נכתבה בלעדיה. התוכנית המיוצאת משתמשת ברשת.",
+  "Web address in the task": "כתובת אינטרנט במשימה",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה."
  },
  "examples": {
   "review": {
@@ -3001,6 +3005,8 @@
   "{n} of them can change things": "{n} מהם יכולים לשנות דברים",
   "Review stuck": "הביקורת נתקעה",
   "stuck": "תקוע",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
+  "Web address in the task": "כתובת אינטרנט במשימה",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה."
  }
 }

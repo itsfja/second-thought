@@ -52,7 +52,9 @@
     "blocks for anything a language model does. Use the connector blocks (Telegram, email, GitHub, calendar, feeds, Home Assistant and so " +
     "on) for the services the description names. Times become rb_when_time or rb_every hats, with a 'when Run is clicked' script that does " +
     "the same job so it can be tried straight away. Put text the person would want to change (a town, an address, a project) in a variable " +
-    "set at the top of the script. If something asked for can't be done with these blocks, leave it out and say so in \"unmapped\". Ignore " +
+    "set at the top of the script. If the description names a web page, a site or a GitHub repository to read, the program must read " +
+    "it: an rb_agent with the web tool (or the GitHub tools) whose answer becomes the draft, or 'using the web' ticked on " +
+    "rb_generate; a plain draft can't open addresses. If something asked for can't be done with these blocks, leave it out and say so in \"unmapped\". Ignore " +
     "the HOW TO MAP CODE section below: it's for converting code.";
   let described = null;  // { state, change }: Claude's program, waiting to be loaded
   // The program on the canvas for a prompt: variables by name, without ids or positions, which Claude doesn't need.

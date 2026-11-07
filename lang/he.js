@@ -52,7 +52,7 @@
 "rb_finish_with":{"message0":"סיים עם %1"},
 "rb_folder_files":{"message0":"קבצים בתיקייה %1 שמתאימים ל-%2","tooltip":"הקבצים בתיקייה, החדשים קודם, כרשומות: name, path, modified, size. \"שמתאימים\" הוא תבנית כמו *.pdf; השאירו ריק לכל הקבצים. רק מסתכל: לא קורא אותם. Python המיוצא מסתכל בתיקייה (ליד התוכנית, אלא אם תתנו נתיב מלא); הדף הזה משתמש בקבצי דוגמה."},
 "rb_folder_when":{"message0":"כשמופיע קובץ בתיקייה %1","tooltip":"מריץ את הבלוקים שמתחת כשקובץ חדש נוחת בתיקייה הזו (ליד התוכנית, אלא אם תתנו נתיב מלא). \"מה הגיע\" נותן את השם, הנתיב, הגודל, ואת המילים שבו עבור PDF, ‏Word או קובץ טקסט. לתמונה, \"picture\" נותן אותה לבלוקי התמונה."},
-"rb_generate":{"message0":"כתוב טיוטה ראשונה","tooltip":"Claude כותב טיוטה שמשלימה את המשימה."},
+"rb_generate":{"message0":"כתוב טיוטה ראשונה %1 בעזרת הרשת","tooltip":"Claude כותב טיוטה שמשלימה את המשימה."},
 "rb_gh_issue_when":{"message0":"כשנפתח issue חדש ב-%1","tooltip":"מריץ את הבלוקים שמתחת כשמישהו פותח issue בפרויקט הזה ב-GitHub (נבדק כל 5 דקות; בקשות משיכה לא נחשבות). \"מה הגיע\" נותן repo, number, title, body, author, labels, link ו-text."},
 "rb_gh_release_when":{"message0":"כשמתפרסמת גרסה ב-%1","tooltip":"מריץ את הבלוקים שמתחת כשהפרויקט הזה ב-GitHub מפרסם גרסה (release; נבדק כל 15 דקות). \"מה הגיע\" נותן repo, tag, name, previous_tag, notes, link ו-text."},
 "rb_gh_when":{"message0":"כשבקשת משיכה מבקשת את הביקורת שלי","tooltip":"מריץ את הבלוקים שמתחת כשמישהו מבקש מכם לבדוק בקשת משיכה ב-GitHub (נבדק כל 5 דקות). \"מה הגיע\" נותן repo, number, title, user, link ו-text."},
@@ -112,7 +112,7 @@
 "rb_result_text":{"message0":"התוצאה עד עכשיו","tooltip":"כל מה שנוסף לתוצאה, כטקסט."},
 "rb_retry":{"message0":"נסה שוב עד %1 פעמים","message1":"%1","tooltip":"אם משהו בפנים נכשל באופן שניסיון נוסף יכול לתקן (חיבור שנפל, תשובה משובשת), מחכה קצת ומריץ אותו שוב."},
 "rb_review":{"message0":"בקר את הטיוטה לפי %1","tooltip":"ביקורת אחת. השתמשו אחר כך ב\"הטיוטה עברה ביקורת\" וב\"בעיות שעלו בביקורת\"."},
-"rb_revise":{"message0":"תקן את הבעיות שעלו בביקורת","tooltip":"Claude מתקן את הבעיות שהביקורת האחרונה מצאה."},
+"rb_revise":{"message0":"תקן את הבעיות שעלו בביקורת %1 בעזרת הרשת","tooltip":"Claude מתקן את הבעיות שהביקורת האחרונה מצאה."},
 "rb_rework":{"message0":"עבד מחדש את הטיוטה: %1","tooltip":"Claude כותב מחדש את הטיוטה לפי ההוראה שלכם."},
 "rb_rewrite":{"message0":"כתוב מחדש את %1: %2","tooltip":"לדוגמה: כתוב מחדש את (טיוטה): (תרגם לצרפתית)."},
 "rb_run_program":{"message0":"הרץ את התוכנית %1 עם %2","tooltip":"מריץ תוכנית מרשימת התוכניות שלכם, כצעד. יש לה טיוטה, תוצאה ומשתנים משלה, והיא מחזירה את התוצאה שלה. בתוכה, \"ערך ההודעה\" הוא הערך שאתם מעבירים כאן. Python המיוצא כולל עותק של התוכנית כפי שהייתה בזמן הייצוא."},
@@ -956,7 +956,11 @@
 "Text changed in {n} blocks.":"הטקסט השתנה ב־{n} בלוקים.",
 "Review stuck":"הביקורת נתקעה",
 "stuck":"תקוע",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
+"Using the web":"בעזרת הרשת",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"הדף הזה לא יכול להשתמש ברשת, ולכן הטיוטה שלמעלה נכתבה בלעדיה. התוכנית המיוצאת משתמשת ברשת.",
+"Web address in the task":"כתובת אינטרנט במשימה",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1868,6 +1872,8 @@
 "{n} of them can change things":"{n} מהם יכולים לשנות דברים",
 "Review stuck":"הביקורת נתקעה",
 "stuck":"תקוע",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
+"Web address in the task":"כתובת אינטרנט במשימה",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה."
 }
 };

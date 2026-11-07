@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Added
+- **using the web** on *write a first draft* and *revise to fix the review's problems* (#332): ticked, the model can search and read the web while it writes (Claude's web search, Gemini's Google Search, Perplexity's own), so a task like "sum up github.com/…" gets an answer from the page itself. When a task names a web address and the step can't open it, the run log says so and how to fix it. "Describe a program" now builds a reading step when a description names a site or a repository.
+
 ### Changed
 - A review loop stops when it's stuck (#331): if the review raises the same problems after two revisions in a row, revising can't fix them, so the loop keeps its best draft, marks the result best effort, and says the program probably needs something it wasn't given (a web page, a file, a fact), instead of spending its remaining rounds. A problem counts as the same when it's in the same words or mostly the same longer words, and the reviewer is now asked to repeat a returning problem in the same words. Programs exported before this keep looping as before until they're exported again.
 

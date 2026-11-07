@@ -186,7 +186,7 @@
    "tooltip": "Exécute les blocs en dessous quand un nouveau fichier arrive dans ce dossier (à côté du programme, sauf si vous donnez un chemin complet). « Ce qui est arrivé » donne son nom, son chemin, sa taille, et ses mots pour un PDF, un fichier Word ou texte. Pour une image, « picture » la donne aux blocs d'image."
   },
   "rb_generate": {
-   "message0": "écrire un premier brouillon",
+   "message0": "écrire un premier brouillon %1 en utilisant le web",
    "tooltip": "Claude écrit un brouillon qui accomplit la tâche."
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "Une relecture. Utilisez ensuite « le brouillon a passé la relecture » et « problèmes de la relecture »."
   },
   "rb_revise": {
-   "message0": "réviser pour corriger les problèmes de la relecture",
+   "message0": "réviser pour corriger les problèmes de la relecture %1 en utilisant le web",
    "tooltip": "Claude corrige les problèmes trouvés par la dernière relecture."
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "Texte modifié dans {n} blocs.",
   "Review stuck": "Relecture bloquée",
   "stuck": "bloqué",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez.",
+  "Using the web": "En utilisant le web",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Cette page ne peut pas utiliser le web : le brouillon ci-dessus a été écrit sans. Le programme exporté utilise le web.",
+  "Web address in the task": "Adresse web dans la tâche",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "La tâche cite une adresse web, mais cette étape ne peut pas l'ouvrir. Cochez 'en utilisant le web' sur le bloc, ou mettez le texte de la page dans la tâche."
  },
  "examples": {
   "review": {
@@ -3000,6 +3004,8 @@
   "{n} of them can change things": "{n} d'entre eux peuvent modifier des choses",
   "Review stuck": "Relecture bloquée",
   "stuck": "bloqué",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez.",
+  "Web address in the task": "Adresse web dans la tâche",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "La tâche cite une adresse web, mais cette étape ne peut pas l'ouvrir. Cochez 'en utilisant le web' sur le bloc, ou mettez le texte de la page dans la tâche."
  }
 }

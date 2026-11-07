@@ -186,7 +186,7 @@
    "tooltip": "Esegue i blocchi sotto quando un nuovo file arriva in questa cartella (accanto al programma, a meno che tu non dia un percorso completo). «Cosa è arrivato» dà nome, percorso, dimensione e, per un PDF, un file Word o di testo, le parole che contiene. Per un'immagine, «picture» la dà ai blocchi delle immagini."
   },
   "rb_generate": {
-   "message0": "scrivi una prima bozza",
+   "message0": "scrivi una prima bozza %1 usando il web",
    "tooltip": "Claude scrive una bozza che svolge il compito."
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "Una revisione. Usa poi «la bozza ha superato la revisione» e «problemi della revisione»."
   },
   "rb_revise": {
-   "message0": "rivedi per correggere i problemi della revisione",
+   "message0": "rivedi per correggere i problemi della revisione %1 usando il web",
    "tooltip": "Claude corregge i problemi trovati dall'ultima revisione."
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "Testo cambiato in {n} blocchi.",
   "Review stuck": "Revisione bloccata",
   "stuck": "bloccato",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La revisione ha segnalato gli stessi problemi dopo due correzioni, quindi correggere non può risolverli. Forse al programma manca qualcosa che non ha ricevuto, come una pagina web, un file o un fatto: daglielo (nel compito, per esempio, o tramite un agente che sa leggere le pagine web), poi eseguilo di nuovo."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La revisione ha segnalato gli stessi problemi dopo due correzioni, quindi correggere non può risolverli. Forse al programma manca qualcosa che non ha ricevuto, come una pagina web, un file o un fatto: daglielo (nel compito, per esempio, o tramite un agente che sa leggere le pagine web), poi eseguilo di nuovo.",
+  "Using the web": "Usando il web",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Questa pagina non può usare il web, quindi la bozza qui sopra è stata scritta senza. Il programma esportato usa il web.",
+  "Web address in the task": "Indirizzo web nel compito",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Il compito nomina un indirizzo web, ma questo passo non può aprirlo. Spunta 'usando il web' sul blocco, oppure metti il testo della pagina nel compito."
  },
  "examples": {
   "review": {
@@ -3000,6 +3004,8 @@
   "{n} of them can change things": "{n} di questi possono cambiare qualcosa",
   "Review stuck": "Revisione bloccata",
   "stuck": "bloccato",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La revisione ha segnalato gli stessi problemi dopo due correzioni, quindi correggere non può risolverli. Forse al programma manca qualcosa che non ha ricevuto, come una pagina web, un file o un fatto: daglielo (nel compito, per esempio, o tramite un agente che sa leggere le pagine web), poi eseguilo di nuovo."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La revisione ha segnalato gli stessi problemi dopo due correzioni, quindi correggere non può risolverli. Forse al programma manca qualcosa che non ha ricevuto, come una pagina web, un file o un fatto: daglielo (nel compito, per esempio, o tramite un agente che sa leggere le pagine web), poi eseguilo di nuovo.",
+  "Web address in the task": "Indirizzo web nel compito",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Il compito nomina un indirizzo web, ma questo passo non può aprirlo. Spunta 'usando il web' sul blocco, oppure metti il testo della pagina nel compito."
  }
 }

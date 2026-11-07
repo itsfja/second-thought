@@ -187,7 +187,7 @@
    "tooltip": "מרהט לבנין דלתחתא כד מגלתא חדתא נחתא בתיבותא הדא (לצד סדורא, אי לא יהבת אורחא שלימא). \"מה דאתא\" יהב שמה, אורחה, רבותה, ומלין דבה ל-PDF, Word או מגלת כתבא. לציורא, \"picture\" יהב יתה ללבני ציורא."
   },
   "rb_generate": {
-   "message0": "כתוב טופסא קדמאה",
+   "message0": "כתוב טופסא קדמאה %1 בסיוע רשתא",
    "tooltip": "Claude כתב טופסא דמשלים עבידתא."
   },
   "rb_gh_issue_when": {
@@ -418,7 +418,7 @@
    "tooltip": "בדיקתא חדא. שמש בתר כן ב\"טופסא עבר בדיקתא\" וב\"פגמי בדיקתא\"."
   },
   "rb_revise": {
-   "message0": "תקן פגמי בדיקתא",
+   "message0": "תקן פגמי בדיקתא %1 בסיוע רשתא",
    "tooltip": "Claude מתקן פגמיא דבדיקתא בתרייתא אשכחת."
   },
   "rb_rework": {
@@ -1457,7 +1457,11 @@
   "Text changed in {n} blocks.": "אשתני מללא ב {n} לבנין.",
   "Review stuck": "בדיקא אתעכבת",
   "stuck": "מתעכב",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ.",
+  "Using the web": "בסיוע רשתא",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "דפא הדין לא מצי לאשתמשא ברשתא, הלכך טופסא דלעיל אתכתיב בלאו הכי. פרוגרמא דאפיקו משתמש ברשתא.",
+  "Web address in the task": "כתובת רשתא בעבידתא",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא."
  },
  "examples": {
   "review": {
@@ -3001,7 +3005,9 @@
   "{n} of them can change things": "{n} מנהון משנין מדעם",
   "Review stuck": "בדיקא אתעכבת",
   "stuck": "מתעכב",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ.",
+  "Web address in the task": "כתובת רשתא בעבידתא",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

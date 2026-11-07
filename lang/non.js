@@ -51,7 +51,7 @@
 "rb_finish_with":{"message0":"lúk með %1"},
 "rb_folder_files":{"message0":"skjǫl í hirzlu %1 er hlýða %2","tooltip":"Skjǫlin í hirzlu, nýjust fyrst, sem skrár: name, path, modified, size. „Hlýða“ er mynstr sem *.pdf; lát tómt fyrir ǫll. Þat sér einungis: þat lesr þau eigi. Útflutt Python sér í hirzluna; þessi síða notar dœmaskjǫl."},
 "rb_folder_when":{"message0":"þá er skjal birtisk í hirzlu %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er nýtt skjal kemr í þessa hirzlu (hjá forritinu, nema þú gefir allan veg). „Hvat kom“ gefr nafn þess, veg, stærð, ok orðin í því fyrir PDF, Word eða ritskjal. Fyrir mynd gefr „picture“ hana myndakubbunum."},
-"rb_generate":{"message0":"rita fyrsta frumrit","tooltip":"Claude ritar frumrit er lýkr verkinu."},
+"rb_generate":{"message0":"rita fyrsta frumrit %1 með vefnum","tooltip":"Claude ritar frumrit er lýkr verkinu."},
 "rb_gh_issue_when":{"message0":"þá er nýtt issue er opnat í %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er einhverr opnar issue í þessu GitHub verki (skoðat hverjar 5 mínútur; pull requests teljask eigi). „Hvat kom“ gefr repo, number, title, body, author, labels, link ok text."},
 "rb_gh_release_when":{"message0":"þá er útgáfa er birt í %1","tooltip":"Keyrir kubbana hér fyrir neðan þá er þetta GitHub verk birtir útgáfu (release; skoðat hverjar 15 mínútur). „Hvat kom“ gefr repo, tag, name, previous_tag, notes, link ok text."},
 "rb_gh_when":{"message0":"þá er pull request biðr um dóm minn","tooltip":"Keyrir kubbana hér fyrir neðan þá er einhverr biðr þik dœma GitHub pull request (skoðat hverjar 5 mínútur). „Hvat kom“ gefr repo, number, title, user, link ok text."},
@@ -111,7 +111,7 @@
 "rb_result_text":{"message0":"úrslitin hingat til","tooltip":"Allt er bætt var við úrslitin, sem rit."},
 "rb_retry":{"message0":"reyn aptr allt at %1 sinnum","message1":"%1","tooltip":"Ef nakkvat hér inni bregzk svá at ǫnnur tilraun mætti bœta (slitit samband, ruglat svar), bíðr þat lítt ok keyrir þat aptr."},
 "rb_review":{"message0":"dœm frumritit eptir %1","tooltip":"Einn dómr. Nota „frumrit stóðsk dóm“ ok „brestir dómsins“ eptir á."},
-"rb_revise":{"message0":"endrbœt at laga bresti dómsins","tooltip":"Claude lagar þá bresti er hinn síðasti dómr fann."},
+"rb_revise":{"message0":"endrbœt at laga bresti dómsins %1 með vefnum","tooltip":"Claude lagar þá bresti er hinn síðasti dómr fann."},
 "rb_rework":{"message0":"endrger frumritit: %1","tooltip":"Claude ritar frumritit aptr eptir fyrirmælum þínum."},
 "rb_rewrite":{"message0":"rita %1 aptr til %2","tooltip":"Svá sem: rita (frumrit) aptr til (snú á frakkneska tungu)."},
 "rb_run_program":{"message0":"keyr forrit %1 með %2","tooltip":"Keyrir forrit af Forrita-skrá þinni, sem eitt fet. Þat fær sitt eigit frumrit, úrslit ok breytur, ok skilar úrslitum sínum. Þar inni er „gildi boðanna“ gildit er þú sendir hér. Útfluttr Python hefir afrit forritsins sem þat var þá er þú fluttir út."},
@@ -955,7 +955,11 @@
 "Text changed in {n} blocks.":"Texti breyttist í {n} kubbum.",
 "Review stuck":"Dómr sat fastr",
 "stuck":"fastr",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr.",
+"Using the web":"Með vefnum",
+"This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Þessi síða má eigi nýta vefinn, svá at frumritit hér fyrir ofan var ritat án hans. Útflutta forritit nýtir vefinn.",
+"Web address in the task":"Vefnafn í verkinu",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1867,7 +1871,9 @@
 "{n} of them can change things":"{n} þeira megu hluti breyta",
 "Review stuck":"Dómr sat fastr",
 "stuck":"fastr",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr."
+"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr.",
+"Web address in the task":"Vefnafn í verkinu",
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

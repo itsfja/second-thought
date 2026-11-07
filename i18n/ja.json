@@ -186,7 +186,7 @@
    "tooltip": "このフォルダー（フルパスを指定しなければプログラムの隣）に新しいファイルが置かれたとき、下のブロックを実行します。「届いた内容」は名前、パス、サイズ、そして PDF、Word、テキストファイルなら中の言葉を返します。画像なら「picture」で画像ブロックに渡せます。"
   },
   "rb_generate": {
-   "message0": "最初の下書きを書く",
+   "message0": "最初の下書きを書く %1 ウェブを使う",
    "tooltip": "Claude がタスクをこなす下書きを書きます。"
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "1 回のレビュー。その後「下書きがレビューに合格した」と「レビューで見つかった問題」を使います。"
   },
   "rb_revise": {
-   "message0": "レビューの問題を直すように修正",
+   "message0": "レビューの問題を直すように修正 %1 ウェブを使う",
    "tooltip": "Claude が前回のレビューで見つかった問題を直します。"
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "{n} 個のブロックのテキストが変わりました。",
   "Review stuck": "レビューが行き詰まりました",
   "stuck": "行き詰まり",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。"
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。",
+  "Using the web": "ウェブを使う",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "このページではウェブを使えないため、上の下書きはウェブなしで書かれました。エクスポートしたプログラムはウェブを使います。",
+  "Web address in the task": "タスク内のウェブアドレス",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。"
  },
  "examples": {
   "review": {
@@ -3000,6 +3004,8 @@
   "{n} of them can change things": "うち {n} 個は変更を加えられます",
   "Review stuck": "レビューが行き詰まりました",
   "stuck": "行き詰まり",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。"
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。",
+  "Web address in the task": "タスク内のウェブアドレス",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。"
  }
 }

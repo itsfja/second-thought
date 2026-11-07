@@ -186,7 +186,7 @@
    "tooltip": "Führt die Blöcke darunter aus, wenn eine neue Datei in diesem Ordner landet (neben dem Programm, außer Sie geben einen vollen Pfad an). „Was ankam“ liefert Name, Pfad, Größe und bei PDF, Word- oder Textdatei die Wörter darin. Bei einem Bild liefert „picture“ es an die Bildblöcke."
   },
   "rb_generate": {
-   "message0": "ersten Entwurf schreiben",
+   "message0": "ersten Entwurf schreiben %1 mit dem Web",
    "tooltip": "Claude schreibt einen Entwurf, der die Aufgabe erfüllt."
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "Eine Prüfung. Verwenden Sie danach „Entwurf hat die Prüfung bestanden“ und „Probleme der Prüfung“."
   },
   "rb_revise": {
-   "message0": "überarbeiten, um die Probleme der Prüfung zu beheben",
+   "message0": "überarbeiten, um die Probleme der Prüfung zu beheben %1 mit dem Web",
    "tooltip": "Claude behebt die Probleme, die die letzte Prüfung gefunden hat."
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "Text in {n} Blöcken geändert.",
   "Review stuck": "Prüfung steckt fest",
   "stuck": "festgefahren",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Die Prüfung hat nach zwei Überarbeitungen dieselben Probleme genannt, also kann Überarbeiten sie nicht beheben. Dem Programm fehlt vielleicht etwas, das es nicht bekommen hat, etwa eine Webseite, eine Datei oder eine Tatsache: Gib es ihm (zum Beispiel in der Aufgabe oder über einen Agenten, der Webseiten lesen kann) und starte es dann neu."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Die Prüfung hat nach zwei Überarbeitungen dieselben Probleme genannt, also kann Überarbeiten sie nicht beheben. Dem Programm fehlt vielleicht etwas, das es nicht bekommen hat, etwa eine Webseite, eine Datei oder eine Tatsache: Gib es ihm (zum Beispiel in der Aufgabe oder über einen Agenten, der Webseiten lesen kann) und starte es dann neu.",
+  "Using the web": "Mit dem Web",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Diese Seite kann das Web nicht nutzen, also wurde der Entwurf oben ohne es geschrieben. Das exportierte Programm nutzt das Web.",
+  "Web address in the task": "Webadresse in der Aufgabe",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Die Aufgabe nennt eine Webadresse, aber dieser Schritt kann sie nicht öffnen. Hake am Block 'mit dem Web' an oder setze den Text der Seite in die Aufgabe."
  },
  "examples": {
   "review": {
@@ -3000,6 +3004,8 @@
   "{n} of them can change things": "{n} davon können etwas ändern",
   "Review stuck": "Prüfung steckt fest",
   "stuck": "festgefahren",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Die Prüfung hat nach zwei Überarbeitungen dieselben Probleme genannt, also kann Überarbeiten sie nicht beheben. Dem Programm fehlt vielleicht etwas, das es nicht bekommen hat, etwa eine Webseite, eine Datei oder eine Tatsache: Gib es ihm (zum Beispiel in der Aufgabe oder über einen Agenten, der Webseiten lesen kann) und starte es dann neu."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Die Prüfung hat nach zwei Überarbeitungen dieselben Probleme genannt, also kann Überarbeiten sie nicht beheben. Dem Programm fehlt vielleicht etwas, das es nicht bekommen hat, etwa eine Webseite, eine Datei oder eine Tatsache: Gib es ihm (zum Beispiel in der Aufgabe oder über einen Agenten, der Webseiten lesen kann) und starte es dann neu.",
+  "Web address in the task": "Webadresse in der Aufgabe",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Die Aufgabe nennt eine Webadresse, aber dieser Schritt kann sie nicht öffnen. Hake am Block 'mit dem Web' an oder setze den Text der Seite in die Aufgabe."
  }
 }

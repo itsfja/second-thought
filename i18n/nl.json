@@ -186,7 +186,7 @@
    "tooltip": "Voert de blokken eronder uit wanneer er een nieuw bestand in deze map komt (naast het programma, tenzij je een volledig pad opgeeft). ‘Wat er binnenkwam’ geeft de naam, het pad, de grootte en, bij een pdf, Word- of tekstbestand, de woorden erin. Bij een afbeelding geeft ‘picture’ die aan de afbeeldingsblokken."
   },
   "rb_generate": {
-   "message0": "een eerste concept schrijven",
+   "message0": "een eerste concept schrijven %1 met het web",
    "tooltip": "Claude schrijft een concept dat de taak uitvoert."
   },
   "rb_gh_issue_when": {
@@ -417,7 +417,7 @@
    "tooltip": "Eén beoordeling. Gebruik daarna ‘concept is door de beoordeling gekomen’ en ‘problemen uit de beoordeling’."
   },
   "rb_revise": {
-   "message0": "herzien om de problemen uit de beoordeling op te lossen",
+   "message0": "herzien om de problemen uit de beoordeling op te lossen %1 met het web",
    "tooltip": "Claude lost de problemen op die de laatste beoordeling vond."
   },
   "rb_rework": {
@@ -1456,7 +1456,11 @@
   "Text changed in {n} blocks.": "Tekst gewijzigd in {n} blokken.",
   "Review stuck": "Beoordeling loopt vast",
   "stuck": "vastgelopen",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit.",
+  "Using the web": "Met het web",
+  "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Deze pagina kan het web niet gebruiken, dus het concept hierboven is zonder geschreven. Het geëxporteerde programma gebruikt het web.",
+  "Web address in the task": "Webadres in de taak",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak."
  },
  "examples": {
   "review": {
@@ -3000,6 +3004,8 @@
   "{n} of them can change things": "{n} daarvan kunnen iets veranderen",
   "Review stuck": "Beoordeling loopt vast",
   "stuck": "vastgelopen",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit."
+  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit.",
+  "Web address in the task": "Webadres in de taak",
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak."
  }
 }
