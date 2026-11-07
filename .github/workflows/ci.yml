@@ -62,9 +62,16 @@ jobs:
         # The page's own functions in Node, no browser: seconds (tests/editor).
         run: node --test "tests/editor/*.test.cjs"
 
+  # The suite runs in three parts side by side, each on its own runner, so the stand-in services' fixed ports never
+  # clash. page and python both begin with the same page run (python checks what the page exported).
   test:
     needs: changes
     if: needs.changes.outputs.code == 'true'
+    name: test (${{ matrix.areas }})
+    strategy:
+      fail-fast: false
+      matrix:
+        areas: [ "page", "python", "sources i18n gallery" ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -80,11 +87,16 @@ jobs:
       - name: Run tests
         run: |
           bash tests/setup.sh
-          python tests/run_tests.py
+          python tests/run_tests.py ${{ matrix.areas }}
 
   windows:
     needs: changes
     if: needs.changes.outputs.code == 'true'
+    name: windows (${{ matrix.areas }})
+    strategy:
+      fail-fast: false
+      matrix:
+        areas: [ "page", "python", "sources i18n gallery" ]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v5
@@ -100,7 +112,7 @@ jobs:
           PYTHONUTF8: "0"
         run: |
           set +e
-          { bash tests/setup.sh && python tests/run_tests.py; } > test-output.txt 2>&1
+          { bash tests/setup.sh && python tests/run_tests.py ${{ matrix.areas }}; } > test-output.txt 2>&1
           status=$?
           cat test-output.txt
           if [ $status -ne 0 ]; then
@@ -110,6 +122,6 @@ jobs:
             out=$(tr -d '\r' < test-output.txt | grep -v "^  ok ")
             msg=$( (echo "$out" | grep -E "^  FAIL |Traceback|^[A-Za-z_.]*(Error|Exception)\b" | head -20; echo "-----"; echo "$out" | tail -40) | cut -c1-300)
             msg="${msg//'%'/'%25'}"; msg="${msg//$'\r'/}"; msg="${msg//$'\n'/'%0A'}"
-            echo "::error title=Windows test failures::$msg"
+            echo "::error title=Windows test failures (${{ matrix.areas }})::$msg"
           fi
           exit $status
