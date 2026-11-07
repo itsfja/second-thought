@@ -47,6 +47,9 @@ async def new_feature_page_tests(pg):
           f"'tokens used so far' gives a number, and a roomy budget lets the run finish ({status}, {items[-1:]})")
     usage = await pg.text_content(".result-usage") if await pg.query_selector(".result-usage") else ""
     check(re.search(r"that's (about £\d+\.\d\d|under £0\.01)", usage), f"with Currency set to pounds, the cost is shown in pounds ({usage[-110:]})")
+    ini = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}["second-thought.ini"].replace("\r\n", "\n")
+    set_lines = [ln for ln in ini.split("\n") if ln.split("=")[0].strip() == "currency"]
+    check(set_lines == ["currency = gbp"], f"the exported ini sets currency = gbp on a line of its own, its note on another (#338) ({set_lines})")
     await pg.select_option("#currency", "usd")
 
     print("Saving the run log")
