@@ -6126,7 +6126,9 @@ class Doctor:
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 tools = await self.mcp_tools(name)
                 text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
-                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True))
+                twak = mcp_is_twak(name, command)  # its tools carry no marks, so its own safe list says which only look (#320)
+                changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True)
+                              and not (twak and t.get("name") in SAFETY["mcp_twak_safe"]))
                 if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
                     text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}
