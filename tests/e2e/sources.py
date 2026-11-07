@@ -103,23 +103,25 @@ def _counts(what, found, actual, over=False):
 
 
 def docs_check():
-    """The numbers in README.md, ROADMAP.md and docs/ladybird-book.md match the sources: the runtime's module table,
+    """The numbers in README.md, the guide in docs/, CONTRIBUTING.md, ROADMAP.md and docs/ladybird-book.md match the
+    sources: the runtime's module table (in CONTRIBUTING.md since #345),
     and every count of examples, community programs, languages, model services or Home Assistant examples (#308).
     Counts drift as the project grows, so anything the docs count is checked against what it counts."""
     sys.path.insert(0, str(ROOT / "tools"))
     import sync as sync_tool
-    texts = [(ROOT / name).read_text(encoding="utf-8") for name in ("README.md", "ROADMAP.md", "docs/ladybird-book.md")]
+    docs = ["README.md", "CONTRIBUTING.md", "ROADMAP.md"] + sorted(str(p.relative_to(ROOT)) for p in (ROOT / "docs").glob("*.md"))
+    texts = [(ROOT / name).read_text(encoding="utf-8") for name in docs]
 
     # The module table lists exactly what python/second_thought/ holds, in tools/sync.py's join order.
-    readme = texts[0]
+    readme = texts[1]
     table = readme[readme.index("The runtime's modules, in the order"):readme.index("Each module starts with")]
     listed = re.findall(r"^\| `([a-z_]+)\.py` \|", table, re.M)
     check(listed == sync_tool.MODULES,
-          "README.md's module table lists every module in python/second_thought/, in tools/sync.py's join order "
+          "CONTRIBUTING.md's module table lists every module in python/second_thought/, in tools/sync.py's join order "
           f"(it lists: {', '.join(listed) or 'nothing'})")
     m = re.search(r"package of (\w+) modules", readme)
     check(m is not None and NUMBER_WORDS.get(m.group(1)) == len(sync_tool.MODULES),
-          f"README.md says 'a package of {m.group(1) if m else '…'} modules'; "
+          f"CONTRIBUTING.md says 'a package of {m.group(1) if m else '…'} modules'; "
           f"python/second_thought/ has {len(sync_tool.MODULES)}")
 
     # What the sources can count, and what the docs say about each.
@@ -139,6 +141,31 @@ def docs_check():
             len(re.findall(r"cat:HC\.", library)), over=True)
     _counts("group of Home Assistant examples", _said(rf"{_MAYBE_A_NUMBER} groups of Home Assistant examples", texts),
             len(set(re.findall(r'"(Home Assistant:[^"]+)"', library))))
+
+
+def links_check():
+    """Every relative link and #anchor in README.md, the guide in docs/, CONTRIBUTING.md, SECURITY.md and ROADMAP.md
+    leads somewhere: the file exists, and the heading it names is in it (#345). GitHub makes each heading's anchor by
+    lower-casing it, dropping punctuation and turning spaces into hyphens."""
+    def anchors(path):
+        text = re.sub(r"```.*?```", "", path.read_text(encoding="utf-8"), flags=re.S)
+        return {re.sub(r"\s", "-", re.sub(r"[^\w\s-]", "", h.strip().lower())) for h in re.findall(r"^#{1,6} (.+)$", text, re.M)}
+    pages = [ROOT / n for n in ("README.md", "CONTRIBUTING.md", "SECURITY.md", "ROADMAP.md")] + sorted((ROOT / "docs").glob("*.md"))
+    broken = []
+    for page in pages:
+        text = re.sub(r"```.*?```", "", page.read_text(encoding="utf-8"), flags=re.S)
+        targets = re.findall(r"\]\(([^)\s]+)\)", text) + re.findall(r'<img src="([^"]+)"', text)
+        for t in targets:
+            if re.match(r"^[a-z]+:", t):
+                continue
+            path, _, anchor = t.partition("#")
+            dest = (page.parent / path).resolve() if path else page
+            if not dest.exists():
+                broken.append(f"{page.relative_to(ROOT)}: {t}")
+            elif anchor and dest.suffix == ".md" and anchor not in anchors(dest):
+                broken.append(f"{page.relative_to(ROOT)}: {t} (no such heading)")
+    check(not broken, f"every link in the README, the guide, CONTRIBUTING, SECURITY and ROADMAP leads somewhere ({len(pages)} pages)"
+          + (": " + "; ".join(broken[:12]) if broken else ""))
 
 
 def sri_check():
