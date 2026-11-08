@@ -3014,6 +3014,7 @@
   "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Η απάντηση αναφέρει διευθύνσεις που αυτή η εκτέλεση δεν διάβασε ποτέ, οπότε έλεγξέ τες πριν βασιστείς σε αυτήν: {addresses}",
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "παραλείφθηκε {names}: οι ρυθμίσεις δεν αλλάζουν ποτέ ονόματα LD_, DYLD_ ή PYTHON, που αλλάζουν την εκκίνηση των προγραμμάτων",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "το {names} δεν είναι ρύθμιση που χρησιμοποιεί το Second Thought, οπότε έλεγξε την ορθογραφία. Αν το χρειάζεται ένας διακομιστής MCP ή μια εντολή που τρέχεις, είναι εντάξει.",
-  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "το {path} μπορούν να το διαβάσουν άλλοι σε αυτόν τον υπολογιστή. Για να μείνουν τα κλειδιά του δικά σου:  chmod 600 {path}"
+  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "το {path} μπορούν να το διαβάσουν άλλοι σε αυτόν τον υπολογιστή. Για να μείνουν τα κλειδιά του δικά σου:  chmod 600 {path}",
+  "Home Assistant sent something that isn't JSON ({e}).": "Το Home Assistant έστειλε κάτι που δεν είναι JSON ({e})."
  }
 }

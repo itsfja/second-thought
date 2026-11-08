@@ -37,7 +37,7 @@ USAGE = re.compile(r"([^·:]+?): ([\d,]+) tokens in, ([\d,]+) out")
 
 def model_envs(providers):
     names = set(MODEL_ENVS)
-    for name, pv in providers.items():
+    for pv in providers.values():
         if pv.get("key_env"):
             names.add(pv["key_env"])
         if pv.get("base_env"):

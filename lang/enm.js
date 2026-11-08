@@ -1880,7 +1880,8 @@
 "The answer cites addresses this run never read, so check them before relying on it: {addresses}":"The answere citeth adresses that this renne nevere radde, so loke on hem er thou truste it: {addresses}",
 "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"left out {names}: settinges nevere chaunge LD_, DYLD_ or PYTHON names, the whiche chaunge how programmes bigynne",
 "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} is no settinge that Second Thought useth, so loke wel to the spellinge. If an MCP servaunt or a comaundement that thou rennest nedeth it, that is wel.",
-"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"othere folk on this computour may rede {path}. To kepe his keyes to thee allone:  chmod 600 {path}"
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"othere folk on this computour may rede {path}. To kepe his keyes to thee allone:  chmod 600 {path}",
+"Home Assistant sent something that isn't JSON ({e}).":"Home Assistant sente somwhat that is nat JSON ({e})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

@@ -351,7 +351,7 @@ def _ics_repeats(start, rule, until_view):
     """Start times of a repeating event, up to the end of the view. Handles DAILY, WEEKLY (with BYDAY), MONTHLY, YEARLY,
     INTERVAL, COUNT and UNTIL: what calendars use for nearly every repeating event."""
     r = dict(part.split("=", 1) for part in rule.split(";") if "=" in part)
-    freq, step = r.get("FREQ", ""), max(1, int(r.get("INTERVAL", "1") or 1))
+    freq, step = r.get("FREQ", ""), max(1, int(r["INTERVAL"]) if r.get("INTERVAL", "").isdigit() else 1)  # a broken one: every time (#313)
     count = int(r["COUNT"]) if r.get("COUNT", "").isdigit() else None
     until = _ics_time(r["UNTIL"], {})[0] if r.get("UNTIL") else None
     if until is not None and len(r["UNTIL"]) == 8:
@@ -404,13 +404,13 @@ def calendar_events(text, start, end):
         if name in ("DTSTART", "DTEND", "RECURRENCE-ID"):
             try:
                 cur[name] = _ics_time(value, params)
-            except ValueError:
+            except (ValueError, OverflowError):
                 pass
         elif name == "EXDATE":
             for v in value.split(","):
                 try:
                     cur.setdefault("EXDATE", set()).add(_ics_time(v, params)[0])
-                except ValueError:
+                except (ValueError, OverflowError):
                     pass
         elif name in ("SUMMARY", "LOCATION", "RRULE", "UID", "STATUS", "DURATION"):
             cur[name] = _ics_unescape(value) if name in ("SUMMARY", "LOCATION") else value
@@ -421,20 +421,23 @@ def calendar_events(text, start, end):
     for e in events:
         if "DTSTART" not in e or e.get("STATUS", "").upper() == "CANCELLED":
             continue
-        s0, all_day = e["DTSTART"]
-        if "DTEND" in e:
-            length = e["DTEND"][0] - s0
-        else:
-            m = re.fullmatch(r"P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?", e.get("DURATION", ""))
-            length = datetime.timedelta(days=int(m.group(1) or 0), hours=int(m.group(2) or 0), minutes=int(m.group(3) or 0)) if m \
-                else datetime.timedelta(days=1 if all_day else 0)
-        starts = _ics_repeats(s0, e["RRULE"], end) if e.get("RRULE") and "RECURRENCE-ID" not in e else [s0]
-        for st in starts:
-            if st in e.get("EXDATE", ()) or (("RECURRENCE-ID" not in e) and (e.get("UID"), st) in moved):
-                continue
-            if st + length > start and st < end or (length == datetime.timedelta(0) and start <= st < end):
-                out.append({"start": st, "end": st + length, "all_day": all_day, "title": e.get("SUMMARY", "(no title)"),
-                            "location": e.get("LOCATION", "")})
+        try:
+            s0, all_day = e["DTSTART"]
+            if "DTEND" in e:
+                length = e["DTEND"][0] - s0
+            else:
+                m = re.fullmatch(r"P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?", e.get("DURATION", ""))
+                length = datetime.timedelta(days=int(m.group(1) or 0), hours=int(m.group(2) or 0), minutes=int(m.group(3) or 0)) if m \
+                    else datetime.timedelta(days=1 if all_day else 0)
+            starts = _ics_repeats(s0, e["RRULE"], end) if e.get("RRULE") and "RECURRENCE-ID" not in e else [s0]
+            for st in starts:
+                if st in e.get("EXDATE", ()) or (("RECURRENCE-ID" not in e) and (e.get("UID"), st) in moved):
+                    continue
+                if st + length > start and st < end or (length == datetime.timedelta(0) and start <= st < end):
+                    out.append({"start": st, "end": st + length, "all_day": all_day, "title": e.get("SUMMARY", "(no title)"),
+                                "location": e.get("LOCATION", "")})
+        except (ValueError, OverflowError):  # a broken date or rule: that event is left out, not the whole calendar (#313)
+            continue
     out.sort(key=lambda x: (x["start"], not x["all_day"]))
     return out
 

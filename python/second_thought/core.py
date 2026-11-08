@@ -776,6 +776,15 @@ class _WebSocket:
         await self._send(1, json.dumps(obj).encode())
 
     async def recv_json(self):
+        """The next message, as JSON. A connection that ends part-way, or a message that isn't JSON, is a RunError (#313)."""
+        try:
+            return await self._recv_json()
+        except asyncio.IncompleteReadError:
+            raise RunError(tr("Home Assistant closed the connection.")) from None
+        except ValueError as e:
+            raise RunError(tr("Home Assistant sent something that isn't JSON ({e}).", e=_short(str(e), 80))) from None
+
+    async def _recv_json(self):
         parts = []
         while True:
             b0, b1 = await self.reader.readexactly(2)

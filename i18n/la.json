@@ -3014,7 +3014,8 @@
   "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Responsum inscriptiones citat quas hic cursus numquam legit, itaque eas inspice priusquam ei confidis: {addresses}",
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "omissum {names}: praecepta numquam nomina LD_, DYLD_ aut PYTHON mutant, quae modum quo programmata incipiunt mutant",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} praeceptum non est quo Second Thought utitur: scripturam inspice. Si servus MCP aut iussum quod agis eo eget, bene est.",
-  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "alii in hoc computatro {path} legere possunt. Ut claves eius tibi soli serventur:  chmod 600 {path}"
+  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "alii in hoc computatro {path} legere possunt. Ut claves eius tibi soli serventur:  chmod 600 {path}",
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant aliquid misit quod JSON non est ({e})."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

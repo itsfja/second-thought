@@ -1880,6 +1880,7 @@
 "The answer cites addresses this run never read, so check them before relying on it: {addresses}":"回答に、この実行で一度も読んでいないアドレスが引用されています。頼る前に確認してください: {addresses}",
 "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"{names} を飛ばしました: 設定は LD_、DYLD_、PYTHON の名前を変えません。これらはプログラムの起動を変えるからです",
 "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} は Second Thought が使う設定ではありません。綴りを確かめてください。MCP サーバーや実行するコマンドが使うなら問題ありません。",
-"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"{path} はこのコンピューターの他の人が読めます。鍵を自分だけのものにするには:  chmod 600 {path}"
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"{path} はこのコンピューターの他の人が読めます。鍵を自分だけのものにするには:  chmod 600 {path}",
+"Home Assistant sent something that isn't JSON ({e}).":"Home Assistant が JSON ではないものを送ってきました ({e})。"
 }
 };
