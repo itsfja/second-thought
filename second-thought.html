@@ -11070,7 +11070,8 @@ HOW TO MAP CODE
     for (var i = 0; i < wanted.length; i++) { if (wanted[i] === "en" || (langs[wanted[i]] && /^[a-z]{2,3}$/.test(wanted[i]))) { lang = wanted[i]; break; } }
     window.ST_LANG = lang;
     window.ST_LANG_NAME = (langs[lang] && langs[lang].name) || lang;
-    if (lang !== "en") document.write('<script src="lang/' + lang + '.js"><\/script>');
+    // (the offline copy, tools/offline.py, already has every language's words inside, #314)
+    if (lang !== "en" && !(window.ST_I18N_FILES || {})[lang]) document.write('<script src="lang/' + lang + '.js"><\/script>');
   })();
 </script>
 <script>
@@ -11086,7 +11087,9 @@ HOW TO MAP CODE
     var msgSri = {};
     try { msgSri = JSON.parse(document.getElementById("sri").textContent || "{}"); } catch(e) {}
     msgSri = (msgSri.blocklyMsg || {})[(window.ST_I18N || {}).blockly] || "";
-    if (window.ST_I18N && window.ST_I18N.blockly)
+    var inside = window.ST_I18N && (window.ST_BLOCKLY_MSG || {})[window.ST_I18N.blockly];  // the offline copy's (#314)
+    if (inside) inside();
+    else if (window.ST_I18N && window.ST_I18N.blockly)
       document.write('<script src="https://cdn.jsdelivr.net/npm/blockly@13.4.0/msg/' + window.ST_I18N.blockly + '.js"'
         + (msgSri ? ' integrity="' + msgSri + '" crossorigin="anonymous"' : '') + '><\/script>');
     /* A script many computers have no font for (Linear B, Devanagari, cuneiform) names one in its i18n file: loaded from Google Fonts for that

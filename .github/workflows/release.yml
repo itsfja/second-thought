@@ -49,3 +49,25 @@ jobs:
           sha256sum runtime.py > runtime.py.sha256
           cat runtime.py.sha256
           gh release upload "$TAG" runtime.py runtime.py.sha256 --clobber --repo "${{ github.repository }}"
+
+  offline:
+    # The page as one file that works with no network (#314): tools/offline.py puts Blockly and every language inside,
+    # each library checked against its fingerprint in tools/sri.json.
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Fetch the libraries the page loads (the tests' set-up, so the versions are the page's)
+        run: bash tests/setup.sh
+      - name: Attach second-thought-offline.html
+        shell: bash
+        run: |
+          python tools/offline.py second-thought-offline.html
+          gh release upload "$TAG" second-thought-offline.html --clobber --repo "${{ github.repository }}"

@@ -14,6 +14,8 @@
 
 **A copy on your own computer.** Clone the repository and serve its folder, for instance `python -m http.server` in it, then open `http://localhost:8000/second-thought.html`. It works like the GitHub Pages copy, but with no limit on which addresses it may call, so the **Address** box can point anywhere, such as a server at work.
 
+**With no network.** Each [release](https://github.com/itsfja/second-thought/releases/latest) has **second-thought-offline.html**: the page as one file, with Blockly and every language inside. Open it from your disk and it builds, explains and exports programs with no connection at all; it runs them with your own key, as the GitHub Pages copy does, when you're online. Reading PDFs needs the network, as do the fonts for Linear B, cuneiform, hieroglyphs and Coptic.
+
 Each block is one instruction, like *write a first draft*, *review the draft against …* or *revise to fix the review's problems*. Drag blocks from the categories on the left and click them together. Only blocks under a **when Run is clicked** or **when I receive** hat run, top to bottom; separate scripts run side by side. Click any white slot to type into it. Round slots take values, hexagon slots take yes/no conditions.
 
 The blocks are colour-coded by job:
