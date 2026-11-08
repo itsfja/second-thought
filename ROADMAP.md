@@ -36,6 +36,8 @@ Released in 3.11.0: Trust Wallet through its Agent Kit's MCP server, with money 
 
 Released in 3.12.0: drafts and revisions can use the web, and say so when a task names an address they can't open ([#332](https://github.com/itsfja/second-thought/issues/332)); a review loop stops when the review keeps raising the same problems, and says what's probably missing ([#331](https://github.com/itsfja/second-thought/issues/331)). The README became a short front page with pictures, with the detail in a guide in `docs/` ([#345](https://github.com/itsfja/second-thought/issues/345)).
 
+Released in 3.13.0: agents say where each fact came from, and flag a source they never read ([#312](https://github.com/itsfja/second-thought/issues/312)); the files a program keeps are only yours, and settings can't set `LD_PRELOAD` and friends ([#307](https://github.com/itsfja/second-thought/issues/307)); Ruff in CI, and fuzz tests that found and fixed three crashes on broken input ([#313](https://github.com/itsfja/second-thought/issues/313)). Off claude.ai, the page runs programs with the model service of your choice and your own key ([#321](https://github.com/itsfja/second-thought/issues/321)), and each release has **second-thought-offline.html**, the page as one file that works with no network ([#314](https://github.com/itsfja/second-thought/issues/314)). CI runs the exported programs in three shares side by side ([#342](https://github.com/itsfja/second-thought/issues/342)).
+
 ## Later: important, not urgent
 
 | | Benefit | Cost |
