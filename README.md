@@ -70,7 +70,7 @@ New to all this? [**The picture book**](docs/ladybird-book.md) is a gentle, Lady
 </tr>
 </table>
 
-It also speaks 24 other languages besides English, from Spanish, Japanese and Classical Chinese to Akkadian in cuneiform ([Languages](docs/using-the-page.md#languages)), and works with 15 model services, with backups if one is down ([Models](docs/settings.md#models)).
+It also speaks 25 other languages besides English, from Spanish, Japanese and Classical Chinese to Akkadian in cuneiform ([Languages](docs/using-the-page.md#languages)), and works with 15 model services, with backups if one is down ([Models](docs/settings.md#models)).
 
 ## Read more
 
