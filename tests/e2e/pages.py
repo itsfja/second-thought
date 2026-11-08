@@ -40,17 +40,36 @@ async def pages_tests():
         policy = re.search(r'http-equiv="Content-Security-Policy" content="([^"]+)"', index)
         policy = policy.group(1) if policy else ""
         connect = next((d for d in policy.split("; ") if d.startswith("connect-src")), "")
-        check(connect == "connect-src 'self' https://api.anthropic.com https://cdnjs.cloudflare.com" and "'unsafe-inline'" not in policy.split("style-src")[0]
-              and policy.count("'sha256-") == len(pages_tool.INLINE_SCRIPT.findall(index)),
-              f"the copy has a Content-Security-Policy: connections only to itself, Claude's API and the CDN the PDF reader's bytes are fetched from to check them, inline scripts by hash ({connect})")
+        hosts = connect.split()[1:]
+        check(hosts[:2] == ["'self'", "https://api.anthropic.com"] and hosts[-1] == "https://cdnjs.cloudflare.com"
+              and {"https://api.mistral.ai", "https://api.openai.com", "https://openrouter.ai", "http://localhost:*"} <= set(hosts)
+              and all(h.startswith(("https://api.", "https://openrouter.ai", "https://router.", "https://dashscope", "http://localhost:", "http://127.0.0.1:", "https://cdnjs.")) for h in hosts[1:])
+              and "'unsafe-inline'" not in policy.split("style-src")[0] and policy.count("'sha256-") == len(pages_tool.INLINE_SCRIPT.findall(index)),
+              f"the copy has a Content-Security-Policy: connections only to itself, Claude's API, the model services you can give a key for and one on this computer (#321), and the CDN the PDF reader's bytes are fetched from, inline scripts by hash ({connect})")
         check(index.startswith("<!doctype html>") and '<meta charset="utf-8">' in index and 'name="viewport"' in index
               and len(langs) == len(list((ROOT / "lang").glob("*.js"))) and (site / ".nojekyll").exists(),
               f"tools/pages.py builds index.html as a whole document, with every language beside it ({len(langs)})")
 
         calls, api = [], {"status": 200, "reply": None}
+        svc_calls, svc = [], {"status": 200, "reply": None}
 
         async def serve(r):
             u = r.request.url
+            if u in ("https://api.mistral.ai/v1/chat/completions", "http://localhost:11434/v1/chat/completions"):
+                # a stand-in for a service that speaks OpenAI's chat format and allows browsers (#321)
+                cors = {"access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-allow-methods": "POST"}
+                if r.request.method == "OPTIONS":
+                    return await r.fulfill(status=204, headers=cors)
+                body = json.loads(r.request.post_data or "{}")
+                svc_calls.append({"url": u, "headers": await r.request.all_headers(), "body": body})
+                if svc["status"] != 200:
+                    return await r.fulfill(status=svc["status"], headers=cors, content_type="application/json",
+                                           body=json.dumps({"error": {"message": "Unauthorized"}}))
+                prompt = str(body["messages"][-1]["content"])
+                reply = svc["reply"] if svc["reply"] is not None else "<think>hmm</think>SVC(" + prompt[:20] + ")"
+                return await r.fulfill(status=200, headers=cors, content_type="application/json", body=json.dumps(
+                    {"choices": [{"message": {"role": "assistant", "content": reply}, "finish_reason": "stop"}],
+                     "usage": {"prompt_tokens": 123, "completion_tokens": 45}}))
             if u == "https://api.anthropic.com/v1/messages":  # a stand-in for Claude's API, which allows browsers that ask
                 cors = {"access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-allow-methods": "POST"}
                 if r.request.method == "OPTIONS":
@@ -164,6 +183,60 @@ async def pages_tests():
             local = await pg.evaluate("JSON.stringify(Object.entries(localStorage))")
             check(KEY.encode() not in zipped and "WXYZ" not in saved and KEY not in local,
                   "the key isn't in the exported Python, the saved block file or what the page keeps in the browser")
+
+            # Another service with your own key (#321): the Model menu's choice answers itself, at its exact token counts
+            MKEY = "mistral-key-" + "m" * 20 + "QRST"
+            mistral = await pg.evaluate("() => [...document.querySelectorAll('#tier option')].map(o => o.value).find(v => v.startsWith('mistral-'))")
+            await pg.select_option("#tier", mistral)
+            await pg.click("#own-key")
+            chosen = await pg.input_value("#own-key-service")
+            check(chosen == "mistral" and await pg.is_visible("#own-key-base"), f"the key panel opens on the Model menu's service, with an address box ({chosen})")
+            await pg.fill("#own-key-input", MKEY)
+            await pg.click("#own-key-use")
+            text = await pg.text_content("#offsite")
+            check("\u2026QRST" in text and "\u2026WXYZ" in text and MKEY not in text, f"the bar lists both keys, by their last four characters ({text.strip()[:120]})")
+            await load_state(pg, script(add(val(blk("rb_ask", inputs={"TEXT": tx("What rhymes with rye?")})))))
+            before = len(calls)
+            status = await run_program(pg)
+            results = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+            steps = json.dumps(await step_texts(pg))
+            usage = " ".join(await pg.eval_on_selector_all(".result-usage", "e => e.map(x => x.textContent)"))
+            h = svc_calls[-1]["headers"] if svc_calls else {}
+            check(svc_calls and svc_calls[-1]["url"].startswith("https://api.mistral.ai/") and h.get("authorization") == "Bearer " + MKEY
+                  and svc_calls[-1]["body"]["model"].startswith("mistral") and len(calls) == before
+                  and any(x.startswith("SVC(") for x in results) and "standing in" not in steps,
+                  f"Run with Mistral chosen calls Mistral with its key, not Claude, and its answer (thinking removed) is the result ({status}; {results})")
+            check("168 tokens (123 sent, 45 received), as the services counted them" in usage, f"the token counts are Mistral's own, not estimates ({usage[:120]})")
+            check(MKEY not in json.dumps([c["headers"] for c in calls]), "the Mistral key never goes to Claude's API")
+            svc["status"] = 401
+            await run_program(pg)
+            said = (await pg.text_content("#banner") or "") + json.dumps(await step_texts(pg))
+            check("Mistral refused your API key" in said, f"a refused key says which service refused it ({said[:160]})")
+            svc["status"] = 200
+            await pg.click("#io-toggle")
+            async with pg.expect_download() as got:
+                await pg.click("#io-py-save")
+            zipped = pathlib.Path(await (await got.value).path()).read_bytes()
+            await pg.click("#io-toggle")
+            local = await pg.evaluate("JSON.stringify(Object.entries(localStorage))")
+            check(MKEY.encode() not in zipped and MKEY not in local, "the Mistral key isn't in the export or what the page keeps (it's for this tab only)")
+
+            # Only a key for Llama on this computer, and no Claude: runs still start, and a Claude step says why it can't
+            await pg.click("#own-key-forget")
+            llama = await pg.evaluate("() => [...document.querySelectorAll('#tier option')].map(o => o.value).find(v => v.startsWith('llama-'))")
+            await pg.select_option("#tier", llama)
+            await pg.click("#own-key")
+            await pg.fill("#own-key-base", "http://localhost:11434/v1")
+            await pg.click("#own-key-use")
+            await run_program(pg)
+            results = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+            check(svc_calls[-1]["url"].startswith("http://localhost:11434/") and "authorization" not in svc_calls[-1]["headers"]
+                  and any(x.startswith("SVC(") for x in results),
+                  f"with no Claude, a Llama server on this computer runs the program, with no key needed ({results})")
+            await pg.select_option("#tier", "default")
+            await run_program(pg)
+            said = (await pg.text_content("#banner") or "") + json.dumps(await step_texts(pg))
+            check("This step uses Claude, which this page can't reach" in said, f"a step that needs Claude says so ({said[:160]})")
 
             await pg.click("#own-key-forget")
             stored = await pg.evaluate("k => [sessionStorage.getItem(k), localStorage.getItem(k)]", "second-thought-anthropic-key")

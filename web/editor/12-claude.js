@@ -340,38 +340,156 @@
     f.ownKey = true;
     return f;
   }
-  // The offsite banner's key controls: "Use your own API key", and once one is given, which key and "Forget my key".
+  /* ---------- Other model services, off claude.ai (#321) ----------
+     Off claude.ai, a program can run with the model service chosen in the Model menu, not only Claude: any service that
+     speaks OpenAI's chat format (twelve of them, Llama through Ollama among them), with your own key for it. Each key
+     goes only from this browser to its own service's address, or to the address you give (Ollama or LM Studio on this
+     computer, say). It's kept like the Anthropic key: for this tab unless Remember is ticked, never in programs, exports
+     or the run log. The calls are the exported program's own (python/second_thought/providers.py, _call_openai), so a
+     service behaves the same on the page as in Python. Building and changing programs stay with Claude. */
+  const SVC_KEY = "second-thought-key-";
+  const browserServices = () => SERVICES.filter(s => s.api === "openai");
+  const svcSlug = s => s.prefix.replace(/[-:]+$/, "");
+  const svcWho = s => s.who || s.name;
+  const isLocal = base => /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(base || "");
+  const svcKeys = {
+    get(s){
+      for (const st of ["sessionStorage", "localStorage"]) {
+        try { const v = window[st].getItem(SVC_KEY + svcSlug(s)); if (v) { const o = JSON.parse(v); if (o && typeof o === "object") return o; } } catch(e) {}
+      }
+      return null;
+    },
+    set(s, entry, remember){
+      svcKeys.forget(s);
+      try { window[remember ? "localStorage" : "sessionStorage"].setItem(SVC_KEY + svcSlug(s), JSON.stringify(entry)); } catch(e) { return false; }
+      return true;
+    },
+    forget(s){ for (const st of ["sessionStorage", "localStorage"]) { try { window[st].removeItem(SVC_KEY + svcSlug(s)); } catch(e) {} } },
+    all(){ return browserServices().map(s => [s, svcKeys.get(s)]).filter(x => x[1]); }
+  };
+  // The key (and address) this page can call a service with, or null: only off claude.ai, where nothing changes (#321).
+  const pageKeyFor = s => (!s || (window.claude && window.claude.use) || s.api !== "openai") ? null : svcKeys.get(s);
+  // A service's own refusal, in words: which service, and what to do.
+  function serviceError(s, status, body){
+    const who = svcWho(s), msg = String((body && body.error && (body.error.message || body.error)) || (body && body.message) || "").slice(0, 300);
+    if (status === 401 || status === 403) return { code:"user", message:tr("{who} refused your API key. Check it, or forget it and enter it again.", { who }) };
+    if (status === 402 || /credit|balance|quota|billing/i.test(msg)) return { code:"user", message:tr("{who} says this key's account has no credit left: {problem}", { who, problem:msg || "HTTP " + status }) };
+    if (status === 429) return { code:"retryable", message:tr("{who} says too many requests right now. Wait a minute and run again.", { who }) };
+    if (status >= 500) return { code:"retryable", message:tr("{who} is having trouble right now ({problem}). Run again in a moment.", { who, problem:msg || "HTTP " + status }) };
+    return { code:"user", message:tr("{who} refused the request ({problem}).", { who, problem:msg || "HTTP " + status }) };
+  }
+  // One call to a service that speaks OpenAI's chat format, as the exported program makes it.
+  async function serviceCall(s, entry, tier, input, o, system){
+    const size = (/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1];
+    const model = s.any_model && String(tier).startsWith(s.any_model) ? String(tier).slice(s.any_model.length) : (s.tiers[size] || s.tiers.default)[0];
+    const messages = (typeof input === "string" ? [{ role:"user", content:input }] : input).map(t => ({ role:t.role, content:String(t.content) }));
+    if (system) messages.unshift({ role:"system", content:system });
+    if (o.images && o.images.length) {
+      const last = messages[messages.length - 1], parts = [{ type:"text", text:last.content }];
+      for (const b of o.images) parts.push({ type:"image_url", image_url:{ url:"data:" + (b.type || "image/png") + ";base64," + await blobBase64(b) } });
+      last.content = parts;
+    }
+    const body = { model, messages, stream:false };
+    if (s.name === "OpenAI") body.max_completion_tokens = API_MAX_TOKENS; else body.max_tokens = API_MAX_TOKENS;
+    if (s.name === "Qwen") body.enable_thinking = false;
+    const base = String(entry.base || s.base || "").replace(/\/+$/, ""), host = base.replace(/^https?:\/\//, "").split("/")[0];
+    const headers = { "content-type":"application/json" };
+    if (entry.key) headers.authorization = "Bearer " + entry.key;
+    let resp;
+    try { resp = await fetch(base + "/chat/completions", { method:"POST", signal:o.signal, headers, body:JSON.stringify(body) }); }
+    catch(e) {
+      if (e && e.name === "AbortError") throw { code:"cancelled" };
+      throw { code:"user", message:isLocal(base)
+        ? tr("Nothing answered at {base}. Is the server running? For Ollama, start it with OLLAMA_ORIGINS=* ollama serve so this page may call it.", { base })
+        : tr("{host} couldn't be reached from this page. Check your connection; if it keeps happening, {who} may not accept calls straight from a browser, and the exported program can use it instead.", { host, who:svcWho(s) }) };
+    }
+    let data = null;
+    try { data = await resp.json(); } catch(e) {}
+    if (!resp.ok) throw serviceError(s, resp.status, data);
+    const choice = data && data.choices && data.choices[0];
+    const text = String((choice && choice.message && choice.message.content) || "").replace(/<think>[\s\S]*?<\/think>\s*/g, "").trim();
+    if (!text) throw { code:"user", message:tr("{who} returned nothing for this step. Simplify it and try again.", { who:svcWho(s) }) };
+    const u = (data && data.usage) || {};
+    return { text, truncated:!!choice && choice.finish_reason === "length", model,
+             usage:Number.isFinite(u.prompt_tokens) && Number.isFinite(u.completion_tokens) ? { in:u.prompt_tokens, out:u.completion_tokens } : null };
+  }
+  // A reply that should be JSON, read the way Claude's are (a fence or a few words around it are forgiven).
+  function readJsonReply(text){
+    const t = String(text).trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+    try { return JSON.parse(t); } catch(e) {}
+    const a = t.search(/[[{]/), z = Math.max(t.lastIndexOf("}"), t.lastIndexOf("]"));
+    if (a >= 0 && z > a) { try { return JSON.parse(t.slice(a, z + 1)); } catch(e) {} }
+    throw { code:"invalid_json", message:"The reply wasn't readable JSON.", text };
+  }
+  // When there's no Claude here but there are keys for other services: runs can start, and a step that needs Claude says so.
+  function noClaudeSample(){
+    const f = async () => { throw { code:"user", message:tr("This step uses Claude, which this page can't reach: open it in claude.ai, add your Anthropic key from the bar at the top, or choose a model you have a key for.") }; };
+    f.json = f;
+    f.limits = async () => ({ maxPromptBytes:262144, images:{ maxCount:10, maxInputBytes:5000000, mediaTypes:["image/jpeg", "image/png", "image/webp"] } });
+    f.noClaude = true;
+    return f;
+  }
+
+  // The offsite banner's key controls: "Use your own API key", and once one is given, which keys and "Forget my keys".
   // Off claude.ai, a "needs Claude" message says where else Claude can come from.
   const orOwnKey = () => (window.claude && window.claude.use) ? "" : " " + tr("Or use your own API key, from the bar at the top.");
   function showOwnKey(){
     if (window.claude && window.claude.use) return;
-    const key = ownKey.get();
-    $("offsite-text").textContent = key
-      ? tr("Programs run with your own API key ({key}), charged to its Anthropic account.", { key:ownKey.shown(key) })
+    const key = ownKey.get(), others = svcKeys.all();
+    const list = (key ? ["Claude (" + ownKey.shown(key) + ")"] : []).concat(others.map(([s, e]) => svcWho(s) + " (" + (e.key ? ownKey.shown(e.key) : (e.base || s.base)) + ")"));
+    $("offsite-text").textContent = list.length
+      ? tr("Programs run with your own keys: {keys}. Each is charged to its own account.", { keys:list.join(", ") })
       : tr("This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:");
-    $("offsite-link").hidden = !!key;
-    $("own-key").hidden = !!key || !$("own-key-panel").hidden;
-    $("own-key-forget").hidden = !key;
+    $("offsite-link").hidden = !!list.length;
+    $("own-key").textContent = tr(list.length ? "Add another key" : "Use your own API key");
+    $("own-key").hidden = !$("own-key-panel").hidden;
+    $("own-key-forget").hidden = !list.length;
   }
   if (!(window.claude && window.claude.use)) {
-    $("own-key").textContent = tr("Use your own API key");
-    $("own-key-forget").textContent = tr("Forget my key");
-    $("own-key-label").textContent = tr("Your Anthropic API key");
+    $("own-key-forget").textContent = tr("Forget my keys");
+    $("own-key-service-label").textContent = tr("Service");
+    $("own-key-base-label").textContent = tr("Address");
     $("own-key-remember-text").textContent = tr("Remember on this browser");
     $("own-key-use").textContent = tr("Use this key");
     $("own-key-cancel").textContent = tr("Cancel");
-    $("own-key-note").textContent = tr("The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.");
-    const close = () => { $("own-key-panel").hidden = true; $("own-key-input").value = ""; $("own-key-msg").textContent = ""; showOwnKey(); };
-    $("own-key").onclick = () => { $("own-key-panel").hidden = false; showOwnKey(); $("own-key-input").focus(); };
+    const sel = $("own-key-service");
+    [["claude", "Claude (Anthropic)"]].concat(browserServices().map(s => [svcSlug(s), s.key_label || svcWho(s)])).forEach(([v, label]) => {
+      const opt = document.createElement("option"); opt.value = v; opt.textContent = label; sel.appendChild(opt);
+    });
+    const chosen = () => browserServices().find(s => svcSlug(s) === sel.value) || null;
+    const fit = () => {
+      const s = chosen();
+      $("own-key-label").textContent = s ? tr("Your {who} API key", { who:svcWho(s) }) : tr("Your Anthropic API key");
+      $("own-key-input").placeholder = s ? (s.name === "Llama" ? tr("none needed for Ollama") : "") : "sk-ant-…";
+      $("own-key-base-row").hidden = !s;
+      $("own-key-base").placeholder = s ? s.base : "";
+      $("own-key-note").textContent = s
+        ? tr("The key goes only from this browser to {host} (or the address you give), and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log.", { host:String(s.base).replace(/^https?:\/\//, "").split("/")[0] })
+        : tr("The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.");
+      $("own-key-msg").textContent = "";
+    };
+    sel.onchange = fit;
+    // The Model menu's service, so the panel opens on the one the program runs with
+    const opening = () => { const s = serviceOf($("tier").value); sel.value = s && s.api === "openai" ? svcSlug(s) : "claude"; fit(); };
+    const close = () => { $("own-key-panel").hidden = true; $("own-key-input").value = ""; $("own-key-base").value = ""; $("own-key-msg").textContent = ""; showOwnKey(); };
+    $("own-key").onclick = () => { $("own-key-panel").hidden = false; opening(); showOwnKey(); $("own-key-input").focus(); };
     $("own-key-cancel").onclick = close;
     $("own-key-use").onclick = () => {
-      const key = $("own-key-input").value.trim();
-      if (!/^sk-ant-[\w-]{20,}$/.test(key)) { $("own-key-msg").textContent = tr("That doesn't look like an Anthropic API key. They start with sk-ant-."); return; }
-      if (!ownKey.set(key, $("own-key-remember").checked)) { $("own-key-msg").textContent = tr("This browser won't keep the key. Allow site data for this page, then try again."); return; }
+      const key = $("own-key-input").value.trim(), s = chosen(), remember = $("own-key-remember").checked;
+      if (!s) {
+        if (!/^sk-ant-[\w-]{20,}$/.test(key)) { $("own-key-msg").textContent = tr("That doesn't look like an Anthropic API key. They start with sk-ant-."); return; }
+        if (!ownKey.set(key, remember)) { $("own-key-msg").textContent = tr("This browser won't keep the key. Allow site data for this page, then try again."); return; }
+      } else {
+        const base = $("own-key-base").value.trim().replace(/\/+$/, "");
+        if (base && !/^https:\/\/[^\s/]+|^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(base)) { $("own-key-msg").textContent = tr("The address needs to start with https://, or be http://localhost on this computer."); return; }
+        if (!key && !(s.name === "Llama" || isLocal(base))) { $("own-key-msg").textContent = tr("Type the key first."); return; }
+        if (/\s/.test(key) || (key && key.length < 8)) { $("own-key-msg").textContent = tr("That doesn't look like an API key."); return; }
+        if (!svcKeys.set(s, { key, base }, remember)) { $("own-key-msg").textContent = tr("This browser won't keep the key. Allow site data for this page, then try again."); return; }
+      }
       samplePromise = null; showBanner(""); close();
     };
     $("own-key-input").onkeydown = e => { if (e.key === "Enter") $("own-key-use").click(); };
-    $("own-key-forget").onclick = () => { ownKey.forget(); samplePromise = null; showOwnKey(); };
+    $("own-key-forget").onclick = () => { ownKey.forget(); browserServices().forEach(s => svcKeys.forget(s)); samplePromise = null; showOwnKey(); };
     showOwnKey();
   }
   getSample();
