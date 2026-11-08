@@ -6,7 +6,7 @@
 "note":"Mycenaean Greek in Linear B. Linear B records only a few hundred words, all palace bookkeeping, so the wording is Greek built from ancient roots and spelled by Mycenaean spelling rules, using attested words where they exist (wa-na-ka, do-mo, a-to-po-qo, te-u-ke-a); it is not genuine Bronze Age text. The page shows Linear B signs (U+10000-U+100FF) in blocks, options, categories, labels, page, examples, starters and blocklyMsg, with the Noto Sans Linear B font named in \"font\"; python holds the standard transcription (ko-no-so), because terminals have no Linear B font. Names (Claude, Home Assistant), keys and placeholders stay in Latin letters. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
 "blocks":{
 "rb_add_result":{"message0":"𐀡𐀮𐀳𐀮 %1 𐀳𐀩𐀂"},
-"rb_agent":{"message0":"𐀁𐀠𐀵𐀫𐀡: 𐀸𐀐 𐀁𐀠 %1","message1":"𐀕𐀑 %1 𐀡𐀅, 𐀕𐀲 𐀵𐀂𐀆 𐀃𐀏𐀙:","message2":"%1","message3":"𐀡𐀁𐀮 𐀡𐀫𐀵 𐀐𐀇𐀍, 𐀏𐀂 𐀀𐀨𐀐 𐀀𐀵 𐀁𐀚 𐀃𐀈 %1","tooltip":"Claude 𐀓𐀪𐀚 𐀴 𐀡𐀁𐀮𐀂: 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀏𐀜 𐀁𐀚𐀵𐀰 𐀨𐀞𐀚, 𐀃𐀨𐀁 𐀴 𐀐𐀚𐀵, 𐀏𐀂 𐀡𐀫𐀣𐀂𐀚𐀁 𐀁𐀒𐀳 𐀳𐀫 𐀁𐀄𐀩𐀳𐀂 𐀁 𐀡𐀆 𐀞𐀄𐀰𐀲𐀂. 𐀀𐀡𐀑𐀪𐀯 𐀄𐀲𐀲 𐀁𐀚 𐀐𐀇𐀍. 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀚 𐀏𐀩𐀯 𐀶𐀡. 𐀁𐀚 “𐀡𐀁𐀮 𐀡𐀫𐀵 𐀐𐀇𐀍” 𐀮𐀔𐀵, 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀁𐀚 𐀡𐀫𐀵 𐀡𐀆 𐀏𐀂 𐀚𐀺 𐀢𐀨𐀭𐀁, 𐀀𐀚𐀄 𐀟𐀨 𐀃𐀜."},
+"rb_agent":{"message0":"𐀁𐀠𐀵𐀫𐀡: 𐀸𐀐 𐀁𐀠 %1","message1":"𐀕𐀑 %1 𐀡𐀅, 𐀕𐀲 𐀵𐀂𐀆 𐀃𐀏𐀙:","message2":"%1","message3":"𐀡𐀁𐀮 𐀡𐀫𐀵 𐀐𐀇𐀍, 𐀏𐀂 𐀀𐀨𐀐 𐀀𐀵 𐀁𐀚 𐀃𐀈 %1","tooltip":"Claude 𐀓𐀪𐀚 𐀴 𐀡𐀁𐀮𐀂: 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀏𐀜 𐀁𐀚𐀵𐀰 𐀨𐀞𐀚, 𐀃𐀨𐀁 𐀴 𐀐𐀚𐀵, 𐀏𐀂 𐀡𐀫𐀣𐀂𐀚𐀁 𐀁𐀒𐀳 𐀳𐀫 𐀁𐀄𐀩𐀳𐀂 𐀁 𐀡𐀆 𐀞𐀄𐀰𐀲𐀂. 𐀀𐀡𐀑𐀪𐀯 𐀄𐀲𐀲 𐀁𐀚 𐀐𐀇𐀍. 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀚 𐀏𐀩𐀯 𐀶𐀡. 𐀁𐀚 “𐀡𐀁𐀮 𐀡𐀫𐀵 𐀐𐀇𐀍” 𐀮𐀔𐀵, 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀁𐀚 𐀡𐀫𐀵 𐀡𐀆 𐀏𐀂 𐀚𐀺 𐀢𐀨𐀭𐀁, 𐀀𐀚𐀄 𐀟𐀨 𐀃𐀜.","message4":"𐀃𐀟𐀫 𐀁𐀳𐀃 𐀁𐀩𐀁 %1"},
 "rb_agent_builtin":{"message0":"𐀃𐀏𐀜: %1","tooltip":"𐀃𐀏𐀜 𐀁𐀵𐀂𐀗 𐀁𐀠𐀵𐀫𐀡𐀂. “𐀀𐀪𐀵𐀗 𐀫𐀑𐀽𐀁” 𐀏𐀂 “𐀃𐀨 𐀏𐀂 𐀀𐀔” 𐀇𐀈𐀯 𐀀𐀪𐀵𐀗 𐀏𐀂 𐀒𐀫𐀜 𐀃𐀫𐀲, 𐀃𐀄 𐀶𐀡 𐀁𐀂𐀏𐀽. “𐀏𐀨𐀔𐀲 𐀁𐀐𐀲𐀽𐀁” 𐀀𐀫𐀃 𐀁𐀐𐀮𐀲𐀳𐀩 𐀓𐀪𐀚 𐀁𐀠𐀵𐀫𐀡 𐀸𐀒. 𐀁𐀚 𐀵𐀵 𐀆𐀵, 𐀫𐀁, GitHub, Telegram, email 𐀏𐀂 𐀁𐀕𐀫𐀫𐀑𐀍 𐀞𐀨𐀆𐀓𐀔𐀲 𐀐𐀨𐀲𐀂; Python 𐀁𐀏𐀕𐀜 𐀐𐀨𐀲𐀂 𐀰𐀀 (𐀏𐀩𐀂𐀆 𐀁𐀚 second-thought.ini), 𐀏𐀂 𐀀𐀙𐀑𐀜𐀐 𐀇𐀓𐀶𐀃 𐀆𐀵 𐀀𐀩𐀳𐀃. 𐀟𐀟𐀁, 𐀁𐀠𐀏𐀨𐀟𐀁 𐀏𐀂 “𐀕𐀏𐀙 𐀓𐀟𐀩𐀙𐀁” 𐀁𐀫𐀲𐀃𐀯 𐀮 𐀡𐀫 𐀁𐀏𐀵, 𐀃𐀴 𐀃 𐀁𐀠𐀵𐀫𐀡 𐀀𐀙𐀑𐀜𐀐 (𐀇𐀓𐀶𐀃 𐀆𐀵, 𐀏𐀨𐀟) 𐀉𐀙𐀲𐀂 𐀀𐀵 𐀀𐀏𐀁. 𐀐𐀩𐀄 “𐀀𐀚𐀄 𐀁𐀫𐀲𐀔𐀵” 𐀗𐀜 𐀁 𐀠𐀮𐀶𐀁𐀂 𐀞𐀲 𐀃 𐀀𐀙𐀑𐀜𐀐. 𐀀𐀜𐀂𐀐𐀁 𐀏𐀨𐀹, 𐀀𐀜𐀂𐀐𐀁 𐀏𐀂 𐀀𐀡𐀃𐀠𐀪𐀽𐀁 𐀁𐀫𐀲𐀃𐀯 𐀀𐀂𐀁𐀂."},
 "rb_agent_mcp":{"message0":"𐀃𐀏𐀙 𐀀𐀢 MCP 𐀈𐀁𐀫 %1 %2","tooltip":"𐀇𐀈𐀯 𐀁𐀠𐀵𐀫𐀡𐀂 𐀞𐀲 𐀃𐀏𐀙 𐀃 MCP 𐀈𐀁𐀫 𐀞𐀩𐀐𐀂: 𐀳𐀄𐀐𐀀, GitHub, 𐀏𐀨𐀞𐀂, 𐀁𐀕𐀫𐀫𐀑𐀊 𐀏𐀂 𐀡𐀫𐀨, 𐀁𐀏 𐀞𐀵 MCP 𐀒𐀰𐀗. 𐀏𐀳𐀮𐀳 𐀈𐀁𐀫 𐀁𐀚 second-thought.ini 𐀃𐀄𐀵 MCP_<NAME> = 𐀐𐀩𐀄𐀔 𐀃 𐀀𐀏𐀁𐀂 𐀀𐀵 (𐀃𐀄𐀵 npx -y @modelcontextprotocol/server-filesystem ~/recipes) 𐀁 https:// 𐀵𐀡 𐀀𐀵. 𐀗𐀜 𐀁𐀚 Python 𐀁𐀏𐀕𐀜: 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃 𐀁𐀠𐀵𐀫𐀡 𐀸𐀐𐀂 𐀀𐀚𐀄 𐀵𐀵 𐀃𐀏𐀙."},
 "rb_agent_steps":{"message0":"𐀁𐀠𐀵𐀫𐀡 𐀡𐀆","tooltip":"𐀴 𐀃 𐀚𐀺𐀲𐀵 𐀁𐀠𐀵𐀫𐀡 𐀁𐀚 𐀵𐀲 𐀞𐀨𐀑𐀯 𐀁𐀡𐀁𐀮: 𐀏𐀲𐀫𐀒 𐀏𐀨𐀞𐀃 𐀕𐀲 step, tool, input, result 𐀏𐀂 status (done, bad input, tool error, refused, repeat, not 𐀀 tool, unreadable, empty answer, stopped, answer)."},
@@ -960,7 +960,9 @@
 "Using the web":"𐀟𐀨𐀲𐀫",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"𐀵𐀵 𐀞𐀑𐀙 𐀃𐀄𐀑 𐀟𐀨𐀲𐀫 𐀐𐀩𐀲, 𐀵𐀨𐀟𐀨𐀭𐀕𐀜 𐀀𐀚𐀄 𐀁𐀨𐀟. 𐀐𐀩𐀯𐀍 𐀁𐀏𐀨𐀵 𐀟𐀨𐀲𐀫 𐀐𐀩𐀲.",
 "Web address in the task":"𐀃𐀜𐀔 𐀟𐀨𐀲𐀫 𐀁𐀚 𐀁𐀏𐀨",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"𐀁𐀏𐀨 𐀃𐀜𐀔 𐀟𐀨𐀲𐀫 𐀁𐀩𐀁, 𐀃𐀄𐀑 𐀀𐀜𐀐 𐀵𐀵 𐀡𐀟. 𐀟𐀨𐀲𐀫 𐀁𐀠 𐀨𐀲 𐀏𐀨𐀟, 𐀁 𐀞𐀑𐀙 𐀺𐀏 𐀁𐀚 𐀁𐀏𐀨 𐀳𐀐."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"𐀁𐀏𐀨 𐀃𐀜𐀔 𐀟𐀨𐀲𐀫 𐀁𐀩𐀁, 𐀃𐀄𐀑 𐀀𐀜𐀐 𐀵𐀵 𐀡𐀟. 𐀟𐀨𐀲𐀫 𐀁𐀠 𐀨𐀲 𐀏𐀨𐀟, 𐀁 𐀞𐀑𐀙 𐀺𐀏 𐀁𐀚 𐀁𐀏𐀨 𐀳𐀐.",
+"Sources not read":"𐀞𐀑𐀙 𐀀𐀙𐀐𐀜𐀭",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"𐀀𐀡𐀒𐀪𐀯 𐀃𐀜𐀔 𐀁𐀩𐀁 𐀵𐀵 𐀃𐀄𐀑 𐀀𐀚𐀐𐀜, 𐀂𐀆 𐀞𐀫 𐀠𐀳𐀄𐀮: {addresses}"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1874,7 +1876,9 @@
 "stuck":"e-ke-to",
 "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"e-ke-se-ta-si me-ta du-wo e-pa-ke-se-ta to-to ko-ka-ta e-re-e, o-u-ki e-pa-ke-se-ta a-ke-ta-ne. ke-re-si-jo ma-ta pa-ro-te-ke o-u-ki e-to-ke, pa-ki-na, pu-ka-ta e-te-o: do-se to-to (e-ne e-ka-ra, e-to-ke a-ka-ta pa-ki-na e-re-u-ke-te), a-pa-ra e-po-pe.",
 "Web address in the task":"o-no-ma pe-ra-ta-ro e-ne e-ka-ra",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"e-ka-ra o-no-ma pe-ra-ta-ro e-re-e, o-u-ki a-no-ke to-to po-pe. pe-ra-ta-ro e-pi ra-ta ka-ra-pe, e pa-ki-na wo-ka e-ne e-ka-ra te-ke."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"e-ka-ra o-no-ma pe-ra-ta-ro e-re-e, o-u-ki a-no-ke to-to po-pe. pe-ra-ta-ro e-pi ra-ta ka-ra-pe, e pa-ki-na wo-ka e-ne e-ka-ra te-ke.",
+"Sources not read":"pa-ki-na a-na-ke-no-sa",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"a-po-ko-ri-si o-no-ma e-re-e to-to o-u-ki a-ne-ke-no, i-de pa-ro pi-te-u-se: {addresses}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

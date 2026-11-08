@@ -11,7 +11,8 @@
    "message1": "tot %1 stappen, met deze hulpmiddelen:",
    "message2": "%1",
    "message3": "eerst een plan maken en het onderweg bijstellen %1",
-   "tooltip": "Claude beslist wat er nu moet gebeuren: bij elke stap kiest hij een van de hulpmiddelen erin, ziet wat er gebeurde en gaat door tot het doel bereikt is of de stappen op zijn. Zijn eindantwoord komt in het concept. Elke stap is één modelaanroep. Met ‘eerst een plan maken’ aangevinkt schrijft hij bij zijn eerste stap een kort plan en houdt dat bij, zonder extra kosten."
+   "tooltip": "Claude beslist wat er nu moet gebeuren: bij elke stap kiest hij een van de hulpmiddelen erin, ziet wat er gebeurde en gaat door tot het doel bereikt is of de stappen op zijn. Zijn eindantwoord komt in het concept. Elke stap is één modelaanroep. Met ‘eerst een plan maken’ aangevinkt schrijft hij bij zijn eerste stap een kort plan en houdt dat bij, zonder extra kosten.",
+   "message4": "zeggen waar elk feit vandaan komt %1"
   },
   "rb_agent_builtin": {
    "message0": "hulpmiddel: %1",
@@ -1460,7 +1461,9 @@
   "Using the web": "Met het web",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Deze pagina kan het web niet gebruiken, dus het concept hierboven is zonder geschreven. Het geëxporteerde programma gebruikt het web.",
   "Web address in the task": "Webadres in de taak",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak.",
+  "Sources not read": "Bronnen niet gelezen",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Het antwoord noemt adressen die deze run nooit heeft gelezen, dus controleer ze voordat je erop vertrouwt: {addresses}"
  },
  "examples": {
   "review": {
@@ -3006,6 +3009,8 @@
   "stuck": "vastgelopen",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit.",
   "Web address in the task": "Webadres in de taak",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak.",
+  "Sources not read": "Bronnen niet gelezen",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Het antwoord noemt adressen die deze run nooit heeft gelezen, dus controleer ze voordat je erop vertrouwt: {addresses}"
  }
 }

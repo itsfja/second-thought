@@ -12,7 +12,8 @@
    "message1": "𐀕𐀑 %1 𐀡𐀅, 𐀕𐀲 𐀵𐀂𐀆 𐀃𐀏𐀙:",
    "message2": "%1",
    "message3": "𐀡𐀁𐀮 𐀡𐀫𐀵 𐀐𐀇𐀍, 𐀏𐀂 𐀀𐀨𐀐 𐀀𐀵 𐀁𐀚 𐀃𐀈 %1",
-   "tooltip": "Claude 𐀓𐀪𐀚 𐀴 𐀡𐀁𐀮𐀂: 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀏𐀜 𐀁𐀚𐀵𐀰 𐀨𐀞𐀚, 𐀃𐀨𐀁 𐀴 𐀐𐀚𐀵, 𐀏𐀂 𐀡𐀫𐀣𐀂𐀚𐀁 𐀁𐀒𐀳 𐀳𐀫 𐀁𐀄𐀩𐀳𐀂 𐀁 𐀡𐀆 𐀞𐀄𐀰𐀲𐀂. 𐀀𐀡𐀑𐀪𐀯 𐀄𐀲𐀲 𐀁𐀚 𐀐𐀇𐀍. 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀚 𐀏𐀩𐀯 𐀶𐀡. 𐀁𐀚 “𐀡𐀁𐀮 𐀡𐀫𐀵 𐀐𐀇𐀍” 𐀮𐀔𐀵, 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀁𐀚 𐀡𐀫𐀵 𐀡𐀆 𐀏𐀂 𐀚𐀺 𐀢𐀨𐀭𐀁, 𐀀𐀚𐀄 𐀟𐀨 𐀃𐀜."
+   "tooltip": "Claude 𐀓𐀪𐀚 𐀴 𐀡𐀁𐀮𐀂: 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀏𐀜 𐀁𐀚𐀵𐀰 𐀨𐀞𐀚, 𐀃𐀨𐀁 𐀴 𐀐𐀚𐀵, 𐀏𐀂 𐀡𐀫𐀣𐀂𐀚𐀁 𐀁𐀒𐀳 𐀳𐀫 𐀁𐀄𐀩𐀳𐀂 𐀁 𐀡𐀆 𐀞𐀄𐀰𐀲𐀂. 𐀀𐀡𐀑𐀪𐀯 𐀄𐀲𐀲 𐀁𐀚 𐀐𐀇𐀍. 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀚 𐀏𐀩𐀯 𐀶𐀡. 𐀁𐀚 “𐀡𐀁𐀮 𐀡𐀫𐀵 𐀐𐀇𐀍” 𐀮𐀔𐀵, 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀁𐀚 𐀡𐀫𐀵 𐀡𐀆 𐀏𐀂 𐀚𐀺 𐀢𐀨𐀭𐀁, 𐀀𐀚𐀄 𐀟𐀨 𐀃𐀜.",
+   "message4": "𐀃𐀟𐀫 𐀁𐀳𐀃 𐀁𐀩𐀁 %1"
   },
   "rb_agent_builtin": {
    "message0": "𐀃𐀏𐀜: %1",
@@ -1461,7 +1462,9 @@
   "Using the web": "𐀟𐀨𐀲𐀫",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "𐀵𐀵 𐀞𐀑𐀙 𐀃𐀄𐀑 𐀟𐀨𐀲𐀫 𐀐𐀩𐀲, 𐀵𐀨𐀟𐀨𐀭𐀕𐀜 𐀀𐀚𐀄 𐀁𐀨𐀟. 𐀐𐀩𐀯𐀍 𐀁𐀏𐀨𐀵 𐀟𐀨𐀲𐀫 𐀐𐀩𐀲.",
   "Web address in the task": "𐀃𐀜𐀔 𐀟𐀨𐀲𐀫 𐀁𐀚 𐀁𐀏𐀨",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "𐀁𐀏𐀨 𐀃𐀜𐀔 𐀟𐀨𐀲𐀫 𐀁𐀩𐀁, 𐀃𐀄𐀑 𐀀𐀜𐀐 𐀵𐀵 𐀡𐀟. 𐀟𐀨𐀲𐀫 𐀁𐀠 𐀨𐀲 𐀏𐀨𐀟, 𐀁 𐀞𐀑𐀙 𐀺𐀏 𐀁𐀚 𐀁𐀏𐀨 𐀳𐀐."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "𐀁𐀏𐀨 𐀃𐀜𐀔 𐀟𐀨𐀲𐀫 𐀁𐀩𐀁, 𐀃𐀄𐀑 𐀀𐀜𐀐 𐀵𐀵 𐀡𐀟. 𐀟𐀨𐀲𐀫 𐀁𐀠 𐀨𐀲 𐀏𐀨𐀟, 𐀁 𐀞𐀑𐀙 𐀺𐀏 𐀁𐀚 𐀁𐀏𐀨 𐀳𐀐.",
+  "Sources not read": "𐀞𐀑𐀙 𐀀𐀙𐀐𐀜𐀭",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "𐀀𐀡𐀒𐀪𐀯 𐀃𐀜𐀔 𐀁𐀩𐀁 𐀵𐀵 𐀃𐀄𐀑 𐀀𐀚𐀐𐀜, 𐀂𐀆 𐀞𐀫 𐀠𐀳𐀄𐀮: {addresses}"
  },
  "examples": {
   "review": {
@@ -3007,7 +3010,9 @@
   "stuck": "e-ke-to",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "e-ke-se-ta-si me-ta du-wo e-pa-ke-se-ta to-to ko-ka-ta e-re-e, o-u-ki e-pa-ke-se-ta a-ke-ta-ne. ke-re-si-jo ma-ta pa-ro-te-ke o-u-ki e-to-ke, pa-ki-na, pu-ka-ta e-te-o: do-se to-to (e-ne e-ka-ra, e-to-ke a-ka-ta pa-ki-na e-re-u-ke-te), a-pa-ra e-po-pe.",
   "Web address in the task": "o-no-ma pe-ra-ta-ro e-ne e-ka-ra",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "e-ka-ra o-no-ma pe-ra-ta-ro e-re-e, o-u-ki a-no-ke to-to po-pe. pe-ra-ta-ro e-pi ra-ta ka-ra-pe, e pa-ki-na wo-ka e-ne e-ka-ra te-ke."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "e-ka-ra o-no-ma pe-ra-ta-ro e-re-e, o-u-ki a-no-ke to-to po-pe. pe-ra-ta-ro e-pi ra-ta ka-ra-pe, e pa-ki-na wo-ka e-ne e-ka-ra te-ke.",
+  "Sources not read": "pa-ki-na a-na-ke-no-sa",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "a-po-ko-ri-si o-no-ma e-re-e to-to o-u-ki a-ne-ke-no, i-de pa-ro pi-te-u-se: {addresses}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

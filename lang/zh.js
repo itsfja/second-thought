@@ -5,7 +5,7 @@
 "note":"Simplified Chinese words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Chinese names (运行, 继续, 程序).",
 "blocks":{
 "rb_add_result":{"message0":"把 %1 加入结果"},
-"rb_agent":{"message0":"智能体：朝 %1 努力","message1":"最多 %1 步，使用这些工具：","message2":"%1","message3":"先做计划，并边做边调整 %1","tooltip":"由 Claude 决定下一步做什么：每一步它从里面的工具中挑一个，看看结果，然后继续，直到达成目标或步数用完。它的最终答案放进草稿。每一步是一次模型调用。勾选“先做计划”后，它会在第一步写一个简短计划并随时更新，不额外花费。"},
+"rb_agent":{"message0":"智能体：朝 %1 努力","message1":"最多 %1 步，使用这些工具：","message2":"%1","message3":"先做计划，并边做边调整 %1","tooltip":"由 Claude 决定下一步做什么：每一步它从里面的工具中挑一个，看看结果，然后继续，直到达成目标或步数用完。它的最终答案放进草稿。每一步是一次模型调用。勾选“先做计划”后，它会在第一步写一个简短计划并随时更新，不额外花费。","message4":"说明每个事实的来源 %1"},
 "rb_agent_builtin":{"message0":"工具：%1","tooltip":"给智能体用的现成工具。“计算”和“时间与日期”能把数字和时间算得完全准确，而不是让模型去猜。“检查文本”让一个独立的审阅者评判智能体的工作。在本页面中，订阅源、GitHub、Telegram、邮件和日历使用示例数据；导出的 Python 使用你自己的数据（把密钥写进 second-thought.ini），并真正读取网页。发送、评论和“控制设备”每次都会先问你，因为智能体读到的内容（网页、笔记）可能试图操纵它。只有当你信任它读到的一切时，才选择“不询问”。解锁、开门和撤防总是会询问。"},
 "rb_agent_mcp":{"message0":"来自 MCP 服务器 %1 的工具 %2","tooltip":"把一个 MCP 服务器提供的所有工具交给智能体：文件、GitHub、数据库、日历等等，来自整个 MCP 生态。在 second-thought.ini 中设置 MCP_<名称> = 启动它的命令（例如 npx -y @modelcontextprotocol/server-filesystem ~/recipes）或它的 https:// 地址。仅限导出的 Python：在本页面中，智能体在没有这些工具的情况下工作。"},
 "rb_agent_steps":{"message0":"智能体的步骤","tooltip":"本次运行中最近一个智能体做了什么：一个记录列表，包含 step、tool、input、result 和 status（done、bad input、tool error、refused、repeat、not a tool、unreadable、empty answer、stopped、answer）。"},
@@ -959,7 +959,9 @@
 "Using the web":"使用网络",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"这个页面无法使用网络，所以上面的草稿是在没有网络的情况下写的。导出的程序会使用网络。",
 "Web address in the task":"任务中的网址",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。"
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。",
+"Sources not read":"未读过的来源",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"回答引用了这次运行从未读过的地址，所以在依赖它之前请先核对：{addresses}"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1873,6 +1875,8 @@
 "stuck":"卡住",
 "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。",
 "Web address in the task":"任务中的网址",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。"
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。",
+"Sources not read":"未读过的来源",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"回答引用了这次运行从未读过的地址，所以在依赖它之前请先核对：{addresses}"
 }
 };

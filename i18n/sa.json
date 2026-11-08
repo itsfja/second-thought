@@ -12,7 +12,8 @@
    "message1": "%1 पदानि यावत्, एतैः साधनैः:",
    "message2": "%1",
    "message3": "प्रथमं योजनां कुरु, गच्छता कालेन तां परिवर्तय %1",
-   "tooltip": "Claude किं करणीयम् इति निश्चिनोति: प्रत्येकस्मिन् पदे अन्तःस्थितेषु साधनेषु एकं वृणोति, किं जातम् इति पश्यति, लक्ष्यं यावत् न प्राप्यते पदानि वा यावत् न समाप्यन्ते तावत् अग्रे गच्छति। तस्य अन्तिमम् उत्तरं प्रारूपे गच्छति। प्रत्येकं पदं प्रतिरूपस्य एकम् आह्वानम्। “प्रथमं योजनां कुरु” इति चिह्निते सः प्रथमपदेन सह लघ्वीं योजनां लिखति, तां च नवीकरोति, अधिकव्ययं विना।"
+   "tooltip": "Claude किं करणीयम् इति निश्चिनोति: प्रत्येकस्मिन् पदे अन्तःस्थितेषु साधनेषु एकं वृणोति, किं जातम् इति पश्यति, लक्ष्यं यावत् न प्राप्यते पदानि वा यावत् न समाप्यन्ते तावत् अग्रे गच्छति। तस्य अन्तिमम् उत्तरं प्रारूपे गच्छति। प्रत्येकं पदं प्रतिरूपस्य एकम् आह्वानम्। “प्रथमं योजनां कुरु” इति चिह्निते सः प्रथमपदेन सह लघ्वीं योजनां लिखति, तां च नवीकरोति, अधिकव्ययं विना।",
+   "message4": "प्रत्येकं तथ्यं कुतः आगतम् इति वद %1"
   },
   "rb_agent_builtin": {
    "message0": "साधनम्: %1",
@@ -1461,7 +1462,9 @@
   "Using the web": "जालस्य साहाय्येन",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "इदं पृष्ठं जालं उपयोक्तुं न शक्नोति, अतः उपरितनं प्रारूपं तेन विना लिखितम्। निर्यातितः कार्यक्रमः जालं उपयुङ्क्ते।",
   "Web address in the task": "कार्ये जालसङ्केतः",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।"
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।",
+  "Sources not read": "अपठिताः स्रोतांसि",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "उत्तरं तान् सङ्केतान् उद्धरति ये अनेन धावनेन कदापि न पठिताः, अतः तस्मिन् विश्वसनात् पूर्वं तान् परीक्षस्व: {addresses}"
  },
  "examples": {
   "review": {
@@ -3007,7 +3010,9 @@
   "stuck": "स्तब्धम्",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।",
   "Web address in the task": "कार्ये जालसङ्केतः",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।"
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।",
+  "Sources not read": "अपठिताः स्रोतांसि",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "उत्तरं तान् सङ्केतान् उद्धरति ये अनेन धावनेन कदापि न पठिताः, अतः तस्मिन् विश्वसनात् पूर्वं तान् परीक्षस्व: {addresses}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

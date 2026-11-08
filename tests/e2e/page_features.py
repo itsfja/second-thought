@@ -356,6 +356,17 @@ async def new_feature_page_tests(pg):
     summary_rows = """e => { const st = e.find(x => x.querySelector('.step-name').textContent === 'Agent summary'); if (!st) return null;
         return [...st.querySelectorAll('tbody tr')].map(r => [...r.cells].map(c => c.textContent)); }"""
     chain = [tcall("remember", name="s", value="rye"), tcall("recall", name="s"), fin("Your starter is rye.")]
+    status, steps, items = await agent_run(pg, ["web"], [done("Rye needs a long proof (https://example.com/rye). Sources: https://example.com/rye "
+                                                              "https://made-up.example.org/bread")], sources=True, goal="Use https://example.com/rye",
+                                           export="t_agent_sources")
+    note = [t for n, p_, t in steps if n == "Sources not read"]
+    prompts = await pg.evaluate("window.__agentPrompts")
+    check(status.startswith("done") and note and "https://made-up.example.org/bread" in note[0] and "example.com/rye" not in note[0]
+          and "Cite only addresses you actually read" in prompts[0],
+          f"'say where each fact came from': the agent is asked for its sources, and one it never read is flagged (#312) ({note})")
+    status, steps, items = await agent_run(pg, ["web"], [done("Rye (https://made-up.example.org/x)")])
+    prompts = await pg.evaluate("window.__agentPrompts")
+    check("Sources not read" not in [n for n, *_ in steps] and "Cite only" not in prompts[0], "with the box unticked, nothing changes")
     status, steps, items = await agent_run(pg, ["memory"], chain)
     rows = await pg.eval_on_selector_all(".step", summary_rows)
     check(status.startswith("done") and rows and len(rows) == 3 and rows[1] == ["2", "recall", '{"name": "s"}', "rye", "done"]

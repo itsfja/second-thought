@@ -5,7 +5,7 @@
 "note":"Japanese words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Japanese names (実行, 続ける, プログラム).",
 "blocks":{
 "rb_add_result":{"message0":"%1 を結果に追加する"},
-"rb_agent":{"message0":"エージェント：%1 を目指す","message1":"最大 %1 ステップ、使う道具：","message2":"%1","message3":"先に計画を立て、進めながら見直す %1","tooltip":"次に何をするかを Claude が決めます。各ステップで中の道具を一つ選び、結果を見て、目標に届くかステップがなくなるまで続けます。最終的な答えは下書きに入ります。1 ステップは 1 回のモデル呼び出しです。「先に計画を立て」にチェックを入れると、最初のステップで短い計画を書き、追加の費用なしで更新し続けます。"},
+"rb_agent":{"message0":"エージェント：%1 を目指す","message1":"最大 %1 ステップ、使う道具：","message2":"%1","message3":"先に計画を立て、進めながら見直す %1","tooltip":"次に何をするかを Claude が決めます。各ステップで中の道具を一つ選び、結果を見て、目標に届くかステップがなくなるまで続けます。最終的な答えは下書きに入ります。1 ステップは 1 回のモデル呼び出しです。「先に計画を立て」にチェックを入れると、最初のステップで短い計画を書き、追加の費用なしで更新し続けます。","message4":"各事実の出典を示す %1"},
 "rb_agent_builtin":{"message0":"道具：%1","tooltip":"エージェント用の既製の道具です。「計算する」と「時刻と日付」は、モデルに推測させずに数値や時刻を正確に出します。「テキストを確認する」は別のレビュアーにエージェントの仕事を評価させます。このページでは、フィード、GitHub、Telegram、メール、カレンダーはサンプルデータを使います。書き出した Python はあなた自身のデータを使い（キーは second-thought.ini に書きます）、Web ページも実際に読みます。送信、コメント、「機器を操作する」は毎回先に確認します。エージェントが読むもの（Web ページやメモ）が、エージェントを誘導しようとするかもしれないからです。読むものすべてを信頼できる場合だけ「確認なし」を選んでください。解錠、開放、警備解除は必ず確認します。"},
 "rb_agent_mcp":{"message0":"MCP サーバー %1 の道具 %2","tooltip":"MCP サーバーが提供するすべての道具をエージェントに渡します。ファイル、GitHub、データベース、カレンダーなど、MCP のエコシステム全体から使えます。サーバーは second-thought.ini に MCP_<名前> = 起動コマンド（例：npx -y @modelcontextprotocol/server-filesystem ~/recipes）または https:// のアドレスとして設定します。書き出した Python でのみ使えます。このページではエージェントはこれらの道具なしで動きます。"},
 "rb_agent_steps":{"message0":"エージェントのステップ","tooltip":"この実行で最後に動いたエージェントがしたこと：step、tool、input、result、status（done、bad input、tool error、refused、repeat、not a tool、unreadable、empty answer、stopped、answer）を持つレコードのリスト。"},
@@ -959,7 +959,9 @@
 "Using the web":"ウェブを使う",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"このページではウェブを使えないため、上の下書きはウェブなしで書かれました。エクスポートしたプログラムはウェブを使います。",
 "Web address in the task":"タスク内のウェブアドレス",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。"
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。",
+"Sources not read":"読んでいない出典",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"回答に、この実行で一度も読んでいないアドレスが引用されています。頼る前に確認してください: {addresses}"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1873,6 +1875,8 @@
 "stuck":"行き詰まり",
 "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。",
 "Web address in the task":"タスク内のウェブアドレス",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。"
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。",
+"Sources not read":"読んでいない出典",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"回答に、この実行で一度も読んでいないアドレスが引用されています。頼る前に確認してください: {addresses}"
 }
 };

@@ -83,7 +83,7 @@
 "rb_tokens_used":{"message0":"token ⲉⲛⲧⲁⲩⲁⲁⲩ ϣⲁⲛⲧⲉ ⲧⲉⲛⲟⲩ","tooltip":"token ⲉⲛⲧⲁⲧⲡⲣⲁⲝⲓⲥ ⲁⲁⲩ: ⲛⲧⲁⲩⲧⲛⲛⲟⲟⲩ ⲙⲛ ⲛⲧⲁⲩϫⲓⲧⲟⲩ. ϩⲱⲥ ϩⲛ ⲧⲉⲓⲥⲉⲗⲓⲥ, ⲙⲙⲉ ϩⲛ Python ⲉⲃⲟⲗ."},
 "rb_setup_check":{"message0":"ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲛⲧⲁⲝⲓⲥ","tooltip":"ⲛϩⲱⲃ ⲛⲟⲩⲱⲧ ⲛⲛⲉⲧϣⲁϥⲁⲁⲩ ϩⲛ --ⲇⲟϭⲧⲟⲣ, ϩⲱⲥ ⲥϩⲁⲓ: ϣⲟϣⲧ ⲛⲓⲙ, ⲕⲓⲃⲱⲧⲟⲥ ⲛⲓⲙ, ϩⲱⲧⲣ ⲛⲓⲙ, ⲙⲛ ⲟⲕ, FAIL ⲏ NOTE. ϣⲁϥⲱϣ ⲟⲩⲁⲁϥ: ⲙⲛ ⲗⲁⲁⲩ ϣⲁⲩⲧⲛⲛⲟⲟⲩϥ ⲏ ϣⲁⲩϣⲓⲃⲉϥ. ϩⲛ Python ⲉⲃⲟⲗ ⲟⲩⲁⲁϥ; ϩⲛ ⲧⲉⲓⲥⲉⲗⲓⲥ ϣⲁϥϫⲱ ⲙⲙⲟⲥ."},
 "rb_ask_first":{"message0":"ϣⲓⲛⲉ ⲙⲙⲟⲓ ϩⲁϫⲛ %1","tooltip":"ϫⲓⲛ ⲧⲉⲛⲟⲩ ⲛⲧⲁⲝⲓⲥ ϣⲁϥⲟⲩⲱⲛϩ ⲉⲃⲟⲗ ⲙⲡⲉⲧϥⲛⲁⲁⲁϥ ⲁⲩⲱ ϣⲁϥϩⲩⲡⲟⲙⲉⲓⲛⲉ ϣⲁⲛⲧⲉⲕⲕⲁⲁϥ. ⲉϣϫⲉ ⲁⲕϫⲱ ϫⲉ ⲙⲙⲟⲛ, ϣⲁϥⲕⲱⲧⲉ ⲉϩⲣⲁⲓ. Python ⲉⲃⲟⲗ ϣⲁϥϣⲓⲛⲉ ϩⲛ ⲡⲧⲉⲣⲙⲓⲛⲁⲗ; ⲧⲡⲣⲁⲝⲓⲥ ⲛⲟⲩⲟⲉⲓϣ ⲉⲧⲉ ⲙⲛ ⲗⲁⲁⲩ ⲙⲙⲁⲩ ϣⲁϥⲕⲱⲧⲉ ⲉϩⲣⲁⲓ."},
-"rb_agent":{"message0":"ⲁⲡⲟⲥⲧⲟⲗⲟⲥ: ⲣϩⲱⲃ ⲉⲡⲉⲓ %1","message1":"ϣⲁⲟⲩⲱϣ %1 ⲙⲃⲁⲑⲙⲟⲥ, ϩⲛ ⲛⲥⲕⲉⲩⲟⲥ:","message2":"%1","message3":"ⲁⲣⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲛⲧϣⲟⲣⲡ, ⲁⲩⲱ ϣⲓⲃⲉ ⲙⲙⲟⲥ ϩⲛ ⲧⲙⲟⲟϣⲉ %1","tooltip":"Claude ϣⲁϥⲕⲣⲓⲛⲉ ⲙⲡⲉⲧϥⲛⲁⲁⲁϥ: ⲕⲁⲧⲁ ⲃⲁⲑⲙⲟⲥ ϣⲁϥⲥⲱⲧⲡ ⲛⲟⲩⲥⲕⲉⲩⲟⲥ, ϣⲁϥⲛⲁⲩ ⲉⲡⲉⲛⲧⲁϥϣⲱⲡⲉ, ⲁⲩⲱ ϣⲁϥⲙⲟⲟϣⲉ ϣⲁⲛⲧⲉ ⲡⲥⲱⲕ ϫⲱⲕ ⲉⲃⲟⲗ ⲏ ⲛⲃⲁⲑⲙⲟⲥ ⲱϫⲛ. ⲡⲉϥⲟⲩⲱϣⲃ ⲛϩⲁⲉ ϣⲁϥⲃⲱⲕ ⲉⲡⲥϩⲁⲓ. ⲃⲁⲑⲙⲟⲥ ⲛⲓⲙ ⲟⲩϣⲓⲛⲉ ⲛⲥⲁⲃⲉ ⲡⲉ. ϩⲛ 'ⲁⲣⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ', ϣⲁϥⲥϩⲁⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲕⲟⲩï ⲙⲛ ⲡⲃⲁⲑⲙⲟⲥ ⲛⲧϣⲟⲣⲡ, ϣⲁϥⲧⲁϩⲟ ⲉⲣⲁⲧ, ⲁϫⲛ ⲕⲉϩⲁⲧ."},
+"rb_agent":{"message0":"ⲁⲡⲟⲥⲧⲟⲗⲟⲥ: ⲣϩⲱⲃ ⲉⲡⲉⲓ %1","message1":"ϣⲁⲟⲩⲱϣ %1 ⲙⲃⲁⲑⲙⲟⲥ, ϩⲛ ⲛⲥⲕⲉⲩⲟⲥ:","message2":"%1","message3":"ⲁⲣⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲛⲧϣⲟⲣⲡ, ⲁⲩⲱ ϣⲓⲃⲉ ⲙⲙⲟⲥ ϩⲛ ⲧⲙⲟⲟϣⲉ %1","tooltip":"Claude ϣⲁϥⲕⲣⲓⲛⲉ ⲙⲡⲉⲧϥⲛⲁⲁⲁϥ: ⲕⲁⲧⲁ ⲃⲁⲑⲙⲟⲥ ϣⲁϥⲥⲱⲧⲡ ⲛⲟⲩⲥⲕⲉⲩⲟⲥ, ϣⲁϥⲛⲁⲩ ⲉⲡⲉⲛⲧⲁϥϣⲱⲡⲉ, ⲁⲩⲱ ϣⲁϥⲙⲟⲟϣⲉ ϣⲁⲛⲧⲉ ⲡⲥⲱⲕ ϫⲱⲕ ⲉⲃⲟⲗ ⲏ ⲛⲃⲁⲑⲙⲟⲥ ⲱϫⲛ. ⲡⲉϥⲟⲩⲱϣⲃ ⲛϩⲁⲉ ϣⲁϥⲃⲱⲕ ⲉⲡⲥϩⲁⲓ. ⲃⲁⲑⲙⲟⲥ ⲛⲓⲙ ⲟⲩϣⲓⲛⲉ ⲛⲥⲁⲃⲉ ⲡⲉ. ϩⲛ 'ⲁⲣⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ', ϣⲁϥⲥϩⲁⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲕⲟⲩï ⲙⲛ ⲡⲃⲁⲑⲙⲟⲥ ⲛⲧϣⲟⲣⲡ, ϣⲁϥⲧⲁϩⲟ ⲉⲣⲁⲧ, ⲁϫⲛ ⲕⲉϩⲁⲧ.","message4":"ϫⲱ ϫⲉ ⲉⲣⲉ ⲟⲩⲟⲛ ⲛⲓⲙ ⲉⲓ ⲉⲃⲟⲗ ⲧⲱⲛ %1"},
 "rb_agent_steps":{"message0":"ⲛⲃⲁⲑⲙⲟⲥ ⲙⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ","tooltip":"ⲡⲉⲛⲧⲁϥⲧⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲛϩⲁⲉ ⲁⲁϥ ϩⲛ ⲧⲉⲓⲡⲣⲁⲝⲓⲥ: ⲟⲩⲕⲁⲧⲁⲗⲟⲅⲟⲥ ⲛⲭⲁⲣⲧⲏⲥ ⲙⲛ ⲃⲁⲑⲙⲟⲥ, ⲥⲕⲉⲩⲟⲥ, ⲡⲉⲧⲁⲩⲧⲁⲁϥ, ⲕⲁⲣⲡⲟⲥ ⲙⲛ ⲧⲕⲁⲧⲁⲥⲧⲁⲥⲓⲥ (ⲁϫⲱⲕ, ⲡⲉⲧⲁⲩⲧⲁⲁϥ ⲉϥϩⲟⲟⲩ, ⲧϩⲓⲥⲉ ⲙⲡⲥⲕⲉⲩⲟⲥ, ⲁϥⲕⲟⲧϥ, ⲟⲩϩⲱⲃ ⲛⲕⲉⲥⲟⲡ, ⲛⲟⲩⲥⲕⲉⲩⲟⲥ ⲁⲛ ⲡⲉ, ⲛϣⲁⲩⲱϣ ⲁⲛ, ⲟⲩⲱϣⲃ ⲉϥϣⲟⲩⲉⲓⲧ, ⲁϥⲗⲟ, ⲟⲩⲱϣⲃ)."},
 "rb_agent_tool":{"message0":"ⲥⲕⲉⲩⲟⲥ: ⲧⲁⲛⲱⲛⲉ %1","message1":"ⲡⲉⲧϥⲉⲓⲣⲉ ⲙⲙⲟϥ %1","message2":"ⲛⲅⲉⲛⲟⲥ ⲛⲛⲉⲧⲁⲩⲧⲁⲁⲩ %1","message3":"ϣⲓⲛⲉ ⲙⲙⲟⲓ ϩⲁϫⲛ ⲥⲟⲡ ⲛⲓⲙ %1","tooltip":"ϣⲁϥⲕⲱ ⲙⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲉⲁⲁⲁⲩ ⲛⲟⲩⲱⲛⲉ ⲛⲛⲉⲕⲧⲱⲛⲉ. ⲛⲉϥϫⲓ ϣⲁⲩϣⲱⲡⲉ ⲛϫⲓ ⲙⲡⲥⲕⲉⲩⲟⲥ, ⲁⲩⲱ ⲡⲉⲧϥⲛⲁϫⲓⲧϥ ⲉⲃⲟⲗ ⲡⲉ ⲡⲕⲁⲣⲡⲟⲥ ⲉⲧⲉⲣⲉ ⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲛⲁⲩ ⲉⲣⲟϥ. ϫⲱ ⲙⲙⲟϥ ⲕⲁⲗⲱⲥ: ⲡⲉϣⲁϫⲉ ⲡⲉ ⲟⲩⲱⲧ ⲉⲧⲉⲣⲉ ⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲥⲟⲟⲩⲛ ⲙⲙⲟϥ. ⲛⲅⲉⲛⲟⲥ ⲛⲛⲉⲧⲁⲩⲧⲁⲁⲩ, ϩⲱⲥ 'ϥⲗⲟⲩⲣ ⲅⲣⲁⲙⲥ: ⲛⲩⲙⲃⲉⲣ; wⲁⲧⲉⲣ ⲅⲣⲁⲙⲥ: ⲛⲩⲙⲃⲉⲣ - ⲅⲣⲁⲙⲥ ⲟϥ wⲁⲧⲉⲣ', ϣⲁⲩϫⲱ ⲙⲡⲉⲧⲉⲣⲉ ⲟⲩⲁ ⲟⲩⲁ ϣⲱⲡⲉ ⲙⲙⲟϥ: text, ⲛⲩⲙⲃⲉⲣ, yes/no, ⲗⲓⲥⲧ ⲏ ⲁⲛⲩ. ϣⲁⲩⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲉⲧⲉⲣⲉ ⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲧⲁⲁϥ ϩⲁϫⲛ ⲡⲉⲓⲱⲛⲉ. 'ϣⲓⲛⲉ ⲙⲙⲟⲓ ϩⲁϫⲛ ⲥⲟⲡ ⲛⲓⲙ' ϣⲁϥϣⲱⲡⲉ ⲉϥ on, ϫⲉ ⲡⲉⲧⲉⲣⲉ ⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲱϣ ⲙⲙⲟϥ ϣⲁϥϣⲓⲕϩ ⲉⲡⲕⲱⲧⲉ ⲙⲙⲟϥ: ϥⲓ ⲙⲙⲟϥ ϩⲛ ⲛⲱⲛⲉ ⲉⲧⲱⲡ ⲟⲩⲁⲁⲩ."},
 "rb_agent_builtin":{"message0":"ⲥⲕⲉⲩⲟⲥ: %1","tooltip":"ⲟⲩⲥⲕⲉⲩⲟⲥ ⲉϥⲥⲃⲧⲱⲧ ⲙⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ. 'ⲱⲡ' ⲙⲛ 'ⲛⲟⲩⲟⲉⲓϣ' ϣⲁⲩⲁⲁⲩ ⲛⲛⲏⲡⲉ ⲙⲛ ⲛⲟⲩⲟⲉⲓϣ ⲙⲙⲉ, ⲟⲩⲕ ⲡⲥⲁⲃⲉ ⲉϥⲙⲉⲉⲩⲉ ⲁⲛ. 'ⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ' ϣⲁϥⲕⲱ ⲛⲟⲩⲕⲉⲇⲟⲕⲓⲙⲁⲥⲧⲏⲥ. ϩⲛ ⲧⲉⲓⲥⲉⲗⲓⲥ, feeds, GitHub, Telegram, email ⲙⲛ ⲡⲱⲡ ⲛⲛϩⲟⲟⲩ ϣⲁⲩⲁⲁⲩ ⲛⲟⲩⲡⲁⲣⲁⲇⲉⲓⲅⲙⲁ; Python ⲉⲃⲟⲗ ϣⲁϥⲁⲁⲩ ⲙⲡⲉⲧⲛⲟⲩⲕⲕ (ⲛϣⲟϣⲧ ϩⲛ second-thought.ini), ⲁⲩⲱ ϣⲁϥⲱϣ ⲛⲥⲉⲗⲓⲥ ⲛⲙⲉ. ⲧⲛⲛⲟⲟⲩ, ϣⲁϫⲉ ϩⲛ GitHub ⲙⲛ 'ⲕⲱ ⲛⲟⲥⲕⲉⲩⲟⲥ' ϣⲁⲩϣⲓⲛⲉ ⲙⲙⲟⲕ ϩⲁϫⲛ ⲟⲩⲁ ⲟⲩⲁ. ⲥⲱⲧⲡ 'ⲙⲛ ϣⲓⲛⲉ' ⲉϣϫⲉ ⲕⲛⲁϩⲧⲉ ⲉⲡⲉⲧϥⲱϣ ⲙⲙⲟϥ ⲧⲏⲣϥ. ⲟⲩⲱⲛ, ⲟⲩⲱⲛ ⲛⲛⲣⲟ ⲙⲛ ϥⲓ ⲛⲥⲏⲙⲉⲓⲟⲛ ϣⲁⲩϣⲓⲛⲉ ⲛⲟⲩⲟⲉⲓϣ ⲛⲓⲙ."},
@@ -959,7 +959,9 @@
 "Using the web":"ϩⲓⲧⲛ ⲡϣⲛⲉ",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"ⲡⲉϫⲱⲱⲙⲉ ⲡⲁⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲉⲡ ⲡϣⲛⲉ, ⲉⲧⲃⲉ ⲡⲁⲓ ⲛⲧⲁⲩⲥⲕϩⲁⲓ ⲡⲥⲙⲛⲧⲓ ⲉⲧⲥⲁ ⲡⲧⲡⲉ ⲁϫⲙ ⲡϣⲛⲉ. ⲡⲓⲣⲟⲅⲣⲁⲙⲙⲁ ⲛⲧⲁⲩⲛⲧϥ ⲉⲃⲟⲗ ϣⲁϥⲉⲉⲡ ⲡϣⲛⲉ.",
 "Web address in the task":"ⲡⲣⲓⲛ ⲛⲡϣⲛⲉ ϩⲙ ⲡϣⲓⲛⲉ",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"ⲡϣⲓⲛⲉ ϫⲱ ⲙⲡⲣⲓⲛ ⲛⲡϣⲛⲉ, ⲁⲗⲗⲁ ⲡⲧϣⲟϣⲓ ⲡⲁⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲟⲩⲱⲛ ⲙⲙⲟϥ. ⲧⲱⲧⲉ 'ϩⲓⲧⲛ ⲡϣⲛⲉ' ϩⲓϫⲙ ⲡⲱⲛⲉ, ⲏ ⲙⲁ ⲛⲛϣⲁϫⲉ ⲙⲡϫⲱⲱⲙⲉ ϩⲙ ⲡϣⲓⲛⲉ."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"ⲡϣⲓⲛⲉ ϫⲱ ⲙⲡⲣⲓⲛ ⲛⲡϣⲛⲉ, ⲁⲗⲗⲁ ⲡⲧϣⲟϣⲓ ⲡⲁⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲟⲩⲱⲛ ⲙⲙⲟϥ. ⲧⲱⲧⲉ 'ϩⲓⲧⲛ ⲡϣⲛⲉ' ϩⲓϫⲙ ⲡⲱⲛⲉ, ⲏ ⲙⲁ ⲛⲛϣⲁϫⲉ ⲙⲡϫⲱⲱⲙⲉ ϩⲙ ⲡϣⲓⲛⲉ.",
+"Sources not read":"ⲛⲥⲕϩⲁⲓ ⲙⲡⲟⲩⲱϣ",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"ⲡⲟⲩⲱϣⲃ ϫⲱ ⲛϩⲉⲛⲣⲓⲛ ⲙⲡⲉ ⲡⲓⲃⲱⲕ ⲡⲁⲓ ⲱϣ ⲙⲙⲟⲟⲩ, ⲉⲧⲃⲉ ⲡⲁⲓ ϭⲱϣⲧ ⲉⲣⲟⲩ ⲉⲙⲡⲁⲧⲉⲕⲕⲁϩⲧ: {addresses}"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -1873,7 +1875,9 @@
 "stuck":"asaho",
 "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"tdokimasia asjo nnipetkōb ntertpe mnnsa smnti snau, etbe pai psmnti nnefšcom etalco mmoou. eie pirogramma ere ouhōb šaat mmof ete mpoutaaf naf, nhe noušōšt nte web, oujōōme ē oume: ma naf mmof (hm pšine, ē hitn ouaggelos efšoš nnšōšt nte web), auō aaf on.",
 "Web address in the task":"prin npšne hm pšine",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"pšine jō mprin npšne, alla ptšoši pai nnefšcom eouōn mmof. tōte 'hitn pšne' hijm pōne, ē ma nnšaje mpjōōme hm pšine."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"pšine jō mprin npšne, alla ptšoši pai nnefšcom eouōn mmof. tōte 'hitn pšne' hijm pōne, ē ma nnšaje mpjōōme hm pšine.",
+"Sources not read":"nskhai mpouōš",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"pouōšb jō nhenrin mpe pibōk pai ōš mmoou, etbe pai cōšt erou empatekkaht: {addresses}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

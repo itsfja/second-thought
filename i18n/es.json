@@ -11,7 +11,8 @@
    "message1": "hasta %1 pasos, con estas herramientas:",
    "message2": "%1",
    "message3": "hacer primero un plan, y cambiarlo sobre la marcha %1",
-   "tooltip": "Claude decide qué hacer a continuación: en cada paso elige una de las herramientas de dentro, ve lo que pasó y sigue hasta cumplir el objetivo o quedarse sin pasos. Su respuesta final va al borrador. Cada paso es una llamada al modelo. Con 'hacer primero un plan' marcado, escribe un plan corto en su primer paso y lo mantiene al día, sin coste adicional."
+   "tooltip": "Claude decide qué hacer a continuación: en cada paso elige una de las herramientas de dentro, ve lo que pasó y sigue hasta cumplir el objetivo o quedarse sin pasos. Su respuesta final va al borrador. Cada paso es una llamada al modelo. Con 'hacer primero un plan' marcado, escribe un plan corto en su primer paso y lo mantiene al día, sin coste adicional.",
+   "message4": "decir de dónde sale cada dato %1"
   },
   "rb_agent_builtin": {
    "message0": "herramienta: %1",
@@ -1460,7 +1461,9 @@
   "Using the web": "Usando la web",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Esta página no puede usar la web, así que el borrador de arriba se escribió sin ella. El programa exportado usa la web.",
   "Web address in the task": "Dirección web en la tarea",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "La tarea nombra una dirección web, pero este paso no puede abrirla. Marca 'usando la web' en el bloque, o pon el texto de la página en la tarea."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "La tarea nombra una dirección web, pero este paso no puede abrirla. Marca 'usando la web' en el bloque, o pon el texto de la página en la tarea.",
+  "Sources not read": "Fuentes no leídas",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "La respuesta cita direcciones que esta ejecución nunca leyó, así que compruébalas antes de fiarte: {addresses}"
  },
  "examples": {
   "review": {
@@ -3006,6 +3009,8 @@
   "stuck": "atascado",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "La revisión señaló los mismos problemas tras dos correcciones, así que corregir no puede arreglarlos. Puede que al programa le falte algo que no se le dio, como una página web, un archivo o un dato: dáselo (en la tarea, por ejemplo, o mediante un agente que pueda leer páginas web) y vuelve a ejecutarlo.",
   "Web address in the task": "Dirección web en la tarea",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "La tarea nombra una dirección web, pero este paso no puede abrirla. Marca 'usando la web' en el bloque, o pon el texto de la página en la tarea."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "La tarea nombra una dirección web, pero este paso no puede abrirla. Marca 'usando la web' en el bloque, o pon el texto de la página en la tarea.",
+  "Sources not read": "Fuentes no leídas",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "La respuesta cita direcciones que esta ejecución nunca leyó, así que compruébalas antes de fiarte: {addresses}"
  }
 }

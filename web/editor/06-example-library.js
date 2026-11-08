@@ -579,7 +579,7 @@
       desc:"Searches, reads its sources properly, saves the key facts for next time, and answers with the addresses it used. Exported Python reads the real pages; this page searches from Claude's knowledge.",
       tip:"Change the question. Run it again and it can start from the facts it saved.",
       build:() => P([], chain(sStart(),
-        blk("rb_agent", { PLAN:true }, { GOAL:lt("Find out how rye flour behaves differently from wheat flour in sourdough. Search first, then read at least one good source page in full. " +
+        blk("rb_agent", { PLAN:true, SOURCES:true }, { GOAL:lt("Find out how rye flour behaves differently from wheat flour in sourdough. Search first, then read at least one good source page in full. " +
             "Save the three most useful facts as a note called 'rye facts'. Answer in five plain sentences, then list the addresses of the sources you used."), STEPS:nm(8),
           TOOLS:st(chain(blk("rb_agent_builtin", { KIND:"web" }), blk("rb_agent_builtin", { KIND:"memory" }))) }),
         sFinish())) },

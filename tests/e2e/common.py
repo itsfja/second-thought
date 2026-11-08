@@ -379,7 +379,7 @@ def add(value):
     return blk("rb_add_result", inputs={"TEXT": value})
 
 
-def agent_prog(tools, steps=6, goal="Test goal", plan=False):
+def agent_prog(tools, steps=6, goal="Test goal", plan=False, sources=False):
     chain = None
     for t in reversed(tools):
         b = blk("rb_agent_builtin", fields={"KIND": t}) if isinstance(t, str) else t
@@ -389,12 +389,12 @@ def agent_prog(tools, steps=6, goal="Test goal", plan=False):
     inputs = {"GOAL": tx(goal), "STEPS": nm(steps)}
     if chain:
         inputs["TOOLS"] = {"block": chain}
-    return script(blk("rb_agent", fields={"PLAN": "TRUE" if plan else "FALSE"}, inputs=inputs), blk("rb_result"))
+    return script(blk("rb_agent", fields={"PLAN": "TRUE" if plan else "FALSE", "SOURCES": "TRUE" if sources else "FALSE"}, inputs=inputs), blk("rb_result"))
 
 
-async def agent_run(pg, tools, replies, steps=6, answer=None, export=None, plan=False):
+async def agent_run(pg, tools, replies, steps=6, answer=None, export=None, plan=False, sources=False, goal="Test goal"):
     """Runs an agent whose stand-in Claude gives these replies in turn. Returns (status, steps, result texts)."""
-    await load_state(pg, agent_prog(tools, steps, plan=plan))
+    await load_state(pg, agent_prog(tools, steps, goal=goal, plan=plan, sources=sources))
     await pg.evaluate("r => { window.__agentScript = r; window.__agentPrompts = []; }", replies)
     try:
         status = await (run_and_answer(pg, answer) if answer else run_program(pg))

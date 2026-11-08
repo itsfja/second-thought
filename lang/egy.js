@@ -83,7 +83,7 @@
 "rb_tokens_used":{"message0":"token 𓇋𓂋 𓂋 𓄿𓏏","tooltip":"token 𓇋𓂋𓈖 𓇋𓂋𓏏 𓏏𓈖: 𓉔𓄿𓃀 𓎛𓈖𓂝 𓈙𓋴𓊪 𓋴𓇋𓄿 𓅓 𓈙𓆑𓂧𓅱 𓊪𓈖, 𓅓𓄿𓂝 𓅓 Python 𓆓𓄿"},
 "rb_setup_check":{"message0":"𓋴𓇋𓊪 𓎼𓂋𓎼 𓈖 𓋴𓐍𓂋 𓊪𓈖","tooltip":"𓋴𓇋𓊪 𓅱𓂝 𓅓𓇋 𓇋𓂋 𓋴𓐍𓂋 𓎛𓈖𓂝 --doctor, 𓅓 𓅓𓂧𓅱: 𓐍𓏏𓅓 𓈖𓃀, 𓄡𓈖𓅱 𓈖𓃀, 𓆓𓄿 𓈖𓃀 𓇋𓂋𓆑, 𓎛𓈖𓂝 ok, FAIL 𓅓 NOTE. 𓈙𓂧𓇋𓆑 𓅱𓂝: 𓈖 𓉔𓄿𓃀, 𓈖 𓈙𓈖𓇋, 𓈖 𓅱𓆓 𓎛𓆓 𓅓 Python 𓆓𓄿 𓅱𓂝; 𓅓 𓈙𓆑𓂧𓅱 𓊪𓈖 𓆓𓂧𓆑 𓋴𓏏"},
 "rb_ask_first":{"message0":"𓈖𓆓 𓅱𓇋 𓐍𓂋𓎛𓄿𓏏 %1","tooltip":"𓆓𓂋 𓂝𓄿, 𓋴𓐍𓂋 𓂋𓂧𓇋 𓅓𓄿𓄿 𓇋𓂋𓏏𓆑, 𓎛𓅓𓋴 𓂋 𓂋𓂧𓇋𓎡 𓇋𓂋 𓆓𓂧𓎡 𓈖𓈖, 𓋴𓅱𓄿𓆑 𓎛𓂋 𓋴𓏏 𓏏𓈖, 𓈙𓅓 𓎛𓂋 𓂝 Python 𓆓𓄿 𓈖𓆓 𓅓 terminal; 𓇋𓂋𓏏 𓅓 𓏏𓂋 𓈖𓈖 𓋴 𓇋𓅓 𓋴𓅱𓄿𓆑 𓋴𓏏"},
-"rb_agent":{"message0":"𓅱𓊪𓅱𓏏𓇋: 𓃀𓄿𓎡 𓂋 %1","message1":"𓂋 𓈖𓅓𓏏𓏏 %1, 𓅓 𓂝𓎛𓂝𓅱 𓇋𓊪𓏏𓈖:","message2":"%1","message3":"𓇋𓂋 𓋴𓈙𓅓 𓏏𓊪𓇋, 𓈙𓈖𓇋 𓋴𓅱 𓅓 𓈙𓅓𓏏 %1","tooltip":"Claude 𓅱𓆓 𓇋𓂋𓏏 𓅓𓐍𓏏: 𓅓 𓈖𓅓𓏏𓏏 𓈖𓃀 𓋴𓏏𓊪𓆑 𓅱𓂝 𓅓 𓂝𓎛𓂝𓅱 𓅓 𓄡𓈖𓅱, 𓅓𓄿𓄿 𓐍𓊪𓂋, 𓈙𓅓 𓂋 𓊪𓎛 𓎛𓄿𓏏 𓅓 𓎡𓅓 𓈖𓅓𓏏𓅱𓏏 𓅱𓈙𓃀 𓐍𓄿𓂝 𓅓 𓋴𓈙𓅱 𓈖𓅓𓏏𓏏 𓈖𓃀 𓈖𓆓 𓅱𓂝 𓈖 𓂋𓐍𓐍𓏏 𓎛𓈖𓂝 '𓇋𓂋 𓋴𓈙𓅓 𓏏𓊪𓇋', 𓋴𓈙𓆑 𓋴𓈙𓅓 𓈙𓂋𓇋 𓎛𓈖𓂝 𓈖𓅓𓏏𓏏 𓏏𓊪𓏏, 𓋴𓅓𓄿𓅱𓇋 𓋴𓅱, 𓈖𓈖 𓎛𓆓 𓎡𓏭"},
+"rb_agent":{"message0":"𓅱𓊪𓅱𓏏𓇋: 𓃀𓄿𓎡 𓂋 %1","message1":"𓂋 𓈖𓅓𓏏𓏏 %1, 𓅓 𓂝𓎛𓂝𓅱 𓇋𓊪𓏏𓈖:","message2":"%1","message3":"𓇋𓂋 𓋴𓈙𓅓 𓏏𓊪𓇋, 𓈙𓈖𓇋 𓋴𓅱 𓅓 𓈙𓅓𓏏 %1","tooltip":"Claude 𓅱𓆓 𓇋𓂋𓏏 𓅓𓐍𓏏: 𓅓 𓈖𓅓𓏏𓏏 𓈖𓃀 𓋴𓏏𓊪𓆑 𓅱𓂝 𓅓 𓂝𓎛𓂝𓅱 𓅓 𓄡𓈖𓅱, 𓅓𓄿𓄿 𓐍𓊪𓂋, 𓈙𓅓 𓂋 𓊪𓎛 𓎛𓄿𓏏 𓅓 𓎡𓅓 𓈖𓅓𓏏𓅱𓏏 𓅱𓈙𓃀 𓐍𓄿𓂝 𓅓 𓋴𓈙𓅱 𓈖𓅓𓏏𓏏 𓈖𓃀 𓈖𓆓 𓅱𓂝 𓈖 𓂋𓐍𓐍𓏏 𓎛𓈖𓂝 '𓇋𓂋 𓋴𓈙𓅓 𓏏𓊪𓇋', 𓋴𓈙𓆑 𓋴𓈙𓅓 𓈙𓂋𓇋 𓎛𓈖𓂝 𓈖𓅓𓏏𓏏 𓏏𓊪𓏏, 𓋴𓅓𓄿𓅱𓇋 𓋴𓅱, 𓈖𓈖 𓎛𓆓 𓎡𓏭","message4":"𓆓𓂧 𓆓𓂋𓂝 𓈖 𓅓𓂧𓏏 𓈖𓃀𓏏 %1"},
 "rb_agent_steps":{"message0":"𓈖𓅓𓏏𓅱𓏏 𓈖𓏏 𓅱𓊪𓅱𓏏𓇋","tooltip":"𓇋𓂋𓈖 𓅱𓊪𓅱𓏏𓇋 𓐍𓄿𓂝 𓅓 𓇋𓂋𓏏 𓏏𓈖: 𓂋𓐍𓏏 𓈖𓏏 𓂝𓂋𓅱𓏏 𓄡𓂋 𓈖𓅓𓏏𓏏, 𓂝𓎛𓂝𓅱, 𓂋𓂧𓇋𓏏, 𓐍𓊪𓂋𓏏 𓎛𓈖𓂝 𓐍𓂋𓏏 (𓎡𓅓, 𓂋𓂧𓇋𓏏 𓃀𓇋𓈖𓏏, 𓇋𓋴𓆑𓏏 𓈖𓏏 𓂝𓎛𓂝𓅱, 𓂝𓈖𓈖, 𓅱𓎛𓅓, 𓈖𓈖 𓂝𓎛𓂝𓅱, 𓈖 𓈙𓂧𓇋, 𓅱𓈙𓃀 𓈙𓅱, 𓂝𓎛𓂝, wšb)."},
 "rb_agent_tool":{"message0":"𓂝𓎛𓂝𓅱: 𓇋𓈖𓂋𓇋 %1","message1":"𓇋𓂋𓏏𓆑 %1","message2":"𓈎𓂧𓅱 𓈖 𓂋𓂧𓇋𓏏 %1","message3":"𓈖𓆓 𓅱𓇋 𓐍𓂋𓎛𓄿𓏏 𓇋𓂋𓏏 𓈖𓃀 %1","tooltip":"𓂋𓂧𓇋 𓇋𓂋 𓅱𓊪𓅱𓏏𓇋 𓅱𓂝 𓅓 𓇋𓈖𓂋𓅱𓎡 𓂋𓂧𓇋𓅱𓏏𓆑 𓐍𓊪𓂋 𓅓 𓂋𓂧𓇋𓅱𓏏 𓈖 𓂝𓎛𓂝𓅱, 𓐍𓊪𓂋𓏏𓆑 𓅓𓄿𓄿 𓅱𓊪𓅱𓏏𓇋 𓆓𓂧 𓋴𓅱 𓅓 𓅓𓄿𓂝: 𓆓𓂧 𓊪𓅱 𓂋𓐍𓈖 𓅱𓊪𓅱𓏏𓇋 𓈖𓃀 𓈎𓂧𓅱 𓈖 𓂋𓂧𓇋𓏏, 𓅓𓇋 'flour grams: number; water grams: number - grams of water', 𓆓𓂧 𓊪𓏏𓂋 𓂋𓂧𓇋𓏏 𓈖𓃀: 𓅓𓂧𓅱, 𓏏𓈖𓅱, 𓅓𓄿𓂝 𓅓 𓎼𓂋𓎼, 𓂋𓐍𓏏 𓅓 𓐍𓏏 𓈖𓃀 𓂋𓂧𓇋𓏏 𓈖𓏏 𓅱𓊪𓅱𓏏𓇋 𓋴𓇋𓊪 𓐍𓂋𓎛𓄿𓏏 𓇋𓂋 𓇋𓈖𓂋 '𓈖𓆓 𓅱𓇋 𓐍𓂋𓎛𓄿𓏏 𓇋𓂋𓏏 𓈖𓃀' 𓋴𓅓𓈖 𓐍𓂋𓎛𓄿𓏏, 𓈖𓈖𓏏𓏏 𓈙𓂧𓇋𓈖 𓅱𓊪𓅱𓏏𓇋 (𓈙𓆑𓂧𓅱 𓈖 web, 𓋴𓐍𓄿𓅱) 𓋴𓈙𓅓𓆑: 𓅱𓂝𓃀 𓋴𓅱 𓈖 𓇋𓈖𓂋𓅱 𓎛𓋴𓃀 𓅱𓂝, 𓈖𓈖 𓈙𓈖𓇋𓋴𓈖 𓐍𓏏"},
 "rb_agent_builtin":{"message0":"𓂝𓎛𓂝𓅱: %1","tooltip":"𓂝𓎛𓂝𓅱 𓎼𓂋𓎼 𓈖 𓅱𓊪𓅱𓏏𓇋 '𓎛𓋴𓃀' 𓎛𓈖𓂝 '𓅱𓈖𓅱𓅱𓏏' 𓇋𓂋 𓏏𓈖𓅱 𓎛𓈖𓂝 𓄿𓏏 𓅓 𓅓𓄿𓂝, 𓈖𓈖 𓋴𓇋𓄿 𓈖 𓂋𓐍𓐍𓏏 '𓋴𓇋𓊪 𓅓𓂧𓅱' 𓂋𓂧𓇋 𓋴𓇋𓊪𓅱 𓎡𓏭 𓂋 𓋴𓇋𓊪 𓃀𓄿𓎡 𓈖 𓅱𓊪𓅱𓏏𓇋 𓅓 𓈙𓆑𓂧𓅱 𓊪𓈖, feeds, GitHub, Telegram, email 𓎛𓈖𓂝 𓎛𓋴𓃀 𓂋𓈖𓊪𓏏 𓅓 𓏏𓊪𓎛𓋴𓃀; Python 𓆓𓄿 𓇋𓂋 𓐍𓏏𓎡 (𓐍𓏏𓅓𓅱 𓅓 second-thought.ini), 𓈙𓂧𓇋 𓈙𓆑𓂧𓅱 𓈖 web 𓅓 𓅓𓄿𓂝 𓉔𓄿𓃀, 𓅓𓂧𓅱 𓎛𓂋 GitHub 𓎛𓈖𓂝 '𓐍𓂋𓊪 𓂝𓎛𓂝𓅱' 𓈖𓆓𓋴𓈖 𓅱𓇋 𓐍𓂋𓎛𓄿𓏏𓋴𓈖, 𓈖𓈖𓏏𓏏 𓈙𓂧𓇋𓈖 𓅱𓊪𓅱𓏏𓇋 𓋴𓈙𓅓𓆑 𓋴𓏏𓊪 '𓈖𓈖 𓈖𓆓' 𓇋𓂋 𓅓𓎛𓎡 𓇋𓃀 𓅓 𓐍𓏏 𓈖𓃀 𓈙𓂧𓇋𓆑 𓅱𓈖, 𓋴𓈙 𓎛𓈖𓂝 𓋴𓆑𓐍 𓋴𓄿𓅱 𓈖𓆓 𓂋 𓈖𓎛𓎛"},
@@ -959,7 +959,9 @@
 "Using the web":"𓎛𓈖𓂝 𓂝𓆓 𓈖 𓏏𓄿",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"𓈖𓈖 𓂋𓐍 𓊪𓄿 𓆓𓅓𓂝 𓇋𓂋 𓂝𓆓 𓈖 𓏏𓄿, 𓋴𓈙𓈖𓏏𓅱 𓋴𓈙𓅱 𓎛𓂋𓇋 𓅓𓐍𓅓𓏏𓆑 𓇋𓂋𓏏 𓊪𓂋𓏏𓅱 𓇋𓂋𓆑 𓂝𓆓 𓈖 𓏏𓄿",
 "Web address in the task":"𓂋𓈖 𓈖 𓂝𓆓 𓅓 𓇋𓂋𓏏",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"𓇋𓂋𓏏 𓆓𓂧 𓂋𓈖 𓈖 𓂝𓆓 𓈖 𓏏𓄿, 𓈖𓈖 𓂋𓐍 𓈖𓅓𓏏𓏏 𓏏𓈖 𓅱𓈖 𓋴𓅱 𓆓𓂝𓂋 '𓎛𓈖𓂝 𓂝𓆓 𓈖 𓏏𓄿' 𓎛𓂋 𓇋𓈖𓂋, 𓅓 𓂋𓂧𓇋 𓅓𓂧𓅱𓏏 𓈖 𓆓𓅓𓂝 𓅓 𓇋𓂋𓏏"
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"𓇋𓂋𓏏 𓆓𓂧 𓂋𓈖 𓈖 𓂝𓆓 𓈖 𓏏𓄿, 𓈖𓈖 𓂋𓐍 𓈖𓅓𓏏𓏏 𓏏𓈖 𓅱𓈖 𓋴𓅱 𓆓𓂝𓂋 '𓎛𓈖𓂝 𓂝𓆓 𓈖 𓏏𓄿' 𓎛𓂋 𓇋𓈖𓂋, 𓅓 𓂋𓂧𓇋 𓅓𓂧𓅱𓏏 𓈖 𓆓𓅓𓂝 𓅓 𓇋𓂋𓏏",
+"Sources not read":"𓈖𓈖 𓈙𓂧𓇋 𓆓𓅓𓂝𓅱",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"𓅱𓈙𓃀𓏏 𓆓𓂧𓋴 𓂋𓈖𓅱 𓈖𓈖 𓈙𓂧𓇋 𓋴𓅱 𓇋𓂋𓏏 𓏏𓈖, 𓊪𓏏𓂋 𓋴𓏏 𓐍𓂋𓎛𓄿𓏏 𓅓𓎛𓇋𓃀𓎡 𓇋𓅓𓋴: {addresses}"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -1873,7 +1875,9 @@
 "stuck":"ꜥḥꜥ",
 "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"sjp ḏd=f jsft wꜥt m-ḫt smnḫw 2, nn smnḫ rḫ=f jr=st. ḫrd n jrt ḥn ḫt nn rdj.tw n=f, mj sš n tꜣ, ḏmꜥ m mꜣꜥt: rdj sw n=f (m jrt, m wpwtj rḫ=f šdj sšw n tꜣ), jr sw m wḥm.",
 "Web address in the task":"rn n ꜥḏ m jrt",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"jrt ḏd rn n ꜥḏ n tꜣ, nn rḫ nmtt tn wn sw. ḏꜥr 'ḥnꜥ ꜥḏ n tꜣ' ḥr jnr, m rdj mdwt n ḏmꜥ m jrt."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"jrt ḏd rn n ꜥḏ n tꜣ, nn rḫ nmtt tn wn sw. ḏꜥr 'ḥnꜥ ꜥḏ n tꜣ' ḥr jnr, m rdj mdwt n ḏmꜥ m jrt.",
+"Sources not read":"nn šdj ḏmꜥw",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"wšbt ḏd=s rnw nn šdj sw jrt tn, ptr st ḫr-ḥꜣt mḥ-jb=k jm=s: {addresses}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

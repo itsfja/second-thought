@@ -6,7 +6,7 @@
 "note":"Jewish Babylonian Aramaic, the language of the Talmud, in Hebrew square script, for the block palette, the page, the examples and what exported programs print. There is no Blockly translation for Aramaic, so Blockly's own blocks and menus come from blocklyMsg here. The page is right to left (dir: rtl), as for Hebrew: Blockly is mirrored, and code, file names and model names stay left to right. Instructions use the short singular imperative. Modern product words (email, token, API, Home Assistant) stay in Latin letters. Coinages: לבנתא block (a brick), שליחא agent (an agent in Talmudic law), טופסא draft, פנקסא log, זמניא schedules. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Aramaic names (שרי, אזיל, פסוק).",
 "blocks":{
 "rb_add_result":{"message0":"אוסיף %1 לפירא"},
-"rb_agent":{"message0":"שליחא: עביד לות %1","message1":"עד %1 פסיען, בהלין מאניא:","message2":"%1","message3":"עביד עיטתא קדמאה, ושני יתה באורחא %1","tooltip":"Claude דאין מה למעבד: בכל פסיעתא בחר חד מן מאניא דבגוה, חזי מה הוה, ואזיל עד דמטי לצביונא או עד דשלמו פסיעתא. פתגמא בתראה דיליה עאל לטופסא. כל פסיעתא היא קריאה חדא לחכימא. כד \"עביד עיטתא קדמאה\" רשים, כתב עיטתא זעירתא בפסיעתא קדמייתא ומחדת לה, בלא אגרא יתירא."},
+"rb_agent":{"message0":"שליחא: עביד לות %1","message1":"עד %1 פסיען, בהלין מאניא:","message2":"%1","message3":"עביד עיטתא קדמאה, ושני יתה באורחא %1","tooltip":"Claude דאין מה למעבד: בכל פסיעתא בחר חד מן מאניא דבגוה, חזי מה הוה, ואזיל עד דמטי לצביונא או עד דשלמו פסיעתא. פתגמא בתראה דיליה עאל לטופסא. כל פסיעתא היא קריאה חדא לחכימא. כד \"עביד עיטתא קדמאה\" רשים, כתב עיטתא זעירתא בפסיעתא קדמייתא ומחדת לה, בלא אגרא יתירא.","message4":"למימר מן היכא אתת כל עובדא %1"},
 "rb_agent_builtin":{"message0":"מאנא: %1","tooltip":"מאנא מתקן לשליחא. \"חושבנין\" ו\"שעין ויומין\" יהבין מניינין וזמנין כדקא יאות, חלף דיחשוב חכימא. \"בדוק כתבא\" שביק לבודקא אחרנא למדן עבידת שליחא. בדפא הדין, שמועתא, GitHub, Telegram, email וחושבן יומיא משתמשין בדוגמא; Python דנפק משתמש בדילך (שוי מפתחיא ב-second-thought.ini), וקרי דפי רשתא בקושטא. שליחותא, תגובתא ו\"שליט על כלי ביתא\" שאלין יתך קדם כל חדא, דהא מה דשליחא קרי (דף רשתא, רשימא) עלול לאסטאה יתיה. בחר \"בלא שאלתא\" לחוד אי אנת רחיץ בכל מה דקרי. פתיחת מנעולא, פתיחה ובטלות נטירותא תדיר שאלין."},
 "rb_agent_mcp":{"message0":"מאניא מן משמשא MCP %1 %2","tooltip":"יהב לשליחא כל מאניא דמשמשא MCP יהב: מגלתא, GitHub, אוצרי ידיעתא, חושבני יומיא וסגי אחרנין, מכל עלמא דMCP. שוי משמשא ב-second-thought.ini כ-MCP_<NAME> = פקודתא דמשריא יתיה (כגון npx -y @modelcontextprotocol/server-filesystem ~/recipes) או אתריה ב-https://. לחוד ב-Python דנפק: בדפא הדין שליחא עביד בלא מאניא אלין."},
 "rb_agent_steps":{"message0":"פסיעת שליחא","tooltip":"מה עבד שליחא בתראה בהלוכא הדין: סדרא דשטרי עם step, tool, input, result ו-status (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."},
@@ -960,7 +960,9 @@
 "Using the web":"בסיוע רשתא",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"דפא הדין לא מצי לאשתמשא ברשתא, הלכך טופסא דלעיל אתכתיב בלאו הכי. פרוגרמא דאפיקו משתמש ברשתא.",
 "Web address in the task":"כתובת רשתא בעבידתא",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא.",
+"Sources not read":"מקורין דלא אתקריו",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"פתגמא מדכר כתובתא דהדא ריהטא לא קרת מעולם, הלכך בדוק להון קדם דתסמוך עלוהי: {addresses}"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1874,7 +1876,9 @@
 "stuck":"מתעכב",
 "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ.",
 "Web address in the task":"כתובת רשתא בעבידתא",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא.",
+"Sources not read":"מקורין דלא אתקריו",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"פתגמא מדכר כתובתא דהדא ריהטא לא קרת מעולם, הלכך בדוק להון קדם דתסמוך עלוהי: {addresses}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

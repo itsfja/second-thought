@@ -6,7 +6,7 @@
 "note":"Akkadian (Old Babylonian) in cuneiform. Akkadian has no words for most of this, so the wording is Old Babylonian vocabulary used for new things (libittum, brick, for block; mār šiprim, messenger, for agent; apkallum, sage, for a model; bīrum, the diviner's inspection, for review; nēpešum, procedure, for program; ṭup epištim, tablet of the work, for the run log); it is not genuine ancient text. The page shows cuneiform signs (U+12000-U+1254F) in blocks, options, categories, labels, page, examples, starters and blocklyMsg, spelled syllable by syllable as Old Babylonian scribes did (CV, VC, CVC as CV-VC), with the Noto Sans Cuneiform font named in \"font\"; python holds the normalised transliteration (šarrum, bītum), because terminals have no cuneiform font. Names (Claude, Home Assistant), keys, English field names and placeholders stay in Latin letters. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
 "blocks":{
 "rb_add_result":{"message0":"%1 𒀀𒈾 𒍢𒋾𒅎 𒊒𒌓𒁲"},
-"rb_agent":{"message0":"𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 %1 𒂊𒁍𒍑","message1":"𒀀𒁲 %1 𒀠𒅗𒅗𒋾𒅎, 𒄿𒈾 𒌑𒉡𒋾𒅎 𒀭𒉌𒋾𒅎:","message2":"%1","message3":"𒉺𒈾 𒁲𒈠𒄠 𒋗𒆪𒌦, 𒌋 𒄿𒈾 𒀀𒆷𒆠𒅎 𒋗𒌦𒉌 %1","tooltip":"Claude 𒊭 𒂊𒁉𒅆𒅎 𒄿𒈠𒀠𒇷𒅅: 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒅖𒋾𒀜 𒅖𒋼𒅔 𒌑𒉡𒋾𒅎 𒊭 𒇷𒅁𒁉 𒄿𒄭𒅕, 𒊭 𒅁𒋗 𒅎𒈠𒅈, 𒌋 𒅋𒆷𒀝 𒀀𒁲 𒍢𒁍𒌅𒌝 𒅅𒋗𒁺 𒌑𒇻 𒀠𒅗𒅗𒌅𒌝 𒅅𒈬𒊏. 𒀀𒁉𒅋𒋗 𒊭 𒄴𒊏𒋾𒅎 𒀀𒈾 𒈠𒀸𒁕𒊑𒅎 𒅕𒊒𒌒. 𒀀𒆷𒀝𒌅𒌝 𒅖𒋾𒀜 𒅆𒋛𒌅𒌝 𒅖𒋾𒀜 𒀀𒈾 𒀊𒅗𒀠𒇷𒅎. 𒋗𒌝𒈠 „𒉺𒈾 𒁲𒈠𒄠 𒋗𒆪𒌦” 𒍝𒁉𒀉, 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒉺𒉌𒋾𒅎 𒁲𒈠𒄠 𒍢𒄴𒊏𒄠 𒄿𒊭𒀜𒁕𒅈 𒌋 𒌓𒁕𒀸, 𒁀𒇻 𒅗𒊍𒁉𒅎 𒍢𒋾𒅎."},
+"rb_agent":{"message0":"𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 %1 𒂊𒁍𒍑","message1":"𒀀𒁲 %1 𒀠𒅗𒅗𒋾𒅎, 𒄿𒈾 𒌑𒉡𒋾𒅎 𒀭𒉌𒋾𒅎:","message2":"%1","message3":"𒉺𒈾 𒁲𒈠𒄠 𒋗𒆪𒌦, 𒌋 𒄿𒈾 𒀀𒆷𒆠𒅎 𒋗𒌦𒉌 %1","tooltip":"Claude 𒊭 𒂊𒁉𒅆𒅎 𒄿𒈠𒀠𒇷𒅅: 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒅖𒋾𒀜 𒅖𒋼𒅔 𒌑𒉡𒋾𒅎 𒊭 𒇷𒅁𒁉 𒄿𒄭𒅕, 𒊭 𒅁𒋗 𒅎𒈠𒅈, 𒌋 𒅋𒆷𒀝 𒀀𒁲 𒍢𒁍𒌅𒌝 𒅅𒋗𒁺 𒌑𒇻 𒀠𒅗𒅗𒌅𒌝 𒅅𒈬𒊏. 𒀀𒁉𒅋𒋗 𒊭 𒄴𒊏𒋾𒅎 𒀀𒈾 𒈠𒀸𒁕𒊑𒅎 𒅕𒊒𒌒. 𒀀𒆷𒀝𒌅𒌝 𒅖𒋾𒀜 𒅆𒋛𒌅𒌝 𒅖𒋾𒀜 𒀀𒈾 𒀊𒅗𒀠𒇷𒅎. 𒋗𒌝𒈠 „𒉺𒈾 𒁲𒈠𒄠 𒋗𒆪𒌦” 𒍝𒁉𒀉, 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒉺𒉌𒋾𒅎 𒁲𒈠𒄠 𒍢𒄴𒊏𒄠 𒄿𒊭𒀜𒁕𒅈 𒌋 𒌓𒁕𒀸, 𒁀𒇻 𒅗𒊍𒁉𒅎 𒍢𒋾𒅎.","message4":"𒀀𒊭𒅈 𒀀𒉿𒌅𒌝 𒅖𒌅 𒅋𒇷𒅗𒄠 𒋡𒁍 %1"},
 "rb_agent_builtin":{"message0":"𒌑𒉡𒌅𒌝: %1","tooltip":"𒌑𒉡𒌅𒌝 𒆠𒉡𒌝 𒀀𒈾 𒈠𒅈 𒅆𒅁𒊑𒅎. „𒉌𒅅𒅗𒊍𒋛 𒂊𒁍𒍑” 𒌋 „𒋛𒈠𒉌 𒌋 𒌑𒈪” 𒈪𒈾𒋾𒅎 𒌋 𒋛𒈠𒉌 𒆠𒈾𒄠 𒄿𒈾𒀜𒁲𒉡, 𒀀𒈾 𒀀𒊭𒅈 𒀊𒅗𒀠𒇻𒌝 𒄿𒄩𒀜𒌅. „𒀀𒉿𒋫𒄠 𒁉𒊑” 𒁀𒊏𒄠 𒊭𒉌𒅎 𒁺𒌌𒆷𒄠 𒊭 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒁕𒀭. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒁍𒊻𒋢𒊏𒌅𒌝, GitHub, Telegram, email 𒌋 𒌑𒈬 𒋫𒄠𒅆𒆷𒄠 𒄿𒇷𒅅𒄣; 𒉈𒁉𒋗𒌝 𒊭 Python 𒊭 𒅗𒅆𒅎 𒄿𒇷𒅅𒆠 (𒆪𒉡𒊌𒅗𒋾𒅎 𒄿𒈾 second-thought.ini 𒋗𒆪𒌦), 𒌋 𒌅𒌒𒁉 𒊺𒋾𒅎 𒆠𒈾𒄠 𒄿𒊭𒊍𒋛. 𒅆𒅁𒊏𒄠 𒊭𒉺𒊒𒌝, 𒀀𒉿𒋫𒄠 𒊭𒅗𒉡𒌝 𒌋 „𒌑𒉡𒌓 𒁉𒋾𒅎 𒋗𒋼𒊺𒅕” 𒄿𒈾 𒉺𒉌 𒅖𒋾𒀜 𒅖𒋾𒀜 𒄿𒊭𒀠𒇻𒅗, 𒀸𒋗𒌝 𒊭 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒊭𒊍𒋢 (𒌅𒌒𒁍𒌝 𒊺𒋾𒅎, 𒅆𒀉𒊒𒌝) 𒀀𒈾 𒋗𒋼𒋗𒊑𒋗 𒄿𒄩𒀸. „𒁀𒇻 𒊭𒇷𒅎” 𒄭𒅕 𒋗𒌝𒈠 𒀀𒈾 𒅗𒇷𒋗 𒊭 𒄿𒊭𒊍𒋢 𒋫𒆠𒅁. 𒋛𒅅𒆪𒊏𒄠 𒁉𒌅𒌝, 𒁉𒌅𒌝 𒌋 𒈠𒊍𒍝𒅈𒋫𒄠 𒊏𒈬𒌝 𒅗𒀀𒅀𒀭𒋫𒄠 𒄿𒊭𒀠𒇻."},
 "rb_agent_mcp":{"message0":"𒌑𒉡𒌅𒌝 𒅖𒌅 𒁀𒀊 MCP %1 %2","tooltip":"𒈠𒅈 𒅆𒅁𒊑𒅎 𒅗𒆷 𒌑𒉡𒋾𒅎 𒊭 𒁀𒀊 MCP 𒄿𒈾𒀜𒁲𒉡 𒄿𒁲𒅔: 𒆪𒉡𒊌𒅗𒋾𒅎, GitHub, 𒈾𒀝𒅗𒈠𒋾𒅎, 𒌑𒈪 𒌋 𒈠𒁲𒅖 𒊭𒉌𒋾𒅎, 𒅖𒌅 𒅗𒆷 𒈠𒋾𒅎 𒊭 MCP. 𒁀𒁀𒄠 𒄿𒈾 second-thought.ini 𒆠𒈠 MCP_<NAME> = 𒆠𒁉𒋾𒅎 𒊭 𒌑𒊭𒊍𒁀𒌅𒋗 (𒆠𒈠 npx -y @modelcontextprotocol/server-filesystem ~/recipes) 𒌑𒇻 𒀀𒊭𒅈𒋗 𒊭 https:// 𒋗𒆪𒌦. 𒄿𒈾 𒉈𒁉𒅆𒅎 𒊭 Python 𒂊𒁲𒅖𒋗: 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒈠𒅈 𒅆𒅁𒊑𒅎 𒁀𒇻 𒌑𒉡𒋾𒅎 𒅆𒈾𒋾 𒅁𒁉𒅖."},
 "rb_agent_steps":{"message0":"𒀠𒅗𒅗𒀜 𒈠𒅈 𒅆𒅁𒊑𒅎","tooltip":"𒊭 𒈠𒅈 𒅆𒅁𒊑𒅎 𒉿𒅈𒆪𒌝 𒄿𒈾 𒂊𒁉𒅖𒋾𒅎 𒀭𒉌𒋾𒅎 𒄿𒁍𒋗: 𒋗𒈠𒌅𒌝 𒊭 𒅆𒀉𒊑 𒀉𒋾 step, tool, input, result 𒌋 status (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."},
@@ -960,7 +960,9 @@
 "Using the web":"𒄿𒈾 𒆠 𒊺𒋾𒅎",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒀀𒈾 𒊺𒋾𒅎 𒌌 𒄿𒇷, 𒀸𒋗𒌝 𒆠𒄠 𒈠𒀸𒁕𒊒𒌝 𒂊𒇷𒅖 𒄿𒈾 𒁀𒇻𒌝 𒊺𒋾 𒊭𒁲𒅕. 𒈾𒊒𒌝 𒊭 𒌑𒊺𒍮 𒊺𒋫𒄠 𒄿𒆷𒀝𒆠.",
 "Web address in the task":"𒋗𒈬𒌝 𒊭 𒊺𒋾𒅎 𒄿𒈾 𒅆𒁉𒅕𒋾𒅎",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"𒅆𒁉𒅕𒌅𒌝 𒋗𒈠 𒊭 𒊺𒋾𒅎 𒅅𒁉, 𒌑 𒁲𒈬𒌝 𒀭𒉡𒌝 𒌌 𒄿𒁉𒀉𒋼. 𒄿𒈾 𒇷𒁉𒀉𒋾 '𒄿𒈾 𒆠 𒊺𒋾𒅎' 𒋗𒈪, 𒌑𒇻 𒀀𒉿𒋾𒅎 𒊭 𒌅𒌒𒁉𒅎 𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒋗𒆪𒌦."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"𒅆𒁉𒅕𒌅𒌝 𒋗𒈠 𒊭 𒊺𒋾𒅎 𒅅𒁉, 𒌑 𒁲𒈬𒌝 𒀭𒉡𒌝 𒌌 𒄿𒁉𒀉𒋼. 𒄿𒈾 𒇷𒁉𒀉𒋾 '𒄿𒈾 𒆠 𒊺𒋾𒅎' 𒋗𒈪, 𒌑𒇻 𒀀𒉿𒋾𒅎 𒊭 𒌅𒌒𒁉𒅎 𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒋗𒆪𒌦.",
+"Sources not read":"𒋗𒈬 𒆷 𒊭𒋢",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"𒀀𒁉𒇻𒌅𒌝 𒋗𒈪 𒊭 𒀀𒇷𒆪𒌝 𒀭𒉡𒌝 𒌌 𒅖𒋢 𒄿𒍝𒀝𒅗𒅈, 𒀸𒋗𒌝 𒆠𒄠 𒀀𒈾 𒉺𒉌 𒋫𒅗𒇷𒅎 𒀀𒈬𒌨: {addresses}"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1874,7 +1876,9 @@
 "stuck":"kali",
 "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"bīrum warki šinā tiqnī ḫiṭâtim ištiātim iqbi, aššum kīam tiqnum ul ile ana šutēšurim. ana narêm mimma ša lā ileqqû ḫašiḫ, kīma ṭuppim, šiṭrim ulū awatim kīnatim: šūtu ana narêm qīš (ina šipirtim lū ina ṭēmim ša ṭuppī išassû), u tūr epuš.",
 "Web address in the task":"šumum ša šētim ina šipirtim",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"šipirtum šuma ša šētim iqbi, u ṭēmum annûm ul ipette. ina libitti 'ina qê šētim' šumi, ulū awâtim ša ṭuppim ina šipirtim šukun."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"šipirtum šuma ša šētim iqbi, u ṭēmum annûm ul ipette. ina libitti 'ina qê šētim' šumi, ulū awâtim ša ṭuppim ina šipirtim šukun.",
+"Sources not read":"šumū lā šasû",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"āpilūtum šumī ša ālikum annûm ul išsû izakkar, aššum kīam ana pāni takālim amur: {addresses}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",
