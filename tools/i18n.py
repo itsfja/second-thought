@@ -139,9 +139,44 @@ def coptic(word):
     return "".join(out)
 
 
+# Classical Syriac (#130), written in transliteration and shown in Estrangela. Consonants one letter each; doubled ones
+# are written once. Vowels as unpointed Syriac writes them: a, e and a medial ā not at all; i, ī and ē as ܝ, o, u, ō and
+# ū as ܘ; a final ā or ē (the emphatic state, singular and plural) as ܐ; a word that starts with a vowel gets ܐ first.
+SYC_CONSONANTS = dict(zip("ʾbgdhwzḥṭyklmnsʿpṣqrštḇḡḏḵṯ", "ܐܒܓܕܗܘܙܚܛܝܟܠܡܢܣܥܦܨܩܪܫܬܒܓܕܟܬ"))  # ḇ ḡ ḏ ḵ ṯ: soft, same letters
+SYC_VOWELS = {"a": "", "e": "", "ā": "", "i": "ܝ", "ī": "ܝ", "ē": "ܝ", "o": "ܘ", "u": "ܘ", "ō": "ܘ", "ū": "ܘ"}
+SYC_LETTERS = "ʾbgdhwzḥṭyklmnsʿpṣqrštḇḡḏḵṯaeiouāēīōū"
+
+
+def syriac(word):
+    """A transliterated Classical Syriac word in Syriac letters, or None if it has a letter Syriac doesn't."""
+    if any(c not in SYC_LETTERS for c in word):
+        return None
+    out = []
+    for i, c in enumerate(word):
+        if c in SYC_CONSONANTS:
+            letter = SYC_CONSONANTS[c]
+            if not (out and out[-1] == letter and word[i - 1] == c):  # a doubled consonant is written once
+                out.append(letter)
+            continue
+        if i == 0:
+            out.append("ܐ")
+        if i == len(word) - 1 and c in "āē":
+            out.append("ܐ")
+        elif not (i == 0 and c in "aeā"):
+            out.append(SYC_VOWELS[c])
+    return "".join(out)
+
+
+def printed(code, text):
+    """What exported Python prints for a word list in a script language: the transliteration, without the ^ marks, and
+    for Syriac with ꜣ and ꜥ (Latin letters) for ʾ and ʿ, so a terminal shows it in Latin script."""
+    text = unmark(text)
+    return text.replace("ʾ", "ꜣ").replace("ʿ", "ꜥ") if code == "syc" else text
+
+
 def unmark(text):
     """The text with the ^ marks (keep this word in Latin letters) taken out, as exported Python shows it."""
-    return re.sub(r"\^(?=\w)", "", text)
+    return re.sub(r"\^(?=[\w*~.\-])", "", re.sub(r"(?<=\w)\^(?=[\w*~.\-])", "-", text))
 
 
 def to_script(lang, text, missing=None):
@@ -150,6 +185,8 @@ def to_script(lang, text, missing=None):
     missing = set() if missing is None else missing
     if lang == "cop":
         return _to_coptic(text, missing)
+    if lang == "syc":
+        return _to_marked(text, missing, SYC_LETTERS, syriac)
     letters = "a-z0-9-" if lang == "gmy" else EGY_LETTERS if lang == "egy" else AKK_LETTERS
     out = []
     for token in text.split(" "):
@@ -182,33 +219,52 @@ def to_script(lang, text, missing=None):
 
 
 def _to_coptic(text, missing):
+    return _to_marked(text, missing, COP_LETTERS, coptic)
+
+
+def _to_marked(text, missing, letters, convert):
+    """A transliterated line in its own letters (Coptic, Syriac), word by word. A word marked ^, placeholders, names,
+    code and file names stay as they are; a Syriac proclitic joined by a hyphen to one of those (d-Claude) is written in
+    Syriac letters with the hyphen kept."""
     if "\n" in text:
-        return "\n".join(_to_coptic(line, missing) for line in text.split("\n"))
+        return "\n".join(_to_marked(line, missing, letters, convert) for line in text.split("\n"))
     out = []
     for token in text.split(" "):
         if re.search(r"</?[a-z]+>", token):  # <b>word</b>: the words beside the tags
-            out.append("".join(part if re.fullmatch(r"</?[a-z]+>", part) else _to_coptic(part, missing)
+            out.append("".join(part if re.fullmatch(r"</?[a-z]+>", part) else _to_marked(part, missing, letters, convert)
                                for part in re.split(r"(</?[a-z]+>)", token)))
             continue
-        if token.startswith("^") or PLACEHOLDER.search(token) or re.search(r"[A-Z0-9_/@]|:\S", token) or re.search(r"(^|\w)\.\w", token):
+        if convert is syriac and "'" in token and not re.search(r"[A-Z0-9_/@{\\\"]", token.replace("'", "")):  # d'sīm ʿbādā'
+            out.append("'".join(_to_marked(part, missing, letters, convert) if part else part for part in token.split("'")))
+            continue
+        pp = re.fullmatch(r"(\W*)([bdlw]{1,2})([A-Z0-9].*)", token) if convert is syriac else None
+        if pp:  # dClaude, bPython, l3: a proclitic on a name or a number
+            out.append(pp.group(1) + convert(pp.group(2)) + "-" + unmark(pp.group(3)))
+            continue
+        kept = lambda t: re.match(r"\W*\^", t) or PLACEHOLDER.search(t) or re.search(r'[A-Z0-9_/@"]|:\S', t) or re.search(r"(^|\w|\()\.\w", t)
+        pm = re.fullmatch(f"([^{letters}]*?)([{letters}]+)(-|(?=\\^))(.+)", token) if convert is syriac else None
+        if pm and kept(pm.group(4)) and convert(pm.group(2)):  # d-Claude, w^text: a proclitic on a word kept as it is
+            out.append(pm.group(1) + convert(pm.group(2)) + "-" + unmark(pm.group(4)))
+            continue
+        if kept(token):
             out.append(unmark(token))
             continue
-        m = re.fullmatch(f"([^{COP_LETTERS}]*?)([{COP_LETTERS}]+)([^{COP_LETTERS}]*)", token)
+        m = re.fullmatch(f"([^{letters}]*?)([{letters}]+)([^{letters}]*)", token)
         if not m:
-            missing.update(c for c in token if c.isalpha() and c not in COP_LETTERS)
+            missing.update(c for c in token if c.isalpha() and c not in letters)
             out.append(token)
             continue
         pre, word, post = m.groups()
-        written = coptic(word)
-        if written is None or re.search(r"[a-zāīū]", post):
-            missing.update(c for c in token if c.isalpha() and c not in COP_LETTERS)
+        written = convert(word)
+        if written is None or re.search(r"[a-zāīū]", post) or re.search(r"[A-Za-z]", pre):
+            missing.update(c for c in token if c.isalpha() and c not in letters)
             out.append(token)
             continue
         out.append(pre + written + post)
     return " ".join(out)
 
 
-SCRIPTS = {"gmy", "akk", "egy", "cop"}
+SCRIPTS = {"gmy", "akk", "egy", "cop", "syc"}
 
 
 # ----- The words each language needs -----
@@ -266,7 +322,7 @@ def cmd_add(path):
                     problems.append(f"{section} “{english[:50]}”: there's no language {code}")
                     continue
                 gaps = set()
-                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else unmark(text) if code == "cop" else text
+                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc") else text
                 if gaps:
                     problems.append(f"{section} “{english[:50]}”: {code} has no sign for {', '.join(sorted(gaps))}, so those stay romanised")
                 if sorted(PLACEHOLDER.findall(value)) != want:
