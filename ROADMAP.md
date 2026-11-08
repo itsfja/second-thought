@@ -34,6 +34,8 @@ Released in 3.10.0, mostly from the outside reviews: unknown Kraken tools count 
 
 Released in 3.11.0: Trust Wallet through its Agent Kit's MCP server, with money tools asking and a **Wallet health check** program ([#320](https://github.com/itsfja/second-thought/issues/320)); settings in layers, `ST_` variables then your home folder's ini then the program's ([#340](https://github.com/itsfja/second-thought/issues/340)); and exported settings files with every note on its own line ([#338](https://github.com/itsfja/second-thought/issues/338)). CI runs its end-to-end suite in three parts side by side ([#341](https://github.com/itsfja/second-thought/pull/341)).
 
+Released in 3.12.0: drafts and revisions can use the web, and say so when a task names an address they can't open ([#332](https://github.com/itsfja/second-thought/issues/332)); a review loop stops when the review keeps raising the same problems, and says what's probably missing ([#331](https://github.com/itsfja/second-thought/issues/331)). The README became a short front page with pictures, with the detail in a guide in `docs/` ([#345](https://github.com/itsfja/second-thought/issues/345)).
+
 ## Later: important, not urgent
 
 | | Benefit | Cost |

@@ -22,6 +22,8 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+## 3.12.0 - 2026-11-07
+
 ### Added
 - **using the web** on *write a first draft* and *revise to fix the review's problems* (#332): ticked, the model can search and read the web while it writes (Claude's web search, Gemini's Google Search, Perplexity's own), so a task like "sum up github.com/…" gets an answer from the page itself. When a task names a web address and the step can't open it, the run log says so and how to fix it. "Describe a program" now builds a reading step when a description names a site or a repository.
 
