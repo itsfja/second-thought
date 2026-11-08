@@ -1878,7 +1878,10 @@
 "Web address in the task":"o-no-ma pe-ra-ta-ro e-ne e-ka-ra",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"e-ka-ra o-no-ma pe-ra-ta-ro e-re-e, o-u-ki a-no-ke to-to po-pe. pe-ra-ta-ro e-pi ra-ta ka-ra-pe, e pa-ki-na wo-ka e-ne e-ka-ra te-ke.",
 "Sources not read":"pa-ki-na a-na-ke-no-sa",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"a-po-ko-ri-si o-no-ma e-re-e to-to o-u-ki a-ne-ke-no, i-de pa-ro pi-te-u-se: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"a-po-ko-ri-si o-no-ma e-re-e to-to o-u-ki a-ne-ke-no, i-de pa-ro pi-te-u-se: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"e-ra-pe {names}: te-to-ne o-u-pi-ra-ka LD_, DYLD_ PYTHON o-no-ma",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} o-u-ke te-to-ne Second Thought, ka-ra-pe o-ra. MCP o-pe-ro-si, e-u",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"a-ra-wo {path} a-ne-ko. ke-re-te jo-u-ka:  chmod 600 {path}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

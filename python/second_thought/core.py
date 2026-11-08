@@ -806,11 +806,27 @@ class _WebSocket:
             pass
 
 
+def _private_open(path, mode="w"):
+    """Opens a file for writing that only you can read (#307): on Linux and Mac it's made with 0600, and one already
+    there is changed to it. These hold prompts, answers, messages and spending, and other people on the computer
+    shouldn't see them. Windows keeps a file to its user already."""
+    if os.name != "posix":
+        return open(path, mode, encoding="utf-8")
+    flags = os.O_WRONLY | os.O_CREAT | (os.O_APPEND if mode == "a" else os.O_TRUNC)
+    fd = os.open(path, flags, 0o600)
+    try:
+        os.fchmod(fd, 0o600)
+    except OSError:
+        pass  # a file system without modes
+    return os.fdopen(fd, mode, encoding="utf-8")
+
+
 def _write_json(path, data, **dump_args):
-    """Writes JSON so the file is either all old or all new, even if the program stops part-way."""
+    """Writes JSON so the file is either all old or all new, even if the program stops part-way. Only you can read it
+    (#307): these are memory, messages, spending and approvals."""
     tmp = f"{path}.{os.getpid()}.tmp"
     try:
-        with open(tmp, "w", encoding="utf-8") as f:
+        with _private_open(tmp) as f:
             json.dump(data, f, ensure_ascii=False, **dump_args)
             f.flush()
             os.fsync(f.fileno())

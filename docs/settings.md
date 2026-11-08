@@ -27,6 +27,8 @@ It asks for the key without showing it. A program then finds any key that isn't 
 
 So a program's own file only needs its own settings. An ordinary environment variable with the setting's usual name (`ANTHROPIC_API_KEY`, `RB_BUDGET`) still wins over all three, and the keychain fills in any key still missing. `--doctor` says which file or variable each key came from.
 
+`--doctor` also notes any name in `second-thought.ini` that isn't a setting, which is usually a spelling mistake (`save_logg`); a name an MCP server or a command you run needs is fine. Settings never set `LD_*`, `DYLD_*` or `PYTHON*` names, which change how programs start, and `--doctor` says so if one was skipped. On Linux and Mac, keep `second-thought.ini` to yourself with `chmod 600 second-thought.ini`: `--doctor` notes it if other people can read it.
+
 ## Run settings
 
 The ini file has a `[run]` section. Remove the `;` from the start of a line to switch it on:

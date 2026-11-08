@@ -79,6 +79,25 @@ def _read_ini(path):
     return [(name, value) for section in cp.sections() for name, value in cp.items(section)]
 
 
+# Names second-thought.ini and ST_ variables never set (#307). They change how programs start: a library loaded into
+# every program (LD_PRELOAD, DYLD_INSERT_LIBRARIES), or Python's own start-up (PYTHONPATH, PYTHONSTARTUP). A copied or
+# downloaded ini could slip one in unnoticed, and it would reach every MCP server and command the program starts.
+# Proxies (HTTPS_PROXY and the like) stay allowed: people set those on purpose.
+NEVER_SET = ("LD_", "DYLD_", "PYTHON")
+SKIPPED_SETTINGS = []  # (name as written, where) for each one skipped, for --doctor
+INI_NAMES = []  # (environment key, name as written, where) for each name second-thought.ini sets, for --doctor's spelling check
+
+# The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
+# models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
+OTHER_SETTINGS = {
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
+    "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
+    "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
+    "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
+OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
+
+
 def _load_settings():
     """Settings come in three layers, each one over the one before (#340):
       1. ST_ environment variables, for every program on this computer: ST_EMAIL_ADDRESS, ST_CURRENCY and so on, the
@@ -97,12 +116,21 @@ def _load_settings():
     for env_name, value in os.environ.items():
         if env_name.upper().startswith("ST_") and len(env_name) > 3:
             name = env_name[3:]
-            chosen[SETTING_NAMES.get(name.lower(), name.upper())] = (_settings_value(name, value), "st:" + env_name)
+            key = SETTING_NAMES.get(name.lower(), name.upper())
+            if key.startswith(NEVER_SET):
+                SKIPPED_SETTINGS.append((env_name, "st:" + env_name))
+                continue
+            chosen[key] = (_settings_value(name, value), "st:" + env_name)
     for path, where in ((home, "home"), (own, "file")):
         for name, value in _read_ini(path) if path else []:
+            key = SETTING_NAMES.get(name.lower(), name.upper())
+            if key.startswith(NEVER_SET):
+                SKIPPED_SETTINGS.append((name, where))
+                continue
+            INI_NAMES.append((key, name, where))
             value = _settings_value(name, value)
             if value:
-                chosen[SETTING_NAMES.get(name.lower(), name.upper())] = (value, where)
+                chosen[key] = (value, where)
     for key, (value, where) in chosen.items():
         if value and not os.environ.get(key):
             os.environ[key] = value

@@ -1877,6 +1877,9 @@
 "Web address in the task":"任务中的网址",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。",
 "Sources not read":"未读过的来源",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"回答引用了这次运行从未读过的地址，所以在依赖它之前请先核对：{addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"回答引用了这次运行从未读过的地址，所以在依赖它之前请先核对：{addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"已跳过 {names}：设置从不更改 LD_、DYLD_ 或 PYTHON 名称，它们会改变程序的启动方式",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} 不是 Second Thought 使用的设置，请检查拼写。如果某个 MCP 服务器或你运行的命令需要它，那就没问题。",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"这台电脑上的其他人可以读取 {path}。要让其中的密钥只归你所有：  chmod 600 {path}"
 }
 };

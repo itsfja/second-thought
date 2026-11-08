@@ -19,7 +19,7 @@ from .settings import RUNTIME_VERSION, WHERE_KEYS, on_github_actions
 from .providers import CURRENCY, ModelCalls, amount_text, fixed_rate, band_text, call_cost, model_byline, model_label, money, per_dollar, rate_note
 from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
-    _locked, _need_picture, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js, same_problem,
+    _locked, _need_picture, _private_open, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js, same_problem,
     to_bool, to_list, to_record, to_str)
 from .connectors import Connections
 from .mcp import MCPTools
@@ -343,7 +343,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 self.log(tr("Resuming"), (tr("Picking up the run that stopped: 1 saved step will be reused instead of repeated.") if len(old) == 1 else
                           tr("Picking up the run that stopped: {n} saved steps will be reused instead of repeated.", n=len(old))), tr("resume"))
         try:
-            self.journal = open(path, "w", encoding="utf-8")
+            self.journal = _private_open(path)  # prompts and answers: only you can read it (#307)
             self.journal.write(json.dumps({"program": digest, "started": time.time()}) + "\n")
             self.journal.flush()
         except OSError:
@@ -1508,7 +1508,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             folder = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), LOG_DIR)
             os.makedirs(folder, exist_ok=True)
             path = os.path.join(folder, f"{prog}-{start:%Y%m%d-%H%M%S}.md")
-            with open(path, "w", encoding="utf-8") as f:
+            with _private_open(path) as f:  # the run's prompts and answers (#307)
                 f.write("\n".join(lines))
             print(tr("Log saved to {path}", path=path), flush=True)
         except OSError as e:

@@ -1877,6 +1877,9 @@
 "Web address in the task":"Webadresse in der Aufgabe",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Die Aufgabe nennt eine Webadresse, aber dieser Schritt kann sie nicht öffnen. Hake am Block 'mit dem Web' an oder setze den Text der Seite in die Aufgabe.",
 "Sources not read":"Quellen nicht gelesen",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Die Antwort nennt Adressen, die dieser Lauf nie gelesen hat, also prüfe sie, bevor du dich darauf verlässt: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Die Antwort nennt Adressen, die dieser Lauf nie gelesen hat, also prüfe sie, bevor du dich darauf verlässt: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"übersprungen {names}: Einstellungen ändern nie LD_-, DYLD_- oder PYTHON-Namen, die den Start von Programmen verändern",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} ist keine Einstellung, die Second Thought nutzt; prüfe die Schreibweise. Braucht sie ein MCP-Server oder ein Befehl, den du startest, ist das in Ordnung.",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"{path} können andere Personen auf diesem Computer lesen. Damit die Schlüssel darin nur dir gehören:  chmod 600 {path}"
 }
 };

@@ -3011,6 +3011,9 @@
   "Web address in the task": "Διεύθυνση ιστού στην εργασία",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Η εργασία αναφέρει μια διεύθυνση ιστού, αλλά αυτό το βήμα δεν μπορεί να την ανοίξει. Τσέκαρε 'με χρήση του ιστού' στο μπλοκ ή βάλε το κείμενο της σελίδας στην εργασία.",
   "Sources not read": "Πηγές που δεν διαβάστηκαν",
-  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Η απάντηση αναφέρει διευθύνσεις που αυτή η εκτέλεση δεν διάβασε ποτέ, οπότε έλεγξέ τες πριν βασιστείς σε αυτήν: {addresses}"
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Η απάντηση αναφέρει διευθύνσεις που αυτή η εκτέλεση δεν διάβασε ποτέ, οπότε έλεγξέ τες πριν βασιστείς σε αυτήν: {addresses}",
+  "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "παραλείφθηκε {names}: οι ρυθμίσεις δεν αλλάζουν ποτέ ονόματα LD_, DYLD_ ή PYTHON, που αλλάζουν την εκκίνηση των προγραμμάτων",
+  "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "το {names} δεν είναι ρύθμιση που χρησιμοποιεί το Second Thought, οπότε έλεγξε την ορθογραφία. Αν το χρειάζεται ένας διακομιστής MCP ή μια εντολή που τρέχεις, είναι εντάξει.",
+  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "το {path} μπορούν να το διαβάσουν άλλοι σε αυτόν τον υπολογιστή. Για να μείνουν τα κλειδιά του δικά σου:  chmod 600 {path}"
  }
 }

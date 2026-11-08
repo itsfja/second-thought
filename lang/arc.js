@@ -1878,7 +1878,10 @@
 "Web address in the task":"כתובת רשתא בעבידתא",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא.",
 "Sources not read":"מקורין דלא אתקריו",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"פתגמא מדכר כתובתא דהדא ריהטא לא קרת מעולם, הלכך בדוק להון קדם דתסמוך עלוהי: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"פתגמא מדכר כתובתא דהדא ריהטא לא קרת מעולם, הלכך בדוק להון קדם דתסמוך עלוהי: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"שבקנא {names}: תקנתא לא משניא לעלם שמהת LD_,‏ DYLD_ או PYTHON, דמשניין איכנא דשריין תכניתא",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} לא תקנתא דמשתמש בה Second Thought, בחון כתבא. אן שמשא MCP או פקודא דאנת מריץ צריך לה, שפיר.",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"אנשא אחרנין בחושבנא הנא יכלין למקרא {path}. למנטר קלידוהי לך בלחוד:  chmod 600 {path}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

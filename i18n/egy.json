@@ -3002,7 +3002,10 @@
   "Web address in the task": "rn n ꜥḏ m jrt",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "jrt ḏd rn n ꜥḏ n tꜣ, nn rḫ nmtt tn wn sw. ḏꜥr 'ḥnꜥ ꜥḏ n tꜣ' ḥr jnr, m rdj mdwt n ḏmꜥ m jrt.",
   "Sources not read": "nn šdj ḏmꜥw",
-  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "wšbt ḏd=s rnw nn šdj sw jrt tn, ptr st ḫr-ḥꜣt mḥ-jb=k jm=s: {addresses}"
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "wšbt ḏd=s rnw nn šdj sw jrt tn, ptr st ḫr-ḥꜣt mḥ-jb=k jm=s: {addresses}",
+  "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "wꜣḥ {names}: nn šnj sḫrw rnw LD_, DYLD_ PYTHON, šnj šꜣꜥ jrt",
+  "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} n sḫr n Second Thought jsṯ, mꜣꜣ sš. jr ḫrd MCP r.f, nfr pw.",
+  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "kjw rmṯ m jꜥḥ pn šdj {path}. r sꜣw ḫtmw n.k wꜥ:  chmod 600 {path}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

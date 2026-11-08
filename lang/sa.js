@@ -1878,7 +1878,10 @@
 "Web address in the task":"कार्ये जालसङ्केतः",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।",
 "Sources not read":"अपठिताः स्रोतांसि",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"उत्तरं तान् सङ्केतान् उद्धरति ये अनेन धावनेन कदापि न पठिताः, अतः तस्मिन् विश्वसनात् पूर्वं तान् परीक्षस्व: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"उत्तरं तान् सङ्केतान् उद्धरति ये अनेन धावनेन कदापि न पठिताः, अतः तस्मिन् विश्वसनात् पूर्वं तान् परीक्षस्व: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"{names} त्यक्तम्: व्यवस्थाः LD_, DYLD_ वा PYTHON नामानि कदापि न परिवर्तयन्ति, यानि कार्यक्रमाणाम् आरम्भं परिवर्तयन्ति",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} Second Thought इत्यनेन उपयुज्यमाना व्यवस्था नास्ति, अतः वर्णविन्यासं परीक्षस्व। यदि MCP सेवकः त्वया चाल्यमानः आदेशः वा तत् अपेक्षते, तर्हि सम्यक्।",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"अस्मिन् सङ्गणके अन्ये जनाः {path} पठितुं शक्नुवन्ति। तस्य कुञ्चिकाः तवैव रक्षितुम्:  chmod 600 {path}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

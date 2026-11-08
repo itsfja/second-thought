@@ -1878,6 +1878,9 @@
 "Web address in the task":"כתובת אינטרנט במשימה",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה.",
 "Sources not read":"מקורות שלא נקראו",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"התשובה מצטטת כתובות שהריצה הזו מעולם לא קראה, אז בדקו אותן לפני שסומכים עליה: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"התשובה מצטטת כתובות שהריצה הזו מעולם לא קראה, אז בדקו אותן לפני שסומכים עליה: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"דולג {names}: הגדרות אף פעם לא משנות שמות LD_,‏ DYLD_ או PYTHON, שמשנים את אופן הפעלת התוכניות",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} אינו הגדרה ש-Second Thought משתמש בה, אז כדאי לבדוק את האיות. אם שרת MCP או פקודה שאתה מריץ צריכים אותו, זה בסדר.",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"אנשים אחרים במחשב הזה יכולים לקרוא את {path}. כדי שהמפתחות שבו יהיו רק שלך:  chmod 600 {path}"
 }
 };

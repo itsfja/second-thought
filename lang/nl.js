@@ -1877,6 +1877,9 @@
 "Web address in the task":"Webadres in de taak",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak.",
 "Sources not read":"Bronnen niet gelezen",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Het antwoord noemt adressen die deze run nooit heeft gelezen, dus controleer ze voordat je erop vertrouwt: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Het antwoord noemt adressen die deze run nooit heeft gelezen, dus controleer ze voordat je erop vertrouwt: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"overgeslagen {names}: instellingen veranderen nooit LD_-, DYLD_- of PYTHON-namen, die bepalen hoe programma's starten",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} is geen instelling die Second Thought gebruikt, dus controleer de spelling. Als een MCP-server of een opdracht die je start het nodig heeft, is het goed.",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"andere mensen op deze computer kunnen {path} lezen. Om de sleutels voor jezelf te houden:  chmod 600 {path}"
 }
 };

@@ -25,6 +25,11 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 ### Added
 - **say where each fact came from** on the agent block (#312): ticked, and with a tool that reads the web, the agent puts the address each fact came from after it and ends with a list of sources. If its answer cites an address the run never read (made up, or remembered), the run log adds a "Sources not read" note listing them, so you know which to check. New agent blocks have it ticked; saved programs are unchanged. *Agent: research with sources* uses it.
 
+### Security
+- **Private files are only yours** (#307): on Linux and Mac, the files a program keeps (the resume journal of prompts and answers, memory, the Telegram message log, spending, approvals, and saved run logs) are made readable only by you, and existing ones are changed to that when they're next written. Before, most systems let every user on the computer read them.
+- **Settings can't change how programs start** (#307): `second-thought.ini` and `ST_` variables no longer set `LD_*`, `DYLD_*` or `PYTHON*` names, which could load a library or code into the program and every MCP server and command it starts. A copied or downloaded ini could have slipped one in unnoticed. Proxy settings still work.
+- **`--doctor`** notes a `second-thought.ini` other people can read (with the `chmod 600` that fixes it), any names it skipped, and any name it doesn't know, which is usually a spelling mistake (`save_logg`).
+
 ## 3.12.0 - 2026-11-07
 
 ### Added
