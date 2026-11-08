@@ -1877,7 +1877,10 @@
 "Web address in the task":"Webbnama on þǣm weorce",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Þæt weorc nemneþ webbnaman, ac þes stæpe ne mæg hine openian. Mearca 'þurh þæt webb' on þǣm stāne, oþþe sete þǣre sīdan word on þæt weorc.",
 "Sources not read":"Æspryngas ungerǣdde",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Sēo andswaru nemneþ naman þe þes ryne nǣfre ne rǣdde, swā sceawa hīe ǣr þū þǣre andsware trūwie: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Sēo andswaru nemneþ naman þe þes ryne nǣfre ne rǣdde, swā sceawa hīe ǣr þū þǣre andsware trūwie: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"forlǣten {names}: settunga nǣfre ne wendaþ LD_, DYLD_ oþþe PYTHON naman, þe wendaþ hū weorc onginnaþ",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} nis nān settung þe Second Thought brūcþ, sēc þā wrītunge. Gif MCP þegn oþþe bebod þe þū drīfst hit behōfaþ, þæt is gōd.",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"ōþre menn on þissum rīmcræftlican tōle magon {path} rǣdan. Tō healdenne his cǣga þē ānum:  chmod 600 {path}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

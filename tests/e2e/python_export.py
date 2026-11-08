@@ -264,6 +264,12 @@ def python_tests(codes, share=None):
     cp = configparser.ConfigParser(interpolation=None, inline_comment_prefixes=(";", "#"))
     cp.read_string(EXPORTS["w_judges"]["second-thought.ini"])
     check(cp.has_section("keys") and cp.has_option("keys", "OPENAI_API_KEY"), "the exported ini is a valid settings file")
+    sys.path.insert(0, str(ROOT / "python"))
+    from second_thought.runtime import Runtime as PyRuntime
+    from second_thought.settings import SETTING_NAMES
+    named = {m for files in EXPORTS.values() for m in re.findall(r"^[;#]?\s*([A-Za-z][A-Za-z0-9_]*)\s*=", files.get("second-thought.ini", ""), re.M)}
+    strange = sorted(n for n in named if not PyRuntime.known_setting(SETTING_NAMES.get(n.lower(), n.upper())))
+    check(named and not strange, f"every setting the exported ini files name, used or not, is one --doctor knows (#307) ({len(named)} names{': ' + ', '.join(strange) if strange else ''})")
     with tempfile.TemporaryDirectory() as tmp:
         folder = pathlib.Path(tmp) / "My Programs" / "judges"  # a folder name with a space, like Windows ones
         folder.mkdir(parents=True)

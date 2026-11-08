@@ -76,6 +76,25 @@ def _read_ini(path):
     return [(name, value) for section in cp.sections() for name, value in cp.items(section)]
 
 
+# Names second-thought.ini and ST_ variables never set (#307). They change how programs start: a library loaded into
+# every program (LD_PRELOAD, DYLD_INSERT_LIBRARIES), or Python's own start-up (PYTHONPATH, PYTHONSTARTUP). A copied or
+# downloaded ini could slip one in unnoticed, and it would reach every MCP server and command the program starts.
+# Proxies (HTTPS_PROXY and the like) stay allowed: people set those on purpose.
+NEVER_SET = ("LD_", "DYLD_", "PYTHON")
+SKIPPED_SETTINGS = []  # (name as written, where) for each one skipped, for --doctor
+INI_NAMES = []  # (environment key, name as written, where) for each name second-thought.ini sets, for --doctor's spelling check
+
+# The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
+# models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
+OTHER_SETTINGS = {
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
+    "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
+    "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
+    "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
+OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
+
+
 def _load_settings():
     """Settings come in three layers, each one over the one before (#340):
       1. ST_ environment variables, for every program on this computer: ST_EMAIL_ADDRESS, ST_CURRENCY and so on, the
@@ -94,12 +113,21 @@ def _load_settings():
     for env_name, value in os.environ.items():
         if env_name.upper().startswith("ST_") and len(env_name) > 3:
             name = env_name[3:]
-            chosen[SETTING_NAMES.get(name.lower(), name.upper())] = (_settings_value(name, value), "st:" + env_name)
+            key = SETTING_NAMES.get(name.lower(), name.upper())
+            if key.startswith(NEVER_SET):
+                SKIPPED_SETTINGS.append((env_name, "st:" + env_name))
+                continue
+            chosen[key] = (_settings_value(name, value), "st:" + env_name)
     for path, where in ((home, "home"), (own, "file")):
         for name, value in _read_ini(path) if path else []:
+            key = SETTING_NAMES.get(name.lower(), name.upper())
+            if key.startswith(NEVER_SET):
+                SKIPPED_SETTINGS.append((name, where))
+                continue
+            INI_NAMES.append((key, name, where))
             value = _settings_value(name, value)
             if value:
-                chosen[SETTING_NAMES.get(name.lower(), name.upper())] = (value, where)
+                chosen[key] = (value, where)
     for key, (value, where) in chosen.items():
         if value and not os.environ.get(key):
             os.environ[key] = value
@@ -1800,11 +1828,27 @@ class _WebSocket:
             pass
 
 
+def _private_open(path, mode="w"):
+    """Opens a file for writing that only you can read (#307): on Linux and Mac it's made with 0600, and one already
+    there is changed to it. These hold prompts, answers, messages and spending, and other people on the computer
+    shouldn't see them. Windows keeps a file to its user already."""
+    if os.name != "posix":
+        return open(path, mode, encoding="utf-8")
+    flags = os.O_WRONLY | os.O_CREAT | (os.O_APPEND if mode == "a" else os.O_TRUNC)
+    fd = os.open(path, flags, 0o600)
+    try:
+        os.fchmod(fd, 0o600)
+    except OSError:
+        pass  # a file system without modes
+    return os.fdopen(fd, mode, encoding="utf-8")
+
+
 def _write_json(path, data, **dump_args):
-    """Writes JSON so the file is either all old or all new, even if the program stops part-way."""
+    """Writes JSON so the file is either all old or all new, even if the program stops part-way. Only you can read it
+    (#307): these are memory, messages, spending and approvals."""
     tmp = f"{path}.{os.getpid()}.tmp"
     try:
-        with open(tmp, "w", encoding="utf-8") as f:
+        with _private_open(tmp) as f:
             json.dump(data, f, ensure_ascii=False, **dump_args)
             f.flush()
             os.fsync(f.fileno())
@@ -5810,6 +5854,33 @@ class Doctor:
             out.append(("Saving files", outputs))
         return out
 
+    @staticmethod
+    def known_setting(key):
+        """Whether the runtime reads this setting (#307): one of its own, a model service's, or a model, MCP server or plan."""
+        services = {n for s in SERVICES for n in (*s["keys"], s.get("base_env"), (s.get("vision") or [None])[0]) if n}
+        return (key in SETTING_NAMES.values() or key in KEYCHAIN_NAMES or key in OTHER_SETTINGS or key in services
+                or key.startswith(OTHER_SETTING_PREFIXES))
+
+    def settings_notes(self):
+        """What --doctor notes about the settings files (#307): one others can read, names it skipped, and names it
+        doesn't know, which are usually spelling mistakes."""
+        notes, where = [], lambda w: w[3:] if w.startswith("st:") else SETTINGS_PATHS[0] if w == "home" else SETTINGS_PATH
+        if os.name == "posix":
+            for path in SETTINGS_PATHS:
+                try:
+                    if os.stat(path).st_mode & 0o077:
+                        notes.append(tr("{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}", path=path))
+                except OSError:
+                    pass
+        if SKIPPED_SETTINGS:
+            notes.append(tr("skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start",
+                            names=", ".join(f"{n} ({where(w)})" for n, w in SKIPPED_SETTINGS)))
+        unknown = [(n, w) for k, n, w in INI_NAMES if not self.known_setting(k)]
+        if unknown:
+            notes.append(tr("{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command "
+                            "you run needs it, that's fine.", names=", ".join(f"{n} ({where(w)})" for n, w in unknown)))
+        return notes
+
     async def doctor(self, can):
         """Runs every check, prints one line each, and gives the exit code: 0 when nothing failed."""
         prog = os.path.basename(sys.argv[0] or "this program")
@@ -5837,6 +5908,8 @@ class Doctor:
             row(update[0], "Runtime", update[1])
         row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=" + ".join(SETTINGS_PATHS)) if SETTINGS_PATH else
             tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
+        for text in self.settings_notes():
+            row("NOTE", "Settings", text)
         found = [(k, KEY_SOURCES.get(k)) for k in KEYCHAIN_NAMES if os.environ.get(k)]
         where = {"environment": tr("the environment"), "file": "second-thought.ini", "keychain": tr("the keychain")}
         if found:
@@ -6511,7 +6584,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 self.log(tr("Resuming"), (tr("Picking up the run that stopped: 1 saved step will be reused instead of repeated.") if len(old) == 1 else
                           tr("Picking up the run that stopped: {n} saved steps will be reused instead of repeated.", n=len(old))), tr("resume"))
         try:
-            self.journal = open(path, "w", encoding="utf-8")
+            self.journal = _private_open(path)  # prompts and answers: only you can read it (#307)
             self.journal.write(json.dumps({"program": digest, "started": time.time()}) + "\n")
             self.journal.flush()
         except OSError:
@@ -7676,7 +7749,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             folder = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), LOG_DIR)
             os.makedirs(folder, exist_ok=True)
             path = os.path.join(folder, f"{prog}-{start:%Y%m%d-%H%M%S}.md")
-            with open(path, "w", encoding="utf-8") as f:
+            with _private_open(path) as f:  # the run's prompts and answers (#307)
                 f.write("\n".join(lines))
             print(tr("Log saved to {path}", path=path), flush=True)
         except OSError as e:

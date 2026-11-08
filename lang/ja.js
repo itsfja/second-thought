@@ -1877,6 +1877,9 @@
 "Web address in the task":"タスク内のウェブアドレス",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。",
 "Sources not read":"読んでいない出典",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"回答に、この実行で一度も読んでいないアドレスが引用されています。頼る前に確認してください: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"回答に、この実行で一度も読んでいないアドレスが引用されています。頼る前に確認してください: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"{names} を飛ばしました: 設定は LD_、DYLD_、PYTHON の名前を変えません。これらはプログラムの起動を変えるからです",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} は Second Thought が使う設定ではありません。綴りを確かめてください。MCP サーバーや実行するコマンドが使うなら問題ありません。",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"{path} はこのコンピューターの他の人が読めます。鍵を自分だけのものにするには:  chmod 600 {path}"
 }
 };

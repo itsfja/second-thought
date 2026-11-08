@@ -9,7 +9,8 @@ import os
 import sys
 import urllib.error
 import urllib.request
-from .settings import KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM, RUNTIME_VERSION, SETTINGS_PATH, SETTINGS_PATHS, WHERE_KEYS
+from .settings import (INI_NAMES, KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM, OTHER_SETTING_PREFIXES, OTHER_SETTINGS, RUNTIME_VERSION,
+                       SETTING_NAMES, SETTINGS_PATH, SETTINGS_PATHS, SKIPPED_SETTINGS, WHERE_KEYS)
 from .providers import CURRENCY, MODELS, dollars, record_limits, PROVIDERS, SERVICES, TIER_NAMES, _tier, amount_text, band_text, model_byline, fixed_rate, per_dollar, rate_note, rates
 from .spending import PLANS, plan_of, reported_lines
 from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, SAFETY, _short, to_str
@@ -259,6 +260,33 @@ class Doctor:
             out.append(("Saving files", outputs))
         return out
 
+    @staticmethod
+    def known_setting(key):
+        """Whether the runtime reads this setting (#307): one of its own, a model service's, or a model, MCP server or plan."""
+        services = {n for s in SERVICES for n in (*s["keys"], s.get("base_env"), (s.get("vision") or [None])[0]) if n}
+        return (key in SETTING_NAMES.values() or key in KEYCHAIN_NAMES or key in OTHER_SETTINGS or key in services
+                or key.startswith(OTHER_SETTING_PREFIXES))
+
+    def settings_notes(self):
+        """What --doctor notes about the settings files (#307): one others can read, names it skipped, and names it
+        doesn't know, which are usually spelling mistakes."""
+        notes, where = [], lambda w: w[3:] if w.startswith("st:") else SETTINGS_PATHS[0] if w == "home" else SETTINGS_PATH
+        if os.name == "posix":
+            for path in SETTINGS_PATHS:
+                try:
+                    if os.stat(path).st_mode & 0o077:
+                        notes.append(tr("{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}", path=path))
+                except OSError:
+                    pass
+        if SKIPPED_SETTINGS:
+            notes.append(tr("skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start",
+                            names=", ".join(f"{n} ({where(w)})" for n, w in SKIPPED_SETTINGS)))
+        unknown = [(n, w) for k, n, w in INI_NAMES if not self.known_setting(k)]
+        if unknown:
+            notes.append(tr("{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command "
+                            "you run needs it, that's fine.", names=", ".join(f"{n} ({where(w)})" for n, w in unknown)))
+        return notes
+
     async def doctor(self, can):
         """Runs every check, prints one line each, and gives the exit code: 0 when nothing failed."""
         prog = os.path.basename(sys.argv[0] or "this program")
@@ -286,6 +314,8 @@ class Doctor:
             row(update[0], "Runtime", update[1])
         row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=" + ".join(SETTINGS_PATHS)) if SETTINGS_PATH else
             tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
+        for text in self.settings_notes():
+            row("NOTE", "Settings", text)
         found = [(k, KEY_SOURCES.get(k)) for k in KEYCHAIN_NAMES if os.environ.get(k)]
         where = {"environment": tr("the environment"), "file": "second-thought.ini", "keychain": tr("the keychain")}
         if found:

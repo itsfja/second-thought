@@ -1877,7 +1877,10 @@
 "Web address in the task":"Διεύθυνσις τοῦ δικτύου ἐν τῷ ἔργῳ",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Τὸ ἔργον διεύθυνσιν τοῦ δικτύου ὀνομάζει, ἀλλ' ὅδε ὁ βαθμὸς αὐτὴν ἀνοίγειν οὐ δύναται. Σημείωσον 'διὰ τοῦ δικτύου' ἐπὶ τῷ πλινθίῳ, ἢ θὲς τοὺς τῆς σελίδος λόγους ἐν τῷ ἔργῳ.",
 "Sources not read":"Πηγαὶ οὐκ ἀναγνωσθεῖσαι",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Ἡ ἀπόκρισις διευθύνσεις μνημονεύει ἃς ὅδε ὁ δρόμος οὐδέποτε ἀνέγνω· ἐξέτασον οὖν αὐτὰς πρὶν πιστεύειν: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Ἡ ἀπόκρισις διευθύνσεις μνημονεύει ἃς ὅδε ὁ δρόμος οὐδέποτε ἀνέγνω· ἐξέτασον οὖν αὐτὰς πρὶν πιστεύειν: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"παρελείφθη {names}· αἱ ῥυθμίσεις οὐδέποτε μεταβάλλουσι τὰ ὀνόματα LD_, DYLD_ ἢ PYTHON, ἃ μεταβάλλει τὴν τῶν προγραμμάτων ἀρχήν",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"τὸ {names} οὐκ ἔστι ῥύθμισις ᾗ χρῆται τὸ Second Thought· σκόπει οὖν τὴν γραφήν. εἰ δὲ θεράπων MCP ἢ πρόσταγμα ὃ πράττεις αὐτοῦ δεῖται, καλῶς ἔχει.",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"τὸ {path} ἄλλοι ἐν τῷδε τῷ λογιστηρίῳ ἀναγιγνώσκειν δύνανται. ἵνα αἱ κλεῖδες αὐτοῦ σοὶ μόνῳ ὦσιν:  chmod 600 {path}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

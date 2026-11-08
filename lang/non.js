@@ -1877,7 +1877,10 @@
 "Web address in the task":"Vefnafn í verkinu",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit.",
 "Sources not read":"Heimildir ólesnar",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Svarit nefnir vefnöfn er þessi renna las aldri, svá at kanna þau áðr þú treystir því: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Svarit nefnir vefnöfn er þessi renna las aldri, svá at kanna þau áðr þú treystir því: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"sleppt {names}: stillingar breyta aldri LD_, DYLD_ né PYTHON nǫfnum, er breyta hversu forrit hefjask",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} er engi stilling er Second Thought notar, ok skaltu hyggja at stafsetningu. Ef MCP þjónn eða boð er þú rennir þarf þess, er þat vel.",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"aðrir menn á þessi tǫlvu megu lesa {path}. At halda lyklum þess þér einum:  chmod 600 {path}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

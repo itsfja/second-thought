@@ -1878,7 +1878,10 @@
 "Web address in the task":"šumum ša šētim ina šipirtim",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"šipirtum šuma ša šētim iqbi, u ṭēmum annûm ul ipette. ina libitti 'ina qê šētim' šumi, ulū awâtim ša ṭuppim ina šipirtim šukun.",
 "Sources not read":"šumū lā šasû",
-"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"āpilūtum šumī ša ālikum annûm ul išsû izakkar, aššum kīam ana pāni takālim amur: {addresses}"
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"āpilūtum šumī ša ālikum annûm ul išsû izakkar, aššum kīam ana pāni takālim amur: {addresses}",
+"skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"{names} ezib: parṣū šumī LD_, DYLD_ u PYTHON ul unakkarū, ša rēš epēšim unakkarū",
+"{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} parṣum ša Second Thought ileqqû ul ibašši, šiṭram amur. Šumma MCP u qibītum ša tepeššu iḫaššeḫ, damiq.",
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"awīlū šanûtum ina kompūterim annîm {path} išassû. Ana kunukkī ana kâšim ukullim:  chmod 600 {path}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

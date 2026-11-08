@@ -93,7 +93,12 @@ Everything it reads and writes is sent to the model services it uses.
   fresh four-digit code, and only a reply from your chat with that code, within five minutes, allows it. Anyone who
   can read your Telegram can allow it, so the phone that reads it should be yours.
 - **Keys stay out of the program.** Keys live in `second-thought.ini` or environment variables, never in the
-  exported `.py` file. `second-thought.ini` is git-ignored here; keep yours private.
+  exported `.py` file. `second-thought.ini` is git-ignored here; keep yours private. On Linux and Mac, `--doctor`
+  says if other people on the computer can read it.
+- **Private files are only yours.** On Linux and Mac, what a program keeps between runs (the journal of prompts and
+  answers, memory, messages, spending, saved logs) is readable only by you.
+- **Settings can't change how a program starts.** `second-thought.ini` and `ST_` variables never set `LD_*`, `DYLD_*`
+  or `PYTHON*` names, which could load code into the program and everything it starts.
 
 ## On the page
 
