@@ -62,9 +62,10 @@ jobs:
         # The page's own functions in Node, no browser: seconds (tests/editor).
         run: node --test "tests/editor/*.test.cjs"
 
-  # The suite runs in four parts side by side, each on its own runner, so the stand-in services' fixed ports never
-  # clash. page and both python shares begin with the same page run (python checks what the page exported); each
-  # share runs half the exported programs, and share 1 the other Python checks too (#342).
+  # The suite runs in five parts side by side, each on its own runner, so the stand-in services' fixed ports never
+  # clash. page and the python shares begin with the same page run (python checks what the page exported). Share 1
+  # runs the Python checks that aren't per-program and shares 2 and 3 the exported programs, so each takes about as
+  # long as the page part (#342).
   test:
     needs: changes
     if: needs.changes.outputs.code == 'true'
@@ -72,7 +73,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        areas: [ "page", "python --share 1/2", "python --share 2/2", "sources i18n gallery" ]
+        areas: [ "page", "python --share 1/3", "python --share 2/3", "python --share 3/3", "sources i18n gallery" ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -97,7 +98,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        areas: [ "page", "python --share 1/2", "python --share 2/2", "sources i18n gallery" ]
+        areas: [ "page", "python --share 1/3", "python --share 2/3", "python --share 3/3", "sources i18n gallery" ]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v5

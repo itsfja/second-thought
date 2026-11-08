@@ -139,13 +139,24 @@ def approval_tests(codes, env, tmp):
           "a program that only looks at things runs without asking")
 
 
+# Share 1 also runs the checks that aren't per-program, which take about as long as this many programs (#342)
+OTHER_CHECKS_WEIGHT = 120
+
+
 def share_of(names, share):
-    """The programs one share of the run takes (#342): by sorted name, every n-th starting at the k-th, so the shares
-    are about the same size and every program is in exactly one. No share means all of them."""
+    """The programs one share of the run takes (#342). In sorted order, each program goes to the share with the least
+    to do so far, share 1 starting with the other checks' weight, so the shares take about as long as each other and
+    every program is in exactly one. No share means all of them."""
     if not share:
         return sorted(names)
     k, n = share
-    return [x for i, x in enumerate(sorted(names)) if i % n == k - 1]
+    load, mine = [OTHER_CHECKS_WEIGHT] + [0] * (n - 1), []
+    for x in sorted(names):
+        j = load.index(min(load))
+        load[j] += 1
+        if j == k - 1:
+            mine.append(x)
+    return mine
 
 
 def python_tests(codes, share=None):

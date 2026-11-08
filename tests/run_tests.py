@@ -13,10 +13,11 @@ The tests live in tests/e2e/, one file per area. To run only some areas, name th
     python tests/run_tests.py i18n gallery
 
 The areas are sources, page, i18n, gallery and python. Python runs the programs the page exports, so naming
-python runs page too. CI runs python in two halves side by side (#342):
+python runs page too. CI runs python in three shares side by side (#342), each about as long as the others:
 
-    python tests/run_tests.py python --share 1/2    # half the exported programs, and the other Python checks
-    python tests/run_tests.py python --share 2/2    # the other half
+    python tests/run_tests.py python --share 1/3    # the Python checks that aren't per-program
+    python tests/run_tests.py python --share 2/3    # half the exported programs
+    python tests/run_tests.py python --share 3/3    # the other half
 """
 import pathlib
 import shutil

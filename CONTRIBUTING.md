@@ -120,8 +120,9 @@ python tests/run_tests.py    # unit tests too; ends with "All checks passed"
 ```
 
 CI runs the unit tests (and the editor's) on Python 3.9 to 3.13 and Windows, and the end-to-end suite on Linux and Windows,
-in four parts side by side on each (`page`, `python --share 1/2`, `python --share 2/2`, and `sources i18n gallery`), so a
-failure names its part. Each python share runs half the exported programs; share 1 also runs the other Python checks.
+in five parts side by side on each (`page`, `python --share 1/3`, `2/3` and `3/3`, and `sources i18n gallery`), so a
+failure names its part. Share 1 runs the Python checks that aren't per-program, shares 2 and 3 the exported programs
+(`share_of` in tests/e2e/python_export.py balances them).
 
 If you have API keys, `python tools/smoke_test.py` checks the real services (it costs a few pence).
 
