@@ -1,0 +1,33 @@
+# 文言: everyday words
+
+Made by tools/sync.py from i18n/lzh.json: edit that, not this.
+
+- Agent: 使者
+- Ask Claude: 問 Claude
+- Connections: 諸連
+- Control: 御
+- Draft: 稿
+- Events: 諸事
+- Files: 卷
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Lists: 列
+- Memory: 記憶
+- My Blocks: 吾塊
+- Operators: 算
+- Output: 出
+- Pictures: 圖
+- Programs: 諸程
+- Records: 簿
+- Review: 審
+- Search results: 所求之果
+- Text: 文
+- Tools: 器
+- Variables: 變數
+- Wait & time: 待與時
+- You: 汝
+- Listeners: they run while the exported program runs on schedule: 聽者：所出之程依時而行，則此諸塊行
+- No blocks match: 無塊相合
+- Read and send: 讀與發
+- Tools for the agent: drop them inside an agent block: 使者之器：置之於使者塊中
+- Type in 'Find a block' above the canvas.: 書於畫布上之「尋塊」。
