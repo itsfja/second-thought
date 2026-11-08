@@ -53,6 +53,8 @@ FONTS = {
                                        "\U00013216", "[\\u{13000}-\\u{1342F}]", True),
     "Noto Sans Coptic": (VENDOR / "@fontsource/noto-sans-coptic/package/files/noto-sans-coptic-coptic-400-normal.woff2",
                          "\u2C80", "[\\u2C80-\\u2CFF\\u03E2-\\u03EF]", True),
+    "Noto Sans Syriac": (VENDOR / "@fontsource/noto-sans-syriac/package/files/noto-sans-syriac-syriac-400-normal.woff2",
+                         "\u0710", "[\\u0700-\\u074F]", True),
 }
 PAGE = (ROOT / "second-thought.html").read_text(encoding="utf-8")
 DOC = '<!doctype html><html><head><meta charset=utf8><style>[hidden]{display:none!important}</style></head><body>' + PAGE + "</body></html>"

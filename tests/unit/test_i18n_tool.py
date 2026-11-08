@@ -29,6 +29,15 @@ class Scripts(unittest.TestCase):
         self.assertEqual(tool.to_script("cop", "ari ^Run {x} second-thought.ini"), "ⲁⲣⲓ Run {x} second-thought.ini")
         self.assertEqual(tool.unmark("ari ^Run"), "ari Run")
 
+    def test_syriac_transliteration_becomes_estrangela(self):
+        # #130: unpointed, as Syriac is written: short vowels and a medial ā left out, a final ā or ē as ܐ, an initial
+        # vowel with ܐ, a doubled consonant once; a proclitic joined to a name keeps its hyphen
+        self.assertEqual(tool.to_script("syc", "malkā ktābā šabbtā"), "ܡܠܟܐ ܟܬܒܐ ܫܒܬܐ")
+        self.assertEqual(tool.to_script("syc", "īdā ʾīdā malkē"), "ܐܝܕܐ ܐܝܕܐ ܡܠܟܐ")
+        self.assertEqual(tool.to_script("syc", "ṭuksā d-Claude {x} second-thought.ini ^Run"), "ܛܘܟܣܐ ܕ-Claude {x} second-thought.ini Run")
+        self.assertEqual(tool.to_script("syc", "dClaude bPython l3 d'sīm ʿbādā' w^text"), "ܕ-Claude ܒ-Python ܠ-3 ܕ'ܣܝܡ ܥܒܕܐ' ܘ-text")
+        self.assertEqual(tool.printed("syc", "ʾīn ʿbādā w^text"), "ꜣīn ꜥbādā w-text", "exported Python prints Latin letters only")
+
     def test_placeholders_names_and_files_are_kept(self):
         for lang, word in [("gmy", "to"), ("akk", "ana")]:
             for keep in ["{to}", "{name}-actions.zip", "GitHub", "SETUP.md", "second-thought.ini", "python my-program.py --test"]:
