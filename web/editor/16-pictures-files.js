@@ -275,11 +275,13 @@
     for (let n = 0; n < tiers.length; n++) {
       if (n) addStep("Backup", { mono:true, text:tr("{model} failed: {problem}\nTrying {next} instead.", { model:tierLabel(tiers[n - 1]), problem:String((last && last.message) || last).slice(0, 160), next:tierLabel(tiers[n]) }) }).done("backup", "warn");
       const t0 = performance.now(), tin = estTokens(prompt) + (images ? images.length * 1600 : 0);
-      const note = (ok, out) => { addCost(tiers[n], tin, ok ? estTokens(out) : 0); if (step && step.call) step.call({ who:tierLabel(tiers[n]), ms:performance.now() - t0, tin, tout:ok ? estTokens(out) : 0, ok, prompt:promptText(prompt, images) }); };
+      const note = (ok, out, u) => { const i = u ? u.in : tin, o = u ? u.out : ok ? estTokens(out) : 0; addCost(tiers[n], i, o); if (step && step.call) step.call({ who:tierLabel(tiers[n]), ms:performance.now() - t0, tin:i, tout:o, ok, prompt:promptText(prompt, images) }); };
       try {
         const got = await askOn(tiers[n], prompt, step, mode, images, sample);
-        const out = mode === "json" ? got : got.text;
-        run.tokOut += estTokens(out); note(true, out);
+        const out = mode === "json" ? got.json : got.text, u = got.usage;
+        if (u) { run.tokIn += u.in - tin; run.tokOut += u.out; run.exact++; }  // the service's own count (#321)
+        else { run.tokOut += estTokens(out); run.guessed++; }
+        note(true, out, u);
         return mode !== "json" && got.truncated ? continueReply(tiers[n], prompt, out, step, sample) : out;
       }
       catch(e) {
@@ -302,8 +304,10 @@
     let more;
     try { more = await askOn(tier, turns, step, "text", null, sample); }
     finally { if (step) step.prefix = ""; }
-    run.tokIn += estTokens(turns); run.tokOut += estTokens(more.text); addCost(tier, estTokens(turns), estTokens(more.text));
-    if (step && step.call) step.call({ who:tierLabel(tier), ms:performance.now() - t0, tin:estTokens(turns), tout:estTokens(more.text), ok:true, prompt:promptText(turns) });
+    const u = more.usage || { in:estTokens(turns), out:estTokens(more.text) };
+    run.tokIn += u.in; run.tokOut += u.out; addCost(tier, u.in, u.out);
+    if (more.usage) run.exact++; else run.guessed++;
+    if (step && step.call) step.call({ who:tierLabel(tier), ms:performance.now() - t0, tin:u.in, tout:u.out, ok:true, prompt:promptText(turns) });
     const joined = text + more.text;  // the continuation picks up exactly where the first part stopped
     if (step) step.text(joined);
     if (more.truncated) {
@@ -312,10 +316,28 @@
     }
     return joined;
   }
+  // One model call. Gives back { text, truncated } or, asked for JSON, { json }, with the service's own token counts
+  // (usage) when it gave them.
   async function askOn(tier, prompt, step, mode, images, sample){
     const ctl = new AbortController(); run.ctls.add(ctl);
-    const away = isElsewhere(tier);
+    const away = isElsewhere(tier), svc = serviceOf(tier), own = pageKeyFor(svc);
     const opts = { signal:ctl.signal, modelTier:away ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier, cache:false };
+    if (own) {  // off claude.ai, with your key for this service: the service itself answers (#321)
+      if (images && images.length) opts.images = images;
+      try {
+        const got = await serviceCall(svc, own, tier, prompt, opts, mode === "json" ? JSON_ONLY : null);
+        if (mode === "json") return { json:readJsonReply(got.text), usage:got.usage };
+        if (step) step.text((step.prefix || "") + got.text);
+        return { text:got.text, truncated:got.truncated, usage:got.usage };
+      } catch(e) {
+        if (e && e.code === "cancelled") throw new Halt();
+        throw e;
+      } finally { run.ctls.delete(ctl); }
+    }
+    if (away && sample.noClaude) {
+      run.ctls.delete(ctl);
+      throw { code:"user", message:tr("{who} has no key on this page, and Claude can't stand in for it here. Add a key for it with “Add another key” at the top, or choose a model you have a key for.", { who:svc.who || svc.name }) };
+    }
     if (away) {
       const svc = serviceOf(tier), who = svc.who || svc.name;
       if (step && step.el && !step.el.dataset.stand) { step.el.dataset.stand = "1"; const n = step.el.querySelector(".step-name"); if (n) n.textContent += " \u00b7 Claude standing in for " + tierLabel(tier); }
@@ -325,7 +347,7 @@
     if (images && images.length) opts.images = images;
     if (mode !== "json" && step) opts.onText = ({ text }) => step.text((step.prefix || "") + text);
     try {
-      if (mode === "json") return await sample.json(prompt, opts);
+      if (mode === "json") return { json:await sample.json(prompt, opts) };
       const r = await sample(prompt, opts);
       return { text:r.text.trim(), truncated:!!r.truncated };
     } catch(e) {
@@ -346,7 +368,8 @@
      Claude answers for every model, so that's the price used for another service's tier of the same size. */
   const PRICES = {};
   SERVICES.forEach(s => Object.keys(s.tiers).forEach(k => { const p = s.prices && s.prices[s.tiers[k][0]]; if (p) PRICES[s.prefix + k] = p; }));
-  const priceOf = tier => PRICES[isElsewhere(tier) ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier];
+  // With your own key for a service, it answers itself, at its own price (#321).
+  const priceOf = tier => PRICES[isElsewhere(tier) && !pageKeyFor(serviceOf(tier)) ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier];
   function addCost(tier, tin, tout){
     const p = priceOf(tier);
     if (!p) { run.costKnown = false; return; }
@@ -385,9 +408,12 @@
   })();
   function usageLine(){
     if (!run || !run.calls) return "";
-    return "About " + tokensUsed().toLocaleString() + " tokens (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from the length of the text. Exported Python reports exact counts." +
+    return (run.exact && !run.guessed ? tr("{n} tokens ({sent} sent, {received} received), as the services counted them.", { n:tokensUsed().toLocaleString(), sent:run.tokIn.toLocaleString(), received:run.tokOut.toLocaleString() })
+      : "About " + tokensUsed().toLocaleString() + " tokens (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from the length of the text. Exported Python reports exact counts.") +
       (run.budget ? " Budget: " + run.budget.toLocaleString() + "." : "") + (run.budgetDollars ? " Budget: " + budgetText() + "." : "") +
-      (run.costKnown && run.cost ? " " + tr("At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.", { cost:money(run.cost) }) : "");
+      (run.costKnown && run.cost ? " " + ((window.claude && window.claude.use)
+        ? tr("At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.", { cost:money(run.cost) })
+        : tr("At the models' list prices that's {cost}, charged to your keys' accounts.", { cost:money(run.cost) })) : "");
   }
 
   /* 'ask me before …': returns true if the action may go ahead. */

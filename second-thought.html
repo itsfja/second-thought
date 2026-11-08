@@ -227,8 +227,12 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 <div id="offsite" class="banner" hidden><span id="offsite-text"></span> <a id="offsite-link" href="https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN" target="_blank" rel="noopener"></a>
   <button id="own-key" type="button" class="own-key-btn"></button> <button id="own-key-forget" type="button" class="own-key-btn" hidden></button>
   <div id="own-key-panel" class="own-key-panel" hidden>
+    <label for="own-key-service" id="own-key-service-label"></label>
+    <select id="own-key-service"></select>
     <label for="own-key-input" id="own-key-label"></label>
     <input id="own-key-input" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
+    <span id="own-key-base-row" hidden><label for="own-key-base" id="own-key-base-label"></label>
+    <input id="own-key-base" type="url" autocomplete="off" spellcheck="false"></span>
     <label class="own-key-remember"><input id="own-key-remember" type="checkbox"> <span id="own-key-remember-text"></span></label>
     <button id="own-key-use" type="button" class="primary"></button> <button id="own-key-cancel" type="button"></button>
     <p id="own-key-note" class="hint"></p>
@@ -15461,38 +15465,156 @@ HOW TO MAP CODE
     f.ownKey = true;
     return f;
   }
-  // The offsite banner's key controls: "Use your own API key", and once one is given, which key and "Forget my key".
+  /* ---------- Other model services, off claude.ai (#321) ----------
+     Off claude.ai, a program can run with the model service chosen in the Model menu, not only Claude: any service that
+     speaks OpenAI's chat format (twelve of them, Llama through Ollama among them), with your own key for it. Each key
+     goes only from this browser to its own service's address, or to the address you give (Ollama or LM Studio on this
+     computer, say). It's kept like the Anthropic key: for this tab unless Remember is ticked, never in programs, exports
+     or the run log. The calls are the exported program's own (python/second_thought/providers.py, _call_openai), so a
+     service behaves the same on the page as in Python. Building and changing programs stay with Claude. */
+  const SVC_KEY = "second-thought-key-";
+  const browserServices = () => SERVICES.filter(s => s.api === "openai");
+  const svcSlug = s => s.prefix.replace(/[-:]+$/, "");
+  const svcWho = s => s.who || s.name;
+  const isLocal = base => /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(base || "");
+  const svcKeys = {
+    get(s){
+      for (const st of ["sessionStorage", "localStorage"]) {
+        try { const v = window[st].getItem(SVC_KEY + svcSlug(s)); if (v) { const o = JSON.parse(v); if (o && typeof o === "object") return o; } } catch(e) {}
+      }
+      return null;
+    },
+    set(s, entry, remember){
+      svcKeys.forget(s);
+      try { window[remember ? "localStorage" : "sessionStorage"].setItem(SVC_KEY + svcSlug(s), JSON.stringify(entry)); } catch(e) { return false; }
+      return true;
+    },
+    forget(s){ for (const st of ["sessionStorage", "localStorage"]) { try { window[st].removeItem(SVC_KEY + svcSlug(s)); } catch(e) {} } },
+    all(){ return browserServices().map(s => [s, svcKeys.get(s)]).filter(x => x[1]); }
+  };
+  // The key (and address) this page can call a service with, or null: only off claude.ai, where nothing changes (#321).
+  const pageKeyFor = s => (!s || (window.claude && window.claude.use) || s.api !== "openai") ? null : svcKeys.get(s);
+  // A service's own refusal, in words: which service, and what to do.
+  function serviceError(s, status, body){
+    const who = svcWho(s), msg = String((body && body.error && (body.error.message || body.error)) || (body && body.message) || "").slice(0, 300);
+    if (status === 401 || status === 403) return { code:"user", message:tr("{who} refused your API key. Check it, or forget it and enter it again.", { who }) };
+    if (status === 402 || /credit|balance|quota|billing/i.test(msg)) return { code:"user", message:tr("{who} says this key's account has no credit left: {problem}", { who, problem:msg || "HTTP " + status }) };
+    if (status === 429) return { code:"retryable", message:tr("{who} says too many requests right now. Wait a minute and run again.", { who }) };
+    if (status >= 500) return { code:"retryable", message:tr("{who} is having trouble right now ({problem}). Run again in a moment.", { who, problem:msg || "HTTP " + status }) };
+    return { code:"user", message:tr("{who} refused the request ({problem}).", { who, problem:msg || "HTTP " + status }) };
+  }
+  // One call to a service that speaks OpenAI's chat format, as the exported program makes it.
+  async function serviceCall(s, entry, tier, input, o, system){
+    const size = (/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1];
+    const model = s.any_model && String(tier).startsWith(s.any_model) ? String(tier).slice(s.any_model.length) : (s.tiers[size] || s.tiers.default)[0];
+    const messages = (typeof input === "string" ? [{ role:"user", content:input }] : input).map(t => ({ role:t.role, content:String(t.content) }));
+    if (system) messages.unshift({ role:"system", content:system });
+    if (o.images && o.images.length) {
+      const last = messages[messages.length - 1], parts = [{ type:"text", text:last.content }];
+      for (const b of o.images) parts.push({ type:"image_url", image_url:{ url:"data:" + (b.type || "image/png") + ";base64," + await blobBase64(b) } });
+      last.content = parts;
+    }
+    const body = { model, messages, stream:false };
+    if (s.name === "OpenAI") body.max_completion_tokens = API_MAX_TOKENS; else body.max_tokens = API_MAX_TOKENS;
+    if (s.name === "Qwen") body.enable_thinking = false;
+    const base = String(entry.base || s.base || "").replace(/\/+$/, ""), host = base.replace(/^https?:\/\//, "").split("/")[0];
+    const headers = { "content-type":"application/json" };
+    if (entry.key) headers.authorization = "Bearer " + entry.key;
+    let resp;
+    try { resp = await fetch(base + "/chat/completions", { method:"POST", signal:o.signal, headers, body:JSON.stringify(body) }); }
+    catch(e) {
+      if (e && e.name === "AbortError") throw { code:"cancelled" };
+      throw { code:"user", message:isLocal(base)
+        ? tr("Nothing answered at {base}. Is the server running? For Ollama, start it with OLLAMA_ORIGINS=* ollama serve so this page may call it.", { base })
+        : tr("{host} couldn't be reached from this page. Check your connection; if it keeps happening, {who} may not accept calls straight from a browser, and the exported program can use it instead.", { host, who:svcWho(s) }) };
+    }
+    let data = null;
+    try { data = await resp.json(); } catch(e) {}
+    if (!resp.ok) throw serviceError(s, resp.status, data);
+    const choice = data && data.choices && data.choices[0];
+    const text = String((choice && choice.message && choice.message.content) || "").replace(/<think>[\s\S]*?<\/think>\s*/g, "").trim();
+    if (!text) throw { code:"user", message:tr("{who} returned nothing for this step. Simplify it and try again.", { who:svcWho(s) }) };
+    const u = (data && data.usage) || {};
+    return { text, truncated:!!choice && choice.finish_reason === "length", model,
+             usage:Number.isFinite(u.prompt_tokens) && Number.isFinite(u.completion_tokens) ? { in:u.prompt_tokens, out:u.completion_tokens } : null };
+  }
+  // A reply that should be JSON, read the way Claude's are (a fence or a few words around it are forgiven).
+  function readJsonReply(text){
+    const t = String(text).trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+    try { return JSON.parse(t); } catch(e) {}
+    const a = t.search(/[[{]/), z = Math.max(t.lastIndexOf("}"), t.lastIndexOf("]"));
+    if (a >= 0 && z > a) { try { return JSON.parse(t.slice(a, z + 1)); } catch(e) {} }
+    throw { code:"invalid_json", message:"The reply wasn't readable JSON.", text };
+  }
+  // When there's no Claude here but there are keys for other services: runs can start, and a step that needs Claude says so.
+  function noClaudeSample(){
+    const f = async () => { throw { code:"user", message:tr("This step uses Claude, which this page can't reach: open it in claude.ai, add your Anthropic key from the bar at the top, or choose a model you have a key for.") }; };
+    f.json = f;
+    f.limits = async () => ({ maxPromptBytes:262144, images:{ maxCount:10, maxInputBytes:5000000, mediaTypes:["image/jpeg", "image/png", "image/webp"] } });
+    f.noClaude = true;
+    return f;
+  }
+
+  // The offsite banner's key controls: "Use your own API key", and once one is given, which keys and "Forget my keys".
   // Off claude.ai, a "needs Claude" message says where else Claude can come from.
   const orOwnKey = () => (window.claude && window.claude.use) ? "" : " " + tr("Or use your own API key, from the bar at the top.");
   function showOwnKey(){
     if (window.claude && window.claude.use) return;
-    const key = ownKey.get();
-    $("offsite-text").textContent = key
-      ? tr("Programs run with your own API key ({key}), charged to its Anthropic account.", { key:ownKey.shown(key) })
+    const key = ownKey.get(), others = svcKeys.all();
+    const list = (key ? ["Claude (" + ownKey.shown(key) + ")"] : []).concat(others.map(([s, e]) => svcWho(s) + " (" + (e.key ? ownKey.shown(e.key) : (e.base || s.base)) + ")"));
+    $("offsite-text").textContent = list.length
+      ? tr("Programs run with your own keys: {keys}. Each is charged to its own account.", { keys:list.join(", ") })
       : tr("This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:");
-    $("offsite-link").hidden = !!key;
-    $("own-key").hidden = !!key || !$("own-key-panel").hidden;
-    $("own-key-forget").hidden = !key;
+    $("offsite-link").hidden = !!list.length;
+    $("own-key").textContent = tr(list.length ? "Add another key" : "Use your own API key");
+    $("own-key").hidden = !$("own-key-panel").hidden;
+    $("own-key-forget").hidden = !list.length;
   }
   if (!(window.claude && window.claude.use)) {
-    $("own-key").textContent = tr("Use your own API key");
-    $("own-key-forget").textContent = tr("Forget my key");
-    $("own-key-label").textContent = tr("Your Anthropic API key");
+    $("own-key-forget").textContent = tr("Forget my keys");
+    $("own-key-service-label").textContent = tr("Service");
+    $("own-key-base-label").textContent = tr("Address");
     $("own-key-remember-text").textContent = tr("Remember on this browser");
     $("own-key-use").textContent = tr("Use this key");
     $("own-key-cancel").textContent = tr("Cancel");
-    $("own-key-note").textContent = tr("The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.");
-    const close = () => { $("own-key-panel").hidden = true; $("own-key-input").value = ""; $("own-key-msg").textContent = ""; showOwnKey(); };
-    $("own-key").onclick = () => { $("own-key-panel").hidden = false; showOwnKey(); $("own-key-input").focus(); };
+    const sel = $("own-key-service");
+    [["claude", "Claude (Anthropic)"]].concat(browserServices().map(s => [svcSlug(s), s.key_label || svcWho(s)])).forEach(([v, label]) => {
+      const opt = document.createElement("option"); opt.value = v; opt.textContent = label; sel.appendChild(opt);
+    });
+    const chosen = () => browserServices().find(s => svcSlug(s) === sel.value) || null;
+    const fit = () => {
+      const s = chosen();
+      $("own-key-label").textContent = s ? tr("Your {who} API key", { who:svcWho(s) }) : tr("Your Anthropic API key");
+      $("own-key-input").placeholder = s ? (s.name === "Llama" ? tr("none needed for Ollama") : "") : "sk-ant-…";
+      $("own-key-base-row").hidden = !s;
+      $("own-key-base").placeholder = s ? s.base : "";
+      $("own-key-note").textContent = s
+        ? tr("The key goes only from this browser to {host} (or the address you give), and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log.", { host:String(s.base).replace(/^https?:\/\//, "").split("/")[0] })
+        : tr("The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.");
+      $("own-key-msg").textContent = "";
+    };
+    sel.onchange = fit;
+    // The Model menu's service, so the panel opens on the one the program runs with
+    const opening = () => { const s = serviceOf($("tier").value); sel.value = s && s.api === "openai" ? svcSlug(s) : "claude"; fit(); };
+    const close = () => { $("own-key-panel").hidden = true; $("own-key-input").value = ""; $("own-key-base").value = ""; $("own-key-msg").textContent = ""; showOwnKey(); };
+    $("own-key").onclick = () => { $("own-key-panel").hidden = false; opening(); showOwnKey(); $("own-key-input").focus(); };
     $("own-key-cancel").onclick = close;
     $("own-key-use").onclick = () => {
-      const key = $("own-key-input").value.trim();
-      if (!/^sk-ant-[\w-]{20,}$/.test(key)) { $("own-key-msg").textContent = tr("That doesn't look like an Anthropic API key. They start with sk-ant-."); return; }
-      if (!ownKey.set(key, $("own-key-remember").checked)) { $("own-key-msg").textContent = tr("This browser won't keep the key. Allow site data for this page, then try again."); return; }
+      const key = $("own-key-input").value.trim(), s = chosen(), remember = $("own-key-remember").checked;
+      if (!s) {
+        if (!/^sk-ant-[\w-]{20,}$/.test(key)) { $("own-key-msg").textContent = tr("That doesn't look like an Anthropic API key. They start with sk-ant-."); return; }
+        if (!ownKey.set(key, remember)) { $("own-key-msg").textContent = tr("This browser won't keep the key. Allow site data for this page, then try again."); return; }
+      } else {
+        const base = $("own-key-base").value.trim().replace(/\/+$/, "");
+        if (base && !/^https:\/\/[^\s/]+|^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(base)) { $("own-key-msg").textContent = tr("The address needs to start with https://, or be http://localhost on this computer."); return; }
+        if (!key && !(s.name === "Llama" || isLocal(base))) { $("own-key-msg").textContent = tr("Type the key first."); return; }
+        if (/\s/.test(key) || (key && key.length < 8)) { $("own-key-msg").textContent = tr("That doesn't look like an API key."); return; }
+        if (!svcKeys.set(s, { key, base }, remember)) { $("own-key-msg").textContent = tr("This browser won't keep the key. Allow site data for this page, then try again."); return; }
+      }
       samplePromise = null; showBanner(""); close();
     };
     $("own-key-input").onkeydown = e => { if (e.key === "Enter") $("own-key-use").click(); };
-    $("own-key-forget").onclick = () => { ownKey.forget(); samplePromise = null; showOwnKey(); };
+    $("own-key-forget").onclick = () => { ownKey.forget(); browserServices().forEach(s => svcKeys.forget(s)); samplePromise = null; showOwnKey(); };
     showOwnKey();
   }
   getSample();
@@ -16128,11 +16250,13 @@ HOW TO MAP CODE
     for (let n = 0; n < tiers.length; n++) {
       if (n) addStep("Backup", { mono:true, text:tr("{model} failed: {problem}\nTrying {next} instead.", { model:tierLabel(tiers[n - 1]), problem:String((last && last.message) || last).slice(0, 160), next:tierLabel(tiers[n]) }) }).done("backup", "warn");
       const t0 = performance.now(), tin = estTokens(prompt) + (images ? images.length * 1600 : 0);
-      const note = (ok, out) => { addCost(tiers[n], tin, ok ? estTokens(out) : 0); if (step && step.call) step.call({ who:tierLabel(tiers[n]), ms:performance.now() - t0, tin, tout:ok ? estTokens(out) : 0, ok, prompt:promptText(prompt, images) }); };
+      const note = (ok, out, u) => { const i = u ? u.in : tin, o = u ? u.out : ok ? estTokens(out) : 0; addCost(tiers[n], i, o); if (step && step.call) step.call({ who:tierLabel(tiers[n]), ms:performance.now() - t0, tin:i, tout:o, ok, prompt:promptText(prompt, images) }); };
       try {
         const got = await askOn(tiers[n], prompt, step, mode, images, sample);
-        const out = mode === "json" ? got : got.text;
-        run.tokOut += estTokens(out); note(true, out);
+        const out = mode === "json" ? got.json : got.text, u = got.usage;
+        if (u) { run.tokIn += u.in - tin; run.tokOut += u.out; run.exact++; }  // the service's own count (#321)
+        else { run.tokOut += estTokens(out); run.guessed++; }
+        note(true, out, u);
         return mode !== "json" && got.truncated ? continueReply(tiers[n], prompt, out, step, sample) : out;
       }
       catch(e) {
@@ -16155,8 +16279,10 @@ HOW TO MAP CODE
     let more;
     try { more = await askOn(tier, turns, step, "text", null, sample); }
     finally { if (step) step.prefix = ""; }
-    run.tokIn += estTokens(turns); run.tokOut += estTokens(more.text); addCost(tier, estTokens(turns), estTokens(more.text));
-    if (step && step.call) step.call({ who:tierLabel(tier), ms:performance.now() - t0, tin:estTokens(turns), tout:estTokens(more.text), ok:true, prompt:promptText(turns) });
+    const u = more.usage || { in:estTokens(turns), out:estTokens(more.text) };
+    run.tokIn += u.in; run.tokOut += u.out; addCost(tier, u.in, u.out);
+    if (more.usage) run.exact++; else run.guessed++;
+    if (step && step.call) step.call({ who:tierLabel(tier), ms:performance.now() - t0, tin:u.in, tout:u.out, ok:true, prompt:promptText(turns) });
     const joined = text + more.text;  // the continuation picks up exactly where the first part stopped
     if (step) step.text(joined);
     if (more.truncated) {
@@ -16165,10 +16291,28 @@ HOW TO MAP CODE
     }
     return joined;
   }
+  // One model call. Gives back { text, truncated } or, asked for JSON, { json }, with the service's own token counts
+  // (usage) when it gave them.
   async function askOn(tier, prompt, step, mode, images, sample){
     const ctl = new AbortController(); run.ctls.add(ctl);
-    const away = isElsewhere(tier);
+    const away = isElsewhere(tier), svc = serviceOf(tier), own = pageKeyFor(svc);
     const opts = { signal:ctl.signal, modelTier:away ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier, cache:false };
+    if (own) {  // off claude.ai, with your key for this service: the service itself answers (#321)
+      if (images && images.length) opts.images = images;
+      try {
+        const got = await serviceCall(svc, own, tier, prompt, opts, mode === "json" ? JSON_ONLY : null);
+        if (mode === "json") return { json:readJsonReply(got.text), usage:got.usage };
+        if (step) step.text((step.prefix || "") + got.text);
+        return { text:got.text, truncated:got.truncated, usage:got.usage };
+      } catch(e) {
+        if (e && e.code === "cancelled") throw new Halt();
+        throw e;
+      } finally { run.ctls.delete(ctl); }
+    }
+    if (away && sample.noClaude) {
+      run.ctls.delete(ctl);
+      throw { code:"user", message:tr("{who} has no key on this page, and Claude can't stand in for it here. Add a key for it with “Add another key” at the top, or choose a model you have a key for.", { who:svc.who || svc.name }) };
+    }
     if (away) {
       const svc = serviceOf(tier), who = svc.who || svc.name;
       if (step && step.el && !step.el.dataset.stand) { step.el.dataset.stand = "1"; const n = step.el.querySelector(".step-name"); if (n) n.textContent += " \u00b7 Claude standing in for " + tierLabel(tier); }
@@ -16178,7 +16322,7 @@ HOW TO MAP CODE
     if (images && images.length) opts.images = images;
     if (mode !== "json" && step) opts.onText = ({ text }) => step.text((step.prefix || "") + text);
     try {
-      if (mode === "json") return await sample.json(prompt, opts);
+      if (mode === "json") return { json:await sample.json(prompt, opts) };
       const r = await sample(prompt, opts);
       return { text:r.text.trim(), truncated:!!r.truncated };
     } catch(e) {
@@ -16199,7 +16343,8 @@ HOW TO MAP CODE
      Claude answers for every model, so that's the price used for another service's tier of the same size. */
   const PRICES = {};
   SERVICES.forEach(s => Object.keys(s.tiers).forEach(k => { const p = s.prices && s.prices[s.tiers[k][0]]; if (p) PRICES[s.prefix + k] = p; }));
-  const priceOf = tier => PRICES[isElsewhere(tier) ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier];
+  // With your own key for a service, it answers itself, at its own price (#321).
+  const priceOf = tier => PRICES[isElsewhere(tier) && !pageKeyFor(serviceOf(tier)) ? ((/-(quick|default|complex)$/.exec(tier) || [0, "default"])[1]) : tier];
   function addCost(tier, tin, tout){
     const p = priceOf(tier);
     if (!p) { run.costKnown = false; return; }
@@ -16238,9 +16383,12 @@ HOW TO MAP CODE
   })();
   function usageLine(){
     if (!run || !run.calls) return "";
-    return "About " + tokensUsed().toLocaleString() + " tokens (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from the length of the text. Exported Python reports exact counts." +
+    return (run.exact && !run.guessed ? tr("{n} tokens ({sent} sent, {received} received), as the services counted them.", { n:tokensUsed().toLocaleString(), sent:run.tokIn.toLocaleString(), received:run.tokOut.toLocaleString() })
+      : "About " + tokensUsed().toLocaleString() + " tokens (" + run.tokIn.toLocaleString() + " sent, " + run.tokOut.toLocaleString() + " received), estimated from the length of the text. Exported Python reports exact counts.") +
       (run.budget ? " Budget: " + run.budget.toLocaleString() + "." : "") + (run.budgetDollars ? " Budget: " + budgetText() + "." : "") +
-      (run.costKnown && run.cost ? " " + tr("At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.", { cost:money(run.cost) }) : "");
+      (run.costKnown && run.cost ? " " + ((window.claude && window.claude.use)
+        ? tr("At the models' list prices that's {cost}; on this page it counts toward your Claude usage instead.", { cost:money(run.cost) })
+        : tr("At the models' list prices that's {cost}, charged to your keys' accounts.", { cost:money(run.cost) })) : "");
   }
 
   /* 'ask me before …': returns true if the action may go ahead. */
@@ -18548,12 +18696,12 @@ HOW TO MAP CODE
             ctls:new Set(), stoppers:new Set(), threads:new Set(), started:0, broadcasts:0, sample:null,
             active:true, ready:false, pending:hats.slice(), timerStart:Date.now(),
             msgWaiters:new Map(), msgNames:new Map(), msgWaiting:0, instructions:"", chats:new Map(), lastError:"",
-            budget:0, budgetDollars:0, budgetAmount:0, budgetUnit:"usd", tokIn:0, tokOut:0, cost:0, costKnown:true, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map(), agentTrace:[],
+            budget:0, budgetDollars:0, budgetAmount:0, budgetUnit:"usd", tokIn:0, tokOut:0, exact:0, guessed:0, cost:0, costKnown:true, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map(), agentTrace:[],
             inputs:{}, inputsIncomplete:false, replay:replay ? JSON.parse(JSON.stringify(replay)) : null };
     $("run").disabled = true; $("stop").disabled = false; setStatus("running");
     const started = Date.now();
     try {
-      run.sample = await getSample();
+      run.sample = await getSample() || (svcKeys.all().length ? noClaudeSample() : null);  // keys for other services only (#321)
       if (!run.sample) { showBanner(tr("Running needs Claude. Open this page in claude.ai while signed in.") + orOwnKey()); throw new Halt(); }
       await memInit();
       run.ready = true;

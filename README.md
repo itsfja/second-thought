@@ -11,7 +11,7 @@
 
 ## Try it
 
-1. **Open [Second Thought](https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN)** in claude.ai. There's nothing to install, and runs use your claude.ai account. There's also a copy at **[itsfja.github.io/second-thought](https://itsfja.github.io/second-thought/)**, updated with each release, which runs Claude with your own API key ([how](docs/using-the-page.md#using-the-page)).
+1. **Open [Second Thought](https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN)** in claude.ai. There's nothing to install, and runs use your claude.ai account. There's also a copy at **[itsfja.github.io/second-thought](https://itsfja.github.io/second-thought/)**, updated with each release, which runs programs with your own API key for Claude or eleven other model services, or Llama on your own computer ([how](docs/using-the-page.md#using-the-page)).
 2. **Pick an example and press Run.** There are over 150, from a simple review loop to agents that plan a bake or check on the house. Change the words in any block and run it again.
 3. **Export it.** *Import / export → Save Python (.zip)*, unzip, put your API key in `second-thought.ini`, then run `run.bat` (Windows) or `sh run.sh` (Linux, Mac). [Running exported programs](docs/running.md) has the details.
 

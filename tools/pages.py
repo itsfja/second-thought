@@ -8,8 +8,9 @@ saves files with ordinary browser downloads, and can run programs with the perso
 
 Because a key can be typed into this copy, it gets a Content-Security-Policy: scripts only from this site, the two
 places the page loads libraries from, and the page's own inline scripts (by their hashes, worked out here); and
-connections only to this site, api.anthropic.com, and cdnjs (the PDF worker's bytes are fetched to be checked
-against their fingerprint before it runs, #310), so nothing else the page loads could send the key anywhere.
+connections only to this site, api.anthropic.com, the model services that speak OpenAI's chat format and a model
+server on this computer (each key goes only to its own service, #321), and cdnjs (the PDF worker's bytes are fetched to
+be checked against their fingerprint before it runs, #310), so nothing else the page loads could send a key anywhere.
 """
 import base64
 import hashlib
@@ -27,6 +28,17 @@ HEAD = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
 TAIL = '\n</body>\n</html>\n'
 LIBRARIES = "https://cdn.jsdelivr.net https://cdnjs.cloudflare.com"  # Blockly and its plugins; the PDF reader
 API = "https://api.anthropic.com"
+LOCAL = "http://localhost:* http://127.0.0.1:*"  # a model server on this computer, such as Ollama (#321)
+
+
+def service_hosts(page):
+    """The addresses of the model services the page can call with your own key (#321): those that speak OpenAI's chat
+    format, from the SERVICES the page carries."""
+    import json
+    from urllib.parse import urlsplit
+    m = re.search(r'<script[^>]*\bid="services"[^>]*>(.*?)</script>', page, re.S)
+    services = json.loads(m.group(1)) if m else []
+    return sorted({f"https://{urlsplit(s['base']).netloc}" for s in services if s.get("api") == "openai" and str(s.get("base", "")).startswith("https://")})
 INLINE_SCRIPT = re.compile(r"<script(?![^>]*\b(?:src|type)=)[^>]*>(.*?)</script>", re.S)
 
 
@@ -41,7 +53,8 @@ def csp(page):
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  # Blockly writes its own styles
         "font-src 'self' https://fonts.gstatic.com",
         "img-src 'self' data: blob: https://static.blockly.com",  # Blockly's sprites (Blockly 13's media path)
-        f"connect-src 'self' {API} https://cdnjs.cloudflare.com",  # cdnjs: the PDF worker's bytes, fetched to check them (#310)
+        # cdnjs: the PDF worker's bytes, fetched to check them (#310); the services: your own keys for them (#321)
+        f"connect-src 'self' {API} {' '.join(service_hosts(page))} {LOCAL} https://cdnjs.cloudflare.com",
         "object-src 'none'",
         "base-uri 'none'",
         "form-action 'none'",

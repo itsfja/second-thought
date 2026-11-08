@@ -91,12 +91,12 @@
             ctls:new Set(), stoppers:new Set(), threads:new Set(), started:0, broadcasts:0, sample:null,
             active:true, ready:false, pending:hats.slice(), timerStart:Date.now(),
             msgWaiters:new Map(), msgNames:new Map(), msgWaiting:0, instructions:"", chats:new Map(), lastError:"",
-            budget:0, budgetDollars:0, budgetAmount:0, budgetUnit:"usd", tokIn:0, tokOut:0, cost:0, costKnown:true, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map(), agentTrace:[],
+            budget:0, budgetDollars:0, budgetAmount:0, budgetUnit:"usd", tokIn:0, tokOut:0, exact:0, guessed:0, cost:0, costKnown:true, askFirst:new Set(), programs:[], t0:Date.now(), reason, reflect:null, checkpoints:new Map(), agentTrace:[],
             inputs:{}, inputsIncomplete:false, replay:replay ? JSON.parse(JSON.stringify(replay)) : null };
     $("run").disabled = true; $("stop").disabled = false; setStatus("running");
     const started = Date.now();
     try {
-      run.sample = await getSample();
+      run.sample = await getSample() || (svcKeys.all().length ? noClaudeSample() : null);  // keys for other services only (#321)
       if (!run.sample) { showBanner(tr("Running needs Claude. Open this page in claude.ai while signed in.") + orOwnKey()); throw new Halt(); }
       await memInit();
       run.ready = true;
