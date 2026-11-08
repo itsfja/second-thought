@@ -11,7 +11,8 @@
    "message1": "έως %1 βήματα, με αυτά τα εργαλεία:",
    "message2": "%1",
    "message3": "κάνε πρώτα σχέδιο και άλλαζέ το στην πορεία %1",
-   "tooltip": "Ο Claude αποφασίζει τι θα κάνει μετά: σε κάθε βήμα διαλέγει ένα από τα εργαλεία μέσα, βλέπει τι έγινε και συνεχίζει ώσπου να πετύχει τον στόχο ή να τελειώσουν τα βήματα. Η τελική του απάντηση μπαίνει στο πρόχειρο. Κάθε βήμα είναι μία κλήση στο μοντέλο. Με το «κάνε πρώτα σχέδιο» επιλεγμένο, γράφει ένα σύντομο σχέδιο στο πρώτο βήμα και το κρατά ενημερωμένο, χωρίς επιπλέον κόστος."
+   "tooltip": "Ο Claude αποφασίζει τι θα κάνει μετά: σε κάθε βήμα διαλέγει ένα από τα εργαλεία μέσα, βλέπει τι έγινε και συνεχίζει ώσπου να πετύχει τον στόχο ή να τελειώσουν τα βήματα. Η τελική του απάντηση μπαίνει στο πρόχειρο. Κάθε βήμα είναι μία κλήση στο μοντέλο. Με το «κάνε πρώτα σχέδιο» επιλεγμένο, γράφει ένα σύντομο σχέδιο στο πρώτο βήμα και το κρατά ενημερωμένο, χωρίς επιπλέον κόστος.",
+   "message4": "να λέει από πού προέρχεται κάθε γεγονός %1"
   },
   "rb_agent_builtin": {
    "message0": "εργαλείο: %1",
@@ -1460,7 +1461,9 @@
   "Using the web": "Με χρήση του ιστού",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Αυτή η σελίδα δεν μπορεί να χρησιμοποιήσει τον ιστό, οπότε το πρόχειρο παραπάνω γράφτηκε χωρίς αυτόν. Το εξαγόμενο πρόγραμμα χρησιμοποιεί τον ιστό.",
   "Web address in the task": "Διεύθυνση ιστού στην εργασία",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Η εργασία αναφέρει μια διεύθυνση ιστού, αλλά αυτό το βήμα δεν μπορεί να την ανοίξει. Τσέκαρε 'με χρήση του ιστού' στο μπλοκ ή βάλε το κείμενο της σελίδας στην εργασία."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Η εργασία αναφέρει μια διεύθυνση ιστού, αλλά αυτό το βήμα δεν μπορεί να την ανοίξει. Τσέκαρε 'με χρήση του ιστού' στο μπλοκ ή βάλε το κείμενο της σελίδας στην εργασία.",
+  "Sources not read": "Πηγές που δεν διαβάστηκαν",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Η απάντηση αναφέρει διευθύνσεις που αυτή η εκτέλεση δεν διάβασε ποτέ, οπότε έλεγξέ τες πριν βασιστείς σε αυτήν: {addresses}"
  },
  "examples": {
   "review": {
@@ -3006,6 +3009,8 @@
   "stuck": "κόλλησε",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ο έλεγχος βρήκε τα ίδια προβλήματα μετά από δύο αναθεωρήσεις, άρα η αναθεώρηση δεν μπορεί να τα διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά.",
   "Web address in the task": "Διεύθυνση ιστού στην εργασία",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Η εργασία αναφέρει μια διεύθυνση ιστού, αλλά αυτό το βήμα δεν μπορεί να την ανοίξει. Τσέκαρε 'με χρήση του ιστού' στο μπλοκ ή βάλε το κείμενο της σελίδας στην εργασία."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Η εργασία αναφέρει μια διεύθυνση ιστού, αλλά αυτό το βήμα δεν μπορεί να την ανοίξει. Τσέκαρε 'με χρήση του ιστού' στο μπλοκ ή βάλε το κείμενο της σελίδας στην εργασία.",
+  "Sources not read": "Πηγές που δεν διαβάστηκαν",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Η απάντηση αναφέρει διευθύνσεις που αυτή η εκτέλεση δεν διάβασε ποτέ, οπότε έλεγξέ τες πριν βασιστείς σε αυτήν: {addresses}"
  }
 }

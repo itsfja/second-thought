@@ -6,7 +6,7 @@
 "note":"Modern Hebrew words for the block palette, the page, the examples and what exported programs print. Blockly's own blocks and menus come from its msg/he.js. The page is right to left (dir: rtl): Blockly is mirrored, and code, file names and model names stay left to right. Instructions to the reader use the plural imperative, which addresses everyone; blocks use the short singular imperative, as Scratch does in Hebrew. Modern product words (email, token, API, Home Assistant) are kept in Latin letters where Hebrew users would see them that way. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Hebrew names (הרץ, המשך, תזמונים).",
 "blocks":{
 "rb_add_result":{"message0":"הוסף %1 לתוצאה"},
-"rb_agent":{"message0":"סוכן: פעל להשגת %1","message1":"עד %1 צעדים, בעזרת הכלים האלה:","message2":"%1","message3":"הכן תוכנית קודם, ועדכן אותה תוך כדי %1","tooltip":"Claude מחליט מה לעשות הלאה: בכל צעד הוא בוחר באחד הכלים שבפנים, רואה מה קרה, וממשיך עד שהמטרה הושגה או שהצעדים נגמרו. התשובה הסופית שלו נכנסת לטיוטה. כל צעד הוא קריאה אחת למודל. כשמסומן \"הכן תוכנית קודם\", הוא כותב תוכנית קצרה בצעד הראשון ומעדכן אותה, בלי עלות נוספת."},
+"rb_agent":{"message0":"סוכן: פעל להשגת %1","message1":"עד %1 צעדים, בעזרת הכלים האלה:","message2":"%1","message3":"הכן תוכנית קודם, ועדכן אותה תוך כדי %1","tooltip":"Claude מחליט מה לעשות הלאה: בכל צעד הוא בוחר באחד הכלים שבפנים, רואה מה קרה, וממשיך עד שהמטרה הושגה או שהצעדים נגמרו. התשובה הסופית שלו נכנסת לטיוטה. כל צעד הוא קריאה אחת למודל. כשמסומן \"הכן תוכנית קודם\", הוא כותב תוכנית קצרה בצעד הראשון ומעדכן אותה, בלי עלות נוספת.","message4":"לומר מאין הגיעה כל עובדה %1"},
 "rb_agent_builtin":{"message0":"כלי: %1","tooltip":"כלי מוכן לסוכן. \"חישובים\" ו\"שעות ותאריכים\" נותנים מספרים וזמנים מדויקים, במקום שהמודל ינחש. \"בדיקת טקסט\" נותן לבודק נפרד לשפוט את עבודת הסוכן. בדף הזה, פידים, GitHub, Telegram, דוא״ל ולוח השנה משתמשים בנתונים לדוגמה; Python המיוצא משתמש בנתונים שלכם (שימו את המפתחות ב-second-thought.ini), וקורא דפי אינטרנט באמת. שליחה, הוספת תגובות ו\"שליטה במכשירים\" שואלים אתכם לפני כל פעולה, כי מה שהסוכן קורא (דף אינטרנט, פתק) עלול לנסות להטות אותו. בחרו \"בלי לשאול\" רק אם אתם סומכים על כל מה שהוא קורא. פתיחת מנעול, פתיחה וניטרול אזעקה תמיד שואלים."},
 "rb_agent_mcp":{"message0":"כלים משרת MCP %1 %2","tooltip":"נותן לסוכן את כל הכלים ששרת MCP מציע: קבצים, GitHub, מסדי נתונים, לוחות שנה ועוד הרבה, מכל עולם ה-MCP. הגדירו את השרת ב-second-thought.ini בתור MCP_<NAME> = הפקודה שמפעילה אותו (כמו npx -y @modelcontextprotocol/server-filesystem ~/recipes) או כתובת ה-https:// שלו. רק ב-Python המיוצא: בדף הזה הסוכן עובד בלי הכלים האלה."},
 "rb_agent_steps":{"message0":"צעדי הסוכן","tooltip":"מה עשה הסוכן האחרון בהרצה הזו: רשימת רשומות עם step, tool, input, result ו-status (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."},
@@ -960,7 +960,9 @@
 "Using the web":"בעזרת הרשת",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"הדף הזה לא יכול להשתמש ברשת, ולכן הטיוטה שלמעלה נכתבה בלעדיה. התוכנית המיוצאת משתמשת ברשת.",
 "Web address in the task":"כתובת אינטרנט במשימה",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה.",
+"Sources not read":"מקורות שלא נקראו",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"התשובה מצטטת כתובות שהריצה הזו מעולם לא קראה, אז בדקו אותן לפני שסומכים עליה: {addresses}"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1874,6 +1876,8 @@
 "stuck":"תקוע",
 "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
 "Web address in the task":"כתובת אינטרנט במשימה",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה.",
+"Sources not read":"מקורות שלא נקראו",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"התשובה מצטטת כתובות שהריצה הזו מעולם לא קראה, אז בדקו אותן לפני שסומכים עליה: {addresses}"
 }
 };

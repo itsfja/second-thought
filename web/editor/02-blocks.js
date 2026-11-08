@@ -366,6 +366,7 @@
       message1:"up to %1 steps, using these tools:", args1:[val("STEPS")],
       message2:"%1", args2:[{ type:"input_statement", name:"TOOLS", check:"AgentTool" }],
       message3:"make a plan first, and change it as it goes %1", args3:[{ type:"field_checkbox", name:"PLAN", checked:false }],
+      message4:"say where each fact came from %1", args4:[{ type:"field_checkbox", name:"SOURCES", checked:false }],
       previousStatement:null, nextStatement:null, style:"agent",
       tooltip:"Claude decides what to do next: each step it picks one of the tools inside, sees what happened, and carries on until the goal is met or the steps run out. Its final answer goes in the draft. Each step is one model call. With 'make a plan first' ticked, it writes a short plan with its first step and keeps it up to date, at no extra cost." },
     V("rb_agent_steps", "agent's steps", [], "Array", { style:"agent",

@@ -304,7 +304,8 @@
    "message1": "ϣⲁⲟⲩⲱϣ %1 ⲙⲃⲁⲑⲙⲟⲥ, ϩⲛ ⲛⲥⲕⲉⲩⲟⲥ:",
    "message2": "%1",
    "message3": "ⲁⲣⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲛⲧϣⲟⲣⲡ, ⲁⲩⲱ ϣⲓⲃⲉ ⲙⲙⲟⲥ ϩⲛ ⲧⲙⲟⲟϣⲉ %1",
-   "tooltip": "Claude ϣⲁϥⲕⲣⲓⲛⲉ ⲙⲡⲉⲧϥⲛⲁⲁⲁϥ: ⲕⲁⲧⲁ ⲃⲁⲑⲙⲟⲥ ϣⲁϥⲥⲱⲧⲡ ⲛⲟⲩⲥⲕⲉⲩⲟⲥ, ϣⲁϥⲛⲁⲩ ⲉⲡⲉⲛⲧⲁϥϣⲱⲡⲉ, ⲁⲩⲱ ϣⲁϥⲙⲟⲟϣⲉ ϣⲁⲛⲧⲉ ⲡⲥⲱⲕ ϫⲱⲕ ⲉⲃⲟⲗ ⲏ ⲛⲃⲁⲑⲙⲟⲥ ⲱϫⲛ. ⲡⲉϥⲟⲩⲱϣⲃ ⲛϩⲁⲉ ϣⲁϥⲃⲱⲕ ⲉⲡⲥϩⲁⲓ. ⲃⲁⲑⲙⲟⲥ ⲛⲓⲙ ⲟⲩϣⲓⲛⲉ ⲛⲥⲁⲃⲉ ⲡⲉ. ϩⲛ 'ⲁⲣⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ', ϣⲁϥⲥϩⲁⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲕⲟⲩï ⲙⲛ ⲡⲃⲁⲑⲙⲟⲥ ⲛⲧϣⲟⲣⲡ, ϣⲁϥⲧⲁϩⲟ ⲉⲣⲁⲧ, ⲁϫⲛ ⲕⲉϩⲁⲧ."
+   "tooltip": "Claude ϣⲁϥⲕⲣⲓⲛⲉ ⲙⲡⲉⲧϥⲛⲁⲁⲁϥ: ⲕⲁⲧⲁ ⲃⲁⲑⲙⲟⲥ ϣⲁϥⲥⲱⲧⲡ ⲛⲟⲩⲥⲕⲉⲩⲟⲥ, ϣⲁϥⲛⲁⲩ ⲉⲡⲉⲛⲧⲁϥϣⲱⲡⲉ, ⲁⲩⲱ ϣⲁϥⲙⲟⲟϣⲉ ϣⲁⲛⲧⲉ ⲡⲥⲱⲕ ϫⲱⲕ ⲉⲃⲟⲗ ⲏ ⲛⲃⲁⲑⲙⲟⲥ ⲱϫⲛ. ⲡⲉϥⲟⲩⲱϣⲃ ⲛϩⲁⲉ ϣⲁϥⲃⲱⲕ ⲉⲡⲥϩⲁⲓ. ⲃⲁⲑⲙⲟⲥ ⲛⲓⲙ ⲟⲩϣⲓⲛⲉ ⲛⲥⲁⲃⲉ ⲡⲉ. ϩⲛ 'ⲁⲣⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ', ϣⲁϥⲥϩⲁⲓ ⲛⲟⲩⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲕⲟⲩï ⲙⲛ ⲡⲃⲁⲑⲙⲟⲥ ⲛⲧϣⲟⲣⲡ, ϣⲁϥⲧⲁϩⲟ ⲉⲣⲁⲧ, ⲁϫⲛ ⲕⲉϩⲁⲧ.",
+   "message4": "ϫⲱ ϫⲉ ⲉⲣⲉ ⲟⲩⲟⲛ ⲛⲓⲙ ⲉⲓ ⲉⲃⲟⲗ ⲧⲱⲛ %1"
   },
   "rb_agent_steps": {
    "message0": "ⲛⲃⲁⲑⲙⲟⲥ ⲙⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ",
@@ -1451,7 +1452,9 @@
   "Using the web": "ϩⲓⲧⲛ ⲡϣⲛⲉ",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "ⲡⲉϫⲱⲱⲙⲉ ⲡⲁⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲉⲡ ⲡϣⲛⲉ, ⲉⲧⲃⲉ ⲡⲁⲓ ⲛⲧⲁⲩⲥⲕϩⲁⲓ ⲡⲥⲙⲛⲧⲓ ⲉⲧⲥⲁ ⲡⲧⲡⲉ ⲁϫⲙ ⲡϣⲛⲉ. ⲡⲓⲣⲟⲅⲣⲁⲙⲙⲁ ⲛⲧⲁⲩⲛⲧϥ ⲉⲃⲟⲗ ϣⲁϥⲉⲉⲡ ⲡϣⲛⲉ.",
   "Web address in the task": "ⲡⲣⲓⲛ ⲛⲡϣⲛⲉ ϩⲙ ⲡϣⲓⲛⲉ",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "ⲡϣⲓⲛⲉ ϫⲱ ⲙⲡⲣⲓⲛ ⲛⲡϣⲛⲉ, ⲁⲗⲗⲁ ⲡⲧϣⲟϣⲓ ⲡⲁⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲟⲩⲱⲛ ⲙⲙⲟϥ. ⲧⲱⲧⲉ 'ϩⲓⲧⲛ ⲡϣⲛⲉ' ϩⲓϫⲙ ⲡⲱⲛⲉ, ⲏ ⲙⲁ ⲛⲛϣⲁϫⲉ ⲙⲡϫⲱⲱⲙⲉ ϩⲙ ⲡϣⲓⲛⲉ."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "ⲡϣⲓⲛⲉ ϫⲱ ⲙⲡⲣⲓⲛ ⲛⲡϣⲛⲉ, ⲁⲗⲗⲁ ⲡⲧϣⲟϣⲓ ⲡⲁⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲟⲩⲱⲛ ⲙⲙⲟϥ. ⲧⲱⲧⲉ 'ϩⲓⲧⲛ ⲡϣⲛⲉ' ϩⲓϫⲙ ⲡⲱⲛⲉ, ⲏ ⲙⲁ ⲛⲛϣⲁϫⲉ ⲙⲡϫⲱⲱⲙⲉ ϩⲙ ⲡϣⲓⲛⲉ.",
+  "Sources not read": "ⲛⲥⲕϩⲁⲓ ⲙⲡⲟⲩⲱϣ",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "ⲡⲟⲩⲱϣⲃ ϫⲱ ⲛϩⲉⲛⲣⲓⲛ ⲙⲡⲉ ⲡⲓⲃⲱⲕ ⲡⲁⲓ ⲱϣ ⲙⲙⲟⲟⲩ, ⲉⲧⲃⲉ ⲡⲁⲓ ϭⲱϣⲧ ⲉⲣⲟⲩ ⲉⲙⲡⲁⲧⲉⲕⲕⲁϩⲧ: {addresses}"
  },
  "examples": {
   "review": {
@@ -2997,7 +3000,9 @@
   "stuck": "asaho",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "tdokimasia asjo nnipetkōb ntertpe mnnsa smnti snau, etbe pai psmnti nnefšcom etalco mmoou. eie pirogramma ere ouhōb šaat mmof ete mpoutaaf naf, nhe noušōšt nte web, oujōōme ē oume: ma naf mmof (hm pšine, ē hitn ouaggelos efšoš nnšōšt nte web), auō aaf on.",
   "Web address in the task": "prin npšne hm pšine",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "pšine jō mprin npšne, alla ptšoši pai nnefšcom eouōn mmof. tōte 'hitn pšne' hijm pōne, ē ma nnšaje mpjōōme hm pšine."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "pšine jō mprin npšne, alla ptšoši pai nnefšcom eouōn mmof. tōte 'hitn pšne' hijm pōne, ē ma nnšaje mpjōōme hm pšine.",
+  "Sources not read": "nskhai mpouōš",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "pouōšb jō nhenrin mpe pibōk pai ōš mmoou, etbe pai cōšt erou empatekkaht: {addresses}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

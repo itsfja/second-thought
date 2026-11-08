@@ -12,7 +12,8 @@
    "message1": "עד %1 פסיען, בהלין מאניא:",
    "message2": "%1",
    "message3": "עביד עיטתא קדמאה, ושני יתה באורחא %1",
-   "tooltip": "Claude דאין מה למעבד: בכל פסיעתא בחר חד מן מאניא דבגוה, חזי מה הוה, ואזיל עד דמטי לצביונא או עד דשלמו פסיעתא. פתגמא בתראה דיליה עאל לטופסא. כל פסיעתא היא קריאה חדא לחכימא. כד \"עביד עיטתא קדמאה\" רשים, כתב עיטתא זעירתא בפסיעתא קדמייתא ומחדת לה, בלא אגרא יתירא."
+   "tooltip": "Claude דאין מה למעבד: בכל פסיעתא בחר חד מן מאניא דבגוה, חזי מה הוה, ואזיל עד דמטי לצביונא או עד דשלמו פסיעתא. פתגמא בתראה דיליה עאל לטופסא. כל פסיעתא היא קריאה חדא לחכימא. כד \"עביד עיטתא קדמאה\" רשים, כתב עיטתא זעירתא בפסיעתא קדמייתא ומחדת לה, בלא אגרא יתירא.",
+   "message4": "למימר מן היכא אתת כל עובדא %1"
   },
   "rb_agent_builtin": {
    "message0": "מאנא: %1",
@@ -1461,7 +1462,9 @@
   "Using the web": "בסיוע רשתא",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "דפא הדין לא מצי לאשתמשא ברשתא, הלכך טופסא דלעיל אתכתיב בלאו הכי. פרוגרמא דאפיקו משתמש ברשתא.",
   "Web address in the task": "כתובת רשתא בעבידתא",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא.",
+  "Sources not read": "מקורין דלא אתקריו",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "פתגמא מדכר כתובתא דהדא ריהטא לא קרת מעולם, הלכך בדוק להון קדם דתסמוך עלוהי: {addresses}"
  },
  "examples": {
   "review": {
@@ -3007,7 +3010,9 @@
   "stuck": "מתעכב",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ.",
   "Web address in the task": "כתובת רשתא בעבידתא",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא.",
+  "Sources not read": "מקורין דלא אתקריו",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "פתגמא מדכר כתובתא דהדא ריהטא לא קרת מעולם, הלכך בדוק להון קדם דתסמוך עלוהי: {addresses}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

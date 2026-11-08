@@ -12,7 +12,8 @@
    "message1": "עד %1 צעדים, בעזרת הכלים האלה:",
    "message2": "%1",
    "message3": "הכן תוכנית קודם, ועדכן אותה תוך כדי %1",
-   "tooltip": "Claude מחליט מה לעשות הלאה: בכל צעד הוא בוחר באחד הכלים שבפנים, רואה מה קרה, וממשיך עד שהמטרה הושגה או שהצעדים נגמרו. התשובה הסופית שלו נכנסת לטיוטה. כל צעד הוא קריאה אחת למודל. כשמסומן \"הכן תוכנית קודם\", הוא כותב תוכנית קצרה בצעד הראשון ומעדכן אותה, בלי עלות נוספת."
+   "tooltip": "Claude מחליט מה לעשות הלאה: בכל צעד הוא בוחר באחד הכלים שבפנים, רואה מה קרה, וממשיך עד שהמטרה הושגה או שהצעדים נגמרו. התשובה הסופית שלו נכנסת לטיוטה. כל צעד הוא קריאה אחת למודל. כשמסומן \"הכן תוכנית קודם\", הוא כותב תוכנית קצרה בצעד הראשון ומעדכן אותה, בלי עלות נוספת.",
+   "message4": "לומר מאין הגיעה כל עובדה %1"
   },
   "rb_agent_builtin": {
    "message0": "כלי: %1",
@@ -1461,7 +1462,9 @@
   "Using the web": "בעזרת הרשת",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "הדף הזה לא יכול להשתמש ברשת, ולכן הטיוטה שלמעלה נכתבה בלעדיה. התוכנית המיוצאת משתמשת ברשת.",
   "Web address in the task": "כתובת אינטרנט במשימה",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה.",
+  "Sources not read": "מקורות שלא נקראו",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "התשובה מצטטת כתובות שהריצה הזו מעולם לא קראה, אז בדקו אותן לפני שסומכים עליה: {addresses}"
  },
  "examples": {
   "review": {
@@ -3007,6 +3010,8 @@
   "stuck": "תקוע",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
   "Web address in the task": "כתובת אינטרנט במשימה",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה.",
+  "Sources not read": "מקורות שלא נקראו",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "התשובה מצטטת כתובות שהריצה הזו מעולם לא קראה, אז בדקו אותן לפני שסומכים עליה: {addresses}"
  }
 }

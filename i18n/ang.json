@@ -11,7 +11,8 @@
    "message1": "oþ %1 stæpas, mid þissum tolum:",
    "message2": "%1",
    "message3": "maca ærest ræd, and wend hine on wege %1",
-   "tooltip": "Claude demeþ hwæt he æfter do: æt ælcum stæpe he geceosþ an þara tola þe þærinne sind, gesihþ hwæt gelamp, and gæþ forþ oþ þæt se ende sy gemet oþþe þa stæpas ateorien. His nihste andswaru gæþ on þæt frumgewrit. Ælc stæp is an clypung þære bysene. Gif “maca ærest ræd” is gemearcod, he writ sceortne ræd mid his forman stæpe and hylt hine niwne, butan maran ceape."
+   "tooltip": "Claude demeþ hwæt he æfter do: æt ælcum stæpe he geceosþ an þara tola þe þærinne sind, gesihþ hwæt gelamp, and gæþ forþ oþ þæt se ende sy gemet oþþe þa stæpas ateorien. His nihste andswaru gæþ on þæt frumgewrit. Ælc stæp is an clypung þære bysene. Gif “maca ærest ræd” is gemearcod, he writ sceortne ræd mid his forman stæpe and hylt hine niwne, butan maran ceape.",
+   "message4": "secgan hwanon ǣlc sōþ cōm %1"
   },
   "rb_agent_builtin": {
    "message0": "tol: %1",
@@ -1460,7 +1461,9 @@
   "Using the web": "Þurh þæt webb",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Þēos sīde ne mæg þæt webb brūcan, swā þæt frumgewrit ufan wæs būtan him gewriten. Þæt ūtgelǣdde ġecræft brȳcþ þæs webbes.",
   "Web address in the task": "Webbnama on þǣm weorce",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Þæt weorc nemneþ webbnaman, ac þes stæpe ne mæg hine openian. Mearca 'þurh þæt webb' on þǣm stāne, oþþe sete þǣre sīdan word on þæt weorc."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Þæt weorc nemneþ webbnaman, ac þes stæpe ne mæg hine openian. Mearca 'þurh þæt webb' on þǣm stāne, oþþe sete þǣre sīdan word on þæt weorc.",
+  "Sources not read": "Æspryngas ungerǣdde",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Sēo andswaru nemneþ naman þe þes ryne nǣfre ne rǣdde, swā sceawa hīe ǣr þū þǣre andsware trūwie: {addresses}"
  },
  "examples": {
   "review": {
@@ -3006,7 +3009,9 @@
   "stuck": "ætstod",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Seo sceawung fand þa ilcan gedwolan æfter twam bētum, swa bētung ne mæg hie gerihtan. Þam crafte wana wenunga sum þing þe him ne wæs gegifen, swa swa webbsīde, ġewrit oþþe soþ: sele him þæt (on þam weorce, to bisene, oþþe þurh ǣrendracan þe webbsīdan rǣdan mæg), and yrn eft.",
   "Web address in the task": "Webbnama on þǣm weorce",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Þæt weorc nemneþ webbnaman, ac þes stæpe ne mæg hine openian. Mearca 'þurh þæt webb' on þǣm stāne, oþþe sete þǣre sīdan word on þæt weorc."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Þæt weorc nemneþ webbnaman, ac þes stæpe ne mæg hine openian. Mearca 'þurh þæt webb' on þǣm stāne, oþþe sete þǣre sīdan word on þæt weorc.",
+  "Sources not read": "Æspryngas ungerǣdde",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Sēo andswaru nemneþ naman þe þes ryne nǣfre ne rǣdde, swā sceawa hīe ǣr þū þǣre andsware trūwie: {addresses}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

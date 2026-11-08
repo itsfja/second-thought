@@ -11,7 +11,8 @@
    "message1": "usque ad %1 gradus, his instrumentis:",
    "message2": "%1",
    "message3": "primum consilium cape et in itinere muta %1",
-   "tooltip": "Claude decernit quid deinde agat: quoque gradu unum ex instrumentis intus eligit, videt quid acciderit, et pergit donec finis attingatur aut gradus deficiant. Responsum eius ultimum in adumbrationem it. Quisque gradus una vocatio exemplaris est. Si «primum consilium cape» notatum est, breve consilium primo gradu scribit et renovat, sine sumptu addito."
+   "tooltip": "Claude decernit quid deinde agat: quoque gradu unum ex instrumentis intus eligit, videt quid acciderit, et pergit donec finis attingatur aut gradus deficiant. Responsum eius ultimum in adumbrationem it. Quisque gradus una vocatio exemplaris est. Si «primum consilium cape» notatum est, breve consilium primo gradu scribit et renovat, sine sumptu addito.",
+   "message4": "dicere unde quaeque res venerit %1"
   },
   "rb_agent_builtin": {
    "message0": "instrumentum: %1",
@@ -1460,7 +1461,9 @@
   "Using the web": "Ope interretis",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Haec pagina interrete uti non potest, itaque adumbratio supra sine eo scripta est. Programma exportatum interrete utitur.",
   "Web address in the task": "Inscriptio interretialis in penso",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Pensum inscriptionem interretialem nominat, sed hic gradus eam aperire non potest. Nota 'ope interretis' in latere, aut verba paginae in pensum pone."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Pensum inscriptionem interretialem nominat, sed hic gradus eam aperire non potest. Nota 'ope interretis' in latere, aut verba paginae in pensum pone.",
+  "Sources not read": "Fontes non lecti",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Responsum inscriptiones citat quas hic cursus numquam legit, itaque eas inspice priusquam ei confidis: {addresses}"
  },
  "examples": {
   "review": {
@@ -3006,7 +3009,9 @@
   "stuck": "haeret",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre.",
   "Web address in the task": "Inscriptio interretialis in penso",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Pensum inscriptionem interretialem nominat, sed hic gradus eam aperire non potest. Nota 'ope interretis' in latere, aut verba paginae in pensum pone."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Pensum inscriptionem interretialem nominat, sed hic gradus eam aperire non potest. Nota 'ope interretis' in latere, aut verba paginae in pensum pone.",
+  "Sources not read": "Fontes non lecti",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Responsum inscriptiones citat quas hic cursus numquam legit, itaque eas inspice priusquam ei confidis: {addresses}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

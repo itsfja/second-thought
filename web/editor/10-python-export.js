@@ -563,7 +563,7 @@
                   '], "fn": ' + (def ? procId(name) : "None") + ', "ask": ' + (t.getFieldValue("ASK") === "TRUE" ? "True" : "False") + "}");
               }
             }
-            E("await R.agent(" + I("GOAL", '""') + ", " + I("STEPS", "6") + ", [" + tools.join(", ") + "]" + (F("PLAN") === "TRUE" ? ", plan=True" : "") + ")");
+            E("await R.agent(" + I("GOAL", '""') + ", " + I("STEPS", "6") + ", [" + tools.join(", ") + "]" + (F("PLAN") === "TRUE" ? ", plan=True" : "") + (F("SOURCES") === "TRUE" ? ", sources=True" : "") + ")");
             break;
           }
           case "rb_ask_first": E("R.ask_before(" + pyStr(F("WHAT") || "all") + ")"); break;

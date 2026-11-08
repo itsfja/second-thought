@@ -11,7 +11,8 @@
    "message1": "ἕως %1 βημάτων, τοῖσδε τοῖς ὀργάνοις χρώμενος·",
    "message2": "%1",
    "message3": "πρῶτον σχέδιον ποίησον, καὶ ἄλλασσε αὐτὸ καθ᾽ ὁδόν %1",
-   "tooltip": "Ὁ Claude κρίνει τί ποιήσει· καθ᾽ ἕκαστον βῆμα ἐκλέγεται ἓν τῶν ὀργάνων τῶν ἔσω, βλέπει τί ἐγένετο, καὶ προβαίνει ἕως ἂν τὸ τέλος εὑρεθῇ ἢ τὰ βήματα παύσωνται. Ἡ ἐσχάτη ἀπόκρισις αὐτοῦ εἰς τὸ σχέδιον τίθεται. Ἕκαστον βῆμα μία κλῆσίς ἐστι τοῦ τύπου. Ἐὰν τὸ «πρῶτον σχέδιον ποίησον» σημειωθῇ, γράφει σύντομον σχέδιον ἐν τῷ πρώτῳ βήματι καὶ νέον αὐτὸ φυλάσσει, ἄνευ πλείονος δαπάνης."
+   "tooltip": "Ὁ Claude κρίνει τί ποιήσει· καθ᾽ ἕκαστον βῆμα ἐκλέγεται ἓν τῶν ὀργάνων τῶν ἔσω, βλέπει τί ἐγένετο, καὶ προβαίνει ἕως ἂν τὸ τέλος εὑρεθῇ ἢ τὰ βήματα παύσωνται. Ἡ ἐσχάτη ἀπόκρισις αὐτοῦ εἰς τὸ σχέδιον τίθεται. Ἕκαστον βῆμα μία κλῆσίς ἐστι τοῦ τύπου. Ἐὰν τὸ «πρῶτον σχέδιον ποίησον» σημειωθῇ, γράφει σύντομον σχέδιον ἐν τῷ πρώτῳ βήματι καὶ νέον αὐτὸ φυλάσσει, ἄνευ πλείονος δαπάνης.",
+   "message4": "λέγειν ὅθεν ἕκαστον ἐλήφθη %1"
   },
   "rb_agent_builtin": {
    "message0": "ὄργανον· %1",
@@ -1460,7 +1461,9 @@
   "Using the web": "Διὰ τοῦ δικτύου",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Ἥδε ἡ σελὶς τῷ δικτύῳ χρῆσθαι οὐ δύναται, ὥστε τὸ ἄνω σχέδιον ἄνευ αὐτοῦ ἐγράφη. Τὸ δὲ ἐξαχθὲν πρόγραμμα τῷ δικτύῳ χρῆται.",
   "Web address in the task": "Διεύθυνσις τοῦ δικτύου ἐν τῷ ἔργῳ",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Τὸ ἔργον διεύθυνσιν τοῦ δικτύου ὀνομάζει, ἀλλ' ὅδε ὁ βαθμὸς αὐτὴν ἀνοίγειν οὐ δύναται. Σημείωσον 'διὰ τοῦ δικτύου' ἐπὶ τῷ πλινθίῳ, ἢ θὲς τοὺς τῆς σελίδος λόγους ἐν τῷ ἔργῳ."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Τὸ ἔργον διεύθυνσιν τοῦ δικτύου ὀνομάζει, ἀλλ' ὅδε ὁ βαθμὸς αὐτὴν ἀνοίγειν οὐ δύναται. Σημείωσον 'διὰ τοῦ δικτύου' ἐπὶ τῷ πλινθίῳ, ἢ θὲς τοὺς τῆς σελίδος λόγους ἐν τῷ ἔργῳ.",
+  "Sources not read": "Πηγαὶ οὐκ ἀναγνωσθεῖσαι",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Ἡ ἀπόκρισις διευθύνσεις μνημονεύει ἃς ὅδε ὁ δρόμος οὐδέποτε ἀνέγνω· ἐξέτασον οὖν αὐτὰς πρὶν πιστεύειν: {addresses}"
  },
  "examples": {
   "review": {
@@ -3006,7 +3009,9 @@
   "stuck": "ἐνέμεινεν",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ἡ ἐξέτασις μετὰ δύο διορθώσεις τὰ αὐτὰ ἁμαρτήματα εὗρεν, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὰ ἰᾶσθαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε.",
   "Web address in the task": "Διεύθυνσις τοῦ δικτύου ἐν τῷ ἔργῳ",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Τὸ ἔργον διεύθυνσιν τοῦ δικτύου ὀνομάζει, ἀλλ' ὅδε ὁ βαθμὸς αὐτὴν ἀνοίγειν οὐ δύναται. Σημείωσον 'διὰ τοῦ δικτύου' ἐπὶ τῷ πλινθίῳ, ἢ θὲς τοὺς τῆς σελίδος λόγους ἐν τῷ ἔργῳ."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Τὸ ἔργον διεύθυνσιν τοῦ δικτύου ὀνομάζει, ἀλλ' ὅδε ὁ βαθμὸς αὐτὴν ἀνοίγειν οὐ δύναται. Σημείωσον 'διὰ τοῦ δικτύου' ἐπὶ τῷ πλινθίῳ, ἢ θὲς τοὺς τῆς σελίδος λόγους ἐν τῷ ἔργῳ.",
+  "Sources not read": "Πηγαὶ οὐκ ἀναγνωσθεῖσαι",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "Ἡ ἀπόκρισις διευθύνσεις μνημονεύει ἃς ὅδε ὁ δρόμος οὐδέποτε ἀνέγνω· ἐξέτασον οὖν αὐτὰς πρὶν πιστεύειν: {addresses}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

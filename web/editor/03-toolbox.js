@@ -70,7 +70,7 @@
     ]},
     { kind:"category", name:"Agent", categorystyle:"agent", contents:[
       B("rb_agent", { GOAL:L("Plan a bake for this weekend that suits what I have in"), STEPS:N(6),
-        TOOLS:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"ask" }, next:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"memory" } } } } } }, { fields:{ PLAN:true } }),
+        TOOLS:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"ask" }, next:{ block:{ type:"rb_agent_builtin", fields:{ KIND:"memory" } } } } } }, { fields:{ PLAN:true, SOURCES:true } }),
       B("rb_agent_steps")
     ]},
     { kind:"category", name:"Tools", categorystyle:"tools", contents:[

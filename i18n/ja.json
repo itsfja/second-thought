@@ -11,7 +11,8 @@
    "message1": "最大 %1 ステップ、使う道具：",
    "message2": "%1",
    "message3": "先に計画を立て、進めながら見直す %1",
-   "tooltip": "次に何をするかを Claude が決めます。各ステップで中の道具を一つ選び、結果を見て、目標に届くかステップがなくなるまで続けます。最終的な答えは下書きに入ります。1 ステップは 1 回のモデル呼び出しです。「先に計画を立て」にチェックを入れると、最初のステップで短い計画を書き、追加の費用なしで更新し続けます。"
+   "tooltip": "次に何をするかを Claude が決めます。各ステップで中の道具を一つ選び、結果を見て、目標に届くかステップがなくなるまで続けます。最終的な答えは下書きに入ります。1 ステップは 1 回のモデル呼び出しです。「先に計画を立て」にチェックを入れると、最初のステップで短い計画を書き、追加の費用なしで更新し続けます。",
+   "message4": "各事実の出典を示す %1"
   },
   "rb_agent_builtin": {
    "message0": "道具：%1",
@@ -1460,7 +1461,9 @@
   "Using the web": "ウェブを使う",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "このページではウェブを使えないため、上の下書きはウェブなしで書かれました。エクスポートしたプログラムはウェブを使います。",
   "Web address in the task": "タスク内のウェブアドレス",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。"
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。",
+  "Sources not read": "読んでいない出典",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "回答に、この実行で一度も読んでいないアドレスが引用されています。頼る前に確認してください: {addresses}"
  },
  "examples": {
   "review": {
@@ -3006,6 +3009,8 @@
   "stuck": "行き詰まり",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "2回修正してもレビューが同じ問題を挙げたため、修正では直せません。プログラムに与えられていないもの（ウェブページ、ファイル、事実など）が必要なのかもしれません。それを与えて（たとえばタスクに書くか、ウェブページを読めるエージェントを使って）、もう一度実行してください。",
   "Web address in the task": "タスク内のウェブアドレス",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。"
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "タスクにウェブアドレスがありますが、このステップでは開けません。ブロックの「ウェブを使う」にチェックを入れるか、ページの文章をタスクに入れてください。",
+  "Sources not read": "読んでいない出典",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "回答に、この実行で一度も読んでいないアドレスが引用されています。頼る前に確認してください: {addresses}"
  }
 }

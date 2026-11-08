@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Added
+- **say where each fact came from** on the agent block (#312): ticked, and with a tool that reads the web, the agent puts the address each fact came from after it and ends with a list of sources. If its answer cites an address the run never read (made up, or remembered), the run log adds a "Sources not read" note listing them, so you know which to check. New agent blocks have it ticked; saved programs are unchanged. *Agent: research with sources* uses it.
+
 ## 3.12.0 - 2026-11-07
 
 ### Added

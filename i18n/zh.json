@@ -11,7 +11,8 @@
    "message1": "最多 %1 步，使用这些工具：",
    "message2": "%1",
    "message3": "先做计划，并边做边调整 %1",
-   "tooltip": "由 Claude 决定下一步做什么：每一步它从里面的工具中挑一个，看看结果，然后继续，直到达成目标或步数用完。它的最终答案放进草稿。每一步是一次模型调用。勾选“先做计划”后，它会在第一步写一个简短计划并随时更新，不额外花费。"
+   "tooltip": "由 Claude 决定下一步做什么：每一步它从里面的工具中挑一个，看看结果，然后继续，直到达成目标或步数用完。它的最终答案放进草稿。每一步是一次模型调用。勾选“先做计划”后，它会在第一步写一个简短计划并随时更新，不额外花费。",
+   "message4": "说明每个事实的来源 %1"
   },
   "rb_agent_builtin": {
    "message0": "工具：%1",
@@ -1460,7 +1461,9 @@
   "Using the web": "使用网络",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "这个页面无法使用网络，所以上面的草稿是在没有网络的情况下写的。导出的程序会使用网络。",
   "Web address in the task": "任务中的网址",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。"
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。",
+  "Sources not read": "未读过的来源",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "回答引用了这次运行从未读过的地址，所以在依赖它之前请先核对：{addresses}"
  },
  "examples": {
   "review": {
@@ -3006,6 +3009,8 @@
   "stuck": "卡住",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。",
   "Web address in the task": "任务中的网址",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。"
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。",
+  "Sources not read": "未读过的来源",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "回答引用了这次运行从未读过的地址，所以在依赖它之前请先核对：{addresses}"
  }
 }

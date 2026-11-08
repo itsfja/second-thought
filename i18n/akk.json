@@ -12,7 +12,8 @@
    "message1": "𒀀𒁲 %1 𒀠𒅗𒅗𒋾𒅎, 𒄿𒈾 𒌑𒉡𒋾𒅎 𒀭𒉌𒋾𒅎:",
    "message2": "%1",
    "message3": "𒉺𒈾 𒁲𒈠𒄠 𒋗𒆪𒌦, 𒌋 𒄿𒈾 𒀀𒆷𒆠𒅎 𒋗𒌦𒉌 %1",
-   "tooltip": "Claude 𒊭 𒂊𒁉𒅆𒅎 𒄿𒈠𒀠𒇷𒅅: 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒅖𒋾𒀜 𒅖𒋼𒅔 𒌑𒉡𒋾𒅎 𒊭 𒇷𒅁𒁉 𒄿𒄭𒅕, 𒊭 𒅁𒋗 𒅎𒈠𒅈, 𒌋 𒅋𒆷𒀝 𒀀𒁲 𒍢𒁍𒌅𒌝 𒅅𒋗𒁺 𒌑𒇻 𒀠𒅗𒅗𒌅𒌝 𒅅𒈬𒊏. 𒀀𒁉𒅋𒋗 𒊭 𒄴𒊏𒋾𒅎 𒀀𒈾 𒈠𒀸𒁕𒊑𒅎 𒅕𒊒𒌒. 𒀀𒆷𒀝𒌅𒌝 𒅖𒋾𒀜 𒅆𒋛𒌅𒌝 𒅖𒋾𒀜 𒀀𒈾 𒀊𒅗𒀠𒇷𒅎. 𒋗𒌝𒈠 „𒉺𒈾 𒁲𒈠𒄠 𒋗𒆪𒌦” 𒍝𒁉𒀉, 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒉺𒉌𒋾𒅎 𒁲𒈠𒄠 𒍢𒄴𒊏𒄠 𒄿𒊭𒀜𒁕𒅈 𒌋 𒌓𒁕𒀸, 𒁀𒇻 𒅗𒊍𒁉𒅎 𒍢𒋾𒅎."
+   "tooltip": "Claude 𒊭 𒂊𒁉𒅆𒅎 𒄿𒈠𒀠𒇷𒅅: 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒅖𒋾𒀜 𒅖𒋼𒅔 𒌑𒉡𒋾𒅎 𒊭 𒇷𒅁𒁉 𒄿𒄭𒅕, 𒊭 𒅁𒋗 𒅎𒈠𒅈, 𒌋 𒅋𒆷𒀝 𒀀𒁲 𒍢𒁍𒌅𒌝 𒅅𒋗𒁺 𒌑𒇻 𒀠𒅗𒅗𒌅𒌝 𒅅𒈬𒊏. 𒀀𒁉𒅋𒋗 𒊭 𒄴𒊏𒋾𒅎 𒀀𒈾 𒈠𒀸𒁕𒊑𒅎 𒅕𒊒𒌒. 𒀀𒆷𒀝𒌅𒌝 𒅖𒋾𒀜 𒅆𒋛𒌅𒌝 𒅖𒋾𒀜 𒀀𒈾 𒀊𒅗𒀠𒇷𒅎. 𒋗𒌝𒈠 „𒉺𒈾 𒁲𒈠𒄠 𒋗𒆪𒌦” 𒍝𒁉𒀉, 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒉺𒉌𒋾𒅎 𒁲𒈠𒄠 𒍢𒄴𒊏𒄠 𒄿𒊭𒀜𒁕𒅈 𒌋 𒌓𒁕𒀸, 𒁀𒇻 𒅗𒊍𒁉𒅎 𒍢𒋾𒅎.",
+   "message4": "𒀀𒊭𒅈 𒀀𒉿𒌅𒌝 𒅖𒌅 𒅋𒇷𒅗𒄠 𒋡𒁍 %1"
   },
   "rb_agent_builtin": {
    "message0": "𒌑𒉡𒌅𒌝: %1",
@@ -1461,7 +1462,9 @@
   "Using the web": "𒄿𒈾 𒆠 𒊺𒋾𒅎",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒀀𒈾 𒊺𒋾𒅎 𒌌 𒄿𒇷, 𒀸𒋗𒌝 𒆠𒄠 𒈠𒀸𒁕𒊒𒌝 𒂊𒇷𒅖 𒄿𒈾 𒁀𒇻𒌝 𒊺𒋾 𒊭𒁲𒅕. 𒈾𒊒𒌝 𒊭 𒌑𒊺𒍮 𒊺𒋫𒄠 𒄿𒆷𒀝𒆠.",
   "Web address in the task": "𒋗𒈬𒌝 𒊭 𒊺𒋾𒅎 𒄿𒈾 𒅆𒁉𒅕𒋾𒅎",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "𒅆𒁉𒅕𒌅𒌝 𒋗𒈠 𒊭 𒊺𒋾𒅎 𒅅𒁉, 𒌑 𒁲𒈬𒌝 𒀭𒉡𒌝 𒌌 𒄿𒁉𒀉𒋼. 𒄿𒈾 𒇷𒁉𒀉𒋾 '𒄿𒈾 𒆠 𒊺𒋾𒅎' 𒋗𒈪, 𒌑𒇻 𒀀𒉿𒋾𒅎 𒊭 𒌅𒌒𒁉𒅎 𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒋗𒆪𒌦."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "𒅆𒁉𒅕𒌅𒌝 𒋗𒈠 𒊭 𒊺𒋾𒅎 𒅅𒁉, 𒌑 𒁲𒈬𒌝 𒀭𒉡𒌝 𒌌 𒄿𒁉𒀉𒋼. 𒄿𒈾 𒇷𒁉𒀉𒋾 '𒄿𒈾 𒆠 𒊺𒋾𒅎' 𒋗𒈪, 𒌑𒇻 𒀀𒉿𒋾𒅎 𒊭 𒌅𒌒𒁉𒅎 𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒋗𒆪𒌦.",
+  "Sources not read": "𒋗𒈬 𒆷 𒊭𒋢",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "𒀀𒁉𒇻𒌅𒌝 𒋗𒈪 𒊭 𒀀𒇷𒆪𒌝 𒀭𒉡𒌝 𒌌 𒅖𒋢 𒄿𒍝𒀝𒅗𒅈, 𒀸𒋗𒌝 𒆠𒄠 𒀀𒈾 𒉺𒉌 𒋫𒅗𒇷𒅎 𒀀𒈬𒌨: {addresses}"
  },
  "examples": {
   "review": {
@@ -3007,7 +3010,9 @@
   "stuck": "kali",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "bīrum warki šinā tiqnī ḫiṭâtim ištiātim iqbi, aššum kīam tiqnum ul ile ana šutēšurim. ana narêm mimma ša lā ileqqû ḫašiḫ, kīma ṭuppim, šiṭrim ulū awatim kīnatim: šūtu ana narêm qīš (ina šipirtim lū ina ṭēmim ša ṭuppī išassû), u tūr epuš.",
   "Web address in the task": "šumum ša šētim ina šipirtim",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "šipirtum šuma ša šētim iqbi, u ṭēmum annûm ul ipette. ina libitti 'ina qê šētim' šumi, ulū awâtim ša ṭuppim ina šipirtim šukun."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "šipirtum šuma ša šētim iqbi, u ṭēmum annûm ul ipette. ina libitti 'ina qê šētim' šumi, ulū awâtim ša ṭuppim ina šipirtim šukun.",
+  "Sources not read": "šumū lā šasû",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "āpilūtum šumī ša ālikum annûm ul išsû izakkar, aššum kīam ana pāni takālim amur: {addresses}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

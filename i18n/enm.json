@@ -11,7 +11,8 @@
    "message1": "up to %1 pases, with thise tooles:",
    "message2": "%1",
    "message3": "make first a purpos, and chaunge it as it goth %1",
-   "tooltip": "Claude demeth what to do next: at ech pas he cheseth oon of the tooles withinne, seeth what bifel, and goth forth til the ende be wonne or the pases be spent. His laste answere goth into the draughte. Ech pas is oon callyng of the patron. Whan “make first a purpos” is marked, he writeth a short purpos with his firste pas and kepeth it newe, withouten more cost."
+   "tooltip": "Claude demeth what to do next: at ech pas he cheseth oon of the tooles withinne, seeth what bifel, and goth forth til the ende be wonne or the pases be spent. His laste answere goth into the draughte. Ech pas is oon callyng of the patron. Whan “make first a purpos” is marked, he writeth a short purpos with his firste pas and kepeth it newe, withouten more cost.",
+   "message4": "seye whennes ech sooth cam %1"
   },
   "rb_agent_builtin": {
    "message0": "tool: %1",
@@ -1460,7 +1461,9 @@
   "Using the web": "By the webbe",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "This page may nat use the webbe, so the draughte above was writen withouten it. The exported program useth the webbe.",
   "Web address in the task": "Webbe adresse in the taske",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "The taske nameth a webbe adresse, but this stappe may nat open it. Marke 'by the webbe' on the blok, or put the pages wordes in the taske."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "The taske nameth a webbe adresse, but this stappe may nat open it. Marke 'by the webbe' on the blok, or put the pages wordes in the taske.",
+  "Sources not read": "Sources nat red",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "The answere citeth adresses that this renne nevere radde, so loke on hem er thou truste it: {addresses}"
  },
  "examples": {
   "review": {
@@ -3006,7 +3009,9 @@
   "stuck": "stoken",
   "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "The examinacioun fond the same defautes after two amendinges, so amendinge may nat helen hem. The program may nede sum thing that was nat yeven it, as a web page, a file or a sooth: yif it that (in the taske, as thus, or thurgh an agent that kan rede web pages), and renne it eft.",
   "Web address in the task": "Webbe adresse in the taske",
-  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "The taske nameth a webbe adresse, but this stappe may nat open it. Marke 'by the webbe' on the blok, or put the pages wordes in the taske."
+  "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "The taske nameth a webbe adresse, but this stappe may nat open it. Marke 'by the webbe' on the blok, or put the pages wordes in the taske.",
+  "Sources not read": "Sources nat red",
+  "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "The answere citeth adresses that this renne nevere radde, so loke on hem er thou truste it: {addresses}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

@@ -5,7 +5,7 @@
 "note":"Old Norse (normalised Old Icelandic spelling, with þ, ð, æ, œ and ǫ) words for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Old Norse. Old Norse words are used where they exist (kubbr for block, erindreki for agent, rím for calendar, annáll for the run log); modern words (email, token, API, Home Assistant) are kept. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. Page buttons named in block text use their Old Norse names (Keyr, Áfram, Tíðir).",
 "blocks":{
 "rb_add_result":{"message0":"bæt %1 við úrslitin"},
-"rb_agent":{"message0":"erindreki: vinn at %1","message1":"allt at %1 fetum, með þessum tólum:","message2":"%1","message3":"ger ráðagørð fyrst, ok breyt henni sem á líðr %1","tooltip":"Claude ræðr hvat næst skal gera: á hverju feti velr hann eitt tólanna hér inni, sér hvat varð, ok heldr áfram unz markinu er náð eða fetin eru þrotin. Hans hinzta svar ferr í frumritit. Hvert fet er eitt kall til líkansins. Þá er „ger ráðagørð fyrst“ er merkt, ritar hann stutta ráðagørð með fyrsta feti ok heldr henni nýrri, án meira kostnaðar."},
+"rb_agent":{"message0":"erindreki: vinn at %1","message1":"allt at %1 fetum, með þessum tólum:","message2":"%1","message3":"ger ráðagørð fyrst, ok breyt henni sem á líðr %1","tooltip":"Claude ræðr hvat næst skal gera: á hverju feti velr hann eitt tólanna hér inni, sér hvat varð, ok heldr áfram unz markinu er náð eða fetin eru þrotin. Hans hinzta svar ferr í frumritit. Hvert fet er eitt kall til líkansins. Þá er „ger ráðagørð fyrst“ er merkt, ritar hann stutta ráðagørð með fyrsta feti ok heldr henni nýrri, án meira kostnaðar.","message4":"segja hvaðan hver sannindi kómu %1"},
 "rb_agent_builtin":{"message0":"tól: %1","tooltip":"Tól búit erindreka. „Reikna summur“ ok „stundir dags“ gefa tǫlur ok tíðir réttar, í stað þess at líkanit geti. „Prófa rit“ lætr annan dómara dœma verk erindrekans. Á þessu blaði nota tíðindastraumar, GitHub, Telegram, email ok rímit sýnigǫgn; útfluttr Python notar þín eigin (set lyklana í second-thought.ini), ok les vefblǫð í sannleik. Sending, umrœða ok „stýra vélum“ spyrja þik fyrir hvert eitt, því at þat er erindrekinn les (vefblað, minnisgrein) mætti freista at stýra honum. Vel „án spurningar“ eina saman ef þú treystir ǫllu því er hann les. Upplúkning, opnan ok afvǫrzlun spyrja ávallt."},
 "rb_agent_mcp":{"message0":"tól frá MCP-þjóni %1 %2","tooltip":"Gefr erindreka ǫll tól er MCP-þjónn býðr: skjǫl, GitHub, gagnasǫfn, rím ok miklu fleira, ór ǫllum MCP-heimi. Set þjóninn í second-thought.ini sem MCP_<NAME> = skipunin er hefr hann (sem npx -y @modelcontextprotocol/server-filesystem ~/recipes) eða https:// staðr hans. Einungis í útfluttum Python: á þessu blaði vinnr erindrekinn án þessara tóla."},
 "rb_agent_steps":{"message0":"fet erindrekans","tooltip":"Hvat hinn nýjasti erindreki í þessi ferð gerði: rǫð skráa með step, tool, input, result ok status (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."},
@@ -959,7 +959,9 @@
 "Using the web":"Með vefnum",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Þessi síða má eigi nýta vefinn, svá at frumritit hér fyrir ofan var ritat án hans. Útflutta forritit nýtir vefinn.",
 "Web address in the task":"Vefnafn í verkinu",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit.",
+"Sources not read":"Heimildir ólesnar",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Svarit nefnir vefnöfn er þessi renna las aldri, svá at kanna þau áðr þú treystir því: {addresses}"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1873,7 +1875,9 @@
 "stuck":"fastr",
 "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr.",
 "Web address in the task":"Vefnafn í verkinu",
-"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit."
+"The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit.",
+"Sources not read":"Heimildir ólesnar",
+"The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Svarit nefnir vefnöfn er þessi renna las aldri, svá at kanna þau áðr þú treystir því: {addresses}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",
