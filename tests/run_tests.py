@@ -13,7 +13,10 @@ The tests live in tests/e2e/, one file per area. To run only some areas, name th
     python tests/run_tests.py i18n gallery
 
 The areas are sources, page, i18n, gallery and python. Python runs the programs the page exports, so naming
-python runs page too.
+python runs page too. CI runs python in two halves side by side (#342):
+
+    python tests/run_tests.py python --share 1/2    # half the exported programs, and the other Python checks
+    python tests/run_tests.py python --share 2/2    # the other half
 """
 import pathlib
 import shutil
@@ -52,7 +55,14 @@ AREAS = ("sources", "page", "i18n", "gallery", "python")
 
 
 def main():
-    areas = set(sys.argv[1:]) or set(AREAS)
+    args, share = sys.argv[1:], None
+    if "--share" in args:
+        i = args.index("--share")
+        m = re.fullmatch(r"(\d+)/(\d+)", args[i + 1] if i + 1 < len(args) else "")
+        if not m or not 1 <= int(m[1]) <= int(m[2]):
+            sys.exit("--share needs a share like 1/2.")
+        share, args = (int(m[1]), int(m[2])), args[:i] + args[i + 2:]
+    areas = set(args) or set(AREAS)
     if areas - set(AREAS):
         sys.exit(f"Unknown area: {', '.join(sorted(areas - set(AREAS)))}. The areas are {', '.join(AREAS)}.")
     if "sources" in areas:
@@ -85,8 +95,9 @@ def main():
         asyncio.run(gallery_tests())
         gallery_smoke_tests()
     if "python" in areas:
-        python_tests(codes)
-        asyncio.run(actions_tests())
+        python_tests(codes, share)
+        if not share or share[0] == 1:
+            asyncio.run(actions_tests())
     print()
     if failures:
         print(f"{len(failures)} check(s) failed.")
