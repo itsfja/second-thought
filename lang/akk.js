@@ -1881,7 +1881,8 @@
 "The answer cites addresses this run never read, so check them before relying on it: {addresses}":"āpilūtum šumī ša ālikum annûm ul išsû izakkar, aššum kīam ana pāni takālim amur: {addresses}",
 "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"{names} ezib: parṣū šumī LD_, DYLD_ u PYTHON ul unakkarū, ša rēš epēšim unakkarū",
 "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} parṣum ša Second Thought ileqqû ul ibašši, šiṭram amur. Šumma MCP u qibītum ša tepeššu iḫaššeḫ, damiq.",
-"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"awīlū šanûtum ina kompūterim annîm {path} išassû. Ana kunukkī ana kâšim ukullim:  chmod 600 {path}"
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"awīlū šanûtum ina kompūterim annîm {path} išassû. Ana kunukkī ana kâšim ukullim:  chmod 600 {path}",
+"Home Assistant sent something that isn't JSON ({e}).":"Home Assistant mimma ša JSON lā šû išpur ({e})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

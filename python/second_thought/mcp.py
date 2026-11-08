@@ -95,7 +95,8 @@ def _header_params(schema):
 def mcp_result_text(result):
     """A tools/call result as (text for the agent, whether the tool said it failed)."""
     parts = []
-    for c in result.get("content") or []:
+    content = result.get("content")
+    for c in content if isinstance(content, list) else []:  # a server's reply can be anything (#313)
         if not isinstance(c, dict):
             continue
         t = c.get("type")
@@ -106,7 +107,7 @@ def mcp_result_text(result):
         elif t == "resource_link":
             parts.append(f"Link: {c.get('name') or c.get('uri')} ({c.get('uri')})")
         elif t == "resource":
-            r = c.get("resource") or {}
+            r = c.get("resource") if isinstance(c.get("resource"), dict) else {}
             parts.append(to_str(r.get("text")) if r.get("text") is not None else f"[a file from the tool: {r.get('uri')}]")
     if not parts and result.get("structuredContent") is not None:
         parts.append(json.dumps(result["structuredContent"], ensure_ascii=False))

@@ -3005,7 +3005,8 @@
   "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "wšbt ḏd=s rnw nn šdj sw jrt tn, ptr st ḫr-ḥꜣt mḥ-jb=k jm=s: {addresses}",
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "wꜣḥ {names}: nn šnj sḫrw rnw LD_, DYLD_ PYTHON, šnj šꜣꜥ jrt",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} n sḫr n Second Thought jsṯ, mꜣꜣ sš. jr ḫrd MCP r.f, nfr pw.",
-  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "kjw rmṯ m jꜥḥ pn šdj {path}. r sꜣw ḫtmw n.k wꜥ:  chmod 600 {path}"
+  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "kjw rmṯ m jꜥḥ pn šdj {path}. r sꜣw ḫtmw n.k wꜥ:  chmod 600 {path}",
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant hꜣb jḫt nn JSON ({e})."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

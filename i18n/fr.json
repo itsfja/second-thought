@@ -3014,6 +3014,7 @@
   "The answer cites addresses this run never read, so check them before relying on it: {addresses}": "La réponse cite des adresses que cette exécution n'a jamais lues : vérifiez-les avant de vous y fier : {addresses}",
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "ignoré {names} : les réglages ne changent jamais les noms LD_, DYLD_ ou PYTHON, qui changent le démarrage des programmes",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} n'est pas un réglage utilisé par Second Thought : vérifiez l'orthographe. Si un serveur MCP ou une commande que vous lancez en a besoin, c'est normal.",
-  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "d'autres personnes sur cet ordinateur peuvent lire {path}. Pour garder ses clés pour vous :  chmod 600 {path}"
+  "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "d'autres personnes sur cet ordinateur peuvent lire {path}. Pour garder ses clés pour vous :  chmod 600 {path}",
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant a envoyé quelque chose qui n'est pas du JSON ({e})."
  }
 }

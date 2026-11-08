@@ -574,7 +574,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 
     # ----- Prompt library -----
     def prompt(self, name):
-        text = PROMPTS.get(to_str(name).strip().lower()) if "PROMPTS" in globals() else None
+        text = globals().get("PROMPTS", {}).get(to_str(name).strip().lower())  # written above the runtime, if the program has any
         if text is None:
             raise RunError(tr("There's no prompt called “{name}” in this program's prompt library.", name=name))
         return text

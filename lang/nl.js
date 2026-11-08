@@ -1880,6 +1880,7 @@
 "The answer cites addresses this run never read, so check them before relying on it: {addresses}":"Het antwoord noemt adressen die deze run nooit heeft gelezen, dus controleer ze voordat je erop vertrouwt: {addresses}",
 "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"overgeslagen {names}: instellingen veranderen nooit LD_-, DYLD_- of PYTHON-namen, die bepalen hoe programma's starten",
 "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} is geen instelling die Second Thought gebruikt, dus controleer de spelling. Als een MCP-server of een opdracht die je start het nodig heeft, is het goed.",
-"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"andere mensen op deze computer kunnen {path} lezen. Om de sleutels voor jezelf te houden:  chmod 600 {path}"
+"{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"andere mensen op deze computer kunnen {path} lezen. Om de sleutels voor jezelf te houden:  chmod 600 {path}",
+"Home Assistant sent something that isn't JSON ({e}).":"Home Assistant stuurde iets dat geen JSON is ({e})."
 }
 };

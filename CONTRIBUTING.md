@@ -124,6 +124,10 @@ in five parts side by side on each (`page`, `python --share 1/3`, `2/3` and `3/3
 failure names its part. Share 1 runs the Python checks that aren't per-program, shares 2 and 3 the exported programs
 (`share_of` in tests/e2e/python_export.py balances them).
 
+`ruff check` (after `pip install ruff`) looks for unused and undefined names and likely bugs, as CI does (`ruff.toml`).
+`tests/unit/test_fuzz.py` feeds the parsers that read outside input thousands of broken inputs from a fixed seed;
+`FUZZ_ROUNDS=50000 python -m unittest test_fuzz` in `tests/unit` tries harder.
+
 If you have API keys, `python tools/smoke_test.py` checks the real services (it costs a few pence).
 
 `python tools/smoke_test.py gallery` runs every community gallery program once against the real models, after

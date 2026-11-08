@@ -25,6 +25,17 @@ jobs:
           echo "Changed, not Markdown: ${other:-none}"
           echo "code=$([ -n "$other" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
 
+  lint:
+    # Ruff: unused and undefined names and likely bugs in the runtime's parts and the tools (ruff.toml, #313). Seconds.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - run: ruff check --output-format github .
+
   unit:
     # The runtime's parts on their own: seconds, nothing to install, every Python an exported program might meet.
     strategy:
