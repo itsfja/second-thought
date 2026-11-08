@@ -1104,8 +1104,9 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         ini = EXPORTS["review"]["second-thought.ini"]
         check("[run]" in ini and "; budget = " in ini and "; save_log = yes" in ini, "the exported ini explains budget and save_log")
     services = {c[0] for c in ha_calls}
-    check({"light.turn_off", "persistent_notification.create"} <= services and "lock.lock" in services,
-          f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
+    if not share:  # in a share, the programs that lock the door are in another one
+        check({"light.turn_off", "persistent_notification.create"} <= services and "lock.lock" in services,
+              f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
 
 
 def mcp_session(path, env, cwd, requests):
