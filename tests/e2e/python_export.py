@@ -139,8 +139,36 @@ def approval_tests(codes, env, tmp):
           "a program that only looks at things runs without asking")
 
 
-def python_tests(codes):
-    print("Exported Python runs")
+# Share 1 also runs the checks that aren't per-program, which take about as long as this many programs (#342)
+OTHER_CHECKS_WEIGHT = 120
+
+
+def share_of(names, share):
+    """The programs one share of the run takes (#342). In sorted order, each program goes to the share with the least
+    to do so far, share 1 starting with the other checks' weight, so the shares take about as long as each other and
+    every program is in exactly one. No share means all of them."""
+    if not share:
+        return sorted(names)
+    k, n = share
+    load, mine = [OTHER_CHECKS_WEIGHT] + [0] * (n - 1), []
+    for x in sorted(names):
+        j = load.index(min(load))
+        load[j] += 1
+        if j == k - 1:
+            mine.append(x)
+    return mine
+
+
+def python_tests(codes, share=None):
+    """Runs the exported programs. With share=(k, n), only that share of the per-program runs; the checks that aren't
+    per-program run in share 1 only (#342)."""
+    first = not share or share[0] == 1
+    mine = share_of(codes, share)
+    if share:
+        k, n = share
+        every = [x for j in range(1, n + 1) for x in share_of(codes, (j, n))]
+        check(sorted(every) == sorted(codes), f"the {n} shares between them run every program once")
+    print("Exported Python runs" + (f" (share {share[0]} of {share[1]}: {len(mine)} of {len(codes)} programs)" if share else ""))
     ha_url, ha_calls = fake_ha.start()
     llama_url, llama_calls = fake_llama.start()
     # RB_APPROVE=no: these programs are run unattended many times over; approval_tests() checks the first-run question.
@@ -170,10 +198,12 @@ def python_tests(codes):
                EMAIL_ADDRESS=fake_services.MAIL_USER, EMAIL_PASSWORD=fake_services.MAIL_PASS, EMAIL_IMAP_HOST="127.0.0.1", EMAIL_SMTP_HOST="127.0.0.1",
                EMAIL_IMAP_PORT=str(imap_port), EMAIL_SMTP_PORT=str(smtp_port), EMAIL_SSL="no", CALENDAR_URL=svc_url + "/calendar.ics")
     with tempfile.TemporaryDirectory() as tmp:
-        approval_tests(codes, {k: v for k, v in env.items() if k != "RB_APPROVE"}, tmp)
-        doctor_tests(codes, env, tmp, llama_url, llama_calls, ha_calls)
-        mcp_serve_tests(codes, env, tmp)
-        for ex, (code, _) in codes.items():
+        if first:
+            approval_tests(codes, {k: v for k, v in env.items() if k != "RB_APPROVE"}, tmp)
+            doctor_tests(codes, env, tmp, llama_url, llama_calls, ha_calls)
+            mcp_serve_tests(codes, env, tmp)
+        for ex in mine:
+            code = codes[ex][0]
             path = pathlib.Path(tmp) / f"{ex}.py"
             path.write_text(code, encoding="utf-8")
             code_, stdout, stderr = drive([sys.executable, "-u", str(path)], env, tmp)
@@ -226,6 +256,9 @@ def python_tests(codes):
                 done = [l for l in r.stdout.splitlines() if l.startswith("Done")]
                 both = bool(done) and "Gemini:" in done[-1] and "Claude:" in done[-1]
                 check(both, "gemini.py used both Claude and Gemini" + ("" if both else f": {done[-1] if done else r.stdout[-200:]}"))
+    sent_by_examples = len(svc_log["tg_sent"]), len(svc_log["mail_sent"])
+    if not first:
+        return
     print("Settings file")
     import configparser
     cp = configparser.ConfigParser(interpolation=None, inline_comment_prefixes=(";", "#"))
@@ -468,9 +501,10 @@ def python_tests(codes):
               and "NOTE  Mistral: JSON mode it accepts  (the full JSON Schema)" in out and "SKIP  OpenAI: all checks" in out,
               "tools/smoke_test.py runs every check and reports each service" + ("" if r.returncode == 0 else f": {(r.stderr or out)[-400:]!r}"))
         print("Connections in Python")
-        sent_before = len(svc_log["tg_sent"]), len(svc_log["mail_sent"])
-        check(sent_before[0] >= 2 and sent_before[1] >= 1 and any("Got:" not in m["text"] for m in svc_log["tg_sent"]),
-              f"the examples sent Telegram messages ({sent_before[0]}) and emails ({sent_before[1]}) through the stand-ins")
+        sent_before = sent_by_examples
+        if not share:  # in a share, the programs that send may all be in the other one
+            check(sent_before[0] >= 2 and sent_before[1] >= 1 and any("Got:" not in m["text"] for m in svc_log["tg_sent"]),
+                  f"the examples sent Telegram messages ({sent_before[0]}) and emails ({sent_before[1]}) through the stand-ins")
         for name in ("t_cn_gh", "t_cn_comment", "t_cn_gh_more", "t_cn_issue", "t_cn_tg", "t_cn_mail", "t_cn_cal", "t_cn_feed"):
             (pathlib.Path(tmp) / f"{name}.py").write_text(EXTRA[name], encoding="utf-8")
         run_cn = lambda name: drive([sys.executable, "-u", str(pathlib.Path(tmp) / f"{name}.py")],  # noqa: E731
@@ -1070,8 +1104,9 @@ print(json.dumps({"a": a, "b": b, "dupes": len(texts) - len(set(texts)), "kept":
         ini = EXPORTS["review"]["second-thought.ini"]
         check("[run]" in ini and "; budget = " in ini and "; save_log = yes" in ini, "the exported ini explains budget and save_log")
     services = {c[0] for c in ha_calls}
-    check({"light.turn_off", "persistent_notification.create"} <= services and "lock.lock" in services,
-          f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
+    if not share:  # in a share, the programs that lock the door are in another one
+        check({"light.turn_off", "persistent_notification.create"} <= services and "lock.lock" in services,
+              f"exported programs called Home Assistant ({len(ha_calls)} service calls: {', '.join(sorted(services))})")
 
 
 def mcp_session(path, env, cwd, requests):
