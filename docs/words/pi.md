@@ -1,0 +1,33 @@
+# पाळि: everyday words
+
+Made by tools/sync.py from i18n/pi.json: edit that, not this.
+
+- Agent: पटिनिधि
+- Ask Claude: Claude पुच्छाहि
+- Connections: सम्बन्धा
+- Control: नियमनं
+- Draft: आलेखो
+- Events: घटना
+- Files: सञ्चिका
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Lists: सूचियो
+- Memory: सति
+- My Blocks: मम खण्डा
+- Operators: किरिया
+- Output: निग्गमो
+- Pictures: चित्तानि
+- Programs: किच्चक्कमा
+- Records: अभिलेखा
+- Review: समेक्खा
+- Search results: परियेसनफलानि
+- Text: पाठो
+- Tools: उपकरणानि
+- Variables: चलानि
+- Wait & time: आगमनं कालो च
+- You: त्वं
+- Listeners: they run while the exported program runs on schedule: सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति
+- No blocks match: न कोचि खण्डो समेति
+- Read and send: पठ पेसेहि च
+- Tools for the agent: drop them inside an agent block: पटिनिधिस्स उपकरणानि: पटिनिधिखण्डस्स अन्तो ठपेहि
+- Type in 'Find a block' above the canvas.: फलकस्स उपरि “खण्डं परियेस” लिख।
