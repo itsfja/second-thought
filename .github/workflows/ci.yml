@@ -73,10 +73,10 @@ jobs:
         # The page's own functions in Node, no browser: seconds (tests/editor).
         run: node --test "tests/editor/*.test.cjs"
 
-  # The suite runs in five parts side by side, each on its own runner, so the stand-in services' fixed ports never
-  # clash. page and the python shares begin with the same page run (python checks what the page exported). Share 1
-  # runs the Python checks that aren't per-program and shares 2 and 3 the exported programs, so each takes about as
-  # long as the page part (#342).
+  # The suite runs in five parts side by side, each on its own runner. page and the python shares begin with the
+  # same page run (python checks what the page exported). The Python checks that aren't per-program are spread over
+  # the three shares and the exported programs fill them up, so the shares take about as long as each other (#342,
+  # #372); before, share 1 had all the other checks and set the run's time.
   test:
     needs: changes
     if: needs.changes.outputs.code == 'true'
