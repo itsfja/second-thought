@@ -25,8 +25,9 @@ learn by trial and error.
 - **Pushing a new branch:** pushes sometimes fail with a server error; retry after a few seconds. If a stop hook says
   a branch has no remote, `git push -u origin <branch>` again.
 - **Tests:** `bash tests/setup.sh` once (it fetches `tests/vendor`, git-ignored). In a git worktree, symlink
-  `tests/vendor` from the main checkout. Run one full suite at a time (the stand-in services use fixed ports); it
-  takes about 25 minutes, so run it in the background. `python tests/run_tests.py sources i18n gallery` is quicker.
+  `tests/vendor` from the main checkout. `python tests/run_tests.py --parallel` runs the full suite as CI's five
+  parts side by side, in about 10 minutes (25 in one process); run it in the background, one at a time (two would fight
+  over the CPUs). `python tests/run_tests.py sources i18n gallery` is quicker.
 - **CI runs on GitHub Actions**, where `GITHUB_ACTIONS` is set; the tests clear it (tests/e2e/common.py).
 - **i18n merges:** `python tools/merge_i18n.py --install` once per clone.
 - **New words:** `python tools/i18n.py missing`, then write translations for all 30 languages into a JSON file and

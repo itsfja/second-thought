@@ -115,14 +115,20 @@ The end-to-end suite drives the page in a headless browser and runs every exampl
 services. Nothing calls a real model.
 
 ```
-bash tests/setup.sh          # once
-python tests/run_tests.py    # unit tests too; ends with "All checks passed"
+bash tests/setup.sh                     # once
+python tests/run_tests.py --parallel    # unit tests too; ends with "All checks passed"
 ```
+
+`--parallel` runs CI's five parts as separate processes, a few at a time: `page` (with `sources i18n gallery` beside
+it), then the three Python shares with what the page part exported, so they don't repeat its run. On two CPUs that
+takes about 10 minutes; plain `python tests/run_tests.py` runs everything in one process and takes about 25. Either
+way, each part's output ends with how long its pieces took and the slowest exported programs (#372).
 
 CI runs the unit tests (and the editor's) on Python 3.9 to 3.13 and Windows, and the end-to-end suite on Linux and Windows,
 in five parts side by side on each (`page`, `python --share 1/3`, `2/3` and `3/3`, and `sources i18n gallery`), so a
-failure names its part. Share 1 runs the Python checks that aren't per-program, shares 2 and 3 the exported programs
-(`share_of` in tests/e2e/python_export.py balances them).
+failure names its part. The Python checks that aren't per-program come in groups (`GROUPS` in
+tests/e2e/python_export.py, with how long each takes), spread over the three shares, and the exported programs fill them
+up, so each share takes about as long as the others (`share_of` balances them).
 
 `ruff check` (after `pip install ruff`) looks for unused and undefined names and likely bugs, as CI does (`ruff.toml`).
 `tests/unit/test_fuzz.py` feeds the parsers that read outside input thousands of broken inputs from a fixed seed;
@@ -239,7 +245,7 @@ bash tests/setup.sh          # once: Playwright, Chromium and local copies of th
 python tests/run_tests.py    # runs the unit tests too
 ```
 
-At the end it says **All checks passed**, or lists what failed. To run only some areas, name them: `python tests/run_tests.py i18n gallery`. The areas are `sources`, `page`, `i18n`, `gallery` and `python` (which runs `page` too, for the programs it exports).
+At the end it says **All checks passed**, or lists what failed. To run only some areas, name them: `python tests/run_tests.py i18n gallery`. The areas are `sources`, `page`, `i18n`, `gallery` and `python` (which runs `page` too, for the programs it exports). `--parallel` runs them as CI's parts, side by side, in about 10 minutes instead of 25.
 
 **Real services.** To check the real model services with your own keys:
 

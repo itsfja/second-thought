@@ -127,6 +127,31 @@ window.claude = { use: async n => {
 failures = []
 
 
+TIMES = []  # (what, seconds), printed at the end of a run so the slow parts are plain (#372)
+
+
+class timed:
+    """with timed("page"): ... records how long the block took in TIMES."""
+    def __init__(self, what):
+        self.what = what
+
+    def __enter__(self):
+        self.start = time.monotonic()
+
+    def __exit__(self, *exc):
+        TIMES.append((self.what, time.monotonic() - self.start))
+
+
+def print_times(slowest=()):
+    if not TIMES:
+        return
+    print("\nTimes")
+    for what, secs in TIMES:
+        print(f"  {secs:7.1f}s  {what}")
+    if slowest:
+        print("  slowest exported programs: " + ", ".join(f"{name} {secs:.1f}s" for name, secs in slowest))
+
+
 def check(cond, label):
     print(("  ok    " if cond else "  FAIL  ") + label)
     if not cond:
