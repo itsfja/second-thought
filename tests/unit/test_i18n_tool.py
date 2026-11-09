@@ -56,6 +56,15 @@ class Scripts(unittest.TestCase):
         self.assertEqual(gaps, set(), "names in mixed case are kept, not reported")
         self.assertEqual(tool.printed("hit", "ḫa-at-re-eš-šar ^MQTT"), "ḫa-at-re-eš-šar MQTT")
 
+    def test_gothic_is_written_letter_for_letter(self):
+        self.assertEqual(tool.to_script("got", "gutisk þiudans ƕas"), "𐌲𐌿𐍄𐌹𐍃𐌺 𐌸𐌹𐌿𐌳𐌰𐌽𐍃 𐍈𐌰𐍃")
+        self.assertEqual(tool.to_script("got", "<b>tawei</b> %1 Claude ^the {name} second-thought.ini"),
+                         "<b>𐍄𐌰𐍅𐌴𐌹</b> %1 Claude the {name} second-thought.ini")
+        gaps = set()
+        self.assertEqual(tool.to_script("got", "cave", gaps), "cave", "c and v aren't Gothic letters")
+        self.assertEqual(gaps, {"c", "v"})
+        self.assertEqual(tool.printed("got", "^the gutisk"), "the gutisk")
+
     def test_sumerian_signs_are_the_signs_themselves(self):
         # A sign's readings, not those of a variant form listed after it (#374): u3 is U, not ŠA17's old form, and aš and
         # dili are AŠ, not the numeral 1(AŠ@c).
