@@ -556,6 +556,38 @@
   "rb_agent_kraken": {
    "message0": "Kraken tooles %1",
    "tooltip": "Yeveth the agent Krakens owene tooles, fro kraken-cli: market prys, thy balaunces and ordres, and chaffare on papir at verray prys. Verray chaffare lat it eek yeve verray ordres, but every tool that may meve moneye asketh thee first, yea whan noght elles asketh, and nevere renneth by a tyme-table ne on GitHub Actions. It nedeth kraken-cli installed, and KRAKEN_API_KEY and KRAKEN_API_SECRET in second-thought.ini for thyn accompte (prys and papir nede no keye). Oonly in exported Python."
+  },
+  "rb_coinbase_balances": {
+   "message0": "Coinbase remenauntes",
+   "tooltip": "A list of recordes, oon for every good in thy Coinbase tresorie, the grettest first: asset, amount, value and currency. The values ben in thy moneye (currency in second-thought.ini). On this page it useth an ensample tresorie."
+  },
+  "rb_coinbase_value": {
+   "message0": "Coinbase tresorie worth",
+   "tooltip": "What thy Coinbase tresorie is worth, in thy moneye."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 of %2 on Coinbase",
+   "tooltip": "A chaffare paires laste prys, as BTC-GBP in poundes, or how muche it chaunged in the laste 24 houres, in hundredes. Spot chaffare paires oonly."
+  },
+  "rb_coinbase_candles": {
+   "message0": "Coinbase %1 prys of %2 for the laste %3",
+   "tooltip": "A list of recordes, the eldest first, oon for every day or houre (up to 350): time, open, high, low, close and volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase %1",
+   "tooltip": "Thyn open ordres (id, product, side, size, price, filled and created), or thy laste fulfillinges (time, product, side, size, price, fee and order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "forsee Coinbase ordre: %1 %2 of %3",
+   "tooltip": "What a market ordre wolde come to, withouten puttinge it: a recorde with size, spend, fee, total, slippage and warnings. Bye spendeth a somme of the seconde moneye (50 of BTC-GBP spendeth £50); selle selleth a somme of the firste (0.01 of BTC-GBP selleth 0.01 BTC). No thing chaungeth."
+  },
+  "rb_coinbase_order": {
+   "message0": "putte Coinbase ordre: %1 %2 of %3",
+   "tooltip": "Putteth a verray market ordre, as 'forsee Coinbase ordre'. It forseeth it first, thanne evere asketh thee, with the fee and the hool somme, ye, whan no thing elles asketh; with no man ther to seye ye, it renneth nat. Nedeth a keye with Trade leve. On this page no thing is boght ne sold."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "cancelle Coinbase ordre %1",
+   "tooltip": "Cancelleth oon of thyn open ordres, by his id (fro 'Coinbase open ordres'). It evere asketh thee first, and renneth nat with no man ther."
   }
  },
  "options": {
@@ -664,6 +696,26 @@
   "rb_agent_kraken.MODE": {
    "read": "(prys, thyn accompte and chaffare on papir)",
    "live": "(and verray chaffare: asketh bifore every ordre)"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "prys",
+   "change": "24 houres chaunge %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "dayly",
+   "hour": "hourly"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "open ordres",
+   "fills": "laste fulfillinges"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "bye",
+   "sell": "selle"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "bye",
+   "sell": "selle"
   }
  },
  "categories": {
@@ -690,7 +742,8 @@
   "Pictures": "Ymages",
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
-  "Output": "Outcome"
+  "Output": "Outcome",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1484,7 +1537,25 @@
   "{who} returned nothing for this step. Simplify it and try again.": "{who} yaf nothyng for this stappe. Make it simpler and assaye agayn.",
   "{who} says this key's account has no credit left: {problem}": "{who} seith this keyes accompte hath no credit left: {problem}",
   "{who} says too many requests right now. Wait a minute and run again.": "{who} seith ther ben to manye requestes now. Abyde a mynute and renne agayn.",
-  "At the models' list prices that's {cost}, charged to your keys' accounts.": "At the models prys that is {cost}, charged to thy keyes accomptes."
+  "At the models' list prices that's {cost}, charged to your keys' accounts.": "At the models prys that is {cost}, charged to thy keyes accomptes.",
+  "A Coinbase order is buy or sell.": "A Coinbase ordre is bye or selle.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase remenauntes",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase cancelled nat the ordre: {why}.",
+  "Coinbase order cancelled": "Coinbase ordre cancelled",
+  "Coinbase order placed": "Coinbase ordre yput",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase wolde nat putte that ordre: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Here ben but spot chaffare paires, as BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "The somme sholde ben a nombre above 0, as 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Which Coinbase ordre? Yif his id, fro 'Coinbase open ordres'.",
+  "not found": "nat yfounde",
+  "{n} assets": "{n} goodes",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "“{product}” is no Coinbase chaffare paire. Use oon as BTC-GBP.",
+  "Coinbase account": "Coinbase acounte",
+  "sample account": "ensample acounte",
+  "trade on your Coinbase account with real money (asking you before every order)": "chaffare on thy Coinbase acounte with verray moneye (askinge thee bifore every ordre)",
+  "read your Coinbase balances and orders, and market prices": "rede thy Coinbase remenauntes and ordres, and the prys of the market"
  },
  "examples": {
   "review": {
@@ -3036,7 +3107,40 @@
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "left out {names}: settinges nevere chaunge LD_, DYLD_ or PYTHON names, the whiche chaunge how programmes bigynne",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} is no settinge that Second Thought useth, so loke wel to the spellinge. If an MCP servaunt or a comaundement that thou rennest nedeth it, that is wel.",
   "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "othere folk on this computour may rede {path}. To kepe his keyes to thee allone:  chmod 600 {path}",
-  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant sente somwhat that is nat JSON ({e})."
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant sente somwhat that is nat JSON ({e}).",
+  "A Coinbase order is buy or sell.": "A Coinbase ordre is bye or selle.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase remenauntes",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase cancelled nat the ordre: {why}.",
+  "Coinbase order cancelled": "Coinbase ordre cancelled",
+  "Coinbase order placed": "Coinbase ordre yput",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase wolde nat putte that ordre: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Here ben but spot chaffare paires, as BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "The somme sholde ben a nombre above 0, as 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Which Coinbase ordre? Yif his id, fro 'Coinbase open ordres'.",
+  "not found": "nat yfounde",
+  "{n} assets": "{n} goodes",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "“{product}” is no Coinbase chaffare paire. Use oon as BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase putte nat the ordre: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase seyde nat for which tresorie this keye is.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase nedeth COINBASE_KEY_FILE {where_keys}: the keye file thou fecchest whan thou makest an API keye at portal.cdp.coinbase.com. Make it View oonly but if the program chaffareth.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase nedeth the cryptography pakke to seele his askinges: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Ne myghte nat reche Coinbase ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "Ne myghte nat rede the Coinbase keye file {path} ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "That Coinbase dede myghte meve verray moneye, so it renneth oonly after thou seyst ye.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "The Coinbase keye sholde ben the JSON file that Coinbase yaf thee, with name and privateKey therinne.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "The privateKey of the Coinbase keye ne myghte nat be rad. Use the keye file as Coinbase yaf it.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "This Coinbase keye is an Ed25519 keye, and Advanced Trade nedeth an ECDSA oon. Make a newe keye at portal.cdp.coinbase.com and chese ECDSA under his avaunced settinges.",
+  "it answered {code}": "it answerde {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "it refused the keye. Loke to COINBASE_KEY_FILE: it moot ben a CDP keye with an ECDSA privee keye",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "the keye may nat do that. Loke to his leves and his tresorie at portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "the keye werketh and may chaffare, but this program redeth oonly: a View-oonly keye is sikerer.",
+  "the key works, View only": "the keye werketh, View oonly",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "the keye werketh, but it may eek sende moneye awey. This program neveremore sendeth: make a keye withouten Transfer leve.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "the keye werketh, but it is View oonly, so this programmes ordres sholde be refused. Make a keye with Trade leve, bounden to oon tresorie.",
+  "the key works: it can trade (every order asks you first)": "the keye werketh: it may chaffare (every ordre asketh thee first)",
+  "too many requests just now; try again in a minute": "to many askinges right now; assaye agayn in a minute"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

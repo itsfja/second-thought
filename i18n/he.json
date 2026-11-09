@@ -557,6 +557,38 @@
   "rb_agent_kraken": {
    "message0": "הכלים של Kraken %1",
    "tooltip": "נותן לסוכן את הכלים של Kraken עצמה, מ-kraken-cli: מחירי שוק, היתרות וההוראות שלך, ומסחר על הנייר במחירים אמיתיים. מסחר אמיתי מאפשר לו גם לתת הוראות אמיתיות, אבל כל כלי שיכול להזיז כסף שואל אותך קודם, גם כשדבר אחר לא שואל, ולעולם לא רץ לפי לוח זמנים או ב-GitHub Actions. צריך kraken-cli מותקן, ו-KRAKEN_API_KEY ו-KRAKEN_API_SECRET ב-second-thought.ini לחשבון שלך (מחירים ומסחר על הנייר לא צריכים מפתח). רק ב-Python המיוצא."
+  },
+  "rb_coinbase_balances": {
+   "message0": "יתרות Coinbase",
+   "tooltip": "רשימת רשומות, אחת לכל נכס בתיק ה-Coinbase שלכם, הגדול קודם: asset, amount, value ו-currency. הערכים במטבע שלכם (currency ב-second-thought.ini). בעמוד הזה משמש תיק לדוגמה."
+  },
+  "rb_coinbase_value": {
+   "message0": "שווי תיק ה-Coinbase",
+   "tooltip": "כמה שווה תיק ה-Coinbase שלכם, במטבע שלכם."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 של %2 ב-Coinbase",
+   "tooltip": "המחיר האחרון של צמד מסחר, כמו של BTC-GBP בליש\"ט, או בכמה השתנה ב-24 השעות האחרונות, באחוזים. צמדי ספוט בלבד."
+  },
+  "rb_coinbase_candles": {
+   "message0": "מחירי Coinbase %1 של %2 עבור %3 האחרונים",
+   "tooltip": "רשימת רשומות, הישנה קודם, אחת לכל יום או שעה (עד 350): time, open, high, low, close ו-volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase: %1",
+   "tooltip": "הפקודות הפתוחות שלכם (id, product, side, size, price, filled ו-created), או הביצועים האחרונים (time, product, side, size, price, fee ו-order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "תצוגה מקדימה של פקודת Coinbase: %1 %2 של %3",
+   "tooltip": "מה תהיה פקודת שוק, בלי לשלוח אותה: רשומה עם size, spend, fee, total, slippage ו-warnings. קנייה מוציאה סכום מהמטבע השני (50 של BTC-GBP מוציא £50); מכירה מוכרת כמות מהראשון (0.01 של BTC-GBP מוכר 0.01 BTC). שום דבר לא משתנה."
+  },
+  "rb_coinbase_order": {
+   "message0": "שלח פקודת Coinbase: %1 %2 של %3",
+   "tooltip": "שולח פקודת שוק אמיתית, כמו 'תצוגה מקדימה של פקודת Coinbase'. קודם הוא מציג אותה מראש, ואז תמיד שואל אתכם, עם העמלה והסכום הכולל, גם כשדבר אחר לא שואל; כשאין מי שיגיד כן, הוא לא רץ. צריך מפתח עם הרשאת Trade. בעמוד הזה שום דבר לא נקנה ולא נמכר."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "בטל פקודת Coinbase ‏%1",
+   "tooltip": "מבטל אחת מהפקודות הפתוחות שלכם, לפי ה-id שלה (מתוך 'פקודות פתוחות ב-Coinbase'). תמיד שואל קודם, ולא רץ כשאין אף אחד."
   }
  },
  "options": {
@@ -665,6 +697,26 @@
   "rb_agent_kraken.MODE": {
    "read": "(מחירים, החשבון שלך ומסחר על הנייר)",
    "live": "(וגם מסחר אמיתי: שואל לפני כל הוראה)"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "מחיר",
+   "change": "שינוי ב-24 שעות %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "יומיים",
+   "hour": "שעתיים"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "פקודות פתוחות",
+   "fills": "ביצועים אחרונים"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "קנה",
+   "sell": "מכור"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "קנה",
+   "sell": "מכור"
   }
  },
  "categories": {
@@ -691,7 +743,8 @@
   "Pictures": "תמונות",
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
-  "Output": "פלט"
+  "Output": "פלט",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1485,7 +1538,25 @@
   "{who} returned nothing for this step. Simplify it and try again.": "{who} לא החזיר דבר בשלב הזה. פשט אותו ונסה שוב.",
   "{who} says this key's account has no credit left: {problem}": "{who} אומר שבחשבון של המפתח הזה לא נשאר אשראי: {problem}",
   "{who} says too many requests right now. Wait a minute and run again.": "{who} אומר שיש עכשיו יותר מדי בקשות. חכה דקה והרץ שוב.",
-  "At the models' list prices that's {cost}, charged to your keys' accounts.": "במחירון של המודלים זה {cost}, שמחויב בחשבונות של המפתחות שלך."
+  "At the models' list prices that's {cost}, charged to your keys' accounts.": "במחירון של המודלים זה {cost}, שמחויב בחשבונות של המפתחות שלך.",
+  "A Coinbase order is buy or sell.": "פקודת Coinbase היא קנייה או מכירה.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "יתרות Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase לא ביטלה את הפקודה: {why}.",
+  "Coinbase order cancelled": "פקודת Coinbase בוטלה",
+  "Coinbase order placed": "פקודת Coinbase נשלחה",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase לא הייתה מבצעת את הפקודה הזאת: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "כאן יש רק צמדי מסחר מיידי (ספוט), כמו BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "הסכום צריך להיות מספר גדול מ-0, כמו 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "איזו פקודת Coinbase? תנו את ה-id שלה, מתוך 'פקודות פתוחות ב-Coinbase'.",
+  "not found": "לא נמצא",
+  "{n} assets": "{n} נכסים",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "\"{product}\" אינו צמד מסחר של Coinbase. השתמשו בצמד כמו BTC-GBP.",
+  "Coinbase account": "חשבון Coinbase",
+  "sample account": "חשבון לדוגמה",
+  "trade on your Coinbase account with real money (asking you before every order)": "לסחור בחשבון ה-Coinbase שלכם בכסף אמיתי (בשאלה לפני כל פקודה)",
+  "read your Coinbase balances and orders, and market prices": "לקרוא את היתרות והפקודות שלכם ב-Coinbase, ואת מחירי השוק"
  },
  "examples": {
   "review": {
@@ -3037,6 +3108,39 @@
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "דולג {names}: הגדרות אף פעם לא משנות שמות LD_,‏ DYLD_ או PYTHON, שמשנים את אופן הפעלת התוכניות",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} אינו הגדרה ש-Second Thought משתמש בה, אז כדאי לבדוק את האיות. אם שרת MCP או פקודה שאתה מריץ צריכים אותו, זה בסדר.",
   "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "אנשים אחרים במחשב הזה יכולים לקרוא את {path}. כדי שהמפתחות שבו יהיו רק שלך:  chmod 600 {path}",
-  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant שלח משהו שאינו JSON ({e})."
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant שלח משהו שאינו JSON ({e}).",
+  "A Coinbase order is buy or sell.": "פקודת Coinbase היא קנייה או מכירה.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "יתרות Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase לא ביטלה את הפקודה: {why}.",
+  "Coinbase order cancelled": "פקודת Coinbase בוטלה",
+  "Coinbase order placed": "פקודת Coinbase נשלחה",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase לא הייתה מבצעת את הפקודה הזאת: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "כאן יש רק צמדי מסחר מיידי (ספוט), כמו BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "הסכום צריך להיות מספר גדול מ-0, כמו 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "איזו פקודת Coinbase? תנו את ה-id שלה, מתוך 'פקודות פתוחות ב-Coinbase'.",
+  "not found": "לא נמצא",
+  "{n} assets": "{n} נכסים",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "\"{product}\" אינו צמד מסחר של Coinbase. השתמשו בצמד כמו BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase לא ביצעה את הפקודה: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase לא אמרה לאיזה תיק המפתח הזה שייך.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase צריכה COINBASE_KEY_FILE {where_keys}: קובץ המפתח שמורידים כשיוצרים מפתח API ב-portal.cdp.coinbase.com. תנו לו רק View, אלא אם התוכנית סוחרת.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase צריכה את החבילה cryptography כדי לחתום על הבקשות: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "לא ניתן להגיע ל-Coinbase ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "לא ניתן לקרוא את קובץ המפתח של Coinbase {path} ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "הפעולה הזאת ב-Coinbase עלולה להזיז כסף אמיתי, ולכן היא רצה רק אחרי שתגידו כן.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "מפתח ה-Coinbase צריך להיות קובץ ה-JSON ש-Coinbase נתנה לכם, ובו name ו-privateKey.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "לא ניתן לקרוא את ה-privateKey של מפתח ה-Coinbase. השתמשו בקובץ המפתח כפי ש-Coinbase נתנה אותו.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "מפתח ה-Coinbase הזה הוא מפתח Ed25519, ו-Advanced Trade צריך מפתח ECDSA. צרו מפתח חדש ב-portal.cdp.coinbase.com ובחרו ECDSA בהגדרות המתקדמות שלו.",
+  "it answered {code}": "התשובה הייתה {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "המפתח נדחה. בדקו את COINBASE_KEY_FILE: הוא חייב להיות מפתח CDP עם מפתח פרטי ECDSA",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "המפתח לא מורשה לעשות את זה. בדקו את ההרשאות והתיק שלו ב-portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "המפתח עובד ויכול לסחור, אבל התוכנית הזאת רק קוראת: מפתח View בלבד בטוח יותר.",
+  "the key works, View only": "המפתח עובד, View בלבד",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "המפתח עובד, אבל הוא יכול גם להעביר כסף. התוכנית הזאת אף פעם לא מעבירה: צרו מפתח בלי הרשאת Transfer.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "המפתח עובד, אבל יש לו רק View, ולכן הפקודות של התוכנית יידחו. צרו מפתח עם הרשאת Trade, מוגבל לתיק אחד.",
+  "the key works: it can trade (every order asks you first)": "המפתח עובד: הוא יכול לסחור (כל פקודה שואלת אתכם קודם)",
+  "too many requests just now; try again in a minute": "יותר מדי בקשות כרגע; נסו שוב בעוד דקה"
  }
 }

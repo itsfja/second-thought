@@ -557,6 +557,38 @@
   "rb_ha_speak": {
    "message0": "%2-𒀀 %1 𒅗",
    "tooltip": "𒅗 𒅗𒀀 𒅗, Home Assistant 𒅗𒅗 𒉽𒊏𒋫."
+  },
+  "rb_coinbase_balances": {
+   "message0": "𒃻𒅅𒆷 Coinbase",
+   "tooltip": "𒁾 𒈬𒊬𒊏, 𒃻𒂵 𒀸𒀸 𒂍𒃻𒂵 Coinbase-𒍪𒀀, 𒃲 𒅆𒂠: asset, amount, value 𒅇 currency. 𒆠𒇴 𒆬𒍪𒀀 (currency second-thought.ini-a). 𒁾 𒉈𒀀 𒂍𒃻𒂵 𒄑𒄯 𒁳."
+  },
+  "rb_coinbase_value": {
+   "message0": "𒆠𒇴 𒂍𒃻𒂵 Coinbase",
+   "tooltip": "𒆠𒇴 𒂍𒃻𒂵 Coinbase-𒍪, 𒆬𒍪𒀀."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 %2 Coinbase-𒀀",
+   "tooltip": "𒆠𒇴 𒂕 𒋰𒀀, BTC-GBP-𒁶 𒂆𒀀, 𒅇𒁀 24 𒆜𒁍𒀀 𒁄𒀀, 𒋗𒅆𒀀. 𒋰 𒆠𒇴 𒌓𒁉𒋫 𒀸."
+  },
+  "rb_coinbase_candles": {
+   "message0": "𒆠𒇴 %1 Coinbase %2 %3 𒂕𒊏",
+   "tooltip": "𒁾 𒈬𒊬𒊏, 𒅆𒂠 𒅆𒂠, 𒌓 𒀸𒀸 𒅇 𒆜𒁍 (350-𒂠): time, open, high, low, close 𒅇 volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase: %1",
+   "tooltip": "𒀉𒉘𒂷 𒃲𒆷𒍪 (id, product, side, size, price, filled 𒅇 created), 𒅇 𒌀𒆷 𒂕 (time, product, side, size, price, fee 𒅇 order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "𒀉𒉘𒂷 Coinbase 𒅆𒂠 𒅆 𒁇: %1 %2 %3",
+   "tooltip": "𒀉𒉘𒂷 𒆠𒇴 𒀀𒈾 𒀝𒂊, 𒉡𒃻𒊏: 𒁾 size, spend, fee, total, slippage 𒅇 warnings-𒁕. 𒉚 𒆬 𒈫𒄰𒈠 𒋧 (50 BTC-GBP £50 𒋧); 𒋧 𒁹𒄰𒈠 𒋧 (0.01 BTC-GBP 0.01 BTC 𒋧). 𒃻 𒉡𒁄."
+  },
+  "rb_coinbase_order": {
+   "message0": "𒀉𒉘𒂷 Coinbase 𒃻: %1 %2 %3",
+   "tooltip": "𒀉𒉘𒂷 𒆠𒇴 𒍣 𒃻, „𒀉𒉘𒂷 Coinbase 𒅆𒂠 𒅆 𒁇”𒁶. 𒅆𒂠 𒅆 𒁇, 𒂕𒁉 𒌓 𒆸𒆸 𒇷 𒋻, 𒆬𒁉 𒅇 𒋗𒆸𒁉𒁕, 𒃻 𒊭𒊏 𒇷 𒉡𒋻𒊏𒅗𒀸; 𒇽 𒃶 𒅗 𒉡𒅅, 𒉡𒀝. 𒃻𒂃 Trade-𒁕 𒀠 𒅗. 𒁾 𒉈𒀀 𒃻 𒉡𒉚 𒉡𒋧."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "𒀉𒉘𒂷 Coinbase %1 𒍣",
+   "tooltip": "𒀉𒉘𒂷 𒃲𒆷𒍪 𒀸 id-𒁉𒋫 𒍣 („𒀉𒉘𒂷 𒃲𒆷 Coinbase”-𒋫). 𒌓 𒆸𒆸 𒅆𒂠 𒇷 𒋻, 𒇽 𒉡𒅅 𒉡𒀝."
   }
  },
  "options": {
@@ -655,6 +687,26 @@
    "png": "PNG",
    "svg": "SVG (𒀩 𒁶𒈠)",
    "orig": "𒁾 𒊕"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "𒆠𒇴",
+   "change": "𒁄 24 𒆜𒁍 %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "𒌓𒁕",
+   "hour": "𒆜𒁍𒁕"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "𒀉𒉘𒂷 𒃲𒆷",
+   "fills": "𒌀𒆷 𒂕"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "𒉚",
+   "sell": "𒋧"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "𒉚",
+   "sell": "𒋧"
   }
  },
  "categories": {
@@ -681,7 +733,8 @@
   "Tools": "𒄑𒆪",
   "Variables": "𒃻𒉽",
   "Wait & time": "𒅅 𒅇 𒌓",
-  "You": "𒍝𒂊"
+  "You": "𒍝𒂊",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
@@ -1475,7 +1528,25 @@
   "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "“{text}” 𒌓 𒉡𒈨𒀀. today, tomorrow, 𒌓 7-𒌓𒀀 𒇻 YYYY-MM-DD 𒆥.",
   "“{to}” isn't an email address.": "“{to}” 𒆠 𒁾𒅗 𒉡𒈨𒀀.",
   "“{value}” isn't a number.": "“{value}” 𒃻𒋃 𒉡𒈨𒀀.",
-  "“{value}” isn't on or off.": "“{value}” on 𒇻 off 𒉡𒈨𒀀."
+  "“{value}” isn't on or off.": "“{value}” on 𒇻 off 𒉡𒈨𒀀.",
+  "A Coinbase order is buy or sell.": "𒀉𒉘𒂷 Coinbase 𒉚 𒅇 𒋧𒈠.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "𒃻𒅅𒆷 Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase 𒀉𒉘𒂷 𒉡𒍣: {why}.",
+  "Coinbase order cancelled": "𒀉𒉘𒂷 Coinbase 𒍣𒂵",
+  "Coinbase order placed": "𒀉𒉘𒂷 Coinbase 𒃻𒊏",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase 𒀉𒉘𒂷 𒉈 𒉡𒃻𒊑: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "𒄯𒊏 𒋰 𒆠𒇴 𒌓𒁉𒋫 𒀸 𒅅, BTC-GBP-𒁶.",
+  "The amount should be a number above 0, like 50.": "𒋃 0-𒋫 𒋛𒀀 𒃶𒀀, 50-𒁶.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "𒀉𒉘𒂷 Coinbase 𒀀𒈾𒀀𒀭? id-𒁉 𒋧, „𒀉𒉘𒂷 𒃲𒆷 Coinbase”-𒋫.",
+  "not found": "𒉡𒅆𒊒",
+  "{n} assets": "𒃻𒂵 {n}",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "„{product}” 𒋰 Coinbase 𒉡𒈨𒀀. BTC-GBP-𒁶 𒁳.",
+  "Coinbase account": "𒃻𒋃 Coinbase",
+  "sample account": "𒃻𒋃 𒄑𒄯",
+  "trade on your Coinbase account with real money (asking you before every order)": "𒃻𒋃 Coinbase-𒍪𒀀 𒆬 𒍣𒉈 𒉚 𒅇 𒋧 (𒀉𒉘𒂷 𒀸𒀸𒋫 𒅆𒂠 𒂊𒉈𒂠 𒇷 𒋻)",
+  "read your Coinbase balances and orders, and market prices": "𒃻𒅅𒆷 𒅇 𒀉𒉘𒂷 Coinbase-𒍪, 𒅇 𒆠𒇴 𒆠𒇴 𒋃"
  },
  "examples": {
   "review": {
@@ -3027,7 +3098,40 @@
   "“{value}” isn't a number.": "“{value}” niĝ2-šid nu-me-a.",
   "“{value}” isn't on or off.": "“{value}” on lu off nu-me-a.",
   "“{x}” isn't a real date.": "“{x}” u4 zid nu-me-a.",
-  "“{x}” isn't a time.": "“{x}” u4 nu-me-a."
+  "“{x}” isn't a time.": "“{x}” u4 nu-me-a.",
+  "A Coinbase order is buy or sell.": "a2-aĝ2-ĝa2 Coinbase sa10 u3 šum2-ma.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "niĝ2-ĝal2-la Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase a2-aĝ2-ĝa2 nu-zi: {why}.",
+  "Coinbase order cancelled": "a2-aĝ2-ĝa2 Coinbase zi-ga",
+  "Coinbase order placed": "a2-aĝ2-ĝa2 Coinbase ĝar-ra",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase a2-aĝ2-ĝa2 ne nu-ĝar-re: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "ur5-ra tab ganba u4-bi-ta dili ĝal2, BTC-GBP-gin7.",
+  "The amount should be a number above 0, like 50.": "šid 0-ta diri ḫe2-a, 50-gin7.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "a2-aĝ2-ĝa2 Coinbase a-na-am3? id-bi šum2, „a2-aĝ2-ĝa2 gal-la Coinbase”-ta.",
+  "not found": "nu-pad3",
+  "{n} assets": "niĝ2-gur11 {n}",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "„{product}” tab Coinbase nu-me-a. BTC-GBP-gin7 dib.",
+  "Coinbase didn't place the order: {why}.": "Coinbase a2-aĝ2-ĝa2 nu-ĝar: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase e2-niĝ2-gur11 niĝ2-du8 ne-a nu-dug4.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase COINBASE_KEY_FILE {where_keys} al dug4: dub niĝ2-du8 niĝ2-du8 API portal.cdp.coinbase.com-a dim2-ma-zu-de3 e11-de3. View dili šum2, tukum-bi dub-sar sa10 nu-ak.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase cryptography al dug4 inim-bi kišib ra-de3: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Coinbase nu-te ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "dub niĝ2-du8 Coinbase {path} nu-šid ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "niĝ2 ne Coinbase kug zid ĝen-de3, u4 he2 dug4-zu-ta dili ak.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "niĝ2-du8 Coinbase dub JSON Coinbase šum2-ma ḫe2-a, name u3 privateKey šag4-ba.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "privateKey niĝ2-du8 Coinbase nu-šid. dub niĝ2-du8 Coinbase šum2-ma-gin7 dib.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "niĝ2-du8 Coinbase ne Ed25519, Advanced Trade ECDSA al dug4. niĝ2-du8 gibil portal.cdp.coinbase.com-a dim2 u3 ECDSA pad3.",
+  "it answered {code}": "{code} gi4",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "niĝ2-du8 nu-še-ga. COINBASE_KEY_FILE igi bar: niĝ2-du8 CDP niĝ2-du8 ECDSA-da ḫe2-a",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "niĝ2-du8 ne nu-ak-e. me-bi u3 e2-niĝ2-gur11-bi portal.cdp.coinbase.com-a igi bar",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "niĝ2-du8 ak u3 sa10 ak-e, dub-sar ne šid dili: niĝ2-du8 View dili silim-ma diri.",
+  "the key works, View only": "niĝ2-du8 ak, View dili",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "niĝ2-du8 ak, kug-ga de6 ak-e. dub-sar ne kug nu-de6: niĝ2-du8 Transfer nu-tuku dim2.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "niĝ2-du8 ak, View dili tuku, a2-aĝ2-ĝa2 dub-sar ne nu-še-ga. niĝ2-du8 Trade-da, e2-niĝ2-gur11 dili-še3, dim2.",
+  "the key works: it can trade (every order asks you first)": "niĝ2-du8 ak: sa10 ak-e (a2-aĝ2-ĝa2 dili-dili igi-še3 en3 tar)",
+  "too many requests just now; try again in a minute": "inim šar2-ra i3-ĝal2; u4 tur-ta a-ra2 min-kam ak"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

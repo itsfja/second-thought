@@ -556,6 +556,38 @@
   "rb_agent_kraken": {
    "message0": "Kraken-tools %1",
    "tooltip": "Geeft de agent de eigen tools van Kraken, uit kraken-cli: marktprijzen, je saldi en orders, en papierhandel tegen echte prijzen. Echte handel laat hem ook echte orders plaatsen, maar elke tool die geld kan verplaatsen vraagt het je eerst, ook als verder niets vraagt, en draait nooit volgens schema of op GitHub Actions. Heeft kraken-cli nodig, en KRAKEN_API_KEY en KRAKEN_API_SECRET in second-thought.ini voor je account (prijzen en papierhandel niet). Alleen in geëxporteerd Python."
+  },
+  "rb_coinbase_balances": {
+   "message0": "Coinbase-saldi",
+   "tooltip": "Een lijst met records, één voor elke bezitting in je Coinbase-portefeuille, de grootste eerst: asset, amount, value en currency. Waarden staan in je eigen valuta (currency in second-thought.ini). Op deze pagina gebruikt hij een voorbeeldportefeuille."
+  },
+  "rb_coinbase_value": {
+   "message0": "waarde van Coinbase-portefeuille",
+   "tooltip": "Wat je Coinbase-portefeuille waard is, in je eigen valuta."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 van %2 op Coinbase",
+   "tooltip": "De laatste prijs van een handelspaar, zoals die van BTC-GBP in ponden, of hoeveel die de afgelopen 24 uur veranderde, in procenten. Alleen spot-handelsparen."
+  },
+  "rb_coinbase_candles": {
+   "message0": "%1 Coinbase-prijzen van %2 voor de laatste %3",
+   "tooltip": "Een lijst met records, de oudste eerst, één voor elke dag of elk uur (tot 350): time, open, high, low, close en volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase: %1",
+   "tooltip": "Je open orders (id, product, side, size, price, filled en created) of je laatste uitvoeringen (time, product, side, size, price, fee en order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "Coinbase-order bekijken: %1 %2 van %3",
+   "tooltip": "Waar een marktorder op uit zou komen, zonder hem te plaatsen: een record met size, spend, fee, total, slippage en warnings. Kopen besteedt een bedrag van de tweede valuta (50 van BTC-GBP besteedt £50); verkopen verkoopt een bedrag van de eerste (0.01 van BTC-GBP verkoopt 0.01 BTC). Er verandert niets."
+  },
+  "rb_coinbase_order": {
+   "message0": "Coinbase-order plaatsen: %1 %2 van %3",
+   "tooltip": "Plaatst een echte marktorder, zoals ‘Coinbase-order bekijken’. Hij bekijkt hem eerst en vraagt het je dan altijd, met kosten en totaal, ook als niets anders iets vraagt; is er niemand om ja te zeggen, dan gebeurt het niet. Heeft een sleutel met het recht Trade nodig. Op deze pagina wordt niets gekocht of verkocht."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "Coinbase-order %1 annuleren",
+   "tooltip": "Annuleert een van je open orders, op zijn id (uit ‘open Coinbase-orders’). Hij vraagt het je altijd eerst en gebeurt niet als er niemand is."
   }
  },
  "options": {
@@ -664,6 +696,26 @@
   "rb_agent_kraken.MODE": {
    "read": "(prijzen, je account en papierhandel)",
    "live": "(en echte handel: vraagt vóór elke order)"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "prijs",
+   "change": "verandering in 24 uur %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "dagelijkse",
+   "hour": "uurlijkse"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "open orders",
+   "fills": "laatste uitvoeringen"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "kopen",
+   "sell": "verkopen"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "kopen",
+   "sell": "verkopen"
   }
  },
  "categories": {
@@ -690,7 +742,8 @@
   "Pictures": "Afbeeldingen",
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
-  "Output": "Uitvoer"
+  "Output": "Uitvoer",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Hulpmiddelen voor de agent: zet ze in een agentblok",
@@ -1484,7 +1537,25 @@
   "{who} returned nothing for this step. Simplify it and try again.": "{who} gaf niets terug voor deze stap. Maak hem eenvoudiger en probeer opnieuw.",
   "{who} says this key's account has no credit left: {problem}": "{who} zegt dat het account van deze sleutel geen tegoed meer heeft: {problem}",
   "{who} says too many requests right now. Wait a minute and run again.": "{who} meldt nu te veel verzoeken. Wacht een minuut en probeer opnieuw.",
-  "At the models' list prices that's {cost}, charged to your keys' accounts.": "Tegen de catalogusprijzen van de modellen is dat {cost}, gerekend aan de accounts van je sleutels."
+  "At the models' list prices that's {cost}, charged to your keys' accounts.": "Tegen de catalogusprijzen van de modellen is dat {cost}, gerekend aan de accounts van je sleutels.",
+  "A Coinbase order is buy or sell.": "Een Coinbase-order is kopen of verkopen.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase-saldi",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase heeft de order niet geannuleerd: {why}.",
+  "Coinbase order cancelled": "Coinbase-order geannuleerd",
+  "Coinbase order placed": "Coinbase-order geplaatst",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase zou die order niet plaatsen: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Hier zijn alleen spot-handelsparen, zoals BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "Het bedrag moet een getal boven 0 zijn, zoals 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Welke Coinbase-order? Geef zijn id, uit ‘open Coinbase-orders’.",
+  "not found": "niet gevonden",
+  "{n} assets": "{n} bezittingen",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "‘{product}’ is geen Coinbase-handelspaar. Gebruik er een zoals BTC-GBP.",
+  "Coinbase account": "Coinbase-rekening",
+  "sample account": "voorbeeldrekening",
+  "trade on your Coinbase account with real money (asking you before every order)": "handelen op je Coinbase-rekening met echt geld (met een vraag vóór elke order)",
+  "read your Coinbase balances and orders, and market prices": "je Coinbase-saldi en -orders en marktprijzen lezen"
  },
  "examples": {
   "review": {
@@ -3036,6 +3107,39 @@
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "overgeslagen {names}: instellingen veranderen nooit LD_-, DYLD_- of PYTHON-namen, die bepalen hoe programma's starten",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} is geen instelling die Second Thought gebruikt, dus controleer de spelling. Als een MCP-server of een opdracht die je start het nodig heeft, is het goed.",
   "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "andere mensen op deze computer kunnen {path} lezen. Om de sleutels voor jezelf te houden:  chmod 600 {path}",
-  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant stuurde iets dat geen JSON is ({e})."
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant stuurde iets dat geen JSON is ({e}).",
+  "A Coinbase order is buy or sell.": "Een Coinbase-order is kopen of verkopen.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase-saldi",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase heeft de order niet geannuleerd: {why}.",
+  "Coinbase order cancelled": "Coinbase-order geannuleerd",
+  "Coinbase order placed": "Coinbase-order geplaatst",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase zou die order niet plaatsen: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Hier zijn alleen spot-handelsparen, zoals BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "Het bedrag moet een getal boven 0 zijn, zoals 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Welke Coinbase-order? Geef zijn id, uit ‘open Coinbase-orders’.",
+  "not found": "niet gevonden",
+  "{n} assets": "{n} bezittingen",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "‘{product}’ is geen Coinbase-handelspaar. Gebruik er een zoals BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase heeft de order niet geplaatst: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase zei niet voor welke portefeuille deze sleutel is.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase heeft COINBASE_KEY_FILE nodig {where_keys}: het sleutelbestand dat je downloadt als je een API-sleutel maakt op portal.cdp.coinbase.com. Geef hem alleen View, tenzij het programma handelt.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase heeft het pakket cryptography nodig om zijn verzoeken te ondertekenen: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Coinbase was niet bereikbaar ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "Het Coinbase-sleutelbestand {path} kon niet worden gelezen ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "Die Coinbase-actie kan echt geld verplaatsen, dus ze gebeurt pas nadat je ja zegt.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "De Coinbase-sleutel moet het JSON-bestand zijn dat Coinbase je gaf, met name en privateKey erin.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "De privateKey van de Coinbase-sleutel kon niet worden gelezen. Gebruik het sleutelbestand zoals Coinbase het gaf.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "Deze Coinbase-sleutel is een Ed25519-sleutel, en Advanced Trade wil een ECDSA-sleutel. Maak een nieuwe sleutel op portal.cdp.coinbase.com en kies ECDSA in de geavanceerde instellingen.",
+  "it answered {code}": "het antwoordde {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "het weigerde de sleutel. Controleer COINBASE_KEY_FILE: het moet een CDP-sleutel met een private ECDSA-sleutel zijn",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "de sleutel mag dat niet. Controleer zijn rechten en portefeuille op portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "de sleutel werkt en kan handelen, maar dit programma leest alleen: een sleutel met alleen View is veiliger.",
+  "the key works, View only": "de sleutel werkt, alleen View",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "de sleutel werkt, maar kan ook geld overmaken. Dit programma maakt nooit iets over: maak een sleutel zonder het recht Transfer.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "de sleutel werkt, maar heeft alleen View, dus de orders van dit programma zouden worden geweigerd. Maak een sleutel met het recht Trade, beperkt tot één portefeuille.",
+  "the key works: it can trade (every order asks you first)": "de sleutel werkt: hij kan handelen (elke order vraagt het je eerst)",
+  "too many requests just now; try again in a minute": "te veel verzoeken op dit moment; probeer het over een minuut opnieuw"
  }
 }

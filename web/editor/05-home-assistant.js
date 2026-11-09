@@ -68,9 +68,13 @@
       return "the agent made this address up, and it can see private things that an address could carry away";
     return "";
   }
+  // Coinbase (#371): true for an API call that could move real money, anything but reading and previewing an order.
+  // The page's sample account goes by the blocks, but the answer is the runtime's coinbase_money.
+  const coinbaseMoney = (method, path) => !SAFETY.coinbase_free.some(([m, p]) => m === str(method).trim().toUpperCase() && new RegExp(p).test(str(path).trim()));
   // For the tests: the page's answers to the same questions the runtime answers (tests/e2e/safety.py).
   window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
+    : c.kind === "coinbase" ? coinbaseMoney(c.method, c.path)
     : c.kind === "asks" ? AGENT_ASKS.has(c.tool) : c.kind === "private" ? AGENT_PRIVATE.has(c.tool)
     : agentMustAsk(c.tool, c.input || {}, c.seen || "", !!c.private));
 

@@ -557,6 +557,38 @@
   "rb_ha_speak": {
    "message0": "%1 𐌰𐌽𐌰 %2 𐌵𐌹𐌸",
    "tooltip": "𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌰𐌽𐌰 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐍃𐍄𐌹𐌱𐌽𐍉𐍃 𐌵𐌹𐌸𐌹𐌸, 𐌸𐌰𐌹𐍂𐌷 Home Assistant."
+  },
+  "rb_coinbase_balances": {
+   "message0": "𐌻𐌰𐌹𐌱𐍉𐍃 Coinbase",
+   "tooltip": "𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌰𐌹𐌲𐌹𐌽𐌰 𐌹𐌽 𐌷𐌿𐌶𐌳𐌰 Coinbase 𐌸𐌴𐌹𐌽𐌰𐌼𐌼𐌰, 𐌼𐌰𐌹𐍃𐍄 𐍆𐍂𐌿𐌼𐌹𐍃𐍄: asset, amount, value 𐌾𐌰𐌷 currency. 𐍅𐌰𐌹𐍂𐌸𐌰 𐌹𐌽 𐍃𐌹𐌻𐌿𐌱𐍂𐌰 𐌸𐌴𐌹𐌽𐌰𐌼𐌼𐌰 (currency 𐌹𐌽 second-thought.ini). 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌱𐍂𐌿𐌺𐌴𐌹𐌸 𐌷𐌿𐌶𐌳𐌰 𐍆𐍂𐌹𐍃𐌰𐌷𐍄𐌰𐌹𐍃."
+  },
+  "rb_coinbase_value": {
+   "message0": "𐍅𐌰𐌹𐍂𐌸 𐌷𐌿𐌶𐌳𐌹𐍃 Coinbase",
+   "tooltip": "𐍅𐌰𐌹𐍂𐌸 𐌷𐌿𐌶𐌳𐌹𐍃 Coinbase 𐌸𐌴𐌹𐌽𐌹𐍃, 𐌹𐌽 𐍃𐌹𐌻𐌿𐌱𐍂𐌰 𐌸𐌴𐌹𐌽𐌰𐌼𐌼𐌰."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 %2 𐌰𐌽𐌰 Coinbase",
+   "tooltip": "𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐌰 𐍅𐌰𐌹𐍂𐌸 𐌲𐌰𐌾𐌿𐌺𐌹𐍃, 𐍃𐍅𐌴 BTC-GBP 𐌹𐌽 𐍀𐌿𐌽𐌳𐌰𐌼, 𐌰𐌹𐌸𐌸𐌰𐌿 𐍈𐌰𐌽 𐍆𐌹𐌻𐌿 𐌹𐌽𐌼𐌰𐌹𐌳𐌹𐌳𐌰 𐌹𐌽 24 𐌷𐍅𐌴𐌹𐌻𐍉𐌼, 𐌹𐌽 𐌷𐌿𐌽𐌳𐌰𐌼. 𐌲𐌰𐌾𐌿𐌺𐌰 𐍃𐌿𐌽𐍃𐌰 𐌱𐌿𐌲𐌾𐌰𐌽𐌳𐌰𐌽𐌴 𐌸𐌰𐍄𐌰𐌹𐌽𐌴𐌹."
+  },
+  "rb_coinbase_candles": {
+   "message0": "𐍅𐌰𐌹𐍂𐌸𐌰 %1 Coinbase %2 𐌸𐌰𐌹𐌼 𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐌰𐌼 %3",
+   "tooltip": "𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐍃𐌹𐌽𐌹𐍃𐍄𐍉𐌽𐌰 𐍆𐍂𐌿𐌼𐌹𐍃𐍄, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌳𐌰𐌲𐌰 𐌰𐌹𐌸𐌸𐌰𐌿 𐌷𐍅𐌴𐌹𐌻𐌰𐌹 (𐌿𐌽𐌳 350): time, open, high, low, close 𐌾𐌰𐌷 volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase: %1",
+   "tooltip": "𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌽𐍃 𐌸𐌴𐌹𐌽𐍉𐍃 𐌿𐍃𐌻𐌿𐌺𐌽𐌰𐌽𐍃 (id, product, side, size, price, filled 𐌾𐌰𐌷 created), 𐌰𐌹𐌸𐌸𐌰𐌿 𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐍉𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐍄𐌹𐌽𐍃 (time, product, side, size, price, fee 𐌾𐌰𐌷 order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "𐍆𐌰𐌿𐍂𐌰𐍃𐌰𐌹𐍈 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 Coinbase: %1 %2 %3",
+   "tooltip": "𐍈𐌰 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃 𐍅𐌰𐌹𐍂𐌸𐌹𐌸, 𐌿𐌽𐍃𐌰𐍄𐌹𐌸𐍃: 𐌱𐍉𐌺𐍉𐍃 𐌼𐌹𐌸 size, spend, fee, total, slippage 𐌾𐌰𐌷 warnings. 𐌱𐌿𐌲𐌾𐌰𐌽 𐍆𐍂𐌰𐌲𐌹𐌱𐌹𐌸 𐍂𐌰𐌸𐌾𐍉𐌽 𐍃𐌹𐌻𐌿𐌱𐍂𐌹𐍃 𐌰𐌽𐌸𐌰𐍂𐌹𐍃 (50 BTC-GBP 𐍆𐍂𐌰𐌲𐌹𐌱𐌹𐌸 £50); 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌹𐌸 𐍂𐌰𐌸𐌾𐍉𐌽 𐍆𐍂𐌿𐌼𐌹𐌽𐍃 (0.01 BTC-GBP 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌹𐌸 0.01 BTC). 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌳𐌰."
+  },
+  "rb_coinbase_order": {
+   "message0": "𐍃𐌰𐍄𐌴𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 Coinbase: %1 %2 %3",
+   "tooltip": "𐍃𐌰𐍄𐌾𐌹𐌸 𐍃𐌿𐌽𐌾𐌰𐌽𐌰 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃, 𐍃𐍅𐌴 „𐍆𐌰𐌿𐍂𐌰𐍃𐌰𐌹𐍈 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 Coinbase”. 𐍆𐍂𐌿𐌼𐌹𐍃𐍄 𐍆𐌰𐌿𐍂𐌰𐍃𐌰𐌹𐍈𐌹𐌸, 𐌸𐌰𐌸𐍂𐍉𐌷 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐌿𐌺, 𐌼𐌹𐌸 𐌼𐌹𐌶𐌳𐍉𐌽 𐌾𐌰𐌷 𐌰𐌻𐌻𐌰𐌼𐌼𐌰, 𐌾𐌰𐌷 𐌸𐌰𐌽 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌰𐌽𐌸𐌰𐍂 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌰𐌹𐌽𐍃𐌷𐌿𐌽 𐌹𐍃𐍄 𐌾𐌰 𐌵𐌹𐌸𐌰𐌽, 𐌽𐌹 𐌲𐌰𐌲𐌲𐌹𐌸. 𐍅𐌹𐌻𐌹 𐌿𐍃𐌻𐌿𐌺𐌰𐌽𐌳 𐌼𐌹𐌸 Trade. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌱𐌿𐌲𐌾𐌰𐌳𐌰 𐌽𐌹𐌷 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌳𐌰."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "𐌰𐍆𐌻𐌴𐍄𐌴𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 Coinbase %1",
+   "tooltip": "𐌰𐍆𐌻𐌴𐍄𐌹𐌸 𐌰𐌹𐌽𐌰𐌽𐌰 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌴 𐌸𐌴𐌹𐌽𐌰𐌹𐌶𐌴 𐌿𐍃𐌻𐌿𐌺𐌽𐌰𐌽𐌴, 𐌱𐌹 id (𐌿𐍃 „𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌽𐍃 𐌿𐍃𐌻𐌿𐌺𐌽𐌰𐌽𐍃 Coinbase”). 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌿𐌼𐌹𐍃𐍄 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐌿𐌺, 𐌾𐌰𐌷 𐌽𐌹 𐌲𐌰𐌲𐌲𐌹𐌸 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌰𐌹𐌽𐍃𐌷𐌿𐌽 𐌹𐍃𐍄."
   }
  },
  "options": {
@@ -655,6 +687,26 @@
    "png": "PNG",
    "svg": "SVG (𐌼𐌰𐌽𐌻𐌴𐌹𐌺𐌰 𐌼𐌴𐌻𐌹𐌸𐌰)",
    "orig": "𐌱𐍉𐌺𐍉𐍃 𐍆𐍂𐌿𐌼𐌹𐍃𐍄𐍉𐍃"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "𐍅𐌰𐌹𐍂𐌸",
+   "change": "𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹𐌽𐍃 24 𐌷𐍅𐌴𐌹𐌻𐍉 %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "𐌳𐌰𐌲𐌰𐌻𐌴𐌹𐌺𐌰",
+   "hour": "𐌷𐍅𐌴𐌹𐌻𐌰𐌻𐌴𐌹𐌺𐌰"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌽𐍃 𐌿𐍃𐌻𐌿𐌺𐌽𐌰𐌽𐍃",
+   "fills": "𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐍉𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐍄𐌹𐌽𐍃"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "𐌱𐌿𐌲𐌾𐌰𐌽",
+   "sell": "𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "𐌱𐌿𐌲𐌾𐌰𐌽",
+   "sell": "𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽"
   }
  },
  "categories": {
@@ -681,7 +733,8 @@
   "Tools": "𐍃𐌰𐍂𐍅𐌰",
   "Variables": "𐌷𐌻𐌰𐌿𐍄𐍉𐍃",
   "Wait & time": "𐌱𐌴𐌹𐌳𐌰𐌽 𐌾𐌰𐌷 𐌼𐌴𐌻",
-  "You": "𐌸𐌿"
+  "You": "𐌸𐌿",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𐌷𐌰𐌿𐍃𐌾𐌰𐌽𐌳𐌰𐌽𐍃: 𐍄𐌰𐌿𐌾𐌰𐌽𐌳 𐍃𐍅𐌴𐌸𐌰𐌿𐌷 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰 𐌹𐌽 𐌼𐌴𐌻𐌰 𐍄𐌰𐌿𐌾𐌹𐌸",
@@ -1475,7 +1528,25 @@
   "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "“{text}” 𐌳𐌰𐌲𐍃 𐌽𐌹 𐌹𐍃𐍄. today, tomorrow, 𐌳𐌰𐌲 𐍅𐌹𐌺𐍉𐌽𐍃 𐌰𐌹𐌸𐌸𐌰𐌿 YYYY-MM-DD 𐌱𐍂𐌿𐌺𐌴𐌹.",
   "“{to}” isn't an email address.": "“{to}” 𐍃𐍄𐌰𐌸𐍃 𐌱𐍉𐌺𐍉𐍃𐍀𐌹𐌻𐌻𐌹𐍃 𐌽𐌹 𐌹𐍃𐍄.",
   "“{value}” isn't a number.": "“{value}” 𐌲𐌰𐍂𐌰𐌸𐌾𐍉 𐌽𐌹 𐌹𐍃𐍄.",
-  "“{value}” isn't on or off.": "“{value}” on 𐌰𐌹𐌸𐌸𐌰𐌿 off 𐌽𐌹 𐌹𐍃𐍄."
+  "“{value}” isn't on or off.": "“{value}” on 𐌰𐌹𐌸𐌸𐌰𐌿 off 𐌽𐌹 𐌹𐍃𐍄.",
+  "A Coinbase order is buy or sell.": "𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 Coinbase 𐌹𐍃𐍄 𐌱𐌿𐌲𐌾𐌰𐌽 𐌰𐌹𐌸𐌸𐌰𐌿 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "𐌻𐌰𐌹𐌱𐍉𐍃 Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase 𐌽𐌹 𐌰𐍆𐌻𐌴𐍄𐌹𐌸 𐌰𐌽𐌰𐌱𐌿𐍃𐌽: {why}.",
+  "Coinbase order cancelled": "𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 Coinbase 𐌰𐍆𐌻𐌴𐍄𐌰𐌽𐍃",
+  "Coinbase order placed": "𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 Coinbase 𐍃𐌰𐍄𐌹𐌸𐍃",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase 𐌽𐌹 𐍃𐌰𐍄𐌹𐌳𐌴𐌳𐌹 𐌸𐌰𐌽𐌰 𐌰𐌽𐌰𐌱𐌿𐍃𐌽: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "𐌷𐌴𐍂 𐍃𐌹𐌽𐌳 𐌲𐌰𐌾𐌿𐌺𐌰 𐍃𐌿𐌽𐍃𐌰 𐌱𐌿𐌲𐌾𐌰𐌽𐌳𐌰𐌽𐌴 𐌸𐌰𐍄𐌰𐌹𐌽𐌴𐌹, 𐍃𐍅𐌴 BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "𐍂𐌰𐌸𐌾𐍉 𐍅𐌹𐍃𐌰𐌹 𐌿𐍆𐌰𐍂 0, 𐍃𐍅𐌴 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "𐍈𐌰𐍂𐌾𐌹𐍃 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 Coinbase? 𐌲𐌹𐍆 id 𐌹𐍃, 𐌿𐍃 „𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌽𐍃 𐌿𐍃𐌻𐌿𐌺𐌽𐌰𐌽𐍃 Coinbase”.",
+  "not found": "𐌽𐌹 𐌱𐌹𐌲𐌹𐍄𐌰𐌽",
+  "{n} assets": "{n} 𐌰𐌹𐌲𐌹𐌽𐌰",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "„{product}” 𐌽𐌹𐍃𐍄 𐌲𐌰𐌾𐌿𐌺 Coinbase. 𐌽𐌹𐌼 𐌰𐌹𐌽 𐍃𐍅𐌴 BTC-GBP.",
+  "Coinbase account": "𐍂𐌰𐌸𐌾𐍉 Coinbase",
+  "sample account": "𐍂𐌰𐌸𐌾𐍉 𐍆𐍂𐌹𐍃𐌰𐌷𐍄𐌰𐌹𐍃",
+  "trade on your Coinbase account with real money (asking you before every order)": "𐌱𐌿𐌲𐌾𐌰𐌽 𐌾𐌰𐌷 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽 𐌰𐌽𐌰 𐍂𐌰𐌸𐌾𐍉𐌽 Coinbase 𐌸𐌴𐌹𐌽𐌰𐌹 𐍃𐌿𐌽𐌾𐌰𐍄𐌰𐌼𐌼𐌰 𐍃𐌹𐌻𐌿𐌱𐍂𐌰 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍆𐌰𐌿𐍂𐌰 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌰𐌹)",
+  "read your Coinbase balances and orders, and market prices": "𐌻𐌰𐌹𐍃𐌾𐌰𐌽 𐌻𐌰𐌹𐌱𐍉𐍃 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌽𐍃 Coinbase 𐌸𐌴𐌹𐌽𐌰𐌽𐍃, 𐌾𐌰𐌷 𐍅𐌰𐌹𐍂𐌸𐌰 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃"
  },
  "examples": {
   "review": {
@@ -3027,7 +3098,40 @@
   "“{value}” isn't a number.": "“{value}” garaþjo ni ist.",
   "“{value}” isn't on or off.": "“{value}” on aiþþau off ni ist.",
   "“{x}” isn't a real date.": "“{x}” dags sunjis ni ist.",
-  "“{x}” isn't a time.": "“{x}” mel ni ist."
+  "“{x}” isn't a time.": "“{x}” mel ni ist.",
+  "A Coinbase order is buy or sell.": "anabusns Coinbase ist bugjan aiþþau frabugjan.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "laibos Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase ni afletiþ anabusn: {why}.",
+  "Coinbase order cancelled": "anabusns Coinbase afletans",
+  "Coinbase order placed": "anabusns Coinbase satiþs",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase ni satidedi þana anabusn: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "her sind gajuka sunsa bugjandane þatainei, swe BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "raþjo wisai ufar 0, swe 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "ƕarjis anabusns Coinbase? gif id is, us „anabusnins usluknans Coinbase”.",
+  "not found": "ni bigitan",
+  "{n} assets": "{n} aigina",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "„{product}” nist gajuk Coinbase. nim ain swe BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase ni satida anabusn: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase ni qaþ ƕarjamma huzda sa uslukands ist.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase COINBASE_KEY_FILE wili {where_keys}: bokos uslukandis þozei niþar nimis, þan waurkeis uslukand API ana portal.cdp.coinbase.com. gif imma View þatainei, niba waurstw bugjai.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase cryptography wili du sigljan bidos seinos: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Coinbase ni gaqimiþ ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "bokos uslukandis Coinbase {path} ni ussiggwanos ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "sa waurstw Coinbase silubr sunjata inmaidjan mag, inuh þis þatainei afar þatei ja qiþis gaggiþ.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "uslukands Coinbase wisai bokos JSON þozei Coinbase gaf þus, miþ name jah privateKey in izai.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "privateKey uslukandis Coinbase ni ussiggwans. nim bokos uslukandis swaswe Coinbase gaf.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "sa uslukands Coinbase ist Ed25519, iþ Advanced Trade wili ECDSA. waurkei niujana uslukand ana portal.cdp.coinbase.com jah gawalei ECDSA.",
+  "it answered {code}": "andhof {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "afwarp uslukand. sai COINBASE_KEY_FILE: skal wisan uslukands CDP miþ ECDSA uslukanda analaugnamma",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "sa uslukands ni mag þata taujan. sai waldufnja is jah huzd ana portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "uslukands brukeiþ jah bugjan mag, iþ waurstw þata þatainei ussiggwiþ: uslukands View þatainei triggwoza.",
+  "the key works, View only": "uslukands brukeiþ, View þatainei",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "uslukands brukeiþ, iþ jah silubr fairra bairan mag. waurstw þata ni aiw bairiþ: waurkei uslukand inuh Transfer.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "uslukands brukeiþ, iþ View þatainei habaiþ, inuh þis anabusnins waurstwis afwairpanda. waurkei uslukand miþ Trade, du ainamma huzda.",
+  "the key works: it can trade (every order asks you first)": "uslukands brukeiþ: bugjan mag (ƕarjizuh anabusns frumist fraihniþ þuk)",
+  "too many requests just now; try again in a minute": "managos bidos nu; aftra sokei afar hweilai"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

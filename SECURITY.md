@@ -42,9 +42,9 @@ decided by its blocks, and every block declares it (the `CAPABILITIES` list in `
 
 - **Act:** send email, Telegram, Discord or Slack messages; comment on GitHub; control Home Assistant or Homey
   devices and start Homey flows; publish MQTT messages; accept web requests from other computers; use the tools of
-  MCP servers you set up.
+  MCP servers you set up; place and cancel Coinbase orders.
 - **Read:** web pages and search, your email, calendars, news feeds, GitHub, Telegram, Discord and Slack messages,
-  Home Assistant, Homey and MQTT, a folder it watches, and files you choose.
+  Home Assistant, Homey and MQTT, your Coinbase balances and orders, a folder it watches, and files you choose.
 - **Keep:** files in its `outputs` folder, and notes between runs in `memory.json`.
 
 Everything it reads and writes is sent to the model services it uses.
@@ -62,6 +62,10 @@ Everything it reads and writes is sent to the model services it uses.
     and valve action except locking, closing and stopping, including toggling and setting a position, and
     `homeassistant.turn_on`, `turn_off` or `toggle` that could reach one: named as the entity or in the data, or
     aimed at a whole area, device, floor or label, at `all`, or at nothing in particular (we can't see what those reach).
+  - **Money.** Placing and cancelling a Coinbase order asks every time, live, after a preview that shows the fee and
+    total, and never runs with nobody there to say yes (unless `approve_by = telegram`). Every Coinbase call other than
+    reading and previewing goes through that question (`coinbase_free` in `SAFETY`), so nothing else can move money;
+    converting, transferring and withdrawing aren't offered at all. Use a View-only key unless the program trades.
   - **Things that could do anything.** When an agent chooses it, running a Home Assistant script, scene or automation,
     pressing a button, starting a Homey flow, or publishing an MQTT message that says unlock, open or disarm.
 - **No reading made-up addresses next to private data.** An agent that can see private things (email, messages,

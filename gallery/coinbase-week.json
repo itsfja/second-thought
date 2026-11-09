@@ -1,0 +1,304 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "coinbase-week",
+  "gallery": {
+    "title": "Weekly crypto round-up",
+    "category": "money",
+    "description": "Each Sunday evening, reads your Coinbase balances and what they're worth, and sends you a Telegram message: the total, how it changed since last week, and each holding's value. It only reads: it places no orders.",
+    "tip": "Needs a Coinbase API key with View permission only (COINBASE_KEY_FILE), and currency = gbp, or yours, in second-thought.ini. The first week has nothing to compare with.",
+    "author": "itsfja",
+    "runtime": "3.0.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_value",
+        "name": "value"
+      },
+      {
+        "id": "g_holdings",
+        "name": "holdings"
+      },
+      {
+        "id": "g_summary",
+        "name": "summary"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "roundup"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 18,
+            "MINUTE": 0,
+            "DAYS": "weekends"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "weekday"
+                          }
+                        }
+                      },
+                      "B": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Sunday"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_broadcast_wait",
+                    "inputs": {
+                      "MSG": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "roundup"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "roundup"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_value"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_coinbase_value"
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_holdings"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_coinbase_balances"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_summary"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_ask",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "Write a short weekly round-up of my crypto, under 120 words, in plain English: the total now, how it changed since last week (in money and percent), and each holding's value, biggest first. No advice on what to buy or sell.\n\nTotal now: "
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_value"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "ADD2": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "\nTotal a week ago (empty if this is the first week): "
+                                        }
+                                      }
+                                    },
+                                    "ADD3": {
+                                      "block": {
+                                        "type": "rb_mem_get",
+                                        "inputs": {
+                                          "NAME": {
+                                            "shadow": {
+                                              "type": "text",
+                                              "fields": {
+                                                "TEXT": "Coinbase total last week"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "ADD4": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "\nHoldings (asset, amount, value, currency):\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD5": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_holdings"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 6
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_mem_set",
+                          "fields": {
+                            "KIND": "permanent"
+                          },
+                          "inputs": {
+                            "VALUE": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_value"
+                                  }
+                                }
+                              }
+                            },
+                            "NAME": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "Coinbase total last week"
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_tg_send",
+                              "inputs": {
+                                "TEXT": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_summary"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_finish_with",
+                                  "inputs": {
+                                    "TEXT": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_summary"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

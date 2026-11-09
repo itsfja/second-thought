@@ -276,6 +276,12 @@
         return recs;
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
+      case "rb_coinbase_balances": return coinbaseBalances();
+      case "rb_coinbase_value": return coinbaseValue();
+      case "rb_coinbase_price": return coinbasePrice(b.getFieldValue("WHAT"), await input(b, tc, "PRODUCT"));
+      case "rb_coinbase_candles": return coinbaseCandles(b.getFieldValue("SIZE"), await input(b, tc, "PRODUCT"), await input(b, tc, "N", 7));
+      case "rb_coinbase_orders": return coinbaseOrders(b.getFieldValue("WHICH"));
+      case "rb_coinbase_preview": return coinbasePreview(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT"));
       case "rb_mqtt_read": {
         const topic = mqttTopic(await input(b, tc, "TOPIC")), got = mqttRead(topic);
         if (!/[+#]/.test(topic)) { const v = got[topic] || ""; addStep("MQTT " + topic, { mono:true, text:v || tr("(no message yet: only messages the broker keeps show up straight away)") }).done("read", "ok"); return v; }
@@ -852,6 +858,8 @@
       case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
+      case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
+      case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {

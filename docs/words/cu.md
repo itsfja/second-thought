@@ -26,6 +26,7 @@ Made by tools/sync.py from i18n/cu.json: edit that, not this.
 - Variables: Измѣняемаѧ
 - Wait & time: Жди и времѧ
 - You: Ты
+- Coinbase: Coinbase
 - Listeners: they run while the exported program runs on schedule: Слышатели: текутъ, егда изведенный чинъ течетъ по уроку
 - No blocks match: Никоегоже звѣна подобна
 - Read and send: Чти и посылай

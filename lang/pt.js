@@ -145,7 +145,15 @@
 "rb_with_any_model":{"message0":"com o modelo OpenRouter %1","message1":"%1","tooltip":"Executa só os blocos lá dentro em qualquer modelo que o OpenRouter ofereça. Escreva o nome de openrouter.ai/models, por exemplo mistralai/mistral-small ou google/gemma-4-31b-it. openrouter/auto escolhe um por si. Corre no Python exportado (precisa de OPENROUTER_API_KEY); nesta página o Claude substitui-o."},
 "rb_with_model":{"message0":"com o modelo %1","message1":"%1","tooltip":"Executa só os blocos lá dentro neste modelo e depois volta ao modelo anterior. Modelos que não sejam o Claude correm no Python exportado; nesta página o Claude substitui-os."},
 "rb_word_count":{"message0":"contagem de palavras de %1"},
-"rb_agent_kraken":{"message0":"ferramentas Kraken %1","tooltip":"Dá ao agente as ferramentas da Kraken, do kraken-cli: preços de mercado, os seus saldos e ordens, e negociação em papel a preços reais. A negociação real deixa-o também dar ordens verdadeiras, mas cada ferramenta que pode movimentar dinheiro pergunta-lhe primeiro, mesmo quando mais nada pergunta, e nunca corre num horário nem no GitHub Actions. Precisa do kraken-cli instalado, e de KRAKEN_API_KEY e KRAKEN_API_SECRET em second-thought.ini para a sua conta (preços e papel não precisam de chave). Só no Python exportado."}
+"rb_agent_kraken":{"message0":"ferramentas Kraken %1","tooltip":"Dá ao agente as ferramentas da Kraken, do kraken-cli: preços de mercado, os seus saldos e ordens, e negociação em papel a preços reais. A negociação real deixa-o também dar ordens verdadeiras, mas cada ferramenta que pode movimentar dinheiro pergunta-lhe primeiro, mesmo quando mais nada pergunta, e nunca corre num horário nem no GitHub Actions. Precisa do kraken-cli instalado, e de KRAKEN_API_KEY e KRAKEN_API_SECRET em second-thought.ini para a sua conta (preços e papel não precisam de chave). Só no Python exportado."},
+"rb_coinbase_balances":{"message0":"saldos da Coinbase","tooltip":"Uma lista de registos, um por cada ativo da sua carteira da Coinbase, o maior primeiro: asset, amount, value e currency. Os valores estão na sua moeda (currency em second-thought.ini). Nesta página usa uma carteira de exemplo."},
+"rb_coinbase_value":{"message0":"valor da carteira da Coinbase","tooltip":"Quanto vale a sua carteira da Coinbase, na sua moeda."},
+"rb_coinbase_price":{"message0":"%1 de %2 na Coinbase","tooltip":"O último preço de um par, como o de BTC-GBP em libras, ou quanto mudou nas últimas 24 horas, em percentagem. Só pares à vista."},
+"rb_coinbase_candles":{"message0":"preços %1 da Coinbase de %2 dos últimos %3","tooltip":"Uma lista de registos, o mais antigo primeiro, um por cada dia ou hora (até 350): time, open, high, low, close e volume."},
+"rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"As suas ordens abertas (id, product, side, size, price, filled e created) ou as suas últimas execuções (time, product, side, size, price, fee e order)."},
+"rb_coinbase_preview":{"message0":"pré-visualizar ordem da Coinbase: %1 %2 de %3","tooltip":"Quanto daria uma ordem a mercado, sem a colocar: um registo com size, spend, fee, total, slippage e warnings. Comprar gasta um montante da segunda moeda (50 de BTC-GBP gasta £50); vender vende um montante da primeira (0.01 de BTC-GBP vende 0.01 BTC). Nada muda."},
+"rb_coinbase_order":{"message0":"colocar ordem da Coinbase: %1 %2 de %3","tooltip":"Coloca uma ordem a mercado real, como «pré-visualizar ordem da Coinbase». Primeiro pré-visualiza-a e depois pergunta-lhe sempre, com a comissão e o total, mesmo quando nada mais pergunta; sem ninguém para dizer que sim, não acontece. Precisa de uma chave com a permissão Trade. Nesta página nada é comprado nem vendido."},
+"rb_coinbase_cancel":{"message0":"cancelar ordem da Coinbase %1","tooltip":"Cancela uma das suas ordens abertas, pelo id (de «ordens abertas da Coinbase»). Pergunta-lhe sempre antes, e não acontece sem ninguém."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos os dias","weekdays":"nos dias úteis","weekends":"ao fim de semana"},
@@ -162,7 +170,12 @@
 "rb_mem_add.KIND":{"transient":"enquanto esta página estiver aberta","permanent":"para sempre"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG (imagens desenhadas)","orig":"ficheiro original"},
 "rb_budget.UNIT":{"tokens":"tokens","dollars":"dólares americanos","gbp":"libras","eur":"euros","jpy":"ienes","cny":"yuans"},
-"rb_agent_kraken.MODE":{"read":"(preços, a sua conta e negociação em papel)","live":"(e negociação real: pergunta antes de cada ordem)"}
+"rb_agent_kraken.MODE":{"read":"(preços, a sua conta e negociação em papel)","live":"(e negociação real: pergunta antes de cada ordem)"},
+"rb_coinbase_price.WHAT":{"price":"preço","change":"variação em 24 horas %"},
+"rb_coinbase_candles.SIZE":{"day":"diários","hour":"por hora"},
+"rb_coinbase_orders.WHICH":{"open":"ordens abertas","fills":"últimas execuções"},
+"rb_coinbase_preview.SIDE":{"buy":"comprar","sell":"vender"},
+"rb_coinbase_order.SIDE":{"buy":"comprar","sell":"vender"}
 },
 "categories":{
 "Events":"Eventos",
@@ -188,7 +201,8 @@
 "Pictures":"Imagens",
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
-"Output":"Saída"
+"Output":"Saída",
+"Coinbase":"Coinbase"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ferramentas para o agente: coloque-as dentro de um bloco de agente",
@@ -982,7 +996,25 @@
 "{who} returned nothing for this step. Simplify it and try again.":"{who} não devolveu nada neste passo. Simplifique-o e tente outra vez.",
 "{who} says this key's account has no credit left: {problem}":"{who} diz que a conta desta chave não tem crédito: {problem}",
 "{who} says too many requests right now. Wait a minute and run again.":"{who} diz que há pedidos a mais agora. Espere um minuto e volte a correr.",
-"At the models' list prices that's {cost}, charged to your keys' accounts.":"Aos preços de tabela dos modelos são {cost}, cobrados às contas das suas chaves."
+"At the models' list prices that's {cost}, charged to your keys' accounts.":"Aos preços de tabela dos modelos são {cost}, cobrados às contas das suas chaves.",
+"A Coinbase order is buy or sell.":"Uma ordem da Coinbase é de compra ou de venda.",
+"Coinbase":"Coinbase",
+"Coinbase balances":"Saldos da Coinbase",
+"Coinbase didn't cancel the order: {why}.":"A Coinbase não cancelou a ordem: {why}.",
+"Coinbase order cancelled":"Ordem da Coinbase cancelada",
+"Coinbase order placed":"Ordem da Coinbase colocada",
+"Coinbase wouldn't place that order: {why}.":"A Coinbase não colocaria essa ordem: {why}.",
+"Coinbase: {why}.":"Coinbase: {why}.",
+"Only spot trading pairs, like BTC-GBP, are offered here.":"Aqui só há pares à vista, como BTC-GBP.",
+"The amount should be a number above 0, like 50.":"O montante deve ser um número acima de 0, como 50.",
+"Which Coinbase order? Give its id, from 'Coinbase open orders'.":"Que ordem da Coinbase? Indique o id dela, em «ordens abertas da Coinbase».",
+"not found":"não encontrado",
+"{n} assets":"{n} ativos",
+"“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.":"«{product}» não é um par da Coinbase. Use um como BTC-GBP.",
+"Coinbase account":"conta da Coinbase",
+"sample account":"conta de exemplo",
+"trade on your Coinbase account with real money (asking you before every order)":"negociar na sua conta da Coinbase com dinheiro real (perguntando antes de cada ordem)",
+"read your Coinbase balances and orders, and market prices":"ler os seus saldos e ordens da Coinbase, e os preços de mercado"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -1902,6 +1934,39 @@
 "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"ignorado {names}: as definições nunca mudam nomes LD_, DYLD_ ou PYTHON, que mudam o arranque dos programas",
 "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} não é uma definição que o Second Thought use, por isso verifique a ortografia. Se um servidor MCP ou um comando que executa precisar dela, não há problema.",
 "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"outras pessoas neste computador podem ler {path}. Para manter as chaves só para si:  chmod 600 {path}",
-"Home Assistant sent something that isn't JSON ({e}).":"O Home Assistant enviou algo que não é JSON ({e})."
+"Home Assistant sent something that isn't JSON ({e}).":"O Home Assistant enviou algo que não é JSON ({e}).",
+"A Coinbase order is buy or sell.":"Uma ordem da Coinbase é de compra ou de venda.",
+"Coinbase":"Coinbase",
+"Coinbase balances":"Saldos da Coinbase",
+"Coinbase didn't cancel the order: {why}.":"A Coinbase não cancelou a ordem: {why}.",
+"Coinbase order cancelled":"Ordem da Coinbase cancelada",
+"Coinbase order placed":"Ordem da Coinbase colocada",
+"Coinbase wouldn't place that order: {why}.":"A Coinbase não colocaria essa ordem: {why}.",
+"Coinbase: {why}.":"Coinbase: {why}.",
+"Only spot trading pairs, like BTC-GBP, are offered here.":"Aqui só há pares à vista, como BTC-GBP.",
+"The amount should be a number above 0, like 50.":"O montante deve ser um número acima de 0, como 50.",
+"Which Coinbase order? Give its id, from 'Coinbase open orders'.":"Que ordem da Coinbase? Indique o id dela, em «ordens abertas da Coinbase».",
+"not found":"não encontrado",
+"{n} assets":"{n} ativos",
+"“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.":"«{product}» não é um par da Coinbase. Use um como BTC-GBP.",
+"Coinbase didn't place the order: {why}.":"A Coinbase não colocou a ordem: {why}.",
+"Coinbase didn't say which portfolio this key is for.":"A Coinbase não disse a que carteira pertence esta chave.",
+"Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.":"A Coinbase precisa de COINBASE_KEY_FILE {where_keys}: o ficheiro da chave que descarrega ao criar uma chave de API em portal.cdp.coinbase.com. Dê-lhe só View, a menos que o programa negocie.",
+"Coinbase needs the cryptography package to sign its requests: pip install cryptography":"A Coinbase precisa do pacote cryptography para assinar os pedidos: pip install cryptography",
+"Couldn't reach Coinbase ({reason}).":"Não foi possível contactar a Coinbase ({reason}).",
+"Couldn't read the Coinbase key file {path} ({reason}).":"Não foi possível ler o ficheiro da chave da Coinbase {path} ({reason}).",
+"That Coinbase action could move real money, so it only runs after you say yes.":"Essa ação da Coinbase pode mover dinheiro real, por isso só acontece depois de dizer que sim.",
+"The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.":"A chave da Coinbase deve ser o ficheiro JSON que a Coinbase lhe deu, com name e privateKey lá dentro.",
+"The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.":"Não foi possível ler o privateKey da chave da Coinbase. Use o ficheiro da chave tal como a Coinbase o deu.",
+"This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.":"Esta chave da Coinbase é Ed25519, e o Advanced Trade precisa de uma ECDSA. Crie uma chave nova em portal.cdp.coinbase.com e escolha ECDSA nas definições avançadas.",
+"it answered {code}":"respondeu {code}",
+"it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key":"recusou a chave. Verifique COINBASE_KEY_FILE: tem de ser uma chave CDP com uma chave privada ECDSA",
+"the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com":"a chave não pode fazer isso. Verifique as permissões e a carteira dela em portal.cdp.coinbase.com",
+"the key works and can trade, but this program only reads: a View-only key is safer.":"a chave funciona e pode negociar, mas este programa só lê: uma chave só com View é mais segura.",
+"the key works, View only":"a chave funciona, só View",
+"the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"a chave funciona, mas também pode transferir dinheiro. Este programa nunca transfere: crie uma chave sem a permissão Transfer.",
+"the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"a chave funciona, mas só tem View, por isso as ordens deste programa seriam recusadas. Crie uma chave com a permissão Trade, limitada a uma carteira.",
+"the key works: it can trade (every order asks you first)":"a chave funciona: pode negociar (cada ordem pergunta-lhe antes)",
+"too many requests just now; try again in a minute":"pedidos a mais neste momento; tente outra vez daqui a um minuto"
 }
 };

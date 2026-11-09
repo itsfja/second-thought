@@ -557,6 +557,38 @@
   "rb_agent_kraken": {
    "message0": "Kraken 𐀃𐀏𐀙 %1",
    "tooltip": "𐀇𐀈𐀯 𐀞𐀨𐀒𐀵 Kraken 𐀃𐀏𐀙, 𐀀𐀡 kraken-cli: 𐀀𐀒𐀨 𐀴𐀕, 𐀃𐀟𐀫𐀰 𐀏𐀂 𐀁𐀵𐀨, 𐀏𐀂 𐀁𐀡𐀫𐀽 𐀁𐀠 𐀞𐀢𐀫. 𐀀𐀨𐀳𐀀 𐀁𐀡𐀫𐀽 𐀁𐀀𐀁 𐀏𐀂 𐀀𐀨𐀳𐀀 𐀁𐀵𐀨, 𐀃𐀏𐀜𐀆 𐀓𐀬𐀰 𐀑𐀚𐀃𐀲 𐀁𐀫𐀲 𐀞𐀫𐀵, 𐀃𐀄𐀟𐀡 𐀒𐀲 𐀒𐀫𐀜 𐀁𐀚 GitHub Actions 𐀳𐀩𐀐𐀁. 𐀆𐀂 kraken-cli, 𐀏𐀂 KRAKEN_API_KEY 𐀏𐀂 KRAKEN_API_SECRET 𐀁𐀚 second-thought.ini. 𐀗𐀜 𐀁𐀚 Python."
+  },
+  "rb_coinbase_balances": {
+   "message0": "𐀫𐀂𐀞 Coinbase",
+   "tooltip": "𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀐𐀳𐀔 𐀁𐀚 𐀳𐀭𐀄𐀫 Coinbase 𐀰𐀂, 𐀕𐀑𐀵 𐀟𐀫𐀵: asset, amount, value 𐀏𐀂 currency. 𐀴𐀔 𐀁𐀚 𐀜𐀖𐀭 𐀰𐀂 (currency 𐀁𐀚 second-thought.ini). 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀐𐀨𐀲𐀂 𐀞𐀨𐀆𐀒𐀔 𐀳𐀭𐀄𐀫."
+  },
+  "rb_coinbase_value": {
+   "message0": "𐀴𐀔 𐀳𐀭𐀄𐀫 Coinbase",
+   "tooltip": "𐀡𐀰 𐀳𐀭𐀄𐀫 Coinbase 𐀰𐀂 𐀀𐀑𐀯𐀃 𐀁𐀯, 𐀁𐀚 𐀜𐀖𐀭 𐀰𐀂."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 𐀀𐀢 %2 𐀁𐀠 Coinbase",
+   "tooltip": "𐀴𐀔 𐀚𐀺𐀲𐀲 𐀽𐀄𐀒, 𐀃𐀒 BTC-GBP 𐀁𐀚 𐀪𐀲, 𐀁 𐀡𐀰 𐀕𐀲𐀞𐀨𐀁 𐀁𐀚 24 𐀃𐀨. 𐀗𐀜 𐀽𐀄𐀏 𐀞𐀨𐀓𐀔."
+  },
+  "rb_coinbase_candles": {
+   "message0": "%1 𐀴𐀔 Coinbase 𐀀𐀢 %2 𐀁𐀚 %3 𐀁𐀏𐀲",
+   "tooltip": "𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀞𐀨𐀍 𐀟𐀫𐀵, 𐀁𐀚 𐀞 𐀀𐀕𐀨 𐀁 𐀃𐀨 (𐀒𐀫 350): time, open, high, low, close 𐀏𐀂 volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase %1",
+   "tooltip": "𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 𐀰𐀂 (id, product, side, size, price, filled 𐀏𐀂 created), 𐀁 𐀁𐀏𐀲 𐀟𐀟𐀨𐀕𐀙 (time, product, side, size, price, fee 𐀏𐀂 order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "𐀡𐀫𐀃𐀨 𐀁𐀵𐀩 Coinbase: %1 %2 𐀀𐀢 %3",
+   "tooltip": "𐀴 𐀁𐀵𐀩 𐀀𐀒𐀨 𐀐𐀚𐀵, 𐀃𐀄 𐀳𐀳𐀕𐀜: 𐀏𐀨𐀟 𐀕𐀲 size, spend, fee, total, slippage 𐀏𐀂 warnings. 𐀃𐀜 𐀅𐀞𐀙𐀂 𐀡𐀰 𐀆𐀄𐀳𐀫 𐀜𐀖𐀭 (50 𐀀𐀢 BTC-GBP 𐀅𐀞𐀙𐀂 £50); 𐀟𐀨𐀯 𐀡𐀩𐀂 𐀡𐀰 𐀟𐀫𐀵 (0.01 𐀀𐀢 BTC-GBP 𐀡𐀩𐀂 0.01 BTC). 𐀃𐀄𐀆 𐀕𐀲𐀞𐀨𐀁."
+  },
+  "rb_coinbase_order": {
+   "message0": "𐀳𐀮 𐀁𐀵𐀩 Coinbase: %1 %2 𐀀𐀢 %3",
+   "tooltip": "𐀳𐀴𐀯 𐀀𐀨𐀳𐀀 𐀁𐀵𐀩 𐀀𐀒𐀨, 𐀃𐀒 “𐀡𐀫𐀃𐀨 𐀁𐀵𐀩 Coinbase”. 𐀟𐀫𐀵 𐀡𐀫𐀃𐀨𐀂, 𐀁𐀟𐀂𐀲 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮, 𐀕𐀲 𐀳𐀫 𐀏𐀂 𐀞𐀲, 𐀏𐀂 𐀃𐀳 𐀃𐀄𐀆 𐀀𐀫 𐀁𐀫𐀲𐀂; 𐀃𐀄𐀆𐀂 𐀞𐀫 𐀃𐀟 𐀙𐀂 𐀁𐀟, 𐀃𐀄 𐀳𐀩𐀐𐀁. 𐀆𐀂 𐀏𐀨𐀹 𐀕𐀲 Trade. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃𐀄𐀆 𐀃𐀚𐀲𐀂 𐀃𐀄𐀆 𐀟𐀨𐀲𐀂."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "𐀀𐀡𐀬𐀁 𐀁𐀵𐀩 Coinbase %1",
+   "tooltip": "𐀀𐀡𐀬𐀁 𐀁𐀚 𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 𐀰𐀂, 𐀕𐀲 id (𐀀𐀡 “𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 Coinbase”). 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵, 𐀏𐀂 𐀃𐀄 𐀳𐀩𐀐𐀁 𐀃𐀄𐀆𐀂 𐀞𐀫."
   }
  },
  "options": {
@@ -665,6 +697,26 @@
   "rb_agent_kraken.MODE": {
    "read": "(𐀴𐀕, 𐀏𐀨𐀵𐀪𐀰 𐀏𐀂 𐀁𐀡𐀫𐀽 𐀁𐀠 𐀞𐀢𐀫)",
    "live": "(𐀏𐀂 𐀀𐀨𐀳𐀀 𐀁𐀡𐀫𐀽: 𐀁𐀫𐀲 𐀞𐀫 𐀞𐀲 𐀁𐀵𐀨)"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "𐀴𐀔",
+   "change": "𐀕𐀲𐀞𐀨 24 𐀃𐀨 %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "𐀀𐀕𐀨𐀯𐀊",
+   "hour": "𐀃𐀨𐀊"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙",
+   "fills": "𐀁𐀏𐀲 𐀟𐀟𐀨𐀕𐀙"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "𐀃𐀜",
+   "sell": "𐀟𐀨𐀯"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "𐀃𐀜",
+   "sell": "𐀟𐀨𐀯"
   }
  },
  "categories": {
@@ -691,7 +743,8 @@
   "Pictures": "𐀁𐀒𐀚",
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
-  "Output": "𐀁𐀒𐀈𐀰"
+  "Output": "𐀁𐀒𐀈𐀰",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵",
@@ -1485,7 +1538,25 @@
   "{who} returned nothing for this step. Simplify it and try again.": "{who} 𐀃𐀄𐀆𐀖 𐀀𐀡𐀈𐀐. 𐀀𐀞𐀫𐀡𐀪𐀁",
   "{who} says this key's account has no credit left: {problem}": "{who} 𐀃𐀄𐀐 𐀓𐀬𐀰: {problem}",
   "{who} says too many requests right now. Wait a minute and run again.": "{who} 𐀡𐀫𐀬 𐀁𐀪𐀲. 𐀕𐀜",
-  "At the models' list prices that's {cost}, charged to your keys' accounts.": "𐀃𐀜 {cost}, 𐀏𐀨𐀹𐀊"
+  "At the models' list prices that's {cost}, charged to your keys' accounts.": "𐀃𐀜 {cost}, 𐀏𐀨𐀹𐀊",
+  "A Coinbase order is buy or sell.": "𐀁𐀵𐀩 Coinbase 𐀃𐀜 𐀁 𐀟𐀨𐀯 𐀁𐀯.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "𐀫𐀂𐀞 Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase 𐀃𐀄 𐀀𐀡𐀬𐀮 𐀁𐀵𐀩: {why}.",
+  "Coinbase order cancelled": "𐀁𐀵𐀩 Coinbase 𐀀𐀡𐀬𐀕𐀜",
+  "Coinbase order placed": "𐀁𐀵𐀩 Coinbase 𐀳𐀳𐀕𐀜",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase 𐀃𐀄 𐀐 𐀳𐀵 𐀵𐀵 𐀁𐀵𐀩: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "𐀁𐀚𐀲𐀆 𐀗𐀜 𐀽𐀄𐀏 𐀞𐀨𐀓𐀔, 𐀃𐀒 BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "𐀡𐀰 𐀀𐀪𐀵𐀗 𐀄𐀟𐀩 0 𐀁𐀵, 𐀃𐀒 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "𐀡𐀳𐀫 𐀁𐀵𐀩 Coinbase? 𐀈𐀮 id, 𐀀𐀡 “𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 Coinbase”.",
+  "not found": "𐀃𐀄 𐀁𐀄𐀩𐀳",
+  "{n} assets": "{n} 𐀐𐀳𐀔𐀲",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "“{product}” 𐀃𐀄𐀏 𐀽𐀄𐀒 Coinbase 𐀁𐀯. 𐀐𐀨 𐀃𐀒 BTC-GBP.",
+  "Coinbase account": "𐀫𐀒 Coinbase",
+  "sample account": "𐀞𐀨𐀆𐀒𐀔 𐀫𐀒",
+  "trade on your Coinbase account with real money (asking you before every order)": "𐀁𐀡𐀫𐀄𐀁 𐀁𐀚 𐀫𐀒 Coinbase 𐀰𐀂 𐀀𐀨𐀳𐀀 𐀓𐀬𐀰 (𐀁𐀫𐀲𐀂 𐀮 𐀡𐀫 𐀞𐀵 𐀁𐀵𐀩)",
+  "read your Coinbase balances and orders, and market prices": "𐀀𐀙𐀑𐀜𐀐 𐀫𐀂𐀞 𐀏𐀂 𐀁𐀵𐀩 Coinbase 𐀰𐀂, 𐀏𐀂 𐀴𐀔 𐀀𐀒𐀨"
  },
  "examples": {
   "review": {
@@ -3037,7 +3108,40 @@
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "e-ra-pe {names}: te-to-ne o-u-pi-ra-ka LD_, DYLD_ PYTHON o-no-ma",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} o-u-ke te-to-ne Second Thought, ka-ra-pe o-ra. MCP o-pe-ro-si, e-u",
   "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "a-ra-wo {path} a-ne-ko. ke-re-te jo-u-ka:  chmod 600 {path}",
-  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant o-u JSON a-pe-te-ke ({e})."
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant o-u JSON a-pe-te-ke ({e}).",
+  "A Coinbase order is buy or sell.": "e-to-re Coinbase o-no e pe-ra-si e-si.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "ro-i-pa Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase o-u a-po-ru-se e-to-re: {why}.",
+  "Coinbase order cancelled": "e-to-re Coinbase a-po-ru-me-no",
+  "Coinbase order placed": "e-to-re Coinbase te-te-me-no",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase o-u ke te-to to-to e-to-re: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "e-ne-ta-de mo-no ze-u-ka pa-ra-ku-ma, o-ko BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "po-so a-ri-to-mo u-pe-re 0 e-to, o-ko 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "po-te-ro e-to-re Coinbase? do-se id, a-po “e-to-re a-ne-wo-ke-me-na Coinbase”.",
+  "not found": "o-u e-u-re-te",
+  "{n} assets": "{n} ke-te-ma-ta",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "“{product}” o-u-ka ze-u-ko Coinbase e-si. ke-ra o-ko BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase o-u te-to e-to-re: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase o-u e-pe po-te-ro te-sa-u-ro to-to ka-ra-wi.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase de-i COINBASE_KEY_FILE {where_keys}: te-u-ko ka-ra-wi o ka-ta-pe-re-i o-te po-e-i API ka-ra-wi e-pi portal.cdp.coinbase.com. do-se mo-no View, e-i me po-ro-ka-ra-ma e-po-ro-u-e.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase de-i cryptography ke-ne-a o-pe se-ma-ne e-ro-te-ma-ta: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Coinbase o-u pi-ke-to ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "te-u-ko ka-ra-wi Coinbase {path} o-u a-na-ki-no-to ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "to-to e-ko-ne Coinbase du-na-ta-i a-ra-te-a ku-ru-so ki-ne-e, o-u-to mo-no me-ta to so na-i te-re-ke-e.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "ka-ra-wi Coinbase JSON te-u-ko e-to o Coinbase do-ke so-i, me-ta name ka-i privateKey.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "privateKey ka-ra-wi Coinbase o-u a-na-ki-no-to. ke-ra te-u-ko ka-ra-wi o-ko Coinbase do-ke.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "to-to ka-ra-wi Coinbase Ed25519 e-si, Advanced Trade de de-i ECDSA. po-e-se ne-wo ka-ra-wi e-pi portal.cdp.coinbase.com ka-i ke-re-u ECDSA e-ne pe-ri-ta-ka-ma.",
+  "it answered {code}": "a-pe-ki-ri-to {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "a-pa-ne-to ka-ra-wi. e-ke-ta-ze COINBASE_KEY_FILE: CDP ka-ra-wi me-ta i-di-o ECDSA ka-ra-wi e-to",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "ka-ra-wi o-u e-ke-si to-to po-e-e. e-ke-ta-ze e-ku-si-ja ka-i te-sa-u-ro e-pi portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "ka-ra-wi we-ke-i ka-i du-na-ta-i e-po-ro-u-e, po-ro-ka-ra-ma de mo-no a-na-ki-no-ke: ka-ra-wi mo-no View a-sa-pa-re-te-ro.",
+  "the key works, View only": "ka-ra-wi we-ke-i, mo-no View",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "ka-ra-wi we-ke-i, a-ra ka-i ku-ru-so me-ta-pe-re-i du-na-ta-i. to-to po-ro-ka-ra-ma o-u-po-te me-ta-pe-re-i: po-e-se ka-ra-wi a-ne-u Transfer.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "ka-ra-wi we-ke-i, a-ra mo-no View e-ke-i, o-u-to e-to-re po-ro-ka-ra-ma a-pa-ne-o-me-na e-so-ta-i. po-e-se ka-ra-wi me-ta Trade, e-ne e-ne te-sa-u-ro.",
+  "the key works: it can trade (every order asks you first)": "ka-ra-wi we-ke-i: du-na-ta-i e-po-ro-u-e (pa e-to-re e-ro-ta-i se pe-ro-to)",
+  "too many requests just now; try again in a minute": "po-ra-ki-se e-ro-te-ma-ta nu; a-pi pe-i-ra me-ta mi-nu-to"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

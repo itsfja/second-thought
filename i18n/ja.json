@@ -556,6 +556,38 @@
   "rb_agent_kraken": {
    "message0": "Kraken のツール %1",
    "tooltip": "エージェントに kraken-cli の Kraken 公式ツールを渡します：市場価格、残高と注文、実際の価格でのペーパートレード。実際の取引を選ぶと本物の注文も出せますが、お金を動かせるツールはどれも、ほかが確認しない設定でも必ず先にあなたに確認し、スケジュールや GitHub Actions では決して実行されません。kraken-cli のインストールと、口座用に second-thought.ini の KRAKEN_API_KEY と KRAKEN_API_SECRET が必要です（価格とペーパートレードはキー不要）。書き出した Python でのみ動きます。"
+  },
+  "rb_coinbase_balances": {
+   "message0": "Coinbase の残高",
+   "tooltip": "記録のリストで、Coinbase のポートフォリオの資産ごとに一つ、大きい順：asset、amount、value、currency。値はあなたの通貨です（second-thought.ini の currency）。このページではサンプルのポートフォリオを使います。"
+  },
+  "rb_coinbase_value": {
+   "message0": "Coinbase のポートフォリオの価値",
+   "tooltip": "Coinbase のポートフォリオの価値を、あなたの通貨で。"
+  },
+  "rb_coinbase_price": {
+   "message0": "Coinbase の %2 の %1",
+   "tooltip": "取引ペアの最新価格（BTC-GBP ならポンドで）、または過去 24 時間の変化をパーセントで。現物の取引ペアのみ。"
+  },
+  "rb_coinbase_candles": {
+   "message0": "Coinbase の %2 の%1価格（直近 %3）",
+   "tooltip": "記録のリストで、古い順、1 日または 1 時間ごとに一つ（最大 350）：time、open、high、low、close、volume。"
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase の%1",
+   "tooltip": "未約定の注文（id、product、side、size、price、filled、created）、または最近の約定（time、product、side、size、price、fee、order）。"
+  },
+  "rb_coinbase_preview": {
+   "message0": "Coinbase の注文を試算：%3 を %2 %1",
+   "tooltip": "成行注文が実際にどうなるかを、注文せずに試算します：size、spend、fee、total、slippage、warnings を持つ記録。買いは 2 番目の通貨の額を使います（BTC-GBP で 50 なら £50 を使う）。売りは 1 番目の通貨の額を売ります（BTC-GBP で 0.01 なら 0.01 BTC を売る）。何も変わりません。"
+  },
+  "rb_coinbase_order": {
+   "message0": "Coinbase に注文：%3 を %2 %1",
+   "tooltip": "本物の成行注文を出します（「Coinbase の注文を試算」と同じ指定）。まず試算し、ほかに何も確認しないときでも、手数料と合計を示して必ずあなたに確認します。「はい」と言う人がいなければ実行しません。Trade 権限のあるキーが必要です。このページでは何も売買しません。"
+  },
+  "rb_coinbase_cancel": {
+   "message0": "Coinbase の注文 %1 を取り消す",
+   "tooltip": "未約定の注文の一つを id で取り消します（「Coinbase の未約定の注文」から）。必ず先に確認し、誰もいなければ実行しません。"
   }
  },
  "options": {
@@ -664,6 +696,26 @@
   "rb_agent_kraken.MODE": {
    "read": "（価格、口座、ペーパートレード）",
    "live": "（実際の取引も：注文の前に毎回確認）"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "価格",
+   "change": "24 時間の変化 %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "日足",
+   "hour": "時間足"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "未約定の注文",
+   "fills": "最近の約定"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "買う",
+   "sell": "売る"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "買う",
+   "sell": "売る"
   }
  },
  "categories": {
@@ -690,7 +742,8 @@
   "Pictures": "画像",
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
-  "Output": "出力"
+  "Output": "出力",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "エージェントの道具：エージェントブロックの中に入れます",
@@ -1484,7 +1537,25 @@
   "{who} returned nothing for this step. Simplify it and try again.": "{who} はこの手順で何も返しませんでした。簡単にしてもう一度試してください。",
   "{who} says this key's account has no credit left: {problem}": "{who} によると、このキーのアカウントに残高がありません: {problem}",
   "{who} says too many requests right now. Wait a minute and run again.": "{who} によると、今はリクエストが多すぎます。1 分待ってから再実行してください。",
-  "At the models' list prices that's {cost}, charged to your keys' accounts.": "モデルの定価で {cost}。キーのアカウントに課金されます。"
+  "At the models' list prices that's {cost}, charged to your keys' accounts.": "モデルの定価で {cost}。キーのアカウントに課金されます。",
+  "A Coinbase order is buy or sell.": "Coinbase の注文は買いか売りです。",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase の残高",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase は注文を取り消しませんでした：{why}。",
+  "Coinbase order cancelled": "Coinbase の注文を取り消しました",
+  "Coinbase order placed": "Coinbase に注文しました",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase はその注文を受け付けません：{why}。",
+  "Coinbase: {why}.": "Coinbase：{why}。",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "ここで扱えるのは BTC-GBP のような現物の取引ペアだけです。",
+  "The amount should be a number above 0, like 50.": "金額は 0 より大きい数にしてください。たとえば 50。",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "どの Coinbase の注文ですか？「Coinbase の未約定の注文」にある id を指定してください。",
+  "not found": "見つかりません",
+  "{n} assets": "{n} 資産",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "「{product}」は Coinbase の取引ペアではありません。BTC-GBP のようなものを使ってください。",
+  "Coinbase account": "Coinbase アカウント",
+  "sample account": "サンプルのアカウント",
+  "trade on your Coinbase account with real money (asking you before every order)": "Coinbase アカウントで本物のお金で取引する（注文のたびに確認します）",
+  "read your Coinbase balances and orders, and market prices": "Coinbase の残高と注文、市場価格を読む"
  },
  "examples": {
   "review": {
@@ -3036,6 +3107,39 @@
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "{names} を飛ばしました: 設定は LD_、DYLD_、PYTHON の名前を変えません。これらはプログラムの起動を変えるからです",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} は Second Thought が使う設定ではありません。綴りを確かめてください。MCP サーバーや実行するコマンドが使うなら問題ありません。",
   "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "{path} はこのコンピューターの他の人が読めます。鍵を自分だけのものにするには:  chmod 600 {path}",
-  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant が JSON ではないものを送ってきました ({e})。"
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant が JSON ではないものを送ってきました ({e})。",
+  "A Coinbase order is buy or sell.": "Coinbase の注文は買いか売りです。",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase の残高",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase は注文を取り消しませんでした：{why}。",
+  "Coinbase order cancelled": "Coinbase の注文を取り消しました",
+  "Coinbase order placed": "Coinbase に注文しました",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase はその注文を受け付けません：{why}。",
+  "Coinbase: {why}.": "Coinbase：{why}。",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "ここで扱えるのは BTC-GBP のような現物の取引ペアだけです。",
+  "The amount should be a number above 0, like 50.": "金額は 0 より大きい数にしてください。たとえば 50。",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "どの Coinbase の注文ですか？「Coinbase の未約定の注文」にある id を指定してください。",
+  "not found": "見つかりません",
+  "{n} assets": "{n} 資産",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "「{product}」は Coinbase の取引ペアではありません。BTC-GBP のようなものを使ってください。",
+  "Coinbase didn't place the order: {why}.": "Coinbase は注文しませんでした：{why}。",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase はこのキーがどのポートフォリオのものか答えませんでした。",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase には COINBASE_KEY_FILE が必要です {where_keys}：portal.cdp.coinbase.com で API キーを作るときにダウンロードするキーファイルです。プログラムが取引しないなら View だけにしてください。",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase はリクエストに署名するため cryptography パッケージが必要です：pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Coinbase に接続できませんでした（{reason}）。",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "Coinbase のキーファイル {path} を読めませんでした（{reason}）。",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "この Coinbase の操作は本物のお金を動かすかもしれないので、あなたが「はい」と言ってからでないと実行しません。",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "Coinbase のキーは、Coinbase から受け取った JSON ファイルで、name と privateKey が入っているはずです。",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "Coinbase のキーの privateKey を読めませんでした。キーファイルを Coinbase から受け取ったまま使ってください。",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "この Coinbase のキーは Ed25519 のキーで、Advanced Trade には ECDSA のキーが必要です。portal.cdp.coinbase.com で新しいキーを作り、詳細設定で ECDSA を選んでください。",
+  "it answered {code}": "{code} と応答しました",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "キーを拒否しました。COINBASE_KEY_FILE を確認してください：ECDSA の秘密鍵を持つ CDP キーである必要があります",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "そのキーにはその操作が許されていません。portal.cdp.coinbase.com でキーの権限とポートフォリオを確認してください",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "キーは使え、取引もできますが、このプログラムは読むだけです：View だけのキーのほうが安全です。",
+  "the key works, View only": "キーは使えます。View のみ",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "キーは使えますが、お金の送金もできます。このプログラムは送金しません：Transfer 権限のないキーを作ってください。",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "キーは使えますが View のみなので、このプログラムの注文は拒否されます。Trade 権限のあるキーを、一つのポートフォリオに限って作ってください。",
+  "the key works: it can trade (every order asks you first)": "キーは使えます：取引できます（注文のたびに確認します）",
+  "too many requests just now; try again in a minute": "今はリクエストが多すぎます。1 分後にもう一度試してください"
  }
 }

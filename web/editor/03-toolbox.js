@@ -131,6 +131,12 @@
       B("rb_homey_set", { DEVICE:K("Kitchen light"), CAPABILITY:K("onoff"), VALUE:K("off") }), B("rb_homey_flow", { NAME:K("Good night") }),
       B("rb_homey_variable", { NAME:K("Loaves this week") }), B("rb_homey_set_variable", { NAME:K("Loaves this week"), VALUE:N(4) })
     ]},
+    { kind:"category", name:"Coinbase", categorystyle:"coinbase", contents:[
+      B("rb_coinbase_balances"), B("rb_coinbase_value"), B("rb_coinbase_price", { PRODUCT:K("BTC-GBP") }),
+      B("rb_coinbase_candles", { PRODUCT:K("BTC-GBP"), N:N(7) }), B("rb_coinbase_orders"),
+      B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
+      B("rb_coinbase_cancel", { ORDER:K("") })
+    ]},
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")
     ]}

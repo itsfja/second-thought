@@ -145,7 +145,15 @@
 "rb_with_any_model":{"message0":"使用 OpenRouter 模型 %1","message1":"%1","tooltip":"只让里面的积木在 OpenRouter 提供的任意模型上运行。从 openrouter.ai/models 输入它的名字，例如 mistralai/mistral-small 或 google/gemma-4-31b-it。openrouter/auto 会替你选一个。在导出的 Python 中运行（需要 OPENROUTER_API_KEY）；在本页面中由 Claude 代替。"},
 "rb_with_model":{"message0":"使用模型 %1","message1":"%1","tooltip":"只让里面的积木在这个模型上运行，然后回到之前的模型。Claude 以外的模型在导出的 Python 中运行；在本页面中由 Claude 代替它们。"},
 "rb_word_count":{"message0":"%1 的字数"},
-"rb_agent_kraken":{"message0":"Kraken 工具 %1","tooltip":"把 kraken-cli 中 Kraken 自己的工具交给智能体：市场价格、你的余额和订单，以及按实时价格的模拟交易。真实交易还能让它下真实订单，但每个可能动用资金的工具都会先问你，即使其他都不问，而且绝不会按计划或在 GitHub Actions 上运行。需要安装 kraken-cli，并在 second-thought.ini 中为你的账户设置 KRAKEN_API_KEY 和 KRAKEN_API_SECRET（价格和模拟交易不需要密钥）。仅在导出的 Python 中可用。"}
+"rb_agent_kraken":{"message0":"Kraken 工具 %1","tooltip":"把 kraken-cli 中 Kraken 自己的工具交给智能体：市场价格、你的余额和订单，以及按实时价格的模拟交易。真实交易还能让它下真实订单，但每个可能动用资金的工具都会先问你，即使其他都不问，而且绝不会按计划或在 GitHub Actions 上运行。需要安装 kraken-cli，并在 second-thought.ini 中为你的账户设置 KRAKEN_API_KEY 和 KRAKEN_API_SECRET（价格和模拟交易不需要密钥）。仅在导出的 Python 中可用。"},
+"rb_coinbase_balances":{"message0":"Coinbase 余额","tooltip":"记录列表，你的 Coinbase 投资组合里每项资产一条，按价值从大到小：asset、amount、value 和 currency。价值以你的货币计（second-thought.ini 里的 currency）。在本页上使用示例投资组合。"},
+"rb_coinbase_value":{"message0":"Coinbase 投资组合价值","tooltip":"你的 Coinbase 投资组合值多少，以你的货币计。"},
+"rb_coinbase_price":{"message0":"Coinbase 上 %2 的 %1","tooltip":"交易对的最新价格（比如 BTC-GBP 以英镑计），或它过去 24 小时的变化百分比。仅限现货交易对。"},
+"rb_coinbase_candles":{"message0":"Coinbase 上 %2 最近 %3 的%1价格","tooltip":"记录列表，从旧到新，每天或每小时一条（最多 350 条）：time、open、high、low、close 和 volume。"},
+"rb_coinbase_orders":{"message0":"Coinbase %1","tooltip":"你的未成交订单（id、product、side、size、price、filled 和 created），或你最近的成交（time、product、side、size、price、fee 和 order）。"},
+"rb_coinbase_preview":{"message0":"预览 Coinbase 订单：%1 %2 的 %3","tooltip":"市价单会是什么结果，而不真正下单：一条含 size、spend、fee、total、slippage 和 warnings 的记录。买入花费第二种货币的金额（BTC-GBP 的 50 花 £50）；卖出卖掉第一种货币的数量（BTC-GBP 的 0.01 卖 0.01 BTC）。什么都不会改变。"},
+"rb_coinbase_order":{"message0":"在 Coinbase 下单：%1 %2 的 %3","tooltip":"真正下一个市价单，填法同“预览 Coinbase 订单”。它先预览，然后总会问你，并给出手续费和总额，即使别的都不问；没人在场说“是”，就不执行。需要有 Trade 权限的密钥。在本页上不会买卖任何东西。"},
+"rb_coinbase_cancel":{"message0":"取消 Coinbase 订单 %1","tooltip":"按 id 取消你的一个未成交订单（来自“Coinbase 未成交订单”）。它总会先问你，没人在场就不执行。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -162,7 +170,12 @@
 "rb_mem_add.KIND":{"transient":"本页面打开期间","permanent":"永久"},
 "rb_img_save.FORMAT":{"png":"PNG","svg":"SVG（绘制的图片）","orig":"原始文件"},
 "rb_budget.UNIT":{"tokens":"个 token","dollars":"美元","gbp":"英镑","eur":"欧元","jpy":"日元","cny":"人民币"},
-"rb_agent_kraken.MODE":{"read":"（价格、你的账户和模拟交易）","live":"（以及真实交易：每次下单前都会问）"}
+"rb_agent_kraken.MODE":{"read":"（价格、你的账户和模拟交易）","live":"（以及真实交易：每次下单前都会问）"},
+"rb_coinbase_price.WHAT":{"price":"价格","change":"24 小时涨跌 %"},
+"rb_coinbase_candles.SIZE":{"day":"每日","hour":"每小时"},
+"rb_coinbase_orders.WHICH":{"open":"未成交订单","fills":"最近成交"},
+"rb_coinbase_preview.SIDE":{"buy":"买入","sell":"卖出"},
+"rb_coinbase_order.SIDE":{"buy":"买入","sell":"卖出"}
 },
 "categories":{
 "Events":"事件",
@@ -188,7 +201,8 @@
 "Pictures":"图片",
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
-"Output":"输出"
+"Output":"输出",
+"Coinbase":"Coinbase"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"给智能体的工具：把它们放进智能体积木里",
@@ -982,7 +996,25 @@
 "{who} returned nothing for this step. Simplify it and try again.":"{who} 这一步什么也没返回。请简化后再试。",
 "{who} says this key's account has no credit left: {problem}":"{who} 说这个密钥的账户没有余额了：{problem}",
 "{who} says too many requests right now. Wait a minute and run again.":"{who} 说现在请求太多。请等一分钟再运行。",
-"At the models' list prices that's {cost}, charged to your keys' accounts.":"按模型标价约为 {cost}，记在你的密钥账户上。"
+"At the models' list prices that's {cost}, charged to your keys' accounts.":"按模型标价约为 {cost}，记在你的密钥账户上。",
+"A Coinbase order is buy or sell.":"Coinbase 订单只能是买入或卖出。",
+"Coinbase":"Coinbase",
+"Coinbase balances":"Coinbase 余额",
+"Coinbase didn't cancel the order: {why}.":"Coinbase 没有取消订单：{why}。",
+"Coinbase order cancelled":"Coinbase 订单已取消",
+"Coinbase order placed":"Coinbase 订单已下",
+"Coinbase wouldn't place that order: {why}.":"Coinbase 不会接受这个订单：{why}。",
+"Coinbase: {why}.":"Coinbase：{why}。",
+"Only spot trading pairs, like BTC-GBP, are offered here.":"这里只提供现货交易对，比如 BTC-GBP。",
+"The amount should be a number above 0, like 50.":"金额应是大于 0 的数字，比如 50。",
+"Which Coinbase order? Give its id, from 'Coinbase open orders'.":"哪个 Coinbase 订单？请给出它的 id，来自“Coinbase 未成交订单”。",
+"not found":"未找到",
+"{n} assets":"{n} 项资产",
+"“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.":"“{product}”不是 Coinbase 的交易对。请用 BTC-GBP 这样的。",
+"Coinbase account":"Coinbase 账户",
+"sample account":"示例账户",
+"trade on your Coinbase account with real money (asking you before every order)":"在你的 Coinbase 账户上用真钱交易（每下一单前都问你）",
+"read your Coinbase balances and orders, and market prices":"读取你的 Coinbase 余额和订单，以及市场价格"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1902,6 +1934,39 @@
 "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start":"已跳过 {names}：设置从不更改 LD_、DYLD_ 或 PYTHON 名称，它们会改变程序的启动方式",
 "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.":"{names} 不是 Second Thought 使用的设置，请检查拼写。如果某个 MCP 服务器或你运行的命令需要它，那就没问题。",
 "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}":"这台电脑上的其他人可以读取 {path}。要让其中的密钥只归你所有：  chmod 600 {path}",
-"Home Assistant sent something that isn't JSON ({e}).":"Home Assistant 发来的内容不是 JSON（{e}）。"
+"Home Assistant sent something that isn't JSON ({e}).":"Home Assistant 发来的内容不是 JSON（{e}）。",
+"A Coinbase order is buy or sell.":"Coinbase 订单只能是买入或卖出。",
+"Coinbase":"Coinbase",
+"Coinbase balances":"Coinbase 余额",
+"Coinbase didn't cancel the order: {why}.":"Coinbase 没有取消订单：{why}。",
+"Coinbase order cancelled":"Coinbase 订单已取消",
+"Coinbase order placed":"Coinbase 订单已下",
+"Coinbase wouldn't place that order: {why}.":"Coinbase 不会接受这个订单：{why}。",
+"Coinbase: {why}.":"Coinbase：{why}。",
+"Only spot trading pairs, like BTC-GBP, are offered here.":"这里只提供现货交易对，比如 BTC-GBP。",
+"The amount should be a number above 0, like 50.":"金额应是大于 0 的数字，比如 50。",
+"Which Coinbase order? Give its id, from 'Coinbase open orders'.":"哪个 Coinbase 订单？请给出它的 id，来自“Coinbase 未成交订单”。",
+"not found":"未找到",
+"{n} assets":"{n} 项资产",
+"“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.":"“{product}”不是 Coinbase 的交易对。请用 BTC-GBP 这样的。",
+"Coinbase didn't place the order: {why}.":"Coinbase 没有下单：{why}。",
+"Coinbase didn't say which portfolio this key is for.":"Coinbase 没有说明这个密钥属于哪个投资组合。",
+"Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.":"Coinbase 需要 COINBASE_KEY_FILE {where_keys}：在 portal.cdp.coinbase.com 创建 API 密钥时下载的密钥文件。除非程序要交易，否则只给它 View 权限。",
+"Coinbase needs the cryptography package to sign its requests: pip install cryptography":"Coinbase 需要 cryptography 包来签名请求：pip install cryptography",
+"Couldn't reach Coinbase ({reason}).":"无法连接 Coinbase（{reason}）。",
+"Couldn't read the Coinbase key file {path} ({reason}).":"无法读取 Coinbase 密钥文件 {path}（{reason}）。",
+"That Coinbase action could move real money, so it only runs after you say yes.":"这个 Coinbase 操作可能动用真钱，所以只有你说“是”之后才会执行。",
+"The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.":"Coinbase 密钥应是 Coinbase 给你的 JSON 文件，里面有 name 和 privateKey。",
+"The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.":"无法读取 Coinbase 密钥的 privateKey。请按 Coinbase 给你的原样使用密钥文件。",
+"This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.":"这个 Coinbase 密钥是 Ed25519 密钥，而 Advanced Trade 需要 ECDSA 密钥。请在 portal.cdp.coinbase.com 新建一个密钥，并在高级设置里选择 ECDSA。",
+"it answered {code}":"它回答了 {code}",
+"it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key":"它拒绝了这个密钥。请检查 COINBASE_KEY_FILE：必须是带 ECDSA 私钥的 CDP 密钥",
+"the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com":"这个密钥不允许这样做。请在 portal.cdp.coinbase.com 检查它的权限和投资组合",
+"the key works and can trade, but this program only reads: a View-only key is safer.":"密钥可用，也能交易，但这个程序只读取：只有 View 权限的密钥更安全。",
+"the key works, View only":"密钥可用，仅 View",
+"the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"密钥可用，但它也能转账。这个程序从不转账：请创建一个没有 Transfer 权限的密钥。",
+"the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"密钥可用，但只有 View 权限，所以这个程序的订单会被拒绝。请创建一个有 Trade 权限、只限一个投资组合的密钥。",
+"the key works: it can trade (every order asks you first)":"密钥可用：它能交易（每一单都会先问你）",
+"too many requests just now; try again in a minute":"现在请求太多了；请一分钟后再试"
 }
 };

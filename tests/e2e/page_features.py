@@ -789,6 +789,40 @@ async def new_feature_page_tests(pg):
     check("[homey]" in files["second-thought.ini"] and "HOMEY_API_KEY = " in files["second-thought.ini"] and "run-on-schedule.sh" in files,
           "a Homey program's settings ask for HOMEY_URL and HOMEY_API_KEY")
 
+    print("Coinbase")
+    cb = lambda t, fields=None, **ins: {"block": blk(t, fields=fields, inputs=ins or None)}  # noqa: E731
+    first = lambda lst: {"block": {"type": "lists_getIndex", "fields": {"MODE": "GET", "WHERE": "FIRST"}, "inputs": {"VALUE": lst}}}  # noqa: E731
+    rec = lambda key, r: {"block": blk("rb_rec_get", inputs={"KEY": tx(key), "REC": r})}  # noqa: E731
+    count = lambda lst: {"block": {"type": "lists_length", "inputs": {"VALUE": lst}}}  # noqa: E731
+    cb_prog = script(add(cb("rb_coinbase_value")), add(cb("rb_coinbase_price", {"WHAT": "price"}, PRODUCT=tx("btc-gbp"))),
+                     add(cb("rb_coinbase_price", {"WHAT": "change"}, PRODUCT=tx("ETH-GBP"))),
+                     add(count(cb("rb_coinbase_candles", {"SIZE": "day"}, PRODUCT=tx("BTC-GBP"), N=nm(7)))),
+                     add(rec("close", {"block": {"type": "lists_getIndex", "fields": {"MODE": "GET", "WHERE": "LAST"},
+                                                 "inputs": {"VALUE": cb("rb_coinbase_candles", {"SIZE": "hour"}, PRODUCT=tx("ETH-GBP"), N=nm(3))}}})),
+                     add(rec("asset", first(cb("rb_coinbase_balances")))), add(rec("value", first(cb("rb_coinbase_balances")))),
+                     add(rec("price", first(cb("rb_coinbase_orders", {"WHICH": "open"})))), add(rec("fee", first(cb("rb_coinbase_orders", {"WHICH": "fills"})))),
+                     add(rec("fee", cb("rb_coinbase_preview", {"SIDE": "buy"}, AMOUNT=nm(50), PRODUCT=tx("BTC-GBP")))),
+                     add(rec("spend", cb("rb_coinbase_preview", {"SIDE": "sell"}, AMOUNT=nm(0.01), PRODUCT=tx("BTC-GBP")))),
+                     blk("rb_coinbase_order", fields={"SIDE": "buy"}, inputs={"AMOUNT": nm(50), "PRODUCT": tx("BTC-GBP")}),
+                     blk("rb_coinbase_cancel", inputs={"ORDER": tx("8f2c1a7e-0b4d-4c55-9a51-3e6d2b9f7a10")}),
+                     blk("rb_result"))
+    await load_state(pg, cb_prog)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    steps = await step_texts(pg)
+    want = ["5802.61", "61468.24", "1.84", "7", "2410.75", "BTC", "2612.4", "55000", "1.71", "0.3", "614.68"]
+    asks = [t for n, _, t in steps if n == "Allow this?"]
+    check(status.startswith("done") and items == want, f"the Coinbase blocks read the sample portfolio, prices, candles, orders and previews ({items})")
+    check(len(asks) == 2 and all("real money" in t for t in asks) and "fee 0.3 GBP, total 50 GBP" in asks[0] and "Coinbase order placed" in [n for n, *_ in steps],
+          f"on the page, placing and cancelling a Coinbase order ask first, with the preview's fee and total ({asks})")
+    EXTRA["t_cb_blocks"] = await export_python(pg, "t_cb_blocks")
+    await pg.evaluate("document.getElementById('io-name').value = 't_cb_blocks'")
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    check("[coinbase]" in files["second-thought.ini"] and "COINBASE_KEY_FILE = " in files["second-thought.ini"] and "cryptography" in files.get("requirements.txt", ""),
+          "a Coinbase program's settings ask for COINBASE_KEY_FILE, and it needs cryptography")
+    check("coinbase_trade" in EXTRA["t_cb_blocks"] and "trade on your Coinbase account" in EXTRA["t_cb_blocks"],
+          "an exported Coinbase program that trades says so, and asks before its first run")
+
     await load_state(pg, script(blk("rb_wait", fields={"UNIT": "s"}, inputs={"SECS": nm(30)}), blk("rb_add_result", inputs={"TEXT": tx("too late")}), blk("rb_result")))
     EXTRA["t_maxsec"] = await export_python(pg, "t_maxsec")
 
