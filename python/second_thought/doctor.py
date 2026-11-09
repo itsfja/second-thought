@@ -141,6 +141,18 @@ class Doctor:
                 home = await self._homey_home()
                 return tr("reached: {home} devices", home=len(home))
             out.append(("Homey", homey))
+        if has("coinbase_read", "coinbase_trade"):
+            async def coinbase():
+                perms = await self._coinbase("GET", "/api/v3/brokerage/key_permissions")
+                await self._coinbase("GET", "/api/v3/brokerage/accounts", {"limit": "1"})
+                if perms.get("can_transfer"):
+                    return "NOTE", tr("the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.")
+                if "coinbase_trade" in can and not perms.get("can_trade"):
+                    raise RunError(tr("the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio."))
+                if "coinbase_trade" not in can and perms.get("can_trade"):
+                    return "NOTE", tr("the key works and can trade, but this program only reads: a View-only key is safer.")
+                return tr("the key works: it can trade (every order asks you first)") if perms.get("can_trade") else tr("the key works, View only")
+            out.append(("Coinbase", coinbase))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -343,6 +355,7 @@ class Doctor:
         needs = [("anthropic", "anthropic", "Claude")] if any(s["api"] == "anthropic" for s in services) else []
         needs += [("google.genai", "google-genai", "Gemini")] if any(s["api"] == "gemini" for s in services) else []
         needs += [("paho.mqtt.client", "paho-mqtt", "MQTT")] if known and any(i in ids for i in ("mqtt_read", "mqtt_publish")) else []
+        needs += [("cryptography", "cryptography", "Coinbase")] if known and any(i in ids for i in ("coinbase_read", "coinbase_trade")) else []
         needs += [("tzdata", "tzdata", "calendars on Windows")] if os.name == "nt" and known and "calendar" in ids else []
         for module, pip, why in needs:
             v = self._doctor_package(module, pip)
@@ -366,7 +379,9 @@ class Doctor:
             if not known and not self._doctor_configured(area):
                 continue
             try:
-                row("ok", area, await check())
+                got = await check()  # a few checks give (status, detail): a NOTE, say
+                status, text = got if isinstance(got, tuple) else ("ok", got)
+                row(status, area, text)
             except Exception as e:  # noqa: BLE001
                 row("FAIL", area, _short(self._describe(e), 240))
         if known and self.can_acts(can):
@@ -407,5 +422,5 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET"}.get(area)
-        return bool(need and os.environ.get(need))
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY"}.get(area)
+        return bool(need and any(os.environ.get(n) for n in need.split()))

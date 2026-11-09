@@ -557,6 +557,38 @@
   "rb_ha_speak": {
    "message0": "𓆓𓂧 %1 𓎛𓂋 %2",
    "tooltip": "𓆓𓂧 𓅓𓂧𓅱 𓎛𓂋 media player, 𓅓 text-to-speech 𓈖 Home Assistant."
+  },
+  "rb_coinbase_balances": {
+   "message0": "𓐍𓏏 𓈖 Coinbase",
+   "tooltip": "𓋴𓈙 𓈖 𓐍𓏏, 𓅱𓂝 𓎛𓂋 𓐍𓏏 𓈖𓃀 𓅓 𓊪𓂋𓎛𓆓𓎡 𓈖 Coinbase, 𓂝𓄿 𓐍𓂋𓎛𓄿𓏏: asset, amount, value 𓎛𓈖𓂝 currency. 𓋴𓅱𓈖𓏏 𓅓 𓎛𓆓𓎡 (currency 𓅓 second-thought.ini). 𓎛𓂋 𓂝 𓊪𓈖 𓈙𓋴𓊪𓆑 𓊪𓂋𓎛𓆓 𓈖 𓏏𓊪𓎛𓋴𓃀"
+  },
+  "rb_coinbase_value": {
+   "message0": "𓋴𓅱𓈖𓏏 𓈖 𓊪𓂋𓎛𓆓 𓈖 Coinbase",
+   "tooltip": "𓋴𓅱𓈖𓏏 𓈖 𓊪𓂋𓎛𓆓𓎡 𓈖 Coinbase, 𓅓 𓎛𓆓𓎡"
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 𓈖 %2 𓅓 Coinbase",
+   "tooltip": "𓋴𓅱𓈖𓏏 𓅓𓐍𓏏 𓈖 𓋴𓈖𓅱𓇋, 𓅓𓇋 BTC-GBP, 𓂋𓊪𓅱 𓈙𓈖𓇋𓋴 𓅓 24 𓅱𓈖𓅱𓏏 𓋴𓈖𓅱𓇋 𓈖 𓋴𓅱𓈖𓏏 𓎛𓂋𓂝 𓅱𓂝"
+  },
+  "rb_coinbase_candles": {
+   "message0": "𓋴𓅱𓈖𓏏 %1 𓈖 Coinbase 𓈖 %2 𓈖 %3 𓅓𓐍𓏏",
+   "tooltip": "𓋴𓈙 𓈖 𓐍𓏏, 𓂝𓄿 𓐍𓂋𓎛𓄿𓏏, 𓅱𓂝 𓎛𓂋 𓉔𓂋𓅱 𓈖𓃀 𓂋𓊪𓅱 𓅱𓈖𓅱𓏏 (𓂋 350): time, open, high, low, close 𓎛𓈖𓂝 volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase: %1",
+   "tooltip": "𓅱𓆓𓅱𓎡 𓅱𓈖 (id, product, side, size, price, filled 𓎛𓈖𓂝 created), 𓂋𓊪𓅱 𓐍𓏏 𓎡𓅓 𓅓𓐍𓏏 (time, product, side, size, price, fee 𓎛𓈖𓂝 order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "𓊪𓏏𓂋 𓅱𓆓 𓈖 Coinbase 𓐍𓂋𓎛𓄿𓏏: %1 %2 𓈖 %3",
+   "tooltip": "𓊪𓏏𓂋 𓅱𓆓 𓈖 𓅓𓂋𓇋𓏏, 𓈖𓈖 𓂋𓂧𓇋𓆑: 𓋴𓈙 𓎛𓈖𓂝 size, spend, fee, total, slippage 𓎛𓈖𓂝 warnings. 𓇋𓈖𓇋 𓂋𓂧𓇋𓆑 𓎛𓆓 𓈖 𓋴𓈖𓅱 (50 𓈖 BTC-GBP 𓂋𓂧𓇋 £50); 𓂋𓂧𓇋 𓂋𓂧𓇋𓆑 𓈖 𓏏𓊪𓇋 (0.01 𓈖 BTC-GBP 𓂋𓂧𓇋 0.01 BTC). 𓈖𓈖 𓈙𓈖𓇋"
+  },
+  "rb_coinbase_order": {
+   "message0": "𓂋𓂧𓇋 𓅱𓆓 𓈖 Coinbase: %1 %2 𓈖 %3",
+   "tooltip": "𓂋𓂧𓇋𓆑 𓅱𓆓 𓅓𓄿𓂝 𓈖 𓅓𓂋𓇋𓏏, 𓅓𓇋 „𓊪𓏏𓂋 𓅱𓆓 𓈖 Coinbase 𓐍𓂋𓎛𓄿𓏏” 𓂋𓊪𓅱, 𓊪𓏏𓂋𓆑 𓋴𓅱 𓐍𓂋𓎛𓄿𓏏, 𓈖𓆓𓆑 𓏏𓅱 𓂋 𓈖𓎛𓎛 𓎛𓈖𓂝 𓆑𓄿𓏏 𓎛𓈖𓂝 𓂧𓅓𓆓, 𓇋𓅱 𓈖𓈖 𓎡𓏭 𓈖𓆓; 𓇋𓂋 𓈖𓈖 𓋴 𓂋 𓆓𓂧 𓅓𓄿𓂝, 𓈖𓈖 𓇋𓂋𓆑 𓇋𓂋𓆑 𓈖 𓐍𓏏𓅓 𓈖 Trade. 𓎛𓂋 𓂝 𓊪𓈖 𓈖𓈖 𓇋𓈖𓇋 𓈖𓈖 𓂋𓂧𓇋"
+  },
+  "rb_coinbase_cancel": {
+   "message0": "𓋴𓇋𓈖 𓅱𓆓 𓈖 Coinbase %1",
+   "tooltip": "𓋴𓇋𓈖𓆑 𓅱𓂝 𓅓 𓅱𓆓𓅱𓎡 𓅱𓈖, 𓅓 𓇋𓂧𓆑 (𓅓 „𓅱𓆓𓅱 𓅱𓈖 𓈖 Coinbase”). 𓈖𓆓𓆑 𓏏𓅱 𓐍𓂋𓎛𓄿𓏏 𓂋 𓈖𓎛𓎛, 𓈖𓈖 𓇋𓂋𓆑 𓇋𓂋 𓈖𓈖 𓋴"
   }
  },
  "options": {
@@ -655,6 +687,26 @@
    "png": "PNG",
    "svg": "SVG (𓏏𓅱𓏏 𓋴𓈙)",
    "orig": "𓆓𓅓𓂝 𓏏𓊪𓇋"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "𓋴𓅱𓈖𓏏",
+   "change": "𓈙𓈖𓇋 𓈖 24 𓅱𓈖𓅱𓏏 %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "𓈖 𓉔𓂋𓅱",
+   "hour": "𓈖 𓅱𓈖𓅱𓏏"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "𓅱𓆓𓅱 𓅱𓈖",
+   "fills": "𓐍𓏏 𓎡𓅓 𓅓𓐍𓏏"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "𓇋𓈖𓇋",
+   "sell": "𓂋𓂧𓇋"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "𓇋𓈖𓇋",
+   "sell": "𓂋𓂧𓇋"
   }
  },
  "categories": {
@@ -681,7 +733,8 @@
   "Tools": "𓂝𓎛𓂝𓅱",
   "Variables": "𓈙𓈖𓇋𓅱",
   "Wait & time": "𓎛𓅓𓋴 𓎛𓈖𓂝 𓄿𓏏",
-  "You": "𓈖𓏏𓎡"
+  "You": "𓈖𓏏𓎡",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𓋴𓆓𓅓𓅱: 𓇋𓂋𓋴𓈖 𓐍𓆑𓏏 𓇋𓂋 𓋴𓐍𓂋 𓆓𓄿 𓅓 𓏏𓂋",
@@ -1475,7 +1528,25 @@
   "{who} returned nothing for this step. Simplify it and try again.": "{who} 𓈖𓈖 𓂋𓂧𓇋 𓇋𓐍𓏏 𓈖 𓋴𓐍𓂋 𓊪𓈖 𓋴𓈙𓅓 𓋴𓅱 𓅱𓎛𓅓",
   "{who} says this key's account has no credit left: {problem}": "{who} 𓆓𓂧 𓈖𓈖 𓎛𓆓 𓈖 𓐍𓏏𓅓 𓊪𓈖: {problem}",
   "{who} says too many requests right now. Wait a minute and run again.": "{who} 𓆓𓂧 𓂝𓈙𓄿 𓋴𓊪 𓂝𓎛𓂝 𓂝𓏏 𓅱𓎛𓅓",
-  "At the models' list prices that's {cost}, charged to your keys' accounts.": "𓅓 𓇋𓋴𓅱 𓏏𓅱𓏏𓅱 {cost}, 𓎛𓂋 𓎛𓋴𓃀𓅱 𓈖 𓐍𓏏𓅓𓅱𓎡"
+  "At the models' list prices that's {cost}, charged to your keys' accounts.": "𓅓 𓇋𓋴𓅱 𓏏𓅱𓏏𓅱 {cost}, 𓎛𓂋 𓎛𓋴𓃀𓅱 𓈖 𓐍𓏏𓅓𓅱𓎡",
+  "A Coinbase order is buy or sell.": "𓅱𓆓 𓈖 Coinbase 𓇋𓈖𓇋 𓊪𓅱 𓂋𓊪𓅱 𓂋𓂧𓇋",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "𓐍𓏏 𓈖 Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "𓈖 𓋴𓇋𓈖 Coinbase 𓅱𓆓: {why}.",
+  "Coinbase order cancelled": "𓅱𓆓 𓈖 Coinbase 𓋴𓇋𓈖",
+  "Coinbase order placed": "𓅱𓆓 𓈖 Coinbase 𓂋𓂧𓇋",
+  "Coinbase wouldn't place that order: {why}.": "𓈖 𓇋𓂋𓈖 Coinbase 𓅱𓆓 𓊪𓈖: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "𓇋𓅓 𓋴𓈖𓅱𓇋 𓈖 𓋴𓅱𓈖𓏏 𓎛𓂋𓂝 𓅱𓂝, 𓅓𓇋 BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "𓍿𓈖𓅱𓏏 𓎛𓂋𓏏𓊪 0 𓇋𓅱𓋴, 𓅓𓇋 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "𓅱𓆓 𓈖 Coinbase 𓇋𓐍? 𓇋𓅓𓇋 𓇋𓂧𓆑, 𓅓 „𓅱𓆓𓅱 𓅱𓈖 𓈖 Coinbase”.",
+  "not found": "𓈖 𓎼𓅓𓏏𓅱",
+  "{n} assets": "𓐍𓏏 {n}",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "„{product}” 𓈖 𓋴𓈖𓅱𓇋 𓈖 Coinbase 𓇋𓋴 𓈙𓋴𓊪 𓅱𓂝 𓅓𓇋 BTC-GBP.",
+  "Coinbase account": "𓎛𓋴𓃀 𓈖 Coinbase",
+  "sample account": "𓎛𓋴𓃀 𓈖 𓏏𓊪𓎛𓋴𓃀",
+  "trade on your Coinbase account with real money (asking you before every order)": "𓇋𓈖𓇋 𓎛𓈖𓂝 𓂋𓂧𓇋 𓅓 𓎛𓋴𓃀𓎡 𓈖 Coinbase 𓅓 𓎛𓆓 𓅓𓄿𓂝 (𓈖𓆓𓆑 𓏏𓅱 𓐍𓆑𓏏 𓅱𓆓 𓈖𓃀)",
+  "read your Coinbase balances and orders, and market prices": "𓈙𓂧𓇋 𓐍𓏏𓎡 𓎛𓈖𓂝 𓅱𓆓𓅱𓎡 𓈖 Coinbase, 𓎛𓈖𓂝 𓋴𓅱𓈖𓏏 𓈖 𓅓𓂋𓇋𓏏"
  },
  "examples": {
   "review": {
@@ -3027,7 +3098,40 @@
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "wꜣḥ {names}: nn šnj sḫrw rnw LD_, DYLD_ PYTHON, šnj šꜣꜥ jrt",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} n sḫr n Second Thought jsṯ, mꜣꜣ sš. jr ḫrd MCP r.f, nfr pw.",
   "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "kjw rmṯ m jꜥḥ pn šdj {path}. r sꜣw ḫtmw n.k wꜥ:  chmod 600 {path}",
-  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant hꜣb jḫt nn JSON ({e})."
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant hꜣb jḫt nn JSON ({e}).",
+  "A Coinbase order is buy or sell.": "wḏ n Coinbase jnj pw r-pw rdj.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "ḫt n Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "n sjn Coinbase wḏ: {why}.",
+  "Coinbase order cancelled": "wḏ n Coinbase sjn",
+  "Coinbase order placed": "wḏ n Coinbase rdj",
+  "Coinbase wouldn't place that order: {why}.": "n jr.n Coinbase wḏ pn: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "jm snwj n swnt ḥr-ꜥ wꜥ, mj BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "ṯnwt ḥr-tp 0 jw=s, mj 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "wḏ n Coinbase jḫ? jmj id=f, m „wḏw wn n Coinbase”.",
+  "not found": "n gm.tw",
+  "{n} assets": "ḫt {n}",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "„{product}” n snwj n Coinbase js. šsp wꜥ mj BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "n rdj.n Coinbase wḏ: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "n ḏd.n Coinbase pr-ḥḏ n ḫtm pn.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase jr n COINBASE_KEY_FILE {where_keys}: sš n ḫtm šsp=k ḫft jr=k ḫtm API m portal.cdp.coinbase.com. jmj View wꜥ, jr nn jnj sš.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase jr n cryptography r ḫtm nḏwt=f: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "n pḥ.tw Coinbase ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "n šdj.tw sš n ḫtm n Coinbase {path} ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "jrt tn n Coinbase šnj=s ḥḏ mꜣꜥ, jr=s ḫft ḏd=k mꜣꜥ wꜥ.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "ḫtm n Coinbase sš JSON rdj.n Coinbase n=k, name ḥnꜥ privateKey jm=f.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "n šdj.tw privateKey n ḫtm n Coinbase. šsp sš n ḫtm mj rdj.n Coinbase sw.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "ḫtm pn n Coinbase Ed25519, jw Advanced Trade jr n ECDSA. jr ḫtm m portal.cdp.coinbase.com, stp ECDSA.",
+  "it answered {code}": "wšb.n=f {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "ꜥnn.n=f ḫtm. ptr COINBASE_KEY_FILE: ḫtm CDP ḥnꜥ ḫtm ECDSA",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "n rdj.tw n ḫtm jr pn. ptr shrw=f ḥnꜥ pr-ḥḏ=f m portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "ḫtm nfr, jnj=f, jw sš pn šdj wꜥ: ḫtm n View wꜥ snb r=f.",
+  "the key works, View only": "ḫtm nfr, View wꜥ",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "ḫtm nfr, jnj=f ḥḏ r ky st. nn jnj sš pn ḥḏ: jr ḫtm n Transfer.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "ḫtm nfr, View wꜥ n=f, wḏw n sš pn ꜥnn.tw. jr ḫtm n Trade, n pr-ḥḏ wꜥ.",
+  "the key works: it can trade (every order asks you first)": "ḫtm nfr: jnj=f (wḏ nb nḏ=f tw ḫr-ḥꜣt)",
+  "too many requests just now; try again in a minute": "nḏwt ꜥšꜣ m tꜣ wnwt; jr ḥr-sꜣ ꜣt"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

@@ -364,6 +364,47 @@ add(program(
         email_me("Your Kraken week", B("rb_draft")),
         B("rb_result"))]))
 
+# Money: #371. Coinbase, read-only: balances and prices, never an order.
+v = Vars("value", "holdings", "summary")
+add(program(
+    "coinbase-week", "Weekly crypto round-up", "money",
+    "Each Sunday evening, reads your Coinbase balances and what they're worth, and sends you a Telegram message: the total, "
+    "how it changed since last week, and each holding's value. It only reads: it places no orders.",
+    "Needs a Coinbase API key with View permission only (COINBASE_KEY_FILE), and currency = gbp, or yours, in "
+    "second-thought.ini. The first week has nothing to compare with.",
+    start_and(msg="roundup") + [on_day("Sunday", 18, 0, "roundup"), receive(
+        "roundup",
+        v.set("value", B("rb_coinbase_value")),
+        v.set("holdings", B("rb_coinbase_balances")),
+        v.set("summary", B("rb_ask", TEXT=join(
+            "Write a short weekly round-up of my crypto, under 120 words, in plain English: the total now, how it changed since "
+            "last week (in money and percent), and each holding's value, biggest first. No advice on what to buy or sell.\n\n"
+            "Total now: ", v.get("value"), "\nTotal a week ago (empty if this is the first week): ",
+            B("rb_mem_get", NAME="Coinbase total last week"), "\nHoldings (asset, amount, value, currency):\n", v.get("holdings")))),
+        B("rb_mem_set", {"KIND": "permanent"}, VALUE=v.get("value"), NAME="Coinbase total last week"),
+        B("rb_tg_send", TEXT=v.get("summary")),
+        B("rb_finish_with", TEXT=v.get("summary")))], v))
+
+# Money: #371. A price watch: no model, no orders.
+v = Vars("change", "price")
+add(program(
+    "btc-drop-watch", "Tell me if BTC drops 10%", "money",
+    "Every 15 minutes, checks Bitcoin's price on Coinbase and sends you a Telegram message if it has fallen 10% or more in "
+    "24 hours, at most once a day. It only reads prices: it places no orders.",
+    "Needs a Coinbase API key with View permission only (COINBASE_KEY_FILE). Change BTC-GBP to the pair you want, and -10 "
+    "to the drop that matters to you.",
+    [chain(hat("rb_every", {"N": 15, "UNIT": "m"}), B("rb_broadcast_wait", MSG="check"))] + start_and(msg="check") + [receive(
+        "check",
+        v.set("change", B("rb_coinbase_price", {"WHAT": "change"}, PRODUCT="BTC-GBP")),
+        v.set("price", B("rb_coinbase_price", {"WHAT": "price"}, PRODUCT="BTC-GBP")),
+        if_(B("logic_operation", {"OP": "AND"},
+              A=B("logic_compare", {"OP": "LTE"}, A=v.get("change"), B=B("math_number", {"NUM": -10})),
+              B=B("logic_negate", BOOL=B("rb_mem_has", NAME="told about the BTC drop"))),
+            chain(B("rb_mem_set_for", {"UNIT": "d"}, VALUE="sent", NAME="told about the BTC drop", N=1),
+                  B("rb_tg_send", TEXT=join("Bitcoin is down ", v.get("change"), "% in 24 hours on Coinbase: BTC-GBP is ", v.get("price"), " now.")),
+                  B("rb_finish_with", TEXT=join("Told you: BTC-GBP ", v.get("change"), "% in 24 hours."))),
+            B("rb_finish_with", TEXT=join("BTC-GBP ", v.get("change"), "% in 24 hours, at ", v.get("price"), "."))))], v))
+
 # Money: #152
 v = Vars("charges", "changes")
 add(program(

@@ -89,7 +89,7 @@
   // Everything in the exported zip: the program, its settings file, what to install, and Windows launchers.
   function exportFiles(progName, code){
     const base = pyName(), sched = ws.getTopBlocks(false).some(b => ["rb_when_time", "rb_every", "rb_ha_when"].includes(b.type) || LISTENER_HATS.has(b.type));
-    const req = servicesUsed().flatMap(s => s.pip || []).concat(settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : []).join("\n") + "\n";
+    const req = servicesUsed().flatMap(s => s.pip || []).concat(settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : [], settingsFor().coinbase ? ["cryptography"] : []).join("\n") + "\n";
     const files = [{ name:base + ".py", text:code }, { name:"second-thought.ini", text:iniText(progName) },
                    { name:"requirements.txt", text:req }, { name:"run.bat", text:runBat(base, false) },
                    { name:"run.sh", text:runSh(base, false) }];
@@ -150,6 +150,7 @@
     add(n.calendar, ["CALENDAR_URL"]);
     add(n.feeds, ["RB_FEEDS"]);
     add(n.homey, ["HOMEY_URL", "HOMEY_API_KEY"]);
+    add(n.coinbase, ["COINBASE_KEY"]);  // the key file's contents: orders never run there, since nobody is there to say yes
     add(n.mqtt, ["MQTT_HOST"], ["MQTT_USERNAME", "MQTT_PASSWORD", "MQTT_TLS"]);
     return out;
   }
@@ -318,7 +319,7 @@
         ...caps.map(c => "- " + c[1])] : []),
       ""
     ].join("\n");
-    const req = servicesUsed().flatMap(s => s.pip || []).concat(settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : []).join("\n") + "\n";
+    const req = servicesUsed().flatMap(s => s.pip || []).concat(settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : [], settingsFor().coinbase ? ["cryptography"] : []).join("\n") + "\n";
     return [{ name:base + ".py", text:code }, { name:"requirements.txt", text:req }, { name:".github/workflows/" + base + ".yml", text:wf },
             ...(tests ? [{ name:base + ".tests.json", text:JSON.stringify(programTests, null, 1) + "\n" }] : []),
             { name:"SETUP.md", text:setup }, { name:".gitignore", text:"second-thought.ini\n__pycache__/\n" }];

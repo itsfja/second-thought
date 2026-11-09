@@ -556,6 +556,38 @@
   "rb_agent_kraken": {
    "message0": "outils Kraken %1",
    "tooltip": "Donne à l'agent les outils de Kraken, issus de kraken-cli : prix du marché, vos soldes et ordres, et trading sur papier aux prix réels. Le trading réel lui permet aussi de passer de vrais ordres, mais chaque outil qui peut déplacer de l'argent vous demande d'abord, même quand rien d'autre ne demande, et ne s'exécute jamais sur un planning ni sur GitHub Actions. Nécessite kraken-cli installé, et KRAKEN_API_KEY et KRAKEN_API_SECRET dans second-thought.ini pour votre compte (les prix et le trading sur papier n'en ont pas besoin). Seulement en Python exporté."
+  },
+  "rb_coinbase_balances": {
+   "message0": "soldes Coinbase",
+   "tooltip": "Une liste d'enregistrements, un par actif de votre portefeuille Coinbase, le plus gros d'abord : asset, amount, value et currency. Les valeurs sont dans votre devise (currency dans second-thought.ini). Sur cette page, il utilise un portefeuille d'exemple."
+  },
+  "rb_coinbase_value": {
+   "message0": "valeur du portefeuille Coinbase",
+   "tooltip": "Ce que vaut votre portefeuille Coinbase, dans votre devise."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 de %2 sur Coinbase",
+   "tooltip": "Le dernier prix d'une paire, comme celui de BTC-GBP en livres, ou de combien il a changé ces dernières 24 heures, en pourcentage. Paires au comptant seulement."
+  },
+  "rb_coinbase_candles": {
+   "message0": "prix %1 Coinbase de %2 sur les %3 derniers",
+   "tooltip": "Une liste d'enregistrements, le plus ancien d'abord, un par jour ou par heure (jusqu'à 350) : time, open, high, low, close et volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase : %1",
+   "tooltip": "Vos ordres ouverts (id, product, side, size, price, filled et created) ou vos dernières exécutions (time, product, side, size, price, fee et order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "prévisualiser un ordre Coinbase : %1 %2 de %3",
+   "tooltip": "Ce que donnerait un ordre au marché, sans le passer : un enregistrement avec size, spend, fee, total, slippage et warnings. Acheter dépense un montant de la seconde devise (50 de BTC-GBP dépense £50) ; vendre vend un montant de la première (0.01 de BTC-GBP vend 0.01 BTC). Rien ne change."
+  },
+  "rb_coinbase_order": {
+   "message0": "passer un ordre Coinbase : %1 %2 de %3",
+   "tooltip": "Passe un vrai ordre au marché, comme « prévisualiser un ordre Coinbase ». Il le prévisualise d'abord, puis vous demande toujours, avec les frais et le total, même quand rien d'autre ne demande ; sans personne pour dire oui, il ne s'exécute pas. Il faut une clé avec la permission Trade. Sur cette page, rien n'est acheté ni vendu."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "annuler l'ordre Coinbase %1",
+   "tooltip": "Annule un de vos ordres ouverts, par son identifiant (pris dans « ordres ouverts Coinbase »). Il vous demande toujours d'abord, et ne s'exécute pas sans personne."
   }
  },
  "options": {
@@ -664,6 +696,26 @@
   "rb_agent_kraken.MODE": {
    "read": "(prix, votre compte et trading sur papier)",
    "live": "(et trading réel : demande avant chaque ordre)"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "prix",
+   "change": "variation sur 24 heures %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "journaliers",
+   "hour": "horaires"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "ordres ouverts",
+   "fills": "dernières exécutions"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "acheter",
+   "sell": "vendre"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "acheter",
+   "sell": "vendre"
   }
  },
  "categories": {
@@ -690,7 +742,8 @@
   "Pictures": "Images",
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
-  "Output": "Sortie"
+  "Output": "Sortie",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Outils pour l'agent : déposez-les dans un bloc agent",
@@ -1484,7 +1537,25 @@
   "{who} returned nothing for this step. Simplify it and try again.": "{who} n'a rien renvoyé pour cette étape. Simplifiez-la et réessayez.",
   "{who} says this key's account has no credit left: {problem}": "{who} indique que le compte de cette clé n'a plus de crédit : {problem}",
   "{who} says too many requests right now. Wait a minute and run again.": "{who} indique trop de requêtes en ce moment. Attendez une minute et relancez.",
-  "At the models' list prices that's {cost}, charged to your keys' accounts.": "Aux prix catalogue des modèles, cela fait {cost}, facturés aux comptes de vos clés."
+  "At the models' list prices that's {cost}, charged to your keys' accounts.": "Aux prix catalogue des modèles, cela fait {cost}, facturés aux comptes de vos clés.",
+  "A Coinbase order is buy or sell.": "Un ordre Coinbase est un achat ou une vente.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Soldes Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase n'a pas annulé l'ordre : {why}.",
+  "Coinbase order cancelled": "Ordre Coinbase annulé",
+  "Coinbase order placed": "Ordre Coinbase passé",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase ne passerait pas cet ordre : {why}.",
+  "Coinbase: {why}.": "Coinbase : {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Seules les paires au comptant, comme BTC-GBP, sont proposées ici.",
+  "The amount should be a number above 0, like 50.": "Le montant doit être un nombre supérieur à 0, comme 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Quel ordre Coinbase ? Donnez son identifiant, pris dans « ordres ouverts Coinbase ».",
+  "not found": "introuvable",
+  "{n} assets": "{n} actifs",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "« {product} » n'est pas une paire Coinbase. Utilisez-en une comme BTC-GBP.",
+  "Coinbase account": "compte Coinbase",
+  "sample account": "compte d'exemple",
+  "trade on your Coinbase account with real money (asking you before every order)": "trader sur votre compte Coinbase avec de l'argent réel (en vous demandant avant chaque ordre)",
+  "read your Coinbase balances and orders, and market prices": "lire vos soldes et ordres Coinbase, et les prix du marché"
  },
  "examples": {
   "review": {
@@ -3036,6 +3107,39 @@
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "ignoré {names} : les réglages ne changent jamais les noms LD_, DYLD_ ou PYTHON, qui changent le démarrage des programmes",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} n'est pas un réglage utilisé par Second Thought : vérifiez l'orthographe. Si un serveur MCP ou une commande que vous lancez en a besoin, c'est normal.",
   "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "d'autres personnes sur cet ordinateur peuvent lire {path}. Pour garder ses clés pour vous :  chmod 600 {path}",
-  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant a envoyé quelque chose qui n'est pas du JSON ({e})."
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant a envoyé quelque chose qui n'est pas du JSON ({e}).",
+  "A Coinbase order is buy or sell.": "Un ordre Coinbase est un achat ou une vente.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Soldes Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase n'a pas annulé l'ordre : {why}.",
+  "Coinbase order cancelled": "Ordre Coinbase annulé",
+  "Coinbase order placed": "Ordre Coinbase passé",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase ne passerait pas cet ordre : {why}.",
+  "Coinbase: {why}.": "Coinbase : {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Seules les paires au comptant, comme BTC-GBP, sont proposées ici.",
+  "The amount should be a number above 0, like 50.": "Le montant doit être un nombre supérieur à 0, comme 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Quel ordre Coinbase ? Donnez son identifiant, pris dans « ordres ouverts Coinbase ».",
+  "not found": "introuvable",
+  "{n} assets": "{n} actifs",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "« {product} » n'est pas une paire Coinbase. Utilisez-en une comme BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase n'a pas passé l'ordre : {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase n'a pas dit à quel portefeuille cette clé correspond.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase a besoin de COINBASE_KEY_FILE {where_keys} : le fichier de clé que vous téléchargez en créant une clé d'API sur portal.cdp.coinbase.com. Donnez-lui seulement View, sauf si le programme trade.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase a besoin du paquet cryptography pour signer ses requêtes : pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Impossible de joindre Coinbase ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "Impossible de lire le fichier de clé Coinbase {path} ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "Cette action Coinbase pourrait déplacer de l'argent réel, elle ne se fait donc qu'après votre oui.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "La clé Coinbase doit être le fichier JSON que Coinbase vous a donné, avec name et privateKey dedans.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "Le privateKey de la clé Coinbase n'a pas pu être lu. Utilisez le fichier de clé tel que Coinbase l'a donné.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "Cette clé Coinbase est une clé Ed25519, et Advanced Trade a besoin d'une clé ECDSA. Créez une nouvelle clé sur portal.cdp.coinbase.com et choisissez ECDSA dans ses réglages avancés.",
+  "it answered {code}": "il a répondu {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "il a refusé la clé. Vérifiez COINBASE_KEY_FILE : ce doit être une clé CDP avec une clé privée ECDSA",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "la clé n'a pas le droit de faire cela. Vérifiez ses permissions et son portefeuille sur portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "la clé fonctionne et peut trader, mais ce programme ne fait que lire : une clé View seulement est plus sûre.",
+  "the key works, View only": "la clé fonctionne, View seulement",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "la clé fonctionne, mais elle peut aussi transférer de l'argent. Ce programme ne transfère jamais : créez une clé sans la permission Transfer.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "la clé fonctionne, mais elle n'a que View, donc les ordres de ce programme seraient refusés. Créez une clé avec la permission Trade, limitée à un portefeuille.",
+  "the key works: it can trade (every order asks you first)": "la clé fonctionne : elle peut trader (chaque ordre vous demande d'abord)",
+  "too many requests just now; try again in a minute": "trop de requêtes pour l'instant ; réessayez dans une minute"
  }
 }

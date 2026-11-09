@@ -557,6 +557,38 @@
   "rb_agent_kraken": {
    "message0": "מאני Kraken %1",
    "tooltip": "יהב לסוכנא מאני Kraken דיליה, מן kraken-cli: דמי שוקא, שארייך ופקודייך, ותגרא על נירא בדמין שרירין. תגרא שרירא שבק ליה אף למתן פקודין שרירין, ברם כל מאן דיכל לשנאה כספא שאל לך קדמיתא, אף כד מדעם אחרנא לא שאל, ולעלם לא רהט בזבנא קביעא או ב־GitHub Actions. צריך kraken-cli מתקן, ו־KRAKEN_API_KEY ו־KRAKEN_API_SECRET ב־second-thought.ini לחושבנך (דמין ונירא לא צריכין מפתחא). בלחוד ב־Python מפקא."
+  },
+  "rb_coinbase_balances": {
+   "message0": "שאריתא דCoinbase",
+   "tooltip": "רשימת כתבין, חד לכל נכס בסימתך דCoinbase, רבא קדמאה: asset, amount, value וcurrency. דמיא במעתך (currency בsecond-thought.ini). בדפא דנא משמש סימא דדוגמא."
+  },
+  "rb_coinbase_value": {
+   "message0": "דמי סימתא דCoinbase",
+   "tooltip": "כמה שויא סימתך דCoinbase, במעתך."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 ד%2 בCoinbase",
+   "tooltip": "דמא בתרא דזוגא, כות דBTC-GBP בליטרין, או כמה אשתני ב-24 שעין, במאה. רק זוגי זבינא מיד."
+  },
+  "rb_coinbase_candles": {
+   "message0": "דמי %1 דCoinbase ד%2 ל%3 בתראי",
+   "tooltip": "רשימת כתבין, עתיקא קדמאה, חד לכל יום או שעה (עד 350): time, open, high, low, close וvolume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase: %1",
+   "tooltip": "פקודיך פתיחן (id, product, side, size, price, filled וcreated), או עבידתא בתרייתא (time, product, side, size, price, fee וorder)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "חזי קדם פקודא דCoinbase: %1 %2 ד%3",
+   "tooltip": "מה תהוי פקודת שוקא, בלא למיהבה: כתבא עם size, spend, fee, total, slippage וwarnings. זבינא מפיק מנין מן מעתא תנינא (50 דBTC-GBP מפיק £50); זבנא מזבן מנין מן קדמיא (0.01 דBTC-GBP מזבן 0.01 BTC). מדעם לא משתני."
+  },
+  "rb_coinbase_order": {
+   "message0": "הב פקודא דCoinbase: %1 %2 ד%3",
+   "tooltip": "יהיב פקודת שוקא קשיטא, כות 'חזי קדם פקודא דCoinbase'. קדם חזי לה, ובתר כן תדירא שאיל לך, עם אגרא וסכומא, אף כד מדעם אחרן לא שאיל; כד לית מן דאמר אין, לא רהיט. צריך מפתח עם רשות Trade. בדפא דנא מדעם לא אזדבן."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "בטל פקודא דCoinbase %1",
+   "tooltip": "מבטל חדא מן פקודיך פתיחן, בid דילה (מן 'פקודין פתיחן דCoinbase'). תדירא שאיל לך קדם, ולא רהיט כד לית אנש."
   }
  },
  "options": {
@@ -665,6 +697,26 @@
   "rb_agent_kraken.MODE": {
    "read": "(דמין, חושבנך ותגרא על נירא)",
    "live": "(ותגרא שרירא: שאל קדם כל פקודא)"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "דמא",
+   "change": "שנוי ד-24 שעין %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "דיומא",
+   "hour": "דשעתא"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "פקודין פתיחן",
+   "fills": "עבידתא בתרייתא"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "זבין",
+   "sell": "זבן"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "זבין",
+   "sell": "זבן"
   }
  },
  "categories": {
@@ -691,7 +743,8 @@
   "Pictures": "צורתא",
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
-  "Output": "מפקנא"
+  "Output": "מפקנא",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "מאני שליחא: שדי יתהון בגו לבנת שליחא",
@@ -1485,7 +1538,25 @@
   "{who} returned nothing for this step. Simplify it and try again.": "{who} לא אהדר מדעם לדרגא הנא. פשט לה ונסי תוב.",
   "{who} says this key's account has no credit left: {problem}": "{who} אמר דחושבנא דקלידא הנא לית בה כספא: {problem}",
   "{who} says too many requests right now. Wait a minute and run again.": "{who} אמר דסגיאן בעותא השא. סכי דקיקא ורהט תוב.",
-  "At the models' list prices that's {cost}, charged to your keys' accounts.": "בטימי דמותא הדא {cost}, דמתחשב לחושבני קלידיך."
+  "At the models' list prices that's {cost}, charged to your keys' accounts.": "בטימי דמותא הדא {cost}, דמתחשב לחושבני קלידיך.",
+  "A Coinbase order is buy or sell.": "פקודא דCoinbase זבינא או זבנא היא.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "שאריתא דCoinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase לא בטלת פקודא: {why}.",
+  "Coinbase order cancelled": "פקודא דCoinbase בטילא",
+  "Coinbase order placed": "פקודא דCoinbase יהיבא",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase לא עבדא פקודא דא: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "הכא אית רק זוגי זבינא מיד, כות BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "מניינא צריך למהוי מנין יתיר מן 0, כות 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "אידא פקודא דCoinbase? הב id דילה, מן 'פקודין פתיחן דCoinbase'.",
+  "not found": "לא אשתכח",
+  "{n} assets": "{n} נכסין",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "\"{product}\" לאו זוגא דCoinbase הוא. שמש בחד כות BTC-GBP.",
+  "Coinbase account": "חושבנא דCoinbase",
+  "sample account": "חושבנא דדוגמא",
+  "trade on your Coinbase account with real money (asking you before every order)": "למזבן ולמזבין בחושבנך דCoinbase בכספא קשיטא (שאיל לך קדם כל פקודא)",
+  "read your Coinbase balances and orders, and market prices": "למקרא שאריתך ופקודיך דCoinbase, ודמי שוקא"
  },
  "examples": {
   "review": {
@@ -3037,7 +3108,40 @@
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "שבקנא {names}: תקנתא לא משניא לעלם שמהת LD_,‏ DYLD_ או PYTHON, דמשניין איכנא דשריין תכניתא",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} לא תקנתא דמשתמש בה Second Thought, בחון כתבא. אן שמשא MCP או פקודא דאנת מריץ צריך לה, שפיר.",
   "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "אנשא אחרנין בחושבנא הנא יכלין למקרא {path}. למנטר קלידוהי לך בלחוד:  chmod 600 {path}",
-  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant שדר מדעם דלא JSON ({e})."
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant שדר מדעם דלא JSON ({e}).",
+  "A Coinbase order is buy or sell.": "פקודא דCoinbase זבינא או זבנא היא.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "שאריתא דCoinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase לא בטלת פקודא: {why}.",
+  "Coinbase order cancelled": "פקודא דCoinbase בטילא",
+  "Coinbase order placed": "פקודא דCoinbase יהיבא",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase לא עבדא פקודא דא: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "הכא אית רק זוגי זבינא מיד, כות BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "מניינא צריך למהוי מנין יתיר מן 0, כות 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "אידא פקודא דCoinbase? הב id דילה, מן 'פקודין פתיחן דCoinbase'.",
+  "not found": "לא אשתכח",
+  "{n} assets": "{n} נכסין",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "\"{product}\" לאו זוגא דCoinbase הוא. שמש בחד כות BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase לא יהבת פקודא: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase לא אמרת לאידא סימא מפתחא דנא.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase צריכא COINBASE_KEY_FILE {where_keys}: כתבא דמפתחא דמחתת כד עבדת מפתח API בportal.cdp.coinbase.com. הב לה רק View, אלא אן תכניתא זבנא.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase צריכא חבילת cryptography למחתם בעותהא: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "לא מטינן לCoinbase ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "לא אתקרי כתבא דמפתחא דCoinbase {path} ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "עבדא דא דCoinbase יכיל לשנאה כספא קשיטא, ועל כן רק בתר דתימר אין רהיט.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "מפתחא דCoinbase צריך למהוי כתבא JSON דיהבת לך Coinbase, ובה name וprivateKey.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "privateKey דמפתחא דCoinbase לא אתקרי. שמש בכתבא דמפתחא היך דיהבת Coinbase.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "מפתחא דנא דCoinbase מפתח Ed25519 הוא, וAdvanced Trade צריך ECDSA. עביד מפתח חדת בportal.cdp.coinbase.com ובחר ECDSA בתקוני מעליא דילה.",
+  "it answered {code}": "אתיב {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "סרב מפתחא. בדוק COINBASE_KEY_FILE: צריך למהוי מפתח CDP עם מפתח פרטי ECDSA",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "לא שליט מפתחא למעבד דא. בדוק רשותיה וסימתיה בportal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "מפתחא עביד ויכיל לזבנא, ברם תכניתא דא רק קריא: מפתח View בלחוד שליו יתיר.",
+  "the key works, View only": "מפתחא עביד, View בלחוד",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "מפתחא עביד, ברם יכיל אף לאעברא כספא. תכניתא דא לעלם לא מעברא: עביד מפתח בלא רשות Transfer.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "מפתחא עביד, ברם אית ליה רק View, ועל כן פקודי תכניתא יסתרבון. עביד מפתח עם רשות Trade, תחים לסימא חדא.",
+  "the key works: it can trade (every order asks you first)": "מפתחא עביד: יכיל לזבנא (כל פקודא שאלא לך קדם)",
+  "too many requests just now; try again in a minute": "סגיאין בעותא השתא; נסי תוב בתר דקיקא"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

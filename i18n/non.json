@@ -556,6 +556,38 @@
   "rb_agent_kraken": {
    "message0": "Kraken tól %1",
    "tooltip": "Gefr erindreka eigin tól Krakens, ór kraken-cli: markaðsverð, innistæður þínar ok boð, ok kaup á pappír við sǫnnu verði. Sǫnn kaup láta hann ok gefa sǫnn boð, en hvert tól er hreyfa má fé spyrr þik fyrst, þótt ekki annat spyrji, ok keyrir aldri eptir tímaskrá né á GitHub Actions. Þarf kraken-cli sett upp, ok KRAKEN_API_KEY ok KRAKEN_API_SECRET í second-thought.ini fyrir reikning þinn (verð ok pappír þurfa engan lykil). Einungis í útfluttu Python."
+  },
+  "rb_coinbase_balances": {
+   "message0": "Coinbase-leifar",
+   "tooltip": "Listi skráa, ein fyrir hverja eign í Coinbase-fjárhirzlu þinni, in mesta fyrst: asset, amount, value ok currency. Verðin eru í þínu fé (currency í second-thought.ini). Á þessi síðu nytr hann dœmis-fjárhirzlu."
+  },
+  "rb_coinbase_value": {
+   "message0": "verð Coinbase-fjárhirzlu",
+   "tooltip": "Hvers Coinbase-fjárhirzla þín er verð, í þínu fé."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 %2 á Coinbase",
+   "tooltip": "Síðasta verð kaupapars, sem BTC-GBP í pundum, eða hversu mjǫk þat breyttisk á 24 stundum, í hundraðshlutum. Einungis staðkaups-pör."
+  },
+  "rb_coinbase_candles": {
+   "message0": "Coinbase %1 verð %2 fyrir síðustu %3",
+   "tooltip": "Listi skráa, in elzta fyrst, ein fyrir hvern dag eða stund (allt at 350): time, open, high, low, close ok volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase: %1",
+   "tooltip": "Opin boð þín (id, product, side, size, price, filled ok created), eða síðustu fyllingar (time, product, side, size, price, fee ok order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "sjá fyrir Coinbase-boð: %1 %2 af %3",
+   "tooltip": "Hvat torgboð myndi verða, án at setja þat: skrá með size, spend, fee, total, slippage ok warnings. Kaupa eyðir upphæð ins síðara fjár (50 af BTC-GBP eyðir £50); selja selr upphæð ins fyrra (0.01 af BTC-GBP selr 0.01 BTC). Ekki breytisk."
+  },
+  "rb_coinbase_order": {
+   "message0": "set Coinbase-boð: %1 %2 af %3",
+   "tooltip": "Setr sannt torgboð, sem 'sjá fyrir Coinbase-boð'. Hann sér þat fyrir fyrst, spyrr þik þá ávallt, með gjaldi ok alls, þótt ekki annat spyrji; sé engi þar at segja já, ferr hann eigi. Þarf lykil með Trade-leyfi. Á þessi síðu er ekki keypt né selt."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "tak aptr Coinbase-boð %1",
+   "tooltip": "Tekr aptr eitt opinna boða þinna, eptir id þess (ór 'opin Coinbase-boð'). Hann spyrr þik ávallt fyrst, ok ferr eigi er engi er þar."
   }
  },
  "options": {
@@ -664,6 +696,26 @@
   "rb_agent_kraken.MODE": {
    "read": "(verð, reikningr þinn ok kaup á pappír)",
    "live": "(ok sǫnn kaup: spyrr fyrir hvert boð)"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "verð",
+   "change": "breyting 24 stunda %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "dagleg",
+   "hour": "stundleg"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "opin boð",
+   "fills": "síðustu fyllingar"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "kaupa",
+   "sell": "selja"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "kaupa",
+   "sell": "selja"
   }
  },
  "categories": {
@@ -690,7 +742,8 @@
   "Pictures": "Myndir",
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
-  "Output": "Útgangr"
+  "Output": "Útgangr",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1484,7 +1537,25 @@
   "{who} returned nothing for this step. Simplify it and try again.": "{who} skilaði engu fyrir þetta skref. Ger þat einfaldara ok reyn aptr.",
   "{who} says this key's account has no credit left: {problem}": "{who} segir at reikningr þessa lykils eigi ekki fé eptir: {problem}",
   "{who} says too many requests right now. Wait a minute and run again.": "{who} segir of margar beiðnir nú. Bíð mínútu ok renn aptr.",
-  "At the models' list prices that's {cost}, charged to your keys' accounts.": "At verði líkananna er þat {cost}, goldit af reikningum lykla þinna."
+  "At the models' list prices that's {cost}, charged to your keys' accounts.": "At verði líkananna er þat {cost}, goldit af reikningum lykla þinna.",
+  "A Coinbase order is buy or sell.": "Coinbase-boð er at kaupa eða selja.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase-leifar",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase tók eigi aptr boðit: {why}.",
+  "Coinbase order cancelled": "Coinbase-boð aptr tekit",
+  "Coinbase order placed": "Coinbase-boð sett",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase vildi eigi setja þat boð: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Hér eru einungis staðkaups-pör, sem BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "Upphæðin skal vera tala yfir 0, sem 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Hvert Coinbase-boð? Gef id þess, ór 'opin Coinbase-boð'.",
+  "not found": "eigi fundit",
+  "{n} assets": "{n} eignir",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "„{product}“ er eigi Coinbase-kaupapar. Nyt eitt sem BTC-GBP.",
+  "Coinbase account": "Coinbase-reikningr",
+  "sample account": "dœmis-reikningr",
+  "trade on your Coinbase account with real money (asking you before every order)": "kaupa á Coinbase-reikningi þínum með sǫnnu fé (spyrjandi þik fyrir hvert boð)",
+  "read your Coinbase balances and orders, and market prices": "lesa Coinbase-leifar þínar ok boð, ok torgverð"
  },
  "examples": {
   "review": {
@@ -3036,7 +3107,40 @@
   "skipped {names}: settings never change LD_, DYLD_ or PYTHON names, which change how programs start": "sleppt {names}: stillingar breyta aldri LD_, DYLD_ né PYTHON nǫfnum, er breyta hversu forrit hefjask",
   "{names} isn't a setting Second Thought uses, so check the spelling. If an MCP server or a command you run needs it, that's fine.": "{names} er engi stilling er Second Thought notar, ok skaltu hyggja at stafsetningu. Ef MCP þjónn eða boð er þú rennir þarf þess, er þat vel.",
   "{path} can be read by other people on this computer. To keep its keys to you:  chmod 600 {path}": "aðrir menn á þessi tǫlvu megu lesa {path}. At halda lyklum þess þér einum:  chmod 600 {path}",
-  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant sendi nakkvat er eigi er JSON ({e})."
+  "Home Assistant sent something that isn't JSON ({e}).": "Home Assistant sendi nakkvat er eigi er JSON ({e}).",
+  "A Coinbase order is buy or sell.": "Coinbase-boð er at kaupa eða selja.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase-leifar",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase tók eigi aptr boðit: {why}.",
+  "Coinbase order cancelled": "Coinbase-boð aptr tekit",
+  "Coinbase order placed": "Coinbase-boð sett",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase vildi eigi setja þat boð: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Hér eru einungis staðkaups-pör, sem BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "Upphæðin skal vera tala yfir 0, sem 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Hvert Coinbase-boð? Gef id þess, ór 'opin Coinbase-boð'.",
+  "not found": "eigi fundit",
+  "{n} assets": "{n} eignir",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "„{product}“ er eigi Coinbase-kaupapar. Nyt eitt sem BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase setti eigi boðit: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase sagði eigi hverri fjárhirzlu þessi lykill heyrir.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase þarf COINBASE_KEY_FILE {where_keys}: lykilskrána er þú sœkir er þú gerir API-lykil á portal.cdp.coinbase.com. Gef honum einungis View, nema forritit kaupi.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase þarf cryptography-pakkann at innsigla beiðnir sínar: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Náði eigi til Coinbase ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "Mátti eigi lesa Coinbase-lykilskrána {path} ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "Sú Coinbase-gerð mætti hrœra sannt fé, því ferr hon einungis eptir at þú segir já.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "Coinbase-lykillinn skal vera JSON-skráin er Coinbase gaf þér, með name ok privateKey í.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "privateKey Coinbase-lykilsins mátti eigi lesa. Nyt lykilskrána sem Coinbase gaf hana.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "Þessi Coinbase-lykill er Ed25519-lykill, en Advanced Trade þarf ECDSA-lykil. Ger nýjan lykil á portal.cdp.coinbase.com ok vel ECDSA í framstilltum stillingum hans.",
+  "it answered {code}": "þat svaraði {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "þat synjaði lyklinum. Kanna COINBASE_KEY_FILE: þat skal vera CDP-lykill með leyndum ECDSA-lykli",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "lykillinn má eigi gera þat. Kanna leyfi hans ok fjárhirzlu á portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "lykillinn vinnr ok má kaupa, en þetta forrit les einungis: lykill með View einu er tryggari.",
+  "the key works, View only": "lykillinn vinnr, View eitt",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "lykillinn vinnr, en hann má ok fœra fé. Þetta forrit fœrir aldri: ger lykil án Transfer-leyfis.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "lykillinn vinnr, en hann hefir View eitt, svá at boðum þessa forrits væri synjat. Ger lykil með Trade-leyfi, bundinn við eina fjárhirzlu.",
+  "the key works: it can trade (every order asks you first)": "lykillinn vinnr: hann má kaupa (hvert boð spyrr þik fyrst)",
+  "too many requests just now; try again in a minute": "of margar beiðnir nú; reyn aptr eptir eina mínútu"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

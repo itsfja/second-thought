@@ -26,6 +26,7 @@ Made by tools/sync.py from i18n/de.json: edit that, not this.
 - Home Assistant: Home Assistant
 - Homey: Homey
 - Output: Ausgabe
+- Coinbase: Coinbase
 - Tools for the agent: drop them inside an agent block: Werkzeuge für den Agenten: in einen Agenten-Block ziehen
 - Listeners: they run while the exported program runs on schedule: Zuhörer: Sie laufen, während das exportierte Programm nach Zeitplan läuft
 - Read and send: Lesen und senden

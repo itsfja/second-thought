@@ -556,6 +556,38 @@
   "rb_ha_speak": {
    "message0": "Xiquihto %1 ipan %2",
    "tooltip": "Quihtoa in tlahtōlli ipan ce tlacaquiltiloni, ica in Home Assistant ītlahtōlcuepaliz."
+  },
+  "rb_coinbase_balances": {
+   "message0": "Coinbase tlapiyalli",
+   "tooltip": "Cē amatlahcuilōlli, cē ipan cecentetl tlatquitl ipan mo Coinbase tlatlātīlōyān, in achi huēyi achto: asset, amount, value ihuan currency. In tlapatiyōtl ipan mo tomin (currency ipan second-thought.ini). Nicān quitequitiltia cē machiyōtl tlatlātīlōyān."
+  },
+  "rb_coinbase_value": {
+   "message0": "Coinbase tlatlātīlōyān ītlapatiyo",
+   "tooltip": "Quēzqui patiyo mo Coinbase tlatlātīlōyān, ipan mo tomin."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 in %2 ipan Coinbase",
+   "tooltip": "Cē ōmeyōtl ītlatzonco tlapatiyōtl, iuhquin BTC-GBP ipan libra, nozo quēzqui ōmopatlac ipan 24 hora, ipan ciento. Zan tlacohualiztli niman ōmeyōtl."
+  },
+  "rb_coinbase_candles": {
+   "message0": "Coinbase %1 tlapatiyōtl in %2 ipan in tlatzonco %3",
+   "tooltip": "Cē amatlahcuilōlli, in achi huēhuehtl achto, cē ipan cecemilhuitl nozo cecenhora (ixquich 350): time, open, high, low, close ihuan volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase %1",
+   "tooltip": "Mo tlapoalli tlanahuatil (id, product, side, size, price, filled ihuan created), nozo in tlatzonco tlatzonquixtiliztli (time, product, side, size, price, fee ihuan order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "achto xiquitta Coinbase tlanahuatilli: %1 %2 in %3",
+   "tooltip": "Tlein quizaz cē tiyānquiztli tlanahuatilli, ahmo motlaliz: cē amatlahcuilōlli ica size, spend, fee, total, slippage ihuan warnings. Tlacohua quipohpolōa tlapōhualli in ōmetetl tomin (50 in BTC-GBP quipohpolōa £50); tlanamaca quinamaca tlapōhualli in achto (0.01 in BTC-GBP quinamaca 0.01 BTC). Ahtle mopatla."
+  },
+  "rb_coinbase_order": {
+   "message0": "xictlali Coinbase tlanahuatilli: %1 %2 in %3",
+   "tooltip": "Quitlalia nelli tiyānquiztli tlanahuatilli, iuhquin 'achto xiquitta Coinbase tlanahuatilli'. Achto quitta, niman mochipa mitztlahtlani, ica ītlaxtlahuil ihuan mochi, māmo ahtle occē tlahtlani; intlā ahquemeh oncā quihtōz quēmah, ahmo mochīhua. Quinequi tlatzacuilli ica Trade. Nicān ahtle mocohua nozo monamaca."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "xicpolo Coinbase tlanahuatilli %1",
+   "tooltip": "Quipoloa cē mo tlapoalli tlanahuatil, ica īid (īhuīcpa 'Coinbase tlapoalli tlanahuatilli'). Mochipa achto mitztlahtlani, ihuan ahmo mochīhua intlā ahquemeh oncā."
   }
  },
  "options": {
@@ -654,6 +686,26 @@
    "png": "PNG",
    "svg": "SVG (tlahcuilōlli ōmotlahcuiloh)",
    "orig": "in nelli āmatl"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "tlapatiyōtl",
+   "change": "24 hora tlapatlaliztli %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "cecemilhuitl",
+   "hour": "cecenhora"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "tlapoalli tlanahuatilli",
+   "fills": "tlatzonco tlatzonquixtiliztli"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "xicohua",
+   "sell": "xicnamaca"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "xicohua",
+   "sell": "xicnamaca"
   }
  },
  "categories": {
@@ -680,7 +732,8 @@
   "Tools": "Tlachīhualoni",
   "Variables": "Tlapatlalli",
   "Wait & time": "Chiyaliztli ihuān cāhuitl",
-  "You": "Tehhuātl"
+  "You": "Tehhuātl",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1474,7 +1527,25 @@
   "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "«{text}» ahmo ce tōnalli. Xictequitlālli today, tomorrow, ce chicōmilhuitl ītōnal anozo YYYY-MM-DD.",
   "“{to}” isn't an email address.": "«{to}» ahmo ce tepozāmatl tēcpan.",
   "“{value}” isn't a number.": "«{value}» ahmo ce tlapōhualli.",
-  "“{value}” isn't on or off.": "«{value}» ahmo on anozo off."
+  "“{value}” isn't on or off.": "«{value}» ahmo on anozo off.",
+  "A Coinbase order is buy or sell.": "Ce Coinbase tlanahuatilli cana tlacohua nozo tlanamaca.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase tlapiyalli",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase ahmo quipolo in tlanahuatilli: {why}.",
+  "Coinbase order cancelled": "Coinbase tlanahuatilli ōpoliuh",
+  "Coinbase order placed": "Coinbase tlanahuatilli ōmotlali",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase ahmo quichīhuaz inīn tlanahuatilli: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Nicān zan tlacohualiztli niman ōmeyōtl, iuhquin BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "In tlapōhualli ma cē tlapōhualli achi huēyi in ahmo 0, iuhquin 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Catlehhuātl Coinbase tlanahuatilli? Xiquitto ītlatōcāyo id, īhuīcpa 'Coinbase tlapoalli tlanahuatilli'.",
+  "not found": "ahmo ōmottac",
+  "{n} assets": "{n} tlatquitl",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "«{product}» ahmo Coinbase ōmeyōtl. Xiquitqui cē iuhquin BTC-GBP.",
+  "Coinbase account": "Coinbase āmatlahcuilōlli",
+  "sample account": "machiyōtl āmatlahcuilōlli",
+  "trade on your Coinbase account with real money (asking you before every order)": "tlanamacaz ipan mo Coinbase āmatlahcuilōl ica nelli tomin (mitztlahtlaniz achto ipan cecentetl tlanahuatilli)",
+  "read your Coinbase balances and orders, and market prices": "quipōhuaz mo Coinbase tlapiyal ihuan mo tlanahuatil, ihuan in tiyānquiztli ītlahuēlīlōca"
  },
  "examples": {
   "review": {
@@ -3026,7 +3097,40 @@
   "“{value}” isn't a number.": "«{value}» ahmo ce tlapōhualli.",
   "“{value}” isn't on or off.": "«{value}» ahmo on anozo off.",
   "“{x}” isn't a real date.": "«{x}» ahmo ce nelli tōnalli.",
-  "“{x}” isn't a time.": "«{x}» ahmo ce cāhuitl."
+  "“{x}” isn't a time.": "«{x}» ahmo ce cāhuitl.",
+  "A Coinbase order is buy or sell.": "Ce Coinbase tlanahuatilli cana tlacohua nozo tlanamaca.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase tlapiyalli",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase ahmo quipolo in tlanahuatilli: {why}.",
+  "Coinbase order cancelled": "Coinbase tlanahuatilli ōpoliuh",
+  "Coinbase order placed": "Coinbase tlanahuatilli ōmotlali",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase ahmo quichīhuaz inīn tlanahuatilli: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Nicān zan tlacohualiztli niman ōmeyōtl, iuhquin BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "In tlapōhualli ma cē tlapōhualli achi huēyi in ahmo 0, iuhquin 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Catlehhuātl Coinbase tlanahuatilli? Xiquitto ītlatōcāyo id, īhuīcpa 'Coinbase tlapoalli tlanahuatilli'.",
+  "not found": "ahmo ōmottac",
+  "{n} assets": "{n} tlatquitl",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "«{product}» ahmo Coinbase ōmeyōtl. Xiquitqui cē iuhquin BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase ahmo quitlali in tlanahuatilli: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase ahmo quihto tlein tlatlātīlōyān ītech pohui inīn tlatzacuilli.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase quinequi COINBASE_KEY_FILE {where_keys}: in tlatzacuilli āmatl tiqutemohuiya ihcuāc ticchīhua API tlatzacuilli ipan portal.cdp.coinbase.com. Zan View xicmaca, intlā ahmo tlanamaca in tlachīhualli.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase quinequi in cryptography tlapiyalli ic quitlahcuilōz ītlatlaniliz: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Ahmo huel ōmacic Coinbase ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "Ahmo huel ōmopōuh in Coinbase tlatzacuilli āmatl {path} ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "Inīn Coinbase tequitl huel quiolīniz nelli tomin, ic zan mochīhua ihcuāc tiquihtoa quēmah.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "In Coinbase tlatzacuilli ma yehhuātl in JSON āmatl in mitzmacac Coinbase, ītech name ihuan privateKey.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "Ahmo huel ōmopōuh in Coinbase tlatzacuilli īprivateKey. Xiquitqui in tlatzacuilli āmatl iuhquin quimacac Coinbase.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "Inīn Coinbase tlatzacuilli Ed25519, auh Advanced Trade quinequi ECDSA. Xicchīhua yancuic tlatzacuilli ipan portal.cdp.coinbase.com ihuan xicpēpena ECDSA ītlatlālīlhuān.",
+  "it answered {code}": "ōquinanquili {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "ōquixtlāuh in tlatzacuilli. Xicitta COINBASE_KEY_FILE: monequi ma CDP tlatzacuilli ica ECDSA ichtacatlatzacuilli",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "in tlatzacuilli ahmo huel quichīhua inīn. Xicitta ītlahuelīlōca ihuan ītlatlātīlōyān ipan portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "in tlatzacuilli tequiti ihuan huel tlanamaca, auh inīn tlachīhualli zan tlapōhua: cē tlatzacuilli zan View achi cualli.",
+  "the key works, View only": "in tlatzacuilli tequiti, zan View",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "in tlatzacuilli tequiti, auh no huel quihuīcaz tomin. Inīn tlachīhualli aīc quihuīca: xicchīhua tlatzacuilli ahtle Transfer.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "in tlatzacuilli tequiti, auh zan View quipiya, ic in tlachīhualli ītlanahuatil motlāxiliz. Xicchīhua tlatzacuilli ica Trade, zan ipan cē tlatlātīlōyān.",
+  "the key works: it can trade (every order asks you first)": "in tlatzacuilli tequiti: huel tlanamaca (cecentetl tlanahuatilli achto mitztlahtlani)",
+  "too many requests just now; try again in a minute": "miyac tlatlanilli āxcān; occeppa xiquēhua ihcuāc cē minuto"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Xictlāli tlahtōlli",

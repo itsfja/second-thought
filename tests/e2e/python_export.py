@@ -203,6 +203,11 @@ def python_tests(codes, share=None):
     svc_url, svc_log, tg_add, imap_port, smtp_port = fake_services.start()
     broker, mqtt_port = fake_mqtt.start(retained={"zigbee2mqtt/leak_sensor_sink": '{"water_leak": false, "battery": 87}', "zigbee2mqtt/oven_plug": '{"state": "ON", "power": 41}'})
     env.update(HOMEY_URL=svc_url + "/homey", HOMEY_API_KEY=fake_services.HOMEY_KEY)
+    import fake_coinbase  # every exported program with Coinbase blocks (the gallery's too) reads the same stand-in (#371)
+    cb_dir = tempfile.mkdtemp()
+    cb_key = fake_coinbase.make_key(pathlib.Path(cb_dir) / "cdp_api_key.json")
+    coinbase_all = fake_coinbase.FakeCoinbase(cb_key)
+    env.update(COINBASE_API_URL=coinbase_all.start(), COINBASE_KEY_FILE=cb_key)
     env.update(MQTT_HOST="127.0.0.1", MQTT_PORT=str(mqtt_port), MQTT_USERNAME=fake_mqtt.USER, MQTT_PASSWORD=fake_mqtt.PASSWORD)
     env.update(DISCORD_API_URL=svc_url + "/discord", DISCORD_BOT_TOKEN=fake_services.DISCORD_TOKEN, DISCORD_CHANNEL_ID=fake_services.DISCORD_CHANNEL,
                SLACK_API_URL=svc_url + "/slack", SLACK_BOT_TOKEN=fake_services.SLACK_TOKEN, SLACK_CHANNEL_ID=fake_services.SLACK_CHANNEL)
@@ -395,6 +400,23 @@ def python_tests(codes, share=None):
             env4 = dict(env, RB_MODEL_TIER="openai-default", OPENAI_API_KEY="", RB_BACKUPS="")
             code_, out, err = drive([sys.executable, "-u", str(path)], env4, tmp)
             check(code_ != 0 and "OPENAI_API_KEY = your-key" in (out + err) and "▸ Backup" not in out, "with no backups, the primary's own error is shown")
+
+    if part("settings"):
+        print("Coinbase in Python")
+        with tempfile.TemporaryDirectory() as tmp:
+            key = fake_coinbase.make_key(pathlib.Path(tmp) / "cdp_api_key.json")
+            coinbase = fake_coinbase.FakeCoinbase(key, can_trade=True)
+            cb_env = dict(env, COINBASE_API_URL=coinbase.start(), COINBASE_KEY_FILE=key, RB_CURRENCY="gbp", RB_EXCHANGE_RATE="0.79")
+            (pathlib.Path(tmp) / "t_cb_blocks.py").write_text(EXTRA["t_cb_blocks"], encoding="utf-8")
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_cb_blocks.py")], cb_env, tmp)
+            res = [l.strip() for l in out.replace("\r\n", "\n").split("RESULT")[-1].split("\n") if l.strip().strip("=")]
+            want = ["5802.61", "61468.24", "1.84", "7", "2410.75", "BTC", "2612.4", "55000", "1.71", "0.3", "614.68"]
+            check(code_ == 0 and res[:len(want)] == want and not coinbase.refused,
+                  f"t_cb_blocks.py signs its requests and gets the same answers from Coinbase as the page does ({res[:len(want)]})" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            check(not coinbase.placed and not coinbase.cancelled and out.count("could move real money") == 2
+                  and "POST /api/v3/brokerage/orders" not in coinbase.calls,
+                  "with nobody at the keyboard, the exported program places and cancels nothing")
+            coinbase.stop()
 
     print("New features in Python")
     with tempfile.TemporaryDirectory() as tmp:

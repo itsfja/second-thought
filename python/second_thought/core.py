@@ -85,6 +85,10 @@ SAFETY = {
     "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
     # Homey changes that unlock, open or disarm: [capability, value].
     "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
+    # Coinbase's Advanced Trade API (#371): the calls that run without asking, [method, path]. Reading, and previewing an
+    # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
+    # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
+    "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
     # Built-in agent tools that ask before each use.
     "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
     # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it
@@ -178,6 +182,12 @@ SAFETY = {
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
+
+
+def coinbase_money(method, path):
+    """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return not any(m == method and re.match(p, path) for m, p in SAFETY["coinbase_free"])
 
 
 def same_problem(a, b):
@@ -606,7 +616,9 @@ CAPABILITIES = [
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
+    ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
+    ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),

@@ -556,6 +556,38 @@
   "rb_ha_speak": {
    "message0": "рцы %1 на %2",
    "tooltip": "Глаголетъ писанїе на гласоподавателѣ, словомъ Home Assistant."
+  },
+  "rb_coinbase_balances": {
+   "message0": "ѡстатки Coinbase",
+   "tooltip": "Списокъ записей, єдина на всѧко имѣніе въ сокровищницѣ твоей Coinbase, величайшее прежде: asset, amount, value и currency. Цѣны во твоей монетѣ (currency въ second-thought.ini). На сей страницѣ ꙋпотреблѧетъ сокровищницꙋ ѡбразца."
+  },
+  "rb_coinbase_value": {
+   "message0": "цѣна сокровищницы Coinbase",
+   "tooltip": "Колико стоитъ сокровищница твоѧ Coinbase, во твоей монетѣ."
+  },
+  "rb_coinbase_price": {
+   "message0": "%1 %2 на Coinbase",
+   "tooltip": "Послѣднѧѧ цѣна пары, ꙗкоже BTC-GBP въ литрахъ, или колико измѣнисѧ въ послѣднихъ 24 часѣхъ, въ сотыхъ. Точїю пары скорагѡ кꙋпленіѧ."
+  },
+  "rb_coinbase_candles": {
+   "message0": "%1 цѣны Coinbase %2 за послѣднихъ %3",
+   "tooltip": "Списокъ записей, древнѣйшаѧ прежде, єдина на всѧкъ день или часъ (до 350): time, open, high, low, close и volume."
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase: %1",
+   "tooltip": "Ѿверзтаѧ повелѣніѧ твоѧ (id, product, side, size, price, filled и created), или послѣднѧѧ исполненіѧ (time, product, side, size, price, fee и order)."
+  },
+  "rb_coinbase_preview": {
+   "message0": "предꙋзри повелѣніе Coinbase: %1 %2 ѿ %3",
+   "tooltip": "Что бы было повелѣніе торжища, не дадꙋщꙋ емꙋ: запись съ size, spend, fee, total, slippage и warnings. Кꙋпленіе иждиваетъ число вторыѧ монеты (50 ѿ BTC-GBP иждиваетъ £50); продаѧніе продаетъ число первыѧ (0.01 ѿ BTC-GBP продаетъ 0.01 BTC). Ничтоже измѣнѧетсѧ."
+  },
+  "rb_coinbase_order": {
+   "message0": "даждь повелѣніе Coinbase: %1 %2 ѿ %3",
+   "tooltip": "Даетъ истинное повелѣніе торжища, ꙗкоже «предꙋзри повелѣніе Coinbase». Прежде предꙋзритъ, потомъ присно вопрошаетъ тѧ, съ мздою и всѣмъ числомъ, аще и ничтоже иное вопрошаетъ; не сꙋщꙋ никомꙋже рещи «ей», не бываетъ. Требꙋетъ ключа съ властію Trade. На сей страницѣ ничтоже кꙋплѧетсѧ ни продаетсѧ."
+  },
+  "rb_coinbase_cancel": {
+   "message0": "ѿмѣни повелѣніе Coinbase %1",
+   "tooltip": "Ѿмѣнѧетъ єдино ѿ ѿверзтыхъ повелѣній твоихъ, по id егѡ (ѿ «ѿверзтыѧ повелѣніѧ Coinbase»). Присно прежде вопрошаетъ тѧ, и не бываетъ, не сꙋщꙋ никомꙋже."
   }
  },
  "options": {
@@ -654,6 +686,26 @@
    "png": "PNG",
    "svg": "SVG (начертанаѧ изображенїѧ)",
    "orig": "первый свитокъ"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "цѣна",
+   "change": "измѣненіе за 24 часа %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "дневныѧ",
+   "hour": "часовыѧ"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "ѿверзтаѧ повелѣніѧ",
+   "fills": "послѣднѧѧ исполненіѧ"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "кꙋпи",
+   "sell": "продаждь"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "кꙋпи",
+   "sell": "продаждь"
   }
  },
  "categories": {
@@ -680,7 +732,8 @@
   "Tools": "Ѡрудїѧ",
   "Variables": "Измѣняемаѧ",
   "Wait & time": "Жди и времѧ",
-  "You": "Ты"
+  "You": "Ты",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1474,7 +1527,25 @@
   "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "«{text}» нѣсть день. Употреби today, tomorrow, день седмицы или YYYY-MM-DD.",
   "“{to}” isn't an email address.": "«{to}» нѣсть адресъ посланїѧ.",
   "“{value}” isn't a number.": "«{value}» нѣсть число.",
-  "“{value}” isn't on or off.": "«{value}» нѣсть on или off."
+  "“{value}” isn't on or off.": "«{value}» нѣсть on или off.",
+  "A Coinbase order is buy or sell.": "Повелѣніе Coinbase есть кꙋпленіе или продаѧніе.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Ѡстатки Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase не ѿмѣни повелѣніѧ: {why}.",
+  "Coinbase order cancelled": "Повелѣніе Coinbase ѿмѣнено",
+  "Coinbase order placed": "Повелѣніе Coinbase дано",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase не сотворилъ бы сегѡ повелѣніѧ: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Здѣ точїю пары скорагѡ кꙋпленіѧ, ꙗкоже BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "Число да бꙋдетъ больше 0, ꙗкоже 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Кое повелѣніе Coinbase? Даждь id егѡ, ѿ «ѿверзтыѧ повелѣніѧ Coinbase».",
+  "not found": "не ѡбрѣтено",
+  "{n} assets": "{n} имѣній",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "«{product}» нѣсть пара Coinbase. Возьми ꙗкоже BTC-GBP.",
+  "Coinbase account": "счетъ Coinbase",
+  "sample account": "счетъ ѡбразца",
+  "trade on your Coinbase account with real money (asking you before every order)": "кꙋпꙋ дѣѧти на счетѣ твоемъ Coinbase истинными сребреники (вопрошаѧ тѧ прежде всѧкагѡ повелѣніѧ)",
+  "read your Coinbase balances and orders, and market prices": "чести ѡстатки и повелѣніѧ твоѧ Coinbase, и цѣны торжища"
  },
  "examples": {
   "review": {
@@ -3026,7 +3097,40 @@
   "“{value}” isn't a number.": "«{value}» нѣсть число.",
   "“{value}” isn't on or off.": "«{value}» нѣсть on или off.",
   "“{x}” isn't a real date.": "«{x}» нѣсть истинный день.",
-  "“{x}” isn't a time.": "«{x}» нѣсть времѧ."
+  "“{x}” isn't a time.": "«{x}» нѣсть времѧ.",
+  "A Coinbase order is buy or sell.": "Повелѣніе Coinbase есть кꙋпленіе или продаѧніе.",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Ѡстатки Coinbase",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase не ѿмѣни повелѣніѧ: {why}.",
+  "Coinbase order cancelled": "Повелѣніе Coinbase ѿмѣнено",
+  "Coinbase order placed": "Повелѣніе Coinbase дано",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase не сотворилъ бы сегѡ повелѣніѧ: {why}.",
+  "Coinbase: {why}.": "Coinbase: {why}.",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "Здѣ точїю пары скорагѡ кꙋпленіѧ, ꙗкоже BTC-GBP.",
+  "The amount should be a number above 0, like 50.": "Число да бꙋдетъ больше 0, ꙗкоже 50.",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "Кое повелѣніе Coinbase? Даждь id егѡ, ѿ «ѿверзтыѧ повелѣніѧ Coinbase».",
+  "not found": "не ѡбрѣтено",
+  "{n} assets": "{n} имѣній",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "«{product}» нѣсть пара Coinbase. Возьми ꙗкоже BTC-GBP.",
+  "Coinbase didn't place the order: {why}.": "Coinbase не даде повелѣніѧ: {why}.",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase не рече, коегѡ сокровищницы есть сей ключь.",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase требꙋетъ COINBASE_KEY_FILE {where_keys}: писаніе ключа, еже емлеши, егда твориши ключь API на portal.cdp.coinbase.com. Даждь емꙋ точїю View, аще не кꙋпꙋетъ программа.",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase требꙋетъ сꙋгꙋба cryptography, да печатлѣетъ прошеніѧ своѧ: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Не возможе достигнꙋти Coinbase ({reason}).",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "Не возможе прочести писанїѧ ключа Coinbase {path} ({reason}).",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "Сїе дѣло Coinbase можетъ двигнꙋти истинное сребро, тѣмже точїю по твоемъ «ей» бываетъ.",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "Ключь Coinbase да бꙋдетъ писаніе JSON, еже Coinbase даде тебѣ, съ name и privateKey въ немъ.",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "privateKey ключа Coinbase не возможе прочестисѧ. Возьми писаніе ключа, ꙗкоже Coinbase даде.",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "Сей ключь Coinbase есть Ed25519, Advanced Trade же требꙋетъ ECDSA. Сотвори новый ключь на portal.cdp.coinbase.com и избери ECDSA въ вышнихъ ꙋстроеніихъ егѡ.",
+  "it answered {code}": "ѿвѣща {code}",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "ѿвержѐ ключь. Испытай COINBASE_KEY_FILE: подобаетъ быти ключꙋ CDP съ тайнымъ ключемъ ECDSA",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "ключꙋ не подобаетъ сегѡ творити. Испытай власти егѡ и сокровищницꙋ на portal.cdp.coinbase.com",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "ключь дѣйствꙋетъ и можетъ кꙋпꙋ дѣѧти, но сїѧ программа точїю чтетъ: ключь съ точїю View безбѣднѣйшъ.",
+  "the key works, View only": "ключь дѣйствꙋетъ, точїю View",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "ключь дѣйствꙋетъ, но можетъ и сребро преносити. Сїѧ программа николиже преноситъ: сотвори ключь безъ власти Transfer.",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "ключь дѣйствꙋетъ, но имать точїю View, тѣмже повелѣніѧ сеѧ программы ѿверглисѧ бы. Сотвори ключь съ властію Trade, ѡграниченъ во єдинꙋ сокровищницꙋ.",
+  "the key works: it can trade (every order asks you first)": "ключь дѣйствꙋетъ: можетъ кꙋпꙋ дѣѧти (всѧко повелѣніе прежде вопрошаетъ тѧ)",
+  "too many requests just now; try again in a minute": "мнѡга прошеніѧ нынѣ; паки покꙋсисѧ по минꙋтѣ"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Приложи толкъ",

@@ -557,6 +557,38 @@
   "rb_ha_speak": {
    "message0": "%2 उपरि %1 वदेहि",
    "tooltip": "Home Assistant-अस्स पाठतो सद्दकरणेन पाठं सद्दयन्ते वदति।"
+  },
+  "rb_coinbase_balances": {
+   "message0": "Coinbase-सेसानि",
+   "tooltip": "अभिलेखानं सूचि, तव Coinbase-कोसे पतिसम्पत्ति एको, महत्तमो पठमं: asset, amount, value, currency च। मूलानि तव कहापणेन (second-thought.ini मध्ये currency)। इमस्मिं पिट्ठे निदस्सन-कोसं गण्हाति।"
+  },
+  "rb_coinbase_value": {
+   "message0": "Coinbase-कोसस्स मूलं",
+   "tooltip": "तव Coinbase-कोसो कित्तकं अग्घति, तव कहापणेन।"
+  },
+  "rb_coinbase_price": {
+   "message0": "Coinbase-मध्ये %2 स्स %1",
+   "tooltip": "युगळस्स नवतमं मूलं, यथा BTC-GBP स्स पौण्डेहि, अथ वा अतीतासु 24 होरासु कित्तकं परिवत्ति, सतभागेन। केवलं तङ्खणिक-युगळानि।"
+  },
+  "rb_coinbase_candles": {
+   "message0": "Coinbase-मध्ये %2 स्स पच्छिमानं %3 %1 मूलानि",
+   "tooltip": "अभिलेखानं सूचि, पुराणतमो पठमं, पतिदिवसं पतिहोरं वा एको (350 याव): time, open, high, low, close, volume च।"
+  },
+  "rb_coinbase_orders": {
+   "message0": "Coinbase %1",
+   "tooltip": "तव विवटाणायो (id, product, side, size, price, filled, created च), अथ वा नवतमा पूरणा (time, product, side, size, price, fee, order च)।"
+  },
+  "rb_coinbase_preview": {
+   "message0": "Coinbase-आणं पुब्बे पस्स: %3 स्स %2 %1",
+   "tooltip": "आपणाणा किं भवेय्य, तं अदत्वा: size, spend, fee, total, slippage, warnings युत्तो अभिलेखो। किणनं दुतियकहापणस्स रासिं वयेति (BTC-GBP स्स 50 £50 वयेति); विक्कयो पठमस्स रासिं विक्किणाति (BTC-GBP स्स 0.01 0.01 BTC विक्किणाति)। किञ्चि न परिवत्तति।"
+  },
+  "rb_coinbase_order": {
+   "message0": "Coinbase-आणं देहि: %3 स्स %2 %1",
+   "tooltip": "सच्चं आपणाणं देति, 'Coinbase-आणं पुब्बे पस्स' विय। पठमं पुब्बे पस्सति, ततो सदा तं पुच्छति, सुङ्केन सब्बेन च सह, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। Trade-अनुञ्ञाय सह कुञ्चिकं इच्छति। इमस्मिं पिट्ठे किञ्चि न किणीयति न विक्किणीयति।"
+  },
+  "rb_coinbase_cancel": {
+   "message0": "Coinbase-आणं %1 निवत्तेहि",
+   "tooltip": "तव विवटाणासु एकं तस्सा id अनुसारेन निवत्तेति ('Coinbase-विवटाणा' तो)। सदा पठमं तं पुच्छति, कोचि नत्थि चे न पवत्तति।"
   }
  },
  "options": {
@@ -655,6 +687,26 @@
    "png": "PNG",
    "svg": "SVG (आलिखितचित्तानि)",
    "orig": "मूलसञ्चिका"
+  },
+  "rb_coinbase_price.WHAT": {
+   "price": "मूलं",
+   "change": "24 होरानं परिवत्तनं %"
+  },
+  "rb_coinbase_candles.SIZE": {
+   "day": "देवसिकानि",
+   "hour": "होरिकानि"
+  },
+  "rb_coinbase_orders.WHICH": {
+   "open": "विवटाणायो",
+   "fills": "नवतमा पूरणा"
+  },
+  "rb_coinbase_preview.SIDE": {
+   "buy": "किणाहि",
+   "sell": "विक्किणाहि"
+  },
+  "rb_coinbase_order.SIDE": {
+   "buy": "किणाहि",
+   "sell": "विक्किणाहि"
   }
  },
  "categories": {
@@ -681,7 +733,8 @@
   "Tools": "उपकरणानि",
   "Variables": "चलानि",
   "Wait & time": "आगमनं कालो च",
-  "You": "त्वं"
+  "You": "त्वं",
+  "Coinbase": "Coinbase"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1475,7 +1528,25 @@
   "“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.": "“{text}” दिवसो न होति। today, tomorrow, सत्ताहदिवसं, YYYY-MM-DD वा उपयुञ्ज।",
   "“{to}” isn't an email address.": "“{to}” ईपत्तठानं न होति।",
   "“{value}” isn't a number.": "“{value}” सङ्ख्या न होति।",
-  "“{value}” isn't on or off.": "“{value}” on off वा न होति।"
+  "“{value}” isn't on or off.": "“{value}” on off वा न होति।",
+  "A Coinbase order is buy or sell.": "Coinbase-आणा किणनं वा विक्कयो वा होति।",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase-सेसानि",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase आणं न निवत्तेसि: {why}।",
+  "Coinbase order cancelled": "Coinbase-आणा निवत्तिता",
+  "Coinbase order placed": "Coinbase-आणा दिन्ना",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase तं आणं न करेय्य: {why}।",
+  "Coinbase: {why}.": "Coinbase: {why}।",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "इध केवलं तङ्खणिक-युगळानि, यथा BTC-GBP।",
+  "The amount should be a number above 0, like 50.": "रासि 0 तो अधिका सङ्ख्या भवेय्य, यथा 50।",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "कतमा Coinbase-आणा? तस्सा id देहि, 'Coinbase-विवटाणा' तो।",
+  "not found": "न लद्धं",
+  "{n} assets": "{n} सम्पत्तियो",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "“{product}” Coinbase-युगळं न होति। BTC-GBP विय एकं गण्हाहि।",
+  "Coinbase account": "Coinbase-लेखा",
+  "sample account": "निदस्सन-लेखा",
+  "trade on your Coinbase account with real money (asking you before every order)": "तव Coinbase-लेखाय सच्चधनेन वणिज्जं कातुं (पतिआणं पुब्बे तं पुच्छन्तो)",
+  "read your Coinbase balances and orders, and market prices": "तव Coinbase-सेसानि आणायो च, आपणमूलानि च पठितुं"
  },
  "examples": {
   "review": {
@@ -3027,7 +3098,40 @@
   "“{value}” isn't a number.": "“{value}” सङ्ख्या न होति।",
   "“{value}” isn't on or off.": "“{value}” on off वा न होति।",
   "“{x}” isn't a real date.": "“{x}” सच्चदिनं न होति।",
-  "“{x}” isn't a time.": "“{x}” कालो न होति।"
+  "“{x}” isn't a time.": "“{x}” कालो न होति।",
+  "A Coinbase order is buy or sell.": "Coinbase-आणा किणनं वा विक्कयो वा होति।",
+  "Coinbase": "Coinbase",
+  "Coinbase balances": "Coinbase-सेसानि",
+  "Coinbase didn't cancel the order: {why}.": "Coinbase आणं न निवत्तेसि: {why}।",
+  "Coinbase order cancelled": "Coinbase-आणा निवत्तिता",
+  "Coinbase order placed": "Coinbase-आणा दिन्ना",
+  "Coinbase wouldn't place that order: {why}.": "Coinbase तं आणं न करेय्य: {why}।",
+  "Coinbase: {why}.": "Coinbase: {why}।",
+  "Only spot trading pairs, like BTC-GBP, are offered here.": "इध केवलं तङ्खणिक-युगळानि, यथा BTC-GBP।",
+  "The amount should be a number above 0, like 50.": "रासि 0 तो अधिका सङ्ख्या भवेय्य, यथा 50।",
+  "Which Coinbase order? Give its id, from 'Coinbase open orders'.": "कतमा Coinbase-आणा? तस्सा id देहि, 'Coinbase-विवटाणा' तो।",
+  "not found": "न लद्धं",
+  "{n} assets": "{n} सम्पत्तियो",
+  "“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.": "“{product}” Coinbase-युगळं न होति। BTC-GBP विय एकं गण्हाहि।",
+  "Coinbase didn't place the order: {why}.": "Coinbase आणं न अदासि: {why}।",
+  "Coinbase didn't say which portfolio this key is for.": "Coinbase न कथेसि अयं कुञ्चिका कस्स कोसस्स होति।",
+  "Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.": "Coinbase COINBASE_KEY_FILE इच्छति {where_keys}: portal.cdp.coinbase.com मध्ये API-कुञ्चिकं करोन्तो यं कुञ्चिका-पण्णं ओतारेसि। केवलं View देहि, सचे कम्मपथो वणिज्जं न करोति।",
+  "Coinbase needs the cryptography package to sign its requests: pip install cryptography": "Coinbase अत्तनो याचनानि मुद्दितुं cryptography भण्डं इच्छति: pip install cryptography",
+  "Couldn't reach Coinbase ({reason}).": "Coinbase पापुणितुं न सक्का ({reason})।",
+  "Couldn't read the Coinbase key file {path} ({reason}).": "Coinbase-कुञ्चिका-पण्णं {path} पठितुं न सक्का ({reason})।",
+  "That Coinbase action could move real money, so it only runs after you say yes.": "इदं Coinbase-कम्मं सच्चधनं चालेय्य, तस्मा तया आम इति वुत्ते येव पवत्तति।",
+  "The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it.": "Coinbase-कुञ्चिका Coinbase-दिन्नं JSON-पण्णं भवेय्य, यस्मिं name privateKey च सन्ति।",
+  "The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.": "Coinbase-कुञ्चिकाय privateKey पठितुं न सक्का। कुञ्चिका-पण्णं यथा Coinbase अदासि तथा गण्हाहि।",
+  "This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings.": "अयं Coinbase-कुञ्चिका Ed25519 होति, Advanced Trade पन ECDSA इच्छति। portal.cdp.coinbase.com मध्ये नवं कुञ्चिकं करोहि, तस्सा उत्तरविधानेसु ECDSA वरेहि।",
+  "it answered {code}": "तं {code} इति पटिवदि",
+  "it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key": "तं कुञ्चिकं पटिक्खिपि। COINBASE_KEY_FILE परिक्खाहि: ECDSA-गुय्हकुञ्चिकाय सह CDP-कुञ्चिका भवितब्बा",
+  "the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com": "कुञ्चिकाय तं कातुं अनुञ्ञा नत्थि। portal.cdp.coinbase.com मध्ये तस्सा अनुञ्ञायो कोसं च परिक्खाहि",
+  "the key works and can trade, but this program only reads: a View-only key is safer.": "कुञ्चिका कम्मं करोति वणिज्जं च कातुं सक्कोति, अयं पन कम्मपथो केवलं पठति: केवल-View कुञ्चिका खेमतरा।",
+  "the key works, View only": "कुञ्चिका कम्मं करोति, केवलं View",
+  "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "कुञ्चिका कम्मं करोति, धनं पन सङ्कामेतुं पि सक्कोति। अयं कम्मपथो कदापि न सङ्कामेति: Transfer-अनुञ्ञं विना कुञ्चिकं करोहि।",
+  "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "कुञ्चिका कम्मं करोति, केवलं पन View, तस्मा इमस्स कम्मपथस्स आणायो पटिक्खिपेय्युं। Trade-अनुञ्ञाय सह एकस्मिं कोसे सीमितं कुञ्चिकं करोहि।",
+  "the key works: it can trade (every order asks you first)": "कुञ्चिका कम्मं करोति: वणिज्जं कातुं सक्कोति (पतिआणा पठमं तं पुच्छति)",
+  "too many requests just now; try again in a minute": "इदानि अतिबहूनि याचनानि; मुहुत्तस्स अच्चयेन पुन वायमाहि"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टीकं पक्खिप",

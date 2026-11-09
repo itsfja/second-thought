@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY")
 
 
 def _load_keychain():
@@ -1525,6 +1525,10 @@ SAFETY = {
     "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
     # Homey changes that unlock, open or disarm: [capability, value].
     "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
+    # Coinbase's Advanced Trade API (#371): the calls that run without asking, [method, path]. Reading, and previewing an
+    # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
+    # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
+    "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
     # Built-in agent tools that ask before each use.
     "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
     # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it
@@ -1618,6 +1622,12 @@ SAFETY = {
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
+
+
+def coinbase_money(method, path):
+    """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return not any(m == method and re.match(p, path) for m, p in SAFETY["coinbase_free"])
 
 
 def same_problem(a, b):
@@ -2046,7 +2056,9 @@ CAPABILITIES = [
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
+    ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
+    ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -2463,6 +2475,10 @@ def current_time_text():
 
 import fnmatch  # noqa: E402 - below the line, so python/runtime.py has it too
 import http.client  # noqa: E402
+import decimal  # noqa: E402
+import math  # noqa: E402
+import secrets  # noqa: E402
+import uuid  # noqa: E402
 
 
 MAX_PAGE_CHARS = 12000
@@ -4019,6 +4035,243 @@ class Connections:
             except RunError as e:
                 print(tr("  (Homey check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(10))
+
+    # Coinbase (#371)
+    # Coinbase's Advanced Trade API, with a CDP API key: COINBASE_KEY_FILE is the key file you download when you make
+    # one at portal.cdp.coinbase.com (or COINBASE_KEY, that file's contents, say from the keychain). Make it View only,
+    # for one portfolio, unless the program trades; never give it Transfer. Each request carries a short-lived token the
+    # key signs (ES256), which needs the cryptography package. Placing and cancelling orders always ask, even with
+    # (no asking), and never run with nobody there to ask; nothing else that changes the account is offered at all
+    # (coinbase_free in SAFETY, core.py). Spot trading pairs only: no derivatives or equities.
+    COINBASE_ORDER_KINDS = {"buy": "BUY", "sell": "SELL"}
+
+    @staticmethod
+    def _cents(v):
+        """Rounded to two places, as the page's Math.round(v * 100) / 100 does."""
+        return _clean_num(math.floor(num(v) * 100 + 0.5) / 100)
+
+    def _coinbase_key(self):
+        """(key name, PEM private key) from COINBASE_KEY or the file COINBASE_KEY_FILE names."""
+        raw, path = os.environ.get("COINBASE_KEY", "").strip(), os.environ.get("COINBASE_KEY_FILE", "").strip().strip('"')
+        if not raw and path:
+            path = os.path.expanduser(path)
+            if not os.path.isabs(path):
+                path = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0] or ".")), path)
+            try:
+                with open(path, encoding="utf-8-sig") as f:
+                    raw = f.read()
+            except OSError as e:
+                raise RunError(tr("Couldn't read the Coinbase key file {path} ({reason}).", path=path, reason=e.strerror or e)) from None
+        if not raw:
+            raise RunError(tr("Coinbase needs COINBASE_KEY_FILE {where_keys}: the key file you download when you make an API key at portal.cdp.coinbase.com. Make it View only unless the program trades.", where_keys=WHERE_KEYS))
+        try:
+            data = json.loads(raw)
+        except ValueError:
+            data = None
+        name = to_str(data.get("name") or data.get("id")).strip() if isinstance(data, dict) else ""
+        pem = to_str(data.get("privateKey")).replace("\\n", "\n").strip() if isinstance(data, dict) else ""
+        if not name or not pem:
+            raise RunError(tr("The Coinbase key should be the JSON file Coinbase gave you, with name and privateKey in it."))
+        return name, pem
+
+    def _coinbase_token(self, method, where):
+        """The JWT for one request (Coinbase wants a new one each time): signed with the key, ES256, for two minutes."""
+        try:
+            from cryptography.hazmat.primitives import hashes, serialization
+            from cryptography.hazmat.primitives.asymmetric import ec, utils
+        except ImportError:
+            raise RunError(tr("Coinbase needs the cryptography package to sign its requests: pip install cryptography")) from None
+        name, pem = self._coinbase_key()
+        if "BEGIN" not in pem:  # a newer CDP key's bare Ed25519 secret, which Advanced Trade doesn't take
+            raise RunError(tr("This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings."))
+        try:
+            key = serialization.load_pem_private_key(pem.encode(), password=None)
+        except (ValueError, TypeError):
+            raise RunError(tr("The Coinbase key's privateKey couldn't be read. Use the key file as Coinbase gave it.")) from None
+        if not isinstance(key, ec.EllipticCurvePrivateKey) or key.curve.name != "secp256r1":
+            raise RunError(tr("This Coinbase key is an Ed25519 key, and Advanced Trade needs an ECDSA one. Make a new key at portal.cdp.coinbase.com and choose ECDSA under its advanced settings."))
+        now = int(time.time())
+        part = lambda d: base64.urlsafe_b64encode(json.dumps(d, separators=(",", ":")).encode()).rstrip(b"=").decode()  # noqa: E731
+        signed = part({"alg": "ES256", "typ": "JWT", "kid": name, "nonce": secrets.token_hex(16)}) + "." + \
+            part({"sub": name, "iss": "cdp", "nbf": now, "exp": now + 120, "uri": f"{method} {where}"})
+        r, s = utils.decode_dss_signature(key.sign(signed.encode(), ec.ECDSA(hashes.SHA256())))
+        return signed + "." + base64.urlsafe_b64encode(r.to_bytes(32, "big") + s.to_bytes(32, "big")).rstrip(b"=").decode()
+
+    async def _coinbase(self, method, path, query=None, body=None, approved=False):
+        """One Advanced Trade API call. One that could move money (anything but reading and previewing) only goes with
+        approved=True, which only _coinbase_ask gives, after a yes; so nothing else can move money, whatever calls this."""
+        if coinbase_money(method, path) and not approved:
+            raise RunError(tr("That Coinbase action could move real money, so it only runs after you say yes."))
+        base = os.environ.get("COINBASE_API_URL", "").strip().rstrip("/") or "https://api.coinbase.com"
+        whole = urllib.parse.urlparse(base + path)
+        token = self._coinbase_token(method, whole.netloc + whole.path)
+        url = base + path + ("?" + urllib.parse.urlencode(query, doseq=True) if query else "")
+        req = urllib.request.Request(url, method=method, data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": "Bearer " + token, "Content-Type": "application/json", "Accept": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    raw = r.read()
+                    return json.loads(raw) if raw.strip() else {}
+            except urllib.error.HTTPError as e:
+                try:
+                    said = json.loads(e.read() or b"{}")
+                except ValueError:
+                    said = {}
+                said = to_str(said.get("message") or said.get("error") or "") if isinstance(said, dict) else ""
+                why = {401: tr("it refused the key. Check COINBASE_KEY_FILE: it must be a CDP key with an ECDSA private key"),
+                       403: tr("the key isn't allowed to do that. Check its permissions and portfolio at portal.cdp.coinbase.com"),
+                       404: tr("not found"), 429: tr("too many requests just now; try again in a minute")}.get(e.code, tr("it answered {code}", code=e.code))
+                raise RunError(tr("Coinbase: {why}.", why=why) + (f" ({_short(said, 160)})" if said else "")) from None
+            except urllib.error.URLError as e:
+                raise RunError(tr("Couldn't reach Coinbase ({reason}).", reason=e.reason)) from None
+        return await asyncio.to_thread(go)
+
+    @staticmethod
+    def _coinbase_currency():
+        """The program's currency (currency in second-thought.ini), for values: GBP, USD, EUR and so on."""
+        return (os.environ.get("RB_CURRENCY") or "usd").strip().upper()
+
+    @staticmethod
+    def _coinbase_product_id(product):
+        p = to_str(product).strip().upper().replace("/", "-")
+        if not re.fullmatch(r"[A-Z0-9]{2,12}-[A-Z0-9]{2,12}", p):
+            raise RunError(tr("“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.", product=to_str(product).strip()))
+        return p
+
+    async def _coinbase_product(self, product):
+        """A spot trading pair, like BTC-GBP: derivatives and equities aren't offered."""
+        p = await self._coinbase("GET", "/api/v3/brokerage/products/" + self._coinbase_product_id(product))
+        if to_str(p.get("product_type") or "SPOT").upper() != "SPOT":
+            raise RunError(tr("Only spot trading pairs, like BTC-GBP, are offered here."))
+        return p
+
+    async def _coinbase_portfolio(self):
+        """The key's portfolio, valued in the program's currency."""
+        uid = to_str((await self._coinbase("GET", "/api/v3/brokerage/key_permissions")).get("portfolio_uuid")).strip()
+        if not re.fullmatch(r"[A-Za-z0-9-]{1,64}", uid):
+            raise RunError(tr("Coinbase didn't say which portfolio this key is for."))
+        got = await self._coinbase("GET", "/api/v3/brokerage/portfolios/" + uid, {"currency": self._coinbase_currency()})
+        return got.get("breakdown") or {}
+
+    async def coinbase_balances(self):
+        """One record per asset in the portfolio, biggest value first: asset, amount, value (in the program's currency)
+        and currency."""
+        cur = self._coinbase_currency()
+        out = [{"asset": to_str(p.get("asset")), "amount": num(p.get("total_balance_crypto")), "value": self._cents(p.get("total_balance_fiat")), "currency": cur}
+               for p in (await self._coinbase_portfolio()).get("spot_positions") or [] if num(p.get("total_balance_crypto")) or num(p.get("total_balance_fiat"))]
+        out.sort(key=lambda r: -r["value"])
+        lines = "\n".join(f"{r['asset']}: {r['amount']} ({r['value']} {cur})" for r in out)
+        self.log(tr("Coinbase balances"), lines or tr("(nothing)"), tr("{n} assets", n=len(out)))
+        return out
+
+    async def coinbase_value(self):
+        """The whole portfolio's value in the program's currency."""
+        total = ((await self._coinbase_portfolio()).get("portfolio_balances") or {}).get("total_balance") or {}
+        return self._cents(total.get("value"))
+
+    async def coinbase_price(self, what, product):
+        """A trading pair's price, or its change over 24 hours in percent."""
+        p = await self._coinbase_product(product)
+        return self._cents(p.get("price_percentage_change_24h")) if what == "change" else num(p.get("price"))
+
+    async def coinbase_candles(self, size, product, count):
+        """The last few days' (or hours') prices, oldest first: time, open, high, low, close and volume."""
+        pid, hours = self._coinbase_product_id(product), size == "hour"
+        n, step = max(1, min(350, int(num(count) or 1))), 3600 if hours else 86400
+        end = int(time.time())
+        got = await self._coinbase("GET", f"/api/v3/brokerage/products/{pid}/candles",
+                                   {"start": str(end - n * step), "end": str(end), "granularity": "ONE_HOUR" if hours else "ONE_DAY", "limit": str(n)})
+        rows = sorted(got.get("candles") or [], key=lambda c: num(c.get("start")))[-n:]
+        when = lambda c: datetime.datetime.fromtimestamp(num(c.get("start"))).strftime("%Y-%m-%d %H:00" if hours else "%Y-%m-%d")  # noqa: E731
+        return [dict({"time": when(c)}, **{k: num(c.get(k)) for k in ("open", "high", "low", "close", "volume")}) for c in rows]
+
+    async def coinbase_orders(self, which):
+        """Open orders (which = "open") or the latest fills (which = "fills"), newest first, as records."""
+        if which == "fills":
+            got = await self._coinbase("GET", "/api/v3/brokerage/orders/historical/fills", {"limit": "50"})
+            return [{"time": to_str(f.get("trade_time"))[:19].replace("T", " "), "product": to_str(f.get("product_id")), "side": to_str(f.get("side")).lower(),
+                     "size": num(f.get("size")), "price": num(f.get("price")), "fee": num(f.get("commission")), "order": to_str(f.get("order_id"))}
+                    for f in got.get("fills") or []]
+        got = await self._coinbase("GET", "/api/v3/brokerage/orders/historical/batch", {"order_status": "OPEN", "limit": "100"})
+        out = []
+        for o in got.get("orders") or []:
+            cfg = next(iter((o.get("order_configuration") or {}).values()), {}) or {}
+            out.append({"id": to_str(o.get("order_id")), "product": to_str(o.get("product_id")), "side": to_str(o.get("side")).lower(),
+                        "size": num(cfg.get("base_size") or cfg.get("quote_size")), "price": num(cfg.get("limit_price")) if cfg.get("limit_price") else "",
+                        "filled": num(o.get("filled_size")), "created": to_str(o.get("created_time"))[:19].replace("T", " ")})
+        return out
+
+    def _coinbase_order_body(self, side, amount, pid):
+        """A market order: buy spends an amount of the second currency (50 GBP of BTC-GBP), sell sells an amount of the first."""
+        side = to_str(side).strip().lower()
+        if side not in self.COINBASE_ORDER_KINDS:
+            raise RunError(tr("A Coinbase order is buy or sell."))
+        if not _num_like(amount) or num(amount) <= 0:
+            raise RunError(tr("The amount should be a number above 0, like 50."))
+        size = format(decimal.Decimal(to_str(num(amount))), "f")
+        return {"product_id": pid, "side": self.COINBASE_ORDER_KINDS[side],
+                "order_configuration": {"market_market_ioc": {"quote_size" if side == "buy" else "base_size": size}}}
+
+    async def coinbase_preview(self, side, amount, product):
+        """What an order would come to, without placing it: product, side, size (of the first currency), spend (of the
+        second), fee, total, slippage and warnings. Nothing changes."""
+        return (await self._coinbase_previewed(side, amount, product))[0]
+
+    async def _coinbase_previewed(self, side, amount, product):
+        """The preview's record, and its id for placing the order."""
+        p = await self._coinbase_product(product)
+        pid = to_str(p.get("product_id")) or self._coinbase_product_id(product)
+        body = self._coinbase_order_body(side, amount, pid)
+        got = await self._coinbase("POST", "/api/v3/brokerage/orders/preview", body=body)
+        errs = [to_str(e).replace("PREVIEW_", "").replace("_", " ").lower() for e in got.get("errs") or []]
+        if errs:
+            raise RunError(tr("Coinbase wouldn't place that order: {why}.", why=", ".join(errs)))
+        return {"product": pid, "side": to_str(side).strip().lower(), "size": num(got.get("base_size")), "spend": num(got.get("quote_size")),
+                "fee": num(got.get("commission_total")), "total": num(got.get("order_total")), "slippage": num(got.get("slippage")),
+                "warnings": [to_str(w) for w in got.get("warning") or []]}, to_str(got.get("preview_id"))
+
+    async def _coinbase_ask(self, what):
+        """Asks before anything that could move money on Coinbase: always, live, and never with nobody there (#371)."""
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        return await self.confirm_money(what)
+
+    async def coinbase_order(self, side, amount, product):
+        """Places a market order, after previewing it and asking you with the preview's numbers. Gives back the order's id,
+        or "" if it wasn't placed."""
+        pre, preview_id = await self._coinbase_previewed(side, amount, product)
+        base, quote = pre["product"].split("-")
+        what = (f"{pre['side']} {pre['size']} {base} for {pre['spend']} {quote} on Coinbase (fee {pre['fee']} {quote}, "
+                f"total {pre['total']} {quote})")
+        if not await self._coinbase_ask(what):
+            return ""
+        body = dict(self._coinbase_order_body(side, amount, pre["product"]), client_order_id=str(uuid.uuid4()))
+        if preview_id:
+            body["preview_id"] = preview_id
+        got = await self._coinbase("POST", "/api/v3/brokerage/orders", body=body, approved=True)
+        if not got.get("success"):
+            err = got.get("error_response") or {}
+            raise RunError(tr("Coinbase didn't place the order: {why}.", why=to_str(err.get("message") or err.get("error_details") or err.get("error") or "no reason given")))
+        oid = to_str((got.get("success_response") or {}).get("order_id"))
+        self.log(tr("Coinbase order placed"), f"{what} · {oid}", tr("done"))
+        return oid
+
+    async def coinbase_cancel(self, order):
+        """Cancels one of your open orders, by its id, after asking."""
+        oid = to_str(order).strip()
+        if not re.fullmatch(r"[A-Za-z0-9-]{6,64}", oid):
+            raise RunError(tr("Which Coinbase order? Give its id, from 'Coinbase open orders'."))
+        if not await self._coinbase_ask(f"cancel the Coinbase order {oid}"):
+            return False
+        got = await self._coinbase("POST", "/api/v3/brokerage/orders/batch_cancel", body={"order_ids": [oid]}, approved=True)
+        res = next(iter(got.get("results") or []), {})
+        if not res.get("success"):
+            raise RunError(tr("Coinbase didn't cancel the order: {why}.", why=to_str(res.get("failure_reason") or "no reason given").replace("_", " ").lower()))
+        self.log(tr("Coinbase order cancelled"), oid, tr("done"))
+        return True
 
     # MQTT
     def _mqtt_new(self, on_message=None, topics=()):
@@ -6166,6 +6419,18 @@ class Doctor:
                 home = await self._homey_home()
                 return tr("reached: {home} devices", home=len(home))
             out.append(("Homey", homey))
+        if has("coinbase_read", "coinbase_trade"):
+            async def coinbase():
+                perms = await self._coinbase("GET", "/api/v3/brokerage/key_permissions")
+                await self._coinbase("GET", "/api/v3/brokerage/accounts", {"limit": "1"})
+                if perms.get("can_transfer"):
+                    return "NOTE", tr("the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.")
+                if "coinbase_trade" in can and not perms.get("can_trade"):
+                    raise RunError(tr("the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio."))
+                if "coinbase_trade" not in can and perms.get("can_trade"):
+                    return "NOTE", tr("the key works and can trade, but this program only reads: a View-only key is safer.")
+                return tr("the key works: it can trade (every order asks you first)") if perms.get("can_trade") else tr("the key works, View only")
+            out.append(("Coinbase", coinbase))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -6368,6 +6633,7 @@ class Doctor:
         needs = [("anthropic", "anthropic", "Claude")] if any(s["api"] == "anthropic" for s in services) else []
         needs += [("google.genai", "google-genai", "Gemini")] if any(s["api"] == "gemini" for s in services) else []
         needs += [("paho.mqtt.client", "paho-mqtt", "MQTT")] if known and any(i in ids for i in ("mqtt_read", "mqtt_publish")) else []
+        needs += [("cryptography", "cryptography", "Coinbase")] if known and any(i in ids for i in ("coinbase_read", "coinbase_trade")) else []
         needs += [("tzdata", "tzdata", "calendars on Windows")] if os.name == "nt" and known and "calendar" in ids else []
         for module, pip, why in needs:
             v = self._doctor_package(module, pip)
@@ -6391,7 +6657,9 @@ class Doctor:
             if not known and not self._doctor_configured(area):
                 continue
             try:
-                row("ok", area, await check())
+                got = await check()  # a few checks give (status, detail): a NOTE, say
+                status, text = got if isinstance(got, tuple) else ("ok", got)
+                row(status, area, text)
             except Exception as e:  # noqa: BLE001
                 row("FAIL", area, _short(self._describe(e), 240))
         if known and self.can_acts(can):
@@ -6432,8 +6700,8 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET"}.get(area)
-        return bool(need and os.environ.get(need))
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY"}.get(area)
+        return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
 # Where the runtime starts and ends in an exported program. tools/sync.py puts these lines first and last in
@@ -8731,12 +8999,14 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_sar_triage","file":"sar-triage.json","category":"calendar","title":"Subject access requests","description":"Each weekday morning, finds emails that look like subject access requests (someone asking for the personal data you hold about them) and emails you a list with the date each arrived and its one-month deadline. Admin help, not legal advice.","tip":"The one-month deadline can be extended in some cases. Check each request yourself; this only makes sure none is missed.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sar"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":30,"DAYS":"weekdays"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sar"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"sar"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Search my email from the last 35 days for subject access requests: anyone asking for a copy of the personal data or information we hold about them, however they word it. Read the likely ones. For each real one: who, the date it arrived, the deadline one calendar month later (use time_plus), and how many days are left. Soonest deadline first. Leave out anything that isn't a request for someone's own data. If there are none, say so in one line. End with: 'This is an admin reminder, not legal advice.'"}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":14}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"email"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"time"}}}}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"messages"},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Subject access requests: deadlines"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_subscription_hit_list","file":"subscription-hit-list.json","category":"money","title":"Subscription hit list","description":"Every 90 days, finds your subscriptions from receipt emails, asks which you've actually used, and suggests which to cancel, with what each costs a year and where to cancel it.","tip":"The first review is 90 days after it starts; press Run for one now. It only suggests: you do the cancelling.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"subs"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":9,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_negate","inputs":{"BOOL":{"block":{"type":"rb_mem_has","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"subscription review done"}}}}}}}}},"DO0":{"block":{"type":"rb_mem_set_for","fields":{"UNIT":"d"},"inputs":{"VALUE":{"shadow":{"type":"text","fields":{"TEXT":"sent"}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"subscription review done"}}},"N":{"shadow":{"type":"math_number","fields":{"NUM":90}}}},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"subs"}}}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"subs"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Search my email from the last 90 days for receipts and renewal notices from subscriptions (streaming, software, apps, memberships, boxes). List each subscription once with what it costs a month and a year. Then ask me, in one question, which of them I've used in the last month. From my answer, suggest which to cancel, cheapest saving last, and for each, search the web for the page where it's cancelled and give its link."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":14}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"email"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"ask"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"}}}}}}}},"next":{"block":{"type":"rb_result"}}}},"x":30,"y":290}]}}},
 {"key":"g_supplier_price_watch","file":"supplier-price-watch.json","category":"home","title":"Supplier price watch","description":"Watches a supplier's price list page. When a price moves by more than 5%, you get an email with the item, the old and new price and the change. Smaller moves are ignored.","tip":"Change the page address in the hat to your supplier's price list. It asks before its first email.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_changes","name":"changes"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type a change to test with, like '- Rye flour 25kg £21.00' then '+ Rye flour 25kg £23.50'"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"prices"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_page_when","fields":{"URL":"https://example.com/supplier/price-list","WORDS":"£","N":360},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"prices"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"prices"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_ask_yesno","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This is how a supplier's price list changed. Lines starting - are before, + after. Did any item's price change by more than 5%?\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_changes"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List each item whose price changed by more than 5%: the item, old price → new price, and the change as a percentage. Biggest change first. Nothing else.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"messages"},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Supplier prices moved"}}},"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_changes"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_changes"}}}}}}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"No price moved by more than 5%."}}}}}}},"extraState":{"hasElse":true}}},"x":30,"y":290}]}}},
+{"key":"g_btc_drop_watch","file":"btc-drop-watch.json","category":"money","title":"Tell me if BTC drops 10%","description":"Every 15 minutes, checks Bitcoin's price on Coinbase and sends you a Telegram message if it has fallen 10% or more in 24 hours, at most once a day. It only reads prices: it places no orders.","tip":"Needs a Coinbase API key with View permission only (COINBASE_KEY_FILE). Change BTC-GBP to the pair you want, and -10 to the drop that matters to you.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_change","name":"change"},{"id":"g_price","name":"price"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_every","fields":{"N":15,"UNIT":"m"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_change"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_price","fields":{"WHAT":"change"},"inputs":{"PRODUCT":{"shadow":{"type":"text","fields":{"TEXT":"BTC-GBP"}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_price"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_price","fields":{"WHAT":"price"},"inputs":{"PRODUCT":{"shadow":{"type":"text","fields":{"TEXT":"BTC-GBP"}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_operation","fields":{"OP":"AND"},"inputs":{"A":{"block":{"type":"logic_compare","fields":{"OP":"LTE"},"inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_change"}}}},"B":{"block":{"type":"math_number","fields":{"NUM":-10}}}}}},"B":{"block":{"type":"logic_negate","inputs":{"BOOL":{"block":{"type":"rb_mem_has","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"told about the BTC drop"}}}}}}}}}}}},"DO0":{"block":{"type":"rb_mem_set_for","fields":{"UNIT":"d"},"inputs":{"VALUE":{"shadow":{"type":"text","fields":{"TEXT":"sent"}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"told about the BTC drop"}}},"N":{"shadow":{"type":"math_number","fields":{"NUM":1}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Bitcoin is down "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_change"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"% in 24 hours on Coinbase: BTC-GBP is "}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_price"}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" now."}}}},"extraState":{"itemCount":5}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Told you: BTC-GBP "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_change"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"% in 24 hours."}}}},"extraState":{"itemCount":3}}}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"BTC-GBP "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_change"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"% in 24 hours, at "}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_price"}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"."}}}},"extraState":{"itemCount":5}}}}}}},"extraState":{"hasElse":true}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_test_failure_whisperer","file":"test-failure-whisperer.json","category":"coding","title":"Test failure whisperer","description":"When CI fails, your workflow sends it the end of the log. It reads the pull request and posts a short 'Probably this:' comment with the likely cause and one thing to try.","tip":"Add a workflow step that runs on failure and posts the repo, PR number and last 200 log lines to /ci-failed. GitHub must be able to reach the program.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste what the workflow would send: repo, PR number and the end of the log"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"failed"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_webhook_when","fields":{"PATH":"ci-failed"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"failed"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"failed"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"A CI run failed. This is what the workflow sent (the project, the pull request number and the end of the log):\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nRead the pull request. Work out the most likely cause in two or three sentences, pointing at the file and change that probably caused it, and suggest one thing to try. Then post it as a comment on the pull request, starting 'Probably this:'. If there's no pull request number, don't comment: just answer."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":8}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github_act"}}}}}},"next":{"block":{"type":"rb_result"}}}},"x":30,"y":290}]}}},
 {"key":"g_three_levels","file":"three-levels.json","category":"learning","title":"Three reading levels","description":"One text as three worksheets, for reading ages of about 7, 10 and 13. Each keeps the facts and is checked against its reading age, with three questions at the end. Saved as one file to print.","tip":"Change the reading ages in the list block to suit your class.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_text","name":"text"},{"id":"g_level","name":"level"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste the text to make worksheets from"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_text"}},"inputs":{"VALUE":{"block":{"type":"rb_answer"}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_level"}},"inputs":{"LIST":{"block":{"type":"lists_create_with","inputs":{"ADD0":{"shadow":{"type":"text","fields":{"TEXT":"7"}}},"ADD1":{"shadow":{"type":"text","fields":{"TEXT":"10"}}},"ADD2":{"shadow":{"type":"text","fields":{"TEXT":"13"}}}},"extraState":{"itemCount":3}}},"DO":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Rewrite this text as a worksheet for a reading age of about "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_level"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". Keep every fact. Add a title, and three questions at the end, the last one asking the reader what they think.\n\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_text"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"reads at about a reading age of "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_level"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"; every fact from the original is still there and still right; no fact added; short paragraphs; three questions at the end"}}}},"extraState":{"itemCount":3}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_add_result","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Reading age "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_level"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\n"}}},"ADD3":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":4}}}}}}}}}}}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_result_text"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"worksheets"}}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_topic_sentinel","file":"topic-sentinel.json","category":"news","title":"Topic sentinel","description":"Watches one topic, like quantum computing funding. Each Monday, a synthesis of what changed since last week, with a source for every claim and nothing it already told you.","tip":"Change the topic in the first block. It remembers each week's synthesis, so the second week is where it shines.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_topic","name":"topic"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sentinel"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":0,"DAYS":"weekdays"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Monday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sentinel"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"sentinel"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_topic"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"quantum computing funding"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"You watch one topic for me: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_topic"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":".\nFirst recall the note 'last synthesis' (it may not exist yet). Search the web for news on the topic from the past week and read the best sources in full. Write a short synthesis of what changed since the last one: new funding, programmes, results or policy. Give a source link for every claim, and leave out anything the last synthesis already said. Check it with review_text against: every claim has a source; nothing repeats last week. Then remember it as 'last synthesis'."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":15}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"memory"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This week in "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_topic"}}}}},"extraState":{"itemCount":2}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_fx_travel_check","file":"fx-travel-check.json","category":"money","title":"Travel money check","description":"Two days before a calendar event abroad, looks up the exchange rate and sends a Telegram reminder about cash, card fees and plugs.","tip":"It decides from the event's title and place whether it's abroad. Web search only works in exported Python.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_country","name":"country"},{"id":"g_advice","name":"advice"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type an event to test with, like 'Flight to Lisbon'"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"trip"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_cal_when","fields":{"N":2880},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"trip"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"trip"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_ask_yesno","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Does this calendar event take place outside the UK?\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_country"}},"inputs":{"VALUE":{"block":{"type":"rb_extract","inputs":{"WHAT":{"shadow":{"type":"text","fields":{"TEXT":"the country it takes place in"}}},"TEXT":{"block":{"type":"rb_msg_value"}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_advice"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Using these search results, give today's rate from pounds to the currency of "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_country"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":", then three short reminders for the trip: cash, card fees abroad, and the plug type.\n\n"}}},"ADD3":{"block":{"type":"rb_web_search","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"pound exchange rate today "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_country"}}}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"✈️ "}}},"ADD1":{"block":{"type":"rb_msg_value"}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_advice"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_advice"}}}}}}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Not abroad."}}}}}}},"extraState":{"hasElse":true}}},"x":30,"y":290}]}}},
 {"key":"g_volunteer_rota","file":"volunteer-rota.json","category":"calendar","title":"Volunteer rota","description":"Drafts next month's volunteer rota from the shifts in your calendar and the availability people emailed you, fairly shared, and asks you to approve it before emailing it round.","tip":"Put the shifts in a calendar it can read, and ask volunteers to reply to one email with their dates. Change the address to your list.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Draft next month's volunteer rota. Read the calendar for next month's shifts (calendar with days 40). Search my email from the last 21 days for volunteers' availability replies and read them. Give each shift its volunteers: only people who said they're free then, shared out as evenly as you can, nobody on two shifts in one day. List any shift still short of people at the top. Then a table by date. Check it with review_text against: every name is someone who said they were free; no shift has someone twice; shifts with too few people are listed first."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":16}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calendar"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"email"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_approve","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Email this rota to the volunteers?\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"rb_ask_first","fields":{"WHAT":"messages"},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"volunteers@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Next month's rota"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Not sent. The draft, to edit yourself:\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":30}]}}},
 {"key":"g_wallet_health_check","file":"wallet-health-check.json","category":"money","title":"Wallet health check","description":"Each Sunday evening, reads your Trust Wallet through its Agent Kit: what you hold and what it's worth, how prices moved, and a risk check on every token, flagging any that look like scams or have little liquidity. Emailed to you. It only reads: it never sends, swaps or approves.","tip":"Needs Trust Wallet's Agent Kit (npm install -g @trustwallet/cli) as MCP_TRUSTWALLET in second-thought.ini: the example ini shows how. Change the email address to yours.","author":"itsfja","runtime":"3.10.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","x":30,"y":30,"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"x":550,"y":30,"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}}}}},{"type":"rb_receive","fields":{"MSG":"check"},"x":30,"y":290,"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Read my Trust Wallet: the wallet's status, then its portfolio (every token, how much, and its value). For each token, get its price now and run a risk check. Then write a short summary: the total value, each holding and its share, and a section headed 'Worth a look' listing any token whose risk check is medium or high, with the reasons it gave. Only read: don't send, swap, approve or pay for anything."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":15}}},"TOOLS":{"block":{"type":"rb_agent_mcp","fields":{"SERVER":"trustwallet","ASK":"changes"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your wallet this week"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}]}}},
+{"key":"g_coinbase_week","file":"coinbase-week.json","category":"money","title":"Weekly crypto round-up","description":"Each Sunday evening, reads your Coinbase balances and what they're worth, and sends you a Telegram message: the total, how it changed since last week, and each holding's value. It only reads: it places no orders.","tip":"Needs a Coinbase API key with View permission only (COINBASE_KEY_FILE), and currency = gbp, or yours, in second-thought.ini. The first week has nothing to compare with.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_value","name":"value"},{"id":"g_holdings","name":"holdings"},{"id":"g_summary","name":"summary"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"roundup"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_value"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_value"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_holdings"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_balances"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_summary"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write a short weekly round-up of my crypto, under 120 words, in plain English: the total now, how it changed since last week (in money and percent), and each holding's value, biggest first. No advice on what to buy or sell.\n\nTotal now: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_value"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nTotal a week ago (empty if this is the first week): "}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Coinbase total last week"}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nHoldings (asset, amount, value, currency):\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_holdings"}}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_value"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Coinbase total last week"}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_recipe_scaler_weekly","file":"recipe-scaler-weekly.json","category":"home","title":"Weekly recipes and shopping list","description":"Remembers recipes you drop in a folder. Run it on shopping day: say which recipes and for how many, and it scales them and makes one shopping list grouped by supermarket aisle.","tip":"Change the folder to where you keep recipes (PDF, Word or text). Run it by hand, since it asks which recipes you want.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_folder_when","fields":{"FOLDER":"~/Recipes"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"recipe"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":30},{"type":"rb_receive","fields":{"MSG":"recipe"},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write this recipe as one line: its name (serves N): each ingredient with its amount, separated by semicolons.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Recipe remembered."}}}}}}}},"x":550,"y":30},{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Which recipes this week, and for how many people? (Your recipes are listed in the agent's first step.)"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"My recipes, one per line:\n"}}},"ADD1":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nThis week I want: "}}},"ADD3":{"block":{"type":"rb_answer"}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nScale each recipe to the servings I want, using calculate for every amount. If a recipe isn't in my list, use a standard version. Then write one shopping list grouped by supermarket aisle (fruit and veg, bakery, dairy, meat and fish, tins and jars, dry goods, frozen), adding up the same ingredient across recipes."}}}},"extraState":{"itemCount":5}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":12}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calc"}}}},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"shopping-list"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Shopping list"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":290}]}}}
 ]
 </script>
@@ -8753,7 +9023,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["webhook", "accept web requests from other computers", true],
 ["mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", true],
 ["kraken_trade", "trade on your Kraken account with real money (asking you before every order)", true],
+["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
+["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["web", "read public web pages and search the web", false],
 ["email_read", "read your email", false],
 ["calendar", "read your calendars", false],
@@ -8800,6 +9072,16 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "homealarm_state",
    "disarmed"
+  ]
+ ],
+ "coinbase_free": [
+  [
+   "GET",
+   "^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"
+  ],
+  [
+   "POST",
+   "^/api/v3/brokerage/orders/preview$"
   ]
  ],
  "agent_asks": [
@@ -10879,6 +11161,301 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
       "from": "Sam",
       "text": "Can I borrow the proving baskets tomorrow?"
     }
+  },
+  "coinbase": {
+    "note": "A sample Coinbase portfolio for the page and the tests (#371): values in pounds. Candles end today; the last close is the price.",
+    "currency": "GBP",
+    "portfolio": {
+      "name": "Second Thought",
+      "uuid": "pf-sample-0001"
+    },
+    "positions": [
+      {
+        "asset": "BTC",
+        "total_balance_crypto": 0.0425,
+        "total_balance_fiat": 2612.4,
+        "is_cash": false
+      },
+      {
+        "asset": "ETH",
+        "total_balance_crypto": 0.81,
+        "total_balance_fiat": 1952.71,
+        "is_cash": false
+      },
+      {
+        "asset": "SOL",
+        "total_balance_crypto": 6.5,
+        "total_balance_fiat": 924.95,
+        "is_cash": false
+      },
+      {
+        "asset": "GBP",
+        "total_balance_crypto": 312.55,
+        "total_balance_fiat": 312.55,
+        "is_cash": true
+      }
+    ],
+    "products": {
+      "BTC-GBP": {
+        "product_id": "BTC-GBP",
+        "price": "61468.24",
+        "price_percentage_change_24h": "-2.31",
+        "product_type": "SPOT"
+      },
+      "ETH-GBP": {
+        "product_id": "ETH-GBP",
+        "price": "2410.75",
+        "price_percentage_change_24h": "1.84",
+        "product_type": "SPOT"
+      },
+      "SOL-GBP": {
+        "product_id": "SOL-GBP",
+        "price": "142.3",
+        "price_percentage_change_24h": "5.12",
+        "product_type": "SPOT"
+      },
+      "BTC-USD": {
+        "product_id": "BTC-USD",
+        "price": "81200.1",
+        "price_percentage_change_24h": "-2.2",
+        "product_type": "SPOT"
+      },
+      "BIT-28NOV26-CDE": {
+        "product_id": "BIT-28NOV26-CDE",
+        "price": "81500",
+        "price_percentage_change_24h": "-2.1",
+        "product_type": "FUTURE"
+      }
+    },
+    "candles": {
+      "BTC-GBP": {
+        "day": [
+          [65889.75, 66276.78, 65086.78, 65554.93, 352.4145],
+          [65554.93, 65977.6, 64825.23, 64972.75, 387.1407],
+          [64972.75, 65255.06, 62125.23, 62698.56, 268.3175],
+          [62698.56, 62788.18, 60796.39, 60978.47, 314.101],
+          [60978.47, 61257.95, 60148.65, 60630.38, 272.1034],
+          [60630.38, 62971.47, 60265.4, 62943.25, 244.427],
+          [62943.25, 63117.51, 60667.3, 60746.96, 307.3059],
+          [60746.96, 62784.29, 60037.49, 62071.66, 331.1599],
+          [62071.66, 62347.34, 61797.29, 62022.09, 411.6245],
+          [62022.09, 62105.73, 60367.88, 60878.01, 426.0451],
+          [60878.01, 61124.5, 60848.85, 60926.59, 219.5402],
+          [60926.59, 61365.49, 60062.36, 60443.44, 341.4486],
+          [60443.44, 64582.56, 60300.71, 63345.64, 250.7079],
+          [63345.64, 64545.36, 63218.2, 64328.57, 380.3122],
+          [64328.57, 64600.88, 64268.8, 64359.99, 371.7502],
+          [64359.99, 65330.1, 63520.22, 65196.51, 222.9175],
+          [65196.51, 65276.52, 63329.6, 63566.89, 211.1255],
+          [63566.89, 63591.44, 63198.03, 63510.23, 248.66],
+          [63510.23, 63832.75, 62304.63, 62461.28, 291.3312],
+          [62461.28, 62623.95, 60053.52, 60060.64, 423.4322],
+          [60060.64, 60882.18, 59821.88, 60691.09, 293.1377],
+          [60691.09, 63196.96, 60522.76, 62681.69, 381.2076],
+          [62681.69, 62863.64, 61485.64, 62579.54, 302.6515],
+          [62579.54, 66146.01, 62020.62, 65419.01, 284.7765],
+          [65419.01, 66637.15, 64219.94, 65228.55, 346.1054],
+          [65228.55, 67447.71, 65227.03, 66639.92, 344.691],
+          [66639.92, 66978.1, 63507.36, 63825.34, 357.4511],
+          [63825.34, 64170.59, 59830.72, 60610.54, 313.8728],
+          [60610.54, 62410.3, 59881.88, 62065.62, 278.5976],
+          [62065.62, 62227.36, 61173.71, 61468.24, 342.6902]
+        ],
+        "hour": [
+          [59886.72, 60030.23, 59778.16, 59882.96, 13.1323],
+          [59882.96, 59920.86, 59647.97, 59650.41, 17.5065],
+          [59650.41, 59754.78, 59564.63, 59621.47, 14.0236],
+          [59621.47, 59745.69, 59567.31, 59678.26, 15.6583],
+          [59678.26, 59685.55, 59496.06, 59650.63, 16.5534],
+          [59650.63, 60176.87, 59647.97, 60141.75, 17.9026],
+          [60141.75, 60672.25, 60133.77, 60509.26, 13.3187],
+          [60509.26, 60664.03, 60316.7, 60332.9, 8.4679],
+          [60332.9, 60398.56, 60080.29, 60144.9, 12.2065],
+          [60144.9, 60189.02, 59919.78, 59973.68, 12.7385],
+          [59973.68, 60066.35, 59937.23, 60051.3, 10.385],
+          [60051.3, 60488.17, 59875.11, 60340.35, 13.847],
+          [60340.35, 60386.18, 59695.39, 59726.08, 11.5981],
+          [59726.08, 59733.1, 59456.41, 59569.01, 10.816],
+          [59569.01, 59569.12, 59281.35, 59286.89, 9.1643],
+          [59286.89, 59380.38, 58899.83, 58969.57, 13.7779],
+          [58969.57, 59029.86, 58469.4, 58516.46, 14.3298],
+          [58516.46, 58650.63, 58407.46, 58565.7, 15.5459],
+          [58565.7, 59084.26, 58557.1, 59037.29, 11.1976],
+          [59037.29, 59189.91, 58955.59, 59061.85, 12.9916],
+          [59061.85, 59447.91, 59006.95, 59435.43, 17.239],
+          [59435.43, 59534.61, 59281.65, 59383.27, 16.1652],
+          [59383.27, 59649.23, 59310.85, 59538.17, 8.4116],
+          [59538.17, 59963.75, 59509.9, 59939.45, 9.1693],
+          [59939.45, 60139.17, 59713.43, 60053.5, 12.0923],
+          [60053.5, 60280.23, 60023.42, 60233.36, 17.6491],
+          [60233.36, 60313.93, 60105.81, 60259.28, 8.1302],
+          [60259.28, 60508.65, 60185.94, 60465.68, 15.6346],
+          [60465.68, 60503.18, 60162.47, 60257.31, 13.6273],
+          [60257.31, 60279.45, 59805.43, 59957.65, 11.5459],
+          [59957.65, 60221.01, 59866.35, 60208.41, 9.7035],
+          [60208.41, 60561.63, 60159.12, 60481.14, 13.859],
+          [60481.14, 60799.43, 60441.65, 60701.73, 11.0287],
+          [60701.73, 61075.79, 60694.86, 61031.44, 17.2577],
+          [61031.44, 61087.49, 60819.06, 60927.6, 8.3039],
+          [60927.6, 60990.7, 60374.63, 60531.98, 14.2328],
+          [60531.98, 60757.22, 60521.58, 60561.37, 13.5732],
+          [60561.37, 60996.44, 60523.35, 60935.17, 9.4133],
+          [60935.17, 61728.3, 60772.31, 61555.63, 13.1386],
+          [61555.63, 61672.55, 61415.67, 61505.15, 8.5623],
+          [61505.15, 61587.35, 60955.97, 61015.09, 14.7898],
+          [61015.09, 61152.71, 60970.53, 60978.0, 10.5032],
+          [60978.0, 61010.99, 60792.41, 60795.43, 15.023],
+          [60795.43, 61011.87, 60658.71, 60868.71, 12.372],
+          [60868.71, 61082.23, 60599.21, 60633.06, 15.8113],
+          [60633.06, 61401.08, 60530.46, 61367.05, 9.2964],
+          [61367.05, 61675.51, 61245.34, 61631.95, 13.3456],
+          [61631.95, 61707.97, 61460.9, 61468.24, 13.9902]
+        ]
+      },
+      "ETH-GBP": {
+        "day": [
+          [2367.79, 2374.1, 2292.36, 2300.79, 5048.9991],
+          [2300.79, 2343.93, 2282.87, 2329.55, 5362.6843],
+          [2329.55, 2475.67, 2324.92, 2465.16, 3171.168],
+          [2465.16, 2590.06, 2464.65, 2574.31, 4516.5135],
+          [2574.31, 2587.2, 2442.32, 2459.86, 7059.3168],
+          [2459.86, 2477.8, 2415.33, 2441.5, 3470.7437],
+          [2441.5, 2459.17, 2425.75, 2456.58, 3514.6215],
+          [2456.58, 2457.49, 2435.16, 2435.52, 7077.0951],
+          [2435.52, 2494.14, 2398.31, 2494.1, 5186.0836],
+          [2494.1, 2505.0, 2405.53, 2457.09, 7149.2023],
+          [2457.09, 2514.4, 2372.12, 2407.78, 6435.6468],
+          [2407.78, 2432.76, 2286.34, 2308.81, 3354.0391],
+          [2308.81, 2334.75, 2283.64, 2302.56, 6414.6707],
+          [2302.56, 2355.74, 2280.74, 2339.03, 4158.0214],
+          [2339.03, 2420.46, 2324.53, 2415.54, 6262.499],
+          [2415.54, 2480.58, 2372.58, 2454.13, 7117.474],
+          [2454.13, 2462.72, 2319.37, 2338.29, 6765.1961],
+          [2338.29, 2474.6, 2327.52, 2437.98, 4813.5564],
+          [2437.98, 2554.93, 2405.07, 2528.25, 5488.9396],
+          [2528.25, 2541.29, 2432.51, 2460.16, 6947.4719],
+          [2460.16, 2502.03, 2418.29, 2425.21, 5081.3937],
+          [2425.21, 2499.69, 2400.51, 2482.44, 4632.4446],
+          [2482.44, 2490.42, 2382.17, 2409.4, 5823.2345],
+          [2409.4, 2499.46, 2347.66, 2477.56, 5361.9136],
+          [2477.56, 2484.28, 2315.84, 2325.81, 5733.7047],
+          [2325.81, 2345.16, 2165.81, 2196.84, 5536.8259],
+          [2196.84, 2241.74, 2190.28, 2236.07, 7121.9506],
+          [2236.07, 2278.33, 2223.63, 2253.1, 5065.3265],
+          [2253.1, 2320.98, 2252.69, 2299.73, 5921.465],
+          [2299.73, 2470.95, 2296.92, 2410.75, 5210.4228]
+        ],
+        "hour": [
+          [2334.92, 2344.89, 2334.0, 2335.26, 176.6198],
+          [2335.26, 2365.4, 2327.8, 2363.55, 296.8492],
+          [2363.55, 2371.0, 2357.34, 2368.34, 146.8908],
+          [2368.34, 2389.3, 2362.31, 2379.91, 180.0888],
+          [2379.91, 2387.01, 2376.42, 2377.98, 248.0923],
+          [2377.98, 2380.83, 2355.12, 2360.22, 266.934],
+          [2360.22, 2378.09, 2346.7, 2372.97, 259.4201],
+          [2372.97, 2386.95, 2371.54, 2386.68, 282.5422],
+          [2386.68, 2392.23, 2376.35, 2379.09, 221.8072],
+          [2379.09, 2381.06, 2362.6, 2362.69, 278.3448],
+          [2362.69, 2377.97, 2362.54, 2376.25, 182.1644],
+          [2376.25, 2382.87, 2363.41, 2378.2, 190.5024],
+          [2378.2, 2388.34, 2372.22, 2373.74, 274.6166],
+          [2373.74, 2383.04, 2371.92, 2379.37, 193.9026],
+          [2379.37, 2400.88, 2379.24, 2393.42, 293.0908],
+          [2393.42, 2397.96, 2386.72, 2388.47, 287.6355],
+          [2388.47, 2389.8, 2379.94, 2384.31, 156.8833],
+          [2384.31, 2385.25, 2377.31, 2377.79, 203.1095],
+          [2377.79, 2395.87, 2366.9, 2375.64, 276.8595],
+          [2375.64, 2380.38, 2362.22, 2367.41, 251.8319],
+          [2367.41, 2391.61, 2364.83, 2388.11, 254.5274],
+          [2388.11, 2399.5, 2375.87, 2382.5, 222.0164],
+          [2382.5, 2385.74, 2372.69, 2376.55, 184.3344],
+          [2376.55, 2398.08, 2375.24, 2391.79, 165.925],
+          [2391.79, 2409.75, 2388.25, 2406.9, 279.689],
+          [2406.9, 2417.7, 2402.03, 2415.08, 165.4053],
+          [2415.08, 2431.48, 2406.46, 2426.82, 252.3483],
+          [2426.82, 2429.35, 2418.77, 2419.16, 148.8686],
+          [2419.16, 2435.26, 2415.4, 2432.45, 249.0925],
+          [2432.45, 2449.06, 2424.75, 2446.45, 179.0379],
+          [2446.45, 2459.61, 2443.06, 2444.73, 159.0037],
+          [2444.73, 2445.39, 2420.38, 2427.2, 195.7411],
+          [2427.2, 2434.6, 2421.3, 2430.28, 289.4693],
+          [2430.28, 2432.59, 2402.56, 2408.8, 287.8561],
+          [2408.8, 2409.19, 2389.69, 2391.76, 138.3551],
+          [2391.76, 2395.74, 2378.39, 2382.23, 175.3306],
+          [2382.23, 2397.11, 2376.04, 2387.15, 158.7716],
+          [2387.15, 2392.51, 2376.19, 2386.3, 261.4548],
+          [2386.3, 2387.32, 2370.72, 2374.54, 224.8238],
+          [2374.54, 2416.33, 2366.78, 2411.46, 233.1214],
+          [2411.46, 2412.68, 2400.36, 2402.42, 134.4468],
+          [2402.42, 2406.59, 2398.99, 2403.78, 278.0592],
+          [2403.78, 2407.56, 2387.71, 2390.62, 237.7296],
+          [2390.62, 2394.18, 2387.76, 2393.16, 250.0282],
+          [2393.16, 2423.28, 2387.95, 2422.51, 295.7512],
+          [2422.51, 2435.38, 2420.36, 2433.58, 137.0265],
+          [2433.58, 2435.61, 2414.67, 2415.07, 151.7302],
+          [2415.07, 2416.73, 2405.19, 2410.75, 142.0068]
+        ]
+      }
+    },
+    "orders": [
+      {
+        "order_id": "8f2c1a7e-0b4d-4c55-9a51-3e6d2b9f7a10",
+        "product_id": "BTC-GBP",
+        "side": "BUY",
+        "status": "OPEN",
+        "created_time": "2026-11-02T09:14:00Z",
+        "order_configuration": {
+          "limit_limit_gtc": {
+            "base_size": "0.01",
+            "limit_price": "55000"
+          }
+        },
+        "filled_size": "0"
+      },
+      {
+        "order_id": "3b7d9e21-6c0a-4f8e-b2d4-7a1e5c9f0d33",
+        "product_id": "SOL-GBP",
+        "side": "SELL",
+        "status": "OPEN",
+        "created_time": "2026-11-05T17:40:00Z",
+        "order_configuration": {
+          "limit_limit_gtc": {
+            "base_size": "2",
+            "limit_price": "165"
+          }
+        },
+        "filled_size": "0"
+      }
+    ],
+    "fills": [
+      {
+        "trade_time": "2026-11-07T08:02:11Z",
+        "product_id": "ETH-GBP",
+        "side": "BUY",
+        "size": "0.12",
+        "price": "2381.40",
+        "commission": "1.71",
+        "order_id": "c4a1f0d2-9e3b-4b7a-8d6c-2f5e1a0b9c44"
+      },
+      {
+        "trade_time": "2026-11-03T19:45:03Z",
+        "product_id": "BTC-GBP",
+        "side": "BUY",
+        "size": "0.0016",
+        "price": "62510.00",
+        "commission": "0.60",
+        "order_id": "e9d2b7c3-1a4f-4e8b-9c0d-5f6a2b3c4d55"
+      },
+      {
+        "trade_time": "2026-10-28T12:30:47Z",
+        "product_id": "SOL-GBP",
+        "side": "SELL",
+        "size": "1.5",
+        "price": "151.20",
+        "commission": "1.36",
+        "order_id": "a7b6c5d4-3e2f-4a1b-8c9d-0e1f2a3b4c66"
+      }
+    ]
   }
 }
 </script>
@@ -11142,7 +11719,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -11154,7 +11731,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -11329,7 +11906,9 @@ HOW TO MAP CODE
     rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
-    rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
+    rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
+    rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -11657,6 +12236,22 @@ HOW TO MAP CODE
     V("rb_homey_variable", "Homey variable %1", [val("NAME")], null, { style:"homey", inputsInline:true, tooltip:"The value of a Homey Logic variable, by its name." }),
     S("rb_homey_set_variable", "set Homey variable %1 to %2", [val("NAME"), val("VALUE")], { style:"homey", inputsInline:true,
       tooltip:"Changes a Homey Logic variable, so your flows can use it." }),
+    /* Coinbase (#371) */
+    V("rb_coinbase_balances", "Coinbase balances", [], "Array", { style:"coinbase",
+      tooltip:"A list of records, one for each asset in your Coinbase portfolio, biggest first: asset, amount, value and currency. Values are in your currency (currency in second-thought.ini). On this page it uses a sample portfolio." }),
+    V("rb_coinbase_value", "Coinbase portfolio value", [], "Number", { style:"coinbase", tooltip:"What your Coinbase portfolio is worth, in your currency." }),
+    V("rb_coinbase_price", "%1 of %2 on Coinbase", [{ type:"field_dropdown", name:"WHAT", options:[["price","price"],["24-hour change %","change"]] }, val("PRODUCT")], "Number",
+      { style:"coinbase", inputsInline:true, tooltip:"A trading pair's latest price, like BTC-GBP's in pounds, or how much it has changed in the last 24 hours, in percent. Spot trading pairs only." }),
+    V("rb_coinbase_candles", "Coinbase %1 prices of %2 for the last %3", [{ type:"field_dropdown", name:"SIZE", options:[["daily","day"],["hourly","hour"]] }, val("PRODUCT"), val("N")], "Array",
+      { style:"coinbase", inputsInline:true, tooltip:"A list of records, oldest first, one for each day or hour (up to 350): time, open, high, low, close and volume." }),
+    V("rb_coinbase_orders", "Coinbase %1", [{ type:"field_dropdown", name:"WHICH", options:[["open orders","open"],["recent fills","fills"]] }], "Array",
+      { style:"coinbase", tooltip:"Your open orders (id, product, side, size, price, filled and created), or your latest fills (time, product, side, size, price, fee and order)." }),
+    V("rb_coinbase_preview", "preview Coinbase order: %1 %2 of %3", [{ type:"field_dropdown", name:"SIDE", options:[["buy","buy"],["sell","sell"]] }, val("AMOUNT"), val("PRODUCT")], null,
+      { style:"coinbase", inputsInline:true, tooltip:"What a market order would come to, without placing it: a record with size, spend, fee, total, slippage and warnings. Buy spends an amount of the second currency (50 of BTC-GBP spends £50); sell sells an amount of the first (0.01 of BTC-GBP sells 0.01 BTC). Nothing changes." }),
+    S("rb_coinbase_order", "place Coinbase order: %1 %2 of %3", [{ type:"field_dropdown", name:"SIDE", options:[["buy","buy"],["sell","sell"]] }, val("AMOUNT"), val("PRODUCT")],
+      { style:"coinbase", inputsInline:true, tooltip:"Places a real market order, like 'preview Coinbase order'. It previews it first, then always asks you, with the fee and total, even when nothing else asks; with nobody there to say yes, it doesn't run. Needs a key with Trade permission. On this page nothing is bought or sold." }),
+    S("rb_coinbase_cancel", "cancel Coinbase order %1", [val("ORDER")], { style:"coinbase", inputsInline:true,
+      tooltip:"Cancels one of your open orders, by its id (from 'Coinbase open orders'). It always asks you first, and doesn't run with nobody there." }),
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
@@ -11819,6 +12414,12 @@ HOW TO MAP CODE
       B("rb_homey_find", { TEXT:K("light") }), B("rb_homey_value", { CAPABILITY:K("measure_temperature"), DEVICE:K("Proofing box") }),
       B("rb_homey_set", { DEVICE:K("Kitchen light"), CAPABILITY:K("onoff"), VALUE:K("off") }), B("rb_homey_flow", { NAME:K("Good night") }),
       B("rb_homey_variable", { NAME:K("Loaves this week") }), B("rb_homey_set_variable", { NAME:K("Loaves this week"), VALUE:N(4) })
+    ]},
+    { kind:"category", name:"Coinbase", categorystyle:"coinbase", contents:[
+      B("rb_coinbase_balances"), B("rb_coinbase_value"), B("rb_coinbase_price", { PRODUCT:K("BTC-GBP") }),
+      B("rb_coinbase_candles", { PRODUCT:K("BTC-GBP"), N:N(7) }), B("rb_coinbase_orders"),
+      B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
+      B("rb_coinbase_cancel", { ORDER:K("") })
     ]},
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")
@@ -12041,9 +12642,13 @@ HOW TO MAP CODE
       return "the agent made this address up, and it can see private things that an address could carry away";
     return "";
   }
+  // Coinbase (#371): true for an API call that could move real money, anything but reading and previewing an order.
+  // The page's sample account goes by the blocks, but the answer is the runtime's coinbase_money.
+  const coinbaseMoney = (method, path) => !SAFETY.coinbase_free.some(([m, p]) => m === str(method).trim().toUpperCase() && new RegExp(p).test(str(path).trim()));
   // For the tests: the page's answers to the same questions the runtime answers (tests/e2e/safety.py).
   window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
+    : c.kind === "coinbase" ? coinbaseMoney(c.method, c.path)
     : c.kind === "asks" ? AGENT_ASKS.has(c.tool) : c.kind === "private" ? AGENT_PRIVATE.has(c.tool)
     : agentMustAsk(c.tool, c.input || {}, c.seen || "", !!c.private));
 
@@ -13926,7 +14531,7 @@ HOW TO MAP CODE
   // Everything in the exported zip: the program, its settings file, what to install, and Windows launchers.
   function exportFiles(progName, code){
     const base = pyName(), sched = ws.getTopBlocks(false).some(b => ["rb_when_time", "rb_every", "rb_ha_when"].includes(b.type) || LISTENER_HATS.has(b.type));
-    const req = servicesUsed().flatMap(s => s.pip || []).concat(settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : []).join("\n") + "\n";
+    const req = servicesUsed().flatMap(s => s.pip || []).concat(settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : [], settingsFor().coinbase ? ["cryptography"] : []).join("\n") + "\n";
     const files = [{ name:base + ".py", text:code }, { name:"second-thought.ini", text:iniText(progName) },
                    { name:"requirements.txt", text:req }, { name:"run.bat", text:runBat(base, false) },
                    { name:"run.sh", text:runSh(base, false) }];
@@ -13987,6 +14592,7 @@ HOW TO MAP CODE
     add(n.calendar, ["CALENDAR_URL"]);
     add(n.feeds, ["RB_FEEDS"]);
     add(n.homey, ["HOMEY_URL", "HOMEY_API_KEY"]);
+    add(n.coinbase, ["COINBASE_KEY"]);  // the key file's contents: orders never run there, since nobody is there to say yes
     add(n.mqtt, ["MQTT_HOST"], ["MQTT_USERNAME", "MQTT_PASSWORD", "MQTT_TLS"]);
     return out;
   }
@@ -14155,7 +14761,7 @@ HOW TO MAP CODE
         ...caps.map(c => "- " + c[1])] : []),
       ""
     ].join("\n");
-    const req = servicesUsed().flatMap(s => s.pip || []).concat(settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : []).join("\n") + "\n";
+    const req = servicesUsed().flatMap(s => s.pip || []).concat(settingsFor().calendar ? ["tzdata"] : [], settingsFor().mqtt ? ["paho-mqtt>=2"] : [], settingsFor().coinbase ? ["cryptography"] : []).join("\n") + "\n";
     return [{ name:base + ".py", text:code }, { name:"requirements.txt", text:req }, { name:".github/workflows/" + base + ".yml", text:wf },
             ...(tests ? [{ name:base + ".tests.json", text:JSON.stringify(programTests, null, 1) + "\n" }] : []),
             { name:"SETUP.md", text:setup }, { name:".gitignore", text:"second-thought.ini\n__pycache__/\n" }];
@@ -14373,6 +14979,7 @@ HOW TO MAP CODE
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
+             coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -14419,6 +15026,12 @@ HOW TO MAP CODE
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.coinbase) out.push("", "[coinbase]",
+      "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
+      "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
+      "; Never give it Transfer. Save the key file it downloads next to the program, and put its name here.",
+      "; Values are in the currency set under [run]. Signing needs:  pip install cryptography",
+      "COINBASE_KEY_FILE = cdp_api_key.json");
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
@@ -14715,6 +15328,12 @@ HOW TO MAP CODE
         case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
+        case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_coinbase_value": return "(await R.coinbase_value())";
+        case "rb_coinbase_price": return "(await R.coinbase_price(" + pyStr(b.getFieldValue("WHAT")) + ", " + I("PRODUCT", '""') + "))";
+        case "rb_coinbase_candles": return "(await R.coinbase_candles(" + pyStr(b.getFieldValue("SIZE")) + ", " + I("PRODUCT", '""') + ", " + I("N", "7") + "))";
+        case "rb_coinbase_orders": return "(await R.coinbase_orders(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_coinbase_preview": return "(await R.coinbase_preview(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + "))";
         case "rb_mqtt_read": return "(await R.mqtt_value(" + I("TOPIC", '""') + "))";
         case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
         case "rb_calendar": return "(await R.calendar_records(" + I("DAYS", "7") + "))";
@@ -14850,6 +15469,8 @@ HOW TO MAP CODE
           case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
+          case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
+          case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
@@ -16661,7 +17282,7 @@ HOW TO MAP CODE
     const note = days === 0 ? "" : days === 1 ? " (next day)" : days === -1 ? " (the day before)" : days > 0 ? " (" + days + " days later)" : " (" + (-days) + " days earlier)";
     return pad2(Math.floor(t / 60)) + ":" + pad2(t % 60) + note;
   }
-  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT and the rest.
+  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase and the rest.
   /* ---------- Connections on the page: sample feeds, GitHub, Telegram, email and calendar ----------
      The page can't reach these services, so it uses the sample data below (like the sample house). The text each one gives
      back is shaped like what exported Python gives from the real services. */
@@ -16674,7 +17295,7 @@ HOW TO MAP CODE
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices" }[what]) : what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -16998,6 +17619,87 @@ HOW TO MAP CODE
     if (!approved && !(await allowed(["ha"], "set the Homey variable “" + v.name + "” to " + homeyShow(nv)))) return false;
     v.value = nv;
     addStep(tr("Homey variable {name}", { name:v.name }), { mono:true, text:homeyShow(old) + " → " + homeyShow(nv) }).done("sample home", "ok");
+    return true;
+  }
+  /* Coinbase on the page (#371): a sample portfolio, in pounds. Exported Python talks to Coinbase's Advanced Trade API
+     with your key. Matches the runtime's coinbase_ methods (and tests/fake_coinbase.py, which serves the same sample).
+     Placing and cancelling orders always ask, even when nothing else does; here nothing is bought or sold. */
+  const cbSample = () => { connNote("Coinbase"); return CONN.coinbase || {}; };
+  const cents = v => Math.round(num(v) * 100) / 100;
+  function cbProductId(product){
+    const p = str(product).trim().toUpperCase().replace(/\//g, "-");
+    if (!/^[A-Z0-9]{2,12}-[A-Z0-9]{2,12}$/.test(p)) fail(tr("“{product}” isn't a Coinbase trading pair. Use one like BTC-GBP.", { product:str(product).trim() }));
+    return p;
+  }
+  function cbProduct(product){
+    const p = (cbSample().products || {})[cbProductId(product)];
+    if (!p) fail(tr("Coinbase: {why}.", { why:tr("not found") }));
+    if ((p.product_type || "SPOT").toUpperCase() !== "SPOT") fail(tr("Only spot trading pairs, like BTC-GBP, are offered here."));
+    return p;
+  }
+  function coinbaseBalances(){
+    const c = cbSample(), cur = c.currency || "GBP";
+    const out = (c.positions || []).filter(p => num(p.total_balance_crypto) || num(p.total_balance_fiat))
+      .map(p => ({ asset:str(p.asset), amount:num(p.total_balance_crypto), value:cents(p.total_balance_fiat), currency:cur }));
+    out.sort((a, b) => b.value - a.value);
+    addStep("Coinbase balances", { mono:true, text:out.map(r => r.asset + ": " + r.amount + " (" + r.value + " " + cur + ")").join("\n") || tr("(nothing)") })
+      .done(tr("{n} assets", { n:out.length }), "ok");
+    return out;
+  }
+  const coinbaseValue = () => cents((cbSample().positions || []).reduce((t, p) => t + num(p.total_balance_fiat), 0));
+  function coinbasePrice(what, product){
+    const p = cbProduct(product);
+    return what === "change" ? cents(p.price_percentage_change_24h) : num(p.price);
+  }
+  function coinbaseCandles(size, product, count){
+    const id = cbProductId(product), hours = size === "hour", n = Math.max(1, Math.min(350, Math.trunc(num(count)) || 1)), step = hours ? 3600 : 86400;
+    const rows = ((cbSample().candles || {})[id] || {})[hours ? "hour" : "day"];
+    if (!rows) fail(tr("Coinbase: {why}.", { why:tr("not found") }));
+    const top = Math.floor(Date.now() / 1000 / step) * step, some = rows.slice(-n);
+    return some.map((r, i) => {
+      const d = new Date((top - (some.length - 1 - i) * step) * 1000);
+      return { time:d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + (hours ? " " + pad2(d.getHours()) + ":00" : ""),
+               open:r[0], high:r[1], low:r[2], close:r[3], volume:r[4] };
+    });
+  }
+  const cbWhen = t => str(t).slice(0, 19).replace("T", " ");
+  function coinbaseOrders(which){
+    const c = cbSample();
+    if (which === "fills") return (c.fills || []).map(f => ({ time:cbWhen(f.trade_time), product:str(f.product_id), side:str(f.side).toLowerCase(),
+      size:num(f.size), price:num(f.price), fee:num(f.commission), order:str(f.order_id) }));
+    return (c.orders || []).map(o => {
+      const cfg = Object.values(o.order_configuration || {})[0] || {};
+      return { id:str(o.order_id), product:str(o.product_id), side:str(o.side).toLowerCase(), size:num(cfg.base_size || cfg.quote_size),
+               price:cfg.limit_price ? num(cfg.limit_price) : "", filled:num(o.filled_size), created:cbWhen(o.created_time) };
+    });
+  }
+  // What the sample account would charge: a 0.6% fee, no slippage. tests/fake_coinbase.py works it out the same way.
+  function coinbasePreview(side, amount, product){
+    const p = cbProduct(product), id = p.product_id, [base, quote] = id.split("-");
+    side = str(side).trim().toLowerCase();
+    if (side !== "buy" && side !== "sell") fail(tr("A Coinbase order is buy or sell."));
+    if (!isNumLike(amount) || num(amount) <= 0) fail(tr("The amount should be a number above 0, like 50."));
+    const a = num(amount), price = num(p.price), have = asset => num(((cbSample().positions || []).find(x => x.asset === asset) || {}).total_balance_crypto);
+    let rec;
+    if (side === "buy") { const fee = cents(a * 0.006); rec = { size:Math.floor((a - fee) / price * 1e8) / 1e8, spend:a, fee, total:a }; }
+    else { const gross = cents(a * price), fee = cents(gross * 0.006); rec = { size:a, spend:gross, fee, total:cents(gross - fee) }; }
+    if (side === "buy" ? a > have(quote) : a > have(base)) fail(tr("Coinbase wouldn't place that order: {why}.", { why:"insufficient fund" }));
+    return Object.assign({ product:id, side }, rec, { slippage:0, warnings:[] });
+  }
+  async function confirmMoney(what){ return confirmAction(what + " (it could move real money, so it always asks)"); }
+  async function coinbaseOrder(side, amount, product){
+    const pre = coinbasePreview(side, amount, product), [base, quote] = pre.product.split("-");
+    const what = pre.side + " " + pre.size + " " + base + " for " + pre.spend + " " + quote + " on Coinbase (fee " + pre.fee + " " + quote + ", total " + pre.total + " " + quote + ")";
+    if (!(await confirmMoney(what))) return "";
+    addStep("Coinbase order placed", { mono:true, text:what + " · sample-order" }).done("sample account", "ok");
+    return "sample-order";
+  }
+  async function coinbaseCancel(order){
+    const id = str(order).trim();
+    if (!/^[A-Za-z0-9-]{6,64}$/.test(id)) fail(tr("Which Coinbase order? Give its id, from 'Coinbase open orders'."));
+    if (!(await confirmMoney("cancel the Coinbase order " + id))) return false;
+    if (!(cbSample().orders || []).some(o => o.order_id === id)) fail(tr("Coinbase didn't cancel the order: {why}.", { why:"unknown cancel order" }));
+    addStep("Coinbase order cancelled", { mono:true, text:id }).done("sample account", "ok");
     return true;
   }
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
@@ -17769,6 +18471,12 @@ HOW TO MAP CODE
         return recs;
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
+      case "rb_coinbase_balances": return coinbaseBalances();
+      case "rb_coinbase_value": return coinbaseValue();
+      case "rb_coinbase_price": return coinbasePrice(b.getFieldValue("WHAT"), await input(b, tc, "PRODUCT"));
+      case "rb_coinbase_candles": return coinbaseCandles(b.getFieldValue("SIZE"), await input(b, tc, "PRODUCT"), await input(b, tc, "N", 7));
+      case "rb_coinbase_orders": return coinbaseOrders(b.getFieldValue("WHICH"));
+      case "rb_coinbase_preview": return coinbasePreview(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT"));
       case "rb_mqtt_read": {
         const topic = mqttTopic(await input(b, tc, "TOPIC")), got = mqttRead(topic);
         if (!/[+#]/.test(topic)) { const v = got[topic] || ""; addStep("MQTT " + topic, { mono:true, text:v || tr("(no message yet: only messages the broker keeps show up straight away)") }).done("read", "ok"); return v; }
@@ -18345,6 +19053,8 @@ HOW TO MAP CODE
       case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
+      case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
+      case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {

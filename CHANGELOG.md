@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Added
+- **Coinbase** (#371): new blocks read your Coinbase account through its Advanced Trade API: balances, the portfolio's value, a trading pair's price and 24-hour change, daily or hourly prices, open orders and fills, and a preview of what an order would come to. **place Coinbase order** and **cancel Coinbase order** always ask, even with (no asking), after a preview that shows the fee and total, and never run with nobody there to say yes; any Coinbase call other than reading and previewing goes through that question (`coinbase_free` in `SAFETY`). Spot pairs only; nothing converts or transfers. `COINBASE_KEY_FILE` (or `COINBASE_KEY`, which the keychain can hold) is a new setting, signing needs the `cryptography` package, and `--doctor` says what the key may do. Two gallery programs, **Weekly crypto round-up** and **Tell me if BTC drops 10%**, only read.
+
 ## 3.13.0 - 2026-11-08
 
 ### Added
