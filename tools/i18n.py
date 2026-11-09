@@ -3,7 +3,7 @@
 
     python tools/i18n.py missing             # the words each language still needs, page and Python (exit 1 if any)
     python tools/i18n.py add words.json      # put new translations into every language file
-    python tools/i18n.py script gmy "ka-ra-pe {name}"   # show how a romanised line is written in Linear B (or akk, sux, hit: cuneiform)
+    python tools/i18n.py script gmy "ka-ra-pe {name}"   # show how a romanised line is written in Linear B (or akk, sux, hit: cuneiform; got: Gothic)
 
 words.json says, for each English text, its translation in each language:
 
@@ -19,7 +19,8 @@ is given in its standard transliteration (e2-dub-ba, ĝeš-ḫur, digits for sig
 tools/sux_signs.json, the readings of the Oracc Global Sign List (CC0); a reading the list hasn't got is reported the
 same way. Hittite (hit) uses the same sign list, written as Hittitologists do: syllables in lowercase (ne-e-ši-li),
 Sumerograms in capitals joined by dots (DUB.SAR), Akkadograms in capitals (A-NA), and an accent for the sign's index
-(ú is u2); an English abbreviation in capitals that should stay Latin is marked ^ (^MQTT).
+(ú is u2); an English abbreviation in capitals that should stay Latin is marked ^ (^MQTT). Gothic (got) is given in its usual
+transliteration (gutisk, þiudans, ƕas) and written letter for letter in the Gothic alphabet.
 
 After adding, run python tools/sync.py, then the tests.
 """
@@ -270,13 +271,15 @@ def unmark(text):
 
 
 def to_script(lang, text, missing=None):
-    """A romanised line in Linear B (gmy), cuneiform (akk, sux, hit), hieroglyphs (egy), Coptic (cop) or Syriac (syc).
+    """A romanised line in Linear B (gmy), cuneiform (akk, sux, hit), hieroglyphs (egy), Coptic (cop), Syriac (syc) or Gothic (got).
     Placeholders, names, file names and code are kept."""
     missing = set() if missing is None else missing
     if lang == "cop":
         return _to_coptic(text, missing)
     if lang == "syc":
         return _to_marked(text, missing, SYC_LETTERS, syriac)
+    if lang == "got":
+        return _to_marked(text, missing, GOT_LETTERS, gothic)
     if lang == "sux":
         return _to_sumerian(text, missing)
     if lang == "hit":
@@ -314,6 +317,17 @@ def to_script(lang, text, missing=None):
 
 def _to_coptic(text, missing):
     return _to_marked(text, missing, COP_LETTERS, coptic)
+
+
+# ----- Gothic (#139) -----
+# Gothic in its usual transliteration, one Latin letter for each Gothic one (þ, ƕ, q for kw); ï is i with its dots.
+GOT_LETTERS = "abgdeqzhþiklmnjuprstwfxƕoï"
+GOT = dict(zip("abgdeqzhþiklmnjuprstwfxƕoï", "𐌰𐌱𐌲𐌳𐌴𐌵𐌶𐌷𐌸𐌹𐌺𐌻𐌼𐌽𐌾𐌿𐍀𐍂𐍃𐍄𐍅𐍆𐍇𐍈𐍉𐌹"))
+
+
+def gothic(word):
+    """A transliterated Gothic word in Gothic letters, or None if it has a letter Gothic doesn't (c, v, y)."""
+    return "".join(GOT[c] for c in word) if word and all(c in GOT for c in word) else None
 
 
 def _to_marked(text, missing, letters, convert):
@@ -358,7 +372,7 @@ def _to_marked(text, missing, letters, convert):
     return " ".join(out)
 
 
-SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux", "hit"}
+SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux", "hit", "got"}
 
 
 # ----- The words each language needs -----
@@ -416,7 +430,7 @@ def cmd_add(path):
                     problems.append(f"{section} “{english[:50]}”: there's no language {code}")
                     continue
                 gaps = set()
-                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc", "sux", "hit") else text
+                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc", "sux", "hit", "got") else text
                 if gaps:
                     problems.append(f"{section} “{english[:50]}”: {code} has no sign for {', '.join(sorted(gaps))}, so those stay romanised")
                 if sorted(PLACEHOLDER.findall(value)) != want:
