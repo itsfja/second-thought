@@ -47,6 +47,15 @@ class Scripts(unittest.TestCase):
         self.assertEqual(gaps, {"zzz"})
         self.assertEqual(tool.printed("sux", "^Claude-e ĝeš-ḫur ak"), "Claude-e ĝeš-ḫur ak", "exported Python prints the transliteration")
 
+    def test_hittite_mixes_syllables_sumerograms_and_akkadograms(self):
+        self.assertEqual(tool.to_script("hit", "ne-e-ši-li"), "𒉈𒂊𒅆𒇷")
+        self.assertEqual(tool.to_script("hit", "DUB.SAR-aš A-NA É LÚ.MEŠ"), "𒁾𒊬𒀸 𒀀𒈾 𒂍 𒇽𒎌")
+        self.assertEqual(tool.to_script("hit", "ú-ul ták-ša-an."), "𒌑𒌌 𒁖𒊭𒀭.", "an accent is the sign's index")
+        gaps = set()
+        self.assertEqual(tool.to_script("hit", "%1-za Claude-aš GitHub ^MQTT <b>DUB</b> {name}", gaps), "%1-𒍝 Claude-𒀸 GitHub MQTT <b>𒁾</b> {name}")
+        self.assertEqual(gaps, set(), "names in mixed case are kept, not reported")
+        self.assertEqual(tool.printed("hit", "ḫa-at-re-eš-šar ^MQTT"), "ḫa-at-re-eš-šar MQTT")
+
     def test_sumerian_signs_are_the_signs_themselves(self):
         # A sign's readings, not those of a variant form listed after it (#374): u3 is U, not ŠA17's old form, and aš and
         # dili are AŠ, not the numeral 1(AŠ@c).
