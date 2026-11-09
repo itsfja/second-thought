@@ -10,7 +10,7 @@
   },
   "rb_start": {
    "message0": "𒌓 𒀝 𒋳𒂵𒀀",
-   "tooltip": "𒄑𒄯 𒕐𒕐 𒆠 𒉈𒀀 𒊕 𒃻. 𒋞 𒆠𒋫 𒀭𒋫 𒆠𒂠 𒀝. 𒊹𒁉 𒍠𒍠𒁀 𒀝."
+   "tooltip": "𒄑𒄯 𒀸𒀸 𒆠 𒉈𒀀 𒊕 𒃻. 𒋞 𒆠𒋫 𒀭𒋫 𒆠𒂠 𒀝. 𒊹𒁉 𒍠𒍠𒁀 𒀝."
   },
   "rb_receive": {
    "message0": "𒌓 %1 𒋗 𒋾𒀀",
@@ -18,19 +18,19 @@
   },
   "rb_when_time": {
    "message0": "𒌓 %1 : %2 %3",
-   "tooltip": "𒌓 𒉈𒀀 𒀝 (𒆜𒁍 12), 𒂗𒈾 𒌓𒃻𒊏 𒅅 𒅆𒇻 𒅆𒁾 𒉈 𒂃𒀀."
+   "tooltip": "𒌓 𒉈𒀀 𒀝 (𒆜𒁍 12), 𒂗𒈾 𒌓𒃻𒊏 𒅅 𒅇 𒅆𒁾 𒉈 𒂃𒀀."
   },
   "rb_every": {
-   "message0": "𒕐𒕐 %1 %2",
-   "tooltip": "𒀀𒁺𒀀𒁺 𒀝, 𒂗𒈾 𒌓𒃻𒊏 𒅅 𒅆𒇻 𒅆𒁾 𒉈 𒂃𒀀. 𒀝 𒊕𒁀 𒌓 1 𒂕 𒌓𒃻𒊏 𒃻𒊏𒋫."
+   "message0": "𒀸𒀸 %1 %2",
+   "tooltip": "𒀀𒁺𒀀𒁺 𒀝, 𒂗𒈾 𒌓𒃻𒊏 𒅅 𒅇 𒅆𒁾 𒉈 𒂃𒀀. 𒀝 𒊕𒁀 𒌓 1 𒂕 𒌓𒃻𒊏 𒃻𒊏𒋫."
   },
   "rb_broadcast": {
    "message0": "%1 𒅗 𒌤",
-   "tooltip": "𒆜 “𒌓 𒋗 𒋾𒀀” 𒕐𒕐 𒅗 𒉈𒀀 𒊕 𒃻, 𒂕𒁉𒀀 𒋛𒀀."
+   "tooltip": "𒆜 “𒌓 𒋗 𒋾𒀀” 𒀸𒀸 𒅗 𒉈𒀀 𒊕 𒃻, 𒂕𒁉𒀀 𒋛𒀀."
   },
   "rb_broadcast_wait": {
-   "message0": "%1 𒅗 𒌤 𒅆𒇻 𒅅",
-   "tooltip": "𒆜 “𒌓 𒋗 𒋾𒀀” 𒕐𒕐 𒅗 𒉈𒀀 𒊕 𒃻 𒅆𒇻 𒂗𒈾 𒃻𒉆 𒌀𒆷 𒅅."
+   "message0": "%1 𒅗 𒌤 𒅇 𒅅",
+   "tooltip": "𒆜 “𒌓 𒋗 𒋾𒀀” 𒀸𒀸 𒅗 𒉈𒀀 𒊕 𒃻 𒅇 𒂗𒈾 𒃻𒉆 𒌀𒆷 𒅅."
   },
   "rb_wait": {
    "message0": "%1 %2 𒅅",
@@ -56,7 +56,7 @@
   "rb_with_any_model": {
    "message0": "𒉣𒈨 OpenRouter %1-𒁕",
    "message1": "%1",
-   "tooltip": "𒋞 𒊮𒂵𒉌𒂠 𒉣𒈨 OpenRouter 𒕐𒕐𒁕 𒀝. 𒈬𒁉 openrouter.ai/models-ta 𒊬, mistralai/mistral-small 𒇻 google/gemma-4-31b-it. openrouter/auto 1 𒅆𒊒. Python 𒌓𒁺𒀀𒋫 𒀝 (OPENROUTER_API_KEY 𒀠 𒅗); 𒅆𒁾 𒉈𒀀 Claude 𒆠𒁉𒀀 𒁺."
+   "tooltip": "𒋞 𒊮𒂵𒉌𒂠 𒉣𒈨 OpenRouter 𒀸𒀸𒁕 𒀝. 𒈬𒁉 openrouter.ai/models-ta 𒊬, mistralai/mistral-small 𒇻 google/gemma-4-31b-it. openrouter/auto 1 𒅆𒊒. Python 𒌓𒁺𒀀𒋫 𒀝 (OPENROUTER_API_KEY 𒀠 𒅗); 𒅆𒁾 𒉈𒀀 Claude 𒆠𒁉𒀀 𒁺."
   },
   "rb_contains": {
    "message0": "%1 %2 𒅅",
@@ -75,7 +75,7 @@
   },
   "rb_pause": {
    "message0": "𒂗𒈾 𒋛𒀀 𒋳𒂵𒈬 𒁺: %1",
-   "tooltip": "𒆠𒁺. 𒅗 𒁾 𒆥𒀝𒀀 𒉺 𒌓𒁺 𒅆𒇻 𒅅."
+   "tooltip": "𒆠𒁺. 𒅗 𒁾 𒆥𒀝𒀀 𒉺 𒌓𒁺 𒅇 𒅅."
   },
   "rb_timer": {
    "message0": "𒌓𒋃",
@@ -111,11 +111,11 @@
   },
   "rb_checkpoint_save": {
    "message0": "𒆠𒁺 %1 𒃻",
-   "tooltip": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅆𒇻 𒃻𒉽 𒌓𒁕𒁶 𒈬 𒉈𒀀, 𒂗𒈾 𒀝 𒌀𒆷, 𒄑𒌆𒉿𒂵 𒃻."
+   "tooltip": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅇 𒃻𒉽 𒌓𒁕𒁶 𒈬 𒉈𒀀, 𒂗𒈾 𒀝 𒌀𒆷, 𒄑𒌆𒉿𒂵 𒃻."
   },
   "rb_checkpoint_restore": {
    "message0": "𒆠𒁺 %1-𒂠 𒄄",
-   "tooltip": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅆𒇻 𒃻𒉽 𒌓 “𒆠𒁺 𒃻”-𒁶 𒄄. 𒄑𒌆𒉿, 𒁾 𒅆𒇻 𒅗 𒆥𒄄𒀀 𒉡𒄄."
+   "tooltip": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅇 𒃻𒉽 𒌓 “𒆠𒁺 𒃻”-𒁶 𒄄. 𒄑𒌆𒉿, 𒁾 𒅇 𒅗 𒆥𒄄𒀀 𒉡𒄄."
   },
   "rb_task_get": {
    "message0": "𒆥"
@@ -146,11 +146,11 @@
    "message0": "𒁾𒊕 %1 𒅆𒂃",
    "message1": "𒂗𒈾 %1 𒀀𒁺; 𒉡𒋛𒁲𒀀 𒀝",
    "message2": "%1",
-   "tooltip": "Claude 𒁾𒊕 𒅆 𒂃. 𒉡𒋛𒁲𒀀, 𒋞 𒊮𒂵 𒀝, 𒂕𒁉𒀀 𒅆 𒂃. 𒀀𒁺 𒕐𒕐𒀀 𒅆𒂃𒂊 𒉡𒋛𒁲 𒅆𒂠 𒉡𒄄𒀀 𒅆 𒁇. 𒀀𒁺 𒌀𒆷𒀀, 𒁾𒊕 𒉡𒋛𒁲 𒌉𒊏 𒃻, 𒂕𒊏 𒉡𒈨𒀀."
+   "tooltip": "Claude 𒁾𒊕 𒅆 𒂃. 𒉡𒋛𒁲𒀀, 𒋞 𒊮𒂵 𒀝, 𒂕𒁉𒀀 𒅆 𒂃. 𒀀𒁺 𒀸𒀸𒀀 𒅆𒂃𒂊 𒉡𒋛𒁲 𒅆𒂠 𒉡𒄄𒀀 𒅆 𒁇. 𒀀𒁺 𒌀𒆷𒀀, 𒁾𒊕 𒉡𒋛𒁲 𒌉𒊏 𒃻, 𒂕𒊏 𒉡𒈨𒀀."
   },
   "rb_review": {
    "message0": "𒁾𒊕 %1 𒅆𒂃",
-   "tooltip": "𒅆𒂃𒀀 1. 𒂕𒁉𒀀 “𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺” 𒅆𒇻 “𒉡𒋛𒁲 𒅆𒂃𒀀” 𒂷𒂷."
+   "tooltip": "𒅆𒂃𒀀 1. 𒂕𒁉𒀀 “𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺” 𒅇 “𒉡𒋛𒁲 𒅆𒂃𒀀” 𒂷𒂷."
   },
   "rb_passed": {
    "message0": "𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺"
@@ -162,10 +162,10 @@
    "message0": "%1 10-𒀀 %2-𒂠 𒋃"
   },
   "rb_better": {
-   "message0": "𒊷𒂵 %1 𒅆𒇻 %2 %3-𒂠"
+   "message0": "𒊷𒂵 %1 𒅇 %2 %3-𒂠"
   },
   "rb_ask_me": {
-   "message0": "𒂷𒊏 %1 𒇷 𒋻 𒅆𒇻 𒅅",
+   "message0": "𒂷𒊏 %1 𒇷 𒋻 𒅇 𒅅",
    "tooltip": "𒀝 𒁺 𒂗𒈾 𒁾𒁀 𒅗 𒄄 𒊬𒊑."
   },
   "rb_answer": {
@@ -173,7 +173,7 @@
   },
   "rb_approve": {
    "message0": "%1 𒊺𒂵",
-   "tooltip": "𒅗 𒉺 𒌓𒁺 𒅆𒇻 𒊺𒂵 𒇻 𒄄𒀀 𒅅."
+   "tooltip": "𒅗 𒉺 𒌓𒁺 𒅇 𒊺𒂵 𒇻 𒄄𒀀 𒅅."
   },
   "rb_choose": {
    "message0": "%1-𒋫 𒂷 𒅆𒊒"
@@ -189,7 +189,7 @@
    "message0": "%1 𒃻𒀝𒀀 𒃻"
   },
   "rb_result": {
-   "message0": "𒌀 𒅆𒇻 𒃻𒀝 𒉺 𒌓𒁺",
+   "message0": "𒌀 𒅇 𒃻𒀝 𒉺 𒌓𒁺",
    "tooltip": "𒀝 𒌀. 𒃻 𒃻𒀝𒀀 𒃻𒊏 𒉺 𒌓𒁺, 𒃻 𒉡𒃻𒊏𒀀 𒁾𒊕."
   },
   "rb_finish_with": {
@@ -197,7 +197,7 @@
   },
   "rb_set_instructions": {
    "message0": "𒀉𒉘𒂷 Claude %1 𒃻",
-   "tooltip": "𒂕 𒋞 𒉈𒋫 Claude 𒅗 𒌤 𒕐𒕐𒁕 𒆥𒄄, 𒆥 𒇻 𒅗 𒇻 𒂍𒀀 𒈨𒁉𒁶."
+   "tooltip": "𒂕 𒋞 𒉈𒋫 Claude 𒅗 𒌤 𒀸𒀸𒁕 𒆥𒄄, 𒆥 𒇻 𒅗 𒇻 𒂍𒀀 𒈨𒁉𒁶."
   },
   "rb_clear_instructions": {
    "message0": "𒀉𒉘𒂷 Claude 𒍣"
@@ -238,14 +238,14 @@
   },
   "rb_sort": {
    "message0": "%1 %2-𒁶 %3 𒋛 𒁲",
-   "tooltip": "𒂠 𒃻𒋃 𒀀𒊮 1-𒁶 𒋛 𒁲. 𒀀𒊮 𒋤 𒃻, 𒃻 𒕐 𒋛 𒁲𒂊𒉈."
+   "tooltip": "𒂠 𒃻𒋃 𒀀𒊮 1-𒁶 𒋛 𒁲. 𒀀𒊮 𒋤 𒃻, 𒃻 𒀸 𒋛 𒁲𒂊𒉈."
   },
   "rb_broadcast_with": {
    "message0": "%1 %2-𒁕 𒅗 𒌤",
-   "tooltip": "𒆜 “𒌓 𒋗 𒋾𒀀” 𒕐𒕐 𒊕 𒃻. 𒕐𒕐 𒃻 “𒃻 𒅗𒈠”-𒁶 𒋗 𒋾."
+   "tooltip": "𒆜 “𒌓 𒋗 𒋾𒀀” 𒀸𒀸 𒊕 𒃻. 𒀸𒀸 𒃻 “𒃻 𒅗𒈠”-𒁶 𒋗 𒋾."
   },
   "rb_broadcast_with_wait": {
-   "message0": "%1 %2-𒁕 𒅗 𒌤 𒅆𒇻 𒅅"
+   "message0": "%1 %2-𒁕 𒅗 𒌤 𒅇 𒅅"
   },
   "rb_msg_value": {
    "message0": "𒃻 𒅗𒈠",
@@ -277,7 +277,7 @@
   "rb_retry": {
    "message0": "𒂗𒈾 %1 𒀀𒁺 𒉋 𒀝",
    "message1": "%1",
-   "tooltip": "𒊮𒂵 𒃻 𒉡𒋛𒁲 𒆥 2-𒄰 𒋛 𒁲𒂊𒉈 (𒊓 𒁀𒁯, 𒅗𒄄 𒅆𒌨), 𒌉 𒅅 𒅆𒇻 𒉋 𒀝."
+   "tooltip": "𒊮𒂵 𒃻 𒉡𒋛𒁲 𒆥 2-𒄰 𒋛 𒁲𒂊𒉈 (𒊓 𒁀𒁯, 𒅗𒄄 𒅆𒌨), 𒌉 𒅅 𒅇 𒉋 𒀝."
   },
   "rb_error": {
    "message0": "𒉡𒋛𒁲",
@@ -285,54 +285,54 @@
   },
   "rb_budget": {
    "message0": "𒀝 𒉈 %1 %2-𒁕 𒆟",
-   "tooltip": "𒌓 𒉣𒈨 𒅗 𒌤 𒕐𒕐 𒊕𒁀, 𒃻𒌉 𒀝 𒉈 𒋗𒁀 𒋾 𒇻 𒆬𒁉 𒉣𒈨𒆤𒉈 𒅆 𒁇. 𒆠 𒉈 𒆭𒊏 𒀝 𒁺. 0 𒆟 𒉡𒈨𒀀. 𒆬𒌓𒋫, 𒉣𒈨 𒆬𒁉 𒉡𒍪 𒉡𒋃, 𒀝 𒁺. 𒅆𒁾 𒉈𒀀 𒋃 𒃶𒀀; Python 𒌓𒁺𒀀𒋫 𒋃 𒍣."
+   "tooltip": "𒌓 𒉣𒈨 𒅗 𒌤 𒀸𒀸 𒊕𒁀, 𒃻𒌉 𒀝 𒉈 𒋗𒁀 𒋾 𒇻 𒆬𒁉 𒉣𒈨𒆤𒉈 𒅆 𒁇. 𒆠 𒉈 𒆭𒊏 𒀝 𒁺. 0 𒆟 𒉡𒈨𒀀. 𒆬𒌓𒋫, 𒉣𒈨 𒆬𒁉 𒉡𒍪 𒉡𒋃, 𒀝 𒁺. 𒅆𒁾 𒉈𒀀 𒋃 𒃶𒀀; Python 𒌓𒁺𒀀𒋫 𒋃 𒍣."
   },
   "rb_tokens_used": {
    "message0": "𒃻𒌉 𒌓𒁕 𒋗 𒋾𒀀",
-   "tooltip": "𒃻𒌉 𒀝 𒉈𒂊 𒋗 𒋾𒀀: 𒆥𒄄𒀀 𒅆𒇻 𒋗 𒋾𒀀. 𒅆𒁾 𒉈𒀀 𒃶𒀀, Python 𒌓𒁺𒀀𒋫 𒍣."
+   "tooltip": "𒃻𒌉 𒀝 𒉈𒂊 𒋗 𒋾𒀀: 𒆥𒄄𒀀 𒅇 𒋗 𒋾𒀀. 𒅆𒁾 𒉈𒀀 𒃶𒀀, Python 𒌓𒁺𒀀𒋫 𒍣."
   },
   "rb_setup_check": {
    "message0": "𒄑𒄯 𒉈 𒅆𒂃𒀀",
-   "tooltip": "𒅆𒂃𒀀 𒄑𒄯 --doctor-𒁕 𒀝𒀀𒁶, 𒅗𒁶: 𒃻𒂃, 𒂷 𒅆𒇻 𒊓 𒕐𒕐, ok, FAIL 𒇻 NOTE-𒁕. 𒋃𒁕𒉌𒂠: 𒃻 𒉡𒆥𒄄, 𒉡𒉽, 𒆬 𒉡𒇲. Python 𒌓𒁺𒀀𒋫𒅗𒉌; 𒅆𒁾 𒉈𒀀 𒅗."
+   "tooltip": "𒅆𒂃𒀀 𒄑𒄯 --doctor-𒁕 𒀝𒀀𒁶, 𒅗𒁶: 𒃻𒂃, 𒂷 𒅇 𒊓 𒀸𒀸, ok, FAIL 𒇻 NOTE-𒁕. 𒋃𒁕𒉌𒂠: 𒃻 𒉡𒆥𒄄, 𒉡𒉽, 𒆬 𒉡𒇲. Python 𒌓𒁺𒀀𒋫𒅗𒉌; 𒅆𒁾 𒉈𒀀 𒅗."
   },
   "rb_ask_first": {
    "message0": "%1 𒊕𒁀 𒂷𒊏 𒇷 𒋻",
-   "tooltip": "𒂕𒁉𒀀 𒄑𒄯 𒃻 𒀝𒉈 𒉺 𒌓𒁺 𒅆𒇻 𒊺𒂵𒍪 𒅅. 𒉡 𒅗𒂵𒀀, 𒃻 𒉈 𒍠𒂠 𒃻 𒅆𒇻 𒋛𒀀. Python 𒌓𒁺𒀀𒋫 terminal-𒀀 𒇷 𒋻; 𒀝 𒌓𒃻𒊏 𒇽 𒉡𒅅𒀀 𒍠𒂠 𒃻."
+   "tooltip": "𒂕𒁉𒀀 𒄑𒄯 𒃻 𒀝𒉈 𒉺 𒌓𒁺 𒅇 𒊺𒂵𒍪 𒅅. 𒉡 𒅗𒂵𒀀, 𒃻 𒉈 𒍠𒂠 𒃻 𒅇 𒋛𒀀. Python 𒌓𒁺𒀀𒋫 terminal-𒀀 𒇷 𒋻; 𒀝 𒌓𒃻𒊏 𒇽 𒉡𒅅𒀀 𒍠𒂠 𒃻."
   },
   "rb_agent": {
    "message0": "𒆥𒄄𒀀: %1-𒂠 𒆥",
    "message1": "𒂗𒈾 %1 𒄊, 𒄑𒆪 𒉈𒉈𒁕:",
    "message2": "%1",
-   "message3": "𒄑𒄯 𒊕 𒁶 𒅆𒇻 𒁺𒈾 𒉽 %1",
-   "message4": "𒅗 𒕐𒕐 𒆠𒋫 𒁺𒈾 𒅗 %1",
-   "tooltip": "Claude 𒃻 𒂕𒁉 𒀝𒉈 𒃻: 𒄊 𒕐𒕐𒀀 𒄑𒆪 1 𒊮𒋫 𒅆𒊒, 𒃻 𒀝𒀀 𒅆 𒁇, 𒅆𒇻 𒂗𒈾 𒃻 𒀠 𒅗𒀀 𒆭 𒇻 𒄊 𒌀𒆷 𒋛𒀀. 𒅗𒄄 𒂕𒊏 𒁾𒊕𒂠 𒆭. 𒄊 1 𒉣𒈨 𒅗 𒌤 1. “𒄑𒄯 𒊕 𒁶” 𒃻𒊏𒀀, 𒄊 𒊕𒁀 𒄑𒄯 𒌉 𒊬 𒅆𒇻 𒆬 𒉡𒋛𒀀𒂵 𒉋."
+   "message3": "𒄑𒄯 𒊕 𒁶 𒅇 𒁺𒈾 𒉽 %1",
+   "message4": "𒅗 𒀸𒀸 𒆠𒋫 𒁺𒈾 𒅗 %1",
+   "tooltip": "Claude 𒃻 𒂕𒁉 𒀝𒉈 𒃻: 𒄊 𒀸𒀸𒀀 𒄑𒆪 1 𒊮𒋫 𒅆𒊒, 𒃻 𒀝𒀀 𒅆 𒁇, 𒅇 𒂗𒈾 𒃻 𒀠 𒅗𒀀 𒆭 𒇻 𒄊 𒌀𒆷 𒋛𒀀. 𒅗𒄄 𒂕𒊏 𒁾𒊕𒂠 𒆭. 𒄊 1 𒉣𒈨 𒅗 𒌤 1. “𒄑𒄯 𒊕 𒁶” 𒃻𒊏𒀀, 𒄊 𒊕𒁀 𒄑𒄯 𒌉 𒊬 𒅇 𒆬 𒉡𒋛𒀀𒂵 𒉋."
   },
   "rb_agent_steps": {
    "message0": "𒄊 𒆥𒄄𒀀",
-   "tooltip": "𒆥𒄄𒀀 𒂕𒊏 𒀝 𒉈𒀀 𒀝𒀀: 𒂠 𒃻𒋃 step, tool, input, result 𒅆𒇻 status-𒁕 (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."
+   "tooltip": "𒆥𒄄𒀀 𒂕𒊏 𒀝 𒉈𒀀 𒀝𒀀: 𒂠 𒃻𒋃 step, tool, input, result 𒅇 status-𒁕 (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer)."
   },
   "rb_agent_tool": {
    "message0": "𒄑𒆪: 𒋞𒈬 %1",
    "message1": "𒃻 𒀝 %1",
    "message2": "𒃻 𒆭𒊏𒆤 𒈨𒁉 %1",
-   "message3": "𒌓 𒕐𒕐 𒊕𒁀 𒂷𒊏 𒇷 𒋻 %1",
-   "tooltip": "𒆥𒄄𒀀 𒋞𒍪 1 𒀝𒉈 𒊺𒂵. 𒃻 𒆭𒊏 𒄑𒆪𒆷𒅗 𒃻 𒆭𒊏, 𒃻 𒋧𒈠 𒃻𒀝 𒆥𒄄𒀀 𒅆 𒁇𒊏. 𒍣𒉈 𒅗: 𒆥𒄄𒀀 𒅗 𒅗𒂵𒉌𒋫 𒃶𒍪. 𒈨 𒃻 𒆭𒊏, 'flour grams: number; water grams: number - grams of water'-𒁶, 𒃻 𒆭𒊏 𒕐𒕐 𒈨𒁉 𒅗: text, number, yes/no, list 𒇻 any. 𒃻 𒆭𒊏 𒆥𒄄𒀀 𒋞 𒀝𒀀 𒊕𒁀 𒅆 𒂃. “𒌓 𒕐𒕐 𒊕𒁀 𒇷 𒋻” 𒃻𒊏 𒊕 𒃻, 𒃻 𒆥𒄄𒀀 𒋃𒁕 (𒅆𒁾 𒊓𒀀, 𒅗) 𒊮𒁉 𒉽𒉈 𒆥: 𒋞 𒋃𒁕𒉌 𒃻 𒉡𒉽𒊏𒅗 𒍣."
+   "message3": "𒌓 𒀸𒀸 𒊕𒁀 𒂷𒊏 𒇷 𒋻 %1",
+   "tooltip": "𒆥𒄄𒀀 𒋞𒍪 1 𒀝𒉈 𒊺𒂵. 𒃻 𒆭𒊏 𒄑𒆪𒆷𒅗 𒃻 𒆭𒊏, 𒃻 𒋧𒈠 𒃻𒀝 𒆥𒄄𒀀 𒅆 𒁇𒊏. 𒍣𒉈 𒅗: 𒆥𒄄𒀀 𒅗 𒅗𒂵𒉌𒋫 𒃶𒍪. 𒈨 𒃻 𒆭𒊏, 'flour grams: number; water grams: number - grams of water'-𒁶, 𒃻 𒆭𒊏 𒀸𒀸 𒈨𒁉 𒅗: text, number, yes/no, list 𒇻 any. 𒃻 𒆭𒊏 𒆥𒄄𒀀 𒋞 𒀝𒀀 𒊕𒁀 𒅆 𒂃. “𒌓 𒀸𒀸 𒊕𒁀 𒇷 𒋻” 𒃻𒊏 𒊕 𒃻, 𒃻 𒆥𒄄𒀀 𒋃𒁕 (𒅆𒁾 𒊓𒀀, 𒅗) 𒊮𒁉 𒉽𒉈 𒆥: 𒋞 𒋃𒁕𒉌 𒃻 𒉡𒉽𒊏𒅗 𒍣."
   },
   "rb_agent_builtin": {
    "message0": "𒄑𒆪: %1",
-   "tooltip": "𒄑𒆪 𒆥𒄄𒀀𒅗 𒃻𒊏. “𒃻𒋃 𒀝” 𒅆𒇻 “𒌓 𒅆𒇻 𒌗” 𒃻𒋃 𒅆𒇻 𒌓 𒍣 𒋧, 𒉣𒈨 𒃶𒀀𒅗 𒉡𒈨𒀀. “𒅗 𒅆𒂃” 𒅆𒂃𒀀 𒕐𒆤 𒆥 𒆥𒄄𒀀𒅗 𒁲 𒋻. 𒅆𒁾 𒉈𒀀 𒅗𒉋, GitHub, Telegram, 𒁾𒅗 𒅆𒇻 𒁾𒌗 𒅆𒁺𒁀𒅗 𒂷𒂷; Python 𒌓𒁺𒀀𒋫 𒃻𒍪 𒂷𒂷 (𒃻𒂃 second-thought.ini-a 𒃻) 𒅆𒇻 𒅆𒁾 𒊓𒀀 𒍣 𒋃. 𒆥𒄄, 𒅗 𒊬 𒅆𒇻 “𒃻𒁶 𒋛 𒁲” 𒕐𒕐𒀀 𒊕𒁀 𒇷 𒋻, 𒃻 𒆥𒄄𒀀 𒋃𒁕 𒊮𒁉 𒉽𒉈 𒆥. “𒇷 𒉡𒋻” 𒃻 𒋃𒁕 𒃻𒉆𒈠 𒉆𒍣 𒃻𒊏𒀀 𒅆𒊒. 𒄑𒅅 𒂃, 𒅅 𒂃 𒅆𒇻 𒄑𒆪 𒍣 𒀀𒁺 𒃻𒉆𒈠 𒇷 𒋻."
+   "tooltip": "𒄑𒆪 𒆥𒄄𒀀𒅗 𒃻𒊏. “𒃻𒋃 𒀝” 𒅇 “𒌓 𒅇 𒌗” 𒃻𒋃 𒅇 𒌓 𒍣 𒋧, 𒉣𒈨 𒃶𒀀𒅗 𒉡𒈨𒀀. “𒅗 𒅆𒂃” 𒅆𒂃𒀀 𒀸𒆤 𒆥 𒆥𒄄𒀀𒅗 𒁲 𒋻. 𒅆𒁾 𒉈𒀀 𒅗𒉋, GitHub, Telegram, 𒁾𒅗 𒅇 𒁾𒌗 𒅆𒁺𒁀𒅗 𒂷𒂷; Python 𒌓𒁺𒀀𒋫 𒃻𒍪 𒂷𒂷 (𒃻𒂃 second-thought.ini-a 𒃻) 𒅇 𒅆𒁾 𒊓𒀀 𒍣 𒋃. 𒆥𒄄, 𒅗 𒊬 𒅇 “𒃻𒁶 𒋛 𒁲” 𒀸𒀸𒀀 𒊕𒁀 𒇷 𒋻, 𒃻 𒆥𒄄𒀀 𒋃𒁕 𒊮𒁉 𒉽𒉈 𒆥. “𒇷 𒉡𒋻” 𒃻 𒋃𒁕 𒃻𒉆𒈠 𒉆𒍣 𒃻𒊏𒀀 𒅆𒊒. 𒄑𒅅 𒂃, 𒅅 𒂃 𒅇 𒄑𒆪 𒍣 𒀀𒁺 𒃻𒉆𒈠 𒇷 𒋻."
   },
   "rb_agent_mcp": {
    "message0": "𒄑𒆪 𒀵 MCP %1 %2",
-   "tooltip": "𒆥𒄄𒀀 𒄑𒆪 𒀵 MCP-𒆤 𒋧𒈠 𒃻𒉆 𒋧: 𒁾, GitHub, 𒂍 𒃻𒋃, 𒁾𒌗 𒅆𒇻 𒃻 𒊹, MCP 𒃻𒉆𒋫. 𒀵 second-thought.ini-a 𒃻 MCP_<NAME> = 𒀉𒉘𒂷 𒊕 𒃻𒊏 (npx -y @modelcontextprotocol/server-filesystem ~/recipes-gin7) 𒇻 𒆠𒁉 https://. Python 𒌓𒁺𒀀𒋫𒅗𒉌: 𒅆𒁾 𒉈𒀀 𒆥𒄄𒀀 𒄑𒆪 𒉈 𒉡𒈨𒀀 𒆥 𒀝."
+   "tooltip": "𒆥𒄄𒀀 𒄑𒆪 𒀵 MCP-𒆤 𒋧𒈠 𒃻𒉆 𒋧: 𒁾, GitHub, 𒂍 𒃻𒋃, 𒁾𒌗 𒅇 𒃻 𒊹, MCP 𒃻𒉆𒋫. 𒀵 second-thought.ini-a 𒃻 MCP_<NAME> = 𒀉𒉘𒂷 𒊕 𒃻𒊏 (npx -y @modelcontextprotocol/server-filesystem ~/recipes-gin7) 𒇻 𒆠𒁉 https://. Python 𒌓𒁺𒀀𒋫𒅗𒉌: 𒅆𒁾 𒉈𒀀 𒆥𒄄𒀀 𒄑𒆪 𒉈 𒉡𒈨𒀀 𒆥 𒀝."
   },
   "rb_agent_kraken": {
    "message0": "𒄑𒆪 Kraken %1",
-   "tooltip": "𒆥𒄄𒀀 𒄑𒆪 Kraken kraken-cli-𒋫 𒋧: 𒆬𒁉 𒆠𒇴, 𒃻𒋃𒍪 𒅆𒇻 𒀉𒉘𒂷𒍪, 𒅆𒇻 𒉚 𒁾𒁀 𒆬𒁉 𒋾𒆷𒁕. 𒉚 𒋾𒆷 𒀉𒉘𒂷 𒍣 𒃻𒊏 𒊺𒂵, 𒄑𒆪 𒆬𒌓 𒉽𒊑 𒕐𒕐 𒊕𒁀 𒂷𒊏 𒇷 𒋻, 𒇽 𒉡𒋻𒊏𒀀, 𒅆𒇻 𒌓𒃻𒊏 𒇻 GitHub Actions-𒀀 𒉡𒀝. kraken-cli 𒃻𒊏 𒀠 𒅗, 𒅆𒇻, 𒃻𒋃𒍪𒂠, KRAKEN_API_KEY 𒅆𒇻 KRAKEN_API_SECRET second-thought.ini-a (𒆬𒁉 𒅆𒇻 𒉚 𒁾𒁀 𒃻𒂃 𒉡𒅗). Python 𒌓𒁺𒀀𒋫𒅗𒉌."
+   "tooltip": "𒆥𒄄𒀀 𒄑𒆪 Kraken kraken-cli-𒋫 𒋧: 𒆬𒁉 𒆠𒇴, 𒃻𒋃𒍪 𒅇 𒀉𒉘𒂷𒍪, 𒅇 𒉚 𒁾𒁀 𒆬𒁉 𒋾𒆷𒁕. 𒉚 𒋾𒆷 𒀉𒉘𒂷 𒍣 𒃻𒊏 𒊺𒂵, 𒄑𒆪 𒆬𒌓 𒉽𒊑 𒀸𒀸 𒊕𒁀 𒂷𒊏 𒇷 𒋻, 𒇽 𒉡𒋻𒊏𒀀, 𒅇 𒌓𒃻𒊏 𒇻 GitHub Actions-𒀀 𒉡𒀝. kraken-cli 𒃻𒊏 𒀠 𒅗, 𒅇, 𒃻𒋃𒍪𒂠, KRAKEN_API_KEY 𒅇 KRAKEN_API_SECRET second-thought.ini-a (𒆬𒁉 𒅇 𒉚 𒁾𒁀 𒃻𒂃 𒉡𒅗). Python 𒌓𒁺𒀀𒋫𒅗𒉌."
   },
   "rb_tg_when": {
    "message0": "𒌓 𒅗 Telegram %1 𒅅 𒁺𒈾",
-   "tooltip": "𒌓 bot-𒍪 𒅗 𒋗 𒋾𒀀, 𒋞 𒆠𒋫 𒀝 (“𒃻𒉆” 𒊬, 𒇻 𒅗 𒅗𒂊 𒅅𒇷𒉈). 𒅗𒅗𒍪𒋫 (TELEGRAM_CHAT_ID) 𒁺𒈾𒉌 𒋃. Python 𒌓𒁺𒀀𒋫 𒌓𒃻𒉆 𒄑𒌆𒉿 𒃻; 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅆𒇻 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅗 𒅆𒁺𒁀𒁕 𒆥𒉈."
+   "tooltip": "𒌓 bot-𒍪 𒅗 𒋗 𒋾𒀀, 𒋞 𒆠𒋫 𒀝 (“𒃻𒉆” 𒊬, 𒇻 𒅗 𒅗𒂊 𒅅𒇷𒉈). 𒅗𒅗𒍪𒋫 (TELEGRAM_CHAT_ID) 𒁺𒈾𒉌 𒋃. Python 𒌓𒁺𒀀𒋫 𒌓𒃻𒉆 𒄑𒌆𒉿 𒃻; 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅇 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅗 𒅆𒁺𒁀𒁕 𒆥𒉈."
   },
   "rb_tg_message": {
    "message0": "𒅗 Telegram %1",
@@ -344,11 +344,11 @@
   },
   "rb_discord_when": {
    "message0": "𒌓 𒅗 Discord %1 𒅅 𒁺𒈾",
-   "tooltip": "𒌓 𒇽 𒉽𒂊 Discord-𒍪 1-𒀀 𒊬𒊑, 𒋞 𒆠𒋫 𒀝 (“𒃻𒉆” 𒊬, 𒇻 𒅗 𒅗𒂊 𒅅𒇷𒉈). 𒉽𒂊 DISCORD_CHANNEL_ID-a-ni 𒋃, 𒅗 bot-𒅗 𒉡𒋃. 𒌓𒌉𒌉 10-𒀀 𒅆 𒁇. “𒃻 𒁺𒈾” text, sender 𒅆𒇻 channel 𒋧. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅆𒇻 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅗 𒅆𒁺𒁀𒁕 𒆥𒉈."
+   "tooltip": "𒌓 𒇽 𒉽𒂊 Discord-𒍪 1-𒀀 𒊬𒊑, 𒋞 𒆠𒋫 𒀝 (“𒃻𒉆” 𒊬, 𒇻 𒅗 𒅗𒂊 𒅅𒇷𒉈). 𒉽𒂊 DISCORD_CHANNEL_ID-a-ni 𒋃, 𒅗 bot-𒅗 𒉡𒋃. 𒌓𒌉𒌉 10-𒀀 𒅆 𒁇. “𒃻 𒁺𒈾” text, sender 𒅇 channel 𒋧. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅇 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅗 𒅆𒁺𒁀𒁕 𒆥𒉈."
   },
   "rb_slack_when": {
    "message0": "𒌓 𒅗 Slack %1 𒅅 𒁺𒈾",
-   "tooltip": "𒌓 𒇽 𒉽𒂊 Slack-𒍪 1-𒀀 𒊬𒊑, 𒋞 𒆠𒋫 𒀝 (“𒃻𒉆” 𒊬, 𒇻 𒅗 𒅗𒂊 𒅅𒇷𒉈). 𒉽𒂊 SLACK_CHANNEL_ID-a-ni 𒋃, 𒅗 bot-𒆤𒉈 𒉡𒋃. 𒌓𒌉𒌉 10-𒀀 𒅆 𒁇. “𒃻 𒁺𒈾” text, sender 𒅆𒇻 channel 𒋧. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅆𒇻 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅗 𒅆𒁺𒁀𒁕 𒆥𒉈."
+   "tooltip": "𒌓 𒇽 𒉽𒂊 Slack-𒍪 1-𒀀 𒊬𒊑, 𒋞 𒆠𒋫 𒀝 (“𒃻𒉆” 𒊬, 𒇻 𒅗 𒅗𒂊 𒅅𒇷𒉈). 𒉽𒂊 SLACK_CHANNEL_ID-a-ni 𒋃, 𒅗 bot-𒆤𒉈 𒉡𒋃. 𒌓𒌉𒌉 10-𒀀 𒅆 𒁇. “𒃻 𒁺𒈾” text, sender 𒅇 channel 𒋧. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅇 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅗 𒅆𒁺𒁀𒁕 𒆥𒉈."
   },
   "rb_discord_send": {
    "message0": "𒅗 Discord 𒆥𒄄 %1",
@@ -364,7 +364,7 @@
   },
   "rb_folder_files": {
    "message0": "𒁾 𒂷 %1-𒀀 %2-𒁶",
-   "tooltip": "𒁾 𒂷𒀀, 𒉋 𒊕𒁀, 𒃻𒋃𒁶: name, path, modified 𒅆𒇻 size. 𒅆𒁺 *.pdf-gin7; 𒁾 𒃻𒉆𒂠 𒋤 𒃻. 𒅆 𒁇𒊏𒉌: 𒉡𒋃. Python 𒌓𒁺𒀀𒋫 𒂷 𒅆 𒁇 (𒄑𒄯 𒁕𒁀, 𒆜 𒃻𒉆 𒉡𒅗𒂵𒀀); 𒅆𒁾 𒉈 𒁾 𒅆𒁺𒁀 𒂷𒂷."
+   "tooltip": "𒁾 𒂷𒀀, 𒉋 𒊕𒁀, 𒃻𒋃𒁶: name, path, modified 𒅇 size. 𒅆𒁺 *.pdf-gin7; 𒁾 𒃻𒉆𒂠 𒋤 𒃻. 𒅆 𒁇𒊏𒉌: 𒉡𒋃. Python 𒌓𒁺𒀀𒋫 𒂷 𒅆 𒁇 (𒄑𒄯 𒁕𒁀, 𒆜 𒃻𒉆 𒉡𒅗𒂵𒀀); 𒅆𒁾 𒉈 𒁾 𒅆𒁺𒁀 𒂷𒂷."
   },
   "rb_calendar": {
    "message0": "𒁾𒌗 𒌓 %1 𒁺𒈾",
@@ -372,76 +372,76 @@
   },
   "rb_email_send": {
    "message0": "𒁾𒅗 %1-𒂠 𒈬 %2 𒆥𒄄 %3",
-   "tooltip": "𒆠𒍪𒋫 𒁾𒅗 𒆥𒄄 (EMAIL_ADDRESS 𒅆𒇻 𒅗 𒌋𒌆𒆷 𒄑𒆪𒆷 second-thought.ini-a). “𒅗 𒆥𒄄 𒊕𒁀 𒂷𒊏 𒇷 𒋻” 𒊕𒁀 𒇷 𒋻𒊑. 𒅆𒁾 𒉈𒀀 𒉺 𒌓𒁺 𒃶𒀀."
+   "tooltip": "𒆠𒍪𒋫 𒁾𒅗 𒆥𒄄 (EMAIL_ADDRESS 𒅇 𒅗 𒌋𒌆𒆷 𒄑𒆪𒆷 second-thought.ini-a). “𒅗 𒆥𒄄 𒊕𒁀 𒂷𒊏 𒇷 𒋻” 𒊕𒁀 𒇷 𒋻𒊑. 𒅆𒁾 𒉈𒀀 𒉺 𒌓𒁺 𒃶𒀀."
   },
   "rb_mqtt_when": {
    "message0": "𒌓 𒅗 MQTT %1-𒀀 𒁺𒈾",
-   "tooltip": "𒌓 𒅗 MQTT 𒉈𒀀 𒁺𒈾, 𒋞 𒆠𒋫 𒀝. + 𒆠 1, # 𒆠𒋫 𒃻𒉆, zigbee2mqtt/#-gin7. “𒃻 𒁺𒈾” 𒆠𒁉 𒅆𒇻 𒅗𒁉, 𒅆𒇻 𒀀𒊮 𒅗 JSON-𒅗 𒋧."
+   "tooltip": "𒌓 𒅗 MQTT 𒉈𒀀 𒁺𒈾, 𒋞 𒆠𒋫 𒀝. + 𒆠 1, # 𒆠𒋫 𒃻𒉆, zigbee2mqtt/#-gin7. “𒃻 𒁺𒈾” 𒆠𒁉 𒅇 𒅗𒁉, 𒅇 𒀀𒊮 𒅗 JSON-𒅗 𒋧."
   },
   "rb_webhook_when": {
    "message0": "𒌓 𒊓𒀀 𒀉𒉘𒂷 / %1-𒂠 𒁺𒈾",
-   "tooltip": "𒌓 𒃻 (Home Assistant, IFTTT, 𒆜 𒌉 𒄑𒅗𒍪𒀀) http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET> 𒅗 𒌤, 𒋞 𒆠𒋫 𒀝. 𒀉𒉘𒂷 𒃻𒂃 𒉡𒈨𒀀 𒋗 𒁇. “𒃻 𒁺𒈾” 𒅗 𒆥𒄄𒀀, 𒅆𒇻 𒀀𒊮 JSON-𒅗 𒇻 𒆠𒅗 𒋧."
+   "tooltip": "𒌓 𒃻 (Home Assistant, IFTTT, 𒆜 𒌉 𒄑𒅗𒍪𒀀) http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET> 𒅗 𒌤, 𒋞 𒆠𒋫 𒀝. 𒀉𒉘𒂷 𒃻𒂃 𒉡𒈨𒀀 𒋗 𒁇. “𒃻 𒁺𒈾” 𒅗 𒆥𒄄𒀀, 𒅇 𒀀𒊮 JSON-𒅗 𒇻 𒆠𒅗 𒋧."
   },
   "rb_email_when": {
    "message0": "𒌓 𒁾𒅗 %1 𒅅 𒁺𒈾",
-   "tooltip": "𒌓 𒁾𒅗 𒉋 𒂍𒍪𒀀 𒁺𒈾 (𒌓𒌉 2-𒀀 𒅆 𒁇), 𒇽 𒆥𒄄, 𒈬 𒇻 𒅗 𒉈 𒅅𒀀, 𒋞 𒆠𒋫 𒀝. “𒃻 𒁺𒈾” from, subject, body 𒅆𒇻 text 𒋧."
+   "tooltip": "𒌓 𒁾𒅗 𒉋 𒂍𒍪𒀀 𒁺𒈾 (𒌓𒌉 2-𒀀 𒅆 𒁇), 𒇽 𒆥𒄄, 𒈬 𒇻 𒅗 𒉈 𒅅𒀀, 𒋞 𒆠𒋫 𒀝. “𒃻 𒁺𒈾” from, subject, body 𒅇 text 𒋧."
   },
   "rb_feed_when": {
    "message0": "𒌓 𒅗𒉋 %1-𒀀 𒃻 𒉋 𒅅",
-   "tooltip": "𒃻 𒉋 𒅗𒉋𒀀 𒕐𒕐𒂠 𒋞 𒆠𒋫 𒀝 (𒌓𒌉 15-𒀀 𒅆 𒁇). 𒅗𒉋𒍪𒂠 𒋤 𒃻. “𒃻 𒁺𒈾” feed, title, link, date, summary 𒅆𒇻 text 𒋧."
+   "tooltip": "𒃻 𒉋 𒅗𒉋𒀀 𒀸𒀸𒂠 𒋞 𒆠𒋫 𒀝 (𒌓𒌉 15-𒀀 𒅆 𒁇). 𒅗𒉋𒍪𒂠 𒋤 𒃻. “𒃻 𒁺𒈾” feed, title, link, date, summary 𒅇 text 𒋧."
   },
   "rb_folder_when": {
    "message0": "𒌓 𒁾 𒂷 %1-𒀀 𒉺 𒌓𒁺",
-   "tooltip": "𒌓 𒁾 𒉋 𒂷 𒉈𒀀 𒊒, 𒋞 𒆠𒋫 𒀝 (𒄑𒄯 𒁕𒁀, 𒆜 𒃻𒉆 𒉡𒅗𒂵𒀀). “𒃻 𒁺𒈾” 𒈬𒁉, 𒆜𒁉, 𒃲𒁉, 𒅆𒇻, PDF, Word 𒇻 𒁾 𒅗𒈠𒂠, 𒅗 𒊮𒁀 𒋧. 𒀩𒂠, “𒀩” 𒋞 𒀩𒆤𒉈 𒋧."
+   "tooltip": "𒌓 𒁾 𒉋 𒂷 𒉈𒀀 𒊒, 𒋞 𒆠𒋫 𒀝 (𒄑𒄯 𒁕𒁀, 𒆜 𒃻𒉆 𒉡𒅗𒂵𒀀). “𒃻 𒁺𒈾” 𒈬𒁉, 𒆜𒁉, 𒃲𒁉, 𒅇, PDF, Word 𒇻 𒁾 𒅗𒈠𒂠, 𒅗 𒊮𒁀 𒋧. 𒀩𒂠, “𒀩” 𒋞 𒀩𒆤𒉈 𒋧."
   },
   "rb_gh_when": {
    "message0": "𒌓 𒀉𒉘𒂷 𒉽 𒅆𒂃𒈬 𒀠 𒅗",
-   "tooltip": "𒌓 𒇽 𒂷𒊏 𒅆𒂃 𒀉𒉘𒂷 𒉽 GitHub 𒀠 𒅗, 𒋞 𒆠𒋫 𒀝 (𒌓𒌉 5-𒀀 𒅆 𒁇). “𒃻 𒁺𒈾” repo, number, title, user, link 𒅆𒇻 text 𒋧."
+   "tooltip": "𒌓 𒇽 𒂷𒊏 𒅆𒂃 𒀉𒉘𒂷 𒉽 GitHub 𒀠 𒅗, 𒋞 𒆠𒋫 𒀝 (𒌓𒌉 5-𒀀 𒅆 𒁇). “𒃻 𒁺𒈾” repo, number, title, user, link 𒅇 text 𒋧."
   },
   "rb_gh_issue_when": {
    "message0": "𒌓 𒀀𒃻 𒉋 %1-𒀀 𒂃",
-   "tooltip": "𒌓 𒇽 𒀀𒃻 𒄑𒄯 GitHub 𒉈𒀀 𒂃, 𒋞 𒆠𒋫 𒀝 (𒌓𒌉 5-𒀀 𒅆 𒁇; 𒀉𒉘𒂷 𒉽 𒉡𒋃). “𒃻 𒁺𒈾” repo, number, title, body, author, labels, link 𒅆𒇻 text 𒋧."
+   "tooltip": "𒌓 𒇽 𒀀𒃻 𒄑𒄯 GitHub 𒉈𒀀 𒂃, 𒋞 𒆠𒋫 𒀝 (𒌓𒌉 5-𒀀 𒅆 𒁇; 𒀉𒉘𒂷 𒉽 𒉡𒋃). “𒃻 𒁺𒈾” repo, number, title, body, author, labels, link 𒅇 text 𒋧."
   },
   "rb_gh_release_when": {
    "message0": "𒌓 𒃻 𒌓𒁺𒀀 %1-𒀀 𒃻",
-   "tooltip": "𒌓 𒄑𒄯 GitHub 𒉈 𒃻 𒌓𒁺𒀀 𒃻, 𒋞 𒆠𒋫 𒀝 (𒌓𒌉 15-𒀀 𒅆 𒁇). “𒃻 𒁺𒈾” repo, tag, name, previous_tag, notes, link 𒅆𒇻 text 𒋧."
+   "tooltip": "𒌓 𒄑𒄯 GitHub 𒉈 𒃻 𒌓𒁺𒀀 𒃻, 𒋞 𒆠𒋫 𒀝 (𒌓𒌉 15-𒀀 𒅆 𒁇). “𒃻 𒁺𒈾” repo, tag, name, previous_tag, notes, link 𒅇 text 𒋧."
   },
   "rb_cal_when": {
    "message0": "𒌓 𒃻 𒁾𒌗𒀀 𒌓𒌉 %1-𒀀 𒊕 𒃻",
-   "tooltip": "𒃻 𒁾𒌗𒍪 𒕐𒕐 𒊕𒁀 𒌓𒌉 𒉈𒀀 𒋞 𒆠𒋫 𒀝 (𒃻 𒌓 1-𒀀 𒉡𒋃). “𒃻 𒁺𒈾” title, start, end, location, minutes 𒅆𒇻 text 𒋧."
+   "tooltip": "𒃻 𒁾𒌗𒍪 𒀸𒀸 𒊕𒁀 𒌓𒌉 𒉈𒀀 𒋞 𒆠𒋫 𒀝 (𒃻 𒌓 1-𒀀 𒉡𒋃). “𒃻 𒁺𒈾” title, start, end, location, minutes 𒅇 text 𒋧."
   },
   "rb_page_when": {
    "message0": "𒌓 𒅆𒁾 𒊓 %1 𒉽",
    "message1": "𒍠 %1 𒅅𒆷𒉌, 𒌓𒌉 %2-𒀀 𒅆 𒁇",
-   "tooltip": "𒌓 𒅗 𒅆𒁾 𒊓𒀀 𒉽, 𒋞 𒆠𒋫 𒀝. 𒅆𒁾 𒃻𒉆 𒅆 𒁇𒊑𒉈 “𒍠 𒅅𒆷𒉌” 𒋤 𒃻, 𒇻 𒅗 (Price-𒁶) 𒊬, 𒄖 𒅅𒆷 𒅆𒇻 𒄖 2 𒂕𒁉𒀀 𒅆 𒁇𒊑𒉈, 𒅗 𒆬𒂵 𒅆𒇻 𒃻𒋃 𒆠𒉽𒊏 𒉡𒋃. 𒅆𒂃𒀀 𒊕𒁀 𒅆𒁾𒉌 𒄑𒌆𒉿𒂵 𒃻. “𒃻 𒁺𒈾” url, title, before, after, changed (𒄖 𒉽𒊏) 𒅆𒇻 text 𒋧. 𒅆𒁾 𒅆𒊓 𒀠 𒅗𒂵 𒅆 𒁇 𒉡𒌒𒋫𒅅. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅆𒇻 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅆𒁾 𒅆𒁺𒁀𒁕 𒆥."
+   "tooltip": "𒌓 𒅗 𒅆𒁾 𒊓𒀀 𒉽, 𒋞 𒆠𒋫 𒀝. 𒅆𒁾 𒃻𒉆 𒅆 𒁇𒊑𒉈 “𒍠 𒅅𒆷𒉌” 𒋤 𒃻, 𒇻 𒅗 (Price-𒁶) 𒊬, 𒄖 𒅅𒆷 𒅇 𒄖 2 𒂕𒁉𒀀 𒅆 𒁇𒊑𒉈, 𒅗 𒆬𒂵 𒅇 𒃻𒋃 𒆠𒉽𒊏 𒉡𒋃. 𒅆𒂃𒀀 𒊕𒁀 𒅆𒁾𒉌 𒄑𒌆𒉿𒂵 𒃻. “𒃻 𒁺𒈾” url, title, before, after, changed (𒄖 𒉽𒊏) 𒅇 text 𒋧. 𒅆𒁾 𒅆𒊓 𒀠 𒅗𒂵 𒅆 𒁇 𒉡𒌒𒋫𒅅. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅇 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅆𒁾 𒅆𒁺𒁀𒁕 𒆥."
   },
   "rb_event": {
    "message0": "𒃻 𒁺𒈾: %1",
-   "tooltip": "𒆜 “𒌓 … 𒁺𒈾” 𒊮𒂵: 𒀀𒊮 1 𒃻 𒁺𒈾𒅗. 𒄑𒌆𒉿𒃻 𒕐𒕐 'text' 𒋧; 𒅗 𒋞 “𒌓” 𒕐𒕐𒅗 𒀀𒊮 𒉽 𒋃. 𒃻𒋃 𒃻𒉆𒂠 𒋤 𒃻."
+   "tooltip": "𒆜 “𒌓 … 𒁺𒈾” 𒊮𒂵: 𒀀𒊮 1 𒃻 𒁺𒈾𒅗. 𒄑𒌆𒉿𒃻 𒀸𒀸 'text' 𒋧; 𒅗 𒋞 “𒌓” 𒀸𒀸𒅗 𒀀𒊮 𒉽 𒋃. 𒃻𒋃 𒃻𒉆𒂠 𒋤 𒃻."
   },
   "rb_mqtt_read": {
    "message0": "𒅗 MQTT 𒂕𒊏 %1-𒀀",
-   "tooltip": "𒅗 𒂕𒊏 𒆠 MQTT-𒀀. 𒅗 𒀵𒂊 𒃻𒊏 (retained)-𒉌 𒌓𒁉𒀀 𒉺 𒌓𒁺. 𒆠𒀀 + 𒇻 # 𒅅𒆷𒀀, 𒃻𒋃 𒅗 𒂕𒊏 𒆠 𒕐𒕐𒅗. 𒅆𒁾 𒉈𒀀 𒆠 𒅆𒁺𒁀 𒂷𒂷."
+   "tooltip": "𒅗 𒂕𒊏 𒆠 MQTT-𒀀. 𒅗 𒀵𒂊 𒃻𒊏 (retained)-𒉌 𒌓𒁉𒀀 𒉺 𒌓𒁺. 𒆠𒀀 + 𒇻 # 𒅅𒆷𒀀, 𒃻𒋃 𒅗 𒂕𒊏 𒆠 𒀸𒀸𒅗. 𒅆𒁾 𒉈𒀀 𒆠 𒅆𒁺𒁀 𒂷𒂷."
   },
   "rb_mqtt_publish": {
    "message0": "MQTT %1 %2-𒀀 𒉺 𒌓𒁺, 𒃻 %3",
-   "tooltip": "𒀵 MQTT-𒍪𒂠 𒅗 𒆥𒄄. “𒃻” 𒀵𒊏 𒇽 𒂕𒊏 𒄑𒌆𒉿 𒃻𒊑𒉈 𒅗. “𒃻 𒂍𒀀 𒀝 𒕐𒕐 𒊕𒁀 𒇷 𒋻” 𒇻 “𒅗 𒆥𒄄” 𒊕𒁀 𒇷 𒋻𒊑. 𒅆𒁾 𒉈𒀀 𒉺 𒌓𒁺𒉌."
+   "tooltip": "𒀵 MQTT-𒍪𒂠 𒅗 𒆥𒄄. “𒃻” 𒀵𒊏 𒇽 𒂕𒊏 𒄑𒌆𒉿 𒃻𒊑𒉈 𒅗. “𒃻 𒂍𒀀 𒀝 𒀸𒀸 𒊕𒁀 𒇷 𒋻” 𒇻 “𒅗 𒆥𒄄” 𒊕𒁀 𒇷 𒋻𒊑. 𒅆𒁾 𒉈𒀀 𒉺 𒌓𒁺𒉌."
   },
   "rb_homey_when": {
    "message0": "𒌓 𒃻𒁶 Homey %1 %2 𒉽",
-   "tooltip": "𒌓 𒃻 𒃻𒁶 Homey 𒉈𒅗 𒉽, 𒋞 𒆠𒋫 𒀝 (𒌓𒌉𒌉 10-𒀀 𒅆 𒁇). 𒃻𒉆𒂠 “𒃻𒉆” 𒊬. “𒃻 𒁺𒈾” device, zone, capability, from, to 𒅆𒇻 text 𒋧. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅆𒇻 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒆥𒉈."
+   "tooltip": "𒌓 𒃻 𒃻𒁶 Homey 𒉈𒅗 𒉽, 𒋞 𒆠𒋫 𒀝 (𒌓𒌉𒌉 10-𒀀 𒅆 𒁇). 𒃻𒉆𒂠 “𒃻𒉆” 𒊬. “𒃻 𒁺𒈾” device, zone, capability, from, to 𒅇 text 𒋧. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅇 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒆥𒉈."
   },
   "rb_homey_value": {
    "message0": "%1 𒃻𒁶 Homey %2-𒀀",
-   "tooltip": "𒃻 𒃻𒁶 Homey-𒅗 1, 𒈬 𒃻𒁶𒈠𒋫: onoff (on 𒇻 off), dim (0-𒋫 1-𒂠), measure_temperature, measure_power 𒅆𒇻 𒃻 𒊹. “𒃻𒁶 Homey match” 𒃻𒁶 𒕐𒕐 𒃻 𒅅𒆷 𒉺 𒌓𒁺."
+   "tooltip": "𒃻 𒃻𒁶 Homey-𒅗 1, 𒈬 𒃻𒁶𒈠𒋫: onoff (on 𒇻 off), dim (0-𒋫 1-𒂠), measure_temperature, measure_power 𒅇 𒃻 𒊹. “𒃻𒁶 Homey match” 𒃻𒁶 𒀸𒀸 𒃻 𒅅𒆷 𒉺 𒌓𒁺."
   },
   "rb_homey_find": {
    "message0": "𒃻𒁶 Homey %1-𒁶",
-   "tooltip": "𒂠 𒃻𒋃 𒃻𒁶 𒕐𒕐𒅗 𒈬, 𒆠 𒇻 𒈨𒁉 𒅗 𒉈𒉈 𒃻𒉆 𒅅 ('*' 𒃻𒉆): name, zone, class 𒅆𒇻 𒃻 𒕐𒕐."
+   "tooltip": "𒂠 𒃻𒋃 𒃻𒁶 𒀸𒀸𒅗 𒈬, 𒆠 𒇻 𒈨𒁉 𒅗 𒉈𒉈 𒃻𒉆 𒅅 ('*' 𒃻𒉆): name, zone, class 𒅇 𒃻 𒀸𒀸."
   },
   "rb_homey_set": {
    "message0": "𒃻𒁶 Homey %1 %2 %3 𒃻",
-   "tooltip": "𒃻 𒃻, onoff off, dim 0.5 𒇻 target_temperature 19-𒁶. “𒃻 𒂍𒀀 𒀝 𒕐𒕐 𒊕𒁀 𒇷 𒋻” 𒊕𒁀 𒇷 𒋻𒊑; 𒄑𒅅 𒂃, 𒅅 𒂃 𒅆𒇻 𒄑𒆪 𒍣 𒀀𒁺 𒃻𒉆𒈠 𒇷 𒋻. 𒅆𒁾 𒉈𒀀 𒂍 𒅆𒁺𒁀 𒉽."
+   "tooltip": "𒃻 𒃻, onoff off, dim 0.5 𒇻 target_temperature 19-𒁶. “𒃻 𒂍𒀀 𒀝 𒀸𒀸 𒊕𒁀 𒇷 𒋻” 𒊕𒁀 𒇷 𒋻𒊑; 𒄑𒅅 𒂃, 𒅅 𒂃 𒅇 𒄑𒆪 𒍣 𒀀𒁺 𒃻𒉆𒈠 𒇷 𒋻. 𒅆𒁾 𒉈𒀀 𒂍 𒅆𒁺𒁀 𒉽."
   },
   "rb_homey_flow": {
    "message0": "𒀀𒃻 Homey %1 𒀝",
@@ -457,7 +457,7 @@
   },
   "rb_run_program": {
    "message0": "𒄑𒄯 %1 %2-𒁕 𒀝",
-   "tooltip": "𒄑𒄯 𒂠 𒄑𒄯𒍪𒋫 𒄊 1-𒁶 𒀝. 𒁾𒊕, 𒃻𒀝 𒅆𒇻 𒃻𒉽𒁉 𒋗 𒋾, 𒃻𒀝 𒄄. 𒊮𒂵 “𒃻 𒅗𒈠” 𒃻 𒆠 𒉈𒀀 𒋧𒈠. Python 𒌓𒁺𒀀 𒄑𒄯 𒌓 𒌓𒁺𒀀𒁶 𒅅."
+   "tooltip": "𒄑𒄯 𒂠 𒄑𒄯𒍪𒋫 𒄊 1-𒁶 𒀝. 𒁾𒊕, 𒃻𒀝 𒅇 𒃻𒉽𒁉 𒋗 𒋾, 𒃻𒀝 𒄄. 𒊮𒂵 “𒃻 𒅗𒈠” 𒃻 𒆠 𒉈𒀀 𒋧𒈠. Python 𒌓𒁺𒀀 𒄑𒄯 𒌓 𒌓𒁺𒀀𒁶 𒅅."
   },
   "rb_mem_set": {
    "message0": "%1 %2-𒁶 𒄑𒌆𒉿 𒃻 %3",
@@ -469,7 +469,7 @@
   },
   "rb_mem_add": {
    "message0": "%1 𒂠 𒄑𒌆𒉿 %2-𒀀 𒃻 %3",
-   "tooltip": "𒃻 𒂠 𒄑𒌆𒉿𒀀 𒃻. 𒂠 𒅅𒆷𒀀, 𒈨𒁉 𒅆𒇻 𒌓𒁉 𒃻."
+   "tooltip": "𒃻 𒂠 𒄑𒌆𒉿𒀀 𒃻. 𒂠 𒅅𒆷𒀀, 𒈨𒁉 𒅇 𒌓𒁉 𒃻."
   },
   "rb_mem_forget": {
    "message0": "%1 𒋗 𒁇"
@@ -498,7 +498,7 @@
   },
   "rb_img_ask": {
    "message0": "Claude %1 𒀩 %2-𒀀 𒇷 𒋻",
-   "tooltip": "Claude 𒀩 𒅆 𒁇 𒅆𒇻 𒅗 𒄄."
+   "tooltip": "Claude 𒀩 𒅆 𒁇 𒅇 𒅗 𒄄."
   },
   "rb_img_score": {
    "message0": "𒀩 %1 10-𒀀 %2-𒂠 𒋃"
@@ -516,7 +516,7 @@
   },
   "rb_ha_event_when": {
    "message0": "𒌓 𒃻 Home Assistant %1 %2-𒁕 𒀝",
-   "tooltip": "𒌓 Home Assistant 𒃻 𒉈 𒆥𒄄, 𒋞 𒆠𒋫 𒀝: 𒋳 𒄑𒆪 𒇻 𒃻𒂃 𒋤 (zha_event, deconz_event), automation 𒊕 𒃻 (automation_triggered), 𒃻 𒄑𒅗𒈠, 𒇻 𒃻𒍪. 𒃻𒉆𒂠 “𒃻𒉆” 𒊬. 𒁾 2-𒄰 𒅗 𒀠 𒅗𒂵 𒃻𒋃 𒃻𒅗𒅗, 𒈬 𒃻𒂃 𒋤𒁶. “𒃻 𒁺𒈾” event_type, entity, data, time 𒅆𒇻 text, 𒅆𒇻 𒀀𒊮 𒃻𒋃 𒕐𒕐 𒋧. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅆𒇻 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒃻 𒅆𒁺𒁀𒁕 𒆥."
+   "tooltip": "𒌓 Home Assistant 𒃻 𒉈 𒆥𒄄, 𒋞 𒆠𒋫 𒀝: 𒋳 𒄑𒆪 𒇻 𒃻𒂃 𒋤 (zha_event, deconz_event), automation 𒊕 𒃻 (automation_triggered), 𒃻 𒄑𒅗𒈠, 𒇻 𒃻𒍪. 𒃻𒉆𒂠 “𒃻𒉆” 𒊬. 𒁾 2-𒄰 𒅗 𒀠 𒅗𒂵 𒃻𒋃 𒃻𒅗𒅗, 𒈬 𒃻𒂃 𒋤𒁶. “𒃻 𒁺𒈾” event_type, entity, data, time 𒅇 text, 𒅇 𒀀𒊮 𒃻𒋃 𒀸𒀸 𒋧. 𒅆𒁾 𒉈𒀀, 𒍣𒁕 𒋳 𒅇 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒃻 𒅆𒁺𒁀𒁕 𒆥."
   },
   "rb_ha_state": {
    "message0": "𒈨 %1",
@@ -528,11 +528,11 @@
   },
   "rb_ha_find": {
    "message0": "𒃻 %1-𒁶",
-   "tooltip": "𒂠 𒃻𒋃 (entity, name, state, unit, area) 𒃻 𒕐𒕐𒅗 id, 𒈬, 𒆠 𒇻 𒈨𒁉 𒅗 𒉈𒉈 𒃻𒉆 𒅅. '*' 𒃻𒉆."
+   "tooltip": "𒂠 𒃻𒋃 (entity, name, state, unit, area) 𒃻 𒀸𒀸𒅗 id, 𒈬, 𒆠 𒇻 𒈨𒁉 𒅗 𒉈𒉈 𒃻𒉆 𒅅. '*' 𒃻𒉆."
   },
   "rb_ha_summary": {
    "message0": "𒃻𒋃 %1-𒅗",
-   "tooltip": "𒂠 𒅗 𒃻𒅗 𒅆𒇻 𒈨𒁉, Claude 𒇷 𒋻𒊑𒉈 𒃻."
+   "tooltip": "𒂠 𒅗 𒃻𒅗 𒅇 𒈨𒁉, Claude 𒇷 𒋻𒊑𒉈 𒃻."
   },
   "rb_ha_history": {
    "message0": "𒃻 𒅆𒂠 %1 𒆜𒁍 %2 𒁀𒉌𒆷",
@@ -544,11 +544,11 @@
   },
   "rb_ha_trigger": {
    "message0": "𒃻 𒉽𒊏",
-   "tooltip": "𒆜 “𒌓 … 𒉽”-𒀀: 𒃻𒋃 entity, name, from 𒅆𒇻 to-𒁕."
+   "tooltip": "𒆜 “𒌓 … 𒉽”-𒀀: 𒃻𒋃 entity, name, from 𒅇 to-𒁕."
   },
   "rb_ha_call": {
    "message0": "%1 %2-𒀀 %3-𒁕 𒅗 𒌤",
-   "tooltip": "𒆥 𒅗 𒌤, light.turn_off-gin7. 𒃻 𒋛𒀀 JSON-𒀀𒀭, {\"temperature\": 20}-𒁶. 𒄑𒅅 𒂃, 𒅅 𒂃 𒅆𒇻 𒄑𒆪 𒍣 𒀀𒁺 𒃻𒉆𒈠 𒊕𒁀 𒇷 𒋻."
+   "tooltip": "𒆥 𒅗 𒌤, light.turn_off-gin7. 𒃻 𒋛𒀀 JSON-𒀀𒀭, {\"temperature\": 20}-𒁶. 𒄑𒅅 𒂃, 𒅅 𒂃 𒅇 𒄑𒆪 𒍣 𒀀𒁺 𒃻𒉆𒈠 𒊕𒁀 𒇷 𒋻."
   },
   "rb_ha_notify": {
    "message0": "𒅗 𒍪 %1 : %2",
@@ -575,7 +575,7 @@
    "h": "𒆜𒁍"
   },
   "rb_now.PART": {
-   "datetime": "𒌓 𒅆𒇻 𒆜𒁍",
+   "datetime": "𒌓 𒅇 𒆜𒁍",
    "weekday": "𒌓 𒌗𒅗"
   },
   "rb_sort.ORDER": {
@@ -591,25 +591,25 @@
   },
   "rb_ask_first.WHAT": {
    "ha": "𒃻 𒂍𒀀 𒀝 𒃻𒉆 (Home Assistant, Homey, MQTT)",
-   "messages": "𒅗 𒅆𒇻 𒅗 𒆥𒄄",
+   "messages": "𒅗 𒅇 𒅗 𒆥𒄄",
    "files": "𒁾 𒃻",
    "all": "𒃻 𒉈𒉈 𒃻𒉆"
   },
   "rb_agent_builtin.KIND": {
-   "web": "𒊓𒀀 𒆥 𒅆𒇻 𒅆𒁾 𒋃",
+   "web": "𒊓𒀀 𒆥 𒅇 𒅆𒁾 𒋃",
    "ask": "𒂷𒊏 𒇷 𒋻",
-   "memory": "𒅗 𒄑𒌆𒉿 𒃻 𒅆𒇻 𒄑𒌆𒉿",
+   "memory": "𒅗 𒄑𒌆𒉿 𒃻 𒅇 𒄑𒌆𒉿",
    "calc": "𒃻𒋃 𒀝",
-   "time": "𒌓 𒅆𒇻 𒌗",
+   "time": "𒌓 𒅇 𒌗",
    "file": "𒁾 𒂷𒂊 𒅆𒊒𒁕 𒋃",
    "review": "𒅗 𒅆𒂃",
    "feeds": "𒅗𒉋",
    "linkedin": "LinkedIn 𒆥 (𒅆𒁾 𒄑𒄯𒊏)",
-   "calendar": "𒁾𒌗: 𒃻 𒅆𒇻 𒌓 𒋤",
-   "email": "𒁾𒅗: 𒆥 𒅆𒇻 𒋃",
+   "calendar": "𒁾𒌗: 𒃻 𒅇 𒌓 𒋤",
+   "email": "𒁾𒅗: 𒆥 𒅇 𒋃",
    "email_send": "𒁾𒅗: 𒆥𒄄 (𒊕𒁀 𒇷 𒋻)",
-   "github": "GitHub: 𒄑𒄯 𒅆𒇻 𒀉𒉘𒂷 𒉽",
-   "github_act": "GitHub: 𒅗 𒊬, 𒀀𒃻 𒂃 𒅆𒇻 𒈬 𒃻 (𒊕𒁀 𒇷 𒋻)",
+   "github": "GitHub: 𒄑𒄯 𒅇 𒀉𒉘𒂷 𒉽",
+   "github_act": "GitHub: 𒅗 𒊬, 𒀀𒃻 𒂃 𒅇 𒈬 𒃻 (𒊕𒁀 𒇷 𒋻)",
    "telegram": "Telegram: 𒅗𒈬𒀀 𒆥",
    "telegram_send": "Telegram: 𒆥𒄄 (𒊕𒁀 𒇷 𒋻)",
    "telegram_send_free": "Telegram: 𒆥𒄄 (𒇷 𒉡𒋻)",
@@ -622,21 +622,21 @@
    "mqtt": "MQTT: 𒆠 𒋃",
    "mqtt_act": "MQTT: 𒉺 𒌓𒁺 (𒊕𒁀 𒇷 𒋻)",
    "mqtt_act_free": "MQTT: 𒉺 𒌓𒁺 (𒇷 𒉡𒋻)",
-   "homey_read": "Homey: 𒃻𒁶, 𒀀𒃻 𒅆𒇻 𒃻𒉽 𒅆 𒁇",
-   "homey_act": "Homey: 𒃻𒁶 𒋛 𒁲 𒅆𒇻 𒀀𒃻 𒊕 𒃻 (𒊕𒁀 𒇷 𒋻)",
-   "homey_act_free": "Homey: 𒃻𒁶 𒋛 𒁲 𒅆𒇻 𒀀𒃻 𒊕 𒃻 (𒇷 𒉡𒋻)",
+   "homey_read": "Homey: 𒃻𒁶, 𒀀𒃻 𒅇 𒃻𒉽 𒅆 𒁇",
+   "homey_act": "Homey: 𒃻𒁶 𒋛 𒁲 𒅇 𒀀𒃻 𒊕 𒃻 (𒊕𒁀 𒇷 𒋻)",
+   "homey_act_free": "Homey: 𒃻𒁶 𒋛 𒁲 𒅇 𒀀𒃻 𒊕 𒃻 (𒇷 𒉡𒋻)",
    "ha_read": "Home Assistant: 𒃻𒁶 𒅆 𒁇",
    "ha_act": "Home Assistant: 𒃻𒁶 𒋛 𒁲",
    "ha_act_free": "Home Assistant: 𒃻𒁶 𒋛 𒁲 (𒇷 𒉡𒋻)"
   },
   "rb_agent_mcp.ASK": {
    "changes": "(𒄑𒆪 𒃻 𒉽𒊑 𒊕𒁀 𒇷 𒋻)",
-   "every": "(𒄑𒆪 𒕐𒕐 𒊕𒁀 𒇷 𒋻)",
+   "every": "(𒄑𒆪 𒀸𒀸 𒊕𒁀 𒇷 𒋻)",
    "never": "(𒇷 𒉡𒋻)"
   },
   "rb_agent_kraken.MODE": {
-   "read": "(𒆬𒁉, 𒃻𒋃𒈬 𒅆𒇻 𒉚 𒁾𒁀)",
-   "live": "(𒅆𒇻 𒉚 𒋾𒆷: 𒀉𒉘𒂷 𒕐𒕐 𒊕𒁀 𒇷 𒋻)"
+   "read": "(𒆬𒁉, 𒃻𒋃𒈬 𒅇 𒉚 𒁾𒁀)",
+   "live": "(𒅇 𒉚 𒋾𒆷: 𒀉𒉘𒂷 𒀸𒀸 𒊕𒁀 𒇷 𒋻)"
   },
   "rb_mem_set.KIND": {
    "transient": "𒌓 𒅆𒁾 𒂃𒀀",
@@ -680,19 +680,19 @@
   "Text": "𒅗",
   "Tools": "𒄑𒆪",
   "Variables": "𒃻𒉽",
-  "Wait & time": "𒅅 𒅆𒇻 𒌓",
+  "Wait & time": "𒅅 𒅇 𒌓",
   "You": "𒍝𒂊"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
   "No blocks match": "𒋞 𒉡𒁲",
-  "Read and send": "𒋃 𒅆𒇻 𒆥𒄄",
+  "Read and send": "𒋃 𒅇 𒆥𒄄",
   "Tools for the agent: drop them inside an agent block": "𒄑𒆪 𒆥𒄄𒀀𒅗: 𒋞 𒆥𒄄𒀀𒅗 𒊮𒂠 𒊒",
   "Type in 'Find a block' above the canvas.": "“𒋞 𒆥” 𒅆𒁾 𒀭𒈾 𒊬."
  },
  "page": {
-  "'Forever' and timed memories are saved in this browser only. They won't follow you to another device.": "𒄑𒌆𒉿 “𒌓𒃻𒉆” 𒅆𒇻 𒌓𒁕 𒅆𒊓 𒉈𒀀 𒕐 𒃻. 𒃻𒁶 𒉽𒊏𒂠 𒉡𒁺.",
-  "'Forever' and timed memories are saved to your account for this page. Only you can see them.": "𒄑𒌆𒉿 “𒌓𒃻𒉆” 𒅆𒇻 𒌓𒁕 𒁾𒍪𒀀 𒅆𒁾 𒉈𒂠 𒃻. 𒍝𒂊 𒕐 𒅆 𒁇.",
+  "'Forever' and timed memories are saved in this browser only. They won't follow you to another device.": "𒄑𒌆𒉿 “𒌓𒃻𒉆” 𒅇 𒌓𒁕 𒅆𒊓 𒉈𒀀 𒀸 𒃻. 𒃻𒁶 𒉽𒊏𒂠 𒉡𒁺.",
+  "'Forever' and timed memories are saved to your account for this page. Only you can see them.": "𒄑𒌆𒉿 “𒌓𒃻𒉆” 𒅇 𒌓𒁕 𒁾𒍪𒀀 𒅆𒁾 𒉈𒂠 𒃻. 𒍝𒂊 𒀸 𒅆 𒁇.",
   "'let me choose from' got an empty list.": "“…-𒋫 𒂷 𒅆𒊒” 𒂠 𒉡𒌇 𒋗 𒋾.",
   "'{k} of' needs a record in its second slot.": "“{k} 𒃻𒋃 …-𒀀” 𒆠 2-𒄰𒀀 𒃻𒋃 𒀠 𒅗.",
   "'{name}' called itself too many times.": "“{name}” 𒉎𒋼𒀀 𒅗 𒌤 𒋛𒀀.",
@@ -701,14 +701,14 @@
   "(no answer)": "(𒅗 𒄄 𒉡𒅅)",
   "(no draft yet)": "(𒁾𒊕 𒉡𒅅)",
   "(no entity)": "(𒃻 𒉡𒅅)",
-  "(no message yet: only messages the broker keeps show up straight away)": "(𒅗 𒉡𒅅: 𒅗 𒁮𒃼𒂊 𒃻𒊏 𒕐 𒁹𒀀 𒉺 𒌓𒁺)",
+  "(no message yet: only messages the broker keeps show up straight away)": "(𒅗 𒉡𒅅: 𒅗 𒁮𒃼𒂊 𒃻𒊏 𒀸 𒁹𒀀 𒉺 𒌓𒁺)",
   "(no records)": "(𒃻𒋃 𒉡𒅅)",
   "(no result)": "(𒃻𒀝 𒉡𒅅)",
   "(no subject)": "(𒅗 𒊕 𒉡𒅅)",
   "(nothing)": "(𒃻 𒉡𒅅)",
   "<b>M</b> moves the block you're on (the arrow keys, then <b>Enter</b>, or <b>Esc</b> to stop), <b>X</b> takes it off what it's joined to, <b>D</b> makes a copy, and <b>Delete</b> removes it.": "<b>M</b> 𒋞 𒆠𒍪 𒁺 (𒄊 𒆜, 𒂕𒁉𒀀 <b>Enter</b>, 𒇻 <b>Esc</b> 𒁺𒉈), <b>X</b> 𒆠𒋫 𒍣, <b>D</b> 𒃮𒊑 𒁶, <b>Delete</b> 𒍣.",
-  "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.": "<b>N</b> 𒅆𒇻 <b>B</b> 𒆜 𒂕𒊏 𒅆𒇻 𒊕𒂷𒂠 𒁺, <b>I</b> 𒆠𒍪 𒅗, <b>Ctrl+Enter</b> 𒋞𒂵 𒃻 𒂃. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> 𒅆𒇻 <b>Ctrl+Z</b> 𒃮𒊑, 𒋻, 𒃻 𒅆𒇻 𒄄.",
-  "<b>T</b> opens the blocks: the <b>up</b> and <b>down</b> arrows choose a category, <b>right</b> opens it, <b>up</b> and <b>down</b> choose a block, and <b>Enter</b> adds it. Move it into place with the arrow keys, then press <b>Enter</b> again.": "<b>T</b> 𒋞 𒂃: 𒄊 <b>𒀭𒂠</b> 𒅆𒇻 <b>𒆠𒂠</b> 𒃻𒃻 𒅆𒊒, <b>𒍣𒁕</b> 𒂃, <b>𒀭𒂠</b> 𒅆𒇻 <b>𒆠𒂠</b> 𒋞 𒅆𒊒, <b>Enter</b> 𒃻. 𒄊 𒆜𒋫 𒆠𒁉𒂠 𒁺, 𒂕𒁉𒀀 <b>Enter</b> 𒉋 𒋳.",
+  "<b>N</b> and <b>B</b> go to the next and previous script, <b>I</b> says where you are, and <b>Ctrl+Enter</b> opens a block's menu. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> and <b>Ctrl+Z</b> copy, cut, paste and undo.": "<b>N</b> 𒅇 <b>B</b> 𒆜 𒂕𒊏 𒅇 𒊕𒂷𒂠 𒁺, <b>I</b> 𒆠𒍪 𒅗, <b>Ctrl+Enter</b> 𒋞𒂵 𒃻 𒂃. <b>Ctrl+C</b>, <b>Ctrl+X</b>, <b>Ctrl+V</b> 𒅇 <b>Ctrl+Z</b> 𒃮𒊑, 𒋻, 𒃻 𒅇 𒄄.",
+  "<b>T</b> opens the blocks: the <b>up</b> and <b>down</b> arrows choose a category, <b>right</b> opens it, <b>up</b> and <b>down</b> choose a block, and <b>Enter</b> adds it. Move it into place with the arrow keys, then press <b>Enter</b> again.": "<b>T</b> 𒋞 𒂃: 𒄊 <b>𒀭𒂠</b> 𒅇 <b>𒆠𒂠</b> 𒃻𒃻 𒅆𒊒, <b>𒍣𒁕</b> 𒂃, <b>𒀭𒂠</b> 𒅇 <b>𒆠𒂠</b> 𒋞 𒅆𒊒, <b>Enter</b> 𒃻. 𒄊 𒆜𒋫 𒆠𒁉𒂠 𒁺, 𒂕𒁉𒀀 <b>Enter</b> 𒉋 𒋳.",
   "A 'remember for' block needs a time above zero.": "𒋞 “𒄑𒌆𒉿 𒃻 … -𒂠” 𒌓 1-𒋫 𒋛𒀀 𒀠 𒅗.",
   "A 'rewrite' block has nothing to rewrite.": "𒋞 “𒉋 𒊬” 𒃻 𒉋 𒊬𒊑𒉈 𒉡𒌇.",
   "A 'wait until I receive' block has no message name.": "𒋞 “𒂗𒈾 … 𒋗 𒋾𒀀 𒅅” 𒈬 𒅗 𒉡𒌇.",
@@ -724,11 +724,11 @@
   "A program with that name exists. Press again to replace it.": "𒄑𒄯 𒈬 𒉈𒁕 𒅅. 𒉋 𒋳 𒉽𒉈.",
   "A save prompt is already open. Finish that one first.": "𒇷 𒃻𒊏 𒂃𒀀𒀭. 𒊕 𒌀.",
   "A scheduled script started inside the current run.": "𒆜 𒌓𒃻𒊏 𒀝 𒉈𒀀 𒊕 𒂷𒂷.",
-  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "𒇽 𒅗 𒋃𒂊 𒋞, 𒆠 𒅆𒇻 𒃻𒃻 𒕐𒕐 𒋃 𒌓 𒆭𒊏, <b>Alt+Shift+A</b> 𒅗 𒌉 𒋞𒂠 𒆭 𒅆𒇻 𒌓𒁺𒀀 𒃻. 𒆠 𒊹𒊏 <b>Tab</b> 𒃻 𒋳𒋫 𒁺. 𒌓 𒄑𒄯 𒇷 𒋻, 𒆠 𒅗 𒄄𒀀 𒅆 𒃻, <b>Ctrl+Enter</b> 𒅗 𒄄 𒊬𒊏 𒆥𒄄.",
+  "A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.": "𒇽 𒅗 𒋃𒂊 𒋞, 𒆠 𒅇 𒃻𒃻 𒀸𒀸 𒋃 𒌓 𒆭𒊏, <b>Alt+Shift+A</b> 𒅗 𒌉 𒋞𒂠 𒆭 𒅇 𒌓𒁺𒀀 𒃻. 𒆠 𒊹𒊏 <b>Tab</b> 𒃻 𒋳𒋫 𒁺. 𒌓 𒄑𒄯 𒇷 𒋻, 𒆠 𒅗 𒄄𒀀 𒅆 𒃻, <b>Ctrl+Enter</b> 𒅗 𒄄 𒊬𒊏 𒆥𒄄.",
   "A yes/no block is empty.": "𒋞 𒃶𒉡 𒉡𒋛𒀀.",
   "A {service} message needs some text.": "𒅗 {service} 𒅗 𒀠 𒅗.",
   "Add a 'set task to' block before this step.": "𒄊 𒉈𒋫 𒊕𒂠 𒋞 “𒆥 … 𒃻” 𒃻.",
-  "Add a 'when it's …' or 'every …' block from Events, with steps under it, before turning Schedules on.": "𒌓𒃻𒊏 𒂃𒀀𒋫 𒊕𒂠, 𒋞 “𒌓 …” 𒇻 “𒕐𒕐 …” 𒃻𒋫 𒃻, 𒄊𒁕.",
+  "Add a 'when it's …' or 'every …' block from Events, with steps under it, before turning Schedules on.": "𒌓𒃻𒊏 𒂃𒀀𒋫 𒊕𒂠, 𒋞 “𒌓 …” 𒇻 “𒀸𒀸 …” 𒃻𒋫 𒃻, 𒄊𒁕.",
   "Add another key": "𒃻𒂃 𒋛𒀀 𒃻",
   "Added to result": "𒃻𒀝𒀀 𒃻",
   "Added to “{name}”": "“{name}”-𒀀 𒃻",
@@ -801,12 +801,12 @@
   "Claude's reply wasn't a block program. Try again, or describe it more simply.": "𒅗 𒄄 Claude-𒅗 𒄑𒄯 𒋞 𒉡𒈨𒀀. 𒉋 𒀝, 𒇻 𒌉𒋫 𒉺 𒌓𒁺.",
   "Claude's reply wasn't a usable drawing.": "𒅗 𒄄 Claude-𒅗 𒀩 𒆥𒉈 𒉡𒈨𒀀.",
   "Cleared.": "𒍣.",
-  "Click any white slot on a block to type into it.": "𒆠 𒌓 𒋞𒂵 𒋳 𒅆𒇻 𒊬.",
-  "Code and data": "𒆜 𒅆𒇻 𒃻𒋃",
+  "Click any white slot on a block to type into it.": "𒆠 𒌓 𒋞𒂵 𒋳 𒅇 𒊬.",
+  "Code and data": "𒆜 𒅇 𒃻𒋃",
   "Community: GitHub": "𒌺: GitHub",
-  "Community: calendar and email": "𒌺: 𒁾𒌗 𒅆𒇻 𒁾𒅗",
-  "Community: code and data": "𒌺: 𒆜 𒅆𒇻 𒃻𒋃",
-  "Community: home and baking": "𒌺: 𒂍 𒅆𒇻 𒃻",
+  "Community: calendar and email": "𒌺: 𒁾𒌗 𒅇 𒁾𒅗",
+  "Community: code and data": "𒌺: 𒆜 𒅇 𒃻𒋃",
+  "Community: home and baking": "𒌺: 𒂍 𒅇 𒃻",
   "Community: money": "𒌺: 𒆬",
   "Community: news": "𒌺: 𒅗 𒉋",
   "Community: odds and ends": "𒌺: 𒃻 𒊹",
@@ -833,7 +833,7 @@
   "Cut short": "𒋻",
   "Delete": "𒍣",
   "Describe a program": "𒄑𒄯 𒉺 𒌓𒁺",
-  "Describe a program, like: every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "𒄑𒄯 𒉺 𒌓𒁺, 𒉈𒁶: 𒌓 5-𒄰 𒕐𒕐 𒆜𒁍 18-𒀀, 𒆜𒁍 2 𒊷𒂵 7-𒌓 𒉈𒀀 𒌆 𒌓𒉈 𒆥 𒅆𒇻 Telegram-𒀀 𒂷𒊏 𒆥𒄄",
+  "Describe a program, like: every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "𒄑𒄯 𒉺 𒌓𒁺, 𒉈𒁶: 𒌓 5-𒄰 𒀸𒀸 𒆜𒁍 18-𒀀, 𒆜𒁍 2 𒊷𒂵 7-𒌓 𒉈𒀀 𒌆 𒌓𒉈 𒆥 𒅇 Telegram-𒀀 𒂷𒊏 𒆥𒄄",
   "Describe what the program should do first.": "𒊕𒂠 𒄑𒄯 𒀀𒈾 𒀝𒂊 𒉺 𒌓𒁺.",
   "Design": "𒄑𒄯",
   "Did you mean: {names}?": "{names} 𒀠 𒅗𒂵𒀀𒀭?",
@@ -841,11 +841,11 @@
   "Discord messages": "𒅗 Discord",
   "Do you approve this?": "𒉈 𒊺𒂵𒈨𒂗?",
   "Don't": "𒉡",
-  "Drag 'when Run is clicked' from Events and attach your steps under it.": "“𒌓 𒀝 𒋳𒂵𒀀” 𒃻𒋫 𒁺 𒅆𒇻 𒄊𒍪 𒆠𒁀𒀀 𒃻.",
+  "Drag 'when Run is clicked' from Events and attach your steps under it.": "“𒌓 𒀝 𒋳𒂵𒀀” 𒃻𒋫 𒁺 𒅇 𒄊𒍪 𒆠𒁀𒀀 𒃻.",
   "Drag blocks from the categories; drag a block back onto them to delete it. Round slots take values, hexagon slots take yes/no conditions.": "𒋞 𒃻𒃻𒋫 𒁺; 𒋞 𒃻𒃻𒂠 𒄄 𒍣𒉈. 𒆠 𒄥 𒃻 𒋗 𒋾, 𒆠 6 𒃶𒉡 𒋗 𒋾.",
   "Draw: {what}": "𒊬: {what}",
   "Drawing…": "𒊬𒊑…",
-  "Each one is a complete program. Load it, press Run, then change the words on the blocks to make it yours. Your current program is replaced, so save it first in Programs if you want to keep it.": "𒕐𒕐 𒄑𒄯 𒌀𒆷𒀀𒀭. 𒃻, 𒀝 𒋳, 𒂕𒁉𒀀 𒅗 𒋞𒂵 𒉽 𒉎𒍪𒂠. 𒄑𒄯 𒉈𒍪 𒉽, 𒊕𒂠 𒄑𒄯𒀀 𒃻 𒋗𒃻𒌉𒇲𒁉 𒃻 𒀠 𒅗.",
+  "Each one is a complete program. Load it, press Run, then change the words on the blocks to make it yours. Your current program is replaced, so save it first in Programs if you want to keep it.": "𒀸𒀸 𒄑𒄯 𒌀𒆷𒀀𒀭. 𒃻, 𒀝 𒋳, 𒂕𒁉𒀀 𒅗 𒋞𒂵 𒉽 𒉎𒍪𒂠. 𒄑𒄯 𒉈𒍪 𒉽, 𒊕𒂠 𒄑𒄯𒀀 𒃻 𒋗𒃻𒌉𒇲𒁉 𒃻 𒀠 𒅗.",
   "Edit": "𒉽",
   "Email": "𒁾𒅗",
   "Email to {to}": "𒁾𒅗 {to}-𒂠",
@@ -888,28 +888,28 @@
   "Gone: {what}.": "𒍣: {what}.",
   "Hide code": "𒆜 𒌋𒌆",
   "Home Assistant": "Home Assistant",
-  "Home Assistant: alerts and voice": "Home Assistant: 𒄑𒌆𒉿 𒃻 𒅆𒇻 𒅗",
-  "Home Assistant: comfort and garden": "Home Assistant: 𒄭 𒅆𒇻 𒊬",
+  "Home Assistant: alerts and voice": "Home Assistant: 𒄑𒌆𒉿 𒃻 𒅇 𒅗",
+  "Home Assistant: comfort and garden": "Home Assistant: 𒄭 𒅇 𒊬",
   "Home Assistant: daily life": "Home Assistant: 𒌓𒌓",
   "Home Assistant: energy": "Home Assistant: 𒉈",
   "Home Assistant: homelab": "Home Assistant: 𒄑𒋃 𒂍𒀀",
   "Home Assistant: house health": "Home Assistant: 𒁲 𒂍",
-  "Home Assistant: kitchen and household": "Home Assistant: 𒂍 𒆥𒅅 𒅆𒇻 𒂍",
+  "Home Assistant: kitchen and household": "Home Assistant: 𒂍 𒆥𒅅 𒅇 𒂍",
   "Home Assistant: no connection needed": "Home Assistant: 𒆜 𒉡𒀠𒅗",
-  "Home Assistant: pets": "Home Assistant: 𒌨 𒅆𒇻 𒊕𒄑",
-  "Home Assistant: security and cameras": "Home Assistant: 𒂗𒉡𒂷 𒅆𒇻 𒀩",
+  "Home Assistant: pets": "Home Assistant: 𒌨 𒅇 𒊕𒄑",
+  "Home Assistant: security and cameras": "Home Assistant: 𒂗𒉡𒂷 𒅇 𒀩",
   "Home Assistant: {service}": "Home Assistant: {service}",
-  "Home and baking": "𒂍 𒅆𒇻 𒃻",
+  "Home and baking": "𒂍 𒅇 𒃻",
   "Homey": "Homey",
   "Homey devices": "𒃻𒁶 Homey",
   "Homey flow started": "𒀀𒃻 Homey 𒊕 𒂷𒂷",
   "Homey variable {name}": "𒃻𒉽 Homey {name}",
   "Import / export": "𒃻 / 𒌓𒁺",
   "Import a program": "𒄑𒄯 𒃻",
-  "Import and export": "𒃻 𒅆𒇻 𒌓𒁺",
+  "Import and export": "𒃻 𒅇 𒌓𒁺",
   "Import undone. Your previous program is back.": "𒃻 𒄄. 𒄑𒄯 𒊕𒂷𒍪 𒄄.",
-  "In this page, the Home Assistant blocks use a <b>sample house</b>, so you can build and test safely. Change a state below (press Enter) to try your 'when … changes' scripts. Exported Python connects to your real Home Assistant: set HA_URL and HA_TOKEN (a long-lived access token from your Home Assistant profile, under Security).": "𒅆𒁾 𒉈𒀀 𒋞 Home Assistant <b>𒂍 𒅆𒁺</b> 𒆥, 𒁶 𒅆𒇻 𒆥 𒄩𒍝. 𒈨 𒆠𒋫 𒉽 (Enter 𒋳) 𒆜 “𒌓 … 𒉽”-𒍪 𒆥𒉈. Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪𒂠 𒆕: HA_URL 𒅆𒇻 HA_TOKEN 𒃻 (𒃻𒌉 𒁍 Home Assistant-𒍪𒋫, Security-𒀀).",
-  "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.": "𒄑𒄯𒍪𒀀 𒄊 𒆜 𒋞, 𒆠𒁉 𒅆𒇻 𒀀𒊮𒁉𒋫 𒁺. 𒀀𒊮𒀀 <b>Enter</b> 𒊬 𒇻 𒅆𒊒, <b>W</b> 𒄑𒄯𒍪𒂠 𒄄.",
+  "In this page, the Home Assistant blocks use a <b>sample house</b>, so you can build and test safely. Change a state below (press Enter) to try your 'when … changes' scripts. Exported Python connects to your real Home Assistant: set HA_URL and HA_TOKEN (a long-lived access token from your Home Assistant profile, under Security).": "𒅆𒁾 𒉈𒀀 𒋞 Home Assistant <b>𒂍 𒅆𒁺</b> 𒆥, 𒁶 𒅇 𒆥 𒄩𒍝. 𒈨 𒆠𒋫 𒉽 (Enter 𒋳) 𒆜 “𒌓 … 𒉽”-𒍪 𒆥𒉈. Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪𒂠 𒆕: HA_URL 𒅇 HA_TOKEN 𒃻 (𒃻𒌉 𒁍 Home Assistant-𒍪𒋫, Security-𒀀).",
+  "In your program, the arrow keys move between blocks, their slots and their fields. <b>Enter</b> on a field lets you type in it or choose, and <b>W</b> brings you back to your program.": "𒄑𒄯𒍪𒀀 𒄊 𒆜 𒋞, 𒆠𒁉 𒅇 𒀀𒊮𒁉𒋫 𒁺. 𒀀𒊮𒀀 <b>Enter</b> 𒊬 𒇻 𒅆𒊒, <b>W</b> 𒄑𒄯𒍪𒂠 𒄄.",
   "Input": "𒃻 𒆭𒊏",
   "Input: {shown}": "𒃻 𒆭𒊏: {shown}",
   "Input: {shown}\n\nIt didn't run: {problem}.": "𒃻 𒆭𒊏: {shown}\n\n𒉡𒀝: {problem}.",
@@ -919,7 +919,7 @@
   "It can also {things}.": "𒋛𒀀 {things}.",
   "It can {things}.": "{things}.",
   "It doesn't yet meet the criteria.": "𒃻 𒀠 𒅗𒂵 𒉡𒁲.",
-  "It only uses your models: it doesn't connect to anything else.": "𒉣𒈨𒍪 𒕐 𒆥: 𒃻 𒉽𒊏 𒉡𒆕.",
+  "It only uses your models: it doesn't connect to anything else.": "𒉣𒈨𒍪 𒀸 𒆥: 𒃻 𒉽𒊏 𒉡𒆕.",
   "It replied with a tool on its last step, so it stopped there.": "𒄊 𒂕𒊏𒉌𒀀 𒄑𒆪𒁕 𒅗 𒄄, 𒆠𒁀 𒁺.",
   "It replied with “{name}”, which isn't one of its tools.": "“{name}”-𒁕 𒅗 𒄄, 𒄑𒆪𒉌 𒉡𒈨𒀀.",
   "It said it was done, but its answer was empty.": "𒌀 𒅗, 𒅗 𒄄𒉌 𒉡𒋛𒀀.",
@@ -948,7 +948,7 @@
   "Loading it replaces the program on the canvas; you can undo straight after.": "𒃻𒊏 𒄑𒄯 𒆠𒀀 𒉽; 𒁹𒀀 𒄄.",
   "Look at picture: {question}": "𒀩 𒅆 𒁇: {question}",
   "MCP server “{server}”": "𒀵 MCP “{server}”",
-  "MCP servers can't be reached from this page, so the agent works without this server's tools here. Export to Python and set {setting} in second-thought.ini to use them.": "𒀵 MCP 𒅆𒁾 𒉈𒋫 𒉡𒋼, 𒆥𒄄𒀀 𒆠 𒉈𒀀 𒄑𒆪 𒀵𒉈 𒉡𒈨𒀀 𒀝. Python-𒂠 𒌓𒁺 𒅆𒇻 {setting} second-thought.ini-a 𒃻 𒆥𒉈.",
+  "MCP servers can't be reached from this page, so the agent works without this server's tools here. Export to Python and set {setting} in second-thought.ini to use them.": "𒀵 MCP 𒅆𒁾 𒉈𒋫 𒉡𒋼, 𒆥𒄄𒀀 𒆠 𒉈𒀀 𒄑𒆪 𒀵𒉈 𒉡𒈨𒀀 𒀝. Python-𒂠 𒌓𒁺 𒅇 {setting} second-thought.ini-a 𒃻 𒆥𒉈.",
   "MQTT": "MQTT",
   "MQTT needs a topic, like home/kitchen/temperature.": "MQTT 𒆠 𒀠 𒅗, home/kitchen/temperature-gin7.",
   "MQTT topics": "𒆠 MQTT",
@@ -957,7 +957,7 @@
   "Memory is full. Forget some entries in the Memory panel, then run again.": "𒄑𒌆𒉿 𒋛. 𒄑𒌆𒉿𒀀 𒃻 𒍣, 𒂕𒁉𒀀 𒉋 𒀝.",
   "Model": "𒉣𒈨",
   "Models to try if the main one fails": "𒉣𒈨 𒀝𒉈 𒋗𒃻𒌉𒇲𒁉 𒊕 𒉡𒌀",
-  "More broadcasts are running. They won't be listed one by one.": "𒅗 𒌤 𒋛𒀀 𒀝. 𒕐𒕐 𒉡𒉺𒌓𒁺.",
+  "More broadcasts are running. They won't be listed one by one.": "𒅗 𒌤 𒋛𒀀 𒀝. 𒀸𒀸 𒉡𒉺𒌓𒁺.",
   "My programs": "𒄑𒄯𒈬",
   "Name": "𒈬",
   "Name for the program on the canvas": "𒈬 𒄑𒄯 𒆠𒀀",
@@ -971,7 +971,7 @@
   "No money budget for this run.": "𒆬 𒀝 𒉈𒀀 𒉡𒅅.",
   "No prompts yet. Add reusable prompt text here, then use the 'prompt' block in Ask Claude.": "𒀉𒉘𒂷 𒉡𒅅. 𒀉𒉘𒂷 𒉋𒉋 𒆠 𒉈𒀀 𒃻, 𒂕𒁉𒀀 𒋞 “𒀉𒉘𒂷” Claude 𒇷 𒋻𒀀 𒆥.",
   "No review problems recorded, so nothing to fix.": "𒉡𒋛𒁲 𒅆𒂃𒀀 𒉡𒊬, 𒃻 𒋛 𒁲𒂊 𒉡𒅅.",
-  "No saved programs yet. Name the one on the canvas and press Save.": "𒄑𒄯 𒃻𒊏 𒉡𒅅. 𒄑𒄯 𒆠𒀀 𒈬 𒄷𒈿 𒅆𒇻 𒃻 𒋳.",
+  "No saved programs yet. Name the one on the canvas and press Save.": "𒄑𒄯 𒃻𒊏 𒉡𒅅. 𒄑𒄯 𒆠𒀀 𒈬 𒄷𒈿 𒅇 𒃻 𒋳.",
   "No scheduled scripts": "𒆜 𒌓𒃻𒊏 𒉡𒅅",
   "No token budget for this run.": "𒃻𒌉 𒆬 𒀝 𒉈𒀀 𒉡𒅅.",
   "Not converted: {notes}.": "𒉡𒉽: {notes}.",
@@ -984,8 +984,8 @@
   "Notification → {target}": "𒄑𒌆𒉿 𒃻 → {target}",
   "Number: {request}": "𒃻𒋃: {request}",
   "On this page the browser already asks before every download.": "𒅆𒁾 𒉈𒀀 𒅆𒊓 𒌓𒁺𒋫 𒊕𒂠 𒇷 𒋻.",
-  "Only blocks under a \"when Run is clicked\" or \"when I receive\" hat run. Separate scripts run side by side.": "𒋞 “𒌓 𒀝 𒋳𒂵𒀀” 𒇻 “𒌓 … 𒋗 𒋾𒀀”-𒋫 𒆠𒋫 𒕐 𒀝. 𒆜 𒁇𒁇 𒁹𒀀 𒀝.",
-  "Only drawn pictures can be saved as SVG. Choose PNG instead.": "𒀩 𒊬𒊏 𒕐 SVG-𒁶 𒃻. PNG 𒅆𒊒.",
+  "Only blocks under a \"when Run is clicked\" or \"when I receive\" hat run. Separate scripts run side by side.": "𒋞 “𒌓 𒀝 𒋳𒂵𒀀” 𒇻 “𒌓 … 𒋗 𒋾𒀀”-𒋫 𒆠𒋫 𒀸 𒀝. 𒆜 𒁇𒁇 𒁹𒀀 𒀝.",
+  "Only drawn pictures can be saved as SVG. Choose PNG instead.": "𒀩 𒊬𒊏 𒀸 SVG-𒁶 𒃻. PNG 𒅆𒊒.",
   "Open": "𒂃",
   "Opened “{name}”.": "“{name}” 𒂃.",
   "Or paste a block file or code": "𒇻 𒁾 𒋞 𒇻 𒆜 𒃻",
@@ -999,14 +999,14 @@
   "Pick a PDF, a Word file (.docx), or a text file such as .txt, .md, .csv or .json.": "PDF, 𒁾 Word (.docx) 𒇻 𒁾 𒅗, .txt, .md, .csv 𒇻 .json-gin7, 𒅆𒊒.",
   "Pick the better one": "𒊷𒂵 𒅆𒊒",
   "Picture": "𒀩",
-  "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "𒀩 “𒌓 𒅆𒁾 𒂃𒀀” 𒕐 𒄑𒌆𒉿𒂵 𒃻. 𒀩 𒁾𒁶 𒃻 𒃻𒉈.",
+  "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "𒀩 “𒌓 𒅆𒁾 𒂃𒀀” 𒀸 𒄑𒌆𒉿𒂵 𒃻. 𒀩 𒁾𒁶 𒃻 𒃻𒉈.",
   "Press the question mark button for keyboard help.": "𒃻 𒋳 𒇷𒈾 𒋳 𒃻 𒋳𒂵 𒀉𒈭𒂠.",
   "Program name": "𒈬 𒄑𒄯",
   "Program: {name}": "𒄑𒄯: {name}",
   "Programs": "𒄑𒄯",
   "Programs inside programs went more than 10 deep, so the run stopped.": "𒄑𒄯 𒄑𒄯 𒊮𒂵 10-𒋫 𒋛𒀀, 𒀝 𒁺.",
-  "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "𒄑𒄯 𒇽 𒉽𒂊 𒋧. 𒕐𒕐 𒃻𒊏𒋫 𒊕𒂠 𒅆 𒁇, 𒅆𒇻 𒀀𒈾 𒀝𒂊 𒋞𒋫 𒅗. 𒄑𒄯𒍪 𒋧𒉈, gallery/README.md 𒂷 Second Thought-𒀀 𒅆 𒁇.",
-  "Programs run with your own keys: {keys}. Each is charged to its own account.": "𒄑𒄯 𒃻𒂃𒍪𒁕 𒀝: {keys}. 𒕐𒕐 𒁾𒉌𒀀 𒋃.",
+  "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "𒄑𒄯 𒇽 𒉽𒂊 𒋧. 𒀸𒀸 𒃻𒊏𒋫 𒊕𒂠 𒅆 𒁇, 𒅇 𒀀𒈾 𒀝𒂊 𒋞𒋫 𒅗. 𒄑𒄯𒍪 𒋧𒉈, gallery/README.md 𒂷 Second Thought-𒀀 𒅆 𒁇.",
+  "Programs run with your own keys: {keys}. Each is charged to its own account.": "𒄑𒄯 𒃻𒂃𒍪𒁕 𒀝: {keys}. 𒀸𒀸 𒁾𒉌𒀀 𒋃.",
   "Prompt library": "𒂠 𒀉𒉘𒂷",
   "Python code copied. Save it as {name}.py.": "𒆜 Python 𒃮𒊑 𒀝. {name}.py-gin7 𒃻.",
   "Question for you": "𒇷 𒍝𒂊𒂠",
@@ -1023,12 +1023,12 @@
   "Reply continued": "𒅗 𒄄 𒋛𒀀",
   "Research": "𒆥",
   "Restore the exported blocks": "𒋞 𒌓𒁺𒀀 𒄄",
-  "Restored the task, draft, review, result and variables.": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅆𒇻 𒃻𒉽 𒄄.",
-  "Restored the task, draft, review, result and variables. Draft: {draft}": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅆𒇻 𒃻𒉽 𒄄. 𒁾𒊕: {draft}",
+  "Restored the task, draft, review, result and variables.": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅇 𒃻𒉽 𒄄.",
+  "Restored the task, draft, review, result and variables. Draft: {draft}": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅇 𒃻𒉽 𒄄. 𒁾𒊕: {draft}",
   "Result": "𒃻𒀝",
   "Result:": "𒃻𒀝:",
   "Retrying": "𒉋 𒀝",
-  "Reusable prompt text. Drop the 'prompt' block (in Ask Claude) into any slot and type the prompt's name.": "𒀉𒉘𒂷 𒉋𒉋. 𒋞 “𒀉𒉘𒂷” (Claude 𒇷 𒋻𒀀) 𒆠𒀀 𒃻 𒅆𒇻 𒈬 𒀉𒉘𒂷 𒊬.",
+  "Reusable prompt text. Drop the 'prompt' block (in Ask Claude) into any slot and type the prompt's name.": "𒀉𒉘𒂷 𒉋𒉋. 𒋞 “𒀉𒉘𒂷” (Claude 𒇷 𒋻𒀀) 𒆠𒀀 𒃻 𒅇 𒈬 𒀉𒉘𒂷 𒊬.",
   "Review": "𒅆𒂃𒀀",
   "Review stuck": "𒅆𒂃𒀀 𒁺",
   "Review, round {n}": "𒅆𒂃𒀀, 𒀀𒁺 {n}",
@@ -1042,7 +1042,7 @@
   "Run stopped": "𒀝 𒁺",
   "Run stopped. What was ready so far is below.": "𒀝 𒁺. 𒃻 𒌀𒆷 𒆠𒋫.",
   "Run tests ({n})": "𒅆𒂃 𒀝 ({n})",
-  "Run this block and show its value": "𒋞 𒉈 𒀝 𒅆𒇻 𒃻𒉌 𒉺 𒌓𒁺",
+  "Run this block and show its value": "𒋞 𒉈 𒀝 𒅇 𒃻𒉌 𒉺 𒌓𒁺",
   "Run this script": "𒆜 𒉈 𒀝",
   "Run to the end": "𒌀𒂠 𒀝",
   "Running needs Claude. Open this page in claude.ai while signed in.": "𒀝𒉈 Claude 𒀠 𒅗. 𒅆𒁾 𒉈 claude.ai-a 𒈬𒍪𒁕 𒂃.",
@@ -1059,16 +1059,16 @@
   "Save prompt": "𒀉𒉘𒂷 𒃻",
   "Save test": "𒅆𒂃 𒃻",
   "Saved": "𒃻",
-  "Saved in this browser only.": "𒅆𒊓 𒉈𒀀 𒕐 𒃻.",
-  "Saved memory isn't available here, so this will only last while the page is open.": "𒄑𒌆𒉿 𒃻𒊏 𒆠 𒉈𒀀 𒉡𒅅, 𒌓 𒅆𒁾 𒂃𒀀 𒕐 𒅅.",
-  "Saved memory isn't available here. Everything lasts only while the page is open.": "𒄑𒌆𒉿 𒃻𒊏 𒆠 𒉈𒀀 𒉡𒅅. 𒃻 𒊹 𒌓 𒅆𒁾 𒂃𒀀 𒕐 𒅅.",
-  "Saved programs and prompts": "𒄑𒄯 𒅆𒇻 𒀉𒉘𒂷 𒃻𒊏",
+  "Saved in this browser only.": "𒅆𒊓 𒉈𒀀 𒀸 𒃻.",
+  "Saved memory isn't available here, so this will only last while the page is open.": "𒄑𒌆𒉿 𒃻𒊏 𒆠 𒉈𒀀 𒉡𒅅, 𒌓 𒅆𒁾 𒂃𒀀 𒀸 𒅅.",
+  "Saved memory isn't available here. Everything lasts only while the page is open.": "𒄑𒌆𒉿 𒃻𒊏 𒆠 𒉈𒀀 𒉡𒅅. 𒃻 𒊹 𒌓 𒅆𒁾 𒂃𒀀 𒀸 𒅅.",
+  "Saved programs and prompts": "𒄑𒄯 𒅇 𒀉𒉘𒂷 𒃻𒊏",
   "Saved prompt “{name}”. Use it with the 'prompt' block.": "𒀉𒉘𒂷 “{name}” 𒃻. 𒋞 “𒀉𒉘𒂷”-𒁕 𒆥.",
-  "Saved the task, draft, review, result and variables.": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅆𒇻 𒃻𒉽 𒃻.",
-  "Saved the task, draft, review, result and variables. Draft: {draft}": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅆𒇻 𒃻𒉽 𒃻. 𒁾𒊕: {draft}",
-  "Saved to your account for this page. Only you can see them.": "𒁾𒍪𒀀 𒅆𒁾 𒉈𒂠 𒃻. 𒍝𒂊 𒕐 𒅆 𒁇.",
+  "Saved the task, draft, review, result and variables.": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅇 𒃻𒉽 𒃻.",
+  "Saved the task, draft, review, result and variables. Draft: {draft}": "𒆥, 𒁾𒊕, 𒅆𒂃𒀀, 𒃻𒀝 𒅇 𒃻𒉽 𒃻. 𒁾𒊕: {draft}",
+  "Saved to your account for this page. Only you can see them.": "𒁾𒍪𒀀 𒅆𒁾 𒉈𒂠 𒃻. 𒍝𒂊 𒀸 𒅆 𒁇.",
   "Saved {file}.": "{file} 𒃻.",
-  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip 𒃻. 𒁾𒁉 GitHub 𒉎𒍪𒅗𒀀 𒃻 𒅆𒇻 𒃻 𒌋𒌆 SETUP.md 𒊬𒊏 𒃻; 𒂕𒁉𒀀 𒌓𒃻𒊏𒀀 𒀝.",
+  "Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.": "{name}-actions.zip 𒃻. 𒁾𒁉 GitHub 𒉎𒍪𒅗𒀀 𒃻 𒅇 𒃻 𒌋𒌆 SETUP.md 𒊬𒊏 𒃻; 𒂕𒁉𒀀 𒌓𒃻𒊏𒀀 𒀝.",
   "Saved {name}.zip. Unzip it, put your keys in second-thought.ini, then run {name}.py (on Windows, double-click run.bat).": "{name}.zip 𒃻. 𒂃, 𒃻𒂃𒍪 second-thought.ini-a 𒃻, 𒂕𒁉𒀀 {name}.py 𒀝 (Windows-𒀀 run.bat 2-𒂠 𒋳).",
   "Saved “{name}”.": "“{name}” 𒃻.",
   "Saved. Run tests checks it again whenever you like; exported, it's in the zip for python my-program.py --test.": "𒃻. 𒅆𒂃 𒀝 𒌓 𒀠 𒅗𒍪 𒉋 𒅆 𒁇; 𒌓𒁺𒀀 zip-𒀀 𒅅 python my-program.py --test-𒂠.",
@@ -1079,7 +1079,7 @@
   "Saving isn't available here. Use Import / export to keep files instead.": "𒃻 𒆠 𒉈𒀀 𒉡𒅅. 𒃻 / 𒌓𒁺 𒆥 𒁾 𒃻𒉈.",
   "Say what the result must do first.": "𒊕𒂠 𒃻𒀝 𒀀𒈾 𒀝𒉈 𒅗.",
   "Scheduled {time}": "𒌓𒃻𒊏 {time}",
-  "Schedules are on. They run only while this page stays open and your computer is awake. Each run uses your Claude usage.": "𒌓𒃻𒊏 𒂃. 𒌓 𒅆𒁾 𒂃 𒅆𒇻 𒄑𒋃𒍪 𒅅𒆷 𒕐 𒀝. 𒀝 𒕐𒕐 Claude-𒍪 𒆥.",
+  "Schedules are on. They run only while this page stays open and your computer is awake. Each run uses your Claude usage.": "𒌓𒃻𒊏 𒂃. 𒌓 𒅆𒁾 𒂃 𒅇 𒄑𒋃𒍪 𒅅𒆷 𒀸 𒀝. 𒀝 𒀸𒀸 Claude-𒍪 𒆥.",
   "Schedules: off": "𒌓𒃻𒊏: 𒋼",
   "Schedules: on": "𒌓𒃻𒊏: 𒂃",
   "Score picture: {criteria}": "𒀩 𒋃: {criteria}",
@@ -1097,7 +1097,7 @@
   "Shared by {author}.": "{author}-𒂊 𒋧.",
   "Show code": "𒆜 𒉺 𒌓𒁺",
   "Slack messages": "𒅗 Slack",
-  "Snap AI steps together, then press Run. Claude does each block in order.": "𒄊 AI 𒁹𒀀 𒃻, 𒂕𒁉𒀀 𒀝 𒋳. Claude 𒋞 𒕐𒕐 𒂠𒁶 𒀝.",
+  "Snap AI steps together, then press Run. Claude does each block in order.": "𒄊 AI 𒁹𒀀 𒃻, 𒂕𒁉𒀀 𒀝 𒋳. Claude 𒋞 𒀸𒀸 𒂠𒁶 𒀝.",
   "Snapshot: {entity}": "𒀩 𒃻: {entity}",
   "Something failed, so the 'if it fails' part ran": "𒃻 𒉡𒋛𒁲, “𒉡𒋛𒁲𒀀” 𒀝",
   "Sources not read": "𒅗 𒊕 𒉡𒋃",
@@ -1112,7 +1112,7 @@
   "Stopped": "𒁺",
   "Stopped after starting {n} scripts. A message may be broadcasting itself in a loop.": "𒆜 {n} 𒊕 𒂷𒂷𒋫 𒂕𒁉𒀀 𒁺. 𒅗 𒉎𒋼𒀀 𒅗 𒌤 𒄥𒄥𒊏 𒅅.",
   "Stopped after {n} Claude calls in one run, to protect your usage. Check for loops that call Claude too often.": "Claude {n}-𒂠 𒅗 𒌤 𒀝 1-𒀀 𒂕𒁉𒀀 𒁺, Claude-𒍪 𒂗𒉡 𒀝𒉈. 𒄥𒄥 Claude 𒅗 𒌤 𒋛𒀀 𒅆 𒁇.",
-  "Stopped after {n} steps. A loop may never end; check repeat and while blocks.": "𒄊 {n}-𒋫 𒂕𒁉𒀀 𒁺. 𒄥𒄥 𒉡𒌀 𒅅; 𒋞 “𒀀𒁺” 𒅆𒇻 “𒌓” 𒅆 𒁇.",
+  "Stopped after {n} steps. A loop may never end; check repeat and while blocks.": "𒄊 {n}-𒋫 𒂕𒁉𒀀 𒁺. 𒄥𒄥 𒉡𒌀 𒅅; 𒋞 “𒀀𒁺” 𒅇 “𒌓” 𒅆 𒁇.",
   "Stopped: a model this run has already used has no known price, so it can't be held to its budget of {budget}. Use models with a price, or a budget in tokens.": "𒁺: 𒉣𒈨 𒀝 𒉈𒀀 𒆥𒀀 𒆬 𒉡𒍪, 𒆬 {budget}-𒁕 𒉡𒆟. 𒉣𒈨 𒆬𒁕 𒆥, 𒇻 𒆬 𒃻𒌉𒋫.",
   "Stopped: this run has spent about {cost} at list prices, which reaches its budget of {budget}. Raise the amount in the 'limit this run' block.": "𒁺: 𒀝 𒉈 𒆬 {cost} 𒆬 𒉣𒈨𒅗𒋫 𒍣, 𒆬 {budget} 𒆭. 𒋞 “𒀝 𒉈 … 𒆟”-𒀀 𒃲.",
   "Stopped: this run has used about {used} tokens, which reaches its budget of {budget}. Raise the number in the 'limit this run' block.": "𒁺: 𒀝 𒉈 𒃻𒌉 {used} 𒆥, 𒆬 {budget} 𒆭. 𒋞 “𒀝 𒉈 … 𒆟”-𒀀 𒃻𒋃 𒃲.",
@@ -1136,7 +1136,7 @@
   "That doesn't look like an API key.": "𒃻𒂃 API 𒉡𒈨𒀀.",
   "That doesn't look like an Anthropic API key. They start with sk-ant-.": "𒃻𒂃 API Anthropic 𒉡𒈨𒀀. sk-ant--𒋫 𒊕 𒂷𒂷.",
   "That file is over 5 MB, which is too big for a program file.": "𒁾 5 MB-𒋫 𒋛𒀀, 𒁾 𒄑𒄯𒂠 𒃲 𒋛𒀀.",
-  "That isn't valid program text. Export a program from this page and import that file.": "𒄑𒄯 𒍣 𒉡𒈨𒀀. 𒄑𒄯 𒅆𒁾 𒉈𒋫 𒌓𒁺 𒅆𒇻 𒁾𒁉 𒃻.",
+  "That isn't valid program text. Export a program from this page and import that file.": "𒄑𒄯 𒍣 𒉡𒈨𒀀. 𒄑𒄯 𒅆𒁾 𒉈𒋫 𒌓𒁺 𒅇 𒁾𒁉 𒃻.",
   "That program couldn't be opened, so the canvas was left as it was.": "𒄑𒄯 𒉡𒂃, 𒆠𒀀 𒆠𒁉𒀀 𒃻.",
   "That saved program is damaged and can't be opened.": "𒄑𒄯 𒃻𒊏 𒅆𒌨𒀀𒀭, 𒉡𒂃.",
   "That value is too big to remember (over 200 KB). Remember something shorter.": "𒃻 𒉈 𒄑𒌆𒉿𒂠 𒃲 𒋛𒀀 (200 KB-𒋫 𒋛𒀀). 𒌉 𒄑𒌆𒉿𒂵 𒃻.",
@@ -1163,20 +1163,20 @@
   "The block '{type}' can't be used as a value here.": "𒋞 “{type}” 𒆠 𒉈𒀀 𒃻𒁶 𒉡𒆥.",
   "The block '{type}' isn't supported yet.": "𒋞 “{type}” 𒉡𒅅.",
   "The code couldn't be generated: {problem}": "𒆜 𒉡𒁶: {problem}",
-  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "𒆬 𒆠𒀀 𒆬 𒅆𒇻 𒆬 𒆟 𒉺 𒌓𒁺. 𒆥 𒆬𒌓 𒈥𒌅𒋫 𒋃; 𒋛𒀀 𒆬 𒂍 𒆬𒅗 Europa-𒅗 {date}-𒅗 𒆥.",
+  "The currency costs and money budgets are shown in. Services charge in US dollars; others use the European Central Bank's rate of {date}.": "𒆬 𒆠𒀀 𒆬 𒅇 𒆬 𒆟 𒉺 𒌓𒁺. 𒆥 𒆬𒌓 𒈥𒌅𒋫 𒋃; 𒋛𒀀 𒆬 𒂍 𒆬𒅗 Europa-𒅗 {date}-𒅗 𒆥.",
   "The data for {svc} isn't valid JSON. Use something like {\"temperature\": 20}.": "𒃻𒋃 {svc}-𒅗 JSON 𒍣 𒉡𒈨𒀀. {\"temperature\": 20}-𒁶 𒆥.",
   "The file couldn't be read. Try choosing it again.": "𒁾 𒉡𒋃. 𒉋 𒅆𒊒.",
   "The file couldn't be saved here.": "𒁾 𒆠 𒉈𒀀 𒉡𒃻.",
-  "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.": "𒃻𒂃 𒅆𒊓 𒉈𒋫 api.anthropic.com-še3 𒕐 𒁺, 𒀝 𒁾𒉌𒀀 𒋃. 𒂗𒈾 𒅆𒁾 𒉈 𒋼 𒃻, 𒋗𒃻𒌉𒇲𒁉 𒄑𒌆𒉿 𒃻 𒉡𒋳. 𒄑𒄯, 𒌓𒁺 𒇻 𒁾 𒆥𒀝𒀀𒀀 𒉡𒃻. console.anthropic.com-a 𒁶.",
-  "The key goes only from this browser to {host} (or the address you give), and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log.": "𒃻𒂃 𒅆𒊓 𒉈𒋫 {host}-𒂠 𒕐 𒁺 (𒇻 𒆠 𒋧𒍪), 𒀝 𒁾𒉌𒀀 𒋃. 𒂗𒈾 𒅆𒁾 𒉈 𒋼 𒃻, 𒋗𒃻𒌉𒇲𒁉 𒄑𒌆𒉿 𒃻 𒉡𒋳. 𒄑𒄯, 𒌓𒁺 𒇻 𒁾 𒆥𒀝𒀀𒀀 𒉡𒃻.",
+  "The key goes only from this browser to api.anthropic.com, and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log. Make one at console.anthropic.com.": "𒃻𒂃 𒅆𒊓 𒉈𒋫 api.anthropic.com-še3 𒀸 𒁺, 𒀝 𒁾𒉌𒀀 𒋃. 𒂗𒈾 𒅆𒁾 𒉈 𒋼 𒃻, 𒋗𒃻𒌉𒇲𒁉 𒄑𒌆𒉿 𒃻 𒉡𒋳. 𒄑𒄯, 𒌓𒁺 𒇻 𒁾 𒆥𒀝𒀀𒀀 𒉡𒃻. console.anthropic.com-a 𒁶.",
+  "The key goes only from this browser to {host} (or the address you give), and runs are charged to its account. It's kept until you close this tab, unless you tick Remember. It's never saved in programs, exports or the run log.": "𒃻𒂃 𒅆𒊓 𒉈𒋫 {host}-𒂠 𒀸 𒁺 (𒇻 𒆠 𒋧𒍪), 𒀝 𒁾𒉌𒀀 𒋃. 𒂗𒈾 𒅆𒁾 𒉈 𒋼 𒃻, 𒋗𒃻𒌉𒇲𒁉 𒄑𒌆𒉿 𒃻 𒉡𒋳. 𒄑𒄯, 𒌓𒁺 𒇻 𒁾 𒆥𒀝𒀀𒀀 𒉡𒃻.",
   "The language the blocks are shown in. Programs are the same in every language.": "𒅴 𒋞 𒉺 𒌓𒁺. 𒄑𒄯 𒅴 𒊹𒀀 𒁹𒀀.",
   "The picture couldn't be saved here.": "𒀩 𒆠 𒉈𒀀 𒉡𒃻.",
-  "The primary model and all {n} backups failed. Last error: {problem}": "𒉣𒈨 𒊕 𒅆𒇻 𒃮𒊑 {n} 𒊹 𒉡𒌀. 𒉡𒋛𒁲 𒂕𒊏: {problem}",
-  "The primary model and its backup failed. Last error: {problem}": "𒉣𒈨 𒊕 𒅆𒇻 𒃮𒊑𒉌 𒉡𒌀. 𒉡𒋛𒁲 𒂕𒊏: {problem}",
+  "The primary model and all {n} backups failed. Last error: {problem}": "𒉣𒈨 𒊕 𒅇 𒃮𒊑 {n} 𒊹 𒉡𒌀. 𒉡𒋛𒁲 𒂕𒊏: {problem}",
+  "The primary model and its backup failed. Last error: {problem}": "𒉣𒈨 𒊕 𒅇 𒃮𒊑𒉌 𒉡𒌀. 𒉡𒋛𒁲 𒂕𒊏: {problem}",
   "The program couldn't be loaded, so your canvas was left as it was. ({problem})": "𒄑𒄯 𒉡𒃻, 𒆠𒀀 𒆠𒁉𒀀 𒃻. ({problem})",
   "The program ended without a result. Add 'add … to the result' or 'write a first draft'.": "𒄑𒄯 𒃻𒀝 𒉡𒌇 𒌀. “… 𒃻𒀝𒀀 𒃻” 𒇻 “𒁾𒊕 𒊬” 𒃻.",
-  "The program wants to {action} on {entity}. This is a safety check: unlocking, opening and disarming always ask first.": "𒄑𒄯 {entity}-𒀀 {action} 𒀠 𒅗. 𒉈 𒂗𒉡𒀀𒀭: 𒃻𒂃 𒂃, 𒅅 𒂃 𒅆𒇻 𒂗𒉡 𒍣 𒊕𒂠 𒇷 𒋻.",
-  "The program wants to {action}. This is a safety check: unlocking, opening and disarming always ask first.": "𒄑𒄯 {action} 𒀠 𒅗. 𒉈 𒂗𒉡𒀀𒀭: 𒃻𒂃 𒂃, 𒅅 𒂃 𒅆𒇻 𒂗𒉡 𒍣 𒊕𒂠 𒇷 𒋻.",
+  "The program wants to {action} on {entity}. This is a safety check: unlocking, opening and disarming always ask first.": "𒄑𒄯 {entity}-𒀀 {action} 𒀠 𒅗. 𒉈 𒂗𒉡𒀀𒀭: 𒃻𒂃 𒂃, 𒅅 𒂃 𒅇 𒂗𒉡 𒍣 𒊕𒂠 𒇷 𒋻.",
+  "The program wants to {action}. This is a safety check: unlocking, opening and disarming always ask first.": "𒄑𒄯 {action} 𒀠 𒅗. 𒉈 𒂗𒉡𒀀𒀭: 𒃻𒂃 𒂃, 𒅅 𒂃 𒅇 𒂗𒉡 𒍣 𒊕𒂠 𒇷 𒋻.",
   "The program wants to {said}": "𒄑𒄯 {said} 𒀠 𒅗",
   "The program “{name}” runs itself ({chain}), which would never end.": "𒄑𒄯 “{name}” 𒉎𒋼𒀀 𒀝 ({chain}), 𒉡𒌀𒇷.",
   "The program “{name}” {problem}, so it can't run as a block.": "𒄑𒄯 “{name}” {problem}, 𒋞𒁶 𒉡𒀝.",
@@ -1188,7 +1188,7 @@
   "The sample house has no camera called “{id}”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.": "𒂍 𒅆𒁺 𒀩 “{id}” 𒉡𒌇. camera.front_door, camera.driveway, camera.garden, camera.garage 𒇻 camera.pet 𒆥.",
   "The sample house has no entity called “{id}”. Open the Home Assistant panel to see the ones it has.": "𒂍 𒅆𒁺 𒃻 “{id}” 𒉡𒌇. Home Assistant 𒂃 𒃻𒁉 𒅆 𒁇𒊑𒉈.",
   "The saved program “{name}” couldn't be opened.": "𒄑𒄯 𒃻𒊏 “{name}” 𒉡𒂃.",
-  "The setup check only runs in exported Python: export this program and run it there to see the report.": "𒅆 𒁇𒊏 Python 𒌓𒁺𒀀𒋫𒀀 𒕐 𒀝: 𒄑𒄯 𒉈 𒌓𒁺 𒅆𒇻 𒆠𒁀 𒀝 𒁾 𒅆 𒁇𒊑𒉈.",
+  "The setup check only runs in exported Python: export this program and run it there to see the report.": "𒅆 𒁇𒊏 Python 𒌓𒁺𒀀𒋫𒀀 𒀸 𒀝: 𒄑𒄯 𒉈 𒌓𒁺 𒅇 𒆠𒁀 𒀝 𒁾 𒅆 𒁇𒊑𒉈.",
   "The task is empty. Type what you want into 'set task to'.": "𒆥 𒉡𒋛𒀀. 𒃻 𒀠 𒅗𒍪 “𒆥 … 𒃻”-𒀀 𒊬.",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "𒆥 𒆠 𒊓 𒉺 𒌓𒁺, 𒄊 𒉈 𒉡𒂃. 𒋞𒂵 “𒊓𒀀” 𒋳, 𒇻 𒅗 𒅆𒁾𒅗 𒆥𒀀 𒃻.",
   "The test case has no answer for this step ({what}). Save it again from a run that gets this far.": "𒅆𒂃 𒄊 𒉈𒂠 𒅗 𒄄 𒉡𒌇 ({what}). 𒀝 𒆠 𒉈𒂠 𒆭𒊏𒋫 𒉋 𒃻.",
@@ -1209,15 +1209,15 @@
   "This browser won't keep the key. Allow site data for this page, then try again.": "𒅆𒊓 𒉈 𒃻𒂃 𒉡𒃻. 𒃻𒋃 𒊓 𒅆𒁾 𒉈𒂠 𒊺𒂵, 𒂕𒁉𒀀 𒉋 𒀝.",
   "This code was exported from here and then edited. The blocks saved inside it are from before the edits.": "𒆜 𒉈 𒆠 𒉈𒋫 𒌓𒁺, 𒂕𒁉𒀀 𒉽. 𒋞 𒊮𒂵 𒃻𒊏 𒉽𒋫 𒊕𒂠𒀀𒀭.",
   "This code wasn't exported from this page. Claude can try to turn it into blocks. That uses your Claude usage, and you can undo it afterwards.": "𒆜 𒉈 𒅆𒁾 𒉈𒋫 𒉡𒌓𒁺. Claude 𒋞𒂠 𒉽𒉈 𒆥. Claude-𒍪 𒆥, 𒂕𒁉𒀀 𒄄𒉈.",
-  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "Second Thought 𒉈 𒄑𒄯 𒁶, 𒃻𒋃 𒅆𒁺𒀀 𒆥, 𒉺 𒌓𒁺 𒅆𒇻 𒌓𒁺, Claude-𒁕 𒉡𒀝. 𒀝𒉈 claude.ai-a 𒂃:",
-  "This doesn't look like a Second Thought program. Export one from this page and import that file.": "𒄑𒄯 Second Thought 𒉡𒈨𒀀. 1 𒅆𒁾 𒉈𒋫 𒌓𒁺 𒅆𒇻 𒁾𒁉 𒃻.",
+  "This copy of Second Thought can build programs, try them on sample data, explain them and export them, but it can't run them with Claude. For that, open it in claude.ai:": "Second Thought 𒉈 𒄑𒄯 𒁶, 𒃻𒋃 𒅆𒁺𒀀 𒆥, 𒉺 𒌓𒁺 𒅇 𒌓𒁺, Claude-𒁕 𒉡𒀝. 𒀝𒉈 claude.ai-a 𒂃:",
+  "This doesn't look like a Second Thought program. Export one from this page and import that file.": "𒄑𒄯 Second Thought 𒉡𒈨𒀀. 1 𒅆𒁾 𒉈𒋫 𒌓𒁺 𒅇 𒁾𒁉 𒃻.",
   "This page can't open other websites, so the agent is told to use search_web instead. Exported Python reads the page for real.": "𒅆𒁾 𒉈 𒊓 𒉽 𒉡𒂃, 𒆥𒄄𒀀 search_web 𒆥𒉈 𒅗. Python 𒌓𒁺𒀀𒋫 𒅆𒁾 𒍣 𒋃.",
-  "This page can't open {u}, so it only has its sample feeds: {feeds}. Exported Python reads any feed.": "𒅆𒁾 𒉈 {u} 𒉡𒂃, 𒅗𒉋 𒅆𒁺 𒕐 𒌇: {feeds}. Python 𒌓𒁺𒀀𒋫 𒅗𒉋 𒊹 𒋃.",
+  "This page can't open {u}, so it only has its sample feeds: {feeds}. Exported Python reads any feed.": "𒅆𒁾 𒉈 {u} 𒉡𒂃, 𒅗𒉋 𒅆𒁺 𒀸 𒌇: {feeds}. Python 𒌓𒁺𒀀𒋫 𒅗𒉋 𒊹 𒋃.",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "𒅆𒁾 𒉈 𒊓 𒉡𒆥, 𒁾𒊕 𒀭𒈾 𒊓 𒉡𒈨𒀀 𒊬. 𒄑𒄯 𒌓𒁺𒀀 𒊓 𒆥.",
   "This page uses a sample house, so nothing real is read or switched. Export to Python to use your own Home Assistant.": "𒅆𒁾 𒉈 𒂍 𒅆𒁺 𒆥, 𒃻 𒍣 𒉡𒋃 𒉡𒉽. Python-𒂠 𒌓𒁺 Home Assistant-𒍪 𒆥𒉈.",
   "This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.": "𒅆𒁾 𒉈 {noun} 𒅆𒁺 𒆥, 𒃻 𒍣 𒉡𒋃 𒉡𒆥𒄄. Python 𒌓𒁺𒀀𒋫 𒃻𒍪 𒆥.",
   "This program can't run on GitHub Actions: {why}.": "𒄑𒄯 𒉈 GitHub Actions-𒀀 𒉡𒀝: {why}.",
-  "This program only has scheduled scripts. Turn Schedules on to let them run, or add 'when Run is clicked' from Events.": "𒄑𒄯 𒉈 𒆜 𒌓𒃻𒊏 𒕐 𒌇. 𒌓𒃻𒊏 𒂃 𒀝𒉈, 𒇻 “𒌓 𒀝 𒋳𒂵𒀀” 𒃻𒋫 𒃻.",
+  "This program only has scheduled scripts. Turn Schedules on to let them run, or add 'when Run is clicked' from Events.": "𒄑𒄯 𒉈 𒆜 𒌓𒃻𒊏 𒀸 𒌇. 𒌓𒃻𒊏 𒂃 𒀝𒉈, 𒇻 “𒌓 𒀝 𒋳𒂵𒀀” 𒃻𒋫 𒃻.",
   "This program uses blocks this page doesn't have: {blocks}.": "𒄑𒄯 𒉈 𒋞 𒅆𒁾 𒉈 𒉡𒌇 𒆥: {blocks}.",
   "This program was saved by a newer Second Thought (block format {theirs}; this page reads up to {ours}). Open it on the newest page.": "𒄑𒄯 𒉈 Second Thought 𒉋𒂊 𒃻 (𒋞 {theirs}; 𒅆𒁾 𒉈 {ours}-𒂠 𒋃). 𒅆𒁾 𒉋𒀀 𒂃.",
   "This run stops before a Claude call once it has spent about {budget} at list prices (about {cost} so far).": "𒀝 𒉈 Claude 𒅗 𒌤𒋫 𒊕𒂠 𒁺 𒌓 𒆬 {budget} 𒆬 𒉣𒈨𒅗𒋫 𒍣 (𒉈𒂠 {cost}).",
@@ -1226,7 +1226,7 @@
   "This view can't send pictures to Claude, so blocks that look at photos can't run here.": "𒅆 𒉈 𒀩 Claude-𒂠 𒉡𒆥𒄄, 𒋞 𒀩 𒅆 𒁇𒊏 𒆠 𒉈𒀀 𒉡𒀝.",
   "To change a list, put a list variable in the 'in list' slot.": "𒂠 𒉽𒉈, 𒃻𒉽 𒂠 𒆠 “𒂠𒀀”-𒀀 𒃻.",
   "To save a picture, use the 'save picture' block.": "𒀩 𒃻𒉈, 𒋞 “𒀩 … 𒃻” 𒆥.",
-  "Too many scripts running at once (over {n}). Use 'broadcast and wait' inside loops.": "𒆜 𒋛𒀀 𒁹𒀀 𒀝 ({n}-𒋫 𒋛𒀀). 𒄥𒄥𒀀 “… 𒅗 𒌤 𒅆𒇻 𒅅” 𒆥.",
+  "Too many scripts running at once (over {n}). Use 'broadcast and wait' inside loops.": "𒆜 𒋛𒀀 𒁹𒀀 𒀝 ({n}-𒋫 𒋛𒀀). 𒄥𒄥𒀀 “… 𒅗 𒌤 𒅇 𒅅” 𒆥.",
   "Tool": "𒄑𒆪",
   "Tools: {tools}": "𒄑𒆪: {tools}",
   "Try {attempt} of {max} failed: {lastError}\nTrying again in {seconds}s.": "𒀀𒁺 {attempt} {max}-𒀀 𒉡𒌀: {lastError}\n𒌓𒌉𒌉 {seconds}-𒀀 𒉋 𒀝.",
@@ -1265,15 +1265,15 @@
   "What the result must do, separated by semicolons, like: under 200 words; names the date": "𒃻𒀝 𒀀𒈾 𒀝𒉈, “;”-𒋫 𒁇, 𒉈𒁶: 𒅗 200-𒋫 𒌉; 𒌓 𒉺 𒌓𒁺",
   "When {entity} changes": "𒌓 {entity} 𒉽",
   "Which Homey device? Give its name, like Kitchen light.": "𒃻𒁶 Homey 𒀀𒁀𒀀𒀭? 𒈬𒉌 𒋧, Kitchen light-𒁶.",
-  "Why: {why}": "𒀀𒈾𒕐𒀀𒀭: {why}",
+  "Why: {why}": "𒀀𒈾𒀸𒀀𒀭: {why}",
   "Woke {n} waiting script.": "𒆜 𒅅𒆷 {n} 𒍣.",
   "Woke {n} waiting scripts.": "𒆜 𒅅𒆷 {n} 𒍣.",
   "Work": "𒆥",
   "Write a first draft": "𒁾𒊕 𒊬",
   "Writing": "𒊬",
   "Yes or no: {question}": "𒃶 𒇻 𒉡: {question}",
-  "You can build programs with the keyboard alone. Press <b>Tab</b> until you reach the block editor, then:": "𒄑𒄯 𒃻 𒋳 𒕐𒋫 𒁶. <b>Tab</b> 𒋳 𒂗𒈾 𒄑𒋃 𒋞 𒆭, 𒂕𒁉𒀀:",
-  "You can't publish to a topic with + or # in it: those only work for listening.": "𒆠 + 𒇻 # 𒌇𒀀 𒉡𒅗𒌤: 𒄑𒌆𒉿 𒃻𒊑𒉈 𒕐.",
+  "You can build programs with the keyboard alone. Press <b>Tab</b> until you reach the block editor, then:": "𒄑𒄯 𒃻 𒋳 𒀸𒋫 𒁶. <b>Tab</b> 𒋳 𒂗𒈾 𒄑𒋃 𒋞 𒆭, 𒂕𒁉𒀀:",
+  "You can't publish to a topic with + or # in it: those only work for listening.": "𒆠 + 𒇻 # 𒌇𒀀 𒉡𒅗𒌤: 𒄑𒌆𒉿 𒃻𒊑𒉈 𒀸.",
   "You said no, so the program skipped this: {said}": "𒉡 𒅗, 𒄑𒄯 𒉈 𒂷𒂷: {said}",
   "Your Anthropic API key": "𒃻𒂃 API Anthropic-𒍪",
   "Your answer": "𒅗 𒄄𒍪",
@@ -1301,10 +1301,10 @@
   "calculate couldn't work out “{expression}”: {message}.": "𒃻𒋃 “{expression}” 𒉡𒋃: {message}.",
   "calendar events": "𒂡 𒁾𒌗",
   "cleared": "𒍣",
-  "comment on GitHub, and open and label issues": "GitHub-𒀀 𒅗 𒃻, 𒀀𒃻 𒂃 𒅆𒇻 𒈬𒊬 𒃻",
+  "comment on GitHub, and open and label issues": "GitHub-𒀀 𒅗 𒃻, 𒀀𒃻 𒂃 𒅇 𒈬𒊬 𒃻",
   "continued": "𒋛𒀀",
   "control your Home Assistant devices": "𒃻𒁶 Home Assistant-𒍪 𒋛 𒁲",
-  "control your Homey devices and start Homey flows": "𒃻𒁶 Homey-𒍪 𒋛 𒁲 𒅆𒇻 𒀀𒃻 Homey 𒊕 𒂷𒂷",
+  "control your Homey devices and start Homey flows": "𒃻𒁶 Homey-𒍪 𒋛 𒁲 𒅇 𒀀𒃻 Homey 𒊕 𒂷𒂷",
   "cut short": "𒋻",
   "done": "𒌀",
   "done in {time}": "{time}-𒀀 𒌀",
@@ -1325,15 +1325,15 @@
   "house style": "𒅗 𒂍",
   "interrupted": "𒋻",
   "it asks you questions while it runs, and nobody is there to answer": "𒀝𒀀 𒇷 𒋻, 𒇽 𒅗 𒄄𒉈 𒉡𒅅",
-  "it has no 'when it's' or 'every' script, so there's nothing to run on a schedule": "𒆜 “𒌓 …” 𒇻 “𒕐𒕐 …” 𒉡𒌇, 𒌓𒃻𒊏𒀀 𒀝𒉈 𒉡𒅅",
+  "it has no 'when it's' or 'every' script, so there's nothing to run on a schedule": "𒆜 “𒌓 …” 𒇻 “𒀸𒀸 …” 𒉡𒌇, 𒌓𒃻𒊏𒀀 𒀝𒉈 𒉡𒅅",
   "it uses Llama, MCP servers or folders on your own computer, which GitHub can't reach": "Llama, 𒀵 MCP 𒇻 𒂷 𒄑𒋃𒍪𒀀 𒆥, GitHub 𒉡𒋼",
-  "it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times": "𒃻 𒅅, 𒅗, 𒀉𒉘𒂷 𒊓 𒇻 𒉽𒁶, GitHub Actions 𒌓 𒃻𒊏 𒕐 𒀝",
+  "it waits for things to happen, like messages, web requests or changes, and GitHub Actions only runs it at set times": "𒃻 𒅅, 𒅗, 𒀉𒉘𒂷 𒊓 𒇻 𒉽𒁶, GitHub Actions 𒌓 𒃻𒊏 𒀸 𒀝",
   "keep notes between runs, in memory.json": "𒅗 𒀝𒀝𒀀 𒃻, memory.json-a",
   "kept": "𒃻",
   "look at the files in a folder, and watch it for new ones": "𒁾 𒂷𒀀 𒅆 𒁇, 𒉋𒂠 𒅆 𒁇",
   "look at your GitHub projects": "𒆥 GitHub-𒍪 𒅆 𒁇",
   "look at your Home Assistant devices": "𒃻𒁶 Home Assistant-𒍪 𒅆 𒁇",
-  "look at your Homey devices, flows and variables": "𒃻𒁶, 𒀀𒃻 𒅆𒇻 𒃻𒉽 Homey-𒍪 𒅆 𒁇",
+  "look at your Homey devices, flows and variables": "𒃻𒁶, 𒀀𒃻 𒅇 𒃻𒉽 Homey-𒍪 𒅆 𒁇",
   "needs work": "𒆥 𒀠 𒅗",
   "news feeds": "𒅗𒉋",
   "no listeners": "𒄑𒌆𒉿 𒃻 𒉡𒅅",
@@ -1360,9 +1360,9 @@
   "read MQTT messages": "𒅗 MQTT 𒋃",
   "read files you choose": "𒁾 𒅆𒊒𒍪 𒋃",
   "read news feeds": "𒅗𒉋 𒋃",
-  "read public web pages and search the web": "𒅆𒁾 𒊓 𒇽𒊹𒅗 𒋃 𒅆𒇻 𒊓𒀀 𒆥",
+  "read public web pages and search the web": "𒅆𒁾 𒊓 𒇽𒊹𒅗 𒋃 𒅇 𒊓𒀀 𒆥",
   "read your Discord channels": "𒉽𒂊 Discord-𒍪 𒋃",
-  "read your Kraken balances and orders, market prices, and trade on paper": "𒆬 𒅆𒇻 𒀉𒉘𒂷 Kraken-𒍪 𒋃, 𒆬 𒆠𒇴𒅗, 𒅆𒇻 𒁾𒀀 𒉚",
+  "read your Kraken balances and orders, market prices, and trade on paper": "𒆬 𒅇 𒀉𒉘𒂷 Kraken-𒍪 𒋃, 𒆬 𒆠𒇴𒅗, 𒅇 𒁾𒀀 𒉚",
   "read your Slack channels": "𒉽𒂊 Slack-𒍪 𒋃",
   "read your Telegram messages": "𒅗 Telegram-𒍪 𒋃",
   "read your calendars": "𒁾𒌗𒍪 𒋃",
@@ -1398,12 +1398,12 @@
   "send Slack messages": "𒅗 Slack 𒆥𒄄",
   "send Telegram messages": "𒅗 Telegram 𒆥𒄄",
   "send email": "𒁾𒅗 𒆥𒄄",
-  "sending messages and announcements": "𒅗 𒅆𒇻 𒅗 𒌤 𒆥𒄄",
+  "sending messages and announcements": "𒅗 𒅇 𒅗 𒌤 𒆥𒄄",
   "sent": "𒆥𒄄",
   "set": "𒃻",
   "shown": "𒉺 𒌓𒁺",
   "skipped": "𒂷𒂷",
-  "smart home actions, messages and saving files": "𒃻 𒂍, 𒅗 𒅆𒇻 𒁾 𒃻",
+  "smart home actions, messages and saving files": "𒃻 𒂍, 𒅗 𒅇 𒁾 𒃻",
   "standard": "𒍣",
   "started": "𒊕 𒂷𒂷",
   "stopped": "𒁺",
@@ -1411,7 +1411,7 @@
   "stuck": "𒁺",
   "time_plus needs a time like 09:30 or 2026-10-10 09:30, not “{when}”.": "time_plus 𒌓 09:30 𒇻 2026-10-10 09:30-gin7 𒀠 𒅗, “{when}” 𒉡.",
   "tool error": "𒄑𒆪 𒉡𒋛𒁲",
-  "trade on your Kraken account with real money (asking you before every order)": "𒆬 𒍣𒋫 Kraken-𒍪𒀀 𒉚 (𒀉𒉘𒂷 𒕐𒕐𒋫 𒊕𒂠 𒇷 𒋻)",
+  "trade on your Kraken account with real money (asking you before every order)": "𒆬 𒍣𒋫 Kraken-𒍪𒀀 𒉚 (𒀉𒉘𒂷 𒀸𒀸𒋫 𒊕𒂠 𒇷 𒋻)",
   "turn {n}": "𒀀𒁺 {n}",
   "under {cost}": "{cost}-𒋫 𒌉",
   "unknown error": "𒉡𒋛𒁲 𒉡𒍪",
@@ -1432,7 +1432,7 @@
   "{device} has no “{cap}”. It has: {caps}.": "{device} “{cap}” 𒉡𒌇. 𒌇: {caps}.",
   "{host} couldn't be reached from this page. Check your connection; if it keeps happening, {who} may not accept calls straight from a browser, and the exported program can use it instead.": "{host} 𒅆𒁾 𒉈𒋫 𒉡𒋼. 𒊓𒍪 𒅆 𒁇; 𒋗𒃻𒌉𒇲𒁉 𒋛𒀀, {who} 𒅗 𒌤 𒅆𒊓𒋫 𒉡𒊺𒂵, 𒄑𒄯 𒌓𒁺𒀀 𒆥.",
   "{label} ({left} left)": "{label} ({left} 𒅅)",
-  "{list} and {last}": "{list} 𒅆𒇻 {last}",
+  "{list} and {last}": "{list} 𒅇 {last}",
   "{model} failed: {problem}\nTrying {next} instead.": "{model} 𒉡𒌀: {problem}\n{next} 𒆥.",
   "{n} Claude call": "Claude 𒅗 𒌤 {n}",
   "{n} Claude calls": "Claude 𒅗 𒌤 {n}",
@@ -1460,10 +1460,10 @@
   "{who} has no key on this page, and Claude can't stand in for it here. Add a key for it with “Add another key” at the top, or choose a model you have a key for.": "{who} 𒅆𒁾 𒉈𒀀 𒃻𒂃 𒉡𒌇, Claude 𒆠𒁉𒀀 𒉡𒁺. 𒃻𒂃 “𒃻𒂃 𒋛𒀀 𒃻”-𒋫 𒀭𒋫 𒃻, 𒇻 𒉣𒈨 𒃻𒂃𒍪 𒌇𒀀 𒅆𒊒.",
   "{who} is having trouble right now ({problem}). Run again in a moment.": "{who} 𒉈𒀀 𒉡𒋛𒁲 𒌇 ({problem}). 𒌓𒌉𒋫 𒉋 𒀝.",
   "{who} refused the request ({problem}).": "{who} 𒀉𒉘𒂷 𒉡𒊺𒂵 ({problem}).",
-  "{who} refused your API key. Check it, or forget it and enter it again.": "{who} 𒃻𒂃 API-𒍪 𒉡𒊺𒂵. 𒅆 𒁇, 𒇻 𒍣 𒅆𒇻 𒉋 𒊬.",
-  "{who} returned nothing for this step. Simplify it and try again.": "{who} 𒄊 𒉈𒂠 𒃻 𒉡𒄄. 𒌉 𒀝 𒅆𒇻 𒉋 𒀝.",
+  "{who} refused your API key. Check it, or forget it and enter it again.": "{who} 𒃻𒂃 API-𒍪 𒉡𒊺𒂵. 𒅆 𒁇, 𒇻 𒍣 𒅇 𒉋 𒊬.",
+  "{who} returned nothing for this step. Simplify it and try again.": "{who} 𒄊 𒉈𒂠 𒃻 𒉡𒄄. 𒌉 𒀝 𒅇 𒉋 𒀝.",
   "{who} says this key's account has no credit left: {problem}": "{who} 𒅗: 𒁾 𒃻𒂃 𒉈𒅗 𒆬 𒉡𒅅: {problem}",
-  "{who} says too many requests right now. Wait a minute and run again.": "{who} 𒅗: 𒀉𒉘𒂷 𒋛𒀀. 𒌓𒌉 1 𒅅 𒅆𒇻 𒉋 𒀝.",
+  "{who} says too many requests right now. Wait a minute and run again.": "{who} 𒅗: 𒀉𒉘𒂷 𒋛𒀀. 𒌓𒌉 1 𒅅 𒅇 𒉋 𒀝.",
   "~{n} tokens": "~𒃻𒌉 {n}",
   "“{hhmm}” isn't a time like 09:00.": "“{hhmm}” 𒌓 09:00-gin7 𒉡𒈨𒀀.",
   "“{kind}” isn't a type the agent knows. Use text, number, yes/no, list or any (for “{name}”).": "“{kind}” 𒈨 𒆥𒄄𒀀𒂊 𒍪 𒉡𒈨𒀀. text, number, yes/no, list 𒇻 any 𒆥 (“{name}”-𒂠).",
@@ -1480,42 +1480,42 @@
  "examples": {
   "review": {
    "title": "𒃻𒄥𒊏 𒅆𒂃𒀀",
-   "desc": "Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅆𒇻 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.",
-   "tip": "𒆥 𒋞 𒍝𒆳𒈾 𒅆𒇻 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."
+   "desc": "Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.",
+   "tip": "𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."
   },
   "interview": {
    "title": "𒂷𒊏 𒇷 𒋻, 𒂕𒁉𒀀 𒊬",
-   "desc": "𒀀𒈾 𒅆𒇻 𒀀𒁀𒂠 𒊬𒊑𒉈 𒇷 𒋻, 𒁾𒊕 𒊬, 𒂕𒁉𒀀 𒉋 𒀝 𒂗𒈾 𒊺𒂵 𒋳.",
+   "desc": "𒀀𒈾 𒅇 𒀀𒁀𒂠 𒊬𒊑𒉈 𒇷 𒋻, 𒁾𒊕 𒊬, 𒂕𒁉𒀀 𒉋 𒀝 𒂗𒈾 𒊺𒂵 𒋳.",
    "tip": "𒁾 𒆥𒀝𒀀 𒇷 𒄄; 𒋗𒍪 𒉽𒉈 𒀀𒁺 𒊹 𒄄."
   },
   "w_email": {
    "title": "𒁾𒅗 𒊷",
-   "desc": "𒁾𒅗 𒉡𒊷 𒃻, 𒀀𒁀𒂠 𒅆𒇻 𒀀𒈾𒁶 𒅗𒄀𒉈 𒅗, Claude 𒂗𒈾 𒊺𒂵 𒉋 𒁶.",
+   "desc": "𒁾𒅗 𒉡𒊷 𒃻, 𒀀𒁀𒂠 𒅇 𒀀𒈾𒁶 𒅗𒄀𒉈 𒅗, Claude 𒂗𒈾 𒊺𒂵 𒉋 𒁶.",
    "tip": "𒃻 𒂂 𒆥: 𒆬 𒉡𒇲𒀀 𒁺, 𒇻 𒉡 𒅗."
   },
   "w_story": {
    "title": "𒅗 𒌓𒈿𒀀 𒅆𒂃𒀀𒁕",
-   "desc": "𒅗 𒌉 𒌉 1-𒂠 𒊬, 𒂕𒁉𒀀 𒈬𒁉𒂠 𒁲, 𒉎 𒂉 𒅆𒇻 𒉡𒁍 𒅆 𒁇.",
+   "desc": "𒅗 𒌉 𒌉 1-𒂠 𒊬, 𒂕𒁉𒀀 𒈬𒁉𒂠 𒁲, 𒉎 𒂉 𒅇 𒉡𒁍 𒅆 𒁇.",
    "tip": "𒀉𒉘𒂷 𒅆𒂃 𒉽, “𒅗 𒁲𒁲 𒅅” 𒇻 “𒃻 𒁀𒁀 𒀜 𒄄”-𒁶."
   },
   "w_longpost": {
    "title": "𒄑𒄯 𒊕𒁀, 𒂕𒁉𒀀 𒁾",
-   "desc": "𒈬 𒍠 𒃻, 𒍠 𒕐𒕐 𒊬, 𒃻, 𒀀𒃻 𒅆 𒁇 𒅆𒇻 𒁾 .md 𒃻.",
+   "desc": "𒈬 𒍠 𒃻, 𒍠 𒀸𒀸 𒊬, 𒃻, 𒀀𒃻 𒅆 𒁇 𒅇 𒁾 .md 𒃻.",
    "tip": "𒆥 𒁾 𒅆𒁾 𒊓𒍪𒂠 𒀠 𒅗𒂵𒁶 𒉽."
   },
   "brainstorm": {
-   "title": "𒅗 𒊹 𒅆𒇻 𒊷𒂵 𒅆𒊒",
-   "desc": "Claude 𒈬 6 𒅗, 𒕐𒕐 10-𒀀 𒋃, 𒃲𒁉 𒃻.",
+   "title": "𒅗 𒊹 𒅇 𒊷𒂵 𒅆𒊒",
+   "desc": "Claude 𒈬 6 𒅗, 𒀸𒀸 10-𒀀 𒋃, 𒃲𒁉 𒃻.",
    "tip": "𒈬 𒅗𒈠, 𒅗 𒊕 𒇻 𒈬 𒁾𒁀𒅗 𒉽."
   },
   "w_social": {
    "title": "𒅗 𒊕 1, 𒅆 5",
-   "desc": "𒅗 1 tweet, 𒁾 LinkedIn, 𒅗 Instagram, 𒁾𒅗 𒅆𒇻 𒅗 𒌉𒂠 𒉽.",
+   "desc": "𒅗 1 tweet, 𒁾 LinkedIn, 𒅗 Instagram, 𒁾𒅗 𒅇 𒅗 𒌉𒂠 𒉽.",
    "tip": "𒂠 𒅆𒅗 𒃻 𒍝𒂊 𒂷𒂷𒍪𒁶 𒋛 𒁲."
   },
   "translate": {
    "title": "𒅴 𒊹𒂠 𒉽",
-   "desc": "𒁲𒈠 𒅆𒁾 𒊓 𒅴 Anglia-𒀀 𒊬, 𒂕𒁉𒀀 𒅴 Faransa 𒅆𒇻 Hispania-𒂠 𒉽.",
+   "desc": "𒁲𒈠 𒅆𒁾 𒊓 𒅴 Anglia-𒀀 𒊬, 𒂕𒁉𒀀 𒅴 Faransa 𒅇 Hispania-𒂠 𒉽.",
    "tip": "𒅴 𒋛𒀀 𒂠𒀀 𒃻."
   },
   "parallel": {
@@ -1530,56 +1530,56 @@
   },
   "w_llama": {
    "title": "Llama 𒊬, Claude 𒅆 𒂃",
-   "desc": "𒉣𒈨 Llama 𒄑𒋃𒍪𒀀 𒁾𒊕 𒅆𒇻 𒋛 𒁲 𒊬; Claude 𒕐𒕐 𒀉𒉘𒂷𒍪𒁶 𒅆 𒂃.",
+   "desc": "𒉣𒈨 Llama 𒄑𒋃𒍪𒀀 𒁾𒊕 𒅇 𒋛 𒁲 𒊬; Claude 𒀸𒀸 𒀉𒉘𒂷𒍪𒁶 𒅆 𒂃.",
    "tip": "Llama Python 𒌓𒁺𒀀𒋫𒅗𒉌 𒅗 𒄄 (𒌓 Ollama 𒀝𒀀); 𒅆𒁾 𒉈𒀀 Claude 𒆠𒁉𒀀 𒁺."
   },
   "w_judges": {
    "title": "𒉣𒈨 6 𒁲 𒋻",
-   "desc": "Claude, Gemini, Llama, DeepSeek, Grok 𒅆𒇻 GPT 𒕐𒕐 𒅗𒍪 10-𒀀 𒋃; 𒃻𒋃 6-𒁉 𒅆𒇻 𒌘𒁉 𒋗 𒋾.",
+   "desc": "Claude, Gemini, Llama, DeepSeek, Grok 𒅇 GPT 𒀸𒀸 𒅗𒍪 10-𒀀 𒋃; 𒃻𒋃 6-𒁉 𒅇 𒌘𒁉 𒋗 𒋾.",
    "tip": "𒅗 𒊕, 𒅗 𒃻𒅗 𒇻 𒅗 𒊕 𒃻."
   },
   "r_brief": {
    "title": "𒅗 𒌉 𒆥𒂷",
-   "desc": "𒅗𒍪 𒇷 4-𒂠 𒁁, 𒕐𒕐 𒅗 𒄄, 𒂕𒁉𒀀 𒅗 𒌉 𒃻𒉆 𒁹𒀀 𒅆𒇻 𒍣𒁕 𒅆 𒁇.",
+   "desc": "𒅗𒍪 𒇷 4-𒂠 𒁁, 𒀸𒀸 𒅗 𒄄, 𒂕𒁉𒀀 𒅗 𒌉 𒃻𒉆 𒁹𒀀 𒅇 𒍣𒁕 𒅆 𒁇.",
    "tip": "“𒍥 𒍩𒀀 𒃻 𒀊𒂠 𒍥 𒌓𒋫 𒊷𒂵𒀀𒀭?” 𒆥."
   },
   "r_compare": {
    "title": "𒃻 𒅆𒊒𒁕 𒁲",
-   "desc": "𒊷, 𒅆𒌨 𒅆𒇻 𒀀𒁀𒂠 𒁲𒀀 𒕐𒕐 𒃻, 𒋃 𒅆𒇻 𒊷𒂵 𒊕𒂠 𒃻.",
+   "desc": "𒊷, 𒅆𒌨 𒅇 𒀀𒁀𒂠 𒁲𒀀 𒀸𒀸 𒃻, 𒋃 𒅇 𒊷𒂵 𒊕𒂠 𒃻.",
    "tip": "“𒍥 3”, “𒄑𒋃 2” 𒇻 “𒌓 𒂉 Cornwall-𒀀 𒇻 Lakes-𒀀” 𒆥."
   },
   "r_sides": {
    "title": "𒍠 2-𒁉 𒅗",
-   "desc": "𒆜 2 𒁹𒀀 𒅗 𒆗𒂵 𒍠 1 𒅆𒇻 𒍠 2 𒁶, 𒂕𒁉𒀀 𒄊 3-𒄰 𒅗 𒌀 𒁹𒀀 𒊬.",
+   "desc": "𒆜 2 𒁹𒀀 𒅗 𒆗𒂵 𒍠 1 𒅇 𒍠 2 𒁶, 𒂕𒁉𒀀 𒄊 3-𒄰 𒅗 𒌀 𒁹𒀀 𒊬.",
    "tip": "𒃻 𒂂𒂵 𒂷𒂷."
   },
   "r_second": {
    "title": "𒅗 2-𒄰 DeepSeek-𒋫",
-   "desc": "Claude 𒅆𒇻 DeepSeek 𒇷 1-𒀀𒀭 𒕐 𒅗 𒄄; 𒂕𒁉𒀀 Claude 2-𒁉 𒁲 𒅆𒇻 𒆠 𒉡𒁹 𒉺 𒌓𒁺.",
+   "desc": "Claude 𒅇 DeepSeek 𒇷 1-𒀀𒀭 𒀸 𒅗 𒄄; 𒂕𒁉𒀀 Claude 2-𒁉 𒁲 𒅇 𒆠 𒉡𒁹 𒉺 𒌓𒁺.",
    "tip": "𒆠 𒉡𒁹 𒆠 𒆥 𒇻 𒅗 𒊕 𒅆 𒁇𒊑𒉈."
   },
   "w_gptcheck": {
    "title": "Claude 𒊬, GPT 𒅆 𒂃",
-   "desc": "Claude 𒁾 𒊬, GPT OpenAI-𒅗 𒉡𒋛𒁲 𒆥, 𒅆𒇻 Claude 𒃻 GPT-𒂊 𒅗𒂵 𒃻𒉆 𒋛 𒁲𒂊𒉈 𒉋 𒊬.",
+   "desc": "Claude 𒁾 𒊬, GPT OpenAI-𒅗 𒉡𒋛𒁲 𒆥, 𒅇 Claude 𒃻 GPT-𒂊 𒅗𒂵 𒃻𒉆 𒋛 𒁲𒂊𒉈 𒉋 𒊬.",
    "tip": "𒉣𒈨 𒂍 2-𒄰𒅗 𒃻 𒉣𒈨 𒊕𒆤 𒉡𒅆 𒁇𒊏 𒅆 𒁇. 𒁾 𒆥𒅗𒋫 𒆥."
   },
   "r_sourced": {
    "title": "𒅗 𒄄 𒅗 𒊕𒁕 (Perplexity)",
    "desc": "Perplexity 𒊓𒀀 𒆥, 𒅗 𒊕 𒋃𒁕𒁕 𒅗 𒄄; 𒂕𒁉𒀀 Claude 𒅗 𒅗 𒊕𒆤 𒉡𒁺𒁀 𒉺 𒌓𒁺.",
-   "tip": "𒃻 𒉽𒊏𒂠 𒊷: 𒆬𒁉, 𒌓 𒂃𒀀, 𒅗𒉋. 𒅆𒁾 𒉈𒀀 Claude 𒆠𒁉𒀀 𒁺 𒅆𒇻 𒉡𒆥, 𒅗 𒊕 𒍣 𒅆 𒁇𒊑𒉈 𒌓𒁺."
+   "tip": "𒃻 𒉽𒊏𒂠 𒊷: 𒆬𒁉, 𒌓 𒂃𒀀, 𒅗𒉋. 𒅆𒁾 𒉈𒀀 Claude 𒆠𒁉𒀀 𒁺 𒅇 𒉡𒆥, 𒅗 𒊕 𒍣 𒅆 𒁇𒊑𒉈 𒌓𒁺."
   },
   "w_worldpanel": {
    "title": "𒅗 𒊕 𒌧𒋫",
-   "desc": "Mistral (Faransa), Qwen (Alibaba), Kimi (Moonshot), GLM (Z.ai) 𒅆𒇻 MiniMax 𒕐𒕐 𒅗 𒊕 𒋧; Claude 𒆗𒂵 𒅆𒊒 𒅆𒇻 𒀀𒈾𒕐𒀀𒀭 𒅗.",
+   "desc": "Mistral (Faransa), Qwen (Alibaba), Kimi (Moonshot), GLM (Z.ai) 𒅇 MiniMax 𒀸𒀸 𒅗 𒊕 𒋧; Claude 𒆗𒂵 𒅆𒊒 𒅇 𒀀𒈾𒀸𒀀𒀭 𒅗.",
    "tip": "𒉣𒈨 𒆠 𒉽𒊏𒀀 𒄑𒌆𒉿 𒃻𒊏 𒈨 𒉽 𒅅. 𒈬 𒃻𒅗 𒇻 𒅗 𒂡𒈾 𒆥."
   },
   "w_groqstorm": {
    "title": "𒆜 𒍽 Groq-𒁕",
-   "desc": "𒉣𒈨 Groq-𒅗 𒍽𒀀 𒄑𒄯 20 𒌓𒌉𒊏 𒅗; 𒂕𒁉𒀀 Claude 𒊷𒂵 5 𒅆𒊒 𒅆𒇻 𒂖 𒀝.",
+   "desc": "𒉣𒈨 Groq-𒅗 𒍽𒀀 𒄑𒄯 20 𒌓𒌉𒊏 𒅗; 𒂕𒁉𒀀 Claude 𒊷𒂵 5 𒅆𒊒 𒅇 𒂖 𒀝.",
    "tip": "𒉣𒈨 𒍽 𒆬 𒉡𒅅𒆷 𒊹𒂠 𒊷; 𒉣𒈨 𒄩𒍝𒀀 𒅆𒊒𒉈 𒊷. 𒈬 𒁾 𒊓𒅗 𒆥."
   },
   "c_openonly": {
-   "title": "𒉣𒈨 𒂃𒀀 𒕐 (Hugging Face)",
+   "title": "𒉣𒈨 𒂃𒀀 𒀸 (Hugging Face)",
    "desc": "Gemma 4 𒅗 𒄄𒁉 𒊬, GPT-OSS 𒅆 𒂃. 𒉣𒈨 𒂃𒀀 2-𒁉 Hugging Face-𒋫 𒀝; Claude 𒉡𒀝.",
    "tip": "𒉣𒈨 𒂃𒀀 Claude-𒁕 𒁲𒉈 𒊷. 𒈬 𒉣𒈨 𒁾 𒌓𒁺𒀀𒅗 𒉣𒈨 huggingface.co-ka-še3 𒉽."
   },
@@ -1590,7 +1590,7 @@
   },
   "r_survey": {
    "title": "𒇷 𒋻 𒍣𒁕",
-   "desc": "𒇷 𒋻 𒊬, 𒕐𒕐 𒍣 𒅆𒇻 𒉺 𒌓𒁺𒀀 𒋃, 𒉡𒆗 𒉋 𒊬.",
+   "desc": "𒇷 𒋻 𒊬, 𒀸𒀸 𒍣 𒅇 𒉺 𒌓𒁺𒀀 𒋃, 𒉡𒆗 𒉋 𒊬.",
    "tip": "𒍠 𒋃𒁕 (7) 𒋞 “𒋗𒃻𒌉𒇲𒁉” 𒁯𒀀𒀀 𒌉 𒇻 𒃲."
   },
   "files": {
@@ -1601,12 +1601,12 @@
   "r_pdf_notes": {
    "title": "𒁾 𒁾𒊬 𒁾𒋫",
    "desc": "𒅗 𒊕 𒁾𒋫 𒌓𒁺, 𒇷 𒉡𒄄𒀀 𒃻, notes.md 𒃻.",
-   "tip": "𒁾 𒌝𒈪𒀀𒆤𒉈 𒅆𒇻 𒁾 𒁍 PDF-𒁶 𒃻𒊏 𒊷."
+   "tip": "𒁾 𒌝𒈪𒀀𒆤𒉈 𒅇 𒁾 𒁍 PDF-𒁶 𒃻𒊏 𒊷."
   },
   "r_web": {
    "title": "𒃻 𒉋𒂊 𒀀𒈾𒀀𒀭",
    "desc": "𒅗 𒉋 𒆥, 𒌓 𒅆 𒁇𒊏𒍪 𒄑𒌆𒉿𒂵 𒃻.",
-   "tip": "𒊓𒀀 𒆥 Python 𒌓𒁺𒀀𒋫 𒕐; 𒅆𒁾 𒉈𒀀 Claude 𒄑𒌆𒉿𒉌𒋫 𒅗 𒄄."
+   "tip": "𒊓𒀀 𒆥 Python 𒌓𒁺𒀀𒋫 𒀸; 𒅆𒁾 𒉈𒀀 Claude 𒄑𒌆𒉿𒉌𒋫 𒅗 𒄄."
   },
   "pictures": {
    "title": "𒊬, 𒅆 𒂃, 𒉋 𒊬",
@@ -1615,17 +1615,17 @@
   },
   "d_logo": {
    "title": "𒄑𒄯 𒈬𒊬, 𒊷𒂵 𒃻",
-   "desc": "𒄑𒄯 𒈬𒊬 3 𒊬, 𒕐𒕐 𒋃, 𒊷𒂵 𒃻.",
-   "tip": "𒊮 𒀠 𒅗𒍪 𒅗, 𒈬 𒕐 𒉡."
+   "desc": "𒄑𒄯 𒈬𒊬 3 𒊬, 𒀸𒀸 𒋃, 𒊷𒂵 𒃻.",
+   "tip": "𒊮 𒀠 𒅗𒍪 𒅗, 𒈬 𒀸 𒉡."
   },
   "d_critique": {
    "title": "𒄑𒄯𒈬 𒅆 𒂃",
-   "desc": "𒀩 𒁾𒍪, 𒅆𒁾 𒇻 𒅆𒊓 𒅆𒊒; Claude 𒌝𒈪𒀀𒁶 𒅗 𒊷 𒅆𒇻 𒋛 𒁲 5 𒋧.",
-   "tip": "𒅆𒁾 𒊓𒅗 𒀩 𒆪 𒅆𒇻 𒆥."
+   "desc": "𒀩 𒁾𒍪, 𒅆𒁾 𒇻 𒅆𒊓 𒅆𒊒; Claude 𒌝𒈪𒀀𒁶 𒅗 𒊷 𒅇 𒋛 𒁲 5 𒋧.",
+   "tip": "𒅆𒁾 𒊓𒅗 𒀩 𒆪 𒅇 𒆥."
   },
   "d_wireframes": {
    "title": "𒅆𒁾 𒄑𒄯 𒊬",
-   "desc": "𒄑𒄯 𒄑𒄯𒅗 𒅆𒁾 𒊕 3-𒂠 𒉽, 𒕐𒕐 𒄑𒄯 𒌉𒁕.",
+   "desc": "𒄑𒄯 𒄑𒄯𒅗 𒅆𒁾 𒊕 3-𒂠 𒉽, 𒀸𒀸 𒄑𒄯 𒌉𒁕.",
    "tip": "𒄑𒄯𒍪 𒅗 1-𒀀 𒅗, “𒄑𒄯 𒃻𒈬 𒋃𒉈”-𒁶."
   },
   "d_palette": {
@@ -1635,7 +1635,7 @@
   },
   "d_icons": {
    "title": "𒀩 𒌉 𒁹𒀀",
-   "desc": "𒀉𒉘𒂷 𒁺𒁀 𒀩 𒕐𒕐 𒁹𒀀 𒊬, 𒀩 𒌉 5 𒁹𒀀 𒌓𒁺.",
+   "desc": "𒀉𒉘𒂷 𒁺𒁀 𒀩 𒀸𒀸 𒁹𒀀 𒊬, 𒀩 𒌉 5 𒁹𒀀 𒌓𒁺.",
    "tip": "𒀉𒉘𒂷 𒋞𒂵 𒄑𒄯 𒉽: 𒁯, 𒄖 𒂼, 𒋛𒀀 𒇻 𒍠."
   },
   "d_name": {
@@ -1650,33 +1650,33 @@
   },
   "l_levels": {
    "title": "3-𒂠 𒉺 𒌓𒁺",
-   "desc": "𒄑𒄯 1 𒌉 𒈬 7-𒂠, 𒄨𒂠 𒅆𒇻 𒌝𒈪𒀀𒂠 𒉺 𒌓𒁺.",
+   "desc": "𒄑𒄯 1 𒌉 𒈬 7-𒂠, 𒄨𒂠 𒅇 𒌝𒈪𒀀𒂠 𒉺 𒌓𒁺.",
    "tip": "𒃻 𒈦 𒄑𒌆𒉿𒍪𒀀 𒆥."
   },
   "l_tutor": {
    "title": "𒌝𒈪𒀀𒁕 𒀀𒁺",
-   "desc": "𒌝𒈪𒀀 𒊮 𒂼𒆷 𒇷 𒕐𒕐 𒋻, 𒅗 𒊕 𒋧 𒅗 𒄄 𒉡, 𒌀𒆷 𒄖 𒅗 𒀝.",
+   "desc": "𒌝𒈪𒀀 𒊮 𒂼𒆷 𒇷 𒀸𒀸 𒋻, 𒅗 𒊕 𒋧 𒅗 𒄄 𒉡, 𒌀𒆷 𒄖 𒅗 𒀝.",
    "tip": "𒋃 𒀀𒁺 𒋞 “𒀀𒁺” 𒁯𒀀𒀀 𒉽."
   },
   "l_flashcards": {
    "title": "𒁾 𒌉 𒁾𒊬𒋫",
-   "desc": "𒁾𒊬𒍪 𒅆𒊒; Claude 𒁾 𒌉 8 𒇷 𒅆𒇻 𒅗 𒄄𒁕 𒁶, 𒁾 𒅗𒈠 𒃻.",
+   "desc": "𒁾𒊬𒍪 𒅆𒊒; Claude 𒁾 𒌉 8 𒇷 𒅇 𒅗 𒄄𒁕 𒁶, 𒁾 𒅗𒈠 𒃻.",
    "tip": "PDF, Word 𒇻 𒁾𒊬 𒅗 𒊷."
   },
   "l_plan": {
    "title": "𒆥 𒌝𒈪𒀀 𒌗𒌗",
-   "desc": "𒆥 7-𒌓𒋫 𒁶: 𒃻 𒍪𒍪𒀀, 𒌓 𒈨𒀀𒍪 𒅆𒇻 𒆜𒁍 7-𒌓𒀀.",
+   "desc": "𒆥 7-𒌓𒋫 𒁶: 𒃻 𒍪𒍪𒀀, 𒌓 𒈨𒀀𒍪 𒅇 𒆜𒁍 7-𒌓𒀀.",
    "tip": "𒉺 𒌓𒁺: “Python 𒊕, 7-𒌓 6, 𒆜𒁍 3 7-𒌓𒀀”."
   },
   "k_meeting": {
    "title": "𒁾 𒌺 𒆥𒂠",
-   "desc": "𒁾𒊬 𒌺𒈾 𒅆𒊒; 𒄖 𒅗 𒌉 𒅆𒇻 𒂠 𒀀𒁀 𒀀𒈾 𒌓 𒀀𒁀𒂠 𒀝𒂊 𒋗 𒋾.",
+   "desc": "𒁾𒊬 𒌺𒈾 𒅆𒊒; 𒄖 𒅗 𒌉 𒅇 𒂠 𒀀𒁀 𒀀𒈾 𒌓 𒀀𒁀𒂠 𒀝𒂊 𒋗 𒋾.",
    "tip": "𒁾𒊬 𒉡𒋛𒁲 𒊷."
   },
   "k_cv": {
    "title": "𒁾 𒇽𒀀 𒆥𒂠 𒋛 𒁲",
-   "desc": "𒁾 𒇽𒍪 𒅆𒊒 𒅆𒇻 𒅗 𒆥𒀀 𒃻; Claude 𒁾 𒉋 𒊬 𒅆𒇻 𒅗 𒕐𒕐 𒍣𒉈 𒅆 𒁇.",
-   "tip": "𒅗 “𒅗 𒕐𒕐 𒁾 𒊕𒂵 𒅅” 𒃻. 𒃻 𒈜 𒉡𒁶."
+   "desc": "𒁾 𒇽𒍪 𒅆𒊒 𒅇 𒅗 𒆥𒀀 𒃻; Claude 𒁾 𒉋 𒊬 𒅇 𒅗 𒀸𒀸 𒍣𒉈 𒅆 𒁇.",
+   "tip": "𒅗 “𒅗 𒀸𒀸 𒁾 𒊕𒂵 𒅅” 𒃻. 𒃻 𒈜 𒉡𒁶."
   },
   "k_complaint": {
    "title": "𒀀𒉪𒊏 𒅗 𒄄",
@@ -1685,17 +1685,17 @@
   },
   "k_products": {
    "title": "𒅗 𒃻 𒉚 𒊹",
-   "desc": "𒃻 𒉚 𒕐𒕐 𒂠𒀀 𒅗 𒂍 𒉚 𒊬, 7-𒋫 𒌉𒊏 𒉋 𒊬, 2-𒁉 𒃻.",
+   "desc": "𒃻 𒉚 𒀸𒀸 𒂠𒀀 𒅗 𒂍 𒉚 𒊬, 7-𒋫 𒌉𒊏 𒉋 𒊬, 2-𒁉 𒃻.",
    "tip": "𒂠 𒃻 𒉚𒍪𒁕 𒉽."
   },
   "k_agenda": {
    "title": "𒌺 𒌓𒁕",
-   "desc": "𒌺𒈾 𒀀𒈾𒕐𒀀𒀭, 𒇽𒁉 𒅆𒇻 𒁍𒁉 𒆥 𒌓𒁕𒂠 𒉽, 𒕐𒕐 𒃻 𒀠 𒅗𒁕.",
-   "tip": "“𒌓𒌉 5 𒇷𒂠” 𒃻 𒅆𒇻 𒉽 𒅆 𒁇."
+   "desc": "𒌺𒈾 𒀀𒈾𒀸𒀀𒀭, 𒇽𒁉 𒅇 𒁍𒁉 𒆥 𒌓𒁕𒂠 𒉽, 𒀸𒀸 𒃻 𒀠 𒅗𒁕.",
+   "tip": "“𒌓𒌉 5 𒇷𒂠” 𒃻 𒅇 𒉽 𒅆 𒁇."
   },
   "h_bake": {
    "title": "𒃻 𒌓, 𒂕𒋫",
-   "desc": "𒌓 𒃻 𒇌𒋫 𒌓𒁺𒀀 𒅗 𒅆𒇻 𒆥 𒕐𒕐 𒌓𒁉𒋫 𒂕𒂠 𒋗 𒋾.",
+   "desc": "𒌓 𒃻 𒇌𒋫 𒌓𒁺𒀀 𒅗 𒅇 𒆥 𒀸𒀸 𒌓𒁉𒋫 𒂕𒂠 𒋗 𒋾.",
    "tip": "“𒌓 6-𒄰 𒆜𒁍 10” 𒆥, 𒂕𒁉𒀀 “𒌓 7-𒄰, 𒂍 𒃻 𒈻”."
   },
   "h_meals": {
@@ -1705,13 +1705,13 @@
   },
   "h_recipe": {
    "title": "𒃻 𒁲𒀀 𒉽",
-   "desc": "𒃻 𒁲𒀀 𒃻 𒅆𒇻 𒉽 𒅗 (𒈦, 𒋗 𒃻 𒃻, 𒉽); Claude 𒉋 𒊬 𒅆𒇻 𒅆 𒁇.",
+   "desc": "𒃻 𒁲𒀀 𒃻 𒅇 𒉽 𒅗 (𒈦, 𒋗 𒃻 𒃻, 𒉽); Claude 𒉋 𒊬 𒅇 𒅆 𒁇.",
    "tip": "𒅆 𒁇𒊏𒁉 𒋃 𒍣𒁕 𒅆 𒁇."
   },
   "h_dayout": {
    "title": "𒌓 𒂉𒊏 𒃻",
-   "desc": "𒌓 𒂉𒊏 𒌓 𒅆𒇻 𒆠𒁕 𒃻, 𒂕𒁉𒀀 𒆜 𒌓 𒍣 𒅆𒇻 𒇽 𒉡𒅅 𒅆 𒁇.",
-   "tip": "𒀀𒁀 𒁺 𒅗: “𒀊𒁀 𒅆𒇻 𒌉 𒌉” 𒃻 𒉽."
+   "desc": "𒌓 𒂉𒊏 𒌓 𒅇 𒆠𒁕 𒃻, 𒂕𒁉𒀀 𒆜 𒌓 𒍣 𒅇 𒇽 𒉡𒅅 𒅆 𒁇.",
+   "tip": "𒀀𒁀 𒁺 𒅗: “𒀊𒁀 𒅇 𒌉 𒌉” 𒃻 𒉽."
   },
   "a_bake": {
    "title": "𒆥𒄄𒀀: 𒃻 𒃻",
@@ -1725,22 +1725,22 @@
   },
   "a_timetable": {
    "title": "𒆥𒄄𒀀: 𒌓 𒃻",
-   "desc": "𒌓 𒃻 𒇌𒋫 𒌓𒁺𒀀 𒅗. 𒂍 𒃻𒍪 𒀀𒈾𒁶 𒉈 𒇷 𒋻, 𒂕𒁉𒀀 𒄑𒆪 𒌓𒁕 𒂕𒂠 𒆥; 𒌓 𒕐𒕐 𒍣.",
-   "tip": "𒌓 𒅆𒇻 𒆜𒁍𒁕 𒅗 𒄄, “𒌓 6-𒄰 11:00”-gin7. 𒂕𒁉𒀀 𒃻 2 𒇷 𒋻."
+   "desc": "𒌓 𒃻 𒇌𒋫 𒌓𒁺𒀀 𒅗. 𒂍 𒃻𒍪 𒀀𒈾𒁶 𒉈 𒇷 𒋻, 𒂕𒁉𒀀 𒄑𒆪 𒌓𒁕 𒂕𒂠 𒆥; 𒌓 𒀸𒀸 𒍣.",
+   "tip": "𒌓 𒅇 𒆜𒁍𒁕 𒅗 𒄄, “𒌓 6-𒄰 11:00”-gin7. 𒂕𒁉𒀀 𒃻 2 𒇷 𒋻."
   },
   "a_scale": {
    "title": "𒆥𒄄𒀀: 𒃻 𒁲𒀀 𒃲",
-   "desc": "𒃻 𒁲𒀀 𒅆𒇻 𒃻𒋃 𒀠 𒅗𒍪 𒋧. 𒄑𒆪 𒃻𒋃𒁕 𒃻𒋃 𒅆𒇻 𒆠𒇲 𒉋 𒋃; 𒃻𒋃 𒉡𒈜.",
-   "tip": "“𒃻 3, 900 g 𒕐𒕐” 𒆥. 𒄖 𒅗 𒆥𒄄𒀀𒅗 𒃻𒋃 𒕐𒕐 𒉺 𒌓𒁺."
+   "desc": "𒃻 𒁲𒀀 𒅇 𒃻𒋃 𒀠 𒅗𒍪 𒋧. 𒄑𒆪 𒃻𒋃𒁕 𒃻𒋃 𒅇 𒆠𒇲 𒉋 𒋃; 𒃻𒋃 𒉡𒈜.",
+   "tip": "“𒃻 3, 900 g 𒀸𒀸” 𒆥. 𒄖 𒅗 𒆥𒄄𒀀𒅗 𒃻𒋃 𒀸𒀸 𒉺 𒌓𒁺."
   },
   "a_selfcheck": {
    "title": "𒆥𒄄𒀀: 𒊬, 𒅆 𒁇, 𒊷 𒀝",
    "desc": "𒅗 𒌉 𒊬, 𒅆𒂃 𒉽𒊏 𒃻 𒀠 𒅗𒍪𒁶 𒅆 𒁇, 𒉡𒋛𒁲 𒋛 𒁲 𒂗𒈾 𒍣.",
-   "tip": "𒂍𒍪𒅗 𒅗 𒃻 𒀠 𒅗𒂵 𒃻. 𒅆𒂃 𒅗 𒕐 𒅆 𒁇, 𒆥𒄄𒀀 𒀀𒈾𒁶 𒀝 𒉡."
+   "tip": "𒂍𒍪𒅗 𒅗 𒃻 𒀠 𒅗𒂵 𒃻. 𒅆𒂃 𒅗 𒀸 𒅆 𒁇, 𒆥𒄄𒀀 𒀀𒈾𒁶 𒀝 𒉡."
   },
   "a_readfile": {
    "title": "𒆥𒄄𒀀: 𒁾 𒃻 𒁲𒀀 𒅆 𒁇",
-   "desc": "𒁾 𒃻 𒁲𒀀 𒇷 𒋻 (PDF, Word 𒇻 𒅗), 𒋃, 𒀀 𒅆𒇻 𒁵 𒄑𒆪 𒃻𒋃𒋫 𒋃, 𒉡𒋛𒁲 𒉺 𒌓𒁺.",
+   "desc": "𒁾 𒃻 𒁲𒀀 𒇷 𒋻 (PDF, Word 𒇻 𒅗), 𒋃, 𒀀 𒅇 𒁵 𒄑𒆪 𒃻𒋃𒋫 𒋃, 𒉡𒋛𒁲 𒉺 𒌓𒁺.",
    "tip": "𒃻 𒁲𒀀 𒆠𒇲 g-𒁕 𒊷. PDF 𒀩𒁕 𒉡: 𒀩 𒅆𒁾 𒅅, 𒅗 𒉡."
   },
   "a_research": {
@@ -1750,112 +1750,112 @@
   },
   "a_house": {
    "title": "𒆥𒄄𒀀: 𒂍 𒅆 𒁇",
-   "desc": "Home Assistant-𒍪 𒅆 𒁇: 𒅅 𒂃𒀀, 𒉈𒃻 𒉡𒆗, 𒃻𒁶 𒁺𒁀 𒅆𒇻 𒉈 𒉡𒋛𒁲; 𒃻 𒅆 𒁇𒊑𒉈 𒂠 𒃻. 𒅆𒁾 𒉈𒀀 𒂍 𒅆𒁺 𒆥.",
-   "tip": "Home Assistant-𒀀 𒀖𒋭 𒂃 𒅆𒇻 𒅆 𒁇𒊏 𒅆 𒁇."
+   "desc": "Home Assistant-𒍪 𒅆 𒁇: 𒅅 𒂃𒀀, 𒉈𒃻 𒉡𒆗, 𒃻𒁶 𒁺𒁀 𒅇 𒉈 𒉡𒋛𒁲; 𒃻 𒅆 𒁇𒊑𒉈 𒂠 𒃻. 𒅆𒁾 𒉈𒀀 𒂍 𒅆𒁺 𒆥.",
+   "tip": "Home Assistant-𒀀 𒀖𒋭 𒂃 𒅇 𒅆 𒁇𒊏 𒅆 𒁇."
   },
   "a_bedtime": {
    "title": "𒆥𒄄𒀀: 𒌓 𒈿𒀀",
-   "desc": "𒉈𒃻 𒆠𒆪𒀀 𒆥 𒅆𒇻 𒋼, 𒕐𒕐𒂠 𒇷 𒋻. 𒅅 𒅆𒇻 𒃻𒂃 𒅆 𒁇, 𒅗 𒕐: 𒃻 𒉡𒂃. 𒅆𒁾 𒉈𒀀 𒂍 𒅆𒁺 𒆥.",
-   "tip": "𒇷 1-𒀀 “Nu” 𒅗 𒅆𒇻 𒉈𒃻 𒉡𒈨𒀀 𒋛𒀀 𒅆 𒁇."
+   "desc": "𒉈𒃻 𒆠𒆪𒀀 𒆥 𒅇 𒋼, 𒀸𒀸𒂠 𒇷 𒋻. 𒅅 𒅇 𒃻𒂃 𒅆 𒁇, 𒅗 𒀸: 𒃻 𒉡𒂃. 𒅆𒁾 𒉈𒀀 𒂍 𒅆𒁺 𒆥.",
+   "tip": "𒇷 1-𒀀 “Nu” 𒅗 𒅇 𒉈𒃻 𒉡𒈨𒀀 𒋛𒀀 𒅆 𒁇."
   },
   "a_news": {
    "title": "𒆥𒄄𒀀: 𒅗 𒉋 𒄖𒀀",
    "desc": "𒅗𒉋𒍪 𒋃, 𒀀𒁺 𒊕 𒉺 𒌓𒁺𒀀 𒂷𒂷, 𒃻 𒅆 𒁇𒊑𒉈 𒅆𒊒, 𒆠 𒊓𒁕. 𒅆𒁾 𒉈𒀀 𒅗𒉋 𒅆𒁺 2 𒋃.",
-   "tip": "Python 𒌓𒁺𒀀𒋫𒀀 𒅗𒉋𒍪 second-thought.ini-a 𒃻 (feeds = …). 2-𒂠 𒀝: 𒀀𒁺 2-𒄰 𒃻 𒉋 𒕐 𒉺 𒌓𒁺."
+   "tip": "Python 𒌓𒁺𒀀𒋫𒀀 𒅗𒉋𒍪 second-thought.ini-a 𒃻 (feeds = …). 2-𒂠 𒀝: 𒀀𒁺 2-𒄰 𒃻 𒉋 𒀸 𒉺 𒌓𒁺."
   },
   "a_trip": {
    "title": "𒆥𒄄𒀀: 𒆜 𒃻",
-   "desc": "𒆠𒂠 𒁺 𒀠 𒅗 𒅆𒇻 𒀀𒁀 𒁺 𒇷 𒋻, 𒌓 𒅅 𒁾𒌗𒍪𒀀 𒆥, 𒆥, 𒆥 𒌓𒌓𒋫 𒌓𒁕 𒍣 𒅆𒇻 𒆬𒁕 𒁶.",
-   "tip": "𒀀𒁀 𒁺 𒅆𒇻 𒃻 𒂂 𒅗, “𒄊 𒄿𒇻 𒉡𒈨𒀀” 𒇻 “𒌉 𒌉”-𒁶. 𒆥 𒃻, 𒀀𒁺 2-𒄰 𒉽 𒇷 𒋻."
+   "desc": "𒆠𒂠 𒁺 𒀠 𒅗 𒅇 𒀀𒁀 𒁺 𒇷 𒋻, 𒌓 𒅅 𒁾𒌗𒍪𒀀 𒆥, 𒆥, 𒆥 𒌓𒌓𒋫 𒌓𒁕 𒍣 𒅇 𒆬𒁕 𒁶.",
+   "tip": "𒀀𒁀 𒁺 𒅇 𒃻 𒂂 𒅗, “𒄊 𒄿𒇻 𒉡𒈨𒀀” 𒇻 “𒌉 𒌉”-𒁶. 𒆥 𒃻, 𒀀𒁺 2-𒄰 𒉽 𒇷 𒋻."
   },
   "a_prs": {
    "title": "𒆥𒄄𒀀: 𒀉𒉘𒂷 𒉽 𒂷𒂠",
-   "desc": "𒀉𒉘𒂷 𒉽 GitHub-𒅗 𒅆𒂃𒍪 𒅅𒆷 𒆥, 𒕐𒕐 𒋃, 𒀀𒈾 𒉽, 𒀀𒈾 𒅆 𒁇 𒅆𒇻 𒅗 𒅗𒄀𒉈 𒉺 𒌓𒁺. 𒋃 𒕐: 𒃻 𒉡𒊬.",
+   "desc": "𒀉𒉘𒂷 𒉽 GitHub-𒅗 𒅆𒂃𒍪 𒅅𒆷 𒆥, 𒀸𒀸 𒋃, 𒀀𒈾 𒉽, 𒀀𒈾 𒅆 𒁇 𒅇 𒅗 𒅗𒄀𒉈 𒉺 𒌓𒁺. 𒋃 𒀸: 𒃻 𒉡𒊬.",
    "tip": "Python 𒌓𒁺𒀀𒋫𒀀 GITHUB_TOKEN 𒀠 𒅗. 𒌓 𒉌𒆷 𒀝, 𒇻 𒋞 “𒌓 09:00”-a 𒃻."
   },
   "a_prreview": {
-   "title": "𒆥𒄄𒀀: 𒀉𒉘𒂷 𒉽 𒅆 𒂃 𒅆𒇻 𒅗 𒃻",
-   "desc": "𒀉𒉘𒂷 𒉽 𒅆 𒂃𒉈 𒇷 𒋻, 𒋃, 𒅗 𒊬, 𒅆𒂃 𒉽𒊏 𒅗 𒍣 𒅆𒇻 𒉺 𒌓𒁺 𒅆 𒁇, 𒂕𒁉𒀀 𒃻, 𒂷𒊏 𒇷 𒋻.",
-   "tip": "𒃻𒉈 𒇷 𒋻𒊏 “Nu” 𒅗, 𒅗 𒋃 𒅆𒇻 𒉡𒃻."
+   "title": "𒆥𒄄𒀀: 𒀉𒉘𒂷 𒉽 𒅆 𒂃 𒅇 𒅗 𒃻",
+   "desc": "𒀉𒉘𒂷 𒉽 𒅆 𒂃𒉈 𒇷 𒋻, 𒋃, 𒅗 𒊬, 𒅆𒂃 𒉽𒊏 𒅗 𒍣 𒅇 𒉺 𒌓𒁺 𒅆 𒁇, 𒂕𒁉𒀀 𒃻, 𒂷𒊏 𒇷 𒋻.",
+   "tip": "𒃻𒉈 𒇷 𒋻𒊏 “Nu” 𒅗, 𒅗 𒋃 𒅇 𒉡𒃻."
   },
   "a_inbox": {
    "title": "𒆥𒄄𒀀: 𒁾𒅗 𒅆𒊒",
-   "desc": "𒁾𒅗 𒌓 2-𒅗 𒋃, 𒅗 𒄄 𒀠 𒅗, 𒍪𒉈 𒊷 𒅆𒇻 𒂷𒂷𒂠 𒅆𒊒, 𒁾𒌗𒀀 𒌓𒁕 𒅆 𒁇, 𒅗 𒄄 𒊬. 𒇷 𒉡𒋻𒊏 𒃻 𒉡𒆥𒄄.",
-   "tip": "Python 𒌓𒁺𒀀𒋫𒀀 EMAIL_ADDRESS 𒅆𒇻 𒃻𒂃 𒀠 𒅗. 𒅗 𒄄 𒆥𒄄𒉈 “𒊺𒂵” 𒅗, 𒁾𒊕𒁶 𒃻𒉈 “Nu” 𒅗."
+   "desc": "𒁾𒅗 𒌓 2-𒅗 𒋃, 𒅗 𒄄 𒀠 𒅗, 𒍪𒉈 𒊷 𒅇 𒂷𒂷𒂠 𒅆𒊒, 𒁾𒌗𒀀 𒌓𒁕 𒅆 𒁇, 𒅗 𒄄 𒊬. 𒇷 𒉡𒋻𒊏 𒃻 𒉡𒆥𒄄.",
+   "tip": "Python 𒌓𒁺𒀀𒋫𒀀 EMAIL_ADDRESS 𒅇 𒃻𒂃 𒀠 𒅗. 𒅗 𒄄 𒆥𒄄𒉈 “𒊺𒂵” 𒅗, 𒁾𒊕𒁶 𒃻𒉈 “Nu” 𒅗."
   },
   "a_week": {
    "title": "𒆥𒄄𒀀: 7-𒌓𒈬 𒃻",
-   "desc": "𒁾𒌗 7-𒌓𒀀, 𒁾𒅗 𒉋 𒅆𒇻 𒅗 Telegram-𒀀 𒆥𒄄𒍪 𒅆 𒁇, 𒃻 𒌓 𒅆𒇻 𒆥 𒅅𒆷 𒅗, 𒌓 𒃻 𒊹𒁕 𒁲.",
+   "desc": "𒁾𒌗 7-𒌓𒀀, 𒁾𒅗 𒉋 𒅇 𒅗 Telegram-𒀀 𒆥𒄄𒍪 𒅆 𒁇, 𒃻 𒌓 𒅇 𒆥 𒅅𒆷 𒅗, 𒌓 𒃻 𒊹𒁕 𒁲.",
    "tip": "7-𒌓𒀀 𒅗 𒉎𒍪𒂠 Telegram-𒀀 𒆥𒄄, “𒍥 𒍩 𒉚”-𒁶. 𒆥𒄄𒀀 𒋗 𒋾."
   },
   "a_tgbot": {
    "title": "Telegram 𒅗 𒄄",
-   "desc": "𒌓 Telegram-𒀀 𒅗 𒆥𒄄𒀀, 𒆥𒄄𒀀 𒅗 𒄄, 𒁾𒌗, 𒁾𒊬 𒅆𒇻 𒃻𒋃 𒆥, 𒅗 𒄄𒁉 𒆥𒄄. 𒀝 𒋳 𒅗 𒊬𒊏𒁕; Python 𒌓𒁺𒀀𒋫𒀀 𒌓𒃻𒊏𒀀 𒀝, 𒅗 𒍣 𒄄.",
-   "tip": "Python 𒌓𒁺𒀀𒋫𒀀: @BotFather-da 𒆥𒄄𒀀 𒁶, 𒃻𒌉 second-thought.ini-a 𒃻, run-on-schedule 𒀝. 𒅗𒍪 𒕐 𒄄 (TELEGRAM_CHAT_ID)."
+   "desc": "𒌓 Telegram-𒀀 𒅗 𒆥𒄄𒀀, 𒆥𒄄𒀀 𒅗 𒄄, 𒁾𒌗, 𒁾𒊬 𒅇 𒃻𒋃 𒆥, 𒅗 𒄄𒁉 𒆥𒄄. 𒀝 𒋳 𒅗 𒊬𒊏𒁕; Python 𒌓𒁺𒀀𒋫𒀀 𒌓𒃻𒊏𒀀 𒀝, 𒅗 𒍣 𒄄.",
+   "tip": "Python 𒌓𒁺𒀀𒋫𒀀: @BotFather-da 𒆥𒄄𒀀 𒁶, 𒃻𒌉 second-thought.ini-a 𒃻, run-on-schedule 𒀝. 𒅗𒍪 𒀸 𒄄 (TELEGRAM_CHAT_ID)."
   },
   "a_discord": {
    "title": "Discord 𒅗 𒃻𒅗 𒄄",
    "desc": "𒌓 𒇽 Discord 𒉽𒂊𒍪𒀀 𒇷 𒋻, 𒆥𒄄𒀀 𒅗 𒄄, 𒃻𒋃 𒄑𒋃𒋫, 𒉽𒂊 𒁹𒀀 𒄄. 𒀝 𒋳 𒇷 𒊬𒊏𒁕.",
-   "tip": "Python 𒌓𒁺𒀀𒋫𒀀: Discord 𒆥𒄄𒀀 Message Content-𒁕 𒁶, 𒃻𒌉 𒅆𒇻 𒉽𒂊𒍪 second-thought.ini-a 𒃻, run-on-schedule 𒀝. 𒉽𒂊 𒊬𒊏𒍪 𒕐 𒋃. Slack-𒂠 𒋞 𒅊𒂵 𒉽."
+   "tip": "Python 𒌓𒁺𒀀𒋫𒀀: Discord 𒆥𒄄𒀀 Message Content-𒁕 𒁶, 𒃻𒌉 𒅇 𒉽𒂊𒍪 second-thought.ini-a 𒃻, run-on-schedule 𒀝. 𒉽𒂊 𒊬𒊏𒍪 𒀸 𒋃. Slack-𒂠 𒋞 𒅊𒂵 𒉽."
   },
   "a_linkedin": {
    "title": "𒆥𒄄𒀀: LinkedIn-𒀀 𒇽 𒆥",
-   "desc": "𒅆𒁾 LinkedIn-𒅗 𒇽 𒅆𒇻 𒂍 𒅗 1-𒀀 𒆥, 𒀀𒁀𒈨𒌍, 𒀀𒈾 𒀝𒂊𒉈 𒅆𒇻 𒀀𒈾𒕐𒀀𒀭 𒅗 𒅗𒄀𒉈 𒂠 𒃻. 𒃻 LinkedIn 𒇽𒂠 𒉺 𒌓𒁺 𒕐, 𒊓𒀀 𒆥𒋫.",
-   "tip": "𒅗 𒅆𒇻 𒆠 𒉽. Python 𒌓𒁺𒀀𒋫 𒍣 𒆥; 𒅆𒁾 𒉈 Claude 𒄑𒌆𒉿𒉌𒋫 𒅗 𒄄."
+   "desc": "𒅆𒁾 LinkedIn-𒅗 𒇽 𒅇 𒂍 𒅗 1-𒀀 𒆥, 𒀀𒁀𒈨𒌍, 𒀀𒈾 𒀝𒂊𒉈 𒅇 𒀀𒈾𒀸𒀀𒀭 𒅗 𒅗𒄀𒉈 𒂠 𒃻. 𒃻 LinkedIn 𒇽𒂠 𒉺 𒌓𒁺 𒀸, 𒊓𒀀 𒆥𒋫.",
+   "tip": "𒅗 𒅇 𒆠 𒉽. Python 𒌓𒁺𒀀𒋫 𒍣 𒆥; 𒅆𒁾 𒉈 Claude 𒄑𒌆𒉿𒉌𒋫 𒅗 𒄄."
   },
   "a_mqtt": {
    "title": "𒆥𒄄𒀀: 𒃻𒁶 𒅆 𒁇 (MQTT)",
-   "desc": "𒃻𒁶 MQTT-𒍪 𒋃 (Zigbee2MQTT 𒅆𒇻 𒋛𒀀), 𒃻 𒉡𒋛𒁲 𒉺 𒌓𒁺, 𒀀 𒌓𒁺𒀀, 𒉈𒃻 𒉡𒆗 𒇻 𒃻𒁶 𒆠𒆪𒀀𒁶, 𒋼𒉈 𒅗, 𒂷𒊏 𒇷 𒋻.",
+   "desc": "𒃻𒁶 MQTT-𒍪 𒋃 (Zigbee2MQTT 𒅇 𒋛𒀀), 𒃻 𒉡𒋛𒁲 𒉺 𒌓𒁺, 𒀀 𒌓𒁺𒀀, 𒉈𒃻 𒉡𒆗 𒇻 𒃻𒁶 𒆠𒆪𒀀𒁶, 𒋼𒉈 𒅗, 𒂷𒊏 𒇷 𒋻.",
    "tip": "Python 𒌓𒁺𒀀𒋫: MQTT_HOST 𒃻. 𒆠 𒃻𒁶𒍪 𒅗 𒌤𒀀 𒃻 𒀠 𒅗𒀀 𒉽."
   },
   "y_goodnight": {
    "title": "𒆥𒄄𒀀: Homey 𒌓 𒈿𒀀",
-   "desc": "𒆥𒄄𒀀 Homey-𒍪 𒅆 𒁇: 𒉈𒃻 𒆠𒆪 𒋼 (𒇷 𒋻𒊏, 𒉈𒃻 𒄊𒅗 𒂷𒂷), 𒅅 𒅆𒇻 𒃻𒂃 𒅆 𒁇 𒅆𒇻 𒅗 𒕐, 𒉈𒃻 𒉡𒆗 𒅗. 𒅆𒁾 𒉈𒀀 𒂍 𒅆𒁺 𒆥.",
-   "tip": "Python 𒌓𒁺𒀀𒋫: HOMEY_URL 𒅆𒇻 HOMEY_API_KEY 𒃻. 𒇷 1-𒀀 “Nu” 𒅗, 𒉡𒈨𒀀 𒋛𒀀."
+   "desc": "𒆥𒄄𒀀 Homey-𒍪 𒅆 𒁇: 𒉈𒃻 𒆠𒆪 𒋼 (𒇷 𒋻𒊏, 𒉈𒃻 𒄊𒅗 𒂷𒂷), 𒅅 𒅇 𒃻𒂃 𒅆 𒁇 𒅇 𒅗 𒀸, 𒉈𒃻 𒉡𒆗 𒅗. 𒅆𒁾 𒉈𒀀 𒂍 𒅆𒁺 𒆥.",
+   "tip": "Python 𒌓𒁺𒀀𒋫: HOMEY_URL 𒅇 HOMEY_API_KEY 𒃻. 𒇷 1-𒀀 “Nu” 𒅗, 𒉡𒈨𒀀 𒋛𒀀."
   },
   "y_washer": {
    "title": "Homey: 𒌆 𒈛 𒌀",
-   "desc": "Homey-𒋫 𒉈 𒄑 𒌆 𒈛𒅗 𒅆 𒁇. 𒌓 5 W-𒋫 𒌉𒊏, Claude 𒅗 𒌉 𒊬 𒅆𒇻 Telegram-𒀀 𒆥𒄄. 𒀝 𒋳 𒉈 𒊬𒊏𒁕.",
+   "desc": "Homey-𒋫 𒉈 𒄑 𒌆 𒈛𒅗 𒅆 𒁇. 𒌓 5 W-𒋫 𒌉𒊏, Claude 𒅗 𒌉 𒊬 𒅇 Telegram-𒀀 𒆥𒄄. 𒀝 𒋳 𒉈 𒊬𒊏𒁕.",
    "tip": "𒈬 𒃻𒁶𒅗 𒃻𒁶𒍪𒂠 𒉽. Python 𒌓𒁺𒀀𒋫 𒌓𒌉𒌉 10-𒀀 𒅆 𒁇 𒌓𒃻𒊏𒀀."
   },
   "y_proofer": {
    "title": "Homey: 𒃻 𒌌𒌌𒂊 𒍣",
-   "desc": "𒉈 𒃻 𒌌𒌌𒂊𒅗 Homey-𒋫 𒋃; 𒋗𒃻𒌉𒇲𒁉 𒉈 𒋛𒀀, 𒃻𒁶 𒉈𒈠 𒋼 𒅆𒇻 𒀀𒈾𒕐𒀀𒀭 𒅗. 𒈻𒉈, 𒂃.",
+   "desc": "𒉈 𒃻 𒌌𒌌𒂊𒅗 Homey-𒋫 𒋃; 𒋗𒃻𒌉𒇲𒁉 𒉈 𒋛𒀀, 𒃻𒁶 𒉈𒈠 𒋼 𒅇 𒀀𒈾𒀸𒀀𒀭 𒅗. 𒈻𒉈, 𒂃.",
    "tip": "𒈬 𒃻𒁶𒅗 𒉽. 𒋞 “𒌓 Homey 𒃻𒁶 … 𒉽”-𒀀 𒃻, 𒌓 𒉈 𒉽𒊏 𒀝𒉈."
   },
   "y_energy": {
    "title": "Homey: 𒉈 𒆠𒂠 𒁺?",
-   "desc": "𒃻𒁶 Homey 𒉈 𒋃𒁕 𒕐𒕐 𒋃 𒅆𒇻 Claude 𒅗 𒉺 𒌓𒁺𒋫 𒅗: 𒀀𒁀 𒃲 𒆥 𒅆𒇻 𒀀𒈾 𒋼𒉈.",
+   "desc": "𒃻𒁶 Homey 𒉈 𒋃𒁕 𒀸𒀸 𒋃 𒅇 Claude 𒅗 𒉺 𒌓𒁺𒋫 𒅗: 𒀀𒁀 𒃲 𒆥 𒅇 𒀀𒈾 𒋼𒉈.",
    "tip": "𒌓 𒄛𒈾 𒀝, 𒌓 𒃻 𒊹 𒋼𒀀."
   },
   "y_bakeday": {
    "title": "Homey: 𒃻 𒀝 𒊕 𒂷𒂷",
    "desc": "𒃻 7-𒌓𒅗 𒃻𒉽 Homey-𒀀 𒋃, 𒀀𒃻 “𒃻 𒀝”-𒍪 𒊕 𒂷𒂷, Homey-𒍪 𒀀𒈾 𒀝𒂊 𒅗. 𒀀𒃻𒍪 𒃻𒉽 𒆥.",
-   "tip": "Homey-𒀀 𒀀𒃻 “𒃻 𒀝” 𒅆𒇻 𒃻𒉽 𒃻𒋃 “𒃻 7-𒌓𒀀” 𒁶."
+   "tip": "Homey-𒀀 𒀀𒃻 “𒃻 𒀝” 𒅇 𒃻𒉽 𒃻𒋃 “𒃻 7-𒌓𒀀” 𒁶."
   },
   "h_gifts": {
    "title": "𒃻𒁀 𒆬𒁕",
    "desc": "𒃻𒁀 6 𒆬𒋫 𒁲𒀀 𒅗, 1 𒅆𒊒𒍪, 𒂕𒁉𒀀 𒅗 𒃻𒁀 𒊬.",
-   "tip": "𒆬 𒅆𒇻 𒃻 𒆠𒉘𒉌 2 𒅗."
+   "tip": "𒆬 𒅇 𒃻 𒆠𒉘𒉌 2 𒅗."
   },
   "h_photo": {
    "title": "𒀩 𒉈𒀀 𒀀𒈾𒀀𒀭?",
-   "desc": "𒀩 𒄑, 𒃻 𒊮, 𒆥𒅅 𒇻 𒃻𒁶 𒅆𒊒; Claude 𒈬𒁉 𒄷𒈿 𒅆𒇻 𒅗 𒊷 𒋧.",
-   "tip": "𒀩 𒃻 𒊮𒍪 𒆥 𒅆𒇻 𒃻 𒁲 𒀀𒈾 𒅗 𒇷 𒋻."
+   "desc": "𒀩 𒄑, 𒃻 𒊮, 𒆥𒅅 𒇻 𒃻𒁶 𒅆𒊒; Claude 𒈬𒁉 𒄷𒈿 𒅇 𒅗 𒊷 𒋧.",
+   "tip": "𒀩 𒃻 𒊮𒍪 𒆥 𒅇 𒃻 𒁲 𒀀𒈾 𒅗 𒇷 𒋻."
   },
   "c_review": {
    "title": "𒆜 𒅆 𒂃",
-   "desc": "𒁾 𒆜 𒅆𒊒; Claude 𒉡𒋛𒁲 𒅆𒇻 𒅆𒌨 𒂂𒋫 𒂠 𒃻, 𒂕𒁉𒀀 𒊷𒂵 𒊬.",
-   "tip": "Python, JavaScript, 𒆜 shell 𒅆𒇻 𒅴 𒊹 𒊷."
+   "desc": "𒁾 𒆜 𒅆𒊒; Claude 𒉡𒋛𒁲 𒅇 𒅆𒌨 𒂂𒋫 𒂠 𒃻, 𒂕𒁉𒀀 𒊷𒂵 𒊬.",
+   "tip": "Python, JavaScript, 𒆜 shell 𒅇 𒅴 𒊹 𒊷."
   },
   "c_explain": {
    "title": "𒆜 𒉺 𒌓𒁺",
-   "desc": "𒁾 𒆜 𒅆𒊒; Claude 𒀀𒈾 𒀝𒂊 𒍠 𒕐𒕐 𒉺 𒌓𒁺, 𒇽 𒆜 𒉡𒊬𒊏𒂠.",
+   "desc": "𒁾 𒆜 𒅆𒊒; Claude 𒀀𒈾 𒀝𒂊 𒍠 𒀸𒀸 𒉺 𒌓𒁺, 𒇽 𒆜 𒉡𒊬𒊏𒂠.",
    "tip": "𒆜 𒊓𒋫 𒃮𒊑𒀝𒍪𒂠 𒊷."
   },
   "c_csv": {
    "title": "𒅗 𒊕 𒁾 𒃻𒋃𒋫",
-   "desc": "𒁾 CSV 𒅆𒊒; Claude 𒅗 𒊕 𒊷 5 𒆥, 𒅆𒁺 𒅆𒇻 𒀀𒈾𒕐𒀀𒀭 𒂂𒁕.",
+   "desc": "𒁾 CSV 𒅆𒊒; Claude 𒅗 𒊕 𒊷 5 𒆥, 𒅆𒁺 𒅇 𒀀𒈾𒀸𒀀𒀭 𒂂𒁕.",
    "tip": "𒁾 𒃻𒋃 CSV-𒂠 𒌓𒁺 𒊕𒂠 (𒁾, 𒃻, CSV)."
   },
   "c_tests": {
@@ -1865,18 +1865,18 @@
   },
   "x_tgbrief": {
    "title": "𒅗 𒌓 𒉌𒆷 Telegram-𒀀",
-   "desc": "𒌓 𒆥𒀀 𒆜𒁍 07:15-a, 𒁾𒌗 𒌓𒁕 𒅆𒇻 𒅗𒉋𒍪 𒋃, 𒅗 𒌉 𒊬, Telegram-𒀀 𒆥𒄄. 𒀝 𒋳 𒉈𒂠 𒆥.",
-   "tip": "Python 𒌓𒁺𒀀𒋫: 𒃻𒌉, 𒉽𒂊, 𒁾𒌗 𒅆𒇻 𒅗𒉋𒍪 second-thought.ini-a 𒃻, run-on-schedule 𒆥."
+   "desc": "𒌓 𒆥𒀀 𒆜𒁍 07:15-a, 𒁾𒌗 𒌓𒁕 𒅇 𒅗𒉋𒍪 𒋃, 𒅗 𒌉 𒊬, Telegram-𒀀 𒆥𒄄. 𒀝 𒋳 𒉈𒂠 𒆥.",
+   "tip": "Python 𒌓𒁺𒀀𒋫: 𒃻𒌉, 𒉽𒂊, 𒁾𒌗 𒅇 𒅗𒉋𒍪 second-thought.ini-a 𒃻, run-on-schedule 𒆥."
   },
   "x_newsmail": {
    "title": "𒅗 𒉋 𒁾𒅗𒀀 𒆥𒄄",
-   "desc": "𒅗𒉋𒍪 𒋃, 𒅗 𒋃𒉈 𒊷 𒊬, 𒁾𒅗𒀀 𒆥𒄄. 𒅆𒁾 𒉈𒀀 𒅗𒉋 𒅆𒇻 𒁾𒅗 𒅆𒁺𒀀𒀭.",
+   "desc": "𒅗𒉋𒍪 𒋃, 𒅗 𒋃𒉈 𒊷 𒊬, 𒁾𒅗𒀀 𒆥𒄄. 𒅆𒁾 𒉈𒀀 𒅗𒉋 𒅇 𒁾𒅗 𒅆𒁺𒀀𒀭.",
    "tip": "𒆠 𒋞 “𒁾𒅗 𒆥𒄄”-𒅗 𒉎𒍪𒂠 𒉽, 𒋞 “𒌓 …”-𒀀 𒃻 7-𒌓𒀀 𒆥𒄄𒉈."
   },
   "x_mqtt": {
    "title": "𒃻 𒌌𒌌𒂊 𒉈? (MQTT)",
-   "desc": "𒃻𒁶 𒉈 MQTT-𒅗 𒄑𒌆𒉿 𒃻. 𒋗𒃻𒌉𒇲𒁉 𒃻 𒌌𒌌𒂊 26°C 𒋛𒀀, 𒉈𒈠 MQTT-𒋫 𒋼 𒅆𒇻 Telegram-𒀀 𒅗. 𒀝 𒋳 𒉈 𒊬𒊏𒁕.",
-   "tip": "Python 𒌓𒁺𒀀𒋫: MQTT_HOST second-thought.ini-a 𒃻 𒅆𒇻 𒌓𒃻𒊏𒀀 𒀝. 𒆠 𒃻𒁶𒍪𒂠 𒉽 (zigbee2mqtt/… Zigbee2MQTT-𒂠)."
+   "desc": "𒃻𒁶 𒉈 MQTT-𒅗 𒄑𒌆𒉿 𒃻. 𒋗𒃻𒌉𒇲𒁉 𒃻 𒌌𒌌𒂊 26°C 𒋛𒀀, 𒉈𒈠 MQTT-𒋫 𒋼 𒅇 Telegram-𒀀 𒅗. 𒀝 𒋳 𒉈 𒊬𒊏𒁕.",
+   "tip": "Python 𒌓𒁺𒀀𒋫: MQTT_HOST second-thought.ini-a 𒃻 𒅇 𒌓𒃻𒊏𒀀 𒀝. 𒆠 𒃻𒁶𒍪𒂠 𒉽 (zigbee2mqtt/… Zigbee2MQTT-𒂠)."
   },
   "x_webhook": {
    "title": "𒌓 𒃻 𒌀𒆷 (𒀉𒉘𒂷 𒊓)",
@@ -1890,17 +1890,17 @@
   },
   "x_feedwatch": {
    "title": "𒅗𒉋 𒃻 𒊷 𒅗𒂵 𒂷𒊏 𒅗",
-   "desc": "𒅗𒉋𒍪 𒌓𒌉 15-𒀀 𒅆 𒁇. 𒌓 𒃻 𒉋 𒌓𒁺, Claude 𒊷 𒀠𒈨𒀀 𒅆𒊒, 𒌓𒁉𒀀 𒕐 Telegram-𒀀 𒆥𒄄.",
+   "desc": "𒅗𒉋𒍪 𒌓𒌉 15-𒀀 𒅆 𒁇. 𒌓 𒃻 𒉋 𒌓𒁺, Claude 𒊷 𒀠𒈨𒀀 𒅆𒊒, 𒌓𒁉𒀀 𒀸 Telegram-𒀀 𒆥𒄄.",
    "tip": "𒇷 𒃻 𒆠𒉘𒍪𒁶 𒉽."
   },
   "x_folder": {
    "title": "𒃻 𒁲𒀀 𒂷𒀀 𒃻𒊏 𒉽",
-   "desc": "𒂷 𒅆 𒁇. 𒃻 𒁲𒀀 𒃻 (PDF, Word 𒇻 𒅗), g 𒅆𒇻 °C-𒂠 𒉋 𒊬 𒃻𒋃 𒃻𒁕, 𒃻 𒌓𒁺𒀀 𒃻. 𒀝 𒋳 𒃻 𒁲𒀀 𒃻𒊏𒁕.",
+   "desc": "𒂷 𒅆 𒁇. 𒃻 𒁲𒀀 𒃻 (PDF, Word 𒇻 𒅗), g 𒅇 °C-𒂠 𒉋 𒊬 𒃻𒋃 𒃻𒁕, 𒃻 𒌓𒁺𒀀 𒃻. 𒀝 𒋳 𒃻 𒁲𒀀 𒃻𒊏𒁕.",
    "tip": "Python 𒌓𒁺𒀀𒋫 𒂷 recipes-in 𒄑𒄯𒁕 𒁶. 𒃻 𒌓𒁺𒀀 𒂷 outputs-𒀀 𒁺."
   },
   "x_review": {
    "title": "𒌓 𒇽 𒅆𒂃𒈬 𒇷 𒋻 (GitHub)",
-   "desc": "𒌓 𒀉𒉘𒂷 𒉽 GitHub 𒅆𒂃𒍪 𒇷 𒋻, 𒆥𒄄𒀀 𒋃 𒅆𒇻 𒄖 𒅗 3 Telegram-𒀀 𒆥𒄄.",
+   "desc": "𒌓 𒀉𒉘𒂷 𒉽 GitHub 𒅆𒂃𒍪 𒇷 𒋻, 𒆥𒄄𒀀 𒋃 𒅇 𒄖 𒅗 3 Telegram-𒀀 𒆥𒄄.",
    "tip": "Python 𒌓𒁺𒀀𒋫: GitHub 𒌓𒌉 5-𒀀 𒅆 𒁇 𒌓 𒄑𒄯 𒌓𒃻𒊏𒀀 𒀝𒀀."
   },
   "x_soon": {
@@ -1910,27 +1910,27 @@
   },
   "x_pagewatch": {
    "title": "𒌓 𒉚 𒍥𒁕 𒉽 𒂷𒊏 𒅗",
-   "desc": "𒅆𒁾 𒂍 𒉚𒅗 𒆜𒁍𒀀 𒅆 𒁇, 𒉚 𒕐. 𒌓 𒉽, Claude 𒅗 1-𒀀 𒉈𒂠 𒉚𒉈 𒊷 𒀠𒈨𒀀 𒅗, Telegram-𒀀 𒆥𒄄. 𒀝 𒋳 𒉽 𒊬𒊏𒁕.",
-   "tip": "𒆠 𒂍 𒉚𒍪 𒋞 𒅊𒂵𒀀 𒃻, 𒅗 𒉚𒁕 (Price-𒁶) “𒍠 ... 𒅅𒆷 𒕐”-𒀀. 𒋞 𒅊𒂵 𒋗 𒍣𒋫 𒋳 𒅆𒇻 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅆𒁾 𒅆𒁺𒁕 𒆥."
+   "desc": "𒅆𒁾 𒂍 𒉚𒅗 𒆜𒁍𒀀 𒅆 𒁇, 𒉚 𒀸. 𒌓 𒉽, Claude 𒅗 1-𒀀 𒉈𒂠 𒉚𒉈 𒊷 𒀠𒈨𒀀 𒅗, Telegram-𒀀 𒆥𒄄. 𒀝 𒋳 𒉽 𒊬𒊏𒁕.",
+   "tip": "𒆠 𒂍 𒉚𒍪 𒋞 𒅊𒂵𒀀 𒃻, 𒅗 𒉚𒁕 (Price-𒁶) “𒍠 ... 𒅅𒆷 𒀸”-𒀀. 𒋞 𒅊𒂵 𒋗 𒍣𒋫 𒋳 𒅇 “𒆜 𒉈 𒀝” 𒅆𒊒, 𒅆𒁾 𒅆𒁺𒁕 𒆥."
   },
   "memory": {
-   "title": "𒅗 𒊕 𒉋 𒀀𒁺 𒕐𒕐",
-   "desc": "𒅗 𒊕 𒆥𒀀 𒕐𒕐 𒄑𒌆𒉿𒂵 𒃻, 𒀀𒁺 𒕐𒕐 (𒇻 𒌓 𒕐𒕐) 𒉋 𒁶.",
-   "tip": "𒀀𒁺 𒊹 𒂕𒁉𒀀 𒄑𒌆𒉿 𒂃 𒅆𒇻 𒃻 𒃻𒊏 𒅆 𒁇."
+   "title": "𒅗 𒊕 𒉋 𒀀𒁺 𒀸𒀸",
+   "desc": "𒅗 𒊕 𒆥𒀀 𒀸𒀸 𒄑𒌆𒉿𒂵 𒃻, 𒀀𒁺 𒀸𒀸 (𒇻 𒌓 𒀸𒀸) 𒉋 𒁶.",
+   "tip": "𒀀𒁺 𒊹 𒂕𒁉𒀀 𒄑𒌆𒉿 𒂃 𒅇 𒃻 𒃻𒊏 𒅆 𒁇."
   },
   "a_weekly": {
    "title": "𒌓 5-𒄰 𒁾 𒁾𒊬 𒌓𒌓𒋫",
-   "desc": "𒌓 𒕐𒕐 𒀝 𒅆𒇻 𒃻 𒀝𒍪 𒊬. 𒆜𒁍 16:30 𒌓 5-𒄰𒀀 𒁾𒊬 7-𒌓𒀀 𒁾𒂠 𒉽 𒅆𒇻 𒃻.",
-   "tip": "𒌓𒃻𒊏 𒂃 𒅆𒇻 𒅆𒁾 𒌓 5-𒄰 𒄛𒈾 𒂃𒀀 𒂷𒂷, 𒇻 Python-𒂠 𒌓𒁺."
+   "desc": "𒌓 𒀸𒀸 𒀝 𒅇 𒃻 𒀝𒍪 𒊬. 𒆜𒁍 16:30 𒌓 5-𒄰𒀀 𒁾𒊬 7-𒌓𒀀 𒁾𒂠 𒉽 𒅇 𒃻.",
+   "tip": "𒌓𒃻𒊏 𒂃 𒅇 𒅆𒁾 𒌓 5-𒄰 𒄛𒈾 𒂃𒀀 𒂷𒂷, 𒇻 Python-𒂠 𒌓𒁺."
   },
   "a_morning": {
    "title": "𒅗 𒌓 𒉌𒆷 𒆜𒁍 7:45-a",
-   "desc": "𒌓 𒆥𒀀 𒉌𒆷 𒅗 𒌉 𒊬: 𒅗 𒃻𒅗, 𒅗 𒌓𒁕 𒅆𒇻 𒃻 𒊮 𒄭. 𒋗𒃻𒌉𒇲𒁉 Claude 𒄊 𒉽, 𒉋 𒀝.",
+   "desc": "𒌓 𒆥𒀀 𒉌𒆷 𒅗 𒌉 𒊬: 𒅗 𒃻𒅗, 𒅗 𒌓𒁕 𒅇 𒃻 𒊮 𒄭. 𒋗𒃻𒌉𒇲𒁉 Claude 𒄊 𒉽, 𒉋 𒀝.",
    "tip": "𒀝 𒋳 𒉈𒂠 𒆥𒉈; 𒌓𒃻𒊏 𒂃 𒍣𒂠."
   },
   "a_batch": {
    "title": "𒆥 𒂠 𒁹𒀀 𒀝",
-   "desc": "𒆥 𒂠𒀀 𒕐𒕐 𒆜𒉌𒂠 𒆥𒄄, 2-𒁉 𒌓 1-𒀀 𒀝, 𒂕𒁉𒀀 𒅅 𒂗𒈾 𒊹 𒌀.",
+   "desc": "𒆥 𒂠𒀀 𒀸𒀸 𒆜𒉌𒂠 𒆥𒄄, 2-𒁉 𒌓 1-𒀀 𒀝, 𒂕𒁉𒀀 𒅅 𒂗𒈾 𒊹 𒌀.",
    "tip": "𒆥 𒂠𒀀 𒃻; 𒌓 1-𒁶 𒌀."
   },
   "ha_write_automation": {
@@ -1940,143 +1940,143 @@
   },
   "ha_explain_automation": {
    "title": "𒀀𒃻 𒉺 𒌓𒁺",
-   "desc": "𒀀𒃻 YAML 𒊓𒋫 𒃻; Claude 𒄖 𒕐𒕐 𒉺 𒌓𒁺, 𒂕𒁉𒀀 𒅗 1-𒀀 𒀀𒈾 𒀝𒂊 𒅗.",
+   "desc": "𒀀𒃻 YAML 𒊓𒋫 𒃻; Claude 𒄖 𒀸𒀸 𒉺 𒌓𒁺, 𒂕𒁉𒀀 𒅗 1-𒀀 𒀀𒈾 𒀝𒂊 𒅗.",
    "tip": "𒄑𒄯 𒃻: 𒁹𒀀 𒀝."
   },
   "ha_debug": {
-   "title": "𒀀𒃻𒈬 𒀀𒈾𒕐 𒉡𒀝?",
-   "desc": "𒀀𒃻 𒅆𒇻 𒃻 𒀝𒀀 𒃻 (𒇻 𒄊𒁉); Claude 𒀀𒈾𒕐𒀀𒀭 𒅆𒇻 𒋛 𒁲 𒂠 𒃻, 𒊷𒂵 𒊕𒂠.",
+   "title": "𒀀𒃻𒈬 𒀀𒈾𒀸 𒉡𒀝?",
+   "desc": "𒀀𒃻 𒅇 𒃻 𒀝𒀀 𒃻 (𒇻 𒄊𒁉); Claude 𒀀𒈾𒀸𒀀𒀭 𒅇 𒋛 𒁲 𒂠 𒃻, 𒊷𒂵 𒊕𒂠.",
    "tip": "𒄊𒁉 Settings, Automations-𒀀, 𒂕𒁉𒀀 dots 3 𒀀𒃻𒍪𒅗."
   },
   "ha_dashboard": {
    "title": "𒅆𒁾 𒃻𒋃 𒃻",
-   "desc": "𒂍 𒅆𒇻 𒃻𒁶𒍪 𒉺 𒌓𒁺; Claude 𒅆𒁾 𒃻 𒅆𒇻 YAML 𒊬, 𒂕𒁉𒀀 𒂖 𒅆𒇻 𒄑𒋃 𒌉𒀀 𒊷 𒅆 𒁇.",
+   "desc": "𒂍 𒅇 𒃻𒁶𒍪 𒉺 𒌓𒁺; Claude 𒅆𒁾 𒃻 𒅇 YAML 𒊬, 𒂕𒁉𒀀 𒂖 𒅇 𒄑𒋃 𒌉𒀀 𒊷 𒅆 𒁇.",
    "tip": "𒀀𒁀 𒆥 𒅗: “𒌉𒉈𒂠” 𒇻 “𒁾 𒂍𒅗 𒂍 𒆥𒅅𒅗”."
   },
   "ha_names": {
    "title": "𒈬 𒃻 𒂖 𒀝",
-   "desc": "𒂠 𒃻 𒉡𒋛𒁲 𒃻; 𒈬 𒉋 𒁹𒀀, 𒈬 𒄭 𒅆𒇻 𒂍 𒅗𒂵 𒋗 𒋾.",
+   "desc": "𒂠 𒃻 𒉡𒋛𒁲 𒃻; 𒈬 𒉋 𒁹𒀀, 𒈬 𒄭 𒅇 𒂍 𒅗𒂵 𒋗 𒋾.",
    "tip": "𒂠 Settings, Entities-𒋫 𒃮𒊑 𒀝."
   },
   "ha_mesh": {
    "title": "𒊓 Zigbee 𒃻",
-   "desc": "𒃻𒁶 Zigbee 𒇻 Z-Wave-𒍪 𒅆𒇻 𒆠𒁉 𒂠 𒃻; 𒆠 𒃻𒁶 𒆜𒅗 𒋗 𒋾, 𒊓 𒍣 𒁺𒉈.",
-   "tip": "𒃻𒁶 𒉈 𒃲𒋫 𒅗: plugs 𒅆𒇻 𒉈𒃻 𒆜𒁶 𒀝."
+   "desc": "𒃻𒁶 Zigbee 𒇻 Z-Wave-𒍪 𒅇 𒆠𒁉 𒂠 𒃻; 𒆠 𒃻𒁶 𒆜𒅗 𒋗 𒋾, 𒊓 𒍣 𒁺𒉈.",
+   "tip": "𒃻𒁶 𒉈 𒃲𒋫 𒅗: plugs 𒅇 𒉈𒃻 𒆜𒁶 𒀝."
   },
   "ha_buy": {
    "title": "𒃻𒁶 𒀀𒁀 𒉚𒈨𒂗?",
-   "desc": "𒃻 𒍪𒉈 𒀠 𒅗𒍪 𒅗; Claude 𒃻𒁶 𒁲 𒅆𒇻 𒊕𒂠 𒃻.",
+   "desc": "𒃻 𒍪𒉈 𒀠 𒅗𒍪 𒅗; Claude 𒃻𒁶 𒁲 𒅇 𒊕𒂠 𒃻.",
    "tip": "“𒀀 𒂍 𒀀 𒋗𒉀𒀀” 𒇻 “𒌓 𒁾 𒁺𒈬 𒍪”."
   },
   "ha_morning": {
    "title": "𒅗 𒌓 𒉌𒆷",
-   "desc": "𒆜𒁍 07:15-a (𒇻 𒀝 𒋳): 𒅎, 𒄑𒈠, 𒁾𒌗, 𒀀𒁀 𒂍𒀀 𒅆𒇻 𒃻 𒈪𒀀 𒂃, 𒅗 𒄭 1-𒀀. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 07:15-a (𒇻 𒀝 𒋳): 𒅎, 𒄑𒈠, 𒁾𒌗, 𒀀𒁀 𒂍𒀀 𒅇 𒃻 𒈪𒀀 𒂃, 𒅗 𒄭 1-𒀀. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒌓 𒋞 𒅊𒂵𒀀 𒉽, 𒇻 𒅗 𒃻𒁶 𒅗𒀀 𒅗."
   },
   "ha_goodnight": {
    "title": "𒌓 𒈿𒀀 𒅆 𒁇",
-   "desc": "𒅅, 𒀖𒋭, 𒃻𒂃 𒅆𒇻 𒉈𒃻 𒅆 𒁇, 𒃻 𒉡𒍣 𒅗 𒉺 𒌓𒁺𒋫 𒂠 𒃻, 𒂕𒁉𒀀 𒆟 𒅆𒇻 𒉈𒃻 𒋼 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒅅, 𒀖𒋭, 𒃻𒂃 𒅇 𒉈𒃻 𒅆 𒁇, 𒃻 𒉡𒍣 𒅗 𒉺 𒌓𒁺𒋫 𒂠 𒃻, 𒂕𒁉𒀀 𒆟 𒅇 𒉈𒃻 𒋼 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒄑𒋃 𒌉𒍪𒋫 𒌓 𒈿𒀀 𒀝, 𒇻 𒆜𒁍 22:30 𒃻."
   },
   "ha_leaving": {
    "title": "𒂍𒋫 𒌓𒁺",
-   "desc": "𒌓 𒇽 𒂕𒊏 𒌓𒁺, 𒉈𒃻 𒂃 𒋼 𒅆𒇻 𒀀𒈾 𒋼 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒇽 𒂕𒊏 𒌓𒁺, 𒉈𒃻 𒂃 𒋼 𒅇 𒀀𒈾 𒋼 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "Home Assistant-𒀀 person.alex not_home-še3 𒉽 𒆥𒉈."
   },
   "ha_welcome": {
    "title": "𒂍𒂠 𒁲𒈠",
-   "desc": "𒌓 𒂍𒂠 𒆭𒊏, 𒀀𒈾 𒀝 𒌓 𒁇𒊏: 𒅅, 𒁺 𒅆𒇻 𒁺𒈬. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒂍𒂠 𒆭𒊏, 𒀀𒈾 𒀝 𒌓 𒁇𒊏: 𒅅, 𒁺 𒅇 𒁺𒈬. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "person.alex home-𒂠 𒉽 𒆥𒉈."
   },
   "ha_remote": {
    "title": "𒃻𒁶 𒁉 𒆳 𒊕 𒂷𒂷",
-   "desc": "𒂡 Home Assistant-𒅗 𒄑𒌆𒉿 𒃻. 𒌓 𒃻𒁶 𒂍 𒆥𒅅𒅗 on 𒋳𒂵𒀀, 𒄑 𒁉 𒆳 𒂃 𒅆𒇻 𒅗 𒃻; off-𒁉 𒋼. 𒁹𒀀 𒁺, 𒉡𒆥. 𒀝 𒋳 𒅗 𒊬𒊏𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒇻 𒋞 “𒌓 𒂡 Home Assistant”-𒀀 𒋗 𒍣𒋫 𒋳 𒅆𒇻 “𒆜 𒉈 𒀝” 𒅆𒊒. kitchen remote 𒈬 𒃻𒁶𒍪𒂠 𒉽, 𒅆𒇻 zha_event deconz_event 𒇻 hue_event-še3 𒋗𒃻𒌉𒇲𒁉 𒃻𒁶𒍪 𒆥𒄄 (Developer tools → Events Home Assistant-𒀀 𒉺 𒌓𒁺)."
+   "desc": "𒂡 Home Assistant-𒅗 𒄑𒌆𒉿 𒃻. 𒌓 𒃻𒁶 𒂍 𒆥𒅅𒅗 on 𒋳𒂵𒀀, 𒄑 𒁉 𒆳 𒂃 𒅇 𒅗 𒃻; off-𒁉 𒋼. 𒁹𒀀 𒁺, 𒉡𒆥. 𒀝 𒋳 𒅗 𒊬𒊏𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "𒇻 𒋞 “𒌓 𒂡 Home Assistant”-𒀀 𒋗 𒍣𒋫 𒋳 𒅇 “𒆜 𒉈 𒀝” 𒅆𒊒. kitchen remote 𒈬 𒃻𒁶𒍪𒂠 𒉽, 𒅇 zha_event deconz_event 𒇻 hue_event-še3 𒋗𒃻𒌉𒇲𒁉 𒃻𒁶𒍪 𒆥𒄄 (Developer tools → Events Home Assistant-𒀀 𒉺 𒌓𒁺)."
   },
   "ha_holiday": {
    "title": "𒉈𒃻 𒂡𒈾",
-   "desc": "𒄛 𒕐𒕐 𒌓 𒁇𒊏𒍪, Claude 𒉈𒃻 𒂃𒉈 𒅆𒊒, 7-𒌓 𒂕𒊏 𒂍 𒀀𒈾𒁶 𒆥𒀀. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒉈𒃻 𒕐 𒅆𒊒: 𒄑𒄯 𒈬 𒕐𒕐 'light.'-𒋫 𒊕 𒂷𒂷 𒅆 𒁇."
+   "desc": "𒄛 𒀸𒀸 𒌓 𒁇𒊏𒍪, Claude 𒉈𒃻 𒂃𒉈 𒅆𒊒, 7-𒌓 𒂕𒊏 𒂍 𒀀𒈾𒁶 𒆥𒀀. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "𒉈𒃻 𒀸 𒅆𒊒: 𒄑𒄯 𒈬 𒀸𒀸 'light.'-𒋫 𒊕 𒂷𒂷 𒅆 𒁇."
   },
   "ha_weekly": {
    "title": "𒁾 𒂍 7-𒌓𒀀",
-   "desc": "𒌓 7-𒄰 𒄛𒈾: 𒉈, 𒉈, 𒉈𒃻 𒅆𒇻 𒃻 𒉡𒋛𒁲, 𒁾 𒌉 𒁾𒀀 𒃻𒊏. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒌓 𒕐𒕐 𒀝 𒋳 𒁾 7-𒌓 𒉈𒀀 𒅆 𒁇𒊑𒉈."
+   "desc": "𒌓 7-𒄰 𒄛𒈾: 𒉈, 𒉈, 𒉈𒃻 𒅇 𒃻 𒉡𒋛𒁲, 𒁾 𒌉 𒁾𒀀 𒃻𒊏. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "𒌓 𒀸𒀸 𒀝 𒋳 𒁾 7-𒌓 𒉈𒀀 𒅆 𒁇𒊑𒉈."
   },
   "ha_private": {
    "title": "𒅗 𒂍𒀀 𒃻𒊏",
-   "desc": "𒉣𒈨 Llama 𒄑𒋃𒍪𒀀 𒂍 𒊹 𒋃 𒅆𒇻 𒅗 𒊬, 𒃻𒋃 𒂍𒍪 𒂍𒋫 𒉡𒌓𒁺. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒉣𒈨 Llama 𒄑𒋃𒍪𒀀 𒂍 𒊹 𒋃 𒅇 𒅗 𒊬, 𒃻𒋃 𒂍𒍪 𒂍𒋫 𒉡𒌓𒁺. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒄑𒋃 Ollama-𒁕 𒁹𒀀 𒀝, Home Assistant-𒁕."
   },
   "ha_ask": {
    "title": "𒂍𒊏 𒇷 𒋻",
-   "desc": "𒃻 𒀠 𒅗 𒇷 𒋻 (“𒇽 𒂍𒀀 𒅅𒀀𒀭?”, “𒇌 𒂃 𒂷𒂷𒀀𒀭?”). Claude Home Assistant-𒍪𒋫 𒕐 𒅗 𒄄. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒃻 𒀠 𒅗 𒇷 𒋻 (“𒇽 𒂍𒀀 𒅅𒀀𒀭?”, “𒇌 𒂃 𒂷𒂷𒀀𒀭?”). Claude Home Assistant-𒍪𒋫 𒀸 𒅗 𒄄. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒋗𒃻𒌉𒇲𒁉 𒃻𒋃 𒅗 𒄄 𒉡𒌇, Claude 𒅗."
   },
   "ha_bins": {
    "title": "𒌓 𒄑𒈠",
-   "desc": "𒆜𒁍 19:00-a, 𒄑𒈠 𒌓 𒌌𒆷 𒌓𒁺𒀀 𒅆 𒁇 (𒌓 𒂡𒈾 𒉽𒊏𒁕) 𒅆𒇻 𒀀𒁀 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 19:00-a, 𒄑𒈠 𒌓 𒌌𒆷 𒌓𒁺𒀀 𒅆 𒁇 (𒌓 𒂡𒈾 𒉽𒊏𒁕) 𒅇 𒀀𒁀 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶 𒄑𒈠𒍪 𒆥."
   },
   "ha_doorbell": {
    "title": "𒅅𒀀 𒀀𒁀𒀀𒀭?",
-   "desc": "𒌓 𒃻𒁶 𒅅𒅗 𒅗 𒌤, Claude 𒀩𒈠 𒅆 𒁇 𒅆𒇻 𒀀𒁀 𒇻 𒀀𒈾 𒅅 𒅗, 𒁾 𒁺𒈬𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒃻𒁶 𒅅𒅗 𒅗 𒌤, Claude 𒀩𒈠 𒅆 𒁇 𒅇 𒀀𒁀 𒇻 𒀀𒈾 𒅅 𒅗, 𒁾 𒁺𒈬𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "Home Assistant-𒀀 binary_sensor.doorbell on-𒂠 𒉽 𒅗 𒌤𒉈."
   },
   "ha_parcel": {
    "title": "𒁾 𒁺𒈬 𒁇𒊏 𒅅𒀀𒀭?",
-   "desc": "𒆜𒁍 18:00-a 𒀩 𒅅 𒊕𒅗 𒅆 𒁇 𒅆𒇻 𒋗𒃻𒌉𒇲𒁉 𒁾 𒁺𒈬 𒄿𒇻𒀀 𒅅 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 18:00-a 𒀩 𒅅 𒊕𒅗 𒅆 𒁇 𒅇 𒋗𒃻𒌉𒇲𒁉 𒁾 𒁺𒈬 𒄿𒇻𒀀 𒅅 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒌓 𒂍𒂠 𒆭𒊏𒍪𒂠 𒉽."
   },
   "ha_motion": {
    "title": "𒁺 𒅆 𒁇𒊏 𒊷",
-   "desc": "𒌓 𒀩 𒊬𒅗 𒁺 𒅆 𒁇, Claude 𒀩 𒅆 𒁇 𒅆𒇻 𒇽 𒇻 𒄑𒇀 𒕐𒂠 𒅗, 𒊕𒄑𒊏 𒇻 𒄑 𒉡. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒀩 𒊬𒅗 𒁺 𒅆 𒁇, Claude 𒀩 𒅆 𒁇 𒅇 𒇽 𒇻 𒄑𒇀 𒀸𒂠 𒅗, 𒊕𒄑𒊏 𒇻 𒄑 𒉡. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "binary_sensor.motion_garden off 𒂕𒁉𒀀 on-𒂠 𒉽 Home Assistant-𒀀."
   },
   "ha_car": {
    "title": "𒄑𒇀𒈨𒀀𒀀𒀭?",
-   "desc": "𒌓 𒃻 𒆜 𒂍𒅗 𒁺, Claude 𒄑𒇀 𒉺 𒌓𒁺 𒅆𒇻 𒄑𒇀𒍪 𒄑𒌆𒉿𒂵𒉌𒁕 𒁲. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒃻 𒆜 𒂍𒅗 𒁺, Claude 𒄑𒇀 𒉺 𒌓𒁺 𒅇 𒄑𒇀𒍪 𒄑𒌆𒉿𒂵𒉌𒁕 𒁲. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒀀𒁺 1-𒄰 𒄑𒇀𒍪 𒄑𒌆𒉿𒂵 𒃻; 𒀀𒁺 𒂕𒊏 𒁲."
   },
   "ha_garage": {
    "title": "𒂍 𒄑𒇀𒅗 𒍣𒉈 𒆟𒀀𒀭?",
-   "desc": "𒆜𒁍 22:00-a 𒃻𒁶 𒅅 𒂍 𒄑𒇀𒅗 𒀩𒁕 𒁲, 𒅆𒇻 𒋗𒃻𒌉𒇲𒁉 𒉡𒁹 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 22:00-a 𒃻𒁶 𒅅 𒂍 𒄑𒇀𒅗 𒀩𒁕 𒁲, 𒅇 𒋗𒃻𒌉𒇲𒁉 𒉡𒁹 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒅅 𒃻𒁶𒁉 𒌓𒁕 𒅅𒆷𒂠 𒊷."
   },
   "ha_overnight": {
    "title": "𒅗 𒈪𒀀",
-   "desc": "𒆜𒁍 07:00-a 𒄖 𒅗 𒄭 1 𒃻 𒅅 𒅆𒇻 𒃻𒁶 𒁺𒈾 𒈪𒀀 𒅆 𒁇, 𒄑𒌆𒉿 𒃻 𒊹𒊏 𒉡. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 07:00-a 𒄖 𒅗 𒄭 1 𒃻 𒅅 𒅇 𒃻𒁶 𒁺𒈾 𒈪𒀀 𒅆 𒁇, 𒄑𒌆𒉿 𒃻 𒊹𒊏 𒉡. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶 𒋛𒀀 𒇷𒀀 𒃻."
   },
   "ha_newdevice": {
    "title": "𒃻𒁶 𒉋 𒊓𒀀",
-   "desc": "𒌓 𒃻𒁶 𒉡𒍪 𒊓𒀀 𒆭, Claude 𒀀𒈾𒀀𒀭 𒅆𒇻 𒀀𒈾 𒅆 𒁇𒊑𒉈 𒉺 𒌓𒁺. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒃻𒁶 𒉡𒍪 𒊓𒀀 𒆭, Claude 𒀀𒈾𒀀𒀭 𒅇 𒀀𒈾 𒅆 𒁇𒊑𒉈 𒉺 𒌓𒁺. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶 UniFi-𒅗 𒆥; 𒃻𒁶𒍪𒂠 𒉽."
   },
   "ha_cheap": {
    "title": "𒃻𒁶 𒀝 𒌓 𒉈 𒆬 𒌉𒊏",
-   "desc": "𒄑 𒄫𒈛, 𒄑 𒌆 𒈛 𒅆𒇻 𒄑𒇀 𒉈 𒋛𒄀𒉈 𒌓 𒀝 𒃻, 𒆬𒋫, 𒌓 𒌉𒊏 𒅆𒇻 𒌓 𒌓𒋫, 𒕐𒕐 𒀀𒈾𒕐𒀀𒀭𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒄑 𒄫𒈛, 𒄑 𒌆 𒈛 𒅇 𒄑𒇀 𒉈 𒋛𒄀𒉈 𒌓 𒀝 𒃻, 𒆬𒋫, 𒌓 𒌉𒊏 𒅇 𒌓 𒌓𒋫, 𒀸𒀸 𒀀𒈾𒀸𒀀𒀭𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶𒍪 𒇷𒀀 𒃻."
   },
   "ha_bill": {
-   "title": "𒌓 𒌌𒆷 𒀀𒈾𒕐 𒆬 𒃲?",
-   "desc": "𒉈 𒆥𒀀 𒅎 𒅆𒇻 𒀀𒁀 𒂍𒀀𒁕 𒁲, 𒅆𒇻 𒀀𒈾𒕐 𒀭𒂠 𒇻 𒆠𒂠 𒁺 𒅗 𒉺 𒌓𒁺𒋫 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "title": "𒌓 𒌌𒆷 𒀀𒈾𒀸 𒆬 𒃲?",
+   "desc": "𒉈 𒆥𒀀 𒅎 𒅇 𒀀𒁀 𒂍𒀀𒁕 𒁲, 𒅇 𒀀𒈾𒀸 𒀭𒂠 𒇻 𒆠𒂠 𒁺 𒅗 𒉺 𒌓𒁺𒋫 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒌓 𒉌𒆷 7-𒌓𒀀 𒇷 𒋻, 𒄑𒄯 𒅆 𒁇𒊑𒉈."
   },
   "ha_standby": {
    "title": "𒉈 𒆠𒆪 𒆥",
-   "desc": "𒉈 𒕐𒕐 𒅆 𒁇 𒅆𒇻 𒃻𒁶 𒉈 𒆠𒆪𒀀 𒍣 𒉺 𒌓𒁺. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒉈 𒀸𒀸 𒅆 𒁇 𒅇 𒃻𒁶 𒉈 𒆠𒆪𒀀 𒍣 𒉺 𒌓𒁺. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒈪𒀀 𒀝, 𒌓 𒃻 𒊹 𒋼𒀀."
   },
   "ha_energy_report": {
    "title": "𒁾 𒉈 𒆬 3 𒃻𒊏𒁕",
    "desc": "𒄖 𒅗 𒉈 𒅗 𒉺 𒌓𒁺𒋫, 𒆬 𒃻𒊑𒉈 𒄊 3-𒁕, 𒁾𒀀 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒌗 𒕐𒕐 𒌀𒆷 𒀝."
+   "tip": "𒌗 𒀸𒀸 𒌀𒆷 𒀝."
   },
   "ha_solar": {
    "title": "𒉈𒃻 𒈪𒀀 𒋛𒄀?",
-   "desc": "𒆜𒁍 21:00-a 𒌓 𒌓 𒌌𒆷, 𒉈𒃻 𒅆𒇻 𒆬 𒌉 𒈪𒀀 𒇲, 𒅆𒇻 𒊓𒋫 𒋛𒄀𒉈 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒅗 𒕐; 𒋗𒃻𒌉𒇲𒁉 𒀝𒉈 𒀠 𒅗, 𒋞 “𒅗 𒌤” 𒃻."
+   "desc": "𒆜𒁍 21:00-a 𒌓 𒌓 𒌌𒆷, 𒉈𒃻 𒅇 𒆬 𒌉 𒈪𒀀 𒇲, 𒅇 𒊓𒋫 𒋛𒄀𒉈 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "𒅗 𒀸; 𒋗𒃻𒌉𒇲𒁉 𒀝𒉈 𒀠 𒅗, 𒋞 “𒅗 𒌤” 𒃻."
   },
   "ha_heating_waste": {
    "title": "𒉈 𒍣 𒅆 𒁇",
@@ -2084,14 +2084,14 @@
    "tip": "𒌓 𒂗𒋼𒈾 𒆜𒁍 2-𒀀 𒀝."
   },
   "ha_damp": {
-   "title": "𒀀 𒅆𒇻 𒄩𒇻𒂠 𒅆 𒁇",
-   "desc": "𒀀 𒌓 2-𒅗 𒂍 𒀀 𒋗𒉀𒀀 𒅆𒇻 𒂍 𒈿𒀀 𒅆 𒁇 𒅆𒇻 𒋗𒃻𒌉𒇲𒁉 𒂍 𒀀 𒁺 𒅗 𒋧. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "title": "𒀀 𒅇 𒄩𒇻𒂠 𒅆 𒁇",
+   "desc": "𒀀 𒌓 2-𒅗 𒂍 𒀀 𒋗𒉀𒀀 𒅇 𒂍 𒈿𒀀 𒅆 𒁇 𒅇 𒋗𒃻𒌉𒇲𒁉 𒂍 𒀀 𒁺 𒅗 𒋧. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "70%-𒋫 𒋛𒀀 𒌓 𒁍𒀀, 𒄩𒇻𒂠 𒊕 𒂷𒂷."
   },
   "ha_sleep": {
    "title": "𒉈 𒂍 𒈿𒀀 𒊷",
-   "desc": "𒉈 𒅆𒇻 𒀀 𒈪 3-𒅗 𒂍 𒈿𒀀 𒅆 𒁇 𒅆𒇻 𒉈 𒅆𒇻𒅥 𒊷𒂠 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒇽 𒊹 16-19°C-𒀀 𒅆𒇻𒅥 𒊷."
+   "desc": "𒉈 𒅇 𒀀 𒈪 3-𒅗 𒂍 𒈿𒀀 𒅆 𒁇 𒅇 𒉈 𒅇𒅥 𒊷𒂠 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "𒇽 𒊹 16-19°C-𒀀 𒅇𒅥 𒊷."
   },
   "ha_window": {
    "title": "𒀖𒋭 𒂃, 𒉈 𒀝",
@@ -2105,18 +2105,18 @@
   },
   "ha_seasonal": {
    "title": "𒌓𒃻𒊏 𒉈𒈠 𒋛 𒁲",
-   "desc": "𒉈 7-𒌓𒀀 𒅆 𒁇 𒅆𒇻 𒌓𒃻𒊏 𒉈𒈠 𒌗 𒁺𒀀𒂠 𒉽 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒌗 𒕐𒕐 𒊕𒁀 𒀝."
+   "desc": "𒉈 7-𒌓𒀀 𒅆 𒁇 𒅇 𒌓𒃻𒊏 𒉈𒈠 𒌗 𒁺𒀀𒂠 𒉽 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "𒌗 𒀸𒀸 𒊕𒁀 𒀝."
   },
   "ha_water": {
    "title": "𒌓𒁕 𒊬 𒀀 𒅗?",
-   "desc": "𒆜𒁍 07:00-a 𒀀 𒆠𒀀, 𒀀𒀭 𒅆𒇻 𒅎 𒌓 𒌌𒆷 𒇲; 𒋗𒃻𒌉𒇲𒁉 𒀀 𒀠 𒅗, 𒀀 𒅗 𒅆𒇻 𒀀𒈾𒕐 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 07:00-a 𒀀 𒆠𒀀, 𒀀𒀭 𒅇 𒅎 𒌓 𒌌𒆷 𒇲; 𒋗𒃻𒌉𒇲𒁉 𒀀 𒀠 𒅗, 𒀀 𒅗 𒅇 𒀀𒈾𒀸 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶 𒀀𒅗 𒃻𒁶𒍪𒂠 𒉽."
   },
   "ha_frost": {
    "title": "𒈻 𒄑𒌆𒉿 𒃻",
-   "desc": "𒆜𒁍 17:00-a 𒅎 𒈪𒀀 𒅆 𒁇 𒅆𒇻 𒋗𒃻𒌉𒇲𒁉 𒈻 𒁺 𒄑 𒌉 𒌋𒌆 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "“𒅆𒇻 𒂁 𒂍𒂠 𒁺” 𒅗𒀀 𒃻."
+   "desc": "𒆜𒁍 17:00-a 𒅎 𒈪𒀀 𒅆 𒁇 𒅇 𒋗𒃻𒌉𒇲𒁉 𒈻 𒁺 𒄑 𒌉 𒌋𒌆 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "“𒅇 𒂁 𒂍𒂠 𒁺” 𒅗𒀀 𒃻."
   },
   "ha_plant": {
    "title": "𒈬 𒄑 𒄷𒈿",
@@ -2130,37 +2130,37 @@
   },
   "ha_proofing": {
    "title": "𒃻 𒌌𒌌𒂊 𒌓 𒀀𒁀𒀀 𒌀?",
-   "desc": "𒃻𒍪 𒆠𒁀 𒅗; 𒉈 𒃻 𒌌𒌌𒂊 𒋃 𒅆𒇻 𒌓 𒌀𒆷 𒅆𒊒. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒃻𒍪 𒆠𒁀 𒅗; 𒉈 𒃻 𒌌𒌌𒂊 𒋃 𒅇 𒌓 𒌀𒆷 𒅆𒊒. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶 𒃻𒁕 𒅅𒆷 𒆥."
   },
   "ha_bake": {
    "title": "𒌓 𒃻 𒂍 𒆥𒅅 𒌓𒁕",
-   "desc": "𒌓 𒃻 𒇌𒋫 𒌓𒁺𒀀𒋫 𒂕𒂠 𒆥, 𒄊 𒕐𒕐 𒉈 𒂍 𒆥𒅅𒍪𒁶 𒋛 𒁲. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒃻 𒇌𒋫 𒌓𒁺𒀀𒋫 𒂕𒂠 𒆥, 𒄊 𒀸𒀸 𒉈 𒂍 𒆥𒅅𒍪𒁶 𒋛 𒁲. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒂍 𒆥𒅅 𒉈 𒃻 𒁲 𒌉; 𒃻."
   },
   "ha_fridge": {
-   "title": "𒄑 𒈻 𒅆𒇻 𒄑 𒈻 𒃲 𒅆 𒁇",
+   "title": "𒄑 𒈻 𒅇 𒄑 𒈻 𒃲 𒅆 𒁇",
    "desc": "𒌓𒌉 30-𒀀, 𒋗𒃻𒌉𒇲𒁉 𒄑 𒈻 5°C-𒋫 𒋛𒀀 𒇻 𒄑 𒈻 𒃲 ^-15°C-𒋫 𒋛𒀀 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒉈 Home Assistant-𒀀 𒉽 𒄑𒌆𒉿 𒃻 𒆥𒉈."
   },
   "ha_starter": {
    "title": "𒄑𒌆𒉿 𒃻 𒃻 𒊕 𒅥",
-   "desc": "𒆜𒁍 08:00-a 𒉈 𒂍 𒆥𒅅 𒋃 𒅆𒇻 𒃻 𒊕 𒌓𒁕 𒌓 𒅥 𒅆𒇻 𒃻𒋃 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 08:00-a 𒉈 𒂍 𒆥𒅅 𒋃 𒅇 𒃻 𒊕 𒌓𒁕 𒌓 𒅥 𒅇 𒃻𒋃 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒋃𒍪 𒇷𒀀 𒅗."
   },
   "ha_oven": {
    "title": "𒇌 𒂃 𒂷𒂷",
-   "desc": "𒌓 𒇽 𒂕𒊏 𒌓𒁺, 𒇌 𒅆 𒁇 𒅆𒇻 𒋗𒃻𒌉𒇲𒁉 𒂃 𒄑𒌆𒉿 𒃻 𒍽 𒆥𒄄. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒇽 𒂕𒊏 𒌓𒁺, 𒇌 𒅆 𒁇 𒅇 𒋗𒃻𒌉𒇲𒁉 𒂃 𒄑𒌆𒉿 𒃻 𒍽 𒆥𒄄. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "Home Assistant-𒀀 switch.oven on-𒂠 𒃻, 𒂕𒁉𒀀 person.alex not_home-še3."
   },
   "ha_dinner": {
    "title": "𒄛𒈾 𒀀𒈾 𒅥?",
-   "desc": "𒆥𒅅 3 𒂠 𒉚𒍪 𒅆𒇻 𒂍 𒆥𒅅𒋫 𒅗, 𒃻 𒀠 𒅗𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆥𒅅 3 𒂠 𒉚𒍪 𒅇 𒂍 𒆥𒅅𒋫 𒅗, 𒃻 𒀠 𒅗𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒂠 𒉚 Home Assistant-𒅗 𒆥."
   },
   "ha_chores": {
    "title": "𒆥 𒂍𒀀 𒍣𒁕",
-   "desc": "7-𒌓 𒕐𒕐 𒀀𒁀 𒀀𒈾 𒀝 𒊬; 𒄑𒌆𒉿𒂵 𒃻, 𒂕𒁉𒀀 𒆥 𒍣 7-𒌓 𒁺𒂠 𒊬. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "7-𒌓 𒀸𒀸 𒀀𒁀 𒀀𒈾 𒀝 𒊬; 𒄑𒌆𒉿𒂵 𒃻, 𒂕𒁉𒀀 𒆥 𒍣 7-𒌓 𒁺𒂠 𒊬. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒌓 7-𒄰 𒄛𒈾 𒂍𒁕 𒀝."
   },
   "ha_laundry": {
@@ -2175,8 +2175,8 @@
   },
   "ha_bedtime": {
    "title": "𒅗 𒌓 𒈿𒀀 𒃻𒁶 𒅗𒀀",
-   "desc": "𒆜𒁍 19:30-a 𒉈𒃻 𒂍 𒈿𒀀 𒌉 𒅆𒇻 𒅗 𒌓 𒈿𒀀 𒉋 𒌉 𒃻𒁶 𒅗 𒂍 𒌉𒉈𒅗 𒋃. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒈬 𒌉 𒅆𒇻 𒃻 𒆠𒉘𒉌 𒇷 𒅗𒈠𒀀 𒉽."
+   "desc": "𒆜𒁍 19:30-a 𒉈𒃻 𒂍 𒈿𒀀 𒌉 𒅇 𒅗 𒌓 𒈿𒀀 𒉋 𒌉 𒃻𒁶 𒅗 𒂍 𒌉𒉈𒅗 𒋃. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "𒈬 𒌉 𒅇 𒃻 𒆠𒉘𒉌 𒇷 𒅗𒈠𒀀 𒉽."
   },
   "ha_checkin": {
    "title": "𒇽 𒅎𒊑𒀀 𒅆 𒁇 𒊮 𒄭𒋫",
@@ -2185,12 +2185,12 @@
   },
   "ha_petcam": {
    "title": "𒌨 𒀀𒈾 𒀝𒂊?",
-   "desc": "𒀩 𒃻𒁶 𒀩 𒌨𒊏𒋫 𒆪 𒅆𒇻 𒅗 1-𒀀 𒌨𒍪 𒀀𒈾 𒀝𒂊 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "“𒅆𒇻 𒃻 𒉡𒅥𒉈 𒅥𒂊𒀀?” 𒃻."
+   "desc": "𒀩 𒃻𒁶 𒀩 𒌨𒊏𒋫 𒆪 𒅇 𒅗 1-𒀀 𒌨𒍪 𒀀𒈾 𒀝𒂊 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "“𒅇 𒃻 𒉡𒅥𒉈 𒅥𒂊𒀀?” 𒃻."
   },
   "ha_feeder": {
    "title": "𒃻𒁶 𒅥𒀀 𒀝𒀀𒀭?",
-   "desc": "𒆜𒁍 09:00-a 𒃻𒁶 𒅥𒀀 𒌓 𒉌𒆷 𒋧𒈠 𒅆𒇻 𒃻 𒅥 𒌉𒊏 𒅆 𒁇. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 09:00-a 𒃻𒁶 𒅥𒀀 𒌓 𒉌𒆷 𒋧𒈠 𒅇 𒃻 𒅥 𒌉𒊏 𒅆 𒁇. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒌓 𒌓𒃻𒊏 𒃻𒁶 𒅥𒀀 𒂕𒁉𒂠 𒉽."
   },
   "ha_petheat": {
@@ -2200,72 +2200,72 @@
   },
   "ha_batteries": {
    "title": "𒉈𒃻 𒉽𒉈",
-   "desc": "𒉈𒃻 20%-𒋫 𒌉𒊏 𒊹 𒆥 𒅆𒇻 𒂠 𒉚 𒂍𒂍𒋫 𒁶, 𒉈𒃻 𒈨𒁉𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒉈𒃻 20%-𒋫 𒌉𒊏 𒊹 𒆥 𒅇 𒂠 𒉚 𒂍𒂍𒋫 𒁶, 𒉈𒃻 𒈨𒁉𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒌗𒀀 1 𒀝, 𒃻𒁶 𒌀𒂵 𒉡𒅅."
   },
   "ha_offline": {
    "title": "𒀀𒈾 𒁺𒁀?",
-   "desc": "𒃻 𒉡𒅅𒆷 𒊹 𒂠 𒃻 𒅆𒇻 𒕐𒕐 𒀀𒈾𒕐𒀀𒀭 𒅆𒇻 𒋛 𒁲 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒃻𒁶 𒂍 𒌉 𒅆𒇻 𒂍 𒄑𒇀𒅗 𒌓 𒈻𒀀 𒁺."
+   "desc": "𒃻 𒉡𒅅𒆷 𒊹 𒂠 𒃻 𒅇 𒀸𒀸 𒀀𒈾𒀸𒀀𒀭 𒅇 𒋛 𒁲 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "𒃻𒁶 𒂍 𒌉 𒅇 𒂍 𒄑𒇀𒅗 𒌓 𒈻𒀀 𒁺."
   },
   "ha_maintenance": {
    "title": "𒋛 𒁲 𒌓𒁉",
-   "desc": "𒌓 𒋛 𒁲𒍪 𒋃 (𒃻 𒉈, 𒉈 𒄑𒌆𒉿 𒃻, 𒃻 𒂖) 𒅆𒇻 𒌓𒁉 𒁀𒉌𒆷 𒇻 𒌓 𒁺𒀀 𒂠 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "Home Assistant-𒀀 𒆥 𒕐𒕐 input_datetime 𒁶."
+   "desc": "𒌓 𒋛 𒁲𒍪 𒋃 (𒃻 𒉈, 𒉈 𒄑𒌆𒉿 𒃻, 𒃻 𒂖) 𒅇 𒌓𒁉 𒁀𒉌𒆷 𒇻 𒌓 𒁺𒀀 𒂠 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "Home Assistant-𒀀 𒆥 𒀸𒀸 input_datetime 𒁶."
   },
   "ha_leak": {
    "title": "𒀀 𒌓𒁺!",
-   "desc": "𒌓 𒃻𒁶 𒀀𒅗 𒀀 𒋗𒉀, 𒄑𒌆𒉿 𒃻 𒍽 𒆥𒄄 𒅆𒇻 𒃻 𒊕 𒀝𒉈 𒅗 𒌤. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒃻𒁶 𒀀𒅗 𒀀 𒋗𒉀, 𒄑𒌆𒉿 𒃻 𒍽 𒆥𒄄 𒅇 𒃻 𒊕 𒀝𒉈 𒅗 𒌤. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "Home Assistant-𒀀 binary_sensor.leak_kitchen on-𒂠 𒃻."
   },
   "ha_waterflow": {
    "title": "𒀀 𒌉 𒌓𒁺 𒇻 𒀀 𒌋𒌆𒆷",
-   "desc": "𒆜𒁍 04:00-a, 𒌓 𒃻 𒉡𒀝𒉈, 𒃻𒋃 𒀀𒅗 𒅆 𒁇 𒅆𒇻 𒀀 𒌉 𒁺𒁀 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 04:00-a, 𒌓 𒃻 𒉡𒀝𒉈, 𒃻𒋃 𒀀𒅗 𒅆 𒁇 𒅇 𒀀 𒌉 𒁺𒁀 𒄑𒌆𒉿 𒃻. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒋃 𒀀 𒇻 𒃻𒁶 𒀀𒅗 𒊷."
   },
   "ha_servers": {
    "title": "𒀵 𒁲 𒄖 1-𒀀",
-   "desc": "𒃻𒁶 Proxmox, 𒁾 𒅆𒇻 𒃮𒊑𒅗 𒋃 𒅆𒇻 𒄖 𒅗 𒉺 𒌓𒁺 1 𒂍 𒄑𒋃𒅗 𒀀𒈾𒁶𒀀𒀭 𒋧. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒃻𒁶 Proxmox, 𒁾 𒅇 𒃮𒊑𒅗 𒋃 𒅇 𒄖 𒅗 𒉺 𒌓𒁺 1 𒂍 𒄑𒋃𒅗 𒀀𒈾𒁶𒀀𒀭 𒋧. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶 Proxmox-𒅗 𒆥; 𒃻𒍪𒂠 𒉽."
   },
   "ha_pihole": {
    "title": "𒅗 Pi-hole",
-   "desc": "𒅗 𒌉 𒋃𒉈 𒊷: Pi-hole 𒌓𒁕 𒀀𒈾 𒆟 𒅆𒇻 𒃻 𒉡𒋛𒁲 𒅅𒆷. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒅗 𒌉 𒋃𒉈 𒊷: Pi-hole 𒌓𒁕 𒀀𒈾 𒆟 𒅇 𒃻 𒉡𒋛𒁲 𒅅𒆷. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶 Pi-hole-𒅗 𒆥."
   },
   "ha_plex": {
    "title": "Plex-𒀀 𒃻 𒉋",
-   "desc": "𒌓 𒂡𒈾 𒅗 𒄭 𒃻 Plex-𒀀 𒃻𒊏, 𒕐𒕐 𒅗 1 𒅆 𒁇𒊑𒉈𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒌓 𒂡𒈾 𒅗 𒄭 𒃻 Plex-𒀀 𒃻𒊏, 𒀸𒀸 𒅗 1 𒅆 𒁇𒊑𒉈𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶 Plex-𒅗 𒆥."
   },
   "ha_backups": {
    "title": "𒃮𒊑 𒀝𒀀𒀭?",
-   "desc": "𒆜𒁍 08:00-a 𒃮𒊑 𒈪𒀀 𒅆 𒁇 𒅆𒇻 𒋗𒃻𒌉𒇲𒁉 𒉡𒌀 𒄑𒌆𒉿 𒃻 𒍽 𒆥𒄄. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 08:00-a 𒃮𒊑 𒈪𒀀 𒅆 𒁇 𒅇 𒋗𒃻𒌉𒇲𒁉 𒉡𒌀 𒄑𒌆𒉿 𒃻 𒍽 𒆥𒄄. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒃻𒁶 𒆥 𒃮𒊑𒍪 𒋛 𒁲𒂊 𒆥."
   },
   "ha_netdigest": {
    "title": "𒅗 𒊓𒀀",
-   "desc": "7-𒌓𒀀 𒊓 𒅆 𒁇: 𒃻𒁶 𒉋, Pi-hole 𒅆𒇻 𒄑𒋃 𒆥 𒃲, 𒃻 𒅆 𒁇𒊑𒉈𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "7-𒌓𒀀 𒊓 𒅆 𒁇: 𒃻𒁶 𒉋, Pi-hole 𒅇 𒄑𒋃 𒆥 𒃲, 𒃻 𒅆 𒁇𒊑𒉈𒁕. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "𒌓 7-𒄰 𒌓 𒉌𒆷 𒁉 𒆳𒍪𒁕 𒀝."
   },
   "ha_rewrite_alerts": {
    "title": "𒄑𒌆𒉿 𒃻 𒉡𒋛𒁲 𒅗 𒉺 𒌓𒁺𒂠",
-   "desc": "𒄑𒌆𒉿 𒃻 𒊹 𒃻; Claude 𒁹𒀀 𒁹𒀀 𒀝 𒅆𒇻 𒅗 𒉺 𒌓𒁺 𒌉𒂠 𒉋 𒊬.",
+   "desc": "𒄑𒌆𒉿 𒃻 𒊹 𒃻; Claude 𒁹𒀀 𒁹𒀀 𒀝 𒅇 𒅗 𒉺 𒌓𒁺 𒌉𒂠 𒉋 𒊬.",
    "tip": "𒌓 𒉌𒆷 𒄑𒋃 𒌉𒍪𒋫 𒃻."
   },
   "ha_tone": {
    "title": "𒅗 𒍣 𒌓𒁕",
-   "desc": "𒅗 𒊬; 𒆜𒁍𒁶 𒉋 𒊬 (𒈪𒀀 𒄭, 𒌓 𒉌𒆷 𒍽) 𒅆𒇻 𒆥𒄄. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
-   "tip": "𒅗 𒁹𒀀 𒆜𒁍 7-𒀀 𒅆𒇻 𒆜𒁍 23-𒀀 𒆥."
+   "desc": "𒅗 𒊬; 𒆜𒁍𒁶 𒉋 𒊬 (𒈪𒀀 𒄭, 𒌓 𒉌𒆷 𒍽) 𒅇 𒆥𒄄. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "tip": "𒅗 𒁹𒀀 𒆜𒁍 7-𒀀 𒅇 𒆜𒁍 23-𒀀 𒆥."
   },
   "ha_spoken": {
    "title": "𒅗 𒌓 𒉌𒆷 𒅗𒋫",
-   "desc": "𒆜𒁍 07:30-a 𒌓 𒆥𒀀, 𒌓𒌉𒌉 30 𒄖 𒅗 𒃻𒁶 𒅗 𒂍 𒆥𒅅𒅗 𒅗: 𒅎, 𒄑𒈠, 𒁾𒌗 𒅆𒇻 𒃻 𒂃. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒆜𒁍 07:30-a 𒌓 𒆥𒀀, 𒌓𒌉𒌉 30 𒄖 𒅗 𒃻𒁶 𒅗 𒂍 𒆥𒅅𒅗 𒅗: 𒅎, 𒄑𒈠, 𒁾𒌗 𒅇 𒃻 𒂃. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "Python-𒀀 HA_TTS_ENTITY 𒆥 𒅗𒋫𒅗𒂠𒍪𒂠 𒃻."
   },
   "ha_ignored": {
    "title": "𒉡𒄑𒌆𒉿𒋫 𒆗",
-   "desc": "𒄑𒌆𒉿 𒃻 𒆥𒄄, 𒅅, 𒋗𒃻𒌉𒇲𒁉 𒅅 𒂕𒊏 𒂃, 𒆗𒂵 𒆥𒄄 𒅆𒇻 𒅗 𒈤𒋫 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
+   "desc": "𒄑𒌆𒉿 𒃻 𒆥𒄄, 𒅅, 𒋗𒃻𒌉𒇲𒁉 𒅅 𒂕𒊏 𒂃, 𒆗𒂵 𒆥𒄄 𒅇 𒅗 𒈤𒋫 𒅗. 𒅆𒁾𒀀 𒂍 𒅆𒁺, Python 𒌓𒁺𒀀𒋫 Home Assistant 𒍣𒍪 𒆥.",
    "tip": "Home Assistant-𒀀 𒌓 𒅅𒆷 𒅅 𒂕𒊏 𒆟, 𒁺𒁀 𒅆 𒁇."
   }
  },
@@ -2296,7 +2296,7 @@
   "accurate; clear": "𒍣; 𒉺 𒌓𒁺",
   "accurate; clear; under 200 words": "𒍣; 𒉺 𒌓𒁺; 𒅗 200 𒉡𒋛𒀀",
   "clarity": "𒉺 𒌓𒁺",
-  "clear and accurate": "𒉺 𒌓𒁺 𒅆𒇻 𒍣",
+  "clear and accurate": "𒉺 𒌓𒁺 𒅇 𒍣",
   "clear, appealing, easy to read at small size": "𒉺 𒌓𒁺, 𒊷, 𒌉𒊏 𒋃𒉈 𒄭",
   "current price of rye flour in the UK": "𒆬𒁉 𒍥 𒍩𒀀 Britannia-𒀀 𒌓𒁕",
   "dough": "𒍥",
@@ -3039,12 +3039,12 @@
   "CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "𒃻𒄥𒊏𒋫 𒌓𒁺",
   "CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE": "𒃻𒄥𒊏 𒂕𒁉𒁕 𒋛𒀀",
   "CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "𒃻𒄥𒊏 𒊮𒁀 𒅅𒆷𒋫 𒌓𒁺.",
-  "CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE": "𒃻𒄥𒊏 𒉈𒀀 𒃻 𒋛𒀀 𒍠𒂠 𒃻 𒅆𒇻 𒂕𒁉𒁕 𒋛𒀀.",
+  "CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE": "𒃻𒄥𒊏 𒉈𒀀 𒃻 𒋛𒀀 𒍠𒂠 𒃻 𒅇 𒂕𒁉𒁕 𒋛𒀀.",
   "CONTROLS_FLOW_STATEMENTS_WARNING": "𒉡𒋛𒁲: 𒋞 𒉈 𒃻𒄥𒊏 𒊮𒁀𒉌 𒂷𒂷.",
-  "CONTROLS_FOREACH_TITLE": "𒃻 %1 𒂠 %2-𒀀 𒕐𒕐",
-  "CONTROLS_FOREACH_TOOLTIP": "𒃻 𒂠𒀀 𒕐𒕐, 𒃻𒉽 '%1' 𒃻𒂠 𒃻, 𒂕𒁉𒀀 𒃻 𒀝.",
+  "CONTROLS_FOREACH_TITLE": "𒃻 %1 𒂠 %2-𒀀 𒀸𒀸",
+  "CONTROLS_FOREACH_TOOLTIP": "𒃻 𒂠𒀀 𒀸𒀸, 𒃻𒉽 '%1' 𒃻𒂠 𒃻, 𒂕𒁉𒀀 𒃻 𒀝.",
   "CONTROLS_FOR_TITLE": "%1-𒁕 %2-𒋫 %3-𒂠 %4-𒀀 𒋃",
-  "CONTROLS_FOR_TOOLTIP": "𒃻𒉽 '%1' 𒃻𒋃 𒊕𒋫 𒃻𒋃 𒌀𒂠, 𒄊 𒃻𒊏𒁕, 𒋗 𒋾 𒅆𒇻 𒋞 𒃻𒊏 𒀝.",
+  "CONTROLS_FOR_TOOLTIP": "𒃻𒉽 '%1' 𒃻𒋃 𒊕𒋫 𒃻𒋃 𒌀𒂠, 𒄊 𒃻𒊏𒁕, 𒋗 𒋾 𒅇 𒋞 𒃻𒊏 𒀝.",
   "CONTROLS_IF_ELSEIF_TOOLTIP": "𒋗𒃻𒌉𒇲𒁉𒀀 𒃻𒃻 𒃻.",
   "CONTROLS_IF_ELSE_TOOLTIP": "𒋗𒃻𒌉𒇲𒁉𒀀 𒃻𒃻 𒂕 𒃻𒉆 𒌋𒌆 𒃻.",
   "CONTROLS_IF_IF_TOOLTIP": "𒋗𒃻𒌉𒇲𒁉 𒉈 𒉋 𒁶𒂊𒉈 𒍠 𒃻, 𒍣 𒇻 𒋛 𒁲.",
@@ -3087,7 +3087,7 @@
   "LISTS_GET_INDEX_FROM_END": "# 𒂕𒋫",
   "LISTS_GET_INDEX_FROM_START": "#",
   "LISTS_GET_INDEX_GET": "𒋗 𒋾",
-  "LISTS_GET_INDEX_GET_REMOVE": "𒋗 𒋾 𒅆𒇻 𒍣",
+  "LISTS_GET_INDEX_GET_REMOVE": "𒋗 𒋾 𒅇 𒍣",
   "LISTS_GET_INDEX_LAST": "𒂕",
   "LISTS_GET_INDEX_RANDOM": "𒃻𒉆",
   "LISTS_GET_INDEX_REMOVE": "𒍣",
@@ -3095,10 +3095,10 @@
   "LISTS_GET_INDEX_TOOLTIP_GET_FROM": "𒃻 𒆠 𒃻𒊏 𒂠𒀀 𒋧.",
   "LISTS_GET_INDEX_TOOLTIP_GET_LAST": "𒃻 𒂕 𒂠𒀀 𒋧.",
   "LISTS_GET_INDEX_TOOLTIP_GET_RANDOM": "𒃻 𒃻𒉆 𒂠𒀀 𒋧.",
-  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FIRST": "𒃻 𒊕 𒂠𒀀 𒍣 𒅆𒇻 𒋧.",
-  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM": "𒃻 𒆠 𒃻𒊏 𒂠𒀀 𒍣 𒅆𒇻 𒋧.",
-  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_LAST": "𒃻 𒂕 𒂠𒀀 𒍣 𒅆𒇻 𒋧.",
-  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_RANDOM": "𒃻 𒃻𒉆 𒂠𒀀 𒍣 𒅆𒇻 𒋧.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FIRST": "𒃻 𒊕 𒂠𒀀 𒍣 𒅇 𒋧.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM": "𒃻 𒆠 𒃻𒊏 𒂠𒀀 𒍣 𒅇 𒋧.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_LAST": "𒃻 𒂕 𒂠𒀀 𒍣 𒅇 𒋧.",
+  "LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_RANDOM": "𒃻 𒃻𒉆 𒂠𒀀 𒍣 𒅇 𒋧.",
   "LISTS_GET_INDEX_TOOLTIP_REMOVE_FIRST": "𒃻 𒊕 𒂠𒀀 𒍣.",
   "LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM": "𒃻 𒆠 𒃻𒊏 𒂠𒀀 𒍣.",
   "LISTS_GET_INDEX_TOOLTIP_REMOVE_LAST": "𒃻 𒂕 𒂠𒀀 𒍣.",
@@ -3132,7 +3132,7 @@
   "LOGIC_COMPARE_TOOLTIP_NEQ": "𒃻 𒆭𒊏 2 𒉡𒁹𒀀 𒍣 𒋧.",
   "LOGIC_NEGATE_TITLE": "𒉡 %1",
   "LOGIC_NEGATE_TOOLTIP": "𒃻 𒆭𒊏 𒉡𒍣𒁕 𒍣 𒋧. 𒃻 𒆭𒊏 𒍣𒁕 𒉡𒍣 𒋧.",
-  "LOGIC_OPERATION_AND": "𒅆𒇻",
+  "LOGIC_OPERATION_AND": "𒅇",
   "LOGIC_OPERATION_OR": "𒇻",
   "LOGIC_OPERATION_TOOLTIP_AND": "𒃻 𒆭𒊏 2-𒁉 𒍣𒁕 𒍣 𒋧.",
   "LOGIC_OPERATION_TOOLTIP_OR": "𒃻 𒆭𒊏 1 𒍣𒁕 𒍣 𒋧.",
@@ -3164,7 +3164,7 @@
   "PROCEDURES_ALLOW_STATEMENTS": "𒀉𒉘𒂷 𒊺𒂵",
   "PROCEDURES_BEFORE_PARAMS": "-𒁕:",
   "PROCEDURES_CALLNORETURN_TOOLTIP": "𒆥 𒇽𒂊 𒁶𒈠 '%1' 𒀝.",
-  "PROCEDURES_CALLRETURN_TOOLTIP": "𒆥 𒇽𒂊 𒁶𒈠 '%1' 𒀝 𒅆𒇻 𒃻 𒌓𒁺𒀀𒁉 𒂷𒂷.",
+  "PROCEDURES_CALLRETURN_TOOLTIP": "𒆥 𒇽𒂊 𒁶𒈠 '%1' 𒀝 𒅇 𒃻 𒌓𒁺𒀀𒁉 𒂷𒂷.",
   "PROCEDURES_CALL_BEFORE_PARAMS": "-𒁕:",
   "PROCEDURES_CALL_DISABLED_DEF_WARNING": "𒆥 𒇽𒂊 𒁶𒈠 '%1' 𒉡𒀝, 𒋞 𒈨𒁉 𒁺𒁀𒀀𒀭.",
   "PROCEDURES_CREATE_DO": "'%1' 𒁶",

@@ -47,6 +47,14 @@ class Scripts(unittest.TestCase):
         self.assertEqual(gaps, {"zzz"})
         self.assertEqual(tool.printed("sux", "^Claude-e ĝeš-ḫur ak"), "Claude-e ĝeš-ḫur ak", "exported Python prints the transliteration")
 
+    def test_sumerian_signs_are_the_signs_themselves(self):
+        # A sign's readings, not those of a variant form listed after it (#374): u3 is U, not ŠA17's old form, and aš and
+        # dili are AŠ, not the numeral 1(AŠ@c).
+        self.assertEqual([tool.sumerian(r) for r in ("u3", "aš", "dili")], ["𒅇", "𒀸", "𒀸"])
+        signs = json.loads((support.ROOT / "tools" / "sux_signs.json").read_text(encoding="utf-8"))["signs"]
+        outside = {r: s for r, s in signs.items() if not all(0x12000 <= ord(c) <= 0x1254F for c in s)}
+        self.assertEqual(outside, {}, "every sign is in Unicode's cuneiform blocks, which the font has")
+
     def test_placeholders_names_and_files_are_kept(self):
         for lang, word in [("gmy", "to"), ("akk", "ana")]:
             for keep in ["{to}", "{name}-actions.zip", "GitHub", "SETUP.md", "second-thought.ini", "python my-program.py --test"]:
