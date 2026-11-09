@@ -38,6 +38,15 @@ class Scripts(unittest.TestCase):
         self.assertEqual(tool.to_script("syc", "dClaude bPython l3 d'sīm ʿbādā' w^text"), "ܕ-Claude ܒ-Python ܠ-3 ܕ'ܣܝܡ ܥܒܕܐ' ܘ-text")
         self.assertEqual(tool.printed("syc", "ʾīn ʿbādā w^text"), "ꜣīn ꜥbādā w-text", "exported Python prints Latin letters only")
 
+    def test_sumerian_is_written_from_the_sign_list(self):
+        self.assertEqual(tool.to_script("sux", "e2-dub-ba"), "𒂍𒁾𒁀")
+        self.assertEqual(tool.to_script("sux", "%1-da Claude-e <b>ak</b> {name}"), "%1-𒁕 Claude-𒂊 <b>𒀝</b> {name}")
+        self.assertEqual(tool.to_script("sux", "ĝeš-ḫur ^n-ta second-thought.ini"), "𒄑𒄯 n-𒋫 second-thought.ini")
+        gaps = set()
+        self.assertEqual(tool.to_script("sux", "dub zzz", gaps), "𒁾 zzz")
+        self.assertEqual(gaps, {"zzz"})
+        self.assertEqual(tool.printed("sux", "^Claude-e ĝeš-ḫur ak"), "Claude-e ĝeš-ḫur ak", "exported Python prints the transliteration")
+
     def test_placeholders_names_and_files_are_kept(self):
         for lang, word in [("gmy", "to"), ("akk", "ana")]:
             for keep in ["{to}", "{name}-actions.zip", "GitHub", "SETUP.md", "second-thought.ini", "python my-program.py --test"]:
