@@ -3,7 +3,7 @@
 
     python tools/i18n.py missing             # the words each language still needs, page and Python (exit 1 if any)
     python tools/i18n.py add words.json      # put new translations into every language file
-    python tools/i18n.py script gmy "ka-ra-pe {name}"   # show how a romanised line is written in Linear B (or akk, sux: cuneiform)
+    python tools/i18n.py script gmy "ka-ra-pe {name}"   # show how a romanised line is written in Linear B (or akk, sux, hit: cuneiform)
 
 words.json says, for each English text, its translation in each language:
 
@@ -17,7 +17,9 @@ Linear B signs come from Unicode's sign names; cuneiform signs are learned from 
 ways. A syllable with no known sign is left romanised and reported, so the word can be put another way. Sumerian (sux)
 is given in its standard transliteration (e2-dub-ba, ĝeš-ḫur, digits for sign indices) and written in cuneiform from
 tools/sux_signs.json, the readings of the Oracc Global Sign List (CC0); a reading the list hasn't got is reported the
-same way.
+same way. Hittite (hit) uses the same sign list, written as Hittitologists do: syllables in lowercase (ne-e-ši-li),
+Sumerograms in capitals joined by dots (DUB.SAR), Akkadograms in capitals (A-NA), and an accent for the sign's index
+(ú is u2); an English abbreviation in capitals that should stay Latin is marked ^ (^MQTT).
 
 After adding, run python tools/sync.py, then the tests.
 """
@@ -195,41 +197,71 @@ def sumerian(word):
     return "".join(signs) if all(signs) else None
 
 
-def _to_sumerian(text, missing):
-    """A transliterated line in cuneiform. A word is split at its hyphens, and each run of readings becomes signs; a
-    part that is a placeholder, a name, a number, code or marked ^ stays as it is, joined to the signs by a hyphen
-    (%1-da, Claude-e, 2-kam)."""
+def _to_sumerian(text, missing, lookup=None, reading=None):
+    """A transliterated line in cuneiform. A word is split at its hyphens (and, for Hittite, the dots of a Sumerogram),
+    and each run of readings becomes signs; a part that is a placeholder, a name, a number, code or marked ^ stays as
+    it is, joined to the signs by a hyphen (%1-da, Claude-e, 2-kam)."""
+    lookup = lookup or sumerian
+    reading = reading or SUX_PART
     if "\n" in text:
-        return "\n".join(_to_sumerian(line, missing) for line in text.split("\n"))
+        return "\n".join(_to_sumerian(line, missing, lookup, reading) for line in text.split("\n"))
     out = []
     for token in text.split(" "):
         if re.search(r"</?[a-z]+>", token):
-            out.append("".join(part if re.fullmatch(r"</?[a-z]+>", part) else _to_sumerian(part, missing)
+            out.append("".join(part if re.fullmatch(r"</?[a-z]+>", part) else _to_sumerian(part, missing, lookup, reading)
                                for part in re.split(r"(</?[a-z]+>)", token)))
             continue
-        if PLACEHOLDER.search(token) and "-" not in token or re.search(r"[_/@]|:\S|https?:|\.\w", token):
+        if PLACEHOLDER.search(token) and "-" not in token or re.search(r"[_/@]|:\S|https?:|\.[a-z]", token):
             out.append(unmark(token))
             continue
-        groups = []  # [is_signs, text]
-        for part in token.split("-"):
+        groups = []  # [is_signs, text, trailing punctuation]
+        pieces = re.split(r"(-|(?<=[^\W_])\.(?=[A-ZŠḪÚÙÁÀÉÈÍÌ]))", token) if reading is HIT_PART else re.split("(-)", token)
+        for part, sep in zip(pieces[::2], pieces[1::2] + [""]):
             m = re.fullmatch(r"([^\w^%{]*)(.*?)([^\w}%]*)", part)
             pre, core, post = m.groups()
-            if re.fullmatch(r"[a-zšĝḫ]+[0-9]*", core):
-                written = sumerian(core)
+            if reading.fullmatch(core):
+                written = lookup(core)
                 if written is None:
                     missing.add(core)
-                    groups.append([False, part])
-                elif groups and groups[-1][0] and not pre and not groups[-1][2]:
-                    groups[-1][1] += pre + written + post
-                    groups[-1][2] = post
+                    groups.append([False, part, sep])
+                elif groups and groups[-1][0] and not pre and not groups[-1][3]:
+                    groups[-1][1] += written + post
+                    groups[-1][3] = post
                 else:
-                    groups.append([True, pre + written + post, post])
-                if groups[-1][0] is True and len(groups[-1]) == 2:
-                    groups[-1].append(post)
+                    groups.append([True, pre + written + post, sep, post])
             else:
-                groups.append([False, unmark(part)])
-        out.append("-".join(g[1] for g in groups))
+                groups.append([False, unmark(part), sep])
+        text_ = ""
+        for i, g in enumerate(groups):
+            text_ += g[1]
+            if i + 1 < len(groups) and not (g[0] and groups[i + 1][0]):
+                text_ += g[2] if g[2] else "-"
+        out.append(text_)
     return " ".join(out)
+
+
+SUX_PART = re.compile(r"[a-zšĝḫ]+[0-9]*")
+
+
+# ----- Hittite (#138) -----
+# Hittite in the usual transliteration: phonetic signs in lowercase, joined by hyphens (ne-e-ši-li); Sumerograms in
+# capitals, their signs joined by dots (DUB.SAR, É, LÚ.MEŠ); Akkadograms in capitals joined by hyphens (A-NA). An
+# accent is the sign's index, as Hittitologists write it (ú is u2, ù is u3). Each sign comes from the same Oracc sign
+# list as Sumerian. An English abbreviation in capitals that should stay in Latin letters is written with ^ (^MQTT).
+HIT_PART = re.compile(r"[a-zšḫúùáàéèíì]+[0-9]*|[A-ZŠḪÚÙÁÀÉÈÍÌ]+[0-9]*")
+_ACUTE, _GRAVE = dict(zip("áéíú", "aeiu")), dict(zip("àèìù", "aeiu"))
+
+
+def hittite(part):
+    """One Hittite sign (ú, ša, DUB, É) → its cuneiform, or None. All capitals or all lowercase, nothing mixed."""
+    if part != part.lower() and part != part.upper():
+        return None
+    p = part.lower()
+    index = ""
+    for marks, digit in ((_ACUTE, "2"), (_GRAVE, "3")):
+        if any(c in marks for c in p):
+            p, index = "".join(marks.get(c, c) for c in p), digit
+    return sumerian(p + index if not re.search(r"[0-9]$", p) else p)
 
 
 def unmark(text):
@@ -238,7 +270,7 @@ def unmark(text):
 
 
 def to_script(lang, text, missing=None):
-    """A romanised line in Linear B (gmy), cuneiform (akk, sux), hieroglyphs (egy), Coptic (cop) or Syriac (syc).
+    """A romanised line in Linear B (gmy), cuneiform (akk, sux, hit), hieroglyphs (egy), Coptic (cop) or Syriac (syc).
     Placeholders, names, file names and code are kept."""
     missing = set() if missing is None else missing
     if lang == "cop":
@@ -247,6 +279,8 @@ def to_script(lang, text, missing=None):
         return _to_marked(text, missing, SYC_LETTERS, syriac)
     if lang == "sux":
         return _to_sumerian(text, missing)
+    if lang == "hit":
+        return _to_sumerian(text, missing, hittite, HIT_PART)
     letters = "a-z0-9-" if lang == "gmy" else EGY_LETTERS if lang == "egy" else AKK_LETTERS
     out = []
     for token in text.split(" "):
@@ -324,7 +358,7 @@ def _to_marked(text, missing, letters, convert):
     return " ".join(out)
 
 
-SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux"}
+SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux", "hit"}
 
 
 # ----- The words each language needs -----
@@ -382,7 +416,7 @@ def cmd_add(path):
                     problems.append(f"{section} “{english[:50]}”: there's no language {code}")
                     continue
                 gaps = set()
-                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc", "sux") else text
+                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc", "sux", "hit") else text
                 if gaps:
                     problems.append(f"{section} “{english[:50]}”: {code} has no sign for {', '.join(sorted(gaps))}, so those stay romanised")
                 if sorted(PLACEHOLDER.findall(value)) != want:

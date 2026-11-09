@@ -10,7 +10,7 @@ Second Thought is for people who have a checklist, a rubric or house rules, but 
 2. **Actions ask first.** A program says what it can do before its first run, and asks before each thing it sends or changes.
 3. **One file you own.** Any program exports as a single Python file that runs with nothing else installed.
 
-The project has grown wide: over 150 examples, 63 community programs, 28 languages, 15 model services. The next gains come from **trust and reach**, not more blocks. Items are ordered by expected benefit against cost; the labels `priority: 1` to `priority: 4` say the same.
+The project has grown wide: over 150 examples, 63 community programs, 29 languages, 15 model services. The next gains come from **trust and reach**, not more blocks. Items are ordered by expected benefit against cost; the labels `priority: 1` to `priority: 4` say the same.
 
 ## Done
 
