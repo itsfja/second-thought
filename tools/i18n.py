@@ -3,7 +3,7 @@
 
     python tools/i18n.py missing             # the words each language still needs, page and Python (exit 1 if any)
     python tools/i18n.py add words.json      # put new translations into every language file
-    python tools/i18n.py script gmy "ka-ra-pe {name}"   # show how a romanised line is written in Linear B (or akk: cuneiform)
+    python tools/i18n.py script gmy "ka-ra-pe {name}"   # show how a romanised line is written in Linear B (or akk, sux: cuneiform)
 
 words.json says, for each English text, its translation in each language:
 
@@ -14,7 +14,10 @@ Two languages write the page in a script most keyboards can't type: Mycenaean Gr
 (akk) in cuneiform. Give their page words romanised, as their Python words are (ka-ra-pe, nēpešum annûm), and this
 writes the page's in the script. Placeholders like {name}, names like GitHub, file names and code stay as they are.
 Linear B signs come from Unicode's sign names; cuneiform signs are learned from the akk words already translated both
-ways. A syllable with no known sign is left romanised and reported, so the word can be put another way.
+ways. A syllable with no known sign is left romanised and reported, so the word can be put another way. Sumerian (sux)
+is given in its standard transliteration (e2-dub-ba, ĝeš-ḫur, digits for sign indices) and written in cuneiform from
+tools/sux_signs.json, the readings of the Oracc Global Sign List (CC0); a reading the list hasn't got is reported the
+same way.
 
 After adding, run python tools/sync.py, then the tests.
 """
@@ -174,19 +177,76 @@ def printed(code, text):
     return text.replace("ʾ", "ꜣ").replace("ʿ", "ꜥ") if code == "syc" else text
 
 
+# ----- Sumerian (#137) -----
+# Sumerian in the usual transliteration, each sign by one of its readings with the index as a digit (e2, du11, ĝeš),
+# the signs of a word joined by hyphens: e2-dub-ba. Each reading is looked up in the Oracc Global Sign List (CC0),
+# kept in tools/sux_signs.json. A lowercase word that should stay in Latin letters is written with ^ in front, as for
+# Coptic and Syriac.
+SUX_WORD = re.compile(r"[a-zšĝḫ]+[0-9]*(?:-[a-zšĝḫ]+[0-9]*)*")
+_SUX = None
+
+
+def sumerian(word):
+    """e2-dub-ba → 𒂍𒁾𒁀, or None if a reading isn't in the sign list."""
+    global _SUX
+    if _SUX is None:
+        _SUX = json.loads((ROOT / "tools" / "sux_signs.json").read_text(encoding="utf-8"))["signs"]
+    signs = [_SUX.get(part.replace("ḫ", "h")) for part in word.split("-")]
+    return "".join(signs) if all(signs) else None
+
+
+def _to_sumerian(text, missing):
+    """A transliterated line in cuneiform. A word is split at its hyphens, and each run of readings becomes signs; a
+    part that is a placeholder, a name, a number, code or marked ^ stays as it is, joined to the signs by a hyphen
+    (%1-da, Claude-e, 2-kam)."""
+    if "\n" in text:
+        return "\n".join(_to_sumerian(line, missing) for line in text.split("\n"))
+    out = []
+    for token in text.split(" "):
+        if re.search(r"</?[a-z]+>", token):
+            out.append("".join(part if re.fullmatch(r"</?[a-z]+>", part) else _to_sumerian(part, missing)
+                               for part in re.split(r"(</?[a-z]+>)", token)))
+            continue
+        if PLACEHOLDER.search(token) and "-" not in token or re.search(r"[_/@]|:\S|https?:|\.\w", token):
+            out.append(unmark(token))
+            continue
+        groups = []  # [is_signs, text]
+        for part in token.split("-"):
+            m = re.fullmatch(r"([^\w^%{]*)(.*?)([^\w}%]*)", part)
+            pre, core, post = m.groups()
+            if re.fullmatch(r"[a-zšĝḫ]+[0-9]*", core):
+                written = sumerian(core)
+                if written is None:
+                    missing.add(core)
+                    groups.append([False, part])
+                elif groups and groups[-1][0] and not pre and not groups[-1][2]:
+                    groups[-1][1] += pre + written + post
+                    groups[-1][2] = post
+                else:
+                    groups.append([True, pre + written + post, post])
+                if groups[-1][0] is True and len(groups[-1]) == 2:
+                    groups[-1].append(post)
+            else:
+                groups.append([False, unmark(part)])
+        out.append("-".join(g[1] for g in groups))
+    return " ".join(out)
+
+
 def unmark(text):
     """The text with the ^ marks (keep this word in Latin letters) taken out, as exported Python shows it."""
     return re.sub(r"\^(?=[\w*~.\-])", "", re.sub(r"(?<=\w)\^(?=[\w*~.\-])", "-", text))
 
 
 def to_script(lang, text, missing=None):
-    """A romanised line in Linear B (gmy), cuneiform (akk) or hieroglyphs (egy). Placeholders, names, file names and
-    code are kept."""
+    """A romanised line in Linear B (gmy), cuneiform (akk, sux), hieroglyphs (egy), Coptic (cop) or Syriac (syc).
+    Placeholders, names, file names and code are kept."""
     missing = set() if missing is None else missing
     if lang == "cop":
         return _to_coptic(text, missing)
     if lang == "syc":
         return _to_marked(text, missing, SYC_LETTERS, syriac)
+    if lang == "sux":
+        return _to_sumerian(text, missing)
     letters = "a-z0-9-" if lang == "gmy" else EGY_LETTERS if lang == "egy" else AKK_LETTERS
     out = []
     for token in text.split(" "):
@@ -264,7 +324,7 @@ def _to_marked(text, missing, letters, convert):
     return " ".join(out)
 
 
-SCRIPTS = {"gmy", "akk", "egy", "cop", "syc"}
+SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux"}
 
 
 # ----- The words each language needs -----
@@ -322,7 +382,7 @@ def cmd_add(path):
                     problems.append(f"{section} “{english[:50]}”: there's no language {code}")
                     continue
                 gaps = set()
-                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc") else text
+                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc", "sux") else text
                 if gaps:
                     problems.append(f"{section} “{english[:50]}”: {code} has no sign for {', '.join(sorted(gaps))}, so those stay romanised")
                 if sorted(PLACEHOLDER.findall(value)) != want:

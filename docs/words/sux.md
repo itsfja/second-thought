@@ -1,0 +1,33 @@
+# 𒅴𒂠: everyday words
+
+Made by tools/sync.py from i18n/sux.json: edit that, not this.
+
+- Agent: 𒆥𒄄𒀀
+- Ask Claude: Claude 𒇷 𒋻
+- Connections: 𒊓
+- Control: 𒋛 𒁲
+- Draft: 𒁾𒊕
+- Events: 𒃻
+- Files: 𒁾
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Lists: 𒂠
+- Memory: 𒄑𒌆𒉿
+- My Blocks: 𒋞𒈬
+- Operators: 𒃻𒋃
+- Output: 𒃻 𒌓𒁺𒀀
+- Pictures: 𒀩
+- Programs: 𒄑𒄯
+- Records: 𒃻𒋃
+- Review: 𒅆𒂃𒀀
+- Search results: 𒃻 𒆥𒂷
+- Text: 𒅗
+- Tools: 𒄑𒆪
+- Variables: 𒃻𒉽
+- Wait & time: 𒅅 𒅆𒇻 𒌓
+- You: 𒍝𒂊
+- Listeners: they run while the exported program runs on schedule: 𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝
+- No blocks match: 𒋞 𒉡𒁲
+- Read and send: 𒋃 𒅆𒇻 𒆥𒄄
+- Tools for the agent: drop them inside an agent block: 𒄑𒆪 𒆥𒄄𒀀𒅗: 𒋞 𒆥𒄄𒀀𒅗 𒊮𒂠 𒊒
+- Type in 'Find a block' above the canvas.: “𒋞 𒆥” 𒅆𒁾 𒀭𒈾 𒊬.
