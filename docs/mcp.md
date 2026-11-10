@@ -73,6 +73,20 @@ That's market prices, your balances, orders and trade history, and paper trading
 Every Kraken tool that can move real money (orders, futures, staking, transfers, withdrawals) **always asks you first**, even with (no asking) and even in a 'tools from MCP server' block, and never runs when nobody is there to answer: on a schedule, on GitHub Actions or with `--mcp`, it's refused and the run log says why. Kraken asks agents to set `acknowledged: true` on those calls; the agent never can, only your yes does. The list works the safe way round: only the Kraken tools known not to move money (market data, your account's history, paper trading) skip that question, so a tool added by a later kraken-cli asks until it has been checked. `--doctor` checks kraken-cli is installed and your key works, and fails if `MCP_KRAKEN` has `--allow-dangerous`.
 
 
+### Flightradar24
+
+The **Flightradar24 tools** block gives the agent [Flightradar24](https://www.flightradar24.com)'s own MCP server, started with npx from its official package ([fr24api-mcp](https://github.com/Flightradar24/fr24api-mcp)), with no command to write:
+
+```
+Flightradar24 tools
+```
+
+That's live positions of aircraft (by area, flight number, callsign or registration), flight summaries with take-off and landing, tracks, history back to 2016, and airline and airport details. Every tool only reads. Install Node.js first, and put `FR24_API_KEY` in `second-thought.ini`, from a paid subscription at [fr24api.flightradar24.com](https://fr24api.flightradar24.com) that works on credits: each call costs credits, so give the program a budget or a step limit to keep a run cheap.
+
+The safe list works the way round that fails safe: only the tools on the list run without a question, so a tool a later fr24api-mcp adds asks first, even with (no asking), until it has been checked. `--doctor` checks Node.js is installed and your key is set — without spending a credit on checking it.
+
+The **When should I leave for the airport?** program in the gallery uses it: the agent reads a flight's live position and estimated landing, adds the drive and the time for parking and security, and sends a Telegram message saying when to leave home.
+
 ### Trust Wallet
 
 [Trust Wallet](https://trustwallet.com)'s Agent Kit (`twak`, from `npm install -g @trustwallet/cli`) runs an MCP server for your self-custody wallet. Set it up with `twak init` and `twak wallet create`, then name the server `trustwallet`:

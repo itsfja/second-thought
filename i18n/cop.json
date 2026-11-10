@@ -1649,7 +1649,9 @@
   "Which Docker container? Give its name, like sonarr.": "ⲁϣ ⲛϩⲛⲁⲁⲩ ⲛⲧⲉ Docker? ⲙⲁ ⲙⲡⲉϥⲣⲁⲛ, ⲛⲧϩⲉ sonarr.",
   "{n} containers": "{n} ⲛϩⲛⲁⲁⲩ",
   "read your Docker containers: their health, memory and logs": "ⲱϣ ⲛⲛⲉⲕϩⲛⲁⲁⲩ ⲛⲧⲉ Docker: ⲡⲉⲩⲟⲩϫⲁⲓ, ⲡⲉⲩⲙⲉⲉⲩⲉ ⲙⲛ ⲛⲉⲩⲥϩⲁⲓ",
-  "restart, stop and start your Docker containers (asking you each time)": "ϣⲁⲁ ⲟⲛ, ⲕϩⲁ ⲙⲛ ϣⲁⲁ ⲛⲛⲉⲕϩⲛⲁⲁⲩ ⲛⲧⲉ Docker (ϣⲁϥϣⲓⲛⲉ ⲙⲙⲟⲕ ⲛⲟⲩⲟⲉⲓϣ ⲛⲓⲙ)"
+  "restart, stop and start your Docker containers (asking you each time)": "ϣⲁⲁ ⲟⲛ, ⲕϩⲁ ⲙⲛ ϣⲁⲁ ⲛⲛⲉⲕϩⲛⲁⲁⲩ ⲛⲧⲉ Docker (ϣⲁϥϣⲓⲛⲉ ⲙⲙⲟⲕ ⲛⲟⲩⲟⲉⲓϣ ⲛⲓⲙ)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "ⲛⲧⲟⲟⲛ ⲛⲛⲥⲟⲩ nFlightradar24 ⲙⲡⲓⲥⲏⲥⲏ ⲛⲓⲥⲁⲓ ⲟⲩ ϩⲟⲟⲩ ⲛⲛⲁⲩ ⲙⲙⲟⲩ. ϥⲓⲛⲉ ⲉⲃⲟⲗ nPython, ⲛⲧⲉ Node.js ⲛⲥⲱⲡⲉ ⲛⲛⲉⲩ FR24_API_KEY ⲛⲥⲱⲡⲉ, ⲛⲛⲁ ⲙⲙⲟⲩ."
  },
  "examples": {
   "review": {
@@ -3282,7 +3284,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "phnaau {name} hn DOCKER_PROTECT, etbe pai Second Thought nšafšaaf an enehe.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "hn Windows, kō n tcp:// hn DOCKER_HOST. pmōit nte Docker nšafšōpe an.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought nšafjoou an n {what} e Docker."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought nšafjoou an n {what} e Docker.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js ōn nsōpe, nskeuos nte Flightradar24 nšauarkhei an (hīōn nšop nnapo nnoou). kaaf: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 sōtm nnoof: FR24_API_KEY nsecond-thought.ini ntaisēsē nnprogramma (psēre nneu psēre, apo https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY ntak nsōpe (ka psēre npeuma psēre, nte oume ōn nsōpe)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

@@ -1649,7 +1649,9 @@
   "Which Docker container? Give its name, like sonarr.": "هانكی Docker قابی؟ آدینی ویرڭ، sonarr كبی.",
   "{n} containers": "{n} قاب",
   "read your Docker containers: their health, memory and logs": "Docker قابلریڭزی اوقومق: صحّتلری، حافظه‌لری و قیدلری",
-  "restart, stop and start your Docker containers (asking you each time)": "Docker قابلریڭزی یڭیدن باشلاتمق، دوردورمق و باشلاتمق (هر دفعه سزه صوراراق)"
+  "restart, stop and start your Docker containers (asking you each time)": "Docker قابلریڭزی یڭیدن باشلاتمق، دوردورمق و باشلاتمق (هر دفعه سزه صوراراق)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24 آلتلری بو صفحه‌دن ایرتیلابی اولمز، بو سببله آجنت بورده اونلارسز چالیشر. استفاده ایچین Node.js قورولموش و FR24_API_KEY تنظیم اولونموش حالده Python‌ا ایحراق ائدین."
  },
  "examples": {
   "review": {
@@ -3282,7 +3284,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "قاب {name}، DOCKER_PROTECT ده‌در، اونڭ ایچون Second Thought اونی اصلا یڭیدن باشلاتماز، دوردورماز و باشلاتماز.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Windows ده DOCKER_HOST ه بر tcp:// آدرسی یازڭ: Docker ڭ آدلی بوروسی دستكلنمز.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought، {what} ی Docker ه گوندرمز."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought، {what} ی Docker ه گوندرمز.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js قورولوب دکل، بو سببله Flightradar24 آلتلری باشلایابیلماز (npx‌دن گلیرلر). قورون: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 بیر آچار طلب ائدر: FR24_API_KEY‌ی second-thought.ini‌ده، بو برنامه‌نین یانینا قویون (اوررلی آبونه، https://fr24api.flightradar24.com‌دن)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY تنظیم اولونموشدور (هر چاغری کردیت خرجلر، بو سببله بورده یوخلانیلمز)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

@@ -151,7 +151,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY")
 
 
 def _load_keychain():
@@ -1220,6 +1220,14 @@ SAFETY = {
                      "kraken_withdrawal_info", "kraken_withdrawal_methods", "kraken_withdrawal_status",
                      "kraken_workspace_balance", "kraken_workspace_list", "kraken_workspace_report",
                      "kraken_workspace_show", "kraken_workspace_status"],
+    # Flightradar24's own MCP server (#364): every tool it offers only reads — live and historic flight positions,
+    # flight summaries, tracks, and airline and airport details (fr24api-mcp 1.0.2, checked 2026-11-06). A tool a
+    # later server adds, or one that leaves this list, asks first: the safe way round, like Kraken's (#309).
+    "mcp_fr24_safe": ["get_airline_info", "get_airport_info_full", "get_airport_info_light", "get_flight_summary_count",
+                      "get_flight_summary_full", "get_flight_summary_light", "get_flight_tracks",
+                      "get_historic_flights_count", "get_historic_flights_positions_full",
+                      "get_historic_flights_positions_light", "get_live_flights_count",
+                      "get_live_flights_positions_full", "get_live_flights_positions_light"],
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
@@ -1693,6 +1701,7 @@ CAPABILITIES = [
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
+    ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
@@ -5372,6 +5381,16 @@ class _MCPHttp(_MCPServer):
 # services each choice starts. MCP_KRAKEN in second-thought.ini wins over these.
 KRAKEN_COMMANDS = {"read": "kraken mcp -s market,account,paper", "live": "kraken mcp -s market,account,paper,trade"}
 
+# The 'Flightradar24 tools' block (#364): Flightradar24's own MCP server, started with npx
+# (https://github.com/Flightradar24/fr24api-mcp). MCP_FLIGHTRADAR24 in second-thought.ini wins over this.
+FR24_COMMANDS = {"read": "npx -y @flightradar24/fr24api-mcp"}
+
+
+def mcp_is_fr24(server, command=""):
+    """True for Flightradar24's own MCP server (#364): one named flightradar24 (or fr24), or started with its package."""
+    name = re.sub(r"[^a-z0-9]", "", to_str(server).lower())
+    return name in ("flightradar24", "fr24", "fr24api") or "@flightradar24/fr24api-mcp" in to_str(command)
+
 
 def mcp_money(tool):
     """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, one taking an "acknowledged" input
@@ -5719,6 +5738,7 @@ class AgentTools:
             if t.get("kind") == "mcp":
                 server, mode = to_str(t.get("server")).strip(), t.get("ask", "changes")
                 twak = mcp_is_twak(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
+                fr24 = mcp_is_fr24(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
                 for tool in (mcp or {}).get(server, []):
                     if twak and tool.get("name") in SAFETY["mcp_twak_never"]:
                         continue  # trades later, out of sight: not offered at all (#320)
@@ -5727,7 +5747,8 @@ class AgentTools:
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
                     money = mcp_money(tool) or (twak and tool.get("name") not in SAFETY["mcp_twak_safe"])  # real money: always asks (#262, #320)
-                    ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only)
+                    ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only) \
+                        or (fr24 and tool.get("name") not in SAFETY["mcp_fr24_safe"])  # a tool we've never seen asks (#364)
                     if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
                         schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k not in SAFETY["mcp_money_inputs"]},
                                       required=[k for k in schema.get("required") or [] if k not in SAFETY["mcp_money_inputs"]])
@@ -5984,7 +6005,7 @@ class AgentTools:
         for t in tools:  # each MCP server's tools, asked for once, before the first step
             server = to_str(t.get("server")).strip()
             if t.get("kind") == "mcp" and server not in mcp:
-                if t.get("command"):  # the Kraken block: its own command, unless MCP_KRAKEN says otherwise
+                if t.get("command"):  # a block with its own command (Kraken's, Flightradar24's), unless MCP_<NAME> says otherwise
                     self.__dict__.setdefault("_mcp_defaults", {})[mcp_env_name(server)] = to_str(t["command"])
                 mcp[server] = await self.mcp_tools(server)
         catalogue = self._agent_tools(tools, mcp)
@@ -6691,11 +6712,17 @@ class Doctor:
                     raise RunError(tr("{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.", key=key))
                 if re.match(r"^\s*kraken(\.exe)?\s", command) and not shutil.which("kraken"):
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
+                fr24 = mcp_is_fr24(name, command)
+                if fr24 and not shutil.which("npx"):
+                    raise RunError(tr("Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org"))
+                if fr24 and not os.environ.get("FR24_API_KEY", "").strip():
+                    raise RunError(tr("Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)"))
                 tools = await self.mcp_tools(name)
                 text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
                 twak = mcp_is_twak(name, command)  # its tools carry no marks, so its own safe list says which only look (#320)
                 changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True)
-                              and not (twak and t.get("name") in SAFETY["mcp_twak_safe"]))
+                              and not (twak and t.get("name") in SAFETY["mcp_twak_safe"])
+                              and not (fr24 and t.get("name") in SAFETY["mcp_fr24_safe"]))
                 if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
                     text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}
@@ -6705,6 +6732,8 @@ class Doctor:
                     if failed:
                         raise RunError(tr("Kraken refused KRAKEN_API_KEY: {problem}", problem=_short(reply, 160)))
                     text += " · " + tr("your Kraken key works")
+                if fr24:  # each call costs credits, so the key is only checked for being there, not by spending one
+                    text += " · " + tr("your FR24_API_KEY is set (each call costs credits, so it isn't checked here)")
                 return text
             out.append((f"MCP server “{name}”", server))
         if has("memory"):
@@ -6836,6 +6865,9 @@ class Doctor:
         if can.get("kraken"):  # the Kraken tools block: its own command, unless MCP_KRAKEN says otherwise
             self.__dict__.setdefault("_mcp_defaults", {})["MCP_KRAKEN"] = KRAKEN_COMMANDS.get(can["kraken"], KRAKEN_COMMANDS["read"])
             servers.append("kraken")
+        if can.get("flightradar24"):  # the Flightradar24 tools block: its own command, unless MCP_FLIGHTRADAR24 says otherwise (#364)
+            self.__dict__.setdefault("_mcp_defaults", {})["MCP_FLIGHTRADAR24"] = FR24_COMMANDS["read"]
+            servers.append("flightradar24")
         for area, check in await self._doctor_connections(ids, servers):
             if not known and not self._doctor_configured(area):
                 continue

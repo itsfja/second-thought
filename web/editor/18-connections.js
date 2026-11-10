@@ -698,6 +698,8 @@
         addStep(tr("MCP server \u201c{server}\u201d", { server }), { mono:true, text:tr("MCP servers can't be reached from this page, so the agent works without this server's tools here. Export to Python and set {setting} in second-thought.ini to use them.", { setting:mcpSetting(server) }) }).done("not on this page", "warn");
       } else if (t.type === "rb_agent_kraken") {
         addStep("Kraken", { mono:true, text:tr("Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.") }).done("not on this page", "warn");
+      } else if (t.type === "rb_agent_fr24") {
+        addStep("Flightradar24", { mono:true, text:tr("Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.") }).done("not on this page", "warn");
       } else if (t.type === "rb_agent_builtin") {
         const kind = t.getFieldValue("KIND");
         (AGENT_BUILTINS[kind] || []).forEach(([n, desc, params]) => {

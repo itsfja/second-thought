@@ -1064,7 +1064,9 @@
 "Which Docker container? Give its name, like sonarr.":"Ποιο container του Docker; Δώστε το όνομά του, όπως sonarr.",
 "{n} containers":"{n} containers",
 "read your Docker containers: their health, memory and logs":"ανάγνωση των containers σας στο Docker: υγεία, μνήμη και αρχεία καταγραφής",
-"restart, stop and start your Docker containers (asking you each time)":"επανεκκίνηση, διακοπή και εκκίνηση των containers σας στο Docker (ρωτώντας σας κάθε φορά)"
+"restart, stop and start your Docker containers (asking you each time)":"επανεκκίνηση, διακοπή και εκκίνηση των containers σας στο Docker (ρωτώντας σας κάθε φορά)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Τα εργαλεία του Flightradar24 δεν είναι προσβάσιμα από αυτή τη σελίδα, οπότε ο πράκτορας εργάζεται εδώ χωρίς αυτά. Εξάγετε σε Python, με το Node.js εγκατεστημένο και το FR24_API_KEY ορισμένο, για να τα χρησιμοποιήσετε."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2065,6 +2067,9 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Το container {name} είναι στο DOCKER_PROTECT, οπότε το Second Thought δεν το επανεκκινεί, σταματά ή ξεκινά ποτέ.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Στα Windows, βάλτε στο DOCKER_HOST μια διεύθυνση tcp://: η επώνυμη διοχέτευση του Docker δεν υποστηρίζεται.",
-"Second Thought doesn't send {what} to Docker.":"Το Second Thought δεν στέλνει {what} στο Docker."
+"Second Thought doesn't send {what} to Docker.":"Το Second Thought δεν στέλνει {what} στο Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Το Node.js δεν είναι εγκατεστημένο, οπότε τα εργαλεία του Flightradar24 δεν μπορούν να ξεκινήσουν (προέρχονται από το npx). Εγκαταστήστε το: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Το Flightradar24 χρειάζεται κλειδί: ορίστε FR24_API_KEY στο second-thought.ini, δίπλα σε αυτό το πρόγραμμα (μια συνδρομή επί πληρωμή, από https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"το FR24_API_KEY σας είναι ορισμένο (κάθε κλήση κοστίζει πιστώσεις, γι' αυτό δεν ελέγχεται εδώ)"
 }
 };

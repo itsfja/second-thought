@@ -1064,7 +1064,9 @@
 "Which Docker container? Give its name, like sonarr.":"𐍈𐌰𐍂𐌾𐌰𐍄𐌰 𐌺𐌰𐍃 Docker? 𐌲𐌹𐍆 𐌽𐌰𐌼𐍉 𐌹𐍃, 𐍃𐍅𐌴 sonarr.",
 "{n} containers":"{n} 𐌺𐌰𐍃𐌰",
 "read your Docker containers: their health, memory and logs":"𐌿𐍃𐍃𐌹𐌲𐌲𐍅𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰: 𐌷𐌰𐌹𐌻𐌴𐌹𐌽, 𐌲𐌰𐌼𐌹𐌽𐌸𐌹 𐌾𐌰𐌷 𐌱𐍉𐌺𐍉𐍃 𐌹𐌶𐌴",
-"restart, stop and start your Docker containers (asking you each time)":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌰𐌽𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉)"
+"restart, stop and start your Docker containers (asking you each time)":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌰𐌽𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24 sarwa fram þizai seido ni hlapand, þannu agents her ina waurkeiþ. Ussandei in Python, mid Node.js satiþ jah FR24_API_KEY satiþ, ei þus bruka."
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2065,7 +2067,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"kas {name} in DOCKER_PROTECT ist, inuh þis Second Thought ni aiw anastodeiþ ita.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"in Windows, satei tcp:// in DOCKER_HOST. swiglo Docker ni andnimada.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought ni sandeiþ {what} du Docker."
+"Second Thought doesn't send {what} to Docker.":"Second Thought ni sandeiþ {what} du Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js ni sati𐍆, swaei sarwa Flightradar24 ni anastodjand (𐌸𐌿𐍂𐌷 npx). satei: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 𐌰𐌽𐌰 𐌺𐌻𐌿𐌳𐌰 𐌸𐌰𐍂𐍆: sat𐌾 FR24_API_KEY in second-thought.ini, 𐌽𐌴𐍈𐌰 𐌸𐌰𐌼𐌼𐌰 𐍀𐍂𐍉𐌲𐍂𐌰𐌼𐌼 (𐍆𐌰𐌹𐍂𐌹𐌽𐍉𐌳𐌰 𐌼𐌴𐌻, 𐍆𐍂𐌰𐌼 https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"𐌸𐌴𐌹𐌽𐍃 FR24_API_KEY sati𐍆 𐌹𐍃 (𐍈𐌰𐍂𐌾𐍉 𐌻𐌰𐌸𐍉𐌽𐍃 𐌺𐍉𐍃𐍄 𐌺𐍂𐌴𐌳𐌹𐍄𐍃, 𐌸𐌰𐌽𐌽𐌿 𐌷𐌴𐍂 𐌽𐌹 𐍃𐍉𐌺𐌹𐌸)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

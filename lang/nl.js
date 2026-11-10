@@ -1064,7 +1064,9 @@
 "Which Docker container? Give its name, like sonarr.":"Welke Docker-container? Geef zijn naam, zoals sonarr.",
 "{n} containers":"{n} containers",
 "read your Docker containers: their health, memory and logs":"je Docker-containers lezen: hun gezondheid, geheugen en logs",
-"restart, stop and start your Docker containers (asking you each time)":"je Docker-containers herstarten, stoppen en starten (met elke keer een vraag aan jou)"
+"restart, stop and start your Docker containers (asking you each time)":"je Docker-containers herstarten, stoppen en starten (met elke keer een vraag aan jou)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"De tools van Flightradar24 zijn vanaf deze pagina niet bereikbaar, dus de agent werkt hier zonder ze. Exporteer naar Python, met Node.js geïnstalleerd en FR24_API_KEY ingesteld, om ze te gebruiken."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2065,6 +2067,9 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Container {name} staat in DOCKER_PROTECT, dus Second Thought herstart, stopt of start hem nooit.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Zet op Windows DOCKER_HOST op een tcp://-adres: de named pipe van Docker wordt niet ondersteund.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought stuurt {what} niet naar Docker."
+"Second Thought doesn't send {what} to Docker.":"Second Thought stuurt {what} niet naar Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js is niet geïnstalleerd, dus de tools van Flightradar24 kunnen niet starten (ze komen uit npx). Installeer het: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 heeft een sleutel nodig: zet FR24_API_KEY in second-thought.ini, naast dit programma (een betaald abonnement, van https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"je FR24_API_KEY is ingesteld (elke aanroep kost credits, dus hij wordt hier niet gecontroleerd)"
 }
 };

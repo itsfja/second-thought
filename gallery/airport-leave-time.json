@@ -1,0 +1,73 @@
+{
+ "format": "reflection-blocks",
+ "version": 1,
+ "name": "airport-leave-time",
+ "gallery": {
+  "title": "When should I leave for the airport?",
+  "category": "home",
+  "description": "Run it before a flight leaves: the agent reads the flight's live position and estimated landing from Flightradar24, adds the drive and the time for parking and security, and sends a Telegram message saying whether the flight is on time and when to leave home. It only reads.",
+  "tip": "Needs Node.js and an FR24_API_KEY from fr24api.flightradar24.com (each call costs credits). Change the flight number and the drive time in the agent's goal to yours.",
+  "author": "itsfja",
+  "runtime": "3.0.0"
+ },
+ "program": {
+  "blocks": {
+   "languageVersion": 0,
+   "blocks": [
+    {
+     "type": "rb_start",
+     "next": {
+      "block": {
+       "type": "rb_agent",
+       "fields": {
+        "PLAN": false
+       },
+       "inputs": {
+        "GOAL": {
+         "shadow": {
+          "type": "rb_longtext",
+          "fields": {
+           "TEXT": "Mum flies on flight BA123, landing at LHR. Find that flight's live position and its estimated landing time. The airport is a 45-minute drive from home, and allow an hour for parking and security. Work out when I should leave home, and write one short message: the flight number, whether it's running on time, its estimated landing time, and when to leave. If the flight can't be found, say so plainly and suggest checking the flight number."
+          }
+         }
+        },
+        "STEPS": {
+         "shadow": {
+          "type": "math_number",
+          "fields": {
+           "NUM": 6
+          }
+         }
+        },
+        "TOOLS": {
+         "block": {
+          "type": "rb_agent_fr24"
+         }
+        }
+       },
+       "next": {
+        "block": {
+         "type": "rb_tg_send",
+         "inputs": {
+          "TEXT": {
+           "block": {
+            "type": "rb_draft"
+           }
+          }
+         },
+         "next": {
+          "block": {
+           "type": "rb_result"
+          }
+         }
+        }
+       }
+      }
+     },
+     "x": 30,
+     "y": 30
+    }
+   ]
+  }
+ }
+}

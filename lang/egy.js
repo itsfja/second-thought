@@ -1064,7 +1064,9 @@
 "Which Docker container? Give its name, like sonarr.":"𓉔𓈖𓅱 𓇋𓐍 𓈖 Docker? 𓇋𓅓𓇋 𓂋𓈖, 𓅓𓇋 sonarr.",
 "{n} containers":"𓉔𓈖𓅱𓅱 {n}",
 "read your Docker containers: their health, memory and logs":"𓈙𓂧𓏏 𓉔𓈖𓅱𓅱𓎡 𓈖 Docker: 𓋴𓈖𓃀, 𓋴𓐍𓄿𓅱 𓎛𓈖𓂝 𓋴𓈙𓅱",
-"restart, stop and start your Docker containers (asking you each time)":"𓈙𓋴𓊪 𓅓 𓅱𓎛𓅓, 𓄿𓃀 𓎛𓈖𓂝 𓈙𓋴𓊪 𓉔𓈖𓅱𓅱𓎡 𓈖 Docker, 𓈖𓆓𓆑 𓏏𓅱 𓂋 𓈖𓎛𓎛"
+"restart, stop and start your Docker containers (asking you each time)":"𓈙𓋴𓊪 𓅓 𓅱𓎛𓅓, 𓄿𓃀 𓎛𓈖𓂝 𓈙𓋴𓊪 𓉔𓈖𓅱𓅱𓎡 𓈖 Docker, 𓈖𓆓𓆑 𓏏𓅱 𓂋 𓈖𓎛𓎛",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"𓎛𓅓𓅱𓏏 𓈖 Flightradar24 𓅓 𓎛𓂋 𓊪𓈖 𓐍𓊪𓈙, 𓍿𓄿𓅱𓏭 𓎛𓂋 𓅱𓎛𓅓 𓅓𓈖𓈖𓆑 𓂝𓈎 𓂋 Python, 𓎛𓅓𓅱𓏏 Node.js 𓎛𓅱𓇋𓄿𓏏, FR24_API_KEY 𓆓𓇋, 𓎛𓂋 𓋴𓎛𓏏𓊪𓆑"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -2065,7 +2067,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"hnw {name} m DOCKER_PROTECT, nn šsp sw Second Thought r nḥḥ.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"m Windows, jmj tcp:// m DOCKER_HOST. nn mr n Docker.",
-"Second Thought doesn't send {what} to Docker.":"nn hꜣb Second Thought {what} r Docker."
+"Second Thought doesn't send {what} to Docker.":"nn hꜣb Second Thought {what} r Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js n sḫꜣw, n šꜣt ḥmwt n Flightradar24 ḫpr (m npx im). sḫꜣ sw: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 ḥꜣt n ḥꜣwtỉ: FR24_API_KEY ḏi m second-thought.ini, ḥr-ntt prꜣm (šw n ḥsb, m https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY n.k ḏi (ꜥq rꜣ nb ḫꜣs n ḥsb, ꜥnḫ n ꜥq n ḫpr)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

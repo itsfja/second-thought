@@ -1064,7 +1064,9 @@
 "Which Docker container? Give its name, like sonarr.":"哪个 Docker 容器？请给出它的名字，比如 sonarr。",
 "{n} containers":"{n} 个容器",
 "read your Docker containers: their health, memory and logs":"读取你的 Docker 容器：健康状况、内存和日志",
-"restart, stop and start your Docker containers (asking you each time)":"重启、停止和启动你的 Docker 容器（每次都问你）"
+"restart, stop and start your Docker containers (asking you each time)":"重启、停止和启动你的 Docker 容器（每次都问你）",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"此页面无法连接 Flightradar24 的工具,因此智能体在这里不使用它们。请安装 Node.js 并设置 FR24_API_KEY,导出为 Python 来使用。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -2065,6 +2067,9 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"容器 {name} 在 DOCKER_PROTECT 里，所以 Second Thought 从不重启、停止或启动它。",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"在 Windows 上，请把 DOCKER_HOST 设为 tcp:// 地址：不支持 Docker 的命名管道。",
-"Second Thought doesn't send {what} to Docker.":"Second Thought 不会向 Docker 发送 {what}。"
+"Second Thought doesn't send {what} to Docker.":"Second Thought 不会向 Docker 发送 {what}。",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"未安装 Node.js,因此 Flightradar24 的工具无法启动(它们来自 npx)。请安装:https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 需要密钥:请在 second-thought.ini 中设置 FR24_API_KEY,放在程序旁边(付费订阅,来自 https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"你的 FR24_API_KEY 已设置(每次调用都消耗积分,因此这里不检查它)"
 }
 };

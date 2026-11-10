@@ -1658,7 +1658,9 @@
   "Which Docker container? Give its name, like sonarr.": "Quale container Docker? Indica il suo nome, come sonarr.",
   "{n} containers": "{n} container",
   "read your Docker containers: their health, memory and logs": "leggere i tuoi container Docker: salute, memoria e log",
-  "restart, stop and start your Docker containers (asking you each time)": "riavviare, fermare e avviare i tuoi container Docker (chiedendotelo ogni volta)"
+  "restart, stop and start your Docker containers (asking you each time)": "riavviare, fermare e avviare i tuoi container Docker (chiedendotelo ogni volta)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Gli strumenti di Flightradar24 non sono raggiungibili da questa pagina, quindi qui l'agente lavora senza di essi. Esporta in Python, con Node.js installato e FR24_API_KEY impostato, per usarli."
  },
  "examples": {
   "review": {
@@ -3291,6 +3293,9 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "Il container {name} è in DOCKER_PROTECT, quindi Second Thought non lo riavvia, ferma o avvia mai.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Su Windows, imposta DOCKER_HOST su un indirizzo tcp://: la named pipe di Docker non è supportata.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought non invia {what} a Docker."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought non invia {what} a Docker.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js non è installato, quindi gli strumenti di Flightradar24 non possono avviarsi (arrivano da npx). Installalo: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 richiede una chiave: imposta FR24_API_KEY in second-thought.ini, accanto a questo programma (un abbonamento a pagamento, da https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "il tuo FR24_API_KEY è impostato (ogni chiamata costa crediti, quindi qui non viene verificato)"
  }
 }

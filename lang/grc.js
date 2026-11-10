@@ -1064,7 +1064,9 @@
 "Which Docker container? Give its name, like sonarr.":"Ποῖον ἀγγεῖον τοῦ Docker; Δὸς τὸ ὄνομα αὐτοῦ, οἷον sonarr.",
 "{n} containers":"{n} ἀγγεῖα",
 "read your Docker containers: their health, memory and logs":"ἀναγιγνώσκειν τὰ ἀγγεῖά σου τοῦ Docker· τὴν ὑγίειαν, τὴν μνήμην καὶ τὰ ὑπομνήματα",
-"restart, stop and start your Docker containers (asking you each time)":"πάλιν ἄρχειν, παύειν καὶ ἄρχειν τὰ ἀγγεῖά σου τοῦ Docker (ἑκάστοτε ἐρωτῶν σε)"
+"restart, stop and start your Docker containers (asking you each time)":"πάλιν ἄρχειν, παύειν καὶ ἄρχειν τὰ ἀγγεῖά σου τοῦ Docker (ἑκάστοτε ἐρωτῶν σε)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Τὰ τοῦ Flightradar24 ὄργανα ἀπὸ τῆσδε τῆς σελίδος οὐχ ἅπτα ἐστίν, ὥστε ὁ πράκτωρ ἐνθάδε ἄνευ αὐτῶν ἐργάζεται. Ἐξάγαγε εἰς Python, τοῦ Node.js ἐγκατεστημένου καὶ τοῦ FR24_API_KEY τεθέντος, ἵνα αὐτοῖς χρῇ."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -2065,7 +2067,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Τὸ ἀγγεῖον {name} ἐν DOCKER_PROTECT ἐστίν, ὥστε τὸ Second Thought οὐδέποτε πάλιν ἄρχει, παύει ἢ ἄρχει αὐτό.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Ἐν Windows θὲς ἐν DOCKER_HOST διεύθυνσιν tcp://· ὁ ὠνομασμένος αὐλὸς τοῦ Docker οὐχ ὑποστηρίζεται.",
-"Second Thought doesn't send {what} to Docker.":"Τὸ Second Thought οὐ πέμπει {what} εἰς Docker."
+"Second Thought doesn't send {what} to Docker.":"Τὸ Second Thought οὐ πέμπει {what} εἰς Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Τὸ Node.js οὐκ ἐγκατέσταται, ὥστε τὰ τοῦ Flightradar24 ὄργανα ἄρξασθαι οὐ δύναται (ἐκ τοῦ npx ἔρχεται). Ἐγκατάστησον αὐτό· https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Τὸ Flightradar24 κλείδι ἀπαιτεῖ: θὲς FR24_API_KEY ἐν τῷ second-thought.ini, παρὰ τοῦτο τὸ πρόγραμμα (μισθὸς οἰκόδεσμος, ἀπὸ https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"ὁ σὸς FR24_API_KEY τέθειται (πᾶσα κλῆσις ὠνήν ἔχει, ὥστε ἐνθάδε οὐ σκοπεῖται)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

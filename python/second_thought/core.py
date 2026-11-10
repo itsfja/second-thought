@@ -198,6 +198,14 @@ SAFETY = {
                      "kraken_withdrawal_info", "kraken_withdrawal_methods", "kraken_withdrawal_status",
                      "kraken_workspace_balance", "kraken_workspace_list", "kraken_workspace_report",
                      "kraken_workspace_show", "kraken_workspace_status"],
+    # Flightradar24's own MCP server (#364): every tool it offers only reads — live and historic flight positions,
+    # flight summaries, tracks, and airline and airport details (fr24api-mcp 1.0.2, checked 2026-11-06). A tool a
+    # later server adds, or one that leaves this list, asks first: the safe way round, like Kraken's (#309).
+    "mcp_fr24_safe": ["get_airline_info", "get_airport_info_full", "get_airport_info_light", "get_flight_summary_count",
+                      "get_flight_summary_full", "get_flight_summary_light", "get_flight_tracks",
+                      "get_historic_flights_count", "get_historic_flights_positions_full",
+                      "get_historic_flights_positions_light", "get_live_flights_count",
+                      "get_live_flights_positions_full", "get_live_flights_positions_light"],
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
@@ -671,6 +679,7 @@ CAPABILITIES = [
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
+    ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),

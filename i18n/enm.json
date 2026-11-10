@@ -1658,7 +1658,9 @@
   "Which Docker container? Give its name, like sonarr.": "Which Docker vessel? Yif his name, as sonarr.",
   "{n} containers": "{n} vessels",
   "read your Docker containers: their health, memory and logs": "rede thy Docker vessels: hir hele, memorie and logges",
-  "restart, stop and start your Docker containers (asking you each time)": "stirte agayn, stynte and stirte thy Docker vessels (axinge thee ech tyme)"
+  "restart, stop and start your Docker containers (asking you each time)": "stirte agayn, stynte and stirte thy Docker vessels (axinge thee ech tyme)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24 his tools may nat ben yreched fro this page, so the agent werkeþ here wiþoute hem. Expourte to Python, wiþ Node.js y-installed and FR24_API_KEY y-set, to use hem."
  },
  "examples": {
   "review": {
@@ -3291,7 +3293,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "Vessel {name} is in DOCKER_PROTECT, so Second Thought neveremore stirteth it agayn, stynteth ne stirteth it.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "On Windows, sette DOCKER_HOST to a tcp:// addresse: the named pipe of Docker is nat supported.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought sendeth nat {what} to Docker."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought sendeth nat {what} to Docker.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js is nat y-installed, so Flightradar24 his tools may nat bigynne (þei comeþ from npx). Installe it: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 behoveþ a key: sette FR24_API_KEY in second-thought.ini, biside þis program (a paid subscripcioun, from https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "þi FR24_API_KEY is y-set (ich cle costeþ credits, so it is nat y-preved here)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

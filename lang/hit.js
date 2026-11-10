@@ -1064,7 +1064,9 @@
 "Which Docker container? Give its name, like sonarr.":"𒆪𒅖 𒂁 Docker? 𒆷𒀀𒈠𒀭 𒉺𒀀𒄿, sonarr 𒈠𒅆𒉿𒀭.",
 "{n} containers":"𒂁𒎌 {n}",
 "read your Docker containers: their health, memory and logs":"𒂁𒎌 Docker-𒅗 𒀀𒍑𒍣: 𒄩𒀜𒁺𒆷𒋻, memory 𒅇 𒁾",
-"restart, stop and start your Docker containers (asking you each time)":"𒂁𒎌 Docker-𒅗 𒂕𒉺 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒅇 𒋾𒉿𒍣 (𒄷𒌋𒈠𒀭𒋾 𒁍𒉡𒍑𒍣)"
+"restart, stop and start your Docker containers (asking you each time)":"𒂁𒎌 Docker-𒅗 𒂕𒉺 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒅇 𒋾𒉿𒍣 (𒄷𒌋𒈠𒀭𒋾 𒁍𒉡𒍑𒍣)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"𒄑𒆪𒄭𒀀 Flightradar24 apās 𒍏𒉻 𒌌 išha-𒄿, 𒉡 agentas anda 𒌌 kuer-𒍣. Python-𒊍 arha 𒉿𒄷𒋼, Node.js 𒋾𒉿𒀭𒍣 FR24_API_KEY-ya 𒋾𒉿𒀭𒍣, 𒆪𒀉 𒆪𒂗𒍣."
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -2065,7 +2067,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"DUG {name} I-NA DOCKER_PROTECT, Second Thought UL ti-ya-zi UL kar-ap-zi.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"I-NA Windows, DOCKER_HOST tcp:// da-a-i. a-mi-ya-ra-aš Docker UL i-ya-zi.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker-ya UL pé-e-da-i."
+"Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker-ya UL pé-e-da-i.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js UL da-a-an, GIŠ.TUKUL.HI.A Flightradar24 UL ti-ya-an-zi (npx-az pa-a-i). da-a-i: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24-aš ḪAŠTAR-an ḫa-i: FR24_API_KUR second-thought.ini-i ti-ya-an-zi, kinun-a URUDU-pat (ku-i-ku-i šume-ešḫi-ia-aš, https://fr24api.flightradar24.com-az)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY-zaš ti-ya-an-zi (ku-iš ki-iš-ru-uš ku-it šu-me-ešḫi-iš, anda UL ku-iš-ri-iš-ki-iz-zi)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

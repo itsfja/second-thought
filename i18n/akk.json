@@ -1659,7 +1659,9 @@
   "Which Docker container? Give its name, like sonarr.": "𒅗𒅈𒉺𒌅𒌝 𒊭 Docker 𒈠𒀭𒉡𒌝? 𒋗𒌝𒊭 𒄿𒁲𒅔, 𒆠𒈠 sonarr.",
   "{n} containers": "{n} 𒅗𒅈𒉺𒌅𒌝",
   "read your Docker containers: their health, memory and logs": "𒅗𒅈𒉺𒋾𒅗 𒊭 Docker 𒀀𒈠𒊒𒌝: 𒋗𒇻𒌝𒅆𒈾, 𒄭𒄑𒊓𒊍𒋛𒈾 𒌑 𒁲𒈪𒅆𒈾",
-  "restart, stop and start your Docker containers (asking you each time)": "𒅗𒅈𒉺𒋾𒅗 𒊭 Docker 𒊭𒉌𒅖 𒋗𒌨𒊒𒌝, 𒉺𒊏𒋢𒌝 𒌑 𒋗𒌨𒊒𒌝 (𒁕𒊑𒅖 𒄿𒊭𒀠𒅗)"
+  "restart, stop and start your Docker containers (asking you each time)": "𒅗𒅈𒉺𒋾𒅗 𒊭 Docker 𒊭𒉌𒅖 𒋗𒌨𒊒𒌝, 𒉺𒊏𒋢𒌝 𒌑 𒋗𒌨𒊒𒌝 (𒁕𒊑𒅖 𒄿𒊭𒀠𒅗)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "𒀀𒆷𒀜 Flightradar24 𒅖𒌅 𒌅𒌒𒁉𒋗 𒆷 𒄿𒅗𒀸𒊭𒁕, 𒀀𒈨𒇻 𒄿𒈾 𒇷𒅁𒁉 𒀀𒈾 𒆷 𒀀𒆷𒀜𒋗𒉡 𒌑𒈾𒀊𒁉𒅖. 𒀀𒈾 Python 𒋗𒍮𒌨, Node.js 𒋗𒆪𒌦 𒌑 FR24_API_KEY 𒅆𒀉𒊒𒌨, 𒀀𒈾 𒂊𒉺𒋗."
  },
  "examples": {
   "review": {
@@ -3292,7 +3294,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "karpatum {name} ina DOCKER_PROTECT ibašši, Second Thought ul ušarrâši ul iparrassi.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "ina Windows, ina DOCKER_HOST tcp:// šukun. rāṭum ša Docker ul illak.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought {what} ana Docker ul išappar."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought {what} ana Docker ul išappar.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js ul šakin, ālāt Flightradar24 ul ištarrâ (ištu npx ṣû). šukunšu: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 nišīšu išû: FR24_API_KEY ana second-thought.ini šitrur, itti ṭuppišu (šertu kânu, ištu https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY šitmur (kalû simmātu, adi ina libbi lā napparka)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

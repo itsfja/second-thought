@@ -1659,7 +1659,9 @@
   "Which Docker container? Give its name, like sonarr.": "किं Docker-पात्रम्? तस्य नाम देहि, यथा sonarr।",
   "{n} containers": "{n} पात्राणि",
   "read your Docker containers: their health, memory and logs": "तव Docker-पात्राणि पठितुम्: तेषां स्वास्थ्यं, स्मृतिं, लेखान् च",
-  "restart, stop and start your Docker containers (asking you each time)": "तव Docker-पात्राणि पुनः आरब्धुं, स्थगयितुं, आरब्धुं च (प्रतिवारं त्वां पृष्ट्वा)"
+  "restart, stop and start your Docker containers (asking you each time)": "तव Docker-पात्राणि पुनः आरब्धुं, स्थगयितुं, आरब्धुं च (प्रतिवारं त्वां पृष्ट्वा)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24-इत्यस्य उपकरणानि अस्मात् पृष्ठात् प्राप्तुं न शक्यन्ते, अतः अभिकर्ता अत्र तैः विना कार्यं करोति। Python-मध्ये निर्यातय, Node.js संस्थापिते FR24_API_KEY च स्थापिते सति, तानि उपयोजयितुम्।"
  },
  "examples": {
   "review": {
@@ -3292,7 +3294,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "पात्रं {name} DOCKER_PROTECT इत्यस्मिन् अस्ति, अतः Second Thought तत् कदापि न पुनः आरभते, न स्थगयति, न आरभते।",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Windows इत्यत्र DOCKER_HOST इत्यस्मिन् tcp:// सङ्केतं स्थापय: Docker इत्यस्य नामयुक्ता नाली न समर्थ्यते।",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought {what} Docker प्रति न प्रेषयति।"
+  "Second Thought doesn't send {what} to Docker.": "Second Thought {what} Docker प्रति न प्रेषयति।",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js न संस्थापितम्, अतः Flightradar24-इत्यस्य उपकरणानि आरब्धुं न शक्नुवन्ति (तानि npx-तः आगच्छन्ति)। तत् संस्थापय: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24-इत्यस्मै कुञ्चिका आवश्यकी: FR24_API_KEY second-thought.ini-इति मध्ये स्थापय, अस्य कार्यक्रमस्य समीपे (शुल्कं दत्त्वा सदस्यता, https://fr24api.flightradar24.com-तः)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "तव FR24_API_KEY स्थापिता (प्रत्येकं आह्वानं श्रेडिट्-मूल्यं स्वीकरोति, अतः अत्र परीक्ष्यते न)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

@@ -1065,7 +1065,9 @@
 "Which Docker container? Give its name, like sonarr.":"אידין מאנא דDocker? הב שמיה, כות sonarr.",
 "{n} containers":"{n} מאנין",
 "read your Docker containers: their health, memory and logs":"למקרא מאנך דDocker: חולמנהון, דוכרנהון וספרי דוכרניהון",
-"restart, stop and start your Docker containers (asking you each time)":"למשרא תוב, לבטלא ולמשרא מאנך דDocker (ושאיל לך בכל זמן)"
+"restart, stop and start your Docker containers (asking you each time)":"למשרא תוב, לבטלא ולמשרא מאנך דDocker (ושאיל לך בכל זמן)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"לא אפשר למטי מניהן דיל Flightradar24 מן דף הדין, ובכן האגנט לא עביד הכא בלעדיהון. תפקיד לPython, עם Node.js מתקן וFR24_API_KEY מתקנא, למיעבד בהון."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2066,7 +2068,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"מאנא {name} בDOCKER_PROTECT, ועל כן Second Thought לעלם לא משרי ליה תוב, מבטל או משרי ליה.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"בWindows, שוי בDOCKER_HOST כתובתא tcp://: צנורא דשמא דDocker לא מסתמך.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought לא משדר {what} לDocker."
+"Second Thought doesn't send {what} to Docker.":"Second Thought לא משדר {what} לDocker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js לא מתקן, ובכן מאני Flightradar24 לא יכלין למשרא (מן npx אתין). תקן יתה: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 בעי מפתחא: שרי FR24_API_KEY בsecond-thought.ini, לגבי הדין פרוגרמא (אנטרא דמפרע, מן https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY דילך מתקנא (כל קריאה אכפר קרדיטין, ובכן לא מתבדק הכא)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

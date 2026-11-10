@@ -1064,7 +1064,9 @@
 "Which Docker container? Give its name, like sonarr.":"𒂁 Docker 𒀀𒁀? 𒈬𒁉 𒋧, sonarr-𒁶.",
 "{n} containers":"𒂁 {n}",
 "read your Docker containers: their health, memory and logs":"𒂁 Docker-𒍪 𒅆 𒁇: 𒁲, 𒄑𒌆𒉿 𒅇 𒈬𒊬𒁉",
-"restart, stop and start your Docker containers (asking you each time)":"𒂁 Docker-𒍪 𒁲 𒅗 𒈫, 𒄑 𒋳 𒅇 𒁲 𒅗 (𒌓 𒆸𒆸 𒇷 𒋻)"
+"restart, stop and start your Docker containers (asking you each time)":"𒂁 Docker-𒍪 𒁲 𒅗 𒈫, 𒄑 𒋳 𒅇 𒁲 𒅗 (𒌓 𒆸𒆸 𒇷 𒋻)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"ŋeš-𒄖𒍝 Flightradar24-𒅗 𒊓𒁺𒁀 𒁀𒀀𒁺, agent-𒀀𒌁 𒁀𒀊𒁺. Python-𒊺 𒁀𒁺, Node.js 𒁀𒀀𒃻, FR24_API_KEY 𒁀𒀀𒃻, 𒃶𒅎𒈪𒆕."
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},
@@ -2065,7 +2067,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"dug {name} DOCKER_PROTECT-a ĝal2, Second Thought nu-sa2-du11 nu-tag.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows-a DOCKER_HOST-a tcp:// ĝar. pa5 Docker nu-ak.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker-še3 nu-kin-gi4."
+"Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker-še3 nu-kin-gi4.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js nu-ĝar, ŋeš-gu-za Flightradar24-ka saĝ nu-ĝa2-ĝa2 (npx-ta ba-ĝen). ĝar: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24-ke saĝ-ĝu10 in-du8: FR24_API_KEY second-thought.ini-a ba-gar, ba-ba-za mu-na-ĝal2 (kug-bi in-gar, https://fr24api.flightradar24.com-ta)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY-za ba-gar (kiĝ2-ĝu10 kug-bi in-gar, a-na-aš ba-nu-zu-zu-še)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

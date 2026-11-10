@@ -1658,7 +1658,9 @@
   "Which Docker container? Give its name, like sonarr.": "Hver Docker-hirzla? Gef nafn hennar, sem sonarr.",
   "{n} containers": "{n} hirzlur",
   "read your Docker containers: their health, memory and logs": "lesa Docker-hirzlur þínar: heilsu þeira, minni ok skrár",
-  "restart, stop and start your Docker containers (asking you each time)": "endrræsa, stöðva ok ræsa Docker-hirzlur þínar (ok spyrja þik hvert sinn)"
+  "restart, stop and start your Docker containers (asking you each time)": "endrræsa, stöðva ok ræsa Docker-hirzlur þínar (ok spyrja þik hvert sinn)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Tól Flightradar24s megu eigi náðst af þessari síðu, svá at fulltrúi görir hér án þeirra. Flyt út í Python, með Node.js settu ok FR24_API_KEY settu, til at nota þau."
  },
  "examples": {
   "review": {
@@ -3291,7 +3293,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "Hirzla {name} er í DOCKER_PROTECT, því endrræsir, stöðvar né ræsir Second Thought hana aldri.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Á Windows, set DOCKER_HOST á tcp:// stað: nefnd pípa Docker er eigi studd.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought sendir eigi {what} til Docker."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought sendir eigi {what} til Docker.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js er eigi sett upp, svá at tól Flightradar24s megu eigi byrja (þau koma frá npx). Set þat upp: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 þarf lykil: set FR24_API_KEY í second-thought.ini, hjá þessu forriti (gjaldsamningr, frá https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY þinn er sett (hvert kall kostar kredit, svá at þat er eigi kannað hér)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

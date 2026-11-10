@@ -1648,7 +1648,9 @@
   "Which Docker container? Give its name, like sonarr.": "Кїй сосѹдъ Docker? Даждь имѧ егѡ, ꙗкоже sonarr.",
   "{n} containers": "{n} сосѹдѡвъ",
   "read your Docker containers: their health, memory and logs": "чести сосѹды твоѧ Docker: здравїе, памѧть и лѣтописи ихъ",
-  "restart, stop and start your Docker containers (asking you each time)": "паки начинати, ѡстанавливати и начинати сосѹды твоѧ Docker (вопрошаѧ тѧ на всѧко времѧ)"
+  "restart, stop and start your Docker containers (asking you each time)": "паки начинати, ѡстанавливати и начинати сосѹды твоѧ Docker (вопрошаѧ тѧ на всѧко времѧ)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Не возможно есть доспѣти къ оустроемъ Flightradar24 отъ сеѩ страніца, тѣмъже дѣятель здѣ безъ нихъ дѣлаѥтъ. Изведи въ Python, Node.js оустроенѣ и FR24_API_KEY положенѣ сѫщѫ, да ихъ поужиши."
  },
  "examples": {
   "review": {
@@ -3281,7 +3283,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "Сосѹдъ {name} есть въ DOCKER_PROTECT, тѣмже Second Thought николиже паки начинаетъ, ѡстанавливаетъ ни начинаетъ егѡ.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Въ Windows положи въ DOCKER_HOST адресъ tcp://: именованнаѧ трѹба Docker не поддержитсѧ.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought не посылаетъ {what} къ Docker."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought не посылаетъ {what} къ Docker.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js не оустановленъ есть, тѣмъже оустроѩ Flightradar24 начатѝ не могѫтъ (отъ npx приходѩтъ). Оустанови и: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 клѩча требоуѥтъ: положи FR24_API_KEY въ second-thought.ini, при сеѥмъ программѣ (платноѥ подписаніе, отъ https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "твои FR24_API_KEY положенъ есть (кыждо зъвънь крадиты изимаши, тѣмъже здѣ не искѹшаѥтъ сѧ)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Приложи толкъ",
