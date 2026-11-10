@@ -325,6 +325,10 @@
    "message0": "tlachīhualoni itech MCP tlatequipanoāni %1 %2",
    "tooltip": "Quimaca in tītlantli mochi in tlachīhualoni in quimaca ce MCP tlatequipanoāni: āmatl, GitHub, tlamatiliztlapiyalli, tōnalāmatl ihuān occequintin, itech in MCP cemānāhuatl. Xictlālli in tlatequipanoāni ipan second-thought.ini iuhqui MCP_<NAME> = in tlanāhuatīlli in quipēhualtia (iuhquin npx -y @modelcontextprotocol/server-filesystem ~/recipes) anozo ītēcpan https://. Zan in tlaquīxtīlli Python: inīn tlaīxco in tītlantli tequipanoa ahmo ica inīn tlachīhualoni."
   },
+  "rb_agent_fr24": {
+   "message0": "Flightradar24 ītlachīhualon",
+   "tooltip": "Quimaca in agent Flightradar24 ītlachīhualon: in nemiliztli in pēhualli ītech (in tlalnanpa, in pēhualli tlapōhualli, in call-sign ahnōzo in tlahcuilōlmatiliztli), in pēhualli cuāltemōliztli ica inHuīcpantli, in ōme, in tōcāitiliztli ica in nemiliztli, in tlapōhualli in tōnalli 2016, in tlacualiztli in pēhualli ītoca. In tlachīhualoni mochīhua in pēhualli. Node.js monequi, ihuān FR24_API_KEY ipan second-thought.ini (in tlāhuīl ipan fr24api.flightradar24.com; in pēhualli quimāca in credits, in tlapōhualli ahnōzo in tlamantli in pēhualli in tōnalli mochīhua in tlāhuīl). Sōlo ipan Python in ōmohuāz."
+  },
   "rb_agent_kraken": {
    "message0": "Kraken ītlachīhualon %1",
    "tooltip": "Quimaca in tītlantli Kraken ītlachīhualon itech kraken-cli: in tiyanquiztli ītlaxtlahuil, mopiyal ihuān motlanāhuatīl, ihuān āmatlatiyanquizōlli ica nemini tlaxtlahuilli. In nemini tiyanquizōlli no quimācāhua quichīhuaz melāhuac tlanāhuatīlli, auh ceceyacah tlachīhualoni in huel quiolīniz tomin achto mitztlatlani, mācihui aca ahmo tlatlani, ihuān ahquemmah mochīhua ipan tōnalpōhualli anozo GitHub Actions. Quinequi kraken-cli ōmotlālih ihuān, ic mopiyal, KRAKEN_API_KEY ihuān KRAKEN_API_SECRET ipan second-thought.ini (in tlaxtlahuilli ihuān āmatlatiyanquizōlli ahmo quinequih tlatlapoāni). Zan in tlaquīxtīlli Python."
@@ -1648,7 +1652,10 @@
   "Which Docker container? Give its name, like sonarr.": "Catlehhuātl Docker tlacomitl? Xiquitto ītōcā, iuhquin sonarr.",
   "{n} containers": "{n} tlacomeh",
   "read your Docker containers: their health, memory and logs": "quipōhuaz in mo Docker tlacomeh: īnpahtiliz, īntlalnāmiquiliz ihuan īntlahcuilōl",
-  "restart, stop and start your Docker containers (asking you each time)": "occeppa quitzintīz, quiquetzaz ihuan quitzintīz in mo Docker tlacomeh (mitztlahtlanīz cecen)"
+  "restart, stop and start your Docker containers (asking you each time)": "occeppa quitzintīz, quiquetzaz ihuan quitzintīz in mo Docker tlacomeh (mitztlahtlanīz cecen)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Ahmo huel impanalo in nemilitzín Flightradar24 ipan ini āmoxtli, ic in agent nican ahmo quimati in nemilitzín. Xiquīxti Python, Node.js motlālih ica FR24_API_KEY motlālih, ma tiquintēchpano.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "Flightradar24 itlapōhualli quimati: in nemiliztli in nemiliztli in tlapōhualli, in cuāltemōliztli, in ōme, in tlacualiztli in pēhualli ītoca"
  },
  "examples": {
   "review": {
@@ -3281,7 +3288,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "In tlacomitl {name} ca ipan DOCKER_PROTECT, ic Second Thought aīc occeppa quitzintia, quiquetza nozo quitzintia.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Ipan Windows, xictlāli ipan DOCKER_HOST cē tcp:// nōtzalōyān: in Docker ītōcāyoh acalotli ahmo mopalēhuia.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought ahmo quititlani {what} ītech Docker."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought ahmo quititlani {what} ītech Docker.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js ahmo ōmotlālih, ic ahmo huel peuhua in nemilitzín Flightradar24 (npx ipan quihuālhuih). Xictlālli: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 itla tlahtōlitzin cocolīa: FR24_API_KEY second-thought.ini ipan xictlāli, inin tlamantli programmatz inahuac (tlāhuīl pattiuh, https://fr24api.flightradar24.com ic)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY mopattiuh (cequintzintzīn tiquinmitztētla credits, ic nican ahmo tiquinmimati)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Xictlāli tlahtōlli",

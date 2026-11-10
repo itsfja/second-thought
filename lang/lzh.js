@@ -87,6 +87,7 @@
 "rb_agent_tool":{"message0":"器：吾塊 %1","message1":"其用 %1","message2":"所入之類 %1","message3":"每用之前問我 %1","tooltip":"使使者行汝之一「吾塊」。其所入為器之所入，其所還為使者所見之果。明言之：使者所知唯此言耳。所入之類，如「flour grams: number; water grams: number - grams of water」，言每入當為何：text、number、yes/no、list 或 any。塊行之前察使者之所入。「每用之前問我」初已勾之，蓋使者所讀（網頁、記）或欲導之：唯計而無所易之塊，可去其勾。"},
 "rb_agent_builtin":{"message0":"器：%1","tooltip":"使者之成器。「計數」與「時刻」得數與時之確，不使模臆之。「察文」使他審者評使者之功。於此頁，訊源、GitHub、Telegram、郵、曆皆用樣；所出之 Python 用汝之所有（鑰書於 second-thought.ini），真讀網頁。發信、評論、「御器」每事先問汝，蓋使者所讀（網頁、記）或欲導之。唯盡信其所讀，乃擇「不問」。開鎖、開門、解警，恆問之。"},
 "rb_agent_mcp":{"message0":"MCP 侍者 %1 之器 %2","tooltip":"予使者以 MCP 侍者所供之諸器：卷、GitHub、庫、曆，及 MCP 之眾。設侍者於 second-thought.ini，書 MCP_<NAME> = 啓之之令（如 npx -y @modelcontextprotocol/server-filesystem ~/recipes）或其 https:// 之址。唯於所出之 Python：於此頁使者無此器而行。"},
+"rb_agent_fr24":{"message0":"Flightradar24 之器","tooltip":"予使者以 Flightradar24 自有之器:飛機之實時所在(以域、航班號、呼號或註冊號)、起降之航班概略、航跡、溯至二〇一六年之史,及航空公司與機場之詳。凡器惟讀。須裝 Node.js,並置 FR24_API_KEY 於 second-thought.ini(自 fr24api.flightradar24.com 付貲之訂;每一呼皆耗 credit,以預算或步限省其費)。唯於所出之 Python。"},
 "rb_agent_kraken":{"message0":"Kraken 之器 %1","tooltip":"予使者以 Kraken 自有之器，出於 kraken-cli：市價、汝之餘與單、及以時價紙上之易。真易亦使之下真單，然凡能動財之器，必先問汝，雖他無問者亦然，且不行於定時與 GitHub Actions。須裝 kraken-cli，並以汝之帳書 KRAKEN_API_KEY、KRAKEN_API_SECRET 於 second-thought.ini（市價與紙易無須鑰）。唯於所出之 Python。"},
 "rb_tg_when":{"message0":"Telegram 信至而含 %1 之時","tooltip":"汝之機得信（書「anything」，或信所必含之言），則行其下之塊。唯汝自有之談算之（TELEGRAM_CHAT_ID）。於所出之 Python 恆聽之；於此頁，右按之，擇「行此段」，以樣信試之。"},
 "rb_tg_message":{"message0":"Telegram 信之 %1","tooltip":"啓此段之 Telegram 信：其言、其發者、或其談。Telegram 段之外則空。"},
@@ -1063,7 +1064,10 @@
 "Which Docker container? Give its name, like sonarr.":"何 Docker 之器？示其名，若 sonarr。",
 "{n} containers":"{n} 器",
 "read your Docker containers: their health, memory and logs":"讀汝 Docker 之器：其康、其憶、其錄",
-"restart, stop and start your Docker containers (asking you each time)":"復啟、止、啟汝 Docker 之器（每必問汝）"
+"restart, stop and start your Docker containers (asking you each time)":"復啟、止、啟汝 Docker 之器（每必問汝）",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"此頁不能及 Flightradar24 之器,故使者於此無之而行。裝 Node.js,設 FR24_API_KEY,出為 Python,乃用之。",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"讀 Flightradar24 之飛行資料:實時與往史之所在、概略、航跡,及航空公司與機場之詳"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2064,7 +2068,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"器 {name} 在 DOCKER_PROTECT，故 Second Thought 未嘗復啟之、止之、啟之。",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"於 Windows，置 DOCKER_HOST 為 tcp:// 之址：Docker 之名管不可用。",
-"Second Thought doesn't send {what} to Docker.":"Second Thought 不發 {what} 於 Docker。"
+"Second Thought doesn't send {what} to Docker.":"Second Thought 不發 {what} 於 Docker。",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js 未裝,故 Flightradar24 之器不能啟(其自 npx 來)。裝之:https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 需鑰:置 FR24_API_KEY 於 second-thought.ini,在此程式之側(付貲之訂,自 https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"爾之 FR24_API_KEY 已設(每一呼皆有費,故此不驗之)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

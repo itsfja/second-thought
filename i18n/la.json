@@ -553,6 +553,10 @@
   "rb_word_count": {
    "message0": "numerus verborum %1"
   },
+  "rb_agent_fr24": {
+   "message0": "instrumenta Flightradar24",
+   "tooltip": "Actori dat instrumenta ipsius Flightradar24: loca aeroplanorum viva (per regionem, numerum volatus, signum vocis aut inscriptionem), summas volatum cum abitu et adventu, vias, historiam usque ad annum 2016, et rerum societatum aeriarum portuumque. Omne instrumentum tantum legit. Requirit Node.js institutum, et FR24_API_KEY in second-thought.ini (merces solvenda ab fr24api.flightradar24.com; quilibet vocatus creditorum pretium habet, sed ratio vel finis graduum cursum viliorem servat). Solum in Python exportato."
+  },
   "rb_agent_kraken": {
    "message0": "instrumenta Kraken %1",
    "tooltip": "Actori dat instrumenta ipsius Kraken, ex kraken-cli: pretia fori, rationes et mandata tua, et mercaturam in charta pretiis veris. Mercatura vera etiam mandata vera dare sinit, sed omne instrumentum quod pecuniam movere potest te prius rogat, etiam cum nihil aliud rogat, neque umquam ex ordine temporum aut in GitHub Actions currit. Requirit kraken-cli institutum, et KRAKEN_API_KEY et KRAKEN_API_SECRET in second-thought.ini pro ratione tua (pretia et charta clave non egent). Tantum in Python exportato."
@@ -1658,7 +1662,10 @@
   "Which Docker container? Give its name, like sonarr.": "Quae capsa Docker? Da eius nomen, ut sonarr.",
   "{n} containers": "{n} capsae",
   "read your Docker containers: their health, memory and logs": "capsas tuas Docker legere: valetudinem, memoriam et acta",
-  "restart, stop and start your Docker containers (asking you each time)": "capsas tuas Docker iterum incipere, sistere et incipere (te quotiens rogato)"
+  "restart, stop and start your Docker containers (asking you each time)": "capsas tuas Docker iterum incipere, sistere et incipere (te quotiens rogato)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Instrumenta Flightradar24 ex hac pagina attingi nequeunt, itaque procurator hic sine illis operatur. Exporta in Python, Node.js instituto et FR24_API_KEY posito, ut illis utaris.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "data volatum Flightradar24 legere: loca viva et historica, summas, vias, et rerum societatum aeriarum portuumque"
  },
  "examples": {
   "review": {
@@ -3291,7 +3298,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "Capsa {name} in DOCKER_PROTECT est, itaque Second Thought eam numquam iterum incipit, sistit aut incipit.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "In Windows, pone in DOCKER_HOST inscriptionem tcp://: canalis nominatus Docker non sustinetur.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought {what} ad Docker non mittit."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought {what} ad Docker non mittit.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js non est institutum, itaque instrumenta Flightradar24 incipere nequeunt (ex npx veniunt). Institue illud: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 clavem requirit: pone FR24_API_KEY in second-thought.ini, iuxta hunc programmatem (merces solvenda, ab https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY tuus positus est (quilibet vocatus creditorum pretium habet, itaque hic non probatur)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

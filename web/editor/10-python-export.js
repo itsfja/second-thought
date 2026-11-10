@@ -52,6 +52,7 @@
   // The Kraken tools block's choice, for --doctor: "live" if any asks for live trading.
   const krakenMode = () => { const k = allProgramBlocks().filter(b => b.type === "rb_agent_kraken");
     return k.length ? (k.some(b => b.getFieldValue("MODE") === "live") ? "live" : "read") : ""; };
+  const FR24_COMMANDS = { read:"npx -y @flightradar24/fr24api-mcp" };  // FR24_COMMANDS in mcp.py
   function settingsFor(){
     const keys = servicesUsed().filter(s => s.signup).map(s => [s.key_label || s.name, s.keys[0], s.signup]);
     const blocks = allProgramBlocks();
@@ -66,6 +67,7 @@
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
+             flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
@@ -117,6 +119,13 @@
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.flightradar24) out.push("", "[flightradar24]",
+      "; Flightradar24's tools come from its own MCP server, started with npx (https://github.com/Flightradar24/fr24api-mcp):",
+      "; install Node.js, and the program starts the server itself.",
+      "; The key is a paid subscription that works on credits, from https://fr24api.flightradar24.com. Each call costs",
+      "; credits, so give the program a budget or a step limit to keep a run cheap.",
+      "FR24_API_KEY = ",
+      ...note("MCP_FLIGHTRADAR24", "npx -y @flightradar24/fr24api-mcp", "to start the server your own way"));
     if (need.docker) out.push("", "[docker]",
       "; Docker's Engine API. Left out, it's the socket on this computer (unix:///var/run/docker.sock), which is root on",
       "; the machine: safer is a socket proxy (tecnativa/docker-socket-proxy with CONTAINERS=1, plus ALLOW_RESTARTS=1 and",
@@ -609,6 +618,7 @@
               if (!enabled(t)) continue;
               if (t.type === "rb_agent_builtin") tools.push('{"kind": ' + pyStr(t.getFieldValue("KIND")) + "}");
               else if (t.type === "rb_agent_kraken") tools.push('{"kind": "mcp", "server": "kraken", "ask": "never", "command": ' + pyStr(KRAKEN_COMMANDS[t.getFieldValue("MODE")] || KRAKEN_COMMANDS.read) + "}");  // money tools ask anyway
+              else if (t.type === "rb_agent_fr24") tools.push('{"kind": "mcp", "server": "flightradar24", "ask": "never", "command": ' + pyStr(FR24_COMMANDS.read) + "}");  // a tool we've never seen asks anyway (#364)
               else if (t.type === "rb_agent_mcp") tools.push('{"kind": "mcp", "server": ' + pyStr(String(t.getFieldValue("SERVER") || "").trim()) + ', "ask": ' + pyStr(t.getFieldValue("ASK") || "changes") + "}");
               else if (t.type === "rb_agent_tool") {
                 const name = String(t.getFieldValue("NAME") || "").trim();
@@ -851,7 +861,8 @@
       "# before its first run, and again whenever this file changes.",
       "CAN = {\"services\": [" + usedServices.map(x => pyStr(x.name)).join(", ") + "], \"can\": [" + caps.map(c => pyStr(c[0])).join(", ") + "]" +
         (settingsFor().mcp.length ? ", \"mcp\": [" + settingsFor().mcp.map(pyStr).join(", ") + "]" : "") +
-        (krakenMode() ? ", \"kraken\": " + pyStr(krakenMode()) : "") + "}",
+        (krakenMode() ? ", \"kraken\": " + pyStr(krakenMode()) : "") +
+        (settingsFor().flightradar24 ? ", \"flightradar24\": \"read\"" : "") + "}",
       "",
       "if __name__ == \"__main__\":",
       "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + ", can=CAN)",

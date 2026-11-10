@@ -145,6 +145,7 @@
 "rb_with_any_model":{"message0":"mid OpenRouter bysene %1","message1":"%1","tooltip":"Fremeþ ana þa stoccas þærinne on ælcre bysene þe OpenRouter beodeþ. Writ hire naman of openrouter.ai/models, swa mistralai/mistral-small oþþe google/gemma-4-31b-it. openrouter/auto geceosþ ane for þe. Yrnþ on utgelæddum Python (behofaþ OPENROUTER_API_KEY); on þissum leafe Claude stent for hire."},
 "rb_with_model":{"message0":"mid bysene %1","message1":"%1","tooltip":"Fremeþ ana þa stoccas þærinne on þisse bysene, and gæþ siþþan eft to þære ærran bysene. Bysena butan Claude yrnaþ on utgelæddum Python; on þissum leafe Claude stent for him."},
 "rb_word_count":{"message0":"worda getæl %1"},
+"rb_agent_fr24":{"message0":"Flightradar24 tōl","tooltip":"Selþ þǣm dǣdere Flightradar24 āgnu tōl: lifig stōwe of flyendum cræftum (be rīce, flyhtes naman, clypnesse oþþe naman), flyhtes gewritu mid upgange and innigange, wegas, foreald oð 2016, and airlines and portes cūþþe. Ǣlc tōl rǣdeþ ān. Hit behōfaþ Node.js gesett, and FR24_API_KEY on second-thought.ini (gyldendlic abonnement of fr24api.flightradar24.com; ǣlc clyp costð credits, a budget oþþe step līm healdeþ rǣnne cēape). Ān on ālǣddum Python."},
 "rb_agent_kraken":{"message0":"Krakenes tōl %1","tooltip":"Selþ þǣm dǣdere Krakenes āgnu tōl, of kraken-cli: cēapstōwe weorþ, þīne lāfe and bebodu, and cēap on bōcfelle æt sōþum weorþe. Sōþ cēap lǣt hine ēac sōþ bebodu syllan, ac ǣlc tōl þe feoh styrian mæg āxaþ þē ǣrest, þēah nān ōþer ne āxie, and næfre ne fērþ be tīdum oþþe on GitHub Actions. Hit behōfaþ kraken-cli gesett, and KRAKEN_API_KEY and KRAKEN_API_SECRET on second-thought.ini for þīnum gerīme (weorþ and bōcfell ne behōfiaþ cǣges). Ān on ūtsendum Python."},
 "rb_coinbase_balances":{"message0":"Coinbase lafe","tooltip":"Getæl gewrita, an for ælcre æhte on þinum Coinbase hord-fæte, seo mæste ærest: asset, amount, value and currency. Þa weorþ sind on þinum feo (currency on second-thought.ini). On þissum leafe hit brycþ bysene hord-fætes."},
 "rb_coinbase_value":{"message0":"Coinbase hord-fætes weorþ","tooltip":"Hu micel þin Coinbase hord-fæt is weorþ, on þinum feo."},
@@ -1064,7 +1065,10 @@
 "Which Docker container? Give its name, like sonarr.":"Hwilc Docker fæt? Sege his naman, swa sonarr.",
 "{n} containers":"{n} fatu",
 "read your Docker containers: their health, memory and logs":"rædan þine Docker fatu: hira hælu, gemynd and gewritu",
-"restart, stop and start your Docker containers (asking you each time)":"eft onstyrian, stillan and onstyrian þine Docker fatu (þe ælce siþe axiende)"
+"restart, stop and start your Docker containers (asking you each time)":"eft onstyrian, stillan and onstyrian þine Docker fatu (þe ælce siþe axiende)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24 tōl ne magon of þissere sidan gerǣched wesan, forþon se ægent hēr wiþ hīe ne wyrceð. Ālǣd tō Python, mid Node.js gesettum and FR24_API_KEY gesettum, þæt þū hīe brūce.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"rǣdan Flightradar24 flyhtes cūþþe: lifig and foreald stōwe, gewritu, wegas, and airlines and portes cūþþe"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2065,7 +2069,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Fæt {name} is on DOCKER_PROTECT, forþon Second Thought hit næfre eft ne onstyreþ, ne stilleþ, ne onstyreþ.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"On Windows, sete on DOCKER_HOST tcp:// stowe: Dockeres genemnede pipe nis underfangen.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought ne sent {what} to Docker."
+"Second Thought doesn't send {what} to Docker.":"Second Thought ne sent {what} to Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js nis gesett, forþon Flightradar24 tōl ne magon onginnan (hīe cumað of npx). Sete hit: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 behōfð cǣgges: sete FR24_API_KEY in second-thought.ini, be þisse programman (gyldendlic abonnement, of https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"þīn FR24_API_KEY is gesett (ǣlc clyp costð credits, forþon hēr nis āfandod)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

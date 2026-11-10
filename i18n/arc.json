@@ -554,6 +554,10 @@
   "rb_word_count": {
    "message0": "מניין מלי %1"
   },
+  "rb_agent_fr24": {
+   "message0": "מאני Flightradar24",
+   "tooltip": "יהב לסוכנא מאני Flightradar24 דיליה: אתרן קיימין דיל מטוסיא (באגן, במנין טיסתא, בקריאתא או ברישומא), כנישין דטיסתא באסקופא ונחיתא, ארחין, תולדתא עד שנת 2016, ופרטין דאוירופלאן ומטרא. כל מאנא לחוד קרי. צריך Node.js מתקן, וFR24_API_KEY בsecond-thought.ini (אנטרא דמפרע מן fr24api.flightradar24.com; כל קריאה אכפר קרדיטין, תקנין או גבולא דשעבין נטיר ריהטא זולתא). בלחוד בPython מפקא."
+  },
   "rb_agent_kraken": {
    "message0": "מאני Kraken %1",
    "tooltip": "יהב לסוכנא מאני Kraken דיליה, מן kraken-cli: דמי שוקא, שארייך ופקודייך, ותגרא על נירא בדמין שרירין. תגרא שרירא שבק ליה אף למתן פקודין שרירין, ברם כל מאן דיכל לשנאה כספא שאל לך קדמיתא, אף כד מדעם אחרנא לא שאל, ולעלם לא רהט בזבנא קביעא או ב־GitHub Actions. צריך kraken-cli מתקן, ו־KRAKEN_API_KEY ו־KRAKEN_API_SECRET ב־second-thought.ini לחושבנך (דמין ונירא לא צריכין מפתחא). בלחוד ב־Python מפקא."
@@ -1659,7 +1663,10 @@
   "Which Docker container? Give its name, like sonarr.": "אידין מאנא דDocker? הב שמיה, כות sonarr.",
   "{n} containers": "{n} מאנין",
   "read your Docker containers: their health, memory and logs": "למקרא מאנך דDocker: חולמנהון, דוכרנהון וספרי דוכרניהון",
-  "restart, stop and start your Docker containers (asking you each time)": "למשרא תוב, לבטלא ולמשרא מאנך דDocker (ושאיל לך בכל זמן)"
+  "restart, stop and start your Docker containers (asking you each time)": "למשרא תוב, לבטלא ולמשרא מאנך דDocker (ושאיל לך בכל זמן)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "לא אפשר למטי מניהן דיל Flightradar24 מן דף הדין, ובכן האגנט לא עביד הכא בלעדיהון. תפקיד לPython, עם Node.js מתקן וFR24_API_KEY מתקנא, למיעבד בהון.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "למקרא נתבנין דטיסתא דיל Flightradar24: אתרן קיימין וקדמאין, כנישין, ארחין, ופרטין דאוירופלאן ומטרא"
  },
  "examples": {
   "review": {
@@ -3292,7 +3299,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "מאנא {name} בDOCKER_PROTECT, ועל כן Second Thought לעלם לא משרי ליה תוב, מבטל או משרי ליה.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "בWindows, שוי בDOCKER_HOST כתובתא tcp://: צנורא דשמא דDocker לא מסתמך.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought לא משדר {what} לDocker."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought לא משדר {what} לDocker.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js לא מתקן, ובכן מאני Flightradar24 לא יכלין למשרא (מן npx אתין). תקן יתה: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 בעי מפתחא: שרי FR24_API_KEY בsecond-thought.ini, לגבי הדין פרוגרמא (אנטרא דמפרע, מן https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY דילך מתקנא (כל קריאה אכפר קרדיטין, ובכן לא מתבדק הכא)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

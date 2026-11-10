@@ -88,6 +88,7 @@
 "rb_agent_tool":{"message0":"𐍃𐌰𐍂𐍅𐌰: 𐍃𐍄𐌰𐌹𐌽𐍃 𐌼𐌴𐌹𐌽𐍃 %1","message1":"𐍈𐌰 𐍄𐌰𐌿𐌾𐌹𐌸 %1","message2":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹𐌽𐍃 𐍃𐌹𐌳𐌿𐍃 %1","message3":"𐌼𐌹𐌺 𐍆𐍂𐌰𐌹𐌷𐌽 𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐌸𐌰𐌽 %1","tooltip":"𐌰𐌹𐍂𐌿𐍃 𐍃𐍄𐌰𐌹𐌽 𐌸𐌴𐌹𐌽𐌰𐌽𐌰 𐌰𐌹𐌽𐌰𐌽𐌰 𐍄𐌰𐌿𐌾𐌹𐌸. 𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹𐌽𐍃 𐌹𐍃 𐍃𐌰𐍂𐍅𐌹𐍃 𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹𐌽𐍃, 𐌸𐌰𐍄𐌴𐌹 𐌰𐍆𐍄𐍂𐌰 𐌲𐌹𐌱𐌹𐌸 𐍅𐌰𐌿𐍂𐍃𐍄𐍅 𐌰𐌹𐍂𐌰𐌿𐍃 𐍃𐌰𐌹𐍈𐌹𐌸. 𐍅𐌰𐌹𐌻𐌰 𐌵𐌹𐌸: 𐌰𐌹𐍂𐌿𐍃 𐌰𐌽𐌸𐌰𐍂 𐌽𐌹 𐌺𐌰𐌽𐌽. 𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹𐌽𐍃 𐍃𐌹𐌳𐌿𐍃, 𐍃𐍅𐌴 'flour grams: number; water grams: number - grams of water', 𐍈𐌰 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 𐍅𐌹𐌻𐌹 𐌵𐌹𐌸𐌹𐌸: text, number, yes/no, list 𐌰𐌹𐌸𐌸𐌰𐌿 any. “𐌼𐌹𐌺 𐍆𐍂𐌰𐌹𐌷𐌽 𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐌸𐌰𐌽” 𐌲𐌰𐍄𐌴𐌺𐌰𐌽, 𐌰𐌹𐍂𐌿𐍃 𐍈𐌰 𐍃𐌹𐌲𐌲𐍅𐌹𐌸 (𐌻𐌰𐌿𐍆𐍃 𐌽𐌰𐍄𐌹𐍃, 𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃) 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌹𐌸; 𐍃𐍄𐌰𐌹𐌽𐍃 𐍃𐌰𐌴𐌹 𐌲𐌰𐍂𐌰𐌸𐌾𐍉 𐌰𐌹𐌽𐌰𐍄𐌰 𐍄𐌰𐌿𐌾𐌹𐌸 𐌽𐌹 𐌲𐌰𐍄𐌴𐌺𐌰𐌽."},
 "rb_agent_builtin":{"message0":"𐍃𐌰𐍂𐍅𐌰: %1","tooltip":"𐍃𐌰𐍂𐍅𐌰 𐌲𐌰𐍂𐌰𐌹𐌳 𐌳𐌿 𐌰𐌹𐍂𐌰𐌿. “𐌲𐌰𐍂𐌰𐌸𐌾𐍉𐌽 𐍄𐌰𐍅𐌴𐌹” 𐌾𐌰𐌷 “𐌼𐌴𐌻 𐌲𐌰𐍂𐌰𐌸𐌾𐍉” 𐌲𐌰𐍂𐌰𐌸𐌾𐍉 𐌾𐌰𐌷 𐌼𐌴𐌻 𐌲𐌰𐍂𐌰𐌹𐌳 𐍄𐌰𐌿𐌾𐌰𐌽𐌳, 𐌻𐌰𐌹𐍃𐌰𐍂𐌴𐌹𐍃 𐌽𐌹 𐍆𐍂𐌹𐍃𐌰𐌹𐍈𐌰𐌽𐌳𐍃. “𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐍃𐌰𐌹𐍈” 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐌹𐍂𐌰𐌿𐍃 𐌰𐌽𐌸𐌰𐍂𐌹𐍃 𐌰𐍂𐌱𐌰𐌹𐌸 𐍃𐌰𐌹𐍈𐌹𐌸. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌻𐌰𐌿𐍆𐌰 𐌽𐌹𐌿𐌾𐌰𐍄𐌰 𐍃𐍀𐌹𐌻𐌻𐌰, GitHub, Telegram, 𐌱𐍉𐌺𐍉𐍃𐍀𐌹𐌻𐌻𐌰 𐌾𐌰𐌷 𐌳𐌰𐌲𐌰𐌱𐍉𐌺𐍉𐍃 𐍆𐍂𐌹𐍃𐌰𐌷𐍄𐍉𐍃 𐍄𐌰𐌿𐌾𐌰𐌽𐌳; 𐌹𐌽 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹 Python 𐌸𐌴𐌹𐌽𐌰 𐍄𐌰𐌿𐌾𐌹𐌸 (𐌿𐍃𐌻𐌿𐌺𐌰𐌽𐌳𐌰𐌽𐍃 𐌹𐌽 second-thought.ini 𐍃𐌰𐍄𐌴𐌹). 𐌹𐌽𐍃𐌰𐌽𐌳𐌴𐌹𐌽𐍃 𐌾𐌰𐌷 “𐌲𐌰𐍃𐌼𐌹𐌸 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹” 𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳 𐍆𐌰𐌿𐍂𐌸𐌹𐍃. “𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽” 𐌲𐌰𐍅𐌰𐌻𐌴𐌹 𐌾𐌰𐌱𐌰𐌹 𐌰𐌻𐌻𐌰𐍄𐌰 𐌲𐌰𐌻𐌰𐌿𐌱𐌴𐌹𐍃. 𐌳𐌰𐌿𐍂 𐌿𐍃𐌻𐌿𐌺𐌰𐌽 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸."},
 "rb_agent_mcp":{"message0":"𐍃𐌰𐍂𐍅𐌰 𐌿𐍃 𐌰𐌽𐌳𐌱𐌰𐌷𐍄𐌰𐌼 MCP %1 %2","tooltip":"𐌰𐌹𐍂𐌿𐍃 𐍃𐌰𐍂𐍅𐌰 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 𐌰𐌽𐌳𐌱𐌰𐌷𐍄𐌹𐍃 MCP 𐌲𐌹𐌱𐌹𐌸: 𐌱𐍉𐌺𐍉𐍃, GitHub, 𐌳𐌰𐌲𐌰𐌱𐍉𐌺𐍉𐍃 𐌾𐌰𐌷 𐍆𐌹𐌻𐌿. 𐌰𐌽𐌳𐌱𐌰𐌷𐍄𐍃 𐌹𐌽 second-thought.ini MCP_<NAME> = 𐍅𐌹𐌲 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌹𐌸 (𐍃𐍅𐌴 npx -y @modelcontextprotocol/server-filesystem ~/recipes) 𐌰𐌹𐌸𐌸𐌰𐌿 https:// 𐍃𐌴𐌹𐌽𐌰𐌽𐌰 𐍃𐌰𐍄𐌾𐌹𐌸. 𐌹𐌽 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹 Python 𐌰𐌹𐌽𐌰𐌹; 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌻𐌰𐌿𐍆𐌰 𐌰𐌹𐍂𐌿𐍃 𐍃𐌰𐍂𐍅𐌰 𐌽𐌹 𐌷𐌰𐌱𐌰𐌽𐌳𐌰𐌽𐍃 𐍄𐌰𐌿𐌾𐌹𐌸."},
+"rb_agent_fr24":{"message0":"Flightradar24 sarwa","tooltip":"Gibiu agenta seinamma sarwa Flightradar24: libandans stadjins flugwade (bi garai, bi flugis numin, bi hropis signin aiþþau melins), flugis gabaurjans mid ufstass jah atgagg, wiggos, history du 2016, jah fairobauainai airlines jah airport. Hwarjat sarwa ainis melis aina þisleiþ. þarfu Node.js satiþ jah FR24_API_KEY in second-thought.ini (faurinoda mel framm fr24api.flightradar24.com; hwarjō ladons kost kredit, gabaurjai aiþþau stapa-gamarz lauf fairkawisk). Ainana in utgaggandin Python."},
 "rb_agent_kraken":{"message0":"𐍃𐌰𐍂𐍅𐌰 Kraken %1","tooltip":"𐌰𐌹𐍂𐌿𐍃 𐍃𐌰𐍂𐍅𐌰 Kraken 𐌲𐌹𐌱𐌹𐌸, 𐌼𐌹𐌸 kraken-cli: 𐍅𐌰𐌹𐍂𐌸𐌰, 𐍃𐌹𐌻𐌿𐌱𐍂 𐌸𐌴𐌹𐌽 𐌾𐌰𐌷 orders, 𐌾𐌰𐌷 𐌺𐌰𐌿𐍀𐌰𐍄𐌾𐌰𐌽 𐌰𐌽𐌰 𐌱𐍉𐌺𐍉𐌼. 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 𐍃𐌰𐍂𐍅𐌰 𐍃𐌰𐌴𐌹 𐍃𐌹𐌻𐌿𐌱𐍂 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌹𐌸 𐌸𐌿𐌺 𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸, 𐌾𐌰𐌷 𐌹𐌽 𐌼𐌴𐌻𐌰𐌼 𐌰𐌹𐌸𐌸𐌰𐌿 𐌹𐌽 GitHub Actions 𐌽𐌹 𐍄𐌰𐌿𐌾𐌹𐌸. kraken-cli 𐌾𐌰𐌷 KRAKEN_API_KEY 𐌾𐌰𐌷 KRAKEN_API_SECRET 𐌹𐌽 second-thought.ini 𐍅𐌹𐌻𐌹. 𐌹𐌽 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹 Python 𐌰𐌹𐌽𐌰𐌹."},
 "rb_tg_when":{"message0":"𐌸𐌰𐌽 𐍃𐍀𐌹𐌻𐌻 Telegram 𐌵𐌹𐌼𐌹𐌸 𐌼𐌹𐌸 %1","tooltip":"𐍃𐍄𐌰𐌹𐌽𐍉𐍃 𐌿𐍆 𐌸𐌰𐌼𐌼𐌰 𐍄𐌰𐌿𐌾𐌰𐌽𐌳 𐌸𐌰𐌽 𐌰𐌹𐍂𐌿𐍃 𐌸𐌴𐌹𐌽𐍃 𐍃𐍀𐌹𐌻𐌻 𐌰𐌽𐌳𐌽𐌹𐌼𐌹𐌸 (“anything” 𐌰𐌹𐌸𐌸𐌰𐌿 𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌸𐍉𐌴𐌹 𐌷𐌰𐌱𐌰𐌹𐌸 𐌼𐌴𐌻𐌴𐌹). 𐍃𐍀𐌹𐌻𐌻𐌰 𐌸𐌴𐌹𐌽𐌰𐌼𐌼𐌰 𐍂𐍉𐌳𐌴𐌹𐌽𐌰𐌹 𐌰𐌹𐌽𐌰𐌹 (TELEGRAM_CHAT_ID). 𐌹𐌽 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹 Python 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐌷𐌰𐌿𐍃𐌴𐌹𐌸; 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌻𐌰𐌿𐍆𐌰 𐍄𐌰𐌹𐌷𐍃𐍅𐍉𐌽 𐌲𐌰𐍄𐌴𐌺 𐌾𐌰𐌷 “𐌸𐌰𐌽𐌰 𐍅𐌹𐌲 𐍄𐌰𐍅𐌴𐌹” 𐌲𐌰𐍅𐌰𐌻𐌴𐌹, 𐌼𐌹𐌸 𐍃𐍀𐌹𐌻𐌻𐌰 𐍆𐍂𐌹𐍃𐌰𐌷𐍄𐌰𐌹 𐍃𐌰𐌹𐍈𐌰𐌽."},
 "rb_tg_message":{"message0":"𐍃𐍀𐌹𐌻𐌻 Telegram %1","tooltip":"𐍃𐍀𐌹𐌻𐌻 Telegram 𐌸𐌰𐍄𐌴𐌹 𐌸𐌰𐌽𐌰 𐍅𐌹𐌲 𐌿𐍃𐍅𐌰𐌺𐌹𐌳𐌰: 𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃, 𐍃𐌰𐌴𐌹 𐌹𐌽𐍃𐌰𐌽𐌳𐌹𐌳𐌰, 𐌰𐌹𐌸𐌸𐌰𐌿 𐍂𐍉𐌳𐌴𐌹𐌽𐍃. 𐍅𐌹𐌲𐍃 Telegram 𐌽𐌹𐍃𐍄, 𐌻𐌰𐌿𐍃."},
@@ -1064,7 +1065,10 @@
 "Which Docker container? Give its name, like sonarr.":"𐍈𐌰𐍂𐌾𐌰𐍄𐌰 𐌺𐌰𐍃 Docker? 𐌲𐌹𐍆 𐌽𐌰𐌼𐍉 𐌹𐍃, 𐍃𐍅𐌴 sonarr.",
 "{n} containers":"{n} 𐌺𐌰𐍃𐌰",
 "read your Docker containers: their health, memory and logs":"𐌿𐍃𐍃𐌹𐌲𐌲𐍅𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰: 𐌷𐌰𐌹𐌻𐌴𐌹𐌽, 𐌲𐌰𐌼𐌹𐌽𐌸𐌹 𐌾𐌰𐌷 𐌱𐍉𐌺𐍉𐍃 𐌹𐌶𐌴",
-"restart, stop and start your Docker containers (asking you each time)":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌰𐌽𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉)"
+"restart, stop and start your Docker containers (asking you each time)":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌰𐌽𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24 sarwa fram þizai seido ni hlapand, þannu agents her ina waurkeiþ. Ussandei in Python, mid Node.js satiþ jah FR24_API_KEY satiþ, ei þus bruka.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 𐍆𐌻𐌿𐌲𐌹𐍃 𐌳𐌰𐍄𐌰𐍃 𐌱𐍂𐌿𐌺𐌰𐌽: 𐌻𐌹𐌱𐌰𐌽𐌳𐌰𐌽𐍃 𐌾𐌰𐌷 history 𐍃𐍄𐌰𐌳𐌾𐌹𐌽𐍃, 𐌲𐌰𐌱𐌰𐌿𐍂𐌾𐌰𐌽𐍃, 𐍅𐌹𐌲𐌲𐍉𐍃, 𐌾𐌰𐌷 𐍆𐌰𐌹𐍂𐍉𐌱𐌰𐌿𐌰𐌹𐌽𐌰𐌹 𐌰𐌹𐍂𐌻𐌹𐌽𐌴𐍃 𐌾𐌰𐌷 𐌰𐌹𐍂𐍀𐍉𐍂𐍄"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2065,7 +2069,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"kas {name} in DOCKER_PROTECT ist, inuh þis Second Thought ni aiw anastodeiþ ita.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"in Windows, satei tcp:// in DOCKER_HOST. swiglo Docker ni andnimada.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought ni sandeiþ {what} du Docker."
+"Second Thought doesn't send {what} to Docker.":"Second Thought ni sandeiþ {what} du Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js ni sati𐍆, swaei sarwa Flightradar24 ni anastodjand (𐌸𐌿𐍂𐌷 npx). satei: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 𐌰𐌽𐌰 𐌺𐌻𐌿𐌳𐌰 𐌸𐌰𐍂𐍆: sat𐌾 FR24_API_KEY in second-thought.ini, 𐌽𐌴𐍈𐌰 𐌸𐌰𐌼𐌼𐌰 𐍀𐍂𐍉𐌲𐍂𐌰𐌼𐌼 (𐍆𐌰𐌹𐍂𐌹𐌽𐍉𐌳𐌰 𐌼𐌴𐌻, 𐍆𐍂𐌰𐌼 https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"𐌸𐌴𐌹𐌽𐍃 FR24_API_KEY sati𐍆 𐌹𐍃 (𐍈𐌰𐍂𐌾𐍉 𐌻𐌰𐌸𐍉𐌽𐍃 𐌺𐍉𐍃𐍄 𐌺𐍂𐌴𐌳𐌹𐍄𐍃, 𐌸𐌰𐌽𐌽𐌿 𐌷𐌴𐍂 𐌽𐌹 𐍃𐍉𐌺𐌹𐌸)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

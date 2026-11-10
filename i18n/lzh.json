@@ -325,6 +325,10 @@
    "message0": "MCP 侍者 %1 之器 %2",
    "tooltip": "予使者以 MCP 侍者所供之諸器：卷、GitHub、庫、曆，及 MCP 之眾。設侍者於 second-thought.ini，書 MCP_<NAME> = 啓之之令（如 npx -y @modelcontextprotocol/server-filesystem ~/recipes）或其 https:// 之址。唯於所出之 Python：於此頁使者無此器而行。"
   },
+  "rb_agent_fr24": {
+   "message0": "Flightradar24 之器",
+   "tooltip": "予使者以 Flightradar24 自有之器:飛機之實時所在(以域、航班號、呼號或註冊號)、起降之航班概略、航跡、溯至二〇一六年之史,及航空公司與機場之詳。凡器惟讀。須裝 Node.js,並置 FR24_API_KEY 於 second-thought.ini(自 fr24api.flightradar24.com 付貲之訂;每一呼皆耗 credit,以預算或步限省其費)。唯於所出之 Python。"
+  },
   "rb_agent_kraken": {
    "message0": "Kraken 之器 %1",
    "tooltip": "予使者以 Kraken 自有之器，出於 kraken-cli：市價、汝之餘與單、及以時價紙上之易。真易亦使之下真單，然凡能動財之器，必先問汝，雖他無問者亦然，且不行於定時與 GitHub Actions。須裝 kraken-cli，並以汝之帳書 KRAKEN_API_KEY、KRAKEN_API_SECRET 於 second-thought.ini（市價與紙易無須鑰）。唯於所出之 Python。"
@@ -1648,7 +1652,10 @@
   "Which Docker container? Give its name, like sonarr.": "何 Docker 之器？示其名，若 sonarr。",
   "{n} containers": "{n} 器",
   "read your Docker containers: their health, memory and logs": "讀汝 Docker 之器：其康、其憶、其錄",
-  "restart, stop and start your Docker containers (asking you each time)": "復啟、止、啟汝 Docker 之器（每必問汝）"
+  "restart, stop and start your Docker containers (asking you each time)": "復啟、止、啟汝 Docker 之器（每必問汝）",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "此頁不能及 Flightradar24 之器,故使者於此無之而行。裝 Node.js,設 FR24_API_KEY,出為 Python,乃用之。",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "讀 Flightradar24 之飛行資料:實時與往史之所在、概略、航跡,及航空公司與機場之詳"
  },
  "examples": {
   "review": {
@@ -3281,7 +3288,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "器 {name} 在 DOCKER_PROTECT，故 Second Thought 未嘗復啟之、止之、啟之。",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "於 Windows，置 DOCKER_HOST 為 tcp:// 之址：Docker 之名管不可用。",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought 不發 {what} 於 Docker。"
+  "Second Thought doesn't send {what} to Docker.": "Second Thought 不發 {what} 於 Docker。",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js 未裝,故 Flightradar24 之器不能啟(其自 npx 來)。裝之:https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 需鑰:置 FR24_API_KEY 於 second-thought.ini,在此程式之側(付貲之訂,自 https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "爾之 FR24_API_KEY 已設(每一呼皆有費,故此不驗之)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

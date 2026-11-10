@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY")
 
 
 def _load_keychain():
@@ -1638,6 +1638,14 @@ SAFETY = {
                      "kraken_withdrawal_info", "kraken_withdrawal_methods", "kraken_withdrawal_status",
                      "kraken_workspace_balance", "kraken_workspace_list", "kraken_workspace_report",
                      "kraken_workspace_show", "kraken_workspace_status"],
+    # Flightradar24's own MCP server (#364): every tool it offers only reads — live and historic flight positions,
+    # flight summaries, tracks, and airline and airport details (fr24api-mcp 1.0.2, checked 2026-11-06). A tool a
+    # later server adds, or one that leaves this list, asks first: the safe way round, like Kraken's (#309).
+    "mcp_fr24_safe": ["get_airline_info", "get_airport_info_full", "get_airport_info_light", "get_flight_summary_count",
+                      "get_flight_summary_full", "get_flight_summary_light", "get_flight_tracks",
+                      "get_historic_flights_count", "get_historic_flights_positions_full",
+                      "get_historic_flights_positions_light", "get_live_flights_count",
+                      "get_live_flights_positions_full", "get_live_flights_positions_light"],
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
@@ -2111,6 +2119,7 @@ CAPABILITIES = [
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
+    ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
@@ -5790,6 +5799,16 @@ class _MCPHttp(_MCPServer):
 # services each choice starts. MCP_KRAKEN in second-thought.ini wins over these.
 KRAKEN_COMMANDS = {"read": "kraken mcp -s market,account,paper", "live": "kraken mcp -s market,account,paper,trade"}
 
+# The 'Flightradar24 tools' block (#364): Flightradar24's own MCP server, started with npx
+# (https://github.com/Flightradar24/fr24api-mcp). MCP_FLIGHTRADAR24 in second-thought.ini wins over this.
+FR24_COMMANDS = {"read": "npx -y @flightradar24/fr24api-mcp"}
+
+
+def mcp_is_fr24(server, command=""):
+    """True for Flightradar24's own MCP server (#364): one named flightradar24 (or fr24), or started with its package."""
+    name = re.sub(r"[^a-z0-9]", "", to_str(server).lower())
+    return name in ("flightradar24", "fr24", "fr24api") or "@flightradar24/fr24api-mcp" in to_str(command)
+
 
 def mcp_money(tool):
     """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, one taking an "acknowledged" input
@@ -6137,6 +6156,7 @@ class AgentTools:
             if t.get("kind") == "mcp":
                 server, mode = to_str(t.get("server")).strip(), t.get("ask", "changes")
                 twak = mcp_is_twak(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
+                fr24 = mcp_is_fr24(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
                 for tool in (mcp or {}).get(server, []):
                     if twak and tool.get("name") in SAFETY["mcp_twak_never"]:
                         continue  # trades later, out of sight: not offered at all (#320)
@@ -6145,7 +6165,8 @@ class AgentTools:
                     desc = _short(tool.get("description") or tool.get("title") or tool["name"], 500) + f" (from the MCP server “{server}”)"
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
                     money = mcp_money(tool) or (twak and tool.get("name") not in SAFETY["mcp_twak_safe"])  # real money: always asks (#262, #320)
-                    ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only)
+                    ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only) \
+                        or (fr24 and tool.get("name") not in SAFETY["mcp_fr24_safe"])  # a tool we've never seen asks (#364)
                     if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
                         schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k not in SAFETY["mcp_money_inputs"]},
                                       required=[k for k in schema.get("required") or [] if k not in SAFETY["mcp_money_inputs"]])
@@ -6402,7 +6423,7 @@ class AgentTools:
         for t in tools:  # each MCP server's tools, asked for once, before the first step
             server = to_str(t.get("server")).strip()
             if t.get("kind") == "mcp" and server not in mcp:
-                if t.get("command"):  # the Kraken block: its own command, unless MCP_KRAKEN says otherwise
+                if t.get("command"):  # a block with its own command (Kraken's, Flightradar24's), unless MCP_<NAME> says otherwise
                     self.__dict__.setdefault("_mcp_defaults", {})[mcp_env_name(server)] = to_str(t["command"])
                 mcp[server] = await self.mcp_tools(server)
         catalogue = self._agent_tools(tools, mcp)
@@ -7109,11 +7130,17 @@ class Doctor:
                     raise RunError(tr("{key} starts the server with --allow-dangerous, which turns off its own check before tools that move money. Take it out.", key=key))
                 if re.match(r"^\s*kraken(\.exe)?\s", command) and not shutil.which("kraken"):
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
+                fr24 = mcp_is_fr24(name, command)
+                if fr24 and not shutil.which("npx"):
+                    raise RunError(tr("Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org"))
+                if fr24 and not os.environ.get("FR24_API_KEY", "").strip():
+                    raise RunError(tr("Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)"))
                 tools = await self.mcp_tools(name)
                 text = tr("{tools} tools, MCP {version}", tools=len(tools), version=self._mcp(name).version)
                 twak = mcp_is_twak(name, command)  # its tools carry no marks, so its own safe list says which only look (#320)
                 changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True)
-                              and not (twak and t.get("name") in SAFETY["mcp_twak_safe"]))
+                              and not (twak and t.get("name") in SAFETY["mcp_twak_safe"])
+                              and not (fr24 and t.get("name") in SAFETY["mcp_fr24_safe"]))
                 if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
                     text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}
@@ -7123,6 +7150,8 @@ class Doctor:
                     if failed:
                         raise RunError(tr("Kraken refused KRAKEN_API_KEY: {problem}", problem=_short(reply, 160)))
                     text += " · " + tr("your Kraken key works")
+                if fr24:  # each call costs credits, so the key is only checked for being there, not by spending one
+                    text += " · " + tr("your FR24_API_KEY is set (each call costs credits, so it isn't checked here)")
                 return text
             out.append((f"MCP server “{name}”", server))
         if has("memory"):
@@ -7254,6 +7283,9 @@ class Doctor:
         if can.get("kraken"):  # the Kraken tools block: its own command, unless MCP_KRAKEN says otherwise
             self.__dict__.setdefault("_mcp_defaults", {})["MCP_KRAKEN"] = KRAKEN_COMMANDS.get(can["kraken"], KRAKEN_COMMANDS["read"])
             servers.append("kraken")
+        if can.get("flightradar24"):  # the Flightradar24 tools block: its own command, unless MCP_FLIGHTRADAR24 says otherwise (#364)
+            self.__dict__.setdefault("_mcp_defaults", {})["MCP_FLIGHTRADAR24"] = FR24_COMMANDS["read"]
+            servers.append("flightradar24")
         for area, check in await self._doctor_connections(ids, servers):
             if not known and not self._doctor_configured(area):
                 continue
@@ -9612,6 +9644,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_wallet_health_check","file":"wallet-health-check.json","category":"money","title":"Wallet health check","description":"Each Sunday evening, reads your Trust Wallet through its Agent Kit: what you hold and what it's worth, how prices moved, and a risk check on every token, flagging any that look like scams or have little liquidity. Emailed to you. It only reads: it never sends, swaps or approves.","tip":"Needs Trust Wallet's Agent Kit (npm install -g @trustwallet/cli) as MCP_TRUSTWALLET in second-thought.ini: the example ini shows how. Change the email address to yours.","author":"itsfja","runtime":"3.10.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","x":30,"y":30,"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"x":550,"y":30,"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}}}}},{"type":"rb_receive","fields":{"MSG":"check"},"x":30,"y":290,"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Read my Trust Wallet: the wallet's status, then its portfolio (every token, how much, and its value). For each token, get its price now and run a risk check. Then write a short summary: the total value, each holding and its share, and a section headed 'Worth a look' listing any token whose risk check is medium or high, with the reasons it gave. Only read: don't send, swap, approve or pay for anything."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":15}}},"TOOLS":{"block":{"type":"rb_agent_mcp","fields":{"SERVER":"trustwallet","ASK":"changes"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your wallet this week"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}]}}},
 {"key":"g_coinbase_week","file":"coinbase-week.json","category":"money","title":"Weekly crypto round-up","description":"Each Sunday evening, reads your Coinbase balances and what they're worth, and sends you a Telegram message: the total, how it changed since last week, and each holding's value. It only reads: it places no orders.","tip":"Needs a Coinbase API key with View permission only (COINBASE_KEY_FILE), and currency = gbp, or yours, in second-thought.ini. The first week has nothing to compare with.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_value","name":"value"},{"id":"g_holdings","name":"holdings"},{"id":"g_summary","name":"summary"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"roundup"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_value"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_value"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_holdings"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_balances"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_summary"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write a short weekly round-up of my crypto, under 120 words, in plain English: the total now, how it changed since last week (in money and percent), and each holding's value, biggest first. No advice on what to buy or sell.\n\nTotal now: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_value"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nTotal a week ago (empty if this is the first week): "}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Coinbase total last week"}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nHoldings (asset, amount, value, currency):\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_holdings"}}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_value"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Coinbase total last week"}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_recipe_scaler_weekly","file":"recipe-scaler-weekly.json","category":"home","title":"Weekly recipes and shopping list","description":"Remembers recipes you drop in a folder. Run it on shopping day: say which recipes and for how many, and it scales them and makes one shopping list grouped by supermarket aisle.","tip":"Change the folder to where you keep recipes (PDF, Word or text). Run it by hand, since it asks which recipes you want.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_folder_when","fields":{"FOLDER":"~/Recipes"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"recipe"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":30},{"type":"rb_receive","fields":{"MSG":"recipe"},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write this recipe as one line: its name (serves N): each ingredient with its amount, separated by semicolons.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Recipe remembered."}}}}}}}},"x":550,"y":30},{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Which recipes this week, and for how many people? (Your recipes are listed in the agent's first step.)"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"My recipes, one per line:\n"}}},"ADD1":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nThis week I want: "}}},"ADD3":{"block":{"type":"rb_answer"}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nScale each recipe to the servings I want, using calculate for every amount. If a recipe isn't in my list, use a standard version. Then write one shopping list grouped by supermarket aisle (fruit and veg, bakery, dairy, meat and fish, tins and jars, dry goods, frozen), adding up the same ingredient across recipes."}}}},"extraState":{"itemCount":5}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":12}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calc"}}}},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"shopping-list"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Shopping list"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":290}]}}},
+{"key":"g_airport_leave_time","file":"airport-leave-time.json","category":"home","title":"When should I leave for the airport?","description":"Run it before a flight leaves: the agent reads the flight's live position and estimated landing from Flightradar24, adds the drive and the time for parking and security, and sends a Telegram message saying whether the flight is on time and when to leave home. It only reads.","tip":"Needs Node.js and an FR24_API_KEY from fr24api.flightradar24.com (each call costs credits). Change the flight number and the drive time in the agent's goal to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Mum flies on flight BA123, landing at LHR. Find that flight's live position and its estimated landing time. The airport is a 45-minute drive from home, and allow an hour for parking and security. Work out when I should leave home, and write one short message: the flight number, whether it's running on time, its estimated landing time, and when to leave. If the flight can't be found, say so plainly and suggest checking the flight number."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":6}}},"TOOLS":{"block":{"type":"rb_agent_fr24"}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":30}]}}},
 {"key":"g_whos_on_the_network","file":"whos-on-the-network.json","category":"home","title":"Who's on the network?","description":"Each morning, reads who's on your UniFi network and how your UniFi devices are, and sends you a Telegram message about anything new since yesterday (by network), any device offline, and firmware waiting. It only reads: nothing is blocked or changed.","tip":"Needs UNIFI_URL, UNIFI_API_KEY and UNIFI_CERT_SHA256 (--doctor shows it). Tell it which address ranges are your IoT and camera networks.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_clients","name":"clients"},{"id":"g_devices","name":"devices"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_clients"}},"inputs":{"VALUE":{"block":{"type":"rb_unifi_clients"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_devices"}},"inputs":{"VALUE":{"block":{"type":"rb_unifi_devices"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Report on my UniFi network in under 120 words. 192.168.30.x is IoT and 192.168.40.x is cameras. List any client that wasn't there yesterday, by network, with a guess at its maker from the MAC address; any UniFi device that isn't online; and any with firmware waiting. If nothing is new, say so in one line.\n\nClients now:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_clients"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nClients yesterday (empty the first day):\n"}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"UniFi clients yesterday"}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nUniFi devices:\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_devices"}}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_clients"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"UniFi clients yesterday"}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}}
 ]
 </script>
@@ -9632,6 +9665,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
+["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
 ["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
@@ -9991,6 +10025,21 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   "kraken_workspace_report",
   "kraken_workspace_show",
   "kraken_workspace_status"
+ ],
+ "mcp_fr24_safe": [
+  "get_airline_info",
+  "get_airport_info_full",
+  "get_airport_info_light",
+  "get_flight_summary_count",
+  "get_flight_summary_full",
+  "get_flight_summary_light",
+  "get_flight_tracks",
+  "get_historic_flights_count",
+  "get_historic_flights_positions_full",
+  "get_historic_flights_positions_light",
+  "get_live_flights_count",
+  "get_live_flights_positions_full",
+  "get_live_flights_positions_light"
  ]
 }
 </script>
@@ -13323,7 +13372,8 @@ HOW TO MAP CODE
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
     rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp",
-    rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }) };
+    rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
+    rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }) };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
     "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
@@ -13571,6 +13621,11 @@ HOW TO MAP CODE
       tooltip:"Gives the agent Kraken's own tools, from kraken-cli: market prices, your balances and orders, and paper trading at live prices. " +
         "Live trading also lets it place real orders, but every tool that can move money asks you first, even when nobody else does, and never runs on a schedule or on GitHub Actions. " +
         "Needs kraken-cli installed, and KRAKEN_API_KEY and KRAKEN_API_SECRET in second-thought.ini for your account (prices and paper trading need no key). Only in exported Python." },
+    { type:"rb_agent_fr24",
+      message0:"Flightradar24 tools",
+      previousStatement:"AgentTool", nextStatement:"AgentTool", style:"tools",
+      tooltip:"Gives the agent Flightradar24's own tools: live positions of aircraft (by area, flight number, callsign or registration), flight summaries with take-off and landing, tracks, history back to 2016, and airline and airport details. Every tool only reads. " +
+        "Needs Node.js installed, and FR24_API_KEY in second-thought.ini (a paid subscription from fr24api.flightradar24.com; each call costs credits, so a budget or a step limit keeps a run cheap). Only in exported Python." },
     /* Connections */
     { type:"rb_tg_when", message0:"when a Telegram message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
       nextStatement:null, style:"conn_hat",
@@ -13806,6 +13861,7 @@ HOW TO MAP CODE
       ...AGENT_TOOL_KINDS.map(([, kind]) => B("rb_agent_builtin", null, { fields:{ KIND:kind } })),
       B("rb_agent_mcp"),
       B("rb_agent_kraken"),
+      B("rb_agent_fr24"),
       B("rb_agent_tool", { DESC:L("Gives the oven temperature in °C for a bread type.") })
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
@@ -16427,6 +16483,7 @@ HOW TO MAP CODE
   // The Kraken tools block's choice, for --doctor: "live" if any asks for live trading.
   const krakenMode = () => { const k = allProgramBlocks().filter(b => b.type === "rb_agent_kraken");
     return k.length ? (k.some(b => b.getFieldValue("MODE") === "live") ? "live" : "read") : ""; };
+  const FR24_COMMANDS = { read:"npx -y @flightradar24/fr24api-mcp" };  // FR24_COMMANDS in mcp.py
   function settingsFor(){
     const keys = servicesUsed().filter(s => s.signup).map(s => [s.key_label || s.name, s.keys[0], s.signup]);
     const blocks = allProgramBlocks();
@@ -16441,6 +16498,7 @@ HOW TO MAP CODE
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
+             flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
@@ -16492,6 +16550,13 @@ HOW TO MAP CODE
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.flightradar24) out.push("", "[flightradar24]",
+      "; Flightradar24's tools come from its own MCP server, started with npx (https://github.com/Flightradar24/fr24api-mcp):",
+      "; install Node.js, and the program starts the server itself.",
+      "; The key is a paid subscription that works on credits, from https://fr24api.flightradar24.com. Each call costs",
+      "; credits, so give the program a budget or a step limit to keep a run cheap.",
+      "FR24_API_KEY = ",
+      ...note("MCP_FLIGHTRADAR24", "npx -y @flightradar24/fr24api-mcp", "to start the server your own way"));
     if (need.docker) out.push("", "[docker]",
       "; Docker's Engine API. Left out, it's the socket on this computer (unix:///var/run/docker.sock), which is root on",
       "; the machine: safer is a socket proxy (tecnativa/docker-socket-proxy with CONTAINERS=1, plus ALLOW_RESTARTS=1 and",
@@ -16984,6 +17049,7 @@ HOW TO MAP CODE
               if (!enabled(t)) continue;
               if (t.type === "rb_agent_builtin") tools.push('{"kind": ' + pyStr(t.getFieldValue("KIND")) + "}");
               else if (t.type === "rb_agent_kraken") tools.push('{"kind": "mcp", "server": "kraken", "ask": "never", "command": ' + pyStr(KRAKEN_COMMANDS[t.getFieldValue("MODE")] || KRAKEN_COMMANDS.read) + "}");  // money tools ask anyway
+              else if (t.type === "rb_agent_fr24") tools.push('{"kind": "mcp", "server": "flightradar24", "ask": "never", "command": ' + pyStr(FR24_COMMANDS.read) + "}");  // a tool we've never seen asks anyway (#364)
               else if (t.type === "rb_agent_mcp") tools.push('{"kind": "mcp", "server": ' + pyStr(String(t.getFieldValue("SERVER") || "").trim()) + ', "ask": ' + pyStr(t.getFieldValue("ASK") || "changes") + "}");
               else if (t.type === "rb_agent_tool") {
                 const name = String(t.getFieldValue("NAME") || "").trim();
@@ -17226,7 +17292,8 @@ HOW TO MAP CODE
       "# before its first run, and again whenever this file changes.",
       "CAN = {\"services\": [" + usedServices.map(x => pyStr(x.name)).join(", ") + "], \"can\": [" + caps.map(c => pyStr(c[0])).join(", ") + "]" +
         (settingsFor().mcp.length ? ", \"mcp\": [" + settingsFor().mcp.map(pyStr).join(", ") + "]" : "") +
-        (krakenMode() ? ", \"kraken\": " + pyStr(krakenMode()) : "") + "}",
+        (krakenMode() ? ", \"kraken\": " + pyStr(krakenMode()) : "") +
+        (settingsFor().flightradar24 ? ", \"flightradar24\": \"read\"" : "") + "}",
       "",
       "if __name__ == \"__main__\":",
       "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + ", can=CAN)",
@@ -19484,6 +19551,8 @@ HOW TO MAP CODE
         addStep(tr("MCP server \u201c{server}\u201d", { server }), { mono:true, text:tr("MCP servers can't be reached from this page, so the agent works without this server's tools here. Export to Python and set {setting} in second-thought.ini to use them.", { setting:mcpSetting(server) }) }).done("not on this page", "warn");
       } else if (t.type === "rb_agent_kraken") {
         addStep("Kraken", { mono:true, text:tr("Kraken's tools can't be reached from this page, so the agent works without them here. Export to Python, with kraken-cli installed, to use them.") }).done("not on this page", "warn");
+      } else if (t.type === "rb_agent_fr24") {
+        addStep("Flightradar24", { mono:true, text:tr("Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.") }).done("not on this page", "warn");
       } else if (t.type === "rb_agent_builtin") {
         const kind = t.getFieldValue("KIND");
         (AGENT_BUILTINS[kind] || []).forEach(([n, desc, params]) => {
@@ -20682,7 +20751,7 @@ HOW TO MAP CODE
         break;
       }
       case "rb_ask_me": { run.answer = await askPerson(str(await input(b, tc, "TEXT"))); break; }
-      case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": case "rb_agent_kraken": break;  // only used inside an agent block
+      case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": case "rb_agent_kraken": case "rb_agent_fr24": break;  // only used inside an agent block
       case "rb_agent": await runAgent(b, tc); break;
       case "rb_say": {
         const v = await input(b, tc, "TEXT");

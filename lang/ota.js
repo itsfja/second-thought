@@ -88,6 +88,7 @@
 "rb_agent_tool":{"message0":"آلت: قطعه‌م %1","message1":"نه یاپار %1","message2":"گیردی نوعلری %1","message3":"هر قوللانیشدن اوّل بڭا صور %1","tooltip":"وكیلڭ قطعه‌لرڭدن برینی اجرا ایتمه‌سنه مساعده ایدر. گیردیلری آلتڭ گیردیلری اولور، ویردیكی ده وكیلڭ كوردیكی نتیجه‌در. اونی آچیقجه تعریف ایت: وكیلڭ اوڭا دائر بیلدیكی یالڭز تعریفدر. گیردی نوعلری، مثلا 'flour grams: number; water grams: number - grams of water'، هر گیردی‌نڭ نه اولمسی لازم گلدیكنی سویلر: text، number، yes/no، list یاخود any. وكیلڭ گیردیسی قطعه اجرا اولونمزدن اوّل یوقلانیر. «هر قوللانیشدن اوّل بڭا صور» ایشارتلی باشلار، زیرا وكیلڭ اوقودیغی (بر شبكه صحیفه‌سی، بر نوط) اونی یوندیرمگه چالیشه‌بیلیر: یالڭز حساب ایدوب هیچ بر شی دڭیشدیرمه‌ین قطعه‌لر ایچون ایشارتی قالدیر."},
 "rb_agent_builtin":{"message0":"آلت: %1","tooltip":"وكیل ایچون حاضر بر آلت. «حساب ایت» و «ساعت وقتلری»، مودلڭ تخمینی یرینه عددلری و وقتلری تام دوغرو ویرر. «متنی یوقلا»، وكیلڭ ایشنی آیری بر مدققه حكم ایتدیریر. بو صحیفه‌ده خبر منبعلری، GitHub، Telegram، مكتوب و تقویم نمونه معلومات قوللانیر؛ اخراج اولونان Python سنڭكینی قوللانیر (آناختارلری second-thought.ini یه قوی) و شبكه صحیفه‌لرینی حقیقةً اوقور. گوندرمك، تعلیق یازمق و «جهازلری اداره ایت» هر بریندن اوّل سڭا صورار، زیرا وكیلڭ اوقودیغی (بر شبكه صحیفه‌سی، بر نوط) اونی یوندیرمگه چالیشه‌بیلیر. «صورمادن» ی یالڭز اوقودیغی هر شیه اعتماد ایدرسڭ سچ. كیلید آچمق، قاپو آچمق و سلاحسزلاندیرمق هر زمان صورار."},
 "rb_agent_mcp":{"message0":"MCP خادمی %1 دن آلتلر %2","tooltip":"وكیله بر MCP خادمینڭ عرض ایتدیكی هر آلتی ویرر: دوسیه‌لر، GitHub، معلومات خزینه‌لری، تقویملر و داها چوغی، بتون MCP عالمندن. خادمی second-thought.ini ده MCP_<NAME> = اونی باشلاتان امر (npx -y @modelcontextprotocol/server-filesystem ~/recipes كبی) یاخود https:// آدرسی اولارق ترتیب ایت. یالڭز اخراج اولونان Python ده: بو صحیفه‌ده وكیل بو آلتلر اولمادن چالیشیر."},
+"rb_agent_fr24":{"message0":"Flightradar24 آلتلری","tooltip":"وكیله Flightradar24 نین کندی آلتلرینی ویرر: طیارهلرین جانلی یئرلری (بولگه، اوچوش نومره‌سی، چاغری علامتی یا ثبتیله)، قونما و ائنمه ایله اوچوش خلاصه‌لری، یوللار، ۲۰۱۶-یا قدر تاریخچه، و هاوا یوللاری ایله هاوا لیمانلاری‌نین تفصیلاتی. هر آلت یالنیز اوخور. Node.js قورولموش و FR24_API_KEY second-thought.ini ده (fr24api.flightradar24.com دن اوررلی آبونه؛ هر چاغری کردیت خرجلر، بودجه یا آدام حدی ایشی اوجوز ساخلار) اولملی‌دیر. یالنیز ایحراق اولونموش Python‌دا."},
 "rb_agent_kraken":{"message0":"Kraken آلتلری %1","tooltip":"وكیله kraken-cli دن Kraken ڭ كندی آلتلرینی ویرر: بازار فیئاتلری، باقیه‌لرڭ و سپارشلرڭ، و جانلی فیئاتلرله كاغد اوزرنده تجارت. جانلی تجارت حقیقی سپارشلر ویرمه‌سنه ده مساعده ایدر، فقط پاره قیمیلداده‌بیلن هر آلت، باشقه كیمسه صورماسه بیله، اوّلا سڭا صورار و هیچ بر وقت موقّت اجراده یاخود GitHub Actions ده اجرا اولونماز. kraken-cli ڭ قورولمسی و حسابڭ ایچون second-thought.ini ده KRAKEN_API_KEY و KRAKEN_API_SECRET لازمدر (فیئاتلر و كاغد تجارتی آناختار ایستمز). یالڭز اخراج اولونان Python ده."},
 "rb_tg_when":{"message0":"%1 یی احتوا ایدن بر Telegram خبری گلدیكنده","tooltip":"بوتڭ بر خبر آلدیغنده آلتنده‌كی قطعه‌لری اجرا ایدر («هر شی» یاخود خبرڭ احتوا ایتمه‌سی لازم كلمه‌لری یاز). یالڭز كندی صحبتلرڭدن (TELEGRAM_CHAT_ID) گلن خبرلر صاییلیر. اخراج اولونان Python ده دائما دیڭلر؛ بو صحیفه‌ده، اوڭا صاغ طیقلا و «بو سلسله‌یی اجرا ایت» ی سچ، بر نمونه خبر ایله تجربه ایتمك ایچون."},
 "rb_tg_message":{"message0":"Telegram خبری %1","tooltip":"بو سلسله‌یی باشلاتان Telegram خبری: كلمه‌لری، كیمڭ گوندردیكی، یاخود صحبت. Telegram سلسله‌سی خارجنده بوشدر."},
@@ -1064,7 +1065,10 @@
 "Which Docker container? Give its name, like sonarr.":"هانكی Docker قابی؟ آدینی ویرڭ، sonarr كبی.",
 "{n} containers":"{n} قاب",
 "read your Docker containers: their health, memory and logs":"Docker قابلریڭزی اوقومق: صحّتلری، حافظه‌لری و قیدلری",
-"restart, stop and start your Docker containers (asking you each time)":"Docker قابلریڭزی یڭیدن باشلاتمق، دوردورمق و باشلاتمق (هر دفعه سزه صوراراق)"
+"restart, stop and start your Docker containers (asking you each time)":"Docker قابلریڭزی یڭیدن باشلاتمق، دوردورمق و باشلاتمق (هر دفعه سزه صوراراق)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24 آلتلری بو صفحه‌دن ایرتیلابی اولمز، بو سببله آجنت بورده اونلارسز چالیشر. استفاده ایچین Node.js قورولموش و FR24_API_KEY تنظیم اولونموش حالده Python‌ا ایحراق ائدین.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 نین اوچوش معلوماتینی اوخومق: جانلی و تاریخی یئرلر، خلاصه‌لر، یوللار، و هاوا یوللاری ایله هاوا لیمانلاری‌نین تفصیلاتی"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2065,7 +2069,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"قاب {name}، DOCKER_PROTECT ده‌در، اونڭ ایچون Second Thought اونی اصلا یڭیدن باشلاتماز، دوردورماز و باشلاتماز.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows ده DOCKER_HOST ه بر tcp:// آدرسی یازڭ: Docker ڭ آدلی بوروسی دستكلنمز.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought، {what} ی Docker ه گوندرمز."
+"Second Thought doesn't send {what} to Docker.":"Second Thought، {what} ی Docker ه گوندرمز.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js قورولوب دکل، بو سببله Flightradar24 آلتلری باشلایابیلماز (npx‌دن گلیرلر). قورون: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 بیر آچار طلب ائدر: FR24_API_KEY‌ی second-thought.ini‌ده، بو برنامه‌نین یانینا قویون (اوررلی آبونه، https://fr24api.flightradar24.com‌دن)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY تنظیم اولونموشدور (هر چاغری کردیت خرجلر، بو سببله بورده یوخلانیلمز)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

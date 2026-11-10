@@ -145,6 +145,7 @@
 "rb_with_any_model":{"message0":"com o modelo OpenRouter %1","message1":"%1","tooltip":"Executa só os blocos lá dentro em qualquer modelo que o OpenRouter ofereça. Escreva o nome de openrouter.ai/models, por exemplo mistralai/mistral-small ou google/gemma-4-31b-it. openrouter/auto escolhe um por si. Corre no Python exportado (precisa de OPENROUTER_API_KEY); nesta página o Claude substitui-o."},
 "rb_with_model":{"message0":"com o modelo %1","message1":"%1","tooltip":"Executa só os blocos lá dentro neste modelo e depois volta ao modelo anterior. Modelos que não sejam o Claude correm no Python exportado; nesta página o Claude substitui-os."},
 "rb_word_count":{"message0":"contagem de palavras de %1"},
+"rb_agent_fr24":{"message0":"ferramentas Flightradar24","tooltip":"Dá ao agente as ferramentas da Flightradar24: posições em direto de aeronaves (por área, número de voo, indicativo ou matrícula), resumos de voo com descolagem e aterragem, trajetórias, histórico até 2016, e detalhes de companhias aéreas e aeroportos. Cada ferramenta só lê. Precisa do Node.js instalado, e de FR24_API_KEY em second-thought.ini (uma subscrição paga de fr24api.flightradar24.com; cada chamada custa créditos, um orçamento ou um limite de passos mantém uma execução barata). Só em Python exportado."},
 "rb_agent_kraken":{"message0":"ferramentas Kraken %1","tooltip":"Dá ao agente as ferramentas da Kraken, do kraken-cli: preços de mercado, os seus saldos e ordens, e negociação em papel a preços reais. A negociação real deixa-o também dar ordens verdadeiras, mas cada ferramenta que pode movimentar dinheiro pergunta-lhe primeiro, mesmo quando mais nada pergunta, e nunca corre num horário nem no GitHub Actions. Precisa do kraken-cli instalado, e de KRAKEN_API_KEY e KRAKEN_API_SECRET em second-thought.ini para a sua conta (preços e papel não precisam de chave). Só no Python exportado."},
 "rb_coinbase_balances":{"message0":"saldos da Coinbase","tooltip":"Uma lista de registos, um por cada ativo da sua carteira da Coinbase, o maior primeiro: asset, amount, value e currency. Os valores estão na sua moeda (currency em second-thought.ini). Nesta página usa uma carteira de exemplo."},
 "rb_coinbase_value":{"message0":"valor da carteira da Coinbase","tooltip":"Quanto vale a sua carteira da Coinbase, na sua moeda."},
@@ -1064,7 +1065,10 @@
 "Which Docker container? Give its name, like sonarr.":"Que contentor do Docker? Indique o nome, como sonarr.",
 "{n} containers":"{n} contentores",
 "read your Docker containers: their health, memory and logs":"ler os seus contentores do Docker: saúde, memória e registos",
-"restart, stop and start your Docker containers (asking you each time)":"reiniciar, parar e iniciar os seus contentores do Docker (perguntando-lhe de cada vez)"
+"restart, stop and start your Docker containers (asking you each time)":"reiniciar, parar e iniciar os seus contentores do Docker (perguntando-lhe de cada vez)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"As ferramentas do Flightradar24 não podem ser usadas a partir desta página, por isso o agente trabalha aqui sem elas. Exporta para Python, com o Node.js instalado e o FR24_API_KEY definido, para as usar.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"ler os dados de voo do Flightradar24: posições em direto e históricas, resumos, trajetórias, e detalhes de companhias aéreas e aeroportos"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -2065,6 +2069,9 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"O contentor {name} está em DOCKER_PROTECT, por isso o Second Thought nunca o reinicia, para ou inicia.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"No Windows, ponha em DOCKER_HOST um endereço tcp://: o pipe nomeado do Docker não é suportado.",
-"Second Thought doesn't send {what} to Docker.":"O Second Thought não envia {what} ao Docker."
+"Second Thought doesn't send {what} to Docker.":"O Second Thought não envia {what} ao Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"O Node.js não está instalado, por isso as ferramentas do Flightradar24 não podem arrancar (vêm do npx). Instala-o: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"O Flightradar24 precisa de uma chave: põe FR24_API_KEY em second-thought.ini, ao lado deste programa (uma subscrição paga, de https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"o teu FR24_API_KEY está definido (cada chamada custa créditos, por isso não é verificado aqui)"
 }
 };

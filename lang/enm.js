@@ -145,6 +145,7 @@
 "rb_with_any_model":{"message0":"with OpenRouter patron %1","message1":"%1","tooltip":"Renneth oonly the blokkes withinne on any patron that OpenRouter profreth. Write his name fro openrouter.ai/models, as mistralai/mistral-small or google/gemma-4-31b-it. openrouter/auto cheseth oon for thee. Renneth in the Python sent out (nedeth OPENROUTER_API_KEY); in this leef Claude standeth in his stede."},
 "rb_with_model":{"message0":"with patron %1","message1":"%1","tooltip":"Renneth oonly the blokkes withinne on this patron, and than goth bak to the patron bifore. Patrons other than Claude rennen in the Python sent out; in this leef Claude standeth in hir stede."},
 "rb_word_count":{"message0":"tale of wordes of %1"},
+"rb_agent_fr24":{"message0":"Flightradar24 tooles","tooltip":"Yeveth the agent Flightradar24 his owene tooles: lyve places of flyeng craft (by regioun, fligt nombre, callsign or registre), fligt summaries with take-off and londing, paths, story bak to 2016, and meening of airlynes and airports. Every tool only redeth. It nedeth Node.js installed, and FR24_API_KEY in second-thought.ini (a paid subscripcioun from fr24api.flightradar24.com; ich cle costeþ credits, a budget or a step lymite kepeth a renne cheep). Only in expourted Python."},
 "rb_agent_kraken":{"message0":"Kraken tooles %1","tooltip":"Yeveth the agent Krakens owene tooles, fro kraken-cli: market prys, thy balaunces and ordres, and chaffare on papir at verray prys. Verray chaffare lat it eek yeve verray ordres, but every tool that may meve moneye asketh thee first, yea whan noght elles asketh, and nevere renneth by a tyme-table ne on GitHub Actions. It nedeth kraken-cli installed, and KRAKEN_API_KEY and KRAKEN_API_SECRET in second-thought.ini for thyn accompte (prys and papir nede no keye). Oonly in exported Python."},
 "rb_coinbase_balances":{"message0":"Coinbase remenauntes","tooltip":"A list of recordes, oon for every good in thy Coinbase tresorie, the grettest first: asset, amount, value and currency. The values ben in thy moneye (currency in second-thought.ini). On this page it useth an ensample tresorie."},
 "rb_coinbase_value":{"message0":"Coinbase tresorie worth","tooltip":"What thy Coinbase tresorie is worth, in thy moneye."},
@@ -1064,7 +1065,10 @@
 "Which Docker container? Give its name, like sonarr.":"Which Docker vessel? Yif his name, as sonarr.",
 "{n} containers":"{n} vessels",
 "read your Docker containers: their health, memory and logs":"rede thy Docker vessels: hir hele, memorie and logges",
-"restart, stop and start your Docker containers (asking you each time)":"stirte agayn, stynte and stirte thy Docker vessels (axinge thee ech tyme)"
+"restart, stop and start your Docker containers (asking you each time)":"stirte agayn, stynte and stirte thy Docker vessels (axinge thee ech tyme)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24 his tools may nat ben yreched fro this page, so the agent werkeþ here wiþoute hem. Expourte to Python, wiþ Node.js y-installed and FR24_API_KEY y-set, to use hem.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"rede Flightradar24 his fligt data: lyve and old places, summaries, paths, and meening of airlynes and airports"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2065,7 +2069,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Vessel {name} is in DOCKER_PROTECT, so Second Thought neveremore stirteth it agayn, stynteth ne stirteth it.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"On Windows, sette DOCKER_HOST to a tcp:// addresse: the named pipe of Docker is nat supported.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought sendeth nat {what} to Docker."
+"Second Thought doesn't send {what} to Docker.":"Second Thought sendeth nat {what} to Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js is nat y-installed, so Flightradar24 his tools may nat bigynne (þei comeþ from npx). Installe it: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 behoveþ a key: sette FR24_API_KEY in second-thought.ini, biside þis program (a paid subscripcioun, from https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"þi FR24_API_KEY is y-set (ich cle costeþ credits, so it is nat y-preved here)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

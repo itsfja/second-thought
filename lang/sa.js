@@ -146,6 +146,7 @@
 "rb_with_any_model":{"message0":"OpenRouter-प्रतिरूपेण %1","message1":"%1","tooltip":"केवलम् अन्तःस्थान् खण्डान् OpenRouter यत् किमपि प्रतिरूपं ददाति तस्मिन् चालयति। openrouter.ai/models तः तस्य नाम टङ्कय, यथा mistralai/mistral-small अथवा google/gemma-4-31b-it। openrouter/auto तव कृते एकं वृणोति। निर्यातिते Python मध्ये चलति (OPENROUTER_API_KEY अपेक्षते); अस्मिन् पृष्ठे Claude तस्य स्थाने तिष्ठति।"},
 "rb_with_model":{"message0":"प्रतिरूपेण %1","message1":"%1","tooltip":"केवलम् अन्तःस्थान् खण्डान् अस्मिन् प्रतिरूपे चालयति, ततः पूर्वप्रतिरूपं प्रत्यागच्छति। Claude-भिन्नानि प्रतिरूपाणि निर्यातिते Python मध्ये चलन्ति; अस्मिन् पृष्ठे Claude तेषां स्थाने तिष्ठति।"},
 "rb_word_count":{"message0":"%1 इत्यस्य शब्दसङ्ख्या"},
+"rb_agent_fr24":{"message0":"Flightradar24 साधनानि","tooltip":"कर्त्रे Flightradar24-इत्यस्य स्वसाधनानि ददाति: विमानानां सजीवस्थानानि (प्रदेशेन, विमानसम्येन, आह्वानचिह्नेन अथवा पञ्जीकरणेन), उत्थानावतरणसहितानि विमानसारांशानि, मार्गान्, 2016-पर्यन्तं इतिहासम्, वायुसेवानां विमानतलानां च विवरणानि। प्रत्येकं साधनं केवलं पठति। Node.js संस्थाप्यं FR24_API_KEY च second-thought.ini-इत्यत्र आवश्यकी (fr24api.flightradar24.com-तः शुल्कं दत्त्वा सदस्यता; प्रत्येकं आह्वानं श्रेडिट्-मूल्यं स्वीकरोति, बजट् अथवा पदसीमा चालयां व्ययं न्यूनं करोति)। केवलं निर्यातिते Python।"},
 "rb_agent_kraken":{"message0":"Kraken साधनानि %1","tooltip":"कर्त्रे kraken-cli इत्यस्मात् Kraken इत्यस्य स्वसाधनानि ददाति: आपणमूल्यानि, तव शेषाः आदेशाः च, सत्यमूल्यैः पत्रव्यापारः च। सत्यव्यापारः सत्यादेशान् अपि दातुं ददाति, किन्तु धनं चालयितुं समर्थं प्रत्येकं साधनं प्रथमं त्वां पृच्छति, यदा अन्यत् किमपि न पृच्छति तदापि, कालसूच्या GitHub Actions इत्यत्र वा कदापि न चलति। kraken-cli स्थापितम्, तव लेखाय second-thought.ini इत्यत्र KRAKEN_API_KEY KRAKEN_API_SECRET च आवश्यकानि (मूल्यानां पत्रव्यापारस्य च कुञ्चिका न आवश्यकी)। केवलं निर्यातिते Python इत्यत्र।"},
 "rb_coinbase_balances":{"message0":"Coinbase-शेषाः","tooltip":"अभिलेखानां सूची, तव Coinbase-कोशस्य प्रत्येकस्याः सम्पदः एकः, बृहत्तमः प्रथमम्: asset, amount, value, currency च। मूल्यानि तव मुद्रायाम् (second-thought.ini इत्यस्मिन् currency)। अस्मिन् पृष्ठे उदाहरण-कोशं प्रयुङ्क्ते।"},
 "rb_coinbase_value":{"message0":"Coinbase-कोशस्य मूल्यम्","tooltip":"तव Coinbase-कोशः कियत् अर्हति, तव मुद्रायाम्।"},
@@ -1065,7 +1066,10 @@
 "Which Docker container? Give its name, like sonarr.":"किं Docker-पात्रम्? तस्य नाम देहि, यथा sonarr।",
 "{n} containers":"{n} पात्राणि",
 "read your Docker containers: their health, memory and logs":"तव Docker-पात्राणि पठितुम्: तेषां स्वास्थ्यं, स्मृतिं, लेखान् च",
-"restart, stop and start your Docker containers (asking you each time)":"तव Docker-पात्राणि पुनः आरब्धुं, स्थगयितुं, आरब्धुं च (प्रतिवारं त्वां पृष्ट्वा)"
+"restart, stop and start your Docker containers (asking you each time)":"तव Docker-पात्राणि पुनः आरब्धुं, स्थगयितुं, आरब्धुं च (प्रतिवारं त्वां पृष्ट्वा)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24-इत्यस्य उपकरणानि अस्मात् पृष्ठात् प्राप्तुं न शक्यन्ते, अतः अभिकर्ता अत्र तैः विना कार्यं करोति। Python-मध्ये निर्यातय, Node.js संस्थापिते FR24_API_KEY च स्थापिते सति, तानि उपयोजयितुम्।",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24-विमानसम्बद्धानि पठितुम्: सजीवानि ऐतिहासिकानि च स्थानानि, सारांशान्, मार्गान्, वायुसेवानां विमानतलानां च विवरणानि"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2066,7 +2070,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"पात्रं {name} DOCKER_PROTECT इत्यस्मिन् अस्ति, अतः Second Thought तत् कदापि न पुनः आरभते, न स्थगयति, न आरभते।",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows इत्यत्र DOCKER_HOST इत्यस्मिन् tcp:// सङ्केतं स्थापय: Docker इत्यस्य नामयुक्ता नाली न समर्थ्यते।",
-"Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker प्रति न प्रेषयति।"
+"Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker प्रति न प्रेषयति।",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js न संस्थापितम्, अतः Flightradar24-इत्यस्य उपकरणानि आरब्धुं न शक्नुवन्ति (तानि npx-तः आगच्छन्ति)। तत् संस्थापय: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24-इत्यस्मै कुञ्चिका आवश्यकी: FR24_API_KEY second-thought.ini-इति मध्ये स्थापय, अस्य कार्यक्रमस्य समीपे (शुल्कं दत्त्वा सदस्यता, https://fr24api.flightradar24.com-तः)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"तव FR24_API_KEY स्थापिता (प्रत्येकं आह्वानं श्रेडिट्-मूल्यं स्वीकरोति, अतः अत्र परीक्ष्यते न)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

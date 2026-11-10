@@ -489,6 +489,16 @@ class _MCPHttp(_MCPServer):
 # services each choice starts. MCP_KRAKEN in second-thought.ini wins over these.
 KRAKEN_COMMANDS = {"read": "kraken mcp -s market,account,paper", "live": "kraken mcp -s market,account,paper,trade"}
 
+# The 'Flightradar24 tools' block (#364): Flightradar24's own MCP server, started with npx
+# (https://github.com/Flightradar24/fr24api-mcp). MCP_FLIGHTRADAR24 in second-thought.ini wins over this.
+FR24_COMMANDS = {"read": "npx -y @flightradar24/fr24api-mcp"}
+
+
+def mcp_is_fr24(server, command=""):
+    """True for Flightradar24's own MCP server (#364): one named flightradar24 (or fr24), or started with its package."""
+    name = re.sub(r"[^a-z0-9]", "", to_str(server).lower())
+    return name in ("flightradar24", "fr24", "fr24api") or "@flightradar24/fr24api-mcp" in to_str(command)
+
 
 def mcp_money(tool):
     """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, one taking an "acknowledged" input

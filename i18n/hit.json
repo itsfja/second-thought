@@ -326,6 +326,10 @@
    "message0": "𒄑𒆪𒄭𒀀 𒅖𒌅 𒀴 MCP %1 %2",
    "tooltip": "𒇽𒆥𒄄𒀀 𒄑𒆪 𒄷𒌋𒈠𒀭 𒀴 MCP 𒉺𒀀𒄿: 𒁾𒄭𒀀, GitHub, 𒌗 𒁾 𒅇 𒈨𒅅𒆠. 𒀴 𒄿𒈾 second-thought.ini MCP_<NAME> = 𒆜 𒋾𒀉𒋫𒉡𒍣 (npx -y @modelcontextprotocol/server-filesystem ~/recipes 𒈠𒄴𒄩𒀭) 𒈾𒀸𒈠 https:// 𒊭𒋗 𒁕𒀀𒄿. 𒄿𒈾 𒄑𒄯 Python-𒁁; 𒄿𒈾 𒅎𒁍𒁕 𒅗𒀀𒊭 𒇽𒆥𒄄𒀀 𒄑𒆪𒄭𒀀 𒉡𒅅 𒄿𒉿𒍣."
   },
+  "rb_agent_fr24": {
+   "message0": "GIŠ.TUKUL.HI.A Flightradar24",
+   "tooltip": "agent-az GIŠ.TUKUL.HI.A Flightradar24 pa-a-i: URUDU-pat GIŠ-ru kar-ap-zi (apās URUDU-pat, GIŠ-ru numeru, kuer-zi URUDU-pat), GIŠ-ru šu-up-pa-ah-zi URUDU-pat ti-ya-at-ta, URUDU-pat ar-ha, 2016-az pa-a-i, airlines-az airports-az-ya. GIŠ.TUKUL.HI.A ku-iš ku-en-zi. Node.js ti-ya-an-zi, FR24_API_KEY second-thought.ini-i ti-ya-an-zi (fr24api.flightradar24.com-az ku-i-ku-i šume-ešḫi-ia-aš; ki-iš-ru-uš šu-me-ešḫi-iš, ku-iš-ru-uš-ya URUDU-pat ku-it šu-me-ešḫi-iš). Python-az arha pe-hu-te."
+  },
   "rb_agent_kraken": {
    "message0": "𒄑𒆪𒄭𒀀 Kraken %1",
    "tooltip": "𒇽𒆥𒄄𒀀 𒄑𒆪𒄭𒀀 Kraken 𒉺𒀀𒄿, 𒅖𒌅 kraken-cli: 𒆪𒍑𒊭𒀭, 𒆬𒌓𒅗 𒅇 orders, 𒅇 𒉿𒀸𒋗𒉿𒅈 𒄿𒈾 𒁾. 𒄑𒆪 𒄷𒌋𒈠𒀭 𒆪𒅖 𒆬𒌓 𒉿𒄴𒉡𒍣 𒌅𒊌 𒄩𒀭𒋼𒄑𒍣 𒁍𒉡𒍑𒍣, 𒅇 𒌌 𒄿𒈾 𒈨𒂊𒄯 𒈾𒀸𒈠 𒄿𒈾 GitHub Actions 𒄿𒉿𒍣. kraken-cli 𒅇 KRAKEN_API_KEY 𒅇 KRAKEN_API_SECRET 𒄿𒈾 second-thought.ini 𒌑𒂊𒅅𒍣. 𒄿𒈾 𒄑𒄯 Python-𒁁."
@@ -1649,7 +1653,10 @@
   "Which Docker container? Give its name, like sonarr.": "𒆪𒅖 𒂁 Docker? 𒆷𒀀𒈠𒀭 𒉺𒀀𒄿, sonarr 𒈠𒅆𒉿𒀭.",
   "{n} containers": "𒂁𒎌 {n}",
   "read your Docker containers: their health, memory and logs": "𒂁𒎌 Docker-𒅗 𒀀𒍑𒍣: 𒄩𒀜𒁺𒆷𒋻, memory 𒅇 𒁾",
-  "restart, stop and start your Docker containers (asking you each time)": "𒂁𒎌 Docker-𒅗 𒂕𒉺 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒅇 𒋾𒉿𒍣 (𒄷𒌋𒈠𒀭𒋾 𒁍𒉡𒍑𒍣)"
+  "restart, stop and start your Docker containers (asking you each time)": "𒂁𒎌 Docker-𒅗 𒂕𒉺 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒅇 𒋾𒉿𒍣 (𒄷𒌋𒈠𒀭𒋾 𒁍𒉡𒍑𒍣)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "𒄑𒆪𒄭𒀀 Flightradar24 apās 𒍏𒉻 𒌌 išha-𒄿, 𒉡 agentas anda 𒌌 kuer-𒍣. Python-𒊍 arha 𒉿𒄷𒋼, Node.js 𒋾𒉿𒀭𒍣 FR24_API_KEY-ya 𒋾𒉿𒀭𒍣, 𒆪𒀉 𒆪𒂗𒍣.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "Flightradar24-𒀸 𒄑𒊒𒈠 𒆪𒅖𒍣: 𒍏𒉻 𒋼𒀀𒀊𒍣, 𒄑𒊒 𒋗𒌒𒉺𒄴𒍣, 𒍏𒉻 𒅈𒄩, airlines-𒊍 airports-𒊍𒉿"
  },
  "examples": {
   "review": {
@@ -3282,7 +3289,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "DUG {name} I-NA DOCKER_PROTECT, Second Thought UL ti-ya-zi UL kar-ap-zi.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "I-NA Windows, DOCKER_HOST tcp:// da-a-i. a-mi-ya-ra-aš Docker UL i-ya-zi.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought {what} Docker-ya UL pé-e-da-i."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought {what} Docker-ya UL pé-e-da-i.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js UL da-a-an, GIŠ.TUKUL.HI.A Flightradar24 UL ti-ya-an-zi (npx-az pa-a-i). da-a-i: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24-aš ḪAŠTAR-an ḫa-i: FR24_API_KUR second-thought.ini-i ti-ya-an-zi, kinun-a URUDU-pat (ku-i-ku-i šume-ešḫi-ia-aš, https://fr24api.flightradar24.com-az)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY-zaš ti-ya-an-zi (ku-iš ki-iš-ru-uš ku-it šu-me-ešḫi-iš, anda UL ku-iš-ri-iš-ki-iz-zi)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

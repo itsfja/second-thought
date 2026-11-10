@@ -145,6 +145,7 @@
 "rb_with_any_model":{"message0":"με το μοντέλο OpenRouter %1","message1":"%1","tooltip":"Εκτελεί μόνο τα μπλοκ μέσα σε οποιοδήποτε μοντέλο προσφέρει το OpenRouter. Γράψτε το όνομά του από το openrouter.ai/models, π.χ. mistralai/mistral-small ή google/gemma-4-31b-it. Το openrouter/auto διαλέγει ένα για εσάς. Τρέχει στην εξαγόμενη Python (χρειάζεται OPENROUTER_API_KEY)· σε αυτή τη σελίδα το αντικαθιστά ο Claude."},
 "rb_with_model":{"message0":"με το μοντέλο %1","message1":"%1","tooltip":"Εκτελεί μόνο τα μπλοκ μέσα σε αυτό το μοντέλο και μετά επιστρέφει στο προηγούμενο. Μοντέλα εκτός του Claude τρέχουν στην εξαγόμενη Python· σε αυτή τη σελίδα τα αντικαθιστά ο Claude."},
 "rb_word_count":{"message0":"πλήθος λέξεων του %1"},
+"rb_agent_fr24":{"message0":"εργαλεία Flightradar24","tooltip":"Δίνει στον πράκτορα τα εργαλεία του Flightradar24: ζωντανές θέσεις αεροσκαφών (κατά περιοχή, αριθμό πτήσης, διακριτικό κλήσης ή νηολόγηση), περιλήψεις πτήσεων με απογείωση και προσγείωση, τροχιές, ιστορικό ως το 2016, και λεπτομέρειες αεροπορικών εταιρειών και αεροδρομίων. Κάθε εργαλείο μόνο διαβάζει. Χρειάζεται το Node.js εγκατεστημένο, και FR24_API_KEY στο second-thought.ini (μια συνδρομή επί πληρωμή από το fr24api.flightradar24.com· κάθε κλήση κοστίζει πιστώσεις, ένα όριο προϋπολογισμού ή βημάτων κρατά μια εκτέλεση φθηνή). Μόνο σε εξαγόμενο Python."},
 "rb_agent_kraken":{"message0":"εργαλεία Kraken %1","tooltip":"Δίνει στον πράκτορα τα εργαλεία του Kraken, από το kraken-cli: τιμές αγοράς, υπόλοιπα και εντολές σας, και εικονικές συναλλαγές σε πραγματικές τιμές. Οι πραγματικές συναλλαγές του επιτρέπουν και αληθινές εντολές, αλλά κάθε εργαλείο που μπορεί να μετακινήσει χρήματα σας ρωτά πρώτα, ακόμη κι όταν τίποτε άλλο δεν ρωτά, και δεν εκτελείται ποτέ με χρονοδιάγραμμα ή στο GitHub Actions. Χρειάζεται εγκατεστημένο kraken-cli, και KRAKEN_API_KEY και KRAKEN_API_SECRET στο second-thought.ini για τον λογαριασμό σας (οι τιμές και οι εικονικές συναλλαγές δεν χρειάζονται κλειδί). Μόνο σε εξαγμένη Python."},
 "rb_coinbase_balances":{"message0":"υπόλοιπα Coinbase","tooltip":"Μια λίστα εγγραφών, μία για κάθε στοιχείο του χαρτοφυλακίου σας στο Coinbase, το μεγαλύτερο πρώτα: asset, amount, value και currency. Οι αξίες είναι στο νόμισμά σας (currency στο second-thought.ini). Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα χαρτοφυλακίου."},
 "rb_coinbase_value":{"message0":"αξία χαρτοφυλακίου Coinbase","tooltip":"Πόσο αξίζει το χαρτοφυλάκιό σας στο Coinbase, στο νόμισμά σας."},
@@ -1064,7 +1065,10 @@
 "Which Docker container? Give its name, like sonarr.":"Ποιο container του Docker; Δώστε το όνομά του, όπως sonarr.",
 "{n} containers":"{n} containers",
 "read your Docker containers: their health, memory and logs":"ανάγνωση των containers σας στο Docker: υγεία, μνήμη και αρχεία καταγραφής",
-"restart, stop and start your Docker containers (asking you each time)":"επανεκκίνηση, διακοπή και εκκίνηση των containers σας στο Docker (ρωτώντας σας κάθε φορά)"
+"restart, stop and start your Docker containers (asking you each time)":"επανεκκίνηση, διακοπή και εκκίνηση των containers σας στο Docker (ρωτώντας σας κάθε φορά)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Τα εργαλεία του Flightradar24 δεν είναι προσβάσιμα από αυτή τη σελίδα, οπότε ο πράκτορας εργάζεται εδώ χωρίς αυτά. Εξάγετε σε Python, με το Node.js εγκατεστημένο και το FR24_API_KEY ορισμένο, για να τα χρησιμοποιήσετε.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"να διαβάζει τα δεδομένα πτήσεων του Flightradar24: ζωντανές και ιστορικές θέσεις, περιλήψεις, τροχιές, και λεπτομέρειες αεροπορικών εταιρειών και αεροδρομίων"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2065,6 +2069,9 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Το container {name} είναι στο DOCKER_PROTECT, οπότε το Second Thought δεν το επανεκκινεί, σταματά ή ξεκινά ποτέ.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Στα Windows, βάλτε στο DOCKER_HOST μια διεύθυνση tcp://: η επώνυμη διοχέτευση του Docker δεν υποστηρίζεται.",
-"Second Thought doesn't send {what} to Docker.":"Το Second Thought δεν στέλνει {what} στο Docker."
+"Second Thought doesn't send {what} to Docker.":"Το Second Thought δεν στέλνει {what} στο Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Το Node.js δεν είναι εγκατεστημένο, οπότε τα εργαλεία του Flightradar24 δεν μπορούν να ξεκινήσουν (προέρχονται από το npx). Εγκαταστήστε το: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Το Flightradar24 χρειάζεται κλειδί: ορίστε FR24_API_KEY στο second-thought.ini, δίπλα σε αυτό το πρόγραμμα (μια συνδρομή επί πληρωμή, από https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"το FR24_API_KEY σας είναι ορισμένο (κάθε κλήση κοστίζει πιστώσεις, γι' αυτό δεν ελέγχεται εδώ)"
 }
 };

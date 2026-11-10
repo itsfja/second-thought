@@ -88,6 +88,7 @@
 "rb_agent_tool":{"message0":"ⲥⲕⲉⲩⲟⲥ: ⲧⲁⲛⲱⲛⲉ %1","message1":"ⲡⲉⲧϥⲉⲓⲣⲉ ⲙⲙⲟϥ %1","message2":"ⲛⲅⲉⲛⲟⲥ ⲛⲛⲉⲧⲁⲩⲧⲁⲁⲩ %1","message3":"ϣⲓⲛⲉ ⲙⲙⲟⲓ ϩⲁϫⲛ ⲥⲟⲡ ⲛⲓⲙ %1","tooltip":"ϣⲁϥⲕⲱ ⲙⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲉⲁⲁⲁⲩ ⲛⲟⲩⲱⲛⲉ ⲛⲛⲉⲕⲧⲱⲛⲉ. ⲛⲉϥϫⲓ ϣⲁⲩϣⲱⲡⲉ ⲛϫⲓ ⲙⲡⲥⲕⲉⲩⲟⲥ, ⲁⲩⲱ ⲡⲉⲧϥⲛⲁϫⲓⲧϥ ⲉⲃⲟⲗ ⲡⲉ ⲡⲕⲁⲣⲡⲟⲥ ⲉⲧⲉⲣⲉ ⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲛⲁⲩ ⲉⲣⲟϥ. ϫⲱ ⲙⲙⲟϥ ⲕⲁⲗⲱⲥ: ⲡⲉϣⲁϫⲉ ⲡⲉ ⲟⲩⲱⲧ ⲉⲧⲉⲣⲉ ⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲥⲟⲟⲩⲛ ⲙⲙⲟϥ. ⲛⲅⲉⲛⲟⲥ ⲛⲛⲉⲧⲁⲩⲧⲁⲁⲩ, ϩⲱⲥ 'ϥⲗⲟⲩⲣ ⲅⲣⲁⲙⲥ: ⲛⲩⲙⲃⲉⲣ; wⲁⲧⲉⲣ ⲅⲣⲁⲙⲥ: ⲛⲩⲙⲃⲉⲣ - ⲅⲣⲁⲙⲥ ⲟϥ wⲁⲧⲉⲣ', ϣⲁⲩϫⲱ ⲙⲡⲉⲧⲉⲣⲉ ⲟⲩⲁ ⲟⲩⲁ ϣⲱⲡⲉ ⲙⲙⲟϥ: text, ⲛⲩⲙⲃⲉⲣ, yes/no, ⲗⲓⲥⲧ ⲏ ⲁⲛⲩ. ϣⲁⲩⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲉⲧⲉⲣⲉ ⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲧⲁⲁϥ ϩⲁϫⲛ ⲡⲉⲓⲱⲛⲉ. 'ϣⲓⲛⲉ ⲙⲙⲟⲓ ϩⲁϫⲛ ⲥⲟⲡ ⲛⲓⲙ' ϣⲁϥϣⲱⲡⲉ ⲉϥ on, ϫⲉ ⲡⲉⲧⲉⲣⲉ ⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲱϣ ⲙⲙⲟϥ ϣⲁϥϣⲓⲕϩ ⲉⲡⲕⲱⲧⲉ ⲙⲙⲟϥ: ϥⲓ ⲙⲙⲟϥ ϩⲛ ⲛⲱⲛⲉ ⲉⲧⲱⲡ ⲟⲩⲁⲁⲩ."},
 "rb_agent_builtin":{"message0":"ⲥⲕⲉⲩⲟⲥ: %1","tooltip":"ⲟⲩⲥⲕⲉⲩⲟⲥ ⲉϥⲥⲃⲧⲱⲧ ⲙⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ. 'ⲱⲡ' ⲙⲛ 'ⲛⲟⲩⲟⲉⲓϣ' ϣⲁⲩⲁⲁⲩ ⲛⲛⲏⲡⲉ ⲙⲛ ⲛⲟⲩⲟⲉⲓϣ ⲙⲙⲉ, ⲟⲩⲕ ⲡⲥⲁⲃⲉ ⲉϥⲙⲉⲉⲩⲉ ⲁⲛ. 'ⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ' ϣⲁϥⲕⲱ ⲛⲟⲩⲕⲉⲇⲟⲕⲓⲙⲁⲥⲧⲏⲥ. ϩⲛ ⲧⲉⲓⲥⲉⲗⲓⲥ, feeds, GitHub, Telegram, email ⲙⲛ ⲡⲱⲡ ⲛⲛϩⲟⲟⲩ ϣⲁⲩⲁⲁⲩ ⲛⲟⲩⲡⲁⲣⲁⲇⲉⲓⲅⲙⲁ; Python ⲉⲃⲟⲗ ϣⲁϥⲁⲁⲩ ⲙⲡⲉⲧⲛⲟⲩⲕⲕ (ⲛϣⲟϣⲧ ϩⲛ second-thought.ini), ⲁⲩⲱ ϣⲁϥⲱϣ ⲛⲥⲉⲗⲓⲥ ⲛⲙⲉ. ⲧⲛⲛⲟⲟⲩ, ϣⲁϫⲉ ϩⲛ GitHub ⲙⲛ 'ⲕⲱ ⲛⲟⲥⲕⲉⲩⲟⲥ' ϣⲁⲩϣⲓⲛⲉ ⲙⲙⲟⲕ ϩⲁϫⲛ ⲟⲩⲁ ⲟⲩⲁ. ⲥⲱⲧⲡ 'ⲙⲛ ϣⲓⲛⲉ' ⲉϣϫⲉ ⲕⲛⲁϩⲧⲉ ⲉⲡⲉⲧϥⲱϣ ⲙⲙⲟϥ ⲧⲏⲣϥ. ⲟⲩⲱⲛ, ⲟⲩⲱⲛ ⲛⲛⲣⲟ ⲙⲛ ϥⲓ ⲛⲥⲏⲙⲉⲓⲟⲛ ϣⲁⲩϣⲓⲛⲉ ⲛⲟⲩⲟⲉⲓϣ ⲛⲓⲙ."},
 "rb_agent_mcp":{"message0":"ⲛⲥⲕⲉⲩⲟⲥ ⲙⲡϣⲙϣⲏⲧ MCP %1 %2","tooltip":"ϣⲁϥⲕⲱ ⲙⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲉⲁⲁⲁⲩ ⲛⲥⲕⲉⲩⲟⲥ ⲛⲓⲙ ⲛⲧⲉ ⲟⲩϣⲙϣⲏⲧ MCP: ⲛϫⲱⲱⲙⲉ, GitHub, ⲛⲕⲁⲧⲁⲗⲟⲅⲟⲥ, ⲡⲱⲡ ⲛⲛϩⲟⲟⲩ ⲙⲛ ϩⲁϩ ⲛⲕⲉⲟⲩⲁ. ⲕⲱ ⲡϣⲙϣⲏⲧ ϩⲛ second-thought.ini ϩⲱⲥ MCP_<NAME> = ⲧⲉⲛⲧⲟⲗⲏ ⲉⲧϣⲁⲥⲁⲣⲭⲉⲓ ⲙⲙⲟϥ (ϩⲱⲥ npx -ⲩ @modelcontextprotocol/server-filesystem ~/recipes) ⲏ ⲡⲉϥⲙⲁ https://. ϩⲛ Python ⲉⲃⲟⲗ ⲟⲩⲁⲁϥ: ϩⲛ ⲧⲉⲓⲥⲉⲗⲓⲥ ⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ϣⲁϥⲣϩⲱⲃ ⲁϫⲛ ⲛⲥⲕⲉⲩⲟⲥ."},
+"rb_agent_fr24":{"message0":"nsou nFlightradar24","tooltip":"Mmoof nnsou nFlightradar24 ntaisēsē: ntaeiōofe nnbaal (mpisēsē, mpeuoeik nnoouplatre, mpeuoeik nnsōma ē mpeuoeik nntalōtre), nnsōtm nnoouplatre nteuōh ebol ē nnau eebol, nntaehoō, nntolme ntaisēsē nna 2016, nneuoeik nnairlines ē nneuoeik nnprogramma. Ouoōn nsou ōn nsōpe ōn. Node.js nsōpe nneu, FR24_API_KEY nsecond-thought.ini (psēre nneu psēre apo fr24api.flightradar24.com; ka psēre npeuma psēre, ouōb ē oume ntaisēsē ntaau ntaisēsē). Nna mmou nna ebol nPython."},
 "rb_agent_kraken":{"message0":"ⲛⲥⲕⲉⲩⲟⲥ ⲛⲧⲉ Kraken %1","tooltip":"ϣⲁϥⲕⲱ ⲙⲡⲁⲡⲟⲥⲧⲟⲗⲟⲥ ⲉⲁⲁⲁⲩ ⲛⲛⲥⲕⲉⲩⲟⲥ ⲛⲧⲉ Kraken, ⲉⲃⲟⲗ ϩⲛ kraken-cli: ⲛⲧⲓⲙⲏ ⲛⲛⲧⲁⲅⲟⲣⲁ, ⲡⲉⲕϩⲁⲧ ⲙⲛ ⲛⲉⲕⲉⲛⲧⲟⲗⲏ, ⲁⲩⲱ ⲟⲩϩⲱⲃ ϩⲛ ⲟⲩⲭⲁⲣⲧⲏⲥ ⲛⲛⲧⲓⲙⲏ ⲉⲧⲟⲛϩ. ⲧϩⲱⲃ ⲉⲧⲟⲛϩ ϣⲁϥⲕⲱ ⲛϥⲕⲱ ⲛϩⲉⲛⲉⲛⲧⲟⲗⲏ ⲙⲙⲉ, ⲁⲗⲗⲁ ⲥⲕⲉⲩⲟⲥ ⲛⲓⲙ ⲉⲧϣⲁϥⲕⲓⲙ ⲙⲡϩⲁⲧ ϣⲁϥϣⲓⲛⲉ ⲙⲙⲟⲕ ⲛⲧϣⲟⲣⲡ, ⲁⲩⲱ ⲛϣⲁϥⲁⲁⲩ ⲁⲛ ⲕⲁⲧⲁ ⲟⲩⲟⲉⲓϣ ⲏ ϩⲛ GitHub Actions. ϣⲁϥⲟⲩⲱϣ kraken-cli, ⲙⲛ KRAKEN_API_KEY ⲙⲛ KRAKEN_API_SECRET ϩⲛ second-thought.ini ⲉⲧⲃⲉ ⲡⲉⲕⲱⲡ. ϩⲛ Python ⲉⲃⲟⲗ ⲟⲩⲁⲁϥ."},
 "rb_tg_when":{"message0":"ϩⲟⲧⲁⲛ ⲉϣⲁⲣⲉ ⲟⲩϣⲁϫⲉ ⲛⲧⲉ Telegram ⲉⲓ ⲉϥⲟⲩⲏϩ %1","tooltip":"ϣⲁϥⲉⲓⲣⲉ ⲛⲛⲱⲛⲉ ⲉⲧⲙⲡⲉⲥⲏⲧ ϩⲟⲧⲁⲛ ⲡⲉⲕ bot ϣⲁϥϫⲓ ⲛⲟⲩϣⲁϫⲉ (ⲥϩⲁⲓ 'ⲁⲛⲩⲧϩⲓⲛⲅ', ⲏ ϩⲉⲛⲛϣⲁϫⲉ). ⲛϣⲁϫⲉ ⲛⲛⲉⲕϣⲁϫⲉ ⲟⲩⲁⲁⲩ (TELEGRAM_CHAT_ID). ϩⲛ Python ⲉⲃⲟⲗ ϣⲁϥⲥⲱⲧⲙ ⲛⲟⲩⲉⲟϣ ⲛⲓⲙ; ϩⲛ ⲧⲉⲓⲥⲉⲗⲓⲥ, ϫⲱϩ ⲛⲟⲩⲛⲁⲙ ⲉⲣⲟϥ, ⲥⲱⲧⲡ 'Run ⲧϩⲓⲥ ⲥϭⲣⲓⲡⲧ' ⲉⲡⲉⲓⲣⲁⲍⲉⲓ ⲙⲙⲟϥ ⲙⲛ ⲟⲩϣⲁϫⲉ ⲛⲡⲁⲣⲁⲇⲉⲓⲅⲙⲁ."},
 "rb_tg_message":{"message0":"ⲡϣⲁϫⲉ ⲛⲧⲉ Telegram %1","tooltip":"ⲡϣⲁϫⲉ ⲛⲧⲉ Telegram ⲉⲛⲧⲁϥⲁⲣⲭⲉⲓ ⲛⲧⲁⲝⲓⲥ: ⲡⲉϥϣⲁϫⲉ, ⲡⲉⲧⲁϥⲧⲛⲛⲟⲟⲩϥ, ⲏ ⲡϣⲁϫⲉ ⲧⲏϥ. ϣⲁϥϣⲟⲩⲉⲓⲧ ϩⲓⲃⲟⲩⲗ ⲛⲧⲁⲝⲓⲥ ⲛⲧⲉ Telegram."},
@@ -1064,7 +1065,10 @@
 "Which Docker container? Give its name, like sonarr.":"ⲁϣ ⲛϩⲛⲁⲁⲩ ⲛⲧⲉ Docker? ⲙⲁ ⲙⲡⲉϥⲣⲁⲛ, ⲛⲧϩⲉ sonarr.",
 "{n} containers":"{n} ⲛϩⲛⲁⲁⲩ",
 "read your Docker containers: their health, memory and logs":"ⲱϣ ⲛⲛⲉⲕϩⲛⲁⲁⲩ ⲛⲧⲉ Docker: ⲡⲉⲩⲟⲩϫⲁⲓ, ⲡⲉⲩⲙⲉⲉⲩⲉ ⲙⲛ ⲛⲉⲩⲥϩⲁⲓ",
-"restart, stop and start your Docker containers (asking you each time)":"ϣⲁⲁ ⲟⲛ, ⲕϩⲁ ⲙⲛ ϣⲁⲁ ⲛⲛⲉⲕϩⲛⲁⲁⲩ ⲛⲧⲉ Docker (ϣⲁϥϣⲓⲛⲉ ⲙⲙⲟⲕ ⲛⲟⲩⲟⲉⲓϣ ⲛⲓⲙ)"
+"restart, stop and start your Docker containers (asking you each time)":"ϣⲁⲁ ⲟⲛ, ⲕϩⲁ ⲙⲛ ϣⲁⲁ ⲛⲛⲉⲕϩⲛⲁⲁⲩ ⲛⲧⲉ Docker (ϣⲁϥϣⲓⲛⲉ ⲙⲙⲟⲕ ⲛⲟⲩⲟⲉⲓϣ ⲛⲓⲙ)",
+"Flightradar24":"Flightradar24",
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"ⲛⲧⲟⲟⲛ ⲛⲛⲥⲟⲩ nFlightradar24 ⲙⲡⲓⲥⲏⲥⲏ ⲛⲓⲥⲁⲓ ⲟⲩ ϩⲟⲟⲩ ⲛⲛⲁⲩ ⲙⲙⲟⲩ. ϥⲓⲛⲉ ⲉⲃⲟⲗ nPython, ⲛⲧⲉ Node.js ⲛⲥⲱⲡⲉ ⲛⲛⲉⲩ FR24_API_KEY ⲛⲥⲱⲡⲉ, ⲛⲛⲁ ⲙⲙⲟⲩ.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"ⲙⲙⲱⲱⲧ ⲛⲛⲟⲟⲩⲡⲗⲁⲧⲣⲉ ⲛⲧⲉ Flightradar24 ⲛⲧⲁⲓⲥⲏⲥⲏ: ⲛⲧⲁⲉⲓⲱⲟϥⲉ ⲛⲛⲃⲁⲁⲗ ⲛⲧⲉ ⲛⲧⲁⲉⲓⲱⲟϥⲉ ⲛⲧⲁⲓⲥⲏⲥⲏ, ⲛⲛⲥⲱⲧⲙ, ⲛⲛⲧⲁⲉϩⲟⲱ, ⲛⲛⲉⲩⲟⲉⲓⲕ ⲛⲛⲁⲓⲣⲗⲓⲛⲉⲥ ⲏ ⲛⲛⲉⲩⲟⲉⲓⲕ ⲛⲛⲡⲣⲟⲅⲣⲁⲙⲙⲁ"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -2065,7 +2069,10 @@
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"phnaau {name} hn DOCKER_PROTECT, etbe pai Second Thought nšafšaaf an enehe.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"hn Windows, kō n tcp:// hn DOCKER_HOST. pmōit nte Docker nšafšōpe an.",
-"Second Thought doesn't send {what} to Docker.":"Second Thought nšafjoou an n {what} e Docker."
+"Second Thought doesn't send {what} to Docker.":"Second Thought nšafjoou an n {what} e Docker.",
+"Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js ōn nsōpe, nskeuos nte Flightradar24 nšauarkhei an (hīōn nšop nnapo nnoou). kaaf: https://nodejs.org",
+"Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 sōtm nnoof: FR24_API_KEY nsecond-thought.ini ntaisēsē nnprogramma (psēre nneu psēre, apo https://fr24api.flightradar24.com)",
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY ntak nsōpe (ka psēre npeuma psēre, nte oume ōn nsōpe)"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

@@ -553,6 +553,10 @@
   "rb_word_count": {
    "message0": "orðafjǫldi %1"
   },
+  "rb_agent_fr24": {
+   "message0": "Flightradar24 tól",
+   "tooltip": "Gefr erindreka eigin tól Flightradar24s: lifandi staði flugvéla (eftir svæði, flugnúmeri, kallsigni eða skráningu), flugyfirlit með brottför og lendingu, farvegi, sögu aftur til 2016, og upplýsingar flugfélaga og flugvalla. Hvert tól les aðeins. Þarf Node.js sett upp, og FR24_API_KEY í second-thought.ini (gjaldsamningur frá fr24api.flightradar24.com; hvert kall kostar kredit, fjárhagsáætlun eða skrefamörk halda keyrslu ódýrri). Aðeins í útfluttu Python."
+  },
   "rb_agent_kraken": {
    "message0": "Kraken tól %1",
    "tooltip": "Gefr erindreka eigin tól Krakens, ór kraken-cli: markaðsverð, innistæður þínar ok boð, ok kaup á pappír við sǫnnu verði. Sǫnn kaup láta hann ok gefa sǫnn boð, en hvert tól er hreyfa má fé spyrr þik fyrst, þótt ekki annat spyrji, ok keyrir aldri eptir tímaskrá né á GitHub Actions. Þarf kraken-cli sett upp, ok KRAKEN_API_KEY ok KRAKEN_API_SECRET í second-thought.ini fyrir reikning þinn (verð ok pappír þurfa engan lykil). Einungis í útfluttu Python."
@@ -1658,7 +1662,10 @@
   "Which Docker container? Give its name, like sonarr.": "Hver Docker-hirzla? Gef nafn hennar, sem sonarr.",
   "{n} containers": "{n} hirzlur",
   "read your Docker containers: their health, memory and logs": "lesa Docker-hirzlur þínar: heilsu þeira, minni ok skrár",
-  "restart, stop and start your Docker containers (asking you each time)": "endrræsa, stöðva ok ræsa Docker-hirzlur þínar (ok spyrja þik hvert sinn)"
+  "restart, stop and start your Docker containers (asking you each time)": "endrræsa, stöðva ok ræsa Docker-hirzlur þínar (ok spyrja þik hvert sinn)",
+  "Flightradar24": "Flightradar24",
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Tól Flightradar24s megu eigi náðst af þessari síðu, svá at fulltrúi görir hér án þeirra. Flyt út í Python, með Node.js settu ok FR24_API_KEY settu, til at nota þau.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "lesa fluggögn Flightradar24s: lifandi og söguleg staði, yfirlit, farvegi, og upplýsingar flugfélaga og flugvalla"
  },
  "examples": {
   "review": {
@@ -3291,7 +3298,10 @@
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "Hirzla {name} er í DOCKER_PROTECT, því endrræsir, stöðvar né ræsir Second Thought hana aldri.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Á Windows, set DOCKER_HOST á tcp:// stað: nefnd pípa Docker er eigi studd.",
-  "Second Thought doesn't send {what} to Docker.": "Second Thought sendir eigi {what} til Docker."
+  "Second Thought doesn't send {what} to Docker.": "Second Thought sendir eigi {what} til Docker.",
+  "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js er eigi sett upp, svá at tól Flightradar24s megu eigi byrja (þau koma frá npx). Set þat upp: https://nodejs.org",
+  "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 þarf lykil: set FR24_API_KEY í second-thought.ini, hjá þessu forriti (gjaldsamningr, frá https://fr24api.flightradar24.com)",
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY þinn er sett (hvert kall kostar kredit, svá at þat er eigi kannað hér)"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",
