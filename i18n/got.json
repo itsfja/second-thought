@@ -326,6 +326,10 @@
    "message0": "𐍃𐌰𐍂𐍅𐌰 𐌿𐍃 𐌰𐌽𐌳𐌱𐌰𐌷𐍄𐌰𐌼 MCP %1 %2",
    "tooltip": "𐌰𐌹𐍂𐌿𐍃 𐍃𐌰𐍂𐍅𐌰 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 𐌰𐌽𐌳𐌱𐌰𐌷𐍄𐌹𐍃 MCP 𐌲𐌹𐌱𐌹𐌸: 𐌱𐍉𐌺𐍉𐍃, GitHub, 𐌳𐌰𐌲𐌰𐌱𐍉𐌺𐍉𐍃 𐌾𐌰𐌷 𐍆𐌹𐌻𐌿. 𐌰𐌽𐌳𐌱𐌰𐌷𐍄𐍃 𐌹𐌽 second-thought.ini MCP_<NAME> = 𐍅𐌹𐌲 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌹𐌸 (𐍃𐍅𐌴 npx -y @modelcontextprotocol/server-filesystem ~/recipes) 𐌰𐌹𐌸𐌸𐌰𐌿 https:// 𐍃𐌴𐌹𐌽𐌰𐌽𐌰 𐍃𐌰𐍄𐌾𐌹𐌸. 𐌹𐌽 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹 Python 𐌰𐌹𐌽𐌰𐌹; 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌻𐌰𐌿𐍆𐌰 𐌰𐌹𐍂𐌿𐍃 𐍃𐌰𐍂𐍅𐌰 𐌽𐌹 𐌷𐌰𐌱𐌰𐌽𐌳𐌰𐌽𐍃 𐍄𐌰𐌿𐌾𐌹𐌸."
   },
+  "rb_agent_fr24": {
+   "message0": "Flightradar24 sarwa",
+   "tooltip": "Gibiu agenta seinamma sarwa Flightradar24: libandans stadjins flugwade (bi garai, bi flugis numin, bi hropis signin aiþþau melins), flugis gabaurjans mid ufstass jah atgagg, wiggos, history du 2016, jah fairobauainai airlines jah airport. Hwarjat sarwa ainis melis aina þisleiþ. þarfu Node.js satiþ jah FR24_API_KEY in second-thought.ini (faurinoda mel framm fr24api.flightradar24.com; hwarjō ladons kost kredit, gabaurjai aiþþau stapa-gamarz lauf fairkawisk). Ainana in utgaggandin Python."
+  },
   "rb_agent_kraken": {
    "message0": "𐍃𐌰𐍂𐍅𐌰 Kraken %1",
    "tooltip": "𐌰𐌹𐍂𐌿𐍃 𐍃𐌰𐍂𐍅𐌰 Kraken 𐌲𐌹𐌱𐌹𐌸, 𐌼𐌹𐌸 kraken-cli: 𐍅𐌰𐌹𐍂𐌸𐌰, 𐍃𐌹𐌻𐌿𐌱𐍂 𐌸𐌴𐌹𐌽 𐌾𐌰𐌷 orders, 𐌾𐌰𐌷 𐌺𐌰𐌿𐍀𐌰𐍄𐌾𐌰𐌽 𐌰𐌽𐌰 𐌱𐍉𐌺𐍉𐌼. 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 𐍃𐌰𐍂𐍅𐌰 𐍃𐌰𐌴𐌹 𐍃𐌹𐌻𐌿𐌱𐍂 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌹𐌸 𐌸𐌿𐌺 𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸, 𐌾𐌰𐌷 𐌹𐌽 𐌼𐌴𐌻𐌰𐌼 𐌰𐌹𐌸𐌸𐌰𐌿 𐌹𐌽 GitHub Actions 𐌽𐌹 𐍄𐌰𐌿𐌾𐌹𐌸. kraken-cli 𐌾𐌰𐌷 KRAKEN_API_KEY 𐌾𐌰𐌷 KRAKEN_API_SECRET 𐌹𐌽 second-thought.ini 𐍅𐌹𐌻𐌹. 𐌹𐌽 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹 Python 𐌰𐌹𐌽𐌰𐌹."
@@ -1651,7 +1655,8 @@
   "read your Docker containers: their health, memory and logs": "𐌿𐍃𐍃𐌹𐌲𐌲𐍅𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰: 𐌷𐌰𐌹𐌻𐌴𐌹𐌽, 𐌲𐌰𐌼𐌹𐌽𐌸𐌹 𐌾𐌰𐌷 𐌱𐍉𐌺𐍉𐍃 𐌹𐌶𐌴",
   "restart, stop and start your Docker containers (asking you each time)": "𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌰𐌽𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉)",
   "Flightradar24": "Flightradar24",
-  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24 sarwa fram þizai seido ni hlapand, þannu agents her ina waurkeiþ. Ussandei in Python, mid Node.js satiþ jah FR24_API_KEY satiþ, ei þus bruka."
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24 sarwa fram þizai seido ni hlapand, þannu agents her ina waurkeiþ. Ussandei in Python, mid Node.js satiþ jah FR24_API_KEY satiþ, ei þus bruka.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "Flightradar24 𐍆𐌻𐌿𐌲𐌹𐍃 𐌳𐌰𐍄𐌰𐍃 𐌱𐍂𐌿𐌺𐌰𐌽: 𐌻𐌹𐌱𐌰𐌽𐌳𐌰𐌽𐍃 𐌾𐌰𐌷 history 𐍃𐍄𐌰𐌳𐌾𐌹𐌽𐍃, 𐌲𐌰𐌱𐌰𐌿𐍂𐌾𐌰𐌽𐍃, 𐍅𐌹𐌲𐌲𐍉𐍃, 𐌾𐌰𐌷 𐍆𐌰𐌹𐍂𐍉𐌱𐌰𐌿𐌰𐌹𐌽𐌰𐌹 𐌰𐌹𐍂𐌻𐌹𐌽𐌴𐍃 𐌾𐌰𐌷 𐌰𐌹𐍂𐍀𐍉𐍂𐍄"
  },
  "examples": {
   "review": {

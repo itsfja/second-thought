@@ -553,6 +553,10 @@
   "rb_word_count": {
    "message0": "Wortzahl von %1"
   },
+  "rb_agent_fr24": {
+   "message0": "Flightradar24-Werkzeuge",
+   "tooltip": "Gibt dem Agenten Flightradar24s eigene Werkzeuge: Live-Positionen von Flugzeugen (nach Gebiet, Flugnummer, Rufzeichen oder Registrierung), Flugzusammenfassungen mit Start und Landung, Flugwege, Historie bis 2016 zurück, und Fluglinien- und Flughafendetails. Jedes Werkzeug liest nur. Braucht installiertes Node.js und FR24_API_KEY in second-thought.ini (ein bezahltes Abo von fr24api.flightradar24.com; jeder Aufruf kostet Credits, ein Budget oder ein Schrittlimit hält eine Ausführung günstig). Nur in exportiertem Python."
+  },
   "rb_agent_kraken": {
    "message0": "Kraken-Werkzeuge %1",
    "tooltip": "Gibt dem Agenten Krakens eigene Werkzeuge aus kraken-cli: Marktpreise, deine Guthaben und Aufträge, und Papierhandel zu echten Preisen. Echter Handel lässt ihn auch echte Aufträge geben, aber jedes Werkzeug, das Geld bewegen kann, fragt dich zuerst, auch wenn sonst nichts fragt, und läuft nie nach Zeitplan oder auf GitHub Actions. Braucht installiertes kraken-cli, und KRAKEN_API_KEY und KRAKEN_API_SECRET in second-thought.ini für dein Konto (Preise und Papierhandel brauchen keinen Schlüssel). Nur im exportierten Python."
@@ -1660,7 +1664,8 @@
   "read your Docker containers: their health, memory and logs": "Ihre Docker-Container lesen: Zustand, Speicher und Protokolle",
   "restart, stop and start your Docker containers (asking you each time)": "Ihre Docker-Container neu starten, stoppen und starten (mit Rückfrage jedes Mal)",
   "Flightradar24": "Flightradar24",
-  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24s Werkzeuge sind von dieser Seite aus nicht erreichbar, daher arbeitet der Agent hier ohne sie. Exportiere nach Python, mit installiertem Node.js und gesetztem FR24_API_KEY, um sie zu nutzen."
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24s Werkzeuge sind von dieser Seite aus nicht erreichbar, daher arbeitet der Agent hier ohne sie. Exportiere nach Python, mit installiertem Node.js und gesetztem FR24_API_KEY, um sie zu nutzen.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "Flightradar24s Flugdaten lesen: live und historische Positionen, Zusammenfassungen, Flugwege, und Fluglinien- und Flughafendetails"
  },
  "examples": {
   "review": {

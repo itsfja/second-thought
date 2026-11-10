@@ -326,6 +326,10 @@
    "message0": "MCP خادمی %1 دن آلتلر %2",
    "tooltip": "وكیله بر MCP خادمینڭ عرض ایتدیكی هر آلتی ویرر: دوسیه‌لر، GitHub، معلومات خزینه‌لری، تقویملر و داها چوغی، بتون MCP عالمندن. خادمی second-thought.ini ده MCP_<NAME> = اونی باشلاتان امر (npx -y @modelcontextprotocol/server-filesystem ~/recipes كبی) یاخود https:// آدرسی اولارق ترتیب ایت. یالڭز اخراج اولونان Python ده: بو صحیفه‌ده وكیل بو آلتلر اولمادن چالیشیر."
   },
+  "rb_agent_fr24": {
+   "message0": "Flightradar24 آلتلری",
+   "tooltip": "وكیله Flightradar24 نین کندی آلتلرینی ویرر: طیارهلرین جانلی یئرلری (بولگه، اوچوش نومره‌سی، چاغری علامتی یا ثبتیله)، قونما و ائنمه ایله اوچوش خلاصه‌لری، یوللار، ۲۰۱۶-یا قدر تاریخچه، و هاوا یوللاری ایله هاوا لیمانلاری‌نین تفصیلاتی. هر آلت یالنیز اوخور. Node.js قورولموش و FR24_API_KEY second-thought.ini ده (fr24api.flightradar24.com دن اوررلی آبونه؛ هر چاغری کردیت خرجلر، بودجه یا آدام حدی ایشی اوجوز ساخلار) اولملی‌دیر. یالنیز ایحراق اولونموش Python‌دا."
+  },
   "rb_agent_kraken": {
    "message0": "Kraken آلتلری %1",
    "tooltip": "وكیله kraken-cli دن Kraken ڭ كندی آلتلرینی ویرر: بازار فیئاتلری، باقیه‌لرڭ و سپارشلرڭ، و جانلی فیئاتلرله كاغد اوزرنده تجارت. جانلی تجارت حقیقی سپارشلر ویرمه‌سنه ده مساعده ایدر، فقط پاره قیمیلداده‌بیلن هر آلت، باشقه كیمسه صورماسه بیله، اوّلا سڭا صورار و هیچ بر وقت موقّت اجراده یاخود GitHub Actions ده اجرا اولونماز. kraken-cli ڭ قورولمسی و حسابڭ ایچون second-thought.ini ده KRAKEN_API_KEY و KRAKEN_API_SECRET لازمدر (فیئاتلر و كاغد تجارتی آناختار ایستمز). یالڭز اخراج اولونان Python ده."
@@ -1651,7 +1655,8 @@
   "read your Docker containers: their health, memory and logs": "Docker قابلریڭزی اوقومق: صحّتلری، حافظه‌لری و قیدلری",
   "restart, stop and start your Docker containers (asking you each time)": "Docker قابلریڭزی یڭیدن باشلاتمق، دوردورمق و باشلاتمق (هر دفعه سزه صوراراق)",
   "Flightradar24": "Flightradar24",
-  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24 آلتلری بو صفحه‌دن ایرتیلابی اولمز، بو سببله آجنت بورده اونلارسز چالیشر. استفاده ایچین Node.js قورولموش و FR24_API_KEY تنظیم اولونموش حالده Python‌ا ایحراق ائدین."
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24 آلتلری بو صفحه‌دن ایرتیلابی اولمز، بو سببله آجنت بورده اونلارسز چالیشر. استفاده ایچین Node.js قورولموش و FR24_API_KEY تنظیم اولونموش حالده Python‌ا ایحراق ائدین.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "Flightradar24 نین اوچوش معلوماتینی اوخومق: جانلی و تاریخی یئرلر، خلاصه‌لر، یوللار، و هاوا یوللاری ایله هاوا لیمانلاری‌نین تفصیلاتی"
  },
  "examples": {
   "review": {

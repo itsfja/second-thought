@@ -553,6 +553,10 @@
   "rb_word_count": {
    "message0": "ἀριθμὸς λέξεων τοῦ %1"
   },
+  "rb_agent_fr24": {
+   "message0": "τὰ τοῦ Flightradar24 ὄργανα",
+   "tooltip": "Δίδωσι τῷ πράκτορι τὰ τοῦ Flightradar24 ὄργανα: ζῶντας τόπους τῶν ἀεροπλάνων (κατὰ χώραν, ἀριθμὸν πτήσεως, σῖμα ἢ ἐγγραφήν), πτήσεων συναγωγὰς μετὰ ἀνόδου καὶ καθόδου, τροχιάς, ἱστορίαν ἕως τοῦ 2016, καὶ λεπτομερείας ἀεροπορικῶν ἑταιρειῶν καὶ ἀεροδρομίων. Πᾶν ὄργανον μόνον ἀναγιγνώσκει. Δεῖται τοῦ Node.js ἐγκατεστημένου, καὶ FR24_API_KEY ἐν τῷ second-thought.ini (μισθὸς οἰκόδεσμος ἀπὸ fr24api.flightradar24.com· πᾶσα κλῆσις ὠνήν ἔχει, λόγος δὲ ἢ πέρας βαθμίδων τὴν χρῆσιν φθηνὴν ποιεῖ). Μόνον ἐν ἐξαγωγῇ Python."
+  },
   "rb_agent_kraken": {
    "message0": "τὰ τοῦ Kraken ὄργανα %1",
    "tooltip": "Δίδωσι τῷ πράκτορι τὰ αὐτοῦ τοῦ Kraken ὄργανα, ἐκ τοῦ kraken-cli· τιμὰς τῆς ἀγορᾶς, τὰ ὑπόλοιπα καὶ τὰς ἐντολάς σου, καὶ ἐμπορίαν ἐπὶ χάρτου ἐν ἀληθιναῖς τιμαῖς. Ἡ ἀληθινὴ ἐμπορία καὶ ἀληθινὰς ἐντολὰς διδόναι ἐᾷ, πᾶν δὲ ὄργανον τὸ χρήματα κινῆσαι δυνάμενον πρῶτον ἐρωτᾷ σε, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ, καὶ οὐδέποτε κατὰ τάξιν χρόνου ἢ ἐν GitHub Actions τρέχει. Δεῖται τοῦ kraken-cli ἐγκατεστημένου, καὶ KRAKEN_API_KEY καὶ KRAKEN_API_SECRET ἐν second-thought.ini τῷ λόγῳ σου (αἱ τιμαὶ καὶ ὁ χάρτης κλειδὸς οὐ δέονται). Μόνον ἐν τῇ ἐξαχθείσῃ Python."
@@ -1660,7 +1664,8 @@
   "read your Docker containers: their health, memory and logs": "ἀναγιγνώσκειν τὰ ἀγγεῖά σου τοῦ Docker· τὴν ὑγίειαν, τὴν μνήμην καὶ τὰ ὑπομνήματα",
   "restart, stop and start your Docker containers (asking you each time)": "πάλιν ἄρχειν, παύειν καὶ ἄρχειν τὰ ἀγγεῖά σου τοῦ Docker (ἑκάστοτε ἐρωτῶν σε)",
   "Flightradar24": "Flightradar24",
-  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Τὰ τοῦ Flightradar24 ὄργανα ἀπὸ τῆσδε τῆς σελίδος οὐχ ἅπτα ἐστίν, ὥστε ὁ πράκτωρ ἐνθάδε ἄνευ αὐτῶν ἐργάζεται. Ἐξάγαγε εἰς Python, τοῦ Node.js ἐγκατεστημένου καὶ τοῦ FR24_API_KEY τεθέντος, ἵνα αὐτοῖς χρῇ."
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Τὰ τοῦ Flightradar24 ὄργανα ἀπὸ τῆσδε τῆς σελίδος οὐχ ἅπτα ἐστίν, ὥστε ὁ πράκτωρ ἐνθάδε ἄνευ αὐτῶν ἐργάζεται. Ἐξάγαγε εἰς Python, τοῦ Node.js ἐγκατεστημένου καὶ τοῦ FR24_API_KEY τεθέντος, ἵνα αὐτοῖς χρῇ.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "τὰ τοῦ Flightradar24 πτήσεων δεδομένα ἀναγιγνώσκειν: ζῶντας καὶ ἱστορικοὺς τόπους, συναγωγάς, τροχιάς, καὶ λεπτομερείας ἀεροπορικῶν ἑταιρειῶν καὶ ἀεροδρομίων"
  },
  "examples": {
   "review": {

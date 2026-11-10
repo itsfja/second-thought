@@ -145,6 +145,7 @@
 "rb_with_any_model":{"message0":"使用 OpenRouter 模型 %1","message1":"%1","tooltip":"只让里面的积木在 OpenRouter 提供的任意模型上运行。从 openrouter.ai/models 输入它的名字，例如 mistralai/mistral-small 或 google/gemma-4-31b-it。openrouter/auto 会替你选一个。在导出的 Python 中运行（需要 OPENROUTER_API_KEY）；在本页面中由 Claude 代替。"},
 "rb_with_model":{"message0":"使用模型 %1","message1":"%1","tooltip":"只让里面的积木在这个模型上运行，然后回到之前的模型。Claude 以外的模型在导出的 Python 中运行；在本页面中由 Claude 代替它们。"},
 "rb_word_count":{"message0":"%1 的字数"},
+"rb_agent_fr24":{"message0":"Flightradar24 工具","tooltip":"把 Flightradar24 自己的工具交给智能体:航空器的实时位置(按区域、航班号、呼号或注册号)、带起飞和降落的航班摘要、航迹、追溯到 2016 年的历史,以及航空公司和机场的详情。每个工具只读取。需要安装 Node.js,并在 second-thought.ini 中设置 FR24_API_KEY(来自 fr24api.flightradar24.com 的付费订阅;每次调用消耗积分,用预算或步数限制控制运行成本)。仅在导出的 Python 中可用。"},
 "rb_agent_kraken":{"message0":"Kraken 工具 %1","tooltip":"把 kraken-cli 中 Kraken 自己的工具交给智能体：市场价格、你的余额和订单，以及按实时价格的模拟交易。真实交易还能让它下真实订单，但每个可能动用资金的工具都会先问你，即使其他都不问，而且绝不会按计划或在 GitHub Actions 上运行。需要安装 kraken-cli，并在 second-thought.ini 中为你的账户设置 KRAKEN_API_KEY 和 KRAKEN_API_SECRET（价格和模拟交易不需要密钥）。仅在导出的 Python 中可用。"},
 "rb_coinbase_balances":{"message0":"Coinbase 余额","tooltip":"记录列表，你的 Coinbase 投资组合里每项资产一条，按价值从大到小：asset、amount、value 和 currency。价值以你的货币计（second-thought.ini 里的 currency）。在本页上使用示例投资组合。"},
 "rb_coinbase_value":{"message0":"Coinbase 投资组合价值","tooltip":"你的 Coinbase 投资组合值多少，以你的货币计。"},
@@ -1066,7 +1067,8 @@
 "read your Docker containers: their health, memory and logs":"读取你的 Docker 容器：健康状况、内存和日志",
 "restart, stop and start your Docker containers (asking you each time)":"重启、停止和启动你的 Docker 容器（每次都问你）",
 "Flightradar24":"Flightradar24",
-"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"此页面无法连接 Flightradar24 的工具,因此智能体在这里不使用它们。请安装 Node.js 并设置 FR24_API_KEY,导出为 Python 来使用。"
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"此页面无法连接 Flightradar24 的工具,因此智能体在这里不使用它们。请安装 Node.js 并设置 FR24_API_KEY,导出为 Python 来使用。",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"读取 Flightradar24 的航班数据:实时和历史位置、摘要、航迹,以及航空公司和机场的详情"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

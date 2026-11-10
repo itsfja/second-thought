@@ -554,6 +554,10 @@
   "rb_word_count": {
    "message0": "מספר המילים ב-%1"
   },
+  "rb_agent_fr24": {
+   "message0": "הכלים של Flightradar24",
+   "tooltip": "נותן לסוכן את הכלים של Flightradar24 עצמה: מיקומי מטוסים בזמן אמת (לפי אזור, מספר טיסה, אות קריאה או רישום), סיכומי טיסה עם המראה ונחיתה, מסלולים, היסטוריה עד 2016, ופרטי חברות תעופה ונמלי תעופה. כל כלי רק קורא. צריך Node.js מותקן, ו-FR24_API_KEY ב-second-thought.ini (מנוי בתשלום מ-fr24api.flightradar24.com; כל קריאה עולה קרדיטים, תקציב או מגבלת צעדים שומר על ריצה זולה). רק ב-Python מיוצא."
+  },
   "rb_agent_kraken": {
    "message0": "הכלים של Kraken %1",
    "tooltip": "נותן לסוכן את הכלים של Kraken עצמה, מ-kraken-cli: מחירי שוק, היתרות וההוראות שלך, ומסחר על הנייר במחירים אמיתיים. מסחר אמיתי מאפשר לו גם לתת הוראות אמיתיות, אבל כל כלי שיכול להזיז כסף שואל אותך קודם, גם כשדבר אחר לא שואל, ולעולם לא רץ לפי לוח זמנים או ב-GitHub Actions. צריך kraken-cli מותקן, ו-KRAKEN_API_KEY ו-KRAKEN_API_SECRET ב-second-thought.ini לחשבון שלך (מחירים ומסחר על הנייר לא צריכים מפתח). רק ב-Python המיוצא."
@@ -1661,7 +1665,8 @@
   "read your Docker containers: their health, memory and logs": "לקרוא את מכולות ה-Docker שלכם: בריאות, זיכרון ויומנים",
   "restart, stop and start your Docker containers (asking you each time)": "לאתחל, לעצור ולהפעיל את מכולות ה-Docker שלכם (ושואל אתכם בכל פעם)",
   "Flightradar24": "Flightradar24",
-  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "אי אפשר להגיע לכלים של Flightradar24 מהדף הזה, ולכן כאן הסוכן עובד בלעדיהם. ייצא ל-Python, עם Node.js מותקן ו-FR24_API_KEY מוגדר, כדי להשתמש בהם."
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "אי אפשר להגיע לכלים של Flightradar24 מהדף הזה, ולכן כאן הסוכן עובד בלעדיהם. ייצא ל-Python, עם Node.js מותקן ו-FR24_API_KEY מוגדר, כדי להשתמש בהם.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "לקרוא את נתוני הטיסות של Flightradar24: מיקומים חיים והיסטוריים, סיכומים, מסלולים, ופרטי חברות תעופה ונמלי תעופה"
  },
  "examples": {
   "review": {

@@ -146,6 +146,7 @@
 "rb_with_any_model":{"message0":"𒀉𒋾 𒀊𒅗𒀠𒇷𒅎 𒊭 OpenRouter %1","message1":"%1","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭 𒇷𒅁𒁉 𒂊𒁲𒅖𒋗𒉡 𒄿𒈾 𒀊𒅗𒀠𒇷𒅎 𒈠𒆷 OpenRouter 𒄿𒈾𒀜𒁲𒉡 𒌑𒊺𒁉𒅖. 𒋗𒌝𒋗 𒅖𒌅 openrouter.ai/models 𒋗𒌅𒌨, 𒆠𒈠 mistralai/mistral-small 𒌑𒇻 google/gemma-4-31b-it. openrouter/auto 𒅖𒋼𒅔 𒀀𒈾 𒅗𒅆𒅎 𒄴𒄭𒅕. 𒄿𒈾 𒉈𒁉𒅆𒅎 𒊭 Python 𒅋𒆷𒀝 (OPENROUTER_API_KEY 𒄩𒅆𒄴); 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 Claude 𒄿𒈾 𒀸𒊑𒋗 𒄑𒍝𒊍."},
 "rb_with_model":{"message0":"𒀉𒋾 𒀊𒅗𒀠𒇷𒅎 %1","message1":"%1","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭 𒇷𒅁𒁉 𒂊𒁲𒅖𒋗𒉡 𒄿𒈾 𒀊𒅗𒀠𒇷𒅎 𒀭𒉌𒅎 𒌑𒊺𒁉𒅖, 𒌋 𒀀𒈾 𒀊𒅗𒀠𒇷𒅎 𒉺𒉌𒅎 𒄿𒋫𒅈. 𒀊𒅗𒀠𒇻 𒊭 𒆷 Claude 𒄿𒈾 𒉈𒁉𒅆𒅎 𒊭 Python 𒅁𒁍𒋗; 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 Claude 𒄿𒈾 𒀸𒊑𒋗𒉡 𒄑𒍝𒊍."},
 "rb_word_count":{"message0":"𒈪𒉡𒌓 𒀀𒉿𒋾𒅎 𒊭 %1"},
+"rb_agent_fr24":{"message0":"ālāt Flightradar24","tooltip":"ana amēli ālāt Flightradar24 nadānu: hayyāt uzuzzāt ša erēbātim (ana ṣērim, ṭēb šiḫṭim, nībim awātim awat qātim), ṭēb ṭarṣātim ana šūzibim ana erēbim, kakkabātim, tāmarti ana šatti 2016, u ṭēb šārērim awātim ana ṣērim. ālāt ṣābim ša šitassû. Node.js šukun, FR24_API_KEY ina second-thought.ini šitrur (šertu kânu ištu fr24api.flightradar24.com; kalû simmātu, ammaru awat ṣābim ana šamši lā nadi). ina Python šuṣur."},
 "rb_agent_kraken":{"message0":"𒌑𒉡𒌓 Kraken %1","tooltip":"𒀀𒈾 𒉿𒆠𒇷𒅎 𒌑𒉡𒌓 Kraken 𒅖𒌅 kraken-cli 𒄿𒈾𒀜𒁲𒅔: 𒅆𒅎 𒈠𒄭𒊑𒅎, 𒅆𒈠𒋾𒅗 𒌑 𒅆𒅁𒊏𒋾𒅗, 𒌑 𒊭𒈬 𒄿𒈾 𒌅𒌒𒁉𒅎 𒄿𒈾 𒅆𒈪𒅎 𒆠𒉌𒅎. 𒊭𒈬 𒆠𒉡𒌝 𒅆𒅁𒊏𒋾 𒆠𒈾𒋾 𒈾𒁕𒈾𒄠 𒌑𒊭𒅈𒅆, 𒌑𒉡𒌅𒌝 𒈠𒆷 𒅗𒊍𒉺𒄠 𒌑𒈾𒅈𒊏𒌅 𒉺𒈾𒉡𒌝 𒄿𒊭𒀠𒅗, 𒈠𒋾𒈠 𒄿𒈾 𒀀𒁕𒉌𒅎 𒌑 𒄿𒈾 GitHub Actions 𒌌 𒅋𒆷𒀝. kraken-cli 𒌑 KRAKEN_API_KEY 𒌑 KRAKEN_API_SECRET 𒄿𒈾 second-thought.ini 𒄩𒀸𒄩. 𒄿𒈾 Python 𒅖𒋼𒅔."},
 "rb_coinbase_balances":{"message0":"𒅆𒀉𒋫𒌅𒌝 𒊭 Coinbase","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒈠𒀝𒆪𒊑𒅎 𒅗𒇷𒋗 𒄿𒈾 𒁉𒀉 𒅗𒊍𒁉𒅗 𒊭 Coinbase, 𒊏𒁍𒌝 𒉺𒈾: asset, amount, value 𒌑 currency. 𒅆𒈠𒌅𒌝 𒄿𒈾 𒅗𒊍𒁉𒅗 (currency 𒄿𒈾 second-thought.ini). 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒁉𒀉 𒅗𒊍𒁉𒅎 𒊭 𒋫𒄠𒅆𒇷𒅎 𒄿𒇷𒅅𒆠."},
 "rb_coinbase_value":{"message0":"𒅆𒈬𒌝 𒊭 𒁉𒀉 𒅗𒊍𒁉𒅎 𒊭 Coinbase","tooltip":"𒅆𒈬𒌝 𒊭 𒁉𒀉 𒅗𒊍𒁉𒅗 𒊭 Coinbase, 𒄿𒈾 𒅗𒊍𒁉𒅗."},
@@ -1067,7 +1068,8 @@
 "read your Docker containers: their health, memory and logs":"𒅗𒅈𒉺𒋾𒅗 𒊭 Docker 𒀀𒈠𒊒𒌝: 𒋗𒇻𒌝𒅆𒈾, 𒄭𒄑𒊓𒊍𒋛𒈾 𒌑 𒁲𒈪𒅆𒈾",
 "restart, stop and start your Docker containers (asking you each time)":"𒅗𒅈𒉺𒋾𒅗 𒊭 Docker 𒊭𒉌𒅖 𒋗𒌨𒊒𒌝, 𒉺𒊏𒋢𒌝 𒌑 𒋗𒌨𒊒𒌝 (𒁕𒊑𒅖 𒄿𒊭𒀠𒅗)",
 "Flightradar24":"Flightradar24",
-"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"𒀀𒆷𒀜 Flightradar24 𒅖𒌅 𒌅𒌒𒁉𒋗 𒆷 𒄿𒅗𒀸𒊭𒁕, 𒀀𒈨𒇻 𒄿𒈾 𒇷𒅁𒁉 𒀀𒈾 𒆷 𒀀𒆷𒀜𒋗𒉡 𒌑𒈾𒀊𒁉𒅖. 𒀀𒈾 Python 𒋗𒍮𒌨, Node.js 𒋗𒆪𒌦 𒌑 FR24_API_KEY 𒅆𒀉𒊒𒌨, 𒀀𒈾 𒂊𒉺𒋗."
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"𒀀𒆷𒀜 Flightradar24 𒅖𒌅 𒌅𒌒𒁉𒋗 𒆷 𒄿𒅗𒀸𒊭𒁕, 𒀀𒈨𒇻 𒄿𒈾 𒇷𒅁𒁉 𒀀𒈾 𒆷 𒀀𒆷𒀜𒋗𒉡 𒌑𒈾𒀊𒁉𒅖. 𒀀𒈾 Python 𒋗𒍮𒌨, Node.js 𒋗𒆪𒌦 𒌑 FR24_API_KEY 𒅆𒀉𒊒𒌨, 𒀀𒈾 𒂊𒉺𒋗.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"ṭēb 𒊭 𒂊𒊑𒁉𒅎 Flightradar24 𒅆𒋫𒊍𒋢: hayyāt 𒀀𒈾 𒍝𒁉𒅎 𒀀𒈾 𒍝𒁉𒅎, 𒁕𒅈𒍝𒋾𒅎, 𒅗𒀝𒅗𒁀𒋾𒅎, 𒌑 ṭēb 𒊭𒊑𒊑𒅎 𒀀𒉿𒋾𒅎 𒀀𒈾 𒍢𒊑𒅎"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},

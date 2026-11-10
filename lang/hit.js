@@ -88,6 +88,7 @@
 "rb_agent_tool":{"message0":"𒄑𒆪: 𒋞𒉿 %1","message1":"𒆪𒀉 𒄿𒉿𒍣 %1","message2":"𒀭𒁕 𒌑𒁕𒌋𒉿𒀸 𒊭𒀝𒆷𒄿 %1","message3":"𒄠𒈬𒊌 𒁍𒉡𒍑 𒄩𒀭𒋼𒄑𒍣 𒆪𒉿𒁉 %1","tooltip":"𒇽𒆥𒄄𒀀 𒋞𒉿𒅗 1 𒄿𒉿𒍣. 𒀭𒁕 𒌑𒁕𒌋𒉿𒅈𒊺𒀉 𒄑𒆪𒀸 𒀭𒁕 𒌑𒁕𒌋𒉿𒅈, 𒆪𒀉 𒂕𒉺 𒉺𒀀𒄿 𒄿𒉿𒀭 𒇽𒆥𒄄𒀀 𒀀𒍑𒍣. 𒄩𒀭𒁕𒀭 𒈨𒈠𒄿: 𒇽𒆥𒄄𒀀 𒀊𒉺𒀭𒈠 𒊭𒀝𒆠. 𒀭𒁕 𒌑𒁕𒌋𒉿𒀸 𒊭𒀝𒆷𒄿, 𒈠𒄴𒄩𒀭 'flour grams: number; water grams: number - grams of water', 𒆪𒀉 𒆪𒀉 𒌑𒂊𒅅𒍣 𒈨𒈠𒄿: text, number, yes/no, list 𒈾𒀸𒈠 any. “𒄠𒈬𒊌 𒁍𒉡𒍑 𒄩𒀭𒋼𒄑𒍣 𒆪𒉿𒁉” 𒁖𒆪𒉿𒀭𒍝 𒋾𒉿𒍣, 𒇽𒆥𒄄𒀀 𒆪𒀉 𒄬𒍝𒀀𒄿 (𒅎𒁍𒁕 𒊓, 𒈨𒈪𒀭) 𒉿𒄴𒉡𒍣; 𒋞𒈠 𒆪𒅖 𒋃𒁁 𒄿𒉿𒍣 𒌌 𒁖𒆪𒉿𒄴."},
 "rb_agent_builtin":{"message0":"𒄑𒆪: %1","tooltip":"𒄑𒆪 𒄩𒀭𒁕𒀭 𒀀𒈾 𒇽𒆥𒄄𒀀. “𒋃 𒄿𒉿” 𒅇 “𒈨𒂊𒄯 𒋃” 𒋃 𒅇 𒈨𒂊𒄯 𒄩𒀭𒁕𒀭 𒄿𒉿𒀭𒍣, 𒌝𒈪𒀀 𒌌 𒁖𒊭𒀭. “𒈨𒈪𒀭 𒀀𒍑” 𒊭𒆪𒉿𒋻 𒋫𒈠𒅖 𒇽𒆥𒄄𒀀 𒀀𒉌𒉿𒀜𒋫 𒀀𒍑𒍣. 𒄿𒈾 𒅎𒁍𒁕 𒅗𒀀𒊭 𒉈𒂊𒉿 𒈨𒈪𒉿𒀭, GitHub, Telegram, 𒁾 𒄩𒀜𒊑𒌍𒊬 𒅇 𒌗 𒁾 𒊭𒀝𒆷𒄿𒍑 𒄿𒉿𒀭𒍣; 𒄿𒈾 𒄑𒄯 Python 𒊭𒅗 𒄿𒉿𒍣 (𒄑𒊕𒆰𒄭𒀀 𒄿𒈾 second-thought.ini 𒁕𒀀𒄿). 𒄩𒀜𒊏𒀀𒌋𒉿𒅈 𒅇 “𒌑𒉡𒉿𒀸𒄩 𒉿𒄴𒉡” 𒄩𒀭𒋼𒄑𒍣 𒁍𒉡𒍑𒍣. “𒌌 𒁍𒉡𒍑” 𒄩𒀭𒁕𒀀𒄿 𒁖𒆪 𒄷𒌋𒈠𒀭 𒄬𒍝𒀀𒄿 𒈾𒄴𒅆. 𒄩𒀜𒊑𒉿 𒃶𒌍𒋗𒉿𒅈 𒄷𒌋𒈠𒀭𒋾𒉿 𒁍𒉡𒍑𒍣."},
 "rb_agent_mcp":{"message0":"𒄑𒆪𒄭𒀀 𒅖𒌅 𒀴 MCP %1 %2","tooltip":"𒇽𒆥𒄄𒀀 𒄑𒆪 𒄷𒌋𒈠𒀭 𒀴 MCP 𒉺𒀀𒄿: 𒁾𒄭𒀀, GitHub, 𒌗 𒁾 𒅇 𒈨𒅅𒆠. 𒀴 𒄿𒈾 second-thought.ini MCP_<NAME> = 𒆜 𒋾𒀉𒋫𒉡𒍣 (npx -y @modelcontextprotocol/server-filesystem ~/recipes 𒈠𒄴𒄩𒀭) 𒈾𒀸𒈠 https:// 𒊭𒋗 𒁕𒀀𒄿. 𒄿𒈾 𒄑𒄯 Python-𒁁; 𒄿𒈾 𒅎𒁍𒁕 𒅗𒀀𒊭 𒇽𒆥𒄄𒀀 𒄑𒆪𒄭𒀀 𒉡𒅅 𒄿𒉿𒍣."},
+"rb_agent_fr24":{"message0":"GIŠ.TUKUL.HI.A Flightradar24","tooltip":"agent-az GIŠ.TUKUL.HI.A Flightradar24 pa-a-i: URUDU-pat GIŠ-ru kar-ap-zi (apās URUDU-pat, GIŠ-ru numeru, kuer-zi URUDU-pat), GIŠ-ru šu-up-pa-ah-zi URUDU-pat ti-ya-at-ta, URUDU-pat ar-ha, 2016-az pa-a-i, airlines-az airports-az-ya. GIŠ.TUKUL.HI.A ku-iš ku-en-zi. Node.js ti-ya-an-zi, FR24_API_KEY second-thought.ini-i ti-ya-an-zi (fr24api.flightradar24.com-az ku-i-ku-i šume-ešḫi-ia-aš; ki-iš-ru-uš šu-me-ešḫi-iš, ku-iš-ru-uš-ya URUDU-pat ku-it šu-me-ešḫi-iš). Python-az arha pe-hu-te."},
 "rb_agent_kraken":{"message0":"𒄑𒆪𒄭𒀀 Kraken %1","tooltip":"𒇽𒆥𒄄𒀀 𒄑𒆪𒄭𒀀 Kraken 𒉺𒀀𒄿, 𒅖𒌅 kraken-cli: 𒆪𒍑𒊭𒀭, 𒆬𒌓𒅗 𒅇 orders, 𒅇 𒉿𒀸𒋗𒉿𒅈 𒄿𒈾 𒁾. 𒄑𒆪 𒄷𒌋𒈠𒀭 𒆪𒅖 𒆬𒌓 𒉿𒄴𒉡𒍣 𒌅𒊌 𒄩𒀭𒋼𒄑𒍣 𒁍𒉡𒍑𒍣, 𒅇 𒌌 𒄿𒈾 𒈨𒂊𒄯 𒈾𒀸𒈠 𒄿𒈾 GitHub Actions 𒄿𒉿𒍣. kraken-cli 𒅇 KRAKEN_API_KEY 𒅇 KRAKEN_API_SECRET 𒄿𒈾 second-thought.ini 𒌑𒂊𒅅𒍣. 𒄿𒈾 𒄑𒄯 Python-𒁁."},
 "rb_tg_when":{"message0":"𒈠𒀀𒀭 𒄩𒀜𒊑𒌍𒊬 Telegram 𒌑𒄑𒍣 𒋡𒁺 %1","tooltip":"𒋞𒄭𒀀 𒃰𒋫𒀭 𒄿𒉿𒍣 𒈠𒀀𒀭 𒇽𒆥𒄄𒀀𒅗 𒄩𒀜𒊑𒌍𒊬 𒁕𒀀𒄿 (“anything” 𒈾𒀸𒈠 𒈨𒈪𒀭 𒆪𒀉 𒄯𒍣 𒄢𒀸). 𒄩𒀜𒊑𒌍𒊬 𒊭𒅗𒁁 (TELEGRAM_CHAT_ID). 𒄿𒈾 𒄑𒄯 Python 𒄷𒌋𒈠𒀭 𒈨𒂊𒄯 𒅖𒋫𒈠𒀸𒍣; 𒄿𒈾 𒅎𒁍𒁕 𒅗𒀀𒊭 𒍠𒊍 𒁖𒆪𒉿𒄴 𒅇 “𒆜 𒅗𒀀𒊭 𒄿𒉿” 𒄩𒀭𒁕𒀀𒄿, 𒋡𒁺 𒄩𒀜𒊑𒌍𒊬 𒊭𒀝𒆷𒄿 𒀀𒍑𒋗𒉿𒀭𒍣."},
 "rb_tg_message":{"message0":"𒄩𒀜𒊑𒌍𒊬 Telegram %1","tooltip":"𒄩𒀜𒊑𒌍𒊬 Telegram 𒆪𒅖 𒆜 𒅗𒀀𒊭 𒋾𒀉𒋫𒉡𒌓: 𒈨𒈪𒀭, 𒆪𒅖 𒄩𒀜𒊏𒀀𒀉, 𒈾𒀸𒈠 𒈨𒈪𒉿𒀭𒉌. 𒆜 Telegram 𒉡𒅅, 𒁕𒈠𒀀𒄿."},
@@ -1066,7 +1067,8 @@
 "read your Docker containers: their health, memory and logs":"𒂁𒎌 Docker-𒅗 𒀀𒍑𒍣: 𒄩𒀜𒁺𒆷𒋻, memory 𒅇 𒁾",
 "restart, stop and start your Docker containers (asking you each time)":"𒂁𒎌 Docker-𒅗 𒂕𒉺 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒅇 𒋾𒉿𒍣 (𒄷𒌋𒈠𒀭𒋾 𒁍𒉡𒍑𒍣)",
 "Flightradar24":"Flightradar24",
-"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"𒄑𒆪𒄭𒀀 Flightradar24 apās 𒍏𒉻 𒌌 išha-𒄿, 𒉡 agentas anda 𒌌 kuer-𒍣. Python-𒊍 arha 𒉿𒄷𒋼, Node.js 𒋾𒉿𒀭𒍣 FR24_API_KEY-ya 𒋾𒉿𒀭𒍣, 𒆪𒀉 𒆪𒂗𒍣."
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"𒄑𒆪𒄭𒀀 Flightradar24 apās 𒍏𒉻 𒌌 išha-𒄿, 𒉡 agentas anda 𒌌 kuer-𒍣. Python-𒊍 arha 𒉿𒄷𒋼, Node.js 𒋾𒉿𒀭𒍣 FR24_API_KEY-ya 𒋾𒉿𒀭𒍣, 𒆪𒀉 𒆪𒂗𒍣.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24-𒀸 𒄑𒊒𒈠 𒆪𒅖𒍣: 𒍏𒉻 𒋼𒀀𒀊𒍣, 𒄑𒊒 𒋗𒌒𒉺𒄴𒍣, 𒍏𒉻 𒅈𒄩, airlines-𒊍 airports-𒊍𒉿"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},

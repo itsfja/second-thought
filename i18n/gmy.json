@@ -554,6 +554,10 @@
   "rb_word_count": {
    "message0": "𐀀𐀪𐀵𐀗 𐀁𐀟𐀃 %1"
   },
+  "rb_agent_fr24": {
+   "message0": "ke-re-a Flightradar24",
+   "tooltip": "a-ko-so-ne ka-a-pi ke-re-a Flightradar24 do-ke: pa-we-jo a-to-ro-o-ko (e-ne-ko, pa-we-jo o-pe-ro-se, pa-we-jo ki-ri-ko), pa-we-jo o-pe-ro-se e-ko a-ra-ke-ta-i o-po-se, ka-ko-to, pa-we-jo to-so 2016, pa-we-jo ko-u-ko-ro-se. ke-re-a o-u pe-re. Node.js o-pe-ro-se, FR24_API_KEY second-thought.ini-to (mi-ri-jo do-so-mo a-po fr24api.flightradar24.com; ka-ro ke-re-a po-re-na do-ke, do-so-mo e-ne-ko o-pe-ro-se). Python-jo e-ne-ko."
+  },
   "rb_agent_kraken": {
    "message0": "Kraken 𐀃𐀏𐀙 %1",
    "tooltip": "𐀇𐀈𐀯 𐀞𐀨𐀒𐀵 Kraken 𐀃𐀏𐀙, 𐀀𐀡 kraken-cli: 𐀀𐀒𐀨 𐀴𐀕, 𐀃𐀟𐀫𐀰 𐀏𐀂 𐀁𐀵𐀨, 𐀏𐀂 𐀁𐀡𐀫𐀽 𐀁𐀠 𐀞𐀢𐀫. 𐀀𐀨𐀳𐀀 𐀁𐀡𐀫𐀽 𐀁𐀀𐀁 𐀏𐀂 𐀀𐀨𐀳𐀀 𐀁𐀵𐀨, 𐀃𐀏𐀜𐀆 𐀓𐀬𐀰 𐀑𐀚𐀃𐀲 𐀁𐀫𐀲 𐀞𐀫𐀵, 𐀃𐀄𐀟𐀡 𐀒𐀲 𐀒𐀫𐀜 𐀁𐀚 GitHub Actions 𐀳𐀩𐀐𐀁. 𐀆𐀂 kraken-cli, 𐀏𐀂 KRAKEN_API_KEY 𐀏𐀂 KRAKEN_API_SECRET 𐀁𐀚 second-thought.ini. 𐀗𐀜 𐀁𐀚 Python."
@@ -1661,7 +1665,8 @@
   "read your Docker containers: their health, memory and logs": "𐀀𐀙𐀑𐀜𐀐 𐀀𐀐𐀊 Docker 𐀰𐀂: 𐀄𐀑𐀁𐀊, 𐀘𐀙𐀔 𐀏𐀂 𐀏𐀨𐀟",
   "restart, stop and start your Docker containers (asking you each time)": "𐀀𐀠 𐀀𐀨𐀐𐀂, 𐀞𐀄𐀁 𐀏𐀂 𐀀𐀨𐀐𐀂 𐀀𐀐𐀊 Docker 𐀰𐀂 (𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮)",
   "Flightradar24": "Flightradar24",
-  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "𐀐𐀩𐀀 Flightradar24 𐀀𐀡 𐀸𐀵𐀆 ou-ko-ro-qe, 𐀀𐀒𐀫 𐀀𐀒𐀰𐀚 𐀐𐀩𐀀 ou-do-ro-qe. Python-jo 𐀁𐀚𐀒, Node.js 𐀃𐀟𐀫𐀤 FR24_API_KEY 𐀈𐀐𐀃, 𐀃𐀟𐀫𐀮."
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "𐀐𐀩𐀀 Flightradar24 𐀀𐀡 𐀸𐀵𐀆 ou-ko-ro-qe, 𐀀𐀒𐀫 𐀀𐀒𐀰𐀚 𐀐𐀩𐀀 ou-do-ro-qe. Python-jo 𐀁𐀚𐀒, Node.js 𐀃𐀟𐀫𐀤 FR24_API_KEY 𐀈𐀐𐀃, 𐀃𐀟𐀫𐀮.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "Flightradar24-jo 𐀞𐀸𐀍 𐀃𐀟𐀫𐀮: 𐀀𐀵𐀫𐀃𐀒 𐀒𐀄𐀒𐀫𐀮, 𐀃𐀟𐀫𐀮, 𐀏𐀒𐀵, 𐀞𐀸𐀍 𐀒𐀄𐀒𐀫𐀮"
  },
  "examples": {
   "review": {

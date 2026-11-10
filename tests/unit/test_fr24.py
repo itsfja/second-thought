@@ -3,6 +3,7 @@ known ones asks, even with (no asking); a tool the safe list has never seen asks
 Kraken's (#309). --doctor checks npx, FR24_API_KEY (without spending a credit on it) and counts what can change."""
 import asyncio
 import os
+import shutil
 import sys
 import tempfile
 import unittest
@@ -134,17 +135,22 @@ class Doctor(unittest.TestCase):
                     s.close()
 
     def test_node_missing(self):
-        with mock.patch("shutil.which", return_value=None), self.assertRaises(RunError) as e:
+        real_which = shutil.which
+        with mock.patch("shutil.which", side_effect=lambda name: None if name == "npx" else real_which(name)), \
+                self.assertRaises(RunError) as e:
             self.check({})
         self.assertIn("Node.js isn't installed", str(e.exception))
 
     def test_no_key_is_a_fail(self):
-        with mock.patch("shutil.which", return_value="/usr/bin/npx"), self.assertRaises(RunError) as e:
+        real_which = shutil.which
+        with mock.patch("shutil.which", side_effect=lambda name: "/usr/bin/npx" if name == "npx" else real_which(name)), \
+                self.assertRaises(RunError) as e:
             self.check({})
         self.assertIn("FR24_API_KEY", str(e.exception))
 
     def test_the_key_is_reported_without_spending_a_credit(self):
-        with mock.patch("shutil.which", return_value="/usr/bin/npx"):
+        real_which = shutil.which
+        with mock.patch("shutil.which", side_effect=lambda name: "/usr/bin/npx" if name == "npx" else real_which(name)):
             text = self.check({"FR24_API_KEY": "good"})
         self.assertIn("FR24_API_KEY is set", text)
         self.assertIn("credits", text)

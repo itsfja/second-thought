@@ -145,6 +145,7 @@
 "rb_with_any_model":{"message0":"OpenRouter のモデル %1 で","message1":"%1","tooltip":"中のブロックだけを、OpenRouter が提供する任意のモデルで実行します。openrouter.ai/models の名前を入力します。例：mistralai/mistral-small、google/gemma-4-31b-it。openrouter/auto は自動で選びます。書き出した Python で動きます（OPENROUTER_API_KEY が必要）。このページでは Claude が代わりを務めます。"},
 "rb_with_model":{"message0":"モデル %1 で","message1":"%1","tooltip":"中のブロックだけをこのモデルで実行し、その後は前のモデルに戻ります。Claude 以外のモデルは書き出した Python で動き、このページでは Claude が代わりを務めます。"},
 "rb_word_count":{"message0":"%1 の単語数"},
+"rb_agent_fr24":{"message0":"Flightradar24 のツール","tooltip":"エージェントに Flightradar24 公式のツールを渡します:航空機のリアルタイム位置(地域・便名・コールサイン・登録記号で)、離着陸を含むフライト概要、航跡、2016年までの履歴、航空会社と空港の詳細。すべてのツールは読み取り専用です。Node.js のインストールと、second-thought.ini の FR24_API_KEY が必要です(fr24api.flightradar24.com の有償サブスクリプション。呼び出しごとにクレジットがかかるため、予算かステップ上限で実行コストを抑えてください)。書き出した Python でのみ動きます。"},
 "rb_agent_kraken":{"message0":"Kraken のツール %1","tooltip":"エージェントに kraken-cli の Kraken 公式ツールを渡します：市場価格、残高と注文、実際の価格でのペーパートレード。実際の取引を選ぶと本物の注文も出せますが、お金を動かせるツールはどれも、ほかが確認しない設定でも必ず先にあなたに確認し、スケジュールや GitHub Actions では決して実行されません。kraken-cli のインストールと、口座用に second-thought.ini の KRAKEN_API_KEY と KRAKEN_API_SECRET が必要です（価格とペーパートレードはキー不要）。書き出した Python でのみ動きます。"},
 "rb_coinbase_balances":{"message0":"Coinbase の残高","tooltip":"記録のリストで、Coinbase のポートフォリオの資産ごとに一つ、大きい順：asset、amount、value、currency。値はあなたの通貨です（second-thought.ini の currency）。このページではサンプルのポートフォリオを使います。"},
 "rb_coinbase_value":{"message0":"Coinbase のポートフォリオの価値","tooltip":"Coinbase のポートフォリオの価値を、あなたの通貨で。"},
@@ -1066,7 +1067,8 @@
 "read your Docker containers: their health, memory and logs":"Docker のコンテナーを読む：状態、メモリー、ログ",
 "restart, stop and start your Docker containers (asking you each time)":"Docker のコンテナーを再起動、停止、起動する（毎回確認します）",
 "Flightradar24":"Flightradar24",
-"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"このページからは Flightradar24 のツールに接続できないため、ここではエージェントはそれらなしで動きます。使うには、Node.js をインストールして FR24_API_KEY を設定し、Python に書き出してください。"
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"このページからは Flightradar24 のツールに接続できないため、ここではエージェントはそれらなしで動きます。使うには、Node.js をインストールして FR24_API_KEY を設定し、Python に書き出してください。",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 のフライトデータを読む:リアルタイムと履歴の位置、概要、航跡、航空会社と空港の詳細"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

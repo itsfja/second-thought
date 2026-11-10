@@ -554,6 +554,10 @@
   "rb_word_count": {
    "message0": "𒈪𒉡𒌓 𒀀𒉿𒋾𒅎 𒊭 %1"
   },
+  "rb_agent_fr24": {
+   "message0": "ālāt Flightradar24",
+   "tooltip": "ana amēli ālāt Flightradar24 nadānu: hayyāt uzuzzāt ša erēbātim (ana ṣērim, ṭēb šiḫṭim, nībim awātim awat qātim), ṭēb ṭarṣātim ana šūzibim ana erēbim, kakkabātim, tāmarti ana šatti 2016, u ṭēb šārērim awātim ana ṣērim. ālāt ṣābim ša šitassû. Node.js šukun, FR24_API_KEY ina second-thought.ini šitrur (šertu kânu ištu fr24api.flightradar24.com; kalû simmātu, ammaru awat ṣābim ana šamši lā nadi). ina Python šuṣur."
+  },
   "rb_agent_kraken": {
    "message0": "𒌑𒉡𒌓 Kraken %1",
    "tooltip": "𒀀𒈾 𒉿𒆠𒇷𒅎 𒌑𒉡𒌓 Kraken 𒅖𒌅 kraken-cli 𒄿𒈾𒀜𒁲𒅔: 𒅆𒅎 𒈠𒄭𒊑𒅎, 𒅆𒈠𒋾𒅗 𒌑 𒅆𒅁𒊏𒋾𒅗, 𒌑 𒊭𒈬 𒄿𒈾 𒌅𒌒𒁉𒅎 𒄿𒈾 𒅆𒈪𒅎 𒆠𒉌𒅎. 𒊭𒈬 𒆠𒉡𒌝 𒅆𒅁𒊏𒋾 𒆠𒈾𒋾 𒈾𒁕𒈾𒄠 𒌑𒊭𒅈𒅆, 𒌑𒉡𒌅𒌝 𒈠𒆷 𒅗𒊍𒉺𒄠 𒌑𒈾𒅈𒊏𒌅 𒉺𒈾𒉡𒌝 𒄿𒊭𒀠𒅗, 𒈠𒋾𒈠 𒄿𒈾 𒀀𒁕𒉌𒅎 𒌑 𒄿𒈾 GitHub Actions 𒌌 𒅋𒆷𒀝. kraken-cli 𒌑 KRAKEN_API_KEY 𒌑 KRAKEN_API_SECRET 𒄿𒈾 second-thought.ini 𒄩𒀸𒄩. 𒄿𒈾 Python 𒅖𒋼𒅔."
@@ -1661,7 +1665,8 @@
   "read your Docker containers: their health, memory and logs": "𒅗𒅈𒉺𒋾𒅗 𒊭 Docker 𒀀𒈠𒊒𒌝: 𒋗𒇻𒌝𒅆𒈾, 𒄭𒄑𒊓𒊍𒋛𒈾 𒌑 𒁲𒈪𒅆𒈾",
   "restart, stop and start your Docker containers (asking you each time)": "𒅗𒅈𒉺𒋾𒅗 𒊭 Docker 𒊭𒉌𒅖 𒋗𒌨𒊒𒌝, 𒉺𒊏𒋢𒌝 𒌑 𒋗𒌨𒊒𒌝 (𒁕𒊑𒅖 𒄿𒊭𒀠𒅗)",
   "Flightradar24": "Flightradar24",
-  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "𒀀𒆷𒀜 Flightradar24 𒅖𒌅 𒌅𒌒𒁉𒋗 𒆷 𒄿𒅗𒀸𒊭𒁕, 𒀀𒈨𒇻 𒄿𒈾 𒇷𒅁𒁉 𒀀𒈾 𒆷 𒀀𒆷𒀜𒋗𒉡 𒌑𒈾𒀊𒁉𒅖. 𒀀𒈾 Python 𒋗𒍮𒌨, Node.js 𒋗𒆪𒌦 𒌑 FR24_API_KEY 𒅆𒀉𒊒𒌨, 𒀀𒈾 𒂊𒉺𒋗."
+  "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "𒀀𒆷𒀜 Flightradar24 𒅖𒌅 𒌅𒌒𒁉𒋗 𒆷 𒄿𒅗𒀸𒊭𒁕, 𒀀𒈨𒇻 𒄿𒈾 𒇷𒅁𒁉 𒀀𒈾 𒆷 𒀀𒆷𒀜𒋗𒉡 𒌑𒈾𒀊𒁉𒅖. 𒀀𒈾 Python 𒋗𒍮𒌨, Node.js 𒋗𒆪𒌦 𒌑 FR24_API_KEY 𒅆𒀉𒊒𒌨, 𒀀𒈾 𒂊𒉺𒋗.",
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "ṭēb 𒊭 𒂊𒊑𒁉𒅎 Flightradar24 𒅆𒋫𒊍𒋢: hayyāt 𒀀𒈾 𒍝𒁉𒅎 𒀀𒈾 𒍝𒁉𒅎, 𒁕𒅈𒍝𒋾𒅎, 𒅗𒀝𒅗𒁀𒋾𒅎, 𒌑 ṭēb 𒊭𒊑𒊑𒅎 𒀀𒉿𒋾𒅎 𒀀𒈾 𒍢𒊑𒅎"
  },
  "examples": {
   "review": {

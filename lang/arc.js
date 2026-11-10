@@ -146,6 +146,7 @@
 "rb_with_any_model":{"message0":"עם חכימא דOpenRouter %1","message1":"%1","tooltip":"מרהט לחוד לבנין דבגוה בכל חכימא דOpenRouter יהב. כתוב שמיה מן openrouter.ai/models, כגון mistralai/mistral-small או google/gemma-4-31b-it. openrouter/auto בחר חד בשבילך. רהט ב-Python דנפק (צריך OPENROUTER_API_KEY); בדפא הדין Claude קאים באתריה."},
 "rb_with_model":{"message0":"עם חכימא %1","message1":"%1","tooltip":"מרהט לחוד לבנין דבגוה בחכימא הדין, ובתר כן תאיב לחכימא דקדם. חכימין דלאו Claude רהטין ב-Python דנפק; בדפא הדין Claude קאים באתרהון."},
 "rb_word_count":{"message0":"מניין מלי %1"},
+"rb_agent_fr24":{"message0":"מאני Flightradar24","tooltip":"יהב לסוכנא מאני Flightradar24 דיליה: אתרן קיימין דיל מטוסיא (באגן, במנין טיסתא, בקריאתא או ברישומא), כנישין דטיסתא באסקופא ונחיתא, ארחין, תולדתא עד שנת 2016, ופרטין דאוירופלאן ומטרא. כל מאנא לחוד קרי. צריך Node.js מתקן, וFR24_API_KEY בsecond-thought.ini (אנטרא דמפרע מן fr24api.flightradar24.com; כל קריאה אכפר קרדיטין, תקנין או גבולא דשעבין נטיר ריהטא זולתא). בלחוד בPython מפקא."},
 "rb_agent_kraken":{"message0":"מאני Kraken %1","tooltip":"יהב לסוכנא מאני Kraken דיליה, מן kraken-cli: דמי שוקא, שארייך ופקודייך, ותגרא על נירא בדמין שרירין. תגרא שרירא שבק ליה אף למתן פקודין שרירין, ברם כל מאן דיכל לשנאה כספא שאל לך קדמיתא, אף כד מדעם אחרנא לא שאל, ולעלם לא רהט בזבנא קביעא או ב־GitHub Actions. צריך kraken-cli מתקן, ו־KRAKEN_API_KEY ו־KRAKEN_API_SECRET ב־second-thought.ini לחושבנך (דמין ונירא לא צריכין מפתחא). בלחוד ב־Python מפקא."},
 "rb_coinbase_balances":{"message0":"שאריתא דCoinbase","tooltip":"רשימת כתבין, חד לכל נכס בסימתך דCoinbase, רבא קדמאה: asset, amount, value וcurrency. דמיא במעתך (currency בsecond-thought.ini). בדפא דנא משמש סימא דדוגמא."},
 "rb_coinbase_value":{"message0":"דמי סימתא דCoinbase","tooltip":"כמה שויא סימתך דCoinbase, במעתך."},
@@ -1067,7 +1068,8 @@
 "read your Docker containers: their health, memory and logs":"למקרא מאנך דDocker: חולמנהון, דוכרנהון וספרי דוכרניהון",
 "restart, stop and start your Docker containers (asking you each time)":"למשרא תוב, לבטלא ולמשרא מאנך דDocker (ושאיל לך בכל זמן)",
 "Flightradar24":"Flightradar24",
-"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"לא אפשר למטי מניהן דיל Flightradar24 מן דף הדין, ובכן האגנט לא עביד הכא בלעדיהון. תפקיד לPython, עם Node.js מתקן וFR24_API_KEY מתקנא, למיעבד בהון."
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"לא אפשר למטי מניהן דיל Flightradar24 מן דף הדין, ובכן האגנט לא עביד הכא בלעדיהון. תפקיד לPython, עם Node.js מתקן וFR24_API_KEY מתקנא, למיעבד בהון.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"למקרא נתבנין דטיסתא דיל Flightradar24: אתרן קיימין וקדמאין, כנישין, ארחין, ופרטין דאוירופלאן ומטרא"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

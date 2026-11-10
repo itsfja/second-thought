@@ -146,6 +146,7 @@
 "rb_with_any_model":{"message0":"עם מודל OpenRouter ‏%1","message1":"%1","tooltip":"מריץ רק את הבלוקים שבפנים על כל מודל ש-OpenRouter מציע. הקלידו את השם שלו מ-openrouter.ai/models, למשל mistralai/mistral-small או google/gemma-4-31b-it. ‏openrouter/auto בוחר אחד בשבילכם. רץ ב-Python המיוצא (צריך OPENROUTER_API_KEY); בדף הזה Claude ממלא את מקומו."},
 "rb_with_model":{"message0":"עם המודל %1","message1":"%1","tooltip":"מריץ רק את הבלוקים שבפנים על המודל הזה, ואז חוזר למודל הקודם. מודלים שאינם Claude רצים ב-Python המיוצא; בדף הזה Claude ממלא את מקומם."},
 "rb_word_count":{"message0":"מספר המילים ב-%1"},
+"rb_agent_fr24":{"message0":"הכלים של Flightradar24","tooltip":"נותן לסוכן את הכלים של Flightradar24 עצמה: מיקומי מטוסים בזמן אמת (לפי אזור, מספר טיסה, אות קריאה או רישום), סיכומי טיסה עם המראה ונחיתה, מסלולים, היסטוריה עד 2016, ופרטי חברות תעופה ונמלי תעופה. כל כלי רק קורא. צריך Node.js מותקן, ו-FR24_API_KEY ב-second-thought.ini (מנוי בתשלום מ-fr24api.flightradar24.com; כל קריאה עולה קרדיטים, תקציב או מגבלת צעדים שומר על ריצה זולה). רק ב-Python מיוצא."},
 "rb_agent_kraken":{"message0":"הכלים של Kraken %1","tooltip":"נותן לסוכן את הכלים של Kraken עצמה, מ-kraken-cli: מחירי שוק, היתרות וההוראות שלך, ומסחר על הנייר במחירים אמיתיים. מסחר אמיתי מאפשר לו גם לתת הוראות אמיתיות, אבל כל כלי שיכול להזיז כסף שואל אותך קודם, גם כשדבר אחר לא שואל, ולעולם לא רץ לפי לוח זמנים או ב-GitHub Actions. צריך kraken-cli מותקן, ו-KRAKEN_API_KEY ו-KRAKEN_API_SECRET ב-second-thought.ini לחשבון שלך (מחירים ומסחר על הנייר לא צריכים מפתח). רק ב-Python המיוצא."},
 "rb_coinbase_balances":{"message0":"יתרות Coinbase","tooltip":"רשימת רשומות, אחת לכל נכס בתיק ה-Coinbase שלכם, הגדול קודם: asset, amount, value ו-currency. הערכים במטבע שלכם (currency ב-second-thought.ini). בעמוד הזה משמש תיק לדוגמה."},
 "rb_coinbase_value":{"message0":"שווי תיק ה-Coinbase","tooltip":"כמה שווה תיק ה-Coinbase שלכם, במטבע שלכם."},
@@ -1067,7 +1068,8 @@
 "read your Docker containers: their health, memory and logs":"לקרוא את מכולות ה-Docker שלכם: בריאות, זיכרון ויומנים",
 "restart, stop and start your Docker containers (asking you each time)":"לאתחל, לעצור ולהפעיל את מכולות ה-Docker שלכם (ושואל אתכם בכל פעם)",
 "Flightradar24":"Flightradar24",
-"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"אי אפשר להגיע לכלים של Flightradar24 מהדף הזה, ולכן כאן הסוכן עובד בלעדיהם. ייצא ל-Python, עם Node.js מותקן ו-FR24_API_KEY מוגדר, כדי להשתמש בהם."
+"Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"אי אפשר להגיע לכלים של Flightradar24 מהדף הזה, ולכן כאן הסוכן עובד בלעדיהם. ייצא ל-Python, עם Node.js מותקן ו-FR24_API_KEY מוגדר, כדי להשתמש בהם.",
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"לקרוא את נתוני הטיסות של Flightradar24: מיקומים חיים והיסטוריים, סיכומים, מסלולים, ופרטי חברות תעופה ונמלי תעופה"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
