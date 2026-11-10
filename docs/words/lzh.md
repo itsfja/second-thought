@@ -28,6 +28,7 @@ Made by tools/sync.py from i18n/lzh.json: edit that, not this.
 - You: 汝
 - Coinbase: Coinbase
 - MikroTik: MikroTik
+- Solax: Solax
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker

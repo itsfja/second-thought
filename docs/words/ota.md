@@ -28,6 +28,7 @@ Made by tools/sync.py from i18n/ota.json: edit that, not this.
 - You: سن
 - Coinbase: Coinbase
 - MikroTik: MikroTik
+- Solax: Solax
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker

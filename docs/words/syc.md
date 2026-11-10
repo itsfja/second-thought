@@ -28,6 +28,7 @@ Made by tools/sync.py from i18n/syc.json: edit that, not this.
 - You: ܐܢܬ
 - Coinbase: Coinbase
 - MikroTik: MikroTik
+- Solax: Solax
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker

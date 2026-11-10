@@ -224,6 +224,7 @@
 "Output":"𐀁𐀒𐀈𐀰",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
