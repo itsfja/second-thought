@@ -364,6 +364,29 @@ add(program(
         email_me("Your Kraken week", B("rb_draft")),
         B("rb_result"))]))
 
+# Home: #357. Proxmox, read-only: the cluster each morning, nothing started or stopped.
+v = Vars("nodes", "guests", "storage", "tasks", "report")
+add(program(
+    "morning-cluster-check", "Morning cluster check", "home",
+    "Each morning, reads your Proxmox cluster and sends you a Telegram message: any node down, storage over 85%, last "
+    "night's backups that failed, guests stopped that should start at boot, and anything else worth a look. It only "
+    "reads: nothing is started or stopped.",
+    "Needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET for a token with the PVEAuditor role, and "
+    "PROXMOX_CERT_SHA256 (--doctor shows it).",
+    start_and(msg="check") + [chain(when_time(7, 30), B("rb_broadcast_wait", MSG="check")), receive(
+        "check",
+        v.set("nodes", B("rb_proxmox_nodes")),
+        v.set("guests", B("rb_proxmox_guests")),
+        v.set("storage", B("rb_proxmox_storage")),
+        v.set("tasks", B("rb_proxmox_tasks", N=24)),
+        v.set("report", B("rb_ask", TEXT=join(
+            "Check my Proxmox cluster in under 120 words: any node not online, any storage over 85% used, any task from "
+            "the last 24 hours that didn't end OK (vzdump is a backup), and any guest that's stopped with onboot true. "
+            "If all is well, say so in one line.\n\nNodes:\n", v.get("nodes"), "\n\nGuests:\n", v.get("guests"),
+            "\n\nStorage:\n", v.get("storage"), "\n\nTasks:\n", v.get("tasks")))),
+        B("rb_tg_send", TEXT=v.get("report")),
+        B("rb_finish_with", TEXT=v.get("report")))], v))
+
 # Home: #359. UniFi, read-only: who's connected and how the devices are.
 v = Vars("clients", "devices", "report")
 add(program(

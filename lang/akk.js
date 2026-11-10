@@ -160,7 +160,12 @@
 "rb_mikrotik_health":{"message0":"𒋗𒌌𒈬𒌝 𒊭 MikroTik","tooltip":"𒌅𒌒𒁍𒌝 𒀸𒋗𒌝 𒈬𒍑𒋼𒉌𒅎: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𒌑 𒈪𒅎𒈠 𒊭𒉡𒌝 𒊭 𒄿𒋗."},
 "rb_mikrotik_log":{"message0":"𒌅𒌒𒉺𒌅𒌝 𒊭 MikroTik, %1 𒅆𒀉𒊒 𒉿𒅈𒆪𒌅𒌝","tooltip":"𒅆𒀉𒊒 𒉿𒅈𒆪𒌅𒌝 𒊭 𒌅𒌒𒉺𒋾𒅎 𒊭 𒈬𒍑𒋼𒉌𒅎, 𒆷𒁉𒊒𒌝 𒉺𒈾, 𒅗𒇻𒋗𒉡 𒆠𒈠 „time topics: message”."},
 "rb_unifi_clients":{"message0":"𒌑𒁀𒊒 𒊭 UniFi","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒌑𒉡𒋾𒅎 𒅗𒇷𒊭 𒊭 𒀀𒈾 𒊺𒋾𒅗 𒊭 UniFi 𒊏𒀝𒊓𒀜: name, mac, ip, type (wired, wireless 𒌑𒇻 vpn), connected 𒌑 uplink. 𒅖𒋼𒅔𒈠 𒄿𒊭𒊍𒋛: 𒈪𒅎𒈠 𒌌 𒄿𒈾𒀝𒆠𒅕. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒊺𒋫𒄠 𒊭 𒋫𒄠𒅆𒇷𒅎 𒄿𒇷𒅅𒆠."},
-"rb_unifi_devices":{"message0":"𒌑𒉡𒌅𒌝 𒊭 UniFi","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒌑𒉡𒋾𒅎 𒅗𒇷𒊭 𒊭 UniFi: name, model, mac, ip, state, firmware, update, 𒌑 uptime (𒅆𒈠𒉡), cpu 𒌑 memory (%)."}
+"rb_unifi_devices":{"message0":"𒌑𒉡𒌅𒌝 𒊭 UniFi","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒌑𒉡𒋾𒅎 𒅗𒇷𒊭 𒊭 UniFi: name, model, mac, ip, state, firmware, update, 𒌑 uptime (𒅆𒈠𒉡), cpu 𒌑 memory (%)."},
+"rb_proxmox_nodes":{"message0":"𒊑𒅅𒋢 𒊭 Proxmox","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒊑𒅅𒋛 𒅗𒇷𒊭 𒊭 𒆠𒄑𒊑𒅗 𒊭 Proxmox: node, status, cpu 𒌑 memory (%), uptime (𒅆𒈠𒉡). 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒆠𒄑𒊏𒄠 𒊭 𒋫𒄠𒅆𒇷𒅎 𒄿𒇷𒅅𒆠."},
+"rb_proxmox_guests":{"message0":"𒌑𒁀𒊒 𒊭 Proxmox","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 VM 𒅗𒇷𒋗: vmid, name, node, type (vm 𒌑𒇻 container), status, cpu 𒌑 memory (%), uptime (𒅆𒈠𒉡), 𒌑 onboot."},
+"rb_proxmox_storage":{"message0":"𒅗𒊒 𒊭 Proxmox","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒅗𒊑𒅎 𒅗𒇷𒋗: storage, node, used (%), used_gb, size_gb 𒌑 status."},
+"rb_proxmox_tasks":{"message0":"𒅆𒉺𒊒 𒊭 Proxmox 𒊭 %1 𒅆𒈠𒉌 𒉿𒅈𒆪𒋾𒅎","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋗𒌝 𒉺𒈾: started, node, type (vzdump), id, status (OK, 𒌑𒇻 𒈪𒅎𒈠 𒊭 𒄴𒌅) 𒌑 user."},
+"rb_proxmox_power":{"message0":"%1 𒌑𒁀𒊏𒄠 𒊭 Proxmox %2","tooltip":"𒌑𒁀𒊏𒄠 𒅖𒋼𒅔 𒄿𒈾 VMID 𒌑𒊭𒅈𒊏, 𒄿𒉺𒅈𒊏𒊍 𒌑𒇻 𒊭𒉌𒅖 𒌑𒊭𒅈𒊏. 𒁕𒊑𒅖 𒉺𒈾 𒄿𒊭𒀠𒅗; 𒋗𒌝𒈠 𒈠𒄠𒈠𒀭 𒀭𒈾 𒀀𒈾 𒋡𒁁𒅎 𒌌 𒄿𒁀𒀸𒅆, 𒌌 𒅋𒆷𒀝. 𒌑𒁀𒊒 𒊭 PROXMOX_PROTECT 𒌌 𒅖𒊭𒄴𒄩𒌅. 𒅆𒀉𒊏𒄠 𒀉𒋾 VM.PowerMgmt 𒄩𒅆𒄴. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒈪𒅎𒈠 𒌌 𒅖𒊭𒅈𒊑."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌑𒈪𒊭𒄠","weekdays":"𒄿𒈾 𒌑𒈪 𒅆𒅁𒊑𒅎","weekends":"𒄿𒈾 𒌑𒈪 𒉡𒄭𒅎"},
@@ -182,7 +187,8 @@
 "rb_coinbase_candles.SIZE":{"day":"𒊭 𒌑𒈪𒅎","hour":"𒊭 𒅆𒈠𒉌𒅎"},
 "rb_coinbase_orders.WHICH":{"open":"𒋼𒊑𒌅𒌝 𒁉𒌅𒌅𒌝","fills":"𒂵𒄠𒊏𒌅𒌝 𒉿𒅈𒆪𒌅𒌝"},
 "rb_coinbase_preview.SIDE":{"buy":"𒊭𒈬𒌝","sell":"𒉺𒊭𒊒𒌝"},
-"rb_coinbase_order.SIDE":{"buy":"𒊭𒈬𒌝","sell":"𒉺𒊭𒊒𒌝"}
+"rb_coinbase_order.SIDE":{"buy":"𒊭𒈬𒌝","sell":"𒉺𒊭𒊒𒌝"},
+"rb_proxmox_power.ACTION":{"start":"𒋗𒌨𒊑","shutdown":"𒁍𒊒𒊻","reboot":"𒊭𒉌𒅖 𒋗𒌨𒊑"}
 },
 "categories":{
 "Events":"𒀉𒋫𒌅𒌝",
@@ -211,7 +217,8 @@
 "Output":"𒍢𒌅𒌝",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𒌑𒉡𒌅𒌝 𒀀𒈾 𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 𒇷𒅁𒁉 𒇷𒁉𒀉𒋾 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒁲𒅆𒈾",
@@ -1033,7 +1040,17 @@
 "UniFi clients":"𒌑𒁀𒊒 𒊭 UniFi",
 "{n} clients":"{n} 𒌑𒁀𒊒",
 "UniFi network":"𒊺𒌅𒌝 𒊭 UniFi",
-"read your UniFi network: who's connected, and how your UniFi devices are":"𒊺𒋫𒅗 𒊭 UniFi 𒊭𒋢𒌝: 𒈠𒀭𒉡𒌝 𒊏𒆠𒄑, 𒌑 𒆠𒈠 𒌑𒉡𒌓𒅗 𒊭 UniFi"
+"read your UniFi network: who's connected, and how your UniFi devices are":"𒊺𒋫𒅗 𒊭 UniFi 𒊭𒋢𒌝: 𒈠𒀭𒉡𒌝 𒊏𒆠𒄑, 𒌑 𒆠𒈠 𒌑𒉡𒌓𒅗 𒊭 UniFi",
+"A Proxmox guest can be started, shut down or rebooted.":"𒌑𒁀𒊒 𒊭 Proxmox 𒄿𒈾 𒋗𒌨𒊑𒅎, 𒄿𒈾 𒉺𒊏𒋛𒅎 𒌑𒇻 𒄿𒈾 𒋗𒌨𒊑𒅎 𒊭𒉌𒅖 𒄿𒁀𒀸𒅆.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"𒆠𒄑𒊒𒌝 𒊭 Proxmox",
+"Proxmox guests":"𒌑𒁀𒊒 𒊭 Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"𒌑𒁀𒊒 𒊭 Proxmox 𒈠𒀭𒉡𒌝? VMID 𒋗 𒄿𒁲𒅔, 𒆠𒈠 101.",
+"sample cluster":"𒆠𒄑𒊒𒌝 𒊭 𒋫𒄠𒅆𒇷𒅎",
+"{n} guests":"{n} 𒌑𒁀𒊒",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"𒆠𒄑𒊏𒅗 𒊭 Proxmox 𒊭𒋢𒌝: 𒊑𒅅𒋛, 𒌑𒁀𒊑, 𒅗𒊑 𒌑 𒅆𒉺𒊑",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"𒌑𒁀𒊑𒅗 𒊭 Proxmox 𒋗𒌨𒊒𒌝, 𒉺𒊏𒋢𒌝 𒌑 𒊭𒉌𒅖 𒋗𒌨𒊒𒌝 (𒀀𒈾 𒅗𒇷𒋗 𒄿𒊭𒀠𒅗)"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -2008,7 +2025,23 @@
 "{n} clients":"{n} ubārū",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi UNIFI_URL u UNIFI_API_KEY {where_keys} ḫašiḫ: ašar (kīma https://192.168.1.1) u kunukkam API ina Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi UNIFI_API_KEY imēs.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} unūtum"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} unūtum",
+"A Proxmox guest can be started, shut down or rebooted.":"ubāru ša Proxmox ina šurrîm, ina parāsim ulū ina šurrîm šanîš ibašši.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"ubārū ša Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"ubāru ša Proxmox mannum? VMID šu idin, kīma 101.",
+"{n} guests":"{n} ubārū",
+"Allow this? {what}":"tanaddin? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"ubārum {vmid} ina PROXMOX_PROTECT ibašši, Second Thought ul ušarrâšu ul iparrassu.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox PROXMOX_URL, PROXMOX_TOKEN_ID u PROXMOX_TOKEN_SECRET {where_keys} ḫašiḫ: ašar (kīma https://pve.local:8006) u šiṭir API ina Datacenter, Permissions, API Tokens. PVEAuditor idiššum, šumma šipir ṭuppim ubārī ul ušarrâ.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox PROXMOX_TOKEN_ID u PROXMOX_TOKEN_SECRET imēs.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought {what} ana Proxmox ul išappar.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"šiṭrum {what} ile’’i. Second Thought annītam ul ḫašiḫ: PVEAuditor šalim.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"šiṭrum ubārī šurrâm ul ile’’i (VM.PowerMgmt ḫašiḫ), libnātum ša šipir ṭuppim imassû.",
+"the token isn't allowed to do that":"šiṭrum annītam epēšam ul išu",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} inūma attā anna ana qabêm tazzazzu illak, u mamman ul ibašši."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

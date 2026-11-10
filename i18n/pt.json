@@ -612,6 +612,26 @@
   "rb_unifi_devices": {
    "message0": "dispositivos UniFi",
    "tooltip": "Uma lista de registos, um por cada dispositivo UniFi (gateway, switches, pontos de acesso): name, model, mac, ip, state, firmware, update (se há firmware mais recente à espera) e, se estiver online, uptime (horas), cpu e memory (%)."
+  },
+  "rb_proxmox_nodes": {
+   "message0": "nós do Proxmox",
+   "tooltip": "Uma lista de registos, um por cada nó do seu cluster Proxmox: node, status, cpu e memory (%), uptime (horas). Nesta página usa um cluster de exemplo."
+  },
+  "rb_proxmox_guests": {
+   "message0": "convidados do Proxmox",
+   "tooltip": "Uma lista de registos, um por cada VM e contentor: vmid, name, node, type (vm ou container), status, cpu e memory (%), uptime (horas) e, se estiver parado, onboot (se devia arrancar com o nó)."
+  },
+  "rb_proxmox_storage": {
+   "message0": "armazenamento do Proxmox",
+   "tooltip": "Uma lista de registos, um por cada armazenamento em cada nó: storage, node, used (%), used_gb, size_gb e status."
+  },
+  "rb_proxmox_tasks": {
+   "message0": "tarefas do Proxmox das últimas %1 horas",
+   "tooltip": "Uma lista de registos, a mais recente primeiro: started, node, type (vzdump é uma cópia de segurança), id (o convidado), status (OK, ou o que correu mal) e user."
+  },
+  "rb_proxmox_power": {
+   "message0": "%1 o convidado do Proxmox %2",
+   "tooltip": "Inicia, desliga ou reinicia uma VM ou contentor, pelo VMID. Pergunta-lhe sempre antes, mesmo quando nada mais pergunta, e sem ninguém para dizer que sim não acontece. Os convidados em PROXMOX_PROTECT nunca são tocados. Precisa de um token com VM.PowerMgmt. Nesta página nada arranca nem para de verdade."
   }
  },
  "options": {
@@ -740,6 +760,11 @@
   "rb_coinbase_order.SIDE": {
    "buy": "comprar",
    "sell": "vender"
+  },
+  "rb_proxmox_power.ACTION": {
+   "start": "iniciar",
+   "shutdown": "desligar",
+   "reboot": "reiniciar"
   }
  },
  "categories": {
@@ -769,7 +794,8 @@
   "Output": "Saída",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
-  "UniFi": "UniFi"
+  "UniFi": "UniFi",
+  "Proxmox": "Proxmox"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Ferramentas para o agente: coloque-as dentro de um bloco de agente",
@@ -1591,7 +1617,17 @@
   "UniFi clients": "Clientes UniFi",
   "{n} clients": "{n} clientes",
   "UniFi network": "rede UniFi",
-  "read your UniFi network: who's connected, and how your UniFi devices are": "ler a sua rede UniFi: quem está ligado, e como estão os seus dispositivos UniFi"
+  "read your UniFi network: who's connected, and how your UniFi devices are": "ler a sua rede UniFi: quem está ligado, e como estão os seus dispositivos UniFi",
+  "A Proxmox guest can be started, shut down or rebooted.": "Um convidado do Proxmox pode ser iniciado, desligado ou reiniciado.",
+  "Proxmox": "Proxmox",
+  "Proxmox cluster": "cluster Proxmox",
+  "Proxmox guests": "Convidados do Proxmox",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Que convidado do Proxmox? Indique o VMID, como 101.",
+  "sample cluster": "cluster de exemplo",
+  "{n} guests": "{n} convidados",
+  "read your Proxmox cluster: nodes, guests, storage and tasks": "ler o seu cluster Proxmox: nós, convidados, armazenamento e tarefas",
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "iniciar, desligar e reiniciar os seus convidados do Proxmox (perguntando-lhe sempre)"
  },
  "examples": {
   "review": {
@@ -3198,6 +3234,22 @@
   "{n} clients": "{n} clientes",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "O UniFi precisa de UNIFI_URL e UNIFI_API_KEY {where_keys}: o endereço da consola (como https://192.168.1.1) e uma chave de API da app Network (Settings, Control Plane, Integrations).",
   "The UniFi console refused UNIFI_API_KEY.": "A consola UniFi recusou UNIFI_API_KEY.",
-  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} dispositivos"
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} dispositivos",
+  "A Proxmox guest can be started, shut down or rebooted.": "Um convidado do Proxmox pode ser iniciado, desligado ou reiniciado.",
+  "Proxmox": "Proxmox",
+  "Proxmox guests": "Convidados do Proxmox",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Que convidado do Proxmox? Indique o VMID, como 101.",
+  "{n} guests": "{n} convidados",
+  "Allow this? {what}": "Permitir? {what}",
+  "Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.": "O convidado {vmid} está em PROXMOX_PROTECT, por isso o Second Thought nunca o inicia, para ou reinicia.",
+  "Proxmox VE {version}": "Proxmox VE {version}",
+  "Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.": "O Proxmox precisa de PROXMOX_URL, PROXMOX_TOKEN_ID e PROXMOX_TOKEN_SECRET {where_keys}: o endereço (como https://pve.local:8006) e um token de API, de Datacenter, Permissions, API Tokens. Dê-lhe o papel PVEAuditor, a menos que o programa inicie ou pare convidados.",
+  "Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.": "O Proxmox recusou PROXMOX_TOKEN_ID e PROXMOX_TOKEN_SECRET.",
+  "Second Thought doesn't send {what} to Proxmox.": "O Second Thought não envia {what} ao Proxmox.",
+  "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "o token também pode {what}. O Second Thought não precisa disso: o papel PVEAuditor é mais seguro.",
+  "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "o token não pode iniciar nem parar convidados (precisa de VM.PowerMgmt), por isso os blocos de ligar e desligar deste programa seriam recusados.",
+  "the token isn't allowed to do that": "o token não pode fazer isso",
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} só acontece quando está lá para dizer que sim, e não está ninguém."
  }
 }

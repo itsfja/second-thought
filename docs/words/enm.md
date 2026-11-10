@@ -29,6 +29,7 @@ Made by tools/sync.py from i18n/enm.json: edit that, not this.
 - Coinbase: Coinbase
 - MikroTik: MikroTik
 - UniFi: UniFi
+- Proxmox: Proxmox
 - Tools for the agent: drop them inside an agent block: Tooles for the procuratour: lay hem withinne a procuratoures blok
 - Listeners: they run while the exported program runs on schedule: Herkeners: they rennen whil the devys sent out renneth by ordinaunce
 - Read and send: Rede and sende

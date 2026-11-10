@@ -159,7 +159,12 @@
 "rb_mikrotik_health":{"message0":"estado de MikroTik","tooltip":"Un registro sobre el propio router o switch: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) y cualquier otro sensor que tenga."},
 "rb_mikrotik_log":{"message0":"registro de MikroTik, últimas %1 líneas","tooltip":"Las últimas líneas del registro del router, la más antigua primero, cada una como «time topics: message»."},
 "rb_unifi_clients":{"message0":"clientes de UniFi","tooltip":"Una lista de registros, uno por cada dispositivo conectado a tu red UniFi: name, mac, ip, type (wired, wireless o vpn), connected (desde cuándo) y uplink (el dispositivo UniFi por el que se conecta). Solo lee: nada se bloquea ni se cambia. En esta página usa una red de ejemplo."},
-"rb_unifi_devices":{"message0":"dispositivos UniFi","tooltip":"Una lista de registros, uno por cada dispositivo UniFi (gateway, switches, puntos de acceso): name, model, mac, ip, state, firmware, update (si hay firmware más nuevo esperando) y, si está en línea, uptime (horas), cpu y memory (%)."}
+"rb_unifi_devices":{"message0":"dispositivos UniFi","tooltip":"Una lista de registros, uno por cada dispositivo UniFi (gateway, switches, puntos de acceso): name, model, mac, ip, state, firmware, update (si hay firmware más nuevo esperando) y, si está en línea, uptime (horas), cpu y memory (%)."},
+"rb_proxmox_nodes":{"message0":"nodos de Proxmox","tooltip":"Una lista de registros, uno por cada nodo de tu clúster Proxmox: node, status, cpu y memory (%), uptime (horas). En esta página usa un clúster de ejemplo."},
+"rb_proxmox_guests":{"message0":"invitados de Proxmox","tooltip":"Una lista de registros, uno por cada VM y contenedor: vmid, name, node, type (vm o container), status, cpu y memory (%), uptime (horas) y, si está detenido, onboot (si debería arrancar con el nodo)."},
+"rb_proxmox_storage":{"message0":"almacenamiento de Proxmox","tooltip":"Una lista de registros, uno por cada almacenamiento de cada nodo: storage, node, used (%), used_gb, size_gb y status."},
+"rb_proxmox_tasks":{"message0":"tareas de Proxmox de las últimas %1 horas","tooltip":"Una lista de registros, la más reciente primero: started, node, type (vzdump es una copia de seguridad), id (el invitado), status (OK, o qué falló) y user."},
+"rb_proxmox_power":{"message0":"%1 invitado de Proxmox %2","tooltip":"Arranca, apaga o reinicia una VM o un contenedor, por su VMID. Siempre te pregunta antes, aunque nada más pregunte, y si no hay nadie para decir que sí, no se hace. Los invitados en PROXMOX_PROTECT nunca se tocan. Necesita un token con VM.PowerMgmt. En esta página nada arranca ni se detiene de verdad."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos los días","weekdays":"entre semana","weekends":"los fines de semana"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"diarios","hour":"por hora"},
 "rb_coinbase_orders.WHICH":{"open":"órdenes abiertas","fills":"últimas ejecuciones"},
 "rb_coinbase_preview.SIDE":{"buy":"comprar","sell":"vender"},
-"rb_coinbase_order.SIDE":{"buy":"comprar","sell":"vender"}
+"rb_coinbase_order.SIDE":{"buy":"comprar","sell":"vender"},
+"rb_proxmox_power.ACTION":{"start":"arrancar","shutdown":"apagar","reboot":"reiniciar"}
 },
 "categories":{
 "Events":"Eventos",
@@ -210,7 +216,8 @@
 "Output":"Salida",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Herramientas para el agente: suéltalas dentro de un bloque de agente",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"Clientes de UniFi",
 "{n} clients":"{n} clientes",
 "UniFi network":"red UniFi",
-"read your UniFi network: who's connected, and how your UniFi devices are":"leer tu red UniFi: quién está conectado y cómo están tus dispositivos UniFi"
+"read your UniFi network: who's connected, and how your UniFi devices are":"leer tu red UniFi: quién está conectado y cómo están tus dispositivos UniFi",
+"A Proxmox guest can be started, shut down or rebooted.":"Un invitado de Proxmox se puede arrancar, apagar o reiniciar.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"clúster Proxmox",
+"Proxmox guests":"Invitados de Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"¿Qué invitado de Proxmox? Indica su VMID, como 101.",
+"sample cluster":"clúster de ejemplo",
+"{n} guests":"{n} invitados",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"leer tu clúster Proxmox: nodos, invitados, almacenamiento y tareas",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"arrancar, apagar y reiniciar tus invitados de Proxmox (preguntándote cada vez)"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
@@ -2007,6 +2024,22 @@
 "{n} clients":"{n} clientes",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi necesita UNIFI_URL y UNIFI_API_KEY {where_keys}: la dirección de la consola (como https://192.168.1.1) y una clave de API de la app Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"La consola UniFi rechazó UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} dispositivos"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} dispositivos",
+"A Proxmox guest can be started, shut down or rebooted.":"Un invitado de Proxmox se puede arrancar, apagar o reiniciar.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Invitados de Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"¿Qué invitado de Proxmox? Indica su VMID, como 101.",
+"{n} guests":"{n} invitados",
+"Allow this? {what}":"¿Lo permites? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"El invitado {vmid} está en PROXMOX_PROTECT, así que Second Thought nunca lo arranca, detiene ni reinicia.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox necesita PROXMOX_URL, PROXMOX_TOKEN_ID y PROXMOX_TOKEN_SECRET {where_keys}: la dirección (como https://pve.local:8006) y un token de API, de Datacenter, Permissions, API Tokens. Dale el rol PVEAuditor salvo que el programa arranque o detenga invitados.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox rechazó PROXMOX_TOKEN_ID y PROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought no envía {what} a Proxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"el token también puede {what}. Second Thought no lo necesita: el rol PVEAuditor es más seguro.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"el token no puede arrancar ni detener invitados (necesita VM.PowerMgmt), así que los bloques de encendido de este programa se rechazarían.",
+"the token isn't allowed to do that":"el token no tiene permiso para eso",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} solo se hace cuando estás ahí para decir que sí, y no hay nadie."
 }
 };

@@ -159,7 +159,12 @@
 "rb_mikrotik_health":{"message0":"MikroTik hælu","tooltip":"Gewrit be þam wegwisende sylfum: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and ælc oþer gefelend þe he hæfþ."},
 "rb_mikrotik_log":{"message0":"MikroTik gewrit, latoste %1 linan","tooltip":"Þa latostan linan þæs wegwisendes gewrites, seo ealdoste ærest, ælc swa 'time topics: message'."},
 "rb_unifi_clients":{"message0":"UniFi cuman","tooltip":"Getæl gewrita, an for ælcum tole þe is geteod to þinum UniFi nette: name, mac, ip, type (wired, wireless oþþe vpn), connected (sibban hwonne) and uplink (þæt UniFi tol þe hit þurh færþ). Hit rædeþ ane: naht ne biþ forboden ne awend. On þissum leafe hit brycþ bysene nettes."},
-"rb_unifi_devices":{"message0":"UniFi tolas","tooltip":"Getæl gewrita, an for ælcum UniFi tole (geat, wenderas, ingangas): name, model, mac, ip, state, firmware, update (hwæþer niwre firmware bideþ), and for þam þe onweald sind, uptime (tida), cpu and memory (%)."}
+"rb_unifi_devices":{"message0":"UniFi tolas","tooltip":"Getæl gewrita, an for ælcum UniFi tole (geat, wenderas, ingangas): name, model, mac, ip, state, firmware, update (hwæþer niwre firmware bideþ), and for þam þe onweald sind, uptime (tida), cpu and memory (%)."},
+"rb_proxmox_nodes":{"message0":"Proxmox cnottas","tooltip":"Getæl gewrita, an for ælcum cnotte þines Proxmox heapes: node, status, cpu and memory (%), uptime (tida). On þissum leafe hit brycþ bysene heapes."},
+"rb_proxmox_guests":{"message0":"Proxmox gystas","tooltip":"Getæl gewrita, an for ælcum VM and fæte: vmid, name, node, type (vm oþþe container), status, cpu and memory (%), uptime (tida), and for þam gestilledan onboot (hwæþer he scolde mid þam cnotte onginnan)."},
+"rb_proxmox_storage":{"message0":"Proxmox hordern","tooltip":"Getæl gewrita, an for ælcum horderne on ælcum cnotte: storage, node, used (%), used_gb, size_gb and status."},
+"rb_proxmox_tasks":{"message0":"Proxmox weorc þara latostena %1 tida","tooltip":"Getæl gewrita, þæt niweste ærest: started, node, type (vzdump is gehealdnes), id (se gyst), status (OK, oþþe hwæt misfor) and user."},
+"rb_proxmox_power":{"message0":"%1 Proxmox gyst %2","tooltip":"Onstyreþ, scet oþþe eft onstyreþ an VM oþþe fæt, be his VMID. Hit axaþ þe simle ærest, þeah naht elles ne axige; gif nan man nis þær to secgenne gea, hit ne færþ. Gystas on PROXMOX_PROTECT ne beoþ næfre gehrinene. Behofaþ tacnes mid VM.PowerMgmt. On þissum leafe naht ne onginþ ne ne stilleþ soþlice."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"dæglicu","hour":"tidlicu"},
 "rb_coinbase_orders.WHICH":{"open":"opene bebodu","fills":"latostan gefyllednessa"},
 "rb_coinbase_preview.SIDE":{"buy":"bycgan","sell":"sellan"},
-"rb_coinbase_order.SIDE":{"buy":"bycgan","sell":"sellan"}
+"rb_coinbase_order.SIDE":{"buy":"bycgan","sell":"sellan"},
+"rb_proxmox_power.ACTION":{"start":"onstyrian","shutdown":"scettan","reboot":"eft onstyrian"}
 },
 "categories":{
 "Events":"Gelimpu",
@@ -210,7 +216,8 @@
 "Output":"Utgang",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tol for þone ærendracan: lege hie innan ærendracan stocce",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"UniFi cuman",
 "{n} clients":"{n} cuman",
 "UniFi network":"UniFi nett",
-"read your UniFi network: who's connected, and how your UniFi devices are":"rædan þin UniFi nett: hwa is geteod, and hu þine UniFi tolas fareþ"
+"read your UniFi network: who's connected, and how your UniFi devices are":"rædan þin UniFi nett: hwa is geteod, and hu þine UniFi tolas fareþ",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox gyst mæg beon onstyred, gesceted oþþe eft onstyred.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"Proxmox heap",
+"Proxmox guests":"Proxmox gystas",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Hwilc Proxmox gyst? Sege his VMID, swa 101.",
+"sample cluster":"bysene heap",
+"{n} guests":"{n} gystas",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"rædan þinne Proxmox heap: cnottas, gystas, hordern and weorc",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"onstyrian, scettan and eft onstyrian þine Proxmox gystas (axiende þe ælce siþe)"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2007,7 +2024,23 @@
 "{n} clients":"{n} cuman",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi behofaþ UNIFI_URL and UNIFI_API_KEY {where_keys}: þære bordes stowe (swa https://192.168.1.1) and API cæg of þam Network cræfte (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"Þæt UniFi bord wiþsoc UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tolas"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tolas",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox gyst mæg beon onstyred, gesceted oþþe eft onstyred.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Proxmox gystas",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Hwilc Proxmox gyst? Sege his VMID, swa 101.",
+"{n} guests":"{n} gystas",
+"Allow this? {what}":"Lyfst þu þis? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"Gyst {vmid} is on PROXMOX_PROTECT, forþon Second Thought hine næfre ne onstyreþ, ne stilleþ, ne eft onstyreþ.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox behofaþ PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: þa stowe (swa https://pve.local:8006) and API tacn, of Datacenter, Permissions, API Tokens. Sele him þone PVEAuditor had, butan se cræft gystas onstyrige oþþe stille.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox wiþsoc PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought ne sent {what} to Proxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"se tacn mæg eac {what}. Second Thought ne behofaþ þæs: se PVEAuditor had is sicorra.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"se tacn ne mæg gystas onstyrian ne stillan (he behofaþ VM.PowerMgmt), swa þæs cræftes mægenstanas wæron wiþsacene.",
+"the token isn't allowed to do that":"se tacn ne mot þæt don",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} færþ ane þonne þu eart þær to secgenne gea, and nan man nis."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

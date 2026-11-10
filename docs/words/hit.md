@@ -29,6 +29,7 @@ Made by tools/sync.py from i18n/hit.json: edit that, not this.
 - Coinbase: Coinbase
 - MikroTik: MikroTik
 - UniFi: UniFi
+- Proxmox: Proxmox
 - Listeners: they run while the exported program runs on schedule: 𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣
 - No blocks match: 𒋞 𒉡𒅅
 - Read and send: 𒄬𒍝𒀀𒄿 𒅇 𒄩𒀜𒊏𒀀𒄿

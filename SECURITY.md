@@ -42,9 +42,9 @@ decided by its blocks, and every block declares it (the `CAPABILITIES` list in `
 
 - **Act:** send email, Telegram, Discord or Slack messages; comment on GitHub; control Home Assistant or Homey
   devices and start Homey flows; publish MQTT messages; accept web requests from other computers; use the tools of
-  MCP servers you set up; place and cancel Coinbase orders.
+  MCP servers you set up; place and cancel Coinbase orders; start, shut down and reboot Proxmox guests.
 - **Read:** web pages and search, your email, calendars, news feeds, GitHub, Telegram, Discord and Slack messages,
-  Home Assistant, Homey and MQTT, your Coinbase balances and orders, your MikroTik switch's ports and log, who's on your UniFi network, a folder it watches, and files you choose.
+  Home Assistant, Homey and MQTT, your Coinbase balances and orders, your MikroTik switch's ports and log, who's on your UniFi network, your Proxmox cluster, a folder it watches, and files you choose.
 - **Keep:** files in its `outputs` folder, and notes between runs in `memory.json`.
 
 Everything it reads and writes is sent to the model services it uses.
@@ -69,6 +69,10 @@ Everything it reads and writes is sent to the model services it uses.
   - **Your network.** The MikroTik and UniFi blocks only read. The runtime sends nothing to RouterOS or a UniFi console
     but the reads in `mikrotik_free` and `unifi_free` (`SAFETY`): no change, block, restart or reboot is ever sent,
     whoever asks. A device's own certificate is used only when `MIKROTIK_CERT_SHA256` or `UNIFI_CERT_SHA256` pins it.
+  - **Your servers.** Starting, shutting down and rebooting a Proxmox guest asks every time, live, and never runs with
+    nobody there to say yes; guests in `PROXMOX_PROTECT` are never touched. Besides those and the reads in
+    `proxmox_free`, nothing is sent to Proxmox: no destroying, snapshots, commands in a guest, or storage, permission
+    or firewall changes. Use a token with the PVEAuditor role unless the program starts or stops guests.
   - **Things that could do anything.** When an agent chooses it, running a Home Assistant script, scene or automation,
     pressing a button, starting a Homey flow, or publishing an MQTT message that says unlock, open or disarm.
 - **No reading made-up addresses next to private data.** An agent that can see private things (email, messages,

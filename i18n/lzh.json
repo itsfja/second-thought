@@ -612,6 +612,26 @@
   "rb_unifi_devices": {
    "message0": "UniFi 之器",
    "tooltip": "簿之列，每 UniFi 器一簿（關、交換器、接點）：name、model、mac、ip、state、firmware、update（新韌體待否），在線者又有 uptime（時）、cpu、memory（%）。"
+  },
+  "rb_proxmox_nodes": {
+   "message0": "Proxmox 之節",
+   "tooltip": "簿之列，汝 Proxmox 群每節一簿：node、status、cpu、memory（%）、uptime（時）。於此頁用樣群。"
+  },
+  "rb_proxmox_guests": {
+   "message0": "Proxmox 之客",
+   "tooltip": "簿之列，每機每器一簿：vmid、name、node、type（vm 或 container）、status、cpu、memory（%）、uptime（時），止者又有 onboot（當隨節而啟否）。"
+  },
+  "rb_proxmox_storage": {
+   "message0": "Proxmox 之庫",
+   "tooltip": "簿之列，每節每庫一簿：storage、node、used（%）、used_gb、size_gb、status。"
+  },
+  "rb_proxmox_tasks": {
+   "message0": "Proxmox 近 %1 時之務",
+   "tooltip": "簿之列，新者居先：started、node、type（vzdump 乃備）、id（其客）、status（OK，或其誤）、user。"
+  },
+  "rb_proxmox_power": {
+   "message0": "%1 Proxmox 之客 %2",
+   "tooltip": "以 VMID 啟、閉、復啟一機一器。必先問汝，雖他無所問；無人在以曰可，則不行。PROXMOX_PROTECT 之客，未嘗觸之。須有 VM.PowerMgmt 之符。於此頁無所真啟止。"
   }
  },
  "options": {
@@ -730,6 +750,11 @@
   "rb_coinbase_order.SIDE": {
    "buy": "買",
    "sell": "賣"
+  },
+  "rb_proxmox_power.ACTION": {
+   "start": "啟",
+   "shutdown": "閉",
+   "reboot": "復啟"
   }
  },
  "categories": {
@@ -759,7 +784,8 @@
   "You": "汝",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
-  "UniFi": "UniFi"
+  "UniFi": "UniFi",
+  "Proxmox": "Proxmox"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "聽者：所出之程依時而行，則此諸塊行",
@@ -1581,7 +1607,17 @@
   "UniFi clients": "UniFi 之客",
   "{n} clients": "{n} 客",
   "UniFi network": "UniFi 之網",
-  "read your UniFi network: who's connected, and how your UniFi devices are": "讀汝 UniFi 之網：誰連焉，及 UniFi 諸器何如"
+  "read your UniFi network: who's connected, and how your UniFi devices are": "讀汝 UniFi 之網：誰連焉，及 UniFi 諸器何如",
+  "A Proxmox guest can be started, shut down or rebooted.": "Proxmox 之客，可啟，可閉，可復啟。",
+  "Proxmox": "Proxmox",
+  "Proxmox cluster": "Proxmox 之群",
+  "Proxmox guests": "Proxmox 之客",
+  "Proxmox: {why}.": "Proxmox：{why}。",
+  "Which Proxmox guest? Give its VMID, like 101.": "何 Proxmox 之客？示其 VMID，若 101。",
+  "sample cluster": "樣群",
+  "{n} guests": "{n} 客",
+  "read your Proxmox cluster: nodes, guests, storage and tasks": "讀汝 Proxmox 之群：節、客、庫、務",
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "啟、閉、復啟汝 Proxmox 之客（每次必問）"
  },
  "examples": {
   "review": {
@@ -3188,7 +3224,23 @@
   "{n} clients": "{n} 客",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi 須 UNIFI_URL 與 UNIFI_API_KEY {where_keys}：控臺之址（若 https://192.168.1.1），及 Network 之 API 鑰（Settings、Control Plane、Integrations）。",
   "The UniFi console refused UNIFI_API_KEY.": "UniFi 控臺拒 UNIFI_API_KEY。",
-  "UniFi Network {version}, {n} devices": "UniFi Network {version}，{n} 器"
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}，{n} 器",
+  "A Proxmox guest can be started, shut down or rebooted.": "Proxmox 之客，可啟，可閉，可復啟。",
+  "Proxmox": "Proxmox",
+  "Proxmox guests": "Proxmox 之客",
+  "Proxmox: {why}.": "Proxmox：{why}。",
+  "Which Proxmox guest? Give its VMID, like 101.": "何 Proxmox 之客？示其 VMID，若 101。",
+  "{n} guests": "{n} 客",
+  "Allow this? {what}": "許之乎？{what}",
+  "Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.": "客 {vmid} 在 PROXMOX_PROTECT，故 Second Thought 未嘗啟之、止之、復啟之。",
+  "Proxmox VE {version}": "Proxmox VE {version}",
+  "Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.": "Proxmox 須 PROXMOX_URL、PROXMOX_TOKEN_ID、PROXMOX_TOKEN_SECRET {where_keys}：其址（若 https://pve.local:8006），及 API 之符，造於 Datacenter、Permissions、API Tokens。程序不啟止客，則予 PVEAuditor 之職。",
+  "Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.": "Proxmox 拒 PROXMOX_TOKEN_ID 與 PROXMOX_TOKEN_SECRET。",
+  "Second Thought doesn't send {what} to Proxmox.": "Second Thought 不發 {what} 於 Proxmox。",
+  "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "其符亦能 {what}。Second Thought 不須此：PVEAuditor 之職為安。",
+  "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "其符不能啟止客（須 VM.PowerMgmt），故此程序之電積將見拒。",
+  "the token isn't allowed to do that": "其符不得為此",
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} 唯汝在而曰可乃行，今無人。"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

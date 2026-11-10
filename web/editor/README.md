@@ -31,7 +31,7 @@ file needn't end where a function does, but it reads better if it does.
 | `15-library.js` | Saved programs and the prompt library. |
 | `16-pictures-files.js` | Pictures, files and error messages. |
 | `17-agent.js` | The agent and its built-in tools. |
-| `18-connections.js` | Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik, UniFi and the rest. |
+| `18-connections.js` | Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik, UniFi, Proxmox and the rest. |
 | `19-interpreter.js` | Running blocks: structured replies, asking you, values and statements, results. |
 | `20-test-cases.js` | Test cases: Save as test case and Run tests. |
 | `21-log-watch-step.js` | Saving the log, the watch panel, step mode and running one script. |

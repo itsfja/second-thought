@@ -159,7 +159,12 @@
 "rb_mikrotik_health":{"message0":"здравїе MikroTik","tooltip":"Запись ѡ самомъ наставницѣ: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), и всѧкъ иный чꙋвственникъ, егоже имать."},
 "rb_mikrotik_log":{"message0":"лѣтопись MikroTik, послѣднїѧ %1 строки","tooltip":"Послѣднїѧ строки лѣтописи наставника, древнѣйшаѧ прежде, всѧка ꙗкоже «time topics: message»."},
 "rb_unifi_clients":{"message0":"гостїе UniFi","tooltip":"Списокъ записей, єдина на всѧко орꙋдїе совокꙋпленное съ мрежею твоею UniFi: name, mac, ip, type (wired, wireless или vpn), connected (ѿ коегѡ времене) и uplink (орꙋдїе UniFi, имже совокꙋплѧетсѧ). Точїю чтетъ: ничтоже возбранѧетсѧ ни измѣнѧетсѧ. На сей страницѣ ꙋпотреблѧетъ мрежꙋ ѡбразца."},
-"rb_unifi_devices":{"message0":"орꙋдїѧ UniFi","tooltip":"Списокъ записей, єдина на всѧко орꙋдїе UniFi (врата, преключатели, точки): name, model, mac, ip, state, firmware, update (аще новѣйшее firmware ждетъ), и совокꙋпленномꙋ, uptime (часы), cpu и memory (%)."}
+"rb_unifi_devices":{"message0":"орꙋдїѧ UniFi","tooltip":"Списокъ записей, єдина на всѧко орꙋдїе UniFi (врата, преключатели, точки): name, model, mac, ip, state, firmware, update (аще новѣйшее firmware ждетъ), и совокꙋпленномꙋ, uptime (часы), cpu и memory (%)."},
+"rb_proxmox_nodes":{"message0":"ѹзлы Proxmox","tooltip":"Списокъ записей, єдина на всѧкъ ѹзелъ собранїѧ твоегѡ Proxmox: node, status, cpu и memory (%), uptime (часы). На сей страницѣ ѹпотреблѧетъ собранїе ѡбразца."},
+"rb_proxmox_guests":{"message0":"гостїе Proxmox","tooltip":"Списокъ записей, єдина на всѧкѹ VM и сосѹдъ: vmid, name, node, type (vm или container), status, cpu и memory (%), uptime (часы), и ѡстановленномѹ onboot (подобаетъ ли емѹ начатисѧ со ѹзломъ)."},
+"rb_proxmox_storage":{"message0":"хранилища Proxmox","tooltip":"Списокъ записей, єдина на всѧко хранилище на всѧкомъ ѹзлѣ: storage, node, used (%), used_gb, size_gb и status."},
+"rb_proxmox_tasks":{"message0":"дѣла Proxmox послѣднихъ %1 часѡвъ","tooltip":"Списокъ записей, новѣйшее прежде: started, node, type (vzdump есть сохраненїе), id (гость), status (OK, или что погрѣши) и user."},
+"rb_proxmox_power":{"message0":"%1 гостѧ Proxmox %2","tooltip":"Начинаетъ, ѹгашаетъ или паки начинаетъ єдинѹ VM или сосѹдъ, по VMID егѡ. Присно прежде вопрошаетъ тѧ, аще и ничтоже иное вопрошаетъ, и не сѹщѹ никомѹже рещи «ей», не бываетъ. Гостей въ PROXMOX_PROTECT николиже косаетсѧ. Требѹетъ знаменїѧ съ VM.PowerMgmt. На сей страницѣ ничтоже воистинѹ начинаетсѧ ни ѡстанавливаетсѧ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"на всѧкъ день","weekdays":"въ дни дѣланїѧ","weekends":"въ дни ѿдыха"},
@@ -180,7 +185,8 @@
 "rb_coinbase_candles.SIZE":{"day":"дневныѧ","hour":"часовыѧ"},
 "rb_coinbase_orders.WHICH":{"open":"ѿверзтаѧ повелѣніѧ","fills":"послѣднѧѧ исполненіѧ"},
 "rb_coinbase_preview.SIDE":{"buy":"кꙋпи","sell":"продаждь"},
-"rb_coinbase_order.SIDE":{"buy":"кꙋпи","sell":"продаждь"}
+"rb_coinbase_order.SIDE":{"buy":"кꙋпи","sell":"продаждь"},
+"rb_proxmox_power.ACTION":{"start":"начни","shutdown":"ѹгаси","reboot":"паки начни"}
 },
 "categories":{
 "Agent":"Посланникъ",
@@ -209,7 +215,8 @@
 "You":"Ты",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1031,7 +1038,17 @@
 "UniFi clients":"Гостїе UniFi",
 "{n} clients":"{n} гостей",
 "UniFi network":"мрежа UniFi",
-"read your UniFi network: who's connected, and how your UniFi devices are":"чести мрежꙋ твою UniFi: кто совокꙋпленъ, и како имꙋтъ орꙋдїѧ твоѧ UniFi"
+"read your UniFi network: who's connected, and how your UniFi devices are":"чести мрежꙋ твою UniFi: кто совокꙋпленъ, и како имꙋтъ орꙋдїѧ твоѧ UniFi",
+"A Proxmox guest can be started, shut down or rebooted.":"Гость Proxmox можетъ начатисѧ, ѹгаснѹти или паки начатисѧ.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"собранїе Proxmox",
+"Proxmox guests":"Гостїе Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Кїй гость Proxmox? Даждь VMID егѡ, ꙗкоже 101.",
+"sample cluster":"собранїе ѡбразца",
+"{n} guests":"{n} гостей",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"чести собранїе твоѐ Proxmox: ѹзлы, гости, хранилища и дѣла",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"начинати, ѹгашати и паки начинати гости твоѧ Proxmox (вопрошаѧ тѧ всѧкъ разъ)"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -2006,7 +2023,23 @@
 "{n} clients":"{n} гостей",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi требꙋетъ UNIFI_URL и UNIFI_API_KEY {where_keys}: мѣсто ꙋправителѧ (ꙗкоже https://192.168.1.1) и ключь API ѿ Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"Ꙋправитель UniFi ѿвержѐ UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} орꙋдїй"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} орꙋдїй",
+"A Proxmox guest can be started, shut down or rebooted.":"Гость Proxmox можетъ начатисѧ, ѹгаснѹти или паки начатисѧ.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Гостїе Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Кїй гость Proxmox? Даждь VMID егѡ, ꙗкоже 101.",
+"{n} guests":"{n} гостей",
+"Allow this? {what}":"Попѹстиши ли? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"Гость {vmid} есть въ PROXMOX_PROTECT, тѣмже Second Thought николиже начинаетъ, ѡстанавливаетъ ни паки начинаетъ егѡ.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox требѹетъ PROXMOX_URL, PROXMOX_TOKEN_ID и PROXMOX_TOKEN_SECRET {where_keys}: мѣсто (ꙗкоже https://pve.local:8006) и знаменїе API, ѿ Datacenter, Permissions, API Tokens. Даждь емѹ чинъ PVEAuditor, аще программа не начинаетъ и не ѡстанавливаетъ гостей.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox ѿвержѐ PROXMOX_TOKEN_ID и PROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought не посылаетъ {what} къ Proxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"знаменїе можетъ и {what}. Second Thought не требѹетъ сегѡ: чинъ PVEAuditor безбѣднѣе.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"знаменїе не можетъ начинати ни ѡстанавливати гостей (требѹетъ VM.PowerMgmt), тѣмже ѿверглисѧ бы сеѧ программы ѡпоки.",
+"the token isn't allowed to do that":"знаменїю не подобаетъ сегѡ творити",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} бываетъ точїю, егда ты еси тамѡ рещи «ей», а никтоже есть."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

@@ -847,8 +847,26 @@ async def new_feature_page_tests(pg):
     check("[mikrotik]" in files["second-thought.ini"] and "MIKROTIK_CERT_SHA256 = " in files["second-thought.ini"] and "mikrotik_read" in EXTRA["t_mt_blocks"],
           "a MikroTik program's settings ask for the router's address, user, password and certificate pin")
 
-    print("UniFi")
+    print("Proxmox")
     nth = lambda lst, i: {"block": {"type": "lists_getIndex", "fields": {"MODE": "GET", "WHERE": "FROM_START"}, "inputs": {"VALUE": lst, "AT": nm(i)}}}  # noqa: E731
+    px_prog = script(add(rec("memory", first(cb("rb_proxmox_nodes")))), add(count(cb("rb_proxmox_guests"))), add(rec("onboot", nth(cb("rb_proxmox_guests"), 5))),
+                     add(rec("used", nth(cb("rb_proxmox_storage"), 2))), add(count(cb("rb_proxmox_tasks", N=nm(24)))),
+                     add(rec("id", first(cb("rb_proxmox_tasks", N=nm(24))))),
+                     blk("rb_proxmox_power", fields={"ACTION": "start"}, inputs={"VMID": nm(104)}), blk("rb_result"))
+    await load_state(pg, px_prog)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    asks = [t for n, _, t in await step_texts(pg) if n == "Allow this?"]
+    want = ["62.5", "6", "true", "88", "2", "103"]
+    check(status.startswith("done") and items == want, f"the Proxmox blocks read the sample cluster's nodes, guests, storage and tasks ({items})")
+    check(len(asks) == 1 and "start the Proxmox guest 104 (pihole, on pve2, now stopped)" in asks[0], f"on the page, starting a Proxmox guest asks first ({asks})")
+    EXTRA["t_px_blocks"] = await export_python(pg, "t_px_blocks")
+    await pg.evaluate("document.getElementById('io-name').value = 't_px_blocks'")
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    check("[proxmox]" in files["second-thought.ini"] and "PROXMOX_PROTECT = " in files["second-thought.ini"] and "proxmox_control" in EXTRA["t_px_blocks"],
+          "a Proxmox program's settings ask for the address, token, certificate pin and protected guests")
+
+    print("UniFi")
     uf_prog = script(add(count(cb("rb_unifi_clients"))), add(rec("uplink", nth(cb("rb_unifi_clients"), 2))), add(rec("name", nth(cb("rb_unifi_clients"), 6))),
                      add(rec("type", nth(cb("rb_unifi_clients"), 2))), add(rec("update", nth(cb("rb_unifi_devices"), 2))),
                      add(rec("uptime", first(cb("rb_unifi_devices")))), add(rec("state", nth(cb("rb_unifi_devices"), 4))), blk("rb_result"))

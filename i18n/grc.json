@@ -612,6 +612,26 @@
   "rb_unifi_devices": {
    "message0": "μηχαναὶ UniFi",
    "tooltip": "Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην μηχανὴν UniFi (πύλη, μεταγωγεῖς, σημεῖα προσβάσεως)· name, model, mac, ip, state, firmware, update (εἰ νεώτερον firmware μένει), καὶ ταῖς συνημμέναις, uptime (ὧραι), cpu καὶ memory (%)."
+  },
+  "rb_proxmox_nodes": {
+   "message0": "κόμβοι τοῦ Proxmox",
+   "tooltip": "Κατάλογος ἀναγραφῶν, μία καθ' ἕκαστον κόμβον τοῦ συστήματός σου Proxmox· node, status, cpu καὶ memory (%), uptime (ὧραι). Ἐν τῇδε τῇ σελίδι χρῆται συστήματι ὑποδείγματος."
+  },
+  "rb_proxmox_guests": {
+   "message0": "ξένοι τοῦ Proxmox",
+   "tooltip": "Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην VM καὶ container· vmid, name, node, type (vm ἢ container), status, cpu καὶ memory (%), uptime (ὧραι), καὶ τῷ πεπαυμένῳ onboot (εἰ δεῖ αὐτὸν μετὰ τοῦ κόμβου ἄρχεσθαι)."
+  },
+  "rb_proxmox_storage": {
+   "message0": "ἀποθῆκαι τοῦ Proxmox",
+   "tooltip": "Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην ἀποθήκην ἐν ἑκάστῳ κόμβῳ· storage, node, used (%), used_gb, size_gb καὶ status."
+  },
+  "rb_proxmox_tasks": {
+   "message0": "ἔργα τοῦ Proxmox τῶν ἐσχάτων %1 ὡρῶν",
+   "tooltip": "Κατάλογος ἀναγραφῶν, τὸ νεώτατον πρῶτον· started, node, type (vzdump ἐστὶν ἀντίγραφον φυλακῆς), id (ὁ ξένος), status (OK, ἢ τί ἥμαρτεν) καὶ user."
+  },
+  "rb_proxmox_power": {
+   "message0": "%1 τὸν ξένον τοῦ Proxmox %2",
+   "tooltip": "Ἄρχει, κλείει ἢ πάλιν ἄρχει μίαν VM ἢ container τῷ VMID. Ἀεὶ πρῶτον ἐρωτᾷ σε, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ· μηδενὸς παρόντος τοῦ «ναί» λέγοντος, οὐ γίνεται. Οἱ ξένοι ἐν PROXMOX_PROTECT οὐδέποτε ἅπτονται. Δεῖται συμβόλου μετὰ VM.PowerMgmt. Ἐν τῇδε τῇ σελίδι οὐδὲν ἀληθῶς ἄρχεται οὐδὲ παύεται."
   }
  },
  "options": {
@@ -740,6 +760,11 @@
   "rb_coinbase_order.SIDE": {
    "buy": "ὠνοῦ",
    "sell": "πώλει"
+  },
+  "rb_proxmox_power.ACTION": {
+   "start": "ἄρξον",
+   "shutdown": "κλεῖσον",
+   "reboot": "πάλιν ἄρξον"
   }
  },
  "categories": {
@@ -769,7 +794,8 @@
   "Output": "Ἔξοδος",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
-  "UniFi": "UniFi"
+  "UniFi": "UniFi",
+  "Proxmox": "Proxmox"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1591,7 +1617,17 @@
   "UniFi clients": "Πελάται UniFi",
   "{n} clients": "{n} πελάται",
   "UniFi network": "δίκτυον UniFi",
-  "read your UniFi network: who's connected, and how your UniFi devices are": "ἀναγινώσκειν τὸ δίκτυόν σου UniFi· τίνες συνῆπται, καὶ πῶς ἔχουσιν αἱ μηχαναί σου UniFi"
+  "read your UniFi network: who's connected, and how your UniFi devices are": "ἀναγινώσκειν τὸ δίκτυόν σου UniFi· τίνες συνῆπται, καὶ πῶς ἔχουσιν αἱ μηχαναί σου UniFi",
+  "A Proxmox guest can be started, shut down or rebooted.": "Ξένος τοῦ Proxmox δύναται ἄρχεσθαι, κλείεσθαι ἢ πάλιν ἄρχεσθαι.",
+  "Proxmox": "Proxmox",
+  "Proxmox cluster": "σύστημα Proxmox",
+  "Proxmox guests": "Ξένοι τοῦ Proxmox",
+  "Proxmox: {why}.": "Proxmox· {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Ποῖος ξένος τοῦ Proxmox; Δὸς τὸ VMID αὐτοῦ, οἷον 101.",
+  "sample cluster": "σύστημα ὑποδείγματος",
+  "{n} guests": "{n} ξένοι",
+  "read your Proxmox cluster: nodes, guests, storage and tasks": "ἀναγινώσκειν τὸ σύστημά σου Proxmox· κόμβους, ξένους, ἀποθήκας καὶ ἔργα",
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "ἄρχειν, κλείειν καὶ πάλιν ἄρχειν τοὺς ξένους σου Proxmox (ἐρωτῶν σε ἑκάστοτε)"
  },
  "examples": {
   "review": {
@@ -3198,7 +3234,23 @@
   "{n} clients": "{n} πελάται",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "Τὸ UniFi δεῖται UNIFI_URL καὶ UNIFI_API_KEY {where_keys}· τῆς διευθύνσεως τῆς κονσόλας (οἷον https://192.168.1.1) καὶ κλειδὸς API ἐκ τῆς Network (Settings, Control Plane, Integrations).",
   "The UniFi console refused UNIFI_API_KEY.": "Ἡ κονσόλα UniFi ἀπεδοκίμασε τὸ UNIFI_API_KEY.",
-  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} μηχαναί"
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} μηχαναί",
+  "A Proxmox guest can be started, shut down or rebooted.": "Ξένος τοῦ Proxmox δύναται ἄρχεσθαι, κλείεσθαι ἢ πάλιν ἄρχεσθαι.",
+  "Proxmox": "Proxmox",
+  "Proxmox guests": "Ξένοι τοῦ Proxmox",
+  "Proxmox: {why}.": "Proxmox· {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Ποῖος ξένος τοῦ Proxmox; Δὸς τὸ VMID αὐτοῦ, οἷον 101.",
+  "{n} guests": "{n} ξένοι",
+  "Allow this? {what}": "Ἐᾶν; {what}",
+  "Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.": "Ὁ ξένος {vmid} ἐν PROXMOX_PROTECT ἐστίν, ὥστε τὸ Second Thought οὐδέποτε ἄρχει, παύει ἢ πάλιν ἄρχει αὐτόν.",
+  "Proxmox VE {version}": "Proxmox VE {version}",
+  "Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.": "Τὸ Proxmox δεῖται PROXMOX_URL, PROXMOX_TOKEN_ID καὶ PROXMOX_TOKEN_SECRET {where_keys}· τῆς διευθύνσεως (οἷον https://pve.local:8006) καὶ συμβόλου API, ἐκ Datacenter, Permissions, API Tokens. Δὸς αὐτῷ τὸ ἔργον PVEAuditor, εἰ μὴ τὸ πρόγραμμα ξένους ἄρχει ἢ παύει.",
+  "Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.": "Τὸ Proxmox ἀπεδοκίμασε τὰ PROXMOX_TOKEN_ID καὶ PROXMOX_TOKEN_SECRET.",
+  "Second Thought doesn't send {what} to Proxmox.": "Τὸ Second Thought οὐ πέμπει {what} εἰς Proxmox.",
+  "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "τὸ σύμβολον δύναται καὶ {what}. Τὸ Second Thought οὐ δεῖται τούτου· τὸ ἔργον PVEAuditor ἀσφαλέστερον.",
+  "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "τὸ σύμβολον οὐ δύναται ξένους ἄρχειν ἢ παύειν (δεῖται VM.PowerMgmt), ὥστε αἱ πλίνθοι τοῦ προγράμματος ἀποδοκιμασθήσονται.",
+  "the token isn't allowed to do that": "οὐκ ἔξεστι τῷ συμβόλῳ τοῦτο ποιεῖν",
+  "{what} only runs when you're there to say yes, and nobody is.": "τὸ {what} μόνον γίνεται ὅταν πάρει τοῦ «ναί» εἰπεῖν, οὐδεὶς δὲ πάρεστιν."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

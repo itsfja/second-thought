@@ -612,6 +612,26 @@
   "rb_unifi_devices": {
    "message0": "UniFi 设备",
    "tooltip": "记录列表，每台 UniFi 设备（网关、交换机、接入点）一条：name、model、mac、ip、state、firmware、update（是否有更新的固件在等），在线的还有 uptime（小时）、cpu 和 memory（%）。"
+  },
+  "rb_proxmox_nodes": {
+   "message0": "Proxmox 节点",
+   "tooltip": "记录列表，你的 Proxmox 集群每个节点一条：node、status、cpu 和 memory（%）、uptime（小时）。在本页上使用示例集群。"
+  },
+  "rb_proxmox_guests": {
+   "message0": "Proxmox 客户机",
+   "tooltip": "记录列表，每个虚拟机和容器一条：vmid、name、node、type（vm 或 container）、status、cpu 和 memory（%）、uptime（小时），停止的还有 onboot（是否应随节点启动）。"
+  },
+  "rb_proxmox_storage": {
+   "message0": "Proxmox 存储",
+   "tooltip": "记录列表，每个节点上的每个存储一条：storage、node、used（%）、used_gb、size_gb 和 status。"
+  },
+  "rb_proxmox_tasks": {
+   "message0": "最近 %1 小时的 Proxmox 任务",
+   "tooltip": "记录列表，最新的在前：started、node、type（vzdump 是备份）、id（客户机）、status（OK，或出了什么错）和 user。"
+  },
+  "rb_proxmox_power": {
+   "message0": "%1 Proxmox 客户机 %2",
+   "tooltip": "按 VMID 启动、关闭或重启一个虚拟机或容器。它总会先问你，即使别的都不问；没人在场说“是”，就不执行。PROXMOX_PROTECT 里的客户机绝不碰。需要有 VM.PowerMgmt 的令牌。在本页上没有东西真的启动或停止。"
   }
  },
  "options": {
@@ -740,6 +760,11 @@
   "rb_coinbase_order.SIDE": {
    "buy": "买入",
    "sell": "卖出"
+  },
+  "rb_proxmox_power.ACTION": {
+   "start": "启动",
+   "shutdown": "关机",
+   "reboot": "重启"
   }
  },
  "categories": {
@@ -769,7 +794,8 @@
   "Output": "输出",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
-  "UniFi": "UniFi"
+  "UniFi": "UniFi",
+  "Proxmox": "Proxmox"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "给智能体的工具：把它们放进智能体积木里",
@@ -1591,7 +1617,17 @@
   "UniFi clients": "UniFi 客户端",
   "{n} clients": "{n} 个客户端",
   "UniFi network": "UniFi 网络",
-  "read your UniFi network: who's connected, and how your UniFi devices are": "读取你的 UniFi 网络：谁连着，以及 UniFi 设备的状况"
+  "read your UniFi network: who's connected, and how your UniFi devices are": "读取你的 UniFi 网络：谁连着，以及 UniFi 设备的状况",
+  "A Proxmox guest can be started, shut down or rebooted.": "Proxmox 客户机可以启动、关机或重启。",
+  "Proxmox": "Proxmox",
+  "Proxmox cluster": "Proxmox 集群",
+  "Proxmox guests": "Proxmox 客户机",
+  "Proxmox: {why}.": "Proxmox：{why}。",
+  "Which Proxmox guest? Give its VMID, like 101.": "哪个 Proxmox 客户机？请给出它的 VMID，比如 101。",
+  "sample cluster": "示例集群",
+  "{n} guests": "{n} 个客户机",
+  "read your Proxmox cluster: nodes, guests, storage and tasks": "读取你的 Proxmox 集群：节点、客户机、存储和任务",
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "启动、关闭和重启你的 Proxmox 客户机（每次都问你）"
  },
  "examples": {
   "review": {
@@ -3198,6 +3234,22 @@
   "{n} clients": "{n} 个客户端",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi 需要 UNIFI_URL 和 UNIFI_API_KEY {where_keys}：控制台地址（比如 https://192.168.1.1），以及 Network 应用里的 API 密钥（Settings、Control Plane、Integrations）。",
   "The UniFi console refused UNIFI_API_KEY.": "UniFi 控制台拒绝了 UNIFI_API_KEY。",
-  "UniFi Network {version}, {n} devices": "UniFi Network {version}，{n} 台设备"
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}，{n} 台设备",
+  "A Proxmox guest can be started, shut down or rebooted.": "Proxmox 客户机可以启动、关机或重启。",
+  "Proxmox": "Proxmox",
+  "Proxmox guests": "Proxmox 客户机",
+  "Proxmox: {why}.": "Proxmox：{why}。",
+  "Which Proxmox guest? Give its VMID, like 101.": "哪个 Proxmox 客户机？请给出它的 VMID，比如 101。",
+  "{n} guests": "{n} 个客户机",
+  "Allow this? {what}": "允许吗？{what}",
+  "Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.": "客户机 {vmid} 在 PROXMOX_PROTECT 里，所以 Second Thought 从不启动、停止或重启它。",
+  "Proxmox VE {version}": "Proxmox VE {version}",
+  "Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.": "Proxmox 需要 PROXMOX_URL、PROXMOX_TOKEN_ID 和 PROXMOX_TOKEN_SECRET {where_keys}：地址（比如 https://pve.local:8006）和 API 令牌，在 Datacenter、Permissions、API Tokens 里创建。除非程序要启动或停止客户机，否则给它 PVEAuditor 角色。",
+  "Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.": "Proxmox 拒绝了 PROXMOX_TOKEN_ID 和 PROXMOX_TOKEN_SECRET。",
+  "Second Thought doesn't send {what} to Proxmox.": "Second Thought 不会向 Proxmox 发送 {what}。",
+  "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "令牌还能 {what}。Second Thought 不需要这些：PVEAuditor 角色更安全。",
+  "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "令牌不能启动或停止客户机（需要 VM.PowerMgmt），所以这个程序的电源积木会被拒绝。",
+  "the token isn't allowed to do that": "令牌不允许这样做",
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} 只在你在场说“是”时才执行，但现在没人。"
  }
 }

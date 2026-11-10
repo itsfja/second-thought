@@ -159,7 +159,12 @@
 "rb_mikrotik_health":{"message0":"κατάσταση MikroTik","tooltip":"Μια εγγραφή για τον ίδιο τον δρομολογητή ή μεταγωγέα: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), και κάθε άλλος αισθητήρας που έχει."},
 "rb_mikrotik_log":{"message0":"καταγραφή MikroTik, τελευταίες %1 γραμμές","tooltip":"Οι τελευταίες γραμμές της καταγραφής του δρομολογητή, η παλαιότερη πρώτα, η καθεμία ως «time topics: message»."},
 "rb_unifi_clients":{"message0":"πελάτες UniFi","tooltip":"Μια λίστα εγγραφών, μία για κάθε συσκευή συνδεδεμένη στο δίκτυό σας UniFi: name, mac, ip, type (wired, wireless ή vpn), connected (από πότε) και uplink (η συσκευή UniFi μέσω της οποίας συνδέεται). Μόνο διαβάζει: τίποτα δεν αποκλείεται ούτε αλλάζει. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα δικτύου."},
-"rb_unifi_devices":{"message0":"συσκευές UniFi","tooltip":"Μια λίστα εγγραφών, μία για κάθε συσκευή UniFi (πύλη, μεταγωγείς, σημεία πρόσβασης): name, model, mac, ip, state, firmware, update (αν περιμένει νεότερο υλικολογισμικό), και για όσες είναι συνδεδεμένες, uptime (ώρες), cpu και memory (%)."}
+"rb_unifi_devices":{"message0":"συσκευές UniFi","tooltip":"Μια λίστα εγγραφών, μία για κάθε συσκευή UniFi (πύλη, μεταγωγείς, σημεία πρόσβασης): name, model, mac, ip, state, firmware, update (αν περιμένει νεότερο υλικολογισμικό), και για όσες είναι συνδεδεμένες, uptime (ώρες), cpu και memory (%)."},
+"rb_proxmox_nodes":{"message0":"κόμβοι Proxmox","tooltip":"Μια λίστα εγγραφών, μία για κάθε κόμβο του συμπλέγματός σας Proxmox: node, status, cpu και memory (%), uptime (ώρες). Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα συμπλέγματος."},
+"rb_proxmox_guests":{"message0":"φιλοξενούμενοι Proxmox","tooltip":"Μια λίστα εγγραφών, μία για κάθε VM και container: vmid, name, node, type (vm ή container), status, cpu και memory (%), uptime (ώρες) και, για όσους είναι σταματημένοι, onboot (αν θα έπρεπε να ξεκινά με τον κόμβο)."},
+"rb_proxmox_storage":{"message0":"αποθήκευση Proxmox","tooltip":"Μια λίστα εγγραφών, μία για κάθε αποθήκευση σε κάθε κόμβο: storage, node, used (%), used_gb, size_gb και status."},
+"rb_proxmox_tasks":{"message0":"εργασίες Proxmox των τελευταίων %1 ωρών","tooltip":"Μια λίστα εγγραφών, η νεότερη πρώτα: started, node, type (το vzdump είναι αντίγραφο ασφαλείας), id (ο φιλοξενούμενος), status (OK, ή τι πήγε στραβά) και user."},
+"rb_proxmox_power":{"message0":"%1 τον φιλοξενούμενο Proxmox %2","tooltip":"Ξεκινά, τερματίζει ή επανεκκινεί μια VM ή ένα container, με το VMID του. Σας ρωτά πάντα πρώτα, ακόμη κι όταν τίποτε άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι δεν εκτελείται. Οι φιλοξενούμενοι στο PROXMOX_PROTECT δεν αγγίζονται ποτέ. Χρειάζεται διακριτικό με VM.PowerMgmt. Σε αυτή τη σελίδα τίποτα δεν ξεκινά ούτε σταματά στ' αλήθεια."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"κάθε μέρα","weekdays":"τις καθημερινές","weekends":"τα Σαββατοκύριακα"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"ημερήσιες","hour":"ωριαίες"},
 "rb_coinbase_orders.WHICH":{"open":"ανοιχτές εντολές","fills":"τελευταίες εκτελέσεις"},
 "rb_coinbase_preview.SIDE":{"buy":"αγορά","sell":"πώληση"},
-"rb_coinbase_order.SIDE":{"buy":"αγορά","sell":"πώληση"}
+"rb_coinbase_order.SIDE":{"buy":"αγορά","sell":"πώληση"},
+"rb_proxmox_power.ACTION":{"start":"εκκίνηση","shutdown":"τερματισμός","reboot":"επανεκκίνηση"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -210,7 +216,8 @@
 "Output":"Έξοδος",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"Πελάτες UniFi",
 "{n} clients":"{n} πελάτες",
 "UniFi network":"δίκτυο UniFi",
-"read your UniFi network: who's connected, and how your UniFi devices are":"να διαβάζει το δίκτυό σας UniFi: ποιος είναι συνδεδεμένος, και πώς είναι οι συσκευές σας UniFi"
+"read your UniFi network: who's connected, and how your UniFi devices are":"να διαβάζει το δίκτυό σας UniFi: ποιος είναι συνδεδεμένος, και πώς είναι οι συσκευές σας UniFi",
+"A Proxmox guest can be started, shut down or rebooted.":"Ένας φιλοξενούμενος του Proxmox μπορεί να ξεκινήσει, να τερματιστεί ή να επανεκκινηθεί.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"σύμπλεγμα Proxmox",
+"Proxmox guests":"Φιλοξενούμενοι Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Ποιος φιλοξενούμενος του Proxmox; Δώστε το VMID του, όπως 101.",
+"sample cluster":"δείγμα συμπλέγματος",
+"{n} guests":"{n} φιλοξενούμενοι",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"να διαβάζει το σύμπλεγμά σας Proxmox: κόμβους, φιλοξενούμενους, αποθήκευση και εργασίες",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"να ξεκινά, να τερματίζει και να επανεκκινεί τους φιλοξενούμενούς σας Proxmox (ρωτώντας σας κάθε φορά)"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2007,6 +2024,22 @@
 "{n} clients":"{n} πελάτες",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"Το UniFi χρειάζεται UNIFI_URL και UNIFI_API_KEY {where_keys}: τη διεύθυνση της κονσόλας (όπως https://192.168.1.1) και ένα κλειδί API από την εφαρμογή Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"Η κονσόλα UniFi απέρριψε το UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} συσκευές"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} συσκευές",
+"A Proxmox guest can be started, shut down or rebooted.":"Ένας φιλοξενούμενος του Proxmox μπορεί να ξεκινήσει, να τερματιστεί ή να επανεκκινηθεί.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Φιλοξενούμενοι Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Ποιος φιλοξενούμενος του Proxmox; Δώστε το VMID του, όπως 101.",
+"{n} guests":"{n} φιλοξενούμενοι",
+"Allow this? {what}":"Να επιτραπεί; {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"Ο φιλοξενούμενος {vmid} είναι στο PROXMOX_PROTECT, οπότε το Second Thought δεν τον ξεκινά, σταματά ή επανεκκινεί ποτέ.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Το Proxmox χρειάζεται PROXMOX_URL, PROXMOX_TOKEN_ID και PROXMOX_TOKEN_SECRET {where_keys}: τη διεύθυνση (όπως https://pve.local:8006) και ένα διακριτικό API, από Datacenter, Permissions, API Tokens. Δώστε του τον ρόλο PVEAuditor, εκτός αν το πρόγραμμα ξεκινά ή σταματά φιλοξενούμενους.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Το Proxmox απέρριψε τα PROXMOX_TOKEN_ID και PROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"Το Second Thought δεν στέλνει {what} στο Proxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"το διακριτικό μπορεί επίσης {what}. Το Second Thought δεν το χρειάζεται: ο ρόλος PVEAuditor είναι ασφαλέστερος.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"το διακριτικό δεν μπορεί να ξεκινά ή να σταματά φιλοξενούμενους (χρειάζεται VM.PowerMgmt), οπότε τα μπλοκ τροφοδοσίας αυτού του προγράμματος θα απορρίπτονταν.",
+"the token isn't allowed to do that":"το διακριτικό δεν επιτρέπεται να το κάνει αυτό",
+"{what} only runs when you're there to say yes, and nobody is.":"το {what} γίνεται μόνο όταν είστε εκεί για να πείτε ναι, και δεν είναι κανείς."
 }
 };

@@ -87,7 +87,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -151,7 +151,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET")
 
 
 def _load_keychain():
@@ -1116,6 +1116,12 @@ SAFETY = {
     # the network with it, and nothing here is worth that.
     # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
     # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
+    # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
+    # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
+    # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
+    # guests it never touches at all.
+    "proxmox_free": [["GET", r"^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/config)$"]],
+    "proxmox_asks": [["POST", r"^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/status/(start|shutdown|reboot)$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
@@ -1224,6 +1230,16 @@ def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
+
+
+def proxmox_call(method, path):
+    """"free" for a Proxmox call the runtime makes without asking, "asks" for a power action that needs a live yes,
+    and None for anything else, which is never sent (#357)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["proxmox_" + kind]):
+            return kind
+    return None
 
 
 def unifi_allowed(method, path):
@@ -1659,10 +1675,12 @@ CAPABILITIES = [
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
+    ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
+    ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -3877,6 +3895,110 @@ class Connections:
         self.log(tr("Coinbase order cancelled"), oid, tr("done"))
         return True
 
+    # Proxmox (#357)
+    # Proxmox VE's REST API, with an API token: PROXMOX_URL (https://pve:8006), PROXMOX_TOKEN_ID (user@pam!name) and
+    # PROXMOX_TOKEN_SECRET. Give the token the PVEAuditor role unless the program starts or stops guests. Reads are the
+    # calls in SAFETY["proxmox_free"]; start, shut down and reboot (proxmox_asks) always ask, live, and never run with
+    # nobody there; nothing else is ever sent. PROXMOX_PROTECT lists VMIDs never started, stopped or rebooted at all.
+    # PROXMOX_CERT_SHA256 pins the node's own certificate, as for MikroTik and UniFi.
+    PROXMOX_POWER = {"start": "start", "shutdown": "shut down", "reboot": "reboot"}
+
+    async def _proxmox(self, method, path, query=None, approved=False):
+        kind = proxmox_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to Proxmox.", what=f"{method} {path}"))
+        base = os.environ.get("PROXMOX_URL", "").strip().rstrip("/")
+        tid, secret = os.environ.get("PROXMOX_TOKEN_ID", "").strip(), os.environ.get("PROXMOX_TOKEN_SECRET", "").strip()
+        if not base or not tid or not secret:
+            raise RunError(tr("Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("Proxmox", base, "PROXMOX_CERT_SHA256", method, path + ("?" + urllib.parse.urlencode(query) if query else ""),
+                                         {"Authorization": f"PVEAPIToken={tid}={secret}"})
+        if status == 401:
+            raise RunError(tr("Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET."))
+        if status == 403:
+            raise RunError(tr("Proxmox: {why}.", why=tr("the token isn't allowed to do that")))
+        if status >= 400:
+            raise RunError(tr("Proxmox: {why}.", why=self._said(status, raw)))
+        got = json.loads(raw) if raw.strip() else {}
+        return got.get("data") if isinstance(got, dict) else got
+
+    @staticmethod
+    def _pct(used, size):
+        return _clean_num(math.floor(num(used) / num(size) * 1000 + 0.5) / 10) if num(size) else ""
+
+    async def proxmox_nodes(self):
+        """Each node: node, status (online or offline), cpu and memory (%), uptime (hours)."""
+        out = [{"node": to_str(n.get("node")), "status": to_str(n.get("status")), "cpu": _clean_num(math.floor(num(n.get("cpu")) * 1000 + 0.5) / 10),
+                "memory": self._pct(n.get("mem"), n.get("maxmem")), "uptime": self._cents(num(n.get("uptime")) / 3600)}
+               for n in await self._proxmox("GET", "/api2/json/nodes") or [] if isinstance(n, dict)]
+        return sorted(out, key=lambda n: n["node"])
+
+    async def proxmox_guests(self):
+        """Each VM and container: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (hours),
+        and for one that's stopped, onboot (whether it should start when the node does)."""
+        out = []
+        for g in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "vm"}) or []:
+            if not isinstance(g, dict) or g.get("template"):
+                continue
+            rec = {"vmid": int(num(g.get("vmid"))), "name": to_str(g.get("name")), "node": to_str(g.get("node")),
+                   "type": "container" if g.get("type") == "lxc" else "vm", "status": to_str(g.get("status")),
+                   "cpu": _clean_num(math.floor(num(g.get("cpu")) * 1000 + 0.5) / 10), "memory": self._pct(g.get("mem"), g.get("maxmem")),
+                   "uptime": self._cents(num(g.get("uptime")) / 3600), "onboot": ""}
+            if rec["status"] == "stopped" and re.fullmatch(r"[A-Za-z0-9.-]+", rec["node"]):
+                cfg = await self._proxmox("GET", f"/api2/json/nodes/{rec['node']}/{g.get('type')}/{rec['vmid']}/config") or {}
+                rec["onboot"] = to_str(cfg.get("onboot")) == "1"
+            out.append(rec)
+        out.sort(key=lambda g: g["vmid"])
+        lines = "\n".join(f"{g['vmid']} {g['name']}: {g['status']}" for g in out)
+        self.log(tr("Proxmox guests"), lines or tr("(nothing)"), tr("{n} guests", n=len(out)))
+        return out
+
+    async def proxmox_storage(self):
+        """Each storage on each node: storage, node, used (%), used_gb, size_gb and status."""
+        out = [{"storage": to_str(s.get("storage")), "node": to_str(s.get("node")), "used": self._pct(s.get("disk"), s.get("maxdisk")),
+                "used_gb": self._cents(num(s.get("disk")) / 1073741824), "size_gb": self._cents(num(s.get("maxdisk")) / 1073741824),
+                "status": to_str(s.get("status"))}
+               for s in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "storage"}) or [] if isinstance(s, dict)]
+        return sorted(out, key=lambda s: (s["node"], s["storage"]))
+
+    async def proxmox_tasks(self, hours=24):
+        """The cluster's tasks from the last few hours, newest first: started, node, type (vzdump is a backup), id (the
+        guest, if any), status (OK, or what went wrong; running if it hasn't finished) and user."""
+        since = time.time() - max(1, min(24 * 31, num(hours) or 24)) * 3600
+        out = []
+        for t in await self._proxmox("GET", "/api2/json/cluster/tasks") or []:
+            if isinstance(t, dict) and num(t.get("starttime")) >= since:
+                out.append({"started": datetime.datetime.fromtimestamp(num(t.get("starttime"))).strftime("%Y-%m-%d %H:%M"), "node": to_str(t.get("node")),
+                            "type": to_str(t.get("type")), "id": to_str(t.get("id")), "status": to_str(t.get("status")) or "running", "user": to_str(t.get("user"))})
+        return sorted(out, key=lambda t: t["started"], reverse=True)
+
+    async def proxmox_power(self, action, vmid):
+        """Starts, shuts down or reboots one guest, by its VMID, after asking you, every time. Never one in
+        PROXMOX_PROTECT. Gives back True if it was done."""
+        action = to_str(action).strip().lower().replace(" ", "")
+        if action not in self.PROXMOX_POWER:
+            raise RunError(tr("A Proxmox guest can be started, shut down or rebooted."))
+        if not _num_like(vmid) or num(vmid) != int(num(vmid)) or num(vmid) < 100:
+            raise RunError(tr("Which Proxmox guest? Give its VMID, like 101."))
+        vmid = int(num(vmid))
+        protected = {int(x) for x in re.findall(r"\d+", os.environ.get("PROXMOX_PROTECT", ""))}
+        if vmid in protected:
+            self.log(tr("Not done"), tr("Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.", vmid=vmid), tr("refused"))
+            return False
+        g = next((g for g in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "vm"}) or []
+                  if isinstance(g, dict) and int(num(g.get("vmid"))) == vmid), None)
+        if not g or not re.fullmatch(r"[A-Za-z0-9.-]+", to_str(g.get("node"))) or g.get("type") not in ("qemu", "lxc"):
+            raise RunError(tr("Proxmox: {why}.", why=tr("not found")))
+        what = f"{self.PROXMOX_POWER[action]} the Proxmox guest {vmid} ({to_str(g.get('name'))}, on {to_str(g.get('node'))}, now {to_str(g.get('status'))})"
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._proxmox("POST", f"/api2/json/nodes/{g['node']}/{g['type']}/{vmid}/status/{action}", approved=True)
+        self.log(tr("Proxmox"), what, tr("done"))
+        return True
+
     # UniFi (#359)
     # The Network API on a UniFi OS console (a Cloud Gateway, a Dream Machine): UNIFI_URL and UNIFI_API_KEY, a key made
     # in the Network app under Settings, Control Plane, Integrations. Only the reads in SAFETY["unifi_free"] are ever
@@ -5421,6 +5543,20 @@ class AgentTools:
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
 
+    async def confirm_live(self, what):
+        """Asks before something that must never happen unseen, like stopping a Proxmox guest (#357): always, live, and
+        never with nobody there to answer, unless approve_by = telegram asks on your phone."""
+        unattended = self.nobody_here() or bool(os.environ.get("GITHUB_ACTIONS")) or not sys.stdin.isatty()
+        if unattended and os.environ.get("RB_APPROVE_BY", "").strip().lower() != "telegram":
+            self.log(tr("Not done"), tr("{what} only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
+            return False
+        if unattended:
+            return await self._approve_telegram(what)
+        if await self._approve_live(tr("Allow this? {what}", what=what)):
+            return True
+        self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
+        return False
+
     def _agent_tools(self, tools, mcp=None):
         """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}. mcp holds each MCP
         server's tools, listed beforehand: {server name: [tool, ...]}."""
@@ -6301,6 +6437,23 @@ class Doctor:
                 devices = await self._unifi_all(f"/sites/{site}/devices")
                 return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
             out.append(("UniFi", unifi))
+        if has("proxmox_read", "proxmox_control"):
+            async def proxmox():
+                base = os.environ.get("PROXMOX_URL", "").strip()
+                if base and not os.environ.get("PROXMOX_CERT_SHA256", "").strip():
+                    seen = await asyncio.to_thread(self._mt_fingerprint, base if "://" in base else "https://" + base)
+                    if seen:
+                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="Proxmox", setting="PROXMOX_CERT_SHA256", seen=seen))
+                version = to_str((await self._proxmox("GET", "/api2/json/version") or {}).get("version"))
+                privs = {p for v in (await self._proxmox("GET", "/api2/json/access/permissions") or {}).values() if isinstance(v, dict) for p, on in v.items() if on}
+                said = tr("Proxmox VE {version}", version=version or "?")
+                if "proxmox_control" in can and "VM.PowerMgmt" not in privs:
+                    raise RunError(said + "; " + tr("the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused."))
+                more = sorted(p for p in privs if not p.endswith(".Audit") and p != "VM.PowerMgmt") + (["VM.PowerMgmt"] if "proxmox_control" not in can and "VM.PowerMgmt" in privs else [])
+                if more:
+                    return "NOTE", said + "; " + tr("the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.", what=", ".join(more[:6]))
+                return said
+            out.append(("Proxmox", proxmox))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -6570,7 +6723,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 

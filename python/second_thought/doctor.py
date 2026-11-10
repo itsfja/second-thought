@@ -211,6 +211,23 @@ class Doctor:
                 devices = await self._unifi_all(f"/sites/{site}/devices")
                 return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
             out.append(("UniFi", unifi))
+        if has("proxmox_read", "proxmox_control"):
+            async def proxmox():
+                base = os.environ.get("PROXMOX_URL", "").strip()
+                if base and not os.environ.get("PROXMOX_CERT_SHA256", "").strip():
+                    seen = await asyncio.to_thread(self._mt_fingerprint, base if "://" in base else "https://" + base)
+                    if seen:
+                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="Proxmox", setting="PROXMOX_CERT_SHA256", seen=seen))
+                version = to_str((await self._proxmox("GET", "/api2/json/version") or {}).get("version"))
+                privs = {p for v in (await self._proxmox("GET", "/api2/json/access/permissions") or {}).values() if isinstance(v, dict) for p, on in v.items() if on}
+                said = tr("Proxmox VE {version}", version=version or "?")
+                if "proxmox_control" in can and "VM.PowerMgmt" not in privs:
+                    raise RunError(said + "; " + tr("the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused."))
+                more = sorted(p for p in privs if not p.endswith(".Audit") and p != "VM.PowerMgmt") + (["VM.PowerMgmt"] if "proxmox_control" not in can and "VM.PowerMgmt" in privs else [])
+                if more:
+                    return "NOTE", said + "; " + tr("the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.", what=", ".join(more[:6]))
+                return said
+            out.append(("Proxmox", proxmox))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -480,5 +497,5 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))

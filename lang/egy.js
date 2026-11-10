@@ -160,7 +160,12 @@
 "rb_mikrotik_health":{"message0":"𓋴𓈖𓃀 𓈖 MikroTik","tooltip":"𓋴𓈙 𓎛𓂋 𓈙𓈖𓇋 𓆓𓋴𓆑: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𓎛𓈖𓂝 𓎡𓏭 𓈖𓃀"},
 "rb_mikrotik_log":{"message0":"𓎼𓈖𓅱𓏏 𓈖 MikroTik, %1 𓅓𓐍𓏏","tooltip":"𓎼𓈖𓅱𓏏 𓅓𓐍𓏏 𓈖 𓈙𓈖𓇋, 𓂝𓄿 𓐍𓂋𓎛𓄿𓏏, 𓅱𓂝 𓈖𓃀 𓅓𓇋 „time topics: message” 𓊪𓅱"},
 "rb_unifi_clients":{"message0":"𓇋𓅱 𓈖 UniFi","tooltip":"𓋴𓈙 𓈖 𓐍𓏏, 𓅱𓂝 𓎛𓂋 𓐍𓏏 𓈖𓃀 𓍿𓋴 𓂋 𓇋𓄿𓂧𓎡 𓈖 UniFi: name, mac, ip, type (wired, wireless 𓂋𓊪𓅱 vpn), connected 𓎛𓈖𓂝 uplink. 𓈙𓂧𓇋𓆑 𓅱𓂝: 𓈖𓈖 𓈙𓈖𓇋 𓎛𓂋 𓂝 𓊪𓈖 𓈙𓋴𓊪𓆑 𓇋𓄿𓂧 𓈖 𓏏𓊪𓎛𓋴𓃀"},
-"rb_unifi_devices":{"message0":"𓐍𓏏 𓈖 UniFi","tooltip":"𓋴𓈙 𓈖 𓐍𓏏, 𓅱𓂝 𓎛𓂋 𓐍𓏏 𓈖𓃀 𓈖 UniFi: name, model, mac, ip, state, firmware, update, 𓎛𓈖𓂝 uptime (𓅱𓈖𓅱𓏏), cpu 𓎛𓈖𓂝 memory (%)."}
+"rb_unifi_devices":{"message0":"𓐍𓏏 𓈖 UniFi","tooltip":"𓋴𓈙 𓈖 𓐍𓏏, 𓅱𓂝 𓎛𓂋 𓐍𓏏 𓈖𓃀 𓈖 UniFi: name, model, mac, ip, state, firmware, update, 𓎛𓈖𓂝 uptime (𓅱𓈖𓅱𓏏), cpu 𓎛𓈖𓂝 memory (%)."},
+"rb_proxmox_nodes":{"message0":"𓍿𓄿𓅱 𓈖 Proxmox","tooltip":"𓋴𓈙 𓈖 𓐍𓏏, 𓅱𓂝 𓎛𓂋 𓍿𓄿 𓈖𓃀 𓈖 𓂧𓅓𓆓𓎡 𓈖 Proxmox: node, status, cpu 𓎛𓈖𓂝 memory (%), uptime 𓅓 𓅱𓈖𓅱𓏏 𓎛𓂋 𓂝 𓊪𓈖 𓈙𓋴𓊪𓆑 𓂧𓅓𓆓 𓈖 𓏏𓊪𓎛𓋴𓃀"},
+"rb_proxmox_guests":{"message0":"𓈙𓅓𓋴𓅱 𓈖 Proxmox","tooltip":"𓋴𓈙 𓈖 𓐍𓏏, 𓅱𓂝 𓎛𓂋 VM 𓈖𓃀: vmid, name, node, type (vm 𓂋𓊪𓅱 container), status, cpu 𓎛𓈖𓂝 memory (%), uptime 𓅓 𓅱𓈖𓅱𓏏, 𓎛𓈖𓂝 onboot."},
+"rb_proxmox_storage":{"message0":"𓅱𓆓𓄿𓅱 𓈖 Proxmox","tooltip":"𓋴𓈙 𓈖 𓐍𓏏, 𓅱𓂝 𓎛𓂋 𓅱𓆓𓄿 𓈖𓃀: storage, node, used (%), used_gb, size_gb 𓎛𓈖𓂝 status."},
+"rb_proxmox_tasks":{"message0":"𓎡𓄿𓅱𓏏 𓈖 Proxmox 𓈖 %1 𓅱𓈖𓅱𓏏 𓅓𓐍𓏏","tooltip":"𓋴𓈙 𓈖 𓐍𓏏, 𓅓𓄿𓅱 𓐍𓂋𓎛𓄿𓏏: started, node, type (vzdump), id, status (OK, 𓂋𓊪𓅱 𓇋𓋴𓆑𓏏) 𓎛𓈖𓂝 user."},
+"rb_proxmox_power":{"message0":"%1 𓈙𓅓𓋴 𓈖 Proxmox %2","tooltip":"𓈙𓋴𓊪𓆑, 𓐍𓏏𓅓𓆑 𓂋𓊪𓅱 𓈙𓋴𓊪𓆑 𓅓 𓅱𓎛𓅓 VM 𓅱𓂝 𓅓 VMID. 𓈖𓆓𓆑 𓏏𓅱 𓐍𓂋𓎛𓄿𓏏 𓂋 𓈖𓎛𓎛; 𓇋𓂋 𓈖𓈖 𓋴 𓂋 𓆓𓂧 𓅓𓄿𓂝, 𓈖𓈖 𓇋𓂋𓆑 PROXMOX_PROTECT 𓈖𓈖 𓍿𓄿 𓇋𓂋𓆑 𓈖 𓋴𓈙 𓎛𓈖𓂝 VM.PowerMgmt. 𓎛𓂋 𓂝 𓊪𓈖 𓈖𓈖 𓈙𓋴𓊪"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𓅓 𓉔𓂋𓅱 𓈖𓃀","weekdays":"𓅓 𓉔𓂋𓅱 𓈖 𓃀𓄿𓎡","weekends":"𓅓 𓉔𓂋𓅱 𓈖 𓎛𓏏𓊪"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"𓈖 𓉔𓂋𓅱","hour":"𓈖 𓅱𓈖𓅱𓏏"},
 "rb_coinbase_orders.WHICH":{"open":"𓅱𓆓𓅱 𓅱𓈖","fills":"𓐍𓏏 𓎡𓅓 𓅓𓐍𓏏"},
 "rb_coinbase_preview.SIDE":{"buy":"𓇋𓈖𓇋","sell":"𓂋𓂧𓇋"},
-"rb_coinbase_order.SIDE":{"buy":"𓇋𓈖𓇋","sell":"𓂋𓂧𓇋"}
+"rb_coinbase_order.SIDE":{"buy":"𓇋𓈖𓇋","sell":"𓂋𓂧𓇋"},
+"rb_proxmox_power.ACTION":{"start":"𓈙𓋴𓊪","shutdown":"𓐍𓏏𓅓","reboot":"𓈙𓋴𓊪 𓅓 𓅱𓎛𓅓"}
 },
 "categories":{
 "Agent":"𓅱𓊪𓅱𓏏𓇋",
@@ -210,7 +216,8 @@
 "You":"𓈖𓏏𓎡",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𓋴𓆓𓅓𓅱: 𓇋𓂋𓋴𓈖 𓐍𓆑𓏏 𓇋𓂋 𓋴𓐍𓂋 𓆓𓄿 𓅓 𓏏𓂋",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"𓇋𓅱 𓈖 UniFi",
 "{n} clients":"𓇋𓅱 {n}",
 "UniFi network":"𓇋𓄿𓂧 𓈖 UniFi",
-"read your UniFi network: who's connected, and how your UniFi devices are":"𓈙𓂧𓇋 𓇋𓄿𓂧𓎡 𓈖 UniFi: 𓈖𓅓 𓎛𓂋 𓍿𓋴, 𓎛𓈖𓂝 𓅓𓇋 𓇋𓐍 𓐍𓏏𓎡 𓈖 UniFi"
+"read your UniFi network: who's connected, and how your UniFi devices are":"𓈙𓂧𓇋 𓇋𓄿𓂧𓎡 𓈖 UniFi: 𓈖𓅓 𓎛𓂋 𓍿𓋴, 𓎛𓈖𓂝 𓅓𓇋 𓇋𓐍 𓐍𓏏𓎡 𓈖 UniFi",
+"A Proxmox guest can be started, shut down or rebooted.":"𓈙𓅓𓋴𓅱 𓈖 Proxmox 𓈙𓋴𓊪𓆑, 𓐍𓏏𓅓𓆑, 𓂋𓊪𓅱 𓈙𓋴𓊪𓆑 𓅓 𓅱𓎛𓅓",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"𓂧𓅓𓆓 𓈖 Proxmox",
+"Proxmox guests":"𓈙𓅓𓋴𓅱 𓈖 Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"𓈙𓅓𓋴 𓇋𓐍 𓈖 Proxmox? 𓇋𓅓𓇋 VMID, 𓅓𓇋 101.",
+"sample cluster":"𓂧𓅓𓆓 𓈖 𓏏𓊪𓎛𓋴𓃀",
+"{n} guests":"𓈙𓅓𓋴𓅱 {n}",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"𓈙𓂧𓇋 𓂧𓅓𓆓𓎡 𓈖 Proxmox: 𓍿𓄿𓅱, 𓈙𓅓𓋴𓅱, 𓅱𓆓𓄿𓅱 𓎛𓈖𓂝 𓎡𓄿𓅱𓏏",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"𓈙𓋴𓊪, 𓐍𓏏𓅓 𓎛𓈖𓂝 𓈙𓋴𓊪 𓅓 𓅱𓎛𓅓 𓈙𓅓𓋴𓅱𓎡 𓈖 Proxmox (𓈖𓆓𓆑 𓏏𓅱 𓂋 𓈖𓃀)"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -2007,7 +2024,23 @@
 "{n} clients":"jw {n}",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi jr n UNIFI_URL ḥnꜥ UNIFI_API_KEY {where_keys}: bw (mj https://192.168.1.1) ḥnꜥ ḫtm API m Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"ꜥnn.n UniFi UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} ḫt"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} ḫt",
+"A Proxmox guest can be started, shut down or rebooted.":"šmsw n Proxmox šsp.f, ḫtm.f, r-pw šsp.f m wḥm.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"šmsw n Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"šms jḫ n Proxmox? jmj VMID, mj 101.",
+"{n} guests":"šmsw {n}",
+"Allow this? {what}":"rdj=k? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"šms {vmid} m PROXMOX_PROTECT, nn šsp sw Second Thought r nḥḥ.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox jr n PROXMOX_URL, PROXMOX_TOKEN_ID ḥnꜥ PROXMOX_TOKEN_SECRET {where_keys}: bw (mj https://pve.local:8006) ḥnꜥ sš API m Datacenter, Permissions, API Tokens. jmj PVEAuditor, jr nn šsp sš šmsw.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"ꜥnn.n Proxmox PROXMOX_TOKEN_ID ḥnꜥ PROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"nn hꜣb Second Thought {what} r Proxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"sš jr=f {what} ḥnꜥ. nn jr Second Thought n=f: PVEAuditor snb r=f.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"nn šsp sš šmsw (jr=f n VM.PowerMgmt), ꜥnn.tw sš pn.",
+"the token isn't allowed to do that":"nn rdj.tw n sš jr pn",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} jr=f ḫft wn=k r ḏd mꜣꜥ, nn s."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

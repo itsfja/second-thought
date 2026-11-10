@@ -159,7 +159,12 @@
 "rb_mikrotik_health":{"message0":"MikroTik hele","tooltip":"A recorde of the routere or switche hymself: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and every other sensour that he hath."},
 "rb_mikrotik_log":{"message0":"MikroTik log, laste %1 lynes","tooltip":"The laste lynes of the routeres log, the eldest first, ech as 'time topics: message'."},
 "rb_unifi_clients":{"message0":"UniFi clientes","tooltip":"A list of recordes, oon for every thing yjoyned to thy UniFi net: name, mac, ip, type (wired, wireless or vpn), connected (sith whan) and uplink (the UniFi thing it passeth thurgh). It oonly redeth: no thing is blokked ne chaunged. On this page it useth an ensample net."},
-"rb_unifi_devices":{"message0":"UniFi thinges","tooltip":"A list of recordes, oon for every UniFi thing (gate, switches, poyntes of entree): name, model, mac, ip, state, firmware, update (wher newer firmware abideth), and for oon that is on lyne, uptime (houres), cpu and memory (%)."}
+"rb_unifi_devices":{"message0":"UniFi thinges","tooltip":"A list of recordes, oon for every UniFi thing (gate, switches, poyntes of entree): name, model, mac, ip, state, firmware, update (wher newer firmware abideth), and for oon that is on lyne, uptime (houres), cpu and memory (%)."},
+"rb_proxmox_nodes":{"message0":"Proxmox knottes","tooltip":"A list of recordes, oon for every knotte of thy Proxmox heep: node, status, cpu and memory (%), uptime (houres). On this page it useth an ensample heep."},
+"rb_proxmox_guests":{"message0":"Proxmox gestes","tooltip":"A list of recordes, oon for every VM and vessel: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (houres), and for oon that is stynt, onboot (wher it sholde stirte with the knotte)."},
+"rb_proxmox_storage":{"message0":"Proxmox storage","tooltip":"A list of recordes, oon for every storage on every knotte: storage, node, used (%), used_gb, size_gb and status."},
+"rb_proxmox_tasks":{"message0":"Proxmox werkes of the laste %1 houres","tooltip":"A list of recordes, the newest first: started, node, type (vzdump is a kepinge), id (the gest), status (OK, or what wente amis) and user."},
+"rb_proxmox_power":{"message0":"%1 Proxmox gest %2","tooltip":"Stirteth, shetteth doun or stirteth agayn oon VM or vessel, by his VMID. It evere asketh thee first, ye, whan no thing elles asketh; with no man ther to seye ye, it renneth nat. Gestes in PROXMOX_PROTECT ben nevere touched. Nedeth a token with VM.PowerMgmt. On this page no thing verraily stirteth ne stynteth."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"dayly","hour":"hourly"},
 "rb_coinbase_orders.WHICH":{"open":"open ordres","fills":"laste fulfillinges"},
 "rb_coinbase_preview.SIDE":{"buy":"bye","sell":"selle"},
-"rb_coinbase_order.SIDE":{"buy":"bye","sell":"selle"}
+"rb_coinbase_order.SIDE":{"buy":"bye","sell":"selle"},
+"rb_proxmox_power.ACTION":{"start":"stirte","shutdown":"shette doun","reboot":"stirte agayn"}
 },
 "categories":{
 "Events":"Events",
@@ -210,7 +216,8 @@
 "Output":"Outcome",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"UniFi clientes",
 "{n} clients":"{n} clientes",
 "UniFi network":"UniFi net",
-"read your UniFi network: who's connected, and how your UniFi devices are":"rede thy UniFi net: who is yjoyned, and how thy UniFi thinges faren"
+"read your UniFi network: who's connected, and how your UniFi devices are":"rede thy UniFi net: who is yjoyned, and how thy UniFi thinges faren",
+"A Proxmox guest can be started, shut down or rebooted.":"A Proxmox gest may be stirt, shet doun or stirt agayn.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"Proxmox heep",
+"Proxmox guests":"Proxmox gestes",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Which Proxmox gest? Yif his VMID, as 101.",
+"sample cluster":"ensample heep",
+"{n} guests":"{n} gestes",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"rede thy Proxmox heep: knottes, gestes, storage and werkes",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"stirte, shette doun and stirte agayn thy Proxmox gestes (askinge thee ech tyme)"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2007,7 +2024,23 @@
 "{n} clients":"{n} clientes",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi nedeth UNIFI_URL and UNIFI_API_KEY {where_keys}: the consoles place (as https://192.168.1.1) and an API keye fro the Network program (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"The UniFi console refused UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} thinges"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} thinges",
+"A Proxmox guest can be started, shut down or rebooted.":"A Proxmox gest may be stirt, shet doun or stirt agayn.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Proxmox gestes",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Which Proxmox gest? Yif his VMID, as 101.",
+"{n} guests":"{n} gestes",
+"Allow this? {what}":"Suffre this? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"Gest {vmid} is in PROXMOX_PROTECT, so Second Thought neveremore stirteth, stynteth ne stirteth hym agayn.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox nedeth PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the place (as https://pve.local:8006) and an API token, fro Datacenter, Permissions, API Tokens. Yif it the PVEAuditor role but if the program stirteth or stynteth gestes.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought sendeth nat {what} to Proxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"the token may eek {what}. Second Thought nedeth it nat: the PVEAuditor role is sikerer.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"the token may nat stirte ne stynte gestes (it nedeth VM.PowerMgmt), so this programmes power blokkes sholde be refused.",
+"the token isn't allowed to do that":"the token may nat do that",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} renneth oonly whan thou art ther to seye ye, and no man is."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",
