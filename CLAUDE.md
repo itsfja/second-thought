@@ -41,4 +41,3 @@ since last seen, read them first (they'll match an earlier main), then publish.
 ## Loose ends
 - itsfja/rain-watcher (private) is the Rain window program on GitHub Actions (#226). Its summer-time cron line
   (17:00 UTC, weekdays) should start and do nothing; Friday 18:00 London should send the Telegram message.
-- #247 (Premium Bonds) needs a few real lines of NS&I's holdings and prize history pages, numbers changed.
