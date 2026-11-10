@@ -1729,11 +1729,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.schedule_mode = True
         print(tr("Schedules are on. Leave this running; press Ctrl+C to stop."), flush=True)
         if watches:
-            asyncio.ensure_future(self._watch(watches))
+            self._background(self._watch(watches))
         if telegram:
             if not self._tg_chats():
                 print(tr("Telegram: send your bot a message. Until TELEGRAM_CHAT_ID is set {where_keys}, the program only says which chat it came from.", where_keys=WHERE_KEYS), flush=True)
-            asyncio.ensure_future(self._tg_watch(telegram))
+            self._background(self._tg_watch(telegram))
         if listeners:
             await self._listen(listeners)
         fired, next_every = {}, {}

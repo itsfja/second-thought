@@ -2265,12 +2265,21 @@ class Connections:
         else:
             self._listen_busy = asyncio.ensure_future(self.run([(fn, payload)], label))
 
+    def _background(self, coro):
+        """Starts a task that runs for as long as the program does, and keeps hold of it: asyncio itself keeps only a
+        weak reference, so a task nobody holds can be collected while it waits, and then it silently stops."""
+        tasks = self.__dict__.setdefault("_background_tasks", set())
+        task = asyncio.ensure_future(coro)
+        tasks.add(task)
+        task.add_done_callback(tasks.discard)
+        return task
+
     async def _listen(self, listeners):
         groups = {}
         for kind, arg, fn in listeners:
             groups.setdefault(kind, []).append((arg, fn))
         for kind, items in groups.items():
-            asyncio.ensure_future(self._keep_listening(kind, items))
+            self._background(self._keep_listening(kind, items))
 
     async def _keep_listening(self, kind, items):
         runner = getattr(self, "_listen_" + kind)
