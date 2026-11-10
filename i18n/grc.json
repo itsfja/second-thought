@@ -604,6 +604,14 @@
   "rb_mikrotik_log": {
    "message0": "ὑπομνήματα MikroTik, ἔσχατοι %1 στίχοι",
    "tooltip": "Οἱ ἔσχατοι στίχοι τῶν ὑπομνημάτων τοῦ μεταγωγέως, ὁ παλαιότατος πρῶτος, ἕκαστος ὡς «time topics: message»."
+  },
+  "rb_unifi_clients": {
+   "message0": "πελάται UniFi",
+   "tooltip": "Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην μηχανὴν συνημμένην τῷ δικτύῳ σου UniFi· name, mac, ip, type (wired, wireless ἢ vpn), connected (ἀφ' οὗ) καὶ uplink (ἡ μηχανὴ UniFi δι' ἧς συνάπτεται). Μόνον ἀναγινώσκει· οὐδὲν κωλύεται οὐδὲ μεταβάλλεται. Ἐν τῇδε τῇ σελίδι χρῆται δικτύῳ ὑποδείγματος."
+  },
+  "rb_unifi_devices": {
+   "message0": "μηχαναὶ UniFi",
+   "tooltip": "Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην μηχανὴν UniFi (πύλη, μεταγωγεῖς, σημεῖα προσβάσεως)· name, model, mac, ip, state, firmware, update (εἰ νεώτερον firmware μένει), καὶ ταῖς συνημμέναις, uptime (ὧραι), cpu καὶ memory (%)."
   }
  },
  "options": {
@@ -760,7 +768,8 @@
   "Homey": "Homey",
   "Output": "Ἔξοδος",
   "Coinbase": "Coinbase",
-  "MikroTik": "MikroTik"
+  "MikroTik": "MikroTik",
+  "UniFi": "UniFi"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1577,7 +1586,12 @@
   "MikroTik ports": "Θύραι τοῦ MikroTik",
   "{n} ports": "{n} θύραι",
   "MikroTik switch": "μεταγωγεὺς MikroTik",
-  "read your MikroTik router or switch: its ports, modules, health and log": "ἀναγινώσκειν τὸν μεταγωγέα σου MikroTik· θύρας, μονάδας, ὑγίειαν καὶ ὑπομνήματα"
+  "read your MikroTik router or switch: its ports, modules, health and log": "ἀναγινώσκειν τὸν μεταγωγέα σου MikroTik· θύρας, μονάδας, ὑγίειαν καὶ ὑπομνήματα",
+  "UniFi": "UniFi",
+  "UniFi clients": "Πελάται UniFi",
+  "{n} clients": "{n} πελάται",
+  "UniFi network": "δίκτυον UniFi",
+  "read your UniFi network: who's connected, and how your UniFi devices are": "ἀναγινώσκειν τὸ δίκτυόν σου UniFi· τίνες συνῆπται, καὶ πῶς ἔχουσιν αἱ μηχαναί σου UniFi"
  },
  "examples": {
   "review": {
@@ -3166,17 +3180,25 @@
   "MikroTik": "MikroTik",
   "MikroTik ports": "Θύραι τοῦ MikroTik",
   "{n} ports": "{n} θύραι",
-  "Couldn't reach the MikroTik at {url} ({reason}).": "Οὐκ ἐδυνήθη ἐφικέσθαι τοῦ MikroTik ἐν {url} ({reason}).",
+  "Couldn't reach the {who} at {url} ({reason}).": "Οὐκ ἐδυνήθη ἐφικέσθαι τοῦ {who} ἐν {url} ({reason}).",
   "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.": "Τὸ MikroTik δεῖται MIKROTIK_URL, MIKROTIK_USER καὶ MIKROTIK_PASSWORD {where_keys}· τῆς διευθύνσεως τοῦ μεταγωγέως (οἷον https://192.168.88.1) καὶ χρήστου ἐν ὁμάδι μόνον μετὰ τῶν ἐξουσιῶν read, api καὶ rest-api.",
   "MikroTik: {why}.": "MikroTik· {why}.",
   "Second Thought only reads from MikroTik, so it doesn't send {what}.": "Τὸ Second Thought μόνον ἀναγινώσκει ἐκ τοῦ MikroTik, ὥστε οὐ πέμπει {what}.",
   "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.": "Τὸ MikroTik ἀπεδοκίμασε τὰ MIKROTIK_USER καὶ MIKROTIK_PASSWORD.",
-  "The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.": "Ὅδε ὁ ὑπολογιστὴς οὐ πιστεύει τῷ πιστοποιητικῷ τοῦ MikroTik (οἱ μεταγωγεῖς ἴδιον ποιοῦσιν). Τρέχε --doctor ἵνα ἴδῃς τὸ ἴχνος αὐτοῦ, καὶ θὲς εἰς MIKROTIK_CERT_SHA256.",
-  "The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "Τὸ πιστοποιητικὸν τοῦ MikroTik οὐκ ἔστιν ὃ τὸ MIKROTIK_CERT_SHA256 ὁρίζει (ἔστιν {seen}). Εἰ ἤλλαξας τὸ πιστοποιητικόν, ἀνανέωσον τὴν τιμήν· εἰ δὲ μή, τι παρεμβαίνει.",
+  "The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.": "Ὅδε ὁ ὑπολογιστὴς οὐ πιστεύει τῷ πιστοποιητικῷ τοῦ {who} (οἱ μεταγωγεῖς ἴδιον ποιοῦσιν). Τρέχε --doctor ἵνα ἴδῃς τὸ ἴχνος αὐτοῦ, καὶ θὲς εἰς {setting}.",
+  "The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "Τὸ πιστοποιητικὸν τοῦ {who} οὐκ ἔστιν ὃ τὸ {setting} ὁρίζει (ἔστιν {seen}). Εἰ ἤλλαξας τὸ πιστοποιητικόν, ἀνανέωσον τὴν τιμήν· εἰ δὲ μή, τι παρεμβαίνει.",
   "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.": "ἡ ὁμὰς τοῦ λογαριασμοῦ ({group}) δύναται καὶ {what}. Τὸ Second Thought μόνον ἀναγινώσκει, ὥστε ὁμὰς μόνον μετὰ read, api καὶ rest-api ἀσφαλεστέρα.",
   "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.": "ὁ κωδικὸς ἀκρυπτὸς διὰ http:// πορεύεται. Χρῶ μᾶλλον τῇ ὑπηρεσίᾳ www-ssl καὶ https://.",
-  "the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.": "τὸ πιστοποιητικὸν τοῦ μεταγωγέως ἴδιόν ἐστιν, ὅρισον οὖν αὐτό· εἰ {url} τὸ σὸν MikroTik ἐστίν, θὲς MIKROTIK_CERT_SHA256 = {seen} ἐν second-thought.ini.",
-  "{board}, RouterOS {version}": "{board}, RouterOS {version}"
+  "the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.": "τὸ πιστοποιητικὸν τοῦ μεταγωγέως ἴδιόν ἐστιν, ὅρισον οὖν αὐτό· εἰ {url} τὸ σὸν {who} ἐστίν, θὲς {setting} = {seen} ἐν second-thought.ini.",
+  "{board}, RouterOS {version}": "{board}, RouterOS {version}",
+  "UniFi": "UniFi",
+  "UniFi: {why}.": "UniFi· {why}.",
+  "Second Thought only reads from UniFi, so it doesn't send {what}.": "Τὸ Second Thought μόνον ἀναγινώσκει ἐκ τοῦ UniFi, ὥστε οὐ πέμπει {what}.",
+  "UniFi clients": "Πελάται UniFi",
+  "{n} clients": "{n} πελάται",
+  "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "Τὸ UniFi δεῖται UNIFI_URL καὶ UNIFI_API_KEY {where_keys}· τῆς διευθύνσεως τῆς κονσόλας (οἷον https://192.168.1.1) καὶ κλειδὸς API ἐκ τῆς Network (Settings, Control Plane, Integrations).",
+  "The UniFi console refused UNIFI_API_KEY.": "Ἡ κονσόλα UniFi ἀπεδοκίμασε τὸ UNIFI_API_KEY.",
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} μηχαναί"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

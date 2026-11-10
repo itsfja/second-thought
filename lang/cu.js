@@ -157,7 +157,9 @@
 "rb_mikrotik_ports":{"message0":"врата MikroTik","tooltip":"Списокъ записей, єдина на всѧ врата MikroTik твоегѡ: port, running, speed (ꙗкоже 10Gbps), errors, drops, link_downs и comment. Погрѣшенїѧ и паденїѧ числѧтсѧ ѿ послѣднѧгѡ начала. Точїю чтетъ: ничтоже измѣнѧетсѧ. На сей страницѣ ꙋпотреблѧетъ преключатель ѡбразца."},
 "rb_mikrotik_sfp":{"message0":"части SFP MikroTik","tooltip":"Списокъ записей, єдина на всѧкꙋ вложенꙋю часть SFP: port, module, temperature (°C), rx_power и tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"здравїе MikroTik","tooltip":"Запись ѡ самомъ наставницѣ: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), и всѧкъ иный чꙋвственникъ, егоже имать."},
-"rb_mikrotik_log":{"message0":"лѣтопись MikroTik, послѣднїѧ %1 строки","tooltip":"Послѣднїѧ строки лѣтописи наставника, древнѣйшаѧ прежде, всѧка ꙗкоже «time topics: message»."}
+"rb_mikrotik_log":{"message0":"лѣтопись MikroTik, послѣднїѧ %1 строки","tooltip":"Послѣднїѧ строки лѣтописи наставника, древнѣйшаѧ прежде, всѧка ꙗкоже «time topics: message»."},
+"rb_unifi_clients":{"message0":"гостїе UniFi","tooltip":"Списокъ записей, єдина на всѧко орꙋдїе совокꙋпленное съ мрежею твоею UniFi: name, mac, ip, type (wired, wireless или vpn), connected (ѿ коегѡ времене) и uplink (орꙋдїе UniFi, имже совокꙋплѧетсѧ). Точїю чтетъ: ничтоже возбранѧетсѧ ни измѣнѧетсѧ. На сей страницѣ ꙋпотреблѧетъ мрежꙋ ѡбразца."},
+"rb_unifi_devices":{"message0":"орꙋдїѧ UniFi","tooltip":"Списокъ записей, єдина на всѧко орꙋдїе UniFi (врата, преключатели, точки): name, model, mac, ip, state, firmware, update (аще новѣйшее firmware ждетъ), и совокꙋпленномꙋ, uptime (часы), cpu и memory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"на всѧкъ день","weekdays":"въ дни дѣланїѧ","weekends":"въ дни ѿдыха"},
@@ -206,7 +208,8 @@
 "Wait & time":"Жди и времѧ",
 "You":"Ты",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1023,7 +1026,12 @@
 "MikroTik ports":"Вратá MikroTik",
 "{n} ports":"{n} вратъ",
 "MikroTik switch":"преключатель MikroTik",
-"read your MikroTik router or switch: its ports, modules, health and log":"чести MikroTik твой: врата, части, здравїе и лѣтопись"
+"read your MikroTik router or switch: its ports, modules, health and log":"чести MikroTik твой: врата, части, здравїе и лѣтопись",
+"UniFi":"UniFi",
+"UniFi clients":"Гостїе UniFi",
+"{n} clients":"{n} гостей",
+"UniFi network":"мрежа UniFi",
+"read your UniFi network: who's connected, and how your UniFi devices are":"чести мрежꙋ твою UniFi: кто совокꙋпленъ, и како имꙋтъ орꙋдїѧ твоѧ UniFi"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -1980,17 +1988,25 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"Вратá MikroTik",
 "{n} ports":"{n} вратъ",
-"Couldn't reach the MikroTik at {url} ({reason}).":"Не возможе достигнꙋти MikroTik на {url} ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"Не возможе достигнꙋти {who} на {url} ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik требꙋетъ MIKROTIK_URL, MIKROTIK_USER и MIKROTIK_PASSWORD {where_keys}: мѣсто наставника (ꙗкоже https://192.168.88.1) и потребителѧ въ собранїи точїю съ властьми read, api и rest-api.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought точїю чтетъ ѿ MikroTik, тѣмже не посылаетъ {what}.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik ѿвержѐ MIKROTIK_USER и MIKROTIK_PASSWORD.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Сей счетникъ не вѣрꙋетъ свидѣтельствꙋ MikroTik (наставницы своѐ творѧтъ). Пꙋсти --doctor видѣти знаменїе егѡ, и положи въ MIKROTIK_CERT_SHA256.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Свидѣтельство MikroTik нѣсть то, еже MIKROTIK_CERT_SHA256 ꙋтверждаетъ (есть {seen}). Аще премѣнилъ еси свидѣтельство, ѡбнови число; аще ли нѣтъ, нѣчто стоитъ посредѣ.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"Сей счетникъ не вѣрꙋетъ свидѣтельствꙋ {who} (наставницы своѐ творѧтъ). Пꙋсти --doctor видѣти знаменїе егѡ, и положи въ {setting}.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Свидѣтельство {who} нѣсть то, еже {setting} ꙋтверждаетъ (есть {seen}). Аще премѣнилъ еси свидѣтельство, ѡбнови число; аще ли нѣтъ, нѣчто стоитъ посредѣ.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"собранїе счета ({group}) можетъ и {what}. Second Thought точїю чтетъ, тѣмже собранїе точїю съ read, api и rest-api безбѣднѣе.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"тайное слово идетъ ѡткрыто чрезъ http://. Возьми паче слꙋжбꙋ www-ssl и https://.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"свидѣтельство наставника своѐ есть, ꙋтверди е: аще {url} есть MikroTik твой, положи MIKROTIK_CERT_SHA256 = {seen} въ second-thought.ini.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"свидѣтельство наставника своѐ есть, ꙋтверди е: аще {url} есть {who} твой, положи {setting} = {seen} въ second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought точїю чтетъ ѿ UniFi, тѣмже не посылаетъ {what}.",
+"UniFi clients":"Гостїе UniFi",
+"{n} clients":"{n} гостей",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi требꙋетъ UNIFI_URL и UNIFI_API_KEY {where_keys}: мѣсто ꙋправителѧ (ꙗкоже https://192.168.1.1) и ключь API ѿ Network (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"Ꙋправитель UniFi ѿвержѐ UNIFI_API_KEY.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} орꙋдїй"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

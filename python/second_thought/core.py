@@ -92,6 +92,9 @@ SAFETY = {
     # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
     # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
     # the network with it, and nothing here is worth that.
+    # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
+    # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
+    "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
@@ -199,6 +202,12 @@ def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
+
+
+def unifi_allowed(method, path):
+    """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 
 
 def same_problem(a, b):
@@ -631,6 +640,7 @@ CAPABILITIES = [
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
+    ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),

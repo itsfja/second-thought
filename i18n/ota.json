@@ -605,6 +605,14 @@
   "rb_mikrotik_log": {
    "message0": "MikroTik دفتری، صوڭ %1 سطر",
    "tooltip": "یوللایجی دفترینڭ صوڭ سطرلری، اڭ اسكیسی اوّل، هر بری «time topics: message» شكلنده."
+  },
+  "rb_unifi_clients": {
+   "message0": "UniFi مشتریلری",
+   "tooltip": "قیدلر لیسته‌سی، UniFi شبكه‌ڭزه باغلی هر جهاز ایچون بر: name، mac، ip، type (wired، wireless یا vpn)، connected (نه زماندن بری) و uplink (اوزرندن باغلاندیغی UniFi جهازی). یالڭز اوقور: هیچ بر شی ایڭلنمز و دكیشمز. بو صحیفه‌ده نمونه بر شبكه قوللانیر."
+  },
+  "rb_unifi_devices": {
+   "message0": "UniFi جهازلری",
+   "tooltip": "قیدلر لیسته‌سی، هر UniFi جهازی ایچون بر (قاپی، آنحتارلر، اریشیم نقطه‌لری): name، model، mac، ip، state، firmware، update (یڭی firmware بكلییور می)، و باغلی اولان ایچون uptime (ساعت)، cpu و memory (%)."
   }
  },
  "options": {
@@ -751,7 +759,8 @@
   "Wait & time": "بكله و وقت",
   "You": "سن",
   "Coinbase": "Coinbase",
-  "MikroTik": "MikroTik"
+  "MikroTik": "MikroTik",
+  "UniFi": "UniFi"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",
@@ -1568,7 +1577,12 @@
   "MikroTik ports": "MikroTik قاپیلری",
   "{n} ports": "{n} قاپی",
   "MikroTik switch": "MikroTik آنحتاری",
-  "read your MikroTik router or switch: its ports, modules, health and log": "MikroTik یوللایجی یا آنحتارڭزی اوقومق: قاپیلری، پارچه‌لری، صحتی و دفتری"
+  "read your MikroTik router or switch: its ports, modules, health and log": "MikroTik یوللایجی یا آنحتارڭزی اوقومق: قاپیلری، پارچه‌لری، صحتی و دفتری",
+  "UniFi": "UniFi",
+  "UniFi clients": "UniFi مشتریلری",
+  "{n} clients": "{n} مشتری",
+  "UniFi network": "UniFi شبكه‌سی",
+  "read your UniFi network: who's connected, and how your UniFi devices are": "UniFi شبكه‌ڭزی اوقومق: كیملر باغلی، و UniFi جهازلرڭز نه حالده"
  },
  "examples": {
   "review": {
@@ -3157,17 +3171,25 @@
   "MikroTik": "MikroTik",
   "MikroTik ports": "MikroTik قاپیلری",
   "{n} ports": "{n} قاپی",
-  "Couldn't reach the MikroTik at {url} ({reason}).": "{url} ده‌كی MikroTik ه اریشیله‌مدی ({reason}).",
+  "Couldn't reach the {who} at {url} ({reason}).": "{url} ده‌كی {who} ه اریشیله‌مدی ({reason}).",
   "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.": "MikroTik، MIKROTIK_URL و MIKROTIK_USER و MIKROTIK_PASSWORD ایستر {where_keys}: یوللایجینڭ آدرسی (https://192.168.88.1 كبی) و یالڭز read، api و rest-api سیاستلری اولان بر زمره‌ده بر قوللانیجی.",
   "MikroTik: {why}.": "MikroTik: {why}.",
   "Second Thought only reads from MikroTik, so it doesn't send {what}.": "Second Thought، MikroTik دن یالڭز اوقور، اونڭ ایچون {what} گوندرمز.",
   "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.": "MikroTik، MIKROTIK_USER و MIKROTIK_PASSWORD ی رد ایتدی.",
-  "The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.": "بو حسابلایجی MikroTik ڭ شهادتنامه‌سنه گوونمیور (یوللایجیلر چوغونلقله كندیلرینكنی یاپار). پارمق ایزینی كورمك ایچون --doctor چالیشدیرڭ و MIKROTIK_CERT_SHA256 ه یازڭ.",
-  "The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "MikroTik ڭ شهادتنامه‌سی MIKROTIK_CERT_SHA256 ڭ صابتله‌دیغی دكل ({seen} در). شهادتنامه‌یی دكیشدیردیڭزسه قیمتی یڭیله‌یڭ؛ یوقسه آرایه بر شی گیرمش.",
+  "The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.": "بو حسابلایجی {who} ڭ شهادتنامه‌سنه گوونمیور (یوللایجیلر چوغونلقله كندیلرینكنی یاپار). پارمق ایزینی كورمك ایچون --doctor چالیشدیرڭ و {setting} ه یازڭ.",
+  "The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "{who} ڭ شهادتنامه‌سی {setting} ڭ صابتله‌دیغی دكل ({seen} در). شهادتنامه‌یی دكیشدیردیڭزسه قیمتی یڭیله‌یڭ؛ یوقسه آرایه بر شی گیرمش.",
   "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.": "حسابڭ زمره‌سی ({group}) {what} ده یاپابیلیر. Second Thought یالڭز اوقور، اونڭ ایچون یالڭز read، api و rest-api اولان بر زمره داها امیندر.",
   "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.": "پاروله http:// اوزرندن شفره‌سز گیدر. یرینه www-ssl خدمتنی و https:// ی قوللانڭ.",
-  "the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.": "یوللایجینڭ شهادتنامه‌سی كندینكیدر، اونی صابتله‌یڭ: {url} سزڭ MikroTik ڭز ایسه second-thought.ini ه MIKROTIK_CERT_SHA256 = {seen} یازڭ.",
-  "{board}, RouterOS {version}": "{board}، RouterOS {version}"
+  "the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.": "یوللایجینڭ شهادتنامه‌سی كندینكیدر، اونی صابتله‌یڭ: {url} سزڭ {who} ڭز ایسه second-thought.ini ه {setting} = {seen} یازڭ.",
+  "{board}, RouterOS {version}": "{board}، RouterOS {version}",
+  "UniFi": "UniFi",
+  "UniFi: {why}.": "UniFi: {why}.",
+  "Second Thought only reads from UniFi, so it doesn't send {what}.": "Second Thought، UniFi دن یالڭز اوقور، اونڭ ایچون {what} گوندرمز.",
+  "UniFi clients": "UniFi مشتریلری",
+  "{n} clients": "{n} مشتری",
+  "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi، UNIFI_URL و UNIFI_API_KEY ایستر {where_keys}: قونسولڭ آدرسی (https://192.168.1.1 كبی) و Network اوینامه‌سندن بر API آناختاری (Settings، Control Plane، Integrations).",
+  "The UniFi console refused UNIFI_API_KEY.": "UniFi قونسولی UNIFI_API_KEY ی رد ایتدی.",
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}، {n} جهاز"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

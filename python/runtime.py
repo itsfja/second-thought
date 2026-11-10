@@ -87,7 +87,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -151,7 +151,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY")
 
 
 def _load_keychain():
@@ -1114,6 +1114,9 @@ SAFETY = {
     # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
     # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
     # the network with it, and nothing here is worth that.
+    # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
+    # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
+    "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
@@ -1221,6 +1224,12 @@ def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
+
+
+def unifi_allowed(method, path):
+    """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 
 
 def same_problem(a, b):
@@ -1653,6 +1662,7 @@ CAPABILITIES = [
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
+    ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -3867,6 +3877,84 @@ class Connections:
         self.log(tr("Coinbase order cancelled"), oid, tr("done"))
         return True
 
+    # UniFi (#359)
+    # The Network API on a UniFi OS console (a Cloud Gateway, a Dream Machine): UNIFI_URL and UNIFI_API_KEY, a key made
+    # in the Network app under Settings, Control Plane, Integrations. Only the reads in SAFETY["unifi_free"] are ever
+    # sent, so nothing is blocked, restarted or reconfigured, whatever the key itself could do. UNIFI_CERT_SHA256 pins
+    # the console's own certificate, as for MikroTik; UNIFI_SITE picks a site other than the first.
+    UNIFI_API = "/proxy/network/integration/v1"
+
+    async def _unifi(self, path, query=None):
+        full = self.UNIFI_API + path
+        if not unifi_allowed("GET", full):
+            raise RunError(tr("Second Thought only reads from UniFi, so it doesn't send {what}.", what=f"GET {full}"))
+        base, key = os.environ.get("UNIFI_URL", "").strip().rstrip("/"), os.environ.get("UNIFI_API_KEY", "").strip()
+        if not base or not key:
+            raise RunError(tr("UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("UniFi", base, "UNIFI_CERT_SHA256", "GET",
+                                         full + ("?" + urllib.parse.urlencode(query) if query else ""), {"X-API-KEY": key})
+        if status == 401:
+            raise RunError(tr("The UniFi console refused UNIFI_API_KEY."))
+        if status >= 400:
+            raise RunError(tr("UniFi: {why}.", why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    async def _unifi_all(self, path):
+        out, offset = [], 0
+        while True:
+            page = await self._unifi(path, {"offset": offset, "limit": 200})
+            data = page.get("data") or [] if isinstance(page, dict) else []
+            out += [x for x in data if isinstance(x, dict)]
+            offset += len(data)
+            if not data or offset >= int(num(page.get("totalCount")) or 0) or offset >= 5000:
+                return out
+
+    async def _unifi_site(self):
+        sites = await self._unifi_all("/sites")
+        want = os.environ.get("UNIFI_SITE", "").strip().lower()
+        site = next((s for s in sites if want and want in (to_str(s.get("name")).lower(), to_str(s.get("internalReference")).lower())), None) or \
+            next(iter(sites), None)
+        if not site or not re.fullmatch(r"[A-Za-z0-9-]+", to_str(site.get("id"))):
+            raise RunError(tr("UniFi: {why}.", why=tr("not found")))
+        return to_str(site["id"])
+
+    @staticmethod
+    def _unifi_when(t):
+        try:
+            return datetime.datetime.fromisoformat(to_str(t).replace("Z", "+00:00")).astimezone().strftime("%Y-%m-%d %H:%M")
+        except ValueError:
+            return to_str(t)
+
+    async def unifi_clients(self):
+        """Everyone connected: name, mac, ip, type (wired, wireless, vpn), connected (since when) and uplink (the UniFi
+        device it's connected through)."""
+        site = await self._unifi_site()
+        names = {to_str(d.get("id")): to_str(d.get("name")) for d in await self._unifi_all(f"/sites/{site}/devices")}
+        out = [{"name": to_str(c.get("name") or c.get("hostname") or c.get("macAddress")), "mac": to_str(c.get("macAddress")).lower(),
+                "ip": to_str(c.get("ipAddress")), "type": to_str(c.get("type")).lower(), "connected": self._unifi_when(c.get("connectedAt")),
+                "uplink": names.get(to_str(c.get("uplinkDeviceId")), "")} for c in await self._unifi_all(f"/sites/{site}/clients")]
+        lines = "\n".join(f"{c['name']} ({c['ip'] or c['mac']})" for c in out)
+        self.log(tr("UniFi clients"), lines or tr("(nothing)"), tr("{n} clients", n=len(out)))
+        return out
+
+    async def unifi_devices(self):
+        """Each UniFi device: name, model, mac, ip, state (online, offline, ...), firmware, update (whether newer
+        firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)."""
+        site = await self._unifi_site()
+        out = []
+        for d in await self._unifi_all(f"/sites/{site}/devices"):
+            rec = {"name": to_str(d.get("name")), "model": to_str(d.get("model")), "mac": to_str(d.get("macAddress")).lower(),
+                   "ip": to_str(d.get("ipAddress")), "state": to_str(d.get("state")).lower(), "firmware": to_str(d.get("firmwareVersion")),
+                   "update": bool(d.get("firmwareUpdatable")), "uptime": "", "cpu": "", "memory": ""}
+            did = to_str(d.get("id"))
+            if rec["state"] == "online" and re.fullmatch(r"[A-Za-z0-9-]+", did):
+                st = await self._unifi(f"/sites/{site}/devices/{did}/statistics/latest")
+                rec.update(uptime=self._cents(num(st.get("uptimeSec")) / 3600) if _num_like(st.get("uptimeSec")) else "",
+                           cpu=num(st.get("cpuUtilizationPct")) if _num_like(st.get("cpuUtilizationPct")) else "",
+                           memory=num(st.get("memoryUtilizationPct")) if _num_like(st.get("memoryUtilizationPct")) else "")
+            out.append(rec)
+        return out
+
     # MikroTik (#360)
     # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
     # user in a group with just the read, api and rest-api policies. Only the calls in SAFETY["mikrotik_free"] are ever
@@ -3880,11 +3968,34 @@ class Connections:
         user, password = os.environ.get("MIKROTIK_USER", "").strip(), os.environ.get("MIKROTIK_PASSWORD", "")
         if not base or not user:
             raise RunError(tr("MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.", where_keys=WHERE_KEYS))
+        headers = {"Authorization": "Basic " + base64.b64encode(f"{user}:{password}".encode()).decode()}
+        status, raw = await self._pinned("MikroTik", base, "MIKROTIK_CERT_SHA256", method, path, headers, body)
+        if status == 401:
+            raise RunError(tr("The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD."))
+        if status >= 400:
+            raise RunError(tr("MikroTik: {why}.", why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else []
+
+    @staticmethod
+    def _said(status, raw):
+        """"it answered 404 (what it said)", for an error from a device's API."""
+        try:
+            said = json.loads(raw)
+            said = to_str(said.get("detail") or said.get("message") or "") if isinstance(said, dict) else ""
+        except ValueError:
+            said = ""
+        return tr("it answered {code}", code=status) + (f" ({_short(said, 120)})" if said else "")
+
+    async def _pinned(self, who, base, setting, method, path, headers, body=None):
+        """One HTTPS request to a device on your network (a router, a switch, a gateway), whose certificate is usually
+        its own. With a pin in the setting named, the certificate's SHA-256 fingerprint must match it, checked before
+        anything (a password included) is sent; without one, the certificate must be one this computer trusts. Gives
+        back (status, body)."""
         if "://" not in base:
             base = "https://" + base
         u = urllib.parse.urlparse(base)
-        pin = re.sub(r"[^0-9a-f]", "", os.environ.get("MIKROTIK_CERT_SHA256", "").lower())
-        headers = {"Authorization": "Basic " + base64.b64encode(f"{user}:{password}".encode()).decode(), "Accept": "application/json"}
+        pin = re.sub(r"[^0-9a-f]", "", os.environ.get(setting, "").lower())
+        headers = dict(headers, Accept="application/json")
         data = None
         if body is not None:
             data, headers["Content-Type"] = json.dumps(body).encode(), "application/json"
@@ -3903,29 +4014,19 @@ class Connections:
                 if u.scheme == "https" and pin:
                     seen = hashlib.sha256(conn.sock.getpeercert(binary_form=True)).hexdigest()
                     if seen != pin:
-                        raise RunError(tr("The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.", seen=seen))
+                        raise RunError(tr("The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.", who=who, setting=setting, seen=seen))
                 conn.request(method, (u.path or "") + path, body=data, headers=headers)
                 r = conn.getresponse()
-                raw = r.read()
+                return r.status, r.read()
             except RunError:
                 raise
             except Exception as e:  # noqa: BLE001 - certificate, refused, timed out: say which
                 text = str(e)
                 if "CERTIFICATE_VERIFY_FAILED" in text:
-                    raise RunError(tr("The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.")) from None
-                raise RunError(tr("Couldn't reach the MikroTik at {url} ({reason}).", url=base, reason=_short(text, 120))) from None
+                    raise RunError(tr("The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.", who=who, setting=setting)) from None
+                raise RunError(tr("Couldn't reach the {who} at {url} ({reason}).", who=who, url=base, reason=_short(text, 120))) from None
             finally:
                 conn.close()
-            if r.status == 401:
-                raise RunError(tr("The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD."))
-            if r.status >= 400:
-                try:
-                    said = json.loads(raw)
-                    said = to_str(said.get("detail") or said.get("message") or "") if isinstance(said, dict) else ""
-                except ValueError:
-                    said = ""
-                raise RunError(tr("MikroTik: {why}.", why=tr("it answered {code}", code=r.status) + (f" ({_short(said, 120)})" if said else "")))
-            return json.loads(raw) if raw.strip() else []
         return await asyncio.to_thread(go)
 
     @staticmethod
@@ -6124,7 +6225,7 @@ class Doctor:
         if base and not base.lower().startswith("http://") and not pinned:
             seen = await asyncio.to_thread(self._mt_fingerprint, base)
             if seen:
-                raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.", url=base, seen=seen))
+                raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="MikroTik", setting="MIKROTIK_CERT_SHA256", seen=seen))
         res = await self.mikrotik_health()
         user = os.environ.get("MIKROTIK_USER", "").strip()
         group = next((to_str(u.get("group")) for u in await self._mikrotik("GET", "/rest/user") if isinstance(u, dict) and u.get("name") == user), "")
@@ -6188,6 +6289,18 @@ class Doctor:
             async def mikrotik():
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
+        if has("unifi_read"):
+            async def unifi():
+                base = os.environ.get("UNIFI_URL", "").strip()
+                if base and not os.environ.get("UNIFI_CERT_SHA256", "").strip():
+                    seen = await asyncio.to_thread(self._mt_fingerprint, base)
+                    if seen:
+                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="UniFi console", setting="UNIFI_CERT_SHA256", seen=seen))
+                info = await self._unifi("/info")
+                site = await self._unifi_site()
+                devices = await self._unifi_all(f"/sites/{site}/devices")
+                return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
+            out.append(("UniFi", unifi))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -6457,7 +6570,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 

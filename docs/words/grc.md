@@ -28,6 +28,7 @@ Made by tools/sync.py from i18n/grc.json: edit that, not this.
 - Output: Ἔξοδος
 - Coinbase: Coinbase
 - MikroTik: MikroTik
+- UniFi: UniFi
 - Tools for the agent: drop them inside an agent block: Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου
 - Listeners: they run while the exported program runs on schedule: Ἀκροαταί· τρέχουσιν ἐν ᾧ τὸ ἐξαχθὲν πρόγραμμα κατὰ τὰς ὥρας τρέχει
 - Read and send: Ἀνάγνωθι καὶ πέμψον

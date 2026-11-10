@@ -39,7 +39,7 @@ New to all this? [**The picture book**](docs/ladybird-book.md) is a gentle, Lady
 <tr>
 <td valign="top">
 
-**Your home and your apps.** Home Assistant, Homey, MQTT, Telegram, Discord, Slack, email, calendars, feeds, GitHub, Coinbase, MikroTik. On the page they use sample data, so you can build safely. [More](docs/connections.md)
+**Your home and your apps.** Home Assistant, Homey, MQTT, Telegram, Discord, Slack, email, calendars, feeds, GitHub, Coinbase, MikroTik, UniFi. On the page they use sample data, so you can build safely. [More](docs/connections.md)
 
 <img src="screenshots/home-assistant.png" alt="The Home Assistant panel on the page, listing the sample house's people, weather, bins and calendar with their states">
 
@@ -78,7 +78,7 @@ It also speaks 30 other languages besides English, from Spanish, Japanese and Cl
 |---|---|
 | [Using the page](docs/using-the-page.md) | The blocks, what a program can do, the examples and gallery, saving, languages |
 | [The agent](docs/agent.md) | Goals and tools, planning, what always asks first |
-| [Connections](docs/connections.md) | Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, MikroTik |
+| [Connections](docs/connections.md) | Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, MikroTik, UniFi |
 | [MCP tools](docs/mcp.md) | Any MCP server, GitHub, Kraken, Trust Wallet, and your program as a tool |
 | [Running exported programs](docs/running.md) | Exporting, schedules, GitHub Actions, approving, test cases, memory, `--doctor` and updates |
 | [Settings and models](docs/settings.md) | Where settings come from, the run settings, models and backups |

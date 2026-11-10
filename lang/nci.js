@@ -157,7 +157,9 @@
 "rb_mikrotik_ports":{"message0":"MikroTik calacōhuayān","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl calacōhuayān in mo MikroTik ohtlatlamachtiāni: port, running, speed (iuhquin 10Gbps), errors, drops, link_downs ihuan comment. In ahcualli ihuan in huetziliztli mopōhua ihcuāc tlatzonco ōpēuh. Zan tlapōhua: ahtle mopatla. Nicān quitequitiltia cē machiyōtl tlapatlaliztli."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP tlatequipanoliztli","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl SFP tlatequipanoliztli calaqui: port, module, temperature (°C), rx_power ihuan tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik pahtiliztli","tooltip":"Cē amatlahcuilōlli ītechpa in ohtlatlamachtiāni: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), ihuan occequintin tlamachiliztli quipiya."},
-"rb_mikrotik_log":{"message0":"MikroTik tlahcuilōlli, in tlatzonco %1 tlahcuilōlli","tooltip":"In tlatzonco tlahcuilōlli in ohtlatlamachtiāni ītlahcuilōl, in achi huēhuehtl achto, cecentetl iuhquin «time topics: message»."}
+"rb_mikrotik_log":{"message0":"MikroTik tlahcuilōlli, in tlatzonco %1 tlahcuilōlli","tooltip":"In tlatzonco tlahcuilōlli in ohtlatlamachtiāni ītlahcuilōl, in achi huēhuehtl achto, cecentetl iuhquin «time topics: message»."},
+"rb_unifi_clients":{"message0":"UniFi calaquini","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl tepozchīhualli motzoh ica mo UniFi matlatl: name, mac, ip, type (wired, wireless nozo vpn), connected (īhuīcpa quēmman) ihuan uplink (in UniFi tepozchīhualli ic motzoh). Zan tlapōhua: ahtle motzacua nozo mopatla. Nicān quitequitiltia cē machiyōtl matlatl."},
+"rb_unifi_devices":{"message0":"UniFi tepozchīhualli","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl UniFi tepozchīhualli (quiyāhuatl, tlapatlaliztli, calaquiyān): name, model, mac, ip, state, firmware, update (intlā quichiya yancuic firmware), ihuan intlā motzoh, uptime (hora), cpu ihuan memory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -206,7 +208,8 @@
 "Wait & time":"Chiyaliztli ihuān cāhuitl",
 "You":"Tehhuātl",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1023,7 +1026,12 @@
 "MikroTik ports":"MikroTik calacōhuayān",
 "{n} ports":"{n} calacōhuayān",
 "MikroTik switch":"MikroTik tlapatlaliztli",
-"read your MikroTik router or switch: its ports, modules, health and log":"quipōhuaz mo MikroTik ohtlatlamachtiāni: ītlacalaquiyān, ītlatequipanoliz, īpahtiliz ihuan ītlahcuilōl"
+"read your MikroTik router or switch: its ports, modules, health and log":"quipōhuaz mo MikroTik ohtlatlamachtiāni: ītlacalaquiyān, ītlatequipanoliz, īpahtiliz ihuan ītlahcuilōl",
+"UniFi":"UniFi",
+"UniFi clients":"UniFi calaquini",
+"{n} clients":"{n} calaquini",
+"UniFi network":"UniFi matlatl",
+"read your UniFi network: who's connected, and how your UniFi devices are":"quipōhuaz mo UniFi matlatl: āquin ōmotzoh, ihuan quēn cah mo UniFi tepozchīhualli"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -1980,17 +1988,25 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"MikroTik calacōhuayān",
 "{n} ports":"{n} calacōhuayān",
-"Couldn't reach the MikroTik at {url} ({reason}).":"Ahmo huel ōmacic in MikroTik ipan {url} ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"Ahmo huel ōmacic in {who} ipan {url} ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik quinequi MIKROTIK_URL, MIKROTIK_USER ihuan MIKROTIK_PASSWORD {where_keys}: in ohtlatlamachtiāni īcān (iuhquin https://192.168.88.1) ihuan cē tlatequitiltiāni ipan cē necentlaliliztli zan ica read, api ihuan rest-api.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought zan quipōhua in MikroTik, ic ahmo quititlani {what}.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"In MikroTik ōquixtlāuh MIKROTIK_USER ihuan MIKROTIK_PASSWORD.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Inīn tlapōhualōni ahmo quineltoca in MikroTik ītlanēxtīl (in ohtlatlamachtiānimeh quichīhuah īyōhuan). Xictequitilti --doctor ic tiquittaz īmāmachiyo, ihuan xictlāli ipan MIKROTIK_CERT_SHA256.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"In MikroTik ītlanēxtīl ahmo yehhuātl in quitlālia MIKROTIK_CERT_SHA256 (yehhuātl {seen}). Intlā ōticpatlac in tlanēxtīlli, xicyancuili in tlapōhualli; intlā ahmo, itlah oncā tlanepantlah.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"Inīn tlapōhualōni ahmo quineltoca in {who} ītlanēxtīl (in ohtlatlamachtiānimeh quichīhuah īyōhuan). Xictequitilti --doctor ic tiquittaz īmāmachiyo, ihuan xictlāli ipan {setting}.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"In {who} ītlanēxtīl ahmo yehhuātl in quitlālia {setting} (yehhuātl {seen}). Intlā ōticpatlac in tlanēxtīlli, xicyancuili in tlapōhualli; intlā ahmo, itlah oncā tlanepantlah.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"in āmatlahcuilōlli īnecentlaliliz ({group}) no huel {what}. Second Thought zan tlapōhua, ic cē necentlaliliztli zan ica read, api ihuan rest-api achi cualli.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"in ichtacatlahtōlli ahmo motlātia ihcuāc yauh ipan http://. Xiquitqui in www-ssl tequitl ihuan https://.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"in ohtlatlamachtiāni ītlanēxtīl ītech pohui, xictlāli: intlā {url} mo MikroTik, xictlahcuilo MIKROTIK_CERT_SHA256 = {seen} ipan second-thought.ini.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"in ohtlatlamachtiāni ītlanēxtīl ītech pohui, xictlāli: intlā {url} mo {who}, xictlahcuilo {setting} = {seen} ipan second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought zan quipōhua in UniFi, ic ahmo quititlani {what}.",
+"UniFi clients":"UniFi calaquini",
+"{n} clients":"{n} calaquini",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi quinequi UNIFI_URL ihuan UNIFI_API_KEY {where_keys}: in tlayacānqui īcān (iuhquin https://192.168.1.1) ihuan cē API tlatzacuilli īhuīcpa Network (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"In UniFi tlayacānqui ōquixtlāuh UNIFI_API_KEY.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tepozchīhualli"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

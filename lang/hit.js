@@ -158,7 +158,9 @@
 "rb_mikrotik_ports":{"message0":"𒆍𒎌 MikroTik","tooltip":"𒁾 𒀀𒀸𒋗, 1 𒆍 𒄷𒌋𒈠𒀭 𒉿𒄴𒉡𒈥 MikroTik-𒅗: port, running, speed (10Gbps 𒈠𒅆𒉿𒀭), errors, drops, link_downs 𒅇 comment. 𒄩𒀜𒊏𒀀𒄑𒍣𒁁: 𒌌 𒆪𒀉𒆠 𒉿𒄴𒉡𒍣. 𒅗𒀀 𒉿𒄴𒉡𒈥 𒊭𒀝𒆠𒅖 𒁕𒀀𒄿."},
 "rb_mikrotik_sfp":{"message0":"𒋗𒎌 SFP MikroTik","tooltip":"𒁾 𒀀𒀸𒋗, 1 𒋗 SFP 𒄷𒌋𒈠𒀭: port, module, temperature (°C), rx_power 𒅇 tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"𒀸𒋗𒌌 MikroTik","tooltip":"𒁾 𒉿𒄴𒉡𒈥𒀸: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𒅇 𒋫𒈠𒄿 𒆪𒀉 𒄯𒍣."},
-"rb_mikrotik_log":{"message0":"𒁾 MikroTik, %1 𒀊𒁉𒄑𒍣","tooltip":"𒁾 𒉿𒄴𒉡𒈥𒀸 𒀊𒁉𒄑𒍣, 𒅗𒊒𒌑𒄿𒇷 𒁉𒊏𒀭, 𒄷𒌋𒈠𒀭 „time topics: message” 𒈠𒅆𒉿𒀭."}
+"rb_mikrotik_log":{"message0":"𒁾 MikroTik, %1 𒀊𒁉𒄑𒍣","tooltip":"𒁾 𒉿𒄴𒉡𒈥𒀸 𒀊𒁉𒄑𒍣, 𒅗𒊒𒌑𒄿𒇷 𒁉𒊏𒀭, 𒄷𒌋𒈠𒀭 „time topics: message” 𒈠𒅆𒉿𒀭."},
+"rb_unifi_clients":{"message0":"𒀭𒌅𒄴𒅆𒌍 UniFi","tooltip":"𒁾 𒀀𒀸𒋗, 1 𒌑𒉡𒌓 𒄷𒌋𒈠𒀭 𒄿𒈾 𒊭𒊓 UniFi-𒅗 𒄩𒈪𒅔𒃷: name, mac, ip, type (wired, wireless 𒈾𒀸𒈠 vpn), connected 𒅇 uplink. 𒄩𒀜𒊏𒀀𒄑𒍣𒁁: 𒌌 𒆪𒀉𒆠 𒉿𒄴𒉡𒍣. 𒅗𒀀 𒊭𒊓 𒊭𒀝𒆠𒅖 𒁕𒀀𒄿."},
+"rb_unifi_devices":{"message0":"𒌑𒉡𒌓 UniFi","tooltip":"𒁾 𒀀𒀸𒋗, 1 𒌑𒉡𒌓 UniFi 𒄷𒌋𒈠𒀭: name, model, mac, ip, state, firmware, update, 𒅇 uptime (𒌓𒋻), cpu 𒅇 memory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒄰 𒄷𒌋𒈠𒀭","weekdays":"𒌓𒄰 𒀀𒉌𒉿𒀜𒋫𒀸","weekends":"𒌓𒄰 𒉿𒅈𒉺𒀸"},
@@ -207,7 +209,8 @@
 "Wait & time":"𒄷𒍑𒆠 𒅇 𒈨𒂊𒄯",
 "You":"𒍣𒅅",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣",
@@ -1024,7 +1027,12 @@
 "MikroTik ports":"𒆍𒎌 MikroTik",
 "{n} ports":"𒆍𒎌 {n}",
 "MikroTik switch":"𒉿𒄴𒉡𒈥 MikroTik",
-"read your MikroTik router or switch: its ports, modules, health and log":"𒉿𒄴𒉡𒈥 MikroTik-𒅗 𒊭𒀝𒍣: 𒆍𒎌, 𒋗𒎌, 𒀸𒋗𒌌 𒅇 𒁾"
+"read your MikroTik router or switch: its ports, modules, health and log":"𒉿𒄴𒉡𒈥 MikroTik-𒅗 𒊭𒀝𒍣: 𒆍𒎌, 𒋗𒎌, 𒀸𒋗𒌌 𒅇 𒁾",
+"UniFi":"UniFi",
+"UniFi clients":"𒀭𒌅𒄴𒅆𒌍 UniFi",
+"{n} clients":"𒀭𒌅𒄴𒅆𒌍 {n}",
+"UniFi network":"𒊭𒊓 UniFi",
+"read your UniFi network: who's connected, and how your UniFi devices are":"𒊭𒊓 UniFi-𒅗 𒊭𒀝𒍣: 𒆪𒅖 𒄩𒈪𒅔𒃷, 𒅇 𒌑𒉡𒌓 UniFi-𒅗 𒈠𒄴𒄩𒀭"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -1981,17 +1989,25 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"KÁ.MEŠ MikroTik",
 "{n} ports":"KÁ.MEŠ {n}",
-"Couldn't reach the MikroTik at {url} ({reason}).":"MikroTik I-NA {url} UL a-ri ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"{who} I-NA {url} UL a-ri ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik MIKROTIK_URL, MIKROTIK_USER Ù MIKROTIK_PASSWORD {where_keys} ú-e-ek-zi: pé-e-da-an (https://192.168.88.1 ma-ši-wa-an) Ù LÚ I-NA ERÍN.MEŠ read, api Ù rest-api-pát.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought MikroTik-za ḫa-at-ra-a-iz-zi-pát, {what} UL pé-e-da-i.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik MIKROTIK_USER Ù MIKROTIK_PASSWORD UL ma-la-a-it.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"GIŠ.SAG.KUL MikroTik UL ša-ak-zi (wa-aḫ-nu-mar GIŠ.SAG.KUL-ŠU i-ya-zi). --doctor i-ya Ù I-NA MIKROTIK_CERT_SHA256 da-a-i.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"GIŠ.SAG.KUL MikroTik UL ku-it MIKROTIK_CERT_SHA256 da-a-iš ({seen}). ma-a-an wa-aḫ-nu-ut-ta, GIBIL i-ya; ma-a-an UL, ku-it-ki an-da.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"GIŠ.SAG.KUL {who} UL ša-ak-zi (wa-aḫ-nu-mar GIŠ.SAG.KUL-ŠU i-ya-zi). --doctor i-ya Ù I-NA {setting} da-a-i.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"GIŠ.SAG.KUL {who} UL ku-it {setting} da-a-iš ({seen}). ma-a-an wa-aḫ-nu-ut-ta, GIBIL i-ya; ma-a-an UL, ku-it-ki an-da.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"ERÍN.MEŠ kap-pu-u-wa-ar ({group}) {what}-ya i-ya-zi. Second Thought ḫa-at-ra-a-iz-zi-pát, ERÍN.MEŠ read, api Ù rest-api-pát aš-šu.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"GIŠ.SAG.KUL I-NA http:// UL mu-un-na-an-za i-ya-at-ta-ri. www-ssl Ù https:// da-a.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"GIŠ.SAG.KUL wa-aḫ-nu-mar-aš a-pé-el, da-a-i: ma-a-an {url} MikroTik-KA, MIKROTIK_CERT_SHA256 = {seen} I-NA second-thought.ini da-a-i.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"GIŠ.SAG.KUL wa-aḫ-nu-mar-aš a-pé-el, da-a-i: ma-a-an {url} {who}-KA, {setting} = {seen} I-NA second-thought.ini da-a-i.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought UniFi-za ḫa-at-ra-a-iz-zi-pát, {what} UL pé-e-da-i.",
+"UniFi clients":"an-tu-uḫ-ši-eš UniFi",
+"{n} clients":"an-tu-uḫ-ši-eš {n}",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi UNIFI_URL Ù UNIFI_API_KEY {where_keys} ú-e-ek-zi: pé-e-da-an (https://192.168.1.1 ma-ši-wa-an) Ù GIŠ.SAG.KUL API Network-za (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"UniFi UNIFI_API_KEY UL ma-la-a-it.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, ú-nu-ut {n}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

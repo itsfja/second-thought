@@ -604,6 +604,14 @@
   "rb_mikrotik_log": {
    "message0": "MikroTik-log, laatste %1 regels",
    "tooltip": "De laatste regels van het routerlog, de oudste eerst, elk als ‘time topics: message’."
+  },
+  "rb_unifi_clients": {
+   "message0": "UniFi-clients",
+   "tooltip": "Een lijst met records, één voor elk apparaat dat met je UniFi-netwerk verbonden is: name, mac, ip, type (wired, wireless of vpn), connected (sinds wanneer) en uplink (het UniFi-apparaat waarlangs het verbonden is). Hij leest alleen: er wordt niets geblokkeerd of veranderd. Op deze pagina gebruikt hij een voorbeeldnetwerk."
+  },
+  "rb_unifi_devices": {
+   "message0": "UniFi-apparaten",
+   "tooltip": "Een lijst met records, één voor elk UniFi-apparaat (gateway, switches, access points): name, model, mac, ip, state, firmware, update (of er nieuwere firmware klaarstaat) en, als het online is, uptime (uren), cpu en memory (%)."
   }
  },
  "options": {
@@ -760,7 +768,8 @@
   "Homey": "Homey",
   "Output": "Uitvoer",
   "Coinbase": "Coinbase",
-  "MikroTik": "MikroTik"
+  "MikroTik": "MikroTik",
+  "UniFi": "UniFi"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Hulpmiddelen voor de agent: zet ze in een agentblok",
@@ -1577,7 +1586,12 @@
   "MikroTik ports": "MikroTik-poorten",
   "{n} ports": "{n} poorten",
   "MikroTik switch": "MikroTik-switch",
-  "read your MikroTik router or switch: its ports, modules, health and log": "je MikroTik-router of -switch lezen: poorten, modules, gezondheid en log"
+  "read your MikroTik router or switch: its ports, modules, health and log": "je MikroTik-router of -switch lezen: poorten, modules, gezondheid en log",
+  "UniFi": "UniFi",
+  "UniFi clients": "UniFi-clients",
+  "{n} clients": "{n} clients",
+  "UniFi network": "UniFi-netwerk",
+  "read your UniFi network: who's connected, and how your UniFi devices are": "je UniFi-netwerk lezen: wie er verbonden is, en hoe het met je UniFi-apparaten gaat"
  },
  "examples": {
   "review": {
@@ -3166,16 +3180,24 @@
   "MikroTik": "MikroTik",
   "MikroTik ports": "MikroTik-poorten",
   "{n} ports": "{n} poorten",
-  "Couldn't reach the MikroTik at {url} ({reason}).": "De MikroTik op {url} was niet bereikbaar ({reason}).",
+  "Couldn't reach the {who} at {url} ({reason}).": "De {who} op {url} was niet bereikbaar ({reason}).",
   "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.": "MikroTik heeft MIKROTIK_URL, MIKROTIK_USER en MIKROTIK_PASSWORD nodig {where_keys}: het adres van de router (zoals https://192.168.88.1) en een gebruiker in een groep met alleen de policies read, api en rest-api.",
   "MikroTik: {why}.": "MikroTik: {why}.",
   "Second Thought only reads from MikroTik, so it doesn't send {what}.": "Second Thought leest alleen van MikroTik, dus het stuurt {what} niet.",
   "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.": "De MikroTik weigerde MIKROTIK_USER en MIKROTIK_PASSWORD.",
-  "The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.": "Deze computer vertrouwt het certificaat van de MikroTik niet (routers maken meestal hun eigen). Start --doctor om de vingerafdruk te zien, en zet die in MIKROTIK_CERT_SHA256.",
-  "The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "Het certificaat van de MikroTik is niet het certificaat dat MIKROTIK_CERT_SHA256 vastlegt (het is {seen}). Heb je het certificaat vervangen, pas de waarde dan aan; zo niet, dan zit er iets tussen.",
+  "The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.": "Deze computer vertrouwt het certificaat van de {who} niet (routers maken meestal hun eigen). Start --doctor om de vingerafdruk te zien, en zet die in {setting}.",
+  "The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "Het certificaat van de {who} is niet het certificaat dat {setting} vastlegt (het is {seen}). Heb je het certificaat vervangen, pas de waarde dan aan; zo niet, dan zit er iets tussen.",
   "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.": "de groep van het account ({group}) mag ook {what}. Second Thought leest alleen, dus een groep met alleen read, api en rest-api is veiliger.",
   "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.": "het wachtwoord gaat onversleuteld over http://. Gebruik liever de dienst www-ssl en https://.",
-  "the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.": "het certificaat van de router is van hemzelf, dus leg het vast: is {url} jouw MikroTik, zet dan MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.",
-  "{board}, RouterOS {version}": "{board}, RouterOS {version}"
+  "the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.": "het certificaat van de router is van hemzelf, dus leg het vast: is {url} jouw {who}, zet dan {setting} = {seen} in second-thought.ini.",
+  "{board}, RouterOS {version}": "{board}, RouterOS {version}",
+  "UniFi": "UniFi",
+  "UniFi: {why}.": "UniFi: {why}.",
+  "Second Thought only reads from UniFi, so it doesn't send {what}.": "Second Thought leest alleen van UniFi, dus het stuurt {what} niet.",
+  "UniFi clients": "UniFi-clients",
+  "{n} clients": "{n} clients",
+  "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi heeft UNIFI_URL en UNIFI_API_KEY nodig {where_keys}: het adres van de console (zoals https://192.168.1.1) en een API-sleutel uit de Network-app (Settings, Control Plane, Integrations).",
+  "The UniFi console refused UNIFI_API_KEY.": "De UniFi-console weigerde UNIFI_API_KEY.",
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} apparaten"
  }
 }

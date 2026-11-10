@@ -157,7 +157,9 @@
 "rb_mikrotik_ports":{"message0":"MikroTik 端口","tooltip":"记录列表，你的 MikroTik 路由器或交换机的每个端口一条：port、running、speed（比如 10Gbps）、errors、drops、link_downs 和 comment。错误和丢包从上次启动开始计数。它只读取：交换机上什么都不会改变。在本页上使用示例交换机。"},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP 模块","tooltip":"记录列表，每个插着的 SFP 模块一条：port、module、temperature（°C）、rx_power 和 tx_power（dBm）。"},
 "rb_mikrotik_health":{"message0":"MikroTik 状态","tooltip":"关于路由器或交换机本身的记录：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C），以及它有的其他传感器。"},
-"rb_mikrotik_log":{"message0":"MikroTik 日志，最后 %1 行","tooltip":"路由器日志的最后几行，从旧到新，每行形如“time topics: message”。"}
+"rb_mikrotik_log":{"message0":"MikroTik 日志，最后 %1 行","tooltip":"路由器日志的最后几行，从旧到新，每行形如“time topics: message”。"},
+"rb_unifi_clients":{"message0":"UniFi 客户端","tooltip":"记录列表，连到你的 UniFi 网络的每台设备一条：name、mac、ip、type（wired、wireless 或 vpn）、connected（从何时起）和 uplink（它经由的 UniFi 设备）。它只读取：不会封锁或更改任何东西。在本页上使用示例网络。"},
+"rb_unifi_devices":{"message0":"UniFi 设备","tooltip":"记录列表，每台 UniFi 设备（网关、交换机、接入点）一条：name、model、mac、ip、state、firmware、update（是否有更新的固件在等），在线的还有 uptime（小时）、cpu 和 memory（%）。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -207,7 +209,8 @@
 "Homey":"Homey",
 "Output":"输出",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"给智能体的工具：把它们放进智能体积木里",
@@ -1024,7 +1027,12 @@
 "MikroTik ports":"MikroTik 端口",
 "{n} ports":"{n} 个端口",
 "MikroTik switch":"MikroTik 交换机",
-"read your MikroTik router or switch: its ports, modules, health and log":"读取你的 MikroTik 路由器或交换机：端口、模块、状态和日志"
+"read your MikroTik router or switch: its ports, modules, health and log":"读取你的 MikroTik 路由器或交换机：端口、模块、状态和日志",
+"UniFi":"UniFi",
+"UniFi clients":"UniFi 客户端",
+"{n} clients":"{n} 个客户端",
+"UniFi network":"UniFi 网络",
+"read your UniFi network: who's connected, and how your UniFi devices are":"读取你的 UniFi 网络：谁连着，以及 UniFi 设备的状况"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1981,16 +1989,24 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"MikroTik 端口",
 "{n} ports":"{n} 个端口",
-"Couldn't reach the MikroTik at {url} ({reason}).":"无法连接 {url} 上的 MikroTik（{reason}）。",
+"Couldn't reach the {who} at {url} ({reason}).":"无法连接 {url} 上的 {who}（{reason}）。",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik 需要 MIKROTIK_URL、MIKROTIK_USER 和 MIKROTIK_PASSWORD {where_keys}：路由器地址（比如 https://192.168.88.1），以及一个所在组只有 read、api 和 rest-api 策略的用户。",
 "MikroTik: {why}.":"MikroTik：{why}。",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought 对 MikroTik 只读，所以不会发送 {what}。",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik 拒绝了 MIKROTIK_USER 和 MIKROTIK_PASSWORD。",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"这台电脑不信任 MikroTik 的证书（路由器通常自己生成证书）。运行 --doctor 查看它的指纹，并填进 MIKROTIK_CERT_SHA256。",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"MikroTik 的证书不是 MIKROTIK_CERT_SHA256 固定的那个（它是 {seen}）。如果你换过证书，请更新这个值；如果没有，说明中间有东西。",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"这台电脑不信任 {who} 的证书（路由器通常自己生成证书）。运行 --doctor 查看它的指纹，并填进 {setting}。",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"{who} 的证书不是 {setting} 固定的那个（它是 {seen}）。如果你换过证书，请更新这个值；如果没有，说明中间有东西。",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"账户所在的组（{group}）还能 {what}。Second Thought 只读，所以只有 read、api 和 rest-api 的组更安全。",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"密码会通过 http:// 明文发送。请改用 www-ssl 服务和 https://。",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"路由器的证书是它自己的，所以请固定它：如果 {url} 是你的 MikroTik，在 second-thought.ini 里写上 MIKROTIK_CERT_SHA256 = {seen}。",
-"{board}, RouterOS {version}":"{board}，RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"路由器的证书是它自己的，所以请固定它：如果 {url} 是你的 {who}，在 second-thought.ini 里写上 {setting} = {seen}。",
+"{board}, RouterOS {version}":"{board}，RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi：{why}。",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought 对 UniFi 只读，所以不会发送 {what}。",
+"UniFi clients":"UniFi 客户端",
+"{n} clients":"{n} 个客户端",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi 需要 UNIFI_URL 和 UNIFI_API_KEY {where_keys}：控制台地址（比如 https://192.168.1.1），以及 Network 应用里的 API 密钥（Settings、Control Plane、Integrations）。",
+"The UniFi console refused UNIFI_API_KEY.":"UniFi 控制台拒绝了 UNIFI_API_KEY。",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}，{n} 台设备"
 }
 };

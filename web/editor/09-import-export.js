@@ -151,6 +151,7 @@
     add(n.feeds, ["RB_FEEDS"]);
     add(n.homey, ["HOMEY_URL", "HOMEY_API_KEY"]);
     add(n.coinbase, ["COINBASE_KEY"]);
+    add(n.unifi, ["UNIFI_URL", "UNIFI_API_KEY", "UNIFI_CERT_SHA256"]);
     add(n.mikrotik, ["MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_PASSWORD", "MIKROTIK_CERT_SHA256"]);  // the key file's contents: orders never run there, since nobody is there to say yes
     add(n.mqtt, ["MQTT_HOST"], ["MQTT_USERNAME", "MQTT_PASSWORD", "MQTT_TLS"]);
     return out;
