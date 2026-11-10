@@ -633,6 +633,22 @@
   "rb_proxmox_power": {
    "message0": "%1 𒇽𒍝𒈝 Proxmox %2",
    "tooltip": "1 VM VMID-𒀉 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒈾𒀸𒈠 𒂕𒉺 𒋾𒉿𒍣. 𒄷𒌋𒈠𒀭𒋾 𒁉𒊏𒀭 𒁍𒉡𒍑𒍣; 𒈠𒀀𒀭 𒀭𒌅𒄴𒊭𒀸 𒉡𒅅, 𒌌 𒄿𒉿𒍣. PROXMOX_PROTECT 𒌌 𒊭𒀝𒍣. 𒄑𒊕𒆰 VM.PowerMgmt-𒀉 𒌑𒂊𒅅𒍣. 𒅗𒀀 𒌌 𒆪𒀉𒆠 𒋾𒉿𒍣."
+  },
+  "rb_docker_containers": {
+   "message0": "𒂁𒎌 Docker",
+   "tooltip": "𒁾 𒀀𒀸𒋗, 1 𒂁 𒄷𒌋𒈠𒀭: name, image, state, status, health (healthy, unhealthy), restarts 𒅇 started. 𒅗𒀀 𒂟𒎌 𒊭𒀝𒆠𒅖 𒁕𒀀𒄿."
+  },
+  "rb_docker_stats": {
+   "message0": "memory 𒅇 CPU Docker",
+   "tooltip": "𒁾 𒀀𒀸𒋗, 1 𒂁 𒄷𒌋𒈠𒀭: name, cpu (%), memory_mb, limit_mb 𒅇 memory (%)."
+  },
+  "rb_docker_logs": {
+   "message0": "𒁾 Docker %1, %2 𒌓𒁕𒀀𒅈 𒀊𒁉𒄑𒍣",
+   "tooltip": "𒌓𒁕𒀀𒅈 𒀊𒁉𒄑𒍣 𒂁, 𒅗𒊒𒌑𒄿𒇷 𒁉𒊏𒀭."
+  },
+  "rb_docker_power": {
+   "message0": "%1 𒂁 Docker %2",
+   "tooltip": "1 𒂁 𒆷𒀀𒈠𒀭𒀉 𒂕𒉺 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒈾𒀸𒈠 𒋾𒉿𒍣. 𒄷𒌋𒈠𒀭𒋾 𒁉𒊏𒀭 𒁍𒉡𒍑𒍣; 𒈠𒀀𒀭 𒀭𒌅𒄴𒊭𒀸 𒉡𒅅, 𒌌 𒄿𒉿𒍣. DOCKER_PROTECT 𒌌 𒊭𒀝𒍣. 𒅗𒀀 𒌌 𒆪𒀉𒆠 𒋾𒉿𒍣."
   }
  },
  "options": {
@@ -756,6 +772,11 @@
    "start": "𒋾𒉿",
    "shutdown": "𒋼𒀀𒀊",
    "reboot": "𒂕𒉺 𒋾𒉿"
+  },
+  "rb_docker_power.ACTION": {
+   "restart": "𒂕𒉺 𒋾𒉿",
+   "stop": "𒋼𒀀𒀊",
+   "start": "𒋾𒉿"
   }
  },
  "categories": {
@@ -786,7 +807,8 @@
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
   "UniFi": "UniFi",
-  "Proxmox": "Proxmox"
+  "Proxmox": "Proxmox",
+  "Docker": "Docker"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣",
@@ -1618,7 +1640,16 @@
   "sample cluster": "𒂟𒎌 𒊭𒀝𒆠𒅖",
   "{n} guests": "𒇽𒎌𒍝𒈝 {n}",
   "read your Proxmox cluster: nodes, guests, storage and tasks": "𒂟𒎌 Proxmox-𒅗 𒊭𒀝𒍣: 𒄩𒀸𒊭𒀭, 𒇽𒎌𒍝𒈝, 𒂍𒎎𒈩 𒅇 𒆥",
-  "start, shut down and reboot your Proxmox guests (asking you each time)": "𒇽𒎌𒍝𒈝 Proxmox-𒅗 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒅇 𒂕𒉺 𒋾𒉿𒍣 (𒄷𒌋𒈠𒀭𒋾 𒁍𒉡𒍑𒍣)"
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "𒇽𒎌𒍝𒈝 Proxmox-𒅗 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒅇 𒂕𒉺 𒋾𒉿𒍣 (𒄷𒌋𒈠𒀭𒋾 𒁍𒉡𒍑𒍣)",
+  "A Docker container can be restarted, stopped or started.": "𒂁 Docker 𒂕𒉺 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒈾𒀸𒈠 𒋾𒉿𒍣.",
+  "Docker": "Docker",
+  "Docker stack": "𒂟𒎌 Docker",
+  "Docker containers": "𒂁𒎌 Docker",
+  "Docker: {why}.": "Docker: {why}.",
+  "Which Docker container? Give its name, like sonarr.": "𒆪𒅖 𒂁 Docker? 𒆷𒀀𒈠𒀭 𒉺𒀀𒄿, sonarr 𒈠𒅆𒉿𒀭.",
+  "{n} containers": "𒂁𒎌 {n}",
+  "read your Docker containers: their health, memory and logs": "𒂁𒎌 Docker-𒅗 𒀀𒍑𒍣: 𒄩𒀜𒁺𒆷𒋻, memory 𒅇 𒁾",
+  "restart, stop and start your Docker containers (asking you each time)": "𒂁𒎌 Docker-𒅗 𒂕𒉺 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒅇 𒋾𒉿𒍣 (𒄷𒌋𒈠𒀭𒋾 𒁍𒉡𒍑𒍣)"
  },
  "examples": {
   "review": {
@@ -3241,7 +3272,17 @@
   "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "GIŠ.SAG.KUL {what}-ya i-ya-zi. Second Thought UL ú-e-ek-zi: PVEAuditor aš-šu.",
   "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "GIŠ.SAG.KUL LÚ.MEŠ.ZA.ḪUM UL ti-ya-zi (VM.PowerMgmt ú-e-ek-zi), DUB.SAR UL ma-la-an-zi.",
   "the token isn't allowed to do that": "GIŠ.SAG.KUL ka-a-aš UL i-ya-zi",
-  "{what} only runs when you're there to say yes, and nobody is.": "{what} ma-a-an zi-ik e-eš-zi me-ma-at-ti ka-a-pát i-ya-zi, an-tu-uḫ-ša-aš-ma NU.GÁL."
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} ma-a-an zi-ik e-eš-zi me-ma-at-ti ka-a-pát i-ya-zi, an-tu-uḫ-ša-aš-ma NU.GÁL.",
+  "A Docker container can be restarted, stopped or started.": "DUG Docker EGIR-pa ti-ya-zi, kar-ap-zi na-aš-ma ti-ya-zi.",
+  "Docker": "Docker",
+  "Docker containers": "DUG.MEŠ Docker",
+  "Docker: {why}.": "Docker: {why}.",
+  "Which Docker container? Give its name, like sonarr.": "ku-iš DUG Docker? la-a-ma-an pa-a-i, sonarr ma-ši-wa-an.",
+  "{n} containers": "DUG.MEŠ {n}",
+  "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "DUG {name} I-NA DOCKER_PROTECT, Second Thought UL ti-ya-zi UL kar-ap-zi.",
+  "Docker {version}": "Docker {version}",
+  "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "I-NA Windows, DOCKER_HOST tcp:// da-a-i. a-mi-ya-ra-aš Docker UL i-ya-zi.",
+  "Second Thought doesn't send {what} to Docker.": "Second Thought {what} Docker-ya UL pé-e-da-i."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

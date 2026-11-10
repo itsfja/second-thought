@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"φιλοξενούμενοι Proxmox","tooltip":"Μια λίστα εγγραφών, μία για κάθε VM και container: vmid, name, node, type (vm ή container), status, cpu και memory (%), uptime (ώρες) και, για όσους είναι σταματημένοι, onboot (αν θα έπρεπε να ξεκινά με τον κόμβο)."},
 "rb_proxmox_storage":{"message0":"αποθήκευση Proxmox","tooltip":"Μια λίστα εγγραφών, μία για κάθε αποθήκευση σε κάθε κόμβο: storage, node, used (%), used_gb, size_gb και status."},
 "rb_proxmox_tasks":{"message0":"εργασίες Proxmox των τελευταίων %1 ωρών","tooltip":"Μια λίστα εγγραφών, η νεότερη πρώτα: started, node, type (το vzdump είναι αντίγραφο ασφαλείας), id (ο φιλοξενούμενος), status (OK, ή τι πήγε στραβά) και user."},
-"rb_proxmox_power":{"message0":"%1 τον φιλοξενούμενο Proxmox %2","tooltip":"Ξεκινά, τερματίζει ή επανεκκινεί μια VM ή ένα container, με το VMID του. Σας ρωτά πάντα πρώτα, ακόμη κι όταν τίποτε άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι δεν εκτελείται. Οι φιλοξενούμενοι στο PROXMOX_PROTECT δεν αγγίζονται ποτέ. Χρειάζεται διακριτικό με VM.PowerMgmt. Σε αυτή τη σελίδα τίποτα δεν ξεκινά ούτε σταματά στ' αλήθεια."}
+"rb_proxmox_power":{"message0":"%1 τον φιλοξενούμενο Proxmox %2","tooltip":"Ξεκινά, τερματίζει ή επανεκκινεί μια VM ή ένα container, με το VMID του. Σας ρωτά πάντα πρώτα, ακόμη κι όταν τίποτε άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι δεν εκτελείται. Οι φιλοξενούμενοι στο PROXMOX_PROTECT δεν αγγίζονται ποτέ. Χρειάζεται διακριτικό με VM.PowerMgmt. Σε αυτή τη σελίδα τίποτα δεν ξεκινά ούτε σταματά στ' αλήθεια."},
+"rb_docker_containers":{"message0":"containers του Docker","tooltip":"Μια λίστα εγγραφών, μία για κάθε container, είτε τρέχει είτε όχι: name, image, state, status, health (healthy, unhealthy, ή κενό χωρίς έλεγχο υγείας), restarts και started. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα στοίβας."},
+"rb_docker_stats":{"message0":"μνήμη και CPU του Docker","tooltip":"Μια λίστα εγγραφών, μία για κάθε container που τρέχει: name, cpu (%), memory_mb, limit_mb (η μνήμη του μηχανήματος, για container χωρίς όριο) και memory (% του ορίου)."},
+"rb_docker_logs":{"message0":"αρχεία καταγραφής Docker του %1, τελευταίες %2 γραμμές","tooltip":"Οι τελευταίες γραμμές που έγραψε ένα container, η έξοδος και τα σφάλματά του μαζί, η παλαιότερη πρώτα."},
+"rb_docker_power":{"message0":"%1 το container του Docker %2","tooltip":"Επανεκκινεί, σταματά ή ξεκινά ένα container, με το όνομά του. Σας ρωτά πάντα πρώτα, ακόμη κι όταν τίποτε άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι δεν εκτελείται. Τα containers στο DOCKER_PROTECT δεν αγγίζονται ποτέ. Σε αυτή τη σελίδα τίποτα δεν επανεκκινείται στ' αλήθεια."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"κάθε μέρα","weekdays":"τις καθημερινές","weekends":"τα Σαββατοκύριακα"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"ανοιχτές εντολές","fills":"τελευταίες εκτελέσεις"},
 "rb_coinbase_preview.SIDE":{"buy":"αγορά","sell":"πώληση"},
 "rb_coinbase_order.SIDE":{"buy":"αγορά","sell":"πώληση"},
-"rb_proxmox_power.ACTION":{"start":"εκκίνηση","shutdown":"τερματισμός","reboot":"επανεκκίνηση"}
+"rb_proxmox_power.ACTION":{"start":"εκκίνηση","shutdown":"τερματισμός","reboot":"επανεκκίνηση"},
+"rb_docker_power.ACTION":{"restart":"επανεκκίνηση","stop":"διακοπή","start":"εκκίνηση"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1049,7 +1055,16 @@
 "sample cluster":"δείγμα συμπλέγματος",
 "{n} guests":"{n} φιλοξενούμενοι",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"να διαβάζει το σύμπλεγμά σας Proxmox: κόμβους, φιλοξενούμενους, αποθήκευση και εργασίες",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"να ξεκινά, να τερματίζει και να επανεκκινεί τους φιλοξενούμενούς σας Proxmox (ρωτώντας σας κάθε φορά)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"να ξεκινά, να τερματίζει και να επανεκκινεί τους φιλοξενούμενούς σας Proxmox (ρωτώντας σας κάθε φορά)",
+"A Docker container can be restarted, stopped or started.":"Ένα container του Docker μπορεί να επανεκκινηθεί, να σταματήσει ή να ξεκινήσει.",
+"Docker":"Docker",
+"Docker stack":"στοίβα Docker",
+"Docker containers":"containers του Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Ποιο container του Docker; Δώστε το όνομά του, όπως sonarr.",
+"{n} containers":"{n} containers",
+"read your Docker containers: their health, memory and logs":"ανάγνωση των containers σας στο Docker: υγεία, μνήμη και αρχεία καταγραφής",
+"restart, stop and start your Docker containers (asking you each time)":"επανεκκίνηση, διακοπή και εκκίνηση των containers σας στο Docker (ρωτώντας σας κάθε φορά)"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2040,6 +2055,16 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"το διακριτικό μπορεί επίσης {what}. Το Second Thought δεν το χρειάζεται: ο ρόλος PVEAuditor είναι ασφαλέστερος.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"το διακριτικό δεν μπορεί να ξεκινά ή να σταματά φιλοξενούμενους (χρειάζεται VM.PowerMgmt), οπότε τα μπλοκ τροφοδοσίας αυτού του προγράμματος θα απορρίπτονταν.",
 "the token isn't allowed to do that":"το διακριτικό δεν επιτρέπεται να το κάνει αυτό",
-"{what} only runs when you're there to say yes, and nobody is.":"το {what} γίνεται μόνο όταν είστε εκεί για να πείτε ναι, και δεν είναι κανείς."
+"{what} only runs when you're there to say yes, and nobody is.":"το {what} γίνεται μόνο όταν είστε εκεί για να πείτε ναι, και δεν είναι κανείς.",
+"A Docker container can be restarted, stopped or started.":"Ένα container του Docker μπορεί να επανεκκινηθεί, να σταματήσει ή να ξεκινήσει.",
+"Docker":"Docker",
+"Docker containers":"containers του Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Ποιο container του Docker; Δώστε το όνομά του, όπως sonarr.",
+"{n} containers":"{n} containers",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Το container {name} είναι στο DOCKER_PROTECT, οπότε το Second Thought δεν το επανεκκινεί, σταματά ή ξεκινά ποτέ.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Στα Windows, βάλτε στο DOCKER_HOST μια διεύθυνση tcp://: η επώνυμη διοχέτευση του Docker δεν υποστηρίζεται.",
+"Second Thought doesn't send {what} to Docker.":"Το Second Thought δεν στέλνει {what} στο Docker."
 }
 };

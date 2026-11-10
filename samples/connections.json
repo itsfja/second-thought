@@ -1609,5 +1609,248 @@
         "took": 5
       }
     ]
+  },
+  "docker": {
+    "note": "A sample Docker stack for the page and the tests (#358): an *arr suite. Each container holds what the Engine API's list, inspect and stats calls say about it, and logs holds its last lines. prowlarr keeps restarting, qbittorrent is unhealthy, and plex is near its memory limit.",
+    "version": {
+      "Version": "27.3.1",
+      "ApiVersion": "1.47"
+    },
+    "containers": [
+      {
+        "name": "plex",
+        "image": "lscr.io/linuxserver/plex:latest",
+        "state": "running",
+        "status": "Up 3 days (healthy)",
+        "health": "healthy",
+        "restarts": 0,
+        "started": "2026-11-07T08:12:44.1Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1020000000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 2013265920,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 2147483648
+          }
+        }
+      },
+      {
+        "name": "prowlarr",
+        "image": "lscr.io/linuxserver/prowlarr:latest",
+        "state": "restarting",
+        "status": "Restarting (1) 20 seconds ago",
+        "health": "",
+        "restarts": 7,
+        "started": "2026-11-10T07:58:02.5Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 20971520,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "qbittorrent",
+        "image": "lscr.io/linuxserver/qbittorrent:latest",
+        "state": "running",
+        "status": "Up 3 days (unhealthy)",
+        "health": "unhealthy",
+        "restarts": 1,
+        "started": "2026-11-07T08:12:50.9Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1005000000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 663224320,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "radarr",
+        "image": "lscr.io/linuxserver/radarr:latest",
+        "state": "running",
+        "status": "Up 3 days",
+        "health": "",
+        "restarts": 0,
+        "started": "2026-11-07T08:12:47.3Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1002500000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 346030080,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "socket-proxy",
+        "image": "tecnativa/docker-socket-proxy:latest",
+        "state": "running",
+        "status": "Up 3 weeks",
+        "health": "",
+        "restarts": 0,
+        "started": "2026-10-20T10:00:00.0Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000250000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 33554432,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "sonarr",
+        "image": "lscr.io/linuxserver/sonarr:latest",
+        "state": "running",
+        "status": "Up 3 days",
+        "health": "",
+        "restarts": 0,
+        "started": "2026-11-07T08:12:46.0Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1007500000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 442761216,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "old-test",
+        "image": "alpine:3.20",
+        "state": "exited",
+        "status": "Exited (0) 2 weeks ago",
+        "health": "",
+        "restarts": 0,
+        "started": "2026-10-26T15:00:00.0Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 20971520,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      }
+    ],
+    "logs": {
+      "prowlarr": [
+        "[Info] Bootstrap: Starting Prowlarr - /app/prowlarr/bin/Prowlarr - Version 1.25.4",
+        "[Fatal] ConsoleApp: EPIC FAIL! System.IO.IOException: No space left on device : '/config/logs.db-wal'",
+        "[Info] Bootstrap: Starting Prowlarr - /app/prowlarr/bin/Prowlarr - Version 1.25.4",
+        "[Fatal] ConsoleApp: EPIC FAIL! System.IO.IOException: No space left on device : '/config/logs.db-wal'"
+      ],
+      "qbittorrent": [
+        "(N) 2026-11-10T07:40:11 - Web UI: Now listening on IP: *, port: 8080",
+        "(W) 2026-11-10T07:55:30 - Tracker 'udp://tracker.example.org:1337' unreachable",
+        "(C) 2026-11-10T07:56:02 - Disk I/O error on /downloads: Input/output error"
+      ],
+      "sonarr": [
+        "[Info] RssSyncService: RSS Sync Completed. Reports found: 212, Reports grabbed: 0",
+        "[Warn] DownloadMonitoringService: Unable to retrieve queue and history items from qBittorrent"
+      ]
+    }
   }
 }

@@ -100,6 +100,11 @@ SAFETY = {
     # guests it never touches at all.
     "proxmox_free": [["GET", r"^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/config)$"]],
     "proxmox_asks": [["POST", r"^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/status/(start|shutdown|reboot)$"]],
+    # Docker's Engine API (#358): the reads the runtime makes, and what it may do to a container after a yes. Nothing
+    # else is ever sent: no exec, run, rm, pull or build (each can run anything on the machine as root), and nothing
+    # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
+    "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
+    "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
@@ -216,6 +221,16 @@ def proxmox_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["proxmox_" + kind]):
+            return kind
+    return None
+
+
+def docker_call(method, path):
+    """"free" for a Docker call the runtime makes without asking, "asks" for restart, stop and start, which need a live
+    yes, and None for anything else, which is never sent (#358)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
             return kind
     return None
 
@@ -654,11 +669,13 @@ CAPABILITIES = [
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
+    ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
+    ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),

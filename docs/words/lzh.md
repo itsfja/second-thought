@@ -30,6 +30,7 @@ Made by tools/sync.py from i18n/lzh.json: edit that, not this.
 - MikroTik: MikroTik
 - UniFi: UniFi
 - Proxmox: Proxmox
+- Docker: Docker
 - Listeners: they run while the exported program runs on schedule: 聽者：所出之程依時而行，則此諸塊行
 - No blocks match: 無塊相合
 - Read and send: 讀與發

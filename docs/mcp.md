@@ -35,6 +35,17 @@ A tool its server marks as one that can delete or overwrite (`destructiveHint`) 
 
 MCP servers only work in exported programs. On the page, the agent works without them, and the run log says so.
 
+### Docker MCP Toolkit
+
+Docker Desktop's MCP Toolkit runs MCP servers in containers, behind one gateway. The gateway speaks stdio unless told otherwise, so it works as a server here:
+
+```ini
+[mcp servers]
+MCP_DOCKER = docker mcp gateway run
+```
+
+Then put `tools from MCP server docker` inside an agent: it gets the tools of every server you've turned on in the Toolkit. Their changes ask first, like any MCP server's. This has not been tried against a real Docker Desktop yet; `--doctor` lists the tools it finds. For containers' health, memory and logs, the [Docker blocks](connections.md#docker) need no gateway.
+
 ### GitHub
 
 GitHub's own MCP server ([github-mcp-server](https://github.com/github/github-mcp-server)) lets an agent read a repository properly: its files, the file tree, code search, issues and pull requests. For reading, start it with `--read-only`, so it offers no tool that can change anything, and give it a [fine-grained token](https://github.com/settings/personal-access-tokens) that can only read (Contents, Issues, Pull requests and Metadata):

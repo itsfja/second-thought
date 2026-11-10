@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -1540,6 +1540,11 @@ SAFETY = {
     # guests it never touches at all.
     "proxmox_free": [["GET", r"^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/config)$"]],
     "proxmox_asks": [["POST", r"^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/status/(start|shutdown|reboot)$"]],
+    # Docker's Engine API (#358): the reads the runtime makes, and what it may do to a container after a yes. Nothing
+    # else is ever sent: no exec, run, rm, pull or build (each can run anything on the machine as root), and nothing
+    # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
+    "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
+    "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
@@ -1656,6 +1661,16 @@ def proxmox_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["proxmox_" + kind]):
+            return kind
+    return None
+
+
+def docker_call(method, path):
+    """"free" for a Docker call the runtime makes without asking, "asks" for restart, stop and start, which need a live
+    yes, and None for anything else, which is never sent (#358)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
             return kind
     return None
 
@@ -2094,11 +2109,13 @@ CAPABILITIES = [
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
+    ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
+    ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -4311,6 +4328,134 @@ class Connections:
         if not res.get("success"):
             raise RunError(tr("Coinbase didn't cancel the order: {why}.", why=to_str(res.get("failure_reason") or "no reason given").replace("_", " ").lower()))
         self.log(tr("Coinbase order cancelled"), oid, tr("done"))
+        return True
+
+    # Docker (#358)
+    # Docker's Engine API: DOCKER_HOST is unix:///var/run/docker.sock (the default, except on Windows) or
+    # tcp://host:2375. The socket is root on that machine, so point DOCKER_HOST at a socket proxy (such as
+    # tecnativa/docker-socket-proxy, allowing CONTAINERS and POST) where you can. With DOCKER_TLS_VERIFY = 1 it uses
+    # TLS, with ca.pem (and cert.pem and key.pem, if there) from DOCKER_CERT_PATH, as the docker command does. Reads
+    # are the calls in SAFETY["docker_free"]; restart, stop and start (docker_asks) always ask, live, and never run
+    # with nobody there; nothing else is ever sent. DOCKER_PROTECT lists containers never restarted, stopped or started.
+    DOCKER_POWER = ("restart", "stop", "start")
+
+    async def _docker(self, method, path, query=None, approved=False, raw=False):
+        kind = docker_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to Docker.", what=f"{method} {path}"))
+        host = os.environ.get("DOCKER_HOST", "").strip() or ("" if os.name == "nt" else "unix:///var/run/docker.sock")
+        if not host or host.startswith("npipe:"):
+            raise RunError(tr("On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported."))
+        u = urllib.parse.urlparse(host if "://" in host else "tcp://" + host)
+        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
+
+        def go():
+            if u.scheme == "unix":
+                import socket
+
+                class Unix(http.client.HTTPConnection):
+                    def connect(self):
+                        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+                        self.sock.settimeout(self.timeout)
+                        self.sock.connect(u.path)
+                conn = Unix("localhost", timeout=30)
+            elif os.environ.get("DOCKER_TLS_VERIFY", "").strip() not in ("", "0") or u.scheme == "https":
+                import ssl
+                certs = os.path.expanduser(os.environ.get("DOCKER_CERT_PATH", "").strip() or "~/.docker")
+                ca = os.path.join(certs, "ca.pem")
+                ctx = ssl.create_default_context(cafile=ca if os.path.isfile(ca) else None)
+                if os.path.isfile(os.path.join(certs, "cert.pem")):
+                    ctx.load_cert_chain(os.path.join(certs, "cert.pem"), os.path.join(certs, "key.pem"))
+                conn = http.client.HTTPSConnection(u.hostname, u.port or 2376, timeout=30, context=ctx)
+            else:
+                conn = http.client.HTTPConnection(u.hostname, u.port or 2375, timeout=30)
+            try:
+                conn.request(method, full, headers={"Accept": "application/json", "Host": "docker"})
+                r = conn.getresponse()
+                return r.status, r.read()
+            except Exception as e:  # noqa: BLE001 - no socket, refused, a certificate: say which
+                raise RunError(tr("Couldn't reach the {who} at {url} ({reason}).", who="Docker engine", url=host, reason=_short(str(e), 120))) from None
+            finally:
+                conn.close()
+        status, body = await asyncio.to_thread(go)
+        if status == 404:
+            raise RunError(tr("Docker: {why}.", why=tr("not found")))
+        if status >= 400 and status != 304:
+            raise RunError(tr("Docker: {why}.", why=self._said(status, body)))
+        if raw:
+            return body
+        return json.loads(body) if body.strip() else {}
+
+    @staticmethod
+    def _docker_name(name):
+        n = to_str(name).strip().lstrip("/")
+        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", n):
+            raise RunError(tr("Which Docker container? Give its name, like sonarr."))
+        return n
+
+    async def docker_containers(self):
+        """Every container, running or not: name, image, state (running, exited, restarting, ...), status (as docker ps
+        says it), health (healthy, unhealthy, starting, or "" with no health check), restarts and started."""
+        async def one(c):
+            name = to_str((c.get("Names") or [""])[0]).lstrip("/")
+            info = await self._docker("GET", f"/containers/{self._docker_name(name)}/json")
+            st = info.get("State") or {}
+            return {"name": name, "image": to_str(c.get("Image")), "state": to_str(c.get("State")), "status": to_str(c.get("Status")),
+                    "health": to_str((st.get("Health") or {}).get("Status")), "restarts": int(num(info.get("RestartCount") or 0)),
+                    "started": to_str(st.get("StartedAt"))[:16].replace("T", " ")}
+        out = list(await asyncio.gather(*(one(c) for c in await self._docker("GET", "/containers/json", {"all": "1"}) if isinstance(c, dict))))
+        out.sort(key=lambda c: c["name"])
+        lines = "\n".join(f"{c['name']}: {c['status']}" for c in out)
+        self.log(tr("Docker containers"), lines or tr("(nothing)"), tr("{n} containers", n=len(out)))
+        return out
+
+    async def docker_stats(self):
+        """Each running container's use right now: name, cpu (%), memory_mb, limit_mb (the machine's memory, for a
+        container with no limit) and memory (% of the limit)."""
+        async def one(c):
+            name = to_str((c.get("Names") or [""])[0]).lstrip("/")
+            s = await self._docker("GET", f"/containers/{self._docker_name(name)}/stats", {"stream": "false"})
+            cpu, pre, mem = s.get("cpu_stats") or {}, s.get("precpu_stats") or {}, s.get("memory_stats") or {}
+            d_cpu = num((cpu.get("cpu_usage") or {}).get("total_usage") or 0) - num((pre.get("cpu_usage") or {}).get("total_usage") or 0)
+            d_sys = num(cpu.get("system_cpu_usage") or 0) - num(pre.get("system_cpu_usage") or 0)
+            used = num(mem.get("usage") or 0) - num((mem.get("stats") or {}).get("inactive_file") or 0)
+            limit = num(mem.get("limit") or 0)
+            return {"name": name, "cpu": self._cents(d_cpu / d_sys * num(cpu.get("online_cpus") or 1) * 100) if d_sys > 0 and d_cpu > 0 else 0,
+                    "memory_mb": self._cents(used / 1048576), "limit_mb": self._cents(limit / 1048576), "memory": self._pct(used, limit) if limit else ""}
+        out = list(await asyncio.gather(*(one(c) for c in await self._docker("GET", "/containers/json") if isinstance(c, dict))))
+        return sorted(out, key=lambda c: c["name"])
+
+    async def docker_logs(self, name, count=50):
+        """The last lines a container wrote (its output and its errors together), oldest first."""
+        n = max(1, min(1000, int(num(count) or 50)))
+        body = await self._docker("GET", f"/containers/{self._docker_name(name)}/logs", {"stdout": "1", "stderr": "1", "tail": str(n)}, raw=True)
+        chunks, i = [], 0
+        while len(body) - i >= 8 and body[i] in (0, 1, 2) and body[i + 1:i + 4] == b"\0\0\0":  # framed: kind, three zeros, length
+            size = int.from_bytes(body[i + 4:i + 8], "big")
+            chunks.append(body[i + 8:i + 8 + size])
+            i += 8 + size
+        text = (b"".join(chunks) if chunks and i >= len(body) else body).decode("utf-8", "replace")
+        return [line.rstrip("\r") for line in text.split("\n") if line.strip()][-n:]
+
+    async def docker_power(self, action, name):
+        """Restarts, stops or starts one container, by name, after asking you, every time. Never one in
+        DOCKER_PROTECT. Gives back True if it was done."""
+        action = to_str(action).strip().lower()
+        if action not in self.DOCKER_POWER:
+            raise RunError(tr("A Docker container can be restarted, stopped or started."))
+        name = self._docker_name(name)
+        if name.lower() in {x.strip().lstrip("/").lower() for x in os.environ.get("DOCKER_PROTECT", "").split(",") if x.strip()}:
+            self.log(tr("Not done"), tr("Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.", name=name), tr("refused"))
+            return False
+        info = await self._docker("GET", f"/containers/{name}/json")
+        what = f"{action} the Docker container {name} ({to_str((info.get('Config') or {}).get('Image'))}, now {to_str((info.get('State') or {}).get('Status'))})"
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._docker("POST", f"/containers/{name}/{action}", approved=True)
+        self.log(tr("Docker"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -6881,6 +7026,12 @@ class Doctor:
                     return "NOTE", said + "; " + tr("the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.", what=", ".join(more[:6]))
                 return said
             out.append(("Proxmox", proxmox))
+        if has("docker_read", "docker_control"):
+            async def docker():
+                version = to_str((await self._docker("GET", "/version")).get("Version"))
+                n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
+                return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
+            out.append(("Docker", docker))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -7150,7 +7301,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -9417,6 +9568,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_instrument_ranges","file":"instrument-ranges.json","category":"coding","title":"Instrument ranges","description":"Choose an instrument's log (a CSV or text export). Claude lists every reading outside the ranges you set, with its time, and checks nothing in range was flagged. Then a line on any pattern, like a drift through the day.","tip":"Put your instruments' ranges in the first block, one per line, with units. Long logs: export a day at a time.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_ranges","name":"ranges"},{"id":"g_log","name":"log"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_ranges"}},"inputs":{"VALUE":{"block":{"type":"rb_longtext","fields":{"TEXT":"Incubator temperature: 36.5 to 37.5 °C\nCO2: 4.5 to 5.5 %\nHumidity: 90 to 98 %"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_log"}},"inputs":{"VALUE":{"block":{"type":"rb_file_choose"}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This is an instrument log. Using these expected ranges, list every reading outside its range: the time (or row), the measurement, the value as logged, and the range it's outside. Readings with no range set are ignored. Then one line on any pattern among them (a drift, a time of day, one sensor), or say there's none. If every reading is in range, say so in one line.\n\nRanges:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_ranges"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nLog:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_log"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every reading listed is really outside its range, with its value quoted as logged; each gives its time or row and the range; units match the ranges; nothing in range is listed; the pattern line is backed by the readings listed"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_invoice_matcher","file":"invoice-matcher.json","category":"money","title":"Invoice matcher","description":"Keeps a list of the receipts you save to a folder. When an invoice arrives by email, it checks for a matching receipt and emails you if there isn't one.","tip":"Change the folder to where you keep receipts. It only knows receipts saved after it starts.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_invoice","name":"invoice"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste an invoice email to test with"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"invoice"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_email_when","fields":{"CONTAINS":"invoice"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"invoice"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_folder_when","fields":{"FOLDER":"~/Receipts"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"receipt"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":290},{"type":"rb_receive","fields":{"MSG":"receipt"},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In one line, from this receipt: supplier — amount — date. Nothing else.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"receipts"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Receipt noted."}}}}}}}},"x":550,"y":290},{"type":"rb_receive","fields":{"MSG":"invoice"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_invoice"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In one line, from this invoice: supplier — amount — date. Nothing else.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_ask_yesno","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Is there a receipt for this invoice in the list: the same supplier and amount, within a month?\nInvoice: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nReceipts:\n"}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"receipts"}}}}}}},"extraState":{"itemCount":4}}}}}},"DO0":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Matched: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}}},"extraState":{"itemCount":2}}}}}},"ELSE":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Invoice with no receipt"}}},"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"No receipt found for: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"No receipt for: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}}},"extraState":{"itemCount":2}}}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":550}]}}},
 {"key":"g_ten_gig_check","file":"ten-gig-check.json","category":"home","title":"Is the 10Gb link at 10Gb?","description":"Each morning, reads your MikroTik switch's ports and SFP modules and sends you a Telegram message if a port came up slower than it should, its errors or drops grew since yesterday, or a module runs hot or its light is weak. It only reads: nothing on the switch changes.","tip":"Needs MIKROTIK_URL, a read-only MIKROTIK_USER and MIKROTIK_PASSWORD, and MIKROTIK_CERT_SHA256 (--doctor shows it). Change the expected speeds to match your ports.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_ports","name":"ports"},{"id":"g_modules","name":"modules"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_ports"}},"inputs":{"VALUE":{"block":{"type":"rb_mikrotik_ports"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_modules"}},"inputs":{"VALUE":{"block":{"type":"rb_mikrotik_sfp"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Check my MikroTik switch. Every sfp-sfpplus port that is running should be at 10Gbps; ether ports at 1Gbps. Say, in under 100 words: any port slower than it should be, any port whose errors or drops grew since yesterday, and any module above 60 °C or with rx_power below -10 dBm. If all is well, say so in one line.\n\nPorts now:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_ports"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nPorts yesterday (empty the first day):\n"}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"MikroTik ports yesterday"}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nSFP modules:\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_modules"}}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_ports"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"MikroTik ports yesterday"}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
+{"key":"g_is_the_stack_healthy","file":"is-the-stack-healthy.json","category":"home","title":"Is the stack healthy?","description":"Each morning, reads your Docker containers and sends you a Telegram message: restarts since yesterday, any unhealthy or stopped, memory against the machine's total, and errors in the latest logs. Each Sunday it says whether the machine needs more memory. It only reads: nothing is restarted.","tip":"Needs Docker on this computer, or DOCKER_HOST for another one: best a socket proxy that allows only reading containers. See Connections, Docker.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_containers","name":"containers"},{"id":"g_stats","name":"stats"},{"id":"g_one","name":"one"},{"id":"g_logs","name":"logs"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":45,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":30,"DAYS":"weekends"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"week"}}}}}}}}},"x":30,"y":290},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_containers"}},"inputs":{"VALUE":{"block":{"type":"rb_docker_containers"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_stats"}},"inputs":{"VALUE":{"block":{"type":"rb_docker_stats"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_logs"}},"inputs":{"VALUE":{"shadow":{"type":"text","fields":{"TEXT":""}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_one"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_containers"}}}},"DO":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_logs"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_logs"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n== "}}},"ADD2":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"name"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"ADD3":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD4":{"block":{"type":"rb_docker_logs","inputs":{"NAME":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"name"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"N":{"shadow":{"type":"math_number","fields":{"NUM":20}}}}}}},"extraState":{"itemCount":5}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Check my Docker stack in under 120 words. It is now "}}},"ADD1":{"block":{"type":"rb_now","fields":{"PART":"time"}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" on "}}},"ADD3":{"block":{"type":"rb_now","fields":{"PART":"date"}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". List any container whose restarts grew since yesterday, any that is unhealthy, restarting or exited, any using over 85% of its memory limit, and how much of the machine's memory they use together (limit_mb is the machine's total for a container with no limit of its own). Then any errors in the log lines from about the last hour, by container, in a few words each. If all is well, say so in one line.\n\nContainers now:\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_containers"}}}},"ADD6":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nContainers yesterday (empty the first day):\n"}}},"ADD7":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Docker containers yesterday"}}}}}},"ADD8":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nMemory and CPU:\n"}}},"ADD9":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_stats"}}}},"ADD10":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nLatest log lines:"}}},"ADD11":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_logs"}}}}},"extraState":{"itemCount":12}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_containers"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Docker containers yesterday"}}}},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"rb_now","fields":{"PART":"date"}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":": "}}},"ADD2":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_stats"}}}}},"extraState":{"itemCount":3}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Docker memory by day"}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}}}}}}}},"x":550,"y":290},{"type":"rb_receive","fields":{"MSG":"week"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"These are my Docker containers' memory and CPU, one line a day, newest last. Going by the last seven days, say in under 100 words how memory moved, which containers grew, and whether the machine needs more memory: yes, no or not yet, with the one number that decides it.\n\n"}}},"ADD1":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Docker memory by day"}}}}}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}},"x":30,"y":550}]}}},
 {"key":"g_issue_triage_bot","file":"issue-triage-bot.json","category":"github","title":"Issue triage bot","description":"When someone opens an issue, it labels it from the project's own labels, links a likely duplicate in a comment, and messages you on Telegram if it looks urgent.","tip":"Change the project in the hat. Labelling and commenting ask first; use the no-asking tool once you trust it.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_project","name":"project"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type an issue to test with, like 'Chart is blank on Safari: nothing shows in the chart area'"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"triage"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_gh_issue_when","fields":{"REPO":"sample-baker/sourdough-chart"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"triage"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"triage"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_project"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"sample-baker/sourdough-chart"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"A new issue was opened in "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_project"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":":\n"}}},"ADD3":{"block":{"type":"rb_msg_value"}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nFind its number if it isn't given (search_github for the title). Add one or two fitting labels, using only labels the project has. Search the project's open issues for a likely duplicate; if there's a clear one, comment linking it. Finally answer in one line: URGENT if it describes data loss, a security problem or the app not working for everyone, otherwise ROUTINE, then a short reason."}}}},"extraState":{"itemCount":5}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":10}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github_act"}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_contains","inputs":{"A":{"block":{"type":"rb_draft"}},"B":{"shadow":{"type":"text","fields":{"TEXT":"URGENT"}}}}}},"DO0":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"🚨 Urgent issue: "}}},"ADD1":{"block":{"type":"rb_msg_value"}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD3":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"rb_result"}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_kraken_week","file":"kraken-week.json","category":"money","title":"Kraken week in review","description":"Each Sunday evening, reads your Kraken balances and this week's prices, and emails what your holdings are worth in pounds, each one's share, and how each moved over the week. It only reads: it places no orders.","tip":"Needs kraken-cli, and a Kraken API key that can only query. Change the email address in the email block to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"review"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"review"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"review"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Read my Kraken balances. For each asset I hold, get its price in pounds today and seven days ago (daily OHLC). Then write a short summary: the total in pounds, each holding's value and share of the total, and how much each moved over the week, biggest moves first. Only read: don't place, change or cancel any orders."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":10}}},"TOOLS":{"block":{"type":"rb_agent_kraken","fields":{"MODE":"read"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your Kraken week"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_language_ladybird","file":"language-ladybird.json","category":"odds","title":"Ladybird lesson","description":"Each morning, one page of Second Thought's Ladybird book in a different historical language from its translations, Akkadian days included, with the English alongside and three words to learn.","tip":"Historical-language versions are as plausible as Second Thought's own translations, no more. Reading pages works in exported Python.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"lesson"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"lesson"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"lesson"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Today is "}}},"ADD1":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". Today's language: Monday Latin (la), Tuesday Old English (ang), Wednesday Akkadian (akk), Thursday Old Norse (non), Friday Koine Greek (grc), Saturday Sanskrit (sa), Sunday Mycenaean Greek in Linear B (gmy). Read https://raw.githubusercontent.com/itsfja/second-thought/main/docs/ladybird-book.md and pick one page, a different one each day. Read the language's everyday words at https://raw.githubusercontent.com/itsfja/second-thought/main/docs/words/<code>.md. Write that page in today's language, using those words where they fit, with the English alongside. Then give three words from it to learn, each with its meaning. End by saying the historical version is plausible, not authoritative."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":6}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Today's Ladybird lesson"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
@@ -9478,11 +9630,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["kraken_trade", "trade on your Kraken account with real money (asking you before every order)", true],
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
 ["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
+["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
 ["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
 ["proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", false],
+["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["web", "read public web pages and search the web", false],
 ["email_read", "read your email", false],
 ["calendar", "read your calendars", false],
@@ -9551,6 +9705,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\\d+/status/(start|shutdown|reboot)$"
+  ]
+ ],
+ "docker_free": [
+  [
+   "GET",
+   "^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"
+  ]
+ ],
+ "docker_asks": [
+  [
+   "POST",
+   "^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"
   ]
  ],
  "unifi_free": [
@@ -12453,6 +12619,249 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         "took": 5
       }
     ]
+  },
+  "docker": {
+    "note": "A sample Docker stack for the page and the tests (#358): an *arr suite. Each container holds what the Engine API's list, inspect and stats calls say about it, and logs holds its last lines. prowlarr keeps restarting, qbittorrent is unhealthy, and plex is near its memory limit.",
+    "version": {
+      "Version": "27.3.1",
+      "ApiVersion": "1.47"
+    },
+    "containers": [
+      {
+        "name": "plex",
+        "image": "lscr.io/linuxserver/plex:latest",
+        "state": "running",
+        "status": "Up 3 days (healthy)",
+        "health": "healthy",
+        "restarts": 0,
+        "started": "2026-11-07T08:12:44.1Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1020000000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 2013265920,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 2147483648
+          }
+        }
+      },
+      {
+        "name": "prowlarr",
+        "image": "lscr.io/linuxserver/prowlarr:latest",
+        "state": "restarting",
+        "status": "Restarting (1) 20 seconds ago",
+        "health": "",
+        "restarts": 7,
+        "started": "2026-11-10T07:58:02.5Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 20971520,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "qbittorrent",
+        "image": "lscr.io/linuxserver/qbittorrent:latest",
+        "state": "running",
+        "status": "Up 3 days (unhealthy)",
+        "health": "unhealthy",
+        "restarts": 1,
+        "started": "2026-11-07T08:12:50.9Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1005000000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 663224320,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "radarr",
+        "image": "lscr.io/linuxserver/radarr:latest",
+        "state": "running",
+        "status": "Up 3 days",
+        "health": "",
+        "restarts": 0,
+        "started": "2026-11-07T08:12:47.3Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1002500000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 346030080,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "socket-proxy",
+        "image": "tecnativa/docker-socket-proxy:latest",
+        "state": "running",
+        "status": "Up 3 weeks",
+        "health": "",
+        "restarts": 0,
+        "started": "2026-10-20T10:00:00.0Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000250000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 33554432,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "sonarr",
+        "image": "lscr.io/linuxserver/sonarr:latest",
+        "state": "running",
+        "status": "Up 3 days",
+        "health": "",
+        "restarts": 0,
+        "started": "2026-11-07T08:12:46.0Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1007500000
+            },
+            "system_cpu_usage": 51000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 442761216,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      },
+      {
+        "name": "old-test",
+        "image": "alpine:3.20",
+        "state": "exited",
+        "status": "Exited (0) 2 weeks ago",
+        "health": "",
+        "restarts": 0,
+        "started": "2026-10-26T15:00:00.0Z",
+        "stats": {
+          "cpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000,
+            "online_cpus": 4
+          },
+          "precpu_stats": {
+            "cpu_usage": {
+              "total_usage": 1000000000
+            },
+            "system_cpu_usage": 50000000000
+          },
+          "memory_stats": {
+            "usage": 20971520,
+            "stats": {
+              "inactive_file": 20971520
+            },
+            "limit": 8589934592
+          }
+        }
+      }
+    ],
+    "logs": {
+      "prowlarr": [
+        "[Info] Bootstrap: Starting Prowlarr - /app/prowlarr/bin/Prowlarr - Version 1.25.4",
+        "[Fatal] ConsoleApp: EPIC FAIL! System.IO.IOException: No space left on device : '/config/logs.db-wal'",
+        "[Info] Bootstrap: Starting Prowlarr - /app/prowlarr/bin/Prowlarr - Version 1.25.4",
+        "[Fatal] ConsoleApp: EPIC FAIL! System.IO.IOException: No space left on device : '/config/logs.db-wal'"
+      ],
+      "qbittorrent": [
+        "(N) 2026-11-10T07:40:11 - Web UI: Now listening on IP: *, port: 8080",
+        "(W) 2026-11-10T07:55:30 - Tracker 'udp://tracker.example.org:1337' unreachable",
+        "(C) 2026-11-10T07:56:02 - Disk I/O error on /downloads: Input/output error"
+      ],
+      "sonarr": [
+        "[Info] RssSyncService: RSS Sync Completed. Reports found: 212, Reports grabbed: 0",
+        "[Warn] DownloadMonitoringService: Unable to retrieve queue and history items from qBittorrent"
+      ]
+    }
   }
 }
 </script>
@@ -12716,7 +13125,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -12728,7 +13137,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -12908,7 +13317,8 @@ HOW TO MAP CODE
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade", rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
     rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read", rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
     rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
-    rb_proxmox_power:"proxmox_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_proxmox_power:"proxmox_control", rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
+    rb_docker_power:"docker_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -13252,6 +13662,15 @@ HOW TO MAP CODE
       { style:"coinbase", inputsInline:true, tooltip:"Places a real market order, like 'preview Coinbase order'. It previews it first, then always asks you, with the fee and total, even when nothing else asks; with nobody there to say yes, it doesn't run. Needs a key with Trade permission. On this page nothing is bought or sold." }),
     S("rb_coinbase_cancel", "cancel Coinbase order %1", [val("ORDER")], { style:"coinbase", inputsInline:true,
       tooltip:"Cancels one of your open orders, by its id (from 'Coinbase open orders'). It always asks you first, and doesn't run with nobody there." }),
+    /* Docker (#358): reads, and restart, stop and start that always ask */
+    V("rb_docker_containers", "Docker containers", [], "Array", { style:"docker",
+      tooltip:"A list of records, one for each container, running or not: name, image, state, status, health (healthy, unhealthy, or empty with no health check), restarts and started. On this page it uses a sample stack." }),
+    V("rb_docker_stats", "Docker memory and CPU", [], "Array", { style:"docker",
+      tooltip:"A list of records, one for each running container: name, cpu (%), memory_mb, limit_mb (the machine's memory, for a container with no limit) and memory (% of the limit)." }),
+    V("rb_docker_logs", "Docker logs of %1, last %2 lines", [val("NAME"), val("N")], "Array", { style:"docker", inputsInline:true,
+      tooltip:"The last lines a container wrote, its output and its errors together, oldest first." }),
+    S("rb_docker_power", "%1 Docker container %2", [{ type:"field_dropdown", name:"ACTION", options:[["restart","restart"],["stop","stop"],["start","start"]] }, val("NAME")],
+      { style:"docker", inputsInline:true, tooltip:"Restarts, stops or starts one container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Containers listed in DOCKER_PROTECT are never touched. On this page nothing really restarts." }),
     /* Proxmox (#357): reads, and power that always asks */
     V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
       tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
@@ -13445,6 +13864,9 @@ HOW TO MAP CODE
       B("rb_coinbase_candles", { PRODUCT:K("BTC-GBP"), N:N(7) }), B("rb_coinbase_orders"),
       B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_cancel", { ORDER:K("") })
+    ]},
+    { kind:"category", name:"Docker", categorystyle:"docker", contents:[
+      B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
     ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
@@ -13681,6 +14103,7 @@ HOW TO MAP CODE
   window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
     : c.kind === "coinbase" ? coinbaseMoney(c.method, c.path)
+    : c.kind === "docker" ? (["free", "asks"].find(k => SAFETY["docker_" + k].some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))) || null)
     : c.kind === "proxmox" ? (["free", "asks"].find(k => SAFETY["proxmox_" + k].some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))) || null)
     : c.kind === "unifi" ? SAFETY.unifi_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
     : c.kind === "mikrotik" ? SAFETY.mikrotik_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
@@ -15628,6 +16051,7 @@ HOW TO MAP CODE
     add(n.feeds, ["RB_FEEDS"]);
     add(n.homey, ["HOMEY_URL", "HOMEY_API_KEY"]);
     add(n.coinbase, ["COINBASE_KEY"]);
+    add(n.docker, ["DOCKER_HOST", "DOCKER_PROTECT"]);  // a tcp:// address the runner can reach; restarts never run there
     add(n.proxmox, ["PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_TOKEN_SECRET", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT"]);  // starting and stopping never run there: nobody is there to say yes
     add(n.unifi, ["UNIFI_URL", "UNIFI_API_KEY", "UNIFI_CERT_SHA256"]);
     add(n.mikrotik, ["MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_PASSWORD", "MIKROTIK_CERT_SHA256"]);  // the key file's contents: orders never run there, since nobody is there to say yes
@@ -16021,6 +16445,7 @@ HOW TO MAP CODE
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
+             docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -16067,6 +16492,12 @@ HOW TO MAP CODE
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.docker) out.push("", "[docker]",
+      "; Docker's Engine API. Left out, it's the socket on this computer (unix:///var/run/docker.sock), which is root on",
+      "; the machine: safer is a socket proxy (tecnativa/docker-socket-proxy with CONTAINERS=1, plus ALLOW_RESTARTS=1 and",
+      "; ALLOW_START=1 only if the program restarts, stops or starts containers), and DOCKER_HOST = tcp://that-machine:2375.",
+      "; DOCKER_PROTECT lists containers never restarted, stopped or started, like the proxy itself.",
+      "; DOCKER_HOST = tcp://docker.local:2375", "DOCKER_PROTECT = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -16385,6 +16816,9 @@ HOW TO MAP CODE
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_docker_containers": return "(await R.docker_containers())";
+        case "rb_docker_stats": return "(await R.docker_stats())";
+        case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -16537,6 +16971,7 @@ HOW TO MAP CODE
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
+          case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
@@ -18349,7 +18784,7 @@ HOW TO MAP CODE
     const note = days === 0 ? "" : days === 1 ? " (next day)" : days === -1 ? " (the day before)" : days > 0 ? " (" + days + " days later)" : " (" + (-days) + " days earlier)";
     return pad2(Math.floor(t / 60)) + ":" + pad2(t % 60) + note;
   }
-  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik, UniFi, Proxmox and the rest.
+  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik, UniFi, Proxmox, Docker and the rest.
   /* ---------- Connections on the page: sample feeds, GitHub, Telegram, email and calendar ----------
      The page can't reach these services, so it uses the sample data below (like the sample house). The text each one gives
      back is shaped like what exported Python gives from the real services. */
@@ -18362,7 +18797,7 @@ HOW TO MAP CODE
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster" }[what]) : what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -18767,6 +19202,45 @@ HOW TO MAP CODE
     if (!(await confirmMoney("cancel the Coinbase order " + id))) return false;
     if (!(cbSample().orders || []).some(o => o.order_id === id)) fail(tr("Coinbase didn't cancel the order: {why}.", { why:"unknown cancel order" }));
     addStep("Coinbase order cancelled", { mono:true, text:id }).done("sample account", "ok");
+    return true;
+  }
+  /* Docker on the page (#358): a sample stack. Exported Python talks to Docker's Engine API: reads, and restart, stop
+     and start after a yes, every time. Matches the runtime's docker_ methods and tests/fake_docker.py. */
+  const dkSample = () => { connNote("Docker"); return CONN.docker || {}; };
+  const byName = (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+  function dkName(name){
+    const n = str(name).trim().replace(/^\/+/, "");
+    if (!/^[A-Za-z0-9][A-Za-z0-9_.-]*$/.test(n)) fail(tr("Which Docker container? Give its name, like sonarr."));
+    return n;
+  }
+  function dockerContainers(){
+    const out = (dkSample().containers || []).map(c => ({ name:str(c.name), image:str(c.image), state:str(c.state), status:str(c.status), health:str(c.health || ""),
+      restarts:Math.trunc(num(c.restarts)), started:str(c.started).slice(0, 16).replace("T", " ") })).sort(byName);
+    addStep("Docker containers", { mono:true, text:out.map(c => c.name + ": " + c.status).join("\n") || tr("(nothing)") }).done(tr("{n} containers", { n:out.length }), "ok");
+    return out;
+  }
+  function dockerStats(){
+    return (dkSample().containers || []).filter(c => c.state === "running" || c.state === "restarting").map(c => {
+      const s = c.stats || {}, cpu = s.cpu_stats || {}, pre = s.precpu_stats || {}, mem = s.memory_stats || {};
+      const dCpu = num((cpu.cpu_usage || {}).total_usage || 0) - num((pre.cpu_usage || {}).total_usage || 0), dSys = num(cpu.system_cpu_usage || 0) - num(pre.system_cpu_usage || 0);
+      const used = num(mem.usage || 0) - num((mem.stats || {}).inactive_file || 0), limit = num(mem.limit || 0);
+      return { name:str(c.name), cpu:dSys > 0 && dCpu > 0 ? cents(dCpu / dSys * num(cpu.online_cpus || 1) * 100) : 0, memory_mb:cents(used / 1048576),
+               limit_mb:cents(limit / 1048576), memory:limit ? pct10(used, limit) : "" };
+    }).sort(byName);
+  }
+  function dockerLogs(name, count){
+    const n = Math.max(1, Math.min(1000, Math.trunc(num(count)) || 50)), s = dkSample(), id = dkName(name);
+    if (!(s.containers || []).some(c => c.name === id)) fail(tr("Docker: {why}.", { why:tr("not found") }));
+    return ((s.logs || {})[id] || []).slice(-n);
+  }
+  async function dockerPower(action, name){
+    action = str(action).trim().toLowerCase();
+    if (!["restart", "stop", "start"].includes(action)) fail(tr("A Docker container can be restarted, stopped or started."));
+    const id = dkName(name), c = (dkSample().containers || []).find(c => c.name === id);
+    if (!c) fail(tr("Docker: {why}.", { why:tr("not found") }));
+    const what = action + " the Docker container " + id + " (" + c.image + ", now " + c.state + ")";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Docker", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
   /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
@@ -19634,6 +20108,9 @@ HOW TO MAP CODE
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_coinbase_balances": return coinbaseBalances();
+      case "rb_docker_containers": return dockerContainers();
+      case "rb_docker_stats": return dockerStats();
+      case "rb_docker_logs": return dockerLogs(await input(b, tc, "NAME"), await input(b, tc, "N", 50));
       case "rb_proxmox_nodes": return proxmoxNodes();
       case "rb_proxmox_guests": return proxmoxGuests();
       case "rb_proxmox_storage": return proxmoxStorage();
@@ -20227,6 +20704,7 @@ HOW TO MAP CODE
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
+      case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;

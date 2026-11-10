@@ -632,6 +632,22 @@
   "rb_proxmox_power": {
    "message0": "%1 гостѧ Proxmox %2",
    "tooltip": "Начинаетъ, ѹгашаетъ или паки начинаетъ єдинѹ VM или сосѹдъ, по VMID егѡ. Присно прежде вопрошаетъ тѧ, аще и ничтоже иное вопрошаетъ, и не сѹщѹ никомѹже рещи «ей», не бываетъ. Гостей въ PROXMOX_PROTECT николиже косаетсѧ. Требѹетъ знаменїѧ съ VM.PowerMgmt. На сей страницѣ ничтоже воистинѹ начинаетсѧ ни ѡстанавливаетсѧ."
+  },
+  "rb_docker_containers": {
+   "message0": "сосѹды Docker",
+   "tooltip": "Списокъ записей, єдина на всѧкъ сосѹдъ, текѹщїй или ни: name, image, state, status, health (healthy, unhealthy, или праздно без̾ испытанїѧ здравїѧ), restarts и started. На сей страницѣ ѹпотреблѧетъ стогъ ѡбразца."
+  },
+  "rb_docker_stats": {
+   "message0": "памѧть и CPU Docker",
+   "tooltip": "Списокъ записей, єдина на всѧкъ текѹщїй сосѹдъ: name, cpu (%), memory_mb, limit_mb (памѧть машины, сосѹдѹ без̾ предѣла) и memory (% предѣла)."
+  },
+  "rb_docker_logs": {
+   "message0": "лѣтописи Docker ѿ %1, послѣднїѧ %2 строкъ",
+   "tooltip": "Послѣднїѧ строки, ꙗже сосѹдъ написа, исходъ и погрѣшенїѧ егѡ вкѹпѣ, старѣйшаѧ первѣе."
+  },
+  "rb_docker_power": {
+   "message0": "%1 сосѹдъ Docker %2",
+   "tooltip": "Паки начинаетъ, ѡстанавливаетъ или начинаетъ єдинъ сосѹдъ, по имени егѡ. Присно прежде вопрошаетъ тѧ, аще и ничтоже иное вопрошаетъ, и не сѹщѹ никомѹже рещи «ей», не бываетъ. Сосѹдѡвъ въ DOCKER_PROTECT николиже косаетсѧ. На сей страницѣ ничтоже воистинѹ паки начинаетсѧ."
   }
  },
  "options": {
@@ -755,6 +771,11 @@
    "start": "начни",
    "shutdown": "ѹгаси",
    "reboot": "паки начни"
+  },
+  "rb_docker_power.ACTION": {
+   "restart": "паки начни",
+   "stop": "ѡстанови",
+   "start": "начни"
   }
  },
  "categories": {
@@ -785,7 +806,8 @@
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
   "UniFi": "UniFi",
-  "Proxmox": "Proxmox"
+  "Proxmox": "Proxmox",
+  "Docker": "Docker"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1617,7 +1639,16 @@
   "sample cluster": "собранїе ѡбразца",
   "{n} guests": "{n} гостей",
   "read your Proxmox cluster: nodes, guests, storage and tasks": "чести собранїе твоѐ Proxmox: ѹзлы, гости, хранилища и дѣла",
-  "start, shut down and reboot your Proxmox guests (asking you each time)": "начинати, ѹгашати и паки начинати гости твоѧ Proxmox (вопрошаѧ тѧ всѧкъ разъ)"
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "начинати, ѹгашати и паки начинати гости твоѧ Proxmox (вопрошаѧ тѧ всѧкъ разъ)",
+  "A Docker container can be restarted, stopped or started.": "Сосѹдъ Docker можетъ паки начатисѧ, ѡстановитисѧ или начатисѧ.",
+  "Docker": "Docker",
+  "Docker stack": "стогъ Docker",
+  "Docker containers": "сосѹды Docker",
+  "Docker: {why}.": "Docker: {why}.",
+  "Which Docker container? Give its name, like sonarr.": "Кїй сосѹдъ Docker? Даждь имѧ егѡ, ꙗкоже sonarr.",
+  "{n} containers": "{n} сосѹдѡвъ",
+  "read your Docker containers: their health, memory and logs": "чести сосѹды твоѧ Docker: здравїе, памѧть и лѣтописи ихъ",
+  "restart, stop and start your Docker containers (asking you each time)": "паки начинати, ѡстанавливати и начинати сосѹды твоѧ Docker (вопрошаѧ тѧ на всѧко времѧ)"
  },
  "examples": {
   "review": {
@@ -3240,7 +3271,17 @@
   "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "знаменїе можетъ и {what}. Second Thought не требѹетъ сегѡ: чинъ PVEAuditor безбѣднѣе.",
   "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "знаменїе не можетъ начинати ни ѡстанавливати гостей (требѹетъ VM.PowerMgmt), тѣмже ѿверглисѧ бы сеѧ программы ѡпоки.",
   "the token isn't allowed to do that": "знаменїю не подобаетъ сегѡ творити",
-  "{what} only runs when you're there to say yes, and nobody is.": "{what} бываетъ точїю, егда ты еси тамѡ рещи «ей», а никтоже есть."
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} бываетъ точїю, егда ты еси тамѡ рещи «ей», а никтоже есть.",
+  "A Docker container can be restarted, stopped or started.": "Сосѹдъ Docker можетъ паки начатисѧ, ѡстановитисѧ или начатисѧ.",
+  "Docker": "Docker",
+  "Docker containers": "сосѹды Docker",
+  "Docker: {why}.": "Docker: {why}.",
+  "Which Docker container? Give its name, like sonarr.": "Кїй сосѹдъ Docker? Даждь имѧ егѡ, ꙗкоже sonarr.",
+  "{n} containers": "{n} сосѹдѡвъ",
+  "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "Сосѹдъ {name} есть въ DOCKER_PROTECT, тѣмже Second Thought николиже паки начинаетъ, ѡстанавливаетъ ни начинаетъ егѡ.",
+  "Docker {version}": "Docker {version}",
+  "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Въ Windows положи въ DOCKER_HOST адресъ tcp://: именованнаѧ трѹба Docker не поддержитсѧ.",
+  "Second Thought doesn't send {what} to Docker.": "Second Thought не посылаетъ {what} къ Docker."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Приложи толкъ",

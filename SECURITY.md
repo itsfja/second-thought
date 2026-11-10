@@ -42,9 +42,10 @@ decided by its blocks, and every block declares it (the `CAPABILITIES` list in `
 
 - **Act:** send email, Telegram, Discord or Slack messages; comment on GitHub; control Home Assistant or Homey
   devices and start Homey flows; publish MQTT messages; accept web requests from other computers; use the tools of
-  MCP servers you set up; place and cancel Coinbase orders; start, shut down and reboot Proxmox guests.
+  MCP servers you set up; place and cancel Coinbase orders; start, shut down and reboot Proxmox guests;
+  restart, stop and start Docker containers.
 - **Read:** web pages and search, your email, calendars, news feeds, GitHub, Telegram, Discord and Slack messages,
-  Home Assistant, Homey and MQTT, your Coinbase balances and orders, your MikroTik switch's ports and log, who's on your UniFi network, your Proxmox cluster, a folder it watches, and files you choose.
+  Home Assistant, Homey and MQTT, your Coinbase balances and orders, your MikroTik switch's ports and log, who's on your UniFi network, your Proxmox cluster, your Docker containers and their logs, a folder it watches, and files you choose.
 - **Keep:** files in its `outputs` folder, and notes between runs in `memory.json`.
 
 Everything it reads and writes is sent to the model services it uses.
@@ -73,6 +74,11 @@ Everything it reads and writes is sent to the model services it uses.
     nobody there to say yes; guests in `PROXMOX_PROTECT` are never touched. Besides those and the reads in
     `proxmox_free`, nothing is sent to Proxmox: no destroying, snapshots, commands in a guest, or storage, permission
     or firewall changes. Use a token with the PVEAuditor role unless the program starts or stops guests.
+  - **Your containers.** Restarting, stopping and starting a Docker container asks every time, live, and never runs
+    with nobody there to say yes; containers in `DOCKER_PROTECT` are never touched. Besides those and the reads in
+    `docker_free`, nothing is sent to Docker: no exec, run, remove, pull or build, nothing about images, volumes or
+    networks. Docker's socket is root on the machine, so put a socket proxy in front of it that allows only what the
+    program needs ([Connections](docs/connections.md#docker)).
   - **Things that could do anything.** When an agent chooses it, running a Home Assistant script, scene or automation,
     pressing a button, starting a Homey flow, or publishing an MQTT message that says unlock, open or disarm.
 - **No reading made-up addresses next to private data.** An agent that can see private things (email, messages,

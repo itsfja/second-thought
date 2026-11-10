@@ -165,7 +165,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox-अतिथयः","tooltip":"अभिलेखानां सूची, प्रत्येकस्य VM-पात्रस्य एकः: vmid, name, node, type (vm container वा), status, cpu, memory (%), uptime (होराः), स्थगितस्य onboot (ग्रन्थिना सह आरभेत वा) च।"},
 "rb_proxmox_storage":{"message0":"Proxmox-कोशाः","tooltip":"अभिलेखानां सूची, प्रत्येकस्मिन् ग्रन्थौ प्रत्येकस्य कोशस्य एकः: storage, node, used (%), used_gb, size_gb, status च।"},
 "rb_proxmox_tasks":{"message0":"अन्तिमानां %1 होराणां Proxmox-कार्याणि","tooltip":"अभिलेखानां सूची, नवीनतमं प्रथमम्: started, node, type (vzdump रक्षा-प्रतिलिपिः), id (अतिथिः), status (OK, अथवा किं विफलम्), user च।"},
-"rb_proxmox_power":{"message0":"Proxmox-अतिथिं %2 %1","tooltip":"एकं VM पात्रं वा तस्य VMID अनुसृत्य आरभते, निर्वापयति, पुनः आरभते वा। सदा प्रथमं त्वां पृच्छति, यदा अन्यत् किमपि न पृच्छति तदापि; आम् इति वक्तुं कोऽपि नास्ति चेत् न प्रवर्तते। PROXMOX_PROTECT इत्यस्य अतिथयः कदापि न स्पृश्यन्ते। VM.PowerMgmt युक्तं चिह्नम् अपेक्षते। अस्मिन् पृष्ठे किमपि सत्यं न आरभ्यते न स्थगयति।"}
+"rb_proxmox_power":{"message0":"Proxmox-अतिथिं %2 %1","tooltip":"एकं VM पात्रं वा तस्य VMID अनुसृत्य आरभते, निर्वापयति, पुनः आरभते वा। सदा प्रथमं त्वां पृच्छति, यदा अन्यत् किमपि न पृच्छति तदापि; आम् इति वक्तुं कोऽपि नास्ति चेत् न प्रवर्तते। PROXMOX_PROTECT इत्यस्य अतिथयः कदापि न स्पृश्यन्ते। VM.PowerMgmt युक्तं चिह्नम् अपेक्षते। अस्मिन् पृष्ठे किमपि सत्यं न आरभ्यते न स्थगयति।"},
+"rb_docker_containers":{"message0":"Docker-पात्राणि","tooltip":"अभिलेखानां सूची, प्रत्येकस्य पात्रस्य एकः, धावतः अधावतः वा: name, image, state, status, health (healthy, unhealthy, स्वास्थ्य-परीक्षां विना रिक्तं वा), restarts, started च। अस्मिन् पृष्ठे उदाहरण-राशिं प्रयुङ्क्ते।"},
+"rb_docker_stats":{"message0":"Docker-स्मृतिः CPU च","tooltip":"अभिलेखानां सूची, प्रत्येकस्य धावतः पात्रस्य एकः: name, cpu (%), memory_mb, limit_mb (सीमारहितस्य पात्रस्य यन्त्रस्य स्मृतिः), memory (सीमायाः %) च।"},
+"rb_docker_logs":{"message0":"%1 इत्यस्य Docker-लेखाः, अन्तिमाः %2 पङ्क्तयः","tooltip":"पात्रेण लिखिताः अन्तिमाः पङ्क्तयः, तस्य निर्गमः दोषाः च एकत्र, प्राचीनतमा प्रथमम्।"},
+"rb_docker_power":{"message0":"Docker-पात्रं %2 %1","tooltip":"एकं पात्रं तस्य नाम अनुसृत्य पुनः आरभते, स्थगयति, आरभते वा। सदा प्रथमं त्वां पृच्छति, यदा अन्यत् किमपि न पृच्छति तदापि; आम् इति वक्तुं कोऽपि नास्ति चेत् न प्रवर्तते। DOCKER_PROTECT इत्यस्य पात्राणि कदापि न स्पृश्यन्ते। अस्मिन् पृष्ठे किमपि सत्यं न पुनः आरभ्यते।"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"प्रतिदिनम्","weekdays":"कार्यदिनेषु","weekends":"सप्ताहान्तेषु"},
@@ -188,7 +192,8 @@
 "rb_coinbase_orders.WHICH":{"open":"मुक्तादेशाः","fills":"नवीनतमाः पूर्तयः"},
 "rb_coinbase_preview.SIDE":{"buy":"क्रीणीहि","sell":"विक्रीणीहि"},
 "rb_coinbase_order.SIDE":{"buy":"क्रीणीहि","sell":"विक्रीणीहि"},
-"rb_proxmox_power.ACTION":{"start":"आरभस्व","shutdown":"निर्वापय","reboot":"पुनः आरभस्व"}
+"rb_proxmox_power.ACTION":{"start":"आरभस्व","shutdown":"निर्वापय","reboot":"पुनः आरभस्व"},
+"rb_docker_power.ACTION":{"restart":"पुनः आरभस्व","stop":"स्थगय","start":"आरभस्व"}
 },
 "categories":{
 "Events":"घटनाः",
@@ -218,7 +223,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"प्रतिनिधेः साधनानि: तानि प्रतिनिधिखण्डस्य अन्तः पातय",
@@ -1050,7 +1056,16 @@
 "sample cluster":"उदाहरण-समूहः",
 "{n} guests":"{n} अतिथयः",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"तव Proxmox-समूहं पठितुम्: ग्रन्थयः, अतिथयः, कोशाः, कार्याणि च",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"तव Proxmox-अतिथीन् आरब्धुं, निर्वापयितुं, पुनः आरब्धुं च (प्रत्येकवारं त्वां पृच्छन्)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"तव Proxmox-अतिथीन् आरब्धुं, निर्वापयितुं, पुनः आरब्धुं च (प्रत्येकवारं त्वां पृच्छन्)",
+"A Docker container can be restarted, stopped or started.":"Docker-पात्रं पुनः आरब्धुं, स्थगयितुं, आरब्धुं वा शक्यते।",
+"Docker":"Docker",
+"Docker stack":"Docker-राशिः",
+"Docker containers":"Docker-पात्राणि",
+"Docker: {why}.":"Docker: {why}।",
+"Which Docker container? Give its name, like sonarr.":"किं Docker-पात्रम्? तस्य नाम देहि, यथा sonarr।",
+"{n} containers":"{n} पात्राणि",
+"read your Docker containers: their health, memory and logs":"तव Docker-पात्राणि पठितुम्: तेषां स्वास्थ्यं, स्मृतिं, लेखान् च",
+"restart, stop and start your Docker containers (asking you each time)":"तव Docker-पात्राणि पुनः आरब्धुं, स्थगयितुं, आरब्धुं च (प्रतिवारं त्वां पृष्ट्वा)"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2041,7 +2056,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"चिह्नं {what} अपि कर्तुं शक्नोति। Second Thought तत् न अपेक्षते: PVEAuditor भूमिका सुरक्षिततरा।",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"चिह्नम् अतिथीन् आरब्धुं स्थगयितुं वा न शक्नोति (VM.PowerMgmt अपेक्षते), अतः अस्य कार्यक्रमस्य शक्ति-खण्डाः प्रत्याख्यायेरन्।",
 "the token isn't allowed to do that":"चिह्नस्य तत् कर्तुम् अनुमतिः नास्ति",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} केवलं तदा प्रवर्तते यदा त्वम् आम् इति वक्तुं तत्र असि, कोऽपि नास्ति च।"
+"{what} only runs when you're there to say yes, and nobody is.":"{what} केवलं तदा प्रवर्तते यदा त्वम् आम् इति वक्तुं तत्र असि, कोऽपि नास्ति च।",
+"A Docker container can be restarted, stopped or started.":"Docker-पात्रं पुनः आरब्धुं, स्थगयितुं, आरब्धुं वा शक्यते।",
+"Docker":"Docker",
+"Docker containers":"Docker-पात्राणि",
+"Docker: {why}.":"Docker: {why}।",
+"Which Docker container? Give its name, like sonarr.":"किं Docker-पात्रम्? तस्य नाम देहि, यथा sonarr।",
+"{n} containers":"{n} पात्राणि",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"पात्रं {name} DOCKER_PROTECT इत्यस्मिन् अस्ति, अतः Second Thought तत् कदापि न पुनः आरभते, न स्थगयति, न आरभते।",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows इत्यत्र DOCKER_HOST इत्यस्मिन् tcp:// सङ्केतं स्थापय: Docker इत्यस्य नामयुक्ता नाली न समर्थ्यते।",
+"Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker प्रति न प्रेषयति।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

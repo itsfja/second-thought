@@ -165,7 +165,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox مسافرلری","tooltip":"قیدلر لیسته‌سی، هر VM و قاب ایچون بر: vmid، name، node، type (vm یا container)، status، cpu و memory (%)، uptime (ساعت)، و دورمش اولان ایچون onboot (دوكومله برابر باشلامالی می)."},
 "rb_proxmox_storage":{"message0":"Proxmox دپولری","tooltip":"قیدلر لیسته‌سی، هر دوكومده‌كی هر دپو ایچون بر: storage، node، used (%)، used_gb، size_gb و status."},
 "rb_proxmox_tasks":{"message0":"صوڭ %1 ساعتڭ Proxmox ایشلری","tooltip":"قیدلر لیسته‌سی، اڭ یڭیسی اوّل: started، node، type (vzdump بر یدكدر)، id (مسافر)، status (OK، یا نه یاڭلیش گیتدی) و user."},
-"rb_proxmox_power":{"message0":"Proxmox مسافری %2 ی %1","tooltip":"بر VM یا قابی VMID سی ایله باشلاتیر، قاپاتیر یا یڭیدن باشلاتیر. باشقه هیچ بر شی صورمازسه بیله هر زمان اوّل سزه صورار؛ اوت دیه‌جك كیمسه یوقسه یورومز. PROXMOX_PROTECT ده‌كی مسافرلره اصلا طوقونولماز. VM.PowerMgmt لی بر نشان ایستر. بو صحیفه‌ده هیچ بر شی حقیقةً باشلاماز و دورماز."}
+"rb_proxmox_power":{"message0":"Proxmox مسافری %2 ی %1","tooltip":"بر VM یا قابی VMID سی ایله باشلاتیر، قاپاتیر یا یڭیدن باشلاتیر. باشقه هیچ بر شی صورمازسه بیله هر زمان اوّل سزه صورار؛ اوت دیه‌جك كیمسه یوقسه یورومز. PROXMOX_PROTECT ده‌كی مسافرلره اصلا طوقونولماز. VM.PowerMgmt لی بر نشان ایستر. بو صحیفه‌ده هیچ بر شی حقیقةً باشلاماز و دورماز."},
+"rb_docker_containers":{"message0":"Docker قابلری","tooltip":"قیدلر لیسته‌سی، چالیشسین چالیشماسین هر قاب ایچون بر: name، image، state، status، health (healthy، unhealthy، یا صحّت یوقلامه‌سی یوقسه بوش)، restarts و started. بو صحیفه‌ده نمونه بر ییغین قوللانیر."},
+"rb_docker_stats":{"message0":"Docker حافظه‌سی و CPU","tooltip":"قیدلر لیسته‌سی، چالیشان هر قاب ایچون بر: name، cpu (%)، memory_mb، limit_mb (حدّی اولمایان قاب ایچون ماكینه‌نڭ حافظه‌سی) و memory (حدّڭ % سی)."},
+"rb_docker_logs":{"message0":"%1 ڭ Docker قیدلری، صوڭ %2 سطر","tooltip":"بر قابڭ یازدیغی صوڭ سطرلر، چیقتیسی و خطالری برابر، اڭ اسكیسی اوّل."},
+"rb_docker_power":{"message0":"Docker قابی %2 ی %1","tooltip":"بر قابی آدی ایله یڭیدن باشلاتیر، دوردورور یا باشلاتیر. باشقه هیچ بر شی صورمازسه بیله هر زمان اوّل سزه صورار؛ اوت دیه‌جك كیمسه یوقسه یورومز. DOCKER_PROTECT ده‌كی قابلره اصلا طوقونولماز. بو صحیفه‌ده هیچ بر شی حقیقةً یڭیدن باشلاماز."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"هر گون","weekdays":"ایش گونلری","weekends":"هفته صوڭلری"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"آچیق امرلری","fills":"صوڭ ایفالری"},
 "rb_coinbase_preview.SIDE":{"buy":"آل","sell":"صات"},
 "rb_coinbase_order.SIDE":{"buy":"آل","sell":"صات"},
-"rb_proxmox_power.ACTION":{"start":"باشلات","shutdown":"قاپات","reboot":"یڭیدن باشلات"}
+"rb_proxmox_power.ACTION":{"start":"باشلات","shutdown":"قاپات","reboot":"یڭیدن باشلات"},
+"rb_docker_power.ACTION":{"restart":"یڭیدن باشلات","stop":"دوردور","start":"باشلات"}
 },
 "categories":{
 "Agent":"وكیل",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",
@@ -1049,7 +1055,16 @@
 "sample cluster":"نمونه قوم",
 "{n} guests":"{n} مسافر",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"Proxmox قومڭزی اوقومق: دوكوملر، مسافرلر، دپولر و ایشلر",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"Proxmox مسافرلرڭزی باشلاتمق، قاپاتمق و یڭیدن باشلاتمق (هر دفعه سزه صوره‌رق)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"Proxmox مسافرلرڭزی باشلاتمق، قاپاتمق و یڭیدن باشلاتمق (هر دفعه سزه صوره‌رق)",
+"A Docker container can be restarted, stopped or started.":"Docker قابی یڭیدن باشلاتیلابیلیر، دوردورولابیلیر یا باشلاتیلابیلیر.",
+"Docker":"Docker",
+"Docker stack":"Docker ییغینی",
+"Docker containers":"Docker قابلری",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"هانكی Docker قابی؟ آدینی ویرڭ، sonarr كبی.",
+"{n} containers":"{n} قاب",
+"read your Docker containers: their health, memory and logs":"Docker قابلریڭزی اوقومق: صحّتلری، حافظه‌لری و قیدلری",
+"restart, stop and start your Docker containers (asking you each time)":"Docker قابلریڭزی یڭیدن باشلاتمق، دوردورمق و باشلاتمق (هر دفعه سزه صوراراق)"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2040,7 +2055,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"نشان {what} ده یاپابیلیر. Second Thought بوڭا محتاج دكل: PVEAuditor وظیفه‌سی داها امیندر.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"نشان مسافر باشلاتوب دوردوره‌مز (VM.PowerMgmt ایستر)، اونڭ ایچون بو پروغرامڭ گوج بلوقلری رد اولونور.",
 "the token isn't allowed to do that":"نشانڭ بونی یاپمغه اذنی یوق",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} آنجق سز اوت دیمك ایچون اوراده ایكن یورور، و كیمسه یوق."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} آنجق سز اوت دیمك ایچون اوراده ایكن یورور، و كیمسه یوق.",
+"A Docker container can be restarted, stopped or started.":"Docker قابی یڭیدن باشلاتیلابیلیر، دوردورولابیلیر یا باشلاتیلابیلیر.",
+"Docker":"Docker",
+"Docker containers":"Docker قابلری",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"هانكی Docker قابی؟ آدینی ویرڭ، sonarr كبی.",
+"{n} containers":"{n} قاب",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"قاب {name}، DOCKER_PROTECT ده‌در، اونڭ ایچون Second Thought اونی اصلا یڭیدن باشلاتماز، دوردورماز و باشلاتماز.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows ده DOCKER_HOST ه بر tcp:// آدرسی یازڭ: Docker ڭ آدلی بوروسی دستكلنمز.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought، {what} ی Docker ه گوندرمز."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

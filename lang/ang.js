@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox gystas","tooltip":"Getæl gewrita, an for ælcum VM and fæte: vmid, name, node, type (vm oþþe container), status, cpu and memory (%), uptime (tida), and for þam gestilledan onboot (hwæþer he scolde mid þam cnotte onginnan)."},
 "rb_proxmox_storage":{"message0":"Proxmox hordern","tooltip":"Getæl gewrita, an for ælcum horderne on ælcum cnotte: storage, node, used (%), used_gb, size_gb and status."},
 "rb_proxmox_tasks":{"message0":"Proxmox weorc þara latostena %1 tida","tooltip":"Getæl gewrita, þæt niweste ærest: started, node, type (vzdump is gehealdnes), id (se gyst), status (OK, oþþe hwæt misfor) and user."},
-"rb_proxmox_power":{"message0":"%1 Proxmox gyst %2","tooltip":"Onstyreþ, scet oþþe eft onstyreþ an VM oþþe fæt, be his VMID. Hit axaþ þe simle ærest, þeah naht elles ne axige; gif nan man nis þær to secgenne gea, hit ne færþ. Gystas on PROXMOX_PROTECT ne beoþ næfre gehrinene. Behofaþ tacnes mid VM.PowerMgmt. On þissum leafe naht ne onginþ ne ne stilleþ soþlice."}
+"rb_proxmox_power":{"message0":"%1 Proxmox gyst %2","tooltip":"Onstyreþ, scet oþþe eft onstyreþ an VM oþþe fæt, be his VMID. Hit axaþ þe simle ærest, þeah naht elles ne axige; gif nan man nis þær to secgenne gea, hit ne færþ. Gystas on PROXMOX_PROTECT ne beoþ næfre gehrinene. Behofaþ tacnes mid VM.PowerMgmt. On þissum leafe naht ne onginþ ne ne stilleþ soþlice."},
+"rb_docker_containers":{"message0":"Docker fatu","tooltip":"Getæl gewrita, an for ælcum fæte, yrne hit oþþe ne yrne: name, image, state, status, health (healthy, unhealthy, oþþe æmtig butan hæle fandunge), restarts and started. On þissum leafe hit brycþ bysene heapes."},
+"rb_docker_stats":{"message0":"Docker gemynd and CPU","tooltip":"Getæl gewrita, an for ælcum yrnendum fæte: name, cpu (%), memory_mb, limit_mb (þære searwe gemynd, for fæte butan gemære) and memory (% þæs gemæres)."},
+"rb_docker_logs":{"message0":"Docker gewritu of %1, þa latostan %2 linan","tooltip":"Þa latostan linan þe fæt wrat, his utgang and his gedwyld ætgædere, seo ieldeste ærest."},
+"rb_docker_power":{"message0":"%1 Docker fæt %2","tooltip":"Eft onstyreþ, stilleþ oþþe onstyreþ an fæt, be his naman. Hit axaþ þe simle ærest, þeah naht elles ne axige; gif nan man nis þær to secgenne gea, hit ne færþ. Fatu on DOCKER_PROTECT ne beoþ næfre gehrinene. On þissum leafe naht eft ne onginþ soþlice."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"opene bebodu","fills":"latostan gefyllednessa"},
 "rb_coinbase_preview.SIDE":{"buy":"bycgan","sell":"sellan"},
 "rb_coinbase_order.SIDE":{"buy":"bycgan","sell":"sellan"},
-"rb_proxmox_power.ACTION":{"start":"onstyrian","shutdown":"scettan","reboot":"eft onstyrian"}
+"rb_proxmox_power.ACTION":{"start":"onstyrian","shutdown":"scettan","reboot":"eft onstyrian"},
+"rb_docker_power.ACTION":{"restart":"eft onstyrian","stop":"stillan","start":"onstyrian"}
 },
 "categories":{
 "Events":"Gelimpu",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tol for þone ærendracan: lege hie innan ærendracan stocce",
@@ -1049,7 +1055,16 @@
 "sample cluster":"bysene heap",
 "{n} guests":"{n} gystas",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"rædan þinne Proxmox heap: cnottas, gystas, hordern and weorc",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"onstyrian, scettan and eft onstyrian þine Proxmox gystas (axiende þe ælce siþe)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"onstyrian, scettan and eft onstyrian þine Proxmox gystas (axiende þe ælce siþe)",
+"A Docker container can be restarted, stopped or started.":"Docker fæt mæg beon eft onstyred, gestilled oþþe onstyred.",
+"Docker":"Docker",
+"Docker stack":"Docker heap",
+"Docker containers":"Docker fatu",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Hwilc Docker fæt? Sege his naman, swa sonarr.",
+"{n} containers":"{n} fatu",
+"read your Docker containers: their health, memory and logs":"rædan þine Docker fatu: hira hælu, gemynd and gewritu",
+"restart, stop and start your Docker containers (asking you each time)":"eft onstyrian, stillan and onstyrian þine Docker fatu (þe ælce siþe axiende)"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2040,7 +2055,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"se tacn mæg eac {what}. Second Thought ne behofaþ þæs: se PVEAuditor had is sicorra.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"se tacn ne mæg gystas onstyrian ne stillan (he behofaþ VM.PowerMgmt), swa þæs cræftes mægenstanas wæron wiþsacene.",
 "the token isn't allowed to do that":"se tacn ne mot þæt don",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} færþ ane þonne þu eart þær to secgenne gea, and nan man nis."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} færþ ane þonne þu eart þær to secgenne gea, and nan man nis.",
+"A Docker container can be restarted, stopped or started.":"Docker fæt mæg beon eft onstyred, gestilled oþþe onstyred.",
+"Docker":"Docker",
+"Docker containers":"Docker fatu",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Hwilc Docker fæt? Sege his naman, swa sonarr.",
+"{n} containers":"{n} fatu",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Fæt {name} is on DOCKER_PROTECT, forþon Second Thought hit næfre eft ne onstyreþ, ne stilleþ, ne onstyreþ.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"On Windows, sete on DOCKER_HOST tcp:// stowe: Dockeres genemnede pipe nis underfangen.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought ne sent {what} to Docker."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

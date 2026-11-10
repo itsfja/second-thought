@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox 之客","tooltip":"簿之列，每機每器一簿：vmid、name、node、type（vm 或 container）、status、cpu、memory（%）、uptime（時），止者又有 onboot（當隨節而啟否）。"},
 "rb_proxmox_storage":{"message0":"Proxmox 之庫","tooltip":"簿之列，每節每庫一簿：storage、node、used（%）、used_gb、size_gb、status。"},
 "rb_proxmox_tasks":{"message0":"Proxmox 近 %1 時之務","tooltip":"簿之列，新者居先：started、node、type（vzdump 乃備）、id（其客）、status（OK，或其誤）、user。"},
-"rb_proxmox_power":{"message0":"%1 Proxmox 之客 %2","tooltip":"以 VMID 啟、閉、復啟一機一器。必先問汝，雖他無所問；無人在以曰可，則不行。PROXMOX_PROTECT 之客，未嘗觸之。須有 VM.PowerMgmt 之符。於此頁無所真啟止。"}
+"rb_proxmox_power":{"message0":"%1 Proxmox 之客 %2","tooltip":"以 VMID 啟、閉、復啟一機一器。必先問汝，雖他無所問；無人在以曰可，則不行。PROXMOX_PROTECT 之客，未嘗觸之。須有 VM.PowerMgmt 之符。於此頁無所真啟止。"},
+"rb_docker_containers":{"message0":"Docker 之器","tooltip":"簿之列，每器一簿，無論行否：name、image、state、status、health（healthy、unhealthy，無康驗則空）、restarts、started。於此頁用樣疊。"},
+"rb_docker_stats":{"message0":"Docker 之憶與 CPU","tooltip":"簿之列，每行器一簿：name、cpu（%）、memory_mb、limit_mb（器無限者，機之憶也）、memory（限之 %）。"},
+"rb_docker_logs":{"message0":"Docker 之錄：%1，末 %2 行","tooltip":"器所書之末行，其出與其誤並列，舊者先。"},
+"rb_docker_power":{"message0":"%1 Docker 之器 %2","tooltip":"以名復啟、止、啟一器。必先問汝，雖他無所問；無人在以曰可，則不行。DOCKER_PROTECT 之器，未嘗觸之。於此頁無所真復啟。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每日","weekdays":"平日","weekends":"休日"},
@@ -186,7 +190,8 @@
 "rb_coinbase_orders.WHICH":{"open":"未成之單","fills":"近成之交"},
 "rb_coinbase_preview.SIDE":{"buy":"買","sell":"賣"},
 "rb_coinbase_order.SIDE":{"buy":"買","sell":"賣"},
-"rb_proxmox_power.ACTION":{"start":"啟","shutdown":"閉","reboot":"復啟"}
+"rb_proxmox_power.ACTION":{"start":"啟","shutdown":"閉","reboot":"復啟"},
+"rb_docker_power.ACTION":{"restart":"復啟","stop":"止","start":"啟"}
 },
 "categories":{
 "Agent":"使者",
@@ -216,7 +221,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"聽者：所出之程依時而行，則此諸塊行",
@@ -1048,7 +1054,16 @@
 "sample cluster":"樣群",
 "{n} guests":"{n} 客",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"讀汝 Proxmox 之群：節、客、庫、務",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"啟、閉、復啟汝 Proxmox 之客（每次必問）"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"啟、閉、復啟汝 Proxmox 之客（每次必問）",
+"A Docker container can be restarted, stopped or started.":"Docker 之器，可復啟，可止，可啟。",
+"Docker":"Docker",
+"Docker stack":"Docker 之疊",
+"Docker containers":"Docker 之器",
+"Docker: {why}.":"Docker：{why}。",
+"Which Docker container? Give its name, like sonarr.":"何 Docker 之器？示其名，若 sonarr。",
+"{n} containers":"{n} 器",
+"read your Docker containers: their health, memory and logs":"讀汝 Docker 之器：其康、其憶、其錄",
+"restart, stop and start your Docker containers (asking you each time)":"復啟、止、啟汝 Docker 之器（每必問汝）"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2039,7 +2054,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"其符亦能 {what}。Second Thought 不須此：PVEAuditor 之職為安。",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"其符不能啟止客（須 VM.PowerMgmt），故此程序之電積將見拒。",
 "the token isn't allowed to do that":"其符不得為此",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} 唯汝在而曰可乃行，今無人。"
+"{what} only runs when you're there to say yes, and nobody is.":"{what} 唯汝在而曰可乃行，今無人。",
+"A Docker container can be restarted, stopped or started.":"Docker 之器，可復啟，可止，可啟。",
+"Docker":"Docker",
+"Docker containers":"Docker 之器",
+"Docker: {why}.":"Docker：{why}。",
+"Which Docker container? Give its name, like sonarr.":"何 Docker 之器？示其名，若 sonarr。",
+"{n} containers":"{n} 器",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"器 {name} 在 DOCKER_PROTECT，故 Second Thought 未嘗復啟之、止之、啟之。",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"於 Windows，置 DOCKER_HOST 為 tcp:// 之址：Docker 之名管不可用。",
+"Second Thought doesn't send {what} to Docker.":"Second Thought 不發 {what} 於 Docker。"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

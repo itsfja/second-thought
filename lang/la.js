@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"hospites Proxmox","tooltip":"Index tabularum, una pro quaque VM et capsa: vmid, name, node, type (vm aut container), status, cpu et memory (%), uptime (horae), et pro sistente onboot (num cum nodo incipere debeat)."},
 "rb_proxmox_storage":{"message0":"horrea Proxmox","tooltip":"Index tabularum, una pro quoque horreo in quoque nodo: storage, node, used (%), used_gb, size_gb et status."},
 "rb_proxmox_tasks":{"message0":"opera Proxmox ultimarum %1 horarum","tooltip":"Index tabularum, recentissimum primum: started, node, type (vzdump est exemplar tutelae), id (hospes), status (OK, aut quid erraverit) et user."},
-"rb_proxmox_power":{"message0":"%1 hospitem Proxmox %2","tooltip":"Unam VM aut capsam per VMID incipit, claudit aut iterum incipit. Te semper prius rogat, etiam cum nihil aliud rogat; nemine adstante qui «ita» dicat, non fit. Hospites in PROXMOX_PROTECT numquam tanguntur. Tesseram cum VM.PowerMgmt eget. In hac pagina nihil vere incipit aut sistit."}
+"rb_proxmox_power":{"message0":"%1 hospitem Proxmox %2","tooltip":"Unam VM aut capsam per VMID incipit, claudit aut iterum incipit. Te semper prius rogat, etiam cum nihil aliud rogat; nemine adstante qui «ita» dicat, non fit. Hospites in PROXMOX_PROTECT numquam tanguntur. Tesseram cum VM.PowerMgmt eget. In hac pagina nihil vere incipit aut sistit."},
+"rb_docker_containers":{"message0":"capsae Docker","tooltip":"Index tabularum, una pro quaque capsa, sive currit sive non: name, image, state, status, health (healthy, unhealthy, aut vacuum sine valetudinis probatione), restarts et started. In hac pagina strue exempli utitur."},
+"rb_docker_stats":{"message0":"memoria et CPU Docker","tooltip":"Index tabularum, una pro quaque capsa currente: name, cpu (%), memory_mb, limit_mb (memoria machinae, pro capsa sine limite) et memory (% limitis)."},
+"rb_docker_logs":{"message0":"acta Docker capsae %1, ultimi %2 versus","tooltip":"Ultimi versus quos capsa scripsit, exitus et errores simul, vetustissimus primus."},
+"rb_docker_power":{"message0":"%1 capsam Docker %2","tooltip":"Unam capsam per nomen iterum incipit, sistit aut incipit. Te semper prius rogat, etiam cum nihil aliud rogat; nemine adstante qui «ita» dicat, non fit. Capsae in DOCKER_PROTECT numquam tanguntur. In hac pagina nihil vere iterum incipit."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"mandata aperta","fills":"ultima perfecta"},
 "rb_coinbase_preview.SIDE":{"buy":"eme","sell":"vende"},
 "rb_coinbase_order.SIDE":{"buy":"eme","sell":"vende"},
-"rb_proxmox_power.ACTION":{"start":"incipe","shutdown":"claude","reboot":"iterum incipe"}
+"rb_proxmox_power.ACTION":{"start":"incipe","shutdown":"claude","reboot":"iterum incipe"},
+"rb_docker_power.ACTION":{"restart":"iterum incipe","stop":"siste","start":"incipe"}
 },
 "categories":{
 "Events":"Eventus",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1049,7 +1055,16 @@
 "sample cluster":"acervus exempli",
 "{n} guests":"{n} hospites",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"acervum tuum Proxmox legere: nodos, hospites, horrea et opera",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"hospites tuos Proxmox incipere, claudere et iterum incipere (te quoque tempore rogans)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"hospites tuos Proxmox incipere, claudere et iterum incipere (te quoque tempore rogans)",
+"A Docker container can be restarted, stopped or started.":"Capsa Docker iterum incipi, sisti aut incipi potest.",
+"Docker":"Docker",
+"Docker stack":"strues Docker",
+"Docker containers":"capsae Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Quae capsa Docker? Da eius nomen, ut sonarr.",
+"{n} containers":"{n} capsae",
+"read your Docker containers: their health, memory and logs":"capsas tuas Docker legere: valetudinem, memoriam et acta",
+"restart, stop and start your Docker containers (asking you each time)":"capsas tuas Docker iterum incipere, sistere et incipere (te quotiens rogato)"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2040,7 +2055,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"tessera etiam {what} potest. Second Thought id non eget: munus PVEAuditor tutius est.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"tessera hospites incipere aut sistere non potest (VM.PowerMgmt eget), itaque huius programmatis caudices recusarentur.",
 "the token isn't allowed to do that":"tesserae id facere non licet",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} tantum fit cum ades ut «ita» dicas, et nemo adest."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} tantum fit cum ades ut «ita» dicas, et nemo adest.",
+"A Docker container can be restarted, stopped or started.":"Capsa Docker iterum incipi, sisti aut incipi potest.",
+"Docker":"Docker",
+"Docker containers":"capsae Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Quae capsa Docker? Da eius nomen, ut sonarr.",
+"{n} containers":"{n} capsae",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Capsa {name} in DOCKER_PROTECT est, itaque Second Thought eam numquam iterum incipit, sistit aut incipit.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"In Windows, pone in DOCKER_HOST inscriptionem tcp://: canalis nominatus Docker non sustinetur.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought {what} ad Docker non mittit."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",
