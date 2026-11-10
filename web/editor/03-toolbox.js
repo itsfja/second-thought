@@ -137,6 +137,9 @@
       B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_cancel", { ORDER:K("") })
     ]},
+    { kind:"category", name:"MikroTik", categorystyle:"mikrotik", contents:[
+      B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
+    ]},
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")
     ]}

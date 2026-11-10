@@ -364,6 +364,29 @@ add(program(
         email_me("Your Kraken week", B("rb_draft")),
         B("rb_result"))]))
 
+# Home: #360. MikroTik, read-only: ports and SFP modules, never a change.
+v = Vars("ports", "modules", "report")
+add(program(
+    "ten-gig-check", "Is the 10Gb link at 10Gb?", "home",
+    "Each morning, reads your MikroTik switch's ports and SFP modules and sends you a Telegram message if a port came up "
+    "slower than it should, its errors or drops grew since yesterday, or a module runs hot or its light is weak. It only "
+    "reads: nothing on the switch changes.",
+    "Needs MIKROTIK_URL, a read-only MIKROTIK_USER and MIKROTIK_PASSWORD, and MIKROTIK_CERT_SHA256 (--doctor shows it). "
+    "Change the expected speeds to match your ports.",
+    start_and(msg="check") + [chain(when_time(8, 0), B("rb_broadcast_wait", MSG="check")), receive(
+        "check",
+        v.set("ports", B("rb_mikrotik_ports")),
+        v.set("modules", B("rb_mikrotik_sfp")),
+        v.set("report", B("rb_ask", TEXT=join(
+            "Check my MikroTik switch. Every sfp-sfpplus port that is running should be at 10Gbps; ether ports at 1Gbps. "
+            "Say, in under 100 words: any port slower than it should be, any port whose errors or drops grew since "
+            "yesterday, and any module above 60 °C or with rx_power below -10 dBm. If all is well, say so in one line.\n\n"
+            "Ports now:\n", v.get("ports"), "\n\nPorts yesterday (empty the first day):\n",
+            B("rb_mem_get", NAME="MikroTik ports yesterday"), "\n\nSFP modules:\n", v.get("modules")))),
+        B("rb_mem_set", {"KIND": "permanent"}, VALUE=v.get("ports"), NAME="MikroTik ports yesterday"),
+        B("rb_tg_send", TEXT=v.get("report")),
+        B("rb_finish_with", TEXT=v.get("report")))], v))
+
 # Money: #371. Coinbase, read-only: balances and prices, never an order.
 v = Vars("value", "holdings", "summary")
 add(program(

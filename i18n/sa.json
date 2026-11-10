@@ -589,6 +589,22 @@
   "rb_coinbase_cancel": {
    "message0": "Coinbase-आदेशं %1 निवर्तय",
    "tooltip": "तव मुक्तादेशेषु एकं तस्य id अनुसृत्य निवर्तयति ('Coinbase-मुक्तादेशाः' इत्यस्मात्)। सदा प्रथमं त्वां पृच्छति, कोऽपि नास्ति चेत् न प्रवर्तते।"
+  },
+  "rb_mikrotik_ports": {
+   "message0": "MikroTik-द्वाराणि",
+   "tooltip": "अभिलेखानां सूची, तव MikroTik-मार्गदर्शकस्य परिवर्तकस्य वा प्रत्येकस्य द्वारस्य एकः: port, running, speed (यथा 10Gbps), errors, drops, link_downs, comment च। दोषाः पाताः च अन्तिमात् आरम्भात् गण्यन्ते। केवलं पठति: परिवर्तके किमपि न परिवर्तते। अस्मिन् पृष्ठे उदाहरण-परिवर्तकं प्रयुङ्क्ते।"
+  },
+  "rb_mikrotik_sfp": {
+   "message0": "MikroTik SFP-अंशाः",
+   "tooltip": "अभिलेखानां सूची, प्रत्येकस्य निवेशितस्य SFP-अंशस्य एकः: port, module, temperature (°C), rx_power, tx_power (dBm) च।"
+  },
+  "rb_mikrotik_health": {
+   "message0": "MikroTik-स्वास्थ्यम्",
+   "tooltip": "मार्गदर्शकस्य स्वस्य विषये अभिलेखः: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), तस्य अन्ये संवेदकाः च।"
+  },
+  "rb_mikrotik_log": {
+   "message0": "MikroTik-वृत्तान्तः, अन्तिमाः %1 पङ्क्तयः",
+   "tooltip": "मार्गदर्शकस्य वृत्तान्तस्य अन्तिमाः पङ्क्तयः, प्राचीनतमा प्रथमम्, प्रत्येका \"time topics: message\" इति रूपेण।"
   }
  },
  "options": {
@@ -744,7 +760,8 @@
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
   "Output": "निर्गमः",
-  "Coinbase": "Coinbase"
+  "Coinbase": "Coinbase",
+  "MikroTik": "MikroTik"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "प्रतिनिधेः साधनानि: तानि प्रतिनिधिखण्डस्य अन्तः पातय",
@@ -1556,7 +1573,12 @@
   "Coinbase account": "Coinbase-लेखा",
   "sample account": "उदाहरण-लेखा",
   "trade on your Coinbase account with real money (asking you before every order)": "तव Coinbase-लेखायां सत्यधनेन व्यापारं कर्तुम् (प्रत्येकस्मात् आदेशात् पूर्वं त्वां पृच्छन्)",
-  "read your Coinbase balances and orders, and market prices": "तव Coinbase-शेषान् आदेशांश्च, आपणमूल्यानि च पठितुम्"
+  "read your Coinbase balances and orders, and market prices": "तव Coinbase-शेषान् आदेशांश्च, आपणमूल्यानि च पठितुम्",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "MikroTik-द्वाराणि",
+  "{n} ports": "{n} द्वाराणि",
+  "MikroTik switch": "MikroTik-परिवर्तकः",
+  "read your MikroTik router or switch: its ports, modules, health and log": "तव MikroTik-मार्गदर्शकं परिवर्तकं वा पठितुम्: द्वाराणि, अंशाः, स्वास्थ्यं, वृत्तान्तः च"
  },
  "examples": {
   "review": {
@@ -3141,7 +3163,21 @@
   "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "कुञ्चिका कार्यं करोति, किन्तु धनं स्थानान्तरयितुम् अपि शक्नोति। अयं कार्यक्रमः कदापि न स्थानान्तरयति: Transfer-अनुमतिं विना कुञ्चिकां रचय।",
   "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "कुञ्चिका कार्यं करोति, किन्तु केवलं View, अतः अस्य कार्यक्रमस्य आदेशाः प्रत्याख्यायेरन्। Trade-अनुमत्या सह एकस्मिन् कोशे सीमितां कुञ्चिकां रचय।",
   "the key works: it can trade (every order asks you first)": "कुञ्चिका कार्यं करोति: व्यापारं कर्तुं शक्नोति (प्रत्येकः आदेशः प्रथमं त्वां पृच्छति)",
-  "too many requests just now; try again in a minute": "अधुना अतिबहूनि याचनानि; निमेषानन्तरं पुनः प्रयतस्व"
+  "too many requests just now; try again in a minute": "अधुना अतिबहूनि याचनानि; निमेषानन्तरं पुनः प्रयतस्व",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "MikroTik-द्वाराणि",
+  "{n} ports": "{n} द्वाराणि",
+  "Couldn't reach the MikroTik at {url} ({reason}).": "{url} इत्यत्र MikroTik प्राप्तुं न शक्तम् ({reason})।",
+  "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.": "MikroTik MIKROTIK_URL, MIKROTIK_USER, MIKROTIK_PASSWORD च अपेक्षते {where_keys}: मार्गदर्शकस्य स्थानम् (यथा https://192.168.88.1), केवलं read, api, rest-api नीतिभिः युक्ते गणे एकः उपयोक्ता च।",
+  "MikroTik: {why}.": "MikroTik: {why}।",
+  "Second Thought only reads from MikroTik, so it doesn't send {what}.": "Second Thought MikroTik इत्यस्मात् केवलं पठति, अतः {what} न प्रेषयति।",
+  "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.": "MikroTik MIKROTIK_USER MIKROTIK_PASSWORD च प्रत्याख्यातवान्।",
+  "The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.": "अयं सङ्गणकः MikroTik इत्यस्य प्रमाणपत्रे न विश्वसिति (मार्गदर्शकाः प्रायः स्वं रचयन्ति)। तस्य अङ्गुलिचिह्नं द्रष्टुं --doctor चालय, MIKROTIK_CERT_SHA256 इत्यत्र स्थापय च।",
+  "The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "MikroTik इत्यस्य प्रमाणपत्रं न तत् यत् MIKROTIK_CERT_SHA256 नियच्छति (तत् {seen})। यदि प्रमाणपत्रं परिवर्तितवान्, मूल्यं नवीकुरु; नो चेत् मध्ये किञ्चित् अस्ति।",
+  "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.": "लेखायाः गणः ({group}) {what} अपि कर्तुं शक्नोति। Second Thought केवलं पठति, अतः केवलं read, api, rest-api युक्तः गणः सुरक्षिततरः।",
+  "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.": "गुप्तशब्दः http:// द्वारा अनावृतः गच्छति। तस्य स्थाने www-ssl सेवां https:// च प्रयुङ्क्ष्व।",
+  "the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.": "मार्गदर्शकस्य प्रमाणपत्रं स्वकीयम्, अतः तत् नियच्छ: यदि {url} तव MikroTik, second-thought.ini इत्यत्र MIKROTIK_CERT_SHA256 = {seen} लिख।",
+  "{board}, RouterOS {version}": "{board}, RouterOS {version}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

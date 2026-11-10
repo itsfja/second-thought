@@ -154,7 +154,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"𒄩𒀜𒊑𒌍𒊬 𒄩𒀸𒊭𒀭𒋫𒅗 (id, product, side, size, price, filled 𒅇 created), 𒈾𒀸𒈠 𒍣𒅔𒈾𒀭 𒀊𒁉𒄑𒍣 (time, product, side, size, price, fee 𒅇 order)."},
 "rb_coinbase_preview":{"message0":"𒄩𒀜𒊑𒌍𒊬 Coinbase 𒁉𒊏𒀭 𒀀𒍑: %1 %2 %3","tooltip":"𒄩𒀜𒊑𒌍𒊬 𒄩𒀊𒉺𒊑 𒆪𒀉 𒄿𒉿𒍣, 𒌌 𒁕𒀀𒅖: 𒁾 size, spend, fee, total, slippage 𒅇 warnings. 𒉿𒀸𒍣 𒆬𒌓 2-𒀭 𒉺𒀀𒄿 (50 BTC-GBP £50 𒉺𒀀𒄿); 𒄩𒀊𒁉𒊏𒄑𒍣 1-𒀭 𒄩𒀊𒁉𒊏𒄑𒍣 (0.01 BTC-GBP 0.01 BTC 𒄩𒀊𒁉𒊏𒄑𒍣). 𒌌 𒆪𒀉𒆠 𒉿𒄴𒉡𒍣."},
 "rb_coinbase_order":{"message0":"𒄩𒀜𒊑𒌍𒊬 Coinbase 𒁕𒀀𒄿: %1 %2 %3","tooltip":"𒄩𒀜𒊑𒌍𒊬 𒄩𒀊𒉺𒊑 𒄩𒀭𒁕𒀭 𒁕𒀀𒄿, „𒄩𒀜𒊑𒌍𒊬 Coinbase 𒁉𒊏𒀭 𒀀𒍑” 𒈠𒅆𒉿𒀭. 𒁉𒊏𒀭 𒀀𒍑𒍣, 𒂕𒉺𒈠 𒄷𒌋𒈠𒀭𒋾 𒁍𒉡𒍑𒍣, 𒆬𒌓 𒅇 𒋗𒆸𒆸𒀉, 𒈠𒀀𒀭 𒋫𒈠𒄿 𒌌 𒁍𒉡𒍑𒍣; 𒈠𒀀𒀭 𒀭𒌅𒄴𒊭𒀸 𒉡𒅅, 𒌌 𒄿𒉿𒍣. 𒄑𒊕𒆰 Trade-𒀉 𒌑𒂊𒅅𒍣. 𒅗𒀀 𒌌 𒆪𒀉𒆠 𒉿𒀸𒍣 𒅇 𒄩𒀊𒁉𒊏𒄑𒍣."},
-"rb_coinbase_cancel":{"message0":"𒄩𒀜𒊑𒌍𒊬 Coinbase %1 𒅈𒄩 𒁕𒀀","tooltip":"1 𒄩𒀜𒊑𒌍𒊬 𒄩𒀸𒊭𒀭𒋫𒅗 id-𒀉 𒅈𒄩 𒁕𒀀𒄿 („𒄩𒀜𒊑𒌍𒊬 𒄩𒀸𒊭𒀭 Coinbase”-𒍝). 𒄷𒌋𒈠𒀭𒋾 𒁉𒊏𒀭 𒁍𒉡𒍑𒍣, 𒈠𒀀𒀭 𒀭𒌅𒄴𒊭𒀸 𒉡𒅅 𒌌 𒄿𒉿𒍣."}
+"rb_coinbase_cancel":{"message0":"𒄩𒀜𒊑𒌍𒊬 Coinbase %1 𒅈𒄩 𒁕𒀀","tooltip":"1 𒄩𒀜𒊑𒌍𒊬 𒄩𒀸𒊭𒀭𒋫𒅗 id-𒀉 𒅈𒄩 𒁕𒀀𒄿 („𒄩𒀜𒊑𒌍𒊬 𒄩𒀸𒊭𒀭 Coinbase”-𒍝). 𒄷𒌋𒈠𒀭𒋾 𒁉𒊏𒀭 𒁍𒉡𒍑𒍣, 𒈠𒀀𒀭 𒀭𒌅𒄴𒊭𒀸 𒉡𒅅 𒌌 𒄿𒉿𒍣."},
+"rb_mikrotik_ports":{"message0":"𒆍𒎌 MikroTik","tooltip":"𒁾 𒀀𒀸𒋗, 1 𒆍 𒄷𒌋𒈠𒀭 𒉿𒄴𒉡𒈥 MikroTik-𒅗: port, running, speed (10Gbps 𒈠𒅆𒉿𒀭), errors, drops, link_downs 𒅇 comment. 𒄩𒀜𒊏𒀀𒄑𒍣𒁁: 𒌌 𒆪𒀉𒆠 𒉿𒄴𒉡𒍣. 𒅗𒀀 𒉿𒄴𒉡𒈥 𒊭𒀝𒆠𒅖 𒁕𒀀𒄿."},
+"rb_mikrotik_sfp":{"message0":"𒋗𒎌 SFP MikroTik","tooltip":"𒁾 𒀀𒀸𒋗, 1 𒋗 SFP 𒄷𒌋𒈠𒀭: port, module, temperature (°C), rx_power 𒅇 tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"𒀸𒋗𒌌 MikroTik","tooltip":"𒁾 𒉿𒄴𒉡𒈥𒀸: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𒅇 𒋫𒈠𒄿 𒆪𒀉 𒄯𒍣."},
+"rb_mikrotik_log":{"message0":"𒁾 MikroTik, %1 𒀊𒁉𒄑𒍣","tooltip":"𒁾 𒉿𒄴𒉡𒈥𒀸 𒀊𒁉𒄑𒍣, 𒅗𒊒𒌑𒄿𒇷 𒁉𒊏𒀭, 𒄷𒌋𒈠𒀭 „time topics: message” 𒈠𒅆𒉿𒀭."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒄰 𒄷𒌋𒈠𒀭","weekdays":"𒌓𒄰 𒀀𒉌𒉿𒀜𒋫𒀸","weekends":"𒌓𒄰 𒉿𒅈𒉺𒀸"},
@@ -202,7 +206,8 @@
 "Variables":"𒆷𒄠𒈠𒀭",
 "Wait & time":"𒄷𒍑𒆠 𒅇 𒈨𒂊𒄯",
 "You":"𒍣𒅅",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣",
@@ -1014,7 +1019,12 @@
 "Coinbase account":"𒆏𒁍𒌋𒉿𒅈 Coinbase",
 "sample account":"𒆏𒁍𒌋𒉿𒅈 𒊭𒀝𒆠𒅖",
 "trade on your Coinbase account with real money (asking you before every order)":"𒄿𒈾 𒆏𒁍𒌋𒉿𒅈 Coinbase-𒅗 𒆬𒌓 𒄩𒀭𒁕𒀭𒋫 𒉿𒀸𒍣 𒅇 𒄩𒀊𒁉𒊏𒄑𒍣 (𒄩𒀜𒊑𒌍𒊬 𒄷𒌋𒈠𒀭𒋾 𒁉𒊏𒀭 𒁍𒉡𒍑𒍣)",
-"read your Coinbase balances and orders, and market prices":"𒀀𒀸𒋗 𒅇 𒄩𒀜𒊑𒌍𒊬 Coinbase-𒅗, 𒅇 𒉚 𒄩𒀊𒉺𒊑 𒊭𒀝𒍣"
+"read your Coinbase balances and orders, and market prices":"𒀀𒀸𒋗 𒅇 𒄩𒀜𒊑𒌍𒊬 Coinbase-𒅗, 𒅇 𒉚 𒄩𒀊𒉺𒊑 𒊭𒀝𒍣",
+"MikroTik":"MikroTik",
+"MikroTik ports":"𒆍𒎌 MikroTik",
+"{n} ports":"𒆍𒎌 {n}",
+"MikroTik switch":"𒉿𒄴𒉡𒈥 MikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"𒉿𒄴𒉡𒈥 MikroTik-𒅗 𒊭𒀝𒍣: 𒆍𒎌, 𒋗𒎌, 𒀸𒋗𒌌 𒅇 𒁾"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -1967,7 +1977,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"GIŠ.SAG.KUL i-ya-zi, KÙ.BABBAR-ya pé-e-da-i. DUB.SAR ka-a-aš KÙ.BABBAR UL pé-e-da-i: GIŠ.SAG.KUL Transfer NU.GÁL i-ya.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"GIŠ.SAG.KUL i-ya-zi, View-pát ḫar-zi, ḫa-at-re-eš-šar DUB.SAR UL ma-la-an-zi. GIŠ.SAG.KUL Trade-it, I-NA É KÙ.BABBAR 1, i-ya.",
 "the key works: it can trade (every order asks you first)":"GIŠ.SAG.KUL i-ya-zi: wa-aš-zi (ḫa-at-re-eš-šar ḫu-u-ma-an pé-ra-an pu-nu-uš-zi)",
-"too many requests just now; try again in a minute":"ḫa-at-re-eš-šar me-ek-ki ki-nu-un; ma-aḫ-ḫa-an ut-tar ap-pa-an EGIR-pa i-ya"
+"too many requests just now; try again in a minute":"ḫa-at-re-eš-šar me-ek-ki ki-nu-un; ma-aḫ-ḫa-an ut-tar ap-pa-an EGIR-pa i-ya",
+"MikroTik":"MikroTik",
+"MikroTik ports":"KÁ.MEŠ MikroTik",
+"{n} ports":"KÁ.MEŠ {n}",
+"Couldn't reach the MikroTik at {url} ({reason}).":"MikroTik I-NA {url} UL a-ri ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik MIKROTIK_URL, MIKROTIK_USER Ù MIKROTIK_PASSWORD {where_keys} ú-e-ek-zi: pé-e-da-an (https://192.168.88.1 ma-ši-wa-an) Ù LÚ I-NA ERÍN.MEŠ read, api Ù rest-api-pát.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought MikroTik-za ḫa-at-ra-a-iz-zi-pát, {what} UL pé-e-da-i.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik MIKROTIK_USER Ù MIKROTIK_PASSWORD UL ma-la-a-it.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"GIŠ.SAG.KUL MikroTik UL ša-ak-zi (wa-aḫ-nu-mar GIŠ.SAG.KUL-ŠU i-ya-zi). --doctor i-ya Ù I-NA MIKROTIK_CERT_SHA256 da-a-i.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"GIŠ.SAG.KUL MikroTik UL ku-it MIKROTIK_CERT_SHA256 da-a-iš ({seen}). ma-a-an wa-aḫ-nu-ut-ta, GIBIL i-ya; ma-a-an UL, ku-it-ki an-da.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"ERÍN.MEŠ kap-pu-u-wa-ar ({group}) {what}-ya i-ya-zi. Second Thought ḫa-at-ra-a-iz-zi-pát, ERÍN.MEŠ read, api Ù rest-api-pát aš-šu.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"GIŠ.SAG.KUL I-NA http:// UL mu-un-na-an-za i-ya-at-ta-ri. www-ssl Ù https:// da-a.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"GIŠ.SAG.KUL wa-aḫ-nu-mar-aš a-pé-el, da-a-i: ma-a-an {url} MikroTik-KA, MIKROTIK_CERT_SHA256 = {seen} I-NA second-thought.ini da-a-i.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

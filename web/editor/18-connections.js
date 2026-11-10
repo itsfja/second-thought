@@ -1,4 +1,4 @@
-  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase and the rest.
+  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik and the rest.
   /* ---------- Connections on the page: sample feeds, GitHub, Telegram, email and calendar ----------
      The page can't reach these services, so it uses the sample data below (like the sample house). The text each one gives
      back is shaped like what exported Python gives from the real services. */
@@ -11,7 +11,7 @@
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account" }[what]) : what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -417,6 +417,41 @@
     if (!(cbSample().orders || []).some(o => o.order_id === id)) fail(tr("Coinbase didn't cancel the order: {why}.", { why:"unknown cancel order" }));
     addStep("Coinbase order cancelled", { mono:true, text:id }).done("sample account", "ok");
     return true;
+  }
+  /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
+     only reads. Matches the runtime's mikrotik_ methods and tests/fake_mikrotik.py, which serves the same sample. */
+  const mtSample = () => { connNote("MikroTik"); return CONN.mikrotik || {}; };
+  const mtNum = v => { const m = /-?\d+(?:\.\d+)?/.exec(str(v)); return m ? Number(m[0]) : ""; };
+  function mikrotikPorts(){
+    const s = mtSample(), mon = s.monitor || {};
+    const add = (i, ...ks) => ks.reduce((t, k) => t + (Number(mtNum(i[k])) || 0), 0);
+    const out = (s.interfaces || []).filter(i => i.disabled !== "true" && ["ether", "bridge", "vlan", "bond"].includes(i.type)).map(i => ({
+      port:str(i.name), running:i.running === "true", speed:i.running === "true" ? str((mon[i.name] || {}).rate || "") : "",
+      errors:add(i, "rx-error", "tx-error"), drops:add(i, "rx-drop", "tx-drop"), link_downs:add(i, "link-downs"), comment:str(i.comment || "") }));
+    addStep("MikroTik ports", { mono:true, text:out.map(p => p.port + ": " + (p.speed || "-")).join("\n") || tr("(nothing)") }).done(tr("{n} ports", { n:out.length }), "ok");
+    return out;
+  }
+  function mikrotikSfp(){
+    const s = mtSample(), mon = s.monitor || {};
+    return (s.interfaces || []).filter(i => i.type === "ether" && i.disabled !== "true" && (mon[i.name] || {})["sfp-module-present"] === "true").map(i => {
+      const m = mon[i.name];
+      return { port:str(i.name), module:[str(m["sfp-vendor-name"] || "").trim(), str(m["sfp-vendor-part-number"] || "").trim()].filter(Boolean).join(" "),
+               temperature:mtNum(m["sfp-temperature"]), rx_power:mtNum(m["sfp-rx-power"]), tx_power:mtNum(m["sfp-tx-power"]) };
+    });
+  }
+  function mikrotikHealth(){
+    const s = mtSample(), r = s.resource || {};
+    const out = { board:str(r["board-name"] || ""), version:str(r.version || ""), uptime:str(r.uptime || ""), cpu_load:mtNum(r["cpu-load"]),
+                  free_memory:Math.round((Number(mtNum(r["free-memory"])) || 0) / 1048576 * 10) / 10, temperature:"" };
+    for (const h of s.health || []) {
+      const v = str(h.value);
+      out[str(h.name).replace(/\W+/g, "_").replace(/^_+|_+$/g, "")] = mtNum(v) !== "" && /^-?[\d.]+\w?$/.test(v) ? mtNum(v) : v;
+    }
+    return out;
+  }
+  function mikrotikLog(count){
+    const n = Math.max(1, Math.min(500, Math.trunc(num(count)) || 20));
+    return (mtSample().log || []).slice(-n).map(r => str(r.time) + " " + str(r.topics) + ": " + str(r.message));
   }
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
   function pagePart(text, words){

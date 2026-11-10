@@ -153,7 +153,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase· %1","tooltip":"Αἱ ἀνεῳγμέναι ἐντολαί σου (id, product, side, size, price, filled καὶ created) ἢ αἱ ἔσχαται πράξεις (time, product, side, size, price, fee καὶ order)."},
 "rb_coinbase_preview":{"message0":"προΐδε ἐντολὴν Coinbase· %1 %2 τοῦ %3","tooltip":"Τί ἂν γένοιτο ἐντολὴ ἀγορᾶς, μὴ δοθεῖσα· ἀναγραφὴ μετὰ size, spend, fee, total, slippage καὶ warnings. Ἡ ὠνὴ δαπανᾷ ποσὸν τοῦ δευτέρου νομίσματος (50 τοῦ BTC-GBP δαπανᾷ £50)· ἡ πρᾶσις πωλεῖ ποσὸν τοῦ πρώτου (0.01 τοῦ BTC-GBP πωλεῖ 0.01 BTC). Οὐδὲν μεταβάλλεται."},
 "rb_coinbase_order":{"message0":"δὸς ἐντολὴν Coinbase· %1 %2 τοῦ %3","tooltip":"Δίδωσιν ἀληθινὴν ἐντολὴν ἀγορᾶς, ὡς τὸ «προΐδε ἐντολὴν Coinbase». Πρῶτον προορᾷ, ἔπειτα ἀεὶ ἐρωτᾷ σε, μετὰ τοῦ τέλους καὶ τοῦ συνόλου, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ· μηδενὸς παρόντος τοῦ «ναί» λέγοντος, οὐ γίνεται. Δεῖται κλειδὸς μετὰ τῆς ἐξουσίας Trade. Ἐν τῇδε τῇ σελίδι οὐδὲν ὠνεῖται οὐδὲ πωλεῖται."},
-"rb_coinbase_cancel":{"message0":"ἄνελε τὴν ἐντολὴν Coinbase %1","tooltip":"Ἀναιρεῖ μίαν τῶν ἀνεῳγμένων ἐντολῶν σου, τῷ id αὐτῆς (ἐκ τῶν «ἀνεῳγμένων ἐντολῶν Coinbase»). Ἀεὶ πρῶτον ἐρωτᾷ σε, καὶ μηδενὸς παρόντος οὐ γίνεται."}
+"rb_coinbase_cancel":{"message0":"ἄνελε τὴν ἐντολὴν Coinbase %1","tooltip":"Ἀναιρεῖ μίαν τῶν ἀνεῳγμένων ἐντολῶν σου, τῷ id αὐτῆς (ἐκ τῶν «ἀνεῳγμένων ἐντολῶν Coinbase»). Ἀεὶ πρῶτον ἐρωτᾷ σε, καὶ μηδενὸς παρόντος οὐ γίνεται."},
+"rb_mikrotik_ports":{"message0":"θύραι τοῦ MikroTik","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην θύραν τοῦ μεταγωγέως σου MikroTik· port, running, speed (οἷον 10Gbps), errors, drops, link_downs καὶ comment. Τὰ σφάλματα καὶ αἱ ἀπώλειαι ἀπὸ τῆς ἐσχάτης ἀρχῆς ἀριθμοῦνται. Μόνον ἀναγινώσκει· οὐδὲν μεταβάλλεται. Ἐν τῇδε τῇ σελίδι χρῆται μεταγωγεῖ ὑποδείγματος."},
+"rb_mikrotik_sfp":{"message0":"μονάδες SFP τοῦ MikroTik","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην μονάδα SFP ἐντεθειμένην· port, module, temperature (°C), rx_power καὶ tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"ὑγίεια τοῦ MikroTik","tooltip":"Ἀναγραφὴ περὶ αὐτοῦ τοῦ μεταγωγέως· board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), καὶ πᾶς ἄλλος αἰσθητὴρ ὃν ἔχει."},
+"rb_mikrotik_log":{"message0":"ὑπομνήματα MikroTik, ἔσχατοι %1 στίχοι","tooltip":"Οἱ ἔσχατοι στίχοι τῶν ὑπομνημάτων τοῦ μεταγωγέως, ὁ παλαιότατος πρῶτος, ἕκαστος ὡς «time topics: message»."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"καθ᾽ ἡμέραν","weekdays":"ἐν ταῖς ἡμέραις τῶν ἔργων","weekends":"ἐν τῷ τέλει τῆς ἑβδομάδος"},
@@ -202,7 +206,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"Ἔξοδος",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1014,7 +1019,12 @@
 "Coinbase account":"λογαριασμὸς Coinbase",
 "sample account":"λογαριασμὸς ὑποδείγματος",
 "trade on your Coinbase account with real money (asking you before every order)":"ἐμπορεύεσθαι ἐν τῷ λογαριασμῷ σου Coinbase ἀληθινῷ ἀργυρίῳ (ἐρωτῶν σε πρὸ ἑκάστης ἐντολῆς)",
-"read your Coinbase balances and orders, and market prices":"ἀναγινώσκειν τὰ λοιπὰ καὶ τὰς ἐντολάς σου ἐν Coinbase, καὶ τὰς τιμὰς τῆς ἀγορᾶς"
+"read your Coinbase balances and orders, and market prices":"ἀναγινώσκειν τὰ λοιπὰ καὶ τὰς ἐντολάς σου ἐν Coinbase, καὶ τὰς τιμὰς τῆς ἀγορᾶς",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Θύραι τοῦ MikroTik",
+"{n} ports":"{n} θύραι",
+"MikroTik switch":"μεταγωγεὺς MikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"ἀναγινώσκειν τὸν μεταγωγέα σου MikroTik· θύρας, μονάδας, ὑγίειαν καὶ ὑπομνήματα"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1967,7 +1977,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"ἡ κλεὶς ἐνεργεῖ, δύναται δὲ καὶ ἀργύριον μεταφέρειν. Τὸ πρόγραμμα τοῦτο οὐδέποτε μεταφέρει· ποίησον κλεῖν ἄνευ τῆς ἐξουσίας Transfer.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"ἡ κλεὶς ἐνεργεῖ, ἔχει δὲ μόνον View, ὥστε αἱ ἐντολαὶ τοῦ προγράμματος ἀποδοκιμασθήσονται. Ποίησον κλεῖν μετὰ τῆς ἐξουσίας Trade, εἰς ἕνα θησαυρὸν ὡρισμένην.",
 "the key works: it can trade (every order asks you first)":"ἡ κλεὶς ἐνεργεῖ· δύναται ἐμπορεύεσθαι (ἑκάστη ἐντολὴ πρῶτον ἐρωτᾷ σε)",
-"too many requests just now; try again in a minute":"πλεῖσται αἰτήσεις ἄρτι· πάλιν πειράθητι μετὰ λεπτόν"
+"too many requests just now; try again in a minute":"πλεῖσται αἰτήσεις ἄρτι· πάλιν πειράθητι μετὰ λεπτόν",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Θύραι τοῦ MikroTik",
+"{n} ports":"{n} θύραι",
+"Couldn't reach the MikroTik at {url} ({reason}).":"Οὐκ ἐδυνήθη ἐφικέσθαι τοῦ MikroTik ἐν {url} ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"Τὸ MikroTik δεῖται MIKROTIK_URL, MIKROTIK_USER καὶ MIKROTIK_PASSWORD {where_keys}· τῆς διευθύνσεως τοῦ μεταγωγέως (οἷον https://192.168.88.1) καὶ χρήστου ἐν ὁμάδι μόνον μετὰ τῶν ἐξουσιῶν read, api καὶ rest-api.",
+"MikroTik: {why}.":"MikroTik· {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Τὸ Second Thought μόνον ἀναγινώσκει ἐκ τοῦ MikroTik, ὥστε οὐ πέμπει {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"Τὸ MikroTik ἀπεδοκίμασε τὰ MIKROTIK_USER καὶ MIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Ὅδε ὁ ὑπολογιστὴς οὐ πιστεύει τῷ πιστοποιητικῷ τοῦ MikroTik (οἱ μεταγωγεῖς ἴδιον ποιοῦσιν). Τρέχε --doctor ἵνα ἴδῃς τὸ ἴχνος αὐτοῦ, καὶ θὲς εἰς MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Τὸ πιστοποιητικὸν τοῦ MikroTik οὐκ ἔστιν ὃ τὸ MIKROTIK_CERT_SHA256 ὁρίζει (ἔστιν {seen}). Εἰ ἤλλαξας τὸ πιστοποιητικόν, ἀνανέωσον τὴν τιμήν· εἰ δὲ μή, τι παρεμβαίνει.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"ἡ ὁμὰς τοῦ λογαριασμοῦ ({group}) δύναται καὶ {what}. Τὸ Second Thought μόνον ἀναγινώσκει, ὥστε ὁμὰς μόνον μετὰ read, api καὶ rest-api ἀσφαλεστέρα.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"ὁ κωδικὸς ἀκρυπτὸς διὰ http:// πορεύεται. Χρῶ μᾶλλον τῇ ὑπηρεσίᾳ www-ssl καὶ https://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"τὸ πιστοποιητικὸν τοῦ μεταγωγέως ἴδιόν ἐστιν, ὅρισον οὖν αὐτό· εἰ {url} τὸ σὸν MikroTik ἐστίν, θὲς MIKROTIK_CERT_SHA256 = {seen} ἐν second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

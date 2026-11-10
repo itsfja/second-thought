@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD")
 
 
 def _load_keychain():
@@ -1529,6 +1529,11 @@ SAFETY = {
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
     "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
+    # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
+    # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
+    # the network with it, and nothing here is worth that.
+    "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
+                      ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
     "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
     # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it
@@ -1628,6 +1633,12 @@ def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return not any(m == method and re.match(p, path) for m, p in SAFETY["coinbase_free"])
+
+
+def mikrotik_allowed(method, path):
+    """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
 
 
 def same_problem(a, b):
@@ -2059,6 +2070,7 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
+    ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -4273,6 +4285,123 @@ class Connections:
         self.log(tr("Coinbase order cancelled"), oid, tr("done"))
         return True
 
+    # MikroTik (#360)
+    # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
+    # user in a group with just the read, api and rest-api policies. Only the calls in SAFETY["mikrotik_free"] are ever
+    # made. A router's certificate is usually its own (self-signed), so MIKROTIK_CERT_SHA256 pins it: the connection
+    # goes ahead only if the certificate's SHA-256 fingerprint matches. --doctor shows the fingerprint it sees.
+
+    async def _mikrotik(self, method, path, body=None):
+        if not mikrotik_allowed(method, path):
+            raise RunError(tr("Second Thought only reads from MikroTik, so it doesn't send {what}.", what=f"{method} {path}"))
+        base = os.environ.get("MIKROTIK_URL", "").strip().rstrip("/")
+        user, password = os.environ.get("MIKROTIK_USER", "").strip(), os.environ.get("MIKROTIK_PASSWORD", "")
+        if not base or not user:
+            raise RunError(tr("MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.", where_keys=WHERE_KEYS))
+        if "://" not in base:
+            base = "https://" + base
+        u = urllib.parse.urlparse(base)
+        pin = re.sub(r"[^0-9a-f]", "", os.environ.get("MIKROTIK_CERT_SHA256", "").lower())
+        headers = {"Authorization": "Basic " + base64.b64encode(f"{user}:{password}".encode()).decode(), "Accept": "application/json"}
+        data = None
+        if body is not None:
+            data, headers["Content-Type"] = json.dumps(body).encode(), "application/json"
+
+        def go():
+            if u.scheme == "https":
+                import ssl
+                ctx = ssl.create_default_context()
+                if pin:  # the pin is the check: a self-signed certificate wouldn't pass the usual one
+                    ctx.check_hostname, ctx.verify_mode = False, ssl.CERT_NONE
+                conn = http.client.HTTPSConnection(u.hostname, u.port or 443, timeout=15, context=ctx)
+            else:
+                conn = http.client.HTTPConnection(u.hostname, u.port or 80, timeout=15)
+            try:
+                conn.connect()
+                if u.scheme == "https" and pin:
+                    seen = hashlib.sha256(conn.sock.getpeercert(binary_form=True)).hexdigest()
+                    if seen != pin:
+                        raise RunError(tr("The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.", seen=seen))
+                conn.request(method, (u.path or "") + path, body=data, headers=headers)
+                r = conn.getresponse()
+                raw = r.read()
+            except RunError:
+                raise
+            except Exception as e:  # noqa: BLE001 - certificate, refused, timed out: say which
+                text = str(e)
+                if "CERTIFICATE_VERIFY_FAILED" in text:
+                    raise RunError(tr("The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.")) from None
+                raise RunError(tr("Couldn't reach the MikroTik at {url} ({reason}).", url=base, reason=_short(text, 120))) from None
+            finally:
+                conn.close()
+            if r.status == 401:
+                raise RunError(tr("The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD."))
+            if r.status >= 400:
+                try:
+                    said = json.loads(raw)
+                    said = to_str(said.get("detail") or said.get("message") or "") if isinstance(said, dict) else ""
+                except ValueError:
+                    said = ""
+                raise RunError(tr("MikroTik: {why}.", why=tr("it answered {code}", code=r.status) + (f" ({_short(said, 120)})" if said else "")))
+            return json.loads(raw) if raw.strip() else []
+        return await asyncio.to_thread(go)
+
+    @staticmethod
+    def _mt_num(v):
+        """RouterOS gives numbers as text, some with a unit on the end (38C, -3.979dBm): just the number, or ""."""
+        m = re.search(r"-?\d+(?:\.\d+)?", to_str(v))
+        return _clean_num(float(m.group())) if m else ""
+
+    async def _mt_monitor(self, ports):
+        names = [p for p in ports if p]
+        if not names:
+            return {}
+        got = await self._mikrotik("POST", "/rest/interface/ethernet/monitor", {"numbers": ",".join(names), "once": ""})
+        return {to_str(m.get("name")): m for m in got if isinstance(m, dict)}
+
+    async def mikrotik_ports(self):
+        """Every port: port, running (yes/no), speed (as RouterOS says it, like 10Gbps; "" when down), errors and drops
+        since the switch started, link downs and comment."""
+        ifs = [i for i in await self._mikrotik("GET", "/rest/interface") if isinstance(i, dict) and to_str(i.get("disabled")) != "true"]
+        mon = await self._mt_monitor([to_str(i.get("name")) for i in ifs if to_str(i.get("type")) == "ether"])
+        n = lambda i, *ks: _clean_num(sum(float(self._mt_num(i.get(k)) or 0) for k in ks))  # noqa: E731
+        out = [{"port": to_str(i.get("name")), "running": to_str(i.get("running")) == "true",
+                "speed": to_str((mon.get(to_str(i.get("name"))) or {}).get("rate")) if to_str(i.get("running")) == "true" else "",
+                "errors": n(i, "rx-error", "tx-error"), "drops": n(i, "rx-drop", "tx-drop"), "link_downs": n(i, "link-downs"),
+                "comment": to_str(i.get("comment"))} for i in ifs if to_str(i.get("type")) in ("ether", "bridge", "vlan", "bond")]
+        lines = "\n".join(f"{p['port']}: {p['speed'] or '-'}" for p in out)
+        self.log(tr("MikroTik ports"), lines or tr("(nothing)"), tr("{n} ports", n=len(out)))
+        return out
+
+    async def mikrotik_sfp(self):
+        """Each SFP module in the switch: port, module (maker and part), temperature (°C), rx_power and tx_power (dBm)."""
+        ifs = [i for i in await self._mikrotik("GET", "/rest/interface") if isinstance(i, dict) and to_str(i.get("type")) == "ether"]
+        mon = await self._mt_monitor([to_str(i.get("name")) for i in ifs if to_str(i.get("disabled")) != "true"])
+        return [{"port": name, "module": " ".join(x for x in (to_str(m.get("sfp-vendor-name")).strip(), to_str(m.get("sfp-vendor-part-number")).strip()) if x),
+                 "temperature": self._mt_num(m.get("sfp-temperature")), "rx_power": self._mt_num(m.get("sfp-rx-power")),
+                 "tx_power": self._mt_num(m.get("sfp-tx-power"))}
+                for name, m in mon.items() if to_str(m.get("sfp-module-present")) == "true"]
+
+    async def mikrotik_health(self):
+        """The switch itself: board, version, uptime, cpu_load (%), free_memory (MB) and temperature (°C), with any other
+        sensor it has (cpu_temperature, fan1_speed and so on)."""
+        res = await self._mikrotik("GET", "/rest/system/resource")
+        res = res[0] if isinstance(res, list) and res else res if isinstance(res, dict) else {}
+        out = {"board": to_str(res.get("board-name")), "version": to_str(res.get("version")), "uptime": to_str(res.get("uptime")),
+               "cpu_load": self._mt_num(res.get("cpu-load")), "free_memory": _clean_num(math.floor(float(self._mt_num(res.get("free-memory")) or 0) / 1048576 * 10 + 0.5) / 10),
+               "temperature": ""}
+        for s in await self._mikrotik("GET", "/rest/system/health"):
+            if isinstance(s, dict) and s.get("name"):
+                v = to_str(s.get("value"))
+                out[re.sub(r"\W+", "_", to_str(s.get("name"))).strip("_")] = self._mt_num(v) if self._mt_num(v) != "" and re.fullmatch(r"-?[\d.]+\w?", v) else v
+        return out
+
+    async def mikrotik_log(self, count=20):
+        """The log's last few lines, oldest first: "time topics: message"."""
+        n = max(1, min(500, int(num(count) or 20)))
+        rows = [r for r in await self._mikrotik("GET", "/rest/log") if isinstance(r, dict)][-n:]
+        return [f"{to_str(r.get('time'))} {to_str(r.get('topics'))}: {to_str(r.get('message'))}" for r in rows]
+
     # MQTT
     def _mqtt_new(self, on_message=None, topics=()):
         """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
@@ -6301,6 +6430,8 @@ import re  # noqa: E402,F811
 import importlib.metadata  # noqa: E402,F811 - below the line, so python/runtime.py has them too
 import importlib.util  # noqa: E402,F811
 import shutil  # noqa: E402,F811
+import hashlib  # noqa: E402,F811
+import urllib.parse  # noqa: E402,F811
 import socket  # noqa: E402,F811
 
 
@@ -6404,6 +6535,46 @@ class Doctor:
         tiers = [getattr(self, "primary", None)] + list(getattr(self, "backups", None) or [])
         return [t for t in tiers if isinstance(t, str) and t]
 
+    async def _doctor_mikrotik(self):
+        """The MikroTik check (#360): reachable, the certificate pinned, and an account that can only read."""
+        base = os.environ.get("MIKROTIK_URL", "").strip()
+        pinned = os.environ.get("MIKROTIK_CERT_SHA256", "").strip()
+        if base and not base.lower().startswith("http://") and not pinned:
+            seen = await asyncio.to_thread(self._mt_fingerprint, base)
+            if seen:
+                raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.", url=base, seen=seen))
+        res = await self.mikrotik_health()
+        user = os.environ.get("MIKROTIK_USER", "").strip()
+        group = next((to_str(u.get("group")) for u in await self._mikrotik("GET", "/rest/user") if isinstance(u, dict) and u.get("name") == user), "")
+        policy = next((to_str(g.get("policy")) for g in await self._mikrotik("GET", "/rest/user/group") if isinstance(g, dict) and g.get("name") == group), "")
+        extra = sorted({p for p in policy.split(",") if p and not p.startswith("!")} - {"read", "api", "rest-api"})
+        said = tr("{board}, RouterOS {version}", board=res.get("board") or "MikroTik", version=res.get("version") or "?")
+        if base.lower().startswith("http://"):
+            return "NOTE", said + "; " + tr("the password goes unencrypted over http://. Use the www-ssl service and https:// instead.")
+        if extra:
+            return "NOTE", said + "; " + tr("the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.", group=group, what=", ".join(extra))
+        return said
+
+    @staticmethod
+    def _mt_fingerprint(base):
+        """The SHA-256 fingerprint of the certificate the router shows, if it isn't one this computer trusts already."""
+        import socket
+        import ssl
+        u = urllib.parse.urlparse(base if "://" in base else "https://" + base)
+        try:
+            with socket.create_connection((u.hostname, u.port or 443), timeout=10) as s:
+                with ssl.create_default_context().wrap_socket(s, server_hostname=u.hostname):
+                    return None  # trusted as it is
+        except ssl.SSLCertVerificationError:
+            pass
+        except OSError:
+            return None  # can't reach it: the request after says so
+        ctx = ssl.create_default_context()
+        ctx.check_hostname, ctx.verify_mode = False, ssl.CERT_NONE
+        with socket.create_connection((u.hostname, u.port or 443), timeout=10) as s:
+            with ctx.wrap_socket(s) as t:
+                return hashlib.sha256(t.getpeercert(binary_form=True)).hexdigest()
+
     async def _doctor_connections(self, can, mcp):
         """(area, coroutine giving the detail) for each connection the program uses. Every one only reads."""
         has = lambda *ids: any(i in can for i in ids)  # noqa: E731
@@ -6431,6 +6602,10 @@ class Doctor:
                     return "NOTE", tr("the key works and can trade, but this program only reads: a View-only key is safer.")
                 return tr("the key works: it can trade (every order asks you first)") if perms.get("can_trade") else tr("the key works, View only")
             out.append(("Coinbase", coinbase))
+        if has("mikrotik_read"):
+            async def mikrotik():
+                return await self._doctor_mikrotik()
+            out.append(("MikroTik", mikrotik))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -6700,7 +6875,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -8966,6 +9141,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_inbox_shrinking_violet","file":"inbox-shrinking-violet.json","category":"calendar","title":"Inbox shrinking violet","description":"Twice a day, sorts your inbox into needs a reply, read later and maybe unsubscribe, with a draft reply for each of the first pile, all in one email to you. It never replies for you.","tip":"Change the times to suit you. The drafts are in your style if you tell it how you write, in the agent's goal.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sort inbox"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":9,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sort inbox"}}}}}},"x":550,"y":30},{"type":"rb_when_time","fields":{"HOUR":16,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sort inbox"}}}}}},"x":30,"y":290},{"type":"rb_receive","fields":{"MSG":"sort inbox"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Look through my email from the last day (search_email with days 1) and read the ones you need to. Sort every email into three piles. NEEDS A REPLY: who, what they want, and a short draft reply for each, friendly and brief. READ LATER: one line each on why it's worth it. MAYBE UNSUBSCRIBE: newsletters and promotions, with the sender. Leave out anything already handled. Don't send anything."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":14}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"email"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your inbox, sorted"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":550,"y":290}]}}},
 {"key":"g_instrument_ranges","file":"instrument-ranges.json","category":"coding","title":"Instrument ranges","description":"Choose an instrument's log (a CSV or text export). Claude lists every reading outside the ranges you set, with its time, and checks nothing in range was flagged. Then a line on any pattern, like a drift through the day.","tip":"Put your instruments' ranges in the first block, one per line, with units. Long logs: export a day at a time.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_ranges","name":"ranges"},{"id":"g_log","name":"log"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_ranges"}},"inputs":{"VALUE":{"block":{"type":"rb_longtext","fields":{"TEXT":"Incubator temperature: 36.5 to 37.5 °C\nCO2: 4.5 to 5.5 %\nHumidity: 90 to 98 %"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_log"}},"inputs":{"VALUE":{"block":{"type":"rb_file_choose"}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This is an instrument log. Using these expected ranges, list every reading outside its range: the time (or row), the measurement, the value as logged, and the range it's outside. Readings with no range set are ignored. Then one line on any pattern among them (a drift, a time of day, one sensor), or say there's none. If every reading is in range, say so in one line.\n\nRanges:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_ranges"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nLog:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_log"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every reading listed is really outside its range, with its value quoted as logged; each gives its time or row and the range; units match the ranges; nothing in range is listed; the pattern line is backed by the readings listed"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_invoice_matcher","file":"invoice-matcher.json","category":"money","title":"Invoice matcher","description":"Keeps a list of the receipts you save to a folder. When an invoice arrives by email, it checks for a matching receipt and emails you if there isn't one.","tip":"Change the folder to where you keep receipts. It only knows receipts saved after it starts.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_invoice","name":"invoice"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste an invoice email to test with"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"invoice"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_email_when","fields":{"CONTAINS":"invoice"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"invoice"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_folder_when","fields":{"FOLDER":"~/Receipts"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"receipt"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":290},{"type":"rb_receive","fields":{"MSG":"receipt"},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In one line, from this receipt: supplier — amount — date. Nothing else.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"receipts"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Receipt noted."}}}}}}}},"x":550,"y":290},{"type":"rb_receive","fields":{"MSG":"invoice"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_invoice"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In one line, from this invoice: supplier — amount — date. Nothing else.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_ask_yesno","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Is there a receipt for this invoice in the list: the same supplier and amount, within a month?\nInvoice: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nReceipts:\n"}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"receipts"}}}}}}},"extraState":{"itemCount":4}}}}}},"DO0":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Matched: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}}},"extraState":{"itemCount":2}}}}}},"ELSE":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Invoice with no receipt"}}},"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"No receipt found for: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"No receipt for: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_invoice"}}}}},"extraState":{"itemCount":2}}}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":550}]}}},
+{"key":"g_ten_gig_check","file":"ten-gig-check.json","category":"home","title":"Is the 10Gb link at 10Gb?","description":"Each morning, reads your MikroTik switch's ports and SFP modules and sends you a Telegram message if a port came up slower than it should, its errors or drops grew since yesterday, or a module runs hot or its light is weak. It only reads: nothing on the switch changes.","tip":"Needs MIKROTIK_URL, a read-only MIKROTIK_USER and MIKROTIK_PASSWORD, and MIKROTIK_CERT_SHA256 (--doctor shows it). Change the expected speeds to match your ports.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_ports","name":"ports"},{"id":"g_modules","name":"modules"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_ports"}},"inputs":{"VALUE":{"block":{"type":"rb_mikrotik_ports"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_modules"}},"inputs":{"VALUE":{"block":{"type":"rb_mikrotik_sfp"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Check my MikroTik switch. Every sfp-sfpplus port that is running should be at 10Gbps; ether ports at 1Gbps. Say, in under 100 words: any port slower than it should be, any port whose errors or drops grew since yesterday, and any module above 60 °C or with rx_power below -10 dBm. If all is well, say so in one line.\n\nPorts now:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_ports"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nPorts yesterday (empty the first day):\n"}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"MikroTik ports yesterday"}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nSFP modules:\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_modules"}}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_ports"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"MikroTik ports yesterday"}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_issue_triage_bot","file":"issue-triage-bot.json","category":"github","title":"Issue triage bot","description":"When someone opens an issue, it labels it from the project's own labels, links a likely duplicate in a comment, and messages you on Telegram if it looks urgent.","tip":"Change the project in the hat. Labelling and commenting ask first; use the no-asking tool once you trust it.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_project","name":"project"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type an issue to test with, like 'Chart is blank on Safari: nothing shows in the chart area'"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"triage"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_gh_issue_when","fields":{"REPO":"sample-baker/sourdough-chart"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"triage"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"triage"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_project"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"sample-baker/sourdough-chart"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"A new issue was opened in "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_project"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":":\n"}}},"ADD3":{"block":{"type":"rb_msg_value"}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nFind its number if it isn't given (search_github for the title). Add one or two fitting labels, using only labels the project has. Search the project's open issues for a likely duplicate; if there's a clear one, comment linking it. Finally answer in one line: URGENT if it describes data loss, a security problem or the app not working for everyone, otherwise ROUTINE, then a short reason."}}}},"extraState":{"itemCount":5}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":10}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github_act"}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_contains","inputs":{"A":{"block":{"type":"rb_draft"}},"B":{"shadow":{"type":"text","fields":{"TEXT":"URGENT"}}}}}},"DO0":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"🚨 Urgent issue: "}}},"ADD1":{"block":{"type":"rb_msg_value"}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD3":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"rb_result"}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_kraken_week","file":"kraken-week.json","category":"money","title":"Kraken week in review","description":"Each Sunday evening, reads your Kraken balances and this week's prices, and emails what your holdings are worth in pounds, each one's share, and how each moved over the week. It only reads: it places no orders.","tip":"Needs kraken-cli, and a Kraken API key that can only query. Change the email address in the email block to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"review"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"review"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"review"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Read my Kraken balances. For each asset I hold, get its price in pounds today and seven days ago (daily OHLC). Then write a short summary: the total in pounds, each holding's value and share of the total, and how much each moved over the week, biggest moves first. Only read: don't place, change or cancel any orders."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":10}}},"TOOLS":{"block":{"type":"rb_agent_kraken","fields":{"MODE":"read"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your Kraken week"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_language_ladybird","file":"language-ladybird.json","category":"odds","title":"Ladybird lesson","description":"Each morning, one page of Second Thought's Ladybird book in a different historical language from its translations, Akkadian days included, with the English alongside and three words to learn.","tip":"Historical-language versions are as plausible as Second Thought's own translations, no more. Reading pages works in exported Python.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"lesson"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"lesson"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"lesson"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Today is "}}},"ADD1":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". Today's language: Monday Latin (la), Tuesday Old English (ang), Wednesday Akkadian (akk), Thursday Old Norse (non), Friday Koine Greek (grc), Saturday Sanskrit (sa), Sunday Mycenaean Greek in Linear B (gmy). Read https://raw.githubusercontent.com/itsfja/second-thought/main/docs/ladybird-book.md and pick one page, a different one each day. Read the language's everyday words at https://raw.githubusercontent.com/itsfja/second-thought/main/docs/words/<code>.md. Write that page in today's language, using those words where they fit, with the English alongside. Then give three words from it to learn, each with its meaning. End by saying the historical version is plausible, not authoritative."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":6}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Today's Ladybird lesson"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
@@ -9026,6 +9202,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
+["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
 ["web", "read public web pages and search the web", false],
 ["email_read", "read your email", false],
 ["calendar", "read your calendars", false],
@@ -9082,6 +9259,16 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/api/v3/brokerage/orders/preview$"
+  ]
+ ],
+ "mikrotik_free": [
+  [
+   "GET",
+   "^/rest/(interface|system/resource|system/health|log|user|user/group)$"
+  ],
+  [
+   "POST",
+   "^/rest/interface/ethernet/monitor$"
   ]
  ],
  "agent_asks": [
@@ -11456,6 +11643,208 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         "order_id": "a7b6c5d4-3e2f-4a1b-8c9d-0e1f2a3b4c66"
       }
     ]
+  },
+  "mikrotik": {
+    "note": "A sample MikroTik switch for the page and the tests (#360), shaped the way RouterOS 7's REST API answers. sfp-sfpplus2 is the NAS link that came up at 1Gbps.",
+    "interfaces": [
+      {
+        ".id": "*1",
+        "name": "ether1",
+        "type": "ether",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": "management"
+      },
+      {
+        ".id": "*1",
+        "name": "sfp-sfpplus1",
+        "type": "ether",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": "uplink to router"
+      },
+      {
+        ".id": "*1",
+        "name": "sfp-sfpplus2",
+        "type": "ether",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "12",
+        "tx-error": "0",
+        "rx-drop": "3",
+        "tx-drop": "0",
+        "link-downs": "2",
+        "comment": "NAS"
+      },
+      {
+        ".id": "*1",
+        "name": "sfp-sfpplus3",
+        "type": "ether",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": "Proxmox host"
+      },
+      {
+        ".id": "*1",
+        "name": "sfp-sfpplus4",
+        "type": "ether",
+        "running": "false",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": "spare"
+      },
+      {
+        ".id": "*6",
+        "name": "bridge",
+        "type": "bridge",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": ""
+      }
+    ],
+    "monitor": {
+      "ether1": {
+        "name": "ether1",
+        "status": "link-ok",
+        "rate": "1Gbps",
+        "full-duplex": "true"
+      },
+      "sfp-sfpplus1": {
+        "name": "sfp-sfpplus1",
+        "status": "link-ok",
+        "rate": "10Gbps",
+        "full-duplex": "true",
+        "sfp-module-present": "true",
+        "sfp-vendor-name": "MikroTik",
+        "sfp-vendor-part-number": "S+85DLC03D",
+        "sfp-temperature": "41C",
+        "sfp-rx-power": "-2.512dBm",
+        "sfp-tx-power": "-2.104dBm"
+      },
+      "sfp-sfpplus2": {
+        "name": "sfp-sfpplus2",
+        "status": "link-ok",
+        "rate": "1Gbps",
+        "full-duplex": "true",
+        "sfp-module-present": "true",
+        "sfp-vendor-name": "FS",
+        "sfp-vendor-part-number": "SFP-10GSR-85",
+        "sfp-temperature": "58C",
+        "sfp-rx-power": "-9.871dBm",
+        "sfp-tx-power": "-2.390dBm"
+      },
+      "sfp-sfpplus3": {
+        "name": "sfp-sfpplus3",
+        "status": "link-ok",
+        "rate": "10Gbps",
+        "full-duplex": "true",
+        "sfp-module-present": "true",
+        "sfp-vendor-name": "MikroTik",
+        "sfp-vendor-part-number": "S+RJ10",
+        "sfp-temperature": "67C"
+      },
+      "sfp-sfpplus4": {
+        "name": "sfp-sfpplus4",
+        "status": "no-link",
+        "sfp-module-present": "false"
+      }
+    },
+    "resource": {
+      "board-name": "CRS309-1G-8S+",
+      "version": "7.16.1 (stable)",
+      "uptime": "3w2d4h11m",
+      "cpu-load": "4",
+      "free-memory": "413138944",
+      "total-memory": "536870912"
+    },
+    "health": [
+      {
+        ".id": "*1",
+        "name": "temperature",
+        "value": "46",
+        "type": "C"
+      },
+      {
+        ".id": "*2",
+        "name": "cpu-temperature",
+        "value": "52",
+        "type": "C"
+      },
+      {
+        ".id": "*3",
+        "name": "psu1-state",
+        "value": "ok",
+        "type": ""
+      }
+    ],
+    "log": [
+      {
+        ".id": "*a1",
+        "time": "2026-11-09 18:02:11",
+        "topics": "interface,info",
+        "message": "sfp-sfpplus2 link down"
+      },
+      {
+        ".id": "*a2",
+        "time": "2026-11-09 18:02:14",
+        "topics": "interface,info",
+        "message": "sfp-sfpplus2 link up (speed 1G, full duplex)"
+      },
+      {
+        ".id": "*a3",
+        "time": "2026-11-10 07:30:00",
+        "topics": "system,info,account",
+        "message": "user monitor logged in via rest-api"
+      }
+    ],
+    "users": [
+      {
+        ".id": "*1",
+        "name": "admin",
+        "group": "full"
+      },
+      {
+        ".id": "*2",
+        "name": "monitor",
+        "group": "read-api"
+      }
+    ],
+    "groups": [
+      {
+        ".id": "*1",
+        "name": "full",
+        "policy": "local,telnet,ssh,ftp,reboot,read,write,policy,test,winbox,password,web,sniff,sensitive,api,romon,rest-api"
+      },
+      {
+        ".id": "*2",
+        "name": "read-api",
+        "policy": "read,api,rest-api,!local,!telnet,!ssh,!ftp,!reboot,!write,!policy,!test,!winbox,!password,!web,!sniff,!sensitive,!romon"
+      }
+    ]
   }
 }
 </script>
@@ -11719,7 +12108,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -11731,7 +12120,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -11908,7 +12297,8 @@ HOW TO MAP CODE
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
-    rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade", rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
+    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -12252,6 +12642,15 @@ HOW TO MAP CODE
       { style:"coinbase", inputsInline:true, tooltip:"Places a real market order, like 'preview Coinbase order'. It previews it first, then always asks you, with the fee and total, even when nothing else asks; with nobody there to say yes, it doesn't run. Needs a key with Trade permission. On this page nothing is bought or sold." }),
     S("rb_coinbase_cancel", "cancel Coinbase order %1", [val("ORDER")], { style:"coinbase", inputsInline:true,
       tooltip:"Cancels one of your open orders, by its id (from 'Coinbase open orders'). It always asks you first, and doesn't run with nobody there." }),
+    /* MikroTik (#360): read only */
+    V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
+      tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),
+    V("rb_mikrotik_sfp", "MikroTik SFP modules", [], "Array", { style:"mikrotik",
+      tooltip:"A list of records, one for each SFP module plugged in: port, module, temperature (°C), rx_power and tx_power (dBm)." }),
+    V("rb_mikrotik_health", "MikroTik health", [], null, { style:"mikrotik",
+      tooltip:"A record about the router or switch itself: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and any other sensors it has." }),
+    V("rb_mikrotik_log", "MikroTik log, last %1 lines", [val("N")], "Array", { style:"mikrotik", inputsInline:true,
+      tooltip:"The last lines of the router's log, oldest first, each as \"time topics: message\"." }),
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
@@ -12420,6 +12819,9 @@ HOW TO MAP CODE
       B("rb_coinbase_candles", { PRODUCT:K("BTC-GBP"), N:N(7) }), B("rb_coinbase_orders"),
       B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_cancel", { ORDER:K("") })
+    ]},
+    { kind:"category", name:"MikroTik", categorystyle:"mikrotik", contents:[
+      B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
     ]},
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")
@@ -12649,6 +13051,7 @@ HOW TO MAP CODE
   window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
     : c.kind === "coinbase" ? coinbaseMoney(c.method, c.path)
+    : c.kind === "mikrotik" ? SAFETY.mikrotik_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
     : c.kind === "asks" ? AGENT_ASKS.has(c.tool) : c.kind === "private" ? AGENT_PRIVATE.has(c.tool)
     : agentMustAsk(c.tool, c.input || {}, c.seen || "", !!c.private));
 
@@ -14592,7 +14995,8 @@ HOW TO MAP CODE
     add(n.calendar, ["CALENDAR_URL"]);
     add(n.feeds, ["RB_FEEDS"]);
     add(n.homey, ["HOMEY_URL", "HOMEY_API_KEY"]);
-    add(n.coinbase, ["COINBASE_KEY"]);  // the key file's contents: orders never run there, since nobody is there to say yes
+    add(n.coinbase, ["COINBASE_KEY"]);
+    add(n.mikrotik, ["MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_PASSWORD", "MIKROTIK_CERT_SHA256"]);  // the key file's contents: orders never run there, since nobody is there to say yes
     add(n.mqtt, ["MQTT_HOST"], ["MQTT_USERNAME", "MQTT_PASSWORD", "MQTT_TLS"]);
     return out;
   }
@@ -14980,6 +15384,7 @@ HOW TO MAP CODE
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
+             mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -15026,6 +15431,11 @@ HOW TO MAP CODE
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.mikrotik) out.push("", "[mikrotik]",
+      "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
+      "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
+      "; router's certificate fingerprint to pin.",
+      "MIKROTIK_URL = https://192.168.88.1", "MIKROTIK_USER = ", "MIKROTIK_PASSWORD = ", "MIKROTIK_CERT_SHA256 = ");
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -15329,6 +15739,10 @@ HOW TO MAP CODE
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
+        case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
+        case "rb_mikrotik_health": return "(await R.mikrotik_health())";
+        case "rb_mikrotik_log": return "(await R.mikrotik_log(" + I("N", "20") + "))";
         case "rb_coinbase_value": return "(await R.coinbase_value())";
         case "rb_coinbase_price": return "(await R.coinbase_price(" + pyStr(b.getFieldValue("WHAT")) + ", " + I("PRODUCT", '""') + "))";
         case "rb_coinbase_candles": return "(await R.coinbase_candles(" + pyStr(b.getFieldValue("SIZE")) + ", " + I("PRODUCT", '""') + ", " + I("N", "7") + "))";
@@ -17282,7 +17696,7 @@ HOW TO MAP CODE
     const note = days === 0 ? "" : days === 1 ? " (next day)" : days === -1 ? " (the day before)" : days > 0 ? " (" + days + " days later)" : " (" + (-days) + " days earlier)";
     return pad2(Math.floor(t / 60)) + ":" + pad2(t % 60) + note;
   }
-  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase and the rest.
+  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik and the rest.
   /* ---------- Connections on the page: sample feeds, GitHub, Telegram, email and calendar ----------
      The page can't reach these services, so it uses the sample data below (like the sample house). The text each one gives
      back is shaped like what exported Python gives from the real services. */
@@ -17295,7 +17709,7 @@ HOW TO MAP CODE
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account" }[what]) : what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -17701,6 +18115,41 @@ HOW TO MAP CODE
     if (!(cbSample().orders || []).some(o => o.order_id === id)) fail(tr("Coinbase didn't cancel the order: {why}.", { why:"unknown cancel order" }));
     addStep("Coinbase order cancelled", { mono:true, text:id }).done("sample account", "ok");
     return true;
+  }
+  /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
+     only reads. Matches the runtime's mikrotik_ methods and tests/fake_mikrotik.py, which serves the same sample. */
+  const mtSample = () => { connNote("MikroTik"); return CONN.mikrotik || {}; };
+  const mtNum = v => { const m = /-?\d+(?:\.\d+)?/.exec(str(v)); return m ? Number(m[0]) : ""; };
+  function mikrotikPorts(){
+    const s = mtSample(), mon = s.monitor || {};
+    const add = (i, ...ks) => ks.reduce((t, k) => t + (Number(mtNum(i[k])) || 0), 0);
+    const out = (s.interfaces || []).filter(i => i.disabled !== "true" && ["ether", "bridge", "vlan", "bond"].includes(i.type)).map(i => ({
+      port:str(i.name), running:i.running === "true", speed:i.running === "true" ? str((mon[i.name] || {}).rate || "") : "",
+      errors:add(i, "rx-error", "tx-error"), drops:add(i, "rx-drop", "tx-drop"), link_downs:add(i, "link-downs"), comment:str(i.comment || "") }));
+    addStep("MikroTik ports", { mono:true, text:out.map(p => p.port + ": " + (p.speed || "-")).join("\n") || tr("(nothing)") }).done(tr("{n} ports", { n:out.length }), "ok");
+    return out;
+  }
+  function mikrotikSfp(){
+    const s = mtSample(), mon = s.monitor || {};
+    return (s.interfaces || []).filter(i => i.type === "ether" && i.disabled !== "true" && (mon[i.name] || {})["sfp-module-present"] === "true").map(i => {
+      const m = mon[i.name];
+      return { port:str(i.name), module:[str(m["sfp-vendor-name"] || "").trim(), str(m["sfp-vendor-part-number"] || "").trim()].filter(Boolean).join(" "),
+               temperature:mtNum(m["sfp-temperature"]), rx_power:mtNum(m["sfp-rx-power"]), tx_power:mtNum(m["sfp-tx-power"]) };
+    });
+  }
+  function mikrotikHealth(){
+    const s = mtSample(), r = s.resource || {};
+    const out = { board:str(r["board-name"] || ""), version:str(r.version || ""), uptime:str(r.uptime || ""), cpu_load:mtNum(r["cpu-load"]),
+                  free_memory:Math.round((Number(mtNum(r["free-memory"])) || 0) / 1048576 * 10) / 10, temperature:"" };
+    for (const h of s.health || []) {
+      const v = str(h.value);
+      out[str(h.name).replace(/\W+/g, "_").replace(/^_+|_+$/g, "")] = mtNum(v) !== "" && /^-?[\d.]+\w?$/.test(v) ? mtNum(v) : v;
+    }
+    return out;
+  }
+  function mikrotikLog(count){
+    const n = Math.max(1, Math.min(500, Math.trunc(num(count)) || 20));
+    return (mtSample().log || []).slice(-n).map(r => str(r.time) + " " + str(r.topics) + ": " + str(r.message));
   }
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
   function pagePart(text, words){
@@ -18472,6 +18921,10 @@ HOW TO MAP CODE
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_coinbase_balances": return coinbaseBalances();
+      case "rb_mikrotik_ports": return mikrotikPorts();
+      case "rb_mikrotik_sfp": return mikrotikSfp();
+      case "rb_mikrotik_health": return mikrotikHealth();
+      case "rb_mikrotik_log": return mikrotikLog(await input(b, tc, "N", 20));
       case "rb_coinbase_value": return coinbaseValue();
       case "rb_coinbase_price": return coinbasePrice(b.getFieldValue("WHAT"), await input(b, tc, "PRODUCT"));
       case "rb_coinbase_candles": return coinbaseCandles(b.getFieldValue("SIZE"), await input(b, tc, "PRODUCT"), await input(b, tc, "N", 7));

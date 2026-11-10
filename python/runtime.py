@@ -87,7 +87,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -151,7 +151,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD")
 
 
 def _load_keychain():
@@ -1111,6 +1111,11 @@ SAFETY = {
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
     "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
+    # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
+    # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
+    # the network with it, and nothing here is worth that.
+    "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
+                      ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
     "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
     # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it
@@ -1210,6 +1215,12 @@ def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return not any(m == method and re.match(p, path) for m, p in SAFETY["coinbase_free"])
+
+
+def mikrotik_allowed(method, path):
+    """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
 
 
 def same_problem(a, b):
@@ -1641,6 +1652,7 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
+    ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -3855,6 +3867,123 @@ class Connections:
         self.log(tr("Coinbase order cancelled"), oid, tr("done"))
         return True
 
+    # MikroTik (#360)
+    # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
+    # user in a group with just the read, api and rest-api policies. Only the calls in SAFETY["mikrotik_free"] are ever
+    # made. A router's certificate is usually its own (self-signed), so MIKROTIK_CERT_SHA256 pins it: the connection
+    # goes ahead only if the certificate's SHA-256 fingerprint matches. --doctor shows the fingerprint it sees.
+
+    async def _mikrotik(self, method, path, body=None):
+        if not mikrotik_allowed(method, path):
+            raise RunError(tr("Second Thought only reads from MikroTik, so it doesn't send {what}.", what=f"{method} {path}"))
+        base = os.environ.get("MIKROTIK_URL", "").strip().rstrip("/")
+        user, password = os.environ.get("MIKROTIK_USER", "").strip(), os.environ.get("MIKROTIK_PASSWORD", "")
+        if not base or not user:
+            raise RunError(tr("MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.", where_keys=WHERE_KEYS))
+        if "://" not in base:
+            base = "https://" + base
+        u = urllib.parse.urlparse(base)
+        pin = re.sub(r"[^0-9a-f]", "", os.environ.get("MIKROTIK_CERT_SHA256", "").lower())
+        headers = {"Authorization": "Basic " + base64.b64encode(f"{user}:{password}".encode()).decode(), "Accept": "application/json"}
+        data = None
+        if body is not None:
+            data, headers["Content-Type"] = json.dumps(body).encode(), "application/json"
+
+        def go():
+            if u.scheme == "https":
+                import ssl
+                ctx = ssl.create_default_context()
+                if pin:  # the pin is the check: a self-signed certificate wouldn't pass the usual one
+                    ctx.check_hostname, ctx.verify_mode = False, ssl.CERT_NONE
+                conn = http.client.HTTPSConnection(u.hostname, u.port or 443, timeout=15, context=ctx)
+            else:
+                conn = http.client.HTTPConnection(u.hostname, u.port or 80, timeout=15)
+            try:
+                conn.connect()
+                if u.scheme == "https" and pin:
+                    seen = hashlib.sha256(conn.sock.getpeercert(binary_form=True)).hexdigest()
+                    if seen != pin:
+                        raise RunError(tr("The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.", seen=seen))
+                conn.request(method, (u.path or "") + path, body=data, headers=headers)
+                r = conn.getresponse()
+                raw = r.read()
+            except RunError:
+                raise
+            except Exception as e:  # noqa: BLE001 - certificate, refused, timed out: say which
+                text = str(e)
+                if "CERTIFICATE_VERIFY_FAILED" in text:
+                    raise RunError(tr("The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.")) from None
+                raise RunError(tr("Couldn't reach the MikroTik at {url} ({reason}).", url=base, reason=_short(text, 120))) from None
+            finally:
+                conn.close()
+            if r.status == 401:
+                raise RunError(tr("The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD."))
+            if r.status >= 400:
+                try:
+                    said = json.loads(raw)
+                    said = to_str(said.get("detail") or said.get("message") or "") if isinstance(said, dict) else ""
+                except ValueError:
+                    said = ""
+                raise RunError(tr("MikroTik: {why}.", why=tr("it answered {code}", code=r.status) + (f" ({_short(said, 120)})" if said else "")))
+            return json.loads(raw) if raw.strip() else []
+        return await asyncio.to_thread(go)
+
+    @staticmethod
+    def _mt_num(v):
+        """RouterOS gives numbers as text, some with a unit on the end (38C, -3.979dBm): just the number, or ""."""
+        m = re.search(r"-?\d+(?:\.\d+)?", to_str(v))
+        return _clean_num(float(m.group())) if m else ""
+
+    async def _mt_monitor(self, ports):
+        names = [p for p in ports if p]
+        if not names:
+            return {}
+        got = await self._mikrotik("POST", "/rest/interface/ethernet/monitor", {"numbers": ",".join(names), "once": ""})
+        return {to_str(m.get("name")): m for m in got if isinstance(m, dict)}
+
+    async def mikrotik_ports(self):
+        """Every port: port, running (yes/no), speed (as RouterOS says it, like 10Gbps; "" when down), errors and drops
+        since the switch started, link downs and comment."""
+        ifs = [i for i in await self._mikrotik("GET", "/rest/interface") if isinstance(i, dict) and to_str(i.get("disabled")) != "true"]
+        mon = await self._mt_monitor([to_str(i.get("name")) for i in ifs if to_str(i.get("type")) == "ether"])
+        n = lambda i, *ks: _clean_num(sum(float(self._mt_num(i.get(k)) or 0) for k in ks))  # noqa: E731
+        out = [{"port": to_str(i.get("name")), "running": to_str(i.get("running")) == "true",
+                "speed": to_str((mon.get(to_str(i.get("name"))) or {}).get("rate")) if to_str(i.get("running")) == "true" else "",
+                "errors": n(i, "rx-error", "tx-error"), "drops": n(i, "rx-drop", "tx-drop"), "link_downs": n(i, "link-downs"),
+                "comment": to_str(i.get("comment"))} for i in ifs if to_str(i.get("type")) in ("ether", "bridge", "vlan", "bond")]
+        lines = "\n".join(f"{p['port']}: {p['speed'] or '-'}" for p in out)
+        self.log(tr("MikroTik ports"), lines or tr("(nothing)"), tr("{n} ports", n=len(out)))
+        return out
+
+    async def mikrotik_sfp(self):
+        """Each SFP module in the switch: port, module (maker and part), temperature (°C), rx_power and tx_power (dBm)."""
+        ifs = [i for i in await self._mikrotik("GET", "/rest/interface") if isinstance(i, dict) and to_str(i.get("type")) == "ether"]
+        mon = await self._mt_monitor([to_str(i.get("name")) for i in ifs if to_str(i.get("disabled")) != "true"])
+        return [{"port": name, "module": " ".join(x for x in (to_str(m.get("sfp-vendor-name")).strip(), to_str(m.get("sfp-vendor-part-number")).strip()) if x),
+                 "temperature": self._mt_num(m.get("sfp-temperature")), "rx_power": self._mt_num(m.get("sfp-rx-power")),
+                 "tx_power": self._mt_num(m.get("sfp-tx-power"))}
+                for name, m in mon.items() if to_str(m.get("sfp-module-present")) == "true"]
+
+    async def mikrotik_health(self):
+        """The switch itself: board, version, uptime, cpu_load (%), free_memory (MB) and temperature (°C), with any other
+        sensor it has (cpu_temperature, fan1_speed and so on)."""
+        res = await self._mikrotik("GET", "/rest/system/resource")
+        res = res[0] if isinstance(res, list) and res else res if isinstance(res, dict) else {}
+        out = {"board": to_str(res.get("board-name")), "version": to_str(res.get("version")), "uptime": to_str(res.get("uptime")),
+               "cpu_load": self._mt_num(res.get("cpu-load")), "free_memory": _clean_num(math.floor(float(self._mt_num(res.get("free-memory")) or 0) / 1048576 * 10 + 0.5) / 10),
+               "temperature": ""}
+        for s in await self._mikrotik("GET", "/rest/system/health"):
+            if isinstance(s, dict) and s.get("name"):
+                v = to_str(s.get("value"))
+                out[re.sub(r"\W+", "_", to_str(s.get("name"))).strip("_")] = self._mt_num(v) if self._mt_num(v) != "" and re.fullmatch(r"-?[\d.]+\w?", v) else v
+        return out
+
+    async def mikrotik_log(self, count=20):
+        """The log's last few lines, oldest first: "time topics: message"."""
+        n = max(1, min(500, int(num(count) or 20)))
+        rows = [r for r in await self._mikrotik("GET", "/rest/log") if isinstance(r, dict)][-n:]
+        return [f"{to_str(r.get('time'))} {to_str(r.get('topics'))}: {to_str(r.get('message'))}" for r in rows]
+
     # MQTT
     def _mqtt_new(self, on_message=None, topics=()):
         """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
@@ -5883,6 +6012,8 @@ import re  # noqa: E402,F811
 import importlib.metadata  # noqa: E402,F811 - below the line, so python/runtime.py has them too
 import importlib.util  # noqa: E402,F811
 import shutil  # noqa: E402,F811
+import hashlib  # noqa: E402,F811
+import urllib.parse  # noqa: E402,F811
 import socket  # noqa: E402,F811
 
 
@@ -5986,6 +6117,46 @@ class Doctor:
         tiers = [getattr(self, "primary", None)] + list(getattr(self, "backups", None) or [])
         return [t for t in tiers if isinstance(t, str) and t]
 
+    async def _doctor_mikrotik(self):
+        """The MikroTik check (#360): reachable, the certificate pinned, and an account that can only read."""
+        base = os.environ.get("MIKROTIK_URL", "").strip()
+        pinned = os.environ.get("MIKROTIK_CERT_SHA256", "").strip()
+        if base and not base.lower().startswith("http://") and not pinned:
+            seen = await asyncio.to_thread(self._mt_fingerprint, base)
+            if seen:
+                raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.", url=base, seen=seen))
+        res = await self.mikrotik_health()
+        user = os.environ.get("MIKROTIK_USER", "").strip()
+        group = next((to_str(u.get("group")) for u in await self._mikrotik("GET", "/rest/user") if isinstance(u, dict) and u.get("name") == user), "")
+        policy = next((to_str(g.get("policy")) for g in await self._mikrotik("GET", "/rest/user/group") if isinstance(g, dict) and g.get("name") == group), "")
+        extra = sorted({p for p in policy.split(",") if p and not p.startswith("!")} - {"read", "api", "rest-api"})
+        said = tr("{board}, RouterOS {version}", board=res.get("board") or "MikroTik", version=res.get("version") or "?")
+        if base.lower().startswith("http://"):
+            return "NOTE", said + "; " + tr("the password goes unencrypted over http://. Use the www-ssl service and https:// instead.")
+        if extra:
+            return "NOTE", said + "; " + tr("the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.", group=group, what=", ".join(extra))
+        return said
+
+    @staticmethod
+    def _mt_fingerprint(base):
+        """The SHA-256 fingerprint of the certificate the router shows, if it isn't one this computer trusts already."""
+        import socket
+        import ssl
+        u = urllib.parse.urlparse(base if "://" in base else "https://" + base)
+        try:
+            with socket.create_connection((u.hostname, u.port or 443), timeout=10) as s:
+                with ssl.create_default_context().wrap_socket(s, server_hostname=u.hostname):
+                    return None  # trusted as it is
+        except ssl.SSLCertVerificationError:
+            pass
+        except OSError:
+            return None  # can't reach it: the request after says so
+        ctx = ssl.create_default_context()
+        ctx.check_hostname, ctx.verify_mode = False, ssl.CERT_NONE
+        with socket.create_connection((u.hostname, u.port or 443), timeout=10) as s:
+            with ctx.wrap_socket(s) as t:
+                return hashlib.sha256(t.getpeercert(binary_form=True)).hexdigest()
+
     async def _doctor_connections(self, can, mcp):
         """(area, coroutine giving the detail) for each connection the program uses. Every one only reads."""
         has = lambda *ids: any(i in can for i in ids)  # noqa: E731
@@ -6013,6 +6184,10 @@ class Doctor:
                     return "NOTE", tr("the key works and can trade, but this program only reads: a View-only key is safer.")
                 return tr("the key works: it can trade (every order asks you first)") if perms.get("can_trade") else tr("the key works, View only")
             out.append(("Coinbase", coinbase))
+        if has("mikrotik_read"):
+            async def mikrotik():
+                return await self._doctor_mikrotik()
+            out.append(("MikroTik", mikrotik))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -6282,7 +6457,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 

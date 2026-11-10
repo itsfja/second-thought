@@ -153,7 +153,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"Ѿверзтаѧ повелѣніѧ твоѧ (id, product, side, size, price, filled и created), или послѣднѧѧ исполненіѧ (time, product, side, size, price, fee и order)."},
 "rb_coinbase_preview":{"message0":"предꙋзри повелѣніе Coinbase: %1 %2 ѿ %3","tooltip":"Что бы было повелѣніе торжища, не дадꙋщꙋ емꙋ: запись съ size, spend, fee, total, slippage и warnings. Кꙋпленіе иждиваетъ число вторыѧ монеты (50 ѿ BTC-GBP иждиваетъ £50); продаѧніе продаетъ число первыѧ (0.01 ѿ BTC-GBP продаетъ 0.01 BTC). Ничтоже измѣнѧетсѧ."},
 "rb_coinbase_order":{"message0":"даждь повелѣніе Coinbase: %1 %2 ѿ %3","tooltip":"Даетъ истинное повелѣніе торжища, ꙗкоже «предꙋзри повелѣніе Coinbase». Прежде предꙋзритъ, потомъ присно вопрошаетъ тѧ, съ мздою и всѣмъ числомъ, аще и ничтоже иное вопрошаетъ; не сꙋщꙋ никомꙋже рещи «ей», не бываетъ. Требꙋетъ ключа съ властію Trade. На сей страницѣ ничтоже кꙋплѧетсѧ ни продаетсѧ."},
-"rb_coinbase_cancel":{"message0":"ѿмѣни повелѣніе Coinbase %1","tooltip":"Ѿмѣнѧетъ єдино ѿ ѿверзтыхъ повелѣній твоихъ, по id егѡ (ѿ «ѿверзтыѧ повелѣніѧ Coinbase»). Присно прежде вопрошаетъ тѧ, и не бываетъ, не сꙋщꙋ никомꙋже."}
+"rb_coinbase_cancel":{"message0":"ѿмѣни повелѣніе Coinbase %1","tooltip":"Ѿмѣнѧетъ єдино ѿ ѿверзтыхъ повелѣній твоихъ, по id егѡ (ѿ «ѿверзтыѧ повелѣніѧ Coinbase»). Присно прежде вопрошаетъ тѧ, и не бываетъ, не сꙋщꙋ никомꙋже."},
+"rb_mikrotik_ports":{"message0":"врата MikroTik","tooltip":"Списокъ записей, єдина на всѧ врата MikroTik твоегѡ: port, running, speed (ꙗкоже 10Gbps), errors, drops, link_downs и comment. Погрѣшенїѧ и паденїѧ числѧтсѧ ѿ послѣднѧгѡ начала. Точїю чтетъ: ничтоже измѣнѧетсѧ. На сей страницѣ ꙋпотреблѧетъ преключатель ѡбразца."},
+"rb_mikrotik_sfp":{"message0":"части SFP MikroTik","tooltip":"Списокъ записей, єдина на всѧкꙋ вложенꙋю часть SFP: port, module, temperature (°C), rx_power и tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"здравїе MikroTik","tooltip":"Запись ѡ самомъ наставницѣ: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), и всѧкъ иный чꙋвственникъ, егоже имать."},
+"rb_mikrotik_log":{"message0":"лѣтопись MikroTik, послѣднїѧ %1 строки","tooltip":"Послѣднїѧ строки лѣтописи наставника, древнѣйшаѧ прежде, всѧка ꙗкоже «time topics: message»."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"на всѧкъ день","weekdays":"въ дни дѣланїѧ","weekends":"въ дни ѿдыха"},
@@ -201,7 +205,8 @@
 "Variables":"Измѣняемаѧ",
 "Wait & time":"Жди и времѧ",
 "You":"Ты",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1013,7 +1018,12 @@
 "Coinbase account":"счетъ Coinbase",
 "sample account":"счетъ ѡбразца",
 "trade on your Coinbase account with real money (asking you before every order)":"кꙋпꙋ дѣѧти на счетѣ твоемъ Coinbase истинными сребреники (вопрошаѧ тѧ прежде всѧкагѡ повелѣніѧ)",
-"read your Coinbase balances and orders, and market prices":"чести ѡстатки и повелѣніѧ твоѧ Coinbase, и цѣны торжища"
+"read your Coinbase balances and orders, and market prices":"чести ѡстатки и повелѣніѧ твоѧ Coinbase, и цѣны торжища",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Вратá MikroTik",
+"{n} ports":"{n} вратъ",
+"MikroTik switch":"преключатель MikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"чести MikroTik твой: врата, части, здравїе и лѣтопись"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -1966,7 +1976,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"ключь дѣйствꙋетъ, но можетъ и сребро преносити. Сїѧ программа николиже преноситъ: сотвори ключь безъ власти Transfer.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"ключь дѣйствꙋетъ, но имать точїю View, тѣмже повелѣніѧ сеѧ программы ѿверглисѧ бы. Сотвори ключь съ властію Trade, ѡграниченъ во єдинꙋ сокровищницꙋ.",
 "the key works: it can trade (every order asks you first)":"ключь дѣйствꙋетъ: можетъ кꙋпꙋ дѣѧти (всѧко повелѣніе прежде вопрошаетъ тѧ)",
-"too many requests just now; try again in a minute":"мнѡга прошеніѧ нынѣ; паки покꙋсисѧ по минꙋтѣ"
+"too many requests just now; try again in a minute":"мнѡга прошеніѧ нынѣ; паки покꙋсисѧ по минꙋтѣ",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Вратá MikroTik",
+"{n} ports":"{n} вратъ",
+"Couldn't reach the MikroTik at {url} ({reason}).":"Не возможе достигнꙋти MikroTik на {url} ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik требꙋетъ MIKROTIK_URL, MIKROTIK_USER и MIKROTIK_PASSWORD {where_keys}: мѣсто наставника (ꙗкоже https://192.168.88.1) и потребителѧ въ собранїи точїю съ властьми read, api и rest-api.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought точїю чтетъ ѿ MikroTik, тѣмже не посылаетъ {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik ѿвержѐ MIKROTIK_USER и MIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Сей счетникъ не вѣрꙋетъ свидѣтельствꙋ MikroTik (наставницы своѐ творѧтъ). Пꙋсти --doctor видѣти знаменїе егѡ, и положи въ MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Свидѣтельство MikroTik нѣсть то, еже MIKROTIK_CERT_SHA256 ꙋтверждаетъ (есть {seen}). Аще премѣнилъ еси свидѣтельство, ѡбнови число; аще ли нѣтъ, нѣчто стоитъ посредѣ.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"собранїе счета ({group}) можетъ и {what}. Second Thought точїю чтетъ, тѣмже собранїе точїю съ read, api и rest-api безбѣднѣе.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"тайное слово идетъ ѡткрыто чрезъ http://. Возьми паче слꙋжбꙋ www-ssl и https://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"свидѣтельство наставника своѐ есть, ꙋтверди е: аще {url} есть MikroTik твой, положи MIKROTIK_CERT_SHA256 = {seen} въ second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

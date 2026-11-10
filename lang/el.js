@@ -153,7 +153,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"Οι ανοιχτές εντολές σας (id, product, side, size, price, filled και created) ή οι τελευταίες εκτελέσεις σας (time, product, side, size, price, fee και order)."},
 "rb_coinbase_preview":{"message0":"προεπισκόπηση εντολής Coinbase: %1 %2 του %3","tooltip":"Σε τι θα έβγαινε μια εντολή αγοράς ή πώλησης στην αγορά, χωρίς να δοθεί: μια εγγραφή με size, spend, fee, total, slippage και warnings. Η αγορά ξοδεύει ποσό του δεύτερου νομίσματος (50 του BTC-GBP ξοδεύει £50)· η πώληση πουλά ποσό του πρώτου (0.01 του BTC-GBP πουλά 0.01 BTC). Τίποτα δεν αλλάζει."},
 "rb_coinbase_order":{"message0":"δώσε εντολή Coinbase: %1 %2 του %3","tooltip":"Δίνει μια πραγματική εντολή στην αγορά, όπως η «προεπισκόπηση εντολής Coinbase». Πρώτα κάνει προεπισκόπηση, μετά σας ρωτά πάντα, με την προμήθεια και το σύνολο, ακόμη κι όταν τίποτε άλλο δεν ρωτά· χωρίς κανέναν να πει ναι, δεν εκτελείται. Χρειάζεται κλειδί με το δικαίωμα Trade. Σε αυτή τη σελίδα τίποτα δεν αγοράζεται ούτε πουλιέται."},
-"rb_coinbase_cancel":{"message0":"ακύρωσε την εντολή Coinbase %1","tooltip":"Ακυρώνει μία από τις ανοιχτές εντολές σας, με το id της (από τις «ανοιχτές εντολές Coinbase»). Σας ρωτά πάντα πρώτα, και δεν εκτελείται χωρίς κανέναν."}
+"rb_coinbase_cancel":{"message0":"ακύρωσε την εντολή Coinbase %1","tooltip":"Ακυρώνει μία από τις ανοιχτές εντολές σας, με το id της (από τις «ανοιχτές εντολές Coinbase»). Σας ρωτά πάντα πρώτα, και δεν εκτελείται χωρίς κανέναν."},
+"rb_mikrotik_ports":{"message0":"θύρες MikroTik","tooltip":"Μια λίστα εγγραφών, μία για κάθε θύρα του δρομολογητή ή μεταγωγέα σας MikroTik: port, running, speed (όπως 10Gbps), errors, drops, link_downs και comment. Σφάλματα και απορρίψεις μετρούν από την τελευταία εκκίνηση. Μόνο διαβάζει: τίποτα δεν αλλάζει στον μεταγωγέα. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα μεταγωγέα."},
+"rb_mikrotik_sfp":{"message0":"μονάδες SFP του MikroTik","tooltip":"Μια λίστα εγγραφών, μία για κάθε συνδεδεμένη μονάδα SFP: port, module, temperature (°C), rx_power και tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"κατάσταση MikroTik","tooltip":"Μια εγγραφή για τον ίδιο τον δρομολογητή ή μεταγωγέα: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), και κάθε άλλος αισθητήρας που έχει."},
+"rb_mikrotik_log":{"message0":"καταγραφή MikroTik, τελευταίες %1 γραμμές","tooltip":"Οι τελευταίες γραμμές της καταγραφής του δρομολογητή, η παλαιότερη πρώτα, η καθεμία ως «time topics: message»."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"κάθε μέρα","weekdays":"τις καθημερινές","weekends":"τα Σαββατοκύριακα"},
@@ -202,7 +206,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"Έξοδος",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1014,7 +1019,12 @@
 "Coinbase account":"λογαριασμός Coinbase",
 "sample account":"δείγμα λογαριασμού",
 "trade on your Coinbase account with real money (asking you before every order)":"να κάνει συναλλαγές στον λογαριασμό σας Coinbase με πραγματικά χρήματα (ρωτώντας σας πριν από κάθε εντολή)",
-"read your Coinbase balances and orders, and market prices":"να διαβάζει τα υπόλοιπα και τις εντολές σας στο Coinbase, και τις τιμές της αγοράς"
+"read your Coinbase balances and orders, and market prices":"να διαβάζει τα υπόλοιπα και τις εντολές σας στο Coinbase, και τις τιμές της αγοράς",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Θύρες MikroTik",
+"{n} ports":"{n} θύρες",
+"MikroTik switch":"μεταγωγέας MikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"να διαβάζει τον δρομολογητή ή μεταγωγέα σας MikroTik: θύρες, μονάδες, κατάσταση και αρχείο καταγραφής"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1967,6 +1977,20 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"το κλειδί λειτουργεί, αλλά μπορεί και να μεταφέρει χρήματα. Αυτό το πρόγραμμα δεν μεταφέρει ποτέ: φτιάξτε κλειδί χωρίς το δικαίωμα Transfer.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"το κλειδί λειτουργεί, αλλά έχει μόνο View, οπότε οι εντολές αυτού του προγράμματος θα απορρίπτονταν. Φτιάξτε κλειδί με το δικαίωμα Trade, περιορισμένο σε ένα χαρτοφυλάκιο.",
 "the key works: it can trade (every order asks you first)":"το κλειδί λειτουργεί: μπορεί να κάνει συναλλαγές (κάθε εντολή σας ρωτά πρώτα)",
-"too many requests just now; try again in a minute":"πάρα πολλά αιτήματα αυτή τη στιγμή· δοκιμάστε ξανά σε ένα λεπτό"
+"too many requests just now; try again in a minute":"πάρα πολλά αιτήματα αυτή τη στιγμή· δοκιμάστε ξανά σε ένα λεπτό",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Θύρες MikroTik",
+"{n} ports":"{n} θύρες",
+"Couldn't reach the MikroTik at {url} ({reason}).":"Δεν ήταν δυνατή η σύνδεση με το MikroTik στο {url} ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"Το MikroTik χρειάζεται MIKROTIK_URL, MIKROTIK_USER και MIKROTIK_PASSWORD {where_keys}: τη διεύθυνση του δρομολογητή (όπως https://192.168.88.1) και έναν χρήστη σε ομάδα μόνο με τις πολιτικές read, api και rest-api.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Το Second Thought μόνο διαβάζει από το MikroTik, οπότε δεν στέλνει {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"Το MikroTik απέρριψε τα MIKROTIK_USER και MIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Αυτός ο υπολογιστής δεν εμπιστεύεται το πιστοποιητικό του MikroTik (οι δρομολογητές συνήθως φτιάχνουν το δικό τους). Τρέξτε --doctor για να δείτε το αποτύπωμά του, και βάλτε το στο MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Το πιστοποιητικό του MikroTik δεν είναι αυτό που ορίζει το MIKROTIK_CERT_SHA256 (είναι {seen}). Αν αντικαταστήσατε το πιστοποιητικό, ενημερώστε την τιμή· αλλιώς, κάτι παρεμβάλλεται.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"η ομάδα του λογαριασμού ({group}) μπορεί επίσης {what}. Το Second Thought μόνο διαβάζει, οπότε μια ομάδα μόνο με read, api και rest-api είναι ασφαλέστερη.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"ο κωδικός πηγαίνει χωρίς κρυπτογράφηση μέσω http://. Χρησιμοποιήστε την υπηρεσία www-ssl και https://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"το πιστοποιητικό του δρομολογητή είναι δικό του, οπότε ορίστε το: αν το {url} είναι το MikroTik σας, βάλτε MIKROTIK_CERT_SHA256 = {seen} στο second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 }
 };

@@ -27,6 +27,7 @@ Made by tools/sync.py from i18n/cop.json: edit that, not this.
 - Wait & time: ϩⲩⲡⲟⲙⲉⲓⲛⲉ ⲙⲛ ⲟⲩⲟⲉⲓϣ
 - You: ⲛⲧⲟⲕ
 - Coinbase: Coinbase
+- MikroTik: MikroTik
 - Listeners: they run while the exported program runs on schedule: ⲛⲥⲱⲧⲙ: ϣⲁⲩⲁⲁⲩ ϩⲟⲧⲁⲛ ⲛⲧⲁⲝⲓⲥ ⲉⲃⲟⲗ ϣⲁϥⲁⲁⲩ ⲕⲁⲧⲁ ⲟⲩⲟⲉⲓϣ
 - No blocks match: ⲙⲛ ⲱⲛⲉ ⲉϥⲓⲛⲉ
 - Read and send: ⲱϣ ⲁⲩⲱ ⲧⲛⲛⲟⲟⲩ

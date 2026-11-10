@@ -153,7 +153,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase %1","tooltip":"Mo tlapoalli tlanahuatil (id, product, side, size, price, filled ihuan created), nozo in tlatzonco tlatzonquixtiliztli (time, product, side, size, price, fee ihuan order)."},
 "rb_coinbase_preview":{"message0":"achto xiquitta Coinbase tlanahuatilli: %1 %2 in %3","tooltip":"Tlein quizaz cē tiyānquiztli tlanahuatilli, ahmo motlaliz: cē amatlahcuilōlli ica size, spend, fee, total, slippage ihuan warnings. Tlacohua quipohpolōa tlapōhualli in ōmetetl tomin (50 in BTC-GBP quipohpolōa £50); tlanamaca quinamaca tlapōhualli in achto (0.01 in BTC-GBP quinamaca 0.01 BTC). Ahtle mopatla."},
 "rb_coinbase_order":{"message0":"xictlali Coinbase tlanahuatilli: %1 %2 in %3","tooltip":"Quitlalia nelli tiyānquiztli tlanahuatilli, iuhquin 'achto xiquitta Coinbase tlanahuatilli'. Achto quitta, niman mochipa mitztlahtlani, ica ītlaxtlahuil ihuan mochi, māmo ahtle occē tlahtlani; intlā ahquemeh oncā quihtōz quēmah, ahmo mochīhua. Quinequi tlatzacuilli ica Trade. Nicān ahtle mocohua nozo monamaca."},
-"rb_coinbase_cancel":{"message0":"xicpolo Coinbase tlanahuatilli %1","tooltip":"Quipoloa cē mo tlapoalli tlanahuatil, ica īid (īhuīcpa 'Coinbase tlapoalli tlanahuatilli'). Mochipa achto mitztlahtlani, ihuan ahmo mochīhua intlā ahquemeh oncā."}
+"rb_coinbase_cancel":{"message0":"xicpolo Coinbase tlanahuatilli %1","tooltip":"Quipoloa cē mo tlapoalli tlanahuatil, ica īid (īhuīcpa 'Coinbase tlapoalli tlanahuatilli'). Mochipa achto mitztlahtlani, ihuan ahmo mochīhua intlā ahquemeh oncā."},
+"rb_mikrotik_ports":{"message0":"MikroTik calacōhuayān","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl calacōhuayān in mo MikroTik ohtlatlamachtiāni: port, running, speed (iuhquin 10Gbps), errors, drops, link_downs ihuan comment. In ahcualli ihuan in huetziliztli mopōhua ihcuāc tlatzonco ōpēuh. Zan tlapōhua: ahtle mopatla. Nicān quitequitiltia cē machiyōtl tlapatlaliztli."},
+"rb_mikrotik_sfp":{"message0":"MikroTik SFP tlatequipanoliztli","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl SFP tlatequipanoliztli calaqui: port, module, temperature (°C), rx_power ihuan tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"MikroTik pahtiliztli","tooltip":"Cē amatlahcuilōlli ītechpa in ohtlatlamachtiāni: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), ihuan occequintin tlamachiliztli quipiya."},
+"rb_mikrotik_log":{"message0":"MikroTik tlahcuilōlli, in tlatzonco %1 tlahcuilōlli","tooltip":"In tlatzonco tlahcuilōlli in ohtlatlamachtiāni ītlahcuilōl, in achi huēhuehtl achto, cecentetl iuhquin «time topics: message»."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -201,7 +205,8 @@
 "Variables":"Tlapatlalli",
 "Wait & time":"Chiyaliztli ihuān cāhuitl",
 "You":"Tehhuātl",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1013,7 +1018,12 @@
 "Coinbase account":"Coinbase āmatlahcuilōlli",
 "sample account":"machiyōtl āmatlahcuilōlli",
 "trade on your Coinbase account with real money (asking you before every order)":"tlanamacaz ipan mo Coinbase āmatlahcuilōl ica nelli tomin (mitztlahtlaniz achto ipan cecentetl tlanahuatilli)",
-"read your Coinbase balances and orders, and market prices":"quipōhuaz mo Coinbase tlapiyal ihuan mo tlanahuatil, ihuan in tiyānquiztli ītlahuēlīlōca"
+"read your Coinbase balances and orders, and market prices":"quipōhuaz mo Coinbase tlapiyal ihuan mo tlanahuatil, ihuan in tiyānquiztli ītlahuēlīlōca",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik calacōhuayān",
+"{n} ports":"{n} calacōhuayān",
+"MikroTik switch":"MikroTik tlapatlaliztli",
+"read your MikroTik router or switch: its ports, modules, health and log":"quipōhuaz mo MikroTik ohtlatlamachtiāni: ītlacalaquiyān, ītlatequipanoliz, īpahtiliz ihuan ītlahcuilōl"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -1966,7 +1976,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"in tlatzacuilli tequiti, auh no huel quihuīcaz tomin. Inīn tlachīhualli aīc quihuīca: xicchīhua tlatzacuilli ahtle Transfer.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"in tlatzacuilli tequiti, auh zan View quipiya, ic in tlachīhualli ītlanahuatil motlāxiliz. Xicchīhua tlatzacuilli ica Trade, zan ipan cē tlatlātīlōyān.",
 "the key works: it can trade (every order asks you first)":"in tlatzacuilli tequiti: huel tlanamaca (cecentetl tlanahuatilli achto mitztlahtlani)",
-"too many requests just now; try again in a minute":"miyac tlatlanilli āxcān; occeppa xiquēhua ihcuāc cē minuto"
+"too many requests just now; try again in a minute":"miyac tlatlanilli āxcān; occeppa xiquēhua ihcuāc cē minuto",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik calacōhuayān",
+"{n} ports":"{n} calacōhuayān",
+"Couldn't reach the MikroTik at {url} ({reason}).":"Ahmo huel ōmacic in MikroTik ipan {url} ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik quinequi MIKROTIK_URL, MIKROTIK_USER ihuan MIKROTIK_PASSWORD {where_keys}: in ohtlatlamachtiāni īcān (iuhquin https://192.168.88.1) ihuan cē tlatequitiltiāni ipan cē necentlaliliztli zan ica read, api ihuan rest-api.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought zan quipōhua in MikroTik, ic ahmo quititlani {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"In MikroTik ōquixtlāuh MIKROTIK_USER ihuan MIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Inīn tlapōhualōni ahmo quineltoca in MikroTik ītlanēxtīl (in ohtlatlamachtiānimeh quichīhuah īyōhuan). Xictequitilti --doctor ic tiquittaz īmāmachiyo, ihuan xictlāli ipan MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"In MikroTik ītlanēxtīl ahmo yehhuātl in quitlālia MIKROTIK_CERT_SHA256 (yehhuātl {seen}). Intlā ōticpatlac in tlanēxtīlli, xicyancuili in tlapōhualli; intlā ahmo, itlah oncā tlanepantlah.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"in āmatlahcuilōlli īnecentlaliliz ({group}) no huel {what}. Second Thought zan tlapōhua, ic cē necentlaliliztli zan ica read, api ihuan rest-api achi cualli.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"in ichtacatlahtōlli ahmo motlātia ihcuāc yauh ipan http://. Xiquitqui in www-ssl tequitl ihuan https://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"in ohtlatlamachtiāni ītlanēxtīl ītech pohui, xictlāli: intlā {url} mo MikroTik, xictlahcuilo MIKROTIK_CERT_SHA256 = {seen} ipan second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

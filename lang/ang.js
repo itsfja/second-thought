@@ -153,7 +153,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase %1","tooltip":"Þine opene bebodu (id, product, side, size, price, filled and created), oþþe þine latostan gefyllednessa (time, product, side, size, price, fee and order)."},
 "rb_coinbase_preview":{"message0":"foresceawa Coinbase bebod: %1 %2 of %3","tooltip":"Hwæt ceapstowe bebod wolde beon, butan hit to sellanne: gewrit mid size, spend, fee, total, slippage and warnings. Bycgan spent rim þæs æfteran feos (50 of BTC-GBP spent £50); sellan selþ rim þæs ærran (0.01 of BTC-GBP selþ 0.01 BTC). Naht ne awent."},
 "rb_coinbase_order":{"message0":"sele Coinbase bebod: %1 %2 of %3","tooltip":"Selþ soþ ceapstowe bebod, swa 'foresceawa Coinbase bebod'. Hit foresceawaþ hit ærest, þonne hit simle axaþ þe, mid þam gafole and þam ealle, þeah naht elles ne axige; gif nan man nis þær to secgenne gea, hit ne færþ. Behofaþ cæges mid Trade leafe. On þissum leafe naht ne biþ geboht ne geseald."},
-"rb_coinbase_cancel":{"message0":"do Coinbase bebod %1 onweg","tooltip":"Deþ an þinra openra beboda onweg, be his id (of 'Coinbase opene bebodu'). Hit axaþ þe simle ærest, and ne færþ þonne nan man nis þær."}
+"rb_coinbase_cancel":{"message0":"do Coinbase bebod %1 onweg","tooltip":"Deþ an þinra openra beboda onweg, be his id (of 'Coinbase opene bebodu'). Hit axaþ þe simle ærest, and ne færþ þonne nan man nis þær."},
+"rb_mikrotik_ports":{"message0":"MikroTik geatu","tooltip":"Getæl gewrita, an for ælcum geate þines MikroTik wegwisendes oþþe wendendes: port, running, speed (swa 10Gbps), errors, drops, link_downs and comment. Gedwolan and fyllas beoþ getealde fram his latostan anginne. Hit rædeþ ane: naht ne awent on þam wendende. On þissum leafe hit brycþ bysene wendendes."},
+"rb_mikrotik_sfp":{"message0":"MikroTik SFP dælas","tooltip":"Getæl gewrita, an for ælcum ingesettum SFP dæle: port, module, temperature (°C), rx_power and tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"MikroTik hælu","tooltip":"Gewrit be þam wegwisende sylfum: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and ælc oþer gefelend þe he hæfþ."},
+"rb_mikrotik_log":{"message0":"MikroTik gewrit, latoste %1 linan","tooltip":"Þa latostan linan þæs wegwisendes gewrites, seo ealdoste ærest, ælc swa 'time topics: message'."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -202,7 +206,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"Utgang",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tol for þone ærendracan: lege hie innan ærendracan stocce",
@@ -1014,7 +1019,12 @@
 "Coinbase account":"Coinbase gerecednes",
 "sample account":"bysene gerecednes",
 "trade on your Coinbase account with real money (asking you before every order)":"ceapian on þinre Coinbase gerecednesse mid soþum feo (axiende þe ær ælcum bebode)",
-"read your Coinbase balances and orders, and market prices":"rædan þine Coinbase lafe and bebodu, and ceapstowe weorþ"
+"read your Coinbase balances and orders, and market prices":"rædan þine Coinbase lafe and bebodu, and ceapstowe weorþ",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik geatu",
+"{n} ports":"{n} geatu",
+"MikroTik switch":"MikroTik wendere",
+"read your MikroTik router or switch: its ports, modules, health and log":"rædan þinne MikroTik wegwisend oþþe wendend: his geatu, dælas, hælu and gewrit"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1967,7 +1977,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"se cæg wyrcþ, ac he mæg eac feoh oferferian. Þes cræft næfre oferfereþ: wyrc cæg butan Transfer leafe.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"se cæg wyrcþ, ac he hæfþ View ane, swa þæs cræftes bebodu wæron wiþsacen. Wyrc cæg mid Trade leafe, to anum hord-fæte gemearcod.",
 "the key works: it can trade (every order asks you first)":"se cæg wyrcþ: he mæg ceapian (ælc bebod axaþ þe ærest)",
-"too many requests just now; try again in a minute":"to manega bena nu; fanda eft ymb ane minutan"
+"too many requests just now; try again in a minute":"to manega bena nu; fanda eft ymb ane minutan",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik geatu",
+"{n} ports":"{n} geatu",
+"Couldn't reach the MikroTik at {url} ({reason}).":"Ne mihte þone MikroTik æt {url} geræcan ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik behofaþ MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: þæs wegwisendes stowe (swa https://192.168.88.1) and brucend on flocce mid ane þam leafum read, api and rest-api.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought rædeþ ane of MikroTik, forþon hit ne sent {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"Se MikroTik wiþsoc MIKROTIK_USER and MIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Þes rimcræft ne truwaþ þæs MikroTikes gewitnesse (wegwisend wyrcaþ oft hiera agene). Yrn --doctor to geseonne hire fingermearc, and sete hie on MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Þæs MikroTikes gewitnes nis seo þe MIKROTIK_CERT_SHA256 fæstnaþ (heo is {seen}). Gif þu þa gewitnesse wendest, niwa þæt weorþ; gif na, sum þing stent betweox.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"þæs reccenes flocc ({group}) mæg eac {what}. Second Thought rædeþ ane, forþon flocc mid read, api and rest-api anum is sicorra.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"þæt dyrne word færþ unbehyd ofer http://. Bruc þære www-ssl þenunge and https:// on his stede.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"þæs wegwisendes gewitnes is his agen, fæstna hie: gif {url} is þin MikroTik, sete MIKROTIK_CERT_SHA256 = {seen} on second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

@@ -153,7 +153,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase %1","tooltip":"你的未成交订单（id、product、side、size、price、filled 和 created），或你最近的成交（time、product、side、size、price、fee 和 order）。"},
 "rb_coinbase_preview":{"message0":"预览 Coinbase 订单：%1 %2 的 %3","tooltip":"市价单会是什么结果，而不真正下单：一条含 size、spend、fee、total、slippage 和 warnings 的记录。买入花费第二种货币的金额（BTC-GBP 的 50 花 £50）；卖出卖掉第一种货币的数量（BTC-GBP 的 0.01 卖 0.01 BTC）。什么都不会改变。"},
 "rb_coinbase_order":{"message0":"在 Coinbase 下单：%1 %2 的 %3","tooltip":"真正下一个市价单，填法同“预览 Coinbase 订单”。它先预览，然后总会问你，并给出手续费和总额，即使别的都不问；没人在场说“是”，就不执行。需要有 Trade 权限的密钥。在本页上不会买卖任何东西。"},
-"rb_coinbase_cancel":{"message0":"取消 Coinbase 订单 %1","tooltip":"按 id 取消你的一个未成交订单（来自“Coinbase 未成交订单”）。它总会先问你，没人在场就不执行。"}
+"rb_coinbase_cancel":{"message0":"取消 Coinbase 订单 %1","tooltip":"按 id 取消你的一个未成交订单（来自“Coinbase 未成交订单”）。它总会先问你，没人在场就不执行。"},
+"rb_mikrotik_ports":{"message0":"MikroTik 端口","tooltip":"记录列表，你的 MikroTik 路由器或交换机的每个端口一条：port、running、speed（比如 10Gbps）、errors、drops、link_downs 和 comment。错误和丢包从上次启动开始计数。它只读取：交换机上什么都不会改变。在本页上使用示例交换机。"},
+"rb_mikrotik_sfp":{"message0":"MikroTik SFP 模块","tooltip":"记录列表，每个插着的 SFP 模块一条：port、module、temperature（°C）、rx_power 和 tx_power（dBm）。"},
+"rb_mikrotik_health":{"message0":"MikroTik 状态","tooltip":"关于路由器或交换机本身的记录：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C），以及它有的其他传感器。"},
+"rb_mikrotik_log":{"message0":"MikroTik 日志，最后 %1 行","tooltip":"路由器日志的最后几行，从旧到新，每行形如“time topics: message”。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -202,7 +206,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"输出",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"给智能体的工具：把它们放进智能体积木里",
@@ -1014,7 +1019,12 @@
 "Coinbase account":"Coinbase 账户",
 "sample account":"示例账户",
 "trade on your Coinbase account with real money (asking you before every order)":"在你的 Coinbase 账户上用真钱交易（每下一单前都问你）",
-"read your Coinbase balances and orders, and market prices":"读取你的 Coinbase 余额和订单，以及市场价格"
+"read your Coinbase balances and orders, and market prices":"读取你的 Coinbase 余额和订单，以及市场价格",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik 端口",
+"{n} ports":"{n} 个端口",
+"MikroTik switch":"MikroTik 交换机",
+"read your MikroTik router or switch: its ports, modules, health and log":"读取你的 MikroTik 路由器或交换机：端口、模块、状态和日志"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1967,6 +1977,20 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"密钥可用，但它也能转账。这个程序从不转账：请创建一个没有 Transfer 权限的密钥。",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"密钥可用，但只有 View 权限，所以这个程序的订单会被拒绝。请创建一个有 Trade 权限、只限一个投资组合的密钥。",
 "the key works: it can trade (every order asks you first)":"密钥可用：它能交易（每一单都会先问你）",
-"too many requests just now; try again in a minute":"现在请求太多了；请一分钟后再试"
+"too many requests just now; try again in a minute":"现在请求太多了；请一分钟后再试",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik 端口",
+"{n} ports":"{n} 个端口",
+"Couldn't reach the MikroTik at {url} ({reason}).":"无法连接 {url} 上的 MikroTik（{reason}）。",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik 需要 MIKROTIK_URL、MIKROTIK_USER 和 MIKROTIK_PASSWORD {where_keys}：路由器地址（比如 https://192.168.88.1），以及一个所在组只有 read、api 和 rest-api 策略的用户。",
+"MikroTik: {why}.":"MikroTik：{why}。",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought 对 MikroTik 只读，所以不会发送 {what}。",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik 拒绝了 MIKROTIK_USER 和 MIKROTIK_PASSWORD。",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"这台电脑不信任 MikroTik 的证书（路由器通常自己生成证书）。运行 --doctor 查看它的指纹，并填进 MIKROTIK_CERT_SHA256。",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"MikroTik 的证书不是 MIKROTIK_CERT_SHA256 固定的那个（它是 {seen}）。如果你换过证书，请更新这个值；如果没有，说明中间有东西。",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"账户所在的组（{group}）还能 {what}。Second Thought 只读，所以只有 read、api 和 rest-api 的组更安全。",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"密码会通过 http:// 明文发送。请改用 www-ssl 服务和 https://。",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"路由器的证书是它自己的，所以请固定它：如果 {url} 是你的 MikroTik，在 second-thought.ini 里写上 MIKROTIK_CERT_SHA256 = {seen}。",
+"{board}, RouterOS {version}":"{board}，RouterOS {version}"
 }
 };

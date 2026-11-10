@@ -823,6 +823,30 @@ async def new_feature_page_tests(pg):
     check("coinbase_trade" in EXTRA["t_cb_blocks"] and "trade on your Coinbase account" in EXTRA["t_cb_blocks"],
           "an exported Coinbase program that trades says so, and asks before its first run")
 
+    print("MikroTik")
+    mt_prog = script(add(rec("speed", {"block": {"type": "lists_getIndex", "fields": {"MODE": "GET", "WHERE": "FROM_START"},
+                                                  "inputs": {"VALUE": cb("rb_mikrotik_ports"), "AT": nm(3)}}})),
+                     add(rec("errors", {"block": {"type": "lists_getIndex", "fields": {"MODE": "GET", "WHERE": "FROM_START"},
+                                                   "inputs": {"VALUE": cb("rb_mikrotik_ports"), "AT": nm(3)}}})),
+                     add(count(cb("rb_mikrotik_ports"))), add(rec("module", first(cb("rb_mikrotik_sfp")))),
+                     add(rec("rx_power", {"block": {"type": "lists_getIndex", "fields": {"MODE": "GET", "WHERE": "FROM_START"},
+                                                     "inputs": {"VALUE": cb("rb_mikrotik_sfp"), "AT": nm(2)}}})),
+                     add(rec("board", cb("rb_mikrotik_health"))), add(rec("free_memory", cb("rb_mikrotik_health"))),
+                     add(rec("cpu_temperature", cb("rb_mikrotik_health"))),
+                     add({"block": {"type": "lists_getIndex", "fields": {"MODE": "GET", "WHERE": "LAST"}, "inputs": {"VALUE": cb("rb_mikrotik_log", N=nm(2))}}}),
+                     blk("rb_result"))
+    await load_state(pg, mt_prog)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    want = ["1Gbps", "12", "6", "MikroTik S+85DLC03D", "-9.871", "CRS309-1G-8S+", "394", "52",
+            "2026-11-10 07:30:00 system,info,account: user monitor logged in via rest-api"]
+    check(status.startswith("done") and items == want, f"the MikroTik blocks read the sample switch's ports, modules, health and log ({items})")
+    EXTRA["t_mt_blocks"] = await export_python(pg, "t_mt_blocks")
+    await pg.evaluate("document.getElementById('io-name').value = 't_mt_blocks'")
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    check("[mikrotik]" in files["second-thought.ini"] and "MIKROTIK_CERT_SHA256 = " in files["second-thought.ini"] and "mikrotik_read" in EXTRA["t_mt_blocks"],
+          "a MikroTik program's settings ask for the router's address, user, password and certificate pin")
+
     await load_state(pg, script(blk("rb_wait", fields={"UNIT": "s"}, inputs={"SECS": nm(30)}), blk("rb_add_result", inputs={"TEXT": tx("too late")}), blk("rb_result")))
     EXTRA["t_maxsec"] = await export_python(pg, "t_maxsec")
 

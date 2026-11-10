@@ -89,6 +89,11 @@ SAFETY = {
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
     "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
+    # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
+    # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
+    # the network with it, and nothing here is worth that.
+    "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
+                      ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
     "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
     # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it
@@ -188,6 +193,12 @@ def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return not any(m == method and re.match(p, path) for m, p in SAFETY["coinbase_free"])
+
+
+def mikrotik_allowed(method, path):
+    """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
 
 
 def same_problem(a, b):
@@ -619,6 +630,7 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
+    ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),

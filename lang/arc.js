@@ -154,7 +154,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"פקודיך פתיחן (id, product, side, size, price, filled וcreated), או עבידתא בתרייתא (time, product, side, size, price, fee וorder)."},
 "rb_coinbase_preview":{"message0":"חזי קדם פקודא דCoinbase: %1 %2 ד%3","tooltip":"מה תהוי פקודת שוקא, בלא למיהבה: כתבא עם size, spend, fee, total, slippage וwarnings. זבינא מפיק מנין מן מעתא תנינא (50 דBTC-GBP מפיק £50); זבנא מזבן מנין מן קדמיא (0.01 דBTC-GBP מזבן 0.01 BTC). מדעם לא משתני."},
 "rb_coinbase_order":{"message0":"הב פקודא דCoinbase: %1 %2 ד%3","tooltip":"יהיב פקודת שוקא קשיטא, כות 'חזי קדם פקודא דCoinbase'. קדם חזי לה, ובתר כן תדירא שאיל לך, עם אגרא וסכומא, אף כד מדעם אחרן לא שאיל; כד לית מן דאמר אין, לא רהיט. צריך מפתח עם רשות Trade. בדפא דנא מדעם לא אזדבן."},
-"rb_coinbase_cancel":{"message0":"בטל פקודא דCoinbase %1","tooltip":"מבטל חדא מן פקודיך פתיחן, בid דילה (מן 'פקודין פתיחן דCoinbase'). תדירא שאיל לך קדם, ולא רהיט כד לית אנש."}
+"rb_coinbase_cancel":{"message0":"בטל פקודא דCoinbase %1","tooltip":"מבטל חדא מן פקודיך פתיחן, בid דילה (מן 'פקודין פתיחן דCoinbase'). תדירא שאיל לך קדם, ולא רהיט כד לית אנש."},
+"rb_mikrotik_ports":{"message0":"תרעי MikroTik","tooltip":"רשימת כתבין, חד לכל תרע בנתבא או במחלפא דילך MikroTik: port, running, speed (כות 10Gbps), errors, drops, link_downs וcomment. טעותא ונפלתא מתמנין מן שריותא בתרייתא. רק קרי: מדעם לא משתני במחלפא. בדפא דנא משמש מחלפא דדוגמא."},
+"rb_mikrotik_sfp":{"message0":"מודולי SFP דMikroTik","tooltip":"רשימת כתבין, חד לכל מודול SFP דמחבר: port, module, temperature (°C), rx_power וtx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"שלמא דMikroTik","tooltip":"כתבא על נתבא או מחלפא גופיה: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), וכל מרגשא אחרנא דאית ליה."},
+"rb_mikrotik_log":{"message0":"כרוניקא דMikroTik, %1 שורין בתראין","tooltip":"שורין בתראין דכרוניקא דנתבא, עתיקא קדמאה, כל חדא כות \"time topics: message\"."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יומא","weekdays":"ביומי חול","weekends":"בסופי שבתא"},
@@ -203,7 +207,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"מפקנא",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"מאני שליחא: שדי יתהון בגו לבנת שליחא",
@@ -1015,7 +1020,12 @@
 "Coinbase account":"חושבנא דCoinbase",
 "sample account":"חושבנא דדוגמא",
 "trade on your Coinbase account with real money (asking you before every order)":"למזבן ולמזבין בחושבנך דCoinbase בכספא קשיטא (שאיל לך קדם כל פקודא)",
-"read your Coinbase balances and orders, and market prices":"למקרא שאריתך ופקודיך דCoinbase, ודמי שוקא"
+"read your Coinbase balances and orders, and market prices":"למקרא שאריתך ופקודיך דCoinbase, ודמי שוקא",
+"MikroTik":"MikroTik",
+"MikroTik ports":"תרעי MikroTik",
+"{n} ports":"{n} תרעין",
+"MikroTik switch":"מחלפא דMikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"למקרא נתבא או מחלפא דילך MikroTik: תרעין, מודולין, שלמא וכרוניקא"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1968,7 +1978,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"מפתחא עביד, ברם יכיל אף לאעברא כספא. תכניתא דא לעלם לא מעברא: עביד מפתח בלא רשות Transfer.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"מפתחא עביד, ברם אית ליה רק View, ועל כן פקודי תכניתא יסתרבון. עביד מפתח עם רשות Trade, תחים לסימא חדא.",
 "the key works: it can trade (every order asks you first)":"מפתחא עביד: יכיל לזבנא (כל פקודא שאלא לך קדם)",
-"too many requests just now; try again in a minute":"סגיאין בעותא השתא; נסי תוב בתר דקיקא"
+"too many requests just now; try again in a minute":"סגיאין בעותא השתא; נסי תוב בתר דקיקא",
+"MikroTik":"MikroTik",
+"MikroTik ports":"תרעי MikroTik",
+"{n} ports":"{n} תרעין",
+"Couldn't reach the MikroTik at {url} ({reason}).":"לא מטינן לMikroTik ב{url} ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik צריך MIKROTIK_URL, MIKROTIK_USER וMIKROTIK_PASSWORD {where_keys}: אתר נתבא (כות https://192.168.88.1) ומשמשנא בכנשא דאית לה רק רשותא read, api וrest-api.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought רק קרי מן MikroTik, ועל כן לא משדר {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik סרב MIKROTIK_USER וMIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"מחשבא דנא לא מהימן בשטר דMikroTik (נתביא עבדין שטר דילהון). הריץ --doctor למחזא רושמיה, ושוי בMIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"שטרא דMikroTik לאו הוא דקבע MIKROTIK_CERT_SHA256 (הוא {seen}). אן שניתא שטרא, חדת ערכא; ואן לא, מדעם קאים בגו.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"כנשא דחושבנא ({group}) יכלא אף {what}. Second Thought רק קרי, ועל כן כנשא עם read, api וrest-api בלחוד שליא יתיר.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"מלת סתרא אזלא גליא בhttp://. שמש בשמשא www-ssl ובhttps://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"שטרא דנתבא דיליה הוא, קבע יתיה: אן {url} הוא MikroTik דילך, כתוב MIKROTIK_CERT_SHA256 = {seen} בsecond-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

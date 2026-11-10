@@ -588,6 +588,22 @@
   "rb_coinbase_cancel": {
    "message0": "Coinbase-order %1 annuleren",
    "tooltip": "Annuleert een van je open orders, op zijn id (uit ‘open Coinbase-orders’). Hij vraagt het je altijd eerst en gebeurt niet als er niemand is."
+  },
+  "rb_mikrotik_ports": {
+   "message0": "MikroTik-poorten",
+   "tooltip": "Een lijst met records, één voor elke poort van je MikroTik-router of -switch: port, running, speed (zoals 10Gbps), errors, drops, link_downs en comment. Fouten en drops tellen vanaf de laatste start. Hij leest alleen: er verandert niets aan de switch. Op deze pagina gebruikt hij een voorbeeldswitch."
+  },
+  "rb_mikrotik_sfp": {
+   "message0": "MikroTik-SFP-modules",
+   "tooltip": "Een lijst met records, één voor elke SFP-module die erin zit: port, module, temperature (°C), rx_power en tx_power (dBm)."
+  },
+  "rb_mikrotik_health": {
+   "message0": "MikroTik-gezondheid",
+   "tooltip": "Een record over de router of switch zelf: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) en alle andere sensoren die hij heeft."
+  },
+  "rb_mikrotik_log": {
+   "message0": "MikroTik-log, laatste %1 regels",
+   "tooltip": "De laatste regels van het routerlog, de oudste eerst, elk als ‘time topics: message’."
   }
  },
  "options": {
@@ -743,7 +759,8 @@
   "Home Assistant": "Home Assistant",
   "Homey": "Homey",
   "Output": "Uitvoer",
-  "Coinbase": "Coinbase"
+  "Coinbase": "Coinbase",
+  "MikroTik": "MikroTik"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Hulpmiddelen voor de agent: zet ze in een agentblok",
@@ -1555,7 +1572,12 @@
   "Coinbase account": "Coinbase-rekening",
   "sample account": "voorbeeldrekening",
   "trade on your Coinbase account with real money (asking you before every order)": "handelen op je Coinbase-rekening met echt geld (met een vraag vóór elke order)",
-  "read your Coinbase balances and orders, and market prices": "je Coinbase-saldi en -orders en marktprijzen lezen"
+  "read your Coinbase balances and orders, and market prices": "je Coinbase-saldi en -orders en marktprijzen lezen",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "MikroTik-poorten",
+  "{n} ports": "{n} poorten",
+  "MikroTik switch": "MikroTik-switch",
+  "read your MikroTik router or switch: its ports, modules, health and log": "je MikroTik-router of -switch lezen: poorten, modules, gezondheid en log"
  },
  "examples": {
   "review": {
@@ -3140,6 +3162,20 @@
   "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "de sleutel werkt, maar kan ook geld overmaken. Dit programma maakt nooit iets over: maak een sleutel zonder het recht Transfer.",
   "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "de sleutel werkt, maar heeft alleen View, dus de orders van dit programma zouden worden geweigerd. Maak een sleutel met het recht Trade, beperkt tot één portefeuille.",
   "the key works: it can trade (every order asks you first)": "de sleutel werkt: hij kan handelen (elke order vraagt het je eerst)",
-  "too many requests just now; try again in a minute": "te veel verzoeken op dit moment; probeer het over een minuut opnieuw"
+  "too many requests just now; try again in a minute": "te veel verzoeken op dit moment; probeer het over een minuut opnieuw",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "MikroTik-poorten",
+  "{n} ports": "{n} poorten",
+  "Couldn't reach the MikroTik at {url} ({reason}).": "De MikroTik op {url} was niet bereikbaar ({reason}).",
+  "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.": "MikroTik heeft MIKROTIK_URL, MIKROTIK_USER en MIKROTIK_PASSWORD nodig {where_keys}: het adres van de router (zoals https://192.168.88.1) en een gebruiker in een groep met alleen de policies read, api en rest-api.",
+  "MikroTik: {why}.": "MikroTik: {why}.",
+  "Second Thought only reads from MikroTik, so it doesn't send {what}.": "Second Thought leest alleen van MikroTik, dus het stuurt {what} niet.",
+  "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.": "De MikroTik weigerde MIKROTIK_USER en MIKROTIK_PASSWORD.",
+  "The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.": "Deze computer vertrouwt het certificaat van de MikroTik niet (routers maken meestal hun eigen). Start --doctor om de vingerafdruk te zien, en zet die in MIKROTIK_CERT_SHA256.",
+  "The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "Het certificaat van de MikroTik is niet het certificaat dat MIKROTIK_CERT_SHA256 vastlegt (het is {seen}). Heb je het certificaat vervangen, pas de waarde dan aan; zo niet, dan zit er iets tussen.",
+  "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.": "de groep van het account ({group}) mag ook {what}. Second Thought leest alleen, dus een groep met alleen read, api en rest-api is veiliger.",
+  "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.": "het wachtwoord gaat onversleuteld over http://. Gebruik liever de dienst www-ssl en https://.",
+  "the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.": "het certificaat van de router is van hemzelf, dus leg het vast: is {url} jouw MikroTik, zet dan MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.",
+  "{board}, RouterOS {version}": "{board}, RouterOS {version}"
  }
 }

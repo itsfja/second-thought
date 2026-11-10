@@ -153,7 +153,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"Opin boð þín (id, product, side, size, price, filled ok created), eða síðustu fyllingar (time, product, side, size, price, fee ok order)."},
 "rb_coinbase_preview":{"message0":"sjá fyrir Coinbase-boð: %1 %2 af %3","tooltip":"Hvat torgboð myndi verða, án at setja þat: skrá með size, spend, fee, total, slippage ok warnings. Kaupa eyðir upphæð ins síðara fjár (50 af BTC-GBP eyðir £50); selja selr upphæð ins fyrra (0.01 af BTC-GBP selr 0.01 BTC). Ekki breytisk."},
 "rb_coinbase_order":{"message0":"set Coinbase-boð: %1 %2 af %3","tooltip":"Setr sannt torgboð, sem 'sjá fyrir Coinbase-boð'. Hann sér þat fyrir fyrst, spyrr þik þá ávallt, með gjaldi ok alls, þótt ekki annat spyrji; sé engi þar at segja já, ferr hann eigi. Þarf lykil með Trade-leyfi. Á þessi síðu er ekki keypt né selt."},
-"rb_coinbase_cancel":{"message0":"tak aptr Coinbase-boð %1","tooltip":"Tekr aptr eitt opinna boða þinna, eptir id þess (ór 'opin Coinbase-boð'). Hann spyrr þik ávallt fyrst, ok ferr eigi er engi er þar."}
+"rb_coinbase_cancel":{"message0":"tak aptr Coinbase-boð %1","tooltip":"Tekr aptr eitt opinna boða þinna, eptir id þess (ór 'opin Coinbase-boð'). Hann spyrr þik ávallt fyrst, ok ferr eigi er engi er þar."},
+"rb_mikrotik_ports":{"message0":"MikroTik-hlið","tooltip":"Listi skráa, ein fyrir hvert hlið MikroTik-leiðvísis þíns eða skiptis: port, running, speed (sem 10Gbps), errors, drops, link_downs ok comment. Villur ok fǫll eru talin frá síðasta upphafi. Hann les einungis: ekki breytisk á skiptinum. Á þessi síðu nytr hann dœmis-skiptis."},
+"rb_mikrotik_sfp":{"message0":"MikroTik SFP-einingar","tooltip":"Listi skráa, ein fyrir hverja SFP-einingu er í er sett: port, module, temperature (°C), rx_power ok tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"MikroTik-heilsa","tooltip":"Skrá um leiðvísinn sjálfan: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), ok hvern annan skynjara er hann hefir."},
+"rb_mikrotik_log":{"message0":"MikroTik-skrá, síðustu %1 línur","tooltip":"Síðustu línur skrár leiðvísis, in elzta fyrst, hver sem 'time topics: message'."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -202,7 +206,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"Útgangr",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1014,7 +1019,12 @@
 "Coinbase account":"Coinbase-reikningr",
 "sample account":"dœmis-reikningr",
 "trade on your Coinbase account with real money (asking you before every order)":"kaupa á Coinbase-reikningi þínum með sǫnnu fé (spyrjandi þik fyrir hvert boð)",
-"read your Coinbase balances and orders, and market prices":"lesa Coinbase-leifar þínar ok boð, ok torgverð"
+"read your Coinbase balances and orders, and market prices":"lesa Coinbase-leifar þínar ok boð, ok torgverð",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik-hlið",
+"{n} ports":"{n} hlið",
+"MikroTik switch":"MikroTik-skiptir",
+"read your MikroTik router or switch: its ports, modules, health and log":"lesa MikroTik-leiðvísi þinn eða skipti: hlið, einingar, heilsu ok skrá"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1967,7 +1977,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"lykillinn vinnr, en hann má ok fœra fé. Þetta forrit fœrir aldri: ger lykil án Transfer-leyfis.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"lykillinn vinnr, en hann hefir View eitt, svá at boðum þessa forrits væri synjat. Ger lykil með Trade-leyfi, bundinn við eina fjárhirzlu.",
 "the key works: it can trade (every order asks you first)":"lykillinn vinnr: hann má kaupa (hvert boð spyrr þik fyrst)",
-"too many requests just now; try again in a minute":"of margar beiðnir nú; reyn aptr eptir eina mínútu"
+"too many requests just now; try again in a minute":"of margar beiðnir nú; reyn aptr eptir eina mínútu",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik-hlið",
+"{n} ports":"{n} hlið",
+"Couldn't reach the MikroTik at {url} ({reason}).":"Náði eigi til MikroTik á {url} ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik þarf MIKROTIK_URL, MIKROTIK_USER ok MIKROTIK_PASSWORD {where_keys}: staðar leiðvísis (sem https://192.168.88.1) ok notanda í flokki með einungis read, api ok rest-api leyfum.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought les einungis frá MikroTik, því sendir þat eigi {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik synjaði MIKROTIK_USER ok MIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Þessi tǫlva treystir eigi vitnisburði MikroTik (leiðvísar gera optast sinn eigin). Renn --doctor at sjá fingrafar hans, ok set þat í MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Vitnisburðr MikroTik er eigi sá er MIKROTIK_CERT_SHA256 festir (hann er {seen}). Ef þú skiptir vitnisburðinum, nýja gildit; ef eigi, stendr nakkvat á milli.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"flokkr reikningsins ({group}) má ok {what}. Second Thought les einungis, því er flokkr með read, api ok rest-api einum tryggari.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"lykilorðit ferr óhulit um http://. Nyt heldr www-ssl þjónustuna ok https://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"vitnisburðr leiðvísis er hans eiginn, festu hann: ef {url} er MikroTik þinn, set MIKROTIK_CERT_SHA256 = {seen} í second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

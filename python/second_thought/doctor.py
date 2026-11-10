@@ -23,6 +23,8 @@ import re  # noqa: E402,F811
 import importlib.metadata  # noqa: E402,F811 - below the line, so python/runtime.py has them too
 import importlib.util  # noqa: E402,F811
 import shutil  # noqa: E402,F811
+import hashlib  # noqa: E402,F811
+import urllib.parse  # noqa: E402,F811
 import socket  # noqa: E402,F811
 
 
@@ -126,6 +128,46 @@ class Doctor:
         tiers = [getattr(self, "primary", None)] + list(getattr(self, "backups", None) or [])
         return [t for t in tiers if isinstance(t, str) and t]
 
+    async def _doctor_mikrotik(self):
+        """The MikroTik check (#360): reachable, the certificate pinned, and an account that can only read."""
+        base = os.environ.get("MIKROTIK_URL", "").strip()
+        pinned = os.environ.get("MIKROTIK_CERT_SHA256", "").strip()
+        if base and not base.lower().startswith("http://") and not pinned:
+            seen = await asyncio.to_thread(self._mt_fingerprint, base)
+            if seen:
+                raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.", url=base, seen=seen))
+        res = await self.mikrotik_health()
+        user = os.environ.get("MIKROTIK_USER", "").strip()
+        group = next((to_str(u.get("group")) for u in await self._mikrotik("GET", "/rest/user") if isinstance(u, dict) and u.get("name") == user), "")
+        policy = next((to_str(g.get("policy")) for g in await self._mikrotik("GET", "/rest/user/group") if isinstance(g, dict) and g.get("name") == group), "")
+        extra = sorted({p for p in policy.split(",") if p and not p.startswith("!")} - {"read", "api", "rest-api"})
+        said = tr("{board}, RouterOS {version}", board=res.get("board") or "MikroTik", version=res.get("version") or "?")
+        if base.lower().startswith("http://"):
+            return "NOTE", said + "; " + tr("the password goes unencrypted over http://. Use the www-ssl service and https:// instead.")
+        if extra:
+            return "NOTE", said + "; " + tr("the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.", group=group, what=", ".join(extra))
+        return said
+
+    @staticmethod
+    def _mt_fingerprint(base):
+        """The SHA-256 fingerprint of the certificate the router shows, if it isn't one this computer trusts already."""
+        import socket
+        import ssl
+        u = urllib.parse.urlparse(base if "://" in base else "https://" + base)
+        try:
+            with socket.create_connection((u.hostname, u.port or 443), timeout=10) as s:
+                with ssl.create_default_context().wrap_socket(s, server_hostname=u.hostname):
+                    return None  # trusted as it is
+        except ssl.SSLCertVerificationError:
+            pass
+        except OSError:
+            return None  # can't reach it: the request after says so
+        ctx = ssl.create_default_context()
+        ctx.check_hostname, ctx.verify_mode = False, ssl.CERT_NONE
+        with socket.create_connection((u.hostname, u.port or 443), timeout=10) as s:
+            with ctx.wrap_socket(s) as t:
+                return hashlib.sha256(t.getpeercert(binary_form=True)).hexdigest()
+
     async def _doctor_connections(self, can, mcp):
         """(area, coroutine giving the detail) for each connection the program uses. Every one only reads."""
         has = lambda *ids: any(i in can for i in ids)  # noqa: E731
@@ -153,6 +195,10 @@ class Doctor:
                     return "NOTE", tr("the key works and can trade, but this program only reads: a View-only key is safer.")
                 return tr("the key works: it can trade (every order asks you first)") if perms.get("can_trade") else tr("the key works, View only")
             out.append(("Coinbase", coinbase))
+        if has("mikrotik_read"):
+            async def mikrotik():
+                return await self._doctor_mikrotik()
+            out.append(("MikroTik", mikrotik))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -422,5 +468,5 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))

@@ -154,7 +154,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"𒋼𒊑𒌅𒅗 𒁉𒌅𒌅𒌝 (id, product, side, size, price, filled 𒌑 created), 𒌑𒇻 𒂵𒄠𒊏𒌅𒌝 𒉿𒅈𒆪𒌅𒌝 (time, product, side, size, price, fee 𒌑 order)."},
 "rb_coinbase_preview":{"message0":"𒋼𒅕𒋫𒄠 𒊭 Coinbase 𒉺𒈾 𒀀𒈬𒌨: %1 %2 𒊭 %3","tooltip":"𒈪𒈾𒄠 𒋼𒅕𒌅𒌝 𒊭 𒈠𒄭𒊑𒅎 𒄿𒁀𒀸𒅆, 𒆷 𒊭𒀝𒈾𒀜: 𒌅𒌒𒁍𒌝 𒀉𒋾 size, spend, fee, total, slippage 𒌑 warnings. 𒊭𒈬𒌝 𒅗𒊍𒉺𒄠 𒊭𒉌𒅎 𒄿𒈾𒀜𒁲𒅔 (50 𒊭 BTC-GBP £50 𒄿𒈾𒀜𒁲𒅔); 𒉺𒊭𒊒𒌝 𒅖𒋼𒅔 𒄿𒉺𒀸𒊭𒅈 (0.01 𒊭 BTC-GBP 0.01 BTC 𒄿𒉺𒀸𒊭𒅈). 𒈪𒅎𒈠 𒌌 𒄿𒈾𒀝𒆠𒅕."},
 "rb_coinbase_order":{"message0":"𒋼𒅕𒋫𒄠 𒊭 Coinbase 𒋗𒆪𒌦: %1 %2 𒊭 %3","tooltip":"𒋼𒅕𒋫𒄠 𒆠𒅔𒋫𒄠 𒊭 𒈠𒄭𒊑𒅎 𒄿𒊭𒀝𒅗𒀭, 𒆠𒈠 „𒋼𒅕𒋫𒄠 𒊭 Coinbase 𒉺𒈾 𒀀𒈬𒌨”. 𒉺𒈾 𒅎𒈠𒅈, 𒉿𒅈𒅗 𒁕𒊑𒅖 𒄿𒊭𒀠𒅗, 𒀉𒋾 𒄿𒁲𒅎 𒌑 𒄀𒅎𒊑𒅎, 𒋗𒌝𒈠 𒈪𒅎𒈠 𒊭𒉡𒌝 𒌌 𒄿𒊭𒀠; 𒋗𒌝𒈠 𒈠𒄠𒈠𒀭 𒀭𒈾 𒀀𒈾 𒋡𒁁𒅎 𒌌 𒄿𒁀𒀸𒅆, 𒌌 𒅋𒆷𒀝. 𒆪𒉡𒊌𒅗𒄠 𒀉𒋾 Trade 𒄩𒅆𒄴. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒈪𒅎𒈠 𒌌 𒅖𒊭𒄠 𒌑 𒌌 𒅁𒉺𒀸𒊭𒅈."},
-"rb_coinbase_cancel":{"message0":"𒋼𒅕𒋫𒄠 𒊭 Coinbase %1 𒁍𒋗𒌓","tooltip":"𒅖𒋼𒀉 𒄿𒈾 𒋼𒊑𒋾𒅗 𒁉𒌅𒋾𒅎 𒄿𒈾 id 𒊭 𒋼𒅕𒋾𒅎 𒄿𒉺𒀸𒅆𒀉 (𒄿𒈾 „𒋼𒊑𒌅𒌝 𒁉𒌅𒌅𒌝 𒊭 Coinbase”). 𒁕𒊑𒅖 𒉺𒈾 𒄿𒊭𒀠𒅗, 𒌑 𒋗𒌝𒈠 𒈠𒄠𒈠𒀭 𒌌 𒄿𒁀𒀸𒅆 𒌌 𒅋𒆷𒀝."}
+"rb_coinbase_cancel":{"message0":"𒋼𒅕𒋫𒄠 𒊭 Coinbase %1 𒁍𒋗𒌓","tooltip":"𒅖𒋼𒀉 𒄿𒈾 𒋼𒊑𒋾𒅗 𒁉𒌅𒋾𒅎 𒄿𒈾 id 𒊭 𒋼𒅕𒋾𒅎 𒄿𒉺𒀸𒅆𒀉 (𒄿𒈾 „𒋼𒊑𒌅𒌝 𒁉𒌅𒌅𒌝 𒊭 Coinbase”). 𒁕𒊑𒅖 𒉺𒈾 𒄿𒊭𒀠𒅗, 𒌑 𒋗𒌝𒈠 𒈠𒄠𒈠𒀭 𒌌 𒄿𒁀𒀸𒅆 𒌌 𒅋𒆷𒀝."},
+"rb_mikrotik_ports":{"message0":"𒁀𒁍 𒊭 MikroTik","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒁀𒁉𒅎 𒅗𒇷𒋗 𒊭 𒈬𒍑𒋼𒉌𒅗 𒊭 MikroTik: port, running, speed (𒆠𒈠 10Gbps), errors, drops, link_downs 𒌑 comment. 𒅖𒋼𒅔𒈠 𒄿𒊭𒊍𒋛: 𒈪𒅎𒈠 𒌌 𒄿𒈾𒀝𒆠𒅕. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒈬𒍑𒋼𒈾𒄠 𒊭 𒋫𒄠𒅆𒇷𒅎 𒄿𒇷𒅅𒆠."},
+"rb_mikrotik_sfp":{"message0":"𒄩𒀠𒍮 𒊭 SFP 𒊭 MikroTik","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒄩𒀠𒍢𒅎 𒅗𒇷𒋗 𒊭 SFP: port, module, temperature (°C), rx_power 𒌑 tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"𒋗𒌌𒈬𒌝 𒊭 MikroTik","tooltip":"𒌅𒌒𒁍𒌝 𒀸𒋗𒌝 𒈬𒍑𒋼𒉌𒅎: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𒌑 𒈪𒅎𒈠 𒊭𒉡𒌝 𒊭 𒄿𒋗."},
+"rb_mikrotik_log":{"message0":"𒌅𒌒𒉺𒌅𒌝 𒊭 MikroTik, %1 𒅆𒀉𒊒 𒉿𒅈𒆪𒌅𒌝","tooltip":"𒅆𒀉𒊒 𒉿𒅈𒆪𒌅𒌝 𒊭 𒌅𒌒𒉺𒋾𒅎 𒊭 𒈬𒍑𒋼𒉌𒅎, 𒆷𒁉𒊒𒌝 𒉺𒈾, 𒅗𒇻𒋗𒉡 𒆠𒈠 „time topics: message”."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌑𒈪𒊭𒄠","weekdays":"𒄿𒈾 𒌑𒈪 𒅆𒅁𒊑𒅎","weekends":"𒄿𒈾 𒌑𒈪 𒉡𒄭𒅎"},
@@ -203,7 +207,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"𒍢𒌅𒌝",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𒌑𒉡𒌅𒌝 𒀀𒈾 𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 𒇷𒅁𒁉 𒇷𒁉𒀉𒋾 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒁲𒅆𒈾",
@@ -1015,7 +1020,12 @@
 "Coinbase account":"𒉌𒅅𒅗𒊍𒋢 𒊭 Coinbase",
 "sample account":"𒉌𒅅𒅗𒊍𒋢 𒊭 𒋫𒄠𒅆𒇷𒅎",
 "trade on your Coinbase account with real money (asking you before every order)":"𒄿𒈾 𒉌𒅅𒅗𒊍𒋛𒅗 𒊭 Coinbase 𒄿𒈾 𒅗𒊍𒁉𒅎 𒆠𒉌𒅎 𒊭𒈠𒄠 𒌑 𒉺𒊭𒊏𒄠 (𒆷𒈠 𒋼𒅕𒋾𒅎 𒅗𒇷𒊭 𒄿𒊭𒀠𒅗)",
-"read your Coinbase balances and orders, and market prices":"𒅆𒀉𒋫𒋾𒅗 𒌑 𒋼𒊑𒋾𒅗 𒊭 Coinbase, 𒌑 𒅆𒈠𒀜 𒈠𒄭𒊑𒅎 𒊭𒋢𒌝"
+"read your Coinbase balances and orders, and market prices":"𒅆𒀉𒋫𒋾𒅗 𒌑 𒋼𒊑𒋾𒅗 𒊭 Coinbase, 𒌑 𒅆𒈠𒀜 𒈠𒄭𒊑𒅎 𒊭𒋢𒌝",
+"MikroTik":"MikroTik",
+"MikroTik ports":"𒁀𒁍 𒊭 MikroTik",
+"{n} ports":"{n} 𒁀𒁍",
+"MikroTik switch":"𒈬𒍑𒋼𒉡𒌝 𒊭 MikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"𒈬𒍑𒋼𒈾𒅗 𒊭 MikroTik 𒊭𒋢𒌝: 𒁀𒁉𒋗, 𒄩𒀠𒍢𒋗, 𒋗𒇻𒌝𒋗 𒌑 𒌅𒌒𒉺𒋾𒋗"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1968,7 +1978,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"kunukkum ippuš, u kaspam šūbulam ile’’i. šipir ṭuppim annûm ul ušabbal: kunukkam ša Transfer lā išû epuš.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"kunukkum ippuš, View ištēnma išu, têrētum ša šipir ṭuppim imassû. kunukkam itti Trade, ana bīt kaspim ištēn kaṣram epuš.",
 "the key works: it can trade (every order asks you first)":"kunukkum ippuš: šâmam ile’’i (têrtum kalûša pāna išâlka)",
-"too many requests just now; try again in a minute":"erēšātum mādā inanna; ina šanîm ūmim šanîš epuš"
+"too many requests just now; try again in a minute":"erēšātum mādā inanna; ina šanîm ūmim šanîš epuš",
+"MikroTik":"MikroTik",
+"MikroTik ports":"bābū ša MikroTik",
+"{n} ports":"{n} bābū",
+"Couldn't reach the MikroTik at {url} ({reason}).":"MikroTik ina {url} kašādam ul imṣi ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik MIKROTIK_URL, MIKROTIK_USER u MIKROTIK_PASSWORD {where_keys} ḫašiḫ: ašar muštēnîm (kīma https://192.168.88.1) u awīlam ina ṣābim ša read, api u rest-api ištēnma.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought ina MikroTik ištēnma išassi, {what} ul išappar.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik MIKROTIK_USER u MIKROTIK_PASSWORD imēs.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"kunukkam ša MikroTik ul itakkal (muštēnû kunukkam ramānišunu ippušū). --doctor epuš ana šiṭirtišu amārim, u ina MIKROTIK_CERT_SHA256 šukun.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"kunukkum ša MikroTik ul ša MIKROTIK_CERT_SHA256 ukinnu ({seen} šū). šumma kunukkam tušanni, eššiš šuṭur; šumma lā, mimma ina birīt izzaz.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"ṣābum ša nikkassī ({group}) {what} ile’’i. Second Thought ištēnma išassi, ṣābum ša read, api u rest-api ištēnma šalim.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"šumum pazrum ina http:// lā katim illak. www-ssl u https:// leqe.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"kunukkum ša muštēnîm ramānišu, kīnšu: šumma {url} MikroTik kâti, MIKROTIK_CERT_SHA256 = {seen} ina second-thought.ini šuṭur.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

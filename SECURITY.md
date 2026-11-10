@@ -44,7 +44,7 @@ decided by its blocks, and every block declares it (the `CAPABILITIES` list in `
   devices and start Homey flows; publish MQTT messages; accept web requests from other computers; use the tools of
   MCP servers you set up; place and cancel Coinbase orders.
 - **Read:** web pages and search, your email, calendars, news feeds, GitHub, Telegram, Discord and Slack messages,
-  Home Assistant, Homey and MQTT, your Coinbase balances and orders, a folder it watches, and files you choose.
+  Home Assistant, Homey and MQTT, your Coinbase balances and orders, your MikroTik switch's ports and log, a folder it watches, and files you choose.
 - **Keep:** files in its `outputs` folder, and notes between runs in `memory.json`.
 
 Everything it reads and writes is sent to the model services it uses.
@@ -66,6 +66,9 @@ Everything it reads and writes is sent to the model services it uses.
     total, and never runs with nobody there to say yes (unless `approve_by = telegram`). Every Coinbase call other than
     reading and previewing goes through that question (`coinbase_free` in `SAFETY`), so nothing else can move money;
     converting, transferring and withdrawing aren't offered at all. Use a View-only key unless the program trades.
+  - **Your network.** The MikroTik blocks only read. The runtime sends nothing to RouterOS but the reads in
+    `mikrotik_free` (`SAFETY`): no change and no reboot is ever sent, whoever asks. A self-signed router certificate is
+    used only when `MIKROTIK_CERT_SHA256` pins it.
   - **Things that could do anything.** When an agent chooses it, running a Home Assistant script, scene or automation,
     pressing a button, starting a Homey flow, or publishing an MQTT message that says unlock, open or disarm.
 - **No reading made-up addresses next to private data.** An agent that can see private things (email, messages,
