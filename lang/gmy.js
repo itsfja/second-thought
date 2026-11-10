@@ -154,7 +154,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase %1","tooltip":"𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 𐀰𐀂 (id, product, side, size, price, filled 𐀏𐀂 created), 𐀁 𐀁𐀏𐀲 𐀟𐀟𐀨𐀕𐀙 (time, product, side, size, price, fee 𐀏𐀂 order)."},
 "rb_coinbase_preview":{"message0":"𐀡𐀫𐀃𐀨 𐀁𐀵𐀩 Coinbase: %1 %2 𐀀𐀢 %3","tooltip":"𐀴 𐀁𐀵𐀩 𐀀𐀒𐀨 𐀐𐀚𐀵, 𐀃𐀄 𐀳𐀳𐀕𐀜: 𐀏𐀨𐀟 𐀕𐀲 size, spend, fee, total, slippage 𐀏𐀂 warnings. 𐀃𐀜 𐀅𐀞𐀙𐀂 𐀡𐀰 𐀆𐀄𐀳𐀫 𐀜𐀖𐀭 (50 𐀀𐀢 BTC-GBP 𐀅𐀞𐀙𐀂 £50); 𐀟𐀨𐀯 𐀡𐀩𐀂 𐀡𐀰 𐀟𐀫𐀵 (0.01 𐀀𐀢 BTC-GBP 𐀡𐀩𐀂 0.01 BTC). 𐀃𐀄𐀆 𐀕𐀲𐀞𐀨𐀁."},
 "rb_coinbase_order":{"message0":"𐀳𐀮 𐀁𐀵𐀩 Coinbase: %1 %2 𐀀𐀢 %3","tooltip":"𐀳𐀴𐀯 𐀀𐀨𐀳𐀀 𐀁𐀵𐀩 𐀀𐀒𐀨, 𐀃𐀒 “𐀡𐀫𐀃𐀨 𐀁𐀵𐀩 Coinbase”. 𐀟𐀫𐀵 𐀡𐀫𐀃𐀨𐀂, 𐀁𐀟𐀂𐀲 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮, 𐀕𐀲 𐀳𐀫 𐀏𐀂 𐀞𐀲, 𐀏𐀂 𐀃𐀳 𐀃𐀄𐀆 𐀀𐀫 𐀁𐀫𐀲𐀂; 𐀃𐀄𐀆𐀂 𐀞𐀫 𐀃𐀟 𐀙𐀂 𐀁𐀟, 𐀃𐀄 𐀳𐀩𐀐𐀁. 𐀆𐀂 𐀏𐀨𐀹 𐀕𐀲 Trade. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃𐀄𐀆 𐀃𐀚𐀲𐀂 𐀃𐀄𐀆 𐀟𐀨𐀲𐀂."},
-"rb_coinbase_cancel":{"message0":"𐀀𐀡𐀬𐀁 𐀁𐀵𐀩 Coinbase %1","tooltip":"𐀀𐀡𐀬𐀁 𐀁𐀚 𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 𐀰𐀂, 𐀕𐀲 id (𐀀𐀡 “𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 Coinbase”). 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵, 𐀏𐀂 𐀃𐀄 𐀳𐀩𐀐𐀁 𐀃𐀄𐀆𐀂 𐀞𐀫."}
+"rb_coinbase_cancel":{"message0":"𐀀𐀡𐀬𐀁 𐀁𐀵𐀩 Coinbase %1","tooltip":"𐀀𐀡𐀬𐀁 𐀁𐀚 𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 𐀰𐀂, 𐀕𐀲 id (𐀀𐀡 “𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 Coinbase”). 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵, 𐀏𐀂 𐀃𐀄 𐀳𐀩𐀐𐀁 𐀃𐀄𐀆𐀂 𐀞𐀫."},
+"rb_mikrotik_ports":{"message0":"𐀶𐀨 MikroTik","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀶𐀨 𐀀𐀨𐀐𐀳 MikroTik 𐀰𐀂: port, running, speed (𐀃𐀒 10Gbps), errors, drops, link_downs 𐀏𐀂 comment. 𐀗𐀜 𐀀𐀙𐀑𐀜𐀐: 𐀃𐀄𐀆 𐀕𐀲𐀞𐀨𐀁. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀐𐀨𐀲𐀂 𐀞𐀨𐀆𐀒𐀔 𐀀𐀨𐀐𐀳."},
+"rb_mikrotik_sfp":{"message0":"𐀕𐀫 SFP MikroTik","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀕𐀫 SFP: port, module, temperature (°C), rx_power 𐀏𐀂 tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"𐀄𐀑𐀊 MikroTik","tooltip":"𐀏𐀨𐀟 𐀟𐀪 𐀀𐀨𐀐𐀳: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𐀏𐀂 𐀀𐀨 𐀀𐀂𐀳𐀳𐀪𐀊."},
+"rb_mikrotik_log":{"message0":"𐀏𐀨𐀟 MikroTik, 𐀁𐀏𐀲 %1 𐀏𐀨𐀟","tooltip":"𐀏𐀨𐀟 𐀁𐀏𐀲 𐀀𐀨𐀐𐀳, 𐀞𐀨𐀍 𐀟𐀫𐀵, 𐀞 𐀃𐀒 “time topics: message”."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐀁𐀏𐀲 𐀀𐀔","weekdays":"𐀀𐀔 𐀸𐀒","weekends":"𐀀𐀔 𐀀𐀙𐀞𐀄𐀮𐀃"},
@@ -203,7 +207,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"𐀁𐀒𐀈𐀰",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵",
@@ -1015,7 +1020,12 @@
 "Coinbase account":"𐀫𐀒 Coinbase",
 "sample account":"𐀞𐀨𐀆𐀒𐀔 𐀫𐀒",
 "trade on your Coinbase account with real money (asking you before every order)":"𐀁𐀡𐀫𐀄𐀁 𐀁𐀚 𐀫𐀒 Coinbase 𐀰𐀂 𐀀𐀨𐀳𐀀 𐀓𐀬𐀰 (𐀁𐀫𐀲𐀂 𐀮 𐀡𐀫 𐀞𐀵 𐀁𐀵𐀩)",
-"read your Coinbase balances and orders, and market prices":"𐀀𐀙𐀑𐀜𐀐 𐀫𐀂𐀞 𐀏𐀂 𐀁𐀵𐀩 Coinbase 𐀰𐀂, 𐀏𐀂 𐀴𐀔 𐀀𐀒𐀨"
+"read your Coinbase balances and orders, and market prices":"𐀀𐀙𐀑𐀜𐀐 𐀫𐀂𐀞 𐀏𐀂 𐀁𐀵𐀩 Coinbase 𐀰𐀂, 𐀏𐀂 𐀴𐀔 𐀀𐀒𐀨",
+"MikroTik":"MikroTik",
+"MikroTik ports":"𐀶𐀨 MikroTik",
+"{n} ports":"{n} 𐀶𐀨",
+"MikroTik switch":"𐀀𐀨𐀐𐀳 MikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"𐀀𐀙𐀑𐀜𐀐 𐀀𐀨𐀐𐀳 MikroTik 𐀰𐀂: 𐀶𐀨, 𐀕𐀫, 𐀄𐀑𐀊 𐀏𐀂 𐀏𐀨𐀟"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1968,7 +1978,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"ka-ra-wi we-ke-i, a-ra ka-i ku-ru-so me-ta-pe-re-i du-na-ta-i. to-to po-ro-ka-ra-ma o-u-po-te me-ta-pe-re-i: po-e-se ka-ra-wi a-ne-u Transfer.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"ka-ra-wi we-ke-i, a-ra mo-no View e-ke-i, o-u-to e-to-re po-ro-ka-ra-ma a-pa-ne-o-me-na e-so-ta-i. po-e-se ka-ra-wi me-ta Trade, e-ne e-ne te-sa-u-ro.",
 "the key works: it can trade (every order asks you first)":"ka-ra-wi we-ke-i: du-na-ta-i e-po-ro-u-e (pa e-to-re e-ro-ta-i se pe-ro-to)",
-"too many requests just now; try again in a minute":"po-ra-ki-se e-ro-te-ma-ta nu; a-pi pe-i-ra me-ta mi-nu-to"
+"too many requests just now; try again in a minute":"po-ra-ki-se e-ro-te-ma-ta nu; a-pi pe-i-ra me-ta mi-nu-to",
+"MikroTik":"MikroTik",
+"MikroTik ports":"tu-ra MikroTik",
+"{n} ports":"{n} tu-ra",
+"Couldn't reach the MikroTik at {url} ({reason}).":"MikroTik e-pi {url} o-u pi-ke-to ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik de-i MIKROTIK_URL, MIKROTIK_USER ka-i MIKROTIK_PASSWORD {where_keys}: to-po a-ra-ke-te (o-ko https://192.168.88.1) ka-i ke-re-te e-ne o-ma-do mo-no me-ta read, api ka-i rest-api.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought mo-no a-na-ki-no-ke a-po MikroTik, o-u-to o-u pe-po-pe {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik a-pa-ne-to MIKROTIK_USER ka-i MIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"to-to o-u pi-to-e-u-e ma-tu-ri-jo MikroTik (a-ra-ke-te i-di-o po-e-o-si). te-re-ke --doctor o-pe i-de-e i-ko-no, ka-i te-ke e-ne MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"ma-tu-ri-jo MikroTik o-u-ka to o MIKROTIK_CERT_SHA256 o-ri-ze e-si ({seen} e-si). e-i a-me-we-se ma-tu-ri-jo, ne-wo po-e-se; e-i me, ti me-so e-si.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"o-ma-do ro-ko ({group}) ka-i {what} du-na-ta-i. Second Thought mo-no a-na-ki-no-ke, o-u-to o-ma-do mo-no me-ta read, api ka-i rest-api a-sa-pa-re-te-ro.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"ka-ra-wi ro-ko a-ku-pi-to e-pi http:// pe-re-ta-i. ke-ra www-ssl ka-i https://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"ma-tu-ri-jo a-ra-ke-te i-di-o e-si, o-ri-so: e-i {url} MikroTik so-i e-si, te-ke MIKROTIK_CERT_SHA256 = {seen} e-ne second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

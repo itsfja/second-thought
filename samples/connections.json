@@ -1097,5 +1097,207 @@
         "order_id": "a7b6c5d4-3e2f-4a1b-8c9d-0e1f2a3b4c66"
       }
     ]
+  },
+  "mikrotik": {
+    "note": "A sample MikroTik switch for the page and the tests (#360), shaped the way RouterOS 7's REST API answers. sfp-sfpplus2 is the NAS link that came up at 1Gbps.",
+    "interfaces": [
+      {
+        ".id": "*1",
+        "name": "ether1",
+        "type": "ether",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": "management"
+      },
+      {
+        ".id": "*1",
+        "name": "sfp-sfpplus1",
+        "type": "ether",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": "uplink to router"
+      },
+      {
+        ".id": "*1",
+        "name": "sfp-sfpplus2",
+        "type": "ether",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "12",
+        "tx-error": "0",
+        "rx-drop": "3",
+        "tx-drop": "0",
+        "link-downs": "2",
+        "comment": "NAS"
+      },
+      {
+        ".id": "*1",
+        "name": "sfp-sfpplus3",
+        "type": "ether",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": "Proxmox host"
+      },
+      {
+        ".id": "*1",
+        "name": "sfp-sfpplus4",
+        "type": "ether",
+        "running": "false",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": "spare"
+      },
+      {
+        ".id": "*6",
+        "name": "bridge",
+        "type": "bridge",
+        "running": "true",
+        "disabled": "false",
+        "rx-error": "0",
+        "tx-error": "0",
+        "rx-drop": "0",
+        "tx-drop": "0",
+        "link-downs": "0",
+        "comment": ""
+      }
+    ],
+    "monitor": {
+      "ether1": {
+        "name": "ether1",
+        "status": "link-ok",
+        "rate": "1Gbps",
+        "full-duplex": "true"
+      },
+      "sfp-sfpplus1": {
+        "name": "sfp-sfpplus1",
+        "status": "link-ok",
+        "rate": "10Gbps",
+        "full-duplex": "true",
+        "sfp-module-present": "true",
+        "sfp-vendor-name": "MikroTik",
+        "sfp-vendor-part-number": "S+85DLC03D",
+        "sfp-temperature": "41C",
+        "sfp-rx-power": "-2.512dBm",
+        "sfp-tx-power": "-2.104dBm"
+      },
+      "sfp-sfpplus2": {
+        "name": "sfp-sfpplus2",
+        "status": "link-ok",
+        "rate": "1Gbps",
+        "full-duplex": "true",
+        "sfp-module-present": "true",
+        "sfp-vendor-name": "FS",
+        "sfp-vendor-part-number": "SFP-10GSR-85",
+        "sfp-temperature": "58C",
+        "sfp-rx-power": "-9.871dBm",
+        "sfp-tx-power": "-2.390dBm"
+      },
+      "sfp-sfpplus3": {
+        "name": "sfp-sfpplus3",
+        "status": "link-ok",
+        "rate": "10Gbps",
+        "full-duplex": "true",
+        "sfp-module-present": "true",
+        "sfp-vendor-name": "MikroTik",
+        "sfp-vendor-part-number": "S+RJ10",
+        "sfp-temperature": "67C"
+      },
+      "sfp-sfpplus4": {
+        "name": "sfp-sfpplus4",
+        "status": "no-link",
+        "sfp-module-present": "false"
+      }
+    },
+    "resource": {
+      "board-name": "CRS309-1G-8S+",
+      "version": "7.16.1 (stable)",
+      "uptime": "3w2d4h11m",
+      "cpu-load": "4",
+      "free-memory": "413138944",
+      "total-memory": "536870912"
+    },
+    "health": [
+      {
+        ".id": "*1",
+        "name": "temperature",
+        "value": "46",
+        "type": "C"
+      },
+      {
+        ".id": "*2",
+        "name": "cpu-temperature",
+        "value": "52",
+        "type": "C"
+      },
+      {
+        ".id": "*3",
+        "name": "psu1-state",
+        "value": "ok",
+        "type": ""
+      }
+    ],
+    "log": [
+      {
+        ".id": "*a1",
+        "time": "2026-11-09 18:02:11",
+        "topics": "interface,info",
+        "message": "sfp-sfpplus2 link down"
+      },
+      {
+        ".id": "*a2",
+        "time": "2026-11-09 18:02:14",
+        "topics": "interface,info",
+        "message": "sfp-sfpplus2 link up (speed 1G, full duplex)"
+      },
+      {
+        ".id": "*a3",
+        "time": "2026-11-10 07:30:00",
+        "topics": "system,info,account",
+        "message": "user monitor logged in via rest-api"
+      }
+    ],
+    "users": [
+      {
+        ".id": "*1",
+        "name": "admin",
+        "group": "full"
+      },
+      {
+        ".id": "*2",
+        "name": "monitor",
+        "group": "read-api"
+      }
+    ],
+    "groups": [
+      {
+        ".id": "*1",
+        "name": "full",
+        "policy": "local,telnet,ssh,ftp,reboot,read,write,policy,test,winbox,password,web,sniff,sensitive,api,romon,rest-api"
+      },
+      {
+        ".id": "*2",
+        "name": "read-api",
+        "policy": "read,api,rest-api,!local,!telnet,!ssh,!ftp,!reboot,!write,!policy,!test,!winbox,!password,!web,!sniff,!sensitive,!romon"
+      }
+    ]
   }
 }

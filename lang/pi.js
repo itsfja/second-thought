@@ -154,7 +154,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase %1","tooltip":"तव विवटाणायो (id, product, side, size, price, filled, created च), अथ वा नवतमा पूरणा (time, product, side, size, price, fee, order च)।"},
 "rb_coinbase_preview":{"message0":"Coinbase-आणं पुब्बे पस्स: %3 स्स %2 %1","tooltip":"आपणाणा किं भवेय्य, तं अदत्वा: size, spend, fee, total, slippage, warnings युत्तो अभिलेखो। किणनं दुतियकहापणस्स रासिं वयेति (BTC-GBP स्स 50 £50 वयेति); विक्कयो पठमस्स रासिं विक्किणाति (BTC-GBP स्स 0.01 0.01 BTC विक्किणाति)। किञ्चि न परिवत्तति।"},
 "rb_coinbase_order":{"message0":"Coinbase-आणं देहि: %3 स्स %2 %1","tooltip":"सच्चं आपणाणं देति, 'Coinbase-आणं पुब्बे पस्स' विय। पठमं पुब्बे पस्सति, ततो सदा तं पुच्छति, सुङ्केन सब्बेन च सह, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। Trade-अनुञ्ञाय सह कुञ्चिकं इच्छति। इमस्मिं पिट्ठे किञ्चि न किणीयति न विक्किणीयति।"},
-"rb_coinbase_cancel":{"message0":"Coinbase-आणं %1 निवत्तेहि","tooltip":"तव विवटाणासु एकं तस्सा id अनुसारेन निवत्तेति ('Coinbase-विवटाणा' तो)। सदा पठमं तं पुच्छति, कोचि नत्थि चे न पवत्तति।"}
+"rb_coinbase_cancel":{"message0":"Coinbase-आणं %1 निवत्तेहि","tooltip":"तव विवटाणासु एकं तस्सा id अनुसारेन निवत्तेति ('Coinbase-विवटाणा' तो)। सदा पठमं तं पुच्छति, कोचि नत्थि चे न पवत्तति।"},
+"rb_mikrotik_ports":{"message0":"MikroTik-द्वारानि","tooltip":"अभिलेखानं सूचि, तव MikroTik-मग्गदेसकस्स परिवत्तकस्स वा पतिद्वारं एको: port, running, speed (यथा 10Gbps), errors, drops, link_downs, comment च। दोसा पाता च पच्छिमारम्भतो गणीयन्ति। केवलं पठति: परिवत्तके किञ्चि न परिवत्तति। इमस्मिं पिट्ठे निदस्सन-परिवत्तकं गण्हाति।"},
+"rb_mikrotik_sfp":{"message0":"MikroTik SFP-अंसा","tooltip":"अभिलेखानं सूचि, पतिनिवेसित-SFP-अंसं एको: port, module, temperature (°C), rx_power, tx_power (dBm) च।"},
+"rb_mikrotik_health":{"message0":"MikroTik-आरोग्यं","tooltip":"मग्गदेसकस्स अत्तनो अभिलेखो: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), तस्स अञ्ञे वेदका च।"},
+"rb_mikrotik_log":{"message0":"MikroTik-वत्तन्तं, पच्छिमा %1 पन्तियो","tooltip":"मग्गदेसकस्स वत्तन्तस्स पच्छिमा पन्तियो, पुराणतमा पठमं, एकेका \"time topics: message\" इति।"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"सब्बदिवसे","weekdays":"कम्मदिवसेसु","weekends":"सत्ताहन्तेसु"},
@@ -202,7 +206,8 @@
 "Variables":"चलानि",
 "Wait & time":"आगमनं कालो च",
 "You":"त्वं",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1014,7 +1019,12 @@
 "Coinbase account":"Coinbase-लेखा",
 "sample account":"निदस्सन-लेखा",
 "trade on your Coinbase account with real money (asking you before every order)":"तव Coinbase-लेखाय सच्चधनेन वणिज्जं कातुं (पतिआणं पुब्बे तं पुच्छन्तो)",
-"read your Coinbase balances and orders, and market prices":"तव Coinbase-सेसानि आणायो च, आपणमूलानि च पठितुं"
+"read your Coinbase balances and orders, and market prices":"तव Coinbase-सेसानि आणायो च, आपणमूलानि च पठितुं",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik-द्वारानि",
+"{n} ports":"{n} द्वारानि",
+"MikroTik switch":"MikroTik-परिवत्तको",
+"read your MikroTik router or switch: its ports, modules, health and log":"तव MikroTik-मग्गदेसकं परिवत्तकं वा पठितुं: द्वारानि, अंसा, आरोग्यं, वत्तन्तं च"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -1967,7 +1977,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"कुञ्चिका कम्मं करोति, धनं पन सङ्कामेतुं पि सक्कोति। अयं कम्मपथो कदापि न सङ्कामेति: Transfer-अनुञ्ञं विना कुञ्चिकं करोहि।",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"कुञ्चिका कम्मं करोति, केवलं पन View, तस्मा इमस्स कम्मपथस्स आणायो पटिक्खिपेय्युं। Trade-अनुञ्ञाय सह एकस्मिं कोसे सीमितं कुञ्चिकं करोहि।",
 "the key works: it can trade (every order asks you first)":"कुञ्चिका कम्मं करोति: वणिज्जं कातुं सक्कोति (पतिआणा पठमं तं पुच्छति)",
-"too many requests just now; try again in a minute":"इदानि अतिबहूनि याचनानि; मुहुत्तस्स अच्चयेन पुन वायमाहि"
+"too many requests just now; try again in a minute":"इदानि अतिबहूनि याचनानि; मुहुत्तस्स अच्चयेन पुन वायमाहि",
+"MikroTik":"MikroTik",
+"MikroTik ports":"MikroTik-द्वारानि",
+"{n} ports":"{n} द्वारानि",
+"Couldn't reach the MikroTik at {url} ({reason}).":"{url} मध्ये MikroTik पापुणितुं न सक्का ({reason})।",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik MIKROTIK_URL, MIKROTIK_USER, MIKROTIK_PASSWORD च इच्छति {where_keys}: मग्गदेसकस्स ठानं (यथा https://192.168.88.1), केवलं read, api, rest-api नीतीहि युत्ते गणे एको उपयोगी च।",
+"MikroTik: {why}.":"MikroTik: {why}।",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought MikroTik तो केवलं पठति, तस्मा {what} न पेसेति।",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik MIKROTIK_USER MIKROTIK_PASSWORD च पटिक्खिपि।",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"अयं गणकयन्तो MikroTik स्स पमाणपत्ते न विस्ससति (मग्गदेसका येभुय्येन अत्तनो करोन्ति)। तस्स अङ्गुलिलक्खणं दट्ठुं --doctor चालेहि, MIKROTIK_CERT_SHA256 मध्ये ठपेहि च।",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"MikroTik स्स पमाणपत्तं न तं यं MIKROTIK_CERT_SHA256 नियमेति (तं {seen})। सचे पमाणपत्तं परिवत्तेसि, मूलं नवं करोहि; नो चे मज्झे किञ्चि अत्थि।",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"लेखाय गणो ({group}) {what} पि कातुं सक्कोति। Second Thought केवलं पठति, तस्मा केवलं read, api, rest-api युत्तो गणो खेमतरो।",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"गुय्हसद्दो http:// मग्गेन अप्पटिच्छन्नो गच्छति। तस्स ठाने www-ssl सेवं https:// च गण्हाहि।",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"मग्गदेसकस्स पमाणपत्तं अत्तनो, तस्मा तं नियमेहि: सचे {url} तव MikroTik, second-thought.ini मध्ये MIKROTIK_CERT_SHA256 = {seen} लिखाहि।",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

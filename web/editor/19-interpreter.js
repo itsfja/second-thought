@@ -277,6 +277,10 @@
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_coinbase_balances": return coinbaseBalances();
+      case "rb_mikrotik_ports": return mikrotikPorts();
+      case "rb_mikrotik_sfp": return mikrotikSfp();
+      case "rb_mikrotik_health": return mikrotikHealth();
+      case "rb_mikrotik_log": return mikrotikLog(await input(b, tc, "N", 20));
       case "rb_coinbase_value": return coinbaseValue();
       case "rb_coinbase_price": return coinbasePrice(b.getFieldValue("WHAT"), await input(b, tc, "PRODUCT"));
       case "rb_coinbase_candles": return coinbaseCandles(b.getFieldValue("SIZE"), await input(b, tc, "PRODUCT"), await input(b, tc, "N", 7));

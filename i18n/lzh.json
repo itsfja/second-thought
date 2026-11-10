@@ -588,6 +588,22 @@
   "rb_coinbase_cancel": {
    "message0": "撤 Coinbase 之單 %1",
    "tooltip": "以 id 撤汝一未成之單（取諸「Coinbase 未成之單」）。必先問汝，無人則不行。"
+  },
+  "rb_mikrotik_ports": {
+   "message0": "MikroTik 之口",
+   "tooltip": "簿之列，汝 MikroTik 路由或交換器每口一簿：port、running、speed（若 10Gbps）、errors、drops、link_downs、comment。誤與棄自末啟計之。唯讀：交換器無所變。於此頁用樣器。"
+  },
+  "rb_mikrotik_sfp": {
+   "message0": "MikroTik 之 SFP 模",
+   "tooltip": "簿之列，每插之 SFP 模一簿：port、module、temperature（°C）、rx_power、tx_power（dBm）。"
+  },
+  "rb_mikrotik_health": {
+   "message0": "MikroTik 之狀",
+   "tooltip": "器之自簿：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C），及其他所有之感。"
+  },
+  "rb_mikrotik_log": {
+   "message0": "MikroTik 之錄，末 %1 行",
+   "tooltip": "路由之錄末數行，舊者居先，每行如「time topics: message」。"
   }
  },
  "options": {
@@ -733,7 +749,8 @@
   "Variables": "變數",
   "Wait & time": "待與時",
   "You": "汝",
-  "Coinbase": "Coinbase"
+  "Coinbase": "Coinbase",
+  "MikroTik": "MikroTik"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "聽者：所出之程依時而行，則此諸塊行",
@@ -1545,7 +1562,12 @@
   "Coinbase account": "Coinbase 之戶",
   "sample account": "樣戶",
   "trade on your Coinbase account with real money (asking you before every order)": "以真錢易於汝 Coinbase 之戶（每單之前必問）",
-  "read your Coinbase balances and orders, and market prices": "讀汝 Coinbase 之餘與單，及市價"
+  "read your Coinbase balances and orders, and market prices": "讀汝 Coinbase 之餘與單，及市價",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "MikroTik 之口",
+  "{n} ports": "{n} 口",
+  "MikroTik switch": "MikroTik 之交換器",
+  "read your MikroTik router or switch: its ports, modules, health and log": "讀汝 MikroTik 之路由或交換器：其口、其模、其狀、其錄"
  },
  "examples": {
   "review": {
@@ -3130,7 +3152,21 @@
   "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "鑰可用，然亦能轉錢。此程序未嘗轉：造無 Transfer 之權之鑰。",
   "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "鑰可用，然唯 View，故此程序之單將見拒。造有 Trade 之權之鑰，限於一庫。",
   "the key works: it can trade (every order asks you first)": "鑰可用：能易（每單先問汝）",
-  "too many requests just now; try again in a minute": "今請太多；一分之後再試"
+  "too many requests just now; try again in a minute": "今請太多；一分之後再試",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "MikroTik 之口",
+  "{n} ports": "{n} 口",
+  "Couldn't reach the MikroTik at {url} ({reason}).": "不能達 {url} 之 MikroTik（{reason}）。",
+  "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.": "MikroTik 須 MIKROTIK_URL、MIKROTIK_USER、MIKROTIK_PASSWORD {where_keys}：路由之址（若 https://192.168.88.1），及一用者，其群唯有 read、api、rest-api 之權。",
+  "MikroTik: {why}.": "MikroTik：{why}。",
+  "Second Thought only reads from MikroTik, so it doesn't send {what}.": "Second Thought 於 MikroTik 唯讀，故不發 {what}。",
+  "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.": "MikroTik 拒 MIKROTIK_USER 與 MIKROTIK_PASSWORD。",
+  "The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.": "此機不信 MikroTik 之證（路由多自造其證）。行 --doctor 以見其紋，書之於 MIKROTIK_CERT_SHA256。",
+  "The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "MikroTik 之證非 MIKROTIK_CERT_SHA256 所定者（乃 {seen}）。若汝易其證，則更其值；否則有物居間。",
+  "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.": "其戶之群（{group}）亦能 {what}。Second Thought 唯讀，故唯有 read、api、rest-api 之群為安。",
+  "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.": "其密以 http:// 明傳。宜用 www-ssl 之務與 https://。",
+  "the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.": "路由之證乃其自造，宜定之：若 {url} 為汝之 MikroTik，書 MIKROTIK_CERT_SHA256 = {seen} 於 second-thought.ini。",
+  "{board}, RouterOS {version}": "{board}，RouterOS {version}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

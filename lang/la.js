@@ -153,7 +153,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"Mandata tua aperta (id, product, side, size, price, filled et created) aut ultima perfecta (time, product, side, size, price, fee et order)."},
 "rb_coinbase_preview":{"message0":"mandatum Coinbase praevide: %1 %2 %3","tooltip":"Quantum mandatum fori efficeret, non dato: tabula cum size, spend, fee, total, slippage et warnings. Emere summam nummi secundi impendit (50 BTC-GBP £50 impendit); vendere summam primi vendit (0.01 BTC-GBP 0.01 BTC vendit). Nihil mutatur."},
 "rb_coinbase_order":{"message0":"mandatum Coinbase da: %1 %2 %3","tooltip":"Verum mandatum fori dat, ut «mandatum Coinbase praevide». Prius praevidet, deinde te semper rogat, cum mercede et summa, etiam cum nihil aliud rogat; nemine adstante qui «ita» dicat, non fit. Clavem cum permissione Trade eget. In hac pagina nihil emitur neque venditur."},
-"rb_coinbase_cancel":{"message0":"mandatum Coinbase %1 revoca","tooltip":"Unum ex mandatis tuis apertis revocat, per eius id (ex «mandatis apertis Coinbase»). Te semper prius rogat, nec nemine adstante fit."}
+"rb_coinbase_cancel":{"message0":"mandatum Coinbase %1 revoca","tooltip":"Unum ex mandatis tuis apertis revocat, per eius id (ex «mandatis apertis Coinbase»). Te semper prius rogat, nec nemine adstante fit."},
+"rb_mikrotik_ports":{"message0":"portae MikroTik","tooltip":"Index tabularum, una pro quaque porta commutatoris tui MikroTik: port, running, speed (ut 10Gbps), errors, drops, link_downs et comment. Errores et amissa ab ultimo initio numerantur. Tantum legit: nihil in commutatore mutatur. In hac pagina commutatore exempli utitur."},
+"rb_mikrotik_sfp":{"message0":"moduli SFP MikroTik","tooltip":"Index tabularum, una pro quoque modulo SFP inserto: port, module, temperature (°C), rx_power et tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"valetudo MikroTik","tooltip":"Tabula de ipso commutatore: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), et quivis alius sensor quem habet."},
+"rb_mikrotik_log":{"message0":"acta MikroTik, ultimi %1 versus","tooltip":"Ultimi versus actorum commutatoris, vetustissimus primus, quisque ut «time topics: message»."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -202,7 +206,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"Exitus",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1014,7 +1019,12 @@
 "Coinbase account":"ratio Coinbase",
 "sample account":"ratio exempli",
 "trade on your Coinbase account with real money (asking you before every order)":"in ratione tua Coinbase vera pecunia mercari (te ante quodque mandatum rogans)",
-"read your Coinbase balances and orders, and market prices":"reliqua et mandata tua Coinbase, et pretia fori legere"
+"read your Coinbase balances and orders, and market prices":"reliqua et mandata tua Coinbase, et pretia fori legere",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Portae MikroTik",
+"{n} ports":"{n} portae",
+"MikroTik switch":"commutator MikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"commutatorem tuum MikroTik legere: portas, modulos, valetudinem et acta"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1967,7 +1977,21 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"clavis operatur, sed etiam pecuniam transferre potest. Hoc programma numquam transfert: fac clavem sine permissione Transfer.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"clavis operatur, sed tantum View habet, itaque mandata huius programmatis recusarentur. Fac clavem cum permissione Trade, ad unum loculum finitam.",
 "the key works: it can trade (every order asks you first)":"clavis operatur: mercari potest (quodque mandatum te prius rogat)",
-"too many requests just now; try again in a minute":"nimiae petitiones modo; iterum conare post minutam"
+"too many requests just now; try again in a minute":"nimiae petitiones modo; iterum conare post minutam",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Portae MikroTik",
+"{n} ports":"{n} portae",
+"Couldn't reach the MikroTik at {url} ({reason}).":"MikroTik ad {url} attingi non potuit ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik MIKROTIK_URL, MIKROTIK_USER et MIKROTIK_PASSWORD eget {where_keys}: inscriptionem commutatoris (ut https://192.168.88.1) et usorem in grege tantum cum permissionibus read, api et rest-api.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought ex MikroTik tantum legit, itaque {what} non mittit.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik MIKROTIK_USER et MIKROTIK_PASSWORD recusavit.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Hic computator testimonio MikroTik non confidit (commutatores plerumque suum faciunt). Exsequere --doctor ut vestigium eius videas, et pone in MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Testimonium MikroTik non est id quod MIKROTIK_CERT_SHA256 figit (est {seen}). Si testimonium mutavisti, valorem renova; sin, aliquid interest.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"grex rationis ({group}) etiam {what} potest. Second Thought tantum legit, itaque grex cum read, api et rest-api tantum tutior est.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"tessera per http:// non obscurata it. Utere potius servitio www-ssl et https://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"testimonium commutatoris suum est, itaque fige id: si {url} tuum MikroTik est, pone MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

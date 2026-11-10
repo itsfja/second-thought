@@ -154,7 +154,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"הפקודות הפתוחות שלכם (id, product, side, size, price, filled ו-created), או הביצועים האחרונים (time, product, side, size, price, fee ו-order)."},
 "rb_coinbase_preview":{"message0":"תצוגה מקדימה של פקודת Coinbase: %1 %2 של %3","tooltip":"מה תהיה פקודת שוק, בלי לשלוח אותה: רשומה עם size, spend, fee, total, slippage ו-warnings. קנייה מוציאה סכום מהמטבע השני (50 של BTC-GBP מוציא £50); מכירה מוכרת כמות מהראשון (0.01 של BTC-GBP מוכר 0.01 BTC). שום דבר לא משתנה."},
 "rb_coinbase_order":{"message0":"שלח פקודת Coinbase: %1 %2 של %3","tooltip":"שולח פקודת שוק אמיתית, כמו 'תצוגה מקדימה של פקודת Coinbase'. קודם הוא מציג אותה מראש, ואז תמיד שואל אתכם, עם העמלה והסכום הכולל, גם כשדבר אחר לא שואל; כשאין מי שיגיד כן, הוא לא רץ. צריך מפתח עם הרשאת Trade. בעמוד הזה שום דבר לא נקנה ולא נמכר."},
-"rb_coinbase_cancel":{"message0":"בטל פקודת Coinbase ‏%1","tooltip":"מבטל אחת מהפקודות הפתוחות שלכם, לפי ה-id שלה (מתוך 'פקודות פתוחות ב-Coinbase'). תמיד שואל קודם, ולא רץ כשאין אף אחד."}
+"rb_coinbase_cancel":{"message0":"בטל פקודת Coinbase ‏%1","tooltip":"מבטל אחת מהפקודות הפתוחות שלכם, לפי ה-id שלה (מתוך 'פקודות פתוחות ב-Coinbase'). תמיד שואל קודם, ולא רץ כשאין אף אחד."},
+"rb_mikrotik_ports":{"message0":"פורטים של MikroTik","tooltip":"רשימת רשומות, אחת לכל פורט בנתב או במתג ה-MikroTik שלכם: port, running, speed (כמו 10Gbps), errors, drops, link_downs ו-comment. שגיאות ונפילות נספרות מההפעלה האחרונה. הוא רק קורא: שום דבר במתג לא משתנה. בעמוד הזה משמש מתג לדוגמה."},
+"rb_mikrotik_sfp":{"message0":"מודולי SFP של MikroTik","tooltip":"רשימת רשומות, אחת לכל מודול SFP מחובר: port, module, temperature (°C), rx_power ו-tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"מצב ה-MikroTik","tooltip":"רשומה על הנתב או המתג עצמו: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), וכל חיישן אחר שיש לו."},
+"rb_mikrotik_log":{"message0":"יומן MikroTik, %1 השורות האחרונות","tooltip":"השורות האחרונות ביומן הנתב, הישנה קודם, כל אחת בצורה \"time topics: message\"."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יום","weekdays":"בימי חול","weekends":"בסופי שבוע"},
@@ -203,7 +207,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"פלט",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1015,7 +1020,12 @@
 "Coinbase account":"חשבון Coinbase",
 "sample account":"חשבון לדוגמה",
 "trade on your Coinbase account with real money (asking you before every order)":"לסחור בחשבון ה-Coinbase שלכם בכסף אמיתי (בשאלה לפני כל פקודה)",
-"read your Coinbase balances and orders, and market prices":"לקרוא את היתרות והפקודות שלכם ב-Coinbase, ואת מחירי השוק"
+"read your Coinbase balances and orders, and market prices":"לקרוא את היתרות והפקודות שלכם ב-Coinbase, ואת מחירי השוק",
+"MikroTik":"MikroTik",
+"MikroTik ports":"פורטים של MikroTik",
+"{n} ports":"{n} פורטים",
+"MikroTik switch":"מתג MikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"לקרוא את הנתב או המתג MikroTik שלכם: פורטים, מודולים, מצב ויומן"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1968,6 +1978,20 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"המפתח עובד, אבל הוא יכול גם להעביר כסף. התוכנית הזאת אף פעם לא מעבירה: צרו מפתח בלי הרשאת Transfer.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"המפתח עובד, אבל יש לו רק View, ולכן הפקודות של התוכנית יידחו. צרו מפתח עם הרשאת Trade, מוגבל לתיק אחד.",
 "the key works: it can trade (every order asks you first)":"המפתח עובד: הוא יכול לסחור (כל פקודה שואלת אתכם קודם)",
-"too many requests just now; try again in a minute":"יותר מדי בקשות כרגע; נסו שוב בעוד דקה"
+"too many requests just now; try again in a minute":"יותר מדי בקשות כרגע; נסו שוב בעוד דקה",
+"MikroTik":"MikroTik",
+"MikroTik ports":"פורטים של MikroTik",
+"{n} ports":"{n} פורטים",
+"Couldn't reach the MikroTik at {url} ({reason}).":"לא ניתן להגיע ל-MikroTik בכתובת {url} ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik צריך MIKROTIK_URL, MIKROTIK_USER ו-MIKROTIK_PASSWORD {where_keys}: כתובת הנתב (כמו https://192.168.88.1) ומשתמש בקבוצה עם המדיניות read, api ו-rest-api בלבד.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought רק קורא מ-MikroTik, ולכן לא שולח {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"ה-MikroTik דחה את MIKROTIK_USER ו-MIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"המחשב הזה לא סומך על התעודה של ה-MikroTik (נתבים בדרך כלל יוצרים תעודה משלהם). הריצו --doctor כדי לראות את טביעת האצבע שלה, ושימו אותה ב-MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"התעודה של ה-MikroTik אינה זו ש-MIKROTIK_CERT_SHA256 מקבע (היא {seen}). אם החלפתם את התעודה, עדכנו את הערך; אם לא, משהו נמצא באמצע.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"קבוצת החשבון ({group}) יכולה גם {what}. Second Thought רק קורא, ולכן קבוצה עם read, api ו-rest-api בלבד בטוחה יותר.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"הסיסמה עוברת בלי הצפנה דרך http://. השתמשו במקום זאת בשירות www-ssl וב-https://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"התעודה של הנתב היא שלו, אז קבעו אותה: אם {url} הוא ה-MikroTik שלכם, כתבו MIKROTIK_CERT_SHA256 = {seen} ב-second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 }
 };

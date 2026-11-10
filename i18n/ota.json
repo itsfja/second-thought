@@ -589,6 +589,22 @@
   "rb_coinbase_cancel": {
    "message0": "Coinbase امری %1 ی لغو ایت",
    "tooltip": "آچیق امرلرڭزدن بریسنی id سی ایله لغو ایدر ('Coinbase آچیق امرلری' ندن). هر زمان اوّل سزه صورار، كیمسه یوقسه یورومز."
+  },
+  "rb_mikrotik_ports": {
+   "message0": "MikroTik قاپیلری",
+   "tooltip": "قیدلر لیسته‌سی، MikroTik یوللایجی یا آنحتارڭزڭ هر قاپیسی ایچون بر: port، running، speed (10Gbps كبی)، errors، drops، link_downs و comment. خطالر و دوشمه‌لر صوڭ باشلانغیجدن صاییلیر. یالڭز اوقور: آنحتارده هیچ بر شی دكیشمز. بو صحیفه‌ده نمونه بر آنحتار قوللانیر."
+  },
+  "rb_mikrotik_sfp": {
+   "message0": "MikroTik SFP پارچه‌لری",
+   "tooltip": "قیدلر لیسته‌سی، طاقیلی هر SFP پارچه‌سی ایچون بر: port، module، temperature (°C)، rx_power و tx_power (dBm)."
+  },
+  "rb_mikrotik_health": {
+   "message0": "MikroTik صحتی",
+   "tooltip": "یوللایجینڭ كندیسی حقنده بر قید: board، version، uptime، cpu_load (%)، free_memory (MB)، temperature (°C)، و اولان هر باشقه حس ایدیجی."
+  },
+  "rb_mikrotik_log": {
+   "message0": "MikroTik دفتری، صوڭ %1 سطر",
+   "tooltip": "یوللایجی دفترینڭ صوڭ سطرلری، اڭ اسكیسی اوّل، هر بری «time topics: message» شكلنده."
   }
  },
  "options": {
@@ -734,7 +750,8 @@
   "Variables": "متحوّللر",
   "Wait & time": "بكله و وقت",
   "You": "سن",
-  "Coinbase": "Coinbase"
+  "Coinbase": "Coinbase",
+  "MikroTik": "MikroTik"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",
@@ -1546,7 +1563,12 @@
   "Coinbase account": "Coinbase حسابی",
   "sample account": "نمونه حساب",
   "trade on your Coinbase account with real money (asking you before every order)": "Coinbase حسابڭزده كرچك پاره ایله تجارت ایتمك (هر امردن اوّل سزه صوره‌رق)",
-  "read your Coinbase balances and orders, and market prices": "Coinbase باقیه‌لرڭزی و امرلرڭزی، و بازار فیاتلرینی اوقومق"
+  "read your Coinbase balances and orders, and market prices": "Coinbase باقیه‌لرڭزی و امرلرڭزی، و بازار فیاتلرینی اوقومق",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "MikroTik قاپیلری",
+  "{n} ports": "{n} قاپی",
+  "MikroTik switch": "MikroTik آنحتاری",
+  "read your MikroTik router or switch: its ports, modules, health and log": "MikroTik یوللایجی یا آنحتارڭزی اوقومق: قاپیلری، پارچه‌لری، صحتی و دفتری"
  },
  "examples": {
   "review": {
@@ -3131,7 +3153,21 @@
   "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "آناختار ایشلر، فقط پاره ده نقل ایده‌بیلیر. بو پروغرام اصلا نقل ایتمز: Transfer اذنی اولمایان بر آناختار یاپڭ.",
   "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "آناختار ایشلر، فقط یالڭز View ی وار، بو سببله بو پروغرامڭ امرلری رد اولونور. Trade اذنلی، بر خزینه‌یه محدود بر آناختار یاپڭ.",
   "the key works: it can trade (every order asks you first)": "آناختار ایشلر: تجارت ایده‌بیلیر (هر امر اوّل سزه صورار)",
-  "too many requests just now; try again in a minute": "شمدی پك چوق ایستك وار؛ بر دقیقه صوڭره ینه دنه‌یڭ"
+  "too many requests just now; try again in a minute": "شمدی پك چوق ایستك وار؛ بر دقیقه صوڭره ینه دنه‌یڭ",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "MikroTik قاپیلری",
+  "{n} ports": "{n} قاپی",
+  "Couldn't reach the MikroTik at {url} ({reason}).": "{url} ده‌كی MikroTik ه اریشیله‌مدی ({reason}).",
+  "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.": "MikroTik، MIKROTIK_URL و MIKROTIK_USER و MIKROTIK_PASSWORD ایستر {where_keys}: یوللایجینڭ آدرسی (https://192.168.88.1 كبی) و یالڭز read، api و rest-api سیاستلری اولان بر زمره‌ده بر قوللانیجی.",
+  "MikroTik: {why}.": "MikroTik: {why}.",
+  "Second Thought only reads from MikroTik, so it doesn't send {what}.": "Second Thought، MikroTik دن یالڭز اوقور، اونڭ ایچون {what} گوندرمز.",
+  "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.": "MikroTik، MIKROTIK_USER و MIKROTIK_PASSWORD ی رد ایتدی.",
+  "The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.": "بو حسابلایجی MikroTik ڭ شهادتنامه‌سنه گوونمیور (یوللایجیلر چوغونلقله كندیلرینكنی یاپار). پارمق ایزینی كورمك ایچون --doctor چالیشدیرڭ و MIKROTIK_CERT_SHA256 ه یازڭ.",
+  "The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "MikroTik ڭ شهادتنامه‌سی MIKROTIK_CERT_SHA256 ڭ صابتله‌دیغی دكل ({seen} در). شهادتنامه‌یی دكیشدیردیڭزسه قیمتی یڭیله‌یڭ؛ یوقسه آرایه بر شی گیرمش.",
+  "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.": "حسابڭ زمره‌سی ({group}) {what} ده یاپابیلیر. Second Thought یالڭز اوقور، اونڭ ایچون یالڭز read، api و rest-api اولان بر زمره داها امیندر.",
+  "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.": "پاروله http:// اوزرندن شفره‌سز گیدر. یرینه www-ssl خدمتنی و https:// ی قوللانڭ.",
+  "the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.": "یوللایجینڭ شهادتنامه‌سی كندینكیدر، اونی صابتله‌یڭ: {url} سزڭ MikroTik ڭز ایسه second-thought.ini ه MIKROTIK_CERT_SHA256 = {seen} یازڭ.",
+  "{board}, RouterOS {version}": "{board}، RouterOS {version}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

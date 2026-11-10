@@ -67,6 +67,7 @@
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
+             mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -113,6 +114,11 @@
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.mikrotik) out.push("", "[mikrotik]",
+      "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
+      "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
+      "; router's certificate fingerprint to pin.",
+      "MIKROTIK_URL = https://192.168.88.1", "MIKROTIK_USER = ", "MIKROTIK_PASSWORD = ", "MIKROTIK_CERT_SHA256 = ");
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -416,6 +422,10 @@
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
+        case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
+        case "rb_mikrotik_health": return "(await R.mikrotik_health())";
+        case "rb_mikrotik_log": return "(await R.mikrotik_log(" + I("N", "20") + "))";
         case "rb_coinbase_value": return "(await R.coinbase_value())";
         case "rb_coinbase_price": return "(await R.coinbase_price(" + pyStr(b.getFieldValue("WHAT")) + ", " + I("PRODUCT", '""') + "))";
         case "rb_coinbase_candles": return "(await R.coinbase_candles(" + pyStr(b.getFieldValue("SIZE")) + ", " + I("PRODUCT", '""') + ", " + I("N", "7") + "))";

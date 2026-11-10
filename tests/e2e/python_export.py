@@ -208,6 +208,9 @@ def python_tests(codes, share=None):
     cb_key = fake_coinbase.make_key(pathlib.Path(cb_dir) / "cdp_api_key.json")
     coinbase_all = fake_coinbase.FakeCoinbase(cb_key)
     env.update(COINBASE_API_URL=coinbase_all.start(), COINBASE_KEY_FILE=cb_key)
+    import fake_mikrotik  # and the MikroTik ones read a stand-in switch (#360)
+    mikrotik_all = fake_mikrotik.FakeMikrotik()
+    env.update(MIKROTIK_URL=mikrotik_all.start(), MIKROTIK_USER=fake_mikrotik.USER, MIKROTIK_PASSWORD=fake_mikrotik.PASSWORD)
     env.update(MQTT_HOST="127.0.0.1", MQTT_PORT=str(mqtt_port), MQTT_USERNAME=fake_mqtt.USER, MQTT_PASSWORD=fake_mqtt.PASSWORD)
     env.update(DISCORD_API_URL=svc_url + "/discord", DISCORD_BOT_TOKEN=fake_services.DISCORD_TOKEN, DISCORD_CHANNEL_ID=fake_services.DISCORD_CHANNEL,
                SLACK_API_URL=svc_url + "/slack", SLACK_BOT_TOKEN=fake_services.SLACK_TOKEN, SLACK_CHANNEL_ID=fake_services.SLACK_CHANNEL)
@@ -417,6 +420,17 @@ def python_tests(codes, share=None):
                   and "POST /api/v3/brokerage/orders" not in coinbase.calls,
                   "with nobody at the keyboard, the exported program places and cancels nothing")
             coinbase.stop()
+
+    if part("settings"):
+        print("MikroTik in Python")
+        with tempfile.TemporaryDirectory() as tmp:
+            (pathlib.Path(tmp) / "t_mt_blocks.py").write_text(EXTRA["t_mt_blocks"], encoding="utf-8")
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_mt_blocks.py")], env, tmp)
+            res = [l.strip() for l in out.replace("\r\n", "\n").split("RESULT")[-1].split("\n") if l.strip().strip("=")]
+            want = ["1Gbps", "12", "6", "MikroTik S+85DLC03D", "-9.871", "CRS309-1G-8S+", "394", "52",
+                    "2026-11-10 07:30:00 system,info,account: user monitor logged in via rest-api"]
+            check(code_ == 0 and res[:len(want)] == want and not mikrotik_all.refused,
+                  f"t_mt_blocks.py reads the same from RouterOS as the page does, and sends nothing but reads ({res[:len(want)]})" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
 
     print("New features in Python")
     with tempfile.TemporaryDirectory() as tmp:

@@ -590,6 +590,22 @@
   "rb_coinbase_cancel": {
    "message0": "ܒܛܠ ܦܘܩܕܢܐ ܕ-Coinbase %1",
    "tooltip": "ܡܒܛܠ ܚܕ ܡܢ ܦܘܩܕܢܝܟ ܦܬܝܚܐ, ܒ-id ܕܝܠܗ (ܡܢ „ܦܘܩܕܢܐ ܦܬܝܚܐ ܕ-Coinbase”). ܐܡܝܢܐܝܬ ܠܘܩܕܡ ܫܐܠ ܠܟ, ܘܠܐ ܪܗܛ ܟܕ ܠܝܬ ܐܢܫ."
+  },
+  "rb_mikrotik_ports": {
+   "message0": "ܬܪܥܐ ܕ-MikroTik",
+   "tooltip": "ܣܕܪܐ ܕܟܛܝܒܬܐ, ܚܕܐ ܠܟܘܠ ܬܪܥܐ ܕܡܫܚܠܦܢܟ ܕ-MikroTik: port, running, speed (ܐܟ 10Gbps), errors, drops, link_downs ܘ-comment. ܒܠܚܘܕ ܩܪ: ܡܕܡ ܠܐ ܡܫܬܢܐ. ܒܦܛܐ ܗܢܐ ܫܩܠ ܡܫܚܠܦܢܐ ܕܛܘܦܣܐ."
+  },
+  "rb_mikrotik_sfp": {
+   "message0": "ܡܢܘܬܐ SFP ܕ-MikroTik",
+   "tooltip": "ܣܕܪܐ ܕܟܛܝܒܬܐ, ܚܕܐ ܠܟܘܠ ܡܢܬܐ SFP: port, module, temperature (°C), rx_power ܘ-tx_power (dBm)."
+  },
+  "rb_mikrotik_health": {
+   "message0": "ܫܠܡܐ ܕ-MikroTik",
+   "tooltip": "ܟܛܝܒܬܐ ܥܠ ܡܫܚܠܦܢܐ: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), ܘܟܘܠ ܡܕܡ ܐܚܪܝܢ."
+  },
+  "rb_mikrotik_log": {
+   "message0": "ܟܛܒܐ ܕ-MikroTik, %1 ܐܚܪܝܐ",
+   "tooltip": "ܫܘܪܐ ܐܚܪܝܐ ܕܟܛܒܐ ܕܡܫܚܠܦܢܐ, ܥܬܝܩܐ ܩܕܡ, ܟܘܠ ܚܕ ܐܟ „time topics: message”."
   }
  },
  "options": {
@@ -735,7 +751,8 @@
   "Variables": "ܫܘܚܠܦܐ",
   "Wait & time": "ܣܟܐ ܘܙܒܢܐ",
   "You": "ܐܢܬ",
-  "Coinbase": "Coinbase"
+  "Coinbase": "Coinbase",
+  "MikroTik": "MikroTik"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "ܡܨܝܬܢܐ: ܪܗܛܝܢ ܟܕ ܛܘܟܣܐ ܕܢܦܩ ܪܗܛ ܥܡ ܙܒܢܐ",
@@ -1547,7 +1564,12 @@
   "Coinbase account": "ܚܘܫܒܢܐ ܕ-Coinbase",
   "sample account": "ܚܘܫܒܢܐ ܕܛܘܦܣܐ",
   "trade on your Coinbase account with real money (asking you before every order)": "ܙܒܘܢ ܘܙܒܢ ܒܚܘܫܒܢܟ ܕ-Coinbase ܒܟܣܦܐ ܫܪܝܪܐ (ܫܐܠ ܠܟ ܩܕܡ ܟܘܠ ܦܘܩܕܢܐ)",
-  "read your Coinbase balances and orders, and market prices": "ܩܪܝ ܫܪܟܢܝܟ ܘܦܘܩܕܢܝܟ ܕ-Coinbase, ܘܛܝܡܐ ܕܫܘܩܐ"
+  "read your Coinbase balances and orders, and market prices": "ܩܪܝ ܫܪܟܢܝܟ ܘܦܘܩܕܢܝܟ ܕ-Coinbase, ܘܛܝܡܐ ܕܫܘܩܐ",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "ܬܪܥܐ ܕ-MikroTik",
+  "{n} ports": "{n} ܬܪܥܐ",
+  "MikroTik switch": "ܡܫܚܠܦܢܐ ܕ-MikroTik",
+  "read your MikroTik router or switch: its ports, modules, health and log": "ܩܪܝ ܡܫܚܠܦܢܟ ܕ-MikroTik: ܬܪܥܘ, ܡܢܘܬܗ, ܫܠܡܗ ܘܟܛܒܗ"
  },
  "examples": {
   "review": {
@@ -3132,7 +3154,21 @@
   "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.": "qlīdā ꜥābed, ꜣellā ꜣāp meškaḥ lmašnāyu kespā. ṭuksā hānā lꜥālam lā mašne: ꜥbed qlīdā dlā Transfer.",
   "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.": "qlīdā ꜥābed, ꜣellā ꜣīt leh balḥod View, wmettul hānā puqdānē dṭuksā netlꜥzūn. ꜥbed qlīdā ꜥam Trade, lgazzā ḥad.",
   "the key works: it can trade (every order asks you first)": "qlīdā ꜥābed: meškaḥ lmezban (kul puqdānā šāꜣel lāk luqdam)",
-  "too many requests just now; try again in a minute": "saggīꜣān bāꜥwātā hāšā; ṭūb nassī bātar šāꜥtā zꜥortā"
+  "too many requests just now; try again in a minute": "saggīꜣān bāꜥwātā hāšā; ṭūb nassī bātar šāꜥtā zꜥortā",
+  "MikroTik": "MikroTik",
+  "MikroTik ports": "tarꜥē d-MikroTik",
+  "{n} ports": "{n} tarꜥē",
+  "Couldn't reach the MikroTik at {url} ({reason}).": "MikroTik b-{url} lā ꜣetmṭī ({reason}).",
+  "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.": "MikroTik sānē MIKROTIK_URL, MIKROTIK_USER w-MIKROTIK_PASSWORD {where_keys}: dukktā dmšaḥlpānā (ꜣak https://192.168.88.1) wbar nāšā bkenšā d-read, api w-rest-api balḥod.",
+  "MikroTik: {why}.": "MikroTik: {why}.",
+  "Second Thought only reads from MikroTik, so it doesn't send {what}.": "Second Thought balḥod qāre men MikroTik, wlā mšaddar {what}.",
+  "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.": "MikroTik lꜥez l-MIKROTIK_USER w-MIKROTIK_PASSWORD.",
+  "The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.": "ḥušbānā hānā lā mhaymen bšṭārā d-MikroTik (mšaḥlpānē ꜥābdīn dīlhon). ꜥbed --doctor lmeḥzā rušmeh, wsīm b-MIKROTIK_CERT_SHA256.",
+  "The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "šṭārā d-MikroTik lāw hāw dqābaꜥ MIKROTIK_CERT_SHA256 ({seen} ꜣītaw). ꜣen šaḥlpet šṭārā, ḥaddet; wꜣen lā, meddem qāꜣem bmeṣꜥtā.",
+  "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.": "kenšā dḥušbānā ({group}) meškḥā ꜣāp {what}. Second Thought balḥod qāre, kenšā d-read, api w-rest-api balḥod šlīmā yattīr.",
+  "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.": "melltā kasītā b-http:// lā kasyā ꜣāzlā. šqol www-ssl w-https://.",
+  "the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.": "šṭārā dmšaḥlpānā dīleh ꜣītaw, qbaꜥ leh: ꜣen {url} MikroTik dīlāk, ktob MIKROTIK_CERT_SHA256 = {seen} b-second-thought.ini.",
+  "{board}, RouterOS {version}": "{board}, RouterOS {version}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ܐܘܣܦ ܫܪܚܐ",

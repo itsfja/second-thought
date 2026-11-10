@@ -153,7 +153,11 @@
 "rb_coinbase_orders":{"message0":"Coinbase: %1","tooltip":"As suas ordens abertas (id, product, side, size, price, filled e created) ou as suas últimas execuções (time, product, side, size, price, fee e order)."},
 "rb_coinbase_preview":{"message0":"pré-visualizar ordem da Coinbase: %1 %2 de %3","tooltip":"Quanto daria uma ordem a mercado, sem a colocar: um registo com size, spend, fee, total, slippage e warnings. Comprar gasta um montante da segunda moeda (50 de BTC-GBP gasta £50); vender vende um montante da primeira (0.01 de BTC-GBP vende 0.01 BTC). Nada muda."},
 "rb_coinbase_order":{"message0":"colocar ordem da Coinbase: %1 %2 de %3","tooltip":"Coloca uma ordem a mercado real, como «pré-visualizar ordem da Coinbase». Primeiro pré-visualiza-a e depois pergunta-lhe sempre, com a comissão e o total, mesmo quando nada mais pergunta; sem ninguém para dizer que sim, não acontece. Precisa de uma chave com a permissão Trade. Nesta página nada é comprado nem vendido."},
-"rb_coinbase_cancel":{"message0":"cancelar ordem da Coinbase %1","tooltip":"Cancela uma das suas ordens abertas, pelo id (de «ordens abertas da Coinbase»). Pergunta-lhe sempre antes, e não acontece sem ninguém."}
+"rb_coinbase_cancel":{"message0":"cancelar ordem da Coinbase %1","tooltip":"Cancela uma das suas ordens abertas, pelo id (de «ordens abertas da Coinbase»). Pergunta-lhe sempre antes, e não acontece sem ninguém."},
+"rb_mikrotik_ports":{"message0":"portas do MikroTik","tooltip":"Uma lista de registos, um por cada porta do seu router ou switch MikroTik: port, running, speed (como 10Gbps), errors, drops, link_downs e comment. Erros e descartes contam desde o último arranque. Só lê: nada muda no switch. Nesta página usa um switch de exemplo."},
+"rb_mikrotik_sfp":{"message0":"módulos SFP do MikroTik","tooltip":"Uma lista de registos, um por cada módulo SFP ligado: port, module, temperature (°C), rx_power e tx_power (dBm)."},
+"rb_mikrotik_health":{"message0":"estado do MikroTik","tooltip":"Um registo sobre o próprio router ou switch: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) e qualquer outro sensor que tenha."},
+"rb_mikrotik_log":{"message0":"registo do MikroTik, últimas %1 linhas","tooltip":"As últimas linhas do registo do router, a mais antiga primeiro, cada uma como «time topics: message»."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos os dias","weekdays":"nos dias úteis","weekends":"ao fim de semana"},
@@ -202,7 +206,8 @@
 "Home Assistant":"Home Assistant",
 "Homey":"Homey",
 "Output":"Saída",
-"Coinbase":"Coinbase"
+"Coinbase":"Coinbase",
+"MikroTik":"MikroTik"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ferramentas para o agente: coloque-as dentro de um bloco de agente",
@@ -1014,7 +1019,12 @@
 "Coinbase account":"conta da Coinbase",
 "sample account":"conta de exemplo",
 "trade on your Coinbase account with real money (asking you before every order)":"negociar na sua conta da Coinbase com dinheiro real (perguntando antes de cada ordem)",
-"read your Coinbase balances and orders, and market prices":"ler os seus saldos e ordens da Coinbase, e os preços de mercado"
+"read your Coinbase balances and orders, and market prices":"ler os seus saldos e ordens da Coinbase, e os preços de mercado",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Portas do MikroTik",
+"{n} ports":"{n} portas",
+"MikroTik switch":"switch MikroTik",
+"read your MikroTik router or switch: its ports, modules, health and log":"ler o seu router ou switch MikroTik: portas, módulos, estado e registo"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -1967,6 +1977,20 @@
 "the key works, but it can also transfer money. This program never transfers: make a key without Transfer permission.":"a chave funciona, mas também pode transferir dinheiro. Este programa nunca transfere: crie uma chave sem a permissão Transfer.",
 "the key works, but it's View only, so this program's orders would be refused. Make a key with Trade permission, limited to one portfolio.":"a chave funciona, mas só tem View, por isso as ordens deste programa seriam recusadas. Crie uma chave com a permissão Trade, limitada a uma carteira.",
 "the key works: it can trade (every order asks you first)":"a chave funciona: pode negociar (cada ordem pergunta-lhe antes)",
-"too many requests just now; try again in a minute":"pedidos a mais neste momento; tente outra vez daqui a um minuto"
+"too many requests just now; try again in a minute":"pedidos a mais neste momento; tente outra vez daqui a um minuto",
+"MikroTik":"MikroTik",
+"MikroTik ports":"Portas do MikroTik",
+"{n} ports":"{n} portas",
+"Couldn't reach the MikroTik at {url} ({reason}).":"Não foi possível contactar o MikroTik em {url} ({reason}).",
+"MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"O MikroTik precisa de MIKROTIK_URL, MIKROTIK_USER e MIKROTIK_PASSWORD {where_keys}: o endereço do router (como https://192.168.88.1) e um utilizador num grupo só com as políticas read, api e rest-api.",
+"MikroTik: {why}.":"MikroTik: {why}.",
+"Second Thought only reads from MikroTik, so it doesn't send {what}.":"O Second Thought só lê do MikroTik, por isso não envia {what}.",
+"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"O MikroTik recusou MIKROTIK_USER e MIKROTIK_PASSWORD.",
+"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Este computador não confia no certificado do MikroTik (os routers costumam criar o seu). Execute --doctor para ver a impressão digital, e ponha-a em MIKROTIK_CERT_SHA256.",
+"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"O certificado do MikroTik não é o que MIKROTIK_CERT_SHA256 fixa (é {seen}). Se substituiu o certificado, atualize o valor; se não, há algo no meio.",
+"the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"o grupo da conta ({group}) também pode {what}. O Second Thought só lê, por isso um grupo só com read, api e rest-api é mais seguro.",
+"the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"a palavra-passe vai sem cifra por http://. Use antes o serviço www-ssl e https://.",
+"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"o certificado do router é dele, por isso fixe-o: se {url} é o seu MikroTik, ponha MIKROTIK_CERT_SHA256 = {seen} em second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}"
 }
 };
