@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"預觀 Coinbase 之單：%1 %3 之 %2","tooltip":"市價之單若下當何如，而不下之：一簿，有 size、spend、fee、total、slippage、warnings。買者費次幣之數（BTC-GBP 之 50 費 £50）；賣者賣首幣之數（BTC-GBP 之 0.01 賣 0.01 BTC）。無所變。"},
 "rb_coinbase_order":{"message0":"下 Coinbase 之單：%1 %3 之 %2","tooltip":"下真市價之單，同「預觀 Coinbase 之單」。先預觀之，然後必問汝，示其費與總，雖他無所問；無人在以曰可，則不行。須有 Trade 之權之鑰。於此頁無所買賣。"},
 "rb_coinbase_cancel":{"message0":"撤 Coinbase 之單 %1","tooltip":"以 id 撤汝一未成之單（取諸「Coinbase 未成之單」）。必先問汝，無人則不行。"},
+"rb_solax_now":{"message0":"Solax 之數","tooltip":"一錄,載 Solax 變流器之數,如 SolaxCloud 最近所有(約五分一更):ac_power_w(今所產)、yield_today_kwh 與 yield_total_kwh(日能所產)、feedin_power_w 與 feedin_energy_kwh(入於網)、import_energy_kwh(取於網)、battery_soc_pct、status、upload_time。惟讀:變流器無所變。須置 SOLAX_TOKEN_ID 與 SOLAX_SN 於 second-thought.ini。此頁用示例之變流器。"},
 "rb_mikrotik_ports":{"message0":"MikroTik 之口","tooltip":"簿之列，汝 MikroTik 路由或交換器每口一簿：port、running、speed（若 10Gbps）、errors、drops、link_downs、comment。誤與棄自末啟計之。唯讀：交換器無所變。於此頁用樣器。"},
 "rb_mikrotik_sfp":{"message0":"MikroTik 之 SFP 模","tooltip":"簿之列，每插之 SFP 模一簿：port、module、temperature（°C）、rx_power、tx_power（dBm）。"},
 "rb_mikrotik_health":{"message0":"MikroTik 之狀","tooltip":"器之自簿：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C），及其他所有之感。"},
@@ -1067,7 +1068,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"復啟、止、啟汝 Docker 之器（每必問汝）",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"此頁不能及 Flightradar24 之器,故使者於此無之而行。裝 Node.js,設 FR24_API_KEY,出為 Python,乃用之。",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"讀 Flightradar24 之飛行資料:實時與往史之所在、概略、航跡,及航空公司與機場之詳"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"讀 Flightradar24 之飛行資料:實時與往史之所在、概略、航跡,及航空公司與機場之詳",
+"Solax":"Solax",
+"Solax figures":"Solax 之數",
+"Solax inverter":"Solax 變流器",
+"from {time}":"自 {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"自 SolaxCloud 讀 Solax 變流器之數:日能之產、蓄電之量、入與出"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2071,7 +2077,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought 不發 {what} 於 Docker。",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js 未裝,故 Flightradar24 之器不能啟(其自 npx 來)。裝之:https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 需鑰:置 FR24_API_KEY 於 second-thought.ini,在此程式之側(付貲之訂,自 https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"爾之 FR24_API_KEY 已設(每一呼皆有費,故此不驗之)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"爾之 FR24_API_KEY 已設(每一呼皆有費,故此不驗之)",
+"Solax figures":"Solax 之數",
+"from {time}":"自 {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax 需 SOLAX_TOKEN_ID 與 SOLAX_SN {where_keys}:SolaxCloud API 頁之免費憑,並變流器 WiFi 模之註冊號(在其籤,或於其應用)。",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud 答 {code}:查 SOLAX_TOKEN_ID 與 SOLAX_SN。",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud 卻其憑或註冊號:{x}。",
+"Couldn't reach SolaxCloud at {url} ({x}).":"不能達 SolaxCloud 於 {url}({x})。",
+"reached SolaxCloud: {status}, figures from {time}":"已達 SolaxCloud:{status},{time} 之數",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

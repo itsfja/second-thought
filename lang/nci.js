@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"achto xiquitta Coinbase tlanahuatilli: %1 %2 in %3","tooltip":"Tlein quizaz cē tiyānquiztli tlanahuatilli, ahmo motlaliz: cē amatlahcuilōlli ica size, spend, fee, total, slippage ihuan warnings. Tlacohua quipohpolōa tlapōhualli in ōmetetl tomin (50 in BTC-GBP quipohpolōa £50); tlanamaca quinamaca tlapōhualli in achto (0.01 in BTC-GBP quinamaca 0.01 BTC). Ahtle mopatla."},
 "rb_coinbase_order":{"message0":"xictlali Coinbase tlanahuatilli: %1 %2 in %3","tooltip":"Quitlalia nelli tiyānquiztli tlanahuatilli, iuhquin 'achto xiquitta Coinbase tlanahuatilli'. Achto quitta, niman mochipa mitztlahtlani, ica ītlaxtlahuil ihuan mochi, māmo ahtle occē tlahtlani; intlā ahquemeh oncā quihtōz quēmah, ahmo mochīhua. Quinequi tlatzacuilli ica Trade. Nicān ahtle mocohua nozo monamaca."},
 "rb_coinbase_cancel":{"message0":"xicpolo Coinbase tlanahuatilli %1","tooltip":"Quipoloa cē mo tlapoalli tlanahuatil, ica īid (īhuīcpa 'Coinbase tlapoalli tlanahuatilli'). Mochipa achto mitztlahtlani, ihuan ahmo mochīhua intlā ahquemeh oncā."},
+"rb_solax_now":{"message0":"Solax tlapōhualli","tooltip":"Cē amoxalli ica in Solax tlātlamīniloni tlapōhualli, in yehhuātl SolaxCloud ōquimpiaya (mochīhua in nāuhcāmpa in macuīlli tōnalmantli): ac_power_w (in aquin quichīhua axcan), yield_today_kwh ihuān yield_total_kwh (in tonatiuh), feedin_power_w ihuān feedin_energy_kwh (ipan in nētlahtōlōyān), import_energy_kwh (nētlahtōlōyāntech), battery_soc_pct, status ihuān upload_time. Mochīhua in quimati: ahmo mochīhua in tlātlamīniloni. Monequi SOLAX_TOKEN_ID ihuān SOLAX_SN ipan second-thought.ini. Ipan ini āmoxtli, cē tlātlamīniloni iuhcāyōtl quimonequiltia."},
 "rb_mikrotik_ports":{"message0":"MikroTik calacōhuayān","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl calacōhuayān in mo MikroTik ohtlatlamachtiāni: port, running, speed (iuhquin 10Gbps), errors, drops, link_downs ihuan comment. In ahcualli ihuan in huetziliztli mopōhua ihcuāc tlatzonco ōpēuh. Zan tlapōhua: ahtle mopatla. Nicān quitequitiltia cē machiyōtl tlapatlaliztli."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP tlatequipanoliztli","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl SFP tlatequipanoliztli calaqui: port, module, temperature (°C), rx_power ihuan tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik pahtiliztli","tooltip":"Cē amatlahcuilōlli ītechpa in ohtlatlamachtiāni: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), ihuan occequintin tlamachiliztli quipiya."},
@@ -1067,7 +1068,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"occeppa quitzintīz, quiquetzaz ihuan quitzintīz in mo Docker tlacomeh (mitztlahtlanīz cecen)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Ahmo huel impanalo in nemilitzín Flightradar24 ipan ini āmoxtli, ic in agent nican ahmo quimati in nemilitzín. Xiquīxti Python, Node.js motlālih ica FR24_API_KEY motlālih, ma tiquintēchpano.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 itlapōhualli quimati: in nemiliztli in nemiliztli in tlapōhualli, in cuāltemōliztli, in ōme, in tlacualiztli in pēhualli ītoca"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 itlapōhualli quimati: in nemiliztli in nemiliztli in tlapōhualli, in cuāltemōliztli, in ōme, in tlacualiztli in pēhualli ītoca",
+"Solax":"Solax",
+"Solax figures":"Solax tlapōhualli",
+"Solax inverter":"Solax tlātlamīniloni",
+"from {time}":"ica {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud itech quimati in Solax tlātlamīniloni tlapōhualli: in tonatiuh, in bateria, in calaquiliztli ihuān in huitziliztli"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2071,7 +2077,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought ahmo quititlani {what} ītech Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js ahmo ōmotlālih, ic ahmo huel peuhua in nemilitzín Flightradar24 (npx ipan quihuālhuih). Xictlālli: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 itla tlahtōlitzin cocolīa: FR24_API_KEY second-thought.ini ipan xictlāli, inin tlamantli programmatz inahuac (tlāhuīl pattiuh, https://fr24api.flightradar24.com ic)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY mopattiuh (cequintzintzīn tiquinmitztētla credits, ic nican ahmo tiquinmimati)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY mopattiuh (cequintzintzīn tiquinmitztētla credits, ic nican ahmo tiquinmimati)",
+"Solax figures":"Solax tlapōhualli",
+"from {time}":"ica {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax monequi SOLAX_TOKEN_ID ihuān SOLAX_SN {where_keys}: in token ipan SolaxCloud API-āmoxtli (noma tlein) ihuān in tlapōhualli in wifi dongle (itech itlāhuīlōlōxōuh, ahnōzo ipan app).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud ōquimōhuīli {code}: xiquitta SOLAX_TOKEN_ID ihuān SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud ōquicualān in token ahnōzo in tlapōhualli: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"Ahmo huel SolaxCloud {url} (ica {x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud huel: {status}, in tlapōhualli ica {time}",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

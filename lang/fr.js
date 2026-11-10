@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"prévisualiser un ordre Coinbase : %1 %2 de %3","tooltip":"Ce que donnerait un ordre au marché, sans le passer : un enregistrement avec size, spend, fee, total, slippage et warnings. Acheter dépense un montant de la seconde devise (50 de BTC-GBP dépense £50) ; vendre vend un montant de la première (0.01 de BTC-GBP vend 0.01 BTC). Rien ne change."},
 "rb_coinbase_order":{"message0":"passer un ordre Coinbase : %1 %2 de %3","tooltip":"Passe un vrai ordre au marché, comme « prévisualiser un ordre Coinbase ». Il le prévisualise d'abord, puis vous demande toujours, avec les frais et le total, même quand rien d'autre ne demande ; sans personne pour dire oui, il ne s'exécute pas. Il faut une clé avec la permission Trade. Sur cette page, rien n'est acheté ni vendu."},
 "rb_coinbase_cancel":{"message0":"annuler l'ordre Coinbase %1","tooltip":"Annule un de vos ordres ouverts, par son identifiant (pris dans « ordres ouverts Coinbase »). Il vous demande toujours d'abord, et ne s'exécute pas sans personne."},
+"rb_solax_now":{"message0":"chiffres Solax","tooltip":"Un enregistrement des valeurs de votre onduleur Solax, telles que SolaxCloud les a eues en dernier (elles se mettent à jour toutes les cinq minutes environ) : ac_power_w (ce qu'il produit maintenant), yield_today_kwh et yield_total_kwh (solaire produit), feedin_power_w et feedin_energy_kwh (vers le réseau), import_energy_kwh (depuis le réseau), battery_soc_pct, status et upload_time. Il ne fait que lire : rien ne change sur l'onduleur. Nécessite SOLAX_TOKEN_ID et SOLAX_SN dans second-thought.ini. Sur cette page, un onduleur d'exemple est utilisé."},
 "rb_mikrotik_ports":{"message0":"ports MikroTik","tooltip":"Une liste d'enregistrements, un par port de votre routeur ou switch MikroTik : port, running, speed (comme 10Gbps), errors, drops, link_downs et comment. Erreurs et pertes comptent depuis son dernier démarrage. Il ne fait que lire : rien ne change sur le switch. Sur cette page, il utilise un switch d'exemple."},
 "rb_mikrotik_sfp":{"message0":"modules SFP MikroTik","tooltip":"Une liste d'enregistrements, un par module SFP branché : port, module, temperature (°C), rx_power et tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"état du MikroTik","tooltip":"Un enregistrement sur le routeur ou switch lui-même : board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), et tout autre capteur qu'il a."},
@@ -1068,7 +1069,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"redémarrer, arrêter et démarrer vos conteneurs Docker (en vous demandant chaque fois)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Les outils de Flightradar24 ne sont pas joignables depuis cette page : l'agent travaille donc sans eux ici. Exportez en Python, avec Node.js installé et FR24_API_KEY défini, pour les utiliser.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"lire les données de vol de Flightradar24 : positions en direct et historiques, résumés, trajectoires, et détails des compagnies et aéroports"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"lire les données de vol de Flightradar24 : positions en direct et historiques, résumés, trajectoires, et détails des compagnies et aéroports",
+"Solax":"Solax",
+"Solax figures":"chiffres Solax",
+"Solax inverter":"onduleur Solax",
+"from {time}":"de {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"lire les chiffres de votre onduleur Solax depuis SolaxCloud : production solaire, charge de batterie, import et export"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -2072,6 +2078,14 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought n'envoie pas {what} à Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js n'est pas installé, donc les outils de Flightradar24 ne peuvent pas démarrer (ils viennent de npx). Installez-le : https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 exige une clé : mettez FR24_API_KEY dans second-thought.ini, à côté de ce programme (un abonnement payant, depuis https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"votre FR24_API_KEY est défini (chaque appel coûte des crédits, il n'est donc pas vérifié ici)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"votre FR24_API_KEY est défini (chaque appel coûte des crédits, il n'est donc pas vérifié ici)",
+"Solax figures":"chiffres Solax",
+"from {time}":"de {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax exige SOLAX_TOKEN_ID et SOLAX_SN {where_keys} : le jeton de la page API de SolaxCloud (gratuit) et le numéro d'enregistrement du dongle wifi de l'onduleur (sur son étiquette, ou dans l'app).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud a répondu {code} : vérifiez SOLAX_TOKEN_ID et SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud a refusé le jeton ou le numéro d'enregistrement : {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud est injoignable à {url} ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud atteint : {status}, chiffres de {time}",
+"Solax":"Solax"
 }
 };

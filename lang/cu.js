@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"предꙋзри повелѣніе Coinbase: %1 %2 ѿ %3","tooltip":"Что бы было повелѣніе торжища, не дадꙋщꙋ емꙋ: запись съ size, spend, fee, total, slippage и warnings. Кꙋпленіе иждиваетъ число вторыѧ монеты (50 ѿ BTC-GBP иждиваетъ £50); продаѧніе продаетъ число первыѧ (0.01 ѿ BTC-GBP продаетъ 0.01 BTC). Ничтоже измѣнѧетсѧ."},
 "rb_coinbase_order":{"message0":"даждь повелѣніе Coinbase: %1 %2 ѿ %3","tooltip":"Даетъ истинное повелѣніе торжища, ꙗкоже «предꙋзри повелѣніе Coinbase». Прежде предꙋзритъ, потомъ присно вопрошаетъ тѧ, съ мздою и всѣмъ числомъ, аще и ничтоже иное вопрошаетъ; не сꙋщꙋ никомꙋже рещи «ей», не бываетъ. Требꙋетъ ключа съ властію Trade. На сей страницѣ ничтоже кꙋплѧетсѧ ни продаетсѧ."},
 "rb_coinbase_cancel":{"message0":"ѿмѣни повелѣніе Coinbase %1","tooltip":"Ѿмѣнѧетъ єдино ѿ ѿверзтыхъ повелѣній твоихъ, по id егѡ (ѿ «ѿверзтыѧ повелѣніѧ Coinbase»). Присно прежде вопрошаетъ тѧ, и не бываетъ, не сꙋщꙋ никомꙋже."},
+"rb_solax_now":{"message0":"ѥрудиꙗ Solax","tooltip":"Запись съ данымиѩми инвертора Solax, ѣко SolaxCloud послѣднѣѩ ихъ имѣ (обновлꙗѭтъсѧ кыжды ѡб пять минутъ): ac_power_w (еже нынѣ творитъ), yield_today_kwh и yield_total_kwh (солнечное произведение), feedin_power_w и feedin_energy_kwh (въ мрѣжѫ), import_energy_kwh (отъ мрѣжа), battery_soc_pct, status и upload_time. Токъмо читаетъ: ничесоже не мѣнꙗетъсѧ на инверторѣ. Требуетъ SOLAX_TOKEN_ID и SOLAX_SN въ second-thought.ini. На сеѩ страніцѣ дѣлаетъ сꙗ примѣръ инвертора."},
 "rb_mikrotik_ports":{"message0":"врата MikroTik","tooltip":"Списокъ записей, єдина на всѧ врата MikroTik твоегѡ: port, running, speed (ꙗкоже 10Gbps), errors, drops, link_downs и comment. Погрѣшенїѧ и паденїѧ числѧтсѧ ѿ послѣднѧгѡ начала. Точїю чтетъ: ничтоже измѣнѧетсѧ. На сей страницѣ ꙋпотреблѧетъ преключатель ѡбразца."},
 "rb_mikrotik_sfp":{"message0":"части SFP MikroTik","tooltip":"Списокъ записей, єдина на всѧкꙋ вложенꙋю часть SFP: port, module, temperature (°C), rx_power и tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"здравїе MikroTik","tooltip":"Запись ѡ самомъ наставницѣ: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), и всѧкъ иный чꙋвственникъ, егоже имать."},
@@ -1067,7 +1068,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"паки начинати, ѡстанавливати и начинати сосѹды твоѧ Docker (вопрошаѧ тѧ на всѧко времѧ)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Не возможно есть доспѣти къ оустроемъ Flightradar24 отъ сеѩ страніца, тѣмъже дѣятель здѣ безъ нихъ дѣлаѥтъ. Изведи въ Python, Node.js оустроенѣ и FR24_API_KEY положенѣ сѫщѫ, да ихъ поужиши.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"читати даныѩ полетовъ Flightradar24: живаѧ и историческаѧ мѣста, съводы, пѫти, и подробица авиокомпаній и летищъ"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"читати даныѩ полетовъ Flightradar24: живаѧ и историческаѧ мѣста, съводы, пѫти, и подробица авиокомпаній и летищъ",
+"Solax":"Solax",
+"Solax figures":"ѥрудиꙗ Solax",
+"Solax inverter":"инверторъ Solax",
+"from {time}":"отъ {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"читати даныѩ инвертора Solax из SolaxCloud: солнечное произведение, зарядъ батарѣи, ввозъ и вывозъ"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -2071,7 +2077,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought не посылаетъ {what} къ Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js не оустановленъ есть, тѣмъже оустроѩ Flightradar24 начатѝ не могѫтъ (отъ npx приходѩтъ). Оустанови и: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 клѩча требоуѥтъ: положи FR24_API_KEY въ second-thought.ini, при сеѥмъ программѣ (платноѥ подписаніе, отъ https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"твои FR24_API_KEY положенъ есть (кыждо зъвънь крадиты изимаши, тѣмъже здѣ не искѹшаѥтъ сѧ)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"твои FR24_API_KEY положенъ есть (кыждо зъвънь крадиты изимаши, тѣмъже здѣ не искѹшаѥтъ сѧ)",
+"Solax figures":"ѥрудиꙗ Solax",
+"from {time}":"отъ {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax требуетъ SOLAX_TOKEN_ID и SOLAX_SN {where_keys}: знакъ отъ страницы API SolaxCloud (безъ мьзды) и номеръ записи wifi-модулꙗ инвертора (на его печати, или в приложении).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud отвѣща {code}: провери SOLAX_TOKEN_ID и SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud отрече знаку или номеру записи: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"Не можно доспѣти SolaxCloud на {url} ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"доспѣхомъ SolaxCloud: {status}, даныѩ отъ {time}",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

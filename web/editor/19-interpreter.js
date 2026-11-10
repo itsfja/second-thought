@@ -286,6 +286,7 @@
       case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
+      case "rb_solax_now": return solaxNow();
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
       case "rb_mikrotik_health": return mikrotikHealth();

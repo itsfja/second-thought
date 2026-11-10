@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"foresceawa Coinbase bebod: %1 %2 of %3","tooltip":"Hwæt ceapstowe bebod wolde beon, butan hit to sellanne: gewrit mid size, spend, fee, total, slippage and warnings. Bycgan spent rim þæs æfteran feos (50 of BTC-GBP spent £50); sellan selþ rim þæs ærran (0.01 of BTC-GBP selþ 0.01 BTC). Naht ne awent."},
 "rb_coinbase_order":{"message0":"sele Coinbase bebod: %1 %2 of %3","tooltip":"Selþ soþ ceapstowe bebod, swa 'foresceawa Coinbase bebod'. Hit foresceawaþ hit ærest, þonne hit simle axaþ þe, mid þam gafole and þam ealle, þeah naht elles ne axige; gif nan man nis þær to secgenne gea, hit ne færþ. Behofaþ cæges mid Trade leafe. On þissum leafe naht ne biþ geboht ne geseald."},
 "rb_coinbase_cancel":{"message0":"do Coinbase bebod %1 onweg","tooltip":"Deþ an þinra openra beboda onweg, be his id (of 'Coinbase opene bebodu'). Hit axaþ þe simle ærest, and ne færþ þonne nan man nis þær."},
+"rb_solax_now":{"message0":"Solax cūþþe","tooltip":"Ǣn gewrit mid þǣm cūþþum þīnes Solax invertores, swā SolaxClōd hīe lǣst hæfde (hīe nīwiaþ ymbe ǣlce fīf minutan): ac_power_w (hƿæt hē nū macaþ), yield_today_kwh and yield_total_kwh (sunnan gield), feedin_power_w and feedin_energy_kwh (tō þǣm nette), import_energy_kwh (of þǣm nette), battery_soc_pct, status and upload_time. Hit rǣdeþ ān: nān þing on þǣm infertore ne ƿyrceþ. Hit behōfaþ SOLAX_TOKEN_ID and SOLAX_SN on second-thought.ini. On þissere sīdan hit brȳcþ ānre byrgene infertores."},
 "rb_mikrotik_ports":{"message0":"MikroTik geatu","tooltip":"Getæl gewrita, an for ælcum geate þines MikroTik wegwisendes oþþe wendendes: port, running, speed (swa 10Gbps), errors, drops, link_downs and comment. Gedwolan and fyllas beoþ getealde fram his latostan anginne. Hit rædeþ ane: naht ne awent on þam wendende. On þissum leafe hit brycþ bysene wendendes."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP dælas","tooltip":"Getæl gewrita, an for ælcum ingesettum SFP dæle: port, module, temperature (°C), rx_power and tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik hælu","tooltip":"Gewrit be þam wegwisende sylfum: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and ælc oþer gefelend þe he hæfþ."},
@@ -1068,7 +1069,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"eft onstyrian, stillan and onstyrian þine Docker fatu (þe ælce siþe axiende)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24 tōl ne magon of þissere sidan gerǣched wesan, forþon se ægent hēr wiþ hīe ne wyrceð. Ālǣd tō Python, mid Node.js gesettum and FR24_API_KEY gesettum, þæt þū hīe brūce.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"rǣdan Flightradar24 flyhtes cūþþe: lifig and foreald stōwe, gewritu, wegas, and airlines and portes cūþþe"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"rǣdan Flightradar24 flyhtes cūþþe: lifig and foreald stōwe, gewritu, wegas, and airlines and portes cūþþe",
+"Solax":"Solax",
+"Solax figures":"Solax cūþþe",
+"Solax inverter":"Solax invertor",
+"from {time}":"of {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"rǣdan þā cūþþe þīnes Solax invertores of SolaxCloude: sunnan gield, batterie hlǣst, inbring and ūtbring"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2072,7 +2078,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought ne sent {what} to Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js nis gesett, forþon Flightradar24 tōl ne magon onginnan (hīe cumað of npx). Sete hit: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 behōfð cǣgges: sete FR24_API_KEY in second-thought.ini, be þisse programman (gyldendlic abonnement, of https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"þīn FR24_API_KEY is gesett (ǣlc clyp costð credits, forþon hēr nis āfandod)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"þīn FR24_API_KEY is gesett (ǣlc clyp costð credits, forþon hēr nis āfandod)",
+"Solax figures":"Solax cūþþe",
+"from {time}":"of {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax behōfaþ SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: se tācen of SolaxCloude API-sīdan (frēo) and se cynelieste nūmbor þæs invertores wifi dongle (on his mearke, oþþe on þǣre æpp).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxClōd andswarode {code}: bēcēaw SOLAX_TOKEN_ID and SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxClōd þone tācen oþþe þone cynelieste nūmbor oferwōp: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"SolaxClōd æt {url} ne mæg gerǣced wesan ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxClōd gerǣched: {status}, cūþþe of {time}",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

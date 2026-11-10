@@ -156,6 +156,7 @@
 "rb_coinbase_preview":{"message0":"𐍆𐌰𐌿𐍂𐌰𐍃𐌰𐌹𐍈 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 Coinbase: %1 %2 %3","tooltip":"𐍈𐌰 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃 𐍅𐌰𐌹𐍂𐌸𐌹𐌸, 𐌿𐌽𐍃𐌰𐍄𐌹𐌸𐍃: 𐌱𐍉𐌺𐍉𐍃 𐌼𐌹𐌸 size, spend, fee, total, slippage 𐌾𐌰𐌷 warnings. 𐌱𐌿𐌲𐌾𐌰𐌽 𐍆𐍂𐌰𐌲𐌹𐌱𐌹𐌸 𐍂𐌰𐌸𐌾𐍉𐌽 𐍃𐌹𐌻𐌿𐌱𐍂𐌹𐍃 𐌰𐌽𐌸𐌰𐍂𐌹𐍃 (50 BTC-GBP 𐍆𐍂𐌰𐌲𐌹𐌱𐌹𐌸 £50); 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌹𐌸 𐍂𐌰𐌸𐌾𐍉𐌽 𐍆𐍂𐌿𐌼𐌹𐌽𐍃 (0.01 BTC-GBP 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌹𐌸 0.01 BTC). 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌳𐌰."},
 "rb_coinbase_order":{"message0":"𐍃𐌰𐍄𐌴𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 Coinbase: %1 %2 %3","tooltip":"𐍃𐌰𐍄𐌾𐌹𐌸 𐍃𐌿𐌽𐌾𐌰𐌽𐌰 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃, 𐍃𐍅𐌴 „𐍆𐌰𐌿𐍂𐌰𐍃𐌰𐌹𐍈 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 Coinbase”. 𐍆𐍂𐌿𐌼𐌹𐍃𐍄 𐍆𐌰𐌿𐍂𐌰𐍃𐌰𐌹𐍈𐌹𐌸, 𐌸𐌰𐌸𐍂𐍉𐌷 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐌿𐌺, 𐌼𐌹𐌸 𐌼𐌹𐌶𐌳𐍉𐌽 𐌾𐌰𐌷 𐌰𐌻𐌻𐌰𐌼𐌼𐌰, 𐌾𐌰𐌷 𐌸𐌰𐌽 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌰𐌽𐌸𐌰𐍂 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌰𐌹𐌽𐍃𐌷𐌿𐌽 𐌹𐍃𐍄 𐌾𐌰 𐌵𐌹𐌸𐌰𐌽, 𐌽𐌹 𐌲𐌰𐌲𐌲𐌹𐌸. 𐍅𐌹𐌻𐌹 𐌿𐍃𐌻𐌿𐌺𐌰𐌽𐌳 𐌼𐌹𐌸 Trade. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌱𐌿𐌲𐌾𐌰𐌳𐌰 𐌽𐌹𐌷 𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌳𐌰."},
 "rb_coinbase_cancel":{"message0":"𐌰𐍆𐌻𐌴𐍄𐌴𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽 Coinbase %1","tooltip":"𐌰𐍆𐌻𐌴𐍄𐌹𐌸 𐌰𐌹𐌽𐌰𐌽𐌰 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌴 𐌸𐌴𐌹𐌽𐌰𐌹𐌶𐌴 𐌿𐍃𐌻𐌿𐌺𐌽𐌰𐌽𐌴, 𐌱𐌹 id (𐌿𐍃 „𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌽𐍃 𐌿𐍃𐌻𐌿𐌺𐌽𐌰𐌽𐍃 Coinbase”). 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌿𐌼𐌹𐍃𐍄 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐌿𐌺, 𐌾𐌰𐌷 𐌽𐌹 𐌲𐌰𐌲𐌲𐌹𐌸 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌰𐌹𐌽𐍃𐌷𐌿𐌽 𐌹𐍃𐍄."},
+"rb_solax_now":{"message0":"Solax data","tooltip":"Melins mids Solax inwaitaris data, swe SolaxCloud siduh habaida (bi ƕarjōn fimf minuts niwjada): ac_power_w (ƕat nu waurkeiþ), yield_today_kkh jah yield_total_kkh (sunnons waurstwa), feedin_power_w jah feedin_energy_kkh (du netwau), import_energy_khh (us netwau), battery_soc_pct, status jah upload_time. ainis melis þisleiþ: in inwaitara naihwa þiþ wairþiþ. SOLAX_TOKEN_ID jah SOLAX_SN in second-thought.ini þarfu. In þizai seidai inwaitara leik þiþ."},
 "rb_mikrotik_ports":{"message0":"𐌳𐌰𐌿𐍂𐍉𐌽𐍃 MikroTik","tooltip":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌳𐌰𐌿𐍂𐌰𐌹 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹𐍃 MikroTik 𐌸𐌴𐌹𐌽𐌰𐌹𐌶𐍉𐍃: port, running, speed (𐍃𐍅𐌴 10Gbps), errors, drops, link_downs 𐌾𐌰𐌷 comment. 𐌸𐌰𐍄𐌰𐌹𐌽𐌴𐌹 𐌿𐍃𐍃𐌹𐌲𐌲𐍅𐌹𐌸: 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌳𐌰. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌱𐍂𐌿𐌺𐌴𐌹𐌸 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹 𐍆𐍂𐌹𐍃𐌰𐌷𐍄𐌰𐌹𐍃."},
 "rb_mikrotik_sfp":{"message0":"𐌳𐌰𐌹𐌻𐍉𐍃 SFP MikroTik","tooltip":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌳𐌰𐌹𐌻𐌰𐌹 SFP: port, module, temperature (°C), rx_power 𐌾𐌰𐌷 tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"𐌷𐌰𐌹𐌻𐍃 MikroTik","tooltip":"𐌱𐍉𐌺𐍉𐍃 𐌱𐌹 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹𐌽 𐍃𐌹𐌻𐌱𐍉: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𐌾𐌰𐌷 𐌰𐌻𐌻 𐌰𐌽𐌸𐌰𐍂 𐌸𐌰𐍄𐌴𐌹 𐌷𐌰𐌱𐌰𐌹𐌸."},
@@ -1068,7 +1069,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌰𐌽𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24 sarwa fram þizai seido ni hlapand, þannu agents her ina waurkeiþ. Ussandei in Python, mid Node.js satiþ jah FR24_API_KEY satiþ, ei þus bruka.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 𐍆𐌻𐌿𐌲𐌹𐍃 𐌳𐌰𐍄𐌰𐍃 𐌱𐍂𐌿𐌺𐌰𐌽: 𐌻𐌹𐌱𐌰𐌽𐌳𐌰𐌽𐍃 𐌾𐌰𐌷 history 𐍃𐍄𐌰𐌳𐌾𐌹𐌽𐍃, 𐌲𐌰𐌱𐌰𐌿𐍂𐌾𐌰𐌽𐍃, 𐍅𐌹𐌲𐌲𐍉𐍃, 𐌾𐌰𐌷 𐍆𐌰𐌹𐍂𐍉𐌱𐌰𐌿𐌰𐌹𐌽𐌰𐌹 𐌰𐌹𐍂𐌻𐌹𐌽𐌴𐍃 𐌾𐌰𐌷 𐌰𐌹𐍂𐍀𐍉𐍂𐍄"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 𐍆𐌻𐌿𐌲𐌹𐍃 𐌳𐌰𐍄𐌰𐍃 𐌱𐍂𐌿𐌺𐌰𐌽: 𐌻𐌹𐌱𐌰𐌽𐌳𐌰𐌽𐍃 𐌾𐌰𐌷 history 𐍃𐍄𐌰𐌳𐌾𐌹𐌽𐍃, 𐌲𐌰𐌱𐌰𐌿𐍂𐌾𐌰𐌽𐍃, 𐍅𐌹𐌲𐌲𐍉𐍃, 𐌾𐌰𐌷 𐍆𐌰𐌹𐍂𐍉𐌱𐌰𐌿𐌰𐌹𐌽𐌰𐌹 𐌰𐌹𐍂𐌻𐌹𐌽𐌴𐍃 𐌾𐌰𐌷 𐌰𐌹𐍂𐍀𐍉𐍂𐍄",
+"Solax":"Solax",
+"Solax figures":"Solax 𐌳𐌰𐍄𐌰",
+"Solax inverter":"Solax 𐌹𐌽𐍅𐌰𐌹𐍄𐌰𐍂𐌰",
+"from {time}":"𐍆𐍂𐌰𐌼 {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"Solax 𐌹𐌽𐍅𐌰𐌹𐍄𐌰𐍂𐌹𐍃 𐌳𐌰𐍄𐌰𐍃 𐌿𐍃 SolaxCloud 𐌱𐍂𐌿𐌺𐌰𐌽: 𐍃𐌿𐌽𐌾𐍉𐌽𐍃 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌾𐌰𐌽𐍃, 𐌱𐌰𐍄𐍄𐌰𐍂𐌹𐌾𐍉𐍃 𐍆𐌿𐌻𐌻𐌹, 𐌹𐌽𐍆𐌰𐍂𐌴𐌹𐌽 𐌾𐌰𐌷 𐌿𐍄𐍆𐌰𐍂𐌴𐌹𐌽"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2072,7 +2078,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought ni sandeiþ {what} du Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js ni sati𐍆, swaei sarwa Flightradar24 ni anastodjand (𐌸𐌿𐍂𐌷 npx). satei: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 𐌰𐌽𐌰 𐌺𐌻𐌿𐌳𐌰 𐌸𐌰𐍂𐍆: sat𐌾 FR24_API_KEY in second-thought.ini, 𐌽𐌴𐍈𐌰 𐌸𐌰𐌼𐌼𐌰 𐍀𐍂𐍉𐌲𐍂𐌰𐌼𐌼 (𐍆𐌰𐌹𐍂𐌹𐌽𐍉𐌳𐌰 𐌼𐌴𐌻, 𐍆𐍂𐌰𐌼 https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"𐌸𐌴𐌹𐌽𐍃 FR24_API_KEY sati𐍆 𐌹𐍃 (𐍈𐌰𐍂𐌾𐍉 𐌻𐌰𐌸𐍉𐌽𐍃 𐌺𐍉𐍃𐍄 𐌺𐍂𐌴𐌳𐌹𐍄𐍃, 𐌸𐌰𐌽𐌽𐌿 𐌷𐌴𐍂 𐌽𐌹 𐍃𐍉𐌺𐌹𐌸)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"𐌸𐌴𐌹𐌽𐍃 FR24_API_KEY sati𐍆 𐌹𐍃 (𐍈𐌰𐍂𐌾𐍉 𐌻𐌰𐌸𐍉𐌽𐍃 𐌺𐍉𐍃𐍄 𐌺𐍂𐌴𐌳𐌹𐍄𐍃, 𐌸𐌰𐌽𐌽𐌿 𐌷𐌴𐍂 𐌽𐌹 𐍃𐍉𐌺𐌹𐌸)",
+"Solax figures":"Solax data",
+"from {time}":"fram {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax þarfu SOLAX_TOKEN_ID jah SOLAX_SN {where_keys}: þo teiken us SolaxCloud API-sida (frels) jah þo registras numin inwaitaris wifi dongle (ana is melin, aiþþau in app).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud andhof {code}: sai SOLAX_TOKEN_ID jah SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud þo teiken aiþþau þo registras numin afwarp: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud at {url} ni atneiþ ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud atneiþ: {status}, data fram {time}",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

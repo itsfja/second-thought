@@ -199,6 +199,11 @@ class Doctor:
             async def mikrotik():
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
+        if has("solax_read"):
+            async def solax():
+                got = await self.solax_now()  # one call: the figures are cached for five minutes after it
+                return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
+            out.append(("Solax", solax))
         if has("unifi_read"):
             async def unifi():
                 base = os.environ.get("UNIFI_URL", "").strip()
@@ -514,5 +519,5 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Solax": "SOLAX_TOKEN_ID"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))

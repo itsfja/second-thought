@@ -156,6 +156,7 @@
 "rb_coinbase_preview":{"message0":"Coinbase-आदेशं पूर्वं पश्य: %3 इत्यस्य %2 %1","tooltip":"आपणादेशः किं भवेत्, तं न ददत्: size, spend, fee, total, slippage, warnings च युक्तः अभिलेखः। क्रयः द्वितीयमुद्रायाः राशिं व्ययति (BTC-GBP इत्यस्य 50 £50 व्ययति); विक्रयः प्रथमायाः राशिं विक्रीणाति (BTC-GBP इत्यस्य 0.01 0.01 BTC विक्रीणाति)। किमपि न परिवर्तते।"},
 "rb_coinbase_order":{"message0":"Coinbase-आदेशं देहि: %3 इत्यस्य %2 %1","tooltip":"सत्यम् आपणादेशं ददाति, 'Coinbase-आदेशं पूर्वं पश्य' इव। प्रथमं पूर्वं पश्यति, ततः सदा त्वां पृच्छति, शुल्केन समग्रेण च सह, यदा अन्यत् किमपि न पृच्छति तदापि; आम् इति वक्तुं कोऽपि नास्ति चेत् न प्रवर्तते। Trade-अनुमत्या सह कुञ्चिकाम् अपेक्षते। अस्मिन् पृष्ठे किमपि न क्रीयते न विक्रीयते।"},
 "rb_coinbase_cancel":{"message0":"Coinbase-आदेशं %1 निवर्तय","tooltip":"तव मुक्तादेशेषु एकं तस्य id अनुसृत्य निवर्तयति ('Coinbase-मुक्तादेशाः' इत्यस्मात्)। सदा प्रथमं त्वां पृच्छति, कोऽपि नास्ति चेत् न प्रवर्तते।"},
+"rb_solax_now":{"message0":"Solax-सङ्ख्याः","tooltip":"Solax प्रतिपरिवर्तकस्य सङ्ख्यानाम् एकं लेख्यम्, याः SolaxCloud इत्येन अन्ततमाः आसन् (पञ्चभिः लघ्वभिः कालैः नवीक्रियन्ते): ac_power_w (इदानीं किं जनयति), yield_today_kwh yield_total_kwh च (सौरोत्पादनम्), feedin_power_w feedin_energy_kwh च (जाले), import_energy_kwh (जालात्), battery_soc_pct, status upload_time च। केवलं पठति: प्रतिपरिवर्तके किमपि न परिवर्तते। SOLAX_TOKEN_ID SOLAX_SN च second-thought.ini-इत्यत्र आवश्यके। अस्मिन् पृष्ठे निदर्शनप्रतिपरिवर्तकः उपयुज्यते।"},
 "rb_mikrotik_ports":{"message0":"MikroTik-द्वाराणि","tooltip":"अभिलेखानां सूची, तव MikroTik-मार्गदर्शकस्य परिवर्तकस्य वा प्रत्येकस्य द्वारस्य एकः: port, running, speed (यथा 10Gbps), errors, drops, link_downs, comment च। दोषाः पाताः च अन्तिमात् आरम्भात् गण्यन्ते। केवलं पठति: परिवर्तके किमपि न परिवर्तते। अस्मिन् पृष्ठे उदाहरण-परिवर्तकं प्रयुङ्क्ते।"},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP-अंशाः","tooltip":"अभिलेखानां सूची, प्रत्येकस्य निवेशितस्य SFP-अंशस्य एकः: port, module, temperature (°C), rx_power, tx_power (dBm) च।"},
 "rb_mikrotik_health":{"message0":"MikroTik-स्वास्थ्यम्","tooltip":"मार्गदर्शकस्य स्वस्य विषये अभिलेखः: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), तस्य अन्ये संवेदकाः च।"},
@@ -1069,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"तव Docker-पात्राणि पुनः आरब्धुं, स्थगयितुं, आरब्धुं च (प्रतिवारं त्वां पृष्ट्वा)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24-इत्यस्य उपकरणानि अस्मात् पृष्ठात् प्राप्तुं न शक्यन्ते, अतः अभिकर्ता अत्र तैः विना कार्यं करोति। Python-मध्ये निर्यातय, Node.js संस्थापिते FR24_API_KEY च स्थापिते सति, तानि उपयोजयितुम्।",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24-विमानसम्बद्धानि पठितुम्: सजीवानि ऐतिहासिकानि च स्थानानि, सारांशान्, मार्गान्, वायुसेवानां विमानतलानां च विवरणानि"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24-विमानसम्बद्धानि पठितुम्: सजीवानि ऐतिहासिकानि च स्थानानि, सारांशान्, मार्गान्, वायुसेवानां विमानतलानां च विवरणानि",
+"Solax":"Solax",
+"Solax figures":"Solax-सङ्ख्याः",
+"Solax inverter":"Solax प्रतिपरिवर्तकः",
+"from {time}":"{time} तः",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud तः भवतः Solax प्रतिपरिवर्तकस्य सङ्ख्याः पठितुम्: सौरोत्पादनं, बिजापूरणं, आयातः निर्यातः च"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2073,7 +2079,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker प्रति न प्रेषयति।",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js न संस्थापितम्, अतः Flightradar24-इत्यस्य उपकरणानि आरब्धुं न शक्नुवन्ति (तानि npx-तः आगच्छन्ति)। तत् संस्थापय: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24-इत्यस्मै कुञ्चिका आवश्यकी: FR24_API_KEY second-thought.ini-इति मध्ये स्थापय, अस्य कार्यक्रमस्य समीपे (शुल्कं दत्त्वा सदस्यता, https://fr24api.flightradar24.com-तः)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"तव FR24_API_KEY स्थापिता (प्रत्येकं आह्वानं श्रेडिट्-मूल्यं स्वीकरोति, अतः अत्र परीक्ष्यते न)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"तव FR24_API_KEY स्थापिता (प्रत्येकं आह्वानं श्रेडिट्-मूल्यं स्वीकरोति, अतः अत्र परीक्ष्यते न)",
+"Solax figures":"Solax-सङ्ख्याः",
+"from {time}":"{time} तः",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax-इत्यस्मै SOLAX_TOKEN_ID SOLAX_SN च आवश्यकी {where_keys}: SolaxCloud-इत्यस्य API-पृष्ठतः टोकन् (मुक्तम्) प्रतिपरिवर्तकस्य wifi-डङ्गलस्य पञ्जीकरणसङ्ख्या च (तस्य लेबल्-इत्यत्र, अथवा ऐप्-इत्यस्मिन्)।",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud अकथयत् {code}: SOLAX_TOKEN_ID SOLAX_SN च पश्यतु।",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud टोकन् पञ्जीकरणसङ्ख्या वा अस्वीकृतवान्: {x}।",
+"Couldn't reach SolaxCloud at {url} ({x}).":"{url} इत्यत्र SolaxCloud अगम्यम् ({x})।",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud प्राप्तम्: {status}, {time} इत्यस्य सङ्ख्याः",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

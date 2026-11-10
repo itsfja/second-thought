@@ -154,7 +154,8 @@
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
     rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp",
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
-    rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }) };
+    rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
+    rb_solax_now:"solax_read" };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
     "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
@@ -523,6 +524,9 @@
       tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
     V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
       tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
+    /* Solax (#361): read only, from SolaxCloud */
+    V("rb_solax_now", "Solax figures", [], null, { style:"solax",
+      tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
       tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),

@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"Coinbase の注文を試算：%3 を %2 %1","tooltip":"成行注文が実際にどうなるかを、注文せずに試算します：size、spend、fee、total、slippage、warnings を持つ記録。買いは 2 番目の通貨の額を使います（BTC-GBP で 50 なら £50 を使う）。売りは 1 番目の通貨の額を売ります（BTC-GBP で 0.01 なら 0.01 BTC を売る）。何も変わりません。"},
 "rb_coinbase_order":{"message0":"Coinbase に注文：%3 を %2 %1","tooltip":"本物の成行注文を出します（「Coinbase の注文を試算」と同じ指定）。まず試算し、ほかに何も確認しないときでも、手数料と合計を示して必ずあなたに確認します。「はい」と言う人がいなければ実行しません。Trade 権限のあるキーが必要です。このページでは何も売買しません。"},
 "rb_coinbase_cancel":{"message0":"Coinbase の注文 %1 を取り消す","tooltip":"未約定の注文の一つを id で取り消します（「Coinbase の未約定の注文」から）。必ず先に確認し、誰もいなければ実行しません。"},
+"rb_solax_now":{"message0":"Solax の数値","tooltip":"Solax インバーターの数値のレコード(SolaxCloud が最後に持っていたもの。約5分ごとに更新):ac_power_w(現在の発電量)、yield_today_kwh と yield_total_kwh(発電した太陽光)、feedin_power_w と feedin_energy_kwh(系統へ)、import_energy_kwh(系統から)、battery_soc_pct、status、upload_time。読み取り専用です。second-thought.ini の SOLAX_TOKEN_ID と SOLAX_SN が必要です。このページではサンプルのインバーターを使用します。"},
 "rb_mikrotik_ports":{"message0":"MikroTik のポート","tooltip":"記録のリストで、MikroTik のルーターやスイッチのポートごとに一つ：port、running、speed（たとえば 10Gbps）、errors、drops、link_downs、comment。エラーとドロップは最後の起動からの数です。読むだけで、スイッチの設定は何も変わりません。このページではサンプルのスイッチを使います。"},
 "rb_mikrotik_sfp":{"message0":"MikroTik の SFP モジュール","tooltip":"記録のリストで、差してある SFP モジュールごとに一つ：port、module、temperature（°C）、rx_power と tx_power（dBm）。"},
 "rb_mikrotik_health":{"message0":"MikroTik の状態","tooltip":"ルーターやスイッチそのものについての記録：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C）、ほかにあるセンサーすべて。"},
@@ -1068,7 +1069,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"Docker のコンテナーを再起動、停止、起動する（毎回確認します）",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"このページからは Flightradar24 のツールに接続できないため、ここではエージェントはそれらなしで動きます。使うには、Node.js をインストールして FR24_API_KEY を設定し、Python に書き出してください。",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 のフライトデータを読む:リアルタイムと履歴の位置、概要、航跡、航空会社と空港の詳細"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 のフライトデータを読む:リアルタイムと履歴の位置、概要、航跡、航空会社と空港の詳細",
+"Solax":"Solax",
+"Solax figures":"Solax の数値",
+"Solax inverter":"Solax インバーター",
+"from {time}":"{time} 時点",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud から Solax インバーターの数値を読む:太陽光発電、バッテリー充電、買電と売電"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2072,6 +2078,14 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought は {what} を Docker に送りません。",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js がインストールされていないため、Flightradar24 のツールを起動できません(npx から来ます)。インストールしてください: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 にはキーが必要です:FR24_API_KEY を second-thought.ini に設定してください(有償のサブスクリプション、https://fr24api.flightradar24.com から)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY が設定されています(呼び出しごとにクレジットがかかるため、ここでは確認しません)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY が設定されています(呼び出しごとにクレジットがかかるため、ここでは確認しません)",
+"Solax figures":"Solax の数値",
+"from {time}":"{time} 時点",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax には SOLAX_TOKEN_ID と SOLAX_SN が必要です {where_keys}:SolaxCloud の API ページで入手した無料トークンと、インバーターの WiFi ドングルの登録番号(ラベルまたはアプリで確認)。",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud が {code} と返しました:SOLAX_TOKEN_ID と SOLAX_SN を確認してください。",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud がトークンまたは登録番号を拒否しました:{x}。",
+"Couldn't reach SolaxCloud at {url} ({x}).":"{url} の SolaxCloud に接続できません({x})。",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud に到達:{status}、{time} 時点の数値",
+"Solax":"Solax"
 }
 };

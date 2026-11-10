@@ -593,6 +593,10 @@
    "message0": "tak aptr Coinbase-boð %1",
    "tooltip": "Tekr aptr eitt opinna boða þinna, eptir id þess (ór 'opin Coinbase-boð'). Hann spyrr þik ávallt fyrst, ok ferr eigi er engi er þar."
   },
+  "rb_solax_now": {
+   "message0": "Solax töl",
+   "tooltip": "Skrá með tölum Solax-aflara þíns, eins og SolaxCloud hafði þær síðast (þær uppfærast um hverja fimm mínútu): ac_power_w (hvað hann framleiðir nú), yield_today_kwh og yield_total_kwh (sólarframleiðsla), feedin_power_w og feedin_energy_kwh (til nets), import_energy_kwh (frá neti), battery_soc_pct, status og upload_time. Hann les aðeins: ekkert breytist á aflaranum. Þarf SOLAX_TOKEN_ID og SOLAX_SN í second-thought.ini. Á þessari síðu er sýnisaflari notaður."
+  },
   "rb_mikrotik_ports": {
    "message0": "MikroTik-hlið",
    "tooltip": "Listi skráa, ein fyrir hvert hlið MikroTik-leiðvísis þíns eða skiptis: port, running, speed (sem 10Gbps), errors, drops, link_downs ok comment. Villur ok fǫll eru talin frá síðasta upphafi. Hann les einungis: ekki breytisk á skiptinum. Á þessi síðu nytr hann dœmis-skiptis."
@@ -1665,7 +1669,12 @@
   "restart, stop and start your Docker containers (asking you each time)": "endrræsa, stöðva ok ræsa Docker-hirzlur þínar (ok spyrja þik hvert sinn)",
   "Flightradar24": "Flightradar24",
   "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Tól Flightradar24s megu eigi náðst af þessari síðu, svá at fulltrúi görir hér án þeirra. Flyt út í Python, með Node.js settu ok FR24_API_KEY settu, til at nota þau.",
-  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "lesa fluggögn Flightradar24s: lifandi og söguleg staði, yfirlit, farvegi, og upplýsingar flugfélaga og flugvalla"
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "lesa fluggögn Flightradar24s: lifandi og söguleg staði, yfirlit, farvegi, og upplýsingar flugfélaga og flugvalla",
+  "Solax": "Solax",
+  "Solax figures": "Solax töl",
+  "Solax inverter": "Solax aflari",
+  "from {time}": "frá {time}",
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "lesa töl Solax-aflara þíns frá SolaxCloud: sólarframleiðsla, rafhlöðuhleðsla, inn- og útflutningur"
  },
  "examples": {
   "review": {
@@ -3301,7 +3310,15 @@
   "Second Thought doesn't send {what} to Docker.": "Second Thought sendir eigi {what} til Docker.",
   "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js er eigi sett upp, svá at tól Flightradar24s megu eigi byrja (þau koma frá npx). Set þat upp: https://nodejs.org",
   "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 þarf lykil: set FR24_API_KEY í second-thought.ini, hjá þessu forriti (gjaldsamningr, frá https://fr24api.flightradar24.com)",
-  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY þinn er sett (hvert kall kostar kredit, svá at þat er eigi kannað hér)"
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY þinn er sett (hvert kall kostar kredit, svá at þat er eigi kannað hér)",
+  "Solax figures": "Solax töl",
+  "from {time}": "frá {time}",
+  "Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).": "Solax þarf SOLAX_TOKEN_ID og SOLAX_SN {where_keys}: teiknið af API-síðu SolaxCloud (ókeypis) og skráningarnúmer wifi-donguls aflarans (á merkinu hans, eða í appinu).",
+  "SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.": "SolaxCloud svaraði {code}: athugaðu SOLAX_TOKEN_ID og SOLAX_SN.",
+  "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud hafnaði teikninu eða skráningarnúmerinu: {x}.",
+  "Couldn't reach SolaxCloud at {url} ({x}).": "SolaxCloud á {url} er ónáðst ({x}).",
+  "reached SolaxCloud: {status}, figures from {time}": "SolaxCloud náð: {status}, töl frá {time}",
+  "Solax": "Solax"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

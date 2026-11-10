@@ -156,6 +156,7 @@
 "rb_coinbase_preview":{"message0":"חזי קדם פקודא דCoinbase: %1 %2 ד%3","tooltip":"מה תהוי פקודת שוקא, בלא למיהבה: כתבא עם size, spend, fee, total, slippage וwarnings. זבינא מפיק מנין מן מעתא תנינא (50 דBTC-GBP מפיק £50); זבנא מזבן מנין מן קדמיא (0.01 דBTC-GBP מזבן 0.01 BTC). מדעם לא משתני."},
 "rb_coinbase_order":{"message0":"הב פקודא דCoinbase: %1 %2 ד%3","tooltip":"יהיב פקודת שוקא קשיטא, כות 'חזי קדם פקודא דCoinbase'. קדם חזי לה, ובתר כן תדירא שאיל לך, עם אגרא וסכומא, אף כד מדעם אחרן לא שאיל; כד לית מן דאמר אין, לא רהיט. צריך מפתח עם רשות Trade. בדפא דנא מדעם לא אזדבן."},
 "rb_coinbase_cancel":{"message0":"בטל פקודא דCoinbase %1","tooltip":"מבטל חדא מן פקודיך פתיחן, בid דילה (מן 'פקודין פתיחן דCoinbase'). תדירא שאיל לך קדם, ולא רהיט כד לית אנש."},
+"rb_solax_now":{"message0":"נתבנין דיל Solax","tooltip":"רישומא עם נתבנין דאינוורטרא דילך, כדין SolaxCloud אחרינא איתון (מתחדשין כל חמש שעין): ac_power_w (מאן עביד כען), yield_today_kwh וyield_total_kwh (אסקופא דשמשא), feedin_power_w וfeedin_energy_kwh (לנטרא), import_energy_kwh (מן נטרא), battery_soc_pct, status וupload_time. לחוד קרי: מדם לא אשתני על אינוורטרא. צריך SOLAX_TOKEN_ID וSOLAX_SN בsecond-thought.ini. בדף הדין עביד באינוורטרא דדוגמא."},
 "rb_mikrotik_ports":{"message0":"תרעי MikroTik","tooltip":"רשימת כתבין, חד לכל תרע בנתבא או במחלפא דילך MikroTik: port, running, speed (כות 10Gbps), errors, drops, link_downs וcomment. טעותא ונפלתא מתמנין מן שריותא בתרייתא. רק קרי: מדעם לא משתני במחלפא. בדפא דנא משמש מחלפא דדוגמא."},
 "rb_mikrotik_sfp":{"message0":"מודולי SFP דMikroTik","tooltip":"רשימת כתבין, חד לכל מודול SFP דמחבר: port, module, temperature (°C), rx_power וtx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"שלמא דMikroTik","tooltip":"כתבא על נתבא או מחלפא גופיה: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), וכל מרגשא אחרנא דאית ליה."},
@@ -1069,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"למשרא תוב, לבטלא ולמשרא מאנך דDocker (ושאיל לך בכל זמן)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"לא אפשר למטי מניהן דיל Flightradar24 מן דף הדין, ובכן האגנט לא עביד הכא בלעדיהון. תפקיד לPython, עם Node.js מתקן וFR24_API_KEY מתקנא, למיעבד בהון.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"למקרא נתבנין דטיסתא דיל Flightradar24: אתרן קיימין וקדמאין, כנישין, ארחין, ופרטין דאוירופלאן ומטרא"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"למקרא נתבנין דטיסתא דיל Flightradar24: אתרן קיימין וקדמאין, כנישין, ארחין, ופרטין דאוירופלאן ומטרא",
+"Solax":"Solax",
+"Solax figures":"נתבנין דיל Solax",
+"Solax inverter":"אינוורטרא דיל Solax",
+"from {time}":"מן {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"למקרא נתבנין דאינוורטרא דילך מן SolaxCloud: אסקופא דשמשא, מליא דבטריא, אסקופא ואפקא"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2073,7 +2079,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought לא משדר {what} לDocker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js לא מתקן, ובכן מאני Flightradar24 לא יכלין למשרא (מן npx אתין). תקן יתה: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 בעי מפתחא: שרי FR24_API_KEY בsecond-thought.ini, לגבי הדין פרוגרמא (אנטרא דמפרע, מן https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY דילך מתקנא (כל קריאה אכפר קרדיטין, ובכן לא מתבדק הכא)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY דילך מתקנא (כל קריאה אכפר קרדיטין, ובכן לא מתבדק הכא)",
+"Solax figures":"נתבנין דיל Solax",
+"from {time}":"מן {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax בעי SOLAX_TOKEN_ID וSOLAX_SN {where_keys}: טוקנא מן דף API דיל SolaxCloud (בחנם) ומנין רישומא דמודול וויפי דאינוורטרא (בתויתיה, או באפליקציא).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud אהניה {code}: בדוק ית SOLAX_TOKEN_ID וSOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud ארחק ית ההוא טוקנא או מניא רישומא: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"לא אפשר למטי לSolaxCloud ב{url} ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"מטינא לSolaxCloud: {status}, נתבנין מן {time}",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",
