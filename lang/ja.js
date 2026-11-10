@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox のゲスト","tooltip":"記録のリストで、VM とコンテナーごとに一つ：vmid、name、node、type（vm か container）、status、cpu と memory（%）、uptime（時間）、停止中なら onboot（ノードと一緒に起動するはずか）。"},
 "rb_proxmox_storage":{"message0":"Proxmox のストレージ","tooltip":"記録のリストで、各ノードのストレージごとに一つ：storage、node、used（%）、used_gb、size_gb、status。"},
 "rb_proxmox_tasks":{"message0":"直近 %1 時間の Proxmox のタスク","tooltip":"記録のリストで、新しい順：started、node、type（vzdump はバックアップ）、id（ゲスト）、status（OK か、失敗の内容）、user。"},
-"rb_proxmox_power":{"message0":"Proxmox のゲスト %2 を %1","tooltip":"VM またはコンテナーを VMID で起動、シャットダウン、再起動します。ほかに何も確認しないときでも必ず先に確認し、「はい」と言う人がいなければ実行しません。PROXMOX_PROTECT にあるゲストには一切触れません。VM.PowerMgmt のあるトークンが必要です。このページでは実際には何も起動も停止もしません。"}
+"rb_proxmox_power":{"message0":"Proxmox のゲスト %2 を %1","tooltip":"VM またはコンテナーを VMID で起動、シャットダウン、再起動します。ほかに何も確認しないときでも必ず先に確認し、「はい」と言う人がいなければ実行しません。PROXMOX_PROTECT にあるゲストには一切触れません。VM.PowerMgmt のあるトークンが必要です。このページでは実際には何も起動も停止もしません。"},
+"rb_docker_containers":{"message0":"Docker のコンテナー","tooltip":"記録のリストで、動いているかどうかにかかわらずコンテナーごとに一つ：name、image、state、status、health（healthy、unhealthy、ヘルスチェックがなければ空）、restarts、started。このページではサンプルのスタックを使います。"},
+"rb_docker_stats":{"message0":"Docker のメモリーと CPU","tooltip":"記録のリストで、動いているコンテナーごとに一つ：name、cpu（%）、memory_mb、limit_mb（上限のないコンテナーではマシンのメモリー）、memory（上限に対する %）。"},
+"rb_docker_logs":{"message0":"Docker のログ：%1、最後の %2 行","tooltip":"コンテナーが書いた最後の行。出力とエラーを合わせて、古い順です。"},
+"rb_docker_power":{"message0":"Docker のコンテナー %2 を %1","tooltip":"コンテナーを名前で再起動、停止、起動します。ほかに何も確認しないときでも必ず先に確認し、「はい」と言う人がいなければ実行しません。DOCKER_PROTECT にあるコンテナーには一切触れません。このページでは実際には何も再起動しません。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"未約定の注文","fills":"最近の約定"},
 "rb_coinbase_preview.SIDE":{"buy":"買う","sell":"売る"},
 "rb_coinbase_order.SIDE":{"buy":"買う","sell":"売る"},
-"rb_proxmox_power.ACTION":{"start":"起動","shutdown":"シャットダウン","reboot":"再起動"}
+"rb_proxmox_power.ACTION":{"start":"起動","shutdown":"シャットダウン","reboot":"再起動"},
+"rb_docker_power.ACTION":{"restart":"再起動","stop":"停止","start":"起動"}
 },
 "categories":{
 "Events":"イベント",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"エージェントの道具：エージェントブロックの中に入れます",
@@ -1049,7 +1055,16 @@
 "sample cluster":"サンプルのクラスター",
 "{n} guests":"{n} ゲスト",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"Proxmox クラスターを読む：ノード、ゲスト、ストレージ、タスク",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"Proxmox のゲストを起動、シャットダウン、再起動する（毎回確認します）"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"Proxmox のゲストを起動、シャットダウン、再起動する（毎回確認します）",
+"A Docker container can be restarted, stopped or started.":"Docker のコンテナーは再起動、停止、起動ができます。",
+"Docker":"Docker",
+"Docker stack":"Docker スタック",
+"Docker containers":"Docker のコンテナー",
+"Docker: {why}.":"Docker：{why}。",
+"Which Docker container? Give its name, like sonarr.":"どの Docker のコンテナーですか？名前を指定してください。たとえば sonarr。",
+"{n} containers":"{n} コンテナー",
+"read your Docker containers: their health, memory and logs":"Docker のコンテナーを読む：状態、メモリー、ログ",
+"restart, stop and start your Docker containers (asking you each time)":"Docker のコンテナーを再起動、停止、起動する（毎回確認します）"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2040,6 +2055,16 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"トークンは {what} もできます。Second Thought には不要です：PVEAuditor ロールのほうが安全です。",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"トークンはゲストを起動・停止できない（VM.PowerMgmt が必要）ので、このプログラムの電源ブロックは拒否されます。",
 "the token isn't allowed to do that":"トークンにはその操作が許されていません",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} は、あなたが「はい」と言えるときだけ実行しますが、誰もいません。"
+"{what} only runs when you're there to say yes, and nobody is.":"{what} は、あなたが「はい」と言えるときだけ実行しますが、誰もいません。",
+"A Docker container can be restarted, stopped or started.":"Docker のコンテナーは再起動、停止、起動ができます。",
+"Docker":"Docker",
+"Docker containers":"Docker のコンテナー",
+"Docker: {why}.":"Docker：{why}。",
+"Which Docker container? Give its name, like sonarr.":"どの Docker のコンテナーですか？名前を指定してください。たとえば sonarr。",
+"{n} containers":"{n} コンテナー",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"コンテナー {name} は DOCKER_PROTECT にあるので、Second Thought は再起動も停止も起動もしません。",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows では DOCKER_HOST に tcp:// のアドレスを設定してください。Docker の名前付きパイプには対応していません。",
+"Second Thought doesn't send {what} to Docker.":"Second Thought は {what} を Docker に送りません。"
 }
 };

@@ -13,6 +13,7 @@ like a router does; .fingerprint is its SHA-256.
 import base64
 import datetime
 import hashlib
+import ipaddress
 import json
 import pathlib
 import ssl
@@ -35,6 +36,7 @@ def self_signed(folder):
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "router")])
     now = datetime.datetime.now(datetime.timezone.utc)
     cert = (x509.CertificateBuilder().subject_name(name).issuer_name(name).public_key(key.public_key())
+            .add_extension(x509.SubjectAlternativeName([x509.IPAddress(ipaddress.ip_address("127.0.0.1"))]), critical=False)
             .serial_number(x509.random_serial_number()).not_valid_before(now - datetime.timedelta(days=1))
             .not_valid_after(now + datetime.timedelta(days=30)).sign(key, hashes.SHA256()))
     cert_path, key_path = pathlib.Path(folder) / "router.crt", pathlib.Path(folder) / "router.key"

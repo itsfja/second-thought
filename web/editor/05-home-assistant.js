@@ -75,6 +75,7 @@
   window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
     : c.kind === "coinbase" ? coinbaseMoney(c.method, c.path)
+    : c.kind === "docker" ? (["free", "asks"].find(k => SAFETY["docker_" + k].some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))) || null)
     : c.kind === "proxmox" ? (["free", "asks"].find(k => SAFETY["proxmox_" + k].some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))) || null)
     : c.kind === "unifi" ? SAFETY.unifi_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
     : c.kind === "mikrotik" ? SAFETY.mikrotik_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))

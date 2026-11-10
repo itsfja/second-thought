@@ -866,6 +866,25 @@ async def new_feature_page_tests(pg):
     check("[proxmox]" in files["second-thought.ini"] and "PROXMOX_PROTECT = " in files["second-thought.ini"] and "proxmox_control" in EXTRA["t_px_blocks"],
           "a Proxmox program's settings ask for the address, token, certificate pin and protected guests")
 
+    print("Docker")
+    dk_prog = script(add(count(cb("rb_docker_containers"))), add(rec("restarts", nth(cb("rb_docker_containers"), 3))), add(rec("health", nth(cb("rb_docker_containers"), 4))),
+                     add(rec("memory", first(cb("rb_docker_stats")))), add(rec("cpu", first(cb("rb_docker_stats")))), add(rec("memory_mb", nth(cb("rb_docker_stats"), 6))),
+                     add({"block": {"type": "lists_getIndex", "fields": {"MODE": "GET", "WHERE": "LAST"}, "inputs": {"VALUE": cb("rb_docker_logs", NAME=tx("qbittorrent"), N=nm(2))}}}),
+                     blk("rb_docker_power", fields={"ACTION": "restart"}, inputs={"NAME": tx("prowlarr")}), blk("rb_result"))
+    await load_state(pg, dk_prog)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    asks = [t for n, _, t in await step_texts(pg) if n == "Allow this?"]
+    want = ["7", "7", "unhealthy", "92.8", "8", "402.25", "(C) 2026-11-10T07:56:02 - Disk I/O error on /downloads: Input/output error"]
+    check(status.startswith("done") and items == want, f"the Docker blocks read the sample stack's containers, memory and logs ({items})")
+    check(len(asks) == 1 and "restart the Docker container prowlarr (lscr.io/linuxserver/prowlarr:latest, now restarting)" in asks[0],
+          f"on the page, restarting a Docker container asks first ({asks})")
+    EXTRA["t_dk_blocks"] = await export_python(pg, "t_dk_blocks")
+    await pg.evaluate("document.getElementById('io-name').value = 't_dk_blocks'")
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    check("[docker]" in files["second-thought.ini"] and "DOCKER_PROTECT = " in files["second-thought.ini"] and "docker_control" in EXTRA["t_dk_blocks"],
+          "a Docker program's settings explain the socket, the proxy and protected containers")
+
     print("UniFi")
     uf_prog = script(add(count(cb("rb_unifi_clients"))), add(rec("uplink", nth(cb("rb_unifi_clients"), 2))), add(rec("name", nth(cb("rb_unifi_clients"), 6))),
                      add(rec("type", nth(cb("rb_unifi_clients"), 2))), add(rec("update", nth(cb("rb_unifi_devices"), 2))),

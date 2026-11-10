@@ -137,6 +137,9 @@
       B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_cancel", { ORDER:K("") })
     ]},
+    { kind:"category", name:"Docker", categorystyle:"docker", contents:[
+      B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
+    ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
     ]},

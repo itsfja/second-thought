@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"ξένοι τοῦ Proxmox","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην VM καὶ container· vmid, name, node, type (vm ἢ container), status, cpu καὶ memory (%), uptime (ὧραι), καὶ τῷ πεπαυμένῳ onboot (εἰ δεῖ αὐτὸν μετὰ τοῦ κόμβου ἄρχεσθαι)."},
 "rb_proxmox_storage":{"message0":"ἀποθῆκαι τοῦ Proxmox","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην ἀποθήκην ἐν ἑκάστῳ κόμβῳ· storage, node, used (%), used_gb, size_gb καὶ status."},
 "rb_proxmox_tasks":{"message0":"ἔργα τοῦ Proxmox τῶν ἐσχάτων %1 ὡρῶν","tooltip":"Κατάλογος ἀναγραφῶν, τὸ νεώτατον πρῶτον· started, node, type (vzdump ἐστὶν ἀντίγραφον φυλακῆς), id (ὁ ξένος), status (OK, ἢ τί ἥμαρτεν) καὶ user."},
-"rb_proxmox_power":{"message0":"%1 τὸν ξένον τοῦ Proxmox %2","tooltip":"Ἄρχει, κλείει ἢ πάλιν ἄρχει μίαν VM ἢ container τῷ VMID. Ἀεὶ πρῶτον ἐρωτᾷ σε, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ· μηδενὸς παρόντος τοῦ «ναί» λέγοντος, οὐ γίνεται. Οἱ ξένοι ἐν PROXMOX_PROTECT οὐδέποτε ἅπτονται. Δεῖται συμβόλου μετὰ VM.PowerMgmt. Ἐν τῇδε τῇ σελίδι οὐδὲν ἀληθῶς ἄρχεται οὐδὲ παύεται."}
+"rb_proxmox_power":{"message0":"%1 τὸν ξένον τοῦ Proxmox %2","tooltip":"Ἄρχει, κλείει ἢ πάλιν ἄρχει μίαν VM ἢ container τῷ VMID. Ἀεὶ πρῶτον ἐρωτᾷ σε, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ· μηδενὸς παρόντος τοῦ «ναί» λέγοντος, οὐ γίνεται. Οἱ ξένοι ἐν PROXMOX_PROTECT οὐδέποτε ἅπτονται. Δεῖται συμβόλου μετὰ VM.PowerMgmt. Ἐν τῇδε τῇ σελίδι οὐδὲν ἀληθῶς ἄρχεται οὐδὲ παύεται."},
+"rb_docker_containers":{"message0":"ἀγγεῖα τοῦ Docker","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἕκαστον ἀγγεῖον, εἴτε τρέχει εἴτε μή· name, image, state, status, health (healthy, unhealthy, ἢ κενὸν ἄνευ ἐλέγχου ὑγιείας), restarts καὶ started. Ἐν τῇδε τῇ σελίδι χρῆται σωρῷ ὑποδείγματος."},
+"rb_docker_stats":{"message0":"μνήμη καὶ CPU τοῦ Docker","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἕκαστον ἀγγεῖον τρέχον· name, cpu (%), memory_mb, limit_mb (ἡ μνήμη τῆς μηχανῆς, ἀγγείῳ ἄνευ ὅρου) καὶ memory (% τοῦ ὅρου)."},
+"rb_docker_logs":{"message0":"ὑπομνήματα τοῦ Docker τοῦ %1, ἔσχατοι %2 στίχοι","tooltip":"Οἱ ἔσχατοι στίχοι οὓς ἀγγεῖον ἔγραψεν, ἡ ἔξοδος καὶ τὰ σφάλματα ὁμοῦ, ὁ παλαιότατος πρῶτος."},
+"rb_docker_power":{"message0":"%1 τὸ ἀγγεῖον τοῦ Docker %2","tooltip":"Πάλιν ἄρχει, παύει ἢ ἄρχει ἓν ἀγγεῖον τῷ ὀνόματι. Ἀεὶ πρῶτον ἐρωτᾷ σε, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ· μηδενὸς παρόντος τοῦ «ναί» λέγοντος, οὐ γίνεται. Τὰ ἀγγεῖα ἐν DOCKER_PROTECT οὐδέποτε ἅπτεται. Ἐν τῇδε τῇ σελίδι οὐδὲν ἀληθῶς πάλιν ἄρχεται."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"καθ᾽ ἡμέραν","weekdays":"ἐν ταῖς ἡμέραις τῶν ἔργων","weekends":"ἐν τῷ τέλει τῆς ἑβδομάδος"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"ἀνεῳγμέναι ἐντολαί","fills":"ἔσχαται πράξεις"},
 "rb_coinbase_preview.SIDE":{"buy":"ὠνοῦ","sell":"πώλει"},
 "rb_coinbase_order.SIDE":{"buy":"ὠνοῦ","sell":"πώλει"},
-"rb_proxmox_power.ACTION":{"start":"ἄρξον","shutdown":"κλεῖσον","reboot":"πάλιν ἄρξον"}
+"rb_proxmox_power.ACTION":{"start":"ἄρξον","shutdown":"κλεῖσον","reboot":"πάλιν ἄρξον"},
+"rb_docker_power.ACTION":{"restart":"πάλιν ἄρξον","stop":"παῦσον","start":"ἄρξον"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1049,7 +1055,16 @@
 "sample cluster":"σύστημα ὑποδείγματος",
 "{n} guests":"{n} ξένοι",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"ἀναγινώσκειν τὸ σύστημά σου Proxmox· κόμβους, ξένους, ἀποθήκας καὶ ἔργα",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"ἄρχειν, κλείειν καὶ πάλιν ἄρχειν τοὺς ξένους σου Proxmox (ἐρωτῶν σε ἑκάστοτε)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"ἄρχειν, κλείειν καὶ πάλιν ἄρχειν τοὺς ξένους σου Proxmox (ἐρωτῶν σε ἑκάστοτε)",
+"A Docker container can be restarted, stopped or started.":"Ἀγγεῖον τοῦ Docker δύναται πάλιν ἄρχεσθαι, παύεσθαι ἢ ἄρχεσθαι.",
+"Docker":"Docker",
+"Docker stack":"σωρὸς τοῦ Docker",
+"Docker containers":"ἀγγεῖα τοῦ Docker",
+"Docker: {why}.":"Docker· {why}.",
+"Which Docker container? Give its name, like sonarr.":"Ποῖον ἀγγεῖον τοῦ Docker; Δὸς τὸ ὄνομα αὐτοῦ, οἷον sonarr.",
+"{n} containers":"{n} ἀγγεῖα",
+"read your Docker containers: their health, memory and logs":"ἀναγιγνώσκειν τὰ ἀγγεῖά σου τοῦ Docker· τὴν ὑγίειαν, τὴν μνήμην καὶ τὰ ὑπομνήματα",
+"restart, stop and start your Docker containers (asking you each time)":"πάλιν ἄρχειν, παύειν καὶ ἄρχειν τὰ ἀγγεῖά σου τοῦ Docker (ἑκάστοτε ἐρωτῶν σε)"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -2040,7 +2055,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"τὸ σύμβολον δύναται καὶ {what}. Τὸ Second Thought οὐ δεῖται τούτου· τὸ ἔργον PVEAuditor ἀσφαλέστερον.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"τὸ σύμβολον οὐ δύναται ξένους ἄρχειν ἢ παύειν (δεῖται VM.PowerMgmt), ὥστε αἱ πλίνθοι τοῦ προγράμματος ἀποδοκιμασθήσονται.",
 "the token isn't allowed to do that":"οὐκ ἔξεστι τῷ συμβόλῳ τοῦτο ποιεῖν",
-"{what} only runs when you're there to say yes, and nobody is.":"τὸ {what} μόνον γίνεται ὅταν πάρει τοῦ «ναί» εἰπεῖν, οὐδεὶς δὲ πάρεστιν."
+"{what} only runs when you're there to say yes, and nobody is.":"τὸ {what} μόνον γίνεται ὅταν πάρει τοῦ «ναί» εἰπεῖν, οὐδεὶς δὲ πάρεστιν.",
+"A Docker container can be restarted, stopped or started.":"Ἀγγεῖον τοῦ Docker δύναται πάλιν ἄρχεσθαι, παύεσθαι ἢ ἄρχεσθαι.",
+"Docker":"Docker",
+"Docker containers":"ἀγγεῖα τοῦ Docker",
+"Docker: {why}.":"Docker· {why}.",
+"Which Docker container? Give its name, like sonarr.":"Ποῖον ἀγγεῖον τοῦ Docker; Δὸς τὸ ὄνομα αὐτοῦ, οἷον sonarr.",
+"{n} containers":"{n} ἀγγεῖα",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Τὸ ἀγγεῖον {name} ἐν DOCKER_PROTECT ἐστίν, ὥστε τὸ Second Thought οὐδέποτε πάλιν ἄρχει, παύει ἢ ἄρχει αὐτό.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Ἐν Windows θὲς ἐν DOCKER_HOST διεύθυνσιν tcp://· ὁ ὠνομασμένος αὐλὸς τοῦ Docker οὐχ ὑποστηρίζεται.",
+"Second Thought doesn't send {what} to Docker.":"Τὸ Second Thought οὐ πέμπει {what} εἰς Docker."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

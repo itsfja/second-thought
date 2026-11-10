@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox calpanecah","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl VM ihuan tlacomitl: vmid, name, node, type (vm nozo container), status, cpu ihuan memory (%), uptime (hora), ihuan in moquetztoc onboot (intlā monequi motzintīz ihuān in ilpicayōtl)."},
 "rb_proxmox_storage":{"message0":"Proxmox tlapiyaloyān","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl tlapiyaloyān ipan cecentetl ilpicayōtl: storage, node, used (%), used_gb, size_gb ihuan status."},
 "rb_proxmox_tasks":{"message0":"Proxmox tequitl in tlatzonco %1 hora","tooltip":"Cē amatlahcuilōlli, in achi yancuic achto: started, node, type (vzdump cē tlapiyaliztli), id (in calpanecatl), status (OK, nozo tlein ōpoliuh) ihuan user."},
-"rb_proxmox_power":{"message0":"%1 Proxmox calpanecatl %2","tooltip":"Quitzintia, quicehuia nozo occeppa quitzintia cē VM nozo tlacomitl, ica īVMID. Mochipa achto mitztlahtlani, māmo ahtle occē tlahtlani; intlā ahquemeh oncah quihtōz quēmah, ahmo mochīhua. In calpanecah ipan PROXMOX_PROTECT aīc moyacatzohuah. Quinequi machiyōtl ica VM.PowerMgmt. Nicān ahtle nelli motzintia nozo moquetza."}
+"rb_proxmox_power":{"message0":"%1 Proxmox calpanecatl %2","tooltip":"Quitzintia, quicehuia nozo occeppa quitzintia cē VM nozo tlacomitl, ica īVMID. Mochipa achto mitztlahtlani, māmo ahtle occē tlahtlani; intlā ahquemeh oncah quihtōz quēmah, ahmo mochīhua. In calpanecah ipan PROXMOX_PROTECT aīc moyacatzohuah. Quinequi machiyōtl ica VM.PowerMgmt. Nicān ahtle nelli motzintia nozo moquetza."},
+"rb_docker_containers":{"message0":"Docker tlacomeh","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl tlacomitl, intlā tequiti nozo ahmo: name, image, state, status, health (healthy, unhealthy, nozo cactoc intlācamo oncah pahtiliz-yehyecōliztli), restarts ihuan started. Nicān quitequitiltia cē machiyōtl tlanechicōlli."},
+"rb_docker_stats":{"message0":"Docker tlalnāmiquiliztli ihuan CPU","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl tlacomitl in tequiti: name, cpu (%), memory_mb, limit_mb (in tepoztli ītlalnāmiquiliz, in tlacomitl in ahmo quipia tlatzontli) ihuan memory (% in tlatzontli)."},
+"rb_docker_logs":{"message0":"Docker tlahcuilōlli in %1, in tlatzonco %2 pāntli","tooltip":"In tlatzonco pāntli in ōquihcuiloh cē tlacomitl, in īquīzaliz ihuan īnēxtlahtōl cepan, in achto huehue."},
+"rb_docker_power":{"message0":"%1 Docker tlacomitl %2","tooltip":"Occeppa quitzintia, quiquetza nozo quitzintia cē tlacomitl, ica ītōcā. Mochipa achto mitztlahtlani, māmo ahtle occē tlahtlani; intlā ahquemeh oncah quihtōz quēmah, ahmo mochīhua. In tlacomeh ipan DOCKER_PROTECT aīc moyacatzohuah. Nicān ahtle nelli occeppa motzintia."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -186,7 +190,8 @@
 "rb_coinbase_orders.WHICH":{"open":"tlapoalli tlanahuatilli","fills":"tlatzonco tlatzonquixtiliztli"},
 "rb_coinbase_preview.SIDE":{"buy":"xicohua","sell":"xicnamaca"},
 "rb_coinbase_order.SIDE":{"buy":"xicohua","sell":"xicnamaca"},
-"rb_proxmox_power.ACTION":{"start":"xictzinti","shutdown":"xiccehui","reboot":"occeppa xictzinti"}
+"rb_proxmox_power.ACTION":{"start":"xictzinti","shutdown":"xiccehui","reboot":"occeppa xictzinti"},
+"rb_docker_power.ACTION":{"restart":"occeppa xictzinti","stop":"xicquetza","start":"xictzinti"}
 },
 "categories":{
 "Agent":"Tītlantli",
@@ -216,7 +221,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1048,7 +1054,16 @@
 "sample cluster":"machiyōtl centlaliliztli",
 "{n} guests":"{n} calpanecah",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"quipōhuaz mo Proxmox centlaliliztli: ilpicayōtl, calpanecah, tlapiyaloyān ihuan tequitl",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"quintzintīz, quincehuīz ihuan occeppa quintzintīz mo Proxmox calpanecah (mitztlahtlaniz cecenpa)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"quintzintīz, quincehuīz ihuan occeppa quintzintīz mo Proxmox calpanecah (mitztlahtlaniz cecenpa)",
+"A Docker container can be restarted, stopped or started.":"Cē Docker tlacomitl huel occeppa motzintia, huel moquetza nozo motzintia.",
+"Docker":"Docker",
+"Docker stack":"Docker tlanechicōlli",
+"Docker containers":"Docker tlacomeh",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Catlehhuātl Docker tlacomitl? Xiquitto ītōcā, iuhquin sonarr.",
+"{n} containers":"{n} tlacomeh",
+"read your Docker containers: their health, memory and logs":"quipōhuaz in mo Docker tlacomeh: īnpahtiliz, īntlalnāmiquiliz ihuan īntlahcuilōl",
+"restart, stop and start your Docker containers (asking you each time)":"occeppa quitzintīz, quiquetzaz ihuan quitzintīz in mo Docker tlacomeh (mitztlahtlanīz cecen)"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2039,7 +2054,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"in machiyōtl no huel {what}. Second Thought ahmo quinequi: in PVEAuditor tequitl achi cualli.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"in machiyōtl ahmo huel quintzintia nozo quinquetza calpanecah (quinequi VM.PowerMgmt), ic in tlachīhualli ītlachicāhualtepētl motlāxilīzqueh.",
 "the token isn't allowed to do that":"in machiyōtl ahmo huel quichīhua inīn",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} zan mochīhua ihcuāc tioncah ic tiquihtōz quēmah, auh ahquemeh oncah."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} zan mochīhua ihcuāc tioncah ic tiquihtōz quēmah, auh ahquemeh oncah.",
+"A Docker container can be restarted, stopped or started.":"Cē Docker tlacomitl huel occeppa motzintia, huel moquetza nozo motzintia.",
+"Docker":"Docker",
+"Docker containers":"Docker tlacomeh",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Catlehhuātl Docker tlacomitl? Xiquitto ītōcā, iuhquin sonarr.",
+"{n} containers":"{n} tlacomeh",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"In tlacomitl {name} ca ipan DOCKER_PROTECT, ic Second Thought aīc occeppa quitzintia, quiquetza nozo quitzintia.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Ipan Windows, xictlāli ipan DOCKER_HOST cē tcp:// nōtzalōyān: in Docker ītōcāyoh acalotli ahmo mopalēhuia.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought ahmo quititlani {what} ītech Docker."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

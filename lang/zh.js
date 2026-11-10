@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox 客户机","tooltip":"记录列表，每个虚拟机和容器一条：vmid、name、node、type（vm 或 container）、status、cpu 和 memory（%）、uptime（小时），停止的还有 onboot（是否应随节点启动）。"},
 "rb_proxmox_storage":{"message0":"Proxmox 存储","tooltip":"记录列表，每个节点上的每个存储一条：storage、node、used（%）、used_gb、size_gb 和 status。"},
 "rb_proxmox_tasks":{"message0":"最近 %1 小时的 Proxmox 任务","tooltip":"记录列表，最新的在前：started、node、type（vzdump 是备份）、id（客户机）、status（OK，或出了什么错）和 user。"},
-"rb_proxmox_power":{"message0":"%1 Proxmox 客户机 %2","tooltip":"按 VMID 启动、关闭或重启一个虚拟机或容器。它总会先问你，即使别的都不问；没人在场说“是”，就不执行。PROXMOX_PROTECT 里的客户机绝不碰。需要有 VM.PowerMgmt 的令牌。在本页上没有东西真的启动或停止。"}
+"rb_proxmox_power":{"message0":"%1 Proxmox 客户机 %2","tooltip":"按 VMID 启动、关闭或重启一个虚拟机或容器。它总会先问你，即使别的都不问；没人在场说“是”，就不执行。PROXMOX_PROTECT 里的客户机绝不碰。需要有 VM.PowerMgmt 的令牌。在本页上没有东西真的启动或停止。"},
+"rb_docker_containers":{"message0":"Docker 容器","tooltip":"记录列表，每个容器一条，不论是否在运行：name、image、state、status、health（healthy、unhealthy，没有健康检查则为空）、restarts 和 started。在本页上使用示例堆栈。"},
+"rb_docker_stats":{"message0":"Docker 内存和 CPU","tooltip":"记录列表，每个运行中的容器一条：name、cpu（%）、memory_mb、limit_mb（没有上限的容器为机器的内存）和 memory（占上限的 %）。"},
+"rb_docker_logs":{"message0":"Docker 日志：%1，最后 %2 行","tooltip":"容器写下的最后几行，输出和错误在一起，最早的在前。"},
+"rb_docker_power":{"message0":"%1 Docker 容器 %2","tooltip":"按名字重启、停止或启动一个容器。它总会先问你，即使别的都不问；没人在场说“是”，就不执行。DOCKER_PROTECT 里的容器绝不碰。在本页上没有东西真的重启。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"未成交订单","fills":"最近成交"},
 "rb_coinbase_preview.SIDE":{"buy":"买入","sell":"卖出"},
 "rb_coinbase_order.SIDE":{"buy":"买入","sell":"卖出"},
-"rb_proxmox_power.ACTION":{"start":"启动","shutdown":"关机","reboot":"重启"}
+"rb_proxmox_power.ACTION":{"start":"启动","shutdown":"关机","reboot":"重启"},
+"rb_docker_power.ACTION":{"restart":"重启","stop":"停止","start":"启动"}
 },
 "categories":{
 "Events":"事件",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"给智能体的工具：把它们放进智能体积木里",
@@ -1049,7 +1055,16 @@
 "sample cluster":"示例集群",
 "{n} guests":"{n} 个客户机",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"读取你的 Proxmox 集群：节点、客户机、存储和任务",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"启动、关闭和重启你的 Proxmox 客户机（每次都问你）"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"启动、关闭和重启你的 Proxmox 客户机（每次都问你）",
+"A Docker container can be restarted, stopped or started.":"Docker 容器可以重启、停止或启动。",
+"Docker":"Docker",
+"Docker stack":"Docker 堆栈",
+"Docker containers":"Docker 容器",
+"Docker: {why}.":"Docker：{why}。",
+"Which Docker container? Give its name, like sonarr.":"哪个 Docker 容器？请给出它的名字，比如 sonarr。",
+"{n} containers":"{n} 个容器",
+"read your Docker containers: their health, memory and logs":"读取你的 Docker 容器：健康状况、内存和日志",
+"restart, stop and start your Docker containers (asking you each time)":"重启、停止和启动你的 Docker 容器（每次都问你）"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -2040,6 +2055,16 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"令牌还能 {what}。Second Thought 不需要这些：PVEAuditor 角色更安全。",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"令牌不能启动或停止客户机（需要 VM.PowerMgmt），所以这个程序的电源积木会被拒绝。",
 "the token isn't allowed to do that":"令牌不允许这样做",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} 只在你在场说“是”时才执行，但现在没人。"
+"{what} only runs when you're there to say yes, and nobody is.":"{what} 只在你在场说“是”时才执行，但现在没人。",
+"A Docker container can be restarted, stopped or started.":"Docker 容器可以重启、停止或启动。",
+"Docker":"Docker",
+"Docker containers":"Docker 容器",
+"Docker: {why}.":"Docker：{why}。",
+"Which Docker container? Give its name, like sonarr.":"哪个 Docker 容器？请给出它的名字，比如 sonarr。",
+"{n} containers":"{n} 个容器",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"容器 {name} 在 DOCKER_PROTECT 里，所以 Second Thought 从不重启、停止或启动它。",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"在 Windows 上，请把 DOCKER_HOST 设为 tcp:// 地址：不支持 Docker 的命名管道。",
+"Second Thought doesn't send {what} to Docker.":"Second Thought 不会向 Docker 发送 {what}。"
 }
 };

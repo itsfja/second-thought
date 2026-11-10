@@ -214,6 +214,9 @@ def python_tests(codes, share=None):
     import fake_unifi  # and the UniFi ones a stand-in console (#359)
     unifi_all = fake_unifi.FakeUnifi()
     env.update(UNIFI_URL=unifi_all.start(), UNIFI_API_KEY=fake_unifi.KEY)
+    import fake_docker  # the Docker ones a stand-in Engine (#358)
+    docker_all = fake_docker.FakeDocker()
+    env.update(DOCKER_HOST=docker_all.start())
     import fake_proxmox  # and the Proxmox ones a stand-in cluster (#357)
     proxmox_all = fake_proxmox.FakeProxmox()
     env.update(PROXMOX_URL=proxmox_all.start(), PROXMOX_TOKEN_ID=fake_proxmox.TOKEN_ID, PROXMOX_TOKEN_SECRET=fake_proxmox.SECRET)
@@ -437,6 +440,18 @@ def python_tests(codes, share=None):
                     "2026-11-10 07:30:00 system,info,account: user monitor logged in via rest-api"]
             check(code_ == 0 and res[:len(want)] == want and not mikrotik_all.refused,
                   f"t_mt_blocks.py reads the same from RouterOS as the page does, and sends nothing but reads ({res[:len(want)]})" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+
+    if part("settings"):
+        print("Docker in Python")
+        with tempfile.TemporaryDirectory() as tmp:
+            (pathlib.Path(tmp) / "t_dk_blocks.py").write_text(EXTRA["t_dk_blocks"], encoding="utf-8")
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_dk_blocks.py")], env, tmp)
+            res = [l.strip() for l in out.replace("\r\n", "\n").split("RESULT")[-1].split("\n") if l.strip().strip("=")]
+            want = ["7", "7", "unhealthy", "92.8", "8", "402.25", "(C) 2026-11-10T07:56:02 - Disk I/O error on /downloads: Input/output error"]
+            check(code_ == 0 and res[:len(want)] == want and not docker_all.refused,
+                  f"t_dk_blocks.py reads the same from Docker as the page does ({res[:len(want)]})" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            check(not docker_all.powered and "only runs when you're there to say yes" in out,
+                  "with nobody at the keyboard, the exported program restarts no container")
 
     if part("settings"):
         print("Proxmox in Python")

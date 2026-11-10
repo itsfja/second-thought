@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"guest Proxmox","tooltip":"Un elenco di record, uno per ogni VM e container: vmid, name, node, type (vm o container), status, cpu e memory (%), uptime (ore) e, se è fermo, onboot (se dovrebbe partire con il nodo)."},
 "rb_proxmox_storage":{"message0":"storage Proxmox","tooltip":"Un elenco di record, uno per ogni storage su ogni nodo: storage, node, used (%), used_gb, size_gb e status."},
 "rb_proxmox_tasks":{"message0":"attività Proxmox delle ultime %1 ore","tooltip":"Un elenco di record, dalla più recente: started, node, type (vzdump è un backup), id (il guest), status (OK, o cosa è andato storto) e user."},
-"rb_proxmox_power":{"message0":"%1 il guest Proxmox %2","tooltip":"Avvia, spegne o riavvia una VM o un container, dal suo VMID. Ti chiede sempre prima, anche quando nient'altro chiede, e se non c'è nessuno a dire sì non parte. I guest in PROXMOX_PROTECT non vengono mai toccati. Serve un token con VM.PowerMgmt. In questa pagina nulla si avvia o si ferma davvero."}
+"rb_proxmox_power":{"message0":"%1 il guest Proxmox %2","tooltip":"Avvia, spegne o riavvia una VM o un container, dal suo VMID. Ti chiede sempre prima, anche quando nient'altro chiede, e se non c'è nessuno a dire sì non parte. I guest in PROXMOX_PROTECT non vengono mai toccati. Serve un token con VM.PowerMgmt. In questa pagina nulla si avvia o si ferma davvero."},
+"rb_docker_containers":{"message0":"container Docker","tooltip":"Un elenco di record, uno per ogni container, in esecuzione o no: name, image, state, status, health (healthy, unhealthy, o vuoto senza controllo di salute), restarts e started. In questa pagina usa uno stack di esempio."},
+"rb_docker_stats":{"message0":"memoria e CPU di Docker","tooltip":"Un elenco di record, uno per ogni container in esecuzione: name, cpu (%), memory_mb, limit_mb (la memoria della macchina, per un container senza limite) e memory (% del limite)."},
+"rb_docker_logs":{"message0":"log Docker di %1, ultime %2 righe","tooltip":"Le ultime righe scritte da un container, output ed errori insieme, la più vecchia per prima."},
+"rb_docker_power":{"message0":"%1 il container Docker %2","tooltip":"Riavvia, ferma o avvia un container, dal suo nome. Ti chiede sempre prima, anche quando nient'altro chiede, e se non c'è nessuno a dire sì non parte. I container in DOCKER_PROTECT non vengono mai toccati. In questa pagina nulla si riavvia davvero."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ogni giorno","weekdays":"nei giorni feriali","weekends":"nel fine settimana"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"ordini aperti","fills":"ultimi eseguiti"},
 "rb_coinbase_preview.SIDE":{"buy":"compra","sell":"vendi"},
 "rb_coinbase_order.SIDE":{"buy":"compra","sell":"vendi"},
-"rb_proxmox_power.ACTION":{"start":"avvia","shutdown":"spegni","reboot":"riavvia"}
+"rb_proxmox_power.ACTION":{"start":"avvia","shutdown":"spegni","reboot":"riavvia"},
+"rb_docker_power.ACTION":{"restart":"riavvia","stop":"ferma","start":"avvia"}
 },
 "categories":{
 "Events":"Eventi",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Strumenti per l'agente: mettili dentro un blocco agente",
@@ -1049,7 +1055,16 @@
 "sample cluster":"cluster di esempio",
 "{n} guests":"{n} guest",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"leggere il tuo cluster Proxmox: nodi, guest, storage e attività",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"avviare, spegnere e riavviare i tuoi guest Proxmox (chiedendoti ogni volta)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"avviare, spegnere e riavviare i tuoi guest Proxmox (chiedendoti ogni volta)",
+"A Docker container can be restarted, stopped or started.":"Un container Docker si può riavviare, fermare o avviare.",
+"Docker":"Docker",
+"Docker stack":"stack Docker",
+"Docker containers":"container Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Quale container Docker? Indica il suo nome, come sonarr.",
+"{n} containers":"{n} container",
+"read your Docker containers: their health, memory and logs":"leggere i tuoi container Docker: salute, memoria e log",
+"restart, stop and start your Docker containers (asking you each time)":"riavviare, fermare e avviare i tuoi container Docker (chiedendotelo ogni volta)"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -2040,6 +2055,16 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"il token può anche {what}. Second Thought non ne ha bisogno: il ruolo PVEAuditor è più sicuro.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"il token non può avviare o fermare guest (gli serve VM.PowerMgmt), quindi i blocchi di accensione di questo programma verrebbero rifiutati.",
 "the token isn't allowed to do that":"il token non può farlo",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} parte solo quando ci sei per dire sì, e non c'è nessuno."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} parte solo quando ci sei per dire sì, e non c'è nessuno.",
+"A Docker container can be restarted, stopped or started.":"Un container Docker si può riavviare, fermare o avviare.",
+"Docker":"Docker",
+"Docker containers":"container Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Quale container Docker? Indica il suo nome, come sonarr.",
+"{n} containers":"{n} container",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Il container {name} è in DOCKER_PROTECT, quindi Second Thought non lo riavvia, ferma o avvia mai.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Su Windows, imposta DOCKER_HOST su un indirizzo tcp://: la named pipe di Docker non è supportata.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought non invia {what} a Docker."
 }
 };

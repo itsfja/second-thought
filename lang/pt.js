@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"convidados do Proxmox","tooltip":"Uma lista de registos, um por cada VM e contentor: vmid, name, node, type (vm ou container), status, cpu e memory (%), uptime (horas) e, se estiver parado, onboot (se devia arrancar com o nó)."},
 "rb_proxmox_storage":{"message0":"armazenamento do Proxmox","tooltip":"Uma lista de registos, um por cada armazenamento em cada nó: storage, node, used (%), used_gb, size_gb e status."},
 "rb_proxmox_tasks":{"message0":"tarefas do Proxmox das últimas %1 horas","tooltip":"Uma lista de registos, a mais recente primeiro: started, node, type (vzdump é uma cópia de segurança), id (o convidado), status (OK, ou o que correu mal) e user."},
-"rb_proxmox_power":{"message0":"%1 o convidado do Proxmox %2","tooltip":"Inicia, desliga ou reinicia uma VM ou contentor, pelo VMID. Pergunta-lhe sempre antes, mesmo quando nada mais pergunta, e sem ninguém para dizer que sim não acontece. Os convidados em PROXMOX_PROTECT nunca são tocados. Precisa de um token com VM.PowerMgmt. Nesta página nada arranca nem para de verdade."}
+"rb_proxmox_power":{"message0":"%1 o convidado do Proxmox %2","tooltip":"Inicia, desliga ou reinicia uma VM ou contentor, pelo VMID. Pergunta-lhe sempre antes, mesmo quando nada mais pergunta, e sem ninguém para dizer que sim não acontece. Os convidados em PROXMOX_PROTECT nunca são tocados. Precisa de um token com VM.PowerMgmt. Nesta página nada arranca nem para de verdade."},
+"rb_docker_containers":{"message0":"contentores do Docker","tooltip":"Uma lista de registos, um por cada contentor, a correr ou não: name, image, state, status, health (healthy, unhealthy, ou vazio sem verificação de saúde), restarts e started. Nesta página usa uma pilha de exemplo."},
+"rb_docker_stats":{"message0":"memória e CPU do Docker","tooltip":"Uma lista de registos, um por cada contentor a correr: name, cpu (%), memory_mb, limit_mb (a memória da máquina, para um contentor sem limite) e memory (% do limite)."},
+"rb_docker_logs":{"message0":"registos do Docker de %1, últimas %2 linhas","tooltip":"As últimas linhas que um contentor escreveu, a saída e os erros juntos, a mais antiga primeiro."},
+"rb_docker_power":{"message0":"%1 o contentor do Docker %2","tooltip":"Reinicia, para ou inicia um contentor, pelo nome. Pergunta-lhe sempre antes, mesmo quando nada mais pergunta, e sem ninguém para dizer que sim não acontece. Os contentores em DOCKER_PROTECT nunca são tocados. Nesta página nada reinicia de verdade."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos os dias","weekdays":"nos dias úteis","weekends":"ao fim de semana"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"ordens abertas","fills":"últimas execuções"},
 "rb_coinbase_preview.SIDE":{"buy":"comprar","sell":"vender"},
 "rb_coinbase_order.SIDE":{"buy":"comprar","sell":"vender"},
-"rb_proxmox_power.ACTION":{"start":"iniciar","shutdown":"desligar","reboot":"reiniciar"}
+"rb_proxmox_power.ACTION":{"start":"iniciar","shutdown":"desligar","reboot":"reiniciar"},
+"rb_docker_power.ACTION":{"restart":"reiniciar","stop":"parar","start":"iniciar"}
 },
 "categories":{
 "Events":"Eventos",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ferramentas para o agente: coloque-as dentro de um bloco de agente",
@@ -1049,7 +1055,16 @@
 "sample cluster":"cluster de exemplo",
 "{n} guests":"{n} convidados",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"ler o seu cluster Proxmox: nós, convidados, armazenamento e tarefas",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"iniciar, desligar e reiniciar os seus convidados do Proxmox (perguntando-lhe sempre)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"iniciar, desligar e reiniciar os seus convidados do Proxmox (perguntando-lhe sempre)",
+"A Docker container can be restarted, stopped or started.":"Um contentor do Docker pode ser reiniciado, parado ou iniciado.",
+"Docker":"Docker",
+"Docker stack":"pilha do Docker",
+"Docker containers":"contentores do Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Que contentor do Docker? Indique o nome, como sonarr.",
+"{n} containers":"{n} contentores",
+"read your Docker containers: their health, memory and logs":"ler os seus contentores do Docker: saúde, memória e registos",
+"restart, stop and start your Docker containers (asking you each time)":"reiniciar, parar e iniciar os seus contentores do Docker (perguntando-lhe de cada vez)"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -2040,6 +2055,16 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"o token também pode {what}. O Second Thought não precisa disso: o papel PVEAuditor é mais seguro.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"o token não pode iniciar nem parar convidados (precisa de VM.PowerMgmt), por isso os blocos de ligar e desligar deste programa seriam recusados.",
 "the token isn't allowed to do that":"o token não pode fazer isso",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} só acontece quando está lá para dizer que sim, e não está ninguém."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} só acontece quando está lá para dizer que sim, e não está ninguém.",
+"A Docker container can be restarted, stopped or started.":"Um contentor do Docker pode ser reiniciado, parado ou iniciado.",
+"Docker":"Docker",
+"Docker containers":"contentores do Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Que contentor do Docker? Indique o nome, como sonarr.",
+"{n} containers":"{n} contentores",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"O contentor {name} está em DOCKER_PROTECT, por isso o Second Thought nunca o reinicia, para ou inicia.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"No Windows, ponha em DOCKER_HOST um endereço tcp://: o pipe nomeado do Docker não é suportado.",
+"Second Thought doesn't send {what} to Docker.":"O Second Thought não envia {what} ao Docker."
 }
 };

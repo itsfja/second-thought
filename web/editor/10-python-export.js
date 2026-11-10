@@ -70,6 +70,7 @@
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
+             docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -116,6 +117,12 @@
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.docker) out.push("", "[docker]",
+      "; Docker's Engine API. Left out, it's the socket on this computer (unix:///var/run/docker.sock), which is root on",
+      "; the machine: safer is a socket proxy (tecnativa/docker-socket-proxy with CONTAINERS=1, plus ALLOW_RESTARTS=1 and",
+      "; ALLOW_START=1 only if the program restarts, stops or starts containers), and DOCKER_HOST = tcp://that-machine:2375.",
+      "; DOCKER_PROTECT lists containers never restarted, stopped or started, like the proxy itself.",
+      "; DOCKER_HOST = tcp://docker.local:2375", "DOCKER_PROTECT = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -434,6 +441,9 @@
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_docker_containers": return "(await R.docker_containers())";
+        case "rb_docker_stats": return "(await R.docker_stats())";
+        case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -586,6 +596,7 @@
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
+          case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;

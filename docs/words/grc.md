@@ -30,6 +30,7 @@ Made by tools/sync.py from i18n/grc.json: edit that, not this.
 - MikroTik: MikroTik
 - UniFi: UniFi
 - Proxmox: Proxmox
+- Docker: Docker
 - Tools for the agent: drop them inside an agent block: Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου
 - Listeners: they run while the exported program runs on schedule: Ἀκροαταί· τρέχουσιν ἐν ᾧ τὸ ἐξαχθὲν πρόγραμμα κατὰ τὰς ὥρας τρέχει
 - Read and send: Ἀνάγνωθι καὶ πέμψον

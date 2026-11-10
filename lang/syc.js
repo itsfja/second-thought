@@ -166,7 +166,11 @@
 "rb_proxmox_guests":{"message0":"ܐܟܣܢܝܐ ܕ-Proxmox","tooltip":"ܣܕܪܐ ܕܟܛܝܒܬܐ, ܚܕܐ ܠܟܘܠ VM: vmid, name, node, type (vm ܐܘ container), status, cpu ܘ-memory (%), uptime (ܫܥܐ), ܘ-onboot."},
 "rb_proxmox_storage":{"message0":"ܐܘܨܪܐ ܕ-Proxmox","tooltip":"ܣܕܪܐ ܕܟܛܝܒܬܐ, ܚܕܐ ܠܟܘܠ ܐܘܨܪܐ: storage, node, used (%), used_gb, size_gb ܘ-status."},
 "rb_proxmox_tasks":{"message0":"ܥܒܕܐ ܕ-Proxmox ܕ-%1 ܫܥܐ ܐܚܪܝܐ","tooltip":"ܣܕܪܐ ܕܟܛܝܒܬܐ, ܚܕܬܐ ܩܕܡ: started, node, type (vzdump), id, status (OK, ܐܘ ܡܢܐ ܛܥܐ) ܘ-user."},
-"rb_proxmox_power":{"message0":"%1 ܐܟܣܢܝܐ ܕ-Proxmox %2","tooltip":"ܡܫܪܐ, ܡܕܥܟ ܐܘ ܬܘܒ ܡܫܪܐ VM ܚܕ ܒ-VMID ܕܝܠܗ. ܐܡܝܢܐܝܬ ܠܘܩܕܡ ܫܐܠ ܠܟ; ܟܕ ܠܝܬ ܡܢ ܕܐܡܪ ܐܝܢ, ܠܐ ܪܗܛ. PROXMOX_PROTECT ܠܐ ܡܛܩܪܒܘܢ. ܣܢܐ ܪܘܫܡܐ ܥܡ VM.PowerMgmt. ܒܦܛܐ ܗܢܐ ܡܕܡ ܠܐ ܫܪܐ."}
+"rb_proxmox_power":{"message0":"%1 ܐܟܣܢܝܐ ܕ-Proxmox %2","tooltip":"ܡܫܪܐ, ܡܕܥܟ ܐܘ ܬܘܒ ܡܫܪܐ VM ܚܕ ܒ-VMID ܕܝܠܗ. ܐܡܝܢܐܝܬ ܠܘܩܕܡ ܫܐܠ ܠܟ; ܟܕ ܠܝܬ ܡܢ ܕܐܡܪ ܐܝܢ, ܠܐ ܪܗܛ. PROXMOX_PROTECT ܠܐ ܡܛܩܪܒܘܢ. ܣܢܐ ܪܘܫܡܐ ܥܡ VM.PowerMgmt. ܒܦܛܐ ܗܢܐ ܡܕܡ ܠܐ ܫܪܐ."},
+"rb_docker_containers":{"message0":"ܡܢܐ ܕ-Docker","tooltip":"ܣܕܪܐ ܕܟܛܝܒܬܐ, ܚܕܐ ܠܟܘܠ ܡܢܐ: name, image, state, status, health (healthy, unhealthy), restarts ܘ-started. ܒܦܛܐ ܗܢܐ ܫܩܠ ܟܢܫܐ ܕܛܘܦܣܐ."},
+"rb_docker_stats":{"message0":"ܥܘܗܕܢܐ ܘ-CPU ܕ-Docker","tooltip":"ܣܕܪܐ ܕܟܛܝܒܬܐ, ܚܕܐ ܠܟܘܠ ܡܢܐ ܕܪܗܛ: name, cpu (%), memory_mb, limit_mb ܘ-memory (%)."},
+"rb_docker_logs":{"message0":"ܟܛܝܒܬܐ ܕ-Docker ܕ-%1, %2 ܣܘܪܛܐ ܐܚܪܝܐ","tooltip":"ܣܘܪܛܐ ܐܚܪܝܐ ܕܟܛܒ ܡܢܐ, ܥܬܝܩܐ ܠܘܩܕܡ."},
+"rb_docker_power":{"message0":"%1 ܡܢܐ ܕ-Docker %2","tooltip":"ܬܘܒ ܡܫܪܐ, ܡܒܛܠ ܐܘ ܡܫܪܐ ܡܢܐ ܚܕ ܒܫܡܗ. ܐܡܝܢܐܝܬ ܠܘܩܕܡ ܫܐܠ ܠܟ; ܟܕ ܠܝܬ ܡܢ ܕܐܡܪ ܐܝܢ, ܠܐ ܪܗܛ. DOCKER_PROTECT ܠܐ ܡܛܩܪܒܘܢ. ܒܦܛܐ ܗܢܐ ܡܕܡ ܬܘܒ ܠܐ ܫܪܐ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ܟܘܠ ܝܘܡ","weekdays":"ܒܝܘܡܬܐ ܕܥܒܕܐ","weekends":"ܒܫܒܬܐ"},
@@ -188,7 +192,8 @@
 "rb_coinbase_orders.WHICH":{"open":"ܦܘܩܕܢܐ ܦܬܝܚܐ","fills":"ܫܘܡܠܝܐ ܐܚܪܝܐ"},
 "rb_coinbase_preview.SIDE":{"buy":"ܙܒܘܢ","sell":"ܙܒܢ"},
 "rb_coinbase_order.SIDE":{"buy":"ܙܒܘܢ","sell":"ܙܒܢ"},
-"rb_proxmox_power.ACTION":{"start":"ܫܪܝ","shutdown":"ܕܥܟ","reboot":"ܬܘܒ ܫܪܝ"}
+"rb_proxmox_power.ACTION":{"start":"ܫܪܝ","shutdown":"ܕܥܟ","reboot":"ܬܘܒ ܫܪܝ"},
+"rb_docker_power.ACTION":{"restart":"ܬܘܒ ܫܪܝ","stop":"ܒܛܠ","start":"ܫܪܝ"}
 },
 "categories":{
 "Agent":"ܫܠܝܚܐ",
@@ -218,7 +223,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ܡܨܝܬܢܐ: ܪܗܛܝܢ ܟܕ ܛܘܟܣܐ ܕܢܦܩ ܪܗܛ ܥܡ ܙܒܢܐ",
@@ -1050,7 +1056,16 @@
 "sample cluster":"ܟܢܫܐ ܕܛܘܦܣܐ",
 "{n} guests":"{n} ܐܟܣܢܝܐ",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"ܩܪܝ ܟܢܫܟ ܕ-Proxmox: ܩܛܪܐ, ܐܟܣܢܝܐ, ܐܘܨܪܐ ܘܥܒܕܐ",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"ܫܪܝ, ܕܥܟ ܘܬܘܒ ܫܪܝ ܐܟܣܢܝܝܟ ܕ-Proxmox (ܫܐܠ ܠܟ ܟܘܠ ܙܒܢ)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"ܫܪܝ, ܕܥܟ ܘܬܘܒ ܫܪܝ ܐܟܣܢܝܝܟ ܕ-Proxmox (ܫܐܠ ܠܟ ܟܘܠ ܙܒܢ)",
+"A Docker container can be restarted, stopped or started.":"ܡܢܐ ܕ-Docker ܬܘܒ ܡܫܬܪܐ, ܡܬܒܛܠ ܐܘ ܡܫܬܪܐ.",
+"Docker":"Docker",
+"Docker stack":"ܟܢܫܐ ܕ-Docker",
+"Docker containers":"ܡܢܐ ܕ-Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"ܐܝܢܐ ܡܢܐ ܕ-Docker? ܗܒ ܫܡܗ, ܐܟ sonarr.",
+"{n} containers":"{n} ܡܢܐ",
+"read your Docker containers: their health, memory and logs":"ܠܡܩܪܐ ܡܢܝܟ ܕ-Docker: ܚܘܠܡܢܗܘܢ, ܥܘܗܕܢܗܘܢ ܘܟܛܝܒܬܗܘܢ",
+"restart, stop and start your Docker containers (asking you each time)":"ܬܘܒ ܠܡܫܪܝܘ, ܠܡܒܛܠܘ ܘܠܡܫܪܝܘ ܡܢܝܟ ܕ-Docker (ܟܕ ܫܐܠ ܠܟ ܒܟܘܠ ܙܒܢ)"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
@@ -2041,7 +2056,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"rušmā meškaḥ ꜣāp {what}. Second Thought lā sānē: PVEAuditor šlīm yattīr.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"rušmā lā meškaḥ lmašrāyu ꜣaksnāyē (sānē VM.PowerMgmt), wpāṭē dṭuksā netlꜥzūn.",
 "the token isn't allowed to do that":"lā šallīṭ rušmā lmeꜥbad hādē",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} balḥod rāheṭ kad ꜣnt tammān lmēmar ꜣīn, wlēt ꜣnāš."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} balḥod rāheṭ kad ꜣnt tammān lmēmar ꜣīn, wlēt ꜣnāš.",
+"A Docker container can be restarted, stopped or started.":"mānā d-Docker tūb meštrē, metbaṭṭal ꜣaw meštrē.",
+"Docker":"Docker",
+"Docker containers":"mānē d-Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"ꜣaynā mānā d-Docker? hab šmeh, ꜣak sonarr.",
+"{n} containers":"{n} mānē",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"mānā {name} b-DOCKER_PROTECT, wlꜥālam Second Thought lā mašrē leh.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"b-Windows, sīm tcp:// b-DOCKER_HOST. zamrūrā d-Docker lā metqabbal.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought lā mšaddar {what} l-Docker."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

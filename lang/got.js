@@ -165,7 +165,11 @@
 "rb_proxmox_guests":{"message0":"𐌲𐌰𐍃𐍄𐌴𐌹𐍃 Proxmox","tooltip":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 VM: vmid, name, node, type (vm 𐌰𐌹𐌸𐌸𐌰𐌿 container), status, cpu 𐌾𐌰𐌷 memory (%), uptime (𐌷𐍅𐌴𐌹𐌻𐍉𐍃), 𐌾𐌰𐌷 onboot."},
 "rb_proxmox_storage":{"message0":"𐌷𐌻𐌰𐌹𐍅𐍉𐍃 Proxmox","tooltip":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌷𐌻𐌰𐌹𐍅𐌰: storage, node, used (%), used_gb, size_gb 𐌾𐌰𐌷 status."},
 "rb_proxmox_tasks":{"message0":"𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌰 Proxmox 𐌸𐌹𐌶𐌴 𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐌰𐌽𐌴 %1 𐌷𐍅𐌴𐌹𐌻𐍉","tooltip":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌽𐌹𐌿𐌾𐌹𐍃𐍄𐌰 𐍆𐍂𐌿𐌼𐌹𐍃𐍄: started, node, type (vzdump), id, status (OK, 𐌰𐌹𐌸𐌸𐌰𐌿 𐍈𐌰 𐌼𐌹𐍃𐍃𐌰𐍄𐌰𐌿𐌾𐌹𐌸) 𐌾𐌰𐌷 user."},
-"rb_proxmox_power":{"message0":"%1 𐌲𐌰𐍃𐍄 Proxmox %2","tooltip":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸, 𐌲𐌰𐌻𐌿𐌺𐌹𐌸 𐌰𐌹𐌸𐌸𐌰𐌿 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸 𐌰𐌹𐌽 VM 𐌱𐌹 VMID. 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌿𐌼𐌹𐍃𐍄 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐌿𐌺; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌰𐌹𐌽𐍃𐌷𐌿𐌽 𐌹𐍃𐍄 𐌾𐌰 𐌵𐌹𐌸𐌰𐌽, 𐌽𐌹 𐌲𐌰𐌲𐌲𐌹𐌸. PROXMOX_PROTECT 𐌽𐌹 𐌰𐍄𐍄𐌴𐌺𐌰𐌽𐌳. 𐍅𐌹𐌻𐌹 𐍄𐌰𐌹𐌺𐌽 𐌼𐌹𐌸 VM.PowerMgmt. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸."}
+"rb_proxmox_power":{"message0":"%1 𐌲𐌰𐍃𐍄 Proxmox %2","tooltip":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸, 𐌲𐌰𐌻𐌿𐌺𐌹𐌸 𐌰𐌹𐌸𐌸𐌰𐌿 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸 𐌰𐌹𐌽 VM 𐌱𐌹 VMID. 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌿𐌼𐌹𐍃𐍄 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐌿𐌺; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌰𐌹𐌽𐍃𐌷𐌿𐌽 𐌹𐍃𐍄 𐌾𐌰 𐌵𐌹𐌸𐌰𐌽, 𐌽𐌹 𐌲𐌰𐌲𐌲𐌹𐌸. PROXMOX_PROTECT 𐌽𐌹 𐌰𐍄𐍄𐌴𐌺𐌰𐌽𐌳. 𐍅𐌹𐌻𐌹 𐍄𐌰𐌹𐌺𐌽 𐌼𐌹𐌸 VM.PowerMgmt. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸."},
+"rb_docker_containers":{"message0":"𐌺𐌰𐍃𐌰 Docker","tooltip":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌺𐌰𐍃𐌰: name, image, state, status, health (healthy, unhealthy), restarts 𐌾𐌰𐌷 started. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌱𐍂𐌿𐌺𐌴𐌹𐌸 𐌷𐌰𐌽𐍃𐌰𐌹 𐍆𐍂𐌹𐍃𐌰𐌷𐍄𐌰𐌹𐍃."},
+"rb_docker_stats":{"message0":"𐌲𐌰𐌼𐌹𐌽𐌸𐌹 𐌾𐌰𐌷 CPU Docker","tooltip":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌺𐌰𐍃𐌰 𐍂𐌹𐌽𐌽𐌰𐌽𐌳𐌹𐌽: name, cpu (%), memory_mb, limit_mb 𐌾𐌰𐌷 memory (%)."},
+"rb_docker_logs":{"message0":"𐌱𐍉𐌺𐍉𐍃 Docker %1, 𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐌰𐌽𐍃 %2 𐍃𐍄𐍂𐌹𐌺𐌰𐌽𐍃","tooltip":"𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐌰𐌹 𐍃𐍄𐍂𐌹𐌺𐍉𐍃 𐌸𐌰𐌹𐌴𐌹 𐌺𐌰𐍃 𐌲𐌰𐌼𐌴𐌻𐌹𐌳𐌰, 𐍃𐌰 𐍆𐌰𐌹𐍂𐌽𐌹𐍃𐍄𐌰 𐍆𐍂𐌿𐌼𐌹𐍃𐍄."},
+"rb_docker_power":{"message0":"%1 𐌺𐌰𐍃 Docker %2","tooltip":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸, 𐌲𐌰𐌰𐌽𐌳𐌴𐌹𐌸 𐌰𐌹𐌸𐌸𐌰𐌿 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸 𐌰𐌹𐌽 𐌺𐌰𐍃 𐌱𐌹 𐌽𐌰𐌼𐌹𐌽. 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌿𐌼𐌹𐍃𐍄 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐌿𐌺; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌰𐌹𐌽𐍃𐌷𐌿𐌽 𐌹𐍃𐍄 𐌾𐌰 𐌵𐌹𐌸𐌰𐌽, 𐌽𐌹 𐌲𐌰𐌲𐌲𐌹𐌸. DOCKER_PROTECT 𐌽𐌹 𐌰𐍄𐍄𐌴𐌺𐌰𐌽𐌳. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐌳𐌰𐌲𐌰 𐍈𐌰𐌼𐌼𐌴𐌷","weekdays":"𐌳𐌰𐌲𐌰𐌼 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌹𐍃","weekends":"𐌳𐌰𐌲𐌰𐌼 𐌲𐌰𐌵𐌿𐌼𐌸𐌰𐌹𐍃"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌽𐍃 𐌿𐍃𐌻𐌿𐌺𐌽𐌰𐌽𐍃","fills":"𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐍉𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐍄𐌹𐌽𐍃"},
 "rb_coinbase_preview.SIDE":{"buy":"𐌱𐌿𐌲𐌾𐌰𐌽","sell":"𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽"},
 "rb_coinbase_order.SIDE":{"buy":"𐌱𐌿𐌲𐌾𐌰𐌽","sell":"𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽"},
-"rb_proxmox_power.ACTION":{"start":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹","shutdown":"𐌲𐌰𐌻𐌿𐌺","reboot":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹"}
+"rb_proxmox_power.ACTION":{"start":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹","shutdown":"𐌲𐌰𐌻𐌿𐌺","reboot":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹"},
+"rb_docker_power.ACTION":{"restart":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹","stop":"𐌲𐌰𐌰𐌽𐌳𐌴𐌹","start":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹"}
 },
 "categories":{
 "Agent":"𐌰𐌹𐍂𐌿𐍃",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𐌷𐌰𐌿𐍃𐌾𐌰𐌽𐌳𐌰𐌽𐍃: 𐍄𐌰𐌿𐌾𐌰𐌽𐌳 𐍃𐍅𐌴𐌸𐌰𐌿𐌷 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰 𐌹𐌽 𐌼𐌴𐌻𐌰 𐍄𐌰𐌿𐌾𐌹𐌸",
@@ -1049,7 +1055,16 @@
 "sample cluster":"𐌷𐌰𐌽𐍃𐌰 𐍆𐍂𐌹𐍃𐌰𐌷𐍄𐌰𐌹𐍃",
 "{n} guests":"{n} 𐌲𐌰𐍃𐍄𐌴𐌹𐍃",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"𐌻𐌰𐌹𐍃𐌾𐌰𐌽 𐌷𐌰𐌽𐍃𐌰 Proxmox 𐌸𐌴𐌹𐌽𐌰: 𐌺𐌽𐍉𐌳𐌰𐌽𐍃, 𐌲𐌰𐍃𐍄𐌹𐌽𐍃, 𐌷𐌻𐌰𐌹𐍅𐍉𐍃 𐌾𐌰𐌷 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌰",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌻𐌿𐌺𐌰𐌽 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 𐌲𐌰𐍃𐍄𐌹𐌽𐍃 Proxmox 𐌸𐌴𐌹𐌽𐌰𐌽𐍃 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍈𐌰𐍂𐌾𐌰𐌽𐍉𐌷 𐍃𐌹𐌽𐌸)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌻𐌿𐌺𐌰𐌽 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 𐌲𐌰𐍃𐍄𐌹𐌽𐍃 Proxmox 𐌸𐌴𐌹𐌽𐌰𐌽𐍃 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍈𐌰𐍂𐌾𐌰𐌽𐍉𐌷 𐍃𐌹𐌽𐌸)",
+"A Docker container can be restarted, stopped or started.":"𐌺𐌰𐍃 Docker 𐌼𐌰𐌲 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌰𐌽𐌳𐌾𐌰𐌽 𐌰𐌹𐌸𐌸𐌰𐌿 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽.",
+"Docker":"Docker",
+"Docker stack":"𐌷𐌰𐌽𐍃𐌰 Docker",
+"Docker containers":"𐌺𐌰𐍃𐌰 Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"𐍈𐌰𐍂𐌾𐌰𐍄𐌰 𐌺𐌰𐍃 Docker? 𐌲𐌹𐍆 𐌽𐌰𐌼𐍉 𐌹𐍃, 𐍃𐍅𐌴 sonarr.",
+"{n} containers":"{n} 𐌺𐌰𐍃𐌰",
+"read your Docker containers: their health, memory and logs":"𐌿𐍃𐍃𐌹𐌲𐌲𐍅𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰: 𐌷𐌰𐌹𐌻𐌴𐌹𐌽, 𐌲𐌰𐌼𐌹𐌽𐌸𐌹 𐌾𐌰𐌷 𐌱𐍉𐌺𐍉𐍃 𐌹𐌶𐌴",
+"restart, stop and start your Docker containers (asking you each time)":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽, 𐌲𐌰𐌰𐌽𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 𐌺𐌰𐍃𐌰 Docker 𐌸𐌴𐌹𐌽𐌰 (𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳𐍃 𐌸𐌿𐌺 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉)"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2040,7 +2055,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"taikns jah {what} mag. Second Thought ni þarf: PVEAuditor triggwoza.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"taikns ni mag gastins anastodjan (þarf VM.PowerMgmt), inuh þis waurstwis afwairpanda.",
 "the token isn't allowed to do that":"taikns ni mag þata taujan",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} þatainei gaggiþ þan þu is jainar ja qiþan, jah ni ainshun ist."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} þatainei gaggiþ þan þu is jainar ja qiþan, jah ni ainshun ist.",
+"A Docker container can be restarted, stopped or started.":"kas Docker mag aftra anastodjan, gaandjan aiþþau anastodjan.",
+"Docker":"Docker",
+"Docker containers":"kasa Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"ƕarjata kas Docker? gif namo is, swe sonarr.",
+"{n} containers":"{n} kasa",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"kas {name} in DOCKER_PROTECT ist, inuh þis Second Thought ni aiw anastodeiþ ita.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"in Windows, satei tcp:// in DOCKER_HOST. swiglo Docker ni andnimada.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought ni sandeiþ {what} du Docker."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

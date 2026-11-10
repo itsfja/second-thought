@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox-gasten","tooltip":"Een lijst met records, één voor elke VM en container: vmid, name, node, type (vm of container), status, cpu en memory (%), uptime (uren) en, als hij gestopt is, onboot (of hij met de node mee zou moeten starten)."},
 "rb_proxmox_storage":{"message0":"Proxmox-opslag","tooltip":"Een lijst met records, één voor elke opslag op elke node: storage, node, used (%), used_gb, size_gb en status."},
 "rb_proxmox_tasks":{"message0":"Proxmox-taken van de laatste %1 uur","tooltip":"Een lijst met records, de nieuwste eerst: started, node, type (vzdump is een back-up), id (de gast), status (OK, of wat er misging) en user."},
-"rb_proxmox_power":{"message0":"Proxmox-gast %2 %1","tooltip":"Start, sluit af of herstart één VM of container, op zijn VMID. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Gasten in PROXMOX_PROTECT worden nooit aangeraakt. Heeft een token met VM.PowerMgmt nodig. Op deze pagina start of stopt er niets echt."}
+"rb_proxmox_power":{"message0":"Proxmox-gast %2 %1","tooltip":"Start, sluit af of herstart één VM of container, op zijn VMID. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Gasten in PROXMOX_PROTECT worden nooit aangeraakt. Heeft een token met VM.PowerMgmt nodig. Op deze pagina start of stopt er niets echt."},
+"rb_docker_containers":{"message0":"Docker-containers","tooltip":"Een lijst met records, één voor elke container, draaiend of niet: name, image, state, status, health (healthy, unhealthy, of leeg zonder gezondheidscontrole), restarts en started. Op deze pagina gebruikt hij een voorbeeldstack."},
+"rb_docker_stats":{"message0":"Docker-geheugen en -CPU","tooltip":"Een lijst met records, één voor elke draaiende container: name, cpu (%), memory_mb, limit_mb (het geheugen van de machine, bij een container zonder limiet) en memory (% van de limiet)."},
+"rb_docker_logs":{"message0":"Docker-logs van %1, laatste %2 regels","tooltip":"De laatste regels die een container schreef, uitvoer en fouten samen, de oudste eerst."},
+"rb_docker_power":{"message0":"Docker-container %2 %1","tooltip":"Herstart, stopt of start één container, op zijn naam. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Containers in DOCKER_PROTECT worden nooit aangeraakt. Op deze pagina herstart er niets echt."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"elke dag","weekdays":"op werkdagen","weekends":"in het weekend"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"open orders","fills":"laatste uitvoeringen"},
 "rb_coinbase_preview.SIDE":{"buy":"kopen","sell":"verkopen"},
 "rb_coinbase_order.SIDE":{"buy":"kopen","sell":"verkopen"},
-"rb_proxmox_power.ACTION":{"start":"starten","shutdown":"afsluiten","reboot":"herstarten"}
+"rb_proxmox_power.ACTION":{"start":"starten","shutdown":"afsluiten","reboot":"herstarten"},
+"rb_docker_power.ACTION":{"restart":"herstarten","stop":"stoppen","start":"starten"}
 },
 "categories":{
 "Events":"Gebeurtenissen",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Hulpmiddelen voor de agent: zet ze in een agentblok",
@@ -1049,7 +1055,16 @@
 "sample cluster":"voorbeeldcluster",
 "{n} guests":"{n} gasten",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"je Proxmox-cluster lezen: nodes, gasten, opslag en taken",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"je Proxmox-gasten starten, afsluiten en herstarten (met elke keer een vraag)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"je Proxmox-gasten starten, afsluiten en herstarten (met elke keer een vraag)",
+"A Docker container can be restarted, stopped or started.":"Een Docker-container kan worden herstart, gestopt of gestart.",
+"Docker":"Docker",
+"Docker stack":"Docker-stack",
+"Docker containers":"Docker-containers",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Welke Docker-container? Geef zijn naam, zoals sonarr.",
+"{n} containers":"{n} containers",
+"read your Docker containers: their health, memory and logs":"je Docker-containers lezen: hun gezondheid, geheugen en logs",
+"restart, stop and start your Docker containers (asking you each time)":"je Docker-containers herstarten, stoppen en starten (met elke keer een vraag aan jou)"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2040,6 +2055,16 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"het token mag ook {what}. Second Thought heeft dat niet nodig: de rol PVEAuditor is veiliger.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"het token kan geen gasten starten of stoppen (het heeft VM.PowerMgmt nodig), dus de aan/uit-blokken van dit programma zouden worden geweigerd.",
 "the token isn't allowed to do that":"het token mag dat niet",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} gebeurt alleen als jij er bent om ja te zeggen, en er is niemand."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} gebeurt alleen als jij er bent om ja te zeggen, en er is niemand.",
+"A Docker container can be restarted, stopped or started.":"Een Docker-container kan worden herstart, gestopt of gestart.",
+"Docker":"Docker",
+"Docker containers":"Docker-containers",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Welke Docker-container? Geef zijn naam, zoals sonarr.",
+"{n} containers":"{n} containers",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Container {name} staat in DOCKER_PROTECT, dus Second Thought herstart, stopt of start hem nooit.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Zet op Windows DOCKER_HOST op een tcp://-adres: de named pipe van Docker wordt niet ondersteund.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought stuurt {what} niet naar Docker."
 }
 };

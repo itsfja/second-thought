@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"invités Proxmox","tooltip":"Une liste d'enregistrements, un par VM et conteneur : vmid, name, node, type (vm ou container), status, cpu et memory (%), uptime (heures), et pour un invité arrêté, onboot (s'il devrait démarrer avec le nœud)."},
 "rb_proxmox_storage":{"message0":"stockage Proxmox","tooltip":"Une liste d'enregistrements, un par stockage sur chaque nœud : storage, node, used (%), used_gb, size_gb et status."},
 "rb_proxmox_tasks":{"message0":"tâches Proxmox des %1 dernières heures","tooltip":"Une liste d'enregistrements, la plus récente d'abord : started, node, type (vzdump est une sauvegarde), id (l'invité), status (OK, ou ce qui a échoué) et user."},
-"rb_proxmox_power":{"message0":"%1 l'invité Proxmox %2","tooltip":"Démarre, arrête ou redémarre une VM ou un conteneur, par son VMID. Il vous demande toujours d'abord, même quand rien d'autre ne demande, et sans personne pour dire oui, il ne s'exécute pas. Les invités de PROXMOX_PROTECT ne sont jamais touchés. Il faut un jeton avec VM.PowerMgmt. Sur cette page, rien ne démarre ni ne s'arrête vraiment."}
+"rb_proxmox_power":{"message0":"%1 l'invité Proxmox %2","tooltip":"Démarre, arrête ou redémarre une VM ou un conteneur, par son VMID. Il vous demande toujours d'abord, même quand rien d'autre ne demande, et sans personne pour dire oui, il ne s'exécute pas. Les invités de PROXMOX_PROTECT ne sont jamais touchés. Il faut un jeton avec VM.PowerMgmt. Sur cette page, rien ne démarre ni ne s'arrête vraiment."},
+"rb_docker_containers":{"message0":"conteneurs Docker","tooltip":"Une liste d'enregistrements, un par conteneur, en marche ou non : name, image, state, status, health (healthy, unhealthy, ou vide sans contrôle de santé), restarts et started. Sur cette page, il utilise une pile d'exemple."},
+"rb_docker_stats":{"message0":"mémoire et CPU Docker","tooltip":"Une liste d'enregistrements, un par conteneur en marche : name, cpu (%), memory_mb, limit_mb (la mémoire de la machine, pour un conteneur sans limite) et memory (% de la limite)."},
+"rb_docker_logs":{"message0":"journaux Docker de %1, %2 dernières lignes","tooltip":"Les dernières lignes écrites par un conteneur, sa sortie et ses erreurs ensemble, la plus ancienne d'abord."},
+"rb_docker_power":{"message0":"%1 le conteneur Docker %2","tooltip":"Redémarre, arrête ou démarre un conteneur, par son nom. Il vous demande toujours d'abord, même quand rien d'autre ne demande, et sans personne pour dire oui, il ne s'exécute pas. Les conteneurs de DOCKER_PROTECT ne sont jamais touchés. Sur cette page, rien ne redémarre vraiment."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"tous les jours","weekdays":"en semaine","weekends":"le week-end"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"ordres ouverts","fills":"dernières exécutions"},
 "rb_coinbase_preview.SIDE":{"buy":"acheter","sell":"vendre"},
 "rb_coinbase_order.SIDE":{"buy":"acheter","sell":"vendre"},
-"rb_proxmox_power.ACTION":{"start":"démarrer","shutdown":"arrêter","reboot":"redémarrer"}
+"rb_proxmox_power.ACTION":{"start":"démarrer","shutdown":"arrêter","reboot":"redémarrer"},
+"rb_docker_power.ACTION":{"restart":"redémarrer","stop":"arrêter","start":"démarrer"}
 },
 "categories":{
 "Events":"Événements",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Outils pour l'agent : déposez-les dans un bloc agent",
@@ -1049,7 +1055,16 @@
 "sample cluster":"cluster d'exemple",
 "{n} guests":"{n} invités",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"lire votre cluster Proxmox : nœuds, invités, stockage et tâches",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"démarrer, arrêter et redémarrer vos invités Proxmox (en vous demandant à chaque fois)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"démarrer, arrêter et redémarrer vos invités Proxmox (en vous demandant à chaque fois)",
+"A Docker container can be restarted, stopped or started.":"Un conteneur Docker peut être redémarré, arrêté ou démarré.",
+"Docker":"Docker",
+"Docker stack":"pile Docker",
+"Docker containers":"conteneurs Docker",
+"Docker: {why}.":"Docker : {why}.",
+"Which Docker container? Give its name, like sonarr.":"Quel conteneur Docker ? Donnez son nom, comme sonarr.",
+"{n} containers":"{n} conteneurs",
+"read your Docker containers: their health, memory and logs":"lire vos conteneurs Docker : leur santé, leur mémoire et leurs journaux",
+"restart, stop and start your Docker containers (asking you each time)":"redémarrer, arrêter et démarrer vos conteneurs Docker (en vous demandant chaque fois)"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -2040,6 +2055,16 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"le jeton peut aussi {what}. Second Thought n'en a pas besoin : le rôle PVEAuditor est plus sûr.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"le jeton ne peut ni démarrer ni arrêter d'invités (il lui faut VM.PowerMgmt), donc les blocs d'alimentation de ce programme seraient refusés.",
 "the token isn't allowed to do that":"le jeton n'a pas le droit de faire cela",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} ne se fait que si vous êtes là pour dire oui, et personne n'y est."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} ne se fait que si vous êtes là pour dire oui, et personne n'y est.",
+"A Docker container can be restarted, stopped or started.":"Un conteneur Docker peut être redémarré, arrêté ou démarré.",
+"Docker":"Docker",
+"Docker containers":"conteneurs Docker",
+"Docker: {why}.":"Docker : {why}.",
+"Which Docker container? Give its name, like sonarr.":"Quel conteneur Docker ? Donnez son nom, comme sonarr.",
+"{n} containers":"{n} conteneurs",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Le conteneur {name} est dans DOCKER_PROTECT, donc Second Thought ne le redémarre, ne l'arrête et ne le démarre jamais.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Sous Windows, mettez dans DOCKER_HOST une adresse tcp:// : le canal nommé de Docker n'est pas pris en charge.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought n'envoie pas {what} à Docker."
 }
 };

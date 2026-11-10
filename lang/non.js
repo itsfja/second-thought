@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox-gestir","tooltip":"Listi skráa, ein fyrir hverja VM ok hirzlu: vmid, name, node, type (vm eða container), status, cpu ok memory (%), uptime (stundir), ok fyrir stöðvaðan onboot (hvárt hann skyldi ræsask með hnútinum)."},
 "rb_proxmox_storage":{"message0":"Proxmox-geymslur","tooltip":"Listi skráa, ein fyrir hverja geymslu á hverjum hnút: storage, node, used (%), used_gb, size_gb ok status."},
 "rb_proxmox_tasks":{"message0":"Proxmox-verk síðustu %1 stunda","tooltip":"Listi skráa, it nýjasta fyrst: started, node, type (vzdump er afrit), id (gestrinn), status (OK, eða hvat fór illa) ok user."},
-"rb_proxmox_power":{"message0":"%1 Proxmox-gest %2","tooltip":"Ræsir, slekkr eða endrræsir eina VM eða hirzlu, eptir VMID hennar. Hann spyrr þik ávallt fyrst, þótt ekki annat spyrji, ok sé engi þar at segja já, ferr hann eigi. Gestum í PROXMOX_PROTECT er aldri snert. Þarf tákn með VM.PowerMgmt. Á þessi síðu ræsisk né stöðvask ekki í sannleika."}
+"rb_proxmox_power":{"message0":"%1 Proxmox-gest %2","tooltip":"Ræsir, slekkr eða endrræsir eina VM eða hirzlu, eptir VMID hennar. Hann spyrr þik ávallt fyrst, þótt ekki annat spyrji, ok sé engi þar at segja já, ferr hann eigi. Gestum í PROXMOX_PROTECT er aldri snert. Þarf tákn með VM.PowerMgmt. Á þessi síðu ræsisk né stöðvask ekki í sannleika."},
+"rb_docker_containers":{"message0":"Docker-hirzlur","tooltip":"Listi skráa, ein fyrir hverja hirzlu, hvárt sem hon rennr eða eigi: name, image, state, status, health (healthy, unhealthy, eða tómt án heilsuprófs), restarts ok started. Á þessi síðu nytr hann dœmis-hlaða."},
+"rb_docker_stats":{"message0":"Docker-minni ok CPU","tooltip":"Listi skráa, ein fyrir hverja rennandi hirzlu: name, cpu (%), memory_mb, limit_mb (minni vélarinnar, fyrir hirzlu án marks) ok memory (% marksins)."},
+"rb_docker_logs":{"message0":"Docker-skrár %1, síðustu %2 línur","tooltip":"Síðustu línur er hirzla ritaði, útgangr hennar ok villur saman, hin elzta fyrst."},
+"rb_docker_power":{"message0":"%1 Docker-hirzlu %2","tooltip":"Endrræsir, stöðvar eða ræsir eina hirzlu, eptir nafni hennar. Hann spyrr þik ávallt fyrst, þótt ekki annat spyrji, ok sé engi þar at segja já, ferr hann eigi. Hirzlum í DOCKER_PROTECT er aldri snert. Á þessi síðu endrræsisk ekki í sannleika."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"opin boð","fills":"síðustu fyllingar"},
 "rb_coinbase_preview.SIDE":{"buy":"kaupa","sell":"selja"},
 "rb_coinbase_order.SIDE":{"buy":"kaupa","sell":"selja"},
-"rb_proxmox_power.ACTION":{"start":"ræsa","shutdown":"slökkva","reboot":"endrræsa"}
+"rb_proxmox_power.ACTION":{"start":"ræsa","shutdown":"slökkva","reboot":"endrræsa"},
+"rb_docker_power.ACTION":{"restart":"endrræsa","stop":"stöðva","start":"ræsa"}
 },
 "categories":{
 "Events":"Atburðir",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1049,7 +1055,16 @@
 "sample cluster":"dœmis-þyrping",
 "{n} guests":"{n} gestir",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"lesa Proxmox-þyrping þína: hnúta, gesti, geymslur ok verk",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"ræsa, slökkva ok endrræsa Proxmox-gesti þína (spyrjandi þik hvert sinn)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"ræsa, slökkva ok endrræsa Proxmox-gesti þína (spyrjandi þik hvert sinn)",
+"A Docker container can be restarted, stopped or started.":"Docker-hirzla má vera endrræst, stöðvuð eða ræst.",
+"Docker":"Docker",
+"Docker stack":"Docker-hlaði",
+"Docker containers":"Docker-hirzlur",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Hver Docker-hirzla? Gef nafn hennar, sem sonarr.",
+"{n} containers":"{n} hirzlur",
+"read your Docker containers: their health, memory and logs":"lesa Docker-hirzlur þínar: heilsu þeira, minni ok skrár",
+"restart, stop and start your Docker containers (asking you each time)":"endrræsa, stöðva ok ræsa Docker-hirzlur þínar (ok spyrja þik hvert sinn)"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2040,7 +2055,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"táknit má ok {what}. Second Thought þarf þess eigi: PVEAuditor-hlutverkit er tryggara.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"táknit má eigi ræsa né stöðva gesti (þat þarf VM.PowerMgmt), því væri afl-kubbum þessa forrits synjat.",
 "the token isn't allowed to do that":"táknit má eigi gera þat",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} ferr einungis er þú ert þar at segja já, ok engi er."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} ferr einungis er þú ert þar at segja já, ok engi er.",
+"A Docker container can be restarted, stopped or started.":"Docker-hirzla má vera endrræst, stöðvuð eða ræst.",
+"Docker":"Docker",
+"Docker containers":"Docker-hirzlur",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Hver Docker-hirzla? Gef nafn hennar, sem sonarr.",
+"{n} containers":"{n} hirzlur",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Hirzla {name} er í DOCKER_PROTECT, því endrræsir, stöðvar né ræsir Second Thought hana aldri.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Á Windows, set DOCKER_HOST á tcp:// stað: nefnd pípa Docker er eigi studd.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought sendir eigi {what} til Docker."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

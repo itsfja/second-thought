@@ -364,6 +364,44 @@ add(program(
         email_me("Your Kraken week", B("rb_draft")),
         B("rb_result"))]))
 
+# Home: #358. Docker, read-only: the stack each morning, and each Sunday whether the machine needs more memory.
+v = Vars("containers", "stats", "one", "logs", "report")
+add(program(
+    "is-the-stack-healthy", "Is the stack healthy?", "home",
+    "Each morning, reads your Docker containers and sends you a Telegram message: restarts since yesterday, any "
+    "unhealthy or stopped, memory against the machine's total, and errors in the latest logs. Each Sunday it says "
+    "whether the machine needs more memory. It only reads: nothing is restarted.",
+    "Needs Docker on this computer, or DOCKER_HOST for another one: best a socket proxy that allows only reading "
+    "containers. See Connections, Docker.",
+    start_and(msg="check") + [chain(when_time(7, 45), B("rb_broadcast_wait", MSG="check")), on_day("Sunday", 18, 30, "week"), receive(
+        "check",
+        v.set("containers", B("rb_docker_containers")),
+        v.set("stats", B("rb_docker_stats")),
+        v.set("logs", ""),
+        B("controls_forEach", {"VAR": {"id": v.ids["one"]}}, LIST=v.get("containers"),
+          DO=v.set("logs", join(v.get("logs"), "\n== ", B("rb_rec_get", KEY="name", REC=v.get("one")), "\n",
+                                B("rb_docker_logs", NAME=B("rb_rec_get", KEY="name", REC=v.get("one")), N=20)))),
+        v.set("report", B("rb_ask", TEXT=join(
+            "Check my Docker stack in under 120 words. It is now ", B("rb_now", {"PART": "time"}), " on ", B("rb_now", {"PART": "date"}),
+            ". List any container whose restarts grew since yesterday, any that is unhealthy, restarting or exited, any "
+            "using over 85% of its memory limit, and how much of the machine's memory they use together (limit_mb is "
+            "the machine's total for a container with no limit of its own). Then any errors in the log lines from "
+            "about the last hour, by container, in a few words each. If all is well, say so in one line.\n\n"
+            "Containers now:\n", v.get("containers"), "\n\nContainers yesterday (empty the first day):\n",
+            B("rb_mem_get", NAME="Docker containers yesterday"), "\n\nMemory and CPU:\n", v.get("stats"),
+            "\n\nLatest log lines:", v.get("logs")))),
+        B("rb_mem_set", {"KIND": "permanent"}, VALUE=v.get("containers"), NAME="Docker containers yesterday"),
+        B("rb_mem_add", {"KIND": "permanent"}, VALUE=join(B("rb_now", {"PART": "date"}), ": ", v.get("stats")), NAME="Docker memory by day"),
+        B("rb_tg_send", TEXT=v.get("report")),
+        B("rb_finish_with", TEXT=v.get("report"))), receive(
+        "week",
+        v.set("report", B("rb_ask", TEXT=join(
+            "These are my Docker containers' memory and CPU, one line a day, newest last. Going by the last seven days, "
+            "say in under 100 words how memory moved, which containers grew, and whether the machine needs more memory: "
+            "yes, no or not yet, with the one number that decides it.\n\n", B("rb_mem_get", NAME="Docker memory by day")))),
+        B("rb_tg_send", TEXT=v.get("report")),
+        B("rb_finish_with", TEXT=v.get("report")))], v))
+
 # Home: #357. Proxmox, read-only: the cluster each morning, nothing started or stopped.
 v = Vars("nodes", "guests", "storage", "tasks", "report")
 add(program(

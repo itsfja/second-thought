@@ -633,6 +633,22 @@
   "rb_proxmox_power": {
    "message0": "%1 את אורח ה-Proxmox ‏%2",
    "tooltip": "מפעיל, מכבה או מאתחל VM או מכולה אחת, לפי ה-VMID. תמיד שואל קודם, גם כשדבר אחר לא שואל, וכשאין מי שיגיד כן הוא לא רץ. אורחים ב-PROXMOX_PROTECT לעולם לא נוגעים בהם. צריך אסימון עם VM.PowerMgmt. בעמוד הזה שום דבר לא באמת עולה או נעצר."
+  },
+  "rb_docker_containers": {
+   "message0": "מכולות Docker",
+   "tooltip": "רשימת רשומות, אחת לכל מכולה, רצה או לא: name, image, state, status, health (healthy, unhealthy, או ריק כשאין בדיקת בריאות), restarts ו-started. בעמוד הזה משמשת מחסנית לדוגמה."
+  },
+  "rb_docker_stats": {
+   "message0": "זיכרון ו-CPU של Docker",
+   "tooltip": "רשימת רשומות, אחת לכל מכולה שרצה: name, cpu (%), memory_mb, limit_mb (זיכרון המכונה, למכולה בלי מגבלה) ו-memory (% מהמגבלה)."
+  },
+  "rb_docker_logs": {
+   "message0": "יומני Docker של %1, %2 השורות האחרונות",
+   "tooltip": "השורות האחרונות שמכולה כתבה, הפלט והשגיאות יחד, הישנה ביותר קודם."
+  },
+  "rb_docker_power": {
+   "message0": "%1 את מכולת ה-Docker ‏%2",
+   "tooltip": "מאתחל, עוצר או מפעיל מכולה אחת, לפי שמה. תמיד שואל קודם, גם כשדבר אחר לא שואל, וכשאין מי שיגיד כן הוא לא רץ. מכולות ב-DOCKER_PROTECT לעולם לא נוגעים בהן. בעמוד הזה שום דבר לא באמת מאותחל."
   }
  },
  "options": {
@@ -766,6 +782,11 @@
    "start": "הפעל",
    "shutdown": "כבה",
    "reboot": "אתחל"
+  },
+  "rb_docker_power.ACTION": {
+   "restart": "אתחל",
+   "stop": "עצור",
+   "start": "הפעל"
   }
  },
  "categories": {
@@ -796,7 +817,8 @@
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
   "UniFi": "UniFi",
-  "Proxmox": "Proxmox"
+  "Proxmox": "Proxmox",
+  "Docker": "Docker"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1628,7 +1650,16 @@
   "sample cluster": "אשכול לדוגמה",
   "{n} guests": "{n} אורחים",
   "read your Proxmox cluster: nodes, guests, storage and tasks": "לקרוא את אשכול ה-Proxmox שלכם: צמתים, אורחים, אחסון ומשימות",
-  "start, shut down and reboot your Proxmox guests (asking you each time)": "להפעיל, לכבות ולאתחל את אורחי ה-Proxmox שלכם (בשאלה בכל פעם)"
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "להפעיל, לכבות ולאתחל את אורחי ה-Proxmox שלכם (בשאלה בכל פעם)",
+  "A Docker container can be restarted, stopped or started.": "אפשר לאתחל, לעצור או להפעיל מכולה של Docker.",
+  "Docker": "Docker",
+  "Docker stack": "מחסנית Docker",
+  "Docker containers": "מכולות Docker",
+  "Docker: {why}.": "Docker: {why}.",
+  "Which Docker container? Give its name, like sonarr.": "איזו מכולה של Docker? תנו את השם שלה, כמו sonarr.",
+  "{n} containers": "{n} מכולות",
+  "read your Docker containers: their health, memory and logs": "לקרוא את מכולות ה-Docker שלכם: בריאות, זיכרון ויומנים",
+  "restart, stop and start your Docker containers (asking you each time)": "לאתחל, לעצור ולהפעיל את מכולות ה-Docker שלכם (ושואל אתכם בכל פעם)"
  },
  "examples": {
   "review": {
@@ -3251,6 +3282,16 @@
   "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "האסימון יכול גם {what}. Second Thought לא צריך את זה: התפקיד PVEAuditor בטוח יותר.",
   "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "האסימון לא יכול להפעיל או לעצור אורחים (הוא צריך VM.PowerMgmt), ולכן בלוקי ההפעלה של התוכנית יידחו.",
   "the token isn't allowed to do that": "האסימון לא מורשה לעשות את זה",
-  "{what} only runs when you're there to say yes, and nobody is.": "{what} רץ רק כשאתם שם כדי להגיד כן, ואין אף אחד."
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} רץ רק כשאתם שם כדי להגיד כן, ואין אף אחד.",
+  "A Docker container can be restarted, stopped or started.": "אפשר לאתחל, לעצור או להפעיל מכולה של Docker.",
+  "Docker": "Docker",
+  "Docker containers": "מכולות Docker",
+  "Docker: {why}.": "Docker: {why}.",
+  "Which Docker container? Give its name, like sonarr.": "איזו מכולה של Docker? תנו את השם שלה, כמו sonarr.",
+  "{n} containers": "{n} מכולות",
+  "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "המכולה {name} נמצאת ב-DOCKER_PROTECT, ולכן Second Thought אף פעם לא מאתחל, עוצר או מפעיל אותה.",
+  "Docker {version}": "Docker {version}",
+  "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "ב-Windows, הגדירו ב-DOCKER_HOST כתובת tcp://: הצינור בעל השם של Docker אינו נתמך.",
+  "Second Thought doesn't send {what} to Docker.": "Second Thought לא שולח {what} ל-Docker."
  }
 }

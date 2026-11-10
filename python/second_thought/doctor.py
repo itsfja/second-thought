@@ -228,6 +228,12 @@ class Doctor:
                     return "NOTE", said + "; " + tr("the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.", what=", ".join(more[:6]))
                 return said
             out.append(("Proxmox", proxmox))
+        if has("docker_read", "docker_control"):
+            async def docker():
+                version = to_str((await self._docker("GET", "/version")).get("Version"))
+                n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
+                return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
+            out.append(("Docker", docker))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -497,5 +503,5 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))

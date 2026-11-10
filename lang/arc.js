@@ -165,7 +165,11 @@
 "rb_proxmox_guests":{"message0":"אכסנאי Proxmox","tooltip":"רשימת כתבין, חד לכל VM ומאנא: vmid, name, node, type (vm או container), status, cpu וmemory (%), uptime (שעין), ולדבטיל אף onboot (אן צריך למשרא עם קטרא)."},
 "rb_proxmox_storage":{"message0":"אוצרי Proxmox","tooltip":"רשימת כתבין, חד לכל אוצר בכל קטר: storage, node, used (%), used_gb, size_gb וstatus."},
 "rb_proxmox_tasks":{"message0":"עבידתא דProxmox ד%1 שעין בתראין","tooltip":"רשימת כתבין, חדתא קדמאה: started, node, type (vzdump הוא נטרתא), id (אכסנאה), status (OK, או מה טעא) וuser."},
-"rb_proxmox_power":{"message0":"%1 אכסנאה דProxmox ‏%2","tooltip":"משרי, מכבי או משרי תוב VM או מאנא חד, בVMID דיליה. תדירא שאיל לך קדם, אף כד מדעם אחרן לא שאיל, וכד לית מן דאמר אין, לא רהיט. אכסנאי PROXMOX_PROTECT לעלם לא מתקרבין. צריך רושם עם VM.PowerMgmt. בדפא דנא מדעם לא באמת שרי או בטיל."}
+"rb_proxmox_power":{"message0":"%1 אכסנאה דProxmox ‏%2","tooltip":"משרי, מכבי או משרי תוב VM או מאנא חד, בVMID דיליה. תדירא שאיל לך קדם, אף כד מדעם אחרן לא שאיל, וכד לית מן דאמר אין, לא רהיט. אכסנאי PROXMOX_PROTECT לעלם לא מתקרבין. צריך רושם עם VM.PowerMgmt. בדפא דנא מדעם לא באמת שרי או בטיל."},
+"rb_docker_containers":{"message0":"מאני Docker","tooltip":"רשימת כתבין, חד לכל מאנא, רהיט או לא: name, image, state, status, health (healthy, unhealthy, או ריקן כד לית בדיקת חולמנא), restarts וstarted. בדפא דנא משמש דרגא דדוגמא."},
+"rb_docker_stats":{"message0":"דוכרנא וCPU דDocker","tooltip":"רשימת כתבין, חד לכל מאנא דרהיט: name, cpu (%), memory_mb, limit_mb (דוכרנא דמכונתא, למאנא דלית ליה תחומא) וmemory (% מן תחומא)."},
+"rb_docker_logs":{"message0":"ספרי דוכרניא דDocker ד%1, %2 שורין בתראין","tooltip":"שורין בתראין דכתב מאנא, מפקניה וטעותיה כחדא, עתיקא קדמאה."},
+"rb_docker_power":{"message0":"%1 מאנא דDocker ‏%2","tooltip":"משרי תוב, מבטל או משרי מאנא חד, בשמיה. תדירא שאיל לך קדם, אף כד מדעם אחרן לא שאיל, וכד לית מן דאמר אין, לא רהיט. מאני DOCKER_PROTECT לעלם לא מתקרבין. בדפא דנא מדעם לא באמת שרי תוב."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יומא","weekdays":"ביומי חול","weekends":"בסופי שבתא"},
@@ -188,7 +192,8 @@
 "rb_coinbase_orders.WHICH":{"open":"פקודין פתיחן","fills":"עבידתא בתרייתא"},
 "rb_coinbase_preview.SIDE":{"buy":"זבין","sell":"זבן"},
 "rb_coinbase_order.SIDE":{"buy":"זבין","sell":"זבן"},
-"rb_proxmox_power.ACTION":{"start":"שרי","shutdown":"כבי","reboot":"שרי תוב"}
+"rb_proxmox_power.ACTION":{"start":"שרי","shutdown":"כבי","reboot":"שרי תוב"},
+"rb_docker_power.ACTION":{"restart":"שרי תוב","stop":"בטל","start":"שרי"}
 },
 "categories":{
 "Events":"מאורעין",
@@ -218,7 +223,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"מאני שליחא: שדי יתהון בגו לבנת שליחא",
@@ -1050,7 +1056,16 @@
 "sample cluster":"כנשא דדוגמא",
 "{n} guests":"{n} אכסנאין",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"למקרא כנשא דילך Proxmox: קטרין, אכסנאין, אוצרין ועבידן",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"למשרא, לכבאה ולמשרא תוב אכסנאי Proxmox דילך (שאיל לך כל זבן)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"למשרא, לכבאה ולמשרא תוב אכסנאי Proxmox דילך (שאיל לך כל זבן)",
+"A Docker container can be restarted, stopped or started.":"מאנא דDocker מתשרי תוב, מתבטל או מתשרי.",
+"Docker":"Docker",
+"Docker stack":"דרגא דDocker",
+"Docker containers":"מאני Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"אידין מאנא דDocker? הב שמיה, כות sonarr.",
+"{n} containers":"{n} מאנין",
+"read your Docker containers: their health, memory and logs":"למקרא מאנך דDocker: חולמנהון, דוכרנהון וספרי דוכרניהון",
+"restart, stop and start your Docker containers (asking you each time)":"למשרא תוב, לבטלא ולמשרא מאנך דDocker (ושאיל לך בכל זמן)"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2041,7 +2056,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"רושמא יכיל אף {what}. Second Thought לא צריך הדא: תפקיד PVEAuditor שליא יתיר.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"רושמא לא יכיל למשרא או לכבאה אכסנאין (צריך VM.PowerMgmt), ועל כן לבני תכניתא יסתרבון.",
 "the token isn't allowed to do that":"לא שליט רושמא למעבד דא",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} רק רהיט כד אנת תמן למימר אין, ולית אנש."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} רק רהיט כד אנת תמן למימר אין, ולית אנש.",
+"A Docker container can be restarted, stopped or started.":"מאנא דDocker מתשרי תוב, מתבטל או מתשרי.",
+"Docker":"Docker",
+"Docker containers":"מאני Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"אידין מאנא דDocker? הב שמיה, כות sonarr.",
+"{n} containers":"{n} מאנין",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"מאנא {name} בDOCKER_PROTECT, ועל כן Second Thought לעלם לא משרי ליה תוב, מבטל או משרי ליה.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"בWindows, שוי בDOCKER_HOST כתובתא tcp://: צנורא דשמא דDocker לא מסתמך.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought לא משדר {what} לDocker."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

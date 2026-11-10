@@ -165,7 +165,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox-अतिथयो","tooltip":"अभिलेखानं सूचि, पति-VM-भाजनं एको: vmid, name, node, type (vm container वा), status, cpu, memory (%), uptime (होरा), ठपितस्स onboot (गण्ठिना सह आरभेय्य वा) च।"},
 "rb_proxmox_storage":{"message0":"Proxmox-कोसा","tooltip":"अभिलेखानं सूचि, पतिगण्ठि पतिकोसं एको: storage, node, used (%), used_gb, size_gb, status च।"},
 "rb_proxmox_tasks":{"message0":"पच्छिमानं %1 होरानं Proxmox-किच्चानि","tooltip":"अभिलेखानं सूचि, नवतमं पठमं: started, node, type (vzdump रक्खा-पटिलिपि), id (अतिथि), status (OK, अथ वा किं विरद्धं), user च।"},
-"rb_proxmox_power":{"message0":"Proxmox-अतिथिं %2 %1","tooltip":"एकं VM भाजनं वा तस्स VMID अनुसारेन आरभति, निब्बापेति, पुन आरभति वा। सदा पठमं तं पुच्छति, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। PROXMOX_PROTECT स्स अतिथयो कदापि न फुसीयन्ति। VM.PowerMgmt युत्तं लक्खणं इच्छति। इमस्मिं पिट्ठे किञ्चि सच्चतो न आरभति न ठपेति।"}
+"rb_proxmox_power":{"message0":"Proxmox-अतिथिं %2 %1","tooltip":"एकं VM भाजनं वा तस्स VMID अनुसारेन आरभति, निब्बापेति, पुन आरभति वा। सदा पठमं तं पुच्छति, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। PROXMOX_PROTECT स्स अतिथयो कदापि न फुसीयन्ति। VM.PowerMgmt युत्तं लक्खणं इच्छति। इमस्मिं पिट्ठे किञ्चि सच्चतो न आरभति न ठपेति।"},
+"rb_docker_containers":{"message0":"Docker-भाजनानि","tooltip":"अभिलेखानं सूचि, पतिभाजनं एको, धावन्तस्स अधावन्तस्स वा: name, image, state, status, health (healthy, unhealthy, आरोग्य-वीमंसं विना तुच्छं वा), restarts, started च। इमस्मिं पिट्ठे निदस्सन-रासिं गण्हाति।"},
+"rb_docker_stats":{"message0":"Docker-सति CPU च","tooltip":"अभिलेखानं सूचि, पति धावन्तं भाजनं एको: name, cpu (%), memory_mb, limit_mb (सीमारहितस्स भाजनस्स यन्तस्स सति), memory (सीमाय %) च।"},
+"rb_docker_logs":{"message0":"%1 स्स Docker-लेखा, पच्छिमा %2 पन्तियो","tooltip":"भाजनेन लिखिता पच्छिमा पन्तियो, तस्स निग्गमो दोसा च एकतो, पुराणतमा पठमं।"},
+"rb_docker_power":{"message0":"Docker-भाजनं %2 %1","tooltip":"एकं भाजनं तस्स नामानुसारेन पुन आरभति, ठपेति, आरभति वा। सदा पठमं तं पुच्छति, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। DOCKER_PROTECT स्स भाजनानि कदापि न फुसीयन्ति। इमस्मिं पिट्ठे किञ्चि सच्चतो न पुन आरभति।"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"सब्बदिवसे","weekdays":"कम्मदिवसेसु","weekends":"सत्ताहन्तेसु"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"विवटाणायो","fills":"नवतमा पूरणा"},
 "rb_coinbase_preview.SIDE":{"buy":"किणाहि","sell":"विक्किणाहि"},
 "rb_coinbase_order.SIDE":{"buy":"किणाहि","sell":"विक्किणाहि"},
-"rb_proxmox_power.ACTION":{"start":"आरभ","shutdown":"निब्बापेहि","reboot":"पुन आरभ"}
+"rb_proxmox_power.ACTION":{"start":"आरभ","shutdown":"निब्बापेहि","reboot":"पुन आरभ"},
+"rb_docker_power.ACTION":{"restart":"पुन आरभ","stop":"ठपेहि","start":"आरभ"}
 },
 "categories":{
 "Agent":"पटिनिधि",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1049,7 +1055,16 @@
 "sample cluster":"निदस्सन-समूहो",
 "{n} guests":"{n} अतिथयो",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"तव Proxmox-समूहं पठितुं: गण्ठियो, अतिथयो, कोसा, किच्चानि च",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"तव Proxmox-अतिथयो आरभितुं, निब्बापेतुं, पुन आरभितुं च (पतिवारं तं पुच्छन्तो)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"तव Proxmox-अतिथयो आरभितुं, निब्बापेतुं, पुन आरभितुं च (पतिवारं तं पुच्छन्तो)",
+"A Docker container can be restarted, stopped or started.":"Docker-भाजनं पुन आरभितुं, ठपेतुं, आरभितुं वा सक्का।",
+"Docker":"Docker",
+"Docker stack":"Docker-रासि",
+"Docker containers":"Docker-भाजनानि",
+"Docker: {why}.":"Docker: {why}।",
+"Which Docker container? Give its name, like sonarr.":"कतमं Docker-भाजनं? तस्स नामं देहि, यथा sonarr।",
+"{n} containers":"{n} भाजनानि",
+"read your Docker containers: their health, memory and logs":"तव Docker-भाजनानि पठितुं: तेसं आरोग्यं, सतिं, लेखे च",
+"restart, stop and start your Docker containers (asking you each time)":"तव Docker-भाजनानि पुन आरभितुं, ठपेतुं, आरभितुं च (वारे वारे तं पुच्छित्वा)"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2040,7 +2055,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"लक्खणं {what} पि कातुं सक्कोति। Second Thought तं न इच्छति: PVEAuditor किच्चं खेमतरं।",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"लक्खणं अतिथयो आरभितुं ठपेतुं वा न सक्कोति (VM.PowerMgmt इच्छति), तस्मा इमस्स कम्मपथस्स बल-खण्डा पटिक्खिपेय्युं।",
 "the token isn't allowed to do that":"लक्खणस्स तं कातुं अनुञ्ञा नत्थि",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} केवलं तदा पवत्तति यदा त्वं आम इति वत्तुं तत्थ असि, कोचि च नत्थि।"
+"{what} only runs when you're there to say yes, and nobody is.":"{what} केवलं तदा पवत्तति यदा त्वं आम इति वत्तुं तत्थ असि, कोचि च नत्थि।",
+"A Docker container can be restarted, stopped or started.":"Docker-भाजनं पुन आरभितुं, ठपेतुं, आरभितुं वा सक्का।",
+"Docker":"Docker",
+"Docker containers":"Docker-भाजनानि",
+"Docker: {why}.":"Docker: {why}।",
+"Which Docker container? Give its name, like sonarr.":"कतमं Docker-भाजनं? तस्स नामं देहि, यथा sonarr।",
+"{n} containers":"{n} भाजनानि",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"भाजनं {name} DOCKER_PROTECT मध्ये अत्थि, तस्मा Second Thought तं कदापि न पुन आरभति, न ठपेति, न आरभति।",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows मध्ये DOCKER_HOST ठाने tcp:// सङ्केतं ठपेहि: Docker स्स नामयुत्ता नाळि न उपत्थम्भीयति।",
+"Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker पति न पेसेति।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

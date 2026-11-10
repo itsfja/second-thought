@@ -164,7 +164,11 @@
 "rb_proxmox_guests":{"message0":"Proxmox gestes","tooltip":"A list of recordes, oon for every VM and vessel: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (houres), and for oon that is stynt, onboot (wher it sholde stirte with the knotte)."},
 "rb_proxmox_storage":{"message0":"Proxmox storage","tooltip":"A list of recordes, oon for every storage on every knotte: storage, node, used (%), used_gb, size_gb and status."},
 "rb_proxmox_tasks":{"message0":"Proxmox werkes of the laste %1 houres","tooltip":"A list of recordes, the newest first: started, node, type (vzdump is a kepinge), id (the gest), status (OK, or what wente amis) and user."},
-"rb_proxmox_power":{"message0":"%1 Proxmox gest %2","tooltip":"Stirteth, shetteth doun or stirteth agayn oon VM or vessel, by his VMID. It evere asketh thee first, ye, whan no thing elles asketh; with no man ther to seye ye, it renneth nat. Gestes in PROXMOX_PROTECT ben nevere touched. Nedeth a token with VM.PowerMgmt. On this page no thing verraily stirteth ne stynteth."}
+"rb_proxmox_power":{"message0":"%1 Proxmox gest %2","tooltip":"Stirteth, shetteth doun or stirteth agayn oon VM or vessel, by his VMID. It evere asketh thee first, ye, whan no thing elles asketh; with no man ther to seye ye, it renneth nat. Gestes in PROXMOX_PROTECT ben nevere touched. Nedeth a token with VM.PowerMgmt. On this page no thing verraily stirteth ne stynteth."},
+"rb_docker_containers":{"message0":"Docker vessels","tooltip":"A list of recordes, oon for every vessel, rennynge or nat: name, image, state, status, health (healthy, unhealthy, or empty with no hele-assay), restarts and started. On this page it useth an ensample stak."},
+"rb_docker_stats":{"message0":"Docker memorie and CPU","tooltip":"A list of recordes, oon for every rennynge vessel: name, cpu (%), memory_mb, limit_mb (the memorie of the engyn, for a vessel with no bound) and memory (% of the bound)."},
+"rb_docker_logs":{"message0":"Docker logges of %1, the laste %2 lynes","tooltip":"The laste lynes that a vessel wroot, his output and his errours togidre, the eldeste first."},
+"rb_docker_power":{"message0":"%1 Docker vessel %2","tooltip":"Stirteth agayn, stynteth or stirteth oon vessel, by his name. It evere asketh thee first, ye, whan no thing elles asketh; with no man ther to seye ye, it renneth nat. Vessels in DOCKER_PROTECT ben nevere touched. On this page no thing verraily stirteth agayn."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -187,7 +191,8 @@
 "rb_coinbase_orders.WHICH":{"open":"open ordres","fills":"laste fulfillinges"},
 "rb_coinbase_preview.SIDE":{"buy":"bye","sell":"selle"},
 "rb_coinbase_order.SIDE":{"buy":"bye","sell":"selle"},
-"rb_proxmox_power.ACTION":{"start":"stirte","shutdown":"shette doun","reboot":"stirte agayn"}
+"rb_proxmox_power.ACTION":{"start":"stirte","shutdown":"shette doun","reboot":"stirte agayn"},
+"rb_docker_power.ACTION":{"restart":"stirte agayn","stop":"stynte","start":"stirte"}
 },
 "categories":{
 "Events":"Events",
@@ -217,7 +222,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1049,7 +1055,16 @@
 "sample cluster":"ensample heep",
 "{n} guests":"{n} gestes",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"rede thy Proxmox heep: knottes, gestes, storage and werkes",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"stirte, shette doun and stirte agayn thy Proxmox gestes (askinge thee ech tyme)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"stirte, shette doun and stirte agayn thy Proxmox gestes (askinge thee ech tyme)",
+"A Docker container can be restarted, stopped or started.":"A Docker vessel may be stirt agayn, stynt or stirt.",
+"Docker":"Docker",
+"Docker stack":"Docker stak",
+"Docker containers":"Docker vessels",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Which Docker vessel? Yif his name, as sonarr.",
+"{n} containers":"{n} vessels",
+"read your Docker containers: their health, memory and logs":"rede thy Docker vessels: hir hele, memorie and logges",
+"restart, stop and start your Docker containers (asking you each time)":"stirte agayn, stynte and stirte thy Docker vessels (axinge thee ech tyme)"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2040,7 +2055,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"the token may eek {what}. Second Thought nedeth it nat: the PVEAuditor role is sikerer.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"the token may nat stirte ne stynte gestes (it nedeth VM.PowerMgmt), so this programmes power blokkes sholde be refused.",
 "the token isn't allowed to do that":"the token may nat do that",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} renneth oonly whan thou art ther to seye ye, and no man is."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} renneth oonly whan thou art ther to seye ye, and no man is.",
+"A Docker container can be restarted, stopped or started.":"A Docker vessel may be stirt agayn, stynt or stirt.",
+"Docker":"Docker",
+"Docker containers":"Docker vessels",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"Which Docker vessel? Yif his name, as sonarr.",
+"{n} containers":"{n} vessels",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Vessel {name} is in DOCKER_PROTECT, so Second Thought neveremore stirteth it agayn, stynteth ne stirteth it.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"On Windows, sette DOCKER_HOST to a tcp:// addresse: the named pipe of Docker is nat supported.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought sendeth nat {what} to Docker."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

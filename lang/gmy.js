@@ -165,7 +165,11 @@
 "rb_proxmox_guests":{"message0":"𐀐𐀮𐀜 Proxmox","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 VM: vmid, name, node, type (vm 𐀁 container), status, cpu 𐀏𐀂 memory (%), uptime (𐀃𐀨), 𐀏𐀂 onboot."},
 "rb_proxmox_storage":{"message0":"𐀀𐀡𐀳𐀏 Proxmox","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀀𐀡𐀳𐀏: storage, node, used (%), used_gb, size_gb 𐀏𐀂 status."},
 "rb_proxmox_tasks":{"message0":"𐀸𐀒 Proxmox 𐀁𐀏𐀲 %1 𐀃𐀨","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀚𐀺 𐀟𐀫𐀵: started, node, type (vzdump), id, status (OK, 𐀁 𐀴) 𐀏𐀂 user."},
-"rb_proxmox_power":{"message0":"%1 𐀐𐀮𐀜 Proxmox %2","tooltip":"𐀀𐀨𐀐𐀂, 𐀏𐀩𐀂𐀁 𐀁 𐀀𐀠 𐀀𐀨𐀐𐀂 VM 𐀕𐀲 VMID. 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵; 𐀃𐀄𐀆𐀂 𐀞𐀫, 𐀃𐀄 𐀳𐀩𐀐𐀁. PROXMOX_PROTECT 𐀃𐀄𐀡𐀳. 𐀆𐀂 𐀮𐀔 𐀕𐀲 VM.PowerMgmt. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃𐀄𐀆 𐀀𐀨𐀐𐀲𐀂."}
+"rb_proxmox_power":{"message0":"%1 𐀐𐀮𐀜 Proxmox %2","tooltip":"𐀀𐀨𐀐𐀂, 𐀏𐀩𐀂𐀁 𐀁 𐀀𐀠 𐀀𐀨𐀐𐀂 VM 𐀕𐀲 VMID. 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵; 𐀃𐀄𐀆𐀂 𐀞𐀫, 𐀃𐀄 𐀳𐀩𐀐𐀁. PROXMOX_PROTECT 𐀃𐀄𐀡𐀳. 𐀆𐀂 𐀮𐀔 𐀕𐀲 VM.PowerMgmt. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃𐀄𐀆 𐀀𐀨𐀐𐀲𐀂."},
+"rb_docker_containers":{"message0":"𐀀𐀐𐀊 Docker","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀀𐀐𐀍: name, image, state, status, health (healthy, unhealthy), restarts 𐀏𐀂 started. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀐𐀨𐀲𐀂 𐀞𐀨𐀆𐀒𐀔 𐀰𐀫."},
+"rb_docker_stats":{"message0":"𐀘𐀙𐀔 𐀏𐀂 CPU Docker","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀀𐀐𐀍: name, cpu (%), memory_mb, limit_mb 𐀏𐀂 memory (%)."},
+"rb_docker_logs":{"message0":"𐀏𐀨𐀟 Docker %1, 𐀁𐀏𐀲 %2 𐀴𐀒","tooltip":"𐀁𐀏𐀲 𐀴𐀒 𐀀𐀐𐀍, 𐀞𐀨𐀍 𐀟𐀫𐀵."},
+"rb_docker_power":{"message0":"%1 𐀀𐀐𐀍 Docker %2","tooltip":"𐀀𐀠 𐀀𐀨𐀐𐀂, 𐀞𐀄𐀁 𐀁 𐀀𐀨𐀐𐀂 𐀀𐀐𐀍 𐀕𐀲 𐀃𐀜𐀔. 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵; 𐀃𐀄𐀆𐀂 𐀞𐀫, 𐀃𐀄 𐀳𐀩𐀐𐀁. DOCKER_PROTECT 𐀃𐀄𐀡𐀳. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃𐀄𐀆 𐀀𐀨𐀐𐀲𐀂."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐀁𐀏𐀲 𐀀𐀔","weekdays":"𐀀𐀔 𐀸𐀒","weekends":"𐀀𐀔 𐀀𐀙𐀞𐀄𐀮𐀃"},
@@ -188,7 +192,8 @@
 "rb_coinbase_orders.WHICH":{"open":"𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙","fills":"𐀁𐀏𐀲 𐀟𐀟𐀨𐀕𐀙"},
 "rb_coinbase_preview.SIDE":{"buy":"𐀃𐀜","sell":"𐀟𐀨𐀯"},
 "rb_coinbase_order.SIDE":{"buy":"𐀃𐀜","sell":"𐀟𐀨𐀯"},
-"rb_proxmox_power.ACTION":{"start":"𐀀𐀨𐀐","shutdown":"𐀏𐀩𐀂𐀰","reboot":"𐀀𐀠 𐀀𐀨𐀐"}
+"rb_proxmox_power.ACTION":{"start":"𐀀𐀨𐀐","shutdown":"𐀏𐀩𐀂𐀰","reboot":"𐀀𐀠 𐀀𐀨𐀐"},
+"rb_docker_power.ACTION":{"restart":"𐀀𐀠 𐀀𐀨𐀐","stop":"𐀞𐀄𐀁","start":"𐀀𐀨𐀐"}
 },
 "categories":{
 "Events":"𐀱𐀞𐀲",
@@ -218,7 +223,8 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "UniFi":"UniFi",
-"Proxmox":"Proxmox"
+"Proxmox":"Proxmox",
+"Docker":"Docker"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵",
@@ -1050,7 +1056,16 @@
 "sample cluster":"𐀞𐀨𐀆𐀒𐀔 𐀃𐀔𐀈",
 "{n} guests":"{n} 𐀐𐀮𐀜",
 "read your Proxmox cluster: nodes, guests, storage and tasks":"𐀀𐀙𐀑𐀜𐀐 𐀃𐀔𐀈 Proxmox 𐀰𐀂: 𐀃𐀿, 𐀐𐀮𐀜, 𐀀𐀡𐀳𐀏 𐀏𐀂 𐀸𐀒",
-"start, shut down and reboot your Proxmox guests (asking you each time)":"𐀀𐀨𐀐, 𐀏𐀩𐀂𐀰 𐀏𐀂 𐀀𐀠 𐀀𐀨𐀐 𐀐𐀮𐀜 Proxmox 𐀰𐀂 (𐀁𐀫𐀲𐀂 𐀮 𐀞𐀵)"
+"start, shut down and reboot your Proxmox guests (asking you each time)":"𐀀𐀨𐀐, 𐀏𐀩𐀂𐀰 𐀏𐀂 𐀀𐀠 𐀀𐀨𐀐 𐀐𐀮𐀜 Proxmox 𐀰𐀂 (𐀁𐀫𐀲𐀂 𐀮 𐀞𐀵)",
+"A Docker container can be restarted, stopped or started.":"𐀀𐀐𐀍 Docker 𐀀𐀠 𐀀𐀨𐀐𐀲𐀂, 𐀞𐀄𐀁𐀲𐀂 𐀁 𐀀𐀨𐀐𐀲𐀂.",
+"Docker":"Docker",
+"Docker stack":"𐀰𐀫 Docker",
+"Docker containers":"𐀀𐀐𐀊 Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"𐀡𐀳𐀫 𐀀𐀐𐀍 Docker? 𐀈𐀮 𐀃𐀜𐀔, 𐀃𐀒 sonarr.",
+"{n} containers":"{n} 𐀀𐀐𐀊",
+"read your Docker containers: their health, memory and logs":"𐀀𐀙𐀑𐀜𐀐 𐀀𐀐𐀊 Docker 𐀰𐀂: 𐀄𐀑𐀁𐀊, 𐀘𐀙𐀔 𐀏𐀂 𐀏𐀨𐀟",
+"restart, stop and start your Docker containers (asking you each time)":"𐀀𐀠 𐀀𐀨𐀐𐀂, 𐀞𐀄𐀁 𐀏𐀂 𐀀𐀨𐀐𐀂 𐀀𐀐𐀊 Docker 𐀰𐀂 (𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮)"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -2041,7 +2056,17 @@
 "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"se-ma ka-i {what} du-na-ta-i. Second Thought o-u de-i: PVEAuditor a-sa-pa-re-te-ro.",
 "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"se-ma o-u du-na-ta-i a-ra-ke-e (de-i VM.PowerMgmt), o-u-to a-pa-ne-o-me-na e-so-ta-i.",
 "the token isn't allowed to do that":"se-ma o-u e-ke-si to-to po-e-e",
-"{what} only runs when you're there to say yes, and nobody is.":"{what} mo-no o-te pa-re-si na-i e-pe-e, o-u-de-i pa-ro."
+"{what} only runs when you're there to say yes, and nobody is.":"{what} mo-no o-te pa-re-si na-i e-pe-e, o-u-de-i pa-ro.",
+"A Docker container can be restarted, stopped or started.":"a-ke-jo Docker a-pi a-ra-ke-ta-i, pa-u-e-ta-i e a-ra-ke-ta-i.",
+"Docker":"Docker",
+"Docker containers":"a-ke-ja Docker",
+"Docker: {why}.":"Docker: {why}.",
+"Which Docker container? Give its name, like sonarr.":"po-te-ro a-ke-jo Docker? do-se o-no-ma, o-ko sonarr.",
+"{n} containers":"{n} a-ke-ja",
+"Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"a-ke-jo {name} e-ne DOCKER_PROTECT e-si, o-u-to Second Thought o-u-po-te a-ra-ke-i o-u-de pa-u-e.",
+"Docker {version}":"Docker {version}",
+"On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"e-ne Windows, te-ke tcp:// e-ne DOCKER_HOST. a-u-ro Docker o-u e-si.",
+"Second Thought doesn't send {what} to Docker.":"Second Thought o-u pe-po-pe {what} e-pi Docker."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",
