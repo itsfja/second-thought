@@ -599,6 +599,14 @@
    "message0": "kanše d-Solax",
    "tooltip": "Safra ḥaw kanše d-inbirtura d-Solax, aykano SolaxCloud ḥwānhon (ḥdāṯin kol ḥamša dqiqa): ac_power_w (emmet maṣḇī ʾnā), yield_today_kwh w-yield_total_kwh (nuhre d-šemša), feedin_power_w w-feedin_energy_kwh (l-ntarā), import_energy_kwh (men ntarā), battery_soc_pct, status w-upload_time. L-ḥwōḏ qra: nāš ḥrānā b-inbirturā. Nšaḥ SOLAX_TOKEN_ID w-SOLAX_SN b-second-thought.ini. B-ḥanā ṣeḥtā sāṯē inbirturā d-maṯlā."
   },
+  "rb_powerwall_now": {
+   "message0": "kanše d-Powerwall",
+   "tooltip": "Safra ḥaw kanše d-Tesla Powerwall: battery_soc_pct (malyutoh), solar_power_w (emmet maṣḇī ʾnā), battery_power_w (ḥayyabā hu malyā), grid_power_w (ḥayyabā hu apqā men ntarā), load_power_w (baytā), reserve_pct (yarḥuqta d-ḥāṯrā), mode (self_consumption, backup, ...) w-grid (ḥabṭā, aw ḥdā ʾnā b-šḥlāpā ḥayyā). L-ḥwōḏ qra. Nšaḥ POWERWALL_URL w-POWERWALL_PASSWORD b-second-thought.ini. B-ḥanā ṣeḥtā sāṯē Powerwall d-maṯlā."
+  },
+  "rb_powerwall_reserve": {
+   "message0": "sāṯem yarḥuqta d-backup d-Powerwall l-%1 %",
+   "tooltip": "Rāmā aw ḥḇāṯ yarḥuqta: kammā men bataryā baytā ḥāṯer l-šḥlāpā ḥayyā. Sāʾel lok kol ḥrānā qdāmāyāt, haw ʾenāš ḥrānā lā sāʾel, w-blo ḥad d-neʾmor īeh lā neḥḏel. Nšaḥ POWERWALL_URL w-POWERWALL_PASSWORD b-second-thought.ini. B-ḥanā ṣeḥtā nāš ḥrānā blo ḥqīqāyā lā šḥlel."
+  },
   "rb_mikrotik_ports": {
    "message0": "ܬܪܥܐ ܕ-MikroTik",
    "tooltip": "ܣܕܪܐ ܕܟܛܝܒܬܐ, ܚܕܐ ܠܟܘܠ ܬܪܥܐ ܕܡܫܚܠܦܢܟ ܕ-MikroTik: port, running, speed (ܐܟ 10Gbps), errors, drops, link_downs ܘ-comment. ܒܠܚܘܕ ܩܪ: ܡܕܡ ܠܐ ܡܫܬܢܐ. ܒܦܛܐ ܗܢܐ ܫܩܠ ܡܫܚܠܦܢܐ ܕܛܘܦܣܐ."
@@ -816,6 +824,7 @@
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
   "Solax": "Solax",
+  "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1667,7 +1676,13 @@
   "Solax figures": "ܟܢܫ ܕ-Solax",
   "Solax inverter": "ܐܝܢܒܝܪܬܘܪ ܕ-Solax",
   "from {time}": "ܡܢ {time}",
-  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "ܡܩܪ ܟܢܫ d-inbirtura ܕ-Solax ܡܢ SolaxCloud: ܢܘܗܪ d-šemša, ܡܠܝܘܬ d-batarya, ܐܦܩܢ w-ufqana"
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "ܡܩܪ ܟܢܫ d-inbirtura ܕ-Solax ܡܢ SolaxCloud: ܢܘܗܪ d-šemša, ܡܠܝܘܬ d-batarya, ܐܦܩܢ w-ufqana",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "ܟܢܫ ܕ-Powerwall",
+  "battery at {pct}%": "ܒܬܪܝ ܠ-{pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "ܣܬܡ ܝܪܚܘܩܬ d-backup ܕ-Powerwall ܠ-{n}% (ܐܢܐ {old}%)",
+  "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "ܡܩܪ ܟܢܫ ܕ-Powerwall: ܡܠܝܘܬ d-batarya, ܫܡܫ, ܐܦܩܢ w-ufqana d-ntarā, w-yarḥuqta d-ḥāṯrā",
+  "set your Powerwall's backup reserve (asking you each time)": "ܫܢ ܝܪܚܘܩܬ d-backup ܕ-Powerwall (ܣܐܠ ܠܘܟ ܟܘܠ ܚܪܢܐ)"
  },
  "examples": {
   "review": {
@@ -3311,7 +3326,17 @@
   "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud rḥaq tukna aw numra d-rišmo: {x}.",
   "Couldn't reach SolaxCloud at {url} ({x}).": "lā mṣaybar SolaxCloud l-{url} ({x}).",
   "reached SolaxCloud: {status}, figures from {time}": "mṣaybar SolaxCloud: {status}, kanše men {time}",
-  "Solax": "Solax"
+  "Solax": "Solax",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "kanše d-Powerwall",
+  "battery at {pct}%": "batarya l-{pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "sāṯem yarḥuqta d-backup d-Powerwall l-{n}% (ꜣnā {old}%)",
+  "Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).": "Powerwall bāꜥē POWERWALL_URL w-POWERWALL_PASSWORD {where_keys}: tora d-tarꜥa (ayk https://192.168.1.50) w-rāza d-bnaynā (ḥamme ḥrāyātā men paterṭa d-QR, illa ḥrtāh).",
+  "Powerwall: {why}.": "Powerwall: {why}.",
+  "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought l-ḥwōḏ qra men Powerwall, hākā lā šāḏel {what}.",
+  "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Tarꜥa d-Powerwall rḥaq rāza d-POWERWALL_PASSWORD: bḥo rāza d-bnaynā (ḥamme ḥrāyātā men paterṭa d-QR).",
+  "The Powerwall gateway's login gave no token.": "ꜥeltā l-tarꜥa d-Powerwall lā yhab tukna.",
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "batarya l-{pct}%, yarḥuqta {reserve}%, ntarā {grid}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ܐܘܣܦ ܫܪܚܐ",

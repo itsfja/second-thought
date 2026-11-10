@@ -157,6 +157,8 @@
 "rb_coinbase_order":{"message0":"Coinbase امری ویر: %3 دن %2 %1","tooltip":"كرچك بر بازار امری ویرر، 'Coinbase امرینی اوّلدن كور' كبی. اوّل اوّلدن كورر، صوڭره هر زمان سزه صورار، اجرت و یكونله، باشقه هیچ بر شی صورمازسه بیله؛ اوت دیه‌جك كیمسه یوقسه یورومز. Trade اذنلی بر آناختار ایستر. بو صحیفه‌ده هیچ بر شی آلینمز و صاتیلمز."},
 "rb_coinbase_cancel":{"message0":"Coinbase امری %1 ی لغو ایت","tooltip":"آچیق امرلرڭزدن بریسنی id سی ایله لغو ایدر ('Coinbase آچیق امرلری' ندن). هر زمان اوّل سزه صورار، كیمسه یوقسه یورومز."},
 "rb_solax_now":{"message0":"Solax معلوماتی","tooltip":"Solax اینورتورونون معلوماتیلری بیر قئیدیت، SolaxCloud نین سون معلوماتی کیمی (تخمینن هر بئش دقیقه‌ده یئنیلنیر): ac_power_w (ایندی نه دوزلدیر)، yield_today_kwh و yield_total_kwh (گونش انرژیسی)، feedin_power_w و feedin_energy_kwh (شبکه‌یه)، import_energy_kwh (شبکه‌دن)، battery_soc_pct، status و upload_time. یالنیز اوخویور: اینورتوردا هئچ بیر شئی دییشمز. second-thought.ini ده SOLAX_TOKEN_ID و SOLAX_SN لازم‌دیر. بو صفحه‌ده بیر نومونه اینورتور ایشلنیر."},
+"rb_powerwall_now":{"message0":"Powerwall معلوماتی","tooltip":"Tesla Powerwall معلوماتیلری بیر قئیدیت:battery_soc_pct(دولولوغو)،solar_power_w(ایندی نه دوزلدیر)،battery_power_w(مثبت اولسا دولور)،grid_power_w(مثبت اولسا آلیر)،load_power_w(ائو)،reserve_pct(ساخلانیلان احتیاط)،mode(self_consumption، backup و...)و grid(باغلی، یا دا الکتریک کسیلنده آیریلا). یالنیز اوخویور. second-thought.ini ده POWERWALL_URL و POWERWALL_PASSWORD لازم‌دیر. بو صفحه‌ده بیر نومونه Powerwall ایشلنیر."},
+"rb_powerwall_reserve":{"message0":"Powerwall نین یریئم احتیاطینی %1 % ائله قویماق","tooltip":"یریئم احتیاطینی یوخاری و آشاغی ساریر: الکتریک کسیلنده ائو نئچه باتریا ساخلامالی. هر زمان اولجه سنی سورار، هئچ بیر شئی سورماسا دا؛ «بله» دییه‌جک کیمی یوخسا ایشله‌مز. second-thought.ini ده POWERWALL_URL و POWERWALL_PASSWORD لازم‌دیر. بو صفحه‌ده هئچ بیر شئی حقیقتده دییشمز."},
 "rb_mikrotik_ports":{"message0":"MikroTik قاپیلری","tooltip":"قیدلر لیسته‌سی، MikroTik یوللایجی یا آنحتارڭزڭ هر قاپیسی ایچون بر: port، running، speed (10Gbps كبی)، errors، drops، link_downs و comment. خطالر و دوشمه‌لر صوڭ باشلانغیجدن صاییلیر. یالڭز اوقور: آنحتارده هیچ بر شی دكیشمز. بو صحیفه‌ده نمونه بر آنحتار قوللانیر."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP پارچه‌لری","tooltip":"قیدلر لیسته‌سی، طاقیلی هر SFP پارچه‌سی ایچون بر: port، module، temperature (°C)، rx_power و tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik صحتی","tooltip":"یوللایجینڭ كندیسی حقنده بر قید: board، version، uptime، cpu_load (%)، free_memory (MB)، temperature (°C)، و اولان هر باشقه حس ایدیجی."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"Solax معلوماتی",
 "Solax inverter":"Solax اینورتوری",
 "from {time}":"{time} دن",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud دان Solax اینورتورونون معلوماتینی اوخومق: گونش انرژیسی، باتریا دولولوغو، آلیم و ساتیم"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud دان Solax اینورتورونون معلوماتینی اوخومق: گونش انرژیسی، باتریا دولولوغو، آلیم و ساتیم",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall معلوماتی",
+"battery at {pct}%":"باتریا {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall نین یریئم احتیاطینی {n}% ائله قویماق(ایندی {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"Powerwall معلوماتینی اوخومق: باتریا دولولوغو، گونش، آلیم و ساتیم، و ساخلانیلان احتیاط",
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall نین یریئم احتیاطینی دییشمک(هر دفه سنی سورار)"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2087,7 +2096,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud توکنی یا قئیدیت نومره‌سینی رد ائتدی:{x}۔",
 "Couldn't reach SolaxCloud at {url} ({x}).":"{url} دکی SolaxCloud آ چاتماق اولمور({x})۔",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud آ چاتیلدی:{status}، {time} معلوماتی",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall معلوماتی",
+"battery at {pct}%":"باتریا {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall نین یریئم احتیاطینی {n}% ائله قویماق(ایندی {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall اوچون POWERWALL_URL و POWERWALL_PASSWORD لازم‌دیر {where_keys}: قاپینین آدرسی(مثل https://192.168.1.50)و موشتری رمزی(QR لیبلی نین سون بئش کاراکتری، دییشدیکنز ایسه او).",
+"Powerwall: {why}.":"Powerwall: {why}۔",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall قاپیسی POWERWALL_PASSWORD نی رد ائتدی:موشتری رمزینی یوخلایین(QR لیبلی نین سون بئش کاراکتری)۔",
+"The Powerwall gateway's login gave no token.":"Powerwall قاپیسینا گیریش توکن وئرمه‌دی.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"باتریا {pct}%، احتیاط {reserve}%، شبکه {grid}",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought یالنیز Powerwall دان اوخویور، بو سببله {what} گؤندرمز."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

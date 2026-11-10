@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"sele Coinbase bebod: %1 %2 of %3","tooltip":"Selþ soþ ceapstowe bebod, swa 'foresceawa Coinbase bebod'. Hit foresceawaþ hit ærest, þonne hit simle axaþ þe, mid þam gafole and þam ealle, þeah naht elles ne axige; gif nan man nis þær to secgenne gea, hit ne færþ. Behofaþ cæges mid Trade leafe. On þissum leafe naht ne biþ geboht ne geseald."},
 "rb_coinbase_cancel":{"message0":"do Coinbase bebod %1 onweg","tooltip":"Deþ an þinra openra beboda onweg, be his id (of 'Coinbase opene bebodu'). Hit axaþ þe simle ærest, and ne færþ þonne nan man nis þær."},
 "rb_solax_now":{"message0":"Solax cūþþe","tooltip":"Ǣn gewrit mid þǣm cūþþum þīnes Solax invertores, swā SolaxClōd hīe lǣst hæfde (hīe nīwiaþ ymbe ǣlce fīf minutan): ac_power_w (hƿæt hē nū macaþ), yield_today_kwh and yield_total_kwh (sunnan gield), feedin_power_w and feedin_energy_kwh (tō þǣm nette), import_energy_kwh (of þǣm nette), battery_soc_pct, status and upload_time. Hit rǣdeþ ān: nān þing on þǣm infertore ne ƿyrceþ. Hit behōfaþ SOLAX_TOKEN_ID and SOLAX_SN on second-thought.ini. On þissere sīdan hit brȳcþ ānre byrgene infertores."},
+"rb_powerwall_now":{"message0":"Powerwall cūþþe","tooltip":"Ǣn gewrit mid þǣm cūþþum þīnes Tesla Powerwall: battery_soc_pct (his hlǣst), solar_power_w (hƿæt hē nū macaþ), battery_power_w (sōþ is hlǣdennes), grid_power_w (sōþ is inbring), load_power_w (sēo hūs), reserve_pct (þæt bæc-hord hit healdeþ), mode (self_consumption, backup, ...) and grid (geþēod, oþþe on īege on mīegþa dēaþe). Hit rǣdeþ ān. Hit behōfaþ POWERWALL_URL and POWERWALL_PASSWORD on second-thought.ini. On þissere sīdan hit brȳcþ ānre byrgene Powerwall."},
+"rb_powerwall_reserve":{"message0":"settan þā Powerwall bæc-hord tō %1 %","tooltip":"Hæfþ ūp oþþe niðer þæt bæc-hord: hū fēla batterie sēo hūs healdeþ for mīegþa dēaþe. Hit āxaþ þē ǣrest ǣfre, þēah nān ōþer ne āxie, and būton menn þe cweþe 'gēa' hit ne fēreþ. Hit behōfaþ POWERWALL_URL and POWERWALL_PASSWORD on second-thought.ini. On þissere sīdan nān þing sōþlīce ne ƿyrceþ."},
 "rb_mikrotik_ports":{"message0":"MikroTik geatu","tooltip":"Getæl gewrita, an for ælcum geate þines MikroTik wegwisendes oþþe wendendes: port, running, speed (swa 10Gbps), errors, drops, link_downs and comment. Gedwolan and fyllas beoþ getealde fram his latostan anginne. Hit rædeþ ane: naht ne awent on þam wendende. On þissum leafe hit brycþ bysene wendendes."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP dælas","tooltip":"Getæl gewrita, an for ælcum ingesettum SFP dæle: port, module, temperature (°C), rx_power and tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik hælu","tooltip":"Gewrit be þam wegwisende sylfum: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and ælc oþer gefelend þe he hæfþ."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"Solax cūþþe",
 "Solax inverter":"Solax invertor",
 "from {time}":"of {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"rǣdan þā cūþþe þīnes Solax invertores of SolaxCloude: sunnan gield, batterie hlǣst, inbring and ūtbring"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"rǣdan þā cūþþe þīnes Solax invertores of SolaxCloude: sunnan gield, batterie hlǣst, inbring and ūtbring",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall cūþþe",
+"battery at {pct}%":"batterie on {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"settan þā Powerwall bæc-hord tō {n}% (nū {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"rǣdan þā cūþþe þīnes Powerwall: batterie hlǣst, sunne, net in and ūt, and þæt hord hit healdeþ",
+"set your Powerwall's backup reserve (asking you each time)":"ƿendan þæt Powerwall bæc-hord (āxaþ þē ǣlce sīðe)"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2087,7 +2096,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxClōd þone tācen oþþe þone cynelieste nūmbor oferwōp: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"SolaxClōd æt {url} ne mæg gerǣced wesan ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxClōd gerǣched: {status}, cūþþe of {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall cūþþe",
+"battery at {pct}%":"batterie on {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"settan þā Powerwall bæc-hord tō {n}% (nū {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall behōfaþ POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: þæs geates cȳþþu (swā https://192.168.1.50) and þæs cundan ƿord (þā lǣstan fīf stæfgrafu of þǣm QR mearke, būton þū hit ƿendest).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought rǣdeþ ān of þǣm Powerwall, forþon hit ne sendeþ {what}.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Þæt Powerwall geat oferwōp þæt ƿord: bēcēaw þæs cundan ƿord (þā lǣstan fīf stæfgrafu of þǣm QR mearke).",
+"The Powerwall gateway's login gave no token.":"Þæs geates inngang ne sealh tācen.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"batterie on {pct}%, hord {reserve}%, net {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

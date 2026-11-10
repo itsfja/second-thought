@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"set Coinbase-boð: %1 %2 af %3","tooltip":"Setr sannt torgboð, sem 'sjá fyrir Coinbase-boð'. Hann sér þat fyrir fyrst, spyrr þik þá ávallt, með gjaldi ok alls, þótt ekki annat spyrji; sé engi þar at segja já, ferr hann eigi. Þarf lykil með Trade-leyfi. Á þessi síðu er ekki keypt né selt."},
 "rb_coinbase_cancel":{"message0":"tak aptr Coinbase-boð %1","tooltip":"Tekr aptr eitt opinna boða þinna, eptir id þess (ór 'opin Coinbase-boð'). Hann spyrr þik ávallt fyrst, ok ferr eigi er engi er þar."},
 "rb_solax_now":{"message0":"Solax töl","tooltip":"Skrá með tölum Solax-aflara þíns, eins og SolaxCloud hafði þær síðast (þær uppfærast um hverja fimm mínútu): ac_power_w (hvað hann framleiðir nú), yield_today_kwh og yield_total_kwh (sólarframleiðsla), feedin_power_w og feedin_energy_kwh (til nets), import_energy_kwh (frá neti), battery_soc_pct, status og upload_time. Hann les aðeins: ekkert breytist á aflaranum. Þarf SOLAX_TOKEN_ID og SOLAX_SN í second-thought.ini. Á þessari síðu er sýnisaflari notaður."},
+"rb_powerwall_now":{"message0":"Powerwall töl","tooltip":"Skrá með tölum Tesla Powerwalls þíns: battery_soc_pct (hleðsla), solar_power_w (framleiðir nú), battery_power_w (jákvætt er að hlaða), grid_power_w (jákvætt er innflutningur), load_power_w (heimilið), reserve_pct (varahluturinn sem hann heldur), mode (self_consumption, backup, ...) og grid (tengt, eða í eyju við rafmagnsleysi). Hann les aðeins. Þarf POWERWALL_URL og POWERWALL_PASSWORD í second-thought.ini. Á þessari síðu er sýni-Powerwall notaður."},
+"rb_powerwall_reserve":{"message0":"setja varahlut Powerwalls á %1 %","tooltip":"Hækkar eða lækkar varahlutinn: hve mikið af rafhlöðunni heimilið heldur fyrir rafmagnsleysi. Hann spyrr þig fyrst alltaf, þótt ekki annat spyrji, og án einhvers til að segja já keyrir hann ekki. Þarf POWERWALL_URL og POWERWALL_PASSWORD í second-thought.ini. Á þessari síðu breytist engu í raun."},
 "rb_mikrotik_ports":{"message0":"MikroTik-hlið","tooltip":"Listi skráa, ein fyrir hvert hlið MikroTik-leiðvísis þíns eða skiptis: port, running, speed (sem 10Gbps), errors, drops, link_downs ok comment. Villur ok fǫll eru talin frá síðasta upphafi. Hann les einungis: ekki breytisk á skiptinum. Á þessi síðu nytr hann dœmis-skiptis."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP-einingar","tooltip":"Listi skráa, ein fyrir hverja SFP-einingu er í er sett: port, module, temperature (°C), rx_power ok tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik-heilsa","tooltip":"Skrá um leiðvísinn sjálfan: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), ok hvern annan skynjara er hann hefir."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"Solax töl",
 "Solax inverter":"Solax aflari",
 "from {time}":"frá {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"lesa töl Solax-aflara þíns frá SolaxCloud: sólarframleiðsla, rafhlöðuhleðsla, inn- og útflutningur"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"lesa töl Solax-aflara þíns frá SolaxCloud: sólarframleiðsla, rafhlöðuhleðsla, inn- og útflutningur",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall töl",
+"battery at {pct}%":"rafhlöðu {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"setja varahlut Powerwalls á {n}% (nú {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"lesa töl Powerwalls þíns: rafhlöðuhleðsla, sólar, inn- og útflutningur nets, og varahluturinn sem hann heldur",
+"set your Powerwall's backup reserve (asking you each time)":"breyta varahlut Powerwalls þíns (spyrr þig í hvert sinn)"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2087,7 +2096,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud hafnaði teikninu eða skráningarnúmerinu: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud á {url} er ónáðst ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud náð: {status}, töl frá {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall töl",
+"battery at {pct}%":"rafhlöðu {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"setja varahlut Powerwalls á {n}% (nú {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall þarf POWERWALL_URL og POWERWALL_PASSWORD {where_keys}: heimsiti netsins (eins og https://192.168.1.50) og viðskiptavinalykillinn (síðustu fimm stafirnir á QR-merkinu, nema þú hafir breytt honum).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought les aðeins af Powerwall, svo hann sendir ekki {what}.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall-netið hafnaði POWERWALL_PASSWORD: athugaðu viðskiptavinalykilinn (síðustu fimm stafirnir á QR-merkinu).",
+"The Powerwall gateway's login gave no token.":"Innskráning á Powerwall-netinu gaf ekkert teikn.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"rafhlöðu {pct}%, varahluti {reserve}%, net {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

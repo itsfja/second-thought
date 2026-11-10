@@ -597,6 +597,14 @@
    "message0": "Solax-cijfers",
    "tooltip": "Een record met de cijfers van je Solax-omvormer, zoals SolaxCloud ze laatst had (ze worden ongeveer elke vijf minuten bijgewerkt): ac_power_w (wat hij nu opwekt), yield_today_kwh en yield_total_kwh (opgewekte zonnestroom), feedin_power_w en feedin_energy_kwh (naar het net), import_energy_kwh (uit het net), battery_soc_pct, status en upload_time. Hij leest alleen: er verandert niets aan de omvormer. Heeft SOLAX_TOKEN_ID en SOLAX_SN in second-thought.ini nodig. Op deze pagina wordt een voorbeeld-omvormer gebruikt."
   },
+  "rb_powerwall_now": {
+   "message0": "Powerwall-cijfers",
+   "tooltip": "Een record met de cijfers van je Tesla Powerwall: battery_soc_pct (zijn lading), solar_power_w (wekt nu op), battery_power_w (positief is opladen), grid_power_w (positief is netto-invoer), load_power_w (het huis), reserve_pct (de back-upreserve die hij vasthoudt), mode (self_consumption, backup, ...) en grid (verbonden, of geïsoleerd bij een stroomstoring). Hij leest alleen. Heeft POWERWALL_URL en POWERWALL_PASSWORD in second-thought.ini nodig. Op deze pagina wordt een voorbeeld-Powerwall gebruikt."
+  },
+  "rb_powerwall_reserve": {
+   "message0": "back-upreserve van de Powerwall op %1 % zetten",
+   "tooltip": "Verhoogt of verlaagt de back-upreserve: hoeveel batterij het huis vasthoudt voor een stroomstoring. Hij vraagt je altijd eerst, ook als verder niets vraagt, en zonder iemand die ja kan zeggen doet hij niets. Heeft POWERWALL_URL en POWERWALL_PASSWORD in second-thought.ini nodig. Op deze pagina verandert er niets echt."
+  },
   "rb_mikrotik_ports": {
    "message0": "MikroTik-poorten",
    "tooltip": "Een lijst met records, één voor elke poort van je MikroTik-router of -switch: port, running, speed (zoals 10Gbps), errors, drops, link_downs en comment. Fouten en drops tellen vanaf de laatste start. Hij leest alleen: er verandert niets aan de switch. Op deze pagina gebruikt hij een voorbeeldswitch."
@@ -824,6 +832,7 @@
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
   "Solax": "Solax",
+  "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1675,7 +1684,13 @@
   "Solax figures": "Solax-cijfers",
   "Solax inverter": "Solax-omvormer",
   "from {time}": "van {time}",
-  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "de cijfers van je Solax-omvormer uit SolaxCloud lezen: zonnestroom, batterijlading, import en export"
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "de cijfers van je Solax-omvormer uit SolaxCloud lezen: zonnestroom, batterijlading, import en export",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "Powerwall-cijfers",
+  "battery at {pct}%": "batterij op {pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "de back-upreserve van de Powerwall op {n}% zetten (nu {old}%)",
+  "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "de cijfers van je Powerwall lezen: batterijlading, zon, netinvoer en -export, en de reserve die hij vasthoudt",
+  "set your Powerwall's backup reserve (asking you each time)": "de back-upreserve van je Powerwall instellen (vraagt je elke keer)"
  },
  "examples": {
   "review": {
@@ -3319,6 +3334,16 @@
   "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud weigerde het token of het registratienummer: {x}.",
   "Couldn't reach SolaxCloud at {url} ({x}).": "SolaxCloud op {url} is niet bereikbaar ({x}).",
   "reached SolaxCloud: {status}, figures from {time}": "SolaxCloud bereikt: {status}, cijfers van {time}",
-  "Solax": "Solax"
+  "Solax": "Solax",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "Powerwall-cijfers",
+  "battery at {pct}%": "batterij op {pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "de back-upreserve van de Powerwall op {n}% zetten (nu {old}%)",
+  "Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).": "Powerwall heeft POWERWALL_URL en POWERWALL_PASSWORD nodig {where_keys}: het adres van de gateway (zoals https://192.168.1.50) en het klantwachtwoord (de laatste vijf tekens van die op de QR-sticker, tenzij je hem changed hebt).",
+  "Powerwall: {why}.": "Powerwall: {why}.",
+  "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought leest alleen van de Powerwall, dus het stuurt {what} niet.",
+  "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "De Powerwall-gateway weigerde POWERWALL_PASSWORD: controleer het klantwachtwoord (de laatste vijf tekens van die op de QR-sticker).",
+  "The Powerwall gateway's login gave no token.": "De login van de Powerwall-gateway gaf geen token.",
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "batterij op {pct}%, reserve {reserve}%, net {grid}"
  }
 }

@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD")
 
 
 def _load_keychain():
@@ -1546,6 +1546,10 @@ SAFETY = {
     "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
     "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
+    # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
+    # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
+    "powerwall_free": [["GET", r"^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"]],
+    "powerwall_asks": [["POST", r"^/api/operation$"]],
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
@@ -1655,6 +1659,14 @@ def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return not any(m == method and re.match(p, path) for m, p in SAFETY["coinbase_free"])
+
+
+def powerwall_allowed(method, path, approved=False):
+    """True for one of the few Tesla gateway calls the runtime makes (#362): the reads in powerwall_free, and the
+    backup reserve change in powerwall_asks, only after the person's yes."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_free"]) \
+        or (approved and any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_asks"]))
 
 
 def mikrotik_allowed(method, path):
@@ -2118,6 +2130,7 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
+    ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
@@ -2126,6 +2139,7 @@ CAPABILITIES = [
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
+    ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -4851,6 +4865,92 @@ class Connections:
                  tr("from {time}", time=out.get("upload_time") or "?"))
         return out
 
+    # Powerwall (#362)
+    # Tesla's local gateway API (the one the gateway's web portal uses), for a Powerwall, Powerwall 2 or Powerwall+ on
+    # your network: POWERWALL_URL (the gateway's address, like https://192.168.1.50) and POWERWALL_PASSWORD, the
+    # customer password (the last five characters of the one on the gateway's QR sticker, unless you changed it).
+    # Login happens once and the token it gives is kept. Only the reads in SAFETY["powerwall_free"] are ever sent, so
+    # no firmware, storm watch or operation mode is ever touched; setting the backup reserve (powerwall_asks) always
+    # asks, live, and never runs with nobody there to say yes: it changes how long the house lasts in a power cut.
+    # The Powerwall 3 has no local web API: use Home Assistant or Teslemetry for one of those. POWERWALL_CERT_SHA256
+    # pins the gateway's own certificate, as for MikroTik.
+    POWERWALL_GRID = {"SystemGridConnected": "connected", "SystemConnectedToGrid": "connected",
+                      "SystemIslandedActive": "islanded (power cut)", "SystemTransitionToIsland": "transitioning"}
+
+    async def _powerwall(self, method, path, body=None, approved=False, again=True):
+        """One call to the gateway, logged in as the customer. Only the calls in SAFETY are ever made."""
+        if not powerwall_allowed(method, path, approved):
+            raise RunError(tr("Second Thought only reads from the Powerwall, so it doesn't send {what}.", what=f"{method} {path}"))
+        base = os.environ.get("POWERWALL_URL", "").strip().rstrip("/")
+        password = os.environ.get("POWERWALL_PASSWORD", "")
+        if not base or not password:
+            raise RunError(tr("Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).", where_keys=WHERE_KEYS))
+        if not self.__dict__.get("_powerwall_token"):
+            lock = self.__dict__.setdefault("_powerwall_lock", asyncio.Lock())
+            async with lock:  # four reads at once, one login
+                if not self.__dict__.get("_powerwall_token"):
+                    status, raw = await self._pinned("Powerwall gateway", base, "POWERWALL_CERT_SHA256", "POST", "/api/login/Basic", {},
+                                                    {"username": "customer", "password": password,
+                                                     "email": os.environ.get("POWERWALL_EMAIL", "").strip() or "customer@example.com",
+                                                     "force_sm_off": False})
+                    if status == 401:
+                        raise RunError(tr("The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker)."))
+                    if status >= 400:
+                        raise RunError(tr("Powerwall: {why}.", why=self._said(status, raw)))
+                    try:
+                        self.__dict__["_powerwall_token"] = to_str(json.loads(raw).get("token"))
+                    except (ValueError, AttributeError):
+                        self.__dict__["_powerwall_token"] = ""
+                    if not self.__dict__["_powerwall_token"]:
+                        raise RunError(tr("The Powerwall gateway's login gave no token."))
+        headers = {"Authorization": "Bearer " + self.__dict__["_powerwall_token"]}
+        status, raw = await self._pinned("Powerwall gateway", base, "POWERWALL_CERT_SHA256", method, path, headers, body)
+        if status == 401 and again:  # the token has expired: log in again, once
+            self.__dict__["_powerwall_token"] = ""
+            return await self._powerwall(method, path, body, approved, again=False)
+        if status >= 400:
+            raise RunError(tr("Powerwall: {why}.", why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    @staticmethod
+    def _pw_num(v):
+        m = re.search(r"-?\d+(?:\.\d+)?", to_str(v))
+        return _clean_num(float(m.group())) if m else ""
+
+    async def powerwall_now(self):
+        """The Powerwall's figures: battery_soc_pct (its charge), solar_power_w (making now), battery_power_w (positive
+        is charging), grid_power_w (positive is importing), load_power_w (the house), reserve_pct (the backup reserve
+        it keeps), mode (self_consumption, backup, ...), grid (connected, or islanded in a power cut)."""
+        meters, soe, grid, op = (await asyncio.gather(
+            self._powerwall("GET", "/api/meters/aggregates"), self._powerwall("GET", "/api/system_status/soe"),
+            self._powerwall("GET", "/api/system_status/grid_status"), self._powerwall("GET", "/api/operation")))
+        meter = lambda name: self._pw_num((meters.get(name) or {}).get("instant_power")) if isinstance(meters, dict) else ""  # noqa: E731
+        out = {"battery_soc_pct": self._pw_num(soe.get("percentage") if isinstance(soe, dict) else ""),
+               "solar_power_w": meter("solar"), "battery_power_w": meter("battery"),
+               "grid_power_w": meter("site"), "load_power_w": meter("load"),
+               "reserve_pct": self._pw_num(op.get("backup_reserve_percent") if isinstance(op, dict) else ""),
+               "mode": to_str((op or {}).get("real_mode") or (op or {}).get("mode") or "") if isinstance(op, dict) else "",
+               "grid": self.POWERWALL_GRID.get(to_str(grid.get("grid_status") if isinstance(grid, dict) else ""),
+                                                to_str(grid.get("grid_status") if isinstance(grid, dict) else ""))}
+        self.log(tr("Powerwall figures"), "\n".join(f"{k}: {v}" for k, v in out.items() if v != ""),
+                 tr("battery at {pct}%", pct=out["battery_soc_pct"]))
+        return out
+
+    async def powerwall_reserve(self, percent):
+        """Sets the backup reserve, after asking: it changes how much of the battery the house keeps for a power cut.
+        Always asks, live, and never runs with nobody there to say yes."""
+        n = max(0, min(100, int(round(num(percent) or 0))))
+        op = await self._powerwall("GET", "/api/operation")
+        what = tr("set the Powerwall backup reserve to {n}% (now {old}%)", n=n, old=self._pw_num(op.get("backup_reserve_percent")))
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._powerwall("POST", "/api/operation", {"backup_reserve_percent": n}, approved=True)
+        self.log(tr("Powerwall"), what, tr("done"))
+        return True
+
     # MQTT
     def _mqtt_new(self, on_message=None, topics=()):
         """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
@@ -7095,6 +7195,17 @@ class Doctor:
                 got = await self.solax_now()  # one call: the figures are cached for five minutes after it
                 return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
             out.append(("Solax", solax))
+        if has("powerwall_read", "powerwall_control"):
+            async def powerwall():
+                base = os.environ.get("POWERWALL_URL", "").strip()
+                if base and not base.lower().startswith("http://") and not os.environ.get("POWERWALL_CERT_SHA256", "").strip():
+                    seen = await asyncio.to_thread(self._mt_fingerprint, base)
+                    if seen:
+                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="Powerwall gateway", setting="POWERWALL_CERT_SHA256", seen=seen))
+                got = await self.powerwall_now()
+                return tr("battery at {pct}%, reserve {reserve}%, grid {grid}", pct=got.get("battery_soc_pct") or "?",
+                          reserve=got.get("reserve_pct") or "?", grid=got.get("grid") or "?")
+            out.append(("Powerwall", powerwall))
         if has("unifi_read"):
             async def unifi():
                 base = os.environ.get("UNIFI_URL", "").strip()
@@ -7410,7 +7521,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Solax": "SOLAX_TOKEN_ID"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -9695,6 +9806,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_plain_english","file":"plain-english.json","category":"odds","title":"Plain English","description":"Paste a letter or notice. Claude rewrites it until it passes a plain-English check: a reading age of about 9 to 11, no jargon, short sentences, and every fact, date and amount kept.","tip":"Paste one letter at a time. Read the result against the original before you send it.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste the letter or notice"}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Rewrite this in plain English for anyone to read. Use 'you' and 'we'. Put the most important thing first.\n\n"}}},"ADD1":{"block":{"type":"rb_answer"}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"reading age of about 9 to 11; no jargon, or any term that must stay is explained; sentences average 15 to 20 words and none is over 30; active voice; every fact, date, amount and deadline from the original is kept and right; what the reader needs to do is clear"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":4}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_planning_digest","file":"planning-digest.json","category":"news","title":"Planning digest","description":"Each Friday, a digest of new planning applications near a postcode: what's proposed, where, and the date comments close, with a link for each. Nothing without a source.","tip":"Change the postcode in the first block. Councils publish differently, so check the first digest against your council's portal.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_postcode","name":"postcode"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"planning"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"weekdays"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Friday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"planning"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"planning"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_postcode"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"SE1 7PB"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Find planning applications submitted in the last week within about a mile of "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_postcode"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". Search the web (the local council's planning portal, and planning news sites) and read the pages. For each: the address, what's proposed in one plain sentence, the reference, the date comments close, and the link. Recall the note 'planning seen' and leave out applications already in it, then remember this week's references as 'planning seen'. Check it with review_text against: every application has a link; nothing invented; plain English."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":16}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"memory"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Planning applications near you"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_portfolio_breather","file":"portfolio-breather.json","category":"money","title":"Portfolio breather","description":"Friday evening, a deliberately calm summary of your holdings: what each did this week and this month, in plain words, with no alarms, no predictions and no advice.","tip":"Press Run once to tell it what you hold; it remembers. Prices come from web search, so they can lag. Not financial advice.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_holdings","name":"holdings"},{"id":"g_summary","name":"summary"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_negate","inputs":{"BOOL":{"block":{"type":"rb_mem_has","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"holdings"}}}}}}}}},"DO0":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"What do you hold? One per line, like 'Vanguard FTSE Global All Cap: £12,000'."}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_answer"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"holdings"}}}}}}}}},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"breathe"}}}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":30,"DAYS":"weekdays"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Friday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"breathe"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"breathe"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_holdings"}},"inputs":{"VALUE":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"holdings"}}}}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"My holdings:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_holdings"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nFor each, search the web for its price now, a week ago and a month ago, and work out the changes with calculate."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":12}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calc"}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_summary"}},"inputs":{"VALUE":{"block":{"type":"rb_rewrite","inputs":{"TEXT":{"block":{"type":"rb_draft"}},"HOW":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"a calm Friday note in plain words: one line per holding with its weekly and monthly change, then one line on the whole. No alarms, no predictions, no advice. End with: Prices come from web search and can lag. This isn't financial advice."}}}}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your week, calmly"}}},"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
+{"key":"g_power_cut_ready","file":"power-cut-ready.json","category":"home","title":"Power cut ready?","description":"Each evening, reads your Tesla Powerwall's figures, checks tonight's severe weather warnings, and sends a Telegram message on whether the house is ready for a power cut. If a storm warning applies, it offers to raise the reserve to 100% — asking first. Otherwise it only reads.","tip":"Needs a Powerwall, Powerwall 2 or Powerwall+ (the Powerwall 3 has no local web API) and the gateway's customer password. Change the town in the weather check to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"storm"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"storm"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"storm"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_figures"}},"inputs":{"VALUE":{"block":{"type":"rb_powerwall_now"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_warn"}},"inputs":{"VALUE":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Search the web for tonight's severe weather warnings for London, UK: wind, storm or flood warnings that apply tonight. Say plainly which warnings apply tonight, in under 60 words, or say 'no warnings tonight'."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":4}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"}}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_summary"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Here are my Tesla Powerwall's figures and a check of tonight's weather warnings. In under 100 words: whether the house is ready for a power cut (enough charge, a sensible reserve), and what to do if not. If a severe weather warning applies tonight, start your reply with the word STORM on a line of its own.\n\nFigures:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_figures"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nWeather check:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_warn"}}}}},"extraState":{"itemCount":4}}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_contains","inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"STORM"}}}}}},"DO0":{"block":{"type":"rb_powerwall_reserve","inputs":{"N":{"shadow":{"type":"math_number","fields":{"NUM":100}}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_pr_review_roundup","file":"pr-review-roundup.json","category":"github","title":"PR review roundup","description":"Each weekday morning, the open pull requests across your GitHub projects, each with a verdict: ready to merge, or needs work, and why in a sentence. Emailed to you.","tip":"Change 7:30 to when you start work, and the address in the email block to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"weekdays"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"roundup"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List my GitHub projects, then the open pull requests in each that changed in the last two weeks, and read each one. Give each a verdict: READY TO MERGE or NEEDS WORK, with one sentence saying why (tests, description, size, anything risky). Group them by project, ready ones first. Before you finish, check your verdicts with review_text against: every verdict names something in the pull request itself; nothing is invented."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":15}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Pull requests: ready or not"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_price_hawk","file":"price-hawk.json","category":"odds","title":"Price hawk","description":"Watches any product page and sends you a Telegram message when the price drops, or reaches your target. Rises and everything else on the page are ignored.","tip":"Change the page address and 'Price' in the hat to the product and the word next to its price. Set a target, or 0 for any drop.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_was","name":"was"},{"id":"g_now","name":"now"},{"id":"g_target","name":"target"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type a change to test with, like '- £2.40' then '+ £2.15' on the next line"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"price"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_page_when","fields":{"URL":"https://example.com/shop/rye-flour","WORDS":"Price","N":60},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"price"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"price"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_target"}},"inputs":{"VALUE":{"block":{"type":"math_number","fields":{"NUM":0}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_was"}},"inputs":{"VALUE":{"block":{"type":"rb_ask_number","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This is how a price changed on a shop's page. Lines starting - are before, + after. What was the price before, as a number?\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_now"}},"inputs":{"VALUE":{"block":{"type":"rb_ask_number","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This is how a price changed on a shop's page. Lines starting - are before, + after. What is the price now, as a number?\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_operation","fields":{"OP":"OR"},"inputs":{"A":{"block":{"type":"logic_compare","fields":{"OP":"LT"},"inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}},"B":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_was"}}}}}}},"B":{"block":{"type":"logic_operation","fields":{"OP":"AND"},"inputs":{"A":{"block":{"type":"logic_compare","fields":{"OP":"GT"},"inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_target"}}}},"B":{"block":{"type":"math_number","fields":{"NUM":0}}}}}},"B":{"block":{"type":"logic_compare","fields":{"OP":"LTE"},"inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}},"B":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_target"}}}}}}}}}}}}},"DO0":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Price drop: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_was"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" → "}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nhttps://example.com/shop/rye-flour"}}}},"extraState":{"itemCount":5}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Price drop: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_was"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" → "}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}}},"extraState":{"itemCount":4}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"No drop ("}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_was"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" → "}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":")."}}}},"extraState":{"itemCount":5}}}}}}},"extraState":{"hasElse":true}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_quiz_from_notes","file":"quiz-from-notes.json","category":"learning","title":"Quiz from notes","description":"Choose your lesson notes. Claude writes a ten-question quiz from them, with the answers, and for each question the wrong answer pupils most often give and why it's wrong. Saved to print.","tip":"Works with a PDF, Word file or text file. Ask for fewer questions in the blue block for a quick starter.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write a ten-question quiz from these lesson notes. Mix recall and understanding. After the questions, an answer section: for each question the answer, the wrong answer pupils most often give, and one sentence on why it's wrong.\n\nNotes:\n"}}},"ADD1":{"block":{"type":"rb_file_choose"}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every question can be answered from the notes; each has one right answer; the common wrong answers are ones pupils really give, not silly ones; answers kept apart from the questions"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"quiz"}}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
@@ -9742,6 +9854,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
 ["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
+["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
@@ -9750,6 +9863,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
+["powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", false],
 ["web", "read public web pages and search the web", false],
 ["email_read", "read your email", false],
 ["calendar", "read your calendars", false],
@@ -9836,6 +9950,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "GET",
    "^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"
+  ]
+ ],
+ "powerwall_free": [
+  [
+   "GET",
+   "^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"
+  ]
+ ],
+ "powerwall_asks": [
+  [
+   "POST",
+   "^/api/operation$"
   ]
  ],
  "mikrotik_free": [
@@ -13945,6 +14071,33 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
    "inverterStatus": "102",
    "uploadTime": "2026-11-11 14:05:00"
   }
+ },
+ "powerwall": {
+  "note": "A sample Tesla Powerwall for the page and the tests (#362), shaped the way the gateway's local API answers: evening, battery three-quarters full, exporting a little to the grid. The reads are the four the runtime makes; operation shows the reserve the program may raise after asking.",
+  "meters_aggregates": {
+   "site": {
+    "instant_power": "-450"
+   },
+   "battery": {
+    "instant_power": "1200"
+   },
+   "load": {
+    "instant_power": "800"
+   },
+   "solar": {
+    "instant_power": "2450"
+   }
+  },
+  "system_status_soe": {
+   "percentage": "76.5"
+  },
+  "system_status_grid_status": {
+   "grid_status": "SystemGridConnected"
+  },
+  "operation": {
+   "real_mode": "self_consumption",
+   "backup_reserve_percent": "20"
+  }
  }
 }</script>
 <script type="text/plain" id="convert-guide">
@@ -14207,7 +14360,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -14219,7 +14372,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -14407,7 +14560,8 @@ HOW TO MAP CODE
     rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp",
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
-    rb_solax_now:"solax_read" };
+    rb_solax_now:"solax_read",
+    rb_powerwall_now:"powerwall_read", rb_powerwall_reserve:"powerwall_control" };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
     "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
@@ -14779,6 +14933,11 @@ HOW TO MAP CODE
     /* Solax (#361): read only, from SolaxCloud */
     V("rb_solax_now", "Solax figures", [], null, { style:"solax",
       tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
+    /* Powerwall (#362): reads, and one change that always asks */
+    V("rb_powerwall_now", "Powerwall figures", [], null, { style:"powerwall",
+      tooltip:"A record of your Tesla Powerwall's figures: battery_soc_pct (its charge), solar_power_w (making now), battery_power_w (positive is charging), grid_power_w (positive is importing), load_power_w (the house), reserve_pct (the backup reserve it keeps), mode (self_consumption, backup, ...) and grid (connected, or islanded in a power cut). It only reads. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page it uses a sample Powerwall." }),
+    S("rb_powerwall_reserve", "set Powerwall backup reserve to %1 %", [val("N")], { style:"powerwall", inputsInline:true,
+      tooltip:"Raises or lowers the backup reserve: how much of the battery the house keeps for a power cut. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page nothing really changes." }),
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
       tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),
@@ -14966,6 +15125,7 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     { kind:"category", name:"Solax", categorystyle:"solax", contents:[ B("rb_solax_now") ]},
+    { kind:"category", name:"Powerwall", categorystyle:"powerwall", contents:[ B("rb_powerwall_now"), B("rb_powerwall_reserve", { N:N(100) }) ]},
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
     ]},
@@ -17540,6 +17700,7 @@ HOW TO MAP CODE
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
+             powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
@@ -17624,6 +17785,15 @@ HOW TO MAP CODE
       "; SOLAX_API_URL points at another region's cloud, like the EU one.",
       "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
       ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
+    if (need.powerwall) out.push("", "[powerwall]",
+      "; Your Tesla Powerwall (a Powerwall, Powerwall 2 or Powerwall+), read through the gateway's local API. The",
+      "; Powerwall 3 has no local web API: use Home Assistant or Teslemetry for one of those.",
+      "; The customer password is the last five characters of the one on the gateway's QR sticker, unless you",
+      "; changed it. Run --doctor once: it shows the gateway's certificate fingerprint for POWERWALL_CERT_SHA256.",
+      "; Setting the backup reserve always asks, and never runs unattended.",
+      "POWERWALL_URL = https://192.168.1.50", "POWERWALL_PASSWORD = ",
+      ...note("POWERWALL_EMAIL", "you@example.com", "the email the gateway's login form asks for (anything works)"),
+      ...note("POWERWALL_CERT_SHA256", "aa:bb:...", "to pin the gateway's own certificate"));
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -17937,6 +18107,7 @@ HOW TO MAP CODE
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         case "rb_solax_now": return "(await R.solax_now())";
+        case "rb_powerwall_now": return "(await R.powerwall_now())";
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";
@@ -18085,6 +18256,7 @@ HOW TO MAP CODE
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
+          case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
@@ -19911,7 +20083,7 @@ HOW TO MAP CODE
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter" }[what]) : what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter", Powerwall:"Powerwall" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter", Powerwall:"Powerwall" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -20471,6 +20643,28 @@ HOW TO MAP CODE
       battery_soc_pct: soc === -1 ? "" : soc, status:solaxStatus(r.inverterStatus), upload_time:str(r.uploadTime || "") };
     addStep("Solax figures", { mono:true, text:Object.entries(out).filter(([, v]) => v !== "").map(([k, v]) => k + ": " + v).join("\n") }).done(tr("from {time}", { time:out.upload_time || "?" }), "ok");
     return out;
+  }
+  /* Powerwall on the page (#362): a sample Powerwall. Exported Python reads your own through the gateway's local
+     API, and the reserve change always asks. Matches the runtime's powerwall_ methods and tests/fake_powerwall.py. */
+  const pwSample = () => { connNote("Powerwall"); return CONN.powerwall || {}; };
+  const pwNum = v => { const m = /-?\d+(?:\.\d+)?/.exec(str(v)); return m ? Number(m[0]) : ""; };
+  const pwGrid = { SystemGridConnected:"connected", SystemConnectedToGrid:"connected", SystemIslandedActive:"islanded (power cut)", SystemTransitionToIsland:"transitioning" };
+  function powerwallNow(){
+    const s = pwSample(), meter = name => pwNum(((s.meters_aggregates || {})[name] || {}).instant_power);
+    const out = { battery_soc_pct:pwNum((s.system_status_soe || {}).percentage), solar_power_w:meter("solar"),
+      battery_power_w:meter("battery"), grid_power_w:meter("site"), load_power_w:meter("load"),
+      reserve_pct:pwNum((s.operation || {}).backup_reserve_percent), mode:str((s.operation || {}).real_mode || ""),
+      grid:pwGrid[str((s.system_status_grid_status || {}).grid_status)] || str((s.system_status_grid_status || {}).grid_status) };
+    addStep("Powerwall figures", { mono:true, text:Object.entries(out).filter(([, v]) => v !== "").map(([k, v]) => k + ": " + v).join("\n") }).done(tr("battery at {pct}%", { pct:out.battery_soc_pct }), "ok");
+    return out;
+  }
+  async function powerwallReserve(percent){
+    const n = Math.max(0, Math.min(100, Math.round(num(percent))));
+    const old = pwNum(((pwSample().operation) || {}).backup_reserve_percent);
+    const what = tr("set the Powerwall backup reserve to {n}% (now {old}%)", { n, old });
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Powerwall", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
   }
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
   function pagePart(text, words){
@@ -21254,6 +21448,7 @@ HOW TO MAP CODE
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
       case "rb_solax_now": return solaxNow();
+      case "rb_powerwall_now": return powerwallNow();
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
       case "rb_mikrotik_health": return mikrotikHealth();
@@ -21843,6 +22038,7 @@ HOW TO MAP CODE
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
+      case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {

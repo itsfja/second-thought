@@ -157,6 +157,8 @@
 "rb_coinbase_order":{"message0":"𐀳𐀮 𐀁𐀵𐀩 Coinbase: %1 %2 𐀀𐀢 %3","tooltip":"𐀳𐀴𐀯 𐀀𐀨𐀳𐀀 𐀁𐀵𐀩 𐀀𐀒𐀨, 𐀃𐀒 “𐀡𐀫𐀃𐀨 𐀁𐀵𐀩 Coinbase”. 𐀟𐀫𐀵 𐀡𐀫𐀃𐀨𐀂, 𐀁𐀟𐀂𐀲 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮, 𐀕𐀲 𐀳𐀫 𐀏𐀂 𐀞𐀲, 𐀏𐀂 𐀃𐀳 𐀃𐀄𐀆 𐀀𐀫 𐀁𐀫𐀲𐀂; 𐀃𐀄𐀆𐀂 𐀞𐀫 𐀃𐀟 𐀙𐀂 𐀁𐀟, 𐀃𐀄 𐀳𐀩𐀐𐀁. 𐀆𐀂 𐀏𐀨𐀹 𐀕𐀲 Trade. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃𐀄𐀆 𐀃𐀚𐀲𐀂 𐀃𐀄𐀆 𐀟𐀨𐀲𐀂."},
 "rb_coinbase_cancel":{"message0":"𐀀𐀡𐀬𐀁 𐀁𐀵𐀩 Coinbase %1","tooltip":"𐀀𐀡𐀬𐀁 𐀁𐀚 𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 𐀰𐀂, 𐀕𐀲 id (𐀀𐀡 “𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 Coinbase”). 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵, 𐀏𐀂 𐀃𐀄 𐀳𐀩𐀐𐀁 𐀃𐀄𐀆𐀂 𐀞𐀫."},
 "rb_solax_now":{"message0":"ko-u-ko-ro Solax","tooltip":"ko-u-ko-ro a-to-ro-o-ko Solax-jo, SolaxCloud-to o-pe-ro-se (pa-we-jo e-ne-ko o-po-se): ac_power_w (ka-ro o-pe-ro-se), yield_today_kkh ka-a-pi yield_total_kkh (ka-ro), feedin_power_w ka-a-pi feedin_energy_kkh (o-po-se), import_energy_khh (e-ne-ko), battery_soc_pct, status ka-a-pi upload_time. ke-re-a o-u pe-re: a-to-ro-o-ko-jo o-u ke-ta-i. SOLAX_TOKEN_ID SOLAX_SN second-thought.ini-to e-ne-ko. we-to-de a-to-ro-o-ko pa-we-jo o-pe-ro-se."},
+"rb_powerwall_now":{"message0":"ko-u-ko-ro Powerwall","tooltip":"ko-u-ko-ro Tesla Powerwall-jo: battery_soc_pct (pa-we-jo), solar_power_w (ka-ro o-pe-ro-se), battery_power_w (pa-we-jo ka-a-pi), grid_power_w (e-ne-ko ka-a-pi), load_power_w (ko-o-ko), reserve_pct (pa-we-jo ko-u-ko-ro-se), mode (self_consumption, backup, ...) o-po-se-qa (do-ke, a-po o-po-se). ke-re-a o-u pe-re. POWERWALL_URL POWERWALL_PASSWORD second-thought.ini-to e-ne-ko. we-to-de Powerwall pa-we-jo o-pe-ro-se."},
+"rb_powerwall_reserve":{"message0":"Powerwall-jo pa-we-jo a-to-ro-o-ko %1 % do-ke","tooltip":"pa-we-jo a-to-ro-o-ko u-po-se ka-ta-ke: ko-o-ko pa-we-jo ko-u-ko-ro-se. so-jo e-re e-ne-ko, o-po-se-qa o-u me-ta-ke; 'me-ta-ke' o-u do-ke, o-u a-ra-ke-ta-i. POWERWALL_URL POWERWALL_PASSWORD second-thought.ini-to e-ne-ko. we-to-de o-u me-ta-ke."},
 "rb_mikrotik_ports":{"message0":"𐀶𐀨 MikroTik","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀶𐀨 𐀀𐀨𐀐𐀳 MikroTik 𐀰𐀂: port, running, speed (𐀃𐀒 10Gbps), errors, drops, link_downs 𐀏𐀂 comment. 𐀗𐀜 𐀀𐀙𐀑𐀜𐀐: 𐀃𐀄𐀆 𐀕𐀲𐀞𐀨𐀁. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀐𐀨𐀲𐀂 𐀞𐀨𐀆𐀒𐀔 𐀀𐀨𐀐𐀳."},
 "rb_mikrotik_sfp":{"message0":"𐀕𐀫 SFP MikroTik","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀕𐀫 SFP: port, module, temperature (°C), rx_power 𐀏𐀂 tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"𐀄𐀑𐀊 MikroTik","tooltip":"𐀏𐀨𐀟 𐀟𐀪 𐀀𐀨𐀐𐀳: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𐀏𐀂 𐀀𐀨 𐀀𐀂𐀳𐀳𐀪𐀊."},
@@ -225,6 +227,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1076,7 +1079,13 @@
 "Solax figures":"𐀒𐀄𐀒𐀫 Solax",
 "Solax inverter":"𐀀𐀵𐀫𐀃𐀒 Solax",
 "from {time}":"{time}-to",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"𐀒𐀄𐀒𐀫 𐀀𐀵𐀫𐀃𐀒 Solax SolaxCloud-to 𐀃𐀟𐀫𐀮: 𐀏𐀫, 𐀞𐀸𐀍, 𐀁𐀚𐀒 𐀃𐀡𐀮"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"𐀒𐀄𐀒𐀫 𐀀𐀵𐀫𐀃𐀒 Solax SolaxCloud-to 𐀃𐀟𐀫𐀮: 𐀏𐀫, 𐀞𐀸𐀍, 𐀁𐀚𐀒 𐀃𐀡𐀮",
+"Powerwall":"Powerwall",
+"Powerwall figures":"𐀒𐀄𐀒𐀫 Powerwall",
+"battery at {pct}%":"𐀞𐀸𐀍 {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-jo 𐀞𐀸𐀍 𐀀𐀵𐀫𐀃𐀒 {n}% 𐀈𐀐 (𐀀𐀡 {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"𐀒𐀄𐀒𐀫 Powerwall-jo 𐀃𐀟𐀫𐀮: 𐀞𐀸𐀍, 𐀏𐀫, 𐀁𐀚𐀒 𐀃𐀡𐀮, 𐀞𐀸𐀍 𐀒𐀄𐀒𐀫𐀮",
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall-jo 𐀞𐀸𐀍 𐀀𐀵𐀫𐀃𐀒 𐀕𐀲𐀐 (𐀰𐀍 𐀁𐀩 𐀁𐀚𐀒)"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -2088,7 +2097,17 @@
 "Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud {url} o-u ke-ta-i ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud do-ke: {status}, ko-u-ko-ro {time}-to",
 "Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax-jo SOLAX_TOKEN_ID ka-a-pi SOLAX_SN e-ne-ko {where_keys}: ko-u-ko-ro SolaxCloud API-to (mi-ri-jo) ka-a-pi wifi dongle-jo pa-ŋal2-ba (pa-we-jo, app-to-qe).",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"ko-u-ko-ro Powerwall",
+"battery at {pct}%":"pa-we-jo {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-jo pa-we-jo a-to-ro-o-ko {n}% do-ke (a-po {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall-jo SOLAX_TOKEN_ID ka-a-pi POWERWALL_URL POWERWALL_PASSWORD e-ne-ko {where_keys}: ko-u-ko-ro ðe-ro (kata https://192.168.1.50) ka-a-pi mu-ŋa (pa-we-jo pente QR-to, o-u me-ta-ke).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought Powerwall-to o-pe-ro-se, {what} o-u po-re-na.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Ðe-ro Powerwall POWERWALL_PASSWORD nu-ub-du3: mu-ŋa ba-zu-zu (pa-we-jo pente QR-to).",
+"The Powerwall gateway's login gave no token.":"Ðe-ro Powerwall tukna o-u do-ke.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"pa-we-jo {pct}%, pa-we-jo {reserve}%, o-po-se {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

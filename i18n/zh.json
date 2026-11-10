@@ -597,6 +597,14 @@
    "message0": "Solax 数据",
    "tooltip": "一条记录,包含你的 Solax 逆变器的数据(SolaxCloud 最近一次的数据,约每五分钟更新):ac_power_w(当前发电功率)、yield_today_kwh 和 yield_total_kwh(已发电量)、feedin_power_w 和 feedin_energy_kwh(送入电网)、import_energy_kwh(从电网输入)、battery_soc_pct、status 和 upload_time。它只读取:逆变器不会有任何变化。需要在 second-thought.ini 中设置 SOLAX_TOKEN_ID 和 SOLAX_SN。此页面使用示例逆变器。"
   },
+  "rb_powerwall_now": {
+   "message0": "Powerwall 数据",
+   "tooltip": "一条记录,包含你的 Tesla Powerwall 数据:battery_soc_pct(电量)、solar_power_w(当前发电)、battery_power_w(正数为充电)、grid_power_w(正数为进口)、load_power_w(房屋)、reserve_pct(保留的备份电量)、mode(self_consumption、backup 等)和 grid(并网,或在停电时离网)。它只读取。需要在 second-thought.ini 中设置 POWERWALL_URL 和 POWERWALL_PASSWORD。此页面使用示例 Powerwall。"
+  },
+  "rb_powerwall_reserve": {
+   "message0": "把 Powerwall 的备份保留设为 %1 %",
+   "tooltip": "调高或调低备份保留:停电时房屋保留多少电池。它总是先问你,即使其他都不问;没有人说是时不会执行。需要在 second-thought.ini 中设置 POWERWALL_URL 和 POWERWALL_PASSWORD。此页面上不会真的更改任何东西。"
+  },
   "rb_mikrotik_ports": {
    "message0": "MikroTik 端口",
    "tooltip": "记录列表，你的 MikroTik 路由器或交换机的每个端口一条：port、running、speed（比如 10Gbps）、errors、drops、link_downs 和 comment。错误和丢包从上次启动开始计数。它只读取：交换机上什么都不会改变。在本页上使用示例交换机。"
@@ -824,6 +832,7 @@
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
   "Solax": "Solax",
+  "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1675,7 +1684,13 @@
   "Solax figures": "Solax 数据",
   "Solax inverter": "Solax 逆变器",
   "from {time}": "来自 {time}",
-  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "从 SolaxCloud 读取你的 Solax 逆变器的数据:太阳能发电、电池电量、进口和出口"
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "从 SolaxCloud 读取你的 Solax 逆变器的数据:太阳能发电、电池电量、进口和出口",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "Powerwall 数据",
+  "battery at {pct}%": "电池电量 {pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "把 Powerwall 的备份保留设为 {n}%(当前 {old}%)",
+  "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "读取你的 Powerwall 数据:电池电量、太阳能、电网进口和出口,以及保留的备用电量",
+  "set your Powerwall's backup reserve (asking you each time)": "更改你的 Powerwall 的备份保留(每次都会先问你)"
  },
  "examples": {
   "review": {
@@ -3319,6 +3334,16 @@
   "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud 拒绝了令牌或注册号:{x}。",
   "Couldn't reach SolaxCloud at {url} ({x}).": "无法连接 {url} 的 SolaxCloud({x})。",
   "reached SolaxCloud: {status}, figures from {time}": "已连接 SolaxCloud:{status},{time} 的数据",
-  "Solax": "Solax"
+  "Solax": "Solax",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "Powerwall 数据",
+  "battery at {pct}%": "电池电量 {pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "把 Powerwall 的备份保留设为 {n}%(当前 {old}%)",
+  "Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).": "Powerwall 需要 POWERWALL_URL 和 POWERWALL_PASSWORD {where_keys}:网关地址(如 https://192.168.1.50)和客户密码(QR 贴纸上的最后五个字符,除非你改过)。",
+  "Powerwall: {why}.": "Powerwall:{why}。",
+  "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought 只从 Powerwall 读取,因此不会发送 {what}。",
+  "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Powerwall 网关拒绝了 POWERWALL_PASSWORD:请检查客户密码(QR 贴纸上的最后五个字符)。",
+  "The Powerwall gateway's login gave no token.": "Powerwall 网关的登录没有给出令牌。",
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "电池 {pct}%,保留 {reserve}%,电网 {grid}"
  }
 }

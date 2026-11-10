@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"realizar orden de Coinbase: %1 %2 de %3","tooltip":"Realiza una orden de mercado real, como «previsualizar orden de Coinbase». Primero la previsualiza y luego siempre te pregunta, con la comisión y el total, aunque nada más pregunte; si no hay nadie para decir que sí, no se hace. Necesita una clave con el permiso Trade. En esta página no se compra ni se vende nada."},
 "rb_coinbase_cancel":{"message0":"cancelar orden de Coinbase %1","tooltip":"Cancela una de tus órdenes abiertas por su id (de «órdenes abiertas de Coinbase»). Siempre te pregunta antes y no se hace si no hay nadie."},
 "rb_solax_now":{"message0":"cifras de Solax","tooltip":"Un registro de las cifras de tu inversor Solax, tal como SolaxCloud las tuvo por última vez (se actualizan unos cada cinco minutos): ac_power_w (lo que está produciendo ahora), yield_today_kwh y yield_total_kwh (solar generado), feedin_power_w y feedin_energy_kwh (hacia la red), import_energy_kwh (desde la red), battery_soc_pct, status y upload_time. Solo lee: nada cambia en el inversor. Necesita SOLAX_TOKEN_ID y SOLAX_SN en second-thought.ini. En esta página usa un inversor de ejemplo."},
+"rb_powerwall_now":{"message0":"cifras de Powerwall","tooltip":"Un registro de las cifras de tu Powerwall: battery_soc_pct (su carga), solar_power_w (produciendo ahora), battery_power_w (positivo es cargando), grid_power_w (positivo es importando), load_power_w (la casa), reserve_pct (la reserva de respaldo que guarda), mode (self_consumption, backup, ...) y grid (conectada, o aislada en un corte). Solo lee. Necesita POWERWALL_URL y POWERWALL_PASSWORD en second-thought.ini. En esta página usa una Powerwall de ejemplo."},
+"rb_powerwall_reserve":{"message0":"poner la reserva de respaldo de la Powerwall al %1 %","tooltip":"Sube o baja la reserva de respaldo: cuánta batería guarda la casa para un corte. Siempre te pregunta antes, aunque nada más pregunte, y sin nadie para decir sí no se ejecuta. Necesita POWERWALL_URL y POWERWALL_PASSWORD en second-thought.ini. En esta página nada cambia de verdad."},
 "rb_mikrotik_ports":{"message0":"puertos de MikroTik","tooltip":"Una lista de registros, uno por cada puerto de tu router o switch MikroTik: port, running, speed (como 10Gbps), errors, drops, link_downs y comment. Los errores y descartes cuentan desde el último arranque. Solo lee: nada cambia en el switch. En esta página usa un switch de ejemplo."},
 "rb_mikrotik_sfp":{"message0":"módulos SFP de MikroTik","tooltip":"Una lista de registros, uno por cada módulo SFP conectado: port, module, temperature (°C), rx_power y tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"estado de MikroTik","tooltip":"Un registro sobre el propio router o switch: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) y cualquier otro sensor que tenga."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"cifras de Solax",
 "Solax inverter":"inversor Solax",
 "from {time}":"de {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"leer las cifras de tu inversor Solax desde SolaxCloud: generación solar, carga de batería, importación y exportación"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"leer las cifras de tu inversor Solax desde SolaxCloud: generación solar, carga de batería, importación y exportación",
+"Powerwall":"Powerwall",
+"Powerwall figures":"cifras de Powerwall",
+"battery at {pct}%":"batería al {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"poner la reserva de respaldo de la Powerwall al {n}% (ahora {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"leer las cifras de tu Powerwall: carga de la batería, solar, importación y exportación de red, y la reserva que guarda",
+"set your Powerwall's backup reserve (asking you each time)":"cambiar la reserva de respaldo de tu Powerwall (preguntándote cada vez)"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
@@ -2087,6 +2096,16 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud rechazó el token o el número de registro: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"No se puede llegar a SolaxCloud en {url} ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud alcanzado: {status}, cifras de {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"cifras de Powerwall",
+"battery at {pct}%":"batería al {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"poner la reserva de respaldo de la Powerwall al {n}% (ahora {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall necesita POWERWALL_URL y POWERWALL_PASSWORD {where_keys}: la dirección de la pasarela (como https://192.168.1.50) y la contraseña de cliente (los últimos cinco caracteres de la del código QR, salvo que la cambiaras).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought solo lee de la Powerwall, así que no envía {what}.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"La pasarela Powerwall rechazó POWERWALL_PASSWORD: comprueba la contraseña de cliente (los últimos cinco caracteres de la del código QR).",
+"The Powerwall gateway's login gave no token.":"El inicio de sesión de la pasarela Powerwall no dio ningún token.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"batería al {pct}%, reserva {reserve}%, red {grid}"
 }
 };

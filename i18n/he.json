@@ -598,6 +598,14 @@
    "message0": "נתוני Solax",
    "tooltip": "רשומה עם נתוני אינוורטר ה-Solax שלך, כפי שהיו לאחרונה ב-SolaxCloud (מתעדכנים בערך כל חמש דקות): ac_power_w (כמה הוא מייצר עכשיו), yield_today_kwh ו-yield_total_kwh (ייצור סולארי), feedin_power_w ו-feedin_energy_kwh (לרשת), import_energy_kwh (מהרשת), battery_soc_pct, status ו-upload_time. הוא רק קורא: שום דבר לא משתנה באינוורטר. צריך SOLAX_TOKEN_ID ו-SOLAX_SN ב-second-thought.ini. בדף זה נעשה שימוש באינוורטר לדוגמה."
   },
+  "rb_powerwall_now": {
+   "message0": "נתוני Powerwall",
+   "tooltip": "רשומה עם נתוני ה-Tesla Powerwall שלך: battery_soc_pct (הטעינה), solar_power_w (מייצר עכשיו), battery_power_w (חיובי = טוען), grid_power_w (חיובי = מייבא), load_power_w (הבית), reserve_pct (רזרבת הגיבוי שהוא שומר), mode (self_consumption, backup, ...) ו-grid (מחובר, או מבודד בהפסקת חשמל). הוא רק קורא. צריך POWERWALL_URL ו-POWERWALL_PASSWORD ב-second-thought.ini. בדף זה נעשה שימוש ב-Powerwall לדוגמה."
+  },
+  "rb_powerwall_reserve": {
+   "message0": "קבע את רזרבת הגיבוי של ה-Powerwall ל-%1 %",
+   "tooltip": "מעלה או מוריד את רזרבת הגיבוי: כמה סוללה הבית שומר להפסקת חשמל. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, ובלי מישהו שיגיד כן הוא לא רץ. צריך POWERWALL_URL ו-POWERWALL_PASSWORD ב-second-thought.ini. בדף זה שום דבר לא משתנה באמת."
+  },
   "rb_mikrotik_ports": {
    "message0": "פורטים של MikroTik",
    "tooltip": "רשימת רשומות, אחת לכל פורט בנתב או במתג ה-MikroTik שלכם: port, running, speed (כמו 10Gbps), errors, drops, link_downs ו-comment. שגיאות ונפילות נספרות מההפעלה האחרונה. הוא רק קורא: שום דבר במתג לא משתנה. בעמוד הזה משמש מתג לדוגמה."
@@ -825,6 +833,7 @@
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
   "Solax": "Solax",
+  "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1676,7 +1685,13 @@
   "Solax figures": "נתוני Solax",
   "Solax inverter": "אינוורטר Solax",
   "from {time}": "מ-{time}",
-  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "לקרוא את נתוני אינוורטר ה-Solax שלך מ-SolaxCloud: ייצור סולארי, טעינת סוללה, ייבוא וייצוא"
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "לקרוא את נתוני אינוורטר ה-Solax שלך מ-SolaxCloud: ייצור סולארי, טעינת סוללה, ייבוא וייצוא",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "נתוני Powerwall",
+  "battery at {pct}%": "סוללה ב-{pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "לקבוע את רזרבת הגיבוי של ה-Powerwall ל-{n}% (כעת {old}%)",
+  "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "לקרוא את נתוני ה-Powerwall שלך: טעינת סוללה, סולארי, ייבוא וייצוא מהרשת, והרזרבה שהוא שומר",
+  "set your Powerwall's backup reserve (asking you each time)": "לשנות את רזרבת הגיבוי של ה-Powerwall שלך (שואל אותך בכל פעם)"
  },
  "examples": {
   "review": {
@@ -3320,6 +3335,16 @@
   "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud דחה את הטוקן או את מספר הרישום: {x}.",
   "Couldn't reach SolaxCloud at {url} ({x}).": "לא ניתן להגיע ל-SolaxCloud ב-{url} ({x}).",
   "reached SolaxCloud: {status}, figures from {time}": "SolaxCloud הושג: {status}, נתונים מ-{time}",
-  "Solax": "Solax"
+  "Solax": "Solax",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "נתוני Powerwall",
+  "battery at {pct}%": "סוללה ב-{pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "לקבוע את רזרבת הגיבוי של ה-Powerwall ל-{n}% (כעת {old}%)",
+  "Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).": "Powerwall צריך POWERWALL_URL ו-POWERWALL_PASSWORD {where_keys}: כתובת השער (כמו https://192.168.1.50) וסיסמת הלקוח (חמשת התווים האחרונים שעל מדבקת ה-QR, אלא אם שינית אותה).",
+  "Powerwall: {why}.": "Powerwall: {why}.",
+  "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought רק קורא מה-Powerwall, ולכן אינו שולח {what}.",
+  "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "שער ה-Powerwall דחה את POWERWALL_PASSWORD: בדוק את סיסמת הלקוח (חמשת התווים האחרונים שעל מדבקת ה-QR).",
+  "The Powerwall gateway's login gave no token.": "הכניסה לשער ה-Powerwall לא נתנה אסימון.",
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "סוללה ב-{pct}%, רזרבה {reserve}%, רשת {grid}"
  }
 }

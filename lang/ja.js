@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"Coinbase に注文：%3 を %2 %1","tooltip":"本物の成行注文を出します（「Coinbase の注文を試算」と同じ指定）。まず試算し、ほかに何も確認しないときでも、手数料と合計を示して必ずあなたに確認します。「はい」と言う人がいなければ実行しません。Trade 権限のあるキーが必要です。このページでは何も売買しません。"},
 "rb_coinbase_cancel":{"message0":"Coinbase の注文 %1 を取り消す","tooltip":"未約定の注文の一つを id で取り消します（「Coinbase の未約定の注文」から）。必ず先に確認し、誰もいなければ実行しません。"},
 "rb_solax_now":{"message0":"Solax の数値","tooltip":"Solax インバーターの数値のレコード(SolaxCloud が最後に持っていたもの。約5分ごとに更新):ac_power_w(現在の発電量)、yield_today_kwh と yield_total_kwh(発電した太陽光)、feedin_power_w と feedin_energy_kwh(系統へ)、import_energy_kwh(系統から)、battery_soc_pct、status、upload_time。読み取り専用です。second-thought.ini の SOLAX_TOKEN_ID と SOLAX_SN が必要です。このページではサンプルのインバーターを使用します。"},
+"rb_powerwall_now":{"message0":"Powerwall の数値","tooltip":"Tesla Powerwall の数値のレコード:battery_soc_pct(充電率)、solar_power_w(現在の発電)、battery_power_w(正なら充電中)、grid_power_w(正なら買電)、load_power_w(家)、reserve_pct(確保するバックアップ予約)、mode(self_consumption、backup など)、grid(接続中、または停電時に独立)。読み取り専用です。second-thought.ini の POWERWALL_URL と POWERWALL_PASSWORD が必要です。このページではサンプルの Powerwall を使用します。"},
+"rb_powerwall_reserve":{"message0":"Powerwall のバックアップ予約を %1 % に設定","tooltip":"バックアップ予約(停電のために家が残すバッテリー量)を上げ下げします。必ず最初に確認し、誰も「はい」と言えない環境では実行されません。second-thought.ini の POWERWALL_URL と POWERWALL_PASSWORD が必要です。このページでは実際には何も変更されません。"},
 "rb_mikrotik_ports":{"message0":"MikroTik のポート","tooltip":"記録のリストで、MikroTik のルーターやスイッチのポートごとに一つ：port、running、speed（たとえば 10Gbps）、errors、drops、link_downs、comment。エラーとドロップは最後の起動からの数です。読むだけで、スイッチの設定は何も変わりません。このページではサンプルのスイッチを使います。"},
 "rb_mikrotik_sfp":{"message0":"MikroTik の SFP モジュール","tooltip":"記録のリストで、差してある SFP モジュールごとに一つ：port、module、temperature（°C）、rx_power と tx_power（dBm）。"},
 "rb_mikrotik_health":{"message0":"MikroTik の状態","tooltip":"ルーターやスイッチそのものについての記録：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C）、ほかにあるセンサーすべて。"},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"Solax の数値",
 "Solax inverter":"Solax インバーター",
 "from {time}":"{time} 時点",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud から Solax インバーターの数値を読む:太陽光発電、バッテリー充電、買電と売電"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud から Solax インバーターの数値を読む:太陽光発電、バッテリー充電、買電と売電",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall の数値",
+"battery at {pct}%":"バッテリー残量 {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall のバックアップ予約を {n}% に設定(現在 {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"Powerwall の数値を読む:バッテリー残量、太陽光、買電と売電、確保される予約",
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall のバックアップ予約を変更する(毎回確認します)"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2087,6 +2096,16 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud がトークンまたは登録番号を拒否しました:{x}。",
 "Couldn't reach SolaxCloud at {url} ({x}).":"{url} の SolaxCloud に接続できません({x})。",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud に到達:{status}、{time} 時点の数値",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall の数値",
+"battery at {pct}%":"バッテリー残量 {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall のバックアップ予約を {n}% に設定(現在 {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall には POWERWALL_URL と POWERWALL_PASSWORD が必要です {where_keys}:ゲートウェイのアドレス(例: https://192.168.1.50)とカスタマーパスワード(QRシールの最後の5文字。変更している場合はそのパスワード)。",
+"Powerwall: {why}.":"Powerwall: {why}。",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought は Powerwall から読み取るだけなので、{what} は送信しません。",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall ゲートウェイが POWERWALL_PASSWORD を拒否しました:カスタマーパスワード(QRシールの最後の5文字)を確認してください。",
+"The Powerwall gateway's login gave no token.":"Powerwall ゲートウェイへのログインがトークンを返しませんでした。",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"バッテリー {pct}%、予約 {reserve}%、系統 {grid}"
 }
 };

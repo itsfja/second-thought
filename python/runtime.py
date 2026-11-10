@@ -87,7 +87,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -151,7 +151,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD")
 
 
 def _load_keychain():
@@ -1128,6 +1128,10 @@ SAFETY = {
     "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
     "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
+    # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
+    # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
+    "powerwall_free": [["GET", r"^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"]],
+    "powerwall_asks": [["POST", r"^/api/operation$"]],
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
@@ -1237,6 +1241,14 @@ def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return not any(m == method and re.match(p, path) for m, p in SAFETY["coinbase_free"])
+
+
+def powerwall_allowed(method, path, approved=False):
+    """True for one of the few Tesla gateway calls the runtime makes (#362): the reads in powerwall_free, and the
+    backup reserve change in powerwall_asks, only after the person's yes."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_free"]) \
+        or (approved and any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_asks"]))
 
 
 def mikrotik_allowed(method, path):
@@ -1700,6 +1712,7 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
+    ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
@@ -1708,6 +1721,7 @@ CAPABILITIES = [
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
+    ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -4433,6 +4447,92 @@ class Connections:
                  tr("from {time}", time=out.get("upload_time") or "?"))
         return out
 
+    # Powerwall (#362)
+    # Tesla's local gateway API (the one the gateway's web portal uses), for a Powerwall, Powerwall 2 or Powerwall+ on
+    # your network: POWERWALL_URL (the gateway's address, like https://192.168.1.50) and POWERWALL_PASSWORD, the
+    # customer password (the last five characters of the one on the gateway's QR sticker, unless you changed it).
+    # Login happens once and the token it gives is kept. Only the reads in SAFETY["powerwall_free"] are ever sent, so
+    # no firmware, storm watch or operation mode is ever touched; setting the backup reserve (powerwall_asks) always
+    # asks, live, and never runs with nobody there to say yes: it changes how long the house lasts in a power cut.
+    # The Powerwall 3 has no local web API: use Home Assistant or Teslemetry for one of those. POWERWALL_CERT_SHA256
+    # pins the gateway's own certificate, as for MikroTik.
+    POWERWALL_GRID = {"SystemGridConnected": "connected", "SystemConnectedToGrid": "connected",
+                      "SystemIslandedActive": "islanded (power cut)", "SystemTransitionToIsland": "transitioning"}
+
+    async def _powerwall(self, method, path, body=None, approved=False, again=True):
+        """One call to the gateway, logged in as the customer. Only the calls in SAFETY are ever made."""
+        if not powerwall_allowed(method, path, approved):
+            raise RunError(tr("Second Thought only reads from the Powerwall, so it doesn't send {what}.", what=f"{method} {path}"))
+        base = os.environ.get("POWERWALL_URL", "").strip().rstrip("/")
+        password = os.environ.get("POWERWALL_PASSWORD", "")
+        if not base or not password:
+            raise RunError(tr("Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).", where_keys=WHERE_KEYS))
+        if not self.__dict__.get("_powerwall_token"):
+            lock = self.__dict__.setdefault("_powerwall_lock", asyncio.Lock())
+            async with lock:  # four reads at once, one login
+                if not self.__dict__.get("_powerwall_token"):
+                    status, raw = await self._pinned("Powerwall gateway", base, "POWERWALL_CERT_SHA256", "POST", "/api/login/Basic", {},
+                                                    {"username": "customer", "password": password,
+                                                     "email": os.environ.get("POWERWALL_EMAIL", "").strip() or "customer@example.com",
+                                                     "force_sm_off": False})
+                    if status == 401:
+                        raise RunError(tr("The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker)."))
+                    if status >= 400:
+                        raise RunError(tr("Powerwall: {why}.", why=self._said(status, raw)))
+                    try:
+                        self.__dict__["_powerwall_token"] = to_str(json.loads(raw).get("token"))
+                    except (ValueError, AttributeError):
+                        self.__dict__["_powerwall_token"] = ""
+                    if not self.__dict__["_powerwall_token"]:
+                        raise RunError(tr("The Powerwall gateway's login gave no token."))
+        headers = {"Authorization": "Bearer " + self.__dict__["_powerwall_token"]}
+        status, raw = await self._pinned("Powerwall gateway", base, "POWERWALL_CERT_SHA256", method, path, headers, body)
+        if status == 401 and again:  # the token has expired: log in again, once
+            self.__dict__["_powerwall_token"] = ""
+            return await self._powerwall(method, path, body, approved, again=False)
+        if status >= 400:
+            raise RunError(tr("Powerwall: {why}.", why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    @staticmethod
+    def _pw_num(v):
+        m = re.search(r"-?\d+(?:\.\d+)?", to_str(v))
+        return _clean_num(float(m.group())) if m else ""
+
+    async def powerwall_now(self):
+        """The Powerwall's figures: battery_soc_pct (its charge), solar_power_w (making now), battery_power_w (positive
+        is charging), grid_power_w (positive is importing), load_power_w (the house), reserve_pct (the backup reserve
+        it keeps), mode (self_consumption, backup, ...), grid (connected, or islanded in a power cut)."""
+        meters, soe, grid, op = (await asyncio.gather(
+            self._powerwall("GET", "/api/meters/aggregates"), self._powerwall("GET", "/api/system_status/soe"),
+            self._powerwall("GET", "/api/system_status/grid_status"), self._powerwall("GET", "/api/operation")))
+        meter = lambda name: self._pw_num((meters.get(name) or {}).get("instant_power")) if isinstance(meters, dict) else ""  # noqa: E731
+        out = {"battery_soc_pct": self._pw_num(soe.get("percentage") if isinstance(soe, dict) else ""),
+               "solar_power_w": meter("solar"), "battery_power_w": meter("battery"),
+               "grid_power_w": meter("site"), "load_power_w": meter("load"),
+               "reserve_pct": self._pw_num(op.get("backup_reserve_percent") if isinstance(op, dict) else ""),
+               "mode": to_str((op or {}).get("real_mode") or (op or {}).get("mode") or "") if isinstance(op, dict) else "",
+               "grid": self.POWERWALL_GRID.get(to_str(grid.get("grid_status") if isinstance(grid, dict) else ""),
+                                                to_str(grid.get("grid_status") if isinstance(grid, dict) else ""))}
+        self.log(tr("Powerwall figures"), "\n".join(f"{k}: {v}" for k, v in out.items() if v != ""),
+                 tr("battery at {pct}%", pct=out["battery_soc_pct"]))
+        return out
+
+    async def powerwall_reserve(self, percent):
+        """Sets the backup reserve, after asking: it changes how much of the battery the house keeps for a power cut.
+        Always asks, live, and never runs with nobody there to say yes."""
+        n = max(0, min(100, int(round(num(percent) or 0))))
+        op = await self._powerwall("GET", "/api/operation")
+        what = tr("set the Powerwall backup reserve to {n}% (now {old}%)", n=n, old=self._pw_num(op.get("backup_reserve_percent")))
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._powerwall("POST", "/api/operation", {"backup_reserve_percent": n}, approved=True)
+        self.log(tr("Powerwall"), what, tr("done"))
+        return True
+
     # MQTT
     def _mqtt_new(self, on_message=None, topics=()):
         """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
@@ -6677,6 +6777,17 @@ class Doctor:
                 got = await self.solax_now()  # one call: the figures are cached for five minutes after it
                 return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
             out.append(("Solax", solax))
+        if has("powerwall_read", "powerwall_control"):
+            async def powerwall():
+                base = os.environ.get("POWERWALL_URL", "").strip()
+                if base and not base.lower().startswith("http://") and not os.environ.get("POWERWALL_CERT_SHA256", "").strip():
+                    seen = await asyncio.to_thread(self._mt_fingerprint, base)
+                    if seen:
+                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="Powerwall gateway", setting="POWERWALL_CERT_SHA256", seen=seen))
+                got = await self.powerwall_now()
+                return tr("battery at {pct}%, reserve {reserve}%, grid {grid}", pct=got.get("battery_soc_pct") or "?",
+                          reserve=got.get("reserve_pct") or "?", grid=got.get("grid") or "?")
+            out.append(("Powerwall", powerwall))
         if has("unifi_read"):
             async def unifi():
                 base = os.environ.get("UNIFI_URL", "").strip()
@@ -6992,7 +7103,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Solax": "SOLAX_TOKEN_ID"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 

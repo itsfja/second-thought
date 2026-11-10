@@ -2807,5 +2807,32 @@
    "inverterStatus": "102",
    "uploadTime": "2026-11-11 14:05:00"
   }
+ },
+ "powerwall": {
+  "note": "A sample Tesla Powerwall for the page and the tests (#362), shaped the way the gateway's local API answers: evening, battery three-quarters full, exporting a little to the grid. The reads are the four the runtime makes; operation shows the reserve the program may raise after asking.",
+  "meters_aggregates": {
+   "site": {
+    "instant_power": "-450"
+   },
+   "battery": {
+    "instant_power": "1200"
+   },
+   "load": {
+    "instant_power": "800"
+   },
+   "solar": {
+    "instant_power": "2450"
+   }
+  },
+  "system_status_soe": {
+   "percentage": "76.5"
+  },
+  "system_status_grid_status": {
+   "grid_status": "SystemGridConnected"
+  },
+  "operation": {
+   "real_mode": "self_consumption",
+   "backup_reserve_percent": "20"
+  }
  }
 }

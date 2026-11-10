@@ -29,6 +29,7 @@ Made by tools/sync.py from i18n/egy.json: edit that, not this.
 - Coinbase: Coinbase
 - MikroTik: MikroTik
 - Solax: Solax
+- Powerwall: Powerwall
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker

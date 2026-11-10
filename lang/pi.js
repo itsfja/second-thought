@@ -157,6 +157,8 @@
 "rb_coinbase_order":{"message0":"Coinbase-आणं देहि: %3 स्स %2 %1","tooltip":"सच्चं आपणाणं देति, 'Coinbase-आणं पुब्बे पस्स' विय। पठमं पुब्बे पस्सति, ततो सदा तं पुच्छति, सुङ्केन सब्बेन च सह, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। Trade-अनुञ्ञाय सह कुञ्चिकं इच्छति। इमस्मिं पिट्ठे किञ्चि न किणीयति न विक्किणीयति।"},
 "rb_coinbase_cancel":{"message0":"Coinbase-आणं %1 निवत्तेहि","tooltip":"तव विवटाणासु एकं तस्सा id अनुसारेन निवत्तेति ('Coinbase-विवटाणा' तो)। सदा पठमं तं पुच्छति, कोचि नत्थि चे न पवत्तति।"},
 "rb_solax_now":{"message0":"Solax-saṅkhya","tooltip":"Solax-inivattakassa saṅkhyānaṃ ekaṃ lekhyaṃ, yāni SolaxCloud-issa pacchimāni ahesuṃ (pañcannaṃ vā pāṇānaṃ kālena navāni bhavanti): ac_power_w (idaani kiṃ janeti), yield_today_kkh yield_total_kkh ca (sūrya-udaya), feedin_power_w feedin_energy_kwh ca (netta), import_energy_kwh (nettato), battery_soc_pct, status upload_time ca. Kevaḷaṃ paṭhati: inivattake kiñci na parivattati. SOLAX_TOKEN_ID SOLAX_SN ca second-thought.ini-smiṃ icchati. Imasmiṃ pane inivattaka-saṃpayogaṃ yujjhati."},
+"rb_powerwall_now":{"message0":"Powerwall-saṅkhya","tooltip":"Powerwall-ssa saṅkhyānaṃ ekaṃ lekhyaṃ: battery_soc_pct (pūraṇaṃ), solar_power_w (idaani janeti), battery_power_w (yadā puññaṃ, tadā pūreti), grid_power_w (yadā puññaṃ, tadā āyati), load_power_w (aggaḷaṃ), reserve_pct (paṭikkhayaṃ), mode (self_consumption, backup, ...) ca grid (yuttāya, vā visaṃyāti). Kevaḷaṃ paṭhati. POWERWALL_URL POWERWALL_PASSWORD ca second-thought.ini-smiṃ icchati. Imasmiṃ pane Powerwall-saṃpayogo yujjhati."},
+"rb_powerwall_reserve":{"message0":"Powerwall-ssa parikkhayaṃ %1 % kātuṃ","tooltip":"Parikkhayaṃ ukkampeti nīhāreti vā: kati battariyaṃ aggaḷo rakkhati satti-vicchedanāya. Ekeke vāre tvaṃ paṭhamaṃ pucchatī, aññadapi appucchanto; 'evaṃ' ti vattu kenaci vinā na pavattati. POWERWALL_URL POWERWALL_PASSWORD ca second-thought.ini-smiṃ icchati. Imasmiṃ pane kiñci saccato na parivattati."},
 "rb_mikrotik_ports":{"message0":"MikroTik-द्वारानि","tooltip":"अभिलेखानं सूचि, तव MikroTik-मग्गदेसकस्स परिवत्तकस्स वा पतिद्वारं एको: port, running, speed (यथा 10Gbps), errors, drops, link_downs, comment च। दोसा पाता च पच्छिमारम्भतो गणीयन्ति। केवलं पठति: परिवत्तके किञ्चि न परिवत्तति। इमस्मिं पिट्ठे निदस्सन-परिवत्तकं गण्हाति।"},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP-अंसा","tooltip":"अभिलेखानं सूचि, पतिनिवेसित-SFP-अंसं एको: port, module, temperature (°C), rx_power, tx_power (dBm) च।"},
 "rb_mikrotik_health":{"message0":"MikroTik-आरोग्यं","tooltip":"मग्गदेसकस्स अत्तनो अभिलेखो: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), तस्स अञ्ञे वेदका च।"},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"Solax-saṅkhya",
 "Solax inverter":"Solax-inivattaka",
 "from {time}":"{time} to",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud-to Solax-inivattakassa saṅkhyāni paṭhituṃ: sūrya-udaya, battariya-pūraṇa, āyana-vijjagga"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud-to Solax-inivattakassa saṅkhyāni paṭhituṃ: sūrya-udaya, battariya-pūraṇa, āyana-vijjagga",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall-saṅkhya",
+"battery at {pct}%":"battariya {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-ssa parikkhayaṃ {n}% kātuṃ (idaani {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"Powerwall-ssa saṅkhyāni paṭhituṃ: battariya-pūraṇa, sūra, āyana-vijja, paṭikkhaya ca",
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall-ssa parikkhayaṃ parivattetuṃ (tvaṃ pucchatī ekeke vāre)"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2087,7 +2096,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud tukaṃ paṭisaññatti-saṅkhyā vā paṭikkhipi: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud {url} na pāpuṇātabbe ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud pāpuṇito: {status}, saṅkhyā {time}-to",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall-saṅkhya",
+"battery at {pct}%":"battariya {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-ssa parikkhayaṃ {n}% kātuṃ (idaani {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall-ssa SOLAX_TOKEN_ID viya POWERWALL_URL POWERWALL_PASSWORD ca icchati {where_keys}: dvārassa ṭhānaṃ (yathā https://192.168.1.50) ca gahaṭṭhassa rakkhaṃ (QR-lipi-ya pacchimā pañca akkhara, sace tvaṃ na parivattesi).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought kevaḷaṃ Powerwall-to paṭhati, tasmā {what} na pāheti.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall-dvāraṃ POWERWALL_PASSWORD paṭikkhipi: gahaṭṭhassa rakkhaṃ passa (QR-lipi-ya pacchimā pañca akkhara).",
+"The Powerwall gateway's login gave no token.":"Powerwall-dvārassa pavesana tukaṃ nādāsi.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"battariya {pct}%, parikkhaya {reserve}%, netta {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

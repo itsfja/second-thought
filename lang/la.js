@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"mandatum Coinbase da: %1 %2 %3","tooltip":"Verum mandatum fori dat, ut «mandatum Coinbase praevide». Prius praevidet, deinde te semper rogat, cum mercede et summa, etiam cum nihil aliud rogat; nemine adstante qui «ita» dicat, non fit. Clavem cum permissione Trade eget. In hac pagina nihil emitur neque venditur."},
 "rb_coinbase_cancel":{"message0":"mandatum Coinbase %1 revoca","tooltip":"Unum ex mandatis tuis apertis revocat, per eius id (ex «mandatis apertis Coinbase»). Te semper prius rogat, nec nemine adstante fit."},
 "rb_solax_now":{"message0":"Solax numeri","tooltip":"Actus cum numeris tui Solax commutatoris, quales SolaxCloud novissime habuit (per quinque fere minuta renovantur): ac_power_w (quod nunc gignit), yield_today_kwh et yield_total_kwh (solar generata), feedin_power_w et feedin_energy_kwh (in reticulum), import_energy_kwh (e reticulo), battery_soc_pct, status et upload_time. tantum legit: nihil in commutatore mutatur. Requirit SOLAX_TOKEN_ID et SOLAX_SN in second-thought.ini. In hac pagina exemplar commutatoris utitur."},
+"rb_powerwall_now":{"message0":"Powerwall numeri","tooltip":"Actus cum numeris tui Powerwall: battery_soc_pct (eius onus), solar_power_w (nunc gignit), battery_power_w (positivum est onerari), grid_power_w (positivum est inportari), load_power_w (domus), reserve_pct (reservatio quam servat), mode (self_consumption, backup, ...) et grid (coniunctum, aut insulatum in interitu reticuli). tantum legit. Requirit POWERWALL_URL et POWERWALL_PASSWORD in second-thought.ini. In hac pagina exemplar utitur."},
+"rb_powerwall_reserve":{"message0":"reservationem auxiliarem Powerwall ponere ad %1 %","tooltip":"Auxiliarem reservationem auget vel minuit: quantum accumulatori domus servat in interitu reticuli. Te prius semper rogat, etiam cum nihil aliud rogat, et sine aliquo qui dicat 'ita' non currit. Requirit POWERWALL_URL et POWERWALL_PASSWORD in second-thought.ini. In hac pagina nihil vere mutatur."},
 "rb_mikrotik_ports":{"message0":"portae MikroTik","tooltip":"Index tabularum, una pro quaque porta commutatoris tui MikroTik: port, running, speed (ut 10Gbps), errors, drops, link_downs et comment. Errores et amissa ab ultimo initio numerantur. Tantum legit: nihil in commutatore mutatur. In hac pagina commutatore exempli utitur."},
 "rb_mikrotik_sfp":{"message0":"moduli SFP MikroTik","tooltip":"Index tabularum, una pro quoque modulo SFP inserto: port, module, temperature (°C), rx_power et tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"valetudo MikroTik","tooltip":"Tabula de ipso commutatore: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), et quivis alius sensor quem habet."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"Solax numeri",
 "Solax inverter":"Solax commutator",
 "from {time}":"ex {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"numeros tui Solax commutatoris ex SolaxCloud legere: generatio solaris, onus accumulatori, inportatio et exportatio"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"numeros tui Solax commutatoris ex SolaxCloud legere: generatio solaris, onus accumulatori, inportatio et exportatio",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall numeri",
+"battery at {pct}%":"accumulatorium ad {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"reservationem auxiliarem Powerwall ponere ad {n}% (nunc {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"numeros tui Powerwall legere: onus accumulatori, solaris, inportatio et exportatio reticuli, et reservatio quam servat",
+"set your Powerwall's backup reserve (asking you each time)":"reservationem auxiliarem tui Powerwall mutare (te rogando singulis vicibus)"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2087,7 +2096,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud tesseram aut numerum registrationis recusavit: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud ad {url} attingi non potest ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud adsecutus: {status}, numeri ex {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall numeri",
+"battery at {pct}%":"accumulatorium ad {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"reservationem auxiliarem Powerwall ponere ad {n}% (nunc {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall POWERWALL_URL et POWERWALL_PASSWORD requirit {where_keys}: porta aditus (ut https://192.168.1.50) et tesseracta clientis (postremi quinque notae eius ex titulo QR, nisi mutavisti).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought tantum ex Powerwall legit, itaque {what} non mittit.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Porta Powerwall tesseractam POWERWALL_PASSWORD recusavit: inspice tesseram clientis (postremi quinque notae ex titulo QR).",
+"The Powerwall gateway's login gave no token.":"Aditus portae Powerwall nullum tesseram dedit.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"accumulatorium ad {pct}%, reservatio {reserve}%, reticulum {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

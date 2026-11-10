@@ -224,6 +224,9 @@ def python_tests(codes, share=None):
     import fake_solax  # and the Solax ones a stand-in SolaxCloud (#361)
     solax_all = fake_solax.FakeSolax()
     env.update(SOLAX_API_URL=solax_all.start(), SOLAX_TOKEN_ID=fake_solax.TOKEN, SOLAX_SN=fake_solax.SN)
+    import fake_powerwall  # and the Powerwall ones a stand-in gateway (#362)
+    powerwall_all = fake_powerwall.FakePowerwall()
+    env.update(POWERWALL_URL=powerwall_all.start(), POWERWALL_PASSWORD=fake_powerwall.PASSWORD)
     env.update(MQTT_HOST="127.0.0.1", MQTT_PORT=str(mqtt_port), MQTT_USERNAME=fake_mqtt.USER, MQTT_PASSWORD=fake_mqtt.PASSWORD)
     env.update(DISCORD_API_URL=svc_url + "/discord", DISCORD_BOT_TOKEN=fake_services.DISCORD_TOKEN, DISCORD_CHANNEL_ID=fake_services.DISCORD_CHANNEL,
                SLACK_API_URL=svc_url + "/slack", SLACK_BOT_TOKEN=fake_services.SLACK_TOKEN, SLACK_CHANNEL_ID=fake_services.SLACK_CHANNEL)

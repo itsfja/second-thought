@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"colocar ordem da Coinbase: %1 %2 de %3","tooltip":"Coloca uma ordem a mercado real, como «pré-visualizar ordem da Coinbase». Primeiro pré-visualiza-a e depois pergunta-lhe sempre, com a comissão e o total, mesmo quando nada mais pergunta; sem ninguém para dizer que sim, não acontece. Precisa de uma chave com a permissão Trade. Nesta página nada é comprado nem vendido."},
 "rb_coinbase_cancel":{"message0":"cancelar ordem da Coinbase %1","tooltip":"Cancela uma das suas ordens abertas, pelo id (de «ordens abertas da Coinbase»). Pergunta-lhe sempre antes, e não acontece sem ninguém."},
 "rb_solax_now":{"message0":"números do Solax","tooltip":"Um registo com os números do teu inversor Solax, tal como o SolaxCloud os teve da última vez (atualizam-se cerca de cinco em cinco minutos): ac_power_w (o que está a produzir agora), yield_today_kwh e yield_total_kwh (solar gerado), feedin_power_w e feedin_energy_kwh (para a rede), import_energy_kwh (da rede), battery_soc_pct, status e upload_time. Só lê: nada muda no inversor. Precisa de SOLAX_TOKEN_ID e SOLAX_SN em second-thought.ini. Nesta página usa um inversor de exemplo."},
+"rb_powerwall_now":{"message0":"números do Powerwall","tooltip":"Um registo com os números do teu Tesla Powerwall: battery_soc_pct (a carga), solar_power_w (a produzir agora), battery_power_w (positivo é a carregar), grid_power_w (positivo é a importar), load_power_w (a casa), reserve_pct (a reserva de backup que guarda), mode (self_consumption, backup, ...) e grid (ligada, ou isolada num corte de energia). Só lê. Precisa de POWERWALL_URL e POWERWALL_PASSWORD em second-thought.ini. Nesta página usa uma Powerwall de exemplo."},
+"rb_powerwall_reserve":{"message0":"pôr a reserva de backup do Powerwall em %1 %","tooltip":"Sobe ou desce a reserva de backup: quanta bateria a casa guarda para um corte. Pergunta-te sempre primeiro, mesmo quando mais nada pergunta, e sem ninguém para dizer sim não corre. Precisa de POWERWALL_URL e POWERWALL_PASSWORD em second-thought.ini. Nesta página nada muda a sério."},
 "rb_mikrotik_ports":{"message0":"portas do MikroTik","tooltip":"Uma lista de registos, um por cada porta do seu router ou switch MikroTik: port, running, speed (como 10Gbps), errors, drops, link_downs e comment. Erros e descartes contam desde o último arranque. Só lê: nada muda no switch. Nesta página usa um switch de exemplo."},
 "rb_mikrotik_sfp":{"message0":"módulos SFP do MikroTik","tooltip":"Uma lista de registos, um por cada módulo SFP ligado: port, module, temperature (°C), rx_power e tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"estado do MikroTik","tooltip":"Um registo sobre o próprio router ou switch: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) e qualquer outro sensor que tenha."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"números do Solax",
 "Solax inverter":"inversor Solax",
 "from {time}":"de {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"ler os números do teu inversor Solax no SolaxCloud: produção solar, carga da bateria, importação e exportação"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"ler os números do teu inversor Solax no SolaxCloud: produção solar, carga da bateria, importação e exportação",
+"Powerwall":"Powerwall",
+"Powerwall figures":"números do Powerwall",
+"battery at {pct}%":"bateria a {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"pôr a reserva de backup do Powerwall em {n}% (agora {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"ler os números do teu Powerwall: carga da bateria, solar, importação e exportação da rede, e a reserva que guarda",
+"set your Powerwall's backup reserve (asking you each time)":"mudar a reserva de backup do teu Powerwall (perguntando-te cada vez)"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -2087,6 +2096,16 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"O SolaxCloud recusou o token ou o número de registo: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"Não foi possível chegar ao SolaxCloud em {url} ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud alcançado: {status}, números de {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"números do Powerwall",
+"battery at {pct}%":"bateria a {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"pôr a reserva de backup do Powerwall em {n}% (agora {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"O Powerwall precisa de POWERWALL_URL e POWERWALL_PASSWORD {where_keys}: o endereço do gateway (como https://192.168.1.50) e a palavra-passe de cliente (os últimos cinco caracteres da do autocolante QR, salvo se a mudaste).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought só lê do Powerwall, portanto não envia {what}.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"O gateway do Powerwall recusou POWERWALL_PASSWORD: verifica a palavra-passe de cliente (os últimos cinco caracteres da do autocolante QR).",
+"The Powerwall gateway's login gave no token.":"O login do gateway do Powerwall não deu nenhum token.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"bateria a {pct}%, reserva {reserve}%, rede {grid}"
 }
 };

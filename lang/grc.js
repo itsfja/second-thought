@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"δὸς ἐντολὴν Coinbase· %1 %2 τοῦ %3","tooltip":"Δίδωσιν ἀληθινὴν ἐντολὴν ἀγορᾶς, ὡς τὸ «προΐδε ἐντολὴν Coinbase». Πρῶτον προορᾷ, ἔπειτα ἀεὶ ἐρωτᾷ σε, μετὰ τοῦ τέλους καὶ τοῦ συνόλου, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ· μηδενὸς παρόντος τοῦ «ναί» λέγοντος, οὐ γίνεται. Δεῖται κλειδὸς μετὰ τῆς ἐξουσίας Trade. Ἐν τῇδε τῇ σελίδι οὐδὲν ὠνεῖται οὐδὲ πωλεῖται."},
 "rb_coinbase_cancel":{"message0":"ἄνελε τὴν ἐντολὴν Coinbase %1","tooltip":"Ἀναιρεῖ μίαν τῶν ἀνεῳγμένων ἐντολῶν σου, τῷ id αὐτῆς (ἐκ τῶν «ἀνεῳγμένων ἐντολῶν Coinbase»). Ἀεὶ πρῶτον ἐρωτᾷ σε, καὶ μηδενὸς παρόντος οὐ γίνεται."},
 "rb_solax_now":{"message0":"τὰ τοῦ Solax ἀριθμήματα","tooltip":"Ἐγγραφή τις μετὰ τῶν τοῦ Solax ἀντιστρέφοντος ἀριθμημάτων, οἷα τὸ SolaxCloud νεώτατα εἶχεν (καθ' ἑκάστης πέντε μᾶλλον ἢ ἧτταρον ἀνακαινοῦται): ac_power_w (ὅτι νῦν ποιεῖ), yield_today_kwh καὶ yield_total_kwh (ἡλιακὴ παραγωγή), feedin_power_w καὶ feedin_energy_kwh (εἰς τὸ βρόχιον), import_energy_kwh (ἐκ τοῦ βροχίου), battery_soc_pct, status καὶ upload_time. Μόνον ἀναγιγνώσκει: οὐδὲν ἐν τῷ ἀντιστρέφοντι μεταβάλλεται. SOLAX_TOKEN_ID καὶ SOLAX_SN ἐν τῷ second-thought.ini δεῖται. Ἐν ταύτῃ τῇ σελίδι ἀντιστρέφων παράδειγμα χρῆται."},
+"rb_powerwall_now":{"message0":"τὰ τοῦ Powerwall ἀριθμήματα","tooltip":"Ἐγγραφή τις μετὰ τῶν τοῦ Tesla Powerwall ἀριθμημάτων: battery_soc_pct (ἡ φόρτισις), solar_power_w (ὅτι νῦν ποιεῖ), battery_power_w (θετικὸν σημαίνει φορτίζεται), grid_power_w (θετικὸν σημαίνει εἰσάγει), load_power_w (ἡ οἰκία), reserve_pct (ἡ φυλαττομένη ἀσφάλεια), mode (self_consumption, backup, ...) καὶ grid (συνδεδεμένον, ἢ νησιοῦν ἐν ἀποσβέσει). Μόνον ἀναγιγνώσκει. SOLAX_TOKEN_ID-καὶ POWERWALL_URL καὶ POWERWALL_PASSWORD ἐν τῷ second-thought.ini δεῖται. Ἐν ταύτῃ τῇ σελίδι παράδειγμα χρῆται."},
+"rb_powerwall_reserve":{"message0":"τὴν τοῦ Powerwall ἀσφάλειαν ἐπὶ %1 % θέσθαι","tooltip":"Τὴν ἀσφάλειαν αὔξει ἢ μειοῖ:πόσον τῆς μπαταρίας ἡ οἰκία φυλάττει εἰς ἀποσβέσιν. Ἑκάστοτε σε πρώτην ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ· ἄνευ τοῦ 'ναὶ' εἰπόντος οὐ τρέχει. POWERWALL_URL καὶ POWERWALL_PASSWORD ἐν τῷ second-thought.ini δεῖται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ὡς ἀληθῶς μεταβάλλεται."},
 "rb_mikrotik_ports":{"message0":"θύραι τοῦ MikroTik","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην θύραν τοῦ μεταγωγέως σου MikroTik· port, running, speed (οἷον 10Gbps), errors, drops, link_downs καὶ comment. Τὰ σφάλματα καὶ αἱ ἀπώλειαι ἀπὸ τῆς ἐσχάτης ἀρχῆς ἀριθμοῦνται. Μόνον ἀναγινώσκει· οὐδὲν μεταβάλλεται. Ἐν τῇδε τῇ σελίδι χρῆται μεταγωγεῖ ὑποδείγματος."},
 "rb_mikrotik_sfp":{"message0":"μονάδες SFP τοῦ MikroTik","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην μονάδα SFP ἐντεθειμένην· port, module, temperature (°C), rx_power καὶ tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"ὑγίεια τοῦ MikroTik","tooltip":"Ἀναγραφὴ περὶ αὐτοῦ τοῦ μεταγωγέως· board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), καὶ πᾶς ἄλλος αἰσθητὴρ ὃν ἔχει."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"τὰ τοῦ Solax ἀριθμήματα",
 "Solax inverter":"ὁ τοῦ Solax ἀντιστρέφων",
 "from {time}":"ἐκ {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"τὰ τοῦ Solax ἀντιστρέφοντος ἀριθμήματα ἐκ τοῦ SolaxCloud ἀναγιγνώσκειν: ἡλιακὴν παραγωγήν, φόρτισιν μπαταρίας, εἰσαγωγὴν καὶ ἐξαγωγήν"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"τὰ τοῦ Solax ἀντιστρέφοντος ἀριθμήματα ἐκ τοῦ SolaxCloud ἀναγιγνώσκειν: ἡλιακὴν παραγωγήν, φόρτισιν μπαταρίας, εἰσαγωγὴν καὶ ἐξαγωγήν",
+"Powerwall":"Powerwall",
+"Powerwall figures":"τὰ τοῦ Powerwall ἀριθμήματα",
+"battery at {pct}%":"μπαταρία ἐπὶ {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"τὴν τοῦ Powerwall ἀσφάλειαν ἐπὶ {n}% θέσθαι (νῦν {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"τὰ τοῦ Powerwall ἀριθμήματα ἀναγιγνώσκειν: φόρτισιν μπαταρίας, ἡλιακά, εἰσαγωγὴν καὶ ἐξαγωγὴν τοῦ βροχίου, καὶ τὴν φυλαττομένην ἀσφάλειαν",
+"set your Powerwall's backup reserve (asking you each time)":"τὴν τοῦ Powerwall ἀσφάλειαν μεταβάλλειν (ἐρωτῶν σε ἑκάστοτε)"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -2087,7 +2096,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"Τὸ SolaxCloud τὸ τεῖχος ἢ τὸν ἀριθμὸν ἐγγραφῆς ἀπεσπάσατο: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"Τὸ SolaxCloud ἐπὶ {url} οὐχ ἅπτεται ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"Τὸ SolaxCloud ἥφθη: {status}, ἀριθμήματα ἐκ {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"τὰ τοῦ Powerwall ἀριθμήματα",
+"battery at {pct}%":"μπαταρία ἐπὶ {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"τὴν τοῦ Powerwall ἀσφάλειαν ἐπὶ {n}% θέσθαι (νῦν {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Τῷ Powerwall POWERWALL_URL καὶ POWERWALL_PASSWORD δεῖται {where_keys}: ἡ τοῦ πυλῶνος διεύθυνσις (οἷον https://192.168.1.50) καὶ τὸ τοῦ πελάτου τεῖχος (τὰ ἔσχατα πέντε γράμματα τοῦ ἐκ τοῦ σήματος QR, ἐὰν μὴ μετέβαλες αὐτό).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Τὸ Second Thought μόνον ἐκ τοῦ Powerwall ἀναγιγνώσκει, οὐκ ἄρα {what} πέμπει.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Ὁ τοῦ Powerwall πυλὼν τὸ τεῖχος ἀπεσπάσατο: ἐπίσκεψαι τὸ τοῦ πελάτου τεῖχος (τὰ ἔσχατα πέντε γράμματα τοῦ ἐκ τοῦ σήματος QR).",
+"The Powerwall gateway's login gave no token.":"Ἡ εἴσοδος τοῦ πυλῶνος τεῖχος οὐκ ἔδωκεν.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"μπαταρία ἐπὶ {pct}%, ἀσφάλεια {reserve}%, βρόχιον {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",
