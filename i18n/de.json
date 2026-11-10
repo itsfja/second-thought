@@ -612,6 +612,26 @@
   "rb_unifi_devices": {
    "message0": "UniFi-Geräte",
    "tooltip": "Eine Liste von Datensätzen, einer für jedes UniFi-Gerät (Gateway, Switches, Access Points): name, model, mac, ip, state, firmware, update (ob neuere Firmware wartet) und, wenn es online ist, uptime (Stunden), cpu und memory (%)."
+  },
+  "rb_proxmox_nodes": {
+   "message0": "Proxmox-Knoten",
+   "tooltip": "Eine Liste von Datensätzen, einer für jeden Knoten Ihres Proxmox-Clusters: node, status, cpu und memory (%), uptime (Stunden). Auf dieser Seite nutzt er einen Beispiel-Cluster."
+  },
+  "rb_proxmox_guests": {
+   "message0": "Proxmox-Gäste",
+   "tooltip": "Eine Liste von Datensätzen, einer für jede VM und jeden Container: vmid, name, node, type (vm oder container), status, cpu und memory (%), uptime (Stunden) und bei einem gestoppten onboot (ob er mit dem Knoten starten sollte)."
+  },
+  "rb_proxmox_storage": {
+   "message0": "Proxmox-Speicher",
+   "tooltip": "Eine Liste von Datensätzen, einer für jeden Speicher auf jedem Knoten: storage, node, used (%), used_gb, size_gb und status."
+  },
+  "rb_proxmox_tasks": {
+   "message0": "Proxmox-Aufgaben der letzten %1 Stunden",
+   "tooltip": "Eine Liste von Datensätzen, die neueste zuerst: started, node, type (vzdump ist eine Sicherung), id (der Gast), status (OK oder was schiefging) und user."
+  },
+  "rb_proxmox_power": {
+   "message0": "Proxmox-Gast %2 %1",
+   "tooltip": "Startet, fährt herunter oder startet eine VM oder einen Container neu, anhand der VMID. Er fragt Sie immer zuerst, auch wenn sonst nichts fragt, und ist niemand da, der Ja sagt, läuft er nicht. Gäste in PROXMOX_PROTECT werden nie angefasst. Braucht ein Token mit VM.PowerMgmt. Auf dieser Seite startet oder stoppt nichts wirklich."
   }
  },
  "options": {
@@ -740,6 +760,11 @@
   "rb_coinbase_order.SIDE": {
    "buy": "kaufen",
    "sell": "verkaufen"
+  },
+  "rb_proxmox_power.ACTION": {
+   "start": "starten",
+   "shutdown": "herunterfahren",
+   "reboot": "neu starten"
   }
  },
  "categories": {
@@ -769,7 +794,8 @@
   "Output": "Ausgabe",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
-  "UniFi": "UniFi"
+  "UniFi": "UniFi",
+  "Proxmox": "Proxmox"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Werkzeuge für den Agenten: in einen Agenten-Block ziehen",
@@ -1591,7 +1617,17 @@
   "UniFi clients": "UniFi-Clients",
   "{n} clients": "{n} Clients",
   "UniFi network": "UniFi-Netz",
-  "read your UniFi network: who's connected, and how your UniFi devices are": "Ihr UniFi-Netz lesen: wer verbunden ist und wie es Ihren UniFi-Geräten geht"
+  "read your UniFi network: who's connected, and how your UniFi devices are": "Ihr UniFi-Netz lesen: wer verbunden ist und wie es Ihren UniFi-Geräten geht",
+  "A Proxmox guest can be started, shut down or rebooted.": "Ein Proxmox-Gast kann gestartet, heruntergefahren oder neu gestartet werden.",
+  "Proxmox": "Proxmox",
+  "Proxmox cluster": "Proxmox-Cluster",
+  "Proxmox guests": "Proxmox-Gäste",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Welcher Proxmox-Gast? Geben Sie seine VMID an, etwa 101.",
+  "sample cluster": "Beispiel-Cluster",
+  "{n} guests": "{n} Gäste",
+  "read your Proxmox cluster: nodes, guests, storage and tasks": "Ihren Proxmox-Cluster lesen: Knoten, Gäste, Speicher und Aufgaben",
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "Ihre Proxmox-Gäste starten, herunterfahren und neu starten (mit Rückfrage jedes Mal)"
  },
  "examples": {
   "review": {
@@ -3198,6 +3234,22 @@
   "{n} clients": "{n} Clients",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi braucht UNIFI_URL und UNIFI_API_KEY {where_keys}: die Adresse der Konsole (etwa https://192.168.1.1) und einen API-Schlüssel aus der Network-App (Settings, Control Plane, Integrations).",
   "The UniFi console refused UNIFI_API_KEY.": "Die UniFi-Konsole hat UNIFI_API_KEY abgelehnt.",
-  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} Geräte"
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} Geräte",
+  "A Proxmox guest can be started, shut down or rebooted.": "Ein Proxmox-Gast kann gestartet, heruntergefahren oder neu gestartet werden.",
+  "Proxmox": "Proxmox",
+  "Proxmox guests": "Proxmox-Gäste",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Welcher Proxmox-Gast? Geben Sie seine VMID an, etwa 101.",
+  "{n} guests": "{n} Gäste",
+  "Allow this? {what}": "Erlauben? {what}",
+  "Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.": "Gast {vmid} steht in PROXMOX_PROTECT, darum startet, stoppt oder startet Second Thought ihn nie neu.",
+  "Proxmox VE {version}": "Proxmox VE {version}",
+  "Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.": "Proxmox braucht PROXMOX_URL, PROXMOX_TOKEN_ID und PROXMOX_TOKEN_SECRET {where_keys}: die Adresse (etwa https://pve.local:8006) und ein API-Token, aus Datacenter, Permissions, API Tokens. Geben Sie ihm die Rolle PVEAuditor, außer das Programm startet oder stoppt Gäste.",
+  "Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.": "Proxmox hat PROXMOX_TOKEN_ID und PROXMOX_TOKEN_SECRET abgelehnt.",
+  "Second Thought doesn't send {what} to Proxmox.": "Second Thought sendet {what} nicht an Proxmox.",
+  "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "das Token kann auch {what}. Second Thought braucht das nicht: die Rolle PVEAuditor ist sicherer.",
+  "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "das Token kann keine Gäste starten oder stoppen (dafür braucht es VM.PowerMgmt), also würden die Ein-/Aus-Blöcke dieses Programms abgelehnt.",
+  "the token isn't allowed to do that": "das Token darf das nicht",
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} läuft nur, wenn Sie da sind, um Ja zu sagen, und niemand ist da."
  }
 }

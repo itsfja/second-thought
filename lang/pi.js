@@ -160,7 +160,12 @@
 "rb_mikrotik_health":{"message0":"MikroTik-आरोग्यं","tooltip":"मग्गदेसकस्स अत्तनो अभिलेखो: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), तस्स अञ्ञे वेदका च।"},
 "rb_mikrotik_log":{"message0":"MikroTik-वत्तन्तं, पच्छिमा %1 पन्तियो","tooltip":"मग्गदेसकस्स वत्तन्तस्स पच्छिमा पन्तियो, पुराणतमा पठमं, एकेका \"time topics: message\" इति।"},
 "rb_unifi_clients":{"message0":"UniFi-गाहका","tooltip":"अभिलेखानं सूचि, तव UniFi-जाले संयुत्तं पतियन्तं एको: name, mac, ip, type (wired, wireless, vpn वा), connected (कदा पट्ठाय), uplink (येन UniFi-यन्तेन संयुत्तं) च। केवलं पठति: किञ्चि न निवारीयति न परिवत्तीयति। इमस्मिं पिट्ठे निदस्सन-जालं गण्हाति।"},
-"rb_unifi_devices":{"message0":"UniFi-यन्तानि","tooltip":"अभिलेखानं सूचि, पति-UniFi-यन्तं एको (द्वारं, परिवत्तका, पवेसट्ठानानि): name, model, mac, ip, state, firmware, update (नवतरं firmware पतिक्खति वा), संयुत्तस्स च uptime (होरा), cpu, memory (%)।"}
+"rb_unifi_devices":{"message0":"UniFi-यन्तानि","tooltip":"अभिलेखानं सूचि, पति-UniFi-यन्तं एको (द्वारं, परिवत्तका, पवेसट्ठानानि): name, model, mac, ip, state, firmware, update (नवतरं firmware पतिक्खति वा), संयुत्तस्स च uptime (होरा), cpu, memory (%)।"},
+"rb_proxmox_nodes":{"message0":"Proxmox-गण्ठियो","tooltip":"अभिलेखानं सूचि, तव Proxmox-समूहस्स पतिगण्ठि एको: node, status, cpu, memory (%), uptime (होरा)। इमस्मिं पिट्ठे निदस्सन-समूहं गण्हाति।"},
+"rb_proxmox_guests":{"message0":"Proxmox-अतिथयो","tooltip":"अभिलेखानं सूचि, पति-VM-भाजनं एको: vmid, name, node, type (vm container वा), status, cpu, memory (%), uptime (होरा), ठपितस्स onboot (गण्ठिना सह आरभेय्य वा) च।"},
+"rb_proxmox_storage":{"message0":"Proxmox-कोसा","tooltip":"अभिलेखानं सूचि, पतिगण्ठि पतिकोसं एको: storage, node, used (%), used_gb, size_gb, status च।"},
+"rb_proxmox_tasks":{"message0":"पच्छिमानं %1 होरानं Proxmox-किच्चानि","tooltip":"अभिलेखानं सूचि, नवतमं पठमं: started, node, type (vzdump रक्खा-पटिलिपि), id (अतिथि), status (OK, अथ वा किं विरद्धं), user च।"},
+"rb_proxmox_power":{"message0":"Proxmox-अतिथिं %2 %1","tooltip":"एकं VM भाजनं वा तस्स VMID अनुसारेन आरभति, निब्बापेति, पुन आरभति वा। सदा पठमं तं पुच्छति, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। PROXMOX_PROTECT स्स अतिथयो कदापि न फुसीयन्ति। VM.PowerMgmt युत्तं लक्खणं इच्छति। इमस्मिं पिट्ठे किञ्चि सच्चतो न आरभति न ठपेति।"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"सब्बदिवसे","weekdays":"कम्मदिवसेसु","weekends":"सत्ताहन्तेसु"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"देवसिकानि","hour":"होरिकानि"},
 "rb_coinbase_orders.WHICH":{"open":"विवटाणायो","fills":"नवतमा पूरणा"},
 "rb_coinbase_preview.SIDE":{"buy":"किणाहि","sell":"विक्किणाहि"},
-"rb_coinbase_order.SIDE":{"buy":"किणाहि","sell":"विक्किणाहि"}
+"rb_coinbase_order.SIDE":{"buy":"किणाहि","sell":"विक्किणाहि"},
+"rb_proxmox_power.ACTION":{"start":"आरभ","shutdown":"निब्बापेहि","reboot":"पुन आरभ"}
 },
 "categories":{
 "Agent":"पटिनिधि",
@@ -210,7 +216,8 @@
 "You":"त्वं",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"UniFi-गाहका",
 "{n} clients":"{n} गाहका",
 "UniFi network":"UniFi-जालं",
-"read your UniFi network: who's connected, and how your UniFi devices are":"तव UniFi-जालं पठितुं: के संयुत्ता, तव UniFi-यन्तानि कथं इति च"
+"read your UniFi network: who's connected, and how your UniFi devices are":"तव UniFi-जालं पठितुं: के संयुत्ता, तव UniFi-यन्तानि कथं इति च",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox-अतिथि आरभितुं, निब्बापेतुं, पुन आरभितुं वा सक्का।",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"Proxmox-समूहो",
+"Proxmox guests":"Proxmox-अतिथयो",
+"Proxmox: {why}.":"Proxmox: {why}।",
+"Which Proxmox guest? Give its VMID, like 101.":"कतमो Proxmox-अतिथि? तस्स VMID देहि, यथा 101।",
+"sample cluster":"निदस्सन-समूहो",
+"{n} guests":"{n} अतिथयो",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"तव Proxmox-समूहं पठितुं: गण्ठियो, अतिथयो, कोसा, किच्चानि च",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"तव Proxmox-अतिथयो आरभितुं, निब्बापेतुं, पुन आरभितुं च (पतिवारं तं पुच्छन्तो)"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2007,7 +2024,23 @@
 "{n} clients":"{n} गाहका",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi UNIFI_URL UNIFI_API_KEY च इच्छति {where_keys}: नियामकस्स ठानं (यथा https://192.168.1.1), Network-अनुप्पयोगतो API-कुञ्चिका च (Settings, Control Plane, Integrations)।",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi-नियामको UNIFI_API_KEY पटिक्खिपि।",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} यन्तानि"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} यन्तानि",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox-अतिथि आरभितुं, निब्बापेतुं, पुन आरभितुं वा सक्का।",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Proxmox-अतिथयो",
+"Proxmox: {why}.":"Proxmox: {why}।",
+"Which Proxmox guest? Give its VMID, like 101.":"कतमो Proxmox-अतिथि? तस्स VMID देहि, यथा 101।",
+"{n} guests":"{n} अतिथयो",
+"Allow this? {what}":"अनुजानासि? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"अतिथि {vmid} PROXMOX_PROTECT मध्ये अत्थि, तस्मा Second Thought तं कदापि न आरभति, न ठपेति, न पुन आरभति।",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox PROXMOX_URL, PROXMOX_TOKEN_ID, PROXMOX_TOKEN_SECRET च इच्छति {where_keys}: ठानं (यथा https://pve.local:8006), Datacenter, Permissions, API Tokens तो API-लक्खणं च। सचे कम्मपथो अतिथयो न आरभति न ठपेति, तस्स PVEAuditor किच्चं देहि।",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox PROXMOX_TOKEN_ID PROXMOX_TOKEN_SECRET च पटिक्खिपि।",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought {what} Proxmox पति न पेसेति।",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"लक्खणं {what} पि कातुं सक्कोति। Second Thought तं न इच्छति: PVEAuditor किच्चं खेमतरं।",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"लक्खणं अतिथयो आरभितुं ठपेतुं वा न सक्कोति (VM.PowerMgmt इच्छति), तस्मा इमस्स कम्मपथस्स बल-खण्डा पटिक्खिपेय्युं।",
+"the token isn't allowed to do that":"लक्खणस्स तं कातुं अनुञ्ञा नत्थि",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} केवलं तदा पवत्तति यदा त्वं आम इति वत्तुं तत्थ असि, कोचि च नत्थि।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

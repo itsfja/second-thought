@@ -69,6 +69,7 @@
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
+             proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -115,6 +116,12 @@
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.proxmox) out.push("", "[proxmox]",
+      "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
+      "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
+      "; --doctor once: it shows the node's certificate fingerprint to pin. PROXMOX_PROTECT lists VMIDs never started,",
+      "; stopped or rebooted, like your Home Assistant or domain controller.",
+      "PROXMOX_URL = https://pve.local:8006", "PROXMOX_TOKEN_ID = ", "PROXMOX_TOKEN_SECRET = ", "PROXMOX_CERT_SHA256 = ", "PROXMOX_PROTECT = ");
     if (need.unifi) out.push("", "[unifi]",
       "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
       "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
@@ -427,6 +434,10 @@
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
+        case "rb_proxmox_guests": return "(await R.proxmox_guests())";
+        case "rb_proxmox_storage": return "(await R.proxmox_storage())";
+        case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
@@ -575,6 +586,7 @@
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
+          case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;

@@ -160,7 +160,12 @@
 "rb_mikrotik_health":{"message0":"שלמא דMikroTik","tooltip":"כתבא על נתבא או מחלפא גופיה: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), וכל מרגשא אחרנא דאית ליה."},
 "rb_mikrotik_log":{"message0":"כרוניקא דMikroTik, %1 שורין בתראין","tooltip":"שורין בתראין דכרוניקא דנתבא, עתיקא קדמאה, כל חדא כות \"time topics: message\"."},
 "rb_unifi_clients":{"message0":"לקוחי UniFi","tooltip":"רשימת כתבין, חד לכל מאן דמחבר למצודתא דילך UniFi: name, mac, ip, type (wired, wireless או vpn), connected (מן אימתי) וuplink (מאנא דUniFi דבה מחבר). רק קרי: מדעם לא מתכלי ולא משתני. בדפא דנא משמשא מצודתא דדוגמא."},
-"rb_unifi_devices":{"message0":"מאני UniFi","tooltip":"רשימת כתבין, חד לכל מאן UniFi (תרעא, מחלפין, נקודין): name, model, mac, ip, state, firmware, update (אן קושחא חדתא מסכיא), ולמאן דמחבר אף uptime (שעין), cpu וmemory (%)."}
+"rb_unifi_devices":{"message0":"מאני UniFi","tooltip":"רשימת כתבין, חד לכל מאן UniFi (תרעא, מחלפין, נקודין): name, model, mac, ip, state, firmware, update (אן קושחא חדתא מסכיא), ולמאן דמחבר אף uptime (שעין), cpu וmemory (%)."},
+"rb_proxmox_nodes":{"message0":"קטרי Proxmox","tooltip":"רשימת כתבין, חד לכל קטר בכנשא דילך Proxmox: node, status, cpu וmemory (%), uptime (שעין). בדפא דנא משמש כנשא דדוגמא."},
+"rb_proxmox_guests":{"message0":"אכסנאי Proxmox","tooltip":"רשימת כתבין, חד לכל VM ומאנא: vmid, name, node, type (vm או container), status, cpu וmemory (%), uptime (שעין), ולדבטיל אף onboot (אן צריך למשרא עם קטרא)."},
+"rb_proxmox_storage":{"message0":"אוצרי Proxmox","tooltip":"רשימת כתבין, חד לכל אוצר בכל קטר: storage, node, used (%), used_gb, size_gb וstatus."},
+"rb_proxmox_tasks":{"message0":"עבידתא דProxmox ד%1 שעין בתראין","tooltip":"רשימת כתבין, חדתא קדמאה: started, node, type (vzdump הוא נטרתא), id (אכסנאה), status (OK, או מה טעא) וuser."},
+"rb_proxmox_power":{"message0":"%1 אכסנאה דProxmox ‏%2","tooltip":"משרי, מכבי או משרי תוב VM או מאנא חד, בVMID דיליה. תדירא שאיל לך קדם, אף כד מדעם אחרן לא שאיל, וכד לית מן דאמר אין, לא רהיט. אכסנאי PROXMOX_PROTECT לעלם לא מתקרבין. צריך רושם עם VM.PowerMgmt. בדפא דנא מדעם לא באמת שרי או בטיל."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יומא","weekdays":"ביומי חול","weekends":"בסופי שבתא"},
@@ -182,7 +187,8 @@
 "rb_coinbase_candles.SIZE":{"day":"דיומא","hour":"דשעתא"},
 "rb_coinbase_orders.WHICH":{"open":"פקודין פתיחן","fills":"עבידתא בתרייתא"},
 "rb_coinbase_preview.SIDE":{"buy":"זבין","sell":"זבן"},
-"rb_coinbase_order.SIDE":{"buy":"זבין","sell":"זבן"}
+"rb_coinbase_order.SIDE":{"buy":"זבין","sell":"זבן"},
+"rb_proxmox_power.ACTION":{"start":"שרי","shutdown":"כבי","reboot":"שרי תוב"}
 },
 "categories":{
 "Events":"מאורעין",
@@ -211,7 +217,8 @@
 "Output":"מפקנא",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"מאני שליחא: שדי יתהון בגו לבנת שליחא",
@@ -1033,7 +1040,17 @@
 "UniFi clients":"לקוחי UniFi",
 "{n} clients":"{n} לקוחין",
 "UniFi network":"מצודתא דUniFi",
-"read your UniFi network: who's connected, and how your UniFi devices are":"למקרא מצודתא דילך UniFi: מן מחבר, והיכא אינון מאני UniFi"
+"read your UniFi network: who's connected, and how your UniFi devices are":"למקרא מצודתא דילך UniFi: מן מחבר, והיכא אינון מאני UniFi",
+"A Proxmox guest can be started, shut down or rebooted.":"אכסנאה דProxmox מתשרי, מתכבי או מתשרי תוב.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"כנשא דProxmox",
+"Proxmox guests":"אכסנאי Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"אידין אכסנאה דProxmox? הב VMID דיליה, כות 101.",
+"sample cluster":"כנשא דדוגמא",
+"{n} guests":"{n} אכסנאין",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"למקרא כנשא דילך Proxmox: קטרין, אכסנאין, אוצרין ועבידן",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"למשרא, לכבאה ולמשרא תוב אכסנאי Proxmox דילך (שאיל לך כל זבן)"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2008,7 +2025,23 @@
 "{n} clients":"{n} לקוחין",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi צריך UNIFI_URL וUNIFI_API_KEY {where_keys}: אתר קונסולא (כות https://192.168.1.1) ומפתח API מן Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"קונסולא דUniFi סרבת UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} מאנין"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} מאנין",
+"A Proxmox guest can be started, shut down or rebooted.":"אכסנאה דProxmox מתשרי, מתכבי או מתשרי תוב.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"אכסנאי Proxmox",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"אידין אכסנאה דProxmox? הב VMID דיליה, כות 101.",
+"{n} guests":"{n} אכסנאין",
+"Allow this? {what}":"תשבוק? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"אכסנאה {vmid} בPROXMOX_PROTECT, ועל כן Second Thought לעלם לא משרי, מכבי או משרי ליה תוב.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox צריך PROXMOX_URL, PROXMOX_TOKEN_ID וPROXMOX_TOKEN_SECRET {where_keys}: אתרא (כות https://pve.local:8006) ורושם API, מן Datacenter, Permissions, API Tokens. הב ליה תפקיד PVEAuditor, אלא אן תכניתא משריא או מכביא אכסנאין.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox סרב PROXMOX_TOKEN_ID וPROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought לא משדר {what} לProxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"רושמא יכיל אף {what}. Second Thought לא צריך הדא: תפקיד PVEAuditor שליא יתיר.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"רושמא לא יכיל למשרא או לכבאה אכסנאין (צריך VM.PowerMgmt), ועל כן לבני תכניתא יסתרבון.",
+"the token isn't allowed to do that":"לא שליט רושמא למעבד דא",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} רק רהיט כד אנת תמן למימר אין, ולית אנש."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

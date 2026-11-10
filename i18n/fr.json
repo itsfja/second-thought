@@ -612,6 +612,26 @@
   "rb_unifi_devices": {
    "message0": "appareils UniFi",
    "tooltip": "Une liste d'enregistrements, un par appareil UniFi (passerelle, switches, points d'accès) : name, model, mac, ip, state, firmware, update (si un firmware plus récent attend), et pour un appareil en ligne, uptime (heures), cpu et memory (%)."
+  },
+  "rb_proxmox_nodes": {
+   "message0": "nœuds Proxmox",
+   "tooltip": "Une liste d'enregistrements, un par nœud de votre cluster Proxmox : node, status, cpu et memory (%), uptime (heures). Sur cette page, il utilise un cluster d'exemple."
+  },
+  "rb_proxmox_guests": {
+   "message0": "invités Proxmox",
+   "tooltip": "Une liste d'enregistrements, un par VM et conteneur : vmid, name, node, type (vm ou container), status, cpu et memory (%), uptime (heures), et pour un invité arrêté, onboot (s'il devrait démarrer avec le nœud)."
+  },
+  "rb_proxmox_storage": {
+   "message0": "stockage Proxmox",
+   "tooltip": "Une liste d'enregistrements, un par stockage sur chaque nœud : storage, node, used (%), used_gb, size_gb et status."
+  },
+  "rb_proxmox_tasks": {
+   "message0": "tâches Proxmox des %1 dernières heures",
+   "tooltip": "Une liste d'enregistrements, la plus récente d'abord : started, node, type (vzdump est une sauvegarde), id (l'invité), status (OK, ou ce qui a échoué) et user."
+  },
+  "rb_proxmox_power": {
+   "message0": "%1 l'invité Proxmox %2",
+   "tooltip": "Démarre, arrête ou redémarre une VM ou un conteneur, par son VMID. Il vous demande toujours d'abord, même quand rien d'autre ne demande, et sans personne pour dire oui, il ne s'exécute pas. Les invités de PROXMOX_PROTECT ne sont jamais touchés. Il faut un jeton avec VM.PowerMgmt. Sur cette page, rien ne démarre ni ne s'arrête vraiment."
   }
  },
  "options": {
@@ -740,6 +760,11 @@
   "rb_coinbase_order.SIDE": {
    "buy": "acheter",
    "sell": "vendre"
+  },
+  "rb_proxmox_power.ACTION": {
+   "start": "démarrer",
+   "shutdown": "arrêter",
+   "reboot": "redémarrer"
   }
  },
  "categories": {
@@ -769,7 +794,8 @@
   "Output": "Sortie",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
-  "UniFi": "UniFi"
+  "UniFi": "UniFi",
+  "Proxmox": "Proxmox"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Outils pour l'agent : déposez-les dans un bloc agent",
@@ -1591,7 +1617,17 @@
   "UniFi clients": "Clients UniFi",
   "{n} clients": "{n} clients",
   "UniFi network": "réseau UniFi",
-  "read your UniFi network: who's connected, and how your UniFi devices are": "lire votre réseau UniFi : qui est connecté, et comment vont vos appareils UniFi"
+  "read your UniFi network: who's connected, and how your UniFi devices are": "lire votre réseau UniFi : qui est connecté, et comment vont vos appareils UniFi",
+  "A Proxmox guest can be started, shut down or rebooted.": "Un invité Proxmox peut être démarré, arrêté ou redémarré.",
+  "Proxmox": "Proxmox",
+  "Proxmox cluster": "cluster Proxmox",
+  "Proxmox guests": "Invités Proxmox",
+  "Proxmox: {why}.": "Proxmox : {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Quel invité Proxmox ? Donnez son VMID, comme 101.",
+  "sample cluster": "cluster d'exemple",
+  "{n} guests": "{n} invités",
+  "read your Proxmox cluster: nodes, guests, storage and tasks": "lire votre cluster Proxmox : nœuds, invités, stockage et tâches",
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "démarrer, arrêter et redémarrer vos invités Proxmox (en vous demandant à chaque fois)"
  },
  "examples": {
   "review": {
@@ -3198,6 +3234,22 @@
   "{n} clients": "{n} clients",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi a besoin de UNIFI_URL et UNIFI_API_KEY {where_keys} : l'adresse de la console (comme https://192.168.1.1) et une clé d'API de l'app Network (Settings, Control Plane, Integrations).",
   "The UniFi console refused UNIFI_API_KEY.": "La console UniFi a refusé UNIFI_API_KEY.",
-  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} appareils"
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} appareils",
+  "A Proxmox guest can be started, shut down or rebooted.": "Un invité Proxmox peut être démarré, arrêté ou redémarré.",
+  "Proxmox": "Proxmox",
+  "Proxmox guests": "Invités Proxmox",
+  "Proxmox: {why}.": "Proxmox : {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Quel invité Proxmox ? Donnez son VMID, comme 101.",
+  "{n} guests": "{n} invités",
+  "Allow this? {what}": "Autoriser ? {what}",
+  "Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.": "L'invité {vmid} est dans PROXMOX_PROTECT, donc Second Thought ne le démarre, ne l'arrête et ne le redémarre jamais.",
+  "Proxmox VE {version}": "Proxmox VE {version}",
+  "Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.": "Proxmox a besoin de PROXMOX_URL, PROXMOX_TOKEN_ID et PROXMOX_TOKEN_SECRET {where_keys} : l'adresse (comme https://pve.local:8006) et un jeton d'API, depuis Datacenter, Permissions, API Tokens. Donnez-lui le rôle PVEAuditor, sauf si le programme démarre ou arrête des invités.",
+  "Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.": "Proxmox a refusé PROXMOX_TOKEN_ID et PROXMOX_TOKEN_SECRET.",
+  "Second Thought doesn't send {what} to Proxmox.": "Second Thought n'envoie pas {what} à Proxmox.",
+  "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "le jeton peut aussi {what}. Second Thought n'en a pas besoin : le rôle PVEAuditor est plus sûr.",
+  "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "le jeton ne peut ni démarrer ni arrêter d'invités (il lui faut VM.PowerMgmt), donc les blocs d'alimentation de ce programme seraient refusés.",
+  "the token isn't allowed to do that": "le jeton n'a pas le droit de faire cela",
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} ne se fait que si vous êtes là pour dire oui, et personne n'y est."
  }
 }

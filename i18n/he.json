@@ -613,6 +613,26 @@
   "rb_unifi_devices": {
    "message0": "מכשירי UniFi",
    "tooltip": "רשימת רשומות, אחת לכל מכשיר UniFi (שער, מתגים, נקודות גישה): name, model, mac, ip, state, firmware, update (האם מחכה קושחה חדשה יותר), ולמכשיר מחובר גם uptime (שעות), cpu ו-memory (%)."
+  },
+  "rb_proxmox_nodes": {
+   "message0": "צמתי Proxmox",
+   "tooltip": "רשימת רשומות, אחת לכל צומת באשכול ה-Proxmox שלכם: node, status, cpu ו-memory (%), uptime (שעות). בעמוד הזה משמש אשכול לדוגמה."
+  },
+  "rb_proxmox_guests": {
+   "message0": "אורחי Proxmox",
+   "tooltip": "רשימת רשומות, אחת לכל VM ולכל מכולה: vmid, name, node, type (vm או container), status, cpu ו-memory (%), uptime (שעות), ולאורח שעצור גם onboot (האם הוא אמור לעלות עם הצומת)."
+  },
+  "rb_proxmox_storage": {
+   "message0": "אחסון Proxmox",
+   "tooltip": "רשימת רשומות, אחת לכל אחסון בכל צומת: storage, node, used (%), used_gb, size_gb ו-status."
+  },
+  "rb_proxmox_tasks": {
+   "message0": "משימות Proxmox של %1 השעות האחרונות",
+   "tooltip": "רשימת רשומות, החדשה קודם: started, node, type (vzdump הוא גיבוי), id (האורח), status (OK, או מה השתבש) ו-user."
+  },
+  "rb_proxmox_power": {
+   "message0": "%1 את אורח ה-Proxmox ‏%2",
+   "tooltip": "מפעיל, מכבה או מאתחל VM או מכולה אחת, לפי ה-VMID. תמיד שואל קודם, גם כשדבר אחר לא שואל, וכשאין מי שיגיד כן הוא לא רץ. אורחים ב-PROXMOX_PROTECT לעולם לא נוגעים בהם. צריך אסימון עם VM.PowerMgmt. בעמוד הזה שום דבר לא באמת עולה או נעצר."
   }
  },
  "options": {
@@ -741,6 +761,11 @@
   "rb_coinbase_order.SIDE": {
    "buy": "קנה",
    "sell": "מכור"
+  },
+  "rb_proxmox_power.ACTION": {
+   "start": "הפעל",
+   "shutdown": "כבה",
+   "reboot": "אתחל"
   }
  },
  "categories": {
@@ -770,7 +795,8 @@
   "Output": "פלט",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
-  "UniFi": "UniFi"
+  "UniFi": "UniFi",
+  "Proxmox": "Proxmox"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1592,7 +1618,17 @@
   "UniFi clients": "לקוחות UniFi",
   "{n} clients": "{n} לקוחות",
   "UniFi network": "רשת UniFi",
-  "read your UniFi network: who's connected, and how your UniFi devices are": "לקרוא את רשת ה-UniFi שלכם: מי מחובר, ומה מצב מכשירי ה-UniFi"
+  "read your UniFi network: who's connected, and how your UniFi devices are": "לקרוא את רשת ה-UniFi שלכם: מי מחובר, ומה מצב מכשירי ה-UniFi",
+  "A Proxmox guest can be started, shut down or rebooted.": "אפשר להפעיל, לכבות או לאתחל אורח של Proxmox.",
+  "Proxmox": "Proxmox",
+  "Proxmox cluster": "אשכול Proxmox",
+  "Proxmox guests": "אורחי Proxmox",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "איזה אורח של Proxmox? תנו את ה-VMID שלו, כמו 101.",
+  "sample cluster": "אשכול לדוגמה",
+  "{n} guests": "{n} אורחים",
+  "read your Proxmox cluster: nodes, guests, storage and tasks": "לקרוא את אשכול ה-Proxmox שלכם: צמתים, אורחים, אחסון ומשימות",
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "להפעיל, לכבות ולאתחל את אורחי ה-Proxmox שלכם (בשאלה בכל פעם)"
  },
  "examples": {
   "review": {
@@ -3199,6 +3235,22 @@
   "{n} clients": "{n} לקוחות",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi צריך UNIFI_URL ו-UNIFI_API_KEY {where_keys}: כתובת הקונסולה (כמו https://192.168.1.1) ומפתח API מאפליקציית Network (Settings, Control Plane, Integrations).",
   "The UniFi console refused UNIFI_API_KEY.": "קונסולת ה-UniFi דחתה את UNIFI_API_KEY.",
-  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} מכשירים"
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} מכשירים",
+  "A Proxmox guest can be started, shut down or rebooted.": "אפשר להפעיל, לכבות או לאתחל אורח של Proxmox.",
+  "Proxmox": "Proxmox",
+  "Proxmox guests": "אורחי Proxmox",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "איזה אורח של Proxmox? תנו את ה-VMID שלו, כמו 101.",
+  "{n} guests": "{n} אורחים",
+  "Allow this? {what}": "לאשר? {what}",
+  "Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.": "האורח {vmid} נמצא ב-PROXMOX_PROTECT, ולכן Second Thought אף פעם לא מפעיל, עוצר או מאתחל אותו.",
+  "Proxmox VE {version}": "Proxmox VE {version}",
+  "Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.": "Proxmox צריך PROXMOX_URL, PROXMOX_TOKEN_ID ו-PROXMOX_TOKEN_SECRET {where_keys}: הכתובת (כמו https://pve.local:8006) ואסימון API, מ-Datacenter, Permissions, API Tokens. תנו לו את התפקיד PVEAuditor, אלא אם התוכנית מפעילה או עוצרת אורחים.",
+  "Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.": "Proxmox דחה את PROXMOX_TOKEN_ID ו-PROXMOX_TOKEN_SECRET.",
+  "Second Thought doesn't send {what} to Proxmox.": "Second Thought לא שולח {what} ל-Proxmox.",
+  "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "האסימון יכול גם {what}. Second Thought לא צריך את זה: התפקיד PVEAuditor בטוח יותר.",
+  "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "האסימון לא יכול להפעיל או לעצור אורחים (הוא צריך VM.PowerMgmt), ולכן בלוקי ההפעלה של התוכנית יידחו.",
+  "the token isn't allowed to do that": "האסימון לא מורשה לעשות את זה",
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} רץ רק כשאתם שם כדי להגיד כן, ואין אף אחד."
  }
 }

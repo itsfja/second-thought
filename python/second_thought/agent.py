@@ -238,6 +238,20 @@ class AgentTools:
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
 
+    async def confirm_live(self, what):
+        """Asks before something that must never happen unseen, like stopping a Proxmox guest (#357): always, live, and
+        never with nobody there to answer, unless approve_by = telegram asks on your phone."""
+        unattended = self.nobody_here() or bool(os.environ.get("GITHUB_ACTIONS")) or not sys.stdin.isatty()
+        if unattended and os.environ.get("RB_APPROVE_BY", "").strip().lower() != "telegram":
+            self.log(tr("Not done"), tr("{what} only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
+            return False
+        if unattended:
+            return await self._approve_telegram(what)
+        if await self._approve_live(tr("Allow this? {what}", what=what)):
+            return True
+        self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
+        return False
+
     def _agent_tools(self, tools, mcp=None):
         """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}. mcp holds each MCP
         server's tools, listed beforehand: {server name: [tool, ...]}."""

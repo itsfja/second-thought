@@ -159,7 +159,12 @@
 "rb_mikrotik_health":{"message0":"MikroTik-heilsa","tooltip":"Skrá um leiðvísinn sjálfan: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), ok hvern annan skynjara er hann hefir."},
 "rb_mikrotik_log":{"message0":"MikroTik-skrá, síðustu %1 línur","tooltip":"Síðustu línur skrár leiðvísis, in elzta fyrst, hver sem 'time topics: message'."},
 "rb_unifi_clients":{"message0":"UniFi-gestir","tooltip":"Listi skráa, ein fyrir hvert tól er tengt er UniFi-neti þínu: name, mac, ip, type (wired, wireless eða vpn), connected (síðan hvenær) ok uplink (UniFi-tólit er þat ferr um). Hann les einungis: ekki er bannat né breytt. Á þessi síðu nytr hann dœmis-nets."},
-"rb_unifi_devices":{"message0":"UniFi-tól","tooltip":"Listi skráa, ein fyrir hvert UniFi-tól (hlið, skiptar, aðgangsstaðir): name, model, mac, ip, state, firmware, update (hvárt nýrri firmware bíðr), ok fyrir þat er tengt er, uptime (stundir), cpu ok memory (%)."}
+"rb_unifi_devices":{"message0":"UniFi-tól","tooltip":"Listi skráa, ein fyrir hvert UniFi-tól (hlið, skiptar, aðgangsstaðir): name, model, mac, ip, state, firmware, update (hvárt nýrri firmware bíðr), ok fyrir þat er tengt er, uptime (stundir), cpu ok memory (%)."},
+"rb_proxmox_nodes":{"message0":"Proxmox-hnútar","tooltip":"Listi skráa, ein fyrir hvern hnút Proxmox-þyrpingar þinnar: node, status, cpu ok memory (%), uptime (stundir). Á þessi síðu nytr hann dœmis-þyrpingar."},
+"rb_proxmox_guests":{"message0":"Proxmox-gestir","tooltip":"Listi skráa, ein fyrir hverja VM ok hirzlu: vmid, name, node, type (vm eða container), status, cpu ok memory (%), uptime (stundir), ok fyrir stöðvaðan onboot (hvárt hann skyldi ræsask með hnútinum)."},
+"rb_proxmox_storage":{"message0":"Proxmox-geymslur","tooltip":"Listi skráa, ein fyrir hverja geymslu á hverjum hnút: storage, node, used (%), used_gb, size_gb ok status."},
+"rb_proxmox_tasks":{"message0":"Proxmox-verk síðustu %1 stunda","tooltip":"Listi skráa, it nýjasta fyrst: started, node, type (vzdump er afrit), id (gestrinn), status (OK, eða hvat fór illa) ok user."},
+"rb_proxmox_power":{"message0":"%1 Proxmox-gest %2","tooltip":"Ræsir, slekkr eða endrræsir eina VM eða hirzlu, eptir VMID hennar. Hann spyrr þik ávallt fyrst, þótt ekki annat spyrji, ok sé engi þar at segja já, ferr hann eigi. Gestum í PROXMOX_PROTECT er aldri snert. Þarf tákn með VM.PowerMgmt. Á þessi síðu ræsisk né stöðvask ekki í sannleika."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"dagleg","hour":"stundleg"},
 "rb_coinbase_orders.WHICH":{"open":"opin boð","fills":"síðustu fyllingar"},
 "rb_coinbase_preview.SIDE":{"buy":"kaupa","sell":"selja"},
-"rb_coinbase_order.SIDE":{"buy":"kaupa","sell":"selja"}
+"rb_coinbase_order.SIDE":{"buy":"kaupa","sell":"selja"},
+"rb_proxmox_power.ACTION":{"start":"ræsa","shutdown":"slökkva","reboot":"endrræsa"}
 },
 "categories":{
 "Events":"Atburðir",
@@ -210,7 +216,8 @@
 "Output":"Útgangr",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"UniFi-gestir",
 "{n} clients":"{n} gestir",
 "UniFi network":"UniFi-net",
-"read your UniFi network: who's connected, and how your UniFi devices are":"lesa UniFi-net þitt: hverir eru tengdir, ok hversu UniFi-tól þín fara"
+"read your UniFi network: who's connected, and how your UniFi devices are":"lesa UniFi-net þitt: hverir eru tengdir, ok hversu UniFi-tól þín fara",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox-gestr má vera ræstr, slökktr eða endrræstr.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"Proxmox-þyrping",
+"Proxmox guests":"Proxmox-gestir",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Hverr Proxmox-gestr? Gef VMID hans, sem 101.",
+"sample cluster":"dœmis-þyrping",
+"{n} guests":"{n} gestir",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"lesa Proxmox-þyrping þína: hnúta, gesti, geymslur ok verk",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"ræsa, slökkva ok endrræsa Proxmox-gesti þína (spyrjandi þik hvert sinn)"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2007,7 +2024,23 @@
 "{n} clients":"{n} gestir",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi þarf UNIFI_URL ok UNIFI_API_KEY {where_keys}: stað borðsins (sem https://192.168.1.1) ok API-lykil ór Network-forritinu (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi-borðit synjaði UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tól"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tól",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox-gestr má vera ræstr, slökktr eða endrræstr.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Proxmox-gestir",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Hverr Proxmox-gestr? Gef VMID hans, sem 101.",
+"{n} guests":"{n} gestir",
+"Allow this? {what}":"Leyfa þetta? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"Gestr {vmid} er í PROXMOX_PROTECT, því ræsir, stöðvar né endrræsir Second Thought hann aldri.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox þarf PROXMOX_URL, PROXMOX_TOKEN_ID ok PROXMOX_TOKEN_SECRET {where_keys}: staðinn (sem https://pve.local:8006) ok API-tákn, ór Datacenter, Permissions, API Tokens. Gef því PVEAuditor-hlutverkit, nema forritit ræsi eða stöðvi gesti.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox synjaði PROXMOX_TOKEN_ID ok PROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought sendir eigi {what} til Proxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"táknit má ok {what}. Second Thought þarf þess eigi: PVEAuditor-hlutverkit er tryggara.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"táknit má eigi ræsa né stöðva gesti (þat þarf VM.PowerMgmt), því væri afl-kubbum þessa forrits synjat.",
+"the token isn't allowed to do that":"táknit má eigi gera þat",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} ferr einungis er þú ert þar at segja já, ok engi er."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET")
 
 
 def _load_keychain():
@@ -1534,6 +1534,12 @@ SAFETY = {
     # the network with it, and nothing here is worth that.
     # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
     # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
+    # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
+    # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
+    # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
+    # guests it never touches at all.
+    "proxmox_free": [["GET", r"^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/config)$"]],
+    "proxmox_asks": [["POST", r"^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/status/(start|shutdown|reboot)$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
@@ -1642,6 +1648,16 @@ def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
+
+
+def proxmox_call(method, path):
+    """"free" for a Proxmox call the runtime makes without asking, "asks" for a power action that needs a live yes,
+    and None for anything else, which is never sent (#357)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["proxmox_" + kind]):
+            return kind
+    return None
 
 
 def unifi_allowed(method, path):
@@ -2077,10 +2093,12 @@ CAPABILITIES = [
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
+    ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
+    ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -4295,6 +4313,110 @@ class Connections:
         self.log(tr("Coinbase order cancelled"), oid, tr("done"))
         return True
 
+    # Proxmox (#357)
+    # Proxmox VE's REST API, with an API token: PROXMOX_URL (https://pve:8006), PROXMOX_TOKEN_ID (user@pam!name) and
+    # PROXMOX_TOKEN_SECRET. Give the token the PVEAuditor role unless the program starts or stops guests. Reads are the
+    # calls in SAFETY["proxmox_free"]; start, shut down and reboot (proxmox_asks) always ask, live, and never run with
+    # nobody there; nothing else is ever sent. PROXMOX_PROTECT lists VMIDs never started, stopped or rebooted at all.
+    # PROXMOX_CERT_SHA256 pins the node's own certificate, as for MikroTik and UniFi.
+    PROXMOX_POWER = {"start": "start", "shutdown": "shut down", "reboot": "reboot"}
+
+    async def _proxmox(self, method, path, query=None, approved=False):
+        kind = proxmox_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to Proxmox.", what=f"{method} {path}"))
+        base = os.environ.get("PROXMOX_URL", "").strip().rstrip("/")
+        tid, secret = os.environ.get("PROXMOX_TOKEN_ID", "").strip(), os.environ.get("PROXMOX_TOKEN_SECRET", "").strip()
+        if not base or not tid or not secret:
+            raise RunError(tr("Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("Proxmox", base, "PROXMOX_CERT_SHA256", method, path + ("?" + urllib.parse.urlencode(query) if query else ""),
+                                         {"Authorization": f"PVEAPIToken={tid}={secret}"})
+        if status == 401:
+            raise RunError(tr("Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET."))
+        if status == 403:
+            raise RunError(tr("Proxmox: {why}.", why=tr("the token isn't allowed to do that")))
+        if status >= 400:
+            raise RunError(tr("Proxmox: {why}.", why=self._said(status, raw)))
+        got = json.loads(raw) if raw.strip() else {}
+        return got.get("data") if isinstance(got, dict) else got
+
+    @staticmethod
+    def _pct(used, size):
+        return _clean_num(math.floor(num(used) / num(size) * 1000 + 0.5) / 10) if num(size) else ""
+
+    async def proxmox_nodes(self):
+        """Each node: node, status (online or offline), cpu and memory (%), uptime (hours)."""
+        out = [{"node": to_str(n.get("node")), "status": to_str(n.get("status")), "cpu": _clean_num(math.floor(num(n.get("cpu")) * 1000 + 0.5) / 10),
+                "memory": self._pct(n.get("mem"), n.get("maxmem")), "uptime": self._cents(num(n.get("uptime")) / 3600)}
+               for n in await self._proxmox("GET", "/api2/json/nodes") or [] if isinstance(n, dict)]
+        return sorted(out, key=lambda n: n["node"])
+
+    async def proxmox_guests(self):
+        """Each VM and container: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (hours),
+        and for one that's stopped, onboot (whether it should start when the node does)."""
+        out = []
+        for g in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "vm"}) or []:
+            if not isinstance(g, dict) or g.get("template"):
+                continue
+            rec = {"vmid": int(num(g.get("vmid"))), "name": to_str(g.get("name")), "node": to_str(g.get("node")),
+                   "type": "container" if g.get("type") == "lxc" else "vm", "status": to_str(g.get("status")),
+                   "cpu": _clean_num(math.floor(num(g.get("cpu")) * 1000 + 0.5) / 10), "memory": self._pct(g.get("mem"), g.get("maxmem")),
+                   "uptime": self._cents(num(g.get("uptime")) / 3600), "onboot": ""}
+            if rec["status"] == "stopped" and re.fullmatch(r"[A-Za-z0-9.-]+", rec["node"]):
+                cfg = await self._proxmox("GET", f"/api2/json/nodes/{rec['node']}/{g.get('type')}/{rec['vmid']}/config") or {}
+                rec["onboot"] = to_str(cfg.get("onboot")) == "1"
+            out.append(rec)
+        out.sort(key=lambda g: g["vmid"])
+        lines = "\n".join(f"{g['vmid']} {g['name']}: {g['status']}" for g in out)
+        self.log(tr("Proxmox guests"), lines or tr("(nothing)"), tr("{n} guests", n=len(out)))
+        return out
+
+    async def proxmox_storage(self):
+        """Each storage on each node: storage, node, used (%), used_gb, size_gb and status."""
+        out = [{"storage": to_str(s.get("storage")), "node": to_str(s.get("node")), "used": self._pct(s.get("disk"), s.get("maxdisk")),
+                "used_gb": self._cents(num(s.get("disk")) / 1073741824), "size_gb": self._cents(num(s.get("maxdisk")) / 1073741824),
+                "status": to_str(s.get("status"))}
+               for s in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "storage"}) or [] if isinstance(s, dict)]
+        return sorted(out, key=lambda s: (s["node"], s["storage"]))
+
+    async def proxmox_tasks(self, hours=24):
+        """The cluster's tasks from the last few hours, newest first: started, node, type (vzdump is a backup), id (the
+        guest, if any), status (OK, or what went wrong; running if it hasn't finished) and user."""
+        since = time.time() - max(1, min(24 * 31, num(hours) or 24)) * 3600
+        out = []
+        for t in await self._proxmox("GET", "/api2/json/cluster/tasks") or []:
+            if isinstance(t, dict) and num(t.get("starttime")) >= since:
+                out.append({"started": datetime.datetime.fromtimestamp(num(t.get("starttime"))).strftime("%Y-%m-%d %H:%M"), "node": to_str(t.get("node")),
+                            "type": to_str(t.get("type")), "id": to_str(t.get("id")), "status": to_str(t.get("status")) or "running", "user": to_str(t.get("user"))})
+        return sorted(out, key=lambda t: t["started"], reverse=True)
+
+    async def proxmox_power(self, action, vmid):
+        """Starts, shuts down or reboots one guest, by its VMID, after asking you, every time. Never one in
+        PROXMOX_PROTECT. Gives back True if it was done."""
+        action = to_str(action).strip().lower().replace(" ", "")
+        if action not in self.PROXMOX_POWER:
+            raise RunError(tr("A Proxmox guest can be started, shut down or rebooted."))
+        if not _num_like(vmid) or num(vmid) != int(num(vmid)) or num(vmid) < 100:
+            raise RunError(tr("Which Proxmox guest? Give its VMID, like 101."))
+        vmid = int(num(vmid))
+        protected = {int(x) for x in re.findall(r"\d+", os.environ.get("PROXMOX_PROTECT", ""))}
+        if vmid in protected:
+            self.log(tr("Not done"), tr("Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.", vmid=vmid), tr("refused"))
+            return False
+        g = next((g for g in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "vm"}) or []
+                  if isinstance(g, dict) and int(num(g.get("vmid"))) == vmid), None)
+        if not g or not re.fullmatch(r"[A-Za-z0-9.-]+", to_str(g.get("node"))) or g.get("type") not in ("qemu", "lxc"):
+            raise RunError(tr("Proxmox: {why}.", why=tr("not found")))
+        what = f"{self.PROXMOX_POWER[action]} the Proxmox guest {vmid} ({to_str(g.get('name'))}, on {to_str(g.get('node'))}, now {to_str(g.get('status'))})"
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._proxmox("POST", f"/api2/json/nodes/{g['node']}/{g['type']}/{vmid}/status/{action}", approved=True)
+        self.log(tr("Proxmox"), what, tr("done"))
+        return True
+
     # UniFi (#359)
     # The Network API on a UniFi OS console (a Cloud Gateway, a Dream Machine): UNIFI_URL and UNIFI_API_KEY, a key made
     # in the Network app under Settings, Control Plane, Integrations. Only the reads in SAFETY["unifi_free"] are ever
@@ -5839,6 +5961,20 @@ class AgentTools:
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
 
+    async def confirm_live(self, what):
+        """Asks before something that must never happen unseen, like stopping a Proxmox guest (#357): always, live, and
+        never with nobody there to answer, unless approve_by = telegram asks on your phone."""
+        unattended = self.nobody_here() or bool(os.environ.get("GITHUB_ACTIONS")) or not sys.stdin.isatty()
+        if unattended and os.environ.get("RB_APPROVE_BY", "").strip().lower() != "telegram":
+            self.log(tr("Not done"), tr("{what} only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
+            return False
+        if unattended:
+            return await self._approve_telegram(what)
+        if await self._approve_live(tr("Allow this? {what}", what=what)):
+            return True
+        self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
+        return False
+
     def _agent_tools(self, tools, mcp=None):
         """Turns the tool blocks into {name: (description, params, run, ask_first, input schema)}. mcp holds each MCP
         server's tools, listed beforehand: {server name: [tool, ...]}."""
@@ -6719,6 +6855,23 @@ class Doctor:
                 devices = await self._unifi_all(f"/sites/{site}/devices")
                 return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
             out.append(("UniFi", unifi))
+        if has("proxmox_read", "proxmox_control"):
+            async def proxmox():
+                base = os.environ.get("PROXMOX_URL", "").strip()
+                if base and not os.environ.get("PROXMOX_CERT_SHA256", "").strip():
+                    seen = await asyncio.to_thread(self._mt_fingerprint, base if "://" in base else "https://" + base)
+                    if seen:
+                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="Proxmox", setting="PROXMOX_CERT_SHA256", seen=seen))
+                version = to_str((await self._proxmox("GET", "/api2/json/version") or {}).get("version"))
+                privs = {p for v in (await self._proxmox("GET", "/api2/json/access/permissions") or {}).values() if isinstance(v, dict) for p, on in v.items() if on}
+                said = tr("Proxmox VE {version}", version=version or "?")
+                if "proxmox_control" in can and "VM.PowerMgmt" not in privs:
+                    raise RunError(said + "; " + tr("the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused."))
+                more = sorted(p for p in privs if not p.endswith(".Audit") and p != "VM.PowerMgmt") + (["VM.PowerMgmt"] if "proxmox_control" not in can and "VM.PowerMgmt" in privs else [])
+                if more:
+                    return "NOTE", said + "; " + tr("the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.", what=", ".join(more[:6]))
+                return said
+            out.append(("Proxmox", proxmox))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -6988,7 +7141,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -9264,6 +9417,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_menu_writer","file":"menu-writer.json","category":"home","title":"Menu writer","description":"List your dishes and what's in them. Claude writes each one a menu description in your house style, 25 words or fewer, with its allergens from the UK's 14 listed underneath.","tip":"Describe your house style in the first block: a few words and one description you like.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_house_style","name":"house style"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_house_style"}},"inputs":{"VALUE":{"block":{"type":"rb_longtext","fields":{"TEXT":"Plain and warm. Say where things come from. No 'delicious', 'homemade' or 'mouth-watering'. Like: Rye sourdough, 48-hour ferment, with Netherend butter."}}}},"next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List the dishes, each with what's in it"}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write a menu description for each dish, in this house style:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_house_style"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nUnder each, list the allergens it contains from the UK's 14 (celery; cereals containing gluten (wheat, rye, barley, oats); crustaceans; eggs; fish; lupin; milk; molluscs; mustard; tree nuts; peanuts; sesame; soya; sulphur dioxide and sulphites).\n\nDishes:\n"}}},"ADD3":{"block":{"type":"rb_answer"}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"each description 25 words or fewer; in the house style; every dish lists its allergens, and only ones its ingredients really contain; nothing claimed that the ingredients don't say"}}}},"extraState":{"itemCount":1}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_minutes_to_actions","file":"minutes-to-actions.json","category":"odds","title":"Minutes to actions","description":"Choose the minutes of a trustees' or committee meeting. Claude lists every action with its owner and date, flags any with no owner or no date, and saves the list to send round.","tip":"Works with a PDF, Word file or text file. It only lists what the minutes say: anything unclear is flagged, not guessed.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List every action agreed in these meeting minutes: the action, who owns it and when it's due, as a table, by owner. Under the table, list actions with no owner or no date as NEEDS AN OWNER or NEEDS A DATE.\n\nMinutes:\n"}}},"ADD1":{"block":{"type":"rb_file_choose"}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every action in the minutes is listed; owners and dates are exactly as the minutes say, never guessed; anything without an owner or date is flagged; decisions that aren't actions are left out"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"actions"}}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_morning_briefing","file":"morning-briefing.json","category":"news","title":"Morning briefing","description":"One email each morning: what you need to know today, from your news feeds and a sourced check with Perplexity on anything big overnight, under 300 words.","tip":"Put your feeds in second-thought.ini (feeds = …). On the page, Claude stands in for Perplexity and the feeds are samples.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_news","name":"news"},{"id":"g_overnight","name":"overnight"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"briefing"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"briefing"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"briefing"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_news"}},"inputs":{"VALUE":{"block":{"type":"rb_feed_news","inputs":{"URL":{"shadow":{"type":"text","fields":{"TEXT":""}}}}}}},"next":{"block":{"type":"rb_with_model","fields":{"TIER":"perplexity-default"},"inputs":{"DO":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_overnight"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In five short bullet points, each with its source, the most important things that happened overnight that someone in the UK should know this morning: world, UK, money, weather."}}}}}}}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write \"What you need to know today\": a short, calm briefing from these feed items and this overnight check. Most important first, one or two lines each, with its link or source.\n\nFeeds:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_news"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nOvernight:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_overnight"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"under 300 words; nothing said twice; every item has its link or source; plain text"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":2}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"What you need to know today"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}}}},"x":30,"y":290}]}}},
+{"key":"g_morning_cluster_check","file":"morning-cluster-check.json","category":"home","title":"Morning cluster check","description":"Each morning, reads your Proxmox cluster and sends you a Telegram message: any node down, storage over 85%, last night's backups that failed, guests stopped that should start at boot, and anything else worth a look. It only reads: nothing is started or stopped.","tip":"Needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET for a token with the PVEAuditor role, and PROXMOX_CERT_SHA256 (--doctor shows it).","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_nodes","name":"nodes"},{"id":"g_guests","name":"guests"},{"id":"g_storage","name":"storage"},{"id":"g_tasks","name":"tasks"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_nodes"}},"inputs":{"VALUE":{"block":{"type":"rb_proxmox_nodes"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_guests"}},"inputs":{"VALUE":{"block":{"type":"rb_proxmox_guests"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_storage"}},"inputs":{"VALUE":{"block":{"type":"rb_proxmox_storage"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_tasks"}},"inputs":{"VALUE":{"block":{"type":"rb_proxmox_tasks","inputs":{"N":{"shadow":{"type":"math_number","fields":{"NUM":24}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Check my Proxmox cluster in under 120 words: any node not online, any storage over 85% used, any task from the last 24 hours that didn't end OK (vzdump is a backup), and any guest that's stopped with onboot true. If all is well, say so in one line.\n\nNodes:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_nodes"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nGuests:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_guests"}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nStorage:\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_storage"}}}},"ADD6":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nTasks:\n"}}},"ADD7":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_tasks"}}}}},"extraState":{"itemCount":8}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_notebook_qc","file":"notebook-qc.json","category":"coding","title":"Notebook QC","description":"Paste a protocol, then choose a lab notebook entry. Claude checks the entry against each step in turn: done as written, changed (and whether the change was recorded), or missing, quoting the entry. Then the three things to fix first.","tip":"Paste the protocol's numbered steps. It checks what was written down; it can't check what was done.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_protocol","name":"protocol"},{"id":"g_entry","name":"entry"},{"id":"g_step","name":"step"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste the protocol's steps"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_protocol"}},"inputs":{"VALUE":{"block":{"type":"rb_ask_list","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List each separate step of this lab protocol, in its own words, one per item, keeping any quantities, times and temperatures:\n\n"}}},"ADD1":{"block":{"type":"rb_answer"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_entry"}},"inputs":{"VALUE":{"block":{"type":"rb_file_choose"}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_step"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_protocol"}}}},"DO":{"block":{"type":"rb_set_draft","inputs":{"TEXT":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Does this lab notebook entry record this protocol step? Say DONE, CHANGED or MISSING. Quote the part of the entry that records it. For CHANGED, say what differs (a quantity, time, temperature, reagent or order) and whether the entry gives a reason. Don't assume anything the entry doesn't say.\n\nStep: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_step"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nNotebook entry:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_entry"}}}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"quotes the entry word for word, or says nothing in it records the step; the verdict fits the quote; a change names the quantity, time, temperature or reagent that differs; says whether a reason was recorded; invents nothing"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":2}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_add_result","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_step"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":3}}}}}}}}}}},"next":{"block":{"type":"rb_add_result","inputs":{"TEXT":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"From these checks of a lab notebook entry against its protocol, give the three things most worth fixing or writing down, most important first: unrecorded changes before missing steps.\n\n"}}},"ADD1":{"block":{"type":"rb_result_text"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_old_dates","file":"old-dates.json","category":"odds","title":"Old dates","description":"Paste a passage from an old document. Claude finds every date in it and gives each in today's form: abbreviations like inst. and 7ber expanded, regnal years worked out, and Old Style dates before 1752 given in both styles.","tip":"It shows its working for each date. Check regnal years against a list of reigns before you rely on one.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_text","name":"text"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste the passage with the dates in it"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_text"}},"inputs":{"VALUE":{"block":{"type":"rb_answer"}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Find every date in this passage from an old English document and give each in today's form (day month year). For each: quote it as written, then the modern date, then one line of working. Expand abbreviations: inst. (this month), ult. (last month), prox. (next month), 7ber, 8ber, 9ber, Xber (September to December). Work out regnal years (like 'the 3rd year of the reign of George III') from the date the reign began. In England before 1752 the year began on 25 March, so a date from 1 January to 24 March is given as both years, like 10 February 1720/21; the Julian calendar was used until 2 September 1752, so also give the Gregorian date: 11 days later from 1 March 1700, 10 days before that. Say when a date can't be worked out exactly, and why.\n\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_text"}}}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every date in the passage is listed, quoted as written; each has a modern date and a line of working; dates between 1 January and 24 March before 1752 show both years, like 1720/21; Julian dates before 1752 also give the Gregorian date; regnal years name the reign and when it began; anything uncertain says so"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_parent_update","file":"parent-update.json","category":"learning","title":"Parent update","description":"Paste this week's lesson plan. Claude writes a warm note to parents, under 150 words, with one thing to try at home, and you approve it before it's emailed.","tip":"Change the email address to your parents' list. No pupil is ever named.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_plan","name":"plan"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste this week's lesson plan"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_plan"}},"inputs":{"VALUE":{"block":{"type":"rb_answer"}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write this week's note to parents from the lesson plan: what the class learned, in everyday words, and one thing they could try at home.\n\nLesson plan:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_plan"}}}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"warm and friendly; under 150 words; no teaching jargon; one thing to try at home; no pupil named"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_approve","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Email this to parents?\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"rb_ask_first","fields":{"WHAT":"messages"},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"parents@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"This week in class"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Not sent. The draft, to edit yourself:\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"hasElse":true}}}}}}}}}}}}},"x":30,"y":30}]}}},
@@ -9314,10 +9468,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", true],
 ["kraken_trade", "trade on your Kraken account with real money (asking you before every order)", true],
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
+["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
 ["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
+["proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", false],
 ["web", "read public web pages and search the web", false],
 ["email_read", "read your email", false],
 ["calendar", "read your calendars", false],
@@ -9374,6 +9530,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/api/v3/brokerage/orders/preview$"
+  ]
+ ],
+ "proxmox_free": [
+  [
+   "GET",
+   "^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\\d+/config)$"
+  ]
+ ],
+ "proxmox_asks": [
+  [
+   "POST",
+   "^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\\d+/status/(start|shutdown|reboot)$"
   ]
  ],
  "unifi_free": [
@@ -12095,6 +12263,187 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         "connectedAt": "2026-11-10T06:55:00Z"
       }
     ]
+  },
+  "proxmox": {
+    "note": "A sample Proxmox VE cluster for the page and the tests (#357), shaped the way the REST API answers. Tasks give 'ago' (seconds before now) instead of starttime: the page and tests/fake_proxmox.py work out the time. Last night's backup of 103 failed, local-lvm is 88% full, and 104 is stopped though it should start at boot.",
+    "version": {
+      "version": "8.4.1",
+      "release": "8.4",
+      "repoid": "2a5fa54a8503f96d"
+    },
+    "permissions": {
+      "/": {
+        "Sys.Audit": 1,
+        "VM.Audit": 1,
+        "Datastore.Audit": 1,
+        "SDN.Audit": 1
+      }
+    },
+    "nodes": [
+      {
+        "node": "pve1",
+        "status": "online",
+        "cpu": 0.073,
+        "maxcpu": 8,
+        "mem": 21474836480,
+        "maxmem": 34359738368,
+        "uptime": 1814400
+      },
+      {
+        "node": "pve2",
+        "status": "online",
+        "cpu": 0.021,
+        "maxcpu": 4,
+        "mem": 8589934592,
+        "maxmem": 17179869184,
+        "uptime": 604800
+      }
+    ],
+    "guests": [
+      {
+        "vmid": 100,
+        "name": "homeassistant",
+        "node": "pve1",
+        "type": "qemu",
+        "status": "running",
+        "cpu": 0.04,
+        "mem": 3221225472,
+        "maxmem": 4294967296,
+        "uptime": 1810000,
+        "onboot": 1
+      },
+      {
+        "vmid": 101,
+        "name": "dc1",
+        "node": "pve1",
+        "type": "qemu",
+        "status": "running",
+        "cpu": 0.012,
+        "mem": 2147483648,
+        "maxmem": 4294967296,
+        "uptime": 1810000,
+        "onboot": 1
+      },
+      {
+        "vmid": 102,
+        "name": "plex",
+        "node": "pve1",
+        "type": "lxc",
+        "status": "running",
+        "cpu": 0.11,
+        "mem": 1610612736,
+        "maxmem": 4294967296,
+        "uptime": 900000,
+        "onboot": 1
+      },
+      {
+        "vmid": 103,
+        "name": "unifi",
+        "node": "pve2",
+        "type": "lxc",
+        "status": "running",
+        "cpu": 0.03,
+        "mem": 1073741824,
+        "maxmem": 2147483648,
+        "uptime": 600000,
+        "onboot": 1
+      },
+      {
+        "vmid": 104,
+        "name": "pihole",
+        "node": "pve2",
+        "type": "lxc",
+        "status": "stopped",
+        "cpu": 0,
+        "mem": 0,
+        "maxmem": 536870912,
+        "uptime": 0,
+        "onboot": 1
+      },
+      {
+        "vmid": 105,
+        "name": "test-vm",
+        "node": "pve2",
+        "type": "qemu",
+        "status": "stopped",
+        "cpu": 0,
+        "mem": 0,
+        "maxmem": 2147483648,
+        "uptime": 0,
+        "onboot": 0
+      },
+      {
+        "vmid": 9000,
+        "name": "debian-template",
+        "node": "pve1",
+        "type": "qemu",
+        "status": "stopped",
+        "cpu": 0,
+        "mem": 0,
+        "maxmem": 2147483648,
+        "uptime": 0,
+        "template": 1
+      }
+    ],
+    "storage": [
+      {
+        "storage": "local",
+        "node": "pve1",
+        "disk": 30064771072,
+        "maxdisk": 107374182400,
+        "status": "available"
+      },
+      {
+        "storage": "local-lvm",
+        "node": "pve1",
+        "disk": 755914244096,
+        "maxdisk": 858993459200,
+        "status": "available"
+      },
+      {
+        "storage": "nas-backups",
+        "node": "pve1",
+        "disk": 1288490188800,
+        "maxdisk": 4294967296000,
+        "status": "available"
+      },
+      {
+        "storage": "local",
+        "node": "pve2",
+        "disk": 21474836480,
+        "maxdisk": 107374182400,
+        "status": "available"
+      }
+    ],
+    "tasks": [
+      {
+        "node": "pve1",
+        "type": "vzdump",
+        "id": "",
+        "status": "OK",
+        "user": "root@pam",
+        "ago": 21600,
+        "took": 3300
+      },
+      {
+        "node": "pve2",
+        "type": "vzdump",
+        "id": "103",
+        "status": "ERROR: job failed with err -5 - Input/output error",
+        "user": "root@pam",
+        "ago": 20000,
+        "took": 240
+      },
+      {
+        "node": "pve1",
+        "type": "qmstart",
+        "id": "105",
+        "status": "OK",
+        "user": "francis@pam",
+        "ago": 108000,
+        "took": 5
+      }
+    ]
   }
 }
 </script>
@@ -12358,7 +12707,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -12370,7 +12719,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -12548,7 +12897,9 @@ HOW TO MAP CODE
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade", rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
-    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read", rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read", rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
+    rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
+    rb_proxmox_power:"proxmox_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -12892,6 +13243,17 @@ HOW TO MAP CODE
       { style:"coinbase", inputsInline:true, tooltip:"Places a real market order, like 'preview Coinbase order'. It previews it first, then always asks you, with the fee and total, even when nothing else asks; with nobody there to say yes, it doesn't run. Needs a key with Trade permission. On this page nothing is bought or sold." }),
     S("rb_coinbase_cancel", "cancel Coinbase order %1", [val("ORDER")], { style:"coinbase", inputsInline:true,
       tooltip:"Cancels one of your open orders, by its id (from 'Coinbase open orders'). It always asks you first, and doesn't run with nobody there." }),
+    /* Proxmox (#357): reads, and power that always asks */
+    V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
+      tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
+    V("rb_proxmox_guests", "Proxmox guests", [], "Array", { style:"proxmox",
+      tooltip:"A list of records, one for each VM and container: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (hours), and for one that's stopped, onboot (whether it should start with the node)." }),
+    V("rb_proxmox_storage", "Proxmox storage", [], "Array", { style:"proxmox",
+      tooltip:"A list of records, one for each storage on each node: storage, node, used (%), used_gb, size_gb and status." }),
+    V("rb_proxmox_tasks", "Proxmox tasks of the last %1 hours", [val("N")], "Array", { style:"proxmox", inputsInline:true,
+      tooltip:"A list of records, newest first: started, node, type (vzdump is a backup), id (the guest), status (OK, or what went wrong) and user." }),
+    S("rb_proxmox_power", "%1 Proxmox guest %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["shut down","shutdown"],["reboot","reboot"]] }, val("VMID")],
+      { style:"proxmox", inputsInline:true, tooltip:"Starts, shuts down or reboots one VM or container, by its VMID. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Guests listed in PROXMOX_PROTECT are never touched. Needs a token with VM.PowerMgmt. On this page nothing really starts or stops." }),
     /* UniFi (#359): read only */
     V("rb_unifi_clients", "UniFi clients", [], "Array", { style:"unifi",
       tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
@@ -13074,6 +13436,9 @@ HOW TO MAP CODE
       B("rb_coinbase_candles", { PRODUCT:K("BTC-GBP"), N:N(7) }), B("rb_coinbase_orders"),
       B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_cancel", { ORDER:K("") })
+    ]},
+    { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
+      B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
     ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", contents:[
@@ -13307,6 +13672,7 @@ HOW TO MAP CODE
   window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
     : c.kind === "coinbase" ? coinbaseMoney(c.method, c.path)
+    : c.kind === "proxmox" ? (["free", "asks"].find(k => SAFETY["proxmox_" + k].some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))) || null)
     : c.kind === "unifi" ? SAFETY.unifi_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
     : c.kind === "mikrotik" ? SAFETY.mikrotik_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
     : c.kind === "asks" ? AGENT_ASKS.has(c.tool) : c.kind === "private" ? AGENT_PRIVATE.has(c.tool)
@@ -15253,6 +15619,7 @@ HOW TO MAP CODE
     add(n.feeds, ["RB_FEEDS"]);
     add(n.homey, ["HOMEY_URL", "HOMEY_API_KEY"]);
     add(n.coinbase, ["COINBASE_KEY"]);
+    add(n.proxmox, ["PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_TOKEN_SECRET", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT"]);  // starting and stopping never run there: nobody is there to say yes
     add(n.unifi, ["UNIFI_URL", "UNIFI_API_KEY", "UNIFI_CERT_SHA256"]);
     add(n.mikrotik, ["MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_PASSWORD", "MIKROTIK_CERT_SHA256"]);  // the key file's contents: orders never run there, since nobody is there to say yes
     add(n.mqtt, ["MQTT_HOST"], ["MQTT_USERNAME", "MQTT_PASSWORD", "MQTT_TLS"]);
@@ -15644,6 +16011,7 @@ HOW TO MAP CODE
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
+             proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -15690,6 +16058,12 @@ HOW TO MAP CODE
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.proxmox) out.push("", "[proxmox]",
+      "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
+      "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
+      "; --doctor once: it shows the node's certificate fingerprint to pin. PROXMOX_PROTECT lists VMIDs never started,",
+      "; stopped or rebooted, like your Home Assistant or domain controller.",
+      "PROXMOX_URL = https://pve.local:8006", "PROXMOX_TOKEN_ID = ", "PROXMOX_TOKEN_SECRET = ", "PROXMOX_CERT_SHA256 = ", "PROXMOX_PROTECT = ");
     if (need.unifi) out.push("", "[unifi]",
       "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
       "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
@@ -16002,6 +16376,10 @@ HOW TO MAP CODE
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
+        case "rb_proxmox_guests": return "(await R.proxmox_guests())";
+        case "rb_proxmox_storage": return "(await R.proxmox_storage())";
+        case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
@@ -16150,6 +16528,7 @@ HOW TO MAP CODE
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
+          case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
@@ -17961,7 +18340,7 @@ HOW TO MAP CODE
     const note = days === 0 ? "" : days === 1 ? " (next day)" : days === -1 ? " (the day before)" : days > 0 ? " (" + days + " days later)" : " (" + (-days) + " days earlier)";
     return pad2(Math.floor(t / 60)) + ":" + pad2(t % 60) + note;
   }
-  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik, UniFi and the rest.
+  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik, UniFi, Proxmox and the rest.
   /* ---------- Connections on the page: sample feeds, GitHub, Telegram, email and calendar ----------
      The page can't reach these services, so it uses the sample data below (like the sample house). The text each one gives
      back is shaped like what exported Python gives from the real services. */
@@ -17974,7 +18353,7 @@ HOW TO MAP CODE
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network" }[what]) : what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -18379,6 +18758,44 @@ HOW TO MAP CODE
     if (!(await confirmMoney("cancel the Coinbase order " + id))) return false;
     if (!(cbSample().orders || []).some(o => o.order_id === id)) fail(tr("Coinbase didn't cancel the order: {why}.", { why:"unknown cancel order" }));
     addStep("Coinbase order cancelled", { mono:true, text:id }).done("sample account", "ok");
+    return true;
+  }
+  /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
+     shut down and reboot after a yes, every time. Matches the runtime's proxmox_ methods and tests/fake_proxmox.py. */
+  const pxSample = () => { connNote("Proxmox"); return CONN.proxmox || {}; };
+  const pct10 = (used, size) => num(size) ? Math.round(num(used) / num(size) * 1000) / 10 : "";
+  const pxWhen = secs => { const d = new Date(secs * 1000); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+  function proxmoxNodes(){
+    return (pxSample().nodes || []).map(n => ({ node:str(n.node), status:str(n.status), cpu:Math.round(num(n.cpu) * 1000) / 10, memory:pct10(n.mem, n.maxmem),
+      uptime:cents(num(n.uptime) / 3600) })).sort((a, b) => a.node < b.node ? -1 : a.node > b.node ? 1 : 0);
+  }
+  function proxmoxGuests(){
+    const out = (pxSample().guests || []).filter(g => !g.template).map(g => ({ vmid:Math.trunc(num(g.vmid)), name:str(g.name), node:str(g.node),
+      type:g.type === "lxc" ? "container" : "vm", status:str(g.status), cpu:Math.round(num(g.cpu) * 1000) / 10, memory:pct10(g.mem, g.maxmem),
+      uptime:cents(num(g.uptime) / 3600), onboot:g.status === "stopped" ? str(g.onboot) === "1" : "" })).sort((a, b) => a.vmid - b.vmid);
+    addStep("Proxmox guests", { mono:true, text:out.map(g => g.vmid + " " + g.name + ": " + g.status).join("\n") || tr("(nothing)") }).done(tr("{n} guests", { n:out.length }), "ok");
+    return out;
+  }
+  function proxmoxStorage(){
+    return (pxSample().storage || []).map(s => ({ storage:str(s.storage), node:str(s.node), used:pct10(s.disk, s.maxdisk), used_gb:cents(num(s.disk) / 1073741824),
+      size_gb:cents(num(s.maxdisk) / 1073741824), status:str(s.status) }))
+      .sort((a, b) => (a.node + "\u0000" + a.storage) < (b.node + "\u0000" + b.storage) ? -1 : 1);
+  }
+  function proxmoxTasks(hours){
+    const now = Math.floor(Date.now() / 1000), span = Math.max(1, Math.min(24 * 31, num(hours) || 24)) * 3600;
+    return (pxSample().tasks || []).filter(t => num(t.ago) <= span).map(t => ({ started:pxWhen(now - num(t.ago)), node:str(t.node), type:str(t.type),
+      id:str(t.id), status:str(t.status) || "running", user:str(t.user) })).sort((a, b) => a.started < b.started ? 1 : a.started > b.started ? -1 : 0);
+  }
+  async function proxmoxPower(action, vmid){
+    const words = { start:"start", shutdown:"shut down", reboot:"reboot" };
+    action = str(action).trim().toLowerCase().replace(/ /g, "");
+    if (!words[action]) fail(tr("A Proxmox guest can be started, shut down or rebooted."));
+    if (!isNumLike(vmid) || num(vmid) !== Math.trunc(num(vmid)) || num(vmid) < 100) fail(tr("Which Proxmox guest? Give its VMID, like 101."));
+    const g = (pxSample().guests || []).find(g => num(g.vmid) === num(vmid));
+    if (!g) fail(tr("Proxmox: {why}.", { why:tr("not found") }));
+    const what = words[action] + " the Proxmox guest " + num(vmid) + " (" + g.name + ", on " + g.node + ", now " + g.status + ")";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Proxmox", { mono:true, text:what }).done("sample cluster", "ok");
     return true;
   }
   /* UniFi on the page (#359): a sample network. Exported Python reads your console's Network API, and only reads.
@@ -19208,6 +19625,10 @@ HOW TO MAP CODE
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_coinbase_balances": return coinbaseBalances();
+      case "rb_proxmox_nodes": return proxmoxNodes();
+      case "rb_proxmox_guests": return proxmoxGuests();
+      case "rb_proxmox_storage": return proxmoxStorage();
+      case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
       case "rb_mikrotik_ports": return mikrotikPorts();
@@ -19797,6 +20218,7 @@ HOW TO MAP CODE
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
+      case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {

@@ -159,7 +159,12 @@
 "rb_mikrotik_health":{"message0":"MikroTik-gezondheid","tooltip":"Een record over de router of switch zelf: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) en alle andere sensoren die hij heeft."},
 "rb_mikrotik_log":{"message0":"MikroTik-log, laatste %1 regels","tooltip":"De laatste regels van het routerlog, de oudste eerst, elk als ‘time topics: message’."},
 "rb_unifi_clients":{"message0":"UniFi-clients","tooltip":"Een lijst met records, één voor elk apparaat dat met je UniFi-netwerk verbonden is: name, mac, ip, type (wired, wireless of vpn), connected (sinds wanneer) en uplink (het UniFi-apparaat waarlangs het verbonden is). Hij leest alleen: er wordt niets geblokkeerd of veranderd. Op deze pagina gebruikt hij een voorbeeldnetwerk."},
-"rb_unifi_devices":{"message0":"UniFi-apparaten","tooltip":"Een lijst met records, één voor elk UniFi-apparaat (gateway, switches, access points): name, model, mac, ip, state, firmware, update (of er nieuwere firmware klaarstaat) en, als het online is, uptime (uren), cpu en memory (%)."}
+"rb_unifi_devices":{"message0":"UniFi-apparaten","tooltip":"Een lijst met records, één voor elk UniFi-apparaat (gateway, switches, access points): name, model, mac, ip, state, firmware, update (of er nieuwere firmware klaarstaat) en, als het online is, uptime (uren), cpu en memory (%)."},
+"rb_proxmox_nodes":{"message0":"Proxmox-nodes","tooltip":"Een lijst met records, één voor elke node in je Proxmox-cluster: node, status, cpu en memory (%), uptime (uren). Op deze pagina gebruikt hij een voorbeeldcluster."},
+"rb_proxmox_guests":{"message0":"Proxmox-gasten","tooltip":"Een lijst met records, één voor elke VM en container: vmid, name, node, type (vm of container), status, cpu en memory (%), uptime (uren) en, als hij gestopt is, onboot (of hij met de node mee zou moeten starten)."},
+"rb_proxmox_storage":{"message0":"Proxmox-opslag","tooltip":"Een lijst met records, één voor elke opslag op elke node: storage, node, used (%), used_gb, size_gb en status."},
+"rb_proxmox_tasks":{"message0":"Proxmox-taken van de laatste %1 uur","tooltip":"Een lijst met records, de nieuwste eerst: started, node, type (vzdump is een back-up), id (de gast), status (OK, of wat er misging) en user."},
+"rb_proxmox_power":{"message0":"Proxmox-gast %2 %1","tooltip":"Start, sluit af of herstart één VM of container, op zijn VMID. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Gasten in PROXMOX_PROTECT worden nooit aangeraakt. Heeft een token met VM.PowerMgmt nodig. Op deze pagina start of stopt er niets echt."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"elke dag","weekdays":"op werkdagen","weekends":"in het weekend"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"dagelijkse","hour":"uurlijkse"},
 "rb_coinbase_orders.WHICH":{"open":"open orders","fills":"laatste uitvoeringen"},
 "rb_coinbase_preview.SIDE":{"buy":"kopen","sell":"verkopen"},
-"rb_coinbase_order.SIDE":{"buy":"kopen","sell":"verkopen"}
+"rb_coinbase_order.SIDE":{"buy":"kopen","sell":"verkopen"},
+"rb_proxmox_power.ACTION":{"start":"starten","shutdown":"afsluiten","reboot":"herstarten"}
 },
 "categories":{
 "Events":"Gebeurtenissen",
@@ -210,7 +216,8 @@
 "Output":"Uitvoer",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Hulpmiddelen voor de agent: zet ze in een agentblok",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"UniFi-clients",
 "{n} clients":"{n} clients",
 "UniFi network":"UniFi-netwerk",
-"read your UniFi network: who's connected, and how your UniFi devices are":"je UniFi-netwerk lezen: wie er verbonden is, en hoe het met je UniFi-apparaten gaat"
+"read your UniFi network: who's connected, and how your UniFi devices are":"je UniFi-netwerk lezen: wie er verbonden is, en hoe het met je UniFi-apparaten gaat",
+"A Proxmox guest can be started, shut down or rebooted.":"Een Proxmox-gast kan worden gestart, afgesloten of herstart.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"Proxmox-cluster",
+"Proxmox guests":"Proxmox-gasten",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Welke Proxmox-gast? Geef zijn VMID, zoals 101.",
+"sample cluster":"voorbeeldcluster",
+"{n} guests":"{n} gasten",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"je Proxmox-cluster lezen: nodes, gasten, opslag en taken",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"je Proxmox-gasten starten, afsluiten en herstarten (met elke keer een vraag)"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2007,6 +2024,22 @@
 "{n} clients":"{n} clients",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi heeft UNIFI_URL en UNIFI_API_KEY nodig {where_keys}: het adres van de console (zoals https://192.168.1.1) en een API-sleutel uit de Network-app (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"De UniFi-console weigerde UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} apparaten"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} apparaten",
+"A Proxmox guest can be started, shut down or rebooted.":"Een Proxmox-gast kan worden gestart, afgesloten of herstart.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Proxmox-gasten",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Welke Proxmox-gast? Geef zijn VMID, zoals 101.",
+"{n} guests":"{n} gasten",
+"Allow this? {what}":"Toestaan? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"Gast {vmid} staat in PROXMOX_PROTECT, dus Second Thought start, stopt of herstart hem nooit.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox heeft PROXMOX_URL, PROXMOX_TOKEN_ID en PROXMOX_TOKEN_SECRET nodig {where_keys}: het adres (zoals https://pve.local:8006) en een API-token, uit Datacenter, Permissions, API Tokens. Geef het de rol PVEAuditor, tenzij het programma gasten start of stopt.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox weigerde PROXMOX_TOKEN_ID en PROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought stuurt {what} niet naar Proxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"het token mag ook {what}. Second Thought heeft dat niet nodig: de rol PVEAuditor is veiliger.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"het token kan geen gasten starten of stoppen (het heeft VM.PowerMgmt nodig), dus de aan/uit-blokken van dit programma zouden worden geweigerd.",
+"the token isn't allowed to do that":"het token mag dat niet",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} gebeurt alleen als jij er bent om ja te zeggen, en er is niemand."
 }
 };

@@ -160,7 +160,12 @@
 "rb_mikrotik_health":{"message0":"MikroTik صحتی","tooltip":"یوللایجینڭ كندیسی حقنده بر قید: board، version، uptime، cpu_load (%)، free_memory (MB)، temperature (°C)، و اولان هر باشقه حس ایدیجی."},
 "rb_mikrotik_log":{"message0":"MikroTik دفتری، صوڭ %1 سطر","tooltip":"یوللایجی دفترینڭ صوڭ سطرلری، اڭ اسكیسی اوّل، هر بری «time topics: message» شكلنده."},
 "rb_unifi_clients":{"message0":"UniFi مشتریلری","tooltip":"قیدلر لیسته‌سی، UniFi شبكه‌ڭزه باغلی هر جهاز ایچون بر: name، mac، ip، type (wired، wireless یا vpn)، connected (نه زماندن بری) و uplink (اوزرندن باغلاندیغی UniFi جهازی). یالڭز اوقور: هیچ بر شی ایڭلنمز و دكیشمز. بو صحیفه‌ده نمونه بر شبكه قوللانیر."},
-"rb_unifi_devices":{"message0":"UniFi جهازلری","tooltip":"قیدلر لیسته‌سی، هر UniFi جهازی ایچون بر (قاپی، آنحتارلر، اریشیم نقطه‌لری): name، model، mac، ip، state، firmware، update (یڭی firmware بكلییور می)، و باغلی اولان ایچون uptime (ساعت)، cpu و memory (%)."}
+"rb_unifi_devices":{"message0":"UniFi جهازلری","tooltip":"قیدلر لیسته‌سی، هر UniFi جهازی ایچون بر (قاپی، آنحتارلر، اریشیم نقطه‌لری): name، model، mac، ip، state، firmware، update (یڭی firmware بكلییور می)، و باغلی اولان ایچون uptime (ساعت)، cpu و memory (%)."},
+"rb_proxmox_nodes":{"message0":"Proxmox دوكوملری","tooltip":"قیدلر لیسته‌سی، Proxmox قومڭزڭ هر دوكومی ایچون بر: node، status، cpu و memory (%)، uptime (ساعت). بو صحیفه‌ده نمونه بر قوم قوللانیر."},
+"rb_proxmox_guests":{"message0":"Proxmox مسافرلری","tooltip":"قیدلر لیسته‌سی، هر VM و قاب ایچون بر: vmid، name، node، type (vm یا container)، status، cpu و memory (%)، uptime (ساعت)، و دورمش اولان ایچون onboot (دوكومله برابر باشلامالی می)."},
+"rb_proxmox_storage":{"message0":"Proxmox دپولری","tooltip":"قیدلر لیسته‌سی، هر دوكومده‌كی هر دپو ایچون بر: storage، node، used (%)، used_gb، size_gb و status."},
+"rb_proxmox_tasks":{"message0":"صوڭ %1 ساعتڭ Proxmox ایشلری","tooltip":"قیدلر لیسته‌سی، اڭ یڭیسی اوّل: started، node، type (vzdump بر یدكدر)، id (مسافر)، status (OK، یا نه یاڭلیش گیتدی) و user."},
+"rb_proxmox_power":{"message0":"Proxmox مسافری %2 ی %1","tooltip":"بر VM یا قابی VMID سی ایله باشلاتیر، قاپاتیر یا یڭیدن باشلاتیر. باشقه هیچ بر شی صورمازسه بیله هر زمان اوّل سزه صورار؛ اوت دیه‌جك كیمسه یوقسه یورومز. PROXMOX_PROTECT ده‌كی مسافرلره اصلا طوقونولماز. VM.PowerMgmt لی بر نشان ایستر. بو صحیفه‌ده هیچ بر شی حقیقةً باشلاماز و دورماز."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"هر گون","weekdays":"ایش گونلری","weekends":"هفته صوڭلری"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"كونلك","hour":"ساعتلك"},
 "rb_coinbase_orders.WHICH":{"open":"آچیق امرلری","fills":"صوڭ ایفالری"},
 "rb_coinbase_preview.SIDE":{"buy":"آل","sell":"صات"},
-"rb_coinbase_order.SIDE":{"buy":"آل","sell":"صات"}
+"rb_coinbase_order.SIDE":{"buy":"آل","sell":"صات"},
+"rb_proxmox_power.ACTION":{"start":"باشلات","shutdown":"قاپات","reboot":"یڭیدن باشلات"}
 },
 "categories":{
 "Agent":"وكیل",
@@ -210,7 +216,8 @@
 "You":"سن",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"UniFi مشتریلری",
 "{n} clients":"{n} مشتری",
 "UniFi network":"UniFi شبكه‌سی",
-"read your UniFi network: who's connected, and how your UniFi devices are":"UniFi شبكه‌ڭزی اوقومق: كیملر باغلی، و UniFi جهازلرڭز نه حالده"
+"read your UniFi network: who's connected, and how your UniFi devices are":"UniFi شبكه‌ڭزی اوقومق: كیملر باغلی، و UniFi جهازلرڭز نه حالده",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox مسافری باشلاتیلابیلیر، قاپاتیلابیلیر یا یڭیدن باشلاتیلابیلیر.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"Proxmox قومی",
+"Proxmox guests":"Proxmox مسافرلری",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"هانكی Proxmox مسافری؟ VMID سنی ویرڭ، 101 كبی.",
+"sample cluster":"نمونه قوم",
+"{n} guests":"{n} مسافر",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"Proxmox قومڭزی اوقومق: دوكوملر، مسافرلر، دپولر و ایشلر",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"Proxmox مسافرلرڭزی باشلاتمق، قاپاتمق و یڭیدن باشلاتمق (هر دفعه سزه صوره‌رق)"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2007,7 +2024,23 @@
 "{n} clients":"{n} مشتری",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi، UNIFI_URL و UNIFI_API_KEY ایستر {where_keys}: قونسولڭ آدرسی (https://192.168.1.1 كبی) و Network اوینامه‌سندن بر API آناختاری (Settings، Control Plane، Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi قونسولی UNIFI_API_KEY ی رد ایتدی.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}، {n} جهاز"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}، {n} جهاز",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox مسافری باشلاتیلابیلیر، قاپاتیلابیلیر یا یڭیدن باشلاتیلابیلیر.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Proxmox مسافرلری",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"هانكی Proxmox مسافری؟ VMID سنی ویرڭ، 101 كبی.",
+"{n} guests":"{n} مسافر",
+"Allow this? {what}":"اذن ویریرمیسڭز؟ {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"مسافر {vmid}، PROXMOX_PROTECT ده‌در، اونڭ ایچون Second Thought اونی اصلا باشلاتماز، دوردورماز و یڭیدن باشلاتماز.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox، PROXMOX_URL و PROXMOX_TOKEN_ID و PROXMOX_TOKEN_SECRET ایستر {where_keys}: آدرس (https://pve.local:8006 كبی) و Datacenter، Permissions، API Tokens دن بر API نشانی. پروغرام مسافر باشلاتوب دوردورمازسه اڭا PVEAuditor وظیفه‌سنی ویرڭ.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox، PROXMOX_TOKEN_ID و PROXMOX_TOKEN_SECRET ی رد ایتدی.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought، {what} ی Proxmox ه گوندرمز.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"نشان {what} ده یاپابیلیر. Second Thought بوڭا محتاج دكل: PVEAuditor وظیفه‌سی داها امیندر.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"نشان مسافر باشلاتوب دوردوره‌مز (VM.PowerMgmt ایستر)، اونڭ ایچون بو پروغرامڭ گوج بلوقلری رد اولونور.",
+"the token isn't allowed to do that":"نشانڭ بونی یاپمغه اذنی یوق",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} آنجق سز اوت دیمك ایچون اوراده ایكن یورور، و كیمسه یوق."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

@@ -137,6 +137,9 @@
       B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_cancel", { ORDER:K("") })
     ]},
+    { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
+      B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
+    ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })

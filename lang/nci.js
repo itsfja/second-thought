@@ -159,7 +159,12 @@
 "rb_mikrotik_health":{"message0":"MikroTik pahtiliztli","tooltip":"Cē amatlahcuilōlli ītechpa in ohtlatlamachtiāni: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), ihuan occequintin tlamachiliztli quipiya."},
 "rb_mikrotik_log":{"message0":"MikroTik tlahcuilōlli, in tlatzonco %1 tlahcuilōlli","tooltip":"In tlatzonco tlahcuilōlli in ohtlatlamachtiāni ītlahcuilōl, in achi huēhuehtl achto, cecentetl iuhquin «time topics: message»."},
 "rb_unifi_clients":{"message0":"UniFi calaquini","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl tepozchīhualli motzoh ica mo UniFi matlatl: name, mac, ip, type (wired, wireless nozo vpn), connected (īhuīcpa quēmman) ihuan uplink (in UniFi tepozchīhualli ic motzoh). Zan tlapōhua: ahtle motzacua nozo mopatla. Nicān quitequitiltia cē machiyōtl matlatl."},
-"rb_unifi_devices":{"message0":"UniFi tepozchīhualli","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl UniFi tepozchīhualli (quiyāhuatl, tlapatlaliztli, calaquiyān): name, model, mac, ip, state, firmware, update (intlā quichiya yancuic firmware), ihuan intlā motzoh, uptime (hora), cpu ihuan memory (%)."}
+"rb_unifi_devices":{"message0":"UniFi tepozchīhualli","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl UniFi tepozchīhualli (quiyāhuatl, tlapatlaliztli, calaquiyān): name, model, mac, ip, state, firmware, update (intlā quichiya yancuic firmware), ihuan intlā motzoh, uptime (hora), cpu ihuan memory (%)."},
+"rb_proxmox_nodes":{"message0":"Proxmox ilpicayōtl","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl ilpicayōtl in mo Proxmox centlaliliztli: node, status, cpu ihuan memory (%), uptime (hora). Nicān quitequitiltia cē machiyōtl centlaliliztli."},
+"rb_proxmox_guests":{"message0":"Proxmox calpanecah","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl VM ihuan tlacomitl: vmid, name, node, type (vm nozo container), status, cpu ihuan memory (%), uptime (hora), ihuan in moquetztoc onboot (intlā monequi motzintīz ihuān in ilpicayōtl)."},
+"rb_proxmox_storage":{"message0":"Proxmox tlapiyaloyān","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl tlapiyaloyān ipan cecentetl ilpicayōtl: storage, node, used (%), used_gb, size_gb ihuan status."},
+"rb_proxmox_tasks":{"message0":"Proxmox tequitl in tlatzonco %1 hora","tooltip":"Cē amatlahcuilōlli, in achi yancuic achto: started, node, type (vzdump cē tlapiyaliztli), id (in calpanecatl), status (OK, nozo tlein ōpoliuh) ihuan user."},
+"rb_proxmox_power":{"message0":"%1 Proxmox calpanecatl %2","tooltip":"Quitzintia, quicehuia nozo occeppa quitzintia cē VM nozo tlacomitl, ica īVMID. Mochipa achto mitztlahtlani, māmo ahtle occē tlahtlani; intlā ahquemeh oncah quihtōz quēmah, ahmo mochīhua. In calpanecah ipan PROXMOX_PROTECT aīc moyacatzohuah. Quinequi machiyōtl ica VM.PowerMgmt. Nicān ahtle nelli motzintia nozo moquetza."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -180,7 +185,8 @@
 "rb_coinbase_candles.SIZE":{"day":"cecemilhuitl","hour":"cecenhora"},
 "rb_coinbase_orders.WHICH":{"open":"tlapoalli tlanahuatilli","fills":"tlatzonco tlatzonquixtiliztli"},
 "rb_coinbase_preview.SIDE":{"buy":"xicohua","sell":"xicnamaca"},
-"rb_coinbase_order.SIDE":{"buy":"xicohua","sell":"xicnamaca"}
+"rb_coinbase_order.SIDE":{"buy":"xicohua","sell":"xicnamaca"},
+"rb_proxmox_power.ACTION":{"start":"xictzinti","shutdown":"xiccehui","reboot":"occeppa xictzinti"}
 },
 "categories":{
 "Agent":"Tītlantli",
@@ -209,7 +215,8 @@
 "You":"Tehhuātl",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1031,7 +1038,17 @@
 "UniFi clients":"UniFi calaquini",
 "{n} clients":"{n} calaquini",
 "UniFi network":"UniFi matlatl",
-"read your UniFi network: who's connected, and how your UniFi devices are":"quipōhuaz mo UniFi matlatl: āquin ōmotzoh, ihuan quēn cah mo UniFi tepozchīhualli"
+"read your UniFi network: who's connected, and how your UniFi devices are":"quipōhuaz mo UniFi matlatl: āquin ōmotzoh, ihuan quēn cah mo UniFi tepozchīhualli",
+"A Proxmox guest can be started, shut down or rebooted.":"Cē Proxmox calpanecatl huel motzintia, huel mocehuia nozo occeppa motzintia.",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"Proxmox centlaliliztli",
+"Proxmox guests":"Proxmox calpanecah",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Catlehhuātl Proxmox calpanecatl? Xiquitto ītlapōhual VMID, iuhquin 101.",
+"sample cluster":"machiyōtl centlaliliztli",
+"{n} guests":"{n} calpanecah",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"quipōhuaz mo Proxmox centlaliliztli: ilpicayōtl, calpanecah, tlapiyaloyān ihuan tequitl",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"quintzintīz, quincehuīz ihuan occeppa quintzintīz mo Proxmox calpanecah (mitztlahtlaniz cecenpa)"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2006,7 +2023,23 @@
 "{n} clients":"{n} calaquini",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi quinequi UNIFI_URL ihuan UNIFI_API_KEY {where_keys}: in tlayacānqui īcān (iuhquin https://192.168.1.1) ihuan cē API tlatzacuilli īhuīcpa Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"In UniFi tlayacānqui ōquixtlāuh UNIFI_API_KEY.",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tepozchīhualli"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tepozchīhualli",
+"A Proxmox guest can be started, shut down or rebooted.":"Cē Proxmox calpanecatl huel motzintia, huel mocehuia nozo occeppa motzintia.",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Proxmox calpanecah",
+"Proxmox: {why}.":"Proxmox: {why}.",
+"Which Proxmox guest? Give its VMID, like 101.":"Catlehhuātl Proxmox calpanecatl? Xiquitto ītlapōhual VMID, iuhquin 101.",
+"{n} guests":"{n} calpanecah",
+"Allow this? {what}":"Ticcāhua? {what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"In calpanecatl {vmid} ca ipan PROXMOX_PROTECT, ic Second Thought aīc quitzintia, quiquetza nozo occeppa quitzintia.",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox quinequi PROXMOX_URL, PROXMOX_TOKEN_ID ihuan PROXMOX_TOKEN_SECRET {where_keys}: in īcān (iuhquin https://pve.local:8006) ihuan cē API machiyōtl, īhuīcpa Datacenter, Permissions, API Tokens. Xicmaca in PVEAuditor tequitl, intlā in tlachīhualli ahmo quintzintia nozo quinquetza calpanecah.",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox ōquixtlāuh PROXMOX_TOKEN_ID ihuan PROXMOX_TOKEN_SECRET.",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought ahmo quititlani {what} ītech Proxmox.",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"in machiyōtl no huel {what}. Second Thought ahmo quinequi: in PVEAuditor tequitl achi cualli.",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"in machiyōtl ahmo huel quintzintia nozo quinquetza calpanecah (quinequi VM.PowerMgmt), ic in tlachīhualli ītlachicāhualtepētl motlāxilīzqueh.",
+"the token isn't allowed to do that":"in machiyōtl ahmo huel quichīhua inīn",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} zan mochīhua ihcuāc tioncah ic tiquihtōz quēmah, auh ahquemeh oncah."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

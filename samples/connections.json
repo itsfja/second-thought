@@ -1428,5 +1428,186 @@
         "connectedAt": "2026-11-10T06:55:00Z"
       }
     ]
+  },
+  "proxmox": {
+    "note": "A sample Proxmox VE cluster for the page and the tests (#357), shaped the way the REST API answers. Tasks give 'ago' (seconds before now) instead of starttime: the page and tests/fake_proxmox.py work out the time. Last night's backup of 103 failed, local-lvm is 88% full, and 104 is stopped though it should start at boot.",
+    "version": {
+      "version": "8.4.1",
+      "release": "8.4",
+      "repoid": "2a5fa54a8503f96d"
+    },
+    "permissions": {
+      "/": {
+        "Sys.Audit": 1,
+        "VM.Audit": 1,
+        "Datastore.Audit": 1,
+        "SDN.Audit": 1
+      }
+    },
+    "nodes": [
+      {
+        "node": "pve1",
+        "status": "online",
+        "cpu": 0.073,
+        "maxcpu": 8,
+        "mem": 21474836480,
+        "maxmem": 34359738368,
+        "uptime": 1814400
+      },
+      {
+        "node": "pve2",
+        "status": "online",
+        "cpu": 0.021,
+        "maxcpu": 4,
+        "mem": 8589934592,
+        "maxmem": 17179869184,
+        "uptime": 604800
+      }
+    ],
+    "guests": [
+      {
+        "vmid": 100,
+        "name": "homeassistant",
+        "node": "pve1",
+        "type": "qemu",
+        "status": "running",
+        "cpu": 0.04,
+        "mem": 3221225472,
+        "maxmem": 4294967296,
+        "uptime": 1810000,
+        "onboot": 1
+      },
+      {
+        "vmid": 101,
+        "name": "dc1",
+        "node": "pve1",
+        "type": "qemu",
+        "status": "running",
+        "cpu": 0.012,
+        "mem": 2147483648,
+        "maxmem": 4294967296,
+        "uptime": 1810000,
+        "onboot": 1
+      },
+      {
+        "vmid": 102,
+        "name": "plex",
+        "node": "pve1",
+        "type": "lxc",
+        "status": "running",
+        "cpu": 0.11,
+        "mem": 1610612736,
+        "maxmem": 4294967296,
+        "uptime": 900000,
+        "onboot": 1
+      },
+      {
+        "vmid": 103,
+        "name": "unifi",
+        "node": "pve2",
+        "type": "lxc",
+        "status": "running",
+        "cpu": 0.03,
+        "mem": 1073741824,
+        "maxmem": 2147483648,
+        "uptime": 600000,
+        "onboot": 1
+      },
+      {
+        "vmid": 104,
+        "name": "pihole",
+        "node": "pve2",
+        "type": "lxc",
+        "status": "stopped",
+        "cpu": 0,
+        "mem": 0,
+        "maxmem": 536870912,
+        "uptime": 0,
+        "onboot": 1
+      },
+      {
+        "vmid": 105,
+        "name": "test-vm",
+        "node": "pve2",
+        "type": "qemu",
+        "status": "stopped",
+        "cpu": 0,
+        "mem": 0,
+        "maxmem": 2147483648,
+        "uptime": 0,
+        "onboot": 0
+      },
+      {
+        "vmid": 9000,
+        "name": "debian-template",
+        "node": "pve1",
+        "type": "qemu",
+        "status": "stopped",
+        "cpu": 0,
+        "mem": 0,
+        "maxmem": 2147483648,
+        "uptime": 0,
+        "template": 1
+      }
+    ],
+    "storage": [
+      {
+        "storage": "local",
+        "node": "pve1",
+        "disk": 30064771072,
+        "maxdisk": 107374182400,
+        "status": "available"
+      },
+      {
+        "storage": "local-lvm",
+        "node": "pve1",
+        "disk": 755914244096,
+        "maxdisk": 858993459200,
+        "status": "available"
+      },
+      {
+        "storage": "nas-backups",
+        "node": "pve1",
+        "disk": 1288490188800,
+        "maxdisk": 4294967296000,
+        "status": "available"
+      },
+      {
+        "storage": "local",
+        "node": "pve2",
+        "disk": 21474836480,
+        "maxdisk": 107374182400,
+        "status": "available"
+      }
+    ],
+    "tasks": [
+      {
+        "node": "pve1",
+        "type": "vzdump",
+        "id": "",
+        "status": "OK",
+        "user": "root@pam",
+        "ago": 21600,
+        "took": 3300
+      },
+      {
+        "node": "pve2",
+        "type": "vzdump",
+        "id": "103",
+        "status": "ERROR: job failed with err -5 - Input/output error",
+        "user": "root@pam",
+        "ago": 20000,
+        "took": 240
+      },
+      {
+        "node": "pve1",
+        "type": "qmstart",
+        "id": "105",
+        "status": "OK",
+        "user": "francis@pam",
+        "ago": 108000,
+        "took": 5
+      }
+    ]
   }
 }

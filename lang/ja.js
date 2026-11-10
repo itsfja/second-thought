@@ -159,7 +159,12 @@
 "rb_mikrotik_health":{"message0":"MikroTik の状態","tooltip":"ルーターやスイッチそのものについての記録：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C）、ほかにあるセンサーすべて。"},
 "rb_mikrotik_log":{"message0":"MikroTik のログ、最後の %1 行","tooltip":"ルーターのログの最後の行を古い順に。それぞれ「time topics: message」の形です。"},
 "rb_unifi_clients":{"message0":"UniFi のクライアント","tooltip":"記録のリストで、UniFi ネットワークにつながっている機器ごとに一つ：name、mac、ip、type（wired、wireless、vpn）、connected（いつから）、uplink（経由している UniFi 機器）。読むだけで、何もブロックも変更もしません。このページではサンプルのネットワークを使います。"},
-"rb_unifi_devices":{"message0":"UniFi の機器","tooltip":"記録のリストで、UniFi 機器（ゲートウェイ、スイッチ、アクセスポイント）ごとに一つ：name、model、mac、ip、state、firmware、update（新しいファームウェアが待っているか）、オンラインなら uptime（時間）、cpu と memory（%）。"}
+"rb_unifi_devices":{"message0":"UniFi の機器","tooltip":"記録のリストで、UniFi 機器（ゲートウェイ、スイッチ、アクセスポイント）ごとに一つ：name、model、mac、ip、state、firmware、update（新しいファームウェアが待っているか）、オンラインなら uptime（時間）、cpu と memory（%）。"},
+"rb_proxmox_nodes":{"message0":"Proxmox のノード","tooltip":"記録のリストで、Proxmox クラスターのノードごとに一つ：node、status、cpu と memory（%）、uptime（時間）。このページではサンプルのクラスターを使います。"},
+"rb_proxmox_guests":{"message0":"Proxmox のゲスト","tooltip":"記録のリストで、VM とコンテナーごとに一つ：vmid、name、node、type（vm か container）、status、cpu と memory（%）、uptime（時間）、停止中なら onboot（ノードと一緒に起動するはずか）。"},
+"rb_proxmox_storage":{"message0":"Proxmox のストレージ","tooltip":"記録のリストで、各ノードのストレージごとに一つ：storage、node、used（%）、used_gb、size_gb、status。"},
+"rb_proxmox_tasks":{"message0":"直近 %1 時間の Proxmox のタスク","tooltip":"記録のリストで、新しい順：started、node、type（vzdump はバックアップ）、id（ゲスト）、status（OK か、失敗の内容）、user。"},
+"rb_proxmox_power":{"message0":"Proxmox のゲスト %2 を %1","tooltip":"VM またはコンテナーを VMID で起動、シャットダウン、再起動します。ほかに何も確認しないときでも必ず先に確認し、「はい」と言う人がいなければ実行しません。PROXMOX_PROTECT にあるゲストには一切触れません。VM.PowerMgmt のあるトークンが必要です。このページでは実際には何も起動も停止もしません。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -181,7 +186,8 @@
 "rb_coinbase_candles.SIZE":{"day":"日足","hour":"時間足"},
 "rb_coinbase_orders.WHICH":{"open":"未約定の注文","fills":"最近の約定"},
 "rb_coinbase_preview.SIDE":{"buy":"買う","sell":"売る"},
-"rb_coinbase_order.SIDE":{"buy":"買う","sell":"売る"}
+"rb_coinbase_order.SIDE":{"buy":"買う","sell":"売る"},
+"rb_proxmox_power.ACTION":{"start":"起動","shutdown":"シャットダウン","reboot":"再起動"}
 },
 "categories":{
 "Events":"イベント",
@@ -210,7 +216,8 @@
 "Output":"出力",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
-"UniFi":"UniFi"
+"UniFi":"UniFi",
+"Proxmox":"Proxmox"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"エージェントの道具：エージェントブロックの中に入れます",
@@ -1032,7 +1039,17 @@
 "UniFi clients":"UniFi のクライアント",
 "{n} clients":"{n} クライアント",
 "UniFi network":"UniFi ネットワーク",
-"read your UniFi network: who's connected, and how your UniFi devices are":"UniFi ネットワークを読む：誰が接続しているか、UniFi 機器の調子"
+"read your UniFi network: who's connected, and how your UniFi devices are":"UniFi ネットワークを読む：誰が接続しているか、UniFi 機器の調子",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox のゲストは起動、シャットダウン、再起動ができます。",
+"Proxmox":"Proxmox",
+"Proxmox cluster":"Proxmox クラスター",
+"Proxmox guests":"Proxmox のゲスト",
+"Proxmox: {why}.":"Proxmox：{why}。",
+"Which Proxmox guest? Give its VMID, like 101.":"どの Proxmox のゲストですか？VMID を指定してください。たとえば 101。",
+"sample cluster":"サンプルのクラスター",
+"{n} guests":"{n} ゲスト",
+"read your Proxmox cluster: nodes, guests, storage and tasks":"Proxmox クラスターを読む：ノード、ゲスト、ストレージ、タスク",
+"start, shut down and reboot your Proxmox guests (asking you each time)":"Proxmox のゲストを起動、シャットダウン、再起動する（毎回確認します）"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2007,6 +2024,22 @@
 "{n} clients":"{n} クライアント",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi には UNIFI_URL と UNIFI_API_KEY が必要です {where_keys}：コンソールのアドレス（たとえば https://192.168.1.1）と、Network アプリ（Settings、Control Plane、Integrations）の API キーです。",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi コンソールが UNIFI_API_KEY を拒否しました。",
-"UniFi Network {version}, {n} devices":"UniFi Network {version}、{n} 台"
+"UniFi Network {version}, {n} devices":"UniFi Network {version}、{n} 台",
+"A Proxmox guest can be started, shut down or rebooted.":"Proxmox のゲストは起動、シャットダウン、再起動ができます。",
+"Proxmox":"Proxmox",
+"Proxmox guests":"Proxmox のゲスト",
+"Proxmox: {why}.":"Proxmox：{why}。",
+"Which Proxmox guest? Give its VMID, like 101.":"どの Proxmox のゲストですか？VMID を指定してください。たとえば 101。",
+"{n} guests":"{n} ゲスト",
+"Allow this? {what}":"許可しますか？{what}",
+"Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.":"ゲスト {vmid} は PROXMOX_PROTECT にあるので、Second Thought は起動も停止も再起動もしません。",
+"Proxmox VE {version}":"Proxmox VE {version}",
+"Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.":"Proxmox には PROXMOX_URL、PROXMOX_TOKEN_ID、PROXMOX_TOKEN_SECRET が必要です {where_keys}：アドレス（たとえば https://pve.local:8006）と、Datacenter、Permissions、API Tokens で作る API トークンです。プログラムがゲストを起動・停止しないなら PVEAuditor ロールにしてください。",
+"Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.":"Proxmox が PROXMOX_TOKEN_ID と PROXMOX_TOKEN_SECRET を拒否しました。",
+"Second Thought doesn't send {what} to Proxmox.":"Second Thought は {what} を Proxmox に送りません。",
+"the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.":"トークンは {what} もできます。Second Thought には不要です：PVEAuditor ロールのほうが安全です。",
+"the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.":"トークンはゲストを起動・停止できない（VM.PowerMgmt が必要）ので、このプログラムの電源ブロックは拒否されます。",
+"the token isn't allowed to do that":"トークンにはその操作が許されていません",
+"{what} only runs when you're there to say yes, and nobody is.":"{what} は、あなたが「はい」と言えるときだけ実行しますが、誰もいません。"
 }
 };

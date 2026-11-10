@@ -277,6 +277,10 @@
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_coinbase_balances": return coinbaseBalances();
+      case "rb_proxmox_nodes": return proxmoxNodes();
+      case "rb_proxmox_guests": return proxmoxGuests();
+      case "rb_proxmox_storage": return proxmoxStorage();
+      case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
       case "rb_mikrotik_ports": return mikrotikPorts();
@@ -866,6 +870,7 @@
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
+      case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {

@@ -613,6 +613,26 @@
   "rb_unifi_devices": {
    "message0": "𒃻 UniFi",
    "tooltip": "𒁾 𒈬𒊬𒊏, 𒃻 UniFi 𒀸𒀸: name, model, mac, ip, state, firmware, update, 𒅇 uptime (𒆜𒁍), cpu 𒅇 memory (%)."
+  },
+  "rb_proxmox_nodes": {
+   "message0": "𒃻𒂉 Proxmox",
+   "tooltip": "𒁾 𒈬𒊬𒊏, 𒃻𒂉 𒀸𒀸 𒃻 Proxmox-𒍪𒀀: node, status, cpu 𒅇 memory (%), uptime (𒆜𒁍). 𒁾 𒉈𒀀 𒃻 𒄑𒄯 𒁳."
+  },
+  "rb_proxmox_guests": {
+   "message0": "𒇽𒆠𒁄 Proxmox",
+   "tooltip": "𒁾 𒈬𒊬𒊏, VM 𒀸𒀸: vmid, name, node, type (vm 𒅇 container), status, cpu 𒅇 memory (%), uptime (𒆜𒁍), 𒅇 onboot."
+  },
+  "rb_proxmox_storage": {
+   "message0": "𒂍𒈩 Proxmox",
+   "tooltip": "𒁾 𒈬𒊬𒊏, 𒂍𒈩 𒀸𒀸: storage, node, used (%), used_gb, size_gb 𒅇 status."
+  },
+  "rb_proxmox_tasks": {
+   "message0": "𒆥 Proxmox %1 𒆜𒁍 𒂕",
+   "tooltip": "𒁾 𒈬𒊬𒊏, 𒉋 𒅆𒂠: started, node, type (vzdump), id, status (OK, 𒅇 𒃻 𒅆𒌨) 𒅇 user."
+  },
+  "rb_proxmox_power": {
+   "message0": "%1 𒇽𒆠𒁄 Proxmox %2",
+   "tooltip": "VM 𒀸 VMID-𒁉𒋫 𒁲 𒅗, 𒄑 𒋳 𒅇 𒁲 𒅗 𒈫. 𒌓 𒆸𒆸 𒅆𒂠 𒇷 𒋻; 𒇽 𒃶 𒅗 𒉡𒅅, 𒉡𒀝. PROXMOX_PROTECT 𒉡𒋳. 𒈬𒊬 VM.PowerMgmt-𒁕 𒀠 𒅗. 𒁾 𒉈𒀀 𒃻 𒉡𒁲𒅗."
   }
  },
  "options": {
@@ -731,6 +751,11 @@
   "rb_coinbase_order.SIDE": {
    "buy": "𒉚",
    "sell": "𒋧"
+  },
+  "rb_proxmox_power.ACTION": {
+   "start": "𒁲 𒅗",
+   "shutdown": "𒄑 𒋳",
+   "reboot": "𒁲 𒅗 𒈫"
   }
  },
  "categories": {
@@ -760,7 +785,8 @@
   "You": "𒍝𒂊",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
-  "UniFi": "UniFi"
+  "UniFi": "UniFi",
+  "Proxmox": "Proxmox"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
@@ -1582,7 +1608,17 @@
   "UniFi clients": "𒇽 𒆭 UniFi",
   "{n} clients": "𒇽 𒆭 {n}",
   "UniFi network": "𒊓 UniFi",
-  "read your UniFi network: who's connected, and how your UniFi devices are": "𒊓 UniFi-𒍪 𒋃: 𒀀𒁀 𒆟, 𒅇 𒃻 UniFi-𒍪 𒀀𒈾𒁶"
+  "read your UniFi network: who's connected, and how your UniFi devices are": "𒊓 UniFi-𒍪 𒋃: 𒀀𒁀 𒆟, 𒅇 𒃻 UniFi-𒍪 𒀀𒈾𒁶",
+  "A Proxmox guest can be started, shut down or rebooted.": "𒇽𒆠𒁄 Proxmox 𒁲 𒅗 𒅇 𒄑 𒋳",
+  "Proxmox": "Proxmox",
+  "Proxmox cluster": "𒃻 Proxmox",
+  "Proxmox guests": "𒇽𒆠𒁄 Proxmox",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "𒇽𒆠𒁄 Proxmox 𒀀𒁀? VMID-𒁉 𒋧, 101-𒁶.",
+  "sample cluster": "𒃻 𒄑𒄯",
+  "{n} guests": "𒇽𒆠𒁄 {n}",
+  "read your Proxmox cluster: nodes, guests, storage and tasks": "𒃻 Proxmox-𒍪 𒋃: 𒃻𒂉, 𒇽𒆠𒁄, 𒂍𒈩 𒅇 𒆥",
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "𒇽𒆠𒁄 Proxmox-𒍪 𒁲 𒅗, 𒄑 𒋳 𒅇 𒁲 𒅗 𒈫 (𒌓 𒆸𒆸 𒇷 𒋻)"
  },
  "examples": {
   "review": {
@@ -3189,7 +3225,23 @@
   "{n} clients": "lu2 kur9 {n}",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi UNIFI_URL u3 UNIFI_API_KEY {where_keys} al dug4: ki (https://192.168.1.1-gin7) u3 niĝ2-du8 API Network-ta (Settings, Control Plane, Integrations).",
   "The UniFi console refused UNIFI_API_KEY.": "UniFi UNIFI_API_KEY nu-še-ga.",
-  "UniFi Network {version}, {n} devices": "UniFi Network {version}, niĝ2 {n}"
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, niĝ2 {n}",
+  "A Proxmox guest can be started, shut down or rebooted.": "lu2-ki-bal Proxmox sa2 du11 u3 ĝiš tag",
+  "Proxmox": "Proxmox",
+  "Proxmox guests": "lu2-ki-bal Proxmox",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "lu2-ki-bal Proxmox a-ba? VMID-bi šum2, 101-gin7.",
+  "{n} guests": "lu2-ki-bal {n}",
+  "Allow this? {what}": "ḫe2-ak? {what}",
+  "Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.": "lu2-ki-bal {vmid} PROXMOX_PROTECT-a ĝal2, Second Thought nu-sa2-du11.",
+  "Proxmox VE {version}": "Proxmox VE {version}",
+  "Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.": "Proxmox PROXMOX_URL, PROXMOX_TOKEN_ID u3 PROXMOX_TOKEN_SECRET {where_keys} al dug4: ki (https://pve.local:8006-gin7) u3 mu-sar API Datacenter, Permissions, API Tokens-ta. PVEAuditor šum2, tukum-bi dub-sar lu2-ki-bal nu-sa2-du11.",
+  "Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.": "Proxmox PROXMOX_TOKEN_ID u3 PROXMOX_TOKEN_SECRET nu-še-ga.",
+  "Second Thought doesn't send {what} to Proxmox.": "Second Thought {what} Proxmox-še3 nu-kin-gi4.",
+  "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "mu-sar {what} ak-e. Second Thought nu-dug4: PVEAuditor silim-ma diri.",
+  "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "mu-sar lu2-ki-bal nu-sa2-du11-e (VM.PowerMgmt al dug4), šeg12 dub-sar nu-še-ga.",
+  "the token isn't allowed to do that": "mu-sar ne nu-ak-e",
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} u4 ḫe2 dug4-zu-a dili ak, lu2 nu-ĝal2."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

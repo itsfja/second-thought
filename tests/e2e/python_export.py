@@ -214,6 +214,9 @@ def python_tests(codes, share=None):
     import fake_unifi  # and the UniFi ones a stand-in console (#359)
     unifi_all = fake_unifi.FakeUnifi()
     env.update(UNIFI_URL=unifi_all.start(), UNIFI_API_KEY=fake_unifi.KEY)
+    import fake_proxmox  # and the Proxmox ones a stand-in cluster (#357)
+    proxmox_all = fake_proxmox.FakeProxmox()
+    env.update(PROXMOX_URL=proxmox_all.start(), PROXMOX_TOKEN_ID=fake_proxmox.TOKEN_ID, PROXMOX_TOKEN_SECRET=fake_proxmox.SECRET)
     env.update(MQTT_HOST="127.0.0.1", MQTT_PORT=str(mqtt_port), MQTT_USERNAME=fake_mqtt.USER, MQTT_PASSWORD=fake_mqtt.PASSWORD)
     env.update(DISCORD_API_URL=svc_url + "/discord", DISCORD_BOT_TOKEN=fake_services.DISCORD_TOKEN, DISCORD_CHANNEL_ID=fake_services.DISCORD_CHANNEL,
                SLACK_API_URL=svc_url + "/slack", SLACK_BOT_TOKEN=fake_services.SLACK_TOKEN, SLACK_CHANNEL_ID=fake_services.SLACK_CHANNEL)
@@ -434,6 +437,18 @@ def python_tests(codes, share=None):
                     "2026-11-10 07:30:00 system,info,account: user monitor logged in via rest-api"]
             check(code_ == 0 and res[:len(want)] == want and not mikrotik_all.refused,
                   f"t_mt_blocks.py reads the same from RouterOS as the page does, and sends nothing but reads ({res[:len(want)]})" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+
+    if part("settings"):
+        print("Proxmox in Python")
+        with tempfile.TemporaryDirectory() as tmp:
+            (pathlib.Path(tmp) / "t_px_blocks.py").write_text(EXTRA["t_px_blocks"], encoding="utf-8")
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_px_blocks.py")], env, tmp)
+            res = [l.strip() for l in out.replace("\r\n", "\n").split("RESULT")[-1].split("\n") if l.strip().strip("=")]
+            want = ["62.5", "6", "true", "88", "2", "103"]
+            check(code_ == 0 and res[:len(want)] == want and not proxmox_all.refused,
+                  f"t_px_blocks.py reads the same from Proxmox as the page does ({res[:len(want)]})" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            check(not proxmox_all.powered and "only runs when you're there to say yes" in out,
+                  "with nobody at the keyboard, the exported program starts no Proxmox guest")
 
     if part("settings"):
         print("UniFi in Python")

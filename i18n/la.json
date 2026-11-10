@@ -612,6 +612,26 @@
   "rb_unifi_devices": {
    "message0": "machinae UniFi",
    "tooltip": "Index tabularum, una pro quaque machina UniFi (porta, commutatores, puncta accessus): name, model, mac, ip, state, firmware, update (num firmware novius exspectet), et pro machina conexa, uptime (horae), cpu et memory (%)."
+  },
+  "rb_proxmox_nodes": {
+   "message0": "nodi Proxmox",
+   "tooltip": "Index tabularum, una pro quoque nodo acervi tui Proxmox: node, status, cpu et memory (%), uptime (horae). In hac pagina acervo exempli utitur."
+  },
+  "rb_proxmox_guests": {
+   "message0": "hospites Proxmox",
+   "tooltip": "Index tabularum, una pro quaque VM et capsa: vmid, name, node, type (vm aut container), status, cpu et memory (%), uptime (horae), et pro sistente onboot (num cum nodo incipere debeat)."
+  },
+  "rb_proxmox_storage": {
+   "message0": "horrea Proxmox",
+   "tooltip": "Index tabularum, una pro quoque horreo in quoque nodo: storage, node, used (%), used_gb, size_gb et status."
+  },
+  "rb_proxmox_tasks": {
+   "message0": "opera Proxmox ultimarum %1 horarum",
+   "tooltip": "Index tabularum, recentissimum primum: started, node, type (vzdump est exemplar tutelae), id (hospes), status (OK, aut quid erraverit) et user."
+  },
+  "rb_proxmox_power": {
+   "message0": "%1 hospitem Proxmox %2",
+   "tooltip": "Unam VM aut capsam per VMID incipit, claudit aut iterum incipit. Te semper prius rogat, etiam cum nihil aliud rogat; nemine adstante qui «ita» dicat, non fit. Hospites in PROXMOX_PROTECT numquam tanguntur. Tesseram cum VM.PowerMgmt eget. In hac pagina nihil vere incipit aut sistit."
   }
  },
  "options": {
@@ -740,6 +760,11 @@
   "rb_coinbase_order.SIDE": {
    "buy": "eme",
    "sell": "vende"
+  },
+  "rb_proxmox_power.ACTION": {
+   "start": "incipe",
+   "shutdown": "claude",
+   "reboot": "iterum incipe"
   }
  },
  "categories": {
@@ -769,7 +794,8 @@
   "Output": "Exitus",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
-  "UniFi": "UniFi"
+  "UniFi": "UniFi",
+  "Proxmox": "Proxmox"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1591,7 +1617,17 @@
   "UniFi clients": "Clientes UniFi",
   "{n} clients": "{n} clientes",
   "UniFi network": "rete UniFi",
-  "read your UniFi network: who's connected, and how your UniFi devices are": "retem tuam UniFi legere: qui conexi sint, et quomodo machinae tuae UniFi se habeant"
+  "read your UniFi network: who's connected, and how your UniFi devices are": "retem tuam UniFi legere: qui conexi sint, et quomodo machinae tuae UniFi se habeant",
+  "A Proxmox guest can be started, shut down or rebooted.": "Hospes Proxmox incipi, claudi aut iterum incipi potest.",
+  "Proxmox": "Proxmox",
+  "Proxmox cluster": "acervus Proxmox",
+  "Proxmox guests": "Hospites Proxmox",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Quis hospes Proxmox? Da eius VMID, ut 101.",
+  "sample cluster": "acervus exempli",
+  "{n} guests": "{n} hospites",
+  "read your Proxmox cluster: nodes, guests, storage and tasks": "acervum tuum Proxmox legere: nodos, hospites, horrea et opera",
+  "start, shut down and reboot your Proxmox guests (asking you each time)": "hospites tuos Proxmox incipere, claudere et iterum incipere (te quoque tempore rogans)"
  },
  "examples": {
   "review": {
@@ -3198,7 +3234,23 @@
   "{n} clients": "{n} clientes",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi UNIFI_URL et UNIFI_API_KEY eget {where_keys}: inscriptionem consolae (ut https://192.168.1.1) et clavem API ex applicatione Network (Settings, Control Plane, Integrations).",
   "The UniFi console refused UNIFI_API_KEY.": "Consola UniFi UNIFI_API_KEY recusavit.",
-  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} machinae"
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} machinae",
+  "A Proxmox guest can be started, shut down or rebooted.": "Hospes Proxmox incipi, claudi aut iterum incipi potest.",
+  "Proxmox": "Proxmox",
+  "Proxmox guests": "Hospites Proxmox",
+  "Proxmox: {why}.": "Proxmox: {why}.",
+  "Which Proxmox guest? Give its VMID, like 101.": "Quis hospes Proxmox? Da eius VMID, ut 101.",
+  "{n} guests": "{n} hospites",
+  "Allow this? {what}": "Licetne? {what}",
+  "Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.": "Hospes {vmid} in PROXMOX_PROTECT est, itaque Second Thought eum numquam incipit, sistit aut iterum incipit.",
+  "Proxmox VE {version}": "Proxmox VE {version}",
+  "Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.": "Proxmox PROXMOX_URL, PROXMOX_TOKEN_ID et PROXMOX_TOKEN_SECRET eget {where_keys}: inscriptionem (ut https://pve.local:8006) et tesseram API, ex Datacenter, Permissions, API Tokens. Da ei munus PVEAuditor, nisi programma hospites incipit aut sistit.",
+  "Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET.": "Proxmox PROXMOX_TOKEN_ID et PROXMOX_TOKEN_SECRET recusavit.",
+  "Second Thought doesn't send {what} to Proxmox.": "Second Thought {what} ad Proxmox non mittit.",
+  "the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.": "tessera etiam {what} potest. Second Thought id non eget: munus PVEAuditor tutius est.",
+  "the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused.": "tessera hospites incipere aut sistere non potest (VM.PowerMgmt eget), itaque huius programmatis caudices recusarentur.",
+  "the token isn't allowed to do that": "tesserae id facere non licet",
+  "{what} only runs when you're there to say yes, and nobody is.": "{what} tantum fit cum ades ut «ita» dicas, et nemo adest."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",
