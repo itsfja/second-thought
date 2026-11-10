@@ -158,7 +158,9 @@
 "rb_mikrotik_ports":{"message0":"MikroTik-द्वारानि","tooltip":"अभिलेखानं सूचि, तव MikroTik-मग्गदेसकस्स परिवत्तकस्स वा पतिद्वारं एको: port, running, speed (यथा 10Gbps), errors, drops, link_downs, comment च। दोसा पाता च पच्छिमारम्भतो गणीयन्ति। केवलं पठति: परिवत्तके किञ्चि न परिवत्तति। इमस्मिं पिट्ठे निदस्सन-परिवत्तकं गण्हाति।"},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP-अंसा","tooltip":"अभिलेखानं सूचि, पतिनिवेसित-SFP-अंसं एको: port, module, temperature (°C), rx_power, tx_power (dBm) च।"},
 "rb_mikrotik_health":{"message0":"MikroTik-आरोग्यं","tooltip":"मग्गदेसकस्स अत्तनो अभिलेखो: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), तस्स अञ्ञे वेदका च।"},
-"rb_mikrotik_log":{"message0":"MikroTik-वत्तन्तं, पच्छिमा %1 पन्तियो","tooltip":"मग्गदेसकस्स वत्तन्तस्स पच्छिमा पन्तियो, पुराणतमा पठमं, एकेका \"time topics: message\" इति।"}
+"rb_mikrotik_log":{"message0":"MikroTik-वत्तन्तं, पच्छिमा %1 पन्तियो","tooltip":"मग्गदेसकस्स वत्तन्तस्स पच्छिमा पन्तियो, पुराणतमा पठमं, एकेका \"time topics: message\" इति।"},
+"rb_unifi_clients":{"message0":"UniFi-गाहका","tooltip":"अभिलेखानं सूचि, तव UniFi-जाले संयुत्तं पतियन्तं एको: name, mac, ip, type (wired, wireless, vpn वा), connected (कदा पट्ठाय), uplink (येन UniFi-यन्तेन संयुत्तं) च। केवलं पठति: किञ्चि न निवारीयति न परिवत्तीयति। इमस्मिं पिट्ठे निदस्सन-जालं गण्हाति।"},
+"rb_unifi_devices":{"message0":"UniFi-यन्तानि","tooltip":"अभिलेखानं सूचि, पति-UniFi-यन्तं एको (द्वारं, परिवत्तका, पवेसट्ठानानि): name, model, mac, ip, state, firmware, update (नवतरं firmware पतिक्खति वा), संयुत्तस्स च uptime (होरा), cpu, memory (%)।"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"सब्बदिवसे","weekdays":"कम्मदिवसेसु","weekends":"सत्ताहन्तेसु"},
@@ -207,7 +209,8 @@
 "Wait & time":"आगमनं कालो च",
 "You":"त्वं",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1024,7 +1027,12 @@
 "MikroTik ports":"MikroTik-द्वारानि",
 "{n} ports":"{n} द्वारानि",
 "MikroTik switch":"MikroTik-परिवत्तको",
-"read your MikroTik router or switch: its ports, modules, health and log":"तव MikroTik-मग्गदेसकं परिवत्तकं वा पठितुं: द्वारानि, अंसा, आरोग्यं, वत्तन्तं च"
+"read your MikroTik router or switch: its ports, modules, health and log":"तव MikroTik-मग्गदेसकं परिवत्तकं वा पठितुं: द्वारानि, अंसा, आरोग्यं, वत्तन्तं च",
+"UniFi":"UniFi",
+"UniFi clients":"UniFi-गाहका",
+"{n} clients":"{n} गाहका",
+"UniFi network":"UniFi-जालं",
+"read your UniFi network: who's connected, and how your UniFi devices are":"तव UniFi-जालं पठितुं: के संयुत्ता, तव UniFi-यन्तानि कथं इति च"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -1981,17 +1989,25 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"MikroTik-द्वारानि",
 "{n} ports":"{n} द्वारानि",
-"Couldn't reach the MikroTik at {url} ({reason}).":"{url} मध्ये MikroTik पापुणितुं न सक्का ({reason})।",
+"Couldn't reach the {who} at {url} ({reason}).":"{url} मध्ये {who} पापुणितुं न सक्का ({reason})।",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik MIKROTIK_URL, MIKROTIK_USER, MIKROTIK_PASSWORD च इच्छति {where_keys}: मग्गदेसकस्स ठानं (यथा https://192.168.88.1), केवलं read, api, rest-api नीतीहि युत्ते गणे एको उपयोगी च।",
 "MikroTik: {why}.":"MikroTik: {why}।",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought MikroTik तो केवलं पठति, तस्मा {what} न पेसेति।",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik MIKROTIK_USER MIKROTIK_PASSWORD च पटिक्खिपि।",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"अयं गणकयन्तो MikroTik स्स पमाणपत्ते न विस्ससति (मग्गदेसका येभुय्येन अत्तनो करोन्ति)। तस्स अङ्गुलिलक्खणं दट्ठुं --doctor चालेहि, MIKROTIK_CERT_SHA256 मध्ये ठपेहि च।",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"MikroTik स्स पमाणपत्तं न तं यं MIKROTIK_CERT_SHA256 नियमेति (तं {seen})। सचे पमाणपत्तं परिवत्तेसि, मूलं नवं करोहि; नो चे मज्झे किञ्चि अत्थि।",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"अयं गणकयन्तो {who} स्स पमाणपत्ते न विस्ससति (मग्गदेसका येभुय्येन अत्तनो करोन्ति)। तस्स अङ्गुलिलक्खणं दट्ठुं --doctor चालेहि, {setting} मध्ये ठपेहि च।",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"{who} स्स पमाणपत्तं न तं यं {setting} नियमेति (तं {seen})। सचे पमाणपत्तं परिवत्तेसि, मूलं नवं करोहि; नो चे मज्झे किञ्चि अत्थि।",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"लेखाय गणो ({group}) {what} पि कातुं सक्कोति। Second Thought केवलं पठति, तस्मा केवलं read, api, rest-api युत्तो गणो खेमतरो।",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"गुय्हसद्दो http:// मग्गेन अप्पटिच्छन्नो गच्छति। तस्स ठाने www-ssl सेवं https:// च गण्हाहि।",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"मग्गदेसकस्स पमाणपत्तं अत्तनो, तस्मा तं नियमेहि: सचे {url} तव MikroTik, second-thought.ini मध्ये MIKROTIK_CERT_SHA256 = {seen} लिखाहि।",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"मग्गदेसकस्स पमाणपत्तं अत्तनो, तस्मा तं नियमेहि: सचे {url} तव {who}, second-thought.ini मध्ये {setting} = {seen} लिखाहि।",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}।",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought UniFi तो केवलं पठति, तस्मा {what} न पेसेति।",
+"UniFi clients":"UniFi-गाहका",
+"{n} clients":"{n} गाहका",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi UNIFI_URL UNIFI_API_KEY च इच्छति {where_keys}: नियामकस्स ठानं (यथा https://192.168.1.1), Network-अनुप्पयोगतो API-कुञ्चिका च (Settings, Control Plane, Integrations)।",
+"The UniFi console refused UNIFI_API_KEY.":"UniFi-नियामको UNIFI_API_KEY पटिक्खिपि।",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} यन्तानि"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

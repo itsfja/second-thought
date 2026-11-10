@@ -68,6 +68,7 @@
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
+             unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -114,6 +115,10 @@
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.unifi) out.push("", "[unifi]",
+      "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
+      "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
+      "UNIFI_URL = https://192.168.1.1", "UNIFI_API_KEY = ", "UNIFI_CERT_SHA256 = ");
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
@@ -422,6 +427,8 @@
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_unifi_clients": return "(await R.unifi_clients())";
+        case "rb_unifi_devices": return "(await R.unifi_devices())";
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";

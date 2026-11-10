@@ -157,7 +157,9 @@
 "rb_mikrotik_ports":{"message0":"portae MikroTik","tooltip":"Index tabularum, una pro quaque porta commutatoris tui MikroTik: port, running, speed (ut 10Gbps), errors, drops, link_downs et comment. Errores et amissa ab ultimo initio numerantur. Tantum legit: nihil in commutatore mutatur. In hac pagina commutatore exempli utitur."},
 "rb_mikrotik_sfp":{"message0":"moduli SFP MikroTik","tooltip":"Index tabularum, una pro quoque modulo SFP inserto: port, module, temperature (°C), rx_power et tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"valetudo MikroTik","tooltip":"Tabula de ipso commutatore: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), et quivis alius sensor quem habet."},
-"rb_mikrotik_log":{"message0":"acta MikroTik, ultimi %1 versus","tooltip":"Ultimi versus actorum commutatoris, vetustissimus primus, quisque ut «time topics: message»."}
+"rb_mikrotik_log":{"message0":"acta MikroTik, ultimi %1 versus","tooltip":"Ultimi versus actorum commutatoris, vetustissimus primus, quisque ut «time topics: message»."},
+"rb_unifi_clients":{"message0":"clientes UniFi","tooltip":"Index tabularum, una pro quaque machina reti tuae UniFi conexa: name, mac, ip, type (wired, wireless aut vpn), connected (ex quo) et uplink (machina UniFi per quam conectitur). Tantum legit: nihil obstruitur neque mutatur. In hac pagina rete exempli utitur."},
+"rb_unifi_devices":{"message0":"machinae UniFi","tooltip":"Index tabularum, una pro quaque machina UniFi (porta, commutatores, puncta accessus): name, model, mac, ip, state, firmware, update (num firmware novius exspectet), et pro machina conexa, uptime (horae), cpu et memory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -207,7 +209,8 @@
 "Homey":"Homey",
 "Output":"Exitus",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1024,7 +1027,12 @@
 "MikroTik ports":"Portae MikroTik",
 "{n} ports":"{n} portae",
 "MikroTik switch":"commutator MikroTik",
-"read your MikroTik router or switch: its ports, modules, health and log":"commutatorem tuum MikroTik legere: portas, modulos, valetudinem et acta"
+"read your MikroTik router or switch: its ports, modules, health and log":"commutatorem tuum MikroTik legere: portas, modulos, valetudinem et acta",
+"UniFi":"UniFi",
+"UniFi clients":"Clientes UniFi",
+"{n} clients":"{n} clientes",
+"UniFi network":"rete UniFi",
+"read your UniFi network: who's connected, and how your UniFi devices are":"retem tuam UniFi legere: qui conexi sint, et quomodo machinae tuae UniFi se habeant"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1981,17 +1989,25 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"Portae MikroTik",
 "{n} ports":"{n} portae",
-"Couldn't reach the MikroTik at {url} ({reason}).":"MikroTik ad {url} attingi non potuit ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"{who} ad {url} attingi non potuit ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik MIKROTIK_URL, MIKROTIK_USER et MIKROTIK_PASSWORD eget {where_keys}: inscriptionem commutatoris (ut https://192.168.88.1) et usorem in grege tantum cum permissionibus read, api et rest-api.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought ex MikroTik tantum legit, itaque {what} non mittit.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik MIKROTIK_USER et MIKROTIK_PASSWORD recusavit.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Hic computator testimonio MikroTik non confidit (commutatores plerumque suum faciunt). Exsequere --doctor ut vestigium eius videas, et pone in MIKROTIK_CERT_SHA256.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Testimonium MikroTik non est id quod MIKROTIK_CERT_SHA256 figit (est {seen}). Si testimonium mutavisti, valorem renova; sin, aliquid interest.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"Hic computator testimonio {who} non confidit (commutatores plerumque suum faciunt). Exsequere --doctor ut vestigium eius videas, et pone in {setting}.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Testimonium {who} non est id quod {setting} figit (est {seen}). Si testimonium mutavisti, valorem renova; sin, aliquid interest.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"grex rationis ({group}) etiam {what} potest. Second Thought tantum legit, itaque grex cum read, api et rest-api tantum tutior est.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"tessera per http:// non obscurata it. Utere potius servitio www-ssl et https://.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"testimonium commutatoris suum est, itaque fige id: si {url} tuum MikroTik est, pone MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"testimonium commutatoris suum est, itaque fige id: si {url} tuum {who} est, pone {setting} = {seen} in second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought ex UniFi tantum legit, itaque {what} non mittit.",
+"UniFi clients":"Clientes UniFi",
+"{n} clients":"{n} clientes",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi UNIFI_URL et UNIFI_API_KEY eget {where_keys}: inscriptionem consolae (ut https://192.168.1.1) et clavem API ex applicatione Network (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"Consola UniFi UNIFI_API_KEY recusavit.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} machinae"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

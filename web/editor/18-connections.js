@@ -1,4 +1,4 @@
-  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik and the rest.
+  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik, UniFi and the rest.
   /* ---------- Connections on the page: sample feeds, GitHub, Telegram, email and calendar ----------
      The page can't reach these services, so it uses the sample data below (like the sample house). The text each one gives
      back is shaped like what exported Python gives from the real services. */
@@ -11,7 +11,7 @@
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch" }[what]) : what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -417,6 +417,28 @@
     if (!(cbSample().orders || []).some(o => o.order_id === id)) fail(tr("Coinbase didn't cancel the order: {why}.", { why:"unknown cancel order" }));
     addStep("Coinbase order cancelled", { mono:true, text:id }).done("sample account", "ok");
     return true;
+  }
+  /* UniFi on the page (#359): a sample network. Exported Python reads your console's Network API, and only reads.
+     Matches the runtime's unifi_ methods and tests/fake_unifi.py, which serves the same sample. */
+  const ufSample = () => { connNote("UniFi"); return CONN.unifi || {}; };
+  const ufWhen = t => { const d = new Date(str(t)); return isNaN(d) ? str(t) : d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+  function unifiClients(){
+    const s = ufSample(), names = Object.fromEntries((s.devices || []).map(d => [str(d.id), str(d.name)]));
+    const out = (s.clients || []).map(c => ({ name:str(c.name || c.hostname || c.macAddress), mac:str(c.macAddress).toLowerCase(), ip:str(c.ipAddress || ""),
+      type:str(c.type).toLowerCase(), connected:ufWhen(c.connectedAt), uplink:names[str(c.uplinkDeviceId)] || "" }));
+    addStep("UniFi clients", { mono:true, text:out.map(c => c.name + " (" + (c.ip || c.mac) + ")").join("\n") || tr("(nothing)") }).done(tr("{n} clients", { n:out.length }), "ok");
+    return out;
+  }
+  function unifiDevices(){
+    const s = ufSample(), stats = s.statistics || {};
+    return (s.devices || []).map(d => {
+      const rec = { name:str(d.name), model:str(d.model), mac:str(d.macAddress).toLowerCase(), ip:str(d.ipAddress || ""), state:str(d.state).toLowerCase(),
+                    firmware:str(d.firmwareVersion || ""), update:!!d.firmwareUpdatable, uptime:"", cpu:"", memory:"" };
+      const st = rec.state === "online" ? stats[str(d.id)] : null;
+      if (st) Object.assign(rec, { uptime:isNumLike(st.uptimeSec) ? cents(num(st.uptimeSec) / 3600) : "", cpu:isNumLike(st.cpuUtilizationPct) ? num(st.cpuUtilizationPct) : "",
+                                    memory:isNumLike(st.memoryUtilizationPct) ? num(st.memoryUtilizationPct) : "" });
+      return rec;
+    });
   }
   /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
      only reads. Matches the runtime's mikrotik_ methods and tests/fake_mikrotik.py, which serves the same sample. */

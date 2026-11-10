@@ -157,7 +157,9 @@
 "rb_mikrotik_ports":{"message0":"MikroTik portes","tooltip":"A list of recordes, oon for every porte of thy MikroTik routere or switche: port, running, speed (as 10Gbps), errors, drops, link_downs and comment. Errours and droppes ben told fro his laste bigynnynge. It oonly redeth: no thing on the switche chaungeth. On this page it useth an ensample switche."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP modules","tooltip":"A list of recordes, oon for every SFP module yput in: port, module, temperature (°C), rx_power and tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik hele","tooltip":"A recorde of the routere or switche hymself: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and every other sensour that he hath."},
-"rb_mikrotik_log":{"message0":"MikroTik log, laste %1 lynes","tooltip":"The laste lynes of the routeres log, the eldest first, ech as 'time topics: message'."}
+"rb_mikrotik_log":{"message0":"MikroTik log, laste %1 lynes","tooltip":"The laste lynes of the routeres log, the eldest first, ech as 'time topics: message'."},
+"rb_unifi_clients":{"message0":"UniFi clientes","tooltip":"A list of recordes, oon for every thing yjoyned to thy UniFi net: name, mac, ip, type (wired, wireless or vpn), connected (sith whan) and uplink (the UniFi thing it passeth thurgh). It oonly redeth: no thing is blokked ne chaunged. On this page it useth an ensample net."},
+"rb_unifi_devices":{"message0":"UniFi thinges","tooltip":"A list of recordes, oon for every UniFi thing (gate, switches, poyntes of entree): name, model, mac, ip, state, firmware, update (wher newer firmware abideth), and for oon that is on lyne, uptime (houres), cpu and memory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -207,7 +209,8 @@
 "Homey":"Homey",
 "Output":"Outcome",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1024,7 +1027,12 @@
 "MikroTik ports":"MikroTik portes",
 "{n} ports":"{n} portes",
 "MikroTik switch":"MikroTik switche",
-"read your MikroTik router or switch: its ports, modules, health and log":"rede thy MikroTik routere or switche: his portes, modules, hele and log"
+"read your MikroTik router or switch: its ports, modules, health and log":"rede thy MikroTik routere or switche: his portes, modules, hele and log",
+"UniFi":"UniFi",
+"UniFi clients":"UniFi clientes",
+"{n} clients":"{n} clientes",
+"UniFi network":"UniFi net",
+"read your UniFi network: who's connected, and how your UniFi devices are":"rede thy UniFi net: who is yjoyned, and how thy UniFi thinges faren"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1981,17 +1989,25 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"MikroTik portes",
 "{n} ports":"{n} portes",
-"Couldn't reach the MikroTik at {url} ({reason}).":"Ne myghte nat reche the MikroTik at {url} ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"Ne myghte nat reche the {who} at {url} ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik nedeth MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the routeres place (as https://192.168.88.1) and a usere in a compaignye with oonly the read, api and rest-api leves.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought oonly redeth fro MikroTik, so it sendeth nat {what}.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"This computere trusteth nat the MikroTikes certificat (routeres maken comunly hir owene). Renne --doctor to see his fyngerprente, and putte it in MIKROTIK_CERT_SHA256.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"The MikroTikes certificat is nat the oon that MIKROTIK_CERT_SHA256 fasteneth (it is {seen}). If thou chaungedest the certificat, newe the value; if nat, som thing stondeth bitwene.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"This computere trusteth nat the {who}es certificat (routeres maken comunly hir owene). Renne --doctor to see his fyngerprente, and putte it in {setting}.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"The {who}es certificat is nat the oon that {setting} fasteneth (it is {seen}). If thou chaungedest the certificat, newe the value; if nat, som thing stondeth bitwene.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"the acountes compaignye ({group}) may eek {what}. Second Thought oonly redeth, so a compaignye with oonly read, api and rest-api is sikerer.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"the passeword goth unhid over http://. Use the www-ssl service and https:// in stede.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"the routeres certificat is his owene, so fasten it: if {url} is thy MikroTik, putte MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"the routeres certificat is his owene, so fasten it: if {url} is thy {who}, putte {setting} = {seen} in second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought oonly redeth fro UniFi, so it sendeth nat {what}.",
+"UniFi clients":"UniFi clientes",
+"{n} clients":"{n} clientes",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi nedeth UNIFI_URL and UNIFI_API_KEY {where_keys}: the consoles place (as https://192.168.1.1) and an API keye fro the Network program (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"The UniFi console refused UNIFI_API_KEY.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} thinges"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

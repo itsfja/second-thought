@@ -157,7 +157,9 @@
 "rb_mikrotik_ports":{"message0":"MikroTik geatu","tooltip":"Getæl gewrita, an for ælcum geate þines MikroTik wegwisendes oþþe wendendes: port, running, speed (swa 10Gbps), errors, drops, link_downs and comment. Gedwolan and fyllas beoþ getealde fram his latostan anginne. Hit rædeþ ane: naht ne awent on þam wendende. On þissum leafe hit brycþ bysene wendendes."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP dælas","tooltip":"Getæl gewrita, an for ælcum ingesettum SFP dæle: port, module, temperature (°C), rx_power and tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik hælu","tooltip":"Gewrit be þam wegwisende sylfum: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and ælc oþer gefelend þe he hæfþ."},
-"rb_mikrotik_log":{"message0":"MikroTik gewrit, latoste %1 linan","tooltip":"Þa latostan linan þæs wegwisendes gewrites, seo ealdoste ærest, ælc swa 'time topics: message'."}
+"rb_mikrotik_log":{"message0":"MikroTik gewrit, latoste %1 linan","tooltip":"Þa latostan linan þæs wegwisendes gewrites, seo ealdoste ærest, ælc swa 'time topics: message'."},
+"rb_unifi_clients":{"message0":"UniFi cuman","tooltip":"Getæl gewrita, an for ælcum tole þe is geteod to þinum UniFi nette: name, mac, ip, type (wired, wireless oþþe vpn), connected (sibban hwonne) and uplink (þæt UniFi tol þe hit þurh færþ). Hit rædeþ ane: naht ne biþ forboden ne awend. On þissum leafe hit brycþ bysene nettes."},
+"rb_unifi_devices":{"message0":"UniFi tolas","tooltip":"Getæl gewrita, an for ælcum UniFi tole (geat, wenderas, ingangas): name, model, mac, ip, state, firmware, update (hwæþer niwre firmware bideþ), and for þam þe onweald sind, uptime (tida), cpu and memory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -207,7 +209,8 @@
 "Homey":"Homey",
 "Output":"Utgang",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tol for þone ærendracan: lege hie innan ærendracan stocce",
@@ -1024,7 +1027,12 @@
 "MikroTik ports":"MikroTik geatu",
 "{n} ports":"{n} geatu",
 "MikroTik switch":"MikroTik wendere",
-"read your MikroTik router or switch: its ports, modules, health and log":"rædan þinne MikroTik wegwisend oþþe wendend: his geatu, dælas, hælu and gewrit"
+"read your MikroTik router or switch: its ports, modules, health and log":"rædan þinne MikroTik wegwisend oþþe wendend: his geatu, dælas, hælu and gewrit",
+"UniFi":"UniFi",
+"UniFi clients":"UniFi cuman",
+"{n} clients":"{n} cuman",
+"UniFi network":"UniFi nett",
+"read your UniFi network: who's connected, and how your UniFi devices are":"rædan þin UniFi nett: hwa is geteod, and hu þine UniFi tolas fareþ"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1981,17 +1989,25 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"MikroTik geatu",
 "{n} ports":"{n} geatu",
-"Couldn't reach the MikroTik at {url} ({reason}).":"Ne mihte þone MikroTik æt {url} geræcan ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"Ne mihte þone {who} æt {url} geræcan ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik behofaþ MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: þæs wegwisendes stowe (swa https://192.168.88.1) and brucend on flocce mid ane þam leafum read, api and rest-api.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought rædeþ ane of MikroTik, forþon hit ne sent {what}.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"Se MikroTik wiþsoc MIKROTIK_USER and MIKROTIK_PASSWORD.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Þes rimcræft ne truwaþ þæs MikroTikes gewitnesse (wegwisend wyrcaþ oft hiera agene). Yrn --doctor to geseonne hire fingermearc, and sete hie on MIKROTIK_CERT_SHA256.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Þæs MikroTikes gewitnes nis seo þe MIKROTIK_CERT_SHA256 fæstnaþ (heo is {seen}). Gif þu þa gewitnesse wendest, niwa þæt weorþ; gif na, sum þing stent betweox.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"Þes rimcræft ne truwaþ þæs {who}es gewitnesse (wegwisend wyrcaþ oft hiera agene). Yrn --doctor to geseonne hire fingermearc, and sete hie on {setting}.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Þæs {who}es gewitnes nis seo þe {setting} fæstnaþ (heo is {seen}). Gif þu þa gewitnesse wendest, niwa þæt weorþ; gif na, sum þing stent betweox.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"þæs reccenes flocc ({group}) mæg eac {what}. Second Thought rædeþ ane, forþon flocc mid read, api and rest-api anum is sicorra.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"þæt dyrne word færþ unbehyd ofer http://. Bruc þære www-ssl þenunge and https:// on his stede.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"þæs wegwisendes gewitnes is his agen, fæstna hie: gif {url} is þin MikroTik, sete MIKROTIK_CERT_SHA256 = {seen} on second-thought.ini.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"þæs wegwisendes gewitnes is his agen, fæstna hie: gif {url} is þin {who}, sete {setting} = {seen} on second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought rædeþ ane of UniFi, forþon hit ne sent {what}.",
+"UniFi clients":"UniFi cuman",
+"{n} clients":"{n} cuman",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi behofaþ UNIFI_URL and UNIFI_API_KEY {where_keys}: þære bordes stowe (swa https://192.168.1.1) and API cæg of þam Network cræfte (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"Þæt UniFi bord wiþsoc UNIFI_API_KEY.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tolas"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

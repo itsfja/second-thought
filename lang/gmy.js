@@ -158,7 +158,9 @@
 "rb_mikrotik_ports":{"message0":"𐀶𐀨 MikroTik","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀶𐀨 𐀀𐀨𐀐𐀳 MikroTik 𐀰𐀂: port, running, speed (𐀃𐀒 10Gbps), errors, drops, link_downs 𐀏𐀂 comment. 𐀗𐀜 𐀀𐀙𐀑𐀜𐀐: 𐀃𐀄𐀆 𐀕𐀲𐀞𐀨𐀁. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀐𐀨𐀲𐀂 𐀞𐀨𐀆𐀒𐀔 𐀀𐀨𐀐𐀳."},
 "rb_mikrotik_sfp":{"message0":"𐀕𐀫 SFP MikroTik","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀕𐀫 SFP: port, module, temperature (°C), rx_power 𐀏𐀂 tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"𐀄𐀑𐀊 MikroTik","tooltip":"𐀏𐀨𐀟 𐀟𐀪 𐀀𐀨𐀐𐀳: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𐀏𐀂 𐀀𐀨 𐀀𐀂𐀳𐀳𐀪𐀊."},
-"rb_mikrotik_log":{"message0":"𐀏𐀨𐀟 MikroTik, 𐀁𐀏𐀲 %1 𐀏𐀨𐀟","tooltip":"𐀏𐀨𐀟 𐀁𐀏𐀲 𐀀𐀨𐀐𐀳, 𐀞𐀨𐀍 𐀟𐀫𐀵, 𐀞 𐀃𐀒 “time topics: message”."}
+"rb_mikrotik_log":{"message0":"𐀏𐀨𐀟 MikroTik, 𐀁𐀏𐀲 %1 𐀏𐀨𐀟","tooltip":"𐀏𐀨𐀟 𐀁𐀏𐀲 𐀀𐀨𐀐𐀳, 𐀞𐀨𐀍 𐀟𐀫𐀵, 𐀞 𐀃𐀒 “time topics: message”."},
+"rb_unifi_clients":{"message0":"𐀐𐀮𐀜 UniFi","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀵𐀨 𐀁𐀚𐀲𐀕𐀜 𐀏𐀲𐀫𐀒 UniFi 𐀰𐀂: name, mac, ip, type (wired, wireless 𐀁 vpn), connected 𐀏𐀂 uplink. 𐀗𐀜 𐀀𐀙𐀑𐀜𐀐: 𐀃𐀄𐀆 𐀕𐀲𐀞𐀨𐀁. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀐𐀨𐀲𐀂 𐀞𐀨𐀆𐀒𐀔 𐀏𐀲𐀫𐀒."},
+"rb_unifi_devices":{"message0":"𐀵𐀨 UniFi","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀵𐀨 UniFi: name, model, mac, ip, state, firmware, update, 𐀏𐀂 uptime (𐀃𐀨), cpu 𐀏𐀂 memory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐀁𐀏𐀲 𐀀𐀔","weekdays":"𐀀𐀔 𐀸𐀒","weekends":"𐀀𐀔 𐀀𐀙𐀞𐀄𐀮𐀃"},
@@ -208,7 +210,8 @@
 "Homey":"Homey",
 "Output":"𐀁𐀒𐀈𐀰",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵",
@@ -1025,7 +1028,12 @@
 "MikroTik ports":"𐀶𐀨 MikroTik",
 "{n} ports":"{n} 𐀶𐀨",
 "MikroTik switch":"𐀀𐀨𐀐𐀳 MikroTik",
-"read your MikroTik router or switch: its ports, modules, health and log":"𐀀𐀙𐀑𐀜𐀐 𐀀𐀨𐀐𐀳 MikroTik 𐀰𐀂: 𐀶𐀨, 𐀕𐀫, 𐀄𐀑𐀊 𐀏𐀂 𐀏𐀨𐀟"
+"read your MikroTik router or switch: its ports, modules, health and log":"𐀀𐀙𐀑𐀜𐀐 𐀀𐀨𐀐𐀳 MikroTik 𐀰𐀂: 𐀶𐀨, 𐀕𐀫, 𐀄𐀑𐀊 𐀏𐀂 𐀏𐀨𐀟",
+"UniFi":"UniFi",
+"UniFi clients":"𐀐𐀮𐀜 UniFi",
+"{n} clients":"{n} 𐀐𐀮𐀜",
+"UniFi network":"𐀏𐀲𐀫𐀒 UniFi",
+"read your UniFi network: who's connected, and how your UniFi devices are":"𐀀𐀙𐀑𐀜𐀐 𐀏𐀲𐀫𐀒 UniFi 𐀰𐀂: 𐀴𐀚 𐀁𐀚𐀲𐀂, 𐀏𐀂 𐀡𐀮 𐀁𐀐𐀯 𐀏𐀨𐀟 UniFi"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1982,17 +1990,25 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"tu-ra MikroTik",
 "{n} ports":"{n} tu-ra",
-"Couldn't reach the MikroTik at {url} ({reason}).":"MikroTik e-pi {url} o-u pi-ke-to ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"{who} e-pi {url} o-u pi-ke-to ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik de-i MIKROTIK_URL, MIKROTIK_USER ka-i MIKROTIK_PASSWORD {where_keys}: to-po a-ra-ke-te (o-ko https://192.168.88.1) ka-i ke-re-te e-ne o-ma-do mo-no me-ta read, api ka-i rest-api.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought mo-no a-na-ki-no-ke a-po MikroTik, o-u-to o-u pe-po-pe {what}.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik a-pa-ne-to MIKROTIK_USER ka-i MIKROTIK_PASSWORD.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"to-to o-u pi-to-e-u-e ma-tu-ri-jo MikroTik (a-ra-ke-te i-di-o po-e-o-si). te-re-ke --doctor o-pe i-de-e i-ko-no, ka-i te-ke e-ne MIKROTIK_CERT_SHA256.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"ma-tu-ri-jo MikroTik o-u-ka to o MIKROTIK_CERT_SHA256 o-ri-ze e-si ({seen} e-si). e-i a-me-we-se ma-tu-ri-jo, ne-wo po-e-se; e-i me, ti me-so e-si.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"to-to o-u pi-to-e-u-e ma-tu-ri-jo {who} (a-ra-ke-te i-di-o po-e-o-si). te-re-ke --doctor o-pe i-de-e i-ko-no, ka-i te-ke e-ne {setting}.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"ma-tu-ri-jo {who} o-u-ka to o {setting} o-ri-ze e-si ({seen} e-si). e-i a-me-we-se ma-tu-ri-jo, ne-wo po-e-se; e-i me, ti me-so e-si.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"o-ma-do ro-ko ({group}) ka-i {what} du-na-ta-i. Second Thought mo-no a-na-ki-no-ke, o-u-to o-ma-do mo-no me-ta read, api ka-i rest-api a-sa-pa-re-te-ro.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"ka-ra-wi ro-ko a-ku-pi-to e-pi http:// pe-re-ta-i. ke-ra www-ssl ka-i https://.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"ma-tu-ri-jo a-ra-ke-te i-di-o e-si, o-ri-so: e-i {url} MikroTik so-i e-si, te-ke MIKROTIK_CERT_SHA256 = {seen} e-ne second-thought.ini.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"ma-tu-ri-jo a-ra-ke-te i-di-o e-si, o-ri-so: e-i {url} {who} so-i e-si, te-ke {setting} = {seen} e-ne second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought mo-no a-na-ki-no-ke a-po UniFi, o-u-to o-u pe-po-pe {what}.",
+"UniFi clients":"ke-se-no UniFi",
+"{n} clients":"{n} ke-se-no",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi de-i UNIFI_URL ka-i UNIFI_API_KEY {where_keys}: to-po (o-ko https://192.168.1.1) ka-i API ka-ra-wi a-po Network (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"UniFi a-pa-ne-to UNIFI_API_KEY.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} to-ra"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

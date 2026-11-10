@@ -157,7 +157,9 @@
 "rb_mikrotik_ports":{"message0":"θύρες MikroTik","tooltip":"Μια λίστα εγγραφών, μία για κάθε θύρα του δρομολογητή ή μεταγωγέα σας MikroTik: port, running, speed (όπως 10Gbps), errors, drops, link_downs και comment. Σφάλματα και απορρίψεις μετρούν από την τελευταία εκκίνηση. Μόνο διαβάζει: τίποτα δεν αλλάζει στον μεταγωγέα. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα μεταγωγέα."},
 "rb_mikrotik_sfp":{"message0":"μονάδες SFP του MikroTik","tooltip":"Μια λίστα εγγραφών, μία για κάθε συνδεδεμένη μονάδα SFP: port, module, temperature (°C), rx_power και tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"κατάσταση MikroTik","tooltip":"Μια εγγραφή για τον ίδιο τον δρομολογητή ή μεταγωγέα: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), και κάθε άλλος αισθητήρας που έχει."},
-"rb_mikrotik_log":{"message0":"καταγραφή MikroTik, τελευταίες %1 γραμμές","tooltip":"Οι τελευταίες γραμμές της καταγραφής του δρομολογητή, η παλαιότερη πρώτα, η καθεμία ως «time topics: message»."}
+"rb_mikrotik_log":{"message0":"καταγραφή MikroTik, τελευταίες %1 γραμμές","tooltip":"Οι τελευταίες γραμμές της καταγραφής του δρομολογητή, η παλαιότερη πρώτα, η καθεμία ως «time topics: message»."},
+"rb_unifi_clients":{"message0":"πελάτες UniFi","tooltip":"Μια λίστα εγγραφών, μία για κάθε συσκευή συνδεδεμένη στο δίκτυό σας UniFi: name, mac, ip, type (wired, wireless ή vpn), connected (από πότε) και uplink (η συσκευή UniFi μέσω της οποίας συνδέεται). Μόνο διαβάζει: τίποτα δεν αποκλείεται ούτε αλλάζει. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα δικτύου."},
+"rb_unifi_devices":{"message0":"συσκευές UniFi","tooltip":"Μια λίστα εγγραφών, μία για κάθε συσκευή UniFi (πύλη, μεταγωγείς, σημεία πρόσβασης): name, model, mac, ip, state, firmware, update (αν περιμένει νεότερο υλικολογισμικό), και για όσες είναι συνδεδεμένες, uptime (ώρες), cpu και memory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"κάθε μέρα","weekdays":"τις καθημερινές","weekends":"τα Σαββατοκύριακα"},
@@ -207,7 +209,8 @@
 "Homey":"Homey",
 "Output":"Έξοδος",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1024,7 +1027,12 @@
 "MikroTik ports":"Θύρες MikroTik",
 "{n} ports":"{n} θύρες",
 "MikroTik switch":"μεταγωγέας MikroTik",
-"read your MikroTik router or switch: its ports, modules, health and log":"να διαβάζει τον δρομολογητή ή μεταγωγέα σας MikroTik: θύρες, μονάδες, κατάσταση και αρχείο καταγραφής"
+"read your MikroTik router or switch: its ports, modules, health and log":"να διαβάζει τον δρομολογητή ή μεταγωγέα σας MikroTik: θύρες, μονάδες, κατάσταση και αρχείο καταγραφής",
+"UniFi":"UniFi",
+"UniFi clients":"Πελάτες UniFi",
+"{n} clients":"{n} πελάτες",
+"UniFi network":"δίκτυο UniFi",
+"read your UniFi network: who's connected, and how your UniFi devices are":"να διαβάζει το δίκτυό σας UniFi: ποιος είναι συνδεδεμένος, και πώς είναι οι συσκευές σας UniFi"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1981,16 +1989,24 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"Θύρες MikroTik",
 "{n} ports":"{n} θύρες",
-"Couldn't reach the MikroTik at {url} ({reason}).":"Δεν ήταν δυνατή η σύνδεση με το MikroTik στο {url} ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"Δεν ήταν δυνατή η σύνδεση με το {who} στο {url} ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"Το MikroTik χρειάζεται MIKROTIK_URL, MIKROTIK_USER και MIKROTIK_PASSWORD {where_keys}: τη διεύθυνση του δρομολογητή (όπως https://192.168.88.1) και έναν χρήστη σε ομάδα μόνο με τις πολιτικές read, api και rest-api.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Το Second Thought μόνο διαβάζει από το MikroTik, οπότε δεν στέλνει {what}.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"Το MikroTik απέρριψε τα MIKROTIK_USER και MIKROTIK_PASSWORD.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Αυτός ο υπολογιστής δεν εμπιστεύεται το πιστοποιητικό του MikroTik (οι δρομολογητές συνήθως φτιάχνουν το δικό τους). Τρέξτε --doctor για να δείτε το αποτύπωμά του, και βάλτε το στο MIKROTIK_CERT_SHA256.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Το πιστοποιητικό του MikroTik δεν είναι αυτό που ορίζει το MIKROTIK_CERT_SHA256 (είναι {seen}). Αν αντικαταστήσατε το πιστοποιητικό, ενημερώστε την τιμή· αλλιώς, κάτι παρεμβάλλεται.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"Αυτός ο υπολογιστής δεν εμπιστεύεται το πιστοποιητικό του {who} (οι δρομολογητές συνήθως φτιάχνουν το δικό τους). Τρέξτε --doctor για να δείτε το αποτύπωμά του, και βάλτε το στο {setting}.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Το πιστοποιητικό του {who} δεν είναι αυτό που ορίζει το {setting} (είναι {seen}). Αν αντικαταστήσατε το πιστοποιητικό, ενημερώστε την τιμή· αλλιώς, κάτι παρεμβάλλεται.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"η ομάδα του λογαριασμού ({group}) μπορεί επίσης {what}. Το Second Thought μόνο διαβάζει, οπότε μια ομάδα μόνο με read, api και rest-api είναι ασφαλέστερη.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"ο κωδικός πηγαίνει χωρίς κρυπτογράφηση μέσω http://. Χρησιμοποιήστε την υπηρεσία www-ssl και https://.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"το πιστοποιητικό του δρομολογητή είναι δικό του, οπότε ορίστε το: αν το {url} είναι το MikroTik σας, βάλτε MIKROTIK_CERT_SHA256 = {seen} στο second-thought.ini.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"το πιστοποιητικό του δρομολογητή είναι δικό του, οπότε ορίστε το: αν το {url} είναι το {who} σας, βάλτε {setting} = {seen} στο second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Το Second Thought μόνο διαβάζει από το UniFi, οπότε δεν στέλνει {what}.",
+"UniFi clients":"Πελάτες UniFi",
+"{n} clients":"{n} πελάτες",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"Το UniFi χρειάζεται UNIFI_URL και UNIFI_API_KEY {where_keys}: τη διεύθυνση της κονσόλας (όπως https://192.168.1.1) και ένα κλειδί API από την εφαρμογή Network (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"Η κονσόλα UniFi απέρριψε το UNIFI_API_KEY.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} συσκευές"
 }
 };

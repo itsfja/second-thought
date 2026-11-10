@@ -75,6 +75,7 @@
   window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
     : c.kind === "coinbase" ? coinbaseMoney(c.method, c.path)
+    : c.kind === "unifi" ? SAFETY.unifi_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
     : c.kind === "mikrotik" ? SAFETY.mikrotik_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
     : c.kind === "asks" ? AGENT_ASKS.has(c.tool) : c.kind === "private" ? AGENT_PRIVATE.has(c.tool)
     : agentMustAsk(c.tool, c.input || {}, c.seen || "", !!c.private));

@@ -158,7 +158,9 @@
 "rb_mikrotik_ports":{"message0":"תרעי MikroTik","tooltip":"רשימת כתבין, חד לכל תרע בנתבא או במחלפא דילך MikroTik: port, running, speed (כות 10Gbps), errors, drops, link_downs וcomment. טעותא ונפלתא מתמנין מן שריותא בתרייתא. רק קרי: מדעם לא משתני במחלפא. בדפא דנא משמש מחלפא דדוגמא."},
 "rb_mikrotik_sfp":{"message0":"מודולי SFP דMikroTik","tooltip":"רשימת כתבין, חד לכל מודול SFP דמחבר: port, module, temperature (°C), rx_power וtx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"שלמא דMikroTik","tooltip":"כתבא על נתבא או מחלפא גופיה: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), וכל מרגשא אחרנא דאית ליה."},
-"rb_mikrotik_log":{"message0":"כרוניקא דMikroTik, %1 שורין בתראין","tooltip":"שורין בתראין דכרוניקא דנתבא, עתיקא קדמאה, כל חדא כות \"time topics: message\"."}
+"rb_mikrotik_log":{"message0":"כרוניקא דMikroTik, %1 שורין בתראין","tooltip":"שורין בתראין דכרוניקא דנתבא, עתיקא קדמאה, כל חדא כות \"time topics: message\"."},
+"rb_unifi_clients":{"message0":"לקוחי UniFi","tooltip":"רשימת כתבין, חד לכל מאן דמחבר למצודתא דילך UniFi: name, mac, ip, type (wired, wireless או vpn), connected (מן אימתי) וuplink (מאנא דUniFi דבה מחבר). רק קרי: מדעם לא מתכלי ולא משתני. בדפא דנא משמשא מצודתא דדוגמא."},
+"rb_unifi_devices":{"message0":"מאני UniFi","tooltip":"רשימת כתבין, חד לכל מאן UniFi (תרעא, מחלפין, נקודין): name, model, mac, ip, state, firmware, update (אן קושחא חדתא מסכיא), ולמאן דמחבר אף uptime (שעין), cpu וmemory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יומא","weekdays":"ביומי חול","weekends":"בסופי שבתא"},
@@ -208,7 +210,8 @@
 "Homey":"Homey",
 "Output":"מפקנא",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"מאני שליחא: שדי יתהון בגו לבנת שליחא",
@@ -1025,7 +1028,12 @@
 "MikroTik ports":"תרעי MikroTik",
 "{n} ports":"{n} תרעין",
 "MikroTik switch":"מחלפא דMikroTik",
-"read your MikroTik router or switch: its ports, modules, health and log":"למקרא נתבא או מחלפא דילך MikroTik: תרעין, מודולין, שלמא וכרוניקא"
+"read your MikroTik router or switch: its ports, modules, health and log":"למקרא נתבא או מחלפא דילך MikroTik: תרעין, מודולין, שלמא וכרוניקא",
+"UniFi":"UniFi",
+"UniFi clients":"לקוחי UniFi",
+"{n} clients":"{n} לקוחין",
+"UniFi network":"מצודתא דUniFi",
+"read your UniFi network: who's connected, and how your UniFi devices are":"למקרא מצודתא דילך UniFi: מן מחבר, והיכא אינון מאני UniFi"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1982,17 +1990,25 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"תרעי MikroTik",
 "{n} ports":"{n} תרעין",
-"Couldn't reach the MikroTik at {url} ({reason}).":"לא מטינן לMikroTik ב{url} ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"לא מטינן ל{who} ב{url} ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik צריך MIKROTIK_URL, MIKROTIK_USER וMIKROTIK_PASSWORD {where_keys}: אתר נתבא (כות https://192.168.88.1) ומשמשנא בכנשא דאית לה רק רשותא read, api וrest-api.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought רק קרי מן MikroTik, ועל כן לא משדר {what}.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik סרב MIKROTIK_USER וMIKROTIK_PASSWORD.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"מחשבא דנא לא מהימן בשטר דMikroTik (נתביא עבדין שטר דילהון). הריץ --doctor למחזא רושמיה, ושוי בMIKROTIK_CERT_SHA256.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"שטרא דMikroTik לאו הוא דקבע MIKROTIK_CERT_SHA256 (הוא {seen}). אן שניתא שטרא, חדת ערכא; ואן לא, מדעם קאים בגו.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"מחשבא דנא לא מהימן בשטר ד{who} (נתביא עבדין שטר דילהון). הריץ --doctor למחזא רושמיה, ושוי ב{setting}.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"שטרא ד{who} לאו הוא דקבע {setting} (הוא {seen}). אן שניתא שטרא, חדת ערכא; ואן לא, מדעם קאים בגו.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"כנשא דחושבנא ({group}) יכלא אף {what}. Second Thought רק קרי, ועל כן כנשא עם read, api וrest-api בלחוד שליא יתיר.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"מלת סתרא אזלא גליא בhttp://. שמש בשמשא www-ssl ובhttps://.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"שטרא דנתבא דיליה הוא, קבע יתיה: אן {url} הוא MikroTik דילך, כתוב MIKROTIK_CERT_SHA256 = {seen} בsecond-thought.ini.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"שטרא דנתבא דיליה הוא, קבע יתיה: אן {url} הוא {who} דילך, כתוב {setting} = {seen} בsecond-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought רק קרי מן UniFi, ועל כן לא משדר {what}.",
+"UniFi clients":"לקוחי UniFi",
+"{n} clients":"{n} לקוחין",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi צריך UNIFI_URL וUNIFI_API_KEY {where_keys}: אתר קונסולא (כות https://192.168.1.1) ומפתח API מן Network (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"קונסולא דUniFi סרבת UNIFI_API_KEY.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} מאנין"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

@@ -605,6 +605,14 @@
   "rb_mikrotik_log": {
    "message0": "𒁾 MikroTik, 𒂕 %1",
    "tooltip": "𒈬𒊬 𒂕 𒁾 𒉽𒊏, 𒅆𒂠 𒅆𒂠, 𒀸𒀸𒁉 „time topics: message”."
+  },
+  "rb_unifi_clients": {
+   "message0": "𒇽 𒆭 UniFi",
+   "tooltip": "𒁾 𒈬𒊬𒊏, 𒃻 𒀸𒀸 𒊓 UniFi-𒍪𒀀 𒆟: name, mac, ip, type (wired, wireless 𒅇 vpn), connected 𒅇 uplink. 𒋃 𒀸: 𒃻 𒉡𒁄. 𒁾 𒉈𒀀 𒊓 𒄑𒄯 𒁳."
+  },
+  "rb_unifi_devices": {
+   "message0": "𒃻 UniFi",
+   "tooltip": "𒁾 𒈬𒊬𒊏, 𒃻 UniFi 𒀸𒀸: name, model, mac, ip, state, firmware, update, 𒅇 uptime (𒆜𒁍), cpu 𒅇 memory (%)."
   }
  },
  "options": {
@@ -751,7 +759,8 @@
   "Wait & time": "𒅅 𒅇 𒌓",
   "You": "𒍝𒂊",
   "Coinbase": "Coinbase",
-  "MikroTik": "MikroTik"
+  "MikroTik": "MikroTik",
+  "UniFi": "UniFi"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
@@ -1568,7 +1577,12 @@
   "MikroTik ports": "𒆍 MikroTik",
   "{n} ports": "𒆍 {n}",
   "MikroTik switch": "𒉽 MikroTik",
-  "read your MikroTik router or switch: its ports, modules, health and log": "𒉽 MikroTik-𒍪 𒋃: 𒆍𒁉, 𒋗𒁉, 𒁲𒁉 𒅇 𒁾𒁉"
+  "read your MikroTik router or switch: its ports, modules, health and log": "𒉽 MikroTik-𒍪 𒋃: 𒆍𒁉, 𒋗𒁉, 𒁲𒁉 𒅇 𒁾𒁉",
+  "UniFi": "UniFi",
+  "UniFi clients": "𒇽 𒆭 UniFi",
+  "{n} clients": "𒇽 𒆭 {n}",
+  "UniFi network": "𒊓 UniFi",
+  "read your UniFi network: who's connected, and how your UniFi devices are": "𒊓 UniFi-𒍪 𒋃: 𒀀𒁀 𒆟, 𒅇 𒃻 UniFi-𒍪 𒀀𒈾𒁶"
  },
  "examples": {
   "review": {
@@ -3157,17 +3171,25 @@
   "MikroTik": "MikroTik",
   "MikroTik ports": "ka2 MikroTik",
   "{n} ports": "ka2 {n}",
-  "Couldn't reach the MikroTik at {url} ({reason}).": "MikroTik {url}-a nu-te ({reason}).",
+  "Couldn't reach the {who} at {url} ({reason}).": "{who} {url}-a nu-te ({reason}).",
   "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.": "MikroTik MIKROTIK_URL, MIKROTIK_USER u3 MIKROTIK_PASSWORD {where_keys} al dug4: ki kur2-ra (https://192.168.88.1-gin7) u3 lu2 erin2 read, api u3 rest-api dili-ta.",
   "MikroTik: {why}.": "MikroTik: {why}.",
   "Second Thought only reads from MikroTik, so it doesn't send {what}.": "Second Thought MikroTik-ta šid dili, {what} nu-kin-gi4.",
   "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.": "MikroTik MIKROTIK_USER u3 MIKROTIK_PASSWORD nu-še-ga.",
-  "The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.": "kišib MikroTik nu-še-ga (kur2 kišib ni2-ba dim2). --doctor ak-e mu-sar-bi igi bar, u3 MIKROTIK_CERT_SHA256-a ĝar.",
-  "The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "kišib MikroTik MIKROTIK_CERT_SHA256 ĝar-ra nu-me-a ({seen}). tukum-bi kišib bal, gibil ĝar; nu-me-a, niĝ2 ša3-ga ĝal2.",
+  "The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.": "kišib {who} nu-še-ga (kur2 kišib ni2-ba dim2). --doctor ak-e mu-sar-bi igi bar, u3 {setting}-a ĝar.",
+  "The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.": "kišib {who} {setting} ĝar-ra nu-me-a ({seen}). tukum-bi kišib bal, gibil ĝar; nu-me-a, niĝ2 ša3-ga ĝal2.",
   "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.": "erin2 niĝ2-ka9 ({group}) {what} ak-e. Second Thought šid dili, erin2 read, api u3 rest-api dili silim-ma diri.",
   "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.": "niĝ2-du8 http:// dul nu-tuku ĝen. www-ssl u3 https:// dib.",
-  "the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.": "kišib kur2-ra ni2-ba, ĝar: tukum-bi {url} MikroTik-zu, MIKROTIK_CERT_SHA256 = {seen} second-thought.ini-a sar.",
-  "{board}, RouterOS {version}": "{board}, RouterOS {version}"
+  "the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.": "kišib kur2-ra ni2-ba, ĝar: tukum-bi {url} {who}-zu, {setting} = {seen} second-thought.ini-a sar.",
+  "{board}, RouterOS {version}": "{board}, RouterOS {version}",
+  "UniFi": "UniFi",
+  "UniFi: {why}.": "UniFi: {why}.",
+  "Second Thought only reads from UniFi, so it doesn't send {what}.": "Second Thought UniFi-ta šid dili, {what} nu-kin-gi4.",
+  "UniFi clients": "lu2 kur9 UniFi",
+  "{n} clients": "lu2 kur9 {n}",
+  "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi UNIFI_URL u3 UNIFI_API_KEY {where_keys} al dug4: ki (https://192.168.1.1-gin7) u3 niĝ2-du8 API Network-ta (Settings, Control Plane, Integrations).",
+  "The UniFi console refused UNIFI_API_KEY.": "UniFi UNIFI_API_KEY nu-še-ga.",
+  "UniFi Network {version}, {n} devices": "UniFi Network {version}, niĝ2 {n}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

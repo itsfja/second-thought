@@ -28,6 +28,7 @@ Made by tools/sync.py from i18n/non.json: edit that, not this.
 - Output: Útgangr
 - Coinbase: Coinbase
 - MikroTik: MikroTik
+- UniFi: UniFi
 - Tools for the agent: drop them inside an agent block: Tól erindreka: lát þau falla inn í erindrekakubb
 - Listeners: they run while the exported program runs on schedule: Hlustendr: þeir keyra meðan útflutt forrit keyrir eptir tíðum
 - Read and send: Lesa ok senda

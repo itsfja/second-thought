@@ -28,6 +28,7 @@ Made by tools/sync.py from i18n/pi.json: edit that, not this.
 - You: त्वं
 - Coinbase: Coinbase
 - MikroTik: MikroTik
+- UniFi: UniFi
 - Listeners: they run while the exported program runs on schedule: सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति
 - No blocks match: न कोचि खण्डो समेति
 - Read and send: पठ पेसेहि च

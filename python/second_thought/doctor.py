@@ -135,7 +135,7 @@ class Doctor:
         if base and not base.lower().startswith("http://") and not pinned:
             seen = await asyncio.to_thread(self._mt_fingerprint, base)
             if seen:
-                raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.", url=base, seen=seen))
+                raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="MikroTik", setting="MIKROTIK_CERT_SHA256", seen=seen))
         res = await self.mikrotik_health()
         user = os.environ.get("MIKROTIK_USER", "").strip()
         group = next((to_str(u.get("group")) for u in await self._mikrotik("GET", "/rest/user") if isinstance(u, dict) and u.get("name") == user), "")
@@ -199,6 +199,18 @@ class Doctor:
             async def mikrotik():
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
+        if has("unifi_read"):
+            async def unifi():
+                base = os.environ.get("UNIFI_URL", "").strip()
+                if base and not os.environ.get("UNIFI_CERT_SHA256", "").strip():
+                    seen = await asyncio.to_thread(self._mt_fingerprint, base)
+                    if seen:
+                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="UniFi console", setting="UNIFI_CERT_SHA256", seen=seen))
+                info = await self._unifi("/info")
+                site = await self._unifi_site()
+                devices = await self._unifi_all(f"/sites/{site}/devices")
+                return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
+            out.append(("UniFi", unifi))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -468,5 +480,5 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))

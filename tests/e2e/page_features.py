@@ -847,6 +847,22 @@ async def new_feature_page_tests(pg):
     check("[mikrotik]" in files["second-thought.ini"] and "MIKROTIK_CERT_SHA256 = " in files["second-thought.ini"] and "mikrotik_read" in EXTRA["t_mt_blocks"],
           "a MikroTik program's settings ask for the router's address, user, password and certificate pin")
 
+    print("UniFi")
+    nth = lambda lst, i: {"block": {"type": "lists_getIndex", "fields": {"MODE": "GET", "WHERE": "FROM_START"}, "inputs": {"VALUE": lst, "AT": nm(i)}}}  # noqa: E731
+    uf_prog = script(add(count(cb("rb_unifi_clients"))), add(rec("uplink", nth(cb("rb_unifi_clients"), 2))), add(rec("name", nth(cb("rb_unifi_clients"), 6))),
+                     add(rec("type", nth(cb("rb_unifi_clients"), 2))), add(rec("update", nth(cb("rb_unifi_devices"), 2))),
+                     add(rec("uptime", first(cb("rb_unifi_devices")))), add(rec("state", nth(cb("rb_unifi_devices"), 4))), blk("rb_result"))
+    await load_state(pg, uf_prog)
+    status = await run_program(pg)
+    items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+    want = ["6", "Office switch", "de:ad:be:ef:00:42", "wired", "true", "360", "offline"]
+    check(status.startswith("done") and items == want, f"the UniFi blocks read the sample network's clients and devices ({items})")
+    EXTRA["t_uf_blocks"] = await export_python(pg, "t_uf_blocks")
+    await pg.evaluate("document.getElementById('io-name').value = 't_uf_blocks'")
+    files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+    check("[unifi]" in files["second-thought.ini"] and "UNIFI_CERT_SHA256 = " in files["second-thought.ini"] and "unifi_read" in EXTRA["t_uf_blocks"],
+          "a UniFi program's settings ask for the console's address, an API key and the certificate pin")
+
     await load_state(pg, script(blk("rb_wait", fields={"UNIT": "s"}, inputs={"SECS": nm(30)}), blk("rb_add_result", inputs={"TEXT": tx("too late")}), blk("rb_result")))
     EXTRA["t_maxsec"] = await export_python(pg, "t_maxsec")
 

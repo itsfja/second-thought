@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY")
 
 
 def _load_keychain():
@@ -1532,6 +1532,9 @@ SAFETY = {
     # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
     # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
     # the network with it, and nothing here is worth that.
+    # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
+    # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
+    "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
@@ -1639,6 +1642,12 @@ def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
+
+
+def unifi_allowed(method, path):
+    """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 
 
 def same_problem(a, b):
@@ -2071,6 +2080,7 @@ CAPABILITIES = [
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
+    ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -4285,6 +4295,84 @@ class Connections:
         self.log(tr("Coinbase order cancelled"), oid, tr("done"))
         return True
 
+    # UniFi (#359)
+    # The Network API on a UniFi OS console (a Cloud Gateway, a Dream Machine): UNIFI_URL and UNIFI_API_KEY, a key made
+    # in the Network app under Settings, Control Plane, Integrations. Only the reads in SAFETY["unifi_free"] are ever
+    # sent, so nothing is blocked, restarted or reconfigured, whatever the key itself could do. UNIFI_CERT_SHA256 pins
+    # the console's own certificate, as for MikroTik; UNIFI_SITE picks a site other than the first.
+    UNIFI_API = "/proxy/network/integration/v1"
+
+    async def _unifi(self, path, query=None):
+        full = self.UNIFI_API + path
+        if not unifi_allowed("GET", full):
+            raise RunError(tr("Second Thought only reads from UniFi, so it doesn't send {what}.", what=f"GET {full}"))
+        base, key = os.environ.get("UNIFI_URL", "").strip().rstrip("/"), os.environ.get("UNIFI_API_KEY", "").strip()
+        if not base or not key:
+            raise RunError(tr("UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("UniFi", base, "UNIFI_CERT_SHA256", "GET",
+                                         full + ("?" + urllib.parse.urlencode(query) if query else ""), {"X-API-KEY": key})
+        if status == 401:
+            raise RunError(tr("The UniFi console refused UNIFI_API_KEY."))
+        if status >= 400:
+            raise RunError(tr("UniFi: {why}.", why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    async def _unifi_all(self, path):
+        out, offset = [], 0
+        while True:
+            page = await self._unifi(path, {"offset": offset, "limit": 200})
+            data = page.get("data") or [] if isinstance(page, dict) else []
+            out += [x for x in data if isinstance(x, dict)]
+            offset += len(data)
+            if not data or offset >= int(num(page.get("totalCount")) or 0) or offset >= 5000:
+                return out
+
+    async def _unifi_site(self):
+        sites = await self._unifi_all("/sites")
+        want = os.environ.get("UNIFI_SITE", "").strip().lower()
+        site = next((s for s in sites if want and want in (to_str(s.get("name")).lower(), to_str(s.get("internalReference")).lower())), None) or \
+            next(iter(sites), None)
+        if not site or not re.fullmatch(r"[A-Za-z0-9-]+", to_str(site.get("id"))):
+            raise RunError(tr("UniFi: {why}.", why=tr("not found")))
+        return to_str(site["id"])
+
+    @staticmethod
+    def _unifi_when(t):
+        try:
+            return datetime.datetime.fromisoformat(to_str(t).replace("Z", "+00:00")).astimezone().strftime("%Y-%m-%d %H:%M")
+        except ValueError:
+            return to_str(t)
+
+    async def unifi_clients(self):
+        """Everyone connected: name, mac, ip, type (wired, wireless, vpn), connected (since when) and uplink (the UniFi
+        device it's connected through)."""
+        site = await self._unifi_site()
+        names = {to_str(d.get("id")): to_str(d.get("name")) for d in await self._unifi_all(f"/sites/{site}/devices")}
+        out = [{"name": to_str(c.get("name") or c.get("hostname") or c.get("macAddress")), "mac": to_str(c.get("macAddress")).lower(),
+                "ip": to_str(c.get("ipAddress")), "type": to_str(c.get("type")).lower(), "connected": self._unifi_when(c.get("connectedAt")),
+                "uplink": names.get(to_str(c.get("uplinkDeviceId")), "")} for c in await self._unifi_all(f"/sites/{site}/clients")]
+        lines = "\n".join(f"{c['name']} ({c['ip'] or c['mac']})" for c in out)
+        self.log(tr("UniFi clients"), lines or tr("(nothing)"), tr("{n} clients", n=len(out)))
+        return out
+
+    async def unifi_devices(self):
+        """Each UniFi device: name, model, mac, ip, state (online, offline, ...), firmware, update (whether newer
+        firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)."""
+        site = await self._unifi_site()
+        out = []
+        for d in await self._unifi_all(f"/sites/{site}/devices"):
+            rec = {"name": to_str(d.get("name")), "model": to_str(d.get("model")), "mac": to_str(d.get("macAddress")).lower(),
+                   "ip": to_str(d.get("ipAddress")), "state": to_str(d.get("state")).lower(), "firmware": to_str(d.get("firmwareVersion")),
+                   "update": bool(d.get("firmwareUpdatable")), "uptime": "", "cpu": "", "memory": ""}
+            did = to_str(d.get("id"))
+            if rec["state"] == "online" and re.fullmatch(r"[A-Za-z0-9-]+", did):
+                st = await self._unifi(f"/sites/{site}/devices/{did}/statistics/latest")
+                rec.update(uptime=self._cents(num(st.get("uptimeSec")) / 3600) if _num_like(st.get("uptimeSec")) else "",
+                           cpu=num(st.get("cpuUtilizationPct")) if _num_like(st.get("cpuUtilizationPct")) else "",
+                           memory=num(st.get("memoryUtilizationPct")) if _num_like(st.get("memoryUtilizationPct")) else "")
+            out.append(rec)
+        return out
+
     # MikroTik (#360)
     # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
     # user in a group with just the read, api and rest-api policies. Only the calls in SAFETY["mikrotik_free"] are ever
@@ -4298,11 +4386,34 @@ class Connections:
         user, password = os.environ.get("MIKROTIK_USER", "").strip(), os.environ.get("MIKROTIK_PASSWORD", "")
         if not base or not user:
             raise RunError(tr("MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.", where_keys=WHERE_KEYS))
+        headers = {"Authorization": "Basic " + base64.b64encode(f"{user}:{password}".encode()).decode()}
+        status, raw = await self._pinned("MikroTik", base, "MIKROTIK_CERT_SHA256", method, path, headers, body)
+        if status == 401:
+            raise RunError(tr("The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD."))
+        if status >= 400:
+            raise RunError(tr("MikroTik: {why}.", why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else []
+
+    @staticmethod
+    def _said(status, raw):
+        """"it answered 404 (what it said)", for an error from a device's API."""
+        try:
+            said = json.loads(raw)
+            said = to_str(said.get("detail") or said.get("message") or "") if isinstance(said, dict) else ""
+        except ValueError:
+            said = ""
+        return tr("it answered {code}", code=status) + (f" ({_short(said, 120)})" if said else "")
+
+    async def _pinned(self, who, base, setting, method, path, headers, body=None):
+        """One HTTPS request to a device on your network (a router, a switch, a gateway), whose certificate is usually
+        its own. With a pin in the setting named, the certificate's SHA-256 fingerprint must match it, checked before
+        anything (a password included) is sent; without one, the certificate must be one this computer trusts. Gives
+        back (status, body)."""
         if "://" not in base:
             base = "https://" + base
         u = urllib.parse.urlparse(base)
-        pin = re.sub(r"[^0-9a-f]", "", os.environ.get("MIKROTIK_CERT_SHA256", "").lower())
-        headers = {"Authorization": "Basic " + base64.b64encode(f"{user}:{password}".encode()).decode(), "Accept": "application/json"}
+        pin = re.sub(r"[^0-9a-f]", "", os.environ.get(setting, "").lower())
+        headers = dict(headers, Accept="application/json")
         data = None
         if body is not None:
             data, headers["Content-Type"] = json.dumps(body).encode(), "application/json"
@@ -4321,29 +4432,19 @@ class Connections:
                 if u.scheme == "https" and pin:
                     seen = hashlib.sha256(conn.sock.getpeercert(binary_form=True)).hexdigest()
                     if seen != pin:
-                        raise RunError(tr("The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.", seen=seen))
+                        raise RunError(tr("The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.", who=who, setting=setting, seen=seen))
                 conn.request(method, (u.path or "") + path, body=data, headers=headers)
                 r = conn.getresponse()
-                raw = r.read()
+                return r.status, r.read()
             except RunError:
                 raise
             except Exception as e:  # noqa: BLE001 - certificate, refused, timed out: say which
                 text = str(e)
                 if "CERTIFICATE_VERIFY_FAILED" in text:
-                    raise RunError(tr("The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.")) from None
-                raise RunError(tr("Couldn't reach the MikroTik at {url} ({reason}).", url=base, reason=_short(text, 120))) from None
+                    raise RunError(tr("The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.", who=who, setting=setting)) from None
+                raise RunError(tr("Couldn't reach the {who} at {url} ({reason}).", who=who, url=base, reason=_short(text, 120))) from None
             finally:
                 conn.close()
-            if r.status == 401:
-                raise RunError(tr("The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD."))
-            if r.status >= 400:
-                try:
-                    said = json.loads(raw)
-                    said = to_str(said.get("detail") or said.get("message") or "") if isinstance(said, dict) else ""
-                except ValueError:
-                    said = ""
-                raise RunError(tr("MikroTik: {why}.", why=tr("it answered {code}", code=r.status) + (f" ({_short(said, 120)})" if said else "")))
-            return json.loads(raw) if raw.strip() else []
         return await asyncio.to_thread(go)
 
     @staticmethod
@@ -6542,7 +6643,7 @@ class Doctor:
         if base and not base.lower().startswith("http://") and not pinned:
             seen = await asyncio.to_thread(self._mt_fingerprint, base)
             if seen:
-                raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.", url=base, seen=seen))
+                raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="MikroTik", setting="MIKROTIK_CERT_SHA256", seen=seen))
         res = await self.mikrotik_health()
         user = os.environ.get("MIKROTIK_USER", "").strip()
         group = next((to_str(u.get("group")) for u in await self._mikrotik("GET", "/rest/user") if isinstance(u, dict) and u.get("name") == user), "")
@@ -6606,6 +6707,18 @@ class Doctor:
             async def mikrotik():
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
+        if has("unifi_read"):
+            async def unifi():
+                base = os.environ.get("UNIFI_URL", "").strip()
+                if base and not os.environ.get("UNIFI_CERT_SHA256", "").strip():
+                    seen = await asyncio.to_thread(self._mt_fingerprint, base)
+                    if seen:
+                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="UniFi console", setting="UNIFI_CERT_SHA256", seen=seen))
+                info = await self._unifi("/info")
+                site = await self._unifi_site()
+                devices = await self._unifi_all(f"/sites/{site}/devices")
+                return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
+            out.append(("UniFi", unifi))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -6875,7 +6988,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -9183,7 +9296,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_volunteer_rota","file":"volunteer-rota.json","category":"calendar","title":"Volunteer rota","description":"Drafts next month's volunteer rota from the shifts in your calendar and the availability people emailed you, fairly shared, and asks you to approve it before emailing it round.","tip":"Put the shifts in a calendar it can read, and ask volunteers to reply to one email with their dates. Change the address to your list.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Draft next month's volunteer rota. Read the calendar for next month's shifts (calendar with days 40). Search my email from the last 21 days for volunteers' availability replies and read them. Give each shift its volunteers: only people who said they're free then, shared out as evenly as you can, nobody on two shifts in one day. List any shift still short of people at the top. Then a table by date. Check it with review_text against: every name is someone who said they were free; no shift has someone twice; shifts with too few people are listed first."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":16}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calendar"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"email"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_approve","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Email this rota to the volunteers?\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"rb_ask_first","fields":{"WHAT":"messages"},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"volunteers@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Next month's rota"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Not sent. The draft, to edit yourself:\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":30}]}}},
 {"key":"g_wallet_health_check","file":"wallet-health-check.json","category":"money","title":"Wallet health check","description":"Each Sunday evening, reads your Trust Wallet through its Agent Kit: what you hold and what it's worth, how prices moved, and a risk check on every token, flagging any that look like scams or have little liquidity. Emailed to you. It only reads: it never sends, swaps or approves.","tip":"Needs Trust Wallet's Agent Kit (npm install -g @trustwallet/cli) as MCP_TRUSTWALLET in second-thought.ini: the example ini shows how. Change the email address to yours.","author":"itsfja","runtime":"3.10.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","x":30,"y":30,"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"x":550,"y":30,"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}}}}},{"type":"rb_receive","fields":{"MSG":"check"},"x":30,"y":290,"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Read my Trust Wallet: the wallet's status, then its portfolio (every token, how much, and its value). For each token, get its price now and run a risk check. Then write a short summary: the total value, each holding and its share, and a section headed 'Worth a look' listing any token whose risk check is medium or high, with the reasons it gave. Only read: don't send, swap, approve or pay for anything."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":15}}},"TOOLS":{"block":{"type":"rb_agent_mcp","fields":{"SERVER":"trustwallet","ASK":"changes"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your wallet this week"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}]}}},
 {"key":"g_coinbase_week","file":"coinbase-week.json","category":"money","title":"Weekly crypto round-up","description":"Each Sunday evening, reads your Coinbase balances and what they're worth, and sends you a Telegram message: the total, how it changed since last week, and each holding's value. It only reads: it places no orders.","tip":"Needs a Coinbase API key with View permission only (COINBASE_KEY_FILE), and currency = gbp, or yours, in second-thought.ini. The first week has nothing to compare with.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_value","name":"value"},{"id":"g_holdings","name":"holdings"},{"id":"g_summary","name":"summary"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"roundup"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_value"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_value"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_holdings"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_balances"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_summary"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write a short weekly round-up of my crypto, under 120 words, in plain English: the total now, how it changed since last week (in money and percent), and each holding's value, biggest first. No advice on what to buy or sell.\n\nTotal now: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_value"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nTotal a week ago (empty if this is the first week): "}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Coinbase total last week"}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nHoldings (asset, amount, value, currency):\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_holdings"}}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_value"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Coinbase total last week"}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
-{"key":"g_recipe_scaler_weekly","file":"recipe-scaler-weekly.json","category":"home","title":"Weekly recipes and shopping list","description":"Remembers recipes you drop in a folder. Run it on shopping day: say which recipes and for how many, and it scales them and makes one shopping list grouped by supermarket aisle.","tip":"Change the folder to where you keep recipes (PDF, Word or text). Run it by hand, since it asks which recipes you want.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_folder_when","fields":{"FOLDER":"~/Recipes"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"recipe"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":30},{"type":"rb_receive","fields":{"MSG":"recipe"},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write this recipe as one line: its name (serves N): each ingredient with its amount, separated by semicolons.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Recipe remembered."}}}}}}}},"x":550,"y":30},{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Which recipes this week, and for how many people? (Your recipes are listed in the agent's first step.)"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"My recipes, one per line:\n"}}},"ADD1":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nThis week I want: "}}},"ADD3":{"block":{"type":"rb_answer"}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nScale each recipe to the servings I want, using calculate for every amount. If a recipe isn't in my list, use a standard version. Then write one shopping list grouped by supermarket aisle (fruit and veg, bakery, dairy, meat and fish, tins and jars, dry goods, frozen), adding up the same ingredient across recipes."}}}},"extraState":{"itemCount":5}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":12}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calc"}}}},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"shopping-list"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Shopping list"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":290}]}}}
+{"key":"g_recipe_scaler_weekly","file":"recipe-scaler-weekly.json","category":"home","title":"Weekly recipes and shopping list","description":"Remembers recipes you drop in a folder. Run it on shopping day: say which recipes and for how many, and it scales them and makes one shopping list grouped by supermarket aisle.","tip":"Change the folder to where you keep recipes (PDF, Word or text). Run it by hand, since it asks which recipes you want.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_folder_when","fields":{"FOLDER":"~/Recipes"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"recipe"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":30},{"type":"rb_receive","fields":{"MSG":"recipe"},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write this recipe as one line: its name (serves N): each ingredient with its amount, separated by semicolons.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Recipe remembered."}}}}}}}},"x":550,"y":30},{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Which recipes this week, and for how many people? (Your recipes are listed in the agent's first step.)"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"My recipes, one per line:\n"}}},"ADD1":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nThis week I want: "}}},"ADD3":{"block":{"type":"rb_answer"}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nScale each recipe to the servings I want, using calculate for every amount. If a recipe isn't in my list, use a standard version. Then write one shopping list grouped by supermarket aisle (fruit and veg, bakery, dairy, meat and fish, tins and jars, dry goods, frozen), adding up the same ingredient across recipes."}}}},"extraState":{"itemCount":5}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":12}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calc"}}}},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"shopping-list"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Shopping list"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":290}]}}},
+{"key":"g_whos_on_the_network","file":"whos-on-the-network.json","category":"home","title":"Who's on the network?","description":"Each morning, reads who's on your UniFi network and how your UniFi devices are, and sends you a Telegram message about anything new since yesterday (by network), any device offline, and firmware waiting. It only reads: nothing is blocked or changed.","tip":"Needs UNIFI_URL, UNIFI_API_KEY and UNIFI_CERT_SHA256 (--doctor shows it). Tell it which address ranges are your IoT and camera networks.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_clients","name":"clients"},{"id":"g_devices","name":"devices"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_clients"}},"inputs":{"VALUE":{"block":{"type":"rb_unifi_clients"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_devices"}},"inputs":{"VALUE":{"block":{"type":"rb_unifi_devices"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Report on my UniFi network in under 120 words. 192.168.30.x is IoT and 192.168.40.x is cameras. List any client that wasn't there yesterday, by network, with a guess at its maker from the MAC address; any UniFi device that isn't online; and any with firmware waiting. If nothing is new, say so in one line.\n\nClients now:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_clients"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nClients yesterday (empty the first day):\n"}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"UniFi clients yesterday"}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nUniFi devices:\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_devices"}}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_clients"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"UniFi clients yesterday"}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}}
 ]
 </script>
 <script type="application/json" id="capabilities">
@@ -9203,6 +9317,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
+["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
 ["web", "read public web pages and search the web", false],
 ["email_read", "read your email", false],
 ["calendar", "read your calendars", false],
@@ -9259,6 +9374,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/api/v3/brokerage/orders/preview$"
+  ]
+ ],
+ "unifi_free": [
+  [
+   "GET",
+   "^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"
   ]
  ],
  "mikrotik_free": [
@@ -11845,6 +11966,135 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         "policy": "read,api,rest-api,!local,!telnet,!ssh,!ftp,!reboot,!write,!policy,!test,!winbox,!password,!web,!sniff,!sensitive,!romon"
       }
     ]
+  },
+  "unifi": {
+    "note": "A sample UniFi network for the page and the tests (#359), shaped the way the Network API (Integration API v1) answers. The last client has no name: a new device on the IoT network.",
+    "info": {
+      "applicationVersion": "9.5.21"
+    },
+    "sites": [
+      {
+        "id": "88f7af54-98f8-306a-a1c7-c9349722b1f6",
+        "internalReference": "default",
+        "name": "Default"
+      }
+    ],
+    "devices": [
+      {
+        "id": "5f3a9b2e-1c4d-4e8f-9a01-0d1e2f3a4b5c",
+        "name": "Gateway",
+        "model": "UCG-Ultra",
+        "macAddress": "F4:E2:C6:11:22:33",
+        "ipAddress": "192.168.1.1",
+        "state": "ONLINE",
+        "firmwareVersion": "4.3.6",
+        "firmwareUpdatable": false
+      },
+      {
+        "id": "6a4b0c3f-2d5e-4f90-8b12-1e2f3a4b5c6d",
+        "name": "Office switch",
+        "model": "USW-Lite-8-PoE",
+        "macAddress": "F4:E2:C6:44:55:66",
+        "ipAddress": "192.168.1.2",
+        "state": "ONLINE",
+        "firmwareVersion": "7.1.26",
+        "firmwareUpdatable": true
+      },
+      {
+        "id": "7b5c1d40-3e6f-4a01-9c23-2f3a4b5c6d7e",
+        "name": "Living room AP",
+        "model": "U7-Pro",
+        "macAddress": "F4:E2:C6:77:88:99",
+        "ipAddress": "192.168.1.3",
+        "state": "ONLINE",
+        "firmwareVersion": "8.0.21",
+        "firmwareUpdatable": false
+      },
+      {
+        "id": "8c6d2e51-4f70-4b12-8d34-3a4b5c6d7e8f",
+        "name": "Garden AP",
+        "model": "U6-Mesh",
+        "macAddress": "F4:E2:C6:AA:BB:CC",
+        "ipAddress": "192.168.1.4",
+        "state": "OFFLINE",
+        "firmwareVersion": "6.6.77",
+        "firmwareUpdatable": true
+      }
+    ],
+    "statistics": {
+      "5f3a9b2e-1c4d-4e8f-9a01-0d1e2f3a4b5c": {
+        "uptimeSec": 1296000,
+        "cpuUtilizationPct": 12.5,
+        "memoryUtilizationPct": 61.2,
+        "loadAverage1Min": 0.4
+      },
+      "6a4b0c3f-2d5e-4f90-8b12-1e2f3a4b5c6d": {
+        "uptimeSec": 2592000,
+        "cpuUtilizationPct": 3,
+        "memoryUtilizationPct": 44
+      },
+      "7b5c1d40-3e6f-4a01-9c23-2f3a4b5c6d7e": {
+        "uptimeSec": 432000,
+        "cpuUtilizationPct": 7.1,
+        "memoryUtilizationPct": 52.8
+      }
+    },
+    "clients": [
+      {
+        "type": "WIRELESS",
+        "id": "c01-0000-4000-8000-000000000001",
+        "name": "Francis's laptop",
+        "macAddress": "3c:22:fb:10:20:30",
+        "ipAddress": "192.168.1.20",
+        "uplinkDeviceId": "7b5c1d40-3e6f-4a01-9c23-2f3a4b5c6d7e",
+        "connectedAt": "2026-11-10T07:02:00Z"
+      },
+      {
+        "type": "WIRED",
+        "id": "c02-0000-4000-8000-000000000002",
+        "name": "NAS",
+        "macAddress": "00:11:32:aa:bb:01",
+        "ipAddress": "192.168.1.10",
+        "uplinkDeviceId": "6a4b0c3f-2d5e-4f90-8b12-1e2f3a4b5c6d",
+        "connectedAt": "2026-10-21T09:14:00Z"
+      },
+      {
+        "type": "WIRED",
+        "id": "c03-0000-4000-8000-000000000003",
+        "name": "Proxmox",
+        "macAddress": "94:c6:91:12:34:56",
+        "ipAddress": "192.168.1.11",
+        "uplinkDeviceId": "6a4b0c3f-2d5e-4f90-8b12-1e2f3a4b5c6d",
+        "connectedAt": "2026-10-21T09:15:00Z"
+      },
+      {
+        "type": "WIRELESS",
+        "id": "c04-0000-4000-8000-000000000004",
+        "name": "Kitchen speaker",
+        "macAddress": "44:65:0d:9a:8b:7c",
+        "ipAddress": "192.168.30.21",
+        "uplinkDeviceId": "7b5c1d40-3e6f-4a01-9c23-2f3a4b5c6d7e",
+        "connectedAt": "2026-11-08T18:40:00Z"
+      },
+      {
+        "type": "WIRELESS",
+        "id": "c05-0000-4000-8000-000000000005",
+        "name": "Doorbell camera",
+        "macAddress": "9c:8e:cd:01:02:03",
+        "ipAddress": "192.168.40.5",
+        "uplinkDeviceId": "7b5c1d40-3e6f-4a01-9c23-2f3a4b5c6d7e",
+        "connectedAt": "2026-11-01T12:00:00Z"
+      },
+      {
+        "type": "WIRELESS",
+        "id": "c06-0000-4000-8000-000000000006",
+        "name": "",
+        "macAddress": "de:ad:be:ef:00:42",
+        "ipAddress": "192.168.30.37",
+        "uplinkDeviceId": "7b5c1d40-3e6f-4a01-9c23-2f3a4b5c6d7e",
+        "connectedAt": "2026-11-10T06:55:00Z"
+      }
+    ]
   }
 }
 </script>
@@ -12108,7 +12358,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -12120,7 +12370,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -12298,7 +12548,7 @@ HOW TO MAP CODE
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade", rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
-    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read", rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -12642,6 +12892,11 @@ HOW TO MAP CODE
       { style:"coinbase", inputsInline:true, tooltip:"Places a real market order, like 'preview Coinbase order'. It previews it first, then always asks you, with the fee and total, even when nothing else asks; with nobody there to say yes, it doesn't run. Needs a key with Trade permission. On this page nothing is bought or sold." }),
     S("rb_coinbase_cancel", "cancel Coinbase order %1", [val("ORDER")], { style:"coinbase", inputsInline:true,
       tooltip:"Cancels one of your open orders, by its id (from 'Coinbase open orders'). It always asks you first, and doesn't run with nobody there." }),
+    /* UniFi (#359): read only */
+    V("rb_unifi_clients", "UniFi clients", [], "Array", { style:"unifi",
+      tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
+    V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
+      tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
       tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),
@@ -12820,6 +13075,7 @@ HOW TO MAP CODE
       B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_cancel", { ORDER:K("") })
     ]},
+    { kind:"category", name:"UniFi", categorystyle:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
     ]},
@@ -13051,6 +13307,7 @@ HOW TO MAP CODE
   window.__safety = cases => cases.map(c => c.kind === "ha" ? haIsSensitive(c.service, c.entity, c.data)
     : c.kind === "homey" ? HOMEY_SENSITIVE.some(([cap, v]) => cap === c.capability && v === c.value)
     : c.kind === "coinbase" ? coinbaseMoney(c.method, c.path)
+    : c.kind === "unifi" ? SAFETY.unifi_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
     : c.kind === "mikrotik" ? SAFETY.mikrotik_free.some(([m, p]) => m === str(c.method).trim().toUpperCase() && new RegExp(p).test(str(c.path).trim()))
     : c.kind === "asks" ? AGENT_ASKS.has(c.tool) : c.kind === "private" ? AGENT_PRIVATE.has(c.tool)
     : agentMustAsk(c.tool, c.input || {}, c.seen || "", !!c.private));
@@ -14996,6 +15253,7 @@ HOW TO MAP CODE
     add(n.feeds, ["RB_FEEDS"]);
     add(n.homey, ["HOMEY_URL", "HOMEY_API_KEY"]);
     add(n.coinbase, ["COINBASE_KEY"]);
+    add(n.unifi, ["UNIFI_URL", "UNIFI_API_KEY", "UNIFI_CERT_SHA256"]);
     add(n.mikrotik, ["MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_PASSWORD", "MIKROTIK_CERT_SHA256"]);  // the key file's contents: orders never run there, since nobody is there to say yes
     add(n.mqtt, ["MQTT_HOST"], ["MQTT_USERNAME", "MQTT_PASSWORD", "MQTT_TLS"]);
     return out;
@@ -15385,6 +15643,7 @@ HOW TO MAP CODE
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
+             unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -15431,6 +15690,10 @@ HOW TO MAP CODE
       "; fewest permissions it needs: query only, unless the program trades. Never give it withdrawal permission.",
       "KRAKEN_API_KEY = ", "KRAKEN_API_SECRET = ",
       ...note("MCP_KRAKEN", "kraken mcp -s market,account,paper", "to choose Kraken's services yourself (never add --allow-dangerous)"));
+    if (need.unifi) out.push("", "[unifi]",
+      "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
+      "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
+      "UNIFI_URL = https://192.168.1.1", "UNIFI_API_KEY = ", "UNIFI_CERT_SHA256 = ");
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
@@ -15739,6 +16002,8 @@ HOW TO MAP CODE
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_unifi_clients": return "(await R.unifi_clients())";
+        case "rb_unifi_devices": return "(await R.unifi_devices())";
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";
@@ -17696,7 +17961,7 @@ HOW TO MAP CODE
     const note = days === 0 ? "" : days === 1 ? " (next day)" : days === -1 ? " (the day before)" : days > 0 ? " (" + days + " days later)" : " (" + (-days) + " days earlier)";
     return pad2(Math.floor(t / 60)) + ":" + pad2(t % 60) + note;
   }
-  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik and the rest.
+  // 18-connections.js: Connections on the page: sample feeds, GitHub, Telegram, email, calendar, Homey, MQTT, Coinbase, MikroTik, UniFi and the rest.
   /* ---------- Connections on the page: sample feeds, GitHub, Telegram, email and calendar ----------
      The page can't reach these services, so it uses the sample data below (like the sample house). The text each one gives
      back is shaped like what exported Python gives from the real services. */
@@ -17709,7 +17974,7 @@ HOW TO MAP CODE
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch" }[what]) : what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -18115,6 +18380,28 @@ HOW TO MAP CODE
     if (!(cbSample().orders || []).some(o => o.order_id === id)) fail(tr("Coinbase didn't cancel the order: {why}.", { why:"unknown cancel order" }));
     addStep("Coinbase order cancelled", { mono:true, text:id }).done("sample account", "ok");
     return true;
+  }
+  /* UniFi on the page (#359): a sample network. Exported Python reads your console's Network API, and only reads.
+     Matches the runtime's unifi_ methods and tests/fake_unifi.py, which serves the same sample. */
+  const ufSample = () => { connNote("UniFi"); return CONN.unifi || {}; };
+  const ufWhen = t => { const d = new Date(str(t)); return isNaN(d) ? str(t) : d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+  function unifiClients(){
+    const s = ufSample(), names = Object.fromEntries((s.devices || []).map(d => [str(d.id), str(d.name)]));
+    const out = (s.clients || []).map(c => ({ name:str(c.name || c.hostname || c.macAddress), mac:str(c.macAddress).toLowerCase(), ip:str(c.ipAddress || ""),
+      type:str(c.type).toLowerCase(), connected:ufWhen(c.connectedAt), uplink:names[str(c.uplinkDeviceId)] || "" }));
+    addStep("UniFi clients", { mono:true, text:out.map(c => c.name + " (" + (c.ip || c.mac) + ")").join("\n") || tr("(nothing)") }).done(tr("{n} clients", { n:out.length }), "ok");
+    return out;
+  }
+  function unifiDevices(){
+    const s = ufSample(), stats = s.statistics || {};
+    return (s.devices || []).map(d => {
+      const rec = { name:str(d.name), model:str(d.model), mac:str(d.macAddress).toLowerCase(), ip:str(d.ipAddress || ""), state:str(d.state).toLowerCase(),
+                    firmware:str(d.firmwareVersion || ""), update:!!d.firmwareUpdatable, uptime:"", cpu:"", memory:"" };
+      const st = rec.state === "online" ? stats[str(d.id)] : null;
+      if (st) Object.assign(rec, { uptime:isNumLike(st.uptimeSec) ? cents(num(st.uptimeSec) / 3600) : "", cpu:isNumLike(st.cpuUtilizationPct) ? num(st.cpuUtilizationPct) : "",
+                                    memory:isNumLike(st.memoryUtilizationPct) ? num(st.memoryUtilizationPct) : "" });
+      return rec;
+    });
   }
   /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
      only reads. Matches the runtime's mikrotik_ methods and tests/fake_mikrotik.py, which serves the same sample. */
@@ -18921,6 +19208,8 @@ HOW TO MAP CODE
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_coinbase_balances": return coinbaseBalances();
+      case "rb_unifi_clients": return unifiClients();
+      case "rb_unifi_devices": return unifiDevices();
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
       case "rb_mikrotik_health": return mikrotikHealth();

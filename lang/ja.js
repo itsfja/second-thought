@@ -157,7 +157,9 @@
 "rb_mikrotik_ports":{"message0":"MikroTik のポート","tooltip":"記録のリストで、MikroTik のルーターやスイッチのポートごとに一つ：port、running、speed（たとえば 10Gbps）、errors、drops、link_downs、comment。エラーとドロップは最後の起動からの数です。読むだけで、スイッチの設定は何も変わりません。このページではサンプルのスイッチを使います。"},
 "rb_mikrotik_sfp":{"message0":"MikroTik の SFP モジュール","tooltip":"記録のリストで、差してある SFP モジュールごとに一つ：port、module、temperature（°C）、rx_power と tx_power（dBm）。"},
 "rb_mikrotik_health":{"message0":"MikroTik の状態","tooltip":"ルーターやスイッチそのものについての記録：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C）、ほかにあるセンサーすべて。"},
-"rb_mikrotik_log":{"message0":"MikroTik のログ、最後の %1 行","tooltip":"ルーターのログの最後の行を古い順に。それぞれ「time topics: message」の形です。"}
+"rb_mikrotik_log":{"message0":"MikroTik のログ、最後の %1 行","tooltip":"ルーターのログの最後の行を古い順に。それぞれ「time topics: message」の形です。"},
+"rb_unifi_clients":{"message0":"UniFi のクライアント","tooltip":"記録のリストで、UniFi ネットワークにつながっている機器ごとに一つ：name、mac、ip、type（wired、wireless、vpn）、connected（いつから）、uplink（経由している UniFi 機器）。読むだけで、何もブロックも変更もしません。このページではサンプルのネットワークを使います。"},
+"rb_unifi_devices":{"message0":"UniFi の機器","tooltip":"記録のリストで、UniFi 機器（ゲートウェイ、スイッチ、アクセスポイント）ごとに一つ：name、model、mac、ip、state、firmware、update（新しいファームウェアが待っているか）、オンラインなら uptime（時間）、cpu と memory（%）。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -207,7 +209,8 @@
 "Homey":"Homey",
 "Output":"出力",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"エージェントの道具：エージェントブロックの中に入れます",
@@ -1024,7 +1027,12 @@
 "MikroTik ports":"MikroTik のポート",
 "{n} ports":"{n} ポート",
 "MikroTik switch":"MikroTik のスイッチ",
-"read your MikroTik router or switch: its ports, modules, health and log":"MikroTik のルーターやスイッチを読む：ポート、モジュール、状態、ログ"
+"read your MikroTik router or switch: its ports, modules, health and log":"MikroTik のルーターやスイッチを読む：ポート、モジュール、状態、ログ",
+"UniFi":"UniFi",
+"UniFi clients":"UniFi のクライアント",
+"{n} clients":"{n} クライアント",
+"UniFi network":"UniFi ネットワーク",
+"read your UniFi network: who's connected, and how your UniFi devices are":"UniFi ネットワークを読む：誰が接続しているか、UniFi 機器の調子"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1981,16 +1989,24 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"MikroTik のポート",
 "{n} ports":"{n} ポート",
-"Couldn't reach the MikroTik at {url} ({reason}).":"{url} の MikroTik に接続できませんでした（{reason}）。",
+"Couldn't reach the {who} at {url} ({reason}).":"{url} の {who} に接続できませんでした（{reason}）。",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik には MIKROTIK_URL、MIKROTIK_USER、MIKROTIK_PASSWORD が必要です {where_keys}：ルーターのアドレス（たとえば https://192.168.88.1）と、read、api、rest-api のポリシーだけを持つグループのユーザーです。",
 "MikroTik: {why}.":"MikroTik：{why}。",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought は MikroTik を読むだけなので、{what} は送りません。",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"MikroTik が MIKROTIK_USER と MIKROTIK_PASSWORD を拒否しました。",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"このコンピューターは MikroTik の証明書を信頼していません（ルーターはふつう自分で作ります）。--doctor を実行してフィンガープリントを確認し、MIKROTIK_CERT_SHA256 に入れてください。",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"MikroTik の証明書が MIKROTIK_CERT_SHA256 で固定したものと違います（{seen} です）。証明書を入れ替えたなら値を更新してください。そうでなければ、何かが間に入っています。",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"このコンピューターは {who} の証明書を信頼していません（ルーターはふつう自分で作ります）。--doctor を実行してフィンガープリントを確認し、{setting} に入れてください。",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"{who} の証明書が {setting} で固定したものと違います（{seen} です）。証明書を入れ替えたなら値を更新してください。そうでなければ、何かが間に入っています。",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"アカウントのグループ（{group}）は {what} もできます。Second Thought は読むだけなので、read、api、rest-api だけのグループのほうが安全です。",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"パスワードが http:// で暗号化されずに送られます。代わりに www-ssl サービスと https:// を使ってください。",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"ルーターの証明書は自前のものなので、固定してください：{url} があなたの MikroTik なら、second-thought.ini に MIKROTIK_CERT_SHA256 = {seen} を書いてください。",
-"{board}, RouterOS {version}":"{board}、RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"ルーターの証明書は自前のものなので、固定してください：{url} があなたの {who} なら、second-thought.ini に {setting} = {seen} を書いてください。",
+"{board}, RouterOS {version}":"{board}、RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi：{why}。",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought は UniFi を読むだけなので、{what} は送りません。",
+"UniFi clients":"UniFi のクライアント",
+"{n} clients":"{n} クライアント",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi には UNIFI_URL と UNIFI_API_KEY が必要です {where_keys}：コンソールのアドレス（たとえば https://192.168.1.1）と、Network アプリ（Settings、Control Plane、Integrations）の API キーです。",
+"The UniFi console refused UNIFI_API_KEY.":"UniFi コンソールが UNIFI_API_KEY を拒否しました。",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}、{n} 台"
 }
 };

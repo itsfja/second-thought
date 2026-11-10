@@ -157,7 +157,9 @@
 "rb_mikrotik_ports":{"message0":"porte MikroTik","tooltip":"Un elenco di record, uno per ogni porta del tuo router o switch MikroTik: port, running, speed (come 10Gbps), errors, drops, link_downs e comment. Errori e scarti contano dall'ultimo avvio. Legge soltanto: sullo switch non cambia nulla. In questa pagina usa uno switch di esempio."},
 "rb_mikrotik_sfp":{"message0":"moduli SFP MikroTik","tooltip":"Un elenco di record, uno per ogni modulo SFP inserito: port, module, temperature (°C), rx_power e tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"stato del MikroTik","tooltip":"Un record sul router o switch stesso: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) e ogni altro sensore che ha."},
-"rb_mikrotik_log":{"message0":"log MikroTik, ultime %1 righe","tooltip":"Le ultime righe del log del router, dalla più vecchia, ognuna come «time topics: message»."}
+"rb_mikrotik_log":{"message0":"log MikroTik, ultime %1 righe","tooltip":"Le ultime righe del log del router, dalla più vecchia, ognuna come «time topics: message»."},
+"rb_unifi_clients":{"message0":"client UniFi","tooltip":"Un elenco di record, uno per ogni dispositivo connesso alla tua rete UniFi: name, mac, ip, type (wired, wireless o vpn), connected (da quando) e uplink (il dispositivo UniFi attraverso cui è connesso). Legge soltanto: nulla viene bloccato o cambiato. In questa pagina usa una rete di esempio."},
+"rb_unifi_devices":{"message0":"dispositivi UniFi","tooltip":"Un elenco di record, uno per ogni dispositivo UniFi (gateway, switch, access point): name, model, mac, ip, state, firmware, update (se c'è un firmware più nuovo in attesa) e, se è online, uptime (ore), cpu e memory (%)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ogni giorno","weekdays":"nei giorni feriali","weekends":"nel fine settimana"},
@@ -207,7 +209,8 @@
 "Homey":"Homey",
 "Output":"Uscita",
 "Coinbase":"Coinbase",
-"MikroTik":"MikroTik"
+"MikroTik":"MikroTik",
+"UniFi":"UniFi"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Strumenti per l'agente: mettili dentro un blocco agente",
@@ -1024,7 +1027,12 @@
 "MikroTik ports":"Porte MikroTik",
 "{n} ports":"{n} porte",
 "MikroTik switch":"switch MikroTik",
-"read your MikroTik router or switch: its ports, modules, health and log":"leggere il tuo router o switch MikroTik: porte, moduli, stato e log"
+"read your MikroTik router or switch: its ports, modules, health and log":"leggere il tuo router o switch MikroTik: porte, moduli, stato e log",
+"UniFi":"UniFi",
+"UniFi clients":"Client UniFi",
+"{n} clients":"{n} client",
+"UniFi network":"rete UniFi",
+"read your UniFi network: who's connected, and how your UniFi devices are":"leggere la tua rete UniFi: chi è connesso, e come stanno i tuoi dispositivi UniFi"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -1981,16 +1989,24 @@
 "MikroTik":"MikroTik",
 "MikroTik ports":"Porte MikroTik",
 "{n} ports":"{n} porte",
-"Couldn't reach the MikroTik at {url} ({reason}).":"Impossibile raggiungere il MikroTik a {url} ({reason}).",
+"Couldn't reach the {who} at {url} ({reason}).":"Impossibile raggiungere il {who} a {url} ({reason}).",
 "MikroTik needs MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD {where_keys}: the router's address (like https://192.168.88.1) and a user in a group with only the read, api and rest-api policies.":"MikroTik ha bisogno di MIKROTIK_URL, MIKROTIK_USER e MIKROTIK_PASSWORD {where_keys}: l'indirizzo del router (come https://192.168.88.1) e un utente in un gruppo con solo le policy read, api e rest-api.",
 "MikroTik: {why}.":"MikroTik: {why}.",
 "Second Thought only reads from MikroTik, so it doesn't send {what}.":"Second Thought legge soltanto dal MikroTik, quindi non invia {what}.",
 "The MikroTik refused MIKROTIK_USER and MIKROTIK_PASSWORD.":"Il MikroTik ha rifiutato MIKROTIK_USER e MIKROTIK_PASSWORD.",
-"The MikroTik's certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in MIKROTIK_CERT_SHA256.":"Questo computer non si fida del certificato del MikroTik (i router di solito se lo creano da soli). Esegui --doctor per vederne l'impronta, e mettila in MIKROTIK_CERT_SHA256.",
-"The MikroTik's certificate isn't the one MIKROTIK_CERT_SHA256 pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Il certificato del MikroTik non è quello fissato da MIKROTIK_CERT_SHA256 (è {seen}). Se hai sostituito il certificato, aggiorna il valore; altrimenti c'è qualcosa in mezzo.",
+"The {who}'s certificate isn't one this computer trusts (routers usually make their own). Run --doctor to see its fingerprint, and put it in {setting}.":"Questo computer non si fida del certificato del {who} (i router di solito se lo creano da soli). Esegui --doctor per vederne l'impronta, e mettila in {setting}.",
+"The {who}'s certificate isn't the one {setting} pins (it's {seen}). If you replaced the certificate, update the pin; if not, something is in the way.":"Il certificato del {who} non è quello fissato da {setting} (è {seen}). Se hai sostituito il certificato, aggiorna il valore; altrimenti c'è qualcosa in mezzo.",
 "the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.":"il gruppo dell'account ({group}) può anche {what}. Second Thought legge soltanto, quindi un gruppo con solo read, api e rest-api è più sicuro.",
 "the password goes unencrypted over http://. Use the www-ssl service and https:// instead.":"la password viaggia in chiaro su http://. Usa invece il servizio www-ssl e https://.",
-"the router's certificate is its own, so pin it: if {url} is your MikroTik, put MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.":"il certificato del router è suo, quindi fissalo: se {url} è il tuo MikroTik, metti MIKROTIK_CERT_SHA256 = {seen} in second-thought.ini.",
-"{board}, RouterOS {version}":"{board}, RouterOS {version}"
+"the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.":"il certificato del router è suo, quindi fissalo: se {url} è il tuo {who}, metti {setting} = {seen} in second-thought.ini.",
+"{board}, RouterOS {version}":"{board}, RouterOS {version}",
+"UniFi":"UniFi",
+"UniFi: {why}.":"UniFi: {why}.",
+"Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought legge soltanto dal UniFi, quindi non invia {what}.",
+"UniFi clients":"Client UniFi",
+"{n} clients":"{n} client",
+"UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi ha bisogno di UNIFI_URL e UNIFI_API_KEY {where_keys}: l'indirizzo della console (come https://192.168.1.1) e una chiave API dall'app Network (Settings, Control Plane, Integrations).",
+"The UniFi console refused UNIFI_API_KEY.":"La console UniFi ha rifiutato UNIFI_API_KEY.",
+"UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} dispositivi"
 }
 };

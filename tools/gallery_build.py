@@ -364,6 +364,29 @@ add(program(
         email_me("Your Kraken week", B("rb_draft")),
         B("rb_result"))]))
 
+# Home: #359. UniFi, read-only: who's connected and how the devices are.
+v = Vars("clients", "devices", "report")
+add(program(
+    "whos-on-the-network", "Who's on the network?", "home",
+    "Each morning, reads who's on your UniFi network and how your UniFi devices are, and sends you a Telegram message about "
+    "anything new since yesterday (by network), any device offline, and firmware waiting. It only reads: nothing is "
+    "blocked or changed.",
+    "Needs UNIFI_URL, UNIFI_API_KEY and UNIFI_CERT_SHA256 (--doctor shows it). Tell it which address ranges are your "
+    "IoT and camera networks.",
+    start_and(msg="check") + [chain(when_time(8, 30), B("rb_broadcast_wait", MSG="check")), receive(
+        "check",
+        v.set("clients", B("rb_unifi_clients")),
+        v.set("devices", B("rb_unifi_devices")),
+        v.set("report", B("rb_ask", TEXT=join(
+            "Report on my UniFi network in under 120 words. 192.168.30.x is IoT and 192.168.40.x is cameras. List any "
+            "client that wasn't there yesterday, by network, with a guess at its maker from the MAC address; any UniFi "
+            "device that isn't online; and any with firmware waiting. If nothing is new, say so in one line.\n\n"
+            "Clients now:\n", v.get("clients"), "\n\nClients yesterday (empty the first day):\n",
+            B("rb_mem_get", NAME="UniFi clients yesterday"), "\n\nUniFi devices:\n", v.get("devices")))),
+        B("rb_mem_set", {"KIND": "permanent"}, VALUE=v.get("clients"), NAME="UniFi clients yesterday"),
+        B("rb_tg_send", TEXT=v.get("report")),
+        B("rb_finish_with", TEXT=v.get("report")))], v))
+
 # Home: #360. MikroTik, read-only: ports and SFP modules, never a change.
 v = Vars("ports", "modules", "report")
 add(program(

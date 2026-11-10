@@ -211,6 +211,9 @@ def python_tests(codes, share=None):
     import fake_mikrotik  # and the MikroTik ones read a stand-in switch (#360)
     mikrotik_all = fake_mikrotik.FakeMikrotik()
     env.update(MIKROTIK_URL=mikrotik_all.start(), MIKROTIK_USER=fake_mikrotik.USER, MIKROTIK_PASSWORD=fake_mikrotik.PASSWORD)
+    import fake_unifi  # and the UniFi ones a stand-in console (#359)
+    unifi_all = fake_unifi.FakeUnifi()
+    env.update(UNIFI_URL=unifi_all.start(), UNIFI_API_KEY=fake_unifi.KEY)
     env.update(MQTT_HOST="127.0.0.1", MQTT_PORT=str(mqtt_port), MQTT_USERNAME=fake_mqtt.USER, MQTT_PASSWORD=fake_mqtt.PASSWORD)
     env.update(DISCORD_API_URL=svc_url + "/discord", DISCORD_BOT_TOKEN=fake_services.DISCORD_TOKEN, DISCORD_CHANNEL_ID=fake_services.DISCORD_CHANNEL,
                SLACK_API_URL=svc_url + "/slack", SLACK_BOT_TOKEN=fake_services.SLACK_TOKEN, SLACK_CHANNEL_ID=fake_services.SLACK_CHANNEL)
@@ -431,6 +434,16 @@ def python_tests(codes, share=None):
                     "2026-11-10 07:30:00 system,info,account: user monitor logged in via rest-api"]
             check(code_ == 0 and res[:len(want)] == want and not mikrotik_all.refused,
                   f"t_mt_blocks.py reads the same from RouterOS as the page does, and sends nothing but reads ({res[:len(want)]})" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+
+    if part("settings"):
+        print("UniFi in Python")
+        with tempfile.TemporaryDirectory() as tmp:
+            (pathlib.Path(tmp) / "t_uf_blocks.py").write_text(EXTRA["t_uf_blocks"], encoding="utf-8")
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_uf_blocks.py")], env, tmp)
+            res = [l.strip() for l in out.replace("\r\n", "\n").split("RESULT")[-1].split("\n") if l.strip().strip("=")]
+            want = ["6", "Office switch", "de:ad:be:ef:00:42", "wired", "true", "360", "offline"]
+            check(code_ == 0 and res[:len(want)] == want and not unifi_all.refused,
+                  f"t_uf_blocks.py reads the same from the UniFi console as the page does, and sends nothing but reads ({res[:len(want)]})" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
 
     print("New features in Python")
     with tempfile.TemporaryDirectory() as tmp:
