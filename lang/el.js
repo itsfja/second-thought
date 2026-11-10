@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"προεπισκόπηση εντολής Coinbase: %1 %2 του %3","tooltip":"Σε τι θα έβγαινε μια εντολή αγοράς ή πώλησης στην αγορά, χωρίς να δοθεί: μια εγγραφή με size, spend, fee, total, slippage και warnings. Η αγορά ξοδεύει ποσό του δεύτερου νομίσματος (50 του BTC-GBP ξοδεύει £50)· η πώληση πουλά ποσό του πρώτου (0.01 του BTC-GBP πουλά 0.01 BTC). Τίποτα δεν αλλάζει."},
 "rb_coinbase_order":{"message0":"δώσε εντολή Coinbase: %1 %2 του %3","tooltip":"Δίνει μια πραγματική εντολή στην αγορά, όπως η «προεπισκόπηση εντολής Coinbase». Πρώτα κάνει προεπισκόπηση, μετά σας ρωτά πάντα, με την προμήθεια και το σύνολο, ακόμη κι όταν τίποτε άλλο δεν ρωτά· χωρίς κανέναν να πει ναι, δεν εκτελείται. Χρειάζεται κλειδί με το δικαίωμα Trade. Σε αυτή τη σελίδα τίποτα δεν αγοράζεται ούτε πουλιέται."},
 "rb_coinbase_cancel":{"message0":"ακύρωσε την εντολή Coinbase %1","tooltip":"Ακυρώνει μία από τις ανοιχτές εντολές σας, με το id της (από τις «ανοιχτές εντολές Coinbase»). Σας ρωτά πάντα πρώτα, και δεν εκτελείται χωρίς κανέναν."},
+"rb_solax_now":{"message0":"στοιχεία Solax","tooltip":"Μια καταγραφή με τα στοιχεία του μετατροπέα Solax σας, όπως τα είχε τελευταία το SolaxCloud (ενημερώνονται περίπου κάθε πέντε λεπτά): ac_power_w (τι παράγει τώρα), yield_today_kwh και yield_total_kwh (ηλιακή παραγωγή), feedin_power_w και feedin_energy_kwh (προς το δίκτυο), import_energy_kwh (από το δίκτυο), battery_soc_pct, status και upload_time. Μόνο διαβάζει: τίποτα δεν αλλάζει στον μετατροπέα. Χρειάζεται SOLAX_TOKEN_ID και SOLAX_SN στο second-thought.ini. Σε αυτή τη σελίδα χρησιμοποιείται δείγμα μετατροπέα."},
 "rb_mikrotik_ports":{"message0":"θύρες MikroTik","tooltip":"Μια λίστα εγγραφών, μία για κάθε θύρα του δρομολογητή ή μεταγωγέα σας MikroTik: port, running, speed (όπως 10Gbps), errors, drops, link_downs και comment. Σφάλματα και απορρίψεις μετρούν από την τελευταία εκκίνηση. Μόνο διαβάζει: τίποτα δεν αλλάζει στον μεταγωγέα. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα μεταγωγέα."},
 "rb_mikrotik_sfp":{"message0":"μονάδες SFP του MikroTik","tooltip":"Μια λίστα εγγραφών, μία για κάθε συνδεδεμένη μονάδα SFP: port, module, temperature (°C), rx_power και tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"κατάσταση MikroTik","tooltip":"Μια εγγραφή για τον ίδιο τον δρομολογητή ή μεταγωγέα: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), και κάθε άλλος αισθητήρας που έχει."},
@@ -222,6 +223,7 @@
 "Output":"Έξοδος",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1068,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"επανεκκίνηση, διακοπή και εκκίνηση των containers σας στο Docker (ρωτώντας σας κάθε φορά)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Τα εργαλεία του Flightradar24 δεν είναι προσβάσιμα από αυτή τη σελίδα, οπότε ο πράκτορας εργάζεται εδώ χωρίς αυτά. Εξάγετε σε Python, με το Node.js εγκατεστημένο και το FR24_API_KEY ορισμένο, για να τα χρησιμοποιήσετε.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"να διαβάζει τα δεδομένα πτήσεων του Flightradar24: ζωντανές και ιστορικές θέσεις, περιλήψεις, τροχιές, και λεπτομέρειες αεροπορικών εταιρειών και αεροδρομίων"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"να διαβάζει τα δεδομένα πτήσεων του Flightradar24: ζωντανές και ιστορικές θέσεις, περιλήψεις, τροχιές, και λεπτομέρειες αεροπορικών εταιρειών και αεροδρομίων",
+"Solax":"Solax",
+"Solax figures":"στοιχεία Solax",
+"Solax inverter":"μετατροπέας Solax",
+"from {time}":"από {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"να διαβάζει τα στοιχεία του μετατροπέα Solax σας από το SolaxCloud: ηλιακή παραγωγή, φόρτιση μπαταρίας, εισαγωγή και εξαγωγή"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2072,6 +2079,14 @@
 "Second Thought doesn't send {what} to Docker.":"Το Second Thought δεν στέλνει {what} στο Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Το Node.js δεν είναι εγκατεστημένο, οπότε τα εργαλεία του Flightradar24 δεν μπορούν να ξεκινήσουν (προέρχονται από το npx). Εγκαταστήστε το: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Το Flightradar24 χρειάζεται κλειδί: ορίστε FR24_API_KEY στο second-thought.ini, δίπλα σε αυτό το πρόγραμμα (μια συνδρομή επί πληρωμή, από https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"το FR24_API_KEY σας είναι ορισμένο (κάθε κλήση κοστίζει πιστώσεις, γι' αυτό δεν ελέγχεται εδώ)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"το FR24_API_KEY σας είναι ορισμένο (κάθε κλήση κοστίζει πιστώσεις, γι' αυτό δεν ελέγχεται εδώ)",
+"Solax figures":"στοιχεία Solax",
+"from {time}":"από {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Το Solax χρειάζεται SOLAX_TOKEN_ID και SOLAX_SN {where_keys}: το token από τη σελίδα API του SolaxCloud (δωρεάν) και τον αριθμό μητρώου του wifi dongle του μετατροπέα (στην ετικέτά του, ή στην εφαρμογή).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"Το SolaxCloud απάντησε {code}: ελέγξτε SOLAX_TOKEN_ID και SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"Το SolaxCloud απέρριψε το token ή τον αριθμό μητρώου: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"Το SolaxCloud δεν είναι προσβάσιμο στο {url} ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"Το SolaxCloud επιτεύχθηκε: {status}, στοιχεία από {time}",
+"Solax":"Solax"
 }
 };

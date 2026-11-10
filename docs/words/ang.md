@@ -28,6 +28,7 @@ Made by tools/sync.py from i18n/ang.json: edit that, not this.
 - Output: Utgang
 - Coinbase: Coinbase
 - MikroTik: MikroTik
+- Solax: Solax
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker

@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"προΐδε ἐντολὴν Coinbase· %1 %2 τοῦ %3","tooltip":"Τί ἂν γένοιτο ἐντολὴ ἀγορᾶς, μὴ δοθεῖσα· ἀναγραφὴ μετὰ size, spend, fee, total, slippage καὶ warnings. Ἡ ὠνὴ δαπανᾷ ποσὸν τοῦ δευτέρου νομίσματος (50 τοῦ BTC-GBP δαπανᾷ £50)· ἡ πρᾶσις πωλεῖ ποσὸν τοῦ πρώτου (0.01 τοῦ BTC-GBP πωλεῖ 0.01 BTC). Οὐδὲν μεταβάλλεται."},
 "rb_coinbase_order":{"message0":"δὸς ἐντολὴν Coinbase· %1 %2 τοῦ %3","tooltip":"Δίδωσιν ἀληθινὴν ἐντολὴν ἀγορᾶς, ὡς τὸ «προΐδε ἐντολὴν Coinbase». Πρῶτον προορᾷ, ἔπειτα ἀεὶ ἐρωτᾷ σε, μετὰ τοῦ τέλους καὶ τοῦ συνόλου, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ· μηδενὸς παρόντος τοῦ «ναί» λέγοντος, οὐ γίνεται. Δεῖται κλειδὸς μετὰ τῆς ἐξουσίας Trade. Ἐν τῇδε τῇ σελίδι οὐδὲν ὠνεῖται οὐδὲ πωλεῖται."},
 "rb_coinbase_cancel":{"message0":"ἄνελε τὴν ἐντολὴν Coinbase %1","tooltip":"Ἀναιρεῖ μίαν τῶν ἀνεῳγμένων ἐντολῶν σου, τῷ id αὐτῆς (ἐκ τῶν «ἀνεῳγμένων ἐντολῶν Coinbase»). Ἀεὶ πρῶτον ἐρωτᾷ σε, καὶ μηδενὸς παρόντος οὐ γίνεται."},
+"rb_solax_now":{"message0":"τὰ τοῦ Solax ἀριθμήματα","tooltip":"Ἐγγραφή τις μετὰ τῶν τοῦ Solax ἀντιστρέφοντος ἀριθμημάτων, οἷα τὸ SolaxCloud νεώτατα εἶχεν (καθ' ἑκάστης πέντε μᾶλλον ἢ ἧτταρον ἀνακαινοῦται): ac_power_w (ὅτι νῦν ποιεῖ), yield_today_kwh καὶ yield_total_kwh (ἡλιακὴ παραγωγή), feedin_power_w καὶ feedin_energy_kwh (εἰς τὸ βρόχιον), import_energy_kwh (ἐκ τοῦ βροχίου), battery_soc_pct, status καὶ upload_time. Μόνον ἀναγιγνώσκει: οὐδὲν ἐν τῷ ἀντιστρέφοντι μεταβάλλεται. SOLAX_TOKEN_ID καὶ SOLAX_SN ἐν τῷ second-thought.ini δεῖται. Ἐν ταύτῃ τῇ σελίδι ἀντιστρέφων παράδειγμα χρῆται."},
 "rb_mikrotik_ports":{"message0":"θύραι τοῦ MikroTik","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην θύραν τοῦ μεταγωγέως σου MikroTik· port, running, speed (οἷον 10Gbps), errors, drops, link_downs καὶ comment. Τὰ σφάλματα καὶ αἱ ἀπώλειαι ἀπὸ τῆς ἐσχάτης ἀρχῆς ἀριθμοῦνται. Μόνον ἀναγινώσκει· οὐδὲν μεταβάλλεται. Ἐν τῇδε τῇ σελίδι χρῆται μεταγωγεῖ ὑποδείγματος."},
 "rb_mikrotik_sfp":{"message0":"μονάδες SFP τοῦ MikroTik","tooltip":"Κατάλογος ἀναγραφῶν, μία καθ' ἑκάστην μονάδα SFP ἐντεθειμένην· port, module, temperature (°C), rx_power καὶ tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"ὑγίεια τοῦ MikroTik","tooltip":"Ἀναγραφὴ περὶ αὐτοῦ τοῦ μεταγωγέως· board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), καὶ πᾶς ἄλλος αἰσθητὴρ ὃν ἔχει."},
@@ -222,6 +223,7 @@
 "Output":"Ἔξοδος",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1068,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"πάλιν ἄρχειν, παύειν καὶ ἄρχειν τὰ ἀγγεῖά σου τοῦ Docker (ἑκάστοτε ἐρωτῶν σε)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Τὰ τοῦ Flightradar24 ὄργανα ἀπὸ τῆσδε τῆς σελίδος οὐχ ἅπτα ἐστίν, ὥστε ὁ πράκτωρ ἐνθάδε ἄνευ αὐτῶν ἐργάζεται. Ἐξάγαγε εἰς Python, τοῦ Node.js ἐγκατεστημένου καὶ τοῦ FR24_API_KEY τεθέντος, ἵνα αὐτοῖς χρῇ.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"τὰ τοῦ Flightradar24 πτήσεων δεδομένα ἀναγιγνώσκειν: ζῶντας καὶ ἱστορικοὺς τόπους, συναγωγάς, τροχιάς, καὶ λεπτομερείας ἀεροπορικῶν ἑταιρειῶν καὶ ἀεροδρομίων"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"τὰ τοῦ Flightradar24 πτήσεων δεδομένα ἀναγιγνώσκειν: ζῶντας καὶ ἱστορικοὺς τόπους, συναγωγάς, τροχιάς, καὶ λεπτομερείας ἀεροπορικῶν ἑταιρειῶν καὶ ἀεροδρομίων",
+"Solax":"Solax",
+"Solax figures":"τὰ τοῦ Solax ἀριθμήματα",
+"Solax inverter":"ὁ τοῦ Solax ἀντιστρέφων",
+"from {time}":"ἐκ {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"τὰ τοῦ Solax ἀντιστρέφοντος ἀριθμήματα ἐκ τοῦ SolaxCloud ἀναγιγνώσκειν: ἡλιακὴν παραγωγήν, φόρτισιν μπαταρίας, εἰσαγωγὴν καὶ ἐξαγωγήν"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -2072,7 +2079,15 @@
 "Second Thought doesn't send {what} to Docker.":"Τὸ Second Thought οὐ πέμπει {what} εἰς Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Τὸ Node.js οὐκ ἐγκατέσταται, ὥστε τὰ τοῦ Flightradar24 ὄργανα ἄρξασθαι οὐ δύναται (ἐκ τοῦ npx ἔρχεται). Ἐγκατάστησον αὐτό· https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Τὸ Flightradar24 κλείδι ἀπαιτεῖ: θὲς FR24_API_KEY ἐν τῷ second-thought.ini, παρὰ τοῦτο τὸ πρόγραμμα (μισθὸς οἰκόδεσμος, ἀπὸ https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"ὁ σὸς FR24_API_KEY τέθειται (πᾶσα κλῆσις ὠνήν ἔχει, ὥστε ἐνθάδε οὐ σκοπεῖται)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"ὁ σὸς FR24_API_KEY τέθειται (πᾶσα κλῆσις ὠνήν ἔχει, ὥστε ἐνθάδε οὐ σκοπεῖται)",
+"Solax figures":"τὰ τοῦ Solax ἀριθμήματα",
+"from {time}":"ἐκ {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Τῷ Solax SOLAX_TOKEN_ID καὶ SOLAX_SN δεῖται {where_keys}: τὸ τεῖχος ἐκ τῆς τοῦ SolaxCloud σελίδος API (δωρεάν) καὶ τὸν ἀριθμὸν ἐγγραφῆς τοῦ τῆς ἀντιστρέφοντος wifi dongle (ἐπὶ τῇ ἐπιγραφῇ, ἐν τῇ ἀρμοδίᾳ).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"Τὸ SolaxCloud ἀπεκρίθη {code}: ἐπίσκεψαι SOLAX_TOKEN_ID καὶ SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"Τὸ SolaxCloud τὸ τεῖχος ἢ τὸν ἀριθμὸν ἐγγραφῆς ἀπεσπάσατο: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"Τὸ SolaxCloud ἐπὶ {url} οὐχ ἅπτεται ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"Τὸ SolaxCloud ἥφθη: {status}, ἀριθμήματα ἐκ {time}",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

@@ -156,6 +156,7 @@
 "rb_coinbase_preview":{"message0":"תצוגה מקדימה של פקודת Coinbase: %1 %2 של %3","tooltip":"מה תהיה פקודת שוק, בלי לשלוח אותה: רשומה עם size, spend, fee, total, slippage ו-warnings. קנייה מוציאה סכום מהמטבע השני (50 של BTC-GBP מוציא £50); מכירה מוכרת כמות מהראשון (0.01 של BTC-GBP מוכר 0.01 BTC). שום דבר לא משתנה."},
 "rb_coinbase_order":{"message0":"שלח פקודת Coinbase: %1 %2 של %3","tooltip":"שולח פקודת שוק אמיתית, כמו 'תצוגה מקדימה של פקודת Coinbase'. קודם הוא מציג אותה מראש, ואז תמיד שואל אתכם, עם העמלה והסכום הכולל, גם כשדבר אחר לא שואל; כשאין מי שיגיד כן, הוא לא רץ. צריך מפתח עם הרשאת Trade. בעמוד הזה שום דבר לא נקנה ולא נמכר."},
 "rb_coinbase_cancel":{"message0":"בטל פקודת Coinbase ‏%1","tooltip":"מבטל אחת מהפקודות הפתוחות שלכם, לפי ה-id שלה (מתוך 'פקודות פתוחות ב-Coinbase'). תמיד שואל קודם, ולא רץ כשאין אף אחד."},
+"rb_solax_now":{"message0":"נתוני Solax","tooltip":"רשומה עם נתוני אינוורטר ה-Solax שלך, כפי שהיו לאחרונה ב-SolaxCloud (מתעדכנים בערך כל חמש דקות): ac_power_w (כמה הוא מייצר עכשיו), yield_today_kwh ו-yield_total_kwh (ייצור סולארי), feedin_power_w ו-feedin_energy_kwh (לרשת), import_energy_kwh (מהרשת), battery_soc_pct, status ו-upload_time. הוא רק קורא: שום דבר לא משתנה באינוורטר. צריך SOLAX_TOKEN_ID ו-SOLAX_SN ב-second-thought.ini. בדף זה נעשה שימוש באינוורטר לדוגמה."},
 "rb_mikrotik_ports":{"message0":"פורטים של MikroTik","tooltip":"רשימת רשומות, אחת לכל פורט בנתב או במתג ה-MikroTik שלכם: port, running, speed (כמו 10Gbps), errors, drops, link_downs ו-comment. שגיאות ונפילות נספרות מההפעלה האחרונה. הוא רק קורא: שום דבר במתג לא משתנה. בעמוד הזה משמש מתג לדוגמה."},
 "rb_mikrotik_sfp":{"message0":"מודולי SFP של MikroTik","tooltip":"רשימת רשומות, אחת לכל מודול SFP מחובר: port, module, temperature (°C), rx_power ו-tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"מצב ה-MikroTik","tooltip":"רשומה על הנתב או המתג עצמו: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), וכל חיישן אחר שיש לו."},
@@ -223,6 +224,7 @@
 "Output":"פלט",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1069,7 +1071,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"לאתחל, לעצור ולהפעיל את מכולות ה-Docker שלכם (ושואל אתכם בכל פעם)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"אי אפשר להגיע לכלים של Flightradar24 מהדף הזה, ולכן כאן הסוכן עובד בלעדיהם. ייצא ל-Python, עם Node.js מותקן ו-FR24_API_KEY מוגדר, כדי להשתמש בהם.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"לקרוא את נתוני הטיסות של Flightradar24: מיקומים חיים והיסטוריים, סיכומים, מסלולים, ופרטי חברות תעופה ונמלי תעופה"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"לקרוא את נתוני הטיסות של Flightradar24: מיקומים חיים והיסטוריים, סיכומים, מסלולים, ופרטי חברות תעופה ונמלי תעופה",
+"Solax":"Solax",
+"Solax figures":"נתוני Solax",
+"Solax inverter":"אינוורטר Solax",
+"from {time}":"מ-{time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"לקרוא את נתוני אינוורטר ה-Solax שלך מ-SolaxCloud: ייצור סולארי, טעינת סוללה, ייבוא וייצוא"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -2073,6 +2080,14 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought לא שולח {what} ל-Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js לא מותקן, ולכן הכלים של Flightradar24 לא יכולים לפעול (הם מגיעים מ-npx). התקן אותו: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 צריך מפתח: קבע FR24_API_KEY ב-second-thought.ini, ליד התוכנית הזו (מנוי בתשלום, מ-https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"ה-FR24_API_KEY שלך מוגדר (כל קריאה עולה קרדיטים, ולכן הוא לא נבדק כאן)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"ה-FR24_API_KEY שלך מוגדר (כל קריאה עולה קרדיטים, ולכן הוא לא נבדק כאן)",
+"Solax figures":"נתוני Solax",
+"from {time}":"מ-{time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax צריך SOLAX_TOKEN_ID ו-SOLAX_SN {where_keys}: את הטוקן מעמוד ה-API של SolaxCloud (בחינם) ואת מספר הרישום של מתאם ה-WiFi של האינוורטר (על המדבקה שלו, או באפליקציה).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud ענה {code}: בדוק את SOLAX_TOKEN_ID ו-SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud דחה את הטוקן או את מספר הרישום: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"לא ניתן להגיע ל-SolaxCloud ב-{url} ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud הושג: {status}, נתונים מ-{time}",
+"Solax":"Solax"
 }
 };

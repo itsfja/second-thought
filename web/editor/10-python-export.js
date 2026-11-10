@@ -70,6 +70,7 @@
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
+             solax:blocks.some(b => b.type.startsWith("rb_solax_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
@@ -147,6 +148,13 @@
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
       "; router's certificate fingerprint to pin.",
       "MIKROTIK_URL = https://192.168.88.1", "MIKROTIK_USER = ", "MIKROTIK_PASSWORD = ", "MIKROTIK_CERT_SHA256 = ");
+    if (need.solax) out.push("", "[solax]",
+      "; Your Solax inverter, read from SolaxCloud (the inverter's own local API is gone from newer firmware).",
+      "; Make a free token on the API page of SolaxCloud, and find the Registration No. on the dongle's label or in the",
+      "; app. The cloud updates about every five minutes, and each read is kept that long, so a run costs few calls.",
+      "; SOLAX_API_URL points at another region's cloud, like the EU one.",
+      "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
+      ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -459,6 +467,7 @@
         case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
+        case "rb_solax_now": return "(await R.solax_now())";
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";

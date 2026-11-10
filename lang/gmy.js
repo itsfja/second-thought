@@ -156,6 +156,7 @@
 "rb_coinbase_preview":{"message0":"𐀡𐀫𐀃𐀨 𐀁𐀵𐀩 Coinbase: %1 %2 𐀀𐀢 %3","tooltip":"𐀴 𐀁𐀵𐀩 𐀀𐀒𐀨 𐀐𐀚𐀵, 𐀃𐀄 𐀳𐀳𐀕𐀜: 𐀏𐀨𐀟 𐀕𐀲 size, spend, fee, total, slippage 𐀏𐀂 warnings. 𐀃𐀜 𐀅𐀞𐀙𐀂 𐀡𐀰 𐀆𐀄𐀳𐀫 𐀜𐀖𐀭 (50 𐀀𐀢 BTC-GBP 𐀅𐀞𐀙𐀂 £50); 𐀟𐀨𐀯 𐀡𐀩𐀂 𐀡𐀰 𐀟𐀫𐀵 (0.01 𐀀𐀢 BTC-GBP 𐀡𐀩𐀂 0.01 BTC). 𐀃𐀄𐀆 𐀕𐀲𐀞𐀨𐀁."},
 "rb_coinbase_order":{"message0":"𐀳𐀮 𐀁𐀵𐀩 Coinbase: %1 %2 𐀀𐀢 %3","tooltip":"𐀳𐀴𐀯 𐀀𐀨𐀳𐀀 𐀁𐀵𐀩 𐀀𐀒𐀨, 𐀃𐀒 “𐀡𐀫𐀃𐀨 𐀁𐀵𐀩 Coinbase”. 𐀟𐀫𐀵 𐀡𐀫𐀃𐀨𐀂, 𐀁𐀟𐀂𐀲 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮, 𐀕𐀲 𐀳𐀫 𐀏𐀂 𐀞𐀲, 𐀏𐀂 𐀃𐀳 𐀃𐀄𐀆 𐀀𐀫 𐀁𐀫𐀲𐀂; 𐀃𐀄𐀆𐀂 𐀞𐀫 𐀃𐀟 𐀙𐀂 𐀁𐀟, 𐀃𐀄 𐀳𐀩𐀐𐀁. 𐀆𐀂 𐀏𐀨𐀹 𐀕𐀲 Trade. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃𐀄𐀆 𐀃𐀚𐀲𐀂 𐀃𐀄𐀆 𐀟𐀨𐀲𐀂."},
 "rb_coinbase_cancel":{"message0":"𐀀𐀡𐀬𐀁 𐀁𐀵𐀩 Coinbase %1","tooltip":"𐀀𐀡𐀬𐀁 𐀁𐀚 𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 𐀰𐀂, 𐀕𐀲 id (𐀀𐀡 “𐀁𐀵𐀩 𐀀𐀚𐀺𐀐𐀕𐀙 Coinbase”). 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵, 𐀏𐀂 𐀃𐀄 𐀳𐀩𐀐𐀁 𐀃𐀄𐀆𐀂 𐀞𐀫."},
+"rb_solax_now":{"message0":"ko-u-ko-ro Solax","tooltip":"ko-u-ko-ro a-to-ro-o-ko Solax-jo, SolaxCloud-to o-pe-ro-se (pa-we-jo e-ne-ko o-po-se): ac_power_w (ka-ro o-pe-ro-se), yield_today_kkh ka-a-pi yield_total_kkh (ka-ro), feedin_power_w ka-a-pi feedin_energy_kkh (o-po-se), import_energy_khh (e-ne-ko), battery_soc_pct, status ka-a-pi upload_time. ke-re-a o-u pe-re: a-to-ro-o-ko-jo o-u ke-ta-i. SOLAX_TOKEN_ID SOLAX_SN second-thought.ini-to e-ne-ko. we-to-de a-to-ro-o-ko pa-we-jo o-pe-ro-se."},
 "rb_mikrotik_ports":{"message0":"𐀶𐀨 MikroTik","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀶𐀨 𐀀𐀨𐀐𐀳 MikroTik 𐀰𐀂: port, running, speed (𐀃𐀒 10Gbps), errors, drops, link_downs 𐀏𐀂 comment. 𐀗𐀜 𐀀𐀙𐀑𐀜𐀐: 𐀃𐀄𐀆 𐀕𐀲𐀞𐀨𐀁. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀐𐀨𐀲𐀂 𐀞𐀨𐀆𐀒𐀔 𐀀𐀨𐀐𐀳."},
 "rb_mikrotik_sfp":{"message0":"𐀕𐀫 SFP MikroTik","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀕𐀫 SFP: port, module, temperature (°C), rx_power 𐀏𐀂 tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"𐀄𐀑𐀊 MikroTik","tooltip":"𐀏𐀨𐀟 𐀟𐀪 𐀀𐀨𐀐𐀳: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), 𐀏𐀂 𐀀𐀨 𐀀𐀂𐀳𐀳𐀪𐀊."},
@@ -223,6 +224,7 @@
 "Output":"𐀁𐀒𐀈𐀰",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1069,7 +1071,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"𐀀𐀠 𐀀𐀨𐀐𐀂, 𐀞𐀄𐀁 𐀏𐀂 𐀀𐀨𐀐𐀂 𐀀𐀐𐀊 Docker 𐀰𐀂 (𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"𐀐𐀩𐀀 Flightradar24 𐀀𐀡 𐀸𐀵𐀆 ou-ko-ro-qe, 𐀀𐀒𐀫 𐀀𐀒𐀰𐀚 𐀐𐀩𐀀 ou-do-ro-qe. Python-jo 𐀁𐀚𐀒, Node.js 𐀃𐀟𐀫𐀤 FR24_API_KEY 𐀈𐀐𐀃, 𐀃𐀟𐀫𐀮.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24-jo 𐀞𐀸𐀍 𐀃𐀟𐀫𐀮: 𐀀𐀵𐀫𐀃𐀒 𐀒𐀄𐀒𐀫𐀮, 𐀃𐀟𐀫𐀮, 𐀏𐀒𐀵, 𐀞𐀸𐀍 𐀒𐀄𐀒𐀫𐀮"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24-jo 𐀞𐀸𐀍 𐀃𐀟𐀫𐀮: 𐀀𐀵𐀫𐀃𐀒 𐀒𐀄𐀒𐀫𐀮, 𐀃𐀟𐀫𐀮, 𐀏𐀒𐀵, 𐀞𐀸𐀍 𐀒𐀄𐀒𐀫𐀮",
+"Solax":"Solax",
+"Solax figures":"𐀒𐀄𐀒𐀫 Solax",
+"Solax inverter":"𐀀𐀵𐀫𐀃𐀒 Solax",
+"from {time}":"{time}-to",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"𐀒𐀄𐀒𐀫 𐀀𐀵𐀫𐀃𐀒 Solax SolaxCloud-to 𐀃𐀟𐀫𐀮: 𐀏𐀫, 𐀞𐀸𐀍, 𐀁𐀚𐀒 𐀃𐀡𐀮"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -2073,7 +2080,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought o-u pe-po-pe {what} e-pi Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js o-u ke-ta-i, ke-re-a Flightradar24 o-u a-ra-ke-ta-i (npx-to e-ko). ke-ta-se: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 ka-ru-ke do-ke: FR24_API_KEY second-thought.ini-to e-ne-ko, programma pa-we-jo-qe (mi-ri-jo do-so-mo, a-po https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"so-jo FR24_API_KEY do-ke-o (ka-ro ke-re-a po-re-na do-ke, a-ko-ro ou-do-ro)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"so-jo FR24_API_KEY do-ke-o (ka-ro ke-re-a po-re-na do-ke, a-ko-ro ou-do-ro)",
+"Solax figures":"ko-u-ko-ro Solax",
+"from {time}":"{time}-to",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud {code} e-ko: SOLAX_TOKEN_ID SOLAX_SN o-pe-ro-se.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud pa-ŋal2-ba nu-ub-du3: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud {url} o-u ke-ta-i ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud do-ke: {status}, ko-u-ko-ro {time}-to",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax-jo SOLAX_TOKEN_ID ka-a-pi SOLAX_SN e-ne-ko {where_keys}: ko-u-ko-ro SolaxCloud API-to (mi-ri-jo) ka-a-pi wifi dongle-jo pa-ŋal2-ba (pa-we-jo, app-to-qe).",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

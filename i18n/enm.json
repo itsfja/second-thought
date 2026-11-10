@@ -593,6 +593,10 @@
    "message0": "cancelle Coinbase ordre %1",
    "tooltip": "Cancelleth oon of thyn open ordres, by his id (fro 'Coinbase open ordres'). It evere asketh thee first, and renneth nat with no man ther."
   },
+  "rb_solax_now": {
+   "message0": "Solax figures",
+   "tooltip": "A record of the figures of thin Solax invertour, as SolaxCloud last hadde hem (thei newen aboute ech fyve mynutis): ac_power_w (what it makith now), yield_today_kwh and yield_total_kwh (sonne-yeld), feedin_power_w and feedin_energy_kwh (to the net), import_energy_kwh (fro the net), battery_soc_pct, status and upload_time. It only redeth: nothing on the invertour chaungeth. It nedeth SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it useth a sample invertour."
+  },
   "rb_mikrotik_ports": {
    "message0": "MikroTik portes",
    "tooltip": "A list of recordes, oon for every porte of thy MikroTik routere or switche: port, running, speed (as 10Gbps), errors, drops, link_downs and comment. Errours and droppes ben told fro his laste bigynnynge. It oonly redeth: no thing on the switche chaungeth. On this page it useth an ensample switche."
@@ -819,6 +823,7 @@
   "Output": "Outcome",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
+  "Solax": "Solax",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1665,7 +1670,12 @@
   "restart, stop and start your Docker containers (asking you each time)": "stirte agayn, stynte and stirte thy Docker vessels (axinge thee ech tyme)",
   "Flightradar24": "Flightradar24",
   "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Flightradar24 his tools may nat ben yreched fro this page, so the agent werkeþ here wiþoute hem. Expourte to Python, wiþ Node.js y-installed and FR24_API_KEY y-set, to use hem.",
-  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "rede Flightradar24 his fligt data: lyve and old places, summaries, paths, and meening of airlynes and airports"
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "rede Flightradar24 his fligt data: lyve and old places, summaries, paths, and meening of airlynes and airports",
+  "Solax": "Solax",
+  "Solax figures": "Solax figures",
+  "Solax inverter": "Solax invertour",
+  "from {time}": "fro {time}",
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "rede the figures of thin Solax invertour fro SolaxCloud: sonne-yeld, baterie charge, inbringe and outbringe"
  },
  "examples": {
   "review": {
@@ -3301,7 +3311,15 @@
   "Second Thought doesn't send {what} to Docker.": "Second Thought sendeth nat {what} to Docker.",
   "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js is nat y-installed, so Flightradar24 his tools may nat bigynne (þei comeþ from npx). Installe it: https://nodejs.org",
   "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 behoveþ a key: sette FR24_API_KEY in second-thought.ini, biside þis program (a paid subscripcioun, from https://fr24api.flightradar24.com)",
-  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "þi FR24_API_KEY is y-set (ich cle costeþ credits, so it is nat y-preved here)"
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "þi FR24_API_KEY is y-set (ich cle costeþ credits, so it is nat y-preved here)",
+  "Solax figures": "Solax figures",
+  "from {time}": "fro {time}",
+  "Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).": "Solax behoveth SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token fro the API page of SolaxCloud (fre) and the Registra-cypher of the invertour his wifi dongle (on his label, or in the app).",
+  "SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.": "SolaxCloud answerde {code}: bihold SOLAX_TOKEN_ID and SOLAX_SN.",
+  "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud refusede the token or the Registra-cypher: {x}.",
+  "Couldn't reach SolaxCloud at {url} ({x}).": "SolaxCloud at {url} may nat ben yreched ({x}).",
+  "reached SolaxCloud: {status}, figures from {time}": "SolaxCloud yreched: {status}, figures fro {time}",
+  "Solax": "Solax"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

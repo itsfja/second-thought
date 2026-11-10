@@ -156,6 +156,7 @@
 "rb_coinbase_preview":{"message0":"Coinbase-आणं पुब्बे पस्स: %3 स्स %2 %1","tooltip":"आपणाणा किं भवेय्य, तं अदत्वा: size, spend, fee, total, slippage, warnings युत्तो अभिलेखो। किणनं दुतियकहापणस्स रासिं वयेति (BTC-GBP स्स 50 £50 वयेति); विक्कयो पठमस्स रासिं विक्किणाति (BTC-GBP स्स 0.01 0.01 BTC विक्किणाति)। किञ्चि न परिवत्तति।"},
 "rb_coinbase_order":{"message0":"Coinbase-आणं देहि: %3 स्स %2 %1","tooltip":"सच्चं आपणाणं देति, 'Coinbase-आणं पुब्बे पस्स' विय। पठमं पुब्बे पस्सति, ततो सदा तं पुच्छति, सुङ्केन सब्बेन च सह, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। Trade-अनुञ्ञाय सह कुञ्चिकं इच्छति। इमस्मिं पिट्ठे किञ्चि न किणीयति न विक्किणीयति।"},
 "rb_coinbase_cancel":{"message0":"Coinbase-आणं %1 निवत्तेहि","tooltip":"तव विवटाणासु एकं तस्सा id अनुसारेन निवत्तेति ('Coinbase-विवटाणा' तो)। सदा पठमं तं पुच्छति, कोचि नत्थि चे न पवत्तति।"},
+"rb_solax_now":{"message0":"Solax-saṅkhya","tooltip":"Solax-inivattakassa saṅkhyānaṃ ekaṃ lekhyaṃ, yāni SolaxCloud-issa pacchimāni ahesuṃ (pañcannaṃ vā pāṇānaṃ kālena navāni bhavanti): ac_power_w (idaani kiṃ janeti), yield_today_kkh yield_total_kkh ca (sūrya-udaya), feedin_power_w feedin_energy_kwh ca (netta), import_energy_kwh (nettato), battery_soc_pct, status upload_time ca. Kevaḷaṃ paṭhati: inivattake kiñci na parivattati. SOLAX_TOKEN_ID SOLAX_SN ca second-thought.ini-smiṃ icchati. Imasmiṃ pane inivattaka-saṃpayogaṃ yujjhati."},
 "rb_mikrotik_ports":{"message0":"MikroTik-द्वारानि","tooltip":"अभिलेखानं सूचि, तव MikroTik-मग्गदेसकस्स परिवत्तकस्स वा पतिद्वारं एको: port, running, speed (यथा 10Gbps), errors, drops, link_downs, comment च। दोसा पाता च पच्छिमारम्भतो गणीयन्ति। केवलं पठति: परिवत्तके किञ्चि न परिवत्तति। इमस्मिं पिट्ठे निदस्सन-परिवत्तकं गण्हाति।"},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP-अंसा","tooltip":"अभिलेखानं सूचि, पतिनिवेसित-SFP-अंसं एको: port, module, temperature (°C), rx_power, tx_power (dBm) च।"},
 "rb_mikrotik_health":{"message0":"MikroTik-आरोग्यं","tooltip":"मग्गदेसकस्स अत्तनो अभिलेखो: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), तस्स अञ्ञे वेदका च।"},
@@ -222,6 +223,7 @@
 "You":"त्वं",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1068,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"तव Docker-भाजनानि पुन आरभितुं, ठपेतुं, आरभितुं च (वारे वारे तं पुच्छित्वा)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24-issa parikkhaye imasmiṃ pane na pāpuṇātabbe, tasmā agento idha tāhi vinā paṭipajjati. Python-nikkhāmaya, Node.js paṭisaṭṭhāya, FR24_API_KEY ṭhapetvā, tāni paribhuñjathāya.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24-issa vaḍḍhana-sambandhāni paṭhituṃ: jīvita-porāṇa ṭhānāni, sāraṅgī, magge, aviation-saṅghānaṃ paṭhavānaṅgānañ ca vevaṇṇeyyaṃ"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24-issa vaḍḍhana-sambandhāni paṭhituṃ: jīvita-porāṇa ṭhānāni, sāraṅgī, magge, aviation-saṅghānaṃ paṭhavānaṅgānañ ca vevaṇṇeyyaṃ",
+"Solax":"Solax",
+"Solax figures":"Solax-saṅkhya",
+"Solax inverter":"Solax-inivattaka",
+"from {time}":"{time} to",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud-to Solax-inivattakassa saṅkhyāni paṭhituṃ: sūrya-udaya, battariya-pūraṇa, āyana-vijjagga"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2072,7 +2079,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought {what} Docker पति न पेसेति।",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js na sajjito, tasmā Flightradar24-issāni parikkhayāni āraddhaṃ na sakkonti (npx-to paṭicchāya). Sajjetha: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24-kassa kuṭicchaṃ atthi: FR24_API_KEY second-thought.ini-smiṃ ṭhapetha, imassa programmassa avidūre (bhaṭika abhisaṅgaho, https://fr24api.flightradar24.com-to)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"tava FR24_API_KEY ṭhapito (ekaṃ ekaṃ āyoganaṃ parikkhayāni bhaṇḍako dehi, tasmā idha na pamāṇiyati)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"tava FR24_API_KEY ṭhapito (ekaṃ ekaṃ āyoganaṃ parikkhayāni bhaṇḍako dehi, tasmā idha na pamāṇiyati)",
+"Solax figures":"Solax-saṅkhya",
+"from {time}":"{time} to",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax-issa SOLAX_TOKEN_ID ca SOLAX_SN ca icchati {where_keys}: SolaxCloud API-paṭṭato (mucca) tukaṃ ca inivattakassa wifi-donghassa paṭisaññatti-saṅkhyā ca (tassa lipi, appasmiṃ vā).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud {code} āha: SOLAX_TOKEN_ID SOLAX_SN ca passa.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud tukaṃ paṭisaññatti-saṅkhyā vā paṭikkhipi: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud {url} na pāpuṇātabbe ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud pāpuṇito: {status}, saṅkhyā {time}-to",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

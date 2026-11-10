@@ -156,6 +156,7 @@
 "rb_coinbase_preview":{"message0":"Coinbase امرینی اوّلدن كور: %3 دن %2 %1","tooltip":"بر بازار امرینڭ نه طوته‌جغی، ویرمه‌دن: size، spend، fee، total، slippage و warnings اولان بر قید. آلیم ایكنجی پاره‌دن بر مقدار خرجلار (BTC-GBP دن 50، £50 خرجلار)؛ صاتیم برنجیدن بر مقدار صاتار (BTC-GBP دن 0.01، 0.01 BTC صاتار). هیچ بر شی دكیشمز."},
 "rb_coinbase_order":{"message0":"Coinbase امری ویر: %3 دن %2 %1","tooltip":"كرچك بر بازار امری ویرر، 'Coinbase امرینی اوّلدن كور' كبی. اوّل اوّلدن كورر، صوڭره هر زمان سزه صورار، اجرت و یكونله، باشقه هیچ بر شی صورمازسه بیله؛ اوت دیه‌جك كیمسه یوقسه یورومز. Trade اذنلی بر آناختار ایستر. بو صحیفه‌ده هیچ بر شی آلینمز و صاتیلمز."},
 "rb_coinbase_cancel":{"message0":"Coinbase امری %1 ی لغو ایت","tooltip":"آچیق امرلرڭزدن بریسنی id سی ایله لغو ایدر ('Coinbase آچیق امرلری' ندن). هر زمان اوّل سزه صورار، كیمسه یوقسه یورومز."},
+"rb_solax_now":{"message0":"Solax معلوماتی","tooltip":"Solax اینورتورونون معلوماتیلری بیر قئیدیت، SolaxCloud نین سون معلوماتی کیمی (تخمینن هر بئش دقیقه‌ده یئنیلنیر): ac_power_w (ایندی نه دوزلدیر)، yield_today_kwh و yield_total_kwh (گونش انرژیسی)، feedin_power_w و feedin_energy_kwh (شبکه‌یه)، import_energy_kwh (شبکه‌دن)، battery_soc_pct، status و upload_time. یالنیز اوخویور: اینورتوردا هئچ بیر شئی دییشمز. second-thought.ini ده SOLAX_TOKEN_ID و SOLAX_SN لازم‌دیر. بو صفحه‌ده بیر نومونه اینورتور ایشلنیر."},
 "rb_mikrotik_ports":{"message0":"MikroTik قاپیلری","tooltip":"قیدلر لیسته‌سی، MikroTik یوللایجی یا آنحتارڭزڭ هر قاپیسی ایچون بر: port، running، speed (10Gbps كبی)، errors، drops، link_downs و comment. خطالر و دوشمه‌لر صوڭ باشلانغیجدن صاییلیر. یالڭز اوقور: آنحتارده هیچ بر شی دكیشمز. بو صحیفه‌ده نمونه بر آنحتار قوللانیر."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP پارچه‌لری","tooltip":"قیدلر لیسته‌سی، طاقیلی هر SFP پارچه‌سی ایچون بر: port، module، temperature (°C)، rx_power و tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik صحتی","tooltip":"یوللایجینڭ كندیسی حقنده بر قید: board، version، uptime، cpu_load (%)، free_memory (MB)، temperature (°C)، و اولان هر باشقه حس ایدیجی."},
@@ -222,6 +223,7 @@
 "You":"سن",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1068,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"Docker قابلریڭزی یڭیدن باشلاتمق، دوردورمق و باشلاتمق (هر دفعه سزه صوراراق)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24 آلتلری بو صفحه‌دن ایرتیلابی اولمز، بو سببله آجنت بورده اونلارسز چالیشر. استفاده ایچین Node.js قورولموش و FR24_API_KEY تنظیم اولونموش حالده Python‌ا ایحراق ائدین.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 نین اوچوش معلوماتینی اوخومق: جانلی و تاریخی یئرلر، خلاصه‌لر، یوللار، و هاوا یوللاری ایله هاوا لیمانلاری‌نین تفصیلاتی"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24 نین اوچوش معلوماتینی اوخومق: جانلی و تاریخی یئرلر، خلاصه‌لر، یوللار، و هاوا یوللاری ایله هاوا لیمانلاری‌نین تفصیلاتی",
+"Solax":"Solax",
+"Solax figures":"Solax معلوماتی",
+"Solax inverter":"Solax اینورتوری",
+"from {time}":"{time} دن",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud دان Solax اینورتورونون معلوماتینی اوخومق: گونش انرژیسی، باتریا دولولوغو، آلیم و ساتیم"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2072,7 +2079,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought، {what} ی Docker ه گوندرمز.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js قورولوب دکل، بو سببله Flightradar24 آلتلری باشلایابیلماز (npx‌دن گلیرلر). قورون: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 بیر آچار طلب ائدر: FR24_API_KEY‌ی second-thought.ini‌ده، بو برنامه‌نین یانینا قویون (اوررلی آبونه، https://fr24api.flightradar24.com‌دن)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY تنظیم اولونموشدور (هر چاغری کردیت خرجلر، بو سببله بورده یوخلانیلمز)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY تنظیم اولونموشدور (هر چاغری کردیت خرجلر، بو سببله بورده یوخلانیلمز)",
+"Solax figures":"Solax معلوماتی",
+"from {time}":"{time} دن",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax اوچون SOLAX_TOKEN_ID و SOLAX_SN لازم‌دیر {where_keys}: SolaxCloud نین API صفحه‌سیندن (اوچریزسیز) توکن و اینورتورون وای‌فای دونگلینین قئیدیت نومره‌سی (لیبلینده، یا اپده).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud {code} جاواب وئردی:SOLAX_TOKEN_ID و SOLAX_SN یی یوخلایین.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud توکنی یا قئیدیت نومره‌سینی رد ائتدی:{x}۔",
+"Couldn't reach SolaxCloud at {url} ({x}).":"{url} دکی SolaxCloud آ چاتماق اولمور({x})۔",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud آ چاتیلدی:{status}، {time} معلوماتی",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

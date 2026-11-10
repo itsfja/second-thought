@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"anteprima ordine Coinbase: %1 %2 di %3","tooltip":"Quanto verrebbe un ordine a mercato, senza inviarlo: un record con size, spend, fee, total, slippage e warnings. Comprare spende un importo della seconda valuta (50 di BTC-GBP spende £50); vendere vende un importo della prima (0.01 di BTC-GBP vende 0.01 BTC). Non cambia nulla."},
 "rb_coinbase_order":{"message0":"invia ordine Coinbase: %1 %2 di %3","tooltip":"Invia un vero ordine a mercato, come «anteprima ordine Coinbase». Prima fa l'anteprima, poi ti chiede sempre, con commissione e totale, anche quando nient'altro chiede; se non c'è nessuno a dire sì, non parte. Serve una chiave con il permesso Trade. In questa pagina non si compra né si vende nulla."},
 "rb_coinbase_cancel":{"message0":"annulla ordine Coinbase %1","tooltip":"Annulla uno dei tuoi ordini aperti, dal suo id (da «ordini aperti Coinbase»). Ti chiede sempre prima, e non parte se non c'è nessuno."},
+"rb_solax_now":{"message0":"cifre Solax","tooltip":"Un record con le cifre del tuo inverter Solax, come SolaxCloud le aveva l'ultima volta (si aggiornano circa ogni cinque minuti): ac_power_w (quanto sta producendo ora), yield_today_kwh e yield_total_kwh (solare generato), feedin_power_w e feedin_energy_kwh (verso la rete), import_energy_kwh (dalla rete), battery_soc_pct, status e upload_time. Legge soltanto: nulla cambia sull'inverter. Richiede SOLAX_TOKEN_ID e SOLAX_SN in second-thought.ini. In questa pagina usa un inverter di esempio."},
 "rb_mikrotik_ports":{"message0":"porte MikroTik","tooltip":"Un elenco di record, uno per ogni porta del tuo router o switch MikroTik: port, running, speed (come 10Gbps), errors, drops, link_downs e comment. Errori e scarti contano dall'ultimo avvio. Legge soltanto: sullo switch non cambia nulla. In questa pagina usa uno switch di esempio."},
 "rb_mikrotik_sfp":{"message0":"moduli SFP MikroTik","tooltip":"Un elenco di record, uno per ogni modulo SFP inserito: port, module, temperature (°C), rx_power e tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"stato del MikroTik","tooltip":"Un record sul router o switch stesso: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) e ogni altro sensore che ha."},
@@ -222,6 +223,7 @@
 "Output":"Uscita",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1068,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"riavviare, fermare e avviare i tuoi container Docker (chiedendotelo ogni volta)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Gli strumenti di Flightradar24 non sono raggiungibili da questa pagina, quindi qui l'agente lavora senza di essi. Esporta in Python, con Node.js installato e FR24_API_KEY impostato, per usarli.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"leggere i dati di volo di Flightradar24: posizioni in tempo reale e storiche, riepiloghi, rotte, e dettagli di compagnie aeree e aeroporti"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"leggere i dati di volo di Flightradar24: posizioni in tempo reale e storiche, riepiloghi, rotte, e dettagli di compagnie aeree e aeroporti",
+"Solax":"Solax",
+"Solax figures":"cifre Solax",
+"Solax inverter":"inverter Solax",
+"from {time}":"delle {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"leggere le cifre del tuo inverter Solax da SolaxCloud: produzione solare, carica della batteria, importazione ed esportazione"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -2072,6 +2079,14 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought non invia {what} a Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js non è installato, quindi gli strumenti di Flightradar24 non possono avviarsi (arrivano da npx). Installalo: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 richiede una chiave: imposta FR24_API_KEY in second-thought.ini, accanto a questo programma (un abbonamento a pagamento, da https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"il tuo FR24_API_KEY è impostato (ogni chiamata costa crediti, quindi qui non viene verificato)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"il tuo FR24_API_KEY è impostato (ogni chiamata costa crediti, quindi qui non viene verificato)",
+"Solax figures":"cifre Solax",
+"from {time}":"delle {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax richiede SOLAX_TOKEN_ID e SOLAX_SN {where_keys}: il token dalla pagina API di SolaxCloud (gratis) e il numero di registrazione del dongle wifi dell'inverter (sulla sua etichetta, o nell'app).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud ha risposto {code}: controlla SOLAX_TOKEN_ID e SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud ha rifiutato il token o il numero di registrazione: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud non è raggiungibile su {url} ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud raggiunto: {status}, cifre delle {time}",
+"Solax":"Solax"
 }
 };

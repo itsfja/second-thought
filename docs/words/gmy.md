@@ -28,6 +28,7 @@ Made by tools/sync.py from i18n/gmy.json: edit that, not this.
 - Output: 𐀁𐀒𐀈𐀰
 - Coinbase: Coinbase
 - MikroTik: MikroTik
+- Solax: Solax
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker

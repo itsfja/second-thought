@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"Coinbase-order bekijken: %1 %2 van %3","tooltip":"Waar een marktorder op uit zou komen, zonder hem te plaatsen: een record met size, spend, fee, total, slippage en warnings. Kopen besteedt een bedrag van de tweede valuta (50 van BTC-GBP besteedt £50); verkopen verkoopt een bedrag van de eerste (0.01 van BTC-GBP verkoopt 0.01 BTC). Er verandert niets."},
 "rb_coinbase_order":{"message0":"Coinbase-order plaatsen: %1 %2 van %3","tooltip":"Plaatst een echte marktorder, zoals ‘Coinbase-order bekijken’. Hij bekijkt hem eerst en vraagt het je dan altijd, met kosten en totaal, ook als niets anders iets vraagt; is er niemand om ja te zeggen, dan gebeurt het niet. Heeft een sleutel met het recht Trade nodig. Op deze pagina wordt niets gekocht of verkocht."},
 "rb_coinbase_cancel":{"message0":"Coinbase-order %1 annuleren","tooltip":"Annuleert een van je open orders, op zijn id (uit ‘open Coinbase-orders’). Hij vraagt het je altijd eerst en gebeurt niet als er niemand is."},
+"rb_solax_now":{"message0":"Solax-cijfers","tooltip":"Een record met de cijfers van je Solax-omvormer, zoals SolaxCloud ze laatst had (ze worden ongeveer elke vijf minuten bijgewerkt): ac_power_w (wat hij nu opwekt), yield_today_kwh en yield_total_kwh (opgewekte zonnestroom), feedin_power_w en feedin_energy_kwh (naar het net), import_energy_kwh (uit het net), battery_soc_pct, status en upload_time. Hij leest alleen: er verandert niets aan de omvormer. Heeft SOLAX_TOKEN_ID en SOLAX_SN in second-thought.ini nodig. Op deze pagina wordt een voorbeeld-omvormer gebruikt."},
 "rb_mikrotik_ports":{"message0":"MikroTik-poorten","tooltip":"Een lijst met records, één voor elke poort van je MikroTik-router of -switch: port, running, speed (zoals 10Gbps), errors, drops, link_downs en comment. Fouten en drops tellen vanaf de laatste start. Hij leest alleen: er verandert niets aan de switch. Op deze pagina gebruikt hij een voorbeeldswitch."},
 "rb_mikrotik_sfp":{"message0":"MikroTik-SFP-modules","tooltip":"Een lijst met records, één voor elke SFP-module die erin zit: port, module, temperature (°C), rx_power en tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik-gezondheid","tooltip":"Een record over de router of switch zelf: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) en alle andere sensoren die hij heeft."},
@@ -222,6 +223,7 @@
 "Output":"Uitvoer",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1068,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"je Docker-containers herstarten, stoppen en starten (met elke keer een vraag aan jou)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"De tools van Flightradar24 zijn vanaf deze pagina niet bereikbaar, dus de agent werkt hier zonder ze. Exporteer naar Python, met Node.js geïnstalleerd en FR24_API_KEY ingesteld, om ze te gebruiken.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"de vluchtdata van Flightradar24 lezen: live en historische posities, samenvattingen, sporen, en details van luchtvaartmaatschappijen en luchthavens"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"de vluchtdata van Flightradar24 lezen: live en historische posities, samenvattingen, sporen, en details van luchtvaartmaatschappijen en luchthavens",
+"Solax":"Solax",
+"Solax figures":"Solax-cijfers",
+"Solax inverter":"Solax-omvormer",
+"from {time}":"van {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"de cijfers van je Solax-omvormer uit SolaxCloud lezen: zonnestroom, batterijlading, import en export"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2072,6 +2079,14 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought stuurt {what} niet naar Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js is niet geïnstalleerd, dus de tools van Flightradar24 kunnen niet starten (ze komen uit npx). Installeer het: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 heeft een sleutel nodig: zet FR24_API_KEY in second-thought.ini, naast dit programma (een betaald abonnement, van https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"je FR24_API_KEY is ingesteld (elke aanroep kost credits, dus hij wordt hier niet gecontroleerd)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"je FR24_API_KEY is ingesteld (elke aanroep kost credits, dus hij wordt hier niet gecontroleerd)",
+"Solax figures":"Solax-cijfers",
+"from {time}":"van {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax heeft SOLAX_TOKEN_ID en SOLAX_SN nodig {where_keys}: het token van de API-pagina van SolaxCloud (gratis) en het registratienummer van de wifi-dongle van de omvormer (op zijn label, of in de app).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud antwoordde {code}: controleer SOLAX_TOKEN_ID en SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud weigerde het token of het registratienummer: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud op {url} is niet bereikbaar ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud bereikt: {status}, cijfers van {time}",
+"Solax":"Solax"
 }
 };

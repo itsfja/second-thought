@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"Coinbase-Order prüfen: %1 %2 von %3","tooltip":"Was eine Market-Order ergäbe, ohne sie aufzugeben: ein Datensatz mit size, spend, fee, total, slippage und warnings. Kaufen gibt einen Betrag der zweiten Währung aus (50 von BTC-GBP gibt £50 aus); Verkaufen verkauft einen Betrag der ersten (0.01 von BTC-GBP verkauft 0.01 BTC). Nichts ändert sich."},
 "rb_coinbase_order":{"message0":"Coinbase-Order aufgeben: %1 %2 von %3","tooltip":"Gibt eine echte Market-Order auf, wie „Coinbase-Order prüfen“. Er prüft sie zuerst und fragt Sie dann immer, mit Gebühr und Summe, auch wenn sonst nichts fragt; ist niemand da, der Ja sagt, läuft er nicht. Braucht einen Schlüssel mit der Berechtigung Trade. Auf dieser Seite wird nichts gekauft oder verkauft."},
 "rb_coinbase_cancel":{"message0":"Coinbase-Order %1 stornieren","tooltip":"Storniert eine Ihrer offenen Orders anhand ihrer ID (aus „offene Coinbase-Orders“). Er fragt Sie immer zuerst und läuft nicht, wenn niemand da ist."},
+"rb_solax_now":{"message0":"Solax-Werte","tooltip":"Ein Datensatz mit den Werten deines Solax-Wechselrichters, wie SolaxCloud sie zuletzt hatte (aktualisiert etwa alle fünf Minuten): ac_power_w (was er gerade erzeugt), yield_today_kwh und yield_total_kwh (erzeugte Solarenergie), feedin_power_w und feedin_energy_kwh (ins Netz), import_energy_kwh (aus dem Netz), battery_soc_pct, status und upload_time. Es liest nur: am Wechselrichter ändert sich nichts. Braucht SOLAX_TOKEN_ID und SOLAX_SN in second-thought.ini. Auf dieser Seite wird ein Beispiel-Wechselrichter verwendet."},
 "rb_mikrotik_ports":{"message0":"MikroTik-Ports","tooltip":"Eine Liste von Datensätzen, einer für jeden Port Ihres MikroTik-Routers oder -Switches: port, running, speed (etwa 10Gbps), errors, drops, link_downs und comment. Fehler und Verwürfe zählen ab dem letzten Start. Er liest nur: Am Switch ändert sich nichts. Auf dieser Seite nutzt er einen Beispiel-Switch."},
 "rb_mikrotik_sfp":{"message0":"MikroTik-SFP-Module","tooltip":"Eine Liste von Datensätzen, einer für jedes eingesteckte SFP-Modul: port, module, temperature (°C), rx_power und tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik-Zustand","tooltip":"Ein Datensatz über den Router oder Switch selbst: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) und alle weiteren Sensoren, die er hat."},
@@ -222,6 +223,7 @@
 "Output":"Ausgabe",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1068,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"Ihre Docker-Container neu starten, stoppen und starten (mit Rückfrage jedes Mal)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Flightradar24s Werkzeuge sind von dieser Seite aus nicht erreichbar, daher arbeitet der Agent hier ohne sie. Exportiere nach Python, mit installiertem Node.js und gesetztem FR24_API_KEY, um sie zu nutzen.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24s Flugdaten lesen: live und historische Positionen, Zusammenfassungen, Flugwege, und Fluglinien- und Flughafendetails"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"Flightradar24s Flugdaten lesen: live und historische Positionen, Zusammenfassungen, Flugwege, und Fluglinien- und Flughafendetails",
+"Solax":"Solax",
+"Solax figures":"Solax-Werte",
+"Solax inverter":"Solax-Wechselrichter",
+"from {time}":"von {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"die Werte deines Solax-Wechselrichters aus SolaxCloud lesen: Solarerzeugung, Batterieladung, Bezug und Einspeisung"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -2072,6 +2079,14 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought sendet {what} nicht an Docker.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js ist nicht installiert, daher können Flightradar24s Werkzeuge nicht starten (sie kommen aus npx). Installiere es: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 braucht einen Schlüssel: setze FR24_API_KEY in second-thought.ini, neben dieses Programm (ein bezahltes Abo, von https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"dein FR24_API_KEY ist gesetzt (jeder Aufruf kostet Credits, deshalb wird er hier nicht geprüft)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"dein FR24_API_KEY ist gesetzt (jeder Aufruf kostet Credits, deshalb wird er hier nicht geprüft)",
+"Solax figures":"Solax-Werte",
+"from {time}":"von {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax braucht SOLAX_TOKEN_ID und SOLAX_SN {where_keys}: das Token von der API-Seite von SolaxCloud (kostenlos) und die Registrierungsnummer des WLAN-Dongles des Wechselrichters (auf seinem Etikett oder in der App).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud antwortete {code}: prüfe SOLAX_TOKEN_ID und SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud hat das Token oder die Registrierungsnummer abgelehnt: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud unter {url} ist nicht erreichbar ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud erreicht: {status}, Werte von {time}",
+"Solax":"Solax"
 }
 };

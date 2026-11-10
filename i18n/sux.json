@@ -594,6 +594,10 @@
    "message0": "𒀉𒉘𒂷 Coinbase %1 𒍣",
    "tooltip": "𒀉𒉘𒂷 𒃲𒆷𒍪 𒀸 id-𒁉𒋫 𒍣 („𒀉𒉘𒂷 𒃲𒆷 Coinbase”-𒋫). 𒌓 𒆸𒆸 𒅆𒂠 𒇷 𒋻, 𒇽 𒉡𒅅 𒉡𒀝."
   },
+  "rb_solax_now": {
+   "message0": "ki-inim-ma Solax",
+   "tooltip": "dub-sar ki-inim-ma an-zu-gu-za Solax-ka, ki-inim-ma SolaxCloud-ĝu10 ba-gub-ba (5 da-a ba-ĝen-ĝen): ac_power_w (ud-ka ba-an-gub), yield_today_kkh yield_total_kkh (ud), feedinpower_w feedinenergy_kwh (ka-ka), import_energy_khh (ka-ta), battery_soc_pct, status upload_time-še. ba-zu-zu ki-inim-ma: an-zu-gu-za-ka nu-ub-du3. SOLAX_TOKEN_ID SOLAX_SN second-thought.ini-a ba-gar. kib-ri-eša an-zu-gu-za ba-gub."
+  },
   "rb_mikrotik_ports": {
    "message0": "𒆍 MikroTik",
    "tooltip": "𒁾 𒈬𒊬𒊏, 𒆍 𒀸𒀸 𒉽 MikroTik-𒍪𒀀: port, running, speed (10Gbps-𒁶), errors, drops, link_downs 𒅇 comment. 𒋃 𒀸: 𒃻 𒉡𒁄. 𒁾 𒉈𒀀 𒉽 𒄑𒄯 𒁳."
@@ -810,6 +814,7 @@
   "You": "𒍝𒂊",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
+  "Solax": "Solax",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1656,7 +1661,12 @@
   "restart, stop and start your Docker containers (asking you each time)": "𒂁 Docker-𒍪 𒁲 𒅗 𒈫, 𒄑 𒋳 𒅇 𒁲 𒅗 (𒌓 𒆸𒆸 𒇷 𒋻)",
   "Flightradar24": "Flightradar24",
   "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "ŋeš-𒄖𒍝 Flightradar24-𒅗 𒊓𒁺𒁀 𒁀𒀀𒁺, agent-𒀀𒌁 𒁀𒀊𒁺. Python-𒊺 𒁀𒁺, Node.js 𒁀𒀀𒃻, FR24_API_KEY 𒁀𒀀𒃻, 𒃶𒅎𒈪𒆕.",
-  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "Flightradar24-𒅗 𒀭𒍪𒄖𒍝 𒆬𒂵𒈬 𒁀𒍪: 𒆠𒁺𒁀 𒆠𒁺𒁀, 𒆠𒅗𒈠, 𒆠𒁺𒁀, airlines-𒀀𒌁 airports-𒀀𒌁𒅗 𒈬𒌓𒁺𒀀"
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "Flightradar24-𒅗 𒀭𒍪𒄖𒍝 𒆬𒂵𒈬 𒁀𒍪: 𒆠𒁺𒁀 𒆠𒁺𒁀, 𒆠𒅗𒈠, 𒆠𒁺𒁀, airlines-𒀀𒌁 airports-𒀀𒌁𒅗 𒈬𒌓𒁺𒀀",
+  "Solax": "Solax",
+  "Solax figures": "𒆠𒅗𒈠 Solax",
+  "Solax inverter": "𒀭𒍪𒄖𒍝 Solax",
+  "from {time}": "{time}-𒋫",
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "𒀭𒍪𒄖𒍝 Solax-𒅗 𒆠𒅗𒈠 SolaxCloud-𒋫 𒁀𒍪: 𒌓, 𒊕𒃻, 𒈬-ḫilim-𒈠 𒁀𒁺"
  },
  "examples": {
   "review": {
@@ -3292,7 +3302,15 @@
   "Second Thought doesn't send {what} to Docker.": "Second Thought {what} Docker-še3 nu-kin-gi4.",
   "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js nu-ĝar, ŋeš-gu-za Flightradar24-ka saĝ nu-ĝa2-ĝa2 (npx-ta ba-ĝen). ĝar: https://nodejs.org",
   "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24-ke saĝ-ĝu10 in-du8: FR24_API_KEY second-thought.ini-a ba-gar, ba-ba-za mu-na-ĝal2 (kug-bi in-gar, https://fr24api.flightradar24.com-ta)",
-  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY-za ba-gar (kiĝ2-ĝu10 kug-bi in-gar, a-na-aš ba-nu-zu-zu-še)"
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY-za ba-gar (kiĝ2-ĝu10 kug-bi in-gar, a-na-aš ba-nu-zu-zu-še)",
+  "Solax figures": "ki-inim-ma Solax",
+  "from {time}": "{time}-ta",
+  "SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.": "SolaxCloud-gu10 {code} ba-an-gub: SOLAX_TOKEN_ID SOLAX_SN-še ba-zu-zu.",
+  "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud pa-ŋal2-ba pa-ŋal2 nu-ub-du3: {x}.",
+  "Couldn't reach SolaxCloud at {url} ({x}).": "SolaxCloud {url} nu-ub-ĝen ({x}).",
+  "reached SolaxCloud: {status}, figures from {time}": "SolaxCloud-še ba-gub: {status}, ki-inim-ma {time}-ta",
+  "Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).": "Solax-ke SOLAX_TOKEN_ID SolaxCloud API-ĝeš-gu-za-ta (kug-bi nu-ub-gar) ba-gar {where_keys}, an-zu-gu-za wifi dongle-ĝu10 pa-ŋal2-ba-še ba-ŋal2 (mu-na-ŋal2-ba, app-a).",
+  "Solax": "Solax"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

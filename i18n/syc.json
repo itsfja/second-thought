@@ -595,6 +595,10 @@
    "message0": "ܒܛܠ ܦܘܩܕܢܐ ܕ-Coinbase %1",
    "tooltip": "ܡܒܛܠ ܚܕ ܡܢ ܦܘܩܕܢܝܟ ܦܬܝܚܐ, ܒ-id ܕܝܠܗ (ܡܢ „ܦܘܩܕܢܐ ܦܬܝܚܐ ܕ-Coinbase”). ܐܡܝܢܐܝܬ ܠܘܩܕܡ ܫܐܠ ܠܟ, ܘܠܐ ܪܗܛ ܟܕ ܠܝܬ ܐܢܫ."
   },
+  "rb_solax_now": {
+   "message0": "kanše d-Solax",
+   "tooltip": "Safra ḥaw kanše d-inbirtura d-Solax, aykano SolaxCloud ḥwānhon (ḥdāṯin kol ḥamša dqiqa): ac_power_w (emmet maṣḇī ʾnā), yield_today_kwh w-yield_total_kwh (nuhre d-šemša), feedin_power_w w-feedin_energy_kwh (l-ntarā), import_energy_kwh (men ntarā), battery_soc_pct, status w-upload_time. L-ḥwōḏ qra: nāš ḥrānā b-inbirturā. Nšaḥ SOLAX_TOKEN_ID w-SOLAX_SN b-second-thought.ini. B-ḥanā ṣeḥtā sāṯē inbirturā d-maṯlā."
+  },
   "rb_mikrotik_ports": {
    "message0": "ܬܪܥܐ ܕ-MikroTik",
    "tooltip": "ܣܕܪܐ ܕܟܛܝܒܬܐ, ܚܕܐ ܠܟܘܠ ܬܪܥܐ ܕܡܫܚܠܦܢܟ ܕ-MikroTik: port, running, speed (ܐܟ 10Gbps), errors, drops, link_downs ܘ-comment. ܒܠܚܘܕ ܩܪ: ܡܕܡ ܠܐ ܡܫܬܢܐ. ܒܦܛܐ ܗܢܐ ܫܩܠ ܡܫܚܠܦܢܐ ܕܛܘܦܣܐ."
@@ -811,6 +815,7 @@
   "You": "ܐܢܬ",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
+  "Solax": "Solax",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1657,7 +1662,12 @@
   "restart, stop and start your Docker containers (asking you each time)": "ܬܘܒ ܠܡܫܪܝܘ, ܠܡܒܛܠܘ ܘܠܡܫܪܝܘ ܡܢܝܟ ܕ-Docker (ܟܕ ܫܐܠ ܠܟ ܒܟܘܠ ܙܒܢ)",
   "Flightradar24": "Flightradar24",
   "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "ܠܐ ܡܣܝܒܪ ܡܢܝܢܐ ܕ-Flightradar24 ܡܢ ܚܢܐ ܛܚܬܢܐ, ܗܟܐ d-aynā ܐܓܢܬܐ b-gawwāh d-bēnān ܡܢܗܘܢ. ܢܦܩ ܠ-Python, Node.js ܡܣܝܒܪ ܘ-FR24_API_KEY ܡܣܝܒܪ, l-metbaʿlon.",
-  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "mqra d-taybateh d-Flightradar24: atran ḥaye w-ḥdate, kanšin, urḥta, w-partyan d-awerlaynan w-d-maṭran"
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "mqra d-taybateh d-Flightradar24: atran ḥaye w-ḥdate, kanšin, urḥta, w-partyan d-awerlaynan w-d-maṭran",
+  "Solax": "Solax",
+  "Solax figures": "ܟܢܫ ܕ-Solax",
+  "Solax inverter": "ܐܝܢܒܝܪܬܘܪ ܕ-Solax",
+  "from {time}": "ܡܢ {time}",
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "ܡܩܪ ܟܢܫ d-inbirtura ܕ-Solax ܡܢ SolaxCloud: ܢܘܗܪ d-šemša, ܡܠܝܘܬ d-batarya, ܐܦܩܢ w-ufqana"
  },
  "examples": {
   "review": {
@@ -3293,7 +3303,15 @@
   "Second Thought doesn't send {what} to Docker.": "Second Thought lā mšaddar {what} l-Docker.",
   "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js lā msaybar, wmettul hānā mānē d-Flightradar24 lā meškḥīn dnešrḵūn (men npx āṯīn). sayyem leh: https://nodejs.org",
   "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 bāꜥē mhaftā: šrā FR24_API_KEY b-second-thought.ini, l-ḥad rabbānā (ḥāymanātā d-mektāzā, men https://fr24api.flightradar24.com)",
-  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY d-īḵ msaybar (kollāh ḥāymanā mektāzā, hākā lā mbaḥrīn)"
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "FR24_API_KEY d-īḵ msaybar (kollāh ḥāymanā mektāzā, hākā lā mbaḥrīn)",
+  "Solax figures": "kanše d-Solax",
+  "from {time}": "men {time}",
+  "Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).": "Solax bāꜥē SOLAX_TOKEN_ID w-SOLAX_SN {where_keys}: tukna men safha API d-SolaxCloud (bḥilo) w-numra d-rišmo d-dongle wifi d-inbirtura (ꜥal paterṭa, aw b-app).",
+  "SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.": "SolaxCloud ꜥna {code}: bḥo SOLAX_TOKEN_ID w-SOLAX_SN.",
+  "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud rḥaq tukna aw numra d-rišmo: {x}.",
+  "Couldn't reach SolaxCloud at {url} ({x}).": "lā mṣaybar SolaxCloud l-{url} ({x}).",
+  "reached SolaxCloud: {status}, figures from {time}": "mṣaybar SolaxCloud: {status}, kanše men {time}",
+  "Solax": "Solax"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ܐܘܣܦ ܫܪܚܐ",

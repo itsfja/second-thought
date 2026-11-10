@@ -593,6 +593,10 @@
    "message0": "cancelar orden de Coinbase %1",
    "tooltip": "Cancela una de tus órdenes abiertas por su id (de «órdenes abiertas de Coinbase»). Siempre te pregunta antes y no se hace si no hay nadie."
   },
+  "rb_solax_now": {
+   "message0": "cifras de Solax",
+   "tooltip": "Un registro de las cifras de tu inversor Solax, tal como SolaxCloud las tuvo por última vez (se actualizan unos cada cinco minutos): ac_power_w (lo que está produciendo ahora), yield_today_kwh y yield_total_kwh (solar generado), feedin_power_w y feedin_energy_kwh (hacia la red), import_energy_kwh (desde la red), battery_soc_pct, status y upload_time. Solo lee: nada cambia en el inversor. Necesita SOLAX_TOKEN_ID y SOLAX_SN en second-thought.ini. En esta página usa un inversor de ejemplo."
+  },
   "rb_mikrotik_ports": {
    "message0": "puertos de MikroTik",
    "tooltip": "Una lista de registros, uno por cada puerto de tu router o switch MikroTik: port, running, speed (como 10Gbps), errors, drops, link_downs y comment. Los errores y descartes cuentan desde el último arranque. Solo lee: nada cambia en el switch. En esta página usa un switch de ejemplo."
@@ -819,6 +823,7 @@
   "Output": "Salida",
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
+  "Solax": "Solax",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1665,7 +1670,12 @@
   "restart, stop and start your Docker containers (asking you each time)": "reiniciar, detener y arrancar tus contenedores de Docker (preguntándote cada vez)",
   "Flightradar24": "Flightradar24",
   "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.": "Las herramientas de Flightradar24 no se pueden usar desde esta página, así que aquí el agente trabaja sin ellas. Exporta a Python, con Node.js instalado y FR24_API_KEY puesto, para usarlas.",
-  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "leer los datos de vuelo de Flightradar24: posiciones en vivo e históricas, resúmenes, trayectorias, y detalles de aerolíneas y aeropuertos"
+  "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details": "leer los datos de vuelo de Flightradar24: posiciones en vivo e históricas, resúmenes, trayectorias, y detalles de aerolíneas y aeropuertos",
+  "Solax": "Solax",
+  "Solax figures": "cifras de Solax",
+  "Solax inverter": "inversor Solax",
+  "from {time}": "de {time}",
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "leer las cifras de tu inversor Solax desde SolaxCloud: generación solar, carga de batería, importación y exportación"
  },
  "examples": {
   "review": {
@@ -3301,6 +3311,14 @@
   "Second Thought doesn't send {what} to Docker.": "Second Thought no envía {what} a Docker.",
   "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org": "Node.js no está instalado, así que las herramientas de Flightradar24 no pueden arrancar (vienen de npx). Instálalo: https://nodejs.org",
   "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)": "Flightradar24 necesita una clave: pon FR24_API_KEY en second-thought.ini, junto a este programa (una suscripción de pago, de https://fr24api.flightradar24.com)",
-  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "tu FR24_API_KEY está puesto (cada llamada cuesta créditos, así que no se comprueba aquí)"
+  "your FR24_API_KEY is set (each call costs credits, so it isn't checked here)": "tu FR24_API_KEY está puesto (cada llamada cuesta créditos, así que no se comprueba aquí)",
+  "Solax figures": "cifras de Solax",
+  "from {time}": "de {time}",
+  "Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).": "Solax necesita SOLAX_TOKEN_ID y SOLAX_SN {where_keys}: el token de la página de API de SolaxCloud (gratis) y el número de registro del dongle wifi del inversor (en su etiqueta, o en la app).",
+  "SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.": "SolaxCloud respondió {code}: comprueba SOLAX_TOKEN_ID y SOLAX_SN.",
+  "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud rechazó el token o el número de registro: {x}.",
+  "Couldn't reach SolaxCloud at {url} ({x}).": "No se puede llegar a SolaxCloud en {url} ({x}).",
+  "reached SolaxCloud: {status}, figures from {time}": "SolaxCloud alcanzado: {status}, cifras de {time}",
+  "Solax": "Solax"
  }
 }

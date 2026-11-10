@@ -28,6 +28,7 @@ Made by tools/sync.py from i18n/akk.json: edit that, not this.
 - Output: 𒍢𒌅𒌝
 - Coinbase: Coinbase
 - MikroTik: MikroTik
+- Solax: Solax
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker

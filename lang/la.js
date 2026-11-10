@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"mandatum Coinbase praevide: %1 %2 %3","tooltip":"Quantum mandatum fori efficeret, non dato: tabula cum size, spend, fee, total, slippage et warnings. Emere summam nummi secundi impendit (50 BTC-GBP £50 impendit); vendere summam primi vendit (0.01 BTC-GBP 0.01 BTC vendit). Nihil mutatur."},
 "rb_coinbase_order":{"message0":"mandatum Coinbase da: %1 %2 %3","tooltip":"Verum mandatum fori dat, ut «mandatum Coinbase praevide». Prius praevidet, deinde te semper rogat, cum mercede et summa, etiam cum nihil aliud rogat; nemine adstante qui «ita» dicat, non fit. Clavem cum permissione Trade eget. In hac pagina nihil emitur neque venditur."},
 "rb_coinbase_cancel":{"message0":"mandatum Coinbase %1 revoca","tooltip":"Unum ex mandatis tuis apertis revocat, per eius id (ex «mandatis apertis Coinbase»). Te semper prius rogat, nec nemine adstante fit."},
+"rb_solax_now":{"message0":"Solax numeri","tooltip":"Actus cum numeris tui Solax commutatoris, quales SolaxCloud novissime habuit (per quinque fere minuta renovantur): ac_power_w (quod nunc gignit), yield_today_kwh et yield_total_kwh (solar generata), feedin_power_w et feedin_energy_kwh (in reticulum), import_energy_kwh (e reticulo), battery_soc_pct, status et upload_time. tantum legit: nihil in commutatore mutatur. Requirit SOLAX_TOKEN_ID et SOLAX_SN in second-thought.ini. In hac pagina exemplar commutatoris utitur."},
 "rb_mikrotik_ports":{"message0":"portae MikroTik","tooltip":"Index tabularum, una pro quaque porta commutatoris tui MikroTik: port, running, speed (ut 10Gbps), errors, drops, link_downs et comment. Errores et amissa ab ultimo initio numerantur. Tantum legit: nihil in commutatore mutatur. In hac pagina commutatore exempli utitur."},
 "rb_mikrotik_sfp":{"message0":"moduli SFP MikroTik","tooltip":"Index tabularum, una pro quoque modulo SFP inserto: port, module, temperature (°C), rx_power et tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"valetudo MikroTik","tooltip":"Tabula de ipso commutatore: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), et quivis alius sensor quem habet."},
@@ -222,6 +223,7 @@
 "Output":"Exitus",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1068,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"capsas tuas Docker iterum incipere, sistere et incipere (te quotiens rogato)",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"Instrumenta Flightradar24 ex hac pagina attingi nequeunt, itaque procurator hic sine illis operatur. Exporta in Python, Node.js instituto et FR24_API_KEY posito, ut illis utaris.",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"data volatum Flightradar24 legere: loca viva et historica, summas, vias, et rerum societatum aeriarum portuumque"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"data volatum Flightradar24 legere: loca viva et historica, summas, vias, et rerum societatum aeriarum portuumque",
+"Solax":"Solax",
+"Solax figures":"Solax numeri",
+"Solax inverter":"Solax commutator",
+"from {time}":"ex {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"numeros tui Solax commutatoris ex SolaxCloud legere: generatio solaris, onus accumulatori, inportatio et exportatio"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2072,7 +2079,15 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought {what} ad Docker non mittit.",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"Node.js non est institutum, itaque instrumenta Flightradar24 incipere nequeunt (ex npx veniunt). Institue illud: https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 clavem requirit: pone FR24_API_KEY in second-thought.ini, iuxta hunc programmatem (merces solvenda, ab https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY tuus positus est (quilibet vocatus creditorum pretium habet, itaque hic non probatur)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"FR24_API_KEY tuus positus est (quilibet vocatus creditorum pretium habet, itaque hic non probatur)",
+"Solax figures":"Solax numeri",
+"from {time}":"ex {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax SOLAX_TOKEN_ID et SOLAX_SN requirit {where_keys}: tessera ex pagina API SolaxCloud (gratis) et numerus registrationis dongle wifi commutatoris (in eius titulo, aut in applicatione).",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud respondit {code}: inspice SOLAX_TOKEN_ID et SOLAX_SN.",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud tesseram aut numerum registrationis recusavit: {x}.",
+"Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud ad {url} attingi non potest ({x}).",
+"reached SolaxCloud: {status}, figures from {time}":"SolaxCloud adsecutus: {status}, numeri ex {time}",
+"Solax":"Solax"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

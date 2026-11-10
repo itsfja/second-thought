@@ -155,6 +155,7 @@
 "rb_coinbase_preview":{"message0":"预览 Coinbase 订单：%1 %2 的 %3","tooltip":"市价单会是什么结果，而不真正下单：一条含 size、spend、fee、total、slippage 和 warnings 的记录。买入花费第二种货币的金额（BTC-GBP 的 50 花 £50）；卖出卖掉第一种货币的数量（BTC-GBP 的 0.01 卖 0.01 BTC）。什么都不会改变。"},
 "rb_coinbase_order":{"message0":"在 Coinbase 下单：%1 %2 的 %3","tooltip":"真正下一个市价单，填法同“预览 Coinbase 订单”。它先预览，然后总会问你，并给出手续费和总额，即使别的都不问；没人在场说“是”，就不执行。需要有 Trade 权限的密钥。在本页上不会买卖任何东西。"},
 "rb_coinbase_cancel":{"message0":"取消 Coinbase 订单 %1","tooltip":"按 id 取消你的一个未成交订单（来自“Coinbase 未成交订单”）。它总会先问你，没人在场就不执行。"},
+"rb_solax_now":{"message0":"Solax 数据","tooltip":"一条记录,包含你的 Solax 逆变器的数据(SolaxCloud 最近一次的数据,约每五分钟更新):ac_power_w(当前发电功率)、yield_today_kwh 和 yield_total_kwh(已发电量)、feedin_power_w 和 feedin_energy_kwh(送入电网)、import_energy_kwh(从电网输入)、battery_soc_pct、status 和 upload_time。它只读取:逆变器不会有任何变化。需要在 second-thought.ini 中设置 SOLAX_TOKEN_ID 和 SOLAX_SN。此页面使用示例逆变器。"},
 "rb_mikrotik_ports":{"message0":"MikroTik 端口","tooltip":"记录列表，你的 MikroTik 路由器或交换机的每个端口一条：port、running、speed（比如 10Gbps）、errors、drops、link_downs 和 comment。错误和丢包从上次启动开始计数。它只读取：交换机上什么都不会改变。在本页上使用示例交换机。"},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP 模块","tooltip":"记录列表，每个插着的 SFP 模块一条：port、module、temperature（°C）、rx_power 和 tx_power（dBm）。"},
 "rb_mikrotik_health":{"message0":"MikroTik 状态","tooltip":"关于路由器或交换机本身的记录：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C），以及它有的其他传感器。"},
@@ -222,6 +223,7 @@
 "Output":"输出",
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
+"Solax":"Solax",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1068,7 +1070,12 @@
 "restart, stop and start your Docker containers (asking you each time)":"重启、停止和启动你的 Docker 容器（每次都问你）",
 "Flightradar24":"Flightradar24",
 "Flightradar24's tools can't be reached from this page, so the agent works without them here. Export to Python, with Node.js installed and FR24_API_KEY set, to use them.":"此页面无法连接 Flightradar24 的工具,因此智能体在这里不使用它们。请安装 Node.js 并设置 FR24_API_KEY,导出为 Python 来使用。",
-"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"读取 Flightradar24 的航班数据:实时和历史位置、摘要、航迹,以及航空公司和机场的详情"
+"read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details":"读取 Flightradar24 的航班数据:实时和历史位置、摘要、航迹,以及航空公司和机场的详情",
+"Solax":"Solax",
+"Solax figures":"Solax 数据",
+"Solax inverter":"Solax 逆变器",
+"from {time}":"来自 {time}",
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"从 SolaxCloud 读取你的 Solax 逆变器的数据:太阳能发电、电池电量、进口和出口"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -2072,6 +2079,14 @@
 "Second Thought doesn't send {what} to Docker.":"Second Thought 不会向 Docker 发送 {what}。",
 "Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org":"未安装 Node.js,因此 Flightradar24 的工具无法启动(它们来自 npx)。请安装:https://nodejs.org",
 "Flightradar24 needs a key: set FR24_API_KEY in second-thought.ini, next to this program (a paid subscription, from https://fr24api.flightradar24.com)":"Flightradar24 需要密钥:请在 second-thought.ini 中设置 FR24_API_KEY,放在程序旁边(付费订阅,来自 https://fr24api.flightradar24.com)",
-"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"你的 FR24_API_KEY 已设置(每次调用都消耗积分,因此这里不检查它)"
+"your FR24_API_KEY is set (each call costs credits, so it isn't checked here)":"你的 FR24_API_KEY 已设置(每次调用都消耗积分,因此这里不检查它)",
+"Solax figures":"Solax 数据",
+"from {time}":"来自 {time}",
+"Solax needs SOLAX_TOKEN_ID and SOLAX_SN {where_keys}: the token from the API page of SolaxCloud (free) and the Registration No. of the inverter's wifi dongle (on its label, or in the app).":"Solax 需要 SOLAX_TOKEN_ID 和 SOLAX_SN {where_keys}:SolaxCloud 的 API 页面上的免费令牌,以及逆变器 WiFi 模块的注册号(在其标签上或应用中)。",
+"SolaxCloud answered {code}: check SOLAX_TOKEN_ID and SOLAX_SN.":"SolaxCloud 返回了 {code}:请检查 SOLAX_TOKEN_ID 和 SOLAX_SN。",
+"SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud 拒绝了令牌或注册号:{x}。",
+"Couldn't reach SolaxCloud at {url} ({x}).":"无法连接 {url} 的 SolaxCloud({x})。",
+"reached SolaxCloud: {status}, figures from {time}":"已连接 SolaxCloud:{status},{time} 的数据",
+"Solax":"Solax"
 }
 };
