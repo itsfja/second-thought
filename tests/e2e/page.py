@@ -14,7 +14,6 @@ async def page_tests():
         await pg.add_init_script(MOCK)
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
-        print("PAGEERRORS:", errors)
 
         sys.path.insert(0, str(ROOT / "tools"))
         import sync as sync_tool
