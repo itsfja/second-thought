@@ -2106,7 +2106,13 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought ḥr ḥm Powerwall, ꜥnḫ {what} n ḥꜣb.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"ꜥqꜣw n Powerwall wꜣd n ꜥḥꜣw: ḥm ꜥḥꜣw (5-ꜥḥꜣw n rn QR).",
 "The Powerwall gateway's login gave no token.":"ꜥq n ꜥqꜣw Powerwall n ḥsb n rn.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"ḥꜣwtỉ m {pct}%, ḥꜣwtỉ {reserve}%, mrw {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"ḥꜣwtỉ m {pct}%, ḥꜣwtỉ {reserve}%, mrw {grid}",
+"Program":"sḫr",
+"this file's own text couldn't be read, so its block file wasn't checked":"nn gmj n šfd mdw n ḏfm pn, ḏfm n ḫw.f nn šfd",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"nn ḏfm n ḫw im, šfdw n sḫr pn nn šfd (prj m šfdw ẖt)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"ḏfm n ḫw imj m sḫr pn nn šfd, šfdw.f nn šfd",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"ḏfm n ḫw imj m sḫr pn nn ḥw n šs ({problem}), šfdw.f ḥw nn šfd",
+"the block file inside this program matches the format, so the page can import it again":"ḏfm n ḫw imj m sḫr pn ḥw n šs, šfdw.f šfd"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

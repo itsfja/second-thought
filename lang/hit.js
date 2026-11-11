@@ -2106,7 +2106,13 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought Powerwall-az ku-iš-zi, {what} UL pa-i.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall tar-na-aš POWERWALL_PASSWORD UL kar-ap-zi: URUDU-pattaz kuit ku-iš-ru-uš (5-az QR-az).",
 "The Powerwall gateway's login gave no token.":"Powerwall tar-na-aš pāhur tukna UL dāi.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"battariya {pct}%, URUDU-pat {reserve}%, URUDU-pat {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"battariya {pct}%, URUDU-pat {reserve}%, URUDU-pat {grid}",
+"Program":"GIŠ.ḪUR",
+"this file's own text couldn't be read, so its block file wasn't checked":"DUB-ka-a-ša me-mi-an UL ku-iš-ki iš-ḫar-zi, ḫar-zi-ya-an blokk DUB-aš UL ku-iš-ki",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"blokk DUB UL ku-it e-eš-zi, ḫar-zi-ya-an IM.GÍD.DA GIŠ.ḪUR ka-a-ša EGIR-pa UL ku-iš-ki (IM.GÍD.DA-aš karūliyaš pa-ra-a e-eš-zi)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"blokk DUB I-NA GIŠ.ḪUR ka-a-ša UL a-ra-aš, ḫar-zi-ya-an IM.GÍD.DA EGIR-pa UL ku-iš-ki",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"blokk DUB I-NA GIŠ.ḪUR ka-a-ša išḫiul UL tar-aš-zi ({problem}), ḫar-zi-ya-an IM.GÍD.DA-ma-aš-ša-an EGIR-pa UL ku-iš-ki",
+"the block file inside this program matches the format, so the page can import it again":"blokk DUB I-NA GIŠ.ḪUR ka-a-ša išḫiul tar-zi, ḫar-zi-ya-an IM.GÍD.DA EGIR-pa ku-iš-ki"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

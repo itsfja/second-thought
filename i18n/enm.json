@@ -3344,7 +3344,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought only redeth fro the Powerwall, so it sendeth nat {what}.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "The Powerwall gate-way refusede POWERWALL_PASSWORD: bihold the customer his passworde (the last fyve letters of that on the QR label).",
   "The Powerwall gateway's login gave no token.": "The Powerwall his logyn yaf no token.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "baterie at {pct}%, reserve {reserve}%, net {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "baterie at {pct}%, reserve {reserve}%, net {grid}",
+  "Program": "Devys",
+  "this file's own text couldn't be read, so its block file wasn't checked": "the text of this quaier myghte nat be rad, so its blok-quaier was nat preved",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "no blok-quaier is embedded, so the page may nat brynge in this devys ageyn (it was sende out by an elder page)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "the blok-quaier embedded in this devys may nat be rad, so the page may nat brynge it in ageyn",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "the blok-quaier embedded in this devys kepth nat the forme ({problem}), so the page may peraventure nat brynge it in ageyn",
+  "the block file inside this program matches the format, so the page can import it again": "the blok-quaier withynne this devys kepth the forme, so the page may brynge it in ageyn"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

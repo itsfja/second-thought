@@ -3344,7 +3344,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought rǣdeþ ān of þǣm Powerwall, forþon hit ne sendeþ {what}.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Þæt Powerwall geat oferwōp þæt ƿord: bēcēaw þæs cundan ƿord (þā lǣstan fīf stæfgrafu of þǣm QR mearke).",
   "The Powerwall gateway's login gave no token.": "Þæs geates inngang ne sealh tācen.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "batterie on {pct}%, hord {reserve}%, net {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "batterie on {pct}%, hord {reserve}%, net {grid}",
+  "Program": "Forescrift",
+  "this file's own text couldn't be read, so its block file wasn't checked": "þæs fætelses gewrit gerǣdan ne mihte, so its blocc-fætels ne wæs geprōfod",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "nā blocc-fætels is inn gelǣded, so the tramete ne mæg þisne forescrift eft bringan inn (he wæs of an ieldran tramete ūt gelǣded)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "sē blocc-fætels þe is inn þissum forescrift ne mæg gerǣdan wesan, so the tramete ne mæg hine eft bringan inn",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "sē blocc-fætels inn þissum forescrift hylt ne þæt geriht (on {problem}), so the tramete mæg wēnlice hine eft bringan inn",
+  "the block file inside this program matches the format, so the page can import it again": "sē blocc-fætels wiþinnan þissum forescrift hylt þæt geriht, so the tramete mæg hine eft bringan inn"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

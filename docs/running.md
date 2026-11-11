@@ -1,6 +1,6 @@
 # Running exported programs
 
-[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · [Connections](connections.md) · [MCP tools](mcp.md) · **Running exported programs** · [Settings and models](settings.md)
+[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · [Connections](connections.md) · [MCP tools](mcp.md) · **Running exported programs** · [Program format](program-format.md) · [Settings and models](settings.md)
 
 *Exporting to Python and running it: on a schedule, on GitHub Actions, approving what it can do, test cases, memory, and keeping it up to date.*
 

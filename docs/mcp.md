@@ -1,6 +1,6 @@
 # MCP tools
 
-[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · [Connections](connections.md) · **MCP tools** · [Running exported programs](running.md) · [Settings and models](settings.md)
+[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · [Connections](connections.md) · **MCP tools** · [Running exported programs](running.md) · [Program format](program-format.md) · [Settings and models](settings.md)
 
 *MCP servers: any server's tools in an agent, GitHub, Kraken and Trust Wallet, and serving your own program as a tool.*
 

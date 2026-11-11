@@ -3335,7 +3335,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought Powerwall-ta ba-zu-zu, {what} nu-ub-de6.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Powerwall-ka2 POWERWALL_PASSWORD ba-nu-gub: mu-ŋal2-ba ba-zu-zu (5 mu-ŋal2-ba QR-ta).",
   "The Powerwall gateway's login gave no token.": "Powerwall-ka2 ba-an-gub tukna nu-ub-du3.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "saĝ-ĝar {pct}%, nig2-ka9 {reserve}%, ka {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "saĝ-ĝar {pct}%, nig2-ka9 {reserve}%, ka {grid}",
+  "Program": "ĝeš-ḫur",
+  "this file's own text couldn't be read, so its block file wasn't checked": "dub ne-a inim nu-šid-de3, dub ĝeš-ḫur-bi nu-šid",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "dub ĝeš-ḫur nu-ĝal2, igi-dub ĝeš-ḫur ne-e3 šu nu-ti (igi-dub gibil-la-šè e3-a)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "dub ĝeš-ḫur ĝeš-ḫur-ba nu-šid, igi-dub šu nu-ti-de3",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "dub ĝeš-ḫur ĝeš-ḫur-ba saĝ nu-ĝa2-ĝa2 ({problem}), igi-dub šu nu-ti-de3",
+  "the block file inside this program matches the format, so the page can import it again": "dub ĝeš-ḫur ĝeš-ḫur-ba saĝ ĝa2-ĝa2, igi-dub šu ti-de3"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

@@ -2107,7 +2107,13 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought l-ḥwōḏ qra men Powerwall, hākā lā šāḏel {what}.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Tarꜥa d-Powerwall rḥaq rāza d-POWERWALL_PASSWORD: bḥo rāza d-bnaynā (ḥamme ḥrāyātā men paterṭa d-QR).",
 "The Powerwall gateway's login gave no token.":"ꜥeltā l-tarꜥa d-Powerwall lā yhab tukna.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"batarya l-{pct}%, yarḥuqta {reserve}%, ntarā {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"batarya l-{pct}%, yarḥuqta {reserve}%, ntarā {grid}",
+"Program":"ṭuksā",
+"this file's own text couldn't be read, so its block file wasn't checked":"lā maṭlīn menṣar lqarāḇā ktāḇā d'hānā pengā, ḥrāyā ktāḇā dlebnē lā npaqqad",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"lēt ktāḇā dlebnē rḥīm, ḥrāy dappā lā maṭlā lmeṭbol ṭuksā hānā tub (men dappā qaṭīrāṯā npaq)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"ktāḇā dlebnē rḥīm b'ṭuksā hānā lā meṭṭel lqaḇbel qarāḇā, ḥrāy dappā lā maṭlā lmeṭbel lhā tub",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"ktāḇā dlebnē rḥīm b'ṭuksā hānā lā nṭar trenā ({problem}), ḥrāy dappā dīn lā maṭlā lmeṭbel lhā tub",
+"the block file inside this program matches the format, so the page can import it again":"ktāḇā dlebnē bqūḇel ṭuksā hānā nṭar trenā, ḥrāy dappā maṭlā lmeṭbel lhā tub"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

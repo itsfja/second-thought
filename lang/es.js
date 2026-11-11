@@ -2106,6 +2106,12 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought solo lee de la Powerwall, así que no envía {what}.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"La pasarela Powerwall rechazó POWERWALL_PASSWORD: comprueba la contraseña de cliente (los últimos cinco caracteres de la del código QR).",
 "The Powerwall gateway's login gave no token.":"El inicio de sesión de la pasarela Powerwall no dio ningún token.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"batería al {pct}%, reserva {reserve}%, red {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"batería al {pct}%, reserva {reserve}%, red {grid}",
+"Program":"Programa",
+"this file's own text couldn't be read, so its block file wasn't checked":"no se pudo leer el texto de este archivo, así que su archivo de bloques no se comprobó",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"no hay archivo de bloques incrustado, así que la página no puede importar este programa otra vez (lo exportó una página más antigua)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"el archivo de bloques incrustado en este programa no se puede leer, así que la página no puede importarlo otra vez",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"el archivo de bloques incrustado en este programa incumple el formato ({problem}), así que la página podría no poder importarlo otra vez",
+"the block file inside this program matches the format, so the page can import it again":"el archivo de bloques dentro de este programa cumple el formato, así que la página puede importarlo otra vez"
 }
 };

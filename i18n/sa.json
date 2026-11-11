@@ -3345,7 +3345,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought केवलं Powerwall इत्यस्मात् पठति, अतः {what} न प्रेषयति।",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Powerwall-द्वारेण POWERWALL_PASSWORD अस्वीकृतम्: ग्राहकस्य गुह्यं पश्य (QR-चिह्नस्य अन्तिमाः पञ्च अक्षराः)।",
   "The Powerwall gateway's login gave no token.": "Powerwall-द्वारस्य प्रवेशेण टोकन् न दत्तम्।",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "बिजापूर्णता {pct}%, रक्षा {reserve}%, जालम् {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "बिजापूर्णता {pct}%, रक्षा {reserve}%, जालम् {grid}",
+  "Program": "कार्यक्रमः",
+  "this file's own text couldn't be read, so its block file wasn't checked": "asya pustakasya pāṭhaḥ na śakto 'bhavat, tasmāt tasya blokkapustakam na parīkṣitam",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "blokkapustakam adhyāropitam na asti, tasmāt patṭā etat kāryakramam punaḥ praveṣṭuṃ na śaknoti (jīrṇatarayā patṭayā niḥsṛtam)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "asmin kāryakrame adhyāropitam blokkapustakam pathituṃ na śakyate, tasmāt patṭā tat punaḥ praveṣṭuṃ na śaknoti",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "asmin kāryakrame adhyāropitam blokkapustakam ākāraṃ na rakṣati ({problem}), tasmāt patṭā tat punaḥ praveṣṭuṃ na śakyeta",
+  "the block file inside this program matches the format, so the page can import it again": "asmin kāryakrame blokkapustakam ākāraṃ rakṣati, tasmāt patṭā tat punaḥ praveṣṭuṃ śaknoti"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

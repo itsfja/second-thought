@@ -2107,7 +2107,13 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought Powerwall-to o-pe-ro-se, {what} o-u po-re-na.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Ðe-ro Powerwall POWERWALL_PASSWORD nu-ub-du3: mu-ŋa ba-zu-zu (pa-we-jo pente QR-to).",
 "The Powerwall gateway's login gave no token.":"Ðe-ro Powerwall tukna o-u do-ke.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"pa-we-jo {pct}%, pa-we-jo {reserve}%, o-po-se {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"pa-we-jo {pct}%, pa-we-jo {reserve}%, o-po-se {grid}",
+"Program":"po-ro-ka-ra-ma",
+"this file's own text couldn't be read, so its block file wasn't checked":"o-u-de ka-ra-ma e-ne to-to te-u-ko a-ko-no-me-no, to-te ka-ma-ke-re te-u-ko o-u ke-re-a",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"blokk te-u-ko o-u-do-ke-re e-ne, to-te pa-ka-ni to-to po-ro-ka-ra-ma o-u do-ke-re a-pi (e-ka-ke a-pi pa-ka-ni pa-ra-ke-ra-i)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"blokk te-u-ko e-ne to-to po-ro-ka-ra-ma o-u a-ko-no-me-no, to-te pa-ka-ni o-u do-ke-re a-pi",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"blokk te-u-ko e-ne to-to po-ro-ka-ra-ma mo-ta o-u te-re-e ({problem}), to-te pa-ka-ni i-jo a-pi o-u do-ke-re",
+"the block file inside this program matches the format, so the page can import it again":"blokk te-u-ko e-ne to-to po-ro-ka-ra-ma mo-ta te-re-e, to-te pa-ka-ni a-pi do-ke-re"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

@@ -6608,6 +6608,78 @@ def window_word(window):
 
 import difflib  # noqa: E402,F811 - below the line, so python/runtime.py has it too
 import re  # noqa: E402,F811
+
+
+# The line the page puts after the program, above its blocks. Written in two parts, like PROGRAM_MARKS in update.py
+# (which this can't import: it joins after this file): the runtime goes inside every program, and the page finds the
+# line anywhere in the file, so the runtime must not contain it as it's written.
+PROGRAM_MARKS = tuple("# ---- " + who + " program: lets the block editor import this file again ----"
+                      for who in ("Second Thought", "Reflection Blocks"))
+
+
+def _grammar_problems(data):
+    """Where a block file breaks the format in docs/program-format.md: a list, empty when it matches.
+
+    Checks only the shape the format promises, not what each block type means, and ignores keys it doesn't
+    know, so a program saved by a newer page still passes and still opens.
+    """
+    problems = []
+
+    def wrong(path, text):
+        problems.append(f"{path} {text}")
+
+    def scalar(v):
+        return v is None or isinstance(v, (str, int, float, bool)) \
+            or (isinstance(v, dict) and isinstance(v.get("id"), str) and v["id"].strip())
+
+    def connection(v, path):
+        if not isinstance(v, dict) or not any(k in v for k in ("block", "shadow")):
+            return wrong(path, "isn't a block connection (a block, a shadow, or both)")
+        for k in ("block", "shadow"):
+            if k in v:
+                block(v[k], f"{path}.{k}")
+
+    def block(b, path):
+        if not isinstance(b, dict) or not isinstance(b.get("type"), str) or not b["type"].strip():
+            return wrong(path, "isn't a block with a type")
+        fields = b.get("fields", {})
+        if not isinstance(fields, dict) or any(not scalar(v) for v in fields.values()):
+            wrong(f"{path} ({b['type']})", "has fields that aren't plain values")
+        inputs = b.get("inputs", {})
+        if not isinstance(inputs, dict):
+            wrong(f"{path} ({b['type']})", "has inputs that aren't an object")
+        else:
+            for name, v in inputs.items():
+                connection(v, f"{path} ({b['type']}) input {name}")
+        if "next" in b:
+            connection(b["next"], f"{path} ({b['type']}) next")
+        for k in ("x", "y"):
+            if k in b and not isinstance(b[k], (int, float)):
+                wrong(f"{path} ({b['type']})", f"has {k} that isn't a number")
+
+    if not isinstance(data, dict):
+        return ["the top level isn't an object"]
+    if data.get("format") != "reflection-blocks":
+        wrong("the top level", 'isn\'t format "reflection-blocks"')
+    if data.get("version") != 1:
+        wrong("the top level", "isn't version 1")
+    if not isinstance(data.get("name", ""), str) or not data.get("name", "").strip():
+        wrong("the top level", "has no name")
+    program = data.get("program")
+    if not isinstance(program, dict) or not isinstance(program.get("blocks"), dict) \
+            or not isinstance(program["blocks"].get("blocks"), list):
+        return problems + ["the program part isn't a block tree"]
+    if "languageVersion" in program["blocks"] and not isinstance(program["blocks"]["languageVersion"], int):
+        wrong("the program part", "has a languageVersion that isn't a number")
+    for i, b in enumerate(program["blocks"]["blocks"]):
+        block(b, f"block {i + 1}")
+    tests = data.get("tests")
+    if tests is not None and (not isinstance(tests, list) or any(not isinstance(t, dict) or not isinstance(t.get("name"), str)
+                                                                or not t.get("name", "").strip() for t in tests)):
+        wrong("the top level", "has tests that aren't a list of named cases")
+    return problems
+
+
 import importlib.metadata  # noqa: E402,F811 - below the line, so python/runtime.py has them too
 import importlib.util  # noqa: E402,F811
 import shutil  # noqa: E402,F811
@@ -6994,6 +7066,37 @@ class Doctor:
                             "you run needs it, that's fine.", names=", ".join(f"{n} ({where(w)})" for n, w in unknown)))
         return notes
 
+    @staticmethod
+    def _doctor_program():
+        """The block file embedded in this program, checked against the format in docs/program-format.md (#391).
+        It's what lets the page import this program again, so a broken one is worth knowing about before a run."""
+        try:
+            with open(os.path.abspath(sys.argv[0] or ""), encoding="utf-8") as f:
+                text = f.read()
+        except OSError:
+            return "NOTE", tr("this file's own text couldn't be read, so its block file wasn't checked")
+        at = next((i for i in (text.find(m) for m in PROGRAM_MARKS) if i >= 0), -1)
+        payload, on = [], False
+        for line in (text[at:].splitlines() if at >= 0 else []):
+            if not on:
+                if re.fullmatch(r"#\s*BLOCKS:\s*", line):
+                    on = True
+                continue
+            m = re.fullmatch(r"#\s*([A-Za-z0-9+/=]+)\s*", line)
+            if m:
+                payload.append(m.group(1))
+        if not payload:
+            return "NOTE", tr("no block file embedded, so the page can't import this program again (it was exported by an older page)")
+        try:
+            data = json.loads(base64.b64decode("".join(payload)))
+        except ValueError:
+            return "FAIL", tr("the block file embedded in this program isn't readable, so the page can't import it again")
+        problems = _grammar_problems(data)
+        if problems:
+            return "FAIL", tr("the block file embedded in this program breaks the format ({problem}), so the page may not "
+                              "import it again", problem=_short(problems[0], 160))
+        return "ok", tr("the block file inside this program matches the format, so the page can import it again")
+
     async def doctor(self, can):
         """Runs every check, prints one line each, and gives the exit code: 0 when nothing failed."""
         prog = os.path.basename(sys.argv[0] or "this program")
@@ -7011,6 +7114,8 @@ class Doctor:
         can = can or {}
         ids = list(can.get("can", [])) if known else [c[0] for c in CAPABILITIES]  # an older program: check whatever is set up
         row("ok" if sys.version_info >= (3, 9) else "FAIL", "Python", sys.version.split()[0] + ("" if sys.version_info >= (3, 9) else ": " + tr("Second Thought needs 3.9 or newer")))
+        status, text = self._doctor_program()
+        row(status, "Program", text)
         if CURRENCY != "usd":
             r = rates()
             row("NOTE" if r["problem"] and not fixed_rate() else "ok", "Currency",

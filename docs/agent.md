@@ -1,6 +1,6 @@
 # The agent
 
-[← Second Thought](../README.md) · [Using the page](using-the-page.md) · **The agent** · [Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · [Settings and models](settings.md)
+[← Second Thought](../README.md) · [Using the page](using-the-page.md) · **The agent** · [Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · [Program format](program-format.md) · [Settings and models](settings.md)
 
 *The agent block: a model that plans, uses tools, and checks its own work, with the tools it can be given and what always asks first.*
 

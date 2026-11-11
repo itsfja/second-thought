@@ -2105,7 +2105,13 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought sōlo quimati Powerwall-tech, ic ahmo quihuīca {what}.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"In Powerwall tzinacantli ōquicualān POWERWALL_PASSWORD: xiquitta in chānāhuac itlahtōl (in macuīlli tlapōhualli in QR).",
 "The Powerwall gateway's login gave no token.":"In Powerwall tzinacantli ōmpa ahmo ōquimacac token.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"bateria ipan {pct}%, backup {reserve}%, red {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"bateria ipan {pct}%, backup {reserve}%, red {grid}",
+"Program":"tlatēcpantli",
+"this file's own text couldn't be read, so its block file wasn't checked":"ahmo ōncenquīxti in tlahtōlli inīn āmatl, ic ahmo ōnmoīxmati in blokkos-āmatl",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"ahmo ca blokkos-āmatl inōc, ic in āmatl ahmo hueli ōmpaquīxtiliz inīn tlatēcpantli occeppa (ōmpantlih ōmopanōltih āmatl huēcauhca)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"in blokkos-āmatl inōc inīn tlatēcpantli ahmo hueli moīxtlahca, ic in āmatl ahmo hueli ōmpaquīxtiliz occeppa",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"in blokkos-āmatl inōc inīn tlatēcpantli ahmo quipiya in iecoliztli ({problem}), ic kenin āmatl ahmo hueli ōmpaquīxtiliz occeppa",
+"the block file inside this program matches the format, so the page can import it again":"in blokkos-āmatl inōc inīn tlatēcpantli quipiya in iecoliztli, ic in āmatl hueli ōmpaquīxtīza occeppa"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

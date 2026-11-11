@@ -3345,7 +3345,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought ālāt Powerwall šitassû, adi {what} lā ušabbiṭ.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "abullim Powerwall ṭēb awātim ušarriṭ: ṣāb awātim (kalû ḫamsut ṭēb qātim ša kunšši QR).",
   "The Powerwall gateway's login gave no token.": "erēbim abullim lā nadānu tācēn.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "ṣābu ana {pct}%, ṣābu uṣṣurū {reserve}%, kakkarum {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "ṣābu ana {pct}%, ṣābu uṣṣurū {reserve}%, kakkarum {grid}",
+  "Program": "nēpešum",
+  "this file's own text couldn't be read, so its block file wasn't checked": "awāt ša ṭuppim annîm ul iššû, ṭupp kīmī šû ul āmur",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "ṭupp kīmī ul ibaššû, arkitu pītum nēpešam annûm ana leqêšu ul iššû (ša pītim maḫrîtim)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "ṭupp kīmī ša ina nēpešim annîm ul iššû, arkitu pītum ana leqêšu ul iššû",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "ṭupp kīmī ša ina nēpešim annîm šipir ul uššab ({problem}), arkitu pītum ana leqêšu mā ul iššû",
+  "the block file inside this program matches the format, so the page can import it again": "ṭupp kīmī ša ina nēpešim annîm šipir uššab, arkitu pītum ana leqêšu iššû"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

@@ -2107,6 +2107,12 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought רק קורא מה-Powerwall, ולכן אינו שולח {what}.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"שער ה-Powerwall דחה את POWERWALL_PASSWORD: בדוק את סיסמת הלקוח (חמשת התווים האחרונים שעל מדבקת ה-QR).",
 "The Powerwall gateway's login gave no token.":"הכניסה לשער ה-Powerwall לא נתנה אסימון.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"סוללה ב-{pct}%, רזרבה {reserve}%, רשת {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"סוללה ב-{pct}%, רזרבה {reserve}%, רשת {grid}",
+"Program":"תוכנית",
+"this file's own text couldn't be read, so its block file wasn't checked":"לא ניתן היה לקרוא את הטקסט של הקובץ הזה, ולכן קובץ הבלוקים שלו לא נבדק",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"אין קובץ בלוקים מוטמע, ולכן הדף לא יכול לייבא את התוכנית הזו שוב (היא יוצאה מדף ישן יותר)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"קובץ הבלוקים המוטמע בתוכנית הזו אינו קריא, ולכן הדף לא יכול לייבא אותה שוב",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"קובץ הבלוקים המוטמע בתוכנית הזו אינו עומד בתבנית ({problem}), ולכן ייתכן שהדף לא יוכל לייבא אותה שוב",
+"the block file inside this program matches the format, so the page can import it again":"קובץ הבלוקים שבתוך התוכנית הזו עומד בתבנית, ולכן הדף יכול לייבא אותה שוב"
 }
 };

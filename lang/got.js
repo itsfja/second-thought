@@ -2106,7 +2106,13 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought ainis melis Powerwall brukeiþ, þan {what} ni sandeiþ.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall daur þo kundis waurd afwarp: sai þo kundis waurd (þos speditans fimf bokos þizos af QR melin).",
 "The Powerwall gateway's login gave no token.":"Powerwall dauris inngangs teiken ni gaf.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"battarijo ana {pct}%, balaþwaddjo {reserve}%, netwau {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"battarijo ana {pct}%, balaþwaddjo {reserve}%, netwau {grid}",
+"Program":"garaideins",
+"this file's own text couldn't be read, so its block file wasn't checked":"bokos þizos bókis siggwan ni mahta, þannu blokkabók is ni sokida",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"ni ain blokkabók inn bairada, þannu laufa þo garaidein aftra inn ni mag (fram airizin laufa ussandida was)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"so blokkabók inn þizai garaideinai siggwan ni mag, þannu laufa þo aftra inn ni mag",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"so blokkabók inn þizai garaideinai garuni ni hafai ({problem}), þannu laufa þo aftra inn ni magah",
+"the block file inside this program matches the format, so the page can import it again":"so blokkabók inn þizai garaideinai garu hafai, þannu laufa þo aftra inn mag"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",
