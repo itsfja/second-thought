@@ -189,6 +189,7 @@ def python_tests(codes, share=None):
                HA_URL=ha_url, HA_TOKEN=fake_ha.TOKEN, LLAMA_BASE_URL=llama_url,
                MCP_KRAKEN=f'"{sys.executable}" "{HERE / "fake_kraken.py"}"',  # the Kraken tools block (#262)
                MCP_FLIGHTRADAR24=f'"{sys.executable}" "{HERE / "fake_fr24.py"}"',  # Flightradar24's MCP server (#364)
+               MCP_VAILLANT=f'"{sys.executable}" "{HERE / "fake_vaillant.py"}"',  # the unofficial read-only Vaillant MCP server (#363)
                MCP_GITHUB=f'"{sys.executable}" "{HERE / "fake_github_mcp.py"}"',  # GitHub's MCP server, read-only (#333)
                FAKE_GITHUB_READ_ONLY="1",
                MCP_TRUSTWALLET=f'"{sys.executable}" "{HERE / "fake_twak.py"}"',  # Trust Wallet's Agent Kit (#320)

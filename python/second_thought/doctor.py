@@ -15,7 +15,7 @@ from .providers import CURRENCY, MODELS, dollars, record_limits, PROVIDERS, SERV
 from .spending import PLANS, plan_of, reported_lines
 from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, SAFETY, _short, to_str
 from .connectors import webhook_host
-from .mcp import FR24_COMMANDS, KRAKEN_COMMANDS, mcp_env_name, mcp_is_fr24, mcp_is_twak
+from .mcp import FR24_COMMANDS, KRAKEN_COMMANDS, mcp_env_name, mcp_is_fr24, mcp_is_twak, mcp_is_vaillant
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import difflib  # noqa: E402,F811 - below the line, so python/runtime.py has it too
@@ -328,6 +328,7 @@ class Doctor:
                 if re.match(r"^\s*kraken(\.exe)?\s", command) and not shutil.which("kraken"):
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 fr24 = mcp_is_fr24(name, command)
+                vaillant = mcp_is_vaillant(name, command)
                 if fr24 and not shutil.which("npx"):
                     raise RunError(tr("Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org"))
                 if fr24 and not os.environ.get("FR24_API_KEY", "").strip():
@@ -337,7 +338,8 @@ class Doctor:
                 twak = mcp_is_twak(name, command)  # its tools carry no marks, so its own safe list says which only look (#320)
                 changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True)
                               and not (twak and t.get("name") in SAFETY["mcp_twak_safe"])
-                              and not (fr24 and t.get("name") in SAFETY["mcp_fr24_safe"]))
+                              and not (fr24 and t.get("name") in SAFETY["mcp_fr24_safe"])
+                              and not (vaillant and t.get("name") in SAFETY["mcp_vaillant_safe"]))
                 if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
                     text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}

@@ -87,6 +87,22 @@ The safe list works the way round that fails safe: only the tools on the list ru
 
 The **When should I leave for the airport?** program in the gallery uses it: the agent reads a flight's live position and estimated landing, adds the drive and the time for parking and security, and sends a Telegram message saying when to leave home.
 
+### Vaillant
+
+For a Vaillant heat pump or boiler, there's no official API and no local one (the sensoNET gateway has none). Two ways to read it:
+
+- **Through Home Assistant (recommended if it's there):** the myVAILLANT integration (HACS, built on [myPyllant](https://github.com/signalkraft/mypyllant)) puts the system in Home Assistant, and the existing Home Assistant connection reads it — and, asking, sets it — today. The gallery program **How's the heating doing?** works this way: each Sunday evening it reads the week's outside temperature and energy and emails a short review.
+- **Through the unofficial read-only server:** [unofficialMCP4Vaillant](https://github.com/holger1411/unofficialMCP4Vaillant) exposes a heat pump through the API behind the myVAILLANT app, reverse-engineered by myPyllant. It's read-only by design, and it caches each call (status for a minute, the energy report for five) so the account behind it is polled gently. Clone it, install it, and set your myVAILLANT email and password in its `.env`; then:
+
+```ini
+[mcp servers]
+MCP_VAILLANT = /path/to/unofficialMCP4Vaillant/.venv/bin/python -m vaillant_mcp_server
+VAILLANT_USERNAME = you@example.com
+VAILLANT_PASSWORD = your-password
+```
+
+Then put `tools from MCP server vaillant` inside an agent. Its four tools (`vaillant_get_status`, `vaillant_get_devices`, `vaillant_get_energy_report`, `vaillant_get_diagnostics`) read temperatures, water pressure, hot water, energy with a COP estimate, schedules and fault codes, and none of them asks. The API is unofficial and can change whenever Vaillant changes the app, so the safe list works the way round that fails safe: a tool this list has never seen asks first, even with (no asking). Their terms don't invite any of this, so poll gently and expect it to break.
+
 ### Trust Wallet
 
 [Trust Wallet](https://trustwallet.com)'s Agent Kit (`twak`, from `npm install -g @trustwallet/cli`) runs an MCP server for your self-custody wallet. Set it up with `twak init` and `twak wallet create`, then name the server `trustwallet`:

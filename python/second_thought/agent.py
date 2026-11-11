@@ -11,7 +11,7 @@ import sys
 from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive, seen_addresses,
     num, round_js, time_plus_text, to_str)
 from .connectors import fetch_page
-from .mcp import mcp_destructive, mcp_env_name, mcp_is_fr24, mcp_is_twak, mcp_money
+from .mcp import mcp_destructive, mcp_env_name, mcp_is_fr24, mcp_is_twak, mcp_is_vaillant, mcp_money
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
@@ -261,6 +261,7 @@ class AgentTools:
                 server, mode = to_str(t.get("server")).strip(), t.get("ask", "changes")
                 twak = mcp_is_twak(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
                 fr24 = mcp_is_fr24(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
+                vaillant = mcp_is_vaillant(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
                 for tool in (mcp or {}).get(server, []):
                     if twak and tool.get("name") in SAFETY["mcp_twak_never"]:
                         continue  # trades later, out of sight: not offered at all (#320)
@@ -270,7 +271,8 @@ class AgentTools:
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
                     money = mcp_money(tool) or (twak and tool.get("name") not in SAFETY["mcp_twak_safe"])  # real money: always asks (#262, #320)
                     ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only) \
-                        or (fr24 and tool.get("name") not in SAFETY["mcp_fr24_safe"])  # a tool we've never seen asks (#364)
+                        or (fr24 and tool.get("name") not in SAFETY["mcp_fr24_safe"]) \
+                        or (vaillant and tool.get("name") not in SAFETY["mcp_vaillant_safe"])  # a tool we've never seen asks (#363, #364)
                     if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
                         schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k not in SAFETY["mcp_money_inputs"]},
                                       required=[k for k in schema.get("required") or [] if k not in SAFETY["mcp_money_inputs"]])

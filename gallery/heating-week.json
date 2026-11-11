@@ -1,0 +1,231 @@
+{
+ "format": "reflection-blocks",
+ "version": 1,
+ "name": "heating-week",
+ "gallery": {
+  "title": "How's the heating doing?",
+  "category": "home",
+  "description": "Each Sunday evening, reads the week's outside temperature and the home's energy from Home Assistant and emails a short review: whether the house used more energy on the colder days, whether the hot water looks healthy, any fault codes, and one thing worth changing. It only reads.",
+  "tip": "Needs the heating in Home Assistant (the myVAILLANT integration, say). Swap the two sensors for your heat pump's own — outdoor temperature and energy — and the email address for yours.",
+  "author": "itsfja",
+  "runtime": "3.0.0"
+ },
+ "program": {
+  "blocks": {
+   "languageVersion": 0,
+   "blocks": [
+    {
+     "type": "rb_start",
+     "next": {
+      "block": {
+       "type": "rb_broadcast_wait",
+       "inputs": {
+        "MSG": {
+         "shadow": {
+          "type": "text",
+          "fields": {
+           "TEXT": "heating"
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "rb_when_time",
+     "fields": {
+      "HOUR": 19,
+      "MINUTE": 0,
+      "DAYS": "weekends"
+     },
+     "next": {
+      "block": {
+       "type": "rb_broadcast_wait",
+       "inputs": {
+        "MSG": {
+         "shadow": {
+          "type": "text",
+          "fields": {
+           "TEXT": "heating"
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "rb_receive",
+     "fields": {
+      "MSG": "heating"
+     },
+     "next": {
+      "block": {
+       "type": "variables_set",
+       "fields": {
+        "VAR": {
+         "id": "g_summary"
+        }
+       },
+       "inputs": {
+        "VALUE": {
+         "block": {
+          "type": "rb_ask",
+          "inputs": {
+           "TEXT": {
+            "block": {
+             "type": "text_join",
+             "inputs": {
+              "ADD0": {
+               "shadow": {
+                "type": "rb_longtext",
+                "fields": {
+                 "TEXT": "Here is my home's heating data for the past week. In under 150 words: how the week's heating went — did the house use more energy on the colder days, as it should — whether the hot water looks healthy, and one thing worth changing. If any fault codes are mentioned, list them plainly.\n\nOutside temperature, last 7 days:\n"
+                }
+               }
+              },
+              "ADD1": {
+               "block": {
+                "type": "rb_ha_history",
+                "inputs": {
+                 "ENTITY": {
+                  "shadow": {
+                   "type": "text",
+                   "fields": {
+                    "TEXT": "sensor.outdoor_temperature"
+                   }
+                  }
+                 },
+                 "HOURS": {
+                  "shadow": {
+                   "type": "math_number",
+                   "fields": {
+                    "NUM": 168
+                   }
+                  }
+                 }
+                }
+               }
+              },
+              "ADD2": {
+               "shadow": {
+                "type": "rb_longtext",
+                "fields": {
+                 "TEXT": "\n\nHouse energy, last 7 days:\n"
+                }
+               }
+              },
+              "ADD3": {
+               "block": {
+                "type": "rb_ha_history",
+                "inputs": {
+                 "ENTITY": {
+                  "shadow": {
+                   "type": "text",
+                   "fields": {
+                    "TEXT": "sensor.energy_today"
+                   }
+                  }
+                 },
+                 "HOURS": {
+                  "shadow": {
+                   "type": "math_number",
+                   "fields": {
+                    "NUM": 168
+                   }
+                  }
+                 }
+                }
+               }
+              },
+              "ADD4": {
+               "shadow": {
+                "type": "rb_longtext",
+                "fields": {
+                 "TEXT": "\n\nEverything reporting a temperature now:\n"
+                }
+               }
+              },
+              "ADD5": {
+               "block": {
+                "type": "rb_ha_summary",
+                "inputs": {
+                 "TEXT": {
+                  "shadow": {
+                   "type": "text",
+                   "fields": {
+                    "TEXT": "temperature"
+                   }
+                  }
+                 }
+                }
+               }
+              }
+             },
+             "extraState": {
+              "itemCount": 6
+             }
+            }
+           }
+          }
+         }
+        }
+       },
+       "next": {
+        "block": {
+         "type": "rb_email_send",
+         "inputs": {
+          "TO": {
+           "shadow": {
+            "type": "text",
+            "fields": {
+             "TEXT": "you@example.com"
+            }
+           }
+          },
+          "SUBJECT": {
+           "shadow": {
+            "type": "text",
+            "fields": {
+             "TEXT": "How's the heating doing?"
+            }
+           }
+          },
+          "TEXT": {
+           "block": {
+            "type": "variables_get",
+            "fields": {
+             "VAR": {
+              "id": "g_summary"
+             }
+            }
+           }
+          }
+         },
+         "next": {
+          "block": {
+           "type": "rb_finish_with",
+           "inputs": {
+            "TEXT": {
+             "block": {
+              "type": "variables_get",
+              "fields": {
+               "VAR": {
+                "id": "g_summary"
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   ]
+  }
+ }
+}

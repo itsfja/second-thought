@@ -500,6 +500,13 @@ def mcp_is_fr24(server, command=""):
     return name in ("flightradar24", "fr24", "fr24api") or "@flightradar24/fr24api-mcp" in to_str(command)
 
 
+def mcp_is_vaillant(server, command=""):
+    """True for the unofficial read-only Vaillant MCP server (#363), unofficialMCP4Vaillant: one named vaillant (or
+    mcp4vaillant), or started with its vaillant_mcp_server module."""
+    name = re.sub(r"[^a-z0-9]", "", to_str(server).lower())
+    return name in ("vaillant", "mcp4vaillant", "unofficialmcp4vaillant") or "vaillant_mcp_server" in to_str(command).lower()
+
+
 def mcp_money(tool):
     """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, one taking an "acknowledged" input
     (Kraken's mark for them), or a Kraken tool not known to be safe, so one we've never seen asks (#309)."""
