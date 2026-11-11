@@ -1232,6 +1232,12 @@ SAFETY = {
                       "get_historic_flights_count", "get_historic_flights_positions_full",
                       "get_historic_flights_positions_light", "get_live_flights_count",
                       "get_live_flights_positions_full", "get_live_flights_positions_light"],
+    # The unofficial read-only Vaillant MCP server (#363): unofficialMCP4Vaillant v1 is read-only by design — status,
+    # devices, the energy report and diagnostics, each cached (status 60s, energy 5 min) so the myVAILLANT account
+    # behind it is polled gently. The API is unofficial and reverse-engineered, so it can change whenever Vaillant
+    # changes the app: a tool this list has never seen asks first, the safe way round like Kraken's (#309).
+    "mcp_vaillant_safe": ["vaillant_get_devices", "vaillant_get_diagnostics", "vaillant_get_energy_report",
+                          "vaillant_get_status"],
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
@@ -5564,6 +5570,13 @@ def mcp_is_fr24(server, command=""):
     return name in ("flightradar24", "fr24", "fr24api") or "@flightradar24/fr24api-mcp" in to_str(command)
 
 
+def mcp_is_vaillant(server, command=""):
+    """True for the unofficial read-only Vaillant MCP server (#363), unofficialMCP4Vaillant: one named vaillant (or
+    mcp4vaillant), or started with its vaillant_mcp_server module."""
+    name = re.sub(r"[^a-z0-9]", "", to_str(server).lower())
+    return name in ("vaillant", "mcp4vaillant", "unofficialmcp4vaillant") or "vaillant_mcp_server" in to_str(command).lower()
+
+
 def mcp_money(tool):
     """True for an MCP tool that can reach real money: one of SAFETY's mcp_money, one taking an "acknowledged" input
     (Kraken's mark for them), or a Kraken tool not known to be safe, so one we've never seen asks (#309)."""
@@ -5911,6 +5924,7 @@ class AgentTools:
                 server, mode = to_str(t.get("server")).strip(), t.get("ask", "changes")
                 twak = mcp_is_twak(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
                 fr24 = mcp_is_fr24(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
+                vaillant = mcp_is_vaillant(server, t.get("command") or os.environ.get(mcp_env_name(server), ""))
                 for tool in (mcp or {}).get(server, []):
                     if twak and tool.get("name") in SAFETY["mcp_twak_never"]:
                         continue  # trades later, out of sight: not offered at all (#320)
@@ -5920,7 +5934,8 @@ class AgentTools:
                     read_only = isinstance(tool.get("annotations"), dict) and tool["annotations"].get("readOnlyHint") is True
                     money = mcp_money(tool) or (twak and tool.get("name") not in SAFETY["mcp_twak_safe"])  # real money: always asks (#262, #320)
                     ask = money or mcp_destructive(tool) or mode == "every" or (mode == "changes" and not read_only) \
-                        or (fr24 and tool.get("name") not in SAFETY["mcp_fr24_safe"])  # a tool we've never seen asks (#364)
+                        or (fr24 and tool.get("name") not in SAFETY["mcp_fr24_safe"]) \
+                        or (vaillant and tool.get("name") not in SAFETY["mcp_vaillant_safe"])  # a tool we've never seen asks (#363, #364)
                     if money:  # the person answers for it, not the agent: it never sees an "acknowledged" input
                         schema = dict(schema, properties={k: v for k, v in (schema.get("properties") or {}).items() if k not in SAFETY["mcp_money_inputs"]},
                                       required=[k for k in schema.get("required") or [] if k not in SAFETY["mcp_money_inputs"]])
@@ -6901,6 +6916,7 @@ class Doctor:
                 if re.match(r"^\s*kraken(\.exe)?\s", command) and not shutil.which("kraken"):
                     raise RunError(tr("kraken-cli isn't installed, so Kraken's tools can't start. Install it: https://docs.kraken.com/home/mcp"))
                 fr24 = mcp_is_fr24(name, command)
+                vaillant = mcp_is_vaillant(name, command)
                 if fr24 and not shutil.which("npx"):
                     raise RunError(tr("Node.js isn't installed, so Flightradar24's tools can't start (they come from npx). Install it: https://nodejs.org"))
                 if fr24 and not os.environ.get("FR24_API_KEY", "").strip():
@@ -6910,7 +6926,8 @@ class Doctor:
                 twak = mcp_is_twak(name, command)  # its tools carry no marks, so its own safe list says which only look (#320)
                 changes = sum(1 for t in tools if not (isinstance(t.get("annotations"), dict) and t["annotations"].get("readOnlyHint") is True)
                               and not (twak and t.get("name") in SAFETY["mcp_twak_safe"])
-                              and not (fr24 and t.get("name") in SAFETY["mcp_fr24_safe"]))
+                              and not (fr24 and t.get("name") in SAFETY["mcp_fr24_safe"])
+                              and not (vaillant and t.get("name") in SAFETY["mcp_vaillant_safe"]))
                 if changes:  # worth knowing: GitHub's server, say, started without --read-only (#333)
                     text += " · " + tr("{n} of them can change things", n=changes)
                 names = {to_str(t.get("name")) for t in tools}

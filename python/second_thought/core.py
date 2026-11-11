@@ -210,6 +210,12 @@ SAFETY = {
                       "get_historic_flights_count", "get_historic_flights_positions_full",
                       "get_historic_flights_positions_light", "get_live_flights_count",
                       "get_live_flights_positions_full", "get_live_flights_positions_light"],
+    # The unofficial read-only Vaillant MCP server (#363): unofficialMCP4Vaillant v1 is read-only by design — status,
+    # devices, the energy report and diagnostics, each cached (status 60s, energy 5 min) so the myVAILLANT account
+    # behind it is polled gently. The API is unofficial and reverse-engineered, so it can change whenever Vaillant
+    # changes the app: a tool this list has never seen asks first, the safe way round like Kraken's (#309).
+    "mcp_vaillant_safe": ["vaillant_get_devices", "vaillant_get_diagnostics", "vaillant_get_energy_report",
+                          "vaillant_get_status"],
 }
 HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
