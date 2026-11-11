@@ -597,6 +597,14 @@
    "message0": "ѥрудиꙗ Solax",
    "tooltip": "Запись съ данымиѩми инвертора Solax, ѣко SolaxCloud послѣднѣѩ ихъ имѣ (обновлꙗѭтъсѧ кыжды ѡб пять минутъ): ac_power_w (еже нынѣ творитъ), yield_today_kwh и yield_total_kwh (солнечное произведение), feedin_power_w и feedin_energy_kwh (въ мрѣжѫ), import_energy_kwh (отъ мрѣжа), battery_soc_pct, status и upload_time. Токъмо читаетъ: ничесоже не мѣнꙗетъсѧ на инверторѣ. Требуетъ SOLAX_TOKEN_ID и SOLAX_SN въ second-thought.ini. На сеѩ страніцѣ дѣлаетъ сꙗ примѣръ инвертора."
   },
+  "rb_powerwall_now": {
+   "message0": "ѥрудиꙗ Powerwall",
+   "tooltip": "Запись съ даныѩми Tesla Powerwall: battery_soc_pct (его зарядъ), solar_power_w (еже нынѣ творитъ), battery_power_w (положьно есть зарѧжаетъ), grid_power_w (положьно есть ввозить), load_power_w (домъ), reserve_pct (запасъ иже держитъ), mode (self_consumption, backup, ...) и grid (съединенъ, или отъ мрѣжа отлѫченъ при погасѣнии). Токъмо читаетъ. Требуетъ POWERWALL_URL и POWERWALL_PASSWORD въ second-thought.ini. На сеѩ страніцѣ дѣлаетъ сꙗ примѣръ Powerwall."
+  },
+  "rb_powerwall_reserve": {
+   "message0": "положити запасъ Powerwall на %1 %",
+   "tooltip": "Възвышаетъ или низитъ запасъ: колико батарѣи домъ держитъ за погасѣнїе мрѣжа. Всегда въпрашаетъ тебе прѣжде, аще и никтоже инъ не въпрашаетъ; безъ человѣка иже речетъ «да», не течетъ. Требуетъ POWERWALL_URL и POWERWALL_PASSWORD въ second-thought.ini. На сеѩ страніцѣ ничесоже истиньно не мѣнꙗетъсѧ."
+  },
   "rb_mikrotik_ports": {
    "message0": "врата MikroTik",
    "tooltip": "Списокъ записей, єдина на всѧ врата MikroTik твоегѡ: port, running, speed (ꙗкоже 10Gbps), errors, drops, link_downs и comment. Погрѣшенїѧ и паденїѧ числѧтсѧ ѿ послѣднѧгѡ начала. Точїю чтетъ: ничтоже измѣнѧетсѧ. На сей страницѣ ꙋпотреблѧетъ преключатель ѡбразца."
@@ -814,6 +822,7 @@
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
   "Solax": "Solax",
+  "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1665,7 +1674,13 @@
   "Solax figures": "ѥрудиꙗ Solax",
   "Solax inverter": "инверторъ Solax",
   "from {time}": "отъ {time}",
-  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "читати даныѩ инвертора Solax из SolaxCloud: солнечное произведение, зарядъ батарѣи, ввозъ и вывозъ"
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "читати даныѩ инвертора Solax из SolaxCloud: солнечное произведение, зарядъ батарѣи, ввозъ и вывозъ",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "ѥрудиꙗ Powerwall",
+  "battery at {pct}%": "батерѣа на {pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "положити запасъ Powerwall на {n}%(нынѣ {old}%)",
+  "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "читати даныѩ Powerwall: зарядъ батарѣи, солнце, ввозъ и вывозъ мрѣжа, и запасъ иже держитъ",
+  "set your Powerwall's backup reserve (asking you each time)": "мѣнити запасъ Powerwall твоего (въпрашаетъ тебе кыждыжды)"
  },
  "examples": {
   "review": {
@@ -3309,7 +3324,17 @@
   "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud отрече знаку или номеру записи: {x}.",
   "Couldn't reach SolaxCloud at {url} ({x}).": "Не можно доспѣти SolaxCloud на {url} ({x}).",
   "reached SolaxCloud: {status}, figures from {time}": "доспѣхомъ SolaxCloud: {status}, даныѩ отъ {time}",
-  "Solax": "Solax"
+  "Solax": "Solax",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "ѥрудиꙗ Powerwall",
+  "battery at {pct}%": "батерѣа на {pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "положити запасъ Powerwall на {n}%(нынѣ {old}%)",
+  "Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).": "Powerwall требуетъ POWERWALL_URL и POWERWALL_PASSWORD {where_keys}: адресъ вратъ(како https://192.168.1.50)и тайна клиента(послѣднихъ пять знаменъ отъ QR печати, аще не измѣнилъ еси ю).",
+  "Powerwall: {why}.": "Powerwall: {why}.",
+  "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought токъмо читаетъ отъ Powerwall, тѣмьже не посылаетъ {what}.",
+  "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Врата Powerwall отрѣша тайнѫ POWERWALL_PASSWORD: провери тайнѫ клиента(послѣднихъ пять знаменъ отъ QR печати).",
+  "The Powerwall gateway's login gave no token.": "Входъ вратъ Powerwall не даде знака.",
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "батерѣа на {pct}%, запасъ {reserve}%, мрѣжа {grid}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Приложи толкъ",

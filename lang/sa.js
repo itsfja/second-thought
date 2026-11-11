@@ -157,6 +157,8 @@
 "rb_coinbase_order":{"message0":"Coinbase-आदेशं देहि: %3 इत्यस्य %2 %1","tooltip":"सत्यम् आपणादेशं ददाति, 'Coinbase-आदेशं पूर्वं पश्य' इव। प्रथमं पूर्वं पश्यति, ततः सदा त्वां पृच्छति, शुल्केन समग्रेण च सह, यदा अन्यत् किमपि न पृच्छति तदापि; आम् इति वक्तुं कोऽपि नास्ति चेत् न प्रवर्तते। Trade-अनुमत्या सह कुञ्चिकाम् अपेक्षते। अस्मिन् पृष्ठे किमपि न क्रीयते न विक्रीयते।"},
 "rb_coinbase_cancel":{"message0":"Coinbase-आदेशं %1 निवर्तय","tooltip":"तव मुक्तादेशेषु एकं तस्य id अनुसृत्य निवर्तयति ('Coinbase-मुक्तादेशाः' इत्यस्मात्)। सदा प्रथमं त्वां पृच्छति, कोऽपि नास्ति चेत् न प्रवर्तते।"},
 "rb_solax_now":{"message0":"Solax-सङ्ख्याः","tooltip":"Solax प्रतिपरिवर्तकस्य सङ्ख्यानाम् एकं लेख्यम्, याः SolaxCloud इत्येन अन्ततमाः आसन् (पञ्चभिः लघ्वभिः कालैः नवीक्रियन्ते): ac_power_w (इदानीं किं जनयति), yield_today_kwh yield_total_kwh च (सौरोत्पादनम्), feedin_power_w feedin_energy_kwh च (जाले), import_energy_kwh (जालात्), battery_soc_pct, status upload_time च। केवलं पठति: प्रतिपरिवर्तके किमपि न परिवर्तते। SOLAX_TOKEN_ID SOLAX_SN च second-thought.ini-इत्यत्र आवश्यके। अस्मिन् पृष्ठे निदर्शनप्रतिपरिवर्तकः उपयुज्यते।"},
+"rb_powerwall_now":{"message0":"Powerwall-सङ्ख्याः","tooltip":"Powerwall-इत्यस्य सङ्ख्यानाम् एकं लेख्यम्: battery_soc_pct (बिजापूर्णता), solar_power_w (इदानीं जनयति), battery_power_w (धनात्मकं तदा पूरयति), grid_power_w (धनात्मकं तदा आयाति), load_power_w (गृहम्), reserve_pct (रक्षिता बिजारक्षा), mode (self_consumption, backup, ...) च grid (संयुक्तम्, अथवा जालस्य मृत्यौ द्वीपवत्)। केवलं पठति। POWERWALL_URL POWERWALL_PASSWORD च second-thought.ini-इत्यत्र आवश्यके। अस्मिन् पृष्ठे निदर्शनं Powerwall उपयुज्यते।"},
+"rb_powerwall_reserve":{"message0":"Powerwall-बिजारक्षां %1 % कृत्वा स्थापय","tooltip":"बिजारक्षां वर्धयति ह्रस्वयति च: जालस्य मृत्यौ गृहं कियत् बिजं रक्षति। प्रत्येकस्मिन् समये त्वां प्रथमं पृच्छति, यद्यपि अन्यत् किमपि न पृच्छति; 'तथा' इति वक्तुं कश्चित् नास्ति चेत् न चलति। POWERWALL_URL POWERWALL_PASSWORD च second-thought.ini-इत्यत्र आवश्यके। अस्मिन् पृष्ठे वस्तुतः किमपि न परिवर्तते।"},
 "rb_mikrotik_ports":{"message0":"MikroTik-द्वाराणि","tooltip":"अभिलेखानां सूची, तव MikroTik-मार्गदर्शकस्य परिवर्तकस्य वा प्रत्येकस्य द्वारस्य एकः: port, running, speed (यथा 10Gbps), errors, drops, link_downs, comment च। दोषाः पाताः च अन्तिमात् आरम्भात् गण्यन्ते। केवलं पठति: परिवर्तके किमपि न परिवर्तते। अस्मिन् पृष्ठे उदाहरण-परिवर्तकं प्रयुङ्क्ते।"},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP-अंशाः","tooltip":"अभिलेखानां सूची, प्रत्येकस्य निवेशितस्य SFP-अंशस्य एकः: port, module, temperature (°C), rx_power, tx_power (dBm) च।"},
 "rb_mikrotik_health":{"message0":"MikroTik-स्वास्थ्यम्","tooltip":"मार्गदर्शकस्य स्वस्य विषये अभिलेखः: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), तस्य अन्ये संवेदकाः च।"},
@@ -225,6 +227,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1076,7 +1079,13 @@
 "Solax figures":"Solax-सङ्ख्याः",
 "Solax inverter":"Solax प्रतिपरिवर्तकः",
 "from {time}":"{time} तः",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud तः भवतः Solax प्रतिपरिवर्तकस्य सङ्ख्याः पठितुम्: सौरोत्पादनं, बिजापूरणं, आयातः निर्यातः च"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"SolaxCloud तः भवतः Solax प्रतिपरिवर्तकस्य सङ्ख्याः पठितुम्: सौरोत्पादनं, बिजापूरणं, आयातः निर्यातः च",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall-सङ्ख्याः",
+"battery at {pct}%":"बिजापूर्णता {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-इत्यस्य बिजारक्षां {n}% कृत्वा स्थापयितुम् (इदानीं {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"भवतः Powerwall-सङ्ख्याः पठितुम्: बिजापूर्णता, सौरिकी, जालस्य आयातः निर्यातः च, रक्षिता च बिजारक्षा",
+"set your Powerwall's backup reserve (asking you each time)":"भवतः Powerwall-इत्यस्य बिजारक्षां परिवर्तयितुम् (प्रत्येकस्मिन् समये त्वां पृच्छति)"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2088,7 +2097,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud टोकन् पञ्जीकरणसङ्ख्या वा अस्वीकृतवान्: {x}।",
 "Couldn't reach SolaxCloud at {url} ({x}).":"{url} इत्यत्र SolaxCloud अगम्यम् ({x})।",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud प्राप्तम्: {status}, {time} इत्यस्य सङ्ख्याः",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall-सङ्ख्याः",
+"battery at {pct}%":"बिजापूर्णता {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-इत्यस्य बिजारक्षां {n}% कृत्वा स्थापयितुम् (इदानीं {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall-इत्यस्मै POWERWALL_URL POWERWALL_PASSWORD च आवश्यकी {where_keys}: द्वारस्य स्थानम् (यथा https://192.168.1.50) ग्राहकस्य च गुह्यम् (QR-चिह्नस्य अन्तिमाः पञ्च अक्षराः, यदि त्वं न परिवर्तितवान्)।",
+"Powerwall: {why}.":"Powerwall: {why}।",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought केवलं Powerwall इत्यस्मात् पठति, अतः {what} न प्रेषयति।",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall-द्वारेण POWERWALL_PASSWORD अस्वीकृतम्: ग्राहकस्य गुह्यं पश्य (QR-चिह्नस्य अन्तिमाः पञ्च अक्षराः)।",
+"The Powerwall gateway's login gave no token.":"Powerwall-द्वारस्य प्रवेशेण टोकन् न दत्तम्।",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"बिजापूर्णता {pct}%, रक्षा {reserve}%, जालम् {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

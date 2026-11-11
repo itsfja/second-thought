@@ -157,6 +157,8 @@
 "rb_coinbase_order":{"message0":"הב פקודא דCoinbase: %1 %2 ד%3","tooltip":"יהיב פקודת שוקא קשיטא, כות 'חזי קדם פקודא דCoinbase'. קדם חזי לה, ובתר כן תדירא שאיל לך, עם אגרא וסכומא, אף כד מדעם אחרן לא שאיל; כד לית מן דאמר אין, לא רהיט. צריך מפתח עם רשות Trade. בדפא דנא מדעם לא אזדבן."},
 "rb_coinbase_cancel":{"message0":"בטל פקודא דCoinbase %1","tooltip":"מבטל חדא מן פקודיך פתיחן, בid דילה (מן 'פקודין פתיחן דCoinbase'). תדירא שאיל לך קדם, ולא רהיט כד לית אנש."},
 "rb_solax_now":{"message0":"נתבנין דיל Solax","tooltip":"רישומא עם נתבנין דאינוורטרא דילך, כדין SolaxCloud אחרינא איתון (מתחדשין כל חמש שעין): ac_power_w (מאן עביד כען), yield_today_kwh וyield_total_kwh (אסקופא דשמשא), feedin_power_w וfeedin_energy_kwh (לנטרא), import_energy_kwh (מן נטרא), battery_soc_pct, status וupload_time. לחוד קרי: מדם לא אשתני על אינוורטרא. צריך SOLAX_TOKEN_ID וSOLAX_SN בsecond-thought.ini. בדף הדין עביד באינוורטרא דדוגמא."},
+"rb_powerwall_now":{"message0":"נתבנין דיל Powerwall","tooltip":"רישומא עם נתבנין דיל Tesla Powerwall: battery_soc_pct (מליא דיליה), solar_power_w (מאן עביד כען), battery_power_w (חיובאי הי אתקן), grid_power_w (חיובאי הי אסקופא מן נטרא), load_power_w (ביתא), reserve_pct (רזרבתא דקאים), mode (self_consumption, backup, ...) וgrid (אחיד, או אי בנטרא בכבייתא). לחוד קרי. צריך POWERWALL_URL וPOWERWALL_PASSWORD בsecond-thought.ini. בדף הדין עביד בPowerwall דדוגמא."},
+"rb_powerwall_reserve":{"message0":"למניא ית רזרבתא דגיבוי דיל Powerwall ל %1 %","tooltip":"אסק או אחית ית רזרבתא: כמה מן בטריא ביתא קאים לכבייתא. שאל לך קדמית כל זמן, אף כד מדם אחרנא לא שאל, ובלא גברא דאמר יא לא רהט. צריך POWERWALL_URL וPOWERWALL_PASSWORD בsecond-thought.ini. בדף הדין מדם לא אשתני בקושטא."},
 "rb_mikrotik_ports":{"message0":"תרעי MikroTik","tooltip":"רשימת כתבין, חד לכל תרע בנתבא או במחלפא דילך MikroTik: port, running, speed (כות 10Gbps), errors, drops, link_downs וcomment. טעותא ונפלתא מתמנין מן שריותא בתרייתא. רק קרי: מדעם לא משתני במחלפא. בדפא דנא משמש מחלפא דדוגמא."},
 "rb_mikrotik_sfp":{"message0":"מודולי SFP דMikroTik","tooltip":"רשימת כתבין, חד לכל מודול SFP דמחבר: port, module, temperature (°C), rx_power וtx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"שלמא דMikroTik","tooltip":"כתבא על נתבא או מחלפא גופיה: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), וכל מרגשא אחרנא דאית ליה."},
@@ -225,6 +227,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1076,7 +1079,13 @@
 "Solax figures":"נתבנין דיל Solax",
 "Solax inverter":"אינוורטרא דיל Solax",
 "from {time}":"מן {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"למקרא נתבנין דאינוורטרא דילך מן SolaxCloud: אסקופא דשמשא, מליא דבטריא, אסקופא ואפקא"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"למקרא נתבנין דאינוורטרא דילך מן SolaxCloud: אסקופא דשמשא, מליא דבטריא, אסקופא ואפקא",
+"Powerwall":"Powerwall",
+"Powerwall figures":"נתבנין דיל Powerwall",
+"battery at {pct}%":"בטריא ב{pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"למניא ית רזרבתא דגיבוי דיל Powerwall ל{n}%(כען {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"למקרא נתבנין דPowerwall דילך: מליא דבטריא, שמשא, אסקופא ואפקא דנטרא, ורזרבתא דקאים",
+"set your Powerwall's backup reserve (asking you each time)":"לשנא ית רזרבתא דגיבוי דPowerwall דילך (שאל לך כל זמן)"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2088,7 +2097,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud ארחק ית ההוא טוקנא או מניא רישומא: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"לא אפשר למטי לSolaxCloud ב{url} ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"מטינא לSolaxCloud: {status}, נתבנין מן {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"נתבנין דיל Powerwall",
+"battery at {pct}%":"בטריא ב{pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"למניא ית רזרבתא דגיבוי דיל Powerwall ל{n}%(כען {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall בעי POWERWALL_URL וPOWERWALL_PASSWORD {where_keys}: אתרן דתרעא (איך https://192.168.1.50) ורז דגברא (חמש אחרוניא דילה דעל תויתא דQR, אלא אם שניתיה).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought לחוד קרי מן Powerwall, ובכן לא שדר {what}.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"תרעא דPowerwall ארחק ית POWERWALL_PASSWORD: בדוק ית רז דגברא (חמש אחרוניא דילה דעל תויתא דQR).",
+"The Powerwall gateway's login gave no token.":"עלתא לתרעא דPowerwall לא יהבה טוקנא.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"בטריא ב{pct}%, רזרבתא {reserve}%, נטרא {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

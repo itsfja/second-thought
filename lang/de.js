@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"Coinbase-Order aufgeben: %1 %2 von %3","tooltip":"Gibt eine echte Market-Order auf, wie „Coinbase-Order prüfen“. Er prüft sie zuerst und fragt Sie dann immer, mit Gebühr und Summe, auch wenn sonst nichts fragt; ist niemand da, der Ja sagt, läuft er nicht. Braucht einen Schlüssel mit der Berechtigung Trade. Auf dieser Seite wird nichts gekauft oder verkauft."},
 "rb_coinbase_cancel":{"message0":"Coinbase-Order %1 stornieren","tooltip":"Storniert eine Ihrer offenen Orders anhand ihrer ID (aus „offene Coinbase-Orders“). Er fragt Sie immer zuerst und läuft nicht, wenn niemand da ist."},
 "rb_solax_now":{"message0":"Solax-Werte","tooltip":"Ein Datensatz mit den Werten deines Solax-Wechselrichters, wie SolaxCloud sie zuletzt hatte (aktualisiert etwa alle fünf Minuten): ac_power_w (was er gerade erzeugt), yield_today_kwh und yield_total_kwh (erzeugte Solarenergie), feedin_power_w und feedin_energy_kwh (ins Netz), import_energy_kwh (aus dem Netz), battery_soc_pct, status und upload_time. Es liest nur: am Wechselrichter ändert sich nichts. Braucht SOLAX_TOKEN_ID und SOLAX_SN in second-thought.ini. Auf dieser Seite wird ein Beispiel-Wechselrichter verwendet."},
+"rb_powerwall_now":{"message0":"Powerwall-Werte","tooltip":"Ein Datensatz mit den Werten deiner Tesla Powerwall: battery_soc_pct (ihre Ladung), solar_power_w (erzeugt gerade), battery_power_w (positiv heißt laden), grid_power_w (positiv heißt beziehen), load_power_w (das Haus), reserve_pct (die gehaltene Backup-Reserve), mode (self_consumption, backup, ...) und grid (verbunden, oder Inselbetrieb bei einem Stromausfall). Es liest nur. Braucht POWERWALL_URL und POWERWALL_PASSWORD in second-thought.ini. Auf dieser Seite wird eine Beispiel-Powerwall verwendet."},
+"rb_powerwall_reserve":{"message0":"Backup-Reserve der Powerwall auf %1 % setzen","tooltip":"Erhöht oder senkt die Backup-Reserve: wie viel der Batterie das Haus für einen Stromausfall zurückhält. Es fragt dich immer zuerst, auch wenn nichts sonst fragt, und mit niemandem, der Ja sagen kann, läuft es nicht. Braucht POWERWALL_URL und POWERWALL_PASSWORD in second-thought.ini. Auf dieser Seite ändert sich nichts wirklich."},
 "rb_mikrotik_ports":{"message0":"MikroTik-Ports","tooltip":"Eine Liste von Datensätzen, einer für jeden Port Ihres MikroTik-Routers oder -Switches: port, running, speed (etwa 10Gbps), errors, drops, link_downs und comment. Fehler und Verwürfe zählen ab dem letzten Start. Er liest nur: Am Switch ändert sich nichts. Auf dieser Seite nutzt er einen Beispiel-Switch."},
 "rb_mikrotik_sfp":{"message0":"MikroTik-SFP-Module","tooltip":"Eine Liste von Datensätzen, einer für jedes eingesteckte SFP-Modul: port, module, temperature (°C), rx_power und tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik-Zustand","tooltip":"Ein Datensatz über den Router oder Switch selbst: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C) und alle weiteren Sensoren, die er hat."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"Solax-Werte",
 "Solax inverter":"Solax-Wechselrichter",
 "from {time}":"von {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"die Werte deines Solax-Wechselrichters aus SolaxCloud lesen: Solarerzeugung, Batterieladung, Bezug und Einspeisung"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"die Werte deines Solax-Wechselrichters aus SolaxCloud lesen: Solarerzeugung, Batterieladung, Bezug und Einspeisung",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall-Werte",
+"battery at {pct}%":"Batterie bei {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"die Backup-Reserve der Powerwall auf {n}% setzen (jetzt {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"die Werte deiner Powerwall lesen: Batterieladung, Solar, Netzbezug und -einspeisung, und die gehaltene Reserve",
+"set your Powerwall's backup reserve (asking you each time)":"die Backup-Reserve deiner Powerwall setzen (fragt dich jedes Mal)"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -2087,6 +2096,16 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud hat das Token oder die Registrierungsnummer abgelehnt: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud unter {url} ist nicht erreichbar ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud erreicht: {status}, Werte von {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall-Werte",
+"battery at {pct}%":"Batterie bei {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"die Backup-Reserve der Powerwall auf {n}% setzen (jetzt {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall braucht POWERWALL_URL und POWERWALL_PASSWORD {where_keys}: die Adresse des Gateways (wie https://192.168.1.50) und das Kundenpasswort (die letzten fünf Zeichen des vom QR-Aufkleber, außer du hast es geändert).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought liest nur von der Powerwall, also sendet es {what} nicht.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Das Powerwall-Gateway hat POWERWALL_PASSWORD abgelehnt: prüfe das Kundenpasswort (die letzten fünf Zeichen des vom QR-Aufkleber).",
+"The Powerwall gateway's login gave no token.":"Das Login des Powerwall-Gateways hat kein Token gegeben.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"Batterie bei {pct}%, Reserve {reserve}%, Netz {grid}"
 }
 };

@@ -11,7 +11,7 @@
   function connNote(what){
     run.connNoted = run.connNoted || {};
     if (run.connNoted[what]) return; run.connNoted[what] = true;
-    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter" }[what]) : what;
+    const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter", Powerwall:"Powerwall" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter", Powerwall:"Powerwall" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
   function sampleFeedItems(url, limit){
@@ -571,6 +571,28 @@
       battery_soc_pct: soc === -1 ? "" : soc, status:solaxStatus(r.inverterStatus), upload_time:str(r.uploadTime || "") };
     addStep("Solax figures", { mono:true, text:Object.entries(out).filter(([, v]) => v !== "").map(([k, v]) => k + ": " + v).join("\n") }).done(tr("from {time}", { time:out.upload_time || "?" }), "ok");
     return out;
+  }
+  /* Powerwall on the page (#362): a sample Powerwall. Exported Python reads your own through the gateway's local
+     API, and the reserve change always asks. Matches the runtime's powerwall_ methods and tests/fake_powerwall.py. */
+  const pwSample = () => { connNote("Powerwall"); return CONN.powerwall || {}; };
+  const pwNum = v => { const m = /-?\d+(?:\.\d+)?/.exec(str(v)); return m ? Number(m[0]) : ""; };
+  const pwGrid = { SystemGridConnected:"connected", SystemConnectedToGrid:"connected", SystemIslandedActive:"islanded (power cut)", SystemTransitionToIsland:"transitioning" };
+  function powerwallNow(){
+    const s = pwSample(), meter = name => pwNum(((s.meters_aggregates || {})[name] || {}).instant_power);
+    const out = { battery_soc_pct:pwNum((s.system_status_soe || {}).percentage), solar_power_w:meter("solar"),
+      battery_power_w:meter("battery"), grid_power_w:meter("site"), load_power_w:meter("load"),
+      reserve_pct:pwNum((s.operation || {}).backup_reserve_percent), mode:str((s.operation || {}).real_mode || ""),
+      grid:pwGrid[str((s.system_status_grid_status || {}).grid_status)] || str((s.system_status_grid_status || {}).grid_status) };
+    addStep("Powerwall figures", { mono:true, text:Object.entries(out).filter(([, v]) => v !== "").map(([k, v]) => k + ": " + v).join("\n") }).done(tr("battery at {pct}%", { pct:out.battery_soc_pct }), "ok");
+    return out;
+  }
+  async function powerwallReserve(percent){
+    const n = Math.max(0, Math.min(100, Math.round(num(percent))));
+    const old = pwNum(((pwSample().operation) || {}).backup_reserve_percent);
+    const what = tr("set the Powerwall backup reserve to {n}% (now {old}%)", { n, old });
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Powerwall", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
   }
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
   function pagePart(text, words){

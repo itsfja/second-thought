@@ -146,6 +146,7 @@
     ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     { kind:"category", name:"Solax", categorystyle:"solax", contents:[ B("rb_solax_now") ]},
+    { kind:"category", name:"Powerwall", categorystyle:"powerwall", contents:[ B("rb_powerwall_now"), B("rb_powerwall_reserve", { N:N(100) }) ]},
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
     ]},

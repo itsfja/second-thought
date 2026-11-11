@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"δώσε εντολή Coinbase: %1 %2 του %3","tooltip":"Δίνει μια πραγματική εντολή στην αγορά, όπως η «προεπισκόπηση εντολής Coinbase». Πρώτα κάνει προεπισκόπηση, μετά σας ρωτά πάντα, με την προμήθεια και το σύνολο, ακόμη κι όταν τίποτε άλλο δεν ρωτά· χωρίς κανέναν να πει ναι, δεν εκτελείται. Χρειάζεται κλειδί με το δικαίωμα Trade. Σε αυτή τη σελίδα τίποτα δεν αγοράζεται ούτε πουλιέται."},
 "rb_coinbase_cancel":{"message0":"ακύρωσε την εντολή Coinbase %1","tooltip":"Ακυρώνει μία από τις ανοιχτές εντολές σας, με το id της (από τις «ανοιχτές εντολές Coinbase»). Σας ρωτά πάντα πρώτα, και δεν εκτελείται χωρίς κανέναν."},
 "rb_solax_now":{"message0":"στοιχεία Solax","tooltip":"Μια καταγραφή με τα στοιχεία του μετατροπέα Solax σας, όπως τα είχε τελευταία το SolaxCloud (ενημερώνονται περίπου κάθε πέντε λεπτά): ac_power_w (τι παράγει τώρα), yield_today_kwh και yield_total_kwh (ηλιακή παραγωγή), feedin_power_w και feedin_energy_kwh (προς το δίκτυο), import_energy_kwh (από το δίκτυο), battery_soc_pct, status και upload_time. Μόνο διαβάζει: τίποτα δεν αλλάζει στον μετατροπέα. Χρειάζεται SOLAX_TOKEN_ID και SOLAX_SN στο second-thought.ini. Σε αυτή τη σελίδα χρησιμοποιείται δείγμα μετατροπέα."},
+"rb_powerwall_now":{"message0":"στοιχεία Powerwall","tooltip":"Μια καταγραφή με τα στοιχεία του Tesla Powerwall σας: battery_soc_pct (η φόρτιση), solar_power_w (παράγει τώρα), battery_power_w (θετικό σημαίνει φορτίζει), grid_power_w (θετικό σημαίνει εισάγει), load_power_w (το σπίτι), reserve_pct (η εφεδρική reserve που κρατά), mode (self_consumption, backup, ...) και grid (συνδεδεμένο, ή σε νησίδα κατά τη διακοπή). Μόνο διαβάζει. Χρειάζεται POWERWALL_URL και POWERWALL_PASSWORD στο second-thought.ini. Σε αυτή τη σελίδα χρησιμοποιείται δείγμα Powerwall."},
+"rb_powerwall_reserve":{"message0":"βάλε την εφεδρική reserve του Powerwall σε %1 %","tooltip":"Ανεβάζει ή κατεβάζει την εφεδρική reserve: πόση μπαταρία κρατά το σπίτι για διακοπή. Ρωτά πάντα πρώτα, ακόμα κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κάποιον να πει ναι δεν εκτελείται. Χρειάζεται POWERWALL_URL και POWERWALL_PASSWORD στο second-thought.ini. Σε αυτή τη σελίδα τίποτα δεν αλλάζει πραγματικά."},
 "rb_mikrotik_ports":{"message0":"θύρες MikroTik","tooltip":"Μια λίστα εγγραφών, μία για κάθε θύρα του δρομολογητή ή μεταγωγέα σας MikroTik: port, running, speed (όπως 10Gbps), errors, drops, link_downs και comment. Σφάλματα και απορρίψεις μετρούν από την τελευταία εκκίνηση. Μόνο διαβάζει: τίποτα δεν αλλάζει στον μεταγωγέα. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα μεταγωγέα."},
 "rb_mikrotik_sfp":{"message0":"μονάδες SFP του MikroTik","tooltip":"Μια λίστα εγγραφών, μία για κάθε συνδεδεμένη μονάδα SFP: port, module, temperature (°C), rx_power και tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"κατάσταση MikroTik","tooltip":"Μια εγγραφή για τον ίδιο τον δρομολογητή ή μεταγωγέα: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), και κάθε άλλος αισθητήρας που έχει."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"στοιχεία Solax",
 "Solax inverter":"μετατροπέας Solax",
 "from {time}":"από {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"να διαβάζει τα στοιχεία του μετατροπέα Solax σας από το SolaxCloud: ηλιακή παραγωγή, φόρτιση μπαταρίας, εισαγωγή και εξαγωγή"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"να διαβάζει τα στοιχεία του μετατροπέα Solax σας από το SolaxCloud: ηλιακή παραγωγή, φόρτιση μπαταρίας, εισαγωγή και εξαγωγή",
+"Powerwall":"Powerwall",
+"Powerwall figures":"στοιχεία Powerwall",
+"battery at {pct}%":"μπαταρία στο {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"να βάλει την εφεδρικήreserve του Powerwall σε {n}% (τώρα {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"να διαβάζει τα στοιχεία του Powerwall σας: φόρτιση μπαταρίας, ηλιακά, εισαγωγή και εξαγωγή δικτύου, και η reserve που κρατά",
+"set your Powerwall's backup reserve (asking you each time)":"να αλλάζει την εφεδρική reserve του Powerwall σας (ρωτώντας σας κάθε φορά)"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2087,6 +2096,16 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"Το SolaxCloud απέρριψε το token ή τον αριθμό μητρώου: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"Το SolaxCloud δεν είναι προσβάσιμο στο {url} ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"Το SolaxCloud επιτεύχθηκε: {status}, στοιχεία από {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"στοιχεία Powerwall",
+"battery at {pct}%":"μπαταρία στο {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"να βάλει την εφεδρικήreserve του Powerwall σε {n}% (τώρα {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Το Powerwall χρειάζεται POWERWALL_URL και POWERWALL_PASSWORD {where_keys}: η διεύθυνση του gateway (όπως https://192.168.1.50) και ο κωδικός πελάτη (οι πέντε τελευταίοι χαρακτήρες του αυτοκόλλητου QR, εκτός αν τον αλλάξατε).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Το Second Thought μόνο διαβάζει από το Powerwall, οπότε δεν στέλνει {what}.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Το gateway του Powerwall απέρριψε το POWERWALL_PASSWORD: ελέγξτε τον κωδικό πελάτη (οι πέντε τελευταίοι χαρακτήρες του αυτοκόλλητου QR).",
+"The Powerwall gateway's login gave no token.":"Η σύνδεση στο gateway του Powerwall δεν έδωσε token.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"μπαταρία στο {pct}%, reserve {reserve}%, δίκτυο {grid}"
 }
 };

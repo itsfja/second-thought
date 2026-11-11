@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"putte Coinbase ordre: %1 %2 of %3","tooltip":"Putteth a verray market ordre, as 'forsee Coinbase ordre'. It forseeth it first, thanne evere asketh thee, with the fee and the hool somme, ye, whan no thing elles asketh; with no man ther to seye ye, it renneth nat. Nedeth a keye with Trade leve. On this page no thing is boght ne sold."},
 "rb_coinbase_cancel":{"message0":"cancelle Coinbase ordre %1","tooltip":"Cancelleth oon of thyn open ordres, by his id (fro 'Coinbase open ordres'). It evere asketh thee first, and renneth nat with no man ther."},
 "rb_solax_now":{"message0":"Solax figures","tooltip":"A record of the figures of thin Solax invertour, as SolaxCloud last hadde hem (thei newen aboute ech fyve mynutis): ac_power_w (what it makith now), yield_today_kwh and yield_total_kwh (sonne-yeld), feedin_power_w and feedin_energy_kwh (to the net), import_energy_kwh (fro the net), battery_soc_pct, status and upload_time. It only redeth: nothing on the invertour chaungeth. It nedeth SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it useth a sample invertour."},
+"rb_powerwall_now":{"message0":"Powerwall figures","tooltip":"A record of the figures of thin Tesla Powerwall: battery_soc_pct (his charge), solar_power_w (what it makith now), battery_power_w (posityf is chargynge), grid_power_w (posityf is takynge fro the net), load_power_w (the hous), reserve_pct (the bak-reserve it kepeth), mode (self_consumption, backup, ...) and grid (ioyned, or yn an yle in a deth of myght). It only redeth. It nedeth POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page it useth a sample Powerwall."},
+"rb_powerwall_reserve":{"message0":"sette the Powerwall his bak-reserve to %1 %","tooltip":"Rereth or loweth the bak-reserve: how myche of the baterie the hous kepeth for a deth of myght. It asketh thee first alwey, yea whan noght elles asketh, and without a man to sayn ye it renneth nat. It nedeth POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page nothing chaungeth in sooth."},
 "rb_mikrotik_ports":{"message0":"MikroTik portes","tooltip":"A list of recordes, oon for every porte of thy MikroTik routere or switche: port, running, speed (as 10Gbps), errors, drops, link_downs and comment. Errours and droppes ben told fro his laste bigynnynge. It oonly redeth: no thing on the switche chaungeth. On this page it useth an ensample switche."},
 "rb_mikrotik_sfp":{"message0":"MikroTik SFP modules","tooltip":"A list of recordes, oon for every SFP module yput in: port, module, temperature (°C), rx_power and tx_power (dBm)."},
 "rb_mikrotik_health":{"message0":"MikroTik hele","tooltip":"A recorde of the routere or switche hymself: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and every other sensour that he hath."},
@@ -224,6 +226,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1075,7 +1078,13 @@
 "Solax figures":"Solax figures",
 "Solax inverter":"Solax invertour",
 "from {time}":"fro {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"rede the figures of thin Solax invertour fro SolaxCloud: sonne-yeld, baterie charge, inbringe and outbringe"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"rede the figures of thin Solax invertour fro SolaxCloud: sonne-yeld, baterie charge, inbringe and outbringe",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall figures",
+"battery at {pct}%":"baterie at {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"sette the Powerwall his bak-reserve to {n}% (now {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"rede the figures of thin Powerwall: baterie charge, sonne, net in and out, and the reserve it kepeth",
+"set your Powerwall's backup reserve (asking you each time)":"chaunge the bak-reserve of thin Powerwall (asketh thee ech tyme)"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2087,7 +2096,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud refusede the token or the Registra-cypher: {x}.",
 "Couldn't reach SolaxCloud at {url} ({x}).":"SolaxCloud at {url} may nat ben yreched ({x}).",
 "reached SolaxCloud: {status}, figures from {time}":"SolaxCloud yreched: {status}, figures fro {time}",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall figures",
+"battery at {pct}%":"baterie at {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"sette the Powerwall his bak-reserve to {n}% (now {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall behoveth POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gate-wayes adres (as https://192.168.1.50) and the customer his passworde (the last fyve letters of that on the QR label, but if thou chaunged it).",
+"Powerwall: {why}.":"Powerwall: {why}.",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought only redeth fro the Powerwall, so it sendeth nat {what}.",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"The Powerwall gate-way refusede POWERWALL_PASSWORD: bihold the customer his passworde (the last fyve letters of that on the QR label).",
+"The Powerwall gateway's login gave no token.":"The Powerwall his logyn yaf no token.",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"baterie at {pct}%, reserve {reserve}%, net {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

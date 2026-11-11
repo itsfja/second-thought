@@ -598,6 +598,14 @@
    "message0": "Solax data",
    "tooltip": "Melins mids Solax inwaitaris data, swe SolaxCloud siduh habaida (bi ƕarjōn fimf minuts niwjada): ac_power_w (ƕat nu waurkeiþ), yield_today_kkh jah yield_total_kkh (sunnons waurstwa), feedin_power_w jah feedin_energy_kkh (du netwau), import_energy_khh (us netwau), battery_soc_pct, status jah upload_time. ainis melis þisleiþ: in inwaitara naihwa þiþ wairþiþ. SOLAX_TOKEN_ID jah SOLAX_SN in second-thought.ini þarfu. In þizai seidai inwaitara leik þiþ."
   },
+  "rb_powerwall_now": {
+   "message0": "Powerwall data",
+   "tooltip": "Melins mids Tesla Powerwall datas: battery_soc_pct (is fulli), solar_power_w (ƕat nu waurkeiþ), battery_power_w (þata þiþ is hlahjan), grid_power_w (þata þiþ is niman), load_power_w (gards), reserve_pct (balaþwaddjo þei habaiþ), mode (self_consumption, backup, ...) jah grid (gabanþan, aiþþau ana auhumai in riqizis). ainis melis þisleiþ. POWERWALL_URL jah POWERWALL_PASSWORD in second-thought.ini þarfu. In þizai seidai lein Powerwall þiþ."
+  },
+  "rb_powerwall_reserve": {
+   "message0": "Powerwall balaþwaddju du %1 % satjan",
+   "tooltip": "Balaþwaddjo hauheiþ aiþþaupairk neiþei: ƕan fela battarijos gards habaiþ in riqizis. Þuk fraihnar ƕarjazuh mel, þan annþar ni fraihniþ; in þize niƕa þatei 'ja' qiþaiþ, ni rinneiþ. POWERWALL_URL jah POWERWALL_PASSWORD in second-thought.ini þarfu. In þizai seidai naihwa ainis melis þiþ wairþiþ."
+  },
   "rb_mikrotik_ports": {
    "message0": "𐌳𐌰𐌿𐍂𐍉𐌽𐍃 MikroTik",
    "tooltip": "𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌳𐌰𐌿𐍂𐌰𐌹 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹𐍃 MikroTik 𐌸𐌴𐌹𐌽𐌰𐌹𐌶𐍉𐍃: port, running, speed (𐍃𐍅𐌴 10Gbps), errors, drops, link_downs 𐌾𐌰𐌷 comment. 𐌸𐌰𐍄𐌰𐌹𐌽𐌴𐌹 𐌿𐍃𐍃𐌹𐌲𐌲𐍅𐌹𐌸: 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌳𐌰. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌱𐍂𐌿𐌺𐌴𐌹𐌸 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹𐌽𐌰𐌹 𐍆𐍂𐌹𐍃𐌰𐌷𐍄𐌰𐌹𐍃."
@@ -815,6 +823,7 @@
   "Coinbase": "Coinbase",
   "MikroTik": "MikroTik",
   "Solax": "Solax",
+  "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker"
@@ -1666,7 +1675,13 @@
   "Solax figures": "Solax 𐌳𐌰𐍄𐌰",
   "Solax inverter": "Solax 𐌹𐌽𐍅𐌰𐌹𐍄𐌰𐍂𐌰",
   "from {time}": "𐍆𐍂𐌰𐌼 {time}",
-  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "Solax 𐌹𐌽𐍅𐌰𐌹𐍄𐌰𐍂𐌹𐍃 𐌳𐌰𐍄𐌰𐍃 𐌿𐍃 SolaxCloud 𐌱𐍂𐌿𐌺𐌰𐌽: 𐍃𐌿𐌽𐌾𐍉𐌽𐍃 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌾𐌰𐌽𐍃, 𐌱𐌰𐍄𐍄𐌰𐍂𐌹𐌾𐍉𐍃 𐍆𐌿𐌻𐌻𐌹, 𐌹𐌽𐍆𐌰𐍂𐌴𐌹𐌽 𐌾𐌰𐌷 𐌿𐍄𐍆𐌰𐍂𐌴𐌹𐌽"
+  "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export": "Solax 𐌹𐌽𐍅𐌰𐌹𐍄𐌰𐍂𐌹𐍃 𐌳𐌰𐍄𐌰𐍃 𐌿𐍃 SolaxCloud 𐌱𐍂𐌿𐌺𐌰𐌽: 𐍃𐌿𐌽𐌾𐍉𐌽𐍃 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌾𐌰𐌽𐍃, 𐌱𐌰𐍄𐍄𐌰𐍂𐌹𐌾𐍉𐍃 𐍆𐌿𐌻𐌻𐌹, 𐌹𐌽𐍆𐌰𐍂𐌴𐌹𐌽 𐌾𐌰𐌷 𐌿𐍄𐍆𐌰𐍂𐌴𐌹𐌽",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "Powerwall 𐌳𐌰𐍄𐌰",
+  "battery at {pct}%": "𐌱𐌰𐍄𐍄𐌰𐍂𐌹𐌾𐍉 𐌰𐌽𐌰 {pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "Powerwall 𐌱𐌰𐌻𐌰𐌸𐍅𐌰𐌳𐌳𐌾𐌿 𐌳𐌿 {n}% 𐍃𐌰𐍄𐌾𐌰𐌽 (𐌽𐌿 {old}%)",
+  "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "Powerwall 𐌳𐌰𐍄𐌰𐍃 𐌱𐍂𐌿𐌺𐌰𐌽: 𐌱𐌰𐍄𐍄𐌰𐍂𐌹𐌾𐍉𐍃 𐍆𐌿𐌻𐌻𐌹, 𐍃𐌿𐌽𐌾𐍉𐌽𐍃, 𐌹𐌽𐍆𐌰𐍂𐌴𐌹𐌽 𐌾𐌰𐌷 𐌿𐍄𐍆𐌰𐍂𐌴𐌹𐌽, 𐌱𐌰𐌻𐌰𐌸𐍅𐌰𐌳𐌳𐌾ō 𐌸𐌴𐌹 𐌷𐌰𐌱𐌰𐌹𐌸",
+  "set your Powerwall's backup reserve (asking you each time)": "Powerwall 𐌱𐌰𐌻𐌰𐌸𐍅𐌰𐌳𐌳𐌾𐌰𐌽 𐌼𐌰𐌹𐌳𐌾𐌰𐌽 (𐌸𐌿𐌺 𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽 𐍈𐌰𐍂𐌾𐌰𐌶𐌿𐌷 𐌼𐌴𐌻)"
  },
  "examples": {
   "review": {
@@ -3310,7 +3325,17 @@
   "SolaxCloud refused the token or the Registration No.: {x}.": "SolaxCloud þo teiken aiþþau þo registras numin afwarp: {x}.",
   "Couldn't reach SolaxCloud at {url} ({x}).": "SolaxCloud at {url} ni atneiþ ({x}).",
   "reached SolaxCloud: {status}, figures from {time}": "SolaxCloud atneiþ: {status}, data fram {time}",
-  "Solax": "Solax"
+  "Solax": "Solax",
+  "Powerwall": "Powerwall",
+  "Powerwall figures": "Powerwall data",
+  "battery at {pct}%": "battarijo ana {pct}%",
+  "set the Powerwall backup reserve to {n}% (now {old}%)": "Powerwall balaþwaddju du {n}% satjan (nu {old}%)",
+  "Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).": "Powerwall þarfu POWERWALL_URL jah POWERWALL_PASSWORD {where_keys}: þizos dauros þata þing (swe https://192.168.1.50) jah þo kundis waurd (þos speditans fimf bokos þizos af QR melin, nih þu þo maidides).",
+  "Powerwall: {why}.": "Powerwall: {why}.",
+  "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought ainis melis Powerwall brukeiþ, þan {what} ni sandeiþ.",
+  "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Powerwall daur þo kundis waurd afwarp: sai þo kundis waurd (þos speditans fimf bokos þizos af QR melin).",
+  "The Powerwall gateway's login gave no token.": "Powerwall dauris inngangs teiken ni gaf.",
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "battarijo ana {pct}%, balaþwaddjo {reserve}%, netwau {grid}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

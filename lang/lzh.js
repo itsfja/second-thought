@@ -156,6 +156,8 @@
 "rb_coinbase_order":{"message0":"下 Coinbase 之單：%1 %3 之 %2","tooltip":"下真市價之單，同「預觀 Coinbase 之單」。先預觀之，然後必問汝，示其費與總，雖他無所問；無人在以曰可，則不行。須有 Trade 之權之鑰。於此頁無所買賣。"},
 "rb_coinbase_cancel":{"message0":"撤 Coinbase 之單 %1","tooltip":"以 id 撤汝一未成之單（取諸「Coinbase 未成之單」）。必先問汝，無人則不行。"},
 "rb_solax_now":{"message0":"Solax 之數","tooltip":"一錄,載 Solax 變流器之數,如 SolaxCloud 最近所有(約五分一更):ac_power_w(今所產)、yield_today_kwh 與 yield_total_kwh(日能所產)、feedin_power_w 與 feedin_energy_kwh(入於網)、import_energy_kwh(取於網)、battery_soc_pct、status、upload_time。惟讀:變流器無所變。須置 SOLAX_TOKEN_ID 與 SOLAX_SN 於 second-thought.ini。此頁用示例之變流器。"},
+"rb_powerwall_now":{"message0":"Powerwall 之數","tooltip":"一錄,載 Tesla Powerwall 之數:battery_soc_pct(其蓄)、solar_power_w(今所產)、battery_power_w(正者充之)、grid_power_w(正者取於網)、load_power_w(其家)、reserve_pct(所存之備用)、mode(self_consumption、backup 等)、grid(連於網,或絕於停電)。惟讀。須置 POWERWALL_URL 與 POWERWALL_PASSWORD 於 second-thought.ini。此頁用示例之 Powerwall。"},
+"rb_powerwall_reserve":{"message0":"以 Powerwall 之備用存電為 %1 %","tooltip":"升降備用存電:停電之時,其家留蓄電幾何。必先問於爾,雖他無問者亦然;無人曰可,則不行。須置 POWERWALL_URL 與 POWERWALL_PASSWORD 於 second-thought.ini。此頁無所真改。"},
 "rb_mikrotik_ports":{"message0":"MikroTik 之口","tooltip":"簿之列，汝 MikroTik 路由或交換器每口一簿：port、running、speed（若 10Gbps）、errors、drops、link_downs、comment。誤與棄自末啟計之。唯讀：交換器無所變。於此頁用樣器。"},
 "rb_mikrotik_sfp":{"message0":"MikroTik 之 SFP 模","tooltip":"簿之列，每插之 SFP 模一簿：port、module、temperature（°C）、rx_power、tx_power（dBm）。"},
 "rb_mikrotik_health":{"message0":"MikroTik 之狀","tooltip":"器之自簿：board、version、uptime、cpu_load（%）、free_memory（MB）、temperature（°C），及其他所有之感。"},
@@ -223,6 +225,7 @@
 "Coinbase":"Coinbase",
 "MikroTik":"MikroTik",
 "Solax":"Solax",
+"Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker"
@@ -1074,7 +1077,13 @@
 "Solax figures":"Solax 之數",
 "Solax inverter":"Solax 變流器",
 "from {time}":"自 {time}",
-"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"自 SolaxCloud 讀 Solax 變流器之數:日能之產、蓄電之量、入與出"
+"read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export":"自 SolaxCloud 讀 Solax 變流器之數:日能之產、蓄電之量、入與出",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall 之數",
+"battery at {pct}%":"蓄電 {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"以 Powerwall 之備用存電為 {n}%(今 {old}%)",
+"read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"讀 Powerwall 之數:蓄電、日能、網之入出,及所存之備用",
+"set your Powerwall's backup reserve (asking you each time)":"改 Powerwall 之備用存電(每問於爾)"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2086,7 +2095,17 @@
 "SolaxCloud refused the token or the Registration No.: {x}.":"SolaxCloud 卻其憑或註冊號:{x}。",
 "Couldn't reach SolaxCloud at {url} ({x}).":"不能達 SolaxCloud 於 {url}({x})。",
 "reached SolaxCloud: {status}, figures from {time}":"已達 SolaxCloud:{status},{time} 之數",
-"Solax":"Solax"
+"Solax":"Solax",
+"Powerwall":"Powerwall",
+"Powerwall figures":"Powerwall 之數",
+"battery at {pct}%":"蓄電 {pct}%",
+"set the Powerwall backup reserve to {n}% (now {old}%)":"以 Powerwall 之備用存電為 {n}%(今 {old}%)",
+"Powerwall needs POWERWALL_URL and POWERWALL_PASSWORD {where_keys}: the gateway's address (like https://192.168.1.50) and the customer password (the last five characters of the one on its QR sticker, unless you changed it).":"Powerwall 需 POWERWALL_URL 與 POWERWALL_PASSWORD {where_keys}:關口之址(如 https://192.168.1.50)與客戶之祕(QR 籤之末五字,除非爾改之)。",
+"Powerwall: {why}.":"Powerwall:{why}。",
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought 惟讀於 Powerwall,故不發 {what}。",
+"The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall 關口卻其祕:查客戶之祕(QR 籤之末五字)。",
+"The Powerwall gateway's login gave no token.":"Powerwall 關口之入未予憑。",
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"蓄電 {pct}%,備用 {reserve}%,網 {grid}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",
