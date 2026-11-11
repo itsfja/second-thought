@@ -2105,7 +2105,13 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought токъмо читаетъ отъ Powerwall, тѣмьже не посылаетъ {what}.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Врата Powerwall отрѣша тайнѫ POWERWALL_PASSWORD: провери тайнѫ клиента(послѣднихъ пять знаменъ отъ QR печати).",
 "The Powerwall gateway's login gave no token.":"Входъ вратъ Powerwall не даде знака.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"батерѣа на {pct}%, запасъ {reserve}%, мрѣжа {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"батерѣа на {pct}%, запасъ {reserve}%, мрѣжа {grid}",
+"Program":"Программа",
+"this file's own text couldn't be read, so its block file wasn't checked":"текстъ сего свитка прочести не можаше, тѣмже и свитокъ блоковъ его не испытанъ бысть",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"никакоже вгнѣзденъ свитокъ блоковъ, тѣмже листъ не можетъ сей чинъ паки внести (отъ древнѣйшаго листа изведенъ есть)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"вгнѣзденый въ сем чинѣ свитокъ блоковъ не можетъ быти прочтенъ, тѣмже листъ не можетъ его паки внести",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"вгнѣзденый въ сем чинѣ свитокъ блоковъ не соблюдаетъ образца ({problem}), тѣмже листъ едва ли можетъ его паки внести",
+"the block file inside this program matches the format, so the page can import it again":"свитокъ блоковъ въ сем чинѣ образецъ соблюдаетъ, тѣмже листъ можетъ его паки внести"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

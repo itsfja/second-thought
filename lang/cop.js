@@ -2106,7 +2106,13 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought ōn nsōpe mmoof Powerwall, nte {what} nu-nsōpe ebol.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Pēēte nte Powerwall ōn nsōpe ōn POWERWALL_PASSWORD: ntaisēsē paŋal2 nte ouōnōm (pente eiōpe nnteiōōpe nte QR).",
 "The Powerwall gateway's login gave no token.":"Pēēte nte Powerwall ouōn nsōpe tukna.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"ntalōtre nta {pct}%, nkak {reserve}%, ntaisēsē {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"ntalōtre nta {pct}%, nkak {reserve}%, ntaisēsē {grid}",
+"Program":"taksis",
+"this file's own text couldn't be read, so its block file wasn't checked":"mpoucine nōtf ōš mmeu mpeijōōme nōtf, auō peblokk mpeijōōme mpōštnau",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"mpeblokk mpeijōōme mpoou hn tselis, auō tselis ntmōtš ehoun nteitaksis nōtf ebol (ebol mntselis ntešōpe)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"peblokk mpeijōōme hn teitaksis nōtf mpoucine nōtf ōš, auō tselis ntmōtš ebol hōtf",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"peblokk mpeijōōme hn teitaksis nōtf mpmntršŋke ({problem}), auō tselis nšōpe ntmōtš ebol hōtf",
+"the block file inside this program matches the format, so the page can import it again":"peblokk mpeijōōme hn teitaksis nōtf mntršŋke, auō tselis mōtš ebol hōtf"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

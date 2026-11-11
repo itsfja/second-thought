@@ -2106,7 +2106,13 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Τὸ Second Thought μόνον ἐκ τοῦ Powerwall ἀναγιγνώσκει, οὐκ ἄρα {what} πέμπει.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Ὁ τοῦ Powerwall πυλὼν τὸ τεῖχος ἀπεσπάσατο: ἐπίσκεψαι τὸ τοῦ πελάτου τεῖχος (τὰ ἔσχατα πέντε γράμματα τοῦ ἐκ τοῦ σήματος QR).",
 "The Powerwall gateway's login gave no token.":"Ἡ εἴσοδος τοῦ πυλῶνος τεῖχος οὐκ ἔδωκεν.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"μπαταρία ἐπὶ {pct}%, ἀσφάλεια {reserve}%, βρόχιον {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"μπαταρία ἐπὶ {pct}%, ἀσφάλεια {reserve}%, βρόχιον {grid}",
+"Program":"Πρόγραμμα",
+"this file's own text couldn't be read, so its block file wasn't checked":"τὸ τοῦδε τοῦ βιβλίου γράμμα ἀναγνωθῆναι οὐκ ἐδύνατο, ὥστε τὸ τῶν πλίνθων βιβλίον αὐτοῦ οὐκ ἐξετάσθη",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"πλιθοβιβλίον οὐκ ἔνεστιν, ὥστε ἡ σελὶς τοῦτο τὸ πρόγραμμα πάλιν ἐσαγαγεῖν οὐ δύναται (ὑπὸ παλαιοτέρας σελιδὸς ἐξήχθη)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"τὸ ἐν τούτῳ τῷ προγράμματι ἐντεταμένον πλιθοβιβλίον ἀνάγνωστον οὐκ ἔστιν, ὥστε ἡ σελὶς αὐτὸ πάλιν ἐσαγαγεῖν οὐ δύναται",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"τὸ ἐντεταμένον ἐν τούτῳ τῷ προγράμματι πλιθοβιβλίον τὸν τύπον οὐ φυλάσσει ({problem}), ὥστε ἴσως ἡ σελὶς αὐτὸ πάλιν ἐσαγαγεῖν οὐ δυνήσεται",
+"the block file inside this program matches the format, so the page can import it again":"τὸ ἐν τούτῳ τῷ προγράμματι πλιθοβιβλίον τὸν τύπον φυλάσσει, ὥστε ἡ σελὶς αὐτὸ πάλιν ἐσαγαγεῖν δύναται"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

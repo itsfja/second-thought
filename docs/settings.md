@@ -1,6 +1,6 @@
 # Settings and models
 
-[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · [Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · **Settings and models**
+[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · [Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · [Program format](program-format.md) · **Settings and models**
 
 *second-thought.ini and where settings come from, the run settings, and choosing models and backups.*
 

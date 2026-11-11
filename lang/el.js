@@ -2106,6 +2106,12 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Το Second Thought μόνο διαβάζει από το Powerwall, οπότε δεν στέλνει {what}.",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Το gateway του Powerwall απέρριψε το POWERWALL_PASSWORD: ελέγξτε τον κωδικό πελάτη (οι πέντε τελευταίοι χαρακτήρες του αυτοκόλλητου QR).",
 "The Powerwall gateway's login gave no token.":"Η σύνδεση στο gateway του Powerwall δεν έδωσε token.",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"μπαταρία στο {pct}%, reserve {reserve}%, δίκτυο {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"μπαταρία στο {pct}%, reserve {reserve}%, δίκτυο {grid}",
+"Program":"Πρόγραμμα",
+"this file's own text couldn't be read, so its block file wasn't checked":"το κείμενο αυτού του αρχείου δεν μπόρεσε να διαβαστεί, οπότε το αρχείο μπλοκ του δεν ελέγχθηκε",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"δεν υπάρχει ενσωματωμένο αρχείο μπλοκ, οπότε η σελίδα δεν μπορεί να εισαγάγει ξανά αυτό το πρόγραμμα (εξήχθη από μια παλιότερη σελίδα)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"το ενσωματωμένο αρχείο μπλοκ σε αυτό το πρόγραμμα δεν διαβάζεται, οπότε η σελίδα δεν μπορεί να το εισαγάγει ξανά",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"το ενσωματωμένο αρχείο μπλοκ σε αυτό το πρόγραμμα δεν τηρεί τη μορφή ({problem}), οπότε ίσως η σελίδα να μην μπορεί να το εισαγάγει ξανά",
+"the block file inside this program matches the format, so the page can import it again":"το αρχείο μπλοκ μέσα σε αυτό το πρόγραμμα τηρεί τη μορφή, οπότε η σελίδα μπορεί να το εισαγάγει ξανά"
 }
 };

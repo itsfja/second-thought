@@ -3344,6 +3344,12 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought lit seulement la Powerwall, donc il n'envoie pas {what}.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "La passerelle Powerwall a refusé POWERWALL_PASSWORD : vérifiez le mot de passe client (les cinq derniers caractères de celui de l'autocollant QR).",
   "The Powerwall gateway's login gave no token.": "La connexion à la passerelle Powerwall n'a donné aucun jeton.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "batterie à {pct} %, réserve {reserve} %, réseau {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "batterie à {pct} %, réserve {reserve} %, réseau {grid}",
+  "Program": "Programme",
+  "this file's own text couldn't be read, so its block file wasn't checked": "le texte de ce fichier n'a pas pu être lu, donc son fichier de blocs n'a pas été vérifié",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "aucun fichier de blocs embarqué, donc la page ne peut pas importer ce programme à nouveau (il a été exporté par une page plus ancienne)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "le fichier de blocs embarqué dans ce programme est illisible, donc la page ne peut pas l'importer à nouveau",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "le fichier de blocs embarqué dans ce programme ne respecte pas le format ({problem}), donc la page pourrait ne pas réussir à l'importer à nouveau",
+  "the block file inside this program matches the format, so the page can import it again": "le fichier de blocs à l'intérieur de ce programme respecte le format, donc la page peut l'importer à nouveau"
  }
 }

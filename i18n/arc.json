@@ -3345,7 +3345,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought לחוד קרי מן Powerwall, ובכן לא שדר {what}.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "תרעא דPowerwall ארחק ית POWERWALL_PASSWORD: בדוק ית רז דגברא (חמש אחרוניא דילה דעל תויתא דQR).",
   "The Powerwall gateway's login gave no token.": "עלתא לתרעא דPowerwall לא יהבה טוקנא.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "בטריא ב{pct}%, רזרבתא {reserve}%, נטרא {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "בטריא ב{pct}%, רזרבתא {reserve}%, נטרא {grid}",
+  "Program": "סדרא",
+  "this file's own text couldn't be read, so its block file wasn't checked": "לא מצינא לקריא כתבא דמגלתא הדא, אדין כתבא דלבנין לא אתבדק",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "לית כתבא דלבנין רשים, אדין דפא לא מציטא לסדרא הדין למעל (מן דפא עתיקתא אתפיק)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "כתבא דלבנין דרשים בסדרא הדין לא מציטא לקריא, אדין דפא לא מציטא למעל",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "כתבא דלבנין דרשים בסדרא הדין לא שמר תקנתא ({problem}), אדין דפא אולי לא מציטא למעל",
+  "the block file inside this program matches the format, so the page can import it again": "כתבא דלבנין דבסדרא הדין שמר תקנתא, אדין דפא מציטא למעל"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

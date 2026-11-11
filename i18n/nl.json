@@ -3344,6 +3344,12 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought leest alleen van de Powerwall, dus het stuurt {what} niet.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "De Powerwall-gateway weigerde POWERWALL_PASSWORD: controleer het klantwachtwoord (de laatste vijf tekens van die op de QR-sticker).",
   "The Powerwall gateway's login gave no token.": "De login van de Powerwall-gateway gaf geen token.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "batterij op {pct}%, reserve {reserve}%, net {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "batterij op {pct}%, reserve {reserve}%, net {grid}",
+  "Program": "Programma",
+  "this file's own text couldn't be read, so its block file wasn't checked": "de tekst van dit bestand kon niet gelezen worden, dus zijn blokkenbestand is niet gecontroleerd",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "geen blokkenbestand ingebed, dus de pagina kan dit programma niet opnieuw importeren (het is geëxporteerd door een oudere pagina)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "het in dit programma ingebedde blokkenbestand is niet leesbaar, dus de pagina kan het niet opnieuw importeren",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "het in dit programma ingebedde blokkenbestand volgt het formaat niet ({problem}), dus de pagina kan het misschien niet opnieuw importeren",
+  "the block file inside this program matches the format, so the page can import it again": "het blokkenbestand in dit programma volgt het formaat, dus de pagina kan het opnieuw importeren"
  }
 }

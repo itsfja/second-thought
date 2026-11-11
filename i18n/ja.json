@@ -3344,6 +3344,12 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought は Powerwall から読み取るだけなので、{what} は送信しません。",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Powerwall ゲートウェイが POWERWALL_PASSWORD を拒否しました:カスタマーパスワード(QRシールの最後の5文字)を確認してください。",
   "The Powerwall gateway's login gave no token.": "Powerwall ゲートウェイへのログインがトークンを返しませんでした。",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "バッテリー {pct}%、予約 {reserve}%、系統 {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "バッテリー {pct}%、予約 {reserve}%、系統 {grid}",
+  "Program": "プログラム",
+  "this file's own text couldn't be read, so its block file wasn't checked": "このファイルの本文を読めなかったため、ブロックファイルは確認しませんでした",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "埋め込まれたブロックファイルがないため、ページでこのプログラムを再度読み込めません（古いページから書き出されたものです）",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "このプログラムに埋め込まれたブロックファイルが読み取れないため、ページで再度読み込めません",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "このプログラムに埋め込まれたブロックファイルが書式を守っていません（{problem}）。そのため、ページで再度読み込めないことがあります",
+  "the block file inside this program matches the format, so the page can import it again": "このプログラムの中のブロックファイルは書式に合っているため、ページで再度読み込めます"
  }
 }

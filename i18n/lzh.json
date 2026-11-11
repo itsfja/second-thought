@@ -3334,7 +3334,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought 惟讀於 Powerwall,故不發 {what}。",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Powerwall 關口卻其祕:查客戶之祕(QR 籤之末五字)。",
   "The Powerwall gateway's login gave no token.": "Powerwall 關口之入未予憑。",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "蓄電 {pct}%,備用 {reserve}%,網 {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "蓄電 {pct}%,備用 {reserve}%,網 {grid}",
+  "Program": "程",
+  "this file's own text couldn't be read, so its block file wasn't checked": "此卷之文不可讀，故其塊卷未驗",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "無嵌塊卷，故頁不能復入此程（舊頁所出也）",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "此程所嵌塊卷不可讀，故頁不能復入之",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "此程所嵌塊卷不合其式（{problem}），故頁或不能復入之",
+  "the block file inside this program matches the format, so the page can import it again": "此程之塊卷合其式，故頁能復入之"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

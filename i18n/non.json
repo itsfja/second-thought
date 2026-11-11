@@ -3344,7 +3344,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought les aðeins af Powerwall, svo hann sendir ekki {what}.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Powerwall-netið hafnaði POWERWALL_PASSWORD: athugaðu viðskiptavinalykilinn (síðustu fimm stafirnir á QR-merkinu).",
   "The Powerwall gateway's login gave no token.": "Innskráning á Powerwall-netinu gaf ekkert teikn.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "rafhlöðu {pct}%, varahluti {reserve}%, net {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "rafhlöðu {pct}%, varahluti {reserve}%, net {grid}",
+  "Program": "forrit",
+  "this file's own text couldn't be read, so its block file wasn't checked": "rit þessa skjals mátti eigi lesask, svá var blokkaskjal þess eigi freistað",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "ekkert blokkaskjal er fólgit í, svá má síðan ekki flytja þetta forrit inn aptr (út var þat sent af eldri síðu)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "blokkaskjalit fólgit í þessu forriti má eigi lesask, svá má síðan eigi flytja þat inn aptr",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "blokkaskjalit fólgit í þessu forriti heldr eigi formi ({problem}), svá má síðan kannski eigi flytja þat inn aptr",
+  "the block file inside this program matches the format, so the page can import it again": "blokkaskjalit í þessu forriti heldr formi, svá má síðan flytja þat inn aptr"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

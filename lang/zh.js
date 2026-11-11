@@ -2106,6 +2106,12 @@
 "Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought 只从 Powerwall 读取,因此不会发送 {what}。",
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall 网关拒绝了 POWERWALL_PASSWORD:请检查客户密码(QR 贴纸上的最后五个字符)。",
 "The Powerwall gateway's login gave no token.":"Powerwall 网关的登录没有给出令牌。",
-"battery at {pct}%, reserve {reserve}%, grid {grid}":"电池 {pct}%,保留 {reserve}%,电网 {grid}"
+"battery at {pct}%, reserve {reserve}%, grid {grid}":"电池 {pct}%,保留 {reserve}%,电网 {grid}",
+"Program":"程序",
+"this file's own text couldn't be read, so its block file wasn't checked":"无法读取此文件的文本，因此没有检查其中的块文件",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"没有嵌入块文件，因此页面无法再次导入此程序（它由较旧的页面导出）",
+"the block file embedded in this program isn't readable, so the page can't import it again":"此程序中嵌入的块文件无法读取，因此页面无法再次导入它",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"此程序中嵌入的块文件不符合格式（{problem}），因此页面可能无法再次导入它",
+"the block file inside this program matches the format, so the page can import it again":"此程序中的块文件符合格式，因此页面可以再次导入它"
 }
 };

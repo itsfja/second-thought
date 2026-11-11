@@ -2106,7 +2106,13 @@
 "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).":"Powerwall قاپیسی POWERWALL_PASSWORD نی رد ائتدی:موشتری رمزینی یوخلایین(QR لیبلی نین سون بئش کاراکتری)۔",
 "The Powerwall gateway's login gave no token.":"Powerwall قاپیسینا گیریش توکن وئرمه‌دی.",
 "battery at {pct}%, reserve {reserve}%, grid {grid}":"باتریا {pct}%، احتیاط {reserve}%، شبکه {grid}",
-"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought یالنیز Powerwall دان اوخویور، بو سببله {what} گؤندرمز."
+"Second Thought only reads from the Powerwall, so it doesn't send {what}.":"Second Thought یالنیز Powerwall دان اوخویور، بو سببله {what} گؤندرمز.",
+"Program":"پروگرام",
+"this file's own text couldn't be read, so its block file wasn't checked":"بو دوسیه‌نین متنی اوخونامادی، ایچون بلوک دوسیه‌سی کنترول ایدیلمدی",
+"no block file embedded, so the page can't import this program again (it was exported by an older page)":"بلوک دوسیه‌سی مدمج دییل، ایچون صحیفه بو پروگرامی تکره داخل ایتمه‌ز (قده‌مکی صحیفه‌دن خارج ایدیلمیش)",
+"the block file embedded in this program isn't readable, so the page can't import it again":"بو پروگرامدا مدمج بلوک دوسیه‌سی اوخوناماز، ایچون صحیفه اونی تکره داخل ایتمه‌ز",
+"the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"بو پروگرامدا مدمج بلوک دوسیه‌سی قالبا اویماز ({problem})، ایچون صحیفه بلکی اونی تکره داخل ایتمه‌ز",
+"the block file inside this program matches the format, so the page can import it again":"بو پروگرامدا بلوک دوسیه‌سی قالبا اویار، ایچون صحیفه اونی تکره داخل ایته بیلر"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

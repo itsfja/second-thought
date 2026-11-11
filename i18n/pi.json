@@ -3335,7 +3335,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought kevaḷaṃ Powerwall-to paṭhati, tasmā {what} na pāheti.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Powerwall-dvāraṃ POWERWALL_PASSWORD paṭikkhipi: gahaṭṭhassa rakkhaṃ passa (QR-lipi-ya pacchimā pañca akkhara).",
   "The Powerwall gateway's login gave no token.": "Powerwall-dvārassa pavesana tukaṃ nādāsi.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "battariya {pct}%, parikkhaya {reserve}%, netta {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "battariya {pct}%, parikkhaya {reserve}%, netta {grid}",
+  "Program": "kiccakkamma",
+  "this file's own text couldn't be read, so its block file wasn't checked": "imasmiṃ saṅghāte desanā na sakkhi paṭhetuṃ, tasmā blokkasaṅghāto na parikkhito",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "blokkasaṅghāto na ajjhotthito, tasmā patthā imassa kiccakkammassa puna ānetuṃ na sakkhissati (purāṇatarāya patthāya nīto)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "imasmiṃ kiccakkamme ajjhotthito blokkasaṅghāto na sakkhi paṭhetuṃ, tasmā patthā taṃ puna ānetuṃ na sakkhissati",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "imasmiṃ kiccakkamme ajjhotthito blokkasaṅghāto ākāraṃ na rakkhati ({problem}), tasmā patthā taṃ puna ānetuṃ na sakkhissatiyeva",
+  "the block file inside this program matches the format, so the page can import it again": "imasmiṃ kiccakkamme ajjhotthito blokkasaṅghāto ākāraṃ rakkhati, tasmā patthā taṃ puna ānetuṃ sakkhissati"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टीकं पक्खिप",

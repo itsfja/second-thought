@@ -3344,7 +3344,13 @@
   "Second Thought only reads from the Powerwall, so it doesn't send {what}.": "Second Thought tantum ex Powerwall legit, itaque {what} non mittit.",
   "The Powerwall gateway refused POWERWALL_PASSWORD: check the customer password (the last five characters of the one on its QR sticker).": "Porta Powerwall tesseractam POWERWALL_PASSWORD recusavit: inspice tesseram clientis (postremi quinque notae ex titulo QR).",
   "The Powerwall gateway's login gave no token.": "Aditus portae Powerwall nullum tesseram dedit.",
-  "battery at {pct}%, reserve {reserve}%, grid {grid}": "accumulatorium ad {pct}%, reservatio {reserve}%, reticulum {grid}"
+  "battery at {pct}%, reserve {reserve}%, grid {grid}": "accumulatorium ad {pct}%, reservatio {reserve}%, reticulum {grid}",
+  "Program": "Programma",
+  "this file's own text couldn't be read, so its block file wasn't checked": "textus huius fasciculi legi non potuit, ita fasciculus laterum eius non inspectus est",
+  "no block file embedded, so the page can't import this program again (it was exported by an older page)": "nullus fasciculus laterum inclusus est, ita pagina hanc programmatam iterum importare non potest (a vetustiore pagina exportata est)",
+  "the block file embedded in this program isn't readable, so the page can't import it again": "fasciculus laterum in hac programmata inclusus legi non potest, ita pagina eam iterum importare non potest",
+  "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "fasciculus laterum in hac programmata inclusus formam non servat ({problem}), ita pagina eam fortasse iterum importare non poterit",
+  "the block file inside this program matches the format, so the page can import it again": "fasciculus laterum in hac programmata formam servat, ita pagina eam iterum importare potest"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

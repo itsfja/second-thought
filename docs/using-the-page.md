@@ -1,6 +1,6 @@
 # Using the page
 
-[← Second Thought](../README.md) · **Using the page** · [The agent](agent.md) · [Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · [Settings and models](settings.md)
+[← Second Thought](../README.md) · **Using the page** · [The agent](agent.md) · [Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · [Program format](program-format.md) · [Settings and models](settings.md)
 
 *Building a program on the page: the blocks, what a program can do, the examples and gallery, saving, and the page's languages.*
 

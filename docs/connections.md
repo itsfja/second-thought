@@ -1,6 +1,6 @@
 # Connections
 
-[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · **Connections** · [MCP tools](mcp.md) · [Running exported programs](running.md) · [Settings and models](settings.md)
+[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · **Connections** · [MCP tools](mcp.md) · [Running exported programs](running.md) · [Program format](program-format.md) · [Settings and models](settings.md)
 
 *What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, MikroTik, UniFi, Proxmox and Docker.*
 
