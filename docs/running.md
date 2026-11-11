@@ -50,6 +50,61 @@ To start it automatically:
 - **Windows:** double-click `install-startup.bat` once. The program then starts in a small window each time you log in. To undo it, press Windows+R, type `shell:startup`, and delete "Second Thought - my-program".
 - **Linux or a Mac:** run `sh install-service.sh` once. On Linux it starts whenever the computer starts (it asks for your password to set this up); on a Mac, whenever you log in. It tells you how to watch what the program is doing, and how to turn it off.
 
+### On a home server
+
+The zip's own installers cover a computer someone logs in to. On a box nobody logs in to — the one under the stairs — the same jobs want a little more: start at power-on with nobody's session, start again after a crash, and keep the program inside its own folder. Run the program once yourself first and answer its approval question (`y`), or put `approve = no` in `second-thought.ini` if you're sure.
+
+**Linux (systemd).** `sh install-service.sh` already installs a unit that starts at boot as you. For the harder-walled shape, put this in `/etc/systemd/system/second-thought-my-program.service` (it's the same unit, with the walls named):
+
+```ini
+[Unit]
+Description=Second Thought: my-program
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/opt/second-thought/my-program
+ExecStart=/bin/sh run-on-schedule.sh
+Restart=on-failure
+RestartSec=30
+User=me
+ReadWritePaths=/opt/second-thought/my-program
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then:
+
+```sh
+sudo systemctl daemon-reload
+sudo systemctl enable --now second-thought-my-program
+```
+
+`ProtectSystem=strict` makes everything read-only except what the program needs, and `ReadWritePaths` gives it back its own folder (where `memory.json`, `outputs/` and its log live). Keep the folder out of your home folder, or give that path in `ReadWritePaths` too — `ProtectHome=read-only` stands in the way otherwise. Watch it with `journalctl -u second-thought-my-program -f`, stop it with `sudo systemctl disable --now second-thought-my-program`. And keep `chmod 600 second-thought.ini`, since it holds your keys: the keychain's Secret Service needs your login session, so on a headless box the ini (or an `EnvironmentFile=` with the same permissions) is the honest place for them.
+
+**Windows (Task Scheduler).** `install-startup.bat` starts the program when you log in. To run it whether anyone is logged in or not, in an administrator PowerShell, once (it asks for your password, which is what lets it run with nobody there):
+
+```powershell
+$dir = 'C:\second-thought\my-program'
+Register-ScheduledTask -TaskName 'Second Thought: my-program' `
+  -Action   (New-ScheduledTaskAction -Execute "$dir\run-on-schedule.bat" -WorkingDirectory $dir) `
+  -Trigger  (New-ScheduledTaskTrigger -AtStartup) `
+  -Settings (New-ScheduledTaskSettingsSet -RestartCount 3 -RestartInterval (New-TimeSpan -Seconds 30) `
+             -ExecutionTimeLimit ([TimeSpan]::Zero) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries) `
+  -User $env:USERNAME
+```
+
+`-AtStartup` starts it when the computer starts; `-RestartCount` starts it again after a crash, and `-ExecutionTimeLimit ([TimeSpan]::Zero)` turns off the 72-hour limit that would otherwise stop a program whose job is to keep running. See how the last run went in Task Scheduler (Last Run Result), or run `run-on-schedule.bat` yourself in a terminal to watch it live. To stop it for good:
+
+```powershell
+Unregister-ScheduledTask -TaskName 'Second Thought: my-program'
+```
+
 ### Running on GitHub Actions
 
 A program whose scripts start at set times ('when it's …' and 'every …') can run on GitHub's computers instead, so yours doesn't need to be on. In Import / export, choose **Save as GitHub Actions (.zip)**. The zip has the program, a workflow in `.github/workflows/`, and `SETUP.md`, which lists the repository secrets to add (your keys). Put the files in a **private** repository, add the secrets, and the scripts run at their times. The **Run workflow** button on the Actions tab runs one now.
