@@ -177,7 +177,11 @@
 "rb_sabnzbd_queue":{"message0":"taksis nte SABnzbd","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-erhme en taksis nte ouōšeb: name, size_mb, left_mb, percent, eta (ēne etšōp ēnhe, nthe 0:12:34) mn status (Downloading, Queued, Paused). En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ šop ere ou-taksis nte ouōrb."},
 "rb_sabnzbd_history":{"tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-erhme etmot en ēne hōn: name, status (Completed ē Failed), size_mb, ēne etmot mn, nte ou-ⲕⲟⲩⲛⲕⲟⲩ, ēte ēne etmot.","message0":"historia nte SABnzbd, ⲧⲏⲣⲟⲩ %1 ⲱⲛⲧ"},
 "rb_sabnzbd_diskspace":{"message0":"mēte nte disk n-SABnzbd","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-mēte nte SABnzbd (pēhēhē nte ouōšeb erhēb): folder mn free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Šoukhaf ē Šaušaaf taksis nte ouōšeb etouōn. Ešafōōš n-kat ouonh, ēre pēhēhē nte ouōšeb mmon erō-k, mn ourome mpša ēro-f, ouonh m-moot. En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ ouonh m-moot nte taksis en ouōrbe."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Šoukhaf ē Šaušaaf taksis nte ouōšeb etouōn. Ešafōōš n-kat ouonh, ēre pēhēhē nte ouōšeb mmon erō-k, mn ourome mpša ēro-f, ouonh m-moot. En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ ouonh m-moot nte taksis en ouōrbe."},
+"rb_arr_queue":{"message0":"taksis nte %1","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-erhme en taksis: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality mn eta (ēne etšōp ēnhe, nthe 0:12:34). En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ šop ere ou-taksis nte ouōrb."},
+"rb_arr_missing":{"message0":"ouōbe nte ouonē nte %1","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-ėhme ēte ou-ⲥⲁⲥⲟⲟⲩⲟⲛ m-mou-int: title, added (ēne etappē) mn id."},
+"rb_arr_diskspace":{"message0":"mēte nte disk nte %1","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-mēte: path, label, free_gb mn total_gb."},
+"rb_arr_search":{"message0":"šop ēnhe en %1","tooltip":"Šop en ouōbe nte ouonē kote ou-ⲥⲁⲥⲟⲟⲩⲟⲛ m-mou-int mmo-f. Ešafōōš n-kat ouonh, ēre pēhēhē nte ouōšeb mmon erō-k, mn ourome mpša ēro-f, ouonh m-moot. En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ ouonh m-moot en ouōrbe."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ϩⲟⲟⲩ ⲛⲓⲙ","weekdays":"ϩⲛ ⲛϩⲟⲟⲩ ⲛϩⲱⲃ","weekends":"ϩⲛ ⲛϩⲟⲟⲩ ⲛⲙⲧⲟⲛ"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"ϣⲱⲡ","sell":"ⲧⲓ ⲉⲃⲟⲗ"},
 "rb_coinbase_order.SIDE":{"buy":"ϣⲱⲡ","sell":"ⲧⲓ ⲉⲃⲟⲗ"},
 "rb_proxmox_power.ACTION":{"start":"ϣⲁⲁ","shutdown":"ⲕϩⲱ","reboot":"ϣⲁⲁ ⲟⲛ"},
-"rb_docker_power.ACTION":{"restart":"ϣⲁⲁ ⲟⲛ","stop":"ⲕϩⲁ","start":"ϣⲁⲁ"}
+"rb_docker_power.ACTION":{"restart":"ϣⲁⲁ ⲟⲛ","stop":"ⲕϩⲁ","start":"ϣⲁⲁ"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Agent":"ⲁⲡⲟⲥⲧⲟⲗⲟⲥ",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr mn Sonarr"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ⲛⲥⲱⲧⲙ: ϣⲁⲩⲁⲁⲩ ϩⲟⲧⲁⲛ ⲛⲧⲁⲝⲓⲥ ⲉⲃⲟⲗ ϣⲁϥⲁⲁⲩ ⲕⲁⲧⲁ ⲟⲩⲟⲉⲓϣ",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} ⲟⲩⲱⲛⲏ",
 "{n} in the queue":"{n} ⲉⲛ ⲧⲁⲝⲓⲥ",
 "pause and resume your SABnzbd downloads (asking you each time)":"Šaukhaf mn Šaušaaf SABnzbd n-kat ouonh (ešafōōš n-kat ouonh)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"šmto SABnzbd: taksis nte ouōšeb, historia mn mēte etšōp ēnhe en disk nte ouōšeb"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"šmto SABnzbd: taksis nte ouōšeb, historia mn mēte etšōp ēnhe en disk nte ouōšeb",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"en Radarr mn Sonarr ntō-k šop ēnhe (ešafōōš n-kat ouonh)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"šmto Radarr mn Sonarr ntō-k: taksis, ouōbe nte ouonē mn mēte nte disk",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Ounou? Radarr ē Sonarr?",
+"{n} downloading":"{n} miše",
+"{n} missing":"{n} etšōp ēnhe"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -2144,7 +2160,21 @@
 "{n} MB left":"{n} MB etšōp ēnhe",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd šafouōš n-SABNZBD_URL mn n-SABNZBD_API_KEY {where_keys}: pma nte (nthe http://sabnzbd:8080) mn pēhēhē nte ouči nte API, en SABnzbd hn Config, General, API Key.",
 "pause SABnzbd's queue":"Šaukhaf taksis nte SABnzbd",
-"resume SABnzbd's queue":"Šaušaaf taksis nte SABnzbd"
+"resume SABnzbd's queue":"Šaušaaf taksis nte SABnzbd",
+"Which one? Radarr or Sonarr.":"Ounou? Radarr ē Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought nšafjoou an n-{what} e {who}.",
+"The {who} refused its API key.":"Pa{who} ouōš ebol ēn pehēhē nte ouči nte API.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"taksis nte {who}",
+"{who} wanted list":"ouōbe nte ouonē nte {who}",
+"{who} diskspace":"mēte nte disk nte {who}",
+"{n} downloading":"{n} miše",
+"{n} missing":"{n} etšōp ēnhe",
+"search {who}'s wanted list for what's missing":"en ouōbe nte ouonē nte {who} šop ēnhe",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} šafouōš n-{url_setting} mn n-{key_setting} {where_keys}: pma nte (nthe http://radarr:7878) mn pēhēhē nte API, hn Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

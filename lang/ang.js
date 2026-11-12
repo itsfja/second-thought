@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"SABnzbd endebyrdnes","tooltip":"Gecynd gecræfa, ān for ǣlcum weorce on þǣre hlǣdunge-endebyrdnesse: name, size_mb, left_mb, percent, eta (tīd þe is left, swa 0:12:34) and status (Downloading, Queued, Paused). On þisse sīde hit brȳcþ bysen-endebyrdnesse."},
 "rb_sabnzbd_history":{"message0":"SABnzbd stǣr, lǣstan %1 tīd","tooltip":"Gecynd gecræfa, ān for ǣlcum weorce þe on þǣre tīde gefylled wæs: name, status (Completed oþþe Failed), size_mb, hwænne hit gefylled wæs and, for wanhæfenum, hwī hit wanhlōm."},
 "rb_sabnzbd_diskspace":{"message0":"SABnzbd diskfæc","tooltip":"Gecynd gecræfa, ān for ǣlcere SABnzbd mapan (hlǣdunge-mapu fyrst): folder and free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Stillþ oþþe eft onstyrrþ ealle þa hlǣdunge-endebyrdnesse. Hit āscāf þē ǣrest, ēac þonne nāwiht oþer āscīeþ, and nānum þǣr tō secgenne þā ne gelimpþ hit. On þisse sīde nan þing sōþlīce ne stillþ."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Stillþ oþþe eft onstyrrþ ealle þa hlǣdunge-endebyrdnesse. Hit āscāf þē ǣrest, ēac þonne nāwiht oþer āscīeþ, and nānum þǣr tō secgenne þā ne gelimpþ hit. On þisse sīde nan þing sōþlīce ne stillþ."},
+"rb_arr_queue":{"message0":"%1 endebyrdnes","tooltip":"Gecynd gecræfa, ān for ǣlcum hlǣdunge on þǣre endebyrdnesse: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (tīd þe is left, swa 0:12:34). On þisse sīde hit brȳcþ bysen-endebyrdnesse."},
+"rb_arr_missing":{"message0":"%1 gewilnodu","tooltip":"Gecynd gecræfa, ān for ǣlcum filme oþþe spelle butan bōc: title, added (hwænne hit wæs geēaht) and id."},
+"rb_arr_diskspace":{"message0":"%1 diskfæc","tooltip":"Gecynd gecræfa, ān for ǣlcere mapan: path, label, free_gb and total_gb."},
+"rb_arr_search":{"message0":"secan in %1 þæt wanful","tooltip":"Sēcþ þurh ealle þa gewilnodu þæt þe bōc næfþ. Hit āscāf þē ǣrest, ēac þonne nāwiht oþer āscīeþ, and nānum þǣr tō secgenne þā ne gelimpþ hit. On þisse sīde nan þing sōþlīce ne sēcþ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"bycgan","sell":"sellan"},
 "rb_coinbase_order.SIDE":{"buy":"bycgan","sell":"sellan"},
 "rb_proxmox_power.ACTION":{"start":"onstyrian","shutdown":"scettan","reboot":"eft onstyrian"},
-"rb_docker_power.ACTION":{"restart":"eft onstyrian","stop":"stillan","start":"onstyrian"}
+"rb_docker_power.ACTION":{"restart":"eft onstyrian","stop":"stillan","start":"onstyrian"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"Gelimpu",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr and Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tol for þone ærendracan: lege hie innan ærendracan stocce",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} mapan",
 "{n} in the queue":"{n} on þǣre endebyrdnesse",
 "pause and resume your SABnzbd downloads (asking you each time)":"SABnzbd hlǣdunge stillan and eft onstyran (āscieþ þē ǣlcum sīþe)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd rǣdan: þa hlǣdunge-endebyrdnesse, þa stǣre and þone diskfæc þe is left on þǣre hlǣdunge-disce"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd rǣdan: þa hlǣdunge-endebyrdnesse, þa stǣre and þone diskfæc þe is left on þǣre hlǣdunge-disce",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"in þinum Radarr and Sonarr þæt wanful secan (āscieþ þē ǣlcum sīþe)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"þīne Radarr and Sonarr rǣdan: þa hlǣdunge-endebyrdnesse, þa gewilnodu and þone diskfæc",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Hwæþer? Radarr oþþe Sonarr?",
+"{n} downloading":"{n} hlǣdaþ",
+"{n} missing":"{n} wanaþ"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2144,7 +2160,21 @@
 "{n} MB left":"{n} MB þǣre lāf",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd behōfaþ SABNZBD_URL and SABNZBD_API_KEY {where_keys}: his stowe (swa http://sabnzbd:8080) and þa fullan cȳþcǣg, in SABnzbd under Config, General, API Key.",
 "pause SABnzbd's queue":"gestillan SABnzbd's endebyrdnesse",
-"resume SABnzbd's queue":"eft onstyran SABnzbd's endebyrdnesse"
+"resume SABnzbd's queue":"eft onstyran SABnzbd's endebyrdnesse",
+"Which one? Radarr or Sonarr.":"Hwæþer? Radarr oþþe Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought ne sent {what} to {who}.",
+"The {who} refused its API key.":"Se {who} his cȳþcǣge wiþsōc.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"{who} endebyrdnes",
+"{who} wanted list":"{who} gewilnodu",
+"{who} diskspace":"{who} diskfæc",
+"{n} downloading":"{n} hlǣdaþ",
+"{n} missing":"{n} wanaþ",
+"search {who}'s wanted list for what's missing":"in {who} gewilnodum þæt wanful secan",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} behōfaþ {url_setting} and {key_setting} {where_keys}: his stowe (swa http://radarr:7878) and his cȳþcǣg, under Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

@@ -34,6 +34,7 @@ Made by tools/sync.py from i18n/got.json: edit that, not this.
 - Proxmox: Proxmox
 - Docker: Docker
 - SABnzbd: SABnzbd
+- Radarr and Sonarr: Radarr jah Sonarr
 - Listeners: they run while the exported program runs on schedule: 𐌷𐌰𐌿𐍃𐌾𐌰𐌽𐌳𐌰𐌽𐍃: 𐍄𐌰𐌿𐌾𐌰𐌽𐌳 𐍃𐍅𐌴𐌸𐌰𐌿𐌷 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰 𐌹𐌽 𐌼𐌴𐌻𐌰 𐍄𐌰𐌿𐌾𐌹𐌸
 - No blocks match: 𐍃𐍄𐌰𐌹𐌽𐍃 𐌽𐌹 𐌹𐍃𐍄
 - Read and send: 𐍃𐌹𐌲𐌲𐍅𐌰𐌽 𐌾𐌰𐌷 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽

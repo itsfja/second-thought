@@ -14,7 +14,7 @@ from .settings import (INI_NAMES, KEY_SOURCES, KEYCHAIN_NAMES, KEYCHAIN_PROBLEM,
                        SETTING_NAMES, SETTINGS_PATH, SETTINGS_PATHS, SKIPPED_SETTINGS, WHERE_KEYS)
 from .providers import CURRENCY, MODELS, dollars, record_limits, PROVIDERS, SERVICES, TIER_NAMES, _tier, amount_text, band_text, model_byline, fixed_rate, per_dollar, rate_note, rates
 from .spending import PLANS, plan_of, reported_lines
-from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, SAFETY, _short, to_str
+from .core import CAPABILITIES, LOG_DIR, MEMORY_FILE, OUTPUT_DIR, RunError, SAFETY, _short, num, to_str
 from .connectors import webhook_host
 from .mcp import FR24_COMMANDS, KRAKEN_COMMANDS, mcp_env_name, mcp_is_fr24, mcp_is_twak, mcp_is_vaillant
 from .settings import tr  # noqa: F401
@@ -328,6 +328,14 @@ class Doctor:
                 q = (await self._sabnzbd("queue")).get("queue") or {}
                 return tr("SABnzbd {version}", version=to_str(q.get("version")) or "?") + ", " + tr("{n} in the queue", n=len(q.get("slots") or []))
             out.append(("SABnzbd", sabnzbd))
+        if has("arr_read", "arr_control"):
+            async def arr(which):
+                status = await self._arr(which, "GET", "/api/v3/system/status")
+                q = await self._arr(which, "GET", "/api/v3/queue", {"page": "1", "pageSize": "1"})
+                return tr("{who} {version}", who=which.capitalize(), version=to_str(status.get("version")) or "?") \
+                    + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
+            out.append(("Radarr", lambda: arr("radarr")))
+            out.append(("Sonarr", lambda: arr("sonarr")))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -643,5 +651,5 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))

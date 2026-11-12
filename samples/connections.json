@@ -2839,6 +2839,88 @@
    ["/mnt/user/complete", "1234.56"]
   ]
  },
+ "arr": {
+  "note": "A sample Radarr and Sonarr for the page and the tests (#398), shaped the way their Servarr API answers: Radarr is importing one film and has another queued, with two wanted; Sonarr is grabbing an episode, with one still missing.",
+  "radarr": {
+   "queue": [
+    {
+     "title": "The Big Lebowski (1998)",
+     "status": "Importing",
+     "size": 26843545600,
+     "sizeleft": 0,
+     "quality": {
+      "quality": {
+       "name": "WEBDL-1080p"
+      }
+     },
+     "timeleft": "00:00:00"
+    },
+    {
+     "title": "Arrival (2016)",
+     "status": "Downloading",
+     "size": 32212254720,
+     "sizeleft": 10737418240,
+     "quality": {
+      "quality": {
+       "name": "Bluray-1080p"
+      }
+     },
+     "timeleft": "00:12:34"
+    }
+   ],
+   "missing": [
+    {
+     "title": "Dune (2021)",
+     "added": "2026-11-05T21:14:26Z",
+     "id": 67
+    },
+    {
+     "title": "Everything Everywhere All at Once (2022)",
+     "added": "2026-10-28T09:03:11Z",
+     "id": 71
+    }
+   ],
+   "diskspace": [
+    {
+     "path": "/mnt/user/media/movies",
+     "label": "movies",
+     "freeSpace": 536870912000,
+     "totalSpace": 2000398934016
+    }
+   ]
+  },
+  "sonarr": {
+   "queue": [
+    {
+     "title": "Severance - S02E01",
+     "status": "Grabbed",
+     "size": 4294967296,
+     "sizeleft": 4294967296,
+     "quality": {
+      "quality": {
+       "name": "HDTV-1080p"
+      }
+     },
+     "timeleft": "00:05:00"
+    }
+   ],
+   "missing": [
+    {
+     "title": "Slow Horses - S04E04",
+     "added": "2026-11-09T23:41:02Z",
+     "id": 320
+    }
+   ],
+   "diskspace": [
+    {
+     "path": "/mnt/user/media/tv",
+     "label": "tv",
+     "freeSpace": 805306368000,
+     "totalSpace": 2000398934016
+    }
+   ]
+  }
+ },
  "solax": {
   "note": "A sample Solax inverter for the page and the tests (#361), shaped the way SolaxCloud's end-user API answers: mid-afternoon, making more than the house uses, battery over half full. The fields are the API's own units (yieldtoday in 0.1 kWh, feedinenergy in 0.01 kWh).",
   "exception": "",

@@ -34,6 +34,7 @@ Made by tools/sync.py from i18n/it.json: edit that, not this.
 - Proxmox: Proxmox
 - Docker: Docker
 - SABnzbd: SABnzbd
+- Radarr and Sonarr: Radarr e Sonarr
 - Tools for the agent: drop them inside an agent block: Strumenti per l'agente: mettili dentro un blocco agente
 - Listeners: they run while the exported program runs on schedule: Ascoltatori: girano mentre il programma esportato gira secondo pianificazione
 - Read and send: Leggi e invia

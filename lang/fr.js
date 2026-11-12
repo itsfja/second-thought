@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"file d'attente SABnzbd","tooltip":"Une liste de fiches, une par travail dans la file de téléchargement : name, size_mb, left_mb, percent, eta (temps restant, comme 0:12:34) et status (Downloading, Queued, Paused). Sur cette page, une file d'exemple."},
 "rb_sabnzbd_history":{"message0":"historique SABnzbd, %1 dernières heures","tooltip":"Une liste de fiches, une par travail terminé dans ce délai : name, status (Completed ou Failed), size_mb, quand il s'est terminé et, pour un échec, pourquoi il a échoué."},
 "rb_sabnzbd_diskspace":{"message0":"espace disque SABnzbd","tooltip":"Une liste de fiches, une pour chaque dossier de SABnzbd (le dossier de téléchargement d'abord) : folder et free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Met en pause ou reprend toute la file de téléchargement. Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne se met vraiment en pause."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Met en pause ou reprend toute la file de téléchargement. Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne se met vraiment en pause."},
+"rb_arr_queue":{"message0":"file d'attente %1","tooltip":"Une liste de fiches, une par téléchargement dans la file : title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality et eta (temps restant, comme 0:12:34). Sur cette page, une file d'exemple."},
+"rb_arr_missing":{"message0":"liste d'attente %1","tooltip":"Une liste de fiches, une par film ou épisode sans fichier : title, added (quand il a été ajouté) et id."},
+"rb_arr_diskspace":{"message0":"espace disque %1","tooltip":"Une liste de fiches, une pour chaque dossier : path, label, free_gb et total_gb."},
+"rb_arr_search":{"message0":"chercher ce qui manque dans %1","tooltip":"Cherche dans toute la liste d'attente ce qui n'a pas de fichier. Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne cherche vraiment."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"tous les jours","weekdays":"en semaine","weekends":"le week-end"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"acheter","sell":"vendre"},
 "rb_coinbase_order.SIDE":{"buy":"acheter","sell":"vendre"},
 "rb_proxmox_power.ACTION":{"start":"démarrer","shutdown":"arrêter","reboot":"redémarrer"},
-"rb_docker_power.ACTION":{"restart":"redémarrer","stop":"arrêter","start":"démarrer"}
+"rb_docker_power.ACTION":{"restart":"redémarrer","stop":"arrêter","start":"démarrer"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"Événements",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr et Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Outils pour l'agent : déposez-les dans un bloc agent",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} dossiers",
 "{n} in the queue":"{n} dans la file d'attente",
 "pause and resume your SABnzbd downloads (asking you each time)":"mettre en pause et reprendre tes téléchargements SABnzbd (en te le demandant à chaque fois)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"lire ton SABnzbd : la file de téléchargement, l'historique et l'espace libre du disque de téléchargement"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"lire ton SABnzbd : la file de téléchargement, l'historique et l'espace libre du disque de téléchargement",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"chercher ce qui manque dans tes Radarr et Sonarr (en te le demandant à chaque fois)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"lire tes Radarr et Sonarr : la file de téléchargement, la liste d'attente et l'espace disque",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Lequel ? Radarr ou Sonarr.",
+"{n} downloading":"{n} en téléchargement",
+"{n} missing":"{n} manquants"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -2144,6 +2160,20 @@
 "{n} MB left":"{n} Mo restants",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd a besoin de SABNZBD_URL et SABNZBD_API_KEY {where_keys} : son adresse (comme http://sabnzbd:8080) et la clé API complète, dans SABnzbd sous Config, General, API Key.",
 "pause SABnzbd's queue":"mettre en pause la file d'attente de SABnzbd",
-"resume SABnzbd's queue":"reprendre la file d'attente de SABnzbd"
+"resume SABnzbd's queue":"reprendre la file d'attente de SABnzbd",
+"Which one? Radarr or Sonarr.":"Lequel ? Radarr ou Sonarr.",
+"Second Thought doesn't send {what} to {who}.":"Second Thought n'envoie pas {what} à {who}.",
+"The {who} refused its API key.":"Le {who} a refusé sa clé API.",
+"{who}: {why}.":"{who} : {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"file d'attente {who}",
+"{who} wanted list":"liste d'attente de {who}",
+"{who} diskspace":"espace disque de {who}",
+"{n} downloading":"{n} en téléchargement",
+"{n} missing":"{n} manquants",
+"search {who}'s wanted list for what's missing":"chercher ce qui manque dans la liste d'attente de {who}",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} a besoin de {url_setting} et {key_setting} {where_keys} : son adresse (comme http://radarr:7878) et sa clé API, sous Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 }
 };

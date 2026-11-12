@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"SABnzbd-wachtrij","tooltip":"Een lijst met records, één voor elke taak in de downloadwachtrij: name, size_mb, left_mb, percent, eta (resterende tijd, zoals 0:12:34) en status (Downloading, Queued, Paused). Op deze pagina gebruikt het een voorbeeldwachtrij."},
 "rb_sabnzbd_history":{"message0":"SABnzbd-geschiedenis, laatste %1 uur","tooltip":"Een lijst met records, één voor elke taak die in die tijd klaar is: name, status (Completed of Failed), size_mb, wanneer hij klaar was en, bij een mislukking, waarom hij mislukte."},
 "rb_sabnzbd_diskspace":{"message0":"SABnzbd-schijfruimte","tooltip":"Een lijst met records, één voor elke map van SABnzbd (de downloadmap eerst): folder en free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Pauzeert of hervat de hele downloadwachtrij. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina pauzeert er niets echt."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Pauzeert of hervat de hele downloadwachtrij. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina pauzeert er niets echt."},
+"rb_arr_queue":{"message0":"%1-wachtrij","tooltip":"Een lijst met records, één voor elke download in de wachtrij: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality en eta (resterende tijd, zoals 0:12:34). Op deze pagina gebruikt het een voorbeeldwachtrij."},
+"rb_arr_missing":{"message0":"%1-verlanglijst","tooltip":"Een lijst met records, één voor elke film of aflevering zonder bestand: title, added (wanneer toegevoegd) en id."},
+"rb_arr_diskspace":{"message0":"%1-schijfruimte","tooltip":"Een lijst met records, één voor elke map: path, label, free_gb en total_gb."},
+"rb_arr_search":{"message0":"%1 doorzoeken naar wat ontbreekt","tooltip":"Doorzoekt de hele verlanglijst naar wat geen bestand heeft. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina zoekt niets echt."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"elke dag","weekdays":"op werkdagen","weekends":"in het weekend"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"kopen","sell":"verkopen"},
 "rb_coinbase_order.SIDE":{"buy":"kopen","sell":"verkopen"},
 "rb_proxmox_power.ACTION":{"start":"starten","shutdown":"afsluiten","reboot":"herstarten"},
-"rb_docker_power.ACTION":{"restart":"herstarten","stop":"stoppen","start":"starten"}
+"rb_docker_power.ACTION":{"restart":"herstarten","stop":"stoppen","start":"starten"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"Gebeurtenissen",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr en Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Hulpmiddelen voor de agent: zet ze in een agentblok",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} mappen",
 "{n} in the queue":"{n} in de wachtrij",
 "pause and resume your SABnzbd downloads (asking you each time)":"je SABnzbd-downloads pauzeren en hervatten (elke keer aan je gevraagd)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"je SABnzbd lezen: de downloadwachtrij, de geschiedenis en de vrije ruimte op de downloadschijf"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"je SABnzbd lezen: de downloadwachtrij, de geschiedenis en de vrije ruimte op de downloadschijf",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"in je Radarr en Sonarr zoeken naar wat ontbreekt (elke keer aan je gevraagd)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"je Radarr en Sonarr lezen: de downloadwachtrij, de verlanglijst en de schijfruimte",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Welke? Radarr of Sonarr.",
+"{n} downloading":"{n} downloaden",
+"{n} missing":"{n} ontbreken"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2144,6 +2160,20 @@
 "{n} MB left":"{n} MB over",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd heeft SABNZBD_URL en SABNZBD_API_KEY nodig {where_keys}: het adres (zoals http://sabnzbd:8080) en de volledige API-sleutel, in SABnzbd onder Config, General, API Key.",
 "pause SABnzbd's queue":"de wachtrij van SABnzbd pauzeren",
-"resume SABnzbd's queue":"de wachtrij van SABnzbd hervatten"
+"resume SABnzbd's queue":"de wachtrij van SABnzbd hervatten",
+"Which one? Radarr or Sonarr.":"Welke? Radarr of Sonarr.",
+"Second Thought doesn't send {what} to {who}.":"Second Thought stuurt {what} niet naar {who}.",
+"The {who} refused its API key.":"De {who} weigerde zijn API-sleutel.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"{who}-wachtrij",
+"{who} wanted list":"verlanglijst van {who}",
+"{who} diskspace":"schijfruimte van {who}",
+"{n} downloading":"{n} downloaden",
+"{n} missing":"{n} ontbreken",
+"search {who}'s wanted list for what's missing":"de verlanglijst van {who} doorzoeken naar wat ontbreekt",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} heeft {url_setting} en {key_setting} nodig {where_keys}: het adres (zoals http://radarr:7878) en de API-sleutel, onder Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 }
 };

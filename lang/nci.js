@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"in necentlāliliztli SABnzbd","tooltip":"Nāhuatiltlahtōlli, cē ic tlapōhualli in tlahtōlmapiliztli: name, size_mb, left_mb, percent, eta (in oc tlamantli, iuhquin 0:12:34) ihuan in tlapōhualli (Downloading, Queued, Paused). Inīn āmoxtli, cē necentlāliliztli tlamachtiāni."},
 "rb_sabnzbd_history":{"tooltip":"Nāhuatiltlahtōlli, cē ic tlapōhualli in tlahtōlmapiliztli ōtlamoc: name, tlapōhualli (Completed nozo Failed), size_mb, quēzqui ōtlamoc nozo, tla ōmoquetz, axcan.","message0":"in tlacuīlōl SABnzbd, in āxcān %1 ihcāitl"},
 "rb_sabnzbd_diskspace":{"message0":"in tlamantli SABnzbd","tooltip":"Nāhuatiltlahtōlli, cē ic tlapōhualli in tlamantli SABnzbd (in tlamantli occeppa): folder ihuan free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Quicholō nozo occeppa quimotzintia in necentlāliliztli. Mitzitzquītia cē ihcāitl occeppa, tla ahmo occe huel mitzitzquītia, ihuan tla ahmo ac quimati, ahmo mochīhua. Inīn āmoxtli, ahmo huel mochīhua."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Quicholō nozo occeppa quimotzintia in necentlāliliztli. Mitzitzquītia cē ihcāitl occeppa, tla ahmo occe huel mitzitzquītia, ihuan tla ahmo ac quimati, ahmo mochīhua. Inīn āmoxtli, ahmo huel mochīhua."},
+"rb_arr_queue":{"message0":"in necentlāliliztli %1","tooltip":"Nāhuatiltlahtōlli, cē ic tlapōhualli in tlahtōlmapiliztli: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ihuan eta (in oc tlamantli, iuhquin 0:12:34). Inīn āmoxtli, cē necentlāliliztli tlamachtiāni."},
+"rb_arr_missing":{"message0":"in tlaīxōhuīl %1","tooltip":"Nāhuatiltlahtōlli, cē ic tlapōhualli in īngōō quēzqui amōxtli: title, added (quēzqui ōmochīuh) ihuan id."},
+"rb_arr_diskspace":{"message0":"in tlamantli %1","tooltip":"Nāhuatiltlahtōlli, cē ic tlapōhualli in īchān: path, label, free_gb ihuan total_gb."},
+"rb_arr_search":{"message0":"quittītīni %1 tlein moc","tooltip":"In tlaīxōhuīli cēmpan tlein moc moppa quittītīni. Mitzitzquītia cē ihcāitl occeppa, tla ahmo occe huel mitzitzquītia, ihuan tla ahmo ac quimati, ahmo mochīhua. Inīn āmoxtli, ahmo huel mochīhua."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -199,7 +203,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"xicohua","sell":"xicnamaca"},
 "rb_coinbase_order.SIDE":{"buy":"xicohua","sell":"xicnamaca"},
 "rb_proxmox_power.ACTION":{"start":"xictzinti","shutdown":"xiccehui","reboot":"occeppa xictzinti"},
-"rb_docker_power.ACTION":{"restart":"occeppa xictzinti","stop":"xicquetza","start":"xictzinti"}
+"rb_docker_power.ACTION":{"restart":"occeppa xictzinti","stop":"xicquetza","start":"xictzinti"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Agent":"Tītlantli",
@@ -233,7 +241,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr ihuan Sonarr"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1098,7 +1107,14 @@
 "{n} folders":"{n} tlamantli",
 "{n} in the queue":"{n} ipan in necentlāliliztli",
 "pause and resume your SABnzbd downloads (asking you each time)":"in SABnzbd tlahtōlmapiliztli quicholō nozo occeppa quimotzintia (mitzitzquītia cē ihcāitl occeppa)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"in SABnzbd mochīhua: in necentlāliliztli, in tlacuīlōl ihuan in tlamantli ōmpa in tlamantli"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"in SABnzbd mochīhua: in necentlāliliztli, in tlacuīlōl ihuan in tlamantli ōmpa in tlamantli",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"in Radarr ihuan in Sonarr īpan tlein moc moppa quittītīni (mitzitzquītia cē ihcāitl occeppa)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"in Radarr ihuan in Sonarr mochīhua: in necentlāliliztli, in tlaīxōhuīl ihuan in tlamantli",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Tlein? Radarr nozo Sonarr?",
+"{n} downloading":"{n} Motēmaca",
+"{n} missing":"{n} moc"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2143,7 +2159,21 @@
 "{n} MB left":"{n} MB oc",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd quinequi SABNZBD_URL ihuan SABNZBD_API_KEY {where_keys}: in ōhtli (iuhquin http://sabnzbd:8080) ihuan in tlapōhualli API, in SABnzbd ipan Config, General, API Key.",
 "pause SABnzbd's queue":"quicholō in necentlāliliztli SABnzbd",
-"resume SABnzbd's queue":"occeppa quimotzintia in necentlāliliztli SABnzbd"
+"resume SABnzbd's queue":"occeppa quimotzintia in necentlāliliztli SABnzbd",
+"Which one? Radarr or Sonarr.":"Tlein? Radarr nozo Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought ahmo quititlanī {what} ītech {who}.",
+"The {who} refused its API key.":"In {who} ōquimictīh in kuñjan is.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"in necentlāliliztli {who}",
+"{who} wanted list":"in tlaīxōhuīl {who}",
+"{who} diskspace":"in tlamantli {who}",
+"{n} downloading":"{n} Motēmaca",
+"{n} missing":"{n} moc",
+"search {who}'s wanted list for what's missing":"in tlaīxōhuīl {who} īpan tlein moc moppa quittītīni",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"In {who} quinequi {url_setting} ihuan {key_setting} {where_keys}: in ōhtli (iuhquin http://radarr:7878) ihuan in kuñjan is, ipan Config, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

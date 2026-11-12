@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"SABnzbd rewe","tooltip":"A list of records, oon for every job in the doun-ladinge rewe: name, size_mb, left_mb, percent, eta (tyme left, as 0:12:34) and status (Downloading, Queued, Paused). On this page it useth a sample rewe."},
 "rb_sabnzbd_history":{"message0":"SABnzbd historie, laste %1 houres","tooltip":"A list of records, oon for every job y-done in that tyme: name, status (Completed or Failed), size_mb, whan it was y-done and, for a failing, why it failde."},
 "rb_sabnzbd_diskspace":{"message0":"SABnzbd disk-space","tooltip":"A list of records, oon for everich of SABnzbd's fóldres (the doun-ladinge fóldre first): folder and free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Stillith or stirith agayn the hole doun-ladinge rewe. It axeth the first everich tyme, though nothing ellis axeth, and with nobody to sayn yea, it nys doon. On this page nothing is truly stillid."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Stillith or stirith agayn the hole doun-ladinge rewe. It axeth the first everich tyme, though nothing ellis axeth, and with nobody to sayn yea, it nys doon. On this page nothing is truly stillid."},
+"rb_arr_queue":{"message0":"%1 rewe","tooltip":"A list of records, oon for every doun-ladinge in the rewe: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (tyme left, as 0:12:34). On this page it useth a sample rewe."},
+"rb_arr_missing":{"message0":"%1 desir list","tooltip":"A list of records, oon for every film or tale without a file: title, added (whan it was y-cast) and id."},
+"rb_arr_diskspace":{"message0":"%1 disk-space","tooltip":"A list of records, oon for everich fóldre: path, label, free_gb and total_gb."},
+"rb_arr_search":{"message0":"sechen in %1 what is y-want","tooltip":"Sekith thrugh al the desir list that that hath no file. It axeth the first everich tyme, though nothing ellis axeth, and with nobody to sayn yea, it nys doon. On this page nothing is truly sought."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"bye","sell":"selle"},
 "rb_coinbase_order.SIDE":{"buy":"bye","sell":"selle"},
 "rb_proxmox_power.ACTION":{"start":"stirte","shutdown":"shette doun","reboot":"stirte agayn"},
-"rb_docker_power.ACTION":{"restart":"stirte agayn","stop":"stynte","start":"stirte"}
+"rb_docker_power.ACTION":{"restart":"stirte agayn","stop":"stynte","start":"stirte"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"Events",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr and Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} fóldres",
 "{n} in the queue":"{n} in the rewe",
 "pause and resume your SABnzbd downloads (asking you each time)":"stille and stire agayn thy SABnzbd doun-ladinges (axing the everich tyme)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"rede thy SABnzbd: the doun-ladinge rewe, the historie and the space left on the doun-ladinge disk"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"rede thy SABnzbd: the doun-ladinge rewe, the historie and the space left on the doun-ladinge disk",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"in thy Radarr and Sonarr to sechen what is y-want (axing the everich tyme)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"rede thy Radarr and Sonarr: the doun-ladinge rewe, the desir list and the disk-space",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Whiche? Radarr or Sonarr?",
+"{n} downloading":"{n} ladinge doun",
+"{n} missing":"{n} ben y-want"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2144,7 +2160,21 @@
 "{n} MB left":"{n} MB left",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd nedeth SABNZBD_URL and SABNZBD_API_KEY {where_keys}: his place (as http://sabnzbd:8080) and the ful key, in SABnzbd under Config, General, API Key.",
 "pause SABnzbd's queue":"stille SABnzbd's rewe",
-"resume SABnzbd's queue":"stire SABnzbd's rewe agayn"
+"resume SABnzbd's queue":"stire SABnzbd's rewe agayn",
+"Which one? Radarr or Sonarr.":"Whiche? Radarr or Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought sendeth nat {what} to {who}.",
+"The {who} refused its API key.":"The {who} refusede his key.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"{who} rewe",
+"{who} wanted list":"{who} desir list",
+"{who} diskspace":"{who} disk-space",
+"{n} downloading":"{n} ladinge doun",
+"{n} missing":"{n} ben y-want",
+"search {who}'s wanted list for what's missing":"in {who} desir list to sechen what is y-want",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} nedeth {url_setting} and {key_setting} {where_keys}: his place (as http://radarr:7878) and his key, under Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

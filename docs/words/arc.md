@@ -34,6 +34,7 @@ Made by tools/sync.py from i18n/arc.json: edit that, not this.
 - Proxmox: Proxmox
 - Docker: Docker
 - SABnzbd: SABnzbd
+- Radarr and Sonarr: Radarr וSonarr
 - Tools for the agent: drop them inside an agent block: מאני שליחא: שדי יתהון בגו לבנת שליחא
 - Listeners: they run while the exported program runs on schedule: שמועין: רהטין כל עוד סדורא דנפק רהט בזמניה
 - Read and send: קרי ושלח

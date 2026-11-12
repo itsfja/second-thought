@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"fila do SABnzbd","tooltip":"Uma lista de registos, um por cada trabalho na fila de descargas: name, size_mb, left_mb, percent, eta (tempo restante, como 0:12:34) e status (Downloading, Queued, Paused). Nesta página usa uma fila de exemplo."},
 "rb_sabnzbd_history":{"message0":"histórico do SABnzbd, últimas %1 horas","tooltip":"Uma lista de registos, um por cada trabalho terminado nesse tempo: name, status (Completed ou Failed), size_mb, quando terminou e, numa falha, porque falhou."},
 "rb_sabnzbd_diskspace":{"message0":"espaço em disco do SABnzbd","tooltip":"Uma lista de registos, um por cada pasta do SABnzbd (a pasta de descargas primeiro): folder e free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Põe em pausa ou retoma toda a fila de descargas. Pergunta-to sempre, mesmo quando mais nada o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada fica em pausa a sério."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Põe em pausa ou retoma toda a fila de descargas. Pergunta-to sempre, mesmo quando mais nada o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada fica em pausa a sério."},
+"rb_arr_queue":{"message0":"fila do %1","tooltip":"Uma lista de registos, um por cada descarga na fila: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality e eta (tempo restante, como 0:12:34). Nesta página usa uma fila de exemplo."},
+"rb_arr_missing":{"message0":"lista de desejados %1","tooltip":"Uma lista de registos, um por cada filme ou episódio sem ficheiro: title, added (quando adicionado) e id."},
+"rb_arr_diskspace":{"message0":"espaço em disco %1","tooltip":"Uma lista de registos, um por cada pasta: path, label, free_gb e total_gb."},
+"rb_arr_search":{"message0":"procurar o que falta em %1","tooltip":"Procura em toda a lista de desejados o que não tem ficheiro. Pergunta-to sempre, mesmo quando mais nada o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada procura a sério."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos os dias","weekdays":"nos dias úteis","weekends":"ao fim de semana"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"comprar","sell":"vender"},
 "rb_coinbase_order.SIDE":{"buy":"comprar","sell":"vender"},
 "rb_proxmox_power.ACTION":{"start":"iniciar","shutdown":"desligar","reboot":"reiniciar"},
-"rb_docker_power.ACTION":{"restart":"reiniciar","stop":"parar","start":"iniciar"}
+"rb_docker_power.ACTION":{"restart":"reiniciar","stop":"parar","start":"iniciar"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"Eventos",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr e Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ferramentas para o agente: coloque-as dentro de um bloco de agente",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} pastas",
 "{n} in the queue":"{n} na fila",
 "pause and resume your SABnzbd downloads (asking you each time)":"pôr em pausa e retomar as tuas descargas do SABnzbd (perguntando-to cada vez)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"ler o teu SABnzbd: a fila de descargas, o histórico e o espaço livre do disco de descargas"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"ler o teu SABnzbd: a fila de descargas, o histórico e o espaço livre do disco de descargas",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"procurar o que falta nos teus Radarr e Sonarr (perguntando-to cada vez)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"ler os teus Radarr e Sonarr: a fila de descargas, a lista de desejados e o espaço em disco",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Qual? Radarr ou Sonarr.",
+"{n} downloading":"{n} a descarregar",
+"{n} missing":"{n} em falta"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -2144,6 +2160,20 @@
 "{n} MB left":"{n} MB restantes",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"O SABnzbd precisa de SABNZBD_URL e SABNZBD_API_KEY {where_keys}: o seu endereço (como http://sabnzbd:8080) e a chave API completa, no SABnzbd em Config, General, API Key.",
 "pause SABnzbd's queue":"pôr em pausa a fila do SABnzbd",
-"resume SABnzbd's queue":"retomar a fila do SABnzbd"
+"resume SABnzbd's queue":"retomar a fila do SABnzbd",
+"Which one? Radarr or Sonarr.":"Qual? Radarr ou Sonarr.",
+"Second Thought doesn't send {what} to {who}.":"O Second Thought não envia {what} ao {who}.",
+"The {who} refused its API key.":"O {who} recusou a sua chave API.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"fila do {who}",
+"{who} wanted list":"lista de desejados do {who}",
+"{who} diskspace":"espaço em disco do {who}",
+"{n} downloading":"{n} a descarregar",
+"{n} missing":"{n} em falta",
+"search {who}'s wanted list for what's missing":"procurar o que falta na lista de desejados do {who}",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"O {who} precisa de {url_setting} e {key_setting} {where_keys}: o seu endereço (como http://radarr:7878) e a sua chave API, em Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 }
 };

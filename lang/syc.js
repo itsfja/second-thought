@@ -178,7 +178,11 @@
 "rb_sabnzbd_queue":{"message0":"ṭūqsā d-SABnzbd","tooltip":"pūqā d-rešē, ḥadā l-kal ꜥabdā b-ṭūqsā d-naḥūṭā: name, size_mb, left_mb, percent, eta (zabnā baꜥ, ꜥak 0:12:34) w-status (Downloading, Queued, Paused). b-dēn ṣeḥtā ṭūqsā d-meṯmārā."},
 "rb_sabnzbd_history":{"tooltip":"pūqā d-rešē, ḥadā l-kal ꜥabdā d-šamlā b-zabnā hānā: name, status (Completed aw Failed), size_mb, ēmat šamlā w, l-ḥṭīṯā, ꜥal mānā ḥṭī.","message0":"tāšꜥītā d-SABnzbd, āḥrānē %1 šāꜥē"},
 "rb_sabnzbd_diskspace":{"message0":"aṯrā d-diskā d-SABnzbd","tooltip":"pūqā d-rešē, ḥadā l-kal qnūšā d-SABnzbd (qnūšā d-naḥūṭā qadmāyā): folder w-free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"meṭṭel aw meštrē kollā ṭūqsā d-naḥūṭā. sāꜣelā lāk kol-zabnā, ꜥaṣar kollā ꜥāḥrānā lā sāꜣel, w-lā āšar āmōr hnā, lā ꜥbad. b-dēn ṣeḥtā kollā meṭṭel lā ꜥbad b-ḥrānūṯā."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"meṭṭel aw meštrē kollā ṭūqsā d-naḥūṭā. sāꜣelā lāk kol-zabnā, ꜥaṣar kollā ꜥāḥrānā lā sāꜣel, w-lā āšar āmōr hnā, lā ꜥbad. b-dēn ṣeḥtā kollā meṭṭel lā ꜥbad b-ḥrānūṯā."},
+"rb_arr_queue":{"message0":"ṭūqsā d-%1","tooltip":"pūqā d-rešē, ḥadā l-kal naḥḥūṭā b-ṭūqsā: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality w-eta (zabnā baꜥ, ꜥak 0:12:34). b-dēn ṣeḥtā ṭūqsā d-meṯmārā."},
+"rb_arr_missing":{"message0":"ṭūbā d-ṭlābē d-%1","tooltip":"pūqā d-rešē, ḥadā l-kal ḥaylānā aw qaṭrā b-lā ktābā: title, added (ēmat tappā) w-id."},
+"rb_arr_diskspace":{"message0":"aṯrā d-diskā d-%1","tooltip":"pūqā d-rešē, ḥadā l-kal qnūšā: path, label, free_gb w-total_gb."},
+"rb_arr_search":{"message0":"baꜥā b-%1 mā bāꜥ","tooltip":"b-kollā ṭūbā d-ṭlābē baꜥā mā lā ktābā ꜥmār. sāꜣelā lāk kol-zabnā, ꜥaṣar kollā ꜥāḥrānā lā sāꜣel, w-lā āšar āmōr hnā, lā ꜥbad. b-dēn ṣeḥtā kollā lā baꜥā b-ḥrānūṯā."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ܟܘܠ ܝܘܡ","weekdays":"ܒܝܘܡܬܐ ܕܥܒܕܐ","weekends":"ܒܫܒܬܐ"},
@@ -201,7 +205,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"ܙܒܘܢ","sell":"ܙܒܢ"},
 "rb_coinbase_order.SIDE":{"buy":"ܙܒܘܢ","sell":"ܙܒܢ"},
 "rb_proxmox_power.ACTION":{"start":"ܫܪܝ","shutdown":"ܕܥܟ","reboot":"ܬܘܒ ܫܪܝ"},
-"rb_docker_power.ACTION":{"restart":"ܬܘܒ ܫܪܝ","stop":"ܒܛܠ","start":"ܫܪܝ"}
+"rb_docker_power.ACTION":{"restart":"ܬܘܒ ܫܪܝ","stop":"ܒܛܠ","start":"ܫܪܝ"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Agent":"ܫܠܝܚܐ",
@@ -235,7 +243,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr w-Sonarr"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ܡܨܝܬܢܐ: ܪܗܛܝܢ ܟܕ ܛܘܟܣܐ ܕܢܦܩ ܪܗܛ ܥܡ ܙܒܢܐ",
@@ -1100,7 +1109,14 @@
 "{n} folders":"{n} ܩܢܘܫܐ",
 "{n} in the queue":"{n} b-ṭūqsā",
 "pause and resume your SABnzbd downloads (asking you each time)":"meṭṭel w-meštrē naḥūṭā d-SABnzbd (sāꜣelā lāk kol-zabnā)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"qrā SABnzbd: ṭūqsā d-naḥūṭā, tāšꜥītā wa-ṯrā d-diskā d-naḥūṭā"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"qrā SABnzbd: ṭūqsā d-naḥūṭā, tāšꜥītā wa-ṯrā d-diskā d-naḥūṭā",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"b-Radarr w-Sonarr ḇdīl baꜥā mā bāꜥ (sāꜣelā lāk kol-zabnā)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"qrā Radarr w-Sonarr ḇdīl: ṭūqsā d-naḥḥūṭā, ṭūbā d-ṭlābē wa-ṯrā d-diskā",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"man? Radarr aw Sonarr?",
+"{n} downloading":"{n} naḥḥāṭīn",
+"{n} missing":"{n} bāꜥīn"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
@@ -2145,7 +2161,21 @@
 "{n} MB left":"{n} MB baꜥ",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd sānē SABNZBD_URL w-SABNZBD_API_KEY {where_keys}: aṯrēh (ꜥak http://sabnzbd:8080) wmāḥtā d-API kullā, b-SABnzbd l-tḥet Config, General, API Key.",
 "pause SABnzbd's queue":"lebaṭṭel ṭūqsā d-SABnzbd",
-"resume SABnzbd's queue":"lameštrē ṭūqsā d-SABnzbd"
+"resume SABnzbd's queue":"lameštrē ṭūqsā d-SABnzbd",
+"Which one? Radarr or Sonarr.":"man? Radarr aw Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought lā mšaddar {what} l-{who}.",
+"The {who} refused its API key.":"{who} sānē māḥtēh raddā.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"ṭūqsā d-{who}",
+"{who} wanted list":"ṭūbā d-ṭlābē d-{who}",
+"{who} diskspace":"aṯrā d-diskā d-{who}",
+"{n} downloading":"{n} naḥḥāṭīn",
+"{n} missing":"{n} bāꜥīn",
+"search {who}'s wanted list for what's missing":"b-ṭūbā d-ṭlābē d-{who} baꜥā mā bāꜥ",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} sānē {url_setting} w-{key_setting} {where_keys}: aṯrēh (ꜥak http://radarr:7878) wmāḥtēh, l-tḥet Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

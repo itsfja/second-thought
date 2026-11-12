@@ -681,6 +681,22 @@
   "rb_sabnzbd_pause": {
    "message0": "%1 SABnzbd",
    "tooltip": "ḫiš-ša-aš kat-ti-wa-aš-ši kar-ap-du na-aš-ma EGIR-pa ti-ya-du. TU-É-ŠU kar-ap-du, SÍSKUR-SU kar-ap-du, ù LÚ-aš UL ti-ya-du, UL ti-ya-zi. SABnzbd-ya anda kala UL kar-ap-ta-ri."
+  },
+  "rb_arr_queue": {
+   "message0": "ḫiš-ša-aš %1",
+   "tooltip": "DUG.MEŠ-aš ša-aš-ta-aš, iš-ta-ma-aš for EGIR-pa kat-ti-wa-aš-ši ḫiš-ša-iš: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ù eta (ḫar-zi, ma-ši-wa-an 0:12:34). SABnzbd-ya anda ḫiš-ša-aš UL-ya."
+  },
+  "rb_arr_missing": {
+   "message0": "GIŠ.HUR-aš %1",
+   "tooltip": "DUG.MEŠ-aš ša-aš-ta-aš, iš-ta-ma-aš for DINGIR.MEŠ-aš ka-a-ri ku-iš DUB.SAR NU-za: title, added (ku-uš wa-aš-ta) ù id."
+  },
+  "rb_arr_diskspace": {
+   "message0": "KI-ŠAR %1",
+   "tooltip": "DUG.MEŠ-aš ša-aš-ta-aš, iš-ta-ma-aš for É.MEŠ: path, label, free_gb ù total_gb."
+  },
+  "rb_arr_search": {
+   "message0": "EGIR-pa ša-aš-ta-aš %1",
+   "tooltip": "GIŠ.HUR kala EGIR-pa ša-aš-ta-aš, ku-iš DUB.SAR NU-za. TU-É-ŠU kar-ap-du, SÍSKUR-SU kar-ap-du, ù LÚ-aš UL ti-ya-du, UL ti-ya-zi. SABnzbd-ya anda kala UL ša-aš-ta-ri."
   }
  },
  "options": {
@@ -809,6 +825,22 @@
    "restart": "𒂕𒉺 𒋾𒉿",
    "stop": "𒋼𒀀𒀊",
    "start": "𒋾𒉿"
+  },
+  "rb_arr_queue.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_missing.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_diskspace.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_search.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
   }
  },
  "categories": {
@@ -843,7 +875,8 @@
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker",
-  "SABnzbd": "SABnzbd"
+  "SABnzbd": "SABnzbd",
+  "Radarr and Sonarr": "Radarr ù Sonarr"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣",
@@ -1708,7 +1741,14 @@
   "{n} folders": "{n} 𒂍𒎌",
   "{n} in the queue": "{n} anda 𒌓𒊭𒀸",
   "pause and resume your SABnzbd downloads (asking you each time)": "kat-ti-wa-aš-ši SABnzbd kar-ap-du ù EGIR-pa ti-ya-du (TU-É-ŠU kar-ap-du)",
-  "read your SABnzbd: the download queue, its history and the download disk's free space": "SABnzbd-aš ša-aš-ta-iš: ḫiš-ša-aš kat-ti-wa-aš-ši, GIŠ.HUR ù KI-ŠAR É kat-ti-wa-aš-ši"
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "SABnzbd-aš ša-aš-ta-iš: ḫiš-ša-aš kat-ti-wa-aš-ši, GIŠ.HUR ù KI-ŠAR É kat-ti-wa-aš-ši",
+  "search your Radarr and Sonarr for what's missing (asking you each time)": "Radarr ù Sonarr EGIR-pa ša-aš-ta-aš (TU-É-ŠU kar-ap-du)",
+  "read your Radarr and Sonarr: the download queue, the wanted list and disk space": "Radarr ù Sonarr-aš ša-aš-ta-iš: ḫiš-ša-aš, GIŠ.HUR ù KI-ŠAR",
+  "Radarr": "Radarr",
+  "Sonarr": "Sonarr",
+  "Which one? Radarr or Sonarr.": "ku-it? Radarr ù Sonarr?",
+  "{n} downloading": "{n} ar-ḫa pa-a-an-zi",
+  "{n} missing": "{n} ḫar-zi"
  },
  "examples": {
   "review": {
@@ -3385,7 +3425,21 @@
   "{n} MB left": "{n} MB ḫar-zi",
   "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "SABnzbd SABNZBD_URL ù SABNZBD_API_KEY ú-e-mi-ya-zi {where_keys}: pé-e-da-an (http://sabnzbd:8080 ma-ši-wa-an) ù SÍSKUR API per, SABnzbd-ya anda Config, General, API Key.",
   "pause SABnzbd's queue": "ḫiš-ša-aš SABnzbd kar-ap-du",
-  "resume SABnzbd's queue": "ḫiš-ša-aš SABnzbd EGIR-pa ti-ya-du"
+  "resume SABnzbd's queue": "ḫiš-ša-aš SABnzbd EGIR-pa ti-ya-du",
+  "Which one? Radarr or Sonarr.": "ku-it? Radarr ù Sonarr?",
+  "Second Thought doesn't send {what} to {who}.": "Second Thought {what} {who}-ya UL pé-e-da-i.",
+  "The {who} refused its API key.": "{who}-aš ku-un-za-aš UZU.ZÉ-ŠU kar-ap-ta.",
+  "{who}: {why}.": "{who}: {why}.",
+  "{who} {version}": "{who} {version}",
+  "{who} queue": "ḫiš-ša-aš {who}",
+  "{who} wanted list": "GIŠ.HUR-aš {who}",
+  "{who} diskspace": "KI-ŠAR {who}",
+  "{n} downloading": "{n} ar-ḫa pa-a-an-zi",
+  "{n} missing": "{n} ḫar-zi",
+  "search {who}'s wanted list for what's missing": "GIŠ.HUR {who} EGIR-pa ša-aš-ta-aš",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.": "{who} {url_setting} ù {key_setting} ú-e-mi-ya-zi {where_keys}: pé-e-da-an (http://radarr:7878 ma-ši-wa-an) ù ku-un-za-an, SABnzbd-ya anda Config, General, API Key.",
+  "Radarr": "Radarr",
+  "Sonarr": "Sonarr"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

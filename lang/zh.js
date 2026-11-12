@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"SABnzbd 队列","tooltip":"记录列表，下载队列中的每个任务一条：name、size_mb、left_mb、percent、eta（剩余时间，如 0:12:34）和 status（Downloading、Queued、Paused）。在本页使用示例队列。"},
 "rb_sabnzbd_history":{"message0":"SABnzbd 历史记录，过去 %1 小时","tooltip":"记录列表，该时间内完成的每个任务一条：name、status（Completed 或 Failed）、size_mb、完成时间，以及失败时的原因。"},
 "rb_sabnzbd_diskspace":{"message0":"SABnzbd 磁盘空间","tooltip":"记录列表，SABnzbd 的每个文件夹（下载文件夹在前）一条：folder 和 free_gb。"},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"暂停或恢复整个下载队列。即使别的都不询问，它也每次先问你；没有人说“是”就不会运行。在本页不会真的暂停。"}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"暂停或恢复整个下载队列。即使别的都不询问，它也每次先问你；没有人说“是”就不会运行。在本页不会真的暂停。"},
+"rb_arr_queue":{"message0":"%1 队列","tooltip":"记录列表，队列中的每个下载一条：title、status（Downloading、Importing、Failed 等）、size_mb、left_mb、quality 和 eta（剩余时间，如 0:12:34）。在本页使用示例队列。"},
+"rb_arr_missing":{"message0":"%1 想要列表","tooltip":"记录列表，没有文件的每部电影或剧集一条：title、added（添加时间）和 id。"},
+"rb_arr_diskspace":{"message0":"%1 磁盘空间","tooltip":"记录列表，每个文件夹一条：path、label、free_gb 和 total_gb。"},
+"rb_arr_search":{"message0":"在 %1 中搜索缺失内容","tooltip":"在整个想要列表中搜索没有文件的内容。即使别的都不询问，它也每次先问你；没有人说“是”就不会运行。在本页不会真的搜索。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"买入","sell":"卖出"},
 "rb_coinbase_order.SIDE":{"buy":"买入","sell":"卖出"},
 "rb_proxmox_power.ACTION":{"start":"启动","shutdown":"关机","reboot":"重启"},
-"rb_docker_power.ACTION":{"restart":"重启","stop":"停止","start":"启动"}
+"rb_docker_power.ACTION":{"restart":"重启","stop":"停止","start":"启动"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"事件",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr 和 Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"给智能体的工具：把它们放进智能体积木里",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} 个文件夹",
 "{n} in the queue":"队列中有 {n} 个",
 "pause and resume your SABnzbd downloads (asking you each time)":"暂停和恢复你的 SABnzbd 下载（每次都询问你）",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"读取你的 SABnzbd：下载队列、历史记录和下载磁盘的剩余空间"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"读取你的 SABnzbd：下载队列、历史记录和下载磁盘的剩余空间",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"在你的 Radarr 和 Sonarr 中搜索缺失内容（每次都询问你）",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"读取你的 Radarr 和 Sonarr：下载队列、想要列表和磁盘空间",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"哪一个？Radarr 还是 Sonarr？",
+"{n} downloading":"{n} 个正在下载",
+"{n} missing":"{n} 个缺失"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -2144,6 +2160,20 @@
 "{n} MB left":"剩余 {n} MB",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd 需要 SABNZBD_URL 和 SABNZBD_API_KEY {where_keys}：它的地址（比如 http://sabnzbd:8080）和完整的 API 密钥，在 SABnzbd 的 Config、General、API Key 下。",
 "pause SABnzbd's queue":"暂停 SABnzbd 的队列",
-"resume SABnzbd's queue":"恢复 SABnzbd 的队列"
+"resume SABnzbd's queue":"恢复 SABnzbd 的队列",
+"Which one? Radarr or Sonarr.":"哪一个？Radarr 还是 Sonarr？",
+"Second Thought doesn't send {what} to {who}.":"Second Thought 不会向 {who} 发送 {what}。",
+"The {who} refused its API key.":"{who} 拒绝了其 API 密钥。",
+"{who}: {why}.":"{who}：{why}。",
+"{who} {version}":"{who} {version}",
+"{who} queue":"{who} 队列",
+"{who} wanted list":"{who} 的想要列表",
+"{who} diskspace":"{who} 磁盘空间",
+"{n} downloading":"{n} 个正在下载",
+"{n} missing":"{n} 个缺失",
+"search {who}'s wanted list for what's missing":"在 {who} 的想要列表中搜索缺失的内容",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} 需要 {url_setting} 和 {key_setting} {where_keys}：它的地址（比如 http://radarr:7878）和 API 密钥，在 Settings、General、API Key 下。",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 }
 };
