@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"Unraid VMs","tooltip":"A liste of records, oon for everich virtual mashine: name and state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 the Unraid container %2","tooltip":"Bigynneth or stoppeth oon Docker container, by his name. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing bigynneth or stoppeth in sooth."},
 "rb_unraid_vm_power":{"message0":"%1 the Unraid VM %2","tooltip":"Bigynneth or stoppeth oon virtual mashine, by his name. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing bigynneth or stoppeth in sooth."},
-"rb_unraid_parity":{"message0":"checken Unraid his parity","tooltip":"It skanneth the parity disks by reding hem, writing no correctiouns. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing skanneth in sooth."}
+"rb_unraid_parity":{"message0":"checken Unraid his parity","tooltip":"It skanneth the parity disks by reding hem, writing no correctiouns. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing skanneth in sooth."},
+"rb_nzbgeek_search":{"message0":"serchen NZBGeek for %1","tooltip":"A liste of records, oon for everich reles the indexer hath for these wordes: title, id, size_mb, grabs, posted (whanne it was posted) and group. It only redeth: nothing is ever dounladed. It hath nede of NZBGEEK_API_KEY in second-thought.ini. In this page it useth a sample serche."},
+"rb_nzbgeek_fetch":{"message0":"fetten the NZB for %1","tooltip":"It feteth the NZB file of oon reles and saveth it as <id>.nzb. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. It yeveth nothing to a dounladere: the file is saved, that is alle. In this page nothing fetteth in sooth."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr and Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid disks",
 "Unraid shares":"Unraid shares",
 "Unraid containers":"Unraid containers",
-"Unraid VMs":"Unraid VMs"
+"Unraid VMs":"Unraid VMs",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"serchen NZBGeek, the Usenet indexer, and reden what he hath: titles, sizes, ages and groupes",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"fetten an NZB file fro NZBGeek and saven it (axing thee every tyme)",
+"{n} found":"{n} founden",
+"NZBGeek search":"NZBGeek serche",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1344,7 +1352,9 @@
 "The back door is still open.":"The bak dore is yet open.",
 "Good morning!":"Good morwe!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(A rennyng bifore stinted amydde, but the devys is chaunged sith, so it bigynneth newe.)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"checken Unraid his parity",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"rewe {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} hath nede of {url_setting} and {key_setting} {where_keys}: his API key, in NZBGeek under My Account, API key.",
+"NZBGeek search for {q}":"NZBGeek serche for {q}",
+"{n} found":"{n} founden",
+"Which one? Give a release's id, from the search.":"Whiche? Yeve the id of a reles, fro the serche.",
+"fetch the NZB for {id} from NZBGeek":"fetten the NZB for {id} fro NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} dayes of keping",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

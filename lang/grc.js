@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"εἰκόνες μηχαναί Unraid","tooltip":"Λόγος μνημῶν, ἑνὶ ἑκάστῃ εἰκόνι μηχανῇ: name καὶ state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 τὸ ἀγγεῖον τοῦ Unraid %2","tooltip":"Ἀνάγει ἢ παύει ἓν ἀγγεῖον Docker, τῷ ὀνόματι. Ἀεὶ σε ἐρωτᾷ πρῶτον, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μὴ ὄντος οὗ ἐρεῖ ναι, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀνάγει ἢ παύει ἀληθῶς."},
 "rb_unraid_vm_power":{"message0":"%1 τὴν εἰκόνα μηχανὴν τοῦ Unraid %2","tooltip":"Ἀνάγει ἢ παύει μίαν εἰκόνα μηχανήν, τῷ ὀνόματι. Ἀεὶ σε ἐρωτᾷ πρῶτον, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μὴ ὄντος οὗ ἐρεῖ ναι, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀνάγει ἢ παύει ἀληθῶς."},
-"rb_unraid_parity":{"message0":"σκεψθῆναι τὴν ἰσότητα τοῦ Unraid","tooltip":"Σκέπτει τοὺς ἰσότητος δίσκους ἀναγιγνώσκων αὐτούς, μὴ γράφων διορθώσεις. Ἀεὶ σε ἐρωτᾷ πρῶτον, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μὴ ὄντος οὗ ἐρεῖ ναι, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν σκέπτει ἀληθῶς."}
+"rb_unraid_parity":{"message0":"σκεψθῆναι τὴν ἰσότητα τοῦ Unraid","tooltip":"Σκέπτει τοὺς ἰσότητος δίσκους ἀναγιγνώσκων αὐτούς, μὴ γράφων διορθώσεις. Ἀεὶ σε ἐρωτᾷ πρῶτον, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μὴ ὄντος οὗ ἐρεῖ ναι, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν σκέπτει ἀληθῶς."},
+"rb_nzbgeek_search":{"message0":"ζητεῖν ἐν NZBGeek περὶ %1","tooltip":"Λόγος μνημῶν, ἑνὶ ἑκάστῃ μεταδόσει ἣν ὁ εὑρετὴς ἔχει περὶ τούτων τῶν λόγων: title, id, size_mb, grabs, posted (πότε ἐδόθη) καὶ group. Μόνον ἀναγιγνώσκει: οὐδὲν ποτὲ κατεβαίνει. Ἡ κληδὶς NZBGEEK_API_KEY ἐν second-thought.ini. Ἐν ταύτῃ τῇ σελίδι δείγματι ζητήσεως χρῆται."},
+"rb_nzbgeek_fetch":{"message0":"λαβεῖν τὸ NZB τοῦ %1","tooltip":"Λαμβάνει τὸ ἀρχεῖον NZB μιᾶς μεταδόσεως καὶ σῴζει αὐτὸ ὡς <id>.nzb. Ἀεὶ σε ἐρωτᾷ πρῶτον, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μὴ ὄντος οὗ ἐρεῖ ναι, οὐ γίνεται. Οὐδενὶ προγράμματι λήψεως δίδωσιν: τὸ ἀρχεῖον σῴζεται, τοῦτο μόνον. Ἐν ταύτῃ τῇ σελίδι οὐδὲν λαμβάνει ἀληθῶς."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"καθ᾽ ἡμέραν","weekdays":"ἐν ταῖς ἡμέραις τῶν ἔργων","weekends":"ἐν τῷ τέλει τῆς ἑβδομάδος"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr καὶ Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"δίσκοι Unraid",
 "Unraid shares":"κοινωνία Unraid",
 "Unraid containers":"ἀγγεῖα Unraid",
-"Unraid VMs":"εἰκόνες μηχαναί Unraid"
+"Unraid VMs":"εἰκόνες μηχαναί Unraid",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"ζητεῖν ἐν NZBGeek, τῷ εὑρετῇ τοῦ Usenet, καὶ ἀναγιγνώσκειν ἃ ἔχει: τίτλους, μεγέθη, ἡλικίας καὶ κοινότητας",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"λαβεῖν ἀρχεῖον NZB παρὰ NZBGeek καὶ σῶσαι αὐτό (ἐρωτώντα σε ἑκάστοτε)",
+"{n} found":"{n} εὑρέθη",
+"NZBGeek search":"ζήτησις ἐν NZBGeek",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1344,7 +1352,9 @@
 "The back door is still open.":"Ἡ ὀπισθία θύρα ἔτι ἀνέῳκται.",
 "Good morning!":"Καλὴ πρωΐα!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Πρᾶξις προτέρα ἐν μέσῳ ἐπαύσατο, ἀλλὰ τὸ πρόγραμμα ἔκτοτε ἠλλάγη, διὸ ἐξ ἀρχῆς ἄρχεται.)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"σκεψθῆναι τὴν ἰσότητα τοῦ Unraid",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"παράταξις {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"Τῷ {who} δεῖ {url_setting} καὶ {key_setting} {where_keys}: τὴν κληδίαν αὐτοῦ, ἐν NZBGeek ὑπὸ My Account, API key.",
+"NZBGeek search for {q}":"ζήτησις ἐν NZBGeek περὶ {q}",
+"{n} found":"{n} εὑρέθη",
+"Which one? Give a release's id, from the search.":"Ποῖον; Δὸς τὴν ταυτότητα μεταδόσεως, ἐκ τῆς ζητήσεως.",
+"fetch the NZB for {id} from NZBGeek":"λαβεῖν τὸ NZB τοῦ {id} παρὰ NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} ἡμέραι φυλακῆς",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

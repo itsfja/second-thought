@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"Unraid velar","tooltip":"Listi faerslna, einnar fyrir hverja syndarvel: name og state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 Unraid-ilat %2","tooltip":"Byrjar etha stodvar eitt Docker-ilat, eftir nafni. Thad spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu byrjar etha stodvar ekkert i alvoru."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid vel %2","tooltip":"Byrjar etha stodvar eina syndarvel, eftir nafni. Thad spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu byrjar etha stodvar ekkert i alvoru."},
-"rb_unraid_parity":{"message0":"kanna jafnredi Unraid","tooltip":"Kannar jafnredisdiska med thvi ad lesa tha, an thess ad skrifa leidrettingar. Thad spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu kannar ekkert i alvoru."}
+"rb_unraid_parity":{"message0":"kanna jafnredi Unraid","tooltip":"Kannar jafnredisdiska med thvi ad lesa tha, an thess ad skrifa leidrettingar. Thad spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu kannar ekkert i alvoru."},
+"rb_nzbgeek_search":{"message0":"leita i NZBGeek adfer %1","tooltip":"Listi faerslna, einnar fyrir hverja utgafu sem visirinn hefur fyrir ordin: title, id, size_mb, grabs, posted (thegar sett) og group. Hann les only: ekkert er nokkru sinnum soett. Hann tharf NZBGEEK_API_KEY i second-thought.ini. A thessari sidu notar hann synishornsleit."},
+"rb_nzbgeek_fetch":{"message0":"sækja NZB fyrir %1","tooltip":"Saekir NZB-skra einnar utgafu og vistar hana sem <id>.nzb. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. Hann gefur engu niurhali: skrain er vistud, thad er alt. A thessari sidu saekir ekkert i alvoru."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr og Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid diskar",
 "Unraid shares":"Unraid hlutir",
 "Unraid containers":"Unraid ilat",
-"Unraid VMs":"Unraid velar"
+"Unraid VMs":"Unraid velar",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"leita i NZBGeek, Usenet-visirinn, og lesa hvad hann hefur: titla, staerdir, aldur og hopa",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"sækja NZB-skra fra NZBGeek og vista hana (spyrjandi thig hvern sinn)",
+"{n} found":"{n} fundin",
+"NZBGeek search":"NZBGeek-leitan",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1344,7 +1352,9 @@
 "The back door is still open.":"Bakdyrrnar eru enn opnar.",
 "Good morning!":"Góðan morgin!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Fyrri ferð stǫðvaðisk í miðju, en forritit hefir síðan breyzk, svá at þat hefsk at nýju.)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"kanna jafnredi Unraid",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"rodin {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} tharfnast {url_setting} og {key_setting} {where_keys}: API-lykil thess, i NZBGeek undir My Account, API key.",
+"NZBGeek search for {q}":"NZBGeek-leitan adfer {q}",
+"{n} found":"{n} fundin",
+"Which one? Give a release's id, from the search.":"Hvat? Gefu id a utgafu, ur leitinni.",
+"fetch the NZB for {id} from NZBGeek":"sækja NZB fyrir {id} fra NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} dagar geymslu",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

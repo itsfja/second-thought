@@ -728,6 +728,14 @@
   "rb_unraid_parity": {
    "message0": "驗 Unraid 之驗盤",
    "tooltip": "讀驗盤以驗之，不書正。縱他者不問，亦必先問於爾，無人在而應之則不行。此頁實無所驗。"
+  },
+  "rb_nzbgeek_search": {
+   "message0": "於NZBGeek檢%1",
+   "tooltip": "錄之列，索引之器以此語所有之每release一錄：title, id, size_mb, grabs, posted（何時布之）與group。惟讀而已：永不載物。需NZBGEEK_API_KEY於second-thought.ini。此頁用示例之檢。"
+  },
+  "rb_nzbgeek_fetch": {
+   "message0": "取%1之NZB",
+   "tooltip": "取一release之NZB檔，存為<id>.nzb。縱他者不問，亦必先問於爾，無人在而應之則不行。不以物予下載之器：存檔而已。此頁實無所取。"
   }
  },
  "options": {
@@ -908,7 +916,8 @@
   "Docker": "Docker",
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr 與 Sonarr",
-  "Unraid": "Unraid"
+  "Unraid": "Unraid",
+  "NZBGeek": "NZBGeek"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "聽者：所出之程依時而行，則此諸塊行",
@@ -1791,7 +1800,12 @@
   "Unraid disks": "Unraid 之盤",
   "Unraid shares": "Unraid 之享",
   "Unraid containers": "Unraid 之器",
-  "Unraid VMs": "Unraid 虛機"
+  "Unraid VMs": "Unraid 虛機",
+  "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups": "檢Usenet索引之器NZBGeek，讀其所有：題、量、齒、群",
+  "fetch an NZB file from NZBGeek and save it (asking you each time)": "自NZBGeek取NZB之檔而存之（每問於爾）",
+  "{n} found": "得{n}物",
+  "NZBGeek search": "NZBGeek檢",
+  "NZBGeek": "NZBGeek"
  },
  "examples": {
   "review": {
@@ -2632,7 +2646,9 @@
   "today's draft": "今日之稿",
   "used headlines": "已用之題",
   "plex": "plex",
-  "windows": "windows"
+  "windows": "windows",
+  "Everything Everywhere All at Once": "Everything Everywhere All at Once",
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n（前行中止，然其程已易，故更始。）",
@@ -3502,7 +3518,15 @@
   "check Unraid's parity": "驗 Unraid 之驗盤",
   "Unraid {version}": "Unraid {version}",
   "array {state}": "陣 {state}",
-  "Unraid": "Unraid"
+  "Unraid": "Unraid",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.": "{who}需{url_setting}與{key_setting} {where_keys}：其API之鑰，在NZBGeek之My Account, API key下。",
+  "NZBGeek search for {q}": "NZBGeek檢{q}",
+  "{n} found": "得{n}物",
+  "Which one? Give a release's id, from the search.": "何者？以檢所得release之id予之。",
+  "fetch the NZB for {id} from NZBGeek": "自NZBGeek取{id}之NZB",
+  "NZBGeek {version}": "NZBGeek {version}",
+  "{n} days of retention": "{n}日存留",
+  "NZBGeek": "NZBGeek"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

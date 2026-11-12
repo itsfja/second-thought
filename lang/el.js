@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"VM Unraid","tooltip":"Λίστα εγγραφών, μία για κάθε εικονική μηχανή: name και state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 το container του Unraid %2","tooltip":"Εκκινεί ή σταματά ένα container Docker, κατά όνομα. Σε ρωτά πάντα πρώτα, ακόμη κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν εκκινεί ή σταματά πραγματικά."},
 "rb_unraid_vm_power":{"message0":"%1 το VM του Unraid %2","tooltip":"Εκκινεί ή σταματά μια εικονική μηχανή, κατά όνομα. Σε ρωτά πάντα πρώτα, ακόμη κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν εκκινεί ή σταματά πραγματικά."},
-"rb_unraid_parity":{"message0":"έλεγχος της parité του Unraid","tooltip":"Ελέγχει τους δίσκους parité διαβάζοντάς τους, χωρίς να γράφει διορθώσεις. Σε ρωτά πάντα πρώτα, ακόμη κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν ελέγχει πραγματικά."}
+"rb_unraid_parity":{"message0":"έλεγχος της parité του Unraid","tooltip":"Ελέγχει τους δίσκους parité διαβάζοντάς τους, χωρίς να γράφει διορθώσεις. Σε ρωτά πάντα πρώτα, ακόμη κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν ελέγχει πραγματικά."},
+"rb_nzbgeek_search":{"message0":"αναζήτηση στο NZBGeek για %1","tooltip":"Λίστα εγγραφών, μία για κάθε κυκλοφορία που έχει ο ευρετήρας για αυτές τις λέξεις: title, id, size_mb, grabs, posted (πότε δημοσιεύτηκε) και group. Μόνο διαβάζει: δεν κατεβαίνει ποτέ τίποτα. Χρειάζεται NZBGEEK_API_KEY στο second-thought.ini. Σε αυτή τη σελίδα χρησιμοποιεί δείγμα αναζήτησης."},
+"rb_nzbgeek_fetch":{"message0":"λήψη του NZB του %1","tooltip":"Παίρνει το αρχείο NZB μιας κυκλοφορίας και το αποθηκεύει ως <id>.nzb. Σε ρωτά πάντα πρώτα, ακόμη κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Δεν δίνει τίποτα σε πρόγραμμα λήψης: το αρχείο αποθηκεύεται, αυτό μόνο. Σε αυτή τη σελίδα τίποτα δεν παίρνει πραγματικά."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"κάθε μέρα","weekdays":"τις καθημερινές","weekends":"τα Σαββατοκύριακα"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr και Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"δίσκοι Unraid",
 "Unraid shares":"κοινόχρηστα Unraid",
 "Unraid containers":"containers Unraid",
-"Unraid VMs":"VM Unraid"
+"Unraid VMs":"VM Unraid",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"να αναζητάς στο NZBGeek, τον ευρετήριο Usenet, και να διαβάζεις τι έχει: τίτλους, μεγέθη, ηλικίες και ομάδες",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"να παίρνεις ένα αρχείο NZB από το NZBGeek και να το αποθηκεύεις (ρωτώντας σε κάθε φορά)",
+"{n} found":"βρέθηκαν {n}",
+"NZBGeek search":"αναζήτηση στο NZBGeek",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1344,7 +1352,9 @@
 "The back door is still open.":"Η πίσω πόρτα είναι ακόμα ανοιχτή.",
 "Good morning!":"Καλημέρα!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Μια προηγούμενη εκτέλεση σταμάτησε στη μέση, αλλά το πρόγραμμα έχει αλλάξει από τότε, οπότε ξεκινά από την αρχή.)",
@@ -2214,6 +2224,14 @@
 "check Unraid's parity":"έλεγχος της parité του Unraid",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"συστοιχία {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"Το {who} χρειάζεται {url_setting} και {key_setting} {where_keys}: το κλειδί API του, στο NZBGeek υπό My Account, API key.",
+"NZBGeek search for {q}":"αναζήτηση στο NZBGeek για {q}",
+"{n} found":"βρέθηκαν {n}",
+"Which one? Give a release's id, from the search.":"Ποιο; Δώσε το id μιας κυκλοφορίας, από την αναζήτηση.",
+"fetch the NZB for {id} from NZBGeek":"λήψη του NZB του {id} από το NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} ημέρες διατήρησης",
+"NZBGeek":"NZBGeek"
 }
 };

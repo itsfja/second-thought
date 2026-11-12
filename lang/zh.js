@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"Unraid 虚拟机","tooltip":"记录列表，每台虚拟机一条：name 和 state（RUNNING, SHUTOFF, ...）。"},
 "rb_unraid_container_power":{"message0":"%1 Unraid 容器 %2","tooltip":"按名称启动或停止一个 Docker 容器。即使别的都不问，它也总是先问你，没人在场说“是”就不会运行。此页面上什么都不会真的启动或停止。"},
 "rb_unraid_vm_power":{"message0":"%1 Unraid 虚拟机 %2","tooltip":"按名称启动或停止一台虚拟机。即使别的都不问，它也总是先问你，没人在场说“是”就不会运行。此页面上什么都不会真的启动或停止。"},
-"rb_unraid_parity":{"message0":"检查 Unraid 的校验盘","tooltip":"通过读取校验盘来检查它们，不写入任何修正。即使别的都不问，它也总是先问你，没人在场说“是”就不会运行。此页面上什么都不会真的检查。"}
+"rb_unraid_parity":{"message0":"检查 Unraid 的校验盘","tooltip":"通过读取校验盘来检查它们，不写入任何修正。即使别的都不问，它也总是先问你，没人在场说“是”就不会运行。此页面上什么都不会真的检查。"},
+"rb_nzbgeek_search":{"message0":"在 NZBGeek 搜索 %1","tooltip":"记录列表，索引器为这些词拥有的每个 release 一条：title, id, size_mb, grabs, posted（何时发布）和 group。它只读取：从不下载任何东西。需要在 second-thought.ini 中设置 NZBGEEK_API_KEY。此页面使用示例搜索。"},
+"rb_nzbgeek_fetch":{"message0":"获取 %1 的 NZB","tooltip":"获取一个 release 的 NZB 文件并保存为 <id>.nzb。即使别的都不问，它也总是先问你，没人在场说“是”就不会运行。它不会把任何东西交给下载器：只是保存文件而已。此页面上什么都不会真的获取。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr 和 Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"给智能体的工具：把它们放进智能体积木里",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid 磁盘",
 "Unraid shares":"Unraid 共享",
 "Unraid containers":"Unraid 容器",
-"Unraid VMs":"Unraid 虚拟机"
+"Unraid VMs":"Unraid 虚拟机",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"搜索 Usenet 索引器 NZBGeek，读取它有什么：标题、大小、日期和组",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"从 NZBGeek 获取 NZB 文件并保存（每次都先问你）",
+"{n} found":"找到 {n} 个",
+"NZBGeek search":"NZBGeek 搜索",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1344,7 +1352,9 @@
 "The back door is still open.":"后门还开着。",
 "Good morning!":"早上好！",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n（上一次运行中途停止了，但程序之后有改动，所以从头开始。）",
@@ -2214,6 +2224,14 @@
 "check Unraid's parity":"检查 Unraid 的校验盘",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"阵列 {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who}需要 {url_setting} 和 {key_setting} {where_keys}：它的 API 密钥，在 NZBGeek 的 My Account, API key 下。",
+"NZBGeek search for {q}":"NZBGeek 搜索 {q}",
+"{n} found":"找到 {n} 个",
+"Which one? Give a release's id, from the search.":"哪一个？给出搜索结果中某个 release 的 id。",
+"fetch the NZB for {id} from NZBGeek":"从 NZBGeek 获取 {id} 的 NZB",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} 天保存期",
+"NZBGeek":"NZBGeek"
 }
 };

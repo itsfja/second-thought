@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"Unraid mhnwt","tooltip":"aq aq, aq aq mhnwt: name at state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 Unraid khet %2","tooltip":"aq aq aq Docker khet, hr rn.f. aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. aq aq aq aq aq aq."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid mhnwt %2","tooltip":"aq aq aq mhnwt, hr rn.f. aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. aq aq aq aq aq aq."},
-"rb_unraid_parity":{"message0":"aq Unraid parity","tooltip":"aq parity khu aq aq aq, aq aq aq aq. aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. aq aq aq aq aq aq."}
+"rb_unraid_parity":{"message0":"aq Unraid parity","tooltip":"aq parity khu aq aq aq, aq aq aq aq. aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. aq aq aq aq aq aq."},
+"rb_nzbgeek_search":{"message0":"nwd hr NZBGeek %1","tooltip":"aq aq, aq aq rmt hr pꜣ wḥꜣ n sꜣ: name, id, size_mb, grabs, posted (aq aq) at group. aq aq: aq aq aq aq. hewa NZBGEEK_API_KEY hr second-thought.ini. aq aq aq aq nwd."},
+"rb_nzbgeek_fetch":{"message0":"aq NZB %1","tooltip":"aq pꜣ NZB n rmt aq hms.f sw wꜥ <id>.nzb. aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. aq aq aq aq: pꜣ hms aq, aq aq. aq aq aq aq aq."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𓅓 𓉔𓂋𓅱 𓈖𓃀","weekdays":"𓅓 𓉔𓂋𓅱 𓈖 𓃀𓄿𓎡","weekends":"𓅓 𓉔𓂋𓅱 𓈖 𓎛𓏏𓊪"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr ḥnꜥ Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𓋴𓆓𓅓𓅱: 𓇋𓂋𓋴𓈖 𓐍𓆑𓏏 𓇋𓂋 𓋴𓐍𓂋 𓆓𓄿 𓅓 𓏏𓂋",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid khau",
 "Unraid shares":"Unraid shau",
 "Unraid containers":"Unraid khet",
-"Unraid VMs":"Unraid mhnwt"
+"Unraid VMs":"Unraid mhnwt",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"nwd hr NZBGeek, pꜣ wḥꜣ n Usenet, aq aq.f: tꜣw, srwt, rnpt at shawt",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"aq pꜣ NZB n NZBGeek aq hms.f (aq n.k aq aq)",
+"{n} found":"{n} inpw",
+"NZBGeek search":"nwd NZBGeek",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -1344,7 +1352,9 @@
 "today's draft":"𓋴𓈙𓅱 𓈖 𓅓𓇋𓈖",
 "used headlines":"𓏏𓊪𓅱𓂋𓄿 𓇋𓂋𓈖",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(jrt tpt ꜥḥꜥ.n=s m ẖnw, jw šnj sḫr ḏr ꜥ, šꜣꜥ=f m mꜣwt.)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"aq Unraid parity",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"aha {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} hewa {url_setting} at {key_setting} {where_keys}: haw.f n API, hr NZBGeek her My Account, API key.",
+"NZBGeek search for {q}":"nwd NZBGeek n {q}",
+"{n} found":"{n} inpw",
+"Which one? Give a release's id, from the search.":"Ashau? Di id n rmt, hr nwd.",
+"fetch the NZB for {id} from NZBGeek":"aq NZB n {id} m NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} hrw hms",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

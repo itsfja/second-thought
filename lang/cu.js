@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"Unraid mashiny","tooltip":"Spisъkъ zapisii, po edinъ za vseakou vidьnou mashinou: name i state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 Unraid sosudъ %2","tooltip":"Nachnetъ ili vospatitъ edinъ Docker sosudъ, po imene. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьto zhe istino ne nachnetъ se ni vospatitъ."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid mashina %2","tooltip":"Nachnetъ ili vospatitъ edinou vidьnou mashinou, po imene. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьto zhe istino ne nachnetъ se ni vospatitъ."},
-"rb_unraid_parity":{"message0":"ispytati ravьstvo Unraid","tooltip":"Ispytayetъ ravьstvenъi diskъi chtъi ihъ, ne pisatъ ispravlenьe. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьto zhe istino ne ispytaetъ se."}
+"rb_unraid_parity":{"message0":"ispytati ravьstvo Unraid","tooltip":"Ispytayetъ ravьstvenъi diskъi chtъi ihъ, ne pisatъ ispravlenьe. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьto zhe istino ne ispytaetъ se."},
+"rb_nzbgeek_search":{"message0":"iskati vъ NZBGeek %1","tooltip":"Spisъkъ zapisii, po edinъ za vseakо izdanie, ezhe iskatelnikъ imatъ za si slova: title, id, size_mb, grabs, posted (kogda poustъ) i group. Toliko chtetъ: nichьto zhe nikogda ne skachayetъ se. Trebuetъ NZBGEEK_API_KEY vъ second-thought.ini. Na sei stranici obrazъnъnъ iskanie."},
+"rb_nzbgeek_fetch":{"message0":"vzyti NZB %1","tooltip":"Vozmetъ NZB pisanie edina izdaniya i sъhranitъ ego jako <id>.nzb. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Ne dastъ nichьto zhe skachalnou: pisanie sъhranyaetъ se, toliko. Na sei stranici nichьto zhe istino ne vospriimletъ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"на всѧкъ день","weekdays":"въ дни дѣланїѧ","weekends":"въ дни ѿдыха"},
@@ -251,7 +253,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr и Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1134,7 +1137,12 @@
 "Unraid disks":"Unraid diskъi",
 "Unraid shares":"Unraid delъi",
 "Unraid containers":"Unraid sosudъi",
-"Unraid VMs":"Unraid mashiny"
+"Unraid VMs":"Unraid mashiny",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"iskati vъ NZBGeek, iskatelnika Useneta, i chesti ego zhe imatъ: zaglavija, velikosti, leta i druzhstva",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"vzyti NZB pisanie otъ NZBGeek i sъhraniti ego (voprasha te vseaky pytъ)",
+"{n} found":"{n} obreteno",
+"NZBGeek search":"iskanie vъ NZBGeek",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -1343,7 +1351,9 @@
 "today's draft":"начертанїе днешнее",
 "used headlines":"употребленнаѧ надписанїѧ",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Прежнее теченїе ѡстависѧ на полупути, но чинъ ѿтолѣ премѣнисѧ, сегѡ ради начинаетъ изнова.)",
@@ -2213,7 +2223,15 @@
 "check Unraid's parity":"ispytati ravьstvo Unraid",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"likъ {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} trebuetъ {url_setting} i {key_setting} {where_keys}: klyuchь API ego, vъ NZBGeek podъ My Account, API key.",
+"NZBGeek search for {q}":"iskanie vъ NZBGeek {q}",
+"{n} found":"{n} obreteno",
+"Which one? Give a release's id, from the search.":"Kotoryi? Dajь idь izdaniya, otъ iskaniya.",
+"fetch the NZB for {id} from NZBGeek":"vzyti NZB {id} otъ NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} dьni hrana",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

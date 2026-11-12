@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"Unraid unutti","tooltip":"Mema unutti, kuis unutti: name u state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 Unraid parkaras %2","tooltip":"Docker parkaras sarnikzi u eszi, sarriessar. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL sarnikzi u UL eszi."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid unutti %2","tooltip":"Unutti sarnikzi u eszi, sarriessar. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL sarnikzi u UL eszi."},
-"rb_unraid_parity":{"message0":"Unraid para handaizzi","tooltip":"Para sarnikzi mema tarna, tus UL kisari. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL handaizzi."}
+"rb_unraid_parity":{"message0":"Unraid para handaizzi","tooltip":"Para sarnikzi mema tarna, tus UL kisari. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL handaizzi."},
+"rb_nzbgeek_search":{"message0":"NZBGeek tarna %1","tooltip":"Mema tarnas, kuiš tarnas tarna kuit ID: title, id, size_mb, grabs, posted (kuwapi dais) u group. Tarna only: UL dais. NZBGEEK_API_KEY second-thought.ini. Kuwapi Unraid tarna parkuwas."},
+"rb_nzbgeek_fetch":{"message0":"NZB %1 dai","tooltip":"NZB lim tarnas dais u parkuwa <id>.nzb. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. UL dai parkuwa: lim parkuwa, id. Kuwapi UL dai suneu."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒄰 𒄷𒌋𒈠𒀭","weekdays":"𒌓𒄰 𒀀𒉌𒉿𒀜𒋫𒀸","weekends":"𒌓𒄰 𒉿𒅈𒉺𒀸"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr ù Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid sarnikzi",
 "Unraid shares":"Unraid sassassar",
 "Unraid containers":"Unraid parkaras",
-"Unraid VMs":"Unraid unutti"
+"Unraid VMs":"Unraid unutti",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"NZBGeek tarnas, Usenet tarna, u tarna memas: title, size, memal u hahriyas",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"NZB lim NZBGeek dais u parkuwa (tuwaz kuwapit arha ehu)",
+"{n} found":"{n} tarna",
+"NZBGeek search":"NZBGeek tarna",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -1344,7 +1352,9 @@
 "today's draft":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒆠𒉡𒌦",
 "used headlines":"𒊕𒁺𒄭𒀀 𒄿𒉿𒀭",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(i-ya-u-wa-ar ḫa-an-te-ez-zi ŠÀ-pát kar-aš-ta, GIŠ.ḪUR-ma wa-aḫ-nu-ut, ne-e-wa ti-ya-zi.)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"Unraid para handaizzi",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"tarsa {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} {url_setting} u {key_setting} {where_keys}: API hartin, NZBGeek sar Settings, Management Access, API Keys.",
+"NZBGeek search for {q}":"NZBGeek tarna {q}",
+"{n} found":"{n} tarna",
+"Which one? Give a release's id, from the search.":"Kuwat-ma? ID-s ehu, tarnas.",
+"fetch the NZB for {id} from NZBGeek":"NZB {id} NZBGeek dai",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} memal harten",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

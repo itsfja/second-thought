@@ -36,6 +36,7 @@ Made by tools/sync.py from i18n/syc.json: edit that, not this.
 - SABnzbd: SABnzbd
 - Radarr and Sonarr: Radarr w-Sonarr
 - Unraid: Unraid
+- NZBGeek: NZBGeek
 - Listeners: they run while the exported program runs on schedule: ܡܨܝܬܢܐ: ܪܗܛܝܢ ܟܕ ܛܘܟܣܐ ܕܢܦܩ ܪܗܛ ܥܡ ܙܒܢܐ
 - No blocks match: ܠܝܬ ܠܒܢܐ ܕܫܘܝܢ
 - Read and send: ܩܪܝ ܘܫܕܪ

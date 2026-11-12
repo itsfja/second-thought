@@ -87,7 +87,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -151,7 +151,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY")
 
 
 def _load_keychain():
@@ -1145,6 +1145,11 @@ SAFETY = {
     "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
                     ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
                     ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
+    # NZBGeek's Newznab API (#400): one GET to /api, so the gate reads the query. The searches and t=caps are reads;
+    # the one fetch (t=get, an NZB file, with a paid account's key) always asks, live. Nothing else is ever sent:
+    # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
+    "nzbgeek_free": [["GET", r"^(?!.*(^|&)t=get(&|$))t=(search|tvsearch|movie|caps)(&|$)"]],
+    "nzbgeek_asks": [["GET", r"^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1320,6 +1325,17 @@ def arr_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
+
+
+def nzbgeek_call(method, query):
+    """"free" for one of NZBGeek's Newznab reads (a search, or t=caps), "asks" for the one fetch (t=get, an NZB
+    file, with a paid account's key), and None for anything else, which is never sent (#400). The query is read as
+    a whole: a search that smuggles t=get is refused, and so is a fetch that smuggles a search."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["nzbgeek_" + kind]):
             return kind
     return None
 
@@ -1773,6 +1789,7 @@ CAPABILITIES = [
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
+    ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -1784,6 +1801,7 @@ CAPABILITIES = [
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
+    ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
@@ -4415,6 +4433,84 @@ class Connections:
             return False
         await self._unraid("mutation{parity{start(correct:false)}}", approved=True)
         self.log(tr("Unraid"), what, tr("done"))
+        return True
+
+    # NZBGeek (#400)
+    # NZBGeek's Newznab API: NZBGEEK_API_KEY (My Account, API key) and, if it ever moves, NZBGEEK_URL (the default is
+    # https://api.nzbgeek.info). The searches and t=caps are reads (nzbgeek_free); the one fetch (t=get, an NZB file,
+    # with a paid account's key) always asks, live, and never runs with nobody there. Nothing else is ever sent: no
+    # account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
+    NZBGEEK_URL = "https://api.nzbgeek.info"
+
+    async def _nzbgeek(self, params, approved=False):
+        """One GET to NZBGeek's /api, gated by nzbgeek_call: a search or t=caps goes without asking, the one fetch
+        only after a live yes, and anything else is never sent."""
+        kind = nzbgeek_call("GET", urllib.parse.urlencode(params))
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.",
+                              what="GET /api?" + urllib.parse.urlencode({k: v for k, v in params.items() if k != "apikey"}), who="NZBGeek"))
+        key = os.environ.get("NZBGEEK_API_KEY", "").strip()
+        if not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.",
+                              who="NZBGeek", url_setting="NZBGEEK_URL", key_setting="NZBGEEK_API_KEY", where_keys=WHERE_KEYS))
+        url = (os.environ.get("NZBGEEK_URL", "").strip() or self.NZBGEEK_URL).rstrip("/")
+        status, raw = await self._pinned("NZBGeek", url, "NZBGEEK_CERT_SHA256", "GET",
+                                        "/api?" + urllib.parse.urlencode(dict(params, apikey=key)), {})
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who="NZBGeek"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="NZBGeek", why=self._said(status, raw)))
+        return raw
+
+    @staticmethod
+    def _nzbgeek_attrs(item):
+        """A release's Newznab attributes, whatever shape the answer gives them: name to value."""
+        out = {}
+        for a in (item.get("newznab:attr") or []) if isinstance(item, dict) else []:
+            a = a.get("@attributes") if isinstance(a, dict) and "@attributes" in a else a
+            if isinstance(a, dict) and a.get("name") is not None:
+                out[to_str(a.get("name"))] = to_str(a.get("value"))
+        return out
+
+    async def nzbgeek_search(self, query):
+        """What the indexer has for these words: a list of records — title, id, size_mb, grabs, posted (when it was
+        posted) and group. It only reads: nothing is ever downloaded."""
+        q = to_str(query).strip()
+        raw = await self._nzbgeek({"t": "search", "q": q, "o": "json"})
+        answer = json.loads(raw) if raw.strip() else {}
+        items = ((answer.get("channel") or {}).get("item")) or []
+        if isinstance(items, dict):
+            items = [items]
+        out = []
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            a = self._nzbgeek_attrs(item)
+            out.append({"title": to_str(item.get("title")),
+                        "id": to_str(item.get("guid")).rsplit("/", 1)[-1] if item.get("guid") else "",
+                        "size_mb": self._cents(num(a.get("size")) / 1048576) if a.get("size") else "",
+                        "grabs": num(a.get("grabs")) if a.get("grabs") else "",
+                        "posted": (a.get("usenetdate") or to_str(item.get("pubDate")))[:16],
+                        "group": a.get("group", "")})
+        lines = "\n".join(f"{r['title']} ({r['size_mb']} MB)" if r["size_mb"] else r["title"] for r in out)
+        self.log(tr("NZBGeek search for {q}", q=q), lines or tr("(nothing)"), tr("{n} found", n=len(out)))
+        return out
+
+    async def nzbgeek_fetch(self, ident):
+        """Fetches one NZB file and saves it as <id>.nzb, after asking you, every time. Gives back True if it was
+        done. It never hands anything to a downloader: the file is saved, that's all."""
+        n = to_str(ident).strip().rsplit("/", 1)[-1]
+        if not n:
+            raise RunError(tr("Which one? Give a release's id, from the search."))
+        what = tr("fetch the NZB for {id} from NZBGeek", id=n)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        raw = await self._nzbgeek({"t": "get", "id": n}, approved=True)
+        await self.save_file(raw, n, "nzb")
+        self.log(tr("NZBGeek"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -7276,6 +7372,16 @@ class Doctor:
                 return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
+        if has("nzbgeek_read", "nzbgeek_fetch"):
+            async def nzbgeek():
+                raw = await self._nzbgeek({"t": "caps", "o": "json"})
+                caps = (json.loads(raw) if raw.strip() else {}).get("caps") or {}
+                server = (caps.get("server") or {}).get("@attributes") or {}
+                ret = caps.get("retention")
+                days = num((ret or {}).get("@attributes", {}).get("days")) if isinstance(ret, dict) else num(ret)
+                return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
+                    + ", " + tr("{n} days of retention", n=days or "?")
+            out.append(("NZBGeek", nzbgeek))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -7591,7 +7697,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 

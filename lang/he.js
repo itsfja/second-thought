@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"מכונות וירטואליות של Unraid","tooltip":"רשימה של רשומות, אחת לכל מכונה וירטואלית: name וstate (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 מכולת Unraid %2","tooltip":"מתחיל או עוצר מכולת Docker אחת, לפי השם. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא מתחיל או עוצר באמת."},
 "rb_unraid_vm_power":{"message0":"%1 מכונה וירטואלית של Unraid %2","tooltip":"מתחיל או עוצר מכונה וירטואלית אחת, לפי השם. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא מתחיל או עוצר באמת."},
-"rb_unraid_parity":{"message0":"בדיקת הפריטי של Unraid","tooltip":"בודק את דיסקי הפריטי בקריאתם, בלי לכתוב תיקונים. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא בודק באמת."}
+"rb_unraid_parity":{"message0":"בדיקת הפריטי של Unraid","tooltip":"בודק את דיסקי הפריטי בקריאתם, בלי לכתוב תיקונים. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא בודק באמת."},
+"rb_nzbgeek_search":{"message0":"חיפוש ב-NZBGeek אחר %1","tooltip":"רשימה של רשומות, אחת לכל release שהאינדקסר יש לו למילים האלה: title, id, size_mb, grabs, posted (מתי פורסם) וgroup. הוא רק קורא: לעולם לא מוריד כלום. צריך NZBGEEK_API_KEY ב-second-thought.ini. בעמוד הזה הוא משתמש בחיפוש לדוגמה."},
+"rb_nzbgeek_fetch":{"message0":"להוריד את ה-NZB של %1","tooltip":"מוריד את קובץ ה-NZB של release אחת ושומר אותו כ-<id>.nzb. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. הוא לא נותן כלום למנהל הורדות: הקובץ נשמר, זה הכל. בעמוד הזה שום דבר לא מוריד באמת."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יום","weekdays":"בימי חול","weekends":"בסופי שבוע"},
@@ -253,7 +255,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr ו-Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1136,7 +1139,12 @@
 "Unraid disks":"דיסקים של Unraid",
 "Unraid shares":"שיתופים של Unraid",
 "Unraid containers":"מכולות של Unraid",
-"Unraid VMs":"מכונות וירטואליות של Unraid"
+"Unraid VMs":"מכונות וירטואליות של Unraid",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"לחפש ב-NZBGeek, אינדקסר ה-Usenet, ולקרוא מה יש לו: כותרות, גדלים, גילאים וקבוצות",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"להוריד קובץ NZB מ-NZBGeek ולשמור אותו (שואל אותך בכל פעם)",
+"{n} found":"{n} נמצאו",
+"NZBGeek search":"חיפוש NZBGeek",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1345,7 +1353,9 @@
 "The back door is still open.":"הדלת האחורית עדיין פתוחה.",
 "Good morning!":"בוקר טוב!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(הרצה קודמת נעצרה באמצע, אבל התוכנית השתנתה מאז, אז היא מתחילה מחדש.)",
@@ -2215,6 +2225,14 @@
 "check Unraid's parity":"בדיקת הפריטי של Unraid",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"מערך {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"ל{who} צריך {url_setting} ו{key_setting} {where_keys}: את מפתח ה-API שלו, ב-NZBGeek תחת My Account, API key.",
+"NZBGeek search for {q}":"חיפוש NZBGeek אחר {q}",
+"{n} found":"{n} נמצאו",
+"Which one? Give a release's id, from the search.":"איזה? תן את ה-id של release, מהחיפוש.",
+"fetch the NZB for {id} from NZBGeek":"להוריד את ה-NZB של {id} מ-NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} ימי שמירה",
+"NZBGeek":"NZBGeek"
 }
 };

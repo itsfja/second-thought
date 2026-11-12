@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY")
 
 
 def _load_keychain():
@@ -1563,6 +1563,11 @@ SAFETY = {
     "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
                     ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
                     ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
+    # NZBGeek's Newznab API (#400): one GET to /api, so the gate reads the query. The searches and t=caps are reads;
+    # the one fetch (t=get, an NZB file, with a paid account's key) always asks, live. Nothing else is ever sent:
+    # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
+    "nzbgeek_free": [["GET", r"^(?!.*(^|&)t=get(&|$))t=(search|tvsearch|movie|caps)(&|$)"]],
+    "nzbgeek_asks": [["GET", r"^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1738,6 +1743,17 @@ def arr_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
+
+
+def nzbgeek_call(method, query):
+    """"free" for one of NZBGeek's Newznab reads (a search, or t=caps), "asks" for the one fetch (t=get, an NZB
+    file, with a paid account's key), and None for anything else, which is never sent (#400). The query is read as
+    a whole: a search that smuggles t=get is refused, and so is a fetch that smuggles a search."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["nzbgeek_" + kind]):
             return kind
     return None
 
@@ -2191,6 +2207,7 @@ CAPABILITIES = [
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
+    ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -2202,6 +2219,7 @@ CAPABILITIES = [
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
+    ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
@@ -4833,6 +4851,84 @@ class Connections:
             return False
         await self._unraid("mutation{parity{start(correct:false)}}", approved=True)
         self.log(tr("Unraid"), what, tr("done"))
+        return True
+
+    # NZBGeek (#400)
+    # NZBGeek's Newznab API: NZBGEEK_API_KEY (My Account, API key) and, if it ever moves, NZBGEEK_URL (the default is
+    # https://api.nzbgeek.info). The searches and t=caps are reads (nzbgeek_free); the one fetch (t=get, an NZB file,
+    # with a paid account's key) always asks, live, and never runs with nobody there. Nothing else is ever sent: no
+    # account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
+    NZBGEEK_URL = "https://api.nzbgeek.info"
+
+    async def _nzbgeek(self, params, approved=False):
+        """One GET to NZBGeek's /api, gated by nzbgeek_call: a search or t=caps goes without asking, the one fetch
+        only after a live yes, and anything else is never sent."""
+        kind = nzbgeek_call("GET", urllib.parse.urlencode(params))
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.",
+                              what="GET /api?" + urllib.parse.urlencode({k: v for k, v in params.items() if k != "apikey"}), who="NZBGeek"))
+        key = os.environ.get("NZBGEEK_API_KEY", "").strip()
+        if not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.",
+                              who="NZBGeek", url_setting="NZBGEEK_URL", key_setting="NZBGEEK_API_KEY", where_keys=WHERE_KEYS))
+        url = (os.environ.get("NZBGEEK_URL", "").strip() or self.NZBGEEK_URL).rstrip("/")
+        status, raw = await self._pinned("NZBGeek", url, "NZBGEEK_CERT_SHA256", "GET",
+                                        "/api?" + urllib.parse.urlencode(dict(params, apikey=key)), {})
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who="NZBGeek"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="NZBGeek", why=self._said(status, raw)))
+        return raw
+
+    @staticmethod
+    def _nzbgeek_attrs(item):
+        """A release's Newznab attributes, whatever shape the answer gives them: name to value."""
+        out = {}
+        for a in (item.get("newznab:attr") or []) if isinstance(item, dict) else []:
+            a = a.get("@attributes") if isinstance(a, dict) and "@attributes" in a else a
+            if isinstance(a, dict) and a.get("name") is not None:
+                out[to_str(a.get("name"))] = to_str(a.get("value"))
+        return out
+
+    async def nzbgeek_search(self, query):
+        """What the indexer has for these words: a list of records — title, id, size_mb, grabs, posted (when it was
+        posted) and group. It only reads: nothing is ever downloaded."""
+        q = to_str(query).strip()
+        raw = await self._nzbgeek({"t": "search", "q": q, "o": "json"})
+        answer = json.loads(raw) if raw.strip() else {}
+        items = ((answer.get("channel") or {}).get("item")) or []
+        if isinstance(items, dict):
+            items = [items]
+        out = []
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            a = self._nzbgeek_attrs(item)
+            out.append({"title": to_str(item.get("title")),
+                        "id": to_str(item.get("guid")).rsplit("/", 1)[-1] if item.get("guid") else "",
+                        "size_mb": self._cents(num(a.get("size")) / 1048576) if a.get("size") else "",
+                        "grabs": num(a.get("grabs")) if a.get("grabs") else "",
+                        "posted": (a.get("usenetdate") or to_str(item.get("pubDate")))[:16],
+                        "group": a.get("group", "")})
+        lines = "\n".join(f"{r['title']} ({r['size_mb']} MB)" if r["size_mb"] else r["title"] for r in out)
+        self.log(tr("NZBGeek search for {q}", q=q), lines or tr("(nothing)"), tr("{n} found", n=len(out)))
+        return out
+
+    async def nzbgeek_fetch(self, ident):
+        """Fetches one NZB file and saves it as <id>.nzb, after asking you, every time. Gives back True if it was
+        done. It never hands anything to a downloader: the file is saved, that's all."""
+        n = to_str(ident).strip().rsplit("/", 1)[-1]
+        if not n:
+            raise RunError(tr("Which one? Give a release's id, from the search."))
+        what = tr("fetch the NZB for {id} from NZBGeek", id=n)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        raw = await self._nzbgeek({"t": "get", "id": n}, approved=True)
+        await self.save_file(raw, n, "nzb")
+        self.log(tr("NZBGeek"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -7694,6 +7790,16 @@ class Doctor:
                 return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
+        if has("nzbgeek_read", "nzbgeek_fetch"):
+            async def nzbgeek():
+                raw = await self._nzbgeek({"t": "caps", "o": "json"})
+                caps = (json.loads(raw) if raw.strip() else {}).get("caps") or {}
+                server = (caps.get("server") or {}).get("@attributes") or {}
+                ret = caps.get("retention")
+                days = num((ret or {}).get("@attributes", {}).get("days")) if isinstance(ret, dict) else num(ret)
+                return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
+                    + ", " + tr("{n} days of retention", n=days or "?")
+            out.append(("NZBGeek", nzbgeek))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -8009,7 +8115,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -10287,6 +10393,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_meeting_fairy","file":"meeting-fairy.json","category":"calendar","title":"Meeting fairy","description":"The evening before, reads tomorrow's calendar, finds recent emails with the people you're meeting, and sends you a one-page brief for each meeting: what's open between you first.","tip":"Change 19:00 to when you plan tomorrow. Meetings with nobody else in them are skipped.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"brief"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":19,"MINUTE":0,"DAYS":"weekdays"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"brief"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"brief"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Look at tomorrow's calendar. For each meeting with other people, search my email from the last 30 days for recent messages from or about them and the topic, and read the useful ones. Write a brief for each meeting: who, when and where; what's open between us (questions, promises, decisions waiting) first; useful background; then two questions I should ask. Check each with review_text against: under one page; open items first; nothing invented."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":16}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calendar"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"email"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Tomorrow's meetings"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_menu_writer","file":"menu-writer.json","category":"home","title":"Menu writer","description":"List your dishes and what's in them. Claude writes each one a menu description in your house style, 25 words or fewer, with its allergens from the UK's 14 listed underneath.","tip":"Describe your house style in the first block: a few words and one description you like.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_house_style","name":"house style"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_house_style"}},"inputs":{"VALUE":{"block":{"type":"rb_longtext","fields":{"TEXT":"Plain and warm. Say where things come from. No 'delicious', 'homemade' or 'mouth-watering'. Like: Rye sourdough, 48-hour ferment, with Netherend butter."}}}},"next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List the dishes, each with what's in it"}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write a menu description for each dish, in this house style:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_house_style"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nUnder each, list the allergens it contains from the UK's 14 (celery; cereals containing gluten (wheat, rye, barley, oats); crustaceans; eggs; fish; lupin; milk; molluscs; mustard; tree nuts; peanuts; sesame; soya; sulphur dioxide and sulphites).\n\nDishes:\n"}}},"ADD3":{"block":{"type":"rb_answer"}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"each description 25 words or fewer; in the house style; every dish lists its allergens, and only ones its ingredients really contain; nothing claimed that the ingredients don't say"}}}},"extraState":{"itemCount":1}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_minutes_to_actions","file":"minutes-to-actions.json","category":"odds","title":"Minutes to actions","description":"Choose the minutes of a trustees' or committee meeting. Claude lists every action with its owner and date, flags any with no owner or no date, and saves the list to send round.","tip":"Works with a PDF, Word file or text file. It only lists what the minutes say: anything unclear is flagged, not guessed.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List every action agreed in these meeting minutes: the action, who owns it and when it's due, as a table, by owner. Under the table, list actions with no owner or no date as NEEDS AN OWNER or NEEDS A DATE.\n\nMinutes:\n"}}},"ADD1":{"block":{"type":"rb_file_choose"}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every action in the minutes is listed; owners and dates are exactly as the minutes say, never guessed; anything without an owner or date is flagged; decisions that aren't actions are left out"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"actions"}}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
+{"key":"g_missing_searched","file":"missing-searched.json","category":"home","title":"Missing, searched","description":"Each morning, reads your Radarr wanted list and searches NZBGeek for each missing film, then sends you a Telegram message with how many releases the indexer has for each. It only reads: nothing is fetched or downloaded.","tip":"Needs RADARR_API_KEY and NZBGEEK_API_KEY in second-thought.ini. Change radarr to sonarr to check the TV wanted list instead.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_missing","name":"missing"},{"id":"g_found","name":"found"},{"id":"g_one","name":"one"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":15,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_missing"}},"inputs":{"VALUE":{"block":{"type":"rb_arr_missing","fields":{"WHICH":"radarr"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"shadow":{"type":"text","fields":{"TEXT":"Missing, searched:"}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_one"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_missing"}}}},"DO":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_found"}},"inputs":{"VALUE":{"block":{"type":"rb_nzbgeek_search","inputs":{"QUERY":{"shadow":{"type":"text","fields":{"TEXT":""}},"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"title"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"title"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"ADD3":{"shadow":{"type":"rb_longtext","fields":{"TEXT":": "}}},"ADD4":{"block":{"type":"lists_length","inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_found"}}}}}}},"ADD5":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" found"}}}},"extraState":{"itemCount":6}}}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}},"x":30,"y":190}]}}},
 {"key":"g_morning_briefing","file":"morning-briefing.json","category":"news","title":"Morning briefing","description":"One email each morning: what you need to know today, from your news feeds and a sourced check with Perplexity on anything big overnight, under 300 words.","tip":"Put your feeds in second-thought.ini (feeds = …). On the page, Claude stands in for Perplexity and the feeds are samples.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_news","name":"news"},{"id":"g_overnight","name":"overnight"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"briefing"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"briefing"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"briefing"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_news"}},"inputs":{"VALUE":{"block":{"type":"rb_feed_news","inputs":{"URL":{"shadow":{"type":"text","fields":{"TEXT":""}}}}}}},"next":{"block":{"type":"rb_with_model","fields":{"TIER":"perplexity-default"},"inputs":{"DO":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_overnight"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In five short bullet points, each with its source, the most important things that happened overnight that someone in the UK should know this morning: world, UK, money, weather."}}}}}}}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write \"What you need to know today\": a short, calm briefing from these feed items and this overnight check. Most important first, one or two lines each, with its link or source.\n\nFeeds:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_news"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nOvernight:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_overnight"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"under 300 words; nothing said twice; every item has its link or source; plain text"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":2}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"What you need to know today"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_morning_cluster_check","file":"morning-cluster-check.json","category":"home","title":"Morning cluster check","description":"Each morning, reads your Proxmox cluster and sends you a Telegram message: any node down, storage over 85%, last night's backups that failed, guests stopped that should start at boot, and anything else worth a look. It only reads: nothing is started or stopped.","tip":"Needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET for a token with the PVEAuditor role, and PROXMOX_CERT_SHA256 (--doctor shows it).","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_nodes","name":"nodes"},{"id":"g_guests","name":"guests"},{"id":"g_storage","name":"storage"},{"id":"g_tasks","name":"tasks"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_nodes"}},"inputs":{"VALUE":{"block":{"type":"rb_proxmox_nodes"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_guests"}},"inputs":{"VALUE":{"block":{"type":"rb_proxmox_guests"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_storage"}},"inputs":{"VALUE":{"block":{"type":"rb_proxmox_storage"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_tasks"}},"inputs":{"VALUE":{"block":{"type":"rb_proxmox_tasks","inputs":{"N":{"shadow":{"type":"math_number","fields":{"NUM":24}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Check my Proxmox cluster in under 120 words: any node not online, any storage over 85% used, any task from the last 24 hours that didn't end OK (vzdump is a backup), and any guest that's stopped with onboot true. If all is well, say so in one line.\n\nNodes:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_nodes"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nGuests:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_guests"}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nStorage:\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_storage"}}}},"ADD6":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nTasks:\n"}}},"ADD7":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_tasks"}}}}},"extraState":{"itemCount":8}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_notebook_qc","file":"notebook-qc.json","category":"coding","title":"Notebook QC","description":"Paste a protocol, then choose a lab notebook entry. Claude checks the entry against each step in turn: done as written, changed (and whether the change was recorded), or missing, quoting the entry. Then the three things to fix first.","tip":"Paste the protocol's numbered steps. It checks what was written down; it can't check what was done.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_protocol","name":"protocol"},{"id":"g_entry","name":"entry"},{"id":"g_step","name":"step"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste the protocol's steps"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_protocol"}},"inputs":{"VALUE":{"block":{"type":"rb_ask_list","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List each separate step of this lab protocol, in its own words, one per item, keeping any quantities, times and temperatures:\n\n"}}},"ADD1":{"block":{"type":"rb_answer"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_entry"}},"inputs":{"VALUE":{"block":{"type":"rb_file_choose"}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_step"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_protocol"}}}},"DO":{"block":{"type":"rb_set_draft","inputs":{"TEXT":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Does this lab notebook entry record this protocol step? Say DONE, CHANGED or MISSING. Quote the part of the entry that records it. For CHANGED, say what differs (a quantity, time, temperature, reagent or order) and whether the entry gives a reason. Don't assume anything the entry doesn't say.\n\nStep: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_step"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nNotebook entry:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_entry"}}}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"quotes the entry word for word, or says nothing in it records the step; the verdict fits the quote; a change names the quantity, time, temperature or reagent that differs; says whether a reason was recorded; invents nothing"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":2}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_add_result","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_step"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":3}}}}}}}}}}},"next":{"block":{"type":"rb_add_result","inputs":{"TEXT":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"From these checks of a lab notebook entry against its protocol, give the three things most worth fixing or writing down, most important first: unrecorded changes before missing steps.\n\n"}}},"ADD1":{"block":{"type":"rb_result_text"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
@@ -10349,6 +10456,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", true],
 ["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
+["nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", true],
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
@@ -10360,6 +10468,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", false],
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
 ["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
+["nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
 ["powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", false],
 ["web", "read public web pages and search the web", false],
@@ -10486,6 +10595,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^mutation\\{parity\\{start\\(correct:false\\)\\}\\}$"
+  ]
+ ],
+ "nzbgeek_free": [
+  [
+   "GET",
+   "^(?!.*(^|&)t=get(&|$))t=(search|tvsearch|movie|caps)(&|$)"
+  ]
+ ],
+ "nzbgeek_asks": [
+  [
+   "GET",
+   "^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"
   ]
  ],
  "unifi_free": [
@@ -14894,6 +15015,73 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   "vars": {
    "version": "7.2.1"
   }
+ },
+ "nzbgeek": {
+  "note": "A sample NZBGeek search for the page and the tests (#400), shaped the way its Newznab API answers with o=json: two releases of the same film, one older and grabbed more.",
+  "search": [
+   {
+    "title": "Everything.Everywhere.All.at.Once.2022.1080p.BluRay.x264-NzbGeek",
+    "guid": "https://api.nzbgeek.info/api/e9c515e02346086e3a477a5436d7bc8c",
+    "pubDate": "Wed, 12 Nov 2026 19:03:12 +0000",
+    "newznab:attr": [
+     {
+      "@attributes": {
+       "name": "size",
+       "value": "8589934592"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "grabs",
+       "value": "412"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "usenetdate",
+       "value": "Wed, 12 Nov 2026 18:59:04 +0000"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "group",
+       "value": "alt.binaries.movies"
+      }
+     }
+    ]
+   },
+   {
+    "title": "Everything.Everywhere.All.at.Once.2022.2160p.WEB-DL.DDP5.7.HDR-NzbGeek",
+    "guid": "https://api.nzbgeek.info/api/28e1d0c9c34a7c8d3b6f0a1924e5f7c1",
+    "pubDate": "Thu, 13 Nov 2026 07:41:55 +0000",
+    "newznab:attr": [
+     {
+      "@attributes": {
+       "name": "size",
+       "value": "34359738368"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "grabs",
+       "value": "63"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "usenetdate",
+       "value": "Thu, 13 Nov 2026 07:38:20 +0000"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "group",
+       "value": "alt.binaries.movies"
+      }
+     }
+    ]
+   }
+  ]
  }
 }
 </script>
@@ -15157,7 +15345,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A", unraid:"#E8590C"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A", unraid:"#E8590C", nzbgeek:"#6A1B9A"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -15169,7 +15357,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid), nzbgeek:style(HUES.nzbgeek),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -15354,7 +15542,8 @@ HOW TO MAP CODE
     rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control", rb_arr_queue:"arr_read",
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
-    rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
+    rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -15750,6 +15939,11 @@ HOW TO MAP CODE
       { style:"unraid", inputsInline:true, tooltip:"Starts or stops one virtual machine, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops." }),
     S("rb_unraid_parity", "check Unraid's parity", [],
       { style:"unraid", tooltip:"Checks the parity disks by reading them, writing no corrections. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really checks." }),
+    /* NZBGeek (#400): a search that only reads, and a fetch that always asks */
+    V("rb_nzbgeek_search", "search NZBGeek for %1", [val("QUERY")], "Array", { style:"nzbgeek",
+      tooltip:"A list of records, one for each release the indexer has for these words: title, id, size_mb, grabs, posted (when it was posted) and group. It only reads: nothing is ever downloaded. Needs NZBGEEK_API_KEY in second-thought.ini. On this page it uses a sample search." }),
+    S("rb_nzbgeek_fetch", "fetch the NZB for %1", [val("ID")],
+      { style:"nzbgeek", inputsInline:true, tooltip:"Fetches one release's NZB file and saves it as <id>.nzb. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. It never hands anything to a downloader: the file is saved, that's all. On this page nothing really fetches." }),
     /* Proxmox (#357): reads, and power that always asks */
     V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
       tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
@@ -15965,6 +16159,9 @@ HOW TO MAP CODE
     { kind:"category", name:"Unraid", categorystyle:"unraid", contents:[
       B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),
       B("rb_unraid_container_power", { NAME:T("plex") }), B("rb_unraid_vm_power", { NAME:T("windows") }), B("rb_unraid_parity")
+    ]},
+    { kind:"category", name:"NZBGeek", categorystyle:"nzbgeek", contents:[
+      B("rb_nzbgeek_search", { QUERY:T("Everything Everywhere All at Once") }), B("rb_nzbgeek_fetch", { ID:T("e9c515e02346086e3a477a5436d7bc8c") })
     ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
@@ -18553,6 +18750,7 @@ HOW TO MAP CODE
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
+             nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -18628,6 +18826,10 @@ HOW TO MAP CODE
       "; the disks, the shares, the containers and the VMs; start, stop and a parity check ask first, and nothing",
       "; else is ever sent.",
       "UNRAID_URL = ", "UNRAID_API_KEY = ", "; UNRAID_CERT_SHA256 = ");
+    if (need.nzbgeek) out.push("", "[nzbgeek]",
+      "; NZBGeek, the Usenet indexer, through its Newznab API: its API key (My Account, API key). The search block",
+      "; only reads; fetching an NZB asks first, and nothing else is ever sent.",
+      "NZBGEEK_API_KEY = ", "; NZBGEEK_URL = ", "; NZBGEEK_CERT_SHA256 = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -18976,6 +19178,7 @@ HOW TO MAP CODE
         case "rb_unraid_shares": return "(await R.unraid_shares())";
         case "rb_unraid_containers": return "(await R.unraid_containers())";
         case "rb_unraid_vms": return "(await R.unraid_vms())";
+        case "rb_nzbgeek_search": return "(await R.nzbgeek_search(" + I("QUERY", "\"\"") + "))";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -19136,6 +19339,7 @@ HOW TO MAP CODE
         case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
+        case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
@@ -21531,6 +21735,25 @@ HOW TO MAP CODE
     addStep("Unraid", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
+  /* NZBGeek on the page (#400): a sample search. Exported Python talks to its Newznab API: a search that only
+     reads, and a fetch that always asks. */
+  const nzbgeekSample = () => { connNote("NZBGeek"); return (CONN.nzbgeek || {})["search"] || []; };
+  function nzbgeekSearch(query){
+    const out = nzbgeekSample().map(r => { const a = {};
+      (r["newznab:attr"] || []).forEach(x => { const v = x["@attributes"] || x; a[v.name] = v.value; });
+      return { title:str(r.title), id:str(r.guid || "").split("/").pop(),
+        size_mb:a.size ? cents(num(a.size) / 1048576) : "", grabs:a.grabs ? Math.trunc(num(a.grabs)) : "",
+        posted:str(a.usenetdate || r.pubDate || "").slice(0, 16), group:str(a.group || "") }; });
+    addStep("NZBGeek search", { mono:true, text:out.map(r => r.title + (r.size_mb ? " (" + r.size_mb + " MB)" : "")).join("\n") || tr("(nothing)") })
+      .done(tr("{n} found", { n:out.length }), "ok");
+    return out;
+  }
+  async function nzbgeekFetch(id){
+    const what = "fetch the NZB for " + id + " from NZBGeek";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("NZBGeek", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
   /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
      shut down and reboot after a yes, every time. Matches the runtime's proxmox_ methods and tests/fake_proxmox.py. */
   const pxSample = () => { connNote("Proxmox"); return CONN.proxmox || {}; };
@@ -22454,6 +22677,7 @@ HOW TO MAP CODE
       case "rb_unraid_shares": return unraidShares();
       case "rb_unraid_containers": return unraidContainers();
       case "rb_unraid_vms": return unraidVms();
+      case "rb_nzbgeek_search": return nzbgeekSearch(await input(b, tc, "QUERY"));
       case "rb_proxmox_nodes": return proxmoxNodes();
       case "rb_proxmox_guests": return proxmoxGuests();
       case "rb_proxmox_storage": return proxmoxStorage();
@@ -23055,6 +23279,7 @@ HOW TO MAP CODE
       case "rb_unraid_container_power": await unraidPower("container", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_parity": await unraidParity(); break;
+      case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;

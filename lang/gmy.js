@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"Unraid masinos","tooltip":"Mleinus, ains hwarjizuh galiugamasinai: name jah state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 thana Unraid kaso %2","tooltip":"Docker kaso startjaith aiththau stopjith, bi namin. Thuk fraihnith sinteino, jah than nikwarjizuh jai withan, 𐀛 wairwith. Ana thamma blawin nikwarjizuh bi suneu startjaith aiththau stopjith."},
 "rb_unraid_vm_power":{"message0":"%1 thana Unraid masino %2","tooltip":"Galiugamasin startjaith aiththau stopjith, bi namin. Thuk fraihnith sinteino, jah than nikwarjizuh jai withan, 𐀛 wairwith. Ana thamma blawin nikwarjizuh bi suneu startjaith aiththau stopjith."},
-"rb_unraid_parity":{"message0":"Unraid parahauth thochjan","tooltip":"Parahauth diskans thochjith thans bigitanans, 𐀛 thadro thochans mleith. Thuk fraihnith sinteino, jah than nikwarjizuh jai withan, 𐀛 wairwith. Ana thamma blawin nikwarjizuh bi suneu thochjith."}
+"rb_unraid_parity":{"message0":"Unraid parahauth thochjan","tooltip":"Parahauth diskans thochjith thans bigitanans, 𐀛 thadro thochans mleith. Thuk fraihnith sinteino, jah than nikwarjizuh jai withan, 𐀛 wairwith. Ana thamma blawin nikwarjizuh bi suneu thochjith."},
+"rb_nzbgeek_search":{"message0":"sothan in NZBGeek aftyr %1","tooltip":"Mleinus, ains hwarjazuh maitspoddau þizei findan habai bi thans waurds: title, id, size_mb, grabs, posted (hwan gibodan) jah group. Thata þrafsteith only: 𐀛 wainaiþ þwairh. API ktho NZBGEEK_API_KEY ina second-thought.ini. Ana thamma blawin bisanlicai sothnai."},
+"rb_nzbgeek_fetch":{"message0":"niman NZB %1","tooltip":"Nimiþ NZB anaþ ainis maitspoddais jah wahsjeiþ thata swe <id>.nzb. Thuk fraihniþ sinteino, jah than nikwarjizuh jai withan, 𐀛 wairwith. Ni leweiþ thana af nimara: anaþ gawahsniþ, thata ist all. Ana thamma blawin nikwarjizuh nimith bi suneu."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐀁𐀏𐀲 𐀀𐀔","weekdays":"𐀀𐀔 𐀸𐀒","weekends":"𐀀𐀔 𐀀𐀙𐀞𐀄𐀮𐀃"},
@@ -253,7 +255,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr ka-i Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵",
@@ -1136,7 +1139,12 @@
 "Unraid disks":"Unraid diskos",
 "Unraid shares":"Unraid dailos",
 "Unraid containers":"Unraid kasos",
-"Unraid VMs":"Unraid masinos"
+"Unraid VMs":"Unraid masinos",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"sothan in NZBGeek, þana useneta findan, jah þrafstjan hwa habai: titulos, mikilans, jeron jah hahjons",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"niman NZB anaþ fram NZBGeek jah wahsjan thata (thuk fraihnands hwarjehun)",
+"{n} found":"{n} bigitan",
+"NZBGeek search":"NZBGeek sothns",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1345,7 +1353,9 @@
 "The back door is still open.":"𐀃𐀠𐀰 𐀶𐀨 𐀁𐀴 𐀀𐀚𐀺𐀐𐀕𐀙.",
 "Good morning!":"𐀏𐀩 𐀁𐀃!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(pa-ra-ki-si po-ro-te-ra e-ne me-so pe-pa-u-to, a-ra po-ro-ka-ra-ma a-ra-ka-ke, o-u-to ne-wo a-ka-e-ta-i.)",
@@ -2215,7 +2225,15 @@
 "check Unraid's parity":"Unraid parahauth thochjan",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"hathra {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} þarbaih {url_setting} jah {key_setting} {where_keys}: API ktho is, in NZBGeek undar My Account, API key.",
+"NZBGeek search for {q}":"NZBGeek sothns aftyr {q}",
+"{n} found":"{n} bigitan",
+"Which one? Give a release's id, from the search.":"Hwaz? Gib id af maitspoddai, us sothnai.",
+"fetch the NZB for {id} from NZBGeek":"niman NZB {id} fram NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} dagans fahaidais",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

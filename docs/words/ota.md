@@ -36,6 +36,7 @@ Made by tools/sync.py from i18n/ota.json: edit that, not this.
 - SABnzbd: SABnzbd
 - Radarr and Sonarr: Radarr و Sonarr
 - Unraid: Unraid
+- NZBGeek: NZBGeek
 - Listeners: they run while the exported program runs on schedule: دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر
 - No blocks match: هیچ بر قطعه اویمیور
 - Read and send: اوقو و گوندر
