@@ -62,6 +62,19 @@ Everything the outside reviews of the code raised that isn't closed or listed ab
 | [#391](https://github.com/itsfja/second-thought/issues/391) A formal grammar for the program format, and --doctor checking a program against it | Medium: the program format is stated once, formally, so authoring a complex program rests on more than prose, and a broken one is caught before it runs | Medium: a grammar page in `docs/`, and a structural check in `--doctor` next to the environment checks it already does |
 | [#392](https://github.com/itsfja/second-thought/issues/392) Systemd and Windows Task Scheduler unit examples in the docs, for a program that runs headless on a home server | Low-medium: the headless mode already exists, and copy-paste unit files are the missing step between an exported program and one that runs forever on a homelab box, whichever OS it runs | Low: one documented example per OS, with the restart and sandbox settings that make sense there |
 
+## Backlog: the homelab and media connections, raised November 2026
+
+The media stack around Docker and Proxmox: the same reads-first, ask-first shape as the connections that are already in, one issue each.
+
+| | Benefit | Cost |
+|---|---|---|
+| [#397](https://github.com/itsfja/second-thought/issues/397) SABnzbd: the download queue, pausing and resuming always asking | Medium: a program could watch the queue and the failures, and pause when the bandwidth is wanted elsewhere | Low-medium: a JSON API with everything needed, and a short safety list |
+| [#398](https://github.com/itsfja/second-thought/issues/398) Radarr and Sonarr (the Servarr family): the wanted list, searching always asking | Medium-high: a program could watch what's missing, what's stuck and what failed to import, across the whole family with one block | Medium: one connection over the shared Servarr API, a URL and key per service |
+| [#399](https://github.com/itsfja/second-thought/issues/399) Unraid: the array, disks, shares and VMs, power actions always asking | Medium-high: a program could check the server each morning: array, disks, shares, containers and VMs | Medium: no official API; a community API plugin or the web UI's own endpoints |
+| [#400](https://github.com/itsfja/second-thought/issues/400) NZBGeek: searching the indexer, fetching always asking | Low-medium: a program could report what the indexer has for the missing list | Low-medium if done through Prowlarr (#398); a small read-only API otherwise |
+| [#401](https://github.com/itsfja/second-thought/issues/401) Pi-hole: DNS stats and blocking, changing lists always asking | Medium: a program could watch the blocked share and warn when blocking is off | Low-medium: a REST API (v6) with everything needed |
+| [#402](https://github.com/itsfja/second-thought/issues/402) Plex (and Tautulli): the library, sessions and stats, stopping streams always asking | Medium: a program could check the server, last night's streams and the week's new items | Medium: a semi-documented API, and Tautulli's for the stats |
+
 ## Someday
 
 | | Notes |
