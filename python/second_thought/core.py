@@ -328,7 +328,7 @@ PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watche
 DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
 SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
-# worked out for Gmail, iCloud, Yahoo and Fastmail; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
+# worked out for Gmail, iCloud, Yahoo, Fastmail and mailbox.org; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
 # MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
 # MQTT_PASSWORD if it needs them. MQTT_TLS = yes for an encrypted connection (port 8883). Needs  pip install paho-mqtt.
 # Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);

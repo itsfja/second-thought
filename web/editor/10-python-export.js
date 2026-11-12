@@ -200,7 +200,7 @@
       "SLACK_BOT_TOKEN = ", "SLACK_CHANNEL_ID = ");
     if (need.email) out.push("", "[email]",
       "; Your address and an app password (not your normal password). Gmail: Google account, Security, App passwords.",
-      "; Gmail, iCloud, Yahoo and Fastmail work out their own servers. For others, fill in the servers too.",
+      "; Gmail, iCloud, Yahoo, Fastmail and mailbox.org work out their own servers. For others, fill in the servers too.",
       "EMAIL_ADDRESS = ", "EMAIL_PASSWORD = ", "; EMAIL_IMAP_HOST = ", "; EMAIL_SMTP_HOST = ", "; EMAIL_SMTP_PORT = 465");
     if (need.calendar) out.push("", "[calendar]",
       "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
