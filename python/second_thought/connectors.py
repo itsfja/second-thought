@@ -1201,7 +1201,8 @@ class Connections:
     MAIL_SERVERS = {"gmail.com": ("imap.gmail.com", "smtp.gmail.com", 465), "googlemail.com": ("imap.gmail.com", "smtp.gmail.com", 465),
                     "icloud.com": ("imap.mail.me.com", "smtp.mail.me.com", 587), "me.com": ("imap.mail.me.com", "smtp.mail.me.com", 587),
                     "yahoo.com": ("imap.mail.yahoo.com", "smtp.mail.yahoo.com", 465), "yahoo.co.uk": ("imap.mail.yahoo.com", "smtp.mail.yahoo.com", 465),
-                    "fastmail.com": ("imap.fastmail.com", "smtp.fastmail.com", 465)}
+                    "fastmail.com": ("imap.fastmail.com", "smtp.fastmail.com", 465),
+                    "mailbox.org": ("imap.mailbox.org", "smtp.mailbox.org", 465)}
 
     def _mail(self):
         addr, pw = os.environ.get("EMAIL_ADDRESS", "").strip(), os.environ.get("EMAIL_PASSWORD", "")
