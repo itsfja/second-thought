@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"сосѹды Docker","tooltip":"Списокъ записей, єдина на всѧкъ сосѹдъ, текѹщїй или ни: name, image, state, status, health (healthy, unhealthy, или праздно без̾ испытанїѧ здравїѧ), restarts и started. На сей страницѣ ѹпотреблѧетъ стогъ ѡбразца."},
 "rb_docker_stats":{"message0":"памѧть и CPU Docker","tooltip":"Списокъ записей, єдина на всѧкъ текѹщїй сосѹдъ: name, cpu (%), memory_mb, limit_mb (памѧть машины, сосѹдѹ без̾ предѣла) и memory (% предѣла)."},
 "rb_docker_logs":{"message0":"лѣтописи Docker ѿ %1, послѣднїѧ %2 строкъ","tooltip":"Послѣднїѧ строки, ꙗже сосѹдъ написа, исходъ и погрѣшенїѧ егѡ вкѹпѣ, старѣйшаѧ первѣе."},
-"rb_docker_power":{"message0":"%1 сосѹдъ Docker %2","tooltip":"Паки начинаетъ, ѡстанавливаетъ или начинаетъ єдинъ сосѹдъ, по имени егѡ. Присно прежде вопрошаетъ тѧ, аще и ничтоже иное вопрошаетъ, и не сѹщѹ никомѹже рещи «ей», не бываетъ. Сосѹдѡвъ въ DOCKER_PROTECT николиже косаетсѧ. На сей страницѣ ничтоже воистинѹ паки начинаетсѧ."}
+"rb_docker_power":{"message0":"%1 сосѹдъ Docker %2","tooltip":"Паки начинаетъ, ѡстанавливаетъ или начинаетъ єдинъ сосѹдъ, по имени егѡ. Присно прежде вопрошаетъ тѧ, аще и ничтоже иное вопрошаетъ, и не сѹщѹ никомѹже рещи «ей», не бываетъ. Сосѹдѡвъ въ DOCKER_PROTECT николиже косаетсѧ. На сей страницѣ ничтоже воистинѹ паки начинаетсѧ."},
+"rb_sabnzbd_queue":{"message0":"рядъ SABnzbd","tooltip":"Списанїе записей, по единой коемуждо дѣлу въ рядꙋ скачанїа: name, size_mb, left_mb, percent, eta (оставшее время, ꙗ́коже 0:12:34) и status (Downloading, Queued, Paused). На сей страницѣ образець ряда."},
+"rb_sabnzbd_history":{"message0":"исторїа SABnzbd, послѣдніи %1 часъ","tooltip":"Списанїе записей, по единой коемуждо дѣлу въ то время скончавшꙋ: name, status (Completed или Failed), size_mb, когда сконча, а неуспѣвшꙋ — почто."},
+"rb_sabnzbd_diskspace":{"message0":"пространїе диска SABnzbd","tooltip":"Списанїе записей, по единой коемуждо мѣстꙋ SABnzbd (мѣсто скачанїа прьвѣе): folder и free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Ѡставлꙗѥтъ или паки двигнѥтъ весь рядъ скачанїа. Тебе всегда прьвѣе вьпроситъ, аще и ничьто же ино не вьпроситъ, и никомꙋ же сꙙщꙋ тъ, не бꙋдѥтъ. На сей страницѣ ничьто же воиство не ѡставлꙗѥтъ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"на всѧкъ день","weekdays":"въ дни дѣланїѧ","weekends":"въ дни ѿдыха"},
@@ -228,7 +232,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1083,7 +1088,17 @@
 "battery at {pct}%":"батерѣа на {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"положити запасъ Powerwall на {n}%(нынѣ {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"читати даныѩ Powerwall: зарядъ батарѣи, солнце, ввозъ и вывозъ мрѣжа, и запасъ иже держитъ",
-"set your Powerwall's backup reserve (asking you each time)":"мѣнити запасъ Powerwall твоего (въпрашаетъ тебе кыждыжды)"
+"set your Powerwall's backup reserve (asking you each time)":"мѣнити запасъ Powerwall твоего (въпрашаетъ тебе кыждыжды)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd можетъ ѡставленъ быти, или пакы двигнꙛꙁ быти.",
+"SABnzbd diskspace":"пространїе диска SABnzbd",
+"SABnzbd history":"исторїа SABnzbd",
+"SABnzbd queue":"рядъ SABnzbd",
+"{n} finished":"{n} скончавшихъ",
+"{n} folders":"{n} мѣстъ",
+"{n} in the queue":"{n} въ рядѣ",
+"pause and resume your SABnzbd downloads (asking you each time)":"скачанїа SABnzbd ѡставлꙗти и паки двигнꙛꙁи (тебе всегда вьпроси)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd твои чьсти: рядъ скачанїа, исторїю и оставшее мѣсто диска скачанїа"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -2111,7 +2126,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"никакоже вгнѣзденъ свитокъ блоковъ, тѣмже листъ не можетъ сей чинъ паки внести (отъ древнѣйшаго листа изведенъ есть)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"вгнѣзденый въ сем чинѣ свитокъ блоковъ не можетъ быти прочтенъ, тѣмже листъ не можетъ его паки внести",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"вгнѣзденый въ сем чинѣ свитокъ блоковъ не соблюдаетъ образца ({problem}), тѣмже листъ едва ли можетъ его паки внести",
-"the block file inside this program matches the format, so the page can import it again":"свитокъ блоковъ въ сем чинѣ образецъ соблюдаетъ, тѣмже листъ можетъ его паки внести"
+"the block file inside this program matches the format, so the page can import it again":"свитокъ блоковъ въ сем чинѣ образецъ соблюдаетъ, тѣмже листъ можетъ его паки внести",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd можетъ ѡставленъ быти, или пакы двигнꙛꙁ быти.",
+"SABnzbd diskspace":"пространїе диска SABnzbd",
+"SABnzbd history":"исторїа SABnzbd",
+"SABnzbd queue":"рядъ SABnzbd",
+"{n} finished":"{n} скончавшихъ",
+"{n} folders":"{n} мѣстъ",
+"{n} in the queue":"{n} въ рядѣ",
+"Downloading":"Скачаѥмъ",
+"Paused":"Ѡставленъ",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought не посылаетъ {what} къ SABnzbd.",
+"{n} MB left":"{n} MB ѡстало",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd требꙋєꙛъ SABNZBD_URL и SABNZBD_API_KEY {where_keys}: мѣсто єго (ꙗ́коже http://sabnzbd:8080) и полныи ключь, въ SABnzbd подъ Config, General, API Key.",
+"pause SABnzbd's queue":"ѡставити рядъ SABnzbd",
+"resume SABnzbd's queue":"паки двигнꙛꙁи рядъ SABnzbd"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

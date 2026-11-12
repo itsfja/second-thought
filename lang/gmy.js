@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"𐀀𐀐𐀊 Docker","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀀𐀐𐀍: name, image, state, status, health (healthy, unhealthy), restarts 𐀏𐀂 started. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀐𐀨𐀲𐀂 𐀞𐀨𐀆𐀒𐀔 𐀰𐀫."},
 "rb_docker_stats":{"message0":"𐀘𐀙𐀔 𐀏𐀂 CPU Docker","tooltip":"𐀏𐀲𐀫𐀒 𐀏𐀨𐀟, 𐀁𐀚 𐀞 𐀀𐀐𐀍: name, cpu (%), memory_mb, limit_mb 𐀏𐀂 memory (%)."},
 "rb_docker_logs":{"message0":"𐀏𐀨𐀟 Docker %1, 𐀁𐀏𐀲 %2 𐀴𐀒","tooltip":"𐀁𐀏𐀲 𐀴𐀒 𐀀𐀐𐀍, 𐀞𐀨𐀍 𐀟𐀫𐀵."},
-"rb_docker_power":{"message0":"%1 𐀀𐀐𐀍 Docker %2","tooltip":"𐀀𐀠 𐀀𐀨𐀐𐀂, 𐀞𐀄𐀁 𐀁 𐀀𐀨𐀐𐀂 𐀀𐀐𐀍 𐀕𐀲 𐀃𐀜𐀔. 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵; 𐀃𐀄𐀆𐀂 𐀞𐀫, 𐀃𐀄 𐀳𐀩𐀐𐀁. DOCKER_PROTECT 𐀃𐀄𐀡𐀳. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃𐀄𐀆 𐀀𐀨𐀐𐀲𐀂."}
+"rb_docker_power":{"message0":"%1 𐀀𐀐𐀍 Docker %2","tooltip":"𐀀𐀠 𐀀𐀨𐀐𐀂, 𐀞𐀄𐀁 𐀁 𐀀𐀨𐀐𐀂 𐀀𐀐𐀍 𐀕𐀲 𐀃𐀜𐀔. 𐀀𐀂 𐀁𐀫𐀲𐀂 𐀮 𐀟𐀫𐀵; 𐀃𐀄𐀆𐀂 𐀞𐀫, 𐀃𐀄 𐀳𐀩𐀐𐀁. DOCKER_PROTECT 𐀃𐀄𐀡𐀳. 𐀁𐀚 𐀵𐀵 𐀆𐀵 𐀃𐀄𐀆 𐀀𐀨𐀐𐀲𐀂."},
+"rb_sabnzbd_queue":{"message0":"𐀮𐀪𐀊 SABnzbd","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀞𐀸𐀃 𐀮𐀪𐀊 𐀁𐀛 𐀏𐀲𐀐: name, size_mb, left_mb, percent, eta (𐀳𐀩𐀸, 𐀃𐀒 0:12:34) 𐀏𐀂 status (Downloading, Queued, Paused). E-ni 𐀵𐀡𐀆 𐀵𐀟 𐀀𐀡 𐀴𐀪𐀮𐀪𐀊."},
+"rb_sabnzbd_history":{"tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀞𐀸𐀃 𐀏𐀲𐀐 𐀳𐀩𐀼 𐀁 𐀸𐀺: name, status (Completed 𐀁 Failed), size_mb, 𐀡𐀣 𐀳𐀩𐀼 𐀏𐀂, 𐀞𐀄𐀳𐀫 𐀁, 𐀀𐀏𐀪 𐀞𐀄𐀳.","message0":"𐀂𐀵𐀫 SABnzbd, 𐀵𐀰 %1 𐀺𐀺"},
+"rb_sabnzbd_diskspace":{"message0":"𐀵𐀡 SABnzbd","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀏𐀔 SABnzbd (𐀏𐀔 𐀏𐀲𐀐 𐀞𐀸𐀃 𐀀𐀵𐀡): folder 𐀏𐀂 free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"𐀞𐀄𐀁 𐀮 𐀀𐀨𐀐 𐀞𐀸𐀃 𐀮𐀪𐀊 𐀏𐀲𐀐. So-ro-i 𐀏𐀵 𐀞𐀸𐀃, 𐀃𐀟 𐀀𐀨 𐀐𐀩𐀸 𐀕𐀲 𐀞𐀄𐀁, 𐀏𐀂 𐀕𐀳𐀫 𐀐𐀩𐀸 𐀙𐀂, 𐀃𐀄 𐀟𐀡𐀟. E-ni 𐀵𐀡𐀆 𐀃𐀄 𐀞𐀄𐀁 𐀃𐀄𐀒 𐀀𐀡."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐀁𐀏𐀲 𐀀𐀔","weekdays":"𐀀𐀔 𐀸𐀒","weekends":"𐀀𐀔 𐀀𐀙𐀞𐀄𐀮𐀃"},
@@ -230,7 +234,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵",
@@ -1085,7 +1090,17 @@
 "battery at {pct}%":"𐀞𐀸𐀍 {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-jo 𐀞𐀸𐀍 𐀀𐀵𐀫𐀃𐀒 {n}% 𐀈𐀐 (𐀀𐀡 {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"𐀒𐀄𐀒𐀫 Powerwall-jo 𐀃𐀟𐀫𐀮: 𐀞𐀸𐀍, 𐀏𐀫, 𐀁𐀚𐀒 𐀃𐀡𐀮, 𐀞𐀸𐀍 𐀒𐀄𐀒𐀫𐀮",
-"set your Powerwall's backup reserve (asking you each time)":"Powerwall-jo 𐀞𐀸𐀍 𐀀𐀵𐀫𐀃𐀒 𐀕𐀲𐀐 (𐀰𐀍 𐀁𐀩 𐀁𐀚𐀒)"
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall-jo 𐀞𐀸𐀍 𐀀𐀵𐀫𐀃𐀒 𐀕𐀲𐀐 (𐀰𐀍 𐀁𐀩 𐀁𐀚𐀒)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd 𐀀𐀠 𐀞𐀄𐀁𐀲𐀂 𐀁 𐀀𐀨𐀐𐀲𐀂.",
+"SABnzbd diskspace":"SABnzbd 𐀵𐀡",
+"SABnzbd history":"SABnzbd 𐀂𐀵𐀫",
+"SABnzbd queue":"SABnzbd 𐀮𐀪𐀊",
+"{n} finished":"{n} 𐀳𐀶𐀒𐀫",
+"{n} folders":"{n} 𐀏𐀔",
+"{n} in the queue":"{n} 𐀁 𐀮𐀪𐀊",
+"pause and resume your SABnzbd downloads (asking you each time)":"𐀞𐀸𐀃 SABnzbd 𐀞𐀄𐀁 𐀏𐀂 𐀀𐀨𐀐 (𐀰𐀫𐀂 𐀏𐀵 𐀞𐀸𐀃)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd 𐀀𐀡 𐀴𐀪𐀮: 𐀮𐀪𐀊 𐀏𐀲𐀐, 𐀂𐀵𐀫 𐀏𐀂 𐀵𐀡 𐀏𐀲𐀐 𐀇𐀒"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -2113,7 +2128,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"blokk te-u-ko o-u-do-ke-re e-ne, to-te pa-ka-ni to-to po-ro-ka-ra-ma o-u do-ke-re a-pi (e-ka-ke a-pi pa-ka-ni pa-ra-ke-ra-i)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"blokk te-u-ko e-ne to-to po-ro-ka-ra-ma o-u a-ko-no-me-no, to-te pa-ka-ni o-u do-ke-re a-pi",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"blokk te-u-ko e-ne to-to po-ro-ka-ra-ma mo-ta o-u te-re-e ({problem}), to-te pa-ka-ni i-jo a-pi o-u do-ke-re",
-"the block file inside this program matches the format, so the page can import it again":"blokk te-u-ko e-ne to-to po-ro-ka-ra-ma mo-ta te-re-e, to-te pa-ka-ni a-pi do-ke-re"
+"the block file inside this program matches the format, so the page can import it again":"blokk te-u-ko e-ne to-to po-ro-ka-ra-ma mo-ta te-re-e, to-te pa-ka-ni a-pi do-ke-re",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd a-pi pa-u-e-ta-i e a-ra-ke-ta-i.",
+"SABnzbd diskspace":"SABnzbd to-po",
+"SABnzbd history":"SABnzbd i-to-ro",
+"SABnzbd queue":"SABnzbd se-ri-ja",
+"{n} finished":"{n} te-tu-ko-ro",
+"{n} folders":"{n} ka-ma",
+"{n} in the queue":"{n} e se-ri-ja",
+"Downloading":"ka-ta-wo",
+"Paused":"pa-u-me-no",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought o-u pe-po-pe {what} e-pi SABnzbd.",
+"{n} MB left":"{n} MB o-wo-we",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd de-i SABNZBD_URL ka-i SABNZBD_API_KEY {where_keys}: to-po e-we (o-ko http://sabnzbd:8080) ka-i ke-re-we API o-ko-we, e-ni SABnzbd ka-to Config, General, API Key.",
+"pause SABnzbd's queue":"pa-u-e se-ri-ja SABnzbd",
+"resume SABnzbd's queue":"a-ra-ke se-ri-ja SABnzbd"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

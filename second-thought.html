@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY")
 
 
 def _load_keychain():
@@ -1545,6 +1545,11 @@ SAFETY = {
     # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
     "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
     "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
+    # SABnzbd's API (#397): one endpoint whose mode says what's asked for, so the gate matches the mode. The reads the
+    # runtime makes, and pause and resume, which need a live yes. Nothing else is ever sent: no adding or deleting jobs,
+    # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
+    "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
+    "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1697,6 +1702,16 @@ def docker_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
+            return kind
+    return None
+
+
+def sabnzbd_call(method, mode):
+    """"free" for a SABnzbd call the runtime makes without asking, "asks" for pause and resume, which need a live yes,
+    and None for anything else, which is never sent (#397)."""
+    method, mode = to_str(method).strip().upper(), to_str(mode).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
             return kind
     return None
 
@@ -2136,6 +2151,7 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
+    ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -2144,6 +2160,7 @@ CAPABILITIES = [
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
+    ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
@@ -4487,6 +4504,89 @@ class Connections:
             return False
         await self._docker("POST", f"/containers/{name}/{action}", approved=True)
         self.log(tr("Docker"), what, tr("done"))
+        return True
+
+    # SABnzbd (#397)
+    # SABnzbd's API: SABNZBD_URL (like http://sabnzbd:8080) and SABNZBD_API_KEY, the full API key (Config, General,
+    # API Key), not the NZB key. Reads are the modes in SAFETY["sabnzbd_free"]; pause and resume (sabnzbd_asks) always
+    # ask, live, and never run with nobody there; nothing else is ever sent: no adding, deleting or retrying jobs, no
+    # speedlimit, no config, no shutdown. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, as for
+    # MikroTik and UniFi.
+    SABNZBD_PAUSE = ("pause", "resume")
+
+    async def _sabnzbd(self, mode, extra=None, approved=False):
+        kind = sabnzbd_call("GET", mode)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to SABnzbd.", what=mode))
+        base, key = os.environ.get("SABNZBD_URL", "").strip().rstrip("/"), os.environ.get("SABNZBD_API_KEY", "").strip()
+        if not base or not key:
+            raise RunError(tr("SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.", where_keys=WHERE_KEYS))
+        query = {"mode": mode, "output": "json", "apikey": key, **(extra or {})}
+        status, raw = await self._pinned("SABnzbd", base, "SABNZBD_CERT_SHA256", "GET", "/api?" + urllib.parse.urlencode(query), {})
+        said = json.loads(raw) if raw.strip() else {}
+        if status >= 400 or (isinstance(said, dict) and said.get("status") is False):
+            why = to_str(said.get("error")) if isinstance(said, dict) else ""
+            raise RunError(tr("SABnzbd: {why}.", why=why or self._said(status, raw)))
+        return said
+
+    async def sabnzbd_queue(self):
+        """What's in the queue now: a list of records, one for each job — name, size_mb, left_mb, percent, eta (time
+        left, like 0:12:34) and status (Downloading, Queued, Paused). The log step says whether the whole queue is
+        paused and how fast it's going."""
+        q = (await self._sabnzbd("queue")).get("queue") or {}
+        out = [{"name": to_str(s.get("filename")), "size_mb": self._cents(num(s.get("mb"))), "left_mb": self._cents(num(s.get("mbleft"))),
+                "percent": self._cents(num(s.get("percentage"))), "eta": to_str(s.get("timeleft")) or "0:00:00",
+                "status": to_str(s.get("status"))} for s in q.get("slots") or [] if isinstance(s, dict)]
+        state = tr("Paused") if to_str(q.get("paused")).lower() == "true" or q.get("paused") is True else tr("Downloading")
+        lines = "\n".join(f"{s['name']}: {s['left_mb']} MB left ({s['percent']}%)" for s in out)
+        self.log(tr("SABnzbd queue"), (state + ", " + tr("{n} MB left", n=self._cents(num(q.get("mbleft"))))) + ("\n" + lines if lines else ""),
+                 tr("{n} in the queue", n=len(out)))
+        return out
+
+    async def sabnzbd_history(self, hours=24):
+        """What finished recently: a list of records, one for each job in the history — name, status (Completed or
+        Failed), size_mb, when it finished and, for a failure, why it failed."""
+        n = max(1, min(500, int(num(hours) or 24)))
+        h = (await self._sabnzbd("history", {"limit": str(n * 10)})).get("history") or {}
+        cutoff = time.time() - n * 3600
+        out = []
+        for s in h.get("slots") or []:
+            if not isinstance(s, dict):
+                continue
+            when = num(s.get("completed"))
+            if when and when < cutoff:
+                continue
+            out.append({"name": to_str(s.get("name")), "status": to_str(s.get("status")), "size_mb": self._cents(num(s.get("bytes")) / 1048576) if s.get("bytes") else "",
+                        "when": datetime.datetime.fromtimestamp(when).strftime("%Y-%m-%d %H:%M") if when else "",
+                        "why": to_str(s.get("fail_message")) if to_str(s.get("status")).lower() == "failed" else ""})
+        out.reverse()  # oldest first, like the queue
+        lines = "\n".join(f"{s['name']}: {s['status']}" for s in out)
+        self.log(tr("SABnzbd history"), lines or tr("(nothing)"), tr("{n} finished", n=len(out)))
+        return out
+
+    async def sabnzbd_diskspace(self):
+        """Each of SABnzbd's folders (the download folder first) and its free space in GB."""
+        rows = (await self._sabnzbd("diskspace")).get("diskspace") or []
+        out = [{"folder": to_str(r[0]), "free_gb": self._cents(num(r[1]))} for r in rows if isinstance(r, list) and len(r) >= 2]
+        lines = "\n".join(f"{d['folder']}: {d['free_gb']} GB free" for d in out)
+        self.log(tr("SABnzbd diskspace"), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
+        return out
+
+    async def sabnzbd_pause(self, action):
+        """Pauses or resumes the whole queue, after asking you, every time. Gives back True if it was done."""
+        action = to_str(action).strip().lower()
+        if action not in self.SABNZBD_PAUSE:
+            raise RunError(tr("SABnzbd can be paused or resumed."))
+        q = (await self._sabnzbd("queue")).get("queue") or {}
+        what = (tr("pause SABnzbd's queue") if action == "pause" else tr("resume SABnzbd's queue")) + \
+            (f" ({self._cents(num(q.get('mbleft')))} MB left, {len(q.get('slots') or [])} in the queue)")
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._sabnzbd("pause" if action == "pause" else "resume", approved=True)
+        self.log(tr("SABnzbd"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -7329,6 +7429,11 @@ class Doctor:
                 n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
                 return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
             out.append(("Docker", docker))
+        if has("sabnzbd_read", "sabnzbd_control"):
+            async def sabnzbd():
+                q = (await self._sabnzbd("queue")).get("queue") or {}
+                return tr("SABnzbd {version}", version=to_str(q.get("version")) or "?") + ", " + tr("{n} in the queue", n=len(q.get("slots") or []))
+            out.append(("SABnzbd", sabnzbd))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -7644,7 +7749,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -9933,6 +10038,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_power_cut_ready","file":"power-cut-ready.json","category":"home","title":"Power cut ready?","description":"Each evening, reads your Tesla Powerwall's figures, checks tonight's severe weather warnings, and sends a Telegram message on whether the house is ready for a power cut. If a storm warning applies, it offers to raise the reserve to 100% — asking first. Otherwise it only reads.","tip":"Needs a Powerwall, Powerwall 2 or Powerwall+ (the Powerwall 3 has no local web API) and the gateway's customer password. Change the town in the weather check to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"storm"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"storm"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"storm"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_figures"}},"inputs":{"VALUE":{"block":{"type":"rb_powerwall_now"}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Search the web for tonight's severe weather warnings for London, UK: wind, storm or flood warnings that apply tonight. Say plainly which warnings apply tonight, in under 60 words, or say 'no warnings tonight'."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":4}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_warn"}},"inputs":{"VALUE":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_summary"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Here are my Tesla Powerwall's figures and a check of tonight's weather warnings. In under 100 words: whether the house is ready for a power cut (enough charge, a sensible reserve), and what to do if not. If a severe weather warning applies tonight, start your reply with the word STORM on a line of its own.\n\nFigures:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_figures"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nWeather check:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_warn"}}}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_contains","inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"STORM"}}}}}},"DO0":{"block":{"type":"rb_powerwall_reserve","inputs":{"N":{"shadow":{"type":"math_number","fields":{"NUM":100}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_pr_review_roundup","file":"pr-review-roundup.json","category":"github","title":"PR review roundup","description":"Each weekday morning, the open pull requests across your GitHub projects, each with a verdict: ready to merge, or needs work, and why in a sentence. Emailed to you.","tip":"Change 7:30 to when you start work, and the address in the email block to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"weekdays"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"roundup"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List my GitHub projects, then the open pull requests in each that changed in the last two weeks, and read each one. Give each a verdict: READY TO MERGE or NEEDS WORK, with one sentence saying why (tests, description, size, anything risky). Group them by project, ready ones first. Before you finish, check your verdicts with review_text against: every verdict names something in the pull request itself; nothing is invented."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":15}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Pull requests: ready or not"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_price_hawk","file":"price-hawk.json","category":"odds","title":"Price hawk","description":"Watches any product page and sends you a Telegram message when the price drops, or reaches your target. Rises and everything else on the page are ignored.","tip":"Change the page address and 'Price' in the hat to the product and the word next to its price. Set a target, or 0 for any drop.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_was","name":"was"},{"id":"g_now","name":"now"},{"id":"g_target","name":"target"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type a change to test with, like '- £2.40' then '+ £2.15' on the next line"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"price"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_page_when","fields":{"URL":"https://example.com/shop/rye-flour","WORDS":"Price","N":60},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"price"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"price"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_target"}},"inputs":{"VALUE":{"block":{"type":"math_number","fields":{"NUM":0}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_was"}},"inputs":{"VALUE":{"block":{"type":"rb_ask_number","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This is how a price changed on a shop's page. Lines starting - are before, + after. What was the price before, as a number?\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_now"}},"inputs":{"VALUE":{"block":{"type":"rb_ask_number","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This is how a price changed on a shop's page. Lines starting - are before, + after. What is the price now, as a number?\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_operation","fields":{"OP":"OR"},"inputs":{"A":{"block":{"type":"logic_compare","fields":{"OP":"LT"},"inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}},"B":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_was"}}}}}}},"B":{"block":{"type":"logic_operation","fields":{"OP":"AND"},"inputs":{"A":{"block":{"type":"logic_compare","fields":{"OP":"GT"},"inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_target"}}}},"B":{"block":{"type":"math_number","fields":{"NUM":0}}}}}},"B":{"block":{"type":"logic_compare","fields":{"OP":"LTE"},"inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}},"B":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_target"}}}}}}}}}}}}},"DO0":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Price drop: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_was"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" → "}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nhttps://example.com/shop/rye-flour"}}}},"extraState":{"itemCount":5}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Price drop: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_was"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" → "}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}}},"extraState":{"itemCount":4}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"No drop ("}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_was"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" → "}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_now"}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":")."}}}},"extraState":{"itemCount":5}}}}}}},"extraState":{"hasElse":true}}}}}}}}},"x":30,"y":290}]}}},
+{"key":"g_queue_watch","file":"queue-watch.json","category":"home","title":"Queue watch","description":"Each morning, reads your SABnzbd queue, history and the download disk's free space, and sends you a Telegram message: what's still downloading, what finished overnight and what failed, with the reason. It only reads: nothing is paused or resumed.","tip":"Needs SABNZBD_URL and SABNZBD_API_KEY (the full API key, in SABnzbd under Config, General, API Key). Change 24 to look further back, and 100 to warn nearer full.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_queue","name":"queue"},{"id":"g_history","name":"history"},{"id":"g_disk","name":"disk"},{"id":"g_one","name":"one"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":45,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_queue"}},"inputs":{"VALUE":{"block":{"type":"rb_sabnzbd_queue"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_history"}},"inputs":{"VALUE":{"block":{"type":"rb_sabnzbd_history","inputs":{"N":{"shadow":{"type":"math_number","fields":{"NUM":24}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_disk"}},"inputs":{"VALUE":{"block":{"type":"rb_sabnzbd_diskspace"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"shadow":{"type":"text","fields":{"TEXT":"SABnzbd overnight:"}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_one"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_history"}}}},"DO":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"name"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"ADD3":{"shadow":{"type":"rb_longtext","fields":{"TEXT":": "}}},"ADD4":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"status"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}}},"extraState":{"itemCount":5}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}}}},"x":30,"y":190}]}}},
 {"key":"g_quiz_from_notes","file":"quiz-from-notes.json","category":"learning","title":"Quiz from notes","description":"Choose your lesson notes. Claude writes a ten-question quiz from them, with the answers, and for each question the wrong answer pupils most often give and why it's wrong. Saved to print.","tip":"Works with a PDF, Word file or text file. Ask for fewer questions in the blue block for a quick starter.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write a ten-question quiz from these lesson notes. Mix recall and understanding. After the questions, an answer section: for each question the answer, the wrong answer pupils most often give, and one sentence on why it's wrong.\n\nNotes:\n"}}},"ADD1":{"block":{"type":"rb_file_choose"}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every question can be answered from the notes; each has one right answer; the common wrong answers are ones pupils really give, not silly ones; answers kept apart from the questions"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"quiz"}}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_rain_window","file":"rain-window.json","category":"odds","title":"Rain window","description":"Friday evening: the best two-hour window this weekend for drying washing outside, from the forecast, with a runner-up. Sent to you on Telegram.","tip":"Change the town in the first block. Web search only works in exported Python; on the page Claude says what it would look up.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_town","name":"town"},{"id":"g_window","name":"window"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"washing"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekdays"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Friday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"washing"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"washing"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_town"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"London"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_window"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"From this forecast, find the best two-hour window this Saturday or Sunday to dry washing outside: dry, ideally breezy and mild. Give the day and time, and a runner-up. If there isn't one, say so kindly.\n\n"}}},"ADD1":{"block":{"type":"rb_web_search","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"hourly weather forecast this weekend "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_town"}}}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"🧺 "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_window"}}}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_window"}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_release_notes_writer","file":"release-notes-writer.json","category":"github","title":"Release notes writer","description":"When a release is published, gathers the pull requests merged since the release before it and drafts changelog-ready notes grouped into Added, Changed and Fixed. Saved as a file and emailed to you.","tip":"Change the project in the hat. It drafts; you paste. It never edits the release itself.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type a release to test with, like 'sample-baker/sourdough-chart v1.4.0, previous v1.3.2'"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"release"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_gh_release_when","fields":{"REPO":"sample-baker/sourdough-chart"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"release"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"release"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"A release was published: "}}},"ADD1":{"block":{"type":"rb_msg_value"}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". Search for the pull requests merged in that project since the previous release (search_github with is:pr is:merged and the project), and read the ones whose titles aren't clear. Draft release notes grouped into Added, Changed and Fixed: one line each, in plain language a user would understand, with the pull request's link. Leave out internal changes (tests, CI, refactoring) unless they change behaviour."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":12}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"}}}},"next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every line is user-facing language; every line has its pull request link; nothing invented"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":2}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"release-notes"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Draft release notes"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":290}]}}},
@@ -9978,6 +10084,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
 ["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
+["sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", true],
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
@@ -9986,6 +10093,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
 ["proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
+["sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
 ["powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", false],
 ["web", "read public web pages and search the web", false],
@@ -10068,6 +10176,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"
+  ]
+ ],
+ "sabnzbd_free": [
+  [
+   "GET",
+   "^(queue|history|diskspace)$"
+  ]
+ ],
+ "sabnzbd_asks": [
+  [
+   "GET",
+   "^(pause|resume)$"
   ]
  ],
  "unifi_free": [
@@ -14183,6 +14303,56 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
    ]
   }
  },
+ "sabnzbd": {
+  "note": "A sample SABnzbd queue for the page and the tests (#397), shaped the way SABnzbd's API answers: two jobs downloading, one queued, last night's Ubuntu ISO finished and one old job that failed on missing articles.",
+  "queue": {
+   "status": "Downloading",
+   "version": "4.3.3",
+   "paused": false,
+   "kbpersec": "9216.00",
+   "mbleft": "2465.30",
+   "slots": [
+    {
+     "filename": "Ubuntu 24.04.1 Desktop amd64",
+     "mb": "4812.70",
+     "mbleft": "1843.20",
+     "percentage": "61.7",
+     "timeleft": "0:03:20",
+     "status": "Downloading"
+    },
+    {
+     "filename": "Debian 13.1.0 netinst amd64",
+     "mb": "622.10",
+     "mbleft": "622.10",
+     "percentage": "0",
+     "timeleft": "0:00:00",
+     "status": "Queued"
+    }
+   ]
+  },
+  "history": {
+   "slots": [
+    {
+     "name": "Big Buck Bunny 2008 4K Remux",
+     "status": "Completed",
+     "bytes": "4295949158",
+     "completed": "1762934400",
+     "fail_message": ""
+    },
+    {
+     "name": "Old Show S01E02 1080p",
+     "status": "Failed",
+     "bytes": "734003200",
+     "completed": "1762935300",
+     "fail_message": "Unusable server article (age?)"
+    }
+   ]
+  },
+  "diskspace": [
+   ["/mnt/user/downloads", "1234.56"],
+   ["/mnt/user/complete", "1234.56"]
+  ]
+ },
  "solax": {
   "note": "A sample Solax inverter for the page and the tests (#361), shaped the way SolaxCloud's end-user API answers: mid-afternoon, making more than the house uses, battery over half full. The fields are the API's own units (yieldtoday in 0.1 kWh, feedinenergy in 0.01 kWh).",
   "exception": "",
@@ -14490,7 +14660,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -14502,7 +14672,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -14683,7 +14853,8 @@ HOW TO MAP CODE
     rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read", rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
     rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
     rb_proxmox_power:"proxmox_control", rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
-    rb_docker_power:"docker_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_docker_power:"docker_control", rb_sabnzbd_queue:"sabnzbd_read", rb_sabnzbd_history:"sabnzbd_read",
+    rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -15044,6 +15215,15 @@ HOW TO MAP CODE
       tooltip:"The last lines a container wrote, its output and its errors together, oldest first." }),
     S("rb_docker_power", "%1 Docker container %2", [{ type:"field_dropdown", name:"ACTION", options:[["restart","restart"],["stop","stop"],["start","start"]] }, val("NAME")],
       { style:"docker", inputsInline:true, tooltip:"Restarts, stops or starts one container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Containers listed in DOCKER_PROTECT are never touched. On this page nothing really restarts." }),
+    /* SABnzbd (#397): reads, and pause and resume that always ask */
+    V("rb_sabnzbd_queue", "SABnzbd queue", [], "Array", { style:"sabnzbd",
+      tooltip:"A list of records, one for each job in the download queue: name, size_mb, left_mb, percent, eta (time left, like 0:12:34) and status (Downloading, Queued, Paused). On this page it uses a sample queue." }),
+    V("rb_sabnzbd_history", "SABnzbd history, last %1 hours", [val("N")], "Array", { style:"sabnzbd",
+      tooltip:"A list of records, one for each job that finished in that time: name, status (Completed or Failed), size_mb, when it finished and, for a failure, why it failed." }),
+    V("rb_sabnzbd_diskspace", "SABnzbd diskspace", [], "Array", { style:"sabnzbd",
+      tooltip:"A list of records, one for each of SABnzbd's folders (the download folder first): folder and free_gb." }),
+    S("rb_sabnzbd_pause", "%1 SABnzbd", [{ type:"field_dropdown", name:"ACTION", options:[["pause","pause"],["resume","resume"]] }],
+      { style:"sabnzbd", inputsInline:true, tooltip:"Pauses or resumes the whole download queue. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really pauses." }),
     /* Proxmox (#357): reads, and power that always asks */
     V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
       tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
@@ -15249,6 +15429,9 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Docker", categorystyle:"docker", contents:[
       B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
+    ]},
+    { kind:"category", name:"SABnzbd", categorystyle:"sabnzbd", contents:[
+      B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
     ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
@@ -17834,6 +18017,7 @@ HOW TO MAP CODE
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
+             sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -17893,6 +18077,10 @@ HOW TO MAP CODE
       "; ALLOW_START=1 only if the program restarts, stops or starts containers), and DOCKER_HOST = tcp://that-machine:2375.",
       "; DOCKER_PROTECT lists containers never restarted, stopped or started, like the proxy itself.",
       "; DOCKER_HOST = tcp://docker.local:2375", "DOCKER_PROTECT = ");
+    if (need.sabnzbd) out.push("", "[sabnzbd]",
+      "; SABnzbd's API: its address and the full API key (in SABnzbd under Config, General, API Key), not the",
+      "; NZB key. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, if it needs one.",
+      "SABNZBD_URL = ", "SABNZBD_API_KEY = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -18230,6 +18418,9 @@ HOW TO MAP CODE
         case "rb_docker_containers": return "(await R.docker_containers())";
         case "rb_docker_stats": return "(await R.docker_stats())";
         case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
+        case "rb_sabnzbd_queue": return "(await R.sabnzbd_queue())";
+        case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
+        case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -18385,6 +18576,7 @@ HOW TO MAP CODE
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
+          case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
@@ -20659,6 +20851,39 @@ HOW TO MAP CODE
     addStep("Docker", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
+  /* SABnzbd on the page (#397): a sample queue. Exported Python talks to SABnzbd's API: reads, and pause and
+     resume after a yes, every time. Matches the runtime's sabnzbd_ methods and tests/fake_sabnzbd.py. */
+  const sbSample = () => { connNote("SABnzbd"); return CONN.sabnzbd || {}; };
+  const sbWhen = secs => { const d = new Date(secs * 1000); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+  function sabnzbdQueue(){
+    const q = sbSample().queue || {}, out = (q.slots || []).map(s => ({ name:str(s.filename), size_mb:cents(num(s.mb)), left_mb:cents(num(s.mbleft)),
+      percent:cents(num(s.percentage)), eta:str(s.timeleft) || "0:00:00", status:str(s.status) }));
+    const head = (q.paused === true || str(q.paused).toLowerCase() === "true" ? "Paused" : "Downloading") + ", " + cents(num(q.mbleft)) + " MB left";
+    addStep("SABnzbd queue", { mono:true, text:head + (out.length ? "\n" + out.map(s => s.name + ": " + s.left_mb + " MB left (" + s.percent + "%)").join("\n") : "") })
+      .done(tr("{n} in the queue", { n:out.length }), "ok");
+    return out;
+  }
+  function sabnzbdHistory(hours){
+    const n = Math.max(1, Math.min(500, Math.trunc(num(hours)) || 24)), cutoff = Date.now() / 1000 - n * 3600;
+    const out = (sbSample().history?.slots || []).filter(s => !num(s.completed) || num(s.completed) >= cutoff)
+      .map(s => ({ name:str(s.name), status:str(s.status), size_mb:s.bytes ? cents(num(s.bytes) / 1048576) : "",
+        when:num(s.completed) ? sbWhen(num(s.completed)) : "", why:str(s.status).toLowerCase() === "failed" ? str(s.fail_message) : "" })).reverse();
+    addStep("SABnzbd history", { mono:true, text:out.map(s => s.name + ": " + s.status).join("\n") || tr("(nothing)") }).done(tr("{n} finished", { n:out.length }), "ok");
+    return out;
+  }
+  function sabnzbdDiskspace(){
+    const out = (sbSample().diskspace || []).filter(r => Array.isArray(r) && r.length >= 2).map(r => ({ folder:str(r[0]), free_gb:cents(num(r[1])) }));
+    addStep("SABnzbd diskspace", { mono:true, text:out.map(d => d.folder + ": " + d.free_gb + " GB free").join("\n") || tr("(nothing)") }).done(tr("{n} folders", { n:out.length }), "ok");
+    return out;
+  }
+  async function sabnzbdPause(action){
+    action = str(action).trim().toLowerCase();
+    if (!["pause", "resume"].includes(action)) fail(tr("SABnzbd can be paused or resumed."));
+    const q = sbSample().queue || {}, what = (action === "pause" ? "pause" : "resume") + " SABnzbd's queue (" + cents(num(q.mbleft)) + " MB left, " + (q.slots || []).length + " in the queue)";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("SABnzbd", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
   /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
      shut down and reboot after a yes, every time. Matches the runtime's proxmox_ methods and tests/fake_proxmox.py. */
   const pxSample = () => { connNote("Proxmox"); return CONN.proxmox || {}; };
@@ -21571,6 +21796,9 @@ HOW TO MAP CODE
       case "rb_docker_containers": return dockerContainers();
       case "rb_docker_stats": return dockerStats();
       case "rb_docker_logs": return dockerLogs(await input(b, tc, "NAME"), await input(b, tc, "N", 50));
+      case "rb_sabnzbd_queue": return sabnzbdQueue();
+      case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
+      case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
       case "rb_proxmox_nodes": return proxmoxNodes();
       case "rb_proxmox_guests": return proxmoxGuests();
       case "rb_proxmox_storage": return proxmoxStorage();
@@ -22167,6 +22395,7 @@ HOW TO MAP CODE
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
+      case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;

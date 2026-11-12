@@ -33,6 +33,7 @@ Made by tools/sync.py from i18n/es.json: edit that, not this.
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker
+- SABnzbd: SABnzbd
 - Tools for the agent: drop them inside an agent block: Herramientas para el agente: suéltalas dentro de un bloque de agente
 - Listeners: they run while the exported program runs on schedule: Escuchas: funcionan mientras el programa exportado se ejecuta con horario
 - Read and send: Leer y enviar

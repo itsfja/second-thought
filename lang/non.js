@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"Docker-hirzlur","tooltip":"Listi skráa, ein fyrir hverja hirzlu, hvárt sem hon rennr eða eigi: name, image, state, status, health (healthy, unhealthy, eða tómt án heilsuprófs), restarts ok started. Á þessi síðu nytr hann dœmis-hlaða."},
 "rb_docker_stats":{"message0":"Docker-minni ok CPU","tooltip":"Listi skráa, ein fyrir hverja rennandi hirzlu: name, cpu (%), memory_mb, limit_mb (minni vélarinnar, fyrir hirzlu án marks) ok memory (% marksins)."},
 "rb_docker_logs":{"message0":"Docker-skrár %1, síðustu %2 línur","tooltip":"Síðustu línur er hirzla ritaði, útgangr hennar ok villur saman, hin elzta fyrst."},
-"rb_docker_power":{"message0":"%1 Docker-hirzlu %2","tooltip":"Endrræsir, stöðvar eða ræsir eina hirzlu, eptir nafni hennar. Hann spyrr þik ávallt fyrst, þótt ekki annat spyrji, ok sé engi þar at segja já, ferr hann eigi. Hirzlum í DOCKER_PROTECT er aldri snert. Á þessi síðu endrræsisk ekki í sannleika."}
+"rb_docker_power":{"message0":"%1 Docker-hirzlu %2","tooltip":"Endrræsir, stöðvar eða ræsir eina hirzlu, eptir nafni hennar. Hann spyrr þik ávallt fyrst, þótt ekki annat spyrji, ok sé engi þar at segja já, ferr hann eigi. Hirzlum í DOCKER_PROTECT er aldri snert. Á þessi síðu endrræsisk ekki í sannleika."},
+"rb_sabnzbd_queue":{"message0":"SABnzbd biðröð","tooltip":"Listi færslna, ein fyrir hvert verk í sóknarbíðröðinni: name, size_mb, left_mb, percent, eta (tími eftir, sem 0:12:34) og status (Downloading, Queued, Paused). Á þessari síðu notar hann úrtaksbiðröð."},
+"rb_sabnzbd_history":{"message0":"SABnzbd söga, síðustu %1 klukkustundir","tooltip":"Listi færslna, ein fyrir hvert verk sem lauk á þeim tíma: name, status (Completed eða Failed), size_mb, hvenær það lauk og, fyrir misheppnað, af hví það misheppnaðist."},
+"rb_sabnzbd_diskspace":{"message0":"SABnzbd diskrúm","tooltip":"Listi færslna, ein fyrir hvern möppu SABnzbd (sóknarmappan fyrst): folder og free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Setur í bið eða heldur áfram allri sóknarbíðröðinni. Hann spyr þig alltaf fyrst, þótt ekkert annað spyrji, og ef enginn er til að segja já, gerist ekkert. Á þessari síðu setur ekkert í bið í alvöru."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"rafhlöðu {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"setja varahlut Powerwalls á {n}% (nú {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"lesa töl Powerwalls þíns: rafhlöðuhleðsla, sólar, inn- og útflutningur nets, og varahluturinn sem hann heldur",
-"set your Powerwall's backup reserve (asking you each time)":"breyta varahlut Powerwalls þíns (spyrr þig í hvert sinn)"
+"set your Powerwall's backup reserve (asking you each time)":"breyta varahlut Powerwalls þíns (spyrr þig í hvert sinn)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd má vera sett í bið eða haldið áfram.",
+"SABnzbd diskspace":"SABnzbd diskrúm",
+"SABnzbd history":"SABnzbd söga",
+"SABnzbd queue":"SABnzbd biðröð",
+"{n} finished":"{n} lokið",
+"{n} folders":"{n} möppur",
+"{n} in the queue":"{n} í biðröðinni",
+"pause and resume your SABnzbd downloads (asking you each time)":"setja í bið og halda áfram SABnzbd-sóknum þínum (spyr þig í hvert sinn)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"lesa SABnzbd þitt: sóknarbiðröðina, söguna og laust pláss á sóknardiskinum"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2112,7 +2127,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"ekkert blokkaskjal er fólgit í, svá má síðan ekki flytja þetta forrit inn aptr (út var þat sent af eldri síðu)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"blokkaskjalit fólgit í þessu forriti má eigi lesask, svá má síðan eigi flytja þat inn aptr",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"blokkaskjalit fólgit í þessu forriti heldr eigi formi ({problem}), svá má síðan kannski eigi flytja þat inn aptr",
-"the block file inside this program matches the format, so the page can import it again":"blokkaskjalit í þessu forriti heldr formi, svá má síðan flytja þat inn aptr"
+"the block file inside this program matches the format, so the page can import it again":"blokkaskjalit í þessu forriti heldr formi, svá má síðan flytja þat inn aptr",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd má vera sett í bið eða haldið áfram.",
+"SABnzbd diskspace":"SABnzbd diskrúm",
+"SABnzbd history":"SABnzbd söga",
+"SABnzbd queue":"SABnzbd biðröð",
+"{n} finished":"{n} lokið",
+"{n} folders":"{n} möppur",
+"{n} in the queue":"{n} í biðröðinni",
+"Downloading":"Að sækja",
+"Paused":"Í bið",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought sendir eigi {what} til SABnzbd.",
+"{n} MB left":"{n} MB eftir",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd þarf SABNZBD_URL ok SABNZBD_API_KEY {where_keys}: staðar hans (sem http://sabnzbd:8080) ok fulla lykilinn, í SABnzbd undir Config, General, API Key.",
+"pause SABnzbd's queue":"setja biðröð SABnzbd í bið",
+"resume SABnzbd's queue":"halda biðröð SABnzbd áfram"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

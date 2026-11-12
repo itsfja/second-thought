@@ -33,6 +33,7 @@ Made by tools/sync.py from i18n/la.json: edit that, not this.
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker
+- SABnzbd: SABnzbd
 - Tools for the agent: drop them inside an agent block: Instrumenta procuratoris: intra laterem procuratoris pone
 - Listeners: they run while the exported program runs on schedule: Auscultatores: currunt dum programma exportatum ex horario currit
 - Read and send: Lege et mitte

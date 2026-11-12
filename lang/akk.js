@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"𒅗𒅈𒉺𒌅𒌝 𒊭 Docker","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒅗𒅈𒉺𒋾𒅎 𒅗𒇷𒊭: name, image, state, status, health (healthy, unhealthy), restarts 𒌑 started. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒄖𒊒𒌦𒈾𒄠 𒊭 𒋫𒄠𒅆𒇷𒅎 𒄿𒇷𒅅𒆠."},
 "rb_docker_stats":{"message0":"𒄭𒄑𒊓𒌅𒌝 𒌑 CPU 𒊭 Docker","tooltip":"𒋗𒈠𒀜 𒌅𒌒𒉺𒋾𒅎, 𒅖𒋼𒀉 𒀀𒈾 𒅗𒅈𒉺𒋾𒅎 𒅗𒇷𒊭 𒊭 𒅋𒆷𒆪: name, cpu (%), memory_mb, limit_mb 𒌑 memory (%)."},
 "rb_docker_logs":{"message0":"𒁲𒈬 𒊭 Docker 𒊭 %1, %2 𒅆𒀉𒊒 𒉿𒅈𒆪𒌅𒌝","tooltip":"𒅆𒀉𒊒 𒉿𒅈𒆪𒌅𒌝 𒊭 𒅗𒅈𒉺𒌅𒌝 𒅖𒌅𒊒, 𒆷𒁉𒊒𒌝 𒉺𒈾."},
-"rb_docker_power":{"message0":"%1 𒅗𒅈𒉺𒋫𒄠 𒊭 Docker %2","tooltip":"𒅗𒅈𒉺𒋫𒄠 𒅖𒋼𒀉 𒄿𒈾 𒋗𒈪𒊭 𒊭𒉌𒅖 𒌑𒊭𒅈𒊏, 𒄿𒉺𒅈𒊏𒊍 𒌑𒇻 𒌑𒊭𒅈𒊏. 𒁕𒊑𒅖 𒉺𒈾 𒄿𒊭𒀠𒅗; 𒋗𒌝𒈠 𒈠𒄠𒈠𒀭 𒀭𒈾 𒀀𒈾 𒋡𒁁𒅎 𒌌 𒄿𒁀𒀸𒅆, 𒌌 𒅋𒆷𒀝. 𒅗𒅈𒉺𒌅𒌝 𒊭 DOCKER_PROTECT 𒌌 𒅖𒊭𒄴𒄩𒁕. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒈪𒅎𒈠 𒌌 𒅖𒊭𒅈𒊑."}
+"rb_docker_power":{"message0":"%1 𒅗𒅈𒉺𒋫𒄠 𒊭 Docker %2","tooltip":"𒅗𒅈𒉺𒋫𒄠 𒅖𒋼𒀉 𒄿𒈾 𒋗𒈪𒊭 𒊭𒉌𒅖 𒌑𒊭𒅈𒊏, 𒄿𒉺𒅈𒊏𒊍 𒌑𒇻 𒌑𒊭𒅈𒊏. 𒁕𒊑𒅖 𒉺𒈾 𒄿𒊭𒀠𒅗; 𒋗𒌝𒈠 𒈠𒄠𒈠𒀭 𒀭𒈾 𒀀𒈾 𒋡𒁁𒅎 𒌌 𒄿𒁀𒀸𒅆, 𒌌 𒅋𒆷𒀝. 𒅗𒅈𒉺𒌅𒌝 𒊭 DOCKER_PROTECT 𒌌 𒅖𒊭𒄴𒄩𒁕. 𒄿𒈾 𒌅𒌒𒁉𒅎 𒀭𒉌𒅎 𒈪𒅎𒈠 𒌌 𒅖𒊭𒅈𒊑."},
+"rb_sabnzbd_queue":{"message0":"𒆷𒀭 SABnzbd","tooltip":"𒈾𒁉𒅖𒌅𒌝 𒊭 𒌅𒌒𒉺𒌅𒌝, 𒅖𒋼𒅔 𒀀𒈾 𒅗𒆷 𒅁𒊺𒋾𒅎 𒄿𒈾 𒆷𒀭 𒉿𒊑𒅎: 𒈾𒈨, size_mb, left_mb, percent, 𒂊𒋫 (𒊺𒊏𒉡𒌝 𒁀𒋗, 𒆠𒈠 0:12:34) 𒌑 status (Downloading, Queued, Paused). Ina 𒌅𒌒𒁉 𒀭𒉌 𒆷𒀭 𒄷𒌨𒍝𒉌𒅎 𒅖𒋫𒀝𒅗𒀭."},
+"rb_sabnzbd_history":{"tooltip":"𒈾𒁉𒅖𒌅𒌝 𒊭 𒌅𒌒𒉺𒌅𒌝, 𒅖𒋼𒅔 𒀀𒈾 𒅗𒆷 𒅁𒊺𒋾𒅎 𒊭 𒄿𒈾 𒌑𒈪𒅎 𒂵𒄠𒊏𒌅𒌝: 𒈾𒈨, status (Completed 𒌑 Failed), size_mb, 𒈠𒋾𒈠 𒂵𒈪𒅕 𒌑, 𒀀𒈾 𒄭𒁲𒅎, 𒀸𒋗𒌝 𒄭𒌅.","message0":"𒊭𒋫𒊒𒌝 𒊭 SABnzbd, 𒄴𒊏𒌅𒌝 %1 𒊭𒋾"},
+"rb_sabnzbd_diskspace":{"message0":"𒋡𒀝𒋡𒊒𒌝 𒊭 SABnzbd","tooltip":"𒈾𒁉𒅖𒌅𒌝 𒊭 𒌅𒌒𒉺𒌅𒌝, 𒅖𒋼𒅔 𒀀𒈾 𒅗𒆷 𒀸𒊏𒋾𒅎 𒊭 SABnzbd (𒀀𒊭𒅈 𒉿𒊑𒅎 𒅖𒋼𒀭𒈠): folder 𒌑 free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"𒆪𒌌𒆷𒀜 𒆷𒀭 𒉿𒊑𒅎 𒄿𒈾 𒉺𒊏𒋛𒅎 𒌑 𒄿𒈾 𒋗𒌨𒊑𒅎 𒄿𒁀𒀸𒅆. Kâta 𒊭 𒀀𒆷𒆪𒌝 𒌑𒍝𒀊𒁀𒀜, 𒊭 𒄿𒈾 muḫḫi 𒀀𒄷 𒆷 𒌑𒍝𒀊𒁀𒀜, 𒌑 𒊭 𒈠𒅈 𒀀𒈨𒇷𒅎 𒆷 𒅁𒋗 𒆷 𒅁𒁉𒅖. Ina 𒌅𒌒𒁉 𒀭𒉌 𒈠𒅈 𒅆𒅁𒊑 𒆷 𒅁𒁉𒅖."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌑𒈪𒊭𒄠","weekdays":"𒄿𒈾 𒌑𒈪 𒅆𒅁𒊑𒅎","weekends":"𒄿𒈾 𒌑𒈪 𒉡𒄭𒅎"},
@@ -230,7 +234,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𒌑𒉡𒌅𒌝 𒀀𒈾 𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 𒇷𒅁𒁉 𒇷𒁉𒀉𒋾 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒁲𒅆𒈾",
@@ -1085,7 +1090,17 @@
 "battery at {pct}%":"𒍝𒁍 𒀀𒈾 {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"𒀀𒈾 𒍝𒁉𒅎 𒀀𒈾 𒍢𒊑𒅎 uṣṣurāt Powerwall 𒀀𒈾 {n}% 𒋗𒆪𒌦 (𒀀𒈾 {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"𒀀𒆷𒀜 Powerwall 𒅆𒋫𒊍𒋢: 𒍝𒁍, 𒊭𒄠𒋗, 𒂊𒊑𒁉𒅎 𒀀𒈾 𒍢𒊑𒅎 𒌑 𒍢𒊑𒅎, 𒌑 𒍝𒁍 uṣṣurū",
-"set your Powerwall's backup reserve (asking you each time)":"𒍝𒁉𒅎 uṣṣurāt Powerwall 𒋗𒆪𒌦 (𒀀𒉿𒋫𒄠 𒀀𒈾 𒀀𒈨𒇷 𒅗𒇻 𒊭𒀝𒋡𒀜)"
+"set your Powerwall's backup reserve (asking you each time)":"𒍝𒁉𒅎 uṣṣurāt Powerwall 𒋗𒆪𒌦 (𒀀𒉿𒋫𒄠 𒀀𒈾 𒀀𒈨𒇷 𒅗𒇻 𒊭𒀝𒋡𒀜)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd 𒄿𒈾 𒉺𒊏𒋛𒅎 𒌑𒇻 𒄿𒈾 𒋗𒌨𒊑𒅎 𒄿𒁀𒀸𒅆.",
+"SABnzbd diskspace":"𒋡𒀝𒋡𒊒𒌝 𒊭 SABnzbd",
+"SABnzbd history":"𒊭𒋫𒊒𒌝 𒊭 SABnzbd",
+"SABnzbd queue":"𒆷𒀭 SABnzbd",
+"{n} finished":"{n} 𒂵𒄠𒊏𒌅𒌝",
+"{n} folders":"{n} 𒀸𒊏𒌅𒌝",
+"{n} in the queue":"{n} 𒄿𒈾 𒆷𒀭 SABnzbd",
+"pause and resume your SABnzbd downloads (asking you each time)":"𒉿𒊑 SABnzbd 𒄿𒈾 𒉺𒊏𒋛𒅎 𒌑 𒄿𒈾 𒋗𒌨𒊑𒅎 (𒅗𒋫 𒊭 𒀀𒆷𒆪𒌝 𒌑𒍝𒀊𒁀𒀜)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd 𒄿𒊭𒀊𒉺𒊏𒄠: 𒆷𒀭 𒉿𒊑𒅎, 𒊭𒋫𒊒𒌝 𒌑 𒁀𒋗𒌝 𒋡𒀝𒋡𒊑𒅎 𒊭 𒀀𒊭𒅈 𒉿𒊑𒅎"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -2113,7 +2128,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"ṭupp kīmī ul ibaššû, arkitu pītum nēpešam annûm ana leqêšu ul iššû (ša pītim maḫrîtim)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"ṭupp kīmī ša ina nēpešim annîm ul iššû, arkitu pītum ana leqêšu ul iššû",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"ṭupp kīmī ša ina nēpešim annîm šipir ul uššab ({problem}), arkitu pītum ana leqêšu mā ul iššû",
-"the block file inside this program matches the format, so the page can import it again":"ṭupp kīmī ša ina nēpešim annîm šipir uššab, arkitu pītum ana leqêšu iššû"
+"the block file inside this program matches the format, so the page can import it again":"ṭupp kīmī ša ina nēpešim annîm šipir uššab, arkitu pītum ana leqêšu iššû",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd ina parāsim ulû ina šurrēm ibašši.",
+"SABnzbd diskspace":"qaqqarum ša SABnzbd",
+"SABnzbd history":"šatārum ša SABnzbd",
+"SABnzbd queue":"lān SABnzbd",
+"{n} finished":"{n} gamrātum",
+"{n} folders":"{n} ašrātum",
+"{n} in the queue":"{n} ina lān SABnzbd",
+"Downloading":"Wāridum",
+"Paused":"Kunukum",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought {what} ana SABnzbd ul išappar.",
+"{n} MB left":"{n} MB bašû",
+"pause SABnzbd's queue":"kunuk lān SABnzbd",
+"resume SABnzbd's queue":"šurrur lān SABnzbd",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd SABNZBD_URL u SABNZBD_API_KEY ḫāṣib {where_keys}: ašaršu (kīma http://sabnzbd:8080) u napišta API kullat, ina SABnzbd ša Config, General, API Key."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

@@ -664,6 +664,22 @@
   "rb_docker_power": {
    "message0": "Docker-Container %2 %1",
    "tooltip": "Startet einen Container neu, stoppt oder startet ihn, anhand seines Namens. Er fragt Sie immer zuerst, auch wenn sonst nichts fragt, und ist niemand da, der Ja sagt, läuft er nicht. Container in DOCKER_PROTECT werden nie angefasst. Auf dieser Seite startet nichts wirklich neu."
+  },
+  "rb_sabnzbd_queue": {
+   "message0": "SABnzbd-Warteschlange",
+   "tooltip": "Eine Liste von Datensätzen, einer für jeden Auftrag in der Download-Warteschlange: name, size_mb, left_mb, percent, eta (Restzeit, wie 0:12:34) und status (Downloading, Queued, Paused). Auf dieser Seite benutzt es eine Beispiel-Warteschlange."
+  },
+  "rb_sabnzbd_history": {
+   "message0": "SABnzbd-Verlauf, letzte %1 Stunden",
+   "tooltip": "Eine Liste von Datensätzen, einer für jeden in dieser Zeit fertig gewordenen Auftrag: name, status (Completed oder Failed), size_mb, wann er fertig wurde und, bei einem Fehlschlag, warum er fehlschlug."
+  },
+  "rb_sabnzbd_diskspace": {
+   "message0": "SABnzbd-Speicherplatz",
+   "tooltip": "Eine Liste von Datensätzen, einer für jeden Ordner von SABnzbd (der Download-Ordner zuerst): folder und free_gb."
+  },
+  "rb_sabnzbd_pause": {
+   "message0": "%1 SABnzbd",
+   "tooltip": "Hält die ganze Download-Warteschlange an oder setzt sie fort. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite hält nichts wirklich an."
   }
  },
  "options": {
@@ -835,7 +851,8 @@
   "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
-  "Docker": "Docker"
+  "Docker": "Docker",
+  "SABnzbd": "SABnzbd"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Werkzeuge für den Agenten: in einen Agenten-Block ziehen",
@@ -1690,7 +1707,17 @@
   "battery at {pct}%": "Batterie bei {pct}%",
   "set the Powerwall backup reserve to {n}% (now {old}%)": "die Backup-Reserve der Powerwall auf {n}% setzen (jetzt {old}%)",
   "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "die Werte deiner Powerwall lesen: Batterieladung, Solar, Netzbezug und -einspeisung, und die gehaltene Reserve",
-  "set your Powerwall's backup reserve (asking you each time)": "die Backup-Reserve deiner Powerwall setzen (fragt dich jedes Mal)"
+  "set your Powerwall's backup reserve (asking you each time)": "die Backup-Reserve deiner Powerwall setzen (fragt dich jedes Mal)",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd kann pausiert oder fortgesetzt werden.",
+  "SABnzbd diskspace": "SABnzbd-Speicherplatz",
+  "SABnzbd history": "SABnzbd-Verlauf",
+  "SABnzbd queue": "SABnzbd-Warteschlange",
+  "{n} finished": "{n} abgeschlossen",
+  "{n} folders": "{n} Ordner",
+  "{n} in the queue": "{n} in der Warteschlange",
+  "pause and resume your SABnzbd downloads (asking you each time)": "deine SABnzbd-Downloads anhalten und fortsetzen (jedes Mal nach dir gefragt)",
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "dein SABnzbd lesen: die Download-Warteschlange, den Verlauf und den freien Platz auf der Download-Platte"
  },
  "examples": {
   "review": {
@@ -3350,6 +3377,23 @@
   "no block file embedded, so the page can't import this program again (it was exported by an older page)": "keine Blockdatei eingebettet, daher kann die Seite dieses Programm nicht wieder importieren (es wurde von einer älteren Seite exportiert)",
   "the block file embedded in this program isn't readable, so the page can't import it again": "die in diesem Programm eingebettete Blockdatei ist nicht lesbar, daher kann die Seite es nicht wieder importieren",
   "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "die in diesem Programm eingebettete Blockdatei verletzt das Format ({problem}), daher kann die Seite es vielleicht nicht wieder importieren",
-  "the block file inside this program matches the format, so the page can import it again": "die Blockdatei in diesem Programm entspricht dem Format, daher kann die Seite es wieder importieren"
+  "the block file inside this program matches the format, so the page can import it again": "die Blockdatei in diesem Programm entspricht dem Format, daher kann die Seite es wieder importieren",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd kann pausiert oder fortgesetzt werden.",
+  "SABnzbd diskspace": "SABnzbd-Speicherplatz",
+  "SABnzbd history": "SABnzbd-Verlauf",
+  "SABnzbd queue": "SABnzbd-Warteschlange",
+  "{n} finished": "{n} abgeschlossen",
+  "{n} folders": "{n} Ordner",
+  "{n} in the queue": "{n} in der Warteschlange",
+  "Downloading": "Lädt herunter",
+  "Paused": "Pausiert",
+  "SABnzbd {version}": "SABnzbd {version}",
+  "SABnzbd: {why}.": "SABnzbd: {why}.",
+  "Second Thought doesn't send {what} to SABnzbd.": "Second Thought sendet {what} nicht an SABnzbd.",
+  "{n} MB left": "{n} MB übrig",
+  "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "SABnzbd braucht SABNZBD_URL und SABNZBD_API_KEY {where_keys}: die Adresse (etwa http://sabnzbd:8080) und den vollständigen API-Schlüssel, in SABnzbd unter Config, General, API Key.",
+  "pause SABnzbd's queue": "die Warteschlange von SABnzbd anhalten",
+  "resume SABnzbd's queue": "die Warteschlange von SABnzbd fortsetzen"
  }
 }

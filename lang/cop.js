@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"ⲛϩⲛⲁⲁⲩ ⲛⲧⲉ Docker","tooltip":"ⲟⲩⲕⲁⲧⲁⲗⲟⲅⲟⲥ ⲛⲭⲁⲣⲧⲏⲥ, ⲟⲩⲁ ⲕⲁⲧⲁ ϩⲛⲁⲁⲩ ⲛⲓⲙ: name, image, state, status, health (healthy, unhealthy), restarts ⲙⲛ started. ϩⲙ ⲡⲉⲓⲡⲓⲛⲁⲕⲥ ϣⲁϥϫⲓ ⲛⲟⲩⲥⲱⲟⲩϩ ⲙⲡⲁⲣⲁⲇⲉⲓⲅⲙⲁ."},
 "rb_docker_stats":{"message0":"ⲡⲙⲉⲉⲩⲉ ⲙⲛ CPU ⲛⲧⲉ Docker","tooltip":"ⲟⲩⲕⲁⲧⲁⲗⲟⲅⲟⲥ ⲛⲭⲁⲣⲧⲏⲥ, ⲟⲩⲁ ⲕⲁⲧⲁ ϩⲛⲁⲁⲩ ⲛⲓⲙ: name, cpu (%), memory_mb, limit_mb ⲙⲛ memory (%)."},
 "rb_docker_logs":{"message0":"ⲛⲥϩⲁⲓ ⲛⲧⲉ Docker ⲛⲧⲉ %1, %2 ⲛⲥⲧⲓⲕϩⲟⲥ ⲛϩⲁⲉ","tooltip":"ⲛⲥⲧⲓⲕϩⲟⲥ ⲛϩⲁⲉ ⲛⲧⲁ ⲡϩⲛⲁⲁⲩ ⲥϩⲁⲓⲥⲟⲩ, ⲡⲁⲥ ⲛϣⲟⲣⲡ."},
-"rb_docker_power":{"message0":"%1 ⲡϩⲛⲁⲁⲩ ⲛⲧⲉ Docker %2","tooltip":"ϣⲁϥϣⲁⲁ ⲟⲛ, ϣⲁϥⲕϩⲱ ⲏ ϣⲁϥϣⲁⲁ ⲛⲟⲩϩⲛⲁⲁⲩ ϩⲙ ⲡⲉϥⲣⲁⲛ. ϣⲁϥϣⲓⲛⲉ ⲙⲙⲟⲕ ⲛϣⲟⲣⲡ ⲛⲟⲩⲟⲉⲓϣ ⲛⲓⲙ; ⲉϣⲱⲡⲉ ⲙⲙⲛ ⲗⲁⲁⲩ ⲉϫⲱ ϫⲉ ϭⲉ, ⲛϣⲁϥϣⲱⲡⲉ ⲁⲛ. DOCKER_PROTECT ⲛϣⲁⲩϫⲓ ⲙⲙⲟⲟⲩ ⲁⲛ. ϩⲙ ⲡⲉⲓⲡⲓⲛⲁⲕⲥ ⲗⲁⲁⲩ ϣⲁⲁ ⲟⲛ."}
+"rb_docker_power":{"message0":"%1 ⲡϩⲛⲁⲁⲩ ⲛⲧⲉ Docker %2","tooltip":"ϣⲁϥϣⲁⲁ ⲟⲛ, ϣⲁϥⲕϩⲱ ⲏ ϣⲁϥϣⲁⲁ ⲛⲟⲩϩⲛⲁⲁⲩ ϩⲙ ⲡⲉϥⲣⲁⲛ. ϣⲁϥϣⲓⲛⲉ ⲙⲙⲟⲕ ⲛϣⲟⲣⲡ ⲛⲟⲩⲟⲉⲓϣ ⲛⲓⲙ; ⲉϣⲱⲡⲉ ⲙⲙⲛ ⲗⲁⲁⲩ ⲉϫⲱ ϫⲉ ϭⲉ, ⲛϣⲁϥϣⲱⲡⲉ ⲁⲛ. DOCKER_PROTECT ⲛϣⲁⲩϫⲓ ⲙⲙⲟⲟⲩ ⲁⲛ. ϩⲙ ⲡⲉⲓⲡⲓⲛⲁⲕⲥ ⲗⲁⲁⲩ ϣⲁⲁ ⲟⲛ."},
+"rb_sabnzbd_queue":{"message0":"taksis nte SABnzbd","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-erhme en taksis nte ouōšeb: name, size_mb, left_mb, percent, eta (ēne etšōp ēnhe, nthe 0:12:34) mn status (Downloading, Queued, Paused). En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ šop ere ou-taksis nte ouōrb."},
+"rb_sabnzbd_history":{"tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-erhme etmot en ēne hōn: name, status (Completed ē Failed), size_mb, ēne etmot mn, nte ou-ⲕⲟⲩⲛⲕⲟⲩ, ēte ēne etmot.","message0":"historia nte SABnzbd, ⲧⲏⲣⲟⲩ %1 ⲱⲛⲧ"},
+"rb_sabnzbd_diskspace":{"message0":"mēte nte disk n-SABnzbd","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-mēte nte SABnzbd (pēhēhē nte ouōšeb erhēb): folder mn free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Šoukhaf ē Šaušaaf taksis nte ouōšeb etouōn. Ešafōōš n-kat ouonh, ēre pēhēhē nte ouōšeb mmon erō-k, mn ourome mpša ēro-f, ouonh m-moot. En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ ouonh m-moot nte taksis en ouōrbe."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ϩⲟⲟⲩ ⲛⲓⲙ","weekdays":"ϩⲛ ⲛϩⲟⲟⲩ ⲛϩⲱⲃ","weekends":"ϩⲛ ⲛϩⲟⲟⲩ ⲛⲙⲧⲟⲛ"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ⲛⲥⲱⲧⲙ: ϣⲁⲩⲁⲁⲩ ϩⲟⲧⲁⲛ ⲛⲧⲁⲝⲓⲥ ⲉⲃⲟⲗ ϣⲁϥⲁⲁⲩ ⲕⲁⲧⲁ ⲟⲩⲟⲉⲓϣ",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"ⲛⲧⲁⲗⲱⲧⲣⲉ ⲛⲧⲁ {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"ⲥⲱⲧⲙ ⲛⲛⲟⲟⲩ ⲛⲕⲁⲕ ⲛⲧⲉ Powerwall ⲛⲧⲁ {n}% (ⲛⲧⲁⲟⲩ {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"ⲙⲙⲱⲱⲧ ⲛⲛⲥⲟⲩ nPowerwall: ⲛⲧⲡⲱⲱⲣⲉ ⲛⲛⲧⲁⲗⲱⲧⲣⲉ, ⲛⲧⲉⲃⲁⲁⲗ, ⲛⲧⲁⲉⲓⲱⲟϥⲉ ⲉⲃⲟⲗ ⲏ ⲛⲧⲁⲉⲓⲱⲟϥⲉ ⲛⲧⲁⲓⲥⲏⲥⲏ, ⲛⲛⲉⲩ ⲛⲕⲁⲕ ⲛⲛⲥⲱⲡⲉ",
-"set your Powerwall's backup reserve (asking you each time)":"ϣⲱⲧⲙ ⲛⲛⲟⲟⲩ ⲛⲕⲁⲕ ⲛⲧⲉ Powerwall (ⲛⲧⲁⲁⲓⲥⲏⲥⲏ ⲛⲛⲉⲩ ⲕⲟⲗ ḥrānā)"
+"set your Powerwall's backup reserve (asking you each time)":"ϣⲱⲧⲙ ⲛⲛⲟⲟⲩ ⲛⲕⲁⲕ ⲛⲧⲉ Powerwall (ⲛⲧⲁⲁⲓⲥⲏⲥⲏ ⲛⲛⲉⲩ ⲕⲟⲗ ḥrānā)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd ϣⲁⲩⲕϩⲁϥ ⲏ ϣⲁⲩϣⲁⲁϥ.",
+"SABnzbd diskspace":"ⲙⲏⲧⲉ ⲛⲧⲉ ⲇⲓⲥⲕ n-SABnzbd",
+"SABnzbd history":"ϩⲓⲥⲧⲟⲣⲓⲁ ⲛⲧⲉ SABnzbd",
+"SABnzbd queue":"ⲧⲁⲝⲓⲥ ⲛⲧⲉ SABnzbd",
+"{n} finished":"{n} ⲉⲧⲙⲟⲧ",
+"{n} folders":"{n} ⲟⲩⲱⲛⲏ",
+"{n} in the queue":"{n} ⲉⲛ ⲧⲁⲝⲓⲥ",
+"pause and resume your SABnzbd downloads (asking you each time)":"Šaukhaf mn Šaušaaf SABnzbd n-kat ouonh (ešafōōš n-kat ouonh)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"šmto SABnzbd: taksis nte ouōšeb, historia mn mēte etšōp ēnhe en disk nte ouōšeb"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -2112,7 +2127,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"mpeblokk mpeijōōme mpoou hn tselis, auō tselis ntmōtš ehoun nteitaksis nōtf ebol (ebol mntselis ntešōpe)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"peblokk mpeijōōme hn teitaksis nōtf mpoucine nōtf ōš, auō tselis ntmōtš ebol hōtf",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"peblokk mpeijōōme hn teitaksis nōtf mpmntršŋke ({problem}), auō tselis nšōpe ntmōtš ebol hōtf",
-"the block file inside this program matches the format, so the page can import it again":"peblokk mpeijōōme hn teitaksis nōtf mntršŋke, auō tselis mōtš ebol hōtf"
+"the block file inside this program matches the format, so the page can import it again":"peblokk mpeijōōme hn teitaksis nōtf mntršŋke, auō tselis mōtš ebol hōtf",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd šaukhaf ē šaušaaf.",
+"SABnzbd diskspace":"mēte nte disk n-SABnzbd",
+"SABnzbd history":"historia nte SABnzbd",
+"SABnzbd queue":"taksis nte SABnzbd",
+"{n} finished":"{n} etmot",
+"{n} folders":"{n} ouōnē",
+"{n} in the queue":"{n} en taksis",
+"Downloading":"Miše",
+"Paused":"Šaukhaf",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought nšafjoou an n-{what} e SABnzbd.",
+"{n} MB left":"{n} MB etšōp ēnhe",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd šafouōš n-SABNZBD_URL mn n-SABNZBD_API_KEY {where_keys}: pma nte (nthe http://sabnzbd:8080) mn pēhēhē nte ouči nte API, en SABnzbd hn Config, General, API Key.",
+"pause SABnzbd's queue":"Šaukhaf taksis nte SABnzbd",
+"resume SABnzbd's queue":"Šaušaaf taksis nte SABnzbd"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

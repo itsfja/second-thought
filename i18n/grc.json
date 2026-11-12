@@ -664,6 +664,22 @@
   "rb_docker_power": {
    "message0": "%1 τὸ ἀγγεῖον τοῦ Docker %2",
    "tooltip": "Πάλιν ἄρχει, παύει ἢ ἄρχει ἓν ἀγγεῖον τῷ ὀνόματι. Ἀεὶ πρῶτον ἐρωτᾷ σε, καὶ ὅταν οὐδὲν ἄλλο ἐρωτᾷ· μηδενὸς παρόντος τοῦ «ναί» λέγοντος, οὐ γίνεται. Τὰ ἀγγεῖα ἐν DOCKER_PROTECT οὐδέποτε ἅπτεται. Ἐν τῇδε τῇ σελίδι οὐδὲν ἀληθῶς πάλιν ἄρχεται."
+  },
+  "rb_sabnzbd_queue": {
+   "message0": "οὐρά SABnzbd",
+   "tooltip": "Κατάλογος ἀναγραφῶν, μία ἑκάστῳ ἔργῳ ἐν τῇ οὐρᾷ τῆς λήψεως: name, size_mb, left_mb, percent, eta (ὁ χρόνος ὁ περιλειπόμενος, οἷον 0:12:34) καὶ status (Downloading, Queued, Paused). Ἐν ταύτῃ τῇ σελίδι οὐρά παραδείγματος χρῆται."
+  },
+  "rb_sabnzbd_history": {
+   "message0": "ἱστορία SABnzbd, ἔσχαται %1 ὧραι",
+   "tooltip": "Κατάλογος ἀναγραφῶν, μία ἑκάστῳ ἔργῳ τῷ ἐν τῷ χρόνῳ τούτῳ τελεσθέντι: name, status (Completed ἢ Failed), size_mb, πότε ἐτελέσθη καὶ, ἐὰν ἀπέτυχεν, διότι."
+  },
+  "rb_sabnzbd_diskspace": {
+   "message0": "τόπος τοῦ δίσκου τοῦ SABnzbd",
+   "tooltip": "Κατάλογος ἀναγραφῶν, μία ἑκάστῃ θήκῃ τοῦ SABnzbd (πρώτη ἡ θήκη τῆς λήψεως): folder καὶ free_gb."
+  },
+  "rb_sabnzbd_pause": {
+   "message0": "%1 SABnzbd",
+   "tooltip": "Παύει ἢ πάλιν ἄρχει πᾶσαν τὴν οὐρὰν τῆς λήψεως. Σε ἀεὶ πρότερον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς φάντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ὄντως παύεται."
   }
  },
  "options": {
@@ -835,7 +851,8 @@
   "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
-  "Docker": "Docker"
+  "Docker": "Docker",
+  "SABnzbd": "SABnzbd"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1690,7 +1707,17 @@
   "battery at {pct}%": "μπαταρία ἐπὶ {pct}%",
   "set the Powerwall backup reserve to {n}% (now {old}%)": "τὴν τοῦ Powerwall ἀσφάλειαν ἐπὶ {n}% θέσθαι (νῦν {old}%)",
   "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "τὰ τοῦ Powerwall ἀριθμήματα ἀναγιγνώσκειν: φόρτισιν μπαταρίας, ἡλιακά, εἰσαγωγὴν καὶ ἐξαγωγὴν τοῦ βροχίου, καὶ τὴν φυλαττομένην ἀσφάλειαν",
-  "set your Powerwall's backup reserve (asking you each time)": "τὴν τοῦ Powerwall ἀσφάλειαν μεταβάλλειν (ἐρωτῶν σε ἑκάστοτε)"
+  "set your Powerwall's backup reserve (asking you each time)": "τὴν τοῦ Powerwall ἀσφάλειαν μεταβάλλειν (ἐρωτῶν σε ἑκάστοτε)",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "Τὸ SABnzbd δύναται παύεσθαι ἢ πάλιν ἄρχεσθαι.",
+  "SABnzbd diskspace": "τόπος τοῦ δίσκου τοῦ SABnzbd",
+  "SABnzbd history": "ἱστορία SABnzbd",
+  "SABnzbd queue": "οὐρά SABnzbd",
+  "{n} finished": "{n} τετελεσμένα",
+  "{n} folders": "{n} θῆκαι",
+  "{n} in the queue": "{n} ἐν τῇ οὐρᾷ",
+  "pause and resume your SABnzbd downloads (asking you each time)": "τὰς λήψεις τοῦ SABnzbd παύειν καὶ πάλιν ἄρχειν (σε ἀεὶ ἐρωτῶν)",
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "τὸ SABnzbd σου ἀναγιγνώσκειν: τὴν οὐρὰν τῆς λήψεως, τὴν ἱστορίαν καὶ τὸν περιλειπόμενον τόπον τοῦ δίσκου τῆς λήψεως"
  },
  "examples": {
   "review": {
@@ -3350,7 +3377,24 @@
   "no block file embedded, so the page can't import this program again (it was exported by an older page)": "πλιθοβιβλίον οὐκ ἔνεστιν, ὥστε ἡ σελὶς τοῦτο τὸ πρόγραμμα πάλιν ἐσαγαγεῖν οὐ δύναται (ὑπὸ παλαιοτέρας σελιδὸς ἐξήχθη)",
   "the block file embedded in this program isn't readable, so the page can't import it again": "τὸ ἐν τούτῳ τῷ προγράμματι ἐντεταμένον πλιθοβιβλίον ἀνάγνωστον οὐκ ἔστιν, ὥστε ἡ σελὶς αὐτὸ πάλιν ἐσαγαγεῖν οὐ δύναται",
   "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "τὸ ἐντεταμένον ἐν τούτῳ τῷ προγράμματι πλιθοβιβλίον τὸν τύπον οὐ φυλάσσει ({problem}), ὥστε ἴσως ἡ σελὶς αὐτὸ πάλιν ἐσαγαγεῖν οὐ δυνήσεται",
-  "the block file inside this program matches the format, so the page can import it again": "τὸ ἐν τούτῳ τῷ προγράμματι πλιθοβιβλίον τὸν τύπον φυλάσσει, ὥστε ἡ σελὶς αὐτὸ πάλιν ἐσαγαγεῖν δύναται"
+  "the block file inside this program matches the format, so the page can import it again": "τὸ ἐν τούτῳ τῷ προγράμματι πλιθοβιβλίον τὸν τύπον φυλάσσει, ὥστε ἡ σελὶς αὐτὸ πάλιν ἐσαγαγεῖν δύναται",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "Τὸ SABnzbd δύναται παύεσθαι ἢ πάλιν ἄρχεσθαι.",
+  "SABnzbd diskspace": "τόπος τοῦ δίσκου τοῦ SABnzbd",
+  "SABnzbd history": "ἱστορία SABnzbd",
+  "SABnzbd queue": "οὐρά SABnzbd",
+  "{n} finished": "{n} τετελεσμένα",
+  "{n} folders": "{n} θῆκαι",
+  "{n} in the queue": "{n} ἐν τῇ οὐρᾷ",
+  "Downloading": "Καταφέρεται",
+  "Paused": "Παύεται",
+  "SABnzbd {version}": "SABnzbd {version}",
+  "SABnzbd: {why}.": "SABnzbd· {why}.",
+  "Second Thought doesn't send {what} to SABnzbd.": "Τὸ Second Thought οὐ πέμπει {what} εἰς SABnzbd.",
+  "{n} MB left": "{n} MB ἀπολείποντα",
+  "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "Τὸ SABnzbd δεῖται SABNZBD_URL καὶ SABNZBD_API_KEY {where_keys}· τὴν διεύθυνσιν αὐτοῦ (οἷον http://sabnzbd:8080) καὶ τὸ πλῆρες κλεῖδι, ἐν τῷ SABnzbd ὑπὸ Config, General, API Key.",
+  "pause SABnzbd's queue": "παῦσαι τὴν οὐρὰν τοῦ SABnzbd",
+  "resume SABnzbd's queue": "πάλιν ἆρξαι τὴν οὐρὰν τοῦ SABnzbd"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

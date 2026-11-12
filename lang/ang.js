@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"Docker fatu","tooltip":"Getæl gewrita, an for ælcum fæte, yrne hit oþþe ne yrne: name, image, state, status, health (healthy, unhealthy, oþþe æmtig butan hæle fandunge), restarts and started. On þissum leafe hit brycþ bysene heapes."},
 "rb_docker_stats":{"message0":"Docker gemynd and CPU","tooltip":"Getæl gewrita, an for ælcum yrnendum fæte: name, cpu (%), memory_mb, limit_mb (þære searwe gemynd, for fæte butan gemære) and memory (% þæs gemæres)."},
 "rb_docker_logs":{"message0":"Docker gewritu of %1, þa latostan %2 linan","tooltip":"Þa latostan linan þe fæt wrat, his utgang and his gedwyld ætgædere, seo ieldeste ærest."},
-"rb_docker_power":{"message0":"%1 Docker fæt %2","tooltip":"Eft onstyreþ, stilleþ oþþe onstyreþ an fæt, be his naman. Hit axaþ þe simle ærest, þeah naht elles ne axige; gif nan man nis þær to secgenne gea, hit ne færþ. Fatu on DOCKER_PROTECT ne beoþ næfre gehrinene. On þissum leafe naht eft ne onginþ soþlice."}
+"rb_docker_power":{"message0":"%1 Docker fæt %2","tooltip":"Eft onstyreþ, stilleþ oþþe onstyreþ an fæt, be his naman. Hit axaþ þe simle ærest, þeah naht elles ne axige; gif nan man nis þær to secgenne gea, hit ne færþ. Fatu on DOCKER_PROTECT ne beoþ næfre gehrinene. On þissum leafe naht eft ne onginþ soþlice."},
+"rb_sabnzbd_queue":{"message0":"SABnzbd endebyrdnes","tooltip":"Gecynd gecræfa, ān for ǣlcum weorce on þǣre hlǣdunge-endebyrdnesse: name, size_mb, left_mb, percent, eta (tīd þe is left, swa 0:12:34) and status (Downloading, Queued, Paused). On þisse sīde hit brȳcþ bysen-endebyrdnesse."},
+"rb_sabnzbd_history":{"message0":"SABnzbd stǣr, lǣstan %1 tīd","tooltip":"Gecynd gecræfa, ān for ǣlcum weorce þe on þǣre tīde gefylled wæs: name, status (Completed oþþe Failed), size_mb, hwænne hit gefylled wæs and, for wanhæfenum, hwī hit wanhlōm."},
+"rb_sabnzbd_diskspace":{"message0":"SABnzbd diskfæc","tooltip":"Gecynd gecræfa, ān for ǣlcere SABnzbd mapan (hlǣdunge-mapu fyrst): folder and free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Stillþ oþþe eft onstyrrþ ealle þa hlǣdunge-endebyrdnesse. Hit āscāf þē ǣrest, ēac þonne nāwiht oþer āscīeþ, and nānum þǣr tō secgenne þā ne gelimpþ hit. On þisse sīde nan þing sōþlīce ne stillþ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tol for þone ærendracan: lege hie innan ærendracan stocce",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"batterie on {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"settan þā Powerwall bæc-hord tō {n}% (nū {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"rǣdan þā cūþþe þīnes Powerwall: batterie hlǣst, sunne, net in and ūt, and þæt hord hit healdeþ",
-"set your Powerwall's backup reserve (asking you each time)":"ƿendan þæt Powerwall bæc-hord (āxaþ þē ǣlce sīðe)"
+"set your Powerwall's backup reserve (asking you each time)":"ƿendan þæt Powerwall bæc-hord (āxaþ þē ǣlce sīðe)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd mæg beon gestilled oþþe eft onstyred.",
+"SABnzbd diskspace":"SABnzbd diskfæc",
+"SABnzbd history":"SABnzbd stǣr",
+"SABnzbd queue":"SABnzbd endebyrdnes",
+"{n} finished":"{n} gefylled",
+"{n} folders":"{n} mapan",
+"{n} in the queue":"{n} on þǣre endebyrdnesse",
+"pause and resume your SABnzbd downloads (asking you each time)":"SABnzbd hlǣdunge stillan and eft onstyran (āscieþ þē ǣlcum sīþe)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd rǣdan: þa hlǣdunge-endebyrdnesse, þa stǣre and þone diskfæc þe is left on þǣre hlǣdunge-disce"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2112,7 +2127,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"nā blocc-fætels is inn gelǣded, so the tramete ne mæg þisne forescrift eft bringan inn (he wæs of an ieldran tramete ūt gelǣded)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"sē blocc-fætels þe is inn þissum forescrift ne mæg gerǣdan wesan, so the tramete ne mæg hine eft bringan inn",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"sē blocc-fætels inn þissum forescrift hylt ne þæt geriht (on {problem}), so the tramete mæg wēnlice hine eft bringan inn",
-"the block file inside this program matches the format, so the page can import it again":"sē blocc-fætels wiþinnan þissum forescrift hylt þæt geriht, so the tramete mæg hine eft bringan inn"
+"the block file inside this program matches the format, so the page can import it again":"sē blocc-fætels wiþinnan þissum forescrift hylt þæt geriht, so the tramete mæg hine eft bringan inn",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd mæg beon gestilled oþþe eft onstyred.",
+"SABnzbd diskspace":"SABnzbd diskfæc",
+"SABnzbd history":"SABnzbd stǣr",
+"SABnzbd queue":"SABnzbd endebyrdnes",
+"{n} finished":"{n} gefylled",
+"{n} folders":"{n} mapan",
+"{n} in the queue":"{n} on þǣre endebyrdnesse",
+"Downloading":"Hlǣdende",
+"Paused":"Gestilled",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought ne sent {what} to SABnzbd.",
+"{n} MB left":"{n} MB þǣre lāf",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd behōfaþ SABNZBD_URL and SABNZBD_API_KEY {where_keys}: his stowe (swa http://sabnzbd:8080) and þa fullan cȳþcǣg, in SABnzbd under Config, General, API Key.",
+"pause SABnzbd's queue":"gestillan SABnzbd's endebyrdnesse",
+"resume SABnzbd's queue":"eft onstyran SABnzbd's endebyrdnesse"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

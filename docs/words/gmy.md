@@ -33,6 +33,7 @@ Made by tools/sync.py from i18n/gmy.json: edit that, not this.
 - UniFi: UniFi
 - Proxmox: Proxmox
 - Docker: Docker
+- SABnzbd: SABnzbd
 - Tools for the agent: drop them inside an agent block: 𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵
 - Listeners: they run while the exported program runs on schedule: 𐀀𐀒𐀺𐀳𐀩: 𐀏𐀨𐀃𐀯 𐀃𐀟𐀨 𐀡𐀫𐀏𐀨𐀔 𐀁𐀏𐀕𐀜 𐀏𐀲 𐀃𐀨 𐀏𐀨𐀁𐀂
 - Read and send: 𐀀𐀙𐀑𐀜𐀮 𐀏𐀂 𐀟𐀟

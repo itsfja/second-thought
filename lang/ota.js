@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"Docker قابلری","tooltip":"قیدلر لیسته‌سی، چالیشسین چالیشماسین هر قاب ایچون بر: name، image، state، status، health (healthy، unhealthy، یا صحّت یوقلامه‌سی یوقسه بوش)، restarts و started. بو صحیفه‌ده نمونه بر ییغین قوللانیر."},
 "rb_docker_stats":{"message0":"Docker حافظه‌سی و CPU","tooltip":"قیدلر لیسته‌سی، چالیشان هر قاب ایچون بر: name، cpu (%)، memory_mb، limit_mb (حدّی اولمایان قاب ایچون ماكینه‌نڭ حافظه‌سی) و memory (حدّڭ % سی)."},
 "rb_docker_logs":{"message0":"%1 ڭ Docker قیدلری، صوڭ %2 سطر","tooltip":"بر قابڭ یازدیغی صوڭ سطرلر، چیقتیسی و خطالری برابر، اڭ اسكیسی اوّل."},
-"rb_docker_power":{"message0":"Docker قابی %2 ی %1","tooltip":"بر قابی آدی ایله یڭیدن باشلاتیر، دوردورور یا باشلاتیر. باشقه هیچ بر شی صورمازسه بیله هر زمان اوّل سزه صورار؛ اوت دیه‌جك كیمسه یوقسه یورومز. DOCKER_PROTECT ده‌كی قابلره اصلا طوقونولماز. بو صحیفه‌ده هیچ بر شی حقیقةً یڭیدن باشلاماز."}
+"rb_docker_power":{"message0":"Docker قابی %2 ی %1","tooltip":"بر قابی آدی ایله یڭیدن باشلاتیر، دوردورور یا باشلاتیر. باشقه هیچ بر شی صورمازسه بیله هر زمان اوّل سزه صورار؛ اوت دیه‌جك كیمسه یوقسه یورومز. DOCKER_PROTECT ده‌كی قابلره اصلا طوقونولماز. بو صحیفه‌ده هیچ بر شی حقیقةً یڭیدن باشلاماز."},
+"rb_sabnzbd_queue":{"message0":"SABnzbd sırası","tooltip":"Kayıtlar listesi, indirme sırasındaki her iş için bir tane: name, size_mb, left_mb, percent, eta (kalan süre, 0:12:34 gibi) ve status (Downloading, Queued, Paused). Bu sayfada örnek bir sıra kullanılır."},
+"rb_sabnzbd_history":{"message0":"SABnzbd tarihi, son %1 saat","tooltip":"Kayıtlar listesi, o sürede biten her iş için bir tane: name, status (Completed veya Failed), size_mb, ne zaman bitti ve başarısızsa neden başarısız oldu."},
+"rb_sabnzbd_diskspace":{"message0":"SABnzbd disk mesahası","tooltip":"Kayıtlar listesi, SABnzbd'nin her klasörü için bir tane (indirme klasörü önce): folder ve free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Bütün indirme sırasını durdurur veya devam ettirir. Başka bir şey sormasa da her seferinde senden sorar; evet diyecek kimse yoksa yapılmaz. Bu sayfada hiçbir şey gerçekten durdurulmaz."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"هر گون","weekdays":"ایش گونلری","weekends":"هفته صوڭلری"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"باتریا {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall نین یریئم احتیاطینی {n}% ائله قویماق(ایندی {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"Powerwall معلوماتینی اوخومق: باتریا دولولوغو، گونش، آلیم و ساتیم، و ساخلانیلان احتیاط",
-"set your Powerwall's backup reserve (asking you each time)":"Powerwall نین یریئم احتیاطینی دییشمک(هر دفه سنی سورار)"
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall نین یریئم احتیاطینی دییشمک(هر دفه سنی سورار)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd durdurulabilir veya devam ettirilebilir.",
+"SABnzbd diskspace":"SABnzbd disk mesahası",
+"SABnzbd history":"SABnzbd tarihi",
+"SABnzbd queue":"SABnzbd sırası",
+"{n} finished":"{n} bitdi",
+"{n} folders":"{n} klasör",
+"{n} in the queue":"sırada {n}",
+"pause and resume your SABnzbd downloads (asking you each time)":"SABnzbd indirmelerini durdurmak ve devam ettirmek (her seferinde sana sorarak)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd'ni okumak: indirme sırası, tarih ve indirme diskindeki boş yer"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2112,7 +2127,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"بلوک دوسیه‌سی مدمج دییل، ایچون صحیفه بو پروگرامی تکره داخل ایتمه‌ز (قده‌مکی صحیفه‌دن خارج ایدیلمیش)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"بو پروگرامدا مدمج بلوک دوسیه‌سی اوخوناماز، ایچون صحیفه اونی تکره داخل ایتمه‌ز",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"بو پروگرامدا مدمج بلوک دوسیه‌سی قالبا اویماز ({problem})، ایچون صحیفه بلکی اونی تکره داخل ایتمه‌ز",
-"the block file inside this program matches the format, so the page can import it again":"بو پروگرامدا بلوک دوسیه‌سی قالبا اویار، ایچون صحیفه اونی تکره داخل ایته بیلر"
+"the block file inside this program matches the format, so the page can import it again":"بو پروگرامدا بلوک دوسیه‌سی قالبا اویار، ایچون صحیفه اونی تکره داخل ایته بیلر",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd durdurulabilir veya devam ettirilebilir.",
+"SABnzbd diskspace":"SABnzbd disk mesahası",
+"SABnzbd history":"SABnzbd tarihi",
+"SABnzbd queue":"SABnzbd sırası",
+"{n} finished":"{n} bitdi",
+"{n} folders":"{n} klasör",
+"{n} in the queue":"sırada {n}",
+"Downloading":"İndiriliyor",
+"Paused":"Duraklatıldı",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought، {what} ی SABnzbd ه گؤندرمز.",
+"{n} MB left":"{n} MB قالدی",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd، SABNZBD_URL و SABNZBD_API_KEY ایستیر {where_keys}: آدرسی (http://sabnzbd:8080 كبی) و تمام کلید، SABnzbd ده Config، General، API Key آلتنده.",
+"pause SABnzbd's queue":"SABnzbd نین سیراسینی دوردورماق",
+"resume SABnzbd's queue":"SABnzbd نین سیراسینی دوام ائتدیرمک"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

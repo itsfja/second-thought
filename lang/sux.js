@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"𒂁 Docker","tooltip":"𒁾 𒈬𒊬𒊏, 𒂁 𒀸𒀸: name, image, state, status, health (healthy, unhealthy), restarts 𒅇 started. 𒁾 𒉈𒀀 𒃻 𒄑𒄯 𒁳."},
 "rb_docker_stats":{"message0":"𒄑𒌆𒉿 𒅇 CPU Docker","tooltip":"𒁾 𒈬𒊬𒊏, 𒂁 𒀸𒀸: name, cpu (%), memory_mb, limit_mb 𒅇 memory (%)."},
 "rb_docker_logs":{"message0":"𒈬𒊬 Docker %1, %2 𒂕","tooltip":"𒈬𒊬 𒂕 𒂁 𒊬𒊏, 𒅆𒂠 𒅆𒂠."},
-"rb_docker_power":{"message0":"%1 𒂁 Docker %2","tooltip":"𒂁 𒀸 𒈬𒁉𒋫 𒁲 𒅗 𒈫, 𒄑 𒋳 𒅇 𒁲 𒅗. 𒌓 𒆸𒆸 𒅆𒂠 𒇷 𒋻; 𒇽 𒃶 𒅗 𒉡𒅅, 𒉡𒀝. DOCKER_PROTECT 𒉡𒋳. 𒁾 𒉈𒀀 𒃻 𒉡𒁲𒅗."}
+"rb_docker_power":{"message0":"%1 𒂁 Docker %2","tooltip":"𒂁 𒀸 𒈬𒁉𒋫 𒁲 𒅗 𒈫, 𒄑 𒋳 𒅇 𒁲 𒅗. 𒌓 𒆸𒆸 𒅆𒂠 𒇷 𒋻; 𒇽 𒃶 𒅗 𒉡𒅅, 𒉡𒀝. DOCKER_PROTECT 𒉡𒋳. 𒁾 𒉈𒀀 𒃻 𒉡𒁲𒅗."},
+"rb_sabnzbd_queue":{"message0":"sa SABnzbd","tooltip":"dub-sar-meš, nig2-nam-mu2 sa-bi: name, size_mb, left_mb, percent, eta (ki-bi, gin7 0:12:34) u3 status (Downloading, Queued, Paused). SABnzbd-a sa ki-bi dug3-du11."},
+"rb_sabnzbd_history":{"tooltip":"dub-sar-meš, nig2-nam-mu2 sa-bi dug ki-bi: name, status (Completed u3 Failed), size_mb, e2-bi dug u3, sa2 nu-dug3, a-na-akam.","message0":"nam-sar SABnzbd, sa3 %1 ud"},
+"rb_sabnzbd_diskspace":{"message0":"ki SABnzbd","tooltip":"dub-sar-meš, nig2-nam-mu2 é SABnzbd-bi (é ki-bi i3-sag): folder u3 free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"sa SABnzbd dug-tag u3 sa2 du11. Ki-bi dug3-ga, nig2-nam-mu2 ki-bi dug3-ga, u3 lu2 nu-um-ma, nu-dug3. SABnzbd-a nig2 nu-um-ma dug-tag."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒃻𒉆","weekdays":"𒌓 𒆥𒅗","weekends":"𒌓 𒄑𒇲𒅗"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"𒊕𒃻 {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-𒅗 𒃻𒋃 𒁀𒀭𒃻 {n}% (𒀀𒈾 {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"Powerwall-𒅗 𒆠𒅗𒈠 𒁀𒍪: 𒊕𒃻, 𒌓, 𒈬-ḫilim-𒈠 𒁀𒁺, 𒃻𒋃𒀝 𒁀𒃻",
-"set your Powerwall's backup reserve (asking you each time)":"Powerwall-𒅗 𒃻𒋃 𒁀𒁉𒁉 (𒈬𒌓𒁺𒀀 𒂊𒊑 𒁀𒀭𒁺)"
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall-𒅗 𒃻𒋃 𒁀𒁉𒁉 (𒈬𒌓𒁺𒀀 𒂊𒊑 𒁀𒀭𒁺)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd 𒂁𒋳 𒅇 𒁲 𒅗.",
+"SABnzbd diskspace":"SABnzbd 𒆠",
+"SABnzbd history":"SABnzbd 𒉆𒊬",
+"SABnzbd queue":"SABnzbd 𒊓",
+"{n} finished":"{n} 𒂁",
+"{n} folders":"{n} é",
+"{n} in the queue":"{n} 𒊓𒁉",
+"pause and resume your SABnzbd downloads (asking you each time)":"sa2 SABnzbd dug-tag u3 sa2 du11 (ki-bi dug3-ga)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd ša3: sa ki-bi, nam-sar u3 ki é ki-bi"
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},
@@ -2112,7 +2127,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"dub ĝeš-ḫur nu-ĝal2, igi-dub ĝeš-ḫur ne-e3 šu nu-ti (igi-dub gibil-la-šè e3-a)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"dub ĝeš-ḫur ĝeš-ḫur-ba nu-šid, igi-dub šu nu-ti-de3",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"dub ĝeš-ḫur ĝeš-ḫur-ba saĝ nu-ĝa2-ĝa2 ({problem}), igi-dub šu nu-ti-de3",
-"the block file inside this program matches the format, so the page can import it again":"dub ĝeš-ḫur ĝeš-ḫur-ba saĝ ĝa2-ĝa2, igi-dub šu ti-de3"
+"the block file inside this program matches the format, so the page can import it again":"dub ĝeš-ḫur ĝeš-ḫur-ba saĝ ĝa2-ĝa2, igi-dub šu ti-de3",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd dug-tag u3 sa2 du11.",
+"SABnzbd diskspace":"SABnzbd ki",
+"SABnzbd history":"SABnzbd nam-sar",
+"SABnzbd queue":"SABnzbd sa",
+"{n} finished":"{n} dug",
+"{n} folders":"{n} é",
+"{n} in the queue":"{n} sa-bi",
+"Downloading":"ki-ta-e11",
+"Paused":"tag-ga",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought {what} SABnzbd-še3 nu-kin-gi4.",
+"{n} MB left":"{n} MB su",
+"pause SABnzbd's queue":"sa SABnzbd dug-tag",
+"resume SABnzbd's queue":"sa SABnzbd sa2 du11",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd SABNZBD_URL u3 SABNZBD_API_KEY al dug4 {where_keys}: ki-bi (http://sabnzbd:8080-gin7) u3 sulgi API, SABnzbd-a Config, General, API Key-bi."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

@@ -664,6 +664,22 @@
   "rb_docker_power": {
    "message0": "%1 il container Docker %2",
    "tooltip": "Riavvia, ferma o avvia un container, dal suo nome. Ti chiede sempre prima, anche quando nient'altro chiede, e se non c'è nessuno a dire sì non parte. I container in DOCKER_PROTECT non vengono mai toccati. In questa pagina nulla si riavvia davvero."
+  },
+  "rb_sabnzbd_queue": {
+   "message0": "coda di SABnzbd",
+   "tooltip": "Una lista di record, uno per ogni lavoro nella coda di download: name, size_mb, left_mb, percent, eta (tempo rimasto, come 0:12:34) e status (Downloading, Queued, Paused). In questa pagina usa una coda d'esempio."
+  },
+  "rb_sabnzbd_history": {
+   "message0": "cronologia di SABnzbd, ultime %1 ore",
+   "tooltip": "Una lista di record, uno per ogni lavoro finito in quel tempo: name, status (Completed o Failed), size_mb, quando è finito e, per un fallimento, perché è fallito."
+  },
+  "rb_sabnzbd_diskspace": {
+   "message0": "spazio su disco di SABnzbd",
+   "tooltip": "Una lista di record, una per ogni cartella di SABnzbd (prima la cartella di download): folder e free_gb."
+  },
+  "rb_sabnzbd_pause": {
+   "message0": "%1 SABnzbd",
+   "tooltip": "Mette in pausa o riprende tutta la coda di download. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente si mette in pausa davvero."
   }
  },
  "options": {
@@ -835,7 +851,8 @@
   "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
-  "Docker": "Docker"
+  "Docker": "Docker",
+  "SABnzbd": "SABnzbd"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Strumenti per l'agente: mettili dentro un blocco agente",
@@ -1690,7 +1707,17 @@
   "battery at {pct}%": "batteria al {pct}%",
   "set the Powerwall backup reserve to {n}% (now {old}%)": "impostare la riserva di backup della Powerwall al {n}% (ora {old}%)",
   "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "leggere le cifre della tua Powerwall: carica della batteria, solare, importazione ed esportazione dalla rete, e la riserva che tiene",
-  "set your Powerwall's backup reserve (asking you each time)": "cambiare la riserva di backup della tua Powerwall (chiedendotelo ogni volta)"
+  "set your Powerwall's backup reserve (asking you each time)": "cambiare la riserva di backup della tua Powerwall (chiedendotelo ogni volta)",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd si può mettere in pausa o riprendere.",
+  "SABnzbd diskspace": "spazio su disco di SABnzbd",
+  "SABnzbd history": "cronologia di SABnzbd",
+  "SABnzbd queue": "coda di SABnzbd",
+  "{n} finished": "{n} completati",
+  "{n} folders": "{n} cartelle",
+  "{n} in the queue": "{n} in coda",
+  "pause and resume your SABnzbd downloads (asking you each time)": "mettere in pausa e riprendere i tuoi download di SABnzbd (chiedendotelo ogni volta)",
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "leggere il tuo SABnzbd: la coda di download, la cronologia e lo spazio libero del disco di download"
  },
  "examples": {
   "review": {
@@ -3350,6 +3377,23 @@
   "no block file embedded, so the page can't import this program again (it was exported by an older page)": "nessun file di blocchi incorporato, quindi la pagina non può importare di nuovo questo programma (è stato esportato da una pagina più vecchia)",
   "the block file embedded in this program isn't readable, so the page can't import it again": "il file di blocchi incorporato in questo programma non è leggibile, quindi la pagina non può importarlo di nuovo",
   "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "il file di blocchi incorporato in questo programma non rispetta il formato ({problem}), quindi la pagina potrebbe non riuscire a importarlo di nuovo",
-  "the block file inside this program matches the format, so the page can import it again": "il file di blocchi dentro questo programma rispetta il formato, quindi la pagina può importarlo di nuovo"
+  "the block file inside this program matches the format, so the page can import it again": "il file di blocchi dentro questo programma rispetta il formato, quindi la pagina può importarlo di nuovo",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd si può mettere in pausa o riprendere.",
+  "SABnzbd diskspace": "spazio su disco di SABnzbd",
+  "SABnzbd history": "cronologia di SABnzbd",
+  "SABnzbd queue": "coda di SABnzbd",
+  "{n} finished": "{n} completati",
+  "{n} folders": "{n} cartelle",
+  "{n} in the queue": "{n} in coda",
+  "Downloading": "In scaricamento",
+  "Paused": "In pausa",
+  "SABnzbd {version}": "SABnzbd {version}",
+  "SABnzbd: {why}.": "SABnzbd: {why}.",
+  "Second Thought doesn't send {what} to SABnzbd.": "Second Thought non invia {what} a SABnzbd.",
+  "{n} MB left": "{n} MB rimasti",
+  "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "SABnzbd ha bisogno di SABNZBD_URL e SABNZBD_API_KEY {where_keys}: il suo indirizzo (come http://sabnzbd:8080) e la chiave API completa, in SABnzbd sotto Config, General, API Key.",
+  "pause SABnzbd's queue": "mettere in pausa la coda di SABnzbd",
+  "resume SABnzbd's queue": "riprendere la coda di SABnzbd"
  }
 }

@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"Docker 之器","tooltip":"簿之列，每器一簿，無論行否：name、image、state、status、health（healthy、unhealthy，無康驗則空）、restarts、started。於此頁用樣疊。"},
 "rb_docker_stats":{"message0":"Docker 之憶與 CPU","tooltip":"簿之列，每行器一簿：name、cpu（%）、memory_mb、limit_mb（器無限者，機之憶也）、memory（限之 %）。"},
 "rb_docker_logs":{"message0":"Docker 之錄：%1，末 %2 行","tooltip":"器所書之末行，其出與其誤並列，舊者先。"},
-"rb_docker_power":{"message0":"%1 Docker 之器 %2","tooltip":"以名復啟、止、啟一器。必先問汝，雖他無所問；無人在以曰可，則不行。DOCKER_PROTECT 之器，未嘗觸之。於此頁無所真復啟。"}
+"rb_docker_power":{"message0":"%1 Docker 之器 %2","tooltip":"以名復啟、止、啟一器。必先問汝，雖他無所問；無人在以曰可，則不行。DOCKER_PROTECT 之器，未嘗觸之。於此頁無所真復啟。"},
+"rb_sabnzbd_queue":{"message0":"SABnzbd 之序","tooltip":"錄之列，下之列中每事一錄：name、size_mb、left_mb、percent、eta（餘時，若 0:12:34）、status（方下、既列、既止）。此頁用示例之序。"},
+"rb_sabnzbd_history":{"message0":"SABnzbd 之史，近 %1 時","tooltip":"錄之列，其時內每畢之事一錄：name、status（成或敗）、size_mb、何時畢，敗者何故。"},
+"rb_sabnzbd_diskspace":{"message0":"SABnzbd 之盤","tooltip":"錄之列，SABnzbd 之每夾（下之夾居首）：folder 與 free_gb。"},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"止或復全下之序。無他問時亦必先問汝，無人在焉則不行。此頁無實止者。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每日","weekdays":"平日","weekends":"休日"},
@@ -228,7 +232,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"聽者：所出之程依時而行，則此諸塊行",
@@ -1083,7 +1088,17 @@
 "battery at {pct}%":"蓄電 {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"以 Powerwall 之備用存電為 {n}%(今 {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"讀 Powerwall 之數:蓄電、日能、網之入出,及所存之備用",
-"set your Powerwall's backup reserve (asking you each time)":"改 Powerwall 之備用存電(每問於爾)"
+"set your Powerwall's backup reserve (asking you each time)":"改 Powerwall 之備用存電(每問於爾)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd 可止，可復。",
+"SABnzbd diskspace":"SABnzbd 之盤",
+"SABnzbd history":"SABnzbd 之史",
+"SABnzbd queue":"SABnzbd 之序",
+"{n} finished":"{n} 畢",
+"{n} folders":"{n} 夾",
+"{n} in the queue":"序中有 {n}",
+"pause and resume your SABnzbd downloads (asking you each time)":"止而復 SABnzbd 之下（每問汝）",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"讀 SABnzbd：下之序、其史、下盤之餘"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2111,7 +2126,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"無嵌塊卷，故頁不能復入此程（舊頁所出也）",
 "the block file embedded in this program isn't readable, so the page can't import it again":"此程所嵌塊卷不可讀，故頁不能復入之",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"此程所嵌塊卷不合其式（{problem}），故頁或不能復入之",
-"the block file inside this program matches the format, so the page can import it again":"此程之塊卷合其式，故頁能復入之"
+"the block file inside this program matches the format, so the page can import it again":"此程之塊卷合其式，故頁能復入之",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd 可止，可復。",
+"SABnzbd diskspace":"SABnzbd 之盤",
+"SABnzbd history":"SABnzbd 之史",
+"SABnzbd queue":"SABnzbd 之序",
+"{n} finished":"{n} 畢",
+"{n} folders":"{n} 夾",
+"{n} in the queue":"序中有 {n}",
+"Downloading":"方下",
+"Paused":"既止",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd：{why}。",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought 不發 {what} 於 SABnzbd。",
+"{n} MB left":"餘 {n} MB",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd 須 SABNZBD_URL、SABNZBD_API_KEY {where_keys}：其址（若 http://sabnzbd:8080），及其全鑰，在 SABnzbd 之 Config、General、API Key 下。",
+"pause SABnzbd's queue":"止 SABnzbd 之序",
+"resume SABnzbd's queue":"復 SABnzbd 之序"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

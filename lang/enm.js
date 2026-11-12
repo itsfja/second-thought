@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"Docker vessels","tooltip":"A list of recordes, oon for every vessel, rennynge or nat: name, image, state, status, health (healthy, unhealthy, or empty with no hele-assay), restarts and started. On this page it useth an ensample stak."},
 "rb_docker_stats":{"message0":"Docker memorie and CPU","tooltip":"A list of recordes, oon for every rennynge vessel: name, cpu (%), memory_mb, limit_mb (the memorie of the engyn, for a vessel with no bound) and memory (% of the bound)."},
 "rb_docker_logs":{"message0":"Docker logges of %1, the laste %2 lynes","tooltip":"The laste lynes that a vessel wroot, his output and his errours togidre, the eldeste first."},
-"rb_docker_power":{"message0":"%1 Docker vessel %2","tooltip":"Stirteth agayn, stynteth or stirteth oon vessel, by his name. It evere asketh thee first, ye, whan no thing elles asketh; with no man ther to seye ye, it renneth nat. Vessels in DOCKER_PROTECT ben nevere touched. On this page no thing verraily stirteth agayn."}
+"rb_docker_power":{"message0":"%1 Docker vessel %2","tooltip":"Stirteth agayn, stynteth or stirteth oon vessel, by his name. It evere asketh thee first, ye, whan no thing elles asketh; with no man ther to seye ye, it renneth nat. Vessels in DOCKER_PROTECT ben nevere touched. On this page no thing verraily stirteth agayn."},
+"rb_sabnzbd_queue":{"message0":"SABnzbd rewe","tooltip":"A list of records, oon for every job in the doun-ladinge rewe: name, size_mb, left_mb, percent, eta (tyme left, as 0:12:34) and status (Downloading, Queued, Paused). On this page it useth a sample rewe."},
+"rb_sabnzbd_history":{"message0":"SABnzbd historie, laste %1 houres","tooltip":"A list of records, oon for every job y-done in that tyme: name, status (Completed or Failed), size_mb, whan it was y-done and, for a failing, why it failde."},
+"rb_sabnzbd_diskspace":{"message0":"SABnzbd disk-space","tooltip":"A list of records, oon for everich of SABnzbd's fóldres (the doun-ladinge fóldre first): folder and free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Stillith or stirith agayn the hole doun-ladinge rewe. It axeth the first everich tyme, though nothing ellis axeth, and with nobody to sayn yea, it nys doon. On this page nothing is truly stillid."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"baterie at {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"sette the Powerwall his bak-reserve to {n}% (now {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"rede the figures of thin Powerwall: baterie charge, sonne, net in and out, and the reserve it kepeth",
-"set your Powerwall's backup reserve (asking you each time)":"chaunge the bak-reserve of thin Powerwall (asketh thee ech tyme)"
+"set your Powerwall's backup reserve (asking you each time)":"chaunge the bak-reserve of thin Powerwall (asketh thee ech tyme)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd may be stilled or stired agayn.",
+"SABnzbd diskspace":"SABnzbd disk-space",
+"SABnzbd history":"SABnzbd historie",
+"SABnzbd queue":"SABnzbd rewe",
+"{n} finished":"{n} y-done",
+"{n} folders":"{n} fóldres",
+"{n} in the queue":"{n} in the rewe",
+"pause and resume your SABnzbd downloads (asking you each time)":"stille and stire agayn thy SABnzbd doun-ladinges (axing the everich tyme)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"rede thy SABnzbd: the doun-ladinge rewe, the historie and the space left on the doun-ladinge disk"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2112,7 +2127,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"no blok-quaier is embedded, so the page may nat brynge in this devys ageyn (it was sende out by an elder page)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"the blok-quaier embedded in this devys may nat be rad, so the page may nat brynge it in ageyn",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"the blok-quaier embedded in this devys kepth nat the forme ({problem}), so the page may peraventure nat brynge it in ageyn",
-"the block file inside this program matches the format, so the page can import it again":"the blok-quaier withynne this devys kepth the forme, so the page may brynge it in ageyn"
+"the block file inside this program matches the format, so the page can import it again":"the blok-quaier withynne this devys kepth the forme, so the page may brynge it in ageyn",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd may be stilled or stired agayn.",
+"SABnzbd diskspace":"SABnzbd disk-space",
+"SABnzbd history":"SABnzbd historie",
+"SABnzbd queue":"SABnzbd rewe",
+"{n} finished":"{n} y-done",
+"{n} folders":"{n} fóldres",
+"{n} in the queue":"{n} in the rewe",
+"Downloading":"Doun-ladinge",
+"Paused":"Stilled",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought sendeth nat {what} to SABnzbd.",
+"{n} MB left":"{n} MB left",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd nedeth SABNZBD_URL and SABNZBD_API_KEY {where_keys}: his place (as http://sabnzbd:8080) and the ful key, in SABnzbd under Config, General, API Key.",
+"pause SABnzbd's queue":"stille SABnzbd's rewe",
+"resume SABnzbd's queue":"stire SABnzbd's rewe agayn"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

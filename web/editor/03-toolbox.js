@@ -141,6 +141,9 @@
     { kind:"category", name:"Docker", categorystyle:"docker", contents:[
       B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
     ]},
+    { kind:"category", name:"SABnzbd", categorystyle:"sabnzbd", contents:[
+      B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
+    ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
     ]},
