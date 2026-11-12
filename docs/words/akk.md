@@ -35,6 +35,7 @@ Made by tools/sync.py from i18n/akk.json: edit that, not this.
 - Docker: Docker
 - SABnzbd: SABnzbd
 - Radarr and Sonarr: Radarr u Sonarr
+- Unraid: Unraid
 - Tools for the agent: drop them inside an agent block: 𒌑𒉡𒌅𒌝 𒀀𒈾 𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 𒇷𒅁𒁉 𒇷𒁉𒀉𒋾 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒁲𒅆𒈾
 - Listeners: they run while the exported program runs on schedule: 𒊺𒈬𒌅𒌝: 𒀀𒁲 𒉈𒁉𒋗𒌝 𒊭 𒋗𒍮 𒄿𒈾 𒀀𒁕𒉌𒅎 𒅋𒆷𒆪 𒅋𒆷𒆪
 - Read and send: 𒅆𒋫𒊍𒋢𒌝 𒌋 𒊭𒉺𒊒𒌝

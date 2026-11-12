@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"οὐρά %1","tooltip":"Κατάλογος ἀναγραφῶν, μία ἑκάστῃ λήψει ἐν τῇ οὐρᾷ: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality καὶ eta (ὁ χρόνος ὁ περιλειπόμενος, οἷον 0:12:34). Ἐν ταύτῃ τῇ σελίδι οὐρά παραδείγματος χρῆται."},
 "rb_arr_missing":{"message0":"ἐπιθυμίαι %1","tooltip":"Κατάλογος ἀναγραφῶν, μία ἑκάστῃ ταινίᾳ ἢ ἐπεισοδίῳ ἄνευ βιβλίου: title, added (πότε προσετέθη) καὶ id."},
 "rb_arr_diskspace":{"message0":"τόπος τοῦ δίσκου %1","tooltip":"Κατάλογος ἀναγραφῶν, μία ἑκάστῃ θήκῃ: path, label, free_gb καὶ total_gb."},
-"rb_arr_search":{"message0":"ἐν %1 ζητεῖν τὸ λεῖπον","tooltip":"Ἐν πάσαις ταῖς ἐπιθυμίαις ζητεῖ ὃ βιβλίον οὐκ ἔχει. Σε ἀεὶ πρότερον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς φάντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ὄντως ζητεῖται."}
+"rb_arr_search":{"message0":"ἐν %1 ζητεῖν τὸ λεῖπον","tooltip":"Ἐν πάσαις ταῖς ἐπιθυμίαις ζητεῖ ὃ βιβλίον οὐκ ἔχει. Σε ἀεὶ πρότερον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς φάντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ὄντως ζητεῖται."},
+"rb_unraid_array":{"message0":"παράταξις Unraid","tooltip":"Μία μνήμη τῇ παρατάξει: state (STARTED, STOPPED, ...), started (πότεραι ἀνήγαγεν), free_gb, total_gb καὶ uptime. Ἐν ταύτῃ τῇ σελίδι δείγματι χρῆται."},
+"rb_unraid_disks":{"message0":"δίσκοι Unraid","tooltip":"Λόγος μνημῶν, ἑνὶ ἑκάστῳ δίσκῳ τῆς παρατάξεως, πρῶτον ἰσότης, εἶτα δεδομένα, εἶτα ἀποθήκη: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb καὶ free_gb."},
+"rb_unraid_shares":{"message0":"κοινωνία Unraid","tooltip":"Λόγος μνημῶν, ἑνὶ ἑκάστῃ κοινωνίᾳ: name, free_gb, used_gb καὶ total_gb."},
+"rb_unraid_containers":{"message0":"ἀγγεῖα Unraid","tooltip":"Λόγος μνημῶν, ἑνὶ ἑκάστῳ ἀγγείῳ Docker: name, state (running, exited, ...), status καὶ auto_start (πότερον τὸ Unraid ἀνάγει αὐτὸ μετὰ τῆς παρατάξεως)."},
+"rb_unraid_vms":{"message0":"εἰκόνες μηχαναί Unraid","tooltip":"Λόγος μνημῶν, ἑνὶ ἑκάστῃ εἰκόνι μηχανῇ: name καὶ state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 τὸ ἀγγεῖον τοῦ Unraid %2","tooltip":"Ἀνάγει ἢ παύει ἓν ἀγγεῖον Docker, τῷ ὀνόματι. Ἀεὶ σε ἐρωτᾷ πρῶτον, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μὴ ὄντος οὗ ἐρεῖ ναι, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀνάγει ἢ παύει ἀληθῶς."},
+"rb_unraid_vm_power":{"message0":"%1 τὴν εἰκόνα μηχανὴν τοῦ Unraid %2","tooltip":"Ἀνάγει ἢ παύει μίαν εἰκόνα μηχανήν, τῷ ὀνόματι. Ἀεὶ σε ἐρωτᾷ πρῶτον, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μὴ ὄντος οὗ ἐρεῖ ναι, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀνάγει ἢ παύει ἀληθῶς."},
+"rb_unraid_parity":{"message0":"σκεψθῆναι τὴν ἰσότητα τοῦ Unraid","tooltip":"Σκέπτει τοὺς ἰσότητος δίσκους ἀναγιγνώσκων αὐτούς, μὴ γράφων διορθώσεις. Ἀεὶ σε ἐρωτᾷ πρῶτον, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μὴ ὄντος οὗ ἐρεῖ ναι, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν σκέπτει ἀληθῶς."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"καθ᾽ ἡμέραν","weekdays":"ἐν ταῖς ἡμέραις τῶν ἔργων","weekends":"ἐν τῷ τέλει τῆς ἑβδομάδος"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr καὶ Sonarr"
+"Radarr and Sonarr":"Radarr καὶ Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Ποῖον; Radarr ἢ Sonarr;",
 "{n} downloading":"{n} φέρεται κάτω",
-"{n} missing":"{n} λείπει"
+"{n} missing":"{n} λείπει",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"ἀνάγειν καὶ παύειν τὰ ἀγγεῖα καὶ τὰς εἰκόνας μηχανὰς τοῦ Unraid σου, καὶ σκεψθῆναι τὴν ἰσότητα (ἐρωτώντα σε ἑκάστοτε)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"ἀναγιγνώσκειν τὸν Unraid σου: τὴν παράταξιν, τοὺς δίσκους, τὰς κοινωνίας, τὰ ἀγγεῖα καὶ τὰς εἰκόνας μηχανάς",
+"{n} disks":"{n} δίσκοι",
+"{n} shares":"κοινωνίαι {n}",
+"{n} VMs":"{n} εἰκόνες μηχαναί",
+"Unraid":"Unraid",
+"Unraid array":"παράταξις Unraid",
+"Unraid disks":"δίσκοι Unraid",
+"Unraid shares":"κοινωνία Unraid",
+"Unraid containers":"ἀγγεῖα Unraid",
+"Unraid VMs":"εἰκόνες μηχαναί Unraid"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"Διήγησαι ταύτην τὴν εἰκόνα ἐν μιᾷ προτάσει.",
 "clear, appealing, easy to read at small size":"σαφές, ἐπίχαρι, εὐανάγνωστον ἐν μικρῷ μεγέθει",
 "The back door is still open.":"Ἡ ὀπισθία θύρα ἔτι ἀνέῳκται.",
-"Good morning!":"Καλὴ πρωΐα!"
+"Good morning!":"Καλὴ πρωΐα!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Πρᾶξις προτέρα ἐν μέσῳ ἐπαύσατο, ἀλλὰ τὸ πρόγραμμα ἔκτοτε ἠλλάγη, διὸ ἐξ ἀρχῆς ἄρχεται.)",
@@ -2112,7 +2134,7 @@
 "Docker containers":"ἀγγεῖα τοῦ Docker",
 "Docker: {why}.":"Docker· {why}.",
 "Which Docker container? Give its name, like sonarr.":"Ποῖον ἀγγεῖον τοῦ Docker; Δὸς τὸ ὄνομα αὐτοῦ, οἷον sonarr.",
-"{n} containers":"{n} ἀγγεῖα",
+"{n} containers":"ἀγγεῖα {n}",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Τὸ ἀγγεῖον {name} ἐν DOCKER_PROTECT ἐστίν, ὥστε τὸ Second Thought οὐδέποτε πάλιν ἄρχει, παύει ἢ ἄρχει αὐτό.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Ἐν Windows θὲς ἐν DOCKER_HOST διεύθυνσιν tcp://· ὁ ὠνομασμένος αὐλὸς τοῦ Docker οὐχ ὑποστηρίζεται.",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"ἐν ταῖς ἐπιθυμίαις τοῦ {who} ζητεῖν τὸ λεῖπον",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"Ὁ {who} {url_setting} καὶ {key_setting} δεῖται {where_keys}· τὴν διεύθυνσιν αὐτοῦ (οἷον http://radarr:7878) καὶ τὸ κλεῖδι, ὑπὸ Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Ποῖον, καὶ ἀνάγειν ἢ παύειν;",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"Τῷ {who} δεῖ {url_setting} καὶ {key_setting} {where_keys}: τὴν διεύθυνσιν αὐτοῦ (ὡς https://unraid) καὶ κληδίαν API, ὑπὸ Settings, Management Access, API Keys.",
+"Unraid array":"παράταξις Unraid",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB ἐλεύθερα ἐκ τῶν {total_gb} GB",
+"Unraid disks":"δίσκοι Unraid",
+"{n} disks":"{n} δίσκοι",
+"Unraid shares":"κοινωνία Unraid",
+"{n} shares":"κοινωνίαι {n}",
+"Unraid containers":"ἀγγεῖα Unraid",
+"{n} VMs":"{n} εἰκόνες μηχαναί",
+"Unraid VMs":"εἰκόνες μηχαναί Unraid",
+"container":"ἀγγεῖον",
+"VM":"εἰκὼν μηχανή",
+"{action} the Unraid {who} {name}":"{action} τὸ {who} τοῦ Unraid {name}",
+"check Unraid's parity":"σκεψθῆναι τὴν ἰσότητα τοῦ Unraid",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"παράταξις {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

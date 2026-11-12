@@ -32,7 +32,7 @@ English, with a note saying the language couldn't be loaded.
 ### Built-in connections, and MCP for the rest
 
 Second Thought builds in its own connections to the services it ships with: Telegram, Discord, Slack, email, GitHub,
-Home Assistant, Homey, MQTT, Coinbase, MikroTik, UniFi, Proxmox, Docker, SABnzbd, Radarr and Sonarr, calendars, news feeds, web pages, folders and web requests (`connectors.py`), and every
+Home Assistant, Homey, MQTT, Coinbase, MikroTik, UniFi, Proxmox, Docker, SABnzbd, Radarr and Sonarr, Unraid, calendars, news feeds, web pages, folders and web requests (`connectors.py`), and every
 model service (`providers.py`). Anything else comes through MCP (`mcp.py`), from servers a person adds themselves. No
 MCP server comes built in. That's deliberate, for two reasons:
 
@@ -216,7 +216,7 @@ The runtime's modules, in the order `tools/sync.py` joins them:
 | `settings.py` | Reads `second-thought.ini` and the environment before anything else. |
 | `providers.py` | Every model service, and how to call each one. |
 | `core.py` | Limits, errors, and the sums and text handling that match the blocks exactly. |
-| `connectors.py` | Web pages, news, calendars, Home Assistant, messages, MQTT, Homey, Coinbase, MikroTik, UniFi, Proxmox, Docker, SABnzbd, Radarr and Sonarr. |
+| `connectors.py` | Web pages, news, calendars, Home Assistant, messages, MQTT, Homey, Coinbase, MikroTik, UniFi, Proxmox, Docker, SABnzbd, Radarr and Sonarr, Unraid. |
 | `mcp.py` | Borrowing tools from MCP servers, for the agent. |
 | `agent.py` | The agent block and its tools. |
 | `spending.py` | What each key has spent on this computer, and its hourly, daily, weekly and monthly allowances. |

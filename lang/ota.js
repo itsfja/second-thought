@@ -181,7 +181,15 @@
 "rb_arr_queue":{"message0":"%1 sırası","tooltip":"Kayıtlar listesi, sıradaki her indirme için bir tane: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ve eta (kalan süre, 0:12:34 gibi). Bu sayfada örnek bir sıra kullanılır."},
 "rb_arr_missing":{"message0":"%1 ایستک لیستی","tooltip":"Kayıtlar listesi, dosyası olmayan her film veya bölüm için bir tane: title, added (ne zaman eklendi) ve id."},
 "rb_arr_diskspace":{"message0":"%1 دیسک مساحتی","tooltip":"Kayıtlar listesi, her klasör için bir tane: path, label, free_gb ve total_gb."},
-"rb_arr_search":{"message0":"%1 نده eksik اولانی آختارماق","tooltip":"Bütün istek listesinde dosyası olmayanı arar. Başka bir şey sormasa da her seferinde senden sorar; evet diyecek kimse yoksa yapılmaz. Bu sayfada hiçbir şey gerçekten aranmaz."}
+"rb_arr_search":{"message0":"%1 نده eksik اولانی آختارماق","tooltip":"Bütün istek listesinde dosyası olmayanı arar. Başka bir şey sormasa da her seferinde senden sorar; evet diyecek kimse yoksa yapılmaz. Bu sayfada hiçbir şey gerçekten aranmaz."},
+"rb_unraid_array":{"message0":"Unraid dizisi","tooltip":"Dizi icin tek kayit: state (STARTED, STOPPED, ...), started (baslatilmis mi), free_gb, total_gb ve uptime. Bu sayfada ornek bir sunucu kullanir."},
+"rb_unraid_disks":{"message0":"Unraid diskleri","tooltip":"Kayit listesi, dizideki her disk icin biri, once eslik, sonra veri, sonra onbellek: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb ve free_gb."},
+"rb_unraid_shares":{"message0":"Unraid paylasimlari","tooltip":"Kayit listesi, her kullanicu paylasimi icin biri: name, free_gb, used_gb ve total_gb."},
+"rb_unraid_containers":{"message0":"Unraid konteynerleri","tooltip":"Kayit listesi, her Docker konteyneri icin biri: name, state (running, exited, ...), status ve auto_start (Unraid onu diziyle baslatiyor mu)."},
+"rb_unraid_vms":{"message0":"Unraid sanal makineleri","tooltip":"Kayit listesi, her sanal makine icin biri: name ve state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 Unraid konteyneri %2","tooltip":"Bir Docker konteynerini adiyla baslatir ya da durdurur. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten baslamaz ya da durmaz."},
+"rb_unraid_vm_power":{"message0":"%1 Unraid sanal makinesi %2","tooltip":"Bir sanal makineyi adiyla baslatir ya da durdurur. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten baslamaz ya da durmaz."},
+"rb_unraid_parity":{"message0":"Unraid'in esligini denetle","tooltip":"Eslik disklerini onlari okuyarak denetler, duzeltme yazmaz. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten denetlenmez."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"هر گون","weekdays":"ایش گونلری","weekends":"هفته صوڭلری"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr و Sonarr"
+"Radarr and Sonarr":"Radarr و Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Hangisi? Radarr mı, Sonarr mı?",
 "{n} downloading":"{n} indiriliyor",
-"{n} missing":"{n} eksik"
+"{n} missing":"{n} eksik",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"Unraid'in konteynerlerini ve sanal makinelerini baslat ve durdur, ve esligini denetle (her seferinde sana sorarak)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"Unraid sunucunu oku: diziyi, disklerini, paylasimlarini, konteynerlerini ve sanal makinelerini",
+"{n} disks":"{n} disk",
+"{n} shares":"{n} paylasim",
+"{n} VMs":"{n} sanal makine",
+"Unraid":"Unraid",
+"Unraid array":"Unraid dizisi",
+"Unraid disks":"Unraid diskleri",
+"Unraid shares":"Unraid paylasimlari",
+"Unraid containers":"Unraid konteynerleri",
+"Unraid VMs":"Unraid sanal makineleri"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -1322,7 +1342,9 @@
 "the key steps":"اساسلی آدیملر",
 "title, score, why":"title, score, why",
 "today's draft":"بوگونكی مسوده",
-"used headlines":"قوللانیلمش باشلقلر"
+"used headlines":"قوللانیلمش باشلقلر",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(اوّلكی بر اجرا یاری یولده دوردی، فقط پروغرام اوندن بری دڭیشدی، بو سببله یڭیدن باشلار.)",
@@ -2112,7 +2134,7 @@
 "Docker containers":"Docker قابلری",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"هانكی Docker قابی؟ آدینی ویرڭ، sonarr كبی.",
-"{n} containers":"{n} قاب",
+"{n} containers":"{n} konteyner",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"قاب {name}، DOCKER_PROTECT ده‌در، اونڭ ایچون Second Thought اونی اصلا یڭیدن باشلاتماز، دوردورماز و باشلاتماز.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows ده DOCKER_HOST ه بر tcp:// آدرسی یازڭ: Docker ڭ آدلی بوروسی دستكلنمز.",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"{who} نین ایستک لیستینده eksik اولانی آختارماق",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who}، {url_setting} و {key_setting} ایستیر {where_keys}: آدرسی (http://radarr:7878 كبی) و کلیدی، Settings، General، API Key آلتنده.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Hangisi, ve baslatmak mi durdurmak mi?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who}, {url_setting} ve {key_setting} gerektirir {where_keys}: onun adresi (https://unraid gibi) ve bir API anahtari, Settings, Management Access, API Keys altinda.",
+"Unraid array":"Unraid dizisi",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {total_gb} GB'nin {free_gb} GB'si bos",
+"Unraid disks":"Unraid diskleri",
+"{n} disks":"{n} disk",
+"Unraid shares":"Unraid paylasimlari",
+"{n} shares":"{n} paylasim",
+"Unraid containers":"Unraid konteynerleri",
+"{n} VMs":"{n} sanal makine",
+"Unraid VMs":"Unraid sanal makineleri",
+"container":"konteyner",
+"VM":"sanal makine",
+"{action} the Unraid {who} {name}":"Unraid {who} {name} {action}",
+"check Unraid's parity":"Unraid'in esligini denetle",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"dizi {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

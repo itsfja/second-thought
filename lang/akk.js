@@ -181,7 +181,15 @@
 "rb_arr_queue":{"message0":"𒆷𒀭 %1","tooltip":"𒈾𒁉𒅖𒌅𒌝 𒊭 𒌅𒌒𒉺𒌅𒌝, 𒅖𒋼𒅔 𒀀𒈾 𒅗𒆷 𒉿𒊑𒅎 𒄿𒈾 𒆷𒀭: 𒋾𒀉𒇷, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality 𒌑 𒂊𒋫 (𒊺𒊏𒉡𒌝 𒁀𒋗, 𒆠𒈠 0:12:34). Ina 𒌅𒌒𒁉 𒀭𒉌 𒆷𒀭 𒄷𒌨𒍝𒉌𒅎 𒅖𒋫𒀝𒅗𒀭."},
 "rb_arr_missing":{"message0":"𒁕𒁀𒌅𒌝 𒊭 %1","tooltip":"𒈾𒁉𒅖𒌅𒌝 𒊭 𒌅𒌒𒉺𒌅𒌝, 𒅖𒋼𒅔 𒀀𒈾 𒅗𒆷 𒄷𒌨𒍝𒉌𒅎 𒌑 𒋡𒁕𒁲𒅎 𒊭 𒌅𒌒𒉺 𒌌 𒄿𒋗: 𒋾𒀉𒇷, added (𒈠𒋾𒈠 𒌑𒍮𒌨) 𒌑 id."},
 "rb_arr_diskspace":{"message0":"𒋡𒀝𒋡𒊒𒌝 𒊭 %1","tooltip":"𒈾𒁉𒅖𒌅𒌝 𒊭 𒌅𒌒𒉺𒌅𒌝, 𒅖𒋼𒅔 𒀀𒈾 𒅗𒆷 𒀸𒊏𒋾𒅎: path, 𒆷𒁁𒂖, free_gb 𒌑 total_gb."},
-"rb_arr_search":{"message0":"𒄿𒈾 %1 𒁀𒀜𒋡𒄠 𒍝𒁀𒀜","tooltip":"𒄿𒈾 𒅗𒆷 𒁕𒁀𒋾𒅎 𒁀𒀜𒋡𒄠 𒊭 𒌅𒌒𒉺 𒌌 𒄿𒋗 𒄿𒍝𒀊𒁀𒀜. Kâta 𒊭 𒀀𒆷𒆪𒌝 𒌑𒍝𒀊𒁀𒀜, 𒊭 𒄿𒈾 muḫḫi 𒀀𒄷 𒆷 𒌑𒍝𒀊𒁀𒀜, 𒌑 𒊭 𒈠𒅈 𒀀𒈨𒇷𒅎 𒆷 𒅁𒋗 𒆷 𒅁𒁉𒅖. Ina 𒌅𒌒𒁉 𒀭𒉌 𒈠𒅈 𒅆𒅁𒊑 𒆷 𒄿𒍝𒀊𒁀𒀜."}
+"rb_arr_search":{"message0":"𒄿𒈾 %1 𒁀𒀜𒋡𒄠 𒍝𒁀𒀜","tooltip":"𒄿𒈾 𒅗𒆷 𒁕𒁀𒋾𒅎 𒁀𒀜𒋡𒄠 𒊭 𒌅𒌒𒉺 𒌌 𒄿𒋗 𒄿𒍝𒀊𒁀𒀜. Kâta 𒊭 𒀀𒆷𒆪𒌝 𒌑𒍝𒀊𒁀𒀜, 𒊭 𒄿𒈾 muḫḫi 𒀀𒄷 𒆷 𒌑𒍝𒀊𒁀𒀜, 𒌑 𒊭 𒈠𒅈 𒀀𒈨𒇷𒅎 𒆷 𒅁𒋗 𒆷 𒅁𒁉𒅖. Ina 𒌅𒌒𒁉 𒀭𒉌 𒈠𒅈 𒅆𒅁𒊑 𒆷 𒄿𒍝𒀊𒁀𒀜."},
+"rb_unraid_array":{"message0":"Unraid 𒆠𒄑𒋛𒊒","tooltip":"𒌅𒌒𒁍 𒄑𒌅 𒆠𒄑𒋛𒊑: state (STARTED, STOPPED, ...), started (𒋢𒋢), free_gb, total_gb 𒌑 𒌒𒋾𒈨. 𒌑𒈬 𒀭𒉡 𒊓𒀠𒈬 𒊓𒁺."},
+"rb_unraid_disks":{"message0":"Unraid 𒌑𒋢𒊏𒌅","tooltip":"𒌅𒌒𒉺𒌅, 𒌅𒌒𒁍 𒀀𒈾 𒌑𒋢𒊏𒋾 𒆠𒄑𒋛𒊑, 𒄑𒌅 𒉺𒊑𒌅, 𒌑𒋢𒊏𒌅, 𒌑 𒁉 𒋫𒁉: 𒈾𒈨, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb 𒌑 free_gb."},
+"rb_unraid_shares":{"message0":"Unraid 𒍝𒍝𒌅","tooltip":"𒌅𒌒𒉺𒌅, 𒌅𒌒𒁍 𒀀𒈾 𒍝𒍝𒋾 𒀀𒈨𒇷: 𒈾𒈨, free_gb, used_gb 𒌑 total_gb."},
+"rb_unraid_containers":{"message0":"Unraid 𒈠𒋢","tooltip":"𒌅𒌒𒉺𒌅, 𒌅𒌒𒁍 𒀀𒈾 mase Docker: 𒈾𒈨, state (running, exited, ...), status 𒌑 auto_start (Unraid 𒀀𒈾 𒆠𒄑𒋛𒊑 𒋢𒋢)."},
+"rb_unraid_vms":{"message0":"Unraid 𒌝𒈠𒈾𒌅","tooltip":"𒌅𒌒𒉺𒌅, 𒌅𒌒𒁍 𒀀𒈾 𒌝𒈠𒈾𒋾: 𒈾𒈨 𒌑 state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 Unraid 𒈠𒋢 %2","tooltip":"Docker 𒈠𒋢 𒋢𒋢 𒌑 𒊓𒁀𒌅, 𒋢𒈠𒋢. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒄑𒌅 𒋢𒋢."},
+"rb_unraid_vm_power":{"message0":"%1 Unraid 𒌝𒈠𒉡 %2","tooltip":"Ummannu 𒋢𒋢 𒌑 𒊓𒁀𒌅, 𒋢𒈠𒋢. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒄑𒌅 𒋢𒋢."},
+"rb_unraid_parity":{"message0":"Unraid 𒉺𒊑𒋫 𒊓𒁺","tooltip":"Paritu 𒌑𒋢𒊏𒌅 𒊓𒁺 𒄑𒋼𒉡, 𒆷 𒌅𒌒𒉺𒋾 𒊓𒁺. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒄑𒌅 𒊓𒁺."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌑𒈪𒊭𒄠","weekdays":"𒄿𒈾 𒌑𒈪 𒅆𒅁𒊑𒅎","weekends":"𒄿𒈾 𒌑𒈪 𒉡𒄭𒅎"},
@@ -244,7 +252,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr u Sonarr"
+"Radarr and Sonarr":"Radarr u Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𒌑𒉡𒌅𒌝 𒀀𒈾 𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 𒇷𒅁𒁉 𒇷𒁉𒀉𒋾 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒁲𒅆𒈾",
@@ -1116,7 +1125,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"𒈪𒉡? Radarr 𒌑 Sonarr?",
 "{n} downloading":"{n} 𒉿𒊑𒁺",
-"{n} missing":"{n} 𒊺𒉡"
+"{n} missing":"{n} 𒊺𒉡",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"Unraid 𒈠𒊍е 𒌑 𒌝𒈠𒈾𒌅 𒋢𒋢 𒌑 𒊓𒁀𒌅, 𒌑 𒉺𒊑𒋫 𒊓𒁺 (𒀀𒈾 𒅗𒋢 𒄭𒋢 𒄑𒌅)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"Unraid 𒊓𒁺: 𒆠𒄑𒋛𒊒, 𒌑𒋢𒊏𒌅𒋢, 𒍝𒍝𒌅𒋢, 𒈠𒋢𒋢 𒌑 𒌝𒈠𒈾𒌅𒋢",
+"{n} disks":"{n} 𒌑𒋢𒊏𒌅",
+"{n} shares":"{n} 𒍝𒍝𒌅",
+"{n} VMs":"{n} 𒌝𒈠𒈾𒌅",
+"Unraid":"Unraid",
+"Unraid array":"Unraid 𒆠𒄑𒋛𒊒",
+"Unraid disks":"Unraid 𒌑𒋢𒊏𒌅",
+"Unraid shares":"Unraid 𒍝𒍝𒌅",
+"Unraid containers":"Unraid 𒈠𒋢",
+"Unraid VMs":"Unraid 𒌝𒈠𒈾𒌅"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1323,7 +1343,9 @@
 "Describe this picture in one sentence.":"𒍝𒀠𒈠𒄠 𒀭𒉌𒅎 𒄿𒈾 𒀀𒉿𒋾𒅎 𒅖𒋾𒀜 𒍢𒅔.",
 "clear, appealing, easy to read at small size":"𒈾𒄠𒊒𒌝, 𒁕𒁍𒌝, 𒄿𒈾 𒍢𒄴𒊑𒅎 𒅖𒊭𒊍𒋛",
 "The back door is still open.":"𒁀𒁍𒌝 𒉿𒅈𒆪𒌝 𒀀𒁲 𒄿𒈾𒀭𒈾 𒁉𒌅.",
-"Good morning!":"𒋗𒌌𒈬𒌝 𒄿𒈾 𒊺𒊑𒅎!"
+"Good morning!":"𒋗𒌌𒈬𒌝 𒄿𒈾 𒊺𒊑𒅎!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(epištum panītum ina qablim iprus, ullâmma nēpešum warka išni, aššum kīam eššiš iṣṣabbat.)",
@@ -2113,7 +2135,7 @@
 "Docker containers":"karpātum ša Docker",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"karpatum ša Docker mannum? šumša idin, kīma sonarr.",
-"{n} containers":"{n} karpātum",
+"{n} containers":"{n} 𒈠𒋢",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"karpatum {name} ina DOCKER_PROTECT ibašši, Second Thought ul ušarrâši ul iparrassi.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"ina Windows, ina DOCKER_HOST tcp:// šukun. rāṭum ša Docker ul illak.",
@@ -2175,7 +2197,25 @@
 "search {who}'s wanted list for what's missing":"𒄿𒈾 𒁕𒁀𒋾𒅎 𒊭 {who} 𒊺𒈾𒄠 𒁀𒀜𒋡𒄠 𒍝𒁀𒀜",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} {url_setting} 𒌑 {key_setting} 𒄩𒍢𒅁 {where_keys}: 𒀀𒊭𒅈𒋗 (𒆠𒈠 http://radarr:7878) 𒌑 𒈾𒁉𒅖𒋫 API, 𒄿𒈾 muḫḫi Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"𒋢𒌝𒈠 𒈪𒉡, 𒌑 𒋢𒋢 𒌑 𒊓𒁀𒌅?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} {url_setting} 𒌑 {key_setting} 𒄑𒌅 {where_keys}: 𒊍𒊓𒋢 (𒆠𒈠 https://unraid) 𒌑 API 𒌅𒌒𒁉, 𒊓 Settings, Management Access, API Keys.",
+"Unraid array":"Unraid 𒆠𒄑𒋛𒊒",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB 𒄑𒌅 {total_gb} GB",
+"Unraid disks":"Unraid 𒌑𒋢𒊏𒌅",
+"{n} disks":"{n} 𒌑𒋢𒊏𒌅",
+"Unraid shares":"Unraid 𒍝𒍝𒌅",
+"{n} shares":"{n} 𒍝𒍝𒌅",
+"Unraid containers":"Unraid 𒈠𒋢",
+"{n} VMs":"{n} 𒌝𒈠𒈾𒌅",
+"Unraid VMs":"Unraid 𒌝𒈠𒈾𒌅",
+"container":"𒈠𒋢",
+"VM":"𒌝𒈠𒉡",
+"{action} the Unraid {who} {name}":"{action} Unraid {who} {name}",
+"check Unraid's parity":"Unraid 𒉺𒊑𒋫 𒊓𒁺",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"𒆠𒄑𒋛𒊒 {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

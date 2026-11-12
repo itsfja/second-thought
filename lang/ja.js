@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"%1 のキュー","tooltip":"キュー内の各ダウンロードのレコードのリスト：title、status（Downloading、Importing、Failed など）、size_mb、left_mb、quality、eta（残り時間、0:12:34 など）。このページではサンプルのキューを使います。"},
 "rb_arr_missing":{"message0":"%1 の欲しい物リスト","tooltip":"ファイルのない各映画・エピソードのレコードのリスト：title、added（追加された時刻）、id。"},
 "rb_arr_diskspace":{"message0":"%1 のディスク容量","tooltip":"各フォルダーのレコードのリスト：path、label、free_gb、total_gb。"},
-"rb_arr_search":{"message0":"%1 で不足分を探す","tooltip":"欲しい物リスト全体からファイルのないものを探します。他に何も尋ねないときでも毎回必ず尋ね、誰も「はい」と言えないときは実行されません。このページでは何も実際には検索しません。"}
+"rb_arr_search":{"message0":"%1 で不足分を探す","tooltip":"欲しい物リスト全体からファイルのないものを探します。他に何も尋ねないときでも毎回必ず尋ね、誰も「はい」と言えないときは実行されません。このページでは何も実際には検索しません。"},
+"rb_unraid_array":{"message0":"Unraid アレイ","tooltip":"アレイの 1 つの記録：state（STARTED, STOPPED, ...）、started（開始しているか）、free_gb、total_gb、uptime。このページではサンプルサーバーを使います。"},
+"rb_unraid_disks":{"message0":"Unraid ディスク","tooltip":"アレイ内の各ディスクの記録のリスト。まずパリティ、次にデータ、次にキャッシュ：name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb, free_gb。"},
+"rb_unraid_shares":{"message0":"Unraid 共有","tooltip":"各ユーザー共有の記録のリスト：name, free_gb, used_gb, total_gb。"},
+"rb_unraid_containers":{"message0":"Unraid コンテナ","tooltip":"各 Docker コンテナの記録のリスト：name, state（running, exited, ...）、status、auto_start（Unraid がアレイと一緒に開始するか）。"},
+"rb_unraid_vms":{"message0":"Unraid VM","tooltip":"各仮想マシンの記録のリスト：name と state（RUNNING, SHUTOFF, ...）。"},
+"rb_unraid_container_power":{"message0":"%1 Unraid コンテナ %2","tooltip":"Docker コンテナを 1 つ、名前で開始または停止します。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には開始・停止しません。"},
+"rb_unraid_vm_power":{"message0":"%1 Unraid VM %2","tooltip":"仮想マシンを 1 つ、名前で開始または停止します。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には開始・停止しません。"},
+"rb_unraid_parity":{"message0":"Unraid のパリティを検査","tooltip":"パリティディスクを読んで検査し、修正は書き込みません。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には検査しません。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr と Sonarr"
+"Radarr and Sonarr":"Radarr と Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"エージェントの道具：エージェントブロックの中に入れます",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"どちらですか？Radarr ですか、Sonarr ですか。",
 "{n} downloading":"{n} 件ダウンロード中",
-"{n} missing":"{n} 件不足"
+"{n} missing":"{n} 件不足",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"Unraid のコンテナと VM を開始・停止し、パリティを検査する（毎回あなたに尋ねる）",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"あなたの Unraid サーバーを読む：アレイ、ディスク、共有、コンテナ、VM",
+"{n} disks":"{n} 本のディスク",
+"{n} shares":"{n} 個の共有",
+"{n} VMs":"{n} 台の VM",
+"Unraid":"Unraid",
+"Unraid array":"Unraid アレイ",
+"Unraid disks":"Unraid ディスク",
+"Unraid shares":"Unraid 共有",
+"Unraid containers":"Unraid コンテナ",
+"Unraid VMs":"Unraid VM"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"この画像を一文で説明して。",
 "clear, appealing, easy to read at small size":"分かりやすく、魅力的で、小さくても読みやすい",
 "The back door is still open.":"裏口がまだ開いています。",
-"Good morning!":"おはようございます！"
+"Good morning!":"おはようございます！",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n（前回の実行は途中で止まりましたが、その後プログラムが変わったので、最初からやり直します。）",
@@ -2112,7 +2134,7 @@
 "Docker containers":"Docker のコンテナー",
 "Docker: {why}.":"Docker：{why}。",
 "Which Docker container? Give its name, like sonarr.":"どの Docker のコンテナーですか？名前を指定してください。たとえば sonarr。",
-"{n} containers":"{n} コンテナー",
+"{n} containers":"{n} 個のコンテナ",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"コンテナー {name} は DOCKER_PROTECT にあるので、Second Thought は再起動も停止も起動もしません。",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows では DOCKER_HOST に tcp:// のアドレスを設定してください。Docker の名前付きパイプには対応していません。",
@@ -2174,6 +2196,24 @@
 "search {who}'s wanted list for what's missing":"{who} の欲しい物リストから不足分を探す",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} には {url_setting} と {key_setting} が必要です {where_keys}：アドレス（たとえば http://radarr:7878）と API キー（Settings、General、API Key の下）。",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"どれで、開始それとも停止？",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who}には{url_setting}と{key_setting}が必要です{where_keys}：アドレス（https://unraid など）と API キー。Settings, Management Access, API Keys にあります。",
+"Unraid array":"Unraid アレイ",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}、{total_gb} GB 中 {free_gb} GB 空き",
+"Unraid disks":"Unraid ディスク",
+"{n} disks":"{n} 本のディスク",
+"Unraid shares":"Unraid 共有",
+"{n} shares":"{n} 個の共有",
+"Unraid containers":"Unraid コンテナ",
+"{n} VMs":"{n} 台の VM",
+"Unraid VMs":"Unraid VM",
+"container":"コンテナ",
+"VM":"VM",
+"{action} the Unraid {who} {name}":"Unraid の{who} {name} を {action}",
+"check Unraid's parity":"Unraid のパリティを検査",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"アレイ {state}",
+"Unraid":"Unraid"
 }
 };

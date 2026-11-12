@@ -2835,8 +2835,14 @@
    ]
   },
   "diskspace": [
-   ["/mnt/user/downloads", "1234.56"],
-   ["/mnt/user/complete", "1234.56"]
+   [
+    "/mnt/user/downloads",
+    "1234.56"
+   ],
+   [
+    "/mnt/user/complete",
+    "1234.56"
+   ]
   ]
  },
  "arr": {
@@ -2965,6 +2971,116 @@
   "operation": {
    "real_mode": "self_consumption",
    "backup_reserve_percent": "20"
+  }
+ },
+ "unraid": {
+  "note": "A sample Unraid server for the page and the tests (#399), shaped the way its GraphQL API answers: the array is started, with one parity, two data disks and a cache; plex is running and pihole has stopped, one VM is up and one is down.",
+  "array": {
+   "state": "STARTED",
+   "capacity": {
+    "kilobytes": {
+     "free": 2147483648,
+     "total": 6442450944
+    }
+   },
+   "parities": [
+    {
+     "name": "parity",
+     "type": "PARITY",
+     "status": "DISK_OK",
+     "temp": 31,
+     "numErrors": 0,
+     "fsSize": null,
+     "fsFree": null
+    }
+   ],
+   "disks": [
+    {
+     "name": "disk1",
+     "type": "DATA",
+     "status": "DISK_OK",
+     "temp": 32,
+     "numErrors": 0,
+     "fsSize": 4000787030,
+     "fsFree": 1073741824
+    },
+    {
+     "name": "disk2",
+     "type": "DATA",
+     "status": "DISK_OK",
+     "temp": 33,
+     "numErrors": 0,
+     "fsSize": 4000787030,
+     "fsFree": 1073741824
+    }
+   ],
+   "caches": [
+    {
+     "name": "cache",
+     "type": "CACHE",
+     "status": "DISK_OK",
+     "temp": 38,
+     "numErrors": 0,
+     "fsSize": 2000398934,
+     "fsFree": 536870912
+    }
+   ]
+  },
+  "info": {
+   "os": {
+    "uptime": "3 days, 4:56:07"
+   }
+  },
+  "shares": [
+   {
+    "name": "media",
+    "free": 1073741824,
+    "used": 1073741824,
+    "size": 2147483648
+   },
+   {
+    "name": "backups",
+    "free": 536870912,
+    "used": 1610612736,
+    "size": 2147483648
+   }
+  ],
+  "dockerContainers": [
+   {
+    "id": "container:plex",
+    "names": [
+     "plex"
+    ],
+    "state": "running",
+    "status": "Up 2 days",
+    "autoStart": true
+   },
+   {
+    "id": "container:pihole",
+    "names": [
+     "pihole"
+    ],
+    "state": "exited",
+    "status": "Exited (0)",
+    "autoStart": true
+   }
+  ],
+  "vms": {
+   "domains": [
+    {
+     "id": "vm:windows",
+     "name": "windows",
+     "state": "RUNNING"
+    },
+    {
+     "id": "vm:arch",
+     "name": "arch",
+     "state": "SHUTOFF"
+    }
+   ]
+  },
+  "vars": {
+   "version": "7.2.1"
   }
  }
 }

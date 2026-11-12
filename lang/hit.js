@@ -181,7 +181,15 @@
 "rb_arr_queue":{"message0":"ḫiš-ša-aš %1","tooltip":"DUG.MEŠ-aš ša-aš-ta-aš, iš-ta-ma-aš for EGIR-pa kat-ti-wa-aš-ši ḫiš-ša-iš: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ù eta (ḫar-zi, ma-ši-wa-an 0:12:34). SABnzbd-ya anda ḫiš-ša-aš UL-ya."},
 "rb_arr_missing":{"message0":"GIŠ.HUR-aš %1","tooltip":"DUG.MEŠ-aš ša-aš-ta-aš, iš-ta-ma-aš for DINGIR.MEŠ-aš ka-a-ri ku-iš DUB.SAR NU-za: title, added (ku-uš wa-aš-ta) ù id."},
 "rb_arr_diskspace":{"message0":"KI-ŠAR %1","tooltip":"DUG.MEŠ-aš ša-aš-ta-aš, iš-ta-ma-aš for É.MEŠ: path, label, free_gb ù total_gb."},
-"rb_arr_search":{"message0":"EGIR-pa ša-aš-ta-aš %1","tooltip":"GIŠ.HUR kala EGIR-pa ša-aš-ta-aš, ku-iš DUB.SAR NU-za. TU-É-ŠU kar-ap-du, SÍSKUR-SU kar-ap-du, ù LÚ-aš UL ti-ya-du, UL ti-ya-zi. SABnzbd-ya anda kala UL ša-aš-ta-ri."}
+"rb_arr_search":{"message0":"EGIR-pa ša-aš-ta-aš %1","tooltip":"GIŠ.HUR kala EGIR-pa ša-aš-ta-aš, ku-iš DUB.SAR NU-za. TU-É-ŠU kar-ap-du, SÍSKUR-SU kar-ap-du, ù LÚ-aš UL ti-ya-du, UL ti-ya-zi. SABnzbd-ya anda kala UL ša-aš-ta-ri."},
+"rb_unraid_array":{"message0":"Unraid tarsa","tooltip":"Tarsa memas: state (STARTED, STOPPED, ...), started (sarnikzi), free_gb, total_gb u uptime. Kuwapi Unraid tarna parkuwas."},
+"rb_unraid_disks":{"message0":"Unraid sarnikzi","tooltip":"Mema sarnikzi, kuis sarnikzi tarsi, para parkuwas, nu datas, nu cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb u free_gb."},
+"rb_unraid_shares":{"message0":"Unraid sassassar","tooltip":"Mema sassassar, kuis le sassassar: name, free_gb, used_gb u total_gb."},
+"rb_unraid_containers":{"message0":"Unraid parkaras","tooltip":"Mema parkaras, kuis Docker parkaras: name, state (running, exited, ...), status u auto_start (Unraid tarsa sarnikzi)."},
+"rb_unraid_vms":{"message0":"Unraid unutti","tooltip":"Mema unutti, kuis unutti: name u state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 Unraid parkaras %2","tooltip":"Docker parkaras sarnikzi u eszi, sarriessar. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL sarnikzi u UL eszi."},
+"rb_unraid_vm_power":{"message0":"%1 Unraid unutti %2","tooltip":"Unutti sarnikzi u eszi, sarriessar. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL sarnikzi u UL eszi."},
+"rb_unraid_parity":{"message0":"Unraid para handaizzi","tooltip":"Para sarnikzi mema tarna, tus UL kisari. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL handaizzi."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒄰 𒄷𒌋𒈠𒀭","weekdays":"𒌓𒄰 𒀀𒉌𒉿𒀜𒋫𒀸","weekends":"𒌓𒄰 𒉿𒅈𒉺𒀸"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr ù Sonarr"
+"Radarr and Sonarr":"Radarr ù Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"ku-it? Radarr ù Sonarr?",
 "{n} downloading":"{n} ar-ḫa pa-a-an-zi",
-"{n} missing":"{n} ḫar-zi"
+"{n} missing":"{n} ḫar-zi",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"Unraid parkaras u unutti sarnikzi u eszi, u para handaizzi (tuwaz kuwapit arha ehu)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"Unraid tarna: tarsa, sarnikzis, sassassars, parkarass u unuttis",
+"{n} disks":"{n} sarnikzi",
+"{n} shares":"{n} sassassar",
+"{n} VMs":"{n} unutti",
+"Unraid":"Unraid",
+"Unraid array":"Unraid tarsa",
+"Unraid disks":"Unraid sarnikzi",
+"Unraid shares":"Unraid sassassar",
+"Unraid containers":"Unraid parkaras",
+"Unraid VMs":"Unraid unutti"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -1322,7 +1342,9 @@
 "the key steps":"𒄊𒎌 𒃲",
 "title, score, why":"𒋳, 𒋃, 𒆪𒉿𒀜",
 "today's draft":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒆠𒉡𒌦",
-"used headlines":"𒊕𒁺𒄭𒀀 𒄿𒉿𒀭"
+"used headlines":"𒊕𒁺𒄭𒀀 𒄿𒉿𒀭",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(i-ya-u-wa-ar ḫa-an-te-ez-zi ŠÀ-pát kar-aš-ta, GIŠ.ḪUR-ma wa-aḫ-nu-ut, ne-e-wa ti-ya-zi.)",
@@ -2112,7 +2134,7 @@
 "Docker containers":"DUG.MEŠ Docker",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"ku-iš DUG Docker? la-a-ma-an pa-a-i, sonarr ma-ši-wa-an.",
-"{n} containers":"DUG.MEŠ {n}",
+"{n} containers":"{n} parkaras",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"DUG {name} I-NA DOCKER_PROTECT, Second Thought UL ti-ya-zi UL kar-ap-zi.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"I-NA Windows, DOCKER_HOST tcp:// da-a-i. a-mi-ya-ra-aš Docker UL i-ya-zi.",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"GIŠ.HUR {who} EGIR-pa ša-aš-ta-aš",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} {url_setting} ù {key_setting} ú-e-mi-ya-zi {where_keys}: pé-e-da-an (http://radarr:7878 ma-ši-wa-an) ù ku-un-za-an, SABnzbd-ya anda Config, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"kuwat-ma, u sarnikzi u eszi?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} {url_setting} u {key_setting} {where_keys}: sarriessar (kuit https://unraid) u API hartin, Settings, Management Access, API Keys sar.",
+"Unraid array":"Unraid tarsa",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB parkus {total_gb} GB-az",
+"Unraid disks":"Unraid sarnikzi",
+"{n} disks":"{n} sarnikzi",
+"Unraid shares":"Unraid sassassar",
+"{n} shares":"{n} sassassar",
+"Unraid containers":"Unraid parkaras",
+"{n} VMs":"{n} unutti",
+"Unraid VMs":"Unraid unutti",
+"container":"parkaras",
+"VM":"unutti",
+"{action} the Unraid {who} {name}":"{action} Unraid {who} {name}",
+"check Unraid's parity":"Unraid para handaizzi",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"tarsa {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

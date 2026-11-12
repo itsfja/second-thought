@@ -696,6 +696,38 @@
   "rb_arr_search": {
    "message0": "chercher ce qui manque dans %1",
    "tooltip": "Cherche dans toute la liste d'attente ce qui n'a pas de fichier. Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne cherche vraiment."
+  },
+  "rb_unraid_array": {
+   "message0": "array Unraid",
+   "tooltip": "Une fiche pour l'array : state (STARTED, STOPPED, ...), started (s'il est démarré), free_gb, total_gb et uptime. Sur cette page, un serveur d'exemple."
+  },
+  "rb_unraid_disks": {
+   "message0": "disques Unraid",
+   "tooltip": "Une liste de fiches, une par disque de l'array, d'abord la parité, puis les données, puis le cache : name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb et free_gb."
+  },
+  "rb_unraid_shares": {
+   "message0": "partages Unraid",
+   "tooltip": "Une liste de fiches, une par partage utilisateur : name, free_gb, used_gb et total_gb."
+  },
+  "rb_unraid_containers": {
+   "message0": "conteneurs Unraid",
+   "tooltip": "Une liste de fiches, une par conteneur Docker : name, state (running, exited, ...), status et auto_start (si Unraid le démarre avec l'array)."
+  },
+  "rb_unraid_vms": {
+   "message0": "VM Unraid",
+   "tooltip": "Une liste de fiches, une par machine virtuelle : name et state (RUNNING, SHUTOFF, ...)."
+  },
+  "rb_unraid_container_power": {
+   "message0": "%1 le conteneur Unraid %2",
+   "tooltip": "Démarre ou arrête un conteneur Docker, par son nom. Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne démarre ni ne s'arrête vraiment."
+  },
+  "rb_unraid_vm_power": {
+   "message0": "%1 la VM Unraid %2",
+   "tooltip": "Démarre ou arrête une machine virtuelle, par son nom. Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne démarre ni ne s'arrête vraiment."
+  },
+  "rb_unraid_parity": {
+   "message0": "vérifier la parité d'Unraid",
+   "tooltip": "Vérifie les disques de parité en les lisant, sans écrire de corrections. Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne vérifie vraiment."
   }
  },
  "options": {
@@ -885,7 +917,8 @@
   "Proxmox": "Proxmox",
   "Docker": "Docker",
   "SABnzbd": "SABnzbd",
-  "Radarr and Sonarr": "Radarr et Sonarr"
+  "Radarr and Sonarr": "Radarr et Sonarr",
+  "Unraid": "Unraid"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Outils pour l'agent : déposez-les dans un bloc agent",
@@ -1757,7 +1790,18 @@
   "Sonarr": "Sonarr",
   "Which one? Radarr or Sonarr.": "Lequel ? Radarr ou Sonarr.",
   "{n} downloading": "{n} en téléchargement",
-  "{n} missing": "{n} manquants"
+  "{n} missing": "{n} manquants",
+  "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)": "démarrer et arrêter les conteneurs et les VM de ton Unraid, et vérifier sa parité (en te le demandant à chaque fois)",
+  "read your Unraid server: the array, its disks, its shares, its containers and its VMs": "lire ton serveur Unraid : l'array, ses disques, ses partages, ses conteneurs et ses VM",
+  "{n} disks": "{n} disques",
+  "{n} shares": "{n} partages",
+  "{n} VMs": "{n} VM",
+  "Unraid": "Unraid",
+  "Unraid array": "array Unraid",
+  "Unraid disks": "disques Unraid",
+  "Unraid shares": "partages Unraid",
+  "Unraid containers": "conteneurs Unraid",
+  "Unraid VMs": "VM Unraid"
  },
  "examples": {
   "review": {
@@ -2596,7 +2640,9 @@
   "Describe this picture in one sentence.": "Décris cette image en une phrase.",
   "clear, appealing, easy to read at small size": "clair, attrayant, lisible en petit",
   "The back door is still open.": "La porte de derrière est toujours ouverte.",
-  "Good morning!": "Bonjour !"
+  "Good morning!": "Bonjour !",
+  "plex": "plex",
+  "windows": "windows"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Une exécution précédente s'est arrêtée en cours de route, mais le programme a changé depuis, donc il repart de zéro.)",
@@ -3448,6 +3494,24 @@
   "search {who}'s wanted list for what's missing": "chercher ce qui manque dans la liste d'attente de {who}",
   "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.": "{who} a besoin de {url_setting} et {key_setting} {where_keys} : son adresse (comme http://radarr:7878) et sa clé API, sous Settings, General, API Key.",
   "Radarr": "Radarr",
-  "Sonarr": "Sonarr"
+  "Sonarr": "Sonarr",
+  "Which one, and start or stop?": "Lequel, et démarrer ou arrêter ?",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.": "{who} a besoin de {url_setting} et {key_setting} {where_keys} : son adresse (comme https://unraid) et une clé API, sous Settings, Management Access, API Keys.",
+  "Unraid array": "array Unraid",
+  "{state}, {free_gb} GB free of {total_gb} GB": "{state}, {free_gb} Go libres sur {total_gb} Go",
+  "Unraid disks": "disques Unraid",
+  "{n} disks": "{n} disques",
+  "Unraid shares": "partages Unraid",
+  "{n} shares": "{n} partages",
+  "Unraid containers": "conteneurs Unraid",
+  "{n} VMs": "{n} VM",
+  "Unraid VMs": "VM Unraid",
+  "container": "conteneur",
+  "VM": "VM",
+  "{action} the Unraid {who} {name}": "{action} le {who} Unraid {name}",
+  "check Unraid's parity": "vérifier la parité d'Unraid",
+  "Unraid {version}": "Unraid {version}",
+  "array {state}": "array {state}",
+  "Unraid": "Unraid"
  }
 }

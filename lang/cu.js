@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"%1 рядъ","tooltip":"Списанїе записей, по единой коемуждо скачанїю въ рядꙋ: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality и eta (оставшее время, ꙗ́коже 0:12:34). На сей страницѣ образець ряда."},
 "rb_arr_missing":{"message0":"%1 искованїе","tooltip":"Списанїе записей, по единой коемуждо фильмꙋ или части безъ досье: title, added (егда приложена) и id."},
 "rb_arr_diskspace":{"message0":"%1 пространїе диска","tooltip":"Списанїе записей, по единой коемуждо мѣстꙋ: path, label, free_gb и total_gb."},
-"rb_arr_search":{"message0":"искати въ %1 еже лишитъ сꙙ","tooltip":"Ищетъ по всему искованїю еже досье не иматъ. Тебе всегда прьвѣе вьпроситъ, аще и ничьто же ино не вьпроситъ, и никомꙋ же сꙙщꙋ тъ, не бꙋдѥтъ. На сей страницѣ ничьто же воиство не ищетъ."}
+"rb_arr_search":{"message0":"искати въ %1 еже лишитъ сꙙ","tooltip":"Ищетъ по всему искованїю еже досье не иматъ. Тебе всегда прьвѣе вьпроситъ, аще и ничьто же ино не вьпроситъ, и никомꙋ же сꙙщꙋ тъ, не бꙋдѥтъ. На сей страницѣ ничьто же воиство не ищетъ."},
+"rb_unraid_array":{"message0":"Unraid likъ","tooltip":"Edinъ zapisъ za likъ: state (STARTED, STOPPED, ...), started (ache nachatъ bystъ), free_gb, total_gb i uptime. Na sei stranici obrazъnъnъ drъzhatelъ byty."},
+"rb_unraid_disks":{"message0":"Unraid diskъi","tooltip":"Spisъkъ zapisii, po edinъ za vseakъ diskъ v l(i)cye, prьveye ravьstvo, potomъ danьe, potomъ sъkrovishche: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb i free_gb."},
+"rb_unraid_shares":{"message0":"Unraid delъi","tooltip":"Spisъkъ zapisii, po edinъ za vseakъ delъ poznikovъ: name, free_gb, used_gb i total_gb."},
+"rb_unraid_containers":{"message0":"Unraid sosudъi","tooltip":"Spisъkъ zapisii, po edinъ za vseakъ Docker sosudъ: name, state (running, exited, ...), status i auto_start (ache Unraid ego s likomъ nachalъ bystъ)."},
+"rb_unraid_vms":{"message0":"Unraid mashiny","tooltip":"Spisъkъ zapisii, po edinъ za vseakou vidьnou mashinou: name i state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 Unraid sosudъ %2","tooltip":"Nachnetъ ili vospatitъ edinъ Docker sosudъ, po imene. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьto zhe istino ne nachnetъ se ni vospatitъ."},
+"rb_unraid_vm_power":{"message0":"%1 Unraid mashina %2","tooltip":"Nachnetъ ili vospatitъ edinou vidьnou mashinou, po imene. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьto zhe istino ne nachnetъ se ni vospatitъ."},
+"rb_unraid_parity":{"message0":"ispytati ravьstvo Unraid","tooltip":"Ispytayetъ ravьstvenъi diskъi chtъi ihъ, ne pisatъ ispravlenьe. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьto zhe istino ne ispytaetъ se."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"на всѧкъ день","weekdays":"въ дни дѣланїѧ","weekends":"въ дни ѿдыха"},
@@ -242,7 +250,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr и Sonarr"
+"Radarr and Sonarr":"Radarr и Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1114,7 +1123,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Которыи? Radarr или Sonarr?",
 "{n} downloading":"{n} скачаѥтъ",
-"{n} missing":"{n} лишитъ сꙙ"
+"{n} missing":"{n} лишитъ сꙙ",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"nachati i vospatiti sosudъi i mashiny Unraid tvoego, i ispytati ravьstvo ego (voprasha te vseaky pytъ)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"chesti Unraid tvoi: likъ ego, diskъi ego, delъi ego, sosudъi ego i mashiny ego",
+"{n} disks":"{n} diskъi",
+"{n} shares":"{n} delъ",
+"{n} VMs":"{n} mashiny",
+"Unraid":"Unraid",
+"Unraid array":"Unraid likъ",
+"Unraid disks":"Unraid diskъi",
+"Unraid shares":"Unraid delъi",
+"Unraid containers":"Unraid sosudъi",
+"Unraid VMs":"Unraid mashiny"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -1321,7 +1341,9 @@
 "the key steps":"главныѧ ступени",
 "title, score, why":"надписанїе, оцѣнка, вина",
 "today's draft":"начертанїе днешнее",
-"used headlines":"употребленнаѧ надписанїѧ"
+"used headlines":"употребленнаѧ надписанїѧ",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Прежнее теченїе ѡстависѧ на полупути, но чинъ ѿтолѣ премѣнисѧ, сегѡ ради начинаетъ изнова.)",
@@ -2111,7 +2133,7 @@
 "Docker containers":"сосѹды Docker",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"Кїй сосѹдъ Docker? Даждь имѧ егѡ, ꙗкоже sonarr.",
-"{n} containers":"{n} сосѹдѡвъ",
+"{n} containers":"{n} sosudъi",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Сосѹдъ {name} есть въ DOCKER_PROTECT, тѣмже Second Thought николиже паки начинаетъ, ѡстанавливаетъ ни начинаетъ егѡ.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Въ Windows положи въ DOCKER_HOST адресъ tcp://: именованнаѧ трѹба Docker не поддержитсѧ.",
@@ -2173,7 +2195,25 @@
 "search {who}'s wanted list for what's missing":"въ искованїи {who} искати еже лишитъ сꙙ",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} требꙋєꙛъ {url_setting} и {key_setting} {where_keys}: мѣсто єго (ꙗ́коже http://radarr:7878) и ключь его, подъ Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Kotoryi, i nachati li ili vospatiti?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} trebuetъ {url_setting} i {key_setting} {where_keys}: adresъ ego (ako https://unraid) i klyuchь API, podъ Settings, Management Access, API Keys.",
+"Unraid array":"Unraid likъ",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB svobodьno otъ {total_gb} GB",
+"Unraid disks":"Unraid diskъi",
+"{n} disks":"{n} diskъi",
+"Unraid shares":"Unraid delъi",
+"{n} shares":"{n} delъ",
+"Unraid containers":"Unraid sosudъi",
+"{n} VMs":"{n} mashiny",
+"Unraid VMs":"Unraid mashiny",
+"container":"sosudъ",
+"VM":"mashina",
+"{action} the Unraid {who} {name}":"{action} Unraid {who} {name}",
+"check Unraid's parity":"ispytati ravьstvo Unraid",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"likъ {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

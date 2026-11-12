@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"%1 队列","tooltip":"记录列表，队列中的每个下载一条：title、status（Downloading、Importing、Failed 等）、size_mb、left_mb、quality 和 eta（剩余时间，如 0:12:34）。在本页使用示例队列。"},
 "rb_arr_missing":{"message0":"%1 想要列表","tooltip":"记录列表，没有文件的每部电影或剧集一条：title、added（添加时间）和 id。"},
 "rb_arr_diskspace":{"message0":"%1 磁盘空间","tooltip":"记录列表，每个文件夹一条：path、label、free_gb 和 total_gb。"},
-"rb_arr_search":{"message0":"在 %1 中搜索缺失内容","tooltip":"在整个想要列表中搜索没有文件的内容。即使别的都不询问，它也每次先问你；没有人说“是”就不会运行。在本页不会真的搜索。"}
+"rb_arr_search":{"message0":"在 %1 中搜索缺失内容","tooltip":"在整个想要列表中搜索没有文件的内容。即使别的都不询问，它也每次先问你；没有人说“是”就不会运行。在本页不会真的搜索。"},
+"rb_unraid_array":{"message0":"Unraid 阵列","tooltip":"阵列的一条记录：state（STARTED, STOPPED, ...）、started（是否已启动）、free_gb、total_gb 和 uptime。此页面使用示例服务器。"},
+"rb_unraid_disks":{"message0":"Unraid 磁盘","tooltip":"记录列表，阵列中每块磁盘一条，先是校验盘，然后是数据盘，再是缓存：name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb 和 free_gb。"},
+"rb_unraid_shares":{"message0":"Unraid 共享","tooltip":"记录列表，每个用户共享一条：name, free_gb, used_gb 和 total_gb。"},
+"rb_unraid_containers":{"message0":"Unraid 容器","tooltip":"记录列表，每个 Docker 容器一条：name, state（running, exited, ...）、status 和 auto_start（Unraid 是否随阵列启动它）。"},
+"rb_unraid_vms":{"message0":"Unraid 虚拟机","tooltip":"记录列表，每台虚拟机一条：name 和 state（RUNNING, SHUTOFF, ...）。"},
+"rb_unraid_container_power":{"message0":"%1 Unraid 容器 %2","tooltip":"按名称启动或停止一个 Docker 容器。即使别的都不问，它也总是先问你，没人在场说“是”就不会运行。此页面上什么都不会真的启动或停止。"},
+"rb_unraid_vm_power":{"message0":"%1 Unraid 虚拟机 %2","tooltip":"按名称启动或停止一台虚拟机。即使别的都不问，它也总是先问你，没人在场说“是”就不会运行。此页面上什么都不会真的启动或停止。"},
+"rb_unraid_parity":{"message0":"检查 Unraid 的校验盘","tooltip":"通过读取校验盘来检查它们，不写入任何修正。即使别的都不问，它也总是先问你，没人在场说“是”就不会运行。此页面上什么都不会真的检查。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr 和 Sonarr"
+"Radarr and Sonarr":"Radarr 和 Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"给智能体的工具：把它们放进智能体积木里",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"哪一个？Radarr 还是 Sonarr？",
 "{n} downloading":"{n} 个正在下载",
-"{n} missing":"{n} 个缺失"
+"{n} missing":"{n} 个缺失",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"启动和停止你 Unraid 的容器和虚拟机，并检查它的校验盘（每次都先问你）",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"读取你的 Unraid 服务器：阵列、它的磁盘、它的共享、它的容器和它的虚拟机",
+"{n} disks":"{n} 块磁盘",
+"{n} shares":"{n} 个共享",
+"{n} VMs":"{n} 台虚拟机",
+"Unraid":"Unraid",
+"Unraid array":"Unraid 阵列",
+"Unraid disks":"Unraid 磁盘",
+"Unraid shares":"Unraid 共享",
+"Unraid containers":"Unraid 容器",
+"Unraid VMs":"Unraid 虚拟机"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"用一句话描述这张图片。",
 "clear, appealing, easy to read at small size":"清楚、吸引人、小尺寸也易读",
 "The back door is still open.":"后门还开着。",
-"Good morning!":"早上好！"
+"Good morning!":"早上好！",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n（上一次运行中途停止了，但程序之后有改动，所以从头开始。）",
@@ -2174,6 +2196,24 @@
 "search {who}'s wanted list for what's missing":"在 {who} 的想要列表中搜索缺失的内容",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} 需要 {url_setting} 和 {key_setting} {where_keys}：它的地址（比如 http://radarr:7878）和 API 密钥，在 Settings、General、API Key 下。",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"哪一个，启动还是停止？",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who}需要 {url_setting} 和 {key_setting} {where_keys}：它的地址（如 https://unraid）和 API 密钥，在 Settings, Management Access, API Keys 下。",
+"Unraid array":"Unraid 阵列",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}，{total_gb} GB 中空闲 {free_gb} GB",
+"Unraid disks":"Unraid 磁盘",
+"{n} disks":"{n} 块磁盘",
+"Unraid shares":"Unraid 共享",
+"{n} shares":"{n} 个共享",
+"Unraid containers":"Unraid 容器",
+"{n} VMs":"{n} 台虚拟机",
+"Unraid VMs":"Unraid 虚拟机",
+"container":"容器",
+"VM":"虚拟机",
+"{action} the Unraid {who} {name}":"{action} Unraid 的{who} {name}",
+"check Unraid's parity":"检查 Unraid 的校验盘",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"阵列 {state}",
+"Unraid":"Unraid"
 }
 };

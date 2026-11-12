@@ -181,7 +181,15 @@
 "rb_arr_queue":{"message0":"𐀮𐀪𐀊 %1","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀞𐀸𐀃 𐀮𐀪𐀊: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality 𐀏𐀂 eta (𐀳𐀩𐀸, 𐀃𐀒 0:12:34). E-ni 𐀵𐀡𐀆 𐀵𐀟 𐀀𐀡 𐀴𐀪𐀮𐀪𐀊."},
 "rb_arr_missing":{"message0":"𐀀𐀨𐀐𐀩 %1","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀞𐀸𐀃 𐀀𐀐𐀫 𐀁𐀸 𐀵𐀰: title, added (𐀡𐀣 𐀀𐀐𐀩) 𐀏𐀂 id."},
 "rb_arr_diskspace":{"message0":"𐀵𐀡 %1","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀏𐀔: path, label, free_gb 𐀏𐀂 total_gb."},
-"rb_arr_search":{"message0":"𐀀𐀡 𐀴𐀪𐀮 𐀁𐀛 %1 𐀞𐀄𐀳","tooltip":"𐀀𐀡 𐀴𐀪𐀮 𐀞𐀸𐀃 𐀀𐀨𐀐𐀩 𐀃𐀄 𐀟𐀩𐀸. So-ro-i 𐀏𐀵 𐀞𐀸𐀃, 𐀃𐀟 𐀀𐀨 𐀐𐀩𐀸 𐀕𐀲 𐀞𐀄𐀁, 𐀏𐀂 𐀕𐀳𐀫 𐀐𐀩𐀸 𐀙𐀂, 𐀃𐀄 𐀟𐀡𐀟. E-ni 𐀵𐀡𐀆 𐀃𐀄 𐀞𐀄𐀁 𐀃𐀄𐀒 𐀀𐀡."}
+"rb_arr_search":{"message0":"𐀀𐀡 𐀴𐀪𐀮 𐀁𐀛 %1 𐀞𐀄𐀳","tooltip":"𐀀𐀡 𐀴𐀪𐀮 𐀞𐀸𐀃 𐀀𐀨𐀐𐀩 𐀃𐀄 𐀟𐀩𐀸. So-ro-i 𐀏𐀵 𐀞𐀸𐀃, 𐀃𐀟 𐀀𐀨 𐀐𐀩𐀸 𐀕𐀲 𐀞𐀄𐀁, 𐀏𐀂 𐀕𐀳𐀫 𐀐𐀩𐀸 𐀙𐀂, 𐀃𐀄 𐀟𐀡𐀟. E-ni 𐀵𐀡𐀆 𐀃𐀄 𐀞𐀄𐀁 𐀃𐀄𐀒 𐀀𐀡."},
+"rb_unraid_array":{"message0":"Unraid hathra","tooltip":"Ains mleins hathrai: state (STARTED, STOPPED, ...), started (skulith), free_gb, total_gb jah uptime. Ana thamma blawin mleins thiubiliktha thrafsnjan."},
+"rb_unraid_disks":{"message0":"Unraid diskos","tooltip":"Mleinus, ains hwarjazuh diskau hathrai, frumist parahauth, than dailos, than hlaiw: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb jah free_gb."},
+"rb_unraid_shares":{"message0":"Unraid dailos","tooltip":"Mleinus, ains hwarjizuh dailau mans: name, free_gb, used_gb jah total_gb."},
+"rb_unraid_containers":{"message0":"Unraid kasos","tooltip":"Mleinus, ains hwarjazuh Docker kasau: name, state (running, exited, ...), status jah auto_start (skulu Unraid ina mith hathrai startjai)."},
+"rb_unraid_vms":{"message0":"Unraid masinos","tooltip":"Mleinus, ains hwarjizuh galiugamasinai: name jah state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 thana Unraid kaso %2","tooltip":"Docker kaso startjaith aiththau stopjith, bi namin. Thuk fraihnith sinteino, jah than nikwarjizuh jai withan, 𐀛 wairwith. Ana thamma blawin nikwarjizuh bi suneu startjaith aiththau stopjith."},
+"rb_unraid_vm_power":{"message0":"%1 thana Unraid masino %2","tooltip":"Galiugamasin startjaith aiththau stopjith, bi namin. Thuk fraihnith sinteino, jah than nikwarjizuh jai withan, 𐀛 wairwith. Ana thamma blawin nikwarjizuh bi suneu startjaith aiththau stopjith."},
+"rb_unraid_parity":{"message0":"Unraid parahauth thochjan","tooltip":"Parahauth diskans thochjith thans bigitanans, 𐀛 thadro thochans mleith. Thuk fraihnith sinteino, jah than nikwarjizuh jai withan, 𐀛 wairwith. Ana thamma blawin nikwarjizuh bi suneu thochjith."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐀁𐀏𐀲 𐀀𐀔","weekdays":"𐀀𐀔 𐀸𐀒","weekends":"𐀀𐀔 𐀀𐀙𐀞𐀄𐀮𐀃"},
@@ -244,7 +252,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr ka-i Sonarr"
+"Radarr and Sonarr":"Radarr ka-i Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵",
@@ -1116,7 +1125,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"𐀒𐀵? Radarr 𐀁 Sonarr?",
 "{n} downloading":"{n} 𐀏𐀲𐀺",
-"{n} missing":"{n} 𐀞𐀄𐀳"
+"{n} missing":"{n} 𐀞𐀄𐀳",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"Unraid kasos jah masinos startjan jah stopjan, jah parahauth thochjan (thuk fraihnands hwarjehun)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"Unraid thrafsnjan: hathra, diskos is, dailos is, kasos is jah masinos is",
+"{n} disks":"{n} diskos",
+"{n} shares":"{n} dailos",
+"{n} VMs":"{n} masinos",
+"Unraid":"Unraid",
+"Unraid array":"Unraid hathra",
+"Unraid disks":"Unraid diskos",
+"Unraid shares":"Unraid dailos",
+"Unraid containers":"Unraid kasos",
+"Unraid VMs":"Unraid masinos"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -1323,7 +1343,9 @@
 "Describe this picture in one sentence.":"𐀞𐀨𐀟 𐀵𐀵 𐀁𐀒 𐀁𐀚 𐀃𐀚 𐀩𐀒.",
 "clear, appealing, easy to read at small size":"𐀭𐀟, 𐀏𐀪𐀁𐀭, 𐀁𐀄𐀒𐀫 𐀀𐀙𐀑𐀜𐀁 𐀁𐀚 𐀖𐀒 𐀕𐀐𐀵",
 "The back door is still open.":"𐀃𐀠𐀰 𐀶𐀨 𐀁𐀴 𐀀𐀚𐀺𐀐𐀕𐀙.",
-"Good morning!":"𐀏𐀩 𐀁𐀃!"
+"Good morning!":"𐀏𐀩 𐀁𐀃!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(pa-ra-ki-si po-ro-te-ra e-ne me-so pe-pa-u-to, a-ra po-ro-ka-ra-ma a-ra-ka-ke, o-u-to ne-wo a-ka-e-ta-i.)",
@@ -2113,7 +2135,7 @@
 "Docker containers":"a-ke-ja Docker",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"po-te-ro a-ke-jo Docker? do-se o-no-ma, o-ko sonarr.",
-"{n} containers":"{n} a-ke-ja",
+"{n} containers":"{n} kasos",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"a-ke-jo {name} e-ne DOCKER_PROTECT e-si, o-u-to Second Thought o-u-po-te a-ra-ke-i o-u-de pa-u-e.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"e-ne Windows, te-ke tcp:// e-ne DOCKER_HOST. a-u-ro Docker o-u e-si.",
@@ -2175,7 +2197,25 @@
 "search {who}'s wanted list for what's missing":"𐀁𐀛 𐀀𐀨𐀐𐀩 {who} 𐀞𐀄𐀳 𐀀𐀡 𐀴𐀪𐀮",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} 𐀆𐀂 {url_setting} 𐀏𐀂 {key_setting} {where_keys}: 𐀵𐀡 𐀁𐀸 (𐀃𐀒 http://radarr:7878) 𐀏𐀂 𐀐𐀩𐀸 API, 𐀏𐀵 Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"hwo, inti startjan thau stopjan?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} tharbaih {url_setting} jah {key_setting} {where_keys}: adreo is (swaswe https://unraid) jah API ktho, undar Settings, Management Access, API Keys.",
+"Unraid array":"Unraid hathra",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB freis us {total_gb} GB",
+"Unraid disks":"Unraid diskos",
+"{n} disks":"{n} diskos",
+"Unraid shares":"Unraid dailos",
+"{n} shares":"{n} dailos",
+"Unraid containers":"Unraid kasos",
+"{n} VMs":"{n} masinos",
+"Unraid VMs":"Unraid masinos",
+"container":"kaso",
+"VM":"masino",
+"{action} the Unraid {who} {name}":"{action} thana Unraid {who} {name}",
+"check Unraid's parity":"Unraid parahauth thochjan",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"hathra {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

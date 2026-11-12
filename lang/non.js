@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"biðröð %1","tooltip":"Listi færslna, ein fyrir hverja sókn í biðröðinni: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality og eta (tími eftir, sem 0:12:34). Á þessari síðu notar hann úrtaksbiðröð."},
 "rb_arr_missing":{"message0":"óskaárás %1","tooltip":"Listi færslna, ein fyrir hvern film eða þátt án skráar: title, added (hvenær bætt var við) og id."},
 "rb_arr_diskspace":{"message0":"diskrúm %1","tooltip":"Listi færslna, ein fyrir hvern möppu: path, label, free_gb og total_gb."},
-"rb_arr_search":{"message0":"leita í %1 að því sem vantar","tooltip":"Leitar í alla óskaárásina að því sem ekki hefur skrá. Hann spyr þig alltaf fyrst, þótt ekkert annað spyrji, og ef enginn er til að segja já, gerist ekkert. Á þessari síðu leitar ekkert í alvöru."}
+"rb_arr_search":{"message0":"leita í %1 að því sem vantar","tooltip":"Leitar í alla óskaárásina að því sem ekki hefur skrá. Hann spyr þig alltaf fyrst, þótt ekkert annað spyrji, og ef enginn er til að segja já, gerist ekkert. Á þessari síðu leitar ekkert í alvöru."},
+"rb_unraid_array":{"message0":"Unraid rodin","tooltip":"Ein faersla um rodina: state (STARTED, STOPPED, ...), started (hvort byrrad se), free_gb, total_gb og uptime. A thessari sidu notar thaet synishornsthjon."},
+"rb_unraid_disks":{"message0":"Unraid diskar","tooltip":"Listi faerslna, einnar fyrir hvern disk i rodinni, fyrst jafnredi, sidan gogn, sidan skyndiminni: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb og free_gb."},
+"rb_unraid_shares":{"message0":"Unraid hlutir","tooltip":"Listi faerslna, einnar fyrir hvern hlut notanda: name, free_gb, used_gb og total_gb."},
+"rb_unraid_containers":{"message0":"Unraid ilat","tooltip":"Listi faerslna, einnar fyrir hvert Docker-ilat: name, state (running, exited, ...), status og auto_start (hvort Unraid byrjar thad med rodinni)."},
+"rb_unraid_vms":{"message0":"Unraid velar","tooltip":"Listi faerslna, einnar fyrir hverja syndarvel: name og state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 Unraid-ilat %2","tooltip":"Byrjar etha stodvar eitt Docker-ilat, eftir nafni. Thad spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu byrjar etha stodvar ekkert i alvoru."},
+"rb_unraid_vm_power":{"message0":"%1 Unraid vel %2","tooltip":"Byrjar etha stodvar eina syndarvel, eftir nafni. Thad spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu byrjar etha stodvar ekkert i alvoru."},
+"rb_unraid_parity":{"message0":"kanna jafnredi Unraid","tooltip":"Kannar jafnredisdiska med thvi ad lesa tha, an thess ad skrifa leidrettingar. Thad spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu kannar ekkert i alvoru."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr og Sonarr"
+"Radarr and Sonarr":"Radarr og Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Hvat? Radarr eða Sonarr?",
 "{n} downloading":"{n} að sækja",
-"{n} missing":"{n} vantar"
+"{n} missing":"{n} vantar",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"byrja og stodva ilat og velar Unraid thins, og kanna jafnredi thess (spyrjandi thig hvern sinn)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"lesa Unraid-thjon thinn: rodina, diskana thess, hlutina thess, ilatin thess og velarnar thess",
+"{n} disks":"{n} diskar",
+"{n} shares":"{n} hlutir",
+"{n} VMs":"{n} velar",
+"Unraid":"Unraid",
+"Unraid array":"Unraid rodin",
+"Unraid disks":"Unraid diskar",
+"Unraid shares":"Unraid hlutir",
+"Unraid containers":"Unraid ilat",
+"Unraid VMs":"Unraid velar"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"Lýs þessari mynd í einni setning.",
 "clear, appealing, easy to read at small size":"skýrt, blítt, læsiligt í smárri stærð",
 "The back door is still open.":"Bakdyrrnar eru enn opnar.",
-"Good morning!":"Góðan morgin!"
+"Good morning!":"Góðan morgin!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Fyrri ferð stǫðvaðisk í miðju, en forritit hefir síðan breyzk, svá at þat hefsk at nýju.)",
@@ -2112,7 +2134,7 @@
 "Docker containers":"Docker-hirzlur",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"Hver Docker-hirzla? Gef nafn hennar, sem sonarr.",
-"{n} containers":"{n} hirzlur",
+"{n} containers":"{n} ilat",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Hirzla {name} er í DOCKER_PROTECT, því endrræsir, stöðvar né ræsir Second Thought hana aldri.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Á Windows, set DOCKER_HOST á tcp:// stað: nefnd pípa Docker er eigi studd.",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"leita að því sem vantar í óskaárás {who}",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} þarf {url_setting} og {key_setting} {where_keys}: staðsetningu hans (sem http://radarr:7878) og lykilinn, undir Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Hvat, og byrja etha stodva?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} tharfnast {url_setting} og {key_setting} {where_keys}: vistfang thess (sem https://unraid) og API-lykil, undir Settings, Management Access, API Keys.",
+"Unraid array":"Unraid rodin",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB laus af {total_gb} GB",
+"Unraid disks":"Unraid diskar",
+"{n} disks":"{n} diskar",
+"Unraid shares":"Unraid hlutir",
+"{n} shares":"{n} hlutir",
+"Unraid containers":"Unraid ilat",
+"{n} VMs":"{n} velar",
+"Unraid VMs":"Unraid velar",
+"container":"ilat",
+"VM":"vel",
+"{action} the Unraid {who} {name}":"{action} Unraid-{who} {name}",
+"check Unraid's parity":"kanna jafnredi Unraid",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"rodin {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

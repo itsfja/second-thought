@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"%1 rewe","tooltip":"A list of records, oon for every doun-ladinge in the rewe: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (tyme left, as 0:12:34). On this page it useth a sample rewe."},
 "rb_arr_missing":{"message0":"%1 desir list","tooltip":"A list of records, oon for every film or tale without a file: title, added (whan it was y-cast) and id."},
 "rb_arr_diskspace":{"message0":"%1 disk-space","tooltip":"A list of records, oon for everich fóldre: path, label, free_gb and total_gb."},
-"rb_arr_search":{"message0":"sechen in %1 what is y-want","tooltip":"Sekith thrugh al the desir list that that hath no file. It axeth the first everich tyme, though nothing ellis axeth, and with nobody to sayn yea, it nys doon. On this page nothing is truly sought."}
+"rb_arr_search":{"message0":"sechen in %1 what is y-want","tooltip":"Sekith thrugh al the desir list that that hath no file. It axeth the first everich tyme, though nothing ellis axeth, and with nobody to sayn yea, it nys doon. On this page nothing is truly sought."},
+"rb_unraid_array":{"message0":"Unraid rewe","tooltip":"Oon record for the rewe: state (STARTED, STOPPED, ...), started (whethir it be bigonnen), free_gb, total_gb and uptime. In this page it useth a sample servour."},
+"rb_unraid_disks":{"message0":"Unraid disks","tooltip":"A liste of records, oon for everich disk in the rewe, first parity, than data, than cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb."},
+"rb_unraid_shares":{"message0":"Unraid shares","tooltip":"A liste of records, oon for everich useres share: name, free_gb, used_gb and total_gb."},
+"rb_unraid_containers":{"message0":"Unraid containers","tooltip":"A liste of records, oon for everich Docker container: name, state (running, exited, ...), status and auto_start (whethir Unraid bigynneth it with the rewe)."},
+"rb_unraid_vms":{"message0":"Unraid VMs","tooltip":"A liste of records, oon for everich virtual mashine: name and state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 the Unraid container %2","tooltip":"Bigynneth or stoppeth oon Docker container, by his name. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing bigynneth or stoppeth in sooth."},
+"rb_unraid_vm_power":{"message0":"%1 the Unraid VM %2","tooltip":"Bigynneth or stoppeth oon virtual mashine, by his name. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing bigynneth or stoppeth in sooth."},
+"rb_unraid_parity":{"message0":"checken Unraid his parity","tooltip":"It skanneth the parity disks by reding hem, writing no correctiouns. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing skanneth in sooth."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr and Sonarr"
+"Radarr and Sonarr":"Radarr and Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Whiche? Radarr or Sonarr?",
 "{n} downloading":"{n} ladinge doun",
-"{n} missing":"{n} ben y-want"
+"{n} missing":"{n} ben y-want",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"bigynnen and stoppen thin Unraid his containers and VMs, and checken his parity (axing thee every tyme)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"reden thin Unraid servour: the rewe, his disks, his shares, his containers and his VMs",
+"{n} disks":"{n} disks",
+"{n} shares":"{n} shares",
+"{n} VMs":"{n} VMs",
+"Unraid":"Unraid",
+"Unraid array":"Unraid rewe",
+"Unraid disks":"Unraid disks",
+"Unraid shares":"Unraid shares",
+"Unraid containers":"Unraid containers",
+"Unraid VMs":"Unraid VMs"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"Descryve this ymage in oon sentence.",
 "clear, appealing, easy to read at small size":"cleer, plesaunt, esy to rede in smal gretnesse",
 "The back door is still open.":"The bak dore is yet open.",
-"Good morning!":"Good morwe!"
+"Good morning!":"Good morwe!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(A rennyng bifore stinted amydde, but the devys is chaunged sith, so it bigynneth newe.)",
@@ -2112,7 +2134,7 @@
 "Docker containers":"Docker vessels",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"Which Docker vessel? Yif his name, as sonarr.",
-"{n} containers":"{n} vessels",
+"{n} containers":"{n} containers",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Vessel {name} is in DOCKER_PROTECT, so Second Thought neveremore stirteth it agayn, stynteth ne stirteth it.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"On Windows, sette DOCKER_HOST to a tcp:// addresse: the named pipe of Docker is nat supported.",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"in {who} desir list to sechen what is y-want",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} nedeth {url_setting} and {key_setting} {where_keys}: his place (as http://radarr:7878) and his key, under Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Whiche, and bigynne or stoppe?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} hath nede of {url_setting} and {key_setting} {where_keys}: his addres (as https://unraid) and an API key, under Settings, Management Access, API Keys.",
+"Unraid array":"Unraid rewe",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB free of {total_gb} GB",
+"Unraid disks":"Unraid disks",
+"{n} disks":"{n} disks",
+"Unraid shares":"Unraid shares",
+"{n} shares":"{n} shares",
+"Unraid containers":"Unraid containers",
+"{n} VMs":"{n} VMs",
+"Unraid VMs":"Unraid VMs",
+"container":"container",
+"VM":"VM",
+"{action} the Unraid {who} {name}":"{action} the Unraid {who} {name}",
+"check Unraid's parity":"checken Unraid his parity",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"rewe {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"%1 endebyrdnes","tooltip":"Gecynd gecræfa, ān for ǣlcum hlǣdunge on þǣre endebyrdnesse: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (tīd þe is left, swa 0:12:34). On þisse sīde hit brȳcþ bysen-endebyrdnesse."},
 "rb_arr_missing":{"message0":"%1 gewilnodu","tooltip":"Gecynd gecræfa, ān for ǣlcum filme oþþe spelle butan bōc: title, added (hwænne hit wæs geēaht) and id."},
 "rb_arr_diskspace":{"message0":"%1 diskfæc","tooltip":"Gecynd gecræfa, ān for ǣlcere mapan: path, label, free_gb and total_gb."},
-"rb_arr_search":{"message0":"secan in %1 þæt wanful","tooltip":"Sēcþ þurh ealle þa gewilnodu þæt þe bōc næfþ. Hit āscāf þē ǣrest, ēac þonne nāwiht oþer āscīeþ, and nānum þǣr tō secgenne þā ne gelimpþ hit. On þisse sīde nan þing sōþlīce ne sēcþ."}
+"rb_arr_search":{"message0":"secan in %1 þæt wanful","tooltip":"Sēcþ þurh ealle þa gewilnodu þæt þe bōc næfþ. Hit āscāf þē ǣrest, ēac þonne nāwiht oþer āscīeþ, and nānum þǣr tō secgenne þā ne gelimpþ hit. On þisse sīde nan þing sōþlīce ne sēcþ."},
+"rb_unraid_array":{"message0":"Unraid gefylde","tooltip":"An gemac for thaem gefylde: state (STARTED, STOPPED, ...), started (hwaether hit ongunnen sie), free_gb, total_gb and uptime. On thissum traefe hit bryceth bisenlicum tothegne."},
+"rb_unraid_disks":{"message0":"Unraid discas","tooltip":"Rind gemaca, an for aelcum disc on thaem gefylde, aerest gelicnes, thonne dael, thonne hord: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb."},
+"rb_unraid_shares":{"message0":"Unraid dalas","tooltip":"Rind gemaca, an for aelcum brucendes daele: name, free_gb, used_gb and total_gb."},
+"rb_unraid_containers":{"message0":"Unraid fata","tooltip":"Rind gemaca, an for aelcum Docker fate: name, state (running, exited, ...), status and auto_start (hwaether Unraid hit mid thaem gefylde onginne)."},
+"rb_unraid_vms":{"message0":"Unraid VM","tooltip":"Rind gemaca, an for aelcum sienlicum sceafte: name and state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 the Unraid fat %2","tooltip":"Onginneth othe stelleth an Docker fat, be naman. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung onginneth othe stelleth sothlice."},
+"rb_unraid_vm_power":{"message0":"%1 the Unraid VM %2","tooltip":"Onginneth othe stelleth ane sienlicne sceafte, be naman. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung onginneth othe stelleth sothlice."},
+"rb_unraid_parity":{"message0":"Unraid his gelicnesse beon","tooltip":"Hit benaeth tha gelicnessa discas be raedenne hie, na writing aenige aehtunge. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung benaeth sothlice."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr and Sonarr"
+"Radarr and Sonarr":"Radarr and Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tol for þone ærendracan: lege hie innan ærendracan stocce",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Hwæþer? Radarr oþþe Sonarr?",
 "{n} downloading":"{n} hlǣdaþ",
-"{n} missing":"{n} wanaþ"
+"{n} missing":"{n} wanaþ",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"onginnan and stellan thin Unraid fata and VM, and his gelicnesse beon (asciende the aelc Sith)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"raedan thin Unraid tothegn: thaet gefylde, his discas, his dalas, his fata and his VM",
+"{n} disks":"{n} discas",
+"{n} shares":"{n} dalas",
+"{n} VMs":"{n} VM",
+"Unraid":"Unraid",
+"Unraid array":"Unraid gefylde",
+"Unraid disks":"Unraid discas",
+"Unraid shares":"Unraid dalas",
+"Unraid containers":"Unraid fata",
+"Unraid VMs":"Unraid VM"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"Asege þas anlicnesse on anum cwide.",
 "clear, appealing, easy to read at small size":"sweotol, wynsum, eaþe to rædenne on lytelre micelnesse",
 "The back door is still open.":"Seo bæcdor is git open.",
-"Good morning!":"God morgen!"
+"Good morning!":"God morgen!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Ærre fremming ætstod on middum, ac þæt forescrift wæs siþþan awend, forþy hit onginþ niwe.)",
@@ -2112,7 +2134,7 @@
 "Docker containers":"Docker fatu",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"Hwilc Docker fæt? Sege his naman, swa sonarr.",
-"{n} containers":"{n} fatu",
+"{n} containers":"{n} fata",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"Fæt {name} is on DOCKER_PROTECT, forþon Second Thought hit næfre eft ne onstyreþ, ne stilleþ, ne onstyreþ.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"On Windows, sete on DOCKER_HOST tcp:// stowe: Dockeres genemnede pipe nis underfangen.",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"in {who} gewilnodum þæt wanful secan",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} behōfaþ {url_setting} and {key_setting} {where_keys}: his stowe (swa http://radarr:7878) and his cȳþcǣg, under Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Hwelc, and onginnan othe stellan?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} beheth {url_setting} and {key_setting} {where_keys}: his adresse (swa https://unraid) and ane API cythe, under Settings, Management Access, API Keys.",
+"Unraid array":"Unraid gefylde",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB fro of {total_gb} GB",
+"Unraid disks":"Unraid discas",
+"{n} disks":"{n} discas",
+"Unraid shares":"Unraid dalas",
+"{n} shares":"{n} dalas",
+"Unraid containers":"Unraid fata",
+"{n} VMs":"{n} VM",
+"Unraid VMs":"Unraid VM",
+"container":"fat",
+"VM":"VM",
+"{action} the Unraid {who} {name}":"{action} the Unraid {who} {name}",
+"check Unraid's parity":"Unraid his gelicnesse beon",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"gefylde {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

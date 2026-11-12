@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"ουρά %1","tooltip":"Μια λίστα εγγραφών, μία για κάθε λήψη στην ουρά: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality και eta (υπόλοιπο χρόνου, όπως 0:12:34). Σε αυτή τη σελίδα χρησιμοποιεί δείγμα ουράς."},
 "rb_arr_missing":{"message0":"λίστα επιθυμιών %1","tooltip":"Μια λίστα εγγραφών, μία για κάθε ταινία ή επεισόδιο χωρίς αρχείο: title, added (πότε προστέθηκε) και id."},
 "rb_arr_diskspace":{"message0":"χώρος δίσκου %1","tooltip":"Μια λίστα εγγραφών, μία για κάθε φάκελο: path, label, free_gb και total_gb."},
-"rb_arr_search":{"message0":"να αναζητήσεις τι λείπει από το %1","tooltip":"Αναζητά σε όλη τη λίστα επιθυμιών ό,τι δεν έχει αρχείο. Σε ρωτά κάθε φορά, ακόμα κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αναζητεί πραγματικά."}
+"rb_arr_search":{"message0":"να αναζητήσεις τι λείπει από το %1","tooltip":"Αναζητά σε όλη τη λίστα επιθυμιών ό,τι δεν έχει αρχείο. Σε ρωτά κάθε φορά, ακόμα κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αναζητεί πραγματικά."},
+"rb_unraid_array":{"message0":"συστοιχία Unraid","tooltip":"Μία εγγραφή για τη συστοιχία: state (STARTED, STOPPED, ...), started (αν έχει εκκινήσει), free_gb, total_gb και uptime. Σε αυτή τη σελίδα χρησιμοποιεί δείγματα διακομιστή."},
+"rb_unraid_disks":{"message0":"δίσκοι Unraid","tooltip":"Λίστα εγγραφών, μία για κάθε δίσκο της συστοιχίας, πρώτα η parité, μετά τα δεδομένα, μετά η cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb και free_gb."},
+"rb_unraid_shares":{"message0":"κοινόχρηστα Unraid","tooltip":"Λίστα εγγραφών, μία για κάθε κοινόχρηστο χρήστη: name, free_gb, used_gb και total_gb."},
+"rb_unraid_containers":{"message0":"containers Unraid","tooltip":"Λίστα εγγραφών, μία για κάθε container Docker: name, state (running, exited, ...), status και auto_start (αν το Unraid το εκκινεί με τη συστοιχία)."},
+"rb_unraid_vms":{"message0":"VM Unraid","tooltip":"Λίστα εγγραφών, μία για κάθε εικονική μηχανή: name και state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 το container του Unraid %2","tooltip":"Εκκινεί ή σταματά ένα container Docker, κατά όνομα. Σε ρωτά πάντα πρώτα, ακόμη κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν εκκινεί ή σταματά πραγματικά."},
+"rb_unraid_vm_power":{"message0":"%1 το VM του Unraid %2","tooltip":"Εκκινεί ή σταματά μια εικονική μηχανή, κατά όνομα. Σε ρωτά πάντα πρώτα, ακόμη κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν εκκινεί ή σταματά πραγματικά."},
+"rb_unraid_parity":{"message0":"έλεγχος της parité του Unraid","tooltip":"Ελέγχει τους δίσκους parité διαβάζοντάς τους, χωρίς να γράφει διορθώσεις. Σε ρωτά πάντα πρώτα, ακόμη κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν ελέγχει πραγματικά."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"κάθε μέρα","weekdays":"τις καθημερινές","weekends":"τα Σαββατοκύριακα"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr και Sonarr"
+"Radarr and Sonarr":"Radarr και Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Ποιο; Radarr ή Sonarr;",
 "{n} downloading":"{n} σε λήψη",
-"{n} missing":"{n} λείπουν"
+"{n} missing":"{n} λείπουν",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"εκκίνηση και διακοπή των containers και των VM του Unraid σου, και έλεγχος της parité (ρωτώντας σε κάθε φορά)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"ανάγνωση του διακομιστή Unraid σου: η συστοιχία, οι δίσκοι του, τα κοινόχρηστά του, τα containers του και τα VM του",
+"{n} disks":"{n} δίσκοι",
+"{n} shares":"{n} κοινόχρηστα",
+"{n} VMs":"{n} VM",
+"Unraid":"Unraid",
+"Unraid array":"συστοιχία Unraid",
+"Unraid disks":"δίσκοι Unraid",
+"Unraid shares":"κοινόχρηστα Unraid",
+"Unraid containers":"containers Unraid",
+"Unraid VMs":"VM Unraid"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"Περίγραψε αυτή την εικόνα σε μία πρόταση.",
 "clear, appealing, easy to read at small size":"σαφές, ελκυστικό, ευανάγνωστο σε μικρό μέγεθος",
 "The back door is still open.":"Η πίσω πόρτα είναι ακόμα ανοιχτή.",
-"Good morning!":"Καλημέρα!"
+"Good morning!":"Καλημέρα!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Μια προηγούμενη εκτέλεση σταμάτησε στη μέση, αλλά το πρόγραμμα έχει αλλάξει από τότε, οπότε ξεκινά από την αρχή.)",
@@ -2174,6 +2196,24 @@
 "search {who}'s wanted list for what's missing":"να αναζητήσεις τι λείπει από τη λίστα επιθυμιών του {who}",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"Ο {who} χρειάζεται {url_setting} και {key_setting} {where_keys}: τη διεύθυνσή του (όπως http://radarr:7878) και το κλειδί API, υπό Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Ποιο, και εκκίνηση ή διακοπή;",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"Το {who} χρειάζεται {url_setting} και {key_setting} {where_keys}: τη διεύθυνσή του (όπως https://unraid) και ένα κλειδί API, κάτω από Settings, Management Access, API Keys.",
+"Unraid array":"συστοιχία Unraid",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB ελεύθερα από {total_gb} GB",
+"Unraid disks":"δίσκοι Unraid",
+"{n} disks":"{n} δίσκοι",
+"Unraid shares":"κοινόχρηστα Unraid",
+"{n} shares":"{n} κοινόχρηστα",
+"Unraid containers":"containers Unraid",
+"{n} VMs":"{n} VM",
+"Unraid VMs":"VM Unraid",
+"container":"container",
+"VM":"VM",
+"{action} the Unraid {who} {name}":"{action} το {who} του Unraid {name}",
+"check Unraid's parity":"έλεγχος της parité του Unraid",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"συστοιχία {state}",
+"Unraid":"Unraid"
 }
 };

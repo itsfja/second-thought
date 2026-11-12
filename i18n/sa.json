@@ -697,6 +697,38 @@
   "rb_arr_search": {
    "message0": "%1-piṭake anveṣṭum",
    "tooltip": "Sarvām api mālām anveṣṭi yad pustakam nāsti. Tavāṃ sarvadā pūrvam praṣṭi, yasmin anyat kiñcin na praṣṭi, ca yasmin kenāpi 'tathā' ity uktuṃ nāsti, tadā na bhavati. Asmin pannāṭake kiñcin na sōbhanaṃ anveṣyate."
+  },
+  "rb_unraid_array": {
+   "message0": "Unraid panktih",
+   "tooltip": "pankterika smrtih: state (STARTED, STOPPED, ...), started (arabdham kim), free_gb, total_gb ca uptime ca. asmin prsthe nidarsakam sevakam upayabhate."
+  },
+  "rb_unraid_disks": {
+   "message0": "Unraid vidyutpatlah",
+   "tooltip": "smrtinam sucih, panktau pratyeksya patkasyaika, prathamam samyam, tatah dattam, tatah kosah: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb ca free_gb ca."
+  },
+  "rb_unraid_shares": {
+   "message0": "Unraid bhagah",
+   "tooltip": "smrtinam sucih, pratyeksya upabhoktrbhagasyaika: name, free_gb, used_gb ca total_gb ca."
+  },
+  "rb_unraid_containers": {
+   "message0": "Unraid patrani",
+   "tooltip": "smrtinam sucih, pratyeksya Docker patrasyaika: name, state (running, exited, ...), status ca auto_start ca (Unraid panktya saha tad arabhate kim)."
+  },
+  "rb_unraid_vms": {
+   "message0": "Unraid yantrani",
+   "tooltip": "smrtinam sucih, pratyeksya abhasayantrasyaika: name ca state (RUNNING, SHUTOFF, ...) ca."
+  },
+  "rb_unraid_container_power": {
+   "message0": "%1 Unraid patram %2",
+   "tooltip": "Docker patramekam, namna, arabhati sthapayati va. anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. asmin prsthe kimapi vastutah na arabhyate na sthapyate."
+  },
+  "rb_unraid_vm_power": {
+   "message0": "%1 Unraid yantram %2",
+   "tooltip": "abhasayantramekam, namna, arabhati sthapayati va. anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. asmin prsthe kimapi vastutah na arabhyate na sthapyate."
+  },
+  "rb_unraid_parity": {
+   "message0": "Unraid ityasya samyam parikset",
+   "tooltip": "samyampatlan pathitva pariksate, sudhih na likhati. anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. asmin prsthe kimapi vastutah na pariksyate."
   }
  },
  "options": {
@@ -886,7 +918,8 @@
   "Proxmox": "Proxmox",
   "Docker": "Docker",
   "SABnzbd": "SABnzbd",
-  "Radarr and Sonarr": "Radarr-Sonarr"
+  "Radarr and Sonarr": "Radarr-Sonarr",
+  "Unraid": "Unraid"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "प्रतिनिधेः साधनानि: तानि प्रतिनिधिखण्डस्य अन्तः पातय",
@@ -1758,7 +1791,18 @@
   "Sonarr": "Sonarr",
   "Which one? Radarr or Sonarr.": "Kaḥ? Radarr vā Sonarr vā?",
   "{n} downloading": "{n} avaropyante",
-  "{n} missing": "{n} apūrvāṇi"
+  "{n} missing": "{n} apūrvāṇi",
+  "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)": "tava Unraid ityasya patrani yantrani ca arabhya sthapya ca, tasya samyam ca parikset (prativaram tvam prcchati)",
+  "read your Unraid server: the array, its disks, its shares, its containers and its VMs": "tava Unraid ityasya sevakam pathatu: panktih, tasya patlah, tasya bhagah, tasya patrani, tasya yantrani ca",
+  "{n} disks": "{n} patlah",
+  "{n} shares": "{n} bhagah",
+  "{n} VMs": "{n} yantrani",
+  "Unraid": "Unraid",
+  "Unraid array": "Unraid panktih",
+  "Unraid disks": "Unraid vidyutpatlah",
+  "Unraid shares": "Unraid bhagah",
+  "Unraid containers": "Unraid patrani",
+  "Unraid VMs": "Unraid yantrani"
  },
  "examples": {
   "review": {
@@ -2597,7 +2641,9 @@
   "Describe this picture in one sentence.": "इदं चित्रम् एकवाक्येन वर्णय।",
   "clear, appealing, easy to read at small size": "स्पष्टं, मैत्रीपूर्णं, लघुपरिमाणे पठनीयम्",
   "The back door is still open.": "पृष्ठद्वारम् अद्यापि उद्घाटितम्।",
-  "Good morning!": "सुप्रभातम्!"
+  "Good morning!": "सुप्रभातम्!",
+  "plex": "plex",
+  "windows": "windows"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(पूर्वं चालनं मध्ये स्थगितम्, किन्तु ततः परं कार्यक्रमः परिवृत्तः, अतः नूतनतया आरभते।)",
@@ -3387,7 +3433,7 @@
   "Docker containers": "Docker-पात्राणि",
   "Docker: {why}.": "Docker: {why}।",
   "Which Docker container? Give its name, like sonarr.": "किं Docker-पात्रम्? तस्य नाम देहि, यथा sonarr।",
-  "{n} containers": "{n} पात्राणि",
+  "{n} containers": "{n} patrani",
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "पात्रं {name} DOCKER_PROTECT इत्यस्मिन् अस्ति, अतः Second Thought तत् कदापि न पुनः आरभते, न स्थगयति, न आरभते।",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Windows इत्यत्र DOCKER_HOST इत्यस्मिन् tcp:// सङ्केतं स्थापय: Docker इत्यस्य नामयुक्ता नाली न समर्थ्यते।",
@@ -3449,7 +3495,25 @@
   "search {who}'s wanted list for what's missing": "{who}-piṭake yad apūrvam anveṣṭum",
   "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.": "{who} {url_setting} ca {key_setting} ca apekṣate {where_keys}: tasya sthānam (yathā http://radarr:7878) ca kuñjikā, madhye Settings, General, API Key.",
   "Radarr": "Radarr",
-  "Sonarr": "Sonarr"
+  "Sonarr": "Sonarr",
+  "Which one, and start or stop?": "kah, ca arabhyatam ut sthapyatam?",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.": "{who} kamayate {url_setting} ca {key_setting} ca {where_keys}: tasya sthanam (yatha https://unraid) tatha API kuncikam, Settings, Management Access, API Keys ityasyah adhah.",
+  "Unraid array": "Unraid panktih",
+  "{state}, {free_gb} GB free of {total_gb} GB": "{state}, {total_gb} GB ityasmat {free_gb} GB muktam",
+  "Unraid disks": "Unraid vidyutpatlah",
+  "{n} disks": "{n} patlah",
+  "Unraid shares": "Unraid bhagah",
+  "{n} shares": "{n} bhagah",
+  "Unraid containers": "Unraid patrani",
+  "{n} VMs": "{n} yantrani",
+  "Unraid VMs": "Unraid yantrani",
+  "container": "patram",
+  "VM": "yantram",
+  "{action} the Unraid {who} {name}": "{action} Unraid ityasya {who} {name}",
+  "check Unraid's parity": "Unraid ityasya samyam parikset",
+  "Unraid {version}": "Unraid {version}",
+  "array {state}": "panktih {state}",
+  "Unraid": "Unraid"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",
