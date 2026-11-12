@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"capsae Docker","tooltip":"Index tabularum, una pro quaque capsa, sive currit sive non: name, image, state, status, health (healthy, unhealthy, aut vacuum sine valetudinis probatione), restarts et started. In hac pagina strue exempli utitur."},
 "rb_docker_stats":{"message0":"memoria et CPU Docker","tooltip":"Index tabularum, una pro quaque capsa currente: name, cpu (%), memory_mb, limit_mb (memoria machinae, pro capsa sine limite) et memory (% limitis)."},
 "rb_docker_logs":{"message0":"acta Docker capsae %1, ultimi %2 versus","tooltip":"Ultimi versus quos capsa scripsit, exitus et errores simul, vetustissimus primus."},
-"rb_docker_power":{"message0":"%1 capsam Docker %2","tooltip":"Unam capsam per nomen iterum incipit, sistit aut incipit. Te semper prius rogat, etiam cum nihil aliud rogat; nemine adstante qui «ita» dicat, non fit. Capsae in DOCKER_PROTECT numquam tanguntur. In hac pagina nihil vere iterum incipit."}
+"rb_docker_power":{"message0":"%1 capsam Docker %2","tooltip":"Unam capsam per nomen iterum incipit, sistit aut incipit. Te semper prius rogat, etiam cum nihil aliud rogat; nemine adstante qui «ita» dicat, non fit. Capsae in DOCKER_PROTECT numquam tanguntur. In hac pagina nihil vere iterum incipit."},
+"rb_sabnzbd_queue":{"message0":"ordo SABnzbd","tooltip":"Index factorum, unum quoque in ordine demittendi: name, size_mb, left_mb, percent, eta (tempus reliquum, ut 0:12:34) et status (Downloading, Queued, Paused). In hac pagina ordo exemplaris adhibetur."},
+"rb_sabnzbd_history":{"message0":"historia SABnzbd, postremae %1 horae","tooltip":"Index factorum, unum quoque illo tempore confecto: name, status (Completed vel Failed), size_mb, quando confectum sit et, si fefellit, cur."},
+"rb_sabnzbd_diskspace":{"message0":"spatium disci SABnzbd","tooltip":"Index factorum, unum quoque SABnzbd capsarum (capsa demissionis prima): folder et free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Omnem ordinem demittendi sistit aut resumit. Te semem primum rogat, etiam cum nihil aliud rogat, et nullo dicente sic, nihil fit. In hac pagina nihil vere sistitur."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"accumulatorium ad {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"reservationem auxiliarem Powerwall ponere ad {n}% (nunc {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"numeros tui Powerwall legere: onus accumulatori, solaris, inportatio et exportatio reticuli, et reservatio quam servat",
-"set your Powerwall's backup reserve (asking you each time)":"reservationem auxiliarem tui Powerwall mutare (te rogando singulis vicibus)"
+"set your Powerwall's backup reserve (asking you each time)":"reservationem auxiliarem tui Powerwall mutare (te rogando singulis vicibus)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd sisti aut resumi potest.",
+"SABnzbd diskspace":"spatium disci SABnzbd",
+"SABnzbd history":"historia SABnzbd",
+"SABnzbd queue":"ordo SABnzbd",
+"{n} finished":"{n} confecta",
+"{n} folders":"{n} capsae",
+"{n} in the queue":"{n} in ordine",
+"pause and resume your SABnzbd downloads (asking you each time)":"ordinationes SABnzbd demissionum sistere et resumere (te semem rogans)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd tuum legere: ordinem demittendi, historiam et spatium liberum disci demissionis"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2112,7 +2127,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"nullus fasciculus laterum inclusus est, ita pagina hanc programmatam iterum importare non potest (a vetustiore pagina exportata est)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"fasciculus laterum in hac programmata inclusus legi non potest, ita pagina eam iterum importare non potest",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"fasciculus laterum in hac programmata inclusus formam non servat ({problem}), ita pagina eam fortasse iterum importare non poterit",
-"the block file inside this program matches the format, so the page can import it again":"fasciculus laterum in hac programmata formam servat, ita pagina eam iterum importare potest"
+"the block file inside this program matches the format, so the page can import it again":"fasciculus laterum in hac programmata formam servat, ita pagina eam iterum importare potest",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd sisti aut resumi potest.",
+"SABnzbd diskspace":"spatium disci SABnzbd",
+"SABnzbd history":"historia SABnzbd",
+"SABnzbd queue":"ordo SABnzbd",
+"{n} finished":"{n} confecta",
+"{n} folders":"{n} capsae",
+"{n} in the queue":"{n} in ordine",
+"Downloading":"Demittens",
+"Paused":"Sistitur",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought {what} ad SABnzbd non mittit.",
+"{n} MB left":"{n} MB relicta",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd SABNZBD_URL et SABNZBD_API_KEY eget {where_keys}: inscriptionem eius (ut http://sabnzbd:8080) et clavem API plenam, in SABnzbd sub Config, General, API Key.",
+"pause SABnzbd's queue":"ordinem SABnzbd sistere",
+"resume SABnzbd's queue":"ordinem SABnzbd resumere"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

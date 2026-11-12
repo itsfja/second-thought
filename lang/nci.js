@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"Docker tlacomeh","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl tlacomitl, intlā tequiti nozo ahmo: name, image, state, status, health (healthy, unhealthy, nozo cactoc intlācamo oncah pahtiliz-yehyecōliztli), restarts ihuan started. Nicān quitequitiltia cē machiyōtl tlanechicōlli."},
 "rb_docker_stats":{"message0":"Docker tlalnāmiquiliztli ihuan CPU","tooltip":"Cē amatlahcuilōlli, cē ipan cecentetl tlacomitl in tequiti: name, cpu (%), memory_mb, limit_mb (in tepoztli ītlalnāmiquiliz, in tlacomitl in ahmo quipia tlatzontli) ihuan memory (% in tlatzontli)."},
 "rb_docker_logs":{"message0":"Docker tlahcuilōlli in %1, in tlatzonco %2 pāntli","tooltip":"In tlatzonco pāntli in ōquihcuiloh cē tlacomitl, in īquīzaliz ihuan īnēxtlahtōl cepan, in achto huehue."},
-"rb_docker_power":{"message0":"%1 Docker tlacomitl %2","tooltip":"Occeppa quitzintia, quiquetza nozo quitzintia cē tlacomitl, ica ītōcā. Mochipa achto mitztlahtlani, māmo ahtle occē tlahtlani; intlā ahquemeh oncah quihtōz quēmah, ahmo mochīhua. In tlacomeh ipan DOCKER_PROTECT aīc moyacatzohuah. Nicān ahtle nelli occeppa motzintia."}
+"rb_docker_power":{"message0":"%1 Docker tlacomitl %2","tooltip":"Occeppa quitzintia, quiquetza nozo quitzintia cē tlacomitl, ica ītōcā. Mochipa achto mitztlahtlani, māmo ahtle occē tlahtlani; intlā ahquemeh oncah quihtōz quēmah, ahmo mochīhua. In tlacomeh ipan DOCKER_PROTECT aīc moyacatzohuah. Nicān ahtle nelli occeppa motzintia."},
+"rb_sabnzbd_queue":{"message0":"in necentlāliliztli SABnzbd","tooltip":"Nāhuatiltlahtōlli, cē ic tlapōhualli in tlahtōlmapiliztli: name, size_mb, left_mb, percent, eta (in oc tlamantli, iuhquin 0:12:34) ihuan in tlapōhualli (Downloading, Queued, Paused). Inīn āmoxtli, cē necentlāliliztli tlamachtiāni."},
+"rb_sabnzbd_history":{"tooltip":"Nāhuatiltlahtōlli, cē ic tlapōhualli in tlahtōlmapiliztli ōtlamoc: name, tlapōhualli (Completed nozo Failed), size_mb, quēzqui ōtlamoc nozo, tla ōmoquetz, axcan.","message0":"in tlacuīlōl SABnzbd, in āxcān %1 ihcāitl"},
+"rb_sabnzbd_diskspace":{"message0":"in tlamantli SABnzbd","tooltip":"Nāhuatiltlahtōlli, cē ic tlapōhualli in tlamantli SABnzbd (in tlamantli occeppa): folder ihuan free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Quicholō nozo occeppa quimotzintia in necentlāliliztli. Mitzitzquītia cē ihcāitl occeppa, tla ahmo occe huel mitzitzquītia, ihuan tla ahmo ac quimati, ahmo mochīhua. Inīn āmoxtli, ahmo huel mochīhua."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -228,7 +232,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1083,7 +1088,17 @@
 "battery at {pct}%":"bateria ipan {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"chīhuāz in Powerwall backup tlapōhualli īpan {n}% (axcan {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"quimati in Powerwall tlapōhualli: in bateria, in tonatiuh, in calaquiliztli ihuān in huitziliztli, ihuān in tlapōhualli in quipiya",
-"set your Powerwall's backup reserve (asking you each time)":"quicualtiz in Powerwall backup tlapōhualli (mitztlatlani ceceyaca tlahtōllī)"
+"set your Powerwall's backup reserve (asking you each time)":"quicualtiz in Powerwall backup tlapōhualli (mitztlatlani ceceyaca tlahtōllī)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd huel moquetza, huel occeppa motzintia.",
+"SABnzbd diskspace":"SABnzbd tlamantli",
+"SABnzbd history":"in tlacuīlōl SABnzbd",
+"SABnzbd queue":"in necentlāliliztli SABnzbd",
+"{n} finished":"{n} otlamoc",
+"{n} folders":"{n} tlamantli",
+"{n} in the queue":"{n} ipan in necentlāliliztli",
+"pause and resume your SABnzbd downloads (asking you each time)":"in SABnzbd tlahtōlmapiliztli quicholō nozo occeppa quimotzintia (mitzitzquītia cē ihcāitl occeppa)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"in SABnzbd mochīhua: in necentlāliliztli, in tlacuīlōl ihuan in tlamantli ōmpa in tlamantli"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2111,7 +2126,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"ahmo ca blokkos-āmatl inōc, ic in āmatl ahmo hueli ōmpaquīxtiliz inīn tlatēcpantli occeppa (ōmpantlih ōmopanōltih āmatl huēcauhca)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"in blokkos-āmatl inōc inīn tlatēcpantli ahmo hueli moīxtlahca, ic in āmatl ahmo hueli ōmpaquīxtiliz occeppa",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"in blokkos-āmatl inōc inīn tlatēcpantli ahmo quipiya in iecoliztli ({problem}), ic kenin āmatl ahmo hueli ōmpaquīxtiliz occeppa",
-"the block file inside this program matches the format, so the page can import it again":"in blokkos-āmatl inōc inīn tlatēcpantli quipiya in iecoliztli, ic in āmatl hueli ōmpaquīxtīza occeppa"
+"the block file inside this program matches the format, so the page can import it again":"in blokkos-āmatl inōc inīn tlatēcpantli quipiya in iecoliztli, ic in āmatl hueli ōmpaquīxtīza occeppa",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd huel moquetza, huel occeppa motzintia.",
+"SABnzbd diskspace":"SABnzbd tlamantli",
+"SABnzbd history":"in tlacuīlōl SABnzbd",
+"SABnzbd queue":"in necentlāliliztli SABnzbd",
+"{n} finished":"{n} otlamoc",
+"{n} folders":"{n} tlamantli",
+"{n} in the queue":"{n} ipan in necentlāliliztli",
+"Downloading":"Motēmaca",
+"Paused":"Ōmoquetz",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought ahmo quititlanī {what} ītech SABnzbd.",
+"{n} MB left":"{n} MB oc",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd quinequi SABNZBD_URL ihuan SABNZBD_API_KEY {where_keys}: in ōhtli (iuhquin http://sabnzbd:8080) ihuan in tlapōhualli API, in SABnzbd ipan Config, General, API Key.",
+"pause SABnzbd's queue":"quicholō in necentlāliliztli SABnzbd",
+"resume SABnzbd's queue":"occeppa quimotzintia in necentlāliliztli SABnzbd"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

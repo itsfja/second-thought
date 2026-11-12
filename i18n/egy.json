@@ -665,6 +665,22 @@
   "rb_docker_power": {
    "message0": "%1 𓉔𓈖𓅱 𓈖 Docker %2",
    "tooltip": "𓈙𓋴𓊪𓆑 𓅓 𓅱𓎛𓅓, 𓄿𓃀𓆑 𓂋𓊪𓅱 𓈙𓋴𓊪𓆑 𓉔𓈖𓅱 𓅱𓂝 𓅓 𓂋𓈖 𓈖𓆓𓆑 𓏏𓅱 𓐍𓂋𓎛𓄿𓏏 𓂋 𓈖𓎛𓎛; 𓇋𓂋 𓈖𓈖 𓋴 𓂋 𓆓𓂧 𓅓𓄿𓂝, 𓈖𓈖 𓇋𓂋𓆑 DOCKER_PROTECT 𓈖𓈖 𓍿𓄿 𓎛𓂋 𓂝 𓊪𓈖 𓈖𓈖 𓈙𓋴𓊪 𓅓 𓅱𓎛𓅓"
+  },
+  "rb_sabnzbd_queue": {
+   "message0": "ḥꜣw SABnzbd",
+   "tooltip": "ḥꜣw n rmṯ, ꜥnḫ rꜣw n kꜣt m ḥꜣw n ini: name, size_mb, left_mb, percent, eta (bw ḫr, mj 0:12:34) ḥnꜥ status (Downloading, Queued, Paused). M pn ḥwꜣ ḥꜣw n ḫpr."
+  },
+  "rb_sabnzbd_history": {
+   "tooltip": "ḥꜣw n rmṯ, ꜥnḫ rꜣw n kꜣt mn m rnpt: name, status (Completed r Failed), size_mb, ḥnꜥ ꜥḫꜣ mn, r ḫꜣt, mrꜣ ḫꜣt.",
+   "message0": "šꜣt SABnzbd, ꜥḫt %1 ḥrw"
+  },
+  "rb_sabnzbd_diskspace": {
+   "message0": "bw n disk n SABnzbd",
+   "tooltip": "ḥꜣw n rmṯ, ꜥnḫ rꜣw n prw SABnzbd (prw n ini ḥr-tp): folder ḥnꜥ free_gb."
+  },
+  "rb_sabnzbd_pause": {
+   "message0": "%1 SABnzbd",
+   "tooltip": "ḫtm r-pw sḫꜥ ḥꜣw n ini r-ḏbt. ḥꜣb n-k r-ꜥwꜣ, ꜥḫꜣ ḥꜣb n ꜥnḫ, ḥnꜥ n s ḥr ḥꜣb ꜥnḫ, nn ḫpr. M pn ḥwꜣ nn ḫtm ḥꜣw m mn."
   }
  },
  "options": {
@@ -826,7 +842,8 @@
   "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
-  "Docker": "Docker"
+  "Docker": "Docker",
+  "SABnzbd": "SABnzbd"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𓋴𓆓𓅓𓅱: 𓇋𓂋𓋴𓈖 𓐍𓆑𓏏 𓇋𓂋 𓋴𓐍𓂋 𓆓𓄿 𓅓 𓏏𓂋",
@@ -1681,7 +1698,17 @@
   "battery at {pct}%": "𓎛𓄿𓅱𓏏ỉ 𓅓 {pct}%",
   "set the Powerwall backup reserve to {n}% (now {old}%)": "𓂝𓎛𓄿𓅱 𓈖 Powerwall 𓂋 𓎛𓄿𓅱𓏏ỉ {n}% (𓅓 {old}%)",
   "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "𓎛𓅓𓅱𓏏 𓈖 Powerwall 𓎛𓂋 𓎛𓅓: 𓎛𓄿𓅱𓏏ỉ 𓈖 𓎛𓄿𓅱𓏏, 𓈙𓅱, 𓂝𓈎 𓂝𓈖𓐍 𓂋𓎛𓂋, 𓎛𓄿𓅱𓏏ỉ 𓎛𓂋 𓎛𓋴𓃀",
-  "set your Powerwall's backup reserve (asking you each time)": "𓂝𓎛𓄿𓅱 𓈖 Powerwall 𓈖𓎡 𓐍𓊪𓂋 (𓂝𓈖𓐍 𓈖𓎡 𓂋 𓂝𓈎 𓈖𓃀)"
+  "set your Powerwall's backup reserve (asking you each time)": "𓂝𓎛𓄿𓅱 𓈖 Powerwall 𓈖𓎡 𓐍𓊪𓂋 (𓂝𓈖𓐍 𓈖𓎡 𓂋 𓂝𓈎 𓈖𓃀)",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd 𓐍𓏏𓅓 𓂋𓊪𓅱 𓋴𓐍𓂝",
+  "SABnzbd diskspace": "𓃀𓅱 𓈖 𓂧𓇋𓋴𓎡 𓈖 SABnzbd",
+  "SABnzbd history": "SABnzbd 𓈙𓄿𓏏",
+  "SABnzbd queue": "SABnzbd 𓎛𓄿𓅱",
+  "{n} finished": "{n} 𓅓𓈖",
+  "{n} folders": "{n} 𓊪𓂋𓅱",
+  "{n} in the queue": "{n} 𓅓 𓎛𓄿𓅱",
+  "pause and resume your SABnzbd downloads (asking you each time)": "ḫtm ḥnꜥ sḫꜥ ini SABnzbd (ḥꜣb n-k r-ꜥwꜣ)",
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "ꜥḫꜣ SABnzbd: ḥꜣw n ini, šꜣt ḥnꜥ bw n disk n ini"
  },
  "examples": {
   "review": {
@@ -3341,7 +3368,24 @@
   "no block file embedded, so the page can't import this program again (it was exported by an older page)": "nn ḏfm n ḫw im, šfdw n sḫr pn nn šfd (prj m šfdw ẖt)",
   "the block file embedded in this program isn't readable, so the page can't import it again": "ḏfm n ḫw imj m sḫr pn nn šfd, šfdw.f nn šfd",
   "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "ḏfm n ḫw imj m sḫr pn nn ḥw n šs ({problem}), šfdw.f ḥw nn šfd",
-  "the block file inside this program matches the format, so the page can import it again": "ḏfm n ḫw imj m sḫr pn ḥw n šs, šfdw.f šfd"
+  "the block file inside this program matches the format, so the page can import it again": "ḏfm n ḫw imj m sḫr pn ḥw n šs, šfdw.f šfd",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd ḫtm r-pw sḫꜥ.",
+  "SABnzbd diskspace": "bw n disk n SABnzbd",
+  "SABnzbd history": "SABnzbd šꜣt",
+  "SABnzbd queue": "SABnzbd ḥꜣw",
+  "{n} finished": "{n} mn",
+  "{n} folders": "{n} prw",
+  "{n} in the queue": "{n} m ḥꜣw",
+  "Downloading": "Ini",
+  "Paused": "Ḫtm",
+  "SABnzbd {version}": "SABnzbd {version}",
+  "SABnzbd: {why}.": "SABnzbd: {why}.",
+  "Second Thought doesn't send {what} to SABnzbd.": "nn ꜥnḫ Second Thought {what} r SABnzbd.",
+  "{n} MB left": "{n} MB ḫr",
+  "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "SABnzbd jr n SABNZBD_URL ḥnꜥ SABNZBD_API_KEY {where_keys}: bw.f (mj http://sabnzbd:8080) ḥnꜥ ḥꜣw-tꜣ n API, m SABnzbd ḥr Config, General, API Key.",
+  "pause SABnzbd's queue": "ḫtm ḥꜣw n SABnzbd",
+  "resume SABnzbd's queue": "sḫꜥ ḥꜣw n SABnzbd"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

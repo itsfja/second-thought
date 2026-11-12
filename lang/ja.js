@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"Docker のコンテナー","tooltip":"記録のリストで、動いているかどうかにかかわらずコンテナーごとに一つ：name、image、state、status、health（healthy、unhealthy、ヘルスチェックがなければ空）、restarts、started。このページではサンプルのスタックを使います。"},
 "rb_docker_stats":{"message0":"Docker のメモリーと CPU","tooltip":"記録のリストで、動いているコンテナーごとに一つ：name、cpu（%）、memory_mb、limit_mb（上限のないコンテナーではマシンのメモリー）、memory（上限に対する %）。"},
 "rb_docker_logs":{"message0":"Docker のログ：%1、最後の %2 行","tooltip":"コンテナーが書いた最後の行。出力とエラーを合わせて、古い順です。"},
-"rb_docker_power":{"message0":"Docker のコンテナー %2 を %1","tooltip":"コンテナーを名前で再起動、停止、起動します。ほかに何も確認しないときでも必ず先に確認し、「はい」と言う人がいなければ実行しません。DOCKER_PROTECT にあるコンテナーには一切触れません。このページでは実際には何も再起動しません。"}
+"rb_docker_power":{"message0":"Docker のコンテナー %2 を %1","tooltip":"コンテナーを名前で再起動、停止、起動します。ほかに何も確認しないときでも必ず先に確認し、「はい」と言う人がいなければ実行しません。DOCKER_PROTECT にあるコンテナーには一切触れません。このページでは実際には何も再起動しません。"},
+"rb_sabnzbd_queue":{"message0":"SABnzbd のキュー","tooltip":"ダウンロードキュー内の各ジョブのレコードのリスト：name、size_mb、left_mb、percent、eta（残り時間、0:12:34 など）、status（Downloading、Queued、Paused）。このページではサンプルのキューを使います。"},
+"rb_sabnzbd_history":{"message0":"SABnzbd の履歴、過去 %1 時間","tooltip":"その時間内に終わった各ジョブのレコードのリスト：name、status（Completed または Failed）、size_mb、終わった時刻と、失敗した場合はその理由。"},
+"rb_sabnzbd_diskspace":{"message0":"SABnzbd のディスク容量","tooltip":"SABnzbd の各フォルダー（最初がダウンロードフォルダー）のレコードのリスト：folder と free_gb。"},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"ダウンロードキュー全体を一時停止または再開します。他に何も尋ねないときでも毎回必ず尋ね、誰も「はい」と言えないときは実行されません。このページでは何も実際には一時停止しません。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"エージェントの道具：エージェントブロックの中に入れます",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"バッテリー残量 {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall のバックアップ予約を {n}% に設定(現在 {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"Powerwall の数値を読む:バッテリー残量、太陽光、買電と売電、確保される予約",
-"set your Powerwall's backup reserve (asking you each time)":"Powerwall のバックアップ予約を変更する(毎回確認します)"
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall のバックアップ予約を変更する(毎回確認します)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd は一時停止または再開できます。",
+"SABnzbd diskspace":"SABnzbd のディスク容量",
+"SABnzbd history":"SABnzbd の履歴",
+"SABnzbd queue":"SABnzbd のキュー",
+"{n} finished":"{n} 件完了",
+"{n} folders":"{n} 個のフォルダー",
+"{n} in the queue":"キューに {n} 件",
+"pause and resume your SABnzbd downloads (asking you each time)":"SABnzbd のダウンロードを一時停止・再開する（毎回尋ねる）",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd を読む：ダウンロードキュー、履歴、ダウンロードディスクの空き容量"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2112,6 +2127,23 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"埋め込まれたブロックファイルがないため、ページでこのプログラムを再度読み込めません（古いページから書き出されたものです）",
 "the block file embedded in this program isn't readable, so the page can't import it again":"このプログラムに埋め込まれたブロックファイルが読み取れないため、ページで再度読み込めません",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"このプログラムに埋め込まれたブロックファイルが書式を守っていません（{problem}）。そのため、ページで再度読み込めないことがあります",
-"the block file inside this program matches the format, so the page can import it again":"このプログラムの中のブロックファイルは書式に合っているため、ページで再度読み込めます"
+"the block file inside this program matches the format, so the page can import it again":"このプログラムの中のブロックファイルは書式に合っているため、ページで再度読み込めます",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd は一時停止または再開できます。",
+"SABnzbd diskspace":"SABnzbd のディスク容量",
+"SABnzbd history":"SABnzbd の履歴",
+"SABnzbd queue":"SABnzbd のキュー",
+"{n} finished":"{n} 件完了",
+"{n} folders":"{n} 個のフォルダー",
+"{n} in the queue":"キューに {n} 件",
+"Downloading":"ダウンロード中",
+"Paused":"一時停止中",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd：{why}。",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought は {what} を SABnzbd に送りません。",
+"{n} MB left":"残り {n} MB",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd には SABNZBD_URL と SABNZBD_API_KEY が必要です {where_keys}：アドレス（たとえば http://sabnzbd:8080）と完全な API キー（SABnzbd の Config、General、API Key にあります）。",
+"pause SABnzbd's queue":"SABnzbd のキューを一時停止する",
+"resume SABnzbd's queue":"SABnzbd のキューを再開する"
 }
 };

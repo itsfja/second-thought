@@ -664,6 +664,22 @@
   "rb_docker_power": {
    "message0": "%1 Docker 容器 %2",
    "tooltip": "按名字重启、停止或启动一个容器。它总会先问你，即使别的都不问；没人在场说“是”，就不执行。DOCKER_PROTECT 里的容器绝不碰。在本页上没有东西真的重启。"
+  },
+  "rb_sabnzbd_queue": {
+   "message0": "SABnzbd 队列",
+   "tooltip": "记录列表，下载队列中的每个任务一条：name、size_mb、left_mb、percent、eta（剩余时间，如 0:12:34）和 status（Downloading、Queued、Paused）。在本页使用示例队列。"
+  },
+  "rb_sabnzbd_history": {
+   "message0": "SABnzbd 历史记录，过去 %1 小时",
+   "tooltip": "记录列表，该时间内完成的每个任务一条：name、status（Completed 或 Failed）、size_mb、完成时间，以及失败时的原因。"
+  },
+  "rb_sabnzbd_diskspace": {
+   "message0": "SABnzbd 磁盘空间",
+   "tooltip": "记录列表，SABnzbd 的每个文件夹（下载文件夹在前）一条：folder 和 free_gb。"
+  },
+  "rb_sabnzbd_pause": {
+   "message0": "%1 SABnzbd",
+   "tooltip": "暂停或恢复整个下载队列。即使别的都不询问，它也每次先问你；没有人说“是”就不会运行。在本页不会真的暂停。"
   }
  },
  "options": {
@@ -835,7 +851,8 @@
   "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
-  "Docker": "Docker"
+  "Docker": "Docker",
+  "SABnzbd": "SABnzbd"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "给智能体的工具：把它们放进智能体积木里",
@@ -1690,7 +1707,17 @@
   "battery at {pct}%": "电池电量 {pct}%",
   "set the Powerwall backup reserve to {n}% (now {old}%)": "把 Powerwall 的备份保留设为 {n}%(当前 {old}%)",
   "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "读取你的 Powerwall 数据:电池电量、太阳能、电网进口和出口,以及保留的备用电量",
-  "set your Powerwall's backup reserve (asking you each time)": "更改你的 Powerwall 的备份保留(每次都会先问你)"
+  "set your Powerwall's backup reserve (asking you each time)": "更改你的 Powerwall 的备份保留(每次都会先问你)",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd 可以暂停或恢复。",
+  "SABnzbd diskspace": "SABnzbd 磁盘空间",
+  "SABnzbd history": "SABnzbd 历史记录",
+  "SABnzbd queue": "SABnzbd 队列",
+  "{n} finished": "{n} 个已完成",
+  "{n} folders": "{n} 个文件夹",
+  "{n} in the queue": "队列中有 {n} 个",
+  "pause and resume your SABnzbd downloads (asking you each time)": "暂停和恢复你的 SABnzbd 下载（每次都询问你）",
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "读取你的 SABnzbd：下载队列、历史记录和下载磁盘的剩余空间"
  },
  "examples": {
   "review": {
@@ -3350,6 +3377,23 @@
   "no block file embedded, so the page can't import this program again (it was exported by an older page)": "没有嵌入块文件，因此页面无法再次导入此程序（它由较旧的页面导出）",
   "the block file embedded in this program isn't readable, so the page can't import it again": "此程序中嵌入的块文件无法读取，因此页面无法再次导入它",
   "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "此程序中嵌入的块文件不符合格式（{problem}），因此页面可能无法再次导入它",
-  "the block file inside this program matches the format, so the page can import it again": "此程序中的块文件符合格式，因此页面可以再次导入它"
+  "the block file inside this program matches the format, so the page can import it again": "此程序中的块文件符合格式，因此页面可以再次导入它",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd 可以暂停或恢复。",
+  "SABnzbd diskspace": "SABnzbd 磁盘空间",
+  "SABnzbd history": "SABnzbd 历史记录",
+  "SABnzbd queue": "SABnzbd 队列",
+  "{n} finished": "{n} 个已完成",
+  "{n} folders": "{n} 个文件夹",
+  "{n} in the queue": "队列中有 {n} 个",
+  "Downloading": "正在下载",
+  "Paused": "已暂停",
+  "SABnzbd {version}": "SABnzbd {version}",
+  "SABnzbd: {why}.": "SABnzbd：{why}。",
+  "Second Thought doesn't send {what} to SABnzbd.": "Second Thought 不会向 SABnzbd 发送 {what}。",
+  "{n} MB left": "剩余 {n} MB",
+  "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "SABnzbd 需要 SABNZBD_URL 和 SABNZBD_API_KEY {where_keys}：它的地址（比如 http://sabnzbd:8080）和完整的 API 密钥，在 SABnzbd 的 Config、General、API Key 下。",
+  "pause SABnzbd's queue": "暂停 SABnzbd 的队列",
+  "resume SABnzbd's queue": "恢复 SABnzbd 的队列"
  }
 }

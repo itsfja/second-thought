@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"מאני Docker","tooltip":"רשימת כתבין, חד לכל מאנא, רהיט או לא: name, image, state, status, health (healthy, unhealthy, או ריקן כד לית בדיקת חולמנא), restarts וstarted. בדפא דנא משמש דרגא דדוגמא."},
 "rb_docker_stats":{"message0":"דוכרנא וCPU דDocker","tooltip":"רשימת כתבין, חד לכל מאנא דרהיט: name, cpu (%), memory_mb, limit_mb (דוכרנא דמכונתא, למאנא דלית ליה תחומא) וmemory (% מן תחומא)."},
 "rb_docker_logs":{"message0":"ספרי דוכרניא דDocker ד%1, %2 שורין בתראין","tooltip":"שורין בתראין דכתב מאנא, מפקניה וטעותיה כחדא, עתיקא קדמאה."},
-"rb_docker_power":{"message0":"%1 מאנא דDocker ‏%2","tooltip":"משרי תוב, מבטל או משרי מאנא חד, בשמיה. תדירא שאיל לך קדם, אף כד מדעם אחרן לא שאיל, וכד לית מן דאמר אין, לא רהיט. מאני DOCKER_PROTECT לעלם לא מתקרבין. בדפא דנא מדעם לא באמת שרי תוב."}
+"rb_docker_power":{"message0":"%1 מאנא דDocker ‏%2","tooltip":"משרי תוב, מבטל או משרי מאנא חד, בשמיה. תדירא שאיל לך קדם, אף כד מדעם אחרן לא שאיל, וכד לית מן דאמר אין, לא רהיט. מאני DOCKER_PROTECT לעלם לא מתקרבין. בדפא דנא מדעם לא באמת שרי תוב."},
+"rb_sabnzbd_queue":{"message0":"סדרא דSABnzbd","tooltip":"רשימא דרשומין, חדא לכל עבידא בסדרא דמיתגרר: name, size_mb, left_mb, percent, eta (זמן דאתר, כות 0:12:34) וstatus (Downloading, Queued, Paused). בדין עמתא משתמש בסדרא דאגרא."},
+"rb_sabnzbd_history":{"message0":"אסתוריא דSABnzbd, אחרני %1 שעין","tooltip":"רשימא דרשומין, חדא לכל עבידא דשלמא בזמנא הנו: name, status (Completed או Failed), size_mb, אמתי שלמא ו, למא דאשתזב, אמתי אשתזב."},
+"rb_sabnzbd_diskspace":{"message0":"מקום דיסקא דSABnzbd","tooltip":"רשימא דרשומין, חדא לכל תקא דSABnzbd (תקא דמיתגרר קדמית): folder וfree_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"מבטל או משרי את כל סדרא דמיתגרר. שאל לך קדם כל זמן, אף דלא אחראנא שאל, ולית אנש למימר הן, לא עביד. בדין עמתא לא מבטל דבר בממש."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יומא","weekdays":"ביומי חול","weekends":"בסופי שבתא"},
@@ -230,7 +234,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"מאני שליחא: שדי יתהון בגו לבנת שליחא",
@@ -1085,7 +1090,17 @@
 "battery at {pct}%":"בטריא ב{pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"למניא ית רזרבתא דגיבוי דיל Powerwall ל{n}%(כען {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"למקרא נתבנין דPowerwall דילך: מליא דבטריא, שמשא, אסקופא ואפקא דנטרא, ורזרבתא דקאים",
-"set your Powerwall's backup reserve (asking you each time)":"לשנא ית רזרבתא דגיבוי דPowerwall דילך (שאל לך כל זמן)"
+"set your Powerwall's backup reserve (asking you each time)":"לשנא ית רזרבתא דגיבוי דPowerwall דילך (שאל לך כל זמן)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd מתבטל או מתשרי יכיל.",
+"SABnzbd diskspace":"מקום דיסקא דSABnzbd",
+"SABnzbd history":"אסתוריא דSABnzbd",
+"SABnzbd queue":"סדרא דSABnzbd",
+"{n} finished":"{n} שלמו",
+"{n} folders":"{n} תיקין",
+"{n} in the queue":"{n} בסדרא",
+"pause and resume your SABnzbd downloads (asking you each time)":"לבטול ולמשרי מיגררין דSABnzbd (שאל לך כל זמן)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"למקרי SABnzbd: סדרא דמיתגרר, אסתוריא ומקום דיתר בדיסקא דמיתגרר"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2113,7 +2128,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"לית כתבא דלבנין רשים, אדין דפא לא מציטא לסדרא הדין למעל (מן דפא עתיקתא אתפיק)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"כתבא דלבנין דרשים בסדרא הדין לא מציטא לקריא, אדין דפא לא מציטא למעל",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"כתבא דלבנין דרשים בסדרא הדין לא שמר תקנתא ({problem}), אדין דפא אולי לא מציטא למעל",
-"the block file inside this program matches the format, so the page can import it again":"כתבא דלבנין דבסדרא הדין שמר תקנתא, אדין דפא מציטא למעל"
+"the block file inside this program matches the format, so the page can import it again":"כתבא דלבנין דבסדרא הדין שמר תקנתא, אדין דפא מציטא למעל",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd מתבטל או מתשרי יכיל.",
+"SABnzbd diskspace":"מקום דיסקא דSABnzbd",
+"SABnzbd history":"אסתוריא דSABnzbd",
+"SABnzbd queue":"סדרא דSABnzbd",
+"{n} finished":"{n} שלמו",
+"{n} folders":"{n} תיקין",
+"{n} in the queue":"{n} בסדרא",
+"Downloading":"מתגרר",
+"Paused":"מתבטל",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought לא משדר {what} לSABnzbd.",
+"{n} MB left":"{n} MB אתרו",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd צריך SABNZBD_URL וSABNZBD_API_KEY {where_keys}: אתריה (כות http://sabnzbd:8080) ומנתקא דAPI כלילא, בSABnzbd תחות Config, General, API Key.",
+"pause SABnzbd's queue":"לבטול סדרא דSABnzbd",
+"resume SABnzbd's queue":"למשרי סדרא דSABnzbd"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

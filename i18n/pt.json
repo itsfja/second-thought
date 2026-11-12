@@ -664,6 +664,22 @@
   "rb_docker_power": {
    "message0": "%1 o contentor do Docker %2",
    "tooltip": "Reinicia, para ou inicia um contentor, pelo nome. Pergunta-lhe sempre antes, mesmo quando nada mais pergunta, e sem ninguém para dizer que sim não acontece. Os contentores em DOCKER_PROTECT nunca são tocados. Nesta página nada reinicia de verdade."
+  },
+  "rb_sabnzbd_queue": {
+   "message0": "fila do SABnzbd",
+   "tooltip": "Uma lista de registos, um por cada trabalho na fila de descargas: name, size_mb, left_mb, percent, eta (tempo restante, como 0:12:34) e status (Downloading, Queued, Paused). Nesta página usa uma fila de exemplo."
+  },
+  "rb_sabnzbd_history": {
+   "message0": "histórico do SABnzbd, últimas %1 horas",
+   "tooltip": "Uma lista de registos, um por cada trabalho terminado nesse tempo: name, status (Completed ou Failed), size_mb, quando terminou e, numa falha, porque falhou."
+  },
+  "rb_sabnzbd_diskspace": {
+   "message0": "espaço em disco do SABnzbd",
+   "tooltip": "Uma lista de registos, um por cada pasta do SABnzbd (a pasta de descargas primeiro): folder e free_gb."
+  },
+  "rb_sabnzbd_pause": {
+   "message0": "%1 SABnzbd",
+   "tooltip": "Põe em pausa ou retoma toda a fila de descargas. Pergunta-to sempre, mesmo quando mais nada o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada fica em pausa a sério."
   }
  },
  "options": {
@@ -835,7 +851,8 @@
   "Powerwall": "Powerwall",
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
-  "Docker": "Docker"
+  "Docker": "Docker",
+  "SABnzbd": "SABnzbd"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Ferramentas para o agente: coloque-as dentro de um bloco de agente",
@@ -1690,7 +1707,17 @@
   "battery at {pct}%": "bateria a {pct}%",
   "set the Powerwall backup reserve to {n}% (now {old}%)": "pôr a reserva de backup do Powerwall em {n}% (agora {old}%)",
   "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps": "ler os números do teu Powerwall: carga da bateria, solar, importação e exportação da rede, e a reserva que guarda",
-  "set your Powerwall's backup reserve (asking you each time)": "mudar a reserva de backup do teu Powerwall (perguntando-te cada vez)"
+  "set your Powerwall's backup reserve (asking you each time)": "mudar a reserva de backup do teu Powerwall (perguntando-te cada vez)",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd pode ser pausado ou retomado.",
+  "SABnzbd diskspace": "espaço em disco do SABnzbd",
+  "SABnzbd history": "histórico do SABnzbd",
+  "SABnzbd queue": "fila do SABnzbd",
+  "{n} finished": "{n} concluídos",
+  "{n} folders": "{n} pastas",
+  "{n} in the queue": "{n} na fila",
+  "pause and resume your SABnzbd downloads (asking you each time)": "pôr em pausa e retomar as tuas descargas do SABnzbd (perguntando-to cada vez)",
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "ler o teu SABnzbd: a fila de descargas, o histórico e o espaço livre do disco de descargas"
  },
  "examples": {
   "review": {
@@ -3350,6 +3377,23 @@
   "no block file embedded, so the page can't import this program again (it was exported by an older page)": "nenhum ficheiro de blocos incorporado, por isso a página não pode importar este programa outra vez (foi exportado por uma página mais antiga)",
   "the block file embedded in this program isn't readable, so the page can't import it again": "o ficheiro de blocos incorporado neste programa não se consegue ler, por isso a página não o pode importar outra vez",
   "the block file embedded in this program breaks the format ({problem}), so the page may not import it again": "o ficheiro de blocos incorporado neste programa não cumpre o formato ({problem}), por isso a página pode não conseguir importá-lo outra vez",
-  "the block file inside this program matches the format, so the page can import it again": "o ficheiro de blocos dentro deste programa cumpre o formato, por isso a página o pode importar outra vez"
+  "the block file inside this program matches the format, so the page can import it again": "o ficheiro de blocos dentro deste programa cumpre o formato, por isso a página o pode importar outra vez",
+  "SABnzbd": "SABnzbd",
+  "SABnzbd can be paused or resumed.": "SABnzbd pode ser pausado ou retomado.",
+  "SABnzbd diskspace": "espaço em disco do SABnzbd",
+  "SABnzbd history": "histórico do SABnzbd",
+  "SABnzbd queue": "fila do SABnzbd",
+  "{n} finished": "{n} concluídos",
+  "{n} folders": "{n} pastas",
+  "{n} in the queue": "{n} na fila",
+  "Downloading": "A descarregar",
+  "Paused": "Em pausa",
+  "SABnzbd {version}": "SABnzbd {version}",
+  "SABnzbd: {why}.": "SABnzbd: {why}.",
+  "Second Thought doesn't send {what} to SABnzbd.": "O Second Thought não envia {what} ao SABnzbd.",
+  "{n} MB left": "{n} MB restantes",
+  "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "O SABnzbd precisa de SABNZBD_URL e SABNZBD_API_KEY {where_keys}: o seu endereço (como http://sabnzbd:8080) e a chave API completa, no SABnzbd em Config, General, API Key.",
+  "pause SABnzbd's queue": "pôr em pausa a fila do SABnzbd",
+  "resume SABnzbd's queue": "retomar a fila do SABnzbd"
  }
 }

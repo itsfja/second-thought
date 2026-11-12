@@ -87,7 +87,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -151,7 +151,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY")
 
 
 def _load_keychain():
@@ -1127,6 +1127,11 @@ SAFETY = {
     # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
     "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
     "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
+    # SABnzbd's API (#397): one endpoint whose mode says what's asked for, so the gate matches the mode. The reads the
+    # runtime makes, and pause and resume, which need a live yes. Nothing else is ever sent: no adding or deleting jobs,
+    # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
+    "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
+    "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1279,6 +1284,16 @@ def docker_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
+            return kind
+    return None
+
+
+def sabnzbd_call(method, mode):
+    """"free" for a SABnzbd call the runtime makes without asking, "asks" for pause and resume, which need a live yes,
+    and None for anything else, which is never sent (#397)."""
+    method, mode = to_str(method).strip().upper(), to_str(mode).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
             return kind
     return None
 
@@ -1718,6 +1733,7 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
+    ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -1726,6 +1742,7 @@ CAPABILITIES = [
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
+    ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
@@ -4069,6 +4086,89 @@ class Connections:
             return False
         await self._docker("POST", f"/containers/{name}/{action}", approved=True)
         self.log(tr("Docker"), what, tr("done"))
+        return True
+
+    # SABnzbd (#397)
+    # SABnzbd's API: SABNZBD_URL (like http://sabnzbd:8080) and SABNZBD_API_KEY, the full API key (Config, General,
+    # API Key), not the NZB key. Reads are the modes in SAFETY["sabnzbd_free"]; pause and resume (sabnzbd_asks) always
+    # ask, live, and never run with nobody there; nothing else is ever sent: no adding, deleting or retrying jobs, no
+    # speedlimit, no config, no shutdown. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, as for
+    # MikroTik and UniFi.
+    SABNZBD_PAUSE = ("pause", "resume")
+
+    async def _sabnzbd(self, mode, extra=None, approved=False):
+        kind = sabnzbd_call("GET", mode)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to SABnzbd.", what=mode))
+        base, key = os.environ.get("SABNZBD_URL", "").strip().rstrip("/"), os.environ.get("SABNZBD_API_KEY", "").strip()
+        if not base or not key:
+            raise RunError(tr("SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.", where_keys=WHERE_KEYS))
+        query = {"mode": mode, "output": "json", "apikey": key, **(extra or {})}
+        status, raw = await self._pinned("SABnzbd", base, "SABNZBD_CERT_SHA256", "GET", "/api?" + urllib.parse.urlencode(query), {})
+        said = json.loads(raw) if raw.strip() else {}
+        if status >= 400 or (isinstance(said, dict) and said.get("status") is False):
+            why = to_str(said.get("error")) if isinstance(said, dict) else ""
+            raise RunError(tr("SABnzbd: {why}.", why=why or self._said(status, raw)))
+        return said
+
+    async def sabnzbd_queue(self):
+        """What's in the queue now: a list of records, one for each job — name, size_mb, left_mb, percent, eta (time
+        left, like 0:12:34) and status (Downloading, Queued, Paused). The log step says whether the whole queue is
+        paused and how fast it's going."""
+        q = (await self._sabnzbd("queue")).get("queue") or {}
+        out = [{"name": to_str(s.get("filename")), "size_mb": self._cents(num(s.get("mb"))), "left_mb": self._cents(num(s.get("mbleft"))),
+                "percent": self._cents(num(s.get("percentage"))), "eta": to_str(s.get("timeleft")) or "0:00:00",
+                "status": to_str(s.get("status"))} for s in q.get("slots") or [] if isinstance(s, dict)]
+        state = tr("Paused") if to_str(q.get("paused")).lower() == "true" or q.get("paused") is True else tr("Downloading")
+        lines = "\n".join(f"{s['name']}: {s['left_mb']} MB left ({s['percent']}%)" for s in out)
+        self.log(tr("SABnzbd queue"), (state + ", " + tr("{n} MB left", n=self._cents(num(q.get("mbleft"))))) + ("\n" + lines if lines else ""),
+                 tr("{n} in the queue", n=len(out)))
+        return out
+
+    async def sabnzbd_history(self, hours=24):
+        """What finished recently: a list of records, one for each job in the history — name, status (Completed or
+        Failed), size_mb, when it finished and, for a failure, why it failed."""
+        n = max(1, min(500, int(num(hours) or 24)))
+        h = (await self._sabnzbd("history", {"limit": str(n * 10)})).get("history") or {}
+        cutoff = time.time() - n * 3600
+        out = []
+        for s in h.get("slots") or []:
+            if not isinstance(s, dict):
+                continue
+            when = num(s.get("completed"))
+            if when and when < cutoff:
+                continue
+            out.append({"name": to_str(s.get("name")), "status": to_str(s.get("status")), "size_mb": self._cents(num(s.get("bytes")) / 1048576) if s.get("bytes") else "",
+                        "when": datetime.datetime.fromtimestamp(when).strftime("%Y-%m-%d %H:%M") if when else "",
+                        "why": to_str(s.get("fail_message")) if to_str(s.get("status")).lower() == "failed" else ""})
+        out.reverse()  # oldest first, like the queue
+        lines = "\n".join(f"{s['name']}: {s['status']}" for s in out)
+        self.log(tr("SABnzbd history"), lines or tr("(nothing)"), tr("{n} finished", n=len(out)))
+        return out
+
+    async def sabnzbd_diskspace(self):
+        """Each of SABnzbd's folders (the download folder first) and its free space in GB."""
+        rows = (await self._sabnzbd("diskspace")).get("diskspace") or []
+        out = [{"folder": to_str(r[0]), "free_gb": self._cents(num(r[1]))} for r in rows if isinstance(r, list) and len(r) >= 2]
+        lines = "\n".join(f"{d['folder']}: {d['free_gb']} GB free" for d in out)
+        self.log(tr("SABnzbd diskspace"), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
+        return out
+
+    async def sabnzbd_pause(self, action):
+        """Pauses or resumes the whole queue, after asking you, every time. Gives back True if it was done."""
+        action = to_str(action).strip().lower()
+        if action not in self.SABNZBD_PAUSE:
+            raise RunError(tr("SABnzbd can be paused or resumed."))
+        q = (await self._sabnzbd("queue")).get("queue") or {}
+        what = (tr("pause SABnzbd's queue") if action == "pause" else tr("resume SABnzbd's queue")) + \
+            (f" ({self._cents(num(q.get('mbleft')))} MB left, {len(q.get('slots') or [])} in the queue)")
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._sabnzbd("pause" if action == "pause" else "resume", approved=True)
+        self.log(tr("SABnzbd"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -6911,6 +7011,11 @@ class Doctor:
                 n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
                 return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
             out.append(("Docker", docker))
+        if has("sabnzbd_read", "sabnzbd_control"):
+            async def sabnzbd():
+                q = (await self._sabnzbd("queue")).get("queue") or {}
+                return tr("SABnzbd {version}", version=to_str(q.get("version")) or "?") + ", " + tr("{n} in the queue", n=len(q.get("slots") or []))
+            out.append(("SABnzbd", sabnzbd))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -7226,7 +7331,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 

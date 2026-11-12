@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"Docker-containers","tooltip":"Een lijst met records, één voor elke container, draaiend of niet: name, image, state, status, health (healthy, unhealthy, of leeg zonder gezondheidscontrole), restarts en started. Op deze pagina gebruikt hij een voorbeeldstack."},
 "rb_docker_stats":{"message0":"Docker-geheugen en -CPU","tooltip":"Een lijst met records, één voor elke draaiende container: name, cpu (%), memory_mb, limit_mb (het geheugen van de machine, bij een container zonder limiet) en memory (% van de limiet)."},
 "rb_docker_logs":{"message0":"Docker-logs van %1, laatste %2 regels","tooltip":"De laatste regels die een container schreef, uitvoer en fouten samen, de oudste eerst."},
-"rb_docker_power":{"message0":"Docker-container %2 %1","tooltip":"Herstart, stopt of start één container, op zijn naam. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Containers in DOCKER_PROTECT worden nooit aangeraakt. Op deze pagina herstart er niets echt."}
+"rb_docker_power":{"message0":"Docker-container %2 %1","tooltip":"Herstart, stopt of start één container, op zijn naam. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Containers in DOCKER_PROTECT worden nooit aangeraakt. Op deze pagina herstart er niets echt."},
+"rb_sabnzbd_queue":{"message0":"SABnzbd-wachtrij","tooltip":"Een lijst met records, één voor elke taak in de downloadwachtrij: name, size_mb, left_mb, percent, eta (resterende tijd, zoals 0:12:34) en status (Downloading, Queued, Paused). Op deze pagina gebruikt het een voorbeeldwachtrij."},
+"rb_sabnzbd_history":{"message0":"SABnzbd-geschiedenis, laatste %1 uur","tooltip":"Een lijst met records, één voor elke taak die in die tijd klaar is: name, status (Completed of Failed), size_mb, wanneer hij klaar was en, bij een mislukking, waarom hij mislukte."},
+"rb_sabnzbd_diskspace":{"message0":"SABnzbd-schijfruimte","tooltip":"Een lijst met records, één voor elke map van SABnzbd (de downloadmap eerst): folder en free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Pauzeert of hervat de hele downloadwachtrij. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina pauzeert er niets echt."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"elke dag","weekdays":"op werkdagen","weekends":"in het weekend"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Hulpmiddelen voor de agent: zet ze in een agentblok",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"batterij op {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"de back-upreserve van de Powerwall op {n}% zetten (nu {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"de cijfers van je Powerwall lezen: batterijlading, zon, netinvoer en -export, en de reserve die hij vasthoudt",
-"set your Powerwall's backup reserve (asking you each time)":"de back-upreserve van je Powerwall instellen (vraagt je elke keer)"
+"set your Powerwall's backup reserve (asking you each time)":"de back-upreserve van je Powerwall instellen (vraagt je elke keer)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd kan worden gepauzeerd of hervat.",
+"SABnzbd diskspace":"SABnzbd-schijfruimte",
+"SABnzbd history":"SABnzbd-geschiedenis",
+"SABnzbd queue":"SABnzbd-wachtrij",
+"{n} finished":"{n} afgerond",
+"{n} folders":"{n} mappen",
+"{n} in the queue":"{n} in de wachtrij",
+"pause and resume your SABnzbd downloads (asking you each time)":"je SABnzbd-downloads pauzeren en hervatten (elke keer aan je gevraagd)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"je SABnzbd lezen: de downloadwachtrij, de geschiedenis en de vrije ruimte op de downloadschijf"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2112,6 +2127,23 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"geen blokkenbestand ingebed, dus de pagina kan dit programma niet opnieuw importeren (het is geëxporteerd door een oudere pagina)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"het in dit programma ingebedde blokkenbestand is niet leesbaar, dus de pagina kan het niet opnieuw importeren",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"het in dit programma ingebedde blokkenbestand volgt het formaat niet ({problem}), dus de pagina kan het misschien niet opnieuw importeren",
-"the block file inside this program matches the format, so the page can import it again":"het blokkenbestand in dit programma volgt het formaat, dus de pagina kan het opnieuw importeren"
+"the block file inside this program matches the format, so the page can import it again":"het blokkenbestand in dit programma volgt het formaat, dus de pagina kan het opnieuw importeren",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd kan worden gepauzeerd of hervat.",
+"SABnzbd diskspace":"SABnzbd-schijfruimte",
+"SABnzbd history":"SABnzbd-geschiedenis",
+"SABnzbd queue":"SABnzbd-wachtrij",
+"{n} finished":"{n} afgerond",
+"{n} folders":"{n} mappen",
+"{n} in the queue":"{n} in de wachtrij",
+"Downloading":"Downloaden",
+"Paused":"Gepauzeerd",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought stuurt {what} niet naar SABnzbd.",
+"{n} MB left":"{n} MB over",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd heeft SABNZBD_URL en SABNZBD_API_KEY nodig {where_keys}: het adres (zoals http://sabnzbd:8080) en de volledige API-sleutel, in SABnzbd onder Config, General, API Key.",
+"pause SABnzbd's queue":"de wachtrij van SABnzbd pauzeren",
+"resume SABnzbd's queue":"de wachtrij van SABnzbd hervatten"
 }
 };

@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"Docker-भाजनानि","tooltip":"अभिलेखानं सूचि, पतिभाजनं एको, धावन्तस्स अधावन्तस्स वा: name, image, state, status, health (healthy, unhealthy, आरोग्य-वीमंसं विना तुच्छं वा), restarts, started च। इमस्मिं पिट्ठे निदस्सन-रासिं गण्हाति।"},
 "rb_docker_stats":{"message0":"Docker-सति CPU च","tooltip":"अभिलेखानं सूचि, पति धावन्तं भाजनं एको: name, cpu (%), memory_mb, limit_mb (सीमारहितस्स भाजनस्स यन्तस्स सति), memory (सीमाय %) च।"},
 "rb_docker_logs":{"message0":"%1 स्स Docker-लेखा, पच्छिमा %2 पन्तियो","tooltip":"भाजनेन लिखिता पच्छिमा पन्तियो, तस्स निग्गमो दोसा च एकतो, पुराणतमा पठमं।"},
-"rb_docker_power":{"message0":"Docker-भाजनं %2 %1","tooltip":"एकं भाजनं तस्स नामानुसारेन पुन आरभति, ठपेति, आरभति वा। सदा पठमं तं पुच्छति, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। DOCKER_PROTECT स्स भाजनानि कदापि न फुसीयन्ति। इमस्मिं पिट्ठे किञ्चि सच्चतो न पुन आरभति।"}
+"rb_docker_power":{"message0":"Docker-भाजनं %2 %1","tooltip":"एकं भाजनं तस्स नामानुसारेन पुन आरभति, ठपेति, आरभति वा। सदा पठमं तं पुच्छति, यदा अञ्ञं किञ्चि न पुच्छति तदापि; आम इति वत्तुं कोचि नत्थि चे न पवत्तति। DOCKER_PROTECT स्स भाजनानि कदापि न फुसीयन्ति। इमस्मिं पिट्ठे किञ्चि सच्चतो न पुन आरभति।"},
+"rb_sabnzbd_queue":{"message0":"SABnzbd mālā","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi kammānaṃ mālāyaṃ oropanāya: name, size_mb, left_mb, percent, eta (avasista kālo, yathā 0:12:34) ca status (Downloading, Queued, Paused). Imasmiṃ panaṭṭhe mālā desanāya."},
+"rb_sabnzbd_history":{"tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi kammānaṃ tasmiṃ kāle pariniṭṭhitānaṃ: name, status (Completed vā Failed vā), size_mb, kadā pariniṭṭhitaṃ ca, upaddhassa, kasmā upaddhaṃ.","message0":"SABnzbd atīta, pacchimāni %1 saddā"},
+"rb_sabnzbd_diskspace":{"message0":"SABnzbd okāsa","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi SABnzbd piṭakānaṃ (oropana-piṭakaṃ paṭhamaṃ): folder ca free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Sabbampi mālāṃ oropanaṃ ṭhapeti vā puna ārabhati vā. Taṃ taṃ kāle taṃ paṭipucchati, yasmiṃ añño na paṭipucchati, ca yasmiṃ natthi kenaci 'sādhu'ti vattuṃ, na hoti. Imasmiṃ panaṭṭhe kiñci na ṭhapeti."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"सब्बदिवसे","weekdays":"कम्मदिवसेसु","weekends":"सत्ताहन्तेसु"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"battariya {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-ssa parikkhayaṃ {n}% kātuṃ (idaani {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"Powerwall-ssa saṅkhyāni paṭhituṃ: battariya-pūraṇa, sūra, āyana-vijja, paṭikkhaya ca",
-"set your Powerwall's backup reserve (asking you each time)":"Powerwall-ssa parikkhayaṃ parivattetuṃ (tvaṃ pucchatī ekeke vāre)"
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall-ssa parikkhayaṃ parivattetuṃ (tvaṃ pucchatī ekeke vāre)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd ṭhapetuṃ, puna ārabhituṃ vā sakkā.",
+"SABnzbd diskspace":"SABnzbd okāsa",
+"SABnzbd history":"SABnzbd atīta",
+"SABnzbd queue":"SABnzbd mālā",
+"{n} finished":"{n} pariniṭṭhitāni",
+"{n} folders":"{n} piṭakāni",
+"{n} in the queue":"{n} mālāyaṃ",
+"pause and resume your SABnzbd downloads (asking you each time)":"SABnzbd oropanā ṭhapetuṃ puna ārabhituṃ (taṃ kāle paṭipucchati)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd vāvakaṃ oropanāya, atīta ca piṭakaṃ oropanaṃ okāso"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2112,7 +2127,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"blokkasaṅghāto na ajjhotthito, tasmā patthā imassa kiccakkammassa puna ānetuṃ na sakkhissati (purāṇatarāya patthāya nīto)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"imasmiṃ kiccakkamme ajjhotthito blokkasaṅghāto na sakkhi paṭhetuṃ, tasmā patthā taṃ puna ānetuṃ na sakkhissati",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"imasmiṃ kiccakkamme ajjhotthito blokkasaṅghāto ākāraṃ na rakkhati ({problem}), tasmā patthā taṃ puna ānetuṃ na sakkhissatiyeva",
-"the block file inside this program matches the format, so the page can import it again":"imasmiṃ kiccakkamme ajjhotthito blokkasaṅghāto ākāraṃ rakkhati, tasmā patthā taṃ puna ānetuṃ sakkhissati"
+"the block file inside this program matches the format, so the page can import it again":"imasmiṃ kiccakkamme ajjhotthito blokkasaṅghāto ākāraṃ rakkhati, tasmā patthā taṃ puna ānetuṃ sakkhissati",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd ṭhapetuṃ, puna ārabhituṃ vā sakkā.",
+"SABnzbd diskspace":"SABnzbd okāsa",
+"SABnzbd history":"SABnzbd atīta",
+"SABnzbd queue":"SABnzbd mālā",
+"{n} finished":"{n} pariniṭṭhitāni",
+"{n} folders":"{n} piṭakāni",
+"{n} in the queue":"{n} mālāyaṃ",
+"Downloading":"Oropayamāna",
+"Paused":"Ṭhapita",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought {what} SABnzbd pati na peseti.",
+"{n} MB left":"{n} MB avasiṭṭha",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd SABNZBD_URL ca SABNZBD_API_KEY ca icchati {where_keys}: tassa ṭhānaṃ (yathā http://sabnzbd:8080) ca paripuṇṇā API-kuñjikā, SABnzbd majjhe Config, General, API Key.",
+"pause SABnzbd's queue":"SABnzbd-mālā ṭhapetuṃ",
+"resume SABnzbd's queue":"SABnzbd-mālā puna ārabhituṃ"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"containers του Docker","tooltip":"Μια λίστα εγγραφών, μία για κάθε container, είτε τρέχει είτε όχι: name, image, state, status, health (healthy, unhealthy, ή κενό χωρίς έλεγχο υγείας), restarts και started. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα στοίβας."},
 "rb_docker_stats":{"message0":"μνήμη και CPU του Docker","tooltip":"Μια λίστα εγγραφών, μία για κάθε container που τρέχει: name, cpu (%), memory_mb, limit_mb (η μνήμη του μηχανήματος, για container χωρίς όριο) και memory (% του ορίου)."},
 "rb_docker_logs":{"message0":"αρχεία καταγραφής Docker του %1, τελευταίες %2 γραμμές","tooltip":"Οι τελευταίες γραμμές που έγραψε ένα container, η έξοδος και τα σφάλματά του μαζί, η παλαιότερη πρώτα."},
-"rb_docker_power":{"message0":"%1 το container του Docker %2","tooltip":"Επανεκκινεί, σταματά ή ξεκινά ένα container, με το όνομά του. Σας ρωτά πάντα πρώτα, ακόμη κι όταν τίποτε άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι δεν εκτελείται. Τα containers στο DOCKER_PROTECT δεν αγγίζονται ποτέ. Σε αυτή τη σελίδα τίποτα δεν επανεκκινείται στ' αλήθεια."}
+"rb_docker_power":{"message0":"%1 το container του Docker %2","tooltip":"Επανεκκινεί, σταματά ή ξεκινά ένα container, με το όνομά του. Σας ρωτά πάντα πρώτα, ακόμη κι όταν τίποτε άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι δεν εκτελείται. Τα containers στο DOCKER_PROTECT δεν αγγίζονται ποτέ. Σε αυτή τη σελίδα τίποτα δεν επανεκκινείται στ' αλήθεια."},
+"rb_sabnzbd_queue":{"message0":"ουρά SABnzbd","tooltip":"Μια λίστα εγγραφών, μία για κάθε εργασία στην ουρά λήψης: name, size_mb, left_mb, percent, eta (υπόλοιπο χρόνου, όπως 0:12:34) και status (Downloading, Queued, Paused). Σε αυτή τη σελίδα χρησιμοποιεί δείγμα ουράς."},
+"rb_sabnzbd_history":{"message0":"ιστορικό SABnzbd, τελευταίες %1 ώρες","tooltip":"Μια λίστα εγγραφών, μία για κάθε εργασία που τελείωσε σε αυτό το διάστημα: name, status (Completed ή Failed), size_mb, πότε τελείωσε και, για αποτυχία, γιατί απέτυχε."},
+"rb_sabnzbd_diskspace":{"message0":"χώρος δίσκου SABnzbd","tooltip":"Μια λίστα εγγραφών, μία για κάθε φάκελο του SABnzbd (πρώτα ο φάκελος λήψης): folder και free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Βάζει σε παύση ή συνεχίζει όλη την ουρά λήψης. Σε ρωτά κάθε φορά, ακόμα κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν παύεται πραγματικά."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"κάθε μέρα","weekdays":"τις καθημερινές","weekends":"τα Σαββατοκύριακα"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"μπαταρία στο {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"να βάλει την εφεδρικήreserve του Powerwall σε {n}% (τώρα {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"να διαβάζει τα στοιχεία του Powerwall σας: φόρτιση μπαταρίας, ηλιακά, εισαγωγή και εξαγωγή δικτύου, και η reserve που κρατά",
-"set your Powerwall's backup reserve (asking you each time)":"να αλλάζει την εφεδρική reserve του Powerwall σας (ρωτώντας σας κάθε φορά)"
+"set your Powerwall's backup reserve (asking you each time)":"να αλλάζει την εφεδρική reserve του Powerwall σας (ρωτώντας σας κάθε φορά)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"Το SABnzbd μπορεί να τεθεί σε παύση ή να συνεχίσει.",
+"SABnzbd diskspace":"χώρος δίσκου SABnzbd",
+"SABnzbd history":"ιστορικό SABnzbd",
+"SABnzbd queue":"ουρά SABnzbd",
+"{n} finished":"{n} ολοκληρώθηκαν",
+"{n} folders":"{n} φάκελοι",
+"{n} in the queue":"{n} στην ουρά",
+"pause and resume your SABnzbd downloads (asking you each time)":"να θέτεις σε παύση και να συνεχίζεις τις λήψεις σου από το SABnzbd (ρώτησέ σε κάθε φορά)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"να διαβάζεις το SABnzbd σου: την ουρά λήψης, το ιστορικό και τον ελεύθερο χώρο του δίσκου λήψης"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2112,6 +2127,23 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"δεν υπάρχει ενσωματωμένο αρχείο μπλοκ, οπότε η σελίδα δεν μπορεί να εισαγάγει ξανά αυτό το πρόγραμμα (εξήχθη από μια παλιότερη σελίδα)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"το ενσωματωμένο αρχείο μπλοκ σε αυτό το πρόγραμμα δεν διαβάζεται, οπότε η σελίδα δεν μπορεί να το εισαγάγει ξανά",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"το ενσωματωμένο αρχείο μπλοκ σε αυτό το πρόγραμμα δεν τηρεί τη μορφή ({problem}), οπότε ίσως η σελίδα να μην μπορεί να το εισαγάγει ξανά",
-"the block file inside this program matches the format, so the page can import it again":"το αρχείο μπλοκ μέσα σε αυτό το πρόγραμμα τηρεί τη μορφή, οπότε η σελίδα μπορεί να το εισαγάγει ξανά"
+"the block file inside this program matches the format, so the page can import it again":"το αρχείο μπλοκ μέσα σε αυτό το πρόγραμμα τηρεί τη μορφή, οπότε η σελίδα μπορεί να το εισαγάγει ξανά",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"Το SABnzbd μπορεί να τεθεί σε παύση ή να συνεχίσει.",
+"SABnzbd diskspace":"χώρος δίσκου SABnzbd",
+"SABnzbd history":"ιστορικό SABnzbd",
+"SABnzbd queue":"ουρά SABnzbd",
+"{n} finished":"{n} ολοκληρώθηκαν",
+"{n} folders":"{n} φάκελοι",
+"{n} in the queue":"{n} στην ουρά",
+"Downloading":"Γίνεται λήψη",
+"Paused":"Σε παύση",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Το Second Thought δεν στέλνει {what} στο SABnzbd.",
+"{n} MB left":"{n} MB απομένουν",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"Το SABnzbd χρειάζεται SABNZBD_URL και SABNZBD_API_KEY {where_keys}: τη διεύθυνσή του (όπως http://sabnzbd:8080) και το πλήρες κλειδί API, στο SABnzbd υπό Config, General, API Key.",
+"pause SABnzbd's queue":"παύση της ουράς του SABnzbd",
+"resume SABnzbd's queue":"συνέχιση της ουράς του SABnzbd"
 }
 };

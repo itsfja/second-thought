@@ -172,7 +172,11 @@
 "rb_docker_containers":{"message0":"contenedores de Docker","tooltip":"Una lista de registros, uno por cada contenedor, en marcha o no: name, image, state, status, health (healthy, unhealthy o vacío si no hay comprobación de salud), restarts y started. En esta página usa una pila de ejemplo."},
 "rb_docker_stats":{"message0":"memoria y CPU de Docker","tooltip":"Una lista de registros, uno por cada contenedor en marcha: name, cpu (%), memory_mb, limit_mb (la memoria de la máquina, si el contenedor no tiene límite) y memory (% del límite)."},
 "rb_docker_logs":{"message0":"registros de Docker de %1, últimas %2 líneas","tooltip":"Las últimas líneas que escribió un contenedor, su salida y sus errores juntos, la más antigua primero."},
-"rb_docker_power":{"message0":"%1 contenedor de Docker %2","tooltip":"Reinicia, detiene o arranca un contenedor, por su nombre. Siempre te pregunta antes, aunque nada más pregunte, y si no hay nadie para decir que sí, no se hace. Los contenedores en DOCKER_PROTECT nunca se tocan. En esta página nada se reinicia de verdad."}
+"rb_docker_power":{"message0":"%1 contenedor de Docker %2","tooltip":"Reinicia, detiene o arranca un contenedor, por su nombre. Siempre te pregunta antes, aunque nada más pregunte, y si no hay nadie para decir que sí, no se hace. Los contenedores en DOCKER_PROTECT nunca se tocan. En esta página nada se reinicia de verdad."},
+"rb_sabnzbd_queue":{"message0":"cola de SABnzbd","tooltip":"Una lista de registros, uno por cada tarea en la cola de descargas: name, size_mb, left_mb, percent, eta (tiempo restante, como 0:12:34) y status (Downloading, Queued, Paused). En esta página usa una cola de ejemplo."},
+"rb_sabnzbd_history":{"message0":"historial de SABnzbd, últimas %1 horas","tooltip":"Una lista de registros, uno por cada tarea terminada en ese tiempo: name, status (Completed o Failed), size_mb, cuándo terminó y, si falló, por qué falló."},
+"rb_sabnzbd_diskspace":{"message0":"espacio en disco de SABnzbd","tooltip":"Una lista de registros, uno por cada carpeta de SABnzbd (la carpeta de descargas primero): folder y free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Pausa o reanuda toda la cola de descargas. Te lo pregunta siempre, aunque nada más lo haga, y si no hay nadie para decir sí, no ocurre. En esta página nada se pausa de verdad."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos los días","weekdays":"entre semana","weekends":"los fines de semana"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Herramientas para el agente: suéltalas dentro de un bloque de agente",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"batería al {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"poner la reserva de respaldo de la Powerwall al {n}% (ahora {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"leer las cifras de tu Powerwall: carga de la batería, solar, importación y exportación de red, y la reserva que guarda",
-"set your Powerwall's backup reserve (asking you each time)":"cambiar la reserva de respaldo de tu Powerwall (preguntándote cada vez)"
+"set your Powerwall's backup reserve (asking you each time)":"cambiar la reserva de respaldo de tu Powerwall (preguntándote cada vez)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd se puede pausar o reanudar.",
+"SABnzbd diskspace":"espacio en disco de SABnzbd",
+"SABnzbd history":"historial de SABnzbd",
+"SABnzbd queue":"cola de SABnzbd",
+"{n} finished":"{n} terminados",
+"{n} folders":"{n} carpetas",
+"{n} in the queue":"{n} en la cola",
+"pause and resume your SABnzbd downloads (asking you each time)":"pausar y reanudar tus descargas de SABnzbd (preguntándotelo cada vez)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"leer tu SABnzbd: la cola de descargas, su historial y el espacio libre del disco de descargas"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
@@ -2112,6 +2127,23 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"no hay archivo de bloques incrustado, así que la página no puede importar este programa otra vez (lo exportó una página más antigua)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"el archivo de bloques incrustado en este programa no se puede leer, así que la página no puede importarlo otra vez",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"el archivo de bloques incrustado en este programa incumple el formato ({problem}), así que la página podría no poder importarlo otra vez",
-"the block file inside this program matches the format, so the page can import it again":"el archivo de bloques dentro de este programa cumple el formato, así que la página puede importarlo otra vez"
+"the block file inside this program matches the format, so the page can import it again":"el archivo de bloques dentro de este programa cumple el formato, así que la página puede importarlo otra vez",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd se puede pausar o reanudar.",
+"SABnzbd diskspace":"espacio en disco de SABnzbd",
+"SABnzbd history":"historial de SABnzbd",
+"SABnzbd queue":"cola de SABnzbd",
+"{n} finished":"{n} terminados",
+"{n} folders":"{n} carpetas",
+"{n} in the queue":"{n} en la cola",
+"Downloading":"Descargando",
+"Paused":"En pausa",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought no envía {what} a SABnzbd.",
+"{n} MB left":"{n} MB restantes",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd necesita SABNZBD_URL y SABNZBD_API_KEY {where_keys}: su dirección (como http://sabnzbd:8080) y la clave API completa, en SABnzbd bajo Config, General, API Key.",
+"pause SABnzbd's queue":"pausar la cola de SABnzbd",
+"resume SABnzbd's queue":"reanudar la cola de SABnzbd"
 }
 };

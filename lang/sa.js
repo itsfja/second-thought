@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"Docker-पात्राणि","tooltip":"अभिलेखानां सूची, प्रत्येकस्य पात्रस्य एकः, धावतः अधावतः वा: name, image, state, status, health (healthy, unhealthy, स्वास्थ्य-परीक्षां विना रिक्तं वा), restarts, started च। अस्मिन् पृष्ठे उदाहरण-राशिं प्रयुङ्क्ते।"},
 "rb_docker_stats":{"message0":"Docker-स्मृतिः CPU च","tooltip":"अभिलेखानां सूची, प्रत्येकस्य धावतः पात्रस्य एकः: name, cpu (%), memory_mb, limit_mb (सीमारहितस्य पात्रस्य यन्त्रस्य स्मृतिः), memory (सीमायाः %) च।"},
 "rb_docker_logs":{"message0":"%1 इत्यस्य Docker-लेखाः, अन्तिमाः %2 पङ्क्तयः","tooltip":"पात्रेण लिखिताः अन्तिमाः पङ्क्तयः, तस्य निर्गमः दोषाः च एकत्र, प्राचीनतमा प्रथमम्।"},
-"rb_docker_power":{"message0":"Docker-पात्रं %2 %1","tooltip":"एकं पात्रं तस्य नाम अनुसृत्य पुनः आरभते, स्थगयति, आरभते वा। सदा प्रथमं त्वां पृच्छति, यदा अन्यत् किमपि न पृच्छति तदापि; आम् इति वक्तुं कोऽपि नास्ति चेत् न प्रवर्तते। DOCKER_PROTECT इत्यस्य पात्राणि कदापि न स्पृश्यन्ते। अस्मिन् पृष्ठे किमपि सत्यं न पुनः आरभ्यते।"}
+"rb_docker_power":{"message0":"Docker-पात्रं %2 %1","tooltip":"एकं पात्रं तस्य नाम अनुसृत्य पुनः आरभते, स्थगयति, आरभते वा। सदा प्रथमं त्वां पृच्छति, यदा अन्यत् किमपि न पृच्छति तदापि; आम् इति वक्तुं कोऽपि नास्ति चेत् न प्रवर्तते। DOCKER_PROTECT इत्यस्य पात्राणि कदापि न स्पृश्यन्ते। अस्मिन् पृष्ठे किमपि सत्यं न पुनः आरभ्यते।"},
+"rb_sabnzbd_queue":{"message0":"SABnzbd-mālā","tooltip":"Patram patram, ekaikaṃ sarveṣāṃ kāryāṇām āvaropyamāṇa-mālāyām: name, size_mb, left_mb, percent, eta (śiṣṭakālaḥ, yathā 0:12:34) ca status (Downloading, Queued, Paused). Asmin pannāṭake mālā dṛṣṭāntena."},
+"rb_sabnzbd_history":{"tooltip":"Patram patram, ekaikaṃ sarveṣāṃ kāryāṇāṃ tasmin kāle samāptānām: name, status (Completed vā Failed vā), size_mb, kadā samāptam ca, vipaṭṭer, kasmād vipaṭṭam.","message0":"SABnzbd-itivṛttaḥ, uttarāṇi %1 horāḥ"},
+"rb_sabnzbd_diskspace":{"message0":"SABnzbd-avakāśaḥ","tooltip":"Patram patram, ekaikaṃ sarveṣāṃ SABnzbd piṭakāṇām (āvaropana-piṭakaṃ pūrvam): folder ca free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Sarvām api āvaropya-mālāṃ sthagayati vā punar ārabdhate vā. Tavāṃ sarvadā pūrvam praṣṭi, yasmin anyat kiñcin na praṣṭi, ca yasmin kenāpi 'tathā' ity uktuṃ nāsti, tadā na bhavati. Asmin pannāṭake kiñcin na sōbhanaṃ sthagayati."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"प्रतिदिनम्","weekdays":"कार्यदिनेषु","weekends":"सप्ताहान्तेषु"},
@@ -230,7 +234,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"प्रतिनिधेः साधनानि: तानि प्रतिनिधिखण्डस्य अन्तः पातय",
@@ -1085,7 +1090,17 @@
 "battery at {pct}%":"बिजापूर्णता {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall-इत्यस्य बिजारक्षां {n}% कृत्वा स्थापयितुम् (इदानीं {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"भवतः Powerwall-सङ्ख्याः पठितुम्: बिजापूर्णता, सौरिकी, जालस्य आयातः निर्यातः च, रक्षिता च बिजारक्षा",
-"set your Powerwall's backup reserve (asking you each time)":"भवतः Powerwall-इत्यस्य बिजारक्षां परिवर्तयितुम् (प्रत्येकस्मिन् समये त्वां पृच्छति)"
+"set your Powerwall's backup reserve (asking you each time)":"भवतः Powerwall-इत्यस्य बिजारक्षां परिवर्तयितुम् (प्रत्येकस्मिन् समये त्वां पृच्छति)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd sthagituṃ, punar ārabdhuṃ vā śakyate.",
+"SABnzbd diskspace":"SABnzbd-avakāśaḥ",
+"SABnzbd history":"SABnzbd-itivṛttaḥ",
+"SABnzbd queue":"SABnzbd-mālā",
+"{n} finished":"{n} samāptāni",
+"{n} folders":"{n} piṭakāni",
+"{n} in the queue":"mālāyāṃ {n}",
+"pause and resume your SABnzbd downloads (asking you each time)":"SABnzbd āvaropāṇi sthagayituṃ punar ārabdhum (tvāṃ sarvadā praṣṭi)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd paṭhituṃ: āvaropya-mālā, itivṛttam ca āvaropana-diskasya avaśiṣṭam avakāśaḥ"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2113,7 +2128,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"blokkapustakam adhyāropitam na asti, tasmāt patṭā etat kāryakramam punaḥ praveṣṭuṃ na śaknoti (jīrṇatarayā patṭayā niḥsṛtam)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"asmin kāryakrame adhyāropitam blokkapustakam pathituṃ na śakyate, tasmāt patṭā tat punaḥ praveṣṭuṃ na śaknoti",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"asmin kāryakrame adhyāropitam blokkapustakam ākāraṃ na rakṣati ({problem}), tasmāt patṭā tat punaḥ praveṣṭuṃ na śakyeta",
-"the block file inside this program matches the format, so the page can import it again":"asmin kāryakrame blokkapustakam ākāraṃ rakṣati, tasmāt patṭā tat punaḥ praveṣṭuṃ śaknoti"
+"the block file inside this program matches the format, so the page can import it again":"asmin kāryakrame blokkapustakam ākāraṃ rakṣati, tasmāt patṭā tat punaḥ praveṣṭuṃ śaknoti",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd sthagituṃ, punar ārabdhuṃ vā śakyate.",
+"SABnzbd diskspace":"SABnzbd-avakāśaḥ",
+"SABnzbd history":"SABnzbd-itivṛttaḥ",
+"SABnzbd queue":"SABnzbd-mālā",
+"{n} finished":"{n} samāptāni",
+"{n} folders":"{n} piṭakāni",
+"{n} in the queue":"mālāyāṃ {n}",
+"Downloading":"Avaropyate",
+"Paused":"Sthagitaḥ",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought {what} SABnzbd prati na preṣayati.",
+"{n} MB left":"{n} MB avaśiṣṭam",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd SABNZBD_URL ca SABNZBD_API_KEY ca apekṣate {where_keys}: tasya sthānam (yathā http://sabnzbd:8080) ca pūrṇā API-kuñjikā, SABnzbd-madhye Config, General, API Key.",
+"pause SABnzbd's queue":"SABnzbd-mālā sthagayitum",
+"resume SABnzbd's queue":"SABnzbd-mālā punar ārabdhum"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

@@ -2,7 +2,7 @@
 
 [← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · **Connections** · [MCP tools](mcp.md) · [Running exported programs](running.md) · [Program format](program-format.md) · [Settings and models](settings.md)
 
-*What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, MikroTik, UniFi, Proxmox and Docker.*
+*What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, MikroTik, UniFi, Proxmox, Docker and SABnzbd.*
 
 ## Connections
 
@@ -152,6 +152,27 @@ DOCKER_PROTECT = socket-proxy, homeassistant
 **Put a socket proxy in front.** Docker's socket is root on the machine: anything that can write to it can start a container that owns the host. Second Thought sends only what's listed above, but a proxy makes Docker itself refuse the rest. [docker-socket-proxy](https://github.com/Tecnativa/docker-socket-proxy) with `CONTAINERS=1` allows reading containers, their memory and logs; the **Docker** check in `--doctor` also needs `VERSION=1`, which is on by default. If the program restarts, stops or starts containers, add `ALLOW_RESTARTS=1` (restart and stop) and `ALLOW_START=1`, and leave `POST` off: with `POST=1` the proxy would allow exec and creating containers too. Point `DOCKER_HOST` at the proxy, and keep the proxy's port off the internet: plain `tcp://` has no password. For Docker on another machine without a proxy, use TLS (`DOCKER_TLS_VERIFY = 1`, with `ca.pem`, `cert.pem` and `key.pem` in `DOCKER_CERT_PATH`). On Windows, set `DOCKER_HOST` to a `tcp://` address: Docker's named pipe isn't supported. `--doctor` says Docker's version and how many containers it sees.
 
 Docker's own MCP Toolkit is a different thing, a gateway to MCP servers that run in containers; an agent can use it as an [MCP server](mcp.md#docker-mcp-toolkit).
+
+## SABnzbd
+
+The amber **SABnzbd** blocks read your download queue through SABnzbd's API, and can pause and resume it, always asking first:
+
+- **SABnzbd queue**: each job in the queue, with name, size_mb, left_mb, percent, eta (time left, like 0:12:34) and status (Downloading, Queued, Paused). The run log says whether the whole queue is paused and how much is left.
+- **SABnzbd history, last … hours**: each job that finished in that time, with name, status (Completed or Failed), size_mb, when it finished and, for a failure, why it failed.
+- **SABnzbd diskspace**: each of SABnzbd's folders (the download folder first), with folder and free_gb.
+- **pause / resume SABnzbd** asks you every time, even when nothing else does, with how much is left and how many jobs are queued. With nobody there to say yes (a schedule, GitHub Actions), it doesn't run; `approve_by = telegram` asks on your phone instead.
+
+Nothing else is ever sent: no jobs added, deleted or retried, no speed limit, and nothing in the config, the servers or the categories. On the page these blocks use a **sample queue**: two jobs downloading, one that finished overnight and one that failed on missing articles. The gallery program **Queue watch** reports each morning and only reads.
+
+**Using your own SABnzbd.** Set its address and the full API key (Config, General, API Key — not the NZB key, which only adds jobs):
+
+```
+[sabnzbd]
+SABNZBD_URL = http://sabnzbd:8080
+SABNZBD_API_KEY = your-full-key
+```
+
+If SABnzbd is behind HTTPS with a certificate this computer doesn't trust, `SABNZBD_CERT_SHA256` pins it, as for MikroTik and UniFi (`--doctor` shows the fingerprint). `--doctor` says SABnzbd's version and how many jobs are in the queue.
 
 ## Proxmox
 

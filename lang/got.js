@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"𐌺𐌰𐍃𐌰 Docker","tooltip":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌺𐌰𐍃𐌰: name, image, state, status, health (healthy, unhealthy), restarts 𐌾𐌰𐌷 started. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌱𐍂𐌿𐌺𐌴𐌹𐌸 𐌷𐌰𐌽𐍃𐌰𐌹 𐍆𐍂𐌹𐍃𐌰𐌷𐍄𐌰𐌹𐍃."},
 "rb_docker_stats":{"message0":"𐌲𐌰𐌼𐌹𐌽𐌸𐌹 𐌾𐌰𐌷 CPU Docker","tooltip":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍃 𐌱𐍉𐌺𐍉𐍃, 𐌰𐌹𐌽𐌰 𐌳𐌿 𐍈𐌰𐍂𐌾𐌰𐌼𐌼𐌴𐌷 𐌺𐌰𐍃𐌰 𐍂𐌹𐌽𐌽𐌰𐌽𐌳𐌹𐌽: name, cpu (%), memory_mb, limit_mb 𐌾𐌰𐌷 memory (%)."},
 "rb_docker_logs":{"message0":"𐌱𐍉𐌺𐍉𐍃 Docker %1, 𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐌰𐌽𐍃 %2 𐍃𐍄𐍂𐌹𐌺𐌰𐌽𐍃","tooltip":"𐍃𐍀𐌴𐌳𐌿𐌼𐌹𐍃𐍄𐌰𐌹 𐍃𐍄𐍂𐌹𐌺𐍉𐍃 𐌸𐌰𐌹𐌴𐌹 𐌺𐌰𐍃 𐌲𐌰𐌼𐌴𐌻𐌹𐌳𐌰, 𐍃𐌰 𐍆𐌰𐌹𐍂𐌽𐌹𐍃𐍄𐌰 𐍆𐍂𐌿𐌼𐌹𐍃𐍄."},
-"rb_docker_power":{"message0":"%1 𐌺𐌰𐍃 Docker %2","tooltip":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸, 𐌲𐌰𐌰𐌽𐌳𐌴𐌹𐌸 𐌰𐌹𐌸𐌸𐌰𐌿 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸 𐌰𐌹𐌽 𐌺𐌰𐍃 𐌱𐌹 𐌽𐌰𐌼𐌹𐌽. 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌿𐌼𐌹𐍃𐍄 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐌿𐌺; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌰𐌹𐌽𐍃𐌷𐌿𐌽 𐌹𐍃𐍄 𐌾𐌰 𐌵𐌹𐌸𐌰𐌽, 𐌽𐌹 𐌲𐌰𐌲𐌲𐌹𐌸. DOCKER_PROTECT 𐌽𐌹 𐌰𐍄𐍄𐌴𐌺𐌰𐌽𐌳. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸."}
+"rb_docker_power":{"message0":"%1 𐌺𐌰𐍃 Docker %2","tooltip":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸, 𐌲𐌰𐌰𐌽𐌳𐌴𐌹𐌸 𐌰𐌹𐌸𐌸𐌰𐌿 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸 𐌰𐌹𐌽 𐌺𐌰𐍃 𐌱𐌹 𐌽𐌰𐌼𐌹𐌽. 𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉 𐍆𐍂𐌿𐌼𐌹𐍃𐍄 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐌿𐌺; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌰𐌹𐌽𐍃𐌷𐌿𐌽 𐌹𐍃𐍄 𐌾𐌰 𐌵𐌹𐌸𐌰𐌽, 𐌽𐌹 𐌲𐌰𐌲𐌲𐌹𐌸. DOCKER_PROTECT 𐌽𐌹 𐌰𐍄𐍄𐌴𐌺𐌰𐌽𐌳. 𐌰𐌽𐌰 𐌸𐌰𐌼𐌼𐌰 𐌱𐌻𐌰𐌳𐌰 𐌽𐌹 𐍅𐌰𐌹𐌷𐍄 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹𐌸."},
+"rb_sabnzbd_queue":{"message0":"raihda SABnzbd","tooltip":"Færeis bōkō, aina for ƕammeh waurke in raihdai niuhanum: name, size_mb, left_mb, percent, eta (ƕeila þaih, swe 0:12:34) jah status (Downloading, Queued, Paused). Ana þamma blaþa raihda faurstasseins."},
+"rb_sabnzbd_history":{"tooltip":"Færeis bōkō, aina for ƕammeh waurke þata in þizai ƕeilai usfullida wesi: name, status (Completed aiþþau Failed), size_mb, hvan usfullida jah, faur gabrannjan, duƕe gabrann.","message0":"gamelþa SABnzbd, spedostans %1 ƕeila"},
+"rb_sabnzbd_diskspace":{"message0":"rūms SABnzbd","tooltip":"Færeis bōkō, aina for ƕarjai mapai SABnzbd (mapa niuhanais frumista): folder jah free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Gaandjan aiþþau aftra anastodjan allai raihdai niuhanum. Þuk fraihneiþ aiv, þauh þata annar ni fraihneiþ, jah nih mannauþ qipan jā, ni gataujada. Ana þamma blaþa ni waiht sōþaba gaandjada."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐌳𐌰𐌲𐌰 𐍈𐌰𐌼𐌼𐌴𐌷","weekdays":"𐌳𐌰𐌲𐌰𐌼 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌹𐍃","weekends":"𐌳𐌰𐌲𐌰𐌼 𐌲𐌰𐌵𐌿𐌼𐌸𐌰𐌹𐍃"},
@@ -229,7 +233,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𐌷𐌰𐌿𐍃𐌾𐌰𐌽𐌳𐌰𐌽𐍃: 𐍄𐌰𐌿𐌾𐌰𐌽𐌳 𐍃𐍅𐌴𐌸𐌰𐌿𐌷 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰 𐌹𐌽 𐌼𐌴𐌻𐌰 𐍄𐌰𐌿𐌾𐌹𐌸",
@@ -1084,7 +1089,17 @@
 "battery at {pct}%":"𐌱𐌰𐍄𐍄𐌰𐍂𐌹𐌾𐍉 𐌰𐌽𐌰 {pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"Powerwall 𐌱𐌰𐌻𐌰𐌸𐍅𐌰𐌳𐌳𐌾𐌿 𐌳𐌿 {n}% 𐍃𐌰𐍄𐌾𐌰𐌽 (𐌽𐌿 {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"Powerwall 𐌳𐌰𐍄𐌰𐍃 𐌱𐍂𐌿𐌺𐌰𐌽: 𐌱𐌰𐍄𐍄𐌰𐍂𐌹𐌾𐍉𐍃 𐍆𐌿𐌻𐌻𐌹, 𐍃𐌿𐌽𐌾𐍉𐌽𐍃, 𐌹𐌽𐍆𐌰𐍂𐌴𐌹𐌽 𐌾𐌰𐌷 𐌿𐍄𐍆𐌰𐍂𐌴𐌹𐌽, 𐌱𐌰𐌻𐌰𐌸𐍅𐌰𐌳𐌳𐌾ō 𐌸𐌴𐌹 𐌷𐌰𐌱𐌰𐌹𐌸",
-"set your Powerwall's backup reserve (asking you each time)":"Powerwall 𐌱𐌰𐌻𐌰𐌸𐍅𐌰𐌳𐌳𐌾𐌰𐌽 𐌼𐌰𐌹𐌳𐌾𐌰𐌽 (𐌸𐌿𐌺 𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽 𐍈𐌰𐍂𐌾𐌰𐌶𐌿𐌷 𐌼𐌴𐌻)"
+"set your Powerwall's backup reserve (asking you each time)":"Powerwall 𐌱𐌰𐌻𐌰𐌸𐍅𐌰𐌳𐌳𐌾𐌰𐌽 𐌼𐌰𐌹𐌳𐌾𐌰𐌽 (𐌸𐌿𐌺 𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽 𐍈𐌰𐍂𐌾𐌰𐌶𐌿𐌷 𐌼𐌴𐌻)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd 𐌼𐌰𐌲 𐌲𐌰𐌰𐌽𐌳𐌾𐌰𐌽 𐌰𐌹𐌸𐌸𐌰𐌿 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽.",
+"SABnzbd diskspace":"SABnzbd rūms",
+"SABnzbd history":"SABnzbd 𐌲𐌰𐌼𐌴𐌻𐌸𐌰",
+"SABnzbd queue":"SABnzbd 𐍂𐌰𐌹𐌷𐌳𐌰",
+"{n} finished":"{n} 𐌿𐍃𐍆𐌿𐌻𐌻𐌹𐌳𐌰𐌹",
+"{n} folders":"{n} 𐌼𐌰𐍀𐌰𐌽𐍃",
+"{n} in the queue":"{n} 𐌹𐌽 𐍂𐌰𐌹𐌷𐌳𐌰𐌹",
+"pause and resume your SABnzbd downloads (asking you each time)":"niuhanins SABnzbd gaandjan jah aftra anastodjan (þuk fraihnands aiv)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd þeinana niukan: raihda niuhanins, gamelþa jah rūms þaih in diskau niuhanins"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2112,7 +2127,24 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"ni ain blokkabók inn bairada, þannu laufa þo garaidein aftra inn ni mag (fram airizin laufa ussandida was)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"so blokkabók inn þizai garaideinai siggwan ni mag, þannu laufa þo aftra inn ni mag",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"so blokkabók inn þizai garaideinai garuni ni hafai ({problem}), þannu laufa þo aftra inn ni magah",
-"the block file inside this program matches the format, so the page can import it again":"so blokkabók inn þizai garaideinai garu hafai, þannu laufa þo aftra inn mag"
+"the block file inside this program matches the format, so the page can import it again":"so blokkabók inn þizai garaideinai garu hafai, þannu laufa þo aftra inn mag",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"SABnzbd mag gaandjan aiþþau aftra anastodjan.",
+"SABnzbd diskspace":"SABnzbd rūms",
+"SABnzbd history":"SABnzbd gamelþa",
+"SABnzbd queue":"SABnzbd raihda",
+"{n} finished":"{n} usfullidai",
+"{n} folders":"{n} mapans",
+"{n} in the queue":"{n} in raihdai",
+"Downloading":"atniumban",
+"Paused":"gaandans",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought ni sandeiþ {what} du SABnzbd.",
+"{n} MB left":"{n} MB us",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd wili SABNZBD_URL jah SABNZBD_API_KEY {where_keys}: staþ seinana (swe http://sabnzbd:8080) jah anaþar fullu API, in SABnzbd uf Config, General, API Key.",
+"pause SABnzbd's queue":"gaandjan raihda SABnzbd",
+"resume SABnzbd's queue":"aftra anastodjan raihda SABnzbd"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

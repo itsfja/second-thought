@@ -173,7 +173,11 @@
 "rb_docker_containers":{"message0":"מכולות Docker","tooltip":"רשימת רשומות, אחת לכל מכולה, רצה או לא: name, image, state, status, health (healthy, unhealthy, או ריק כשאין בדיקת בריאות), restarts ו-started. בעמוד הזה משמשת מחסנית לדוגמה."},
 "rb_docker_stats":{"message0":"זיכרון ו-CPU של Docker","tooltip":"רשימת רשומות, אחת לכל מכולה שרצה: name, cpu (%), memory_mb, limit_mb (זיכרון המכונה, למכולה בלי מגבלה) ו-memory (% מהמגבלה)."},
 "rb_docker_logs":{"message0":"יומני Docker של %1, %2 השורות האחרונות","tooltip":"השורות האחרונות שמכולה כתבה, הפלט והשגיאות יחד, הישנה ביותר קודם."},
-"rb_docker_power":{"message0":"%1 את מכולת ה-Docker ‏%2","tooltip":"מאתחל, עוצר או מפעיל מכולה אחת, לפי שמה. תמיד שואל קודם, גם כשדבר אחר לא שואל, וכשאין מי שיגיד כן הוא לא רץ. מכולות ב-DOCKER_PROTECT לעולם לא נוגעים בהן. בעמוד הזה שום דבר לא באמת מאותחל."}
+"rb_docker_power":{"message0":"%1 את מכולת ה-Docker ‏%2","tooltip":"מאתחל, עוצר או מפעיל מכולה אחת, לפי שמה. תמיד שואל קודם, גם כשדבר אחר לא שואל, וכשאין מי שיגיד כן הוא לא רץ. מכולות ב-DOCKER_PROTECT לעולם לא נוגעים בהן. בעמוד הזה שום דבר לא באמת מאותחל."},
+"rb_sabnzbd_queue":{"message0":"התור של SABnzbd","tooltip":"רשימת רשומות, אחת לכל משימה בתור ההורדות: name, size_mb, left_mb, percent, eta (זמן שנותר, כמו 0:12:34) ו-status (Downloading, Queued, Paused). בעמוד זה נעשה שימוש בתור לדוגמה."},
+"rb_sabnzbd_history":{"message0":"היסטוריית SABnzbd, %1 שעות אחרונות","tooltip":"רשימת רשומות, אחת לכל משימה שהסתיימה בזמן הזה: name, status (Completed או Failed), size_mb, מתי הסתיימה ו, למשימה שנכשלה, מדוע נכשלה."},
+"rb_sabnzbd_diskspace":{"message0":"שטח הדיסק של SABnzbd","tooltip":"רשימת רשומות, אחת לכל תיקייה של SABnzbd (תיקיית ההורדות קודם): folder ו-free_gb."},
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"משהה או ממשיך את כל תור ההורדות. הוא שואל אותך קודם תמיד, גם כששום דבר אחר לא שואל, ואין אף אחד לומר כן, זה לא קורה. בעמוד זה שום דבר לא מושהה באמת."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יום","weekdays":"בימי חול","weekends":"בסופי שבוע"},
@@ -230,7 +234,8 @@
 "Powerwall":"Powerwall",
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
-"Docker":"Docker"
+"Docker":"Docker",
+"SABnzbd":"SABnzbd"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1085,7 +1090,17 @@
 "battery at {pct}%":"סוללה ב-{pct}%",
 "set the Powerwall backup reserve to {n}% (now {old}%)":"לקבוע את רזרבת הגיבוי של ה-Powerwall ל-{n}% (כעת {old}%)",
 "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps":"לקרוא את נתוני ה-Powerwall שלך: טעינת סוללה, סולארי, ייבוא וייצוא מהרשת, והרזרבה שהוא שומר",
-"set your Powerwall's backup reserve (asking you each time)":"לשנות את רזרבת הגיבוי של ה-Powerwall שלך (שואל אותך בכל פעם)"
+"set your Powerwall's backup reserve (asking you each time)":"לשנות את רזרבת הגיבוי של ה-Powerwall שלך (שואל אותך בכל פעם)",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"אפשר להשהות או להמשיך את SABnzbd.",
+"SABnzbd diskspace":"שטח הדיסק של SABnzbd",
+"SABnzbd history":"היסטוריית SABnzbd",
+"SABnzbd queue":"התור של SABnzbd",
+"{n} finished":"{n} הסתיימו",
+"{n} folders":"{n} תיקיות",
+"{n} in the queue":"{n} בתור",
+"pause and resume your SABnzbd downloads (asking you each time)":"להשהות ולהמשיך את הורדות ה-SABnzbd שלך (שואל אותך בכל פעם)",
+"read your SABnzbd: the download queue, its history and the download disk's free space":"לקרוא את ה-SABnzbd שלך: את תור ההורדות, ההיסטוריה והמקום הפנוי בדיסק ההורדות"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -2113,6 +2128,23 @@
 "no block file embedded, so the page can't import this program again (it was exported by an older page)":"אין קובץ בלוקים מוטמע, ולכן הדף לא יכול לייבא את התוכנית הזו שוב (היא יוצאה מדף ישן יותר)",
 "the block file embedded in this program isn't readable, so the page can't import it again":"קובץ הבלוקים המוטמע בתוכנית הזו אינו קריא, ולכן הדף לא יכול לייבא אותה שוב",
 "the block file embedded in this program breaks the format ({problem}), so the page may not import it again":"קובץ הבלוקים המוטמע בתוכנית הזו אינו עומד בתבנית ({problem}), ולכן ייתכן שהדף לא יוכל לייבא אותה שוב",
-"the block file inside this program matches the format, so the page can import it again":"קובץ הבלוקים שבתוך התוכנית הזו עומד בתבנית, ולכן הדף יכול לייבא אותה שוב"
+"the block file inside this program matches the format, so the page can import it again":"קובץ הבלוקים שבתוך התוכנית הזו עומד בתבנית, ולכן הדף יכול לייבא אותה שוב",
+"SABnzbd":"SABnzbd",
+"SABnzbd can be paused or resumed.":"אפשר להשהות או להמשיך את SABnzbd.",
+"SABnzbd diskspace":"שטח הדיסק של SABnzbd",
+"SABnzbd history":"היסטוריית SABnzbd",
+"SABnzbd queue":"התור של SABnzbd",
+"{n} finished":"{n} הסתיימו",
+"{n} folders":"{n} תיקיות",
+"{n} in the queue":"{n} בתור",
+"Downloading":"מוריד",
+"Paused":"מושהה",
+"SABnzbd {version}":"SABnzbd {version}",
+"SABnzbd: {why}.":"SABnzbd: {why}.",
+"Second Thought doesn't send {what} to SABnzbd.":"Second Thought לא שולח {what} ל-SABnzbd.",
+"{n} MB left":"{n} MB נותרו",
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd צריך SABNZBD_URL ו-SABNZBD_API_KEY {where_keys}: הכתובת שלו (כמו http://sabnzbd:8080) ומפתח ה-API המלא, ב-SABnzbd תחת Config, General, API Key.",
+"pause SABnzbd's queue":"להשהות את התור של SABnzbd",
+"resume SABnzbd's queue":"להמשיך את התור של SABnzbd"
 }
 };

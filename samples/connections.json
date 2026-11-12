@@ -2789,6 +2789,56 @@
    ]
   }
  },
+ "sabnzbd": {
+  "note": "A sample SABnzbd queue for the page and the tests (#397), shaped the way SABnzbd's API answers: two jobs downloading, one queued, last night's Ubuntu ISO finished and one old job that failed on missing articles.",
+  "queue": {
+   "status": "Downloading",
+   "version": "4.3.3",
+   "paused": false,
+   "kbpersec": "9216.00",
+   "mbleft": "2465.30",
+   "slots": [
+    {
+     "filename": "Ubuntu 24.04.1 Desktop amd64",
+     "mb": "4812.70",
+     "mbleft": "1843.20",
+     "percentage": "61.7",
+     "timeleft": "0:03:20",
+     "status": "Downloading"
+    },
+    {
+     "filename": "Debian 13.1.0 netinst amd64",
+     "mb": "622.10",
+     "mbleft": "622.10",
+     "percentage": "0",
+     "timeleft": "0:00:00",
+     "status": "Queued"
+    }
+   ]
+  },
+  "history": {
+   "slots": [
+    {
+     "name": "Big Buck Bunny 2008 4K Remux",
+     "status": "Completed",
+     "bytes": "4295949158",
+     "completed": "1762934400",
+     "fail_message": ""
+    },
+    {
+     "name": "Old Show S01E02 1080p",
+     "status": "Failed",
+     "bytes": "734003200",
+     "completed": "1762935300",
+     "fail_message": "Unusable server article (age?)"
+    }
+   ]
+  },
+  "diskspace": [
+   ["/mnt/user/downloads", "1234.56"],
+   ["/mnt/user/complete", "1234.56"]
+  ]
+ },
  "solax": {
   "note": "A sample Solax inverter for the page and the tests (#361), shaped the way SolaxCloud's end-user API answers: mid-afternoon, making more than the house uses, battery over half full. The fields are the API's own units (yieldtoday in 0.1 kWh, feedinenergy in 0.01 kWh).",
   "exception": "",
