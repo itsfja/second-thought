@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"ordo SABnzbd","tooltip":"Index factorum, unum quoque in ordine demittendi: name, size_mb, left_mb, percent, eta (tempus reliquum, ut 0:12:34) et status (Downloading, Queued, Paused). In hac pagina ordo exemplaris adhibetur."},
 "rb_sabnzbd_history":{"message0":"historia SABnzbd, postremae %1 horae","tooltip":"Index factorum, unum quoque illo tempore confecto: name, status (Completed vel Failed), size_mb, quando confectum sit et, si fefellit, cur."},
 "rb_sabnzbd_diskspace":{"message0":"spatium disci SABnzbd","tooltip":"Index factorum, unum quoque SABnzbd capsarum (capsa demissionis prima): folder et free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Omnem ordinem demittendi sistit aut resumit. Te semem primum rogat, etiam cum nihil aliud rogat, et nullo dicente sic, nihil fit. In hac pagina nihil vere sistitur."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Omnem ordinem demittendi sistit aut resumit. Te semem primum rogat, etiam cum nihil aliud rogat, et nullo dicente sic, nihil fit. In hac pagina nihil vere sistitur."},
+"rb_arr_queue":{"message0":"ordo %1","tooltip":"Index factorum, unum quoque in ordine demittendi: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality et eta (tempus reliquum, ut 0:12:34). In hac pagina ordo exemplaris adhibetur."},
+"rb_arr_missing":{"message0":"desideria %1","tooltip":"Index factorum, unum quoque pelliculae vel epistolae sine folio: title, added (quando additum) et id."},
+"rb_arr_diskspace":{"message0":"spatium disci %1","tooltip":"Index factorum, unum quoque capsarum: path, label, free_gb et total_gb."},
+"rb_arr_search":{"message0":"in %1 quaerere quid desit","tooltip":"In omnibus desideriis quaerit quod folium non habet. Te semem primum rogat, etiam cum nihil aliud rogat, et nullo dicente sic, nihil fit. In hac pagina nihil vere quaeritur."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"eme","sell":"vende"},
 "rb_coinbase_order.SIDE":{"buy":"eme","sell":"vende"},
 "rb_proxmox_power.ACTION":{"start":"incipe","shutdown":"claude","reboot":"iterum incipe"},
-"rb_docker_power.ACTION":{"restart":"iterum incipe","stop":"siste","start":"incipe"}
+"rb_docker_power.ACTION":{"restart":"iterum incipe","stop":"siste","start":"incipe"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"Eventus",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr et Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} capsae",
 "{n} in the queue":"{n} in ordine",
 "pause and resume your SABnzbd downloads (asking you each time)":"ordinationes SABnzbd demissionum sistere et resumere (te semem rogans)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd tuum legere: ordinem demittendi, historiam et spatium liberum disci demissionis"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd tuum legere: ordinem demittendi, historiam et spatium liberum disci demissionis",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"in Radarr et Sonarr tuis quaerere quid desit (te semper rogans)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"Radarr et Sonarr tuos legere: ordinem demittendi, desideria et spatium disci",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Quis? Radarr an Sonarr?",
+"{n} downloading":"{n} demittuntur",
+"{n} missing":"{n} desunt"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2144,7 +2160,21 @@
 "{n} MB left":"{n} MB relicta",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd SABNZBD_URL et SABNZBD_API_KEY eget {where_keys}: inscriptionem eius (ut http://sabnzbd:8080) et clavem API plenam, in SABnzbd sub Config, General, API Key.",
 "pause SABnzbd's queue":"ordinem SABnzbd sistere",
-"resume SABnzbd's queue":"ordinem SABnzbd resumere"
+"resume SABnzbd's queue":"ordinem SABnzbd resumere",
+"Which one? Radarr or Sonarr.":"Quis? Radarr an Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought {what} ad {who} non mittit.",
+"The {who} refused its API key.":"{who} clavem API suam recusavit.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"ordo {who}",
+"{who} wanted list":"desideria {who}",
+"{who} diskspace":"spatium disci {who}",
+"{n} downloading":"{n} demittuntur",
+"{n} missing":"{n} desunt",
+"search {who}'s wanted list for what's missing":"in desideriis {who} quaerere quid desit",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} {url_setting} et {key_setting} eget {where_keys}: inscriptionem eius (ut http://radarr:7878) et clavem API, sub Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"SABnzbd のキュー","tooltip":"ダウンロードキュー内の各ジョブのレコードのリスト：name、size_mb、left_mb、percent、eta（残り時間、0:12:34 など）、status（Downloading、Queued、Paused）。このページではサンプルのキューを使います。"},
 "rb_sabnzbd_history":{"message0":"SABnzbd の履歴、過去 %1 時間","tooltip":"その時間内に終わった各ジョブのレコードのリスト：name、status（Completed または Failed）、size_mb、終わった時刻と、失敗した場合はその理由。"},
 "rb_sabnzbd_diskspace":{"message0":"SABnzbd のディスク容量","tooltip":"SABnzbd の各フォルダー（最初がダウンロードフォルダー）のレコードのリスト：folder と free_gb。"},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"ダウンロードキュー全体を一時停止または再開します。他に何も尋ねないときでも毎回必ず尋ね、誰も「はい」と言えないときは実行されません。このページでは何も実際には一時停止しません。"}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"ダウンロードキュー全体を一時停止または再開します。他に何も尋ねないときでも毎回必ず尋ね、誰も「はい」と言えないときは実行されません。このページでは何も実際には一時停止しません。"},
+"rb_arr_queue":{"message0":"%1 のキュー","tooltip":"キュー内の各ダウンロードのレコードのリスト：title、status（Downloading、Importing、Failed など）、size_mb、left_mb、quality、eta（残り時間、0:12:34 など）。このページではサンプルのキューを使います。"},
+"rb_arr_missing":{"message0":"%1 の欲しい物リスト","tooltip":"ファイルのない各映画・エピソードのレコードのリスト：title、added（追加された時刻）、id。"},
+"rb_arr_diskspace":{"message0":"%1 のディスク容量","tooltip":"各フォルダーのレコードのリスト：path、label、free_gb、total_gb。"},
+"rb_arr_search":{"message0":"%1 で不足分を探す","tooltip":"欲しい物リスト全体からファイルのないものを探します。他に何も尋ねないときでも毎回必ず尋ね、誰も「はい」と言えないときは実行されません。このページでは何も実際には検索しません。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"買う","sell":"売る"},
 "rb_coinbase_order.SIDE":{"buy":"買う","sell":"売る"},
 "rb_proxmox_power.ACTION":{"start":"起動","shutdown":"シャットダウン","reboot":"再起動"},
-"rb_docker_power.ACTION":{"restart":"再起動","stop":"停止","start":"起動"}
+"rb_docker_power.ACTION":{"restart":"再起動","stop":"停止","start":"起動"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"イベント",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr と Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"エージェントの道具：エージェントブロックの中に入れます",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} 個のフォルダー",
 "{n} in the queue":"キューに {n} 件",
 "pause and resume your SABnzbd downloads (asking you each time)":"SABnzbd のダウンロードを一時停止・再開する（毎回尋ねる）",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd を読む：ダウンロードキュー、履歴、ダウンロードディスクの空き容量"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd を読む：ダウンロードキュー、履歴、ダウンロードディスクの空き容量",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"Radarr と Sonarr で不足分を探す（毎回尋ねる）",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"Radarr と Sonarr を読む：ダウンロードキュー、欲しい物リスト、ディスク容量",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"どちらですか？Radarr ですか、Sonarr ですか。",
+"{n} downloading":"{n} 件ダウンロード中",
+"{n} missing":"{n} 件不足"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2144,6 +2160,20 @@
 "{n} MB left":"残り {n} MB",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd には SABNZBD_URL と SABNZBD_API_KEY が必要です {where_keys}：アドレス（たとえば http://sabnzbd:8080）と完全な API キー（SABnzbd の Config、General、API Key にあります）。",
 "pause SABnzbd's queue":"SABnzbd のキューを一時停止する",
-"resume SABnzbd's queue":"SABnzbd のキューを再開する"
+"resume SABnzbd's queue":"SABnzbd のキューを再開する",
+"Which one? Radarr or Sonarr.":"どちらですか？Radarr ですか、Sonarr ですか。",
+"Second Thought doesn't send {what} to {who}.":"Second Thought は {what} を {who} に送りません。",
+"The {who} refused its API key.":"{who} は API キーを拒否しました。",
+"{who}: {why}.":"{who}：{why}。",
+"{who} {version}":"{who} {version}",
+"{who} queue":"{who} のキュー",
+"{who} wanted list":"{who} の欲しい物リスト",
+"{who} diskspace":"{who} のディスク容量",
+"{n} downloading":"{n} 件ダウンロード中",
+"{n} missing":"{n} 件不足",
+"search {who}'s wanted list for what's missing":"{who} の欲しい物リストから不足分を探す",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} には {url_setting} と {key_setting} が必要です {where_keys}：アドレス（たとえば http://radarr:7878）と API キー（Settings、General、API Key の下）。",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 }
 };

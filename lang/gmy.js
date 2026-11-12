@@ -177,7 +177,11 @@
 "rb_sabnzbd_queue":{"message0":"𐀮𐀪𐀊 SABnzbd","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀞𐀸𐀃 𐀮𐀪𐀊 𐀁𐀛 𐀏𐀲𐀐: name, size_mb, left_mb, percent, eta (𐀳𐀩𐀸, 𐀃𐀒 0:12:34) 𐀏𐀂 status (Downloading, Queued, Paused). E-ni 𐀵𐀡𐀆 𐀵𐀟 𐀀𐀡 𐀴𐀪𐀮𐀪𐀊."},
 "rb_sabnzbd_history":{"tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀞𐀸𐀃 𐀏𐀲𐀐 𐀳𐀩𐀼 𐀁 𐀸𐀺: name, status (Completed 𐀁 Failed), size_mb, 𐀡𐀣 𐀳𐀩𐀼 𐀏𐀂, 𐀞𐀄𐀳𐀫 𐀁, 𐀀𐀏𐀪 𐀞𐀄𐀳.","message0":"𐀂𐀵𐀫 SABnzbd, 𐀵𐀰 %1 𐀺𐀺"},
 "rb_sabnzbd_diskspace":{"message0":"𐀵𐀡 SABnzbd","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀏𐀔 SABnzbd (𐀏𐀔 𐀏𐀲𐀐 𐀞𐀸𐀃 𐀀𐀵𐀡): folder 𐀏𐀂 free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"𐀞𐀄𐀁 𐀮 𐀀𐀨𐀐 𐀞𐀸𐀃 𐀮𐀪𐀊 𐀏𐀲𐀐. So-ro-i 𐀏𐀵 𐀞𐀸𐀃, 𐀃𐀟 𐀀𐀨 𐀐𐀩𐀸 𐀕𐀲 𐀞𐀄𐀁, 𐀏𐀂 𐀕𐀳𐀫 𐀐𐀩𐀸 𐀙𐀂, 𐀃𐀄 𐀟𐀡𐀟. E-ni 𐀵𐀡𐀆 𐀃𐀄 𐀞𐀄𐀁 𐀃𐀄𐀒 𐀀𐀡."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"𐀞𐀄𐀁 𐀮 𐀀𐀨𐀐 𐀞𐀸𐀃 𐀮𐀪𐀊 𐀏𐀲𐀐. So-ro-i 𐀏𐀵 𐀞𐀸𐀃, 𐀃𐀟 𐀀𐀨 𐀐𐀩𐀸 𐀕𐀲 𐀞𐀄𐀁, 𐀏𐀂 𐀕𐀳𐀫 𐀐𐀩𐀸 𐀙𐀂, 𐀃𐀄 𐀟𐀡𐀟. E-ni 𐀵𐀡𐀆 𐀃𐀄 𐀞𐀄𐀁 𐀃𐀄𐀒 𐀀𐀡."},
+"rb_arr_queue":{"message0":"𐀮𐀪𐀊 %1","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀞𐀸𐀃 𐀮𐀪𐀊: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality 𐀏𐀂 eta (𐀳𐀩𐀸, 𐀃𐀒 0:12:34). E-ni 𐀵𐀡𐀆 𐀵𐀟 𐀀𐀡 𐀴𐀪𐀮𐀪𐀊."},
+"rb_arr_missing":{"message0":"𐀀𐀨𐀐𐀩 %1","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀞𐀸𐀃 𐀀𐀐𐀫 𐀁𐀸 𐀵𐀰: title, added (𐀡𐀣 𐀀𐀐𐀩) 𐀏𐀂 id."},
+"rb_arr_diskspace":{"message0":"𐀵𐀡 %1","tooltip":"𐀃𐀟𐀨 𐀳𐀶𐀒𐀫, he-kas 𐀏𐀵 𐀏𐀔: path, label, free_gb 𐀏𐀂 total_gb."},
+"rb_arr_search":{"message0":"𐀀𐀡 𐀴𐀪𐀮 𐀁𐀛 %1 𐀞𐀄𐀳","tooltip":"𐀀𐀡 𐀴𐀪𐀮 𐀞𐀸𐀃 𐀀𐀨𐀐𐀩 𐀃𐀄 𐀟𐀩𐀸. So-ro-i 𐀏𐀵 𐀞𐀸𐀃, 𐀃𐀟 𐀀𐀨 𐀐𐀩𐀸 𐀕𐀲 𐀞𐀄𐀁, 𐀏𐀂 𐀕𐀳𐀫 𐀐𐀩𐀸 𐀙𐀂, 𐀃𐀄 𐀟𐀡𐀟. E-ni 𐀵𐀡𐀆 𐀃𐀄 𐀞𐀄𐀁 𐀃𐀄𐀒 𐀀𐀡."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐀁𐀏𐀲 𐀀𐀔","weekdays":"𐀀𐀔 𐀸𐀒","weekends":"𐀀𐀔 𐀀𐀙𐀞𐀄𐀮𐀃"},
@@ -201,7 +205,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"𐀃𐀜","sell":"𐀟𐀨𐀯"},
 "rb_coinbase_order.SIDE":{"buy":"𐀃𐀜","sell":"𐀟𐀨𐀯"},
 "rb_proxmox_power.ACTION":{"start":"𐀀𐀨𐀐","shutdown":"𐀏𐀩𐀂𐀰","reboot":"𐀀𐀠 𐀀𐀨𐀐"},
-"rb_docker_power.ACTION":{"restart":"𐀀𐀠 𐀀𐀨𐀐","stop":"𐀞𐀄𐀁","start":"𐀀𐀨𐀐"}
+"rb_docker_power.ACTION":{"restart":"𐀀𐀠 𐀀𐀨𐀐","stop":"𐀞𐀄𐀁","start":"𐀀𐀨𐀐"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"𐀱𐀞𐀲",
@@ -235,7 +243,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr ka-i Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵",
@@ -1100,7 +1109,14 @@
 "{n} folders":"{n} 𐀏𐀔",
 "{n} in the queue":"{n} 𐀁 𐀮𐀪𐀊",
 "pause and resume your SABnzbd downloads (asking you each time)":"𐀞𐀸𐀃 SABnzbd 𐀞𐀄𐀁 𐀏𐀂 𐀀𐀨𐀐 (𐀰𐀫𐀂 𐀏𐀵 𐀞𐀸𐀃)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd 𐀀𐀡 𐀴𐀪𐀮: 𐀮𐀪𐀊 𐀏𐀲𐀐, 𐀂𐀵𐀫 𐀏𐀂 𐀵𐀡 𐀏𐀲𐀐 𐀇𐀒"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd 𐀀𐀡 𐀴𐀪𐀮: 𐀮𐀪𐀊 𐀏𐀲𐀐, 𐀂𐀵𐀫 𐀏𐀂 𐀵𐀡 𐀏𐀲𐀐 𐀇𐀒",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"𐀁𐀛 Radarr 𐀏𐀂 Sonarr 𐀞𐀄𐀳 𐀀𐀡 𐀴𐀪𐀮 (𐀰𐀫𐀂 𐀏𐀵 𐀞𐀸𐀃)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"Radarr 𐀏𐀂 Sonarr 𐀀𐀡 𐀴𐀪𐀮: 𐀮𐀪𐀊, 𐀀𐀨𐀐𐀩 𐀏𐀂 𐀵𐀡",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"𐀒𐀵? Radarr 𐀁 Sonarr?",
+"{n} downloading":"{n} 𐀏𐀲𐀺",
+"{n} missing":"{n} 𐀞𐀄𐀳"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -2145,7 +2161,21 @@
 "{n} MB left":"{n} MB o-wo-we",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd de-i SABNZBD_URL ka-i SABNZBD_API_KEY {where_keys}: to-po e-we (o-ko http://sabnzbd:8080) ka-i ke-re-we API o-ko-we, e-ni SABnzbd ka-to Config, General, API Key.",
 "pause SABnzbd's queue":"pa-u-e se-ri-ja SABnzbd",
-"resume SABnzbd's queue":"a-ra-ke se-ri-ja SABnzbd"
+"resume SABnzbd's queue":"a-ra-ke se-ri-ja SABnzbd",
+"Which one? Radarr or Sonarr.":"𐀒𐀵? Radarr 𐀁 Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought 𐀃𐀄 𐀟𐀡𐀟 {what} 𐀁𐀠 {who}.",
+"The {who} refused its API key.":"{who} 𐀐𐀩𐀸 API 𐀃𐀄𐀈𐀐.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"𐀮𐀪𐀊 {who}",
+"{who} wanted list":"𐀀𐀨𐀐𐀩 {who}",
+"{who} diskspace":"𐀵𐀡 {who}",
+"{n} downloading":"{n} 𐀏𐀲𐀺",
+"{n} missing":"{n} 𐀞𐀄𐀳",
+"search {who}'s wanted list for what's missing":"𐀁𐀛 𐀀𐀨𐀐𐀩 {who} 𐀞𐀄𐀳 𐀀𐀡 𐀴𐀪𐀮",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} 𐀆𐀂 {url_setting} 𐀏𐀂 {key_setting} {where_keys}: 𐀵𐀡 𐀁𐀸 (𐀃𐀒 http://radarr:7878) 𐀏𐀂 𐀐𐀩𐀸 API, 𐀏𐀵 Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

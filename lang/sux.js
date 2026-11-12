@@ -177,7 +177,11 @@
 "rb_sabnzbd_queue":{"message0":"sa SABnzbd","tooltip":"dub-sar-meš, nig2-nam-mu2 sa-bi: name, size_mb, left_mb, percent, eta (ki-bi, gin7 0:12:34) u3 status (Downloading, Queued, Paused). SABnzbd-a sa ki-bi dug3-du11."},
 "rb_sabnzbd_history":{"tooltip":"dub-sar-meš, nig2-nam-mu2 sa-bi dug ki-bi: name, status (Completed u3 Failed), size_mb, e2-bi dug u3, sa2 nu-dug3, a-na-akam.","message0":"nam-sar SABnzbd, sa3 %1 ud"},
 "rb_sabnzbd_diskspace":{"message0":"ki SABnzbd","tooltip":"dub-sar-meš, nig2-nam-mu2 é SABnzbd-bi (é ki-bi i3-sag): folder u3 free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"sa SABnzbd dug-tag u3 sa2 du11. Ki-bi dug3-ga, nig2-nam-mu2 ki-bi dug3-ga, u3 lu2 nu-um-ma, nu-dug3. SABnzbd-a nig2 nu-um-ma dug-tag."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"sa SABnzbd dug-tag u3 sa2 du11. Ki-bi dug3-ga, nig2-nam-mu2 ki-bi dug3-ga, u3 lu2 nu-um-ma, nu-dug3. SABnzbd-a nig2 nu-um-ma dug-tag."},
+"rb_arr_queue":{"message0":"sa %1","tooltip":"dub-sar-meš, nig2-nam-mu2 sa-bi: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality u3 eta (ki-bi, gin7 0:12:34). SABnzbd-a sa ki-bi dug3-du11."},
+"rb_arr_missing":{"message0":"ki-ur2 %1","tooltip":"dub-sar-meš, nig2-nam-mu2 nig2-nam-mu2 nu-um-ma: title, added (e2-bi) u3 id."},
+"rb_arr_diskspace":{"message0":"ki %1","tooltip":"dub-sar-meš, nig2-nam-mu2 é-bi: path, label, free_gb u3 total_gb."},
+"rb_arr_search":{"message0":"%1-a nu dug3-du11","tooltip":"ki-ur2 kala nu dug3-du11, nig2 nu-um-ma. Ki-bi dug3-ga, nig2-nam-mu2 ki-bi dug3-ga, u3 lu2 nu-um-ma, nu-dug3. SABnzbd-a nig2 nu-um-ma dug3-du11."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒃻𒉆","weekdays":"𒌓 𒆥𒅗","weekends":"𒌓 𒄑𒇲𒅗"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"𒉚","sell":"𒋧"},
 "rb_coinbase_order.SIDE":{"buy":"𒉚","sell":"𒋧"},
 "rb_proxmox_power.ACTION":{"start":"𒁲 𒅗","shutdown":"𒄑 𒋳","reboot":"𒁲 𒅗 𒈫"},
-"rb_docker_power.ACTION":{"restart":"𒁲 𒅗 𒈫","stop":"𒄑 𒋳","start":"𒁲 𒅗"}
+"rb_docker_power.ACTION":{"restart":"𒁲 𒅗 𒈫","stop":"𒄑 𒋳","start":"𒁲 𒅗"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Agent":"𒆥𒄄𒀀",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr u3 Sonarr"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} é",
 "{n} in the queue":"{n} 𒊓𒁉",
 "pause and resume your SABnzbd downloads (asking you each time)":"sa2 SABnzbd dug-tag u3 sa2 du11 (ki-bi dug3-ga)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd ša3: sa ki-bi, nam-sar u3 ki é ki-bi"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd ša3: sa ki-bi, nam-sar u3 ki é ki-bi",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"Radarr u3 Sonarr-a nu dug3-du11 (ki-bi dug3-ga)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"Radarr u3 Sonarr ša3: sa, ki-ur2 u3 ki",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"sa? Radarr u3 Sonarr?",
+"{n} downloading":"{n} ki-ta-e11",
+"{n} missing":"{n} nu"
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},
@@ -2144,7 +2160,21 @@
 "{n} MB left":"{n} MB su",
 "pause SABnzbd's queue":"sa SABnzbd dug-tag",
 "resume SABnzbd's queue":"sa SABnzbd sa2 du11",
-"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd SABNZBD_URL u3 SABNZBD_API_KEY al dug4 {where_keys}: ki-bi (http://sabnzbd:8080-gin7) u3 sulgi API, SABnzbd-a Config, General, API Key-bi."
+"SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd SABNZBD_URL u3 SABNZBD_API_KEY al dug4 {where_keys}: ki-bi (http://sabnzbd:8080-gin7) u3 sulgi API, SABnzbd-a Config, General, API Key-bi.",
+"Which one? Radarr or Sonarr.":"sa? Radarr u3 Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought {what} {who}-še3 nu-kin-gi4.",
+"The {who} refused its API key.":"{who} sulgi-bi in-gi4.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"sa {who}",
+"{who} wanted list":"ki-ur2 {who}",
+"{who} diskspace":"ki {who}",
+"{n} downloading":"{n} ki-ta-e11",
+"{n} missing":"{n} nu",
+"search {who}'s wanted list for what's missing":"ki-ur2 {who}-a nu dug3-du11",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} {url_setting} u3 {key_setting} al dug4 {where_keys}: ki-bi (http://radarr:7878-gin7) u3 sulgi API, SABnzbd-a Config, General, API Key-bi.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

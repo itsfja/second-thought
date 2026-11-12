@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"SABnzbd 之序","tooltip":"錄之列，下之列中每事一錄：name、size_mb、left_mb、percent、eta（餘時，若 0:12:34）、status（方下、既列、既止）。此頁用示例之序。"},
 "rb_sabnzbd_history":{"message0":"SABnzbd 之史，近 %1 時","tooltip":"錄之列，其時內每畢之事一錄：name、status（成或敗）、size_mb、何時畢，敗者何故。"},
 "rb_sabnzbd_diskspace":{"message0":"SABnzbd 之盤","tooltip":"錄之列，SABnzbd 之每夾（下之夾居首）：folder 與 free_gb。"},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"止或復全下之序。無他問時亦必先問汝，無人在焉則不行。此頁無實止者。"}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"止或復全下之序。無他問時亦必先問汝，無人在焉則不行。此頁無實止者。"},
+"rb_arr_queue":{"message0":"%1 之序","tooltip":"錄之列，序中每下一錄：title、status（方下、方入、敗等）、size_mb、left_mb、quality、eta（餘時，若 0:12:34）。此頁用示例之序。"},
+"rb_arr_missing":{"message0":"%1 之所求","tooltip":"錄之列，無卷之影片每事一錄：title、added（何時加）、id。"},
+"rb_arr_diskspace":{"message0":"%1 之盤","tooltip":"錄之列，每夾一錄：path、label、free_gb、total_gb。"},
+"rb_arr_search":{"message0":"於 %1 索其乏者","tooltip":"遍索所求，無卷者皆索之。無他問時亦必先問汝，無人在焉則不行。此頁無實索者。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每日","weekdays":"平日","weekends":"休日"},
@@ -199,7 +203,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"買","sell":"賣"},
 "rb_coinbase_order.SIDE":{"buy":"買","sell":"賣"},
 "rb_proxmox_power.ACTION":{"start":"啟","shutdown":"閉","reboot":"復啟"},
-"rb_docker_power.ACTION":{"restart":"復啟","stop":"止","start":"啟"}
+"rb_docker_power.ACTION":{"restart":"復啟","stop":"止","start":"啟"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Agent":"使者",
@@ -233,7 +241,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr 與 Sonarr"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"聽者：所出之程依時而行，則此諸塊行",
@@ -1098,7 +1107,14 @@
 "{n} folders":"{n} 夾",
 "{n} in the queue":"序中有 {n}",
 "pause and resume your SABnzbd downloads (asking you each time)":"止而復 SABnzbd 之下（每問汝）",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"讀 SABnzbd：下之序、其史、下盤之餘"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"讀 SABnzbd：下之序、其史、下盤之餘",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"於汝之 Radarr、Sonarr 索其乏者（每問汝）",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"讀汝之 Radarr、Sonarr：下之序、所求與盤",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"孰？Radarr 抑 Sonarr？",
+"{n} downloading":"{n} 方下",
+"{n} missing":"{n} 乏"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2143,7 +2159,21 @@
 "{n} MB left":"餘 {n} MB",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd 須 SABNZBD_URL、SABNZBD_API_KEY {where_keys}：其址（若 http://sabnzbd:8080），及其全鑰，在 SABnzbd 之 Config、General、API Key 下。",
 "pause SABnzbd's queue":"止 SABnzbd 之序",
-"resume SABnzbd's queue":"復 SABnzbd 之序"
+"resume SABnzbd's queue":"復 SABnzbd 之序",
+"Which one? Radarr or Sonarr.":"孰？Radarr 抑 Sonarr？",
+"Second Thought doesn't send {what} to {who}.":"Second Thought 不發 {what} 於 {who}。",
+"The {who} refused its API key.":"{who} 卻其鑰。",
+"{who}: {why}.":"{who}：{why}。",
+"{who} {version}":"{who} {version}",
+"{who} queue":"{who} 之序",
+"{who} wanted list":"{who} 之所求",
+"{who} diskspace":"{who} 之盤",
+"{n} downloading":"{n} 方下",
+"{n} missing":"{n} 乏",
+"search {who}'s wanted list for what's missing":"於 {who} 之所求索其乏者",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} 須 {url_setting}、{key_setting} {where_keys}：其址（若 http://radarr:7878），及其鑰，在 Settings、General、API Key 下。",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

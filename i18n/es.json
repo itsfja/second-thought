@@ -680,6 +680,22 @@
   "rb_sabnzbd_pause": {
    "message0": "%1 SABnzbd",
    "tooltip": "Pausa o reanuda toda la cola de descargas. Te lo pregunta siempre, aunque nada más lo haga, y si no hay nadie para decir sí, no ocurre. En esta página nada se pausa de verdad."
+  },
+  "rb_arr_queue": {
+   "message0": "cola de %1",
+   "tooltip": "Una lista de registros, uno por cada descarga en la cola: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality y eta (tiempo restante, como 0:12:34). En esta página usa una cola de ejemplo."
+  },
+  "rb_arr_missing": {
+   "message0": "lista de deseados %1",
+   "tooltip": "Una lista de registros, uno por cada película o episodio sin archivo: title, added (cuándo se añadió) e id."
+  },
+  "rb_arr_diskspace": {
+   "message0": "espacio en disco %1",
+   "tooltip": "Una lista de registros, uno por cada carpeta: path, label, free_gb y total_gb."
+  },
+  "rb_arr_search": {
+   "message0": "buscar lo que falta en %1",
+   "tooltip": "Busca en toda la lista de deseados lo que no tiene archivo. Te lo pregunta siempre, aunque nada más lo haga, y si no hay nadie para decir sí, no ocurre. En esta página nada busca de verdad."
   }
  },
  "options": {
@@ -818,6 +834,22 @@
    "restart": "reiniciar",
    "stop": "detener",
    "start": "arrancar"
+  },
+  "rb_arr_queue.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_missing.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_diskspace.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_search.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
   }
  },
  "categories": {
@@ -852,7 +884,8 @@
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker",
-  "SABnzbd": "SABnzbd"
+  "SABnzbd": "SABnzbd",
+  "Radarr and Sonarr": "Radarr y Sonarr"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Herramientas para el agente: suéltalas dentro de un bloque de agente",
@@ -1717,7 +1750,14 @@
   "{n} folders": "{n} carpetas",
   "{n} in the queue": "{n} en la cola",
   "pause and resume your SABnzbd downloads (asking you each time)": "pausar y reanudar tus descargas de SABnzbd (preguntándotelo cada vez)",
-  "read your SABnzbd: the download queue, its history and the download disk's free space": "leer tu SABnzbd: la cola de descargas, su historial y el espacio libre del disco de descargas"
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "leer tu SABnzbd: la cola de descargas, su historial y el espacio libre del disco de descargas",
+  "search your Radarr and Sonarr for what's missing (asking you each time)": "buscar lo que falta en tus Radarr y Sonarr (preguntándotelo cada vez)",
+  "read your Radarr and Sonarr: the download queue, the wanted list and disk space": "leer tus Radarr y Sonarr: la cola de descargas, la lista de deseados y el espacio en disco",
+  "Radarr": "Radarr",
+  "Sonarr": "Sonarr",
+  "Which one? Radarr or Sonarr.": "¿Cuál? ¿Radarr o Sonarr?",
+  "{n} downloading": "{n} descargando",
+  "{n} missing": "{n} faltan"
  },
  "examples": {
   "review": {
@@ -3394,6 +3434,20 @@
   "{n} MB left": "{n} MB restantes",
   "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "SABnzbd necesita SABNZBD_URL y SABNZBD_API_KEY {where_keys}: su dirección (como http://sabnzbd:8080) y la clave API completa, en SABnzbd bajo Config, General, API Key.",
   "pause SABnzbd's queue": "pausar la cola de SABnzbd",
-  "resume SABnzbd's queue": "reanudar la cola de SABnzbd"
+  "resume SABnzbd's queue": "reanudar la cola de SABnzbd",
+  "Which one? Radarr or Sonarr.": "¿Cuál? ¿Radarr o Sonarr?",
+  "Second Thought doesn't send {what} to {who}.": "Second Thought no envía {what} a {who}.",
+  "The {who} refused its API key.": "El {who} rechazó su clave API.",
+  "{who}: {why}.": "{who}: {why}.",
+  "{who} {version}": "{who} {version}",
+  "{who} queue": "cola de {who}",
+  "{who} wanted list": "lista de deseados de {who}",
+  "{who} diskspace": "espacio en disco de {who}",
+  "{n} downloading": "{n} descargando",
+  "{n} missing": "{n} faltan",
+  "search {who}'s wanted list for what's missing": "buscar lo que falta en la lista de deseados de {who}",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.": "{who} necesita {url_setting} y {key_setting} {where_keys}: su dirección (como http://radarr:7878) y su clave API, bajo Settings, General, API Key.",
+  "Radarr": "Radarr",
+  "Sonarr": "Sonarr"
  }
 }

@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY")
 
 
 def _load_keychain():
@@ -1550,6 +1550,11 @@ SAFETY = {
     # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
     "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
     "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
+    # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
+    # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
+    # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
+    "arr_free": [["GET", r"^/api/v3/(queue|wanted/missing|diskspace|system/status)$"]],
+    "arr_asks": [["POST", r"^/api/v3/command$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1712,6 +1717,19 @@ def sabnzbd_call(method, mode):
     method, mode = to_str(method).strip().upper(), to_str(mode).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
+            return kind
+    return None
+
+
+ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
+
+
+def arr_call(method, path):
+    """"free" for a Radarr or Sonarr call the runtime makes without asking, "asks" for the one search command, which
+    needs a live yes, and None for anything else, which is never sent (#398)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
             return kind
     return None
 
@@ -2152,6 +2170,7 @@ CAPABILITIES = [
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
+    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -2161,6 +2180,7 @@ CAPABILITIES = [
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
+    ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
@@ -4587,6 +4607,90 @@ class Connections:
             return False
         await self._sabnzbd("pause" if action == "pause" else "resume", approved=True)
         self.log(tr("SABnzbd"), what, tr("done"))
+        return True
+
+    # Radarr and Sonarr (#398)
+    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
+    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
+    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
+    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
+    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
+    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
+                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
+
+    @staticmethod
+    def _arr_which(which):
+        w = to_str(which).strip().lower()
+        if w not in Connections.ARR_URLS:
+            raise RunError(tr("Which one? Radarr or Sonarr."))
+        return w
+
+    async def _arr(self, which, method, path, query=None, body=None, approved=False):
+        w = self._arr_which(which)
+        kind = arr_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
+        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
+        who = self.ARR_URLS[w][3]
+        if not url or not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
+                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
+        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
+        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who=who))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    async def arr_queue(self, which):
+        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
+        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
+        w = self._arr_which(which)
+        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
+                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
+                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
+                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
+                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
+        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
+        return out
+
+    async def arr_missing(self, which):
+        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
+        was added) and id."""
+        w = self._arr_which(which)
+        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
+        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
+        return out
+
+    async def arr_diskspace(self, which):
+        """Each of its folders: path, label, free_gb and total_gb."""
+        w = self._arr_which(which)
+        rows = await self._arr(w, "GET", "/api/v3/diskspace")
+        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
+                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
+                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
+               for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
+        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
+        return out
+
+    async def arr_search(self, which):
+        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
+        was done."""
+        w = self._arr_which(which)
+        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
+        self.log(w.capitalize(), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -7434,6 +7538,14 @@ class Doctor:
                 q = (await self._sabnzbd("queue")).get("queue") or {}
                 return tr("SABnzbd {version}", version=to_str(q.get("version")) or "?") + ", " + tr("{n} in the queue", n=len(q.get("slots") or []))
             out.append(("SABnzbd", sabnzbd))
+        if has("arr_read", "arr_control"):
+            async def arr(which):
+                status = await self._arr(which, "GET", "/api/v3/system/status")
+                q = await self._arr(which, "GET", "/api/v3/queue", {"page": "1", "pageSize": "1"})
+                return tr("{who} {version}", who=which.capitalize(), version=to_str(status.get("version")) or "?") \
+                    + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
+            out.append(("Radarr", lambda: arr("radarr")))
+            out.append(("Sonarr", lambda: arr("sonarr")))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -7749,7 +7861,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -10062,6 +10174,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_fx_travel_check","file":"fx-travel-check.json","category":"money","title":"Travel money check","description":"Two days before a calendar event abroad, looks up the exchange rate and sends a Telegram reminder about cash, card fees and plugs.","tip":"It decides from the event's title and place whether it's abroad. Web search only works in exported Python.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_country","name":"country"},{"id":"g_advice","name":"advice"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type an event to test with, like 'Flight to Lisbon'"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"trip"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_cal_when","fields":{"N":2880},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"trip"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"trip"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_ask_yesno","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Does this calendar event take place outside the UK?\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_country"}},"inputs":{"VALUE":{"block":{"type":"rb_extract","inputs":{"WHAT":{"shadow":{"type":"text","fields":{"TEXT":"the country it takes place in"}}},"TEXT":{"block":{"type":"rb_msg_value"}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_advice"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Using these search results, give today's rate from pounds to the currency of "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_country"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":", then three short reminders for the trip: cash, card fees abroad, and the plug type.\n\n"}}},"ADD3":{"block":{"type":"rb_web_search","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"pound exchange rate today "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_country"}}}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"✈️ "}}},"ADD1":{"block":{"type":"rb_msg_value"}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_advice"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_advice"}}}}}}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Not abroad."}}}}}}},"extraState":{"hasElse":true}}},"x":30,"y":290}]}}},
 {"key":"g_volunteer_rota","file":"volunteer-rota.json","category":"calendar","title":"Volunteer rota","description":"Drafts next month's volunteer rota from the shifts in your calendar and the availability people emailed you, fairly shared, and asks you to approve it before emailing it round.","tip":"Put the shifts in a calendar it can read, and ask volunteers to reply to one email with their dates. Change the address to your list.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Draft next month's volunteer rota. Read the calendar for next month's shifts (calendar with days 40). Search my email from the last 21 days for volunteers' availability replies and read them. Give each shift its volunteers: only people who said they're free then, shared out as evenly as you can, nobody on two shifts in one day. List any shift still short of people at the top. Then a table by date. Check it with review_text against: every name is someone who said they were free; no shift has someone twice; shifts with too few people are listed first."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":16}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calendar"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"email"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_approve","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Email this rota to the volunteers?\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"rb_ask_first","fields":{"WHAT":"messages"},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"volunteers@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Next month's rota"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Not sent. The draft, to edit yourself:\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":30}]}}},
 {"key":"g_wallet_health_check","file":"wallet-health-check.json","category":"money","title":"Wallet health check","description":"Each Sunday evening, reads your Trust Wallet through its Agent Kit: what you hold and what it's worth, how prices moved, and a risk check on every token, flagging any that look like scams or have little liquidity. Emailed to you. It only reads: it never sends, swaps or approves.","tip":"Needs Trust Wallet's Agent Kit (npm install -g @trustwallet/cli) as MCP_TRUSTWALLET in second-thought.ini: the example ini shows how. Change the email address to yours.","author":"itsfja","runtime":"3.10.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","x":30,"y":30,"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"x":550,"y":30,"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}}}}}},{"type":"rb_receive","fields":{"MSG":"check"},"x":30,"y":290,"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Read my Trust Wallet: the wallet's status, then its portfolio (every token, how much, and its value). For each token, get its price now and run a risk check. Then write a short summary: the total value, each holding and its share, and a section headed 'Worth a look' listing any token whose risk check is medium or high, with the reasons it gave. Only read: don't send, swap, approve or pay for anything."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":15}}},"TOOLS":{"block":{"type":"rb_agent_mcp","fields":{"SERVER":"trustwallet","ASK":"changes"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Your wallet this week"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}]}}},
+{"key":"g_wanted_list_check","file":"wanted-list-check.json","category":"home","title":"Wanted list check","description":"Each morning, reads your Radarr wanted list and sends you a Telegram message with every movie that has no file yet. It only reads: nothing is searched, added or renamed.","tip":"Needs RADARR_URL and RADARR_API_KEY (Settings, General, API Key). Change radarr to sonarr to check the TV wanted list instead.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_missing","name":"missing"},{"id":"g_one","name":"one"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_missing"}},"inputs":{"VALUE":{"block":{"type":"rb_arr_missing","fields":{"WHICH":"radarr"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"shadow":{"type":"text","fields":{"TEXT":"Radarr wanted list:"}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_one"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_missing"}}}},"DO":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"title"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}}},"extraState":{"itemCount":3}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}},"x":30,"y":190}]}}},
 {"key":"g_coinbase_week","file":"coinbase-week.json","category":"money","title":"Weekly crypto round-up","description":"Each Sunday evening, reads your Coinbase balances and what they're worth, and sends you a Telegram message: the total, how it changed since last week, and each holding's value. It only reads: it places no orders.","tip":"Needs a Coinbase API key with View permission only (COINBASE_KEY_FILE), and currency = gbp, or yours, in second-thought.ini. The first week has nothing to compare with.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_value","name":"value"},{"id":"g_holdings","name":"holdings"},{"id":"g_summary","name":"summary"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":18,"MINUTE":0,"DAYS":"weekends"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"roundup"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"roundup"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_value"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_value"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_holdings"}},"inputs":{"VALUE":{"block":{"type":"rb_coinbase_balances"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_summary"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write a short weekly round-up of my crypto, under 120 words, in plain English: the total now, how it changed since last week (in money and percent), and each holding's value, biggest first. No advice on what to buy or sell.\n\nTotal now: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_value"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nTotal a week ago (empty if this is the first week): "}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Coinbase total last week"}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nHoldings (asset, amount, value, currency):\n"}}},"ADD5":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_holdings"}}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_value"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"Coinbase total last week"}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_recipe_scaler_weekly","file":"recipe-scaler-weekly.json","category":"home","title":"Weekly recipes and shopping list","description":"Remembers recipes you drop in a folder. Run it on shopping day: say which recipes and for how many, and it scales them and makes one shopping list grouped by supermarket aisle.","tip":"Change the folder to where you keep recipes (PDF, Word or text). Run it by hand, since it asks which recipes you want.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_folder_when","fields":{"FOLDER":"~/Recipes"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"recipe"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":30},{"type":"rb_receive","fields":{"MSG":"recipe"},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write this recipe as one line: its name (serves N): each ingredient with its amount, separated by semicolons.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Recipe remembered."}}}}}}}},"x":550,"y":30},{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Which recipes this week, and for how many people? (Your recipes are listed in the agent's first step.)"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"My recipes, one per line:\n"}}},"ADD1":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"recipes"}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nThis week I want: "}}},"ADD3":{"block":{"type":"rb_answer"}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nScale each recipe to the servings I want, using calculate for every amount. If a recipe isn't in my list, use a standard version. Then write one shopping list grouped by supermarket aisle (fruit and veg, bakery, dairy, meat and fish, tins and jars, dry goods, frozen), adding up the same ingredient across recipes."}}}},"extraState":{"itemCount":5}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":12}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calc"}}}},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"shopping-list"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Shopping list"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_airport_leave_time","file":"airport-leave-time.json","category":"home","title":"When should I leave for the airport?","description":"Run it before a flight leaves: the agent reads the flight's live position and estimated landing from Flightradar24, adds the drive and the time for parking and security, and sends a Telegram message saying whether the flight is on time and when to leave home. It only reads.","tip":"Needs Node.js and an FR24_API_KEY from fr24api.flightradar24.com (each call costs credits). Change the flight number and the drive time in the agent's goal to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Mum flies on flight BA123, landing at LHR. Find that flight's live position and its estimated landing time. The airport is a 45-minute drive from home, and allow an hour for parking and security. Work out when I should leave home, and write one short message: the flight number, whether it's running on time, its estimated landing time, and when to leave. If the flight can't be found, say so plainly and suggest checking the flight number."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":6}}},"TOOLS":{"block":{"type":"rb_agent_fr24"}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":30}]}}},
@@ -10085,6 +10198,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
 ["sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", true],
+["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
@@ -10094,6 +10208,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", false],
+["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
 ["powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", false],
 ["web", "read public web pages and search the web", false],
@@ -10188,6 +10303,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "GET",
    "^(pause|resume)$"
+  ]
+ ],
+ "arr_free": [
+  [
+   "GET",
+   "^/api/v3/(queue|wanted/missing|diskspace|system/status)$"
+  ]
+ ],
+ "arr_asks": [
+  [
+   "POST",
+   "^/api/v3/command$"
   ]
  ],
  "unifi_free": [
@@ -14353,6 +14480,88 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
    ["/mnt/user/complete", "1234.56"]
   ]
  },
+ "arr": {
+  "note": "A sample Radarr and Sonarr for the page and the tests (#398), shaped the way their Servarr API answers: Radarr is importing one film and has another queued, with two wanted; Sonarr is grabbing an episode, with one still missing.",
+  "radarr": {
+   "queue": [
+    {
+     "title": "The Big Lebowski (1998)",
+     "status": "Importing",
+     "size": 26843545600,
+     "sizeleft": 0,
+     "quality": {
+      "quality": {
+       "name": "WEBDL-1080p"
+      }
+     },
+     "timeleft": "00:00:00"
+    },
+    {
+     "title": "Arrival (2016)",
+     "status": "Downloading",
+     "size": 32212254720,
+     "sizeleft": 10737418240,
+     "quality": {
+      "quality": {
+       "name": "Bluray-1080p"
+      }
+     },
+     "timeleft": "00:12:34"
+    }
+   ],
+   "missing": [
+    {
+     "title": "Dune (2021)",
+     "added": "2026-11-05T21:14:26Z",
+     "id": 67
+    },
+    {
+     "title": "Everything Everywhere All at Once (2022)",
+     "added": "2026-10-28T09:03:11Z",
+     "id": 71
+    }
+   ],
+   "diskspace": [
+    {
+     "path": "/mnt/user/media/movies",
+     "label": "movies",
+     "freeSpace": 536870912000,
+     "totalSpace": 2000398934016
+    }
+   ]
+  },
+  "sonarr": {
+   "queue": [
+    {
+     "title": "Severance - S02E01",
+     "status": "Grabbed",
+     "size": 4294967296,
+     "sizeleft": 4294967296,
+     "quality": {
+      "quality": {
+       "name": "HDTV-1080p"
+      }
+     },
+     "timeleft": "00:05:00"
+    }
+   ],
+   "missing": [
+    {
+     "title": "Slow Horses - S04E04",
+     "added": "2026-11-09T23:41:02Z",
+     "id": 320
+    }
+   ],
+   "diskspace": [
+    {
+     "path": "/mnt/user/media/tv",
+     "label": "tv",
+     "freeSpace": 805306368000,
+     "totalSpace": 2000398934016
+    }
+   ]
+  }
+ },
  "solax": {
   "note": "A sample Solax inverter for the page and the tests (#361), shaped the way SolaxCloud's end-user API answers: mid-afternoon, making more than the house uses, battery over half full. The fields are the API's own units (yieldtoday in 0.1 kWh, feedinenergy in 0.01 kWh).",
   "exception": "",
@@ -14660,7 +14869,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -14672,7 +14881,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -14854,7 +15063,8 @@ HOW TO MAP CODE
     rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
     rb_proxmox_power:"proxmox_control", rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control", rb_sabnzbd_queue:"sabnzbd_read", rb_sabnzbd_history:"sabnzbd_read",
-    rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control", rb_arr_queue:"arr_read",
+    rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -15224,6 +15434,15 @@ HOW TO MAP CODE
       tooltip:"A list of records, one for each of SABnzbd's folders (the download folder first): folder and free_gb." }),
     S("rb_sabnzbd_pause", "%1 SABnzbd", [{ type:"field_dropdown", name:"ACTION", options:[["pause","pause"],["resume","resume"]] }],
       { style:"sabnzbd", inputsInline:true, tooltip:"Pauses or resumes the whole download queue. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really pauses." }),
+    /* Radarr and Sonarr (#398): reads, and a search that always asks */
+    V("rb_arr_queue", "%1 queue", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
+      tooltip:"A list of records, one for each download in the queue: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34). On this page it uses a sample queue." }),
+    V("rb_arr_missing", "%1 wanted list", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
+      tooltip:"A list of records, one for each movie or episode with no file: title, added (when it was added) and id." }),
+    V("rb_arr_diskspace", "%1 diskspace", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
+      tooltip:"A list of records, one for each of its folders: path, label, free_gb and total_gb." }),
+    S("rb_arr_search", "search %1 for what's missing", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }],
+      { style:"arr", inputsInline:true, tooltip:"Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches." }),
     /* Proxmox (#357): reads, and power that always asks */
     V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
       tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
@@ -15432,6 +15651,9 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"SABnzbd", categorystyle:"sabnzbd", contents:[
       B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
+    ]},
+    { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", contents:[
+      B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
     ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
@@ -18018,6 +18240,7 @@ HOW TO MAP CODE
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
+             arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -18081,6 +18304,12 @@ HOW TO MAP CODE
       "; SABnzbd's API: its address and the full API key (in SABnzbd under Config, General, API Key), not the",
       "; NZB key. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, if it needs one.",
       "SABNZBD_URL = ", "SABNZBD_API_KEY = ");
+    if (need.arr) out.push("", "[radarr]",
+      "; Radarr's Servarr API: its address and API key (Settings, General, API Key). The blocks read the queue, the",
+      "; wanted list and disk space; a search asks first, and nothing else is ever sent.",
+      "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
+      "; Sonarr, the same: its address and API key (Settings, General, API Key).",
+      "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -18421,6 +18650,9 @@ HOW TO MAP CODE
         case "rb_sabnzbd_queue": return "(await R.sabnzbd_queue())";
         case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
         case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
+        case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -18577,6 +18809,7 @@ HOW TO MAP CODE
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
           case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
+          case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
@@ -20884,6 +21117,39 @@ HOW TO MAP CODE
     addStep("SABnzbd", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
+  /* Radarr and Sonarr on the page (#398): a sample queue and wanted list. Exported Python talks to their Servarr API:
+     reads, and a search after a yes, every time. Matches the runtime's arr_ methods and tests/fake_arr.py. */
+  const arrSample = which => { connNote(which === "sonarr" ? "Sonarr" : "Radarr"); return (CONN.arr || {})[which] || {}; };
+  const arrName = which => { const w = str(which).trim().toLowerCase();
+    if (!["radarr", "sonarr"].includes(w)) fail(tr("Which one? Radarr or Sonarr.")); return w; };
+  function arrQueue(which){
+    const w = arrName(which), out = (arrSample(w).queue || []).map(r => ({ title:str(r.title), status:str(r.status),
+      size_mb:r.size ? cents(num(r.size) / 1048576) : "", left_mb:r.sizeleft ? cents(num(r.sizeleft) / 1048576) : "",
+      quality:str(((r.quality || {}).quality || {}).name || ""), eta:str(r.timeleft) }));
+    addStep(str(w === "sonarr" ? "Sonarr" : "Radarr") + " queue", { mono:true, text:out.map(r => r.title + ": " + r.status).join("\n") || tr("(nothing)") })
+      .done(tr("{n} downloading", { n:out.length }), "ok");
+    return out;
+  }
+  function arrMissing(which){
+    const w = arrName(which), out = (arrSample(w).missing || []).map(r => ({ title:str(r.title), added:str(r.added).slice(0, 10), id:Math.trunc(num(r.id)) }));
+    addStep(str(w === "sonarr" ? "Sonarr" : "Radarr") + " wanted list", { mono:true, text:out.map(r => r.title + " (added " + r.added + ")").join("\n") || tr("(nothing)") })
+      .done(tr("{n} missing", { n:out.length }), "ok");
+    return out;
+  }
+  function arrDiskspace(which){
+    const w = arrName(which), out = (arrSample(w).diskspace || []).map(r => ({ path:str(r.path), label:str(r.label),
+      free_gb:r.freeSpace ? cents(num(r.freeSpace) / 1073741824) : "", total_gb:r.totalSpace ? cents(num(r.totalSpace) / 1073741824) : "" }));
+    addStep(str(w === "sonarr" ? "Sonarr" : "Radarr") + " diskspace", { mono:true, text:out.map(d => d.label + ": " + d.free_gb + " GB free").join("\n") || tr("(nothing)") })
+      .done(tr("{n} folders", { n:out.length }), "ok");
+    return out;
+  }
+  async function arrSearch(which){
+    const w = arrName(which), who = w === "sonarr" ? "Sonarr" : "Radarr";
+    const what = "search " + who + "'s wanted list for what's missing";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep(who, { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
   /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
      shut down and reboot after a yes, every time. Matches the runtime's proxmox_ methods and tests/fake_proxmox.py. */
   const pxSample = () => { connNote("Proxmox"); return CONN.proxmox || {}; };
@@ -21799,6 +22065,9 @@ HOW TO MAP CODE
       case "rb_sabnzbd_queue": return sabnzbdQueue();
       case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
       case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
+      case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
+      case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
+      case "rb_arr_diskspace": return arrDiskspace(b.getFieldValue("WHICH"));
       case "rb_proxmox_nodes": return proxmoxNodes();
       case "rb_proxmox_guests": return proxmoxGuests();
       case "rb_proxmox_storage": return proxmoxStorage();
@@ -22396,6 +22665,7 @@ HOW TO MAP CODE
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
+      case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;

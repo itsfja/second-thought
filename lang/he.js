@@ -177,7 +177,11 @@
 "rb_sabnzbd_queue":{"message0":"התור של SABnzbd","tooltip":"רשימת רשומות, אחת לכל משימה בתור ההורדות: name, size_mb, left_mb, percent, eta (זמן שנותר, כמו 0:12:34) ו-status (Downloading, Queued, Paused). בעמוד זה נעשה שימוש בתור לדוגמה."},
 "rb_sabnzbd_history":{"message0":"היסטוריית SABnzbd, %1 שעות אחרונות","tooltip":"רשימת רשומות, אחת לכל משימה שהסתיימה בזמן הזה: name, status (Completed או Failed), size_mb, מתי הסתיימה ו, למשימה שנכשלה, מדוע נכשלה."},
 "rb_sabnzbd_diskspace":{"message0":"שטח הדיסק של SABnzbd","tooltip":"רשימת רשומות, אחת לכל תיקייה של SABnzbd (תיקיית ההורדות קודם): folder ו-free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"משהה או ממשיך את כל תור ההורדות. הוא שואל אותך קודם תמיד, גם כששום דבר אחר לא שואל, ואין אף אחד לומר כן, זה לא קורה. בעמוד זה שום דבר לא מושהה באמת."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"משהה או ממשיך את כל תור ההורדות. הוא שואל אותך קודם תמיד, גם כששום דבר אחר לא שואל, ואין אף אחד לומר כן, זה לא קורה. בעמוד זה שום דבר לא מושהה באמת."},
+"rb_arr_queue":{"message0":"תור %1","tooltip":"רשימת רשומות, אחת לכל הורדה בתור: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ו-eta (זמן שנותר, כמו 0:12:34). בעמוד זה נעשה שימוש בתור לדוגמה."},
+"rb_arr_missing":{"message0":"רשימת המבוקשים %1","tooltip":"רשימת רשומות, אחת לכל סרט או פרק בלי קובץ: title, added (מתי נוסף) ו-id."},
+"rb_arr_diskspace":{"message0":"שטח הדיסק %1","tooltip":"רשימת רשומות, אחת לכל תיקייה: path, label, free_gb ו-total_gb."},
+"rb_arr_search":{"message0":"לחפש מה חסר ב-%1","tooltip":"מחפש בכל רשימת המבוקשים את מה שאין לו קובץ. הוא שואל אותך קודם תמיד, גם כששום דבר אחר לא שואל, ואין אף אחד לומר כן, זה לא קורה. בעמוד זה שום דבר לא מחפש באמת."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יום","weekdays":"בימי חול","weekends":"בסופי שבוע"},
@@ -201,7 +205,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"קנה","sell":"מכור"},
 "rb_coinbase_order.SIDE":{"buy":"קנה","sell":"מכור"},
 "rb_proxmox_power.ACTION":{"start":"הפעל","shutdown":"כבה","reboot":"אתחל"},
-"rb_docker_power.ACTION":{"restart":"אתחל","stop":"עצור","start":"הפעל"}
+"rb_docker_power.ACTION":{"restart":"אתחל","stop":"עצור","start":"הפעל"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"אירועים",
@@ -235,7 +243,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr ו-Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1100,7 +1109,14 @@
 "{n} folders":"{n} תיקיות",
 "{n} in the queue":"{n} בתור",
 "pause and resume your SABnzbd downloads (asking you each time)":"להשהות ולהמשיך את הורדות ה-SABnzbd שלך (שואל אותך בכל פעם)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"לקרוא את ה-SABnzbd שלך: את תור ההורדות, ההיסטוריה והמקום הפנוי בדיסק ההורדות"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"לקרוא את ה-SABnzbd שלך: את תור ההורדות, ההיסטוריה והמקום הפנוי בדיסק ההורדות",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"לחפש מה חסר ב-Radarr וב-Sonarr שלך (שואל אותך בכל פעם)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"לקרוא את ה-Radarr וה-Sonarr שלך: את תור ההורדות, רשימת המבוקשים ושטח הדיסק",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"איזה? Radarr או Sonarr.",
+"{n} downloading":"{n} מורידים",
+"{n} missing":"{n} חסרים"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -2145,6 +2161,20 @@
 "{n} MB left":"{n} MB נותרו",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd צריך SABNZBD_URL ו-SABNZBD_API_KEY {where_keys}: הכתובת שלו (כמו http://sabnzbd:8080) ומפתח ה-API המלא, ב-SABnzbd תחת Config, General, API Key.",
 "pause SABnzbd's queue":"להשהות את התור של SABnzbd",
-"resume SABnzbd's queue":"להמשיך את התור של SABnzbd"
+"resume SABnzbd's queue":"להמשיך את התור של SABnzbd",
+"Which one? Radarr or Sonarr.":"איזה? Radarr או Sonarr.",
+"Second Thought doesn't send {what} to {who}.":"Second Thought לא שולח {what} ל-{who}.",
+"The {who} refused its API key.":"ה-{who} סירב למפתח ה-API שלו.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"תור {who}",
+"{who} wanted list":"רשימת המבוקשים של {who}",
+"{who} diskspace":"שטח הדיסק של {who}",
+"{n} downloading":"{n} מורידים",
+"{n} missing":"{n} חסרים",
+"search {who}'s wanted list for what's missing":"לחפש מה חסר ברשימת המבוקשים של {who}",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} צריך {url_setting} ו-{key_setting} {where_keys}: הכתובת שלו (כמו http://radarr:7878) ומפתח ה-API, תחת Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 }
 };

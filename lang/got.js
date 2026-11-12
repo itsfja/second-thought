@@ -177,7 +177,11 @@
 "rb_sabnzbd_queue":{"message0":"raihda SABnzbd","tooltip":"Færeis bōkō, aina for ƕammeh waurke in raihdai niuhanum: name, size_mb, left_mb, percent, eta (ƕeila þaih, swe 0:12:34) jah status (Downloading, Queued, Paused). Ana þamma blaþa raihda faurstasseins."},
 "rb_sabnzbd_history":{"tooltip":"Færeis bōkō, aina for ƕammeh waurke þata in þizai ƕeilai usfullida wesi: name, status (Completed aiþþau Failed), size_mb, hvan usfullida jah, faur gabrannjan, duƕe gabrann.","message0":"gamelþa SABnzbd, spedostans %1 ƕeila"},
 "rb_sabnzbd_diskspace":{"message0":"rūms SABnzbd","tooltip":"Færeis bōkō, aina for ƕarjai mapai SABnzbd (mapa niuhanais frumista): folder jah free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Gaandjan aiþþau aftra anastodjan allai raihdai niuhanum. Þuk fraihneiþ aiv, þauh þata annar ni fraihneiþ, jah nih mannauþ qipan jā, ni gataujada. Ana þamma blaþa ni waiht sōþaba gaandjada."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Gaandjan aiþþau aftra anastodjan allai raihdai niuhanum. Þuk fraihneiþ aiv, þauh þata annar ni fraihneiþ, jah nih mannauþ qipan jā, ni gataujada. Ana þamma blaþa ni waiht sōþaba gaandjada."},
+"rb_arr_queue":{"message0":"raihda %1","tooltip":"Færeis bōkō, aina for ƕammeh niuhanum in raihdai: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality jah eta (ƕeila þaih, swe 0:12:34). Ana þamma blaþa raihda faurstasseins."},
+"rb_arr_missing":{"message0":"wens %1","tooltip":"Færeis bōkō, aina for ƕammeh filme aiþþau kaþa bilaþe: title, added (ƕan gamēnida) jah id."},
+"rb_arr_diskspace":{"message0":"rūms %1","tooltip":"Færeis bōkō, aina for ƕarjai mapai: path, label, free_gb jah total_gb."},
+"rb_arr_search":{"message0":"niukan in %1 þata skula","tooltip":"Niukilþ in allai wens þata þatei bōk nih habaiþ. Þuk fraihneiþ aiv, þauh þata annar ni fraihneiþ, jah nih mannauþ qipan jā, ni gataujada. Ana þamma blaþa ni waiht sōþaba niukada."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐌳𐌰𐌲𐌰 𐍈𐌰𐌼𐌼𐌴𐌷","weekdays":"𐌳𐌰𐌲𐌰𐌼 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌹𐍃","weekends":"𐌳𐌰𐌲𐌰𐌼 𐌲𐌰𐌵𐌿𐌼𐌸𐌰𐌹𐍃"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"𐌱𐌿𐌲𐌾𐌰𐌽","sell":"𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽"},
 "rb_coinbase_order.SIDE":{"buy":"𐌱𐌿𐌲𐌾𐌰𐌽","sell":"𐍆𐍂𐌰𐌱𐌿𐌲𐌾𐌰𐌽"},
 "rb_proxmox_power.ACTION":{"start":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹","shutdown":"𐌲𐌰𐌻𐌿𐌺","reboot":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹"},
-"rb_docker_power.ACTION":{"restart":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹","stop":"𐌲𐌰𐌰𐌽𐌳𐌴𐌹","start":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹"}
+"rb_docker_power.ACTION":{"restart":"𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹","stop":"𐌲𐌰𐌰𐌽𐌳𐌴𐌹","start":"𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌴𐌹"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Agent":"𐌰𐌹𐍂𐌿𐍃",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr jah Sonarr"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𐌷𐌰𐌿𐍃𐌾𐌰𐌽𐌳𐌰𐌽𐍃: 𐍄𐌰𐌿𐌾𐌰𐌽𐌳 𐍃𐍅𐌴𐌸𐌰𐌿𐌷 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰 𐌹𐌽 𐌼𐌴𐌻𐌰 𐍄𐌰𐌿𐌾𐌹𐌸",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} 𐌼𐌰𐍀𐌰𐌽𐍃",
 "{n} in the queue":"{n} 𐌹𐌽 𐍂𐌰𐌹𐌷𐌳𐌰𐌹",
 "pause and resume your SABnzbd downloads (asking you each time)":"niuhanins SABnzbd gaandjan jah aftra anastodjan (þuk fraihnands aiv)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd þeinana niukan: raihda niuhanins, gamelþa jah rūms þaih in diskau niuhanins"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd þeinana niukan: raihda niuhanins, gamelþa jah rūms þaih in diskau niuhanins",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"in þaim Radarr jah Sonarr þata skula niukan (þuk fraihnands aiv)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"Radarr jah Sonarr þeinans niukan: raihda, wens jah rūms",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"ƕar? Radarr aiþþau Sonarr?",
+"{n} downloading":"{n} niuhan",
+"{n} missing":"{n} skula"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2144,7 +2160,21 @@
 "{n} MB left":"{n} MB us",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd wili SABNZBD_URL jah SABNZBD_API_KEY {where_keys}: staþ seinana (swe http://sabnzbd:8080) jah anaþar fullu API, in SABnzbd uf Config, General, API Key.",
 "pause SABnzbd's queue":"gaandjan raihda SABnzbd",
-"resume SABnzbd's queue":"aftra anastodjan raihda SABnzbd"
+"resume SABnzbd's queue":"aftra anastodjan raihda SABnzbd",
+"Which one? Radarr or Sonarr.":"ƕar? Radarr aiþþau Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought ni sandeiþ {what} du {who}.",
+"The {who} refused its API key.":"{who} anaþar kuñjan waiardsō.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"raihda {who}",
+"{who} wanted list":"wens {who}",
+"{who} diskspace":"rūms {who}",
+"{n} downloading":"{n} niuhan",
+"{n} missing":"{n} skula",
+"search {who}'s wanted list for what's missing":"in wens {who} þata skula niukan",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} wili {url_setting} jah {key_setting} {where_keys}: staþ seinana (swe http://radarr:7878) jah kuñjan is, uf Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

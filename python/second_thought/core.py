@@ -110,6 +110,11 @@ SAFETY = {
     # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
     "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
     "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
+    # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
+    # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
+    # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
+    "arr_free": [["GET", r"^/api/v3/(queue|wanted/missing|diskspace|system/status)$"]],
+    "arr_asks": [["POST", r"^/api/v3/command$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -272,6 +277,19 @@ def sabnzbd_call(method, mode):
     method, mode = to_str(method).strip().upper(), to_str(mode).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
+            return kind
+    return None
+
+
+ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
+
+
+def arr_call(method, path):
+    """"free" for a Radarr or Sonarr call the runtime makes without asking, "asks" for the one search command, which
+    needs a live yes, and None for anything else, which is never sent (#398)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
             return kind
     return None
 
@@ -712,6 +730,7 @@ CAPABILITIES = [
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
+    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -721,6 +740,7 @@ CAPABILITIES = [
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
+    ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),

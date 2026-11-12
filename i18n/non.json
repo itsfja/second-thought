@@ -680,6 +680,22 @@
   "rb_sabnzbd_pause": {
    "message0": "%1 SABnzbd",
    "tooltip": "Setur í bið eða heldur áfram allri sóknarbíðröðinni. Hann spyr þig alltaf fyrst, þótt ekkert annað spyrji, og ef enginn er til að segja já, gerist ekkert. Á þessari síðu setur ekkert í bið í alvöru."
+  },
+  "rb_arr_queue": {
+   "message0": "biðröð %1",
+   "tooltip": "Listi færslna, ein fyrir hverja sókn í biðröðinni: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality og eta (tími eftir, sem 0:12:34). Á þessari síðu notar hann úrtaksbiðröð."
+  },
+  "rb_arr_missing": {
+   "message0": "óskaárás %1",
+   "tooltip": "Listi færslna, ein fyrir hvern film eða þátt án skráar: title, added (hvenær bætt var við) og id."
+  },
+  "rb_arr_diskspace": {
+   "message0": "diskrúm %1",
+   "tooltip": "Listi færslna, ein fyrir hvern möppu: path, label, free_gb og total_gb."
+  },
+  "rb_arr_search": {
+   "message0": "leita í %1 að því sem vantar",
+   "tooltip": "Leitar í alla óskaárásina að því sem ekki hefur skrá. Hann spyr þig alltaf fyrst, þótt ekkert annað spyrji, og ef enginn er til að segja já, gerist ekkert. Á þessari síðu leitar ekkert í alvöru."
   }
  },
  "options": {
@@ -818,6 +834,22 @@
    "restart": "endrræsa",
    "stop": "stöðva",
    "start": "ræsa"
+  },
+  "rb_arr_queue.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_missing.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_diskspace.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_search.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
   }
  },
  "categories": {
@@ -852,7 +884,8 @@
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker",
-  "SABnzbd": "SABnzbd"
+  "SABnzbd": "SABnzbd",
+  "Radarr and Sonarr": "Radarr og Sonarr"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1717,7 +1750,14 @@
   "{n} folders": "{n} möppur",
   "{n} in the queue": "{n} í biðröðinni",
   "pause and resume your SABnzbd downloads (asking you each time)": "setja í bið og halda áfram SABnzbd-sóknum þínum (spyr þig í hvert sinn)",
-  "read your SABnzbd: the download queue, its history and the download disk's free space": "lesa SABnzbd þitt: sóknarbiðröðina, söguna og laust pláss á sóknardiskinum"
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "lesa SABnzbd þitt: sóknarbiðröðina, söguna og laust pláss á sóknardiskinum",
+  "search your Radarr and Sonarr for what's missing (asking you each time)": "leita að því sem vantar í Radarr og Sonarr þínu (spyr þig í hvert sinn)",
+  "read your Radarr and Sonarr: the download queue, the wanted list and disk space": "lesa Radarr og Sonarr þín: sóknarbiðröð, óskaárás og diskrúm",
+  "Radarr": "Radarr",
+  "Sonarr": "Sonarr",
+  "Which one? Radarr or Sonarr.": "Hvat? Radarr eða Sonarr?",
+  "{n} downloading": "{n} að sækja",
+  "{n} missing": "{n} vantar"
  },
  "examples": {
   "review": {
@@ -3394,7 +3434,21 @@
   "{n} MB left": "{n} MB eftir",
   "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "SABnzbd þarf SABNZBD_URL ok SABNZBD_API_KEY {where_keys}: staðar hans (sem http://sabnzbd:8080) ok fulla lykilinn, í SABnzbd undir Config, General, API Key.",
   "pause SABnzbd's queue": "setja biðröð SABnzbd í bið",
-  "resume SABnzbd's queue": "halda biðröð SABnzbd áfram"
+  "resume SABnzbd's queue": "halda biðröð SABnzbd áfram",
+  "Which one? Radarr or Sonarr.": "Hvat? Radarr eða Sonarr?",
+  "Second Thought doesn't send {what} to {who}.": "Second Thought sendir eigi {what} til {who}.",
+  "The {who} refused its API key.": "{who} synjaði lykli sínum.",
+  "{who}: {why}.": "{who}: {why}.",
+  "{who} {version}": "{who} {version}",
+  "{who} queue": "biðröð {who}",
+  "{who} wanted list": "óskaárás {who}",
+  "{who} diskspace": "diskrúm {who}",
+  "{n} downloading": "{n} að sækja",
+  "{n} missing": "{n} vantar",
+  "search {who}'s wanted list for what's missing": "leita að því sem vantar í óskaárás {who}",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.": "{who} þarf {url_setting} og {key_setting} {where_keys}: staðsetningu hans (sem http://radarr:7878) og lykilinn, undir Settings, General, API Key.",
+  "Radarr": "Radarr",
+  "Sonarr": "Sonarr"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

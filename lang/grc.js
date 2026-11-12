@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"οὐρά SABnzbd","tooltip":"Κατάλογος ἀναγραφῶν, μία ἑκάστῳ ἔργῳ ἐν τῇ οὐρᾷ τῆς λήψεως: name, size_mb, left_mb, percent, eta (ὁ χρόνος ὁ περιλειπόμενος, οἷον 0:12:34) καὶ status (Downloading, Queued, Paused). Ἐν ταύτῃ τῇ σελίδι οὐρά παραδείγματος χρῆται."},
 "rb_sabnzbd_history":{"message0":"ἱστορία SABnzbd, ἔσχαται %1 ὧραι","tooltip":"Κατάλογος ἀναγραφῶν, μία ἑκάστῳ ἔργῳ τῷ ἐν τῷ χρόνῳ τούτῳ τελεσθέντι: name, status (Completed ἢ Failed), size_mb, πότε ἐτελέσθη καὶ, ἐὰν ἀπέτυχεν, διότι."},
 "rb_sabnzbd_diskspace":{"message0":"τόπος τοῦ δίσκου τοῦ SABnzbd","tooltip":"Κατάλογος ἀναγραφῶν, μία ἑκάστῃ θήκῃ τοῦ SABnzbd (πρώτη ἡ θήκη τῆς λήψεως): folder καὶ free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Παύει ἢ πάλιν ἄρχει πᾶσαν τὴν οὐρὰν τῆς λήψεως. Σε ἀεὶ πρότερον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς φάντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ὄντως παύεται."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Παύει ἢ πάλιν ἄρχει πᾶσαν τὴν οὐρὰν τῆς λήψεως. Σε ἀεὶ πρότερον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς φάντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ὄντως παύεται."},
+"rb_arr_queue":{"message0":"οὐρά %1","tooltip":"Κατάλογος ἀναγραφῶν, μία ἑκάστῃ λήψει ἐν τῇ οὐρᾷ: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality καὶ eta (ὁ χρόνος ὁ περιλειπόμενος, οἷον 0:12:34). Ἐν ταύτῃ τῇ σελίδι οὐρά παραδείγματος χρῆται."},
+"rb_arr_missing":{"message0":"ἐπιθυμίαι %1","tooltip":"Κατάλογος ἀναγραφῶν, μία ἑκάστῃ ταινίᾳ ἢ ἐπεισοδίῳ ἄνευ βιβλίου: title, added (πότε προσετέθη) καὶ id."},
+"rb_arr_diskspace":{"message0":"τόπος τοῦ δίσκου %1","tooltip":"Κατάλογος ἀναγραφῶν, μία ἑκάστῃ θήκῃ: path, label, free_gb καὶ total_gb."},
+"rb_arr_search":{"message0":"ἐν %1 ζητεῖν τὸ λεῖπον","tooltip":"Ἐν πάσαις ταῖς ἐπιθυμίαις ζητεῖ ὃ βιβλίον οὐκ ἔχει. Σε ἀεὶ πρότερον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς φάντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ὄντως ζητεῖται."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"καθ᾽ ἡμέραν","weekdays":"ἐν ταῖς ἡμέραις τῶν ἔργων","weekends":"ἐν τῷ τέλει τῆς ἑβδομάδος"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"ὠνοῦ","sell":"πώλει"},
 "rb_coinbase_order.SIDE":{"buy":"ὠνοῦ","sell":"πώλει"},
 "rb_proxmox_power.ACTION":{"start":"ἄρξον","shutdown":"κλεῖσον","reboot":"πάλιν ἄρξον"},
-"rb_docker_power.ACTION":{"restart":"πάλιν ἄρξον","stop":"παῦσον","start":"ἄρξον"}
+"rb_docker_power.ACTION":{"restart":"πάλιν ἄρξον","stop":"παῦσον","start":"ἄρξον"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr καὶ Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} θῆκαι",
 "{n} in the queue":"{n} ἐν τῇ οὐρᾷ",
 "pause and resume your SABnzbd downloads (asking you each time)":"τὰς λήψεις τοῦ SABnzbd παύειν καὶ πάλιν ἄρχειν (σε ἀεὶ ἐρωτῶν)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"τὸ SABnzbd σου ἀναγιγνώσκειν: τὴν οὐρὰν τῆς λήψεως, τὴν ἱστορίαν καὶ τὸν περιλειπόμενον τόπον τοῦ δίσκου τῆς λήψεως"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"τὸ SABnzbd σου ἀναγιγνώσκειν: τὴν οὐρὰν τῆς λήψεως, τὴν ἱστορίαν καὶ τὸν περιλειπόμενον τόπον τοῦ δίσκου τῆς λήψεως",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"ἐν τοῖς Radarr καὶ Sonarr ζητεῖν τὸ λεῖπον (σε ἀεὶ ἐρωτῶν)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"τὰ Radarr καὶ Sonarr ἀναγιγνώσκειν: τὴν οὐρὰν τῆς λήψεως, τὰς ἐπιθυμίας καὶ τὸν τόπον τοῦ δίσκου",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Ποῖον; Radarr ἢ Sonarr;",
+"{n} downloading":"{n} φέρεται κάτω",
+"{n} missing":"{n} λείπει"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -2144,7 +2160,21 @@
 "{n} MB left":"{n} MB ἀπολείποντα",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"Τὸ SABnzbd δεῖται SABNZBD_URL καὶ SABNZBD_API_KEY {where_keys}· τὴν διεύθυνσιν αὐτοῦ (οἷον http://sabnzbd:8080) καὶ τὸ πλῆρες κλεῖδι, ἐν τῷ SABnzbd ὑπὸ Config, General, API Key.",
 "pause SABnzbd's queue":"παῦσαι τὴν οὐρὰν τοῦ SABnzbd",
-"resume SABnzbd's queue":"πάλιν ἆρξαι τὴν οὐρὰν τοῦ SABnzbd"
+"resume SABnzbd's queue":"πάλιν ἆρξαι τὴν οὐρὰν τοῦ SABnzbd",
+"Which one? Radarr or Sonarr.":"Ποῖον; Radarr ἢ Sonarr;",
+"Second Thought doesn't send {what} to {who}.":"Τὸ Second Thought οὐ πέμπει {what} εἰς {who}.",
+"The {who} refused its API key.":"Ὁ {who} τὸ κλεῖδι τὸ ἑαυτοῦ ἠρνήσατο.",
+"{who}: {why}.":"{who}· {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"οὐρά {who}",
+"{who} wanted list":"ἐπιθυμίαι {who}",
+"{who} diskspace":"τόπος τοῦ δίσκου τοῦ {who}",
+"{n} downloading":"{n} φέρεται κάτω",
+"{n} missing":"{n} λείπει",
+"search {who}'s wanted list for what's missing":"ἐν ταῖς ἐπιθυμίαις τοῦ {who} ζητεῖν τὸ λεῖπον",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"Ὁ {who} {url_setting} καὶ {key_setting} δεῖται {where_keys}· τὴν διεύθυνσιν αὐτοῦ (οἷον http://radarr:7878) καὶ τὸ κλεῖδι, ὑπὸ Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

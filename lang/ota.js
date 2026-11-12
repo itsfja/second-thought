@@ -177,7 +177,11 @@
 "rb_sabnzbd_queue":{"message0":"SABnzbd sırası","tooltip":"Kayıtlar listesi, indirme sırasındaki her iş için bir tane: name, size_mb, left_mb, percent, eta (kalan süre, 0:12:34 gibi) ve status (Downloading, Queued, Paused). Bu sayfada örnek bir sıra kullanılır."},
 "rb_sabnzbd_history":{"message0":"SABnzbd tarihi, son %1 saat","tooltip":"Kayıtlar listesi, o sürede biten her iş için bir tane: name, status (Completed veya Failed), size_mb, ne zaman bitti ve başarısızsa neden başarısız oldu."},
 "rb_sabnzbd_diskspace":{"message0":"SABnzbd disk mesahası","tooltip":"Kayıtlar listesi, SABnzbd'nin her klasörü için bir tane (indirme klasörü önce): folder ve free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Bütün indirme sırasını durdurur veya devam ettirir. Başka bir şey sormasa da her seferinde senden sorar; evet diyecek kimse yoksa yapılmaz. Bu sayfada hiçbir şey gerçekten durdurulmaz."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Bütün indirme sırasını durdurur veya devam ettirir. Başka bir şey sormasa da her seferinde senden sorar; evet diyecek kimse yoksa yapılmaz. Bu sayfada hiçbir şey gerçekten durdurulmaz."},
+"rb_arr_queue":{"message0":"%1 sırası","tooltip":"Kayıtlar listesi, sıradaki her indirme için bir tane: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ve eta (kalan süre, 0:12:34 gibi). Bu sayfada örnek bir sıra kullanılır."},
+"rb_arr_missing":{"message0":"%1 ایستک لیستی","tooltip":"Kayıtlar listesi, dosyası olmayan her film veya bölüm için bir tane: title, added (ne zaman eklendi) ve id."},
+"rb_arr_diskspace":{"message0":"%1 دیسک مساحتی","tooltip":"Kayıtlar listesi, her klasör için bir tane: path, label, free_gb ve total_gb."},
+"rb_arr_search":{"message0":"%1 نده eksik اولانی آختارماق","tooltip":"Bütün istek listesinde dosyası olmayanı arar. Başka bir şey sormasa da her seferinde senden sorar; evet diyecek kimse yoksa yapılmaz. Bu sayfada hiçbir şey gerçekten aranmaz."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"هر گون","weekdays":"ایش گونلری","weekends":"هفته صوڭلری"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"آل","sell":"صات"},
 "rb_coinbase_order.SIDE":{"buy":"آل","sell":"صات"},
 "rb_proxmox_power.ACTION":{"start":"باشلات","shutdown":"قاپات","reboot":"یڭیدن باشلات"},
-"rb_docker_power.ACTION":{"restart":"یڭیدن باشلات","stop":"دوردور","start":"باشلات"}
+"rb_docker_power.ACTION":{"restart":"یڭیدن باشلات","stop":"دوردور","start":"باشلات"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Agent":"وكیل",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr و Sonarr"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} klasör",
 "{n} in the queue":"sırada {n}",
 "pause and resume your SABnzbd downloads (asking you each time)":"SABnzbd indirmelerini durdurmak ve devam ettirmek (her seferinde sana sorarak)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd'ni okumak: indirme sırası, tarih ve indirme diskindeki boş yer"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd'ni okumak: indirme sırası, tarih ve indirme diskindeki boş yer",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"Radarr و Sonarr نده eksik اولانی آختارماق (هر سئفهینده سنه سووراراق)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"Radarr و Sonarr نی اوخوماق: سیرا، ایستک لیستی و دیسک مساحتی",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Hangisi? Radarr mı, Sonarr mı?",
+"{n} downloading":"{n} indiriliyor",
+"{n} missing":"{n} eksik"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2144,7 +2160,21 @@
 "{n} MB left":"{n} MB قالدی",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd، SABNZBD_URL و SABNZBD_API_KEY ایستیر {where_keys}: آدرسی (http://sabnzbd:8080 كبی) و تمام کلید، SABnzbd ده Config، General، API Key آلتنده.",
 "pause SABnzbd's queue":"SABnzbd نین سیراسینی دوردورماق",
-"resume SABnzbd's queue":"SABnzbd نین سیراسینی دوام ائتدیرمک"
+"resume SABnzbd's queue":"SABnzbd نین سیراسینی دوام ائتدیرمک",
+"Which one? Radarr or Sonarr.":"Hangisi? Radarr mı, Sonarr mı?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought، {what} ی {who} ه گؤندرمز.",
+"The {who} refused its API key.":"{who}، کلیدی‌نی رد ائتدی.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"{who} sırası",
+"{who} wanted list":"{who} نین ایستک لیستی",
+"{who} diskspace":"{who} نین دیسک مساحتی",
+"{n} downloading":"{n} indiriliyor",
+"{n} missing":"{n} eksik",
+"search {who}'s wanted list for what's missing":"{who} نین ایستک لیستینده eksik اولانی آختارماق",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who}، {url_setting} و {key_setting} ایستیر {where_keys}: آدرسی (http://radarr:7878 كبی) و کلیدی، Settings، General، API Key آلتنده.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

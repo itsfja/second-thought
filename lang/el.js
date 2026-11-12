@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"ουρά SABnzbd","tooltip":"Μια λίστα εγγραφών, μία για κάθε εργασία στην ουρά λήψης: name, size_mb, left_mb, percent, eta (υπόλοιπο χρόνου, όπως 0:12:34) και status (Downloading, Queued, Paused). Σε αυτή τη σελίδα χρησιμοποιεί δείγμα ουράς."},
 "rb_sabnzbd_history":{"message0":"ιστορικό SABnzbd, τελευταίες %1 ώρες","tooltip":"Μια λίστα εγγραφών, μία για κάθε εργασία που τελείωσε σε αυτό το διάστημα: name, status (Completed ή Failed), size_mb, πότε τελείωσε και, για αποτυχία, γιατί απέτυχε."},
 "rb_sabnzbd_diskspace":{"message0":"χώρος δίσκου SABnzbd","tooltip":"Μια λίστα εγγραφών, μία για κάθε φάκελο του SABnzbd (πρώτα ο φάκελος λήψης): folder και free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Βάζει σε παύση ή συνεχίζει όλη την ουρά λήψης. Σε ρωτά κάθε φορά, ακόμα κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν παύεται πραγματικά."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Βάζει σε παύση ή συνεχίζει όλη την ουρά λήψης. Σε ρωτά κάθε φορά, ακόμα κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν παύεται πραγματικά."},
+"rb_arr_queue":{"message0":"ουρά %1","tooltip":"Μια λίστα εγγραφών, μία για κάθε λήψη στην ουρά: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality και eta (υπόλοιπο χρόνου, όπως 0:12:34). Σε αυτή τη σελίδα χρησιμοποιεί δείγμα ουράς."},
+"rb_arr_missing":{"message0":"λίστα επιθυμιών %1","tooltip":"Μια λίστα εγγραφών, μία για κάθε ταινία ή επεισόδιο χωρίς αρχείο: title, added (πότε προστέθηκε) και id."},
+"rb_arr_diskspace":{"message0":"χώρος δίσκου %1","tooltip":"Μια λίστα εγγραφών, μία για κάθε φάκελο: path, label, free_gb και total_gb."},
+"rb_arr_search":{"message0":"να αναζητήσεις τι λείπει από το %1","tooltip":"Αναζητά σε όλη τη λίστα επιθυμιών ό,τι δεν έχει αρχείο. Σε ρωτά κάθε φορά, ακόμα κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αναζητεί πραγματικά."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"κάθε μέρα","weekdays":"τις καθημερινές","weekends":"τα Σαββατοκύριακα"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"αγορά","sell":"πώληση"},
 "rb_coinbase_order.SIDE":{"buy":"αγορά","sell":"πώληση"},
 "rb_proxmox_power.ACTION":{"start":"εκκίνηση","shutdown":"τερματισμός","reboot":"επανεκκίνηση"},
-"rb_docker_power.ACTION":{"restart":"επανεκκίνηση","stop":"διακοπή","start":"εκκίνηση"}
+"rb_docker_power.ACTION":{"restart":"επανεκκίνηση","stop":"διακοπή","start":"εκκίνηση"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr και Sonarr"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} φάκελοι",
 "{n} in the queue":"{n} στην ουρά",
 "pause and resume your SABnzbd downloads (asking you each time)":"να θέτεις σε παύση και να συνεχίζεις τις λήψεις σου από το SABnzbd (ρώτησέ σε κάθε φορά)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"να διαβάζεις το SABnzbd σου: την ουρά λήψης, το ιστορικό και τον ελεύθερο χώρο του δίσκου λήψης"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"να διαβάζεις το SABnzbd σου: την ουρά λήψης, το ιστορικό και τον ελεύθερο χώρο του δίσκου λήψης",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"να αναζητήσεις τι λείπει από τα Radarr και Sonarr σου (ρώτησέ σε κάθε φορά)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"να διαβάζεις τα Radarr και Sonarr σου: την ουρά λήψης, τη λίστα επιθυμιών και τον χώρο δίσκου",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Ποιο; Radarr ή Sonarr;",
+"{n} downloading":"{n} σε λήψη",
+"{n} missing":"{n} λείπουν"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2144,6 +2160,20 @@
 "{n} MB left":"{n} MB απομένουν",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"Το SABnzbd χρειάζεται SABNZBD_URL και SABNZBD_API_KEY {where_keys}: τη διεύθυνσή του (όπως http://sabnzbd:8080) και το πλήρες κλειδί API, στο SABnzbd υπό Config, General, API Key.",
 "pause SABnzbd's queue":"παύση της ουράς του SABnzbd",
-"resume SABnzbd's queue":"συνέχιση της ουράς του SABnzbd"
+"resume SABnzbd's queue":"συνέχιση της ουράς του SABnzbd",
+"Which one? Radarr or Sonarr.":"Ποιο; Radarr ή Sonarr;",
+"Second Thought doesn't send {what} to {who}.":"Το Second Thought δεν στέλνει {what} στο {who}.",
+"The {who} refused its API key.":"Ο {who} απέρριψε το κλειδί API του.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"ουρά {who}",
+"{who} wanted list":"λίστα επιθυμιών του {who}",
+"{who} diskspace":"χώρος δίσκου {who}",
+"{n} downloading":"{n} σε λήψη",
+"{n} missing":"{n} λείπουν",
+"search {who}'s wanted list for what's missing":"να αναζητήσεις τι λείπει από τη λίστα επιθυμιών του {who}",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"Ο {who} χρειάζεται {url_setting} και {key_setting} {where_keys}: τη διεύθυνσή του (όπως http://radarr:7878) και το κλειδί API, υπό Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 }
 };

@@ -177,7 +177,11 @@
 "rb_sabnzbd_queue":{"message0":"SABnzbd mālā","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi kammānaṃ mālāyaṃ oropanāya: name, size_mb, left_mb, percent, eta (avasista kālo, yathā 0:12:34) ca status (Downloading, Queued, Paused). Imasmiṃ panaṭṭhe mālā desanāya."},
 "rb_sabnzbd_history":{"tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi kammānaṃ tasmiṃ kāle pariniṭṭhitānaṃ: name, status (Completed vā Failed vā), size_mb, kadā pariniṭṭhitaṃ ca, upaddhassa, kasmā upaddhaṃ.","message0":"SABnzbd atīta, pacchimāni %1 saddā"},
 "rb_sabnzbd_diskspace":{"message0":"SABnzbd okāsa","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi SABnzbd piṭakānaṃ (oropana-piṭakaṃ paṭhamaṃ): folder ca free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Sabbampi mālāṃ oropanaṃ ṭhapeti vā puna ārabhati vā. Taṃ taṃ kāle taṃ paṭipucchati, yasmiṃ añño na paṭipucchati, ca yasmiṃ natthi kenaci 'sādhu'ti vattuṃ, na hoti. Imasmiṃ panaṭṭhe kiñci na ṭhapeti."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Sabbampi mālāṃ oropanaṃ ṭhapeti vā puna ārabhati vā. Taṃ taṃ kāle taṃ paṭipucchati, yasmiṃ añño na paṭipucchati, ca yasmiṃ natthi kenaci 'sādhu'ti vattuṃ, na hoti. Imasmiṃ panaṭṭhe kiñci na ṭhapeti."},
+"rb_arr_queue":{"message0":"mālā %1","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi oropanānaṃ mālāyaṃ: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ca eta (avasista kālo, yathā 0:12:34). Imasmiṃ panaṭṭhe mālā desanāya."},
+"rb_arr_missing":{"message0":"piṭakaṃ %1","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi kammānaṃ potthakena vinā: title, added (kadā upanitaṃ) ca id."},
+"rb_arr_diskspace":{"message0":"okāsa %1","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi piṭakānaṃ: path, label, free_gb ca total_gb."},
+"rb_arr_search":{"message0":"%1-piṭake pariyesituṃ","tooltip":"Sabbampi piṭakaṃ yadā potthako nattīti pariyesati. Taṃ taṃ kāle paṭipucchati, yasmiṃ añño na paṭipucchati, ca yasmiṃ natthi kenaci 'sādhu'ti vattuṃ, na hoti. Imasmiṃ panaṭṭhe kiñci na pariyesati."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"सब्बदिवसे","weekdays":"कम्मदिवसेसु","weekends":"सत्ताहन्तेसु"},
@@ -200,7 +204,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"किणाहि","sell":"विक्किणाहि"},
 "rb_coinbase_order.SIDE":{"buy":"किणाहि","sell":"विक्किणाहि"},
 "rb_proxmox_power.ACTION":{"start":"आरभ","shutdown":"निब्बापेहि","reboot":"पुन आरभ"},
-"rb_docker_power.ACTION":{"restart":"पुन आरभ","stop":"ठपेहि","start":"आरभ"}
+"rb_docker_power.ACTION":{"restart":"पुन आरभ","stop":"ठपेहि","start":"आरभ"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Agent":"पटिनिधि",
@@ -234,7 +242,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr-Sonarr"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1099,7 +1108,14 @@
 "{n} folders":"{n} piṭakāni",
 "{n} in the queue":"{n} mālāyaṃ",
 "pause and resume your SABnzbd downloads (asking you each time)":"SABnzbd oropanā ṭhapetuṃ puna ārabhituṃ (taṃ kāle paṭipucchati)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd vāvakaṃ oropanāya, atīta ca piṭakaṃ oropanaṃ okāso"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd vāvakaṃ oropanāya, atīta ca piṭakaṃ oropanaṃ okāso",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"sakaṃ Radarr-Sonarr-piṭakesu apāpurāṇāni pariyesituṃ (taṃ kāle paṭipucchati)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"sakaṃ Radarr-Sonarr vāvakaṃ oropanāya, piṭakañca okāso",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Katama? Radarr vā Sonarr vā?",
+"{n} downloading":"{n} oropayamānā",
+"{n} missing":"{n} apāpurāṇā"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2144,7 +2160,21 @@
 "{n} MB left":"{n} MB avasiṭṭha",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd SABNZBD_URL ca SABNZBD_API_KEY ca icchati {where_keys}: tassa ṭhānaṃ (yathā http://sabnzbd:8080) ca paripuṇṇā API-kuñjikā, SABnzbd majjhe Config, General, API Key.",
 "pause SABnzbd's queue":"SABnzbd-mālā ṭhapetuṃ",
-"resume SABnzbd's queue":"SABnzbd-mālā puna ārabhituṃ"
+"resume SABnzbd's queue":"SABnzbd-mālā puna ārabhituṃ",
+"Which one? Radarr or Sonarr.":"Katama? Radarr vā Sonarr vā?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought {what} {who} pati na peseti.",
+"The {who} refused its API key.":"{who} kuñjikaṃ paṭikkhesi.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"mālā {who}",
+"{who} wanted list":"piṭakaṃ {who}",
+"{who} diskspace":"okāsa {who}",
+"{n} downloading":"{n} oropayamānā",
+"{n} missing":"{n} apāpurāṇā",
+"search {who}'s wanted list for what's missing":"{who}-piṭake yadā apāpurāṇā pariyesituṃ",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} {url_setting} ca {key_setting} ca icchati {where_keys}: tassa ṭhānaṃ (yathā http://radarr:7878) ca kuñjikā, majjhe Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

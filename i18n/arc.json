@@ -681,6 +681,22 @@
   "rb_sabnzbd_pause": {
    "message0": "%1 SABnzbd",
    "tooltip": "מבטל או משרי את כל סדרא דמיתגרר. שאל לך קדם כל זמן, אף דלא אחראנא שאל, ולית אנש למימר הן, לא עביד. בדין עמתא לא מבטל דבר בממש."
+  },
+  "rb_arr_queue": {
+   "message0": "סדרא ד%1",
+   "tooltip": "רשימא דרשומין, חדא לכל מיגרר בסדרא: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality וeta (זמן דאתר, כות 0:12:34). בדין עמתא סדרא דאגרא."
+  },
+  "rb_arr_missing": {
+   "message0": "מבקשיא ד%1",
+   "tooltip": "רשימא דרשומין, חדא לכל מלצא או מגלתא בלא צבתא: title, added (אמתי אתוסף) וid."
+  },
+  "rb_arr_diskspace": {
+   "message0": "מקום דיסקא ד%1",
+   "tooltip": "רשימא דרשומין, חדא לכל תקא: path, label, free_gb וtotal_gb."
+  },
+  "rb_arr_search": {
+   "message0": "לבקשא ב%1 מן דאתר",
+   "tooltip": "בקש בכל מבקשיא מן דאין לית ליה צבתא. שאל לך קדם כל זמן, אף דלא אחראנא שאל, ולית אנש למימר הן, לא עביד. בדין עמתא לא מבקש דבר בממש."
   }
  },
  "options": {
@@ -819,6 +835,22 @@
    "restart": "שרי תוב",
    "stop": "בטל",
    "start": "שרי"
+  },
+  "rb_arr_queue.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_missing.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_diskspace.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
+  },
+  "rb_arr_search.WHICH": {
+   "radarr": "Radarr",
+   "sonarr": "Sonarr"
   }
  },
  "categories": {
@@ -853,7 +885,8 @@
   "UniFi": "UniFi",
   "Proxmox": "Proxmox",
   "Docker": "Docker",
-  "SABnzbd": "SABnzbd"
+  "SABnzbd": "SABnzbd",
+  "Radarr and Sonarr": "Radarr וSonarr"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "מאני שליחא: שדי יתהון בגו לבנת שליחא",
@@ -1718,7 +1751,14 @@
   "{n} folders": "{n} תיקין",
   "{n} in the queue": "{n} בסדרא",
   "pause and resume your SABnzbd downloads (asking you each time)": "לבטול ולמשרי מיגררין דSABnzbd (שאל לך כל זמן)",
-  "read your SABnzbd: the download queue, its history and the download disk's free space": "למקרי SABnzbd: סדרא דמיתגרר, אסתוריא ומקום דיתר בדיסקא דמיתגרר"
+  "read your SABnzbd: the download queue, its history and the download disk's free space": "למקרי SABnzbd: סדרא דמיתגרר, אסתוריא ומקום דיתר בדיסקא דמיתגרר",
+  "search your Radarr and Sonarr for what's missing (asking you each time)": "לבקשא מן דאתר בRadarr ובSonarr דידך (שאל לך כל זמן)",
+  "read your Radarr and Sonarr: the download queue, the wanted list and disk space": "למקרי Radarr וSonarr דידך: סדרא דמיתגרר, מבקשיא ומקום דיסקא",
+  "Radarr": "Radarr",
+  "Sonarr": "Sonarr",
+  "Which one? Radarr or Sonarr.": "מן דא? Radarr או Sonarr?",
+  "{n} downloading": "{n} מיתגררין",
+  "{n} missing": "{n} אתרו"
  },
  "examples": {
   "review": {
@@ -3395,7 +3435,21 @@
   "{n} MB left": "{n} MB אתרו",
   "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.": "SABnzbd צריך SABNZBD_URL וSABNZBD_API_KEY {where_keys}: אתריה (כות http://sabnzbd:8080) ומנתקא דAPI כלילא, בSABnzbd תחות Config, General, API Key.",
   "pause SABnzbd's queue": "לבטול סדרא דSABnzbd",
-  "resume SABnzbd's queue": "למשרי סדרא דSABnzbd"
+  "resume SABnzbd's queue": "למשרי סדרא דSABnzbd",
+  "Which one? Radarr or Sonarr.": "מן דא? Radarr או Sonarr?",
+  "Second Thought doesn't send {what} to {who}.": "Second Thought לא משדר {what} ל{who}.",
+  "The {who} refused its API key.": "{who} ארכיש למנתקיה דAPI.",
+  "{who}: {why}.": "{who}: {why}.",
+  "{who} {version}": "{who} {version}",
+  "{who} queue": "סדרא ד{who}",
+  "{who} wanted list": "מבקשיא ד{who}",
+  "{who} diskspace": "מקום דיסקא ד{who}",
+  "{n} downloading": "{n} מיתגררין",
+  "{n} missing": "{n} אתרו",
+  "search {who}'s wanted list for what's missing": "לבקשא מן דאתר במבקשיא ד{who}",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.": "{who} צריך {url_setting} ו{key_setting} {where_keys}: אתריה (כות http://radarr:7878) ומנתקיה דAPI, תחות Settings, General, API Key.",
+  "Radarr": "Radarr",
+  "Sonarr": "Sonarr"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

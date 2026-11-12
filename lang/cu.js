@@ -176,7 +176,11 @@
 "rb_sabnzbd_queue":{"message0":"рядъ SABnzbd","tooltip":"Списанїе записей, по единой коемуждо дѣлу въ рядꙋ скачанїа: name, size_mb, left_mb, percent, eta (оставшее время, ꙗ́коже 0:12:34) и status (Downloading, Queued, Paused). На сей страницѣ образець ряда."},
 "rb_sabnzbd_history":{"message0":"исторїа SABnzbd, послѣдніи %1 часъ","tooltip":"Списанїе записей, по единой коемуждо дѣлу въ то время скончавшꙋ: name, status (Completed или Failed), size_mb, когда сконча, а неуспѣвшꙋ — почто."},
 "rb_sabnzbd_diskspace":{"message0":"пространїе диска SABnzbd","tooltip":"Списанїе записей, по единой коемуждо мѣстꙋ SABnzbd (мѣсто скачанїа прьвѣе): folder и free_gb."},
-"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Ѡставлꙗѥтъ или паки двигнѥтъ весь рядъ скачанїа. Тебе всегда прьвѣе вьпроситъ, аще и ничьто же ино не вьпроситъ, и никомꙋ же сꙙщꙋ тъ, не бꙋдѥтъ. На сей страницѣ ничьто же воиство не ѡставлꙗѥтъ."}
+"rb_sabnzbd_pause":{"message0":"%1 SABnzbd","tooltip":"Ѡставлꙗѥтъ или паки двигнѥтъ весь рядъ скачанїа. Тебе всегда прьвѣе вьпроситъ, аще и ничьто же ино не вьпроситъ, и никомꙋ же сꙙщꙋ тъ, не бꙋдѥтъ. На сей страницѣ ничьто же воиство не ѡставлꙗѥтъ."},
+"rb_arr_queue":{"message0":"%1 рядъ","tooltip":"Списанїе записей, по единой коемуждо скачанїю въ рядꙋ: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality и eta (оставшее время, ꙗ́коже 0:12:34). На сей страницѣ образець ряда."},
+"rb_arr_missing":{"message0":"%1 искованїе","tooltip":"Списанїе записей, по единой коемуждо фильмꙋ или части безъ досье: title, added (егда приложена) и id."},
+"rb_arr_diskspace":{"message0":"%1 пространїе диска","tooltip":"Списанїе записей, по единой коемуждо мѣстꙋ: path, label, free_gb и total_gb."},
+"rb_arr_search":{"message0":"искати въ %1 еже лишитъ сꙙ","tooltip":"Ищетъ по всему искованїю еже досье не иматъ. Тебе всегда прьвѣе вьпроситъ, аще и ничьто же ино не вьпроситъ, и никомꙋ же сꙙщꙋ тъ, не бꙋдѥтъ. На сей страницѣ ничьто же воиство не ищетъ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"на всѧкъ день","weekdays":"въ дни дѣланїѧ","weekends":"въ дни ѿдыха"},
@@ -199,7 +203,11 @@
 "rb_coinbase_preview.SIDE":{"buy":"кꙋпи","sell":"продаждь"},
 "rb_coinbase_order.SIDE":{"buy":"кꙋпи","sell":"продаждь"},
 "rb_proxmox_power.ACTION":{"start":"начни","shutdown":"ѹгаси","reboot":"паки начни"},
-"rb_docker_power.ACTION":{"restart":"паки начни","stop":"ѡстанови","start":"начни"}
+"rb_docker_power.ACTION":{"restart":"паки начни","stop":"ѡстанови","start":"начни"},
+"rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
 },
 "categories":{
 "Agent":"Посланникъ",
@@ -233,7 +241,8 @@
 "UniFi":"UniFi",
 "Proxmox":"Proxmox",
 "Docker":"Docker",
-"SABnzbd":"SABnzbd"
+"SABnzbd":"SABnzbd",
+"Radarr and Sonarr":"Radarr и Sonarr"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1098,7 +1107,14 @@
 "{n} folders":"{n} мѣстъ",
 "{n} in the queue":"{n} въ рядѣ",
 "pause and resume your SABnzbd downloads (asking you each time)":"скачанїа SABnzbd ѡставлꙗти и паки двигнꙛꙁи (тебе всегда вьпроси)",
-"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd твои чьсти: рядъ скачанїа, исторїю и оставшее мѣсто диска скачанїа"
+"read your SABnzbd: the download queue, its history and the download disk's free space":"SABnzbd твои чьсти: рядъ скачанїа, исторїю и оставшее мѣсто диска скачанїа",
+"search your Radarr and Sonarr for what's missing (asking you each time)":"въ Radarr и Sonarr твоихъ искати еже лишитъ сꙙ (тебе всегда вьпроси)",
+"read your Radarr and Sonarr: the download queue, the wanted list and disk space":"Radarr и Sonarr твоꙗ чьсти: рядъ, искованїе и пространїе диска",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr",
+"Which one? Radarr or Sonarr.":"Которыи? Radarr или Sonarr?",
+"{n} downloading":"{n} скачаѥтъ",
+"{n} missing":"{n} лишитъ сꙙ"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -2143,7 +2159,21 @@
 "{n} MB left":"{n} MB ѡстало",
 "SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.":"SABnzbd требꙋєꙛъ SABNZBD_URL и SABNZBD_API_KEY {where_keys}: мѣсто єго (ꙗ́коже http://sabnzbd:8080) и полныи ключь, въ SABnzbd подъ Config, General, API Key.",
 "pause SABnzbd's queue":"ѡставити рядъ SABnzbd",
-"resume SABnzbd's queue":"паки двигнꙛꙁи рядъ SABnzbd"
+"resume SABnzbd's queue":"паки двигнꙛꙁи рядъ SABnzbd",
+"Which one? Radarr or Sonarr.":"Которыи? Radarr или Sonarr?",
+"Second Thought doesn't send {what} to {who}.":"Second Thought не посылаетъ {what} къ {who}.",
+"The {who} refused its API key.":"{who} ѡтрицъ ключь свои.",
+"{who}: {why}.":"{who}: {why}.",
+"{who} {version}":"{who} {version}",
+"{who} queue":"{who} рядъ",
+"{who} wanted list":"{who} искованїе",
+"{who} diskspace":"{who} пространїе диска",
+"{n} downloading":"{n} скачаѥтъ",
+"{n} missing":"{n} лишитъ сꙙ",
+"search {who}'s wanted list for what's missing":"въ искованїи {who} искати еже лишитъ сꙙ",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} требꙋєꙛъ {url_setting} и {key_setting} {where_keys}: мѣсто єго (ꙗ́коже http://radarr:7878) и ключь его, подъ Settings, General, API Key.",
+"Radarr":"Radarr",
+"Sonarr":"Sonarr"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",
