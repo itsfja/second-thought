@@ -181,7 +181,15 @@
 "rb_arr_queue":{"message0":"mālā %1","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi oropanānaṃ mālāyaṃ: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ca eta (avasista kālo, yathā 0:12:34). Imasmiṃ panaṭṭhe mālā desanāya."},
 "rb_arr_missing":{"message0":"piṭakaṃ %1","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi kammānaṃ potthakena vinā: title, added (kadā upanitaṃ) ca id."},
 "rb_arr_diskspace":{"message0":"okāsa %1","tooltip":"Pūgani saṃyogaṃ, ekaṃ sabbānampi piṭakānaṃ: path, label, free_gb ca total_gb."},
-"rb_arr_search":{"message0":"%1-piṭake pariyesituṃ","tooltip":"Sabbampi piṭakaṃ yadā potthako nattīti pariyesati. Taṃ taṃ kāle paṭipucchati, yasmiṃ añño na paṭipucchati, ca yasmiṃ natthi kenaci 'sādhu'ti vattuṃ, na hoti. Imasmiṃ panaṭṭhe kiñci na pariyesati."}
+"rb_arr_search":{"message0":"%1-piṭake pariyesituṃ","tooltip":"Sabbampi piṭakaṃ yadā potthako nattīti pariyesati. Taṃ taṃ kāle paṭipucchati, yasmiṃ añño na paṭipucchati, ca yasmiṃ natthi kenaci 'sādhu'ti vattuṃ, na hoti. Imasmiṃ panaṭṭhe kiñci na pariyesati."},
+"rb_unraid_array":{"message0":"Unraid mala","tooltip":"Malaya ekam mulham: state (STARTED, STOPPED, ...), started (pathento kim), free_gb, total_gb ca uptime ca. imasmi pannapattiye dakkhineyyakam paricca."},
+"rb_unraid_disks":{"message0":"Unraid disaka","tooltip":"Mulhanam santanam, ekam ekam disake malaya, pathamam sassirintam, paccha dhamma, paccha thambho: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb ca free_gb ca."},
+"rb_unraid_shares":{"message0":"Unraid samika","tooltip":"Mulhanam santanam, ekam ekam samike: name, free_gb, used_gb ca total_gb ca."},
+"rb_unraid_containers":{"message0":"Unraid bhajanani","tooltip":"Mulhanam santanam, ekam ekam Docker bhajane: name, state (running, exited, ...), status ca auto_start ca (Unraid malaya saddhim tam pathento kim)."},
+"rb_unraid_vms":{"message0":"Unraid yantrani","tooltip":"Mulhanam santanam, ekam ekam yantram: name ca state (RUNNING, SHUTOFF, ...) ca."},
+"rb_unraid_container_power":{"message0":"%1 Unraid bhajanam %2","tooltip":"Docker bhajanam ekam, namena, pathento va nivarento va. sabada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. imasmi pannapattiye kinci na saccato pathento va nivarento va."},
+"rb_unraid_vm_power":{"message0":"%1 Unraid yantram %2","tooltip":"Yantram ekam, namena, pathento va nivarento va. sabada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. imasmi pannapattiye kinci na saccato pathento va nivarento va."},
+"rb_unraid_parity":{"message0":"Unraid sassirintam parikkhato","tooltip":"Sassirinta disake parikkhati tani pathanto, thapana na likkhato. sabada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. imasmi pannapattiye kinci na saccato parikkhati."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"सब्बदिवसे","weekdays":"कम्मदिवसेसु","weekends":"सत्ताहन्तेसु"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr-Sonarr"
+"Radarr and Sonarr":"Radarr-Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Katama? Radarr vā Sonarr vā?",
 "{n} downloading":"{n} oropayamānā",
-"{n} missing":"{n} apāpurāṇā"
+"{n} missing":"{n} apāpurāṇā",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"Unraid bhajanani ca yantrani ca pathento nivarento ca, sassirintam ca parikkhato (sabada tam pucchito)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"Unraid paricca: mala, disaka, samika, bhajanani, yantrani",
+"{n} disks":"{n} disaka",
+"{n} shares":"{n} samika",
+"{n} VMs":"{n} yantrani",
+"Unraid":"Unraid",
+"Unraid array":"Unraid mala",
+"Unraid disks":"Unraid disaka",
+"Unraid shares":"Unraid samika",
+"Unraid containers":"Unraid bhajanani",
+"Unraid VMs":"Unraid yantrani"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -1322,7 +1342,9 @@
 "the key steps":"मुख्यपदानि",
 "title, score, why":"title, score, why",
 "today's draft":"अज्जतनो आलेखो",
-"used headlines":"उपयुत्तानि सीसानि"
+"used headlines":"उपयुत्तानि सीसानि",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(पुब्बचालनं मज्झे अट्ठासि, किच्चक्कमो पन ततो परिवत्ति, तस्मा नवं आरभति।)",
@@ -2112,7 +2134,7 @@
 "Docker containers":"Docker-भाजनानि",
 "Docker: {why}.":"Docker: {why}।",
 "Which Docker container? Give its name, like sonarr.":"कतमं Docker-भाजनं? तस्स नामं देहि, यथा sonarr।",
-"{n} containers":"{n} भाजनानि",
+"{n} containers":"{n} bhajanani",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"भाजनं {name} DOCKER_PROTECT मध्ये अत्थि, तस्मा Second Thought तं कदापि न पुन आरभति, न ठपेति, न आरभति।",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"Windows मध्ये DOCKER_HOST ठाने tcp:// सङ्केतं ठपेहि: Docker स्स नामयुत्ता नाळि न उपत्थम्भीयति।",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"{who}-piṭake yadā apāpurāṇā pariyesituṃ",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} {url_setting} ca {key_setting} ca icchati {where_keys}: tassa ṭhānaṃ (yathā http://radarr:7878) ca kuñjikā, majjhe Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"kon, ca pathento va nivarento va?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} icchati {url_setting} ca {key_setting} ca {where_keys}: tassa thanam (yatha https://unraid) ca API kammattanam, Settings, Management Access, API Keys hettha.",
+"Unraid array":"Unraid mala",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB sunna {total_gb} GB-mha",
+"Unraid disks":"Unraid disaka",
+"{n} disks":"{n} disaka",
+"Unraid shares":"Unraid samika",
+"{n} shares":"{n} samika",
+"Unraid containers":"Unraid bhajanani",
+"{n} VMs":"{n} yantrani",
+"Unraid VMs":"Unraid yantrani",
+"container":"bhajanam",
+"VM":"yantram",
+"{action} the Unraid {who} {name}":"{action} Unraid {who} {name}",
+"check Unraid's parity":"Unraid sassirintam parikkhato",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"mala {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"%1 之序","tooltip":"錄之列，序中每下一錄：title、status（方下、方入、敗等）、size_mb、left_mb、quality、eta（餘時，若 0:12:34）。此頁用示例之序。"},
 "rb_arr_missing":{"message0":"%1 之所求","tooltip":"錄之列，無卷之影片每事一錄：title、added（何時加）、id。"},
 "rb_arr_diskspace":{"message0":"%1 之盤","tooltip":"錄之列，每夾一錄：path、label、free_gb、total_gb。"},
-"rb_arr_search":{"message0":"於 %1 索其乏者","tooltip":"遍索所求，無卷者皆索之。無他問時亦必先問汝，無人在焉則不行。此頁無實索者。"}
+"rb_arr_search":{"message0":"於 %1 索其乏者","tooltip":"遍索所求，無卷者皆索之。無他問時亦必先問汝，無人在焉則不行。此頁無實索者。"},
+"rb_unraid_array":{"message0":"Unraid 之陣","tooltip":"陣之一錄：state（STARTED, STOPPED, ...）、started（啟否）、free_gb、total_gb 與 uptime。此頁用示例之伺服。"},
+"rb_unraid_disks":{"message0":"Unraid 之盤","tooltip":"錄之列，陣中每盤一錄，先驗盤，次資料，次快取：name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb 與 free_gb。"},
+"rb_unraid_shares":{"message0":"Unraid 之享","tooltip":"錄之列，每用戶共享一錄：name, free_gb, used_gb 與 total_gb。"},
+"rb_unraid_containers":{"message0":"Unraid 之器","tooltip":"錄之列，每 Docker 器一錄：name, state（running, exited, ...）、status 與 auto_start（Unraid 隨陣啟之否）。"},
+"rb_unraid_vms":{"message0":"Unraid 虛機","tooltip":"錄之列，每虛機一錄：name 與 state（RUNNING, SHUTOFF, ...）。"},
+"rb_unraid_container_power":{"message0":"%1 Unraid 之器 %2","tooltip":"依名啟或止一 Docker 器。縱他者不問，亦必先問於爾，無人在而應之則不行。此頁實無所啟止。"},
+"rb_unraid_vm_power":{"message0":"%1 Unraid 之虛機 %2","tooltip":"依名啟或止一虛機。縱他者不問，亦必先問於爾，無人在而應之則不行。此頁實無所啟止。"},
+"rb_unraid_parity":{"message0":"驗 Unraid 之驗盤","tooltip":"讀驗盤以驗之，不書正。縱他者不問，亦必先問於爾，無人在而應之則不行。此頁實無所驗。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每日","weekdays":"平日","weekends":"休日"},
@@ -242,7 +250,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr 與 Sonarr"
+"Radarr and Sonarr":"Radarr 與 Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"聽者：所出之程依時而行，則此諸塊行",
@@ -1114,7 +1123,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"孰？Radarr 抑 Sonarr？",
 "{n} downloading":"{n} 方下",
-"{n} missing":"{n} 乏"
+"{n} missing":"{n} 乏",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"啟止爾 Unraid 之器與虛機，且驗其驗盤（每問於爾）",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"讀爾 Unraid 之伺服：其陣、其盤、其享、其器與其虛機",
+"{n} disks":"{n} 盤",
+"{n} shares":"{n} 享",
+"{n} VMs":"虛機 {n}",
+"Unraid":"Unraid",
+"Unraid array":"Unraid 之陣",
+"Unraid disks":"Unraid 之盤",
+"Unraid shares":"Unraid 之享",
+"Unraid containers":"Unraid 之器",
+"Unraid VMs":"Unraid 虛機"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -1321,7 +1341,9 @@
 "the key steps":"要步",
 "title, score, why":"題, 分, 故",
 "today's draft":"今日之稿",
-"used headlines":"已用之題"
+"used headlines":"已用之題",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n（前行中止，然其程已易，故更始。）",
@@ -2111,7 +2133,7 @@
 "Docker containers":"Docker 之器",
 "Docker: {why}.":"Docker：{why}。",
 "Which Docker container? Give its name, like sonarr.":"何 Docker 之器？示其名，若 sonarr。",
-"{n} containers":"{n} 器",
+"{n} containers":"器 {n}",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"器 {name} 在 DOCKER_PROTECT，故 Second Thought 未嘗復啟之、止之、啟之。",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"於 Windows，置 DOCKER_HOST 為 tcp:// 之址：Docker 之名管不可用。",
@@ -2173,7 +2195,25 @@
 "search {who}'s wanted list for what's missing":"於 {who} 之所求索其乏者",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} 須 {url_setting}、{key_setting} {where_keys}：其址（若 http://radarr:7878），及其鑰，在 Settings、General、API Key 下。",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"何者，且啟之抑止之？",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who}需{url_setting}與{key_setting} {where_keys}：其址（如 https://unraid）與 API 之鑰，在 Settings, Management Access, API Keys 之下。",
+"Unraid array":"Unraid 之陣",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}，{total_gb} GB 中餘 {free_gb} GB",
+"Unraid disks":"Unraid 之盤",
+"{n} disks":"{n} 盤",
+"Unraid shares":"Unraid 之享",
+"{n} shares":"{n} 享",
+"Unraid containers":"Unraid 之器",
+"{n} VMs":"虛機 {n}",
+"Unraid VMs":"Unraid 虛機",
+"container":"器",
+"VM":"虛機",
+"{action} the Unraid {who} {name}":"{action} Unraid 之{who} {name}",
+"check Unraid's parity":"驗 Unraid 之驗盤",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"陣 {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

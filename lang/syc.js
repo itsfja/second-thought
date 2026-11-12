@@ -182,7 +182,15 @@
 "rb_arr_queue":{"message0":"ṭūqsā d-%1","tooltip":"pūqā d-rešē, ḥadā l-kal naḥḥūṭā b-ṭūqsā: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality w-eta (zabnā baꜥ, ꜥak 0:12:34). b-dēn ṣeḥtā ṭūqsā d-meṯmārā."},
 "rb_arr_missing":{"message0":"ṭūbā d-ṭlābē d-%1","tooltip":"pūqā d-rešē, ḥadā l-kal ḥaylānā aw qaṭrā b-lā ktābā: title, added (ēmat tappā) w-id."},
 "rb_arr_diskspace":{"message0":"aṯrā d-diskā d-%1","tooltip":"pūqā d-rešē, ḥadā l-kal qnūšā: path, label, free_gb w-total_gb."},
-"rb_arr_search":{"message0":"baꜥā b-%1 mā bāꜥ","tooltip":"b-kollā ṭūbā d-ṭlābē baꜥā mā lā ktābā ꜥmār. sāꜣelā lāk kol-zabnā, ꜥaṣar kollā ꜥāḥrānā lā sāꜣel, w-lā āšar āmōr hnā, lā ꜥbad. b-dēn ṣeḥtā kollā lā baꜥā b-ḥrānūṯā."}
+"rb_arr_search":{"message0":"baꜥā b-%1 mā bāꜥ","tooltip":"b-kollā ṭūbā d-ṭlābē baꜥā mā lā ktābā ꜥmār. sāꜣelā lāk kol-zabnā, ꜥaṣar kollā ꜥāḥrānā lā sāꜣel, w-lā āšar āmōr hnā, lā ꜥbad. b-dēn ṣeḥtā kollā lā baꜥā b-ḥrānūṯā."},
+"rb_unraid_array":{"message0":"sdra d Unraid","tooltip":"ktba lda lsdra: state (STARTED, STOPPED, ...), started (ayk mkykl), free_gb, total_gb w uptime. bhn dawkta aqstra d hwyt mtlmy."},
+"rb_unraid_disks":{"message0":"asqla d Unraid","tooltip":"rhta dktb, lda lkl asqla dsdra, qdmyta mwshtha, btar ynyqta, btar kywta: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb w free_gb."},
+"rb_unraid_shares":{"message0":"shwtre d Unraid","tooltip":"rhta dktb, lda lkl shwtra d bnyna: name, free_gb, used_gb w total_gb."},
+"rb_unraid_containers":{"message0":"asqle d Unraid","tooltip":"rhta dktb, lda lkl asqlta d Docker: name, state (running, exited, ...), status w auto_start (ayk Unraid mkykl lh m sdra)."},
+"rb_unraid_vms":{"message0":"awnyte d Unraid","tooltip":"rhta dktb, lda lkl awnyta: name w state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 lasqlta d Unraid %2","tooltip":"mkyl aw mkyf asqlta da d Docker, bshmh. shl lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la mkyl aw mkyf bshryra."},
+"rb_unraid_vm_power":{"message0":"%1 lawnyta d Unraid %2","tooltip":"mkyl aw mkyf awnyta da, bshmh. shl lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la mkyl aw mkyf bshryra."},
+"rb_unraid_parity":{"message0":"bdykuta d mwshtha d Unraid","tooltip":"bdyk asqle dmwshtha bqrynhn, la ktb twbrna. shl lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la bdyk bshryra."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ܟܘܠ ܝܘܡ","weekdays":"ܒܝܘܡܬܐ ܕܥܒܕܐ","weekends":"ܒܫܒܬܐ"},
@@ -244,7 +252,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr w-Sonarr"
+"Radarr and Sonarr":"Radarr w-Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ܡܨܝܬܢܐ: ܪܗܛܝܢ ܟܕ ܛܘܟܣܐ ܕܢܦܩ ܪܗܛ ܥܡ ܙܒܢܐ",
@@ -1116,7 +1125,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"man? Radarr aw Sonarr?",
 "{n} downloading":"{n} naḥḥāṭīn",
-"{n} missing":"{n} bāꜥīn"
+"{n} missing":"{n} bāꜥīn",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"lmkyl wlmkyf asqle wawnyte d Unraid dylk, wlbdykuta dmwshth (shl lk kl zbn)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"lmqryta laqstra d Unraid dylk: sdra, asqlwhy, shwtrwhy, asqlwhy wawnytwhy",
+"{n} disks":"{n} asqla",
+"{n} shares":"{n} shwtre",
+"{n} VMs":"{n} awnyte",
+"Unraid":"Unraid",
+"Unraid array":"sdra d Unraid",
+"Unraid disks":"asqla d Unraid",
+"Unraid shares":"shwtre d Unraid",
+"Unraid containers":"asqle d Unraid",
+"Unraid VMs":"awnyte d Unraid"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
@@ -1323,7 +1343,9 @@
 "the key steps":"ܕܪܓܐ ܪܝܫܝܐ",
 "title, score, why":"ܪܝܫܐ, ܫܡܐ, ܠܡܢܐ",
 "today's draft":"ܪܘܫܡܐ ܕܝܘܡܢܐ",
-"used headlines":"ܪܝܫܐ ܕܐܬܚܫܚܘ"
+"used headlines":"ܪܝܫܐ ܕܐܬܚܫܚܘ",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(rahṭā qadmāyā psaq bpalgeh, ꜣellā ṭuksā ꜣeštaḥlap men hāydēn, wmettul hānā šārē men dreš.)",
@@ -2113,7 +2135,7 @@
 "Docker containers":"mānē d-Docker",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"ꜣaynā mānā d-Docker? hab šmeh, ꜣak sonarr.",
-"{n} containers":"{n} mānē",
+"{n} containers":"{n} asqle",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"mānā {name} b-DOCKER_PROTECT, wlꜥālam Second Thought lā mašrē leh.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"b-Windows, sīm tcp:// b-DOCKER_HOST. zamrūrā d-Docker lā metqabbal.",
@@ -2175,7 +2197,25 @@
 "search {who}'s wanted list for what's missing":"b-ṭūbā d-ṭlābē d-{who} baꜥā mā bāꜥ",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} sānē {url_setting} w-{key_setting} {where_keys}: aṯrēh (ꜥak http://radarr:7878) wmāḥtēh, l-tḥet Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"ayna u lmykl aw lmkyf?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} bea {url_setting} w {key_setting} {where_keys}: atrh (ayk https://unraid) w ikta d API, thwy't Settings, Management Access, API Keys.",
+"Unraid array":"sdra d Unraid",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB frya mn {total_gb} GB",
+"Unraid disks":"asqla d Unraid",
+"{n} disks":"{n} asqla",
+"Unraid shares":"shwtre d Unraid",
+"{n} shares":"{n} shwtre",
+"Unraid containers":"asqle d Unraid",
+"{n} VMs":"{n} awnyte",
+"Unraid VMs":"awnyte d Unraid",
+"container":"asqlta",
+"VM":"awnyta",
+"{action} the Unraid {who} {name}":"{action} l {who} d Unraid {name}",
+"check Unraid's parity":"bdykuta d mwshtha d Unraid",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"sdra {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

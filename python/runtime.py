@@ -87,7 +87,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -151,7 +151,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY")
 
 
 def _load_keychain():
@@ -1137,6 +1137,14 @@ SAFETY = {
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
     "arr_free": [["GET", r"^/api/v3/(queue|wanted/missing|diskspace|system/status)$"]],
     "arr_asks": [["POST", r"^/api/v3/command$"]],
+    # Unraid's own GraphQL API (#399), all of it one POST to /graphql, so the gate reads the query text: a query is a
+    # read, and only these mutations are ever sent, after a live yes: starting or stopping one container or VM by
+    # name, and a parity read-check. Anything else (stopping the array, adding or removing disks, updating
+    # containers, plugins, terminal commands) is never sent.
+    "unraid_free": [["POST", r"^(?![\s\S]*mutation)\s*(query|\{)"]],
+    "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
+                    ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
+                    ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1312,6 +1320,17 @@ def arr_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
+
+
+def unraid_call(method, query):
+    """"free" for a Unraid GraphQL query the runtime makes without asking (a query is a read), "asks" for the few
+    mutations that need a live yes (starting or stopping one container or VM, a parity read-check), and None for
+    anything else, which is never sent (#399)."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
             return kind
     return None
 
@@ -1753,6 +1772,7 @@ CAPABILITIES = [
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
+    ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -1763,6 +1783,7 @@ CAPABILITIES = [
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
+    ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
@@ -4273,6 +4294,127 @@ class Connections:
             return False
         await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
         self.log(w.capitalize(), what, tr("done"))
+        return True
+
+    # Unraid (#399)
+    # Unraid's own GraphQL API: UNRAID_URL (the server's address, like https://unraid) and UNRAID_API_KEY (Settings,
+    # Management Access, API Keys; built into Unraid 7.2 and later, the Unraid Connect plugin before that). Reads are
+    # the queries in SAFETY["unraid_free"]; starting or stopping one container or VM, and a parity read-check
+    # (unraid_asks) always ask, live, and never run with nobody there. Nothing else is ever sent: the array is never
+    # stopped, no disk is added or removed, no container is updated or removed, no plugin is installed, nothing runs
+    # in a terminal. UNRAID_CERT_SHA256 pins a certificate this computer doesn't trust.
+    UNRAID_STATE = {"STARTED": "STARTED", "STOPPED": "STOPPED"}
+
+    async def _unraid(self, query, approved=False):
+        """One GraphQL request to the server, gated by unraid_call: a query goes without asking, one of the few
+        allowed mutations only after a live yes, and anything else is never sent."""
+        kind = unraid_call("POST", query)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=query[:80], who="Unraid"))
+        url = os.environ.get("UNRAID_URL", "").strip()
+        key = os.environ.get("UNRAID_API_KEY", "").strip()
+        if not url or not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.",
+                              who="Unraid", url_setting="UNRAID_URL", key_setting="UNRAID_API_KEY", where_keys=WHERE_KEYS))
+        base = url if url.endswith("/graphql") else url.rstrip("/") + "/graphql"
+        status, raw = await self._pinned("Unraid", base, "UNRAID_CERT_SHA256", "POST", "", {"x-api-key": key}, {"query": query})
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who="Unraid"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="Unraid", why=self._said(status, raw)))
+        answer = json.loads(raw) if raw.strip() else {}
+        if isinstance(answer, dict) and answer.get("errors"):
+            raise RunError(tr("{who}: {why}.", who="Unraid", why=_short(to_str(answer["errors"][0].get("message") if answer["errors"] else ""), 120)))
+        return (answer or {}).get("data") or {}
+
+    async def unraid_array(self):
+        """One record for the array: state (STARTED, STOPPED, ...), started (whether it's started), free_gb,
+        total_gb and uptime."""
+        d = await self._unraid("query{array{state capacity{kilobytes{free total}}}info{os{uptime}}}")
+        a = d.get("array") or {}
+        kb = ((a.get("capacity") or {}).get("kilobytes") or {})
+        out = {"state": to_str(a.get("state")), "started": to_str(a.get("state")) == "STARTED",
+               "free_gb": self._cents(num(kb.get("free")) / 1048576) if kb.get("free") else "",
+               "total_gb": self._cents(num(kb.get("total")) / 1048576) if kb.get("total") else "",
+               "uptime": to_str(((d.get("info") or {}).get("os") or {}).get("uptime"))}
+        line = tr("{state}, {free_gb} GB free of {total_gb} GB", **out) if out["free_gb"] else out["state"]
+        self.log(tr("Unraid array"), line)
+        return out
+
+    async def unraid_disks(self):
+        """A list of records, one for each disk in the array, parity first then data then cache: name, type (Parity,
+        Data, Cache), status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb."""
+        d = await self._unraid("query{array{parities{name type status temp numErrors fsSize fsFree}disks{name type status"
+                               " temp numErrors fsSize fsFree}caches{name type status temp numErrors fsSize fsFree}}}")
+        a = d.get("array") or {}
+        rows = [r for kind in ("parities", "disks", "caches") for r in (a.get(kind) or []) if isinstance(r, dict)]
+        out = [{"name": to_str(r.get("name")), "type": to_str(r.get("type")).capitalize(), "status": to_str(r.get("status")),
+                "temp_c": num(r.get("temp")) if r.get("temp") is not None else "",
+                "errors": num(r.get("numErrors")) if r.get("numErrors") is not None else "",
+                "size_gb": self._cents(num(r.get("fsSize")) / 1048576) if r.get("fsSize") else "",
+                "free_gb": self._cents(num(r.get("fsFree")) / 1048576) if r.get("fsFree") else ""} for r in rows]
+        lines = "\n".join(f"{r['name']} ({r['type']})" + (f": {r['temp_c']} °C" if r["temp_c"] != "" else "") for r in out)
+        self.log(tr("Unraid disks"), lines or tr("(nothing)"), tr("{n} disks", n=len(out)))
+        return out
+
+    async def unraid_shares(self):
+        """A list of records, one for each user share: name, free_gb, used_gb and total_gb."""
+        rows = (await self._unraid("query{shares{name free used size}}")).get("shares") or []
+        out = [{"name": to_str(r.get("name")),
+                "free_gb": self._cents(num(r.get("free")) / 1048576) if r.get("free") else "",
+                "used_gb": self._cents(num(r.get("used")) / 1048576) if r.get("used") else "",
+                "total_gb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else ""} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['free_gb']} GB free" for r in out)
+        self.log(tr("Unraid shares"), lines or tr("(nothing)"), tr("{n} shares", n=len(out)))
+        return out
+
+    async def unraid_containers(self):
+        """A list of records, one for each Docker container: name, state (running, exited, ...), status and
+        auto_start (whether Unraid starts it with the array)."""
+        rows = (await self._unraid("query{dockerContainers{id names state status autoStart}}")).get("dockerContainers") or []
+        out = [{"name": to_str((r.get("names") or [""])[0]), "state": to_str(r.get("state")), "status": to_str(r.get("status")),
+                "auto_start": bool(r.get("autoStart"))} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['state']}" for r in out)
+        self.log(tr("Unraid containers"), lines or tr("(nothing)"), tr("{n} containers", n=len(out)))
+        return out
+
+    async def unraid_vms(self):
+        """A list of records, one for each VM: name and state (RUNNING, SHUTOFF, ...)."""
+        rows = ((await self._unraid("query{vms{domains{id name state}}}")).get("vms") or {}).get("domains") or []
+        out = [{"name": to_str(r.get("name")), "state": to_str(r.get("state"))} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['state']}" for r in out)
+        self.log(tr("Unraid VMs"), lines or tr("(nothing)"), tr("{n} VMs", n=len(out)))
+        return out
+
+    async def unraid_power(self, kind, action, name):
+        """Starts or stops one container or VM, after asking you, every time. Gives back True if it was done."""
+        k, a, n = to_str(kind).strip().lower(), to_str(action).strip().lower(), to_str(name).strip()
+        if k not in ("container", "vm") or a not in ("start", "stop") or not n:
+            raise RunError(tr("Which one, and start or stop?"))
+        who = tr("container") if k == "container" else tr("VM")
+        what = tr("{action} the Unraid {who} {name}", action=a, who=who, name=n)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        query = 'mutation{docker{' + a + '(id:"container:' + n + '"){id}}}' if k == "container" \
+            else 'mutation{vm{' + a + '(id:"vm:' + n + '")}'
+        await self._unraid(query, approved=True)
+        self.log(tr("Unraid"), what, tr("done"))
+        return True
+
+    async def unraid_parity(self):
+        """Checks the parity disks by reading them (a read-check, no corrections written), after asking you, every
+        time. Gives back True if it was started."""
+        what = tr("check Unraid's parity")
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._unraid("mutation{parity{start(correct:false)}}", approved=True)
+        self.log(tr("Unraid"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -7128,6 +7270,12 @@ class Doctor:
                     + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
             out.append(("Radarr", lambda: arr("radarr")))
             out.append(("Sonarr", lambda: arr("sonarr")))
+        if has("unraid_read", "unraid_control"):
+            async def unraid():
+                d = await self._unraid("query{vars{version}array{state}}")
+                return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
+                    + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
+            out.append(("Unraid", unraid))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -7443,7 +7591,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 

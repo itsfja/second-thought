@@ -181,7 +181,15 @@
 "rb_arr_queue":{"message0":"sa %1","tooltip":"dub-sar-meš, nig2-nam-mu2 sa-bi: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality u3 eta (ki-bi, gin7 0:12:34). SABnzbd-a sa ki-bi dug3-du11."},
 "rb_arr_missing":{"message0":"ki-ur2 %1","tooltip":"dub-sar-meš, nig2-nam-mu2 nig2-nam-mu2 nu-um-ma: title, added (e2-bi) u3 id."},
 "rb_arr_diskspace":{"message0":"ki %1","tooltip":"dub-sar-meš, nig2-nam-mu2 é-bi: path, label, free_gb u3 total_gb."},
-"rb_arr_search":{"message0":"%1-a nu dug3-du11","tooltip":"ki-ur2 kala nu dug3-du11, nig2 nu-um-ma. Ki-bi dug3-ga, nig2-nam-mu2 ki-bi dug3-ga, u3 lu2 nu-um-ma, nu-dug3. SABnzbd-a nig2 nu-um-ma dug3-du11."}
+"rb_arr_search":{"message0":"%1-a nu dug3-du11","tooltip":"ki-ur2 kala nu dug3-du11, nig2 nu-um-ma. Ki-bi dug3-ga, nig2-nam-mu2 ki-bi dug3-ga, u3 lu2 nu-um-ma, nu-dug3. SABnzbd-a nig2 nu-um-ma dug3-du11."},
+"rb_unraid_array":{"message0":"Unraid kisikkat","tooltip":"kisikkat-ak mueash: state (STARTED, STOPPED, ...), started (uru), free_gb, total_gb gu uptime. kigiga-bi aabba Unraid igal."},
+"rb_unraid_disks":{"message0":"Unraid nagur","tooltip":"mueash inimmah, anaag nagur kisikkat-a, nuub-si gubal, iku4-ku4, iku4-ku4: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb gu free_gb."},
+"rb_unraid_shares":{"message0":"Unraid sagal","tooltip":"mueash inimmah, anaag sagal lu-a: name, free_gb, used_gb gu total_gb."},
+"rb_unraid_containers":{"message0":"Unraid dug","tooltip":"mueash inimmah, anaag dug Docker: name, state (running, exited, ...), status gu auto_start (Unraid kisikkat-da uru)."},
+"rb_unraid_vms":{"message0":"Unraid unudu","tooltip":"mueash inimmah, anaag unudu: name gu state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 Unraid dug %2","tooltip":"Docker dug ana-gen uru, musha. mueash nugigi4, igal igal nugigi4, lu igal nuduga, nugal. kigiga-bi nuub-uru nuku4-ku4."},
+"rb_unraid_vm_power":{"message0":"%1 Unraid unudu %2","tooltip":"unudu ana-gen uru, musha. mueash nugigi4, igal igal nugigi4, lu igal nuduga, nugal. kigiga-bi nuub-uru nuku4-ku4."},
+"rb_unraid_parity":{"message0":"Unraid gubal agal","tooltip":"gubal nagur inimmah idu, tush-a nugal. mueash nugigi4, igal igal nugigi4, lu igal nuduga, nugal. kigiga-bi nuub-agal."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒃻𒉆","weekdays":"𒌓 𒆥𒅗","weekends":"𒌓 𒄑𒇲𒅗"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr u3 Sonarr"
+"Radarr and Sonarr":"Radarr u3 Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"sa? Radarr u3 Sonarr?",
 "{n} downloading":"{n} ki-ta-e11",
-"{n} missing":"{n} nu"
+"{n} missing":"{n} nu",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"Unraid dug gu unudu uru gu babab, gu gubal agal (mueash mungi4gi4)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"Unraid idu: kisikkat, nagurbi, sagalbi, dugbi gu unudubi",
+"{n} disks":"nagur {n}",
+"{n} shares":"sagal {n}",
+"{n} VMs":"unudu {n}",
+"Unraid":"Unraid",
+"Unraid array":"Unraid kisikkat",
+"Unraid disks":"Unraid nagur",
+"Unraid shares":"Unraid sagal",
+"Unraid containers":"Unraid dug",
+"Unraid VMs":"Unraid unudu"
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},
@@ -1322,7 +1342,9 @@
 "the key steps":"𒅗 𒊕",
 "title, score, why":"title, score, why",
 "today's draft":"𒁾𒊕 𒌓𒁕",
-"used headlines":"𒈬 𒂷𒂷𒀀"
+"used headlines":"𒈬 𒂷𒂷𒀀",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(ak saĝ-ĝa2 maš-a gub, ĝeš-ḫur kur2, gibil-ta saĝ ĝa2-ĝa2.)",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"ki-ur2 {who}-a nu dug3-du11",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} {url_setting} u3 {key_setting} al dug4 {where_keys}: ki-bi (http://radarr:7878-gin7) u3 sulgi API, SABnzbd-a Config, General, API Key-bi.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"aba, u uru u babab?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} {url_setting} gu {key_setting} {where_keys}: kibi (kim https://unraid) gu API sagha, igal Settings, Management Access, API Keys-se.",
+"Unraid array":"Unraid kisikkat",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB sia {total_gb} GB-ta",
+"Unraid disks":"Unraid nagur",
+"{n} disks":"nagur {n}",
+"Unraid shares":"Unraid sagal",
+"{n} shares":"sagal {n}",
+"Unraid containers":"Unraid dug",
+"{n} VMs":"unudu {n}",
+"Unraid VMs":"Unraid unudu",
+"container":"dug",
+"VM":"unudu",
+"{action} the Unraid {who} {name}":"{action} Unraid {who} {name}",
+"check Unraid's parity":"Unraid gubal agal",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"kisikkat {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

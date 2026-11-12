@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"ordo %1","tooltip":"Index factorum, unum quoque in ordine demittendi: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality et eta (tempus reliquum, ut 0:12:34). In hac pagina ordo exemplaris adhibetur."},
 "rb_arr_missing":{"message0":"desideria %1","tooltip":"Index factorum, unum quoque pelliculae vel epistolae sine folio: title, added (quando additum) et id."},
 "rb_arr_diskspace":{"message0":"spatium disci %1","tooltip":"Index factorum, unum quoque capsarum: path, label, free_gb et total_gb."},
-"rb_arr_search":{"message0":"in %1 quaerere quid desit","tooltip":"In omnibus desideriis quaerit quod folium non habet. Te semem primum rogat, etiam cum nihil aliud rogat, et nullo dicente sic, nihil fit. In hac pagina nihil vere quaeritur."}
+"rb_arr_search":{"message0":"in %1 quaerere quid desit","tooltip":"In omnibus desideriis quaerit quod folium non habet. Te semem primum rogat, etiam cum nihil aliud rogat, et nullo dicente sic, nihil fit. In hac pagina nihil vere quaeritur."},
+"rb_unraid_array":{"message0":"acies Unraid","tooltip":"Una memoria aciei: state (STARTED, STOPPED, ...), started (num incohaverit), free_gb, total_gb et uptime. In hac pagina servatore exemplari utitur."},
+"rb_unraid_disks":{"message0":"disci Unraid","tooltip":"Index memoriarum, una quoque disco aciei, primum paritas, deinde data, deinde cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb et free_gb."},
+"rb_unraid_shares":{"message0":"partes Unraid","tooltip":"Index memoriarum, una quoque parte utentis: name, free_gb, used_gb et total_gb."},
+"rb_unraid_containers":{"message0":"capsae Unraid","tooltip":"Index memoriarum, una quoque capsae Docker: name, state (running, exited, ...), status et auto_start (num Unraid eam cum acie incipiat)."},
+"rb_unraid_vms":{"message0":"machinae virtuales Unraid","tooltip":"Index memoriarum, una quoque machina virtuali: name et state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 capsam Unraid %2","tooltip":"Incipit aut sistit unam capsam Docker, nomine. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere incipit aut sistit."},
+"rb_unraid_vm_power":{"message0":"%1 machinam virtualem Unraid %2","tooltip":"Incipit aut sistit unam machinam virtualem, nomine. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere incipit aut sistit."},
+"rb_unraid_parity":{"message0":"paritatem Unraid explorare","tooltip":"Discos paritatis legit eos explorans, nullas correctiones scribens. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere explorat."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr et Sonarr"
+"Radarr and Sonarr":"Radarr et Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Quis? Radarr an Sonarr?",
 "{n} downloading":"{n} demittuntur",
-"{n} missing":"{n} desunt"
+"{n} missing":"{n} desunt",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"capsas et machinas virtuales Unraid tui incipere et sistere, et paritatem explorare (te interrogans vicibus omnibus)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"servatorem Unraid tuum legere: aciem, discos eius, partes eius, capsas eius et machinas virtuales eius",
+"{n} disks":"{n} disci",
+"{n} shares":"{n} partes",
+"{n} VMs":"{n} machinae virtuales",
+"Unraid":"Unraid",
+"Unraid array":"acies Unraid",
+"Unraid disks":"disci Unraid",
+"Unraid shares":"partes Unraid",
+"Unraid containers":"capsae Unraid",
+"Unraid VMs":"machinae virtuales Unraid"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"Hanc imaginem una sententia describe.",
 "clear, appealing, easy to read at small size":"clarum, gratum, facile lectu parva magnitudine",
 "The back door is still open.":"Ianua postica adhuc aperta est.",
-"Good morning!":"Bonum mane!"
+"Good morning!":"Bonum mane!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Exsecutio prior in medio substitit, sed programma postea mutatum est, itaque de integro incipit.)",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"in desideriis {who} quaerere quid desit",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} {url_setting} et {key_setting} eget {where_keys}: inscriptionem eius (ut http://radarr:7878) et clavem API, sub Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Quis, et incipere an sistere?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} indiget {url_setting} et {key_setting} {where_keys}: insulam eius (ut https://unraid) et clavem API, sub Settings, Management Access, API Keys.",
+"Unraid array":"acies Unraid",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB libera ex {total_gb} GB",
+"Unraid disks":"disci Unraid",
+"{n} disks":"{n} disci",
+"Unraid shares":"partes Unraid",
+"{n} shares":"{n} partes",
+"Unraid containers":"capsae Unraid",
+"{n} VMs":"{n} machinae virtuales",
+"Unraid VMs":"machinae virtuales Unraid",
+"container":"capsa",
+"VM":"machina virtualis",
+"{action} the Unraid {who} {name}":"{action} {who} Unraid {name}",
+"check Unraid's parity":"paritatem Unraid explorare",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"acies {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

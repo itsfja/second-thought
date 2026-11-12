@@ -181,7 +181,15 @@
 "rb_arr_queue":{"message0":"taksis nte %1","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-erhme en taksis: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality mn eta (ēne etšōp ēnhe, nthe 0:12:34). En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ šop ere ou-taksis nte ouōrb."},
 "rb_arr_missing":{"message0":"ouōbe nte ouonē nte %1","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-ėhme ēte ou-ⲥⲁⲥⲟⲟⲩⲟⲛ m-mou-int: title, added (ēne etappē) mn id."},
 "rb_arr_diskspace":{"message0":"mēte nte disk nte %1","tooltip":"ouōbe nte oun-ršōme, hēn nak-šop nte ou-mēte: path, label, free_gb mn total_gb."},
-"rb_arr_search":{"message0":"šop ēnhe en %1","tooltip":"Šop en ouōbe nte ouonē kote ou-ⲥⲁⲥⲟⲟⲩⲟⲛ m-mou-int mmo-f. Ešafōōš n-kat ouonh, ēre pēhēhē nte ouōšeb mmon erō-k, mn ourome mpša ēro-f, ouonh m-moot. En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ ouonh m-moot en ouōrbe."}
+"rb_arr_search":{"message0":"šop ēnhe en %1","tooltip":"Šop en ouōbe nte ouonē kote ou-ⲥⲁⲥⲟⲟⲩⲟⲛ m-mou-int mmo-f. Ešafōōš n-kat ouonh, ēre pēhēhē nte ouōšeb mmon erō-k, mn ourome mpša ēro-f, ouonh m-moot. En pe-ⲥⲁⲥⲟⲟⲩⲟⲛ ouonh m-moot en ouōrbe."},
+"rb_unraid_array":{"message0":"proseuxe mmmont m Unraid","tooltip":"oun mont ehan mmproseuxe: state (STARTED, STOPPED, ...), started (ethnaounh), free_gb, total_gb nem uptime. narem pesnouti ouaaou nim nesneou na ounh nuaaou."},
+"rb_unraid_disks":{"message0":"tisnou m Unraid","tooltip":"oudap nimmont, ouaaou nim ntero tisnou hn proseuxe, prwte tirwseuxe, nem piran, nem pikot: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb nem free_gb."},
+"rb_unraid_shares":{"message0":"niare n Unraid","tooltip":"oudap nimmont, ouaaou nim ntero re nniare: name, free_gb, used_gb nem total_gb."},
+"rb_unraid_containers":{"message0":"nikap n Unraid","tooltip":"oudap nimmont, ouaaou nim ntero kap n Docker: name, state (running, exited, ...), status nem auto_start (ethebe Unraid nau mihte proseuxe anastoth)."},
+"rb_unraid_vms":{"message0":"ounonnouoni n Unraid","tooltip":"oudap nimmont, ouaaou nim ntero ounonnouoni: name nem state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 pkap n Unraid %2","tooltip":"naounh akonk oukap n Docker, etbe pesran. nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare ouounh akonk na oumetn."},
+"rb_unraid_vm_power":{"message0":"%1 pounonnouoni n Unraid %2","tooltip":"naounh akonk ouounonnouoni, etbe pesran. nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare ouounh akonk na oumetn."},
+"rb_unraid_parity":{"message0":"ethebepproseuxe mmmont m Unraid ouosh","tooltip":"noune nisnou nte tirwseuxe ethre sotem mmou, nim ethnasou saounonim. nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nim na oumetn."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ϩⲟⲟⲩ ⲛⲓⲙ","weekdays":"ϩⲛ ⲛϩⲟⲟⲩ ⲛϩⲱⲃ","weekends":"ϩⲛ ⲛϩⲟⲟⲩ ⲛⲙⲧⲟⲛ"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr mn Sonarr"
+"Radarr and Sonarr":"Radarr mn Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ⲛⲥⲱⲧⲙ: ϣⲁⲩⲁⲁⲩ ϩⲟⲧⲁⲛ ⲛⲧⲁⲝⲓⲥ ⲉⲃⲟⲗ ϣⲁϥⲁⲁⲩ ⲕⲁⲧⲁ ⲟⲩⲟⲉⲓϣ",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Ounou? Radarr ē Sonarr?",
 "{n} downloading":"{n} miše",
-"{n} missing":"{n} etšōp ēnhe"
+"{n} missing":"{n} etšōp ēnhe",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"ounh nem konk nikap nem ounonnouoni m Unraid ntek, nem ouosh mmpesproseuxe (nanoun nak nim ntero)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"sotem mpanoi m Unraid ntek: proseuxe, nisnou mmou, niare mmou, nikap mmou nem ounonnouoni mmou",
+"{n} disks":"{n} tisnou",
+"{n} shares":"{n} niare",
+"{n} VMs":"{n} ounonnouoni",
+"Unraid":"Unraid",
+"Unraid array":"proseuxe mmmont m Unraid",
+"Unraid disks":"tisnou m Unraid",
+"Unraid shares":"niare n Unraid",
+"Unraid containers":"nikap n Unraid",
+"Unraid VMs":"ounonnouoni n Unraid"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -1322,7 +1342,9 @@
 "the key steps":"ⲛⲃⲁⲑⲙⲟⲥ ⲉⲧⲛⲁϣⲉ",
 "title, score, why":"ⲣⲁⲛ, ⲱⲡ, ⲉⲧⲃⲉ ⲟⲩ",
 "today's draft":"ⲡⲥϩⲁⲓ ⲙⲡⲟⲟⲩ",
-"used headlines":"ⲛϣⲁϫⲉ ⲛⲧⲁⲩⲁⲁⲩ"
+"used headlines":"ⲛϣⲁϫⲉ ⲛⲧⲁⲩⲁⲁⲩ",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(oupraksis ntšorp aslo hn tmēte, alla taksis asšibe jin tote, auō šasarkhei nkesop.)",
@@ -2112,7 +2134,7 @@
 "Docker containers":"nhnaau nte Docker",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"aš nhnaau nte Docker? ma mpefran, nthe sonarr.",
-"{n} containers":"{n} nhnaau",
+"{n} containers":"{n} kap",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"phnaau {name} hn DOCKER_PROTECT, etbe pai Second Thought nšafšaaf an enehe.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"hn Windows, kō n tcp:// hn DOCKER_HOST. pmōit nte Docker nšafšōpe an.",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"en ouōbe nte ouonē nte {who} šop ēnhe",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} šafouōš n-{url_setting} mn n-{key_setting} {where_keys}: pma nte (nthe http://radarr:7878) mn pēhēhē nte API, hn Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"ounouni, oude ethnaounh ethnaconk?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} outab eru {url_setting} nem {key_setting} {where_keys}: pesnanef (ehoue https://unraid) nem ouaipi n API, hn Settings, Management Access, API Keys.",
+"Unraid array":"proseuxe mmmont m Unraid",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB ethouab hn {total_gb} GB",
+"Unraid disks":"tisnou m Unraid",
+"{n} disks":"{n} tisnou",
+"Unraid shares":"niare n Unraid",
+"{n} shares":"{n} niare",
+"Unraid containers":"nikap n Unraid",
+"{n} VMs":"{n} ounonnouoni",
+"Unraid VMs":"ounonnouoni n Unraid",
+"container":"kap",
+"VM":"ounonnouoni",
+"{action} the Unraid {who} {name}":"{action} nte p {who} n Unraid {name}",
+"check Unraid's parity":"ethebepproseuxe mmmont m Unraid ouosh",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"proseuxe {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

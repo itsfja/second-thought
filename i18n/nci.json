@@ -696,6 +696,38 @@
   "rb_arr_search": {
    "message0": "quittītīni %1 tlein moc",
    "tooltip": "In tlaīxōhuīli cēmpan tlein moc moppa quittītīni. Mitzitzquītia cē ihcāitl occeppa, tla ahmo occe huel mitzitzquītia, ihuan tla ahmo ac quimati, ahmo mochīhua. Inīn āmoxtli, ahmo huel mochīhua."
+  },
+  "rb_unraid_array": {
+   "message0": "Unraid necuitlalpilli",
+   "tooltip": "Ce tlacuilolli in necuitlalpilli: state (STARTED, STOPPED, ...), started (oquipehualoc), free_gb, total_gb ihuan uptime. Ipan ini amoxtli ce tlacaxochitli tlacuilolli quimonequiltia."
+  },
+  "rb_unraid_disks": {
+   "message0": "Unraid tepoztli",
+   "tooltip": "Tlacuilolli in tlapoualli, ce ipampa centetl tepoztli in necuitlalpilli, achto nemic xelihuiliztli, zatepan tlacatlaliztli, zatepan ixtlailiztli: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb ihuan free_gb."
+  },
+  "rb_unraid_shares": {
+   "message0": "Unraid tlacatlaliztli",
+   "tooltip": "Tlacuilolli in tlapoualli, ce ipampa centetl tlacatlaliztli: name, free_gb, used_gb ihuan total_gb."
+  },
+  "rb_unraid_containers": {
+   "message0": "Unraid tlacaxochitli",
+   "tooltip": "Tlacuilolli in tlapoualli, ce ipampa centetl Docker tlacaxochitli: name, state (running, exited, ...), status ihuan auto_start (Unraid quipehualtia in necuitlalpilli ic)."
+  },
+  "rb_unraid_vms": {
+   "message0": "Unraid machiyotl",
+   "tooltip": "Tlacuilolli in tlapoualli, ce ipampa centetl machiyotl: name ihuan state (RUNNING, SHUTOFF, ...)."
+  },
+  "rb_unraid_container_power": {
+   "message0": "%1 in Unraid tlacaxochitli %2",
+   "tooltip": "Ce Docker tlacaxochitli quipehualtia ahnozo quictlamia, itoca. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quipehualtia ahnozo quictlamia."
+  },
+  "rb_unraid_vm_power": {
+   "message0": "%1 in Unraid machiyotl %2",
+   "tooltip": "Ce machiyotl quipehualtia ahnozo quictlamia, itoca. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quipehualtia ahnozo quictlamia."
+  },
+  "rb_unraid_parity": {
+   "message0": "Unraid nemic xelihuiliztli",
+   "tooltip": "In nemic xelihuiliztli tepoztli quipoua quimittacitia, amo quicuiloa in amoxtili. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quipoua."
   }
  },
  "options": {
@@ -875,7 +907,8 @@
   "Proxmox": "Proxmox",
   "Docker": "Docker",
   "SABnzbd": "SABnzbd",
-  "Radarr and Sonarr": "Radarr ihuan Sonarr"
+  "Radarr and Sonarr": "Radarr ihuan Sonarr",
+  "Unraid": "Unraid"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1747,7 +1780,18 @@
   "Sonarr": "Sonarr",
   "Which one? Radarr or Sonarr.": "Tlein? Radarr nozo Sonarr?",
   "{n} downloading": "{n} Motēmaca",
-  "{n} missing": "{n} moc"
+  "{n} missing": "{n} moc",
+  "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)": "Unraid tlacaxochitli ihuan machiyotl ticpehualtiz tictlamaz huan in ic nemic xelihuiliztli ticchihualtiz (centetl ipampa mitztlahtlaniz)",
+  "read your Unraid server: the array, its disks, its shares, its containers and its VMs": "Unraid ticpouaz: in necuitlalpilli, in tepoztli, in tlacatlaliztli, in tlacaxochitli ihuan in machiyotl",
+  "{n} disks": "{n} tepoztli",
+  "{n} shares": "{n} tlacatlaliztli",
+  "{n} VMs": "{n} machiyotl",
+  "Unraid": "Unraid",
+  "Unraid array": "Unraid necuitlalpilli",
+  "Unraid disks": "Unraid tepoztli",
+  "Unraid shares": "Unraid tlacatlaliztli",
+  "Unraid containers": "Unraid tlacaxochitli",
+  "Unraid VMs": "Unraid machiyotl"
  },
  "examples": {
   "review": {
@@ -2586,7 +2630,9 @@
   "the key steps": "huēyi tlahtōlli",
   "title, score, why": "title, score, why",
   "today's draft": "in axcān achtlahcuilōlli",
-  "used headlines": "in tōcāitl ōmotequitlālih"
+  "used headlines": "in tōcāitl ōmotequitlālih",
+  "plex": "plex",
+  "windows": "windows"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Ce achto tlachīhualiztli ōmoquetz ipan in nepantla, auh in tlatēcpantli ōmopatla, ic occeppa peuhua.)",
@@ -3376,7 +3422,7 @@
   "Docker containers": "Docker tlacomeh",
   "Docker: {why}.": "Docker: {why}.",
   "Which Docker container? Give its name, like sonarr.": "Catlehhuātl Docker tlacomitl? Xiquitto ītōcā, iuhquin sonarr.",
-  "{n} containers": "{n} tlacomeh",
+  "{n} containers": "{n} tlacaxochitli",
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "In tlacomitl {name} ca ipan DOCKER_PROTECT, ic Second Thought aīc occeppa quitzintia, quiquetza nozo quitzintia.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "Ipan Windows, xictlāli ipan DOCKER_HOST cē tcp:// nōtzalōyān: in Docker ītōcāyoh acalotli ahmo mopalēhuia.",
@@ -3438,7 +3484,25 @@
   "search {who}'s wanted list for what's missing": "in tlaīxōhuīl {who} īpan tlein moc moppa quittītīni",
   "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.": "In {who} quinequi {url_setting} ihuan {key_setting} {where_keys}: in ōhtli (iuhquin http://radarr:7878) ihuan in kuñjan is, ipan Config, General, API Key.",
   "Radarr": "Radarr",
-  "Sonarr": "Sonarr"
+  "Sonarr": "Sonarr",
+  "Which one, and start or stop?": "tlein, ihuan ticpehualtiz ahnozo tictlamaz?",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.": "{who} itla monequi {url_setting} ihuan {key_setting} {where_keys}: in itlahtlacolcauh (quen https://unraid) ihuan ce API tlacuilolli, ipan Settings, Management Access, API Keys.",
+  "Unraid array": "Unraid necuitlalpilli",
+  "{state}, {free_gb} GB free of {total_gb} GB": "{state}, {free_gb} GB yamanqui {total_gb} GB ic",
+  "Unraid disks": "Unraid tepoztli",
+  "{n} disks": "{n} tepoztli",
+  "Unraid shares": "Unraid tlacatlaliztli",
+  "{n} shares": "{n} tlacatlaliztli",
+  "Unraid containers": "Unraid tlacaxochitli",
+  "{n} VMs": "{n} machiyotl",
+  "Unraid VMs": "Unraid machiyotl",
+  "container": "tlacaxochitli",
+  "VM": "machiyotl",
+  "{action} the Unraid {who} {name}": "{action} in Unraid {who} {name}",
+  "check Unraid's parity": "Unraid nemic xelihuiliztli",
+  "Unraid {version}": "Unraid {version}",
+  "array {state}": "necuitlalpilli {state}",
+  "Unraid": "Unraid"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Xictlāli tlahtōlli",

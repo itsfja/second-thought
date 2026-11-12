@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY")
 
 
 def _load_keychain():
@@ -1555,6 +1555,14 @@ SAFETY = {
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
     "arr_free": [["GET", r"^/api/v3/(queue|wanted/missing|diskspace|system/status)$"]],
     "arr_asks": [["POST", r"^/api/v3/command$"]],
+    # Unraid's own GraphQL API (#399), all of it one POST to /graphql, so the gate reads the query text: a query is a
+    # read, and only these mutations are ever sent, after a live yes: starting or stopping one container or VM by
+    # name, and a parity read-check. Anything else (stopping the array, adding or removing disks, updating
+    # containers, plugins, terminal commands) is never sent.
+    "unraid_free": [["POST", r"^(?![\s\S]*mutation)\s*(query|\{)"]],
+    "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
+                    ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
+                    ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1730,6 +1738,17 @@ def arr_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
+
+
+def unraid_call(method, query):
+    """"free" for a Unraid GraphQL query the runtime makes without asking (a query is a read), "asks" for the few
+    mutations that need a live yes (starting or stopping one container or VM, a parity read-check), and None for
+    anything else, which is never sent (#399)."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
             return kind
     return None
 
@@ -2171,6 +2190,7 @@ CAPABILITIES = [
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
+    ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -2181,6 +2201,7 @@ CAPABILITIES = [
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
+    ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
@@ -4691,6 +4712,127 @@ class Connections:
             return False
         await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
         self.log(w.capitalize(), what, tr("done"))
+        return True
+
+    # Unraid (#399)
+    # Unraid's own GraphQL API: UNRAID_URL (the server's address, like https://unraid) and UNRAID_API_KEY (Settings,
+    # Management Access, API Keys; built into Unraid 7.2 and later, the Unraid Connect plugin before that). Reads are
+    # the queries in SAFETY["unraid_free"]; starting or stopping one container or VM, and a parity read-check
+    # (unraid_asks) always ask, live, and never run with nobody there. Nothing else is ever sent: the array is never
+    # stopped, no disk is added or removed, no container is updated or removed, no plugin is installed, nothing runs
+    # in a terminal. UNRAID_CERT_SHA256 pins a certificate this computer doesn't trust.
+    UNRAID_STATE = {"STARTED": "STARTED", "STOPPED": "STOPPED"}
+
+    async def _unraid(self, query, approved=False):
+        """One GraphQL request to the server, gated by unraid_call: a query goes without asking, one of the few
+        allowed mutations only after a live yes, and anything else is never sent."""
+        kind = unraid_call("POST", query)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=query[:80], who="Unraid"))
+        url = os.environ.get("UNRAID_URL", "").strip()
+        key = os.environ.get("UNRAID_API_KEY", "").strip()
+        if not url or not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.",
+                              who="Unraid", url_setting="UNRAID_URL", key_setting="UNRAID_API_KEY", where_keys=WHERE_KEYS))
+        base = url if url.endswith("/graphql") else url.rstrip("/") + "/graphql"
+        status, raw = await self._pinned("Unraid", base, "UNRAID_CERT_SHA256", "POST", "", {"x-api-key": key}, {"query": query})
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who="Unraid"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="Unraid", why=self._said(status, raw)))
+        answer = json.loads(raw) if raw.strip() else {}
+        if isinstance(answer, dict) and answer.get("errors"):
+            raise RunError(tr("{who}: {why}.", who="Unraid", why=_short(to_str(answer["errors"][0].get("message") if answer["errors"] else ""), 120)))
+        return (answer or {}).get("data") or {}
+
+    async def unraid_array(self):
+        """One record for the array: state (STARTED, STOPPED, ...), started (whether it's started), free_gb,
+        total_gb and uptime."""
+        d = await self._unraid("query{array{state capacity{kilobytes{free total}}}info{os{uptime}}}")
+        a = d.get("array") or {}
+        kb = ((a.get("capacity") or {}).get("kilobytes") or {})
+        out = {"state": to_str(a.get("state")), "started": to_str(a.get("state")) == "STARTED",
+               "free_gb": self._cents(num(kb.get("free")) / 1048576) if kb.get("free") else "",
+               "total_gb": self._cents(num(kb.get("total")) / 1048576) if kb.get("total") else "",
+               "uptime": to_str(((d.get("info") or {}).get("os") or {}).get("uptime"))}
+        line = tr("{state}, {free_gb} GB free of {total_gb} GB", **out) if out["free_gb"] else out["state"]
+        self.log(tr("Unraid array"), line)
+        return out
+
+    async def unraid_disks(self):
+        """A list of records, one for each disk in the array, parity first then data then cache: name, type (Parity,
+        Data, Cache), status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb."""
+        d = await self._unraid("query{array{parities{name type status temp numErrors fsSize fsFree}disks{name type status"
+                               " temp numErrors fsSize fsFree}caches{name type status temp numErrors fsSize fsFree}}}")
+        a = d.get("array") or {}
+        rows = [r for kind in ("parities", "disks", "caches") for r in (a.get(kind) or []) if isinstance(r, dict)]
+        out = [{"name": to_str(r.get("name")), "type": to_str(r.get("type")).capitalize(), "status": to_str(r.get("status")),
+                "temp_c": num(r.get("temp")) if r.get("temp") is not None else "",
+                "errors": num(r.get("numErrors")) if r.get("numErrors") is not None else "",
+                "size_gb": self._cents(num(r.get("fsSize")) / 1048576) if r.get("fsSize") else "",
+                "free_gb": self._cents(num(r.get("fsFree")) / 1048576) if r.get("fsFree") else ""} for r in rows]
+        lines = "\n".join(f"{r['name']} ({r['type']})" + (f": {r['temp_c']} °C" if r["temp_c"] != "" else "") for r in out)
+        self.log(tr("Unraid disks"), lines or tr("(nothing)"), tr("{n} disks", n=len(out)))
+        return out
+
+    async def unraid_shares(self):
+        """A list of records, one for each user share: name, free_gb, used_gb and total_gb."""
+        rows = (await self._unraid("query{shares{name free used size}}")).get("shares") or []
+        out = [{"name": to_str(r.get("name")),
+                "free_gb": self._cents(num(r.get("free")) / 1048576) if r.get("free") else "",
+                "used_gb": self._cents(num(r.get("used")) / 1048576) if r.get("used") else "",
+                "total_gb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else ""} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['free_gb']} GB free" for r in out)
+        self.log(tr("Unraid shares"), lines or tr("(nothing)"), tr("{n} shares", n=len(out)))
+        return out
+
+    async def unraid_containers(self):
+        """A list of records, one for each Docker container: name, state (running, exited, ...), status and
+        auto_start (whether Unraid starts it with the array)."""
+        rows = (await self._unraid("query{dockerContainers{id names state status autoStart}}")).get("dockerContainers") or []
+        out = [{"name": to_str((r.get("names") or [""])[0]), "state": to_str(r.get("state")), "status": to_str(r.get("status")),
+                "auto_start": bool(r.get("autoStart"))} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['state']}" for r in out)
+        self.log(tr("Unraid containers"), lines or tr("(nothing)"), tr("{n} containers", n=len(out)))
+        return out
+
+    async def unraid_vms(self):
+        """A list of records, one for each VM: name and state (RUNNING, SHUTOFF, ...)."""
+        rows = ((await self._unraid("query{vms{domains{id name state}}}")).get("vms") or {}).get("domains") or []
+        out = [{"name": to_str(r.get("name")), "state": to_str(r.get("state"))} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['state']}" for r in out)
+        self.log(tr("Unraid VMs"), lines or tr("(nothing)"), tr("{n} VMs", n=len(out)))
+        return out
+
+    async def unraid_power(self, kind, action, name):
+        """Starts or stops one container or VM, after asking you, every time. Gives back True if it was done."""
+        k, a, n = to_str(kind).strip().lower(), to_str(action).strip().lower(), to_str(name).strip()
+        if k not in ("container", "vm") or a not in ("start", "stop") or not n:
+            raise RunError(tr("Which one, and start or stop?"))
+        who = tr("container") if k == "container" else tr("VM")
+        what = tr("{action} the Unraid {who} {name}", action=a, who=who, name=n)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        query = 'mutation{docker{' + a + '(id:"container:' + n + '"){id}}}' if k == "container" \
+            else 'mutation{vm{' + a + '(id:"vm:' + n + '")}'
+        await self._unraid(query, approved=True)
+        self.log(tr("Unraid"), what, tr("done"))
+        return True
+
+    async def unraid_parity(self):
+        """Checks the parity disks by reading them (a read-check, no corrections written), after asking you, every
+        time. Gives back True if it was started."""
+        what = tr("check Unraid's parity")
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._unraid("mutation{parity{start(correct:false)}}", approved=True)
+        self.log(tr("Unraid"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -7546,6 +7688,12 @@ class Doctor:
                     + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
             out.append(("Radarr", lambda: arr("radarr")))
             out.append(("Sonarr", lambda: arr("sonarr")))
+        if has("unraid_read", "unraid_control"):
+            async def unraid():
+                d = await self._unraid("query{vars{version}array{state}}")
+                return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
+                    + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
+            out.append(("Unraid", unraid))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -7861,7 +8009,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -10159,6 +10307,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_rubric_feedback","file":"rubric-feedback.json","category":"learning","title":"Rubric feedback","description":"Paste a pupil's essay. Claude drafts feedback against your mark scheme, checks it's kind, specific and ends with two next steps, and you approve it before it's saved. Nothing goes to the pupil from here.","tip":"Put your own mark scheme in the first block. The pupil's name isn't needed: leave it out of what you paste.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_mark_scheme","name":"mark scheme"},{"id":"g_essay","name":"essay"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_mark_scheme"}},"inputs":{"VALUE":{"block":{"type":"rb_longtext","fields":{"TEXT":"AO1 ideas: a clear argument, developed through the essay.\nAO2 evidence: quotations chosen well and explained.\nAO3 writing: paragraphs that link; accurate spelling and punctuation."}}}},"next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste the essay"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_essay"}},"inputs":{"VALUE":{"block":{"type":"rb_answer"}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write feedback on this essay for the pupil who wrote it, using the mark scheme. Say what works first, then what would lift it, quoting the essay. End with exactly two next steps.\n\nMark scheme:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_mark_scheme"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nEssay:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_essay"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every point refers to something in the mark scheme; kind, and talks to the pupil; specific, quoting the essay; ends with exactly two next steps the pupil can act on; no mark or grade; under 200 words"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_approve","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Feedback ready. Save it?\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"essay-feedback"}}}},"next":{"block":{"type":"rb_result"}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Not saved. The draft, to edit yourself:\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"hasElse":true}}}}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_rye_news_telegram","file":"rye-news-telegram.json","category":"news","title":"Rye news on Telegram","description":"Reads your news feeds and sends you a Telegram message about any items on rye or wholegrain flour, with their links. On a day with none, it sends nothing.","tip":"Change rye to whatever you follow, and add a 'when it's …' block so it checks every morning.","author":"itsfja","runtime":"2.0.0","version":1,"program":{"variables":[{"id":"g_news","name":"news"}],"blocks":{"languageVersion":0,"blocks":[{"x":30,"y":30,"type":"rb_start","next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_news"}},"inputs":{"VALUE":{"block":{"type":"rb_feed_news","inputs":{"URL":{"shadow":{"type":"text","fields":{"TEXT":""}}}}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","extraState":{"itemCount":2},"inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"From these news items, pick any about rye or wholegrain flour and write one short line for each, with its link. If none are, reply with just: nothing today\n\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_news"}}}}}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_contains","inputs":{"A":{"block":{"type":"rb_draft"}},"B":{"shadow":{"type":"text","fields":{"TEXT":"nothing today"}}}}}},"DO0":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"No rye news today."}}}}}},"ELSE":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}},"extraState":{"hasElse":true}}}}}}}}}}]}}},
 {"key":"g_second_thought_doctor","file":"second-thought-doctor.json","category":"odds","title":"Second Thought doctor","description":"Once a week, runs the same checks as --doctor on your keys and connections and emails you the report if anything needs fixing, before a program finds out the hard way.","tip":"Point it at the second-thought.ini in your home folder, so it checks the keys every program shares. Only runs in exported Python.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"checkup"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":0,"DAYS":"weekends"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Sunday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"checkup"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"checkup"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"rb_setup_check"}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_contains","inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"FAIL"}}}}}},"DO0":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Second Thought: something to fix"}}},"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"All well.\n\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":290}]}}},
+{"key":"g_server_morning_check","file":"server-morning-check.json","category":"home","title":"Server morning check","description":"Each morning, reads your Unraid server and sends you a Telegram message: whether the array is started, any disk running hot, and any container or VM that's down. It only reads: nothing is started, stopped or checked.","tip":"Needs UNRAID_URL and UNRAID_API_KEY (Settings, Management Access, API Keys). Change 45 to warn nearer a disk's limit.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_array","name":"array"},{"id":"g_disks","name":"disks"},{"id":"g_containers","name":"containers"},{"id":"g_vms","name":"vms"},{"id":"g_one","name":"one"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_array"}},"inputs":{"VALUE":{"block":{"type":"rb_unraid_array"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_disks"}},"inputs":{"VALUE":{"block":{"type":"rb_unraid_disks"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_containers"}},"inputs":{"VALUE":{"block":{"type":"rb_unraid_containers"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_vms"}},"inputs":{"VALUE":{"block":{"type":"rb_unraid_vms"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"shadow":{"type":"text","fields":{"TEXT":"Unraid morning check:"}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_negate","inputs":{"BOOL":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"started"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_array"}}}}}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nthe array is not started"}}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_one"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_disks"}}}},"DO":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"GT"},"inputs":{"A":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"temp_c"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"B":{"shadow":{"type":"math_number","fields":{"NUM":45}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"name"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"ADD3":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" is hot: "}}},"ADD4":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"temp_c"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"ADD5":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" °C"}}}},"extraState":{"itemCount":6}}}}}}}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_one"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_containers"}}}},"DO":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"NEQ"},"inputs":{"A":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"state"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"running"}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"name"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"ADD3":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" is down"}}}},"extraState":{"itemCount":4}}}}}}}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_one"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_vms"}}}},"DO":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"NEQ"},"inputs":{"A":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"state"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"RUNNING"}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"name"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"ADD3":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" is down"}}}},"extraState":{"itemCount":4}}}}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}}}}}}}}}}}},"x":30,"y":190}]}}},
 {"key":"g_sourced_check","file":"sourced-check.json","category":"news","title":"Sourced check","description":"Type a claim. Claude searches the web and says whether good sources support it, contradict it or don't say, with a link for every point. It refuses to give a verdict it can't source.","tip":"Uses web search, which only works in exported Python; on the page Claude says what it would look up.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_claim","name":"claim"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Type the claim to check"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_claim"}},"inputs":{"VALUE":{"block":{"type":"rb_answer"}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Check this claim against these search results. Verdict first: SUPPORTED, CONTRADICTED, MIXED or NOT ENOUGH TO SAY. Then the evidence, each point with its link. If the results don't settle it, say NOT ENOUGH TO SAY and what a reader could check.\n\nClaim: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_claim"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nSearch results:\n"}}},"ADD3":{"block":{"type":"rb_web_search","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_claim"}}}}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every point has a link from the search results; no link is invented; the verdict follows from the sourced points only; NOT ENOUGH TO SAY if the sources don't settle it"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_spend_canary","file":"spend-canary.json","category":"money","title":"Spend canary","description":"When a bank statement arrives (a file in a folder, or an email), it lists your recurring charges and tells you which changed price since last month. Statements are sent to the model; only merchants and amounts are kept, in memory.","tip":"Change the folder to where you save statements, and the email words to what your bank's statement emails say.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_charges","name":"charges"},{"id":"g_changes","name":"changes"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste a few lines of a statement to test with"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"statement"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_folder_when","fields":{"FOLDER":"~/Bank statements"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"statement"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_email_when","fields":{"CONTAINS":"statement"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"statement"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":30,"y":290},{"type":"rb_receive","fields":{"MSG":"statement"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_charges"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List the card payments and direct debits in this bank statement, one per line, as: merchant — amount. Nothing else.\n\n"}}},"ADD1":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_changes"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Here are this month's charges, and last month's. List recurring charges (the same merchant both months) whose amount changed, with both amounts. If none did, reply exactly: no changes\n\nThis month:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_charges"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nLast month:\n"}}},"ADD3":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"last month's charges"}}}}}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"rb_mem_set","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_charges"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"last month's charges"}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_contains","inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_changes"}}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"no changes"}}}}}},"DO0":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"No recurring charge changed price."}}}}}},"ELSE":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Charges that changed price"}}},"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_changes"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_changes"}}}}}}}}}},"extraState":{"hasElse":true}}}}}}}}},"x":550,"y":290}]}}},
 {"key":"g_stale_branch_sweeper","file":"stale-branch-sweeper.json","category":"github","title":"Stale branch sweeper","description":"Each Monday, finds branches with no commits in 90 days and no open pull request, across your recent GitHub projects, and opens one cleanup issue per project, or updates last week's instead of opening another.","tip":"It asks before opening or commenting. Choose the no-asking tool once you trust what it writes.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sweep"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":9,"MINUTE":0,"DAYS":"weekdays"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Monday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"sweep"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"sweep"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List my GitHub projects and keep those pushed in the last six months. For each, list its branches. Stale branches have a last commit over 90 days ago, aren't the default branch, and have no open pull request. For each project with stale branches, recall the note 'stale branches <project>'. If it names an issue number, comment on that issue with the updated list. Otherwise open an issue titled 'Stale branches to clean up' listing each branch, how old it is and who last changed it, and remember its number as 'stale branches <project>'. If nothing is stale, change nothing."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":18}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github_act"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"memory"}}}}}}}},"next":{"block":{"type":"rb_result"}}}},"x":30,"y":290}]}}},
@@ -10199,6 +10348,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
 ["sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", true],
 ["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
+["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
@@ -10209,6 +10359,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", false],
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
+["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
 ["powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", false],
 ["web", "read public web pages and search the web", false],
@@ -10315,6 +10466,26 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/api/v3/command$"
+  ]
+ ],
+ "unraid_free": [
+  [
+   "POST",
+   "^(?![\\s\\S]*mutation)\\s*(query|\\{)"
+  ]
+ ],
+ "unraid_asks": [
+  [
+   "POST",
+   "^mutation\\{docker\\{(start|stop)\\(id:\"container:[^\"]+\"\\)\\{id\\}\\}\\}$"
+  ],
+  [
+   "POST",
+   "^mutation\\{vm\\{(start|stop)\\(id:\"vm:[^\"]+\"\\)\\}\\}$"
+  ],
+  [
+   "POST",
+   "^mutation\\{parity\\{start\\(correct:false\\)\\}\\}$"
   ]
  ],
  "unifi_free": [
@@ -14476,8 +14647,14 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
    ]
   },
   "diskspace": [
-   ["/mnt/user/downloads", "1234.56"],
-   ["/mnt/user/complete", "1234.56"]
+   [
+    "/mnt/user/downloads",
+    "1234.56"
+   ],
+   [
+    "/mnt/user/complete",
+    "1234.56"
+   ]
   ]
  },
  "arr": {
@@ -14607,8 +14784,119 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
    "real_mode": "self_consumption",
    "backup_reserve_percent": "20"
   }
+ },
+ "unraid": {
+  "note": "A sample Unraid server for the page and the tests (#399), shaped the way its GraphQL API answers: the array is started, with one parity, two data disks and a cache; plex is running and pihole has stopped, one VM is up and one is down.",
+  "array": {
+   "state": "STARTED",
+   "capacity": {
+    "kilobytes": {
+     "free": 2147483648,
+     "total": 6442450944
+    }
+   },
+   "parities": [
+    {
+     "name": "parity",
+     "type": "PARITY",
+     "status": "DISK_OK",
+     "temp": 31,
+     "numErrors": 0,
+     "fsSize": null,
+     "fsFree": null
+    }
+   ],
+   "disks": [
+    {
+     "name": "disk1",
+     "type": "DATA",
+     "status": "DISK_OK",
+     "temp": 32,
+     "numErrors": 0,
+     "fsSize": 4000787030,
+     "fsFree": 1073741824
+    },
+    {
+     "name": "disk2",
+     "type": "DATA",
+     "status": "DISK_OK",
+     "temp": 33,
+     "numErrors": 0,
+     "fsSize": 4000787030,
+     "fsFree": 1073741824
+    }
+   ],
+   "caches": [
+    {
+     "name": "cache",
+     "type": "CACHE",
+     "status": "DISK_OK",
+     "temp": 38,
+     "numErrors": 0,
+     "fsSize": 2000398934,
+     "fsFree": 536870912
+    }
+   ]
+  },
+  "info": {
+   "os": {
+    "uptime": "3 days, 4:56:07"
+   }
+  },
+  "shares": [
+   {
+    "name": "media",
+    "free": 1073741824,
+    "used": 1073741824,
+    "size": 2147483648
+   },
+   {
+    "name": "backups",
+    "free": 536870912,
+    "used": 1610612736,
+    "size": 2147483648
+   }
+  ],
+  "dockerContainers": [
+   {
+    "id": "container:plex",
+    "names": [
+     "plex"
+    ],
+    "state": "running",
+    "status": "Up 2 days",
+    "autoStart": true
+   },
+   {
+    "id": "container:pihole",
+    "names": [
+     "pihole"
+    ],
+    "state": "exited",
+    "status": "Exited (0)",
+    "autoStart": true
+   }
+  ],
+  "vms": {
+   "domains": [
+    {
+     "id": "vm:windows",
+     "name": "windows",
+     "state": "RUNNING"
+    },
+    {
+     "id": "vm:arch",
+     "name": "arch",
+     "state": "SHUTOFF"
+    }
+   ]
+  },
+  "vars": {
+   "version": "7.2.1"
+  }
  }
-}</script>
+}
+</script>
 <script type="text/plain" id="convert-guide">
 You convert program code into a block program for "Second Thought", a Scratch-style editor for AI workflows. Output the program as Blockly JSON (described below). Keep the program's logic and order. Prefer the AI blocks over generic ones whenever the code calls a language model.
 
@@ -14869,7 +15157,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A", unraid:"#E8590C"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -14881,7 +15169,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -15064,7 +15352,9 @@ HOW TO MAP CODE
     rb_proxmox_power:"proxmox_control", rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control", rb_sabnzbd_queue:"sabnzbd_read", rb_sabnzbd_history:"sabnzbd_read",
     rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control", rb_arr_queue:"arr_read",
-    rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
+    rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
+    rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -15443,6 +15733,23 @@ HOW TO MAP CODE
       tooltip:"A list of records, one for each of its folders: path, label, free_gb and total_gb." }),
     S("rb_arr_search", "search %1 for what's missing", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }],
       { style:"arr", inputsInline:true, tooltip:"Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches." }),
+    /* Unraid (#399): reads, and power and parity that always ask */
+    V("rb_unraid_array", "Unraid array", [], null, { style:"unraid",
+      tooltip:"One record for the array: state (STARTED, STOPPED, ...), started (whether it's started), free_gb, total_gb and uptime. On this page it uses a sample server." }),
+    V("rb_unraid_disks", "Unraid disks", [], "Array", { style:"unraid",
+      tooltip:"A list of records, one for each disk in the array, parity first then data then cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb." }),
+    V("rb_unraid_shares", "Unraid shares", [], "Array", { style:"unraid",
+      tooltip:"A list of records, one for each user share: name, free_gb, used_gb and total_gb." }),
+    V("rb_unraid_containers", "Unraid containers", [], "Array", { style:"unraid",
+      tooltip:"A list of records, one for each Docker container: name, state (running, exited, ...), status and auto_start (whether Unraid starts it with the array)." }),
+    V("rb_unraid_vms", "Unraid VMs", [], "Array", { style:"unraid",
+      tooltip:"A list of records, one for each virtual machine: name and state (RUNNING, SHUTOFF, ...)." }),
+    S("rb_unraid_container_power", "%1 Unraid container %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["stop","stop"]] }, val("NAME")],
+      { style:"unraid", inputsInline:true, tooltip:"Starts or stops one Docker container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops." }),
+    S("rb_unraid_vm_power", "%1 Unraid VM %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["stop","stop"]] }, val("NAME")],
+      { style:"unraid", inputsInline:true, tooltip:"Starts or stops one virtual machine, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops." }),
+    S("rb_unraid_parity", "check Unraid's parity", [],
+      { style:"unraid", tooltip:"Checks the parity disks by reading them, writing no corrections. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really checks." }),
     /* Proxmox (#357): reads, and power that always asks */
     V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
       tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
@@ -15654,6 +15961,10 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
+    ]},
+    { kind:"category", name:"Unraid", categorystyle:"unraid", contents:[
+      B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),
+      B("rb_unraid_container_power", { NAME:T("plex") }), B("rb_unraid_vm_power", { NAME:T("windows") }), B("rb_unraid_parity")
     ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
@@ -18241,6 +18552,7 @@ HOW TO MAP CODE
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
+             unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -18310,6 +18622,12 @@ HOW TO MAP CODE
       "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
       "; Sonarr, the same: its address and API key (Settings, General, API Key).",
       "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
+    if (need.unraid) out.push("", "[unraid]",
+      "; Your Unraid server, through its own GraphQL API (built into Unraid 7.2 and later, the Unraid Connect plugin",
+      "; before that): its address and an API key (Settings, Management Access, API Keys). The blocks read the array,",
+      "; the disks, the shares, the containers and the VMs; start, stop and a parity check ask first, and nothing",
+      "; else is ever sent.",
+      "UNRAID_URL = ", "UNRAID_API_KEY = ", "; UNRAID_CERT_SHA256 = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -18653,6 +18971,11 @@ HOW TO MAP CODE
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_unraid_array": return "(await R.unraid_array())";
+        case "rb_unraid_disks": return "(await R.unraid_disks())";
+        case "rb_unraid_shares": return "(await R.unraid_shares())";
+        case "rb_unraid_containers": return "(await R.unraid_containers())";
+        case "rb_unraid_vms": return "(await R.unraid_vms())";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -18810,6 +19133,9 @@ HOW TO MAP CODE
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
           case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
+        case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
+        case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
+        case "rb_unraid_parity": E("await R.unraid_parity()"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
@@ -21150,6 +21476,61 @@ HOW TO MAP CODE
     addStep(who, { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
+  /* Unraid on the page (#399): a sample server. Exported Python talks to its GraphQL API: reads, and start, stop
+     and parity that always ask. */
+  const unraidSample = () => { connNote("Unraid"); return CONN.unraid || {}; };
+  function unraidArray(){
+    const s = unraidSample(), a = s.array || {}, kb = (a.capacity || {}).kilobytes || {},
+      out = { state:str(a.state), started:str(a.state) === "STARTED",
+        free_gb:kb.free ? cents(num(kb.free) / 1048576) : "", total_gb:kb.total ? cents(num(kb.total) / 1048576) : "",
+        uptime:str(((s.info || {}).os || {}).uptime) };
+    addStep("Unraid array", { mono:true, text:out.state + (out.free_gb ? ", " + out.free_gb + " GB free of " + out.total_gb + " GB" : "") })
+      .done(tr("done"), "ok");
+    return out;
+  }
+  function unraidDisks(){
+    const a = (unraidSample().array || {}),
+      out = ["parities", "disks", "caches"].flatMap(k => a[k] || []).map(r => ({ name:str(r.name), type:str(r.type).toLowerCase() ===
+        "parity" ? "Parity" : str(r.type).toLowerCase() === "cache" ? "Cache" : "Data", status:str(r.status),
+        temp_c:r.temp === null || r.temp === undefined ? "" : num(r.temp), errors:r.numErrors === null || r.numErrors === undefined ? "" : num(r.numErrors),
+        size_gb:r.fsSize ? cents(num(r.fsSize) / 1048576) : "", free_gb:r.fsFree ? cents(num(r.fsFree) / 1048576) : "" }));
+    addStep("Unraid disks", { mono:true, text:out.map(r => r.name + " (" + r.type + ")" + (r.temp_c === "" ? "" : ": " + r.temp_c + " \u00b0C")).join("\n") || tr("(nothing)") })
+      .done(tr("{n} disks", { n:out.length }), "ok");
+    return out;
+  }
+  function unraidShares(){
+    const out = (unraidSample().shares || []).map(r => ({ name:str(r.name),
+      free_gb:r.free ? cents(num(r.free) / 1048576) : "", used_gb:r.used ? cents(num(r.used) / 1048576) : "",
+      total_gb:r.size ? cents(num(r.size) / 1048576) : "" }));
+    addStep("Unraid shares", { mono:true, text:out.map(r => r.name + ": " + r.free_gb + " GB free").join("\n") || tr("(nothing)") })
+      .done(tr("{n} shares", { n:out.length }), "ok");
+    return out;
+  }
+  function unraidContainers(){
+    const out = (unraidSample().dockerContainers || []).map(r => ({ name:str((r.names || [""])[0]), state:str(r.state),
+      status:str(r.status), auto_start:!!r.autoStart }));
+    addStep("Unraid containers", { mono:true, text:out.map(r => r.name + ": " + r.state).join("\n") || tr("(nothing)") })
+      .done(tr("{n} containers", { n:out.length }), "ok");
+    return out;
+  }
+  function unraidVms(){
+    const out = (((unraidSample().vms || {}).domains) || []).map(r => ({ name:str(r.name), state:str(r.state) }));
+    addStep("Unraid VMs", { mono:true, text:out.map(r => r.name + ": " + r.state).join("\n") || tr("(nothing)") })
+      .done(tr("{n} VMs", { n:out.length }), "ok");
+    return out;
+  }
+  async function unraidPower(kind, action, name){
+    const what = action + " the Unraid " + (kind === "vm" ? "VM " : "container ") + name;
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Unraid", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
+  async function unraidParity(){
+    const what = "check Unraid's parity";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Unraid", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
   /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
      shut down and reboot after a yes, every time. Matches the runtime's proxmox_ methods and tests/fake_proxmox.py. */
   const pxSample = () => { connNote("Proxmox"); return CONN.proxmox || {}; };
@@ -22068,6 +22449,11 @@ HOW TO MAP CODE
       case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
       case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
       case "rb_arr_diskspace": return arrDiskspace(b.getFieldValue("WHICH"));
+      case "rb_unraid_array": return unraidArray();
+      case "rb_unraid_disks": return unraidDisks();
+      case "rb_unraid_shares": return unraidShares();
+      case "rb_unraid_containers": return unraidContainers();
+      case "rb_unraid_vms": return unraidVms();
       case "rb_proxmox_nodes": return proxmoxNodes();
       case "rb_proxmox_guests": return proxmoxGuests();
       case "rb_proxmox_storage": return proxmoxStorage();
@@ -22666,6 +23052,9 @@ HOW TO MAP CODE
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
+      case "rb_unraid_container_power": await unraidPower("container", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
+      case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
+      case "rb_unraid_parity": await unraidParity(); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;

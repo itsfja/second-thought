@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"%1-wachtrij","tooltip":"Een lijst met records, één voor elke download in de wachtrij: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality en eta (resterende tijd, zoals 0:12:34). Op deze pagina gebruikt het een voorbeeldwachtrij."},
 "rb_arr_missing":{"message0":"%1-verlanglijst","tooltip":"Een lijst met records, één voor elke film of aflevering zonder bestand: title, added (wanneer toegevoegd) en id."},
 "rb_arr_diskspace":{"message0":"%1-schijfruimte","tooltip":"Een lijst met records, één voor elke map: path, label, free_gb en total_gb."},
-"rb_arr_search":{"message0":"%1 doorzoeken naar wat ontbreekt","tooltip":"Doorzoekt de hele verlanglijst naar wat geen bestand heeft. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina zoekt niets echt."}
+"rb_arr_search":{"message0":"%1 doorzoeken naar wat ontbreekt","tooltip":"Doorzoekt de hele verlanglijst naar wat geen bestand heeft. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina zoekt niets echt."},
+"rb_unraid_array":{"message0":"Unraid-array","tooltip":"Eén record voor de array: state (STARTED, STOPPED, ...), started (of hij gestart is), free_gb, total_gb en uptime. Op deze pagina gebruikt het een voorbeeldserver."},
+"rb_unraid_disks":{"message0":"Unraid-schijven","tooltip":"Een lijst met records, één voor elke schijf in de array, eerst parity, dan data, dan cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb en free_gb."},
+"rb_unraid_shares":{"message0":"Unraid-shares","tooltip":"Een lijst met records, één voor elke gebruikersshare: name, free_gb, used_gb en total_gb."},
+"rb_unraid_containers":{"message0":"Unraid-containers","tooltip":"Een lijst met records, één voor elke Docker-container: name, state (running, exited, ...), status en auto_start (of Unraid hem met de array start)."},
+"rb_unraid_vms":{"message0":"Unraid-VM's","tooltip":"Een lijst met records, één voor elke virtuele machine: name en state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 Unraid-container %2","tooltip":"Start of stopt één Docker-container, op naam. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina start of stopt niets echt."},
+"rb_unraid_vm_power":{"message0":"%1 Unraid-VM %2","tooltip":"Start of stopt één virtuele machine, op naam. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina start of stopt niets echt."},
+"rb_unraid_parity":{"message0":"de parity van Unraid controleren","tooltip":"Controleert de parity-schijven door ze te lezen, zonder correcties te schrijven. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina controleert niets echt."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"elke dag","weekdays":"op werkdagen","weekends":"in het weekend"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr en Sonarr"
+"Radarr and Sonarr":"Radarr en Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Hulpmiddelen voor de agent: zet ze in een agentblok",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Welke? Radarr of Sonarr.",
 "{n} downloading":"{n} downloaden",
-"{n} missing":"{n} ontbreken"
+"{n} missing":"{n} ontbreken",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"je Unraid-containers en VM's starten en stoppen, en de parity controleren (elke keer aan je gevraagd)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"je Unraid-server lezen: de array, zijn schijven, zijn shares, zijn containers en zijn VM's",
+"{n} disks":"{n} schijven",
+"{n} shares":"{n} shares",
+"{n} VMs":"{n} VM's",
+"Unraid":"Unraid",
+"Unraid array":"Unraid-array",
+"Unraid disks":"Unraid-schijven",
+"Unraid shares":"Unraid-shares",
+"Unraid containers":"Unraid-containers",
+"Unraid VMs":"Unraid-VM's"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"Beschrijf deze afbeelding in één zin.",
 "clear, appealing, easy to read at small size":"duidelijk, aantrekkelijk, goed leesbaar op klein formaat",
 "The back door is still open.":"De achterdeur staat nog open.",
-"Good morning!":"Goedemorgen!"
+"Good morning!":"Goedemorgen!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Een eerdere run stopte halverwege, maar het programma is sindsdien veranderd, dus het begint opnieuw.)",
@@ -2174,6 +2196,24 @@
 "search {who}'s wanted list for what's missing":"de verlanglijst van {who} doorzoeken naar wat ontbreekt",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} heeft {url_setting} en {key_setting} nodig {where_keys}: het adres (zoals http://radarr:7878) en de API-sleutel, onder Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Welke, en starten of stoppen?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} heeft {url_setting} en {key_setting} nodig {where_keys}: het adres (zoals https://unraid) en een API-sleutel, onder Settings, Management Access, API Keys.",
+"Unraid array":"Unraid-array",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB vrij van {total_gb} GB",
+"Unraid disks":"Unraid-schijven",
+"{n} disks":"{n} schijven",
+"Unraid shares":"Unraid-shares",
+"{n} shares":"{n} shares",
+"Unraid containers":"Unraid-containers",
+"{n} VMs":"{n} VM's",
+"Unraid VMs":"Unraid-VM's",
+"container":"container",
+"VM":"VM",
+"{action} the Unraid {who} {name}":"{action} de Unraid-{who} {name}",
+"check Unraid's parity":"de parity van Unraid controleren",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"array {state}",
+"Unraid":"Unraid"
 }
 };

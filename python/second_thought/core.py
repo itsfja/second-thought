@@ -115,6 +115,14 @@ SAFETY = {
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
     "arr_free": [["GET", r"^/api/v3/(queue|wanted/missing|diskspace|system/status)$"]],
     "arr_asks": [["POST", r"^/api/v3/command$"]],
+    # Unraid's own GraphQL API (#399), all of it one POST to /graphql, so the gate reads the query text: a query is a
+    # read, and only these mutations are ever sent, after a live yes: starting or stopping one container or VM by
+    # name, and a parity read-check. Anything else (stopping the array, adding or removing disks, updating
+    # containers, plugins, terminal commands) is never sent.
+    "unraid_free": [["POST", r"^(?![\s\S]*mutation)\s*(query|\{)"]],
+    "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
+                    ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
+                    ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -290,6 +298,17 @@ def arr_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
+
+
+def unraid_call(method, query):
+    """"free" for a Unraid GraphQL query the runtime makes without asking (a query is a read), "asks" for the few
+    mutations that need a live yes (starting or stopping one container or VM, a parity read-check), and None for
+    anything else, which is never sent (#399)."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
             return kind
     return None
 
@@ -731,6 +750,7 @@ CAPABILITIES = [
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
+    ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -741,6 +761,7 @@ CAPABILITIES = [
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
+    ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),

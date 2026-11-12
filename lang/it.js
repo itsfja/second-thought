@@ -180,7 +180,15 @@
 "rb_arr_queue":{"message0":"coda di %1","tooltip":"Una lista di record, uno per ogni download in coda: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality e eta (tempo rimasto, come 0:12:34). In questa pagina usa una coda d'esempio."},
 "rb_arr_missing":{"message0":"lista dei desideri %1","tooltip":"Una lista di record, uno per ogni film o episodio senza file: title, added (quando aggiunto) e id."},
 "rb_arr_diskspace":{"message0":"spazio su disco %1","tooltip":"Una lista di record, una per ogni cartella: path, label, free_gb e total_gb."},
-"rb_arr_search":{"message0":"cercare cosa manca in %1","tooltip":"Cerca in tutta la lista dei desideri ciò che non ha file. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente cerca davvero."}
+"rb_arr_search":{"message0":"cercare cosa manca in %1","tooltip":"Cerca in tutta la lista dei desideri ciò che non ha file. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente cerca davvero."},
+"rb_unraid_array":{"message0":"array di Unraid","tooltip":"Un record per l'array: state (STARTED, STOPPED, ...), started (se è avviato), free_gb, total_gb e uptime. In questa pagina usa un server d'esempio."},
+"rb_unraid_disks":{"message0":"dischi di Unraid","tooltip":"Una lista di record, uno per ogni disco dell'array, prima la parità, poi i dati, poi la cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb e free_gb."},
+"rb_unraid_shares":{"message0":"share di Unraid","tooltip":"Una lista di record, uno per ogni share utente: name, free_gb, used_gb e total_gb."},
+"rb_unraid_containers":{"message0":"container di Unraid","tooltip":"Una lista di record, uno per ogni container Docker: name, state (running, exited, ...), status e auto_start (se Unraid lo avvia con l'array)."},
+"rb_unraid_vms":{"message0":"VM di Unraid","tooltip":"Una lista di record, uno per ogni macchina virtuale: name e state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 il container di Unraid %2","tooltip":"Avvia o ferma un container Docker, per nome. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente avvia o ferma davvero."},
+"rb_unraid_vm_power":{"message0":"%1 la VM di Unraid %2","tooltip":"Avvia o ferma una macchina virtuale, per nome. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente avvia o ferma davvero."},
+"rb_unraid_parity":{"message0":"controllare la parità di Unraid","tooltip":"Controlla i dischi di parità leggendoli, senza scrivere correzioni. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente controlla davvero."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ogni giorno","weekdays":"nei giorni feriali","weekends":"nel fine settimana"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr e Sonarr"
+"Radarr and Sonarr":"Radarr e Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Strumenti per l'agente: mettili dentro un blocco agente",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"Quale? Radarr o Sonarr.",
 "{n} downloading":"{n} in scaricamento",
-"{n} missing":"{n} mancanti"
+"{n} missing":"{n} mancanti",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"avviare e fermare i container e le VM del tuo Unraid, e controllare la parità (chiedendotelo ogni volta)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"leggere il tuo server Unraid: l'array, i suoi dischi, i suoi share, i suoi container e le sue VM",
+"{n} disks":"{n} dischi",
+"{n} shares":"{n} share",
+"{n} VMs":"{n} VM",
+"Unraid":"Unraid",
+"Unraid array":"array di Unraid",
+"Unraid disks":"dischi di Unraid",
+"Unraid shares":"share di Unraid",
+"Unraid containers":"container di Unraid",
+"Unraid VMs":"VM di Unraid"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -1322,7 +1342,9 @@
 "Describe this picture in one sentence.":"Descrivi questa immagine in una frase.",
 "clear, appealing, easy to read at small size":"chiaro, attraente, facile da leggere anche in piccolo",
 "The back door is still open.":"La porta sul retro è ancora aperta.",
-"Good morning!":"Buongiorno!"
+"Good morning!":"Buongiorno!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Un'esecuzione precedente si è fermata a metà, ma da allora il programma è cambiato, quindi ricomincia da capo.)",
@@ -2174,6 +2196,24 @@
 "search {who}'s wanted list for what's missing":"cercare cosa manca nella lista dei desideri di {who}",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} ha bisogno di {url_setting} e {key_setting} {where_keys}: il suo indirizzo (come http://radarr:7878) e la sua chiave API, sotto Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"Quale, e avviare o fermare?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} ha bisogno di {url_setting} e {key_setting} {where_keys}: il suo indirizzo (come https://unraid) e una chiave API, sotto Settings, Management Access, API Keys.",
+"Unraid array":"array di Unraid",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB liberi su {total_gb} GB",
+"Unraid disks":"dischi di Unraid",
+"{n} disks":"{n} dischi",
+"Unraid shares":"share di Unraid",
+"{n} shares":"{n} share",
+"Unraid containers":"container di Unraid",
+"{n} VMs":"{n} VM",
+"Unraid VMs":"VM di Unraid",
+"container":"container",
+"VM":"VM",
+"{action} the Unraid {who} {name}":"{action} il {who} di Unraid {name}",
+"check Unraid's parity":"controllare la parità di Unraid",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"array {state}",
+"Unraid":"Unraid"
 }
 };

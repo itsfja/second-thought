@@ -77,6 +77,7 @@
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
+             unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -146,6 +147,12 @@
       "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
       "; Sonarr, the same: its address and API key (Settings, General, API Key).",
       "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
+    if (need.unraid) out.push("", "[unraid]",
+      "; Your Unraid server, through its own GraphQL API (built into Unraid 7.2 and later, the Unraid Connect plugin",
+      "; before that): its address and an API key (Settings, Management Access, API Keys). The blocks read the array,",
+      "; the disks, the shares, the containers and the VMs; start, stop and a parity check ask first, and nothing",
+      "; else is ever sent.",
+      "UNRAID_URL = ", "UNRAID_API_KEY = ", "; UNRAID_CERT_SHA256 = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -489,6 +496,11 @@
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_unraid_array": return "(await R.unraid_array())";
+        case "rb_unraid_disks": return "(await R.unraid_disks())";
+        case "rb_unraid_shares": return "(await R.unraid_shares())";
+        case "rb_unraid_containers": return "(await R.unraid_containers())";
+        case "rb_unraid_vms": return "(await R.unraid_vms())";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -646,6 +658,9 @@
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
           case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
+        case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
+        case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
+        case "rb_unraid_parity": E("await R.unraid_parity()"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;

@@ -697,6 +697,38 @@
   "rb_arr_search": {
    "message0": "לבקשא ב%1 מן דאתר",
    "tooltip": "בקש בכל מבקשיא מן דאין לית ליה צבתא. שאל לך קדם כל זמן, אף דלא אחראנא שאל, ולית אנש למימר הן, לא עביד. בדין עמתא לא מבקש דבר בממש."
+  },
+  "rb_unraid_array": {
+   "message0": "sdra d Unraid",
+   "tooltip": "ktba lda lsdra: state (STARTED, STOPPED, ...), started (ayk mkul), free_gb, total_gb w uptime. bhn dwkta aqstra d hwyt mtmlly."
+  },
+  "rb_unraid_disks": {
+   "message0": "asqla d Unraid",
+   "tooltip": "rhta dktba, lda lkl asqla dsdra, qdmyt mywsta, btar ynqta, btar kywta: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb w free_gb."
+  },
+  "rb_unraid_shares": {
+   "message0": "shwtra d Unraid",
+   "tooltip": "rhta dktba, lda lkl shwtra dbrshna: name, free_gb, used_gb w total_gb."
+  },
+  "rb_unraid_containers": {
+   "message0": "aysklta d Unraid",
+   "tooltip": "rhta dktba, lda lkl aysklta d Docker: name, state (running, exited, ...), status w auto_start (ayk Unraid mkl lh m sdra)."
+  },
+  "rb_unraid_vms": {
+   "message0": "awnyta d Unraid",
+   "tooltip": "rhta dktba, lda lkl awnyta: name w state (RUNNING, SHUTOFF, ...)."
+  },
+  "rb_unraid_container_power": {
+   "message0": "%1 la aysklta d Unraid %2",
+   "tooltip": "mkul aw mkyp lda Docker aysklta, bshmh. shall lk kl zbn qdmyt, af kd la ahrnyta shal, wkd lyt dnemr ha, la abd. bhn dwkta la mkul aw mkyp bshryra."
+  },
+  "rb_unraid_vm_power": {
+   "message0": "%1 la awnyta d Unraid %2",
+   "tooltip": "mkul aw mkyp lda awnyta, bshmh. shall lk kl zbn qdmyt, af kd la ahrnyta shal, wkd lyt dnemr ha, la abd. bhn dwkta la mkul aw mkyp bshryra."
+  },
+  "rb_unraid_parity": {
+   "message0": "bdqa d mywsta d Unraid",
+   "tooltip": "bdq asqla d mywsta bqrynhn, la ktb twbrna. shall lk kl zbn qdmyt, af kd la ahrnyta shal, wkd lyt dnemr ha, la abd. bhn dwkta la bdq bshryra."
   }
  },
  "options": {
@@ -886,7 +918,8 @@
   "Proxmox": "Proxmox",
   "Docker": "Docker",
   "SABnzbd": "SABnzbd",
-  "Radarr and Sonarr": "Radarr וSonarr"
+  "Radarr and Sonarr": "Radarr וSonarr",
+  "Unraid": "Unraid"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "מאני שליחא: שדי יתהון בגו לבנת שליחא",
@@ -1758,7 +1791,18 @@
   "Sonarr": "Sonarr",
   "Which one? Radarr or Sonarr.": "מן דא? Radarr או Sonarr?",
   "{n} downloading": "{n} מיתגררין",
-  "{n} missing": "{n} אתרו"
+  "{n} missing": "{n} אתרו",
+  "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)": "lmkul wlmkyp aysklta wawnyta d Unraid dylk, wlbdqa d mywsth (shal lk kl zbn)",
+  "read your Unraid server: the array, its disks, its shares, its containers and its VMs": "lmqryta laqstra d Unraid dylk: sdra, asqlwhy, shwtrwhy, aysklwhy wawnytwhy",
+  "{n} disks": "{n} asqla",
+  "{n} shares": "{n} shwtra",
+  "{n} VMs": "{n} awnyta",
+  "Unraid": "Unraid",
+  "Unraid array": "sdra d Unraid",
+  "Unraid disks": "asqla d Unraid",
+  "Unraid shares": "shwtra d Unraid",
+  "Unraid containers": "aysklta d Unraid",
+  "Unraid VMs": "awnyta d Unraid"
  },
  "examples": {
   "review": {
@@ -2597,7 +2641,9 @@
   "Describe this picture in one sentence.": "פרש צורתא הדא במלה חדא.",
   "clear, appealing, easy to read at small size": "בהיר, רחימאה, מתקרי בשיעורא זעירא",
   "The back door is still open.": "תרעא בתראה עדיין פתיח.",
-  "Good morning!": "צפרא טבא!"
+  "Good morning!": "צפרא טבא!",
+  "plex": "plex",
+  "windows": "windows"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(רהטא קדמאה פסק בפלגותא, ברם סדרא אשתני מן בתר כן, הלכך שרי מן רישא.)",
@@ -3387,7 +3433,7 @@
   "Docker containers": "מאני Docker",
   "Docker: {why}.": "Docker: {why}.",
   "Which Docker container? Give its name, like sonarr.": "אידין מאנא דDocker? הב שמיה, כות sonarr.",
-  "{n} containers": "{n} מאנין",
+  "{n} containers": "{n} aysklta",
   "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.": "מאנא {name} בDOCKER_PROTECT, ועל כן Second Thought לעלם לא משרי ליה תוב, מבטל או משרי ליה.",
   "Docker {version}": "Docker {version}",
   "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.": "בWindows, שוי בDOCKER_HOST כתובתא tcp://: צנורא דשמא דDocker לא מסתמך.",
@@ -3449,7 +3495,25 @@
   "search {who}'s wanted list for what's missing": "לבקשא מן דאתר במבקשיא ד{who}",
   "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.": "{who} צריך {url_setting} ו{key_setting} {where_keys}: אתריה (כות http://radarr:7878) ומנתקיה דAPI, תחות Settings, General, API Key.",
   "Radarr": "Radarr",
-  "Sonarr": "Sonarr"
+  "Sonarr": "Sonarr",
+  "Which one, and start or stop?": "ayna, u lmkul aw lmkyp?",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.": "{who} bea {url_setting} w {key_setting} {where_keys}: atrh (ayk https://unraid) w ikta d API, thyt Settings, Management Access, API Keys.",
+  "Unraid array": "sdra d Unraid",
+  "{state}, {free_gb} GB free of {total_gb} GB": "{state}, {free_gb} GB frya mn {total_gb} GB",
+  "Unraid disks": "asqla d Unraid",
+  "{n} disks": "{n} asqla",
+  "Unraid shares": "shwtra d Unraid",
+  "{n} shares": "{n} shwtra",
+  "Unraid containers": "aysklta d Unraid",
+  "{n} VMs": "{n} awnyta",
+  "Unraid VMs": "awnyta d Unraid",
+  "container": "aysklta",
+  "VM": "awnyta",
+  "{action} the Unraid {who} {name}": "{action} l {who} d Unraid {name}",
+  "check Unraid's parity": "bdqa d mywsta d Unraid",
+  "Unraid {version}": "Unraid {version}",
+  "array {state}": "sdra {state}",
+  "Unraid": "Unraid"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

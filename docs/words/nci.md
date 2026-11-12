@@ -35,6 +35,7 @@ Made by tools/sync.py from i18n/nci.json: edit that, not this.
 - Docker: Docker
 - SABnzbd: SABnzbd
 - Radarr and Sonarr: Radarr ihuan Sonarr
+- Unraid: Unraid
 - Listeners: they run while the exported program runs on schedule: Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli
 - No blocks match: Ahmo mochīhua ce tlaxtlapalli
 - Read and send: Xicpōhua ihuān xictitlani

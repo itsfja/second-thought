@@ -181,7 +181,15 @@
 "rb_arr_queue":{"message0":"ḥꜣw %1","tooltip":"ḥꜣw n rmṯ, ꜥnḫ rꜣw n ini m ḥꜣw: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ḥnꜥ eta (bw ḫr, mj 0:12:34). M pn ḥwꜣ ḥꜣw n ḫpr."},
 "rb_arr_missing":{"message0":"šꜣt mn %1","tooltip":"ḥꜣw n rmṯ, ꜥnḫ rꜣw n ḥw.t-nswt bꜣw-n-pr: title, added (ḥnꜥ ꜥḫꜣ) ḥnꜥ id."},
 "rb_arr_diskspace":{"message0":"bw n disk %1","tooltip":"ḥꜣw n rmṯ, ꜥnḫ rꜣw n prw: path, label, free_gb ḥnꜥ total_gb."},
-"rb_arr_search":{"message0":"ꜥḫꜣ %1 n ḫꜣsw","tooltip":"ꜥḫꜣ šꜣt r-ḏbt n ḫꜣsw bꜣw-n-pr. ḥꜣb n-k r-ꜥwꜣ, ꜥḫꜣ ḥꜣb n ꜥnḫ, ḥnꜥ n s ḥr ḥꜣb ꜥnḫ, nn ḫpr. M pn ḥwꜣ nn ꜥḫꜣ m mn."}
+"rb_arr_search":{"message0":"ꜥḫꜣ %1 n ḫꜣsw","tooltip":"ꜥḫꜣ šꜣt r-ḏbt n ḫꜣsw bꜣw-n-pr. ḥꜣb n-k r-ꜥwꜣ, ꜥḫꜣ ḥꜣb n ꜥnḫ, ḥnꜥ n s ḥr ḥꜣb ꜥnḫ, nn ḫpr. M pn ḥwꜣ nn ꜥḫꜣ m mn."},
+"rb_unraid_array":{"message0":"Unraid aha","tooltip":"aq hr aha: state (STARTED, STOPPED, ...), started (aq aq), free_gb, total_gb at uptime. aq aq aq aq aq."},
+"rb_unraid_disks":{"message0":"Unraid khau","tooltip":"aq aq, aq aq khu aha, aq parity, aq aq, aq cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb at free_gb."},
+"rb_unraid_shares":{"message0":"Unraid shau","tooltip":"aq aq, aq aq shau rmt: name, free_gb, used_gb at total_gb."},
+"rb_unraid_containers":{"message0":"Unraid khet","tooltip":"aq aq, aq aq Docker khet: name, state (running, exited, ...), status at auto_start (aq Unraid aq aq aha)."},
+"rb_unraid_vms":{"message0":"Unraid mhnwt","tooltip":"aq aq, aq aq mhnwt: name at state (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 Unraid khet %2","tooltip":"aq aq aq Docker khet, hr rn.f. aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. aq aq aq aq aq aq."},
+"rb_unraid_vm_power":{"message0":"%1 Unraid mhnwt %2","tooltip":"aq aq aq mhnwt, hr rn.f. aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. aq aq aq aq aq aq."},
+"rb_unraid_parity":{"message0":"aq Unraid parity","tooltip":"aq parity khu aq aq aq, aq aq aq aq. aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. aq aq aq aq aq aq."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𓅓 𓉔𓂋𓅱 𓈖𓃀","weekdays":"𓅓 𓉔𓂋𓅱 𓈖 𓃀𓄿𓎡","weekends":"𓅓 𓉔𓂋𓅱 𓈖 𓎛𓏏𓊪"},
@@ -243,7 +251,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr ḥnꜥ Sonarr"
+"Radarr and Sonarr":"Radarr ḥnꜥ Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𓋴𓆓𓅓𓅱: 𓇋𓂋𓋴𓈖 𓐍𓆑𓏏 𓇋𓂋 𓋴𓐍𓂋 𓆓𓄿 𓅓 𓏏𓂋",
@@ -1115,7 +1124,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"ī? Radarr r Sonarr?",
 "{n} downloading":"{n} ini",
-"{n} missing":"{n} ḫꜣsw"
+"{n} missing":"{n} ḫꜣsw",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"aq akh Unraid n.k khet mhnwt, aq aq parity (aq n.k aq aq)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"aq Unraid n.k: aha, khau.f, shau.f, khet.f at mhnwt.f",
+"{n} disks":"{n} khu",
+"{n} shares":"{n} shau",
+"{n} VMs":"{n} mhnwt",
+"Unraid":"Unraid",
+"Unraid array":"Unraid aha",
+"Unraid disks":"Unraid khau",
+"Unraid shares":"Unraid shau",
+"Unraid containers":"Unraid khet",
+"Unraid VMs":"Unraid mhnwt"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -1322,7 +1342,9 @@
 "the key steps":"𓈖𓅓𓏏𓅱𓏏 𓅱𓂋𓏏",
 "title, score, why":"𓂋𓈖, 𓎛𓋴𓃀, 𓎛𓂋 𓊪𓏏𓂋",
 "today's draft":"𓋴𓈙𓅱 𓈖 𓅓𓇋𓈖",
-"used headlines":"𓏏𓊪𓅱𓂋𓄿 𓇋𓂋𓈖"
+"used headlines":"𓏏𓊪𓅱𓂋𓄿 𓇋𓂋𓈖",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(jrt tpt ꜥḥꜥ.n=s m ẖnw, jw šnj sḫr ḏr ꜥ, šꜣꜥ=f m mꜣwt.)",
@@ -2112,7 +2134,7 @@
 "Docker containers":"hnww n Docker",
 "Docker: {why}.":"Docker: {why}.",
 "Which Docker container? Give its name, like sonarr.":"hnw jḫ n Docker? jmj rn, mj sonarr.",
-"{n} containers":"hnww {n}",
+"{n} containers":"{n} khet",
 "Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.":"hnw {name} m DOCKER_PROTECT, nn šsp sw Second Thought r nḥḥ.",
 "Docker {version}":"Docker {version}",
 "On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported.":"m Windows, jmj tcp:// m DOCKER_HOST. nn mr n Docker.",
@@ -2174,7 +2196,25 @@
 "search {who}'s wanted list for what's missing":"ꜥḫꜣ n ḫꜣsw m šꜣt mn {who}",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} jr n {url_setting} ḥnꜥ {key_setting} {where_keys}: bw.f (mj http://radarr:7878) ḥnꜥ ḥꜣw-tꜣ n API, ḥr Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"ashau, her khau her sehau?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"{who} hewa {url_setting} at {key_setting} {where_keys}: bwa.f (mi https://unraid) at khayt API, her Settings, Management Access, API Keys.",
+"Unraid array":"Unraid aha",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB khat n {total_gb} GB",
+"Unraid disks":"Unraid khau",
+"{n} disks":"{n} khu",
+"Unraid shares":"Unraid shau",
+"{n} shares":"{n} shau",
+"Unraid containers":"Unraid khet",
+"{n} VMs":"{n} mhnwt",
+"Unraid VMs":"Unraid mhnwt",
+"container":"khet",
+"VM":"mhnwt",
+"{action} the Unraid {who} {name}":"{action} Unraid {who} {name}",
+"check Unraid's parity":"aq Unraid parity",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"aha {state}",
+"Unraid":"Unraid"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

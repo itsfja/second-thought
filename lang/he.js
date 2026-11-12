@@ -181,7 +181,15 @@
 "rb_arr_queue":{"message0":"תור %1","tooltip":"רשימת רשומות, אחת לכל הורדה בתור: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality ו-eta (זמן שנותר, כמו 0:12:34). בעמוד זה נעשה שימוש בתור לדוגמה."},
 "rb_arr_missing":{"message0":"רשימת המבוקשים %1","tooltip":"רשימת רשומות, אחת לכל סרט או פרק בלי קובץ: title, added (מתי נוסף) ו-id."},
 "rb_arr_diskspace":{"message0":"שטח הדיסק %1","tooltip":"רשימת רשומות, אחת לכל תיקייה: path, label, free_gb ו-total_gb."},
-"rb_arr_search":{"message0":"לחפש מה חסר ב-%1","tooltip":"מחפש בכל רשימת המבוקשים את מה שאין לו קובץ. הוא שואל אותך קודם תמיד, גם כששום דבר אחר לא שואל, ואין אף אחד לומר כן, זה לא קורה. בעמוד זה שום דבר לא מחפש באמת."}
+"rb_arr_search":{"message0":"לחפש מה חסר ב-%1","tooltip":"מחפש בכל רשימת המבוקשים את מה שאין לו קובץ. הוא שואל אותך קודם תמיד, גם כששום דבר אחר לא שואל, ואין אף אחד לומר כן, זה לא קורה. בעמוד זה שום דבר לא מחפש באמת."},
+"rb_unraid_array":{"message0":"מערך Unraid","tooltip":"רשומה אחת למערך: state (STARTED, STOPPED, ...), started (האם הוא התחיל), free_gb, total_gb וuptime. בעמוד הזה הוא משתמש בשרת לדוגמה."},
+"rb_unraid_disks":{"message0":"דיסקים של Unraid","tooltip":"רשימה של רשומות, אחת לכל דיסק במערך, קודם פריטי, אחר כך נתונים, אחר כך מטמון: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb וfree_gb."},
+"rb_unraid_shares":{"message0":"שיתופים של Unraid","tooltip":"רשימה של רשומות, אחת לכל שיתוף משתמש: name, free_gb, used_gb וtotal_gb."},
+"rb_unraid_containers":{"message0":"מכולות של Unraid","tooltip":"רשימה של רשומות, אחת לכל מכולת Docker: name, state (running, exited, ...), status וauto_start (האם Unraid מתחיל אותה עם המערך)."},
+"rb_unraid_vms":{"message0":"מכונות וירטואליות של Unraid","tooltip":"רשימה של רשומות, אחת לכל מכונה וירטואלית: name וstate (RUNNING, SHUTOFF, ...)."},
+"rb_unraid_container_power":{"message0":"%1 מכולת Unraid %2","tooltip":"מתחיל או עוצר מכולת Docker אחת, לפי השם. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא מתחיל או עוצר באמת."},
+"rb_unraid_vm_power":{"message0":"%1 מכונה וירטואלית של Unraid %2","tooltip":"מתחיל או עוצר מכונה וירטואלית אחת, לפי השם. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא מתחיל או עוצר באמת."},
+"rb_unraid_parity":{"message0":"בדיקת הפריטי של Unraid","tooltip":"בודק את דיסקי הפריטי בקריאתם, בלי לכתוב תיקונים. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא בודק באמת."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יום","weekdays":"בימי חול","weekends":"בסופי שבוע"},
@@ -244,7 +252,8 @@
 "Proxmox":"Proxmox",
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
-"Radarr and Sonarr":"Radarr ו-Sonarr"
+"Radarr and Sonarr":"Radarr ו-Sonarr",
+"Unraid":"Unraid"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1116,7 +1125,18 @@
 "Sonarr":"Sonarr",
 "Which one? Radarr or Sonarr.":"איזה? Radarr או Sonarr.",
 "{n} downloading":"{n} מורידים",
-"{n} missing":"{n} חסרים"
+"{n} missing":"{n} חסרים",
+"start and stop your Unraid's containers and VMs, and check its parity (asking you each time)":"להתחיל ולעצור את המכולות והמכונות הווירטואליות של Unraid, ולבדוק את הפריטי (שואל אותך בכל פעם)",
+"read your Unraid server: the array, its disks, its shares, its containers and its VMs":"לקרוא את שרת Unraid שלך: המערך, הדיסקים שלו, השיתופים שלו, המכולות שלו והמכונות הווירטואליות שלו",
+"{n} disks":"{n} דיסקים",
+"{n} shares":"{n} שיתופים",
+"{n} VMs":"{n} מכונות וירטואליות",
+"Unraid":"Unraid",
+"Unraid array":"מערך Unraid",
+"Unraid disks":"דיסקים של Unraid",
+"Unraid shares":"שיתופים של Unraid",
+"Unraid containers":"מכולות של Unraid",
+"Unraid VMs":"מכונות וירטואליות של Unraid"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1323,7 +1343,9 @@
 "Describe this picture in one sentence.":"תארו את התמונה הזו במשפט אחד.",
 "clear, appealing, easy to read at small size":"ברור, ידידותי, קריא בגודל קטן",
 "The back door is still open.":"הדלת האחורית עדיין פתוחה.",
-"Good morning!":"בוקר טוב!"
+"Good morning!":"בוקר טוב!",
+"plex":"plex",
+"windows":"windows"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(הרצה קודמת נעצרה באמצע, אבל התוכנית השתנתה מאז, אז היא מתחילה מחדש.)",
@@ -2175,6 +2197,24 @@
 "search {who}'s wanted list for what's missing":"לחפש מה חסר ברשימת המבוקשים של {who}",
 "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.":"{who} צריך {url_setting} ו-{key_setting} {where_keys}: הכתובת שלו (כמו http://radarr:7878) ומפתח ה-API, תחת Settings, General, API Key.",
 "Radarr":"Radarr",
-"Sonarr":"Sonarr"
+"Sonarr":"Sonarr",
+"Which one, and start or stop?":"איזה, ולהתחיל או לעצור?",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.":"ל{who} צריך {url_setting} ו{key_setting} {where_keys}: הכתובת שלו (כמו https://unraid) ומפתח API, תחת Settings, Management Access, API Keys.",
+"Unraid array":"מערך Unraid",
+"{state}, {free_gb} GB free of {total_gb} GB":"{state}, {free_gb} GB פנויים מתוך {total_gb} GB",
+"Unraid disks":"דיסקים של Unraid",
+"{n} disks":"{n} דיסקים",
+"Unraid shares":"שיתופים של Unraid",
+"{n} shares":"{n} שיתופים",
+"Unraid containers":"מכולות של Unraid",
+"{n} VMs":"{n} מכונות וירטואליות",
+"Unraid VMs":"מכונות וירטואליות של Unraid",
+"container":"מכולה",
+"VM":"מכונה וירטואלית",
+"{action} the Unraid {who} {name}":"{action} את {who} של Unraid {name}",
+"check Unraid's parity":"בדיקת הפריטי של Unraid",
+"Unraid {version}":"Unraid {version}",
+"array {state}":"מערך {state}",
+"Unraid":"Unraid"
 }
 };
