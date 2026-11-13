@@ -216,7 +216,7 @@
 "rb_sort.ORDER":{"desc":"उच्चतमं पठमं","asc":"नीचतमं पठमं"},
 "rb_budget.UNIT":{"dollars":"अमेरिकदोल्लरा","gbp":"पोन्डा","eur":"यूरा","jpy":"येना","cny":"युवाना"},
 "rb_ask_first.WHAT":{"ha":"सब्बा घर-किरिया (Home Assistant, Homey, MQTT)","messages":"सासनानि उग्घोसनानि च पेसेतुं","files":"सञ्चिका रक्खितुं","all":"इमानि सब्बानि"},
-"rb_agent_builtin.KIND":{"web":"जाले परियेस पत्तानि च पठ","ask":"मं पञ्हं पुच्छाहि","memory":"सल्लक्खणानि सर अनुस्सर च","calc":"सङ्ख्या गणेहि","time":"काला च दिनानि च","file":"मया विचितं सञ्चिकं पठ","review":"पाठं पटिमानेहि","feeds":"पवत्तिसोतानि","linkedin":"LinkedIn परियेस (सब्बजनपत्तानि)","calendar":"दिनदस्सिका: घटना तुच्छकालो च","email":"ईपत्तं: परियेस पठ च","email_send":"ईपत्तं: पेसेहि (पठमं मं पुच्छति)","github":"GitHub: पयोगा आकड्ढनयाचना च","github_act":"GitHub: टीकं लिख, पञ्हे विवर लक्खेहि च (पठमं मं पुच्छति)","telegram":"Telegram: मम सासनानि परियेस","telegram_send":"Telegram: पेसेहि (पठमं मं पुच्छति)","telegram_send_free":"Telegram: पेसेहि (अपुच्छित्वा)","discord":"Discord: मम नाळियो परियेस","discord_send":"Discord: पेसेहि (पठमं मं पुच्छति)","discord_send_free":"Discord: पेसेहि (अपुच्छित्वा)","slack":"Slack: मम नाळियो परियेस","slack_send":"Slack: पेसेहि (पठमं मं पुच्छति)","slack_send_free":"Slack: पेसेहि (अपुच्छित्वा)","mqtt":"MQTT: विसये पठ","mqtt_act":"MQTT: पकासेहि (पठमं मं पुच्छति)","mqtt_act_free":"MQTT: पकासेहि (अपुच्छित्वा)","homey_read":"Homey: यन्तानि, पवाहे, चलानि च ओलोकेहि","homey_act":"Homey: यन्तानि नियमेहि पवाहे च आरभ (पठमं मं पुच्छति)","homey_act_free":"Homey: यन्तानि नियमेहि पवाहे च आरभ (अपुच्छित्वा)","ha_read":"Home Assistant: यन्तानि ओलोकेहि","ha_act":"Home Assistant: यन्तानि नियमेहि","ha_act_free":"Home Assistant: यन्तानि नियमेहि (अपुच्छित्वा)"},
+"rb_agent_builtin.KIND":{"web":"जाले परियेस पत्तानि च पठ","ask":"मं पञ्हं पुच्छाहि","memory":"सल्लक्खणानि सर अनुस्सर च","calc":"सङ्ख्या गणेहि","time":"काला च दिनानि च","file":"मया विचितं सञ्चिकं पठ","review":"पाठं पटिमानेहि","usage":"model services: usage, plans and limits","feeds":"पवत्तिसोतानि","linkedin":"LinkedIn परियेस (सब्बजनपत्तानि)","calendar":"दिनदस्सिका: घटना तुच्छकालो च","email":"ईपत्तं: परियेस पठ च","email_send":"ईपत्तं: पेसेहि (पठमं मं पुच्छति)","github":"GitHub: पयोगा आकड्ढनयाचना च","github_act":"GitHub: टीकं लिख, पञ्हे विवर लक्खेहि च (पठमं मं पुच्छति)","telegram":"Telegram: मम सासनानि परियेस","telegram_send":"Telegram: पेसेहि (पठमं मं पुच्छति)","telegram_send_free":"Telegram: पेसेहि (अपुच्छित्वा)","discord":"Discord: मम नाळियो परियेस","discord_send":"Discord: पेसेहि (पठमं मं पुच्छति)","discord_send_free":"Discord: पेसेहि (अपुच्छित्वा)","slack":"Slack: मम नाळियो परियेस","slack_send":"Slack: पेसेहि (पठमं मं पुच्छति)","slack_send_free":"Slack: पेसेहि (अपुच्छित्वा)","mqtt":"MQTT: विसये पठ","mqtt_act":"MQTT: पकासेहि (पठमं मं पुच्छति)","mqtt_act_free":"MQTT: पकासेहि (अपुच्छित्वा)","homey_read":"Homey: यन्तानि, पवाहे, चलानि च ओलोकेहि","homey_act":"Homey: यन्तानि नियमेहि पवाहे च आरभ (पठमं मं पुच्छति)","homey_act_free":"Homey: यन्तानि नियमेहि पवाहे च आरभ (अपुच्छित्वा)","ha_read":"Home Assistant: यन्तानि ओलोकेहि","ha_act":"Home Assistant: यन्तानि नियमेहि","ha_act_free":"Home Assistant: यन्तानि नियमेहि (अपुच्छित्वा)"},
 "rb_agent_mcp.ASK":{"changes":"(परिवत्तकउपकरणतो पुब्बे मं पुच्छति)","every":"(सब्बूपकरणतो पुब्बे मं पुच्छति)","never":"(अपुच्छित्वा)"},
 "rb_agent_kraken.MODE":{"read":"(मूलानि, तव खाता, पण्णवाणिज्जं च)","live":"(जीववाणिज्जं च: पच्चेकाणत्तितो पुब्बे पुच्छति)"},
 "rb_mem_set.KIND":{"transient":"इमस्मिं पत्ते विवटे","permanent":"सदा"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex samavayani",
 "Plex new items":"Plex nava",
 "Tautulli history":"Tautulli itihaso",
-"Tautulli watch time":"Tautulli passana-kalo"
+"Tautulli watch time":"Tautulli passana-kalo",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2314,7 +2315,19 @@
 "Tautulli watch time":"Tautulli passana-kalo",
 "{n} users":"{n} upasagga",
 "Which stream? Give a session's id, from the sessions.":"Ko savaho? Dehi ekassa samavayassa id, samavayehi.",
-"stop the {id} stream on Plex":"Plex {id} savam nivattetu"
+"stop the {id} stream on Plex":"Plex {id} savam nivattetu",
+", over by {x}":", over by {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Nothing has been spent through this computer's keys yet, so there's nothing to count.",
+"What each model service has been used, counted on this computer at list prices:":"What each model service has been used, counted on this computer at list prices:",
+"no plan set: add {setting} in {where} to count it against a cap":"no plan set: add {setting} in {where} to count it against a cap",
+"over the cap by {x}":"over the cap by {x}",
+"the {plan} plan publishes no monthly cap":"the {plan} plan publishes no monthly cap",
+"this hour":"this hour",
+"this month":"this month",
+"this week":"this week",
+"today":"today",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

@@ -215,7 +215,7 @@
 "rb_now.PART":{"time":"שעתא","date":"יומא","datetime":"יומא ושעתא","hour":"שעתא","minute":"רגעא","weekday":"יומא דשבתא"},
 "rb_sort.ORDER":{"desc":"רמא קדמאה","asc":"מכיכא קדמאה"},
 "rb_ask_first.WHAT":{"ha":"כל עבידתא דביתא חכימא (Home Assistant, Homey, MQTT)","messages":"שליחות אגרן והכרזן","files":"נטירת מגלתא","all":"כל אלין"},
-"rb_agent_builtin.KIND":{"web":"בעי ברשתא וקרי דפין","ask":"שאל יתי שאלתא","memory":"דכר ואדכר רשימין","calc":"חושבנין","time":"שעין ויומין","file":"קרי מגלתא דאבחר","review":"בדוק כתבא כלקבל מכילתא","feeds":"מבועי שמועתא","linkedin":"בעי ב-LinkedIn (דפין גליין)","calendar":"חושבן יומיא: מאורעין וזמן פנוי","email":"email: בעי וקרי","email_send":"email: שלח (שאיל יתי קדמאה)","github":"GitHub: עבידן ו-pull requests","github_act":"GitHub: תגובתא, פתיחה ורשמא ל-issues (שאיל יתי קדמאה)","telegram":"Telegram: בעי באגרתי","telegram_send":"Telegram: שלח (שאיל יתי קדמאה)","telegram_send_free":"Telegram: שלח (בלא שאלתא)","discord":"Discord: בעי בפלגי","discord_send":"Discord: שלח (שאיל יתי קדמאה)","discord_send_free":"Discord: שלח (בלא שאלתא)","slack":"Slack: בעי בפלגי","slack_send":"Slack: שלח (שאיל יתי קדמאה)","slack_send_free":"Slack: שלח (בלא שאלתא)","mqtt":"MQTT: קרי ענינין","mqtt_act":"MQTT: פרסם (שאיל יתי קדמאה)","mqtt_act_free":"MQTT: פרסם (בלא שאלתא)","homey_read":"Homey: חזי במאנין, בנגדין ובמשתניא","homey_act":"Homey: שליט במאנין ושרי נגדין (שאיל יתי קדמאה)","homey_act_free":"Homey: שליט במאנין ושרי נגדין (בלא שאלתא)","ha_read":"Home Assistant: חזי במאנין","ha_act":"Home Assistant: שליט במאנין","ha_act_free":"Home Assistant: שליט במאנין (בלא שאלתא)"},
+"rb_agent_builtin.KIND":{"web":"בעי ברשתא וקרי דפין","ask":"שאל יתי שאלתא","memory":"דכר ואדכר רשימין","calc":"חושבנין","time":"שעין ויומין","file":"קרי מגלתא דאבחר","review":"בדוק כתבא כלקבל מכילתא","usage":"שירותי המודלים: שימוש, תוכניות ומגבלות","feeds":"מבועי שמועתא","linkedin":"בעי ב-LinkedIn (דפין גליין)","calendar":"חושבן יומיא: מאורעין וזמן פנוי","email":"email: בעי וקרי","email_send":"email: שלח (שאיל יתי קדמאה)","github":"GitHub: עבידן ו-pull requests","github_act":"GitHub: תגובתא, פתיחה ורשמא ל-issues (שאיל יתי קדמאה)","telegram":"Telegram: בעי באגרתי","telegram_send":"Telegram: שלח (שאיל יתי קדמאה)","telegram_send_free":"Telegram: שלח (בלא שאלתא)","discord":"Discord: בעי בפלגי","discord_send":"Discord: שלח (שאיל יתי קדמאה)","discord_send_free":"Discord: שלח (בלא שאלתא)","slack":"Slack: בעי בפלגי","slack_send":"Slack: שלח (שאיל יתי קדמאה)","slack_send_free":"Slack: שלח (בלא שאלתא)","mqtt":"MQTT: קרי ענינין","mqtt_act":"MQTT: פרסם (שאיל יתי קדמאה)","mqtt_act_free":"MQTT: פרסם (בלא שאלתא)","homey_read":"Homey: חזי במאנין, בנגדין ובמשתניא","homey_act":"Homey: שליט במאנין ושרי נגדין (שאיל יתי קדמאה)","homey_act_free":"Homey: שליט במאנין ושרי נגדין (בלא שאלתא)","ha_read":"Home Assistant: חזי במאנין","ha_act":"Home Assistant: שליט במאנין","ha_act_free":"Home Assistant: שליט במאנין (בלא שאלתא)"},
 "rb_agent_mcp.ASK":{"changes":"(שאיל יתי קדם מאנין דמשנין מדעם)","every":"(שאיל יתי קדם כל מאנא)","never":"(בלא שאלתא)"},
 "rb_tg_message.PART":{"text":"כתבא","sender":"משלחא","chat":"שיחתא"},
 "rb_mem_set.KIND":{"transient":"כל עוד דפא הדין פתיח","permanent":"לעלם"},
@@ -1182,7 +1182,8 @@
 "Plex sessions":"Plex sjlat",
 "Plex new items":"Plex jdyd",
 "Tautulli history":"Tautulli tarikh",
-"Tautulli watch time":"Tautulli wqt shw"
+"Tautulli watch time":"Tautulli wqt shw",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"הדין עמודא על חשבונך די-claude.ai רהט, ולהן לא מני טבע כל חד מן שמשתא; אפק לפיתון, במפתחיא ב-second-thought.ini, וימסר הדין אסתימא מה טבע כל שמשתא, תכניתה ותחומה, וכל רביא."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2315,7 +2316,19 @@
 "Tautulli watch time":"Tautulli wqt shw",
 "{n} users":"{n} msthdmyn",
 "Which stream? Give a session's id, from the sessions.":"Ayna strym? Hb id sjl, mn sjlat.",
-"stop the {id} stream on Plex":"wqf strym {id} b Pi-hole"
+"stop the {id} stream on Plex":"wqf strym {id} b Pi-hole",
+", over by {x}":", רביא {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"לא אתטבע כלום עד כען במפתחיא די הא חשבנא, לית מה למנא.",
+"What each model service has been used, counted on this computer at list prices:":"מה טבע כל חד מן שמשתא מדלאתא, מתמני בהא חשבנא לפום מחירי רשימתא:",
+"no plan set: add {setting} in {where} to count it against a cap":"לא אתוקף תכניתא: אוסיף {setting} {where} די לתת מניה לקבל תחומא",
+"over the cap by {x}":"לעיל מן תחומא {x}",
+"the {plan} plan publishes no monthly cap":"תכניתא {plan} לא מפרסמא תחומא דירחא",
+"this hour":"בשעתא הדין",
+"this month":"בירחא הדין",
+"this week":"בשבועא הדין",
+"today":"אידנא",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% מן תחומא דירחא {cap} די תכניתא {plan} ({spent} טבע, אתחדת {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

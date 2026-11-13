@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"時刻","date":"日付","datetime":"日付と時刻","hour":"時","minute":"分","weekday":"曜日"},
 "rb_sort.ORDER":{"desc":"高い順","asc":"低い順"},
 "rb_ask_first.WHAT":{"ha":"スマートホームの操作（Home Assistant、Homey、MQTT）","messages":"メッセージやお知らせの送信","files":"ファイルの保存","all":"これらすべて"},
-"rb_agent_builtin.KIND":{"web":"Web を検索してページを読む","ask":"私に質問する","memory":"メモを覚えて思い出す","calc":"計算する","time":"時刻と日付","file":"私が選んだファイルを読む","review":"基準に照らしてテキストを確認する","feeds":"ニュースフィード","linkedin":"LinkedIn を検索（公開ページ）","calendar":"カレンダー：予定と空き時間","email":"メール：検索して読む","email_send":"メール：送信（先に確認）","github":"GitHub：プロジェクトとプルリクエスト","github_act":"GitHub：コメント、Issue の作成とラベル付け（先に確認）","telegram":"Telegram：自分のメッセージを検索","telegram_send":"Telegram：送信（先に確認）","telegram_send_free":"Telegram：送信（確認なし）","discord":"Discord：自分のチャンネルを検索","discord_send":"Discord：送信（先に確認）","discord_send_free":"Discord：送信（確認なし）","slack":"Slack：自分のチャンネルを検索","slack_send":"Slack：送信（先に確認）","slack_send_free":"Slack：送信（確認なし）","mqtt":"MQTT：トピックを読む","mqtt_act":"MQTT：送信（先に確認）","mqtt_act_free":"MQTT：送信（確認なし）","homey_read":"Homey：機器、フロー、変数を見る","homey_act":"Homey：機器を操作しフローを開始（先に確認）","homey_act_free":"Homey：機器を操作しフローを開始（確認なし）","ha_read":"Home Assistant：機器を見る","ha_act":"Home Assistant：機器を操作する","ha_act_free":"Home Assistant：機器を操作する（確認なし）"},
+"rb_agent_builtin.KIND":{"web":"Web を検索してページを読む","ask":"私に質問する","memory":"メモを覚えて思い出す","calc":"計算する","time":"時刻と日付","file":"私が選んだファイルを読む","review":"基準に照らしてテキストを確認する","usage":"モデルサービス：使用量・プラン・上限","feeds":"ニュースフィード","linkedin":"LinkedIn を検索（公開ページ）","calendar":"カレンダー：予定と空き時間","email":"メール：検索して読む","email_send":"メール：送信（先に確認）","github":"GitHub：プロジェクトとプルリクエスト","github_act":"GitHub：コメント、Issue の作成とラベル付け（先に確認）","telegram":"Telegram：自分のメッセージを検索","telegram_send":"Telegram：送信（先に確認）","telegram_send_free":"Telegram：送信（確認なし）","discord":"Discord：自分のチャンネルを検索","discord_send":"Discord：送信（先に確認）","discord_send_free":"Discord：送信（確認なし）","slack":"Slack：自分のチャンネルを検索","slack_send":"Slack：送信（先に確認）","slack_send_free":"Slack：送信（確認なし）","mqtt":"MQTT：トピックを読む","mqtt_act":"MQTT：送信（先に確認）","mqtt_act_free":"MQTT：送信（確認なし）","homey_read":"Homey：機器、フロー、変数を見る","homey_act":"Homey：機器を操作しフローを開始（先に確認）","homey_act_free":"Homey：機器を操作しフローを開始（確認なし）","ha_read":"Home Assistant：機器を見る","ha_act":"Home Assistant：機器を操作する","ha_act_free":"Home Assistant：機器を操作する（確認なし）"},
 "rb_agent_mcp.ASK":{"changes":"（何かを変える道具の前に確認）","every":"（すべての道具の前に確認）","never":"（確認なし）"},
 "rb_tg_message.PART":{"text":"テキスト","sender":"送り主","chat":"チャット"},
 "rb_mem_set.KIND":{"transient":"このページが開いている間","permanent":"ずっと"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex セッション",
 "Plex new items":"Plex の新しいアイテム",
 "Tautulli history":"Tautulli 履歴",
-"Tautulli watch time":"Tautulli 視聴時間"
+"Tautulli watch time":"Tautulli 視聴時間",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"このページは claude.ai アカウントで動くため、各サービスの支出は数えません。second-thought.ini にキーを書いて Python に書き出せば、このツールは各サービスの支出、プランと上限、超過分を報告します。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2314,6 +2315,18 @@
 "Tautulli watch time":"Tautulli 視聴時間",
 "{n} users":"{n} ユーザー",
 "Which stream? Give a session's id, from the sessions.":"どのストリーム？ セッションの中からセッションの id を指定してください。",
-"stop the {id} stream on Plex":"Plex のストリーム {id} を停止する"
+"stop the {id} stream on Plex":"Plex のストリーム {id} を停止する",
+", over by {x}":"、{x} の超過",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"このコンピュータのキーではまだ何も支出されていないため、計上するものがありません。",
+"What each model service has been used, counted on this computer at list prices:":"各モデルサービスの使用状況（このコンピュータ上で定価により集計）:",
+"no plan set: add {setting} in {where} to count it against a cap":"プラン未設定: {setting} を {where} 追加すると上限に対して計上します",
+"over the cap by {x}":"上限を {x} 超過",
+"the {plan} plan publishes no monthly cap":"{plan} プランは月次上限を公表していません",
+"this hour":"この 1 時間",
+"this month":"今月",
+"this week":"今週",
+"today":"今日",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{plan} プランの月次上限 {cap} の {pct}%（{spent} 支出、{when} にリセット）",
+"{window} {x}":"{window} {x}"
 }
 };

@@ -843,6 +843,7 @@
    "time": "ساعت وقتلری و تاریخلر",
    "file": "سچدیكم بر دوسیه‌یی اوقو",
    "review": "متنی معیارلره گوره یوقلا",
+   "usage": "خدمات مدل‌لر: استعمال، پلان‌لر و حدودلر",
    "feeds": "خبر منبعلری",
    "linkedin": "LinkedIn ده آرا (عمومی صحیفه‌لر)",
    "calendar": "تقویم: واقعه‌لر و بوش وقت",
@@ -1889,7 +1890,8 @@
   "Plex sessions": "Plex oturumlari",
   "Plex new items": "Plex yeni ogeler",
   "Tautulli history": "Tautulli gecmisi",
-  "Tautulli watch time": "Tautulli izleme suresi"
+  "Tautulli watch time": "Tautulli izleme suresi",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "بو صفحه حساب claude.ai‌نینده فعالیّت eder، هر خدمتین مصرفی‌نی سایماز؛ Python‌یه ایخراج ایده‌رک، second-thought.ini‌ده آچارلر قویوب، بو آلت هر خدمتین مصرفی، پلانی و حدی و مازادینی بیلدیرور."
  },
  "examples": {
   "review": {
@@ -3654,7 +3656,19 @@
   "Tautulli watch time": "Tautulli izleme suresi",
   "{n} users": "{n} kullanici",
   "Which stream? Give a session's id, from the sessions.": "Hangi akis? Oturumlarin icinden bir oturumun id'sini ver.",
-  "stop the {id} stream on Plex": "Plex'teki {id} akisini durdurmak"
+  "stop the {id} stream on Plex": "Plex'teki {id} akisini durdurmak",
+  ", over by {x}": "، مازادی {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "بو بیلگیسایارین آچارلری‌یله هنوز هیچ مصرف اولمامیش‌در، حساب‌لناجق شئ یوخ‌دور.",
+  "What each model service has been used, counted on this computer at list prices:": "هر مودل خدمتی نچه قدر قوللانیلمیش‌دیر، بو بیلگیسایارده لیست قیمتی اوزره سایلمیش‌دیر:",
+  "no plan set: add {setting} in {where} to count it against a cap": "پلان تنظیم اولمامیش‌در: {setting}‌نی {where} قویوب بود حد قارشی‌سینده سایلمق اوچون",
+  "over the cap by {x}": "حددن {x} مازاد",
+  "the {plan} plan publishes no monthly cap": "{plan} پلانی آی‌لیق حد نشر اتمه‌مک‌ده‌دیر",
+  "this hour": "بو ساعاتده",
+  "this month": "بو آیدا",
+  "this week": "بو حفته‌ده",
+  "today": "بوگون",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{plan} پلانی‌نین {cap} آی‌لیق حدی‌نین %{pct}‌ای ({spent} صرف اولموش، {when}‌ده یئنی‌دن باشلار)",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

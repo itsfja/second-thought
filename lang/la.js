@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"hora","date":"dies","datetime":"dies et hora","hour":"hora","minute":"minutum","weekday":"dies hebdomadis"},
 "rb_sort.ORDER":{"desc":"maxima primum","asc":"minima primum"},
 "rb_ask_first.WHAT":{"ha":"quamlibet actionem domus callidae (Home Assistant, Homey, MQTT)","messages":"missionem nuntiorum et praeconiorum","files":"servationem fasciculorum","all":"haec omnia"},
-"rb_agent_builtin.KIND":{"web":"interrete quaerere et paginas legere","ask":"me interrogare","memory":"notas meminisse et recordari","calc":"rationes subducere","time":"horae et dies","file":"fasciculum a me electum legere","review":"textum examinare secundum normas","feeds":"fluxus nuntiorum","linkedin":"LinkedIn quaerere (paginas publicas)","calendar":"calendarium: eventus et tempus liberum","email":"epistula electronica: quaerere et legere","email_send":"epistula electronica: mittere (me prius interrogat)","github":"GitHub: incepta et petitiones trahendi","github_act":"GitHub: commentari, quaestiones aperire ac notare (me prius interrogat)","telegram":"Telegram: nuntios meos quaerere","telegram_send":"Telegram: mittere (me prius interrogat)","telegram_send_free":"Telegram: mittere (sine interrogatione)","discord":"Discord: canales meos quaerere","discord_send":"Discord: mittere (me prius interrogat)","discord_send_free":"Discord: mittere (sine interrogatione)","slack":"Slack: canales meos quaerere","slack_send":"Slack: mittere (me prius interrogat)","slack_send_free":"Slack: mittere (sine interrogatione)","mqtt":"MQTT: argumenta legere","mqtt_act":"MQTT: divulgare (me prius interrogat)","mqtt_act_free":"MQTT: divulgare (sine interrogatione)","homey_read":"Homey: apparatus, fluxus operis et variabiles inspicere","homey_act":"Homey: apparatus regere et fluxus incipere (me prius interrogat)","homey_act_free":"Homey: apparatus regere et fluxus incipere (sine interrogatione)","ha_read":"Home Assistant: apparatus inspicere","ha_act":"Home Assistant: apparatus regere","ha_act_free":"Home Assistant: apparatus regere (sine interrogatione)"},
+"rb_agent_builtin.KIND":{"web":"interrete quaerere et paginas legere","ask":"me interrogare","memory":"notas meminisse et recordari","calc":"rationes subducere","time":"horae et dies","file":"fasciculum a me electum legere","review":"textum examinare secundum normas","usage":"ministrationes exemplarium: usus, rationes et limites","feeds":"fluxus nuntiorum","linkedin":"LinkedIn quaerere (paginas publicas)","calendar":"calendarium: eventus et tempus liberum","email":"epistula electronica: quaerere et legere","email_send":"epistula electronica: mittere (me prius interrogat)","github":"GitHub: incepta et petitiones trahendi","github_act":"GitHub: commentari, quaestiones aperire ac notare (me prius interrogat)","telegram":"Telegram: nuntios meos quaerere","telegram_send":"Telegram: mittere (me prius interrogat)","telegram_send_free":"Telegram: mittere (sine interrogatione)","discord":"Discord: canales meos quaerere","discord_send":"Discord: mittere (me prius interrogat)","discord_send_free":"Discord: mittere (sine interrogatione)","slack":"Slack: canales meos quaerere","slack_send":"Slack: mittere (me prius interrogat)","slack_send_free":"Slack: mittere (sine interrogatione)","mqtt":"MQTT: argumenta legere","mqtt_act":"MQTT: divulgare (me prius interrogat)","mqtt_act_free":"MQTT: divulgare (sine interrogatione)","homey_read":"Homey: apparatus, fluxus operis et variabiles inspicere","homey_act":"Homey: apparatus regere et fluxus incipere (me prius interrogat)","homey_act_free":"Homey: apparatus regere et fluxus incipere (sine interrogatione)","ha_read":"Home Assistant: apparatus inspicere","ha_act":"Home Assistant: apparatus regere","ha_act_free":"Home Assistant: apparatus regere (sine interrogatione)"},
 "rb_agent_mcp.ASK":{"changes":"(me interrogat ante instrumenta quae aliquid mutant)","every":"(me interrogat ante omne instrumentum)","never":"(sine interrogatione)"},
 "rb_tg_message.PART":{"text":"textus","sender":"missor","chat":"colloquium"},
 "rb_mem_set.KIND":{"transient":"dum haec pagina aperta est","permanent":"in perpetuum"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex sessiones",
 "Plex new items":"Plex nova",
 "Tautulli history":"Tautulli acta",
-"Tautulli watch time":"Tautulli tempus videnti"
+"Tautulli watch time":"Tautulli tempus videnti",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Haec pagina in ratione claude.ai tua currit, igitur impensa cuiusque ministerii non numerat; in Pythonum expone, clavibus in second-thought.ini positis, et hoc instrumentum dicet quod cuiusque ministerii impenderit, rationem et summam eius, et omnem excessum."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2314,7 +2315,19 @@
 "Tautulli watch time":"Tautulli tempus videnti",
 "{n} users":"{n} utentes",
 "Which stream? Give a session's id, from the sessions.":"Quis fluxus? Da notam sessionis, ex sessionibus.",
-"stop the {id} stream on Plex":"fluxum {id} in Plex sistere"
+"stop the {id} stream on Plex":"fluxum {id} in Plex sistere",
+", over by {x}":", superfluum {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Nihil adhuc per huius computatris claves impensum est, nihil igitur numerandum.",
+"What each model service has been used, counted on this computer at list prices:":"Quod cuiusque exemplaris ministerii usum est, in hoc computatro pretio catalogi numeratum:",
+"no plan set: add {setting} in {where} to count it against a cap":"ratio non posita: adde {setting} {where} ut contra summam numeretur",
+"over the cap by {x}":"ultra summam {x}",
+"the {plan} plan publishes no monthly cap":"ratio {plan} summam menstruam non publicat",
+"this hour":"hac hora",
+"this month":"hoc mense",
+"this week":"hac hebdomade",
+"today":"hodie",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% summae menstruae {cap} rationis {plan} ({spent} impensum, revertitur {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

@@ -1,0 +1,125 @@
+{
+ "format": "reflection-blocks",
+ "version": 1,
+ "name": "ai-spend-report",
+ "gallery": {
+  "title": "AI spend report",
+  "category": "money",
+  "description": "Each morning, what your model services have been used: spent per hour, day, week and month, the share of each plan's cap gone, any overspend, and the services' own rate limits, sent to you on Telegram. Only runs in exported Python, where spending is counted.",
+  "tip": "Add PLAN_CLAUDE (or PLAN_OPENAI, PLAN_GEMINI, PLAN_GROQ) in second-thought.ini to count against a plan's monthly cap.",
+  "author": "itsfja",
+  "runtime": "3.13.0"
+ },
+ "program": {
+  "variables": [],
+  "blocks": {
+   "languageVersion": 0,
+   "blocks": [
+    {
+     "type": "rb_start",
+     "x": 30,
+     "y": 30,
+     "next": {
+      "block": {
+       "type": "rb_broadcast_wait",
+       "inputs": {
+        "MSG": {
+         "shadow": {
+          "type": "text",
+          "fields": {
+           "TEXT": "spend report"
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "rb_when_time",
+     "fields": {
+      "HOUR": 8,
+      "MINUTE": 0,
+      "DAYS": "every"
+     },
+     "x": 550,
+     "y": 30,
+     "next": {
+      "block": {
+       "type": "rb_broadcast_wait",
+       "inputs": {
+        "MSG": {
+         "shadow": {
+          "type": "text",
+          "fields": {
+           "TEXT": "spend report"
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "rb_receive",
+     "fields": {
+      "MSG": "spend report"
+     },
+     "x": 30,
+     "y": 290,
+     "next": {
+      "block": {
+       "type": "rb_agent",
+       "fields": {
+        "PLAN": false
+       },
+       "inputs": {
+        "GOAL": {
+         "shadow": {
+          "type": "rb_longtext",
+          "fields": {
+           "TEXT": "Use ai_usage once. Write a short report of what each model service has been used: this hour, today, this week and this month, the share of each plan's monthly cap gone (say it as a percentage), any allowance shares, anything overspent, and the services' own reported rate limits. One line per service, then one line saying which service is closest to a cap or allowance and when that resets. If nothing has been spent yet, say so."
+          }
+         }
+        },
+        "STEPS": {
+         "shadow": {
+          "type": "math_number",
+          "fields": {
+           "NUM": 6
+          }
+         }
+        },
+        "TOOLS": {
+         "block": {
+          "type": "rb_agent_builtin",
+          "fields": {
+           "KIND": "usage"
+          }
+         }
+        }
+       },
+       "next": {
+        "block": {
+         "type": "rb_telegram_send",
+         "inputs": {
+          "TEXT": {
+           "block": {
+            "type": "rb_draft"
+           }
+          }
+         },
+         "next": {
+          "block": {
+           "type": "rb_result"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   ]
+  }
+ }
+}

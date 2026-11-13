@@ -840,6 +840,7 @@
    "time": "घटिकाः तिथयः च",
    "file": "मया वृतां सञ्चिकां पठ",
    "review": "मानदण्डैः पाठं परीक्षस्व",
+   "usage": "प्रतिरूपसेवाः प्रयोगः योजनाः सीमाः च",
    "feeds": "वार्तास्रोतांसि",
    "linkedin": "LinkedIn अन्विष्य (सार्वजनिकपृष्ठानि)",
    "calendar": "दिनदर्शिका: घटनाः रिक्तसमयः च",
@@ -1899,7 +1900,8 @@
   "Plex sessions": "Plex samavayahani",
   "Plex new items": "Plex nava",
   "Tautulli history": "Tautulli itihasah",
-  "Tautulli watch time": "Tautulli drishti-kalah"
+  "Tautulli watch time": "Tautulli drishti-kalah",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "इयं पृष्ठः तव claude.ai-लेखायां चलति, अतः प्रत्येकसेवायाः व्ययः न गणयति; Python-म् प्रति निर्यास्य, second-thought.ini-मध्ये कुञ्चिकाः स्थापय, एतत् साधनं प्रत्येकसेवायाः व्ययं, तस्याः योजनां सीमां च, अधिकव्ययं च निवेदयति."
  },
  "examples": {
   "review": {
@@ -3664,7 +3666,19 @@
   "Tautulli watch time": "Tautulli drishti-kalah",
   "{n} users": "{n} uporogah",
   "Which stream? Give a session's id, from the sessions.": "Kah pravahah? Dva ekasya samavayahasya notam, samavayahyoh.",
-  "stop the {id} stream on Plex": "Plex {id} pravaham sthapayitum"
+  "stop the {id} stream on Plex": "Plex {id} pravaham sthapayitum",
+  ", over by {x}": ", अधिकः {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "अस्य सङ्गणकस्य कुञ्चिकाभिः अद्यापि किमपि न व्ययितम्, अतः गणयितुं न किमपि।",
+  "What each model service has been used, counted on this computer at list prices:": "प्रत्येकं प्रतिरूपसेवा कियत् उपयुज्यत, अस्मिन् सङ्गणके सूचीमूल्यैः गणितम्:",
+  "no plan set: add {setting} in {where} to count it against a cap": "योजना न स्थापिता: {setting} {where} स्थापय, येन सीमायाः प्रति गण्यते",
+  "over the cap by {x}": "सीमाम् अतिक्रम्य {x}",
+  "the {plan} plan publishes no monthly cap": "योजना {plan} मासिकीं सीमां न प्रकाशयति",
+  "this hour": "अस्मिन् क्षणे",
+  "this month": "अस्मिन् मासे",
+  "this week": "अस्मिन् सप्ताहे",
+  "today": "अद्य",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "योजनायाः {plan} मासिक्याः सीमायाः {cap} इति {pct}% ({spent} व्ययितम्, {when} पुनः प्रवर्तते)",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

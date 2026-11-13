@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"tyme","date":"day","datetime":"day and tyme","hour":"houre","minute":"minute","weekday":"day of the wike"},
 "rb_sort.ORDER":{"desc":"heighest first","asc":"lowest first"},
 "rb_ask_first.WHAT":{"ha":"any dede of the wise hous (Home Assistant, Homey, MQTT)","messages":"sendynge of messages and pronouncynges","files":"savynge of quaiers","all":"alle thise"},
-"rb_agent_builtin.KIND":{"web":"seke on the web and rede leves","ask":"aske me a questioun","memory":"remembre notes and calle hem to mynde","calc":"rekene sommes","time":"houres and dayes","file":"rede a quaier that I chese","review":"examyne text agayns reules","feeds":"tydinges streemes","linkedin":"seke on LinkedIn (commune leves)","calendar":"kalender: events and free tyme","email":"email: seke and rede","email_send":"email: sende (asketh me first)","github":"GitHub: werkes and pull requests","github_act":"GitHub: comente, open and marke issues (asketh me first)","telegram":"Telegram: seke my messages","telegram_send":"Telegram: sende (asketh me first)","telegram_send_free":"Telegram: sende (withouten askynge)","discord":"Discord: seke my chanels","discord_send":"Discord: sende (asketh me first)","discord_send_free":"Discord: sende (withouten askynge)","slack":"Slack: seke my chanels","slack_send":"Slack: sende (asketh me first)","slack_send_free":"Slack: sende (withouten askynge)","mqtt":"MQTT: rede materes","mqtt_act":"MQTT: publisshe (asketh me first)","mqtt_act_free":"MQTT: publisshe (withouten askynge)","homey_read":"Homey: loke on engynes, floodes and variables","homey_act":"Homey: governe engynes and bigynne floodes (asketh me first)","homey_act_free":"Homey: governe engynes and bigynne floodes (withouten askynge)","ha_read":"Home Assistant: loke on engynes","ha_act":"Home Assistant: governe engynes","ha_act_free":"Home Assistant: governe engynes (withouten askynge)"},
+"rb_agent_builtin.KIND":{"web":"seke on the web and rede leves","ask":"aske me a questioun","memory":"remembre notes and calle hem to mynde","calc":"rekene sommes","time":"houres and dayes","file":"rede a quaier that I chese","review":"examyne text agayns reules","usage":"the modell servys: vsage, planys and boundys","feeds":"tydinges streemes","linkedin":"seke on LinkedIn (commune leves)","calendar":"kalender: events and free tyme","email":"email: seke and rede","email_send":"email: sende (asketh me first)","github":"GitHub: werkes and pull requests","github_act":"GitHub: comente, open and marke issues (asketh me first)","telegram":"Telegram: seke my messages","telegram_send":"Telegram: sende (asketh me first)","telegram_send_free":"Telegram: sende (withouten askynge)","discord":"Discord: seke my chanels","discord_send":"Discord: sende (asketh me first)","discord_send_free":"Discord: sende (withouten askynge)","slack":"Slack: seke my chanels","slack_send":"Slack: sende (asketh me first)","slack_send_free":"Slack: sende (withouten askynge)","mqtt":"MQTT: rede materes","mqtt_act":"MQTT: publisshe (asketh me first)","mqtt_act_free":"MQTT: publisshe (withouten askynge)","homey_read":"Homey: loke on engynes, floodes and variables","homey_act":"Homey: governe engynes and bigynne floodes (asketh me first)","homey_act_free":"Homey: governe engynes and bigynne floodes (withouten askynge)","ha_read":"Home Assistant: loke on engynes","ha_act":"Home Assistant: governe engynes","ha_act_free":"Home Assistant: governe engynes (withouten askynge)"},
 "rb_agent_mcp.ASK":{"changes":"(asketh me bifore tooles that chaungen thynges)","every":"(asketh me bifore every tool)","never":"(withouten askynge)"},
 "rb_tg_message.PART":{"text":"text","sender":"sendere","chat":"conversacioun"},
 "rb_mem_set.KIND":{"transient":"whil this leef is open","permanent":"for evere"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex sessions",
 "Plex new items":"Plex newe thinges",
 "Tautulli history":"Tautulli historie",
-"Tautulli watch time":"Tautulli watching tyme"
+"Tautulli watch time":"Tautulli watching tyme",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Þis page renneþ on þi claude.ai compt, so it telleþ nouȝt of ech servys spending; bere it out to Pyþon, wiþ keies in second-thought.ini, and þis tol seiþ what ech servys haþ spent, his plan and his bound, and ani ouerspend."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2314,7 +2315,19 @@
 "Tautulli watch time":"Tautulli watching tyme",
 "{n} users":"{n} users",
 "Which stream? Give a session's id, from the sessions.":"Whiche stream? Yeve a session's id, fro the sessions.",
-"stop the {id} stream on Plex":"stopping the {id} stream on Plex"
+"stop the {id} stream on Plex":"stopping the {id} stream on Plex",
+", over by {x}":", ouer by {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Nouȝt hath ben spent ȝit þurh þis computres keies, so þer is nouȝt to counte.",
+"What each model service has been used, counted on this computer at list prices:":"What ech modell servys hath ben vsed, I-told on þis computre at list price:",
+"no plan set: add {setting} in {where} to count it against a cap":"no plan y-set: adde {setting} {where} to counte it aȝeyn a bounde",
+"over the cap by {x}":"ouer þe bounde by {x}",
+"the {plan} plan publishes no monthly cap":"þe {plan} plan publissheth no monþely bounde",
+"this hour":"in þis houre",
+"this month":"þis monþe",
+"this week":"þis woke",
+"today":"to-day",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% of þe {plan} planys monþely bounde of {cap} ({spent} spent, bigynneth aȝeyn {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

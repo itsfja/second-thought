@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"ώρα","date":"ημερομηνία","datetime":"ημερομηνία και ώρα","hour":"ώρα της ημέρας (0-23)","minute":"λεπτό","weekday":"ημέρα της εβδομάδας"},
 "rb_sort.ORDER":{"desc":"από το μεγαλύτερο","asc":"από το μικρότερο"},
 "rb_ask_first.WHAT":{"ha":"κάθε ενέργεια έξυπνου σπιτιού (Home Assistant, Homey, MQTT)","messages":"την αποστολή μηνυμάτων και ανακοινώσεων","files":"την αποθήκευση αρχείων","all":"όλα αυτά"},
-"rb_agent_builtin.KIND":{"web":"αναζήτηση στο διαδίκτυο και ανάγνωση σελίδων","ask":"ερώτηση προς εμένα","memory":"μνήμη και ανάκληση σημειώσεων","calc":"κάνε υπολογισμούς","time":"ώρες και ημερομηνίες","file":"ανάγνωση αρχείου που διαλέγω","review":"έλεγξε κείμενο με βάση κριτήρια","feeds":"ροές ειδήσεων","linkedin":"αναζήτηση στο LinkedIn (δημόσιες σελίδες)","calendar":"ημερολόγιο: συμβάντα και ελεύθερος χρόνος","email":"email: αναζήτηση και ανάγνωση","email_send":"email: αποστολή (με ρωτά πρώτα)","github":"GitHub: έργα και pull requests","github_act":"GitHub: σχόλιο, άνοιγμα και ετικέτες σε issues (με ρωτά πρώτα)","telegram":"Telegram: αναζήτηση στα μηνύματά μου","telegram_send":"Telegram: αποστολή (με ρωτά πρώτα)","telegram_send_free":"Telegram: αποστολή (χωρίς ερώτηση)","discord":"Discord: αναζήτηση στα κανάλια μου","discord_send":"Discord: αποστολή (με ρωτά πρώτα)","discord_send_free":"Discord: αποστολή (χωρίς ερώτηση)","slack":"Slack: αναζήτηση στα κανάλια μου","slack_send":"Slack: αποστολή (με ρωτά πρώτα)","slack_send_free":"Slack: αποστολή (χωρίς ερώτηση)","mqtt":"MQTT: ανάγνωση θεμάτων","mqtt_act":"MQTT: δημοσίευση (με ρωτά πρώτα)","mqtt_act_free":"MQTT: δημοσίευση (χωρίς ερώτηση)","homey_read":"Homey: προβολή συσκευών, ροών και μεταβλητών","homey_act":"Homey: έλεγχος συσκευών και έναρξη ροών (με ρωτά πρώτα)","homey_act_free":"Homey: έλεγχος συσκευών και έναρξη ροών (χωρίς ερώτηση)","ha_read":"Home Assistant: προβολή συσκευών","ha_act":"Home Assistant: έλεγχος συσκευών","ha_act_free":"Home Assistant: έλεγχος συσκευών (χωρίς ερώτηση)"},
+"rb_agent_builtin.KIND":{"web":"αναζήτηση στο διαδίκτυο και ανάγνωση σελίδων","ask":"ερώτηση προς εμένα","memory":"μνήμη και ανάκληση σημειώσεων","calc":"κάνε υπολογισμούς","time":"ώρες και ημερομηνίες","file":"ανάγνωση αρχείου που διαλέγω","review":"έλεγξε κείμενο με βάση κριτήρια","usage":"υπηρεσίες μοντέλων: χρήση, πακέτα και όρια","feeds":"ροές ειδήσεων","linkedin":"αναζήτηση στο LinkedIn (δημόσιες σελίδες)","calendar":"ημερολόγιο: συμβάντα και ελεύθερος χρόνος","email":"email: αναζήτηση και ανάγνωση","email_send":"email: αποστολή (με ρωτά πρώτα)","github":"GitHub: έργα και pull requests","github_act":"GitHub: σχόλιο, άνοιγμα και ετικέτες σε issues (με ρωτά πρώτα)","telegram":"Telegram: αναζήτηση στα μηνύματά μου","telegram_send":"Telegram: αποστολή (με ρωτά πρώτα)","telegram_send_free":"Telegram: αποστολή (χωρίς ερώτηση)","discord":"Discord: αναζήτηση στα κανάλια μου","discord_send":"Discord: αποστολή (με ρωτά πρώτα)","discord_send_free":"Discord: αποστολή (χωρίς ερώτηση)","slack":"Slack: αναζήτηση στα κανάλια μου","slack_send":"Slack: αποστολή (με ρωτά πρώτα)","slack_send_free":"Slack: αποστολή (χωρίς ερώτηση)","mqtt":"MQTT: ανάγνωση θεμάτων","mqtt_act":"MQTT: δημοσίευση (με ρωτά πρώτα)","mqtt_act_free":"MQTT: δημοσίευση (χωρίς ερώτηση)","homey_read":"Homey: προβολή συσκευών, ροών και μεταβλητών","homey_act":"Homey: έλεγχος συσκευών και έναρξη ροών (με ρωτά πρώτα)","homey_act_free":"Homey: έλεγχος συσκευών και έναρξη ροών (χωρίς ερώτηση)","ha_read":"Home Assistant: προβολή συσκευών","ha_act":"Home Assistant: έλεγχος συσκευών","ha_act_free":"Home Assistant: έλεγχος συσκευών (χωρίς ερώτηση)"},
 "rb_agent_mcp.ASK":{"changes":"(με ρωτά πριν από εργαλεία που αλλάζουν κάτι)","every":"(με ρωτά πριν από κάθε εργαλείο)","never":"(χωρίς ερώτηση)"},
 "rb_tg_message.PART":{"text":"κείμενο","sender":"αποστολέας","chat":"συνομιλία"},
 "rb_mem_set.KIND":{"transient":"όσο αυτή η σελίδα είναι ανοιχτή","permanent":"για πάντα"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"συνεδρίες Plex",
 "Plex new items":"νέα Plex",
 "Tautulli history":"ιστορικό Tautulli",
-"Tautulli watch time":"χρόνος παρακολούθησης Tautulli"
+"Tautulli watch time":"χρόνος παρακολούθησης Tautulli",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Η σελίδα τρέχει στον λογαριασμό σας στο claude.ai, οπότε δεν μετρά τα έξοδα κάθε υπηρεσίας· εξαγάγετε σε Python, με κλειδιά στο second-thought.ini, και αυτό το εργαλείο θα αναφέρει τι έχει ξοδέψει κάθε υπηρεσία, το πλάνο και το όριό της, και τυχόν υπέρβαση."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2314,6 +2315,18 @@
 "Tautulli watch time":"χρόνος παρακολούθησης Tautulli",
 "{n} users":"{n} χρήστες",
 "Which stream? Give a session's id, from the sessions.":"Ποια ροή; Δώσε το id μιας συνεδρίας, από τις συνεδρίες.",
-"stop the {id} stream on Plex":"διακοπή της ροής {id} στο Plex"
+"stop the {id} stream on Plex":"διακοπή της ροής {id} στο Plex",
+", over by {x}":", υπέρβαση κατά {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Δεν έχει ξοδευτεί τίποτα ακόμα με τα κλειδιά αυτού του υπολογιστή, οπότε δεν υπάρχει τίποτα να μετρηθεί.",
+"What each model service has been used, counted on this computer at list prices:":"Πόσο έχει χρησιμοποιηθεί κάθε υπηρεσία μοντέλων, μετρημένο σε αυτόν τον υπολογιστή σε τιμές καταλόγου:",
+"no plan set: add {setting} in {where} to count it against a cap":"χωρίς πλάνο: προσθέστε {setting} {where} για να μετρηθεί έναντι ορίου",
+"over the cap by {x}":"πάνω από το όριο κατά {x}",
+"the {plan} plan publishes no monthly cap":"το πλάνο {plan} δεν δημοσιεύει μηνιαίο όριο",
+"this hour":"αυτή την ώρα",
+"this month":"αυτόν τον μήνα",
+"this week":"αυτή την εβδομάδα",
+"today":"σήμερα",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% του μηνιαίου ορίου {cap} του πλάνου {plan} ({spent} ξοδεμένα, μηδενίζει {when})",
+"{window} {x}":"{window} {x}"
 }
 };

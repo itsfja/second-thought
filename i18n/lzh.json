@@ -842,6 +842,7 @@
    "time": "時刻與日",
    "file": "讀吾所擇之卷",
    "review": "依其準察文",
+   "usage": "模型之役：用量、其制、其限",
    "feeds": "訊源",
    "linkedin": "求諸 LinkedIn（公頁）",
    "calendar": "曆：事與閒時",
@@ -1888,7 +1889,8 @@
   "Plex sessions": "Plex之會",
   "Plex new items": "Plex之新物",
   "Tautulli history": "Tautulli之史",
-  "Tautulli watch time": "Tautulli觀時"
+  "Tautulli watch time": "Tautulli觀時",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "此頁行於爾claude.ai之籍，故不計各役之費；導出為Python，置鑰於second-thought.ini，此器則報各役所費、其制其限、並逾額者。"
  },
  "examples": {
   "review": {
@@ -3653,7 +3655,19 @@
   "Tautulli watch time": "Tautulli觀時",
   "{n} users": "{n}人",
   "Which stream? Give a session's id, from the sessions.": "何流？以一會之id予之，自會。",
-  "stop the {id} stream on Plex": "止Plex之{id}流"
+  "stop the {id} stream on Plex": "止Plex之{id}流",
+  ", over by {x}": "，逾{x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "此機之鑰尚未有所費，故無可計者。",
+  "What each model service has been used, counted on this computer at list prices:": "各模型之役所用幾何，以本機按表價計之：",
+  "no plan set: add {setting} in {where} to count it against a cap": "未設其制：置{setting}於{where}，乃可計其限",
+  "over the cap by {x}": "逾其限{x}",
+  "the {plan} plan publishes no monthly cap": "{plan}之制不布月限",
+  "this hour": "此一時",
+  "this month": "本月",
+  "this week": "本周",
+  "today": "今日",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{plan}之制月限{cap}之{pct}%（已費{spent}，{when}復始）",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

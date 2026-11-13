@@ -13,6 +13,7 @@ from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like,
 from .connectors import fetch_page
 from .mcp import mcp_destructive, mcp_env_name, mcp_is_fr24, mcp_is_twak, mcp_is_vaillant, mcp_money
 from .settings import tr  # noqa: F401
+from .spending import usage_text
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 
 
@@ -36,6 +37,10 @@ class AgentTools:
                      "as a list of times and states.", ["entity", "hours"])],
         "ha_act": [("call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. "
                     "The person may be asked first, and may say no.", ["service", "entity", "data"])],
+        "usage": [("ai_usage", "What the person's model services have been used: for each with a key set, what it has spent this "
+                    "hour, today, this week and this month, the plan and monthly cap set for it and how much of that is gone "
+                    "or overspent, any allowances, and the rate limits the services themselves reported. Counted on this "
+                    "computer, at list prices.", [])],
         "calc": [("calculate", "Work out a sum exactly, like (350 / 500) * 100 or round(1000 * 0.02, 1). Use it for every sum instead of working it out "
                   "yourself. It knows + - * / ^, brackets, pi, and round(x, places), min, max, sqrt, abs, floor, ceil.", ["expression"])],
         "time": [("current_time", "Get the day, date and time now.", []),
@@ -113,7 +118,7 @@ class AgentTools:
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
                          "recall": {"name": "text"}, "list_memory": {}, "search_memory": {"query": "text"}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
-                         "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"},
+                         "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"}, "ai_usage": {},
                          "device_history": {"entity": "text", "hours": "number"}, "calculate": {"expression": "text"}, "current_time": {},
                          "time_plus": {"time": "text", "minutes": "number"}, "read_file": {"why": "text"},
                          "review_text": {"text": "text", "criteria": "text"}, "read_feed": {"url": "text", "limit": "number"},
@@ -391,6 +396,8 @@ class AgentTools:
             out = await asyncio.to_thread(fetch_page, a("url"))
             self.log(tr("Read page: {x}", x=_short(a("url"), 60)), _short(out, 400), tr("done"))
             return out
+        if kind == "ai_usage":
+            return usage_text()
         if kind == "calculate":
             return calc_text(a("expression"))
         if kind == "current_time":

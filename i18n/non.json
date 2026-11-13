@@ -839,6 +839,7 @@
    "time": "stundir ok dagar",
    "file": "lesa skjal er ek vel",
    "review": "prófa rit eptir mælikvǫrðum",
+   "usage": "þjónustu líkana: notkun, áskriftir og takmörk",
    "feeds": "tíðindastraumar",
    "linkedin": "leita á LinkedIn (opin blǫð)",
    "calendar": "rím: atburðir ok frjálsar stundir",
@@ -1898,7 +1899,8 @@
   "Plex sessions": "Plex setur",
   "Plex new items": "Plex nytt",
   "Tautulli history": "Tautulli saga",
-  "Tautulli watch time": "Tautulli ahtimal"
+  "Tautulli watch time": "Tautulli ahtimal",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "Þessi síða keyrir á claude.ai-reikningi þínum, telur því ekki útgjörf hvers þjónustu; flyttu út í Python, með lyklum í second-thought.ini, og segir þetta tól hvað hver þjónusta hefur eytt, áskrift og takmörk hennar, og alla yfirför."
  },
  "examples": {
   "review": {
@@ -3663,7 +3665,19 @@
   "Tautulli watch time": "Tautulli ahtimal",
   "{n} users": "{n} notendur",
   "Which stream? Give a session's id, from the sessions.": "Hvad straumur? Gefu id a setu, ur setum.",
-  "stop the {id} stream on Plex": "stoppa strauminn {id} a Plex"
+  "stop the {id} stream on Plex": "stoppa strauminn {id} a Plex",
+  ", over by {x}": ", yfir um {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Ekkert hefur enn eytt með lyklum þessa tölvu, svo ekkert er að telja.",
+  "What each model service has been used, counted on this computer at list prices:": "Hvað hver líkanaþjónusta hefur verið notuð, talin á þessari tölvu við listaverð:",
+  "no plan set: add {setting} in {where} to count it against a cap": "engin áskrift sett: settu {setting} {where} til að telja hana móti takmörkum",
+  "over the cap by {x}": "yfir takmörkunum um {x}",
+  "the {plan} plan publishes no monthly cap": "áskriftin {plan} birtir engin mánaðartakmörk",
+  "this hour": "þessa stund",
+  "this month": "þennan mánuð",
+  "this week": "þessa viku",
+  "today": "í dag",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% af mánaðartakmörkum {cap} áskriftarinnar {plan} ({spent} eytt, endurstillt {when})",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

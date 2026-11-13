@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"ὥρα","date":"ἡμέρα","datetime":"ἡμέρα καὶ ὥρα","hour":"ὥρα","minute":"λεπτόν","weekday":"ἡμέρα τῆς ἑβδομάδος"},
 "rb_sort.ORDER":{"desc":"τὰ ὑψηλότατα πρῶτα","asc":"τὰ ταπεινότατα πρῶτα"},
 "rb_ask_first.WHAT":{"ha":"πάσης πράξεως τοῦ σοφοῦ οἴκου (Home Assistant, Homey, MQTT)","messages":"τῆς ἀποστολῆς ἀγγελιῶν καὶ κηρυγμάτων","files":"τῆς φυλακῆς τευχῶν","all":"πάντων τούτων"},
-"rb_agent_builtin.KIND":{"web":"ἐν τῷ δικτύῳ ζητεῖν καὶ σελίδας ἀναγινώσκειν","ask":"ἐμὲ ἐρωτᾶν","memory":"σημειώσεις μνημονεύειν καὶ ἀναμιμνήσκεσθαι","calc":"ἀριθμοὺς λογίζεσθαι","time":"ὧραι καὶ ἡμέραι","file":"τεῦχος ὃ ἐκλέγομαι ἀναγινώσκειν","review":"γράμματα ἐξετάζειν κατὰ κανόνας","feeds":"ῥοαὶ ἀγγελιῶν","linkedin":"LinkedIn ζητεῖν (δημοσίας σελίδας)","calendar":"ἡμερολόγιον· συμβάντα καὶ σχολή","email":"email· ζητεῖν καὶ ἀναγινώσκειν","email_send":"email· πέμπειν (πρῶτον ἐρωτᾷ με)","github":"GitHub· ἔργα καὶ pull requests","github_act":"GitHub· σχολιάζειν, issues ἀνοίγειν καὶ ἐπιγράφειν (πρῶτον ἐρωτᾷ με)","telegram":"Telegram· τὰς ἐμὰς ἀγγελίας ζητεῖν","telegram_send":"Telegram· πέμπειν (πρῶτον ἐρωτᾷ με)","telegram_send_free":"Telegram· πέμπειν (ἄνευ ἐρωτήσεως)","discord":"Discord· τὰ ἐμὰ κανάλια ζητεῖν","discord_send":"Discord· πέμπειν (πρῶτον ἐρωτᾷ με)","discord_send_free":"Discord· πέμπειν (ἄνευ ἐρωτήσεως)","slack":"Slack· τὰ ἐμὰ κανάλια ζητεῖν","slack_send":"Slack· πέμπειν (πρῶτον ἐρωτᾷ με)","slack_send_free":"Slack· πέμπειν (ἄνευ ἐρωτήσεως)","mqtt":"MQTT· θέματα ἀναγινώσκειν","mqtt_act":"MQTT· δημοσιεύειν (πρῶτον ἐρωτᾷ με)","mqtt_act_free":"MQTT· δημοσιεύειν (ἄνευ ἐρωτήσεως)","homey_read":"Homey· μηχανάς, ῥοὰς καὶ μεταβλητὰ βλέπειν","homey_act":"Homey· μηχανὰς κυβερνᾶν καὶ ῥοὰς ἄρχειν (πρῶτον ἐρωτᾷ με)","homey_act_free":"Homey· μηχανὰς κυβερνᾶν καὶ ῥοὰς ἄρχειν (ἄνευ ἐρωτήσεως)","ha_read":"Home Assistant· μηχανὰς βλέπειν","ha_act":"Home Assistant· μηχανὰς κυβερνᾶν","ha_act_free":"Home Assistant· μηχανὰς κυβερνᾶν (ἄνευ ἐρωτήσεως)"},
+"rb_agent_builtin.KIND":{"web":"ἐν τῷ δικτύῳ ζητεῖν καὶ σελίδας ἀναγινώσκειν","ask":"ἐμὲ ἐρωτᾶν","memory":"σημειώσεις μνημονεύειν καὶ ἀναμιμνήσκεσθαι","calc":"ἀριθμοὺς λογίζεσθαι","time":"ὧραι καὶ ἡμέραι","file":"τεῦχος ὃ ἐκλέγομαι ἀναγινώσκειν","review":"γράμματα ἐξετάζειν κατὰ κανόνας","usage":"υπηρεσίαι τύπων: χρήσις, σχέδια καὶ ὅρια","feeds":"ῥοαὶ ἀγγελιῶν","linkedin":"LinkedIn ζητεῖν (δημοσίας σελίδας)","calendar":"ἡμερολόγιον· συμβάντα καὶ σχολή","email":"email· ζητεῖν καὶ ἀναγινώσκειν","email_send":"email· πέμπειν (πρῶτον ἐρωτᾷ με)","github":"GitHub· ἔργα καὶ pull requests","github_act":"GitHub· σχολιάζειν, issues ἀνοίγειν καὶ ἐπιγράφειν (πρῶτον ἐρωτᾷ με)","telegram":"Telegram· τὰς ἐμὰς ἀγγελίας ζητεῖν","telegram_send":"Telegram· πέμπειν (πρῶτον ἐρωτᾷ με)","telegram_send_free":"Telegram· πέμπειν (ἄνευ ἐρωτήσεως)","discord":"Discord· τὰ ἐμὰ κανάλια ζητεῖν","discord_send":"Discord· πέμπειν (πρῶτον ἐρωτᾷ με)","discord_send_free":"Discord· πέμπειν (ἄνευ ἐρωτήσεως)","slack":"Slack· τὰ ἐμὰ κανάλια ζητεῖν","slack_send":"Slack· πέμπειν (πρῶτον ἐρωτᾷ με)","slack_send_free":"Slack· πέμπειν (ἄνευ ἐρωτήσεως)","mqtt":"MQTT· θέματα ἀναγινώσκειν","mqtt_act":"MQTT· δημοσιεύειν (πρῶτον ἐρωτᾷ με)","mqtt_act_free":"MQTT· δημοσιεύειν (ἄνευ ἐρωτήσεως)","homey_read":"Homey· μηχανάς, ῥοὰς καὶ μεταβλητὰ βλέπειν","homey_act":"Homey· μηχανὰς κυβερνᾶν καὶ ῥοὰς ἄρχειν (πρῶτον ἐρωτᾷ με)","homey_act_free":"Homey· μηχανὰς κυβερνᾶν καὶ ῥοὰς ἄρχειν (ἄνευ ἐρωτήσεως)","ha_read":"Home Assistant· μηχανὰς βλέπειν","ha_act":"Home Assistant· μηχανὰς κυβερνᾶν","ha_act_free":"Home Assistant· μηχανὰς κυβερνᾶν (ἄνευ ἐρωτήσεως)"},
 "rb_agent_mcp.ASK":{"changes":"(ἐρωτᾷ με πρὸ ὀργάνων ἃ ἀλλάσσει τι)","every":"(ἐρωτᾷ με πρὸ παντὸς ὀργάνου)","never":"(ἄνευ ἐρωτήσεως)"},
 "rb_tg_message.PART":{"text":"γράμματα","sender":"ὁ πέμψας","chat":"ὁμιλία"},
 "rb_mem_set.KIND":{"transient":"ἐν ᾧ ἥδε ἡ σελὶς ἀνέῳκται","permanent":"εἰς ἀεί"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex συνεδρίαι",
 "Plex new items":"Plex νέα",
 "Tautulli history":"Tautulli ἱστορία",
-"Tautulli watch time":"Tautulli χρόνος θεάσεως"
+"Tautulli watch time":"Tautulli χρόνος θεάσεως",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Ἡ σελὶς ἐν τῷ claude.ai λογαρυσμῷ σου τρέχει, οὐκ ἄρα τὰ ἐξοδα ἑκάστης διακονίας μετρεῖ· ἐξάγαγε εἰς Πύθωνα, τῶν κλειδῶν ἐν second-thought.ini τεθέντων, καὶ ἐρεῖ τὸ ὄργανον τί ἑκάστη διακονία δαπανᾷ, τὸ σχέδιον καὶ τὸ ὅριον αὐτῆς, καὶ πᾶσαν ὑπερβολήν."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -2314,7 +2315,19 @@
 "Tautulli watch time":"Tautulli χρόνος θεάσεως",
 "{n} users":"{n} χρώμενοι",
 "Which stream? Give a session's id, from the sessions.":"Ποία ῥύσις; Δὸς τὸ ταυτότητας συνεδρίας, ἐκ τῶν συνεδριῶν.",
-"stop the {id} stream on Plex":"τὴν {id} ῥύσιν ἐπὶ Plex παύειν"
+"stop the {id} stream on Plex":"τὴν {id} ῥύσιν ἐπὶ Plex παύειν",
+", over by {x}":", ὑπερβολὴ {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Οὐδέπω διὰ τῶν κλειδῶν τούτου τοῦ ὑπολογιστοῦ ἐδαπανήθη οὐδέν, οὐκ ἄρα ἔστιν ἀριθμεῖν.",
+"What each model service has been used, counted on this computer at list prices:":"Τί ἑκάστης διακονίας τύπων ἐχρήσθη, ἐν τούτῳ τῷ ὑπολογιστῷ κατὰ τίμημα καταλόγου μετρημένον:",
+"no plan set: add {setting} in {where} to count it against a cap":"σχέδιον οὐκ ἐτέθη: πρόσθες {setting} {where} ἵνα πρὸς ὅριον μετρηθῇ",
+"over the cap by {x}":"ὑπὲρ τὸ ὅριον {x}",
+"the {plan} plan publishes no monthly cap":"τὸ σχέδιον {plan} ὅριον μηνιαῖον οὐ δημοσιεύει",
+"this hour":"ταύτῃ τῇ ὥρᾳ",
+"this month":"τοῦτον τὸν μῆνα",
+"this week":"ταύτῃ τῇ ἑβδομάδι",
+"today":"σήμερον",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% τοῦ μηνιαίου ὁρίου {cap} τοῦ σχέδίου {plan} ({spent} δεδαπανημέναν, ἐπανέρχεται {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

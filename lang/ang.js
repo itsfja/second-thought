@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"tid","date":"dæg","datetime":"dæg and tid","hour":"tid","minute":"minute","weekday":"wucan dæg"},
 "rb_sort.ORDER":{"desc":"hehst ærest","asc":"nyþerost ærest"},
 "rb_ask_first.WHAT":{"ha":"ælcre dæde þæs snoteran huses (Home Assistant, Homey, MQTT)","messages":"sendunge ærendgewrita and bodunga","files":"healdunge fætelsa","all":"eallum þissum"},
-"rb_agent_builtin.KIND":{"web":"on webbe secan and leaf rædan","ask":"me axian","memory":"gemearc gemunan and eft gemyndgian","calc":"rimas asmeagan","time":"tida and dagas","file":"fætels þe ic geceose rædan","review":"gewrit sceawian be regolum","feeds":"spellstreamas","linkedin":"LinkedIn secan (openlicu leaf)","calendar":"tidboc: gelimp and æmtig tid","email":"email: secan and rædan","email_send":"email: sendan (axaþ me ærest)","github":"GitHub: weorc and pull requests","github_act":"GitHub: cwide writan, issues openian and mearcian (axaþ me ærest)","telegram":"Telegram: mine ærendgewritu secan","telegram_send":"Telegram: sendan (axaþ me ærest)","telegram_send_free":"Telegram: sendan (butan axunge)","discord":"Discord: mine canalas secan","discord_send":"Discord: sendan (axaþ me ærest)","discord_send_free":"Discord: sendan (butan axunge)","slack":"Slack: mine canalas secan","slack_send":"Slack: sendan (axaþ me ærest)","slack_send_free":"Slack: sendan (butan axunge)","mqtt":"MQTT: intingan rædan","mqtt_act":"MQTT: cyþan (axaþ me ærest)","mqtt_act_free":"MQTT: cyþan (butan axunge)","homey_read":"Homey: searu, floda and wendlingas sceawian","homey_act":"Homey: searu wealdan and floda onginnan (axaþ me ærest)","homey_act_free":"Homey: searu wealdan and floda onginnan (butan axunge)","ha_read":"Home Assistant: searu sceawian","ha_act":"Home Assistant: searu wealdan","ha_act_free":"Home Assistant: searu wealdan (butan axunge)"},
+"rb_agent_builtin.KIND":{"web":"on webbe secan and leaf rædan","ask":"me axian","memory":"gemearc gemunan and eft gemyndgian","calc":"rimas asmeagan","time":"tida and dagas","file":"fætels þe ic geceose rædan","review":"gewrit sceawian be regolum","usage":"þenunga þara módella: brȳc, plancas and gemæro","feeds":"spellstreamas","linkedin":"LinkedIn secan (openlicu leaf)","calendar":"tidboc: gelimp and æmtig tid","email":"email: secan and rædan","email_send":"email: sendan (axaþ me ærest)","github":"GitHub: weorc and pull requests","github_act":"GitHub: cwide writan, issues openian and mearcian (axaþ me ærest)","telegram":"Telegram: mine ærendgewritu secan","telegram_send":"Telegram: sendan (axaþ me ærest)","telegram_send_free":"Telegram: sendan (butan axunge)","discord":"Discord: mine canalas secan","discord_send":"Discord: sendan (axaþ me ærest)","discord_send_free":"Discord: sendan (butan axunge)","slack":"Slack: mine canalas secan","slack_send":"Slack: sendan (axaþ me ærest)","slack_send_free":"Slack: sendan (butan axunge)","mqtt":"MQTT: intingan rædan","mqtt_act":"MQTT: cyþan (axaþ me ærest)","mqtt_act_free":"MQTT: cyþan (butan axunge)","homey_read":"Homey: searu, floda and wendlingas sceawian","homey_act":"Homey: searu wealdan and floda onginnan (axaþ me ærest)","homey_act_free":"Homey: searu wealdan and floda onginnan (butan axunge)","ha_read":"Home Assistant: searu sceawian","ha_act":"Home Assistant: searu wealdan","ha_act_free":"Home Assistant: searu wealdan (butan axunge)"},
 "rb_agent_mcp.ASK":{"changes":"(axaþ me ær tolum þe hwæt wendaþ)","every":"(axaþ me ær ælcum tole)","never":"(butan axunge)"},
 "rb_tg_message.PART":{"text":"gewrit","sender":"sendend","chat":"spræc"},
 "rb_mem_set.KIND":{"transient":"þa hwile þe þis leaf open is","permanent":"a"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex sessiuns",
 "Plex new items":"Plex niwe",
 "Tautulli history":"Tautulli stear",
-"Tautulli watch time":"Tautulli sight-tima"
+"Tautulli watch time":"Tautulli sight-tima",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Þis page renneþ on þi claude.ai compt, and telleþ nouȝt of ech servys spending; bere it out to Pyþon, wiþ keies in second-thought.ini, and þis tol seiþ what ech servys haþ spent, his plan and his bound, and ani ouerspend."
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2314,7 +2315,19 @@
 "Tautulli watch time":"Tautulli sight-tima",
 "{n} users":"{n} brucrend",
 "Which stream? Give a session's id, from the sessions.":"Hwaet stream? Syl anre sessiune id, fra tham sessiunum.",
-"stop the {id} stream on Plex":"thone {id} stream on Plex gestillan"
+"stop the {id} stream on Plex":"thone {id} stream on Plex gestillan",
+", over by {x}":", ouer by {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Naht þurh þissa compbrēca keies haþ naht abbened, nis þau naht to tellanne.",
+"What each model service has been used, counted on this computer at list prices:":"Hwæt ælc modellþenung brȳced wæs, on þissum compbrēce be lystcræfte geteald:",
+"no plan set: add {setting} in {where} to count it against a cap":"nā plan geset: adde {setting} {where} þæt hit wiþ ān gemǣro sīe geteald",
+"over the cap by {x}":"ofer þǣm gemǣran be {x}",
+"the {plan} plan publishes no monthly cap":"þæt {plan} plan nǣnne mōnþgemǣre cȳþeþ",
+"this hour":"on þissere tīde",
+"this month":"þisses mōnþes",
+"this week":"þisse wucan",
+"today":"tō dæg",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% of þæs {plan} planes mōnþgemǣre {cap} ({spent} abbened, ongynþ eft {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

@@ -842,6 +842,7 @@
    "time": "часы и дни",
    "file": "чти свитокъ, егоже изберу",
    "review": "испытай писанїе по мѣрамъ",
+   "usage": "слѹжьбы образьць: ѹпотреба, планъ ꙇ граници",
    "feeds": "источники вѣстей",
    "linkedin": "взыщи въ LinkedIn (ѡбщїи листы)",
    "calendar": "мѣсѧцесловъ: событїѧ и праздное времѧ",
@@ -1888,7 +1889,8 @@
   "Plex sessions": "Plex sessii",
   "Plex new items": "Plex novoe",
   "Tautulli history": "Tautulli istoria",
-  "Tautulli watch time": "Tautulli vremia smotrenia"
+  "Tautulli watch time": "Tautulli vremia smotrenia",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "Сѣ страница на claude.ai тѣчетъ, того ради не считаетъ истрачьныѩ коѥѩждо службы; изнеси въ Пѵѳонъ, съ клѫчи въ second-thought.ini, и речетъ си подъобьіе колико коѥждо служба истрачи, планъ и граници ѥѩ, и всѧко прехождениѥ."
  },
  "examples": {
   "review": {
@@ -3653,7 +3655,19 @@
   "Tautulli watch time": "Tautulli vremia smotrenia",
   "{n} users": "{n} polzovateli",
   "Which stream? Give a session's id, from the sessions.": "Kakyi potokъ? Dajь id sessii, otъ sessii.",
-  "stop the {id} stream on Plex": "ostanoviti potokъ {id} na Plex"
+  "stop the {id} stream on Plex": "ostanoviti potokъ {id} na Plex",
+  ", over by {x}": ", прехождениѥ {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Ни чьсо же ѥще не истрачи сѩ клѫчи сего исповньника, ни ѥсть что считаети.",
+  "What each model service has been used, counted on this computer at list prices:": "Что коѥждо службы образьць съпотрѣбьно бѣ, съчитаети на сѣмъ исповньницѣ по списоу цѣнъ:",
+  "no plan set: add {setting} in {where} to count it against a cap": "планъ не положенъ: вложи {setting} {where}, да сѧ считаетъ прѣмо граници",
+  "over the cap by {x}": "прѣходить граници на {x}",
+  "the {plan} plan publishes no monthly cap": "планъ {plan} мѣсѧчьнѫ граници не обличаѥтъ",
+  "this hour": "въ сїѭ годинѫ",
+  "this month": "въ сь мѣсѧць",
+  "this week": "въ сєю недѣлѭ",
+  "today": "дьньсь",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% мѣсѧчьнѫ граници {cap} плана {plan} ({spent} истрачи, възвращаѥтъ сѧ {when})",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Приложи толкъ",

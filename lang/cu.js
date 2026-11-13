@@ -215,7 +215,7 @@
 "rb_sort.ORDER":{"desc":"высшее прежде","asc":"нижшее прежде"},
 "rb_budget.UNIT":{"dollars":"долары американскїѧ","gbp":"фунты","eur":"евро","jpy":"ены","cny":"юани"},
 "rb_ask_first.WHAT":{"ha":"всѧко дѣйство умнагѡ дома (Home Assistant, Homey, MQTT)","messages":"посыланїе вѣстей и возглашенїй","files":"сохраненїе свиткѡвъ","all":"всѧ сїѧ"},
-"rb_agent_builtin.KIND":{"web":"взыщи въ мрежѣ и чти листы","ask":"вопроси мене вопросъ","memory":"помни и воспоминай замѣтки","calc":"сочти числа","time":"часы и дни","file":"чти свитокъ, егоже изберу","review":"испытай писанїе по мѣрамъ","feeds":"источники вѣстей","linkedin":"взыщи въ LinkedIn (ѡбщїи листы)","calendar":"мѣсѧцесловъ: событїѧ и праздное времѧ","email":"посланїѧ: взыщи и чти","email_send":"посланїѧ: посли (вопрошаетъ мене прежде)","github":"GitHub: дѣла и прошенїѧ утвержденїѧ","github_act":"GitHub: толкуй, ѿверзай и знаменуй вопросы (вопрошаетъ мене прежде)","telegram":"Telegram: взыщи вѣстей моихъ","telegram_send":"Telegram: посли (вопрошаетъ мене прежде)","telegram_send_free":"Telegram: посли (безъ вопрошенїѧ)","discord":"Discord: взыщи стезей моихъ","discord_send":"Discord: посли (вопрошаетъ мене прежде)","discord_send_free":"Discord: посли (безъ вопрошенїѧ)","slack":"Slack: взыщи стезей моихъ","slack_send":"Slack: посли (вопрошаетъ мене прежде)","slack_send_free":"Slack: посли (безъ вопрошенїѧ)","mqtt":"MQTT: чти предметы","mqtt_act":"MQTT: возвѣсти (вопрошаетъ мене прежде)","mqtt_act_free":"MQTT: возвѣсти (безъ вопрошенїѧ)","homey_read":"Homey: зри снарѧды, токи и измѣняемаѧ","homey_act":"Homey: управляй снарѧды и начинай токи (вопрошаетъ мене прежде)","homey_act_free":"Homey: управляй снарѧды и начинай токи (безъ вопрошенїѧ)","ha_read":"Home Assistant: зри снарѧды","ha_act":"Home Assistant: управляй снарѧды","ha_act_free":"Home Assistant: управляй снарѧды (безъ вопрошенїѧ)"},
+"rb_agent_builtin.KIND":{"web":"взыщи въ мрежѣ и чти листы","ask":"вопроси мене вопросъ","memory":"помни и воспоминай замѣтки","calc":"сочти числа","time":"часы и дни","file":"чти свитокъ, егоже изберу","review":"испытай писанїе по мѣрамъ","usage":"слѹжьбы образьць: ѹпотреба, планъ ꙇ граници","feeds":"источники вѣстей","linkedin":"взыщи въ LinkedIn (ѡбщїи листы)","calendar":"мѣсѧцесловъ: событїѧ и праздное времѧ","email":"посланїѧ: взыщи и чти","email_send":"посланїѧ: посли (вопрошаетъ мене прежде)","github":"GitHub: дѣла и прошенїѧ утвержденїѧ","github_act":"GitHub: толкуй, ѿверзай и знаменуй вопросы (вопрошаетъ мене прежде)","telegram":"Telegram: взыщи вѣстей моихъ","telegram_send":"Telegram: посли (вопрошаетъ мене прежде)","telegram_send_free":"Telegram: посли (безъ вопрошенїѧ)","discord":"Discord: взыщи стезей моихъ","discord_send":"Discord: посли (вопрошаетъ мене прежде)","discord_send_free":"Discord: посли (безъ вопрошенїѧ)","slack":"Slack: взыщи стезей моихъ","slack_send":"Slack: посли (вопрошаетъ мене прежде)","slack_send_free":"Slack: посли (безъ вопрошенїѧ)","mqtt":"MQTT: чти предметы","mqtt_act":"MQTT: возвѣсти (вопрошаетъ мене прежде)","mqtt_act_free":"MQTT: возвѣсти (безъ вопрошенїѧ)","homey_read":"Homey: зри снарѧды, токи и измѣняемаѧ","homey_act":"Homey: управляй снарѧды и начинай токи (вопрошаетъ мене прежде)","homey_act_free":"Homey: управляй снарѧды и начинай токи (безъ вопрошенїѧ)","ha_read":"Home Assistant: зри снарѧды","ha_act":"Home Assistant: управляй снарѧды","ha_act_free":"Home Assistant: управляй снарѧды (безъ вопрошенїѧ)"},
 "rb_agent_mcp.ASK":{"changes":"(вопрошаетъ мене прежде ѡрудїй, премѣняющихъ вещи)","every":"(вопрошаетъ мене прежде всѧкагѡ ѡрудїѧ)","never":"(безъ вопрошенїѧ)"},
 "rb_agent_kraken.MODE":{"read":"(цѣны, счетъ твой и куплѧ на хартїи)","live":"(и живаѧ куплѧ: вопрошаетъ прежде всѧкагѡ повелѣнїѧ)"},
 "rb_mem_set.KIND":{"transient":"дондеже сей листъ ѿверзтъ","permanent":"во вѣкъ"},
@@ -1180,7 +1180,8 @@
 "Plex sessions":"Plex sessii",
 "Plex new items":"Plex novoe",
 "Tautulli history":"Tautulli istoria",
-"Tautulli watch time":"Tautulli vremia smotrenia"
+"Tautulli watch time":"Tautulli vremia smotrenia",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Сѣ страница на claude.ai тѣчетъ, того ради не считаетъ истрачьныѩ коѥѩждо службы; изнеси въ Пѵѳонъ, съ клѫчи въ second-thought.ini, и речетъ си подъобьіе колико коѥждо служба истрачи, планъ и граници ѥѩ, и всѧко прехождениѥ."
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -2313,7 +2314,19 @@
 "Tautulli watch time":"Tautulli vremia smotrenia",
 "{n} users":"{n} polzovateli",
 "Which stream? Give a session's id, from the sessions.":"Kakyi potokъ? Dajь id sessii, otъ sessii.",
-"stop the {id} stream on Plex":"ostanoviti potokъ {id} na Plex"
+"stop the {id} stream on Plex":"ostanoviti potokъ {id} na Plex",
+", over by {x}":", прехождениѥ {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Ни чьсо же ѥще не истрачи сѩ клѫчи сего исповньника, ни ѥсть что считаети.",
+"What each model service has been used, counted on this computer at list prices:":"Что коѥждо службы образьць съпотрѣбьно бѣ, съчитаети на сѣмъ исповньницѣ по списоу цѣнъ:",
+"no plan set: add {setting} in {where} to count it against a cap":"планъ не положенъ: вложи {setting} {where}, да сѧ считаетъ прѣмо граници",
+"over the cap by {x}":"прѣходить граници на {x}",
+"the {plan} plan publishes no monthly cap":"планъ {plan} мѣсѧчьнѫ граници не обличаѥтъ",
+"this hour":"въ сїѭ годинѫ",
+"this month":"въ сь мѣсѧць",
+"this week":"въ сєю недѣлѭ",
+"today":"дьньсь",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% мѣсѧчьнѫ граници {cap} плана {plan} ({spent} истрачи, възвращаѥтъ сѧ {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

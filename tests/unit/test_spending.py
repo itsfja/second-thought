@@ -186,5 +186,51 @@ class AsAnExportedProgram(unittest.TestCase):
         self.assertIn("quota_daily", r.stderr)
 
 
+class Usage(Base):
+    def test_nothing_spent(self):
+        self.assertIn("Nothing has been spent", spending.usage_text(now=NOW))
+
+    def test_service_line_with_windows(self):
+        self.rt.spend("default", 1.50, now=NOW)
+        text = spending.usage_text(now=NOW)
+        self.assertIn("Claude", text)
+        self.assertIn("this hour $1.50", text)
+        self.assertIn("today $1.50", text)
+        self.assertIn("this week $1.50", text)
+        self.assertIn("this month $1.50", text)
+
+    def test_plan_cap_share_and_excess(self):
+        with Env(PLAN_CLAUDE="start"):
+            self.rt.spend("default", 61.0, now=NOW)
+            text = spending.usage_text(now=NOW)
+            self.assertIn("12% of the Start plan's monthly cap of $500.00 ($61.00 spent", text)
+            self.assertNotIn("over the cap by", text)
+            self.rt.spend("default", 550.0, now=NOW)
+            text = spending.usage_text(now=NOW)
+            self.assertIn("122% of the Start plan's monthly cap", text)
+            self.assertIn("over the cap by $111.00", text)
+
+    def test_no_plan_set_says_the_setting(self):
+        self.rt.spend("default", 0.10, now=NOW)
+        text = spending.usage_text(now=NOW)
+        self.assertIn("no plan set: add PLAN_CLAUDE", text)
+
+    def test_the_agent_tool_gives_the_same_text(self):
+        self.rt.spend("default", 2.00, now=NOW)
+        cat = self.rt._agent_tools([{"kind": "usage"}], [])
+        self.assertIn("ai_usage", cat)
+        self.assertEqual(asyncio.run(self.rt._agent_run_tool("ai_usage", cat["ai_usage"], {})), spending.usage_text())
+
+    def test_allowance_share_and_excess(self):
+        with Env(QUOTA_DAILY_CLAUDE="1.00"):
+            self.rt.spend("default", 0.40, now=NOW)
+            text = spending.usage_text(now=NOW)
+            self.assertIn("40% of the daily allowance of $1.00", text)
+            self.rt.spend("default", 1.00, now=NOW)
+            text = spending.usage_text(now=NOW)
+            self.assertIn("140% of the daily allowance of $1.00", text)
+            self.assertIn("over by $0.40", text)
+
+
 if __name__ == "__main__":
     unittest.main()

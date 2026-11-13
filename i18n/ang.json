@@ -839,6 +839,7 @@
    "time": "tida and dagas",
    "file": "fætels þe ic geceose rædan",
    "review": "gewrit sceawian be regolum",
+   "usage": "þenunga þara módella: brȳc, plancas and gemæro",
    "feeds": "spellstreamas",
    "linkedin": "LinkedIn secan (openlicu leaf)",
    "calendar": "tidboc: gelimp and æmtig tid",
@@ -1898,7 +1899,8 @@
   "Plex sessions": "Plex sessiuns",
   "Plex new items": "Plex niwe",
   "Tautulli history": "Tautulli stear",
-  "Tautulli watch time": "Tautulli sight-tima"
+  "Tautulli watch time": "Tautulli sight-tima",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "Þis page renneþ on þi claude.ai compt, and telleþ nouȝt of ech servys spending; bere it out to Pyþon, wiþ keies in second-thought.ini, and þis tol seiþ what ech servys haþ spent, his plan and his bound, and ani ouerspend."
  },
  "examples": {
   "review": {
@@ -3663,7 +3665,19 @@
   "Tautulli watch time": "Tautulli sight-tima",
   "{n} users": "{n} brucrend",
   "Which stream? Give a session's id, from the sessions.": "Hwaet stream? Syl anre sessiune id, fra tham sessiunum.",
-  "stop the {id} stream on Plex": "thone {id} stream on Plex gestillan"
+  "stop the {id} stream on Plex": "thone {id} stream on Plex gestillan",
+  ", over by {x}": ", ouer by {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Naht þurh þissa compbrēca keies haþ naht abbened, nis þau naht to tellanne.",
+  "What each model service has been used, counted on this computer at list prices:": "Hwæt ælc modellþenung brȳced wæs, on þissum compbrēce be lystcræfte geteald:",
+  "no plan set: add {setting} in {where} to count it against a cap": "nā plan geset: adde {setting} {where} þæt hit wiþ ān gemǣro sīe geteald",
+  "over the cap by {x}": "ofer þǣm gemǣran be {x}",
+  "the {plan} plan publishes no monthly cap": "þæt {plan} plan nǣnne mōnþgemǣre cȳþeþ",
+  "this hour": "on þissere tīde",
+  "this month": "þisses mōnþes",
+  "this week": "þisse wucan",
+  "today": "tō dæg",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% of þæs {plan} planes mōnþgemǣre {cap} ({spent} abbened, ongynþ eft {when})",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",
