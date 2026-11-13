@@ -764,6 +764,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 ἐπὶ τῆς deny λίστρου τοῦ Pi-hole",
    "tooltip": "Τίθησιν τόμον ἐπὶ τὴν deny λίστραν, ἢ αἱρεῖ. Ἀεὶ σε πρῶτον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς λέγοντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀληθῶς ἀλλάσσει."
+  },
+  "rb_plex_server": {
+   "message0": "Plex διακονητής",
+   "tooltip": "Μία μνήμη περὶ τοῦ διακονητοῦ: name, version καὶ up (ἀπεκρίθη, ἄρα ἐνεργής). Δεῖ PLEX_URL καὶ PLEX_TOKEN ἐν second-thought.ini. Ἐν ταύτῃ τῇ σελίδι δείγματι διακονητῇ χρῆται."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex βιβλιοθῆκαι",
+   "tooltip": "Λόγος μνημῶν, μία περὶ ἑκάστην βιβλιοθήκην: name, type (movie, show ἢ artist) καὶ count (πόσα πράγματα ἔχει). Μόνον ἀναγιγνώσκει."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex συνεδρίαι",
+   "tooltip": "Λόγος μνημῶν, μία περὶ ἕκαστον τὸ νῦν παζόμενον: id (τὸ τῆς συνεδρίας), user, title, player, state (playing ἢ paused) καὶ transcode (εἰ ὁ διακονητὴς μετατίθησιν αὐτό). Μόνον ἀναγιγνώσκει."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex νέα, ἔσχαται %1 ἡμέραι",
+   "tooltip": "Λόγος μνημῶν, μία περὶ ἕκαστον τὸ ἐν τοσαῖς ἡμέραις προστεθέν: title, library καὶ added (πότε προσετέθη). Μόνον ἀναγιγνώσκει."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli ἱστορία, ἔσχαται %1 ἡμέραι",
+   "tooltip": "Λόγος μνημῶν, μία περὶ ἕκαστον τὸ ἐν τοσαῖς ἡμέραις θεαθέν, ἐκ Tautulli: user, title, when καὶ transcode (εἰ μετετίθη). Μόνον ἀναγιγνώσκει. Δεῖ TAUTULLI_URL καὶ TAUTULLI_API_KEY ἐν second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli χρόνος θεάσεως, ἔσχαται %1 ἡμέραι",
+   "tooltip": "Λόγος μνημῶν, μία περὶ ἕκαστον τὸν ἐν τοσαῖς ἡμέραις θεωμήσαντα, ἐκ Tautulli: user καὶ hours. Μόνον ἀναγιγνώσκει."
+  },
+  "rb_plex_scan": {
+   "message0": "τὴν %1 βιβλιοθήκην ἐπὶ Plex σαρεῖν",
+   "tooltip": "Σαρεῖ μίαν βιβλιοθήκην περὶ νέων ἀρχείων. Ἀεὶ σε πρῶτον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς λέγοντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀληθῶς ἀλλάσσει."
+  },
+  "rb_plex_stop": {
+   "message0": "τὴν %1 ῥύσιν ἐπὶ Plex παύειν",
+   "tooltip": "Παύει μίαν ῥύσιν (τὸ Tautulli terminate). Ἀεὶ σε πρῶτον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς λέγοντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀληθῶς ἀλλάσσει."
   }
  },
  "options": {
@@ -956,7 +988,8 @@
   "Radarr and Sonarr": "Radarr καὶ Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1851,7 +1884,21 @@
   "Pi-hole summary": "σύνοψις Pi-hole",
   "Pi-hole top blocked domains": "οἱ πλεῖστον ἐκκεκλεισμένοι τόμοι τοῦ Pi-hole",
   "Pi-hole top clients": "οἱ πρῶτοι πελάται τοῦ Pi-hole",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "τὸ Plex σου ἀναγιγνώσκειν: τὸν διακονητήν, τὰς βιβλιοθήκας αὐτοῦ, τί νῦν παίζεται καὶ τὰ νεώτατα· καὶ τὴν Tautulli ἱστορίαν καὶ τὰς θεάσεως στατιστικὰς ἀναγιγνώσκειν",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "βιβλιοθήκην Plex σαρεῖν, καὶ ῥύσιν ἐπὶ Plex παύειν (ἐρωτῶντά σε ἑκάστοτε)",
+  "up": "ἐνεργής",
+  "{n} libraries": "{n} βιβλιοθῆκαι",
+  "{n} sessions": "{n} συνεδρίαι",
+  "{n} plays": "{n} θεάσεις",
+  "{n} users": "{n} χρώμενοι",
+  "Plex": "Plex",
+  "Plex server": "Plex διακονητής",
+  "Plex libraries": "Plex βιβλιοθῆκαι",
+  "Plex sessions": "Plex συνεδρίαι",
+  "Plex new items": "Plex νέα",
+  "Tautulli history": "Tautulli ἱστορία",
+  "Tautulli watch time": "Tautulli χρόνος θεάσεως"
  },
  "examples": {
   "review": {
@@ -2696,7 +2743,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Πρᾶξις προτέρα ἐν μέσῳ ἐπαύσατο, ἀλλὰ τὸ πρόγραμμα ἔκτοτε ἠλλάγη, διὸ ἐξ ἀρχῆς ἄρχεται.)",
@@ -3591,7 +3640,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Ποία λίστα (allow ἢ deny), προσθεῖναι ἢ ἀφελεῖν, καὶ ποῖος τόμος;",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} ἐπὶ τῆς {which}λίστρου τοῦ Pi-hole",
   "added by Second Thought": "προστεθὲν ὑπὸ Second Thought",
-  "{n} queries, {blocked} blocked": "{n} ἐρωτήματα, {blocked} ἐκκεκλεισμένα"
+  "{n} queries, {blocked} blocked": "{n} ἐρωτήματα, {blocked} ἐκκεκλεισμένα",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "Τ1ff7 {who} δεῖ {url_setting} καὶ {key_setting} {where_keys}: τὴν διεύθυνσιν αὐτοῦ (ὡς http://plex:32400) καὶ τὸ σημεῖον αὐτοῦ, ὃ αἱ ἐφαρμογαὶ πέμπουσιν (τὰ τοῦ λογαριασμοῦ ὄργανος αὐτὸ δεικνύουσιν).",
+  "The {who} refused its token.": "Τ1ff7 {who} τὸ σημεῖον αὐτοῦ ἀπέκρουσε.",
+  "Plex": "Plex",
+  "Plex server": "Plex διακονητής",
+  "Plex {version}": "Plex {version}",
+  "up": "ἐνεργής",
+  "Plex libraries": "Plex βιβλιοθῆκαι",
+  "{n} libraries": "{n} βιβλιοθῆκαι",
+  "Plex sessions": "Plex συνεδρίαι",
+  "{n} sessions": "{n} συνεδρίαι",
+  "Plex new items": "Plex νέα",
+  "{n} items": "{n} πράγματα",
+  "Which library? Give its name, from the libraries.": "Ποία βιβλιοθήκη; Δὸς τὸ ὄνομα αὐτῆς, ἐκ τῶν βιβλιοθηκῶν.",
+  "scan the {library} library on Plex": "τὴν {library} βιβλιοθήκην ἐπὶ Plex σαρεῖν",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Τὸ Tautulli δεῖ {url_setting} καὶ {key_setting} {where_keys}: τὴν διεύθυνσιν αὐτοῦ (ὡς http://tautulli:8181) καὶ τὸ κλειδίον αὐτοῦ (Settings, API Keys).",
+  "The {who} refused its key.": "Τ1ff7 {who} τὸ κλειδίον αὐτοῦ ἀπέκρουσε.",
+  "Tautulli history": "Tautulli ἱστορία",
+  "{n} plays": "{n} θεάσεις",
+  "Tautulli watch time": "Tautulli χρόνος θεάσεως",
+  "{n} users": "{n} χρώμενοι",
+  "Which stream? Give a session's id, from the sessions.": "Ποία ῥύσις; Δὸς τὸ ταυτότητας συνεδρίας, ἐκ τῶν συνεδριῶν.",
+  "stop the {id} stream on Plex": "τὴν {id} ῥύσιν ἐπὶ Plex παύειν"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

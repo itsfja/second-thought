@@ -198,7 +198,15 @@
 "rb_pihole_blocking":{"message0":"לכבות את חסימת Pi-hole ל-%1 שניות","tooltip":"מכבה את החסימה למשך כל כך הרבה שניות, ואז Pi-hole מדליק אותה בעצמו. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."},
 "rb_pihole_enable":{"message0":"להדליק את חסימת Pi-hole","tooltip":"מדליק את החסימה בחזרה. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."},
 "rb_pihole_allow":{"message0":"%1 %2 ברשימת ה-allow של Pi-hole","tooltip":"שם דומיין ברשימת ה-allow, או מוריד אותו. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."},
-"rb_pihole_deny":{"message0":"%1 %2 ברשימת ה-deny של Pi-hole","tooltip":"שם דומיין ברשימת ה-deny, או מוריד אותו. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."}
+"rb_pihole_deny":{"message0":"%1 %2 ברשימת ה-deny של Pi-hole","tooltip":"שם דומיין ברשימת ה-deny, או מוריד אותו. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."},
+"rb_plex_server":{"message0":"שרת Plex","tooltip":"רשומה אחת לשרת: name, version ו-up (הוא ענה, אז הוא זמין). צריך PLEX_URL ו-PLEX_TOKEN ב-second-thought.ini. בעמוד הזה הוא משתמש בשרת לדוגמה."},
+"rb_plex_libraries":{"message0":"ספריות Plex","tooltip":"רשימה של רשומות, אחת לכל ספרייה: name, type (movie, show או artist) ו-count (כמה פריטים יש בה). הוא רק קורא."},
+"rb_plex_sessions":{"message0":"סשנים של Plex","tooltip":"רשימה של רשומות, אחת לכל דבר שמתנגן עכשיו: id (ה-id של הסשן), user, title, player, state (playing או paused) ו-transcode (האם השרת ממיר אותו). הוא רק קורא."},
+"rb_plex_recent":{"message0":"פריטים חדשים ב-Plex, %1 ימים אחרונים","tooltip":"רשימה של רשומות, אחת לכל פריט שנוסף בכל כך הרבה ימים: title, library ו-added (מתי נוסף). הוא רק קורא."},
+"rb_tautulli_history":{"message0":"היסטוריית Tautulli, %1 ימים אחרונים","tooltip":"רשימה של רשומות, אחת לכל דבר שנצפה בכל כך הרבה ימים, מ-Tautulli: user, title, when ו-transcode (האם הומר). הוא רק קורא. צריך TAUTULLI_URL ו-TAUTULLI_API_KEY ב-second-thought.ini."},
+"rb_tautulli_watchtime":{"message0":"זמן צפייה ב-Tautulli, %1 ימים אחרונים","tooltip":"רשימה של רשומות, אחת לכל אדם שצפה בכל כך הרבה ימים, מ-Tautulli: user ו-hours. הוא רק קורא."},
+"rb_plex_scan":{"message0":"לסרוק את ספריית ה%1 ב-Plex","tooltip":"סורק ספרייה אחת לקבצים חדשים. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."},
+"rb_plex_stop":{"message0":"לעצור את הזרם %1 ב-Plex","tooltip":"עוצר זרם אחד (ה-terminate של Tautulli). הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יום","weekdays":"בימי חול","weekends":"בסופי שבוע"},
@@ -264,7 +272,8 @@
 "Radarr and Sonarr":"Radarr ו-Sonarr",
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"Plex":"Plex"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1159,7 +1168,21 @@
 "Pi-hole summary":"סיכום Pi-hole",
 "Pi-hole top blocked domains":"הדומיינים החסומים ביותר ב-Pi-hole",
 "Pi-hole top clients":"הלקוחות המובילים ב-Pi-hole",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats":"לקרוא את ה-Plex שלך: השרת, הספריות שלו, מה מתנגן עכשיו והפריטים החדשים; ולקרוא את ההיסטוריה וסטטיסטיקות הצפייה של Tautulli",
+"scan a Plex library, and stop a stream on Plex (asking you each time)":"לסרוק ספריית Plex, ולעצור זרם ב-Plex (שואל אותך בכל פעם)",
+"up":"זמין",
+"{n} libraries":"{n} ספריות",
+"{n} sessions":"{n} סשנים",
+"{n} plays":"{n} צפיות",
+"{n} users":"{n} משתמשים",
+"Plex":"Plex",
+"Plex server":"שרת Plex",
+"Plex libraries":"ספריות Plex",
+"Plex sessions":"סשנים של Plex",
+"Plex new items":"פריטים חדשים ב-Plex",
+"Tautulli history":"היסטוריית Tautulli",
+"Tautulli watch time":"זמן צפייה ב-Tautulli"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1372,7 +1395,9 @@
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
 "e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
 "ads.example.com":"ads.example.com",
-"bad.example.com":"bad.example.com"
+"bad.example.com":"bad.example.com",
+"Films":"Films",
+"abc123":"abc123"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(הרצה קודמת נעצרה באמצע, אבל התוכנית השתנתה מאז, אז היא מתחילה מחדש.)",
@@ -2267,6 +2292,29 @@
 "Which list (allow or deny), add or remove, and which domain?":"איזו רשימה (allow או deny), להוסיף או להסיר, ואיזה דומיין?",
 "{action} {domain} on Pi-hole's {which} list":"{action} {domain} ברשימת ה{which} של Pi-hole",
 "added by Second Thought":"נוסף על ידי Second Thought",
-"{n} queries, {blocked} blocked":"{n} שאילתות, {blocked} חסומות"
+"{n} queries, {blocked} blocked":"{n} שאילתות, {blocked} חסומות",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).":"ל{who} צריך {url_setting} ו{key_setting} {where_keys}: את הכתובת שלו (כמו http://plex:32400) ואת האסימון שלו, זה שהאפליקציות שולחות (פרטי החשבון של מכשיר מראים אותו).",
+"The {who} refused its token.":"ה{who} דחה את האסימון שלו.",
+"Plex":"Plex",
+"Plex server":"שרת Plex",
+"Plex {version}":"Plex {version}",
+"up":"זמין",
+"Plex libraries":"ספריות Plex",
+"{n} libraries":"{n} ספריות",
+"Plex sessions":"סשנים של Plex",
+"{n} sessions":"{n} סשנים",
+"Plex new items":"פריטים חדשים ב-Plex",
+"{n} items":"{n} פריטים",
+"Which library? Give its name, from the libraries.":"איזו ספרייה? תן את שמה, מהספריות.",
+"scan the {library} library on Plex":"לסרוק את ספריית ה{library} ב-Plex",
+"Tautulli":"Tautulli",
+"Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).":"ל-Tautulli צריך {url_setting} ו{key_setting} {where_keys}: את הכתובת שלו (כמו http://tautulli:8181) ואת מפתח ה-API שלו (Settings, API Keys).",
+"The {who} refused its key.":"ה{who} דחה את המפתח שלו.",
+"Tautulli history":"היסטוריית Tautulli",
+"{n} plays":"{n} צפיות",
+"Tautulli watch time":"זמן צפייה ב-Tautulli",
+"{n} users":"{n} משתמשים",
+"Which stream? Give a session's id, from the sessions.":"איזה זרם? תן את ה-id של סשן, מהסשנים.",
+"stop the {id} stream on Plex":"לעצור את הזרם {id} ב-Plex"
 }
 };

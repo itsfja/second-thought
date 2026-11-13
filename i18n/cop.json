@@ -765,6 +765,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 hn pi-deny-rim nte Pi-hole",
    "tooltip": "Ep-tish ou-domma hn pi-deny-rim, em-moou. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."
+  },
+  "rb_plex_server": {
+   "message0": "Plex soueu",
+   "tooltip": "Ou-nimmont etbe pi-soueu: name, version nem hnouhte (etbe ouon-ef, hnouhte). Outab PLEX_URL nem PLEX_TOKEN hn second-thought.ini. Hn pei-selide pinaei soueu."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex bibliotheca",
+   "tooltip": "Oudap nimmont, ouaaou nim nte pi-bibliotheca: name, type (movie, show e artist) nem count (ou-nfr etbe ouoein). Hnho only."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex sessia",
+   "tooltip": "Oudap nimmont, ouaaou nim nte pe-nfr etbe ouoein: id, user, title, player, state (playing e paused) nem transcode. Hnho only."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex nfr, %1 oush",
+   "tooltip": "Oudap nimmont, ouaaou nim nte pe-nfr etbe ouses oush: title, bibliotheca nem added. Hnho only."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli soueu, %1 oush",
+   "tooltip": "Oudap nimmont, ouaaou nim nte pe-smotrenie etbe ouses oush, hn Tautulli: user, title, when nem transcode. Hnho only. Outab TAUTULLI_URL nem TAUTULLI_API_KEY hn second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli hraw-t, %1 oush",
+   "tooltip": "Oudap nimmont, ouaaou nim nte pi-rmt etbe ouses oush, hn Tautulli: user nem hmoou. Hnho only."
+  },
+  "rb_plex_scan": {
+   "message0": "Plex bibliotheca %1 skn",
+   "tooltip": "Skn pi-bibliotheca etbe nfr nfr. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."
+  },
+  "rb_plex_stop": {
+   "message0": "Plex stream %1 ostanoviti",
+   "tooltip": "Ostanoviti ou-stream (Tautulli terminate). Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."
   }
  },
  "options": {
@@ -947,7 +979,8 @@
   "Radarr and Sonarr": "Radarr mn Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "ⲛⲥⲱⲧⲙ: ϣⲁⲩⲁⲁⲩ ϩⲟⲧⲁⲛ ⲛⲧⲁⲝⲓⲥ ⲉⲃⲟⲗ ϣⲁϥⲁⲁⲩ ⲕⲁⲧⲁ ⲟⲩⲟⲉⲓϣ",
@@ -1679,7 +1712,7 @@
   "{n} characters": "{n} ⲛⲥⲏⲙⲉⲓⲟⲛ",
   "{n} devices": "{n} ⲛⲟⲣⲅⲁⲛⲟⲛ",
   "{n} events": "{n} ⲛϣⲱⲡⲉ",
-  "{n} items": "{n} ⲛϩⲱⲃ",
+  "{n} items": "{n} nfr",
   "{n} records": "{n} ⲛⲭⲁⲣⲧⲏⲥ",
   "{n} script started": "{n} ⲛⲧⲁⲝⲓⲥ ⲁϥⲁⲣⲭⲉⲓ",
   "{n} script started, waiting for it to finish": "{n} ⲛⲧⲁⲝⲓⲥ ⲁϥⲁⲣⲭⲉⲓ, ⲉϥϩⲩⲡⲟⲙⲉⲓⲛⲉ ϣⲁⲛⲧⲉϥϫⲱⲕ",
@@ -1842,7 +1875,21 @@
   "Pi-hole summary": "soueu nte Pi-hole",
   "Pi-hole top blocked domains": "Pi-hole most etbloc domenn",
   "Pi-hole top clients": "Pi-hole nopc klient",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "hnho e Pi-hole: soueu, bibliotheca, nfr hn-t nem nfr nfr; hnho e Tautulli soueu nem hraw-t",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "Plex bibliotheca skn, nem stream hn Pi-hole ostanoviti (nanoun nak nim ntero)",
+  "up": "hnouhte",
+  "{n} libraries": "{n} bibliotheca",
+  "{n} sessions": "{n} sessia",
+  "{n} plays": "{n} smotrenie",
+  "{n} users": "{n} polzovateli",
+  "Plex": "Plex",
+  "Plex server": "Plex soueu",
+  "Plex libraries": "Plex bibliotheca",
+  "Plex sessions": "Plex sessia",
+  "Plex new items": "Plex nfr",
+  "Tautulli history": "Tautulli soueu",
+  "Tautulli watch time": "Tautulli hraw-t"
  },
  "examples": {
   "review": {
@@ -2687,7 +2734,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(oupraksis ntšorp aslo hn tmēte, alla taksis asšibe jin tote, auō šasarkhei nkesop.)",
@@ -3582,7 +3631,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Oun pi-rim (allow e deny), ep-tish em-moou, e ou-domma?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} hn pi-{which}-rim nte Pi-hole",
   "added by Second Thought": "ep-tish m-moi nte Second Thought",
-  "{n} queries, {blocked} blocked": "{n} hnho nem {blocked} etbloc"
+  "{n} queries, {blocked} blocked": "{n} hnho nem {blocked} etbloc",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} outab eru {url_setting} nem {key_setting} {where_keys}: pefaipn is (hn http://plex:32400) nem pesemeion is, etbe aps appi (peetn-hn-te-snippe apparatus pefaipe).",
+  "The {who} refused its token.": "Pefaipe nte {who} aporef.",
+  "Plex": "Plex",
+  "Plex server": "Plex soueu",
+  "Plex {version}": "Plex {version}",
+  "up": "hnouhte",
+  "Plex libraries": "Plex bibliotheca",
+  "{n} libraries": "{n} bibliotheca",
+  "Plex sessions": "Plex sessia",
+  "{n} sessions": "{n} sessia",
+  "Plex new items": "Plex nfr",
+  "{n} items": "{n} nfr",
+  "Which library? Give its name, from the libraries.": "Oun pi-bibliotheca? Nau pe-pes-hn-te-soueu is.",
+  "scan the {library} library on Plex": "Plex bibliotheca {library} skn",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli outab eru {url_setting} nem {key_setting} {where_keys}: pefaipn is (hn http://tautulli:8181) nem pefaipe nte API (Settings, API Keys).",
+  "The {who} refused its key.": "Pefaipe nte {who} aporef.",
+  "Tautulli history": "Tautulli soueu",
+  "{n} plays": "{n} smotrenie",
+  "Tautulli watch time": "Tautulli hraw-t",
+  "{n} users": "{n} polzovateli",
+  "Which stream? Give a session's id, from the sessions.": "Oun pi-stream? Nau pe id nte pi-sessia, hn pi-sessia.",
+  "stop the {id} stream on Plex": "Plex stream {id} ostanoviti"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

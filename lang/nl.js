@@ -197,7 +197,15 @@
 "rb_pihole_blocking":{"message0":"Pi-hole blokkering %1 seconden uitschakelen","tooltip":"Zet de blokkering zo veel seconden uit, daarna zet Pi-hole hem zelf weer aan. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."},
 "rb_pihole_enable":{"message0":"Pi-hole blokkering inschakelen","tooltip":"Zet de blokkering weer aan. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."},
 "rb_pihole_allow":{"message0":"%1 %2 op Pi-hole's allow-lijst","tooltip":"Zet een domein op de allow-lijst, of haalt het eraf. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."},
-"rb_pihole_deny":{"message0":"%1 %2 op Pi-hole's deny-lijst","tooltip":"Zet een domein op de deny-lijst, of haalt het eraf. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."}
+"rb_pihole_deny":{"message0":"%1 %2 op Pi-hole's deny-lijst","tooltip":"Zet een domein op de deny-lijst, of haalt het eraf. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."},
+"rb_plex_server":{"message0":"Plex-server","tooltip":"Eén record voor de server: name, version en up (hij antwoordde, dus hij is bereikbaar). Heeft PLEX_URL en PLEX_TOKEN nodig in second-thought.ini. Op deze pagina gebruikt hij een voorbeeldserver."},
+"rb_plex_libraries":{"message0":"Plex-bibliotheken","tooltip":"Een lijst met records, één voor elke bibliotheek: name, type (movie, show of artist) en count (hoeveel items hij heeft). Hij leest alleen."},
+"rb_plex_sessions":{"message0":"Plex-sessies","tooltip":"Een lijst met records, één voor alles wat nu speelt: id (de sessie-id), user, title, player, state (playing of paused) en transcode (of de server het transcodeert). Hij leest alleen."},
+"rb_plex_recent":{"message0":"Plex nieuwe items, laatste %1 dagen","tooltip":"Een lijst met records, één voor elk item dat in zoveel dagen is toegevoegd: title, library en added (wanneer het is toegevoegd). Hij leest alleen."},
+"rb_tautulli_history":{"message0":"Tautulli-geschiedenis, laatste %1 dagen","tooltip":"Een lijst met records, één voor alles wat in zoveel dagen is bekeken, van Tautulli: user, title, when en transcode (of het getranscodeerd was). Hij leest alleen. Heeft TAUTULLI_URL en TAUTULLI_API_KEY nodig in second-thought.ini."},
+"rb_tautulli_watchtime":{"message0":"Tautulli kijktijd, laatste %1 dagen","tooltip":"Een lijst met records, één voor iedereen die in zoveel dagen keek, van Tautulli: user en hours. Hij leest alleen."},
+"rb_plex_scan":{"message0":"de %1-bibliotheek op Plex scannen","tooltip":"Scant één bibliotheek op nieuwe bestanden. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."},
+"rb_plex_stop":{"message0":"de stream %1 op Plex stoppen","tooltip":"Stopt één stream (Tautulli's terminate). Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"elke dag","weekdays":"op werkdagen","weekends":"in het weekend"},
@@ -263,7 +271,8 @@
 "Radarr and Sonarr":"Radarr en Sonarr",
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"Plex":"Plex"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Hulpmiddelen voor de agent: zet ze in een agentblok",
@@ -1158,7 +1167,21 @@
 "Pi-hole summary":"Pi-hole samenvatting",
 "Pi-hole top blocked domains":"Pi-hole meest geblokkeerde domeinen",
 "Pi-hole top clients":"Pi-hole topclients",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats":"je Plex lezen: de server, zijn bibliotheken, wat er nu speelt en de nieuwste items; en Tautulli's geschiedenis en kijktijdstatistieken lezen",
+"scan a Plex library, and stop a stream on Plex (asking you each time)":"een Plex-bibliotheek scannen, en een stream op Plex stoppen (elke keer aan je gevraagd)",
+"up":"bereikbaar",
+"{n} libraries":"{n} bibliotheken",
+"{n} sessions":"{n} sessies",
+"{n} plays":"{n} keer bekeken",
+"{n} users":"{n} gebruikers",
+"Plex":"Plex",
+"Plex server":"Plex-server",
+"Plex libraries":"Plex-bibliotheken",
+"Plex sessions":"Plex-sessies",
+"Plex new items":"Plex nieuwe items",
+"Tautulli history":"Tautulli-geschiedenis",
+"Tautulli watch time":"Tautulli kijktijd"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -1371,7 +1394,9 @@
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
 "e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
 "ads.example.com":"ads.example.com",
-"bad.example.com":"bad.example.com"
+"bad.example.com":"bad.example.com",
+"Films":"Films",
+"abc123":"abc123"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Een eerdere run stopte halverwege, maar het programma is sindsdien veranderd, dus het begint opnieuw.)",
@@ -2266,6 +2291,29 @@
 "Which list (allow or deny), add or remove, and which domain?":"Welke lijst (allow of deny), toevoegen of verwijderen, en welk domein?",
 "{action} {domain} on Pi-hole's {which} list":"{domain} {action} op Pi-hole's {which}lijst",
 "added by Second Thought":"toegevoegd door Second Thought",
-"{n} queries, {blocked} blocked":"{n} queries, {blocked} geblokkeerd"
+"{n} queries, {blocked} blocked":"{n} queries, {blocked} geblokkeerd",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).":"{who} heeft {url_setting} en {key_setting} nodig {where_keys}: het adres (zoals http://plex:32400) en zijn token, degene die de apps sturen (de accountdetails van een apparaat laten hem zien).",
+"The {who} refused its token.":"De {who} weigerde zijn token.",
+"Plex":"Plex",
+"Plex server":"Plex-server",
+"Plex {version}":"Plex {version}",
+"up":"bereikbaar",
+"Plex libraries":"Plex-bibliotheken",
+"{n} libraries":"{n} bibliotheken",
+"Plex sessions":"Plex-sessies",
+"{n} sessions":"{n} sessies",
+"Plex new items":"Plex nieuwe items",
+"{n} items":"{n} items",
+"Which library? Give its name, from the libraries.":"Welke bibliotheek? Geef de naam, van de bibliotheken.",
+"scan the {library} library on Plex":"de {library}-bibliotheek op Plex scannen",
+"Tautulli":"Tautulli",
+"Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).":"Tautulli heeft {url_setting} en {key_setting} nodig {where_keys}: het adres (zoals http://tautulli:8181) en zijn API-sleutel (Settings, API Keys).",
+"The {who} refused its key.":"De {who} weigerde zijn sleutel.",
+"Tautulli history":"Tautulli-geschiedenis",
+"{n} plays":"{n} keer bekeken",
+"Tautulli watch time":"Tautulli kijktijd",
+"{n} users":"{n} gebruikers",
+"Which stream? Give a session's id, from the sessions.":"Welke stream? Geef het id van een sessie, van de sessies.",
+"stop the {id} stream on Plex":"de stream {id} op Plex stoppen"
 }
 };

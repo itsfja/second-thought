@@ -159,6 +159,11 @@
       B("rb_pihole_blocking", { N:N(60) }), B("rb_pihole_enable"),
       B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
     ]},
+    { kind:"category", name:"Plex", categorystyle:"plex", contents:[
+      B("rb_plex_server"), B("rb_plex_libraries"), B("rb_plex_sessions"),
+      B("rb_plex_recent", { N:N(7) }), B("rb_tautulli_history", { N:N(7) }), B("rb_tautulli_watchtime", { N:N(7) }),
+      B("rb_plex_scan", { LIBRARY:T("Films") }), B("rb_plex_stop", { ID:T("abc123") })
+    ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
     ]},

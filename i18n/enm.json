@@ -764,6 +764,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 on Pi-hole's deny liste",
    "tooltip": "Putteth a domaine on the deny liste, or taketh it of. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."
+  },
+  "rb_plex_server": {
+   "message0": "Plex servaunt",
+   "tooltip": "Oon record for the servaunt: name, version and up (it answerde, so it is on line). It hath nede of PLEX_URL and PLEX_TOKEN in second-thought.ini. In this page it useth a sample servaunt."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex libraries",
+   "tooltip": "A liste of records, oon for everich library: name, type (movie, show or artist) and count (how many thinges it hath). It only redeth."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex sessions",
+   "tooltip": "A liste of records, oon for everich thing pleying now: id (the session's id), user, title, player, state (playing or paused) and transcode (whether the servaunt turneth it). It only redeth."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex newe thinges, laste %1 dayes",
+   "tooltip": "A liste of records, oon for everich thing added in so many dayes: title, library and added (whanne it was added). It only redeth."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli historie, laste %1 dayes",
+   "tooltip": "A liste of records, oon for everich thing watched in so many dayes, fro Tautulli: user, title, when and transcode (whether it was turned). It only redeth. It hath nede of TAUTULLI_URL and TAUTULLI_API_KEY in second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli watching tyme, laste %1 dayes",
+   "tooltip": "A liste of records, oon for everich persone that watched in so many dayes, fro Tautulli: user and hours. It only redeth."
+  },
+  "rb_plex_scan": {
+   "message0": "scannen the %1 library on Plex",
+   "tooltip": "Scanneth oon library for newe files. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."
+  },
+  "rb_plex_stop": {
+   "message0": "stopping the %1 stream on Plex",
+   "tooltip": "Stoppeth oon stream (Tautulli's terminate). It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."
   }
  },
  "options": {
@@ -956,7 +988,8 @@
   "Radarr and Sonarr": "Radarr and Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1280,7 +1313,7 @@
   "waiting": "abidynge",
   "{n} devices": "{n} engynes",
   "{n} events": "{n} events",
-  "{n} items": "{n} thynges",
+  "{n} items": "{n} thinges",
   "{n} records": "{n} recordes",
   "{n} step": "{n} pas",
   "{n} steps": "{n} pases",
@@ -1851,7 +1884,21 @@
   "Pi-hole summary": "Pi-hole summarie",
   "Pi-hole top blocked domains": "Pi-hole most blocked domaines",
   "Pi-hole top clients": "Pi-hole top clientz",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "reden thi Plex: the servaunt, his libraries, what is pleying now and the neweste; and reden Tautulli's historie and watching statistiques",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "scannen a Plex library, and stopping a stream on Plex (axing thee every tyme)",
+  "up": "on line",
+  "{n} libraries": "{n} libraries",
+  "{n} sessions": "{n} sessions",
+  "{n} plays": "{n} pleyinges",
+  "{n} users": "{n} users",
+  "Plex": "Plex",
+  "Plex server": "Plex servaunt",
+  "Plex libraries": "Plex libraries",
+  "Plex sessions": "Plex sessions",
+  "Plex new items": "Plex newe thinges",
+  "Tautulli history": "Tautulli historie",
+  "Tautulli watch time": "Tautulli watching tyme"
  },
  "examples": {
   "review": {
@@ -2696,7 +2743,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(A rennyng bifore stinted amydde, but the devys is chaunged sith, so it bigynneth newe.)",
@@ -3591,7 +3640,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Whiche liste (allow or deny), adden or remeven, and which domaine?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} on Pi-hole's {which} liste",
   "added by Second Thought": "added by Second Thought",
-  "{n} queries, {blocked} blocked": "{n} queries, {blocked} blocked"
+  "{n} queries, {blocked} blocked": "{n} queries, {blocked} blocked",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} hath nede of {url_setting} and {key_setting} {where_keys}: his addresse (as http://plex:32400) and his token, that the appes senden (the accounte detailes of a devise shewen it).",
+  "The {who} refused its token.": "The {who} refused his token.",
+  "Plex": "Plex",
+  "Plex server": "Plex servaunt",
+  "Plex {version}": "Plex {version}",
+  "up": "on line",
+  "Plex libraries": "Plex libraries",
+  "{n} libraries": "{n} libraries",
+  "Plex sessions": "Plex sessions",
+  "{n} sessions": "{n} sessions",
+  "Plex new items": "Plex newe thinges",
+  "{n} items": "{n} thinges",
+  "Which library? Give its name, from the libraries.": "Whiche library? Yeve its name, fro the libraries.",
+  "scan the {library} library on Plex": "scannen the {library} library on Plex",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli hath nede of {url_setting} and {key_setting} {where_keys}: his addresse (as http://tautulli:8181) and his API key (Settings, API Keys).",
+  "The {who} refused its key.": "The {who} refused his key.",
+  "Tautulli history": "Tautulli historie",
+  "{n} plays": "{n} pleyinges",
+  "Tautulli watch time": "Tautulli watching tyme",
+  "{n} users": "{n} users",
+  "Which stream? Give a session's id, from the sessions.": "Whiche stream? Yeve a session's id, fro the sessions.",
+  "stop the {id} stream on Plex": "stopping the {id} stream on Plex"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

@@ -764,6 +764,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 in lista deny Pi-hole",
    "tooltip": "Ponit dominium in lista deny, aut tollit. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."
+  },
+  "rb_plex_server": {
+   "message0": "Plex servus",
+   "tooltip": "Una memoria pro servo: name, version et up (respondit, igitur promptus est). Indiget PLEX_URL et PLEX_TOKEN in second-thought.ini. In hac pagina exemplari servo utitur."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex bibliothecae",
+   "tooltip": "Index memoriarum, una quoque bibliotheca: name, type (movie, show an artist) et count (quot res habet). Solum legit."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex sessiones",
+   "tooltip": "Index memoriarum, una quoque re nunc ludata: id (nota sessionis), user, title, player, state (playing an paused) et transcode (num servus eam convertit). Solum legit."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex nova, novissima %1 dies",
+   "tooltip": "Index memoriarum, una quoque re in tot diebus addita: title, library et added (quando addita). Solum legit."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli acta, novissima %1 dies",
+   "tooltip": "Index memoriarum, una quoque re in tot diebus visa, ex Tautulli: user, title, when et transcode (num conversa). Solum legit. Indiget TAUTULLI_URL et TAUTULLI_API_KEY in second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli tempus videnti, novissima %1 dies",
+   "tooltip": "Index memoriarum, una quoque persona quae in tot diebus spectavit, ex Tautulli: user et hours. Solum legit."
+  },
+  "rb_plex_scan": {
+   "message0": "bibliothecam %1 in Plex perscrutari",
+   "tooltip": "Perscrutatur unam bibliothecam quaerens nova files. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."
+  },
+  "rb_plex_stop": {
+   "message0": "fluxum %1 in Plex sistere",
+   "tooltip": "Sistit unum fluxum (Tautulli terminate). Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."
   }
  },
  "options": {
@@ -956,7 +988,8 @@
   "Radarr and Sonarr": "Radarr et Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1851,7 +1884,21 @@
   "Pi-hole summary": "Pi-hole summa",
   "Pi-hole top blocked domains": "dominia maxime interclusa Pi-hole",
   "Pi-hole top clients": "primi clientes Pi-hole",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "legere tuum Plex: servum, bibliothecas eius, quid nunc ludatur et nova; et legere Tautulli acta et tempora videnti",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "bibliothecam Plex perscrutari, et fluxum in Plex sistere (te interrogans vicibus omnibus)",
+  "up": "promptus",
+  "{n} libraries": "{n} bibliothecae",
+  "{n} sessions": "{n} sessiones",
+  "{n} plays": "{n} visiones",
+  "{n} users": "{n} utentes",
+  "Plex": "Plex",
+  "Plex server": "Plex servus",
+  "Plex libraries": "Plex bibliothecae",
+  "Plex sessions": "Plex sessiones",
+  "Plex new items": "Plex nova",
+  "Tautulli history": "Tautulli acta",
+  "Tautulli watch time": "Tautulli tempus videnti"
  },
  "examples": {
   "review": {
@@ -2696,7 +2743,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Exsecutio prior in medio substitit, sed programma postea mutatum est, itaque de integro incipit.)",
@@ -3591,7 +3640,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Quae lista (allow an deny), addere an removere, et quod dominium?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} in lista {which} Pi-hole",
   "added by Second Thought": "additum a Second Thought",
-  "{n} queries, {blocked} blocked": "{n} interrogationes, {blocked} interclusae"
+  "{n} queries, {blocked} blocked": "{n} interrogationes, {blocked} interclusae",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} indiget {url_setting} et {key_setting} {where_keys}: eius locum (ut http://plex:32400) et eius signum, quod app mittunt (ratio apparatus id monstrat).",
+  "The {who} refused its token.": "{who} signum eius recusavit.",
+  "Plex": "Plex",
+  "Plex server": "Plex servus",
+  "Plex {version}": "Plex {version}",
+  "up": "promptus",
+  "Plex libraries": "Plex bibliothecae",
+  "{n} libraries": "{n} bibliothecae",
+  "Plex sessions": "Plex sessiones",
+  "{n} sessions": "{n} sessiones",
+  "Plex new items": "Plex nova",
+  "{n} items": "{n} res",
+  "Which library? Give its name, from the libraries.": "Quae bibliotheca? Da nomen eius, ex bibliothecis.",
+  "scan the {library} library on Plex": "bibliothecam {library} in Plex perscrutari",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli indiget {url_setting} et {key_setting} {where_keys}: eius locum (ut http://tautulli:8181) et eius clavem API (Settings, API Keys).",
+  "The {who} refused its key.": "{who} clavem eius recusavit.",
+  "Tautulli history": "Tautulli acta",
+  "{n} plays": "{n} visiones",
+  "Tautulli watch time": "Tautulli tempus videnti",
+  "{n} users": "{n} utentes",
+  "Which stream? Give a session's id, from the sessions.": "Quis fluxus? Da notam sessionis, ex sessionibus.",
+  "stop the {id} stream on Plex": "fluxum {id} in Plex sistere"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

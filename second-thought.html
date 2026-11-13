@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PIHOLE_PASSWORD")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PIHOLE_PASSWORD", "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():
@@ -1576,6 +1576,16 @@ SAFETY = {
     "pihole_asks": [["POST", r"^/api/dns/blocking$"],
                     ["POST", r"^/api/domains/(allowlist|denylist)/exact$"],
                     ["DELETE", r"^/api/domains/(allowlist|denylist)/exact$"]],
+    # Plex's HTTP API (the X-Plex-Token endpoints the apps use) and Tautulli's API (#402). The server, the libraries, the
+    # sessions and the newest items are reads; scanning a library always asks, live. Tautulli's gate reads the query as
+    # a whole, like NZBGeek's: the history is a read, and the one terminate (a stream stopped) always asks. Nothing else
+    # is ever sent: no media or library is ever deleted, no sharing, no user access, no transcoding or remote-access
+    # settings.
+    "plex_free": [["GET", r"^/$"], ["GET", r"^/library/sections$"], ["GET", r"^/library/sections/[0-9]+/all$"],
+                  ["GET", r"^/library/recentlyAdded$"], ["GET", r"^/status/sessions$"]],
+    "plex_asks": [["GET", r"^/library/sections/[0-9]+/refresh$"]],
+    "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
+    "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1762,6 +1772,28 @@ def pihole_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["pihole_" + kind]):
+            return kind
+    return None
+
+
+def plex_call(method, path):
+    """"free" for one of the Plex calls the runtime makes without asking (the server, the libraries, the sessions and
+    the newest items), "asks" for the one change that needs a live yes (scanning a library), and None for anything
+    else, which is never sent (#402)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["plex_" + kind]):
+            return kind
+    return None
+
+
+def tautulli_call(method, query):
+    """"free" for Tautulli's history read, "asks" for the one terminate (a stream stopped), and None for anything
+    else, which is never sent (#402). The query is read as a whole, like NZBGeek's, so a history that smuggles a
+    terminate is refused."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["tautulli_" + kind]):
             return kind
     return None
 
@@ -2227,6 +2259,7 @@ CAPABILITIES = [
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
+    ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
@@ -2240,6 +2273,7 @@ CAPABILITIES = [
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
+    ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
@@ -5080,6 +5114,198 @@ class Connections:
         else:
             await self._pihole("DELETE", path, {"domain": [d]}, approved=True)
         self.log(tr("Pi-hole"), what, tr("done"))
+        return True
+
+    # Plex and Tautulli (#402)
+    # Plex's HTTP API (the X-Plex-Token endpoints the apps use), PLEX_URL (like http://plex:32400) and PLEX_TOKEN (the
+    # token the apps send, from a device's account details). The server, the libraries, the sessions and the newest
+    # items are reads (plex_free); scanning a library (plex_asks) always asks, live, and never runs with nobody there.
+    # Tautulli (TAUTULLI_URL and TAUTULLI_API_KEY, from Settings, API Keys) adds the history and the watch-time stats
+    # (tautulli_free) and the one way to stop a stream (tautulli_asks), which always asks too. Nothing else is ever
+    # sent: no media or library is ever deleted, no sharing, no user access, no transcoding or remote-access settings.
+    # PLEX_CERT_SHA256 and TAUTULLI_CERT_SHA256 pin certificates this computer doesn't trust.
+    async def _plex(self, method, path, query=None, approved=False):
+        """One request to Plex's API, gated by plex_call: the server, the libraries, the sessions and the newest
+        items go without asking, the one scan only after a live yes, and anything else is never sent."""
+        kind = plex_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who="Plex"))
+        base = os.environ.get("PLEX_URL", "").strip().rstrip("/")
+        token = os.environ.get("PLEX_TOKEN", "").strip()
+        if not base or not token:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).",
+                              url_setting="PLEX_URL", key_setting="PLEX_TOKEN", where_keys=WHERE_KEYS))
+        whole = path + (("?" + urllib.parse.urlencode(query)) if query else "")
+        status, raw = await self._pinned("Plex", base, "PLEX_CERT_SHA256", method, whole,
+                                         {"X-Plex-Token": token, "Accept": "application/json"})
+        if status == 401:
+            raise RunError(tr("The {who} refused its token.", who="Plex"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="Plex", why=self._said(status, raw)))
+        answer = json.loads(raw) if raw.strip() else {}
+        return answer.get("MediaContainer") or {} if isinstance(answer, dict) else {}
+
+    async def plex_server(self):
+        """One record for the server: name, version and up (it answered, so it's up)."""
+        c = await self._plex("GET", "/")
+        out = {"name": to_str(c.get("friendlyName")), "version": to_str(c.get("version")), "up": True}
+        self.log(tr("Plex server"), tr("Plex {version}", version=out["version"]), tr("up"))
+        return out
+
+    async def plex_libraries(self):
+        """The libraries: a list of records — name, type (movie, show or artist) and count (how many items)."""
+        c = await self._plex("GET", "/library/sections")
+        out = []
+        for d in c.get("Directory") or []:
+            if not isinstance(d, dict):
+                continue
+            key = to_str(d.get("key"))
+            items = await self._plex("GET", f"/library/sections/{key}/all") if key.isdigit() else {}
+            out.append({"name": to_str(d.get("title")), "type": to_str(d.get("type")), "count": num(items.get("size"))})
+        lines = "\n".join(f"{r['name']}: {r['count']}" for r in out)
+        self.log(tr("Plex libraries"), lines or tr("(nothing)"), tr("{n} libraries", n=len(out)))
+        return out
+
+    async def plex_sessions(self):
+        """What's playing now: a list of records — id (the session's id), user, title, player, state (playing or
+        paused) and transcode (whether the server is transcoding it)."""
+        c = await self._plex("GET", "/status/sessions")
+        out = []
+        for v in (c.get("Video") or []) + (c.get("Metadata") or []):
+            if not isinstance(v, dict) or not v.get("sessionKey"):
+                continue
+            title = to_str(v.get("title"))
+            show = to_str(v.get("grandparentTitle"))
+            out.append({"id": to_str(v.get("sessionKey")), "user": to_str((v.get("User") or {}).get("title")),
+                        "title": f"{show} - {title}" if show else title,
+                        "player": to_str((v.get("Player") or {}).get("title")),
+                        "state": to_str((v.get("Player") or {}).get("state")),
+                        "transcode": bool(v.get("TranscodeSession"))})
+        lines = "\n".join(f"{r['user']}: {r['title']} ({r['state']})" for r in out)
+        self.log(tr("Plex sessions"), lines or tr("(nothing)"), tr("{n} sessions", n=len(out)))
+        return out
+
+    async def plex_recent(self, days=7):
+        """The newest items: a list of records — title, library and added (when it was added)."""
+        n = max(1, min(365, int(num(days) or 7)))
+        c = await self._plex("GET", "/library/recentlyAdded")
+        cutoff = time.time() - n * 86400
+        out = []
+        for m in c.get("Metadata") or []:
+            if not isinstance(m, dict):
+                continue
+            added = num(m.get("addedAt"))
+            if added and added < cutoff:
+                continue
+            title = to_str(m.get("title"))
+            show = to_str(m.get("grandparentTitle"))
+            out.append({"title": f"{show} - {title}" if show else title,
+                        "library": to_str(m.get("librarySectionTitle")),
+                        "added": datetime.datetime.fromtimestamp(added).strftime("%Y-%m-%d %H:%M") if added else ""})
+        lines = "\n".join(f"{r['title']} ({r['library']})" for r in out)
+        self.log(tr("Plex new items"), lines or tr("(nothing)"), tr("{n} items", n=len(out)))
+        return out
+
+    async def plex_scan(self, library):
+        """Scans one library for new files, after asking you, every time. Gives back True if it was done."""
+        name = to_str(library).strip()
+        if not name:
+            raise RunError(tr("Which library? Give its name, from the libraries."))
+        c = await self._plex("GET", "/library/sections")
+        key, found = "", ""
+        for d in c.get("Directory") or []:
+            if isinstance(d, dict) and to_str(d.get("title")).strip().lower() == name.lower():
+                key, found = to_str(d.get("key")), to_str(d.get("title"))
+        if not key.isdigit():
+            raise RunError(tr("Which library? Give its name, from the libraries."))
+        what = tr("scan the {library} library on Plex", library=found)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._plex("GET", f"/library/sections/{key}/refresh", approved=True)
+        self.log(tr("Plex"), what, tr("done"))
+        return True
+
+    async def _tautulli(self, cmd, params=None, approved=False):
+        """One request to Tautulli's API, gated by tautulli_call on the query as a whole: the history goes without
+        asking, the one terminate only after a live yes, and anything else is never sent."""
+        gate = "cmd=" + cmd + (("&" + urllib.parse.urlencode(params)) if params else "")
+        kind = tautulli_call("GET", gate)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=gate, who="Tautulli"))
+        base = os.environ.get("TAUTULLI_URL", "").strip().rstrip("/")
+        api_key = os.environ.get("TAUTULLI_API_KEY", "").strip()
+        if not base or not api_key:
+            raise RunError(tr("Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).",
+                              url_setting="TAUTULLI_URL", key_setting="TAUTULLI_API_KEY", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("Tautulli", base, "TAUTULLI_CERT_SHA256", "GET", "/api/v2?" + gate + "&api_key=" + api_key, {})
+        if status == 401:
+            raise RunError(tr("The {who} refused its key.", who="Tautulli"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="Tautulli", why=self._said(status, raw)))
+        answer = json.loads(raw) if raw.strip() else {}
+        return ((answer or {}).get("response") or {}) if isinstance(answer, dict) else {}
+
+    async def _tautulli_history(self, days):
+        """Tautulli's history rows, newest first, as (columns, rows)."""
+        n = max(1, min(365, int(num(days) or 7)))
+        r = await self._tautulli("get_history", {"after": datetime.datetime.fromtimestamp(time.time() - n * 86400).strftime("%Y-%m-%d"),
+                                                 "length": "100"})
+        data = (r.get("data") or {}) if isinstance(r.get("data"), dict) else {}
+        cols = [to_str(c) for c in (data.get("columns") or [])]
+        rows = [row for row in (data.get("data") or []) if isinstance(row, list)]
+        return cols, rows
+
+    async def tautulli_history(self, days=7):
+        """What was watched: a list of records — user, title, when and transcode (whether it was transcoded)."""
+        cols, rows = await self._tautulli_history(days)
+        at = lambda name: cols.index(name) if name in cols else -1  # noqa: E731
+        def g(row, name):
+            i = at(name)
+            return row[i] if 0 <= i < len(row) else None
+        out = []
+        for row in rows:
+            when = num(g(row, "date"))
+            out.append({"user": to_str(g(row, "user")), "title": to_str(g(row, "full_title") or g(row, "title")),
+                        "when": datetime.datetime.fromtimestamp(when).strftime("%Y-%m-%d %H:%M") if when else "",
+                        "transcode": to_str(g(row, "transcode_decision")).lower() == "transcode"})
+        lines = "\n".join(f"{r['user']}: {r['title']}" for r in out)
+        self.log(tr("Tautulli history"), lines or tr("(nothing)"), tr("{n} plays", n=len(out)))
+        return out
+
+    async def tautulli_watchtime(self, days=7):
+        """How long each person watched: a list of records — user and hours."""
+        cols, rows = await self._tautulli_history(days)
+        at = lambda name: cols.index(name) if name in cols else -1  # noqa: E731
+        def g(row, name):
+            i = at(name)
+            return row[i] if 0 <= i < len(row) else None
+        seen = {}
+        for row in rows:
+            user = to_str(g(row, "user"))
+            seen[user] = seen.get(user, 0) + num(g(row, "duration"))
+        out = [{"user": u, "hours": self._cents(s / 3600)} for u, s in sorted(seen.items(), key=lambda kv: -kv[1])]
+        lines = "\n".join(f"{r['user']}: {r['hours']}" for r in out)
+        self.log(tr("Tautulli watch time"), lines or tr("(nothing)"), tr("{n} users", n=len(out)))
+        return out
+
+    async def plex_stop(self, session):
+        """Stops one stream (Tautulli's terminate), after asking you, every time. Gives back True if it was done."""
+        key = to_str(session).strip()
+        if not key:
+            raise RunError(tr("Which stream? Give a session's id, from the sessions."))
+        what = tr("stop the {id} stream on Plex", id=key)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        r = await self._tautulli("terminate_session", {"session_key": key}, approved=True)
+        if to_str(r.get("result")).lower() != "success":
+            raise RunError(tr("{who}: {why}.", who="Tautulli", why=self._said(400, to_str(r.get("message") or ""))))
+        self.log(tr("Plex"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -7957,6 +8183,18 @@ class Doctor:
                 q = (s.get("queries") or {})
                 return tr("{n} queries, {blocked} blocked", n=num(q.get("total")), blocked=num(q.get("blocked")))
             out.append(("Pi-hole", pihole))
+        if has("plex_read", "plex_control"):
+            async def plex():
+                home = await self._plex("GET", "/")
+                libs = await self._plex("GET", "/library/sections")
+                return tr("Plex {version}", version=to_str(home.get("version")) or "?") \
+                    + ", " + tr("{n} libraries", n=len([d for d in (libs.get("Directory") or []) if isinstance(d, dict)]))
+            out.append(("Plex", plex))
+            async def tautulli():
+                r = await self._tautulli("get_history", {"length": "1"})
+                data = (r.get("data") or {}) if isinstance(r.get("data"), dict) else {}
+                return tr("Tautulli") + ", " + tr("{n} plays", n=num(data.get("recordsFiltered")))
+            out.append(("Tautulli", tautulli))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -8272,7 +8510,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -10548,6 +10786,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_language_ladybird","file":"language-ladybird.json","category":"odds","title":"Ladybird lesson","description":"Each morning, one page of Second Thought's Ladybird book in a different historical language from its translations, Akkadian days included, with the English alongside and three words to learn.","tip":"Historical-language versions are as plausible as Second Thought's own translations, no more. Reading pages works in exported Python.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"lesson"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":7,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"lesson"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"lesson"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Today is "}}},"ADD1":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". Today's language: Monday Latin (la), Tuesday Old English (ang), Wednesday Akkadian (akk), Thursday Old Norse (non), Friday Koine Greek (grc), Saturday Sanskrit (sa), Sunday Mycenaean Greek in Linear B (gmy). Read https://raw.githubusercontent.com/itsfja/second-thought/main/docs/ladybird-book.md and pick one page, a different one each day. Read the language's everyday words at https://raw.githubusercontent.com/itsfja/second-thought/main/docs/words/<code>.md. Write that page in today's language, using those words where they fit, with the English alongside. Then give three words from it to learn, each with its meaning. End by saying the historical version is plausible, not authoritative."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":6}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"web"}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Today's Ladybird lesson"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_leaving_home_check","file":"leaving-home-check.json","category":"home","title":"Leaving-home check","description":"Your phone calls it as you leave home. If any door or window is still open, the house says so on the kitchen speaker and you get a notification. If everything's shut, it stays quiet.","tip":"In the Home Assistant app, make an automation for leaving home that calls this program's /leaving address (see Web requests in the README). Change the speaker to yours.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_openings","name":"openings"},{"id":"g_warning","name":"warning"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"leaving"}}},"VALUE":{"shadow":{"type":"text","fields":{"TEXT":null}}}}}},"x":30,"y":30},{"type":"rb_webhook_when","fields":{"PATH":"leaving"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"leaving"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":""}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"leaving"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_openings"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"rb_ha_summary","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"door"}}}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}},"ADD2":{"block":{"type":"rb_ha_summary","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"window"}}}}}}},"extraState":{"itemCount":3}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_ask_yesno","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Do these readings show any door or window open (on, or open), not counting the doorbell or anything unavailable?\n\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_openings"}}}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_warning"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In one short spoken sentence, warn someone leaving the house which doors or windows are still open. Use their everyday names.\n\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_openings"}}}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"rb_ha_speak","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_warning"}}}},"PLAYER":{"shadow":{"type":"text","fields":{"TEXT":"media_player.kitchen_speaker"}}}},"next":{"block":{"type":"rb_ha_notify","inputs":{"TARGET":{"shadow":{"type":"text","fields":{"TEXT":"persistent_notification"}}},"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_warning"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_warning"}}}}}}}}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Everything's shut. Nothing said."}}}}}}},"extraState":{"hasElse":true}}}}},"x":30,"y":290}]}}},
 {"key":"g_letter_transcriber","file":"letter-transcriber.json","category":"odds","title":"Letter transcriber","description":"Choose a scan or photo of a handwritten letter. Claude transcribes it as written, old spellings and all, marks every word it isn't sure of, and checks the transcription against the usual conventions. Asks before saving it.","tip":"Use a clear, flat scan. Read it against the original: every [word?] is a guess to check.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_set_draft","inputs":{"TEXT":{"block":{"type":"rb_img_ask","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Transcribe this handwritten document exactly as written. Keep the original spelling, capitals, punctuation and abbreviations; don't modernise or correct anything. Keep the line breaks. Put a word you're unsure of in square brackets with a question mark, like [Thomas?]; write [illegible] for anything you can't read, and [torn] or [blot] for damage. Put words written above the line in ^carets^. After the transcription, a line '---' and a short note: the likely date and writer if the letter says, and how confident you are overall."}}},"IMG":{"block":{"type":"rb_img_choose"}}}}}},"next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"spelling, capitals and punctuation are as written, not modernised; abbreviations are kept, not expanded; every uncertain word is marked [word?]; unreadable parts say [illegible]; line breaks are kept; nothing is added that isn't on the page; the note after '---' says how confident it is"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":2}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_approve","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Save this transcription?\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}},"DO0":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"transcription"}}}},"next":{"block":{"type":"rb_result"}}}}}},"ELSE":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Not saved. The transcription, to edit yourself:\n\n"}}},"ADD1":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":2}}}}}}},"extraState":{"hasElse":true}}}}}}},"x":30,"y":30}]}}},
+{"key":"g_media_server_check","file":"media-server-check.json","category":"home","title":"Media server check","description":"Each morning, reads your Plex and Tautulli: whether the server's up, last night's streams (who watched what, and when), and the week's new items, and sends you a Telegram message. It only reads: nothing is scanned or stopped.","tip":"Needs PLEX_URL, PLEX_TOKEN, TAUTULLI_URL and TAUTULLI_API_KEY in second-thought.ini. Change 2 to look further back, and 7 to a longer week.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_server","name":"server"},{"id":"g_history","name":"history"},{"id":"g_recent","name":"recent"},{"id":"g_two","name":"two"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":30,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_server"}},"inputs":{"VALUE":{"block":{"type":"rb_plex_server"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_history"}},"inputs":{"VALUE":{"block":{"type":"rb_tautulli_history","inputs":{"N":{"shadow":{"type":"math_number","fields":{"NUM":2}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_recent"}},"inputs":{"VALUE":{"block":{"type":"rb_plex_recent","inputs":{"N":{"shadow":{"type":"math_number","fields":{"NUM":7}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Media server overnight: "}}},"ADD1":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"name"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_server"}}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" is up, last night's streams:"}}},"ADD3":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_two"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_history"}}}},"DO":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"user"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_two"}}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":": "}}},"ADD3":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"title"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_two"}}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" ("}}},"ADD5":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"when"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_two"}}}}}}},"ADD6":{"shadow":{"type":"rb_longtext","fields":{"TEXT":")"}}},"ADD7":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}}},"extraState":{"itemCount":8}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"New this week:"}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}}},"extraState":{"itemCount":3}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_two"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_recent"}}}},"DO":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"title"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_two"}}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" ("}}},"ADD3":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"library"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_two"}}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":")"}}},"ADD5":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n"}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}}}}}}}},"x":30,"y":190}]}}},
 {"key":"g_meeting_fairy","file":"meeting-fairy.json","category":"calendar","title":"Meeting fairy","description":"The evening before, reads tomorrow's calendar, finds recent emails with the people you're meeting, and sends you a one-page brief for each meeting: what's open between you first.","tip":"Change 19:00 to when you plan tomorrow. Meetings with nobody else in them are skipped.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"brief"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":19,"MINUTE":0,"DAYS":"weekdays"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"brief"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"brief"},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Look at tomorrow's calendar. For each meeting with other people, search my email from the last 30 days for recent messages from or about them and the topic, and read the useful ones. Write a brief for each meeting: who, when and where; what's open between us (questions, promises, decisions waiting) first; useful background; then two questions I should ask. Check each with review_text against: under one page; open items first; nothing invented."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":16}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"calendar"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"email"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Tomorrow's meetings"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_menu_writer","file":"menu-writer.json","category":"home","title":"Menu writer","description":"List your dishes and what's in them. Claude writes each one a menu description in your house style, 25 words or fewer, with its allergens from the UK's 14 listed underneath.","tip":"Describe your house style in the first block: a few words and one description you like.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_house_style","name":"house style"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_house_style"}},"inputs":{"VALUE":{"block":{"type":"rb_longtext","fields":{"TEXT":"Plain and warm. Say where things come from. No 'delicious', 'homemade' or 'mouth-watering'. Like: Rye sourdough, 48-hour ferment, with Netherend butter."}}}},"next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List the dishes, each with what's in it"}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write a menu description for each dish, in this house style:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_house_style"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nUnder each, list the allergens it contains from the UK's 14 (celery; cereals containing gluten (wheat, rye, barley, oats); crustaceans; eggs; fish; lupin; milk; molluscs; mustard; tree nuts; peanuts; sesame; soya; sulphur dioxide and sulphites).\n\nDishes:\n"}}},"ADD3":{"block":{"type":"rb_answer"}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"each description 25 words or fewer; in the house style; every dish lists its allergens, and only ones its ingredients really contain; nothing claimed that the ingredients don't say"}}}},"extraState":{"itemCount":1}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_minutes_to_actions","file":"minutes-to-actions.json","category":"odds","title":"Minutes to actions","description":"Choose the minutes of a trustees' or committee meeting. Claude lists every action with its owner and date, flags any with no owner or no date, and saves the list to send round.","tip":"Works with a PDF, Word file or text file. It only lists what the minutes say: anything unclear is flagged, not guessed.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List every action agreed in these meeting minutes: the action, who owns it and when it's due, as a table, by owner. Under the table, list actions with no owner or no date as NEEDS AN OWNER or NEEDS A DATE.\n\nMinutes:\n"}}},"ADD1":{"block":{"type":"rb_file_choose"}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every action in the minutes is listed; owners and dates are exactly as the minutes say, never guessed; anything without an owner or date is flagged; decisions that aren't actions are left out"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"actions"}}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
@@ -10615,6 +10854,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
 ["nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", true],
+["plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", true],
 ["pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", true],
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
@@ -10628,6 +10868,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
 ["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
 ["nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", false],
+["plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", false],
 ["pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
 ["powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", false],
@@ -10791,6 +11032,46 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "DELETE",
    "^/api/domains/(allowlist|denylist)/exact$"
+  ]
+ ],
+ "plex_free": [
+  [
+   "GET",
+   "^/$"
+  ],
+  [
+   "GET",
+   "^/library/sections$"
+  ],
+  [
+   "GET",
+   "^/library/sections/[0-9]+/all$"
+  ],
+  [
+   "GET",
+   "^/library/recentlyAdded$"
+  ],
+  [
+   "GET",
+   "^/status/sessions$"
+  ]
+ ],
+ "plex_asks": [
+  [
+   "GET",
+   "^/library/sections/[0-9]+/refresh$"
+  ]
+ ],
+ "tautulli_free": [
+  [
+   "GET",
+   "^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"
+  ]
+ ],
+ "tautulli_asks": [
+  [
+   "GET",
+   "^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"
   ]
  ],
  "unifi_free": [
@@ -15314,6 +15595,98 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
     "count": 1877
    }
   ]
+ },
+ "plex": {
+  "note": "A sample Plex server and Tautulli (#402), shaped the way their APIs answer: three libraries, two sessions (one transcoding), two items added this week, and last night's watching in Tautulli's history.",
+  "server": {
+   "name": "livingroom",
+   "version": "1.41.3.9662"
+  },
+  "libraries": [
+   {
+    "id": 1,
+    "name": "Films",
+    "type": "movie",
+    "count": 312
+   },
+   {
+    "id": 2,
+    "name": "TV",
+    "type": "show",
+    "count": 1204
+   },
+   {
+    "id": 3,
+    "name": "Music",
+    "type": "artist",
+    "count": 89
+   }
+  ],
+  "sessions": [
+   {
+    "id": "abc123",
+    "user": "alice",
+    "title": "The Matrix",
+    "player": "livingroom-tv",
+    "state": "playing",
+    "transcode": false
+   },
+   {
+    "id": "def456",
+    "user": "bob",
+    "title": "Doctor Who - s01e01",
+    "player": "bob-phone",
+    "state": "paused",
+    "transcode": true
+   }
+  ],
+  "recent": [
+   {
+    "title": "Arrival",
+    "library": "Films",
+    "added": 1794431040
+   },
+   {
+    "title": "Doctor Who - s01e02",
+    "library": "TV",
+    "added": 1794167040
+   },
+   {
+    "title": "Blade Runner 2049",
+    "library": "Films",
+    "added": 1792000800
+   }
+  ],
+  "history": [
+   {
+    "user": "alice",
+    "title": "The Matrix",
+    "when": 1794519000,
+    "transcode": false,
+    "duration": 7200
+   },
+   {
+    "user": "bob",
+    "title": "Doctor Who - s01e01",
+    "when": 1794516000,
+    "transcode": true,
+    "duration": 2700
+   },
+   {
+    "user": "alice",
+    "title": "Blade Runner 2049",
+    "when": 1794340800,
+    "transcode": false,
+    "duration": 9600
+   },
+   {
+    "user": "bob",
+    "title": "Doctor Who - s01e01",
+    "when": 1792872000,
+    "transcode": true,
+    "duration": 2700
+   }
+  ]
  }
 }
 </script>
@@ -15577,7 +15950,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A", unraid:"#E8590C", nzbgeek:"#6A1B9A", pihole:"#9E2B25"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A", unraid:"#E8590C", nzbgeek:"#6A1B9A", pihole:"#9E2B25", plex:"#E5A00D"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -15589,7 +15962,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid), nzbgeek:style(HUES.nzbgeek), pihole:style(HUES.pihole),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid), nzbgeek:style(HUES.nzbgeek), pihole:style(HUES.pihole), plex:style(HUES.plex),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -15777,7 +16150,10 @@ HOW TO MAP CODE
     rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
     rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch", rb_pihole_summary:"pihole_read",
     rb_pihole_top_domains:"pihole_read", rb_pihole_top_clients:"pihole_read", rb_pihole_blocking:"pihole_control",
-    rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control",
+    rb_plex_server:"plex_read", rb_plex_libraries:"plex_read", rb_plex_sessions:"plex_read", rb_plex_recent:"plex_read",
+    rb_tautulli_history:"plex_read", rb_tautulli_watchtime:"plex_read", rb_plex_scan:"plex_control", rb_plex_stop:"plex_control",
+    rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -16193,6 +16569,23 @@ HOW TO MAP CODE
       { style:"pihole", inputsInline:true, tooltip:"Puts a domain on the allow list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     S("rb_pihole_deny", "%1 %2 on Pi-hole's deny list", [{ type:"field_dropdown", name:"ACTION", options:[["add","add"],["remove","remove"]] }, val("DOMAIN")],
       { style:"pihole", inputsInline:true, tooltip:"Puts a domain on the deny list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
+    /* Plex and Tautulli (#402): reads, and changes that always ask */
+    V("rb_plex_server", "Plex server", [], null, { style:"plex",
+      tooltip:"One record for the server: name, version and up (it answered, so it's up). Needs PLEX_URL and PLEX_TOKEN in second-thought.ini. On this page it uses a sample server." }),
+    V("rb_plex_libraries", "Plex libraries", [], "Array", { style:"plex",
+      tooltip:"A list of records, one for each library: name, type (movie, show or artist) and count (how many items it has). It only reads." }),
+    V("rb_plex_sessions", "Plex sessions", [], "Array", { style:"plex",
+      tooltip:"A list of records, one for each thing playing now: id (the session's id), user, title, player, state (playing or paused) and transcode (whether the server is transcoding it). It only reads." }),
+    V("rb_plex_recent", "Plex new items, last %1 days", [val("N")], "Array", { style:"plex", inputsInline:true,
+      tooltip:"A list of records, one for each item added in that many days: title, library and added (when it was added). It only reads." }),
+    V("rb_tautulli_history", "Tautulli history, last %1 days", [val("N")], "Array", { style:"plex", inputsInline:true,
+      tooltip:"A list of records, one for each thing watched in that many days, from Tautulli: user, title, when and transcode (whether it was transcoded). It only reads. Needs TAUTULLI_URL and TAUTULLI_API_KEY in second-thought.ini." }),
+    V("rb_tautulli_watchtime", "Tautulli watch time, last %1 days", [val("N")], "Array", { style:"plex", inputsInline:true,
+      tooltip:"A list of records, one for each person who watched in that many days, from Tautulli: user and hours. It only reads." }),
+    S("rb_plex_scan", "scan the %1 library on Plex", [val("LIBRARY")],
+      { style:"plex", inputsInline:true, tooltip:"Scans one library for new files. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
+    S("rb_plex_stop", "stop the %1 stream on Plex", [val("ID")],
+      { style:"plex", inputsInline:true, tooltip:"Stops one stream (Tautulli's terminate). It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     /* Proxmox (#357): reads, and power that always asks */
     V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
       tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
@@ -16416,6 +16809,11 @@ HOW TO MAP CODE
       B("rb_pihole_summary"), B("rb_pihole_top_domains", { N:N(5) }), B("rb_pihole_top_clients", { N:N(5) }),
       B("rb_pihole_blocking", { N:N(60) }), B("rb_pihole_enable"),
       B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
+    ]},
+    { kind:"category", name:"Plex", categorystyle:"plex", contents:[
+      B("rb_plex_server"), B("rb_plex_libraries"), B("rb_plex_sessions"),
+      B("rb_plex_recent", { N:N(7) }), B("rb_tautulli_history", { N:N(7) }), B("rb_tautulli_watchtime", { N:N(7) }),
+      B("rb_plex_scan", { LIBRARY:T("Films") }), B("rb_plex_stop", { ID:T("abc123") })
     ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
@@ -19006,6 +19404,7 @@ HOW TO MAP CODE
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
+             plex:blocks.some(b => b.type.startsWith("rb_plex_") || b.type.startsWith("rb_tautulli_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -19091,6 +19490,16 @@ HOW TO MAP CODE
       "; ever sent. Run --doctor once: it shows the certificate fingerprint for PIHOLE_CERT_SHA256, if Pi-hole is",
       "; behind HTTPS this computer doesn't trust.",
       "PIHOLE_URL = ", "PIHOLE_PASSWORD = ", "; PIHOLE_CERT_SHA256 = ");
+    if (need.plex) out.push("", "[plex]",
+      "; Your Plex media server, through the X-Plex-Token API the apps use: its address and its token (a device's",
+      "; account details show it). The server, libraries, sessions and new items blocks only read; scanning a library",
+      "; asks first, and nothing else is ever sent. Run --doctor once: it shows the certificate fingerprint for",
+      "; PLEX_CERT_SHA256, if Plex is behind HTTPS this computer doesn't trust.",
+      "PLEX_URL = ", "PLEX_TOKEN = ", "; PLEX_CERT_SHA256 = ",
+      "", "[tautulli]",
+      "; Tautulli, for the history and watch-time blocks and stopping a stream: its address and its API key (Settings,",
+      "; API Keys). The history only reads; stopping a stream asks first, and nothing else is ever sent.",
+      "TAUTULLI_URL = ", "TAUTULLI_API_KEY = ", "; TAUTULLI_CERT_SHA256 = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -19443,6 +19852,12 @@ HOW TO MAP CODE
         case "rb_pihole_summary": return "(await R.pihole_summary())";
         case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
         case "rb_pihole_top_clients": return "(await R.pihole_top_clients(" + I("N", "5") + "))";
+        case "rb_plex_server": return "(await R.plex_server())";
+        case "rb_plex_libraries": return "(await R.plex_libraries())";
+        case "rb_plex_sessions": return "(await R.plex_sessions())";
+        case "rb_plex_recent": return "(await R.plex_recent(" + I("N", "7") + "))";
+        case "rb_tautulli_history": return "(await R.tautulli_history(" + I("N", "7") + "))";
+        case "rb_tautulli_watchtime": return "(await R.tautulli_watchtime(" + I("N", "7") + "))";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -19608,6 +20023,8 @@ HOW TO MAP CODE
         case "rb_pihole_enable": E("await R.pihole_enable()"); break;
         case "rb_pihole_allow": E("await R.pihole_list(\"allow\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"ads.example.com\"") + ")"); break;
         case "rb_pihole_deny": E("await R.pihole_list(\"deny\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"bad.example.com\"") + ")"); break;
+        case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
+        case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
@@ -22053,6 +22470,60 @@ HOW TO MAP CODE
     addStep("Pi-hole", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
+  /* Plex and Tautulli on the page (#402): a sample server. Exported Python talks to your Plex through the
+     X-Plex-Token API and to Tautulli: reads, and a library scan and a stream stop after a yes, every time.
+     Matches the runtime's plex_ and tautulli_ methods and tests/fake_plex.py. */
+  const plexSample = () => { connNote("Plex"); return CONN.plex || {}; };
+  function plexServer(){
+    const s = plexSample(), out = { name:str((s.server || {}).name), version:str((s.server || {}).version), up:true };
+    addStep("Plex server", { mono:true, text:out.name + " " + out.version }).done(tr("up"), "ok");
+    return out;
+  }
+  function plexLibraries(){
+    const out = (plexSample().libraries || []).map(l => ({ name:str(l.name), type:str(l.type), count:Math.trunc(num(l.count)) }));
+    addStep("Plex libraries", { mono:true, text:out.map(l => l.name + " (" + l.type + "): " + l.count).join("\n") || tr("(nothing)") })
+      .done(tr("{n} libraries", { n:out.length }), "ok");
+    return out;
+  }
+  function plexSessions(){
+    const out = (plexSample().sessions || []).map(s => ({ id:str(s.id), user:str(s.user), title:str(s.title), player:str(s.player),
+      state:str(s.state), transcode:!!s.transcode }));
+    addStep("Plex sessions", { mono:true, text:out.map(s => s.user + ": " + s.title + " (" + s.state + ")").join("\n") || tr("(nothing)") })
+      .done(tr("{n} sessions", { n:out.length }), "ok");
+    return out;
+  }
+  function plexRecent(days){
+    const n = Math.max(1, Math.min(365, Math.trunc(num(days)) || 7)), cutoff = Date.now() / 1000 - n * 86400;
+    const out = (plexSample().recent || []).filter(r => !num(r.added) || num(r.added) >= cutoff)
+      .map(r => ({ title:str(r.title), library:str(r.library), added:num(r.added) ? sbWhen(num(r.added)) : "" }));
+    addStep("Plex new items", { mono:true, text:out.map(r => r.title + " (" + r.library + ")").join("\n") || tr("(nothing)") })
+      .done(tr("{n} items", { n:out.length }), "ok");
+    return out;
+  }
+  function tautulliHistory(days){
+    const n = Math.max(1, Math.min(365, Math.trunc(num(days)) || 7)), cutoff = Date.now() / 1000 - n * 86400;
+    const out = (plexSample().history || []).filter(h => !num(h.when) || num(h.when) >= cutoff)
+      .map(h => ({ user:str(h.user), title:str(h.title), when:num(h.when) ? sbWhen(num(h.when)) : "", transcode:!!h.transcode }));
+    addStep("Tautulli history", { mono:true, text:out.map(h => h.user + ": " + h.title).join("\n") || tr("(nothing)") })
+      .done(tr("{n} plays", { n:out.length }), "ok");
+    return out;
+  }
+  function tautulliWatchtime(days){
+    const n = Math.max(1, Math.min(365, Math.trunc(num(days)) || 7)), cutoff = Date.now() / 1000 - n * 86400;
+    const seen = {};
+    (plexSample().history || []).filter(h => !num(h.when) || num(h.when) >= cutoff)
+      .forEach(h => { seen[str(h.user)] = (seen[str(h.user)] || 0) + num(h.duration); });
+    const out = Object.keys(seen).map(u => ({ user:u, hours:cents(seen[u] / 3600) }))
+      .sort((a, b) => b.hours - a.hours);
+    addStep("Tautulli watch time", { mono:true, text:out.map(w => w.user + ": " + w.hours).join("\n") || tr("(nothing)") })
+      .done(tr("{n} users", { n:out.length }), "ok");
+    return out;
+  }
+  async function plexAsking(what){
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Plex", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
   /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
      shut down and reboot after a yes, every time. Matches the runtime's proxmox_ methods and tests/fake_proxmox.py. */
   const pxSample = () => { connNote("Proxmox"); return CONN.proxmox || {}; };
@@ -22980,6 +23451,12 @@ HOW TO MAP CODE
       case "rb_pihole_summary": return piholeSummary();
       case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
       case "rb_pihole_top_clients": return piholeTopClients(await input(b, tc, "N"));
+      case "rb_plex_server": return plexServer();
+      case "rb_plex_libraries": return plexLibraries();
+      case "rb_plex_sessions": return plexSessions();
+      case "rb_plex_recent": return plexRecent(await input(b, tc, "N"));
+      case "rb_tautulli_history": return tautulliHistory(await input(b, tc, "N"));
+      case "rb_tautulli_watchtime": return tautulliWatchtime(await input(b, tc, "N"));
       case "rb_proxmox_nodes": return proxmoxNodes();
       case "rb_proxmox_guests": return proxmoxGuests();
       case "rb_proxmox_storage": return proxmoxStorage();
@@ -23586,6 +24063,8 @@ HOW TO MAP CODE
       case "rb_pihole_enable": await piholeAsking("enable Pi-hole's blocking"); break;
       case "rb_pihole_allow": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's allow list"); break;
       case "rb_pihole_deny": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's deny list"); break;
+      case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
+      case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;

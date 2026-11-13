@@ -764,6 +764,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 a deny-lista Pi-hole",
    "tooltip": "Setur domen a deny-listan, eda tekur thaed af. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."
+  },
+  "rb_plex_server": {
+   "message0": "Plex thjonari",
+   "tooltip": "Ein faersla fyrir thjonarann: name, version og up (hann svaraadi, thannig hann er i gangi). Tharf PLEX_URL og PLEX_TOKEN i second-thought.ini. A thessari sidu notar hann synishorns thjonara."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex safnbok",
+   "tooltip": "Listi faerslna, ein fyrir hverja safnbok: name, type (movie, show eda artist) og count (hve morg hlutir hun hefur). Hann les only."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex setur",
+   "tooltip": "Listi faerslna, ein fyrir hvada spilar nuna: id (id setsins), user, title, player, state (playing eda paused) og transcode (hvort thjonarinn umbreytir thvi). Hann les only."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex nytt, sidustu %1 daga",
+   "tooltip": "Listi faerslna, ein fyrir hvern hlut sem baett var vid a thessa daga: title, library og added (thegar baett var vid). Hann les only."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli saga, sidustu %1 daga",
+   "tooltip": "Listi faerslna, ein fyrir hvada sagth var a thessa daga, ur Tautulli: user, title, when og transcode (hvort thad var umbreytt). Hann les only. Tharf TAUTULLI_URL og TAUTULLI_API_KEY i second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli ahtimal, sidustu %1 daga",
+   "tooltip": "Listi faerslna, ein fyrir hvern mann sem sagthi a thessa daga, ur Tautulli: user og hours. Hann les only."
+  },
+  "rb_plex_scan": {
+   "message0": "skanna %1 safnbokina a Plex",
+   "tooltip": "Skannar eina safnbok fyrir nyjar skrar. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."
+  },
+  "rb_plex_stop": {
+   "message0": "stoppa strauminn %1 a Plex",
+   "tooltip": "Stoppar einn straum (Tautulli terminate). Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."
   }
  },
  "options": {
@@ -956,7 +988,8 @@
   "Radarr and Sonarr": "Radarr og Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1851,7 +1884,21 @@
   "Pi-hole summary": "Pi-hole samantekt",
   "Pi-hole top blocked domains": "most blokkadu domenin a Pi-hole",
   "Pi-hole top clients": "Pi-hole toppklientar",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "lesa Plex thitt: thjonarann, safnbokur thess, hvad spilar nuna og nyjasta; og lesa Tautulli sogu og ahtimalstolur",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "skanna Plex safnbok, og stoppa straum a Plex (spyrjandi thig hvern sinn)",
+  "up": "i gangi",
+  "{n} libraries": "{n} safnbok",
+  "{n} sessions": "{n} setur",
+  "{n} plays": "{n} afspilanir",
+  "{n} users": "{n} notendur",
+  "Plex": "Plex",
+  "Plex server": "Plex thjonari",
+  "Plex libraries": "Plex safnbok",
+  "Plex sessions": "Plex setur",
+  "Plex new items": "Plex nytt",
+  "Tautulli history": "Tautulli saga",
+  "Tautulli watch time": "Tautulli ahtimal"
  },
  "examples": {
   "review": {
@@ -2696,7 +2743,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Fyrri ferð stǫðvaðisk í miðju, en forritit hefir síðan breyzk, svá at þat hefsk at nýju.)",
@@ -3591,7 +3640,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Hvad listi (allow eda deny), baeta eda fjarlaegja, og hvad domen?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} a {which}-lista Pi-hole",
   "added by Second Thought": "baett vid af Second Thought",
-  "{n} queries, {blocked} blocked": "{n} fyrirspurnir, {blocked} blokkad"
+  "{n} queries, {blocked} blocked": "{n} fyrirspurnir, {blocked} blokkad",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} tharfnast {url_setting} og {key_setting} {where_keys}: adressa thess (sem http://plex:32400) og merki thess, thad sem apparnir senda (upplysingar um reikning tolko sja thad).",
+  "The {who} refused its token.": "{who} synadist merki sitt.",
+  "Plex": "Plex",
+  "Plex server": "Plex thjonari",
+  "Plex {version}": "Plex {version}",
+  "up": "i gangi",
+  "Plex libraries": "Plex safnbok",
+  "{n} libraries": "{n} safnbok",
+  "Plex sessions": "Plex setur",
+  "{n} sessions": "{n} setur",
+  "Plex new items": "Plex nytt",
+  "{n} items": "{n} hlutir",
+  "Which library? Give its name, from the libraries.": "Hvad safnbok? Gefu nafn thess, ur safnbokum.",
+  "scan the {library} library on Plex": "skanna {library} safnbokina a Plex",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli tharfnast {url_setting} og {key_setting} {where_keys}: adressu thess (sem http://tautulli:8181) og API-lykil thess (Settings, API Keys).",
+  "The {who} refused its key.": "{who} synadist lykil sinn.",
+  "Tautulli history": "Tautulli saga",
+  "{n} plays": "{n} afspilanir",
+  "Tautulli watch time": "Tautulli ahtimal",
+  "{n} users": "{n} notendur",
+  "Which stream? Give a session's id, from the sessions.": "Hvad straumur? Gefu id a setu, ur setum.",
+  "stop the {id} stream on Plex": "stoppa strauminn {id} a Plex"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

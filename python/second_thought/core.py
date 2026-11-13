@@ -136,6 +136,16 @@ SAFETY = {
     "pihole_asks": [["POST", r"^/api/dns/blocking$"],
                     ["POST", r"^/api/domains/(allowlist|denylist)/exact$"],
                     ["DELETE", r"^/api/domains/(allowlist|denylist)/exact$"]],
+    # Plex's HTTP API (the X-Plex-Token endpoints the apps use) and Tautulli's API (#402). The server, the libraries, the
+    # sessions and the newest items are reads; scanning a library always asks, live. Tautulli's gate reads the query as
+    # a whole, like NZBGeek's: the history is a read, and the one terminate (a stream stopped) always asks. Nothing else
+    # is ever sent: no media or library is ever deleted, no sharing, no user access, no transcoding or remote-access
+    # settings.
+    "plex_free": [["GET", r"^/$"], ["GET", r"^/library/sections$"], ["GET", r"^/library/sections/[0-9]+/all$"],
+                  ["GET", r"^/library/recentlyAdded$"], ["GET", r"^/status/sessions$"]],
+    "plex_asks": [["GET", r"^/library/sections/[0-9]+/refresh$"]],
+    "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
+    "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -322,6 +332,28 @@ def pihole_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["pihole_" + kind]):
+            return kind
+    return None
+
+
+def plex_call(method, path):
+    """"free" for one of the Plex calls the runtime makes without asking (the server, the libraries, the sessions and
+    the newest items), "asks" for the one change that needs a live yes (scanning a library), and None for anything
+    else, which is never sent (#402)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["plex_" + kind]):
+            return kind
+    return None
+
+
+def tautulli_call(method, query):
+    """"free" for Tautulli's history read, "asks" for the one terminate (a stream stopped), and None for anything
+    else, which is never sent (#402). The query is read as a whole, like NZBGeek's, so a history that smuggles a
+    terminate is refused."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["tautulli_" + kind]):
             return kind
     return None
 
@@ -787,6 +819,7 @@ CAPABILITIES = [
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
+    ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
@@ -800,6 +833,7 @@ CAPABILITIES = [
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
+    ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),

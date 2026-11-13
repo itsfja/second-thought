@@ -765,6 +765,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 Pi-hole'un deny listesine",
    "tooltip": "Bir alan adini deny listesine koyar, ya da cikarir. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten degismez."
+  },
+  "rb_plex_server": {
+   "message0": "Plex sunucusu",
+   "tooltip": "Sunucu icin bir kayit: name, version ve up (yanit verdi, yani erisilebilir). second-thought.ini icinde PLEX_URL ve PLEX_TOKEN gerekir. Bu sayfada ornek bir sunucu kullanir."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex kutuphaneleri",
+   "tooltip": "Kayit listesi, her kutuphane icin bir tane: name, type (movie, show veya artist) ve count (kac ogesi var). Sadece okur."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex oturumlari",
+   "tooltip": "Kayit listesi, su anda oynayan her sey icin bir tane: id (oturumun id'si), user, title, player, state (playing veya paused) ve transcode (sunucu onu donusturuyor mu). Sadece okur."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex yeni ogeler, son %1 gun",
+   "tooltip": "Kayit listesi, bu kadar gunde eklenen her oge icin bir tane: title, library ve added (ne zaman eklendi). Sadece okur."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli gecmisi, son %1 gun",
+   "tooltip": "Kayit listesi, bu kadar gunde izlenen her sey icin bir tane, Tautulli'den: user, title, when ve transcode (donusturuldu mu). Sadece okur. second-thought.ini icinde TAUTULLI_URL ve TAUTULLI_API_KEY gerekir."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli izleme suresi, son %1 gun",
+   "tooltip": "Kayit listesi, bu kadar gunde izleyen her kisi icin bir tane, Tautulli'den: user ve hours. Sadece okur."
+  },
+  "rb_plex_scan": {
+   "message0": "Plex'teki %1 kutuphanesini taramak",
+   "tooltip": "Bir kutuphaneyi yeni dosyalar icin tarar. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten degismez."
+  },
+  "rb_plex_stop": {
+   "message0": "Plex'teki %1 akisini durdurmak",
+   "tooltip": "Bir akisi durdurur (Tautulli'nin terminate'i). Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten degismez."
   }
  },
  "options": {
@@ -947,7 +979,8 @@
   "Radarr and Sonarr": "Radarr و Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",
@@ -1707,7 +1740,7 @@
   "{n} characters": "{n} حرف",
   "{n} devices": "{n} جهاز",
   "{n} events": "{n} واقعه",
-  "{n} items": "{n} شی",
+  "{n} items": "{n} oge",
   "{n} records": "{n} قید",
   "{n} script started": "{n} سلسله باشلادی",
   "{n} script started, waiting for it to finish": "{n} سلسله باشلادی، بیتمه‌سی بكلنیور",
@@ -1842,7 +1875,21 @@
   "Pi-hole summary": "Pi-hole ozeti",
   "Pi-hole top blocked domains": "Pi-hole'te en cok engellenen alan adlari",
   "Pi-hole top clients": "Pi-hole'un bas musterileri",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "Plex'ini okumak: sunucu, kutuphaneleri, su anda ne oynuyor ve en yeniler; ve Tautulli'nin gecmisini ve izleme suresi istatistiklerini okumak",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "bir Plex kutuphanesini taramak, ve Plex'te bir akisi durdurmak (her seferinde sana sorarak)",
+  "up": "erisinde",
+  "{n} libraries": "{n} kutuphane",
+  "{n} sessions": "{n} oturum",
+  "{n} plays": "{n} oynatma",
+  "{n} users": "{n} kullanici",
+  "Plex": "Plex",
+  "Plex server": "Plex sunucusu",
+  "Plex libraries": "Plex kutuphaneleri",
+  "Plex sessions": "Plex oturumlari",
+  "Plex new items": "Plex yeni ogeler",
+  "Tautulli history": "Tautulli gecmisi",
+  "Tautulli watch time": "Tautulli izleme suresi"
  },
  "examples": {
   "review": {
@@ -2687,7 +2734,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(اوّلكی بر اجرا یاری یولده دوردی، فقط پروغرام اوندن بری دڭیشدی، بو سببله یڭیدن باشلار.)",
@@ -3582,7 +3631,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Hangi liste (allow mu deny mi), eklemek mi kaldirmak mi, hangi alan adi?",
   "{action} {domain} on Pi-hole's {which} list": "Pi-hole'un {which} listesinde {action} {domain}",
   "added by Second Thought": "Second Thought tarafindan eklendi",
-  "{n} queries, {blocked} blocked": "{n} sorgu, {blocked} engellendi"
+  "{n} queries, {blocked} blocked": "{n} sorgu, {blocked} engellendi",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who}, {url_setting} ve {key_setting} gerektirir {where_keys}: onun adresi (http://plex:32400 gibi) ve onun token'i, uygulamalarin gonderdigi (bir cihazin hesap detaylari onu gosterir).",
+  "The {who} refused its token.": "Bu {who} token'ini reddetti.",
+  "Plex": "Plex",
+  "Plex server": "Plex sunucusu",
+  "Plex {version}": "Plex {version}",
+  "up": "erisinde",
+  "Plex libraries": "Plex kutuphaneleri",
+  "{n} libraries": "{n} kutuphane",
+  "Plex sessions": "Plex oturumlari",
+  "{n} sessions": "{n} oturum",
+  "Plex new items": "Plex yeni ogeler",
+  "{n} items": "{n} oge",
+  "Which library? Give its name, from the libraries.": "Hangi kutuphane? Adini ver, kutuphanelerden.",
+  "scan the {library} library on Plex": "Plex'teki {library} kutuphanesini taramak",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli {url_setting} ve {key_setting} gerektirir {where_keys}: onun adresi (http://tautulli:8181 gibi) ve onun API anahtari (Settings, API Keys).",
+  "The {who} refused its key.": "Bu {who} anahtarini reddetti.",
+  "Tautulli history": "Tautulli gecmisi",
+  "{n} plays": "{n} oynatma",
+  "Tautulli watch time": "Tautulli izleme suresi",
+  "{n} users": "{n} kullanici",
+  "Which stream? Give a session's id, from the sessions.": "Hangi akis? Oturumlarin icinden bir oturumun id'sini ver.",
+  "stop the {id} stream on Plex": "Plex'teki {id} akisini durdurmak"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

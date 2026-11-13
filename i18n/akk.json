@@ -765,6 +765,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 𒀀𒈾 Pi-hole deny 𒇷𒄑𒋫",
    "tooltip": "Domain 𒀀𒈾 deny 𒇷𒄑𒋫 𒉿𒊓𒈬, 𒀠 𒊏𒄠𒈬. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒."
+  },
+  "rb_plex_server": {
+   "message0": "Plex 𒂊𒅗𒀠𒇻",
+   "tooltip": "Tuppu 𒀀𒈾 𒂊𒅗𒀠𒇷: 𒈾𒈨, version 𒌑 𒊓𒁺 (𒅅𒉡𒊻𒋢, 𒊓𒁺). PLEX_URL 𒌑 PLEX_TOKEN 𒄿𒈾 second-thought.ini. Umu 𒀭𒉡 𒊓𒀠𒈬 𒂊𒅗𒀠𒇷."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex 𒌅𒌒𒉺𒌅",
+   "tooltip": "Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒋢𒌒𒊏𒄠𒈪 𒌅𒌒𒉺𒋾𒅎: 𒈾𒈨, type (movie, show 𒀠 artist) 𒌑 count (𒆠𒈠 𒈾𒊍𒊒 𒄿𒋢). Sadu mahta."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex 𒈠𒊍𒊓𒅈𒌅",
+   "tooltip": "Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪: id, user, 𒋾𒀉𒇷, player, state (playing 𒀠 paused) 𒌑 transcode (𒈠𒊍𒊓𒅈𒌅 𒊓 𒂊𒅗𒀠𒇷). Sadu mahta."
+  },
+  "rb_plex_recent": {
+   "tooltip": "Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒈾𒊍𒊒 𒊓 𒌨𒊑: 𒋾𒀉𒇷, 𒌅𒌒𒉺𒌅 𒌑 𒈾𒊍𒊒. Sadu mahta.",
+   "message0": "Plex 𒈾𒊍𒊒, %1 𒌨𒊒"
+  },
+  "rb_tautulli_history": {
+   "tooltip": "Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒈠𒊍𒊓𒅈𒋾𒅎 𒊓 𒌨𒊑, 𒄑𒌅 Tautulli: user, 𒋾𒀉𒇷, 𒈠𒊍𒊓𒅈𒌅 𒌑 transcode. Sadu mahta. TAUTULLI_URL 𒌑 TAUTULLI_API_KEY 𒄿𒈾 second-thought.ini.",
+   "message0": "Tautulli 𒋫𒅈𒋛𒋢, %1 𒌨𒊒"
+  },
+  "rb_tautulli_watchtime": {
+   "tooltip": "Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒀀𒈨𒇷 𒊓 𒌨𒊑, 𒄑𒌅 Tautulli: user 𒌑 𒈠𒊍𒊓𒅈𒌅. Sadu mahta.",
+   "message0": "Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪, %1 𒌨𒊒"
+  },
+  "rb_plex_scan": {
+   "tooltip": "Tuppu 𒀀𒈾 𒌅𒌒𒉺𒋾𒅎 𒈾𒊍𒊑𒅎 𒄑𒌅. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒.",
+   "message0": "𒌅𒌒𒉺 %1 𒀀𒈾 Plex 𒈠𒊍𒊓𒅈𒌅"
+  },
+  "rb_plex_stop": {
+   "tooltip": "Massartu 𒅗𒉺𒌅 (Tautulli 𒋼𒅕𒈪𒈾𒋼). Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒.",
+   "message0": "𒈠𒊍𒊓𒅈𒌅 %1 𒀀𒈾 Plex 𒅗𒉺𒌅"
   }
  },
  "options": {
@@ -957,7 +989,8 @@
   "Radarr and Sonarr": "Radarr u Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "𒌑𒉡𒌅𒌝 𒀀𒈾 𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 𒇷𒅁𒁉 𒇷𒁉𒀉𒋾 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒁲𒅆𒈾",
@@ -1281,7 +1314,7 @@
   "waiting": "𒄿𒋡𒀠",
   "{n} devices": "{n} 𒌑𒉡𒌅𒌝",
   "{n} events": "{n} 𒀉𒋫𒌅𒌝",
-  "{n} items": "{n} 𒈪𒅎𒈬",
+  "{n} items": "{n} 𒈾𒊍𒊒",
   "{n} records": "{n} 𒅆𒀉𒊒",
   "{n} step": "{n} 𒀀𒆷𒀝𒌅𒌝",
   "{n} steps": "{n} 𒀠𒅗𒅗𒌅𒌝",
@@ -1852,7 +1885,21 @@
   "Pi-hole summary": "Pi-hole 𒋫𒅈𒋛𒋢",
   "Pi-hole top blocked domains": "Pi-hole 𒈠𒊍𒊓𒅈𒌅 domains",
   "Pi-hole top clients": "Pi-hole 𒀀𒇷𒅅 rates",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "Pi-hole 𒊓𒁺: 𒂊𒅗𒀠𒇻, 𒌅𒌒𒉺𒌅, 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪 𒌑 𒈾𒊍𒊒; Tautulli 𒋫𒅈𒋛𒋢 𒌑 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪 𒊓𒁺",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "Plex 𒌅𒌒𒉺 𒈠𒊍𒊓𒅈𒌅, 𒈠𒊍𒊓𒅈𒌅 𒀀𒈾 Plex 𒅗𒉺𒌅 (𒀀𒈾 𒅗𒋢 𒄭𒋢 𒄑𒌅)",
+  "up": "𒊓𒁺",
+  "{n} libraries": "{n} 𒌅𒌒𒉺𒌅",
+  "{n} sessions": "{n} 𒈠𒊍𒊓𒅈𒌅",
+  "{n} plays": "{n} 𒈠𒊍𒊓𒅈𒌅",
+  "{n} users": "{n} 𒀀𒈨𒇻",
+  "Plex": "Plex",
+  "Plex server": "Plex 𒂊𒅗𒀠𒇻",
+  "Plex libraries": "Plex 𒌅𒌒𒉺𒌅",
+  "Plex sessions": "Plex 𒈠𒊍𒊓𒅈𒌅",
+  "Plex new items": "Plex 𒈾𒊍𒊒",
+  "Tautulli history": "Tautulli 𒋫𒅈𒋛𒋢",
+  "Tautulli watch time": "Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪"
  },
  "examples": {
   "review": {
@@ -2697,7 +2744,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(epištum panītum ina qablim iprus, ullâmma nēpešum warka išni, aššum kīam eššiš iṣṣabbat.)",
@@ -3592,7 +3641,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Ayya 𒇷𒄑𒋫 (allow 𒀠 deny), 𒉿𒊓𒈬 𒀠 𒊏𒄠𒈬, 𒌑 ayya domain?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} 𒀀𒈾 Pi-hole {which} 𒇷𒄑𒋫",
   "added by Second Thought": "𒉿𒊓𒈬 𒄑𒌅 Second Thought",
-  "{n} queries, {blocked} blocked": "{n} 𒋼𒁉𒄑𒋾, {blocked} ka'adatu"
+  "{n} queries, {blocked} blocked": "{n} 𒋼𒁉𒄑𒋾, {blocked} ka'adatu",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} {url_setting} 𒌑 {key_setting} 𒄑𒌅 {where_keys}: addresassu (𒆠𒈠 http://plex:32400) 𒌑 𒁍𒌨𒋢𒊻𒋢 𒊓 𒀊𒁉 𒄑𒌅 (𒌅𒌒𒁍𒊻𒋢 𒊓 𒀠𒁉 𒁍𒌨𒋢𒊻𒋢 𒄿𒅗𒄠𒈬𒋢).",
+  "The {who} refused its token.": "{who} 𒁍𒌨𒋢𒊻𒋢 𒅅𒉡𒊻𒋢.",
+  "Plex": "Plex",
+  "Plex server": "Plex 𒂊𒅗𒀠𒇻",
+  "Plex {version}": "Plex {version}",
+  "up": "𒊓𒁺",
+  "Plex libraries": "Plex 𒌅𒌒𒉺𒌅",
+  "{n} libraries": "{n} 𒌅𒌒𒉺𒌅",
+  "Plex sessions": "Plex 𒈠𒊍𒊓𒅈𒌅",
+  "{n} sessions": "{n} 𒈠𒊍𒊓𒅈𒌅",
+  "Plex new items": "Plex 𒈾𒊍𒊒",
+  "{n} items": "{n} 𒈾𒊍𒊒",
+  "Which library? Give its name, from the libraries.": "Ayya 𒌅𒌒𒁍? Suprammi 𒈠𒋢, 𒄑𒌅 𒌅𒌒𒉺𒌅.",
+  "scan the {library} library on Plex": "𒌅𒌒𒉺 {library} 𒀀𒈾 Plex 𒈠𒊍𒊓𒅈𒌅",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli {url_setting} 𒌑 {key_setting} 𒄑𒌅 {where_keys}: addresassu (𒆠𒈠 http://tautulli:8181) 𒌑 𒁍𒊻𒊒𒊻𒋢 𒊓 API (Settings, API Keys).",
+  "The {who} refused its key.": "{who} 𒁍𒊻𒊒𒊻𒋢 𒅅𒉡𒊻𒋢.",
+  "Tautulli history": "Tautulli 𒋫𒅈𒋛𒋢",
+  "{n} plays": "{n} 𒈠𒊍𒊓𒅈𒌅",
+  "Tautulli watch time": "Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪",
+  "{n} users": "{n} 𒀀𒈨𒇻",
+  "Which stream? Give a session's id, from the sessions.": "Ayya 𒈠𒊍𒊓𒅈𒌅? Suprammi id 𒈠𒊍𒊓𒅈𒌅, 𒄑𒌅 𒈠𒊍𒊓𒅈𒌅.",
+  "stop the {id} stream on Plex": "𒈠𒊍𒊓𒅈𒌅 {id} 𒀀𒈾 Plex 𒅗𒉺𒌅"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

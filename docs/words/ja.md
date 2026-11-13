@@ -38,6 +38,7 @@ Made by tools/sync.py from i18n/ja.json: edit that, not this.
 - Unraid: Unraid
 - NZBGeek: NZBGeek
 - Pi-hole: Pi-hole
+- Plex: Plex
 - Tools for the agent: drop them inside an agent block: エージェントの道具：エージェントブロックの中に入れます
 - Listeners: they run while the exported program runs on schedule: 受信ブロック：書き出したプログラムがスケジュールで動く間に働きます
 - Read and send: 読む・送る

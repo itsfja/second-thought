@@ -38,6 +38,7 @@ Made by tools/sync.py from i18n/ang.json: edit that, not this.
 - Unraid: Unraid
 - NZBGeek: NZBGeek
 - Pi-hole: Pi-hole
+- Plex: Plex
 - Tools for the agent: drop them inside an agent block: Tol for þone ærendracan: lege hie innan ærendracan stocce
 - Listeners: they run while the exported program runs on schedule: Hlystendas: hie yrnaþ þa hwile þe þæt utgelædde forescrift be tidsetnesse yrnþ
 - Read and send: Ræd and send
