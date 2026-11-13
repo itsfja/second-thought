@@ -117,6 +117,7 @@ TWAK_HMAC_SECRET = your-hmac-secret
 and put `tools from MCP server trustwallet` inside an agent. Balances, your portfolio, prices, history, swap quotes and token risk checks run without asking. Its tools don't say which only look, so Second Thought works the safe way round, as with Kraken: **everything else counts as money** (transfers, swaps, token approvals, payments, and any tool a later twak adds), so it always asks you first, even with (no asking), and never runs when nobody is there to answer. The agent can't set twak's `autoApprove`; only your yes does. Automations (`create_automation`) are never offered to the agent, because they trade later, inside twak, where nothing here can ask. On-chain sends can't be undone, so keep the wallet's password in your system's keychain, as twak does by default, rather than in `second-thought.ini`.
 
 The **Wallet health check** program in the gallery uses it: each Sunday it emails what you hold, what it's worth, and any token whose risk check looks bad. It only reads.
+
 ---
 
 

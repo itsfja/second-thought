@@ -43,7 +43,25 @@ When the agent finishes, the run log shows an **Agent summary**: one row per ste
 
 On the page, the feeds, GitHub, email, Telegram and the calendar use **sample** data, so you can try everything safely; nothing real is read or sent. Exported programs use your real accounts: see [Connections](connections.md#connections) for the settings.
 
-There are 19 agent examples under **Agents** in **Browse examples**. **Agent: plan my bake** asks and remembers. **Agent with your own tool** uses a My Block. **Agent: bake timetable** works backwards with the clock. **Agent: scale a recipe** does every sum with the sums tool. **Agent: write, check, improve** fixes its work until a reviewer passes it. **Agent: check my recipe file** reads a file you choose. **Agent: research with sources** searches and reads its sources. **Agent: house check-up** and **Agent: bedtime round** look after a Home Assistant house, and the bedtime round asks before switching anything off. **Agent: news round-up** reads your feeds and skips what it showed you last time. **Agent: trip planner** checks your calendar and builds a plan with times and a budget. **Agent: pull requests for me** and **Agent: review and comment on a pull request** work with GitHub. **Agent: inbox triage** sorts your email and drafts replies. **Agent: plan my week** fits baking around your calendar. **Telegram bot that answers** replies to messages you send your bot. **Agent: find people on LinkedIn** searches LinkedIn's public pages.
+There are 19 agent examples under **Agents** in **Browse examples**:
+
+- **Agent: plan my bake** asks and remembers.
+- **Agent with your own tool** uses a My Block.
+- **Agent: bake timetable** works backwards with the clock.
+- **Agent: scale a recipe** does every sum with the sums tool.
+- **Agent: write, check, improve** fixes its work until a reviewer passes it.
+- **Agent: check my recipe file** reads a file you choose.
+- **Agent: research with sources** searches and reads its sources.
+- **Agent: house check-up** and **Agent: bedtime round** look after a Home Assistant house, and the bedtime round asks before switching anything off.
+- **Agent: check the sensors (MQTT)** reads your MQTT sensors and points out anything odd, like a leak or a plug left on.
+- **Agent: news round-up** reads your feeds and skips what it showed you last time.
+- **Agent: trip planner** checks your calendar and builds a plan with times and a budget.
+- **Agent: pull requests for me** and **Agent: review and comment on a pull request** work with GitHub.
+- **Agent: inbox triage** sorts your email and drafts replies.
+- **Agent: plan my week** fits baking around your calendar.
+- **Agent: Homey good night** turns off the lights left on (asking first) and reports doors, locks and low batteries.
+- **Agent: find people on LinkedIn** searches LinkedIn's public pages.
+- **Telegram bot that answers** replies to messages you send your bot.
 
 ---
 

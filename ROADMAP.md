@@ -10,7 +10,7 @@ Second Thought is for people who have a checklist, a rubric or house rules, but 
 2. **Actions ask first.** A program says what it can do before its first run, and asks before each thing it sends or changes.
 3. **One file you own.** Any program exports as a single Python file that runs with nothing else installed.
 
-The project has grown wide: over 150 examples, 79 community programs, 30 languages, 15 model services. The next gains come from **trust and reach**, not more blocks. Items are ordered by expected benefit against cost; the labels `priority: 1` to `priority: 4` say the same.
+The project has grown wide: over 150 examples, 79 community programs, 30 languages, 15 model services. The next gains come from **trust and reach**, not more blocks. The scheduled work is done: what the outside reviews raised, the eleven remaining languages and the homelab connections have all landed, so what's next starts with an idea and an issue of its own.
 
 ## Done
 
@@ -38,48 +38,9 @@ Released in 3.12.0: drafts and revisions can use the web, and say so when a task
 
 Released in 3.13.0: agents say where each fact came from, and flag a source they never read ([#312](https://github.com/itsfja/second-thought/issues/312)); the files a program keeps are only yours, and settings can't set `LD_PRELOAD` and friends ([#307](https://github.com/itsfja/second-thought/issues/307)); Ruff in CI, and fuzz tests that found and fixed three crashes on broken input ([#313](https://github.com/itsfja/second-thought/issues/313)). Off claude.ai, the page runs programs with the model service of your choice and your own key ([#321](https://github.com/itsfja/second-thought/issues/321)), and each release has **second-thought-offline.html**, the page as one file that works with no network ([#314](https://github.com/itsfja/second-thought/issues/314)). CI runs the exported programs in three shares side by side ([#342](https://github.com/itsfja/second-thought/issues/342)).
 
-## Later: important, not urgent
+The last eleven languages, merged to main: Sahidic Coptic and Middle Egyptian in 3.9.2 ([#131](https://github.com/itsfja/second-thought/issues/131), [#136](https://github.com/itsfja/second-thought/issues/136)), then Classical Chinese ([#129](https://github.com/itsfja/second-thought/issues/129)), Classical Syriac ([#130](https://github.com/itsfja/second-thought/issues/130)), Church Slavonic ([#132](https://github.com/itsfja/second-thought/issues/132)), Ottoman Turkish ([#133](https://github.com/itsfja/second-thought/issues/133)), Pali ([#134](https://github.com/itsfja/second-thought/issues/134)), Classical Nahuatl ([#135](https://github.com/itsfja/second-thought/issues/135)), Sumerian ([#137](https://github.com/itsfja/second-thought/issues/137)), Hittite ([#138](https://github.com/itsfja/second-thought/issues/138)) and Gothic ([#139](https://github.com/itsfja/second-thought/issues/139)). The page now speaks thirty.
 
-| | Benefit | Cost |
-|---|---|---|
-| [#321](https://github.com/itsfja/second-thought/issues/321) The page runs programs with the service of your choice | High: off claude.ai the page runs only with Claude (#293); a program whose primary is another service sees Claude standing in until after export, so GitHub — the Pages copy or a local clone — can't try the model the program will really use | Medium-high: a second family of model calls in the browser (OpenAI-compatible, which most services speak), keys and a wider security policy for more than one service, and a third page behaviour to keep true |
-
-## Backlog: raised in the reviews, not yet scheduled
-
-Everything the outside reviews of the code raised that isn't closed or listed above, `priority: 3` first and then `priority: 4`:
-
-| | Benefit | Cost |
-|---|---|---|
-| [#305](https://github.com/itsfja/second-thought/issues/305) Approve from your phone: unattended runs ask on Telegram instead of refusing | High: a scheduled program that reaches a question no longer stops at the exact moment it matters, and the ask-first rule holds, answered fresh each time | Medium: a per-run question on Telegram with a short-lived answer, never replayed from a stopped run's journal |
-| [#306](https://github.com/itsfja/second-thought/issues/306) Change this program: say what's different before loading it, new connections first | Medium: a changed program might do different things, so the page should say what before it loads, as Python's approval does | Low-medium: compare the two programs' blocks and describe the difference |
-| [#309](https://github.com/itsfja/second-thought/issues/309) Kraken: a tool we don't know counts as money, and MCP tools marked destructive ask | Medium: the money rules follow what the server says its tools do, rather than a list that goes stale as kraken-cli changes | Low-medium: ask the server's tool catalog, and mark unknown tools as money rather than ordinary |
-| [#311](https://github.com/itsfja/second-thought/issues/311) --update-runtime: say what the SHA-256 proves, and decide on signed releases | High: the updater is code execution on every exported program that self-updates, so its anchor wants a hold somewhere the repo can't reach | Medium: a signed manifest, or the SHA published in a second place the updater checks against |
-| [#307](https://github.com/itsfja/second-thought/issues/307) Private files only for you, and second-thought.ini can't set LD_PRELOAD and friends | Medium: a settings file is shared and backed up more often than keys are, so it shouldn't be able to change how the program itself runs | Low-medium: keep the settings that change process behaviour to the environment |
-| [#312](https://github.com/itsfja/second-thought/issues/312) Agent answers say where each fact came from | Medium: a made-up fact has no source to name, so provenance is a prompt-injection check as well as something a reader can follow | Medium: the agent carries its sources with its steps, and the summary shows them |
-| [#313](https://github.com/itsfja/second-thought/issues/313) CI quality floor: Ruff, and fuzz tests for the parsers that read outside input | Medium: a linter and fuzzing catch what a careful writer misses, before a change lands, cheaply forever | Low-medium: a CI job; the parsers already have unit tests to hang the cases on |
-| [#314](https://github.com/itsfja/second-thought/issues/314) A downloadable offline page as a release asset | Medium: the page keeps working when a CDN doesn't, and "one file you own" applies to the product itself | Medium: the libraries vendored in, and a release workflow that attaches the file |
-| [#320](https://github.com/itsfja/second-thought/issues/320) Trust Wallet through its Agent Kit's MCP server (twak), money tools asking | Medium: the money rules reach another service, with the same always-asking before anything that moves money | Medium: an MCP server, so no settings beyond its own, and the money tools named in SAFETY |
-| [#391](https://github.com/itsfja/second-thought/issues/391) A formal grammar for the program format, and --doctor checking a program against it | Medium: the program format is stated once, formally, so authoring a complex program rests on more than prose, and a broken one is caught before it runs | Medium: a grammar page in `docs/`, and a structural check in `--doctor` next to the environment checks it already does |
-| [#392](https://github.com/itsfja/second-thought/issues/392) Systemd and Windows Task Scheduler unit examples in the docs, for a program that runs headless on a home server | Low-medium: the headless mode already exists, and copy-paste unit files are the missing step between an exported program and one that runs forever on a homelab box, whichever OS it runs | Low: one documented example per OS, with the restart and sandbox settings that make sense there |
-
-## Backlog: the homelab and media connections, raised November 2026
-
-The media stack around Docker and Proxmox: the same reads-first, ask-first shape as the connections that are already in, one issue each.
-
-| | Benefit | Cost |
-|---|---|---|
-| [#397](https://github.com/itsfja/second-thought/issues/397) SABnzbd: the download queue, pausing and resuming always asking | Medium: a program could watch the queue and the failures, and pause when the bandwidth is wanted elsewhere | Low-medium: a JSON API with everything needed, and a short safety list |
-| [#398](https://github.com/itsfja/second-thought/issues/398) Radarr and Sonarr (the Servarr family): the wanted list, searching always asking | Medium-high: a program could watch what's missing, what's stuck and what failed to import, across the whole family with one block | Medium: one connection over the shared Servarr API, a URL and key per service |
-| [#399](https://github.com/itsfja/second-thought/issues/399) Unraid: the array, disks, shares and VMs, power actions always asking | Medium-high: a program could check the server each morning: array, disks, shares, containers and VMs | Medium: no official API; a community API plugin or the web UI's own endpoints |
-| [#400](https://github.com/itsfja/second-thought/issues/400) NZBGeek: searching the indexer, fetching always asking | Low-medium: a program could report what the indexer has for the missing list | Low-medium if done through Prowlarr (#398); a small read-only API otherwise |
-| [#401](https://github.com/itsfja/second-thought/issues/401) Pi-hole: DNS stats and blocking, changing lists always asking | Medium: a program could watch the blocked share and warn when blocking is off | Low-medium: a REST API (v6) with everything needed |
-| [#402](https://github.com/itsfja/second-thought/issues/402) Plex (and Tautulli): the library, sessions and stats, stopping streams always asking | Medium: a program could check the server, last night's streams and the week's new items | Medium: a semi-documented API, and Tautulli's for the stats |
-
-## Someday
-
-| | Notes |
-|---|---|
-| [#129](https://github.com/itsfja/second-thought/issues/129)–[#139](https://github.com/itsfja/second-thought/issues/139) Eleven more languages | Paused for now; each costs only the people who pick it since #120 |
+The homelab and media connections, merged to main (unreleased): SABnzbd ([#397](https://github.com/itsfja/second-thought/issues/397)), Radarr and Sonarr ([#398](https://github.com/itsfja/second-thought/issues/398)), Unraid ([#399](https://github.com/itsfja/second-thought/issues/399)), NZBGeek ([#400](https://github.com/itsfja/second-thought/issues/400)), Pi-hole ([#401](https://github.com/itsfja/second-thought/issues/401)) and Plex and Tautulli ([#402](https://github.com/itsfja/second-thought/issues/402)) — the same reads-first, ask-first shape as the connections already in, each with a gallery program that only reads. The reviews' backlog is closed too: the program format stated once and checked ([#391](https://github.com/itsfja/second-thought/issues/391)), and the systemd and Task Scheduler examples in the docs ([#392](https://github.com/itsfja/second-thought/issues/392)).
 
 ## If there's a successor
 

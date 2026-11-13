@@ -40,12 +40,22 @@ pair the way they can with the SHA-256. Until the first signed release, the key 
 An exported program runs as you, on your computer, with the keys in its `second-thought.ini`. What it can do is
 decided by its blocks, and every block declares it (the `CAPABILITIES` list in `python/second_thought/core.py`):
 
-- **Act:** send email, Telegram, Discord or Slack messages; comment on GitHub; control Home Assistant or Homey
-  devices and start Homey flows; publish MQTT messages; accept web requests from other computers; use the tools of
-  MCP servers you set up; place and cancel Coinbase orders; start, shut down and reboot Proxmox guests;
-  restart, stop and start Docker containers.
-- **Read:** web pages and search, your email, calendars, news feeds, GitHub, Telegram, Discord and Slack messages,
-  Home Assistant, Homey and MQTT, your Coinbase balances and orders, your MikroTik switch's ports and log, who's on your UniFi network, your Proxmox cluster, your Docker containers and their logs, a folder it watches, and files you choose.
+- **Act:** send email, Telegram, Discord or Slack messages; comment on GitHub, and open and label issues; control
+  Home Assistant or Homey devices and start Homey flows; publish MQTT messages; accept web requests from other
+  computers; use the tools of MCP servers you set up; place and cancel Coinbase orders and trade on Kraken; start,
+  shut down and reboot Proxmox guests; restart, stop and start Docker containers; pause and resume SABnzbd;
+  search Radarr and Sonarr for what's missing; start and stop Unraid containers and VMs, and check its parity;
+  fetch an NZB file from NZBGeek; scan a Plex library and stop a stream; disable and enable Pi-hole's blocking and
+  change its allow and deny lists; set a Powerwall's backup reserve. The ones that change a service always ask
+  first, live, and never run with nobody there to say yes.
+- **Read:** web pages and search; your email, calendars and news feeds; GitHub, Telegram, Discord and Slack messages;
+  Home Assistant, Homey and MQTT; your Coinbase balances and orders, and your Kraken balances, orders and market
+  prices; your MikroTik switch's ports and log; who's on your UniFi network; your Proxmox cluster; your Docker
+  containers and their logs; your SABnzbd queue, history and download disk; your Radarr and Sonarr queue, wanted
+  list and disk space; your Unraid server's array, disks, shares, containers and VMs; NZBGeek's search results;
+  your Pi-hole's stats and top lists; your Plex server, its libraries, sessions and newest items, and Tautulli's
+  history and watch-time stats; your Solax inverter's and Powerwall's figures; Flightradar24's flight data; a
+  folder it watches; and files you choose.
 - **Keep:** files in its `outputs` folder, and notes between runs in `memory.json`.
 
 Everything it reads and writes is sent to the model services it uses.
