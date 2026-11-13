@@ -843,6 +843,7 @@
    "time": "𐌼𐌴𐌻 𐌾𐌰𐌷 𐌳𐌰𐌲𐍉𐍃",
    "file": "𐌱𐍉𐌺𐍉𐍃 𐌸𐍉𐌴𐌹 𐌲𐌰𐍅𐌰𐌻𐌾𐌰 𐍃𐌹𐌲𐌲𐍅𐌰𐌽",
    "review": "𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹 𐍅𐌹𐌻𐌾𐌹𐌽 𐍃𐌰𐌹𐍈",
+   "usage": "model services: usage, plans and limits",
    "feeds": "𐌽𐌹𐌿𐌾𐌰 𐍃𐍀𐌹𐌻𐌻𐌰",
    "linkedin": "LinkedIn 𐍃𐍉𐌺𐌾𐌰𐌽 (𐌻𐌰𐌿𐌱𐍉𐍃 𐌰𐌻𐌻𐌰 𐌼𐌰𐌽𐌽𐌴)",
    "calendar": "𐌳𐌰𐌲𐌰𐌱𐍉𐌺𐍉𐍃: 𐍅𐌰𐌿𐍂𐌳𐌰 𐌾𐌰𐌷 𐌼𐌴𐌻𐍉𐍃 𐌻𐌰𐌿𐍃𐌰",
@@ -1889,7 +1890,8 @@
   "Plex sessions": "Plex sessiuns",
   "Plex new items": "Plex niwe",
   "Tautulli history": "Tautulli stear",
-  "Tautulli watch time": "Tautulli sight-tima"
+  "Tautulli watch time": "Tautulli sight-tima",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
  },
  "examples": {
   "review": {
@@ -3654,7 +3656,19 @@
   "Tautulli watch time": "Tautulli sight-tima",
   "{n} users": "{n} brucrend",
   "Which stream? Give a session's id, from the sessions.": "Hwaz stream? Gib id anre sessiune, fram tham sessiunum.",
-  "stop the {id} stream on Plex": "thana {id} stream on Plex stillan"
+  "stop the {id} stream on Plex": "thana {id} stream on Plex stillan",
+  ", over by {x}": ", over by {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Nothing has been spent through this computer's keys yet, so there's nothing to count.",
+  "What each model service has been used, counted on this computer at list prices:": "What each model service has been used, counted on this computer at list prices:",
+  "no plan set: add {setting} in {where} to count it against a cap": "no plan set: add {setting} in {where} to count it against a cap",
+  "over the cap by {x}": "over the cap by {x}",
+  "the {plan} plan publishes no monthly cap": "the {plan} plan publishes no monthly cap",
+  "this hour": "this hour",
+  "this month": "this month",
+  "this week": "this week",
+  "today": "today",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

@@ -215,7 +215,7 @@
 "rb_now.PART":{"time":"वेला","date":"तिथिः","datetime":"तिथिः वेला च","hour":"होरा","minute":"निमेषः","weekday":"वासरः"},
 "rb_sort.ORDER":{"desc":"उच्चतमं प्रथमम्","asc":"निम्नतमं प्रथमम्"},
 "rb_ask_first.WHAT":{"ha":"प्रत्येकस्याः बुद्धिमद्गृहक्रियायाः (Home Assistant, Homey, MQTT)","messages":"सन्देशानाम् उद्घोषणानां च प्रेषणात्","files":"सञ्चिकानां रक्षणात्","all":"एतेभ्यः सर्वेभ्यः"},
-"rb_agent_builtin.KIND":{"web":"जाले अन्वेषणं पृष्ठपठनं च","ask":"मां प्रश्नं पृच्छ","memory":"टिप्पणीः स्मर पुनः स्मर च","calc":"गणनाः कुरु","time":"घटिकाः तिथयः च","file":"मया वृतां सञ्चिकां पठ","review":"मानदण्डैः पाठं परीक्षस्व","feeds":"वार्तास्रोतांसि","linkedin":"LinkedIn अन्विष्य (सार्वजनिकपृष्ठानि)","calendar":"दिनदर्शिका: घटनाः रिक्तसमयः च","email":"ईपत्रम्: अन्वेषणं पठनं च","email_send":"ईपत्रम्: प्रेषणम् (प्रथमं मां पृच्छति)","github":"GitHub: परियोजनाः pull requests च","github_act":"GitHub: टिप्पणी, issues उद्घाटनं चिह्नीकरणं च (प्रथमं मां पृच्छति)","telegram":"Telegram: मम सन्देशेषु अन्वेषणम्","telegram_send":"Telegram: प्रेषणम् (प्रथमं मां पृच्छति)","telegram_send_free":"Telegram: प्रेषणम् (अपृष्ट्वा)","discord":"Discord: मम प्रणालेषु अन्वेषणम्","discord_send":"Discord: प्रेषणम् (प्रथमं मां पृच्छति)","discord_send_free":"Discord: प्रेषणम् (अपृष्ट्वा)","slack":"Slack: मम प्रणालेषु अन्वेषणम्","slack_send":"Slack: प्रेषणम् (प्रथमं मां पृच्छति)","slack_send_free":"Slack: प्रेषणम् (अपृष्ट्वा)","mqtt":"MQTT: विषयपठनम्","mqtt_act":"MQTT: प्रकाशनम् (प्रथमं मां पृच्छति)","mqtt_act_free":"MQTT: प्रकाशनम् (अपृष्ट्वा)","homey_read":"Homey: यन्त्राणां प्रवाहाणां चराणां च दर्शनम्","homey_act":"Homey: यन्त्रनियमनं प्रवाहारम्भः च (प्रथमं मां पृच्छति)","homey_act_free":"Homey: यन्त्रनियमनं प्रवाहारम्भः च (अपृष्ट्वा)","ha_read":"Home Assistant: यन्त्रदर्शनम्","ha_act":"Home Assistant: यन्त्रनियमनम्","ha_act_free":"Home Assistant: यन्त्रनियमनम् (अपृष्ट्वा)"},
+"rb_agent_builtin.KIND":{"web":"जाले अन्वेषणं पृष्ठपठनं च","ask":"मां प्रश्नं पृच्छ","memory":"टिप्पणीः स्मर पुनः स्मर च","calc":"गणनाः कुरु","time":"घटिकाः तिथयः च","file":"मया वृतां सञ्चिकां पठ","review":"मानदण्डैः पाठं परीक्षस्व","usage":"प्रतिरूपसेवाः प्रयोगः योजनाः सीमाः च","feeds":"वार्तास्रोतांसि","linkedin":"LinkedIn अन्विष्य (सार्वजनिकपृष्ठानि)","calendar":"दिनदर्शिका: घटनाः रिक्तसमयः च","email":"ईपत्रम्: अन्वेषणं पठनं च","email_send":"ईपत्रम्: प्रेषणम् (प्रथमं मां पृच्छति)","github":"GitHub: परियोजनाः pull requests च","github_act":"GitHub: टिप्पणी, issues उद्घाटनं चिह्नीकरणं च (प्रथमं मां पृच्छति)","telegram":"Telegram: मम सन्देशेषु अन्वेषणम्","telegram_send":"Telegram: प्रेषणम् (प्रथमं मां पृच्छति)","telegram_send_free":"Telegram: प्रेषणम् (अपृष्ट्वा)","discord":"Discord: मम प्रणालेषु अन्वेषणम्","discord_send":"Discord: प्रेषणम् (प्रथमं मां पृच्छति)","discord_send_free":"Discord: प्रेषणम् (अपृष्ट्वा)","slack":"Slack: मम प्रणालेषु अन्वेषणम्","slack_send":"Slack: प्रेषणम् (प्रथमं मां पृच्छति)","slack_send_free":"Slack: प्रेषणम् (अपृष्ट्वा)","mqtt":"MQTT: विषयपठनम्","mqtt_act":"MQTT: प्रकाशनम् (प्रथमं मां पृच्छति)","mqtt_act_free":"MQTT: प्रकाशनम् (अपृष्ट्वा)","homey_read":"Homey: यन्त्राणां प्रवाहाणां चराणां च दर्शनम्","homey_act":"Homey: यन्त्रनियमनं प्रवाहारम्भः च (प्रथमं मां पृच्छति)","homey_act_free":"Homey: यन्त्रनियमनं प्रवाहारम्भः च (अपृष्ट्वा)","ha_read":"Home Assistant: यन्त्रदर्शनम्","ha_act":"Home Assistant: यन्त्रनियमनम्","ha_act_free":"Home Assistant: यन्त्रनियमनम् (अपृष्ट्वा)"},
 "rb_agent_mcp.ASK":{"changes":"(वस्तूनि परिवर्तयद्भ्यः साधनेभ्यः पूर्वं मां पृच्छति)","every":"(प्रत्येकस्मात् साधनात् पूर्वं मां पृच्छति)","never":"(अपृष्ट्वा)"},
 "rb_tg_message.PART":{"text":"पाठः","sender":"प्रेषकः","chat":"संवादः"},
 "rb_mem_set.KIND":{"transient":"यावत् इदं पृष्ठम् उद्घाटितम्","permanent":"सदा"},
@@ -1182,7 +1182,8 @@
 "Plex sessions":"Plex samavayahani",
 "Plex new items":"Plex nava",
 "Tautulli history":"Tautulli itihasah",
-"Tautulli watch time":"Tautulli drishti-kalah"
+"Tautulli watch time":"Tautulli drishti-kalah",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"इयं पृष्ठः तव claude.ai-लेखायां चलति, अतः प्रत्येकसेवायाः व्ययः न गणयति; Python-म् प्रति निर्यास्य, second-thought.ini-मध्ये कुञ्चिकाः स्थापय, एतत् साधनं प्रत्येकसेवायाः व्ययं, तस्याः योजनां सीमां च, अधिकव्ययं च निवेदयति."
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2315,7 +2316,19 @@
 "Tautulli watch time":"Tautulli drishti-kalah",
 "{n} users":"{n} uporogah",
 "Which stream? Give a session's id, from the sessions.":"Kah pravahah? Dva ekasya samavayahasya notam, samavayahyoh.",
-"stop the {id} stream on Plex":"Plex {id} pravaham sthapayitum"
+"stop the {id} stream on Plex":"Plex {id} pravaham sthapayitum",
+", over by {x}":", अधिकः {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"अस्य सङ्गणकस्य कुञ्चिकाभिः अद्यापि किमपि न व्ययितम्, अतः गणयितुं न किमपि।",
+"What each model service has been used, counted on this computer at list prices:":"प्रत्येकं प्रतिरूपसेवा कियत् उपयुज्यत, अस्मिन् सङ्गणके सूचीमूल्यैः गणितम्:",
+"no plan set: add {setting} in {where} to count it against a cap":"योजना न स्थापिता: {setting} {where} स्थापय, येन सीमायाः प्रति गण्यते",
+"over the cap by {x}":"सीमाम् अतिक्रम्य {x}",
+"the {plan} plan publishes no monthly cap":"योजना {plan} मासिकीं सीमां न प्रकाशयति",
+"this hour":"अस्मिन् क्षणे",
+"this month":"अस्मिन् मासे",
+"this week":"अस्मिन् सप्ताहे",
+"today":"अद्य",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"योजनायाः {plan} मासिक्याः सीमायाः {cap} इति {pct}% ({spent} व्ययितम्, {when} पुनः प्रवर्तते)",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

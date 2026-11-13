@@ -215,7 +215,7 @@
 "rb_sort.ORDER":{"desc":"in achi huēyi achto","asc":"in achi tepiton achto"},
 "rb_budget.UNIT":{"dollars":"Anāhuac tomin (dōlar)","gbp":"Inglaterra tomin (libra)","eur":"euro","jpy":"yen","cny":"yuan"},
 "rb_ask_first.WHAT":{"ha":"ceceyacah ītlachīhual calli (Home Assistant, Homey, MQTT)","messages":"tlahtōlli ihuān tlanōnōtzaliztli titlaniliztli","files":"āmatl piyaliztli","all":"inīn mochi"},
-"rb_agent_builtin.KIND":{"web":"xictēmo ipan matlatl ihuān xicpōhua āmatl","ask":"xinēchtlatlani","memory":"xiclalnamiqui ihuān xicnēxti tlahtōlli","calc":"xictlapōhua","time":"ōra ihuān tōnalli","file":"xicpōhua in āmatl in ōnicpēpen","review":"xictlatta in tlahtōlli ica in tlanequiliztli","feeds":"tlahtōlāmeyalli","linkedin":"xictēmo ipan LinkedIn (in mochintin quittah āmatl)","calendar":"tōnalāmatl: tlamantli ihuān cāhuitl iztāc","email":"tepozāmatl: xictēmo ihuān xicpōhua","email_send":"tepozāmatl: xictitlani (achto nēchtlatlani)","github":"GitHub: tlachīhualli ihuān tlatēquīxtīliztli","github_act":"GitHub: xictlahcuilo, xictlapo ihuān xicmachiyōti tlaihīyōhuiliztli (achto nēchtlatlani)","telegram":"Telegram: xictēmo ipan notlahtōl","telegram_send":"Telegram: xictitlani (achto nēchtlatlani)","telegram_send_free":"Telegram: xictitlani (ahmo tlatlaniliztli)","discord":"Discord: xictēmo ipan noāpan","discord_send":"Discord: xictitlani (achto nēchtlatlani)","discord_send_free":"Discord: xictitlani (ahmo tlatlaniliztli)","slack":"Slack: xictēmo ipan noāpan","slack_send":"Slack: xictitlani (achto nēchtlatlani)","slack_send_free":"Slack: xictitlani (ahmo tlatlaniliztli)","mqtt":"MQTT: xicpōhua in tlahtōlpan","mqtt_act":"MQTT: xicnēxti (achto nēchtlatlani)","mqtt_act_free":"MQTT: xicnēxti (ahmo tlatlaniliztli)","homey_read":"Homey: xiquimitta in tepoztli, tlahtōlōhuiztli ihuān tlapatlalli","homey_act":"Homey: xictlanāhuati in tepoztli ihuān xicpēhualti tlahtōlōhuiztli (achto nēchtlatlani)","homey_act_free":"Homey: xictlanāhuati in tepoztli ihuān xicpēhualti tlahtōlōhuiztli (ahmo tlatlaniliztli)","ha_read":"Home Assistant: xiquimitta in tepoztli","ha_act":"Home Assistant: xictlanāhuati in tepoztli","ha_act_free":"Home Assistant: xictlanāhuati in tepoztli (ahmo tlatlaniliztli)"},
+"rb_agent_builtin.KIND":{"web":"xictēmo ipan matlatl ihuān xicpōhua āmatl","ask":"xinēchtlatlani","memory":"xiclalnamiqui ihuān xicnēxti tlahtōlli","calc":"xictlapōhua","time":"ōra ihuān tōnalli","file":"xicpōhua in āmatl in ōnicpēpen","review":"xictlatta in tlahtōlli ica in tlanequiliztli","usage":"model services: usage, plans and limits","feeds":"tlahtōlāmeyalli","linkedin":"xictēmo ipan LinkedIn (in mochintin quittah āmatl)","calendar":"tōnalāmatl: tlamantli ihuān cāhuitl iztāc","email":"tepozāmatl: xictēmo ihuān xicpōhua","email_send":"tepozāmatl: xictitlani (achto nēchtlatlani)","github":"GitHub: tlachīhualli ihuān tlatēquīxtīliztli","github_act":"GitHub: xictlahcuilo, xictlapo ihuān xicmachiyōti tlaihīyōhuiliztli (achto nēchtlatlani)","telegram":"Telegram: xictēmo ipan notlahtōl","telegram_send":"Telegram: xictitlani (achto nēchtlatlani)","telegram_send_free":"Telegram: xictitlani (ahmo tlatlaniliztli)","discord":"Discord: xictēmo ipan noāpan","discord_send":"Discord: xictitlani (achto nēchtlatlani)","discord_send_free":"Discord: xictitlani (ahmo tlatlaniliztli)","slack":"Slack: xictēmo ipan noāpan","slack_send":"Slack: xictitlani (achto nēchtlatlani)","slack_send_free":"Slack: xictitlani (ahmo tlatlaniliztli)","mqtt":"MQTT: xicpōhua in tlahtōlpan","mqtt_act":"MQTT: xicnēxti (achto nēchtlatlani)","mqtt_act_free":"MQTT: xicnēxti (ahmo tlatlaniliztli)","homey_read":"Homey: xiquimitta in tepoztli, tlahtōlōhuiztli ihuān tlapatlalli","homey_act":"Homey: xictlanāhuati in tepoztli ihuān xicpēhualti tlahtōlōhuiztli (achto nēchtlatlani)","homey_act_free":"Homey: xictlanāhuati in tepoztli ihuān xicpēhualti tlahtōlōhuiztli (ahmo tlatlaniliztli)","ha_read":"Home Assistant: xiquimitta in tepoztli","ha_act":"Home Assistant: xictlanāhuati in tepoztli","ha_act_free":"Home Assistant: xictlanāhuati in tepoztli (ahmo tlatlaniliztli)"},
 "rb_agent_mcp.ASK":{"changes":"(nēchtlatlani achto in tlachīhualoni in tlapatlah)","every":"(nēchtlatlani achto ceceyacah tlachīhualoni)","never":"(ahmo tlatlaniliztli)"},
 "rb_agent_kraken.MODE":{"read":"(tlaxtlahuilli, nopiyal ihuān āmatlatiyanquizōlli)","live":"(ihuān nemini tiyanquizōlli: tlatlani achto ceceyacah tlanāhuatīlli)"},
 "rb_mem_set.KIND":{"transient":"inīn āmatl tlapohtoc","permanent":"mochipa"},
@@ -1180,7 +1180,8 @@
 "Plex sessions":"Plex tlachializtli",
 "Plex new items":"Plex yancuic",
 "Tautulli history":"Tautulli tlahtol",
-"Tautulli watch time":"Tautulli tlahtol-t"
+"Tautulli watch time":"Tautulli tlahtol-t",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2313,7 +2314,19 @@
 "Tautulli watch time":"Tautulli tlahtol-t",
 "{n} users":"{n} tlacameh",
 "Which stream? Give a session's id, from the sessions.":"Tlein tlatemolea? Xiquica in id, ipan tlachializtli.",
-"stop the {id} stream on Plex":"Plex {id} tlatemoztli quicelah"
+"stop the {id} stream on Plex":"Plex {id} tlatemoztli quicelah",
+", over by {x}":", over by {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Nothing has been spent through this computer's keys yet, so there's nothing to count.",
+"What each model service has been used, counted on this computer at list prices:":"What each model service has been used, counted on this computer at list prices:",
+"no plan set: add {setting} in {where} to count it against a cap":"no plan set: add {setting} in {where} to count it against a cap",
+"over the cap by {x}":"over the cap by {x}",
+"the {plan} plan publishes no monthly cap":"the {plan} plan publishes no monthly cap",
+"this hour":"this hour",
+"this month":"this month",
+"this week":"this week",
+"today":"today",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

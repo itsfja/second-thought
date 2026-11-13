@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"orario","date":"data","datetime":"data e orario","hour":"ora","minute":"minuto","weekday":"giorno della settimana"},
 "rb_sort.ORDER":{"desc":"dal più alto","asc":"dal più basso"},
 "rb_ask_first.WHAT":{"ha":"ogni azione smart home (Home Assistant, Homey, MQTT)","messages":"inviare messaggi e annunci","files":"salvare file","all":"tutto questo"},
-"rb_agent_builtin.KIND":{"web":"cercare sul web e leggere pagine","ask":"farmi una domanda","memory":"ricordare e richiamare note","calc":"fare calcoli","time":"orari e date","file":"leggere un file che scelgo","review":"controllare un testo secondo dei criteri","feeds":"feed di notizie","linkedin":"cercare su LinkedIn (pagine pubbliche)","calendar":"calendario: eventi e tempo libero","email":"email: cercare e leggere","email_send":"email: inviare (mi chiede prima)","github":"GitHub: progetti e pull request","github_act":"GitHub: commentare, aprire ed etichettare issue (mi chiede prima)","telegram":"Telegram: cercare nei miei messaggi","telegram_send":"Telegram: inviare (mi chiede prima)","telegram_send_free":"Telegram: inviare (senza chiedere)","discord":"Discord: cercare nei miei canali","discord_send":"Discord: inviare (mi chiede prima)","discord_send_free":"Discord: inviare (senza chiedere)","slack":"Slack: cercare nei miei canali","slack_send":"Slack: inviare (mi chiede prima)","slack_send_free":"Slack: inviare (senza chiedere)","mqtt":"MQTT: leggere i topic","mqtt_act":"MQTT: pubblicare (mi chiede prima)","mqtt_act_free":"MQTT: pubblicare (senza chiedere)","homey_read":"Homey: guardare dispositivi, flow e variabili","homey_act":"Homey: controllare dispositivi e avviare flow (mi chiede prima)","homey_act_free":"Homey: controllare dispositivi e avviare flow (senza chiedere)","ha_read":"Home Assistant: guardare i dispositivi","ha_act":"Home Assistant: controllare dispositivi","ha_act_free":"Home Assistant: controllare dispositivi (senza chiedere)"},
+"rb_agent_builtin.KIND":{"web":"cercare sul web e leggere pagine","ask":"farmi una domanda","memory":"ricordare e richiamare note","calc":"fare calcoli","time":"orari e date","file":"leggere un file che scelgo","review":"controllare un testo secondo dei criteri","usage":"servizi di modelli: uso, piani e limiti","feeds":"feed di notizie","linkedin":"cercare su LinkedIn (pagine pubbliche)","calendar":"calendario: eventi e tempo libero","email":"email: cercare e leggere","email_send":"email: inviare (mi chiede prima)","github":"GitHub: progetti e pull request","github_act":"GitHub: commentare, aprire ed etichettare issue (mi chiede prima)","telegram":"Telegram: cercare nei miei messaggi","telegram_send":"Telegram: inviare (mi chiede prima)","telegram_send_free":"Telegram: inviare (senza chiedere)","discord":"Discord: cercare nei miei canali","discord_send":"Discord: inviare (mi chiede prima)","discord_send_free":"Discord: inviare (senza chiedere)","slack":"Slack: cercare nei miei canali","slack_send":"Slack: inviare (mi chiede prima)","slack_send_free":"Slack: inviare (senza chiedere)","mqtt":"MQTT: leggere i topic","mqtt_act":"MQTT: pubblicare (mi chiede prima)","mqtt_act_free":"MQTT: pubblicare (senza chiedere)","homey_read":"Homey: guardare dispositivi, flow e variabili","homey_act":"Homey: controllare dispositivi e avviare flow (mi chiede prima)","homey_act_free":"Homey: controllare dispositivi e avviare flow (senza chiedere)","ha_read":"Home Assistant: guardare i dispositivi","ha_act":"Home Assistant: controllare dispositivi","ha_act_free":"Home Assistant: controllare dispositivi (senza chiedere)"},
 "rb_agent_mcp.ASK":{"changes":"(mi chiede prima degli strumenti che cambiano qualcosa)","every":"(mi chiede prima di ogni strumento)","never":"(senza chiedere)"},
 "rb_tg_message.PART":{"text":"testo","sender":"mittente","chat":"chat"},
 "rb_mem_set.KIND":{"transient":"finché questa pagina è aperta","permanent":"per sempre"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"sessioni Plex",
 "Plex new items":"nuovi elementi Plex",
 "Tautulli history":"cronologia Tautulli",
-"Tautulli watch time":"tempo di visione Tautulli"
+"Tautulli watch time":"tempo di visione Tautulli",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"La pagina usa il tuo account claude.ai, quindi non conta quanto spende ogni servizio; esporta in Python, con le chiavi in second-thought.ini, e questo strumento dirà quanto ha speso ogni servizio, il suo piano e il suo tetto, e ogni eccedenza."
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -2314,6 +2315,18 @@
 "Tautulli watch time":"tempo di visione Tautulli",
 "{n} users":"{n} utenti",
 "Which stream? Give a session's id, from the sessions.":"Quale stream? Dài l'id di una sessione, dalle sessioni.",
-"stop the {id} stream on Plex":"fermare lo stream {id} su Plex"
+"stop the {id} stream on Plex":"fermare lo stream {id} su Plex",
+", over by {x}":", in eccesso di {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Non è ancora stato speso nulla con le chiavi di questo computer, quindi non c'è niente da contare.",
+"What each model service has been used, counted on this computer at list prices:":"Quanto è stato usato ciascun servizio di modelli, contato su questo computer a prezzi di listino:",
+"no plan set: add {setting} in {where} to count it against a cap":"nessun piano impostato: aggiungi {setting} {where} per contarne il tetto",
+"over the cap by {x}":"oltre il tetto di {x}",
+"the {plan} plan publishes no monthly cap":"il piano {plan} non pubblica un tetto mensile",
+"this hour":"quest'ora",
+"this month":"questo mese",
+"this week":"questa settimana",
+"today":"oggi",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% del tetto mensile di {cap} del piano {plan} ({spent} spesi, si azzera {when})",
+"{window} {x}":"{window} {x}"
 }
 };

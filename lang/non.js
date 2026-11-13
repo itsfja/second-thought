@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"stund","date":"dagr","datetime":"dagr ok stund","hour":"stund","minute":"mínúta","weekday":"vikudagr"},
 "rb_sort.ORDER":{"desc":"hæst fyrst","asc":"lægst fyrst"},
 "rb_ask_first.WHAT":{"ha":"hverju verki snjallhúss (Home Assistant, Homey, MQTT)","messages":"sendingu boða ok tilkynninga","files":"geymslu skjala","all":"ǫllu þessu"},
-"rb_agent_builtin.KIND":{"web":"leita á vefnum ok lesa blǫð","ask":"spyrja mik spurningar","memory":"muna ok minnask minnisgreina","calc":"reikna summur","time":"stundir ok dagar","file":"lesa skjal er ek vel","review":"prófa rit eptir mælikvǫrðum","feeds":"tíðindastraumar","linkedin":"leita á LinkedIn (opin blǫð)","calendar":"rím: atburðir ok frjálsar stundir","email":"email: leita ok lesa","email_send":"email: senda (spyrr mik fyrst)","github":"GitHub: verk ok pull requests","github_act":"GitHub: rœða, opna ok merkja issues (spyrr mik fyrst)","telegram":"Telegram: leita í boðum mínum","telegram_send":"Telegram: senda (spyrr mik fyrst)","telegram_send_free":"Telegram: senda (án spurningar)","discord":"Discord: leita í rásum mínum","discord_send":"Discord: senda (spyrr mik fyrst)","discord_send_free":"Discord: senda (án spurningar)","slack":"Slack: leita í rásum mínum","slack_send":"Slack: senda (spyrr mik fyrst)","slack_send_free":"Slack: senda (án spurningar)","mqtt":"MQTT: lesa efni","mqtt_act":"MQTT: birta (spyrr mik fyrst)","mqtt_act_free":"MQTT: birta (án spurningar)","homey_read":"Homey: líta á tæki, flœði ok breytur","homey_act":"Homey: stýra tækjum ok hefja flœði (spyrr mik fyrst)","homey_act_free":"Homey: stýra tækjum ok hefja flœði (án spurningar)","ha_read":"Home Assistant: líta á tæki","ha_act":"Home Assistant: stýra tækjum","ha_act_free":"Home Assistant: stýra tækjum (án spurningar)"},
+"rb_agent_builtin.KIND":{"web":"leita á vefnum ok lesa blǫð","ask":"spyrja mik spurningar","memory":"muna ok minnask minnisgreina","calc":"reikna summur","time":"stundir ok dagar","file":"lesa skjal er ek vel","review":"prófa rit eptir mælikvǫrðum","usage":"þjónustu líkana: notkun, áskriftir og takmörk","feeds":"tíðindastraumar","linkedin":"leita á LinkedIn (opin blǫð)","calendar":"rím: atburðir ok frjálsar stundir","email":"email: leita ok lesa","email_send":"email: senda (spyrr mik fyrst)","github":"GitHub: verk ok pull requests","github_act":"GitHub: rœða, opna ok merkja issues (spyrr mik fyrst)","telegram":"Telegram: leita í boðum mínum","telegram_send":"Telegram: senda (spyrr mik fyrst)","telegram_send_free":"Telegram: senda (án spurningar)","discord":"Discord: leita í rásum mínum","discord_send":"Discord: senda (spyrr mik fyrst)","discord_send_free":"Discord: senda (án spurningar)","slack":"Slack: leita í rásum mínum","slack_send":"Slack: senda (spyrr mik fyrst)","slack_send_free":"Slack: senda (án spurningar)","mqtt":"MQTT: lesa efni","mqtt_act":"MQTT: birta (spyrr mik fyrst)","mqtt_act_free":"MQTT: birta (án spurningar)","homey_read":"Homey: líta á tæki, flœði ok breytur","homey_act":"Homey: stýra tækjum ok hefja flœði (spyrr mik fyrst)","homey_act_free":"Homey: stýra tækjum ok hefja flœði (án spurningar)","ha_read":"Home Assistant: líta á tæki","ha_act":"Home Assistant: stýra tækjum","ha_act_free":"Home Assistant: stýra tækjum (án spurningar)"},
 "rb_agent_mcp.ASK":{"changes":"(spyrr mik fyrir tól er breyta hlutum)","every":"(spyrr mik fyrir hvert tól)","never":"(án spurningar)"},
 "rb_tg_message.PART":{"text":"rit","sender":"sendandi","chat":"tal"},
 "rb_mem_set.KIND":{"transient":"meðan þetta blað er opit","permanent":"at eilífu"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex setur",
 "Plex new items":"Plex nytt",
 "Tautulli history":"Tautulli saga",
-"Tautulli watch time":"Tautulli ahtimal"
+"Tautulli watch time":"Tautulli ahtimal",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Þessi síða keyrir á claude.ai-reikningi þínum, telur því ekki útgjörf hvers þjónustu; flyttu út í Python, með lyklum í second-thought.ini, og segir þetta tól hvað hver þjónusta hefur eytt, áskrift og takmörk hennar, og alla yfirför."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2314,7 +2315,19 @@
 "Tautulli watch time":"Tautulli ahtimal",
 "{n} users":"{n} notendur",
 "Which stream? Give a session's id, from the sessions.":"Hvad straumur? Gefu id a setu, ur setum.",
-"stop the {id} stream on Plex":"stoppa strauminn {id} a Plex"
+"stop the {id} stream on Plex":"stoppa strauminn {id} a Plex",
+", over by {x}":", yfir um {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Ekkert hefur enn eytt með lyklum þessa tölvu, svo ekkert er að telja.",
+"What each model service has been used, counted on this computer at list prices:":"Hvað hver líkanaþjónusta hefur verið notuð, talin á þessari tölvu við listaverð:",
+"no plan set: add {setting} in {where} to count it against a cap":"engin áskrift sett: settu {setting} {where} til að telja hana móti takmörkum",
+"over the cap by {x}":"yfir takmörkunum um {x}",
+"the {plan} plan publishes no monthly cap":"áskriftin {plan} birtir engin mánaðartakmörk",
+"this hour":"þessa stund",
+"this month":"þennan mánuð",
+"this week":"þessa viku",
+"today":"í dag",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% af mánaðartakmörkum {cap} áskriftarinnar {plan} ({spent} eytt, endurstillt {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

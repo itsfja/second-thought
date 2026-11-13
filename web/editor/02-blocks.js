@@ -87,6 +87,7 @@
   /* The ready-made agent tools, in the order the Tools category shows them. */
   const AGENT_TOOL_KINDS = [["search the web and read pages","web"],["ask me a question","ask"],["remember and recall notes","memory"],
     ["work out sums","calc"],["clock times and dates","time"],["read a file I choose","file"],["check text against criteria","review"],
+    ["model services: usage, plans and limits","usage"],
     ["news feeds","feeds"],["search LinkedIn (public pages)","linkedin"],["calendar: events and free time","calendar"],
     ["email: search and read","email"],["email: send (asks me first)","email_send"],
     ["GitHub: projects and pull requests","github"],["GitHub: comment, open and label issues (asks me first)","github_act"],
@@ -183,7 +184,7 @@
     slack:"slack_read", slack_send:"slack_send", slack_send_free:"slack_send",
     mqtt:"mqtt_read", mqtt_act:"mqtt_publish", mqtt_act_free:"mqtt_publish",
     homey_read:"homey_read", homey_act:"homey_act", homey_act_free:"homey_act", ha_read:"ha_read", ha_act:"ha_act", ha_act_free:"ha_act",
-    ask:null, calc:null, time:null, review:null };
+    ask:null, calc:null, time:null, review:null, usage:null };
   function blockCapability(b){
     const c = b.type === "rb_agent_builtin" ? CAP_KINDS[b.getFieldValue("KIND")] : CAP_BLOCKS[b.type];
     return typeof c === "function" ? c(b) : (c || null);

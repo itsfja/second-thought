@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"Uhrzeit","date":"Datum","datetime":"Datum und Uhrzeit","hour":"Stunde","minute":"Minute","weekday":"Wochentag"},
 "rb_sort.ORDER":{"desc":"höchste zuerst","asc":"niedrigste zuerst"},
 "rb_ask_first.WHAT":{"ha":"eine Smart-Home-Aktion ausgeführt wird (Home Assistant, Homey, MQTT)","messages":"Nachrichten und Ansagen gesendet werden","files":"Dateien gespeichert werden","all":"irgendetwas davon passiert"},
-"rb_agent_builtin.KIND":{"web":"im Web suchen und Seiten lesen","ask":"mir eine Frage stellen","memory":"Notizen merken und abrufen","calc":"Rechnen","time":"Uhrzeiten und Daten","file":"eine Datei lesen, die ich auswähle","review":"Text prüfen anhand von Kriterien","feeds":"Newsfeeds","linkedin":"LinkedIn durchsuchen (öffentliche Seiten)","calendar":"Kalender: Termine und freie Zeit","email":"E-Mail: suchen und lesen","email_send":"E-Mail: senden (fragt mich vorher)","github":"GitHub: Projekte und Pull Requests","github_act":"GitHub: kommentieren, Issues eröffnen und labeln (fragt mich vorher)","telegram":"Telegram: meine Nachrichten durchsuchen","telegram_send":"Telegram: senden (fragt mich vorher)","telegram_send_free":"Telegram: senden (ohne Nachfrage)","discord":"Discord: meine Kanäle durchsuchen","discord_send":"Discord: senden (fragt mich vorher)","discord_send_free":"Discord: senden (ohne Nachfrage)","slack":"Slack: meine Kanäle durchsuchen","slack_send":"Slack: senden (fragt mich vorher)","slack_send_free":"Slack: senden (ohne Nachfrage)","mqtt":"MQTT: Topics lesen","mqtt_act":"MQTT: veröffentlichen (fragt mich vorher)","mqtt_act_free":"MQTT: veröffentlichen (ohne Nachfrage)","homey_read":"Homey: Geräte, Flows und Variablen ansehen","homey_act":"Homey: Geräte steuern und Flows starten (fragt mich vorher)","homey_act_free":"Homey: Geräte steuern und Flows starten (ohne Nachfrage)","ha_read":"Home Assistant: Geräte ansehen","ha_act":"Home Assistant: Geräte steuern","ha_act_free":"Home Assistant: Geräte steuern (ohne Nachfrage)"},
+"rb_agent_builtin.KIND":{"web":"im Web suchen und Seiten lesen","ask":"mir eine Frage stellen","memory":"Notizen merken und abrufen","calc":"Rechnen","time":"Uhrzeiten und Daten","file":"eine Datei lesen, die ich auswähle","review":"Text prüfen anhand von Kriterien","usage":"Modell-Dienste: Nutzung, Tarife und Grenzen","feeds":"Newsfeeds","linkedin":"LinkedIn durchsuchen (öffentliche Seiten)","calendar":"Kalender: Termine und freie Zeit","email":"E-Mail: suchen und lesen","email_send":"E-Mail: senden (fragt mich vorher)","github":"GitHub: Projekte und Pull Requests","github_act":"GitHub: kommentieren, Issues eröffnen und labeln (fragt mich vorher)","telegram":"Telegram: meine Nachrichten durchsuchen","telegram_send":"Telegram: senden (fragt mich vorher)","telegram_send_free":"Telegram: senden (ohne Nachfrage)","discord":"Discord: meine Kanäle durchsuchen","discord_send":"Discord: senden (fragt mich vorher)","discord_send_free":"Discord: senden (ohne Nachfrage)","slack":"Slack: meine Kanäle durchsuchen","slack_send":"Slack: senden (fragt mich vorher)","slack_send_free":"Slack: senden (ohne Nachfrage)","mqtt":"MQTT: Topics lesen","mqtt_act":"MQTT: veröffentlichen (fragt mich vorher)","mqtt_act_free":"MQTT: veröffentlichen (ohne Nachfrage)","homey_read":"Homey: Geräte, Flows und Variablen ansehen","homey_act":"Homey: Geräte steuern und Flows starten (fragt mich vorher)","homey_act_free":"Homey: Geräte steuern und Flows starten (ohne Nachfrage)","ha_read":"Home Assistant: Geräte ansehen","ha_act":"Home Assistant: Geräte steuern","ha_act_free":"Home Assistant: Geräte steuern (ohne Nachfrage)"},
 "rb_agent_mcp.ASK":{"changes":"(fragt mich vor Werkzeugen, die etwas ändern)","every":"(fragt mich vor jedem Werkzeug)","never":"(ohne Nachfrage)"},
 "rb_tg_message.PART":{"text":"Text","sender":"Absender","chat":"Chat"},
 "rb_mem_set.KIND":{"transient":"solange diese Seite offen ist","permanent":"für immer"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex-Sitzungen",
 "Plex new items":"Plex neue Items",
 "Tautulli history":"Tautulli-Verlauf",
-"Tautulli watch time":"Tautulli Sehzeit"
+"Tautulli watch time":"Tautulli Sehzeit",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Die Seite läuft über dein claude.ai-Konto und zählt daher nicht die Ausgaben je Dienst; exportiere nach Python, mit Schlüsseln in second-thought.ini, dann meldet dieses Werkzeug, was jeder Dienst ausgegeben hat, seinen Tarif und sein Limit sowie jede Überschreitung."
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -2314,6 +2315,18 @@
 "Tautulli watch time":"Tautulli Sehzeit",
 "{n} users":"{n} Nutzer",
 "Which stream? Give a session's id, from the sessions.":"Welcher Stream? Gib die ID einer Sitzung, aus den Sitzungen.",
-"stop the {id} stream on Plex":"den Stream {id} auf Plex stoppen"
+"stop the {id} stream on Plex":"den Stream {id} auf Plex stoppen",
+", over by {x}":", um {x} darüber",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Über die Schlüssel dieses Computers wurde noch nichts ausgegeben, also gibt es nichts zu zählen.",
+"What each model service has been used, counted on this computer at list prices:":"Was jeder Modelldienst genutzt hat, auf diesem Computer zu Listenpreisen gezählt:",
+"no plan set: add {setting} in {where} to count it against a cap":"kein Tarif gesetzt: füge {setting} {where} hinzu, um ihn gegen eine Obergrenze zu zählen",
+"over the cap by {x}":"über der Obergrenze um {x}",
+"the {plan} plan publishes no monthly cap":"der {plan}-Tarif veröffentlicht keine monatliche Obergrenze",
+"this hour":"diese Stunde",
+"this month":"diesen Monat",
+"this week":"diese Woche",
+"today":"heute",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct} % der monatlichen Obergrenze von {cap} des {plan}-Tarifs ({spent} ausgegeben, zurückgesetzt {when})",
+"{window} {x}":"{window} {x}"
 }
 };

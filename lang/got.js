@@ -216,7 +216,7 @@
 "rb_sort.ORDER":{"desc":"𐌼𐌹𐌺𐌹𐌻𐌰𐍄𐌰 𐍆𐌰𐌿𐍂𐌸𐌹𐍃","asc":"𐌻𐌴𐌹𐍄𐌹𐌻𐌰𐍄𐌰 𐍆𐌰𐌿𐍂𐌸𐌹𐍃"},
 "rb_budget.UNIT":{"dollars":"𐍃𐌹𐌻𐌿𐌱𐍂 Amaurikau","gbp":"𐍃𐌹𐌻𐌿𐌱𐍂 Aggle","eur":"𐍃𐌹𐌻𐌿𐌱𐍂 Aiwropai","jpy":"𐍃𐌹𐌻𐌿𐌱𐍂 Nippon","cny":"𐍃𐌹𐌻𐌿𐌱𐍂 Zhongguo"},
 "rb_ask_first.WHAT":{"ha":"𐌲𐌰𐍂𐌳𐌰 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌰 𐌰𐌻𐌻𐌰 (Home Assistant, Homey, MQTT)","messages":"𐍃𐍀𐌹𐌻𐌻𐌰 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌼𐌴𐍂𐌾𐌰𐌽","files":"𐌱𐍉𐌺𐍉𐍃 𐍆𐌰𐍃𐍄𐌰𐌽","all":"𐌰𐌻𐌻𐌰"},
-"rb_agent_builtin.KIND":{"web":"𐌽𐌰𐍄𐌹 𐍃𐍉𐌺𐌾𐌰𐌽 𐌾𐌰𐌷 𐌻𐌰𐌿𐌱𐍉𐍃 𐍃𐌹𐌲𐌲𐍅𐌰𐌽","ask":"𐌼𐌹𐌺 𐍆𐍂𐌰𐌹𐌷𐌽","memory":"𐌲𐌰𐌼𐌿𐌽𐌰𐌽 𐌾𐌰𐌷 𐌲𐌰𐌼𐌿𐌽𐌳𐍃","calc":"𐌲𐌰𐍂𐌰𐌸𐌾𐍉𐌽 𐍄𐌰𐍅𐌴𐌹","time":"𐌼𐌴𐌻 𐌾𐌰𐌷 𐌳𐌰𐌲𐍉𐍃","file":"𐌱𐍉𐌺𐍉𐍃 𐌸𐍉𐌴𐌹 𐌲𐌰𐍅𐌰𐌻𐌾𐌰 𐍃𐌹𐌲𐌲𐍅𐌰𐌽","review":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹 𐍅𐌹𐌻𐌾𐌹𐌽 𐍃𐌰𐌹𐍈","feeds":"𐌽𐌹𐌿𐌾𐌰 𐍃𐍀𐌹𐌻𐌻𐌰","linkedin":"LinkedIn 𐍃𐍉𐌺𐌾𐌰𐌽 (𐌻𐌰𐌿𐌱𐍉𐍃 𐌰𐌻𐌻𐌰 𐌼𐌰𐌽𐌽𐌴)","calendar":"𐌳𐌰𐌲𐌰𐌱𐍉𐌺𐍉𐍃: 𐍅𐌰𐌿𐍂𐌳𐌰 𐌾𐌰𐌷 𐌼𐌴𐌻𐍉𐍃 𐌻𐌰𐌿𐍃𐌰","email":"𐌱𐍉𐌺𐍉𐍃𐍀𐌹𐌻𐌻: 𐍃𐍉𐌺𐌾𐌰𐌽 𐌾𐌰𐌷 𐍃𐌹𐌲𐌲𐍅𐌰𐌽","email_send":"𐌱𐍉𐌺𐍉𐍃𐍀𐌹𐌻𐌻: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","github":"GitHub: 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍉𐍃 𐌾𐌰𐌷 𐌱𐌹𐌳𐍉𐍃","github_act":"GitHub: 𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃, 𐍃𐌰𐌺𐌾𐍉 𐌿𐍃𐌻𐌿𐌺𐌰𐌽 𐌾𐌰𐌷 𐌽𐌰𐌼𐍉 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","telegram":"Telegram: 𐍃𐍀𐌹𐌻𐌻𐌰 𐌸𐌴𐌹𐌽𐌰 𐍃𐍉𐌺𐌾𐌰𐌽","telegram_send":"Telegram: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","telegram_send_free":"Telegram: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","discord":"Discord: 𐌰𐌷𐍅𐍉𐍃 𐌸𐌴𐌹𐌽𐍉𐍃 𐍃𐍉𐌺𐌾𐌰𐌽","discord_send":"Discord: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","discord_send_free":"Discord: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","slack":"Slack: 𐌰𐌷𐍅𐍉𐍃 𐌸𐌴𐌹𐌽𐍉𐍃 𐍃𐍉𐌺𐌾𐌰𐌽","slack_send":"Slack: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","slack_send_free":"Slack: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","mqtt":"MQTT: 𐍃𐍄𐌰𐌸 𐍃𐌹𐌲𐌲𐍅𐌰𐌽","mqtt_act":"MQTT: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","mqtt_act_free":"MQTT: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","homey_read":"Homey: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰, 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃 𐌾𐌰𐌷 𐌷𐌻𐌰𐌿𐍄𐍉𐍃 𐍃𐌰𐌹𐍈𐌰𐌽","homey_act":"Homey: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","homey_act_free":"Homey: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","ha_read":"Home Assistant: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐍃𐌰𐌹𐍈𐌰𐌽","ha_act":"Home Assistant: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌽","ha_act_free":"Home Assistant: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)"},
+"rb_agent_builtin.KIND":{"web":"𐌽𐌰𐍄𐌹 𐍃𐍉𐌺𐌾𐌰𐌽 𐌾𐌰𐌷 𐌻𐌰𐌿𐌱𐍉𐍃 𐍃𐌹𐌲𐌲𐍅𐌰𐌽","ask":"𐌼𐌹𐌺 𐍆𐍂𐌰𐌹𐌷𐌽","memory":"𐌲𐌰𐌼𐌿𐌽𐌰𐌽 𐌾𐌰𐌷 𐌲𐌰𐌼𐌿𐌽𐌳𐍃","calc":"𐌲𐌰𐍂𐌰𐌸𐌾𐍉𐌽 𐍄𐌰𐍅𐌴𐌹","time":"𐌼𐌴𐌻 𐌾𐌰𐌷 𐌳𐌰𐌲𐍉𐍃","file":"𐌱𐍉𐌺𐍉𐍃 𐌸𐍉𐌴𐌹 𐌲𐌰𐍅𐌰𐌻𐌾𐌰 𐍃𐌹𐌲𐌲𐍅𐌰𐌽","review":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹 𐍅𐌹𐌻𐌾𐌹𐌽 𐍃𐌰𐌹𐍈","usage":"model services: usage, plans and limits","feeds":"𐌽𐌹𐌿𐌾𐌰 𐍃𐍀𐌹𐌻𐌻𐌰","linkedin":"LinkedIn 𐍃𐍉𐌺𐌾𐌰𐌽 (𐌻𐌰𐌿𐌱𐍉𐍃 𐌰𐌻𐌻𐌰 𐌼𐌰𐌽𐌽𐌴)","calendar":"𐌳𐌰𐌲𐌰𐌱𐍉𐌺𐍉𐍃: 𐍅𐌰𐌿𐍂𐌳𐌰 𐌾𐌰𐌷 𐌼𐌴𐌻𐍉𐍃 𐌻𐌰𐌿𐍃𐌰","email":"𐌱𐍉𐌺𐍉𐍃𐍀𐌹𐌻𐌻: 𐍃𐍉𐌺𐌾𐌰𐌽 𐌾𐌰𐌷 𐍃𐌹𐌲𐌲𐍅𐌰𐌽","email_send":"𐌱𐍉𐌺𐍉𐍃𐍀𐌹𐌻𐌻: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","github":"GitHub: 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍉𐍃 𐌾𐌰𐌷 𐌱𐌹𐌳𐍉𐍃","github_act":"GitHub: 𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃, 𐍃𐌰𐌺𐌾𐍉 𐌿𐍃𐌻𐌿𐌺𐌰𐌽 𐌾𐌰𐌷 𐌽𐌰𐌼𐍉 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","telegram":"Telegram: 𐍃𐍀𐌹𐌻𐌻𐌰 𐌸𐌴𐌹𐌽𐌰 𐍃𐍉𐌺𐌾𐌰𐌽","telegram_send":"Telegram: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","telegram_send_free":"Telegram: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","discord":"Discord: 𐌰𐌷𐍅𐍉𐍃 𐌸𐌴𐌹𐌽𐍉𐍃 𐍃𐍉𐌺𐌾𐌰𐌽","discord_send":"Discord: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","discord_send_free":"Discord: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","slack":"Slack: 𐌰𐌷𐍅𐍉𐍃 𐌸𐌴𐌹𐌽𐍉𐍃 𐍃𐍉𐌺𐌾𐌰𐌽","slack_send":"Slack: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","slack_send_free":"Slack: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","mqtt":"MQTT: 𐍃𐍄𐌰𐌸 𐍃𐌹𐌲𐌲𐍅𐌰𐌽","mqtt_act":"MQTT: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","mqtt_act_free":"MQTT: 𐌹𐌽𐍃𐌰𐌽𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","homey_read":"Homey: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰, 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃 𐌾𐌰𐌷 𐌷𐌻𐌰𐌿𐍄𐍉𐍃 𐍃𐌰𐌹𐍈𐌰𐌽","homey_act":"Homey: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 (𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","homey_act_free":"Homey: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌽 𐌾𐌰𐌷 𐌲𐌰𐍂𐌿𐌽𐌾𐍉𐍃 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)","ha_read":"Home Assistant: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐍃𐌰𐌹𐍈𐌰𐌽","ha_act":"Home Assistant: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌽","ha_act_free":"Home Assistant: 𐌲𐌰𐍃𐌼𐌹𐌸𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌽 (𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)"},
 "rb_agent_mcp.ASK":{"changes":"(𐍃𐌰𐍂𐍅𐌰 𐌸𐍉𐌴𐌹 𐌹𐌽𐌼𐌰𐌹𐌳𐌾𐌰𐌽𐌳 𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳)","every":"(𐍃𐌰𐍂𐍅𐌰 𐌰𐌻𐌻𐌰 𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌰𐌽𐌳)","never":"(𐌽𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)"},
 "rb_agent_kraken.MODE":{"read":"(𐍅𐌰𐌹𐍂𐌸𐌰, 𐍃𐌹𐌻𐌿𐌱𐍂 𐌸𐌴𐌹𐌽 𐌾𐌰𐌷 𐌺𐌰𐌿𐍀𐌰𐍄𐌾𐌰𐌽 𐌰𐌽𐌰 𐌱𐍉𐌺𐍉𐌼)","live":"(𐌾𐌰𐌷 𐌺𐌰𐌿𐍀𐌰𐍄𐌾𐌰𐌽 𐌵𐌹𐍅𐌰𐌱𐌰: 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 order 𐍆𐌰𐌿𐍂𐌸𐌹𐍃 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸)"},
 "rb_mem_set.KIND":{"transient":"𐍃𐍅𐌴𐌸𐌰𐌿𐌷 𐌻𐌰𐌿𐍆𐍃 𐌿𐍃𐌻𐌿𐌺𐌰𐌽𐍃","permanent":"𐍃𐌹𐌽𐍄𐌴𐌹𐌽𐍉"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex sessiuns",
 "Plex new items":"Plex niwe",
 "Tautulli history":"Tautulli stear",
-"Tautulli watch time":"Tautulli sight-tima"
+"Tautulli watch time":"Tautulli sight-tima",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2314,7 +2315,19 @@
 "Tautulli watch time":"Tautulli sight-tima",
 "{n} users":"{n} brucrend",
 "Which stream? Give a session's id, from the sessions.":"Hwaz stream? Gib id anre sessiune, fram tham sessiunum.",
-"stop the {id} stream on Plex":"thana {id} stream on Plex stillan"
+"stop the {id} stream on Plex":"thana {id} stream on Plex stillan",
+", over by {x}":", over by {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Nothing has been spent through this computer's keys yet, so there's nothing to count.",
+"What each model service has been used, counted on this computer at list prices:":"What each model service has been used, counted on this computer at list prices:",
+"no plan set: add {setting} in {where} to count it against a cap":"no plan set: add {setting} in {where} to count it against a cap",
+"over the cap by {x}":"over the cap by {x}",
+"the {plan} plan publishes no monthly cap":"the {plan} plan publishes no monthly cap",
+"this hour":"this hour",
+"this month":"this month",
+"this week":"this week",
+"today":"today",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

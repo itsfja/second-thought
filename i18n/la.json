@@ -839,6 +839,7 @@
    "time": "horae et dies",
    "file": "fasciculum a me electum legere",
    "review": "textum examinare secundum normas",
+   "usage": "ministrationes exemplarium: usus, rationes et limites",
    "feeds": "fluxus nuntiorum",
    "linkedin": "LinkedIn quaerere (paginas publicas)",
    "calendar": "calendarium: eventus et tempus liberum",
@@ -1898,7 +1899,8 @@
   "Plex sessions": "Plex sessiones",
   "Plex new items": "Plex nova",
   "Tautulli history": "Tautulli acta",
-  "Tautulli watch time": "Tautulli tempus videnti"
+  "Tautulli watch time": "Tautulli tempus videnti",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "Haec pagina in ratione claude.ai tua currit, igitur impensa cuiusque ministerii non numerat; in Pythonum expone, clavibus in second-thought.ini positis, et hoc instrumentum dicet quod cuiusque ministerii impenderit, rationem et summam eius, et omnem excessum."
  },
  "examples": {
   "review": {
@@ -3663,7 +3665,19 @@
   "Tautulli watch time": "Tautulli tempus videnti",
   "{n} users": "{n} utentes",
   "Which stream? Give a session's id, from the sessions.": "Quis fluxus? Da notam sessionis, ex sessionibus.",
-  "stop the {id} stream on Plex": "fluxum {id} in Plex sistere"
+  "stop the {id} stream on Plex": "fluxum {id} in Plex sistere",
+  ", over by {x}": ", superfluum {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Nihil adhuc per huius computatris claves impensum est, nihil igitur numerandum.",
+  "What each model service has been used, counted on this computer at list prices:": "Quod cuiusque exemplaris ministerii usum est, in hoc computatro pretio catalogi numeratum:",
+  "no plan set: add {setting} in {where} to count it against a cap": "ratio non posita: adde {setting} {where} ut contra summam numeretur",
+  "over the cap by {x}": "ultra summam {x}",
+  "the {plan} plan publishes no monthly cap": "ratio {plan} summam menstruam non publicat",
+  "this hour": "hac hora",
+  "this month": "hoc mense",
+  "this week": "hac hebdomade",
+  "today": "hodie",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% summae menstruae {cap} rationis {plan} ({spent} impensum, revertitur {when})",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

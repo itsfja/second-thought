@@ -217,7 +217,7 @@
 "rb_sort.ORDER":{"desc":"ܪܡܐ ܩܕܡ","asc":"ܡܟܐ ܩܕܡ"},
 "rb_budget.UNIT":{"dollars":"ܕܘܠܪܐ ܕܐܡܪܝܩܐ","gbp":"ܠܝܒܪܐ","eur":"ܐܘܪܐ","jpy":"ܝܢ","cny":"ܝܘܐܢ"},
 "rb_ask_first.WHAT":{"ha":"ܟܘܠ ܥܒܕܐ ܕܒܝܬܐ ܚܟܝܡܐ (Home Assistant, Homey, MQTT)","messages":"ܫܘܕܪ ܡܠܐ ܘܟܪܘܙܘܬܐ","files":"ܢܛܪܐ ܕܦܢܓܐ","all":"ܟܘܠܗܝܢ ܗܠܝܢ"},
-"rb_agent_builtin.KIND":{"web":"ܒܥܝ ܒܪܫܬܐ ܘܩܪܝ ܕܦܐ","ask":"ܫܐܠ ܐܢܐ ܫܐܠܬܐ","memory":"ܥܗܕ ܘܐܬܕܟܪ ܡܠܬܐ","calc":"ܚܫܘܒ ܡܢܝܢܐ","time":"ܫܥܐ ܘܝܘܡܬܐ","file":"ܩܪܝ ܦܢܓܐ ܕܓܒܐ ܐܢܐ","review":"ܒܚܢ ܟܬܒܐ ܠܘܬ ܢܡܘܣܐ","feeds":"ܡܒܥܐ ܕܫܡܥܬܐ","linkedin":"ܒܥܝ ܒ-LinkedIn (ܕܦܐ ܓܚܝܐ)","calendar":"ܩܠܢܕܪܐ: ܥܒܕܐ ܘܙܒܢܐ ܣܪܩܐ","email":"ܐܓܪܬܐ: ܒܥܝ ܘܩܪܝ","email_send":"ܐܓܪܬܐ: ܫܕܪ (ܫܐܠ ܠܝ ܩܕܡ)","github":"GitHub: ܥܒܕܐ ܘܒܥܘܬܐ ܕܡܓܕܠܬܐ","github_act":"GitHub: ܫܪܚ, ܦܬܚ ܘܪܫܘܡ ܫܘܐܠܐ (ܫܐܠ ܠܝ ܩܕܡ)","telegram":"Telegram: ܒܥܝ ܡܠܝ","telegram_send":"Telegram: ܫܕܪ (ܫܐܠ ܠܝ ܩܕܡ)","telegram_send_free":"Telegram: ܫܕܪ (ܕܠܐ ܫܘܐܠܐ)","discord":"Discord: ܒܥܝ ܢܗܪܝ","discord_send":"Discord: ܫܕܪ (ܫܐܠ ܠܝ ܩܕܡ)","discord_send_free":"Discord: ܫܕܪ (ܕܠܐ ܫܘܐܠܐ)","slack":"Slack: ܒܥܝ ܢܗܪܝ","slack_send":"Slack: ܫܕܪ (ܫܐܠ ܠܝ ܩܕܡ)","slack_send_free":"Slack: ܫܕܪ (ܕܠܐ ܫܘܐܠܐ)","mqtt":"MQTT: ܩܪܝ ܪܝܫܐ","mqtt_act":"MQTT: ܦܪܫ (ܫܐܠ ܠܝ ܩܕܡ)","mqtt_act_free":"MQTT: ܦܪܫ (ܕܠܐ ܫܘܐܠܐ)","homey_read":"Homey: ܚܙܝ ܐܘܪܓܢܐ, ܪܕܝܬܐ ܘܫܘܚܠܦܐ","homey_act":"Homey: ܐܚܕ ܐܘܪܓܢܐ ܘܫܪܐ ܪܕܝܬܐ (ܫܐܠ ܠܝ ܩܕܡ)","homey_act_free":"Homey: ܐܚܕ ܐܘܪܓܢܐ ܘܫܪܐ ܪܕܝܬܐ (ܕܠܐ ܫܘܐܠܐ)","ha_read":"Home Assistant: ܚܙܝ ܐܘܪܓܢܐ","ha_act":"Home Assistant: ܐܚܕ ܐܘܪܓܢܐ","ha_act_free":"Home Assistant: ܐܚܕ ܐܘܪܓܢܐ (ܕܠܐ ܫܘܐܠܐ)"},
+"rb_agent_builtin.KIND":{"web":"ܒܥܝ ܒܪܫܬܐ ܘܩܪܝ ܕܦܐ","ask":"ܫܐܠ ܐܢܐ ܫܐܠܬܐ","memory":"ܥܗܕ ܘܐܬܕܟܪ ܡܠܬܐ","calc":"ܚܫܘܒ ܡܢܝܢܐ","time":"ܫܥܐ ܘܝܘܡܬܐ","file":"ܩܪܝ ܦܢܓܐ ܕܓܒܐ ܐܢܐ","review":"ܒܚܢ ܟܬܒܐ ܠܘܬ ܢܡܘܣܐ","usage":"model services: usage, plans and limits","feeds":"ܡܒܥܐ ܕܫܡܥܬܐ","linkedin":"ܒܥܝ ܒ-LinkedIn (ܕܦܐ ܓܚܝܐ)","calendar":"ܩܠܢܕܪܐ: ܥܒܕܐ ܘܙܒܢܐ ܣܪܩܐ","email":"ܐܓܪܬܐ: ܒܥܝ ܘܩܪܝ","email_send":"ܐܓܪܬܐ: ܫܕܪ (ܫܐܠ ܠܝ ܩܕܡ)","github":"GitHub: ܥܒܕܐ ܘܒܥܘܬܐ ܕܡܓܕܠܬܐ","github_act":"GitHub: ܫܪܚ, ܦܬܚ ܘܪܫܘܡ ܫܘܐܠܐ (ܫܐܠ ܠܝ ܩܕܡ)","telegram":"Telegram: ܒܥܝ ܡܠܝ","telegram_send":"Telegram: ܫܕܪ (ܫܐܠ ܠܝ ܩܕܡ)","telegram_send_free":"Telegram: ܫܕܪ (ܕܠܐ ܫܘܐܠܐ)","discord":"Discord: ܒܥܝ ܢܗܪܝ","discord_send":"Discord: ܫܕܪ (ܫܐܠ ܠܝ ܩܕܡ)","discord_send_free":"Discord: ܫܕܪ (ܕܠܐ ܫܘܐܠܐ)","slack":"Slack: ܒܥܝ ܢܗܪܝ","slack_send":"Slack: ܫܕܪ (ܫܐܠ ܠܝ ܩܕܡ)","slack_send_free":"Slack: ܫܕܪ (ܕܠܐ ܫܘܐܠܐ)","mqtt":"MQTT: ܩܪܝ ܪܝܫܐ","mqtt_act":"MQTT: ܦܪܫ (ܫܐܠ ܠܝ ܩܕܡ)","mqtt_act_free":"MQTT: ܦܪܫ (ܕܠܐ ܫܘܐܠܐ)","homey_read":"Homey: ܚܙܝ ܐܘܪܓܢܐ, ܪܕܝܬܐ ܘܫܘܚܠܦܐ","homey_act":"Homey: ܐܚܕ ܐܘܪܓܢܐ ܘܫܪܐ ܪܕܝܬܐ (ܫܐܠ ܠܝ ܩܕܡ)","homey_act_free":"Homey: ܐܚܕ ܐܘܪܓܢܐ ܘܫܪܐ ܪܕܝܬܐ (ܕܠܐ ܫܘܐܠܐ)","ha_read":"Home Assistant: ܚܙܝ ܐܘܪܓܢܐ","ha_act":"Home Assistant: ܐܚܕ ܐܘܪܓܢܐ","ha_act_free":"Home Assistant: ܐܚܕ ܐܘܪܓܢܐ (ܕܠܐ ܫܘܐܠܐ)"},
 "rb_agent_mcp.ASK":{"changes":"(ܫܐܠ ܠܝ ܩܕܡ ܡܢܐ ܕܡܫܢܝܢ ܡܕܡ)","every":"(ܫܐܠ ܠܝ ܩܕܡ ܟܘܠ ܡܢܐ)","never":"(ܕܠܐ ܫܘܐܠܐ)"},
 "rb_agent_kraken.MODE":{"read":"(ܛܝܡܐ, ܚܘܫܒܢܟ ܘܬܓܪܘܬܐ ܕܟܪܛܝܣܐ)","live":"(ܘܬܓܪܘܬܐ ܚܝܬܐ: ܫܐܠ ܩܕܡ ܟܘܠ ܦܘܩܕܢܐ)"},
 "rb_mem_set.KIND":{"transient":"ܟܕ ܕܦܐ ܗܢܐ ܦܬܝܚܐ","permanent":"ܠܥܠܡ"},
@@ -1182,7 +1182,8 @@
 "Plex sessions":"Plex sjlat",
 "Plex new items":"Plex jdyd",
 "Tautulli history":"Tautulli tarikh",
-"Tautulli watch time":"Tautulli wqt shw"
+"Tautulli watch time":"Tautulli wqt shw",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
@@ -2315,7 +2316,19 @@
 "Tautulli watch time":"Tautulli wqt shw",
 "{n} users":"{n} msthdmyn",
 "Which stream? Give a session's id, from the sessions.":"Ayna strym? Hb id sjl, mn sjlat.",
-"stop the {id} stream on Plex":"wqf strym {id} b Pi-hole"
+"stop the {id} stream on Plex":"wqf strym {id} b Pi-hole",
+", over by {x}":", over by {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Nothing has been spent through this computer's keys yet, so there's nothing to count.",
+"What each model service has been used, counted on this computer at list prices:":"What each model service has been used, counted on this computer at list prices:",
+"no plan set: add {setting} in {where} to count it against a cap":"no plan set: add {setting} in {where} to count it against a cap",
+"over the cap by {x}":"over the cap by {x}",
+"the {plan} plan publishes no monthly cap":"the {plan} plan publishes no monthly cap",
+"this hour":"this hour",
+"this month":"this month",
+"this week":"this week",
+"today":"today",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

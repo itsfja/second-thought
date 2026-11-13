@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"tijd","date":"datum","datetime":"datum en tijd","hour":"uur","minute":"minuut","weekday":"dag van de week"},
 "rb_sort.ORDER":{"desc":"hoogste eerst","asc":"laagste eerst"},
 "rb_ask_first.WHAT":{"ha":"elke smarthome-actie (Home Assistant, Homey, MQTT)","messages":"het versturen van berichten en aankondigingen","files":"het opslaan van bestanden","all":"al deze dingen"},
-"rb_agent_builtin.KIND":{"web":"op het web zoeken en pagina’s lezen","ask":"mij een vraag stellen","memory":"notities onthouden en ophalen","calc":"rekenen","time":"tijden en datums","file":"een bestand lezen dat ik kies","review":"tekst controleren op criteria","feeds":"nieuwsfeeds","linkedin":"LinkedIn doorzoeken (openbare pagina’s)","calendar":"agenda: afspraken en vrije tijd","email":"e-mail: zoeken en lezen","email_send":"e-mail: versturen (vraagt het me eerst)","github":"GitHub: projecten en pull requests","github_act":"GitHub: reageren, issues openen en labelen (vraagt het me eerst)","telegram":"Telegram: mijn berichten doorzoeken","telegram_send":"Telegram: versturen (vraagt het me eerst)","telegram_send_free":"Telegram: versturen (zonder vragen)","discord":"Discord: mijn kanalen doorzoeken","discord_send":"Discord: versturen (vraagt het me eerst)","discord_send_free":"Discord: versturen (zonder vragen)","slack":"Slack: mijn kanalen doorzoeken","slack_send":"Slack: versturen (vraagt het me eerst)","slack_send_free":"Slack: versturen (zonder vragen)","mqtt":"MQTT: topics lezen","mqtt_act":"MQTT: publiceren (vraagt het me eerst)","mqtt_act_free":"MQTT: publiceren (zonder vragen)","homey_read":"Homey: apparaten, flows en variabelen bekijken","homey_act":"Homey: apparaten bedienen en flows starten (vraagt het me eerst)","homey_act_free":"Homey: apparaten bedienen en flows starten (zonder vragen)","ha_read":"Home Assistant: apparaten bekijken","ha_act":"Home Assistant: apparaten bedienen","ha_act_free":"Home Assistant: apparaten bedienen (zonder vragen)"},
+"rb_agent_builtin.KIND":{"web":"op het web zoeken en pagina’s lezen","ask":"mij een vraag stellen","memory":"notities onthouden en ophalen","calc":"rekenen","time":"tijden en datums","file":"een bestand lezen dat ik kies","review":"tekst controleren op criteria","usage":"modeldiensten: gebruik, abonnementen en limieten","feeds":"nieuwsfeeds","linkedin":"LinkedIn doorzoeken (openbare pagina’s)","calendar":"agenda: afspraken en vrije tijd","email":"e-mail: zoeken en lezen","email_send":"e-mail: versturen (vraagt het me eerst)","github":"GitHub: projecten en pull requests","github_act":"GitHub: reageren, issues openen en labelen (vraagt het me eerst)","telegram":"Telegram: mijn berichten doorzoeken","telegram_send":"Telegram: versturen (vraagt het me eerst)","telegram_send_free":"Telegram: versturen (zonder vragen)","discord":"Discord: mijn kanalen doorzoeken","discord_send":"Discord: versturen (vraagt het me eerst)","discord_send_free":"Discord: versturen (zonder vragen)","slack":"Slack: mijn kanalen doorzoeken","slack_send":"Slack: versturen (vraagt het me eerst)","slack_send_free":"Slack: versturen (zonder vragen)","mqtt":"MQTT: topics lezen","mqtt_act":"MQTT: publiceren (vraagt het me eerst)","mqtt_act_free":"MQTT: publiceren (zonder vragen)","homey_read":"Homey: apparaten, flows en variabelen bekijken","homey_act":"Homey: apparaten bedienen en flows starten (vraagt het me eerst)","homey_act_free":"Homey: apparaten bedienen en flows starten (zonder vragen)","ha_read":"Home Assistant: apparaten bekijken","ha_act":"Home Assistant: apparaten bedienen","ha_act_free":"Home Assistant: apparaten bedienen (zonder vragen)"},
 "rb_agent_mcp.ASK":{"changes":"(vraagt het me vóór hulpmiddelen die iets veranderen)","every":"(vraagt het me vóór elk hulpmiddel)","never":"(zonder vragen)"},
 "rb_tg_message.PART":{"text":"tekst","sender":"afzender","chat":"chat"},
 "rb_mem_set.KIND":{"transient":"zolang deze pagina open is","permanent":"voor altijd"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex-sessies",
 "Plex new items":"Plex nieuwe items",
 "Tautulli history":"Tautulli-geschiedenis",
-"Tautulli watch time":"Tautulli kijktijd"
+"Tautulli watch time":"Tautulli kijktijd",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"De pagina draait op je claude.ai-account en telt dus niet wat elke dienst uitgeeft; exporteer naar Python, met sleutels in second-thought.ini, dan zegt deze tool wat elke dienst heeft uitgegeven, zijn abonnement en zijn limiet, en elke overschrijding."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2314,6 +2315,18 @@
 "Tautulli watch time":"Tautulli kijktijd",
 "{n} users":"{n} gebruikers",
 "Which stream? Give a session's id, from the sessions.":"Welke stream? Geef het id van een sessie, van de sessies.",
-"stop the {id} stream on Plex":"de stream {id} op Plex stoppen"
+"stop the {id} stream on Plex":"de stream {id} op Plex stoppen",
+", over by {x}":", erover door {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Er is nog niets uitgegeven met de sleutels van deze computer, dus er valt niets te tellen.",
+"What each model service has been used, counted on this computer at list prices:":"Wat elke modeldienst is gebruikt, geteld op deze computer tegen lijstprijzen:",
+"no plan set: add {setting} in {where} to count it against a cap":"geen abonnement ingesteld: voeg {setting} {where} toe om het tegen een limiet te tellen",
+"over the cap by {x}":"over de limiet met {x}",
+"the {plan} plan publishes no monthly cap":"het {plan}-abonnement publiceert geen maandlimiet",
+"this hour":"dit uur",
+"this month":"deze maand",
+"this week":"deze week",
+"today":"vandaag",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% van de maandlimiet van {cap} van het {plan}-abonnement ({spent} uitgegeven, stelt terug op {when})",
+"{window} {x}":"{window} {x}"
 }
 };

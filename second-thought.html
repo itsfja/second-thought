@@ -6937,6 +6937,10 @@ class AgentTools:
                      "as a list of times and states.", ["entity", "hours"])],
         "ha_act": [("call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. "
                     "The person may be asked first, and may say no.", ["service", "entity", "data"])],
+        "usage": [("ai_usage", "What the person's model services have been used: for each with a key set, what it has spent this "
+                    "hour, today, this week and this month, the plan and monthly cap set for it and how much of that is gone "
+                    "or overspent, any allowances, and the rate limits the services themselves reported. Counted on this "
+                    "computer, at list prices.", [])],
         "calc": [("calculate", "Work out a sum exactly, like (350 / 500) * 100 or round(1000 * 0.02, 1). Use it for every sum instead of working it out "
                   "yourself. It knows + - * / ^, brackets, pi, and round(x, places), min, max, sqrt, abs, floor, ceil.", ["expression"])],
         "time": [("current_time", "Get the day, date and time now.", []),
@@ -7014,7 +7018,7 @@ class AgentTools:
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
                          "recall": {"name": "text"}, "list_memory": {}, "search_memory": {"query": "text"}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
-                         "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"},
+                         "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"}, "ai_usage": {},
                          "device_history": {"entity": "text", "hours": "number"}, "calculate": {"expression": "text"}, "current_time": {},
                          "time_plus": {"time": "text", "minutes": "number"}, "read_file": {"why": "text"},
                          "review_text": {"text": "text", "criteria": "text"}, "read_feed": {"url": "text", "limit": "number"},
@@ -7292,6 +7296,8 @@ class AgentTools:
             out = await asyncio.to_thread(fetch_page, a("url"))
             self.log(tr("Read page: {x}", x=_short(a("url"), 60)), _short(out, 400), tr("done"))
             return out
+        if kind == "ai_usage":
+            return usage_text()
         if kind == "calculate":
             return calc_text(a("expression"))
         if kind == "current_time":
@@ -7838,6 +7844,55 @@ def reported_lines(services=None, low_only=False, hints=True):
             out.append(tr("{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}", service=service,
                           plan=hint.title(), setting=plan_setting(service), plan_lower=hint, where_keys=WHERE_KEYS))
     return out
+
+
+def usage_text(now=None):
+    """What each service's keys have spent on this computer, and how that stands against each plan cap and allowance:
+    the ai_usage tool's answer. Only services whose keys have spent something are listed."""
+    now = now or datetime.datetime.now()
+    keys = Spending._ledger_read()["keys"]
+    if not keys:
+        return tr("Nothing has been spent through this computer's keys yet, so there's nothing to count.")
+    hours_by_service = {}
+    for entry in keys.values():
+        hours = hours_by_service.setdefault(entry.get("service") or "", {})
+        for hour, value in (entry.get("hours") or {}).items():
+            hours[hour] = hours.get(hour, 0.0) + value
+    out = [tr("What each model service has been used, counted on this computer at list prices:")]
+    for service in sorted(hours_by_service):
+        hours = hours_by_service[service]
+
+        def spent_since(start, hours=hours):
+            first = start.strftime("%Y-%m-%dT%H")
+            return sum(v for h, v in hours.items() if h >= first)
+
+        window_words = {"hourly": tr("this hour"), "daily": tr("today"), "weekly": tr("this week"), "monthly": tr("this month")}
+        parts = [tr("{window} {x}", window=window_words[w], x=dollars(spent_since(window_start(w, now)))) for w in WINDOWS]
+        cap = plan_cap(service)
+        if cap:
+            plan, usd, utc = cap
+            start = month_start(now, utc)
+            month = spent_since(start)
+            parts.append(tr("{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+                            pct=round(100 * month / usd), plan=plan.title(), cap=dollars(usd), spent=dollars(month),
+                            when=next_month(start).strftime("%Y-%m-%d %H:%M")))
+            if month > usd:
+                parts.append(tr("over the cap by {x}", x=dollars(month - usd)))
+        else:
+            plan = plan_of(service)
+            parts.append(tr("no plan set: add {setting} in {where} to count it against a cap",
+                            setting=plan_setting(service), where=WHERE_KEYS) if not plan else
+                         tr("the {plan} plan publishes no monthly cap", plan=plan.title()))
+        for window, limit in allowances_for(service).items():
+            spent = spent_since(window_start(window, now)) * per_dollar(CURRENCY)
+            bit = tr("{pct}% of the {window} allowance of {amount}", pct=round(100 * spent / limit),
+                     window=window_word(window), amount=amount_text(limit, CURRENCY))
+            if spent > limit:
+                bit += tr(", over by {x}", x=amount_text(spent - limit, CURRENCY))
+            parts.append(bit)
+        out.append(service + ": " + ", ".join(parts) + ".")
+    out += reported_lines(sorted(hours_by_service), low_only=False, hints=False)
+    return "\n".join(out)
 
 
 def window_word(window):
@@ -10753,6 +10808,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 </script>
 <script type="application/json" id="community-gallery">
 [
+{"key":"g_ai_spend_report","file":"ai-spend-report.json","category":"money","title":"AI spend report","description":"Each morning, what your model services have been used: spent per hour, day, week and month, the share of each plan's cap gone, any overspend, and the services' own rate limits, sent to you on Telegram. Only runs in exported Python, where spending is counted.","tip":"Add PLAN_CLAUDE (or PLAN_OPENAI, PLAN_GEMINI, PLAN_GROQ) in second-thought.ini to count against a plan's monthly cap.","author":"itsfja","runtime":"3.13.0","version":1,"program":{"variables":[],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","x":30,"y":30,"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"spend report"}}}}}}},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":0,"DAYS":"every"},"x":550,"y":30,"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"spend report"}}}}}}},{"type":"rb_receive","fields":{"MSG":"spend report"},"x":30,"y":290,"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Use ai_usage once. Write a short report of what each model service has been used: this hour, today, this week and this month, the share of each plan's monthly cap gone (say it as a percentage), any allowance shares, anything overspent, and the services' own reported rate limits. One line per service, then one line saying which service is closest to a cap or allowance and when that resets. If nothing has been spent yet, say so."}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":6}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"usage"}}}},"next":{"block":{"type":"rb_telegram_send","inputs":{"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}]}}},
 {"key":"g_allergen_check","file":"allergen-check.json","category":"home","title":"Allergen check","description":"Paste a recipe card. Claude checks it against the UK's 14 allergens: which each ingredient contains, 'may contain' wording to look at, and anything the card should declare but doesn't. A second pair of eyes, not a guarantee.","tip":"Paste the ingredients with any sub-recipes (the stock, the sauce): allergens hide there.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste the recipe card, with its ingredients and any allergen statement"}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Check this recipe card against the UK's 14 allergens (celery; cereals containing gluten (wheat, rye, barley, oats); crustaceans; eggs; fish; lupin; milk; molluscs; mustard; tree nuts; peanuts; sesame; soya; sulphur dioxide and sulphites). Give: a table of each ingredient and the allergens it contains; any 'may contain' or 'made in a kitchen that' wording, and what it would cover; and allergens the card should declare but doesn't. End with the full list to declare, in bold.\n\nRecipe card:\n"}}},"ADD1":{"block":{"type":"rb_answer"}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"names all 14 allergens, saying for each whether it's present; every ingredient that contains one is named; sub-recipes and processed ingredients (stock, sauces, bread) are checked; anything unclear says what to ask the supplier; says it is a check to confirm, not a guarantee"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_alt_text_folder","file":"alt-text-folder.json","category":"odds","title":"Alt text for a folder","description":"Watches a folder. For each new picture, Claude writes alt text, checks it against accessibility guidance (short, says what matters, includes any words in the picture), and adds it to a file, asking before it writes.","tip":"Change the folder to where your website's pictures go. Every picture is sent to the model.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_alt","name":"alt"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_folder_when","fields":{"FOLDER":"~/Pictures/For the website"},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"picture"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"picture"}}}}}},"x":30,"y":30},{"type":"rb_start","next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"picture"}}},"VALUE":{"block":{"type":"rb_img_choose"}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"picture"},"next":{"block":{"type":"rb_set_draft","inputs":{"TEXT":{"block":{"type":"rb_img_ask","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Write alt text for this picture, for someone using a screen reader: what matters about it in one or two short sentences. Include any words in the picture. Don't start with 'image of' or 'picture of'."}}},"IMG":{"block":{"type":"rb_msg_value"}}}}}},"next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"under 125 characters, or two short sentences if there's text in the picture; says what matters, not every detail; any words in the picture are included; doesn't start 'image of' or 'picture of'; doesn't guess who people are"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":2}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_alt"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"rb_now","fields":{"PART":"datetime"}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":": "}}},"ADD2":{"block":{"type":"rb_draft"}}},"extraState":{"itemCount":3}}}},"next":{"block":{"type":"rb_mem_add","fields":{"KIND":"permanent"},"inputs":{"VALUE":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_alt"}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"alt text"}}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_mem_get","inputs":{"NAME":{"shadow":{"type":"text","fields":{"TEXT":"alt text"}}}}}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"alt-text"}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"rb_draft"}}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_arxiv_fisher","file":"arxiv-fisher.json","category":"news","title":"arXiv fisher","description":"Each morning, the five new arXiv papers closest to your interests, each with a plain-English paragraph on what they did and why it matters. Emailed to you.","tip":"Put your arXiv category feeds in second-thought.ini, like feeds = https://rss.arxiv.org/rss/cs.AI, and your interests in the first block.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_interests","name":"interests"},{"id":"g_papers","name":"papers"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"papers"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":6,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"papers"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"papers"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_interests"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"AI agents, evaluation, tool use"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_papers"}},"inputs":{"VALUE":{"block":{"type":"rb_feed_news","inputs":{"URL":{"shadow":{"type":"text","fields":{"TEXT":""}}}}}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"These are new postings from my feeds (ignore anything that isn't an arXiv paper). My interests: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_interests"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". Pick the five most relevant. For each: the title and link, then one plain-English paragraph on what they did and why it matters, for someone who doesn't read papers.\n\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_papers"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_review","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"five papers at most; each has its link; no jargon left unexplained"}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_negate","inputs":{"BOOL":{"block":{"type":"rb_passed"}}}}},"DO0":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Five papers worth your time"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}}}}}},"x":30,"y":290}]}}},
@@ -16082,6 +16138,7 @@ HOW TO MAP CODE
   /* The ready-made agent tools, in the order the Tools category shows them. */
   const AGENT_TOOL_KINDS = [["search the web and read pages","web"],["ask me a question","ask"],["remember and recall notes","memory"],
     ["work out sums","calc"],["clock times and dates","time"],["read a file I choose","file"],["check text against criteria","review"],
+    ["model services: usage, plans and limits","usage"],
     ["news feeds","feeds"],["search LinkedIn (public pages)","linkedin"],["calendar: events and free time","calendar"],
     ["email: search and read","email"],["email: send (asks me first)","email_send"],
     ["GitHub: projects and pull requests","github"],["GitHub: comment, open and label issues (asks me first)","github_act"],
@@ -16178,7 +16235,7 @@ HOW TO MAP CODE
     slack:"slack_read", slack_send:"slack_send", slack_send_free:"slack_send",
     mqtt:"mqtt_read", mqtt_act:"mqtt_publish", mqtt_act_free:"mqtt_publish",
     homey_read:"homey_read", homey_act:"homey_act", homey_act_free:"homey_act", ha_read:"ha_read", ha_act:"ha_act", ha_act_free:"ha_act",
-    ask:null, calc:null, time:null, review:null };
+    ask:null, calc:null, time:null, review:null, usage:null };
   function blockCapability(b){
     const c = b.type === "rb_agent_builtin" ? CAP_KINDS[b.getFieldValue("KIND")] : CAP_BLOCKS[b.type];
     return typeof c === "function" ? c(b) : (c || null);
@@ -21724,6 +21781,7 @@ HOW TO MAP CODE
           ["time_plus", "Add minutes to a clock time and get the new time, like 09:30 plus 270 gives 14:00. Use a negative number to go back. time is HH:MM, or YYYY-MM-DD HH:MM to get the date and day too. Use it for every clock time instead of working it out yourself.", ["time", "minutes"]]],
     file:[["read_file", "Ask the person to choose a file (a PDF, a Word file or a text file) and get the words in it. Say why you want it.", ["why"]]],
     review:[["review_text", "Have a separate, strict reviewer check some text against criteria (separate them with semicolons). It says whether the text passes, and lists each problem. Use it to check your work before you finish.", ["text", "criteria"]]],
+    usage:[["ai_usage", "What the person's model services have been used: for each with a key set, what it has spent this hour, today, this week and this month, the plan and monthly cap set for it and how much of that is gone or overspent, any allowances, and the rate limits the services themselves reported. Counted on this computer, at list prices.", []]],
     feeds:[["read_feed", "Get the latest items from a news feed (RSS or Atom) by its address, or from the person's own feeds if you leave url empty. Each item has a title, date, link and summary. limit is items per feed (10 if you don't say).", ["url", "limit"]]],
     linkedin:[["search_linkedin", "Search LinkedIn's public pages (people, companies, posts) through a web search. It only finds what LinkedIn shows to everyone.", ["query"]]],
     github:[["my_pull_requests", "List the GitHub pull requests waiting for the person's review, and their own open ones.", []],
@@ -21765,7 +21823,7 @@ HOW TO MAP CODE
   // The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL. Matches the runtime.
   const AGENT_INPUT_TYPES = { search_web:{ query:"text" }, ask_me:{ question:"text" }, remember:{ name:"text", value:"text" }, recall:{ name:"text" },
     list_memory:{}, search_memory:{ query:"text" }, find_devices:{ search:"text" }, device_state:{ entity:"text" }, call_service:{ service:"text", entity:"text", data:"any" },
-    read_page:{ url:"text" }, device_history:{ entity:"text", hours:"number" }, calculate:{ expression:"text" }, current_time:{},
+    read_page:{ url:"text" }, ai_usage:{}, device_history:{ entity:"text", hours:"number" }, calculate:{ expression:"text" }, current_time:{},
     time_plus:{ time:"text", minutes:"number" }, read_file:{ why:"text" }, review_text:{ text:"text", criteria:"text" },
     read_feed:{ url:"text", limit:"number" }, search_linkedin:{ query:"text" }, my_pull_requests:{}, list_pull_requests:{ repo:"text", state:"text" }, read_pull_request:{ repo:"text", number:"number" }, list_projects:{ owner:"text" }, search_github:{ query:"text" }, comment_on_github:{ repo:"text", number:"number", text:"text" }, list_branches:{ repo:"text" }, list_commits:{ repo:"text", author:"text", since:"text" },
     read_github_file:{ repo:"text", path:"text", ref:"text" }, open_issue:{ repo:"text", title:"text", body:"text" }, add_labels:{ repo:"text", number:"number", labels:"list" }, search_telegram:{ text:"text" }, send_telegram:{ text:"text" }, search_discord:{ text:"text" }, send_discord:{ text:"text" }, search_slack:{ text:"text" }, send_slack:{ text:"text" }, search_email:{ query:"text", days:"number" }, read_email:{ id:"text" }, send_email:{ to:"text", subject:"text", body:"text" }, calendar:{ day:"text", days:"number" }, free_time:{ day:"text", "from":"text", to:"text", minutes:"number" },
@@ -22910,6 +22968,7 @@ HOW TO MAP CODE
         addStep(tr("Read page: {url}", { url:short(a("url"), 60) }), { mono:true, text:tr("This page can't open other websites, so the agent is told to use search_web instead. Exported Python reads the page for real.") }).done("not live", "warn");
         return "This page can't open other websites, so read_page doesn't work here (it does in exported Python). Use search_web instead.";
       }
+      case "ai_usage": return tr("The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.");
       case "calculate": return calcText(a("expression"));
       case "current_time": return currentTimeText();
       case "time_plus": return timePlusText(a("time"), inp.minutes == null ? 0 : inp.minutes);

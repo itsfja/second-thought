@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"heure","date":"date","datetime":"date et heure","hour":"heure (nombre)","minute":"minute","weekday":"jour de la semaine"},
 "rb_sort.ORDER":{"desc":"du plus haut au plus bas","asc":"du plus bas au plus haut"},
 "rb_ask_first.WHAT":{"ha":"toute action de maison connectée (Home Assistant, Homey, MQTT)","messages":"l'envoi de messages et d'annonces","files":"l'enregistrement de fichiers","all":"tout cela"},
-"rb_agent_builtin.KIND":{"web":"chercher sur le web et lire des pages","ask":"me poser une question","memory":"mémoriser et rappeler des notes","calc":"faire des calculs","time":"heures et dates","file":"lire un fichier que je choisis","review":"vérifier un texte selon des critères","feeds":"flux d'actualités","linkedin":"chercher sur LinkedIn (pages publiques)","calendar":"calendrier : événements et créneaux libres","email":"e-mail : chercher et lire","email_send":"e-mail : envoyer (me demande d'abord)","github":"GitHub : projets et pull requests","github_act":"GitHub : commenter, ouvrir et étiqueter des issues (me demande d'abord)","telegram":"Telegram : chercher dans mes messages","telegram_send":"Telegram : envoyer (me demande d'abord)","telegram_send_free":"Telegram : envoyer (sans demander)","discord":"Discord : chercher dans mes salons","discord_send":"Discord : envoyer (me demande d'abord)","discord_send_free":"Discord : envoyer (sans demander)","slack":"Slack : chercher dans mes canaux","slack_send":"Slack : envoyer (me demande d'abord)","slack_send_free":"Slack : envoyer (sans demander)","mqtt":"MQTT : lire des sujets","mqtt_act":"MQTT : publier (me demande d'abord)","mqtt_act_free":"MQTT : publier (sans demander)","homey_read":"Homey : voir appareils, flows et variables","homey_act":"Homey : contrôler les appareils et lancer des flows (me demande d'abord)","homey_act_free":"Homey : contrôler les appareils et lancer des flows (sans demander)","ha_read":"Home Assistant : voir les appareils","ha_act":"Home Assistant : contrôler les appareils","ha_act_free":"Home Assistant : contrôler les appareils (sans demander)"},
+"rb_agent_builtin.KIND":{"web":"chercher sur le web et lire des pages","ask":"me poser une question","memory":"mémoriser et rappeler des notes","calc":"faire des calculs","time":"heures et dates","file":"lire un fichier que je choisis","review":"vérifier un texte selon des critères","usage":"services de modèles : usage, abonnements et limites","feeds":"flux d'actualités","linkedin":"chercher sur LinkedIn (pages publiques)","calendar":"calendrier : événements et créneaux libres","email":"e-mail : chercher et lire","email_send":"e-mail : envoyer (me demande d'abord)","github":"GitHub : projets et pull requests","github_act":"GitHub : commenter, ouvrir et étiqueter des issues (me demande d'abord)","telegram":"Telegram : chercher dans mes messages","telegram_send":"Telegram : envoyer (me demande d'abord)","telegram_send_free":"Telegram : envoyer (sans demander)","discord":"Discord : chercher dans mes salons","discord_send":"Discord : envoyer (me demande d'abord)","discord_send_free":"Discord : envoyer (sans demander)","slack":"Slack : chercher dans mes canaux","slack_send":"Slack : envoyer (me demande d'abord)","slack_send_free":"Slack : envoyer (sans demander)","mqtt":"MQTT : lire des sujets","mqtt_act":"MQTT : publier (me demande d'abord)","mqtt_act_free":"MQTT : publier (sans demander)","homey_read":"Homey : voir appareils, flows et variables","homey_act":"Homey : contrôler les appareils et lancer des flows (me demande d'abord)","homey_act_free":"Homey : contrôler les appareils et lancer des flows (sans demander)","ha_read":"Home Assistant : voir les appareils","ha_act":"Home Assistant : contrôler les appareils","ha_act_free":"Home Assistant : contrôler les appareils (sans demander)"},
 "rb_agent_mcp.ASK":{"changes":"(me demande avant les outils qui changent quelque chose)","every":"(me demande avant chaque outil)","never":"(sans demander)"},
 "rb_tg_message.PART":{"text":"texte","sender":"expéditeur","chat":"chat"},
 "rb_mem_set.KIND":{"transient":"tant que cette page est ouverte","permanent":"pour toujours"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"sessions Plex",
 "Plex new items":"nouveaux éléments Plex",
 "Tautulli history":"historique Tautulli",
-"Tautulli watch time":"temps de visionnage Tautulli"
+"Tautulli watch time":"temps de visionnage Tautulli",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"La page tourne sur votre compte claude.ai et ne compte donc pas les dépenses de chaque service ; exportez en Python, avec les clés dans second-thought.ini, et cet outil dira ce que chaque service a dépensé, son offre et son plafond, et tout dépassement."
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -2314,6 +2315,18 @@
 "Tautulli watch time":"temps de visionnage Tautulli",
 "{n} users":"{n} utilisateurs",
 "Which stream? Give a session's id, from the sessions.":"Quel flux ? Donne l'identifiant d'une session, dans les sessions.",
-"stop the {id} stream on Plex":"arrêter le flux {id} sur Plex"
+"stop the {id} stream on Plex":"arrêter le flux {id} sur Plex",
+", over by {x}":", en excès de {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Rien n'a encore été dépensé avec les clés de cet ordinateur, il n'y a donc rien à compter.",
+"What each model service has been used, counted on this computer at list prices:":"Ce que chaque service de modèles a été utilisé, compté sur cet ordinateur aux prix catalogues :",
+"no plan set: add {setting} in {where} to count it against a cap":"aucune offre définie : ajoutez {setting} {where} pour la compter face à un plafond",
+"over the cap by {x}":"au-delà du plafond de {x}",
+"the {plan} plan publishes no monthly cap":"l'offre {plan} ne publie aucun plafond mensuel",
+"this hour":"cette heure",
+"this month":"ce mois-ci",
+"this week":"cette semaine",
+"today":"aujourd'hui",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% du plafond mensuel de {cap} de l'offre {plan} ({spent} dépensés, revient à {when})",
+"{window} {x}":"{window} {x}"
 }
 };

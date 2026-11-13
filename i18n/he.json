@@ -840,6 +840,7 @@
    "time": "שעות ותאריכים",
    "file": "לקרוא קובץ שאבחר",
    "review": "בדיקת טקסט מול קריטריונים",
+   "usage": "שירותי המודלים: שימוש, תוכניות ומגבלות",
    "feeds": "פידים של חדשות",
    "linkedin": "חיפוש ב-LinkedIn (דפים ציבוריים)",
    "calendar": "לוח שנה: אירועים וזמן פנוי",
@@ -1899,7 +1900,8 @@
   "Plex sessions": "סשנים של Plex",
   "Plex new items": "פריטים חדשים ב-Plex",
   "Tautulli history": "היסטוריית Tautulli",
-  "Tautulli watch time": "זמן צפייה ב-Tautulli"
+  "Tautulli watch time": "זמן צפייה ב-Tautulli",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "העמוד פועל בחשבון ה-claude.ai שלך, ולכן אינו מונה את ההוצאה של כל שירות; ייצאו ל-Python, עם מפתחות ב-second-thought.ini, והכלי הזה ידווח כמה כל שירות הוציא, את התוכנית והתקרה שלו, וכל חריגה."
  },
  "examples": {
   "review": {
@@ -3664,6 +3666,18 @@
   "Tautulli watch time": "זמן צפייה ב-Tautulli",
   "{n} users": "{n} משתמשים",
   "Which stream? Give a session's id, from the sessions.": "איזה זרם? תן את ה-id של סשן, מהסשנים.",
-  "stop the {id} stream on Plex": "לעצור את הזרם {id} ב-Plex"
+  "stop the {id} stream on Plex": "לעצור את הזרם {id} ב-Plex",
+  ", over by {x}": ", בחריגה של {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "טרם הוצא דבר דרך המפתחות של מחשב זה, אין אפוא מה למנות.",
+  "What each model service has been used, counted on this computer at list prices:": "כמה נעשה שימוש בכל שירות מודלים, נמנה במחשב זה לפי מחירי המחירון:",
+  "no plan set: add {setting} in {where} to count it against a cap": "לא נקבעה תוכנית: הוסיפו {setting} {where} כדי למנות זאת מול תקרה",
+  "over the cap by {x}": "מעל לתקרה ב-{x}",
+  "the {plan} plan publishes no monthly cap": "תוכנית {plan} אינה מפרסמת תקרה חודשית",
+  "this hour": "בשעה זו",
+  "this month": "החודש",
+  "this week": "השבוע",
+  "today": "היום",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% מהתקרה החודשית של {cap} של תוכנית {plan} ({spent} הוצאו, מתאפס ב-{when})",
+  "{window} {x}": "{window} {x}"
  }
 }

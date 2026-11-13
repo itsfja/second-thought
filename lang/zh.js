@@ -214,7 +214,7 @@
 "rb_now.PART":{"time":"时间","date":"日期","datetime":"日期和时间","hour":"小时数","minute":"分钟数","weekday":"星期几"},
 "rb_sort.ORDER":{"desc":"从高到低","asc":"从低到高"},
 "rb_ask_first.WHAT":{"ha":"任何智能家居操作（Home Assistant、Homey、MQTT）","messages":"发送消息和广播通知","files":"保存文件","all":"以上所有操作"},
-"rb_agent_builtin.KIND":{"web":"搜索网络并阅读网页","ask":"问我一个问题","memory":"记住和回想笔记","calc":"计算","time":"时间与日期","file":"读取我选择的文件","review":"按标准检查文本","feeds":"新闻订阅源","linkedin":"搜索领英（公开页面）","calendar":"日历：事件和空闲时间","email":"邮件：搜索和阅读","email_send":"邮件：发送（先问我）","github":"GitHub：项目和拉取请求","github_act":"GitHub：评论、创建和标记 issue（先问我）","telegram":"Telegram：搜索我的消息","telegram_send":"Telegram：发送（先问我）","telegram_send_free":"Telegram：发送（不询问）","discord":"Discord：搜索我的频道","discord_send":"Discord：发送（先问我）","discord_send_free":"Discord：发送（不询问）","slack":"Slack：搜索我的频道","slack_send":"Slack：发送（先问我）","slack_send_free":"Slack：发送（不询问）","mqtt":"MQTT：读取主题","mqtt_act":"MQTT：发布（先问我）","mqtt_act_free":"MQTT：发布（不询问）","homey_read":"Homey：查看设备、流程和变量","homey_act":"Homey：控制设备和启动流程（先问我）","homey_act_free":"Homey：控制设备和启动流程（不询问）","ha_read":"Home Assistant：查看设备","ha_act":"Home Assistant：控制设备","ha_act_free":"Home Assistant：控制设备（不询问）"},
+"rb_agent_builtin.KIND":{"web":"搜索网络并阅读网页","ask":"问我一个问题","memory":"记住和回想笔记","calc":"计算","time":"时间与日期","file":"读取我选择的文件","review":"按标准检查文本","usage":"模型服务：用量、套餐与限额","feeds":"新闻订阅源","linkedin":"搜索领英（公开页面）","calendar":"日历：事件和空闲时间","email":"邮件：搜索和阅读","email_send":"邮件：发送（先问我）","github":"GitHub：项目和拉取请求","github_act":"GitHub：评论、创建和标记 issue（先问我）","telegram":"Telegram：搜索我的消息","telegram_send":"Telegram：发送（先问我）","telegram_send_free":"Telegram：发送（不询问）","discord":"Discord：搜索我的频道","discord_send":"Discord：发送（先问我）","discord_send_free":"Discord：发送（不询问）","slack":"Slack：搜索我的频道","slack_send":"Slack：发送（先问我）","slack_send_free":"Slack：发送（不询问）","mqtt":"MQTT：读取主题","mqtt_act":"MQTT：发布（先问我）","mqtt_act_free":"MQTT：发布（不询问）","homey_read":"Homey：查看设备、流程和变量","homey_act":"Homey：控制设备和启动流程（先问我）","homey_act_free":"Homey：控制设备和启动流程（不询问）","ha_read":"Home Assistant：查看设备","ha_act":"Home Assistant：控制设备","ha_act_free":"Home Assistant：控制设备（不询问）"},
 "rb_agent_mcp.ASK":{"changes":"（在会改变东西的工具之前先问我）","every":"（在每个工具之前先问我）","never":"（不询问）"},
 "rb_tg_message.PART":{"text":"文字","sender":"发送者","chat":"聊天"},
 "rb_mem_set.KIND":{"transient":"本页面打开期间","permanent":"永久"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex 会话",
 "Plex new items":"Plex 新增内容",
 "Tautulli history":"Tautulli 历史",
-"Tautulli watch time":"Tautulli 观看时长"
+"Tautulli watch time":"Tautulli 观看时长",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"此页面通过你的 claude.ai 账户运行，因此不统计各服务的花销；导出为 Python 并在 second-thought.ini 中填好密钥后，此工具会报告每个服务的花销、套餐与上限，以及超额部分。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -2314,6 +2315,18 @@
 "Tautulli watch time":"Tautulli 观看时长",
 "{n} users":"{n} 个用户",
 "Which stream? Give a session's id, from the sessions.":"哪个串流？从会话里给出一个会话的 id。",
-"stop the {id} stream on Plex":"停止 Plex 上的 {id} 串流"
+"stop the {id} stream on Plex":"停止 Plex 上的 {id} 串流",
+", over by {x}":"，超出 {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"这台电脑的密钥还没有支出，因此没有可统计的。",
+"What each model service has been used, counted on this computer at list prices:":"各模型服务的使用情况，按本机以目录价统计：",
+"no plan set: add {setting} in {where} to count it against a cap":"未设置套餐：在 {where} 添加 {setting}，即可按上限统计",
+"over the cap by {x}":"超出上限 {x}",
+"the {plan} plan publishes no monthly cap":"{plan} 套餐未公布月度上限",
+"this hour":"这一小时",
+"this month":"本月",
+"this week":"本周",
+"today":"今天",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{plan} 套餐月度上限 {cap} 的 {pct}%（已支出 {spent}，{when} 重置）",
+"{window} {x}":"{window} {x}"
 }
 };

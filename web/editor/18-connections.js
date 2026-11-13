@@ -1068,6 +1068,7 @@
         addStep(tr("Read page: {url}", { url:short(a("url"), 60) }), { mono:true, text:tr("This page can't open other websites, so the agent is told to use search_web instead. Exported Python reads the page for real.") }).done("not live", "warn");
         return "This page can't open other websites, so read_page doesn't work here (it does in exported Python). Use search_web instead.";
       }
+      case "ai_usage": return tr("The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.");
       case "calculate": return calcText(a("expression"));
       case "current_time": return currentTimeText();
       case "time_plus": return timePlusText(a("time"), inp.minutes == null ? 0 : inp.minutes);

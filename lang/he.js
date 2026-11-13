@@ -215,7 +215,7 @@
 "rb_now.PART":{"time":"שעה","date":"תאריך","datetime":"תאריך ושעה","hour":"שעה","minute":"דקה","weekday":"יום בשבוע"},
 "rb_sort.ORDER":{"desc":"הגבוה קודם","asc":"הנמוך קודם"},
 "rb_ask_first.WHAT":{"ha":"כל פעולה בבית החכם (Home Assistant, ‏Homey, ‏MQTT)","messages":"שליחת הודעות והכרזות","files":"שמירת קבצים","all":"כל אלה"},
-"rb_agent_builtin.KIND":{"web":"חיפוש ברשת וקריאת דפים","ask":"לשאול אותי שאלה","memory":"לזכור ולהיזכר בפתקים","calc":"חישובים","time":"שעות ותאריכים","file":"לקרוא קובץ שאבחר","review":"בדיקת טקסט מול קריטריונים","feeds":"פידים של חדשות","linkedin":"חיפוש ב-LinkedIn (דפים ציבוריים)","calendar":"לוח שנה: אירועים וזמן פנוי","email":"דוא״ל: חיפוש וקריאה","email_send":"דוא״ל: שליחה (שואל אותי קודם)","github":"GitHub: פרויקטים ובקשות משיכה","github_act":"GitHub: תגובה, פתיחה ותיוג של issues (שואל אותי קודם)","telegram":"Telegram: חיפוש בהודעות שלי","telegram_send":"Telegram: שליחה (שואל אותי קודם)","telegram_send_free":"Telegram: שליחה (בלי לשאול)","discord":"Discord: חיפוש בערוצים שלי","discord_send":"Discord: שליחה (שואל אותי קודם)","discord_send_free":"Discord: שליחה (בלי לשאול)","slack":"Slack: חיפוש בערוצים שלי","slack_send":"Slack: שליחה (שואל אותי קודם)","slack_send_free":"Slack: שליחה (בלי לשאול)","mqtt":"MQTT: קריאת נושאים","mqtt_act":"MQTT: פרסום (שואל אותי קודם)","mqtt_act_free":"MQTT: פרסום (בלי לשאול)","homey_read":"Homey: צפייה במכשירים, בזרימות ובמשתנים","homey_act":"Homey: שליטה במכשירים והפעלת זרימות (שואל אותי קודם)","homey_act_free":"Homey: שליטה במכשירים והפעלת זרימות (בלי לשאול)","ha_read":"Home Assistant: צפייה במכשירים","ha_act":"Home Assistant: שליטה במכשירים","ha_act_free":"Home Assistant: שליטה במכשירים (בלי לשאול)"},
+"rb_agent_builtin.KIND":{"web":"חיפוש ברשת וקריאת דפים","ask":"לשאול אותי שאלה","memory":"לזכור ולהיזכר בפתקים","calc":"חישובים","time":"שעות ותאריכים","file":"לקרוא קובץ שאבחר","review":"בדיקת טקסט מול קריטריונים","usage":"שירותי המודלים: שימוש, תוכניות ומגבלות","feeds":"פידים של חדשות","linkedin":"חיפוש ב-LinkedIn (דפים ציבוריים)","calendar":"לוח שנה: אירועים וזמן פנוי","email":"דוא״ל: חיפוש וקריאה","email_send":"דוא״ל: שליחה (שואל אותי קודם)","github":"GitHub: פרויקטים ובקשות משיכה","github_act":"GitHub: תגובה, פתיחה ותיוג של issues (שואל אותי קודם)","telegram":"Telegram: חיפוש בהודעות שלי","telegram_send":"Telegram: שליחה (שואל אותי קודם)","telegram_send_free":"Telegram: שליחה (בלי לשאול)","discord":"Discord: חיפוש בערוצים שלי","discord_send":"Discord: שליחה (שואל אותי קודם)","discord_send_free":"Discord: שליחה (בלי לשאול)","slack":"Slack: חיפוש בערוצים שלי","slack_send":"Slack: שליחה (שואל אותי קודם)","slack_send_free":"Slack: שליחה (בלי לשאול)","mqtt":"MQTT: קריאת נושאים","mqtt_act":"MQTT: פרסום (שואל אותי קודם)","mqtt_act_free":"MQTT: פרסום (בלי לשאול)","homey_read":"Homey: צפייה במכשירים, בזרימות ובמשתנים","homey_act":"Homey: שליטה במכשירים והפעלת זרימות (שואל אותי קודם)","homey_act_free":"Homey: שליטה במכשירים והפעלת זרימות (בלי לשאול)","ha_read":"Home Assistant: צפייה במכשירים","ha_act":"Home Assistant: שליטה במכשירים","ha_act_free":"Home Assistant: שליטה במכשירים (בלי לשאול)"},
 "rb_agent_mcp.ASK":{"changes":"(שואל אותי לפני כלים שמשנים דברים)","every":"(שואל אותי לפני כל כלי)","never":"(בלי לשאול)"},
 "rb_tg_message.PART":{"text":"טקסט","sender":"שולח","chat":"צ'אט"},
 "rb_mem_set.KIND":{"transient":"כל עוד הדף הזה פתוח","permanent":"לתמיד"},
@@ -1182,7 +1182,8 @@
 "Plex sessions":"סשנים של Plex",
 "Plex new items":"פריטים חדשים ב-Plex",
 "Tautulli history":"היסטוריית Tautulli",
-"Tautulli watch time":"זמן צפייה ב-Tautulli"
+"Tautulli watch time":"זמן צפייה ב-Tautulli",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"העמוד פועל בחשבון ה-claude.ai שלך, ולכן אינו מונה את ההוצאה של כל שירות; ייצאו ל-Python, עם מפתחות ב-second-thought.ini, והכלי הזה ידווח כמה כל שירות הוציא, את התוכנית והתקרה שלו, וכל חריגה."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -2315,6 +2316,18 @@
 "Tautulli watch time":"זמן צפייה ב-Tautulli",
 "{n} users":"{n} משתמשים",
 "Which stream? Give a session's id, from the sessions.":"איזה זרם? תן את ה-id של סשן, מהסשנים.",
-"stop the {id} stream on Plex":"לעצור את הזרם {id} ב-Plex"
+"stop the {id} stream on Plex":"לעצור את הזרם {id} ב-Plex",
+", over by {x}":", בחריגה של {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"טרם הוצא דבר דרך המפתחות של מחשב זה, אין אפוא מה למנות.",
+"What each model service has been used, counted on this computer at list prices:":"כמה נעשה שימוש בכל שירות מודלים, נמנה במחשב זה לפי מחירי המחירון:",
+"no plan set: add {setting} in {where} to count it against a cap":"לא נקבעה תוכנית: הוסיפו {setting} {where} כדי למנות זאת מול תקרה",
+"over the cap by {x}":"מעל לתקרה ב-{x}",
+"the {plan} plan publishes no monthly cap":"תוכנית {plan} אינה מפרסמת תקרה חודשית",
+"this hour":"בשעה זו",
+"this month":"החודש",
+"this week":"השבוע",
+"today":"היום",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% מהתקרה החודשית של {cap} של תוכנית {plan} ({spent} הוצאו, מתאפס ב-{when})",
+"{window} {x}":"{window} {x}"
 }
 };

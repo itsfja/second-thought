@@ -216,7 +216,7 @@
 "rb_sort.ORDER":{"desc":"اڭ یوكسگی اوّل","asc":"اڭ آشاغیسی اوّل"},
 "rb_budget.UNIT":{"dollars":"آمریقا دولاری","gbp":"انگلیز لیراسی","eur":"یورو","jpy":"ین","cny":"یوان"},
 "rb_ask_first.WHAT":{"ha":"هر آقللی خانه عملی (Home Assistant، Homey، MQTT)","messages":"خبر و اعلان گوندرمك","files":"دوسیه حفظ ایتمك","all":"بونلرڭ هپسی"},
-"rb_agent_builtin.KIND":{"web":"شبكه‌ده آرا و صحیفه اوقو","ask":"بڭا بر صوال صور","memory":"نوط خاطرلا و خاطرله","calc":"حساب ایت","time":"ساعت وقتلری و تاریخلر","file":"سچدیكم بر دوسیه‌یی اوقو","review":"متنی معیارلره گوره یوقلا","feeds":"خبر منبعلری","linkedin":"LinkedIn ده آرا (عمومی صحیفه‌لر)","calendar":"تقویم: واقعه‌لر و بوش وقت","email":"مكتوب: آرا و اوقو","email_send":"مكتوب: گوندر (اوّلا بڭا صورار)","github":"GitHub: پروژه‌لر و چكمه طلبلری","github_act":"GitHub: تعلیق یاز، مسئله آچ و ایشارتله (اوّلا بڭا صورار)","telegram":"Telegram: خبرلرمده آرا","telegram_send":"Telegram: گوندر (اوّلا بڭا صورار)","telegram_send_free":"Telegram: گوندر (صورمادن)","discord":"Discord: قناللرمده آرا","discord_send":"Discord: گوندر (اوّلا بڭا صورار)","discord_send_free":"Discord: گوندر (صورمادن)","slack":"Slack: قناللرمده آرا","slack_send":"Slack: گوندر (اوّلا بڭا صورار)","slack_send_free":"Slack: گوندر (صورمادن)","mqtt":"MQTT: موضوعلری اوقو","mqtt_act":"MQTT: نشر ایت (اوّلا بڭا صورار)","mqtt_act_free":"MQTT: نشر ایت (صورمادن)","homey_read":"Homey: جهازلره، آقیشلره و متحوّللره باق","homey_act":"Homey: جهازلری اداره ایت و آقیش باشلات (اوّلا بڭا صورار)","homey_act_free":"Homey: جهازلری اداره ایت و آقیش باشلات (صورمادن)","ha_read":"Home Assistant: جهازلره باق","ha_act":"Home Assistant: جهازلری اداره ایت","ha_act_free":"Home Assistant: جهازلری اداره ایت (صورمادن)"},
+"rb_agent_builtin.KIND":{"web":"شبكه‌ده آرا و صحیفه اوقو","ask":"بڭا بر صوال صور","memory":"نوط خاطرلا و خاطرله","calc":"حساب ایت","time":"ساعت وقتلری و تاریخلر","file":"سچدیكم بر دوسیه‌یی اوقو","review":"متنی معیارلره گوره یوقلا","usage":"خدمات مدل‌لر: استعمال، پلان‌لر و حدودلر","feeds":"خبر منبعلری","linkedin":"LinkedIn ده آرا (عمومی صحیفه‌لر)","calendar":"تقویم: واقعه‌لر و بوش وقت","email":"مكتوب: آرا و اوقو","email_send":"مكتوب: گوندر (اوّلا بڭا صورار)","github":"GitHub: پروژه‌لر و چكمه طلبلری","github_act":"GitHub: تعلیق یاز، مسئله آچ و ایشارتله (اوّلا بڭا صورار)","telegram":"Telegram: خبرلرمده آرا","telegram_send":"Telegram: گوندر (اوّلا بڭا صورار)","telegram_send_free":"Telegram: گوندر (صورمادن)","discord":"Discord: قناللرمده آرا","discord_send":"Discord: گوندر (اوّلا بڭا صورار)","discord_send_free":"Discord: گوندر (صورمادن)","slack":"Slack: قناللرمده آرا","slack_send":"Slack: گوندر (اوّلا بڭا صورار)","slack_send_free":"Slack: گوندر (صورمادن)","mqtt":"MQTT: موضوعلری اوقو","mqtt_act":"MQTT: نشر ایت (اوّلا بڭا صورار)","mqtt_act_free":"MQTT: نشر ایت (صورمادن)","homey_read":"Homey: جهازلره، آقیشلره و متحوّللره باق","homey_act":"Homey: جهازلری اداره ایت و آقیش باشلات (اوّلا بڭا صورار)","homey_act_free":"Homey: جهازلری اداره ایت و آقیش باشلات (صورمادن)","ha_read":"Home Assistant: جهازلره باق","ha_act":"Home Assistant: جهازلری اداره ایت","ha_act_free":"Home Assistant: جهازلری اداره ایت (صورمادن)"},
 "rb_agent_mcp.ASK":{"changes":"(شی دڭیشدیرن آلتلردن اوّل بڭا صورار)","every":"(هر آلتدن اوّل بڭا صورار)","never":"(صورمادن)"},
 "rb_agent_kraken.MODE":{"read":"(فیئاتلر، حسابڭ و كاغد تجارتی)","live":"(و جانلی تجارت: هر سپارشدن اوّل صورار)"},
 "rb_mem_set.KIND":{"transient":"بو صحیفه آچیق ایكن","permanent":"ابدیاً"},
@@ -1181,7 +1181,8 @@
 "Plex sessions":"Plex oturumlari",
 "Plex new items":"Plex yeni ogeler",
 "Tautulli history":"Tautulli gecmisi",
-"Tautulli watch time":"Tautulli izleme suresi"
+"Tautulli watch time":"Tautulli izleme suresi",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"بو صفحه حساب claude.ai‌نینده فعالیّت eder، هر خدمتین مصرفی‌نی سایماز؛ Python‌یه ایخراج ایده‌رک، second-thought.ini‌ده آچارلر قویوب، بو آلت هر خدمتین مصرفی، پلانی و حدی و مازادینی بیلدیرور."
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2314,7 +2315,19 @@
 "Tautulli watch time":"Tautulli izleme suresi",
 "{n} users":"{n} kullanici",
 "Which stream? Give a session's id, from the sessions.":"Hangi akis? Oturumlarin icinden bir oturumun id'sini ver.",
-"stop the {id} stream on Plex":"Plex'teki {id} akisini durdurmak"
+"stop the {id} stream on Plex":"Plex'teki {id} akisini durdurmak",
+", over by {x}":"، مازادی {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"بو بیلگیسایارین آچارلری‌یله هنوز هیچ مصرف اولمامیش‌در، حساب‌لناجق شئ یوخ‌دور.",
+"What each model service has been used, counted on this computer at list prices:":"هر مودل خدمتی نچه قدر قوللانیلمیش‌دیر، بو بیلگیسایارده لیست قیمتی اوزره سایلمیش‌دیر:",
+"no plan set: add {setting} in {where} to count it against a cap":"پلان تنظیم اولمامیش‌در: {setting}‌نی {where} قویوب بود حد قارشی‌سینده سایلمق اوچون",
+"over the cap by {x}":"حددن {x} مازاد",
+"the {plan} plan publishes no monthly cap":"{plan} پلانی آی‌لیق حد نشر اتمه‌مک‌ده‌دیر",
+"this hour":"بو ساعاتده",
+"this month":"بو آیدا",
+"this week":"بو حفته‌ده",
+"today":"بوگون",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{plan} پلانی‌نین {cap} آی‌لیق حدی‌نین %{pct}‌ای ({spent} صرف اولموش، {when}‌ده یئنی‌دن باشلار)",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

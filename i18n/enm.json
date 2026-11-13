@@ -839,6 +839,7 @@
    "time": "houres and dayes",
    "file": "rede a quaier that I chese",
    "review": "examyne text agayns reules",
+   "usage": "the modell servys: vsage, planys and boundys",
    "feeds": "tydinges streemes",
    "linkedin": "seke on LinkedIn (commune leves)",
    "calendar": "kalender: events and free tyme",
@@ -1898,7 +1899,8 @@
   "Plex sessions": "Plex sessions",
   "Plex new items": "Plex newe thinges",
   "Tautulli history": "Tautulli historie",
-  "Tautulli watch time": "Tautulli watching tyme"
+  "Tautulli watch time": "Tautulli watching tyme",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "Þis page renneþ on þi claude.ai compt, so it telleþ nouȝt of ech servys spending; bere it out to Pyþon, wiþ keies in second-thought.ini, and þis tol seiþ what ech servys haþ spent, his plan and his bound, and ani ouerspend."
  },
  "examples": {
   "review": {
@@ -3663,7 +3665,19 @@
   "Tautulli watch time": "Tautulli watching tyme",
   "{n} users": "{n} users",
   "Which stream? Give a session's id, from the sessions.": "Whiche stream? Yeve a session's id, fro the sessions.",
-  "stop the {id} stream on Plex": "stopping the {id} stream on Plex"
+  "stop the {id} stream on Plex": "stopping the {id} stream on Plex",
+  ", over by {x}": ", ouer by {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Nouȝt hath ben spent ȝit þurh þis computres keies, so þer is nouȝt to counte.",
+  "What each model service has been used, counted on this computer at list prices:": "What ech modell servys hath ben vsed, I-told on þis computre at list price:",
+  "no plan set: add {setting} in {where} to count it against a cap": "no plan y-set: adde {setting} {where} to counte it aȝeyn a bounde",
+  "over the cap by {x}": "ouer þe bounde by {x}",
+  "the {plan} plan publishes no monthly cap": "þe {plan} plan publissheth no monþely bounde",
+  "this hour": "in þis houre",
+  "this month": "þis monþe",
+  "this week": "þis woke",
+  "today": "to-day",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% of þe {plan} planys monþely bounde of {cap} ({spent} spent, bigynneth aȝeyn {when})",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

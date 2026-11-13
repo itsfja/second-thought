@@ -839,6 +839,7 @@
    "time": "orari e date",
    "file": "leggere un file che scelgo",
    "review": "controllare un testo secondo dei criteri",
+   "usage": "servizi di modelli: uso, piani e limiti",
    "feeds": "feed di notizie",
    "linkedin": "cercare su LinkedIn (pagine pubbliche)",
    "calendar": "calendario: eventi e tempo libero",
@@ -1898,7 +1899,8 @@
   "Plex sessions": "sessioni Plex",
   "Plex new items": "nuovi elementi Plex",
   "Tautulli history": "cronologia Tautulli",
-  "Tautulli watch time": "tempo di visione Tautulli"
+  "Tautulli watch time": "tempo di visione Tautulli",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "La pagina usa il tuo account claude.ai, quindi non conta quanto spende ogni servizio; esporta in Python, con le chiavi in second-thought.ini, e questo strumento dirà quanto ha speso ogni servizio, il suo piano e il suo tetto, e ogni eccedenza."
  },
  "examples": {
   "review": {
@@ -3663,6 +3665,18 @@
   "Tautulli watch time": "tempo di visione Tautulli",
   "{n} users": "{n} utenti",
   "Which stream? Give a session's id, from the sessions.": "Quale stream? Dài l'id di una sessione, dalle sessioni.",
-  "stop the {id} stream on Plex": "fermare lo stream {id} su Plex"
+  "stop the {id} stream on Plex": "fermare lo stream {id} su Plex",
+  ", over by {x}": ", in eccesso di {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Non è ancora stato speso nulla con le chiavi di questo computer, quindi non c'è niente da contare.",
+  "What each model service has been used, counted on this computer at list prices:": "Quanto è stato usato ciascun servizio di modelli, contato su questo computer a prezzi di listino:",
+  "no plan set: add {setting} in {where} to count it against a cap": "nessun piano impostato: aggiungi {setting} {where} per contarne il tetto",
+  "over the cap by {x}": "oltre il tetto di {x}",
+  "the {plan} plan publishes no monthly cap": "il piano {plan} non pubblica un tetto mensile",
+  "this hour": "quest'ora",
+  "this month": "questo mese",
+  "this week": "questa settimana",
+  "today": "oggi",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% del tetto mensile di {cap} del piano {plan} ({spent} spesi, si azzera {when})",
+  "{window} {x}": "{window} {x}"
  }
 }

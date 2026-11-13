@@ -6519,6 +6519,10 @@ class AgentTools:
                      "as a list of times and states.", ["entity", "hours"])],
         "ha_act": [("call_service", "Call a Home Assistant service, like light.turn_off on light.kitchen. data is optional JSON. "
                     "The person may be asked first, and may say no.", ["service", "entity", "data"])],
+        "usage": [("ai_usage", "What the person's model services have been used: for each with a key set, what it has spent this "
+                    "hour, today, this week and this month, the plan and monthly cap set for it and how much of that is gone "
+                    "or overspent, any allowances, and the rate limits the services themselves reported. Counted on this "
+                    "computer, at list prices.", [])],
         "calc": [("calculate", "Work out a sum exactly, like (350 / 500) * 100 or round(1000 * 0.02, 1). Use it for every sum instead of working it out "
                   "yourself. It knows + - * / ^, brackets, pi, and round(x, places), min, max, sqrt, abs, floor, ceil.", ["expression"])],
         "time": [("current_time", "Get the day, date and time now.", []),
@@ -6596,7 +6600,7 @@ class AgentTools:
     # The type of each built-in tool's inputs; every input is required unless listed in AGENT_OPTIONAL.
     AGENT_INPUT_TYPES = {"search_web": {"query": "text"}, "ask_me": {"question": "text"}, "remember": {"name": "text", "value": "text"},
                          "recall": {"name": "text"}, "list_memory": {}, "search_memory": {"query": "text"}, "find_devices": {"search": "text"}, "device_state": {"entity": "text"},
-                         "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"},
+                         "call_service": {"service": "text", "entity": "text", "data": "any"}, "read_page": {"url": "text"}, "ai_usage": {},
                          "device_history": {"entity": "text", "hours": "number"}, "calculate": {"expression": "text"}, "current_time": {},
                          "time_plus": {"time": "text", "minutes": "number"}, "read_file": {"why": "text"},
                          "review_text": {"text": "text", "criteria": "text"}, "read_feed": {"url": "text", "limit": "number"},
@@ -6874,6 +6878,8 @@ class AgentTools:
             out = await asyncio.to_thread(fetch_page, a("url"))
             self.log(tr("Read page: {x}", x=_short(a("url"), 60)), _short(out, 400), tr("done"))
             return out
+        if kind == "ai_usage":
+            return usage_text()
         if kind == "calculate":
             return calc_text(a("expression"))
         if kind == "current_time":
@@ -7420,6 +7426,55 @@ def reported_lines(services=None, low_only=False, hints=True):
             out.append(tr("{service}'s limits match its {plan} plan: add {setting} = {plan_lower} {where_keys}", service=service,
                           plan=hint.title(), setting=plan_setting(service), plan_lower=hint, where_keys=WHERE_KEYS))
     return out
+
+
+def usage_text(now=None):
+    """What each service's keys have spent on this computer, and how that stands against each plan cap and allowance:
+    the ai_usage tool's answer. Only services whose keys have spent something are listed."""
+    now = now or datetime.datetime.now()
+    keys = Spending._ledger_read()["keys"]
+    if not keys:
+        return tr("Nothing has been spent through this computer's keys yet, so there's nothing to count.")
+    hours_by_service = {}
+    for entry in keys.values():
+        hours = hours_by_service.setdefault(entry.get("service") or "", {})
+        for hour, value in (entry.get("hours") or {}).items():
+            hours[hour] = hours.get(hour, 0.0) + value
+    out = [tr("What each model service has been used, counted on this computer at list prices:")]
+    for service in sorted(hours_by_service):
+        hours = hours_by_service[service]
+
+        def spent_since(start, hours=hours):
+            first = start.strftime("%Y-%m-%dT%H")
+            return sum(v for h, v in hours.items() if h >= first)
+
+        window_words = {"hourly": tr("this hour"), "daily": tr("today"), "weekly": tr("this week"), "monthly": tr("this month")}
+        parts = [tr("{window} {x}", window=window_words[w], x=dollars(spent_since(window_start(w, now)))) for w in WINDOWS]
+        cap = plan_cap(service)
+        if cap:
+            plan, usd, utc = cap
+            start = month_start(now, utc)
+            month = spent_since(start)
+            parts.append(tr("{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+                            pct=round(100 * month / usd), plan=plan.title(), cap=dollars(usd), spent=dollars(month),
+                            when=next_month(start).strftime("%Y-%m-%d %H:%M")))
+            if month > usd:
+                parts.append(tr("over the cap by {x}", x=dollars(month - usd)))
+        else:
+            plan = plan_of(service)
+            parts.append(tr("no plan set: add {setting} in {where} to count it against a cap",
+                            setting=plan_setting(service), where=WHERE_KEYS) if not plan else
+                         tr("the {plan} plan publishes no monthly cap", plan=plan.title()))
+        for window, limit in allowances_for(service).items():
+            spent = spent_since(window_start(window, now)) * per_dollar(CURRENCY)
+            bit = tr("{pct}% of the {window} allowance of {amount}", pct=round(100 * spent / limit),
+                     window=window_word(window), amount=amount_text(limit, CURRENCY))
+            if spent > limit:
+                bit += tr(", over by {x}", x=amount_text(spent - limit, CURRENCY))
+            parts.append(bit)
+        out.append(service + ": " + ", ".join(parts) + ".")
+    out += reported_lines(sorted(hours_by_service), low_only=False, hints=False)
+    return "\n".join(out)
 
 
 def window_word(window):

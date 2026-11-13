@@ -840,6 +840,7 @@
    "time": "𒋛𒈠𒉡 𒌋 𒌑𒈬",
    "file": "𒆪𒉡𒊌𒅗𒄠 𒊭 𒄴𒄭𒊒 𒅆𒋫𒊍𒋛",
    "review": "𒀀𒉿𒋫𒄠 𒀀𒈾 𒍢𒁍𒋾𒅎 𒁉𒊑",
+   "usage": "model services: usage, plans and limits",
    "feeds": "𒁍𒊻𒋢𒊏𒌅𒌝",
    "linkedin": "𒄿𒈾 LinkedIn 𒄭𒀉 (𒌅𒌒𒁍 𒁉𒌅𒌅𒌝)",
    "calendar": "𒌑𒈬: 𒀉𒋫𒌅𒌝 𒌋 𒋛𒈠𒉡 𒊑𒄣𒌅𒌝",
@@ -1899,7 +1900,8 @@
   "Plex sessions": "Plex 𒈠𒊍𒊓𒅈𒌅",
   "Plex new items": "Plex 𒈾𒊍𒊒",
   "Tautulli history": "Tautulli 𒋫𒅈𒋛𒋢",
-  "Tautulli watch time": "Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪"
+  "Tautulli watch time": "Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
  },
  "examples": {
   "review": {
@@ -3664,7 +3666,19 @@
   "Tautulli watch time": "Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪",
   "{n} users": "{n} 𒀀𒈨𒇻",
   "Which stream? Give a session's id, from the sessions.": "Ayya 𒈠𒊍𒊓𒅈𒌅? Suprammi id 𒈠𒊍𒊓𒅈𒌅, 𒄑𒌅 𒈠𒊍𒊓𒅈𒌅.",
-  "stop the {id} stream on Plex": "𒈠𒊍𒊓𒅈𒌅 {id} 𒀀𒈾 Plex 𒅗𒉺𒌅"
+  "stop the {id} stream on Plex": "𒈠𒊍𒊓𒅈𒌅 {id} 𒀀𒈾 Plex 𒅗𒉺𒌅",
+  ", over by {x}": ", over by {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Nothing has been spent through this computer's keys yet, so there's nothing to count.",
+  "What each model service has been used, counted on this computer at list prices:": "What each model service has been used, counted on this computer at list prices:",
+  "no plan set: add {setting} in {where} to count it against a cap": "no plan set: add {setting} in {where} to count it against a cap",
+  "over the cap by {x}": "over the cap by {x}",
+  "the {plan} plan publishes no monthly cap": "the {plan} plan publishes no monthly cap",
+  "this hour": "this hour",
+  "this month": "this month",
+  "this week": "this week",
+  "today": "today",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

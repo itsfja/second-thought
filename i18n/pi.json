@@ -843,6 +843,7 @@
    "time": "काला च दिनानि च",
    "file": "मया विचितं सञ्चिकं पठ",
    "review": "पाठं पटिमानेहि",
+   "usage": "model services: usage, plans and limits",
    "feeds": "पवत्तिसोतानि",
    "linkedin": "LinkedIn परियेस (सब्बजनपत्तानि)",
    "calendar": "दिनदस्सिका: घटना तुच्छकालो च",
@@ -1889,7 +1890,8 @@
   "Plex sessions": "Plex samavayani",
   "Plex new items": "Plex nava",
   "Tautulli history": "Tautulli itihaso",
-  "Tautulli watch time": "Tautulli passana-kalo"
+  "Tautulli watch time": "Tautulli passana-kalo",
+  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
  },
  "examples": {
   "review": {
@@ -3654,7 +3656,19 @@
   "Tautulli watch time": "Tautulli passana-kalo",
   "{n} users": "{n} upasagga",
   "Which stream? Give a session's id, from the sessions.": "Ko savaho? Dehi ekassa samavayassa id, samavayehi.",
-  "stop the {id} stream on Plex": "Plex {id} savam nivattetu"
+  "stop the {id} stream on Plex": "Plex {id} savam nivattetu",
+  ", over by {x}": ", over by {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Nothing has been spent through this computer's keys yet, so there's nothing to count.",
+  "What each model service has been used, counted on this computer at list prices:": "What each model service has been used, counted on this computer at list prices:",
+  "no plan set: add {setting} in {where} to count it against a cap": "no plan set: add {setting} in {where} to count it against a cap",
+  "over the cap by {x}": "over the cap by {x}",
+  "the {plan} plan publishes no monthly cap": "the {plan} plan publishes no monthly cap",
+  "this hour": "this hour",
+  "this month": "this month",
+  "this week": "this week",
+  "today": "today",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+  "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टीकं पक्खिप",

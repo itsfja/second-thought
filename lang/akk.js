@@ -215,7 +215,7 @@
 "rb_now.PART":{"time":"𒋛𒈠𒉡𒌝","date":"𒌑𒈬𒌝","datetime":"𒌑𒈬𒌝 𒌋 𒋛𒈠𒉡𒌝","hour":"𒁁𒊒𒌝","minute":"𒌓𒁕𒌅𒌝","weekday":"𒌝 𒊺𒁍𒋾𒅎"},
 "rb_sort.ORDER":{"desc":"𒂊𒇻𒌝 𒉺𒈾","asc":"𒊭𒀊𒇻𒌝 𒉺𒈾"},
 "rb_ask_first.WHAT":{"ha":"𒂊𒁉𒅖𒋾𒅎 𒅗𒇷𒊭 𒊭 𒁉𒋾𒅎 𒅎𒆠𒅎 (Home Assistant, Homey, MQTT)","messages":"𒊭𒉺𒅈 𒅆𒅁𒊑 𒌋 𒋗𒁺𒋾𒅎","files":"𒈾𒍝𒅈 𒆪𒉡𒊌𒅗𒋾𒅎","all":"𒀭𒈾𒋾𒅎 𒅗𒇷𒅆𒈾"},
-"rb_agent_builtin.KIND":{"web":"𒄿𒈾 𒊺𒋾𒅎 𒄭𒀀𒌅𒌝 𒌋 𒌅𒌒𒁉 𒅆𒋫𒊍𒋢𒌝","ask":"𒅆𒌅𒌌𒋫𒄠 𒊭𒆷𒀭𒉌","memory":"𒅆𒀉𒊑 𒄩𒊓𒋢𒌝 𒌋 𒄷𒊻𒋢𒋢𒌝","calc":"𒉌𒅅𒅗𒊍𒋛 𒂊𒁍𒍑","time":"𒋛𒈠𒉡 𒌋 𒌑𒈬","file":"𒆪𒉡𒊌𒅗𒄠 𒊭 𒄴𒄭𒊒 𒅆𒋫𒊍𒋛","review":"𒀀𒉿𒋫𒄠 𒀀𒈾 𒍢𒁍𒋾𒅎 𒁉𒊑","feeds":"𒁍𒊻𒋢𒊏𒌅𒌝","linkedin":"𒄿𒈾 LinkedIn 𒄭𒀉 (𒌅𒌒𒁍 𒁉𒌅𒌅𒌝)","calendar":"𒌑𒈬: 𒀉𒋫𒌅𒌝 𒌋 𒋛𒈠𒉡 𒊑𒄣𒌅𒌝","email":"email: 𒄭𒀀𒌅𒌝 𒌋 𒅆𒋫𒊍𒋢𒌝","email_send":"email: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","github":"GitHub: 𒁺𒌌𒇻 𒌋 pull requests","github_act":"GitHub: 𒀀𒉿𒋫𒄠 𒊭𒅗𒉡𒌝, issues 𒁉𒋼𒅎 𒌋 𒋗𒈪 𒊭𒅗𒉡𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","telegram":"Telegram: 𒄿𒈾 𒅆𒅁𒊑𒅀 𒄭𒀉","telegram_send":"Telegram: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","telegram_send_free":"Telegram: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","discord":"Discord: 𒄿𒈾 𒈾𒊏𒋾𒅀 𒄭𒀉","discord_send":"Discord: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","discord_send_free":"Discord: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","slack":"Slack: 𒄿𒈾 𒈾𒊏𒋾𒅀 𒄭𒀉","slack_send":"Slack: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","slack_send_free":"Slack: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","mqtt":"MQTT: 𒀀𒉿𒋾𒅎 𒅆𒋫𒊍𒋢𒌝","mqtt_act":"MQTT: 𒋗𒁍𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","mqtt_act_free":"MQTT: 𒋗𒁍𒌝 (𒁀𒇻 𒊭𒇷𒅎)","homey_read":"Homey: 𒀀𒈾 𒌑𒉡𒋾𒅎, 𒀠𒅗𒅗𒋾𒅎 𒌋 𒅆𒈾𒋾𒅎 𒈾𒁕𒇻𒌝","homey_act":"Homey: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 𒌋 𒀠𒅗𒅗𒋾𒅎 𒋗𒊻𒁍𒌅𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","homey_act_free":"Homey: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 𒌋 𒀠𒅗𒅗𒋾𒅎 𒋗𒊻𒁍𒌅𒌝 (𒁀𒇻 𒊭𒇷𒅎)","ha_read":"Home Assistant: 𒀀𒈾 𒌑𒉡𒋾𒅎 𒈾𒁕𒇻𒌝","ha_act":"Home Assistant: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝","ha_act_free":"Home Assistant: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)"},
+"rb_agent_builtin.KIND":{"web":"𒄿𒈾 𒊺𒋾𒅎 𒄭𒀀𒌅𒌝 𒌋 𒌅𒌒𒁉 𒅆𒋫𒊍𒋢𒌝","ask":"𒅆𒌅𒌌𒋫𒄠 𒊭𒆷𒀭𒉌","memory":"𒅆𒀉𒊑 𒄩𒊓𒋢𒌝 𒌋 𒄷𒊻𒋢𒋢𒌝","calc":"𒉌𒅅𒅗𒊍𒋛 𒂊𒁍𒍑","time":"𒋛𒈠𒉡 𒌋 𒌑𒈬","file":"𒆪𒉡𒊌𒅗𒄠 𒊭 𒄴𒄭𒊒 𒅆𒋫𒊍𒋛","review":"𒀀𒉿𒋫𒄠 𒀀𒈾 𒍢𒁍𒋾𒅎 𒁉𒊑","usage":"model services: usage, plans and limits","feeds":"𒁍𒊻𒋢𒊏𒌅𒌝","linkedin":"𒄿𒈾 LinkedIn 𒄭𒀉 (𒌅𒌒𒁍 𒁉𒌅𒌅𒌝)","calendar":"𒌑𒈬: 𒀉𒋫𒌅𒌝 𒌋 𒋛𒈠𒉡 𒊑𒄣𒌅𒌝","email":"email: 𒄭𒀀𒌅𒌝 𒌋 𒅆𒋫𒊍𒋢𒌝","email_send":"email: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","github":"GitHub: 𒁺𒌌𒇻 𒌋 pull requests","github_act":"GitHub: 𒀀𒉿𒋫𒄠 𒊭𒅗𒉡𒌝, issues 𒁉𒋼𒅎 𒌋 𒋗𒈪 𒊭𒅗𒉡𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","telegram":"Telegram: 𒄿𒈾 𒅆𒅁𒊑𒅀 𒄭𒀉","telegram_send":"Telegram: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","telegram_send_free":"Telegram: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","discord":"Discord: 𒄿𒈾 𒈾𒊏𒋾𒅀 𒄭𒀉","discord_send":"Discord: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","discord_send_free":"Discord: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","slack":"Slack: 𒄿𒈾 𒈾𒊏𒋾𒅀 𒄭𒀉","slack_send":"Slack: 𒊭𒉺𒊒𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","slack_send_free":"Slack: 𒊭𒉺𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)","mqtt":"MQTT: 𒀀𒉿𒋾𒅎 𒅆𒋫𒊍𒋢𒌝","mqtt_act":"MQTT: 𒋗𒁍𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","mqtt_act_free":"MQTT: 𒋗𒁍𒌝 (𒁀𒇻 𒊭𒇷𒅎)","homey_read":"Homey: 𒀀𒈾 𒌑𒉡𒋾𒅎, 𒀠𒅗𒅗𒋾𒅎 𒌋 𒅆𒈾𒋾𒅎 𒈾𒁕𒇻𒌝","homey_act":"Homey: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 𒌋 𒀠𒅗𒅗𒋾𒅎 𒋗𒊻𒁍𒌅𒌝 (𒉺𒈾 𒄿𒊭𒀠𒆷𒀭𒉌)","homey_act_free":"Homey: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 𒌋 𒀠𒅗𒅗𒋾𒅎 𒋗𒊻𒁍𒌅𒌝 (𒁀𒇻 𒊭𒇷𒅎)","ha_read":"Home Assistant: 𒀀𒈾 𒌑𒉡𒋾𒅎 𒈾𒁕𒇻𒌝","ha_act":"Home Assistant: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝","ha_act_free":"Home Assistant: 𒌑𒉡𒋫𒄠 𒋗𒋼𒋗𒊒𒌝 (𒁀𒇻 𒊭𒇷𒅎)"},
 "rb_agent_mcp.ASK":{"changes":"(𒄿𒈾 𒉺𒉌 𒌑𒉡𒋾𒅎 𒊭 𒈪𒅎𒈠 𒌑𒈾𒀝𒅗𒊏 𒄿𒊭𒀠𒆷𒀭𒉌)","every":"(𒄿𒈾 𒉺𒉌 𒌑𒉡𒋾𒅎 𒅗𒇷𒊭 𒄿𒊭𒀠𒆷𒀭𒉌)","never":"(𒁀𒇻 𒊭𒇷𒅎)"},
 "rb_tg_message.PART":{"text":"𒀀𒉿𒌅𒌝","sender":"𒊭𒁉𒊒𒌝","chat":"𒁕𒁀𒁍𒌝"},
 "rb_mem_set.KIND":{"transient":"𒀀𒁲 𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒁉𒌅","permanent":"𒀀𒈾 𒁕𒅈"},
@@ -1182,7 +1182,8 @@
 "Plex sessions":"Plex 𒈠𒊍𒊓𒅈𒌅",
 "Plex new items":"Plex 𒈾𒊍𒊒",
 "Tautulli history":"Tautulli 𒋫𒅈𒋛𒋢",
-"Tautulli watch time":"Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪"
+"Tautulli watch time":"Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -2315,7 +2316,19 @@
 "Tautulli watch time":"Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪",
 "{n} users":"{n} 𒀀𒈨𒇻",
 "Which stream? Give a session's id, from the sessions.":"Ayya 𒈠𒊍𒊓𒅈𒌅? Suprammi id 𒈠𒊍𒊓𒅈𒌅, 𒄑𒌅 𒈠𒊍𒊓𒅈𒌅.",
-"stop the {id} stream on Plex":"𒈠𒊍𒊓𒅈𒌅 {id} 𒀀𒈾 Plex 𒅗𒉺𒌅"
+"stop the {id} stream on Plex":"𒈠𒊍𒊓𒅈𒌅 {id} 𒀀𒈾 Plex 𒅗𒉺𒌅",
+", over by {x}":", over by {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Nothing has been spent through this computer's keys yet, so there's nothing to count.",
+"What each model service has been used, counted on this computer at list prices:":"What each model service has been used, counted on this computer at list prices:",
+"no plan set: add {setting} in {where} to count it against a cap":"no plan set: add {setting} in {where} to count it against a cap",
+"over the cap by {x}":"over the cap by {x}",
+"the {plan} plan publishes no monthly cap":"the {plan} plan publishes no monthly cap",
+"this hour":"this hour",
+"this month":"this month",
+"this week":"this week",
+"today":"today",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

@@ -215,7 +215,7 @@
 "rb_sort.ORDER":{"desc":"高者居先","asc":"低者居先"},
 "rb_budget.UNIT":{"dollars":"美元","gbp":"英鎊","eur":"歐元","jpy":"日圓","cny":"人民幣"},
 "rb_ask_first.WHAT":{"ha":"凡智宅之事（Home Assistant、Homey、MQTT）","messages":"發信與宣告","files":"存卷","all":"凡此諸事"},
-"rb_agent_builtin.KIND":{"web":"求諸網而讀其頁","ask":"問我","memory":"記與憶其記","calc":"計數","time":"時刻與日","file":"讀吾所擇之卷","review":"依其準察文","feeds":"訊源","linkedin":"求諸 LinkedIn（公頁）","calendar":"曆：事與閒時","email":"郵：求而讀之","email_send":"郵：發之（先問我）","github":"GitHub：諸案與拉請","github_act":"GitHub：評、開、標議題（先問我）","telegram":"Telegram：求吾之信","telegram_send":"Telegram：發之（先問我）","telegram_send_free":"Telegram：發之（不問）","discord":"Discord：求吾之頻","discord_send":"Discord：發之（先問我）","discord_send_free":"Discord：發之（不問）","slack":"Slack：求吾之頻","slack_send":"Slack：發之（先問我）","slack_send_free":"Slack：發之（不問）","mqtt":"MQTT：讀其題","mqtt_act":"MQTT：發之（先問我）","mqtt_act_free":"MQTT：發之（不問）","homey_read":"Homey：觀器、流、變數","homey_act":"Homey：御器而啓流（先問我）","homey_act_free":"Homey：御器而啓流（不問）","ha_read":"Home Assistant：觀其器","ha_act":"Home Assistant：御其器","ha_act_free":"Home Assistant：御其器（不問）"},
+"rb_agent_builtin.KIND":{"web":"求諸網而讀其頁","ask":"問我","memory":"記與憶其記","calc":"計數","time":"時刻與日","file":"讀吾所擇之卷","review":"依其準察文","usage":"模型之役：用量、其制、其限","feeds":"訊源","linkedin":"求諸 LinkedIn（公頁）","calendar":"曆：事與閒時","email":"郵：求而讀之","email_send":"郵：發之（先問我）","github":"GitHub：諸案與拉請","github_act":"GitHub：評、開、標議題（先問我）","telegram":"Telegram：求吾之信","telegram_send":"Telegram：發之（先問我）","telegram_send_free":"Telegram：發之（不問）","discord":"Discord：求吾之頻","discord_send":"Discord：發之（先問我）","discord_send_free":"Discord：發之（不問）","slack":"Slack：求吾之頻","slack_send":"Slack：發之（先問我）","slack_send_free":"Slack：發之（不問）","mqtt":"MQTT：讀其題","mqtt_act":"MQTT：發之（先問我）","mqtt_act_free":"MQTT：發之（不問）","homey_read":"Homey：觀器、流、變數","homey_act":"Homey：御器而啓流（先問我）","homey_act_free":"Homey：御器而啓流（不問）","ha_read":"Home Assistant：觀其器","ha_act":"Home Assistant：御其器","ha_act_free":"Home Assistant：御其器（不問）"},
 "rb_agent_mcp.ASK":{"changes":"（器之能易物者，先問我）","every":"（每器先問我）","never":"（不問）"},
 "rb_agent_kraken.MODE":{"read":"（市價、汝之帳、紙上之易）","live":"（並真易：每單先問）"},
 "rb_mem_set.KIND":{"transient":"此頁開時","permanent":"永"},
@@ -1180,7 +1180,8 @@
 "Plex sessions":"Plex之會",
 "Plex new items":"Plex之新物",
 "Tautulli history":"Tautulli之史",
-"Tautulli watch time":"Tautulli觀時"
+"Tautulli watch time":"Tautulli觀時",
+"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"此頁行於爾claude.ai之籍，故不計各役之費；導出為Python，置鑰於second-thought.ini，此器則報各役所費、其制其限、並逾額者。"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2313,7 +2314,19 @@
 "Tautulli watch time":"Tautulli觀時",
 "{n} users":"{n}人",
 "Which stream? Give a session's id, from the sessions.":"何流？以一會之id予之，自會。",
-"stop the {id} stream on Plex":"止Plex之{id}流"
+"stop the {id} stream on Plex":"止Plex之{id}流",
+", over by {x}":"，逾{x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"此機之鑰尚未有所費，故無可計者。",
+"What each model service has been used, counted on this computer at list prices:":"各模型之役所用幾何，以本機按表價計之：",
+"no plan set: add {setting} in {where} to count it against a cap":"未設其制：置{setting}於{where}，乃可計其限",
+"over the cap by {x}":"逾其限{x}",
+"the {plan} plan publishes no monthly cap":"{plan}之制不布月限",
+"this hour":"此一時",
+"this month":"本月",
+"this week":"本周",
+"today":"今日",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{plan}之制月限{cap}之{pct}%（已費{spent}，{when}復始）",
+"{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

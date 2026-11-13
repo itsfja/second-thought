@@ -19,6 +19,7 @@ The olive block **agent: work toward …** holds the tools, which have their own
 - **clock times and dates**, for the time now and for adding or taking away minutes, like 09:30 plus 270 minutes. Good for working backwards from when you want bread out of the oven.
 - **read a file I choose**: the agent asks you for a PDF, a Word file or a text file and reads it.
 - **check text against criteria**: a separate, strict reviewer checks the agent's work and lists the problems, so the agent can fix them before it finishes.
+- **model services: usage, plans and limits**, to ask what each model service has been used: spent this hour, today, this week and this month, the plan and monthly cap set for it and how much of that is gone or overspent, any allowances, and the rate limits the services themselves reported. Counted on this computer, at list prices, so on the page the tool says spending is only counted in exported Python.
 - **news feeds**, to read the latest from news sites and blogs (RSS or Atom).
 - **search LinkedIn**, through the web search. LinkedIn doesn't let programs search it directly, so this only finds what LinkedIn shows everyone.
 - **calendar**, to list your events and find free time.
