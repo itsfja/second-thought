@@ -80,6 +80,7 @@
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
+             plex:blocks.some(b => b.type.startsWith("rb_plex_") || b.type.startsWith("rb_tautulli_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -165,6 +166,16 @@
       "; ever sent. Run --doctor once: it shows the certificate fingerprint for PIHOLE_CERT_SHA256, if Pi-hole is",
       "; behind HTTPS this computer doesn't trust.",
       "PIHOLE_URL = ", "PIHOLE_PASSWORD = ", "; PIHOLE_CERT_SHA256 = ");
+    if (need.plex) out.push("", "[plex]",
+      "; Your Plex media server, through the X-Plex-Token API the apps use: its address and its token (a device's",
+      "; account details show it). The server, libraries, sessions and new items blocks only read; scanning a library",
+      "; asks first, and nothing else is ever sent. Run --doctor once: it shows the certificate fingerprint for",
+      "; PLEX_CERT_SHA256, if Plex is behind HTTPS this computer doesn't trust.",
+      "PLEX_URL = ", "PLEX_TOKEN = ", "; PLEX_CERT_SHA256 = ",
+      "", "[tautulli]",
+      "; Tautulli, for the history and watch-time blocks and stopping a stream: its address and its API key (Settings,",
+      "; API Keys). The history only reads; stopping a stream asks first, and nothing else is ever sent.",
+      "TAUTULLI_URL = ", "TAUTULLI_API_KEY = ", "; TAUTULLI_CERT_SHA256 = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -517,6 +528,12 @@
         case "rb_pihole_summary": return "(await R.pihole_summary())";
         case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
         case "rb_pihole_top_clients": return "(await R.pihole_top_clients(" + I("N", "5") + "))";
+        case "rb_plex_server": return "(await R.plex_server())";
+        case "rb_plex_libraries": return "(await R.plex_libraries())";
+        case "rb_plex_sessions": return "(await R.plex_sessions())";
+        case "rb_plex_recent": return "(await R.plex_recent(" + I("N", "7") + "))";
+        case "rb_tautulli_history": return "(await R.tautulli_history(" + I("N", "7") + "))";
+        case "rb_tautulli_watchtime": return "(await R.tautulli_watchtime(" + I("N", "7") + "))";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -682,6 +699,8 @@
         case "rb_pihole_enable": E("await R.pihole_enable()"); break;
         case "rb_pihole_allow": E("await R.pihole_list(\"allow\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"ads.example.com\"") + ")"); break;
         case "rb_pihole_deny": E("await R.pihole_list(\"deny\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"bad.example.com\"") + ")"); break;
+        case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
+        case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;

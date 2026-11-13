@@ -197,7 +197,15 @@
 "rb_pihole_blocking":{"message0":"Pi-hole-Blockieren für %1 Sekunden ausschalten","tooltip":"Schaltet Blockieren für so viele Sekunden aus, dann schaltet Pi-hole es selbst wieder ein. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."},
 "rb_pihole_enable":{"message0":"Pi-hole-Blockieren einschalten","tooltip":"Schaltet Blockieren wieder ein. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."},
 "rb_pihole_allow":{"message0":"%1 %2 auf Pi-holes Allow-Liste","tooltip":"Setzt eine Domain auf die Allow-Liste oder nimmt sie herunter. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."},
-"rb_pihole_deny":{"message0":"%1 %2 auf Pi-holes Deny-Liste","tooltip":"Setzt eine Domain auf die Deny-Liste oder nimmt sie herunter. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."}
+"rb_pihole_deny":{"message0":"%1 %2 auf Pi-holes Deny-Liste","tooltip":"Setzt eine Domain auf die Deny-Liste oder nimmt sie herunter. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."},
+"rb_plex_server":{"message0":"Plex-Server","tooltip":"Ein Datensatz für den Server: name, version und up (er hat geantwortet, also ist er erreichbar). Braucht PLEX_URL und PLEX_TOKEN in second-thought.ini. Auf dieser Seite benutzt es einen Beispielserver."},
+"rb_plex_libraries":{"message0":"Plex-Bibliotheken","tooltip":"Eine Liste von Datensätzen, einer für jede Bibliothek: name, type (movie, show oder artist) und count (wie viele Items sie hat). Es liest nur."},
+"rb_plex_sessions":{"message0":"Plex-Sitzungen","tooltip":"Eine Liste von Datensätzen, einer für alles, was gerade läuft: id (die Sitzungs-ID), user, title, player, state (playing oder paused) und transcode (ob der Server es umwandelt). Es liest nur."},
+"rb_plex_recent":{"message0":"Plex neue Items, letzte %1 Tage","tooltip":"Eine Liste von Datensätzen, einer für jedes Item, das in so vielen Tagen dazukam: title, library und added (wann es dazukam). Es liest nur."},
+"rb_tautulli_history":{"message0":"Tautulli-Verlauf, letzte %1 Tage","tooltip":"Eine Liste von Datensätzen, einer für alles, was in so vielen Tagen angesehen wurde, von Tautulli: user, title, when und transcode (ob es umgewandelt wurde). Es liest nur. Braucht TAUTULLI_URL und TAUTULLI_API_KEY in second-thought.ini."},
+"rb_tautulli_watchtime":{"message0":"Tautulli Sehzeit, letzte %1 Tage","tooltip":"Eine Liste von Datensätzen, einer für jede Person, die in so vielen Tagen ansah, von Tautulli: user und hours. Es liest nur."},
+"rb_plex_scan":{"message0":"die %1-Bibliothek auf Plex durchsuchen","tooltip":"Durchsucht eine Bibliothek nach neuen Dateien. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."},
+"rb_plex_stop":{"message0":"den Stream %1 auf Plex stoppen","tooltip":"Stoppt einen Stream (Tautullis terminate). Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"jeden Tag","weekdays":"an Wochentagen","weekends":"am Wochenende"},
@@ -263,7 +271,8 @@
 "Radarr and Sonarr":"Radarr und Sonarr",
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"Plex":"Plex"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Werkzeuge für den Agenten: in einen Agenten-Block ziehen",
@@ -587,7 +596,7 @@
 "waiting":"wartet",
 "{n} devices":"{n} Geräte",
 "{n} events":"{n} Ereignisse",
-"{n} items":"{n} Einträge",
+"{n} items":"{n} Items",
 "{n} records":"{n} Datensätze",
 "{n} step":"{n} Schritt",
 "{n} steps":"{n} Schritte",
@@ -1158,7 +1167,21 @@
 "Pi-hole summary":"Pi-hole-Übersicht",
 "Pi-hole top blocked domains":"Pi-holes meistblockierte Domains",
 "Pi-hole top clients":"Pi-hole Top-Clients",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats":"deinen Plex lesen: der Server, seine Bibliotheken, was gerade läuft und das Neueste; und Tautullis Verlauf und Sehzeit-Statistiken lesen",
+"scan a Plex library, and stop a stream on Plex (asking you each time)":"eine Plex-Bibliothek durchsuchen, und einen Stream auf Plex stoppen (jedes Mal nach dir gefragt)",
+"up":"erreichbar",
+"{n} libraries":"{n} Bibliotheken",
+"{n} sessions":"{n} Sitzungen",
+"{n} plays":"{n} Wiedergaben",
+"{n} users":"{n} Nutzer",
+"Plex":"Plex",
+"Plex server":"Plex-Server",
+"Plex libraries":"Plex-Bibliotheken",
+"Plex sessions":"Plex-Sitzungen",
+"Plex new items":"Plex neue Items",
+"Tautulli history":"Tautulli-Verlauf",
+"Tautulli watch time":"Tautulli Sehzeit"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -1371,7 +1394,9 @@
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
 "e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
 "ads.example.com":"ads.example.com",
-"bad.example.com":"bad.example.com"
+"bad.example.com":"bad.example.com",
+"Films":"Films",
+"abc123":"abc123"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Ein früherer Lauf hat mittendrin aufgehört, aber das Programm hat sich seitdem geändert, also fängt es neu an.)",
@@ -2266,6 +2291,29 @@
 "Which list (allow or deny), add or remove, and which domain?":"Welche Liste (allow oder deny), hinzufügen oder entfernen, und welche Domain?",
 "{action} {domain} on Pi-hole's {which} list":"{domain} {action} auf Pi-holes {which}-Liste",
 "added by Second Thought":"von Second Thought hinzugefügt",
-"{n} queries, {blocked} blocked":"{n} Abfragen, {blocked} blockiert"
+"{n} queries, {blocked} blocked":"{n} Abfragen, {blocked} blockiert",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).":"{who} braucht {url_setting} und {key_setting} {where_keys}: die Adresse (etwa http://plex:32400) und sein Token, das die Apps senden (die Accountdetails eines Geräts zeigen es).",
+"The {who} refused its token.":"Der {who} hat sein Token abgelehnt.",
+"Plex":"Plex",
+"Plex server":"Plex-Server",
+"Plex {version}":"Plex {version}",
+"up":"erreichbar",
+"Plex libraries":"Plex-Bibliotheken",
+"{n} libraries":"{n} Bibliotheken",
+"Plex sessions":"Plex-Sitzungen",
+"{n} sessions":"{n} Sitzungen",
+"Plex new items":"Plex neue Items",
+"{n} items":"{n} Items",
+"Which library? Give its name, from the libraries.":"Welche Bibliothek? Gib ihren Namen, aus den Bibliotheken.",
+"scan the {library} library on Plex":"die {library}-Bibliothek auf Plex durchsuchen",
+"Tautulli":"Tautulli",
+"Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).":"Tautulli braucht {url_setting} und {key_setting} {where_keys}: die Adresse (etwa http://tautulli:8181) und seinen API-Schlüssel (Settings, API Keys).",
+"The {who} refused its key.":"Der {who} hat seinen Schlüssel abgelehnt.",
+"Tautulli history":"Tautulli-Verlauf",
+"{n} plays":"{n} Wiedergaben",
+"Tautulli watch time":"Tautulli Sehzeit",
+"{n} users":"{n} Nutzer",
+"Which stream? Give a session's id, from the sessions.":"Welcher Stream? Gib die ID einer Sitzung, aus den Sitzungen.",
+"stop the {id} stream on Plex":"den Stream {id} auf Plex stoppen"
 }
 };

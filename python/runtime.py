@@ -87,7 +87,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -151,7 +151,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PIHOLE_PASSWORD")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PIHOLE_PASSWORD", "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():
@@ -1158,6 +1158,16 @@ SAFETY = {
     "pihole_asks": [["POST", r"^/api/dns/blocking$"],
                     ["POST", r"^/api/domains/(allowlist|denylist)/exact$"],
                     ["DELETE", r"^/api/domains/(allowlist|denylist)/exact$"]],
+    # Plex's HTTP API (the X-Plex-Token endpoints the apps use) and Tautulli's API (#402). The server, the libraries, the
+    # sessions and the newest items are reads; scanning a library always asks, live. Tautulli's gate reads the query as
+    # a whole, like NZBGeek's: the history is a read, and the one terminate (a stream stopped) always asks. Nothing else
+    # is ever sent: no media or library is ever deleted, no sharing, no user access, no transcoding or remote-access
+    # settings.
+    "plex_free": [["GET", r"^/$"], ["GET", r"^/library/sections$"], ["GET", r"^/library/sections/[0-9]+/all$"],
+                  ["GET", r"^/library/recentlyAdded$"], ["GET", r"^/status/sessions$"]],
+    "plex_asks": [["GET", r"^/library/sections/[0-9]+/refresh$"]],
+    "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
+    "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1344,6 +1354,28 @@ def pihole_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["pihole_" + kind]):
+            return kind
+    return None
+
+
+def plex_call(method, path):
+    """"free" for one of the Plex calls the runtime makes without asking (the server, the libraries, the sessions and
+    the newest items), "asks" for the one change that needs a live yes (scanning a library), and None for anything
+    else, which is never sent (#402)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["plex_" + kind]):
+            return kind
+    return None
+
+
+def tautulli_call(method, query):
+    """"free" for Tautulli's history read, "asks" for the one terminate (a stream stopped), and None for anything
+    else, which is never sent (#402). The query is read as a whole, like NZBGeek's, so a history that smuggles a
+    terminate is refused."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["tautulli_" + kind]):
             return kind
     return None
 
@@ -1809,6 +1841,7 @@ CAPABILITIES = [
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
+    ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
@@ -1822,6 +1855,7 @@ CAPABILITIES = [
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
+    ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
@@ -4662,6 +4696,198 @@ class Connections:
         else:
             await self._pihole("DELETE", path, {"domain": [d]}, approved=True)
         self.log(tr("Pi-hole"), what, tr("done"))
+        return True
+
+    # Plex and Tautulli (#402)
+    # Plex's HTTP API (the X-Plex-Token endpoints the apps use), PLEX_URL (like http://plex:32400) and PLEX_TOKEN (the
+    # token the apps send, from a device's account details). The server, the libraries, the sessions and the newest
+    # items are reads (plex_free); scanning a library (plex_asks) always asks, live, and never runs with nobody there.
+    # Tautulli (TAUTULLI_URL and TAUTULLI_API_KEY, from Settings, API Keys) adds the history and the watch-time stats
+    # (tautulli_free) and the one way to stop a stream (tautulli_asks), which always asks too. Nothing else is ever
+    # sent: no media or library is ever deleted, no sharing, no user access, no transcoding or remote-access settings.
+    # PLEX_CERT_SHA256 and TAUTULLI_CERT_SHA256 pin certificates this computer doesn't trust.
+    async def _plex(self, method, path, query=None, approved=False):
+        """One request to Plex's API, gated by plex_call: the server, the libraries, the sessions and the newest
+        items go without asking, the one scan only after a live yes, and anything else is never sent."""
+        kind = plex_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who="Plex"))
+        base = os.environ.get("PLEX_URL", "").strip().rstrip("/")
+        token = os.environ.get("PLEX_TOKEN", "").strip()
+        if not base or not token:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).",
+                              url_setting="PLEX_URL", key_setting="PLEX_TOKEN", where_keys=WHERE_KEYS))
+        whole = path + (("?" + urllib.parse.urlencode(query)) if query else "")
+        status, raw = await self._pinned("Plex", base, "PLEX_CERT_SHA256", method, whole,
+                                         {"X-Plex-Token": token, "Accept": "application/json"})
+        if status == 401:
+            raise RunError(tr("The {who} refused its token.", who="Plex"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="Plex", why=self._said(status, raw)))
+        answer = json.loads(raw) if raw.strip() else {}
+        return answer.get("MediaContainer") or {} if isinstance(answer, dict) else {}
+
+    async def plex_server(self):
+        """One record for the server: name, version and up (it answered, so it's up)."""
+        c = await self._plex("GET", "/")
+        out = {"name": to_str(c.get("friendlyName")), "version": to_str(c.get("version")), "up": True}
+        self.log(tr("Plex server"), tr("Plex {version}", version=out["version"]), tr("up"))
+        return out
+
+    async def plex_libraries(self):
+        """The libraries: a list of records — name, type (movie, show or artist) and count (how many items)."""
+        c = await self._plex("GET", "/library/sections")
+        out = []
+        for d in c.get("Directory") or []:
+            if not isinstance(d, dict):
+                continue
+            key = to_str(d.get("key"))
+            items = await self._plex("GET", f"/library/sections/{key}/all") if key.isdigit() else {}
+            out.append({"name": to_str(d.get("title")), "type": to_str(d.get("type")), "count": num(items.get("size"))})
+        lines = "\n".join(f"{r['name']}: {r['count']}" for r in out)
+        self.log(tr("Plex libraries"), lines or tr("(nothing)"), tr("{n} libraries", n=len(out)))
+        return out
+
+    async def plex_sessions(self):
+        """What's playing now: a list of records — id (the session's id), user, title, player, state (playing or
+        paused) and transcode (whether the server is transcoding it)."""
+        c = await self._plex("GET", "/status/sessions")
+        out = []
+        for v in (c.get("Video") or []) + (c.get("Metadata") or []):
+            if not isinstance(v, dict) or not v.get("sessionKey"):
+                continue
+            title = to_str(v.get("title"))
+            show = to_str(v.get("grandparentTitle"))
+            out.append({"id": to_str(v.get("sessionKey")), "user": to_str((v.get("User") or {}).get("title")),
+                        "title": f"{show} - {title}" if show else title,
+                        "player": to_str((v.get("Player") or {}).get("title")),
+                        "state": to_str((v.get("Player") or {}).get("state")),
+                        "transcode": bool(v.get("TranscodeSession"))})
+        lines = "\n".join(f"{r['user']}: {r['title']} ({r['state']})" for r in out)
+        self.log(tr("Plex sessions"), lines or tr("(nothing)"), tr("{n} sessions", n=len(out)))
+        return out
+
+    async def plex_recent(self, days=7):
+        """The newest items: a list of records — title, library and added (when it was added)."""
+        n = max(1, min(365, int(num(days) or 7)))
+        c = await self._plex("GET", "/library/recentlyAdded")
+        cutoff = time.time() - n * 86400
+        out = []
+        for m in c.get("Metadata") or []:
+            if not isinstance(m, dict):
+                continue
+            added = num(m.get("addedAt"))
+            if added and added < cutoff:
+                continue
+            title = to_str(m.get("title"))
+            show = to_str(m.get("grandparentTitle"))
+            out.append({"title": f"{show} - {title}" if show else title,
+                        "library": to_str(m.get("librarySectionTitle")),
+                        "added": datetime.datetime.fromtimestamp(added).strftime("%Y-%m-%d %H:%M") if added else ""})
+        lines = "\n".join(f"{r['title']} ({r['library']})" for r in out)
+        self.log(tr("Plex new items"), lines or tr("(nothing)"), tr("{n} items", n=len(out)))
+        return out
+
+    async def plex_scan(self, library):
+        """Scans one library for new files, after asking you, every time. Gives back True if it was done."""
+        name = to_str(library).strip()
+        if not name:
+            raise RunError(tr("Which library? Give its name, from the libraries."))
+        c = await self._plex("GET", "/library/sections")
+        key, found = "", ""
+        for d in c.get("Directory") or []:
+            if isinstance(d, dict) and to_str(d.get("title")).strip().lower() == name.lower():
+                key, found = to_str(d.get("key")), to_str(d.get("title"))
+        if not key.isdigit():
+            raise RunError(tr("Which library? Give its name, from the libraries."))
+        what = tr("scan the {library} library on Plex", library=found)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._plex("GET", f"/library/sections/{key}/refresh", approved=True)
+        self.log(tr("Plex"), what, tr("done"))
+        return True
+
+    async def _tautulli(self, cmd, params=None, approved=False):
+        """One request to Tautulli's API, gated by tautulli_call on the query as a whole: the history goes without
+        asking, the one terminate only after a live yes, and anything else is never sent."""
+        gate = "cmd=" + cmd + (("&" + urllib.parse.urlencode(params)) if params else "")
+        kind = tautulli_call("GET", gate)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=gate, who="Tautulli"))
+        base = os.environ.get("TAUTULLI_URL", "").strip().rstrip("/")
+        api_key = os.environ.get("TAUTULLI_API_KEY", "").strip()
+        if not base or not api_key:
+            raise RunError(tr("Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).",
+                              url_setting="TAUTULLI_URL", key_setting="TAUTULLI_API_KEY", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("Tautulli", base, "TAUTULLI_CERT_SHA256", "GET", "/api/v2?" + gate + "&api_key=" + api_key, {})
+        if status == 401:
+            raise RunError(tr("The {who} refused its key.", who="Tautulli"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="Tautulli", why=self._said(status, raw)))
+        answer = json.loads(raw) if raw.strip() else {}
+        return ((answer or {}).get("response") or {}) if isinstance(answer, dict) else {}
+
+    async def _tautulli_history(self, days):
+        """Tautulli's history rows, newest first, as (columns, rows)."""
+        n = max(1, min(365, int(num(days) or 7)))
+        r = await self._tautulli("get_history", {"after": datetime.datetime.fromtimestamp(time.time() - n * 86400).strftime("%Y-%m-%d"),
+                                                 "length": "100"})
+        data = (r.get("data") or {}) if isinstance(r.get("data"), dict) else {}
+        cols = [to_str(c) for c in (data.get("columns") or [])]
+        rows = [row for row in (data.get("data") or []) if isinstance(row, list)]
+        return cols, rows
+
+    async def tautulli_history(self, days=7):
+        """What was watched: a list of records — user, title, when and transcode (whether it was transcoded)."""
+        cols, rows = await self._tautulli_history(days)
+        at = lambda name: cols.index(name) if name in cols else -1  # noqa: E731
+        def g(row, name):
+            i = at(name)
+            return row[i] if 0 <= i < len(row) else None
+        out = []
+        for row in rows:
+            when = num(g(row, "date"))
+            out.append({"user": to_str(g(row, "user")), "title": to_str(g(row, "full_title") or g(row, "title")),
+                        "when": datetime.datetime.fromtimestamp(when).strftime("%Y-%m-%d %H:%M") if when else "",
+                        "transcode": to_str(g(row, "transcode_decision")).lower() == "transcode"})
+        lines = "\n".join(f"{r['user']}: {r['title']}" for r in out)
+        self.log(tr("Tautulli history"), lines or tr("(nothing)"), tr("{n} plays", n=len(out)))
+        return out
+
+    async def tautulli_watchtime(self, days=7):
+        """How long each person watched: a list of records — user and hours."""
+        cols, rows = await self._tautulli_history(days)
+        at = lambda name: cols.index(name) if name in cols else -1  # noqa: E731
+        def g(row, name):
+            i = at(name)
+            return row[i] if 0 <= i < len(row) else None
+        seen = {}
+        for row in rows:
+            user = to_str(g(row, "user"))
+            seen[user] = seen.get(user, 0) + num(g(row, "duration"))
+        out = [{"user": u, "hours": self._cents(s / 3600)} for u, s in sorted(seen.items(), key=lambda kv: -kv[1])]
+        lines = "\n".join(f"{r['user']}: {r['hours']}" for r in out)
+        self.log(tr("Tautulli watch time"), lines or tr("(nothing)"), tr("{n} users", n=len(out)))
+        return out
+
+    async def plex_stop(self, session):
+        """Stops one stream (Tautulli's terminate), after asking you, every time. Gives back True if it was done."""
+        key = to_str(session).strip()
+        if not key:
+            raise RunError(tr("Which stream? Give a session's id, from the sessions."))
+        what = tr("stop the {id} stream on Plex", id=key)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        r = await self._tautulli("terminate_session", {"session_key": key}, approved=True)
+        if to_str(r.get("result")).lower() != "success":
+            raise RunError(tr("{who}: {why}.", who="Tautulli", why=self._said(400, to_str(r.get("message") or ""))))
+        self.log(tr("Plex"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -7539,6 +7765,18 @@ class Doctor:
                 q = (s.get("queries") or {})
                 return tr("{n} queries, {blocked} blocked", n=num(q.get("total")), blocked=num(q.get("blocked")))
             out.append(("Pi-hole", pihole))
+        if has("plex_read", "plex_control"):
+            async def plex():
+                home = await self._plex("GET", "/")
+                libs = await self._plex("GET", "/library/sections")
+                return tr("Plex {version}", version=to_str(home.get("version")) or "?") \
+                    + ", " + tr("{n} libraries", n=len([d for d in (libs.get("Directory") or []) if isinstance(d, dict)]))
+            out.append(("Plex", plex))
+            async def tautulli():
+                r = await self._tautulli("get_history", {"length": "1"})
+                data = (r.get("data") or {}) if isinstance(r.get("data"), dict) else {}
+                return tr("Tautulli") + ", " + tr("{n} plays", n=num(data.get("recordsFiltered")))
+            out.append(("Tautulli", tautulli))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -7854,7 +8092,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 

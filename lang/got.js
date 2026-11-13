@@ -198,7 +198,15 @@
 "rb_pihole_blocking":{"message0":"Pi-hole's belocung of for %1 secundans","tooltip":"Deth belocung of fyrir thans secundans, tha Pi-hole hit self on eft deth. Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."},
 "rb_pihole_enable":{"message0":"Pi-hole's belocung on","tooltip":"Deth belocung on eft. Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."},
 "rb_pihole_allow":{"message0":"%1 %2 uppon Pi-hole's allow rims","tooltip":"Deth an domenn uppon allow rims, allai nimeth hit of. Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."},
-"rb_pihole_deny":{"message0":"%1 %2 uppon Pi-hole's deny rims","tooltip":"Deth an domenn uppon deny rims, allai nimeth hit of. Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."}
+"rb_pihole_deny":{"message0":"%1 %2 uppon Pi-hole's deny rims","tooltip":"Deth an domenn uppon deny rims, allai nimeth hit of. Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."},
+"rb_plex_server":{"message0":"Plex thionare","tooltip":"An summarie fyrir thioner: name, version and on linie (hit andswarode, swa hit is on linie). Hit beheth PLEX_URL and PLEX_TOKEN in second-thought.ini. A thessum blade bryceth bisenlicum thionere."},
+"rb_plex_libraries":{"message0":"Plex bokira","tooltip":"Rind gewrita, an fyrir hvert bokere: name, type (movie, show allai artist) and count (hu fela thing hit habath). Hit raedeth an."},
+"rb_plex_sessions":{"message0":"Plex sessiuns","tooltip":"Rind gewrita, an fyrir hvert thon thar nu plegath: id, user, title, player, state (playing allai paused) and transcode (hwaether se thionere hit wendth). Hit raedeth an."},
+"rb_plex_recent":{"message0":"Plex niwe, lasta %1 dagans","tooltip":"Rind gewrita, an fyrir hvert thing thar in thans dagans addod was: title, library and added (hwan addod). Hit raedeth an."},
+"rb_tautulli_history":{"message0":"Tautulli stear, lasta %1 dagans","tooltip":"Rind gewrita, an fyrir hvert thon thar in thans dagans geseon was, fram Tautulli: user, title, when and transcode. Hit raedeth an. Hit beheth TAUTULLI_URL and TAUTULLI_API_KEY in second-thought.ini."},
+"rb_tautulli_watchtime":{"message0":"Tautulli sight-tima, lasta %1 dagans","tooltip":"Rind gewrita, an fyrir hvern mann thar in thans dagans seah, fram Tautulli: user and hours. Hit raedeth an."},
+"rb_plex_scan":{"message0":"thana %1 bokere on Plex scannie","tooltip":"Scanneth an bokere fyrir niwe files. Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."},
+"rb_plex_stop":{"message0":"thana %1 stream on Plex stillan","tooltip":"Stilleth an stream (Tautulli terminate). Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐌳𐌰𐌲𐌰 𐍈𐌰𐌼𐌼𐌴𐌷","weekdays":"𐌳𐌰𐌲𐌰𐌼 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌹𐍃","weekends":"𐌳𐌰𐌲𐌰𐌼 𐌲𐌰𐌵𐌿𐌼𐌸𐌰𐌹𐍃"},
@@ -263,7 +271,8 @@
 "Radarr and Sonarr":"Radarr jah Sonarr",
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"Plex":"Plex"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𐌷𐌰𐌿𐍃𐌾𐌰𐌽𐌳𐌰𐌽𐍃: 𐍄𐌰𐌿𐌾𐌰𐌽𐌳 𐍃𐍅𐌴𐌸𐌰𐌿𐌷 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰 𐌹𐌽 𐌼𐌴𐌻𐌰 𐍄𐌰𐌿𐌾𐌹𐌸",
@@ -1023,7 +1032,7 @@
 "{n} characters":"𐌱𐍉𐌺𐍉𐍃 {n}",
 "{n} devices":"𐌲𐌰𐍃𐌼𐌹𐌸𐌰 {n}",
 "{n} events":"𐍅𐌰𐌿𐍂𐌳𐌰 {n}",
-"{n} items":"𐍅𐌰𐌹𐌷𐍄𐌴𐌹𐍃 {n}",
+"{n} items":"{n} thing",
 "{n} records":"𐍂𐌰𐌷𐌽𐌴𐌹𐌽𐍉𐍃 {n}",
 "{n} script started":"𐍅𐌹𐌲𐍃 {n} 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌹𐌳𐌰",
 "{n} script started, waiting for it to finish":"𐍅𐌹𐌲𐍃 {n} 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌹𐌳𐌰, 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽 𐌱𐌴𐌹𐌳𐌹𐌸",
@@ -1158,7 +1167,21 @@
 "Pi-hole summary":"Pi-hole summarie",
 "Pi-hole top blocked domains":"Pi-hole most belocene domennas",
 "Pi-hole top clients":"Pi-hole heafod cienas",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats":"lesan thi Plex: thone thioner, bokira is, hwaet nu plegath jah niwasta; jah Tautulli stear jah sight-tima stats lesan",
+"scan a Plex library, and stop a stream on Plex (asking you each time)":"Plex bokere scannian, jah stream on Plex stillan (asciende the aelc Sith)",
+"up":"on linie",
+"{n} libraries":"{n} bokira",
+"{n} sessions":"{n} sessiuns",
+"{n} plays":"{n} sighta",
+"{n} users":"{n} brucrend",
+"Plex":"Plex",
+"Plex server":"Plex thionare",
+"Plex libraries":"Plex bokira",
+"Plex sessions":"Plex sessiuns",
+"Plex new items":"Plex niwe",
+"Tautulli history":"Tautulli stear",
+"Tautulli watch time":"Tautulli sight-tima"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -1371,7 +1394,9 @@
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
 "e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
 "ads.example.com":"ads.example.com",
-"bad.example.com":"bad.example.com"
+"bad.example.com":"bad.example.com",
+"Films":"Films",
+"abc123":"abc123"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(tawi faurþis halb gastoþ, aþþan garaideins inmaidida, swaei niujaba anastodeiþ.)",
@@ -2266,7 +2291,30 @@
 "Which list (allow or deny), add or remove, and which domain?":"Hwaz rims (allow allai deny), addian allai removian, jah hwaz domenn?",
 "{action} {domain} on Pi-hole's {which} list":"{action} {domain} uppon Pi-hole's {which} rims",
 "added by Second Thought":"added fram Second Thought",
-"{n} queries, {blocked} blocked":"{n} queries, {blocked} belocene"
+"{n} queries, {blocked} blocked":"{n} queries, {blocked} belocene",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).":"{who} tharbath {url_setting} jah {key_setting} {where_keys}: thana adrassen (swa http://plex:32400) jah thata tacen is, thata appos sendath (racu-tolas apparatus thata onwrieth).",
+"The {who} refused its token.":"Thana {who} tacen is ofwand.",
+"Plex":"Plex",
+"Plex server":"Plex thionare",
+"Plex {version}":"Plex {version}",
+"up":"on linie",
+"Plex libraries":"Plex bokira",
+"{n} libraries":"{n} bokira",
+"Plex sessions":"Plex sessiuns",
+"{n} sessions":"{n} sessiuns",
+"Plex new items":"Plex niwe",
+"{n} items":"{n} thing",
+"Which library? Give its name, from the libraries.":"Hwaz bokere? Gib naman is, fram tham bokerum.",
+"scan the {library} library on Plex":"thana {library} bokere on Plex scannie",
+"Tautulli":"Tautulli",
+"Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).":"Tautulli tharbath {url_setting} jah {key_setting} {where_keys}: adrassen is (swa http://tautulli:8181) jah API ktho is (Settings, API Keys).",
+"The {who} refused its key.":"Thana {who} ktho is ofwand.",
+"Tautulli history":"Tautulli stear",
+"{n} plays":"{n} sighta",
+"Tautulli watch time":"Tautulli sight-tima",
+"{n} users":"{n} brucrend",
+"Which stream? Give a session's id, from the sessions.":"Hwaz stream? Gib id anre sessiune, fram tham sessiunum.",
+"stop the {id} stream on Plex":"thana {id} stream on Plex stillan"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

@@ -764,6 +764,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 到 Pi-hole 的 deny 列表",
    "tooltip": "把一个域名放到 deny 列表上，或把它取下。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"
+  },
+  "rb_plex_server": {
+   "message0": "Plex 服务器",
+   "tooltip": "服务器的一条记录：name、version 和 up（它应答了，所以在线）。需要在 second-thought.ini 中设置 PLEX_URL 和 PLEX_TOKEN。此页面使用示例服务器。"
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex 媒体库",
+   "tooltip": "记录列表，每个媒体库一条：name、type（movie、show 或 artist）和 count（它有多少项）。它只读取。"
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex 会话",
+   "tooltip": "记录列表，每个正在播放的内容一条：id（会话的 id）、user、title、player、state（playing 或 paused）和 transcode（服务器是否在转码）。它只读取。"
+  },
+  "rb_plex_recent": {
+   "message0": "Plex 新增内容，最近 %1 天",
+   "tooltip": "记录列表，这个天数里添加的每一项一条：title、library 和 added（何时添加）。它只读取。"
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli 历史，最近 %1 天",
+   "tooltip": "记录列表，这个天数里观看的每一项一条，来自 Tautulli：user、title、when 和 transcode（是否转码）。它只读取。需要在 second-thought.ini 中设置 TAUTULLI_URL 和 TAUTULLI_API_KEY。"
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli 观看时长，最近 %1 天",
+   "tooltip": "记录列表，这个天数里观看的每一个人一条，来自 Tautulli：user 和 hours。它只读取。"
+  },
+  "rb_plex_scan": {
+   "message0": "扫描 Plex 上的 %1 媒体库",
+   "tooltip": "扫描一个媒体库寻找新文件。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"
+  },
+  "rb_plex_stop": {
+   "message0": "停止 Plex 上的 %1 串流",
+   "tooltip": "停止一个串流（Tautulli 的 terminate）。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"
   }
  },
  "options": {
@@ -956,7 +988,8 @@
   "Radarr and Sonarr": "Radarr 和 Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "给智能体的工具：把它们放进智能体积木里",
@@ -1851,7 +1884,21 @@
   "Pi-hole summary": "Pi-hole 概览",
   "Pi-hole top blocked domains": "Pi-hole 拦截最多的域名",
   "Pi-hole top clients": "Pi-hole 主要客户端",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "读取你的 Plex：服务器、它的媒体库、正在播放的内容和最新内容；并读取 Tautulli 的历史和观看时长统计",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "扫描一个 Plex 媒体库，并停止 Plex 上的一个串流（每次都先问你）",
+  "up": "在线",
+  "{n} libraries": "{n} 个媒体库",
+  "{n} sessions": "{n} 个会话",
+  "{n} plays": "{n} 次播放",
+  "{n} users": "{n} 个用户",
+  "Plex": "Plex",
+  "Plex server": "Plex 服务器",
+  "Plex libraries": "Plex 媒体库",
+  "Plex sessions": "Plex 会话",
+  "Plex new items": "Plex 新增内容",
+  "Tautulli history": "Tautulli 历史",
+  "Tautulli watch time": "Tautulli 观看时长"
  },
  "examples": {
   "review": {
@@ -2696,7 +2743,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n（上一次运行中途停止了，但程序之后有改动，所以从头开始。）",
@@ -3591,6 +3640,29 @@
   "Which list (allow or deny), add or remove, and which domain?": "哪个列表（allow 还是 deny），添加还是移除，哪个域名？",
   "{action} {domain} on Pi-hole's {which} list": "在 Pi-hole 的 {which} 列表上{action} {domain}",
   "added by Second Thought": "由 Second Thought 添加",
-  "{n} queries, {blocked} blocked": "{n} 次查询，{blocked} 次拦截"
+  "{n} queries, {blocked} blocked": "{n} 次查询，{blocked} 次拦截",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who}需要 {url_setting} 和 {key_setting} {where_keys}：它的地址（如 http://plex:32400）和它的令牌，即应用发送的那个（设备的账户详情里能看到）。",
+  "The {who} refused its token.": "这个{who}拒绝了它的令牌。",
+  "Plex": "Plex",
+  "Plex server": "Plex 服务器",
+  "Plex {version}": "Plex {version}",
+  "up": "在线",
+  "Plex libraries": "Plex 媒体库",
+  "{n} libraries": "{n} 个媒体库",
+  "Plex sessions": "Plex 会话",
+  "{n} sessions": "{n} 个会话",
+  "Plex new items": "Plex 新增内容",
+  "{n} items": "{n} 项",
+  "Which library? Give its name, from the libraries.": "哪个媒体库？从媒体库里给出它的名字。",
+  "scan the {library} library on Plex": "扫描 Plex 上的 {library} 媒体库",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli 需要 {url_setting} 和 {key_setting} {where_keys}：它的地址（如 http://tautulli:8181）和它的 API 密钥（Settings, API Keys）。",
+  "The {who} refused its key.": "这个{who}拒绝了它的密钥。",
+  "Tautulli history": "Tautulli 历史",
+  "{n} plays": "{n} 次播放",
+  "Tautulli watch time": "Tautulli 观看时长",
+  "{n} users": "{n} 个用户",
+  "Which stream? Give a session's id, from the sessions.": "哪个串流？从会话里给出一个会话的 id。",
+  "stop the {id} stream on Plex": "停止 Plex 上的 {id} 串流"
  }
 }

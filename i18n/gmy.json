@@ -765,6 +765,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 uppon Pi-hole's deny rims",
    "tooltip": "Deth an domenn uppon deny rims, allai nimeth hit of. Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja 𐀊, hit 𐀚 deth. A thessum blade naenung sothlice 𐀚 wendth."
+  },
+  "rb_plex_server": {
+   "message0": "Plex thionare",
+   "tooltip": "An summarie fyrir thioner: name, version and on linie (hit andswarode, swa hit is on linie). Hit beheth PLEX_URL and PLEX_TOKEN in second-thought.ini. A thessum blade bryceth bisenlicum thionere."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex bokira",
+   "tooltip": "Rind gewrita, an fyrir hvert bokere: name, type (movie, show allai artist) and count (hu fela thing hit habath). Hit raedeth an."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex sessiuns",
+   "tooltip": "Rind gewrita, an fyrir hvert thon thar 𐀝 plegath: id, user, title, player, state (playing allai paused) and transcode (hwaether 𐀮 thionere hit wendth). Hit raedeth an."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex niwe, lasta %1 dagans",
+   "tooltip": "Rind gewrita, an fyrir hvert thing thar in thans dagans addod was: title, library and added (hwan addod). Hit raedeth an."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli stear, lasta %1 dagans",
+   "tooltip": "Rind gewrita, an fyrir hvert thon thar in thans dagans geseon was, fram Tautulli: user, title, when and transcode. Hit raedeth an. Hit beheth TAUTULLI_URL and TAUTULLI_API_KEY in second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli sight-tima, lasta %1 dagans",
+   "tooltip": "Rind gewrita, an fyrir hvern mann thar in thans dagans seah, fram Tautulli: user and hours. Hit raedeth an."
+  },
+  "rb_plex_scan": {
+   "message0": "thana %1 bokere on Plex scannie",
+   "tooltip": "Scanneth an bokere fyrir niwe files. Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja 𐀊, hit 𐀚 deth. A thessum blade naenung sothlice 𐀚 wendth."
+  },
+  "rb_plex_stop": {
+   "message0": "thana %1 stream on Plex stillan",
+   "tooltip": "Stilleth an stream (Tautulli terminate). Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja 𐀊, hit 𐀚 deth. A thessum blade naenung sothlice 𐀚 wendth."
   }
  },
  "options": {
@@ -957,7 +989,8 @@
   "Radarr and Sonarr": "Radarr ka-i Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "𐀃𐀏𐀙 𐀁𐀠𐀵𐀫𐀡: 𐀴𐀳𐀐 𐀁𐀚𐀵𐀰 𐀁𐀠𐀵𐀫𐀡 𐀠𐀪𐀵",
@@ -1281,7 +1314,7 @@
   "waiting": "𐀕𐀚𐀂",
   "{n} devices": "{n} 𐀕𐀏𐀙",
   "{n} events": "{n} 𐀱𐀞𐀲",
-  "{n} items": "{n} 𐀏𐀩𐀔𐀲",
+  "{n} items": "{n} thing",
   "{n} records": "{n} 𐀏𐀨𐀞𐀂",
   "{n} step": "{n} 𐀡𐀅",
   "{n} steps": "{n} 𐀡𐀆",
@@ -1852,7 +1885,21 @@
   "Pi-hole summary": "Pi-hole summarie",
   "Pi-hole top blocked domains": "Pi-hole most belocene domennas",
   "Pi-hole top clients": "Pi-hole heafod cienas",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "lesan thi Plex: thone thioner, bokira is, hwaet 𐀝 plegath jah niwasta; jah Tautulli stear jah sight-tima stats lesan",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "Plex bokere scannian, jah stream on Plex stillan (asciende the aelc Sith)",
+  "up": "on linie",
+  "{n} libraries": "{n} bokira",
+  "{n} sessions": "{n} sessiuns",
+  "{n} plays": "{n} sighta",
+  "{n} users": "{n} brucrend",
+  "Plex": "Plex",
+  "Plex server": "Plex thionare",
+  "Plex libraries": "Plex bokira",
+  "Plex sessions": "Plex sessiuns",
+  "Plex new items": "Plex niwe",
+  "Tautulli history": "Tautulli stear",
+  "Tautulli watch time": "Tautulli sight-tima"
  },
  "examples": {
   "review": {
@@ -2697,7 +2744,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(pa-ra-ki-si po-ro-te-ra e-ne me-so pe-pa-u-to, a-ra po-ro-ka-ra-ma a-ra-ka-ke, o-u-to ne-wo a-ka-e-ta-i.)",
@@ -3592,7 +3641,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Hwaz rims (allow allai deny), addian allai removian, jah hwaz domenn?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} uppon Pi-hole's {which} rims",
   "added by Second Thought": "added fram Second Thought",
-  "{n} queries, {blocked} blocked": "{n} queries, {blocked} belocene"
+  "{n} queries, {blocked} blocked": "{n} queries, {blocked} belocene",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} tharbath {url_setting} jah {key_setting} {where_keys}: thans adrassen (swa http://plex:32400) jah thata tacen is, thata appos sendath (racu-tolas apparatus thata onwrieth).",
+  "The {who} refused its token.": "Thana {who} tacen is ofwand.",
+  "Plex": "Plex",
+  "Plex server": "Plex thionare",
+  "Plex {version}": "Plex {version}",
+  "up": "on linie",
+  "Plex libraries": "Plex bokira",
+  "{n} libraries": "{n} bokira",
+  "Plex sessions": "Plex sessiuns",
+  "{n} sessions": "{n} sessiuns",
+  "Plex new items": "Plex niwe",
+  "{n} items": "{n} thing",
+  "Which library? Give its name, from the libraries.": "Hwaz bokere? Gib naman is, fram tham bokerum.",
+  "scan the {library} library on Plex": "thana {library} bokere on Plex scannie",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli tharbath {url_setting} jah {key_setting} {where_keys}: adrassen is (swa http://tautulli:8181) jah API ktho is (Settings, API Keys).",
+  "The {who} refused its key.": "Thana {who} ktho is ofwand.",
+  "Tautulli history": "Tautulli stear",
+  "{n} plays": "{n} sighta",
+  "Tautulli watch time": "Tautulli sight-tima",
+  "{n} users": "{n} brucrend",
+  "Which stream? Give a session's id, from the sessions.": "Hwaz stream? Gib id anre sessiune, fram tham sessiunum.",
+  "stop the {id} stream on Plex": "thana {id} stream on Plex stillan"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

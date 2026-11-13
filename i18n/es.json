@@ -764,6 +764,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 en la lista deny de Pi-hole",
    "tooltip": "Pone un dominio en la lista deny, o lo quita. Te lo pregunta siempre, aunque nada más lo haga, y si no hay nadie para decir sí, no ocurre. En esta página nada cambia de verdad."
+  },
+  "rb_plex_server": {
+   "message0": "servidor Plex",
+   "tooltip": "Un registro para el servidor: name, version y up (respondió, así que está en línea). Necesita PLEX_URL y PLEX_TOKEN en second-thought.ini. En esta página usa un servidor de ejemplo."
+  },
+  "rb_plex_libraries": {
+   "message0": "bibliotecas de Plex",
+   "tooltip": "Una lista de registros, uno por cada biblioteca: name, type (movie, show o artist) y count (cuántos elementos tiene). Solo lee."
+  },
+  "rb_plex_sessions": {
+   "message0": "sesiones de Plex",
+   "tooltip": "Una lista de registros, uno por cada cosa que se reproduce ahora: id (el id de la sesión), user, title, player, state (playing o paused) y transcode (si el servidor la está transcodificando). Solo lee."
+  },
+  "rb_plex_recent": {
+   "message0": "nuevos elementos de Plex, últimos %1 días",
+   "tooltip": "Una lista de registros, uno por cada elemento añadido en esos días: title, library y added (cuándo se añadió). Solo lee."
+  },
+  "rb_tautulli_history": {
+   "message0": "historial de Tautulli, últimos %1 días",
+   "tooltip": "Una lista de registros, uno por cada cosa vista en esos días, de Tautulli: user, title, when y transcode (si fue transcodificada). Solo lee. Necesita TAUTULLI_URL y TAUTULLI_API_KEY en second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "tiempo de visionado de Tautulli, últimos %1 días",
+   "tooltip": "Una lista de registros, uno por cada persona que vio algo en esos días, de Tautulli: user y hours. Solo lee."
+  },
+  "rb_plex_scan": {
+   "message0": "escanear la biblioteca %1 en Plex",
+   "tooltip": "Escanea una biblioteca buscando archivos nuevos. Te lo pregunta siempre, aunque nada más lo haga, y si no hay nadie para decir sí, no ocurre. En esta página nada cambia de verdad."
+  },
+  "rb_plex_stop": {
+   "message0": "parar el stream %1 en Plex",
+   "tooltip": "Para un stream (el terminate de Tautulli). Te lo pregunta siempre, aunque nada más lo haga, y si no hay nadie para decir sí, no ocurre. En esta página nada cambia de verdad."
   }
  },
  "options": {
@@ -956,7 +988,8 @@
   "Radarr and Sonarr": "Radarr y Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Herramientas para el agente: suéltalas dentro de un bloque de agente",
@@ -1851,7 +1884,21 @@
   "Pi-hole summary": "resumen de Pi-hole",
   "Pi-hole top blocked domains": "dominios más bloqueados de Pi-hole",
   "Pi-hole top clients": "principales clientes de Pi-hole",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "leer tu Plex: el servidor, sus bibliotecas, lo que se reproduce ahora y lo más nuevo; y leer el historial y las estadísticas de visionado de Tautulli",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "escanear una biblioteca de Plex, y parar un stream en Plex (preguntándotelo cada vez)",
+  "up": "en línea",
+  "{n} libraries": "{n} bibliotecas",
+  "{n} sessions": "{n} sesiones",
+  "{n} plays": "{n} reproducciones",
+  "{n} users": "{n} usuarios",
+  "Plex": "Plex",
+  "Plex server": "servidor Plex",
+  "Plex libraries": "bibliotecas de Plex",
+  "Plex sessions": "sesiones de Plex",
+  "Plex new items": "nuevos elementos de Plex",
+  "Tautulli history": "historial de Tautulli",
+  "Tautulli watch time": "tiempo de visionado de Tautulli"
  },
  "examples": {
   "review": {
@@ -2696,7 +2743,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Una ejecución anterior se quedó a medias, pero el programa ha cambiado desde entonces, así que empieza de cero.)",
@@ -3591,6 +3640,29 @@
   "Which list (allow or deny), add or remove, and which domain?": "¿Qué lista (allow o deny), añadir o quitar, y qué dominio?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} en la lista {which} de Pi-hole",
   "added by Second Thought": "añadido por Second Thought",
-  "{n} queries, {blocked} blocked": "{n} consultas, {blocked} bloqueadas"
+  "{n} queries, {blocked} blocked": "{n} consultas, {blocked} bloqueadas",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} necesita {url_setting} y {key_setting} {where_keys}: su dirección (como http://plex:32400) y su token, el que envían las apps (los detalles de la cuenta de un aparato lo muestran).",
+  "The {who} refused its token.": "El {who} rechazó su token.",
+  "Plex": "Plex",
+  "Plex server": "servidor Plex",
+  "Plex {version}": "Plex {version}",
+  "up": "en línea",
+  "Plex libraries": "bibliotecas de Plex",
+  "{n} libraries": "{n} bibliotecas",
+  "Plex sessions": "sesiones de Plex",
+  "{n} sessions": "{n} sesiones",
+  "Plex new items": "nuevos elementos de Plex",
+  "{n} items": "{n} elementos",
+  "Which library? Give its name, from the libraries.": "¿Qué biblioteca? Da su nombre, de las bibliotecas.",
+  "scan the {library} library on Plex": "escanear la biblioteca {library} en Plex",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli necesita {url_setting} y {key_setting} {where_keys}: su dirección (como http://tautulli:8181) y su clave API (Settings, API Keys).",
+  "The {who} refused its key.": "El {who} rechazó su clave.",
+  "Tautulli history": "historial de Tautulli",
+  "{n} plays": "{n} reproducciones",
+  "Tautulli watch time": "tiempo de visionado de Tautulli",
+  "{n} users": "{n} usuarios",
+  "Which stream? Give a session's id, from the sessions.": "¿Qué stream? Da el id de una sesión, de las sesiones.",
+  "stop the {id} stream on Plex": "parar el stream {id} en Plex"
  }
 }

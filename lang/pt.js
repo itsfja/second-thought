@@ -197,7 +197,15 @@
 "rb_pihole_blocking":{"message0":"desligar o bloqueio do Pi-hole durante %1 segundos","tooltip":"Desliga o bloqueio durante esses segundos, e depois o Pi-hole volta a ligá-lo sozinho. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
 "rb_pihole_enable":{"message0":"ligar o bloqueio do Pi-hole","tooltip":"Volta a ligar o bloqueio. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
 "rb_pihole_allow":{"message0":"%1 %2 na lista allow do Pi-hole","tooltip":"Põe um domínio na lista allow, ou retira-o. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
-"rb_pihole_deny":{"message0":"%1 %2 na lista deny do Pi-hole","tooltip":"Põe um domínio na lista deny, ou retira-o. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."}
+"rb_pihole_deny":{"message0":"%1 %2 na lista deny do Pi-hole","tooltip":"Põe um domínio na lista deny, ou retira-o. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
+"rb_plex_server":{"message0":"servidor Plex","tooltip":"Um registo para o servidor: name, version e up (respondeu, portanto está acessível). Precisa de PLEX_URL e PLEX_TOKEN em second-thought.ini. Nesta página usa um servidor de exemplo."},
+"rb_plex_libraries":{"message0":"bibliotecas do Plex","tooltip":"Uma lista de registos, um por cada biblioteca: name, type (movie, show ou artist) e count (quantos itens tem). Só lê."},
+"rb_plex_sessions":{"message0":"sessões do Plex","tooltip":"Uma lista de registos, um por cada coisa que está a tocar agora: id (o id da sessão), user, title, player, state (playing ou paused) e transcode (se o servidor a está a transcodificar). Só lê."},
+"rb_plex_recent":{"message0":"novos itens do Plex, últimos %1 dias","tooltip":"Uma lista de registos, um por cada item adicionado nesses dias: title, library e added (quando foi adicionado). Só lê."},
+"rb_tautulli_history":{"message0":"histórico do Tautulli, últimos %1 dias","tooltip":"Uma lista de registos, um por cada coisa vista nesses dias, do Tautulli: user, title, when e transcode (se foi transcodificada). Só lê. Precisa de TAUTULLI_URL e TAUTULLI_API_KEY em second-thought.ini."},
+"rb_tautulli_watchtime":{"message0":"tempo de visionamento do Tautulli, últimos %1 dias","tooltip":"Uma lista de registos, um por cada pessoa que viu algo nesses dias, do Tautulli: user e hours. Só lê."},
+"rb_plex_scan":{"message0":"procurar novos ficheiros na biblioteca %1 no Plex","tooltip":"Procura novos ficheiros numa biblioteca. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
+"rb_plex_stop":{"message0":"parar o stream %1 no Plex","tooltip":"Para um stream (o terminate do Tautulli). Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos os dias","weekdays":"nos dias úteis","weekends":"ao fim de semana"},
@@ -263,7 +271,8 @@
 "Radarr and Sonarr":"Radarr e Sonarr",
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"Plex":"Plex"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ferramentas para o agente: coloque-as dentro de um bloco de agente",
@@ -1158,7 +1167,21 @@
 "Pi-hole summary":"resumo do Pi-hole",
 "Pi-hole top blocked domains":"domínios mais bloqueados do Pi-hole",
 "Pi-hole top clients":"principais clientes do Pi-hole",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats":"ler o teu Plex: o servidor, as suas bibliotecas, o que está a tocar agora e as novidades; e ler o histórico e as estatísticas de visionamento do Tautulli",
+"scan a Plex library, and stop a stream on Plex (asking you each time)":"procurar novos ficheiros numa biblioteca do Plex, e parar um stream no Plex (perguntando-to cada vez)",
+"up":"acessível",
+"{n} libraries":"{n} bibliotecas",
+"{n} sessions":"{n} sessões",
+"{n} plays":"{n} reproduções",
+"{n} users":"{n} utilizadores",
+"Plex":"Plex",
+"Plex server":"servidor Plex",
+"Plex libraries":"bibliotecas do Plex",
+"Plex sessions":"sessões do Plex",
+"Plex new items":"novos itens do Plex",
+"Tautulli history":"histórico do Tautulli",
+"Tautulli watch time":"tempo de visionamento do Tautulli"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -1371,7 +1394,9 @@
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
 "e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
 "ads.example.com":"ads.example.com",
-"bad.example.com":"bad.example.com"
+"bad.example.com":"bad.example.com",
+"Films":"Films",
+"abc123":"abc123"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Uma execução anterior parou a meio, mas o programa mudou entretanto, por isso começa do zero.)",
@@ -2266,6 +2291,29 @@
 "Which list (allow or deny), add or remove, and which domain?":"Qual lista (allow ou deny), adicionar ou remover, e qual domínio?",
 "{action} {domain} on Pi-hole's {which} list":"{action} {domain} na lista {which} do Pi-hole",
 "added by Second Thought":"adicionado pelo Second Thought",
-"{n} queries, {blocked} blocked":"{n} consultas, {blocked} bloqueadas"
+"{n} queries, {blocked} blocked":"{n} consultas, {blocked} bloqueadas",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).":"O {who} precisa de {url_setting} e {key_setting} {where_keys}: o seu endereço (como http://plex:32400) e o seu token, o que as apps enviam (os detalhes da conta de um aparelho o mostram).",
+"The {who} refused its token.":"O {who} recusou o seu token.",
+"Plex":"Plex",
+"Plex server":"servidor Plex",
+"Plex {version}":"Plex {version}",
+"up":"acessível",
+"Plex libraries":"bibliotecas do Plex",
+"{n} libraries":"{n} bibliotecas",
+"Plex sessions":"sessões do Plex",
+"{n} sessions":"{n} sessões",
+"Plex new items":"novos itens do Plex",
+"{n} items":"{n} itens",
+"Which library? Give its name, from the libraries.":"Qual biblioteca? Dá o nome dela, das bibliotecas.",
+"scan the {library} library on Plex":"procurar novos ficheiros na biblioteca {library} no Plex",
+"Tautulli":"Tautulli",
+"Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).":"O Tautulli precisa de {url_setting} e {key_setting} {where_keys}: o seu endereço (como http://tautulli:8181) e a sua chave API (Settings, API Keys).",
+"The {who} refused its key.":"O {who} recusou a sua chave.",
+"Tautulli history":"histórico do Tautulli",
+"{n} plays":"{n} reproduções",
+"Tautulli watch time":"tempo de visionamento do Tautulli",
+"{n} users":"{n} utilizadores",
+"Which stream? Give a session's id, from the sessions.":"Qual stream? Dá o id de uma sessão, das sessões.",
+"stop the {id} stream on Plex":"parar o stream {id} no Plex"
 }
 };

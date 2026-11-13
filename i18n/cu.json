@@ -764,6 +764,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 na deny listie Pi-hole",
    "tooltip": "Polagaetъ domenъ na deny listu, ili emlъetъ. Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."
+  },
+  "rb_plex_server": {
+   "message0": "Plex sluga",
+   "tooltip": "Edina zapisъ za slugu: name, version i up (otъvьtisha, sьce deistvuetъ). Trebuetъ PLEX_URL i PLEX_TOKEN vъ second-thought.ini. Na sei stranici obrazъnyi sluga."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex knigy",
+   "tooltip": "Spisakъ zapisii, po edinъ za vseaku knigu: name, type (movie, show ili artist) i count (koli veshchei imeetъ). Toliko chtetъ."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex sessii",
+   "tooltip": "Spisakъ zapisii, po edinъ za vseako, ezhe nyne igraetъ: id (id sessii), user, title, player, state (playing ili paused) i transcode (daliko sluga preobrazuetъ ego). Toliko chtetъ."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex novoe, poslednie %1 dni",
+   "tooltip": "Spisakъ zapisii, po edinъ za vseakou veshchъ, ezhe vъ tolmi dniehъ prilozhena bystъ: title, library i added (kogda prilozhena). Toliko chtetъ."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli istoria, poslednie %1 dni",
+   "tooltip": "Spisakъ zapisii, po edinъ za vseako smotrenie vъ tolmi dniehъ, otъ Tautulli: user, title, when i transcode (daliko preobrazovano bystъ). Toliko chtetъ. Trebuetъ TAUTULLI_URL i TAUTULLI_API_KEY vъ second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli vremia smotrenia, poslednie %1 dni",
+   "tooltip": "Spisakъ zapisii, po edinъ za vseako lico, ezhe vъ tolmi dniehъ smotrie, otъ Tautulli: user i hours. Toliko chtetъ."
+  },
+  "rb_plex_scan": {
+   "message0": "iskati novyja vъ knigie %1 na Plex",
+   "tooltip": "Iskaetъ vъ edinoi knigie novyja files. Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."
+  },
+  "rb_plex_stop": {
+   "message0": "ostanoviti potokъ %1 na Plex",
+   "tooltip": "Ostanovliaetъ edinъ potokъ (Tautulli terminate). Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."
   }
  },
  "options": {
@@ -946,7 +978,8 @@
   "Radarr and Sonarr": "Radarr и Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1706,7 +1739,7 @@
   "{n} characters": "{n} писмѧнъ",
   "{n} devices": "{n} снарѧдѡвъ",
   "{n} events": "{n} событїй",
-  "{n} items": "{n} вещей",
+  "{n} items": "{n} veshchi",
   "{n} records": "{n} хартїй",
   "{n} script started": "{n} чреда начасѧ",
   "{n} script started, waiting for it to finish": "{n} чреда начасѧ, жду скончанїѧ еѧ",
@@ -1841,7 +1874,21 @@
   "Pi-hole summary": "Pi-hole svodъ",
   "Pi-hole top blocked domains": "naibolee zagrajdenyja domeny Pi-hole",
   "Pi-hole top clients": "glavnyja klienty Pi-hole",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "chitati tvoi Plex: slugu, knigy ego, chto nyne igraetъ i novoe; i chitati Tautulli istorii i vremeni smotrenia statistiku",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "iskati novyja vъ knigie Plex, i ostanoviti potokъ na Plex (voprasha te vseaky pytъ)",
+  "up": "deistvuetъ",
+  "{n} libraries": "{n} knigy",
+  "{n} sessions": "{n} sessii",
+  "{n} plays": "{n} smotrenia",
+  "{n} users": "{n} polzovateli",
+  "Plex": "Plex",
+  "Plex server": "Plex sluga",
+  "Plex libraries": "Plex knigy",
+  "Plex sessions": "Plex sessii",
+  "Plex new items": "Plex novoe",
+  "Tautulli history": "Tautulli istoria",
+  "Tautulli watch time": "Tautulli vremia smotrenia"
  },
  "examples": {
   "review": {
@@ -2686,7 +2733,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Прежнее теченїе ѡстависѧ на полупути, но чинъ ѿтолѣ премѣнисѧ, сегѡ ради начинаетъ изнова.)",
@@ -3581,7 +3630,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Kakaia lista (allow ili deny), prilojiti ili otъlojiti, i koiyi domenъ?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} na {which} listie Pi-hole",
   "added by Second Thought": "prilozheno otъ Second Thought",
-  "{n} queries, {blocked} blocked": "{n} vъprosy, {blocked} zagrajdeny"
+  "{n} queries, {blocked} blocked": "{n} vъprosy, {blocked} zagrajdeny",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} trebuetъ {url_setting} i {key_setting} {where_keys}: adresъ jego (ako http://plex:32400) i znakъ jego, iže prilagy posьlai (podrobnosti scheta ustroistva jego pokazaioutъ).",
+  "The {who} refused its token.": "{who} otъverzhe znakъ svoi.",
+  "Plex": "Plex",
+  "Plex server": "Plex sluga",
+  "Plex {version}": "Plex {version}",
+  "up": "deistvuetъ",
+  "Plex libraries": "Plex knigy",
+  "{n} libraries": "{n} knigy",
+  "Plex sessions": "Plex sessii",
+  "{n} sessions": "{n} sessii",
+  "Plex new items": "Plex novoe",
+  "{n} items": "{n} veshchi",
+  "Which library? Give its name, from the libraries.": "Kakaia kniga? Dajь ime ego, otъ knigъ.",
+  "scan the {library} library on Plex": "iskati novyja vъ knigie {library} na Plex",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli trebuetъ {url_setting} i {key_setting} {where_keys}: adresъ jego (ako http://tautulli:8181) i kljuchъ API ego (Settings, API Keys).",
+  "The {who} refused its key.": "{who} otъverzhe kljuchъ svoi.",
+  "Tautulli history": "Tautulli istoria",
+  "{n} plays": "{n} smotrenia",
+  "Tautulli watch time": "Tautulli vremia smotrenia",
+  "{n} users": "{n} polzovateli",
+  "Which stream? Give a session's id, from the sessions.": "Kakyi potokъ? Dajь id sessii, otъ sessii.",
+  "stop the {id} stream on Plex": "ostanoviti potokъ {id} na Plex"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Приложи толкъ",

@@ -38,6 +38,7 @@ Made by tools/sync.py from i18n/ota.json: edit that, not this.
 - Unraid: Unraid
 - NZBGeek: NZBGeek
 - Pi-hole: Pi-hole
+- Plex: Plex
 - Listeners: they run while the exported program runs on schedule: دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر
 - No blocks match: هیچ بر قطعه اویمیور
 - Read and send: اوقو و گوندر

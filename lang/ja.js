@@ -197,7 +197,15 @@
 "rb_pihole_blocking":{"message0":"Pi-hole のブロックを %1 秒間無効にする","tooltip":"その秒数だけブロックを切り、その後 Pi-hole が自分で戻します。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
 "rb_pihole_enable":{"message0":"Pi-hole のブロックを有効にする","tooltip":"ブロックを再度有効にします。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
 "rb_pihole_allow":{"message0":"Pi-hole の allow リストに %1 %2","tooltip":"ドメインを allow リストに載せたり外したりします。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
-"rb_pihole_deny":{"message0":"Pi-hole の deny リストに %1 %2","tooltip":"ドメインを deny リストに載せたり外したりします。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"}
+"rb_pihole_deny":{"message0":"Pi-hole の deny リストに %1 %2","tooltip":"ドメインを deny リストに載せたり外したりします。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
+"rb_plex_server":{"message0":"Plex サーバー","tooltip":"サーバーの 1 つの記録：name、version、up（応答したので稼働中）。second-thought.ini に PLEX_URL と PLEX_TOKEN が必要。このページではサンプルサーバーを使います。"},
+"rb_plex_libraries":{"message0":"Plex ライブラリ","tooltip":"記録のリスト、各ライブラリにつき 1 つ：name、type（movie、show、artist）と count（いくつのアイテムがあるか）。読み取り専用です。"},
+"rb_plex_sessions":{"message0":"Plex セッション","tooltip":"記録のリスト、今再生中のものにつき 1 つ：id（セッションの id）、user、title、player、state（playing か paused）、transcode（サーバーがトランスコード中か）。読み取り専用です。"},
+"rb_plex_recent":{"message0":"Plex の新しいアイテム、過去 %1 日","tooltip":"記録のリスト、この日数で追加された各アイテムにつき 1 つ：title、library、added（いつ追加されたか）。読み取り専用です。"},
+"rb_tautulli_history":{"message0":"Tautulli 履歴、過去 %1 日","tooltip":"記録のリスト、この日数で視聴された各ものにつき 1 つ、Tautulli から：user、title、when、transcode（トランスコードされたか）。読み取り専用です。second-thought.ini に TAUTULLI_URL と TAUTULLI_API_KEY が必要。"},
+"rb_tautulli_watchtime":{"message0":"Tautulli 視聴時間、過去 %1 日","tooltip":"記録のリスト、この日数で視聴した各人につき 1 つ、Tautulli から：user と hours。読み取り専用です。"},
+"rb_plex_scan":{"message0":"Plex の %1 ライブラリをスキャンする","tooltip":"1 つのライブラリを新しいファイルを探してスキャンします。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
+"rb_plex_stop":{"message0":"Plex のストリーム %1 を停止する","tooltip":"1 つのストリームを停止します（Tautulli の terminate）。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -263,7 +271,8 @@
 "Radarr and Sonarr":"Radarr と Sonarr",
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"Plex":"Plex"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"エージェントの道具：エージェントブロックの中に入れます",
@@ -587,7 +596,7 @@
 "waiting":"待機中",
 "{n} devices":"{n} 台の機器",
 "{n} events":"{n} 件のイベント",
-"{n} items":"{n} 件",
+"{n} items":"{n} アイテム",
 "{n} records":"{n} 件のレコード",
 "{n} step":"{n} ステップ",
 "{n} steps":"{n} ステップ",
@@ -1158,7 +1167,21 @@
 "Pi-hole summary":"Pi-hole の概要",
 "Pi-hole top blocked domains":"Pi-hole のブロック最多的ドメイン",
 "Pi-hole top clients":"Pi-hole の上位クライアント",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats":"あなたの Plex を読む：サーバー、そのライブラリ、今再生中のものと最新のアイテム。そして Tautulli の履歴と視聴時間の統計を読む",
+"scan a Plex library, and stop a stream on Plex (asking you each time)":"Plex のライブラリをスキャンし、Plex のストリームを停止する（毎回あなたに尋ねる）",
+"up":"稼働中",
+"{n} libraries":"{n} ライブラリ",
+"{n} sessions":"{n} セッション",
+"{n} plays":"{n} 回再生",
+"{n} users":"{n} ユーザー",
+"Plex":"Plex",
+"Plex server":"Plex サーバー",
+"Plex libraries":"Plex ライブラリ",
+"Plex sessions":"Plex セッション",
+"Plex new items":"Plex の新しいアイテム",
+"Tautulli history":"Tautulli 履歴",
+"Tautulli watch time":"Tautulli 視聴時間"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1371,7 +1394,9 @@
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
 "e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
 "ads.example.com":"ads.example.com",
-"bad.example.com":"bad.example.com"
+"bad.example.com":"bad.example.com",
+"Films":"Films",
+"abc123":"abc123"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n（前回の実行は途中で止まりましたが、その後プログラムが変わったので、最初からやり直します。）",
@@ -2266,6 +2291,29 @@
 "Which list (allow or deny), add or remove, and which domain?":"どのリスト（allow か deny）で、追加か削除か、どのドメイン？",
 "{action} {domain} on Pi-hole's {which} list":"Pi-hole の {which} リストに {action} {domain}",
 "added by Second Thought":"Second Thought によって追加",
-"{n} queries, {blocked} blocked":"{n} 件のクエリ、{blocked} 件ブロック"
+"{n} queries, {blocked} blocked":"{n} 件のクエリ、{blocked} 件ブロック",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).":"{who}には{url_setting}と{key_setting}が必要です{where_keys}：そのアドレス（http://plex:32400 など）と、そのトークン（アプリが送るもの。機器のアカウント詳細に表示されます）。",
+"The {who} refused its token.":"この{who}はトークンを拒否しました。",
+"Plex":"Plex",
+"Plex server":"Plex サーバー",
+"Plex {version}":"Plex {version}",
+"up":"稼働中",
+"Plex libraries":"Plex ライブラリ",
+"{n} libraries":"{n} ライブラリ",
+"Plex sessions":"Plex セッション",
+"{n} sessions":"{n} セッション",
+"Plex new items":"Plex の新しいアイテム",
+"{n} items":"{n} アイテム",
+"Which library? Give its name, from the libraries.":"どのライブラリ？ ライブラリの中からその名前を指定してください。",
+"scan the {library} library on Plex":"Plex の {library} ライブラリをスキャンする",
+"Tautulli":"Tautulli",
+"Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).":"Tautulli には{url_setting}と{key_setting}が必要です{where_keys}：そのアドレス（http://tautulli:8181 など）と、その API キー（Settings, API Keys）。",
+"The {who} refused its key.":"この{who}はキーを拒否しました。",
+"Tautulli history":"Tautulli 履歴",
+"{n} plays":"{n} 回再生",
+"Tautulli watch time":"Tautulli 視聴時間",
+"{n} users":"{n} ユーザー",
+"Which stream? Give a session's id, from the sessions.":"どのストリーム？ セッションの中からセッションの id を指定してください。",
+"stop the {id} stream on Plex":"Plex のストリーム {id} を停止する"
 }
 };

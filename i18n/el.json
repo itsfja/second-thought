@@ -764,6 +764,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 στη λίστα deny του Pi-hole",
    "tooltip": "Βάζει έναν τομέα στη λίστα deny, ή τον βγάζει. Σε ρωτάει πάντα πρώτα, ακόμα κι όταν τίποτα άλλο δεν ρωτάει, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αλλάζει πραγματικά."
+  },
+  "rb_plex_server": {
+   "message0": "εξυπηρετητής Plex",
+   "tooltip": "Μια εγγραφή για τον εξυπηρετητή: name, version και up (απάντησε, άρα είναι σε λειτουργία). Χρειάζεται PLEX_URL και PLEX_TOKEN στο second-thought.ini. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα εξυπηρετητή."
+  },
+  "rb_plex_libraries": {
+   "message0": "βιβλιοθήκες Plex",
+   "tooltip": "Μια λίστα εγγραφών, μία για κάθε βιβλιοθήκη: name, type (movie, show ή artist) και count (πόσα στοιχεία έχει). Μόνο διαβάζει."
+  },
+  "rb_plex_sessions": {
+   "message0": "συνεδρίες Plex",
+   "tooltip": "Μια λίστα εγγραφών, μία για κάθε πράγμα που παίζει τώρα: id (το id της συνεδρίας), user, title, player, state (playing ή paused) και transcode (αν ο εξυπηρετητής το μετατρέπει). Μόνο διαβάζει."
+  },
+  "rb_plex_recent": {
+   "message0": "νέα Plex, τελευταίες %1 ημέρες",
+   "tooltip": "Μια λίστα εγγραφών, μία για κάθε στοιχείο που προστέθηκε σε τόσες ημέρες: title, library και added (πότε προστέθηκε). Μόνο διαβάζει."
+  },
+  "rb_tautulli_history": {
+   "message0": "ιστορικό Tautulli, τελευταίες %1 ημέρες",
+   "tooltip": "Μια λίστα εγγραφών, μία για κάθε πράγμα που παρακολουθήθηκε σε τόσες ημέρες, από το Tautulli: user, title, when και transcode (αν μετατράπηκε). Μόνο διαβάζει. Χρειάζεται TAUTULLI_URL και TAUTULLI_API_KEY στο second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "χρόνος παρακολούθησης Tautulli, τελευταίες %1 ημέρες",
+   "tooltip": "Μια λίστα εγγραφών, μία για κάθε άτομο που παρακολούθησε σε τόσες ημέρες, από το Tautulli: user και hours. Μόνο διαβάζει."
+  },
+  "rb_plex_scan": {
+   "message0": "σάρωση της βιβλιοθήκης %1 στο Plex",
+   "tooltip": "Σαρώνει μια βιβλιοθήκη για νέα αρχεία. Σε ρωτάει πάντα πρώτα, ακόμα κι όταν τίποτα άλλο δεν ρωτάει, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αλλάζει πραγματικά."
+  },
+  "rb_plex_stop": {
+   "message0": "διακοπή της ροής %1 στο Plex",
+   "tooltip": "Διακόπτει μια ροή (το terminate του Tautulli). Σε ρωτάει πάντα πρώτα, ακόμα κι όταν τίποτα άλλο δεν ρωτάει, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αλλάζει πραγματικά."
   }
  },
  "options": {
@@ -956,7 +988,8 @@
   "Radarr and Sonarr": "Radarr και Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1851,7 +1884,21 @@
   "Pi-hole summary": "σύνοψη Pi-hole",
   "Pi-hole top blocked domains": "Οι πιο μπλοκαρισμένοι τομείς του Pi-hole",
   "Pi-hole top clients": "Κύριοι πελάτες του Pi-hole",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "να διαβάζεις το Plex σου: τον εξυπηρετητή, τις βιβλιοθήκες του, τι παίζει τώρα και τα νεότερα· και να διαβάζεις το ιστορικό και τα στατιστικά παρακολούθησης του Tautulli",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "σαρώσει μια βιβλιοθήκη Plex, και να διακόψεις μια ροή στο Plex (ρωτώντας σε κάθε φορά)",
+  "up": "σε λειτουργία",
+  "{n} libraries": "{n} βιβλιοθήκες",
+  "{n} sessions": "{n} συνεδρίες",
+  "{n} plays": "{n} αναπαραγωγές",
+  "{n} users": "{n} χρήστες",
+  "Plex": "Plex",
+  "Plex server": "εξυπηρετητής Plex",
+  "Plex libraries": "βιβλιοθήκες Plex",
+  "Plex sessions": "συνεδρίες Plex",
+  "Plex new items": "νέα Plex",
+  "Tautulli history": "ιστορικό Tautulli",
+  "Tautulli watch time": "χρόνος παρακολούθησης Tautulli"
  },
  "examples": {
   "review": {
@@ -2696,7 +2743,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Μια προηγούμενη εκτέλεση σταμάτησε στη μέση, αλλά το πρόγραμμα έχει αλλάξει από τότε, οπότε ξεκινά από την αρχή.)",
@@ -3591,6 +3640,29 @@
   "Which list (allow or deny), add or remove, and which domain?": "Ποια λίστα (allow ή deny), προσθήκη ή αφαίρεση, και ποιος τομέας;",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} στη λίστα {which} του Pi-hole",
   "added by Second Thought": "προστέθηκε από το Second Thought",
-  "{n} queries, {blocked} blocked": "{n} ερωτήματα, {blocked} μπλοκαρισμένα"
+  "{n} queries, {blocked} blocked": "{n} ερωτήματα, {blocked} μπλοκαρισμένα",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "Το {who} χρειάζεται {url_setting} και {key_setting} {where_keys}: τη διεύθυνσή του (όπως http://plex:32400) και το token του, αυτό που στέλνουν οι εφαρμογές (τα στοιχεία του λογαριασμού μιας συσκευής το δείχνουν).",
+  "The {who} refused its token.": "Το {who} απέρριψε το token του.",
+  "Plex": "Plex",
+  "Plex server": "εξυπηρετητής Plex",
+  "Plex {version}": "Plex {version}",
+  "up": "σε λειτουργία",
+  "Plex libraries": "βιβλιοθήκες Plex",
+  "{n} libraries": "{n} βιβλιοθήκες",
+  "Plex sessions": "συνεδρίες Plex",
+  "{n} sessions": "{n} συνεδρίες",
+  "Plex new items": "νέα Plex",
+  "{n} items": "{n} στοιχεία",
+  "Which library? Give its name, from the libraries.": "Ποια βιβλιοθήκη; Δώσε το όνομά της, από τις βιβλιοθήκες.",
+  "scan the {library} library on Plex": "σάρωση της βιβλιοθήκης {library} στο Plex",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Το Tautulli χρειάζεται {url_setting} και {key_setting} {where_keys}: τη διεύθυνσή του (όπως http://tautulli:8181) και το κλειδί API του (Settings, API Keys).",
+  "The {who} refused its key.": "Το {who} απέρριψε το κλειδί του.",
+  "Tautulli history": "ιστορικό Tautulli",
+  "{n} plays": "{n} αναπαραγωγές",
+  "Tautulli watch time": "χρόνος παρακολούθησης Tautulli",
+  "{n} users": "{n} χρήστες",
+  "Which stream? Give a session's id, from the sessions.": "Ποια ροή; Δώσε το id μιας συνεδρίας, από τις συνεδρίες.",
+  "stop the {id} stream on Plex": "διακοπή της ροής {id} στο Plex"
  }
 }

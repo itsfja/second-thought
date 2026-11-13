@@ -198,7 +198,15 @@
 "rb_pihole_blocking":{"message0":"Pi-hole hms %1 sbn nu-ub-gal","tooltip":"Hms nu-ub-gal ana sbn-bi, Pi-hole gal-e igi. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."},
 "rb_pihole_enable":{"message0":"Pi-hole hms gal","tooltip":"Hms gal-e igi. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."},
 "rb_pihole_allow":{"message0":"%1 %2 Pi-hole allow rim-a","tooltip":"Domain allow rim-a su3, din remove. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."},
-"rb_pihole_deny":{"message0":"%1 %2 Pi-hole deny rim-a","tooltip":"Domain deny rim-a su3, din remove. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."}
+"rb_pihole_deny":{"message0":"%1 %2 Pi-hole deny rim-a","tooltip":"Domain deny rim-a su3, din remove. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."},
+"rb_plex_server":{"message0":"Plex ekur","tooltip":"Summu ana ekur: name, version gu igi (igi-du, igi). PLEX_URL gu PLEX_TOKEN second-thought.ini-se. Kigiga-bi ekur summu."},
+"rb_plex_libraries":{"message0":"Plex dub-sar","tooltip":"Nimmah, anaag ki-ag2-ki-bi dub-sar: name, type (movie, show din artist) gu count (nfr). Igi igi."},
+"rb_plex_sessions":{"message0":"Plex ak","tooltip":"Nimmah, anaag ki-ag2-ki-bi nu-ub-igal: id, user, title, player, state (playing din paused) gu transcode. Igi igi."},
+"rb_plex_recent":{"message0":"Plex nfr, %1 ud","tooltip":"Nimmah, anaag ki-ag2-ki-bi nfr ud-bi: title, dub-sar gu nfr. Igi igi."},
+"rb_tautulli_history":{"message0":"Tautulli sa, %1 ud","tooltip":"Nimmah, anaag ki-ag2-ki-bi igi ud-bi, Tautulli-se: user, title, igi gu transcode. Igi igi. TAUTULLI_URL gu TAUTULLI_API_KEY second-thought.ini-se."},
+"rb_tautulli_watchtime":{"message0":"Tautulli igi-sa, %1 ud","tooltip":"Nimmah, anaag ki-ag2-ki-bi lu igi ud-bi, Tautulli-se: user gu igi-sa. Igi igi."},
+"rb_plex_scan":{"message0":"dub-sar %1 Plex-a skn","tooltip":"Dub-sar nfr-a skn. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."},
+"rb_plex_stop":{"message0":"ak %1 Plex-a nu-ub-gal","tooltip":"Ak nu-ub-gal (Tautulli terminate). Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒃻𒉆","weekdays":"𒌓 𒆥𒅗","weekends":"𒌓 𒄑𒇲𒅗"},
@@ -263,7 +271,8 @@
 "Radarr and Sonarr":"Radarr u3 Sonarr",
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"Plex":"Plex"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
@@ -1023,7 +1032,7 @@
 "{n} characters":"𒋞 𒅗 {n}",
 "{n} devices":"𒃻𒁶 {n}",
 "{n} events":"𒂡 {n}",
-"{n} items":"𒃻 {n}",
+"{n} items":"{n} nfr",
 "{n} records":"𒃻𒋃 {n}",
 "{n} script started":"𒆜 {n} 𒊕 𒂷𒂷",
 "{n} script started, waiting for it to finish":"𒆜 {n} 𒊕 𒂷𒂷, 𒌀𒂠 𒅅",
@@ -1158,7 +1167,21 @@
 "Pi-hole summary":"Pi-hole summu",
 "Pi-hole top blocked domains":"Pi-hole-a hms domain-nir",
 "Pi-hole top clients":"Pi-hole-a klient-er",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats":"Plex igi: ekur, dub-sar-bi, nu-ub-igal w nfr; Tautulli sa gu igi-sa igi",
+"scan a Plex library, and stop a stream on Plex (asking you each time)":"Plex dub-sar skn, ak Plex-a nu-ub-gal (mueash mungi4gi4)",
+"up":"igi",
+"{n} libraries":"{n} dub-sar",
+"{n} sessions":"{n} ak",
+"{n} plays":"{n} igi",
+"{n} users":"{n} lu",
+"Plex":"Plex",
+"Plex server":"Plex ekur",
+"Plex libraries":"Plex dub-sar",
+"Plex sessions":"Plex ak",
+"Plex new items":"Plex nfr",
+"Tautulli history":"Tautulli sa",
+"Tautulli watch time":"Tautulli igi-sa"
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},
@@ -1371,7 +1394,9 @@
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
 "e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
 "ads.example.com":"ads.example.com",
-"bad.example.com":"bad.example.com"
+"bad.example.com":"bad.example.com",
+"Films":"Films",
+"abc123":"abc123"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(ak saĝ-ĝa2 maš-a gub, ĝeš-ḫur kur2, gibil-ta saĝ ĝa2-ĝa2.)",
@@ -2266,7 +2291,30 @@
 "Which list (allow or deny), add or remove, and which domain?":"Aba? Rim (allow din deny), add din remove, domain aba?",
 "{action} {domain} on Pi-hole's {which} list":"{action} {domain} Pi-hole {which} rim-a",
 "added by Second Thought":"Second Thought-gu add",
-"{n} queries, {blocked} blocked":"{n} nwd, {blocked} hms"
+"{n} queries, {blocked} blocked":"{n} nwd, {blocked} hms",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).":"{who} {url_setting} gu {key_setting} igal {where_keys}: ki-ag2-ki-bi (sux http://plex:32400) gu kib-gu-a-bi, app-a gu-bi (nam-kug apparatus-bi igi-du).",
+"The {who} refused its token.":"{who} kib-gu-a-bi nu-gig-gig.",
+"Plex":"Plex",
+"Plex server":"Plex ekur",
+"Plex {version}":"Plex {version}",
+"up":"igi",
+"Plex libraries":"Plex dub-sar",
+"{n} libraries":"{n} dub-sar",
+"Plex sessions":"Plex ak",
+"{n} sessions":"{n} ak",
+"Plex new items":"Plex nfr",
+"{n} items":"{n} nfr",
+"Which library? Give its name, from the libraries.":"Aba? Id di, dub-sar-ta.",
+"scan the {library} library on Plex":"dub-sar {library} Plex-a skn",
+"Tautulli":"Tautulli",
+"Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).":"Tautulli {url_setting} gu {key_setting} igal {where_keys}: ki-ag2-ki-bi (sux http://tautulli:8181) gu kib-gu-a API-bi (Settings, API Keys).",
+"The {who} refused its key.":"{who} kib-gu-a-bi nu-gig.",
+"Tautulli history":"Tautulli sa",
+"{n} plays":"{n} igi",
+"Tautulli watch time":"Tautulli igi-sa",
+"{n} users":"{n} lu",
+"Which stream? Give a session's id, from the sessions.":"Aba ak? Id di, ak-ta.",
+"stop the {id} stream on Plex":"ak {id} Plex-a nu-ub-gal"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

@@ -3197,5 +3197,97 @@
     "count": 1877
    }
   ]
+ },
+ "plex": {
+  "note": "A sample Plex server and Tautulli (#402), shaped the way their APIs answer: three libraries, two sessions (one transcoding), two items added this week, and last night's watching in Tautulli's history.",
+  "server": {
+   "name": "livingroom",
+   "version": "1.41.3.9662"
+  },
+  "libraries": [
+   {
+    "id": 1,
+    "name": "Films",
+    "type": "movie",
+    "count": 312
+   },
+   {
+    "id": 2,
+    "name": "TV",
+    "type": "show",
+    "count": 1204
+   },
+   {
+    "id": 3,
+    "name": "Music",
+    "type": "artist",
+    "count": 89
+   }
+  ],
+  "sessions": [
+   {
+    "id": "abc123",
+    "user": "alice",
+    "title": "The Matrix",
+    "player": "livingroom-tv",
+    "state": "playing",
+    "transcode": false
+   },
+   {
+    "id": "def456",
+    "user": "bob",
+    "title": "Doctor Who - s01e01",
+    "player": "bob-phone",
+    "state": "paused",
+    "transcode": true
+   }
+  ],
+  "recent": [
+   {
+    "title": "Arrival",
+    "library": "Films",
+    "added": 1794431040
+   },
+   {
+    "title": "Doctor Who - s01e02",
+    "library": "TV",
+    "added": 1794167040
+   },
+   {
+    "title": "Blade Runner 2049",
+    "library": "Films",
+    "added": 1792000800
+   }
+  ],
+  "history": [
+   {
+    "user": "alice",
+    "title": "The Matrix",
+    "when": 1794519000,
+    "transcode": false,
+    "duration": 7200
+   },
+   {
+    "user": "bob",
+    "title": "Doctor Who - s01e01",
+    "when": 1794516000,
+    "transcode": true,
+    "duration": 2700
+   },
+   {
+    "user": "alice",
+    "title": "Blade Runner 2049",
+    "when": 1794340800,
+    "transcode": false,
+    "duration": 9600
+   },
+   {
+    "user": "bob",
+    "title": "Doctor Who - s01e01",
+    "when": 1792872000,
+    "transcode": true,
+    "duration": 2700
+   }
+  ]
  }
 }

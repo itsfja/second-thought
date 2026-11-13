@@ -765,6 +765,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 Pi-hole deny liste",
    "tooltip": "Domainam deny liste sthapayati, va apasarayati. Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."
+  },
+  "rb_plex_server": {
+   "message0": "Plex sevayah",
+   "tooltip": "Aika smritih sevakasya: name, version ca sadrisha (sa uttaram adadat, tasmatsadrisha). PLEX_URL PLEX_TOKEN second-thought.ini. Asmin prsthe nidarsakam sevakam upayabhate."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex pustakalayah",
+   "tooltip": "Smrtinam sucih, pratyeksya pustakalaya: name, type (movie, show va artist) ca count (kati vastuni santi). Kevalam pathati."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex samavayahani",
+   "tooltip": "Smrtinam sucih, pratyeksya idani kim pathati: id, user, title, player, state (playing va paused) ca transcode. Kevalam pathati."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex nava, %1 dinam",
+   "tooltip": "Smrtinam sucih, pratyeksya vastu etesu dinesu prasthitam: title, pustakalaya ca added. Kevalam pathati."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli itihasah, %1 dinam",
+   "tooltip": "Smrtinam sucih, pratyeksya kim etesu dinesu drishtam, Tautulli: user, title, when ca transcode. Kevalam pathati. TAUTULLI_URL TAUTULLI_API_KEY second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli drishti-kalah, %1 dinam",
+   "tooltip": "Smrtinam sucih, pratyeksya yah etesu dinesu apaśyat, Tautulli: user ca hours. Kevalam pathati."
+  },
+  "rb_plex_scan": {
+   "message0": "Plex %1 pustakalayam parikshitu",
+   "tooltip": "Pustakalayam nava-patra-anvesane parikshati. Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."
+  },
+  "rb_plex_stop": {
+   "message0": "Plex %1 pravaham sthapayitum",
+   "tooltip": "Ekam pravaham sthapayati (Tautulli terminate). Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."
   }
  },
  "options": {
@@ -957,7 +989,8 @@
   "Radarr and Sonarr": "Radarr-Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "प्रतिनिधेः साधनानि: तानि प्रतिनिधिखण्डस्य अन्तः पातय",
@@ -1281,7 +1314,7 @@
   "waiting": "प्रतीक्षते",
   "{n} devices": "{n} यन्त्राणि",
   "{n} events": "{n} घटनाः",
-  "{n} items": "{n} विषयाः",
+  "{n} items": "{n} vastuni",
   "{n} records": "{n} अभिलेखाः",
   "{n} step": "{n} पदम्",
   "{n} steps": "{n} पदानि",
@@ -1852,7 +1885,21 @@
   "Pi-hole summary": "Pi-hole samkshepah",
   "Pi-hole top blocked domains": "Pi-hole atyadhikam nirodhita domainah",
   "Pi-hole top clients": "Pi-hole pratham clientah",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "pathatu yad tasya asti: sevakah, tasya pustakalayah, idani kim pathati ca nava; Tautulli itihasam drishti-kala-sankhye cha pathatu",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "Plex pustakalayam parikshitum, Plex pravaham sthapayitum cha (prativaram tvam prcchati)",
+  "up": "sadrisha",
+  "{n} libraries": "{n} pustakalayani",
+  "{n} sessions": "{n} samavayahani",
+  "{n} plays": "{n} drishtayah",
+  "{n} users": "{n} uporogah",
+  "Plex": "Plex",
+  "Plex server": "Plex sevayah",
+  "Plex libraries": "Plex pustakalayah",
+  "Plex sessions": "Plex samavayahani",
+  "Plex new items": "Plex nava",
+  "Tautulli history": "Tautulli itihasah",
+  "Tautulli watch time": "Tautulli drishti-kalah"
  },
  "examples": {
   "review": {
@@ -2697,7 +2744,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(पूर्वं चालनं मध्ये स्थगितम्, किन्तु ततः परं कार्यक्रमः परिवृत्तः, अतः नूतनतया आरभते।)",
@@ -3592,7 +3641,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Ka lista (allow va deny), prasthitum va apasarayitum, ka cha domain?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} Pi-hole {which} liste",
   "added by Second Thought": "Second Thought dvara prasthitam",
-  "{n} queries, {blocked} blocked": "{n} prashnah, {blocked} nirodhah"
+  "{n} queries, {blocked} blocked": "{n} prashnah, {blocked} nirodhah",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} kamayate {url_setting} ca {key_setting} ca {where_keys}: tasya adesham (yatha http://plex:32400) ca tasya tokenam, yat apps presayanti (ekasya yantrasya account-vishlesha tam darshayati).",
+  "The {who} refused its token.": "Tena {who} tena tokenam apaharitam.",
+  "Plex": "Plex",
+  "Plex server": "Plex sevayah",
+  "Plex {version}": "Plex {version}",
+  "up": "sadrisha",
+  "Plex libraries": "Plex pustakalayah",
+  "{n} libraries": "{n} pustakalayani",
+  "Plex sessions": "Plex samavayahani",
+  "{n} sessions": "{n} samavayahani",
+  "Plex new items": "Plex nava",
+  "{n} items": "{n} vastuni",
+  "Which library? Give its name, from the libraries.": "Ka pustakalaya? Dva tasya nam, pustakalayebhyah.",
+  "scan the {library} library on Plex": "Plex {library} pustakalayam parikshitu",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli kamayate {url_setting} ca {key_setting} ca {where_keys}: tasya adesham (yatha http://tautulli:8181) ca tasya API kuncikam (Settings, API Keys).",
+  "The {who} refused its key.": "Tena {who} tena kuncikam apaharitam.",
+  "Tautulli history": "Tautulli itihasah",
+  "{n} plays": "{n} drishtayah",
+  "Tautulli watch time": "Tautulli drishti-kalah",
+  "{n} users": "{n} uporogah",
+  "Which stream? Give a session's id, from the sessions.": "Kah pravahah? Dva ekasya samavayahasya notam, samavayahyoh.",
+  "stop the {id} stream on Plex": "Plex {id} pravaham sthapayitum"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

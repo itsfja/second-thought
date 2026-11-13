@@ -198,7 +198,15 @@
 "rb_pihole_blocking":{"message0":"Pi-hole belocu %1 secundas of","tooltip":"Belocu of ana secundas, Pi-hole estari. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
 "rb_pihole_enable":{"message0":"Pi-hole belocu estari","tooltip":"Belocu estari. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
 "rb_pihole_allow":{"message0":"%1 %2 Pi-hole allow rimma","tooltip":"Domain allow rimma dais, removian. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
-"rb_pihole_deny":{"message0":"%1 %2 Pi-hole deny rimma","tooltip":"Domain deny rimma dais, removian. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."}
+"rb_pihole_deny":{"message0":"%1 %2 Pi-hole deny rimma","tooltip":"Domain deny rimma dais, removian. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
+"rb_plex_server":{"message0":"Plex tarkasnai","tooltip":"Mema memas tarkasnai: name, version u estari (andai, estari). PLEX_URL u PLEX_TOKEN second-thought.ini. Kuwapi Unraid tarna parkuwas."},
+"rb_plex_libraries":{"message0":"Plex tuppas","tooltip":"Mema tarnas, kuis tarnas tuppa: name, type (movie, show allai artist) u count (kuit nfr). Tarna only."},
+"rb_plex_sessions":{"message0":"Plex tarnas","tooltip":"Mema tarnas, kuis tarnas estari: id, user, title, player, state (playing allai paused) u transcode. Tarna only."},
+"rb_plex_recent":{"message0":"Plex nfr, %1 memal","tooltip":"Mema tarnas, kuis tarnas nfr memal: title, tuppa u nfr. Tarna only."},
+"rb_tautulli_history":{"message0":"Tautulli mema, %1 memal","tooltip":"Mema tarnas, kuis tarnas mema memal, Tautulli: user, title, tarnas u transcode. Tarna only. PLEX_URL u PLEX_TOKEN second-thought.ini."},
+"rb_tautulli_watchtime":{"message0":"Tautulli tarnas memas, %1 memal","tooltip":"Mema tarnas, kuis tarnas arha mema memal, Tautulli: user u memal. Tarna only."},
+"rb_plex_scan":{"message0":"tuppa %1 Plex tarkasnai","tooltip":"Tuppa nfr tarkasnai. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
+"rb_plex_stop":{"message0":"tarnas %1 Plex of","tooltip":"Tarnas of (Tautulli terminate). Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒄰 𒄷𒌋𒈠𒀭","weekdays":"𒌓𒄰 𒀀𒉌𒉿𒀜𒋫𒀸","weekends":"𒌓𒄰 𒉿𒅈𒉺𒀸"},
@@ -263,7 +271,8 @@
 "Radarr and Sonarr":"Radarr ù Sonarr",
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"Plex":"Plex"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣",
@@ -1023,7 +1032,7 @@
 "{n} characters":"𒅗 {n}",
 "{n} devices":"𒌑𒉡𒉿𒀸𒄩 {n}",
 "{n} events":"𒈨𒈪𒀸 {n}",
-"{n} items":"𒆪𒀉𒆠 {n}",
+"{n} items":"{n} nfr",
 "{n} records":"𒁾 𒆏𒁍𒉿𒀸 {n}",
 "{n} script started":"𒆜 {n} 𒋾𒉿𒀜",
 "{n} script started, waiting for it to finish":"𒆜 {n} 𒋾𒉿𒀜, 𒍣𒅔𒉡𒈥 𒄷𒍑𒆠𒄑𒍣",
@@ -1158,7 +1167,21 @@
 "Pi-hole summary":"Pi-hole mema",
 "Pi-hole top blocked domains":"Pi-hole beloceni domainas",
 "Pi-hole top clients":"Pi-hole klientas",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats":"Plex tarnas: tarkasnai, tuppas, kuit tarnas estari u nfr; Tautulli mema u tarnas memas tarnas",
+"scan a Plex library, and stop a stream on Plex (asking you each time)":"Plex tuppa tarkasnai, tarnas Plex of (tuwaz kuwapit arha ehu)",
+"up":"estari",
+"{n} libraries":"{n} tuppas",
+"{n} sessions":"{n} tarnas",
+"{n} plays":"{n} tarnas",
+"{n} users":"{n} arha",
+"Plex":"Plex",
+"Plex server":"Plex tarkasnai",
+"Plex libraries":"Plex tuppas",
+"Plex sessions":"Plex tarnas",
+"Plex new items":"Plex nfr",
+"Tautulli history":"Tautulli mema",
+"Tautulli watch time":"Tautulli tarnas memas"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -1371,7 +1394,9 @@
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
 "e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
 "ads.example.com":"ads.example.com",
-"bad.example.com":"bad.example.com"
+"bad.example.com":"bad.example.com",
+"Films":"Films",
+"abc123":"abc123"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(i-ya-u-wa-ar ḫa-an-te-ez-zi ŠÀ-pát kar-aš-ta, GIŠ.ḪUR-ma wa-aḫ-nu-ut, ne-e-wa ti-ya-zi.)",
@@ -2266,7 +2291,30 @@
 "Which list (allow or deny), add or remove, and which domain?":"Kuis rim (allow allai deny), addian allai removian, kuis domain?",
 "{action} {domain} on Pi-hole's {which} list":"{action} {domain} Pi-hole {which} rimma",
 "added by Second Thought":"added fram Second Thought",
-"{n} queries, {blocked} blocked":"{n} tarnas, {blocked} beloceni"
+"{n} queries, {blocked} blocked":"{n} tarnas, {blocked} beloceni",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).":"{who} {url_setting} u {key_setting} {where_keys}: kuit ID-s (sux http://plex:32400) u hartin appas harta (apparatus racu-tolas hartin onwriyandari).",
+"The {who} refused its token.":"{who} hartin-wa apeni.",
+"Plex":"Plex",
+"Plex server":"Plex tarkasnai",
+"Plex {version}":"Plex {version}",
+"up":"estari",
+"Plex libraries":"Plex tuppas",
+"{n} libraries":"{n} tuppas",
+"Plex sessions":"Plex tarnas",
+"{n} sessions":"{n} tarnas",
+"Plex new items":"Plex nfr",
+"{n} items":"{n} nfr",
+"Which library? Give its name, from the libraries.":"Kuis tuppa? ID-s ehu, tuppas-ta.",
+"scan the {library} library on Plex":"tuppa {library} Plex tarkasnai",
+"Tautulli":"Tautulli",
+"Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).":"Tautulli {url_setting} u {key_setting} {where_keys}: kuit ID-s (sux http://tautulli:8181) u API hartin (Settings, API Keys).",
+"The {who} refused its key.":"{who} hartin-wa apeni.",
+"Tautulli history":"Tautulli mema",
+"{n} plays":"{n} tarnas",
+"Tautulli watch time":"Tautulli tarnas memas",
+"{n} users":"{n} arha",
+"Which stream? Give a session's id, from the sessions.":"Kuis tarnas? Tarnas ID-s ehu, tarnas-ta.",
+"stop the {id} stream on Plex":"tarnas {id} Plex of"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

@@ -764,6 +764,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2於Pi-hole之deny列",
    "tooltip": "置一域於deny列，或除之。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"
+  },
+  "rb_plex_server": {
+   "message0": "Plex之伺服器",
+   "tooltip": "伺服器一錄：name、version與up（其應，故通達）。需PLEX_URL與PLEX_TOKEN於second-thought.ini。此頁用示例之伺服器。"
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex之書庫",
+   "tooltip": "錄之列，每書庫一錄：name、type（movie、show抑artist）與count（有幾物）。惟讀而已。"
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex之會",
+   "tooltip": "錄之列，現所奏者各一錄：id（會之id）、user、title、player、state（playing抑paused）與transcode（伺服器轉之否）。惟讀而已。"
+  },
+  "rb_plex_recent": {
+   "message0": "Plex之新物，近%1日",
+   "tooltip": "錄之列，此日數所增之物各一錄：title、library與added（何時所增）。惟讀而已。"
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli之史，近%1日",
+   "tooltip": "錄之列，此日數所觀者各一錄，出自Tautulli：user、title、when與transcode（轉之否）。惟讀而已。需TAUTULLI_URL與TAUTULLI_API_KEY於second-thought.ini。"
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli觀時，近%1日",
+   "tooltip": "錄之列，此日數所觀之人各一錄，出自Tautulli：user與hours。惟讀而已。"
+  },
+  "rb_plex_scan": {
+   "message0": "掃Plex之%1書庫",
+   "tooltip": "掃一書庫以尋新檔。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"
+  },
+  "rb_plex_stop": {
+   "message0": "止Plex之%1流",
+   "tooltip": "止一流（Tautulli之terminate）。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"
   }
  },
  "options": {
@@ -946,7 +978,8 @@
   "Radarr and Sonarr": "Radarr 與 Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "聽者：所出之程依時而行，則此諸塊行",
@@ -1706,7 +1739,7 @@
   "{n} characters": "{n} 字",
   "{n} devices": "{n} 器",
   "{n} events": "{n} 事",
-  "{n} items": "{n} 項",
+  "{n} items": "{n}物",
   "{n} records": "{n} 簿",
   "{n} script started": "已始 {n} 段",
   "{n} script started, waiting for it to finish": "已始 {n} 段，待其畢",
@@ -1841,7 +1874,21 @@
   "Pi-hole summary": "Pi-hole之要略",
   "Pi-hole top blocked domains": "Pi-hole所拒最多之域",
   "Pi-hole top clients": "Pi-hole首客",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "讀汝之Plex：伺服器、其書庫、現所奏者與新物；且讀Tautulli之史與觀時之統計",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "掃Plex一書庫，且止Plex一流（每問於汝）",
+  "up": "通達",
+  "{n} libraries": "{n}書庫",
+  "{n} sessions": "{n}會",
+  "{n} plays": "{n}次觀",
+  "{n} users": "{n}人",
+  "Plex": "Plex",
+  "Plex server": "Plex之伺服器",
+  "Plex libraries": "Plex之書庫",
+  "Plex sessions": "Plex之會",
+  "Plex new items": "Plex之新物",
+  "Tautulli history": "Tautulli之史",
+  "Tautulli watch time": "Tautulli觀時"
  },
  "examples": {
   "review": {
@@ -2686,7 +2733,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n（前行中止，然其程已易，故更始。）",
@@ -3581,7 +3630,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "何列（allow抑deny），增抑除，何域？",
   "{action} {domain} on Pi-hole's {which} list": "Pi-hole之{which}列{action} {domain}",
   "added by Second Thought": "Second Thought所增",
-  "{n} queries, {blocked} blocked": "{n}問，{blocked}拒"
+  "{n} queries, {blocked} blocked": "{n}問，{blocked}拒",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who}需{url_setting}與{key_setting} {where_keys}：其址（如http://plex:32400）及其符節，諸器所寄者（機之帳目詳情示之）。",
+  "The {who} refused its token.": "此{who}拒其符節。",
+  "Plex": "Plex",
+  "Plex server": "Plex之伺服器",
+  "Plex {version}": "Plex {version}",
+  "up": "通達",
+  "Plex libraries": "Plex之書庫",
+  "{n} libraries": "{n}書庫",
+  "Plex sessions": "Plex之會",
+  "{n} sessions": "{n}會",
+  "Plex new items": "Plex之新物",
+  "{n} items": "{n}物",
+  "Which library? Give its name, from the libraries.": "何書庫？以其名予之，自書庫。",
+  "scan the {library} library on Plex": "掃Plex之{library}書庫",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli需{url_setting}與{key_setting} {where_keys}：其址（如http://tautulli:8181）及其API之鑰（Settings, API Keys）。",
+  "The {who} refused its key.": "此{who}拒其鑰。",
+  "Tautulli history": "Tautulli之史",
+  "{n} plays": "{n}次觀",
+  "Tautulli watch time": "Tautulli觀時",
+  "{n} users": "{n}人",
+  "Which stream? Give a session's id, from the sessions.": "何流？以一會之id予之，自會。",
+  "stop the {id} stream on Plex": "止Plex之{id}流"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

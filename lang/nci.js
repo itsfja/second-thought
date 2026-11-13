@@ -197,7 +197,15 @@
 "rb_pihole_blocking":{"message0":"Pi-hole huatequiliztli %1 sekundah quicelah","tooltip":"Quicela in huatequiliztli ini sekundah, zatepan Pi-hole quimonequiltia. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
 "rb_pihole_enable":{"message0":"Pi-hole huatequiliztli quicelilitu","tooltip":"Quicelilitu in huatequiliztli. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
 "rb_pihole_allow":{"message0":"%1 %2 ipan Pi-hole allow lista","tooltip":"Quihuehca ce dominio ipan allow lista, ahnozo quiquixtia. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
-"rb_pihole_deny":{"message0":"%1 %2 ipan Pi-hole deny lista","tooltip":"Quihuehca ce dominio ipan deny lista, ahnozo quiquixtia. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."}
+"rb_pihole_deny":{"message0":"%1 %2 ipan Pi-hole deny lista","tooltip":"Quihuehca ce dominio ipan deny lista, ahnozo quiquixtia. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
+"rb_plex_server":{"message0":"Plex teopixcalli","tooltip":"Ce tlacuilolli in teopixcalli: name, version ihuan cualiz (quinnamiqui, ipampa cualiz). PLEX_URL ihuan PLEX_TOKEN second-thought.ini ipan. Ipan ini amoxtli ce tlacuilolli teopixcalli quimonequiltia."},
+"rb_plex_libraries":{"message0":"Plex amoxcalli","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl amoxcalli: name, type (movie, show nozo artist) ihuan count (quezqui tlamantli quipiya). Zan quipoua."},
+"rb_plex_sessions":{"message0":"Plex tlachializtli","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl tlahtol-t: id, user, title, player, state (playing nozo paused) ihuan transcode. Zan quipoua."},
+"rb_plex_recent":{"message0":"Plex yancuic, %1 tonalli","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl tlamantli in ini tonalli ome: title, amoxcalli ihuan added. Zan quipoua."},
+"rb_tautulli_history":{"message0":"Tautulli tlahtol, %1 tonalli","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl tlahtol ini tonalli, Tautulli: user, title, when ihuan transcode. Zan quipoua. TAUTULLI_URL ihuan TAUTULLI_API_KEY second-thought.ini ipan."},
+"rb_tautulli_watchtime":{"message0":"Tautulli tlahtol-t, %1 tonalli","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl tlacatl in tlahtol ini tonalli, Tautulli: user ihuan hmoou. Zan quipoua."},
+"rb_plex_scan":{"message0":"Plex %1 amoxcalli tlatlalia","tooltip":"In amoxcalli tlatlalia ipampa yancuic tlamantli. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
+"rb_plex_stop":{"message0":"Plex %1 tlatemoztli quicelah","tooltip":"Ce tlatemoztli quicelah (Tautulli terminate). Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -262,7 +270,8 @@
 "Radarr and Sonarr":"Radarr ihuan Sonarr",
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"Plex":"Plex"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1157,7 +1166,21 @@
 "Pi-hole summary":"Pi-hole amoxpohualiztli",
 "Pi-hole top blocked domains":"Pi-hole in ocachi huatequi dominomeh",
 "Pi-hole top clients":"Pi-hole in ameyalli clienteh",
-"Pi-hole":"Pi-hole"
+"Pi-hole":"Pi-hole",
+"read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats":"tictoca in Pi-hole: in teopixcalli, in amoxcalli, in tlahtol-t ihuan in yancuic; Tautulli tlahtol ihuan tlahtol-t tlahtolhuan",
+"scan a Plex library, and stop a stream on Plex (asking you each time)":"in Plex amoxcalli tlatlalia, ihuan in tlatemoztli quicelah (centetl ipampa mitztlahtlaniz)",
+"up":"cualiz",
+"{n} libraries":"{n} amoxcalli",
+"{n} sessions":"{n} tlachializtli",
+"{n} plays":"{n} tlahtol",
+"{n} users":"{n} tlacameh",
+"Plex":"Plex",
+"Plex server":"Plex teopixcalli",
+"Plex libraries":"Plex amoxcalli",
+"Plex sessions":"Plex tlachializtli",
+"Plex new items":"Plex yancuic",
+"Tautulli history":"Tautulli tlahtol",
+"Tautulli watch time":"Tautulli tlahtol-t"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -1370,7 +1393,9 @@
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
 "e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
 "ads.example.com":"ads.example.com",
-"bad.example.com":"bad.example.com"
+"bad.example.com":"bad.example.com",
+"Films":"Films",
+"abc123":"abc123"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Ce achto tlachīhualiztli ōmoquetz ipan in nepantla, auh in tlatēcpantli ōmopatla, ic occeppa peuhua.)",
@@ -2265,7 +2290,30 @@
 "Which list (allow or deny), add or remove, and which domain?":"Tlein lista (allow nozo deny), quiquixtilia nozo quihuehca, ihuan tlein dominio?",
 "{action} {domain} on Pi-hole's {which} list":"{action} {domain} ipan Pi-hole {which} lista",
 "added by Second Thought":"quihuehcati Second Thought",
-"{n} queries, {blocked} blocked":"{n} tlahtolhuan, {blocked} huatequi"
+"{n} queries, {blocked} blocked":"{n} tlahtolhuan, {blocked} huatequi",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).":"{who} itla monequi {url_setting} ihuan {key_setting} {where_keys}: in italan (iuhca http://plex:32400) ihuan in itlahtol in app quiquiti (in tlacuilolli in se tlacuilolli apparatus quiquixtia).",
+"The {who} refused its token.":"In {who} itlahtol amo quicelili.",
+"Plex":"Plex",
+"Plex server":"Plex teopixcalli",
+"Plex {version}":"Plex {version}",
+"up":"cualiz",
+"Plex libraries":"Plex amoxcalli",
+"{n} libraries":"{n} amoxcalli",
+"Plex sessions":"Plex tlachializtli",
+"{n} sessions":"{n} tlachializtli",
+"Plex new items":"Plex yancuic",
+"{n} items":"{n} tlamantli",
+"Which library? Give its name, from the libraries.":"Tlein amoxcalli? Xiquica i itoca, ipan amoxcalli.",
+"scan the {library} library on Plex":"Plex {library} amoxcalli tlatlalia",
+"Tautulli":"Tautulli",
+"Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).":"Tautulli itla monequi {url_setting} ihuan {key_setting} {where_keys}: in italan (iuhca http://tautulli:8181) ihuan in API tlacuilolli (Settings, API Keys).",
+"The {who} refused its key.":"In {who} itlahtol amo quicelili.",
+"Tautulli history":"Tautulli tlahtol",
+"{n} plays":"{n} tlahtol",
+"Tautulli watch time":"Tautulli tlahtol-t",
+"{n} users":"{n} tlacameh",
+"Which stream? Give a session's id, from the sessions.":"Tlein tlatemolea? Xiquica in id, ipan tlachializtli.",
+"stop the {id} stream on Plex":"Plex {id} tlatemoztli quicelah"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

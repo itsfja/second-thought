@@ -766,6 +766,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 b rshma deny d Pi-hole",
    "tooltip": "hty domyn b rshma deny, wla htyh. shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."
+  },
+  "rb_plex_server": {
+   "message0": "Plex sl'",
+   "tooltip": "Sjl l sl': name, version w on (rdd, f-ho on). hty' PLEX_URL w PLEX_TOKEN b second-thought.ini. bhn dawkta sl' d hwyt mtlmy."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex ktb",
+   "tooltip": "rhta dktba, lda lkl ktb: name, type (movie, show wla artist) w count (ad ashya). bqra fqt."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex sjlat",
+   "tooltip": "rhta dktba, lda lkl shw-hl: id, user, title, player, state (playing wla paused) w transcode. bqra fqt."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex jdyd, akhr %1 ywm",
+   "tooltip": "rhta dktba, lda lkl sh zwd f had ywm: title, ktb w added (aymt zwd). bqra fqt."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli tarikh, akhr %1 ywm",
+   "tooltip": "rhta dktba, lda lkl sh shwh f had ywm, mn Tautulli: user, title, aymt w transcode. bqra fqt. hty' TAUTULLI_URL w TAUTULLI_API_KEY b second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli wqt shw, akhr %1 ywm",
+   "tooltip": "rhta dktba, lda lkl sh shwh f had ywm, mn Tautulli: user w sb'. bqra fqt."
+  },
+  "rb_plex_scan": {
+   "message0": "mswh ktb %1 b Pi-hole",
+   "tooltip": "mswh ktb l ashya jyda. shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."
+  },
+  "rb_plex_stop": {
+   "message0": "wqf strym %1 b Pi-hole",
+   "tooltip": "wqf strym (Tautulli terminate). shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."
   }
  },
  "options": {
@@ -948,7 +980,8 @@
   "Radarr and Sonarr": "Radarr w-Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "ܡܨܝܬܢܐ: ܪܗܛܝܢ ܟܕ ܛܘܟܣܐ ܕܢܦܩ ܪܗܛ ܥܡ ܙܒܢܐ",
@@ -1708,7 +1741,7 @@
   "{n} characters": "{n} ܐܬܘܬܐ",
   "{n} devices": "{n} ܐܘܪܓܢܐ",
   "{n} events": "{n} ܥܒܕܐ",
-  "{n} items": "{n} ܡܠܐ",
+  "{n} items": "{n} ashya",
   "{n} records": "{n} ܛܒܠܐ",
   "{n} script started": "{n} ܦܣܩܬܐ ܫܪܬ",
   "{n} script started, waiting for it to finish": "{n} ܦܣܩܬܐ ܫܪܬ, ܡܣܟܐ ܕܬܫܠܡ",
@@ -1843,7 +1876,21 @@
   "Pi-hole summary": "Pi-hole sjl",
   "Pi-hole top blocked domains": "aktr msdod domyn b Pi-hole",
   "Pi-hole top clients": "rwas kliont b Pi-hole",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "qra Pi-hole dyrk: sl', ktbh, shw-hl w jdyd; qra tarikh Tautulli w shw wqth",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "mswh ktb Pi-hole, w wqf strym b Pi-hole (shal lk kl zbn)",
+  "up": "on",
+  "{n} libraries": "{n} ktb",
+  "{n} sessions": "{n} sjlat",
+  "{n} plays": "{n} mshahda",
+  "{n} users": "{n} msthdmyn",
+  "Plex": "Plex",
+  "Plex server": "Plex sl'",
+  "Plex libraries": "Plex ktb",
+  "Plex sessions": "Plex sjlat",
+  "Plex new items": "Plex jdyd",
+  "Tautulli history": "Tautulli tarikh",
+  "Tautulli watch time": "Tautulli wqt shw"
  },
  "examples": {
   "review": {
@@ -2688,7 +2735,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(rahṭā qadmāyā psaq bpalgeh, ꜣellā ṭuksā ꜣeštaḥlap men hāydēn, wmettul hānā šārē men dreš.)",
@@ -3583,7 +3632,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Ayna rshma (allow wla deny), zwd wla hty, w ayna domyn?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} b rshma {which} d Pi-hole",
   "added by Second Thought": "zwd mnh Second Thought",
-  "{n} queries, {blocked} blocked": "{n} stsal, {blocked} msdod"
+  "{n} queries, {blocked} blocked": "{n} stsal, {blocked} msdod",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} bea {url_setting} w {key_setting} {where_keys}: adres dylh (kl http://plex:32400) w sfm dylh, dly d-apps shabyn (tfsyl d-hsb d-jhz byn'h).",
+  "The {who} refused its token.": "{who} rdd sfmh.",
+  "Plex": "Plex",
+  "Plex server": "Plex sl'",
+  "Plex {version}": "Plex {version}",
+  "up": "on",
+  "Plex libraries": "Plex ktb",
+  "{n} libraries": "{n} ktb",
+  "Plex sessions": "Plex sjlat",
+  "{n} sessions": "{n} sjlat",
+  "Plex new items": "Plex jdyd",
+  "{n} items": "{n} ashya",
+  "Which library? Give its name, from the libraries.": "Ayna ktb? Hb smh, mn ktb.",
+  "scan the {library} library on Plex": "mswh ktb {library} b Pi-hole",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli bea {url_setting} w {key_setting} {where_keys}: adres dylh (kl http://tautulli:8181) w mftah API dylh (Settings, API Keys).",
+  "The {who} refused its key.": "{who} rdd mftahh.",
+  "Tautulli history": "Tautulli tarikh",
+  "{n} plays": "{n} mshahda",
+  "Tautulli watch time": "Tautulli wqt shw",
+  "{n} users": "{n} msthdmyn",
+  "Which stream? Give a session's id, from the sessions.": "Ayna strym? Hb id sjl, mn sjlat.",
+  "stop the {id} stream on Plex": "wqf strym {id} b Pi-hole"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ܐܘܣܦ ܫܪܚܐ",

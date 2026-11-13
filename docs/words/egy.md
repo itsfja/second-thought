@@ -38,6 +38,7 @@ Made by tools/sync.py from i18n/egy.json: edit that, not this.
 - Unraid: Unraid
 - NZBGeek: NZBGeek
 - Pi-hole: Pi-hole
+- Plex: Plex
 - Listeners: they run while the exported program runs on schedule: 𓋴𓆓𓅓𓅱: 𓇋𓂋𓋴𓈖 𓐍𓆑𓏏 𓇋𓂋 𓋴𓐍𓂋 𓆓𓄿 𓅓 𓏏𓂋
 - No blocks match: 𓈖𓈖 𓇋𓈖𓂋 𓅓𓇋
 - Read and send: 𓈙𓂧𓇋, 𓉔𓄿𓃀

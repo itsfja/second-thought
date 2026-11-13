@@ -765,6 +765,38 @@
   "rb_pihole_deny": {
    "message0": "%1 %2 Pi-hole deny pannapatti",
    "tooltip": "Domainam deny pannapatti joteti, va nivatteti. Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."
+  },
+  "rb_plex_server": {
+   "message0": "Plex sevako",
+   "tooltip": "Ekam mulhanam sevakassa: name, version ca paccuppanna (so uttaram adadi, tasma paccuppanna). PLEX_URL PLEX_TOKEN second-thought.ini. Imasmi pannapattiye dakkhineyyako sevako."
+  },
+  "rb_plex_libraries": {
+   "message0": "Plex potthakagaram",
+   "tooltip": "Mulhanam santanam, ekam ekam potthakagaram: name, type (movie, show va artist) ca count (kivati vatthuni atthi). Patham yeva."
+  },
+  "rb_plex_sessions": {
+   "message0": "Plex samavayani",
+   "tooltip": "Mulhanam santanam, ekam ekam idani pathati: id, user, title, player, state (playing va paused) ca transcode. Patham yeva."
+  },
+  "rb_plex_recent": {
+   "message0": "Plex nava, %1 divasa",
+   "tooltip": "Mulhanam santanam, ekam ekam vatthu imesu divasesu jotita: title, potthakagaram ca added. Patham yeva."
+  },
+  "rb_tautulli_history": {
+   "message0": "Tautulli itihaso, %1 divasa",
+   "tooltip": "Mulhanam santanam, ekam ekam imesu divasesu dittha, Tautulli: user, title, when ca transcode. Patham yeva. TAUTULLI_URL TAUTULLI_API_KEY second-thought.ini."
+  },
+  "rb_tautulli_watchtime": {
+   "message0": "Tautulli passana-kalo, %1 divasa",
+   "tooltip": "Mulhanam santanam, ekam ekam yam imesu divasesu apassi, Tautulli: user ca hours. Patham yeva."
+  },
+  "rb_plex_scan": {
+   "message0": "Plex %1 potthakagaram parigganhitu",
+   "tooltip": "Potthakagaram nava-panna-anvesaya parigganhiti. Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."
+  },
+  "rb_plex_stop": {
+   "message0": "Plex %1 savam nivattetu",
+   "tooltip": "Ekam savam nivatteti (Tautulli terminate). Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."
   }
  },
  "options": {
@@ -947,7 +979,8 @@
   "Radarr and Sonarr": "Radarr-Sonarr",
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "Plex": "Plex"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1707,7 +1740,7 @@
   "{n} characters": "{n} अक्खरानि",
   "{n} devices": "{n} यन्तानि",
   "{n} events": "{n} घटना",
-  "{n} items": "{n} वत्थूनि",
+  "{n} items": "{n} vatthuni",
   "{n} records": "{n} अभिलेखा",
   "{n} script started": "{n} पटिपाटि आरद्धा",
   "{n} script started, waiting for it to finish": "{n} पटिपाटि आरद्धा, तस्सा निट्ठानं आगमेति",
@@ -1842,7 +1875,21 @@
   "Pi-hole summary": "Pi-hole samkhittam",
   "Pi-hole top blocked domains": "Pi-hole atirukkha domainani",
   "Pi-hole top clients": "Pi-hole pattha clientani",
-  "Pi-hole": "Pi-hole"
+  "Pi-hole": "Pi-hole",
+  "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats": "pathatu yam tassa atthi: sevako, tassa potthakagara, idani kim pathati ca nava; Tautulli itihaso passana-kala-sankkhye ca pathatu",
+  "scan a Plex library, and stop a stream on Plex (asking you each time)": "Plex potthakagaram parigganhitu, Plex savam nivattetu ca (sabada tam pucchito)",
+  "up": "paccuppanna",
+  "{n} libraries": "{n} potthakagara",
+  "{n} sessions": "{n} samavayani",
+  "{n} plays": "{n} passani",
+  "{n} users": "{n} upasagga",
+  "Plex": "Plex",
+  "Plex server": "Plex sevako",
+  "Plex libraries": "Plex potthakagaram",
+  "Plex sessions": "Plex samavayani",
+  "Plex new items": "Plex nava",
+  "Tautulli history": "Tautulli itihaso",
+  "Tautulli watch time": "Tautulli passana-kalo"
  },
  "examples": {
   "review": {
@@ -2687,7 +2734,9 @@
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
   "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
   "ads.example.com": "ads.example.com",
-  "bad.example.com": "bad.example.com"
+  "bad.example.com": "bad.example.com",
+  "Films": "Films",
+  "abc123": "abc123"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(पुब्बचालनं मज्झे अट्ठासि, किच्चक्कमो पन ततो परिवत्ति, तस्मा नवं आरभति।)",
@@ -3582,7 +3631,30 @@
   "Which list (allow or deny), add or remove, and which domain?": "Ka pannam (allow va deny), joti va nivatti, ka ca domainam?",
   "{action} {domain} on Pi-hole's {which} list": "{action} {domain} Pi-hole {which} pannapatti",
   "added by Second Thought": "Second Thought dvare jotita",
-  "{n} queries, {blocked} blocked": "{n} pucchha, {blocked} rukkha"
+  "{n} queries, {blocked} blocked": "{n} pucchha, {blocked} rukkha",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://plex:32400) and its token, the one the apps send (a device's account details show it).": "{who} icchati {url_setting} ca {key_setting} ca {where_keys}: tassa thanam (yadi http://plex:32400) ca tassa tokenam, yam appo pessanti (ekassa yantrassa account-visesana tam dassati).",
+  "The {who} refused its token.": "{who} tena tokenam apaharasi.",
+  "Plex": "Plex",
+  "Plex server": "Plex sevako",
+  "Plex {version}": "Plex {version}",
+  "up": "paccuppanna",
+  "Plex libraries": "Plex potthakagaram",
+  "{n} libraries": "{n} potthakagara",
+  "Plex sessions": "Plex samavayani",
+  "{n} sessions": "{n} samavayani",
+  "Plex new items": "Plex nava",
+  "{n} items": "{n} vatthuni",
+  "Which library? Give its name, from the libraries.": "Ko potthakagaram? Dehi tassa naman, potthakagarehi.",
+  "scan the {library} library on Plex": "Plex {library} potthakagaram parigganhitu",
+  "Tautulli": "Tautulli",
+  "Tautulli needs {url_setting} and {key_setting} {where_keys}: its address (like http://tautulli:8181) and its API key (Settings, API Keys).": "Tautulli icchati {url_setting} ca {key_setting} ca {where_keys}: tassa thanam (yadi http://tautulli:8181) ca tassa API kammattanam (Settings, API Keys).",
+  "The {who} refused its key.": "{who} tena kammattanam apaharasi.",
+  "Tautulli history": "Tautulli itihaso",
+  "{n} plays": "{n} passani",
+  "Tautulli watch time": "Tautulli passana-kalo",
+  "{n} users": "{n} upasagga",
+  "Which stream? Give a session's id, from the sessions.": "Ko savaho? Dehi ekassa samavayassa id, samavayehi.",
+  "stop the {id} stream on Plex": "Plex {id} savam nivattetu"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टीकं पक्खिप",
