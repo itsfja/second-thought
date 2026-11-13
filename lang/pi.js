@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"Unraid yantrani","tooltip":"Mulhanam santanam, ekam ekam yantram: name ca state (RUNNING, SHUTOFF, ...) ca."},
 "rb_unraid_container_power":{"message0":"%1 Unraid bhajanam %2","tooltip":"Docker bhajanam ekam, namena, pathento va nivarento va. sabada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. imasmi pannapattiye kinci na saccato pathento va nivarento va."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid yantram %2","tooltip":"Yantram ekam, namena, pathento va nivarento va. sabada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. imasmi pannapattiye kinci na saccato pathento va nivarento va."},
-"rb_unraid_parity":{"message0":"Unraid sassirintam parikkhato","tooltip":"Sassirinta disake parikkhati tani pathanto, thapana na likkhato. sabada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. imasmi pannapattiye kinci na saccato parikkhati."}
+"rb_unraid_parity":{"message0":"Unraid sassirintam parikkhato","tooltip":"Sassirinta disake parikkhati tani pathanto, thapana na likkhato. sabada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. imasmi pannapattiye kinci na saccato parikkhati."},
+"rb_nzbgeek_search":{"message0":"NZBGeek %1 esana","tooltip":"Mulhanam santanam, ekam ekam paccayassa yam esako imesu padesu atthi: title, id, size_mb, grabs, posted (kada patita) ca group ca. Patham yeva: kimpi na kadapi orohati. NZBGEEK_API_KEY second-thought.ini. Imasmi pannapattiye dakkhineyyaka esana."},
+"rb_nzbgeek_fetch":{"message0":"%1 NZB gahetva","tooltip":"Paccayassa NZB pannam gahetva tam <id>.nzb ti rakkhati. Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Na kimpi orohakassa deti: pannam rakkhati, etam yeva. Imasmi pannapattiye kimpi na saccato gahetva."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"सब्बदिवसे","weekdays":"कम्मदिवसेसु","weekends":"सत्ताहन्तेसु"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr-Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid disaka",
 "Unraid shares":"Unraid samika",
 "Unraid containers":"Unraid bhajanani",
-"Unraid VMs":"Unraid yantrani"
+"Unraid VMs":"Unraid yantrani",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"NZBGeek, Usenet esako, esetva pathatu yam tassa atthi: tittha, pamana, vayam ca sangha",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"NZBGeek to NZB pannam gahetva ca tam rakkhitva (sabada tam pucchito)",
+"{n} found":"{n} laddha",
+"NZBGeek search":"NZBGeek esana",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -1344,7 +1352,9 @@
 "today's draft":"अज्जतनो आलेखो",
 "used headlines":"उपयुत्तानि सीसानि",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(पुब्बचालनं मज्झे अट्ठासि, किच्चक्कमो पन ततो परिवत्ति, तस्मा नवं आरभति।)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"Unraid sassirintam parikkhato",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"mala {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} icchati {url_setting} ca {key_setting} ca {where_keys}: tassa API kammattanam, NZBGeek hettha My Account, API key.",
+"NZBGeek search for {q}":"NZBGeek {q} esana",
+"{n} found":"{n} laddha",
+"Which one? Give a release's id, from the search.":"Ko? Esanato paccayassa id dehi.",
+"fetch the NZB for {id} from NZBGeek":"NZBGeek to {id} NZB gahetva",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} divasa rakkhana",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

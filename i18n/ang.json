@@ -728,6 +728,14 @@
   "rb_unraid_parity": {
    "message0": "Unraid his gelicnesse beon",
    "tooltip": "Hit benaeth tha gelicnessa discas be raedenne hie, na writing aenige aehtunge. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung benaeth sothlice."
+  },
+  "rb_nzbgeek_search": {
+   "message0": "soecan in NZBGeek after %1",
+   "tooltip": "Rind gemaca, an for aelcum aeled the findere heth for thisum wordum: title, id, size_mb, grabs, posted (hwaenne hit waes gecydd) and group. Hit raedeth an: naenung is aefre aduned. Hit beheth NZBGEEK_API_KEY in second-thought.ini. On thissum traefe hit bryceth bisenlicre soecunge."
+  },
+  "rb_nzbgeek_fetch": {
+   "message0": "niman the NZB for %1",
+   "tooltip": "Hit nimeth the NZB file anes aeledes and hordeth hit swa <id>.nzb. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. Hit gifth naenung to an adunere: the file is gehordod, that is eall. On thissum traefe naenung nimeth sothlice."
   }
  },
  "options": {
@@ -918,7 +926,8 @@
   "Docker": "Docker",
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr and Sonarr",
-  "Unraid": "Unraid"
+  "Unraid": "Unraid",
+  "NZBGeek": "NZBGeek"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Tol for þone ærendracan: lege hie innan ærendracan stocce",
@@ -1801,7 +1810,12 @@
   "Unraid disks": "Unraid discas",
   "Unraid shares": "Unraid dalas",
   "Unraid containers": "Unraid fata",
-  "Unraid VMs": "Unraid VM"
+  "Unraid VMs": "Unraid VM",
+  "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups": "soecan in NZBGeek, the Usenet findere, and raedan hwat he heth: titlas, micelnessa, yldra and heapas",
+  "fetch an NZB file from NZBGeek and save it (asking you each time)": "niman an NZB file fram NZBGeek and hordian hit (asciende the aelc Sith)",
+  "{n} found": "{n} funden",
+  "NZBGeek search": "NZBGeek soecung",
+  "NZBGeek": "NZBGeek"
  },
  "examples": {
   "review": {
@@ -2642,7 +2656,9 @@
   "The back door is still open.": "Seo bæcdor is git open.",
   "Good morning!": "God morgen!",
   "plex": "plex",
-  "windows": "windows"
+  "windows": "windows",
+  "Everything Everywhere All at Once": "Everything Everywhere All at Once",
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Ærre fremming ætstod on middum, ac þæt forescrift wæs siþþan awend, forþy hit onginþ niwe.)",
@@ -3512,7 +3528,15 @@
   "check Unraid's parity": "Unraid his gelicnesse beon",
   "Unraid {version}": "Unraid {version}",
   "array {state}": "gefylde {state}",
-  "Unraid": "Unraid"
+  "Unraid": "Unraid",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.": "{who} beheth {url_setting} and {key_setting} {where_keys}: his API cyythe, in NZBGeek under My Account, API key.",
+  "NZBGeek search for {q}": "NZBGeek soecung after {q}",
+  "{n} found": "{n} funden",
+  "Which one? Give a release's id, from the search.": "Hwelc? Syl the id of an aeled, fram the soecunge.",
+  "fetch the NZB for {id} from NZBGeek": "niman the NZB for {id} fram NZBGeek",
+  "NZBGeek {version}": "NZBGeek {version}",
+  "{n} days of retention": "{n} dagas helde",
+  "NZBGeek": "NZBGeek"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

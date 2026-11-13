@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"VM di Unraid","tooltip":"Una lista di record, uno per ogni macchina virtuale: name e state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 il container di Unraid %2","tooltip":"Avvia o ferma un container Docker, per nome. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente avvia o ferma davvero."},
 "rb_unraid_vm_power":{"message0":"%1 la VM di Unraid %2","tooltip":"Avvia o ferma una macchina virtuale, per nome. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente avvia o ferma davvero."},
-"rb_unraid_parity":{"message0":"controllare la parità di Unraid","tooltip":"Controlla i dischi di parità leggendoli, senza scrivere correzioni. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente controlla davvero."}
+"rb_unraid_parity":{"message0":"controllare la parità di Unraid","tooltip":"Controlla i dischi di parità leggendoli, senza scrivere correzioni. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina niente controlla davvero."},
+"rb_nzbgeek_search":{"message0":"cercare in NZBGeek %1","tooltip":"Una lista di record, uno per ogni release che l'indicizzatore ha per queste parole: title, id, size_mb, grabs, posted (quando è stata pubblicata) e group. Legge soltanto: non si scarica mai nulla. Serve NZBGEEK_API_KEY in second-thought.ini. In questa pagina usa una ricerca d'esempio."},
+"rb_nzbgeek_fetch":{"message0":"prendere l'NZB di %1","tooltip":"Prende il file NZB di una release e lo salva come <id>.nzb. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. Non consegna nulla a un downloader: il file viene salvato, tutto qui. In questa pagina niente scarica davvero."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ogni giorno","weekdays":"nei giorni feriali","weekends":"nel fine settimana"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr e Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Strumenti per l'agente: mettili dentro un blocco agente",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"dischi di Unraid",
 "Unraid shares":"share di Unraid",
 "Unraid containers":"container di Unraid",
-"Unraid VMs":"VM di Unraid"
+"Unraid VMs":"VM di Unraid",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"cercare in NZBGeek, l'indicizzatore Usenet, e leggere cosa ha: titoli, dimensioni, età e gruppi",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"prendere un file NZB da NZBGeek e salvarlo (chiedendotelo ogni volta)",
+"{n} found":"{n} trovati",
+"NZBGeek search":"ricerca in NZBGeek",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -1344,7 +1352,9 @@
 "The back door is still open.":"La porta sul retro è ancora aperta.",
 "Good morning!":"Buongiorno!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Un'esecuzione precedente si è fermata a metà, ma da allora il programma è cambiato, quindi ricomincia da capo.)",
@@ -2214,6 +2224,14 @@
 "check Unraid's parity":"controllare la parità di Unraid",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"array {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} ha bisogno di {url_setting} e {key_setting} {where_keys}: la sua chiave API, in NZBGeek sotto My Account, API key.",
+"NZBGeek search for {q}":"ricerca in NZBGeek di {q}",
+"{n} found":"{n} trovati",
+"Which one? Give a release's id, from the search.":"Quale? Dai l'id di una release, dalla ricerca.",
+"fetch the NZB for {id} from NZBGeek":"prendere l'NZB di {id} da NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} giorni di retention",
+"NZBGeek":"NZBGeek"
 }
 };

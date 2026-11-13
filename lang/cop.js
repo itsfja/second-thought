@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"ounonnouoni n Unraid","tooltip":"oudap nimmont, ouaaou nim ntero ounonnouoni: name nem state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 pkap n Unraid %2","tooltip":"naounh akonk oukap n Docker, etbe pesran. nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare ouounh akonk na oumetn."},
 "rb_unraid_vm_power":{"message0":"%1 pounonnouoni n Unraid %2","tooltip":"naounh akonk ouounonnouoni, etbe pesran. nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare ouounh akonk na oumetn."},
-"rb_unraid_parity":{"message0":"ethebepproseuxe mmmont m Unraid ouosh","tooltip":"noune nisnou nte tirwseuxe ethre sotem mmou, nim ethnasou saounonim. nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nim na oumetn."}
+"rb_unraid_parity":{"message0":"ethebepproseuxe mmmont m Unraid ouosh","tooltip":"noune nisnou nte tirwseuxe ethre sotem mmou, nim ethnasou saounonim. nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nim na oumetn."},
+"rb_nzbgeek_search":{"message0":"hnho e NZBGeek %1","tooltip":"Oudap nimmont, ouaaou nim ntero oueropmoun etbe pese ouahse: title, id, size_mb, grabs, posted (ethre shanofou) nem group. Hnho only: oume ntennaoun ebei. Ntefaipe NZBGEEK_API_KEY hn second-thought.ini. Narem pesnouti ouaaou nim nesneou na hnho nuaaou."},
+"rb_nzbgeek_fetch":{"message0":"nchina NZB n %1","tooltip":"Nchina ou-NZB n oueropmoun nem masto mmou sw <id>.nzb. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Oume mmou etbe pniwre: ouon masto mmou, thatef. Narem pesnouti oume nchina oumetn."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ϩⲟⲟⲩ ⲛⲓⲙ","weekdays":"ϩⲛ ⲛϩⲟⲟⲩ ⲛϩⲱⲃ","weekends":"ϩⲛ ⲛϩⲟⲟⲩ ⲛⲙⲧⲟⲛ"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr mn Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ⲛⲥⲱⲧⲙ: ϣⲁⲩⲁⲁⲩ ϩⲟⲧⲁⲛ ⲛⲧⲁⲝⲓⲥ ⲉⲃⲟⲗ ϣⲁϥⲁⲁⲩ ⲕⲁⲧⲁ ⲟⲩⲟⲉⲓϣ",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"tisnou m Unraid",
 "Unraid shares":"niare n Unraid",
 "Unraid containers":"nikap n Unraid",
-"Unraid VMs":"ounonnouoni n Unraid"
+"Unraid VMs":"ounonnouoni n Unraid",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"hnho e NZBGeek, poueiros nte Usenet, nem sotem etbe peetn-hn-te-snippe: alogi, oujai, hmoou nem sow",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"nchina ou-NZB e NZBGeek nem masto mmou (nanoun nak nim ntero)",
+"{n} found":"{n} ontf",
+"NZBGeek search":"hnho e NZBGeek",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -1344,7 +1352,9 @@
 "today's draft":"ⲡⲥϩⲁⲓ ⲙⲡⲟⲟⲩ",
 "used headlines":"ⲛϣⲁϫⲉ ⲛⲧⲁⲩⲁⲁⲩ",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(oupraksis ntšorp aslo hn tmēte, alla taksis asšibe jin tote, auō šasarkhei nkesop.)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"ethebepproseuxe mmmont m Unraid ouosh",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"proseuxe {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} outab eru {url_setting} nem {key_setting} {where_keys}: pefaipe n API, hn NZBGeek hn My Account, API key.",
+"NZBGeek search for {q}":"hnho e NZBGeek n {q}",
+"{n} found":"{n} ontf",
+"Which one? Give a release's id, from the search.":"Oun? Nau pe id n oueropmoun, ehn hnho.",
+"fetch the NZB for {id} from NZBGeek":"nchina NZB n {id} e NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} ouoe hmo",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

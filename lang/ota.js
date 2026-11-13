@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"Unraid sanal makineleri","tooltip":"Kayit listesi, her sanal makine icin biri: name ve state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 Unraid konteyneri %2","tooltip":"Bir Docker konteynerini adiyla baslatir ya da durdurur. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten baslamaz ya da durmaz."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid sanal makinesi %2","tooltip":"Bir sanal makineyi adiyla baslatir ya da durdurur. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten baslamaz ya da durmaz."},
-"rb_unraid_parity":{"message0":"Unraid'in esligini denetle","tooltip":"Eslik disklerini onlari okuyarak denetler, duzeltme yazmaz. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten denetlenmez."}
+"rb_unraid_parity":{"message0":"Unraid'in esligini denetle","tooltip":"Eslik disklerini onlari okuyarak denetler, duzeltme yazmaz. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten denetlenmez."},
+"rb_nzbgeek_search":{"message0":"NZBGeek'te %1 aramasi","tooltip":"Indeksleyicinin bu kelimeler icin sahip oldugu her surum icin bir kayit listesi: title, id, size_mb, grabs, posted (ne zaman gonderildi) ve group. Sadece okur: hicbir sey asla indirilmez. second-thought.ini icinde NZBGEEK_API_KEY gerekir. Bu sayfada ornek bir arama kullanir."},
+"rb_nzbgeek_fetch":{"message0":"%1 NZB'sini al","tooltip":"Bir surumun NZB dosyasini alir ve <id>.nzb olarak kaydeder. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Hicbir seyi bir indiriciye vermez: dosya kaydedilir, o kadar. Bu sayfada hicbir sey gercekten almaz."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"هر گون","weekdays":"ایش گونلری","weekends":"هفته صوڭلری"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr و Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid diskleri",
 "Unraid shares":"Unraid paylasimlari",
 "Unraid containers":"Unraid konteynerleri",
-"Unraid VMs":"Unraid sanal makineleri"
+"Unraid VMs":"Unraid sanal makineleri",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"Usenet indeksleyicisi NZBGeek'te aramak ve neye sahip oldugunu okumak: basliklar, boyutlar, yaslar ve gruplar",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"NZBGeek'ten bir NZB dosyasi alip kaydetmek (her seferinde sana sorarak)",
+"{n} found":"{n} bulundu",
+"NZBGeek search":"NZBGeek aramasi",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -1344,7 +1352,9 @@
 "today's draft":"بوگونكی مسوده",
 "used headlines":"قوللانیلمش باشلقلر",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(اوّلكی بر اجرا یاری یولده دوردی، فقط پروغرام اوندن بری دڭیشدی، بو سببله یڭیدن باشلار.)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"Unraid'in esligini denetle",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"dizi {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who}, {url_setting} ve {key_setting} gerektirir {where_keys}: onun API anahtari, NZBGeek'te My Account, API key altinda.",
+"NZBGeek search for {q}":"NZBGeek'te {q} aramasi",
+"{n} found":"{n} bulundu",
+"Which one? Give a release's id, from the search.":"Hangisi? Aramadan bir surumun id'sini ver.",
+"fetch the NZB for {id} from NZBGeek":"NZBGeek'ten {id} NZB'sini al",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} gun saklama",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

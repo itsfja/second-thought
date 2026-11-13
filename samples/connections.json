@@ -3082,5 +3082,72 @@
   "vars": {
    "version": "7.2.1"
   }
+ },
+ "nzbgeek": {
+  "note": "A sample NZBGeek search for the page and the tests (#400), shaped the way its Newznab API answers with o=json: two releases of the same film, one older and grabbed more.",
+  "search": [
+   {
+    "title": "Everything.Everywhere.All.at.Once.2022.1080p.BluRay.x264-NzbGeek",
+    "guid": "https://api.nzbgeek.info/api/e9c515e02346086e3a477a5436d7bc8c",
+    "pubDate": "Wed, 12 Nov 2026 19:03:12 +0000",
+    "newznab:attr": [
+     {
+      "@attributes": {
+       "name": "size",
+       "value": "8589934592"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "grabs",
+       "value": "412"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "usenetdate",
+       "value": "Wed, 12 Nov 2026 18:59:04 +0000"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "group",
+       "value": "alt.binaries.movies"
+      }
+     }
+    ]
+   },
+   {
+    "title": "Everything.Everywhere.All.at.Once.2022.2160p.WEB-DL.DDP5.7.HDR-NzbGeek",
+    "guid": "https://api.nzbgeek.info/api/28e1d0c9c34a7c8d3b6f0a1924e5f7c1",
+    "pubDate": "Thu, 13 Nov 2026 07:41:55 +0000",
+    "newznab:attr": [
+     {
+      "@attributes": {
+       "name": "size",
+       "value": "34359738368"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "grabs",
+       "value": "63"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "usenetdate",
+       "value": "Thu, 13 Nov 2026 07:38:20 +0000"
+      }
+     },
+     {
+      "@attributes": {
+       "name": "group",
+       "value": "alt.binaries.movies"
+      }
+     }
+    ]
+   }
+  ]
  }
 }

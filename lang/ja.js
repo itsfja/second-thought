@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"Unraid VM","tooltip":"各仮想マシンの記録のリスト：name と state（RUNNING, SHUTOFF, ...）。"},
 "rb_unraid_container_power":{"message0":"%1 Unraid コンテナ %2","tooltip":"Docker コンテナを 1 つ、名前で開始または停止します。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には開始・停止しません。"},
 "rb_unraid_vm_power":{"message0":"%1 Unraid VM %2","tooltip":"仮想マシンを 1 つ、名前で開始または停止します。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には開始・停止しません。"},
-"rb_unraid_parity":{"message0":"Unraid のパリティを検査","tooltip":"パリティディスクを読んで検査し、修正は書き込みません。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には検査しません。"}
+"rb_unraid_parity":{"message0":"Unraid のパリティを検査","tooltip":"パリティディスクを読んで検査し、修正は書き込みません。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には検査しません。"},
+"rb_nzbgeek_search":{"message0":"NZBGeek で %1 を検索","tooltip":"この言葉に対してインデクサーが持つ各 release の記録のリスト：title, id, size_mb, grabs, posted（投稿された時刻）、group。読み取り専用です：何もダウンロードされません。second-thought.ini に NZBGEEK_API_KEY が必要です。このページではサンプル検索を使います。"},
+"rb_nzbgeek_fetch":{"message0":"%1 の NZB を取得","tooltip":"1 つの release の NZB ファイルを取得し、<id>.nzb として保存します。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。ダウンローダーには何も渡しません：ファイルを保存するだけです。このページでは何も実際には取得しません。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr と Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"エージェントの道具：エージェントブロックの中に入れます",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid ディスク",
 "Unraid shares":"Unraid 共有",
 "Unraid containers":"Unraid コンテナ",
-"Unraid VMs":"Unraid VM"
+"Unraid VMs":"Unraid VM",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"Usenet のインデクサー NZBGeek を検索し、何があるかを読む：タイトル、サイズ、年齢、グループ",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"NZBGeek から NZB ファイルを取得して保存する（毎回あなたに尋ねる）",
+"{n} found":"{n} 件見つかりました",
+"NZBGeek search":"NZBGeek 検索",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1344,7 +1352,9 @@
 "The back door is still open.":"裏口がまだ開いています。",
 "Good morning!":"おはようございます！",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n（前回の実行は途中で止まりましたが、その後プログラムが変わったので、最初からやり直します。）",
@@ -2214,6 +2224,14 @@
 "check Unraid's parity":"Unraid のパリティを検査",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"アレイ {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who}には{url_setting}と{key_setting}が必要です{where_keys}：NZBGeek の My Account, API key にある API キー。",
+"NZBGeek search for {q}":"NZBGeek で {q} を検索",
+"{n} found":"{n} 件見つかりました",
+"Which one? Give a release's id, from the search.":"どれ？検索結果から release の id を指定してください。",
+"fetch the NZB for {id} from NZBGeek":"NZBGeek から {id} の NZB を取得",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} 日保持",
+"NZBGeek":"NZBGeek"
 }
 };

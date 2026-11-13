@@ -728,6 +728,14 @@
   "rb_unraid_parity": {
    "message0": "comprobar la paridad de Unraid",
    "tooltip": "Comprueba los discos de paridad leyéndolos, sin escribir correcciones. Te lo pregunta siempre, aunque nada más lo haga, y si no hay nadie para decir sí, no ocurre. En esta página nada comprueba de verdad."
+  },
+  "rb_nzbgeek_search": {
+   "message0": "buscar en NZBGeek %1",
+   "tooltip": "Una lista de registros, uno por cada release que el indexador tiene para estas palabras: title, id, size_mb, grabs, posted (cuándo se publicó) y group. Solo lee: nunca se descarga nada. Necesita NZBGEEK_API_KEY en second-thought.ini. En esta página usa una búsqueda de ejemplo."
+  },
+  "rb_nzbgeek_fetch": {
+   "message0": "descargar el NZB de %1",
+   "tooltip": "Descarga el archivo NZB de una release y lo guarda como <id>.nzb. Te lo pregunta siempre, aunque nada más lo haga, y si no hay nadie para decir sí, no ocurre. No le entrega nada a un gestor de descargas: el archivo se guarda, eso es todo. En esta página nada descarga de verdad."
   }
  },
  "options": {
@@ -918,7 +926,8 @@
   "Docker": "Docker",
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr y Sonarr",
-  "Unraid": "Unraid"
+  "Unraid": "Unraid",
+  "NZBGeek": "NZBGeek"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Herramientas para el agente: suéltalas dentro de un bloque de agente",
@@ -1801,7 +1810,12 @@
   "Unraid disks": "discos de Unraid",
   "Unraid shares": "shares de Unraid",
   "Unraid containers": "contenedores de Unraid",
-  "Unraid VMs": "VM de Unraid"
+  "Unraid VMs": "VM de Unraid",
+  "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups": "buscar en NZBGeek, el indexador de Usenet, y leer lo que tiene: títulos, tamaños, edades y grupos",
+  "fetch an NZB file from NZBGeek and save it (asking you each time)": "descargar un archivo NZB de NZBGeek y guardarlo (preguntándotelo cada vez)",
+  "{n} found": "{n} encontrados",
+  "NZBGeek search": "búsqueda en NZBGeek",
+  "NZBGeek": "NZBGeek"
  },
  "examples": {
   "review": {
@@ -2642,7 +2656,9 @@
   "The back door is still open.": "La puerta de atrás sigue abierta.",
   "Good morning!": "¡Buenos días!",
   "plex": "plex",
-  "windows": "windows"
+  "windows": "windows",
+  "Everything Everywhere All at Once": "Everything Everywhere All at Once",
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Una ejecución anterior se quedó a medias, pero el programa ha cambiado desde entonces, así que empieza de cero.)",
@@ -3512,6 +3528,14 @@
   "check Unraid's parity": "comprobar la paridad de Unraid",
   "Unraid {version}": "Unraid {version}",
   "array {state}": "array {state}",
-  "Unraid": "Unraid"
+  "Unraid": "Unraid",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.": "{who} necesita {url_setting} y {key_setting} {where_keys}: su clave API, en NZBGeek bajo My Account, API key.",
+  "NZBGeek search for {q}": "búsqueda en NZBGeek de {q}",
+  "{n} found": "{n} encontrados",
+  "Which one? Give a release's id, from the search.": "¿Cuál? Da el id de una release, de la búsqueda.",
+  "fetch the NZB for {id} from NZBGeek": "descargar el NZB de {id} de NZBGeek",
+  "NZBGeek {version}": "NZBGeek {version}",
+  "{n} days of retention": "{n} días de retención",
+  "NZBGeek": "NZBGeek"
  }
 }

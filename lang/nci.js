@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"Unraid machiyotl","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl machiyotl: name ihuan state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 in Unraid tlacaxochitli %2","tooltip":"Ce Docker tlacaxochitli quipehualtia ahnozo quictlamia, itoca. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quipehualtia ahnozo quictlamia."},
 "rb_unraid_vm_power":{"message0":"%1 in Unraid machiyotl %2","tooltip":"Ce machiyotl quipehualtia ahnozo quictlamia, itoca. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quipehualtia ahnozo quictlamia."},
-"rb_unraid_parity":{"message0":"Unraid nemic xelihuiliztli","tooltip":"In nemic xelihuiliztli tepoztli quipoua quimittacitia, amo quicuiloa in amoxtili. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quipoua."}
+"rb_unraid_parity":{"message0":"Unraid nemic xelihuiliztli","tooltip":"In nemic xelihuiliztli tepoztli quipoua quimittacitia, amo quicuiloa in amoxtili. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quipoua."},
+"rb_nzbgeek_search":{"message0":"NZBGeek %1 ticnemitiz","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl tlacuilolli in tlaixcopiniliztli quimpiya ipampa ini tlahtolli: name, id, size_mb, grabs, posted (tleinca omoquetz) ihuan group. Zan quipoua: acazo tlen amo huel quicui. NZBGEEK_API_KEY second-thought.ini ipan. Ipan ini amoxtli ce tlacuilolli tlaixcopiniliztli quimonequiltia."},
+"rb_nzbgeek_fetch":{"message0":"%1 NZB quicui","tooltip":"Quicui ce tlacuilolli NZB amox ihuan quiqui_xtia <id>.nzb itoca. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Acazo tlen quicui: in amox quiqui_xtia, ihcuac. Ipan ini amoxtli aca amo quicui."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -251,7 +253,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr ihuan Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1134,7 +1137,12 @@
 "Unraid disks":"Unraid tepoztli",
 "Unraid shares":"Unraid tlacatlaliztli",
 "Unraid containers":"Unraid tlacaxochitli",
-"Unraid VMs":"Unraid machiyotl"
+"Unraid VMs":"Unraid machiyotl",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"NZBGeek, in Usenet tlaixcopiniliztli, ticnemitiz ahnozo tictoca in tlein: in tlachialtontli, in tlacentlactli, in xiuhitl ihuan in tlacameh",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"ce NZB amox NZBGeek itech quicuaz ahnozo quiquaz (centetl ipampa mitztlahtlaniz)",
+"{n} found":"{n} onmochiuh",
+"NZBGeek search":"NZBGeek itlahtol",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -1343,7 +1351,9 @@
 "today's draft":"in axcān achtlahcuilōlli",
 "used headlines":"in tōcāitl ōmotequitlālih",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Ce achto tlachīhualiztli ōmoquetz ipan in nepantla, auh in tlatēcpantli ōmopatla, ic occeppa peuhua.)",
@@ -2213,7 +2223,15 @@
 "check Unraid's parity":"Unraid nemic xelihuiliztli",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"necuitlalpilli {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} itla monequi {url_setting} ihuan {key_setting} {where_keys}: in API tlacuilolli, in NZBGeek ipan My Account, API key.",
+"NZBGeek search for {q}":"NZBGeek itlahtol {q}",
+"{n} found":"{n} onmochiuh",
+"Which one? Give a release's id, from the search.":"Tlein? Xiquica in id in ce tlacuilolli, in itlahtol.",
+"fetch the NZB for {id} from NZBGeek":"NZBGeek itech {id} NZB quicui",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} tonalli ihxiuh",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

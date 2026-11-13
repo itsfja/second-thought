@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"machinae virtuales Unraid","tooltip":"Index memoriarum, una quoque machina virtuali: name et state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 capsam Unraid %2","tooltip":"Incipit aut sistit unam capsam Docker, nomine. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere incipit aut sistit."},
 "rb_unraid_vm_power":{"message0":"%1 machinam virtualem Unraid %2","tooltip":"Incipit aut sistit unam machinam virtualem, nomine. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere incipit aut sistit."},
-"rb_unraid_parity":{"message0":"paritatem Unraid explorare","tooltip":"Discos paritatis legit eos explorans, nullas correctiones scribens. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere explorat."}
+"rb_unraid_parity":{"message0":"paritatem Unraid explorare","tooltip":"Discos paritatis legit eos explorans, nullas correctiones scribens. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere explorat."},
+"rb_nzbgeek_search":{"message0":"quaerere in NZBGeek %1","tooltip":"Index memoriarum, una quoque emissione quam index habet pro his verbis: title, id, size_mb, grabs, posted (quando posita) et group. Solum legit: numquam quidquam descendit. Clavis NZBGEEK_API_KEY in second-thought.ini. In hac pagina exemplari quaestione utitur."},
+"rb_nzbgeek_fetch":{"message0":"NZB sumere pro %1","tooltip":"Sumit NZB limen unius emissionis et servat ut <id>.nzb. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. Nulli programme datorum dat: limen servatur, id solum. In hac pagina nihil vere sumit."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr et Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"disci Unraid",
 "Unraid shares":"partes Unraid",
 "Unraid containers":"capsae Unraid",
-"Unraid VMs":"machinae virtuales Unraid"
+"Unraid VMs":"machinae virtuales Unraid",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"quaerere in NZBGeek, indicem Usenet, et legere quid habeat: titulos, magnitudines, aetates et greges",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"NZB limen sumere ex NZBGeek et servare (te interrogans vicibus omnibus)",
+"{n} found":"{n} inventa",
+"NZBGeek search":"NZBGeek quaestio",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -1344,7 +1352,9 @@
 "The back door is still open.":"Ianua postica adhuc aperta est.",
 "Good morning!":"Bonum mane!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Exsecutio prior in medio substitit, sed programma postea mutatum est, itaque de integro incipit.)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"paritatem Unraid explorare",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"acies {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} indiget {url_setting} et {key_setting} {where_keys}: clavem API eius, in NZBGeek sub My Account, API key.",
+"NZBGeek search for {q}":"NZBGeek quaestio {q}",
+"{n} found":"{n} inventa",
+"Which one? Give a release's id, from the search.":"Quis? Da emissionis notam, ex quaestione.",
+"fetch the NZB for {id} from NZBGeek":"NZB sumere pro {id} apud NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} dies custodiae",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

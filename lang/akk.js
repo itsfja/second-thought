@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"Unraid 𒌝𒈠𒈾𒌅","tooltip":"𒌅𒌒𒉺𒌅, 𒌅𒌒𒁍 𒀀𒈾 𒌝𒈠𒈾𒋾: 𒈾𒈨 𒌑 state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 Unraid 𒈠𒋢 %2","tooltip":"Docker 𒈠𒋢 𒋢𒋢 𒌑 𒊓𒁀𒌅, 𒋢𒈠𒋢. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒄑𒌅 𒋢𒋢."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid 𒌝𒈠𒉡 %2","tooltip":"Ummannu 𒋢𒋢 𒌑 𒊓𒁀𒌅, 𒋢𒈠𒋢. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒄑𒌅 𒋢𒋢."},
-"rb_unraid_parity":{"message0":"Unraid 𒉺𒊑𒋫 𒊓𒁺","tooltip":"Paritu 𒌑𒋢𒊏𒌅 𒊓𒁺 𒄑𒋼𒉡, 𒆷 𒌅𒌒𒉺𒋾 𒊓𒁺. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒄑𒌅 𒊓𒁺."}
+"rb_unraid_parity":{"message0":"Unraid 𒉺𒊑𒋫 𒊓𒁺","tooltip":"Paritu 𒌑𒋢𒊏𒌅 𒊓𒁺 𒄑𒋼𒉡, 𒆷 𒌅𒌒𒉺𒋾 𒊓𒁺. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒄑𒌅 𒊓𒁺."},
+"rb_nzbgeek_search":{"message0":"𒋼𒁉𒄑𒌅 𒄿𒈾 NZBGeek %1","tooltip":"Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒋢𒌒𒊏𒄠𒈪 𒄿𒁕𒋾𒅎 𒊓 𒈬𒆠𒅔 iddi 𒀀𒈾 𒂊𒁉𒊓𒋾: 𒈾𒈨, id, size_mb, grabs, posted (𒄿𒈠𒈾 iddu) 𒌑 group. Sadu mahta: 𒌑𒇻𒌝𒈠 𒆷 𒋢𒌒𒊏𒄠𒈪. API 𒌅𒌒𒁍 NZBGEEK_API_KEY 𒄿𒈾 second-thought.ini. Umu 𒀭𒉡 𒊓𒀠𒈬 𒋼𒁉𒄑𒋾."},
+"rb_nzbgeek_fetch":{"message0":"NZB 𒊓 %1 𒇷𒄣","tooltip":"NZB 𒌅𒌒𒁉 𒋢𒌒𒊏𒄠𒈪 𒄿𒁕𒋾 𒇷𒄣 𒌑 𒈠𒊍𒊓𒊒 𒆠 <id>.nzb. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Ana 𒆷 mupahhiri 𒋢𒌒𒊏𒄠𒈪 iddinu: 𒌅𒌒𒁍 𒈠𒊍𒊓𒅈, 𒄿𒄭𒌅. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒇷𒄣."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌑𒈪𒊭𒄠","weekdays":"𒄿𒈾 𒌑𒈪 𒅆𒅁𒊑𒅎","weekends":"𒄿𒈾 𒌑𒈪 𒉡𒄭𒅎"},
@@ -253,7 +255,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr u Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𒌑𒉡𒌅𒌝 𒀀𒈾 𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 𒇷𒅁𒁉 𒇷𒁉𒀉𒋾 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒁲𒅆𒈾",
@@ -1136,7 +1139,12 @@
 "Unraid disks":"Unraid 𒌑𒋢𒊏𒌅",
 "Unraid shares":"Unraid 𒍝𒍝𒌅",
 "Unraid containers":"Unraid 𒈠𒋢",
-"Unraid VMs":"Unraid 𒌝𒈠𒈾𒌅"
+"Unraid VMs":"Unraid 𒌝𒈠𒈾𒌅",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"𒋼𒁉𒄑𒌅 𒄿𒈾 NZBGeek, 𒈬𒆠𒅔 useneti, 𒌑 𒊓𒁺 𒊓 iddi: 𒋛𒅕𒋛, 𒊏𒁍𒋾, 𒌑𒈪 𒌑 𒀀𒇷𒅎𒈠𒌅",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"NZB 𒌅𒌒𒁉 𒀀𒈾 NZBGeek 𒇷𒄣 𒌑 𒈠𒊍𒋢𒊒 (𒀀𒈾 𒅗𒋢 𒄭𒋢 𒄑𒌅)",
+"{n} found":"{n} 𒈾𒋛𒊒",
+"NZBGeek search":"NZBGeek 𒋼𒁉𒄑𒌅",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1345,7 +1353,9 @@
 "The back door is still open.":"𒁀𒁍𒌝 𒉿𒅈𒆪𒌝 𒀀𒁲 𒄿𒈾𒀭𒈾 𒁉𒌅.",
 "Good morning!":"𒋗𒌌𒈬𒌝 𒄿𒈾 𒊺𒊑𒅎!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(epištum panītum ina qablim iprus, ullâmma nēpešum warka išni, aššum kīam eššiš iṣṣabbat.)",
@@ -2215,7 +2225,15 @@
 "check Unraid's parity":"Unraid 𒉺𒊑𒋫 𒊓𒁺",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"𒆠𒄑𒋛𒊒 {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} {url_setting} 𒌑 {key_setting} 𒄑𒌅 {where_keys}: API 𒌅𒌒𒁍𒋢, 𒅔 NZBGeek 𒀀𒈾 My Account, API key.",
+"NZBGeek search for {q}":"NZBGeek 𒋼𒁉𒄑𒌅 𒊓 {q}",
+"{n} found":"{n} 𒈾𒋛𒊒",
+"Which one? Give a release's id, from the search.":"Summa 𒈪𒉡? Idi 𒋢𒌒𒊏𒄠𒈪 𒄿𒁕𒋾, 𒄑𒌅 𒋼𒁉𒄑𒋾.",
+"fetch the NZB for {id} from NZBGeek":"NZB 𒊓 {id} 𒀀𒈾 NZBGeek 𒇷𒄣",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} 𒌨𒊑 𒈠𒊍𒊓𒅈𒋾",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"Unraid unudu","tooltip":"mueash inimmah, anaag unudu: name gu state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 Unraid dug %2","tooltip":"Docker dug ana-gen uru, musha. mueash nugigi4, igal igal nugigi4, lu igal nuduga, nugal. kigiga-bi nuub-uru nuku4-ku4."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid unudu %2","tooltip":"unudu ana-gen uru, musha. mueash nugigi4, igal igal nugigi4, lu igal nuduga, nugal. kigiga-bi nuub-uru nuku4-ku4."},
-"rb_unraid_parity":{"message0":"Unraid gubal agal","tooltip":"gubal nagur inimmah idu, tush-a nugal. mueash nugigi4, igal igal nugigi4, lu igal nuduga, nugal. kigiga-bi nuub-agal."}
+"rb_unraid_parity":{"message0":"Unraid gubal agal","tooltip":"gubal nagur inimmah idu, tush-a nugal. mueash nugigi4, igal igal nugigi4, lu igal nuduga, nugal. kigiga-bi nuub-agal."},
+"rb_nzbgeek_search":{"message0":"nwd NZBGeek-a %1","tooltip":"mueash inimmah, anaag ki-ag2-ki-bi mu: name, id, size_mb, grabs, posted (u4-mu) gu group. inim-ma igi igi: ki-a nu-ub-su3. NZBGEEK_API_KEY second-thought.ini-se. kigiga-bi aabba nwd."},
+"rb_nzbgeek_fetch":{"message0":"NZB %1 su3","tooltip":"NZB pisan ki-ag2-ki-bi su3 aq hms-bi <id>.nzb-gu. mueash nugigi4, igal igal nugigi4, lu igal nuduga, nugal. nu-ub-su3-e: pisan hms, igi. kigiga-bi ki-a nu-ub-su3."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒃻𒉆","weekdays":"𒌓 𒆥𒅗","weekends":"𒌓 𒄑𒇲𒅗"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr u3 Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid nagur",
 "Unraid shares":"Unraid sagal",
 "Unraid containers":"Unraid dug",
-"Unraid VMs":"Unraid unudu"
+"Unraid VMs":"Unraid unudu",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"nwd NZBGeek-a, Usenet kisikka-bi, aq aq-bi: mu, gal, u4 at eren2",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"NZB pisan NZBGeek-ta su3 aq hms-bi (mueash mungi4gi4)",
+"{n} found":"{n} inim",
+"NZBGeek search":"nwd NZBGeek",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},
@@ -1344,7 +1352,9 @@
 "today's draft":"𒁾𒊕 𒌓𒁕",
 "used headlines":"𒈬 𒂷𒂷𒀀",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(ak saĝ-ĝa2 maš-a gub, ĝeš-ḫur kur2, gibil-ta saĝ ĝa2-ĝa2.)",
@@ -2214,7 +2224,15 @@
 "check Unraid's parity":"Unraid gubal agal",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"kisikkat {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} {url_setting} gu {key_setting} igal {where_keys}: API kib-gu-a, NZBGeek-se igal Settings, Management Access, API Keys.",
+"NZBGeek search for {q}":"nwd NZBGeek-a {q}",
+"{n} found":"{n} inim",
+"Which one? Give a release's id, from the search.":"Aba? Id di, nwd-ta.",
+"fetch the NZB for {id} from NZBGeek":"NZB {id} NZBGeek-ta su3",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} ud hms",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

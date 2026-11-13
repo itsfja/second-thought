@@ -36,6 +36,7 @@ Made by tools/sync.py from i18n/sa.json: edit that, not this.
 - SABnzbd: SABnzbd
 - Radarr and Sonarr: Radarr-Sonarr
 - Unraid: Unraid
+- NZBGeek: NZBGeek
 - Tools for the agent: drop them inside an agent block: प्रतिनिधेः साधनानि: तानि प्रतिनिधिखण्डस्य अन्तः पातय
 - Listeners: they run while the exported program runs on schedule: श्रोतारः: यावत् निर्यातितः कार्यक्रमः कालयोजनया चलति तावत् ते चलन्ति
 - Read and send: पठनं प्रेषणं च

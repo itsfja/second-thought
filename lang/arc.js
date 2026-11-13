@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"awnyta d Unraid","tooltip":"rhta dktba, lda lkl awnyta: name w state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 la aysklta d Unraid %2","tooltip":"mkul aw mkyp lda Docker aysklta, bshmh. shall lk kl zbn qdmyt, af kd la ahrnyta shal, wkd lyt dnemr ha, la abd. bhn dwkta la mkul aw mkyp bshryra."},
 "rb_unraid_vm_power":{"message0":"%1 la awnyta d Unraid %2","tooltip":"mkul aw mkyp lda awnyta, bshmh. shall lk kl zbn qdmyt, af kd la ahrnyta shal, wkd lyt dnemr ha, la abd. bhn dwkta la mkul aw mkyp bshryra."},
-"rb_unraid_parity":{"message0":"bdqa d mywsta d Unraid","tooltip":"bdq asqla d mywsta bqrynhn, la ktb twbrna. shall lk kl zbn qdmyt, af kd la ahrnyta shal, wkd lyt dnemr ha, la abd. bhn dwkta la bdq bshryra."}
+"rb_unraid_parity":{"message0":"bdqa d mywsta d Unraid","tooltip":"bdq asqla d mywsta bqrynhn, la ktb twbrna. shall lk kl zbn qdmyt, af kd la ahrnyta shal, wkd lyt dnemr ha, la abd. bhn dwkta la bdq bshryra."},
+"rb_nzbgeek_search":{"message0":"nwd b NZBGeek %1","tooltip":"rhta dktba, lda lkl pkd d mkyn ldayt lhwn: name, id, size_mb, grabs, posted (aymt shlaq) w group. bqra fqt: la sh lamy abd. hty' NZBGEEK_API_KEY b second-thought.ini. bhn dawkta nwdta d hwyt mtlmy."},
+"rb_nzbgeek_fetch":{"message0":"lmbt NZB d %1","tooltip":"lmb sfa NZB dpkda w htyantha k <id>.nzb. shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. la mnth lsh dmy: sfa htyan, hdt. bhn dawkta la lmb bshryra."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יומא","weekdays":"ביומי חול","weekends":"בסופי שבתא"},
@@ -253,7 +255,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr וSonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"מאני שליחא: שדי יתהון בגו לבנת שליחא",
@@ -1136,7 +1139,12 @@
 "Unraid disks":"asqla d Unraid",
 "Unraid shares":"shwtra d Unraid",
 "Unraid containers":"aysklta d Unraid",
-"Unraid VMs":"awnyta d Unraid"
+"Unraid VMs":"awnyta d Unraid",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"nwd b NZBGeek, mkyn d Usenet, w mqra ldayt: atwl, gbwt, shry w kwnwt",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"lmbt sfa NZB mn NZBGeek w htyanth (shal lk kl zbn)",
+"{n} found":"{n} ltwy",
+"NZBGeek search":"nwdta b NZBGeek",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -1345,7 +1353,9 @@
 "The back door is still open.":"תרעא בתראה עדיין פתיח.",
 "Good morning!":"צפרא טבא!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(רהטא קדמאה פסק בפלגותא, ברם סדרא אשתני מן בתר כן, הלכך שרי מן רישא.)",
@@ -2215,7 +2225,15 @@
 "check Unraid's parity":"bdqa d mywsta d Unraid",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"sdra {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} bea {url_setting} w {key_setting} {where_keys}: ikta d API dylh, b NZBGeek thyt My Account, API key.",
+"NZBGeek search for {q}":"nwdta b NZBGeek d {q}",
+"{n} found":"{n} ltwy",
+"Which one? Give a release's id, from the search.":"Ayna? hb id d pkd, mn nwdta.",
+"fetch the NZB for {id} from NZBGeek":"lmbt NZB d {id} mn NZBGeek",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} ywm shwra",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

@@ -189,7 +189,9 @@
 "rb_unraid_vms":{"message0":"Unraid yantrani","tooltip":"smrtinam sucih, pratyeksya abhasayantrasyaika: name ca state (RUNNING, SHUTOFF, ...) ca."},
 "rb_unraid_container_power":{"message0":"%1 Unraid patram %2","tooltip":"Docker patramekam, namna, arabhati sthapayati va. anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. asmin prsthe kimapi vastutah na arabhyate na sthapyate."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid yantram %2","tooltip":"abhasayantramekam, namna, arabhati sthapayati va. anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. asmin prsthe kimapi vastutah na arabhyate na sthapyate."},
-"rb_unraid_parity":{"message0":"Unraid ityasya samyam parikset","tooltip":"samyampatlan pathitva pariksate, sudhih na likhati. anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. asmin prsthe kimapi vastutah na pariksyate."}
+"rb_unraid_parity":{"message0":"Unraid ityasya samyam parikset","tooltip":"samyampatlan pathitva pariksate, sudhih na likhati. anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. asmin prsthe kimapi vastutah na pariksyate."},
+"rb_nzbgeek_search":{"message0":"NZBGeek %1 anvesayatu","tooltip":"Smrtinam sucih, pratyeksya pratibimbasyaika yam anvesakah etesu padesu asti: title, id, size_mb, grabs, posted (kada pritah) ca group ca. Kevalam pathati: na kadapi kimapi avataryate. NZBGEEK_API_KEY second-thought.ini ityasyam. Asmin prsthe nidarsakam anvesanam upayabhate."},
+"rb_nzbgeek_fetch":{"message0":"%1 NZB grhnatu","tooltip":"Pratibimbasya NZB patram grhnati cha tat <id>.nzb iti rakshati. Anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Na kasyapi avatarakaya datti: patram rakshyate, iti eva. Asmin prsthe kimapi vastutah na grhnati."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"प्रतिदिनम्","weekdays":"कार्यदिनेषु","weekends":"सप्ताहान्तेषु"},
@@ -253,7 +255,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr-Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"प्रतिनिधेः साधनानि: तानि प्रतिनिधिखण्डस्य अन्तः पातय",
@@ -1136,7 +1139,12 @@
 "Unraid disks":"Unraid vidyutpatlah",
 "Unraid shares":"Unraid bhagah",
 "Unraid containers":"Unraid patrani",
-"Unraid VMs":"Unraid yantrani"
+"Unraid VMs":"Unraid yantrani",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"NZBGeek, Usenet anvesakah, anvesayitva pathatu yat tasya asti: shirshani, parimanani, vayamsi cha samuhatascha",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"NZBGeek at NZB patram grhnatu cha tat rakshatu (prativaram tvam prcchati)",
+"{n} found":"{n} labdhani",
+"NZBGeek search":"NZBGeek anvesanam",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1345,7 +1353,9 @@
 "The back door is still open.":"पृष्ठद्वारम् अद्यापि उद्घाटितम्।",
 "Good morning!":"सुप्रभातम्!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(पूर्वं चालनं मध्ये स्थगितम्, किन्तु ततः परं कार्यक्रमः परिवृत्तः, अतः नूतनतया आरभते।)",
@@ -2215,7 +2225,15 @@
 "check Unraid's parity":"Unraid ityasya samyam parikset",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"panktih {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} kamayate {url_setting} ca {key_setting} ca {where_keys}: tasya API kuncikam, NZBGeek ityasya My Account, API Keys adhah.",
+"NZBGeek search for {q}":"NZBGeek ityasya {q} anvesanam",
+"{n} found":"{n} labdhani",
+"Which one? Give a release's id, from the search.":"Kah? Pratibimbanasya id dva, anvesanatah.",
+"fetch the NZB for {id} from NZBGeek":"NZBGeek at {id} NZB grhnatu",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} dinani parirakshana",
+"NZBGeek":"NZBGeek"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

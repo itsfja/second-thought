@@ -188,7 +188,9 @@
 "rb_unraid_vms":{"message0":"Unraid-VMs","tooltip":"Eine Liste von Datensätzen, einer für jede virtuelle Maschine: name und state (RUNNING, SHUTOFF, ...)."},
 "rb_unraid_container_power":{"message0":"%1 Unraid-Container %2","tooltip":"Startet oder stoppt einen Docker-Container, nach Namen. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite startet oder stoppt nichts wirklich."},
 "rb_unraid_vm_power":{"message0":"%1 Unraid-VM %2","tooltip":"Startet oder stoppt eine virtuelle Maschine, nach Namen. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite startet oder stoppt nichts wirklich."},
-"rb_unraid_parity":{"message0":"die Parität von Unraid prüfen","tooltip":"Prüft die Paritätsfestplatten, indem es sie liest, ohne Korrekturen zu schreiben. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite prüft nichts wirklich."}
+"rb_unraid_parity":{"message0":"die Parität von Unraid prüfen","tooltip":"Prüft die Paritätsfestplatten, indem es sie liest, ohne Korrekturen zu schreiben. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite prüft nichts wirklich."},
+"rb_nzbgeek_search":{"message0":"NZBGeek durchsuchen nach %1","tooltip":"Eine Liste von Datensätzen, einer für jede Release, die der Indexer für diese Wörter hat: title, id, size_mb, grabs, posted (wann gepostet) und group. Es liest nur: nichts wird je heruntergeladen. Braucht NZBGEEK_API_KEY in second-thought.ini. Auf dieser Seite benutzt es eine Beispielsuche."},
+"rb_nzbgeek_fetch":{"message0":"die NZB für %1 holen","tooltip":"Holt die NZB-Datei eines Releases und speichert sie als <id>.nzb. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Es übergibt nichts an einen Downloader: die Datei wird gespeichert, das ist alles. Auf dieser Seite holt nichts wirklich etwas."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"jeden Tag","weekdays":"an Wochentagen","weekends":"am Wochenende"},
@@ -252,7 +254,8 @@
 "Docker":"Docker",
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr und Sonarr",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"NZBGeek":"NZBGeek"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Werkzeuge für den Agenten: in einen Agenten-Block ziehen",
@@ -1135,7 +1138,12 @@
 "Unraid disks":"Unraid-Festplatten",
 "Unraid shares":"Unraid-Shares",
 "Unraid containers":"Unraid-Container",
-"Unraid VMs":"Unraid-VMs"
+"Unraid VMs":"Unraid-VMs",
+"search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups":"NZBGeek durchsuchen, den Usenet-Indexer, und lesen, was er hat: Titel, Größen, Alter und Gruppen",
+"fetch an NZB file from NZBGeek and save it (asking you each time)":"eine NZB-Datei von NZBGeek holen und speichern (jedes Mal nach dir gefragt)",
+"{n} found":"{n} gefunden",
+"NZBGeek search":"NZBGeek-Suche",
+"NZBGeek":"NZBGeek"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -1344,7 +1352,9 @@
 "The back door is still open.":"Die Hintertür ist noch offen.",
 "Good morning!":"Guten Morgen!",
 "plex":"plex",
-"windows":"windows"
+"windows":"windows",
+"Everything Everywhere All at Once":"Everything Everywhere All at Once",
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Ein früherer Lauf hat mittendrin aufgehört, aber das Programm hat sich seitdem geändert, also fängt es neu an.)",
@@ -2214,6 +2224,14 @@
 "check Unraid's parity":"die Parität von Unraid prüfen",
 "Unraid {version}":"Unraid {version}",
 "array {state}":"Array {state}",
-"Unraid":"Unraid"
+"Unraid":"Unraid",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.":"{who} braucht {url_setting} und {key_setting} {where_keys}: seinen API-Schlüssel, in NZBGeek unter My Account, API key.",
+"NZBGeek search for {q}":"NZBGeek-Suche nach {q}",
+"{n} found":"{n} gefunden",
+"Which one? Give a release's id, from the search.":"Welche? Gib die Kennung eines Releases an, aus der Suche.",
+"fetch the NZB for {id} from NZBGeek":"die NZB für {id} von NZBGeek holen",
+"NZBGeek {version}":"NZBGeek {version}",
+"{n} days of retention":"{n} Tage Haltezeit",
+"NZBGeek":"NZBGeek"
 }
 };

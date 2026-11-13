@@ -36,6 +36,7 @@ Made by tools/sync.py from i18n/zh.json: edit that, not this.
 - SABnzbd: SABnzbd
 - Radarr and Sonarr: Radarr 和 Sonarr
 - Unraid: Unraid
+- NZBGeek: NZBGeek
 - Tools for the agent: drop them inside an agent block: 给智能体的工具：把它们放进智能体积木里
 - Listeners: they run while the exported program runs on schedule: 监听器：在导出的程序按定时运行时工作
 - Read and send: 读取和发送
