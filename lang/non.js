@@ -190,7 +190,14 @@
 "rb_unraid_vm_power":{"message0":"%1 Unraid vel %2","tooltip":"Byrjar etha stodvar eina syndarvel, eftir nafni. Thad spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu byrjar etha stodvar ekkert i alvoru."},
 "rb_unraid_parity":{"message0":"kanna jafnredi Unraid","tooltip":"Kannar jafnredisdiska med thvi ad lesa tha, an thess ad skrifa leidrettingar. Thad spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu kannar ekkert i alvoru."},
 "rb_nzbgeek_search":{"message0":"leita i NZBGeek adfer %1","tooltip":"Listi faerslna, einnar fyrir hverja utgafu sem visirinn hefur fyrir ordin: title, id, size_mb, grabs, posted (thegar sett) og group. Hann les only: ekkert er nokkru sinnum soett. Hann tharf NZBGEEK_API_KEY i second-thought.ini. A thessari sidu notar hann synishornsleit."},
-"rb_nzbgeek_fetch":{"message0":"sækja NZB fyrir %1","tooltip":"Saekir NZB-skra einnar utgafu og vistar hana sem <id>.nzb. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. Hann gefur engu niurhali: skrain er vistud, thad er alt. A thessari sidu saekir ekkert i alvoru."}
+"rb_nzbgeek_fetch":{"message0":"sækja NZB fyrir %1","tooltip":"Saekir NZB-skra einnar utgafu og vistar hana sem <id>.nzb. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. Hann gefur engu niurhali: skrain er vistud, thad er alt. A thessari sidu saekir ekkert i alvoru."},
+"rb_pihole_summary":{"message0":"Pi-hole samantekt","tooltip":"Ein faersla fyrir daginn: queries (hve margar DNS fyrirspurnir), blocked (hve margar blokkad), blocked_pct (blokkada hlutfallid), gravity (hve morg domen listarnir hafa), clients (hve morg tolko spurdust) og blocking (hvort blokkun se a). Tharf PIHOLE_URL og PIHOLE_PASSWORD i second-thought.ini. A thessari sidu notar hann synishorns Pi-hole."},
+"rb_pihole_top_domains":{"message0":"top %1 blokkadu domenin","tooltip":"Listi faerslna, ein fyrir hvert most blokkada domenid: domain og count (hve oft thaad blokkadist). Hann les only."},
+"rb_pihole_top_clients":{"message0":"top %1 klientar","tooltip":"Listi faerslna, ein fyrir hvert tolko sem mest spurdust: name, ip og count (hve margar fyrirspurnir). Hann les only."},
+"rb_pihole_blocking":{"message0":"slakka a blokkun Pi-hole i %1 sekundur","tooltip":"Slakkar a blokkun i thessa sekundu, tha Pi-hole settir hana a sjalft aftur. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."},
+"rb_pihole_enable":{"message0":"kvekja a blokkun Pi-hole","tooltip":"Settur blokkun a aftur. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."},
+"rb_pihole_allow":{"message0":"%1 %2 a allow-lista Pi-hole","tooltip":"Setur domen a allow-listan, eda tekur thaad af. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."},
+"rb_pihole_deny":{"message0":"%1 %2 a deny-lista Pi-hole","tooltip":"Setur domen a deny-listan, eda tekur thaed af. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -255,7 +262,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr og Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tól erindreka: lát þau falla inn í erindrekakubb",
@@ -1075,7 +1083,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"lesa MikroTik-leiðvísi þinn eða skipti: hlið, einingar, heilsu ok skrá",
 "UniFi":"UniFi",
 "UniFi clients":"UniFi-gestir",
-"{n} clients":"{n} gestir",
+"{n} clients":"{n} klientar",
 "UniFi network":"UniFi-net",
 "read your UniFi network: who's connected, and how your UniFi devices are":"lesa UniFi-net þitt: hverir eru tengdir, ok hversu UniFi-tól þín fara",
 "A Proxmox guest can be started, shut down or rebooted.":"Proxmox-gestr má vera ræstr, slökktr eða endrræstr.",
@@ -1143,7 +1151,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"sækja NZB-skra fra NZBGeek og vista hana (spyrjandi thig hvern sinn)",
 "{n} found":"{n} fundin",
 "NZBGeek search":"NZBGeek-leitan",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"lesa Pi-hole thitt: dagens fyrirspurnir og blokkada hlutfallid, most blokkadu domenin og klientarnir, og hvort blokkun se a",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"slakka a og kvekja a blokkun Pi-hole thins, og breyta allow- og deny-listum thess (spyrjandi thig hvern sinn)",
+"{n} domains":"{n} domen",
+"Pi-hole summary":"Pi-hole samantekt",
+"Pi-hole top blocked domains":"most blokkadu domenin a Pi-hole",
+"Pi-hole top clients":"Pi-hole toppklientar",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -1354,7 +1369,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Fyrri ferð stǫðvaðisk í miðju, en forritit hefir síðan breyzk, svá at þat hefsk at nýju.)",
@@ -2119,7 +2136,7 @@
 "UniFi: {why}.":"UniFi: {why}.",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought les einungis frá UniFi, því sendir þat eigi {what}.",
 "UniFi clients":"UniFi-gestir",
-"{n} clients":"{n} gestir",
+"{n} clients":"{n} klientar",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi þarf UNIFI_URL ok UNIFI_API_KEY {where_keys}: stað borðsins (sem https://192.168.1.1) ok API-lykil ór Network-forritinu (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi-borðit synjaði UNIFI_API_KEY.",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tól",
@@ -2232,7 +2249,24 @@
 "fetch the NZB for {id} from NZBGeek":"sækja NZB fyrir {id} fra NZBGeek",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} dagar geymslu",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} tharfnast {url_setting} og {key_setting} {where_keys}: adressa thess (sem http://pi.hole) og lykilord vefins thess.",
+"The {who} refused its password.":"{who} synadist lykilord sitt.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole samantekt",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} fyrirspurnir, {blocked} blokkad ({blocked_pct} %)",
+"blocking on":"blokkun a",
+"blocking off":"blokkun af",
+"Pi-hole top blocked domains":"most blokkadu domenin a Pi-hole",
+"{n} domains":"{n} domen",
+"Pi-hole top clients":"Pi-hole toppklientar",
+"For how long? Give the seconds blocking should be off, like 60.":"Hve lengi? Gefu sekundurnar sem blokkun skulu vera af, sem 60.",
+"disable Pi-hole's blocking for {n} seconds":"slakka a blokkun Pi-hole i {n} sekundur",
+"enable Pi-hole's blocking":"kvekja a blokkun Pi-hole",
+"Which list (allow or deny), add or remove, and which domain?":"Hvad listi (allow eda deny), baeta eda fjarlaegja, og hvad domen?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} a {which}-lista Pi-hole",
+"added by Second Thought":"baett vid af Second Thought",
+"{n} queries, {blocked} blocked":"{n} fyrirspurnir, {blocked} blokkad"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

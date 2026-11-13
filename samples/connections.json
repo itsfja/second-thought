@@ -3149,5 +3149,53 @@
     ]
    }
   ]
+ },
+ "pihole": {
+  "note": "A sample Pi-hole (v6) for the page and the tests (#401), shaped the way its REST API answers: 85000 queries today, 14.1 % blocked, blocking on, with the living-room TV the noisiest client.",
+  "summary": {
+   "queries": {
+    "total": 85000,
+    "blocked": 12000,
+    "percent": 14.1
+   },
+   "gravity": {
+    "domains": 1200000
+   },
+   "clients": {
+    "total": 12
+   }
+  },
+  "blocking": true,
+  "top_domains": [
+   {
+    "domain": "ads.example.com",
+    "count": 3210
+   },
+   {
+    "domain": "tracker.example.net",
+    "count": 1842
+   },
+   {
+    "domain": "telemetry.example.org",
+    "count": 907
+   }
+  ],
+  "top_clients": [
+   {
+    "name": "livingroom-tv",
+    "ip": "192.168.1.42",
+    "count": 5400
+   },
+   {
+    "name": "fridge",
+    "ip": "192.168.1.51",
+    "count": 2210
+   },
+   {
+    "name": "laptop",
+    "ip": "192.168.1.10",
+    "count": 1877
+   }
+  ]
  }
 }

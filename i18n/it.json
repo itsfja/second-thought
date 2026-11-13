@@ -736,6 +736,34 @@
   "rb_nzbgeek_fetch": {
    "message0": "prendere l'NZB di %1",
    "tooltip": "Prende il file NZB di una release e lo salva come <id>.nzb. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. Non consegna nulla a un downloader: il file viene salvato, tutto qui. In questa pagina niente scarica davvero."
+  },
+  "rb_pihole_summary": {
+   "message0": "riepilogo Pi-hole",
+   "tooltip": "Un record per oggi: queries (quante richieste DNS), blocked (quante bloccate), blocked_pct (la quota bloccata), gravity (quanti domini hanno le liste), clients (quanti dispositivi hanno chiesto) e blocking (se il blocco è attivo). Serve PIHOLE_URL e PIHOLE_PASSWORD in second-thought.ini. In questa pagina usa un Pi-hole d'esempio."
+  },
+  "rb_pihole_top_domains": {
+   "message0": "top %1 domini bloccati",
+   "tooltip": "Una lista di record, uno per ciascuno dei domini più bloccati: domain e count (quante volte bloccato). Legge soltanto."
+  },
+  "rb_pihole_top_clients": {
+   "message0": "top %1 client",
+   "tooltip": "Una lista di record, uno per ciascuno dei dispositivi che hanno chiesto di più: name, ip e count (quante richieste). Legge soltanto."
+  },
+  "rb_pihole_blocking": {
+   "message0": "spegnere il blocco di Pi-hole per %1 secondi",
+   "tooltip": "Spegne il blocco per quei secondi, poi Pi-hole lo riaccende da solo. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina nulla cambia davvero."
+  },
+  "rb_pihole_enable": {
+   "message0": "riattivare il blocco di Pi-hole",
+   "tooltip": "Riaccende il blocco. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina nulla cambia davvero."
+  },
+  "rb_pihole_allow": {
+   "message0": "%1 %2 nella lista allow di Pi-hole",
+   "tooltip": "Mette un dominio nella lista allow, o lo toglie. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina nulla cambia davvero."
+  },
+  "rb_pihole_deny": {
+   "message0": "%1 %2 nella lista deny di Pi-hole",
+   "tooltip": "Mette un dominio nella lista deny, o lo toglie. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina nulla cambia davvero."
   }
  },
  "options": {
@@ -927,7 +955,8 @@
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr e Sonarr",
   "Unraid": "Unraid",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "Pi-hole": "Pi-hole"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Strumenti per l'agente: mettili dentro un blocco agente",
@@ -1815,7 +1844,14 @@
   "fetch an NZB file from NZBGeek and save it (asking you each time)": "prendere un file NZB da NZBGeek e salvarlo (chiedendotelo ogni volta)",
   "{n} found": "{n} trovati",
   "NZBGeek search": "ricerca in NZBGeek",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on": "leggere il tuo Pi-hole: le richieste di oggi e la quota bloccata, i domini e i client più bloccati, e se il blocco è attivo",
+  "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)": "spegnere e riattivare il blocco del tuo Pi-hole, e cambiare le sue liste allow e deny (chiedendotelo ogni volta)",
+  "{n} domains": "{n} domini",
+  "Pi-hole summary": "riepilogo Pi-hole",
+  "Pi-hole top blocked domains": "domini più bloccati di Pi-hole",
+  "Pi-hole top clients": "principali client di Pi-hole",
+  "Pi-hole": "Pi-hole"
  },
  "examples": {
   "review": {
@@ -2658,7 +2694,9 @@
   "plex": "plex",
   "windows": "windows",
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
-  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
+  "ads.example.com": "ads.example.com",
+  "bad.example.com": "bad.example.com"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Un'esecuzione precedente si è fermata a metà, ma da allora il programma è cambiato, quindi ricomincia da capo.)",
@@ -3536,6 +3574,23 @@
   "fetch the NZB for {id} from NZBGeek": "prendere l'NZB di {id} da NZBGeek",
   "NZBGeek {version}": "NZBGeek {version}",
   "{n} days of retention": "{n} giorni di retention",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.": "{who} ha bisogno di {url_setting} e {key_setting} {where_keys}: il suo indirizzo (come http://pi.hole) e la password della sua interfaccia web.",
+  "The {who} refused its password.": "Il {who} ha rifiutato la sua password.",
+  "Pi-hole": "Pi-hole",
+  "Pi-hole summary": "riepilogo Pi-hole",
+  "{queries} queries, {blocked} blocked ({blocked_pct} %)": "{queries} richieste, {blocked} bloccate ({blocked_pct} %)",
+  "blocking on": "blocco attivo",
+  "blocking off": "blocco spento",
+  "Pi-hole top blocked domains": "domini più bloccati di Pi-hole",
+  "{n} domains": "{n} domini",
+  "Pi-hole top clients": "principali client di Pi-hole",
+  "For how long? Give the seconds blocking should be off, like 60.": "Per quanto? Dai i secondi per cui il blocco deve restare spento, come 60.",
+  "disable Pi-hole's blocking for {n} seconds": "spegnere il blocco di Pi-hole per {n} secondi",
+  "enable Pi-hole's blocking": "riattivare il blocco di Pi-hole",
+  "Which list (allow or deny), add or remove, and which domain?": "Quale lista (allow o deny), aggiungere o togliere, e quale dominio?",
+  "{action} {domain} on Pi-hole's {which} list": "{action} {domain} nella lista {which} di Pi-hole",
+  "added by Second Thought": "aggiunto da Second Thought",
+  "{n} queries, {blocked} blocked": "{n} richieste, {blocked} bloccate"
  }
 }

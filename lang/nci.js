@@ -190,7 +190,14 @@
 "rb_unraid_vm_power":{"message0":"%1 in Unraid machiyotl %2","tooltip":"Ce machiyotl quipehualtia ahnozo quictlamia, itoca. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quipehualtia ahnozo quictlamia."},
 "rb_unraid_parity":{"message0":"Unraid nemic xelihuiliztli","tooltip":"In nemic xelihuiliztli tepoztli quipoua quimittacitia, amo quicuiloa in amoxtili. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quipoua."},
 "rb_nzbgeek_search":{"message0":"NZBGeek %1 ticnemitiz","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl tlacuilolli in tlaixcopiniliztli quimpiya ipampa ini tlahtolli: name, id, size_mb, grabs, posted (tleinca omoquetz) ihuan group. Zan quipoua: acazo tlen amo huel quicui. NZBGEEK_API_KEY second-thought.ini ipan. Ipan ini amoxtli ce tlacuilolli tlaixcopiniliztli quimonequiltia."},
-"rb_nzbgeek_fetch":{"message0":"%1 NZB quicui","tooltip":"Quicui ce tlacuilolli NZB amox ihuan quiqui_xtia <id>.nzb itoca. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Acazo tlen quicui: in amox quiqui_xtia, ihcuac. Ipan ini amoxtli aca amo quicui."}
+"rb_nzbgeek_fetch":{"message0":"%1 NZB quicui","tooltip":"Quicui ce tlacuilolli NZB amox ihuan quiqui_xtia <id>.nzb itoca. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Acazo tlen quicui: in amox quiqui_xtia, ihcuac. Ipan ini amoxtli aca amo quicui."},
+"rb_pihole_summary":{"message0":"Pi-hole amoxpohualiztli","tooltip":"Ce tlacuilolli in tonalli: queries (quezqui tlahtolhuan DNS), blocked (quezqui huatequi), blocked_pct (in huatequi iixelo), gravity (quezqui dominomeh in lista quipiya), clients (quezqui tlacameh tlahtlaniqueh) ihuan blocking (huatequiliztli on ahnozo amo). PIHOLE_URL ihuan PIHOLE_PASSWORD second-thought.ini ipan. Ipan ini amoxtli ce tlacuilolli Pi-hole quimonequiltia."},
+"rb_pihole_top_domains":{"message0":"in ocachi huatequi dominomeh %1","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl in ocachi huatequi dominio: domain ihuan count (quezquipa huatequi). Zan quipoua."},
+"rb_pihole_top_clients":{"message0":"in ameyalli clienteh %1","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl tlacatl in ocachi tlahtlani: name, ip ihuan count (quezqui tlahtolhuan). Zan quipoua."},
+"rb_pihole_blocking":{"message0":"Pi-hole huatequiliztli %1 sekundah quicelah","tooltip":"Quicela in huatequiliztli ini sekundah, zatepan Pi-hole quimonequiltia. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
+"rb_pihole_enable":{"message0":"Pi-hole huatequiliztli quicelilitu","tooltip":"Quicelilitu in huatequiliztli. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
+"rb_pihole_allow":{"message0":"%1 %2 ipan Pi-hole allow lista","tooltip":"Quihuehca ce dominio ipan allow lista, ahnozo quiquixtia. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
+"rb_pihole_deny":{"message0":"%1 %2 ipan Pi-hole deny lista","tooltip":"Quihuehca ce dominio ipan deny lista, ahnozo quiquixtia. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -254,7 +261,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr ihuan Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",
@@ -1074,7 +1082,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"quipōhuaz mo MikroTik ohtlatlamachtiāni: ītlacalaquiyān, ītlatequipanoliz, īpahtiliz ihuan ītlahcuilōl",
 "UniFi":"UniFi",
 "UniFi clients":"UniFi calaquini",
-"{n} clients":"{n} calaquini",
+"{n} clients":"{n} clienteh",
 "UniFi network":"UniFi matlatl",
 "read your UniFi network: who's connected, and how your UniFi devices are":"quipōhuaz mo UniFi matlatl: āquin ōmotzoh, ihuan quēn cah mo UniFi tepozchīhualli",
 "A Proxmox guest can be started, shut down or rebooted.":"Cē Proxmox calpanecatl huel motzintia, huel mocehuia nozo occeppa motzintia.",
@@ -1142,7 +1150,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"ce NZB amox NZBGeek itech quicuaz ahnozo quiquaz (centetl ipampa mitztlahtlaniz)",
 "{n} found":"{n} onmochiuh",
 "NZBGeek search":"NZBGeek itlahtol",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"tictoca in Pi-hole: in tonalli tlahtolhuan ihuan in huatequi iixelo, in ocachi huatequi dominomeh ihuan clienteh, ihuan huatequiliztli on ahnozo amo",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"in Pi-hole huatequiliztli quicelah ahnozo quicelilitu, ihuan in allow ihuan deny lista quihuehca (centetl ipampa mitztlahtlaniz)",
+"{n} domains":"{n} dominomeh",
+"Pi-hole summary":"Pi-hole amoxpohualiztli",
+"Pi-hole top blocked domains":"Pi-hole in ocachi huatequi dominomeh",
+"Pi-hole top clients":"Pi-hole in ameyalli clienteh",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -1353,7 +1368,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Ce achto tlachīhualiztli ōmoquetz ipan in nepantla, auh in tlatēcpantli ōmopatla, ic occeppa peuhua.)",
@@ -2118,7 +2135,7 @@
 "UniFi: {why}.":"UniFi: {why}.",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought zan quipōhua in UniFi, ic ahmo quititlani {what}.",
 "UniFi clients":"UniFi calaquini",
-"{n} clients":"{n} calaquini",
+"{n} clients":"{n} clienteh",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi quinequi UNIFI_URL ihuan UNIFI_API_KEY {where_keys}: in tlayacānqui īcān (iuhquin https://192.168.1.1) ihuan cē API tlatzacuilli īhuīcpa Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"In UniFi tlayacānqui ōquixtlāuh UNIFI_API_KEY.",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tepozchīhualli",
@@ -2231,7 +2248,24 @@
 "fetch the NZB for {id} from NZBGeek":"NZBGeek itech {id} NZB quicui",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} tonalli ihxiuh",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} itla monequi {url_setting} ihuan {key_setting} {where_keys}: in italan ( iuhca http://pi.hole) ihuan in itlahtol in amoxtli web.",
+"The {who} refused its password.":"In {who} itlahtol amo quicelili.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole amoxpohualiztli",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} tlahtolhuan, {blocked} huatequi ({blocked_pct} %)",
+"blocking on":"huatequiliztli on",
+"blocking off":"huatequiliztli off",
+"Pi-hole top blocked domains":"Pi-hole in ocachi huatequi dominomeh",
+"{n} domains":"{n} dominomeh",
+"Pi-hole top clients":"Pi-hole in ameyalli clienteh",
+"For how long? Give the seconds blocking should be off, like 60.":"Tleica tlen huelic? Xiquita in sekundah in huatequiliztli off, iuhca 60.",
+"disable Pi-hole's blocking for {n} seconds":"Pi-hole huatequiliztli {n} sekundah quicelah",
+"enable Pi-hole's blocking":"Pi-hole huatequiliztli quicelilitu",
+"Which list (allow or deny), add or remove, and which domain?":"Tlein lista (allow nozo deny), quiquixtilia nozo quihuehca, ihuan tlein dominio?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} ipan Pi-hole {which} lista",
+"added by Second Thought":"quihuehcati Second Thought",
+"{n} queries, {blocked} blocked":"{n} tlahtolhuan, {blocked} huatequi"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

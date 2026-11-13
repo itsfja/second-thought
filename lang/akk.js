@@ -191,7 +191,14 @@
 "rb_unraid_vm_power":{"message0":"%1 Unraid 𒌝𒈠𒉡 %2","tooltip":"Ummannu 𒋢𒋢 𒌑 𒊓𒁀𒌅, 𒋢𒈠𒋢. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒄑𒌅 𒋢𒋢."},
 "rb_unraid_parity":{"message0":"Unraid 𒉺𒊑𒋫 𒊓𒁺","tooltip":"Paritu 𒌑𒋢𒊏𒌅 𒊓𒁺 𒄑𒋼𒉡, 𒆷 𒌅𒌒𒉺𒋾 𒊓𒁺. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒄑𒌅 𒊓𒁺."},
 "rb_nzbgeek_search":{"message0":"𒋼𒁉𒄑𒌅 𒄿𒈾 NZBGeek %1","tooltip":"Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒋢𒌒𒊏𒄠𒈪 𒄿𒁕𒋾𒅎 𒊓 𒈬𒆠𒅔 iddi 𒀀𒈾 𒂊𒁉𒊓𒋾: 𒈾𒈨, id, size_mb, grabs, posted (𒄿𒈠𒈾 iddu) 𒌑 group. Sadu mahta: 𒌑𒇻𒌝𒈠 𒆷 𒋢𒌒𒊏𒄠𒈪. API 𒌅𒌒𒁍 NZBGEEK_API_KEY 𒄿𒈾 second-thought.ini. Umu 𒀭𒉡 𒊓𒀠𒈬 𒋼𒁉𒄑𒋾."},
-"rb_nzbgeek_fetch":{"message0":"NZB 𒊓 %1 𒇷𒄣","tooltip":"NZB 𒌅𒌒𒁉 𒋢𒌒𒊏𒄠𒈪 𒄿𒁕𒋾 𒇷𒄣 𒌑 𒈠𒊍𒊓𒊒 𒆠 <id>.nzb. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Ana 𒆷 mupahhiri 𒋢𒌒𒊏𒄠𒈪 iddinu: 𒌅𒌒𒁍 𒈠𒊍𒊓𒅈, 𒄿𒄭𒌅. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒇷𒄣."}
+"rb_nzbgeek_fetch":{"message0":"NZB 𒊓 %1 𒇷𒄣","tooltip":"NZB 𒌅𒌒𒁉 𒋢𒌒𒊏𒄠𒈪 𒄿𒁕𒋾 𒇷𒄣 𒌑 𒈠𒊍𒊓𒊒 𒆠 <id>.nzb. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Ana 𒆷 mupahhiri 𒋢𒌒𒊏𒄠𒈪 iddinu: 𒌅𒌒𒁍 𒈠𒊍𒊓𒅈, 𒄿𒄭𒌅. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒇷𒄣."},
+"rb_pihole_summary":{"message0":"Pi-hole 𒋫𒅈𒋛𒋢","tooltip":"Tuppu 𒀀𒈾 𒌑𒈪: queries (𒆠𒈠 𒋼𒁉𒄑𒋾 DNS), blocked (𒆠𒈠 ka'adatu), blocked_pct (𒈠𒊍𒊓𒅈𒌅 𒊓 iddi), gravity (𒆠𒈠 𒀀𒇷𒅎𒈠𒌅 𒇷𒄑𒌅 𒄿𒋢), clients (𒆠𒈠 𒀀𒇷𒅅 rates 𒀀𒇻) 𒌑 blocking (𒈠𒊍𒊓𒅈𒌅 𒀠𒅗𒌅𒌝 𒀠 𒆷). PIHOLE_URL 𒌑 PIHOLE_PASSWORD 𒄿𒈾 second-thought.ini. Umu 𒀭𒉡 𒊓𒀠𒈬 Pi-hole."},
+"rb_pihole_top_domains":{"message0":"𒈠𒊍𒊓𒅈𒌅 domains %1","tooltip":"Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒋢𒌒𒊏𒄠𒈪 ka'adatim: domain 𒌑 count (𒆠𒈠 𒈠𒊍𒋢 ka'adatu). Sadu mahta."},
+"rb_pihole_top_clients":{"message0":"𒀀𒇷𒅅 rates %1","tooltip":"Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒀀𒇷𒅅 rates 𒋢𒌒𒊏𒄠𒈪 𒀀𒇻: 𒈾𒈨, 𒅁 𒌑 count (𒆠𒈠 𒋼𒁉𒄑𒋾). Sadu mahta."},
+"rb_pihole_blocking":{"message0":"Pi-hole 𒈠𒊍𒊓𒅈𒌅 𒅗𒉺𒌅 %1 𒀉𒄣𒊻𒋢","tooltip":"Massartu 𒅗𒉺𒌅 𒀀𒈾 𒀉𒄣𒊻𒋢 𒀭𒉡𒌅, 𒌑 Pi-hole 𒀀𒈾 𒄿𒁕𒀜𒋢 𒀠𒅗𒌅𒌝. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒."},
+"rb_pihole_enable":{"message0":"Pi-hole 𒈠𒊍𒊓𒅈𒌅 𒀠𒅗𒌅𒌝","tooltip":"Massartu 𒀠𒅗𒌅𒌝. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒."},
+"rb_pihole_allow":{"message0":"%1 %2 𒀀𒈾 Pi-hole allow 𒇷𒄑𒋫","tooltip":"Domain 𒀀𒈾 allow 𒇷𒄑𒋫 𒉿𒊓𒈬, 𒀠 𒊏𒄠𒈬. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒."},
+"rb_pihole_deny":{"message0":"%1 %2 𒀀𒈾 Pi-hole deny 𒇷𒄑𒋫","tooltip":"Domain 𒀀𒈾 deny 𒇷𒄑𒋫 𒉿𒊓𒈬, 𒀠 𒊏𒄠𒈬. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌑𒈪𒊭𒄠","weekdays":"𒄿𒈾 𒌑𒈪 𒅆𒅁𒊑𒅎","weekends":"𒄿𒈾 𒌑𒈪 𒉡𒄭𒅎"},
@@ -256,7 +263,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr u Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"𒌑𒉡𒌅𒌝 𒀀𒈾 𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 𒇷𒅁𒁉 𒇷𒁉𒀉𒋾 𒈠𒅈 𒅆𒅁𒊑𒅎 𒄿𒁲𒅆𒈾",
@@ -1076,7 +1084,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"𒈬𒍑𒋼𒈾𒅗 𒊭 MikroTik 𒊭𒋢𒌝: 𒁀𒁉𒋗, 𒄩𒀠𒍢𒋗, 𒋗𒇻𒌝𒋗 𒌑 𒌅𒌒𒉺𒋾𒋗",
 "UniFi":"UniFi",
 "UniFi clients":"𒌑𒁀𒊒 𒊭 UniFi",
-"{n} clients":"{n} 𒌑𒁀𒊒",
+"{n} clients":"{n} 𒀀𒇷𒅅 rates",
 "UniFi network":"𒊺𒌅𒌝 𒊭 UniFi",
 "read your UniFi network: who's connected, and how your UniFi devices are":"𒊺𒋫𒅗 𒊭 UniFi 𒊭𒋢𒌝: 𒈠𒀭𒉡𒌝 𒊏𒆠𒄑, 𒌑 𒆠𒈠 𒌑𒉡𒌓𒅗 𒊭 UniFi",
 "A Proxmox guest can be started, shut down or rebooted.":"𒌑𒁀𒊒 𒊭 Proxmox 𒄿𒈾 𒋗𒌨𒊑𒅎, 𒄿𒈾 𒉺𒊏𒋛𒅎 𒌑𒇻 𒄿𒈾 𒋗𒌨𒊑𒅎 𒊭𒉌𒅖 𒄿𒁀𒀸𒅆.",
@@ -1144,7 +1152,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"NZB 𒌅𒌒𒁉 𒀀𒈾 NZBGeek 𒇷𒄣 𒌑 𒈠𒊍𒋢𒊒 (𒀀𒈾 𒅗𒋢 𒄭𒋢 𒄑𒌅)",
 "{n} found":"{n} 𒈾𒋛𒊒",
 "NZBGeek search":"NZBGeek 𒋼𒁉𒄑𒌅",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"Pi-hole 𒊓𒁺: 𒋼𒁉𒄑𒋾 𒌑 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪, 𒈠𒊍𒊓𒅈𒌅 domains 𒌑 𒀀𒇷𒅅 rates, 𒌑 𒈠𒊍𒊓𒅈𒌅 𒀠𒅗𒌅𒌝 𒀠 𒆷",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"Pi-hole 𒈠𒊍𒊓𒅈𒌅 𒅗𒉺𒌅 𒌑 𒀠𒅗𒌅𒌝, 𒌑 𒇷𒄑𒋫𒋢 allow 𒌑 deny 𒈠𒊍𒊓𒊒 (𒀀𒈾 𒅗𒋢 𒄭𒋢 𒄑𒌅)",
+"{n} domains":"{n} 𒀀𒇷𒅎𒈠𒌅",
+"Pi-hole summary":"Pi-hole 𒋫𒅈𒋛𒋢",
+"Pi-hole top blocked domains":"Pi-hole 𒈠𒊍𒊓𒅈𒌅 domains",
+"Pi-hole top clients":"Pi-hole 𒀀𒇷𒅅 rates",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -1355,7 +1370,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(epištum panītum ina qablim iprus, ullâmma nēpešum warka išni, aššum kīam eššiš iṣṣabbat.)",
@@ -2120,7 +2137,7 @@
 "UniFi: {why}.":"UniFi: {why}.",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought ina UniFi ištēnma išassi, {what} ul išappar.",
 "UniFi clients":"ubārū ša UniFi",
-"{n} clients":"{n} ubārū",
+"{n} clients":"{n} 𒀀𒇷𒅅 rates",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi UNIFI_URL u UNIFI_API_KEY {where_keys} ḫašiḫ: ašar (kīma https://192.168.1.1) u kunukkam API ina Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi UNIFI_API_KEY imēs.",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} unūtum",
@@ -2233,7 +2250,24 @@
 "fetch the NZB for {id} from NZBGeek":"NZB 𒊓 {id} 𒀀𒈾 NZBGeek 𒇷𒄣",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} 𒌨𒊑 𒈠𒊍𒊓𒅈𒋾",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} {url_setting} 𒌑 {key_setting} 𒄑𒌅 {where_keys}: addresassu (𒆠𒈠 http://pi.hole) 𒌑 𒁍𒊻𒊒𒊻𒋢 𒊓 web 𒂊𒁉𒊓𒋾.",
+"The {who} refused its password.":"{who} 𒁍𒊻𒊒𒊻𒋢 𒅅𒉡𒊻𒋢.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole 𒋫𒅈𒋛𒋢",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} 𒋼𒁉𒄑𒋾, {blocked} ka'adatu ({blocked_pct} %)",
+"blocking on":"𒈠𒊍𒊓𒅈𒌅 𒀠𒅗𒌅𒌝",
+"blocking off":"𒈠𒊍𒊓𒅈𒌅 𒅗𒉺𒌅𒌝",
+"Pi-hole top blocked domains":"Pi-hole 𒈠𒊍𒊓𒅈𒌅 domains",
+"{n} domains":"{n} 𒀀𒇷𒅎𒈠𒌅",
+"Pi-hole top clients":"Pi-hole 𒀀𒇷𒅅 rates",
+"For how long? Give the seconds blocking should be off, like 60.":"Kima 𒈠𒊍𒋢? Suprammi 𒀉𒄣𒊻𒋢 𒈠𒊍𒊓𒅈𒌅 𒅗𒉺𒌅, 𒆠𒈠 60.",
+"disable Pi-hole's blocking for {n} seconds":"Pi-hole 𒈠𒊍𒊓𒅈𒌅 𒅗𒉺𒌅 {n} 𒀉𒄣𒊻𒋢",
+"enable Pi-hole's blocking":"Pi-hole 𒈠𒊍𒊓𒅈𒌅 𒀠𒅗𒌅𒌝",
+"Which list (allow or deny), add or remove, and which domain?":"Ayya 𒇷𒄑𒋫 (allow 𒀠 deny), 𒉿𒊓𒈬 𒀠 𒊏𒄠𒈬, 𒌑 ayya domain?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} 𒀀𒈾 Pi-hole {which} 𒇷𒄑𒋫",
+"added by Second Thought":"𒉿𒊓𒈬 𒄑𒌅 Second Thought",
+"{n} queries, {blocked} blocked":"{n} 𒋼𒁉𒄑𒋾, {blocked} ka'adatu"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

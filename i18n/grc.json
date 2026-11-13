@@ -736,6 +736,34 @@
   "rb_nzbgeek_fetch": {
    "message0": "λαβεῖν τὸ NZB τοῦ %1",
    "tooltip": "Λαμβάνει τὸ ἀρχεῖον NZB μιᾶς μεταδόσεως καὶ σῴζει αὐτὸ ὡς <id>.nzb. Ἀεὶ σε ἐρωτᾷ πρῶτον, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μὴ ὄντος οὗ ἐρεῖ ναι, οὐ γίνεται. Οὐδενὶ προγράμματι λήψεως δίδωσιν: τὸ ἀρχεῖον σῴζεται, τοῦτο μόνον. Ἐν ταύτῃ τῇ σελίδι οὐδὲν λαμβάνει ἀληθῶς."
+  },
+  "rb_pihole_summary": {
+   "message0": "σύνοψις Pi-hole",
+   "tooltip": "Μία μνήμη πρὸς τὴν σήμερον: queries (πόσα ἐρωτήματα DNS), blocked (πόσα ἐκκεκλείσθη), blocked_pct (τὸ ἐκκεκλεισμένον μέρος), gravity (πόσοι τόμοι ταῖς λίστραις εἰσίν), clients (πόσα ὄργανα ἠρώτησαν) καὶ blocking (εἰ ἐνεργές ἐστι τὸ κλεῖσιν). Δεῖ PIHOLE_URL καὶ PIHOLE_PASSWORD ἐν second-thought.ini. Ἐν ταύτῃ τῇ σελίδι δείγματι Pi-hole χρῆται."
+  },
+  "rb_pihole_top_domains": {
+   "message0": "top %1 ἐκκεκλεισμένοι τόμοι",
+   "tooltip": "Λόγος μνημῶν, μία περὶ ἕκαστον τῶν πλεῖστον ἐκκεκλεισμένων τόμων: domain καὶ count (πόσακις ἐκκεκλείσθη). Μόνον ἀναγιγνώσκει."
+  },
+  "rb_pihole_top_clients": {
+   "message0": "top %1 πελάται",
+   "tooltip": "Λόγος μνημῶν, μία περὶ ἕκαστον τῶν ὀργάνων τὰ πλεῖστα ἐρωτησάντων: name, ip καὶ count (πόσα ἐρωτήματα). Μόνον ἀναγιγνώσκει."
+  },
+  "rb_pihole_blocking": {
+   "message0": "τὸ κλεῖσιν τοῦ Pi-hole ἀποκλεῖσαι ἐπὶ %1 δευτερόλεπτα",
+   "tooltip": "Ἀποκλείει τὸ κλεῖσιν τοσούτων δευτερολέπτων, εἶτα τὸ Pi-hole αὐτὸ πάλιν ἐγκλείει. Ἀεὶ σε πρῶτον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς λέγοντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀληθῶς ἀλλάσσει."
+  },
+  "rb_pihole_enable": {
+   "message0": "τὸ κλεῖσιν τοῦ Pi-hole ἐγκλεῖσαι",
+   "tooltip": "Πάλιν ἐγκλείει τὸ κλεῖσιν. Ἀεὶ σε πρῶτον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς λέγοντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀληθῶς ἀλλάσσει."
+  },
+  "rb_pihole_allow": {
+   "message0": "%1 %2 ἐπὶ τῆς allow λίστρου τοῦ Pi-hole",
+   "tooltip": "Τίθησιν τόμον ἐπὶ τὴν allow λίστραν, ἢ αἱρεῖ. Ἀεὶ σε πρῶτον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς λέγοντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀληθῶς ἀλλάσσει."
+  },
+  "rb_pihole_deny": {
+   "message0": "%1 %2 ἐπὶ τῆς deny λίστρου τοῦ Pi-hole",
+   "tooltip": "Τίθησιν τόμον ἐπὶ τὴν deny λίστραν, ἢ αἱρεῖ. Ἀεὶ σε πρῶτον ἐρωτᾷ, κἂν μηδὲν ἄλλο ἐρωτᾷ, καὶ μηδενὸς λέγοντος ναί, οὐ γίνεται. Ἐν ταύτῃ τῇ σελίδι οὐδὲν ἀληθῶς ἀλλάσσει."
   }
  },
  "options": {
@@ -927,7 +955,8 @@
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr καὶ Sonarr",
   "Unraid": "Unraid",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "Pi-hole": "Pi-hole"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου",
@@ -1815,7 +1844,14 @@
   "fetch an NZB file from NZBGeek and save it (asking you each time)": "λαβεῖν ἀρχεῖον NZB παρὰ NZBGeek καὶ σῶσαι αὐτό (ἐρωτώντα σε ἑκάστοτε)",
   "{n} found": "{n} εὑρέθη",
   "NZBGeek search": "ζήτησις ἐν NZBGeek",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on": "ἀναγιγνώσκειν τὸ Pi-hole σου: τὰ ἐρωτήματα καὶ τὸ ἐκκεκλεισμένον μέρος τῆς σήμερον, τοὺς πλεῖστον ἐκκεκλεισμένους τόμους καὶ πελάτας, καὶ εἰ ἐνεργές ἐστι τὸ κλεῖσιν",
+  "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)": "τὸ τοῦ Pi-hole σου κλεῖσιν ἀποκλεῖσαι καὶ ἐγκλεῖσαι, καὶ τὰς allow καὶ deny λίστρας αὐτοῦ ἀλλάσσειν (ἐρωτῶντά σε ἑκάστοτε)",
+  "{n} domains": "{n} τόμοι",
+  "Pi-hole summary": "σύνοψις Pi-hole",
+  "Pi-hole top blocked domains": "οἱ πλεῖστον ἐκκεκλεισμένοι τόμοι τοῦ Pi-hole",
+  "Pi-hole top clients": "οἱ πρῶτοι πελάται τοῦ Pi-hole",
+  "Pi-hole": "Pi-hole"
  },
  "examples": {
   "review": {
@@ -2658,7 +2694,9 @@
   "plex": "plex",
   "windows": "windows",
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
-  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
+  "ads.example.com": "ads.example.com",
+  "bad.example.com": "bad.example.com"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Πρᾶξις προτέρα ἐν μέσῳ ἐπαύσατο, ἀλλὰ τὸ πρόγραμμα ἔκτοτε ἠλλάγη, διὸ ἐξ ἀρχῆς ἄρχεται.)",
@@ -3536,7 +3574,24 @@
   "fetch the NZB for {id} from NZBGeek": "λαβεῖν τὸ NZB τοῦ {id} παρὰ NZBGeek",
   "NZBGeek {version}": "NZBGeek {version}",
   "{n} days of retention": "{n} ἡμέραι φυλακῆς",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.": "Τ1ff7 {who} δεῖ {url_setting} καὶ {key_setting} {where_keys}: τὴν διεύθυνσιν αὐτοῦ (ὡς http://pi.hole) καὶ τὸ συνθηματικὸν τῆς ἱστοσελίδος αὐτοῦ.",
+  "The {who} refused its password.": "Τ1ff7 {who} ἀπέκρουσε τὸ συνθηματικὸν αὐτοῦ.",
+  "Pi-hole": "Pi-hole",
+  "Pi-hole summary": "σύνοψις Pi-hole",
+  "{queries} queries, {blocked} blocked ({blocked_pct} %)": "{queries} ἐρωτήματα, {blocked} ἐκκεκλεισμένα ({blocked_pct} %)",
+  "blocking on": "κλεῖσις ἐνεργής",
+  "blocking off": "κλεῖσις ἀνενεργής",
+  "Pi-hole top blocked domains": "οἱ πλεῖστον ἐκκεκλεισμένοι τόμοι τοῦ Pi-hole",
+  "{n} domains": "{n} τόμοι",
+  "Pi-hole top clients": "οἱ πρῶτοι πελάται τοῦ Pi-hole",
+  "For how long? Give the seconds blocking should be off, like 60.": "Πόσον χρόνον; Δὸς τὰ δευτερόλεπτα ἃ δεῖ κεκλεῖσθαι, ὡς 60.",
+  "disable Pi-hole's blocking for {n} seconds": "τὸ κλεῖσιν τοῦ Pi-hole ἀποκλεῖσαι ἐπὶ {n} δευτερόλεπτα",
+  "enable Pi-hole's blocking": "τὸ κλεῖσιν τοῦ Pi-hole ἐγκλεῖσαι",
+  "Which list (allow or deny), add or remove, and which domain?": "Ποία λίστα (allow ἢ deny), προσθεῖναι ἢ ἀφελεῖν, καὶ ποῖος τόμος;",
+  "{action} {domain} on Pi-hole's {which} list": "{action} {domain} ἐπὶ τῆς {which}λίστρου τοῦ Pi-hole",
+  "added by Second Thought": "προστεθὲν ὑπὸ Second Thought",
+  "{n} queries, {blocked} blocked": "{n} ἐρωτήματα, {blocked} ἐκκεκλεισμένα"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

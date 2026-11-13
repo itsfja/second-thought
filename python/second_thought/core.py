@@ -128,6 +128,14 @@ SAFETY = {
     # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
     "nzbgeek_free": [["GET", r"^(?!.*(^|&)t=get(&|$))t=(search|tvsearch|movie|caps)(&|$)"]],
     "nzbgeek_asks": [["GET", r"^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"]],
+    # Pi-hole's REST API, v6 and later (#401): the reads the runtime makes, signing in first, and the few changes it
+    # may make after a live yes. Nothing else is ever sent: no upstream DNS, no DHCP, no web password, no network
+    # settings.
+    "pihole_free": [["GET", r"^/api/(stats/summary|stats/top_domains|stats/top_clients|dns/blocking)$"],
+                    ["POST", r"^/api/auth$"]],
+    "pihole_asks": [["POST", r"^/api/dns/blocking$"],
+                    ["POST", r"^/api/domains/(allowlist|denylist)/exact$"],
+                    ["DELETE", r"^/api/domains/(allowlist|denylist)/exact$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -303,6 +311,17 @@ def arr_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
+
+
+def pihole_call(method, path):
+    """"free" for one of the Pi-hole calls the runtime makes without asking (the stats, the blocking status, and
+    signing in), "asks" for the few changes that need a live yes (blocking on and off, a domain on the allow or
+    deny list), and None for anything else, which is never sent (#401)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["pihole_" + kind]):
             return kind
     return None
 
@@ -768,6 +787,7 @@ CAPABILITIES = [
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
+    ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -780,6 +800,7 @@ CAPABILITIES = [
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
+    ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),

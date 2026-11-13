@@ -191,7 +191,14 @@
 "rb_unraid_vm_power":{"message0":"%1 מכונה וירטואלית של Unraid %2","tooltip":"מתחיל או עוצר מכונה וירטואלית אחת, לפי השם. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא מתחיל או עוצר באמת."},
 "rb_unraid_parity":{"message0":"בדיקת הפריטי של Unraid","tooltip":"בודק את דיסקי הפריטי בקריאתם, בלי לכתוב תיקונים. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא בודק באמת."},
 "rb_nzbgeek_search":{"message0":"חיפוש ב-NZBGeek אחר %1","tooltip":"רשימה של רשומות, אחת לכל release שהאינדקסר יש לו למילים האלה: title, id, size_mb, grabs, posted (מתי פורסם) וgroup. הוא רק קורא: לעולם לא מוריד כלום. צריך NZBGEEK_API_KEY ב-second-thought.ini. בעמוד הזה הוא משתמש בחיפוש לדוגמה."},
-"rb_nzbgeek_fetch":{"message0":"להוריד את ה-NZB של %1","tooltip":"מוריד את קובץ ה-NZB של release אחת ושומר אותו כ-<id>.nzb. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. הוא לא נותן כלום למנהל הורדות: הקובץ נשמר, זה הכל. בעמוד הזה שום דבר לא מוריד באמת."}
+"rb_nzbgeek_fetch":{"message0":"להוריד את ה-NZB של %1","tooltip":"מוריד את קובץ ה-NZB של release אחת ושומר אותו כ-<id>.nzb. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. הוא לא נותן כלום למנהל הורדות: הקובץ נשמר, זה הכל. בעמוד הזה שום דבר לא מוריד באמת."},
+"rb_pihole_summary":{"message0":"סיכום Pi-hole","tooltip":"רשומה אחת להיום: queries (כמה שאילתות DNS), blocked (כמה נחסמו), blocked_pct (אחוז החסימה), gravity (כמה דומיינים יש ברשימות), clients (כמה מכשירים שאלו) ו-blocking (האם החסימה פעילה). צריך PIHOLE_URL ו-PIHOLE_PASSWORD ב-second-thought.ini. בעמוד הזה הוא משתמש ב-Pi-hole לדוגמה."},
+"rb_pihole_top_domains":{"message0":"%1 הדומיינים החסומים ביותר","tooltip":"רשימה של רשומות, אחת לכל אחד מהדומיינים החסומים ביותר: domain ו-count (כמה פעמים נחסם). הוא רק קורא."},
+"rb_pihole_top_clients":{"message0":"%1 הלקוחות המובילים","tooltip":"רשימה של רשומות, אחת לכל מכשיר ששאל הכי הרבה: name, ip ו-count (כמה שאילתות). הוא רק קורא."},
+"rb_pihole_blocking":{"message0":"לכבות את חסימת Pi-hole ל-%1 שניות","tooltip":"מכבה את החסימה למשך כל כך הרבה שניות, ואז Pi-hole מדליק אותה בעצמו. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."},
+"rb_pihole_enable":{"message0":"להדליק את חסימת Pi-hole","tooltip":"מדליק את החסימה בחזרה. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."},
+"rb_pihole_allow":{"message0":"%1 %2 ברשימת ה-allow של Pi-hole","tooltip":"שם דומיין ברשימת ה-allow, או מוריד אותו. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."},
+"rb_pihole_deny":{"message0":"%1 %2 ברשימת ה-deny של Pi-hole","tooltip":"שם דומיין ברשימת ה-deny, או מוריד אותו. הוא תמיד שואל אותך קודם, גם כששום דבר אחר לא שואל, וכשאין אף אחד לומר כן, זה לא קורה. בעמוד הזה שום דבר לא משתנה באמת."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יום","weekdays":"בימי חול","weekends":"בסופי שבוע"},
@@ -256,7 +263,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr ו-Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"כלים לסוכן: גררו אותם לתוך בלוק סוכן",
@@ -1144,7 +1152,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"להוריד קובץ NZB מ-NZBGeek ולשמור אותו (שואל אותך בכל פעם)",
 "{n} found":"{n} נמצאו",
 "NZBGeek search":"חיפוש NZBGeek",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"לקרוא את ה-Pi-hole שלך: השאילתות ואחוז החסימה של היום, הדומיינים והלקוחות החסומים ביותר, והאם החסימה פעילה",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"לכבות ולהדליק את החסימה של ה-Pi-hole שלך, ולשנות את רשימות ה-allow וה-deny שלו (שואל אותך בכל פעם)",
+"{n} domains":"{n} דומיינים",
+"Pi-hole summary":"סיכום Pi-hole",
+"Pi-hole top blocked domains":"הדומיינים החסומים ביותר ב-Pi-hole",
+"Pi-hole top clients":"הלקוחות המובילים ב-Pi-hole",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1355,7 +1370,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(הרצה קודמת נעצרה באמצע, אבל התוכנית השתנתה מאז, אז היא מתחילה מחדש.)",
@@ -2233,6 +2250,23 @@
 "fetch the NZB for {id} from NZBGeek":"להוריד את ה-NZB של {id} מ-NZBGeek",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} ימי שמירה",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"ל{who} צריך {url_setting} ו{key_setting} {where_keys}: את הכתובת שלו (כמו http://pi.hole) ואת סיסמת ממשק הווב שלו.",
+"The {who} refused its password.":"ה{who} דחה את הסיסמה שלו.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"סיכום Pi-hole",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} שאילתות, {blocked} חסומות ({blocked_pct} %)",
+"blocking on":"חסימה פעילה",
+"blocking off":"חסימה כבויה",
+"Pi-hole top blocked domains":"הדומיינים החסומים ביותר ב-Pi-hole",
+"{n} domains":"{n} דומיינים",
+"Pi-hole top clients":"הלקוחות המובילים ב-Pi-hole",
+"For how long? Give the seconds blocking should be off, like 60.":"לכמה זמן? תן את השניות שהחסימה צריכה להיות כבויה, כמו 60.",
+"disable Pi-hole's blocking for {n} seconds":"לכבות את החסימה של Pi-hole ל{n} שניות",
+"enable Pi-hole's blocking":"להדליק את החסימה של Pi-hole",
+"Which list (allow or deny), add or remove, and which domain?":"איזו רשימה (allow או deny), להוסיף או להסיר, ואיזה דומיין?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} ברשימת ה{which} של Pi-hole",
+"added by Second Thought":"נוסף על ידי Second Thought",
+"{n} queries, {blocked} blocked":"{n} שאילתות, {blocked} חסומות"
 }
 };

@@ -191,7 +191,14 @@
 "rb_unraid_vm_power":{"message0":"%1 pounonnouoni n Unraid %2","tooltip":"naounh akonk ouounonnouoni, etbe pesran. nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare ouounh akonk na oumetn."},
 "rb_unraid_parity":{"message0":"ethebepproseuxe mmmont m Unraid ouosh","tooltip":"noune nisnou nte tirwseuxe ethre sotem mmou, nim ethnasou saounonim. nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nim na oumetn."},
 "rb_nzbgeek_search":{"message0":"hnho e NZBGeek %1","tooltip":"Oudap nimmont, ouaaou nim ntero oueropmoun etbe pese ouahse: title, id, size_mb, grabs, posted (ethre shanofou) nem group. Hnho only: oume ntennaoun ebei. Ntefaipe NZBGEEK_API_KEY hn second-thought.ini. Narem pesnouti ouaaou nim nesneou na hnho nuaaou."},
-"rb_nzbgeek_fetch":{"message0":"nchina NZB n %1","tooltip":"Nchina ou-NZB n oueropmoun nem masto mmou sw <id>.nzb. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Oume mmou etbe pniwre: ouon masto mmou, thatef. Narem pesnouti oume nchina oumetn."}
+"rb_nzbgeek_fetch":{"message0":"nchina NZB n %1","tooltip":"Nchina ou-NZB n oueropmoun nem masto mmou sw <id>.nzb. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Oume mmou etbe pniwre: ouon masto mmou, thatef. Narem pesnouti oume nchina oumetn."},
+"rb_pihole_summary":{"message0":"soueu nte Pi-hole","tooltip":"Ou-nimmont etbe peouoein: queries (ou-hnhou DNS), blocked (ou-etbloc), blocked_pct (pe-etbloc), gravity (ou-domma nte pi-rim), clients (ou-tolko etbe ouoein) nem blocking (etbloc on). Outab PIHOLE_URL nem PIHOLE_PASSWORD hn second-thought.ini. Hn pei-selide pinaei soueu nte Pi-hole."},
+"rb_pihole_top_domains":{"message0":"top %1 etbloc domenn","tooltip":"Oudap nimmont, ouaaou nim nte pi-etbloc domenn: domain nem count (ou-beke etbe pi-etbloc). Hnho only."},
+"rb_pihole_top_clients":{"message0":"top %1 klient","tooltip":"Oudap nimmont, ouaaou nim nte pi-tolko etbe ouoein: name, ip nem count (ou-hnhou). Hnho only."},
+"rb_pihole_blocking":{"message0":"etbloc nte Pi-hole of etbe %1 ouoein","tooltip":"Ete etbloc of etbe ouoein nimp, oude Pi-hole auer auer on efrouoit. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."},
+"rb_pihole_enable":{"message0":"etbloc nte Pi-hole on","tooltip":"Auer etbloc on efrouoit. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."},
+"rb_pihole_allow":{"message0":"%1 %2 hn pi-allow-rim nte Pi-hole","tooltip":"Ep-tish ou-domma hn pi-allow-rim, em-moou. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."},
+"rb_pihole_deny":{"message0":"%1 %2 hn pi-deny-rim nte Pi-hole","tooltip":"Ep-tish ou-domma hn pi-deny-rim, em-moou. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ϩⲟⲟⲩ ⲛⲓⲙ","weekdays":"ϩⲛ ⲛϩⲟⲟⲩ ⲛϩⲱⲃ","weekends":"ϩⲛ ⲛϩⲟⲟⲩ ⲛⲙⲧⲟⲛ"},
@@ -255,7 +262,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr mn Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ⲛⲥⲱⲧⲙ: ϣⲁⲩⲁⲁⲩ ϩⲟⲧⲁⲛ ⲛⲧⲁⲝⲓⲥ ⲉⲃⲟⲗ ϣⲁϥⲁⲁⲩ ⲕⲁⲧⲁ ⲟⲩⲟⲉⲓϣ",
@@ -1075,7 +1083,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"ⲱϣ ⲙⲡⲉⲕϣⲓⲃⲉ ⲛⲧⲉ MikroTik: ⲛⲉϥⲣⲟ, ⲛⲉϥⲙⲉⲣⲟⲥ, ⲡⲉϥⲟⲩϫⲁⲓ ⲙⲛ ⲡⲉϥⲭⲁⲣⲧⲏⲥ",
 "UniFi":"UniFi",
 "UniFi clients":"ⲛϣⲙⲙⲟ ⲛⲧⲉ UniFi",
-"{n} clients":"{n} ϣⲙⲙⲟ",
+"{n} clients":"{n} klient",
 "UniFi network":"ⲡⲛⲉⲧ ⲛⲧⲉ UniFi",
 "read your UniFi network: who's connected, and how your UniFi devices are":"ⲱϣ ⲙⲡⲉⲕⲛⲉⲧ ⲛⲧⲉ UniFi: ⲛⲓⲙ ⲉⲧⲙⲟϩ, ⲁⲩⲱ ⲛⲉⲕⲥⲕⲉⲩⲟⲥ ⲛⲧⲉ UniFi ϣⲟⲟⲡ ⲛⲁⲥ ⲛϩⲉ",
 "A Proxmox guest can be started, shut down or rebooted.":"ⲟⲩϣⲙⲙⲟ ⲛⲧⲉ Proxmox ϣⲁⲩϣⲁⲁϥ, ϣⲁⲩⲕϩⲁϥ ⲏ ϣⲁⲩϣⲁⲁϥ ⲟⲛ.",
@@ -1143,7 +1151,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"nchina ou-NZB e NZBGeek nem masto mmou (nanoun nak nim ntero)",
 "{n} found":"{n} ontf",
 "NZBGeek search":"hnho e NZBGeek",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"hnho e Pi-hole: pe-hnhou nte peouoein nem pe-etbloc, most etbloc domenn nem klient, etbe etbloc on",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"etbloc nte Pi-hole of nem on, nem ouoein-shemshel allow nem deny (nanoun nak nim ntero)",
+"{n} domains":"{n} domenn",
+"Pi-hole summary":"soueu nte Pi-hole",
+"Pi-hole top blocked domains":"Pi-hole most etbloc domenn",
+"Pi-hole top clients":"Pi-hole nopc klient",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -1354,7 +1369,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(oupraksis ntšorp aslo hn tmēte, alla taksis asšibe jin tote, auō šasarkhei nkesop.)",
@@ -2119,7 +2136,7 @@
 "UniFi: {why}.":"UniFi: {why}.",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought ōš mmate hn UniFi, etbe pai nšafjoou an n {what}.",
 "UniFi clients":"nšmmo nte UniFi",
-"{n} clients":"{n} šmmo",
+"{n} clients":"{n} klient",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi šafouōš n UNIFI_URL mn UNIFI_API_KEY {where_keys}: pma (nthe https://192.168.1.1) mn ou API šošt ebol hn Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi afkote UNIFI_API_KEY.",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} skeuos",
@@ -2232,7 +2249,24 @@
 "fetch the NZB for {id} from NZBGeek":"nchina NZB n {id} e NZBGeek",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} ouoe hmo",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} outab eru {url_setting} nem {key_setting} {where_keys}: pefaipn is (hn http://pi.hole) nem pefaipe nte pes-hn-te-snippe is.",
+"The {who} refused its password.":"Pefaipe nte {who} aporef abal.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"soueu nte Pi-hole",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} hnho nem {blocked} etbloc ({blocked_pct} %)",
+"blocking on":"etbloc on",
+"blocking off":"etbloc of",
+"Pi-hole top blocked domains":"Pi-hole most etbloc domenn",
+"{n} domains":"{n} domenn",
+"Pi-hole top clients":"Pi-hole nopc klient",
+"For how long? Give the seconds blocking should be off, like 60.":"Oun hmoou? Nau pe ouoein ne etbloc of etbe, hn 60.",
+"disable Pi-hole's blocking for {n} seconds":"etbloc nte Pi-hole of etbe {n} ouoein",
+"enable Pi-hole's blocking":"etbloc nte Pi-hole on",
+"Which list (allow or deny), add or remove, and which domain?":"Oun pi-rim (allow e deny), ep-tish em-moou, e ou-domma?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} hn pi-{which}-rim nte Pi-hole",
+"added by Second Thought":"ep-tish m-moi nte Second Thought",
+"{n} queries, {blocked} blocked":"{n} hnho nem {blocked} etbloc"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

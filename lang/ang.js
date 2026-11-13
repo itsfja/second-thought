@@ -190,7 +190,14 @@
 "rb_unraid_vm_power":{"message0":"%1 the Unraid VM %2","tooltip":"Onginneth othe stelleth ane sienlicne sceafte, be naman. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung onginneth othe stelleth sothlice."},
 "rb_unraid_parity":{"message0":"Unraid his gelicnesse beon","tooltip":"Hit benaeth tha gelicnessa discas be raedenne hie, na writing aenige aehtunge. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung benaeth sothlice."},
 "rb_nzbgeek_search":{"message0":"soecan in NZBGeek after %1","tooltip":"Rind gemaca, an for aelcum aeled the findere heth for thisum wordum: title, id, size_mb, grabs, posted (hwaenne hit waes gecydd) and group. Hit raedeth an: naenung is aefre aduned. Hit beheth NZBGEEK_API_KEY in second-thought.ini. On thissum traefe hit bryceth bisenlicre soecunge."},
-"rb_nzbgeek_fetch":{"message0":"niman the NZB for %1","tooltip":"Hit nimeth the NZB file anes aeledes and hordeth hit swa <id>.nzb. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. Hit gifth naenung to an adunere: the file is gehordod, that is eall. On thissum traefe naenung nimeth sothlice."}
+"rb_nzbgeek_fetch":{"message0":"niman the NZB for %1","tooltip":"Hit nimeth the NZB file anes aeledes and hordeth hit swa <id>.nzb. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. Hit gifth naenung to an adunere: the file is gehordod, that is eall. On thissum traefe naenung nimeth sothlice."},
+"rb_pihole_summary":{"message0":"Pi-hole gewrit","tooltip":"An gewrit for todag: queries (hu fela DNS ascunga), blocked (hu fela belocene), blocked_pct (se belocene dael), gravity (hu fela domennas tha rimas habath), clients (hu fela tulgum ascundan) and blocking (hwaether belocung on sien). Hit beheth PIHOLE_URL and PIHOLE_PASSWORD in second-thought.ini. On thissum traefe hit bryceth bisenlicre Pi-hole."},
+"rb_pihole_top_domains":{"message0":"top %1 belocene domennas","tooltip":"Rind gewrita, an for aelcum tha most belocan domennan: domain and count (hu oft hit belocen waes). Hit raedeth an."},
+"rb_pihole_top_clients":{"message0":"top %1 cienas","tooltip":"Rind gewrita, an for aelcum tulgum the most ascunde: name, ip and count (hu fela ascunga). Hit raedeth an."},
+"rb_pihole_blocking":{"message0":"Pi-hole's belocung of don for %1 secundas","tooltip":"Deth belocung of for thas secundas, tha Pi-hole hit self on eft deth. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung sothlice ne wendth."},
+"rb_pihole_enable":{"message0":"Pi-hole's belocung on don","tooltip":"Deth belocung on eft. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung sothlice ne wendth."},
+"rb_pihole_allow":{"message0":"%1 %2 on Pi-hole's allow rim","tooltip":"Deth an domenn uppon tha allow rim, oththe nimeth hine of. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung sothlice ne wendth."},
+"rb_pihole_deny":{"message0":"%1 %2 on Pi-hole's deny rim","tooltip":"Deth an domenn uppon tha deny rim, oththe nimeth hine of. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung sothlice ne wendth."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -255,7 +262,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr and Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tol for þone ærendracan: lege hie innan ærendracan stocce",
@@ -1075,7 +1083,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"rædan þinne MikroTik wegwisend oþþe wendend: his geatu, dælas, hælu and gewrit",
 "UniFi":"UniFi",
 "UniFi clients":"UniFi cuman",
-"{n} clients":"{n} cuman",
+"{n} clients":"{n} cienas",
 "UniFi network":"UniFi nett",
 "read your UniFi network: who's connected, and how your UniFi devices are":"rædan þin UniFi nett: hwa is geteod, and hu þine UniFi tolas fareþ",
 "A Proxmox guest can be started, shut down or rebooted.":"Proxmox gyst mæg beon onstyred, gesceted oþþe eft onstyred.",
@@ -1143,7 +1151,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"niman an NZB file fram NZBGeek and hordian hit (asciende the aelc Sith)",
 "{n} found":"{n} funden",
 "NZBGeek search":"NZBGeek soecung",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"raedan thin Pi-hole: todages ascungas and the belocene dael, the most belocene domennas and cienas, and hwaether belocung on sien",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"Pi-hole's belocung of and on don, and his allow and deny rimas wendan (asciende the aelc Sith)",
+"{n} domains":"{n} domennas",
+"Pi-hole summary":"Pi-hole gewrit",
+"Pi-hole top blocked domains":"Pi-hole most belocene domennas",
+"Pi-hole top clients":"Pi-hole heafod cienas",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -1354,7 +1369,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Ærre fremming ætstod on middum, ac þæt forescrift wæs siþþan awend, forþy hit onginþ niwe.)",
@@ -2119,7 +2136,7 @@
 "UniFi: {why}.":"UniFi: {why}.",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought rædeþ ane of UniFi, forþon hit ne sent {what}.",
 "UniFi clients":"UniFi cuman",
-"{n} clients":"{n} cuman",
+"{n} clients":"{n} cienas",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi behofaþ UNIFI_URL and UNIFI_API_KEY {where_keys}: þære bordes stowe (swa https://192.168.1.1) and API cæg of þam Network cræfte (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"Þæt UniFi bord wiþsoc UNIFI_API_KEY.",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} tolas",
@@ -2232,7 +2249,24 @@
 "fetch the NZB for {id} from NZBGeek":"niman the NZB for {id} fram NZBGeek",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} dagas helde",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} beheth {url_setting} and {key_setting} {where_keys}: his stow (swa http://pi.hole) and the cwith of his web lica.",
+"The {who} refused its password.":"Se {who} ofwand his cwith.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole gewrit",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} ascungas, {blocked} belocene ({blocked_pct} %)",
+"blocking on":"belocung on",
+"blocking off":"belocung of",
+"Pi-hole top blocked domains":"Pi-hole most belocene domennas",
+"{n} domains":"{n} domennas",
+"Pi-hole top clients":"Pi-hole heafod cienas",
+"For how long? Give the seconds blocking should be off, like 60.":"Hu longe? Syl the secundas belocung of sceal beon, swa 60.",
+"disable Pi-hole's blocking for {n} seconds":"Pi-hole's belocung of for {n} secundas",
+"enable Pi-hole's blocking":"Pi-hole's belocung on",
+"Which list (allow or deny), add or remove, and which domain?":"Hwaelc rim (allow oththe deny), addian oththe removian, and hwaelc domenn?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} on Pi-hole's {which} rim",
+"added by Second Thought":"added fram Second Thought",
+"{n} queries, {blocked} blocked":"{n} ascungas, {blocked} belocene"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

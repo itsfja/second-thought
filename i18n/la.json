@@ -736,6 +736,34 @@
   "rb_nzbgeek_fetch": {
    "message0": "NZB sumere pro %1",
    "tooltip": "Sumit NZB limen unius emissionis et servat ut <id>.nzb. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. Nulli programme datorum dat: limen servatur, id solum. In hac pagina nihil vere sumit."
+  },
+  "rb_pihole_summary": {
+   "message0": "Pi-hole summa",
+   "tooltip": "Una memoria pro hodie: queries (quot interrogationes DNS), blocked (quot interclusae), blocked_pct (pars interclusa), gravity (quot dominia listae habent), clients (quot machinae rogaverunt) et blocking (utrum interclusio activa sit). Indiget PIHOLE_URL et PIHOLE_PASSWORD in second-thought.ini. In hac pagina exemplari Pi-hole utitur."
+  },
+  "rb_pihole_top_domains": {
+   "message0": "top %1 dominia interclusa",
+   "tooltip": "Index memoriarum, una quoque maxime intercluso dominio: domain et count (quotiens interclusum). Solum legit."
+  },
+  "rb_pihole_top_clients": {
+   "message0": "top %1 clientes",
+   "tooltip": "Index memoriarum, una quoque machina quae plurimum rogavit: name, ip et count (quot interrogationes). Solum legit."
+  },
+  "rb_pihole_blocking": {
+   "message0": "interclusionem Pi-hole claudere pro %1 secundis",
+   "tooltip": "Claudit interclusionem tot secundis, deinde Pi-hole ipsum iterum aperit. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."
+  },
+  "rb_pihole_enable": {
+   "message0": "interclusionem Pi-hole aperire",
+   "tooltip": "Iterum aperit interclusionem. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."
+  },
+  "rb_pihole_allow": {
+   "message0": "%1 %2 in lista allow Pi-hole",
+   "tooltip": "Ponit dominium in lista allow, aut tollit. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."
+  },
+  "rb_pihole_deny": {
+   "message0": "%1 %2 in lista deny Pi-hole",
+   "tooltip": "Ponit dominium in lista deny, aut tollit. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."
   }
  },
  "options": {
@@ -927,7 +955,8 @@
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr et Sonarr",
   "Unraid": "Unraid",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "Pi-hole": "Pi-hole"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Instrumenta procuratoris: intra laterem procuratoris pone",
@@ -1815,7 +1844,14 @@
   "fetch an NZB file from NZBGeek and save it (asking you each time)": "NZB limen sumere ex NZBGeek et servare (te interrogans vicibus omnibus)",
   "{n} found": "{n} inventa",
   "NZBGeek search": "NZBGeek quaestio",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on": "legere tuum Pi-hole: hodiernas interrogationes et partem interclusam, dominia et clientes maxime interclusos, et utrum interclusio activa sit",
+  "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)": "interclusionem tui Pi-hole claudere et aperire, et eius listas allow et deny mutare (te interrogans vicibus omnibus)",
+  "{n} domains": "{n} dominia",
+  "Pi-hole summary": "Pi-hole summa",
+  "Pi-hole top blocked domains": "dominia maxime interclusa Pi-hole",
+  "Pi-hole top clients": "primi clientes Pi-hole",
+  "Pi-hole": "Pi-hole"
  },
  "examples": {
   "review": {
@@ -2658,7 +2694,9 @@
   "plex": "plex",
   "windows": "windows",
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
-  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
+  "ads.example.com": "ads.example.com",
+  "bad.example.com": "bad.example.com"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Exsecutio prior in medio substitit, sed programma postea mutatum est, itaque de integro incipit.)",
@@ -3536,7 +3574,24 @@
   "fetch the NZB for {id} from NZBGeek": "NZB sumere pro {id} apud NZBGeek",
   "NZBGeek {version}": "NZBGeek {version}",
   "{n} days of retention": "{n} dies custodiae",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.": "{who} indiget {url_setting} et {key_setting} {where_keys}: eius locum (ut http://pi.hole) et signum eius interfaciei interretialis.",
+  "The {who} refused its password.": "{who} signum eius recusavit.",
+  "Pi-hole": "Pi-hole",
+  "Pi-hole summary": "Pi-hole summa",
+  "{queries} queries, {blocked} blocked ({blocked_pct} %)": "{queries} interrogationes, {blocked} interclusae ({blocked_pct} %)",
+  "blocking on": "interclusio activa",
+  "blocking off": "interclusio inactiva",
+  "Pi-hole top blocked domains": "dominia maxime interclusa Pi-hole",
+  "{n} domains": "{n} dominia",
+  "Pi-hole top clients": "primi clientes Pi-hole",
+  "For how long? Give the seconds blocking should be off, like 60.": "Quamdiu? Da secundas quibus interclusio clausa esse debet, ut 60.",
+  "disable Pi-hole's blocking for {n} seconds": "interclusionem Pi-hole claudere pro {n} secundis",
+  "enable Pi-hole's blocking": "interclusionem Pi-hole aperire",
+  "Which list (allow or deny), add or remove, and which domain?": "Quae lista (allow an deny), addere an removere, et quod dominium?",
+  "{action} {domain} on Pi-hole's {which} list": "{action} {domain} in lista {which} Pi-hole",
+  "added by Second Thought": "additum a Second Thought",
+  "{n} queries, {blocked} blocked": "{n} interrogationes, {blocked} interclusae"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

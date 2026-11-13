@@ -190,7 +190,14 @@
 "rb_unraid_vm_power":{"message0":"%1 the Unraid VM %2","tooltip":"Bigynneth or stoppeth oon virtual mashine, by his name. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing bigynneth or stoppeth in sooth."},
 "rb_unraid_parity":{"message0":"checken Unraid his parity","tooltip":"It skanneth the parity disks by reding hem, writing no correctiouns. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing skanneth in sooth."},
 "rb_nzbgeek_search":{"message0":"serchen NZBGeek for %1","tooltip":"A liste of records, oon for everich reles the indexer hath for these wordes: title, id, size_mb, grabs, posted (whanne it was posted) and group. It only redeth: nothing is ever dounladed. It hath nede of NZBGEEK_API_KEY in second-thought.ini. In this page it useth a sample serche."},
-"rb_nzbgeek_fetch":{"message0":"fetten the NZB for %1","tooltip":"It feteth the NZB file of oon reles and saveth it as <id>.nzb. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. It yeveth nothing to a dounladere: the file is saved, that is alle. In this page nothing fetteth in sooth."}
+"rb_nzbgeek_fetch":{"message0":"fetten the NZB for %1","tooltip":"It feteth the NZB file of oon reles and saveth it as <id>.nzb. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. It yeveth nothing to a dounladere: the file is saved, that is alle. In this page nothing fetteth in sooth."},
+"rb_pihole_summary":{"message0":"Pi-hole summarie","tooltip":"Oon record for today: queries (how many DNS queries), blocked (how many weren blocked), blocked_pct (the blocked part), gravity (how many domaines the listes haven), clients (how many devises axeden) and blocking (whether blocking be on). It hath nede of PIHOLE_URL and PIHOLE_PASSWORD in second-thought.ini. In this page it useth a sample Pi-hole."},
+"rb_pihole_top_domains":{"message0":"top %1 blocked domaines","tooltip":"A liste of records, oon for everich of the most blocked domaines: domain and count (how many tymes it was blocked). It only redeth."},
+"rb_pihole_top_clients":{"message0":"top %1 clientz","tooltip":"A liste of records, oon for everich of the devises that axeden most: name, ip and count (how many queries). It only redeth."},
+"rb_pihole_blocking":{"message0":"stoppin Pi-hole blocking for %1 secundes","tooltip":"Turneth blocking of for so many secundes, than Pi-hole turneth it on agen by himself. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."},
+"rb_pihole_enable":{"message0":"startin Pi-hole blocking","tooltip":"Turneth blocking on agen. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."},
+"rb_pihole_allow":{"message0":"%1 %2 on Pi-hole's allow liste","tooltip":"Putteth a domaine on the allow liste, or taketh it of. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."},
+"rb_pihole_deny":{"message0":"%1 %2 on Pi-hole's deny liste","tooltip":"Putteth a domaine on the deny liste, or taketh it of. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -255,7 +262,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr and Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tooles for the procuratour: lay hem withinne a procuratoures blok",
@@ -1075,7 +1083,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"rede thy MikroTik routere or switche: his portes, modules, hele and log",
 "UniFi":"UniFi",
 "UniFi clients":"UniFi clientes",
-"{n} clients":"{n} clientes",
+"{n} clients":"{n} clientz",
 "UniFi network":"UniFi net",
 "read your UniFi network: who's connected, and how your UniFi devices are":"rede thy UniFi net: who is yjoyned, and how thy UniFi thinges faren",
 "A Proxmox guest can be started, shut down or rebooted.":"A Proxmox gest may be stirt, shet doun or stirt agayn.",
@@ -1143,7 +1151,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"fetten an NZB file fro NZBGeek and saven it (axing thee every tyme)",
 "{n} found":"{n} founden",
 "NZBGeek search":"NZBGeek serche",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"reden thi Pi-hole: todays queries and the blocked part, the most blocked domaines and clientz, and whether blocking be on",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"stoppin and startin thi Pi-hole's blocking, and chaunging his allow and deny listes (axing thee every tyme)",
+"{n} domains":"{n} domaines",
+"Pi-hole summary":"Pi-hole summarie",
+"Pi-hole top blocked domains":"Pi-hole most blocked domaines",
+"Pi-hole top clients":"Pi-hole top clientz",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -1354,7 +1369,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(A rennyng bifore stinted amydde, but the devys is chaunged sith, so it bigynneth newe.)",
@@ -2119,7 +2136,7 @@
 "UniFi: {why}.":"UniFi: {why}.",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought oonly redeth fro UniFi, so it sendeth nat {what}.",
 "UniFi clients":"UniFi clientes",
-"{n} clients":"{n} clientes",
+"{n} clients":"{n} clientz",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi nedeth UNIFI_URL and UNIFI_API_KEY {where_keys}: the consoles place (as https://192.168.1.1) and an API keye fro the Network program (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"The UniFi console refused UNIFI_API_KEY.",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} thinges",
@@ -2232,7 +2249,24 @@
 "fetch the NZB for {id} from NZBGeek":"fetten the NZB for {id} fro NZBGeek",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} dayes of keping",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} hath nede of {url_setting} and {key_setting} {where_keys}: his addresse (as http://pi.hole) and the pasword of his web interface.",
+"The {who} refused its password.":"The {who} refused his pasword.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole summarie",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} queries, {blocked} blocked ({blocked_pct} %)",
+"blocking on":"blocking on",
+"blocking off":"blocking of",
+"Pi-hole top blocked domains":"Pi-hole most blocked domaines",
+"{n} domains":"{n} domaines",
+"Pi-hole top clients":"Pi-hole top clientz",
+"For how long? Give the seconds blocking should be off, like 60.":"How longe? Yeve the secundes blocking shuld be of, as 60.",
+"disable Pi-hole's blocking for {n} seconds":"don Pi-hole's blocking of for {n} secundes",
+"enable Pi-hole's blocking":"enablen Pi-hole's blocking",
+"Which list (allow or deny), add or remove, and which domain?":"Whiche liste (allow or deny), adden or remeven, and which domaine?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} on Pi-hole's {which} liste",
+"added by Second Thought":"added by Second Thought",
+"{n} queries, {blocked} blocked":"{n} queries, {blocked} blocked"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

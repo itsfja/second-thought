@@ -154,6 +154,11 @@
     { kind:"category", name:"NZBGeek", categorystyle:"nzbgeek", contents:[
       B("rb_nzbgeek_search", { QUERY:T("Everything Everywhere All at Once") }), B("rb_nzbgeek_fetch", { ID:T("e9c515e02346086e3a477a5436d7bc8c") })
     ]},
+    { kind:"category", name:"Pi-hole", categorystyle:"pihole", contents:[
+      B("rb_pihole_summary"), B("rb_pihole_top_domains", { N:N(5) }), B("rb_pihole_top_clients", { N:N(5) }),
+      B("rb_pihole_blocking", { N:N(60) }), B("rb_pihole_enable"),
+      B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
+    ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
     ]},

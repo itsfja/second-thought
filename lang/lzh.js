@@ -190,7 +190,14 @@
 "rb_unraid_vm_power":{"message0":"%1 Unraid 之虛機 %2","tooltip":"依名啟或止一虛機。縱他者不問，亦必先問於爾，無人在而應之則不行。此頁實無所啟止。"},
 "rb_unraid_parity":{"message0":"驗 Unraid 之驗盤","tooltip":"讀驗盤以驗之，不書正。縱他者不問，亦必先問於爾，無人在而應之則不行。此頁實無所驗。"},
 "rb_nzbgeek_search":{"message0":"於NZBGeek檢%1","tooltip":"錄之列，索引之器以此語所有之每release一錄：title, id, size_mb, grabs, posted（何時布之）與group。惟讀而已：永不載物。需NZBGEEK_API_KEY於second-thought.ini。此頁用示例之檢。"},
-"rb_nzbgeek_fetch":{"message0":"取%1之NZB","tooltip":"取一release之NZB檔，存為<id>.nzb。縱他者不問，亦必先問於爾，無人在而應之則不行。不以物予下載之器：存檔而已。此頁實無所取。"}
+"rb_nzbgeek_fetch":{"message0":"取%1之NZB","tooltip":"取一release之NZB檔，存為<id>.nzb。縱他者不問，亦必先問於爾，無人在而應之則不行。不以物予下載之器：存檔而已。此頁實無所取。"},
+"rb_pihole_summary":{"message0":"Pi-hole之要略","tooltip":"今日一錄：queries（幾DNS之問）、blocked（幾拒）、blocked_pct（所拒之分）、gravity（列有幾域）、clients（幾器問之）與blocking（拒啟否）。需PIHOLE_URL與PIHOLE_PASSWORD於second-thought.ini。此頁用示例之Pi-hole。"},
+"rb_pihole_top_domains":{"message0":"所拒最多之域%1","tooltip":"錄之列，每至拒之域一錄：domain與count（幾拒）。惟讀而已。"},
+"rb_pihole_top_clients":{"message0":"首客%1","tooltip":"錄之列，每問最多之器一錄：name、ip與count（幾問）。惟讀而已。"},
+"rb_pihole_blocking":{"message0":"止Pi-hole之拒%1秒","tooltip":"止拒若干秒，後Pi-hole自復啟之。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"},
+"rb_pihole_enable":{"message0":"啟Pi-hole之拒","tooltip":"復啟其拒。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"},
+"rb_pihole_allow":{"message0":"%1 %2於Pi-hole之allow列","tooltip":"置一域於allow列，或除之。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"},
+"rb_pihole_deny":{"message0":"%1 %2於Pi-hole之deny列","tooltip":"置一域於deny列，或除之。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每日","weekdays":"平日","weekends":"休日"},
@@ -254,7 +261,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr 與 Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"聽者：所出之程依時而行，則此諸塊行",
@@ -1074,7 +1082,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"讀汝 MikroTik 之路由或交換器：其口、其模、其狀、其錄",
 "UniFi":"UniFi",
 "UniFi clients":"UniFi 之客",
-"{n} clients":"{n} 客",
+"{n} clients":"{n}客",
 "UniFi network":"UniFi 之網",
 "read your UniFi network: who's connected, and how your UniFi devices are":"讀汝 UniFi 之網：誰連焉，及 UniFi 諸器何如",
 "A Proxmox guest can be started, shut down or rebooted.":"Proxmox 之客，可啟，可閉，可復啟。",
@@ -1142,7 +1150,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"自NZBGeek取NZB之檔而存之（每問於爾）",
 "{n} found":"得{n}物",
 "NZBGeek search":"NZBGeek檢",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"讀汝之Pi-hole：今日之問與所拒之分，所拒最多之域與客，及拒之啟否",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"止與啟汝Pi-hole之拒，改其allow與deny之列（每問於汝）",
+"{n} domains":"{n}域",
+"Pi-hole summary":"Pi-hole之要略",
+"Pi-hole top blocked domains":"Pi-hole所拒最多之域",
+"Pi-hole top clients":"Pi-hole首客",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -1353,7 +1368,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n（前行中止，然其程已易，故更始。）",
@@ -2118,7 +2135,7 @@
 "UniFi: {why}.":"UniFi：{why}。",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought 於 UniFi 唯讀，故不發 {what}。",
 "UniFi clients":"UniFi 之客",
-"{n} clients":"{n} 客",
+"{n} clients":"{n}客",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi 須 UNIFI_URL 與 UNIFI_API_KEY {where_keys}：控臺之址（若 https://192.168.1.1），及 Network 之 API 鑰（Settings、Control Plane、Integrations）。",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi 控臺拒 UNIFI_API_KEY。",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}，{n} 器",
@@ -2231,7 +2248,24 @@
 "fetch the NZB for {id} from NZBGeek":"自NZBGeek取{id}之NZB",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n}日存留",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who}需{url_setting}與{key_setting} {where_keys}：其址（如http://pi.hole）及其網頁之密。",
+"The {who} refused its password.":"此{who}拒其密。",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole之要略",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries}問，{blocked}拒（{blocked_pct} %）",
+"blocking on":"拒啟",
+"blocking off":"拒止",
+"Pi-hole top blocked domains":"Pi-hole所拒最多之域",
+"{n} domains":"{n}域",
+"Pi-hole top clients":"Pi-hole首客",
+"For how long? Give the seconds blocking should be off, like 60.":"幾何？以拒所止之秒數予之，如60。",
+"disable Pi-hole's blocking for {n} seconds":"止Pi-hole之拒{n}秒",
+"enable Pi-hole's blocking":"啟Pi-hole之拒",
+"Which list (allow or deny), add or remove, and which domain?":"何列（allow抑deny），增抑除，何域？",
+"{action} {domain} on Pi-hole's {which} list":"Pi-hole之{which}列{action} {domain}",
+"added by Second Thought":"Second Thought所增",
+"{n} queries, {blocked} blocked":"{n}問，{blocked}拒"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",
